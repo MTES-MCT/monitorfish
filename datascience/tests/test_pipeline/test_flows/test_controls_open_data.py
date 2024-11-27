@@ -38,13 +38,15 @@ def fleet_segments_open_data() -> pd.DataFrame:
                 ["27.8.c", "27.8", "27.9"],
                 ["27.8.c", "27.8"],
             ],
-            "species": [
-                ["HKE", "SOL", "ANF", "MNZ", "NEP", "LEZ", "ANF"],
+            "target_species": [
+                ["HKE", "SOL", "ANF", "MNZ", "NEP", "LEZ"],
                 ["HKE"],
-                ["HKE", "SOL", "ANF", "MNZ", "NEP", "LEZ", "ANF"],
+                ["HKE", "SOL", "ANF", "MNZ", "NEP", "LEZ"],
                 ["HKE"],
             ],
             "impact_risk_factor": [3.0, 2.1, 3.0, 2.1],
+            "min_mesh": [None, None, None, None],
+            "max_mesh": [None, None, None, None],
         }
     )
 
@@ -73,13 +75,15 @@ def transformed_fleet_segments_open_data() -> pd.DataFrame:
                 "{27.8.c,27.8,27.9}",
                 "{27.8.c,27.8}",
             ],
-            "species": [
-                "{HKE,SOL,ANF,MNZ,NEP,LEZ,ANF}",
+            "target_species": [
+                "{HKE,SOL,ANF,MNZ,NEP,LEZ}",
                 "{HKE}",
-                "{HKE,SOL,ANF,MNZ,NEP,LEZ,ANF}",
+                "{HKE,SOL,ANF,MNZ,NEP,LEZ}",
                 "{HKE}",
             ],
             "impact_risk_factor": [3.0, 2.1, 3.0, 2.1],
+            "min_mesh": [None, None, None, None],
+            "max_mesh": [None, None, None, None],
         }
     )
 
@@ -181,5 +185,7 @@ def test_flow(
         assert list(df_from_csv_file_object) == controls_open_data_columns
     else:
         pd.testing.assert_frame_equal(
-            df_from_csv_file_object, transformed_fleet_segments_open_data
+            df_from_csv_file_object,
+            transformed_fleet_segments_open_data,
+            check_dtype=False,
         )

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { TrackTypeCard } from './TrackTypeCard'
 import { COLORS } from '../../../../constants/constants'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../MainMap/constants'
 import { monitorfishMap } from '../../monitorfishMap'
 
 export function TrackTypeOverlay({ feature, pointerMoveEventPixel }) {

@@ -1,18 +1,17 @@
+import { MainMap } from '@features/MainMap/MainMap.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { selectedMissionActionsStyles } from './styles'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
-import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
+import { LayerProperties } from '../../../MainMap/constants'
 import { monitorfishMap } from '../../../map/monitorfishMap'
 import { useGetFilteredMissionsQuery } from '../../components/MissionList/hooks/useGetFilteredMissionsQuery'
 import { getMissionActionFeature, getMissionActionFeatureZone } from '../../features'
 import { NEW_MISSION_ID } from '../constants'
 
 import type { GeoJSON } from '../../../../domain/types/GeoJSON'
-import type { VectorLayerWithName } from '../../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type { MutableRefObject } from 'react'
 
@@ -68,11 +67,11 @@ export function UnmemoizedSelectedMissionActionsLayer() {
     return vectorSourceRef.current
   }, [])
 
-  const vectorLayerRef = useRef() as MutableRefObject<VectorLayerWithName>
+  const vectorLayerRef = useRef() as MutableRefObject<MainMap.VectorLayerWithName>
   const getVectorLayer = useCallback(() => {
     if (vectorLayerRef.current === undefined) {
       vectorLayerRef.current = new VectorLayer({
-        className: MonitorFishLayer.MISSION_ACTION_SELECTED,
+        className: MainMap.MonitorFishLayer.MISSION_ACTION_SELECTED,
         source: getVectorSource(),
         style: selectedMissionActionsStyles,
         updateWhileAnimating: true,
@@ -85,7 +84,7 @@ export function UnmemoizedSelectedMissionActionsLayer() {
   }, [getVectorSource])
 
   useEffect(() => {
-    getVectorLayer().name = MonitorFishLayer.MISSION_ACTION_SELECTED
+    getVectorLayer().name = MainMap.MonitorFishLayer.MISSION_ACTION_SELECTED
     monitorfishMap.getLayers().push(getVectorLayer())
 
     return () => {

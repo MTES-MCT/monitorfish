@@ -4,14 +4,14 @@ import styled from 'styled-components'
 import { HideIcon } from '../../../commonStyles/icons/HideIcon.style'
 import { ShowIcon } from '../../../commonStyles/icons/ShowIcon.style'
 
-import type { ShowableLayer } from '../../../../domain/entities/layers/types'
+import type { MainMap } from '@features/MainMap/MainMap.types'
 
 type AdministrativeZoneType = {
   isFirst?: boolean
   isGrouped?: boolean
   isShown: boolean
   showOrHideZone: (isShown: boolean) => void
-  zone: ShowableLayer
+  zone: MainMap.ShowableLayer
 }
 export function AdministrativeZone({ isFirst, isGrouped, isShown, showOrHideZone, zone }: AdministrativeZoneType) {
   return (

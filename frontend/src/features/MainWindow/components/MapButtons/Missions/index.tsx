@@ -7,10 +7,10 @@ import { Accent, Button, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { MapBox } from '../../../../../domain/entities/map/constants'
 import { SideWindowMenuKey, SideWindowStatus } from '../../../../../domain/entities/sideWindow/constants'
 import { setDisplayedComponents } from '../../../../../domain/shared_slices/DisplayedComponent'
 import { setLeftMapBoxOpened } from '../../../../../domain/shared_slices/Global'
+import { MapBox } from '../../../../MainMap/constants'
 import { sideWindowActions } from '../../../../SideWindow/slice'
 import { MapToolBox } from '../shared/MapToolBox'
 import { MapToolButton } from '../shared/MapToolButton'

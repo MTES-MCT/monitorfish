@@ -7,7 +7,7 @@ import { useDebouncedCallback } from 'use-debounce'
 
 import { clearPreviousLineFeatures, getLabelsOfFeaturesInExtent } from './utils'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../MainMap/constants'
 import { useGetLineFeatureIdToCoordinates } from '../../../map/layers/hooks/useGetLineFeatureIdToCoordinates'
 import { useIsZooming } from '../../../map/layers/hooks/useIsZooming'
 import { getLabelLineStyle } from '../../../map/layers/styles/labelLine.style'
@@ -15,7 +15,7 @@ import { monitorfishMap } from '../../../map/monitorfishMap'
 import { MissionLabelOverlay } from '../../components/MissionUnitLabelOverlay'
 
 import type { FeatureAndLabel } from './types'
-import type { VectorLayerWithName } from '../../../../domain/types/layer'
+import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 
@@ -30,7 +30,7 @@ export function MissionsLabelsLayer({ mapMovingAndZoomEvent }) {
   const currentZoom = Number(monitorfishMap.getView()?.getZoom()?.toFixed(2))
 
   const vectorSourceRef = useRef<VectorSource>()
-  const layerRef = useRef<VectorLayerWithName>()
+  const layerRef = useRef<MainMap.VectorLayerWithName>()
 
   const getVectorSource = useCallback(() => {
     if (!vectorSourceRef.current) {
@@ -116,8 +116,8 @@ export function MissionsLabelsLayer({ mapMovingAndZoomEvent }) {
     const missionsLayer = monitorfishMap
       .getLayers()
       .getArray()
-      ?.find(olLayer => (olLayer as VectorLayerWithName).name === LayerProperties.MISSION_PIN_POINT.code)
-    const missionsLayerSource = (missionsLayer as VectorLayerWithName)?.getSource()
+      ?.find(olLayer => (olLayer as MainMap.VectorLayerWithName).name === LayerProperties.MISSION_PIN_POINT.code)
+    const missionsLayerSource = (missionsLayer as MainMap.VectorLayerWithName)?.getSource()
 
     const isHidden = !isSuperUser || !isMissionsLayerDisplayed || !missionsLayerSource || currentZoom < MIN_ZOOM
     addLabelsToAllFeaturesInExtent(

@@ -1,15 +1,16 @@
+import { Vector } from 'ol/layer'
+import VectorSource from 'ol/source/Vector'
 import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
-import VectorSource from 'ol/source/Vector'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
+
+import { getEstimatedPositionStyle } from './styles/vesselEstimatedPosition.style'
 import { EstimatedPosition } from '../../../domain/entities/estimatedPosition'
 import { getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../../../domain/entities/vessel/vessel'
-import { Vector } from 'ol/layer'
-import { getEstimatedPositionStyle } from './styles/vesselEstimatedPosition.style'
+import { LayerProperties } from '../../MainMap/constants'
 import { monitorfishMap } from '../../map/monitorfishMap'
 import { vesselSelectors } from '../slice'
 
-const VesselEstimatedPositionLayer = () => {
+function VesselEstimatedPositionLayer() {
   const hideNonSelectedVessels = useSelector(state => state.vessel.hideNonSelectedVessels)
   const vesselsTracksShowed = useSelector(state => state.vessel.vesselsTracksShowed)
   const selectedVesselIdentity = useSelector(state => state.vessel.selectedVesselIdentity)
@@ -24,32 +25,34 @@ const VesselEstimatedPositionLayer = () => {
   const vectorSourceRef = useRef(null)
   const layerRef = useRef(null)
 
-  function getVectorSource () {
+  function getVectorSource() {
     if (vectorSourceRef.current === null) {
       vectorSourceRef.current = new VectorSource({
         features: [],
         wrapX: false
       })
     }
+
     return vectorSourceRef.current
   }
 
-  function getLayer () {
+  function getLayer() {
     if (layerRef.current === null) {
       layerRef.current = new Vector({
         renderBuffer: 4,
         source: getVectorSource(),
-        zIndex: LayerProperties.VESSEL_ESTIMATED_POSITION.zIndex,
+        style: feature => getEstimatedPositionStyle(feature),
         updateWhileAnimating: true,
         updateWhileInteracting: true,
-        style: feature => getEstimatedPositionStyle(feature)
+        zIndex: LayerProperties.VESSEL_ESTIMATED_POSITION.zIndex
       })
     }
+
     return layerRef.current
   }
 
   useEffect(() => {
-    function addLayerToMap () {
+    function addLayerToMap() {
       getLayer().name = LayerProperties.VESSEL_ESTIMATED_POSITION.code
       monitorfishMap.getLayers().push(getLayer())
     }
@@ -67,23 +70,28 @@ const VesselEstimatedPositionLayer = () => {
     }
 
     if (vessels && showingVesselsEstimatedPositions) {
-      function createEstimatedTrackFeatures (vessel, options) {
-        const {
-          isAtPort,
-          isFiltered,
-          filterPreview
-        } = vessel
+      function createEstimatedTrackFeatures(vessel, options) {
+        const { filterPreview, isAtPort, isFiltered } = vessel
 
-        if (nonFilteredVesselsAreHidden && !isFiltered) return null
-        if (previewFilteredVesselsMode && !filterPreview) return null
-        if (hideVesselsAtPort && isAtPort) return null
+        if (nonFilteredVesselsAreHidden && !isFiltered) {
+          return null
+        }
+        if (previewFilteredVesselsMode && !filterPreview) {
+          return null
+        }
+        if (hideVesselsAtPort && isAtPort) {
+          return null
+        }
 
-        options.hideNonSelectedVessels = hideNonSelectedVessels && !vesselIsShowed(vessel, vesselsTracksShowed, selectedVesselIdentity)
+        options.hideNonSelectedVessels =
+          hideNonSelectedVessels && !vesselIsShowed(vessel, vesselsTracksShowed, selectedVesselIdentity)
+
         return EstimatedPosition.getFeatures(vessel, options)
       }
 
       const isLight = Vessel.iconIsLight(selectedBaseLayer)
-      const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
+      const { vesselIsHidden, vesselIsOpacityReduced } =
+        getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
       const options = {
         isLight,
         vesselIsHidden,

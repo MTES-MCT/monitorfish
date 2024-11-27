@@ -1,15 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+import { BaseLayers, CoordinatesFormat } from '../../features/MainMap/constants'
 import { getLocalStorageState } from '../../utils'
-import { BaseLayers } from '../entities/layers/constants'
-import { CoordinatesFormat } from '../entities/map/constants'
 import { VesselLabel } from '../entities/vessel/label/types'
 import { VesselTrackDepth } from '../entities/vesselTrackDepth'
 
-import type { LastPositionVisibility } from '../types/map'
+import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import type { ShowableLayer } from 'domain/entities/layers/types'
 import type { Coordinate } from 'ol/coordinate'
 import type { Extent } from 'ol/extent'
 
@@ -32,7 +30,7 @@ export type MapState = {
   animateToRegulatoryLayer:
     | {
         center: Coordinate
-        name: string | ShowableLayer
+        name: string | MainMap.ShowableLayer
       }
     | undefined
   coordinatesFormat: CoordinatesFormat
@@ -47,7 +45,7 @@ export type MapState = {
   vesselLabel: string
   vesselLabelsShowedOnMap: boolean
   /** Vessels map properties */
-  vesselsLastPositionVisibility: LastPositionVisibility
+  vesselsLastPositionVisibility: MainMap.LastPositionVisibility
   view: {
     center: null
     zoom: null
@@ -84,6 +82,7 @@ const INITIAL_STATE: MapState = {
   )
 }
 
+// TODO This slice should be merged into a common "MainMap" feature.
 const mapSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'map',
@@ -111,7 +110,7 @@ const mapSlice = createSlice({
       state,
       action: PayloadAction<{
         center: Coordinate
-        name: string | ShowableLayer
+        name: string | MainMap.ShowableLayer
       }>
     ) {
       state.animateToRegulatoryLayer = action.payload

@@ -3,7 +3,7 @@ import GeoJSON from 'ol/format/GeoJSON'
 import { all } from 'ol/loadingstrategy'
 import VectorSource from 'ol/source/Vector'
 
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map/constants'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './features/MainMap/constants'
 
 import type { GeoJSON as GeoJSONType } from './domain/types/GeoJSON'
 import type { Extent } from 'ol/extent'

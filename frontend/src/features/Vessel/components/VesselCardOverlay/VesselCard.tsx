@@ -10,9 +10,9 @@ import * as timeago from 'timeago.js'
 import { marginsWithOneWarning, marginsWithoutAlert, marginsWithThreeWarning, marginsWithTwoWarning } from './constants'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { getCoordinates } from '../../../../coordinates'
-import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
 import { timeagoFrenchLocale } from '../../../../utils'
 import BeaconMalfunctionSVG from '../../../icons/Icone_VMS_dark.svg?react'
+import { OPENLAYERS_PROJECTION } from '../../../MainMap/constants'
 import { OverlayPosition } from '../../../map/overlays/Overlay'
 
 // @ts-ignore

@@ -3,11 +3,10 @@ import LineString from 'ol/geom/LineString'
 import Point from 'ol/geom/Point'
 import { transform } from 'ol/proj'
 
-import { LayerProperties } from './layers/constants'
-import { MonitorFishLayer } from './layers/types'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './map/constants'
 import { Vessel } from './vessel/vessel'
 import { COLORS } from '../../constants/constants'
+import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../features/MainMap/constants'
+import { MonitorFishLayer } from '../../features/MainMap/LegacyMainMap.types'
 import { theme } from '../../ui/theme'
 
 class EstimatedPosition {

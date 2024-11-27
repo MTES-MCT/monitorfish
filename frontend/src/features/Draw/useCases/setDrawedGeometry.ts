@@ -1,6 +1,6 @@
 import { setDrawedGeometry as setDrawedGeometryGeoJSON } from '@features/Draw/slice'
 
-import { convertToGeoJSONGeometryObject } from '../../../domain/entities/layers'
+import { convertToGeoJSONGeometryObject } from '../../MainMap/utils'
 
 import type { Geometry } from 'ol/geom'
 

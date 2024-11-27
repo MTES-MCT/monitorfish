@@ -5,7 +5,6 @@ import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { LayerProperties } from '../../../domain/entities/layers/constants'
 import {
   fishingActivityIsWithinTrackLineDates,
   getFeaturesFromPositions,
@@ -19,14 +18,15 @@ import { getVesselCompositeIdentifier } from '../../../domain/entities/vessel/ve
 import { animateToCoordinates } from '../../../domain/shared_slices/Map'
 import { logbookActions } from '../../Logbook/slice'
 import { getFishingActivityFeatureOnTrackLine } from '../../Logbook/utils'
+import { LayerProperties } from '../../MainMap/constants'
 import { monitorfishMap } from '../../map/monitorfishMap'
 import CloseVesselTrackOverlay from '../../map/overlays/CloseVesselTrackOverlay'
 import FishingActivityOverlay from '../../map/overlays/FishingActivityOverlay'
 import { setVesselTrackExtent, updateVesselTrackAsHidden, updateVesselTrackAsShowedWithExtend } from '../slice'
 
 import type { FishingActivityShowedOnMap } from '../../../domain/entities/vessel/types'
-import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { FishingActivityFeatureIdAndCoordinates } from '../../Logbook/types'
+import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { Feature } from 'ol'
 import type { Coordinate } from 'ol/coordinate'
 import type { Geometry } from 'ol/geom'
@@ -72,7 +72,7 @@ function VesselsTracksLayer() {
     return vectorSourceRef.current as VectorSource
   }, [])
 
-  const layerRef = useRef<VectorLayerWithName>()
+  const layerRef = useRef<MainMap.VectorLayerWithName>()
   const getLayer = useCallback(() => {
     if (layerRef.current === undefined) {
       layerRef.current = new Vector({
@@ -84,7 +84,7 @@ function VesselsTracksLayer() {
       })
     }
 
-    return layerRef.current as VectorLayerWithName
+    return layerRef.current as MainMap.VectorLayerWithName
   }, [getVectorSource])
 
   useEffect(() => {

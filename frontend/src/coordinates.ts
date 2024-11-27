@@ -1,6 +1,6 @@
 import { transform } from 'ol/proj'
 
-import { CoordinatesFormat, WSG84_PROJECTION } from './domain/entities/map/constants'
+import { CoordinatesFormat, WSG84_PROJECTION } from './features/MainMap/constants'
 import { isNumeric } from './utils/isNumeric'
 
 enum CoordinateLatLon {

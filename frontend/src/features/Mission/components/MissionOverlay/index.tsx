@@ -1,3 +1,4 @@
+import { MainMap } from '@features/MainMap/MainMap.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useMoveOverlayWhenDragging } from '@hooks/useMoveOverlayWhenDragging'
 import GeoJSON from 'ol/format/GeoJSON'
@@ -7,8 +8,7 @@ import styled from 'styled-components'
 
 import { margins } from './constants'
 import { MissionDetails } from './MissionDetails'
-import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
-import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
+import { OPENLAYERS_PROJECTION } from '../../../MainMap/constants'
 import { monitorfishMap } from '../../../map/monitorfishMap'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../../../map/overlays/Overlay'
 import { getMapResolution } from '../../../map/utils'
@@ -93,7 +93,7 @@ export function MissionOverlay({ feature, isSelected = false }) {
       return
     }
 
-    if (!feature?.getId()?.toString()?.includes(MonitorFishLayer.MISSION_PIN_POINT)) {
+    if (!feature?.getId()?.toString()?.includes(MainMap.MonitorFishLayer.MISSION_PIN_POINT)) {
       overlayRef.current.style.display = 'none'
       setMissionProperties(undefined)
 

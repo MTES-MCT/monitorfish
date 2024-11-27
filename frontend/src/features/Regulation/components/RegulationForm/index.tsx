@@ -1,6 +1,7 @@
 // TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
 
-import { BaseLayer } from '@features/BaseMap/layers/BaseLayer'
+import { LayerProperties } from '@features/MainMap/constants'
+import { BaseLayer } from '@features/MainMap/layers/BaseLayer'
 import { ConfirmRegulationModal } from '@features/Regulation/components/RegulationForm/ConfirmRegulationModal'
 import { FishingPeriodSection } from '@features/Regulation/components/RegulationForm/fishing_period/FishingPeriodSection'
 import { GearRegulation } from '@features/Regulation/components/RegulationForm/gear_regulation/GearRegulation'
@@ -27,7 +28,6 @@ import {
 } from '@features/Regulation/utils'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
-import { LayerProperties } from 'domain/entities/layers/constants'
 import { setError } from 'domain/shared_slices/Global'
 import { getAllSpecies } from 'domain/use_cases/species/getAllSpecies'
 import { useCallback, useEffect, useMemo, useState } from 'react'

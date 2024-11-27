@@ -7,7 +7,7 @@ import { memo, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ResultZones } from './ResultZones'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../MainMap/constants'
 
 import type { RegulatoryZone } from '../../types'
 

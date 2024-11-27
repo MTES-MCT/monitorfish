@@ -1,3 +1,4 @@
+import { MainMap } from '@features/MainMap/MainMap.types'
 import { extractVesselPropertiesFromFeature } from '@features/Vessel/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
@@ -7,8 +8,6 @@ import VectorSource from 'ol/source/Vector'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { MonitorFishLayer } from '../../../domain/entities/layers/types'
 import { drawMovedLabelLineIfFoundAndReturnOffset } from '../../../domain/entities/vessel/label'
 import {
   getVesselCompositeIdentifier,
@@ -16,12 +15,12 @@ import {
   Vessel
 } from '../../../domain/entities/vessel/vessel'
 import { VesselLabelLine } from '../../../domain/entities/vesselLabelLine'
+import { LayerProperties } from '../../MainMap/constants'
 import { getLabelLineStyle } from '../../map/layers/styles/labelLine.style'
 import { monitorfishMap } from '../../map/monitorfishMap'
 import { VesselLabelOverlay } from '../components/VesselLabelOverlay'
 import { vesselSelectors } from '../slice'
 
-import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 import type { MutableRefObject } from 'react'
@@ -69,7 +68,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
   const isThrottled = useRef(false)
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
-  const layerRef = useRef() as MutableRefObject<VectorLayerWithName>
+  const layerRef = useRef() as MutableRefObject<MainMap.VectorLayerWithName>
   const [currentLabels, setCurrentLabels] = useState<JSX.Element[]>([])
 
   const getVectorSource = useCallback(() => {

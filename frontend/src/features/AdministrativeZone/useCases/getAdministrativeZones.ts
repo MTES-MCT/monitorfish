@@ -1,18 +1,19 @@
-import { getAdministrativeSubZonesFromAPI } from '../../../api/geoserver'
-import { administrativeLayers } from '../../../domain/entities/layers'
-import { LayerProperties as LayersEnum, LayerType } from '../../../domain/entities/layers/constants'
+import { MainMap } from '@features/MainMap/MainMap.types'
 
-import type { CodeAndName, ShowableLayer } from '../../../domain/entities/layers/types'
+import { getAdministrativeSubZonesFromAPI } from '../../../api/geoserver'
+import { LayerProperties as LayersEnum, LayerType } from '../../MainMap/constants'
+import { administrativeLayers } from '../../MainMap/utils'
+
 import type { GeoJSON } from '../../../domain/types/GeoJSON'
 
 export type GroupAndZones = {
-  group: CodeAndName
-  zones: ShowableLayer[]
+  group: MainMap.CodeAndName
+  zones: MainMap.ShowableLayer[]
 }
 
 export type GroupedZonesAndZones = {
   groupedZones: GroupAndZones[]
-  zones: ShowableLayer[]
+  zones: MainMap.ShowableLayer[]
 }
 
 export const getAdministrativeZones =
@@ -32,13 +33,13 @@ export const getAdministrativeZones =
 
     const groupedZonesToFetch: Promise<GroupAndZones>[] = Object.keys(LayersEnum)
       .map(layer => LayersEnum[layer])
-      .filter((zone): zone is ShowableLayer => zone !== undefined)
+      .filter((zone): zone is MainMap.ShowableLayer => zone !== undefined)
       .filter(zone => zone.type === LayerType.ADMINISTRATIVE)
       .filter(zone => zone.hasFetchableZones)
       .map(zone =>
         getAdministrativeSubZonesFromAPI(zone.code, getState().global.isBackoffice).then(
           (fetchedZones: GeoJSON.FeatureCollection) => {
-            const nextZones: ShowableLayer[] = fetchedZones.features.map(feature => ({
+            const nextZones: MainMap.ShowableLayer[] = fetchedZones.features.map(feature => ({
               code: feature.id!.toString(),
               group: zone.group,
               hasFetchableZones: zone.hasFetchableZones!,

@@ -11,11 +11,10 @@ import styled from 'styled-components'
 import { VesselIcon } from './shared'
 import { addZoneSelected, reset } from './slice'
 import { VesselListModal } from './VesselListModal'
-import { LayerType } from '../../../../domain/entities/layers/constants'
-import { InteractionListener } from '../../../../domain/entities/map/constants'
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setBlockVesselsUpdate } from '../../../../domain/shared_slices/Global'
 import { MapComponent } from '../../../commonStyles/MapComponent'
+import { LayerType, InteractionListener } from '../../../MainMap/constants'
 
 export function VesselList() {
   const dispatch = useMainAppDispatch()

@@ -1,11 +1,11 @@
+import { fitToExtent } from 'domain/shared_slices/Map'
 import { flattenDepth } from 'lodash'
 import { boundingExtent } from 'ol/extent'
 import { GeoJSON } from 'ol/format'
 
-import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
-import { fitToExtent } from '../../shared_slices/Map'
+import { OPENLAYERS_PROJECTION } from '../constants'
 
-import type { GeoJSON as GeoJSONNamespace } from '../../types/GeoJSON'
+import type { GeoJSON as GeoJSONNamespace } from 'domain/types/GeoJSON'
 import type { Coordinate } from 'ol/coordinate'
 import type { MultiPolygon } from 'ol/geom'
 

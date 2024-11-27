@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 
 import { useMainAppSelector } from './useMainAppSelector'
 
-import type { InteractionListener, InteractionType } from '../domain/entities/map/constants'
 import type { GeoJSON } from '../domain/types/GeoJSON'
+import type { InteractionListener, InteractionType } from '../features/MainMap/constants'
 
 type GeometryAndInteractionType = {
   drawedGeometry: GeoJSON.Geometry | undefined

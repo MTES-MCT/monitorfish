@@ -2,7 +2,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import GeoJSON from 'ol/format/GeoJSON'
 import { useMemo } from 'react'
 
-import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
+import { OPENLAYERS_PROJECTION } from '../../../MainMap/constants'
 import { MissionOverlay } from '../MissionOverlay'
 
 export function SelectedMissionOverlay() {

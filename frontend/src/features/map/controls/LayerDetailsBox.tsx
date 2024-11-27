@@ -3,7 +3,7 @@ import { THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../MainMap/constants'
 
 import type { RegulatoryZone } from '../../Regulation/types'
 import type Feature from 'ol/Feature'

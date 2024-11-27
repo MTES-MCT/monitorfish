@@ -1,3 +1,4 @@
+import { MainMap } from '@features/MainMap/MainMap.types'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 import { Feature } from 'ol'
 import { GPX, IGC, KML, TopoJSON } from 'ol/format'
@@ -6,9 +7,8 @@ import { Geometry } from 'ol/geom'
 import { DragAndDrop } from 'ol/interaction'
 import { v4 as uuidv4 } from 'uuid'
 
-import { MonitorFishLayer } from '../../../domain/entities/layers/types'
-import { WSG84_PROJECTION } from '../../../domain/entities/map/constants'
 import { mainStore } from '../../../store'
+import { WSG84_PROJECTION } from '../../MainMap/constants'
 import { monitorfishMap } from '../../map/monitorfishMap'
 import { customZoneActions } from '../slice'
 import { fitViewToFeatures } from '../utils/fitViewToFeatures'
@@ -69,7 +69,7 @@ function saveAndShowCustomZones(dispatch: ThunkDispatch<ReturnType<typeof mainSt
       })
     )
 
-    const layer = getLayer(MonitorFishLayer.CUSTOM)
+    const layer = getLayer(MainMap.MonitorFishLayer.CUSTOM)
     if (!layer) {
       logSoftError({
         isSideWindowError: false,

@@ -1,7 +1,7 @@
 import GeoJSONOLFormat from 'ol/format/GeoJSON'
 import { omit } from 'ramda'
 
-import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
+import { OPENLAYERS_PROJECTION } from '../../MainMap/constants'
 
 import type { RegulatoryZone } from '../../Regulation/types'
 import type { Feature } from 'ol'

@@ -1,23 +1,23 @@
-import { layerActions } from '@features/BaseMap/slice'
+import { mainMapActions } from '@features/MainMap/slice'
+import { closeRegulatoryZoneMetadata } from '@features/Regulation/useCases/closeRegulatoryZoneMetadata'
 import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
+import { selectBaseLayer } from 'domain/shared_slices/Map'
 import { useCallback, useMemo } from 'react'
 import { RadioGroup } from 'rsuite'
 import styled from 'styled-components'
 
 import { BaseMap } from './BaseMap'
-import { BaseLayers, LayerType } from '../../../../domain/entities/layers/constants'
-import { selectBaseLayer } from '../../../../domain/shared_slices/Map'
 import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
-import { closeRegulatoryZoneMetadata } from '../../../Regulation/useCases/closeRegulatoryZoneMetadata'
+import { BaseLayers, LayerType } from '../../constants'
 
 export function BaseMaps() {
   const dispatch = useMainAppDispatch()
   const isInLightMode = useIsInLightMode()
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
-  const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
+  const layersSidebarOpenedLayerType = useMainAppSelector(state => state.mainMap.layersSidebarOpenedLayerType)
 
   const baseLayers = useMemo(() => {
     if (isInLightMode) {
@@ -34,9 +34,9 @@ export function BaseMaps() {
 
   const openOrCloseBaseLayers = useCallback(() => {
     if (isBaseLayersShowed) {
-      dispatch(layerActions.setLayersSideBarOpenedLayerType(undefined))
+      dispatch(mainMapActions.setLayersSideBarOpenedLayerType(undefined))
     } else {
-      dispatch(layerActions.setLayersSideBarOpenedLayerType(LayerType.BASE_LAYER))
+      dispatch(mainMapActions.setLayersSideBarOpenedLayerType(LayerType.BASE_LAYER))
       // @ts-ignore
       dispatch(closeRegulatoryZoneMetadata())
     }

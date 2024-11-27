@@ -1,25 +1,25 @@
-import { layerActions } from '@features/BaseMap/slice'
+import { mainMapActions } from '@features/MainMap/slice'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { CustomZone } from './CustomZone'
 import { COLORS } from '../../../../constants/constants'
-import { LayerType } from '../../../../domain/entities/layers/constants'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
+import { LayerType } from '../../../MainMap/constants'
 import { initDragAndDrop } from '../../useCases/initDragAndDrop'
 import { initLayer } from '../../useCases/initLayer'
 import { remove } from '../../useCases/remove'
 import { showOrHide } from '../../useCases/showOrHide'
 
-export type CustomZonesProps = {
+export type CustomZonesProps = Readonly<{
   hideLayersListWhenSearching?: boolean
-}
+}>
 export function CustomZones({ hideLayersListWhenSearching = false }: CustomZonesProps) {
   const dispatch = useMainAppDispatch()
 
-  const { layersSidebarOpenedLayerType } = useMainAppSelector(state => state.layer)
+  const layersSidebarOpenedLayerType = useMainAppSelector(state => state.mainMap.layersSidebarOpenedLayerType)
   const [isOpened, setIsOpened] = useState(false)
 
   const zones = useMainAppSelector(state => state.customZone.zones)
@@ -57,9 +57,9 @@ export function CustomZones({ hideLayersListWhenSearching = false }: CustomZones
 
   const onSectionTitleClicked = () => {
     if (isOpened) {
-      dispatch(layerActions.setLayersSideBarOpenedLayerType(undefined))
+      dispatch(mainMapActions.setLayersSideBarOpenedLayerType(undefined))
     } else {
-      dispatch(layerActions.setLayersSideBarOpenedLayerType(LayerType.CUSTOM))
+      dispatch(mainMapActions.setLayersSideBarOpenedLayerType(LayerType.CUSTOM))
     }
   }
 

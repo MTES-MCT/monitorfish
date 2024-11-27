@@ -11,18 +11,18 @@ import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { addFeatureToDrawedFeature } from './useCases/addFeatureToDrawedFeature'
 import { setDrawedGeometry } from './useCases/setDrawedGeometry'
-import { LayerProperties } from '../../domain/entities/layers/constants'
 import {
+  LayerProperties,
   InteractionType,
   OPENLAYERS_PROJECTION,
   OpenLayersGeometryType,
   WSG84_PROJECTION
-} from '../../domain/entities/map/constants'
+} from '../MainMap/constants'
 import { dottedLayerStyle } from '../map/layers/styles/dottedLayer.style'
 import { drawStyle, editStyle } from '../map/layers/styles/draw.style'
 import { monitorfishMap } from '../map/monitorfishMap'
 
-import type { VectorLayerWithName } from '../../domain/types/layer'
+import type { MainMap } from '@features/MainMap/MainMap.types'
 import type Geometry from 'ol/geom/Geometry'
 import type { GeometryFunction } from 'ol/interaction/Draw'
 import type { MutableRefObject } from 'react'
@@ -66,7 +66,7 @@ function UnmemoizedDrawLayer() {
     return drawVectorSourceRef.current
   }, [])
 
-  const vectorLayerRef = useRef() as MutableRefObject<VectorLayerWithName>
+  const vectorLayerRef = useRef() as MutableRefObject<MainMap.VectorLayerWithName>
 
   useEffect(() => {
     function getVectorLayer() {

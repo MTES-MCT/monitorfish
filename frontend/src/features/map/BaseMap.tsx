@@ -7,13 +7,13 @@ import { MapAttributionsBox } from './controls/MapAttributionsBox'
 import { MapCoordinatesBox } from './controls/MapCoordinatesBox'
 import { monitorfishMap } from './monitorfishMap'
 import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
-import { clickableLayerCodes, hoverableLayerCodes } from '../../domain/entities/layers'
 import { resetAnimateToRegulatoryLayer } from '../../domain/shared_slices/Map'
-import { clickOnMapFeature } from '../../domain/use_cases/map/clickOnMapFeature'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
+import { clickOnMapFeature } from '../MainMap/useCases/clickOnMapFeature'
+import { clickableLayerCodes, hoverableLayerCodes } from '../MainMap/utils'
 
-import type { VectorLayerWithName } from '../../domain/types/layer'
+import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { Coordinates } from '@mtes-mct/monitor-ui'
 import type { FeatureLike } from 'ol/Feature'
 import type { AnimationOptions } from 'ol/View'
@@ -64,7 +64,7 @@ export function BaseMap({
         hitTolerance: HIT_PIXEL_TO_TOLERANCE,
         layerFilter: layer =>
           !!clickableLayerCodes.find(clickableLayerName =>
-            (layer as VectorLayerWithName).name?.includes(clickableLayerName)
+            (layer as MainMap.VectorLayerWithName).name?.includes(clickableLayerName)
           )
       })
       const isCtrl = platformModifierKeyOnly(event)
@@ -85,7 +85,7 @@ export function BaseMap({
         hitTolerance: HIT_PIXEL_TO_TOLERANCE,
         layerFilter: layer =>
           !!hoverableLayerCodes.find(hoverableLayerName =>
-            (layer as VectorLayerWithName).name?.includes(hoverableLayerName)
+            (layer as MainMap.VectorLayerWithName).name?.includes(hoverableLayerName)
           )
       })
 

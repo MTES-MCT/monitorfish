@@ -16,8 +16,8 @@ import {
 import { sortVesselsByProperty } from './tableSort'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { getCoordinates } from '../../../../coordinates'
-import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
 import FlagSVG from '../../../icons/flag.svg?react'
+import { OPENLAYERS_PROJECTION } from '../../../MainMap/constants'
 
 import type { SortType } from 'rsuite-table'
 

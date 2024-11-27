@@ -6,7 +6,6 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { LastPositionsSlider } from './LastPositionsSlider'
-import { MapBox } from '../../../../../domain/entities/map/constants'
 import {
   setHideVesselsAtPort,
   setVesselsLastPositionVisibility,
@@ -18,6 +17,7 @@ import HidingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_actif.
 import ShowingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_inactif.svg?react'
 import HideVesselsAtPortSVG from '../../../../icons/Masquer_navires_au_port.svg?react'
 import EstimatedPositionSVG from '../../../../icons/Positions_estimees.svg?react'
+import { MapBox } from '../../../../MainMap/constants'
 import { setHideNonSelectedVessels } from '../../../../Vessel/slice'
 import { MapToolBox } from '../shared/MapToolBox'
 import { Header, Content } from '../shared/styles'

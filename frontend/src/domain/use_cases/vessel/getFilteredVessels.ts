@@ -1,8 +1,8 @@
 import GeoJSON from 'ol/format/GeoJSON'
 import VectorSource from 'ol/source/Vector'
 
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../features/MainMap/constants'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../entities/map/constants'
 
 import type { VesselEnhancedLastPositionWebGLObject } from '../../entities/vessel/types'
 

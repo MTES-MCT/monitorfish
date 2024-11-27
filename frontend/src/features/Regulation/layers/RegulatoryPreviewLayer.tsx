@@ -3,15 +3,15 @@ import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useRef } from 'react'
 
 import { getRegulatoryLayerStyle } from './styles/regulatoryLayer.style'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { zoomInLayer } from '../../LayersSidebar/useCases/zoomInLayer'
+import { LayerProperties } from '../../MainMap/constants'
 // import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 // import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { zoomInLayer } from '../../LayersSidebar/useCases/zoomInLayer'
 import { getFeaturesFromRegulatoryZones } from '../../map/layers/utils'
 import { monitorfishMap } from '../../map/monitorfishMap'
 
-import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { BaseRegulatoryZone, RegulatoryZone } from '../types'
+import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { ZoneSelected } from '@features/VesselFilter/types'
 import type { BackofficeAppDispatch, MainAppDispatch } from '@store'
 import type { Feature } from 'ol'
@@ -31,7 +31,7 @@ function UnmemoizedRegulatoryPreviewLayer({
   zoneSelected
 }: RegulatoryPreviewLayerProps<BackofficeAppDispatch | MainAppDispatch>) {
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
-  const layerRef = useRef() as MutableRefObject<VectorLayerWithName>
+  const layerRef = useRef() as MutableRefObject<MainMap.VectorLayerWithName>
 
   function getVectorSource() {
     if (!vectorSourceRef.current) {

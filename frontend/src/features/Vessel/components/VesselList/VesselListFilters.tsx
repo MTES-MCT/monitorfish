@@ -24,14 +24,13 @@ import { Checkbox, CheckboxGroup, MultiCascader, SelectPicker, Tag, TagPicker } 
 import styled from 'styled-components'
 
 import { lastControlAfterLabels, lastPositionTimeAgoLabels } from './dataFormatting'
-import { LayerType, LayerType as LayersType } from '../../../../domain/entities/layers/constants'
-import { InteractionType } from '../../../../domain/entities/map/constants'
 import { VesselLocation, vesselSize } from '../../../../domain/entities/vessel/vessel'
 import { setBlockVesselsUpdate } from '../../../../domain/shared_slices/Global'
 import { addVesselListFilterZone } from '../../../../domain/use_cases/vessel/addVesselListFilterZone'
 import { getZonesAndSubZonesPromises } from '../../../AdministrativeZone/useCases/getZonesAndSubZonesPromises'
 import PolygonFilterSVG from '../../../icons/Filtre_zone_polygone.svg?react'
 import BoxFilterSVG from '../../../icons/Filtre_zone_rectangle.svg?react'
+import { LayerType, LayerType as LayersType, InteractionType } from '../../../MainMap/constants'
 
 function renderTagPickerMenuItem(item) {
   return <Label data-cy={`select-picker-menu-item-${item.label}`}>{item.label}</Label>

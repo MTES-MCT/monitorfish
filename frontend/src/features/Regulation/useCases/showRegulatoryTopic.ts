@@ -1,13 +1,13 @@
 import { showRegulatoryZone } from './showRegulatoryZone'
 
-import type { TopicContainingMultipleZones } from '../../../domain/types/layer'
+import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { MainAppThunk } from '@store'
 
 /**
  * Show a Regulatory topic
  */
 export const showRegulatoryTopic =
-  (topic: TopicContainingMultipleZones): MainAppThunk =>
+  (topic: MainMap.TopicContainingMultipleZones): MainAppThunk =>
   dispatch =>
     topic.regulatoryZones.forEach(regulatoryZone => {
       dispatch(

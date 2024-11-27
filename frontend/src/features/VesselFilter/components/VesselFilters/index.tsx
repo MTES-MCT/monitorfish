@@ -6,9 +6,9 @@ import { useCallback, useRef } from 'react'
 import styled from 'styled-components'
 
 import { Filters } from './Filters'
-import { MapBox } from '../../../../domain/entities/map/constants'
 import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
 import FilterSVG from '../../../icons/standardized/Filter.svg?react'
+import { MapBox } from '../../../MainMap/constants'
 import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'
 
 export function VesselFiltersMapButton() {

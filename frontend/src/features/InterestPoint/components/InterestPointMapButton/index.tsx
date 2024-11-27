@@ -5,9 +5,9 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { EditInterestPoint } from './EditInterestPoint'
-import { MapBox } from '../../../../domain/entities/map/constants'
 import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
 import InterestPointSVG from '../../../icons/standardized/Landmark.svg?react'
+import { MapBox } from '../../../MainMap/constants'
 import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'
 import { deleteInterestPointBeingDrawed, drawInterestPoint, endInterestPointDraw } from '../../slice'
 

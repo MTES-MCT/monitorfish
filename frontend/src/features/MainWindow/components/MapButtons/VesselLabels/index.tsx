@@ -6,8 +6,8 @@ import { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { EditVesselLabels } from './EditVesselLabels'
-import { MapBox } from '../../../../../domain/entities/map/constants'
 import { setRightMapBoxOpened } from '../../../../../domain/shared_slices/Global'
+import { MapBox } from '../../../../MainMap/constants'
 import { MapToolButton } from '../shared/MapToolButton'
 
 export function VesselLabelsMapButton() {

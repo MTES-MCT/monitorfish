@@ -1,7 +1,7 @@
 import { Radio } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { BaseLayers } from '../../../../domain/entities/layers/constants'
+import { BaseLayers } from '../../constants'
 
 type BaseLayerRowProps = {
   layer: string

@@ -1,4 +1,5 @@
 import { COLORS } from '@constants/constants'
+import { MainMap } from '@features/MainMap/MainMap.types'
 import Overlay from 'ol/Overlay'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -6,7 +7,6 @@ import styled from 'styled-components'
 import { marginsWithOneWarning, marginsWithoutAlert, marginsWithThreeWarning, marginsWithTwoWarning } from './constants'
 import { VesselCard } from './VesselCard'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
-import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { monitorfishMap } from '../../../map/monitorfishMap'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../../../map/overlays/Overlay'
 import { getMapResolution } from '../../../map/utils'
@@ -65,7 +65,7 @@ export function VesselCardOverlay({ feature }) {
       return
     }
 
-    if (!feature?.getId()?.toString()?.includes(MonitorFishLayer.VESSELS)) {
+    if (!feature?.getId()?.toString()?.includes(MainMap.MonitorFishLayer.VESSELS)) {
       overlayRef.current.style.display = 'none'
       setVesselFeatureToShowOnCard(null)
 

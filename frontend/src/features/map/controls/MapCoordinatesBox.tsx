@@ -4,11 +4,11 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { getCoordinates } from '../../../coordinates'
-import { CoordinatesFormat, OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
 import { setCoordinatesFormat } from '../../../domain/shared_slices/Map'
 import { useClickOutsideWhenOpened } from '../../../hooks/useClickOutsideWhenOpened'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { CoordinatesFormat, OPENLAYERS_PROJECTION } from '../../MainMap/constants'
 
 import type { Coordinates } from '@mtes-mct/monitor-ui'
 

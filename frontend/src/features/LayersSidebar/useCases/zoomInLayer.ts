@@ -1,9 +1,10 @@
 import { getCenter } from 'ol/extent'
 
-import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { mapActions } from '../../../domain/shared_slices/Map'
 import { isNumeric } from '../../../utils/isNumeric'
+import { LayerProperties } from '../../MainMap/constants'
 
+import type { MainMap } from '@features/MainMap/MainMap.types'
 import type {
   BackofficeAppDispatch,
   BackofficeAppGetState,
@@ -12,13 +13,12 @@ import type {
   MainAppGetState,
   MainAppThunk
 } from '@store'
-import type { ShowableLayer, ShowedLayer } from 'domain/entities/layers/types'
 import type { Feature } from 'ol'
 import type { Coordinate } from 'ol/coordinate'
 
 type Params = {
   feature?: Feature | undefined
-  topicAndZone?: ShowedLayer
+  topicAndZone?: MainMap.ShowedLayer
 }
 
 export function zoomInLayer<T extends BackofficeAppThunk | MainAppThunk>(layer: Params): T
@@ -26,7 +26,12 @@ export function zoomInLayer(layer: Params): MainAppThunk | BackofficeAppThunk {
   return (dispatch: BackofficeAppDispatch | MainAppDispatch, getState: BackofficeAppGetState | MainAppGetState) => {
     if (layer.topicAndZone) {
       const name = `${LayerProperties.REGULATORY.code}:${layer.topicAndZone.topic}:${layer.topicAndZone.zone}`
-      const layerToZoomIn = getState().layer.layersToFeatures.find(layerFeature => layerFeature.name === name)
+      const mainMapSliceState = getState().mainMap
+
+      const layerToZoomIn =
+        'layersToFeatures' in mainMapSliceState
+          ? mainMapSliceState.layersToFeatures.find(layerFeature => layerFeature.name === name)
+          : undefined
       if (layerToZoomIn) {
         dispatchAnimateToRegulatoryLayer(dispatch, layerToZoomIn.center, name)
       }
@@ -45,7 +50,7 @@ export function zoomInLayer(layer: Params): MainAppThunk | BackofficeAppThunk {
 const dispatchAnimateToRegulatoryLayer = (
   dispatch: BackofficeAppDispatch | MainAppDispatch,
   center: Coordinate,
-  name: string | ShowableLayer
+  name: string | MainMap.ShowableLayer
 ) => {
   if (center?.length && isNumeric(center[0]) && isNumeric(center[1])) {
     dispatch(

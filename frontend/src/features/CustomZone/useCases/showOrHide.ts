@@ -1,7 +1,7 @@
+import { MainMap } from '@features/MainMap/MainMap.types'
 import { logSoftError, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import GeoJSON from 'ol/format/GeoJSON'
 
-import { MonitorFishLayer } from '../../../domain/entities/layers/types'
 import { customZoneActions } from '../slice'
 import { fitViewToFeatures } from '../utils/fitViewToFeatures'
 import { getLayer } from '../utils/getLayer'
@@ -20,7 +20,7 @@ export const showOrHide =
       return
     }
 
-    const layer = getLayer(MonitorFishLayer.CUSTOM)
+    const layer = getLayer(MainMap.MonitorFishLayer.CUSTOM)
     if (!layer) {
       logSoftError({
         isSideWindowError: false,

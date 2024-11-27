@@ -2,8 +2,8 @@ import Feature from 'ol/Feature'
 import { MultiPolygon } from 'ol/geom'
 import { circular } from 'ol/geom/Polygon'
 
-import { convertToGeoJSONGeometryObject } from '../../../domain/entities/layers'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../MainMap/constants'
+import { convertToGeoJSONGeometryObject } from '../../MainMap/utils'
 import { CONTROL_ZONE_RADIUS } from '../constants'
 import { MissionAction } from '../missionAction.types'
 

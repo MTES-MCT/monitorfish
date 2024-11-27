@@ -4,8 +4,8 @@ import { Circle, Icon, Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 
-import { OpenLayersGeometryType } from '../../../../domain/entities/map/constants'
 import { theme } from '../../../../ui/theme'
+import { OpenLayersGeometryType } from '../../../MainMap/constants'
 
 import type { MultiPolygon } from 'ol/geom'
 

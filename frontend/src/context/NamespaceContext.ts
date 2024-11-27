@@ -1,5 +1,4 @@
+import { MainMap } from '@features/MainMap/MainMap.types'
 import React from 'react'
 
-import { LayerSliceNamespace } from '../domain/entities/layers/types'
-
-export const NamespaceContext = React.createContext<LayerSliceNamespace>(LayerSliceNamespace.homepage)
+export const NamespaceContext = React.createContext<MainMap.LayerSliceNamespace>(MainMap.LayerSliceNamespace.homepage)

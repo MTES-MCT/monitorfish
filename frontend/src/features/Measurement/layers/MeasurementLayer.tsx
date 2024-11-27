@@ -14,14 +14,13 @@ import VectorSource from 'ol/source/Vector'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { measurementStyle, measurementStyleWithCenter } from './measurement.style'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
+import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../MainMap/constants'
 import { monitorfishMap } from '../../map/monitorfishMap'
 import MeasurementOverlay from '../components/MeasurementOverlay'
 import { removeMeasurementDrawed, resetMeasurementTypeToAdd, setCircleMeasurementInDrawing } from '../slice'
 import { saveMeasurement } from '../useCases/saveMeasurement'
 
-import type { VectorLayerWithName } from '../../../domain/types/layer'
+import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { MeasurementInProgress } from '@features/Measurement/types'
 import type { Type } from 'ol/geom/Geometry'
 import type Geometry from 'ol/geom/Geometry'
@@ -60,7 +59,7 @@ function UnmemoizedMeasurementLayer() {
     return vectorSourceRef.current
   }, [])
 
-  const layerRef = useRef<VectorLayerWithName>()
+  const layerRef = useRef<MainMap.VectorLayerWithName>()
   const getLayer = useCallback(() => {
     if (layerRef.current === undefined) {
       layerRef.current = new VectorLayer({
@@ -74,7 +73,7 @@ function UnmemoizedMeasurementLayer() {
       })
     }
 
-    return layerRef.current as VectorLayerWithName
+    return layerRef.current as MainMap.VectorLayerWithName
   }, [getVectorSource])
 
   useEffect(() => {

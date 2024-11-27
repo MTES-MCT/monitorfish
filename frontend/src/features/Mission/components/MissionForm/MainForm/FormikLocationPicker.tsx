@@ -1,14 +1,14 @@
-import { addOrEditMissionZone } from '@features/Mission/useCases/addOrEditMissionZone'
-import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
-import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, Fieldset, Icon, IconButton, Label, NotificationEvent, THEME } from '@mtes-mct/monitor-ui'
 import {
   InteractionListener,
   OPENLAYERS_PROJECTION,
   OpenLayersGeometryType,
   WSG84_PROJECTION
-} from 'domain/entities/map/constants'
+} from '@features/MainMap/constants'
+import { addOrEditMissionZone } from '@features/Mission/useCases/addOrEditMissionZone'
+import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Accent, Button, Fieldset, Icon, IconButton, Label, NotificationEvent, THEME } from '@mtes-mct/monitor-ui'
 import { fitToExtent } from 'domain/shared_slices/Map'
 import { useFormikContext } from 'formik'
 import { boundingExtent } from 'ol/extent'

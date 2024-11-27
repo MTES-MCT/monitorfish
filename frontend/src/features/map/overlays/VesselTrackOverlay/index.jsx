@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import VesselTrackCard from './VesselTrackCard'
 import { COLORS } from '../../../../constants/constants'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../MainMap/constants'
 import { monitorfishMap } from '../../monitorfishMap'
 import { getMapResolution } from '../../utils'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay'

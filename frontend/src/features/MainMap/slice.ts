@@ -8,7 +8,6 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { isNotNullish } from '@utils/isNotNullish'
 
 import { MainMap } from './MainMap.types'
-import { reOrderOldObjectHierarchyIfFound } from './utils'
 
 import type { RegulatoryZone } from '@features/Regulation/types'
 import type { Feature } from 'ol'
@@ -27,10 +26,8 @@ const INITIAL_STATE: MainMapState = {
   lastShowedFeatures: [],
   layersSidebarOpenedLayerType: undefined,
   layersToFeatures: [],
-  showedLayers: reOrderOldObjectHierarchyIfFound(
-    // TODO Use redux-persist to load showed layers.
-    localStorageManager.get<MainMap.ShowedLayer[]>(LocalStorageKey.LayersShowedOnMap, [])
-  )
+  // TODO Use redux-persist to load showed layers.
+  showedLayers: localStorageManager.get<MainMap.ShowedLayer[]>(LocalStorageKey.LayersShowedOnMap, [])
 }
 
 const mainMapSlice = createSlice({
@@ -68,6 +65,8 @@ const mainMapSlice = createSlice({
           ]
         }
       }
+
+      localStorageManager.set(LocalStorageKey.LayersShowedOnMap, state.showedLayers)
     },
 
     /**
@@ -110,6 +109,8 @@ const mainMapSlice = createSlice({
       } else {
         state.showedLayers = state.showedLayers.filter(layer => !(layer.type === type && layer.zone === zone))
       }
+
+      localStorageManager.set(LocalStorageKey.LayersShowedOnMap, state.showedLayers)
     },
 
     setLastShowedFeatures(state, action: PayloadAction<Array<Feature<Geometry>>>) {
@@ -122,9 +123,10 @@ const mainMapSlice = createSlice({
 
     setShowedLayersWithLocalStorageValues(state, action: PayloadAction<RegulatoryZone[]>) {
       let nextShowedLayers: MainMap.ShowedLayer[] = []
-      const showedLayersInLocalStorage = reOrderOldObjectHierarchyIfFound(
-        // TODO Use redux-persist to load showed layers.
-        localStorageManager.get<MainMap.ShowedLayer[]>(LocalStorageKey.LayersShowedOnMap, [])
+      // TODO Use redux-persist to load showed layers.
+      const showedLayersInLocalStorage = localStorageManager.get<MainMap.ShowedLayer[]>(
+        LocalStorageKey.LayersShowedOnMap,
+        []
       )
 
       nextShowedLayers = showedLayersInLocalStorage

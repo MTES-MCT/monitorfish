@@ -159,7 +159,7 @@ export function RegulationTables() {
             simplifiedGeometries={simplifiedGeometries}
           />
           <AdministrativeLayers />
-          <RegulatoryPreviewLayer dispatch={dispatch} regulatoryZonesToPreview={regulatoryZonesToPreview} />
+          <RegulatoryPreviewLayer regulatoryZonesToPreview={regulatoryZonesToPreview} />
         </BaseMap>
       </BackofficeContainer>
       {/* TODO Is it always `false`? */}

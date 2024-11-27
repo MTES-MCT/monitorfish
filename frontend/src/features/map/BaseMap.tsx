@@ -15,6 +15,7 @@ import { clickableLayerCodes, hoverableLayerCodes } from '../MainMap/utils'
 
 import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { Coordinates } from '@mtes-mct/monitor-ui'
+import type { MainAppThunk } from '@store'
 import type { FeatureLike } from 'ol/Feature'
 import type { AnimationOptions } from 'ol/View'
 import type { PropsWithChildren } from 'react'
@@ -69,7 +70,7 @@ export function BaseMap({
       })
       const isCtrl = platformModifierKeyOnly(event)
       const mapClick = { ctrlKeyPressed: isCtrl, feature }
-      dispatch(clickOnMapFeature(mapClick))
+      dispatch(clickOnMapFeature(mapClick) as unknown as MainAppThunk)
     },
     [dispatch]
   )

@@ -3,14 +3,15 @@ import { setError } from '../../../domain/shared_slices/Global'
 import { regulationActions } from '../slice'
 import { mapToRegulatoryZone } from '../utils'
 
-import type { MainAppThunk } from '../../../store'
 import type { RegulatoryZone } from '../types'
+import type { HybridAppDispatch, HybridAppThunk } from '@store/types'
 
 export const showRegulatoryZoneMetadata =
-  (
+  <T extends HybridAppDispatch>(
     partialRegulatoryZone: Pick<RegulatoryZone, 'topic' | 'zone'>,
     isPreviewing: boolean = false
-  ): MainAppThunk<Promise<void>> =>
+  ): HybridAppThunk<T, Promise<void>> =>
+  // @ts-ignore Required to avoid reducers typing conflicts. Not fancy but allows us to keep Thunk context type-checks.
   async (dispatch, getState) => {
     dispatch(regulationActions.setLoadingRegulatoryZoneMetadata())
     const { speciesByCode } = getState().species

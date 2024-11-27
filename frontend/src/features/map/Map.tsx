@@ -156,11 +156,7 @@ export function Map() {
       <VesselTrackOverlay feature={hoveredFeature} />
       {hoveredFeature && <LayerDetailsBox feature={hoveredFeature} />}
       <InterestPointLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
-      <RegulatoryPreviewLayer
-        dispatch={dispatch}
-        regulatoryZonesToPreview={regulatoryZonesToPreview}
-        zoneSelected={zoneSelected}
-      />
+      <RegulatoryPreviewLayer regulatoryZonesToPreview={regulatoryZonesToPreview} zoneSelected={zoneSelected} />
     </BaseMap>
   )
 }

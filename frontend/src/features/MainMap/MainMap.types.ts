@@ -9,6 +9,7 @@ import type VectorLayer from 'ol/layer/Vector'
 import type VectorImageLayer from 'ol/layer/VectorImage'
 import type WebGLPointsLayer from 'ol/layer/WebGLPoints'
 
+// TODO Rename to `MonitorFishMap` and merge with `map/` "feature".
 export namespace MainMap {
   export type MapClick = {
     ctrlKeyPressed: boolean

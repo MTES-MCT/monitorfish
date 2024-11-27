@@ -14,6 +14,7 @@ import { regulationActions } from '../../slice'
 import { showRegulatoryTopic } from '../../useCases/showRegulatoryTopic'
 
 import type { RegulatoryZone as RegulatoryZoneType } from '../../types'
+import type { MainAppThunk } from '@store'
 import type { Promisable } from 'type-fest'
 
 export type RegulatoryTopicProps = {
@@ -91,7 +92,7 @@ function UnmemoizedRegulatoryTopic({
       showRegulatoryTopic({
         regulatoryZones,
         type: LayerProperties.REGULATORY.code
-      })
+      }) as unknown as MainAppThunk
     )
   }
 

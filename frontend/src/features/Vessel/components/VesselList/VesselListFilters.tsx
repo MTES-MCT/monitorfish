@@ -27,7 +27,7 @@ import { lastControlAfterLabels, lastPositionTimeAgoLabels } from './dataFormatt
 import { VesselLocation, vesselSize } from '../../../../domain/entities/vessel/vessel'
 import { setBlockVesselsUpdate } from '../../../../domain/shared_slices/Global'
 import { addVesselListFilterZone } from '../../../../domain/use_cases/vessel/addVesselListFilterZone'
-import { getZonesAndSubZonesPromises } from '../../../AdministrativeZone/useCases/getZonesAndSubZonesPromises'
+import { getZonesAndSubZones } from '../../../AdministrativeZone/useCases/getZonesAndSubZones'
 import PolygonFilterSVG from '../../../icons/Filtre_zone_polygone.svg?react'
 import BoxFilterSVG from '../../../icons/Filtre_zone_rectangle.svg?react'
 import { LayerType, LayerType as LayersType, InteractionType } from '../../../MainMap/constants'
@@ -196,7 +196,7 @@ function UnmemoizedVesselListFilters({ seeMoreIsOpen, setSeeMoreIsOpen }: Vessel
 
   // TODO Export to a thunk use-case
   const getZones = useCallback(async () => {
-    const zonesAndSubZones = await dispatch(getZonesAndSubZonesPromises())
+    const zonesAndSubZones = await dispatch(getZonesAndSubZones())
 
     const groups = Array.from(new Set(zonesAndSubZones.map(zone => zone.group)))
     setZoneGroups(groups)

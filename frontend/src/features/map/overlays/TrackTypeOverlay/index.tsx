@@ -1,3 +1,4 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import Overlay from 'ol/Overlay'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -7,10 +8,20 @@ import { COLORS } from '../../../../constants/constants'
 import { LayerProperties } from '../../../MainMap/constants'
 import { monitorfishMap } from '../../monitorfishMap'
 
-export function TrackTypeOverlay({ feature, pointerMoveEventPixel }) {
-  const [trackTypeToShowOnCard, setTrackTypeToShowOnCard] = useState(null)
+import type { FeatureWithCodeAndEntityId } from '@libs/FeatureWithCodeAndEntityId'
+import type { Feature } from 'ol'
+import type { Geometry } from 'ol/geom'
+
+type TrackTypeOverlayProps = Readonly<{
+  feature: Feature<Geometry> | FeatureWithCodeAndEntityId<Geometry> | undefined
+}>
+export function TrackTypeOverlay({ feature }: TrackTypeOverlayProps) {
   const overlayRef = useRef<HTMLDivElement | null>(null)
   const overlayObjectRef = useRef<Overlay | null>(null)
+
+  const mousePosition = useMainAppSelector(state => state.mainMap.mousePosition)
+
+  const [trackTypeToShowOnCard, setTrackTypeToShowOnCard] = useState(null)
 
   const overlayCallback = useCallback(
     ref => {
@@ -52,12 +63,13 @@ export function TrackTypeOverlay({ feature, pointerMoveEventPixel }) {
       return
     }
 
-    setTrackTypeToShowOnCard(feature.trackType)
+    // TODO Create a custom `Feature` type to avoid using `any`.
+    setTrackTypeToShowOnCard((feature as any).trackType)
     overlayRef.current.style.display = 'block'
-    if (pointerMoveEventPixel) {
-      overlayObjectRef.current.setPosition(monitorfishMap.getCoordinateFromPixel(pointerMoveEventPixel))
+    if (mousePosition) {
+      overlayObjectRef.current.setPosition(monitorfishMap.getCoordinateFromPixel(mousePosition))
     }
-  }, [setTrackTypeToShowOnCard, pointerMoveEventPixel, feature])
+  }, [setTrackTypeToShowOnCard, mousePosition, feature])
 
   return (
     <TrackTypeCardOverlayComponent ref={overlayCallback}>

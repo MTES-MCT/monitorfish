@@ -12,12 +12,14 @@ import { MainMap } from './MainMap.types'
 import type { RegulatoryZone } from '@features/Regulation/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
+import type { Pixel } from 'ol/pixel'
 
 interface MainMapState {
   administrativeZonesGeometryCache: Record<string, any>[]
   lastShowedFeatures: Array<Feature<Geometry>>
   layersSidebarOpenedLayerType: string | undefined
   layersToFeatures: MainMap.LayerToFeatures[]
+  mousePosition: Pixel | undefined
   showedLayers: MainMap.ShowedLayer[]
 }
 
@@ -26,6 +28,7 @@ const INITIAL_STATE: MainMapState = {
   lastShowedFeatures: [],
   layersSidebarOpenedLayerType: undefined,
   layersToFeatures: [],
+  mousePosition: undefined,
   // TODO Use redux-persist to load showed layers.
   showedLayers: localStorageManager.get<MainMap.ShowedLayer[]>(LocalStorageKey.LayersShowedOnMap, [])
 }
@@ -121,6 +124,10 @@ const mainMapSlice = createSlice({
 
     setLayersSideBarOpenedLayerType(state, action) {
       state.layersSidebarOpenedLayerType = action.payload
+    },
+
+    setMousePosition(state, action: PayloadAction<Pixel>) {
+      state.mousePosition = action.payload
     },
 
     setShowedLayersWithLocalStorageValues(state, action: PayloadAction<RegulatoryZone[]>) {

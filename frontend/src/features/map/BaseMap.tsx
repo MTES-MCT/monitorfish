@@ -14,8 +14,10 @@ import { clickOnMapFeature } from '../MainMap/useCases/clickOnMapFeature'
 import { clickableLayerCodes, hoverableLayerCodes } from '../MainMap/utils'
 
 import type { MainMap } from '@features/MainMap/MainMap.types'
+import type { FeatureWithCodeAndEntityId } from '@libs/FeatureWithCodeAndEntityId'
 import type { Coordinates } from '@mtes-mct/monitor-ui'
 import type { MainAppThunk } from '@store'
+import type { Feature, MapBrowserEvent } from 'ol'
 import type { FeatureLike } from 'ol/Feature'
 import type { AnimationOptions } from 'ol/View'
 import type { PropsWithChildren } from 'react'
@@ -28,10 +30,10 @@ let timeoutForMove
  * BaseMap forwards map as props to children
  */
 type BaseMapProps = {
-  handleMovingAndZoom?: (map) => void
-  handlePointerMove?: (feature) => void
+  handleMovingAndZoom?: (openLayerMap: OpenLayerMap) => void
+  handlePointerMove?: (event: MapBrowserEvent<any>) => void
   isMainApp?: boolean
-  setCurrentFeature?: (feature) => void
+  setCurrentFeature?: (feature: Feature | FeatureWithCodeAndEntityId | undefined) => void
   showAttributions?: boolean
   showCoordinates?: boolean
 } & PropsWithChildren
@@ -44,24 +46,24 @@ export function BaseMap({
   showAttributions,
   showCoordinates
 }: BaseMapProps) {
-  const { animateToRegulatoryLayer } = useMainAppSelector(state => state.map)
-
-  const { healthcheckTextWarning, previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
-  const dispatch = useMainAppDispatch()
-
   const isAnimating = useRef(false)
   const isInitRenderDone = useRef(false)
-  const [cursorCoordinates, setCursorCoordinates] = useState<Coordinates | undefined>(undefined)
-
   const mapElement = useRef()
 
+  const dispatch = useMainAppDispatch()
+  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
+  const animateToRegulatoryLayer = useMainAppSelector(state => state.map.animateToRegulatoryLayer)
+
+  const [cursorCoordinates, setCursorCoordinates] = useState<Coordinates | undefined>(undefined)
+
   const handleMapClick = useCallback(
-    (event, _map: OpenLayerMap) => {
-      if (!event || !_map) {
+    (event: MapBrowserEvent<any>, openLayerMap: OpenLayerMap) => {
+      if (!event || !openLayerMap) {
         return
       }
 
-      const feature = _map.forEachFeatureAtPixel<FeatureLike>(event.pixel, clickedFeature => clickedFeature, {
+      const feature = openLayerMap.forEachFeatureAtPixel<FeatureLike>(event.pixel, clickedFeature => clickedFeature, {
         hitTolerance: HIT_PIXEL_TO_TOLERANCE,
         layerFilter: layer =>
           !!clickableLayerCodes.find(clickableLayerName =>
@@ -76,13 +78,13 @@ export function BaseMap({
   )
 
   const handleBasePointerMove = useCallback(
-    (event, _map: OpenLayerMap) => {
-      if (!event || !_map) {
+    (event: MapBrowserEvent<any>, openLayerMap: OpenLayerMap) => {
+      if (!event) {
         return
       }
 
-      const pixel = _map.getEventPixel(event.originalEvent)
-      const feature = _map.forEachFeatureAtPixel<FeatureLike>(pixel, hoveredFeature => hoveredFeature, {
+      const pixel = openLayerMap.getEventPixel(event.originalEvent)
+      const feature = openLayerMap.forEachFeatureAtPixel<FeatureLike>(pixel, hoveredFeature => hoveredFeature, {
         hitTolerance: HIT_PIXEL_TO_TOLERANCE,
         layerFilter: layer =>
           !!hoverableLayerCodes.find(hoverableLayerName =>
@@ -96,25 +98,25 @@ export function BaseMap({
 
       if (!feature?.getId()) {
         if (setCurrentFeature) {
-          setCurrentFeature(null)
+          setCurrentFeature(undefined)
         }
         // eslint-disable-next-line no-param-reassign
-        ;(_map.getTarget() as HTMLElement).style.cursor = ''
+        ;(openLayerMap.getTarget() as HTMLElement).style.cursor = ''
 
         return
       }
 
       if (setCurrentFeature) {
-        setCurrentFeature(feature)
+        setCurrentFeature(feature as Feature | FeatureWithCodeAndEntityId | undefined)
       }
       // eslint-disable-next-line no-param-reassign
-      ;(_map.getTarget() as HTMLElement).style.cursor = 'pointer'
+      ;(openLayerMap.getTarget() as HTMLElement).style.cursor = 'pointer'
     },
     [handlePointerMove, setCurrentFeature]
   )
 
   const throttleAndHandleMovingAndZoom = useCallback(
-    _map => {
+    (openLayerMap: OpenLayerMap) => {
       if (timeoutForMove) {
         return
       }
@@ -122,7 +124,7 @@ export function BaseMap({
       timeoutForMove = setTimeout(() => {
         timeoutForMove = null
         if (handleMovingAndZoom) {
-          handleMovingAndZoom(_map)
+          handleMovingAndZoom(openLayerMap)
         }
       }, 100)
     },
@@ -130,7 +132,7 @@ export function BaseMap({
   )
 
   const throttleAndHandlePointerMove = useCallback(
-    (event, _map) => {
+    (event: MapBrowserEvent<any>, openLayerMap: OpenLayerMap) => {
       if (event.dragging || timeoutForPointerMove) {
         if (timeoutForPointerMove) {
           lastEventForPointerMove = event
@@ -141,7 +143,7 @@ export function BaseMap({
 
       timeoutForPointerMove = setTimeout(() => {
         timeoutForPointerMove = null
-        handleBasePointerMove(lastEventForPointerMove, _map)
+        handleBasePointerMove(lastEventForPointerMove, openLayerMap)
 
         if (showCoordinates) {
           saveCoordinates(lastEventForPointerMove)

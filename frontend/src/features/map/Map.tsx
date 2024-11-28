@@ -1,8 +1,9 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
+import { mainMapActions } from '@features/MainMap/slice'
 import FilterLayer from '@features/VesselFilter/layers/VesselFilterLayer'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Feature } from 'ol'
-import { useState } from 'react'
+import { Feature, MapBrowserEvent } from 'ol'
+import { useCallback, useState } from 'react'
 
 import { BaseMap } from './BaseMap'
 import { LayerDetailsBox } from './controls/LayerDetailsBox'
@@ -49,9 +50,9 @@ import { VesselsTracksLayerMemoized } from '../Vessel/layers/VesselsTracksLayer'
 export function Map() {
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
-  const { areVesselsDisplayed, isMissionsLayerDisplayed, isStationLayerDisplayed } = useMainAppSelector(
-    state => state.displayedComponent
-  )
+  const areVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselsDisplayed)
+  const isMissionsLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isMissionsLayerDisplayed)
+  const isStationLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isStationLayerDisplayed)
   const zoneSelected = useMainAppSelector(state => state.regulatoryLayerSearch.zoneSelected)
   const lastShowedFeatures = useMainAppSelector(state => state.mainMap.lastShowedFeatures)
   const layersToFeatures = useMainAppSelector(state => state.mainMap.layersToFeatures)
@@ -64,7 +65,6 @@ export function Map() {
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
   const [hoveredFeature, setHoveredFeature] = useState<Feature | FeatureWithCodeAndEntityId | undefined>(undefined)
   const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState<Object>({})
-  const [handlePointerMoveEventPixel, setHandlePointerMoveEventPixel] = useState(null)
 
   const hoveredFeatureWithCodeAndEntityId =
     hoveredFeature && hoveredFeature instanceof FeatureWithCodeAndEntityId ? hoveredFeature : undefined
@@ -77,12 +77,12 @@ export function Map() {
     setMapMovingAndZoomEvent({ dummyUpdate: true })
   }
 
-  // TODO Maybe debounce this call. This triggers a lot of re-renders.
-  const handlePointerMove = event => {
-    if (event) {
-      setHandlePointerMoveEventPixel(event.pixel)
-    }
-  }
+  const handlePointerMove = useCallback(
+    (event: MapBrowserEvent<any>) => {
+      dispatch(mainMapActions.setMousePosition(event.pixel))
+    },
+    [dispatch]
+  )
 
   return (
     <BaseMap
@@ -96,7 +96,6 @@ export function Map() {
     >
       <BaseLayer />
       <RegulatoryLayers
-        dispatch={dispatch}
         lastShowedFeatures={lastShowedFeatures}
         layersToFeatures={layersToFeatures}
         mapMovingAndZoomEvent={mapMovingAndZoomEvent}
@@ -151,8 +150,8 @@ export function Map() {
       {areVesselsDisplayed && <VesselInfractionSuspicionLayer />}
       <VesselsTracksLayerMemoized />
       <VesselCardOverlay feature={hoveredFeature} />
-      <TrackTypeOverlay feature={hoveredFeature} pointerMoveEventPixel={handlePointerMoveEventPixel} />
-      <VesselEstimatedPositionOverlay feature={hoveredFeature} pointerMoveEventPixel={handlePointerMoveEventPixel} />
+      <TrackTypeOverlay feature={hoveredFeature} />
+      <VesselEstimatedPositionOverlay feature={hoveredFeature} />
       <VesselTrackOverlay feature={hoveredFeature} />
       {hoveredFeature && <LayerDetailsBox feature={hoveredFeature} />}
       <InterestPointLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />

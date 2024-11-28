@@ -3,7 +3,7 @@ import { Ellipsised } from '@components/Ellipsised'
 import { Titled } from '@components/Titled'
 import { getReportingOrigin, getReportingTitle } from '@features/Reporting/components/ReportingTable/utils'
 import { type Reporting, ReportingType, ReportingTypeCharacteristics } from '@features/Reporting/types'
-import { TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import { TableWithSelectableRows, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
@@ -47,9 +47,9 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
         return timeago.format(validationDate, 'fr').replace('il y a ', '')
       },
       enableSorting: true,
-      header: () => 'Ouvert il y a...',
+      header: () => 'Il y a...',
       id: 'date',
-      size: 130 + legacyFirefoxOffset
+      size: 90 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row,
@@ -131,11 +131,16 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
     },
     {
       accessorFn: row => row.underCharter,
-      cell: (info: CellContext<Reporting.Reporting, boolean>) => info.getValue(),
-      enableSorting: true,
+      cell: (info: CellContext<Reporting.Reporting, boolean>) =>
+        info.getValue() ? (
+          <Tag backgroundColor={THEME.color.mediumSeaGreen25} color={THEME.color.mediumSeaGreen}>
+            Navire sous charte
+          </Tag>
+        ) : undefined,
+      enableSorting: false,
       header: () => '',
       id: 'underCharter',
-      size: 55 + legacyFirefoxOffset
+      size: 170 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row.id,
@@ -143,7 +148,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       enableSorting: false,
       header: () => '',
       id: 'actions',
-      size: 73 + legacyFirefoxOffset
+      size: 80 + legacyFirefoxOffset
     }
   ]
 }

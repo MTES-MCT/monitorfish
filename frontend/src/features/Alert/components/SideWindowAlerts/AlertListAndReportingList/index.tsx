@@ -42,19 +42,21 @@ export function AlertListAndReportingList({
 
   return (
     <Wrapper>
-      <Title
-        $isSelected={selectedTab === AlertAndReportingTab.ALERT}
-        onClick={() => setSelectedTab(AlertAndReportingTab.ALERT)}
-      >
-        Alertes
-      </Title>
-      <Title
-        $isSelected={selectedTab === AlertAndReportingTab.REPORTING}
-        data-cy="side-window-reporting-tab"
-        onClick={() => setSelectedTab(AlertAndReportingTab.REPORTING)}
-      >
-        Signalements
-      </Title>
+      <Header>
+        <Title
+          $isSelected={selectedTab === AlertAndReportingTab.ALERT}
+          onClick={() => setSelectedTab(AlertAndReportingTab.ALERT)}
+        >
+          Alertes
+        </Title>
+        <Title
+          $isSelected={selectedTab === AlertAndReportingTab.REPORTING}
+          data-cy="side-window-reporting-tab"
+          onClick={() => setSelectedTab(AlertAndReportingTab.REPORTING)}
+        >
+          Signalements
+        </Title>
+      </Header>
 
       {selectedTab === AlertAndReportingTab.ALERT && (
         <PendingAlertsList
@@ -73,7 +75,10 @@ export function AlertListAndReportingList({
 const Wrapper = styled.div`
   flex-grow: 1;
   overflow: auto;
-  margin-left: 30px;
+`
+
+const Header = styled.div`
+  margin-left: 32px;
 `
 
 // TODO This should be a `<a />` or a `<button />`.
@@ -86,8 +91,8 @@ const Title = styled.h2<{
   display: inline-block;
   font-size: 22px;
   font-weight: 700;
-  margin: 30px 10px;
-  padding-bottom: 5px;
+  margin-top: 30px;
+  margin-right: 30px;
   text-align: left;
   transition: all 0.2s;
   width: fit-content;

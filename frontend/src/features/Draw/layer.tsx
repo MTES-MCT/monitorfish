@@ -25,11 +25,15 @@ import { monitorfishMap } from '../map/monitorfishMap'
 import type { MainMap } from '@features/MainMap/MainMap.types'
 import type Geometry from 'ol/geom/Geometry'
 import type { GeometryFunction } from 'ol/interaction/Draw'
+import type { ModifyEvent } from 'ol/interaction/Modify'
 import type { MutableRefObject } from 'react'
 
 function UnmemoizedDrawLayer() {
   const dispatch = useMainAppDispatch()
-  const { drawedGeometry, initialGeometry, interactionType, listener } = useMainAppSelector(state => state.draw)
+  const drawedGeometry = useMainAppSelector(state => state.draw.drawedGeometry)
+  const initialGeometry = useMainAppSelector(state => state.draw.initialGeometry)
+  const interactionType = useMainAppSelector(state => state.draw.interactionType)
+  const listener = useMainAppSelector(state => state.draw.listener)
 
   const feature = useMemo(() => {
     const currentGeometry = drawedGeometry ?? initialGeometry
@@ -93,10 +97,10 @@ function UnmemoizedDrawLayer() {
   }, [getVectorSource])
 
   const setGeometryOnModifyEnd = useCallback(
-    event => {
+    (event: ModifyEvent) => {
       const nextGeometry = event.features.item(0).getGeometry()
       if (nextGeometry) {
-        dispatch(setDrawedGeometry(nextGeometry as Geometry))
+        dispatch(setDrawedGeometry(nextGeometry))
       }
     },
     [dispatch]

@@ -1,7 +1,8 @@
+import { HALF_A_SECOND } from '@constants/index'
+import { useHybridAppDispatch } from '@hooks/useHybridAppDispatch'
 import { Feature } from 'ol'
 import { Geometry } from 'ol/geom'
 import { useEffect, useRef } from 'react'
-import { useStore } from 'react-redux'
 
 import { LayerProperties } from '../../MainMap/constants'
 import { getLayerNameNormalized } from '../../MainMap/utils'
@@ -11,15 +12,12 @@ import { getRegulatoryLayersToAdd } from '../useCases/getRegulatoryLayersToAdd'
 
 import type { RegulatoryZone } from '../types'
 import type { MainMap } from '@features/MainMap/MainMap.types'
-import type { BackofficeAppDispatch, MainAppDispatch } from '@store'
-import type { HybridAppDispatch } from '@store/types'
 import type VectorImageLayer from 'ol/layer/VectorImage'
 
 export const METADATA_IS_SHOWED = 'metadataIsShowed'
 const SIMPLIFIED_FEATURE_ZOOM_LEVEL = 9.5
 
-export type RegulatoryLayersProps<Dispatch extends HybridAppDispatch> = Readonly<{
-  dispatch: Dispatch
+export type RegulatoryLayersProps = Readonly<{
   lastShowedFeatures: Record<string, any>[]
   layersToFeatures: Record<string, any>[]
   mapMovingAndZoomEvent?: any
@@ -27,26 +25,18 @@ export type RegulatoryLayersProps<Dispatch extends HybridAppDispatch> = Readonly
   showedLayers: MainMap.ShowedLayer[]
   simplifiedGeometries: boolean
 }>
-export function RegulatoryLayers(props: RegulatoryLayersProps<BackofficeAppDispatch>): JSX.Element
-export function RegulatoryLayers(props: RegulatoryLayersProps<MainAppDispatch>): JSX.Element
-export function RegulatoryLayers<Dispatch extends HybridAppDispatch>({
-  dispatch,
+export function RegulatoryLayers({
   lastShowedFeatures,
   layersToFeatures,
   mapMovingAndZoomEvent,
   regulatoryZoneMetadata,
   showedLayers,
   simplifiedGeometries
-}: RegulatoryLayersProps<Dispatch>) {
-  const throttleDuration = 500 // ms
-  const { getState } = useStore()
-
-  // const { lastShowedFeatures, layersToFeatures, showedLayers } = useMainAppSelector(state => state.layer)
-
-  // const { regulatoryZoneMetadata, simplifiedGeometries } = useMainAppSelector(state => state.regulatory)
-
-  const previousMapZoom = useRef('')
+}: RegulatoryLayersProps) {
   const isThrottled = useRef(false)
+  const previousMapZoom = useRef('')
+
+  const dispatch = useHybridAppDispatch()
 
   useEffect(() => {
     sortRegulatoryLayersFromAreas(layersToFeatures, monitorfishMap.getLayers().getArray())
@@ -67,7 +57,7 @@ export function RegulatoryLayers<Dispatch extends HybridAppDispatch>({
       olLayers.push(vectorLayer)
     })
     removeRegulatoryLayersToMap(showedLayers, olLayers)
-  }, [dispatch, getState, showedLayers])
+  }, [dispatch, showedLayers])
 
   useEffect(() => {
     function addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers() {
@@ -146,7 +136,7 @@ export function RegulatoryLayers<Dispatch extends HybridAppDispatch>({
     setTimeout(() => {
       showSimplifiedOrWholeFeatures()
       isThrottled.current = false
-    }, throttleDuration)
+    }, HALF_A_SECOND)
     // The `mapMovingAndZoomEvent` prop is used to refresh this effect
   }, [dispatch, layersToFeatures, mapMovingAndZoomEvent, simplifiedGeometries])
 

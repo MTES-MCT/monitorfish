@@ -75,4 +75,5 @@ export const {
   setInteractionTypeAndListener
 } = drawReducerSlice.actions
 
+export const drawActions = drawReducerSlice.actions
 export const drawReducer = drawReducerSlice.reducer

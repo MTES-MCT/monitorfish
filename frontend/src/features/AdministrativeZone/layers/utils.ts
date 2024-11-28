@@ -1,28 +1,18 @@
-import { mainMapActions } from '@features/MainMap/slice'
 import GeoJSON from 'ol/format/GeoJSON'
 import VectorImageLayer from 'ol/layer/VectorImage'
 import { all, bbox as bboxStrategy } from 'ol/loadingstrategy'
 import VectorSource from 'ol/source/Vector'
 
-import { getLayerNameFromTypeAndZone } from './utils'
+import { getAdministrativeLayerStyle } from './styles/administrativeLayer.style'
 import { getAdministrativeZoneFromAPI } from '../../../api/geoserver'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../MainMap/constants'
-import { getAdministrativeLayerStyle } from '../layers/styles/administrativeLayer.style'
 
-import type { MainAppThunk } from '../../../store'
-import type { MainMap } from '@features/MainMap/MainMap.types'
 import type Feature from 'ol/Feature'
 import type Geometry from 'ol/geom/Geometry'
 
-export const showAdministrativeZone =
-  (zoneRequest: MainMap.ShowedLayer): MainAppThunk<void> =>
-  dispatch => {
-    dispatch(mainMapActions.addShowedLayer(zoneRequest))
-  }
-
 export const getVectorOLLayer = (
   type: string,
-  zone: string | null,
+  zone: string | undefined,
   isBackoffice: boolean
 ): VectorImageLayer<Feature<Geometry>> => {
   const layer = new VectorImageLayer({
@@ -37,7 +27,7 @@ export const getVectorOLLayer = (
   return layer
 }
 
-const getVectorSource = (type: string, zone: string | null, isBackoffice): VectorSource => {
+const getVectorSource = (type: string, zone: string | undefined, isBackoffice: boolean): VectorSource => {
   if (zone) {
     return buildWholeVectorSource(type, zone, isBackoffice)
   }
@@ -45,7 +35,11 @@ const getVectorSource = (type: string, zone: string | null, isBackoffice): Vecto
   return buildBBOXVectorSource(type, zone, isBackoffice)
 }
 
-function buildWholeVectorSource(type: string, zone: string | null, isBackoffice): VectorSource<Feature<Geometry>> {
+function buildWholeVectorSource(
+  type: string,
+  zone: string | undefined,
+  isBackoffice: boolean
+): VectorSource<Feature<Geometry>> {
   const vectorSource = new VectorSource({
     format: new GeoJSON({
       dataProjection: WSG84_PROJECTION,
@@ -54,7 +48,7 @@ function buildWholeVectorSource(type: string, zone: string | null, isBackoffice)
     strategy: all
   })
 
-  getAdministrativeZoneFromAPI(type, null, zone, isBackoffice).then(administrativeZoneFeature => {
+  getAdministrativeZoneFromAPI(type, undefined, zone, isBackoffice).then(administrativeZoneFeature => {
     const features = vectorSource.getFormat()?.readFeatures(administrativeZoneFeature)
     if (!features) {
       return
@@ -66,7 +60,11 @@ function buildWholeVectorSource(type: string, zone: string | null, isBackoffice)
   return vectorSource
 }
 
-function buildBBOXVectorSource(type: string, zone: string | null, isBackoffice): VectorSource<Feature<Geometry>> {
+function buildBBOXVectorSource(
+  type: string,
+  zone: string | undefined,
+  isBackoffice: boolean
+): VectorSource<Feature<Geometry>> {
   const vectorSource = new VectorSource({
     format: new GeoJSON({
       dataProjection: WSG84_PROJECTION,
@@ -91,4 +89,12 @@ function buildBBOXVectorSource(type: string, zone: string | null, isBackoffice):
   })
 
   return vectorSource
+}
+
+export function getLayerNameFromTypeAndZone(type: string, zone: string | undefined): string {
+  if (!zone) {
+    return type
+  }
+
+  return `${type}:${zone}`
 }

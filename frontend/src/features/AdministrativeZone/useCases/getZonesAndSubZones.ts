@@ -7,7 +7,7 @@ import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { ZoneChildren } from '@features/Vessel/components/VesselList/slice'
 import type { MainAppThunk } from '@store'
 
-export const getZonesAndSubZonesPromises = (): MainAppThunk<Promise<ZoneChildren[]>> => async (_dispatch, getState) => {
+export const getZonesAndSubZones = (): MainAppThunk<Promise<ZoneChildren[]>> => async (_dispatch, getState) => {
   const filteredLayers = Object.keys(LayerProperties)
     .map<MainMap.ShowableLayer>(layerKey => LayerProperties[layerKey])
     .filter(layer => layer.type === LayerType.ADMINISTRATIVE)

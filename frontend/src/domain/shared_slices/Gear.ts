@@ -1,12 +1,13 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
 import type { Gear } from '../types/Gear'
+import type { REGULATED_GEARS_KEYS } from 'domain/entities/backoffice'
 
 export type GearState = {
   categoriesToGears: Record<string, Gear[]> | undefined
   gears: Gear[]
   gearsByCode: Record<string, Gear> | undefined
-  groupsToCategories: Record<string, string[]> | undefined
+  groupsToCategories: Partial<Record<REGULATED_GEARS_KEYS, string[]>> | undefined
 }
 const INITIAL_STATE: GearState = {
   categoriesToGears: undefined,
@@ -31,7 +32,7 @@ const gearSlice = createSlice({
       state.gearsByCode = action.payload
     },
 
-    setGroupsToCategories(state, action: PayloadAction<Record<string, string[]>>) {
+    setGroupsToCategories(state, action: PayloadAction<Partial<Record<REGULATED_GEARS_KEYS, string[]>>>) {
       state.groupsToCategories = action.payload
     }
   }

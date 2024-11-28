@@ -96,13 +96,20 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears: Record<str
     return null
   }).filter(isNotNullish)
 
-export const getGroupCategories = (option, groupsToCategories) => {
+export const getGroupCategories = (
+  option: REGULATED_GEARS_KEYS,
+  groupsToCategories: Partial<Record<REGULATED_GEARS_KEYS, string[]>> | undefined
+): string[] => {
+  if (!groupsToCategories) {
+    return []
+  }
+
   switch (option) {
     case REGULATED_GEARS_KEYS.ALL_TOWED_GEARS:
-      return groupsToCategories[REGULATED_GEARS_KEYS.ALL_TOWED_GEARS]
+      return groupsToCategories[REGULATED_GEARS_KEYS.ALL_TOWED_GEARS] ?? []
 
     case REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS:
-      return groupsToCategories[REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS]
+      return groupsToCategories[REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS] ?? []
 
     case REGULATED_GEARS_KEYS.ALL_GEARS:
       return SORTED_CATEGORY_LIST

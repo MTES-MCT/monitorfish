@@ -1,7 +1,7 @@
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
 import _ from 'lodash'
 import { useCallback, useEffect } from 'react'
-import { MultiCascader, Radio, RadioGroup } from 'rsuite'
+import { MultiCascader, Radio, RadioGroup, type CheckboxProps } from 'rsuite'
 import styled from 'styled-components'
 
 import { RegulatedGear } from './RegulatedGear'
@@ -43,7 +43,11 @@ export function RegulatedGears({
   const gearsByCode = useBackofficeAppSelector(state => state.gear.gearsByCode)
   const groupsToCategories = useBackofficeAppSelector(state => state.gear.groupsToCategories)
 
-  const onCheckboxChange = (groupName, checked) => {
+  const onCheckboxChange = (groupName: REGULATED_GEARS_KEYS | undefined, checked: boolean) => {
+    if (!groupName) {
+      return
+    }
+
     let nextSelectedCategoriesAndGears = selectedCategoriesAndGears ? [...selectedCategoriesAndGears] : []
     const gearsListToConcatOrFilter = getGroupCategories(groupName, groupsToCategories)
 
@@ -334,7 +338,7 @@ const CustomMultiCascader = styled(MultiCascader)`
   }
 `
 
-const GearCheckBox = styled(CustomCheckbox)`
+const GearCheckBox = styled(CustomCheckbox)<any, CheckboxProps<REGULATED_GEARS_KEYS>>`
   padding-right: 11px;
 `
 

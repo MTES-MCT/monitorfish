@@ -16,6 +16,7 @@ import { priorNotificationReducer, type PriorNotificationState } from '@features
 import { backofficeProducerOrganizationMembershipReducer } from '@features/ProducerOrganizationMembership/backoffice.slice'
 import { regulatoryLayerSearchReducer } from '@features/Regulation/components/RegulationSearch/slice'
 import { regulatoryReducer } from '@features/Regulation/slice'
+import { reportingTableFiltersReducer } from '@features/Reporting/components/ReportingTable/Filters/slice'
 import { reportingReducer } from '@features/Reporting/slice'
 import { sideWindowReducer } from '@features/SideWindow/slice'
 import { stationReducer } from '@features/Station/slice'
@@ -118,6 +119,7 @@ export const mainReducer = {
   ),
   regulatoryLayerSearch: regulatoryLayerSearchReducer,
   reporting: reportingReducer,
+  reportingTableFilters: reportingTableFiltersReducer,
   sideWindow: sideWindowReducer,
   station: stationReducer,
   vessel: vesselReducer,

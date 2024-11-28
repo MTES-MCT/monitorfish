@@ -91,6 +91,6 @@ const Wrapper = styled.div`
   margin-bottom: 1px;
 
   > button {
-    padding: 0px;
+    padding: 0;
   }
 `

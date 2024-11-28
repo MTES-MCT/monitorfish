@@ -10,12 +10,13 @@ import { getRowCellCustomStyle } from '@features/Reporting/components/ReportingT
 import { Body } from '@features/SideWindow/components/Body'
 import { Page } from '@features/SideWindow/components/Page'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useTableVirtualizer } from '@hooks/useTableVirtualizer'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Icon, IconButton, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
 import dayjs from 'dayjs'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { SkeletonRow } from '../../../../ui/Table/SkeletonRow'
@@ -24,7 +25,6 @@ import { archiveReportings } from '../../useCases/archiveReportings'
 import { deleteReportings } from '../../useCases/deleteReportings'
 
 import type { Reporting } from '@features/Reporting/types'
-import type { SortingState } from '@tanstack/react-table'
 
 type ReportingTableProps = Readonly<{
   isFromUrl: boolean
@@ -32,9 +32,10 @@ type ReportingTableProps = Readonly<{
 }>
 export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTableProps) {
   const dispatch = useMainAppDispatch()
+  const tableContainerRef = useRef<HTMLDivElement>(null)
+
   const [rowSelection, setRowSelection] = useState({})
   const rowSelectionAsArray = Object.keys(rowSelection).map(Number)
-  const [sorting, setSorting] = useState<SortingState>([{ desc: true, id: 'name' }])
 
   const { isError, isLoading, reportings } = useGetFilteredReportingsQuery(selectedSeafrontGroup)
 
@@ -66,21 +67,29 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
   const table = useReactTable<Reporting.Reporting>({
     columns,
     data: tableData,
+    debugAll: true,
     enableRowSelection: true,
     enableSortingRemoval: false,
     getCoreRowModel: getCoreRowModel(),
     getRowId: row => row.id.toString(),
-    manualPagination: false,
-    manualSorting: true,
+    getSortedRowModel: getSortedRowModel(),
+    initialState: {
+      sorting: [
+        {
+          desc: true,
+          id: 'date'
+        }
+      ]
+    },
     onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
     state: {
-      rowSelection,
-      sorting
+      rowSelection
     }
   })
 
   const { rows } = table.getRowModel()
+  const rowVirtualizer = useTableVirtualizer({ estimateSize: 42, ref: tableContainerRef, rows })
+  const virtualRows = rowVirtualizer.getVirtualItems()
 
   return (
     <Page>
@@ -111,7 +120,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
           </RightAligned>
         </Filters>
 
-        <TableInnerWrapper $hasError={isError}>
+        <TableInnerWrapper ref={tableContainerRef} $hasError={isError}>
           {isError && <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR} />}
           {!isError && (
             <TableWithSelectableRows.Table $withRowCheckbox data-cy="side-window-reporting-list">
@@ -124,20 +133,24 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
               {reportings.length === 0 && <TableBodyEmptyData />}
               {!!reportings.length && (
                 <tbody>
-                  {rows.map(row => (
-                    <TableWithSelectableRows.BodyTr data-cy="ReportingList-reporting">
-                      {row.getVisibleCells().map(cell => (
-                        <Row
-                          key={cell.id}
-                          $hasRightBorder={cell.column.id === 'underCharter'}
-                          $isCenter={cell.column.id === 'actions'}
-                          style={getRowCellCustomStyle(cell.column)}
-                        >
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </Row>
-                      ))}
-                    </TableWithSelectableRows.BodyTr>
-                  ))}
+                  {virtualRows.map(virtualRow => {
+                    const row = rows[virtualRow.index]
+
+                    return (
+                      <TableWithSelectableRows.BodyTr key={virtualRow.key} data-cy="ReportingList-reporting">
+                        {row?.getVisibleCells().map(cell => (
+                          <Row
+                            key={cell.id}
+                            $hasRightBorder={cell.column.id === 'underCharter'}
+                            $isCenter={cell.column.id === 'actions'}
+                            style={getRowCellCustomStyle(cell.column)}
+                          >
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </Row>
+                        ))}
+                      </TableWithSelectableRows.BodyTr>
+                    )
+                  })}
                 </tbody>
               )}
             </TableWithSelectableRows.Table>

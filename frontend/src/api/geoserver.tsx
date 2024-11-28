@@ -11,6 +11,7 @@ import { ApiError } from '../libs/ApiError'
 import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { Regulation } from '@features/Regulation/Regulation.types'
 import type { RegulatoryZone } from '@features/Regulation/types'
+import type { GeoJSON } from 'domain/types/GeoJSON'
 import type { Extent } from 'ol/extent'
 import type { GeoJSONFeatureCollection } from 'ol/format/GeoJSON'
 
@@ -103,15 +104,13 @@ function getAllGeometryWithoutProperty(fromBackoffice) {
 /**
  * Get the administrative zone GeoJSON feature
  * @description This API isn't authenticated
- * @memberOf API
- * @param {string} administrativeZone
- * @param {import("ol/extent.js").Extent|null} extent
- * @param {string|null} subZone
- * @param {boolean} fromBackoffice - From backoffice
- * @returns {Promise<GeoJSON>} The feature GeoJSON
- * @throws {Error}
  */
-export async function getAdministrativeZoneFromAPI(administrativeZone, extent, subZone, fromBackoffice) {
+export async function getAdministrativeZoneFromAPI(
+  administrativeZone: string,
+  extent: Extent | undefined,
+  subZone: string | undefined,
+  fromBackoffice: boolean
+) {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
   return fetch(getAdministrativeZoneURL(administrativeZone, extent, subZone, geoserverURL))
@@ -137,9 +136,13 @@ export async function getAdministrativeZoneFromAPI(administrativeZone, extent, s
 /**
  * Get the administrative zone Geoserver URL
  * @description This API isn't authenticated
- * @returns {string} - the zone URL WFS request
  */
-function getAdministrativeZoneURL(type: string, extent: Extent | null, subZone: string | null, geoserverURL: string) {
+function getAdministrativeZoneURL(
+  type: string,
+  extent: Extent | undefined,
+  subZone: string | undefined,
+  geoserverURL: string
+): string {
   let extentFilter = ''
   if (extent) {
     extentFilter = `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}`
@@ -310,7 +313,10 @@ function getRegulatoryFeatureMetadataFromAPI(
 /**
  * @description This API isn't authenticated
  */
-function getAdministrativeSubZonesFromAPI(type: string, fromBackoffice: boolean) {
+function getAdministrativeSubZonesFromAPI(
+  type: string,
+  fromBackoffice: boolean
+): Promise<GeoJSON.FeatureCollection<any, string>> {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
   let query

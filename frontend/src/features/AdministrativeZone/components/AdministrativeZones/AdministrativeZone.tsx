@@ -6,13 +6,13 @@ import { ShowIcon } from '../../../commonStyles/icons/ShowIcon.style'
 
 import type { MainMap } from '@features/MainMap/MainMap.types'
 
-type AdministrativeZoneType = {
+type AdministrativeZoneType = Readonly<{
   isFirst?: boolean
   isGrouped?: boolean
   isShown: boolean
   showOrHideZone: (isShown: boolean) => void
   zone: MainMap.ShowableLayer
-}
+}>
 export function AdministrativeZone({ isFirst, isGrouped, isShown, showOrHideZone, zone }: AdministrativeZoneType) {
   return (
     <Row

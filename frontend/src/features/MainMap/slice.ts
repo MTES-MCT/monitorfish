@@ -66,6 +66,7 @@ const mainMapSlice = createSlice({
         }
       }
 
+      // TODO Use redux-persist to save showed layers.
       localStorageManager.set(LocalStorageKey.LayersShowedOnMap, state.showedLayers)
     },
 
@@ -110,6 +111,7 @@ const mainMapSlice = createSlice({
         state.showedLayers = state.showedLayers.filter(layer => !(layer.type === type && layer.zone === zone))
       }
 
+      // TODO Use redux-persist to save showed layers.
       localStorageManager.set(LocalStorageKey.LayersShowedOnMap, state.showedLayers)
     },
 

@@ -12,7 +12,6 @@ import { hideLayer } from '../../../LayersSidebar/useCases/hideLayer'
 import { LayerType } from '../../../MainMap/constants'
 import { closeRegulatoryZoneMetadata } from '../../../Regulation/useCases/closeRegulatoryZoneMetadata'
 import { getAdministrativeZones } from '../../useCases/getAdministrativeZones'
-import { showAdministrativeZone } from '../../useCases/showAdministrativeZone'
 
 import type { GroupedZonesAndZones } from '../../useCases/getAdministrativeZones'
 import type { MainMap } from '@features/MainMap/MainMap.types'
@@ -48,6 +47,7 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
     }
   }, [hideLayersListWhenSearching])
 
+  // TODO Simplify this callback with a direct call to the action rather than a function-wrapper.
   const showOrHideZone = useCallback(
     (zone: MainMap.ShowableLayer) => (isShown: boolean) => {
       if (isShown) {
@@ -64,10 +64,12 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
       }
 
       dispatch(
-        showAdministrativeZone({
-          type: zone.hasFetchableZones ? zone.group?.code!! : zone.code,
-          zone: zone.hasFetchableZones ? zone.code : undefined
-        })
+        dispatch(
+          mainMapActions.addShowedLayer({
+            type: zone.hasFetchableZones ? zone.group?.code!! : zone.code,
+            zone: zone.hasFetchableZones ? zone.code : undefined
+          })
+        )
       )
     },
     [dispatch]

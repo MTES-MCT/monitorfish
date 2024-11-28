@@ -1,6 +1,7 @@
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import React, { useEffect } from 'react'
 
+import { getVectorOLLayer } from './utils'
 import {
   administrativeLayers,
   layerOfTypeAdministrativeLayer,
@@ -9,10 +10,10 @@ import {
   layersNotInShowedLayers
 } from '../../MainMap/utils'
 import { monitorfishMap } from '../../map/monitorfishMap'
-import { getVectorOLLayer } from '../useCases/showAdministrativeZone'
 
 function UnmemoizedAdministrativeLayers() {
   const showedLayers = useMainAppSelector(state => state.mainMap.showedLayers)
+  // TODO Do we use administrative layers in the backoffice?
   const isBackoffice = useMainAppSelector(state => state.global.isBackoffice)
 
   useEffect(() => {
@@ -27,7 +28,7 @@ function UnmemoizedAdministrativeLayers() {
         .filter(layer => layersNotInCurrentOLMap(olLayers, layer))
 
       layersToInsert.forEach(layerToInsert => {
-        if (!layerToInsert?.type || !layerToInsert.zone) {
+        if (!layerToInsert?.type) {
           return
         }
 

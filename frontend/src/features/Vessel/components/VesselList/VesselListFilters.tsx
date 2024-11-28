@@ -196,21 +196,18 @@ function UnmemoizedVesselListFilters({ seeMoreIsOpen, setSeeMoreIsOpen }: Vessel
 
   // TODO Export to a thunk use-case
   const getZones = useCallback(async () => {
-    const nextZonesPromises = dispatch(getZonesAndSubZonesPromises())
-    const nextZones = await Promise.all(nextZonesPromises)
+    const zonesAndSubZones = await dispatch(getZonesAndSubZonesPromises())
 
-    let nextZonesWithoutNulls = nextZones.flat().filter(zone => zone)
-
-    const groups = Array.from(new Set(nextZonesWithoutNulls.map(zone => zone.group)))
+    const groups = Array.from(new Set(zonesAndSubZones.map(zone => zone.group)))
     setZoneGroups(groups)
 
-    nextZonesWithoutNulls = groups.map(group => ({
-      children: nextZonesWithoutNulls.filter(zone => zone.group === group),
+    const nextZones = groups.map(group => ({
+      children: zonesAndSubZones.filter(zone => zone.group === group),
       label: group,
       value: group
     }))
 
-    dispatch(setZonesFilter(nextZonesWithoutNulls))
+    dispatch(setZonesFilter(nextZones))
   }, [dispatch])
 
   useEffect(() => {

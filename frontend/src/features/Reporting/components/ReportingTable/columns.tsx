@@ -10,7 +10,7 @@ import * as timeago from 'timeago.js'
 
 import { ActionButtonsCell } from './cells/ActionButtonsCell'
 
-import type { CellContext, ColumnDef } from '@tanstack/react-table'
+import type { CellContext, ColumnDef, Row } from '@tanstack/react-table'
 
 export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Reporting.Reporting, any>> {
   const legacyFirefoxOffset = !isFromUrl && isLegacyFirefox() ? -32 : 0
@@ -41,7 +41,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       cell: (info: CellContext<Reporting.Reporting, string | undefined>) => {
         const validationDate = info.getValue()
         if (!validationDate) {
-          return undefined
+          return ''
         }
 
         return timeago.format(validationDate, 'fr').replace('il y a ', '')
@@ -58,7 +58,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
 
         return getReportingOrigin(reporting)
       },
-      enableSorting: true,
+      enableSorting: false,
       header: () => 'Origine',
       id: 'origin',
       size: 130 + legacyFirefoxOffset
@@ -90,13 +90,17 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       enableSorting: true,
       header: () => 'Titre',
       id: 'title',
-      size: 280 + legacyFirefoxOffset
+      size: 280 + legacyFirefoxOffset,
+      sortingFn: (rowA: Row<any>, rowB: Row<any>) => {
+        const titleA = rowA.original.value.title ?? rowA.original.value.type
+        const titleB = rowB.original.value.title ?? rowB.original.value.type
+
+        return titleA.localeCompare(titleB)
+      }
     },
     {
       accessorFn: row =>
-        row.type === ReportingType.INFRACTION_SUSPICION || row.type === ReportingType.ALERT
-          ? row.value.natinfCode
-          : undefined,
+        row.type === ReportingType.INFRACTION_SUSPICION || row.type === ReportingType.ALERT ? row.value.natinfCode : '',
       cell: (info: CellContext<Reporting.Reporting, string | undefined>) => info.getValue(),
       enableSorting: true,
       header: () => 'NATINF',
@@ -136,7 +140,9 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
           <Tag backgroundColor={THEME.color.mediumSeaGreen25} color={THEME.color.mediumSeaGreen}>
             Navire sous charte
           </Tag>
-        ) : undefined,
+        ) : (
+          ''
+        ),
       enableSorting: false,
       header: () => '',
       id: 'underCharter',

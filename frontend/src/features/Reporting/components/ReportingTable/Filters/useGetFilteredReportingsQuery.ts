@@ -11,6 +11,8 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { CustomSearch } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 
+import type { InfractionSuspicionReporting, Reporting } from '@features/Reporting/types'
+
 export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup) => {
   const searchQuery = useMainAppSelector(state => state.reportingTableFilters.searchQuery)
 
@@ -37,15 +39,21 @@ export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGro
 
   const fuse = useMemo(
     () =>
-      new CustomSearch(
+      new CustomSearch<Reporting.Reporting>(
         currentSeafrontReportings,
         [
           'vesselName',
           'internalReferenceNumber',
           'externalReferenceNumber',
           'ircs',
-          'value.dml',
-          'value.title',
+          {
+            getFn: reporting => (isInfractionSuspicion(reporting) ? reporting.value.dml : ''),
+            name: 'value.dml'
+          },
+          {
+            getFn: reporting => (isInfractionSuspicion(reporting) ? reporting.value.title : ''),
+            name: 'value.title'
+          },
           {
             getFn: reporting => {
               if (Object.keys(PendingAlertValueType).includes(reporting.value.type)) {
@@ -54,7 +62,7 @@ export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGro
 
               return ''
             },
-            name: ['value', 'type']
+            name: 'value.type'
           }
         ],
         { isCaseSensitive: false, isDiacriticSensitive: false, isStrict: true, threshold: 0.4 }
@@ -75,4 +83,8 @@ export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGro
   }, [currentSeafrontReportings, searchQuery, fuse])
 
   return { isError, isLoading, reportings: filteredReportings }
+}
+
+function isInfractionSuspicion(reporting: Reporting.Reporting): reporting is InfractionSuspicionReporting {
+  return (<InfractionSuspicionReporting>reporting).value.title !== undefined
 }

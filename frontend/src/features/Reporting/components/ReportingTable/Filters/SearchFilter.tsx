@@ -11,9 +11,13 @@ export function SearchFilter() {
   const searchQuery = useMainAppSelector(state => state.reportingTableFilters.searchQuery)
   const [searchText, setSearchText] = useState(searchQuery)
 
-  const debouncedHandleChange = useDebouncedCallback((value: string | undefined) => {
-    dispatch(reportingTableFiltersActions.setSearchQueryFilter(value))
-  }, 250)
+  const debouncedHandleChange = useDebouncedCallback(
+    (value: string | undefined) => {
+      dispatch(reportingTableFiltersActions.setSearchQueryFilter(value))
+    },
+    50,
+    { leading: true, maxWait: 250 }
+  )
 
   return (
     <StyledSearch

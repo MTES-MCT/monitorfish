@@ -44,7 +44,7 @@ export function getAllGearCodes(): MainAppThunk | BackofficeAppThunk {
     try {
       const gears = await getAllGearsFromAPI()
       const categoriesToGears: Record<string, Gear[]> = {}
-      const groupToCategories: Record<string, string[]> = {}
+      const groupToCategories: Partial<Record<REGULATED_GEARS_KEYS, string[]>> = {}
       const gearsByCode: Record<string, Gear> = {}
 
       gears.forEach(gear => {

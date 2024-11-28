@@ -8,10 +8,10 @@ import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { getOnlyVesselIdentityProperties } from '../../../../../domain/entities/vessel/vessel'
-import CloseIconSVG from '../../../../icons/Croix_grise.svg?react'
-import AlertsSVG from '../../../../icons/Icone_alertes_gris.svg?react'
-import { ReportingForm } from '../../../../Reporting/components/ReportingForm'
+import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
+import CloseIconSVG from '../../../icons/Croix_grise.svg?react'
+import AlertsSVG from '../../../icons/Icone_alertes_gris.svg?react'
+import { ReportingForm } from '../ReportingForm'
 
 export function EditReporting() {
   const dispatch = useMainAppDispatch()
@@ -79,8 +79,8 @@ const EditReportingWrapper = styled.div<{
   height: 100vh;
   margin-right: ${p => (p.$isEditedInSideWindow ? 0 : -490)}px;
   position: fixed;
-  right: 0px;
-  top: 0px;
+  right: 0;
+  top: 0;
   transition: margin-right 0.5s;
   width: 490px;
   z-index: 999;
@@ -123,7 +123,7 @@ const CloseIcon = styled(CloseIconSVG)`
   height: 20px;
   margin-left: auto;
   margin-right: 4px;
-  margin-top: 0px;
+  margin-top: 0;
   width: 20px;
 `
 
@@ -141,7 +141,7 @@ const Header = styled.div`
 const Title = styled.span`
   color: ${THEME.color.slateGray};
   font: normal normal bold 16px Marianne;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   margin-left: 10px;
   vertical-align: super;
 `

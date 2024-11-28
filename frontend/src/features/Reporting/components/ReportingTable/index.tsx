@@ -3,6 +3,7 @@ import { ErrorWall } from '@components/ErrorWall'
 import { type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import { getReportingTableColumns } from '@features/Reporting/components/ReportingTable/columns'
 import { REPORTING_CSV_MAP } from '@features/Reporting/components/ReportingTable/constants'
+import { EditReporting } from '@features/Reporting/components/ReportingTable/EditReporting'
 import { SearchFilter } from '@features/Reporting/components/ReportingTable/Filters/SearchFilter'
 import { useGetFilteredReportingsQuery } from '@features/Reporting/components/ReportingTable/Filters/useGetFilteredReportingsQuery'
 import { TableBodyEmptyData } from '@features/Reporting/components/ReportingTable/TableBodyEmptyData'
@@ -67,7 +68,6 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
   const table = useReactTable<Reporting.Reporting>({
     columns,
     data: tableData,
-    debugAll: true,
     enableRowSelection: true,
     enableSortingRemoval: false,
     getCoreRowModel: getCoreRowModel(),
@@ -157,6 +157,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
           )}
         </TableInnerWrapper>
       </Body>
+      <EditReporting />
     </Page>
   )
 }
@@ -187,7 +188,7 @@ const TableInnerWrapper = styled.div<{
   * {
     box-sizing: border-box;
   }
-  height: 519px; /* = table height - 5px (negative margin-top) + 1px for Chrome compatibility */
+  height: 619px; /* = table height - 5px (negative margin-top) + 1px for Chrome compatibility */
   min-width: 1271px; /* = table width + right padding + scrollbar width (8px) */
   padding-right: 8px;
   overflow-y: scroll;

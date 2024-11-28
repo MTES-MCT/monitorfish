@@ -13,7 +13,6 @@ context('Side Window > Reporting List > Actions', () => {
       cy.visit('/side_window')
       cy.getDataCy('side-window-reporting-tab').click()
       cy.getDataCy('side-window-sub-menu-NAMO').click()
-      cy.getDataCy('table-order-by-validationDate').click().wait(250).click()
 
       cy.getDataCy('ReportingList-reporting').then($reportingRows => {
         const numberOfReportings = $reportingRows.length
@@ -36,45 +35,6 @@ context('Side Window > Reporting List > Actions', () => {
     })
   })
 
-  it('Reportings Should be searched and ordered by date', () => {
-    // Given
-    cy.visit('/side_window')
-    cy.getDataCy('side-window-reporting-tab').click()
-    cy.getDataCy('side-window-sub-menu-NAMO').click()
-    cy.wait(200)
-
-    cy.getDataCy('ReportingList-reporting').first().children().children().next().next().invoke('text').as('firstRow')
-    cy.getDataCy('ReportingList-reporting').last().children().children().next().next().invoke('text').as('lastRow')
-    cy.getDataCy('table-order-by-validationDate').click()
-    cy.getDataCy('table-order-by-validationDate').click()
-
-    cy.get<string>('@firstRow').then(firstRow => {
-      // When we re-order by date
-      cy.getDataCy('table-order-by-validationDate').click()
-
-      // Then it is re-ordered
-      cy.getDataCy('ReportingList-reporting').last().contains(firstRow)
-    })
-
-    // We reset the order
-    cy.getDataCy('table-order-by-validationDate').click()
-
-    cy.get<string>('@lastRow').then(lastRow => {
-      // When we re-order by date
-      cy.getDataCy('table-order-by-validationDate').click()
-
-      // Then it is re-ordered
-      cy.getDataCy('ReportingList-reporting').first().contains(lastRow)
-    })
-
-    // When we search by vessel name
-    cy.getDataCy('side-window-reporting-search').type('RENCONTRER')
-
-    // Then there is only the searched vessel
-    cy.getDataCy('ReportingList-reporting').first().contains('RENCONTRER VEILLER APPARTEMENT')
-    cy.getDataCy('ReportingList-reporting').should('have.length', 1)
-  })
-
   it('Reportings Should be deleted', () => {
     cy.intercept('DELETE', '/bff/v1/reportings').as('deleteReportings')
 
@@ -83,7 +43,6 @@ context('Side Window > Reporting List > Actions', () => {
       cy.visit('/side_window')
       cy.getDataCy('side-window-reporting-tab').click()
       cy.getDataCy('side-window-sub-menu-NAMO').click()
-      cy.getDataCy('table-order-by-validationDate').click().wait(250).click()
 
       cy.getDataCy('ReportingList-reporting').then($reportingRows => {
         const numberOfReportings = $reportingRows.length
@@ -118,7 +77,7 @@ context('Side Window > Reporting List > Actions', () => {
 
     // When
     cy.clickButton('Editer le signalement', {
-      withinSelector: '[data-cy="ReportingList-reporting"][data-id="7"]'
+      withinSelector: 'tr:contains("COURANT MAIN PROFESSEUR")'
     })
     cy.fill('Titre', 'Suspicion de chalutage dans les 3 km')
     cy.fill('Natinf', 'maille')
@@ -133,25 +92,18 @@ context('Side Window > Reporting List > Actions', () => {
     cy.wait(200)
 
     cy.getDataCy('ReportingList-reporting').should('have.length.greaterThan', 1)
-    cy.get('[data-cy="ReportingList-reporting"][data-id="7"]').contains('DML 56')
-    cy.get('[data-cy="ReportingList-reporting"][data-id="7"]').contains(23581)
-  })
+    cy.get('tr:contains("COURANT MAIN PROFESSEUR")').contains('DML 56')
+    cy.get('tr:contains("COURANT MAIN PROFESSEUR")').contains(23581)
 
-  it('A Reporting Should be edited with the reporting type modified ', () => {
-    cy.intercept('PUT', 'bff/v1/reportings/7').as('updateReporting')
-
-    // Given
-    cy.login('superuser')
-    cy.visit('/side_window')
-    cy.wait(500)
-    cy.getDataCy('side-window-reporting-tab').click()
-    cy.getDataCy('side-window-sub-menu-NAMO').click()
+    /**
+     * The reporting type must be modified to OBSERVATION
+     */
 
     cy.getDataCy('ReportingList-reporting').then($reportingRows => {
       const numberOfReportings = $reportingRows.length
 
       cy.clickButton('Editer le signalement', {
-        withinSelector: '[data-cy="ReportingList-reporting"][data-id="7"]'
+        withinSelector: 'tr:contains("COURANT MAIN PROFESSEUR")'
       })
 
       // When

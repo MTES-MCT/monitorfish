@@ -150,7 +150,6 @@ export function RegulationTables() {
         <BaseMap handleMovingAndZoom={handleMovingAndZoom}>
           <BaseLayer />
           <RegulatoryLayers
-            dispatch={dispatch}
             lastShowedFeatures={[]}
             layersToFeatures={[]}
             mapMovingAndZoomEvent={mapMovingAndZoomEvent}

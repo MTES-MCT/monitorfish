@@ -15,6 +15,8 @@ import { LayerType as LayersType, InteractionListener, InteractionType } from '.
 import { regulationActions } from '../../slice'
 import { MINIMUM_SEARCH_CHARACTERS_NUMBER, searchRegulatoryLayers } from '../../useCases/searchRegulatoryLayers'
 
+import type { ZoneSelected } from '@features/VesselFilter/types'
+
 export function SearchInput() {
   const dispatch = useMainAppDispatch()
   const { advancedSearchIsOpen, zoneSelected } = useMainAppSelector(state => state.regulatoryLayerSearch)
@@ -25,10 +27,10 @@ export function SearchInput() {
   const selectedOrSelectingZoneIsPolygon = zoneSelected?.name === InteractionType.POLYGON
 
   const search = useCallback(
-    async (nextSearchQuery: string | undefined) => {
+    async (nextSearchQuery: string | undefined, nextZoneSelected: ZoneSelected | undefined) => {
       setSearchQuery(nextSearchQuery)
 
-      if ((!nextSearchQuery || nextSearchQuery.length < MINIMUM_SEARCH_CHARACTERS_NUMBER) && !zoneSelected) {
+      if ((!nextSearchQuery || nextSearchQuery.length < MINIMUM_SEARCH_CHARACTERS_NUMBER) && !nextZoneSelected) {
         dispatch(setRegulatoryLayersSearchResult({}))
 
         return
@@ -38,8 +40,12 @@ export function SearchInput() {
 
       dispatch(setRegulatoryLayersSearchResult(foundRegulatoryLayers))
     },
-    [dispatch, zoneSelected]
+    [dispatch]
   )
+
+  useEffect(() => {
+    search(searchQuery, zoneSelected)
+  }, [search, searchQuery, zoneSelected])
 
   useEffect(() => {
     if (searchQuery === undefined) {
@@ -106,7 +112,7 @@ export function SearchInput() {
           isSearchInput
           label="Rechercher une zone réglementaire"
           name="Rechercher une zone réglementaire"
-          onChange={search}
+          onChange={setSearchQuery}
           placeholder="Rechercher une zone réglementaire"
           size={Size.LARGE}
           value={searchQuery}

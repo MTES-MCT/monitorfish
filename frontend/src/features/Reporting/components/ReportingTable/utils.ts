@@ -12,10 +12,6 @@ export const getReportingOrigin = (reporting: Reporting.Reporting, isHovering: b
     return 'Alerte auto.'
   }
 
-  if (reporting.type === ReportingType.OBSERVATION) {
-    return ''
-  }
-
   switch (reporting.value.reportingActor) {
     case ReportingOriginActor.UNIT:
       return `${reporting.value.controlUnit?.name ?? ''}${isHovering ? `: ${reporting.value.authorContact}` : ''}`

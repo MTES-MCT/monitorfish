@@ -4,7 +4,6 @@ import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlert
 import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '@features/Alert/constants'
 import { PendingAlertValueType } from '@features/Alert/types'
 import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
-import { isNotObservationReporting } from '@features/Reporting/utils'
 import { useHandleFrontendApiError } from '@hooks/useHandleFrontendApiError'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -15,6 +14,7 @@ import type { InfractionSuspicionReporting, Reporting } from '@features/Reportin
 
 export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup) => {
   const searchQuery = useMainAppSelector(state => state.reportingTableFilters.searchQuery)
+  const reportingTypesDisplayed = useMainAppSelector(state => state.reportingTableFilters.reportingTypesDisplayed)
 
   const { data, error, isError, isLoading } = useGetReportingsQuery(undefined, RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS)
 
@@ -24,18 +24,20 @@ export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGro
     const currentReportings = data ?? []
 
     if (selectedSeafrontGroup === NO_SEAFRONT_GROUP) {
-      return currentReportings.filter(isNotObservationReporting).filter(reporting => !reporting.value.seaFront)
+      return currentReportings
+        .filter(reporting => !reporting.value.seaFront)
+        .filter(reporting => reportingTypesDisplayed.includes(reporting.type))
     }
 
     return currentReportings
-      .filter(isNotObservationReporting)
       .filter(
         reporting =>
           ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup] &&
           reporting.value.seaFront &&
           ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts.includes(reporting.value.seaFront)
       )
-  }, [data, selectedSeafrontGroup])
+      .filter(reporting => reportingTypesDisplayed.includes(reporting.type))
+  }, [data, selectedSeafrontGroup, reportingTypesDisplayed])
 
   const fuse = useMemo(
     () =>
@@ -47,7 +49,7 @@ export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGro
           'externalReferenceNumber',
           'ircs',
           {
-            getFn: reporting => (isInfractionSuspicion(reporting) ? reporting.value.dml : ''),
+            getFn: reporting => reporting.value.dml ?? '',
             name: 'value.dml'
           },
           {

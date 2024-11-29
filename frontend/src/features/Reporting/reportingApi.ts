@@ -2,13 +2,7 @@ import { monitorfishApi } from '@api/api'
 import { RtkCacheTagType } from '@api/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 
-import type {
-  EditedReporting,
-  InfractionSuspicionReporting,
-  PendingAlertReporting,
-  Reporting,
-  ReportingCreation
-} from './types'
+import type { EditedReporting, Reporting, ReportingCreation } from './types'
 
 const ARCHIVE_REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu archiver ce signalement."
 const ARCHIVE_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu archiver ces signalements."
@@ -68,8 +62,7 @@ export const reportingApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(DELETE_REPORTINGS_ERROR_MESSAGE, response)
     }),
 
-    // TODO Migrate to Reporting
-    getReportings: builder.query<Array<InfractionSuspicionReporting | PendingAlertReporting>, void>({
+    getReportings: builder.query<Array<Reporting.Reporting>, void>({
       providesTags: () => [{ type: RtkCacheTagType.Reportings }],
       query: () => ({
         method: 'GET',

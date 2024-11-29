@@ -103,10 +103,10 @@ export type InfractionSuspicion = {
   controlUnit: LegacyControlUnit.LegacyControlUnit | undefined
   controlUnitId: number | undefined
   description: string | undefined
-  dml: string
+  dml: string | undefined
   natinfCode: number
   reportingActor: ReportingOriginActor
-  seaFront: Seafront
+  seaFront: Seafront | undefined
   title: string
   type: ReportingType.INFRACTION_SUSPICION
 }
@@ -117,7 +117,9 @@ export type Observation = {
   controlUnit: LegacyControlUnit.LegacyControlUnit | undefined
   controlUnitId: number | undefined
   description: string | undefined
+  dml: string | undefined
   reportingActor: ReportingOriginActor
+  seaFront: Seafront | undefined
   title: string
   type: ReportingType.OBSERVATION
 }

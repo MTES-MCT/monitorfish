@@ -202,6 +202,7 @@ class ReturnToPortPurpose(Enum):
 class PnoAddressee:
     name: str
     organization: str
+    communication_means: CommunicationMeans
     email_address_or_number: str
 
 
@@ -214,6 +215,7 @@ class RenderedPno:
     is_verified: bool
     is_being_sent: bool
     trip_segments: list
+    pno_types: List[str]
     port_locode: str
     facade: str
     source: PnoSource
@@ -223,26 +225,31 @@ class RenderedPno:
     html_email_body: str | None = None
     sms_content: str | None = None
     control_units: List[ControlUnit] | None = None
+    additional_addressees: List[PnoAddressee] = None
 
     def get_addressees(
         self, communication_means: CommunicationMeans
     ) -> List[PnoAddressee]:
+        addressees = []
+
         if self.control_units:
             if communication_means == CommunicationMeans.EMAIL:
-                addressees = [
+                addressees += [
                     PnoAddressee(
                         name=control_unit.control_unit_name,
                         organization=control_unit.administration,
+                        communication_means=CommunicationMeans.EMAIL,
                         email_address_or_number=email,
                     )
                     for control_unit in self.control_units
                     for email in control_unit.emails
                 ]
             elif communication_means == CommunicationMeans.SMS:
-                addressees = [
+                addressees += [
                     PnoAddressee(
                         name=control_unit.control_unit_name,
                         organization=control_unit.administration,
+                        communication_means=CommunicationMeans.SMS,
                         email_address_or_number=phone_number,
                     )
                     for control_unit in self.control_units
@@ -253,8 +260,18 @@ class RenderedPno:
                     f"Unexpected communication_means {communication_means}"
                 )
 
-        else:
-            addressees = []
+        if self.additional_addressees:
+            addressees += [
+                PnoAddressee(
+                    name=add.name,
+                    organization=add.organization,
+                    communication_means=communication_means,
+                    email_address_or_number=add.email_address_or_number,
+                )
+                for add in self.additional_addressees
+                if add.communication_means is communication_means
+            ]
+
         return addressees
 
 

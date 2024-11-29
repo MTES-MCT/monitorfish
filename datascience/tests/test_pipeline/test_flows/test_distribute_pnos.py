@@ -34,6 +34,7 @@ from src.pipeline.entities.control_units import ControlUnit
 from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
 from src.pipeline.entities.missions import Infraction
 from src.pipeline.entities.pnos import (
+    PnoAddressee,
     PnoSource,
     PnoToRender,
     PnoToSend,
@@ -48,6 +49,7 @@ from src.pipeline.flows.distribute_pnos import (
     execute_prior_notification_attachments_query,
     extract_facade_email_addresses,
     extract_fishing_gear_names,
+    extract_pno_extra_subscriptions,
     extract_pnos_to_generate,
     extract_species_names,
     flow,
@@ -920,6 +922,7 @@ def pno_pdf_document_to_distribute_targeted_vessel_and_segments() -> RenderedPno
         vessel_name="Le navire 123-abc",
         is_verified=False,
         is_being_sent=True,
+        pno_types=["Préavis type 1", "Préavis type 2"],
         trip_segments=[
             FleetSegment("NWW01", "Chalutiers"),
             FleetSegment("NWW02", "Autres"),
@@ -956,6 +959,26 @@ def pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned(
                 phone_numbers=["44 44 44 44 44"],
             ),
         ],
+        additional_addressees=[
+            PnoAddressee(
+                name="Nozey Joey",
+                organization="PNO sniffers",
+                communication_means=CommunicationMeans.EMAIL,
+                email_address_or_number="nozey.joey@pno.snif",
+            ),
+            PnoAddressee(
+                name="Ronald",
+                organization="Mc Donald",
+                communication_means=CommunicationMeans.SMS,
+                email_address_or_number="0000000000",
+            ),
+            PnoAddressee(
+                name="Ronald",
+                organization="Mc Donald",
+                communication_means=CommunicationMeans.EMAIL,
+                email_address_or_number="ronald.mcdonald@ham.burger",
+            ),
+        ],
     )
 
 
@@ -970,6 +993,7 @@ def pno_pdf_document_to_distribute_receive_all_pnos_from_port() -> RenderedPno:
         is_being_sent=True,
         trip_segments=[],
         port_locode="FRDPE",
+        pno_types=["Préavis type 1"],
         facade="Unknown facade",
         source=PnoSource.MANUAL,
         generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
@@ -992,6 +1016,7 @@ def pno_pdf_document_to_distribute_receive_all_pnos_from_port_assigned(
                 phone_numbers=[],
             )
         ],
+        additional_addressees=[],
     )
 
 
@@ -1006,6 +1031,7 @@ def pno_pdf_document_to_distribute_without_addressees() -> RenderedPno:
         is_being_sent=True,
         trip_segments=[],
         port_locode="FRDKK",
+        pno_types=["Préavis type 1", "Préavis type 2"],
         facade="SA",
         source=PnoSource.MANUAL,
         generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
@@ -1020,9 +1046,7 @@ def pno_pdf_document_to_distribute_without_addressees_assigned(
     return dataclasses.replace(
         pno_pdf_document_to_distribute_without_addressees,
         control_units=[],
-        # control_unit_ids=set(),
-        # emails=[],
-        # phone_numbers=[],
+        additional_addressees=[],
     )
 
 
@@ -1037,6 +1061,7 @@ def pno_pdf_document_to_distribute_verified() -> RenderedPno:
         is_being_sent=True,
         trip_segments=[],
         port_locode="FRLEH",
+        pno_types=["Some PNO type"],
         facade="NAMO",
         source=PnoSource.LOGBOOK,
         generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
@@ -1066,6 +1091,7 @@ def pno_pdf_document_to_distribute_verified_assigned(
                 phone_numbers=["44 44 44 44 44"],
             ),
         ],
+        additional_addressees=[],
     )
 
 
@@ -1125,6 +1151,7 @@ def logbook_rendered_pno():
         is_being_sent=True,
         trip_segments=["Segment1", "Segment2"],
         port_locode="FRBOL",
+        pno_types=["Some PNO type"],
         facade="NAMO",
         source=PnoSource.LOGBOOK,
         html_for_pdf="<html>Html for PDF</html>",
@@ -1162,6 +1189,7 @@ def manual_rendered_pno():
         is_being_sent=True,
         trip_segments=["Segment3"],
         port_locode="FRBOL",
+        pno_types=["Some other PNO type"],
         facade="SA",
         source=PnoSource.MANUAL,
         html_for_pdf="<html>Html for PDF manual</html>",
@@ -1395,6 +1423,44 @@ def prior_notification_attachments() -> dict:
     }
 
 
+@pytest.fixture
+def pno_extra_subscriptions() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "pno_type_name": [
+                "Préavis type 1",
+                "Préavis type 2",
+                "Préavis type 2",
+                "Préavis type 2",
+                "Préavis type 2",
+            ],
+            "port_locode": ["FRZJZ", "FRDPE", "FRZJZ", "FRZJZ", "FRZJZ"],
+            "recipient_name": [
+                "Nozey Joey",
+                "Nozey Joey",
+                "Ronald",
+                "Nozey Joey",
+                "Ronald",
+            ],
+            "recipient_organization": [
+                "PNO sniffers",
+                "PNO sniffers",
+                "Mc Donald",
+                "PNO sniffers",
+                "Mc Donald",
+            ],
+            "communication_means": ["EMAIL", "EMAIL", "SMS", "EMAIL", "EMAIL"],
+            "recipient_email_address_or_number": [
+                "nozey.joey@pno.snif",
+                "nozey.joey@pno.snif",
+                "0000000000",
+                "nozey.joey@pno.snif",
+                "ronald.mcdonald@ham.burger",
+            ],
+        }
+    )
+
+
 def test_extract_pnos_to_generate(reset_test_data, extracted_pnos):
     approximate_datetime_columns = [
         "operation_datetime_utc",
@@ -1434,6 +1500,17 @@ def test_extract_fishing_gear_names(reset_test_data, fishing_gear_names):
 def test_extract_facade_email_addresses(reset_test_data, facade_email_addresses):
     res = extract_facade_email_addresses.run()
     assert res == facade_email_addresses
+
+
+def test_extract_pno_extra_subscriptions(reset_test_data, pno_extra_subscriptions):
+    subscriptions = (
+        extract_pno_extra_subscriptions.run()
+        .sort_values(
+            ["pno_type_name", "port_locode", "recipient_email_address_or_number"]
+        )
+        .reset_index(drop=True)
+    )
+    pd.testing.assert_frame_equal(subscriptions, pno_extra_subscriptions)
 
 
 def test_to_pnos_to_render(extracted_pnos):
@@ -1661,6 +1738,7 @@ def test_load_pno_pdf_documents(reset_test_data):
                 is_being_sent=is_being_sent,
                 trip_segments=[],
                 port_locode="FRBOL",
+                pno_types=[],
                 facade="NAMO",
                 source=PnoSource.LOGBOOK,
                 generation_datetime_utc=datetime(2020, 5, 6, 8, 52, 42),
@@ -1738,11 +1816,13 @@ def test_attribute_addressees_uses_target_vessels_and_segments(
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
     monitorenv_control_units,
+    pno_extra_subscriptions,
 ):
     res = attribute_addressees.run(
         pno_pdf_document_to_distribute_targeted_vessel_and_segments,
         pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions,
+        pno_extra_subscriptions,
         monitorenv_control_units,
     )
     assert res == pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned
@@ -1754,11 +1834,13 @@ def test_attribute_addressees_uses_receive_all_pnos_from_port(
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
     monitorenv_control_units,
+    pno_extra_subscriptions,
 ):
     res = attribute_addressees.run(
         pno_pdf_document_to_distribute_receive_all_pnos_from_port,
         pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions,
+        pno_extra_subscriptions,
         monitorenv_control_units,
     )
     assert res == pno_pdf_document_to_distribute_receive_all_pnos_from_port_assigned
@@ -1770,11 +1852,13 @@ def test_attribute_addressees_returns_empty_addressees(
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
     monitorenv_control_units,
+    pno_extra_subscriptions,
 ):
     res = attribute_addressees.run(
         pno_pdf_document_to_distribute_without_addressees,
         pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions,
+        pno_extra_subscriptions,
         monitorenv_control_units,
     )
     assert res == pno_pdf_document_to_distribute_without_addressees_assigned
@@ -1786,11 +1870,13 @@ def test_attribute_addressees_when_is_verified(
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
     monitorenv_control_units,
+    pno_extra_subscriptions,
 ):
     res = attribute_addressees.run(
         pno_pdf_document_to_distribute_verified,
         pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions,
+        pno_extra_subscriptions,
         monitorenv_control_units,
     )
     assert res == pno_pdf_document_to_distribute_verified_assigned
@@ -1865,7 +1951,8 @@ def test_create_email(
         assert pno_to_send.message["Cc"] is None
     else:
         assert (
-            pno_to_send.message["To"] == "alternative@email, some.email@control.unit.4"
+            pno_to_send.message["To"]
+            == "alternative@email, some.email@control.unit.4, nozey.joey@pno.snif, ronald.mcdonald@ham.burger"
         )
         assert pno_to_send.message["Cc"] == "namo@email"
     assert pno_to_send.message["From"] == "monitorfish@test.email"
@@ -1965,7 +2052,7 @@ def test_create_sms(
     else:
         assert (
             pno_to_send.message["To"]
-            == '"\'00 11 22 33 44 55"@test.sms, "44 44 44 44 44"@test.sms'
+            == '"\'00 11 22 33 44 55"@test.sms, "44 44 44 44 44"@test.sms, 0000000000@test.sms'
         )
 
     assert pno_to_send.message["Cc"] is None

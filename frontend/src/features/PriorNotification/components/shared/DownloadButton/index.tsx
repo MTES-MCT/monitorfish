@@ -4,7 +4,6 @@ import { RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { useGetGearsQuery } from '@api/gear'
 import { getAlpha2CodeFromAlpha2or3Code } from '@components/CountryFlag/utils'
 import { useGetPriorNotificationPdfExistenceQuery } from '@features/PriorNotification/priorNotificationApi'
-import { customSentry, CustomSentryMeasurementName } from '@libs/customSentry'
 import { Accent, Button, customDayjs, Dropdown, Icon } from '@mtes-mct/monitor-ui'
 import { downloadFile } from '@utils/downloadFile'
 import printJS from 'print-js'
@@ -76,12 +75,6 @@ export function DownloadButton({
     const fileName = `preavis_debarquement_${generationDate}.pdf`
 
     downloadFile(fileName, 'application/pdf', blob)
-  }
-
-  if (isDisabled) {
-    customSentry.startMeasurement(CustomSentryMeasurementName.PRIOR_NOTIFICATION_CARD_DOWNLOAD_BUTTON, reportId)
-  } else {
-    customSentry.endMeasurement(CustomSentryMeasurementName.PRIOR_NOTIFICATION_CARD_DOWNLOAD_BUTTON, reportId, 1000)
   }
 
   return (

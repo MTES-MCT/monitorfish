@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
 @UseCase
 class UpdateReporting(
     private val reportingRepository: ReportingRepository,
-    private val getInfractionSuspicionWithDMLAndSeaFront: GetInfractionSuspicionWithDMLAndSeaFront,
+    private val getReportingWithDMLAndSeaFront: GetReportingWithDMLAndSeaFront,
     private val getAllLegacyControlUnits: GetAllLegacyControlUnits,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(UpdateReporting::class.java)
@@ -28,43 +28,42 @@ class UpdateReporting(
             "The edited reporting must be an INFRACTION_SUSPICION or an OBSERVATION"
         }
 
-        return when (updatedInfractionSuspicionOrObservation.type) {
-            ReportingType.OBSERVATION -> {
-                currentReporting.value as InfractionSuspicionOrObservationType
+        currentReporting.value as InfractionSuspicionOrObservationType
 
-                val nextObservation =
+        val nextReporting =
+            when (updatedInfractionSuspicionOrObservation.type) {
+                ReportingType.INFRACTION_SUSPICION ->
+                    InfractionSuspicion.fromUpdatedReporting(
+                        updatedInfractionSuspicionOrObservation,
+                    )
+                ReportingType.OBSERVATION ->
                     Observation.fromUpdatedReporting(
                         updatedInfractionSuspicionOrObservation,
                     )
-                nextObservation.checkReportingActorAndFieldsRequirements()
-
-                val updatedReporting = reportingRepository.update(reportingId, nextObservation)
-                val controlUnit = getControlUnit(updatedReporting, controlUnits)
-
-                Pair(updatedReporting, controlUnit)
+                else -> throw IllegalArgumentException(
+                    "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION",
+                )
+            }.let {
+                getReportingWithDMLAndSeaFront.execute(it, currentReporting.vesselId)
             }
 
-            ReportingType.INFRACTION_SUSPICION -> {
-                currentReporting.value as InfractionSuspicionOrObservationType
+        nextReporting.checkReportingActorAndFieldsRequirements()
 
-                val nextInfractionSuspicion =
-                    InfractionSuspicion.fromUpdatedReporting(
-                        updatedInfractionSuspicionOrObservation,
-                    ).let {
-                        getInfractionSuspicionWithDMLAndSeaFront.execute(it, currentReporting.vesselId)
-                    }
-                nextInfractionSuspicion.checkReportingActorAndFieldsRequirements()
-
-                val updatedReporting = reportingRepository.update(reportingId, nextInfractionSuspicion)
-                val controlUnit = getControlUnit(updatedReporting, controlUnits)
-
-                Pair(updatedReporting, controlUnit)
+        val updatedReporting =
+            when (nextReporting) {
+                is InfractionSuspicion ->
+                    reportingRepository.update(
+                        reportingId,
+                        nextReporting,
+                    )
+                is Observation -> reportingRepository.update(reportingId, nextReporting)
+                else -> throw IllegalArgumentException(
+                    "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION",
+                )
             }
+        val controlUnit = getControlUnit(updatedReporting, controlUnits)
 
-            else -> throw IllegalArgumentException(
-                "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION",
-            )
-        }
+        return Pair(updatedReporting, controlUnit)
     }
 
     fun getControlUnit(

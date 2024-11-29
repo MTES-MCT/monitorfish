@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -14,7 +13,7 @@ import org.slf4j.LoggerFactory
 @UseCase
 class AddReporting(
     private val reportingRepository: ReportingRepository,
-    private val getInfractionSuspicionWithDMLAndSeaFront: GetInfractionSuspicionWithDMLAndSeaFront,
+    private val getReportingWithDMLAndSeaFront: GetReportingWithDMLAndSeaFront,
     private val getAllLegacyControlUnits: GetAllLegacyControlUnits,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(AddReporting::class.java)
@@ -33,18 +32,12 @@ class AddReporting(
         newReporting.value as InfractionSuspicionOrObservationType
         newReporting.value.checkReportingActorAndFieldsRequirements()
 
-        val nextReporting =
-            if (newReporting.type === ReportingType.INFRACTION_SUSPICION) {
-                newReporting.value as InfractionSuspicion
-                val nextInfractionSuspicion =
-                    getInfractionSuspicionWithDMLAndSeaFront.execute(
-                        newReporting.value,
-                        newReporting.vesselId,
-                    )
-                newReporting.copy(value = nextInfractionSuspicion)
-            } else {
-                newReporting
-            }
+        val nextValue =
+            getReportingWithDMLAndSeaFront.execute(
+                newReporting.value,
+                newReporting.vesselId,
+            )
+        val nextReporting = newReporting.copy(value = nextValue)
 
         val savedReporting = reportingRepository.save(nextReporting)
         val controlUnitId = (savedReporting.value as InfractionSuspicionOrObservationType).controlUnitId

@@ -1,73 +1,31 @@
-import { getReportingOrigin, getReportingTitle } from './utils'
+import { getReportingOrigin, getReportingTitle } from '@features/Reporting/components/ReportingTable/utils'
 
 import type { Reporting } from '@features/Reporting/types'
-import type { TableOptions } from '@hooks/useTable/types'
+import type { DownloadAsCsvMap } from '@utils/downloadAsCsv'
 
-export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<Reporting.Reporting> = {
-  columns: [
-    {
-      fixedWidth: 130,
-      isSortable: true,
-      key: 'validationDate',
-      label: 'Ouvert il y a...',
-      sortingTransform: item => item.validationDate ?? item.creationDate
-    },
-    {
-      fixedWidth: 130,
-      isSortable: true,
-      key: 'source',
-      label: 'Origine',
-      transform: getReportingOrigin
-    },
-    {
-      fixedWidth: 280,
-      isSortable: true,
-      key: 'title',
-      label: 'Titre',
-      transform: getReportingTitle
-    },
-    {
-      fixedWidth: 85,
-      isSortable: true,
-      key: 'value.natinfCode',
-      label: 'NATINF'
-    },
-    {
-      fixedWidth: 230,
-      isSortable: true,
-      key: 'vesselName',
-      label: 'Navire'
-    },
-    {
-      fixedWidth: 70,
-      isSortable: true,
-      key: 'value.dml',
-      label: 'DML'
-    },
-    {
-      fixedWidth: 155,
-      isSortable: false,
-      key: 'underCharter',
-      label: ''
-    },
-    {
-      fixedWidth: 40,
-      key: '_focusOnMap'
-    },
-    {
-      fixedWidth: 33,
-      key: '_edit'
-    }
-  ],
-  isCheckable: true,
-  searchableKeys: [
-    'value.dml',
-    'externalReferenceNumber',
-    'internalReferenceNumber',
-    'ircs',
-    'title',
-    'source',
-    'value.natinfCode',
-    'vesselName'
-  ]
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+export const REPORTING_CSV_MAP: DownloadAsCsvMap<Reporting.Reporting> = {
+  creationDate: 'Ouvert le',
+  'value.dml': 'DML concernée',
+  type: {
+    label: 'Origine',
+    transform: getReportingOrigin
+  },
+  'value.type': {
+    label: 'Titre',
+    transform: getReportingTitle
+  },
+  'value.description': 'Description',
+  'value.natinfCode': 'NATINF',
+  flagState: 'Pavillon',
+  vesselName: 'Navire',
+  internalReferenceNumber: 'CFR',
+  externalReferenceNumber: 'Marquage ext.',
+  ircs: 'C/S',
+  underCharter: {
+    label: 'Navire sous charte',
+    transform: reporting => (reporting.underCharter ? 'OUI' : 'NON')
+  },
+  'value.seaFront': 'Façade'
 }
+/* eslint-enable sort-keys-fix/sort-keys-fix */

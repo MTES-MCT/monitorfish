@@ -1,5 +1,4 @@
 import { RtkCacheTagType } from '@api/constants'
-import { customSentry, CustomSentryMeasurementName } from '@libs/customSentry'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { FrontendError } from '@libs/FrontendError'
@@ -28,17 +27,6 @@ export const openManualPriorNotificationForm =
   ): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
-      if (identifier) {
-        customSentry.startMeasurement(
-          CustomSentryMeasurementName.MANUAL_PRIOR_NOTIFICATION_FORM_LOADING,
-          identifier.reportId
-        )
-        customSentry.startMeasurement(
-          CustomSentryMeasurementName.MANUAL_PRIOR_NOTIFICATION_FORM_SPINNER,
-          identifier.reportId
-        )
-      }
-
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
       dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
       // TODO Remove this function once loading / spinner perfs tests are removed.

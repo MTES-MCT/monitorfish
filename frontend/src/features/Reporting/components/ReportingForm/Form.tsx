@@ -85,11 +85,11 @@ export function Form({ className, hasWhiteBackground, onClose, onIsDirty, window
         name="type"
         options={[
           {
-            label: ReportingTypeCharacteristics.INFRACTION_SUSPICION.inputName,
+            label: ReportingTypeCharacteristics.INFRACTION_SUSPICION.displayName,
             value: ReportingTypeCharacteristics.INFRACTION_SUSPICION.code
           },
           {
-            label: ReportingTypeCharacteristics.OBSERVATION.inputName,
+            label: ReportingTypeCharacteristics.OBSERVATION.displayName,
             value: ReportingTypeCharacteristics.OBSERVATION.code
           }
         ]}

@@ -7,7 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetInfractionSuspicionWithDMLAndSeaFront
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetReportingWithDMLAndSeaFront
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdateReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSuspicionOrObservation
 import org.assertj.core.api.Assertions.assertThat
@@ -26,7 +26,7 @@ class UpdateReportingUTests {
     private lateinit var reportingRepository: ReportingRepository
 
     @MockBean
-    private lateinit var getInfractionSuspicionWithDMLAndSeaFront: GetInfractionSuspicionWithDMLAndSeaFront
+    private lateinit var getReportingWithDMLAndSeaFront: GetReportingWithDMLAndSeaFront
 
     @MockBean
     private lateinit var getAllLegacyControlUnits: GetAllLegacyControlUnits
@@ -55,7 +55,7 @@ class UpdateReportingUTests {
         // When
         val throwable =
             catchThrowable {
-                UpdateReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllLegacyControlUnits)
+                UpdateReporting(reportingRepository, getReportingWithDMLAndSeaFront, getAllLegacyControlUnits)
                     .execute(
                         1,
                         UpdatedInfractionSuspicionOrObservation(
@@ -101,7 +101,7 @@ class UpdateReportingUTests {
         // When
         val throwable =
             catchThrowable {
-                UpdateReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllLegacyControlUnits)
+                UpdateReporting(reportingRepository, getReportingWithDMLAndSeaFront, getAllLegacyControlUnits)
                     .execute(
                         1,
                         UpdatedInfractionSuspicionOrObservation(
@@ -149,7 +149,7 @@ class UpdateReportingUTests {
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
         given(reportingRepository.update(any(), isA<InfractionSuspicion>())).willReturn(reporting)
-        given(getInfractionSuspicionWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
+        given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
             InfractionSuspicion(
                 reportingActor = reportingActor,
                 title = "Test",
@@ -161,7 +161,7 @@ class UpdateReportingUTests {
         // When
         val throwable =
             catchThrowable {
-                UpdateReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllLegacyControlUnits)
+                UpdateReporting(reportingRepository, getReportingWithDMLAndSeaFront, getAllLegacyControlUnits)
                     .execute(
                         1,
                         UpdatedInfractionSuspicionOrObservation(
@@ -217,7 +217,7 @@ class UpdateReportingUTests {
             catchThrowable {
                 UpdateReporting(
                     reportingRepository,
-                    getInfractionSuspicionWithDMLAndSeaFront,
+                    getReportingWithDMLAndSeaFront,
                     getAllLegacyControlUnits,
                 ).execute(
                     1,
@@ -263,11 +263,14 @@ class UpdateReportingUTests {
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
         given(reportingRepository.update(any(), isA<Observation>())).willReturn(reporting)
+        given(
+            getReportingWithDMLAndSeaFront.execute(any(), anyOrNull()),
+        ).willReturn(observation.copy(description = "Test 2"))
 
         // When
         UpdateReporting(
             reportingRepository,
-            getInfractionSuspicionWithDMLAndSeaFront,
+            getReportingWithDMLAndSeaFront,
             getAllLegacyControlUnits,
         ).execute(
             1,
@@ -317,11 +320,19 @@ class UpdateReportingUTests {
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
         given(reportingRepository.update(any(), isA<Observation>())).willReturn(reporting)
-
+        given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
+            Observation(
+                reportingActor = ReportingActor.UNIT,
+                controlUnitId = 1,
+                authorTrigram = "LTH",
+                title = "A reporting",
+                description = "Test 2",
+            ),
+        )
         // When
         UpdateReporting(
             reportingRepository,
-            getInfractionSuspicionWithDMLAndSeaFront,
+            getReportingWithDMLAndSeaFront,
             getAllLegacyControlUnits,
         ).execute(
             1,
@@ -373,7 +384,7 @@ class UpdateReportingUTests {
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
         given(reportingRepository.update(any(), isA<InfractionSuspicion>())).willReturn(reporting)
-        given(getInfractionSuspicionWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
+        given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
             InfractionSuspicion(
                 reportingActor = ReportingActor.UNIT,
                 controlUnitId = 1,
@@ -388,7 +399,7 @@ class UpdateReportingUTests {
         // When
         UpdateReporting(
             reportingRepository,
-            getInfractionSuspicionWithDMLAndSeaFront,
+            getReportingWithDMLAndSeaFront,
             getAllLegacyControlUnits,
         ).execute(
             1,
@@ -437,28 +448,33 @@ class UpdateReportingUTests {
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
         given(reportingRepository.update(any(), isA<Observation>())).willReturn(reporting)
+        given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
+            (reporting.value as Observation).copy(controlUnitId = 1),
+        )
 
         // When
-        UpdateReporting(
-            reportingRepository,
-            getInfractionSuspicionWithDMLAndSeaFront,
-            getAllLegacyControlUnits,
-        ).execute(
-            1,
-            UpdatedInfractionSuspicionOrObservation(
-                reportingActor = ReportingActor.UNIT,
-                type = ReportingType.OBSERVATION,
-                controlUnitId = 1,
-                authorTrigram = "LTH",
-                title = "A reporting",
-                natinfCode = 1234,
-            ),
-        )
+        val returnedReporting =
+            UpdateReporting(
+                reportingRepository,
+                getReportingWithDMLAndSeaFront,
+                getAllLegacyControlUnits,
+            ).execute(
+                1,
+                UpdatedInfractionSuspicionOrObservation(
+                    reportingActor = ReportingActor.UNIT,
+                    type = ReportingType.OBSERVATION,
+                    controlUnitId = 1,
+                    authorTrigram = "LTH",
+                    title = "A reporting",
+                    natinfCode = 1234,
+                ),
+            )
 
         // Then
         argumentCaptor<Observation>().apply {
             verify(reportingRepository).update(any(), capture())
         }
+        assertThat(returnedReporting.first.flagState).isEqualTo(CountryCode.FR)
     }
 
     @Test
@@ -487,7 +503,7 @@ class UpdateReportingUTests {
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
         given(reportingRepository.update(any(), isA<InfractionSuspicion>())).willReturn(reporting)
-        given(getInfractionSuspicionWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
+        given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
             InfractionSuspicion(
                 reportingActor = ReportingActor.OPS,
                 seaFront = "NAMO",
@@ -501,7 +517,7 @@ class UpdateReportingUTests {
         // When
         UpdateReporting(
             reportingRepository,
-            getInfractionSuspicionWithDMLAndSeaFront,
+            getReportingWithDMLAndSeaFront,
             getAllLegacyControlUnits,
         ).execute(
             1,

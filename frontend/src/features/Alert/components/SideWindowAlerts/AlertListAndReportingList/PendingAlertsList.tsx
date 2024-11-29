@@ -305,7 +305,8 @@ const alertNatinfStyle = {
 const Content = styled.div``
 const contentStyle = {
   background: COLORS.gainsboro,
-  marginLeft: 10,
+  marginLeft: 36,
+  marginTop: 36,
   padding: '30px 40px 40px 40px',
   width: 'fit-content'
 }

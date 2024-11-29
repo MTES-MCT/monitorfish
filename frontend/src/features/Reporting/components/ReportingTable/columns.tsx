@@ -126,7 +126,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
     },
     {
       accessorFn: row =>
-        row.type === ReportingType.INFRACTION_SUSPICION || row.type === ReportingType.ALERT ? row.value.dml : undefined,
+        row.type === ReportingType.INFRACTION_SUSPICION || row.type === ReportingType.ALERT ? row.value.dml : '',
       cell: (info: CellContext<Reporting.Reporting, string | undefined>) => info.getValue(),
       enableSorting: true,
       header: () => 'DML',

@@ -96,4 +96,5 @@ const Title = styled.h2<{
   text-align: left;
   transition: all 0.2s;
   width: fit-content;
+  user-select: none;
 `

@@ -12,6 +12,8 @@ class ObservationDataOutput(
     val authorContact: String? = null,
     val title: String,
     val description: String? = null,
+    val seaFront: String? = null,
+    val dml: String? = null,
 ) : ReportingValueDataOutput() {
     companion object {
         fun fromObservation(
@@ -26,6 +28,8 @@ class ObservationDataOutput(
                 authorContact = observation.authorContact,
                 title = observation.title,
                 description = observation.description,
+                seaFront = observation.seaFront,
+                dml = observation.dml,
             )
         }
     }

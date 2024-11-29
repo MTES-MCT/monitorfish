@@ -4,7 +4,7 @@ import { type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import { getReportingTableColumns } from '@features/Reporting/components/ReportingTable/columns'
 import { REPORTING_CSV_MAP } from '@features/Reporting/components/ReportingTable/constants'
 import { EditReporting } from '@features/Reporting/components/ReportingTable/EditReporting'
-import { SearchFilter } from '@features/Reporting/components/ReportingTable/Filters/SearchFilter'
+import { Filters } from '@features/Reporting/components/ReportingTable/Filters/Filters'
 import { useGetFilteredReportingsQuery } from '@features/Reporting/components/ReportingTable/Filters/useGetFilteredReportingsQuery'
 import { TableBodyEmptyData } from '@features/Reporting/components/ReportingTable/TableBodyEmptyData'
 import { getRowCellCustomStyle } from '@features/Reporting/components/ReportingTable/utils'
@@ -94,8 +94,8 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
   return (
     <Page>
       <Body>
-        <Filters>
-          <SearchFilter />
+        <TableOuterWrapper>
+          <Filters />
           <RightAligned>
             <IconButton
               disabled={!rowSelectionAsArray.length}
@@ -118,7 +118,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
               title={`Supprimer ${rowSelectionAsArray.length} signalement${rowSelectionAsArray.length > 1 ? 's' : ''}`}
             />
           </RightAligned>
-        </Filters>
+        </TableOuterWrapper>
 
         <TableInnerWrapper ref={tableContainerRef} $hasError={isError}>
           {isError && <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR} />}
@@ -162,7 +162,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
   )
 }
 
-const Filters = styled.div`
+const TableOuterWrapper = styled.div`
   margin: 0 32px 8px 0;
 `
 

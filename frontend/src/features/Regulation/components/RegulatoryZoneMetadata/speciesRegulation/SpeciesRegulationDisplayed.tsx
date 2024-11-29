@@ -13,8 +13,8 @@ export function SpeciesRegulationDisplayed() {
 
   const { speciesRegulation } = regulatoryZoneMetadata ?? {}
   const { authorized, otherInfo, unauthorized } = speciesRegulation ?? {}
-  const hasAuthorizedContent = !isRegulatedSpeciesEmpty(authorized)
-  const hasUnauthorizedContent = !isRegulatedSpeciesEmpty(unauthorized)
+  const hasAuthorizedContent = !isRegulatedSpeciesEmpty(authorized ?? undefined)
+  const hasUnauthorizedContent = !isRegulatedSpeciesEmpty(unauthorized ?? undefined)
   const areSpeciesRegulationEmpty = !hasAuthorizedContent && !hasUnauthorizedContent && !otherInfo
 
   if (areSpeciesRegulationEmpty) {

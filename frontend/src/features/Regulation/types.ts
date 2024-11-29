@@ -78,9 +78,9 @@ export type RegulatedSpecies = {
 }
 
 export type SpeciesRegulation = {
-  authorized: RegulatedSpecies
+  authorized: RegulatedSpecies | null
   otherInfo: string | undefined
-  unauthorized: RegulatedSpecies
+  unauthorized: RegulatedSpecies | null
 }
 
 export type Gear = {

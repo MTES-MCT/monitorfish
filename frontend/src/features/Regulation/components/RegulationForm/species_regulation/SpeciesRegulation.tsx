@@ -1,34 +1,30 @@
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
 import { SPECIES_REGULATION_KEYS } from 'domain/entities/backoffice'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, type ChangeEvent } from 'react'
 import styled from 'styled-components'
 
 import { RegulatedSpecies } from './RegulatedSpecies'
 import { OtherRemark, Section, VerticalLine } from '../../../../commonStyles/Backoffice.style'
 import { CustomInput, Label } from '../../../../commonStyles/Input.style'
 import { regulationActions } from '../../../slice'
-import {
-  DEFAULT_AUTHORIZED_REGULATED_SPECIES,
-  DEFAULT_UNAUTHORIZED_REGULATED_SPECIES,
-  REGULATORY_REFERENCE_KEYS
-} from '../../../utils'
+import { REGULATORY_REFERENCE_KEYS } from '../../../utils'
 import { SectionTitle } from '../../RegulationTables/SectionTitle'
 
+import type { RegulatedSpecies as RegulatedSpeciesType } from '@features/Regulation/types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 export function SpeciesRegulation() {
   const dispatch = useBackofficeAppDispatch()
-
-  /** @type {Map<string, Species>} speciesByCode */
   const speciesByCode = useBackofficeAppSelector(state => state.species.speciesByCode)
   const speciesGroups = useBackofficeAppSelector(state => state.species.speciesGroups)
+
   const [formattedSpecies, setFormattedSpecies] = useState<Option[]>([])
   const [formattedSpeciesGroups, setFormattedSpeciesGroups] = useState<Option[]>([])
 
   useEffect(() => {
     const nextFormattedSpeciesGroups = [...speciesGroups]
-      ?.sort((speciesA, speciesB) => speciesA.group?.localeCompare(speciesB.group))
+      ?.sort((speciesA, speciesB) => speciesA.group.localeCompare(speciesB.group))
       .map(speciesGroup => ({
         label: speciesGroup.group,
         value: speciesGroup.group
@@ -40,7 +36,7 @@ export function SpeciesRegulation() {
   useEffect(() => {
     const nextFormattedSpecies = speciesByCode
       ? Object.values(speciesByCode)
-          .sort((speciesA, speciesB) => speciesA.name?.localeCompare(speciesB.name))
+          .sort((speciesA, speciesB) => speciesA.name.localeCompare(speciesB.name))
           .map(_species => ({
             label: `${_species.name} (${_species.code})`,
             value: _species.code
@@ -54,26 +50,30 @@ export function SpeciesRegulation() {
   const [show, setShow] = useState(false)
 
   // TODO Impossible to type and make this code safe as it is, should be refactored?
-  const setSpeciesRegulation = (subKey: any, value: any) => {
-    dispatch(
-      regulationActions.updateProcessingRegulationByKeyAndSubKey({
-        key: REGULATORY_REFERENCE_KEYS.SPECIES_REGULATION as 'speciesRegulation',
-        // @ts-ignore
-        subKey,
-        // @ts-ignore
-        value
-      })
-    )
-  }
+  const setSpeciesRegulation = useCallback(
+    (subKey: string, value: any) => {
+      dispatch(
+        regulationActions.updateProcessingRegulationByKeyAndSubKey({
+          key: REGULATORY_REFERENCE_KEYS.SPECIES_REGULATION,
+          subKey,
+          value
+        })
+      )
+    },
+    [dispatch]
+  )
 
-  const setRegulatedSpecies = (isAuthorized, regulatedSpecies) => {
-    const property = isAuthorized ? SPECIES_REGULATION_KEYS.AUTHORIZED : SPECIES_REGULATION_KEYS.UNAUTHORIZED
+  const setRegulatedSpecies = useCallback(
+    (isAuthorized: boolean, regulatedSpecies: RegulatedSpeciesType) => {
+      const property = isAuthorized ? SPECIES_REGULATION_KEYS.AUTHORIZED : SPECIES_REGULATION_KEYS.UNAUTHORIZED
 
-    setSpeciesRegulation(property, regulatedSpecies)
-  }
+      setSpeciesRegulation(property, regulatedSpecies)
+    },
+    [setSpeciesRegulation]
+  )
 
-  const setOtherInfo = value => {
-    setSpeciesRegulation(SPECIES_REGULATION_KEYS.OTHER_INFO, value)
+  const setOtherInfo = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setSpeciesRegulation(SPECIES_REGULATION_KEYS.OTHER_INFO, event.target.value)
   }
 
   return (
@@ -84,7 +84,7 @@ export function SpeciesRegulation() {
           authorized
           formattedSpecies={formattedSpecies}
           formattedSpeciesGroups={formattedSpeciesGroups}
-          regulatedSpecies={processingRegulation.speciesRegulation?.authorized ?? DEFAULT_AUTHORIZED_REGULATED_SPECIES}
+          regulatedSpecies={processingRegulation.speciesRegulation.authorized}
           setRegulatedSpecies={setRegulatedSpecies}
           show={show}
           speciesByCode={speciesByCode}
@@ -94,9 +94,7 @@ export function SpeciesRegulation() {
           authorized={false}
           formattedSpecies={formattedSpecies}
           formattedSpeciesGroups={formattedSpeciesGroups}
-          regulatedSpecies={
-            processingRegulation.speciesRegulation?.unauthorized ?? DEFAULT_UNAUTHORIZED_REGULATED_SPECIES
-          }
+          regulatedSpecies={processingRegulation.speciesRegulation.unauthorized}
           setRegulatedSpecies={setRegulatedSpecies}
           show={show}
           speciesByCode={speciesByCode}
@@ -111,7 +109,7 @@ export function SpeciesRegulation() {
           }
           as="textarea"
           data-cy="regulatory-species-other-info"
-          onChange={event => setOtherInfo(event.target.value)}
+          onChange={setOtherInfo}
           placeholder=""
           rows={2}
           value={processingRegulation.speciesRegulation?.otherInfo ?? ''}

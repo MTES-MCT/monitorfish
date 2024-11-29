@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -11,10 +11,18 @@ import {
 } from '../../../../commonStyles/Backoffice.style'
 import { GreenCircle, RedCircle } from '../../../../commonStyles/Circle.style'
 import { CustomInput, Label } from '../../../../commonStyles/Input.style'
-import { DEFAULT_MENU_CLASSNAME } from '../../../utils'
+import {
+  DEFAULT_AUTHORIZED_REGULATED_SPECIES,
+  DEFAULT_MENU_CLASSNAME,
+  DEFAULT_UNAUTHORIZED_REGULATED_SPECIES
+} from '../../../utils'
 import { CustomSelectComponent } from '../custom_form/CustomSelectComponent'
 import { MenuItem } from '../custom_form/MenuItem'
 import { Tag } from '../Tag'
+
+import type { RegulatedSpecies as RegulatedSpeciesType } from '@features/Regulation/types'
+import type { Option } from '@mtes-mct/monitor-ui'
+import type { Specy } from 'domain/types/specy'
 
 const REGULATORY_SPECIES_KEYS = {
   ALL_SPECIES: 'allSpecies',
@@ -27,12 +35,12 @@ export const DEFAULT_SPECIES_VALUE = 'Choisir une ou des espèces'
 
 type RegulatedSpeciesProps = Readonly<{
   authorized: boolean
-  formattedSpecies: any[]
-  formattedSpeciesGroups: any[]
-  regulatedSpecies: any
-  setRegulatedSpecies: any
+  formattedSpecies: Option[]
+  formattedSpeciesGroups: Option[]
+  regulatedSpecies: RegulatedSpeciesType | null
+  setRegulatedSpecies: (isAuthorized: boolean, regulatedSpecies: RegulatedSpeciesType) => void
   show: boolean
-  speciesByCode: any
+  speciesByCode: Record<string, Specy>
 }>
 export function RegulatedSpecies({
   authorized,
@@ -43,39 +51,27 @@ export function RegulatedSpecies({
   show,
   speciesByCode
 }: RegulatedSpeciesProps) {
-  const { species, speciesGroups } = regulatedSpecies
+  const controlledRegulatedSpecies =
+    regulatedSpecies ?? (authorized ? DEFAULT_AUTHORIZED_REGULATED_SPECIES : DEFAULT_UNAUTHORIZED_REGULATED_SPECIES)
+  const { species, speciesGroups } = controlledRegulatedSpecies
 
   const set = useCallback(
     (key, value) => {
-      const nextRegulatedSpecies = {
-        ...regulatedSpecies,
+      const nextRegulatedSpecies: RegulatedSpeciesType = {
+        ...controlledRegulatedSpecies,
         [key]: value
       }
 
       setRegulatedSpecies(authorized, nextRegulatedSpecies)
     },
-    [authorized, regulatedSpecies, setRegulatedSpecies]
+    [authorized, controlledRegulatedSpecies, setRegulatedSpecies]
   )
-
-  useEffect(() => {
-    function initSpeciesWithRemarks() {
-      const nextSpecies = [...species].map(_species => ({
-        ..._species,
-        remarks: undefined
-      }))
-      set(REGULATORY_SPECIES_KEYS.SPECIES, nextSpecies)
-    }
-
-    if (!authorized && species?.length) {
-      initSpeciesWithRemarks()
-    }
-  }, [authorized, set, species])
 
   const onAllSpeciesChange = useCallback(
     _allSpecies => {
       if (_allSpecies) {
         const nextRegulatedSpeciesWithoutSpeciesAndGroups = {
-          ...regulatedSpecies,
+          ...controlledRegulatedSpecies,
           [REGULATORY_SPECIES_KEYS.SPECIES]: [],
           [REGULATORY_SPECIES_KEYS.SPECIES_GROUPS]: [],
           [REGULATORY_SPECIES_KEYS.ALL_SPECIES]: true
@@ -86,7 +82,7 @@ export function RegulatedSpecies({
         set(REGULATORY_SPECIES_KEYS.ALL_SPECIES, false)
       }
     },
-    [authorized, regulatedSpecies, set, setRegulatedSpecies]
+    [authorized, controlledRegulatedSpecies, set, setRegulatedSpecies]
   )
 
   const push = useCallback(
@@ -165,9 +161,9 @@ export function RegulatedSpecies({
         {!authorized && (
           <ContentLine>
             <CustomCheckbox
-              checked={regulatedSpecies.allSpecies}
+              checked={!!controlledRegulatedSpecies.allSpecies}
               inline
-              onChange={_ => onAllSpeciesChange(!regulatedSpecies.allSpecies)}
+              onChange={_ => onAllSpeciesChange(!controlledRegulatedSpecies.allSpecies)}
             >
               Toutes les espèces
             </CustomCheckbox>
@@ -176,7 +172,7 @@ export function RegulatedSpecies({
         <ContentLine>
           <CustomSelectComponent
             data={formattedSpeciesGroups}
-            disabled={regulatedSpecies.allSpecies}
+            disabled={!!controlledRegulatedSpecies.allSpecies}
             emptyMessage="Aucune catégorie"
             menuClassName={DEFAULT_MENU_CLASSNAME}
             menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
@@ -194,7 +190,7 @@ export function RegulatedSpecies({
             <CustomSelectComponent
               data={formattedSpecies}
               dataCy={`${dataCyTarget}-species-selector`}
-              disabled={regulatedSpecies.allSpecies}
+              disabled={!!controlledRegulatedSpecies.allSpecies}
               emptyMessage="Aucune espèce"
               menuClassName={DEFAULT_MENU_CLASSNAME}
               menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
@@ -213,15 +209,15 @@ export function RegulatedSpecies({
           ) : null}
         </ContentLine>
         {speciesGroups?.map((speciesGroup, index) => (
-          <SpeciesGroupDetail key={speciesGroup.group} isFirst={index === 0}>
+          <SpeciesGroupDetail key={speciesGroup} $isFirst={index === 0}>
             <Label>Catégorie {index + 1}</Label>
-            <Tag key={speciesGroup} onCloseIconClicked={removeSpeciesGroupToSpeciesGroupList} tagValue={speciesGroup} />
+            <Tag onCloseIconClicked={removeSpeciesGroupToSpeciesGroupList} tagValue={speciesGroup} />
           </SpeciesGroupDetail>
         ))}
         {species?.map((speciesValue, index) => (
           <>
             {authorized ? (
-              <SpeciesDetails key={speciesValue.code} isFirst={index === 0 && !speciesGroups?.length}>
+              <SpeciesDetails key={speciesValue.code} $isFirst={index === 0 && !speciesGroups?.length}>
                 <SpeciesDetail>
                   <Label>Espèce {index + 1}</Label>
                   <Tag
@@ -250,7 +246,7 @@ export function RegulatedSpecies({
                 </SpeciesDetail>
               </SpeciesDetails>
             ) : (
-              <SpeciesDetail key={speciesValue.code} onlySpeciesName={!authorized}>
+              <SpeciesDetail key={speciesValue.code} $onlySpeciesName={!authorized}>
                 <Label>Espèce {index + 1}</Label>
                 <Tag
                   key={speciesValue.code}
@@ -267,22 +263,22 @@ export function RegulatedSpecies({
 }
 
 const SpeciesDetails = styled.div<{
-  isFirst: boolean
+  $isFirst: boolean
 }>`
   width: 100%;
-  margin-top: ${p => (p.isFirst ? 20 : 15)}px;
+  margin-top: ${p => (p.$isFirst ? 20 : 15)}px;
 `
 
 const SpeciesDetail = styled.div<{
-  onlySpeciesName?: boolean
+  $onlySpeciesName?: boolean
 }>`
   display: flex;
-  margin-top: ${p => (p.onlySpeciesName ? 8 : 5)}px;
+  margin-top: ${p => (p.$onlySpeciesName ? 8 : 5)}px;
 `
 
 const SpeciesGroupDetail = styled.div<{
-  isFirst: boolean
+  $isFirst: boolean
 }>`
   display: flex;
-  margin-top: ${p => (p.isFirst ? 20 : 8)}px;
+  margin-top: ${p => (p.$isFirst ? 20 : 8)}px;
 `

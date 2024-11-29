@@ -35,11 +35,22 @@ def expected_all_segments() -> pd.DataFrame:
                 ["27.8.c", "27.8", "27.9"],
                 ["27.8.c", "27.8"],
             ],
-            "species": [
-                ["ANF", "HKE", "LEZ", "MNZ", "NEP", "SOL"],
+            "min_mesh": [None, None, 80.0, None],
+            "max_mesh": [None, None, 120.0, None],
+            "target_species": [
+                ["HKE", "SOL", "ANF", "MNZ", "NEP", "LEZ"],
                 ["HKE"],
-                ["ANF", "HKE", "LEZ", "MNZ", "NEP", "SOL"],
+                ["HKE", "SOL", "ANF", "MNZ", "NEP", "LEZ"],
                 ["HKE"],
+            ],
+            "min_share_of_target_species": [0.0, 0.0, 0.0, 0.0],
+            "favored_main_species_type": [None, None, "DEMERSAL", "PELAGIC"],
+            "priority": [0.0, 0.0, 0.0, 1.0],
+            "vessel_types": [
+                None,
+                None,
+                None,
+                ["Navire qui pêche", "Chalutier", "Ligneur", "Navire qui navigue"],
             ],
             "impact_risk_factor": [3.0, 2.1, 3.0, 2.1],
         }
@@ -47,11 +58,9 @@ def expected_all_segments() -> pd.DataFrame:
     return expected_segments
 
 
-def test_extract_segments_of_year(reset_test_data):
-    current_year = datetime.utcnow().year
-    segments = extract_segments_of_year.run(current_year)
-
-    expected_segments = pd.DataFrame(
+@pytest.fixture
+def expected_segments_of_year() -> pd.DataFrame:
+    return pd.DataFrame(
         {
             "segment": ["SWW01/02/03", "SWW04"],
             "segment_name": ["Bottom trawls", "Midwater trawls"],
@@ -60,14 +69,28 @@ def test_extract_segments_of_year(reset_test_data):
                 ["OTM", "PTM"],
             ],
             "fao_areas": [["27.8.c", "27.8", "27.9"], ["27.8.c", "27.8"]],
-            "species": [["ANF", "HKE", "LEZ", "MNZ", "NEP", "SOL"], ["HKE"]],
+            "min_mesh": [80.0, None],
+            "max_mesh": [120.0, None],
+            "target_species": [["HKE", "SOL", "ANF", "MNZ", "NEP", "LEZ"], ["HKE"]],
+            "min_share_of_target_species": [0.0, 0.0],
+            "favored_main_species_type": ["DEMERSAL", "PELAGIC"],
+            "priority": [0.0, 1.0],
+            "vessel_types": [
+                None,
+                ["Navire qui pêche", "Chalutier", "Ligneur", "Navire qui navigue"],
+            ],
             "impact_risk_factor": [3.0, 2.1],
         }
     )
 
+
+def test_extract_segments_of_year(reset_test_data, expected_segments_of_year):
+    current_year = datetime.utcnow().year
+    segments = extract_segments_of_year.run(current_year)
+
     pd.testing.assert_frame_equal(
         segments.sort_values("segment").reset_index(drop=True),
-        expected_segments.sort_values("segment").reset_index(drop=True),
+        expected_segments_of_year,
     )
 
 
@@ -76,78 +99,6 @@ def test_extract_all_segments(reset_test_data, expected_all_segments):
     pd.testing.assert_frame_equal(segments, expected_all_segments)
 
 
-def test_unnest_segments():
-    segments_definitions = [
-        [
-            "A",
-            [
-                "OTB",
-                "OTT",
-            ],
-            ["27.8.c", "27.8"],
-            ["HKE", "SOL"],
-        ],
-        ["B", ["SDN"], [], []],
-        ["C", [], ["27.8.c"], []],
-        ["D", [], [], ["HKE"]],
-        ["E", ["LL"], None, None],
-    ]
-
-    segments = pd.DataFrame(
-        data=segments_definitions,
-        columns=pd.Index(["segment", "gears", "fao_areas", "species"]),
-    )
-
-    segments = unnest_segments.run(segments)
-
-    expected_segments = pd.DataFrame(
-        {
-            "segment": ["A", "A", "A", "A", "A", "A", "A", "A", "B", "C", "D", "E"],
-            "gear": [
-                "OTB",
-                "OTB",
-                "OTB",
-                "OTB",
-                "OTT",
-                "OTT",
-                "OTT",
-                "OTT",
-                "SDN",
-                None,
-                None,
-                "LL",
-            ],
-            "fao_area": [
-                "27.8.c",
-                "27.8.c",
-                "27.8",
-                "27.8",
-                "27.8.c",
-                "27.8.c",
-                "27.8",
-                "27.8",
-                None,
-                "27.8.c",
-                None,
-                None,
-            ],
-            "species": [
-                "HKE",
-                "SOL",
-                "HKE",
-                "SOL",
-                "HKE",
-                "SOL",
-                "HKE",
-                "SOL",
-                None,
-                None,
-                "HKE",
-                None,
-            ],
-        }
-    )
-
-    pd.testing.assert_frame_equal(
-        segments.convert_dtypes(), expected_segments.convert_dtypes()
-    )
+def test_unnest_segments(expected_all_segments):
+    unnested_segments = unnest_segments.run(expected_all_segments)
+    assert len(unnested_segments) == 332

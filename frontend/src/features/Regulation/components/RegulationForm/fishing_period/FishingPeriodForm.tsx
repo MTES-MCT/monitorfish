@@ -66,12 +66,12 @@ export function FishingPeriodForm({ show }: FishingPeriodFormProps) {
   }, [fishingPeriodAsString, processingRegulation.fishingPeriod])
 
   return (
-    <FormSection show={show}>
+    <FormSection $show={show}>
       <RegulatorySectionTitle>
         <AuthorizedRadioButtonGroup title="Périodes" />
       </RegulatorySectionTitle>
       <Delimiter width={523} />
-      <FormContent display={displayForm}>
+      <FormContent $display={displayForm}>
         <Always authorized={processingRegulation.fishingPeriod?.authorized} />
         <FishingPeriodAnnualRecurrence disabled={processingRegulation.fishingPeriod?.always} />
         <DateTime>

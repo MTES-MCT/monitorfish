@@ -107,7 +107,7 @@ export function RegulatedGear({
         </ContentLine>
       )}
 
-      <ContentLine alignedToTop>
+      <ContentLine $alignedToTop>
         <Label>Remarques</Label>
         <CustomInput
           $isGray={remarks}

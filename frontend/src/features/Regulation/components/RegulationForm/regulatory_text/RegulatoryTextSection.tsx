@@ -53,7 +53,7 @@ export function RegulatoryTextSection({ regulatoryTextList, saveForm }: Regulato
   }
 
   return (
-    <Section show>
+    <Section $show>
       <Title>références réglementaires en vigueur</Title>
       {regulotaryTextListWithInitialRegulatoryText.map((regulatoryText, index) => (
         <RegulatoryTextContent
@@ -68,9 +68,7 @@ export function RegulatoryTextSection({ regulatoryTextList, saveForm }: Regulato
         />
       ))}
       <ButtonLine>
-        <ValidateButton disabled={false} isLast={false} onClick={addRegRefInEffect}>
-          Ajouter un autre texte en vigueur
-        </ValidateButton>
+        <ValidateButton onClick={addRegRefInEffect}>Ajouter un autre texte en vigueur</ValidateButton>
       </ButtonLine>
     </Section>
   )

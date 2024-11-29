@@ -36,7 +36,7 @@ export function RegulationTopicLine({ isDisabled }) {
   }
 
   return (
-    <ContentLine isFormOpened={isAddTopicClicked} isInfoTextShown={isInfoTextShown}>
+    <ContentLine $isFormOpened={isAddTopicClicked} $isInfoTextShown={isInfoTextShown}>
       <Wrapper>
         <Label>Thématique de la zone</Label>
         <StyledSelect
@@ -82,7 +82,7 @@ export function RegulationTopicLine({ isDisabled }) {
           setIsInfoTextShown={setIsInfoTextShown}
         >
           <InfoTextWrapper>
-            <InfoText bold>{INFO_TEXT.TOPIC}</InfoText>
+            <InfoText $bold>{INFO_TEXT.TOPIC}</InfoText>
             <InfoText>{INFO_TEXT.TOPIC_NEXT}</InfoText>
           </InfoTextWrapper>
         </CustomInfoBox>

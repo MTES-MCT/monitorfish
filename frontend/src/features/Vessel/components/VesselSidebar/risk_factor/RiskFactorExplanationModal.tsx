@@ -73,7 +73,7 @@ export function RiskFactorExplanationModal({ isOpen, setIsOpen }: RiskFactorExpl
           Lorsqu&apos;un navire appartient à plusieurs segments de flotte,{' '}
           <b>c&apos;est le segment dont le score est le plus élevé qui est retenu</b>.<br />
         </Text>
-        <RiskFactorLegend isFirst>
+        <RiskFactorLegend $isFirst>
           <RiskFactorBox color={getRiskFactorColor(1)}>1</RiskFactorBox>
           {getImpactRiskFactorText(1)} - ou pas de segment
         </RiskFactorLegend>
@@ -85,7 +85,7 @@ export function RiskFactorExplanationModal({ isOpen, setIsOpen }: RiskFactorExpl
           <RiskFactorBox color={getRiskFactorColor(3)}>3</RiskFactorBox>
           {getImpactRiskFactorText(3)}
         </RiskFactorLegend>
-        <RiskFactorLegend isLast>
+        <RiskFactorLegend $isLast>
           <RiskFactorBox color={getRiskFactorColor(4)}>4</RiskFactorBox>
           {getImpactRiskFactorText(4)}
         </RiskFactorLegend>
@@ -102,7 +102,7 @@ export function RiskFactorExplanationModal({ isOpen, setIsOpen }: RiskFactorExpl
           (plus un contrôle <br />
           est ancien, moins ses infractions vont peser dans le score).
         </Text>
-        <RiskFactorLegend isFirst>
+        <RiskFactorLegend $isFirst>
           <RiskFactorBox color={getRiskFactorColor(1)}>1</RiskFactorBox>
           {getProbabilityRiskFactorText(1)}
         </RiskFactorLegend>
@@ -114,7 +114,7 @@ export function RiskFactorExplanationModal({ isOpen, setIsOpen }: RiskFactorExpl
           <RiskFactorBox color={getRiskFactorColor(3)}>3</RiskFactorBox>
           {getProbabilityRiskFactorText(3)}
         </RiskFactorLegend>
-        <RiskFactorLegend isLast>
+        <RiskFactorLegend $isLast>
           <RiskFactorBox color={getRiskFactorColor(4)}>4</RiskFactorBox>
           {getProbabilityRiskFactorText(4)} – ou absence d&apos;antériorité de contrôle
         </RiskFactorLegend>
@@ -135,7 +135,7 @@ export function RiskFactorExplanationModal({ isOpen, setIsOpen }: RiskFactorExpl
           <br />
           saisonnalité des pêcheries
         </Text>
-        <RiskFactorLegend isFirst>
+        <RiskFactorLegend $isFirst>
           <RiskFactorBox color={getRiskFactorColor(1)}>1</RiskFactorBox>
           {getDetectabilityRiskFactorText(1)}
         </RiskFactorLegend>
@@ -166,7 +166,7 @@ export function RiskFactorExplanationModal({ isOpen, setIsOpen }: RiskFactorExpl
 }
 
 const DocumentationLink = styled.a<{
-  width?: string
+  $width?: string
 }>`
   ${basePrimaryButton}
   color: ${p => p.theme.color.gainsboro} !important;
@@ -180,14 +180,14 @@ const CloseButton = styled(SecondaryButton)`
 `
 
 const RiskFactorLegend = styled.div<{
-  isFirst?: boolean
-  isLast?: boolean
+  $isFirst?: boolean
+  $isLast?: boolean
 }>`
   font-size: 13px;
   color: ${p => p.theme.color.slateGray};
   margin: 7px 0;
-  margin-top: ${p => (p.isFirst ? 20 : 7)}px;
-  margin-bottom: ${p => (p.isLast ? 25 : 7)}px;
+  margin-top: ${p => (p.$isFirst ? 20 : 7)}px;
+  margin-bottom: ${p => (p.$isLast ? 25 : 7)}px;
 `
 
 const RiskFactorImpact = styled(RiskFactorImpactSVG)`

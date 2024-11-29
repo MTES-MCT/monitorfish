@@ -65,7 +65,7 @@ export function GearRegulation() {
   }
 
   return (
-    <Section show>
+    <Section $show>
       <SectionTitle dataCy="regulatory-gears-section" isOpen={show} setIsOpen={setShow} title="Engins Réglementés" />
       <RegulatedGearsForms>
         <RegulatedGears
@@ -86,7 +86,7 @@ export function GearRegulation() {
           show={show}
         />
       </RegulatedGearsForms>
-      <OtherRemark show={show}>
+      <OtherRemark $show={show}>
         <Label>Remarques</Label>
         <CustomInput
           $isGray={!!processingRegulation.gearRegulation?.otherInfo}

@@ -77,7 +77,7 @@ export function SpeciesRegulation() {
   }
 
   return (
-    <Section show>
+    <Section $show>
       <SectionTitle dataCy="open-regulated-species" isOpen={show} setIsOpen={setShow} title="ESPÈCES RÉGLEMENTÉES" />
       <RegulatedSpeciesForms>
         <RegulatedSpecies
@@ -102,7 +102,7 @@ export function SpeciesRegulation() {
           speciesByCode={speciesByCode}
         />
       </RegulatedSpeciesForms>
-      <OtherRemark show={show}>
+      <OtherRemark $show={show}>
         <Label>Remarques</Label>
         <CustomInput
           $isGray={

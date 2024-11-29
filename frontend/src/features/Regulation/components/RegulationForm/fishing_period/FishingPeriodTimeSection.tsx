@@ -48,7 +48,7 @@ export function FishingPeriodTimeSection({ disabled, timeIsDisabled }: FishingPe
   }, [processingRegulation.fishingPeriod?.daytime, setTimeInterval])
 
   return (
-    <TimeRow disabled={timeIsDisabled}>
+    <TimeRow $disabled={timeIsDisabled}>
       <DateRanges>
         {processingRegulation.fishingPeriod?.timeIntervals?.length === 0 && (
           <TimeInterval
@@ -74,7 +74,7 @@ export function FishingPeriodTimeSection({ disabled, timeIsDisabled }: FishingPe
           />
         ))}
       </DateRanges>
-      <ContentWrapper alignSelf="flex-end">
+      <ContentWrapper $alignSelf="flex-end">
         <SquareButton
           disabled={timeIsDisabled || disabled || processingRegulation.fishingPeriod?.timeIntervals?.length === 0}
           onClick={addTimeToTimeInterval}

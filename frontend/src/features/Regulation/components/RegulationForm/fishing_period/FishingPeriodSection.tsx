@@ -17,10 +17,10 @@ export function FishingPeriodSection() {
   const onChange = useCallback(value => dispatch(regulationActions.setFishingPeriodOtherInfo(value)), [dispatch])
 
   return (
-    <Section show>
+    <Section $show>
       <SectionTitle isOpen={show} setIsOpen={setShow} title="Périodes de pêche" />
       <FishingPeriodForm show={show} />
-      <OtherRemark show={show}>
+      <OtherRemark $show={show}>
         <Label>Remarques</Label>
         <CustomInput
           $isGray={processingRegulation.fishingPeriod?.otherInfo !== ''}

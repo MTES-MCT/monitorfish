@@ -64,12 +64,10 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
       }
 
       dispatch(
-        dispatch(
-          mainMapActions.addShowedLayer({
-            type: zone.hasFetchableZones ? zone.group?.code!! : zone.code,
-            zone: zone.hasFetchableZones ? zone.code : undefined
-          })
-        )
+        mainMapActions.addShowedLayer({
+          type: zone.hasFetchableZones ? zone.group?.code!! : zone.code,
+          zone: zone.hasFetchableZones ? zone.code : undefined
+        })
       )
     },
     [dispatch]

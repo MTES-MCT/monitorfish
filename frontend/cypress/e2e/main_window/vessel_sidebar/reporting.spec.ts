@@ -42,11 +42,11 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="side-window-reporting-tab"]').click()
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.wait(200)
-    cy.get('*[data-cy="ReportingList-reporting"]').last().contains('FRAIS AVIS MODE')
+    cy.get('*[data-cy="ReportingList-reporting"]').first().contains('FRAIS AVIS MODE')
 
-    // Delete the newly created reporting
-    cy.get('.rs-checkbox').last().click()
-    cy.get('[title="Archiver 1 signalement"]').click()
+    // Archive the newly created reporting
+    cy.get('.rs-checkbox-wrapper').eq(1).click()
+    cy.clickButton('Archiver 1 signalement')
   })
 
   it('An observation reporting should be modified to an Infraction suspicion', () => {
@@ -65,7 +65,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.wait('@getVesselReportings')
     cy.wait(100)
 
-    // Create an new Observation
+    // Create a new Observation
     cy.clickButton('Ouvrir un signalement')
     cy.fill('Type de signalement', 'Observation')
     cy.fill('Origine', 'Unité')

@@ -68,6 +68,7 @@ export const reportingApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(DELETE_REPORTINGS_ERROR_MESSAGE, response)
     }),
 
+    // TODO Migrate to Reporting
     getReportings: builder.query<Array<InfractionSuspicionReporting | PendingAlertReporting>, void>({
       providesTags: () => [{ type: RtkCacheTagType.Reportings }],
       query: () => ({

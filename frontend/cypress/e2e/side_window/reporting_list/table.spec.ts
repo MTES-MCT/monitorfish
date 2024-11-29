@@ -7,12 +7,6 @@ context('Side Window > Reporting List > Table', () => {
   const failedQueryCount = RTK_MAX_RETRIES + 1
   const apiPathBase = '/bff/v1/reportings'
 
-  beforeEach(() => {
-    openSideWindowReportingList()
-
-    cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click()
-  })
-
   it('Should filter reportings by vessel name (search input)', () => {
     /**
      * Should handle fetching error as expected
@@ -42,9 +36,6 @@ context('Side Window > Reporting List > Table', () => {
 
     cy.wait('@getReportings')
 
-    openSideWindowReportingList()
-    cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click()
-
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 3)
 
     /**
@@ -53,7 +44,7 @@ context('Side Window > Reporting List > Table', () => {
 
     cy.fill('Rechercher dans les signalements', 'renco')
 
-    cy.get('.Table-SimpleTable tr').should('have.length', 1)
+    cy.get('.Table-SimpleTable tr').should('have.length', 2)
 
     cy.fill('Rechercher dans les signalements', '')
 
@@ -63,10 +54,10 @@ context('Side Window > Reporting List > Table', () => {
      * Sort reporting table by date
      */
 
-    cy.get('.Table-SimpleTable tr').eq(0).contains('Suspicion de chalutage dans les 3 milles')
+    cy.get('.Table-SimpleTable tr').eq(1).contains('3 milles - Chaluts')
 
-    cy.get('div:contains("Il y a...")').click()
+    cy.get('th > div').filter(':contains("Il y a...")').click()
 
-    cy.get('.Table-SimpleTable tr').eq(0).contains("Suspicion d'infraction 212")
+    cy.get('.Table-SimpleTable tr').eq(1).contains("Suspicion d'infraction 212")
   })
 })

@@ -13,8 +13,6 @@ import { monitorfishMap } from '../../map/monitorfishMap'
 
 function UnmemoizedAdministrativeLayers() {
   const showedLayers = useMainAppSelector(state => state.mainMap.showedLayers)
-  // TODO Do we use administrative layers in the backoffice?
-  const isBackoffice = useMainAppSelector(state => state.global.isBackoffice)
 
   useEffect(() => {
     if (!showedLayers) {
@@ -32,7 +30,7 @@ function UnmemoizedAdministrativeLayers() {
           return
         }
 
-        const VectorLayer = getVectorOLLayer(layerToInsert.type, layerToInsert.zone, isBackoffice)
+        const VectorLayer = getVectorOLLayer(layerToInsert.type, layerToInsert.zone, false)
         olLayers.push(VectorLayer)
       })
     }
@@ -51,7 +49,7 @@ function UnmemoizedAdministrativeLayers() {
 
     addAdministrativeLayersToMap()
     removeAdministrativeLayersToMap()
-  }, [isBackoffice, showedLayers])
+  }, [showedLayers])
 
   return <></>
 }

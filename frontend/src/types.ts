@@ -1,4 +1,4 @@
-import type { Native } from '@mtes-mct/monitor-ui'
+import type { Native, OptionValueType, TreeBranchOption, TreeLeafOption } from '@mtes-mct/monitor-ui'
 import type { ConditionalKeys, Exact } from 'type-fest'
 
 // =============================================================================
@@ -14,6 +14,14 @@ export type FormikFormError = Record<string, any> | undefined
 export type MenuItem<T = string> = {
   code: T
   name: string
+}
+
+export type TreeBranchOptionWithValue<OptionValue extends OptionValueType = string> = Omit<
+  TreeBranchOption,
+  'children' | 'value'
+> & {
+  children: Array<TreeBranchOptionWithValue<OptionValue>> | Array<TreeLeafOption<OptionValue>>
+  value: string
 }
 
 // =============================================================================

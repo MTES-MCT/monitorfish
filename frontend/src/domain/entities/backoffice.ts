@@ -4,6 +4,7 @@ import { RegulatorySearchProperty } from '../../features/Regulation/utils'
 
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { Gear } from 'domain/types/Gear'
+import type { TreeBranchOptionWithValue } from 'types'
 
 export const BACKOFFICE_SEARCH_PROPERTIES = [
   RegulatorySearchProperty.TOPIC,
@@ -66,7 +67,9 @@ export const SORTED_CATEGORY_LIST = [
 
 const CATEGORIES_TO_HIDE = ['engins inconnus', "pas d'engin", 'engins de pêche récréative']
 
-export const prepareCategoriesAndGearsToDisplay = (categoriesToGears: Record<string, Gear[]>) =>
+export const prepareCategoriesAndGearsToDisplay = (
+  categoriesToGears: Record<string, Gear[]>
+): TreeBranchOptionWithValue[] =>
   SORTED_CATEGORY_LIST.map(category => {
     if (!CATEGORIES_TO_HIDE.includes(category) && categoriesToGears[category]) {
       const categoryGearList = [...categoriesToGears[category]]

@@ -12,11 +12,11 @@ type RegulatedGearProps = Readonly<{
   code?: string
   id: number
   label: string
-  mesh: number[]
-  meshType: GearMeshSizeEqualityComparator
+  mesh: string[] | undefined
+  meshType: GearMeshSizeEqualityComparator | undefined
   onChange: (key: string, value: any) => void
   onCloseIconClicked: (tagValue: string) => void
-  remarks: string
+  remarks: string | undefined
 }>
 export function RegulatedGear({
   allowMesh,
@@ -70,32 +70,30 @@ export function RegulatedGear({
             onChange={value => onChange('meshType', value)}
             renderMenuItem={(_, item) => <MenuItem item={item} />}
             searchable={false}
-            value={meshType || GearMeshSizeEqualityComparator.greaterThan}
+            value={meshType ?? GearMeshSizeEqualityComparator.greaterThan}
             valueIsMissing={false}
             width={165}
           />
           <CustomInput
-            //  TODO Is this a `number[]`, a `string[]`, both?
-            // @ts-ignore
             $isGray={mesh && mesh[0] !== ''}
             onChange={intervalValue => {
               const nextIntervalValue = mesh ? [...mesh] : []
-              //  TODO Is this a `number[]`, a `string[]`, both?
-              // @ts-ignore
               nextIntervalValue[0] = intervalValue
               onChange('mesh', nextIntervalValue)
             }}
-            value={mesh?.length > 0 ? mesh[0] : ''}
+            value={mesh && mesh.length > 0 ? mesh[0] : ''}
             width="60px"
           />
           {meshType && meshType === 'between' && (
             <>
               et
               <SecondCustomInput
-                //  TODO Is this a `number[]`, a `string[]`, both?
-                // @ts-ignore
                 $isGray={mesh && mesh.length === 2 && mesh[1] !== ''}
                 onChange={value => {
+                  if (!mesh) {
+                    return
+                  }
+
                   onChange('mesh', [mesh[0], value])
                 }}
                 value={mesh && mesh.length === 2 ? mesh[1] : ''}
@@ -116,7 +114,7 @@ export function RegulatedGear({
           onChange={event => onChange('remarks', event.target.value)}
           placeholder=""
           rows={2}
-          value={remarks || ''}
+          value={remarks ?? ''}
           width="300px"
         />
       </ContentLine>

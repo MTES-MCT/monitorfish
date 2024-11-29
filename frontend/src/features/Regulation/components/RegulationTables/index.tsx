@@ -34,6 +34,8 @@ export function RegulationTables() {
   }
 
   const layersTopicsByRegTerritory = useBackofficeAppSelector(state => state.regulation.layersTopicsByRegTerritory)
+  const lastShowedFeatures = useBackofficeAppSelector(state => state.mainMap.lastShowedFeatures)
+  const layersToFeatures = useBackofficeAppSelector(state => state.mainMap.layersToFeatures)
   const regulatoryZoneMetadataPanelIsOpen = useBackofficeAppSelector(
     state => state.regulation.regulatoryZoneMetadataPanelIsOpen
   )
@@ -150,8 +152,8 @@ export function RegulationTables() {
         <BaseMap handleMovingAndZoom={handleMovingAndZoom}>
           <BaseLayer />
           <RegulatoryLayers
-            lastShowedFeatures={[]}
-            layersToFeatures={[]}
+            lastShowedFeatures={lastShowedFeatures}
+            layersToFeatures={layersToFeatures}
             mapMovingAndZoomEvent={mapMovingAndZoomEvent}
             regulatoryZoneMetadata={regulatoryZoneMetadata}
             showedLayers={showedLayers}
@@ -161,9 +163,8 @@ export function RegulationTables() {
           <RegulatoryPreviewLayer regulatoryZonesToPreview={regulatoryZonesToPreview} />
         </BaseMap>
       </BackofficeContainer>
-      {/* TODO Is it always `false`? */}
       {regulatoryZoneMetadataPanelIsOpen && (
-        <MetadataWrapper regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}>
+        <MetadataWrapper $regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}>
           <RegulatoryZoneMetadata />
         </MetadataWrapper>
       )}
@@ -236,9 +237,9 @@ const RegulatoryZonePanel = styled.div`
 `
 
 const MetadataWrapper = styled.div<{
-  regulatoryZoneMetadataPanelIsOpen: boolean
+  $regulatoryZoneMetadataPanelIsOpen: boolean
 }>`
-  display: ${props => (props.regulatoryZoneMetadataPanelIsOpen ? 'flex' : 'none')};
+  display: ${props => (props.$regulatoryZoneMetadataPanelIsOpen ? 'flex' : 'none')};
   position: absolute;
   top: 0;
   left: calc(50% + 88px);
@@ -248,6 +249,6 @@ const MetadataWrapper = styled.div<{
   flex-direction: column;
   max-height: 95vh;
   transition: all 0.5s;
-  opacity: ${props => (props.regulatoryZoneMetadataPanelIsOpen ? '1' : '0')};
+  opacity: ${props => (props.$regulatoryZoneMetadataPanelIsOpen ? '1' : '0')};
   background: linear-gradient(${p => p.theme.color.gainsboro} 70%, rgb(0, 0, 0, 0));
 `

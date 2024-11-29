@@ -8,7 +8,6 @@ import {
 } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { customSentry, CustomSentryMeasurementName } from '@libs/customSentry'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { Formik } from 'formik'
@@ -33,7 +32,6 @@ export function ManualPriorNotificationForm() {
   const editedManualPriorNotificationFormValues = useMainAppSelector(
     state => state.priorNotification.editedManualPriorNotificationFormValues
   )
-  const editedPriorNotificationId = useMainAppSelector(state => state.priorNotification.editedPriorNotificationId)
   const openedPriorNotificationDetail = useMainAppSelector(
     state => state.priorNotification.openedPriorNotificationDetail
   )
@@ -108,26 +106,10 @@ export function ManualPriorNotificationForm() {
   }
 
   if (!editedManualPriorNotificationFormValues || isLoading) {
-    const customSentryProps = editedPriorNotificationId
-      ? {
-          id: editedPriorNotificationId,
-          maxExpectedDurationInMs: 2000,
-          name: CustomSentryMeasurementName.MANUAL_PRIOR_NOTIFICATION_FORM_SPINNER
-        }
-      : undefined
-
     return (
       <SideWindowCard onBackgroundClick={close}>
-        <LoadingSpinnerWall customSentryProps={customSentryProps} />
+        <LoadingSpinnerWall />
       </SideWindowCard>
-    )
-  }
-
-  if (openedPriorNotificationDetail?.reportId) {
-    customSentry.endMeasurement(
-      CustomSentryMeasurementName.MANUAL_PRIOR_NOTIFICATION_FORM_LOADING,
-      openedPriorNotificationDetail.reportId,
-      2000
     )
   }
 

@@ -26,7 +26,7 @@ class GetAllCurrentReportings(
             ReportingFilter(
                 isArchived = false,
                 isDeleted = false,
-                types = listOf(ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION),
+                types = listOf(ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION, ReportingType.OBSERVATION),
             )
 
         val currentReportings = reportingRepository.findAll(filter)

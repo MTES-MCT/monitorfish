@@ -1,42 +1,14 @@
 import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
-import { customSentry, type CustomSentryMeasurementName } from '@libs/customSentry'
 import { THEME } from '@mtes-mct/monitor-ui'
-import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import VesselSVG from '../features/icons/Icone_navire.svg?react'
 
 export type LoadingSpinnerWallProps = {
-  customSentryProps?:
-    | {
-        id: string
-        maxExpectedDurationInMs?: number
-        name: CustomSentryMeasurementName
-      }
-    | undefined
   isVesselShowed?: boolean
   message?: string
 }
-export function LoadingSpinnerWall({
-  customSentryProps,
-  isVesselShowed = false,
-  message = 'Chargement...'
-}: LoadingSpinnerWallProps) {
-  useEffect(
-    () => () => {
-      if (!customSentryProps) {
-        return
-      }
-
-      customSentry.endMeasurement(
-        customSentryProps.name,
-        customSentryProps.id,
-        customSentryProps.maxExpectedDurationInMs
-      )
-    },
-    [customSentryProps]
-  )
-
+export function LoadingSpinnerWall({ isVesselShowed = false, message = 'Chargement...' }: LoadingSpinnerWallProps) {
   return (
     <Wrapper data-cy="first-loader">
       <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.lightGray} size={48} />

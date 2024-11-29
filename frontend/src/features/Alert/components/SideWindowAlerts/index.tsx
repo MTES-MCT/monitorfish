@@ -2,7 +2,6 @@ import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { NO_SEAFRONT_GROUP, SEAFRONT_GROUP_SEAFRONTS, SeafrontGroup } from '@constants/seafront'
 import { AlertAndReportingTab } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/constants'
 import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
-import { isNotObservationReporting } from '@features/Reporting/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useCallback, useState } from 'react'
@@ -18,10 +17,13 @@ import type { MutableRefObject, RefObject } from 'react'
 
 type SideWindowAlertsProps = Readonly<{
   baseRef: RefObject<HTMLDivElement>
+  isFromUrl: boolean
 }>
-export function SideWindowAlerts({ baseRef }: SideWindowAlertsProps) {
+export function SideWindowAlerts({ baseRef, isFromUrl }: SideWindowAlertsProps) {
   const dispatch = useMainAppDispatch()
-  const { pendingAlerts, subMenu } = useMainAppSelector(state => state.alert)
+  const pendingAlerts = useMainAppSelector(state => state.alert.pendingAlerts)
+  const subMenu = useMainAppSelector(state => state.alert.subMenu)
+  const reportingTypesDisplayed = useMainAppSelector(state => state.reportingTableFilters.reportingTypesDisplayed)
   const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
 
   const { data: currentReportings } = useGetReportingsQuery(undefined, RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS)
@@ -40,7 +42,11 @@ export function SideWindowAlerts({ baseRef }: SideWindowAlertsProps) {
       }
 
       if (seaFrontGroup === NO_SEAFRONT_GROUP && selectedTab === AlertAndReportingTab.REPORTING) {
-        return currentReportings?.filter(reporting => !reporting.value.seaFront)?.length ?? 0
+        return (
+          currentReportings
+            ?.filter(reporting => !reporting.value.seaFront)
+            ?.filter(reporting => reportingTypesDisplayed.includes(reporting.type))?.length ?? 0
+        )
       }
 
       const seafronts = SEAFRONT_GROUP_SEAFRONTS[seaFrontGroup]
@@ -54,15 +60,15 @@ export function SideWindowAlerts({ baseRef }: SideWindowAlertsProps) {
 
       if (selectedTab === AlertAndReportingTab.REPORTING) {
         return (
-          currentReportings?.filter(
-            reporting => isNotObservationReporting(reporting) && seafronts.includes(reporting.value.seaFront)
-          )?.length ?? 0
+          currentReportings
+            ?.filter(reporting => seafronts.includes(reporting.value.seaFront))
+            ?.filter(reporting => reportingTypesDisplayed.includes(reporting.type))?.length ?? 0
         )
       }
 
       return 0
     },
-    [currentReportings, pendingAlerts, selectedTab]
+    [currentReportings, pendingAlerts, reportingTypesDisplayed, selectedTab]
   )
 
   return (
@@ -76,6 +82,7 @@ export function SideWindowAlerts({ baseRef }: SideWindowAlertsProps) {
       {subMenu !== AdditionalSubMenu.SUSPENDED_ALERTS && (
         <AlertListAndReportingList
           baseRef={baseRef as MutableRefObject<HTMLDivElement>}
+          isFromUrl={isFromUrl}
           selectedSeafrontGroup={subMenu || SeafrontGroup.MEMN}
           selectedTab={selectedTab}
           setSelectedTab={setSelectedTab}

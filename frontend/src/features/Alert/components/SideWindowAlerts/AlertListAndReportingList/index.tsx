@@ -1,9 +1,6 @@
-import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { NO_SEAFRONT_GROUP, type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import { ReportingTable } from '@features/Reporting/components/ReportingTable'
-import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -15,22 +12,19 @@ import type { RefObject } from 'react'
 
 type AlertListAndReportingListProps = {
   baseRef: RefObject<HTMLDivElement>
+  isFromUrl: boolean
   selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup
   selectedTab: any
   setSelectedTab: any
 }
 export function AlertListAndReportingList({
   baseRef,
+  isFromUrl,
   selectedSeafrontGroup,
   selectedTab,
   setSelectedTab
 }: AlertListAndReportingListProps) {
-  const displayedError = useMainAppSelector(
-    state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR]
-  )
   const silencedAlerts = useMainAppSelector(state => state.alert.silencedAlerts)
-
-  const { data: currentReportings } = useGetReportingsQuery(undefined, RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS)
 
   const filteredSilencedAlerts = useMemo(() => {
     if (selectedSeafrontGroup === NO_SEAFRONT_GROUP) {
@@ -48,19 +42,21 @@ export function AlertListAndReportingList({
 
   return (
     <Wrapper>
-      <Title
-        $isSelected={selectedTab === AlertAndReportingTab.ALERT}
-        onClick={() => setSelectedTab(AlertAndReportingTab.ALERT)}
-      >
-        Alertes
-      </Title>
-      <Title
-        $isSelected={selectedTab === AlertAndReportingTab.REPORTING}
-        data-cy="side-window-reporting-tab"
-        onClick={() => setSelectedTab(AlertAndReportingTab.REPORTING)}
-      >
-        Signalements
-      </Title>
+      <Header>
+        <Title
+          $isSelected={selectedTab === AlertAndReportingTab.ALERT}
+          onClick={() => setSelectedTab(AlertAndReportingTab.ALERT)}
+        >
+          Alertes
+        </Title>
+        <Title
+          $isSelected={selectedTab === AlertAndReportingTab.REPORTING}
+          data-cy="side-window-reporting-tab"
+          onClick={() => setSelectedTab(AlertAndReportingTab.REPORTING)}
+        >
+          Signalements
+        </Title>
+      </Header>
 
       {selectedTab === AlertAndReportingTab.ALERT && (
         <PendingAlertsList
@@ -70,11 +66,7 @@ export function AlertListAndReportingList({
         />
       )}
       {selectedTab === AlertAndReportingTab.REPORTING && (
-        <ReportingTable
-          currentReportings={currentReportings ?? []}
-          displayedError={displayedError}
-          selectedSeafrontGroup={selectedSeafrontGroup}
-        />
+        <ReportingTable isFromUrl={isFromUrl} selectedSeafrontGroup={selectedSeafrontGroup} />
       )}
     </Wrapper>
   )
@@ -83,7 +75,10 @@ export function AlertListAndReportingList({
 const Wrapper = styled.div`
   flex-grow: 1;
   overflow: auto;
-  margin-left: 30px;
+`
+
+const Header = styled.div`
+  margin-left: 32px;
 `
 
 // TODO This should be a `<a />` or a `<button />`.
@@ -96,9 +91,10 @@ const Title = styled.h2<{
   display: inline-block;
   font-size: 22px;
   font-weight: 700;
-  margin: 30px 10px;
-  padding-bottom: 5px;
+  margin-top: 30px;
+  margin-right: 30px;
   text-align: left;
   transition: all 0.2s;
   width: fit-content;
+  user-select: none;
 `

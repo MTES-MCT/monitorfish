@@ -16,7 +16,7 @@ export const SUB_MENU_LABEL: Record<AlertSubMenu, string> = {
   MED: 'MED',
   OUTREMEROA: 'OUTRE-MER OA',
   OUTREMEROI: 'OUTRE-MER OI',
-  NONE: 'Hors f.',
+  NONE: 'Hors façade',
   SUSPENDED_ALERTS: 'Suspension d’alertes'
 }
 /* eslint-enable sort-keys-fix/sort-keys-fix */

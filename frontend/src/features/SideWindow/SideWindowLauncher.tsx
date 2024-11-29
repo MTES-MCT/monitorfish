@@ -1,16 +1,17 @@
 import { cleanMissionForm } from '@features/SideWindow/useCases/cleanMissionForm'
+import { useForceUpdate } from '@hooks/useForceUpdate'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { NewWindow } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect } from 'react'
 
 import { SideWindow } from '.'
 import { sideWindowActions } from './slice'
 import { SideWindowStatus } from '../../domain/entities/sideWindow/constants'
-import { useForceUpdate } from '../../hooks/useForceUpdate'
-import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { resetFocusOnPendingAlert } from '../Alert/components/SideWindowAlerts/slice'
 
 export function SideWindowLauncher() {
+  const dispatch = useMainAppDispatch()
   const hasUnsavedChanges = useMainAppSelector(
     store =>
       store.missionForm.isDraftDirty ||
@@ -18,10 +19,9 @@ export function SideWindowLauncher() {
       store.priorNotification.isReportingFormDirty
   )
   const status = useMainAppSelector(store => store.sideWindow.status)
-  const dispatch = useMainAppDispatch()
   const { forceUpdate } = useForceUpdate()
 
-  const handleChangeFocus = useCallback(
+  const onChangeFocus = useCallback(
     (isFocused: boolean) => {
       const nextStatus = isFocused ? SideWindowStatus.FOCUSED : SideWindowStatus.BLURRED
 
@@ -30,15 +30,19 @@ export function SideWindowLauncher() {
     [dispatch]
   )
 
-  const handleUnload = useCallback(() => {
+  const onUnload = () => {
     dispatch(sideWindowActions.close())
     dispatch(resetFocusOnPendingAlert())
     dispatch(cleanMissionForm())
-  }, [dispatch])
+  }
 
   useEffect(() => {
     forceUpdate()
   }, [forceUpdate])
+
+  if (status === SideWindowStatus.CLOSED) {
+    return null
+  }
 
   return (
     <NewWindow
@@ -46,13 +50,13 @@ export function SideWindowLauncher() {
       copyStyles
       features={{ height: 1200, width: window.innerWidth }}
       name="MonitorFish"
-      onChangeFocus={handleChangeFocus}
-      onUnload={handleUnload}
+      onChangeFocus={onChangeFocus}
+      onUnload={onUnload}
       shouldHaveFocus={status === SideWindowStatus.FOCUSED}
       showPrompt={hasUnsavedChanges}
       title="MonitorFish"
     >
-      <SideWindow isFromURL={false} />
+      <SideWindow isFromUrl={false} />
     </NewWindow>
   )
 }

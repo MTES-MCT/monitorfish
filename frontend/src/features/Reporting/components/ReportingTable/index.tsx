@@ -1,296 +1,173 @@
 import { WindowContext } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
-import { NO_SEAFRONT_GROUP, type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
-import { EditReporting } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/EditReporting'
-import { reportingActions } from '@features/Reporting/slice'
-import { ReportingType } from '@features/Reporting/types'
-import { isNotObservationReporting } from '@features/Reporting/utils'
-import { Flag } from '@features/Vessel/components/VesselList/tableCells'
-import { useForceUpdate } from '@hooks/useForceUpdate'
+import { type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
+import { getReportingTableColumns } from '@features/Reporting/components/ReportingTable/columns'
+import { REPORTING_CSV_MAP } from '@features/Reporting/components/ReportingTable/constants'
+import { EditReporting } from '@features/Reporting/components/ReportingTable/EditReporting'
+import { Filters } from '@features/Reporting/components/ReportingTable/Filters/Filters'
+import { useGetFilteredReportingsQuery } from '@features/Reporting/components/ReportingTable/Filters/useGetFilteredReportingsQuery'
+import { TableBodyEmptyData } from '@features/Reporting/components/ReportingTable/TableBodyEmptyData'
+import { getRowCellCustomStyle } from '@features/Reporting/components/ReportingTable/utils'
+import { Body } from '@features/SideWindow/components/Body'
+import { Page } from '@features/SideWindow/components/Page'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { useTable } from '@hooks/useTable'
+import { useTableVirtualizer } from '@hooks/useTableVirtualizer'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Accent, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
+import { Icon, IconButton, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
 import dayjs from 'dayjs'
-import countries from 'i18n-iso-countries'
-import { useCallback, useMemo, useRef } from 'react'
-import { Checkbox, FlexboxGrid } from 'rsuite'
-import styled from 'styled-components'
-import * as timeago from 'timeago.js'
+import { useMemo, useRef, useState } from 'react'
+import styled, { css } from 'styled-components'
 
-import { REPORTING_LIST_TABLE_OPTIONS } from './constants'
-import { getReportingOrigin, getReportingTitle } from './utils'
-import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
-import { CardTable } from '../../../../ui/card-table/CardTable'
-import { CardTableBody } from '../../../../ui/card-table/CardTableBody'
-import { CardTableFilters } from '../../../../ui/card-table/CardTableFilters'
-import { CardTableRow } from '../../../../ui/card-table/CardTableRow'
-import { EmptyCardTable } from '../../../../ui/card-table/EmptyCardTable'
-import { FilterTableInput } from '../../../../ui/card-table/FilterTableInput'
-import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../Alert/constants'
+import { SkeletonRow } from '../../../../ui/Table/SkeletonRow'
+import { TableWithSelectableRowsHeader } from '../../../../ui/Table/TableWithSelectableRowsHeader'
 import { archiveReportings } from '../../useCases/archiveReportings'
 import { deleteReportings } from '../../useCases/deleteReportings'
 
-import type {
-  InfractionSuspicionReporting,
-  ObservationReporting,
-  PendingAlertReporting,
-  Reporting
-} from '@features/Reporting/types'
-import type { DisplayedErrorStateValue } from 'domain/shared_slices/DisplayedError'
-import type { CSSProperties, MutableRefObject } from 'react'
+import type { Reporting } from '@features/Reporting/types'
 
 type ReportingTableProps = Readonly<{
-  currentReportings: Reporting.Reporting[]
-  displayedError: DisplayedErrorStateValue | undefined
+  isFromUrl: boolean
   selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup
 }>
-export function ReportingTable({ currentReportings, displayedError, selectedSeafrontGroup }: ReportingTableProps) {
+export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTableProps) {
   const dispatch = useMainAppDispatch()
-  const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
+  const tableContainerRef = useRef<HTMLDivElement>(null)
 
-  const { forceDebouncedUpdate } = useForceUpdate()
+  const [rowSelection, setRowSelection] = useState({})
+  const rowSelectionAsArray = Object.keys(rowSelection).map(Number)
 
-  const baseUrl = useMemo(() => window.location.origin, [])
+  const { isError, isLoading, reportings } = useGetFilteredReportingsQuery(selectedSeafrontGroup)
 
-  const currentSeafrontReportings = useMemo(() => {
-    if (selectedSeafrontGroup === NO_SEAFRONT_GROUP) {
-      return currentReportings.filter(isNotObservationReporting).filter(reporting => !reporting.value.seaFront)
-    }
+  const archive = () => {
+    dispatch(archiveReportings(reportings, rowSelectionAsArray, WindowContext.SideWindow))
+  }
 
-    return currentReportings
-      .filter(isNotObservationReporting)
-      .filter(
-        reporting =>
-          ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup] &&
-          reporting.value.seaFront &&
-          ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts.includes(reporting.value.seaFront)
-      )
-  }, [currentReportings, selectedSeafrontGroup])
-
-  const { getTableCheckedData, renderTableHead, tableCheckedIds, tableData, toggleTableCheckForId } = useTable<
-    InfractionSuspicionReporting | PendingAlertReporting
-  >(currentSeafrontReportings, REPORTING_LIST_TABLE_OPTIONS, [], searchInputRef.current?.value)
-
-  const archive = useCallback(() => {
-    if (!tableCheckedIds.length) {
-      return
-    }
-
-    dispatch(archiveReportings(currentReportings, tableCheckedIds.map(Number), WindowContext.SideWindow))
-  }, [currentReportings, dispatch, tableCheckedIds])
-
-  const download = useCallback(() => {
-    const checkedCurrentSeafrontReportings = getTableCheckedData()
+  const download = () => {
+    const checkedCurrentSeafrontReportings = reportings.filter(reporting => rowSelectionAsArray.includes(reporting.id))
     const fileName = `${checkedCurrentSeafrontReportings.length}-signalements-${dayjs().format('DD-MM-YYYY')}`
 
-    /* eslint-disable sort-keys-fix/sort-keys-fix */
-    downloadAsCsv(fileName, checkedCurrentSeafrontReportings, {
-      creationDate: 'Ouvert le',
-      'value.dml': 'DML concernée',
-      type: {
-        label: 'Origine',
-        transform: getReportingOrigin
-      },
-      'value.type': {
-        label: 'Titre',
-        transform: getReportingTitle
-      },
-      'value.description': 'Description',
-      'value.natinfCode': 'NATINF',
-      flagState: 'Pavillon',
-      vesselName: 'Navire',
-      internalReferenceNumber: 'CFR',
-      externalReferenceNumber: 'Marquage ext.',
-      ircs: 'C/S',
-      underCharter: {
-        label: 'Navire sous charte',
-        transform: reporting => (reporting.underCharter ? 'OUI' : 'NON')
-      },
-      'value.seaFront': 'Façade'
-    })
-  }, [getTableCheckedData])
-  /* eslint-enable sort-keys-fix/sort-keys-fix */
+    downloadAsCsv(fileName, checkedCurrentSeafrontReportings, REPORTING_CSV_MAP)
+  }
 
-  // TODO Rather use a reporting id here than passing a copy of the whole Reporting object.
-  const edit = useCallback(
-    (isDisabled: boolean, reporting: Reporting.EditableReporting) => {
-      if (isDisabled) {
-        return
-      }
+  const remove = () => {
+    dispatch(deleteReportings(reportings, rowSelectionAsArray, WindowContext.SideWindow))
+  }
 
-      dispatch(reportingActions.setEditedReporting(reporting))
-    },
-    [dispatch]
+  const columns = useMemo(
+    () =>
+      isLoading
+        ? getReportingTableColumns(isFromUrl).map(column => ({ ...column, cell: SkeletonRow }))
+        : getReportingTableColumns(isFromUrl),
+    [isLoading, isFromUrl]
   )
 
-  const focusOnMap = useCallback(
-    (reporting: InfractionSuspicionReporting | PendingAlertReporting) => {
-      dispatch(showVessel(reporting, false, true))
-    },
-    [dispatch]
-  )
+  const tableData = useMemo(() => (isLoading ? Array(5).fill({ id: 0 }) : reportings), [isLoading, reportings])
 
-  const remove = useCallback(async () => {
-    if (!tableCheckedIds.length) {
-      return
+  const table = useReactTable<Reporting.Reporting>({
+    columns,
+    data: tableData,
+    enableRowSelection: true,
+    enableSortingRemoval: false,
+    getCoreRowModel: getCoreRowModel(),
+    getRowId: row => row.id.toString(),
+    getSortedRowModel: getSortedRowModel(),
+    initialState: {
+      sorting: [
+        {
+          desc: true,
+          id: 'date'
+        }
+      ]
+    },
+    onRowSelectionChange: setRowSelection,
+    state: {
+      rowSelection
     }
+  })
 
-    dispatch(deleteReportings(currentReportings, tableCheckedIds.map(Number), WindowContext.SideWindow))
-  }, [currentReportings, dispatch, tableCheckedIds])
-
-  function getVesselNameTitle(reporting) {
-    return [
-      reporting.vesselName,
-      `CFR: ${reporting.internalReferenceNumber || ''}`,
-      `MARQUAGE EXT.: ${reporting.externalReferenceNumber || ''}`,
-      `IRCS: ${reporting.ircs || ''}`,
-      `MMSI: ${reporting.mmsi || ''}`
-    ].join('\n')
-  }
-
-  if (displayedError) {
-    return (
-      <Content>
-        <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR} isAbsolute />
-      </Content>
-    )
-  }
+  const { rows } = table.getRowModel()
+  const rowVirtualizer = useTableVirtualizer({ estimateSize: 42, ref: tableContainerRef, rows })
+  const virtualRows = rowVirtualizer.getVirtualItems()
 
   return (
-    <Content>
-      <CardTableFilters>
-        <FilterTableInput
-          ref={searchInputRef}
-          $baseUrl={baseUrl}
-          data-cy="side-window-reporting-search"
-          onChange={forceDebouncedUpdate}
-          placeholder="Rechercher un signalement"
-          type="text"
-        />
-        <RightAligned>
-          <IconButton
-            disabled={!tableCheckedIds.length}
-            Icon={Icon.Download}
-            onClick={download}
-            title={`Télécharger ${tableCheckedIds.length} signalement${tableCheckedIds.length > 1 ? 's' : ''}`}
-          />
-          <IconButton
-            data-cy="archive-reporting-cards"
-            disabled={!tableCheckedIds.length}
-            Icon={Icon.Archive}
-            onClick={archive}
-            title={`Archiver ${tableCheckedIds.length} signalement${tableCheckedIds.length > 1 ? 's' : ''}`}
-          />
-          <IconButton
-            data-cy="delete-reporting-cards"
-            disabled={!tableCheckedIds.length}
-            Icon={Icon.Delete}
-            onClick={remove}
-            title={`Supprimer ${tableCheckedIds.length} signalement${tableCheckedIds.length > 1 ? 's' : ''}`}
-          />
-        </RightAligned>
-      </CardTableFilters>
+    <Page>
+      <Body>
+        <TableOuterWrapper>
+          <Filters />
+          <RightAligned>
+            <IconButton
+              disabled={!rowSelectionAsArray.length}
+              Icon={Icon.Download}
+              onClick={download}
+              title={`Télécharger ${rowSelectionAsArray.length} signalement${rowSelectionAsArray.length > 1 ? 's' : ''}`}
+            />
+            <IconButton
+              data-cy="archive-reporting-cards"
+              disabled={!rowSelectionAsArray.length}
+              Icon={Icon.Archive}
+              onClick={archive}
+              title={`Archiver ${rowSelectionAsArray.length} signalement${rowSelectionAsArray.length > 1 ? 's' : ''}`}
+            />
+            <IconButton
+              data-cy="delete-reporting-cards"
+              disabled={!rowSelectionAsArray.length}
+              Icon={Icon.Delete}
+              onClick={remove}
+              title={`Supprimer ${rowSelectionAsArray.length} signalement${rowSelectionAsArray.length > 1 ? 's' : ''}`}
+            />
+          </RightAligned>
+        </TableOuterWrapper>
 
-      <CardTable
-        $hasScroll={tableData.length > 9}
-        $width={1195}
-        data-cy="side-window-reporting-list"
-        style={{ marginTop: 10 }}
-      >
-        {renderTableHead()}
+        <TableInnerWrapper ref={tableContainerRef} $hasError={isError}>
+          {isError && <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR} />}
+          {!isError && (
+            <TableWithSelectableRows.Table $withRowCheckbox data-cy="side-window-reporting-list">
+              <TableWithSelectableRows.Head>
+                {table.getHeaderGroups().map(headerGroup => (
+                  <TableWithSelectableRowsHeader key={headerGroup.id} headerGroup={headerGroup} />
+                ))}
+              </TableWithSelectableRows.Head>
 
-        <CardTableBody>
-          {tableData.map((reporting, index) => {
-            const editingIsDisabled = reporting.type === ReportingType.ALERT
-            const reportingDate = reporting.validationDate ?? reporting.creationDate
+              {reportings.length === 0 && <TableBodyEmptyData />}
+              {!!reportings.length && (
+                <tbody>
+                  {virtualRows.map(virtualRow => {
+                    const row = rows[virtualRow.index]
 
-            return (
-              <CardTableRow
-                key={reporting.id}
-                data-cy="ReportingList-reporting"
-                data-id={reporting.id}
-                index={index + 1}
-                style={{}}
-              >
-                <FlexboxGrid>
-                  <Cell style={columnStyles[0] ?? {}}>
-                    <StyledCheckbox
-                      checked={reporting.$isChecked}
-                      onChange={() => toggleTableCheckForId(reporting.id)}
-                    />
-                  </Cell>
-                  <Cell style={columnStyles[1] ?? {}} title={reportingDate}>
-                    {timeago.format(reportingDate, 'fr')}
-                  </Cell>
-                  <Cell style={columnStyles[2] ?? {}} title={getReportingOrigin(reporting, true)}>
-                    {getReportingOrigin(reporting)}
-                  </Cell>
-                  <Cell style={columnStyles[3] ?? {}} title={getReportingTitle(reporting, true)}>
-                    {getReportingTitle(reporting)}
-                  </Cell>
-                  <Cell style={columnStyles[4] ?? {}}>{reporting.value.natinfCode}</Cell>
-                  <Cell style={columnStyles[5] ?? {}} title={getVesselNameTitle(reporting)}>
-                    <Flag
-                      rel="preload"
-                      src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.flagState.toLowerCase()}.svg`}
-                      style={{ marginLeft: 0, marginRight: 5, marginTop: -2, width: 18 }}
-                      title={countries.getName(reporting.flagState.toLowerCase(), 'fr')}
-                    />
-                    {reporting.vesselName}
-                  </Cell>
-                  <Cell style={columnStyles[6] ?? {}}>{reporting.value.dml}</Cell>
-                  <Cell style={columnStyles[7] ?? {}}>
-                    {reporting.underCharter && <UnderCharter>Navire sous charte</UnderCharter>}
-                  </Cell>
-                  <Separator />
-                  <Cell style={columnStyles[8] ?? {}}>
-                    <IconButton
-                      accent={Accent.TERTIARY}
-                      data-cy="side-window-silenced-alerts-show-vessel"
-                      Icon={Icon.ViewOnMap}
-                      onClick={() => focusOnMap(reporting)}
-                      style={showIconStyle}
-                      title="Voir sur la carte"
-                    />
-                  </Cell>
-                  <Cell style={columnStyles[9] ?? {}}>
-                    <IconButton
-                      accent={Accent.TERTIARY}
-                      data-cy="side-window-edit-reporting"
-                      disabled={editingIsDisabled}
-                      Icon={Icon.Edit}
-                      onClick={() =>
-                        edit(editingIsDisabled, reporting as InfractionSuspicionReporting | ObservationReporting)
-                      }
-                      title="Editer le signalement"
-                    />
-                  </Cell>
-                </FlexboxGrid>
-              </CardTableRow>
-            )
-          })}
-        </CardTableBody>
-        {!tableData.length && <EmptyCardTable>Aucun signalement</EmptyCardTable>}
-      </CardTable>
+                    return (
+                      <TableWithSelectableRows.BodyTr key={virtualRow.key} data-cy="ReportingList-reporting">
+                        {row?.getVisibleCells().map(cell => (
+                          <Row
+                            key={cell.id}
+                            $hasRightBorder={cell.column.id === 'underCharter'}
+                            $isCenter={cell.column.id === 'actions'}
+                            style={getRowCellCustomStyle(cell.column)}
+                          >
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </Row>
+                        ))}
+                      </TableWithSelectableRows.BodyTr>
+                    )
+                  })}
+                </tbody>
+              )}
+            </TableWithSelectableRows.Table>
+          )}
+        </TableInnerWrapper>
+      </Body>
       <EditReporting />
-    </Content>
+    </Page>
   )
 }
 
-const Cell = styled(FlexboxGrid.Item).attrs(() => ({
-  role: 'row'
-}))``
-
-const UnderCharter = styled.div`
-  background: ${p => p.theme.color.mediumSeaGreen} 0% 0% no-repeat padding-box;
-  border-radius: 1px;
-  color: ${p => p.theme.color.gunMetal};
-  padding: 2px 8px;
-  white-space: nowrap;
+const TableOuterWrapper = styled.div`
+  margin: 0 32px 8px 0;
 `
+
 const RightAligned = styled.div`
+  margin-top: 16px;
   align-items: flex-end;
   display: flex;
   flex-grow: 1;
@@ -301,106 +178,32 @@ const RightAligned = styled.div`
   }
 `
 
-const styleCenter = {
-  alignItems: 'center',
-  display: 'flex',
-  height: 15,
-  paddingLeft: 10,
-  paddingRight: 10
-}
-
-const Separator = styled.div`
-  border-left: 1px solid ${THEME.color.lightGray};
-  height: 41px;
-  margin-top: -13px;
+const Row = styled(TableWithSelectableRows.Td)`
+  color: ${p => p.theme.color.charcoal};
 `
 
-// TODO Most of these styles are either repetitions or generalizable styles (i.e. ellipsis).
-// It's  better to create common pre-styled components covering 70-80% of the cases and custom-wrapped ones
-// for the rest. But not via a "detached" collections of style objects, preferably using named components.
-// TODO We should really check if applying styles to a real table would not save a lot of code.
-// Duplication of styles between heads and rows doesn't seem optimal.
-const columnStyles: CSSProperties[] = [
-  {
-    ...styleCenter,
-    alignItems: 'center',
-    display: 'flex',
-    justifyContent: 'center',
-    paddingLeft: 0,
-    paddingRight: 0,
-    width: 36
-  },
-  {
-    ...styleCenter,
-    width: 130
-  },
-  {
-    ...styleCenter,
-    width: 130
-  },
-  {
-    ...styleCenter,
-    display: 'inline-block',
-    height: 20,
-    marginTop: -3,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    width: 280
-  },
-  {
-    ...styleCenter,
-    width: 85
-  },
-  {
-    ...styleCenter,
-    display: 'inline-block',
-    height: 20,
-    marginTop: -3,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    width: 230
-  },
-  {
-    ...styleCenter,
-    width: 70
-  },
-  {
-    ...styleCenter,
-    width: 155
-  },
-  {
-    ...styleCenter,
-    height: '100%',
-    justifyContent: 'center',
-    width: 40
-  },
-  {
-    ...styleCenter,
-    justifyContent: 'center',
-    width: 33
+const TableInnerWrapper = styled.div<{
+  $hasError: boolean
+}>`
+  * {
+    box-sizing: border-box;
   }
-]
+  height: 619px; /* = table height - 5px (negative margin-top) + 1px for Chrome compatibility */
+  min-width: 1271px; /* = table width + right padding + scrollbar width (8px) */
+  padding-right: 8px;
+  overflow-y: scroll;
+  width: auto;
 
-export const StyledCheckbox = styled(Checkbox)`
-  height: 36px;
+  > table {
+    margin-top: -5px;
+  }
+
+  ${p =>
+    p.$hasError &&
+    css`
+      align-items: center;
+      border: solid 1px ${p.theme.color.lightGray};
+      display: flex;
+      justify-content: center;
+    `}
 `
-
-const Content = styled.div`
-  width: fit-content;
-  padding: 20px 0px 40px 10px;
-  margin-bottom: 20px;
-`
-
-// We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
-// goes back to the main window
-const showIconStyle: CSSProperties = {
-  cursor: 'pointer',
-  flexShrink: 0,
-  float: 'right',
-  height: 16,
-  marginLeft: 'auto',
-  paddingRight: 7,
-  width: 20
-}

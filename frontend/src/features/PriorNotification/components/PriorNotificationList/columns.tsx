@@ -118,10 +118,6 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotifi
       size: 168 + legacyFirefoxOffset
     },
     {
-      // accessorFn: row =>
-      //   row.types.length > 0
-      //     ? sortPriorNotificationTypesByPriority(row.types.map(({ name }) => name)).join(', ')
-      //     : undefined,
       cell: (info: CellContext<PriorNotification.PriorNotification, string | undefined>) => (
         <TypesCell priorNotification={info.row.original} />
       ),

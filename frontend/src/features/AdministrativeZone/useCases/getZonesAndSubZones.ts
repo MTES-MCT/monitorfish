@@ -7,21 +7,22 @@ import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { ZoneChildren } from '@features/Vessel/components/VesselList/slice'
 import type { MainAppThunk } from '@store'
 
-export const getZonesAndSubZones = (): MainAppThunk<Promise<ZoneChildren[]>> => async (_dispatch, getState) => {
+// TODO This could be transformed into a function or an RTK call, there is no need for a thunk here.
+export const getZonesAndSubZones = (): MainAppThunk<Promise<Array<ZoneChildren>>> => async () => {
   const filteredLayers = Object.keys(LayerProperties)
     .map<MainMap.ShowableLayer>(layerKey => LayerProperties[layerKey])
     .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
     .filter(layer => layer.isIntersectable)
 
   const zonesAndSubZones = await Promise.all(
-    filteredLayers.map(async (zone): Promise<ZoneChildren | undefined> => {
+    filteredLayers.map(async (zone): Promise<ZoneChildren | ZoneChildren[] | undefined> => {
       if (zone.hasSearchableZones) {
         try {
-          const subZonesFeatures = await getAdministrativeSubZonesFromAPI(zone.code, getState().global.isBackoffice)
+          const subZonesFeatures = await getAdministrativeSubZonesFromAPI(zone.code, false)
 
           return subZonesFeatures.features.map((subZone: any) => ({
             code: subZone.id,
-            group: zone.name,
+            group: zone.name ?? 'Aucun groupe',
             groupCode: zone.code,
             isSubZone: true,
             label:
@@ -33,7 +34,7 @@ export const getZonesAndSubZones = (): MainAppThunk<Promise<ZoneChildren[]>> => 
                 ? subZone.properties[zone.zoneNamePropertyKey]
                 : 'Aucun nom',
             value: subZone.id
-          })) as any
+          }))
         } catch (error) {
           console.warn(error)
 
@@ -54,5 +55,5 @@ export const getZonesAndSubZones = (): MainAppThunk<Promise<ZoneChildren[]>> => 
     })
   )
 
-  return zonesAndSubZones.filter(isNotNullish)
+  return zonesAndSubZones.flat().filter(isNotNullish)
 }

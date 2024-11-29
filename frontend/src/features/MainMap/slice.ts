@@ -100,18 +100,16 @@ const mainMapSlice = createSlice({
 
       if (type === LayerProperties.REGULATORY.code) {
         if (zone && topic) {
-          state.showedLayers = state.showedLayers
-            .filter(layer => !(layer.topic === topic && layer.zone === zone))
-            // LayerName is not used anymore, but may be still stored in LocalStorage (see l. 17)
-            .filter(layer => !((layer as any).layerName === topic && layer.zone === zone))
+          state.showedLayers = state.showedLayers.filter(
+            layer => !(layer.topic === topic && (layer.zone ? layer.zone === zone : true))
+          )
         } else if (topic) {
-          state.showedLayers = state.showedLayers
-            .filter(layer => layer.topic !== topic)
-            // LayerName is not used anymore, but may be still stored in LocalStorage (see l. 17)
-            .filter(layer => (layer as any).layerName !== topic)
+          state.showedLayers = state.showedLayers.filter(layer => layer.topic !== topic)
         }
       } else {
-        state.showedLayers = state.showedLayers.filter(layer => !(layer.type === type && layer.zone === zone))
+        state.showedLayers = state.showedLayers.filter(
+          layer => !(layer.type === type && (layer.zone ? layer.zone === zone : true))
+        )
       }
 
       // TODO Use redux-persist to save showed layers.

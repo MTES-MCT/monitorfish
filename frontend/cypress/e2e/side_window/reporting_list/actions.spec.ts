@@ -18,7 +18,7 @@ context('Side Window > Reporting List > Actions', () => {
         const numberOfReportings = $reportingRows.length
 
         // When
-        cy.get('.rs-checkbox-wrapper').eq(1).click()
+        cy.get('table .rs-checkbox-wrapper').eq(1).click()
         cy.getDataCy('archive-reporting-cards').click({ force: true })
 
         cy.wait('@archiveReportings').then(archiveInterception => {
@@ -48,7 +48,7 @@ context('Side Window > Reporting List > Actions', () => {
         const numberOfReportings = $reportingRows.length
 
         // When
-        cy.get('.rs-checkbox-wrapper').eq(1).click()
+        cy.get('table .rs-checkbox-wrapper').eq(1).click()
         cy.getDataCy('delete-reporting-cards').click({ force: true })
 
         cy.wait('@deleteReportings').then(archiveInterception => {
@@ -152,7 +152,7 @@ context('Side Window > Reporting List > Actions', () => {
 
   function downloadReporting(seafront, csvValues) {
     cy.getDataCy(`side-window-sub-menu-${seafront}`).click()
-    cy.get('.rs-checkbox-wrapper').eq(0).click()
+    cy.get('table .rs-checkbox-wrapper').eq(0).click()
 
     // When
     cy.clickButton('Télécharger 1 signalement')

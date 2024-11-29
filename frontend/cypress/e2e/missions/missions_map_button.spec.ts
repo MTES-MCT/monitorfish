@@ -28,6 +28,7 @@ context('Missions Map Button', () => {
     // Show the missions back
     cy.get('*[data-cy^="missions-map-button"]').click()
     cy.get('*[data-cy^="missions-menu-box"]').should('be.visible')
+    cy.wait(500)
     cy.get('*[data-cy^="toggle-mission-layer"]').click()
     cy.get('.MISSION_PIN_POINT').should('exist')
     cy.get('*[data-cy="mission-label-text"]').should('have.length', 1)

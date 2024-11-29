@@ -55,11 +55,11 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
 
   const layersTopicsByRegTerritory = useBackofficeAppSelector(state => state.regulation.layersTopicsByRegTerritory)
 
-  const [geometryObjectList, setGeometryRecord] = useState<Record<string, GeoJSON.Geometry>>({})
+  const [geometriesMap, setGeometriesMap] = useState<Record<string, GeoJSON.Geometry>>({})
   const [isRegulatoryPreviewDisplayed, setIsRegulatoryPreviewDisplayed] = useState(false)
   const geometryIdList = useMemo(
-    () => (geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : []),
-    [geometryObjectList]
+    () => (geometriesMap ? formatDataForSelectPicker(Object.keys(geometriesMap)) : []),
+    [geometriesMap]
   )
   const [saveIsForbidden, setSaveIsForbidden] = useState(false)
 
@@ -82,7 +82,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
   useEffect(() => {
     ;(async () => {
       const geometryRecord = await dispatch(getGeometryWithoutRegulationReference())
-      setGeometryRecord(geometryRecord)
+      setGeometriesMap(geometryRecord)
 
       await dispatch(getAllSpecies<BackofficeAppThunk>())
       await dispatch(getAllRegulatoryLayersByRegTerritory())
@@ -204,8 +204,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
       return
     }
 
-    const geometryFromId =
-      !!geometryObjectList && !!processingRegulation.id && geometryObjectList[processingRegulation.id]
+    const geometryFromId = !!geometriesMap && !!processingRegulation.id && geometriesMap[processingRegulation.id]
     if (geometryFromId) {
       dispatch(regulationActions.setRegulatoryGeometriesToPreview([{ geometry: geometryFromId }]))
     } else if (isEdition && processingRegulation?.geometry) {
@@ -215,14 +214,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
     } else {
       dispatch(setError(new Error("Aucune géométrie n'a été trouvée pour cette identifiant.")))
     }
-  }, [
-    dispatch,
-    geometryObjectList,
-    isEdition,
-    processingRegulation,
-    selectedRegulatoryZoneId,
-    isRegulatoryPreviewDisplayed
-  ])
+  }, [dispatch, geometriesMap, isEdition, processingRegulation, selectedRegulatoryZoneId, isRegulatoryPreviewDisplayed])
 
   const setOtherInfo = value => {
     dispatch(

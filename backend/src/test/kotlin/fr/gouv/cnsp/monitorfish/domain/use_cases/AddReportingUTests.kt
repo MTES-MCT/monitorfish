@@ -8,7 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.AddReporting
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetInfractionSuspicionWithDMLAndSeaFront
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetReportingWithDMLAndSeaFront
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -26,7 +26,7 @@ class AddReportingUTests {
     private lateinit var reportingRepository: ReportingRepository
 
     @Mock
-    private lateinit var getInfractionSuspicionWithDMLAndSeaFront: GetInfractionSuspicionWithDMLAndSeaFront
+    private lateinit var getReportingWithDMLAndSeaFront: GetReportingWithDMLAndSeaFront
 
     @Mock
     private lateinit var getAllLegacyControlUnits: GetAllLegacyControlUnits
@@ -56,7 +56,7 @@ class AddReportingUTests {
             catchThrowable {
                 AddReporting(
                     reportingRepository,
-                    getInfractionSuspicionWithDMLAndSeaFront,
+                    getReportingWithDMLAndSeaFront,
                     getAllLegacyControlUnits,
                 ).execute(
                     reportingToAdd,
@@ -94,6 +94,15 @@ class AddReportingUTests {
                 isArchived = false,
                 isDeleted = false,
             )
+        given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
+            Observation(
+                reportingActor = reportingActor,
+                authorTrigram = "LTH",
+                title = "A title",
+                dml = "DML 56",
+                seaFront = "NAMO",
+            ),
+        )
         given(reportingRepository.save(any())).willReturn(reportingToAdd)
 
         // When
@@ -101,7 +110,7 @@ class AddReportingUTests {
             catchThrowable {
                 AddReporting(
                     reportingRepository,
-                    getInfractionSuspicionWithDMLAndSeaFront,
+                    getReportingWithDMLAndSeaFront,
                     getAllLegacyControlUnits,
                 ).execute(
                     reportingToAdd,
@@ -122,7 +131,7 @@ class AddReportingUTests {
     @Test
     fun `execute Should add a new reporting When the type is an INFRACTION_SUSPICION`() {
         // Given
-        given(getInfractionSuspicionWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
+        given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
             InfractionSuspicion(
                 reportingActor = ReportingActor.OPS,
                 seaFront = "NAMO",
@@ -157,7 +166,7 @@ class AddReportingUTests {
         given(reportingRepository.save(any())).willReturn(reportingToAdd)
 
         // When
-        AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllLegacyControlUnits).execute(
+        AddReporting(reportingRepository, getReportingWithDMLAndSeaFront, getAllLegacyControlUnits).execute(
             reportingToAdd,
         )
 

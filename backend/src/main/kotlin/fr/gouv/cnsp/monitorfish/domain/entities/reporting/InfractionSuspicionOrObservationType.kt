@@ -11,6 +11,8 @@ abstract class InfractionSuspicionOrObservationType(
     open val authorContact: String? = null,
     open val title: String,
     open val description: String? = null,
+    open val seaFront: String? = null,
+    open val dml: String? = null,
     override val natinfCode: Int? = null,
 ) : ReportingValue(natinfCode) {
     fun checkReportingActorAndFieldsRequirements() =

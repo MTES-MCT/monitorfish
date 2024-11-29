@@ -10,8 +10,8 @@ data class InfractionSuspicion(
     override val title: String,
     override val description: String? = null,
     override val natinfCode: Int,
-    val seaFront: String? = null,
-    val dml: String? = null,
+    override val seaFront: String? = null,
+    override val dml: String? = null,
 ) : InfractionSuspicionOrObservationType(
         reportingActor = reportingActor,
         controlUnitId = controlUnitId,
@@ -20,6 +20,8 @@ data class InfractionSuspicion(
         title = title,
         description = description,
         natinfCode = natinfCode,
+        seaFront = seaFront,
+        dml = dml,
         type = ReportingTypeMapping.INFRACTION_SUSPICION,
     ) {
     companion object {

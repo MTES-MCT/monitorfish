@@ -59,13 +59,6 @@ export namespace MainMap {
     name?: string
   }
 
-  /** @deprecated Redux namespacing should not be stored in data. */
-  // TODO Replace that with a cleaner mechanism.
-  export enum LayerSliceNamespace {
-    backoffice = 'backoffice',
-    homepage = 'homepage'
-  }
-
   export enum MonitorFishLayer {
     AEM = 'AEM',
     BASE_LAYER = 'BASE_LAYER',

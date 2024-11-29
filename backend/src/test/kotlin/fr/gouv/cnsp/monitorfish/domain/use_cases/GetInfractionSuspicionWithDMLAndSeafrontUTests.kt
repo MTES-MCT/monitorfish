@@ -10,7 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.DistrictRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetInfractionSuspicionWithDMLAndSeaFront
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetReportingWithDMLAndSeaFront
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -46,11 +46,11 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
 
         // When
         val infractionSuspicion =
-            GetInfractionSuspicionWithDMLAndSeaFront(
+            GetReportingWithDMLAndSeaFront(
                 vesselRepository,
                 districtRepository,
             ).execute(
-                infractionSuspicion = expectedInfractionSuspicion,
+                infractionSuspicionOrObservationType = expectedInfractionSuspicion,
                 vesselId = 123,
             )
 
@@ -64,8 +64,8 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
         // When
         val throwable =
             catchThrowable {
-                GetInfractionSuspicionWithDMLAndSeaFront(vesselRepository, districtRepository).execute(
-                    infractionSuspicion =
+                GetReportingWithDMLAndSeaFront(vesselRepository, districtRepository).execute(
+                    infractionSuspicionOrObservationType =
                         InfractionSuspicion(
                             reportingActor = ReportingActor.OPS,
                             dml = "",
@@ -89,8 +89,8 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
         // When
         val throwable =
             catchThrowable {
-                GetInfractionSuspicionWithDMLAndSeaFront(vesselRepository, districtRepository).execute(
-                    infractionSuspicion =
+                GetReportingWithDMLAndSeaFront(vesselRepository, districtRepository).execute(
+                    infractionSuspicionOrObservationType =
                         InfractionSuspicion(
                             reportingActor = ReportingActor.OPS,
                             dml = "",
@@ -118,8 +118,8 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
         // When
         val throwable =
             catchThrowable {
-                GetInfractionSuspicionWithDMLAndSeaFront(vesselRepository, districtRepository).execute(
-                    infractionSuspicion =
+                GetReportingWithDMLAndSeaFront(vesselRepository, districtRepository).execute(
+                    infractionSuspicionOrObservationType =
                         InfractionSuspicion(
                             reportingActor = ReportingActor.OPS,
                             dml = "",

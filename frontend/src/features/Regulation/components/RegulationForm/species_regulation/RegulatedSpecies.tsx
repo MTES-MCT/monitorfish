@@ -155,13 +155,13 @@ export function RegulatedSpecies({
   const dataCyTarget = authorized ? 'authorized' : 'unauthorized'
 
   return (
-    <FormSection show={show}>
+    <FormSection $show={show}>
       <RegulatorySectionTitle>
-        {authorized ? <GreenCircle margin="0 6px" /> : <RedCircle margin="0 6px" />}
+        {authorized ? <GreenCircle $margin="0 6px" /> : <RedCircle $margin="0 6px" />}
         Espèces {authorized ? 'autorisées' : 'interdites'}
       </RegulatorySectionTitle>
       <Delimiter width={523} />
-      <FormContent display>
+      <FormContent $display>
         {!authorized && (
           <ContentLine>
             <CustomCheckbox

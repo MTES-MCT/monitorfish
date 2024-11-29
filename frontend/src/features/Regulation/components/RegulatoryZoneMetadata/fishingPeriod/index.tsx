@@ -14,7 +14,7 @@ export function FishingPeriodDisplayed() {
   return !!fishingPeriod && fishingPeriod.authorized !== undefined && (fishingPeriodText ?? fishingPeriod.otherInfo) ? (
     <Section data-cy="regulatory-layers-metadata-fishing-period">
       <SectionTitle>
-        {fishingPeriod.authorized ? <GreenCircle margin="0 5px 0 0" /> : <RedCircle margin="0 5px 0 0" />}
+        {fishingPeriod.authorized ? <GreenCircle $margin="0 5px 0 0" /> : <RedCircle $margin="0 5px 0 0" />}
         Période de pêche {fishingPeriod.authorized ? 'autorisée' : 'interdites'}
       </SectionTitle>
       {fishingPeriodText}

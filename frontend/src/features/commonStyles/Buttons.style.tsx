@@ -5,11 +5,11 @@ import { SQUARE_BUTTON_TYPE } from '../../constants/constants'
 import type { ValueOf } from 'type-fest'
 
 export const basePrimaryButton = css<{
-  width?: string
+  $width?: string
 }>`
   background: ${p => p.theme.color.charcoal};
   color: ${p => p.theme.color.gainsboro};
-  ${p => (p.width ? `width: ${p.width};` : '')}
+  ${p => (p.$width ? `width: ${p.$width};` : '')}
   &:hover, &:focus {
     background: ${p => p.theme.color.charcoal};
   }
@@ -21,11 +21,11 @@ export const basePrimaryButton = css<{
 `
 
 const baseSecondaryButton = css<{
-  width?: string
+  $width?: string
 }>`
   border: 1px solid ${p => p.theme.color.charcoal};
   color: ${p => p.theme.color.gunMetal};
-  ${p => (p.width ? `width: ${p.width};` : '')}
+  ${p => (p.$width ? `width: ${p.$width};` : '')}
   &:disabled {
     border: 1px solid ${p => p.theme.color.lightGray};
     color: ${p => p.theme.color.slateGray};
@@ -33,22 +33,22 @@ const baseSecondaryButton = css<{
 `
 
 const Button = styled.button<{
-  isLast?: boolean
+  $isLast?: boolean
 }>`
   font-size: 13px;
   padding: 5px 12px;
-  margin: 20px ${p => (p.isLast ? '20px' : '0')} 20px 10px;
+  margin: 20px ${p => (p.$isLast ? '20px' : '0')} 20px 10px;
   height: 30px;
 `
 
 export const PrimaryButton = styled(Button)<{
-  width?: string
+  $width?: string
 }>`
   ${basePrimaryButton}
 `
 
 export const SecondaryButton = styled(Button)<{
-  width?: string
+  $width?: string
 }>`
   ${baseSecondaryButton}
 `

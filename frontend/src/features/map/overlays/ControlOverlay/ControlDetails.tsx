@@ -30,7 +30,7 @@ export function ControlDetails({ control, isSelected, overlayPosition }: Control
     if (!control.numberOfInfractions) {
       return (
         <div>
-          {allInfractionsText} <GreenCircle margin="2" />
+          {allInfractionsText} <GreenCircle $margin="2" />
         </div>
       )
     }
@@ -38,7 +38,7 @@ export function ControlDetails({ control, isSelected, overlayPosition }: Control
     if (control.numberOfInfractions && !control.numberOfInfractionsWithRecords) {
       return (
         <div>
-          {allInfractionsText} sans PV <GreenCircle margin="2" />
+          {allInfractionsText} sans PV <GreenCircle $margin="2" />
         </div>
       )
     }
@@ -46,14 +46,14 @@ export function ControlDetails({ control, isSelected, overlayPosition }: Control
     if (control.numberOfInfractions === control.numberOfInfractionsWithRecords) {
       return (
         <div>
-          {allInfractionsText} avec PV <RedCircle margin="2" />
+          {allInfractionsText} avec PV <RedCircle $margin="2" />
         </div>
       )
     }
 
     return (
       <div>
-        {allInfractionsText} dont {control.numberOfInfractionsWithRecords} avec PV <RedCircle margin="2" />
+        {allInfractionsText} dont {control.numberOfInfractionsWithRecords} avec PV <RedCircle $margin="2" />
       </div>
     )
   }, [control])

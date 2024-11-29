@@ -27,7 +27,7 @@ export function FishingPeriodDates({ disabled }) {
 
   return (
     <Row>
-      <ContentWrapper alignSelf="flex-start">
+      <ContentWrapper $alignSelf="flex-start">
         <Label>Dates précises</Label>
       </ContentWrapper>
       <DateList>
@@ -40,7 +40,7 @@ export function FishingPeriodDates({ disabled }) {
           </>
         )}
       </DateList>
-      <ContentWrapper alignSelf="flex-end">
+      <ContentWrapper $alignSelf="flex-end">
         <SquareButton disabled={disabled} onClick={addDate} type={SQUARE_BUTTON_TYPE.DELETE} />
         <SquareButton disabled={disabled} onClick={removeDate} />
       </ContentWrapper>

@@ -250,7 +250,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
             </Header>
             <ContentWrapper>
               {/* @ts-ignore */}
-              <Section show>
+              <Section $show>
                 <Title>identification de la zone réglementaire</Title>
                 <RegulationLawTypeLine selectData={formatDataForSelectPicker(Object.keys(LAWTYPES_TO_TERRITORY))} />
                 <RegulationTopicLine isDisabled={!lawType} />
@@ -267,7 +267,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
               <SpeciesRegulation />
               <GearRegulation />
               {/* @ts-ignore */}
-              <OtherRemark show>
+              <OtherRemark $show>
                 <Label>Remarques générales</Label>
                 {/* @ts-ignore */}
                 <CustomInput
@@ -292,10 +292,8 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
                   </ErrorMessage>
                 )}
                 <ValidateButton
+                  $isLast={false}
                   data-cy="validate-button"
-                  disabled={false}
-                  // @ts-ignore
-                  isLast={false}
                   onClick={() => {
                     checkRequiredValues()
                     dispatch(regulationActions.setSaveOrUpdateRegulation(true))
@@ -305,12 +303,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
                 </ValidateButton>
               </Validate>
               {isEdition && (
-                <CancelButton
-                  disabled={false}
-                  // @ts-ignore
-                  isLast={false}
-                  onClick={() => dispatch(regulationActions.setIsRemoveModalOpen(true))}
-                >
+                <CancelButton $isLast={false} onClick={() => dispatch(regulationActions.setIsRemoveModalOpen(true))}>
                   Supprimer la réglementation
                 </CancelButton>
               )}

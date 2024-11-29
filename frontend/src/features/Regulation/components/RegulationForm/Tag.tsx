@@ -13,7 +13,7 @@ export function Tag({ onClickText, onCloseIconClicked, tagUrl, tagValue }: TagPr
   return (
     <TagWrapper data-cy={`tag-${tagValue}`}>
       {tagUrl && (
-        <Link href={tagUrl} tagUrl target="_blank">
+        <Link $tagUrl href={tagUrl} target="_blank">
           {tagValue}
         </Link>
       )}

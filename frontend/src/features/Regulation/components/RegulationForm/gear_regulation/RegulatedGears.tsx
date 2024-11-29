@@ -174,13 +174,13 @@ export function RegulatedGears({
   const dataCyTarget = authorized ? 'authorized' : 'unauthorized'
 
   return (
-    <FormSection show={show}>
+    <FormSection $show={show}>
       <RegulatorySectionTitle>
-        {authorized ? <GreenCircle margin="0 6px" /> : <RedCircle margin="0 6px" />}
+        {authorized ? <GreenCircle $margin="0 6px" /> : <RedCircle $margin="0 6px" />}
         Engins {authorized ? 'autorisés' : 'interdits'}
       </RegulatorySectionTitle>
       <Delimiter width={523} />
-      <FormContent data-cy={`${dataCyTarget}-gears-section-content`} display={authorized !== undefined}>
+      <FormContent $display={authorized !== undefined} data-cy={`${dataCyTarget}-gears-section-content`}>
         {!authorized && (
           <GearCheckBox
             checked={allGears}

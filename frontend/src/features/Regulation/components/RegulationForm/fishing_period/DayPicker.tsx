@@ -1,8 +1,8 @@
+import { useSetFishingPeriod } from '@hooks/fishingPeriod/useSetFishingPeriod'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
 import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 
-import { useSetFishingPeriod } from '../../../../../hooks/fishingPeriod/useSetFishingPeriod'
 import { FishingPeriodKey, WEEKDAYS } from '../../../utils'
 
 type DayPickerProps = Readonly<{
@@ -12,36 +12,36 @@ export function DayPicker({ disabled }: DayPickerProps) {
   const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
   const setWeekdays = useSetFishingPeriod(FishingPeriodKey.WEEKDAYS)
 
-  useEffect(() => {
-    if (disabled) {
-      setWeekdays([])
-    }
-  }, [disabled, setWeekdays])
+  const toggle = useCallback(
+    (weekdayKey: string) => {
+      let newSelectedList: string[]
 
-  const onClick = useCallback(
-    e => {
-      let newSelectedList
-      const value = e.currentTarget.getAttribute('value')
-      if (processingRegulation.fishingPeriod?.weekdays?.includes(value)) {
-        newSelectedList = processingRegulation.fishingPeriod?.weekdays.filter(elem => elem !== value)
+      if (processingRegulation.fishingPeriod?.weekdays?.includes(weekdayKey)) {
+        newSelectedList = processingRegulation.fishingPeriod?.weekdays.filter(elem => elem !== weekdayKey)
       } else {
-        newSelectedList = [...(processingRegulation.fishingPeriod?.weekdays ?? []), value]
+        newSelectedList = [...(processingRegulation.fishingPeriod?.weekdays ?? []), weekdayKey]
       }
       setWeekdays(newSelectedList)
     },
     [processingRegulation.fishingPeriod?.weekdays, setWeekdays]
   )
 
+  useEffect(() => {
+    if (disabled) {
+      setWeekdays([])
+    }
+  }, [disabled, setWeekdays])
+
   return (
     <>
-      {Object.keys(WEEKDAYS).map(weekday => (
+      {Object.keys(WEEKDAYS).map(weekdayKey => (
         <Circle
-          key={weekday}
+          key={weekdayKey}
           $disabled={disabled}
-          $isGray={!!processingRegulation.fishingPeriod?.weekdays?.includes(weekday)}
-          onClick={onClick}
+          $isGray={processingRegulation.fishingPeriod.weekdays.includes(weekdayKey)}
+          onClick={() => toggle(weekdayKey)}
         >
-          {WEEKDAYS[weekday]}
+          {WEEKDAYS[weekdayKey]}
         </Circle>
       ))}
     </>

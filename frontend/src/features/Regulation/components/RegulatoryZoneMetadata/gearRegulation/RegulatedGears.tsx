@@ -63,7 +63,7 @@ export function RegulatedGears({
   return (
     <Wrapper data-cy={`${dataCyTarget}-regulatory-layers-metadata-gears`}>
       <SectionTitle $hasPreviousRegulatedGearsBloc={hasPreviousRegulatedGearsBloc}>
-        {authorized ? <GreenCircle margin="0 5px 0 0" /> : <RedCircle margin="0 5px 0 0" />}
+        {authorized ? <GreenCircle $margin="0 5px 0 0" /> : <RedCircle $margin="0 5px 0 0" />}
         Engins {authorized ? 'réglementés' : 'interdits'}
       </SectionTitle>
       {allGears ? (

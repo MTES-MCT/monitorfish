@@ -80,13 +80,7 @@ export function SearchRegulations({ regulatoryZoneListByRegTerritory, setFoundRe
         />
         <SearchIcon />
       </SearchBox>
-      <AddRegulationButton
-        // @ts-ignore
-        disabled={false}
-        isLast={false}
-        onClick={onAddRegulationClick}
-        title="Saisir une nouvelle réglementation"
-      />
+      <AddRegulationButton onClick={onAddRegulationClick} title="Saisir une nouvelle réglementation" />
     </SearchContainer>
   )
 }

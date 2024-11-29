@@ -18,7 +18,7 @@ export function DayTimeCheckbox({ disabled, timeIsDisabled }) {
   }, [disabled, setDaytime])
 
   return (
-    <TimeRow disabled={timeIsDisabled}>
+    <TimeRow $disabled={timeIsDisabled}>
       Ou
       <StyledCheckbox
         checked={daytime}

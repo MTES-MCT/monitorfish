@@ -47,7 +47,7 @@ export function FishingPeriodDateRanges({ disabled }: FishingPeriodDateRangesPro
 
   return (
     <Row>
-      <ContentWrapper alignSelf="flex-start">
+      <ContentWrapper $alignSelf="flex-start">
         <Label>Plages de dates</Label>
       </ContentWrapper>
       <DateRanges>
@@ -73,7 +73,7 @@ export function FishingPeriodDateRanges({ disabled }: FishingPeriodDateRangesPro
           />
         )}
       </DateRanges>
-      <ContentWrapper alignSelf="flex-end">
+      <ContentWrapper $alignSelf="flex-end">
         <SquareButton disabled={disabled || fishingPeriod?.dateRanges?.length === 0} onClick={addDateToDateRange} />
         <SquareButton
           disabled={disabled || fishingPeriod?.dateRanges?.length === 0}

@@ -13,11 +13,7 @@ export const updateTopicForAllZones =
   (territory: string, lawType: string, oldLayerName: string, newLayerName: string): BackofficeAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
     const { layersTopicsByRegTerritory } = getState().regulation
-    if (
-      !layersTopicsByRegTerritory ||
-      !layersTopicsByRegTerritory[territory] ||
-      !layersTopicsByRegTerritory[territory][lawType]
-    ) {
+    if (!layersTopicsByRegTerritory?.[territory]?.[lawType]) {
       console.error(`${UPDATE_TOPIC_NAME_ERROR}
       One value is undefined:
       layersTopicsByRegTerritory is ${layersTopicsByRegTerritory}

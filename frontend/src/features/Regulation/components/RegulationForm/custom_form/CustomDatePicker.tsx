@@ -91,7 +91,7 @@ export function CustomDatePicker({
 }
 
 const DatePickerStyled = styled(DatePicker)`
-  width: 87px;
+  width: 120px;
   box-sizing: border-box;
   color: ${p => p.theme.color.gunMetal}!important;
   border-radius: 2px;

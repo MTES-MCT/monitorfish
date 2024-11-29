@@ -63,7 +63,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
     [isLoading, isFromUrl]
   )
 
-  const tableData = useMemo(() => (isLoading ? Array(5).fill({}) : reportings), [isLoading, reportings])
+  const tableData = useMemo(() => (isLoading ? Array(5).fill({ id: 0 }) : reportings), [isLoading, reportings])
 
   const table = useReactTable<Reporting.Reporting>({
     columns,

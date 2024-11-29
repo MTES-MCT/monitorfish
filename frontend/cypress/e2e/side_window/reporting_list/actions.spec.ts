@@ -152,7 +152,7 @@ context('Side Window > Reporting List > Actions', () => {
 
   function downloadReporting(seafront, csvValues) {
     cy.getDataCy(`side-window-sub-menu-${seafront}`).click()
-    cy.get('.rs-checkbox-checker').eq(0).click({ timeout: 10000 })
+    cy.get('.rs-checkbox-wrapper').eq(0).click()
 
     // When
     cy.clickButton('Télécharger 1 signalement')

@@ -45,8 +45,8 @@ def fleet_segments_open_data() -> pd.DataFrame:
                 ["HKE"],
             ],
             "impact_risk_factor": [3.0, 2.1, 3.0, 2.1],
-            "min_mesh": [None, None, None, None],
-            "max_mesh": [None, None, None, None],
+            "min_mesh": [None, None, 80, None],
+            "max_mesh": [None, None, 120, None],
         }
     )
 
@@ -82,8 +82,8 @@ def transformed_fleet_segments_open_data() -> pd.DataFrame:
                 "{HKE}",
             ],
             "impact_risk_factor": [3.0, 2.1, 3.0, 2.1],
-            "min_mesh": [None, None, None, None],
-            "max_mesh": [None, None, None, None],
+            "min_mesh": [None, None, 80, None],
+            "max_mesh": [None, None, 120, None],
         }
     )
 

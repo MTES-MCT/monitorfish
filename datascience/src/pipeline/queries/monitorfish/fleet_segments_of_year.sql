@@ -3,7 +3,13 @@ SELECT
     segment_name,
     gears,
     fao_areas,
-    target_species || bycatch_species as species,
+    min_mesh,
+    max_mesh,
+    target_species,
+    min_share_of_target_species,
+    favored_main_species_type,
+    priority,
+    vessel_types,
     impact_risk_factor
 FROM public.fleet_segments
 WHERE year = :year

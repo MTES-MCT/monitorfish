@@ -97,6 +97,8 @@ export type GearCategory = {
   mesh: string[] | undefined
   meshType: GearMeshSizeEqualityComparator | undefined
   name: string
+  // TODO "Guessed" prop durint TS migration. Check if it's correct.
+  remarks?: string | undefined
 }
 
 export type GearRegulation = {

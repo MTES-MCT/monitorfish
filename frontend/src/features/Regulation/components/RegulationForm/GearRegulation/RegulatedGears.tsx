@@ -19,19 +19,25 @@ import { GEARS_CATEGORIES_WITH_MESH } from '../../../utils'
 import { INFO_TEXT } from '../../RegulationTables/constants'
 import { InfoBox } from '../InfoBox'
 
+import type { RegulatedGears as RegulatedGearsType } from '@features/Regulation/types'
+
+type RegulatedGearsProps = Readonly<{
+  authorized: boolean
+  formattedAndFilteredCategoriesToGears: any[]
+  regulatedGearsObject: RegulatedGearsType
+  setRegulatedGearsObject: (isAuthorized: boolean, regulatedGearsObject: any) => void
+  show: boolean
+}>
 export function RegulatedGears({
   authorized,
   formattedAndFilteredCategoriesToGears,
   regulatedGearsObject,
   setRegulatedGearsObject,
   show
-}) {
+}: RegulatedGearsProps) {
   const {
-    /** @type {Gear[]} */
     allGears,
-    /** @type {GearCategory[]} */
     allPassiveGears,
-    /** @type {string[]} */
     allTowedGears,
     derogation,
     regulatedGearCategories,
@@ -228,11 +234,14 @@ export function RegulatedGears({
               return
             }
 
-            if (!selectedCategoriesAndGears?.find(value => value === item.value)) {
-              set(REGULATED_GEARS_KEYS.SELECTED_GEARS_AND_CATEGORIES, selectedCategoriesAndGears.concat(item.value))
+            if (!selectedCategoriesAndGears.find(value => value === item.value)) {
+              set(
+                REGULATED_GEARS_KEYS.SELECTED_GEARS_AND_CATEGORIES,
+                selectedCategoriesAndGears.concat(item.value as any)
+              )
             }
 
-            if (selectedCategoriesAndGears?.find(value => value === item.value)) {
+            if (selectedCategoriesAndGears.find(value => value === item.value)) {
               set(
                 REGULATED_GEARS_KEYS.SELECTED_GEARS_AND_CATEGORIES,
                 selectedCategoriesAndGears.filter(tag => tag !== item.value)
@@ -246,47 +255,46 @@ export function RegulatedGears({
           style={{ width: 200 }}
           value={selectedCategoriesAndGears || []}
         />
-        {Object.keys(regulatedGears)?.length > 0 ||
-          (Object.keys(regulatedGearCategories)?.length > 0 && (
-            <GearList>
-              {Object.keys(regulatedGears).map((gearCode, index) => (
-                <RegulatedGear
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={gearCode + index}
-                  allowMesh={GEARS_CATEGORIES_WITH_MESH.includes(regulatedGears[gearCode].category)}
-                  code={gearCode}
-                  id={index}
-                  label={regulatedGears[gearCode].name}
-                  mesh={regulatedGears[gearCode].mesh}
-                  meshType={regulatedGears[gearCode].meshType}
-                  onChange={(key, value) => setRegulatedGears(key, value, gearCode)}
-                  onCloseIconClicked={() => removeGearOrCategory(gearCode)}
-                  remarks={regulatedGears[gearCode].remarks}
-                />
-              ))}
-              {Object.keys(regulatedGearCategories).map((category, index) => (
-                <RegulatedGear
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={category + index}
-                  allowMesh={GEARS_CATEGORIES_WITH_MESH.includes(category)}
-                  id={index}
-                  label={category}
-                  mesh={regulatedGearCategories[category].mesh}
-                  meshType={regulatedGearCategories[category].meshType}
-                  onChange={(key, value) => setRegulatedGearCategory(key, value, category)}
-                  onCloseIconClicked={() => removeGearOrCategory(category)}
-                  remarks={regulatedGearCategories[category].remarks}
-                />
-              ))}
-            </GearList>
-          ))}
+        {(Object.keys(regulatedGears).length > 0 || Object.keys(regulatedGearCategories).length > 0) && (
+          <GearList>
+            {Object.keys(regulatedGears).map((gearCode, index) => (
+              <RegulatedGear
+                // eslint-disable-next-line react/no-array-index-key
+                key={gearCode + index}
+                allowMesh={GEARS_CATEGORIES_WITH_MESH.includes(regulatedGears[gearCode]!.category)}
+                code={gearCode}
+                id={index}
+                label={regulatedGears[gearCode]!.name}
+                mesh={regulatedGears[gearCode]!.mesh}
+                meshType={regulatedGears[gearCode]!.meshType}
+                onChange={(key, value) => setRegulatedGears(key, value, gearCode)}
+                onCloseIconClicked={() => removeGearOrCategory(gearCode)}
+                remarks={regulatedGears[gearCode]!.remarks}
+              />
+            ))}
+            {Object.keys(regulatedGearCategories).map((category, index) => (
+              <RegulatedGear
+                // eslint-disable-next-line react/no-array-index-key
+                key={category + index}
+                allowMesh={GEARS_CATEGORIES_WITH_MESH.includes(category)}
+                id={index}
+                label={category}
+                mesh={regulatedGearCategories[category]!.mesh}
+                meshType={regulatedGearCategories[category]!.meshType}
+                onChange={(key, value) => setRegulatedGearCategory(key, value, category)}
+                onCloseIconClicked={() => removeGearOrCategory(category)}
+                remarks={regulatedGearCategories[category]!.remarks}
+              />
+            ))}
+          </GearList>
+        )}
         {!authorized && (
           <DerogationRadioWrapper>
             <DerogationRadio
               $isYellow={derogation}
               inline
               onChange={value => set(REGULATED_GEARS_KEYS.DEROGATION, value)}
-              value={derogation}
+              value={derogation as any}
             >
               <Text>Mesures dérogatoires</Text>
               <CustomRadio value={true as any}>oui</CustomRadio>

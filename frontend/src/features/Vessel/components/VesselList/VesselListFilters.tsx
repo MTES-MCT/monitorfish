@@ -19,6 +19,7 @@ import { FilterTag } from '@features/VesselFilter/components/VesselFilters/Filte
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
+import { cloneDeep } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Checkbox, CheckboxGroup, MultiCascader, SelectPicker, Tag, TagPicker } from 'rsuite'
 import styled from 'styled-components'
@@ -48,20 +49,19 @@ type VesselListFiltersProps = Readonly<{
 }>
 function UnmemoizedVesselListFilters({ seeMoreIsOpen, setSeeMoreIsOpen }: VesselListFiltersProps) {
   const dispatch = useMainAppDispatch()
-  const {
-    countriesFiltered,
-    districtsFiltered,
-    fleetSegmentsFiltered,
-    gearsFiltered,
-    lastControlMonthsAgo,
-    lastPositionTimeAgoFilter,
-    speciesFiltered,
-    vesselsLocationFilter,
-    vesselsSizeValuesChecked,
-    zonesFilter,
-    zonesSelected
-  } = useMainAppSelector(state => state.vesselList)
-  const { uniqueVesselsDistricts: districts, uniqueVesselsSpecies: species } = useMainAppSelector(state => state.vessel)
+  const countriesFiltered = useMainAppSelector(state => state.vesselList.countriesFiltered)
+  const districtsFiltered = useMainAppSelector(state => state.vesselList.districtsFiltered)
+  const fleetSegmentsFiltered = useMainAppSelector(state => state.vesselList.fleetSegmentsFiltered)
+  const gearsFiltered = useMainAppSelector(state => state.vesselList.gearsFiltered)
+  const lastControlMonthsAgo = useMainAppSelector(state => state.vesselList.lastControlMonthsAgo)
+  const lastPositionTimeAgoFilter = useMainAppSelector(state => state.vesselList.lastPositionTimeAgoFilter)
+  const speciesFiltered = useMainAppSelector(state => state.vesselList.speciesFiltered)
+  const vesselsLocationFilter = useMainAppSelector(state => state.vesselList.vesselsLocationFilter)
+  const vesselsSizeValuesChecked = useMainAppSelector(state => state.vesselList.vesselsSizeValuesChecked)
+  const zonesFilter = useMainAppSelector(state => state.vesselList.zonesFilter)
+  const zonesSelected = useMainAppSelector(state => state.vesselList.zonesSelected)
+  const districts = useMainAppSelector(state => state.vessel.uniqueVesselsDistricts)
+  const species = useMainAppSelector(state => state.vessel.uniqueVesselsSpecies)
   const gears = useMainAppSelector(state => state.gear.gears)
   const getFleetSegmentsQuery = useGetFleetSegmentsQuery()
   const [zoneGroups, setZoneGroups] = useState<string[]>([])
@@ -158,6 +158,9 @@ function UnmemoizedVesselListFilters({ seeMoreIsOpen, setSeeMoreIsOpen }: Vessel
         .map(zoneSelected => zoneSelected.code),
     [zonesSelected]
   )
+
+  // A deep copy is required to prevent error : "can't define property "parent": Object is not extensible".
+  const zonesFilterClone = useMemo(() => cloneDeep(zonesFilter), [zonesFilter])
 
   // TODO Export to a thunk use-case
   const setAdministrativeZonesFiltered = useCallback(
@@ -265,10 +268,9 @@ function UnmemoizedVesselListFilters({ seeMoreIsOpen, setSeeMoreIsOpen }: Vessel
         value={speciesFiltered}
       />
       <ZoneFilter>
-        {!!zonesFilter.length && !!zoneGroups?.length && (
+        {!!zonesFilterClone.length && !!zoneGroups.length && (
           <MultiCascader
-            // TODO A deep copy is required to prevent error : "can't define property "parent": Object is not extensible"
-            data={zonesFilter.map(zone => JSON.parse(JSON.stringify(zone)))}
+            data={zonesFilterClone}
             menuWidth={250}
             onChange={nextValue => setAdministrativeZonesFiltered(nextValue as string[])}
             onClean={() => setAdministrativeZonesFiltered([])}

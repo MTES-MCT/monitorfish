@@ -10,8 +10,8 @@
     "npm": "10"
   },
   "scripts": {
-    "build": "vite build && cp ./build/assets/MonitorFishWebWorker-*.js ./public/service-worker.js",
-    "clean": "rm -Rf ./node-modules/.cache ./node-modules/.vite ./build",
+    "build": "npm run clean && vite build && cp ./build/assets/serviceWorker-*.js ./public/service-worker.js",
+    "clean": "rm -Rf ./build ./public/service-worker.js ./node-modules/.cache ./node-modules/.vite",
     "dev": "import-meta-env-prepare -x ./.env.local.defaults && vite --port 3000",
     "dev-monitorenv": "FRONTEND_MONITORENV_URL=//localhost:9880 import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",
     "dev-puppeteer": "FRONTEND_OIDC_ENABLED=false FRONTEND_MONITORENV_URL=//localhost:9880 import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",
@@ -19,7 +19,7 @@
     "generate:perfdata": "node ./scripts/generate_perf_data.js",
     "generate:testdata": "node ./scripts/generate_test_data_seeds.js",
     "start": "import-meta-env-prepare -u -x ./.env.local.defaults && vite preview --port 3000",
-    "start:emulate": "npm run clean && npm run build && import-meta-env -x ./.env.example -p ./build/index.html && import-meta-env-prepare -u -x ./.env.local.defaults && vite preview --port 3000",
+    "start:emulate": "npm run build && import-meta-env -x ./.env.example -p ./build/index.html && import-meta-env-prepare -u -x ./.env.local.defaults && vite preview --port 3000",
     "test:deps": "madge --circular ./src/index.tsx",
     "test:e2e": "cypress run --browser firefox --config-file ./config/cypress.config.ts --e2e",
     "test:e2e:flaky": "./cypress/support/test_flaky_test.sh",

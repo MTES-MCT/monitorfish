@@ -16,9 +16,10 @@ export default defineConfig({
     outDir: './build',
     sourcemap: true,
     rollupOptions: {
-      // input: {
-      //   index: './src/index.tsx'
-      // },
+      input: {
+        index: './index.html',
+        serviceWorker: './src/workers/serviceWorker.ts'
+      },
 
       plugins: replace({
         'pointerEvents: isScrolling ? "none" : void 0': 'pointerEvents: null',

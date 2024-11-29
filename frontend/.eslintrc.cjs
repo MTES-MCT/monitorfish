@@ -8,7 +8,7 @@ module.exports = {
     ecmaVersion: 2022,
     project: path.join(__dirname, 'tsconfig.json')
   },
-  ignorePatterns: ['.eslintrc.cjs', '.eslintrc.partial.cjs'],
+  ignorePatterns: ['/build/*', '/public/*', '.eslintrc.cjs'],
   env: {
     browser: true
   },

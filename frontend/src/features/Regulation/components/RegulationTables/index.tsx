@@ -1,4 +1,3 @@
-import { AdministrativeLayers } from '@features/AdministrativeZone/layers/AdministrativeLayers'
 import { BaseLayer } from '@features/MainMap/layers/BaseLayer'
 import { backOfficeMainMapActions } from '@features/MainMap/slice.backoffice'
 import { RegulatoryZoneMetadata } from '@features/Regulation/components/RegulatoryZoneMetadata'
@@ -159,7 +158,6 @@ export function RegulationTables() {
             showedLayers={showedLayers}
             simplifiedGeometries={simplifiedGeometries}
           />
-          <AdministrativeLayers />
           <RegulatoryPreviewLayer regulatoryZonesToPreview={regulatoryZonesToPreview} />
         </BaseMap>
       </BackofficeContainer>

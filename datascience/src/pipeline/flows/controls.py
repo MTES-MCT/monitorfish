@@ -19,15 +19,9 @@ from src.pipeline.entities.missions import (
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.controls import make_infractions
 from src.pipeline.helpers.fao_areas import remove_redundant_fao_area_codes
-from src.pipeline.helpers.segments import attribute_segments_to_catches_by_year
-from src.pipeline.processing import (
-    df_to_dict_series,
-    try_get_factory,
-    zeros_ones_to_bools,
-)
+from src.pipeline.processing import df_to_dict_series, zeros_ones_to_bools
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.facades import extract_facade_areas
-from src.pipeline.shared_tasks.segments import extract_all_segments, unnest_segments
 
 
 # ********************************** Tasks and flow ***********************************
@@ -502,67 +496,23 @@ def compute_controls_facade(
 
 
 @task(checkpoint=False)
-def compute_controls_segments(
+def merge_controls_data(
     controls: pd.DataFrame,
     catch_controls: pd.DataFrame,
     controls_fao_areas: pd.DataFrame,
     controls_facade: pd.DataFrame,
-    segments: pd.DataFrame,
 ) -> pd.DataFrame:
     controls = pd.merge(
-        pd.merge(controls, catch_controls, how="left", on="id"),
-        controls_fao_areas,
-        how="left",
-        on="id",
-    )
-
-    # For controls anterior to the first year with segment definitions, we use the
-    first_year_with_segment_defs = segments.year.min()
-    controls["year"] = controls.action_datetime_utc.map(lambda dt: dt.year)
-    controls["first_year_with_segment_defs"] = first_year_with_segment_defs
-    controls["year"] = controls[["year", "first_year_with_segment_defs"]].max(axis=1)
-    controls = controls.drop(columns=["first_year_with_segment_defs"])
-
-    controls_catches = (
-        controls[["id", "year", "gear_onboard", "species_onboard", "fao_areas"]]
-        .explode("fao_areas")
-        .rename(columns={"fao_areas": "fao_area"})
-        .explode("gear_onboard")
-        .explode("species_onboard")
-        .assign(gear=lambda x: x.gear_onboard.map(try_get_factory("gearCode")))
-        .assign(species=lambda x: x.species_onboard.map(try_get_factory("speciesCode")))
-        .reset_index()[["id", "year", "fao_area", "species", "gear"]]
-    )
-
-    controls_catches = controls_catches.where(controls_catches.notnull(), None)
-    controls_segments = (
-        attribute_segments_to_catches_by_year(
-            controls_catches,
-            segments[
-                ["segment", "segment_name", "year", "fao_area", "gear", "species"]
-            ],
-        )[["id", "segment", "segment_name"]]
-        .drop_duplicates()
-        .rename(columns={"segment_name": "segmentName"})
-    )
-    controls_segments["segment"] = df_to_dict_series(
-        controls_segments[["segment", "segmentName"]]
-    )
-
-    controls_segments = (
-        controls_segments.groupby("id")[["segment", "segmentName"]]
-        .agg(list)
-        .reset_index()
-        .rename(columns={"segment": "segments"})[["id", "segments"]]
-    )
-
-    controls = pd.merge(
-        pd.merge(controls, controls_segments, how="left", on="id"),
+        pd.merge(
+            pd.merge(controls, catch_controls, how="left", on="id"),
+            controls_fao_areas,
+            how="left",
+            on="id",
+        ),
         controls_facade,
         how="left",
         on="id",
     )
-    controls = controls.drop(columns=["year"])
 
     # Fill null values in jsonb array volumns with []
     controls["species_onboard"] = controls.species_onboard.map(
@@ -573,9 +523,10 @@ def compute_controls_segments(
         lambda li: li if isinstance(li, list) else []
     )
 
-    controls["segments"] = controls.segments.map(
-        lambda li: li if isinstance(li, list) else []
-    )
+    # Segment allocation is no longer done in this flow
+    # If legacy controls data were to be re-imported one day, segments would have to be
+    # allocated after import using the `recompute_controls_segments` flow
+    controls["segments"] = [[]] * len(controls)
 
     return controls
 
@@ -791,17 +742,15 @@ with Flow("Controls", executor=LocalDaskExecutor()) as flow:
         fao_areas = extract_fao_areas()
         facade_areas = extract_facade_areas()
         ports = extract_ports()
-        segments = extract_all_segments()
         catch_controls = extract_catch_controls()
 
         # Transform
-        segments = unnest_segments(segments)
         controls = transform_controls(controls)
         catch_controls = transform_catch_controls(catch_controls)
         controls_fao_areas = compute_controls_fao_areas(controls, fao_areas, ports)
         controls_facade = compute_controls_facade(controls, facade_areas, ports)
-        controls = compute_controls_segments(
-            controls, catch_controls, controls_fao_areas, controls_facade, segments
+        controls = merge_controls_data(
+            controls, catch_controls, controls_fao_areas, controls_facade
         )
         (
             missions,

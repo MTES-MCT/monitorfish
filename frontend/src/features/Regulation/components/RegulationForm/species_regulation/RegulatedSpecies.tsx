@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { Fragment, useCallback } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -215,13 +215,12 @@ export function RegulatedSpecies({
           </SpeciesGroupDetail>
         ))}
         {species?.map((speciesValue, index) => (
-          <>
+          <Fragment key={speciesValue.code}>
             {authorized ? (
-              <SpeciesDetails key={speciesValue.code} $isFirst={index === 0 && !speciesGroups?.length}>
+              <SpeciesDetails $isFirst={index === 0 && !speciesGroups?.length}>
                 <SpeciesDetail>
                   <Label>Espèce {index + 1}</Label>
                   <Tag
-                    key={speciesValue.code}
                     onCloseIconClicked={removeSpeciesToSpeciesList}
                     tagValue={`${speciesByCode[speciesValue.code]?.name} (${speciesValue.code})`}
                   />
@@ -246,16 +245,15 @@ export function RegulatedSpecies({
                 </SpeciesDetail>
               </SpeciesDetails>
             ) : (
-              <SpeciesDetail key={speciesValue.code} $onlySpeciesName={!authorized}>
+              <SpeciesDetail $onlySpeciesName={!authorized}>
                 <Label>Espèce {index + 1}</Label>
                 <Tag
-                  key={speciesValue.code}
                   onCloseIconClicked={removeSpeciesToSpeciesList}
                   tagValue={`${speciesByCode[speciesValue.code]?.name} (${speciesValue.code})`}
                 />
               </SpeciesDetail>
             )}
-          </>
+          </Fragment>
         ))}
       </FormContent>
     </FormSection>

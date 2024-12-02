@@ -20,9 +20,9 @@ enum class LogbookMessageTypeMapping(private val clazz: Class<out LogbookMessage
     DEP(DEPMessage::class.java),
     DIS(DISMessage::class.java),
     COX(COXMessage::class.java),
-    NOT_COX(COXMessage::class.java),
+    `NOT-COX`(COXMessage::class.java),
     COE(COEMessage::class.java),
-    NOT_COE(COEMessage::class.java),
+    `NOT-COE`(COEMessage::class.java),
     CRO(CROMessage::class.java),
     EOF(EOFMessage::class.java),
     LAN(LANMessage::class.java),
@@ -30,12 +30,11 @@ enum class LogbookMessageTypeMapping(private val clazz: Class<out LogbookMessage
     RTP(RTPMessage::class.java),
     RLC(NotImplementedMessage::class.java),
     TRA(NotImplementedMessage::class.java),
-    NOT_TRA(NotImplementedMessage::class.java),
-    GEAR_SHOT(NotImplementedMessage::class.java),
-    GEAR_RETRIEVAL(NotImplementedMessage::class.java),
-    START_ACTIVITY(NotImplementedMessage::class.java),
-    START_FISHING(NotImplementedMessage::class.java),
-
+    `NOT-TRA`(NotImplementedMessage::class.java),
+    `GEAR-SHOT`(NotImplementedMessage::class.java),
+    `GEAR-RETRIEVAL`(NotImplementedMessage::class.java),
+    `START-ACTIVITY`(NotImplementedMessage::class.java),
+    `START-FISHING`(NotImplementedMessage::class.java),
     ;
 
     override fun getImplementation(): Class<out LogbookMessageValue> {

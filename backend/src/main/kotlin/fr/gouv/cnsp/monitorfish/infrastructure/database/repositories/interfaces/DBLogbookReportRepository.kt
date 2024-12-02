@@ -407,7 +407,17 @@ interface DBLogbookReportRepository :
     ): List<LogbookReportEntity>
 
     @Query(
-        "select operation_datetime_utc from logbook_reports where operation_datetime_utc < now() order by operation_datetime_utc desc limit 1",
+        """
+            select
+                operation_datetime_utc
+            from
+                logbook_reports
+            where
+                operation_datetime_utc > NOW() - INTERVAL '1 month' and
+                operation_datetime_utc < now()
+            order by operation_datetime_utc desc
+            limit 1
+        """,
         nativeQuery = true,
     )
     fun findLastOperationDateTime(): Instant

@@ -92,7 +92,8 @@ const Progress = styled.div<{
   width: ${p => (p.$progress ? p.$progress : 0)}%;
   background: ${p => (p.$color ? p.$color : 'white')};
   margin-top: calc(
-    -${p => (p.$height ? p.$height : 8)}px - ${p =>
+    -${p => (p.$height ? p.$height : 8)}px -
+      ${p =>
         // eslint-disable-next-line no-nested-ternary
         p.$isBig ? 5 : p.$height === 8 ? 11 : 14}px
   );

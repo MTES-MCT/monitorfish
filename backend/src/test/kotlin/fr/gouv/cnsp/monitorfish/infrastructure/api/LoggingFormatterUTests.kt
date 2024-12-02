@@ -104,8 +104,7 @@ class LoggingFormatterUTests {
                 "\"flagState\":\"FR\"," +
                 "\"creationDate\":\"2019-01-18T07:19:45.000000045Z\"," +
                 "\"validationDate\":null," +
-                "\"value\":{\"type\":\"INFRACTION_SUSPICION\"," +
-                "\"natinfCode\":123456," +
+                "\"value\":{" +
                 "\"type\":\"INFRACTION_SUSPICION\"," +
                 "\"reportingActor\":\"OPS\"," +
                 "\"controlUnitId\":null," +
@@ -113,8 +112,10 @@ class LoggingFormatterUTests {
                 "\"authorContact\":null," +
                 "\"title\":\"A title\"," +
                 "\"description\":null," +
+                "\"natinfCode\":123456," +
                 "\"seaFront\":null," +
-                "\"dml\":null}}",
+                "\"dml\":null," +
+                "\"type\":\"INFRACTION_SUSPICION\"}}",
         )
     }
 

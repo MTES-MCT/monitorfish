@@ -2,13 +2,13 @@ plugins {
     `java-library`
     `maven-publish`
     id("org.springframework.boot") version "3.4.0"
-    id("org.jetbrains.kotlin.plugin.spring") version "2.1.0"
-    kotlin("jvm") version "2.1.0"
+    id("org.jetbrains.kotlin.plugin.spring") version "2.0.21"
+    kotlin("jvm") version "2.0.21"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.9.22"
-    kotlin("plugin.noarg") version "2.1.0"
-    kotlin("plugin.jpa") version "2.1.0"
+    kotlin("plugin.noarg") version "2.0.21"
+    kotlin("plugin.jpa") version "2.0.21"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
-    kotlin("plugin.serialization") version "2.1.0"
+    kotlin("plugin.serialization") version "2.0.21"
     id("io.spring.dependency-management") version "1.1.6"
 }
 
@@ -67,8 +67,8 @@ dependencies {
     api("org.flywaydb:flyway-core:10.21.0")
     api("org.flywaydb:flyway-database-postgresql:10.21.0")
     api("org.springdoc:springdoc-openapi-ui:1.8.0")
-    api("org.jetbrains.kotlin:kotlin-reflect:2.1.0")
-    api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.0")
+    api("org.jetbrains.kotlin:kotlin-reflect:2.0.21")
+    api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.21")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
     api("com.neovisionaries:nv-i18n:1.29")
     api("com.github.ben-manes.caffeine:caffeine:3.1.8")

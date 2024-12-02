@@ -17,6 +17,7 @@ import { Icon, IconButton, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
 import dayjs from 'dayjs'
+import { range } from 'lodash'
 import { useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -63,7 +64,10 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
     [isLoading, isFromUrl]
   )
 
-  const tableData = useMemo(() => (isLoading ? Array(5).fill({ id: 0 }) : reportings), [isLoading, reportings])
+  const tableData = useMemo(
+    () => (isLoading ? range(5).map(id => ({ id }) as Reporting.Reporting) : reportings),
+    [isLoading, reportings]
+  )
 
   const table = useReactTable<Reporting.Reporting>({
     columns,
@@ -130,8 +134,8 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
                 ))}
               </TableWithSelectableRows.Head>
 
-              {reportings.length === 0 && <TableBodyEmptyData />}
-              {!!reportings.length && (
+              {!isLoading && reportings.length === 0 && <TableBodyEmptyData />}
+              {!!rows.length && (
                 <tbody>
                   {virtualRows.map(virtualRow => {
                     const row = rows[virtualRow.index]

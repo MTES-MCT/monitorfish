@@ -56,7 +56,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       cell: (info: CellContext<Reporting.Reporting, Reporting.Reporting>) => {
         const reporting = info.getValue()
 
-        return getReportingOrigin(reporting)
+        return <Ellipsised>{getReportingOrigin(reporting)}</Ellipsised>
       },
       enableSorting: false,
       header: () => 'Origine',

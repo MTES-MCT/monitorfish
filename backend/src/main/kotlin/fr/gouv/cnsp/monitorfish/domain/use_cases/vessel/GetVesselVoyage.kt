@@ -72,6 +72,12 @@ class GetVesselVoyage(
                     "Could not fetch voyage for request \"${voyageRequest}\"",
                     e,
                 )
+            } catch (e: NoLogbookFishingTripFound) {
+                throw BackendUsageException(
+                    BackendUsageErrorCode.NOT_FOUND_BUT_OK,
+                    "Could not fetch voyage for request \"${voyageRequest}\"",
+                    e,
+                )
             }
 
         val isLastVoyage = getIsLastVoyage(tripNumber, voyageRequest, internalReferenceNumber, trip.tripNumber)

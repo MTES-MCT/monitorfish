@@ -38,11 +38,11 @@ export function getComponentFromMessageType(logbookMessage: Logbook.Message, isM
       return <COEMessage messageValue={logbookMessage.message as Logbook.CoeMessageValue} />
     case LogbookMessageType.CPS.code:
       return <CPSMessage message={logbookMessage.message as Logbook.CpsMessageValue} />
-    case LogbookMessageType.NOT_COE.code:
+    case LogbookMessageType['NOT-COE'].code:
       return <COEMessage messageValue={logbookMessage.message as Logbook.CoeMessageValue} />
     case LogbookMessageType.COX.code:
       return <COXMessage messageValue={logbookMessage.message as Logbook.CoxMessageValue} />
-    case LogbookMessageType.NOT_COX.code:
+    case LogbookMessageType['NOT-COX'].code:
       return <COXMessage messageValue={logbookMessage.message as Logbook.CoxMessageValue} />
     case LogbookMessageType.JFO.code:
       return <NotImplementedMessage />
@@ -54,15 +54,15 @@ export function getComponentFromMessageType(logbookMessage: Logbook.Message, isM
       return <NotImplementedMessage />
     case LogbookMessageType.TRA.code:
       return <NotImplementedMessage />
-    case LogbookMessageType.NOT_TRA.code:
+    case LogbookMessageType['NOT-TRA'].code:
       return <NotImplementedMessage />
-    case LogbookMessageType.GEAR_SHOT.code:
+    case LogbookMessageType['GEAR-SHOT'].code:
       return <NotImplementedMessage />
-    case LogbookMessageType.GEAR_RETRIEVAL.code:
+    case LogbookMessageType['GEAR-RETRIEVAL'].code:
       return <NotImplementedMessage />
-    case LogbookMessageType.START_ACTIVITY.code:
+    case LogbookMessageType['START-ACTIVITY'].code:
       return <NotImplementedMessage />
-    case LogbookMessageType.START_FISHING.code:
+    case LogbookMessageType['START-FISHING'].code:
       return <NotImplementedMessage />
     default:
       return undefined

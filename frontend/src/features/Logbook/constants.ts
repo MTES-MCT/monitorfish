@@ -70,15 +70,15 @@ export const LogbookMessageType: Record<Logbook.MessageType, LogbookMessageTypeL
     isFilterable: true,
     name: 'Captures'
   },
-  GEAR_RETRIEVAL: {
-    code: Logbook.MessageType.GEAR_RETRIEVAL,
+  'GEAR-RETRIEVAL': {
+    code: Logbook.MessageType['GEAR-RETRIEVAL'],
     displayCode: 'RTV',
     fullName: "Sortie de l'eau d`engin",
     isFilterable: false,
     name: "Sortie de l'eau d`engin"
   },
-  GEAR_SHOT: {
-    code: Logbook.MessageType.GEAR_SHOT,
+  'GEAR-SHOT': {
+    code: Logbook.MessageType['GEAR-SHOT'],
     displayCode: 'SHT',
     fullName: "Mise à l'eau d'engin",
     isFilterable: false,
@@ -105,23 +105,23 @@ export const LogbookMessageType: Record<Logbook.MessageType, LogbookMessageTypeL
     isFilterable: true,
     name: 'Débarquement'
   },
-  NOT_COE: {
-    code: Logbook.MessageType.NOT_COE,
-    displayCode: 'COE',
+  'NOT-COE': {
+    code: Logbook.MessageType['NOT-COE'],
+    displayCode: 'NOT-COE',
     fullName: "Notification d'entrée dans une zone d'effort",
     isFilterable: false,
     name: "Notification d'entrée dans une zone d'effort"
   },
-  NOT_COX: {
-    code: Logbook.MessageType.NOT_COX,
-    displayCode: 'COX',
+  'NOT-COX': {
+    code: Logbook.MessageType['NOT-COX'],
+    displayCode: 'NOT-COX',
     fullName: "Notification de sortie d'une zone d'effort",
     isFilterable: false,
     name: "Notification de sortie d'une zone d'effort"
   },
-  NOT_TRA: {
-    code: Logbook.MessageType.NOT_TRA,
-    displayCode: 'TRA',
+  'NOT-TRA': {
+    code: Logbook.MessageType['NOT-TRA'],
+    displayCode: 'NOT-TRA',
     fullName: 'Notification de transbordement',
     isFilterable: false,
     name: 'Notification de transbordement'
@@ -154,15 +154,15 @@ export const LogbookMessageType: Record<Logbook.MessageType, LogbookMessageTypeL
     isFilterable: true,
     name: 'Retour au port'
   },
-  START_ACTIVITY: {
-    code: Logbook.MessageType.START_ACTIVITY,
+  'START-ACTIVITY': {
+    code: Logbook.MessageType['START-ACTIVITY'],
     displayCode: 'STA',
     fullName: "Début d'activité de pêche",
     isFilterable: false,
     name: "Début d'activité de pêche"
   },
-  START_FISHING: {
-    code: Logbook.MessageType.START_FISHING,
+  'START-FISHING': {
+    code: Logbook.MessageType['START-FISHING'],
     displayCode: 'STF',
     fullName: 'Début de pêche',
     isFilterable: false,

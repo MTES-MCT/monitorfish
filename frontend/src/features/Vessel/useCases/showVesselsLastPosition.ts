@@ -1,6 +1,6 @@
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
-import { VESSELS_VECTOR_LAYER, VESSELS_VECTOR_SOURCE } from '@features/Vessel/layers/VesselsLayer/constants'
-import { buildFeature } from '@features/Vessel/utils'
+import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { transform } from 'ol/proj'
 
 import { applyFilterToVessels } from './applyFilterToVessels'
@@ -9,7 +9,7 @@ import { Vessel } from '../../../domain/entities/vessel/vessel'
 import { resetIsUpdatingVessels } from '../../../domain/shared_slices/Global'
 import getUniqueSpeciesAndDistricts from '../../../domain/use_cases/species/getUniqueSpeciesAndDistricts'
 import { customHexToRGB } from '../../../utils'
-import { setVessels, setVesselsSpeciesAndDistricts, vesselSelectors } from '../slice'
+import { setVessels, setVesselsSpeciesAndDistricts } from '../slice'
 
 import type { VesselEnhancedLastPositionWebGLObject, VesselLastPosition } from '../../../domain/entities/vessel/types'
 import type { MainAppThunk } from '@store'
@@ -22,7 +22,7 @@ export const showVesselsLastPosition =
     const nextVessels = convertToEnhancedLastPositions(vessels)
     await dispatch(setVessels(nextVessels))
 
-    dispatch(applyFilterToVessels())
+    await dispatch(applyFilterToVessels())
     if (showedFilter?.color) {
       const [red, green, blue] = customHexToRGB(showedFilter?.color)
 
@@ -33,11 +33,7 @@ export const showVesselsLastPosition =
       })
     }
 
-    const filteredVessels = vesselSelectors.selectAll(getState().vessel.vessels)
-    const features = filteredVessels.map(vessel => buildFeature(vessel))
-
-    VESSELS_VECTOR_SOURCE.clear(true)
-    VESSELS_VECTOR_SOURCE.addFeatures(features)
+    dispatch(renderVesselFeatures())
 
     const speciesAndDistricts = await dispatch(getUniqueSpeciesAndDistricts(vessels))
     dispatch(

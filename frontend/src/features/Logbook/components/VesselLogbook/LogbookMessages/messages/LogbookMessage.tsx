@@ -342,7 +342,7 @@ const LogbookMessageTypeText = styled.span`
   font-size: 14px;
   vertical-align: -moz-middle-with-baseline;
   vertical-align: -webkit-baseline-middle;
-  width: 33px;
+  min-width: 33px;
   display: inline-block;
   text-align: center;
   line-height: 19px;

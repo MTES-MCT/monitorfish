@@ -400,6 +400,21 @@ export namespace Logbook {
      */
     COX = 'COX',
 
+    /**
+     * Notification d'entrée dans une zone d'effort
+     */
+    'NOT-COE' = 'NOT-COE',
+
+    /**
+     * Notification de sortie d'une zone d'effort
+     */
+    'NOT-COX' = 'NOT-COX',
+
+    /**
+     * Notification de transbordement
+     */
+    'NOT-TRA' = 'NOT-TRA',
+
     /** Dolphins capture declaration (specific to France). */
     CPS = 'CPS',
 
@@ -516,27 +531,12 @@ export namespace Logbook {
     /**
      * Sortie de l'eau d`engin
      */
-    GEAR_RETRIEVAL = 'GEAR_RETRIEVAL',
+    'GEAR-RETRIEVAL' = 'GEAR-RETRIEVAL',
 
     /**
      * Mise à l'eau d'engin
      */
-    GEAR_SHOT = 'GEAR_SHOT',
-
-    /**
-     * Notification d'entrée dans une zone d'effort
-     */
-    NOT_COE = 'NOT_COE',
-
-    /**
-     * Notification de sortie d'une zone d'effort
-     */
-    NOT_COX = 'NOT_COX',
-
-    /**
-     * Notification de transbordement
-     */
-    NOT_TRA = 'NOT_TRA',
+    'GEAR-SHOT' = 'GEAR-SHOT',
 
     /**
      * Pré-notification de transfert
@@ -551,12 +551,12 @@ export namespace Logbook {
     /**
      * Début d'activité de pêche
      */
-    START_ACTIVITY = 'START_ACTIVITY',
+    'START-ACTIVITY' = 'START-ACTIVITY',
 
     /**
      * Début de pêche
      */
-    START_FISHING = 'START_FISHING'
+    'START-FISHING' = 'START-FISHING'
   }
   /* eslint-enable typescript-sort-keys/string-enum */
 

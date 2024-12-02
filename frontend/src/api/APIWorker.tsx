@@ -22,7 +22,7 @@ import { useMainAppSelector } from '../hooks/useMainAppSelector'
 
 export const FIVE_MINUTES = 5 * 60 * 1000
 export const TWENTY_MINUTES = 20 * 60 * 1000
-export const THIRTY_SECONDS = 30 * 1000
+export const TWENTY_SECONDS = 20 * 1000
 
 // TODO Move these `useEffect`s to dispatchers, in order to remove logic from this component
 export function APIWorker() {
@@ -86,7 +86,7 @@ export function APIWorker() {
         dispatch(getAllBeaconMalfunctions())
         dispatch(getOperationalAlerts())
         dispatch(getSilencedAlerts())
-      }, THIRTY_SECONDS) as any
+      }, TWENTY_SECONDS) as any
     }
 
     return () => {
@@ -102,7 +102,7 @@ export function APIWorker() {
 
       beaconMalfunctionInKanbanInterval.current = setInterval(() => {
         dispatch(openBeaconMalfunctionInKanban(openedBeaconMalfunctionInKanban.beaconMalfunction.id))
-      }, THIRTY_SECONDS) as any
+      }, TWENTY_SECONDS) as any
     }
 
     return () => {
@@ -118,7 +118,7 @@ export function APIWorker() {
 
       vesselBeaconMalfunctionInterval.current = setInterval(() => {
         dispatch(getVesselBeaconMalfunctions(false))
-      }, THIRTY_SECONDS) as any
+      }, TWENTY_SECONDS) as any
     }
 
     return () => {

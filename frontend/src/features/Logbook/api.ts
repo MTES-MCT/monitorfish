@@ -24,9 +24,9 @@ const getVesselLogbookQueryArgs = {
     const { voyageRequest } = params
 
     return getUrlOrPathWithQueryParams(`/vessels/logbook/find`, {
-      internalReferenceNumber,
-      tripNumber,
-      voyageRequest
+      internalReferenceNumber: internalReferenceNumber ?? '',
+      tripNumber: tripNumber ?? '',
+      voyageRequest: voyageRequest ?? ''
     })
   },
   transformErrorResponse: response => new FrontendApiError(LOGBOOK_ERROR_MESSAGE, response),

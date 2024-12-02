@@ -12,7 +12,6 @@ from config import FAO_SPECIES_URL, ISSCAAP_GROUPS_URL, PROXIES
 
 @task(checkpoint=False)
 def extract_species(url: str, proxies: dict) -> pd.DataFrame:
-
     # Extract zipfile from fao.org
     r = requests.get(url, proxies=proxies)
     r.raise_for_status()
@@ -32,10 +31,10 @@ def extract_species(url: str, proxies: dict) -> pd.DataFrame:
 
     species = species.rename(
         columns={
-            "ISSCAAP": "isscaap_code",
-            "TAXOCODE": "taxocode",
-            "3A_CODE": "species_code",
-            "Scientific_name": "scientific_name",
+            "ISSCAAP_Group ": "isscaap_code",
+            "Taxonomic_Code": "taxocode",
+            "Alpha3_Code": "species_code",
+            "Scientific_Name": "scientific_name",
             "English_name": "english_name",
             "French_name": "french_name",
             "Spanish_name": "spanish_name",
@@ -44,8 +43,8 @@ def extract_species(url: str, proxies: dict) -> pd.DataFrame:
             "Russian_name": "russian_name",
             "Author": "author",
             "Family": "family",
-            "Order": "order",
-            "Stats_data": "stats_data",
+            "Order or higher taxa": "order",
+            "FishStat_Data": "stats_data",
         }
     )
 
@@ -54,7 +53,6 @@ def extract_species(url: str, proxies: dict) -> pd.DataFrame:
 
 @task(checkpoint=False)
 def extract_isscaap_groups(url: str, proxies: dict) -> pd.DataFrame:
-
     # Extract isscaap codes table
     r = requests.get(url, proxies=proxies)
     r.raise_for_status()
@@ -69,7 +67,6 @@ def extract_isscaap_groups(url: str, proxies: dict) -> pd.DataFrame:
 def transform_species(
     species: pd.DataFrame, isscaap_groups: pd.DataFrame
 ) -> pd.DataFrame:
-
     res = pd.merge(species, isscaap_groups, on="isscaap_code", how="left")
 
     res["order"] = res.order.map(str.capitalize)

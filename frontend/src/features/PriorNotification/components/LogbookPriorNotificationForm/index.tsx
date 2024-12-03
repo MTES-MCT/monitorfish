@@ -113,9 +113,7 @@ export function LogbookPriorNotificationForm() {
     <>
       <Formik initialValues={editedLogbookPriorNotificationFormValues} onSubmit={submit}>
         <PriorNotificationCard
-          bodyChildren={
-            <Form detail={openedPriorNotificationDetail} initialFormValues={editedLogbookPriorNotificationFormValues} />
-          }
+          bodyChildren={<Form detail={openedPriorNotificationDetail} />}
           detail={openedPriorNotificationDetail}
           footerChildren={
             isSuperUser ? <Footer detail={openedPriorNotificationDetail} onVerifyAndSend={verifyAndSend} /> : null

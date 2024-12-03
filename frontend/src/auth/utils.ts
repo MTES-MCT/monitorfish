@@ -1,4 +1,5 @@
 import { isUnauthorizedOrForbidden } from '@api/utils'
+import { trackEvent } from '@hooks/useTracking'
 
 import { ROUTER_PATHS } from '../paths'
 
@@ -11,6 +12,12 @@ export function redirectToLoginIfUnauthorized(error: CustomResponseError) {
   if (!error.path.includes(ROUTER_PATHS.backendForFrontend) || !isUnauthorizedOrForbidden(error.status)) {
     return
   }
+
+  trackEvent({
+    action: 'LOGIN',
+    category: 'REDIRECTION',
+    name: 'Après une erreur API 401'
+  })
 
   // We don't use `router.navigate()` to avoid circular dependency issues
   window.location.href = ROUTER_PATHS.login

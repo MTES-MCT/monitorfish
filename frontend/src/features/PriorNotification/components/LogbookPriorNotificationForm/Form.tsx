@@ -18,7 +18,6 @@ import type { PriorNotification } from '@features/PriorNotification/PriorNotific
 
 type FormProps = Readonly<{
   detail: PriorNotification.Detail
-  initialFormValues: PriorNotification.LogbookForm
 }>
 export function Form({ detail }: FormProps) {
   const dispatch = useMainAppDispatch()

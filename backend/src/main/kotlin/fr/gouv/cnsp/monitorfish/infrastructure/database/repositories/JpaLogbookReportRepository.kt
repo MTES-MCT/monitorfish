@@ -298,7 +298,12 @@ class JpaLogbookReportRepository(
     }
 
     override fun findLastMessageDate(): ZonedDateTime {
-        return dbLogbookReportRepository.findLastOperationDateTime().atZone(UTC)
+        return try {
+            dbLogbookReportRepository.findLastOperationDateTime().atZone(UTC)
+        } catch (e: Exception) {
+            // We return a dummy old date, as only the UAT will have old messages
+            return ZonedDateTime.now().minusMonths(1)
+        }
     }
 
     override fun findFirstAcknowledgedDateOfTripBeforeDateTime(

@@ -111,7 +111,7 @@ class UserAuthorizationCheckFilter(
 
             filterChain.doFilter(request, response)
         } catch (e: Exception) {
-            logger.error(COULD_NOT_FETCH_USER_INFO_MESSAGE, e)
+            logger.warn(COULD_NOT_FETCH_USER_INFO_MESSAGE, e)
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, COULD_NOT_FETCH_USER_INFO_MESSAGE)
         }
     }

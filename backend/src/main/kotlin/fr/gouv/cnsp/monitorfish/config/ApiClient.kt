@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration
 class ApiClient(engine: HttpClientEngine = Java.create()) {
     val httpClient =
         HttpClient(engine) {
+            expectSuccess = true
             install(ContentNegotiation) {
                 json(
                     Json {

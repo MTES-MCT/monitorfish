@@ -1,3 +1,4 @@
+import { trackEvent } from '@hooks/useTracking'
 import styled from 'styled-components'
 
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
@@ -8,6 +9,14 @@ export function RegulatoryReferencesDisplayed() {
   const regulatory = useMainAppSelector(state => state.regulatory)
 
   const { regulatoryReferences } = regulatory.regulatoryZoneMetadata ?? {}
+
+  const sendTrackEvent = () => {
+    trackEvent({
+      action: 'LIEN',
+      category: 'EXTERNE',
+      name: "Ouverture d'un lien Legipêche"
+    })
+  }
 
   return (
     <>
@@ -23,7 +32,7 @@ export function RegulatoryReferencesDisplayed() {
                 {regulatoryReference.textType && (
                   <Label>{getRegulatoryZoneTextTypeAsText(regulatoryReference.textType)}</Label>
                 )}
-                <Link href={regulatoryReference.url} target="_blank">
+                <Link href={regulatoryReference.url} onClick={sendTrackEvent} target="_blank">
                   {regulatoryReference.reference}
                 </Link>
               </Reference>

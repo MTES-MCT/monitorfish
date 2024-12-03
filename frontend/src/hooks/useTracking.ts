@@ -10,6 +10,11 @@ type Tracking = {
   trackUserId: (userId: string) => void
 }
 
+/* eslint-disable no-underscore-dangle */
+export function trackEvent({ action, category, name }: TrackEvent) {
+  window._paq?.push(['trackEvent', category, action, name])
+}
+
 /**
  * Wrapper of UseMatomo script injected in `index.html`.
  *
@@ -17,11 +22,8 @@ type Tracking = {
  * @see https://developer.matomo.org/guides/tracking-javascript-guide
  */
 export function useTracking(): Tracking {
-  /* eslint-disable no-underscore-dangle */
   return {
-    trackEvent: ({ action, category, name }) => {
-      window._paq?.push(['trackEvent', category, action, name])
-    },
+    trackEvent,
     trackPage: pageTitle => {
       window._paq?.push(['setDocumentTitle', pageTitle])
       window._paq?.push(['trackPageView'])
@@ -31,5 +33,5 @@ export function useTracking(): Tracking {
       window._paq?.push(['enableHeartBeatTimer', 30])
     }
   }
-  /* eslint-enable no-underscore-dangle */
 }
+/* eslint-enable no-underscore-dangle */

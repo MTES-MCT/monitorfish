@@ -7,6 +7,7 @@ import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
 import { priorNotificationApi } from '../priorNotificationApi'
 import { priorNotificationActions } from '../slice'
+import { openLogbookPriorNotificationForm } from './openLogbookPriorNotificationForm'
 
 import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
@@ -44,6 +45,8 @@ export const updateLogbookPriorNotification =
 
         return
       }
+
+      dispatch(openLogbookPriorNotificationForm(identifier))
 
       dispatch(priorNotificationActions.setOpenedPriorNotificationDetail(logbookPriorNotification))
     } catch (err) {

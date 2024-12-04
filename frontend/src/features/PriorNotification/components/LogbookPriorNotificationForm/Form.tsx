@@ -1,18 +1,15 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
-import { HALF_A_SECOND } from '@constants/index'
+import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { duplicateLogbookPriorNotification } from '@features/PriorNotification/useCases/duplicateLogbookPriorNotification'
 import { invalidatePriorNotification } from '@features/PriorNotification/useCases/invalidatePriorNotification'
 import { openPriorNotificationReportingList } from '@features/PriorNotification/useCases/openPriorNotificationReportingList'
-import { updateLogbookPriorNotification } from '@features/PriorNotification/useCases/updateLogbookPriorNotification'
 import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
+import { useFormikDirtyOnceEffect } from '@hooks/useFormikDirtyOnceEffect'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Accent, Button, FormikEffect, FormikTextarea, Icon, LinkButton, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Button, FormikTextarea, Icon, LinkButton, THEME } from '@mtes-mct/monitor-ui'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
-import { Formik } from 'formik'
-import { noop, isEqual } from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { useDebouncedCallback } from 'use-debounce'
 
 import { EditHistory } from '../shared/EditHistory'
 import { UploadFiles } from '../shared/UploadFiles'
@@ -21,9 +18,8 @@ import type { PriorNotification } from '@features/PriorNotification/PriorNotific
 
 type FormProps = Readonly<{
   detail: PriorNotification.Detail
-  initialFormValues: PriorNotification.LogbookForm
 }>
-export function Form({ detail, initialFormValues }: FormProps) {
+export function Form({ detail }: FormProps) {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
 
@@ -55,54 +51,39 @@ export function Form({ detail, initialFormValues }: FormProps) {
     dispatch(openPriorNotificationReportingList(detail.vesselIdentity))
   }
 
-  const updateFormCallback = useCallback(
-    async (nextValues: PriorNotification.LogbookForm) => {
-      if (isEqual(nextValues, initialFormValues)) {
-        return
-      }
-
-      await dispatch(updateLogbookPriorNotification(priorNotificationIdentifier, nextValues))
+  const updateIsDirty = useCallback(
+    (isDirty: boolean) => {
+      dispatch(priorNotificationActions.setIsPriorNotificationFormDirty(isDirty))
     },
-    [dispatch, priorNotificationIdentifier, initialFormValues]
+    [dispatch]
   )
 
-  const updateNote = useDebouncedCallback(
-    (nextValues: PriorNotification.LogbookForm) => updateFormCallback(nextValues),
-    HALF_A_SECOND
-  )
+  useFormikDirtyOnceEffect(updateIsDirty)
 
   return (
     <>
-      <Formik initialValues={initialFormValues} onSubmit={noop}>
+      <FieldGroup>
+        <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" readOnly={isReadOnly} />
+
+        {isSuperUser && <LinkButton onClick={openVesselReportingList}>Ouvrir un signalement sur le navire</LinkButton>}
+      </FieldGroup>
+
+      {isSuperUser && (
         <>
-          {!isReadOnly && <FormikEffect onChange={updateNote as any} />}
+          <hr />
 
-          <FieldGroup>
-            <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" readOnly={isReadOnly} />
+          <UploadFiles
+            isManualPriorNotification={false}
+            isReadOnly={isReadOnly}
+            operationDate={detail.operationDate}
+            reportId={detail.reportId}
+          />
 
-            {isSuperUser && (
-              <LinkButton onClick={openVesselReportingList}>Ouvrir un signalement sur le navire</LinkButton>
-            )}
-          </FieldGroup>
+          <hr style={{ margin: '8px 0 24px' }} />
 
-          {isSuperUser && (
-            <>
-              <hr />
-
-              <UploadFiles
-                isManualPriorNotification={false}
-                isReadOnly={isReadOnly}
-                operationDate={detail.operationDate}
-                reportId={detail.reportId}
-              />
-
-              <hr style={{ margin: '8px 0 24px' }} />
-
-              <EditHistory priorNotificationDetail={detail} />
-            </>
-          )}
+          <EditHistory priorNotificationDetail={detail} />
         </>
-      </Formik>
+      )}
 
       {isSuperUser && (
         <ActionWrapper>

@@ -27,6 +27,7 @@ type PriorNotificationCardProps = Readonly<{
   detail: PriorNotification.Detail | undefined
   footerChildren?: React.ReactNode
   isLoading?: boolean
+  onClose?: () => void
   otherDisplayedErrorKey?: DisplayedErrorKey
 }>
 export function PriorNotificationCard({
@@ -34,6 +35,7 @@ export function PriorNotificationCard({
   detail,
   footerChildren,
   isLoading = false,
+  onClose,
   otherDisplayedErrorKey
 }: PriorNotificationCardProps) {
   const dispatch = useMainAppDispatch()
@@ -47,6 +49,12 @@ export function PriorNotificationCard({
     : otherDisplayedErrorKey
 
   const close = () => {
+    if (onClose) {
+      onClose()
+
+      return
+    }
+
     dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
   }
 

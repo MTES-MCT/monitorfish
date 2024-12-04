@@ -33,6 +33,8 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     // When
     cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
 
+    cy.clickButton('Enregistrer')
+
     cy.wait('@updateLogbookPriorNotification')
 
     // Then, the PDF is deleted

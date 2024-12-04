@@ -1,20 +1,26 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.health.Health
-import java.time.ZonedDateTime
+import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
 
 data class HealthDataOutput(
-    val dateLastPositionReceivedByAPI: ZonedDateTime,
-    val dateLastPositionUpdatedByPrefect: ZonedDateTime,
-    val dateLogbookMessageReceived: ZonedDateTime,
+    val dateLastPositionReceivedByAPI: String,
+    val dateLastPositionUpdatedByPrefect: String,
+    val dateLogbookMessageReceived: String,
     val suddenDropOfPositionsReceived: Boolean,
 ) {
     companion object {
         fun fromHealth(health: Health) =
             HealthDataOutput(
-                dateLastPositionUpdatedByPrefect = health.dateLastPositionUpdatedByPrefect,
-                dateLastPositionReceivedByAPI = health.dateLastPositionReceivedByAPI,
-                dateLogbookMessageReceived = health.dateLogbookMessageReceived,
+                dateLastPositionUpdatedByPrefect =
+                    CustomZonedDateTime(
+                        health.dateLastPositionUpdatedByPrefect,
+                    ).toString(),
+                dateLastPositionReceivedByAPI =
+                    CustomZonedDateTime(
+                        health.dateLastPositionReceivedByAPI,
+                    ).toString(),
+                dateLogbookMessageReceived = CustomZonedDateTime(health.dateLogbookMessageReceived).toString(),
                 suddenDropOfPositionsReceived = health.suddenDropOfPositionsReceived,
             )
     }

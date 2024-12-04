@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.api.security.input
+package fr.gouv.cnsp.monitorfish.domain.entities.oidc
 
 import kotlinx.serialization.Serializable
 

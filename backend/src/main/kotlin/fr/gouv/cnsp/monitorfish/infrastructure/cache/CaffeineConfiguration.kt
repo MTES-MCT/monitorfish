@@ -85,6 +85,7 @@ class CaffeineConfiguration {
     val suddenDropOfPositionsReceived = "sudden_drop_of_positions_received"
     val userAuthorization = "user_authorization"
     val smallChatScript = "smallchat_script"
+    val userInfo = "user_info"
 
     @Bean
     fun cacheManager(ticker: Ticker): CacheManager? {
@@ -170,6 +171,7 @@ class CaffeineConfiguration {
         val suddenDropOfPositionsReceivedCache = buildMinutesCache(suddenDropOfPositionsReceived, ticker, 2)
         val userAuthorizationCache = buildMinutesCache(userAuthorization, ticker, 120)
         val smallChatScriptCache = buildMinutesCache(smallChatScript, ticker, oneDay)
+        val userInfoCache = buildMinutesCache(userInfo, ticker, 15)
 
         val manager = SimpleCacheManager()
         manager.setCaches(
@@ -221,6 +223,7 @@ class CaffeineConfiguration {
                 vesselsPositionsCache,
                 vesselsPositionsWithBeaconMalfunctionsCache,
                 vesselCharterCache,
+                userInfoCache,
             ),
         )
 

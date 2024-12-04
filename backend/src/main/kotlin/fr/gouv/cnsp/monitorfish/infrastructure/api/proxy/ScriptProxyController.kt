@@ -14,8 +14,6 @@ class ScriptProxyController(
     @GetMapping("/smallchat.js")
     @Cacheable("smallchat_script")
     fun proxySmallChatScript(): ResponseEntity<String> {
-        println("Proxying SmallChat script")
-
         val smallChatUrl = "https://embed.small.chat/T0176BBUCEQC01SV3W4464.js"
 
         val scriptResponse = restTemplate.getForEntity(smallChatUrl, String::class.java)

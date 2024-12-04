@@ -1,9 +1,10 @@
+import { NotifierEvent } from '@components/Notifier/NotifierEvent'
 import { backofficeProducerOrganizationMembershipActions } from '@features/ProducerOrganizationMembership/backoffice.slice'
 import { updateProducerOrganizationMemberships } from '@features/ProducerOrganizationMembership/useCases/updateProducerOrganizationMemberships'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
 import { Button, Icon, Size, TextInput } from '@mtes-mct/monitor-ui'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useRef } from 'react'
 import { Uploader } from 'rsuite'
 import styled from 'styled-components'
 
@@ -12,7 +13,6 @@ import type { FileType } from 'rsuite/esm/Uploader/Uploader'
 export function FilterBar() {
   const dispatch = useBackofficeAppDispatch()
   const searchQuery = useBackofficeAppSelector(store => store.producerOrganizationMembership.searchQuery)
-  const [hasUpdated, setHasUpdated] = useState<boolean>(false)
   const uploader = useRef()
 
   const onUpload = async (fileList: FileType[]) => {
@@ -22,7 +22,7 @@ export function FilterBar() {
     }
 
     await dispatch(updateProducerOrganizationMemberships(fileType.blobFile as File))
-    setHasUpdated(true)
+    window.document.dispatchEvent(new NotifierEvent('Mise à jour des données effectuée', 'success', false, false))
   }
 
   const updateSearchQuery = useCallback(
@@ -53,15 +53,9 @@ export function FilterBar() {
         fileListVisible={false}
         onChange={onUpload}
       >
-        {hasUpdated ? (
-          <Button Icon={Icon.Check} size={Size.SMALL}>
-            Mise-à-jour effectuée
-          </Button>
-        ) : (
-          <Button Icon={Icon.Reset} size={Size.SMALL}>
-            Mettre à jour avec une extraction SYSADH
-          </Button>
-        )}
+        <Button Icon={Icon.Reset} size={Size.SMALL}>
+          Mettre à jour avec une extraction SYSADH
+        </Button>
       </Uploader>
     </Wrapper>
   )

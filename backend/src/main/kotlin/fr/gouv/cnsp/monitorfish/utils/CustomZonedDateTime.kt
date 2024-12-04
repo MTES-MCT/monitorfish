@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter
  * A custom and consistent `ZonedDateTime` that always uses UTC as the time zone.
  *
  * The overridden `toString()` method ensures seconds are always present in the output
- * (= never omitted when equal to `00`) and removes unecessary milli/micro/nanoseconds.
+ * (= never omitted when equal to `00`) and removes unnecessary milli/micro/nanoseconds.
  */
 data class CustomZonedDateTime(private val dateAsZonedDateTime: ZonedDateTime) {
     companion object {

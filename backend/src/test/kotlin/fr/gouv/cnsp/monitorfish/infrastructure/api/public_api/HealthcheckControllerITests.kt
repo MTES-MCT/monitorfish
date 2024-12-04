@@ -32,9 +32,9 @@ class HealthcheckControllerITests {
         // Given
         given(this.getHealthcheck.execute()).willReturn(
             Health(
-                ZonedDateTime.parse("2020-12-21T15:01:00Z"),
-                ZonedDateTime.parse("2020-12-21T16:01:00Z"),
-                ZonedDateTime.parse("2020-12-21T17:01:00Z"),
+                dateLastPositionUpdatedByPrefect = ZonedDateTime.parse("2020-12-21T15:01:00Z"),
+                dateLastPositionReceivedByAPI = ZonedDateTime.parse("2020-12-21T16:01:00Z"),
+                dateLogbookMessageReceived = ZonedDateTime.parse("2020-12-21T17:01:00.000Z"),
                 suddenDropOfPositionsReceived = false,
             ),
         )

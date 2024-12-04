@@ -69,6 +69,15 @@ export function Identity() {
     return customDayjs(selectedVessel.navigationLicenceExpirationDate).isBefore(now)
   }
 
+  const isNavigationLicenceExtensionDateExpired = () => {
+    if (!selectedVessel?.navigationLicenceExtensionDate) {
+      return undefined
+    }
+    const now = customDayjs()
+
+    return customDayjs(selectedVessel.navigationLicenceExtensionDate).isBefore(now)
+  }
+
   return !loadingVessel ? (
     <Body>
       <FlatTwoColumnKeyValue
@@ -173,13 +182,35 @@ export function Identity() {
             value: selectedVessel?.navigationLicenceExpirationDate ? (
               <>
                 {getDate(selectedVessel?.navigationLicenceExpirationDate)}
-                {isNavigationLicenceExpired() === true && (
+                {selectedVessel?.navigationLicenceExtensionDate === undefined &&
+                  isNavigationLicenceExpired() === true && (
+                    <>
+                      {' '}
+                      <LicenceExpired />
+                    </>
+                  )}
+                {selectedVessel?.navigationLicenceExtensionDate === undefined &&
+                  isNavigationLicenceExpired() === false && (
+                    <>
+                      {' '}
+                      <LicenceActive />
+                    </>
+                  )}
+              </>
+            ) : undefined
+          },
+          {
+            key: 'Date de prorogation',
+            value: selectedVessel?.navigationLicenceExtensionDate ? (
+              <>
+                {getDate(selectedVessel?.navigationLicenceExtensionDate)}
+                {isNavigationLicenceExtensionDateExpired() === true && (
                   <>
                     {' '}
                     <LicenceExpired />
                   </>
                 )}
-                {isNavigationLicenceExpired() === false && (
+                {isNavigationLicenceExtensionDateExpired() === false && (
                   <>
                     {' '}
                     <LicenceActive />
@@ -187,10 +218,6 @@ export function Identity() {
                 )}
               </>
             ) : undefined
-          },
-          {
-            key: 'Date de prorogation',
-            value: getDate(selectedVessel?.navigationLicenceExtensionDate)
           }
         ]}
         keyWidth={200}

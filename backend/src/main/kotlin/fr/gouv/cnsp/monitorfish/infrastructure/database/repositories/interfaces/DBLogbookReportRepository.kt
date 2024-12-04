@@ -333,8 +333,10 @@ interface DBLogbookReportRepository :
         """WITH dat_cor AS (
             SELECT *
             FROM logbook_reports e
-            WHERE e.cfr = ?1
-            AND e.trip_number = ?2
+            WHERE e.cfr = :internalReferenceNumber
+            AND e.trip_number = :tripNumber
+            AND operation_datetime_utc >= :startDate
+            AND operation_datetime_utc <= :endDate
             AND NOT e.is_test_message
         ),
         ret AS (
@@ -356,6 +358,8 @@ interface DBLogbookReportRepository :
     fun findFirstAcknowledgedDateOfTrip(
         internalReferenceNumber: String,
         tripNumber: String,
+        startDate: Instant,
+        endDate: Instant,
     ): Instant
 
     @Query(

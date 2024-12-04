@@ -57,9 +57,12 @@ export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
     dispatch(priorNotificationActions.setOpenedReportingListVesselIdentity(values.vesselIdentity))
   }
 
-  const updateIsDirty = (isDirty: boolean) => {
-    dispatch(priorNotificationActions.setIsPriorNotificationFormDirty(isDirty))
-  }
+  const updateIsDirty = useCallback(
+    (isDirty: boolean) => {
+      dispatch(priorNotificationActions.setIsPriorNotificationFormDirty(isDirty))
+    },
+    [dispatch]
+  )
 
   useFormikDirtyOnceEffect(updateIsDirty)
 

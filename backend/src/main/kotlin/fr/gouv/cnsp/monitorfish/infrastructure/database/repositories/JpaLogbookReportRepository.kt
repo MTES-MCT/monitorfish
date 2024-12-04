@@ -320,8 +320,10 @@ class JpaLogbookReportRepository(
                     ).first()
 
                 return dbLogbookReportRepository.findFirstAcknowledgedDateOfTrip(
-                    internalReferenceNumber,
-                    lastTrip.tripNumber,
+                    internalReferenceNumber = internalReferenceNumber,
+                    tripNumber = lastTrip.tripNumber,
+                    startDate = lastTrip.startDate,
+                    endDate = lastTrip.endDate,
                 ).atZone(
                     UTC,
                 )

@@ -9,6 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUs
 import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.TestUtils.Companion.getMockApiClient
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.UserAuthorizationCheckFilter
+import fr.gouv.cnsp.monitorfish.infrastructure.oidc.APIOIDCRepository
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -31,6 +32,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
     UserAuthorizationCheckFilter::class,
     SentryConfig::class,
     CustomAuthenticationEntryPoint::class,
+    APIOIDCRepository::class,
 )
 @WebMvcTest(
     value = [(UserAuthorizationController::class)],

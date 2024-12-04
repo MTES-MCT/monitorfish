@@ -13,9 +13,10 @@ import { Page } from '@features/SideWindow/components/Page'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useTableVirtualizer } from '@hooks/useTableVirtualizer'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Icon, IconButton, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import { Icon, IconButton, pluralize, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
+import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import dayjs from 'dayjs'
 import { range } from 'lodash'
 import { useMemo, useRef, useState } from 'react'
@@ -43,6 +44,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
 
   const archive = () => {
     dispatch(archiveReportings(reportings, rowSelectionAsArray, WindowContext.SideWindow))
+    setRowSelection({})
   }
 
   const download = () => {
@@ -54,6 +56,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
 
   const remove = () => {
     dispatch(deleteReportings(reportings, rowSelectionAsArray, WindowContext.SideWindow))
+    setRowSelection({})
   }
 
   const columns = useMemo(
@@ -100,7 +103,10 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
       <Body>
         <TableOuterWrapper>
           <Filters />
-          <RightAligned>
+          <TableTop $isFromUrl={isFromUrl}>
+            <TableLegend>
+              {reportings.length} {pluralize('signalement', reportings.length)} en cours
+            </TableLegend>
             <IconButton
               disabled={!rowSelectionAsArray.length}
               Icon={Icon.Download}
@@ -121,7 +127,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
               onClick={remove}
               title={`Supprimer ${rowSelectionAsArray.length} signalement${rowSelectionAsArray.length > 1 ? 's' : ''}`}
             />
-          </RightAligned>
+          </TableTop>
         </TableOuterWrapper>
 
         <TableInnerWrapper ref={tableContainerRef} $hasError={isError}>
@@ -145,7 +151,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
                         {row?.getVisibleCells().map(cell => (
                           <Row
                             key={cell.id}
-                            $hasRightBorder={cell.column.id === 'underCharter'}
+                            $hasRightBorder={cell.column.id === 'dml'}
                             $isCenter={cell.column.id === 'actions'}
                             style={getRowCellCustomStyle(cell.column)}
                           >
@@ -166,20 +172,34 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
   )
 }
 
-const TableOuterWrapper = styled.div`
-  margin: 0 32px 8px 0;
-`
-
-const RightAligned = styled.div`
-  margin-top: 16px;
+const TableTop = styled.div<{
+  $isFromUrl: boolean
+}>`
   align-items: flex-end;
   display: flex;
-  flex-grow: 1;
   justify-content: flex-end;
+  margin-top: 16px;
+  width: ${p => (!p.$isFromUrl && isLegacyFirefox() ? 1396 : 1290)}px; /* = table width */
+
+  > button(:first) {
+    margin-left: auto;
+  }
 
   > button:not(:last-child) {
-    margin-right: 10px;
+    margin-right: 8px;
   }
+`
+
+const TableLegend = styled.p`
+  color: ${p => p.theme.color.slateGray};
+  line-height: 1;
+  margin-left: 0;
+  margin-right: auto;
+  float: left;
+`
+
+const TableOuterWrapper = styled.div`
+  margin: 0 32px 8px 0;
 `
 
 const Row = styled(TableWithSelectableRows.Td)`
@@ -193,7 +213,7 @@ const TableInnerWrapper = styled.div<{
     box-sizing: border-box;
   }
   height: 619px; /* = table height - 5px (negative margin-top) + 1px for Chrome compatibility */
-  min-width: 1271px; /* = table width + right padding + scrollbar width (8px) */
+  min-width: 1290px; /* = table width + right padding + scrollbar width (8px) */
   padding-right: 8px;
   overflow-y: scroll;
   width: auto;

@@ -105,19 +105,37 @@ enum class JointDeploymentPlan(
     }
 
     /**
-     * We use an arbitrary method to de-duplicated reporting of controls made in multiple fao areas,
-     * hence in multiple JDP.
-     * `JointDeploymentPlan.entries.firstOrNull` is the arbitrary rule to attach a control to only one JDP.
-     * see: https://github.com/MTES-MCT/monitorfish/issues/3157#issuecomment-2093036583
+     * Compute if the control must be attached to the extracted JDP.
      */
-    fun isAttributedJdp(control: MissionAction) =
-        JointDeploymentPlan.entries
+    fun isAttributedJdp(control: MissionAction): Boolean {
+        /**
+         * We must double count inspections for controls in PEL13 segments in which BFT are observed.
+         * @see: https://github.com/MTES-MCT/monitorfish/issues/3839#issue-2640708820
+         */
+        val isPel13Segment = control.segments.any { it.segment == "PEL13" }
+        val hasBFTOnboard = control.speciesOnboard.any { it.speciesCode == "BFT" }
+        val isDoubleCounted = isPel13Segment && hasBFTOnboard
+        if (isDoubleCounted) {
+            if (this == MEDITERRANEAN_AND_EASTERN_ATLANTIC) {
+                return isMedJdpAttributed(control)
+            }
+
+            return this.getOperationalZones().any { jdpFaoArea ->
+                control.faoAreas.any { controlFaoArea ->
+                    FaoArea(controlFaoArea).hasFaoCodeIncludedIn(jdpFaoArea)
+                }
+            }
+        }
+
+        /**
+         * We use an arbitrary method to de-duplicate reporting of controls made in multiple fao areas,
+         * hence in multiple JDP.
+         * `JointDeploymentPlan.entries.firstOrNull {...} == this` is the arbitrary rule to attach a
+         * control to only one JDP.
+         * @see: https://github.com/MTES-MCT/monitorfish/issues/3157#issuecomment-2093036583
+         */
+        return JointDeploymentPlan.entries
             .firstOrNull { jdpEntry ->
-                /**
-                 * There is an overlap between the `MEDITERRANEAN_AND_EASTERN_ATLANTIC` and the WESTERN_WATERS JDPs.
-                 * We add a filter by species to avoid counting all controls done in
-                 * `EASTERN_ATLANTIC_OPERATIONAL_ZONES without targeted species in catches.
-                 */
                 if (jdpEntry == MEDITERRANEAN_AND_EASTERN_ATLANTIC) {
                     return@firstOrNull isMedJdpAttributed(control)
                 }
@@ -128,7 +146,13 @@ enum class JointDeploymentPlan(
                     }
                 }
             } == this
+    }
 
+    /**
+     * There is an overlap between the `MEDITERRANEAN_AND_EASTERN_ATLANTIC` and the WESTERN_WATERS JDPs.
+     * We add a filter by species to avoid counting all controls done in
+     * `EASTERN_ATLANTIC_OPERATIONAL_ZONES without targeted species in catches.
+     */
     private fun isMedJdpAttributed(control: MissionAction) =
         MEDITERRANEAN_AND_EASTERN_ATLANTIC.getOperationalZones().any { jdpFaoArea ->
             /**

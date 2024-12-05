@@ -1,3 +1,4 @@
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
 
 import type { FleetSegment } from '@features/FleetSegment/types'
@@ -18,11 +19,14 @@ export const computeFleetSegments =
     const species = speciesOnboard?.map(specy => specy.speciesCode)
 
     const { data: fleetSegments } = await dispatch(
-      fleetSegmentApi.endpoints.computeFleetSegments.initiate({
-        faoAreas: faoAreas ?? [],
-        gears: gears ?? [],
-        species: species ?? []
-      })
+      fleetSegmentApi.endpoints.computeFleetSegments.initiate(
+        {
+          faoAreas: faoAreas ?? [],
+          gears: gears ?? [],
+          species: species ?? []
+        },
+        RTK_FORCE_REFETCH_QUERY_OPTIONS
+      )
     )
 
     return fleetSegments

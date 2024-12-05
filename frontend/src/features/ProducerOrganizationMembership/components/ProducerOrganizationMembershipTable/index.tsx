@@ -4,13 +4,14 @@ import { BackOfficeTitle } from '@features/BackOffice/components/BackOfficeTitle
 import { useGetProducerOrganizationMembershipsQuery } from '@features/ProducerOrganizationMembership/apis'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Accent, Button, DataTable, pluralize } from '@mtes-mct/monitor-ui'
-import Fuse from 'fuse.js'
+import { Accent, Button, CustomSearch, DataTable, pluralize } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { DEFAULT_ROWS_DISPLAYED, MEMBERSHIP_SEARCH_OPTIONS, TABLE_COLUMNS } from './constants'
+import { DEFAULT_ROWS_DISPLAYED, TABLE_COLUMNS } from './constants'
 import { FilterBar } from './FilterBar'
+
+import type { ProducerOrganizationMembership } from '@features/ProducerOrganizationMembership/types'
 
 export function ProducerOrganizationMembershipTable() {
   const searchQuery = useBackofficeAppSelector(store => store.producerOrganizationMembership.searchQuery)
@@ -22,12 +23,18 @@ export function ProducerOrganizationMembershipTable() {
   const { data: memberships = [] } = useGetProducerOrganizationMembershipsQuery()
 
   const fuse = useMemo(
-    () => (memberships ? new Fuse(memberships, MEMBERSHIP_SEARCH_OPTIONS) : undefined),
+    () =>
+      memberships
+        ? new CustomSearch<ProducerOrganizationMembership>(
+            memberships,
+            ['internalReferenceNumber', 'organizationName'],
+            { isCaseSensitive: false, isDiacriticSensitive: false, isStrict: true, threshold: 0.4 }
+          )
+        : undefined,
     [memberships]
   )
 
-  const filteredMemberships =
-    !!searchQuery?.length && fuse ? fuse.search(searchQuery).map(result => result.item) : memberships
+  const filteredMemberships = !!searchQuery?.length && fuse ? fuse.find(searchQuery) : memberships
   const displayedMemberships = filteredMemberships.slice(0, rowsDisplayed)
 
   if (displayedError) {

@@ -1,4 +1,5 @@
 import { BackofficeMode } from '@api/BackofficeMode'
+import { Notifier } from '@components/Notifier'
 import countries from 'i18n-iso-countries'
 import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
 import { Provider } from 'react-redux'
@@ -29,6 +30,7 @@ export function BackofficePage() {
           </Wrapper>
 
           <ErrorToastNotification />
+          <Notifier />
         </NamespaceContext.Provider>
       </PersistGate>
     </Provider>

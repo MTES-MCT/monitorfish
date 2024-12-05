@@ -170,8 +170,8 @@ context('Vessel sidebar logbook tab', () => {
       .should(
         'have.string',
         '/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
-          '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
-          '&afterDateTime=2019-10-10T21:06:00.000Z&beforeDateTime=2019-10-22T12:06:00.000Z'
+          '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER' +
+          '&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime='
       )
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
     cy.get('*[data-cy="custom-dates-showed-text"]').contains('Piste affichée du 10/10/19 au 22/10/19')

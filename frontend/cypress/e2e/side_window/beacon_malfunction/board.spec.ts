@@ -310,7 +310,10 @@ context('Side Window > Beacon Malfunction Board', () => {
       .contains('I just added a new comment')
   })
 
-  it('Beacon malfunction archived reason Should be showed', () => {
+  it('Notification messages feedback should be showed in beacon follow up', () => {
+    /**
+     * Beacon malfunction archived reason Should be showed
+     */
     // In the board
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-ARCHIVED"]')
       .children()
@@ -318,9 +321,7 @@ context('Side Window > Beacon Malfunction Board', () => {
       .first()
       .find('*[data-cy="side-window-beacon-malfunctions-end-of-malfunction"]')
       .contains('Reprise des émissions')
-  })
 
-  it('Notification messages feedback should be showed in beacon follow up', () => {
     // In the board
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-ARCHIVED"]')
       .children()

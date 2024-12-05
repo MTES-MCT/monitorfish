@@ -789,7 +789,7 @@ def compute_ports_zones(ports: pd.DataFrame) -> pd.DataFrame:
         connection.execute(
             text(
                 "UPDATE tmp_ports "
-                "SET buffer = St_Buffer(geometry, 0.5) "
+                "SET buffer = St_Buffer(geometry, 0.1) "
                 "WHERE geometry IS NOT NULL; "
             )
         )

@@ -60,7 +60,7 @@ export function ActionButtonsCell({ reporting }: ActionButtonsCellProps) {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: 16px;
   height: 20px;
   margin-bottom: 1px;
 

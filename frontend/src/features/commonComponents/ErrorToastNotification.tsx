@@ -8,6 +8,7 @@ import type { ToastOptions } from 'react-toastify'
 
 import 'react-toastify/dist/ReactToastify.css'
 
+/** @deprecated Use `<Notifier/>`. */
 export function ErrorToastNotification() {
   // TODO Type global.error
   const error:

@@ -3,7 +3,7 @@ import { Ellipsised } from '@components/Ellipsised'
 import { Titled } from '@components/Titled'
 import { getReportingOrigin, getReportingTitle } from '@features/Reporting/components/ReportingTable/utils'
 import { type Reporting, ReportingType, ReportingTypeCharacteristics } from '@features/Reporting/types'
-import { TableWithSelectableRows, Tag, THEME } from '@mtes-mct/monitor-ui'
+import { TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
@@ -49,7 +49,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       enableSorting: true,
       header: () => 'Il y a...',
       id: 'date',
-      size: 90 + legacyFirefoxOffset
+      size: 100 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row,
@@ -61,7 +61,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       enableSorting: false,
       header: () => 'Origine',
       id: 'origin',
-      size: 130 + legacyFirefoxOffset
+      size: 142 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row.type,
@@ -78,7 +78,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       enableSorting: true,
       header: () => 'Type',
       id: 'type',
-      size: 130 + legacyFirefoxOffset
+      size: 160 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row,
@@ -90,7 +90,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       enableSorting: true,
       header: () => 'Titre',
       id: 'title',
-      size: 280 + legacyFirefoxOffset,
+      size: 340 + legacyFirefoxOffset,
       sortingFn: (rowA: Row<any>, rowB: Row<any>) => {
         const titleA = rowA.original.value.title ?? rowA.original.value.type
         const titleB = rowB.original.value.title ?? rowB.original.value.type
@@ -122,7 +122,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       enableSorting: true,
       header: () => 'Navire',
       id: 'vesselName',
-      size: 230 + legacyFirefoxOffset
+      size: 260 + legacyFirefoxOffset
     },
     {
       accessorFn: row =>
@@ -131,22 +131,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       enableSorting: true,
       header: () => 'DML',
       id: 'dml',
-      size: 70 + legacyFirefoxOffset
-    },
-    {
-      accessorFn: row => row.underCharter,
-      cell: (info: CellContext<Reporting.Reporting, boolean>) =>
-        info.getValue() ? (
-          <Tag backgroundColor={THEME.color.mediumSeaGreen25} color={THEME.color.mediumSeaGreen}>
-            Navire sous charte
-          </Tag>
-        ) : (
-          ''
-        ),
-      enableSorting: false,
-      header: () => '',
-      id: 'underCharter',
-      size: 170 + legacyFirefoxOffset
+      size: 90 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row.id,
@@ -154,7 +139,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       enableSorting: false,
       header: () => '',
       id: 'actions',
-      size: 80 + legacyFirefoxOffset
+      size: 88 + legacyFirefoxOffset
     }
   ]
 }

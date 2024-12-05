@@ -50,7 +50,7 @@ export function Login() {
       {!!auth?.isLoading || isLoading ? (
         <LoadingSpinnerWall isVesselShowed />
       ) : (
-        <div>
+        <>
           <Head>MonitorFish</Head>
 
           <Button onClick={() => auth?.signinRedirect()} title="Se connecter avec Cerbère">
@@ -68,7 +68,7 @@ export function Login() {
             d&apos;amende&quot;.
           </Warning>
           <Footer>Centre National de Surveillance des Pêches (CNSP) – CROSS Etel</Footer>
-        </div>
+        </>
       )}
       {auth?.error && <div>Oops... {auth.error?.message}</div>}
       <ToastContainer />
@@ -79,12 +79,11 @@ export function Login() {
 const Warning = styled.p`
   max-width: 600px;
   font-style: italic;
-  bottom: 120px;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  height: 130px;
   background-color: #8aa4bd;
   padding: 32px;
+  margin-top: auto;
+  margin-bottom: 6vh;
 `
 
 const WarningHeader = styled.span`
@@ -93,6 +92,7 @@ const WarningHeader = styled.span`
 `
 
 const Head = styled.div`
+  margin-top: 40vh;
   margin-bottom: 16px;
   font-size: 32px;
   font-weight: 800;
@@ -100,21 +100,21 @@ const Head = styled.div`
 `
 
 const Footer = styled.div`
-  bottom: 16px;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   background-color: #8aa4bd;
   padding: 8px;
+  height: 34px;
+  margin-bottom: 0;
 `
 
 export const LoginBackground = styled.div`
   font-size: 13px;
   text-align: center;
   width: 100vw;
-  padding-top: 40vh;
   height: 100vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   background: url('landing_background.png') no-repeat center center fixed;
   -webkit-background-size: cover;

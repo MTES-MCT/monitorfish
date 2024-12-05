@@ -1,8 +1,11 @@
 // import { encodeUriObject } from '../../src/utils/encodeUriObject'
 
 context('Sidebars > Regulatory Layers', () => {
-  it('The number of zones searched and total zones in law type should be displayed', () => {
+  beforeEach(() => {
     cy.login('superuser')
+  })
+
+  it('A regulation Should be searched, added to My Zones and showed on the map with the Zone button', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(1000)
 
@@ -13,28 +16,21 @@ context('Sidebars > Regulatory Layers', () => {
       cy.log(response.body)
     })
 
+    /**
+     * The number of zones searched and total zones in law type should be displayed
+     */
     // When
     cy.get('[title="Arbre des couches"]').click()
     cy.get('*[name="Rechercher une zone réglementaire"]').type('interdiction')
 
     // Then, 2 zones are showed
     cy.get('*[data-cy="regulatory-layer-topic-count"]').contains('2/4')
-  })
 
-  it('A regulation Should be searched, added to My Zones and showed on the map with the Zone button', () => {
-    cy.login('superuser')
-    cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(1000)
-
-    cy.request(
-      'GET',
-      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
-    ).then(response => {
-      cy.log(response.body)
-    })
-
+    /**
+     * A regulation Should be searched, added to My Zones and showed on the map with the Zone button
+     */
     // When
-    cy.get('[title="Arbre des couches"]').click()
+    cleanRegulationSearchInput()
 
     // Add the layer to My Zones
     cy.get('*[name="Rechercher une zone réglementaire"]').type('Cotentin biva')
@@ -43,6 +39,7 @@ context('Sidebars > Regulatory Layers', () => {
     cy.get('[title=\'Sélectionner "Praires Ouest cotentin"\']').click()
 
     // Then it is in "My Zones"
+    cleanRegulationSearchInput()
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').contains('Ouest Cotentin Bivalves')
     cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').click()
@@ -54,23 +51,6 @@ context('Sidebars > Regulatory Layers', () => {
     cy.intercept(
       'http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&CQL_FILTER=topic=%27Ouest%20Cotentin%20Bivalves%27%20AND%20zone=%27Praires%20Ouest%20cotentin%27'
     ).as('getRegulation')
-    // TODO Integrate `utils/encodeUriObject()` in `frontend/src/api/geoserver.js` once it's migrated to TS.
-    // cy.intercept(
-    //   encodeUriObject(
-    //     `http://0.0.0.0:8081/geoserver/wfs`,
-    //     /* eslint-disable sort-keys-fix/sort-keys-fix */
-    //     {
-    //       service: 'WFS',
-    //       version: '1.1.0',
-    //       request: 'GetFeature',
-    //       typename: 'monitorfish:regulations',
-    //       outputFormat: 'application/json',
-    //       CQL_FILTER: `topic='Ouest Cotentin Bivalves' AND zone='Praires Ouest cotentin'`
-    //     },
-    //     /* eslint-enable sort-keys-fix/sort-keys-fix */
-    //     true
-    //   )
-    // ).as('getRegulation')
     cy.get('[title=\'Afficher la zone "Praires Ouest cotentin"\']').click()
     cy.wait('@getRegulation').then(({ response }) => expect(response && response.statusCode).equal(200))
     cy.wait(200)
@@ -95,20 +75,10 @@ context('Sidebars > Regulatory Layers', () => {
     // The layer is hidden, the metadata modal should not be opened
     cy.get('.regulatory', { timeout: 10000 }).should('not.exist')
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]', { timeout: 10000 }).should('not.exist')
-  })
 
-  it('A regulation Should be searched and the result Should be kept When we go to My Zones section', () => {
-    cy.login('superuser')
-    cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(1000)
-
-    cy.request(
-      'GET',
-      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
-    ).then(response => {
-      cy.log(response.body)
-    })
-
+    /**
+     * A regulation Should be searched and the result Should be kept When we go to My Zones section
+     */
     // When
     cy.get('[title="Arbre des couches"]').click()
 
@@ -126,13 +96,9 @@ context('Sidebars > Regulatory Layers', () => {
 
     // Back to My Zones
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
-
-    // Clean the search input
-    cleanSearchInput()
   })
 
   it('A regulation Should be searched, added to My Zones and showed on the map with the Topic button', () => {
-    cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(1000)
 
@@ -179,7 +145,6 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('The Cotentin regulation metadata Should be opened', () => {
-    cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(1000)
 
@@ -242,7 +207,6 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('The Armor regulation metadata Should be opened', () => {
-    cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(1000)
 
@@ -295,7 +259,6 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('A regulation Should be searched with a rectangle', () => {
-    cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(1000)
 
@@ -340,7 +303,6 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('A regulation Should be searched with a polygon', () => {
-    cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(1000)
 
@@ -378,7 +340,6 @@ context('Sidebars > Regulatory Layers', () => {
       throw new Error('`baseUrl` is not defined')
     }
 
-    cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(1000)
 
@@ -448,7 +409,6 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('Should unselect one of the selected topic zone layers', () => {
     // Focus the map on Corsica
-    cy.login('superuser')
     cy.visit('/#@997505.75,5180266.24,8.70')
     cy.wait(500)
 
@@ -490,7 +450,6 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('Should toggle the selected topic zone layers', () => {
     // Focus the map on Corsica
-    cy.login('superuser')
     cy.visit('/#@997505.75,5180266.24,8.70')
     cy.wait(500)
 
@@ -514,12 +473,12 @@ context('Sidebars > Regulatory Layers', () => {
 
     // Select all the "Armor CSJ Dragues" regulation zones (there is only 1)
     // Clean input
-    cleanSearchInput()
+    cleanRegulationSearchInput()
     cy.get('*[name="Rechercher une zone réglementaire"]').type('Armor')
     cy.get('[title=\'Sélectionner "Armor CSJ Dragues"\']').click()
 
     // Show metadata the only "Armor CSJ Dragues" regulation zone
-    cleanSearchInput()
+    cleanRegulationSearchInput()
     cy.contains('Mes zones réglementaires').click()
     cy.contains('Mes zones réglementaires').parent().contains('Armor CSJ Dragues').click()
     cy.get('[title=\'Afficher la réglementation "Secteur 3"\']').click()
@@ -530,7 +489,7 @@ context('Sidebars > Regulatory Layers', () => {
     cy.contains('Création de zone').should('be.visible')
   })
 
-  function cleanSearchInput() {
+  function cleanRegulationSearchInput() {
     cy.get('*[name="Rechercher une zone réglementaire"]').parent().find('.Element-IconButton').click()
   }
 })

@@ -1,4 +1,6 @@
+import { RtkCacheTagType } from '@api/constants'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { vesselApi } from '@features/Vessel/vesselApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
@@ -16,6 +18,8 @@ export const deleteReporting =
 
     try {
       await dispatch(reportingApi.endpoints.deleteReporting.initiate(id)).unwrap()
+
+      dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
 
       dispatch(
         removeVesselReporting({

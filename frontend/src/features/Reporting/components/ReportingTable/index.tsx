@@ -92,7 +92,9 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
   })
 
   const { rows } = table.getRowModel()
-  const rowVirtualizer = useTableVirtualizer({ estimateSize: 42, ref: tableContainerRef, rows })
+
+  const overscan = useMemo(() => (reportings.length > 500 ? 500 : 50), [reportings])
+  const rowVirtualizer = useTableVirtualizer({ estimateSize: 42, overscan, ref: tableContainerRef, rows })
   const virtualRows = rowVirtualizer.getVirtualItems()
 
   return (
@@ -138,7 +140,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
               {!!rows.length && (
                 <tbody>
                   {virtualRows.map(virtualRow => {
-                    const row = rows[virtualRow.index]
+                    const row = rows[virtualRow?.index]
 
                     return (
                       <TableWithSelectableRows.BodyTr key={virtualRow.key} data-cy="ReportingList-reporting">

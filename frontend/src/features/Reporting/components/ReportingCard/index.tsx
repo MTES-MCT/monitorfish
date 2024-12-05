@@ -179,6 +179,19 @@ export function ReportingCard({
             />
           </Actions>
         )}
+        {isArchived && (
+          <Actions $hasOccurrences={otherOccurrencesOfSameAlert.length > 0}>
+            <StyledIconButton
+              accent={Accent.TERTIARY}
+              color={THEME.color.charcoal}
+              data-cy="delete-reporting-card"
+              Icon={Icon.Delete}
+              iconSize={20}
+              onClick={askForDeletionConfirmation}
+              title="Supprimer ce signalement"
+            />
+          </Actions>
+        )}
       </Wrapper>
 
       {isDeletionConfirmationModalOpen && (

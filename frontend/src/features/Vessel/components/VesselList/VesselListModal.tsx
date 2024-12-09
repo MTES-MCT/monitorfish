@@ -55,7 +55,7 @@ export function VesselListModal({ namespace, onClose }) {
   const [vesselsCountShowed, setVesselsCountShowed] = useState(0)
   const [allVesselsChecked, setAllVesselsChecked] = useState(true)
 
-  // Index
+  // Filters
   const {
     countriesFiltered,
     districtsFiltered,

@@ -1,208 +1,52 @@
+from ast import literal_eval
+
 import pandas as pd
 import pytest
 
-from src.pipeline.helpers.segments import attribute_segments_to_catches
+from config import TEST_DATA_LOCATION
+from src.pipeline.helpers.segments import allocate_segments_to_catches
 
 
 @pytest.fixture
-def catches():
-    return pd.DataFrame(
-        {
-            "some_id": ["A", "A", "A", "B", "C", "D", "D", "E"],
-            "species": [
-                "spe_1",
-                "spe_2",
-                "spe_4",
-                "spe_1",
-                "spe_1",
-                "spe_1",
-                "spe_4",
-                "spe_5",
-            ],
-            "gear": [
-                "gear_1",
-                "gear_1",
-                "gear_1",
-                "gear_2",
-                "gear_1",
-                "gear_3",
-                "gear_4",
-                "gear_4",
-            ],
-            "fao_area": [
-                "27.7.b",
-                "27.7.b",
-                "27.7.b",
-                "28.8",
-                "27.8",
-                "28.8.f",
-                "37.8",
-                "28.8.a.5",
-            ],
-        }
-    )
+def catches() -> pd.DataFrame:
+    return pd.read_csv(TEST_DATA_LOCATION / "csv/catches.csv")
 
 
 @pytest.fixture
-def segments():
-    return pd.DataFrame(
-        {
-            "segment": [
-                "segment_all_criteria",
-                "segment_all_criteria",
-                "segment_all_criteria",
-                "segment_gear_species",
-                "segment_area_species",
-                "segment_gear_area",
-                "segment_species_only",
-                "segment_area_only",
-                "segment_gear_only",
-            ],
-            "species": [
-                "spe_1",
-                "spe_2",
-                "spe_3",
-                "spe_1",
-                "spe_1",
-                None,
-                "spe_4",
-                None,
-                None,
-            ],
-            "gear": [
-                "gear_1",
-                "gear_1",
-                "gear_1",
-                "gear_2",
-                None,
-                "gear_1",
-                None,
-                None,
-                "gear_3",
-            ],
-            "fao_area": [
-                "27.7",
-                "27.7",
-                "27.7",
-                None,
-                "28.8",
-                "28.7",
-                None,
-                "28.8.a",
-                None,
-            ],
-        }
-    )
+def empty_catches(catches) -> pd.DataFrame:
+    return catches.head(0)
 
 
 @pytest.fixture
-def expected_segmented_catches():
-    return pd.DataFrame(
-        {
-            "segment": [
-                "segment_all_criteria",
-                "segment_all_criteria",
-                "segment_species_only",
-                "segment_gear_species",
-                "segment_area_species",
-                "Pas de segment",
-                "segment_gear_only",
-                "segment_area_species",
-                "segment_species_only",
-                "segment_area_only",
-            ],
-            "species": [
-                "spe_1",
-                "spe_2",
-                "spe_4",
-                "spe_1",
-                "spe_1",
-                "spe_1",
-                "spe_1",
-                "spe_1",
-                "spe_4",
-                "spe_5",
-            ],
-            "gear": [
-                "gear_1",
-                "gear_1",
-                "gear_1",
-                "gear_2",
-                "gear_2",
-                "gear_1",
-                "gear_3",
-                "gear_3",
-                "gear_4",
-                "gear_4",
-            ],
-            "fao_area_of_segment": [
-                "27.7",
-                "27.7",
-                None,
-                None,
-                "28.8",
-                None,
-                None,
-                "28.8",
-                None,
-                "28.8.a",
-            ],
-            "some_id": ["A", "A", "A", "B", "B", "C", "D", "D", "D", "E"],
-            "fao_area_of_catch": [
-                "27.7.b",
-                "27.7.b",
-                "27.7.b",
-                "28.8",
-                "28.8",
-                "27.8",
-                "28.8.f",
-                "28.8.f",
-                "37.8",
-                "28.8.a.5",
-            ],
-        }
+def segments() -> pd.DataFrame:
+    return pd.read_csv(
+        TEST_DATA_LOCATION / "csv/segments.csv",
+        converters={
+            "gears": literal_eval,
+            "fao_areas": literal_eval,
+            "target_species": literal_eval,
+            "vessel_types": literal_eval,
+        },
     )
 
 
-def test_attribute_segments_to_catches(catches, segments, expected_segmented_catches):
-    segmented_catches = attribute_segments_to_catches(
-        catches=catches, segments=segments
-    )
-    pd.testing.assert_frame_equal(
-        segmented_catches,
-        expected_segmented_catches[
-            expected_segmented_catches.segment != "Pas de segment"
-        ].reset_index(drop=True),
-    )
-
-
-def test_attribute_segments_to_catches_with_empty_input(
-    catches, segments, expected_segmented_catches
-):
-    empty_catches = catches.head(0)
-    segmented_catches = attribute_segments_to_catches(
-        catches=empty_catches, segments=segments
-    )
-    pd.testing.assert_frame_equal(
-        segmented_catches, expected_segmented_catches.head(0), check_dtype=False
-    )
-
-
-def test_attribute_segments_to_catches_with_unsassigned_catches(
-    catches, segments, expected_segmented_catches
-):
-    segmented_catches = attribute_segments_to_catches(
-        catches=catches,
+def test_allocate_segments_to_catches(catches, segments):
+    segmented_catches = allocate_segments_to_catches(
+        catches=catches.drop(columns=["segment"]),
         segments=segments,
-        append_unassigned_catches=True,
-        unassigned_catches_segment_label="Pas de segment",
+        catch_id_column="catch_id",
+        batch_id_column="batch_id",
     )
-    segmented_catches = segmented_catches.sort_values(
-        ["some_id", "segment", "species", "gear"]
-    ).reset_index(drop=True)
-    expected_segmented_catches = expected_segmented_catches.sort_values(
-        ["some_id", "segment", "species", "gear"]
-    ).reset_index(drop=True)
+    pd.testing.assert_frame_equal(segmented_catches, catches)
+
+
+def test_allocate_segments_to_catches_with_empty_input(empty_catches, segments):
+    segmented_catches = allocate_segments_to_catches(
+        catches=empty_catches.drop(columns=["segment"]),
+        segments=segments,
+        catch_id_column="catch_id",
+        batch_id_column="batch_id",
+    )
     pd.testing.assert_frame_equal(
-        segmented_catches.convert_dtypes(), expected_segmented_catches.convert_dtypes()
+        segmented_catches, empty_catches.head(0), check_dtype=False
     )

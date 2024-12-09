@@ -9,7 +9,7 @@ context('Side Window > Prior Notification List > Actions', () => {
     cy.fill('Rechercher un navire', 'DOS FIN')
 
     cy.getTableRowById('00000000-0000-4000-0000-000000000002').click()
-    cy.get('[role="button"][title="Ouvrir la liste des signalements pour ce navire"]').click()
+    cy.get('[role="link"][title="Ouvrir la liste des signalements pour ce navire"]').click()
 
     if (document.querySelector('[data-cy="first-loader"]')) {
       cy.getDataCy('first-loader').should('not.be.visible')

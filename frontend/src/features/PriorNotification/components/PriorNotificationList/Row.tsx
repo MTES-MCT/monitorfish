@@ -206,7 +206,7 @@ export function Row({ row }: RowProps) {
                   backgroundColor={THEME.color.maximumRed15}
                   color={THEME.color.maximumRed}
                   onClick={openReportingList}
-                  role="button"
+                  role="link"
                   title="Ouvrir la liste des signalements pour ce navire"
                 >{`${
                   priorNotification.reportingCount

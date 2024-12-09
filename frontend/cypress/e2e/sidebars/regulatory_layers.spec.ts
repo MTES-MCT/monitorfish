@@ -9,13 +9,6 @@ context('Sidebars > Regulatory Layers', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(1000)
 
-    cy.request(
-      'GET',
-      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
-    ).then(response => {
-      cy.log(response.body)
-    })
-
     /**
      * The number of zones searched and total zones in law type should be displayed
      */
@@ -49,7 +42,7 @@ context('Sidebars > Regulatory Layers', () => {
     cy.log('Show a zone with the zone button')
     // This intercept only works in the CI, as localhost in used in local
     cy.intercept(
-      'http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&CQL_FILTER=topic=%27Ouest%20Cotentin%20Bivalves%27%20AND%20zone=%27Praires%20Ouest%20cotentin%27'
+      'http://*:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&CQL_FILTER=topic=%27Ouest%20Cotentin%20Bivalves%27%20AND%20zone=%27Praires%20Ouest%20cotentin%27'
     ).as('getRegulation')
     cy.get('[title=\'Afficher la zone "Praires Ouest cotentin"\']').click()
     cy.wait('@getRegulation').then(({ response }) => expect(response && response.statusCode).equal(200))
@@ -79,9 +72,6 @@ context('Sidebars > Regulatory Layers', () => {
     /**
      * A regulation Should be searched and the result Should be kept When we go to My Zones section
      */
-    // When
-    cy.get('[title="Arbre des couches"]').click()
-
     // Add the layer to My Zones
     cy.get('*[name="Rechercher une zone réglementaire"]').type('Cotentin biva')
     cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 1)
@@ -101,13 +91,6 @@ context('Sidebars > Regulatory Layers', () => {
   it('A regulation Should be searched, added to My Zones and showed on the map with the Topic button', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(1000)
-
-    cy.request(
-      'GET',
-      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
-    ).then(response => {
-      cy.log(response.body)
-    })
 
     // When
     cy.get('[title="Arbre des couches"]').click()
@@ -147,13 +130,6 @@ context('Sidebars > Regulatory Layers', () => {
   it('The Cotentin regulation metadata Should be opened', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(1000)
-
-    cy.request(
-      'GET',
-      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
-    ).then(response => {
-      cy.log(response.body)
-    })
 
     // When
     cy.get('[title="Arbre des couches"]').click()
@@ -210,13 +186,6 @@ context('Sidebars > Regulatory Layers', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(1000)
 
-    cy.request(
-      'GET',
-      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
-    ).then(response => {
-      cy.log(response.body)
-    })
-
     // When
     cy.get('[title="Arbre des couches"]').click()
 
@@ -262,17 +231,10 @@ context('Sidebars > Regulatory Layers', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(1000)
 
-    cy.request(
-      'GET',
-      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
-    ).then(response => {
-      cy.log(response.body)
-    })
-
     // When
     cy.intercept(
       'GET',
-      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&srsname=EPSG:4326&bbox=-378334.88336741074,6256373.869989776,-280465.66220758925,6275194.874058974,EPSG:3857&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region`
+      `http://*:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&srsname=EPSG:4326&bbox=-378334.88336741074,6256373.869989776,-280465.66220758925,6275194.874058974,EPSG:3857&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region`
     ).as('getFeature')
     cy.get('[title="Arbre des couches"]').click()
 
@@ -306,13 +268,6 @@ context('Sidebars > Regulatory Layers', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(1000)
 
-    cy.request(
-      'GET',
-      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
-    ).then(response => {
-      cy.log(response.body)
-    })
-
     // When
     cy.get('[title="Arbre des couches"]').click()
 
@@ -342,13 +297,6 @@ context('Sidebars > Regulatory Layers', () => {
 
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(1000)
-
-    cy.request(
-      'GET',
-      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
-    ).then(response => {
-      cy.log(response.body)
-    })
 
     // TODO Investigate why there is white space in the Cypress iframe when hiding vessels which breaks the entire test.
     // cy.clickButton('Affichage des dernières positions')

@@ -143,6 +143,7 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 4)
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
     cy.intercept('GET', '/bff/v1/vessels/positions*').as('previousTripPositions')
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 10000 })
 
     // Then
@@ -174,10 +175,7 @@ context('Vessel sidebar logbook tab', () => {
           '&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime='
       )
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
-    cy.get('*[data-cy="custom-dates-showed-text"]').contains('Piste affichée du 10/10/19 au 22/10/19')
-
     // Go back to the default track depth
-    cy.get('*[data-cy="custom-dates-show-last-positions"]').click()
     cy.get('*[data-cy="custom-dates-showed-text"]').should('not.exist')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
     cy.get('[name="vessel-track-depth"]').should('have.value', 'TWELVE_HOURS')

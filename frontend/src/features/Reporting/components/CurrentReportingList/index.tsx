@@ -25,7 +25,7 @@ export function CurrentReportingList({
   withOpenedNewReportingForm = false,
   withVesselSidebarHistoryLink = false
 }: CurrentReportingListProps) {
-  const { data: vesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
+  const { data: vesselReportings, isFetching } = useGetVesselReportingsByVesselIdentityQuery(
     vesselIdentity
       ? {
           fromDate: startDate.toISOString(),
@@ -35,7 +35,7 @@ export function CurrentReportingList({
     RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
   )
 
-  if (!vesselIdentity || !vesselReportings) {
+  if (!vesselIdentity || !vesselReportings || isFetching) {
     return <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
   }
 

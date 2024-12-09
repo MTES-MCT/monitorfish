@@ -18,10 +18,14 @@ import fr.gouv.cnsp.monitorfish.fakers.PortFaker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import java.util.stream.Stream
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment as FullFleetSegment
 
 @ExtendWith(SpringExtension::class)
@@ -970,5 +974,117 @@ class GetActivityReportsUTests {
         // Then
         assertThat(activityReports.jdpSpecies).hasSize(38)
         assertThat(activityReports.activityReports).hasSize(0)
+    }
+
+    @ParameterizedTest
+    @MethodSource("getDoubleCountTestCases")
+    fun `execute Should report a PEL13 control with BFT in MED`(
+        actionType: MissionActionType,
+        jdp: JointDeploymentPlan,
+    ) {
+        // Given
+        val controls =
+            listOf(
+                MissionAction(
+                    id = 1,
+                    vesselId = 1,
+                    missionId = 1,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    portLocode = "AEFAT",
+                    faoAreas = listOf("27.8.a", "27.8.d"),
+                    actionType = actionType,
+                    speciesOnboard =
+                        listOf(
+                            SpeciesControl().apply {
+                                speciesCode = "ALB"
+                                declaredWeight = 23750.0
+                            },
+                            SpeciesControl().apply {
+                                speciesCode = "BFT"
+                                declaredWeight = 7845.0
+                            },
+                        ),
+                    gearOnboard = listOf(),
+                    controlUnits = listOf(),
+                    seizureAndDiversion = true,
+                    isDeleted = false,
+                    segments =
+                        listOf(
+                            FleetSegment("ATL01"),
+                            FleetSegment("PEL13"),
+                        ),
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    completion = Completion.TO_COMPLETE,
+                    flagState = CountryCode.FR,
+                    userTrigram = "CPAMOI",
+                ),
+            )
+        given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
+
+        val vessels =
+            listOf(
+                Vessel(
+                    id = 1,
+                    internalReferenceNumber = "FR00022680",
+                    vesselName = "MY AWESOME VESSEL",
+                    flagState = CountryCode.FR,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing",
+                    districtCode = "AY",
+                    hasLogbookEsacapt = false,
+                ),
+            )
+        given(vesselRepository.findVesselsByIds(eq(listOf(1)))).willReturn(vessels)
+
+        val missions =
+            listOf(
+                Mission(
+                    1,
+                    missionTypes = listOf(MissionType.SEA),
+                    missionSource = MissionSource.MONITORFISH,
+                    isUnderJdp = true,
+                    controlUnits = listOf(LegacyControlUnit(1234, "An admin.", false, "A random Unit", listOf())),
+                    isGeometryComputedFromControls = false,
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                ),
+            )
+        // The mission id 2 is not returned
+        given(missionRepository.findByIds(listOf(1))).willReturn(missions)
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(
+            PortFaker.fakePort(
+                locode = "AEFAT",
+                name = "Al Jazeera Port",
+            ),
+        )
+
+        // When
+        val activityReports =
+            GetActivityReports(
+                missionActionsRepository,
+                portRepository,
+                vesselRepository,
+                missionRepository,
+            ).execute(
+                ZonedDateTime.now(),
+                ZonedDateTime.now().minusDays(1),
+                jdp,
+            )
+
+        // Then
+        assertThat(activityReports.activityReports).hasSize(1)
+    }
+
+    companion object {
+        @JvmStatic
+        private fun getDoubleCountTestCases(): Stream<Arguments> {
+            return Stream.of(
+                Arguments.of(MissionActionType.LAND_CONTROL, JointDeploymentPlan.WESTERN_WATERS),
+                Arguments.of(MissionActionType.SEA_CONTROL, JointDeploymentPlan.WESTERN_WATERS),
+                Arguments.of(MissionActionType.LAND_CONTROL, JointDeploymentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC),
+                Arguments.of(MissionActionType.SEA_CONTROL, JointDeploymentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC),
+            )
+        }
     }
 }

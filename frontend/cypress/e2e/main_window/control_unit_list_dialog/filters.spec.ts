@@ -1,4 +1,4 @@
-context('Main Window > Control Unit List Dialog > Filters', () => {
+context('Main Window > Control Unit List Dialog > Index', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit(`/`)

@@ -15,7 +15,7 @@ export type CsvColumns = Record<string, CodeAndName>
  * Format object's data as specified in the CSV column
  * @param initialObject - The value object
  * @param csvColumns - The columns to be exported in the CSV
- * @param filters - Filters of the exported columns contained in the csvColumns object
+ * @param filters - Index of the exported columns contained in the csvColumns object
  * @returns - a new array
  */
 export function formatAsCSVColumns(initialObject, csvColumns: CsvColumns, filters?: string[] | undefined) {

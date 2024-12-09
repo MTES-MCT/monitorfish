@@ -2,7 +2,7 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
-import { getTrackRequestFromDates } from '../../../domain/entities/vesselTrackDepth'
+import { getTrackRequestFromDates, getTrackRequestFromTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
 import { removeError, setError } from '../../../domain/shared_slices/Global'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
@@ -32,6 +32,7 @@ export const getVesselLogbook =
     }
 
     const currentSelectedVesselIdentity = getState().vessel.selectedVesselIdentity
+    const { defaultVesselTrackDepth } = getState().map
     const { areFishingActivitiesShowedOnMap, isLastVoyage, lastFishingActivities, tripNumber } =
       getState().fishingActivities
 
@@ -80,7 +81,13 @@ export const getVesselLogbook =
         vesselIdentity
       }
       if (updateVesselTrack) {
-        modifyVesselTrackAndVoyage(voyageWithVesselIdentity, dispatch, vesselIdentity, areFishingActivitiesShowedOnMap)
+        await modifyVesselTrackAndVoyage(
+          voyageWithVesselIdentity,
+          dispatch,
+          vesselIdentity,
+          areFishingActivitiesShowedOnMap,
+          defaultVesselTrackDepth
+        )
 
         return
       }
@@ -107,22 +114,30 @@ export const getVesselLogbook =
     }
   }
 
-function modifyVesselTrackAndVoyage(voyage, dispatch, vesselIdentity, areFishingActivitiesShowedOnMap) {
+async function modifyVesselTrackAndVoyage(
+  voyage,
+  dispatch,
+  vesselIdentity,
+  areFishingActivitiesShowedOnMap,
+  defaultVesselTrackDepth
+) {
   if (!voyage.startDate && !voyage.endDate) {
     return
   }
 
   const { afterDateTime, beforeDateTime } = getDateRangeMinusFourHoursPlusOneHour(voyage.startDate, voyage.endDate)
+  const trackRequest = voyage.isLastVoyage
+    ? getTrackRequestFromTrackDepth(defaultVesselTrackDepth)
+    : getTrackRequestFromDates(afterDateTime, beforeDateTime)
 
-  const trackRequest = getTrackRequestFromDates(afterDateTime, beforeDateTime)
-  dispatch(updateSelectedVesselTrackRequest(vesselIdentity, trackRequest, true)).then(() => {
-    dispatch(logbookActions.setVoyage(voyage))
-    if (areFishingActivitiesShowedOnMap) {
-      dispatch(logbookActions.showAllOnMap())
-    } else {
-      dispatch(logbookActions.removeAllFromMap())
-    }
-  })
+  await dispatch(updateSelectedVesselTrackRequest(vesselIdentity, trackRequest, true))
+  await dispatch(logbookActions.setVoyage(voyage))
+
+  if (areFishingActivitiesShowedOnMap) {
+    dispatch(logbookActions.showAllOnMap())
+  } else {
+    dispatch(logbookActions.removeAllFromMap())
+  }
 }
 
 function getDateRangeMinusFourHoursPlusOneHour(afterDateTime, beforeDateTime) {

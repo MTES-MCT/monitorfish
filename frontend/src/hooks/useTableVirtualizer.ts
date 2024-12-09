@@ -1,13 +1,19 @@
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useCallback } from 'react'
+import { type MutableRefObject, useCallback } from 'react'
 
-export function useTableVirtualizer({ estimateSize, ref, rows }) {
+type UseTableVirtualizerProps = {
+  estimateSize: number
+  overscan: number
+  ref: MutableRefObject<HTMLDivElement | null>
+  rows: any
+}
+export function useTableVirtualizer({ estimateSize, overscan, ref, rows }: UseTableVirtualizerProps) {
   return useVirtualizer({
     count: rows.length,
     estimateSize: () => estimateSize,
     getItemKey: useCallback((index: number) => `${rows[index]?.id}`, [rows]),
     getScrollElement: () => ref.current,
-    overscan: rows.length > 500 ? rows.length / 10 : 50,
+    overscan,
     scrollPaddingEnd: 50,
     scrollPaddingStart: 40
   })

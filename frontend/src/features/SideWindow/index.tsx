@@ -41,9 +41,9 @@ import { PriorNotificationList } from '../PriorNotification/components/PriorNoti
 import type { MainAppThunk } from '@store'
 
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
-  isFromUrl: boolean
+  isFromURL: boolean
 }
-export function SideWindow({ isFromUrl }: SideWindowProps) {
+export function SideWindow({ isFromURL }: SideWindowProps) {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
   // eslint-disable-next-line no-null/no-null
@@ -112,7 +112,7 @@ export function SideWindow({ isFromUrl }: SideWindowProps) {
   }, [openedBeaconMalfunctionInKanban, editedReporting, selectedPath.menu])
 
   useEffect(() => {
-    if (!isFromUrl) {
+    if (!isFromURL) {
       return
     }
 
@@ -136,7 +136,7 @@ export function SideWindow({ isFromUrl }: SideWindowProps) {
       <Wrapper ref={wrapperRef}>
         {!isFirstRender && (
           <NewWindowContext.Provider value={newWindowContextProviderValue}>
-            <GlobalStyle $isFromURL={isFromUrl} />
+            <GlobalStyle $isFromURL={isFromURL} />
 
             <BannerStack />
 
@@ -159,11 +159,11 @@ export function SideWindow({ isFromUrl }: SideWindowProps) {
               {!isPreloading && (
                 <Content>
                   {selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && (
-                    <SideWindowAlerts baseRef={wrapperRef as MutableRefObject<HTMLDivElement>} isFromUrl={isFromUrl} />
+                    <SideWindowAlerts baseRef={wrapperRef as MutableRefObject<HTMLDivElement>} isFromUrl={isFromURL} />
                   )}
                   {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
                   {selectedPath.menu === SideWindowMenuKey.PRIOR_NOTIFICATION_LIST && (
-                    <PriorNotificationList isFromUrl={isFromUrl} />
+                    <PriorNotificationList isFromUrl={isFromURL} />
                   )}
                   {selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
 

@@ -1,7 +1,7 @@
 import { BackofficeMode } from '@api/BackofficeMode'
+import { Notifier } from '@components/Notifier'
 import { BackOfficeMenu } from '@features/BackOffice/components/BackofficeMenu'
 import countries from 'i18n-iso-countries'
-import { Notifier } from '@components/Notifier'
 import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
 import { Provider } from 'react-redux'
 import { Outlet } from 'react-router-dom'

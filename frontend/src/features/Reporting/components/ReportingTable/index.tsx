@@ -1,10 +1,11 @@
 import { WindowContext } from '@api/constants'
+import { ConfirmationModal } from '@components/ConfirmationModal'
 import { ErrorWall } from '@components/ErrorWall'
 import { type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import { getReportingTableColumns } from '@features/Reporting/components/ReportingTable/columns'
 import { REPORTING_CSV_MAP } from '@features/Reporting/components/ReportingTable/constants'
 import { EditReporting } from '@features/Reporting/components/ReportingTable/EditReporting'
-import { Filters } from '@features/Reporting/components/ReportingTable/Filters/Filters'
+import { Filters } from '@features/Reporting/components/ReportingTable/Filters'
 import { useGetFilteredReportingsQuery } from '@features/Reporting/components/ReportingTable/Filters/useGetFilteredReportingsQuery'
 import { TableBodyEmptyData } from '@features/Reporting/components/ReportingTable/TableBodyEmptyData'
 import { getRowCellCustomStyle } from '@features/Reporting/components/ReportingTable/utils'
@@ -13,13 +14,14 @@ import { Page } from '@features/SideWindow/components/Page'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useTableVirtualizer } from '@hooks/useTableVirtualizer'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Icon, IconButton, pluralize, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import { Icon, IconButton, TableWithSelectableRows, THEME } from '@mtes-mct/monitor-ui'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
+import { pluralize } from '@utils/pluralize'
 import dayjs from 'dayjs'
 import { range } from 'lodash'
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { SkeletonRow } from '../../../../ui/Table/SkeletonRow'
@@ -37,15 +39,18 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
   const dispatch = useMainAppDispatch()
   const tableContainerRef = useRef<HTMLDivElement>(null)
 
+  const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
+  const [isArchivingConfirmationDialogOpen, setIsArchivingConfirmationDialogOpen] = useState(false)
   const [rowSelection, setRowSelection] = useState({})
   const rowSelectionAsArray = Object.keys(rowSelection).map(Number)
 
   const { isError, isLoading, reportings } = useGetFilteredReportingsQuery(selectedSeafrontGroup)
 
-  const archive = () => {
+  const confirmArchive = useCallback(() => {
     dispatch(archiveReportings(reportings, rowSelectionAsArray, WindowContext.SideWindow))
     setRowSelection({})
-  }
+    setIsArchivingConfirmationDialogOpen(false)
+  }, [dispatch, reportings, rowSelectionAsArray])
 
   const download = () => {
     const checkedCurrentSeafrontReportings = reportings.filter(reporting => rowSelectionAsArray.includes(reporting.id))
@@ -54,10 +59,11 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
     downloadAsCsv(fileName, checkedCurrentSeafrontReportings, REPORTING_CSV_MAP)
   }
 
-  const remove = () => {
+  const confirmDelete = useCallback(() => {
+    setIsDeletionConfirmationDialogOpen(false)
     dispatch(deleteReportings(reportings, rowSelectionAsArray, WindowContext.SideWindow))
     setRowSelection({})
-  }
+  }, [dispatch, reportings, rowSelectionAsArray])
 
   const columns = useMemo(
     () =>
@@ -113,21 +119,25 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
               disabled={!rowSelectionAsArray.length}
               Icon={Icon.Download}
               onClick={download}
-              title={`Télécharger ${rowSelectionAsArray.length} signalement${rowSelectionAsArray.length > 1 ? 's' : ''}`}
+              title={`Télécharger ${rowSelectionAsArray.length} ${pluralize('signalement', rowSelectionAsArray.length)}`}
             />
             <IconButton
               data-cy="archive-reporting-cards"
               disabled={!rowSelectionAsArray.length}
               Icon={Icon.Archive}
-              onClick={archive}
-              title={`Archiver ${rowSelectionAsArray.length} signalement${rowSelectionAsArray.length > 1 ? 's' : ''}`}
+              onClick={() => {
+                setIsArchivingConfirmationDialogOpen(true)
+              }}
+              title={`Archiver ${rowSelectionAsArray.length} ${pluralize('signalement', rowSelectionAsArray.length)}`}
             />
             <IconButton
               data-cy="delete-reporting-cards"
               disabled={!rowSelectionAsArray.length}
               Icon={Icon.Delete}
-              onClick={remove}
-              title={`Supprimer ${rowSelectionAsArray.length} signalement${rowSelectionAsArray.length > 1 ? 's' : ''}`}
+              onClick={() => {
+                setIsDeletionConfirmationDialogOpen(true)
+              }}
+              title={`Supprimer ${rowSelectionAsArray.length} ${pluralize('signalement', rowSelectionAsArray.length)}`}
             />
           </TableTop>
         </TableOuterWrapper>
@@ -170,6 +180,31 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
         </TableInnerWrapper>
       </Body>
       <EditReporting />
+      {isDeletionConfirmationDialogOpen && (
+        <ConfirmationModal
+          color={THEME.color.maximumRed}
+          confirmationButtonLabel="Supprimer"
+          iconName="Delete"
+          message={`Êtes-vous sûr de vouloir supprimer ${pluralize('ce', rowSelectionAsArray.length)} ${rowSelectionAsArray.length} ${pluralize('signalement', rowSelectionAsArray.length)} ?`}
+          onCancel={() => {
+            setIsDeletionConfirmationDialogOpen(false)
+          }}
+          onConfirm={confirmDelete}
+          title={`Suppression ${pluralize('de', rowSelectionAsArray.length)} ${pluralize('signalement', rowSelectionAsArray.length)}`}
+        />
+      )}
+      {isArchivingConfirmationDialogOpen && (
+        <ConfirmationModal
+          confirmationButtonLabel="Archiver"
+          iconName="Archive"
+          message={`Êtes-vous sûr de vouloir archiver ${pluralize('ce', rowSelectionAsArray.length)} ${rowSelectionAsArray.length} ${pluralize('signalement', rowSelectionAsArray.length)} ?`}
+          onCancel={() => {
+            setIsArchivingConfirmationDialogOpen(false)
+          }}
+          onConfirm={confirmArchive}
+          title={`Archivage ${pluralize('de', rowSelectionAsArray.length)} ${pluralize('signalement', rowSelectionAsArray.length)}`}
+        />
+      )}
     </Page>
   )
 }

@@ -44,7 +44,7 @@ def expected_all_segments() -> pd.DataFrame:
                 ["HKE"],
             ],
             "min_share_of_target_species": [0.0, 0.0, 0.0, 0.0],
-            "favored_main_species_type": [None, None, "DEMERSAL", "PELAGIC"],
+            "main_scip_species_type": [None, None, "DEMERSAL", "PELAGIC"],
             "priority": [0.0, 0.0, 0.0, 1.0],
             "vessel_types": [
                 None,
@@ -73,7 +73,7 @@ def expected_segments_of_year() -> pd.DataFrame:
             "max_mesh": [120.0, None],
             "target_species": [["HKE", "SOL", "ANF", "MNZ", "NEP", "LEZ"], ["HKE"]],
             "min_share_of_target_species": [0.0, 0.0],
-            "favored_main_species_type": ["DEMERSAL", "PELAGIC"],
+            "main_scip_species_type": ["DEMERSAL", "PELAGIC"],
             "priority": [0.0, 1.0],
             "vessel_types": [
                 None,

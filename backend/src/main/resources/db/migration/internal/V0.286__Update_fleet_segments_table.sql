@@ -8,7 +8,7 @@ ALTER TABLE public.fleet_segments
     DROP COLUMN dirm,
     DROP COLUMN flag_states,
     ADD COLUMN min_share_of_target_species DOUBLE PRECISION,
-    ADD COLUMN favored_main_species_type scip_species_type,
+    ADD COLUMN main_scip_species_type scip_species_type,
     ADD COLUMN min_mesh DOUBLE PRECISION,
     ADD COLUMN max_mesh DOUBLE PRECISION,
     ADD COLUMN priority DOUBLE PRECISION NOT NULL DEFAULT 0,
@@ -19,7 +19,7 @@ SET min_share_of_target_species = 0
 WHERE target_species != '{}';
 
 UPDATE public.fleet_segments
-SET favored_main_species_type = 'DEMERSAL'
+SET main_scip_species_type = 'DEMERSAL'
 WHERE
     segment LIKE 'ATL%' OR
     segment LIKE 'SWW%' OR
@@ -27,5 +27,5 @@ WHERE
     segment LIKE 'NS%';
 
 UPDATE public.fleet_segments
-SET favored_main_species_type = 'PELAGIC'
+SET main_scip_species_type = 'PELAGIC'
 WHERE segment LIKE 'PEL%';

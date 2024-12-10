@@ -105,6 +105,7 @@ def allocate_segments_to_catches(
             SELECT
                 { catch_id_column },
                 s.segment,
+                s.impact_risk_factor,
                 s.priority AS priority,
                 (
                     SUM(
@@ -139,12 +140,13 @@ def allocate_segments_to_catches(
         catches_top_priority_segment AS (
             SELECT DISTINCT ON ({ catch_id_column })
                 { catch_id_column },
-                segment
+                segment,
+                impact_risk_factor
             FROM segmented_catches c
             ORDER BY { catch_id_column }, priority DESC
         )
 
-        SELECT c.*, s.segment
+        SELECT c.*, s.segment, s.impact_risk_factor
         FROM catches c
         LEFT JOIN catches_top_priority_segment s
         ON c.{ catch_id_column } = s.{ catch_id_column }

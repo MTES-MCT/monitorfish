@@ -30,6 +30,7 @@ export function HolidayCheckbox({ disabled }: HolidayCheckboxProps) {
       <Label>Jours fériés</Label>
       <HolidaysCheckbox
         checked={!!processingRegulation.fishingPeriod?.holidays}
+        data-cy="holidays-checkbox"
         disabled={disabled}
         onChange={onChange}
       />

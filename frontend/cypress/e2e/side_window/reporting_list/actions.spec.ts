@@ -20,6 +20,7 @@ context('Side Window > Reporting List > Actions', () => {
         // When
         cy.get('table .rs-checkbox-wrapper').eq(1).click()
         cy.getDataCy('archive-reporting-cards').click({ force: true })
+        cy.clickButton('Archiver')
 
         cy.wait('@archiveReportings').then(archiveInterception => {
           if (!archiveInterception.request) {
@@ -50,6 +51,7 @@ context('Side Window > Reporting List > Actions', () => {
         // When
         cy.get('table .rs-checkbox-wrapper').eq(1).click()
         cy.getDataCy('delete-reporting-cards').click({ force: true })
+        cy.clickButton('Supprimer')
 
         cy.wait('@deleteReportings').then(archiveInterception => {
           if (!archiveInterception.request) {

@@ -144,21 +144,21 @@ export function timeagoFrenchLocale(_, index, totalSec) {
     const days = remainder >= 1 ? daysFloored + 1 : daysFloored
     const noun = days === 1 ? 'jour' : 'jours'
 
-    return [`il y a  ${days} ${noun}`, `${days} ${noun}`]
+    return [`il y a ${days} ${noun}`, `${days} ${noun}`]
   }
 
   // For 9-12 days ago, Convert “1 week ago” to “__ days ago”
   // For 13 days, round it to “2 weeks ago”
   if (index === 8) {
-    const days = Math.round(totalSec / SECONDS / MINUTES / HOURS)
+    const days = Math.round(totalSec / (SECONDS * MINUTES * HOURS))
     if (days > 8) {
-      return days === 13 ? ['il y a 2 semaines', '2 semaines'] : ['il y a %s jours', '%s jours']
+      return days === 13 ? ['il y a 2 semaines', '2 semaines'] : [`il y a ${days} jours`, `${days} jours`]
     }
   }
 
   // For below 62 days (~ 2 months), show days number
   if (index === 9 || index === 10) {
-    const days = Math.round(totalSec / SECONDS / MINUTES / HOURS)
+    const days = Math.round(totalSec / (SECONDS * MINUTES * HOURS))
     if (days <= 62) {
       return [`il y a ${days} jours`, `${days} jours`]
     }

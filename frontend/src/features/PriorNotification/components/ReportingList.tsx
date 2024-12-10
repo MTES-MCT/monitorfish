@@ -105,4 +105,6 @@ const StyledLinkButton = styled(LinkButton)`
 const StyledCurrentReportingList = styled(CurrentReportingList)`
   flex-grow: 1;
   overflow-y: auto;
+  margin-left: 16px;
+  margin-right: 16px;
 `

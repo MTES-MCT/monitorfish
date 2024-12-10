@@ -1,6 +1,6 @@
 import { expect } from '@jest/globals'
 
-import { getDateTime } from './utils'
+import { getDateTime, timeagoFrenchLocale } from './utils'
 
 describe('utils', () => {
   it('getDateTime Should respect the timezone given fur UTC', async () => {
@@ -34,5 +34,16 @@ describe('utils', () => {
 
     // Then
     expect(formattedDate).toEqual('06/04/2021 à 23h24')
+  })
+
+  it('timeagoFrenchLocale Should return the locale', async () => {
+    // Given
+    const tenDaysAgo = 10 * 24 * 60 * 60
+
+    // When
+    const formattedDate = timeagoFrenchLocale(undefined, 8, tenDaysAgo)
+
+    // Then
+    expect(formattedDate).toEqual(['il y a 10 jours', '10 jours'])
   })
 })

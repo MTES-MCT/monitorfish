@@ -1,5 +1,6 @@
 from ast import literal_eval
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -15,6 +16,11 @@ def catches() -> pd.DataFrame:
 @pytest.fixture
 def empty_catches(catches) -> pd.DataFrame:
     return catches.head(0)
+
+
+@pytest.fixture
+def catches_with_extra_column(catches) -> pd.DataFrame:
+    return catches.assign(some_random_column=np.random.random(len(catches)))
 
 
 @pytest.fixture
@@ -38,6 +44,21 @@ def test_allocate_segments_to_catches(catches, segments):
         batch_id_column="batch_id",
     )
     pd.testing.assert_frame_equal(segmented_catches, catches)
+
+
+def test_allocate_segments_to_catches_preserves_additional_columns(
+    catches_with_extra_column, segments
+):
+    segmented_catches = allocate_segments_to_catches(
+        catches=catches_with_extra_column.drop(columns=["segment"]),
+        segments=segments,
+        catch_id_column="catch_id",
+        batch_id_column="batch_id",
+    )
+    pd.testing.assert_frame_equal(
+        segmented_catches, catches_with_extra_column, check_like=True
+    )
+    breakpoint()
 
 
 def test_allocate_segments_to_catches_with_empty_input(empty_catches, segments):

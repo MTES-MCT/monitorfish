@@ -60,7 +60,7 @@ def allocate_segments_to_catches(
         "vessel_type",
         catch_id_column,
         batch_id_column,
-    } == set(catches.columns)
+    }.issubset(set(catches.columns))
 
     assert {
         "segment",

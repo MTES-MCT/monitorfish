@@ -39,6 +39,7 @@ export function DayPicker({ disabled }: DayPickerProps) {
           key={weekdayKey}
           $disabled={disabled}
           $isGray={processingRegulation.fishingPeriod.weekdays.includes(weekdayKey)}
+          data-cy={`weekday-${weekdayKey}`}
           onClick={() => toggle(weekdayKey)}
         >
           {WEEKDAYS[weekdayKey]}

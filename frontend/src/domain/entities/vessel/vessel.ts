@@ -1,8 +1,8 @@
-import { BaseLayer } from '@features/Map/constants'
-import { MonitorFishMap } from '@features/Map/Map.types'
 import countries from 'i18n-iso-countries'
 
 import { VesselLabel } from './label/types'
+import { BaseLayer } from '../../../features/Map/constants'
+import { MonitorFishMap } from '../../../features/Map/Map.types'
 
 import type { ShowedVesselTrack, VesselCompositeIdentifier, VesselIdentity } from './types'
 import type { Reporting } from '../../../features/Reporting/types'
@@ -13,8 +13,6 @@ export const VESSEL_ALERT_STYLE = 1
 export const VESSEL_INFRACTION_SUSPICION_STYLE = 1
 export const VESSEL_BEACON_MALFUNCTION_STYLE = 1
 export const VESSEL_ALERT_AND_BEACON_MALFUNCTION = 1
-export const VESSEL_ICON_STYLE = 10
-export const VESSEL_LABEL_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
 
 export class Vessel {

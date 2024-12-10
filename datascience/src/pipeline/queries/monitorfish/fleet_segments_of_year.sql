@@ -1,4 +1,5 @@
-SELECT 
+SELECT
+    year,
     segment,
     segment_name,
     gears,
@@ -13,3 +14,4 @@ SELECT
     impact_risk_factor
 FROM public.fleet_segments
 WHERE year = :year
+ORDER BY segment

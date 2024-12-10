@@ -1,3 +1,4 @@
+import { LayerProperties } from '@features/Map/constants'
 import { ZonePreview } from '@features/Regulation/components/ZonePreview'
 import { useHybridAppDispatch } from '@hooks/useHybridAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -9,7 +10,6 @@ import styled from 'styled-components'
 import { EditIcon } from '../../../commonStyles/icons/EditIcon.style'
 import { hideLayer } from '../../../LayersSidebar/useCases/hideLayer'
 import { zoomInLayer } from '../../../LayersSidebar/useCases/zoomInLayer'
-import { LayerProperties } from '../../../MainMap/constants'
 import { regulationActions } from '../../slice'
 import { closeRegulatoryZoneMetadata } from '../../useCases/closeRegulatoryZoneMetadata'
 import { showRegulationToEdit } from '../../useCases/showRegulationToEdit'
@@ -41,7 +41,7 @@ function UnmemoizedRegulatoryZone({
 
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
   const isZoneShown = useMainAppSelector(state =>
-    state.mainMap.showedLayers.some(layer => layer.id === regulatoryZone.id)
+    state.layer.showedLayers.some(layer => layer.id === regulatoryZone.id)
   )
   const [isOver, setIsOver] = useState(false)
 

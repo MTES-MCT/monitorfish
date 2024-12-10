@@ -1,5 +1,6 @@
-import { BaseLayer } from '@features/MainMap/layers/BaseLayer'
-import { backOfficeMainMapActions } from '@features/MainMap/slice.backoffice'
+import { BaseMap } from '@features/Map/components/BaseMap'
+import { backOfficeLayerActions } from '@features/Map/layer.slice.backoffice'
+import { BaseLayer } from '@features/Map/layers/BaseLayer'
 import { RegulatoryZoneMetadata } from '@features/Regulation/components/RegulatoryZoneMetadata'
 import { RegulatoryLayers } from '@features/Regulation/layers/RegulatoryLayers'
 import { RegulatoryPreviewLayer } from '@features/Regulation/layers/RegulatoryPreviewLayer'
@@ -17,7 +18,6 @@ import styled from 'styled-components'
 import { LawType } from './LawType'
 import { SearchRegulations } from './SearchRegulations'
 import { EmptyResult } from '../../../commonStyles/Text.style'
-import { BaseMap } from '../../../map/BaseMap'
 
 import type { BackofficeAppThunk } from '@store'
 
@@ -33,8 +33,8 @@ export function RegulationTables() {
   }
 
   const layersTopicsByRegTerritory = useBackofficeAppSelector(state => state.regulation.layersTopicsByRegTerritory)
-  const lastShowedFeatures = useBackofficeAppSelector(state => state.mainMap.lastShowedFeatures)
-  const layersToFeatures = useBackofficeAppSelector(state => state.mainMap.layersToFeatures)
+  const lastShowedFeatures = useBackofficeAppSelector(state => state.layer.lastShowedFeatures)
+  const layersToFeatures = useBackofficeAppSelector(state => state.layer.layersToFeatures)
   const regulatoryZoneMetadataPanelIsOpen = useBackofficeAppSelector(
     state => state.regulation.regulatoryZoneMetadataPanelIsOpen
   )
@@ -42,7 +42,7 @@ export function RegulationTables() {
   // TODO Scritly type this once the store is perfectly typed.
   const regulationSaved = useBackofficeAppSelector(state => state.regulation.regulationSaved)
   const regulatoryZoneMetadata = useBackofficeAppSelector(state => state.regulation.regulatoryZoneMetadata)
-  const showedLayers = useBackofficeAppSelector(state => state.mainMap.showedLayers)
+  const showedLayers = useBackofficeAppSelector(state => state.layer.showedLayers)
   const simplifiedGeometries = useBackofficeAppSelector(state => state.regulation.simplifiedGeometries)
 
   const initBackoffice = useCallback(async () => {
@@ -60,7 +60,7 @@ export function RegulationTables() {
     initBackoffice()
 
     return () => {
-      dispatch(backOfficeMainMapActions.resetShowedLayer())
+      dispatch(backOfficeLayerActions.resetShowedLayer())
     }
   }, [dispatch, initBackoffice])
 

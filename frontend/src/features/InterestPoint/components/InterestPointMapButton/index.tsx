@@ -1,3 +1,4 @@
+import { MapBox } from '@features/Map/constants'
 import { useEscapeFromKeyboardAndExecute } from '@hooks/useEscapeFromKeyboardAndExecute'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -7,7 +8,6 @@ import styled from 'styled-components'
 import { EditInterestPoint } from './EditInterestPoint'
 import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
 import InterestPointSVG from '../../../icons/standardized/Landmark.svg?react'
-import { MapBox } from '../../../MainMap/constants'
 import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'
 import { deleteInterestPointBeingDrawed, drawInterestPoint, endInterestPointDraw } from '../../slice'
 

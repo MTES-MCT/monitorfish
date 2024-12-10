@@ -1,8 +1,9 @@
+import { InteractionListener, InteractionType } from '@features/Map/constants'
+import { fitMultiPolygonToExtent } from '@features/Map/useCases/fitMultiPolygonToExtent'
+
 import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
 import { unselectVessel } from '../../../domain/use_cases/vessel/unselectVessel'
 import { setInitialGeometry, setInteractionTypeAndListener } from '../../Draw/slice'
-import { InteractionListener, InteractionType } from '../../MainMap/constants'
-import { fitMultiPolygonToExtent } from '../../MainMap/useCases/fitMultiPolygonToExtent'
 
 import type { GeoJSON as GeoJSONNamespace } from '../../../domain/types/GeoJSON'
 import type { MainAppThunk } from '@store'

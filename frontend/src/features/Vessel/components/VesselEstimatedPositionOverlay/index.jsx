@@ -1,17 +1,17 @@
 import { COLORS } from '@constants/constants'
 import Overlay from 'ol/Overlay'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 
 import VesselEstimatedPositionCard from './VesselEstimatedPositionCard'
 import { getCoordinates } from '../../../../coordinates'
-import { LayerProperties, WSG84_PROJECTION } from '../../../MainMap/constants'
-import { monitorfishMap } from '../../../map/monitorfishMap'
+import { LayerProperties, WSG84_PROJECTION } from '../../../Map/constants'
+import { monitorfishMap } from '../../../Map/monitorfishMap'
 
 function VesselEstimatedPositionOverlay({ feature }) {
   const coordinatesFormat = useSelector(state => state.map.coordinatesFormat)
-  const mousePosition = useSelector(state => state.mainMap.mousePosition)
+  const mousePosition = useSelector(state => state.layer.mousePosition)
   const [coordinates, setCoordinates] = useState(null)
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)

@@ -4,7 +4,7 @@ import { getLocalStorageState } from '../../utils'
 import { UserType } from '../entities/beaconMalfunction/constants'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel/vessel'
 
-import type { MapBox } from '../../features/MainMap/constants'
+import type { MapBox } from '@features/Map/constants'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 const userTypeLocalStorageKey = 'userType'

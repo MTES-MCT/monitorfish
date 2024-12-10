@@ -1,4 +1,4 @@
-import { WSG84_PROJECTION } from '@features/MainMap/constants'
+import { WSG84_PROJECTION } from '@features/Map/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTracking } from '@hooks/useTracking'
 import { downloadAsCsv } from '@utils/downloadAsCsv'

@@ -1,4 +1,4 @@
-import type { OverlayCardMargins } from '../../../map/overlays/Overlay/types'
+import type { OverlayCardMargins } from '@features/Map/components/Overlay/types'
 
 /**
  * height: 201px

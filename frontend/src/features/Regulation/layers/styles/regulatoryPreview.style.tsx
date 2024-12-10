@@ -1,9 +1,9 @@
+import { getColorWithAlpha } from '@features/Map/layers/styles/utils'
 import { Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 
 import { COLORS } from '../../../../constants/constants'
-import { getColorWithAlpha } from '../../../map/layers/styles/utils'
 
 export const regulatoryPreviewStyle = new Style({
   fill: new Fill({

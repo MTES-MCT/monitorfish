@@ -1,8 +1,8 @@
+import { BaseLayer } from '@features/Map/constants'
+import { MonitorFishMap } from '@features/Map/Map.types'
 import countries from 'i18n-iso-countries'
 
 import { VesselLabel } from './label/types'
-import { BaseLayers } from '../../../features/MainMap/constants'
-import { MainMap } from '../../../features/MainMap/MainMap.types'
 
 import type { ShowedVesselTrack, VesselCompositeIdentifier, VesselIdentity } from './types'
 import type { Reporting } from '../../../features/Reporting/types'
@@ -21,7 +21,7 @@ export class Vessel {
   static vesselIsMovingSpeed = 0.1
 
   static getVesselFeatureId(vessel) {
-    return `${MainMap.MonitorFishLayer.VESSELS}:${getVesselCompositeIdentifier(vessel)}`
+    return `${MonitorFishMap.MonitorFishLayer.VESSELS}:${getVesselCompositeIdentifier(vessel)}`
   }
 
   static getVesselOpacity(dateTime, vesselIsHidden, vesselIsOpacityReduced) {
@@ -65,7 +65,7 @@ export class Vessel {
       isRiskFactorShowed: boolean
       vesselLabel: string
       vesselLabelsShowedOnMap: boolean
-      vesselsLastPositionVisibility: MainMap.LastPositionVisibility
+      vesselsLastPositionVisibility: MonitorFishMap.LastPositionVisibility
     }
   ): {
     labelText: string | null
@@ -150,7 +150,7 @@ export class Vessel {
    * @return {boolean} isLight - returns true if vessel icon is light
    */
   static iconIsLight = selectedBaseLayer =>
-    selectedBaseLayer === BaseLayers.SATELLITE.code || selectedBaseLayer === BaseLayers.DARK.code
+    selectedBaseLayer === BaseLayer.SATELLITE.code || selectedBaseLayer === BaseLayer.DARK.code
 }
 
 /** @deprecated Use `extractVesselIdentityProps()` from `@features/Vessel/utils`. */

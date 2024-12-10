@@ -1,6 +1,6 @@
+import { getStartAndEndDatesSetWithCurrentYear } from '@features/Map/layers/styles/utils'
 import { isObject } from 'lodash'
 
-import { getStartAndEndDatesSetWithCurrentYear } from '../../../../map/layers/styles/utils'
 import { WEEKDAYS } from '../../../utils'
 
 import type { DateInterval, FishingPeriod } from '../../../types'

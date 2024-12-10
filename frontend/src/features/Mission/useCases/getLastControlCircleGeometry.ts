@@ -1,9 +1,9 @@
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
+import { convertToGeoJSONGeometryObject } from '@features/Map/utils'
 import Feature from 'ol/Feature'
 import { MultiPolygon } from 'ol/geom'
 import { circular } from 'ol/geom/Polygon'
 
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../MainMap/constants'
-import { convertToGeoJSONGeometryObject } from '../../MainMap/utils'
 import { CONTROL_ZONE_RADIUS } from '../constants'
 import { MissionAction } from '../missionAction.types'
 

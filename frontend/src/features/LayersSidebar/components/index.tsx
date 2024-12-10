@@ -1,6 +1,8 @@
+import { MapBox } from '@features/Map/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
+import { BaseLayers } from 'features/Map/components/BaseLayers'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 
@@ -8,8 +10,6 @@ import { setLeftMapBoxOpened } from '../../../domain/shared_slices/Global'
 import { AdministrativeZones } from '../../AdministrativeZone/components/AdministrativeZones'
 import { MapComponent } from '../../commonStyles/MapComponent'
 import { CustomZones } from '../../CustomZone/components/CustomZones'
-import { BaseMaps } from '../../MainMap/components/BaseMaps'
-import { MapBox } from '../../MainMap/constants'
 import { MapButton } from '../../MainWindow/components/MapButtons/MapButton'
 import { RegulationSearch } from '../../Regulation/components/RegulationSearch'
 import { RegulatoryZoneMetadata } from '../../Regulation/components/RegulatoryZoneMetadata'
@@ -56,7 +56,7 @@ export function LayersSidebar() {
           <RegulatoryZones />
           <CustomZones />
           <AdministrativeZones />
-          <BaseMaps />
+          <BaseLayers />
         </Layers>
         <RegulatoryZoneMetadataShifter
           $isLeftMapBoxOpened={!!leftMapBoxOpened}

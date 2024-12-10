@@ -1,5 +1,6 @@
+import { monitorfishMap } from '@features/Map/monitorfishMap'
+
 import { ensureCoordinates } from './ensureCoordinates'
-import { monitorfishMap } from '../features/map/monitorfishMap'
 import { FeatureWithCodeAndEntityId } from '../libs/FeatureWithCodeAndEntityId'
 import { FrontendError } from '../libs/FrontendError'
 

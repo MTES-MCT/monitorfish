@@ -1,21 +1,20 @@
-import { mainMapActions } from '@features/MainMap/slice'
-import { backOfficeMainMapActions } from '@features/MainMap/slice.backoffice'
-
-import { getLayerNameNormalized } from '../../MainMap/utils'
+import { layerActions } from '@features/Map/layer.slice'
+import { backOfficeLayerActions } from '@features/Map/layer.slice.backoffice'
+import { getLayerNameNormalized } from '@features/Map/utils'
 
 import type { MainAppThunk } from '../../../store'
-import type { MainMap } from '@features/MainMap/MainMap.types'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 
 /**
  * hide a Regulatory or Administrative layer
  * @param layerToHide {AdministrativeOrRegulatoryLayer} - The layer to hide
  */
 export const hideLayer =
-  (layerToHide: MainMap.ShowedLayer): MainAppThunk<void> =>
+  (layerToHide: MonitorFishMap.ShowedLayer): MainAppThunk<void> =>
   (dispatch, getState) => {
     const { topic, type, zone } = layerToHide
 
-    const { showedLayers } = getState().mainMap
+    const { showedLayers } = getState().layer
     const layerName = getLayerNameNormalized({ topic, type, zone })
 
     const layersToRemove = showedLayers.filter(layerToRemove => {
@@ -26,7 +25,7 @@ export const hideLayer =
       return getLayerNameNormalized(layerToRemove).includes(layerName)
     })
 
-    const actions = getState().global.isBackoffice ? backOfficeMainMapActions : mainMapActions
+    const actions = getState().global.isBackoffice ? backOfficeLayerActions : layerActions
 
     dispatch(actions.removeShowedLayer(layerToHide))
     layersToRemove.forEach(layerToRemove => {

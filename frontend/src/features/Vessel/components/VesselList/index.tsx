@@ -1,5 +1,6 @@
 import { resetInteraction } from '@features/Draw/slice'
 import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
+import { LayerType, InteractionListener } from '@features/Map/constants'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -14,7 +15,6 @@ import { VesselListModal } from './VesselListModal'
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setBlockVesselsUpdate } from '../../../../domain/shared_slices/Global'
 import { MapComponent } from '../../../commonStyles/MapComponent'
-import { LayerType, InteractionListener } from '../../../MainMap/constants'
 
 export function VesselList() {
   const dispatch = useMainAppDispatch()

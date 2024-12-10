@@ -1,3 +1,6 @@
+import { LayerProperties } from '@features/Map/constants'
+import { getFeaturesFromRegulatoryZones } from '@features/Map/layers/utils'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { useHybridAppDispatch } from '@hooks/useHybridAppDispatch'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
@@ -5,12 +8,9 @@ import { memo, useCallback, useEffect, useRef } from 'react'
 
 import { getRegulatoryLayerStyle } from './styles/regulatoryLayer.style'
 import { zoomInLayer } from '../../LayersSidebar/useCases/zoomInLayer'
-import { LayerProperties } from '../../MainMap/constants'
-import { getFeaturesFromRegulatoryZones } from '../../map/layers/utils'
-import { monitorfishMap } from '../../map/monitorfishMap'
 
 import type { BaseRegulatoryZone, RegulatoryZone } from '../types'
-import type { MainMap } from '@features/MainMap/MainMap.types'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { ZoneSelected } from '@features/VesselFilter/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
@@ -23,7 +23,7 @@ type RegulatoryPreviewLayerProps = Readonly<{
 }>
 function UnmemoizedRegulatoryPreviewLayer({ regulatoryZonesToPreview, zoneSelected }: RegulatoryPreviewLayerProps) {
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
-  const layerRef = useRef() as MutableRefObject<MainMap.VectorLayerWithName>
+  const layerRef = useRef() as MutableRefObject<MonitorFishMap.VectorLayerWithName>
 
   const dispatch = useHybridAppDispatch()
 

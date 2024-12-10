@@ -1,4 +1,4 @@
-import { mainMapActions } from '@features/MainMap/slice'
+import { layerActions } from '@features/Map/layer.slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Button, Size } from '@mtes-mct/monitor-ui'
@@ -13,7 +13,7 @@ export function ResultList() {
   const regulatoryLayersSearchResult = useMainAppSelector(
     state => state.regulatoryLayerSearch.regulatoryLayersSearchResult
   )
-  const layersSidebarOpenedLayerType = useMainAppSelector(state => state.mainMap.layersSidebarOpenedLayerType)
+  const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
   const hasOneLayerTypeOpen = useMemo(() => layersSidebarOpenedLayerType !== undefined, [layersSidebarOpenedLayerType])
   const hasSearchResults = useMemo(
     () => regulatoryLayersSearchResult && Object.keys(regulatoryLayersSearchResult).length > 0,
@@ -26,7 +26,7 @@ export function ResultList() {
         <ShowResultButton
           isFullWidth
           onClick={() => {
-            dispatch(mainMapActions.setLayersSideBarOpenedLayerType(undefined))
+            dispatch(layerActions.setLayersSideBarOpenedLayerType(undefined))
           }}
           size={Size.LARGE}
         >

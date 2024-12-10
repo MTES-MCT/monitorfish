@@ -1,5 +1,5 @@
 import { COLORS } from '@constants/constants'
-import { MapBox } from '@features/MainMap/constants'
+import { MapBox } from '@features/Map/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { setLeftMapBoxOpened } from 'domain/shared_slices/Global'

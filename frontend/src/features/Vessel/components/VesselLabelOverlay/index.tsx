@@ -1,3 +1,4 @@
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { useMoveOverlayWhenDragging } from '@hooks/useMoveOverlayWhenDragging'
 import { useMoveOverlayWhenZooming } from '@hooks/useMoveOverlayWhenZooming'
 import Overlay from 'ol/Overlay'
@@ -6,7 +7,6 @@ import styled from 'styled-components'
 
 import { VesselLabel } from './VesselLabel'
 import { getVesselCompositeIdentifier } from '../../../../domain/entities/vessel/vessel'
-import { monitorfishMap } from '../../../map/monitorfishMap'
 
 import type { MutableRefObject } from 'react'
 

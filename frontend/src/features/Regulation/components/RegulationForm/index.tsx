@@ -1,7 +1,8 @@
 // TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
 
-import { LayerProperties } from '@features/MainMap/constants'
-import { BaseLayer } from '@features/MainMap/layers/BaseLayer'
+import { BaseMap } from '@features/Map/components/BaseMap'
+import { LayerProperties } from '@features/Map/constants'
+import { BaseLayer } from '@features/Map/layers/BaseLayer'
 import { ConfirmRegulationModal } from '@features/Regulation/components/RegulationForm/ConfirmRegulationModal'
 import { FishingPeriodSection } from '@features/Regulation/components/RegulationForm/fishing_period/FishingPeriodSection'
 import { GearRegulation } from '@features/Regulation/components/RegulationForm/GearRegulation'
@@ -38,7 +39,6 @@ import { Footer, FooterButton, OtherRemark, Section, Title } from '../../../comm
 import { CancelButton, ValidateButton } from '../../../commonStyles/Buttons.style'
 import { CustomInput, Label } from '../../../commonStyles/Input.style'
 import ChevronIconSVG from '../../../icons/Chevron_simple_gris.svg?react'
-import { BaseMap } from '../../../map/BaseMap'
 import { STATUS } from '../RegulationTables/constants'
 
 import type { GeoJSON } from '../../../../domain/types/GeoJSON'

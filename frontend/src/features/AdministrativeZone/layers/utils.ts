@@ -1,3 +1,4 @@
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import GeoJSON from 'ol/format/GeoJSON'
 import VectorImageLayer from 'ol/layer/VectorImage'
 import { all, bbox as bboxStrategy } from 'ol/loadingstrategy'
@@ -5,7 +6,6 @@ import VectorSource from 'ol/source/Vector'
 
 import { getAdministrativeLayerStyle } from './styles/administrativeLayer.style'
 import { getAdministrativeZoneFromAPI } from '../../../api/geoserver'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../MainMap/constants'
 
 import type Feature from 'ol/Feature'
 import type Geometry from 'ol/geom/Geometry'

@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-throw-literal */
 
+import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import GML from 'ol/format/GML'
 import WFS from 'ol/format/WFS'
 
 import { HttpStatusCode } from './constants'
-import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../features/MainMap/constants'
 import { RegulationActionType } from '../features/Regulation/utils'
 import { ApiError } from '../libs/ApiError'
 
-import type { MainMap } from '@features/MainMap/MainMap.types'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { Regulation } from '@features/Regulation/Regulation.types'
 import type { RegulatoryZone } from '@features/Regulation/types'
 import type { GeoJSON } from 'domain/types/GeoJSON'
@@ -167,7 +167,7 @@ function getAdministrativeZoneURL(
  */
 export async function getRegulatoryZoneFromAPI(
   type: string,
-  regulatoryZone: MainMap.ShowedLayer,
+  regulatoryZone: MonitorFishMap.ShowedLayer,
   fromBackoffice: boolean
 ): Promise<Regulation.RegulatoryZoneGeoJsonFeature> {
   try {
@@ -199,7 +199,7 @@ export async function getRegulatoryZoneFromAPI(
 /**
  * @description This API isn't authenticated
  */
-function getRegulatoryZoneURL(type: string, regulatoryZone: MainMap.ShowedLayer, geoserverURL: string) {
+function getRegulatoryZoneURL(type: string, regulatoryZone: MonitorFishMap.ShowedLayer, geoserverURL: string) {
   if (!regulatoryZone.topic) {
     throw new Error("Le nom de la couche n'est pas renseigné")
   }

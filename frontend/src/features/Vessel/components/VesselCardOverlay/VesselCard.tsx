@@ -1,6 +1,8 @@
 /* eslint-disable no-nested-ternary */
 
 import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
+import { OverlayPosition } from '@features/Map/components/Overlay'
+import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
 import { extractVesselPropertiesFromFeature } from '@features/Vessel/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
@@ -12,8 +14,6 @@ import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { getCoordinates } from '../../../../coordinates'
 import { timeagoFrenchLocale } from '../../../../utils'
 import BeaconMalfunctionSVG from '../../../icons/Icone_VMS_dark.svg?react'
-import { OPENLAYERS_PROJECTION } from '../../../MainMap/constants'
-import { OverlayPosition } from '../../../map/overlays/Overlay'
 
 // @ts-ignore
 timeago.register('fr', timeagoFrenchLocale)

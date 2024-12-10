@@ -1,3 +1,13 @@
+import {
+  LayerProperties,
+  InteractionType,
+  OPENLAYERS_PROJECTION,
+  OpenLayersGeometryType,
+  WSG84_PROJECTION
+} from '@features/Map/constants'
+import { dottedLayerStyle } from '@features/Map/layers/styles/dottedLayer.style'
+import { drawStyle, editStyle } from '@features/Map/layers/styles/draw.style'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { isEmpty } from 'lodash'
@@ -11,18 +21,8 @@ import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { addFeatureToDrawedFeature } from './useCases/addFeatureToDrawedFeature'
 import { setDrawedGeometry } from './useCases/setDrawedGeometry'
-import {
-  LayerProperties,
-  InteractionType,
-  OPENLAYERS_PROJECTION,
-  OpenLayersGeometryType,
-  WSG84_PROJECTION
-} from '../MainMap/constants'
-import { dottedLayerStyle } from '../map/layers/styles/dottedLayer.style'
-import { drawStyle, editStyle } from '../map/layers/styles/draw.style'
-import { monitorfishMap } from '../map/monitorfishMap'
 
-import type { MainMap } from '@features/MainMap/MainMap.types'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 import type Geometry from 'ol/geom/Geometry'
 import type { GeometryFunction } from 'ol/interaction/Draw'
 import type { ModifyEvent } from 'ol/interaction/Modify'
@@ -70,7 +70,7 @@ function UnmemoizedDrawLayer() {
     return drawVectorSourceRef.current
   }, [])
 
-  const vectorLayerRef = useRef() as MutableRefObject<MainMap.VectorLayerWithName>
+  const vectorLayerRef = useRef() as MutableRefObject<MonitorFishMap.VectorLayerWithName>
 
   useEffect(() => {
     function getVectorLayer() {

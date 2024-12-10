@@ -1,12 +1,12 @@
-import { MainMap } from '@features/MainMap/MainMap.types'
+import { LayerProperties } from '@features/Map/constants'
+import { MonitorFishMap } from '@features/Map/Map.types'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useRef } from 'react'
 
 import { missionZoneStyle } from './MissionLayer/styles'
-import { LayerProperties } from '../../MainMap/constants'
-import { monitorfishMap } from '../../map/monitorfishMap'
 import { useGetFilteredMissionsQuery } from '../components/MissionList/hooks/useGetFilteredMissionsQuery'
 import { getMissionFeatureZone } from '../features'
 
@@ -23,11 +23,11 @@ export function UnmemoizedMissionHoveredLayer({ feature }) {
     return vectorSourceRef.current as VectorSource
   }, [])
 
-  const vectorLayerRef = useRef<MainMap.VectorLayerWithName>()
+  const vectorLayerRef = useRef<MonitorFishMap.VectorLayerWithName>()
   const getVectorLayer = useCallback(() => {
     if (vectorLayerRef.current === undefined) {
       vectorLayerRef.current = new VectorLayer({
-        className: MainMap.MonitorFishLayer.MISSION_HOVER,
+        className: MonitorFishMap.MonitorFishLayer.MISSION_HOVER,
         renderBuffer: 7,
         source: getVectorSource(),
         style: missionZoneStyle,
@@ -37,11 +37,11 @@ export function UnmemoizedMissionHoveredLayer({ feature }) {
       })
     }
 
-    return vectorLayerRef.current as MainMap.VectorLayerWithName
+    return vectorLayerRef.current as MonitorFishMap.VectorLayerWithName
   }, [getVectorSource])
 
   useEffect(() => {
-    getVectorLayer().name = MainMap.MonitorFishLayer.MISSION_HOVER
+    getVectorLayer().name = MonitorFishMap.MonitorFishLayer.MISSION_HOVER
     monitorfishMap.getLayers().push(getVectorLayer())
 
     return () => {
@@ -57,7 +57,7 @@ export function UnmemoizedMissionHoveredLayer({ feature }) {
 
     getVectorSource().clear(true)
 
-    if (!feature?.getId()?.toString()?.includes(MainMap.MonitorFishLayer.MISSION_PIN_POINT)) {
+    if (!feature?.getId()?.toString()?.includes(MonitorFishMap.MonitorFishLayer.MISSION_PIN_POINT)) {
       return
     }
 
@@ -68,7 +68,10 @@ export function UnmemoizedMissionHoveredLayer({ feature }) {
       return
     }
 
-    const missionFeature = getMissionFeatureZone(hoveredMissionWithActions, MainMap.MonitorFishLayer.MISSION_HOVER)
+    const missionFeature = getMissionFeatureZone(
+      hoveredMissionWithActions,
+      MonitorFishMap.MonitorFishLayer.MISSION_HOVER
+    )
     getVectorSource().addFeature(missionFeature)
   }, [feature, getVectorSource, draft?.mainFormValues, missions])
 

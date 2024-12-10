@@ -1,5 +1,5 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
-import { WSG84_PROJECTION } from '@features/MainMap/constants'
+import { WSG84_PROJECTION } from '@features/Map/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'

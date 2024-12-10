@@ -1,4 +1,4 @@
-import { MainMap } from '@features/MainMap/MainMap.types'
+import { MonitorFishMap } from '@features/Map/Map.types'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 
 import { customZoneActions } from '../slice'
@@ -16,7 +16,7 @@ export const editName =
       return
     }
 
-    const layer = getLayer(MainMap.MonitorFishLayer.CUSTOM)
+    const layer = getLayer(MonitorFishMap.MonitorFishLayer.CUSTOM)
     if (!layer) {
       logSoftError({
         isSideWindowError: false,

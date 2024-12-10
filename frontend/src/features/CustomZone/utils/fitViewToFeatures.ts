@@ -1,6 +1,5 @@
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import VectorSource from 'ol/source/Vector'
-
-import { monitorfishMap } from '../../map/monitorfishMap'
 
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'

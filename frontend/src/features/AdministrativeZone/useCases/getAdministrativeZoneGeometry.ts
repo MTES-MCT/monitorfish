@@ -1,5 +1,5 @@
 import { getAdministrativeZoneFromAPI } from '@api/geoserver'
-import { mainMapActions } from '@features/MainMap/slice'
+import { layerActions } from '@features/Map/layer.slice'
 import { addZoneSelected } from '@features/Vessel/components/VesselList/slice'
 
 import type { MainAppThunk } from '@store'
@@ -7,7 +7,7 @@ import type { MainAppThunk } from '@store'
 export const getAdministrativeZoneGeometry =
   (administrativeZoneCode: string, subZoneCode: string | undefined, zoneName: string): MainAppThunk =>
   (dispatch, getState) => {
-    const { administrativeZonesGeometryCache } = getState().mainMap
+    const { administrativeZonesGeometryCache } = getState().layer
     const foundCache = administrativeZonesGeometryCache.find(
       zone => zone.key === `${administrativeZoneCode}:${subZoneCode}:${zoneName}`
     )
@@ -20,7 +20,7 @@ export const getAdministrativeZoneGeometry =
         if (administrativeZoneFeature.numberReturned === 1) {
           dispatchZoneSelected(administrativeZoneFeature)
           dispatch(
-            mainMapActions.addAdministrativeZoneGeometryToCache({
+            layerActions.addAdministrativeZoneGeometryToCache({
               key: `${administrativeZoneCode}:${subZoneCode}:${zoneName}`,
               value: administrativeZoneFeature
             })

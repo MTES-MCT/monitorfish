@@ -1,3 +1,4 @@
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { useMoveOverlayWhenDragging } from '@hooks/useMoveOverlayWhenDragging'
 import { useMoveOverlayWhenZooming } from '@hooks/useMoveOverlayWhenZooming'
 import Overlay from 'ol/Overlay'
@@ -5,7 +6,6 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { MissionUnitLabel } from './MissionUnitLabel'
-import { monitorfishMap } from '../../../map/monitorfishMap'
 
 import type { MutableRefObject } from 'react'
 

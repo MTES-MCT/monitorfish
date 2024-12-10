@@ -1,3 +1,4 @@
+import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -19,7 +20,7 @@ export function DateRange({ dateRange, disabled, id, isLast, updateList }: DateR
     key => value => {
       const newDateRange: DateInterval = {
         ...dateRange,
-        [key]: value
+        [key]: getUtcizedDayjs(value).set('hour', 0).set('minute', 0).set('second', 0).toDate()
       }
 
       updateList(id, newDateRange)

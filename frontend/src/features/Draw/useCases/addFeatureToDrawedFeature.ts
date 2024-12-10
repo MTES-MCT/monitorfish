@@ -1,8 +1,7 @@
 import { setDrawedGeometry } from '@features/Draw/slice'
+import { OpenLayersGeometryType } from '@features/Map/constants'
+import { addGeometryToMultiPolygonGeoJSON, convertToGeoJSONGeometryObject } from '@features/Map/utils'
 import { Geometry, MultiPolygon } from 'ol/geom'
-
-import { OpenLayersGeometryType } from '../../MainMap/constants'
-import { addGeometryToMultiPolygonGeoJSON, convertToGeoJSONGeometryObject } from '../../MainMap/utils'
 
 import type Feature from 'ol/Feature'
 

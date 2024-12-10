@@ -1,4 +1,6 @@
-import { MainMap } from '@features/MainMap/MainMap.types'
+import { LayerProperties, OPENLAYERS_PROJECTION } from '@features/Map/constants'
+import { MonitorFishMap } from '@features/Map/Map.types'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import GeoJSON from 'ol/format/GeoJSON'
 import VectorLayer from 'ol/layer/Vector'
@@ -7,8 +9,6 @@ import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { NEW_MISSION_ID } from './constants'
 import { missionZoneStyle } from './MissionLayer/styles'
-import { LayerProperties, OPENLAYERS_PROJECTION } from '../../MainMap/constants'
-import { monitorfishMap } from '../../map/monitorfishMap'
 import { useGetFilteredMissionsQuery } from '../components/MissionList/hooks/useGetFilteredMissionsQuery'
 import { getMissionFeatureZone } from '../features'
 
@@ -37,11 +37,11 @@ export function UnmemoizedSelectedMissionLayer() {
     return vectorSourceRef.current as VectorSource
   }, [])
 
-  const vectorLayerRef = useRef<MainMap.VectorLayerWithName>()
+  const vectorLayerRef = useRef<MonitorFishMap.VectorLayerWithName>()
   const getVectorLayer = useCallback(() => {
     if (!vectorLayerRef.current) {
       vectorLayerRef.current = new VectorLayer({
-        className: MainMap.MonitorFishLayer.MISSION_SELECTED,
+        className: MonitorFishMap.MonitorFishLayer.MISSION_SELECTED,
         renderBuffer: 7,
         source: getVectorSource(),
         style: missionZoneStyle,
@@ -55,7 +55,7 @@ export function UnmemoizedSelectedMissionLayer() {
   }, [getVectorSource])
 
   useEffect(() => {
-    getVectorLayer().name = MainMap.MonitorFishLayer.MISSION_SELECTED
+    getVectorLayer().name = MonitorFishMap.MonitorFishLayer.MISSION_SELECTED
     monitorfishMap.getLayers().push(getVectorLayer())
 
     return () => {
@@ -71,7 +71,7 @@ export function UnmemoizedSelectedMissionLayer() {
 
     getVectorSource().clear(true)
 
-    if (!selectedMission?.getId()?.toString()?.includes(MainMap.MonitorFishLayer.MISSION_PIN_POINT)) {
+    if (!selectedMission?.getId()?.toString()?.includes(MonitorFishMap.MonitorFishLayer.MISSION_PIN_POINT)) {
       return
     }
 
@@ -82,7 +82,10 @@ export function UnmemoizedSelectedMissionLayer() {
       return
     }
 
-    const missionFeature = getMissionFeatureZone(selectedMissionWithActions, MainMap.MonitorFishLayer.MISSION_SELECTED)
+    const missionFeature = getMissionFeatureZone(
+      selectedMissionWithActions,
+      MonitorFishMap.MonitorFishLayer.MISSION_SELECTED
+    )
     getVectorSource().addFeature(missionFeature)
   }, [selectedMission, missions, draft?.mainFormValues, getVectorSource])
 
@@ -96,7 +99,7 @@ export function UnmemoizedSelectedMissionLayer() {
     // When creating a new mission, dummy NEW_MISSION_ID is used
     const missionFeature = getMissionFeatureZone(
       { ...draft.mainFormValues, id: missionId ?? NEW_MISSION_ID },
-      MainMap.MonitorFishLayer.MISSION_SELECTED
+      MonitorFishMap.MonitorFishLayer.MISSION_SELECTED
     )
     getVectorSource().addFeature(missionFeature)
   }, [getVectorSource, draft?.mainFormValues, missionId])

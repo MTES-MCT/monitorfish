@@ -13,8 +13,8 @@ import { getInterestPointStyle, POIStyle } from './interestPoint.style'
 import { InterestPointLine } from './interestPointLine'
 import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 import { saveInterestPointFeature } from '../../../domain/use_cases/interestPoint/saveInterestPointFeature'
-import { MapBox, OPENLAYERS_PROJECTION, LayerProperties } from '../../MainMap/constants'
-import { monitorfishMap } from '../../map/monitorfishMap'
+import { MapBox, OPENLAYERS_PROJECTION, LayerProperties } from '../../Map/constants'
+import { monitorfishMap } from '../../Map/monitorfishMap'
 import { InterestPointOverlay } from '../components/InterestPointOverlay'
 import {
   deleteInterestPointBeingDrawed,

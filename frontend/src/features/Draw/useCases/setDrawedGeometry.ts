@@ -1,6 +1,5 @@
 import { drawActions } from '@features/Draw/slice'
-
-import { convertToGeoJSONGeometryObject } from '../../MainMap/utils'
+import { convertToGeoJSONGeometryObject } from '@features/Map/utils'
 
 import type { MainAppThunk } from '@store'
 import type { Geometry } from 'ol/geom'

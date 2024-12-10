@@ -1,4 +1,4 @@
-import type { MainMap } from '@features/MainMap/MainMap.types'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 
 /**
  * Example:
@@ -9,7 +9,7 @@ import type { MainMap } from '@features/MainMap/MainMap.types'
  *   }
  * }
  */
-export type CsvColumns = Record<string, MainMap.CodeAndName>
+export type CsvColumns = Record<string, MonitorFishMap.CodeAndName>
 
 /**
  * Format object's data as specified in the CSV column

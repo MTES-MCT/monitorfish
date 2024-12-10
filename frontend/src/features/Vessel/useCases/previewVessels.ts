@@ -4,8 +4,8 @@ import { isNumeric } from '@utils/isNumeric'
 
 import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
 import { setPreviewFilteredVesselsMode } from '../../../domain/shared_slices/Global'
-import { animateToExtent } from '../../../domain/shared_slices/Map'
 import { getExtentFromGeoJSON } from '../../../utils'
+import { animateToExtent } from '../../Map/slice'
 import { setPreviewFilteredVesselsFeatures } from '../slice'
 
 import type { VesselEnhancedLastPositionWebGLObject } from '../../../domain/entities/vessel/types'

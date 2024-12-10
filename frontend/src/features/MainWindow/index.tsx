@@ -1,4 +1,5 @@
 import { BannerStack } from '@features/MainWindow/components/BannerStack'
+import { MainMap } from '@features/Map/components/MainMap'
 import { useCallback } from 'react'
 import { useBeforeUnload } from 'react-router-dom'
 import styled from 'styled-components'
@@ -16,7 +17,6 @@ import { ControlUnitListDialog } from '../ControlUnit/components/ControlUnitList
 import { DrawLayerModal } from '../Draw/components/DrawModal'
 import { HealthcheckHeadband } from '../Healthcheck/components/HealthcheckHeadband'
 import { LayersSidebar } from '../LayersSidebar/components'
-import { Map } from '../map/Map'
 import PreviewFilteredVessels from '../preview_filtered_vessels/PreviewFilteredVessels'
 import { SideWindowLauncher } from '../SideWindow/SideWindowLauncher'
 import { VesselList } from '../Vessel/components/VesselList'
@@ -61,7 +61,7 @@ export function MainWindow() {
 
       <Wrapper id="mainWindowWrapper">
         <BannerStack />
-        <Map />
+        <MainMap />
 
         <LegacyRsuiteComponentsWrapper>
           <LayersSidebar />

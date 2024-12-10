@@ -1,3 +1,4 @@
+import { MapBox } from '@features/Map/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { MultiRadio } from '@mtes-mct/monitor-ui'
@@ -6,15 +7,10 @@ import styled from 'styled-components'
 
 import { SUPER_USER_VESSEL_LABEL_OPTION, VESSEL_LABEL_OPTIONS } from './constants'
 import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
-import {
-  setRiskFactorShowedOnMap,
-  setVesselLabel,
-  setVesselLabelsShowedOnMap
-} from '../../../../../domain/shared_slices/Map'
 import { MapPropertyTrigger } from '../../../../commonComponents/MapPropertyTrigger'
 import RiskFactorSVG from '../../../../icons/Bouton_afficher_note_de_risque.svg?react'
 import LabelSVG from '../../../../icons/Menu_etiquettes_navires.svg?react'
-import { MapBox } from '../../../../MainMap/constants'
+import { setRiskFactorShowedOnMap, setVesselLabel, setVesselLabelsShowedOnMap } from '../../../../Map/slice'
 import { MapToolBox } from '../shared/MapToolBox'
 import { Content, Header } from '../shared/styles'
 

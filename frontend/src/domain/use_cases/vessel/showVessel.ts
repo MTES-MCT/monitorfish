@@ -1,5 +1,6 @@
 import { getVesselFromAPI } from '@api/vessel'
 import { logbookActions } from '@features/Logbook/slice'
+import { doNotAnimate } from '@features/Map/slice'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel, vesselSelectors } from '@features/Vessel/slice'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { captureMessage } from '@sentry/react'
@@ -9,7 +10,6 @@ import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from 
 import { displayedComponentActions } from '../../shared_slices/DisplayedComponent'
 import { displayedErrorActions } from '../../shared_slices/DisplayedError'
 import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
-import { doNotAnimate } from '../../shared_slices/Map'
 import { displayOrLogError } from '../error/displayOrLogError'
 
 import type { VesselIdentity } from '../../entities/vessel/types'

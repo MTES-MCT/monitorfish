@@ -1,7 +1,7 @@
 // TODO Remove temporary `any`/`as any` (fresh migration to TS).
 
-import { LayerProperties, LayerType } from '@features/MainMap/constants'
-import { mainMapActions } from '@features/MainMap/slice'
+import { LayerProperties, LayerType } from '@features/Map/constants'
+import { layerActions } from '@features/Map/layer.slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
@@ -20,7 +20,7 @@ export function RegulatoryZones() {
 
   const selectedRegulatoryLayers = useMainAppSelector(state => state.regulation.selectedRegulatoryLayers)
   const advancedSearchIsOpen = useMainAppSelector(state => state.regulatoryLayerSearch.advancedSearchIsOpen)
-  const layersSidebarOpenedLayerType = useMainAppSelector(state => state.mainMap.layersSidebarOpenedLayerType)
+  const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
 
   const isOpen = layersSidebarOpenedLayerType === LayerType.REGULATORY
 
@@ -47,9 +47,9 @@ export function RegulatoryZones() {
 
   const onTitleClicked = () => {
     if (isOpen) {
-      dispatch(mainMapActions.setLayersSideBarOpenedLayerType(undefined))
+      dispatch(layerActions.setLayersSideBarOpenedLayerType(undefined))
     } else {
-      dispatch(mainMapActions.setLayersSideBarOpenedLayerType(LayerType.REGULATORY))
+      dispatch(layerActions.setLayersSideBarOpenedLayerType(LayerType.REGULATORY))
       dispatch(closeRegulatoryZoneMetadata())
     }
   }

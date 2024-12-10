@@ -1,16 +1,16 @@
-import { mainMapActions } from '@features/MainMap/slice'
+import { layerActions } from '@features/Map/layer.slice'
 
 import type { MainAppThunk } from '../../../store'
 
 export const hideRegulatoryZoneLayerById =
   (id: number | string): MainAppThunk<void> =>
   (dispatch, getState) => {
-    const { showedLayers } = getState().mainMap
+    const { showedLayers } = getState().layer
 
     const hiddenLayer = showedLayers.find(showedLayer => showedLayer.id === id)
     if (!hiddenLayer) {
       return
     }
 
-    dispatch(mainMapActions.removeShowedLayer(hiddenLayer))
+    dispatch(layerActions.removeShowedLayer(hiddenLayer))
   }

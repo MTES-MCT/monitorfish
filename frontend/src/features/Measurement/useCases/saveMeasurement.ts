@@ -1,3 +1,4 @@
+import { convertToGeoJSONGeometryObject } from '@features/Map/utils'
 import { addMeasurementDrawed, resetCircleMeasurementInDrawing } from '@features/Measurement/slice'
 import Feature from 'ol/Feature'
 import Circle from 'ol/geom/Circle'
@@ -5,7 +6,6 @@ import { fromCircle } from 'ol/geom/Polygon'
 import { v4 as uuidv4 } from 'uuid'
 
 import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
-import { convertToGeoJSONGeometryObject } from '../../MainMap/utils'
 
 import type { SimpleGeometry } from 'ol/geom'
 

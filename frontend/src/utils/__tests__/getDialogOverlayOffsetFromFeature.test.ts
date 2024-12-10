@@ -1,4 +1,4 @@
-import { MainMap } from '@features/MainMap/MainMap.types'
+import { MonitorFishMap } from '@features/Map/Map.types'
 import { describe, expect, it, jest } from '@jest/globals'
 import { Geometry } from 'ol/geom'
 import Map from 'ol/Map'
@@ -14,7 +14,7 @@ const TEST_WINDOW_MARGINS: Margins = [21, 22, 23, 24]
 
 describe('utils/getDialogOverlayOffsetFromFeature()', () => {
   const featureMock = new FeatureWithCodeAndEntityId({
-    code: MainMap.MonitorFishLayer.VESSELS,
+    code: MonitorFishMap.MonitorFishLayer.VESSELS,
     entityId: 123,
     geometry: new Geometry()
   })

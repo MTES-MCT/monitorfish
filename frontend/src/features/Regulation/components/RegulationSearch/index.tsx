@@ -1,4 +1,4 @@
-import { mainMapActions } from '@features/MainMap/slice'
+import { layerActions } from '@features/Map/layer.slice'
 import { useEscapeFromKeyboard } from '@hooks/useEscapeFromKeyboard'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -12,7 +12,7 @@ import { regulationActions } from '../../slice'
 
 export function RegulationSearch() {
   const dispatch = useMainAppDispatch()
-  const layersSidebarOpenedLayerType = useMainAppSelector(state => state.mainMap.layersSidebarOpenedLayerType)
+  const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
   const regulatoryLayersSearchResult = useMainAppSelector(
     state => state.regulatoryLayerSearch.regulatoryLayersSearchResult
   )
@@ -40,7 +40,7 @@ export function RegulationSearch() {
 
   useEffect(() => {
     if (regulatoryLayersSearchResult && Object.keys(regulatoryLayersSearchResult).length > 0) {
-      dispatch(mainMapActions.setLayersSideBarOpenedLayerType(undefined))
+      dispatch(layerActions.setLayersSideBarOpenedLayerType(undefined))
     }
   }, [dispatch, regulatoryLayersSearchResult])
 

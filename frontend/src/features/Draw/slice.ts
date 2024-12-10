@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import type { GeoJSON, GeoJSON as GeoJSONType } from '../../domain/types/GeoJSON'
-import type { InteractionListener, InteractionType } from '../MainMap/constants'
-import type { MainMap } from '@features/MainMap/MainMap.types'
+import type { InteractionListener, InteractionType } from '@features/Map/constants'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type DrawState = {
@@ -59,7 +59,7 @@ const drawReducerSlice = createSlice({
     /**
      * Start an interaction with the OpenLayers map, hence use the mouse to draw geometries
      */
-    setInteractionTypeAndListener(state, action: PayloadAction<MainMap.InteractionTypeAndListener>) {
+    setInteractionTypeAndListener(state, action: PayloadAction<MonitorFishMap.InteractionTypeAndListener>) {
       state.interactionType = action.payload.type
       state.listener = action.payload.listener
     }

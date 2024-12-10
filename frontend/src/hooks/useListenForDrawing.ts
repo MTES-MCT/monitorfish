@@ -1,7 +1,7 @@
+import { InteractionListener, type InteractionType } from '@features/Map/constants'
 import { useEffect, useState } from 'react'
 
 import { useMainAppSelector } from './useMainAppSelector'
-import { InteractionListener, type InteractionType } from '../features/MainMap/constants'
 
 import type { GeoJSON } from '../domain/types/GeoJSON'
 

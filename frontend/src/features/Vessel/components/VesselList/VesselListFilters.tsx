@@ -1,6 +1,7 @@
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
 import { getAdministrativeZoneGeometry } from '@features/AdministrativeZone/useCases/getAdministrativeZoneGeometry'
 import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
+import { LayerType, LayerType as LayersType, InteractionType } from '@features/Map/constants'
 import {
   removeZoneSelected,
   setCountriesFiltered,
@@ -31,7 +32,6 @@ import { addVesselListFilterZone } from '../../../../domain/use_cases/vessel/add
 import { getZonesAndSubZones } from '../../../AdministrativeZone/useCases/getZonesAndSubZones'
 import PolygonFilterSVG from '../../../icons/Filtre_zone_polygone.svg?react'
 import BoxFilterSVG from '../../../icons/Filtre_zone_rectangle.svg?react'
-import { LayerType, LayerType as LayersType, InteractionType } from '../../../MainMap/constants'
 
 function renderTagPickerMenuItem(item) {
   return <Label data-cy={`select-picker-menu-item-${item.label}`}>{item.label}</Label>

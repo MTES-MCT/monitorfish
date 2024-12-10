@@ -1,4 +1,6 @@
-import { MainMap } from '@features/MainMap/MainMap.types'
+import { LayerProperties, OpenLayersGeometryType } from '@features/Map/constants'
+import { MonitorFishMap } from '@features/Map/Map.types'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import { Feature } from 'ol'
 import GeoJSON from 'ol/format/GeoJSON'
@@ -6,8 +8,6 @@ import { Geometry } from 'ol/geom'
 import VectorImageLayer from 'ol/layer/VectorImage'
 import VectorSource from 'ol/source/Vector'
 
-import { LayerProperties, OpenLayersGeometryType } from '../../MainMap/constants'
-import { monitorfishMap } from '../../map/monitorfishMap'
 import { computeCustomZoneStyle } from '../utils/computeCustomZoneStyle'
 
 import type { CustomZone } from '../types'
@@ -23,14 +23,14 @@ export const initLayer = (): MainAppThunk => (_, getState) => {
   const showedFeatures = getFeaturesFromGeoJson(showedZones)
 
   const customZoneLayer = new VectorImageLayer({
-    className: MainMap.MonitorFishLayer.CUSTOM,
+    className: MonitorFishMap.MonitorFishLayer.CUSTOM,
     source: new VectorSource({
       features: showedFeatures
     }),
     style: feature => getLayerStyle(feature as Feature<Geometry>),
     zIndex: LayerProperties.CUSTOM.zIndex
-  }) as MainMap.VectorImageLayerWithName
-  customZoneLayer.name = MainMap.MonitorFishLayer.CUSTOM
+  }) as MonitorFishMap.VectorImageLayerWithName
+  customZoneLayer.name = MonitorFishMap.MonitorFishLayer.CUSTOM
 
   monitorfishMap.getLayers().push(customZoneLayer)
 }

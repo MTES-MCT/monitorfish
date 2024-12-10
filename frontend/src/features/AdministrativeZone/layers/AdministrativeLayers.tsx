@@ -1,18 +1,18 @@
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import React, { useEffect } from 'react'
-
-import { getVectorOLLayer } from './utils'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import {
   administrativeLayers,
   layerOfTypeAdministrativeLayer,
   layerOfTypeAdministrativeLayerInCurrentMap,
   layersNotInCurrentOLMap,
   layersNotInShowedLayers
-} from '../../MainMap/utils'
-import { monitorfishMap } from '../../map/monitorfishMap'
+} from '@features/Map/utils'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import React, { useEffect } from 'react'
+
+import { getVectorOLLayer } from './utils'
 
 function UnmemoizedAdministrativeLayers() {
-  const showedLayers = useMainAppSelector(state => state.mainMap.showedLayers)
+  const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
 
   useEffect(() => {
     if (!showedLayers) {

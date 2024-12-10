@@ -1,17 +1,17 @@
+import { getColorWithAlpha, getHashDigitsFromString, getStyle } from '@features/Map/layers/styles/utils'
 import { THEME, customDayjs } from '@mtes-mct/monitor-ui'
 
 import { isForbiddenPeriod } from './utils/isForbiddenPeriod'
 import { theme } from '../../../../ui/theme'
-import { getColorWithAlpha, getHashDigitsFromString, getStyle } from '../../../map/layers/styles/utils'
 
 import type { BaseRegulatoryZone } from '../../types'
-import type { MainMap } from '@features/MainMap/MainMap.types'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { FeatureLike } from 'ol/Feature'
 import type { Style } from 'ol/style'
 
 export function getRegulatoryLayerStyle(
   feature: FeatureLike | undefined,
-  regulation: BaseRegulatoryZone | MainMap.ShowedLayer | null
+  regulation: BaseRegulatoryZone | MonitorFishMap.ShowedLayer | null
 ): Style {
   const randomDigits = getHashDigitsFromString(`${regulation?.topic}:${regulation?.zone}`)
   const currentDate = customDayjs().utc()

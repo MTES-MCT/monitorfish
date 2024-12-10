@@ -1,3 +1,4 @@
+import { MapBox } from '@features/Map/constants'
 import { useClickOutsideWhenOpenedAndExecute } from '@hooks/useClickOutsideWhenOpenedAndExecute'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -8,7 +9,6 @@ import styled from 'styled-components'
 import { Filters } from './Filters'
 import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
 import FilterSVG from '../../../icons/standardized/Filter.svg?react'
-import { MapBox } from '../../../MainMap/constants'
 import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'
 
 export function VesselFiltersMapButton() {

@@ -1,3 +1,4 @@
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, Tag } from '@mtes-mct/monitor-ui'
@@ -5,9 +6,8 @@ import { transform } from 'ol/proj'
 import styled from 'styled-components'
 
 import { getCoordinates } from '../../../../../../coordinates'
-import { animateToCoordinates } from '../../../../../../domain/shared_slices/Map'
 import ManualPositionSVG from '../../../../../icons/Pastille_position_manuelle.svg?react'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../../../MainMap/constants'
+import { animateToCoordinates } from '../../../../../Map/slice'
 import { highlightVesselTrackPosition } from '../../../../slice'
 
 import type { VesselPosition } from '../../../../../../domain/entities/vessel/types'

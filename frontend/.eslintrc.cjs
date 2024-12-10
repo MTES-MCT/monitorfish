@@ -120,7 +120,7 @@ module.exports = {
   overrides: [
     // Redux
     {
-      files: ['src/domain/shared_slices/**/*.ts', 'src/**/slice.ts', 'src/**/slice.backoffice.ts'],
+      files: ['src/domain/shared_slices/**/*.ts', 'src/**/*.slice.ts', 'src/**/slice.ts', 'src/**/slice.*.ts', 'src/**/*.slice.*.ts'],
       rules: {
         'no-param-reassign': 'off'
       }

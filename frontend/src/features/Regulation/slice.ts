@@ -116,7 +116,7 @@ const INITIAL_STATE: RegulationState = {
 
 const regulationSlice = createSlice({
   initialState: INITIAL_STATE,
-  name: 'regulatory',
+  name: 'regulation',
   reducers: {
     addObjectToRegulatoryTextCheckedMap(state, action: PayloadAction<{ complete: boolean; index: number }>) {
       state.regulatoryTextCheckedMap = {

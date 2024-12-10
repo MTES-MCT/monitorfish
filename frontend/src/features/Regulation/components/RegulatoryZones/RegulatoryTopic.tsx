@@ -1,3 +1,4 @@
+import { LayerProperties } from '@features/Map/constants'
 import { RegulatoryTopicInput } from '@features/Regulation/components/RegulationTables/RegulatoryTopicInput'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
@@ -9,7 +10,6 @@ import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../../libs/FrontendError'
 import { EditIcon } from '../../../commonStyles/icons/EditIcon.style'
 import { hideLayer } from '../../../LayersSidebar/useCases/hideLayer'
-import { LayerProperties } from '../../../MainMap/constants'
 import { regulationActions } from '../../slice'
 import { showRegulatoryTopic } from '../../useCases/showRegulatoryTopic'
 
@@ -45,7 +45,7 @@ function UnmemoizedRegulatoryTopic({
 
   const dispatch = useMainAppDispatch()
   const ref = useRef<HTMLLIElement | null>(null)
-  const showedLayers = useMainAppSelector(state => state.mainMap.showedLayers)
+  const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
   const regulatoryTopicsOpened = useMainAppSelector(state => state.regulation.regulatoryTopicsOpened)
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
   const lawType = regulatoryZones[0]?.lawType

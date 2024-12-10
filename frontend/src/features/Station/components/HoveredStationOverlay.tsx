@@ -1,4 +1,4 @@
-import { MainMap } from '@features/MainMap/MainMap.types'
+import { MonitorFishMap } from '@features/Map/Map.types'
 import { useForceUpdate, type Coordinates } from '@mtes-mct/monitor-ui'
 import { useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
@@ -19,7 +19,7 @@ export function HoveredStationOverlay({ hoveredFeature }: HoveredStationOverlayP
 
   const selectedStationId = useMainAppSelector(state => state.station.selectedStationId)
   const hoveredStationId =
-    hoveredFeature?.code === MainMap.MonitorFishLayer.STATION && hoveredFeature.entityId !== selectedStationId
+    hoveredFeature?.code === MonitorFishMap.MonitorFishLayer.STATION && hoveredFeature.entityId !== selectedStationId
       ? hoveredFeature.entityId
       : undefined
 

@@ -1,5 +1,5 @@
 import { getAllRegulatoryLayersFromAPI } from '@api/geoserver'
-import { mainMapActions } from '@features/MainMap/slice'
+import { layerActions } from '@features/Map/layer.slice'
 
 import { setError } from '../../../domain/shared_slices/Global'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
@@ -23,7 +23,7 @@ export const getAllRegulatoryLayers = (): MainAppThunk<Promise<void>> => async (
     dispatch(regulationActions.setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
     dispatch(regulationActions.setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))
     dispatch(regulationActions.setSelectedRegulatoryZone(layersWithoutGeometry))
-    dispatch(mainMapActions.setShowedLayersWithLocalStorageValues(layersWithoutGeometry))
+    dispatch(layerActions.setShowedLayersWithLocalStorageValues(layersWithoutGeometry))
   } catch (error) {
     console.error(error)
     dispatch(setError(error))

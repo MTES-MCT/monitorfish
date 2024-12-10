@@ -1,3 +1,4 @@
+import { LayerProperties } from '@features/Map/constants'
 import { getFishingActivityCircleStyle } from '@features/Vessel/layers/styles/vesselTrack.style'
 import { Feature } from 'ol'
 import Point from 'ol/geom/Point'
@@ -5,7 +6,6 @@ import Point from 'ol/geom/Point'
 import { LogbookMessageType } from './constants'
 import { Logbook } from './Logbook.types'
 import { undefinedize } from '../../utils/undefinedize'
-import { LayerProperties } from '../MainMap/constants'
 
 import type { CatchProperty, CatchWithProperties, ProtectedCatchWithProperties } from './components/VesselLogbook/types'
 import type { SpeciesInsight, SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from './types'

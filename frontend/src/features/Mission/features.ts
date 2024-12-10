@@ -1,4 +1,5 @@
-import { MainMap } from '@features/MainMap/MainMap.types'
+import { OpenLayersGeometryType } from '@features/Map/constants'
+import { MonitorFishMap } from '@features/Map/Map.types'
 import { getMissionActionInfractionsFromMissionActionFormValues } from '@features/Mission/components/MissionForm/ActionList/utils'
 import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
@@ -14,7 +15,6 @@ import { transform } from 'ol/proj'
 import { CONTROL_ZONE_RADIUS, MISSION_ACTION_ZONE_FEATURE_ID } from './constants'
 import { getNumberOfInfractions, getNumberOfInfractionsWithRecord } from '../../domain/entities/controls'
 import { booleanToInt, getDate, getDateTime } from '../../utils'
-import { OpenLayersGeometryType } from '../MainMap/constants'
 
 import type { MissionActionFormValues, MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MultiPolygon } from 'ol/geom'
@@ -24,7 +24,7 @@ import MissionActionType = MissionAction.MissionActionType
 import MissionType = Mission.MissionType
 
 export function getMissionFeaturePointId(id: number) {
-  return `${MainMap.MonitorFishLayer.MISSION_PIN_POINT}:${id}`
+  return `${MonitorFishMap.MonitorFishLayer.MISSION_PIN_POINT}:${id}`
 }
 
 export const getMissionFeaturePoint = (
@@ -94,7 +94,7 @@ export type MissionMainFormValuesWithId = MissionMainFormValues & {
 
 export const getMissionFeatureZone = (
   mission: Mission.Mission | MissionMainFormValuesWithId,
-  type: MainMap.MonitorFishLayer
+  type: MonitorFishMap.MonitorFishLayer
 ): Feature => {
   const geoJSON = new GeoJSON()
   const geometry = geoJSON.readGeometry(mission.geom, {
@@ -144,7 +144,7 @@ export const getMissionActionFeature = (
     numberOfInfractionsWithRecords,
     vesselName: action.vesselName
   })
-  feature.setId(`${MainMap.MonitorFishLayer.MISSION_ACTION_SELECTED}:${actionId}`)
+  feature.setId(`${MonitorFishMap.MonitorFishLayer.MISSION_ACTION_SELECTED}:${actionId}`)
 
   return feature
 }

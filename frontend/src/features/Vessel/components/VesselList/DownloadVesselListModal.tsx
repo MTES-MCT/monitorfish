@@ -1,4 +1,5 @@
 import { COLORS } from '@constants/constants'
+import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTracking } from '@hooks/useTracking'
 import { formatAsCSVColumns } from '@utils/formatAsCSVColumns'
@@ -12,7 +13,6 @@ import { CSVOptions } from './dataFormatting'
 import { getCoordinates } from '../../../../coordinates'
 import { getDate } from '../../../../utils'
 import { StyledModalHeader } from '../../../commonComponents/StyledModalHeader'
-import { OPENLAYERS_PROJECTION } from '../../../MainMap/constants'
 
 const optionsCSV = {
   decimalSeparator: '.',

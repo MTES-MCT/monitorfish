@@ -8,8 +8,8 @@ import { useSelector } from 'react-redux'
 import { getVesselAlertAndBeaconMalfunctionStyle } from './style'
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
 import { getVesselCompositeIdentifier, vesselIsShowed } from '../../../domain/entities/vessel/vessel'
-import { LayerProperties } from '../../MainMap/constants'
-import { monitorfishMap } from '../../map/monitorfishMap'
+import { LayerProperties } from '../../Map/constants'
+import { monitorfishMap } from '../../Map/monitorfishMap'
 import { vesselSelectors } from '../slice'
 
 function VesselAlertAndBeaconMalfunctionLayer() {

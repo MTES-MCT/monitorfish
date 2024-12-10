@@ -4,14 +4,14 @@ import styled from 'styled-components'
 import { HideIcon } from '../../../commonStyles/icons/HideIcon.style'
 import { ShowIcon } from '../../../commonStyles/icons/ShowIcon.style'
 
-import type { MainMap } from '@features/MainMap/MainMap.types'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 
 type AdministrativeZoneType = Readonly<{
   isFirst?: boolean
   isGrouped?: boolean
   isShown: boolean
   showOrHideZone: (isShown: boolean) => void
-  zone: MainMap.ShowableLayer
+  zone: MonitorFishMap.ShowableLayer
 }>
 export function AdministrativeZone({ isFirst, isGrouped, isShown, showOrHideZone, zone }: AdministrativeZoneType) {
   return (

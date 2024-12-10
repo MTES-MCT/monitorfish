@@ -1,3 +1,4 @@
+import { MapBox } from '@features/Map/constants'
 import { useClickOutsideWhenOpenedAndExecute } from '@hooks/useClickOutsideWhenOpenedAndExecute'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -7,7 +8,6 @@ import styled from 'styled-components'
 
 import { EditVesselVisibility } from './EditVesselVisibility'
 import { setRightMapBoxOpened } from '../../../../../domain/shared_slices/Global'
-import { MapBox } from '../../../../MainMap/constants'
 import { MapToolButton } from '../shared/MapToolButton'
 
 export function VesselVisibilityMapButton() {

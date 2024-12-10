@@ -1,4 +1,5 @@
 import { hideLayer } from '@features/LayersSidebar/useCases/hideLayer'
+import { LayerProperties } from '@features/Map/constants'
 import { regulationActions } from '@features/Regulation/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -7,7 +8,6 @@ import { memo, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ResultZones } from './ResultZones'
-import { LayerProperties } from '../../../MainMap/constants'
 
 import type { RegulatoryZone } from '../../types'
 

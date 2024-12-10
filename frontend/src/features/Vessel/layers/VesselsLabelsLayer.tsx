@@ -1,4 +1,7 @@
-import { MainMap } from '@features/MainMap/MainMap.types'
+import { LayerProperties } from '@features/Map/constants'
+import { getLabelLineStyle } from '@features/Map/layers/styles/labelLine.style'
+import { MonitorFishMap } from '@features/Map/Map.types'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { extractVesselPropertiesFromFeature } from '@features/Vessel/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
@@ -15,9 +18,6 @@ import {
   Vessel
 } from '../../../domain/entities/vessel/vessel'
 import { VesselLabelLine } from '../../../domain/entities/vesselLabelLine'
-import { LayerProperties } from '../../MainMap/constants'
-import { getLabelLineStyle } from '../../map/layers/styles/labelLine.style'
-import { monitorfishMap } from '../../map/monitorfishMap'
 import { VesselLabelOverlay } from '../components/VesselLabelOverlay'
 import { vesselSelectors } from '../slice'
 
@@ -68,7 +68,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
   const isThrottled = useRef(false)
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
-  const layerRef = useRef() as MutableRefObject<MainMap.VectorLayerWithName>
+  const layerRef = useRef() as MutableRefObject<MonitorFishMap.VectorLayerWithName>
   const [currentLabels, setCurrentLabels] = useState<JSX.Element[]>([])
 
   const getVectorSource = useCallback(() => {
@@ -200,7 +200,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
       .getLayers()
       .getArray()
       // @ts-ignore
-      ?.find(olLayer => olLayer.name === MainMap.MonitorFishLayer.VESSELS)
+      ?.find(olLayer => olLayer.name === MonitorFishMap.MonitorFishLayer.VESSELS)
       // @ts-ignore
       ?.getSource()
     vesselsLayer?.current?.forEachFeatureInExtent(monitorfishMap.getView().calculateExtent(), vesselFeature => {
@@ -324,7 +324,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
         .getLayers()
         .getArray()
         // @ts-ignore
-        ?.find(olLayer => olLayer.name === MainMap.MonitorFishLayer.VESSELS)
+        ?.find(olLayer => olLayer.name === MonitorFishMap.MonitorFishLayer.VESSELS)
         // @ts-ignore
         ?.getSource()
       const featuresInExtent = vesselsLayer?.getFeaturesInExtent(monitorfishMap.getView().calculateExtent()) || []

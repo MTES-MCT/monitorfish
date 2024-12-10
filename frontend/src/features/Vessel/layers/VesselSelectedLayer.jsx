@@ -8,8 +8,8 @@ import { useSelector } from 'react-redux'
 
 import { getSelectedVesselStyle } from './style'
 import { Vessel } from '../../../domain/entities/vessel/vessel'
-import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../MainMap/constants'
-import { monitorfishMap } from '../../map/monitorfishMap'
+import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../Map/constants'
+import { monitorfishMap } from '../../Map/monitorfishMap'
 
 function VesselSelectedLayer() {
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)

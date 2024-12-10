@@ -1,4 +1,5 @@
-import { mainMapActions } from '@features/MainMap/slice'
+import { LayerType } from '@features/Map/constants'
+import { layerActions } from '@features/Map/layer.slice'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -9,20 +10,19 @@ import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
 import { hideLayer } from '../../../LayersSidebar/useCases/hideLayer'
-import { LayerType } from '../../../MainMap/constants'
 import { closeRegulatoryZoneMetadata } from '../../../Regulation/useCases/closeRegulatoryZoneMetadata'
 import { getAdministrativeZones } from '../../useCases/getAdministrativeZones'
 
 import type { GroupedZonesAndZones } from '../../useCases/getAdministrativeZones'
-import type { MainMap } from '@features/MainMap/MainMap.types'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 
 export type AdministrativeZonesProps = Readonly<{
   hideLayersListWhenSearching?: boolean
 }>
 export function AdministrativeZones({ hideLayersListWhenSearching = false }: AdministrativeZonesProps) {
   const dispatch = useMainAppDispatch()
-  const showedLayers = useMainAppSelector(state => state.mainMap.showedLayers)
-  const layersSidebarOpenedLayerType = useMainAppSelector(state => state.mainMap.layersSidebarOpenedLayerType)
+  const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
+  const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
 
   const [isOpened, setIsOpened] = useState(false)
   const [zones, setZones] = useState<GroupedZonesAndZones>({ groupedZones: [], zones: [] })
@@ -49,7 +49,7 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
 
   // TODO Simplify this callback with a direct call to the action rather than a function-wrapper.
   const showOrHideZone = useCallback(
-    (zone: MainMap.ShowableLayer) => (isShown: boolean) => {
+    (zone: MonitorFishMap.ShowableLayer) => (isShown: boolean) => {
       if (isShown) {
         dispatch(
           hideLayer({
@@ -64,7 +64,7 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
       }
 
       dispatch(
-        mainMapActions.addShowedLayer({
+        layerActions.addShowedLayer({
           type: zone.hasFetchableZones ? zone.group?.code!! : zone.code,
           zone: zone.hasFetchableZones ? zone.code : undefined
         })
@@ -75,9 +75,9 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
 
   const onSectionTitleClicked = () => {
     if (isOpened) {
-      dispatch(mainMapActions.setLayersSideBarOpenedLayerType(undefined))
+      dispatch(layerActions.setLayersSideBarOpenedLayerType(undefined))
     } else {
-      dispatch(mainMapActions.setLayersSideBarOpenedLayerType(LayerType.ADMINISTRATIVE))
+      dispatch(layerActions.setLayersSideBarOpenedLayerType(LayerType.ADMINISTRATIVE))
       dispatch(closeRegulatoryZoneMetadata())
     }
   }

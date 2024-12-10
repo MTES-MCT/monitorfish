@@ -1,3 +1,4 @@
+import { featureHas, featureHasNot, stateIs } from '@features/Map/layers/styles/utils/webgl'
 import { Icon, Style } from 'ol/style'
 import Circle from 'ol/style/Circle'
 import Stroke from 'ol/style/Stroke'
@@ -12,7 +13,6 @@ import {
 } from '../../../domain/entities/vessel/vessel'
 import { theme } from '../../../ui/theme'
 import { booleanToInt } from '../../../utils'
-import { featureHas, featureHasNot, stateIs } from '../../map/layers/styles/utils/webgl'
 
 import type { WebGLStyle } from 'ol/style/webgl'
 

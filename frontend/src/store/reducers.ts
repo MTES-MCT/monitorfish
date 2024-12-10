@@ -6,9 +6,10 @@ import { customZoneReducer, type CustomZoneState } from '@features/CustomZone/sl
 import { drawReducer } from '@features/Draw/slice'
 import { interestPointReducer } from '@features/InterestPoint/slice'
 import { logbookReducer } from '@features/Logbook/slice'
-import { mainMapReducer } from '@features/MainMap/slice'
-import { backOfficeMainMapReducer } from '@features/MainMap/slice.backoffice'
 import { mainWindowReducer } from '@features/MainWindow/slice'
+import { layerReducer } from '@features/Map/layer.slice'
+import { backOfficeLayerReducer } from '@features/Map/layer.slice.backoffice'
+import { mapReducer } from '@features/Map/slice'
 import { measurementReducer, type MeasurementState } from '@features/Measurement/slice'
 import { missionFormReducer } from '@features/Mission/components/MissionForm/slice'
 import { missionListReducer, type MissionListState } from '@features/Mission/components/MissionList/slice'
@@ -32,7 +33,6 @@ import { favoriteVesselReducer } from 'domain/shared_slices/FavoriteVessel'
 import { gearReducer } from 'domain/shared_slices/Gear'
 import { globalSliceReducer } from 'domain/shared_slices/Global'
 import { infractionReducer } from 'domain/shared_slices/Infraction'
-import { mapReducer } from 'domain/shared_slices/Map'
 import { speciesReducer } from 'domain/shared_slices/Species'
 import createMigrate from 'redux-persist/es/createMigrate'
 import persistReducer from 'redux-persist/es/persistReducer'
@@ -99,7 +99,7 @@ export const mainReducer = {
   fishingActivities: logbookReducer,
   infraction: infractionReducer,
   interestPoint: interestPointReducer,
-  mainMap: mainMapReducer,
+  layer: layerReducer,
   mainWindow: mainWindowReducer,
   measurement: persistReducerTyped(
     { ...getCommonPersistReducerConfig<MeasurementState>('mainPersistorMeasurement', ['measurementsDrawed']) },
@@ -133,7 +133,7 @@ export const mainReducer = {
 export const backofficeReducer = {
   ...commonReducerList,
 
-  mainMap: backOfficeMainMapReducer,
+  layer: backOfficeLayerReducer,
   priorNotification: backofficePriorNotificationReducer,
   producerOrganizationMembership: backofficeProducerOrganizationMembershipReducer
 }

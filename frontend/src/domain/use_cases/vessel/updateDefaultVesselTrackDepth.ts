@@ -1,5 +1,6 @@
+import { setDefaultVesselTrackDepth } from '@features/Map/slice'
+
 import { updateVesselTracks } from './updateVesselTracks'
-import { setDefaultVesselTrackDepth } from '../../shared_slices/Map'
 
 import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'
 

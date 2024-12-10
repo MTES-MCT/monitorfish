@@ -1,16 +1,16 @@
+import { LayerProperties, LayerType } from '@features/Map/constants'
 import { isNotNullish } from '@utils/isNotNullish'
 
 import { getAdministrativeSubZonesFromAPI } from '../../../api/geoserver'
-import { LayerProperties, LayerType } from '../../MainMap/constants'
 
-import type { MainMap } from '@features/MainMap/MainMap.types'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { ZoneChildren } from '@features/Vessel/components/VesselList/slice'
 import type { MainAppThunk } from '@store'
 
 // TODO This could be transformed into a function or an RTK call, there is no need for a thunk here.
 export const getZonesAndSubZones = (): MainAppThunk<Promise<Array<ZoneChildren>>> => async () => {
   const filteredLayers = Object.keys(LayerProperties)
-    .map<MainMap.ShowableLayer>(layerKey => LayerProperties[layerKey])
+    .map<MonitorFishMap.ShowableLayer>(layerKey => LayerProperties[layerKey])
     .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
     .filter(layer => layer.isIntersectable)
 

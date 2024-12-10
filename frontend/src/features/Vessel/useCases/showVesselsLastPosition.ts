@@ -1,3 +1,4 @@
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
@@ -8,7 +9,6 @@ import { Vessel } from '../../../domain/entities/vessel/vessel'
 import { resetIsUpdatingVessels } from '../../../domain/shared_slices/Global'
 import { getUniqueSpeciesAndDistricts } from '../../../domain/use_cases/species/getUniqueSpeciesAndDistricts'
 import { customHexToRGB } from '../../../utils'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../MainMap/constants'
 import { setVessels, setVesselsSpeciesAndDistricts } from '../slice'
 
 import type { VesselEnhancedLastPositionWebGLObject, VesselLastPosition } from '../../../domain/entities/vessel/types'

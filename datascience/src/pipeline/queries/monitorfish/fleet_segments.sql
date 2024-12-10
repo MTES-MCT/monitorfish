@@ -8,7 +8,7 @@ SELECT
     max_mesh,
     target_species,
     min_share_of_target_species,
-    favored_main_species_type,
+    main_scip_species_type,
     priority,
     vessel_types,
     impact_risk_factor

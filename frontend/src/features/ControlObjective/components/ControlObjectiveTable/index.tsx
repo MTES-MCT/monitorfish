@@ -59,7 +59,7 @@ export function ControlObjectiveTable() {
 
     await addControlObjectiveYear()
 
-    // Since there is no query param, we need to explicitely ask for a refetch
+    // Since there is no query param, we need to explicitly ask for a refetch
     getControlObjectiveYearsQuery.refetch()
 
     setSelectedYear(nextYearToAddFromEntries)

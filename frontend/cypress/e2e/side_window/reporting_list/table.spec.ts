@@ -15,7 +15,8 @@ context('Side Window > Reporting List > Table', () => {
     cy.intercept(
       {
         method: 'GET',
-        times: failedQueryCount,
+        // We add one more intercept as there is one more request when going to the NAMO tab
+        times: failedQueryCount + 1,
         url: apiPathBase
       },
       {

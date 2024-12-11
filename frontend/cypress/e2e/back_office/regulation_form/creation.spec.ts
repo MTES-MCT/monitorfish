@@ -302,8 +302,8 @@ context('BackOffice > Regulation Form > Creation', () => {
     cy.wait('@postRegulation').then(({ request, response }) => {
       expect(request.body)
         .contain('<Name>fishing_period</Name>' +
-        '<Value>{"dateRanges":[{"endDate":"0002-10-30T00:00:00.000Z","startDate":"0002-10-09T00:00:00.000Z"},' +
-        '{"endDate":"0002-12-30T00:00:00.000Z","startDate":"0002-12-09T00:00:00.000Z"}],"dates":[],"timeIntervals":[],' +
+        '<Value>{"dateRanges":[{"endDate":"0002-10-31T00:00:00.000Z","startDate":"0002-10-10T00:00:00.000Z"},' +
+        '{"endDate":"0002-12-31T00:00:00.000Z","startDate":"0002-12-10T00:00:00.000Z"}],"dates":[],"timeIntervals":[],' +
         '"weekdays":["lundi","mercredi"],"holidays":true,"authorized":true,"annualRecurrence":true}</Value>')
 
       expect(response && response.statusCode).equal(200)

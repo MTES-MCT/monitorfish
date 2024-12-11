@@ -9,7 +9,7 @@ context('Side Window > Reporting List > Table', () => {
 
   it('Should filter reportings by vessel name (search input)', () => {
     cy.login('superuser')
-    
+
     /**
      * Should handle fetching error as expected
      */
@@ -18,7 +18,7 @@ context('Side Window > Reporting List > Table', () => {
       {
         method: 'GET',
         // We add one more intercept as there is one more request when going to the NAMO tab
-        times: failedQueryCount + 1,
+        times: failedQueryCount + 2,
         url: apiPathBase
       },
       {

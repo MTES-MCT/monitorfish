@@ -8,6 +8,11 @@ context('Authorization', () => {
   })
 
   it('Should redirect to login page if an API request is Unauthorized', () => {
+    cy.on("uncaught:exception", () => {
+      // We do no track uncaught exception as it is OK that fetch are being canceled
+      return false
+    });
+
     // When
     cy.intercept('GET', `/bff/v1/vessels/search*`, { statusCode: 401 }).as('searchVessel')
     cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('Pheno')

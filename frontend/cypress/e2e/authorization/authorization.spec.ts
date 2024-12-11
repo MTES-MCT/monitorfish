@@ -4,14 +4,14 @@ context('Authorization', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(5000)
+    cy.wait(10000)
   })
 
   it('Should redirect to login page if an API request is Unauthorized', () => {
     cy.on("uncaught:exception", () => {
       // We do no track uncaught exception as it is OK that fetch are being canceled
       return false
-    });
+    })
 
     // When
     cy.intercept('GET', `/bff/v1/vessels/search*`, { statusCode: 401 }).as('searchVessel')

@@ -8,6 +8,8 @@ context('Side Window > Reporting List > Table', () => {
   const apiPathBase = '/bff/v1/reportings'
 
   it('Should filter reportings by vessel name (search input)', () => {
+    cy.login('superuser')
+    
     /**
      * Should handle fetching error as expected
      */

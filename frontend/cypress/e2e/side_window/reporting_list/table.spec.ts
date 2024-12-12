@@ -14,6 +14,7 @@ context('Side Window > Reporting List > Table', () => {
      * Should handle fetching error as expected
      */
 
+    cy.wait(500)
     cy.intercept(
       {
         method: 'GET',

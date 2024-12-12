@@ -1,4 +1,5 @@
 import { Seafront } from '@constants/seafront'
+import { PendingAlertValueType } from '@features/Alert/types'
 import { ReportingCard } from '@features/Reporting/components/ReportingCard'
 import { ReportingType } from '@features/Reporting/types'
 import { afterAll, describe, expect, it, jest } from '@jest/globals'
@@ -6,9 +7,10 @@ import { THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { noop } from 'lodash'
+import { Provider } from 'react-redux'
+import configureStore from 'redux-mock-store'
 
 import { VesselIdentifier } from '../../../../../domain/entities/vessel/types'
-import { PendingAlertValueType } from '../../../../Alert/types'
 
 import type { PendingAlertReporting } from '@features/Reporting/types'
 
@@ -24,6 +26,9 @@ describe('ReportingCard()', () => {
 
   it('should display all other dates', async () => {
     // Given
+    const mockStore = configureStore()
+    const store = mockStore({})
+
     const reporting: PendingAlertReporting = {
       creationDate: '2023-10-30T09:10:00Z',
       externalReferenceNumber: '',
@@ -55,17 +60,19 @@ describe('ReportingCard()', () => {
     }
 
     render(
-      <ThemeProvider theme={THEME}>
-        <ReportingCard
-          isArchived={false}
-          onEdit={noop}
-          otherOccurrencesOfSameAlert={[
-            { ...reporting, validationDate: '2024-10-30T15:08:05.845121Z' },
-            { ...reporting, validationDate: '2025-10-30T15:08:05.845121Z' }
-          ]}
-          reporting={reporting}
-        />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={THEME}>
+          <ReportingCard
+            isArchived={false}
+            onEdit={noop}
+            otherOccurrencesOfSameAlert={[
+              { ...reporting, validationDate: '2024-10-30T15:08:05.845121Z' },
+              { ...reporting, validationDate: '2025-10-30T15:08:05.845121Z' }
+            ]}
+            reporting={reporting}
+          />
+        </ThemeProvider>
+      </Provider>
     )
 
     const linkElement = screen.getByText(/Voir les dates des autres alertes/i)

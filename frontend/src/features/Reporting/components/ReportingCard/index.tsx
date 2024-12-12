@@ -1,5 +1,6 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
+import { PendingAlertValueType } from '@features/Alert/types'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -35,6 +36,9 @@ export function ReportingCard({
   const reportingName = Object.values(ReportingTypeCharacteristics).find(
     reportingType => reportingType.code === reporting.type
   )?.name
+  const canBeArchived = !(
+    reporting.type === ReportingType.ALERT && reporting.value.type === PendingAlertValueType.MISSING_FAR_48_HOURS_ALERT
+  )
   const alertDateTime = getDateTime(
     reporting.type === ReportingType.ALERT ? reporting.validationDate : reporting.creationDate,
     true
@@ -54,7 +58,7 @@ export function ReportingCard({
   }, [reporting, reportingName])
 
   const archive = () => {
-    dispatch(archiveReporting(reporting.id, reporting.type))
+    dispatch(archiveReporting(reporting))
   }
 
   const askForDeletionConfirmation = () => {
@@ -166,7 +170,11 @@ export function ReportingCard({
               Icon={Icon.Archive}
               iconSize={20}
               onClick={archive}
-              title="Archiver ce signalement"
+              title={
+                canBeArchived
+                  ? 'Archiver ce signalement'
+                  : `Ce signalement sera archivé sous la forme de 2 alertes "Absence de message FAR en 24h"`
+              }
             />
             <StyledIconButton
               accent={Accent.TERTIARY}

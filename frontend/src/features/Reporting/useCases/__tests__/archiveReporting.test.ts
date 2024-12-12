@@ -1,18 +1,27 @@
+import { PendingAlertValueType } from '@features/Alert/types'
 import { fortyHeightHourAlertReporting } from '@features/Reporting/useCases/__tests__/__mocks__/dummyReporting'
 import { archiveReporting } from '@features/Reporting/useCases/archiveReporting'
-import * as deleteReporting from '@features/Reporting/useCases/deleteReporting'
-import { describe, it, expect, jest, afterAll } from '@jest/globals'
+import { describe, it, expect, afterAll } from '@jest/globals'
 import { dispatchProcessor } from '@store/__tests__/utils'
 
-import { PendingAlertValueType } from '../../../../domain/entities/alerts/types'
 import { VesselIdentifier } from '../../../../domain/entities/vessel/types'
+import { deleteReporting } from '../deleteReporting'
 
+/**
+ * Warning: We could not add `jest` import as it makes the test to fail.
+ * We need to have
+ * @see: https://github.com/swc-project/jest/issues/14#issuecomment-2525330413
+ */
+
+// @ts-ignore
 jest.mock('../../reportingApi', () => jest.fn())
+// @ts-ignore
 jest.mock('../deleteReporting', () => ({
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
-  deleteReporting: () => jest.fn()
+  // @ts-ignore
+  deleteReporting: jest.fn()
 }))
-jest.spyOn(deleteReporting, 'deleteReporting')
 
 describe('archiveReporting()', () => {
   const INITIAL_STATE = {
@@ -30,6 +39,7 @@ describe('archiveReporting()', () => {
 
   afterAll(() => {
     // Reset module registry to clear the mock
+    // @ts-ignore
     jest.resetModules()
   })
 
@@ -38,7 +48,7 @@ describe('archiveReporting()', () => {
     dispatchProcessor(archiveReporting(fortyHeightHourAlertReporting), INITIAL_STATE)
 
     // Then
-    expect(deleteReporting.deleteReporting).toHaveBeenCalled()
+    expect(deleteReporting).toHaveBeenCalled()
   })
 
   it('Should not delete reporting When the alert is not an MISSING_FAR_48_HOURS_ALERT', async () => {
@@ -55,6 +65,6 @@ describe('archiveReporting()', () => {
     dispatchProcessor(archiveReporting(otherAlertReporting), INITIAL_STATE)
 
     // Then
-    expect(deleteReporting.deleteReporting).toHaveBeenCalledTimes(0)
+    expect(deleteReporting).toHaveBeenCalledTimes(0)
   })
 })

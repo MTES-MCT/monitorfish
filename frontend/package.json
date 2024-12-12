@@ -143,7 +143,7 @@
     "ora": "8.1.1",
     "postgres": "3.4.5",
     "prettier": "3.4.1",
-    "puppeteer": "22.15.0",
+    "puppeteer": "23.9.0",
     "strip-json-comments": "5.0.1",
     "ts-jest": "29.2.5",
     "type-fest": "4.29.0",

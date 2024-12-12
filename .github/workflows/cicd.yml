@@ -241,7 +241,6 @@ jobs:
   e2e_multi_windows_test:
     name: Run E2E multi windows tests
     needs: [version, build]
-    if: contains(github.ref, 'dependabot') == false
     runs-on: ubuntu-22.04
     timeout-minutes: 30
     env:

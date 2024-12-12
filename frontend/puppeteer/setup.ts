@@ -24,10 +24,10 @@ export default async () => {
         `--window-position=${WIDTH * i},0`,
         '--enable-features=ExperimentalJavaScript'
       ],
+      browser: 'firefox',
       defaultViewport: null,
       devtools: !IS_HEADLESS,
-      headless: IS_HEADLESS,
-      product: 'firefox'
+      headless: IS_HEADLESS
     })
 
     const version = await browser.version()

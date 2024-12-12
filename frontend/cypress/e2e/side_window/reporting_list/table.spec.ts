@@ -1,7 +1,5 @@
-import { RTK_MAX_RETRIES } from '@api/constants'
-
-import { openSideWindowReportingList } from './utils'
-import { SeafrontGroup } from '../../../../src/constants/seafront'
+import {RTK_MAX_RETRIES} from '@api/constants'
+import {SeafrontGroup} from '../../../../src/constants/seafront'
 
 context('Side Window > Reporting List > Table', () => {
   const failedQueryCount = RTK_MAX_RETRIES + 1
@@ -18,7 +16,7 @@ context('Side Window > Reporting List > Table', () => {
     cy.intercept(
       {
         method: 'GET',
-        times: failedQueryCount,
+        times: failedQueryCount * 2,
         url: apiPathBase
       },
       {
@@ -26,8 +24,14 @@ context('Side Window > Reporting List > Table', () => {
       }
     ).as('getReportingsWithError')
 
-    openSideWindowReportingList()
+    cy.visit('/side_window')
+    for (let i = 1; i <= failedQueryCount; i += 1) {
+      cy.wait('@getReportingsWithError')
+    }
 
+    cy.wait(500)
+
+    cy.getDataCy('side-window-reporting-tab').click()
     for (let i = 1; i <= failedQueryCount; i += 1) {
       cy.wait('@getReportingsWithError')
     }

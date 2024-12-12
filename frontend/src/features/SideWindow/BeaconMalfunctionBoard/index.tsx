@@ -8,7 +8,14 @@ import {
   useSensor,
   useSensors
 } from '@dnd-kit/core'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { createSelector } from '@reduxjs/toolkit'
+import { STAGE_RECORD, VESSEL_STATUS } from 'domain/entities/beaconMalfunction/constants'
+import { setError } from 'domain/shared_slices/Global'
+import { getAllBeaconMalfunctions } from 'domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
+import { updateBeaconMalfunctionFromKanban } from 'domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
@@ -19,21 +26,14 @@ import { getBeaconMalfunctionsByStage, searchInBeaconMalfunctions } from './beac
 import { Droppable } from './Droppable'
 import { StageColumn } from './StageColumn'
 import { VesselStatusSelect } from './VesselStatusSelect'
-import { COLORS } from '../../../constants/constants'
-import { STAGE_RECORD, VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
-import { setError } from '../../../domain/shared_slices/Global'
-import getAllBeaconMalfunctions from '../../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
-import updateBeaconMalfunctionFromKanban from '../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import SearchIconSVG from '../../icons/Loupe_dark.svg?react'
 
+import type { MainRootState } from '@store'
 import type {
   BeaconMalfunction,
   BeaconMalfunctionStageColumnValue,
   BeaconMalfunctionStatusValue
-} from '../../../domain/entities/beaconMalfunction/types'
-import type { MainRootState } from '../../../store'
+} from 'domain/entities/beaconMalfunction/types'
 import type { CSSProperties, MutableRefObject } from 'react'
 
 const getMemoizedBeaconMalfunctionsByStage = createSelector(
@@ -303,16 +303,16 @@ export function BeaconMalfunctionBoard() {
 const SearchVesselInput = styled.input``
 const searchVesselInputStyle = {
   ':hover, :focus': {
-    borderBottom: `1px ${COLORS.lightGray} solid`
+    borderBottom: `1px ${THEME.color.lightGray} solid`
   },
   backgroundColor: 'white',
   backgroundImage: `url(${baseUrl}${SearchIconSVG})`,
   backgroundPosition: 'bottom 3px right 5px',
   backgroundRepeat: 'no-repeat',
   backgroundSize: 30,
-  border: `1px ${COLORS.lightGray} solid`,
+  border: `1px ${THEME.color.lightGray} solid`,
   borderRadius: 0,
-  color: COLORS.gunMetal,
+  color: THEME.color.gunMetal,
   fontSize: 13,
   height: 40,
   margin: '0 0 5px 5px',
@@ -344,7 +344,7 @@ const Wrapper = styled(LegacyRsuiteComponentsWrapper)`
     margin: 3px 7px 0 7px;
   }
   .rs-btn-toggle::after {
-    background: ${COLORS.slateGray} 0% 0% no-repeat padding-box;
+    background: ${THEME.color.slateGray} 0% 0% no-repeat padding-box;
     top: 1px;
   }
   .rs-toggle {

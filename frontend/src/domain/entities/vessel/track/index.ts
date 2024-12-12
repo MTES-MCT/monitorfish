@@ -1,3 +1,4 @@
+import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { getArrowStyle, getCircleStyle, getLineStyle } from '@features/Vessel/layers/styles/vesselTrack.style'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { uniqWith, isEqual } from 'lodash'
@@ -9,8 +10,6 @@ import { transform } from 'ol/proj'
 
 import { TRACK_TYPE_RECORD } from './constants'
 import { calculatePointsDistance, calculateSplitPointCoordinates } from '../../../../utils'
-import { LayerProperties } from '../../layers/constants'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../map/constants'
 
 import type {
   VesselArrowFeature,

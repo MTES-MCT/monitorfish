@@ -23,9 +23,10 @@ context('BackOffice > Regulation Form > Creation', () => {
     // Remove tag
     cy.get('.Component-SingleTag').filter(':contains("Reg. NAMO")').find('button').click()
     cy.get('.Component-SingleTag').should('not.exist')
-  })
 
-  it('Change law type update the layer name list', () => {
+    /**
+     * Change law type update the layer name list
+     */
     // Select Reg. MEMN in the dropdown menu
     cy.fill('Choisir un ensemble', 'Reg. MEMN')
 
@@ -44,9 +45,10 @@ context('BackOffice > Regulation Form > Creation', () => {
     cy.fill('Choisir un ensemble', '494/2002')
     cy.get('[id="Choisir une thématique"]').click()
     cy.get('[data-testid="picker-popup"] > div').contains('Aucun résultat trouvé')
-  })
 
-  it('Region list should be enabled or disabled depending on the law type', () => {
+    /**
+     * Region list should be enabled or disabled depending on the law type
+     */
     // Select a French law type
     cy.fill('Choisir un ensemble', 'Reg. MED')
     cy.get('[id="Choisir une région"]').parent().click()
@@ -57,9 +59,10 @@ context('BackOffice > Regulation Form > Creation', () => {
     cy.fill('Choisir un ensemble', '2019')
     // Region select picker should be disabled
     cy.get('[id="Choisir une région"]').forceClick().should('have.attr', 'aria-disabled', 'true')
-  })
 
-  it('Select "Grand Est" and "Auvergne-Rhône-Alpes" region and remove it', () => {
+    /**
+     * Select "Grand Est" and "Auvergne-Rhône-Alpes" region and remove it
+     */
     // Select a french law type
     cy.fill('Choisir un ensemble', 'Reg. MED')
     cy.fill('Choisir une région', ['Auvergne-Rhône-Alpes', 'Grand Est'])
@@ -120,7 +123,10 @@ context('BackOffice > Regulation Form > Creation', () => {
     cy.url().should('include', '/backoffice')
   })
 
-  it('Check and uncheck of all gears Should add or remove all gears', () => {
+  it('Gears regulations', () => {
+    /**
+     * Check and uncheck of all gears Should add or remove all gears
+     */
     // Given
     cy.get('[data-cy="authorized-all-towed-gears-option"]').should('exist')
     cy.get('[data-cy="authorized-all-passive-gears-option"]').should('exist')
@@ -144,11 +150,10 @@ context('BackOffice > Regulation Form > Creation', () => {
     cy.get('[data-cy="unauthorized-all-towed-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
     cy.get('[data-cy="unauthorized-all-passive-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
     cy.get('[data-cy^="tag-"]').should('have.length', 0)
-  })
 
-  it('Check all towed gear displays a list of towed gear categories', () => {
-    // Given
-    cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
+    /**
+     * Check all towed gear displays a list of towed gear categories
+     */
     // when
     cy.get('[data-cy="authorized-all-towed-gears-option"] > div > label').click({ force: true })
     // then
@@ -159,16 +164,15 @@ context('BackOffice > Regulation Form > Creation', () => {
     // then
     cy.get('[data-cy="tag-Sennes traînantes"]').should('not.exist')
     cy.get('[data-cy="authorized-all-towed-gears-option"]').should('not.be.checked')
-  })
 
-  it('Check all passive gears display a list of passive gear categories', () => {
-    // Given
-    cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
+    /**
+     * Check all passive gears display a list of passive gear categories
+     */
     // when
     cy.get('[data-cy="authorized-all-passive-gears-option"] > div > label').scrollIntoView().click()
     // then
-    cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 6)
-    cy.get('[data-cy="mesh-label"]').should('have.length', 3)
+    cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 9)
+    cy.get('[data-cy="mesh-label"]').should('have.length', 4)
     // when
     cy.get('[data-cy="close-tag-Sennes tournantes coulissantes"]').scrollIntoView().click()
     // then
@@ -223,5 +227,86 @@ context('BackOffice > Regulation Form > Creation', () => {
     cy.get('[data-cy="mesh-label"]').should('have.length', 2)
     cy.get('[data-cy="tag-MERLU D\'EUROPE (HKE)"]').should('exist')
     cy.get('[data-cy="tag-Espèces eau profonde"]').should('exist')
+  })
+
+  it('Should send the expected request when creating a regulation with a complex period', () => {
+    // Given
+    cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
+
+    // Identification de la zone réglementaire
+    cy.fill('Choisir un ensemble', 'Reg. MEMN')
+    cy.wait(1000)
+    cy.fill('Choisir une thématique', 'Ouest Cotentin Bivalves')
+    cy.fill('Nom de la zone', 'Une zone REG')
+    cy.fill('Choisir une région', ['Auvergne-Rhône-Alpes'])
+    cy.fill('Choisir un tracé', '598')
+
+    // Références réglementaires en vigueur
+    // TODO A re-render might stop the first fill(), we need to re-fill a second time
+    cy.fill('Nom', ' ')
+    cy.fill('Nom', 'zone name')
+    cy.fill('URL', 'http://url.com')
+    cy.fill('Début de validité', [2024, 1, 1])
+    cy.fill("jusqu'à nouvel ordre", true)
+    cy.get('label:contains("création de la zone")').click()
+
+    // Périodes de pêche
+    cy.contains('Périodes de pêche').scrollIntoView().click()
+    cy.contains('autorisées').click().scrollIntoView()
+    // Récurrence annuelle
+    cy.contains('oui').click()
+
+    cy.contains('Plages de dates')
+      .parent()
+      .parent()
+      .find('input')
+      .eq(0)
+      .click({ force: true })
+      .wait(250)
+      .type('10102024', { delay: 150, force: true })
+    cy.contains('Plages de dates')
+      .parent()
+      .parent()
+      .find('input')
+      .eq(1)
+      .click({ force: true })
+      .wait(250)
+      .type('31102024', { delay: 500, force: true })
+    cy.contains('Plages de dates').parent().parent().find('a').eq(0).click()
+    cy.contains('Plages de dates')
+      .parent()
+      .parent()
+      .find('input')
+      .eq(2)
+      .click({ force: true })
+      .wait(250)
+      .type('10122024', { delay: 500, force: true })
+    cy.contains('Plages de dates')
+      .parent()
+      .parent()
+      .find('input')
+      .eq(3)
+      .click({ force: true })
+      .wait(250)
+      .type('31122024', { delay: 500, force: true })
+
+    cy.get('[data-cy="weekday-lundi"]').click()
+    cy.get('[data-cy="weekday-mercredi"]').click()
+    cy.get('[data-cy="holidays-checkbox"]').click()
+
+    // When
+    cy.get('[data-cy="validate-button"]').click()
+
+    // Then
+
+    cy.wait('@postRegulation').then(({ request, response }) => {
+      expect(request.body)
+        .contain('<Name>fishing_period</Name>' +
+        '<Value>{"dateRanges":[{"endDate":"0002-10-31T00:00:00.000Z","startDate":"0002-10-10T00:00:00.000Z"},' +
+        '{"endDate":"0002-12-31T00:00:00.000Z","startDate":"0002-12-10T00:00:00.000Z"}],"dates":[],"timeIntervals":[],' +
+        '"weekdays":["lundi","mercredi"],"holidays":true,"authorized":true,"annualRecurrence":true}</Value>')
+
+      expect(response && response.statusCode).equal(200)
+    })
   })
 })

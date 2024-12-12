@@ -3,7 +3,7 @@ import GeoJSON from 'ol/format/GeoJSON'
 import { all } from 'ol/loadingstrategy'
 import VectorSource from 'ol/source/Vector'
 
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map/constants'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './features/Map/constants'
 
 import type { GeoJSON as GeoJSONType } from './domain/types/GeoJSON'
 import type { Extent } from 'ol/extent'
@@ -111,7 +111,7 @@ export function getDateMonthsBefore(date, nofMonths) {
 }
 
 /** @deprecated Use `@libs/localStorageManager`. */
-export const getLocalStorageState = (defaultValue, key) => {
+export const getLocalStorageState = <T>(defaultValue: T, key: string): T => {
   const stickyValue = window.localStorage.getItem(key)
 
   return stickyValue !== null ? JSON.parse(stickyValue) : defaultValue

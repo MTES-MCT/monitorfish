@@ -7,7 +7,7 @@ import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedEr
 import { removeError, setError } from '../../../domain/shared_slices/Global'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { updateSelectedVesselTrackRequest } from '../../../domain/use_cases/vessel/updateSelectedVesselTrackRequest'
-import NoLogbookMessagesFoundError from '../../../errors/NoLogbookMessagesFoundError'
+import { NoLogbookMessagesFoundError } from '../../../errors/NoLogbookMessagesFoundError'
 import { logbookApi, logbookLightApi } from '../api'
 import { NavigateTo } from '../constants'
 import { logbookActions } from '../slice'

@@ -1,6 +1,6 @@
-import { closeRegulatoryZoneMetadataPanel, resetRegulatoryGeometriesToPreview } from '../slice'
+import { regulationActions } from '../slice'
 
 export const closeRegulatoryZoneMetadata = () => dispatch => {
-  dispatch(closeRegulatoryZoneMetadataPanel())
-  dispatch(resetRegulatoryGeometriesToPreview())
+  dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
+  dispatch(regulationActions.resetRegulatoryGeometriesToPreview())
 }

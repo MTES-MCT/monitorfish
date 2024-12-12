@@ -1,34 +1,31 @@
+import { LayerProperties } from '@features/Map/constants'
+import { getFeaturesFromRegulatoryZones } from '@features/Map/layers/utils'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { useHybridAppDispatch } from '@hooks/useHybridAppDispatch'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useRef } from 'react'
 
 import { getRegulatoryLayerStyle } from './styles/regulatoryLayer.style'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import zoomInLayer from '../../LayersSidebar/useCases/zoomInLayer'
-import { getFeaturesFromRegulatoryZones } from '../../map/layers/utils'
-import { monitorfishMap } from '../../map/monitorfishMap'
+import { zoomInLayer } from '../../LayersSidebar/useCases/zoomInLayer'
 
-import type { VectorLayerWithName } from '../../../domain/types/layer'
-import type { BaseRegulatoryZone } from '../types'
+import type { BaseRegulatoryZone, RegulatoryZone } from '../types'
+import type { MonitorFishMap } from '@features/Map/Map.types'
+import type { ZoneSelected } from '@features/VesselFilter/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 import type { MutableRefObject } from 'react'
+import type { UnknownAction } from 'redux'
 
-function UnmemoizedRegulatoryPreviewLayer() {
-  const dispatch = useMainAppDispatch()
-  /**
-   * `useMainAppSelector` is typed as `MainApp` store but `useBackofficeAppSelector` also works as `state.regulatory`
-   * is used in both stores.
-   */
-  const regulatoryZonesToPreview = useMainAppSelector(state => state.regulatory.regulatoryZonesToPreview)
-  /**
-   * /!\ `regulatoryLayerSearch` will be null when using this component in <Backoffice/> page.
-   */
-  const zoneSelected = useMainAppSelector(state => state.regulatoryLayerSearch?.zoneSelected)
+type RegulatoryPreviewLayerProps = Readonly<{
+  regulatoryZonesToPreview: Array<Partial<RegulatoryZone>>
+  zoneSelected?: ZoneSelected | undefined
+}>
+function UnmemoizedRegulatoryPreviewLayer({ regulatoryZonesToPreview, zoneSelected }: RegulatoryPreviewLayerProps) {
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
-  const layerRef = useRef() as MutableRefObject<VectorLayerWithName>
+  const layerRef = useRef() as MutableRefObject<MonitorFishMap.VectorLayerWithName>
+
+  const dispatch = useHybridAppDispatch()
 
   function getVectorSource() {
     if (!vectorSourceRef.current) {
@@ -45,7 +42,7 @@ function UnmemoizedRegulatoryPreviewLayer() {
       layerRef.current = new Vector({
         renderBuffer: 4,
         source: getVectorSource(),
-        style: feature => [getRegulatoryLayerStyle(feature as Feature, feature.getProperties() as BaseRegulatoryZone)],
+        style: feature => [getRegulatoryLayerStyle(feature, feature.getProperties() as BaseRegulatoryZone)],
         updateWhileAnimating: true,
         updateWhileInteracting: true
       })
@@ -66,7 +63,7 @@ function UnmemoizedRegulatoryPreviewLayer() {
 
     // Do not zoom on regulation when a specific zone was drawed to search regulations
     if (!zoneSelected) {
-      dispatch(zoomInLayer({ feature: features[0] }))
+      dispatch(zoomInLayer<any>({ feature: features[0] }) as unknown as UnknownAction)
     }
   }, [dispatch, zoneSelected, regulatoryZonesToPreview])
 

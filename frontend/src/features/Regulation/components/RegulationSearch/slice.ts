@@ -1,14 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { GeoJSON } from '../../../../domain/types/GeoJSON'
 import type { RegulatoryLawTypes } from '../../types'
+import type { ZoneSelected } from '@features/VesselFilter/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
-
-type ZoneSelected = {
-  code: string
-  feature: GeoJSON.Geometry
-  name: string
-}
 
 type VesselListState = {
   advancedSearchIsOpen: boolean

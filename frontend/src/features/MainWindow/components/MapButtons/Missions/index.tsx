@@ -1,4 +1,5 @@
 import { COLORS } from '@constants/constants'
+import { MapBox } from '@features/Map/constants'
 import { addMission } from '@features/Mission/useCases/addMission'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -7,7 +8,6 @@ import { Accent, Button, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { MapBox } from '../../../../../domain/entities/map/constants'
 import { SideWindowMenuKey, SideWindowStatus } from '../../../../../domain/entities/sideWindow/constants'
 import { setDisplayedComponents } from '../../../../../domain/shared_slices/DisplayedComponent'
 import { setLeftMapBoxOpened } from '../../../../../domain/shared_slices/Global'

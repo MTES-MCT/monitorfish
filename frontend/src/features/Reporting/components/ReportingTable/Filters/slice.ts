@@ -1,11 +1,11 @@
 import { ReportingType } from '@features/Reporting/types'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
-export type reportingTableFiltersState = {
+export type ReportingTableFiltersState = {
   reportingTypesDisplayed: ReportingType[]
   searchQuery: string | undefined
 }
-const INITIAL_STATE: reportingTableFiltersState = {
+const INITIAL_STATE: ReportingTableFiltersState = {
   reportingTypesDisplayed: [ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION],
   searchQuery: undefined
 }

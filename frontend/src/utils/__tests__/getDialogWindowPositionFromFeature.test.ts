@@ -1,8 +1,8 @@
+import { MonitorFishMap } from '@features/Map/Map.types'
 import { describe, expect, it, jest } from '@jest/globals'
 import { Geometry } from 'ol/geom'
 import Map from 'ol/Map'
 
-import { MonitorFishLayer } from '../../domain/entities/layers/types'
 import { FeatureWithCodeAndEntityId } from '../../libs/FeatureWithCodeAndEntityId'
 import { getDialogWindowPositionFromFeature, type Margins } from '../getDialogWindowPositionFromFeature'
 
@@ -13,7 +13,7 @@ const TEST_WINDOW_MARGINS: Margins = [21, 22, 23, 24]
 
 describe('utils/getDialogWindowPositionFromFeature()', () => {
   const featureMock = new FeatureWithCodeAndEntityId({
-    code: MonitorFishLayer.VESSELS,
+    code: MonitorFishMap.MonitorFishLayer.VESSELS,
     entityId: 123,
     geometry: new Geometry()
   })

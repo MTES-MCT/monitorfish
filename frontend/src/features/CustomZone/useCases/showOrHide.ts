@@ -1,7 +1,7 @@
+import { MonitorFishMap } from '@features/Map/Map.types'
 import { logSoftError, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import GeoJSON from 'ol/format/GeoJSON'
 
-import { MonitorFishLayer } from '../../../domain/entities/layers/types'
 import { customZoneActions } from '../slice'
 import { fitViewToFeatures } from '../utils/fitViewToFeatures'
 import { getLayer } from '../utils/getLayer'
@@ -20,7 +20,7 @@ export const showOrHide =
       return
     }
 
-    const layer = getLayer(MonitorFishLayer.CUSTOM)
+    const layer = getLayer(MonitorFishMap.MonitorFishLayer.CUSTOM)
     if (!layer) {
       logSoftError({
         isSideWindowError: false,
@@ -35,7 +35,7 @@ export const showOrHide =
         layer
           .getSource()
           ?.getFeatures()
-          .filter(feature => feature.get('uuid') === uuid) || []
+          .filter(feature => feature.get('uuid') === uuid) ?? []
 
       features.forEach(feature => layer.getSource()?.removeFeature(feature))
       dispatch(customZoneActions.hide(uuid))

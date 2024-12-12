@@ -1,7 +1,7 @@
+import { LayerProperties } from '@features/Map/constants'
 import Feature from 'ol/Feature'
 import LineString from 'ol/geom/LineString'
 
-import { LayerProperties } from './layers/constants'
 import { getVesselCompositeIdentifier } from './vessel/vessel'
 
 export class VesselLabelLine {

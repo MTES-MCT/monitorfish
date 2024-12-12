@@ -6,8 +6,7 @@ import type { Specy, SpecyGroup } from '../types/specy'
 
 export type SpecyState = {
   species: Specy[]
-  // TODO Type this prop.
-  speciesByCode: Record<string, Record<string, any>>
+  speciesByCode: Record<string, Specy>
   speciesGroups: SpecyGroup[]
 }
 const INITIAL_STATE: SpecyState = {
@@ -37,4 +36,5 @@ const speciesSlice = createSlice({
 
 export const { setSpeciesAndSpeciesGroups } = speciesSlice.actions
 
+export const speciesActions = speciesSlice.actions
 export const speciesReducer = speciesSlice.reducer

@@ -6,9 +6,9 @@ import { getRegulatoryZoneTextTypeAsText } from '../../../utils'
 import { SectionTitle, Section, List, Label } from '../RegulatoryMetadata.style'
 
 export function RegulatoryReferencesDisplayed() {
-  const regulatory = useMainAppSelector(state => state.regulatory)
+  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
 
-  const { regulatoryReferences } = regulatory.regulatoryZoneMetadata ?? {}
+  const { regulatoryReferences } = regulatoryZoneMetadata ?? {}
 
   const sendTrackEvent = () => {
     trackEvent({

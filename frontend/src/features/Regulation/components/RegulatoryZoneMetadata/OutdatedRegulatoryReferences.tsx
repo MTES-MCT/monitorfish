@@ -2,16 +2,16 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { INFINITE } from '../../../BackOffice/constants'
 import AlertSVG from '../../../icons/Picto_alerte.svg?react'
+import { INFINITE } from '../RegulationTables/constants'
 
 export function OutdatedRegulatoryReferences() {
   const { hasAtLeastOneOutdatedReference, hasOneRegulatoryReference } = useMainAppSelector(state => {
     const today = new Date()
     let nextHasAtLeastOneOutdatedReference = false
 
-    if (Array.isArray(state.regulatory.regulatoryZoneMetadata?.regulatoryReferences)) {
-      state.regulatory.regulatoryZoneMetadata?.regulatoryReferences.forEach(reference => {
+    if (Array.isArray(state.regulation.regulatoryZoneMetadata?.regulatoryReferences)) {
+      state.regulation.regulatoryZoneMetadata?.regulatoryReferences.forEach(reference => {
         if (reference?.endDate && reference.endDate !== INFINITE) {
           nextHasAtLeastOneOutdatedReference =
             new Date(reference?.endDate) < today || nextHasAtLeastOneOutdatedReference
@@ -21,7 +21,7 @@ export function OutdatedRegulatoryReferences() {
 
     return {
       hasAtLeastOneOutdatedReference: nextHasAtLeastOneOutdatedReference,
-      hasOneRegulatoryReference: state.regulatory.regulatoryZoneMetadata?.regulatoryReferences?.length === 1
+      hasOneRegulatoryReference: state.regulation.regulatoryZoneMetadata?.regulatoryReferences?.length === 1
     }
   })
 

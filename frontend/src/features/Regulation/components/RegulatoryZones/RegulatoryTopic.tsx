@@ -1,22 +1,20 @@
-import RegulatoryTopicInput from '@features/BackOffice/list_regulation/RegulatoryTopicInput'
+import { LayerProperties } from '@features/Map/constants'
+import { RegulatoryTopicInput } from '@features/Regulation/components/RegulationTables/RegulatoryTopicInput'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { RegulatoryZone } from './RegulatoryZone'
-import { COLORS } from '../../../../constants/constants'
-import { NamespaceContext } from '../../../../context/NamespaceContext'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../../libs/FrontendError'
 import { EditIcon } from '../../../commonStyles/icons/EditIcon.style'
 import { hideLayer } from '../../../LayersSidebar/useCases/hideLayer'
-import { addRegulatoryTopicOpened, closeRegulatoryZoneMetadataPanel, removeRegulatoryTopicOpened } from '../../slice'
+import { regulationActions } from '../../slice'
 import { showRegulatoryTopic } from '../../useCases/showRegulatoryTopic'
 
-import type { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
 import type { RegulatoryZone as RegulatoryZoneType } from '../../types'
+import type { MainAppThunk } from '@store'
 import type { Promisable } from 'type-fest'
 
 export type RegulatoryTopicProps = {
@@ -24,12 +22,12 @@ export type RegulatoryTopicProps = {
   isEditable: boolean
   isLastItem: boolean
   /** Remove a single regulation zone layer. */
-  onRemoveById: (id: number | string) => Promisable<void>
+  onRemoveById?: (id: number | string) => Promisable<void>
   /** Remove all the regulation zone layers for the given topic. */
-  onRemoveByTopic: (topic: string, numberOfZones: number) => Promisable<void>
+  onRemoveByTopic?: (topic: string, numberOfZones: number) => Promisable<void>
   regulatoryTopic: string
   regulatoryZones: RegulatoryZoneType[] | undefined
-  updateLayerName?: (topic: string, value: string) => Promisable<void>
+  updateLayerName?: (previousTopic: string, nextTopic: string) => void
 }
 function UnmemoizedRegulatoryTopic({
   allowRemoveZone,
@@ -48,11 +46,11 @@ function UnmemoizedRegulatoryTopic({
   const dispatch = useMainAppDispatch()
   const ref = useRef<HTMLLIElement | null>(null)
   const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
-  const regulatoryTopicsOpened = useMainAppSelector(state => state.regulatory.regulatoryTopicsOpened)
-  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulatory.regulatoryZoneMetadata)
+  const regulatoryTopicsOpened = useMainAppSelector(state => state.regulation.regulatoryTopicsOpened)
+  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
   const lawType = regulatoryZones[0]?.lawType
   const numberOfTotalZones = useMainAppSelector(state => {
-    const { regulatoryLayerLawTypes } = state.regulatory
+    const { regulatoryLayerLawTypes } = state.regulation
 
     if (regulatoryLayerLawTypes && lawType && regulatoryTopic && regulatoryLayerLawTypes[lawType]) {
       const regulatoryLayerLawType = regulatoryLayerLawTypes[lawType]
@@ -89,20 +87,18 @@ function UnmemoizedRegulatoryTopic({
     return isTopicFoundInShowedLayers && isTopicFoundInSelectedLayers
   }, [showedLayers, regulatoryZones, regulatoryTopic])
 
-  const showTopic = (namespace: LayerSliceNamespace) => {
+  const showTopic = () => {
     dispatch(
       showRegulatoryTopic({
-        namespace,
         regulatoryZones,
         type: LayerProperties.REGULATORY.code
-      })
+      }) as unknown as MainAppThunk
     )
   }
 
-  const hideTopic = (namespace: LayerSliceNamespace) => {
+  const hideTopic = () => {
     dispatch(
       hideLayer({
-        namespace,
         topic: regulatoryTopic,
         type: LayerProperties.REGULATORY.code
       })
@@ -126,86 +122,85 @@ function UnmemoizedRegulatoryTopic({
 
   const onRegulatoryTopicClick = useCallback(() => {
     if (isOpen) {
-      dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
-      dispatch(closeRegulatoryZoneMetadataPanel())
+      dispatch(regulationActions.removeRegulatoryTopicOpened(regulatoryTopic))
+      dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
     } else {
-      dispatch(addRegulatoryTopicOpened(regulatoryTopic))
+      dispatch(regulationActions.addRegulatoryTopicOpened(regulatoryTopic))
     }
   }, [dispatch, isOpen, regulatoryTopic])
 
   return (
-    <NamespaceContext.Consumer>
-      {namespace => (
-        <Row ref={ref} data-cy="regulatory-layer-topic-row">
-          <Topic $isLastItem={isLastItem} $isOpen={isOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-            <Name data-cy="regulatory-layers-my-zones-topic" onClick={onRegulatoryTopicClick} title={regulatoryTopic}>
-              {isTopicInEdition ? (
-                <RegulatoryTopicInput
-                  setIsTopicEditable={setIsTopicInEdition}
-                  topic={regulatoryTopic}
-                  updateTopic={updateLayerName}
-                />
-              ) : (
-                <Text>{regulatoryTopic}</Text>
-              )}
-            </Name>
-            <ZonesNumber>{`${regulatoryZones?.length}/${numberOfTotalZones}`}</ZonesNumber>
-            <Icons>
-              {isEditable && (
-                <EditIcon
-                  $isOver={isOver}
-                  data-cy="regulatory-topic-edit"
-                  onClick={onEditTopicClick}
-                  title="Modifier le nom de la thématique"
-                />
-              )}
-              {atLeastOneZoneIsShowed ? (
-                <Icon.Display
-                  data-cy="regulatory-layers-my-zones-zone-hide"
-                  /* eslint-disable-next-line react/jsx-no-bind */
-                  onClick={() => hideTopic(namespace)}
-                  size={20}
-                  title={`Cacher la thématique "${regulatoryTopic}"`}
-                />
-              ) : (
-                <Icon.Hide
-                  color={THEME.color.lightGray}
-                  data-cy="regulatory-layers-my-zones-zone-show"
-                  /* eslint-disable-next-line react/jsx-no-bind */
-                  onClick={() => showTopic(namespace)}
-                  size={20}
-                  title={`Afficher la thématique "${regulatoryTopic}"`}
-                />
-              )}
-              {allowRemoveZone && (
-                <Icon.Close
-                  color={THEME.color.slateGray}
-                  onClick={() => onRemoveByTopic(getFirstRegulatoryZoneTopic(regulatoryZones), regulatoryZones.length)}
-                  size={15}
-                  title="Supprimer la thématique de ma sélection"
-                />
-              )}
-            </Icons>
-          </Topic>
-          <List $isOpen={isOpen} $zonesLength={regulatoryZones.length}>
-            {regulatoryZones &&
-              showedLayers &&
-              regulatoryZones.map((regulatoryZone, index) => (
-                <RegulatoryZone
-                  key={`${regulatoryZone.topic}:${regulatoryZone.zone}`}
-                  allowRemoveZone={allowRemoveZone}
-                  isEditable={isEditable}
-                  isLast={regulatoryZones.length === index + 1}
-                  namespace={namespace}
-                  onRemove={onRemoveById}
-                  regulatoryTopic={regulatoryTopic}
-                  regulatoryZone={regulatoryZone}
-                />
-              ))}
-          </List>
-        </Row>
-      )}
-    </NamespaceContext.Consumer>
+    <Row ref={ref} data-cy="regulatory-layer-topic-row">
+      <Topic $isLastItem={isLastItem} $isOpen={isOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+        <Name data-cy="regulatory-layers-my-zones-topic" onClick={onRegulatoryTopicClick} title={regulatoryTopic}>
+          {isTopicInEdition ? (
+            <RegulatoryTopicInput
+              setIsTopicEditable={setIsTopicInEdition}
+              topic={regulatoryTopic}
+              updateTopic={updateLayerName}
+            />
+          ) : (
+            <Text>{regulatoryTopic}</Text>
+          )}
+        </Name>
+        <ZonesNumber>{`${regulatoryZones?.length}/${numberOfTotalZones}`}</ZonesNumber>
+        <Icons>
+          {isEditable && (
+            <EditIcon
+              $isOver={isOver}
+              data-cy="regulatory-topic-edit"
+              onClick={onEditTopicClick}
+              title="Modifier le nom de la thématique"
+            />
+          )}
+          {atLeastOneZoneIsShowed ? (
+            <Icon.Display
+              data-cy="regulatory-layers-my-zones-zone-hide"
+              /* eslint-disable-next-line react/jsx-no-bind */
+              onClick={hideTopic}
+              size={20}
+              title={`Cacher la thématique "${regulatoryTopic}"`}
+            />
+          ) : (
+            <Icon.Hide
+              color={THEME.color.lightGray}
+              data-cy="regulatory-layers-my-zones-zone-show"
+              /* eslint-disable-next-line react/jsx-no-bind */
+              onClick={showTopic}
+              size={20}
+              title={`Afficher la thématique "${regulatoryTopic}"`}
+            />
+          )}
+          {allowRemoveZone && (
+            <Icon.Close
+              color={THEME.color.slateGray}
+              onClick={
+                onRemoveByTopic
+                  ? () => onRemoveByTopic(getFirstRegulatoryZoneTopic(regulatoryZones), regulatoryZones.length)
+                  : undefined
+              }
+              size={15}
+              title="Supprimer la thématique de ma sélection"
+            />
+          )}
+        </Icons>
+      </Topic>
+      <List $isOpen={isOpen} $zonesLength={regulatoryZones.length}>
+        {regulatoryZones &&
+          showedLayers &&
+          regulatoryZones.map((regulatoryZone, index) => (
+            <RegulatoryZone
+              key={`${regulatoryZone.topic}:${regulatoryZone.zone}`}
+              allowRemoveZone={allowRemoveZone}
+              isEditable={isEditable}
+              isLast={regulatoryZones.length === index + 1}
+              onRemove={onRemoveById}
+              regulatoryTopic={regulatoryTopic}
+              regulatoryZone={regulatoryZone}
+            />
+          ))}
+      </List>
+    </Row>
   )
 }
 
@@ -248,7 +243,7 @@ const Name = styled.span`
 `
 
 const ZonesNumber = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-size: 11px;
   margin-right: 4px;
 `

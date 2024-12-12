@@ -1,3 +1,4 @@
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { useForceUpdate } from '@mtes-mct/monitor-ui'
 import { Overlay } from 'ol'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
@@ -8,7 +9,6 @@ import { getStationPointFeature } from './StationLayer/utils'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { useMoveOverlayWhenDragging } from '../../../hooks/useMoveOverlayWhenDragging'
 import { getDialogOverlayOffsetFromFeature } from '../../../utils/getDialogOverlayOffsetFromFeature'
-import { monitorfishMap } from '../../map/monitorfishMap'
 import { FEATURE_MARGINS } from '../constants'
 import { useGetStationsQuery } from '../stationApi'
 

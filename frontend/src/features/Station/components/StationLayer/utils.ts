@@ -1,3 +1,5 @@
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
+import { MonitorFishMap } from '@features/Map/Map.types'
 import { THEME, type Station } from '@mtes-mct/monitor-ui'
 import { isEmpty } from 'lodash'
 import { uniq } from 'lodash/fp'
@@ -6,8 +8,6 @@ import { LineString, Point } from 'ol/geom'
 import { Fill, Icon, Stroke, Style, Text } from 'ol/style'
 import CircleStyle from 'ol/style/Circle'
 
-import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
 import { FeatureWithCodeAndEntityId } from '../../../../libs/FeatureWithCodeAndEntityId'
 
 import type { StyleFunction } from 'ol/style/Style'
@@ -81,7 +81,7 @@ export function getStationPointFeature(station: Station.Station) {
   )
 
   const feature = new FeatureWithCodeAndEntityId({
-    code: MonitorFishLayer.STATION,
+    code: MonitorFishMap.MonitorFishLayer.STATION,
     entityId: station.id,
     geometry
   })

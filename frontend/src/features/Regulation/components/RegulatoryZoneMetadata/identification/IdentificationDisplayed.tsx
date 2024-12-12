@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Key, Value, Fields, Field } from '../RegulatoryMetadata.style'
 
 export function IdentificationDisplayed() {
-  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulatory.regulatoryZoneMetadata)
+  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
 
   const { lawType, region, topic, zone } = regulatoryZoneMetadata ?? {}
 

@@ -1,3 +1,4 @@
+import { getColorWithAlpha } from '@features/Map/layers/styles/utils'
 import { MISSION_ACTION_ZONE_FEATURE_ID } from '@features/Mission/constants'
 import { missionZoneStyle } from '@features/Mission/layers/MissionLayer/styles'
 import { THEME } from '@mtes-mct/monitor-ui'
@@ -6,7 +7,6 @@ import { MultiPoint, MultiPolygon } from 'ol/geom'
 import { Fill, Icon, Stroke, Style } from 'ol/style'
 
 import { isControl } from '../../../../domain/entities/controls'
-import { getColorWithAlpha } from '../../../map/layers/styles/utils'
 import { MissionAction } from '../../missionAction.types'
 
 import MissionActionType = MissionAction.MissionActionType

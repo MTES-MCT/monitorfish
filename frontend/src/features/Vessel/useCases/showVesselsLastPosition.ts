@@ -1,13 +1,13 @@
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { transform } from 'ol/proj'
 
 import { applyFilterToVessels } from './applyFilterToVessels'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
 import { Vessel } from '../../../domain/entities/vessel/vessel'
 import { resetIsUpdatingVessels } from '../../../domain/shared_slices/Global'
-import getUniqueSpeciesAndDistricts from '../../../domain/use_cases/species/getUniqueSpeciesAndDistricts'
+import { getUniqueSpeciesAndDistricts } from '../../../domain/use_cases/species/getUniqueSpeciesAndDistricts'
 import { customHexToRGB } from '../../../utils'
 import { setVessels, setVesselsSpeciesAndDistricts } from '../slice'
 

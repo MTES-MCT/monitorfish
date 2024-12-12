@@ -1,4 +1,11 @@
 import { MapInteraction } from '@features/Draw/components/MapInteraction'
+import {
+  InteractionListener,
+  InteractionType,
+  OPENLAYERS_PROJECTION,
+  OpenLayersGeometryType,
+  WSG84_PROJECTION
+} from '@features/Map/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { CoordinatesInput, Icon, IconButton } from '@mtes-mct/monitor-ui'
@@ -9,15 +16,8 @@ import { transform } from 'ol/proj'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import {
-  InteractionListener,
-  InteractionType,
-  OPENLAYERS_PROJECTION,
-  OpenLayersGeometryType,
-  WSG84_PROJECTION
-} from '../../../domain/entities/map/constants'
 import { SideWindowStatus } from '../../../domain/entities/sideWindow/constants'
-import { fitToExtent } from '../../../domain/shared_slices/Map'
+import { fitToExtent } from '../../Map/slice'
 import { setInteractionType } from '../slice'
 import { addFeatureToDrawedFeature } from '../useCases/addFeatureToDrawedFeature'
 import { closeDraw } from '../useCases/closeDraw'

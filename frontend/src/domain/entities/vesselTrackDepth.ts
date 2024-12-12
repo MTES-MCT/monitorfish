@@ -1,5 +1,5 @@
-import NoDEPFoundError from '../../errors/NoDEPFoundError'
-import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
+import { NoDEPFoundError } from '../../errors/NoDEPFoundError'
+import { NoPositionsFoundError } from '../../errors/NoPositionsFoundError'
 
 import type { TrackRequest, TrackRequestPredefined, VesselPosition } from './vessel/types'
 

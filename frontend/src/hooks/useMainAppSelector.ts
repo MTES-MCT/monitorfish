@@ -2,9 +2,8 @@
 import { useSelector } from 'react-redux'
 
 import type { MainRootState } from '../store'
-import type { TypedUseSelectorHook } from 'react-redux'
 
 /**
- * @see https://react-redux.js.org/using-react-redux/usage-with-typescript#typing-the-useselector-hook
+ * @see https://redux.js.org/usage/usage-with-typescript#withtypes
  */
-export const useMainAppSelector: TypedUseSelectorHook<MainRootState> = useSelector
+export const useMainAppSelector = useSelector.withTypes<MainRootState>()

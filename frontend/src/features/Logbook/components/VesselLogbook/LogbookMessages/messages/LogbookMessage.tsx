@@ -39,7 +39,7 @@ export function LogbookMessage({
         return (
           <>
             <LogbookMessageName>{LogbookMessageTypeEnum[depMessage.messageType].name}</LogbookMessageName>
-            {depMessage.message.departurePortName || depMessage.message.departurePort} le{' '}
+            {depMessage.message.departurePortName ?? depMessage.message.departurePort} le{' '}
             {getDateTime(depMessage.message.departureDatetimeUtc, true)} <Gray>(UTC)</Gray>
           </>
         )

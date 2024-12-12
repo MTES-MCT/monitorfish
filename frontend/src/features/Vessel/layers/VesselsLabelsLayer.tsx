@@ -1,3 +1,7 @@
+import { LayerProperties } from '@features/Map/constants'
+import { getLabelLineStyle } from '@features/Map/layers/styles/labelLine.style'
+import { MonitorFishMap } from '@features/Map/Map.types'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { extractVesselPropertiesFromFeature } from '@features/Vessel/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
@@ -7,8 +11,6 @@ import VectorSource from 'ol/source/Vector'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { MonitorFishLayer } from '../../../domain/entities/layers/types'
 import { drawMovedLabelLineIfFoundAndReturnOffset } from '../../../domain/entities/vessel/label'
 import {
   getVesselCompositeIdentifier,
@@ -16,12 +18,9 @@ import {
   Vessel
 } from '../../../domain/entities/vessel/vessel'
 import { VesselLabelLine } from '../../../domain/entities/vesselLabelLine'
-import { getLabelLineStyle } from '../../map/layers/styles/labelLine.style'
-import { monitorfishMap } from '../../map/monitorfishMap'
 import { VesselLabelOverlay } from '../components/VesselLabelOverlay'
 import { vesselSelectors } from '../slice'
 
-import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 import type { MutableRefObject } from 'react'
@@ -69,7 +68,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
   const isThrottled = useRef(false)
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
-  const layerRef = useRef() as MutableRefObject<VectorLayerWithName>
+  const layerRef = useRef() as MutableRefObject<MonitorFishMap.VectorLayerWithName>
   const [currentLabels, setCurrentLabels] = useState<JSX.Element[]>([])
 
   const getVectorSource = useCallback(() => {
@@ -201,7 +200,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
       .getLayers()
       .getArray()
       // @ts-ignore
-      ?.find(olLayer => olLayer.name === MonitorFishLayer.VESSELS)
+      ?.find(olLayer => olLayer.name === MonitorFishMap.MonitorFishLayer.VESSELS)
       // @ts-ignore
       ?.getSource()
     vesselsLayer?.current?.forEachFeatureInExtent(monitorfishMap.getView().calculateExtent(), vesselFeature => {
@@ -325,7 +324,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
         .getLayers()
         .getArray()
         // @ts-ignore
-        ?.find(olLayer => olLayer.name === MonitorFishLayer.VESSELS)
+        ?.find(olLayer => olLayer.name === MonitorFishMap.MonitorFishLayer.VESSELS)
         // @ts-ignore
         ?.getSource()
       const featuresInExtent = vesselsLayer?.getFeaturesInExtent(monitorfishMap.getView().calculateExtent()) || []

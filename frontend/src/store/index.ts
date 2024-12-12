@@ -17,7 +17,7 @@ import { backofficeReducer, mainReducer } from './reducers'
 import { monitorenvApi, monitorfishApi, monitorfishLightApi, monitorfishPublicApi } from '../api/api'
 import { mapToProcessingRegulation } from '../features/Regulation/utils'
 
-import type { RegulationState } from '../features/BackOffice/slice'
+import type { RegulationState } from '../features/Regulation/slice'
 import type { AnyAction } from '@reduxjs/toolkit'
 import type { PersistConfig } from 'redux-persist'
 import type { ThunkAction } from 'redux-thunk'
@@ -57,6 +57,7 @@ export const mainStorePersistor = persistStore(mainStore)
 // https://react-redux.js.org/using-react-redux/usage-with-typescript#define-root-state-and-dispatch-types
 // Infer the `MainRootState` and `AppDispatch` types from the store itself
 export type MainAppDispatch = typeof mainStore.dispatch
+export type MainAppGetState = () => MainRootState
 export type MainAppThunk<ReturnType = void> = ThunkAction<ReturnType, MainRootState, undefined, AnyAction>
 export type MainRootState = ReturnType<typeof mainStore.getState>
 export type MainAppUseCase = () => MainAppThunk
@@ -106,5 +107,6 @@ export const backofficeStorePersistor = persistStore(backofficeStore)
 
 // https://react-redux.js.org/using-react-redux/usage-with-typescript#define-root-state-and-dispatch-types
 export type BackofficeAppDispatch = typeof backofficeStore.dispatch
+export type BackofficeAppGetState = () => BackofficeRootState
 export type BackofficeAppThunk<ReturnType = void> = ThunkAction<ReturnType, BackofficeRootState, unknown, AnyAction>
 export type BackofficeRootState = ReturnType<typeof backofficeStore.getState>

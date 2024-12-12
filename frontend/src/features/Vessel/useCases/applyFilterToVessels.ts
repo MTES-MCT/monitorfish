@@ -1,6 +1,6 @@
 import { setError } from '../../../domain/shared_slices/Global'
 import { getFilteredVessels } from '../../../domain/use_cases/vessel/getFilteredVessels'
-import NoVesselsInFilterError from '../../../errors/NoVesselsInFilterError'
+import { NoVesselsInFilterError } from '../../../errors/NoVesselsInFilterError'
 import { setAllVesselsAsUnfiltered, setFilteredVesselsFeatures, vesselSelectors } from '../slice'
 
 import type { MainAppThunk } from '@store'

@@ -1,5 +1,5 @@
 import { NotifierEvent } from '@components/Notifier/NotifierEvent'
-import { backofficeProducerOrganizationMembershipActions } from '@features/ProducerOrganizationMembership/backoffice.slice'
+import { backofficeProducerOrganizationMembershipActions } from '@features/ProducerOrganizationMembership/slice.backoffice'
 import { updateProducerOrganizationMemberships } from '@features/ProducerOrganizationMembership/useCases/updateProducerOrganizationMemberships'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'

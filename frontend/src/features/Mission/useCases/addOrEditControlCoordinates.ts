@@ -1,13 +1,13 @@
+import { InteractionListener, InteractionType } from '@features/Map/constants'
+import { getCoordinatesExtent } from '@features/Map/useCases/getCoordinatesExtent'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import { boundingExtent } from 'ol/extent'
 import { transformExtent } from 'ol/proj'
 
 import { openDrawLayerModal } from './addOrEditMissionZone'
-import { InteractionListener, InteractionType } from '../../../domain/entities/map/constants'
-import { fitToExtent } from '../../../domain/shared_slices/Map'
-import { getCoordinatesExtent } from '../../../domain/use_cases/map/getCoordinatesExtent'
 import { unselectVessel } from '../../../domain/use_cases/vessel/unselectVessel'
 import { setInitialGeometry, setInteractionTypeAndListener } from '../../Draw/slice'
+import { fitToExtent } from '../../Map/slice'
 
 import type { GeoJSON as GeoJSONNamespace, GeoJSON } from '../../../domain/types/GeoJSON'
 import type { MainAppThunk } from '@store'

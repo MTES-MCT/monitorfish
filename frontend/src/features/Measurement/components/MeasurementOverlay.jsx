@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { COLORS } from '@constants/constants'
 import CloseIconSVG from '../../icons/Croix_grise.svg?react'
-import { monitorfishMap } from '../../map/monitorfishMap'
+import { monitorfishMap } from '../../Map/monitorfishMap'
 
 function MeasurementOverlay({ coordinates, deleteFeature, id, measurement }) {
   const ref = createRef()

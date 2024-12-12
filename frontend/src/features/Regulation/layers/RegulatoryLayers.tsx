@@ -1,35 +1,42 @@
+import { HALF_A_SECOND } from '@constants/index'
+import { LayerProperties } from '@features/Map/constants'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { getLayerNameNormalized } from '@features/Map/utils'
+import { useHybridAppDispatch } from '@hooks/useHybridAppDispatch'
 import { Feature } from 'ol'
 import { Geometry } from 'ol/geom'
 import { useEffect, useRef } from 'react'
-import { useStore } from 'react-redux'
 
-import { getLayerNameNormalized } from '../../../domain/entities/layers'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { monitorfishMap } from '../../map/monitorfishMap'
-import { showSimplifiedGeometries, showWholeGeometries } from '../slice'
+import { regulationActions } from '../slice'
 import { getRegulatoryLayersToAdd } from '../useCases/getRegulatoryLayersToAdd'
 
-import type { VectorLayerWithName } from '../../../domain/types/layer'
+import type { RegulatoryZone } from '../types'
+import type { MonitorFishMap } from '@features/Map/Map.types'
+import type VectorImageLayer from 'ol/layer/VectorImage'
 
 export const METADATA_IS_SHOWED = 'metadataIsShowed'
 const SIMPLIFIED_FEATURE_ZOOM_LEVEL = 9.5
 
-export type RegulatoryLayersProps = {
+export type RegulatoryLayersProps = Readonly<{
+  lastShowedFeatures: Record<string, any>[]
+  layersToFeatures: Record<string, any>[]
   mapMovingAndZoomEvent?: any
-}
-export function RegulatoryLayers({ mapMovingAndZoomEvent }: RegulatoryLayersProps) {
-  const throttleDuration = 500 // ms
-  const dispatch = useMainAppDispatch()
-  const { getState } = useStore()
-
-  const { lastShowedFeatures, layersToFeatures, showedLayers } = useMainAppSelector(state => state.layer)
-
-  const { regulatoryZoneMetadata, simplifiedGeometries } = useMainAppSelector(state => state.regulatory)
-
-  const previousMapZoom = useRef('')
+  regulatoryZoneMetadata: RegulatoryZone | undefined
+  showedLayers: MonitorFishMap.ShowedLayer[]
+  simplifiedGeometries: boolean
+}>
+export function RegulatoryLayers({
+  lastShowedFeatures,
+  layersToFeatures,
+  mapMovingAndZoomEvent,
+  regulatoryZoneMetadata,
+  showedLayers,
+  simplifiedGeometries
+}: RegulatoryLayersProps) {
   const isThrottled = useRef(false)
+  const previousMapZoom = useRef('')
+
+  const dispatch = useHybridAppDispatch()
 
   useEffect(() => {
     sortRegulatoryLayersFromAreas(layersToFeatures, monitorfishMap.getLayers().getArray())
@@ -41,19 +48,23 @@ export function RegulatoryLayers({ mapMovingAndZoomEvent }: RegulatoryLayersProp
     }
 
     const olLayers = monitorfishMap.getLayers()
-    const vectorLayersToAdd = dispatch(getRegulatoryLayersToAdd(olLayers.getArray(), showedLayers))
+    // @ts-ignore
+    const vectorLayersToAdd: Array<VectorImageLayer<Feature<Geometry>>> = dispatch(
+      // @ts-ignore
+      getRegulatoryLayersToAdd(olLayers.getArray(), showedLayers)
+    )
     vectorLayersToAdd.forEach(vectorLayer => {
       olLayers.push(vectorLayer)
     })
     removeRegulatoryLayersToMap(showedLayers, olLayers)
-  }, [dispatch, getState, showedLayers])
+  }, [dispatch, showedLayers])
 
   useEffect(() => {
     function addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers() {
       const regulatoryLayers = monitorfishMap
         .getLayers()
         .getArray()
-        .filter(layer => (layer as VectorLayerWithName)?.name?.includes(LayerProperties.REGULATORY.code))
+        .filter(layer => (layer as MonitorFishMap.VectorLayerWithName)?.name?.includes(LayerProperties.REGULATORY.code))
 
       if (!regulatoryZoneMetadata) {
         removeMetadataIsShowedProperty(regulatoryLayers)
@@ -63,7 +74,7 @@ export function RegulatoryLayers({ mapMovingAndZoomEvent }: RegulatoryLayersProp
 
       const layerToAddProperty = regulatoryLayers.find(
         layer =>
-          (layer as VectorLayerWithName)?.name ===
+          (layer as MonitorFishMap.VectorLayerWithName)?.name ===
           `${LayerProperties.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
       )
 
@@ -94,13 +105,15 @@ export function RegulatoryLayers({ mapMovingAndZoomEvent }: RegulatoryLayersProp
         const regulatoryLayers = monitorfishMap
           .getLayers()
           .getArray()
-          .filter(layer => (layer as VectorLayerWithName)?.name?.includes(LayerProperties.REGULATORY.code))
+          .filter(layer =>
+            (layer as MonitorFishMap.VectorLayerWithName)?.name?.includes(LayerProperties.REGULATORY.code)
+          )
         regulatoryLayers.forEach(layer => {
-          const vectorSource = (layer as VectorLayerWithName).getSource()
+          const vectorSource = (layer as MonitorFishMap.VectorLayerWithName).getSource()
 
           if (vectorSource) {
             const layerToFeatures = layersToFeatures?.find(
-              layerToFeature => layerToFeature.name === (layer as VectorLayerWithName)?.name
+              layerToFeature => layerToFeature.name === (layer as MonitorFishMap.VectorLayerWithName)?.name
             )
             if (layerToFeatures) {
               const features = showSimplifiedFeatures
@@ -114,9 +127,9 @@ export function RegulatoryLayers({ mapMovingAndZoomEvent }: RegulatoryLayersProp
         })
 
         if (showSimplifiedFeatures) {
-          dispatch(showSimplifiedGeometries())
+          dispatch(regulationActions.showSimplifiedGeometries())
         } else {
-          dispatch(showWholeGeometries())
+          dispatch(regulationActions.showWholeGeometries())
         }
       }
     }
@@ -125,7 +138,7 @@ export function RegulatoryLayers({ mapMovingAndZoomEvent }: RegulatoryLayersProp
     setTimeout(() => {
       showSimplifiedOrWholeFeatures()
       isThrottled.current = false
-    }, throttleDuration)
+    }, HALF_A_SECOND)
     // The `mapMovingAndZoomEvent` prop is used to refresh this effect
   }, [dispatch, layersToFeatures, mapMovingAndZoomEvent, simplifiedGeometries])
 

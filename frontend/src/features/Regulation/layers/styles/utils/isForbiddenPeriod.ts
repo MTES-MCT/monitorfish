@@ -1,13 +1,14 @@
+import { getStartAndEndDatesSetWithCurrentYear } from '@features/Map/layers/styles/utils'
 import { isObject } from 'lodash'
 
-import { getStartAndEndDatesSetWithCurrentYear } from '../../../../map/layers/styles/utils'
 import { WEEKDAYS } from '../../../utils'
 
 import type { DateInterval, FishingPeriod } from '../../../types'
 import type { Dayjs } from 'dayjs'
 import type Feature from 'ol/Feature'
+import type { FeatureLike } from 'ol/Feature'
 
-export function isForbiddenPeriod(feature: Feature | undefined, currentDate: Dayjs) {
+export function isForbiddenPeriod(feature: Feature | FeatureLike | undefined, currentDate: Dayjs) {
   const currentWeekDayDigit = currentDate.day()
 
   const fishingPeriodValue = feature?.get('fishing_period') || feature?.get('fishingPeriod')
@@ -65,7 +66,7 @@ export function isForbiddenPeriod(feature: Feature | undefined, currentDate: Day
      *  - hasForbiddenWeekDay is true
      */
     case false: {
-      const isAlwaysForbidden = fishingPeriod.always
+      const isAlwaysForbidden = !!fishingPeriod.always
 
       const hasForbiddenRange = !!fishingPeriod.dateRanges?.find(dateRange => {
         if (fishingPeriod.annualRecurrence) {

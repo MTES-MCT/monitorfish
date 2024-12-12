@@ -1,6 +1,6 @@
+import { CoordinatesFormat, WSG84_PROJECTION } from '@features/Map/constants'
 import { transform } from 'ol/proj'
 
-import { CoordinatesFormat, WSG84_PROJECTION } from './domain/entities/map/constants'
 import { isNumeric } from './utils/isNumeric'
 
 enum CoordinateLatLon {
@@ -58,7 +58,7 @@ function getDDCoordinates(transformedCoordinates: number[], forPrint: boolean): 
     return []
   }
   let longitude = longitudeInteger.toString().trim().replace(/-/g, '')
-  const decimals = longitudeDecimals?.substring(0, precision) || '000000'
+  const decimals = longitudeDecimals?.substring(0, precision) ?? '000000'
   longitude = `${negative ? '-' : ''}${getPaddedDegrees(longitude, CoordinateLatLon.LONGITUDE)}.${decimals}`
 
   return [`${transformedCoordinates[1].toFixed(precision)}°`, `${longitude}°`]

@@ -55,7 +55,7 @@ export function getMissionCompletionStatus(
     completion => !completion || completion === CompletionStatus.TO_COMPLETE
   )
 
-  if (hasAtLeastOnUncompletedAction || !MainFormLiveSchema.isValidSync(mission)) {
+  if (!!hasAtLeastOnUncompletedAction || !MainFormLiveSchema.isValidSync(mission)) {
     return CompletionStatus.TO_COMPLETE
   }
 

@@ -1,28 +1,18 @@
-import { getLayerNameNormalized } from '../../../domain/entities/layers'
-import layer from '../../../domain/shared_slices/Layer'
-import { FrontendError } from '../../../libs/FrontendError'
+import { layerActions } from '@features/Map/layer.slice'
+import { backOfficeLayerActions } from '@features/Map/layer.slice.backoffice'
+import { getLayerNameNormalized } from '@features/Map/utils'
 
-import type { LayerSliceNamespace } from '../../../domain/entities/layers/types'
 import type { MainAppThunk } from '../../../store'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 
 /**
  * hide a Regulatory or Administrative layer
  * @param layerToHide {AdministrativeOrRegulatoryLayer} - The layer to hide
  */
 export const hideLayer =
-  (layerToHide: {
-    namespace: LayerSliceNamespace
-    topic?: string
-    type: string
-    zone?: string | null
-  }): MainAppThunk<void> =>
+  (layerToHide: MonitorFishMap.ShowedLayer): MainAppThunk<void> =>
   (dispatch, getState) => {
-    const { namespace, topic, type, zone } = layerToHide
-
-    const { removeLayerToFeatures, removeShowedLayer } = layer[namespace].actions
-    if (!removeLayerToFeatures || !removeShowedLayer) {
-      throw new FrontendError('`removeLayerToFeatures` or `removeShowedLayer` is undefined.')
-    }
+    const { topic, type, zone } = layerToHide
 
     const { showedLayers } = getState().layer
     const layerName = getLayerNameNormalized({ topic, type, zone })
@@ -35,8 +25,10 @@ export const hideLayer =
       return getLayerNameNormalized(layerToRemove).includes(layerName)
     })
 
-    dispatch(removeShowedLayer(layerToHide))
+    const actions = getState().global.isBackoffice ? backOfficeLayerActions : layerActions
+
+    dispatch(actions.removeShowedLayer(layerToHide))
     layersToRemove.forEach(layerToRemove => {
-      dispatch(removeLayerToFeatures(getLayerNameNormalized(layerToRemove)))
+      dispatch(actions.removeLayerToFeatures(getLayerNameNormalized(layerToRemove)))
     })
   }

@@ -1,3 +1,5 @@
+import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useMoveOverlayWhenDragging } from '@hooks/useMoveOverlayWhenDragging'
 import { useMoveOverlayWhenZooming } from '@hooks/useMoveOverlayWhenZooming'
@@ -10,10 +12,8 @@ import { createRef, useCallback, useEffect, useMemo, useRef, useState } from 're
 import styled from 'styled-components'
 
 import { getCoordinates } from '../../../coordinates'
-import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
 import EditSVG from '../../icons/Bouton_edition.svg?react'
 import DeleteSVG from '../../icons/Suppression.svg?react'
-import { monitorfishMap } from '../../map/monitorfishMap'
 
 const X = 0
 const Y = 1

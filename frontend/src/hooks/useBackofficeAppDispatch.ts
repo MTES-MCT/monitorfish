@@ -3,4 +3,4 @@ import { useDispatch } from 'react-redux'
 
 import type { BackofficeAppDispatch } from '../store'
 
-export const useBackofficeAppDispatch: () => BackofficeAppDispatch = useDispatch
+export const useBackofficeAppDispatch = useDispatch.withTypes<BackofficeAppDispatch>()

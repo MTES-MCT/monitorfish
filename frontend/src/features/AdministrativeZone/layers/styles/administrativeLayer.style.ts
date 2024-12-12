@@ -1,13 +1,12 @@
 // TODO Remove legacy colors.
 
+import { LayerProperties } from '@features/Map/constants'
+import { getColorWithAlpha } from '@features/Map/layers/styles/utils'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 import Text from 'ol/style/Text'
-
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
-import { getColorWithAlpha } from '../../../map/layers/styles/utils'
 
 import type Feature from 'ol/Feature'
 

@@ -1,3 +1,7 @@
+import CloseVesselTrackOverlay from '@features/Map/components/CloseVesselTrackOverlay'
+import FishingActivityOverlay from '@features/Map/components/FishingActivityOverlay'
+import { LayerProperties } from '@features/Map/constants'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
@@ -5,7 +9,6 @@ import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { LayerProperties } from '../../../domain/entities/layers/constants'
 import {
   fishingActivityIsWithinTrackLineDates,
   getFeaturesFromPositions,
@@ -16,17 +19,14 @@ import {
   updateTrackCircleStyle
 } from '../../../domain/entities/vessel/track'
 import { getVesselCompositeIdentifier } from '../../../domain/entities/vessel/vessel'
-import { animateToCoordinates } from '../../../domain/shared_slices/Map'
 import { logbookActions } from '../../Logbook/slice'
 import { getFishingActivityFeatureOnTrackLine } from '../../Logbook/utils'
-import { monitorfishMap } from '../../map/monitorfishMap'
-import CloseVesselTrackOverlay from '../../map/overlays/CloseVesselTrackOverlay'
-import FishingActivityOverlay from '../../map/overlays/FishingActivityOverlay'
+import { animateToCoordinates } from '../../Map/slice'
 import { setVesselTrackExtent, updateVesselTrackAsHidden, updateVesselTrackAsShowedWithExtend } from '../slice'
 
 import type { FishingActivityShowedOnMap } from '../../../domain/entities/vessel/types'
-import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { FishingActivityFeatureIdAndCoordinates } from '../../Logbook/types'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { Feature } from 'ol'
 import type { Coordinate } from 'ol/coordinate'
 import type { Geometry } from 'ol/geom'
@@ -72,7 +72,7 @@ function VesselsTracksLayer() {
     return vectorSourceRef.current as VectorSource
   }, [])
 
-  const layerRef = useRef<VectorLayerWithName>()
+  const layerRef = useRef<MonitorFishMap.VectorLayerWithName>()
   const getLayer = useCallback(() => {
     if (layerRef.current === undefined) {
       layerRef.current = new Vector({
@@ -84,7 +84,7 @@ function VesselsTracksLayer() {
       })
     }
 
-    return layerRef.current as VectorLayerWithName
+    return layerRef.current as MonitorFishMap.VectorLayerWithName
   }, [getVectorSource])
 
   useEffect(() => {

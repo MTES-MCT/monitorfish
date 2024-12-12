@@ -1,3 +1,4 @@
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { IconButton, type ControlUnit, Accent, Icon } from '@mtes-mct/monitor-ui'
 import { property, uniqBy } from 'lodash/fp'
 import { fromLonLat } from 'ol/proj'
@@ -9,11 +10,10 @@ import {
   getBufferedExtentFromStations
 } from './utils'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
-import { mapActions } from '../../../../domain/shared_slices/Map'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../../libs/FrontendError'
-import { monitorfishMap } from '../../../map/monitorfishMap'
+import { mapActions } from '../../../Map/slice'
 import { stationActions } from '../../../Station/slice'
 import { controlUnitDialogActions } from '../ControlUnitDialog/slice'
 

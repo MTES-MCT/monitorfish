@@ -1,21 +1,22 @@
-import { RTK_MAX_RETRIES } from '@api/constants'
-
-import { openSideWindowReportingList } from './utils'
-import { SeafrontGroup } from '../../../../src/constants/seafront'
+import {RTK_MAX_RETRIES} from '@api/constants'
+import {SeafrontGroup} from '../../../../src/constants/seafront'
 
 context('Side Window > Reporting List > Table', () => {
   const failedQueryCount = RTK_MAX_RETRIES + 1
   const apiPathBase = '/bff/v1/reportings'
 
   it('Should filter reportings by vessel name (search input)', () => {
+    cy.login('superuser')
+
     /**
      * Should handle fetching error as expected
      */
 
+    cy.wait(500)
     cy.intercept(
       {
         method: 'GET',
-        times: failedQueryCount,
+        times: failedQueryCount * 2,
         url: apiPathBase
       },
       {
@@ -23,12 +24,19 @@ context('Side Window > Reporting List > Table', () => {
       }
     ).as('getReportingsWithError')
 
-    openSideWindowReportingList()
-    cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click()
-
+    cy.visit('/side_window')
     for (let i = 1; i <= failedQueryCount; i += 1) {
       cy.wait('@getReportingsWithError')
     }
+
+    cy.wait(500)
+
+    cy.getDataCy('side-window-reporting-tab').click()
+    for (let i = 1; i <= failedQueryCount; i += 1) {
+      cy.wait('@getReportingsWithError')
+    }
+
+    cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click()
 
     cy.intercept('GET', apiPathBase).as('getReportings')
 
@@ -68,7 +76,9 @@ context('Side Window > Reporting List > Table', () => {
      * Sort reporting table by date
      */
 
-    cy.get('.Table-SimpleTable tr').eq(1).contains('3 milles - Chaluts')
+    cy.get('.Table-SimpleTable td').eq(5).then(firstRowText => {
+      cy.get('.Table-SimpleTable tr').eq(1).contains(firstRowText.text())
+    })
 
     cy.get('th > div').filter(':contains("Il y a...")').click({ force: true })
 

@@ -1,10 +1,9 @@
-import { monitorfishMap } from '../../map/monitorfishMap'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 
-import type { MonitorFishLayer } from '../../../domain/entities/layers/types'
-import type { VectorLayerWithName } from '../../../domain/types/layer'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 
-export function getLayer(name: MonitorFishLayer): VectorLayerWithName | undefined {
-  return (monitorfishMap.getLayers().getArray() as VectorLayerWithName[]).find(layer => layer.name === name) as
-    | VectorLayerWithName
-    | undefined
+export function getLayer(name: MonitorFishMap.MonitorFishLayer): MonitorFishMap.VectorLayerWithName | undefined {
+  return (monitorfishMap.getLayers().getArray() as MonitorFishMap.VectorLayerWithName[]).find(
+    layer => layer.name === name
+  ) as MonitorFishMap.VectorLayerWithName | undefined
 }

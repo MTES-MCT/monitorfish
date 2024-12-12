@@ -1,34 +1,32 @@
 import styled, { css } from 'styled-components'
 
-import { COLORS } from '../../constants/constants'
-
 const circle = css<{
-  margin: string
+  $margin: string
 }>`
   display: inline-block;
   height: 10px;
   width: 10px;
-  margin: ${p => p.margin || 'unset'};
+  margin: ${p => p.$margin || 'unset'};
   border-radius: 50%;
   vertical-align: middle;
 `
 
 export const GreenCircle = styled.span<{
-  margin: string
+  $margin: string
 }>`
   ${circle}
-  background-color: ${COLORS.mediumSeaGreen};
+  background-color: ${p => p.theme.color.mediumSeaGreen};
 `
 
 export const RedCircle = styled.span<{
-  margin: string
+  $margin: string
 }>`
   ${circle}
-  background-color: ${COLORS.maximumRed};
+  background-color: ${p => p.theme.color.maximumRed};
 `
 
 export const BlackCircle = styled.span<{
-  margin: string
+  $margin: string
 }>`
   display: inline-block;
   height: 4px;
@@ -36,5 +34,5 @@ export const BlackCircle = styled.span<{
   border-radius: 50%;
   vertical-align: middle;
   margin-right: 6px;
-  background-color: ${COLORS.gunMetal};
+  background-color: ${p => p.theme.color.gunMetal};
 `

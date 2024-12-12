@@ -10,7 +10,7 @@ type ZoneSelected = {
   name: string
 }
 
-type ZoneChildren = {
+export type ZoneChildren = {
   code: string
   group: string
   groupCode: string

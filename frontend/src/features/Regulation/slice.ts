@@ -1,17 +1,17 @@
 // TODO Rethink Regulatory naming? Regulatory (an adjective rather than an object name), Regulation difference.
 
+import { localStorageManager } from '@libs/LocalStorageManager'
+import { LocalStorageKey } from '@libs/LocalStorageManager/constants'
 import { createSlice } from '@reduxjs/toolkit'
+import { isNotNullish } from '@utils/isNotNullish'
 import { fromPairs } from 'lodash/fp'
 
-import { getRegulatoryLayersWithoutTerritory } from './utils'
-import {
-  SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY,
-  SELECTED_REG_ZONES_LOCAL_STORAGE_KEY
-} from '../../domain/entities/layers/constants'
-import { getLocalStorageState } from '../../utils'
+import { STATUS } from './components/RegulationTables/constants'
+import { DEFAULT_REGULATION, getRegulatoryLayersWithoutTerritory, REGULATORY_REFERENCE_KEYS } from './utils'
 
-import type { RegulatoryLawTypes, RegulatoryZone } from './types'
+import type { EditedRegulatoryZone, RegulatoryLawTypes, RegulatoryZone, RegulatoryZoneDraft } from './types'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import type { Extent } from 'ol/extent'
 
 // TODO Move that somewhere else.
 const pushRegulatoryZoneInTopicList = (selectedRegulatoryLayers, regulatoryZone) => {
@@ -26,16 +26,17 @@ const pushRegulatoryZoneInTopicList = (selectedRegulatoryLayers, regulatoryZone)
 
 // TODO Move that somewhere else.
 const updateSelectedRegulatoryLayers = (
-  regulatoryLayers,
-  regulatoryZoneId,
-  selectedRegulatoryLayers,
-  selectedRegulatoryLayerIds
+  regulatoryLayers: RegulatoryZone[] | EditedRegulatoryZone[],
+  regulatoryZoneId: string,
+  // TODO This param seems to always be an empty object: remove it with all its related code?
+  selectedRegulatoryLayers: {},
+  selectedRegulatoryLayerIds: Array<number | string>
 ) => {
   const nextSelectedRegulatoryLayers = { ...selectedRegulatoryLayers }
   const nextSelectedRegulatoryLayerIds = [...selectedRegulatoryLayerIds]
   const nextRegulatoryZone = regulatoryLayers.find(zone => zone.id === regulatoryZoneId)
   if (nextRegulatoryZone) {
-    if (nextRegulatoryZone.lawType && nextRegulatoryZone.topic) {
+    if (nextRegulatoryZone.id && nextRegulatoryZone.lawType && nextRegulatoryZone.topic) {
       pushRegulatoryZoneInTopicList(nextSelectedRegulatoryLayers, nextRegulatoryZone)
       nextSelectedRegulatoryLayerIds.push(nextRegulatoryZone.id)
 
@@ -59,58 +60,85 @@ const updateSelectedRegulatoryLayers = (
   return null
 }
 
-export type RegulatoryState = {
-  // TODO Type this prop.
-  lawTypeOpened: Record<string, any> | null
-  // TODO Type this prop.
-  layersTopicsByRegTerritory: Record<string, any>
+export type RegulationState = {
+  hasOneOrMoreValuesMissing: boolean | undefined
+  isConfirmModalOpen: boolean
+  isRemoveModalOpen: boolean
+  lawTypeOpened: string | undefined
+  layersTopicsByRegTerritory: Record<string, Record<string, Record<string, RegulatoryZone[]>>>
   loadingRegulatoryZoneMetadata: boolean
-  // TODO Type this prop.
-  regulationSearchedZoneExtent: Record<string, any>[]
+  processingRegulation: RegulatoryZoneDraft
+  regulationDeleted: boolean
+  regulationModified: boolean
+  regulationSaved: boolean
+  regulationSearchedZoneExtent: Extent
   regulatoryLayerLawTypes: RegulatoryLawTypes | undefined
+  regulatoryTextCheckedMap: Record<number, boolean> | undefined
   regulatoryTopics: string[]
   regulatoryTopicsOpened: string[]
   regulatoryZoneMetadata: RegulatoryZone | undefined
   regulatoryZoneMetadataPanelIsOpen: boolean
   regulatoryZones: RegulatoryZone[]
   regulatoryZonesToPreview: Partial<RegulatoryZone>[]
+  saveOrUpdateRegulation: boolean
   selectedRegulatoryLayers: Record<string, RegulatoryZone[]> | null
+  selectedRegulatoryZoneId: string | undefined
   simplifiedGeometries: boolean
+  status: STATUS
 }
-const INITIAL_STATE: RegulatoryState = {
-  lawTypeOpened: null,
+const INITIAL_STATE: RegulationState = {
+  hasOneOrMoreValuesMissing: undefined,
+  isConfirmModalOpen: false,
+  isRemoveModalOpen: false,
+  lawTypeOpened: undefined,
   layersTopicsByRegTerritory: {},
   loadingRegulatoryZoneMetadata: false,
+  processingRegulation: DEFAULT_REGULATION,
+  regulationDeleted: false,
+  regulationModified: false,
+  regulationSaved: false,
   regulationSearchedZoneExtent: [],
   regulatoryLayerLawTypes: undefined,
+  regulatoryTextCheckedMap: undefined,
+
   regulatoryTopics: [],
   regulatoryTopicsOpened: [],
   regulatoryZoneMetadata: undefined,
   regulatoryZoneMetadataPanelIsOpen: false,
   regulatoryZones: [],
   regulatoryZonesToPreview: [],
+  saveOrUpdateRegulation: false,
   selectedRegulatoryLayers: null,
-  simplifiedGeometries: true
+  selectedRegulatoryZoneId: undefined,
+  simplifiedGeometries: true,
+  status: STATUS.IDLE
 }
 
-const regulatorySlice = createSlice({
+const regulationSlice = createSlice({
   initialState: INITIAL_STATE,
-  name: 'regulatory',
+  name: 'regulation',
   reducers: {
+    addObjectToRegulatoryTextCheckedMap(state, action: PayloadAction<{ complete: boolean; index: number }>) {
+      state.regulatoryTextCheckedMap = {
+        ...(state.regulatoryTextCheckedMap ?? {}),
+        [action.payload.index]: action.payload.complete
+      }
+    },
+
     addRegulatoryTopicOpened(state, action: PayloadAction<string>) {
       state.regulatoryTopicsOpened = [...state.regulatoryTopicsOpened, action.payload]
     },
 
     /**
      * Add regulatory zones to "My Zones" regulatory selection
-     * @memberOf RegulatoryReducer
-     * @param {Object=} state
-     * @param {RegulatoryZone[]} action - The regulatory zones
      */
-    addRegulatoryZonesToMyLayers(state, action) {
+    addRegulatoryZonesToMyLayers(state, action: PayloadAction<RegulatoryZone[]>) {
       const myRegulatoryLayers = { ...state.selectedRegulatoryLayers }
       // TODO Use Redux Persist.
-      const myRegulatoryLayerIds = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
+      const myRegulatoryLayerIds = localStorageManager.get<Array<number | string>>(
+        LocalStorageKey.SelectedRegulatoryZoneIds,
+        []
+      )
 
       // TODO Make that functional.
       action.payload.forEach(regulatoryZone => {
@@ -122,11 +150,14 @@ const regulatorySlice = createSlice({
           myRegulatoryLayers[regulatoryZone.topic] = myTopicRegulatoryLayer.concat(regulatoryZone)
         }
 
-        myRegulatoryLayerIds.push(regulatoryZone.id)
+        if (regulatoryZone.id) {
+          myRegulatoryLayerIds.push(regulatoryZone.id)
+        }
       })
 
       state.selectedRegulatoryLayers = myRegulatoryLayers
-      window.localStorage.setItem(SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY, JSON.stringify(myRegulatoryLayerIds))
+
+      localStorageManager.set(LocalStorageKey.SelectedRegulatoryZoneIds, myRegulatoryLayerIds)
     },
 
     closeRegulatoryZoneMetadataPanel(state) {
@@ -158,17 +189,14 @@ const regulatorySlice = createSlice({
         // Remove layer group if it's empty
         .filter(([, regulatoryZones]) => regulatoryZones.length > 0)
       const nextSelectedRegulatoryLayers = fromPairs(nextSelectedRegulatoryLayersAsPairs)
-      const nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayersAsPairs.reduce(
-        (ids, [, regulatoryZones]) => [...ids, ...regulatoryZones.map(({ id }) => id)],
-        [] as Array<number | string>
+      const nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayersAsPairs.reduce<Array<number | string>>(
+        (ids, [, regulatoryZones]) => [...ids, ...regulatoryZones.map(({ id }) => id).filter(isNotNullish)],
+        []
       )
 
       state.selectedRegulatoryLayers = nextSelectedRegulatoryLayers
 
-      window.localStorage.setItem(
-        SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY,
-        JSON.stringify(nextSelectedRegulatoryLayerIds)
-      )
+      localStorageManager.set(LocalStorageKey.SelectedRegulatoryZoneIds, nextSelectedRegulatoryLayerIds)
     },
 
     /**
@@ -184,17 +212,14 @@ const regulatorySlice = createSlice({
         ([topic]) => topic !== action.payload
       )
       const nextSelectedRegulatoryLayers = fromPairs(nextSelectedRegulatoryLayersAsPairs)
-      const nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayersAsPairs.reduce(
-        (ids, [, regulatoryZones]) => [...ids, ...regulatoryZones.map(({ id }) => id)],
-        [] as Array<number | string>
+      const nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayersAsPairs.reduce<Array<number | string>>(
+        (ids, [, regulatoryZones]) => [...ids, ...regulatoryZones.map(({ id }) => id).filter(isNotNullish)],
+        []
       )
 
       state.selectedRegulatoryLayers = nextSelectedRegulatoryLayers
 
-      window.localStorage.setItem(
-        SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY,
-        JSON.stringify(nextSelectedRegulatoryLayerIds)
-      )
+      localStorageManager.set(LocalStorageKey.SelectedRegulatoryZoneIds, nextSelectedRegulatoryLayerIds)
     },
 
     resetLoadingRegulatoryZoneMetadata(state) {
@@ -205,14 +230,45 @@ const regulatorySlice = createSlice({
       state.regulatoryZonesToPreview = []
     },
 
+    resetState: () => INITIAL_STATE,
+
+    setFishingPeriod(state, { payload: { key, value } }) {
+      const nextFishingPeriod = {
+        ...state.processingRegulation.fishingPeriod,
+        [key]: value
+      }
+
+      state.processingRegulation = {
+        ...state.processingRegulation,
+        [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: nextFishingPeriod
+      }
+    },
+
+    setFishingPeriodOtherInfo(state, action: PayloadAction<string>) {
+      state.processingRegulation[REGULATORY_REFERENCE_KEYS.FISHING_PERIOD].otherInfo = action.payload
+    },
+
+    setHasOneOrMoreValuesMissing(state, action: PayloadAction<boolean | undefined>) {
+      state.hasOneOrMoreValuesMissing = action.payload
+    },
+
+    setIsConfirmModalOpen(state, action: PayloadAction<boolean>) {
+      state.isConfirmModalOpen = action.payload
+    },
+
+    setIsRemoveModalOpen(state, action: PayloadAction<boolean>) {
+      state.isRemoveModalOpen = action.payload
+    },
+
     setLawTypeOpened(state, action) {
       state.lawTypeOpened = action.payload
     },
 
-    setLayersTopicsByRegTerritory(state, action) {
-      if (action.payload) {
-        state.layersTopicsByRegTerritory = action.payload
-      }
+    setLayersTopicsByRegTerritory(
+      state,
+      action: PayloadAction<Record<string, Record<string, Record<string, RegulatoryZone[]>>>>
+    ) {
+      state.layersTopicsByRegTerritory = action.payload
     },
 
     setLoadingRegulatoryZoneMetadata(state) {
@@ -221,68 +277,36 @@ const regulatorySlice = createSlice({
       state.regulatoryZoneMetadataPanelIsOpen = true
     },
 
+    setProcessingRegulation(state, action: PayloadAction<RegulatoryZoneDraft>) {
+      state.status = STATUS.READY
+      state.processingRegulation = action.payload
+    },
+
+    setProcessingRegulationDeleted(state, action) {
+      state.regulationDeleted = action.payload
+    },
+
+    setProcessingRegulationSaved(state, action: PayloadAction<boolean>) {
+      state.regulationSaved = action.payload
+    },
+
+    setRegulationModified(state, action: PayloadAction<boolean>) {
+      state.regulationModified = action.payload
+    },
+
     setRegulatoryGeometriesToPreview(state, action: PayloadAction<Partial<RegulatoryZone>[]>) {
       state.regulatoryZonesToPreview = action.payload
     },
 
-    /**
-     * Set regulatory data structured as
-     * LawType: {
-     *   Topic: Zone[]
-     * }
-     * (see example)
-     * @param {Object=} state
-     * @param {{payload: RegulatoryLawTypes}} action - The regulatory data
-     * @memberOf RegulatoryReducer
-     * @example
-     * {
-     *  "Reg locale / NAMO": {
-     *   "Armor_CSJ_Dragues": [
-     *     {
-     *      bycatch: undefined,
-     *      closingDate: undefined,
-     *      deposit: undefined,
-     *      fishingPeriod: Object { authorized: undefined, annualRecurrence: undefined, dateRanges: [], … },
-     *      gears: "DHB, DRH, DHS",
-     *      geometry: null,
-     *      id: 3012,
-     *      lawType: "Reg. MED",
-     *      mandatoryDocuments: undefined,
-     *      obligations: undefined,
-     *      openingDate: undefined,
-     *      period: undefined,
-     *      permissions: undefined,
-     *      prohibitedGears: null,
-     *      prohibitedSpecies: null,
-     *      prohibitions: undefined,
-     *      quantity: undefined,
-     *      region: "Occitanie, Languedoc-Roussillon",
-     *      gearRegulation: Object { authorized: undefined, allGears: undefined, allTowedGears: undefined, … },
-     *      regulatoryReferences: Array [ {…} ],
-     *      regulatorySpecies: Object { authorized: undefined, allSpecies: undefined, otherInfo: undefined, … },
-     *      rejections: undefined,
-     *      size: undefined,
-     *      species: "coquillages et appâts\n",
-     *      state: undefined,
-     *      technicalMeasurements: undefined,
-     *      topic: "Etang de Thau-Ingril Mèze",
-     *      upcomingRegulatoryReferences: undefined,
-     *      zone: "Etang de Thau-Ingrill_Drague-à-main",
-     *      next_id: undefined
-     *     }
-     *   ]
-     *   "GlÃ©nan_CSJ_Dragues": (1) […],
-     *   "Bretagne_Laminaria_Hyperborea_Scoubidous - 2019": (1) […],
-     *  },
-     *  "Reg locale / Sud-Atlantique, SA": {
-     *   "Embouchure_Gironde": (1) […],
-     *   "Pertuis_CSJ_Dragues": (6) […],
-     *   "SA_Chaluts_Pelagiques": (5) […]
-     *  }
-     * }
-     */
-    setRegulatoryLayerLawTypes(state, action) {
-      state.regulatoryLayerLawTypes = getRegulatoryLayersWithoutTerritory(action.payload)
+    setRegulatoryLayerLawTypes(
+      state,
+      action: PayloadAction<Record<string, Record<string, Record<string, RegulatoryZone[]>>>>
+    ) {
+      state.regulatoryLayerLawTypes = action.payload ? getRegulatoryLayersWithoutTerritory(action.payload) : undefined
+    },
+
+    setRegulatoryTextCheckedMap(state, action: PayloadAction<Record<number, boolean>>) {
+      state.regulatoryTextCheckedMap = action.payload
     },
 
     setRegulatoryTopics(state, action) {
@@ -293,7 +317,7 @@ const regulatorySlice = createSlice({
       state.regulatoryTopicsOpened = action.payload
     },
 
-    setRegulatoryZoneMetadata(state, action) {
+    setRegulatoryZoneMetadata(state, action: PayloadAction<RegulatoryZone | undefined>) {
       state.loadingRegulatoryZoneMetadata = false
       state.regulatoryZoneMetadata = action.payload
     },
@@ -302,56 +326,51 @@ const regulatorySlice = createSlice({
       state.regulatoryZones = action.payload
     },
 
+    setSaveOrUpdateRegulation(state, action: PayloadAction<boolean>) {
+      state.saveOrUpdateRegulation = action.payload
+    },
+
     /**
      * Set the regulation searched zone extent - used to fit the extent into the OpenLayers view
-     * @function setSearchedRegulationZoneExtent
-     * @memberOf RegulatoryReducer
-     * @param {Object=} state
-     * @param {{payload: number[]}} action - the extent
      */
-    setSearchedRegulationZoneExtent(state, action) {
+    setSearchedRegulationZoneExtent(state, action: PayloadAction<Extent>) {
       state.regulationSearchedZoneExtent = action.payload
     },
 
-    setSelectedRegulatoryZone(state, action) {
-      if (action.payload?.length) {
-        const regulatoryLayers = action.payload
-        let nextSelectedRegulatoryLayers = {}
-        // TODO Remove this `any` once layers are fully typed.
-        let nextSelectedRegulatoryLayerIds: any[] = []
-        let selectedRegulatoryLayerIds = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
-        if (!selectedRegulatoryLayerIds.length) {
-          const selectedRegulatoryLayers = getLocalStorageState([], SELECTED_REG_ZONES_LOCAL_STORAGE_KEY)
-          if (Object.keys(selectedRegulatoryLayers).length) {
-            selectedRegulatoryLayerIds = []
-            Object.keys(selectedRegulatoryLayers).forEach(selectedRegulatoryTopic => {
-              selectedRegulatoryLayers[selectedRegulatoryTopic].forEach(selectedRegulatoryLayerId => {
-                selectedRegulatoryLayerIds.push(selectedRegulatoryLayerId.id)
-              })
-            })
-            window.localStorage.removeItem(SELECTED_REG_ZONES_LOCAL_STORAGE_KEY)
-          }
-        }
-        selectedRegulatoryLayerIds.forEach(selectedRegulatoryZoneId => {
-          const updatedObjects = updateSelectedRegulatoryLayers(
-            regulatoryLayers,
-            selectedRegulatoryZoneId,
-            nextSelectedRegulatoryLayers,
-            nextSelectedRegulatoryLayerIds
-          )
-          if (updatedObjects?.selectedRegulatoryLayers && updatedObjects?.selectedRegulatoryLayerIds) {
-            nextSelectedRegulatoryLayers = updatedObjects.selectedRegulatoryLayers
-            nextSelectedRegulatoryLayerIds = updatedObjects.selectedRegulatoryLayerIds
-          }
+    setSelectedRegulatoryZone(state, action: PayloadAction<RegulatoryZone[] | EditedRegulatoryZone[]>) {
+      let nextSelectedRegulatoryLayers = {}
+      let nextSelectedRegulatoryLayerIds: Array<number | string> = []
+      const selectedRegulatoryLayerIds = localStorageManager.get<string[]>(
+        LocalStorageKey.SelectedRegulatoryZoneIds,
+        []
+      )
 
-          return null
-        })
-        window.localStorage.setItem(
-          SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY,
-          JSON.stringify(nextSelectedRegulatoryLayerIds)
+      selectedRegulatoryLayerIds.forEach(selectedRegulatoryZoneId => {
+        const updatedObjects = updateSelectedRegulatoryLayers(
+          action.payload,
+          selectedRegulatoryZoneId,
+          nextSelectedRegulatoryLayers,
+          nextSelectedRegulatoryLayerIds
         )
-        state.selectedRegulatoryLayers = nextSelectedRegulatoryLayers
-      }
+        if (updatedObjects?.selectedRegulatoryLayers && updatedObjects?.selectedRegulatoryLayerIds) {
+          nextSelectedRegulatoryLayers = updatedObjects.selectedRegulatoryLayers
+          nextSelectedRegulatoryLayerIds = updatedObjects.selectedRegulatoryLayerIds
+        }
+
+        return null
+      })
+
+      state.selectedRegulatoryLayers = nextSelectedRegulatoryLayers
+
+      localStorageManager.set(LocalStorageKey.SelectedRegulatoryZoneIds, nextSelectedRegulatoryLayerIds)
+    },
+
+    setSelectedRegulatoryZoneId(state, action) {
+      state.selectedRegulatoryZoneId = action.payload
+    },
+
+    setStatus(state, action) {
+      state.status = action.payload
     },
 
     showSimplifiedGeometries(state) {
@@ -360,32 +379,43 @@ const regulatorySlice = createSlice({
 
     showWholeGeometries(state) {
       state.simplifiedGeometries = false
+    },
+
+    updateProcessingRegulationByKey(state, action: PayloadAction<{ key: string; value: any }>) {
+      if (state.status !== STATUS.READY && state.status !== STATUS.IDLE) {
+        return
+      }
+
+      state.processingRegulation[action.payload.key] = action.payload.value
+      if (!state.regulationModified) {
+        state.regulationModified = true
+      }
+    },
+
+    // TODO Fix these types and find a cleaner way to achieve that. Proposal: pass a partial `RegulatoryZoneDraft` as param and use a "deepMerge" function.
+    updateProcessingRegulationByKeyAndSubKey(
+      state,
+      action: PayloadAction<{
+        key: string
+        subKey: string
+        value: any
+      }>
+    ) {
+      const {
+        payload: { key, subKey, value }
+      } = action
+
+      if (state.status !== STATUS.READY && state.status !== STATUS.IDLE) {
+        return
+      }
+
+      state.processingRegulation[key][subKey] = value
+      if (!state.regulationModified) {
+        state.regulationModified = true
+      }
     }
   }
 })
 
-export const {
-  addRegulatoryTopicOpened,
-  addRegulatoryZonesToMyLayers,
-  closeRegulatoryZoneMetadataPanel,
-  removeRegulatoryTopicOpened,
-  resetLoadingRegulatoryZoneMetadata,
-  resetRegulatoryGeometriesToPreview,
-  setLawTypeOpened,
-  setLayersTopicsByRegTerritory,
-  setLoadingRegulatoryZoneMetadata,
-  setRegulatoryGeometriesToPreview,
-  setRegulatoryLayerLawTypes,
-  setRegulatoryTopics,
-  setRegulatoryTopicsOpened,
-  setRegulatoryZoneMetadata,
-  setRegulatoryZones,
-  setSearchedRegulationZoneExtent,
-  setSelectedRegulatoryZone,
-  showSimplifiedGeometries,
-  showWholeGeometries
-} = regulatorySlice.actions
-
-export const regulatoryActions = regulatorySlice.actions
-
-export const regulatoryReducer = regulatorySlice.reducer
+export const regulationActions = regulationSlice.actions
+export const regulationReducer = regulationSlice.reducer

@@ -1,14 +1,13 @@
+import { MapBox } from '@features/Map/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
+import { BaseLayers } from 'features/Map/components/BaseLayers'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 
-import { NamespaceContext } from '../../../context/NamespaceContext'
-import { MapBox } from '../../../domain/entities/map/constants'
 import { setLeftMapBoxOpened } from '../../../domain/shared_slices/Global'
 import { AdministrativeZones } from '../../AdministrativeZone/components/AdministrativeZones'
-import { BaseMaps } from '../../BaseMap/components/BaseMaps'
 import { MapComponent } from '../../commonStyles/MapComponent'
 import { CustomZones } from '../../CustomZone/components/CustomZones'
 import { MapButton } from '../../MainWindow/components/MapButtons/MapButton'
@@ -20,7 +19,7 @@ import { closeRegulatoryZoneMetadata } from '../../Regulation/useCases/closeRegu
 export function LayersSidebar() {
   const dispatch = useMainAppDispatch()
   const regulatoryZoneMetadataPanelIsOpen = useMainAppSelector(
-    state => state.regulatory.regulatoryZoneMetadataPanelIsOpen
+    state => state.regulation.regulatoryZoneMetadataPanelIsOpen
   )
   const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
   const leftMapBoxOpened = useMainAppSelector(state => state.global.leftMapBoxOpened)
@@ -33,44 +32,40 @@ export function LayersSidebar() {
   }, [dispatch, leftMapBoxOpened])
 
   return (
-    <NamespaceContext.Consumer>
-      {namespace => (
-        <>
-          <SidebarLayersButton isHidden={!!previewFilteredVesselsMode}>
-            <SidebarLayersIcon
-              $isActive={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
-              accent={Accent.PRIMARY}
-              aria-label="Arbre des couches"
-              Icon={Icon.MapLayers}
-              onClick={() =>
-                dispatch(setLeftMapBoxOpened(leftMapBoxOpened === MapBox.REGULATIONS ? undefined : MapBox.REGULATIONS))
-              }
-              size={Size.LARGE}
-              title="Arbre des couches"
-            />
-          </SidebarLayersButton>
-          <Sidebar
-            $isOpen={leftMapBoxOpened === MapBox.REGULATIONS}
-            $isVisible={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
-            data-cy="layers-sidebar-box"
-          >
-            <RegulationSearch namespace={namespace} />
-            <Layers $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}>
-              <RegulatoryZones namespace={namespace} />
-              <CustomZones namespace={namespace} />
-              <AdministrativeZones namespace={namespace} />
-              <BaseMaps namespace={namespace} />
-            </Layers>
-            <RegulatoryZoneMetadataShifter
-              $isLeftMapBoxOpened={!!leftMapBoxOpened}
-              $isOpen={regulatoryZoneMetadataPanelIsOpen}
-            >
-              <RegulatoryZoneMetadata />
-            </RegulatoryZoneMetadataShifter>
-          </Sidebar>
-        </>
-      )}
-    </NamespaceContext.Consumer>
+    <>
+      <SidebarLayersButton isHidden={!!previewFilteredVesselsMode}>
+        <SidebarLayersIcon
+          $isActive={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
+          accent={Accent.PRIMARY}
+          aria-label="Arbre des couches"
+          Icon={Icon.MapLayers}
+          onClick={() =>
+            dispatch(setLeftMapBoxOpened(leftMapBoxOpened === MapBox.REGULATIONS ? undefined : MapBox.REGULATIONS))
+          }
+          size={Size.LARGE}
+          title="Arbre des couches"
+        />
+      </SidebarLayersButton>
+      <Sidebar
+        $isOpen={leftMapBoxOpened === MapBox.REGULATIONS}
+        $isVisible={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
+        data-cy="layers-sidebar-box"
+      >
+        <RegulationSearch />
+        <Layers $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}>
+          <RegulatoryZones />
+          <CustomZones />
+          <AdministrativeZones />
+          <BaseLayers />
+        </Layers>
+        <RegulatoryZoneMetadataShifter
+          $isLeftMapBoxOpened={!!leftMapBoxOpened}
+          $isOpen={regulatoryZoneMetadataPanelIsOpen}
+        >
+          <RegulatoryZoneMetadata />
+        </RegulatoryZoneMetadataShifter>
+      </Sidebar>
+    </>
   )
 }
 

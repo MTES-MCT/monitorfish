@@ -58,6 +58,8 @@ export function APIWorker() {
     }
 
     dispatch(getInfractions())
+
+    // This `await` must be kept at the end of the function to prevent blocking of other fetch
     await dispatch(getAllSpecies<MainAppThunk>())
     dispatch(getAllRegulatoryLayers())
   }, [dispatch, isSuperUser])

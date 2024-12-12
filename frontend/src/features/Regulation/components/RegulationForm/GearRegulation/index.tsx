@@ -16,7 +16,7 @@ import { Section, OtherRemark, VerticalLine } from '../../../../commonStyles/Bac
 import { Label, CustomInput } from '../../../../commonStyles/Input.style'
 import { SectionTitle } from '../../RegulationTables/SectionTitle'
 
-import type { BackofficeAppThunk } from '@store'
+import type { BackofficeAppPromiseThunk } from '@store'
 
 export function GearRegulation() {
   const dispatch = useBackofficeAppDispatch()
@@ -31,7 +31,7 @@ export function GearRegulation() {
 
   useEffect(() => {
     if (!categoriesToGears || !groupsToCategories || gearsByCode) {
-      dispatch(getAllGearCodes<BackofficeAppThunk>())
+      dispatch(getAllGearCodes<BackofficeAppPromiseThunk>())
     }
   }, [categoriesToGears, dispatch, gearsByCode, groupsToCategories])
 

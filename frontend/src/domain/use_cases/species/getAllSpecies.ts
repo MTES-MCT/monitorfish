@@ -5,15 +5,15 @@ import { speciesActions } from '../../shared_slices/Species'
 import type {
   BackofficeAppDispatch,
   BackofficeAppGetState,
-  BackofficeAppThunk,
+  BackofficeAppPromiseThunk,
   MainAppDispatch,
   MainAppGetState,
-  MainAppThunk
+  MainAppAsyncThunk
 } from '@store'
 import type { Specy } from 'domain/types/specy'
 
-export function getAllSpecies<T extends MainAppThunk | BackofficeAppThunk>(): T
-export function getAllSpecies(): MainAppThunk | BackofficeAppThunk {
+export function getAllSpecies<T extends MainAppAsyncThunk | BackofficeAppPromiseThunk>(): T
+export function getAllSpecies(): MainAppAsyncThunk | BackofficeAppPromiseThunk {
   return async (
     dispatch: BackofficeAppDispatch | MainAppDispatch,
     getState: BackofficeAppGetState | MainAppGetState
@@ -26,13 +26,13 @@ export function getAllSpecies(): MainAppThunk | BackofficeAppThunk {
       const speciesAndSpeciesGroups = await getAllSpeciesFromAPI()
       const { groups, species } = speciesAndSpeciesGroups
 
-      const speciesByCode = species.reduce<Record<string, Specy>>(
-        (map, specy) => ({
-          ...map,
-          [specy.code]: specy
-        }),
-        {}
-      )
+      const speciesByCode = species.reduce<Record<string, Specy>>((map, specy) => {
+        // We use param reassign for performance reason
+        // eslint-disable-next-line no-param-reassign
+        map[specy.code] = specy
+
+        return map
+      }, {})
 
       dispatch(
         speciesActions.setSpeciesAndSpeciesGroups({

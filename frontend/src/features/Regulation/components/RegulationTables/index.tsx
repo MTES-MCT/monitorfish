@@ -19,7 +19,7 @@ import { LawType } from './LawType'
 import { SearchRegulations } from './SearchRegulations'
 import { EmptyResult } from '../../../commonStyles/Text.style'
 
-import type { BackofficeAppThunk } from '@store'
+import type { BackofficeAppPromiseThunk } from '@store'
 
 export function RegulationTables() {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})
@@ -46,9 +46,9 @@ export function RegulationTables() {
   const simplifiedGeometries = useBackofficeAppSelector(state => state.regulation.simplifiedGeometries)
 
   const initBackoffice = useCallback(async () => {
-    await dispatch(getAllSpecies<BackofficeAppThunk>())
+    await dispatch(getAllSpecies<BackofficeAppPromiseThunk>())
     dispatch(getAllRegulatoryLayersByRegTerritory())
-    dispatch(getAllGearCodes<BackofficeAppThunk>())
+    dispatch(getAllGearCodes<BackofficeAppPromiseThunk>())
     dispatch(regulationActions.setProcessingRegulationSaved(false))
     dispatch(regulationActions.setRegulatoryZoneMetadata(undefined))
   }, [dispatch])

@@ -61,6 +61,7 @@ export type MainAppGetState = () => MainRootState
 export type MainAppThunk<ReturnType = void> = ThunkAction<ReturnType, MainRootState, undefined, AnyAction>
 export type MainRootState = ReturnType<typeof mainStore.getState>
 export type MainAppUseCase = () => MainAppThunk
+export type MainAppAsyncThunk<ReturnType = void> = MainAppThunk<Promise<ReturnType>>
 
 // =============================================================================
 // Backoffice Store
@@ -110,3 +111,4 @@ export type BackofficeAppDispatch = typeof backofficeStore.dispatch
 export type BackofficeAppGetState = () => BackofficeRootState
 export type BackofficeAppThunk<ReturnType = void> = ThunkAction<ReturnType, BackofficeRootState, unknown, AnyAction>
 export type BackofficeRootState = ReturnType<typeof backofficeStore.getState>
+export type BackofficeAppPromiseThunk<ReturnType = void> = BackofficeAppThunk<Promise<ReturnType>>

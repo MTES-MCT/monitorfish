@@ -38,7 +38,7 @@ import { Loader as MissionFormLoader } from '../Mission/components/MissionForm/L
 import { MissionList } from '../Mission/components/MissionList'
 import { PriorNotificationList } from '../PriorNotification/components/PriorNotificationList'
 
-import type { MainAppThunk } from '@store'
+import type { MainAppAsyncThunk } from '@store'
 
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
   isFromURL: boolean
@@ -124,7 +124,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
     }
 
     dispatch(getInfractions())
-    dispatch(getAllGearCodes<MainAppThunk>())
+    dispatch(getAllGearCodes<MainAppAsyncThunk>())
   }, [dispatch, isFromURL, isSuperUser])
 
   useEffect(() => {

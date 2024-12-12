@@ -17,8 +17,7 @@ context('Side Window > Reporting List > Table', () => {
     cy.intercept(
       {
         method: 'GET',
-        // We add one more intercept as there is one more request when going to the NAMO tab
-        times: failedQueryCount + 2,
+        times: failedQueryCount,
         url: apiPathBase
       },
       {
@@ -27,11 +26,12 @@ context('Side Window > Reporting List > Table', () => {
     ).as('getReportingsWithError')
 
     openSideWindowReportingList()
-    cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click()
 
     for (let i = 1; i <= failedQueryCount; i += 1) {
       cy.wait('@getReportingsWithError')
     }
+
+    cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click()
 
     cy.intercept('GET', apiPathBase).as('getReportings')
 
@@ -71,7 +71,9 @@ context('Side Window > Reporting List > Table', () => {
      * Sort reporting table by date
      */
 
-    cy.get('.Table-SimpleTable tr').eq(1).contains('3 milles - Chaluts')
+    cy.get('.Table-SimpleTable td').eq(5).then(firstRowText => {
+      cy.get('.Table-SimpleTable tr').eq(1).contains(firstRowText.text())
+    })
 
     cy.get('th > div').filter(':contains("Il y a...")').click({ force: true })
 

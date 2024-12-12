@@ -6,7 +6,7 @@ import { jest } from '@jest/globals'
  * we could have more middleware functions being called within the
  * use-case middleware, and we should be able to capture all of these events.
  */
-export const dispatchProcessor = (action, initialState) => {
+export const mockedDispatch = (action, initialState) => {
   const store = {
     dispatch: jest.fn(fn => {
       if (typeof fn === 'function') {

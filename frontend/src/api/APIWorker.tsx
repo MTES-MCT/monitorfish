@@ -47,8 +47,6 @@ export function APIWorker() {
 
   const load = useCallback(async () => {
     dispatch(setIsUpdatingVessels())
-    await dispatch(getAllSpecies<MainAppThunk>())
-    dispatch(getAllRegulatoryLayers())
     dispatch(getAllGearCodes<MainAppThunk>())
 
     if (isSuperUser) {
@@ -60,9 +58,11 @@ export function APIWorker() {
     }
 
     dispatch(getInfractions())
+    await dispatch(getAllSpecies<MainAppThunk>())
+    dispatch(getAllRegulatoryLayers())
   }, [dispatch, isSuperUser])
 
-  const poll = useCallback(async () => {
+  const poll = useCallback(() => {
     dispatch(setIsUpdatingVessels())
     dispatch(updateVesselTracks())
 

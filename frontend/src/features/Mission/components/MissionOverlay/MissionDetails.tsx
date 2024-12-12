@@ -1,4 +1,5 @@
 import { Bold } from '@components/style'
+import { OverlayPosition } from '@features/Map/components/Overlay'
 import { CompletionStatusTag } from '@features/Mission/components/MissionForm/shared/CompletionStatusTag'
 import { MissionStatusTag } from '@features/Mission/components/MissionForm/shared/MissionStatusTag'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -8,7 +9,6 @@ import { Fragment } from 'react'
 import styled from 'styled-components'
 
 import { margins } from './constants'
-import { OverlayPosition } from '../../../map/overlays/Overlay'
 import { Mission } from '../../mission.types'
 import { editMission } from '../../useCases/editMission'
 import { missionFormActions } from '../MissionForm/slice'

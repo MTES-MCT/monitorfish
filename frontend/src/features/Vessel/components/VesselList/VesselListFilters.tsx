@@ -1,6 +1,7 @@
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
-import getAdministrativeZoneGeometry from '@features/AdministrativeZone/useCases/getAdministrativeZoneGeometry'
+import { getAdministrativeZoneGeometry } from '@features/AdministrativeZone/useCases/getAdministrativeZoneGeometry'
 import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
+import { LayerType, LayerType as LayersType, InteractionType } from '@features/Map/constants'
 import {
   removeZoneSelected,
   setCountriesFiltered,
@@ -19,17 +20,16 @@ import { FilterTag } from '@features/VesselFilter/components/VesselFilters/Filte
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
+import { cloneDeep } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Checkbox, CheckboxGroup, MultiCascader, SelectPicker, Tag, TagPicker } from 'rsuite'
 import styled from 'styled-components'
 
 import { lastControlAfterLabels, lastPositionTimeAgoLabels } from './dataFormatting'
-import { LayerType, LayerType as LayersType } from '../../../../domain/entities/layers/constants'
-import { InteractionType } from '../../../../domain/entities/map/constants'
 import { VesselLocation, vesselSize } from '../../../../domain/entities/vessel/vessel'
 import { setBlockVesselsUpdate } from '../../../../domain/shared_slices/Global'
 import { addVesselListFilterZone } from '../../../../domain/use_cases/vessel/addVesselListFilterZone'
-import { getZonesAndSubZonesPromises } from '../../../AdministrativeZone/useCases/getZonesAndSubZonesPromises'
+import { getZonesAndSubZones } from '../../../AdministrativeZone/useCases/getZonesAndSubZones'
 import PolygonFilterSVG from '../../../icons/Filtre_zone_polygone.svg?react'
 import BoxFilterSVG from '../../../icons/Filtre_zone_rectangle.svg?react'
 
@@ -44,26 +44,24 @@ function renderTagPickerValue(items) {
 const tagPickerStyle = { margin: '3px 10px 10px 0', verticalAlign: 'top', width: 150 }
 
 type VesselListFiltersProps = Readonly<{
-  namespace: string
   seeMoreIsOpen: any
   setSeeMoreIsOpen: any
 }>
-function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpen }: VesselListFiltersProps) {
+function UnmemoizedVesselListFilters({ seeMoreIsOpen, setSeeMoreIsOpen }: VesselListFiltersProps) {
   const dispatch = useMainAppDispatch()
-  const {
-    countriesFiltered,
-    districtsFiltered,
-    fleetSegmentsFiltered,
-    gearsFiltered,
-    lastControlMonthsAgo,
-    lastPositionTimeAgoFilter,
-    speciesFiltered,
-    vesselsLocationFilter,
-    vesselsSizeValuesChecked,
-    zonesFilter,
-    zonesSelected
-  } = useMainAppSelector(state => state.vesselList)
-  const { uniqueVesselsDistricts: districts, uniqueVesselsSpecies: species } = useMainAppSelector(state => state.vessel)
+  const countriesFiltered = useMainAppSelector(state => state.vesselList.countriesFiltered)
+  const districtsFiltered = useMainAppSelector(state => state.vesselList.districtsFiltered)
+  const fleetSegmentsFiltered = useMainAppSelector(state => state.vesselList.fleetSegmentsFiltered)
+  const gearsFiltered = useMainAppSelector(state => state.vesselList.gearsFiltered)
+  const lastControlMonthsAgo = useMainAppSelector(state => state.vesselList.lastControlMonthsAgo)
+  const lastPositionTimeAgoFilter = useMainAppSelector(state => state.vesselList.lastPositionTimeAgoFilter)
+  const speciesFiltered = useMainAppSelector(state => state.vesselList.speciesFiltered)
+  const vesselsLocationFilter = useMainAppSelector(state => state.vesselList.vesselsLocationFilter)
+  const vesselsSizeValuesChecked = useMainAppSelector(state => state.vesselList.vesselsSizeValuesChecked)
+  const zonesFilter = useMainAppSelector(state => state.vesselList.zonesFilter)
+  const zonesSelected = useMainAppSelector(state => state.vesselList.zonesSelected)
+  const districts = useMainAppSelector(state => state.vessel.uniqueVesselsDistricts)
+  const species = useMainAppSelector(state => state.vessel.uniqueVesselsSpecies)
   const gears = useMainAppSelector(state => state.gear.gears)
   const getFleetSegmentsQuery = useGetFleetSegmentsQuery()
   const [zoneGroups, setZoneGroups] = useState<string[]>([])
@@ -161,6 +159,9 @@ function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpe
     [zonesSelected]
   )
 
+  // A deep copy is required to prevent error : "can't define property "parent": Object is not extensible".
+  const zonesFilterClone = useMemo(() => cloneDeep(zonesFilter), [zonesFilter])
+
   // TODO Export to a thunk use-case
   const setAdministrativeZonesFiltered = useCallback(
     (nextAdministrativeZonesFiltered: string[]) => {
@@ -187,32 +188,29 @@ function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpe
         }
 
         if (zoneToFetch.isSubZone) {
-          dispatch(getAdministrativeZoneGeometry(zoneToFetch.groupCode, zoneToFetch.code, zoneToFetch.name, namespace))
+          dispatch(getAdministrativeZoneGeometry(zoneToFetch.groupCode, zoneToFetch.code, zoneToFetch.name))
         } else {
-          dispatch(getAdministrativeZoneGeometry(zoneToFetch.code, null, zoneToFetch.name, namespace))
+          dispatch(getAdministrativeZoneGeometry(zoneToFetch.code, undefined, zoneToFetch.name))
         }
       })
     },
-    [dispatch, namespace, zonesFilter, zonesSelected]
+    [dispatch, zonesFilter, zonesSelected]
   )
 
   // TODO Export to a thunk use-case
   const getZones = useCallback(async () => {
-    const nextZonesPromises = dispatch(getZonesAndSubZonesPromises())
-    const nextZones = await Promise.all(nextZonesPromises)
+    const zonesAndSubZones = await dispatch(getZonesAndSubZones())
 
-    let nextZonesWithoutNulls = nextZones.flat().filter(zone => zone)
-
-    const groups = Array.from(new Set(nextZonesWithoutNulls.map(zone => zone.group)))
+    const groups = Array.from(new Set(zonesAndSubZones.map(zone => zone.group)))
     setZoneGroups(groups)
 
-    nextZonesWithoutNulls = groups.map(group => ({
-      children: nextZonesWithoutNulls.filter(zone => zone.group === group),
+    const nextZones = groups.map(group => ({
+      children: zonesAndSubZones.filter(zone => zone.group === group),
       label: group,
       value: group
     }))
 
-    dispatch(setZonesFilter(nextZonesWithoutNulls))
+    dispatch(setZonesFilter(nextZones))
   }, [dispatch])
 
   useEffect(() => {
@@ -236,8 +234,8 @@ function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpe
         data-cy="vessel-list-country-filter"
         onChange={nextValue => dispatch(setCountriesFiltered(nextValue))}
         placeholder="Nationalité"
-        renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
-        renderValue={(_, items) => renderTagPickerValue(items)}
+        renderMenuItem={(_label, item) => renderTagPickerMenuItem(item)}
+        renderValue={(_value, items) => renderTagPickerValue(items)}
         style={tagPickerStyle}
         value={countriesFiltered}
       />
@@ -246,8 +244,8 @@ function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpe
         data-cy="vessel-list-fleet-segment-filter"
         onChange={nextValue => dispatch(setFleetSegmentsFiltered(nextValue))}
         placeholder="Seg. de flotte"
-        renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
-        renderValue={(_, items) => renderTagPickerValue(items)}
+        renderMenuItem={(_label, item) => renderTagPickerMenuItem(item)}
+        renderValue={(_value, items) => renderTagPickerValue(items)}
         style={tagPickerStyle}
         value={fleetSegmentsFiltered}
       />
@@ -255,8 +253,8 @@ function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpe
         data={gearsField}
         onChange={nextValue => dispatch(setGearsFiltered(nextValue))}
         placeholder="Engins à bord"
-        renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
-        renderValue={(_, items) => renderTagPickerValue(items)}
+        renderMenuItem={(_label, item) => renderTagPickerMenuItem(item)}
+        renderValue={(_value, items) => renderTagPickerValue(items)}
         style={tagPickerStyle}
         value={gearsFiltered}
       />
@@ -264,16 +262,15 @@ function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpe
         data={speciesField}
         onChange={nextValue => dispatch(setSpeciesFiltered(nextValue))}
         placeholder="Espèces à bord"
-        renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
-        renderValue={(_, items) => renderTagPickerValue(items)}
+        renderMenuItem={(_label, item) => renderTagPickerMenuItem(item)}
+        renderValue={(_value, items) => renderTagPickerValue(items)}
         style={tagPickerStyle}
         value={speciesFiltered}
       />
       <ZoneFilter>
-        {!!zonesFilter.length && !!zoneGroups?.length && (
+        {!!zonesFilterClone.length && !!zoneGroups.length && (
           <MultiCascader
-            // TODO A deep copy is required to prevent error : "can't define property "parent": Object is not extensible"
-            data={zonesFilter.map(zone => JSON.parse(JSON.stringify(zone)))}
+            data={zonesFilterClone}
             menuWidth={250}
             onChange={nextValue => setAdministrativeZonesFiltered(nextValue as string[])}
             onClean={() => setAdministrativeZonesFiltered([])}
@@ -321,8 +318,8 @@ function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpe
             data={districtsField}
             onChange={nextValue => dispatch(setDistrictsFiltered(nextValue))}
             placeholder="Quartiers"
-            renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
-            renderValue={(_, items) => renderTagPickerValue(items)}
+            renderMenuItem={(_label, item) => renderTagPickerMenuItem(item)}
+            renderValue={(_value, items) => renderTagPickerValue(items)}
             style={tagPickerStyle}
             value={districtsFiltered}
           />

@@ -3,13 +3,13 @@ import { Checkbox } from 'rsuite'
 import styled, { css } from 'styled-components'
 
 export const ContentLine = styled.div<{
-  alignedToTop?: boolean
-  isFormOpened?: boolean
-  isInfoTextShown?: boolean
+  $alignedToTop?: boolean
+  $isFormOpened?: boolean
+  $isInfoTextShown?: boolean
 }>`
   display: flex;
-  flex-direction: ${p => (p.isFormOpened && p.isInfoTextShown ? 'column' : 'row')};
-  align-items: ${p => ((!!p.isFormOpened && !!p.isInfoTextShown) || !!p.alignedToTop ? 'flex-start' : 'center')};
+  flex-direction: ${p => (p.$isFormOpened && p.$isInfoTextShown ? 'column' : 'row')};
+  align-items: ${p => ((!!p.$isFormOpened && !!p.$isInfoTextShown) || !!p.$alignedToTop ? 'flex-start' : 'center')};
   margin-bottom: 12px;
 `
 
@@ -54,12 +54,12 @@ export const Delimiter = styled.div<{
 `
 
 export const Link = styled.a<{
-  tagUrl?: boolean
+  $tagUrl?: boolean
 }>`
   font-size: 13px;
   padding: 0px 8px;
   cursor: pointer;
-  ${p => (!p.tagUrl ? 'font-weight: 500;' : '')}
+  ${p => (!p.$tagUrl ? 'font-weight: 500;' : '')}
 `
 export const InfoTextWrapper = styled.div`
   display: flex;
@@ -69,14 +69,14 @@ export const InfoTextWrapper = styled.div`
 `
 
 export const InfoText = styled.span<{
-  bold?: boolean
-  red?: boolean
+  $bold?: boolean
+  $red?: boolean
 }>`
-  ${p => (p.bold ? 'font-weight: bold;' : '')}
+  ${p => (p.$bold ? 'font-weight: bold;' : '')}
   text-align: left;
   display: inline-block;
   font-size: 13px;
-  color: ${p => (p.red ? THEME.color.maximumRed : THEME.color.gunMetal)};
+  color: ${p => (p.$red ? THEME.color.maximumRed : THEME.color.gunMetal)};
   padding-left: 8px;
   white-space: pre-line;
 `
@@ -124,32 +124,32 @@ export const RegulatorySectionTitle = styled.div`
 `
 
 export const FormSection = styled.div<{
-  show?: boolean
+  $show?: boolean
 }>`
-  display: ${p => (p.show ? 'flex' : 'none')};
-  ${p => (p.show ? 'flex-direction: column;' : '')};
+  display: ${p => (p.$show ? 'flex' : 'none')};
+  ${p => (p.$show ? 'flex-direction: column;' : '')};
   margin-right: 40px;
 `
 
 export const FormContent = styled.div<{
-  display?: boolean
+  $display?: boolean
 }>`
-  display: ${p => (!p.display ? 'none' : 'flex')};
+  display: ${p => (!p.$display ? 'none' : 'flex')};
   flex-direction: column;
   align-items: flex-start;
   margin-bottom: 15px;
 `
 
 export const Section = styled(FormSection)`
-  display: ${p => (p.show ? 'flex' : 'none')};
-  ${p => (p.show ? 'flex-direction: column;' : '')};
+  display: ${p => (p.$show ? 'flex' : 'none')};
+  ${p => (p.$show ? 'flex-direction: column;' : '')};
   padding-bottom: 60px;
 `
 
 export const OtherRemark = styled.div<{
-  show?: boolean
+  $show?: boolean
 }>`
-  display: ${p => (p.show ? 'flex' : 'none')};
+  display: ${p => (p.$show ? 'flex' : 'none')};
   margin-top: 15px;
 `
 export const Content = styled.div`

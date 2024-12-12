@@ -1,10 +1,10 @@
 import { COLORS } from '@constants/constants'
+import { MapBox } from '@features/Map/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import styled from 'styled-components'
 
 import { Filter } from './Filter'
 import { FilterParameters } from './FilterParameters'
-import { MapBox } from '../../../../domain/entities/map/constants'
 import { MapToolBox } from '../../../MainWindow/components/MapButtons/shared/MapToolBox'
 
 export function Filters() {

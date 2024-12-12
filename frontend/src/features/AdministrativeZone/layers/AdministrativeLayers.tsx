@@ -1,19 +1,18 @@
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import React, { useEffect } from 'react'
-
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import {
   administrativeLayers,
   layerOfTypeAdministrativeLayer,
   layerOfTypeAdministrativeLayerInCurrentMap,
   layersNotInCurrentOLMap,
   layersNotInShowedLayers
-} from '../../../domain/entities/layers'
-import { monitorfishMap } from '../../map/monitorfishMap'
-import { getVectorOLLayer } from '../useCases/showAdministrativeZone'
+} from '@features/Map/utils'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import React, { useEffect } from 'react'
+
+import { getVectorOLLayer } from './utils'
 
 function UnmemoizedAdministrativeLayers() {
   const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
-  const isBackoffice = useMainAppSelector(state => state.global.isBackoffice)
 
   useEffect(() => {
     if (!showedLayers) {
@@ -27,11 +26,11 @@ function UnmemoizedAdministrativeLayers() {
         .filter(layer => layersNotInCurrentOLMap(olLayers, layer))
 
       layersToInsert.forEach(layerToInsert => {
-        if (!layerToInsert) {
+        if (!layerToInsert?.type) {
           return
         }
 
-        const VectorLayer = getVectorOLLayer(layerToInsert.type, layerToInsert.zone, isBackoffice)
+        const VectorLayer = getVectorOLLayer(layerToInsert.type, layerToInsert.zone, false)
         olLayers.push(VectorLayer)
       })
     }
@@ -50,7 +49,7 @@ function UnmemoizedAdministrativeLayers() {
 
     addAdministrativeLayersToMap()
     removeAdministrativeLayersToMap()
-  }, [isBackoffice, showedLayers])
+  }, [showedLayers])
 
   return <></>
 }

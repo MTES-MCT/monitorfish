@@ -8,7 +8,7 @@ module.exports = {
     ecmaVersion: 2022,
     project: path.join(__dirname, 'tsconfig.json')
   },
-  ignorePatterns: ['.eslintrc.cjs', '.eslintrc.partial.cjs'],
+  ignorePatterns: ['/build/*', '/public/*', '.eslintrc.cjs'],
   env: {
     browser: true
   },
@@ -112,7 +112,7 @@ module.exports = {
         caughtErrorsIgnorePattern: '^_'
       }
     ],
-    '@typescript-eslint/prefer-nullish-coalescing': 'warn',
+    '@typescript-eslint/prefer-nullish-coalescing': 'error',
 
     'typescript-sort-keys/interface': 'error',
     'typescript-sort-keys/string-enum': 'error'
@@ -120,7 +120,7 @@ module.exports = {
   overrides: [
     // Redux
     {
-      files: ['src/domain/shared_slices/**/*.ts', 'src/**/slice.ts', 'src/**/*.slice.ts'],
+      files: ['src/domain/shared_slices/**/*.ts', 'src/**/*.slice.ts', 'src/**/slice.ts', 'src/**/slice.*.ts', 'src/**/*.slice.*.ts'],
       rules: {
         'no-param-reassign': 'off'
       }

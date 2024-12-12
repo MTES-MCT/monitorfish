@@ -1,4 +1,4 @@
-import { addRegulatoryZonesToMyLayers, regulatoryActions } from '@features/Regulation/slice'
+import { regulationActions } from '@features/Regulation/slice'
 import { hideRegulatoryZoneLayerById } from '@features/Regulation/useCases/hideRegulatoryZoneLayerById'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -6,12 +6,12 @@ import { Accent, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
 import { closeRegulatoryZoneMetadata } from '../../useCases/closeRegulatoryZoneMetadata'
 import { showRegulatoryZoneMetadata } from '../../useCases/showRegulatoryZoneMetadata'
 import { ZonePreview } from '../ZonePreview'
 
 import type { RegulatoryZone } from '../../types'
+import type { MainAppThunk } from '@store'
 
 export type RegulatoryLayerSearchResultZoneProps = {
   isOpen: boolean
@@ -19,8 +19,8 @@ export type RegulatoryLayerSearchResultZoneProps = {
 }
 export function ResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResultZoneProps) {
   const dispatch = useMainAppDispatch()
-  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulatory.regulatoryZoneMetadata)
-  const selectedRegulatoryLayers = useMainAppSelector(state => state.regulatory.selectedRegulatoryLayers)
+  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
+  const selectedRegulatoryLayers = useMainAppSelector(state => state.regulation.selectedRegulatoryLayers)
   const isMetadataShown = regulatoryZoneMetadata?.id === regulatoryZone.id
 
   const isZoneAlreadySelected = useMemo(() => {
@@ -38,21 +38,21 @@ export function ResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResu
 
   const showOrHideRegulatoryZoneMetadata = (partialRegulatoryZone: Pick<RegulatoryZone, 'topic' | 'zone'>) => {
     if (!isMetadataShown) {
-      dispatch(showRegulatoryZoneMetadata(partialRegulatoryZone, true))
+      dispatch(showRegulatoryZoneMetadata(partialRegulatoryZone, true) as unknown as MainAppThunk)
     } else {
       dispatch(closeRegulatoryZoneMetadata())
     }
   }
 
   function toggleCheckZone() {
-    if (isZoneAlreadySelected) {
-      dispatch(hideRegulatoryZoneLayerById(regulatoryZone.id, LayerSliceNamespace.homepage))
-      dispatch(regulatoryActions.removeSelectedZoneById(regulatoryZone.id))
+    if (isZoneAlreadySelected && regulatoryZone.id) {
+      dispatch(hideRegulatoryZoneLayerById(regulatoryZone.id))
+      dispatch(regulationActions.removeSelectedZoneById(regulatoryZone.id))
 
       return
     }
 
-    dispatch(addRegulatoryZonesToMyLayers([regulatoryZone]))
+    dispatch(regulationActions.addRegulatoryZonesToMyLayers([regulatoryZone]))
   }
 
   return (

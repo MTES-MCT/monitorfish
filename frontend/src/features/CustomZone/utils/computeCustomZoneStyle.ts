@@ -1,9 +1,9 @@
+import { getColorWithAlpha, getHashDigitsFromString } from '@features/Map/layers/styles/utils'
 import { Circle, Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 import Text from 'ol/style/Text'
 
-import { getColorWithAlpha, getHashDigitsFromString } from '../../map/layers/styles/utils'
 import { DEFAULT_ZONE_BORDER, DEFAULT_ZONE_COLOR, DIGIT_TO_LAYER_COLOR_MAP } from '../constants'
 
 export function computeCustomZoneStyle(uuid: string, name: string): [Style] {

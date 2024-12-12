@@ -56,7 +56,7 @@ export function SideWindowLauncher() {
       showPrompt={hasUnsavedChanges}
       title="MonitorFish"
     >
-      <SideWindow isFromUrl={false} />
+      <SideWindow isFromURL={false} />
     </NewWindow>
   )
 }

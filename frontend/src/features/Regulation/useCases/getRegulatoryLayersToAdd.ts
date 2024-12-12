@@ -1,32 +1,48 @@
-import { getVectorOLLayer } from './showRegulatoryZone'
-import { getLayerNameNormalized } from '../../../domain/entities/layers'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '@features/Map/constants'
+import { getLayerNameNormalized } from '@features/Map/utils'
+import { isNotNullish } from '@utils/isNotNullish'
 
-export const getRegulatoryLayersToAdd = (olLayers, showedLayers) => (dispatch, getState) => {
-  if (!showedLayers.length) {
-    return []
+import { getVectorOLLayer } from './getVectorOLLayer'
+
+import type { MonitorFishMap } from '@features/Map/Map.types'
+import type { HybridAppDispatch, HybridAppThunk } from '@store/types'
+import type { Feature } from 'ol'
+import type { Geometry } from 'ol/geom'
+import type BaseLayer from 'ol/layer/Base'
+import type VectorImageLayer from 'ol/layer/VectorImage'
+
+export const getRegulatoryLayersToAdd =
+  <T extends HybridAppDispatch>(
+    olLayers: BaseLayer[],
+    showedLayers: MonitorFishMap.ShowedLayer[]
+  ): HybridAppThunk<T, Array<VectorImageLayer<Feature<Geometry>>>> =>
+  // @ts-ignore Required to avoid reducers typing conflicts. Not fancy but allows us to keep Thunk context type-checks.
+  dispatch => {
+    if (!showedLayers.length) {
+      return []
+    }
+
+    const layersToInsert = showedLayers
+      .filter(layer => layersNotInCurrentOLMap(olLayers, layer))
+      .filter(layer => layersOfTypeRegulatoryLayer(layer))
+
+    return (
+      layersToInsert
+        // TODO Is it really necessary?
+        .filter(isNotNullish)
+        .map(layerToInsert => dispatch(getVectorOLLayer<T>(layerToInsert)))
+        // TODO Is it really necessary?
+        .filter(isNotNullish)
+    )
   }
 
-  const layersToInsert = showedLayers
-    .filter(layer => layersNotInCurrentOLMap(olLayers, layer))
-    .filter(layer => layersOfTypeRegulatoryLayer(layer))
-
-  return layersToInsert
-    .filter(layerToInsert => layerToInsert)
-    .map(layerToInsert => {
-      const getVectorLayerClosure = getVectorOLLayer(dispatch, getState)
-
-      return getVectorLayerClosure(layerToInsert)
-    })
-    .filter(layer => layer)
-}
-
-function layersNotInCurrentOLMap(olLayers, layer) {
+function layersNotInCurrentOLMap(olLayers: BaseLayer[], layer: MonitorFishMap.ShowedLayer) {
   return !olLayers.some(
-    olLayer => olLayer.name === getLayerNameNormalized({ type: LayerProperties.REGULATORY.code, ...layer })
+    // TODO Create a custom `BaseLayer`.
+    olLayer => (olLayer as any).name === getLayerNameNormalized({ type: LayerProperties.REGULATORY.code, ...layer })
   )
 }
 
-function layersOfTypeRegulatoryLayer(layer) {
+function layersOfTypeRegulatoryLayer(layer: MonitorFishMap.ShowedLayer) {
   return layer.type === LayerProperties.REGULATORY.code
 }

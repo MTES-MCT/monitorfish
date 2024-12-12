@@ -1,28 +1,25 @@
 import countries from 'i18n-iso-countries'
 
 import { VesselLabel } from './label/types'
-import { BaseLayers } from '../layers/constants'
-import { MonitorFishLayer } from '../layers/types'
+import { BaseLayer } from '../../../features/Map/constants'
+import { MonitorFishMap } from '../../../features/Map/Map.types'
 
 import type { ShowedVesselTrack, VesselCompositeIdentifier, VesselIdentity } from './types'
+import type { Reporting } from '../../../features/Reporting/types'
+import type { Vessel as VesselTypes } from '../../../features/Vessel/Vessel.types'
 import type { PartialExcept } from '../../../types'
-import type { LastPositionVisibility } from '../../types/map'
-import type { Reporting } from '@features/Reporting/types'
-import type { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
 
 export const VESSEL_ALERT_STYLE = 1
 export const VESSEL_INFRACTION_SUSPICION_STYLE = 1
 export const VESSEL_BEACON_MALFUNCTION_STYLE = 1
 export const VESSEL_ALERT_AND_BEACON_MALFUNCTION = 1
-export const VESSEL_ICON_STYLE = 10
-export const VESSEL_LABEL_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
 
 export class Vessel {
   static vesselIsMovingSpeed = 0.1
 
   static getVesselFeatureId(vessel) {
-    return `${MonitorFishLayer.VESSELS}:${getVesselCompositeIdentifier(vessel)}`
+    return `${MonitorFishMap.MonitorFishLayer.VESSELS}:${getVesselCompositeIdentifier(vessel)}`
   }
 
   static getVesselOpacity(dateTime, vesselIsHidden, vesselIsOpacityReduced) {
@@ -66,7 +63,7 @@ export class Vessel {
       isRiskFactorShowed: boolean
       vesselLabel: string
       vesselLabelsShowedOnMap: boolean
-      vesselsLastPositionVisibility: LastPositionVisibility
+      vesselsLastPositionVisibility: MonitorFishMap.LastPositionVisibility
     }
   ): {
     labelText: string | null
@@ -151,7 +148,7 @@ export class Vessel {
    * @return {boolean} isLight - returns true if vessel icon is light
    */
   static iconIsLight = selectedBaseLayer =>
-    selectedBaseLayer === BaseLayers.SATELLITE.code || selectedBaseLayer === BaseLayers.DARK.code
+    selectedBaseLayer === BaseLayer.SATELLITE.code || selectedBaseLayer === BaseLayer.DARK.code
 }
 
 /** @deprecated Use `extractVesselIdentityProps()` from `@features/Vessel/utils`. */

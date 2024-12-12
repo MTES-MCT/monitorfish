@@ -1,13 +1,13 @@
 import { COLORS } from '@constants/constants'
+import { MonitorFishMap } from '@features/Map/Map.types'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { memo, useEffect } from 'react'
 
-import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { getVesselLastPositionVisibilityDates, Vessel } from '../../../../domain/entities/vessel/vessel'
 import { theme } from '../../../../ui/theme'
 import { booleanToInt, customHexToRGB } from '../../../../utils'
-import { monitorfishMap } from '../../../map/monitorfishMap'
 import { getWebGLVesselStyleVariables } from '../style'
 
 function UnmemoizedVesselsLayer() {
@@ -44,7 +44,7 @@ function UnmemoizedVesselsLayer() {
     }
     const styleVariables = getWebGLVesselStyleVariables(initStyles)
     VESSELS_VECTOR_LAYER.updateStyleVariables(styleVariables)
-    VESSELS_VECTOR_LAYER.name = MonitorFishLayer.VESSELS
+    VESSELS_VECTOR_LAYER.name = MonitorFishMap.MonitorFishLayer.VESSELS
 
     monitorfishMap.getLayers().push(VESSELS_VECTOR_LAYER)
 

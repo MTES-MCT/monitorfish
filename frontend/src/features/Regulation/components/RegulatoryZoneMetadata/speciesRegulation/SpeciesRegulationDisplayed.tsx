@@ -9,12 +9,12 @@ import { Section } from '../RegulatoryMetadata.style'
 import type { RegulatedSpecies as RegulatedSpeciesType } from '../../../types'
 
 export function SpeciesRegulationDisplayed() {
-  const regulatory = useMainAppSelector(state => state.regulatory)
+  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
 
-  const { speciesRegulation } = regulatory.regulatoryZoneMetadata ?? {}
+  const { speciesRegulation } = regulatoryZoneMetadata ?? {}
   const { authorized, otherInfo, unauthorized } = speciesRegulation ?? {}
-  const hasAuthorizedContent = !isRegulatedSpeciesEmpty(authorized)
-  const hasUnauthorizedContent = !isRegulatedSpeciesEmpty(unauthorized)
+  const hasAuthorizedContent = !isRegulatedSpeciesEmpty(authorized ?? undefined)
+  const hasUnauthorizedContent = !isRegulatedSpeciesEmpty(unauthorized ?? undefined)
   const areSpeciesRegulationEmpty = !hasAuthorizedContent && !hasUnauthorizedContent && !otherInfo
 
   if (areSpeciesRegulationEmpty) {

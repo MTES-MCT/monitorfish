@@ -23,7 +23,7 @@ export function RegulatedSpecies({
   return (
     <div data-cy={`${dataCyTarget}-regulatory-layers-metadata-species`}>
       <SectionTitle $hasPreviousRegulatedGearsBloc={hasPreviousRegulatedSpeciesBloc}>
-        {authorized ? <GreenCircle margin="0 5px 0 0" /> : <RedCircle margin="0 5px 0 0" />}
+        {authorized ? <GreenCircle $margin="0 5px 0 0" /> : <RedCircle $margin="0 5px 0 0" />}
         Espèces {authorized ? 'réglementées' : 'interdites'}
       </SectionTitle>
       {allSpecies ? (

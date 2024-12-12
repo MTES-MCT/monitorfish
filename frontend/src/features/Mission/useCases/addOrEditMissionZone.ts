@@ -1,6 +1,7 @@
-import { InteractionListener, InteractionType } from '../../../domain/entities/map/constants'
+import { InteractionListener, InteractionType } from '@features/Map/constants'
+import { fitMultiPolygonToExtent } from '@features/Map/useCases/fitMultiPolygonToExtent'
+
 import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
-import { fitMultiPolygonToExtent } from '../../../domain/use_cases/map/fitMultiPolygonToExtent'
 import { unselectVessel } from '../../../domain/use_cases/vessel/unselectVessel'
 import { setInitialGeometry, setInteractionTypeAndListener } from '../../Draw/slice'
 

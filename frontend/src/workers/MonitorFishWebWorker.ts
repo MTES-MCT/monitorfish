@@ -1,3 +1,4 @@
+import { logSoftError } from '@mtes-mct/monitor-ui'
 import * as Comlink from 'comlink'
 
 import { VesselLocation, vesselSize } from '../domain/entities/vessel/vessel'
@@ -8,8 +9,12 @@ import {
   mapToRegulatoryZone
 } from '../features/Regulation/utils'
 import { getDateMonthsBefore } from '../utils'
+import { isNotNullish } from '../utils/isNotNullish'
 
 import type { GeoJSON } from '../domain/types/GeoJSON'
+import type { Regulation } from '../features/Regulation/Regulation.types'
+import type { RegulatoryZone } from '../features/Regulation/types'
+import type { Specy } from 'domain/types/specy'
 
 /**
  * /!\ Do not shorten imports in the Web worker.
@@ -21,10 +26,15 @@ export class MonitorFishWebWorker {
     return getRegulatoryLawTypesFromZones(regulatoryZones)
   }
 
-  static getLayerTopicList = (features, speciesByCode) => {
-    const featuresWithoutGeometry = features.features.map(feature => mapToRegulatoryZone(feature, speciesByCode))
+  static getLayerTopicList = (
+    features: Regulation.RegulatoryZoneGeoJsonFeatureCollection,
+    speciesByCode: Record<string, Specy>
+  ) => {
+    const featuresWithoutGeometry: RegulatoryZone[] = features.features
+      .map(feature => mapToRegulatoryZone(feature, speciesByCode))
+      .filter(isNotNullish)
 
-    const uniqueFeaturesWithoutGeometry = featuresWithoutGeometry.reduce((acc, current) => {
+    const uniqueFeaturesWithoutGeometry = featuresWithoutGeometry.reduce<RegulatoryZone[]>((acc, current) => {
       const found = acc.find(item => item.topic === current.topic && item.zone === current.zone)
       if (!found) {
         return acc.concat([current])
@@ -43,8 +53,11 @@ export class MonitorFishWebWorker {
     }
   }
 
-  static mapGeoserverToRegulatoryZones = (geoJSON, speciesByCode) =>
-    geoJSON.features.map(feature => mapToRegulatoryZone(feature, speciesByCode))
+  static mapGeoserverToRegulatoryZones = (
+    geoJSON: Regulation.RegulatoryZoneGeoJsonFeatureCollection,
+    speciesByCode: Record<string, Specy>
+  ): RegulatoryZone[] =>
+    geoJSON.features.map(feature => mapToRegulatoryZone(feature, speciesByCode)).filter(isNotNullish)
 
   static getGeometryIdFromFeatureId = (feature: GeoJSON.Feature): number | string => {
     const idFromProperties = feature.properties?.id as number | undefined
@@ -70,70 +83,30 @@ export class MonitorFishWebWorker {
     return geometryListAsObject
   }
 
-  /**
-   * Get all regulatory data structured as
-   * Territory: {
-   *  LawType: {
-   *    Topic: Zone[]
-   *  }
-   * }
-   * (see example)
-   * @param {GeoJSON} features
-   * @param {Object<string, Object>} speciesByCode
-   * @returns {Object} The structured regulatory data
-   * @example
-   * "France": {
-   *    "Reg locale / NAMO": {
-   *       "Armor_CSJ_Dragues": [
-   *         {
-   *           bycatch: undefined,
-   *           closingDate: undefined,
-   *           deposit: undefined,
-   *           gears: "DRB",
-   *           lawType: "Reg locale",
-   *           mandatoryDocuments: undefined,
-   *           obligations: undefined,
-   *           openingDate: undefined,
-   *           period: undefined,
-   *           permissions: undefined,
-   *           prohibitedGears: null,
-   *           prohibitedSpecies: null,
-   *           prohibitions: undefined,
-   *           quantity: undefined,
-   *           region: "Bretagne",
-   *           regulatoryReferences: "[
-   *             {\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-r53-2020-04-24-002-delib-2020-a9873.html?id_rub=1637\",
-   *             \"reference\": \"ArrÃªtÃ© PrÃ©fectoral R53-2020-04-24-002 - dÃ©lib 2020-004 / NAMO\"}, {\"url\": \"\", \"reference\": \"126-2020\"}]",
-   *           rejections: undefined,
-   *           size: undefined,
-   *           species: "SCE",
-   *           state: undefined,
-   *           technicalMeasurements: undefined,
-   *           topic: "Armor_CSJ_Dragues",
-   *           zone: "Secteur 3"
-   *         }
-   *       ]
-   *       "GlÃ©nan_CSJ_Dragues": (1) […],
-   *       "Bretagne_Laminaria_Hyperborea_Scoubidous - 2019": (1) […],
-   *    },
-   *     "Reg locale / Sud-Atlantique, SA": {
-   *       "Embouchure_Gironde": (1) […],
-   *       "Pertuis_CSJ_Dragues": (6) […],
-   *       "SA_Chaluts_Pelagiques": (5) […]
-   *     }
-   * }
-   */
-  static convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode) {
+  // TODO Find a better name.
+  static convertGeoJSONFeaturesToStructuredRegulatoryObject(
+    features: Regulation.RegulatoryZoneGeoJsonFeatureCollection,
+    speciesByCode: Record<string, Specy>
+  ): Regulation.StructuredRegulatoryObject {
     const regulatoryTopicList = new Set()
     const { featuresWithoutGeometry, uniqueFeaturesWithoutGeometryByTopics: layerTopicArray } =
       MonitorFishWebWorker.getLayerTopicList(features, speciesByCode)
 
-    const layersTopicsByRegulatoryTerritory = layerTopicArray.reduce((accumulatedObject, zone) => {
-      const { lawType, topic } = zone[0]
+    const layersTopicsByRegulatoryTerritory = layerTopicArray.reduce<
+      Record<string, Record<string, Record<string, RegulatoryZone[]>>>
+    >((accumulatedObject, zone) => {
+      const firstRegulatoryZone = zone[0]
+      if (!firstRegulatoryZone) {
+        logSoftError({ message: '`regulatoryZone[0]` is undefined.' })
+
+        return accumulatedObject
+      }
+
+      const { lawType, topic } = firstRegulatoryZone
 
       if (topic && lawType) {
         regulatoryTopicList.add(topic)
-        const regulatoryTerritory = LAWTYPES_TO_TERRITORY[lawType]
+        const regulatoryTerritory: string | undefined = LAWTYPES_TO_TERRITORY[lawType]
         if (regulatoryTerritory) {
           if (!accumulatedObject[regulatoryTerritory]) {
             // For performance reason
@@ -165,7 +138,7 @@ export class MonitorFishWebWorker {
       return accumulatedObject
     }, {})
 
-    const orderedFrenchLayersTopics = {}
+    const orderedFrenchLayersTopics: Record<string, Record<string, RegulatoryZone[]>> = {}
     Object.keys(LAWTYPES_TO_TERRITORY).forEach(lawType => {
       if (layersTopicsByRegulatoryTerritory[FRANCE] && layersTopicsByRegulatoryTerritory[FRANCE][lawType]) {
         orderedFrenchLayersTopics[lawType] = layersTopicsByRegulatoryTerritory[FRANCE][lawType]

@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 import { CreateOrEditFleetSegmentModal } from './CreateOrEditFleetSegmentModal'
 import { FleetSegmentsTable } from './FleetSegmentsTable'
-import getFAOAreas from '../../../../domain/use_cases/faoAreas/getFAOAreas'
+import { getFAOAreas } from '../../../../domain/use_cases/faoAreas/getFAOAreas'
 import { theme } from '../../../../ui/theme'
 import { BackOfficeTitle } from '../../../BackOffice/components/BackOfficeTitle'
 import { addFleetSegmentYear } from '../../useCases/addFleetSegmentYear'

@@ -1,7 +1,7 @@
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
 import { getAllRegulatoryLayers } from '@features/Regulation/useCases/getAllRegulatoryLayers'
 import { reportingApi } from '@features/Reporting/reportingApi'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useIsSuperUser } from '../auth/hooks/useIsSuperUser'
 import { SideWindowStatus } from '../domain/entities/sideWindow/constants'
@@ -9,16 +9,18 @@ import { VesselSidebarTab } from '../domain/entities/vessel/vessel'
 import { setIsUpdatingVessels } from '../domain/shared_slices/Global'
 import { getOperationalAlerts } from '../domain/use_cases/alert/getOperationalAlerts'
 import { getSilencedAlerts } from '../domain/use_cases/alert/getSilencedAlerts'
-import getAllBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
+import { getAllBeaconMalfunctions } from '../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import { getVesselBeaconMalfunctions } from '../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import { openBeaconMalfunctionInKanban } from '../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
-import getAllGearCodes from '../domain/use_cases/gearCode/getAllGearCodes'
+import { getAllGearCodes } from '../domain/use_cases/gearCode/getAllGearCodes'
 import { getInfractions } from '../domain/use_cases/infraction/getInfractions'
 import { getVesselControls } from '../domain/use_cases/mission/getVesselControls'
-import getAllSpecies from '../domain/use_cases/species/getAllSpecies'
+import { getAllSpecies } from '../domain/use_cases/species/getAllSpecies'
 import { updateVesselTracks } from '../domain/use_cases/vessel/updateVesselTracks'
 import { useMainAppDispatch } from '../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../hooks/useMainAppSelector'
+
+import type { MainAppThunk } from '@store'
 
 export const FIVE_MINUTES = 5 * 60 * 1000
 export const TWENTY_MINUTES = 20 * 60 * 1000
@@ -43,16 +45,10 @@ export function APIWorker() {
   const vesselBeaconMalfunctionInterval = useRef<number>()
   const [updateVesselSidebarTab, setUpdateVesselSidebarTab] = useState(false)
 
-  useEffect(() => {
-    if (isSuperUser === undefined) {
-      return () => {}
-    }
-
+  const load = useCallback(async () => {
     dispatch(setIsUpdatingVessels())
-    dispatch(getAllSpecies()).then(() => dispatch(getAllRegulatoryLayers()))
-    dispatch(getAllGearCodes())
+    dispatch(getAllGearCodes<MainAppThunk>())
 
-    // TODO Use a RTK query hook with polling, within a global hook if really necessary.
     if (isSuperUser) {
       dispatch(fleetSegmentApi.endpoints.getFleetSegments.initiate())
       dispatch(getOperationalAlerts())
@@ -63,17 +59,32 @@ export function APIWorker() {
 
     dispatch(getInfractions())
 
-    const interval = setInterval(() => {
-      dispatch(setIsUpdatingVessels())
-      dispatch(updateVesselTracks())
+    // This `await` must be kept at the end of the function to prevent blocking of other fetch
+    await dispatch(getAllSpecies<MainAppThunk>())
+    dispatch(getAllRegulatoryLayers())
+  }, [dispatch, isSuperUser])
 
-      setUpdateVesselSidebarTab(true)
-    }, FIVE_MINUTES)
+  const poll = useCallback(() => {
+    dispatch(setIsUpdatingVessels())
+    dispatch(updateVesselTracks())
+
+    setUpdateVesselSidebarTab(true)
+  }, [dispatch])
+
+  useEffect(() => {
+    if (isSuperUser === undefined) {
+      return () => {}
+    }
+
+    load()
+
+    // TODO Use a RTK query hook with polling, within a global hook if really necessary.
+    const interval = setInterval(poll, FIVE_MINUTES)
 
     return () => {
       clearInterval(interval)
     }
-  }, [dispatch, isSuperUser])
+  }, [dispatch, isSuperUser, load, poll])
 
   useEffect(() => {
     if (isSuperUser && sideWindow.status !== SideWindowStatus.CLOSED) {

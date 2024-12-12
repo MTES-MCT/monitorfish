@@ -1,3 +1,7 @@
 export enum LocalStorageKey {
-  LastSearchVessels = 'lastSearchedVessels'
+  BackofficeLayersShowedOnMap = 'backofficelayersShowedOnMap',
+  LastSearchVessels = 'lastSearchedVessels',
+  LayersShowedOnMap = 'homepagelayersShowedOnMap',
+  SelectedRegulatoryZoneIds = 'selectedRegulatoryZoneIds',
+  SelectedRegulatoryZones = 'selectedRegulatoryZones'
 }

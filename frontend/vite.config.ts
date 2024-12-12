@@ -2,11 +2,11 @@
 
 import importMetaEnv from '@import-meta-env/unplugin'
 import replace from '@rollup/plugin-replace'
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import svgr from 'vite-plugin-svgr'
 import viteTsconfigPaths from 'vite-tsconfig-paths'
-import {sentryVitePlugin} from "@sentry/vite-plugin";
 
 // https://vitejs.dev/config/
 // eslint-disable-next-line import/no-default-export
@@ -16,6 +16,11 @@ export default defineConfig({
     outDir: './build',
     sourcemap: true,
     rollupOptions: {
+      input: {
+        index: './index.html',
+        serviceWorker: './src/workers/serviceWorker.ts'
+      },
+
       plugins: replace({
         'pointerEvents: isScrolling ? "none" : void 0': 'pointerEvents: null',
         preventAssignment: true

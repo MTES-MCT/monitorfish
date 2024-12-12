@@ -1,3 +1,4 @@
+import { CoordinatesFormat, MeasurementType, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { CoordinatesInput } from '@mtes-mct/monitor-ui'
@@ -6,12 +7,6 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
-import {
-  CoordinatesFormat,
-  MeasurementType,
-  OPENLAYERS_PROJECTION,
-  WSG84_PROJECTION
-} from '../../../../domain/entities/map/constants'
 import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
 import { MapToolBox } from '../../../MainWindow/components/MapButtons/shared/MapToolBox'
 import {

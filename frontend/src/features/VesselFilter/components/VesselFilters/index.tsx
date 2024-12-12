@@ -1,3 +1,4 @@
+import { MapBox } from '@features/Map/constants'
 import { useClickOutsideWhenOpenedAndExecute } from '@hooks/useClickOutsideWhenOpenedAndExecute'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -6,7 +7,6 @@ import { useCallback, useRef } from 'react'
 import styled from 'styled-components'
 
 import { Filters } from './Filters'
-import { MapBox } from '../../../../domain/entities/map/constants'
 import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
 import FilterSVG from '../../../icons/standardized/Filter.svg?react'
 import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'

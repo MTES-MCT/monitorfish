@@ -1,14 +1,13 @@
-import { setDrawedGeometry as setDrawedGeometryGeoJSON } from '@features/Draw/slice'
+import { drawActions } from '@features/Draw/slice'
+import { convertToGeoJSONGeometryObject } from '@features/Map/utils'
 
-import { convertToGeoJSONGeometryObject } from '../../../domain/entities/layers'
-
+import type { MainAppThunk } from '@store'
 import type { Geometry } from 'ol/geom'
 
-export const setDrawedGeometry = (geometry: Geometry) => dispatch => {
-  if (!geometry) {
-    return
-  }
+export const setDrawedGeometry =
+  (geometry: Geometry): MainAppThunk =>
+  dispatch => {
+    const geometryAsGeoJsonGeometry = convertToGeoJSONGeometryObject(geometry)
 
-  const nextGeometry = convertToGeoJSONGeometryObject(geometry)
-  dispatch(setDrawedGeometryGeoJSON(nextGeometry))
-}
+    dispatch(drawActions.setDrawedGeometry(geometryAsGeoJsonGeometry))
+  }

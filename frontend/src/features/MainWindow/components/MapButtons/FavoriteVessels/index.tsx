@@ -1,7 +1,7 @@
 import { COLORS } from '@constants/constants'
+import { MapBox } from '@features/Map/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { MapBox } from 'domain/entities/map/constants'
 import { setLeftMapBoxOpened } from 'domain/shared_slices/Global'
 import { useRef } from 'react'
 import styled from 'styled-components'

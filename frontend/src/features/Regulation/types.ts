@@ -1,5 +1,6 @@
 import type { GearMeshSizeEqualityComparator } from '../../domain/entities/backoffice'
 import type { GeoJSON } from '../../domain/types/GeoJSON'
+import type { UndefineExcept } from '@mtes-mct/monitor-ui'
 
 export type BaseRegulatoryZone = {
   topic: string
@@ -8,26 +9,31 @@ export type BaseRegulatoryZone = {
 
 export type RegulatoryZone = BaseRegulatoryZone & {
   color?: string
-  fishingPeriod: FishingPeriod
+  fishingPeriod: FishingPeriod<Date>
   gearRegulation: GearRegulation
-  geometry: GeoJSON.Geometry
-  id: number | string
+  geometry: GeoJSON.Geometry | undefined
+  id: number | string | undefined
   lawType: string
-  nextId: string
-  otherInfo: string
+  nextId: string | undefined
+  otherInfo: string | undefined
   region: string
   regulatoryReferences: RegulatoryText[] | undefined
   showed?: boolean
   speciesRegulation: SpeciesRegulation
 }
 
-export type EditedRegulatoryZone = RegulatoryZone & {
+export type EditedRegulatoryZone = Omit<RegulatoryZone, 'region'> & {
   region: string[] | undefined
 }
 
+export type RegulatoryZoneDraft = UndefineExcept<
+  EditedRegulatoryZone,
+  'fishingPeriod' | 'gearRegulation' | 'speciesRegulation'
+>
+
 export type RegulatoryText = {
   // TODO Use `Infinity`
-  endDate: Date | 'infinite'
+  endDate: Date | 'infinite' | undefined
   reference: string
   startDate: Date
   // TODO Doesn't exist.
@@ -40,22 +46,22 @@ export type RegulatoryText = {
 export type RegulatoryLawTypes = Record<string, Record<string, RegulatoryZone[]>>
 
 export type DateInterval = {
-  endDate: string | Date
-  startDate: string | Date
+  endDate: string | Date | undefined
+  startDate: string | Date | undefined
 }
 
 export type TimeInterval = {
-  from: Date
-  to: Date
+  from: Date | undefined
+  to: Date | undefined
 }
 
-export type FishingPeriod = {
+// TODO It would be safer to use strict array types: `DateRange[]` and `DateAsStringRange[]`.
+export type FishingPeriod<DateType extends string | Date = string> = {
   always: boolean | undefined
   annualRecurrence: boolean | undefined
   authorized: boolean | undefined
   dateRanges: DateInterval[]
-  // ISO-8601 date
-  dates: string[]
+  dates: DateType[]
   daytime: boolean | undefined
   holidays: boolean | undefined
   otherInfo: string | undefined
@@ -72,9 +78,9 @@ export type RegulatedSpecies = {
 }
 
 export type SpeciesRegulation = {
-  authorized: RegulatedSpecies
+  authorized: RegulatedSpecies | null
   otherInfo: string | undefined
-  unauthorized: RegulatedSpecies
+  unauthorized: RegulatedSpecies | null
 }
 
 export type Gear = {
@@ -91,6 +97,8 @@ export type GearCategory = {
   mesh: string[] | undefined
   meshType: GearMeshSizeEqualityComparator | undefined
   name: string
+  // TODO "Guessed" prop durint TS migration. Check if it's correct.
+  remarks?: string | undefined
 }
 
 export type GearRegulation = {

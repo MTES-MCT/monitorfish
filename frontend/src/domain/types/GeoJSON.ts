@@ -134,7 +134,7 @@ export declare namespace GeoJSON {
 
   // GeoJSON types
 
-  export interface Feature {
+  export interface Feature<Properties extends Record = Record, Id = string | number> {
     /**
      * A Feature object has a member with the name "geometry". The value of the geometry member SHALL be either a
      * Geometry object as defined above or, in the case that the Feature is unlocated, a JSON null value.
@@ -144,24 +144,24 @@ export declare namespace GeoJSON {
      * If a Feature has a commonly used identifier, that identifier SHOULD be included as a member of the Feature object
      * with the name "id", and the value of this member is either a JSON string or number.
      */
-    id?: string | number
+    id?: Id
     /**
      * A Feature object has a member with the name "properties". The value of the properties member is an object
      * (any JSON object or a JSON null value).
      */
-    properties: Record | null
+    properties: Properties | null
     /**
      * A Feature object has a "type" member with the value "Feature".
      */
     type: 'Feature'
   }
 
-  export interface FeatureCollection {
+  export interface FeatureCollection<Properties extends Record = Record, Id = string | number> {
     /**
      * A FeatureCollection object has a member with the name "features". The value of "features" is a JSON array. Each
      * element of the array is a Feature object as defined above. It is possible for this array to be empty.
      */
-    features: Feature[]
+    features: Feature<Properties, Id>[]
     /**
      * A GeoJSON object with the type "FeatureCollection" is a FeatureCollection object.
      */

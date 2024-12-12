@@ -1,18 +1,18 @@
-import React, { useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
-import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
+import VectorSource from 'ol/source/Vector'
+import React, { useEffect, useRef } from 'react'
+import { useSelector } from 'react-redux'
 
 import { getVesselBeaconMalfunctionStyle } from './style'
-import { getVesselCompositeIdentifier, vesselIsShowed } from '../../../domain/entities/vessel/vessel'
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
-import { monitorfishMap } from '../../map/monitorfishMap'
+import { getVesselCompositeIdentifier, vesselIsShowed } from '../../../domain/entities/vessel/vessel'
+import { LayerProperties } from '../../Map/constants'
+import { monitorfishMap } from '../../Map/monitorfishMap'
 import { vesselSelectors } from '../slice'
 
-const VesselBeaconMalfunctionLayer = () => {
+function VesselBeaconMalfunctionLayer() {
   const isSuperUser = useIsSuperUser()
   const hideNonSelectedVessels = useSelector(state => state.vessel.hideNonSelectedVessels)
   const vesselsTracksShowed = useSelector(state => state.vessel.vesselsTracksShowed)
@@ -23,27 +23,29 @@ const VesselBeaconMalfunctionLayer = () => {
   const hideVesselsAtPort = useSelector(state => state.map.hideVesselsAtPort)
 
   const vectorSourceRef = useRef(null)
-  function getVectorSource () {
+  function getVectorSource() {
     if (vectorSourceRef.current === null) {
       vectorSourceRef.current = new VectorSource({
         features: [],
         wrapX: false
       })
     }
+
     return vectorSourceRef.current
   }
 
   const layerRef = useRef(null)
-  function getLayer () {
+  function getLayer() {
     if (layerRef.current === null) {
       layerRef.current = new Vector({
         source: getVectorSource(),
-        zIndex: LayerProperties.VESSEL_BEACON_MALFUNCTION.zIndex,
+        style: (_, resolution) => getVesselBeaconMalfunctionStyle(resolution),
         updateWhileAnimating: true,
         updateWhileInteracting: true,
-        style: (_, resolution) => getVesselBeaconMalfunctionStyle(resolution)
+        zIndex: LayerProperties.VESSEL_BEACON_MALFUNCTION.zIndex
       })
     }
+
     return layerRef.current
   }
 
@@ -61,12 +63,24 @@ const VesselBeaconMalfunctionLayer = () => {
   useEffect(() => {
     if (isSuperUser && vessels?.length) {
       const features = vessels.reduce((_features, vessel) => {
-        if (!vessel.hasBeaconMalfunction) return _features
-        if (vessel.hasAlert) return _features
-        if (nonFilteredVesselsAreHidden && !vessel.isFiltered) return _features
-        if (previewFilteredVesselsMode && !vessel.filterPreview) return _features
-        if (hideVesselsAtPort && vessel.isAtPort) return _features
-        if (hideNonSelectedVessels && !vesselIsShowed(vessel, vesselsTracksShowed, selectedVesselIdentity)) return _features
+        if (!vessel.hasBeaconMalfunction) {
+          return _features
+        }
+        if (vessel.hasAlert) {
+          return _features
+        }
+        if (nonFilteredVesselsAreHidden && !vessel.isFiltered) {
+          return _features
+        }
+        if (previewFilteredVesselsMode && !vessel.filterPreview) {
+          return _features
+        }
+        if (hideVesselsAtPort && vessel.isAtPort) {
+          return _features
+        }
+        if (hideNonSelectedVessels && !vesselIsShowed(vessel, vesselsTracksShowed, selectedVesselIdentity)) {
+          return _features
+        }
 
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)

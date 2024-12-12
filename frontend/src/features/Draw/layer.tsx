@@ -1,3 +1,13 @@
+import {
+  LayerProperties,
+  InteractionType,
+  OPENLAYERS_PROJECTION,
+  OpenLayersGeometryType,
+  WSG84_PROJECTION
+} from '@features/Map/constants'
+import { dottedLayerStyle } from '@features/Map/layers/styles/dottedLayer.style'
+import { drawStyle, editStyle } from '@features/Map/layers/styles/draw.style'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { isEmpty } from 'lodash'
@@ -11,28 +21,22 @@ import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { addFeatureToDrawedFeature } from './useCases/addFeatureToDrawedFeature'
 import { setDrawedGeometry } from './useCases/setDrawedGeometry'
-import { LayerProperties } from '../../domain/entities/layers/constants'
-import {
-  InteractionType,
-  OPENLAYERS_PROJECTION,
-  OpenLayersGeometryType,
-  WSG84_PROJECTION
-} from '../../domain/entities/map/constants'
-import { dottedLayerStyle } from '../map/layers/styles/dottedLayer.style'
-import { drawStyle, editStyle } from '../map/layers/styles/draw.style'
-import { monitorfishMap } from '../map/monitorfishMap'
 
-import type { VectorLayerWithName } from '../../domain/types/layer'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 import type Geometry from 'ol/geom/Geometry'
 import type { GeometryFunction } from 'ol/interaction/Draw'
+import type { ModifyEvent } from 'ol/interaction/Modify'
 import type { MutableRefObject } from 'react'
 
 function UnmemoizedDrawLayer() {
   const dispatch = useMainAppDispatch()
-  const { drawedGeometry, initialGeometry, interactionType, listener } = useMainAppSelector(state => state.draw)
+  const drawedGeometry = useMainAppSelector(state => state.draw.drawedGeometry)
+  const initialGeometry = useMainAppSelector(state => state.draw.initialGeometry)
+  const interactionType = useMainAppSelector(state => state.draw.interactionType)
+  const listener = useMainAppSelector(state => state.draw.listener)
 
   const feature = useMemo(() => {
-    const currentGeometry = drawedGeometry || initialGeometry
+    const currentGeometry = drawedGeometry ?? initialGeometry
     if (!currentGeometry) {
       return undefined
     }
@@ -66,7 +70,7 @@ function UnmemoizedDrawLayer() {
     return drawVectorSourceRef.current
   }, [])
 
-  const vectorLayerRef = useRef() as MutableRefObject<VectorLayerWithName>
+  const vectorLayerRef = useRef() as MutableRefObject<MonitorFishMap.VectorLayerWithName>
 
   useEffect(() => {
     function getVectorLayer() {
@@ -93,10 +97,10 @@ function UnmemoizedDrawLayer() {
   }, [getVectorSource])
 
   const setGeometryOnModifyEnd = useCallback(
-    event => {
+    (event: ModifyEvent) => {
       const nextGeometry = event.features.item(0).getGeometry()
       if (nextGeometry) {
-        dispatch(setDrawedGeometry(nextGeometry as Geometry))
+        dispatch(setDrawedGeometry(nextGeometry))
       }
     },
     [dispatch]

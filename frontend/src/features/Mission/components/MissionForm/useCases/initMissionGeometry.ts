@@ -1,7 +1,6 @@
+import { convertToGeoJSONGeometryObject } from '@features/Map/utils'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 import { MultiPolygon } from 'ol/geom'
-
-import { convertToGeoJSONGeometryObject } from '../../../../../domain/entities/layers'
 
 import type { GeoJSON } from '../../../../../domain/types/GeoJSON'
 

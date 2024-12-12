@@ -1,11 +1,4 @@
 import { BackOfficeTitle } from '@features/BackOffice/components/BackOfficeTitle'
-import { sortArrayByColumn, SortType } from '@features/Vessel/components/VesselList/tableSort'
-import { useCallback, useEffect, useState } from 'react'
-import { SelectPicker, Table } from 'rsuite'
-import styled from 'styled-components'
-import { useDebouncedCallback } from 'use-debounce'
-
-import { LoadingSpinnerWall } from '../../../../ui/LoadingSpinnerWall'
 import {
   ControlPriorityCell,
   DeleteCell,
@@ -15,7 +8,14 @@ import {
   ModifiableCell,
   renderRowExpanded,
   SegmentCellWithTitle
-} from '../../../BackOffice/tableCells'
+} from '@features/Regulation/components/RegulationTables/tableCells'
+import { sortArrayByColumn, SortType } from '@features/Vessel/components/VesselList/tableSort'
+import { useCallback, useEffect, useState } from 'react'
+import { SelectPicker, Table } from 'rsuite'
+import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
+
+import { LoadingSpinnerWall } from '../../../../ui/LoadingSpinnerWall'
 import { useGetFleetSegmentsQuery } from '../../../FleetSegment/apis'
 import {
   useAddControlObjectiveMutation,

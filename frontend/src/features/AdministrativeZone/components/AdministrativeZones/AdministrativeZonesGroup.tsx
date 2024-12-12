@@ -7,12 +7,12 @@ import { COLORS } from '../../../../constants/constants'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
 
-import type { CodeAndName, ShowableLayer } from '../../../../domain/entities/layers/types'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 
 type AdministrativeZonesGroupType = {
-  group: CodeAndName
-  showOrHideZone: (zone: ShowableLayer) => (isShown: boolean) => void
-  zones: ShowableLayer[]
+  group: MonitorFishMap.CodeAndName
+  showOrHideZone: (zone: MonitorFishMap.ShowableLayer) => (isShown: boolean) => void
+  zones: MonitorFishMap.ShowableLayer[]
 }
 export function AdministrativeZonesGroup({ group, showOrHideZone, zones }: AdministrativeZonesGroupType) {
   const showedLayers = useMainAppSelector(state => state.layer.showedLayers)

@@ -1,5 +1,6 @@
 import { hideLayer } from '@features/LayersSidebar/useCases/hideLayer'
-import { addRegulatoryZonesToMyLayers, regulatoryActions } from '@features/Regulation/slice'
+import { LayerProperties } from '@features/Map/constants'
+import { regulationActions } from '@features/Regulation/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, IconButton, logSoftError, THEME } from '@mtes-mct/monitor-ui'
@@ -7,8 +8,6 @@ import { memo, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ResultZones } from './ResultZones'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
-import { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
 
 import type { RegulatoryZone } from '../../types'
 
@@ -24,8 +23,8 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
 }: RegulatoryLayerSearchResultTopicProps) {
   const dispatch = useMainAppDispatch()
 
-  const regulatoryLayerLawTypes = useMainAppSelector(state => state.regulatory.regulatoryLayerLawTypes)
-  const selectedRegulatoryLayers = useMainAppSelector(state => state.regulatory.selectedRegulatoryLayers)
+  const regulatoryLayerLawTypes = useMainAppSelector(state => state.regulation.regulatoryLayerLawTypes)
+  const selectedRegulatoryLayers = useMainAppSelector(state => state.regulation.selectedRegulatoryLayers)
   const regulatoryLayersSearchResult = useMainAppSelector(
     state => state.regulatoryLayerSearch.regulatoryLayersSearchResult
   )
@@ -86,17 +85,16 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
     if (areAllZonesAlreadySelected && regulatoryLayerTopic) {
       dispatch(
         hideLayer({
-          namespace: LayerSliceNamespace.homepage,
           topic: regulatoryLayerTopic,
           type: LayerProperties.REGULATORY.code
         })
       )
-      dispatch(regulatoryActions.removeSelectedZonesByTopic(regulatoryLayerTopic))
+      dispatch(regulationActions.removeSelectedZonesByTopic(regulatoryLayerTopic))
 
       return
     }
 
-    dispatch(addRegulatoryZonesToMyLayers(searchResultZones))
+    dispatch(regulationActions.addRegulatoryZonesToMyLayers(searchResultZones))
   }
 
   return (

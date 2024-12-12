@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import Nouislider from '../../../../../ui/Nouislider'
 
-import type { LastPositionVisibility } from '../../../../../domain/types/map'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 
 // Hours
 const labels = [48, 24, 12, 6, 3, 2, 1]
@@ -13,7 +13,7 @@ declare type Range = [number, number]
 
 type LastPositionsSliderProps = {
   updateVesselsLastPositionVisibility: (hidden, opacityReduced) => void
-  vesselsLastPositionVisibility: LastPositionVisibility
+  vesselsLastPositionVisibility: MonitorFishMap.LastPositionVisibility
 }
 export function LastPositionsSlider({
   updateVesselsLastPositionVisibility,

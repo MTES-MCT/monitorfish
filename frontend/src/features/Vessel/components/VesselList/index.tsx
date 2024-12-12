@@ -1,5 +1,6 @@
 import { resetInteraction } from '@features/Draw/slice'
 import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
+import { LayerType, InteractionListener } from '@features/Map/constants'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -11,13 +12,11 @@ import styled from 'styled-components'
 import { VesselIcon } from './shared'
 import { addZoneSelected, reset } from './slice'
 import { VesselListModal } from './VesselListModal'
-import { LayerType } from '../../../../domain/entities/layers/constants'
-import { InteractionListener } from '../../../../domain/entities/map/constants'
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setBlockVesselsUpdate } from '../../../../domain/shared_slices/Global'
 import { MapComponent } from '../../../commonStyles/MapComponent'
 
-export function VesselList({ namespace }) {
+export function VesselList() {
   const dispatch = useMainAppDispatch()
   const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.VESSELS_LIST)
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
@@ -77,7 +76,7 @@ export function VesselList({ namespace }) {
           />
         </VesselListButton>
         <Modal backdrop="static" onClose={onClose} open={isVesselListModalDisplayed} size="full">
-          {isVesselListModalDisplayed && <VesselListModal namespace={namespace} onClose={onClose} />}
+          {isVesselListModalDisplayed && <VesselListModal onClose={onClose} />}
         </Modal>
       </Wrapper>
     </>

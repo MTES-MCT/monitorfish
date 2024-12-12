@@ -1,3 +1,4 @@
+import { MapBox, MeasurementType } from '@features/Map/constants'
 import { useClickOutsideWhenOpenedAndExecute } from '@hooks/useClickOutsideWhenOpenedAndExecute'
 import { useEscapeFromKeyboardAndExecute } from '@hooks/useEscapeFromKeyboardAndExecute'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -6,7 +7,6 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { CustomCircleRange } from './CustomCircleRange'
-import { MapBox, MeasurementType } from '../../../../domain/entities/map/constants'
 import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
 import { MapComponent } from '../../../commonStyles/MapComponent'
 import MultiLineSVG from '../../../icons/standardized/Measure_broken_line.svg?react'

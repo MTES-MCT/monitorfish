@@ -12,7 +12,7 @@ import { setError } from '../../shared_slices/Global'
  * @param {number} beaconMalfunctionId
  * @param {string} comment
  */
-const saveBeaconMalfunctionCommentFromKanban = (beaconMalfunctionId, comment) => (dispatch, getState) => {
+export const saveBeaconMalfunctionCommentFromKanban = (beaconMalfunctionId, comment) => (dispatch, getState) => {
   const { userType } = getState().global
   const newCommentInput = {
     comment,
@@ -48,5 +48,3 @@ const saveBeaconMalfunctionCommentFromKanban = (beaconMalfunctionId, comment) =>
       dispatch(setError(error))
     })
 }
-
-export default saveBeaconMalfunctionCommentFromKanban

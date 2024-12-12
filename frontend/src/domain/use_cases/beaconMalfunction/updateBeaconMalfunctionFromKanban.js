@@ -14,7 +14,7 @@ import { setError } from '../../shared_slices/Global'
  * @param {BeaconMalfunction} nextBeaconMalfunction - The next beacon malfunction
  * @param {UpdateBeaconMalfunction} updatedFields - The fields to update
  */
-const updateBeaconMalfunctionFromKanban = (id, nextBeaconMalfunction, updatedFields) => (dispatch, getState) => {
+export const updateBeaconMalfunctionFromKanban = (id, nextBeaconMalfunction, updatedFields) => (dispatch, getState) => {
   const previousBeaconMalfunctions = getState().beaconMalfunction.beaconMalfunctions
   dispatch(updateLocalBeaconMalfunction(nextBeaconMalfunction))
   const beaconMalfunctionToUpdateIsOpenedAsCurrentVesselMalfunction =
@@ -46,5 +46,3 @@ const updateBeaconMalfunctionFromKanban = (id, nextBeaconMalfunction, updatedFie
       dispatch(setBeaconMalfunctions(previousBeaconMalfunctions))
     })
 }
-
-export default updateBeaconMalfunctionFromKanban

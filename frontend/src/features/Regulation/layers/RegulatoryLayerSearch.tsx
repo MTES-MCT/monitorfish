@@ -1,15 +1,14 @@
+import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
+import { dottedLayerStyle } from '@features/Map/layers/styles/dottedLayer.style'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import GeoJSON from 'ol/format/GeoJSON'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import { useCallback, useEffect, useRef } from 'react'
 
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { dottedLayerStyle } from '../../map/layers/styles/dottedLayer.style'
-import { monitorfishMap } from '../../map/monitorfishMap'
 
-import type { VectorLayerWithName } from '../../../domain/types/layer'
+import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { Feature } from 'ol'
 import type Geometry from 'ol/geom/Geometry'
 import type { MutableRefObject } from 'react'
@@ -31,7 +30,7 @@ export function RegulatoryLayerSearch() {
     return vectorSourceRef.current
   }, [])
 
-  const vectorLayerRef = useRef() as MutableRefObject<VectorLayerWithName>
+  const vectorLayerRef = useRef() as MutableRefObject<MonitorFishMap.VectorLayerWithName>
 
   useEffect(() => {
     function getVectorLayer() {

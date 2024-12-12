@@ -14,14 +14,16 @@ export function ResultZones({
   regulatoryLayerLawType,
   regulatoryLayerTopic
 }: RegulatoryLayerSearchResultZonesProps) {
-  const { regulatoryLayersSearchResult } = useMainAppSelector(state => state.regulatoryLayerSearch)
+  const regulatoryLayersSearchResult = useMainAppSelector(
+    state => state.regulatoryLayerSearch.regulatoryLayersSearchResult
+  )
 
   const getRegulatoryZones = useCallback(() => {
     if (regulatoryLayersSearchResult && regulatoryLayerLawType && regulatoryLayerTopic) {
       const regulatoryLayer = regulatoryLayersSearchResult[regulatoryLayerLawType]
 
       if (regulatoryLayer) {
-        return regulatoryLayer[regulatoryLayerTopic] || []
+        return regulatoryLayer[regulatoryLayerTopic] ?? []
       }
     }
 

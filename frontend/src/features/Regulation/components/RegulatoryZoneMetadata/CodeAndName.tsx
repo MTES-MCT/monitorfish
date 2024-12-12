@@ -1,5 +1,5 @@
 import { COLORS } from '@constants/constants'
-import { InfoPoint } from '@features/BackOffice/edit_regulation/InfoPoint'
+import { InfoPoint } from '@features/Regulation/components/RegulationForm/InfoPoint'
 
 import { Label } from './RegulatoryMetadata.style'
 

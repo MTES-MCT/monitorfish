@@ -4,6 +4,6 @@ import { useDispatch } from 'react-redux'
 import type { MainAppDispatch } from '../store'
 
 /**
- * @see https://react-redux.js.org/using-react-redux/usage-with-typescript#typing-the-usedispatch-hook
+ * @see https://redux.js.org/usage/usage-with-typescript#withtypes
  */
-export const useMainAppDispatch: () => MainAppDispatch = useDispatch
+export const useMainAppDispatch = useDispatch.withTypes<MainAppDispatch>()

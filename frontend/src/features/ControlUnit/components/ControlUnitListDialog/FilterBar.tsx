@@ -36,7 +36,7 @@ export function FilterBar() {
   FrontendApiError.handleIfAny(getStationsError)
 
   const administrationsAsOptions = useMemo(
-    () => getOptionsFromIdAndName((administrations || []).filter(isNotArchived)),
+    () => getOptionsFromIdAndName((administrations ?? []).filter(isNotArchived)),
     [administrations]
   )
   const basesAsOptions = useMemo(() => getOptionsFromIdAndName(bases), [bases])

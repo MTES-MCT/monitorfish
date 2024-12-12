@@ -1,3 +1,8 @@
+import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '@features/Map/components/Overlay'
+import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
+import { MonitorFishMap } from '@features/Map/Map.types'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { getMapResolution } from '@features/Map/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useMoveOverlayWhenDragging } from '@hooks/useMoveOverlayWhenDragging'
 import GeoJSON from 'ol/format/GeoJSON'
@@ -7,11 +12,6 @@ import styled from 'styled-components'
 
 import { margins } from './constants'
 import { MissionDetails } from './MissionDetails'
-import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
-import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
-import { monitorfishMap } from '../../../map/monitorfishMap'
-import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../../../map/overlays/Overlay'
-import { getMapResolution } from '../../../map/utils'
 
 import type { Mission } from '../../mission.types'
 
@@ -93,7 +93,7 @@ export function MissionOverlay({ feature, isSelected = false }) {
       return
     }
 
-    if (!feature?.getId()?.toString()?.includes(MonitorFishLayer.MISSION_PIN_POINT)) {
+    if (!feature?.getId()?.toString()?.includes(MonitorFishMap.MonitorFishLayer.MISSION_PIN_POINT)) {
       overlayRef.current.style.display = 'none'
       setMissionProperties(undefined)
 

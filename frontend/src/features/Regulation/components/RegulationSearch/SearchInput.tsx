@@ -1,33 +1,55 @@
+import { LayerType as LayersType, InteractionListener, InteractionType } from '@features/Map/constants'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, IconButton, SingleTag, Size, TextInput, THEME } from '@mtes-mct/monitor-ui'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { resetZoneSelected, setAdvancedSearchIsOpen, setRegulatoryLayersSearchResult, setZoneSelected } from './slice'
-import { LayerType as LayersType } from '../../../../domain/entities/layers/constants'
-import { InteractionListener, InteractionType } from '../../../../domain/entities/map/constants'
 import { resetInteraction, setInteractionTypeAndListener } from '../../../Draw/slice'
 import PolygonFilterSVG from '../../../icons/Filtre_zone_polygone.svg?react'
 import PolygonFilterSelectedSVG from '../../../icons/Filtre_zone_polygone_selected.svg?react'
 import BoxFilterSVG from '../../../icons/Filtre_zone_rectangle.svg?react'
 import BoxFilterSelectedSVG from '../../../icons/Filtre_zone_rectangle_selected.svg?react'
-import { closeRegulatoryZoneMetadataPanel } from '../../slice'
+import { regulationActions } from '../../slice'
 import { MINIMUM_SEARCH_CHARACTERS_NUMBER, searchRegulatoryLayers } from '../../useCases/searchRegulatoryLayers'
+
+import type { ZoneSelected } from '@features/VesselFilter/types'
 
 export function SearchInput() {
   const dispatch = useMainAppDispatch()
   const { advancedSearchIsOpen, zoneSelected } = useMainAppSelector(state => state.regulatoryLayerSearch)
 
   const { drawedGeometry, interactionType } = useListenForDrawedGeometry(InteractionListener.REGULATION)
-  const [searchQuery, setSearchQuery] = useState<string | undefined>('')
+  const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
   const selectedOrSelectingZoneIsSquare = zoneSelected?.name === InteractionType.SQUARE
   const selectedOrSelectingZoneIsPolygon = zoneSelected?.name === InteractionType.POLYGON
 
+  const search = useCallback(
+    async (nextSearchQuery: string | undefined, nextZoneSelected: ZoneSelected | undefined) => {
+      setSearchQuery(nextSearchQuery)
+
+      if ((!nextSearchQuery || nextSearchQuery.length < MINIMUM_SEARCH_CHARACTERS_NUMBER) && !nextZoneSelected) {
+        dispatch(setRegulatoryLayersSearchResult({}))
+
+        return
+      }
+
+      const foundRegulatoryLayers = await dispatch(searchRegulatoryLayers(nextSearchQuery))
+
+      dispatch(setRegulatoryLayersSearchResult(foundRegulatoryLayers))
+    },
+    [dispatch]
+  )
+
+  useEffect(() => {
+    search(searchQuery, zoneSelected)
+  }, [search, searchQuery, zoneSelected])
+
   useEffect(() => {
     if (searchQuery === undefined) {
-      dispatch(closeRegulatoryZoneMetadataPanel())
+      dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
     }
   }, [dispatch, searchQuery])
 
@@ -43,18 +65,6 @@ export function SearchInput() {
     },
     [dispatch]
   )
-
-  useEffect(() => {
-    if ((!searchQuery || searchQuery?.length < MINIMUM_SEARCH_CHARACTERS_NUMBER) && !zoneSelected) {
-      dispatch(setRegulatoryLayersSearchResult({}))
-
-      return
-    }
-
-    dispatch(searchRegulatoryLayers(searchQuery)).then(foundRegulatoryLayers => {
-      dispatch(setRegulatoryLayersSearchResult(foundRegulatoryLayers))
-    })
-  }, [dispatch, searchQuery, zoneSelected])
 
   useEffect(() => {
     if (!drawedGeometry) {
@@ -102,7 +112,7 @@ export function SearchInput() {
           isSearchInput
           label="Rechercher une zone réglementaire"
           name="Rechercher une zone réglementaire"
-          onChange={searched => setSearchQuery(searched)}
+          onChange={setSearchQuery}
           placeholder="Rechercher une zone réglementaire"
           size={Size.LARGE}
           value={searchQuery}

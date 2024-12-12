@@ -1,4 +1,5 @@
 import { COLORS } from '@constants/constants'
+import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTracking } from '@hooks/useTracking'
 import { formatAsCSVColumns } from '@utils/formatAsCSVColumns'
@@ -10,7 +11,6 @@ import styled from 'styled-components'
 
 import { CSVOptions } from './dataFormatting'
 import { getCoordinates } from '../../../../coordinates'
-import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
 import { getDate } from '../../../../utils'
 import { StyledModalHeader } from '../../../commonComponents/StyledModalHeader'
 

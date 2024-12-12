@@ -1,4 +1,4 @@
-import { backofficePriorNotificationActions } from '@features/PriorNotification/backoffice.slice'
+import { backofficePriorNotificationActions } from '@features/PriorNotification/slice.backoffice'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
 import { useGetAdministrationsAsOptions } from '@hooks/useGetAdministrationsAsOptions'

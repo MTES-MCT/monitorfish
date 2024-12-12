@@ -7,9 +7,9 @@ import { COLORS } from '../../../../../constants/constants'
 import { getGroupCategories, REGULATED_GEARS_KEYS } from '../../../../../domain/entities/backoffice'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { theme } from '../../../../../ui/theme'
-import { INFO_TEXT } from '../../../../BackOffice/constants'
-import { InfoPoint } from '../../../../BackOffice/edit_regulation/InfoPoint'
 import { GreenCircle, RedCircle } from '../../../../commonStyles/Circle.style'
+import { InfoPoint } from '../../RegulationForm/InfoPoint'
+import { INFO_TEXT } from '../../RegulationTables/constants'
 import { Label, List, SectionTitle } from '../RegulatoryMetadata.style'
 
 import type { RegulatedGears as RegulatedGearsType } from '../../../types'
@@ -63,7 +63,7 @@ export function RegulatedGears({
   return (
     <Wrapper data-cy={`${dataCyTarget}-regulatory-layers-metadata-gears`}>
       <SectionTitle $hasPreviousRegulatedGearsBloc={hasPreviousRegulatedGearsBloc}>
-        {authorized ? <GreenCircle margin="0 5px 0 0" /> : <RedCircle margin="0 5px 0 0" />}
+        {authorized ? <GreenCircle $margin="0 5px 0 0" /> : <RedCircle $margin="0 5px 0 0" />}
         Engins {authorized ? 'réglementés' : 'interdits'}
       </SectionTitle>
       {allGears ? (

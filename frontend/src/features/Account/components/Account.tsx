@@ -1,5 +1,6 @@
 import { MapToolBox } from '@features/MainWindow/components/MapButtons/shared/MapToolBox'
 import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
+import { MapBox } from '@features/Map/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, Icon, MapMenuDialog, THEME } from '@mtes-mct/monitor-ui'
@@ -7,7 +8,6 @@ import { useContext } from 'react'
 import styled from 'styled-components'
 
 import { UserAccountContext } from '../../../context/UserAccountContext'
-import { MapBox } from '../../../domain/entities/map/constants'
 import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 
 const MARGIN_TOP = 428

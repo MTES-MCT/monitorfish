@@ -1,4 +1,5 @@
 import { COLORS } from '@constants/constants'
+import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import React, { useCallback, useMemo } from 'react'
 import { Table } from 'rsuite'
@@ -16,7 +17,6 @@ import {
 import { sortVesselsByProperty } from './tableSort'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { getCoordinates } from '../../../../coordinates'
-import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
 import FlagSVG from '../../../icons/flag.svg?react'
 
 import type { SortType } from 'rsuite-table'

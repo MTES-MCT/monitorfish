@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { MeasurementType } from '../../domain/entities/map/constants'
+import type { MeasurementType } from '@features/Map/constants'
 import type { CircleMeasurementToAdd, DrawedMeasurement } from '@features/Measurement/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 

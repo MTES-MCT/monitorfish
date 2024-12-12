@@ -1,8 +1,7 @@
+import { getColorWithAlpha } from '@features/Map/layers/styles/utils'
+import { featureHas } from '@features/Map/layers/styles/utils/webgl'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { Fill, Stroke, Style } from 'ol/style'
-
-import { getColorWithAlpha } from '../../../map/layers/styles/utils'
-import { featureHas } from '../../../map/layers/styles/utils/webgl'
 
 import type { WebGLStyle } from 'ol/style/webgl'
 

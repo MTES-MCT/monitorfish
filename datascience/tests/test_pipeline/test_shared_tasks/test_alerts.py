@@ -168,7 +168,7 @@ def test_make_alerts():
                 "INTERNAL_REFERENCE_NUMBER",
             ],
             "risk_factor": [1.23, 3.56],
-            "creation_date": [date_1, date_2],
+            "triggering_behaviour_datetime_utc": [date_1, date_2],
             "latitude": [9.8, -1.963],
             "longitude": [65.59, -81.71],
             "vessel_id": [1, 12],
@@ -194,7 +194,8 @@ def test_make_alerts():
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
             ],
-            "creation_date": [date_1, date_2],
+            "triggering_behaviour_datetime_utc": [date_1, date_2],
+            "creation_date": [datetime(2020, 5, 3, 8, 0, 0)] * 2,
             "latitude": [9.8, -1.963],
             "longitude": [65.59, -81.71],
             "type": ["MISSING_FAR_ALERT", "MISSING_FAR_ALERT"],
@@ -217,14 +218,12 @@ def test_make_alerts():
                 "MISSING_FAR_ALERT_CONFIG_1",
             ],
         }
-    ).astype({"creation_date": "datetime64[ns]"})
+    ).astype({"creation_date": "datetime64[us]"})
 
     pd.testing.assert_frame_equal(alerts, expected_alerts)
 
     # Without optional in input
-    vessels_in_alert = vessels_in_alert.drop(
-        columns=["creation_date", "latitude", "longitude"]
-    )
+    vessels_in_alert = vessels_in_alert.drop(columns=["latitude", "longitude"])
     alerts = make_alerts.run(
         vessels_in_alert,
         alert_type="MISSING_FAR_ALERT",

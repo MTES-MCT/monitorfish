@@ -51,6 +51,7 @@ SELECT
     fe.dml,
     fe.flag_state,
     lp.risk_factor,
+    DATE_TRUNC('day', CURRENT_TIMESTAMP AT TIME ZONE 'UTC') - INTERVAL '7 days' AS triggering_behaviour_datetime_utc,
     lp.latitude,
     lp.longitude
 FROM fishing_efforts fe

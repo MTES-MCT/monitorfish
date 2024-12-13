@@ -6,10 +6,10 @@ import { setError } from '../../shared_slices/Global'
 import type {
   BackofficeAppDispatch,
   BackofficeAppGetState,
-  BackofficeAppThunk,
+  BackofficeAppPromiseThunk,
   MainAppDispatch,
   MainAppGetState,
-  MainAppThunk
+  MainAppAsyncThunk
 } from '@store'
 import type { Gear } from 'domain/types/Gear'
 
@@ -31,8 +31,8 @@ const getGroupName = (groupId: 1 | 2): string | undefined => {
   }
 }
 
-export function getAllGearCodes<T extends MainAppThunk | BackofficeAppThunk>(): T
-export function getAllGearCodes(): MainAppThunk | BackofficeAppThunk {
+export function getAllGearCodes<T extends MainAppAsyncThunk | BackofficeAppPromiseThunk>(): T
+export function getAllGearCodes(): MainAppAsyncThunk | BackofficeAppPromiseThunk {
   return async (
     dispatch: BackofficeAppDispatch | MainAppDispatch,
     getState: BackofficeAppGetState | MainAppGetState

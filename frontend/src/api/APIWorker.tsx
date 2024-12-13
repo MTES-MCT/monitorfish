@@ -20,7 +20,7 @@ import { updateVesselTracks } from '../domain/use_cases/vessel/updateVesselTrack
 import { useMainAppDispatch } from '../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../hooks/useMainAppSelector'
 
-import type { MainAppThunk } from '@store'
+import type { MainAppAsyncThunk } from '@store'
 
 export const FIVE_MINUTES = 5 * 60 * 1000
 export const TWENTY_MINUTES = 20 * 60 * 1000
@@ -47,7 +47,7 @@ export function APIWorker() {
 
   const load = useCallback(async () => {
     dispatch(setIsUpdatingVessels())
-    dispatch(getAllGearCodes<MainAppThunk>())
+    dispatch(getAllGearCodes<MainAppAsyncThunk>())
 
     if (isSuperUser) {
       dispatch(fleetSegmentApi.endpoints.getFleetSegments.initiate())
@@ -58,9 +58,8 @@ export function APIWorker() {
     }
 
     dispatch(getInfractions())
-
     // This `await` must be kept at the end of the function to prevent blocking of other fetch
-    await dispatch(getAllSpecies<MainAppThunk>())
+    await dispatch(getAllSpecies<MainAppAsyncThunk>())
     dispatch(getAllRegulatoryLayers())
   }, [dispatch, isSuperUser])
 

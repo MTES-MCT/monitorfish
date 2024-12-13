@@ -8,7 +8,7 @@ import { Table } from 'rsuite'
 import { getAllGearCodes } from '../../../../domain/use_cases/gearCode/getAllGearCodes'
 import { getAllSpecies } from '../../../../domain/use_cases/species/getAllSpecies'
 
-import type { MainAppThunk } from '@store'
+import type { MainAppAsyncThunk } from '@store'
 
 const { Cell, Column, HeaderCell } = Table
 
@@ -19,8 +19,8 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, onDeleteFleetSegme
   const { height } = useWindowResize()
 
   useEffect(() => {
-    dispatch(getAllGearCodes<MainAppThunk>())
-    dispatch(getAllSpecies<MainAppThunk>())
+    dispatch(getAllGearCodes<MainAppAsyncThunk>())
+    dispatch(getAllSpecies<MainAppAsyncThunk>())
   }, [dispatch])
 
   return (

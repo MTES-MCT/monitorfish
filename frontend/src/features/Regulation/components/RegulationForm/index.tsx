@@ -42,7 +42,7 @@ import ChevronIconSVG from '../../../icons/Chevron_simple_gris.svg?react'
 import { STATUS } from '../RegulationTables/constants'
 
 import type { GeoJSON } from '../../../../domain/types/GeoJSON'
-import type { BackofficeAppThunk } from '@store'
+import type { BackofficeAppPromiseThunk } from '@store'
 
 type RegulationFormProps = Readonly<{
   isEdition: boolean
@@ -84,7 +84,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
       const geometryRecord = await dispatch(getGeometryWithoutRegulationReference())
       setGeometriesMap(geometryRecord)
 
-      await dispatch(getAllSpecies<BackofficeAppThunk>())
+      await dispatch(getAllSpecies<BackofficeAppPromiseThunk>())
       await dispatch(getAllRegulatoryLayersByRegTerritory())
       dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
     })()

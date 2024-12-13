@@ -132,7 +132,6 @@ def make_alerts(
           create an alert.
         alert_type (str): `type` to specify in the built alerts.
         alert_config_name (str): `alert_config_name` to specify in the built alerts.
-        creation_date (datetime): `creation_date` to specify in the built alerts.
 
     Returns:
         pd.DataFrame: `DataFrame` of alerts.

@@ -17,7 +17,7 @@ WITH detected_recent_deps AS (
     LEFT JOIN districts d
     ON d.district_code = v.district_code
     WHERE
-        p.date_time >= CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '48 hours'
+        p.date_time >= CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL ':hours_from_now hours'
         AND p.date_time < CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '2 hours'
         AND p.is_at_port = false
         AND time_emitting_at_sea = INTERVAL '0'
@@ -37,6 +37,7 @@ SELECT
     d.dml,
     d.flag_state,
     lp.risk_factor,
+    d.date_time AS triggering_behaviour_datetime_utc,
     d.latitude,
     d.longitude
 FROM detected_recent_deps d

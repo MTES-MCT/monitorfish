@@ -21,16 +21,24 @@ from src.pipeline.utils import delete_rows, get_table
 
 
 @task(checkpoint=False)
-def extract_silenced_alerts(alert_type: str) -> pd.DataFrame:
+def extract_silenced_alerts(alert_type: str, number_of_hours: int = 0) -> pd.DataFrame:
     """
     Return DataFrame of vessels with active silenced alerts of the given type.
+
+    Args:
+        alert_type (str): Type of alert for which to extract silenced alerts
+        number_of_hours (int, optional): Number of hours from current time to extract.
+          Defaults to 0.
+
+    Returns:
+        pd.DataFrame: Silenced alerts with columns
     """
 
     alert_type = AlertType(alert_type)
     return extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/silenced_alerts.sql",
-        params={"alert_type": alert_type.value},
+        params={"alert_type": alert_type.value, "number_of_hours": number_of_hours},
     )
 
 

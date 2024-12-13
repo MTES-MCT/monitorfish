@@ -88,6 +88,36 @@ def positions_at_sea():
     )
 
 
+@pytest.fixture
+def expected_vessels_at_sea_1_day() -> pd.DataFrame:
+    d = datetime(2020, 2, 5, 12, 56, 0)
+    td = timedelta(hours=1)
+
+    return pd.DataFrame(
+        {
+            "cfr": ["A", "B"],
+            "external_immatriculation": ["AA", "BB"],
+            "ircs": ["AAA", "BBB"],
+            "vessel_name": ["vessel_A", "vessel_B"],
+            "flag_state": ["state_A", "state_B"],
+            "facade": ["facade_A", "facade_B"],
+            "triggering_behaviour_datetime_utc": [d + 48 * td, d],
+            "latitude": [1.5, -5.65],
+            "longitude": [10.6, -8.96],
+        }
+    )
+
+
+@pytest.fixture
+def expected_vessels_at_sea_2_or_3_days(expected_vessels_at_sea_1_day) -> pd.DataFrame:
+    return expected_vessels_at_sea_1_day.head(1)
+
+
+@pytest.fixture
+def expected_vessels_at_sea_4_days(expected_vessels_at_sea_1_day) -> pd.DataFrame:
+    return expected_vessels_at_sea_1_day.head(0)
+
+
 @patch(
     "src.pipeline.flows.missing_far_alerts.datetime",
     mock_datetime_utcnow(datetime(2021, 1, 1, 16, 10, 0)),
@@ -98,22 +128,26 @@ def test_get_dates():
         yesterday_at_eight_pm,
         today_at_zero_hours,
         utcnow,
+        period_start_hours_from_now,
     ) = get_dates.run(days_without_far=1)
     assert period_start_at_zero_hours == datetime(2020, 12, 31, 0, 0, 0)
     assert yesterday_at_eight_pm == datetime(2020, 12, 31, 20, 0, 0)
     assert today_at_zero_hours == datetime(2021, 1, 1, 0, 0, 0)
     assert utcnow == datetime(2021, 1, 1, 16, 10, 0)
+    assert period_start_hours_from_now == pytest.approx(40.16, abs=0.01)
 
     (
         period_start_at_zero_hours,
         yesterday_at_eight_pm,
         today_at_zero_hours,
         utcnow,
+        period_start_hours_from_now,
     ) = get_dates.run(days_without_far=2)
     assert period_start_at_zero_hours == datetime(2020, 12, 30, 0, 0, 0)
     assert yesterday_at_eight_pm == datetime(2020, 12, 31, 20, 0, 0)
     assert today_at_zero_hours == datetime(2021, 1, 1, 0, 0, 0)
     assert utcnow == datetime(2021, 1, 1, 16, 10, 0)
+    assert period_start_hours_from_now == pytest.approx(64.16, abs=0.01)
 
 
 def test_make_positions_at_sea_query():
@@ -270,45 +304,25 @@ def test_extract_vessels_that_emitted_fars(reset_test_data):
     assert vessels_that_emitted_fars == {"ABC000306959", "ABC000542519"}
 
 
-def test_get_vessels_at_sea(positions_at_sea):
+def test_get_vessels_at_sea(
+    positions_at_sea,
+    expected_vessels_at_sea_1_day,
+    expected_vessels_at_sea_2_or_3_days,
+    expected_vessels_at_sea_4_days,
+):
     vessels_at_sea_1_day = get_vessels_at_sea.run(positions_at_sea, min_days=1)
-    expected_vessels_at_sea_1_day = pd.DataFrame(
-        {
-            "cfr": ["A", "B"],
-            "external_immatriculation": ["AA", "BB"],
-            "ircs": ["AAA", "BBB"],
-            "vessel_name": ["vessel_A", "vessel_B"],
-            "flag_state": ["state_A", "state_B"],
-            "facade": ["facade_A", "facade_B"],
-            "latitude": [1.5, -5.65],
-            "longitude": [10.6, -8.96],
-        }
-    )
-    pd.testing.assert_frame_equal(vessels_at_sea_1_day, expected_vessels_at_sea_1_day)
-
     vessels_at_sea_2_days = get_vessels_at_sea.run(positions_at_sea, min_days=2)
     vessels_at_sea_3_days = get_vessels_at_sea.run(positions_at_sea, min_days=3)
-    expected_vessels_at_sea_2_or_3_days = pd.DataFrame(
-        {
-            "cfr": ["A"],
-            "external_immatriculation": ["AA"],
-            "ircs": ["AAA"],
-            "vessel_name": ["vessel_A"],
-            "flag_state": ["state_A"],
-            "facade": ["facade_A"],
-            "latitude": [1.5],
-            "longitude": [10.6],
-        }
-    )
+    vessels_at_sea_4_days = get_vessels_at_sea.run(positions_at_sea, min_days=4)
+
+    pd.testing.assert_frame_equal(vessels_at_sea_1_day, expected_vessels_at_sea_1_day)
     pd.testing.assert_frame_equal(
         vessels_at_sea_2_days, expected_vessels_at_sea_2_or_3_days
     )
     pd.testing.assert_frame_equal(
         vessels_at_sea_3_days, expected_vessels_at_sea_2_or_3_days
     )
-
-    vessels_at_sea_4_days = get_vessels_at_sea.run(positions_at_sea, min_days=4)
-    assert len(vessels_at_sea_4_days) == 0
+    pd.testing.assert_frame_equal(vessels_at_sea_4_days, expected_vessels_at_sea_4_days)
 
 
 def test_concat():

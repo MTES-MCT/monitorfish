@@ -23,14 +23,29 @@ def test_extract_silenced_alerts(reset_test_data):
     silenced_alerts = extract_silenced_alerts.run(
         AlertType.THREE_MILES_TRAWLING_ALERT.value
     )
+    now = datetime.utcnow()
+    d = timedelta(days=1)
+    h = timedelta(hours=1)
+
     expected_silenced_alerts = pd.DataFrame(
         {
             "internal_reference_number": ["ABC000658985"],
             "external_reference_number": ["OHMYGOSH"],
             "ircs": ["OGMJ"],
+            "silenced_before_date": [now + 15 * d],
         }
     )
-    pd.testing.assert_frame_equal(silenced_alerts, expected_silenced_alerts)
+    pd.testing.assert_frame_equal(
+        silenced_alerts.drop(columns=["silenced_before_date"]),
+        expected_silenced_alerts.drop(columns=["silenced_before_date"]),
+    )
+    assert (
+        (
+            silenced_alerts.silenced_before_date
+            - expected_silenced_alerts.silenced_before_date
+        ).map(lambda td: td.total_seconds())
+        < 10
+    ).all()
 
     silenced_alerts = extract_silenced_alerts.run(AlertType.MISSING_FAR_ALERT.value)
     expected_silenced_alerts = pd.DataFrame(
@@ -38,9 +53,43 @@ def test_extract_silenced_alerts(reset_test_data):
             "internal_reference_number": ["ABC000542519"],
             "external_reference_number": ["RO237719"],
             "ircs": ["FQ7058"],
+            "silenced_before_date": [now + 15 * d],
         }
     )
-    pd.testing.assert_frame_equal(silenced_alerts, expected_silenced_alerts)
+    pd.testing.assert_frame_equal(
+        silenced_alerts.drop(columns=["silenced_before_date"]),
+        expected_silenced_alerts.drop(columns=["silenced_before_date"]),
+    )
+    assert (
+        (
+            silenced_alerts.silenced_before_date
+            - expected_silenced_alerts.silenced_before_date
+        ).map(lambda td: td.total_seconds())
+        < 10
+    ).all()
+
+    silenced_alerts = extract_silenced_alerts.run(
+        AlertType.MISSING_FAR_ALERT.value, number_of_hours=6
+    )
+    expected_silenced_alerts = pd.DataFrame(
+        {
+            "internal_reference_number": ["ABC000123456", "ABC000542519"],
+            "external_reference_number": [None, "RO237719"],
+            "ircs": [None, "FQ7058"],
+            "silenced_before_date": [now - 5 * h, now + 15 * d],
+        }
+    )
+    pd.testing.assert_frame_equal(
+        silenced_alerts.drop(columns=["silenced_before_date"]),
+        expected_silenced_alerts.drop(columns=["silenced_before_date"]),
+    )
+    assert (
+        (
+            silenced_alerts.silenced_before_date
+            - expected_silenced_alerts.silenced_before_date
+        ).map(lambda td: td.total_seconds())
+        < 10
+    ).all()
 
 
 def test_extract_active_reportings(reset_test_data):

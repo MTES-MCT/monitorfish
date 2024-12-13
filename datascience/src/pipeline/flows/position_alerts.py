@@ -439,7 +439,7 @@ def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
         ]
         .rename(
             columns={
-                "date_time": "creation_date",
+                "date_time": "triggering_behaviour_datetime_utc",
             }
         )
         .reset_index(drop=True)
@@ -526,7 +526,9 @@ with Flow("Position alert", executor=LocalDaskExecutor()) as flow:
             districts_columns_to_add=["dml"],
         )
         alerts = make_alerts(vessels_in_alert, alert_type, alert_config_name)
-        silenced_alerts = extract_silenced_alerts(alert_type)
+        silenced_alerts = extract_silenced_alerts(
+            alert_type, number_of_hours=hours_from_now
+        )
         alert_without_silenced = filter_alerts(alerts, silenced_alerts)
         load_alerts(alert_without_silenced, alert_config_name)
 

@@ -2,7 +2,7 @@ WITH acknowledged_messages AS (
     SELECT referenced_report_id
     FROM logbook_reports
     WHERE
-        operation_datetime_utc >= CURRENT_TIMESTAMP - INTERVAL '3 months'
+        operation_datetime_utc >= CURRENT_TIMESTAMP - INTERVAL ':number_of_days days'
         AND operation_datetime_utc < CURRENT_TIMESTAMP + INTERVAL '6 hours'
         AND operation_type ='RET'
         AND value->>'returnStatus' = '000'
@@ -14,7 +14,7 @@ deleted_messages AS (
         referenced_report_id
     FROM logbook_reports
     WHERE
-        operation_datetime_utc >= CURRENT_TIMESTAMP - INTERVAL '3 months'
+        operation_datetime_utc >= CURRENT_TIMESTAMP - INTERVAL ':number_of_days days'
         AND operation_datetime_utc < CURRENT_TIMESTAMP + INTERVAL '6 hours'
         AND operation_type ='DEL'
 ),
@@ -31,7 +31,7 @@ corrected_messages AS (
         referenced_report_id
     FROM logbook_reports
     WHERE
-        operation_datetime_utc >= CURRENT_TIMESTAMP - INTERVAL '3 months'
+        operation_datetime_utc >= CURRENT_TIMESTAMP - INTERVAL ':number_of_days days'
         AND operation_datetime_utc < CURRENT_TIMESTAMP + INTERVAL '6 hours'
         AND operation_type ='COR'
         AND (
@@ -51,7 +51,7 @@ ordered_deps AS (
     FROM public.logbook_reports
     WHERE
         log_type = 'DEP'
-        AND operation_datetime_utc > CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '3 months'
+        AND operation_datetime_utc > CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL ':number_of_days days'
         AND activity_datetime_utc < CURRENT_TIMESTAMP AT TIME ZONE 'UTC' + INTERVAL '24 hours'
         AND report_id NOT IN (SELECT referenced_report_id FROM corrected_messages)
         AND NOT (
@@ -89,7 +89,7 @@ last_logbook_reports AS (
         MAX(report_datetime_utc) AS last_logbook_message_datetime_utc
     FROM public.logbook_reports
     WHERE operation_type IN ('DAT', 'COR')
-    AND operation_datetime_utc > CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '3 months'
+    AND operation_datetime_utc > CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL ':number_of_days days'
     AND report_datetime_utc < CURRENT_TIMESTAMP AT TIME ZONE 'UTC' + INTERVAL '24 hours'
     AND (software IS NULL OR software NOT LIKE '%VISIOCaptures%')
     GROUP BY cfr
@@ -111,7 +111,7 @@ catches AS (
     AND r.trip_number = d.trip_number
     WHERE
         log_type = 'FAR'
-        AND operation_datetime_utc > CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '3 months'
+        AND operation_datetime_utc > CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL ':number_of_days days'
         AND report_id NOT IN (SELECT referenced_report_id FROM corrected_messages)
         AND NOT (
             report_id IN (SELECT referenced_report_id FROM acknowledged_deleted_messages)
@@ -166,7 +166,7 @@ SELECT
     gear,
     mesh,
     species,
-    s.species_name,
+    s.scip_species_type,
     weight,
     COALESCE(
         v_cfr.vessel_type,
@@ -174,7 +174,7 @@ SELECT
         v_ext.vessel_type
     ) AS vessel_type,
     last_deps.ircs,
-    last_deps.external_immatriculation AS external_immatriculation,
+    last_deps.external_immatriculation,
     l.last_logbook_message_datetime_utc,
     departure_datetime_utc,
     trip_number,

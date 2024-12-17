@@ -1,3 +1,4 @@
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { customDayjs, logSoftError } from '@mtes-mct/monitor-ui'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
 
@@ -16,11 +17,14 @@ export const downloadActivityReports =
     const {
       data: { activityReports, jdpSpecies }
     }: { data: ActivityReports } = await dispatch(
-      activityReportApi.endpoints.getActivityReports.initiate({
-        afterDateTime,
-        beforeDateTime,
-        jdp
-      })
+      activityReportApi.endpoints.getActivityReports.initiate(
+        {
+          afterDateTime,
+          beforeDateTime,
+          jdp
+        },
+        RTK_FORCE_REFETCH_QUERY_OPTIONS
+      )
     )
 
     if (!activityReports?.length) {

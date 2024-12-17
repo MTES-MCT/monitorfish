@@ -60,7 +60,7 @@ const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
   },
   {
     color: theme.color.powderBlue,
-    hoursOffsetToRetrieveMalfunctionCreation: 6,
+    hoursOffsetToRetrieveMalfunctionCreation: 4,
     icon: <VesselStatusAtSea style={iconStyle} />,
     label: 'Navire en mer',
     textColor: theme.color.charcoal,

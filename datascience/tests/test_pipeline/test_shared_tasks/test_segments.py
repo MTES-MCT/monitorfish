@@ -6,7 +6,6 @@ import pytest
 from src.pipeline.shared_tasks.segments import (
     extract_all_segments,
     extract_segments_of_year,
-    unnest_segments,
 )
 
 
@@ -81,8 +80,3 @@ def test_extract_segments_of_year(
 def test_extract_all_segments(reset_test_data, expected_all_segments):
     segments = extract_all_segments.run()
     pd.testing.assert_frame_equal(segments, expected_all_segments)
-
-
-def test_unnest_segments(expected_all_segments):
-    unnested_segments = unnest_segments.run(expected_all_segments)
-    assert len(unnested_segments) == 332

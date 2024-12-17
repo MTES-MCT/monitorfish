@@ -252,10 +252,8 @@ const vesselSlice = createSlice({
     ) {
       const vessel = vesselSelectors.selectById(state.vessels, action.payload.vesselFeatureId)
       if (vessel) {
-        const vesselReportingWithoutFirstFoundReportingType = vessel.reportings?.reduce(
-          filterFirstFoundReportingType(action.payload.reportingType),
-          []
-        )
+        const vesselReportingWithoutFirstFoundReportingType =
+          vessel.reportings?.reduce(filterFirstFoundReportingType(action.payload.reportingType), []) || []
 
         const nextVessel = {
           ...vessel,
@@ -272,10 +270,8 @@ const vesselSlice = createSlice({
         state.selectedVessel &&
         Vessel.getVesselFeatureId(state.selectedVesselIdentity) === action.payload.vesselFeatureId
       ) {
-        const vesselReportingWithoutFirstFoundReportingType = state.selectedVessel.reportings?.reduce(
-          filterFirstFoundReportingType(action.payload.reportingType),
-          []
-        )
+        const vesselReportingWithoutFirstFoundReportingType =
+          state.selectedVessel.reportings?.reduce(filterFirstFoundReportingType(action.payload.reportingType), []) || []
 
         state.selectedVessel = {
           ...state.selectedVessel,

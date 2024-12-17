@@ -160,7 +160,7 @@ class GetPriorNotifications(
                     vesselInternalReferenceNumbers = internalReferenceNumbers,
                     isArchived = false,
                     isDeleted = false,
-                    types = listOf(ReportingType.INFRACTION_SUSPICION),
+                    types = listOf(ReportingType.INFRACTION_SUSPICION, ReportingType.ALERT),
                 ),
             )
 

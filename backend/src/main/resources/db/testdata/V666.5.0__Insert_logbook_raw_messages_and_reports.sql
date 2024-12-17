@@ -304,7 +304,7 @@ VALUES ('OOF20190265896325', 9463701, 'OOF', '2018-02-17T01:05:00Z', 'DAT', 'OOF
         'U_W0NTFINDME', 'QGDF', 'ABC123456', 'MALOTRU', 'FRA', null, 'PNO',
         '2018-02-20T13:45Z', '{"port": "AEJAZ", "purpose": "LAN", "catchOnboard": [{"weight": 36.0, "nbFish": null, "species": "SOL", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}], "tripStartDate": "2018-02-20T00:00Z", "predictedArrivalDatetimeUtc": "2018-02-20T13:45Z"}',
         '2021-01-18T07:17:31.532639Z', 'ERS', 'TurboCatch (3.7-1)'),
-       ('OOF20190126036598', 9463711, 'OOF', '2019-01-18T11:45:00Z', 'DAT', 'OOF20190126036598', null,
+       ('OOF20190126036598', 9463711, 'OOF', '2019-01-18T11:45:00Z', 'DAT', 'OOF20180227051234', null,
         '2019-01-18T11:45:00Z',
         'U_W0NTFINDME', 'QGDF', 'ABC123456', 'MALOTRU', 'FRA', null, 'FAR',
         '2019-01-15T11:45:00Z', '{"hauls": [{"gear": "GTN", "mesh": 100.0, "catches": [], "farDatetimeUtc": "2019-01-15T11:45:00Z"}]}',

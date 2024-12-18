@@ -15,22 +15,31 @@ from src.pipeline.entities.alerts import AlertType
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import (
     df_to_dict_series,
+    join_on_multiple_keys,
     left_isin_right_by_decreasing_priority,
 )
 from src.pipeline.utils import delete_rows, get_table
 
 
 @task(checkpoint=False)
-def extract_silenced_alerts(alert_type: str) -> pd.DataFrame:
+def extract_silenced_alerts(alert_type: str, number_of_hours: int = 0) -> pd.DataFrame:
     """
     Return DataFrame of vessels with active silenced alerts of the given type.
+
+    Args:
+        alert_type (str): Type of alert for which to extract silenced alerts
+        number_of_hours (int, optional): Number of hours from current time to extract.
+          Defaults to 0.
+
+    Returns:
+        pd.DataFrame: Silenced alerts with columns
     """
 
     alert_type = AlertType(alert_type)
     return extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/silenced_alerts.sql",
-        params={"alert_type": alert_type.value},
+        params={"alert_type": alert_type.value, "number_of_hours": number_of_hours},
     )
 
 
@@ -119,10 +128,8 @@ def make_alerts(
       - `dml`
       - `flag_state`
       - `risk_factor`
-      - and optionally, `creation_date`, `latitude` and `longitude`
-
-    If `creation_date` is not one of the columns, it will be added and filled with
-    `datetime.utcnow`.
+      - `triggering_behaviour_datetime_utc`
+      - and optionally, `latitude` and `longitude`
 
     If `latitude` and `longitude` are not columns of the input, they are added and
     filled with null values in the result.
@@ -132,7 +139,6 @@ def make_alerts(
           create an alert.
         alert_type (str): `type` to specify in the built alerts.
         alert_config_name (str): `alert_config_name` to specify in the built alerts.
-        creation_date (datetime): `creation_date` to specify in the built alerts.
 
     Returns:
         pd.DataFrame: `DataFrame` of alerts.
@@ -145,8 +151,7 @@ def make_alerts(
         }
     )
 
-    if "creation_date" not in alerts:
-        alerts["creation_date"] = datetime.utcnow()
+    alerts["creation_date"] = datetime.utcnow()
 
     if "latitude" not in alerts:
         alerts["latitude"] = None
@@ -175,6 +180,7 @@ def make_alerts(
             "flag_state",
             "vessel_id",
             "vessel_identifier",
+            "triggering_behaviour_datetime_utc",
             "creation_date",
             "latitude",
             "longitude",
@@ -209,11 +215,15 @@ def filter_alerts(
       - vessel_identifier
       - flag_state
       - facade
+      - triggering_behaviour_datetime_utc
       - creation_date
       - latitude
       - longitude
       - value
       - alert_config_name
+
+    and the `silenced_alerts` DataFrame must have a `silenced_before_date`
+    column.
 
     Args:
         alerts (pd.DataFrame): positions alerts.
@@ -224,18 +234,14 @@ def filter_alerts(
     """
     vessel_id_cols = ["internal_reference_number", "external_reference_number", "ircs"]
 
-    if isinstance(vessels_with_active_reportings, pd.DataFrame):
-        vessels_to_remove = (
-            pd.concat([vessels_with_silenced_alerts, vessels_with_active_reportings])
-            .drop_duplicates()
-            .reset_index(drop=True)
-        )
-    else:
-        vessels_to_remove = vessels_with_silenced_alerts
+    alerts = join_on_multiple_keys(
+        alerts, vessels_with_silenced_alerts, or_join_keys=vessel_id_cols, how="left"
+    )
 
     alerts = alerts.loc[
-        ~left_isin_right_by_decreasing_priority(
-            alerts[vessel_id_cols], vessels_to_remove[vessel_id_cols]
+        (
+            (alerts.silenced_before_date.isna())
+            | (alerts.triggering_behaviour_datetime_utc > alerts.silenced_before_date)
         ),
         [
             "vessel_name",
@@ -251,7 +257,16 @@ def filter_alerts(
             "value",
             "alert_config_name",
         ],
-    ].reset_index(drop=True)
+    ]
+
+    if isinstance(vessels_with_active_reportings, pd.DataFrame):
+        alerts = alerts.loc[
+            ~left_isin_right_by_decreasing_priority(
+                alerts[vessel_id_cols], vessels_with_active_reportings[vessel_id_cols]
+            )
+        ]
+
+    alerts = alerts.sort_values("internal_reference_number").reset_index(drop=True)
 
     return alerts
 

@@ -36,7 +36,10 @@ with Flow("Suspicions of under-declaration", executor=LocalDaskExecutor()) as fl
             AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT.value,
         )
         silenced_alerts = extract_silenced_alerts(
-            AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT.value
+            AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT.value,
+            # 8 days, to cover the date range analyzed in
+            # `extract_suspicions_of_under_declaration`
+            number_of_hours=192,
         )
         active_reportings = extract_active_reportings(
             AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT.value

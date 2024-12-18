@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import pandas as pd
 import pytest
@@ -17,6 +17,10 @@ flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_ru
 
 @pytest.fixture
 def expected_suspicions_of_under_declaration() -> pd.DataFrame:
+    today_at_zero_hours = datetime.utcnow().replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
+    one_day = timedelta(days=1)
     return pd.DataFrame(
         {
             "cfr": ["ABC000306959"],
@@ -29,6 +33,7 @@ def expected_suspicions_of_under_declaration() -> pd.DataFrame:
             "dml": ["DML 29"],
             "flag_state": ["FR"],
             "risk_factor": [2.58],
+            "triggering_behaviour_datetime_utc": [today_at_zero_hours - 7 * one_day],
             "latitude": [49.606],
             "longitude": [-0.736],
         }

@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import pandas as pd
 import pytest
@@ -26,6 +26,9 @@ def expected_missing_deps() -> pd.DataFrame:
             "dml": ["DML 29"],
             "flag_state": ["FR"],
             "risk_factor": [2.58],
+            "triggering_behaviour_datetime_utc": [
+                datetime.utcnow() - timedelta(hours=2)
+            ],
             "latitude": [49.606],
             "longitude": [-0.736],
         }
@@ -83,8 +86,23 @@ def reset_test_data_missing_dep_alerts(reset_test_data):
 def test_extract_missing_deps(
     reset_test_data_missing_dep_alerts, expected_missing_deps
 ):
-    res = extract_missing_deps.run()
-    pd.testing.assert_frame_equal(res, expected_missing_deps)
+    res = extract_missing_deps.run(hours_from_now=48)
+    pd.testing.assert_frame_equal(
+        res.drop(columns=["triggering_behaviour_datetime_utc"]),
+        expected_missing_deps.drop(columns=["triggering_behaviour_datetime_utc"]),
+    )
+
+    assert (
+        (
+            (
+                res.triggering_behaviour_datetime_utc
+                - expected_missing_deps.triggering_behaviour_datetime_utc
+            )
+            .map(lambda td: td.total_seconds())
+            .abs()
+        )
+        < 10
+    ).all()
 
 
 def test_flow(reset_test_data_missing_dep_alerts):

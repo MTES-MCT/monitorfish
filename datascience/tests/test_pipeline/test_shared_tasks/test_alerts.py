@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from unittest.mock import patch
 
 import pandas as pd
+import pytest
 
 from src.pipeline.entities.alerts import AlertType
 from src.pipeline.shared_tasks.alerts import (
@@ -23,14 +24,29 @@ def test_extract_silenced_alerts(reset_test_data):
     silenced_alerts = extract_silenced_alerts.run(
         AlertType.THREE_MILES_TRAWLING_ALERT.value
     )
+    now = datetime.utcnow()
+    d = timedelta(days=1)
+    h = timedelta(hours=1)
+
     expected_silenced_alerts = pd.DataFrame(
         {
             "internal_reference_number": ["ABC000658985"],
             "external_reference_number": ["OHMYGOSH"],
             "ircs": ["OGMJ"],
+            "silenced_before_date": [now + 15 * d],
         }
     )
-    pd.testing.assert_frame_equal(silenced_alerts, expected_silenced_alerts)
+    pd.testing.assert_frame_equal(
+        silenced_alerts.drop(columns=["silenced_before_date"]),
+        expected_silenced_alerts.drop(columns=["silenced_before_date"]),
+    )
+    assert (
+        (
+            silenced_alerts.silenced_before_date
+            - expected_silenced_alerts.silenced_before_date
+        ).map(lambda td: td.total_seconds())
+        < 10
+    ).all()
 
     silenced_alerts = extract_silenced_alerts.run(AlertType.MISSING_FAR_ALERT.value)
     expected_silenced_alerts = pd.DataFrame(
@@ -38,9 +54,43 @@ def test_extract_silenced_alerts(reset_test_data):
             "internal_reference_number": ["ABC000542519"],
             "external_reference_number": ["RO237719"],
             "ircs": ["FQ7058"],
+            "silenced_before_date": [now + 15 * d],
         }
     )
-    pd.testing.assert_frame_equal(silenced_alerts, expected_silenced_alerts)
+    pd.testing.assert_frame_equal(
+        silenced_alerts.drop(columns=["silenced_before_date"]),
+        expected_silenced_alerts.drop(columns=["silenced_before_date"]),
+    )
+    assert (
+        (
+            silenced_alerts.silenced_before_date
+            - expected_silenced_alerts.silenced_before_date
+        ).map(lambda td: td.total_seconds())
+        < 10
+    ).all()
+
+    silenced_alerts = extract_silenced_alerts.run(
+        AlertType.MISSING_FAR_ALERT.value, number_of_hours=6
+    )
+    expected_silenced_alerts = pd.DataFrame(
+        {
+            "internal_reference_number": ["ABC000123456", "ABC000542519"],
+            "external_reference_number": [None, "RO237719"],
+            "ircs": [None, "FQ7058"],
+            "silenced_before_date": [now - 5 * h, now + 15 * d],
+        }
+    )
+    pd.testing.assert_frame_equal(
+        silenced_alerts.drop(columns=["silenced_before_date"]),
+        expected_silenced_alerts.drop(columns=["silenced_before_date"]),
+    )
+    assert (
+        (
+            silenced_alerts.silenced_before_date
+            - expected_silenced_alerts.silenced_before_date
+        ).map(lambda td: td.total_seconds())
+        < 10
+    ).all()
 
 
 def test_extract_active_reportings(reset_test_data):
@@ -118,7 +168,7 @@ def test_make_alerts():
                 "INTERNAL_REFERENCE_NUMBER",
             ],
             "risk_factor": [1.23, 3.56],
-            "creation_date": [date_1, date_2],
+            "triggering_behaviour_datetime_utc": [date_1, date_2],
             "latitude": [9.8, -1.963],
             "longitude": [65.59, -81.71],
             "vessel_id": [1, 12],
@@ -144,7 +194,8 @@ def test_make_alerts():
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
             ],
-            "creation_date": [date_1, date_2],
+            "triggering_behaviour_datetime_utc": [date_1, date_2],
+            "creation_date": [datetime(2020, 5, 3, 8, 0, 0)] * 2,
             "latitude": [9.8, -1.963],
             "longitude": [65.59, -81.71],
             "type": ["MISSING_FAR_ALERT", "MISSING_FAR_ALERT"],
@@ -167,14 +218,12 @@ def test_make_alerts():
                 "MISSING_FAR_ALERT_CONFIG_1",
             ],
         }
-    ).astype({"creation_date": "datetime64[ns]"})
+    ).astype({"creation_date": "datetime64[us]"})
 
     pd.testing.assert_frame_equal(alerts, expected_alerts)
 
     # Without optional in input
-    vessels_in_alert = vessels_in_alert.drop(
-        columns=["creation_date", "latitude", "longitude"]
-    )
+    vessels_in_alert = vessels_in_alert.drop(columns=["latitude", "longitude"])
     alerts = make_alerts.run(
         vessels_in_alert,
         alert_type="MISSING_FAR_ALERT",
@@ -191,13 +240,22 @@ def test_make_alerts():
     pd.testing.assert_frame_equal(alerts, expected_alerts)
 
 
-def test_filter_alerts():
-    now = datetime(2020, 1, 1, 0, 0, 0)
-    td = timedelta(hours=1)
+@pytest.fixture
+def first_of_january_2000() -> datetime:
+    return datetime(2020, 1, 1, 0, 0, 0)
+
+
+@pytest.fixture
+def one_day() -> timedelta:
+    return timedelta(days=1)
+
+
+@pytest.fixture
+def alerts_to_filter(first_of_january_2000, one_day) -> pd.DataFrame:
     alert_type = "USER_DEFINED_ALERT_TYPE"
     alert_config_name = "ALERTE_CHALUTAGE_CONFIG_1"
 
-    alerts = pd.DataFrame(
+    return pd.DataFrame(
         {
             "vessel_name": ["v_A", "v_B", "v_C"],
             "internal_reference_number": ["A", "B", "C"],
@@ -210,7 +268,12 @@ def test_filter_alerts():
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
             ],
-            "creation_date": [now, now - 0.5 * td, now - td],
+            "triggering_behaviour_datetime_utc": [
+                first_of_january_2000 - 0.5 * one_day,
+                first_of_january_2000 - 0.5 * one_day,
+                first_of_january_2000 - one_day,
+            ],
+            "creation_date": [first_of_january_2000] * 3,
             "latitude": [9.8, -1.963, -2.365],
             "longitude": [65.59, -81.71, 46.894],
             "type": [alert_type, alert_type, alert_type],
@@ -242,51 +305,58 @@ def test_filter_alerts():
         }
     )
 
-    silenced_alerts = pd.DataFrame(
+
+@pytest.fixture
+def silenced_alerts_1(first_of_january_2000, one_day) -> pd.DataFrame:
+    return pd.DataFrame(
         {
-            "internal_reference_number": ["A", "B_ANOTHER_VESSEL"],
-            "external_reference_number": ["AA", "BB_ANOTHER_VESSEL"],
-            "ircs": ["AAA", "BBB"],
+            "internal_reference_number": ["A", "B_ANOTHER_VESSEL", "C"],
+            "external_reference_number": ["AA", "BB_ANOTHER_VESSEL", "CC"],
+            "ircs": ["AAA", "BBB", "CCC"],
+            "silenced_before_date": [first_of_january_2000 - 1.25 * one_day] * 3,
         }
     )
 
-    active_alerts = filter_alerts.run(alerts, silenced_alerts)
 
-    expected_active_alerts = pd.DataFrame(
-        {
-            "vessel_name": ["v_B", "v_C"],
-            "internal_reference_number": ["B", "C"],
-            "external_reference_number": ["BB", "CC"],
-            "ircs": ["BBB", "CCC"],
-            "flag_state": ["FR", "FR"],
-            "vessel_id": [12, 15],
-            "vessel_identifier": [
-                "INTERNAL_REFERENCE_NUMBER",
-                "INTERNAL_REFERENCE_NUMBER",
-            ],
-            "creation_date": [now - 0.5 * td, now - td],
-            "latitude": [-1.963, -2.365],
-            "longitude": [-81.71, 46.894],
-            "value": [
-                {
-                    "seaFront": "MEMN",
-                    "type": alert_type,
-                    "riskFactor": None,
-                    "dml": "dml B",
-                },
-                {
-                    "seaFront": "MEMN",
-                    "type": alert_type,
-                    "riskFactor": 2.56,
-                    "dml": "dml C",
-                },
-            ],
-            "alert_config_name": [alert_config_name, alert_config_name],
-        }
-    ).reset_index(drop=True)
+@pytest.fixture
+def silenced_alerts_2(
+    silenced_alerts_1, first_of_january_2000, one_day
+) -> pd.DataFrame:
+    return silenced_alerts_1.assign(
+        silenced_before_date=first_of_january_2000 - 0.75 * one_day
+    )
 
+
+@pytest.fixture
+def silenced_alerts_3(
+    silenced_alerts_1, first_of_january_2000, one_day
+) -> pd.DataFrame:
+    return silenced_alerts_1.assign(
+        silenced_before_date=first_of_january_2000 - 0.25 * one_day
+    )
+
+
+@pytest.fixture
+def expected_filtered_alerts(alerts_to_filter) -> pd.DataFrame:
+    return alerts_to_filter.drop(columns=["type", "triggering_behaviour_datetime_utc"])
+
+
+def test_filter_alerts(
+    alerts_to_filter,
+    silenced_alerts_1,
+    silenced_alerts_2,
+    silenced_alerts_3,
+    expected_filtered_alerts,
+):
+    filtered_alerts_1 = filter_alerts.run(alerts_to_filter, silenced_alerts_1)
+    pd.testing.assert_frame_equal(filtered_alerts_1, expected_filtered_alerts)
+
+    filtered_alerts_2 = filter_alerts.run(alerts_to_filter, silenced_alerts_2)
+    pd.testing.assert_frame_equal(filtered_alerts_2, expected_filtered_alerts.head(2))
+
+    filtered_alerts_3 = filter_alerts.run(alerts_to_filter, silenced_alerts_3)
     pd.testing.assert_frame_equal(
-        active_alerts.reset_index(drop=True), expected_active_alerts
+        filtered_alerts_3, expected_filtered_alerts.loc[[1]].reset_index(drop=True)
     )
 
 

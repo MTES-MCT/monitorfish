@@ -43,22 +43,6 @@ def current_catches() -> pd.DataFrame:
 
 
 @pytest.fixture
-def segments_of_year() -> pd.DataFrame:
-    df = pd.read_csv(
-        TEST_DATA_LOCATION / "csv/segments.csv",
-        converters={
-            "gears": literal_eval,
-            "fao_areas": literal_eval,
-            "target_species": literal_eval,
-            "vessel_types": literal_eval,
-        },
-    )
-
-    df = df[df.year == 2050].reset_index(drop=True)
-    return df
-
-
-@pytest.fixture
 def control_priorities() -> pd.DataFrame:
     return pd.DataFrame(
         {

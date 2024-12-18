@@ -50,9 +50,9 @@ def expected_all_segments(current_year) -> pd.DataFrame:
             "main_scip_species_type": [None, None, "DEMERSAL", "PELAGIC"],
             "priority": [0.0, 0.0, 0.0, 1.0],
             "vessel_types": [
-                None,
-                None,
-                None,
+                [],
+                [],
+                [],
                 ["Navire qui pêche", "Chalutier", "Ligneur", "Navire qui navigue"],
             ],
             "impact_risk_factor": [3.0, 2.1, 3.0, 2.1],

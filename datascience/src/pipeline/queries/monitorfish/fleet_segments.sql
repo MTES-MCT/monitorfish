@@ -2,15 +2,15 @@ SELECT
     year,
     segment,
     segment_name,
-    gears,
-    fao_areas,
+    COALESCE(gears, '{}'::VARCHAR[]) AS gears,
+    COALESCE(fao_areas, '{}'::VARCHAR[]) AS fao_areas,
     min_mesh,
     max_mesh,
-    target_species,
+    COALESCE(target_species, '{}'::VARCHAR[]) AS target_species,
     min_share_of_target_species,
     main_scip_species_type,
     priority,
-    vessel_types,
+    COALESCE(vessel_types, '{}'::VARCHAR[]) AS vessel_types,
     impact_risk_factor
 FROM public.fleet_segments
 ORDER BY year, segment

@@ -27,14 +27,17 @@ from src.pipeline.shared_tasks.vessels import add_vessel_id, add_vessels_columns
 
 
 @task(checkpoint=False)
-def get_dates(days_without_far: int) -> Tuple[datetime, datetime, datetime, datetime]:
+def get_dates(
+    days_without_far: int,
+) -> Tuple[datetime, datetime, datetime, datetime, float]:
     """
-    Returns the dates used in the flow as a 4-tuple :
+    Returns the dates used in the flow as a 5-tuple :
 
-      - `days_without_far` days ago at 00:00 (beginning of the day) in UTC
+      - `days_without_far` days ago at 00:00 (beginning of the day) in UTC (1)
       - Yesterday at 8pm in UTC
       - Today at 00:00 (beginning of the day) in UTC
-      - Current datetime in UTC
+      - Current datetime in UTC (2)
+      - The number of hours that separate 1 and 2
 
     Returns:
         Tuple[datetime, datetime, datetime]
@@ -43,12 +46,16 @@ def get_dates(days_without_far: int) -> Tuple[datetime, datetime, datetime, date
     today_at_zero_hours = utcnow.replace(hour=0, minute=0, second=0, microsecond=0)
     period_start_at_zero_hours = today_at_zero_hours - timedelta(days=days_without_far)
     yesterday_at_eight_pm = today_at_zero_hours - timedelta(hours=4)
+    period_start_hours_from_now = (
+        utcnow - period_start_at_zero_hours
+    ).total_seconds() / 3600
 
     return (
         period_start_at_zero_hours,
         yesterday_at_eight_pm,
         today_at_zero_hours,
         utcnow,
+        period_start_hours_from_now,
     )
 
 
@@ -301,10 +308,16 @@ def get_vessels_at_sea(positions_at_sea: pd.DataFrame, min_days: int) -> pd.Data
                 "vessel_name",
                 "flag_state",
                 "facade",
+                "date_time",
                 "latitude",
                 "longitude",
             ]
         ]
+        .rename(
+            columns={
+                "date_time": "triggering_behaviour_datetime_utc",
+            }
+        )
         .reset_index(drop=True)
     )
     return vessels_at_sea
@@ -426,6 +439,7 @@ with Flow("Missing FAR alerts", executor=LocalDaskExecutor()) as flow:
             yesterday_at_eight_pm,
             today_at_zero_hours,
             utcnow,
+            period_start_hours_from_now,
         ) = get_dates(days_without_far)
 
         positions_at_sea_yesterday_everywhere_query = make_positions_at_sea_query(
@@ -497,7 +511,9 @@ with Flow("Missing FAR alerts", executor=LocalDaskExecutor()) as flow:
             districts_columns_to_add=["dml"],
         )
         alerts = make_alerts(vessels_with_missing_fars, alert_type, alert_config_name)
-        silenced_alerts = extract_silenced_alerts(alert_type)
+        silenced_alerts = extract_silenced_alerts(
+            alert_type, number_of_hours=period_start_hours_from_now
+        )
         alert_without_silenced = filter_alerts(alerts, silenced_alerts)
 
         # Load

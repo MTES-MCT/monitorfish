@@ -428,7 +428,7 @@ def test_get_vessels_in_alert():
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
             ],
-            "creation_date": [now, now - 0.5 * td],
+            "triggering_behaviour_datetime_utc": [now, now - 0.5 * td],
             "latitude": [-1.23, -51.23],
             "longitude": [39.25, -42.25],
         }
@@ -561,11 +561,11 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
                 "ZZ000000",
             ],
             "creation_date": [
-                now - timedelta(days=1),
-                now - timedelta(minutes=10),
-                now - timedelta(minutes=25),
-                now - timedelta(minutes=15),
-                now - timedelta(minutes=10),
+                now,
+                now,
+                now,
+                now,
+                now,
             ],
             "trip_number": [None, None, None, None, None],
             "value": [
@@ -706,10 +706,10 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
                 "ZZ000000",
             ],
             "creation_date": [
-                now - timedelta(days=1),
-                now - timedelta(minutes=10),
-                now - timedelta(minutes=25),
-                now - timedelta(minutes=10),
+                now,
+                now,
+                now,
+                now,
             ],
             "trip_number": [None, None, None, None],
             "value": [
@@ -829,8 +829,8 @@ def test_flow_filters_on_gears(reset_test_data):
                 "FQ7058",
             ],
             "creation_date": [
-                now - timedelta(days=1),
-                now - timedelta(minutes=25),
+                now,
+                now,
             ],
             "trip_number": [None, None],
             "value": [
@@ -940,9 +940,9 @@ def test_flow_filters_on_time(reset_test_data):
                 "ZZ000000",
             ],
             "creation_date": [
-                now - timedelta(minutes=10),
-                now - timedelta(minutes=25),
-                now - timedelta(minutes=10),
+                now,
+                now,
+                now,
             ],
             "trip_number": [None, None, None],
             "value": [
@@ -1051,7 +1051,7 @@ def test_flow_filters_on_flag_states(reset_test_data):
                 "IL2468",
             ],
             "creation_date": [
-                now - timedelta(days=1),
+                now,
             ],
             "trip_number": [None],
             "value": [

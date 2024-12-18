@@ -13,4 +13,14 @@ INSERT INTO silenced_alerts (
     'DEVINER FIGURE CONSCIENCE', 'ABC000542519', 'RO237719', 'FQ7058', 'INTERNAL_REFERENCE_NUMBER',
     NOW() + ('15 DAYS')::interval, 'FR',
     '{"type": "MISSING_FAR_ALERT", "seaFront": "NAMO"}'
+),
+(
+    'DEVINER FIGURE CONSCIENCE', 'ABC000542519', 'RO237719', 'FQ7058', 'INTERNAL_REFERENCE_NUMBER',
+    NOW() + ('7 DAYS')::interval, 'FR',
+    '{"type": "MISSING_FAR_ALERT", "seaFront": "NAMO"}'
+),
+(
+    'AUTRE NAVIRE', 'ABC000123456', NULL, NULL, 'INTERNAL_REFERENCE_NUMBER',
+    NOW() - ('5 HOURS')::interval, 'FR',
+    '{"type": "MISSING_FAR_ALERT", "seaFront": "NAMO"}'
 );

@@ -77,16 +77,23 @@ export const getDetectabilityRiskFactorText = (riskFactor: number, isTextReduced
   return undefined
 }
 
-export const getControlPriorityLevel = (riskFactor: number) => {
-  if (riskFactor >= 1 && riskFactor < 1.75) {
+export const getControlPriorityLevel = (riskFactor: number, segmentHighestPriority: string | undefined | null) => {
+  if (!segmentHighestPriority) {
     return 'pas de segment'
   }
+
+  if (riskFactor >= 1 && riskFactor < 1.75) {
+    return 'basse'
+  }
+
   if (riskFactor >= 1.75 && riskFactor < 2.5) {
     return 'moyenne'
   }
+
   if (riskFactor >= 2.5 && riskFactor < 3.25) {
     return 'élevée'
   }
+
   if (riskFactor >= 3.25 && riskFactor <= 4) {
     return 'très élevée'
   }

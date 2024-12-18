@@ -73,9 +73,5 @@ export const vesselApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const {
-  useGetRiskFactorQuery,
-  useGetVesselQuery,
-  useGetVesselReportingsByVesselIdentityQuery,
-  useGetVesselsLastPositionsQuery
-} = vesselApi
+export const { useGetVesselQuery, useGetVesselReportingsByVesselIdentityQuery, useGetVesselsLastPositionsQuery } =
+  vesselApi

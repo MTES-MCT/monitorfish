@@ -18,6 +18,7 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZoneOffset
+import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
@@ -141,26 +142,6 @@ class GetLogbookMessagesUTests {
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyCorrectedLogbookMessages(),
         )
-        given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
-        given(gearRepository.findAll()).willReturn(
-            listOf(
-                Gear("OTB", "Chaluts de fond à panneaux"),
-                Gear("DRB", "Dragues remorquées par bateau"),
-            ),
-        )
-        given(portRepository.findAll()).willReturn(
-            listOf(
-                PortFaker.fakePort(locode = "AEFAT", name = "Al Jazeera Port"),
-                PortFaker.fakePort(locode = "AEJAZ", name = "Arzanah Island"),
-            ),
-        )
-        given(speciesRepository.findAll()).willReturn(
-            listOf(
-                Species("TTV", "TORPILLE OCELLÉE"),
-                Species("SMV", "STOMIAS BREVIBARBATUS"),
-                Species("PNB", "CREVETTE ROYALE ROSE"),
-            ),
-        )
 
         // When
         val ersMessages =
@@ -199,26 +180,6 @@ class GetLogbookMessagesUTests {
         )
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyRETLogbookMessages(),
-        )
-        given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
-        given(gearRepository.findAll()).willReturn(
-            listOf(
-                Gear("OTB", "Chaluts de fond à panneaux"),
-                Gear("DRB", "Dragues remorquées par bateau"),
-            ),
-        )
-        given(portRepository.findAll()).willReturn(
-            listOf(
-                PortFaker.fakePort(locode = "AEFAT", name = "Al Jazeera Port"),
-                PortFaker.fakePort(locode = "AEJAZ", name = "Arzanah Island"),
-            ),
-        )
-        given(speciesRepository.findAll()).willReturn(
-            listOf(
-                Species("TTV", "TORPILLE OCELLÉE"),
-                Species("SMV", "STOMIAS BREVIBARBATUS"),
-                Species("PNB", "CREVETTE ROYALE ROSE"),
-            ),
         )
 
         // When
@@ -329,26 +290,6 @@ class GetLogbookMessagesUTests {
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyRETLogbookMessages(),
         )
-        given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
-        given(gearRepository.findAll()).willReturn(
-            listOf(
-                Gear("OTB", "Chaluts de fond à panneaux"),
-                Gear("DRB", "Dragues remorquées par bateau"),
-            ),
-        )
-        given(portRepository.findAll()).willReturn(
-            listOf(
-                PortFaker.fakePort(locode = "AEFAT", name = "Al Jazeera Port"),
-                PortFaker.fakePort(locode = "AEJAZ", name = "Arzanah Island"),
-            ),
-        )
-        given(speciesRepository.findAll()).willReturn(
-            listOf(
-                Species("TTV", "TORPILLE OCELLÉE"),
-                Species("SMV", "STOMIAS BREVIBARBATUS"),
-                Species("PNB", "CREVETTE ROYALE ROSE"),
-            ),
-        )
 
         // When
         val ersMessages =
@@ -376,26 +317,6 @@ class GetLogbookMessagesUTests {
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyFluxAndVisioCaptureLogbookMessages(),
         )
-        given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
-        given(gearRepository.findAll()).willReturn(
-            listOf(
-                Gear("OTB", "Chaluts de fond à panneaux"),
-                Gear("DRB", "Dragues remorquées par bateau"),
-            ),
-        )
-        given(portRepository.findAll()).willReturn(
-            listOf(
-                PortFaker.fakePort(locode = "AEFAT", name = "Al Jazeera Port"),
-                PortFaker.fakePort(locode = "AEJAZ", name = "Arzanah Island"),
-            ),
-        )
-        given(speciesRepository.findAll()).willReturn(
-            listOf(
-                Species("TTV", "TORPILLE OCELLÉE"),
-                Species("SMV", "STOMIAS BREVIBARBATUS"),
-                Species("PNB", "CREVETTE ROYALE ROSE"),
-            ),
-        )
 
         // When
         val ersMessages =
@@ -416,6 +337,10 @@ class GetLogbookMessagesUTests {
         assertThat(ersMessages[2].acknowledgment?.isSuccess).isTrue
     }
 
+    /**
+     * add two report_id for the same RET in the stub
+     */
+
     @Test
     fun `execute Should flag messages sent by the failover software e-Sacapt`() {
         // Given
@@ -424,26 +349,6 @@ class GetLogbookMessagesUTests {
         )
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyLogbookMessages(),
-        )
-        given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
-        given(gearRepository.findAll()).willReturn(
-            listOf(
-                Gear("OTB", "Chaluts de fond à panneaux"),
-                Gear("DRB", "Dragues remorquées par bateau"),
-            ),
-        )
-        given(portRepository.findAll()).willReturn(
-            listOf(
-                PortFaker.fakePort(locode = "AEFAT", name = "Al Jazeera Port"),
-                PortFaker.fakePort(locode = "AEJAZ", name = "Arzanah Island"),
-            ),
-        )
-        given(speciesRepository.findAll()).willReturn(
-            listOf(
-                Species("TTV", "TORPILLE OCELLÉE"),
-                Species("SMV", "STOMIAS BREVIBARBATUS"),
-                Species("PNB", "CREVETTE ROYALE ROSE"),
-            ),
         )
 
         // When
@@ -465,5 +370,58 @@ class GetLogbookMessagesUTests {
         assertThat(ersMessages[2].isSentByFailoverSoftware).isTrue
         assertThat(ersMessages[3].isSentByFailoverSoftware).isTrue
         assertThat(ersMessages[4].isSentByFailoverSoftware).isFalse
+    }
+
+    @Test
+    fun `execute Should acknowledge two messages with the same report id`() {
+        // Given
+        val retTargetingTwoMessages =
+            LogbookMessage(
+                id = 123,
+                operationNumber = "",
+                reportId = "906564681689",
+                referencedReportId = "REPORT_ID#4",
+                operationType = LogbookOperationType.RET,
+                messageType = "",
+                message = Acknowledgment().apply { returnStatus = "000" },
+                reportDateTime =
+                    ZonedDateTime.of(
+                        2020,
+                        5,
+                        5,
+                        3,
+                        4,
+                        5,
+                        3,
+                        UTC,
+                    ).minusHours(12),
+                transmissionFormat = LogbookTransmissionFormat.ERS,
+                integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
+                operationDateTime = ZonedDateTime.now(),
+            )
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
+        )
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+            getDummyLogbookMessages() + retTargetingTwoMessages,
+        )
+
+        // When
+        val ersMessages =
+            GetLogbookMessages(
+                logbookReportRepository,
+                gearRepository,
+                speciesRepository,
+                portRepository,
+                logbookRawMessageRepository,
+            )
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+
+        // Then
+        assertThat(ersMessages).hasSize(6)
+
+        assertThat(ersMessages[2].acknowledgment?.isSuccess).isTrue
+        assertThat(ersMessages[3].acknowledgment?.isSuccess).isTrue
     }
 }

@@ -1,3 +1,4 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import styled from 'styled-components'
 
 import {
@@ -5,7 +6,6 @@ import {
   getControlRateRiskFactorText,
   getRiskFactorColor
 } from '../../../../../../domain/entities/vessel/riskFactor'
-import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
 import { getDate } from '../../../../../../utils'
 import { RiskFactorCursor } from '../RiskFactorCursor'
 
@@ -23,13 +23,12 @@ export function DetectabilityRiskFactorDetails({ isOpen }: DetectabilityRiskFact
     <SubRiskDetails $isOpen={isOpen}>
       <Line />
       <Zone>
-        <InlineKey>
-          Priorité du segment {riskFactor?.segmentHighestPriority ? riskFactor?.segmentHighestPriority : null}
-        </InlineKey>
+        <InlineKey>Priorité du segment {riskFactor?.segmentHighestPriority}</InlineKey>
         <InlineValue data-cy="risk-factor-priority-level">
           {riskFactor?.controlPriorityLevel ? (
             `${riskFactor?.controlPriorityLevel?.toFixed(1)} – ${getControlPriorityLevel(
-              riskFactor?.controlPriorityLevel
+              riskFactor?.controlPriorityLevel,
+              riskFactor?.segmentHighestPriority
             )}`
           ) : (
             <NoValue>-</NoValue>

@@ -136,23 +136,27 @@ data class LogbookMessage(
     }
 
     private fun enrichAcknowledgeCorrectionAndDeletion(contextLogbookMessages: List<LogbookMessage>) {
-        val referenceLogbookMessage = findReferencedLogbookMessage(contextLogbookMessages)
+        val referenceLogbookMessages = findReferencedLogbookMessages(contextLogbookMessages)
         val relatedLogbookMessages = filterRelatedLogbookMessages(contextLogbookMessages)
 
         when (true) {
             (operationType == LogbookOperationType.COR) -> {
-                if (referenceLogbookMessage == null) {
+                if (referenceLogbookMessages.isEmpty()) {
                     logger.warn(
                         "Original message $referencedReportId corrected by message COR $operationNumber is not found.",
                     )
                 }
 
-                referenceLogbookMessage?.isCorrectedByNewerMessage = true
+                referenceLogbookMessages.forEach {
+                    it.isCorrectedByNewerMessage = true
+                }
                 setIsCorrectedByNewerMessage(relatedLogbookMessages)
             }
 
             (operationType == LogbookOperationType.RET && !referencedReportId.isNullOrEmpty()) -> {
-                referenceLogbookMessage?.setAcknowledge(this.copy())
+                referenceLogbookMessages.forEach {
+                    it.setAcknowledge(this.copy())
+                }
             }
 
             (transmissionFormat == LogbookTransmissionFormat.FLUX),
@@ -162,7 +166,9 @@ data class LogbookMessage(
             }
 
             (operationType == LogbookOperationType.DEL && !referencedReportId.isNullOrEmpty()) -> {
-                referenceLogbookMessage?.isDeleted = true
+                referenceLogbookMessages.forEach {
+                    it.isDeleted = true
+                }
             }
 
             else -> {}
@@ -186,11 +192,11 @@ data class LogbookMessage(
         }
     }
 
-    private fun findReferencedLogbookMessage(messages: List<LogbookMessage>): LogbookMessage? {
+    private fun findReferencedLogbookMessages(messages: List<LogbookMessage>): List<LogbookMessage> {
         return if (!referencedReportId.isNullOrEmpty()) {
-            messages.find { it.reportId == referencedReportId }
+            messages.filter { it.reportId == referencedReportId }
         } else {
-            null
+            listOf()
         }
     }
 

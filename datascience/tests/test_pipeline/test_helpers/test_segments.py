@@ -38,7 +38,7 @@ def segments() -> pd.DataFrame:
 
 def test_allocate_segments_to_catches(catches, segments):
     segmented_catches = allocate_segments_to_catches(
-        catches=catches.drop(columns=["segment", "impact_risk_factor"]),
+        catches=catches.drop(columns=["segment", "segment_name", "impact_risk_factor"]),
         segments=segments,
         catch_id_column="catch_id",
         batch_id_column="batch_id",
@@ -51,7 +51,7 @@ def test_allocate_segments_to_catches_preserves_additional_columns(
 ):
     segmented_catches = allocate_segments_to_catches(
         catches=catches_with_extra_column.drop(
-            columns=["segment", "impact_risk_factor"]
+            columns=["segment", "segment_name", "impact_risk_factor"]
         ),
         segments=segments,
         catch_id_column="catch_id",
@@ -64,7 +64,9 @@ def test_allocate_segments_to_catches_preserves_additional_columns(
 
 def test_allocate_segments_to_catches_with_empty_input(empty_catches, segments):
     segmented_catches = allocate_segments_to_catches(
-        catches=empty_catches.drop(columns=["segment", "impact_risk_factor"]),
+        catches=empty_catches.drop(
+            columns=["segment", "segment_name", "impact_risk_factor"]
+        ),
         segments=segments,
         catch_id_column="catch_id",
         batch_id_column="batch_id",

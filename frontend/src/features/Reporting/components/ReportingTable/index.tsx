@@ -145,21 +145,27 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
         <TableInnerWrapper ref={tableContainerRef} $hasError={isError}>
           {isError && <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR} />}
           {!isError && (
-            <TableWithSelectableRows.Table $withRowCheckbox data-cy="side-window-reporting-list">
-              <TableWithSelectableRows.Head>
+            <StyledTable data-cy="side-window-reporting-list">
+              <StyledHead>
                 {table.getHeaderGroups().map(headerGroup => (
                   <TableWithSelectableRowsHeader key={headerGroup.id} headerGroup={headerGroup} />
                 ))}
-              </TableWithSelectableRows.Head>
+              </StyledHead>
 
               {!isLoading && reportings.length === 0 && <TableBodyEmptyData />}
               {!!rows.length && (
-                <tbody>
+                <StyledTbody $size={rowVirtualizer?.getTotalSize()}>
                   {virtualRows.map(virtualRow => {
                     const row = rows[virtualRow?.index]
 
                     return (
-                      <TableWithSelectableRows.BodyTr key={virtualRow.key} data-cy="ReportingList-reporting">
+                      <StyledBodyTr
+                        key={virtualRow.key}
+                        ref={node => rowVirtualizer?.measureElement(node)}
+                        $start={virtualRow?.start}
+                        data-cy="ReportingList-reporting"
+                        data-index={virtualRow?.index}
+                      >
                         {row?.getVisibleCells().map(cell => (
                           <Row
                             key={cell.id}
@@ -170,12 +176,12 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                           </Row>
                         ))}
-                      </TableWithSelectableRows.BodyTr>
+                      </StyledBodyTr>
                     )
                   })}
-                </tbody>
+                </StyledTbody>
               )}
-            </TableWithSelectableRows.Table>
+            </StyledTable>
           )}
         </TableInnerWrapper>
       </Body>
@@ -208,6 +214,32 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
     </Page>
   )
 }
+
+const StyledHead = styled(TableWithSelectableRows.Head)`
+  display: grid;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+`
+
+const StyledTable = styled(TableWithSelectableRows.Table)``
+
+const StyledTbody = styled.tbody<{
+  $size: number | undefined
+}>`
+  display: grid;
+  height: ${p => p.$size}px;
+  position: relative;
+`
+
+const StyledBodyTr = styled(TableWithSelectableRows.BodyTr)<{
+  $start: number | undefined
+}>`
+  display: flex;
+  position: absolute;
+  transform: ${p => `translateY(${p.$start}px)`};
+  width: 100%;
+`
 
 const TableTop = styled.div<{
   $isFromUrl: boolean
@@ -252,8 +284,9 @@ const TableInnerWrapper = styled.div<{
   height: 619px; /* = table height - 5px (negative margin-top) + 1px for Chrome compatibility */
   min-width: 1290px; /* = table width + right padding + scrollbar width (8px) */
   padding-right: 8px;
-  overflow-y: scroll;
+  overflow: auto;
   width: auto;
+  position: relative;
 
   > table {
     margin-top: -5px;

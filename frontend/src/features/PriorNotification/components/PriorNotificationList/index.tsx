@@ -217,7 +217,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
             <TableInnerWrapper $hasError={isError}>
               {isError && <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_LIST_ERROR} />}
               {!isError && (
-                <TableWithSelectableRows.Table $withRowCheckbox>
+                <TableWithSelectableRows.Table>
                   <TableWithSelectableRows.Head>
                     {table.getHeaderGroups().map(headerGroup => (
                       <tr key={headerGroup.id}>

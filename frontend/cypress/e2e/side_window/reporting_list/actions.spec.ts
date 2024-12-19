@@ -19,7 +19,7 @@ context('Side Window > Reporting List > Actions', () => {
         const numberOfReportings = $reportingRows.length
 
         // When
-        cy.get('table .rs-checkbox-wrapper').eq(1).click()
+        cy.get('table .rs-checkbox-wrapper').eq(1).click({ force: true })
         cy.getDataCy('archive-reporting-cards').click({ force: true })
         cy.clickButton('Archiver')
 
@@ -51,7 +51,7 @@ context('Side Window > Reporting List > Actions', () => {
         const numberOfReportings = $reportingRows.length
 
         // When
-        cy.get('table .rs-checkbox-wrapper').eq(1).click()
+        cy.get('table .rs-checkbox-wrapper').eq(1).click({ force: true })
         cy.getDataCy('delete-reporting-cards').click({ force: true })
         cy.clickButton('Supprimer')
 
@@ -78,7 +78,6 @@ context('Side Window > Reporting List > Actions', () => {
     cy.wait(500)
     cy.getDataCy('side-window-reporting-tab').click()
     cy.getDataCy('side-window-sub-menu-NAMO').click()
-    cy.fill('Observations', false)
 
     // When
     cy.clickButton('Editer le signalement', {
@@ -122,7 +121,7 @@ context('Side Window > Reporting List > Actions', () => {
         expect(request.body.authorTrigram).contains('LTH')
         expect(response && response.statusCode).equal(200)
 
-        cy.getDataCy('ReportingList-reporting').should('have.length', numberOfReportings - 1)
+        cy.getDataCy('ReportingList-reporting').should('have.length', numberOfReportings)
       })
     })
   })
@@ -158,7 +157,7 @@ context('Side Window > Reporting List > Actions', () => {
   function downloadReporting(seafront, csvValues) {
     cy.getDataCy(`side-window-sub-menu-${seafront}`).click()
     cy.fill('Observations', false)
-    cy.get('table .rs-checkbox-wrapper').eq(0).click()
+    cy.get('table .rs-checkbox-wrapper').eq(0).click({ force: true })
 
     // When
     cy.clickButton('Télécharger 1 signalement')

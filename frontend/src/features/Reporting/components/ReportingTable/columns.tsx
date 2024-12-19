@@ -19,7 +19,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
     {
       accessorFn: row => row.id,
       cell: ({ row }) => (
-        <TableWithSelectableRows.RowCheckbox
+        <StyledRowCheckbox
           checked={row.getIsSelected()}
           disabled={!row.getCanSelect()}
           onChange={row.getToggleSelectedHandler()}
@@ -27,7 +27,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       ),
       enableSorting: false,
       header: ({ table }) => (
-        <TableWithSelectableRows.RowCheckbox
+        <StyledRowCheckbox
           checked={table.getIsAllRowsSelected()}
           indeterminate={table.getIsSomeRowsSelected()}
           onChange={table.getToggleAllRowsSelectedHandler()}
@@ -147,4 +147,9 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
 export const StyledCountryFlag = styled(CountryFlag)`
   margin-right: 8px;
   vertical-align: -2px;
+`
+
+const StyledRowCheckbox = styled(TableWithSelectableRows.RowCheckbox)`
+  // FIXME Temporary fix do delete once the update had been done in monitor-ui
+  margin-top: 12px;
 `

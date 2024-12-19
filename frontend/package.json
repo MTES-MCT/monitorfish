@@ -41,7 +41,7 @@
     "@sentry/react": "8.41.0",
     "@sentry/vite-plugin": "^2.22.6",
     "@tanstack/react-table": "8.20.5",
-    "@tanstack/react-virtual": "3.10.9",
+    "@tanstack/react-virtual": "3.11.2",
     "comlink": "4.4.2",
     "date-fns": "3.6.0",
     "dayjs": "1.11.13",

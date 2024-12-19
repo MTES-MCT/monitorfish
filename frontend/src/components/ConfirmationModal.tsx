@@ -1,4 +1,4 @@
-import {Accent, Button, Dialog, Icon} from '@mtes-mct/monitor-ui'
+import { Accent, Button, Dialog, Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import type { ReactNode } from 'react'

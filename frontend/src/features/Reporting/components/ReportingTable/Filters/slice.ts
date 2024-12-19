@@ -6,7 +6,7 @@ export type ReportingTableFiltersState = {
   searchQuery: string | undefined
 }
 const INITIAL_STATE: ReportingTableFiltersState = {
-  reportingTypesDisplayed: [ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION],
+  reportingTypesDisplayed: [ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION, ReportingType.OBSERVATION],
   searchQuery: undefined
 }
 

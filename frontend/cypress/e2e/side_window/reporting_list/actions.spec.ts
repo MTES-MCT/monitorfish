@@ -13,6 +13,7 @@ context('Side Window > Reporting List > Actions', () => {
       cy.visit('/side_window')
       cy.getDataCy('side-window-reporting-tab').click()
       cy.getDataCy('side-window-sub-menu-NAMO').click()
+      cy.fill('Observations', false)
 
       cy.getDataCy('ReportingList-reporting').then($reportingRows => {
         const numberOfReportings = $reportingRows.length
@@ -44,6 +45,7 @@ context('Side Window > Reporting List > Actions', () => {
       cy.visit('/side_window')
       cy.getDataCy('side-window-reporting-tab').click()
       cy.getDataCy('side-window-sub-menu-NAMO').click()
+      cy.fill('Observations', false)
 
       cy.getDataCy('ReportingList-reporting').then($reportingRows => {
         const numberOfReportings = $reportingRows.length
@@ -76,6 +78,7 @@ context('Side Window > Reporting List > Actions', () => {
     cy.wait(500)
     cy.getDataCy('side-window-reporting-tab').click()
     cy.getDataCy('side-window-sub-menu-NAMO').click()
+    cy.fill('Observations', false)
 
     // When
     cy.clickButton('Editer le signalement', {
@@ -154,6 +157,7 @@ context('Side Window > Reporting List > Actions', () => {
 
   function downloadReporting(seafront, csvValues) {
     cy.getDataCy(`side-window-sub-menu-${seafront}`).click()
+    cy.fill('Observations', false)
     cy.get('table .rs-checkbox-wrapper').eq(0).click()
 
     // When

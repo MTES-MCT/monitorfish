@@ -1,4 +1,4 @@
-import { Accent, Button, Dialog, Icon } from '@mtes-mct/monitor-ui'
+import {Accent, Button, Dialog, Icon} from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import type { ReactNode } from 'react'
@@ -57,6 +57,7 @@ const StyledDialog = styled(Dialog)`
     p {
       font-size: 16px;
       line-height: 22px;
+      color: ${p => p.theme.color.gunMetal};
     }
 
     > p:not(:first-child) {
@@ -78,7 +79,8 @@ const StyledDialog = styled(Dialog)`
       padding: 24px 0 32px;
 
       > .Element-Button {
-        width: 175px;
+        min-width: 175px;
+        max-width: 185px;
 
         &:not(:first-child) {
           margin-left: 8px;

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { WeightType } from '../../constants'
 
 import type { CatchWithProperties, ProtectedCatchWithProperties } from '../../../types'
-import type { ReactNode, HTMLProps } from 'react'
+import type { ReactNode } from 'react'
 
 type SpecyCatchProps = Readonly<{
   children: ReactNode
@@ -34,7 +34,9 @@ export function SpecyCatch({
   return (
     <Species>
       <Title $isOpen={isOpen} $isOpenable={isOpenable} onClick={() => isOpenable && setIsOpen(!isOpen)}>
-        <SpecyName title={specyFullName}>{specyFullName}</SpecyName>
+        <SpecyName $width={specyCatch.nbFish > 0 ? 157 : 168} title={specyFullName}>
+          {specyFullName}
+        </SpecyName>
         <SpecyWeight title={`${specyCatch.weight} kg (${weightType})`}>
           <SpecyWeightLabel>Poids total ({weightType})</SpecyWeightLabel>
           <SpecyWeightValue $width={58} data-cy="SpecyCatch-weight">
@@ -87,13 +89,15 @@ const Title = styled.div<{
   width: inherit;
 `
 
-const SpecyName = styled.span<HTMLProps<HTMLDivElement>>`
+const SpecyName = styled.span<{
+  $width: number
+}>`
   color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
   line-height: 18px;
   margin-left: 16px;
-  max-width: 168px;
-  min-width: 168px;
+  max-width: ${p => p.$width}px;
+  min-width: ${p => p.$width}px;
   padding-right: 12px;
   overflow: hidden !important;
   text-overflow: ellipsis;
@@ -155,8 +159,8 @@ const ChevronIcon = styled(Icon.Chevron)<{
   $isOpen: boolean
 }>`
   margin-right: 12px;
-  transform: rotate(${p => (p.$isOpen ? 0 : 180)}deg);
-  transition: all 0.2s ease forwards;
+  transform: rotate(${p => (p.$isOpen ? 180 : 0)}deg);
+  transition: all 0.2s ease;
 `
 
 const NoValue = styled.span`

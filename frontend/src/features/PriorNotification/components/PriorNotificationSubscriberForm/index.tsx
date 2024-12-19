@@ -161,7 +161,7 @@ export function PriorNotificationSubscriberForm() {
 
 const Wrapper = styled(BackOfficeBody)`
   > hr {
-    margin: 32px 0;
+    margin: 40px 0;
   }
 
   .Table-SimpleTable {

@@ -65,6 +65,10 @@ export function AllPortSubscriptionsField({
     isDisabled
   )
 
+  const hasDeletedPortSubscribedToAllPriorNotifications = !!portSubscriptions.find(subscription =>
+    subscription.portLocode === unsubscriptionConfirmationModalPortLocode)
+    ?.hasSubscribedToAllPriorNotifications
+
   return (
     <>
       <BackOfficeSubtitle $isFirst $withSmallBottomMargin>
@@ -87,6 +91,7 @@ export function AllPortSubscriptionsField({
       />
 
       <Select
+        searchable
         disabled={!portsAsOptions || isDisabled}
         isLabelHidden
         label="Ajouter un port de diffusion partielle"
@@ -104,8 +109,12 @@ export function AllPortSubscriptionsField({
                 <b>Êtes-vous sûr de vouloir supprimer ce port de diffusion ?</b>
               </p>
               <p>
-                L’unité ne recevra plus les préavis des navires ayant une note de risque supérieure à 2,3 lorsqu’ils
-                débarquent dans ce port.
+                {
+                  hasDeletedPortSubscribedToAllPriorNotifications
+                  ? 'L’unité ne recevra plus les tous les préavis des navires débarquant dans ce port.'
+                  : 'L’unité ne recevra plus les préavis des navires ayant une note de risque supérieure à 2,3 lorsqu’ils ' +
+                    'débarquent dans ce port.'
+                }
               </p>
             </>
           }

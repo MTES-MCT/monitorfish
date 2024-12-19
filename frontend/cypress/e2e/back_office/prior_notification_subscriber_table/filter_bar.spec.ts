@@ -47,7 +47,7 @@ context('BackOffice > Prior Notification Table > Filter Bar', () => {
       'getPriorNotificationSubscribers'
     )
 
-    cy.fill('Avec au moins une diffusion', true)
+    cy.fill('Unités recevant des préavis', true)
 
     cy.wait('@getPriorNotificationSubscribers')
   })

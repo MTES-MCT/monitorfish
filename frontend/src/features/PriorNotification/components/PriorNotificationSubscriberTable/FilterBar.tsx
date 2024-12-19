@@ -80,7 +80,7 @@ export function FilterBar() {
 
       <Checkbox
         checked={tableFilterValues.withAtLeastOneSubscription}
-        label="Avec au moins une diffusion"
+        label="Unités recevant des préavis"
         name="withAtLeastOneSubscription"
         onChange={updateWithAtLeastOneSubscription}
       />

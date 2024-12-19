@@ -17,7 +17,7 @@ export function getSubscriberPortNames(
     return <em>Aucun</em>
   }
 
-  return <Ellipsised>{portNames.join(', ')}</Ellipsised>
+  return <Ellipsised maxWidth={450}>{portNames.join(', ')}</Ellipsised>
 }
 
 export function getSubscriberPortNamesWithAllNotifications(

@@ -185,7 +185,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
           color={THEME.color.maximumRed}
           confirmationButtonLabel="Supprimer"
           iconName="Delete"
-          message={`Êtes-vous sûr de vouloir supprimer ${pluralize('ce', rowSelectionAsArray.length)} ${rowSelectionAsArray.length} ${pluralize('signalement', rowSelectionAsArray.length)} ?`}
+          message={`Êtes-vous sûr de vouloir supprimer ${pluralize('ce', rowSelectionAsArray.length)} ${rowSelectionAsArray.length > 1 ? rowSelectionAsArray.length : ''} ${pluralize('signalement', rowSelectionAsArray.length)} ?`}
           onCancel={() => {
             setIsDeletionConfirmationDialogOpen(false)
           }}

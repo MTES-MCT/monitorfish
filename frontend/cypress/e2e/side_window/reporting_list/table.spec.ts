@@ -44,7 +44,7 @@ context('Side Window > Reporting List > Table', () => {
 
     cy.wait('@getReportings')
 
-    cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 3)
+    cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 4)
 
     /**
      * Search a vessel
@@ -52,11 +52,11 @@ context('Side Window > Reporting List > Table', () => {
 
     cy.fill('Rechercher dans les signalements', 'renco')
 
-    cy.get('.Table-SimpleTable tr').should('have.length', 2)
+    cy.get('.Table-SimpleTable tr').should('have.length', 3)
 
     cy.fill('Rechercher dans les signalements', '')
 
-    cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 3)
+    cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 4)
 
     /**
      * Filter by observation

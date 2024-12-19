@@ -17,6 +17,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button, Icon, Size, TableWithSelectableRows, usePrevious } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
+import { captureMessage } from '@sentry/react'
 import { flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from '@tanstack/react-table'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
@@ -130,7 +131,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   )
 
   const tableData = useMemo(
-    () => (isBodyLoaderVisible ? Array(5).fill({}) : (priorNotifications ?? [])),
+    () => (isBodyLoaderVisible ? Array(8).fill({}) : (priorNotifications ?? [])),
     [isBodyLoaderVisible, priorNotifications]
   )
 
@@ -172,8 +173,22 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
     }
 
     if (lastFetchStartDateRef.current) {
-      setLastFetchDuration(Date.now() - lastFetchStartDateRef.current)
+      const nextLastFetchDuration = Date.now() - lastFetchStartDateRef.current
+      const TEN_SECONDS = 10
+
+      if (nextLastFetchDuration / 1000 > TEN_SECONDS) {
+        captureMessage('Display of PNO list took more than 10 seconds.', {
+          extra: {
+            params: rtkQueryParams,
+            waitTime: nextLastFetchDuration / 1000
+          }
+        })
+      }
+
+      setLastFetchDuration(nextLastFetchDuration)
     }
+    // We do no want to trigger useEffect on `rtkQueryParams` changes but only on `isFetching`
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFetching])
 
   return (
@@ -244,7 +259,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
                   </TableWithSelectableRows.Head>
 
                   {isBodyEmptyDataVisible && <TableBodyEmptyData />}
-                  {!isBodyLoaderVisible && !isBodyEmptyDataVisible && (
+                  {!isBodyEmptyDataVisible && (
                     <tbody>
                       {rows.map(row => (
                         <Row key={row.id} row={row} />

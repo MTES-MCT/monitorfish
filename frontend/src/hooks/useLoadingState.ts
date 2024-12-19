@@ -35,7 +35,7 @@ export function useLoadingState(
     isReloading: false
   })
 
-  // We want to keep track of the previous filter/sorting & pagination states only when the data is been fetched.
+  // We want to keep track of the previous filter/sorting & pagination states only when the data has been fetched.
   // Indeed, when new filters are passed to a Redux RTK query hook,
   // there is a first render happening with the new filters but `isFetching` is still `false`.
   // The hook will then start fetching the data which will trigger a new render with `isFetching` set to `true`.

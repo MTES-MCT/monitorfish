@@ -31,10 +31,8 @@ export function TableWithSelectableRowsHeader({ headerGroup }) {
 }
 
 const StyledTh = styled(TableWithSelectableRows.Th)`
-  display: flex;
+  position: sticky;
+  top: 0;
 `
 
-const StyledTr = styled.tr`
-  display: flex;
-  width: 100%;
-`
+const StyledTr = styled.tr``

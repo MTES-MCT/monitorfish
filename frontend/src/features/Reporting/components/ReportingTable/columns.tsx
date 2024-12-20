@@ -19,7 +19,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
     {
       accessorFn: row => row.id,
       cell: ({ row }) => (
-        <StyledRowCheckbox
+        <TableWithSelectableRows.RowCheckbox
           checked={row.getIsSelected()}
           disabled={!row.getCanSelect()}
           onChange={row.getToggleSelectedHandler()}
@@ -27,7 +27,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       ),
       enableSorting: false,
       header: ({ table }) => (
-        <StyledRowCheckbox
+        <TableWithSelectableRows.RowCheckbox
           checked={table.getIsAllRowsSelected()}
           indeterminate={table.getIsSomeRowsSelected()}
           onChange={table.getToggleAllRowsSelectedHandler()}
@@ -148,5 +148,3 @@ export const StyledCountryFlag = styled(CountryFlag)`
   margin-right: 8px;
   vertical-align: -2px;
 `
-
-const StyledRowCheckbox = styled(TableWithSelectableRows.RowCheckbox)``

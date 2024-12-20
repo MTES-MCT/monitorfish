@@ -14,6 +14,7 @@ from sqlalchemy import text
 
 from config import (
     IS_INTEGRATION,
+    PORTS_CACHE_INVALIDATION_ENDPOINT,
     PORTS_CSV_RESOURCE_ID,
     PORTS_CSV_RESOURCE_TITLE,
     PORTS_DATASET_ID,
@@ -864,6 +865,11 @@ def transform_ports_open_data(ports: pd.DataFrame) -> pd.DataFrame:
 
 
 @task(checkpoint=False)
+def invalidate_cache():
+    requests.put(PORTS_CACHE_INVALIDATION_ENDPOINT)
+
+
+@task(checkpoint=False)
 def load_ports(ports):
     load(
         ports,
@@ -900,7 +906,8 @@ with Flow("Ports", executor=LocalDaskExecutor()) as flow:
         ports_open_data = transform_ports_open_data(ports)
 
         # Load
-        load_ports(ports)
+        loaded_ports = load_ports(ports)
+        invalidate_cache(upstream_tasks=[loaded_ports])
 
         ports_open_data_csv_file = get_csv_file_object(ports_open_data)
         update_resource(

@@ -377,10 +377,8 @@ def test_extract_monitorfish_regulations(reset_test_data, monitorfish_regulation
     regulations = extract_monitorfish_regulations.run()
 
     pd.testing.assert_frame_equal(
-        regulations,
-        regulations.sort_values("reference", ascending=False)
-        .sort_values(["law_type", "zone"])
-        .reset_index(drop=True),
+        monitorfish_regulations,
+        regulations.sort_values(["law_type", "zone"]).reset_index(drop=True),
     )
 
 

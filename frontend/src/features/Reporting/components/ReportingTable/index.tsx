@@ -153,21 +153,21 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
         <TableInnerWrapper ref={tableContainerRef} $hasError={isError}>
           {isError && <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR} />}
           {!isError && (
-            <StyledTable data-cy="side-window-reporting-list">
-              <StyledHead>
+            <TableWithSelectableRows.Table data-cy="side-window-reporting-list">
+              <TableWithSelectableRows.Head>
                 {table.getHeaderGroups().map(headerGroup => (
                   <TableWithSelectableRowsHeader key={headerGroup.id} headerGroup={headerGroup} />
                 ))}
-              </StyledHead>
+              </TableWithSelectableRows.Head>
 
               {!isLoading && reportings.length === 0 && <TableBodyEmptyData />}
               {before > 0 && (
                 <tr>
-                  <td colSpan={8} style={{ height: before }} />
+                  <td aria-label="padding before" colSpan={columns.length} style={{ height: before }} />
                 </tr>
               )}
               {!!rows.length && (
-                <StyledTbody $size={rowVirtualizer?.getTotalSize()}>
+                <tbody>
                   {virtualRows.map(virtualRow => {
                     const row = rows[virtualRow?.index]
 
@@ -175,7 +175,6 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
                       <StyledBodyTr
                         key={virtualRow.key}
                         ref={node => rowVirtualizer?.measureElement(node)}
-                        $start={virtualRow?.start}
                         data-cy="ReportingList-reporting"
                         data-index={virtualRow?.index}
                       >
@@ -192,14 +191,14 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
                       </StyledBodyTr>
                     )
                   })}
-                </StyledTbody>
+                </tbody>
               )}
               {after > 0 && (
                 <tr>
-                  <td colSpan={8} style={{ height: after }} />
+                  <td aria-label="padding after" colSpan={columns.length} style={{ height: after }} />
                 </tr>
               )}
-            </StyledTable>
+            </TableWithSelectableRows.Table>
           )}
         </TableInnerWrapper>
       </Body>
@@ -233,17 +232,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
   )
 }
 
-const StyledHead = styled(TableWithSelectableRows.Head)``
-
-const StyledTable = styled(TableWithSelectableRows.Table)``
-
-const StyledTbody = styled.tbody<{
-  $size: number | undefined
-}>``
-
-const StyledBodyTr = styled(TableWithSelectableRows.BodyTr)<{
-  $start: number | undefined
-}>`
+const StyledBodyTr = styled(TableWithSelectableRows.BodyTr)`
   height: 40px;
   width: 100%;
 `

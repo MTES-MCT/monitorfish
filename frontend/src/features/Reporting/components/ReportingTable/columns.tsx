@@ -149,7 +149,4 @@ export const StyledCountryFlag = styled(CountryFlag)`
   vertical-align: -2px;
 `
 
-const StyledRowCheckbox = styled(TableWithSelectableRows.RowCheckbox)`
-  // FIXME Temporary fix do delete once the update had been done in monitor-ui
-  margin-top: 12px;
-`
+const StyledRowCheckbox = styled(TableWithSelectableRows.RowCheckbox)``

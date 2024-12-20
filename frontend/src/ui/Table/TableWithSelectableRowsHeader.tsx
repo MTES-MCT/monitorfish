@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 export function TableWithSelectableRowsHeader({ headerGroup }) {
   return (
-    <StyledTr key={headerGroup.id}>
+    <tr key={headerGroup.id}>
       {headerGroup.headers.map(header => (
         <StyledTh key={header.id} $width={header.column.getSize()}>
           {header.id === 'select' && flexRender(header.column.columnDef.header, header.getContext())}
@@ -26,7 +26,7 @@ export function TableWithSelectableRowsHeader({ headerGroup }) {
           )}
         </StyledTh>
       ))}
-    </StyledTr>
+    </tr>
   )
 }
 
@@ -34,5 +34,3 @@ const StyledTh = styled(TableWithSelectableRows.Th)`
   position: sticky;
   top: 0;
 `
-
-const StyledTr = styled.tr``

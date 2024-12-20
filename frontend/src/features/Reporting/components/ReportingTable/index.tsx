@@ -16,6 +16,7 @@ import { useTableVirtualizer } from '@hooks/useTableVirtualizer'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Icon, IconButton, TableWithSelectableRows, THEME } from '@mtes-mct/monitor-ui'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
+import { notUndefined } from '@tanstack/virtual-core'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import { pluralize } from '@utils/pluralize'
@@ -105,6 +106,13 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
   const overscan = useMemo(() => (reportings.length > 500 ? 500 : 50), [reportings])
   const rowVirtualizer = useTableVirtualizer({ estimateSize: 42, overscan, ref: tableContainerRef, rows })
   const virtualRows = rowVirtualizer.getVirtualItems()
+  const [paddingBeforeRows, paddingAfterRows] =
+    virtualRows.length > 0
+      ? [
+          notUndefined(virtualRows[0]).start - rowVirtualizer.options.scrollMargin,
+          rowVirtualizer.getTotalSize() - notUndefined(virtualRows[virtualRows.length - 1]).end
+        ]
+      : [0, 0]
 
   return (
     <Page>
@@ -153,13 +161,23 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
               </TableWithSelectableRows.Head>
 
               {!isLoading && reportings.length === 0 && <TableBodyEmptyData />}
+              {paddingBeforeRows > 0 && (
+                <tr>
+                  <td aria-label="padding before" colSpan={columns.length} style={{ height: paddingBeforeRows }} />
+                </tr>
+              )}
               {!!rows.length && (
                 <tbody>
                   {virtualRows.map(virtualRow => {
                     const row = rows[virtualRow?.index]
 
                     return (
-                      <TableWithSelectableRows.BodyTr key={virtualRow.key} data-cy="ReportingList-reporting">
+                      <StyledBodyTr
+                        key={virtualRow.key}
+                        ref={node => rowVirtualizer?.measureElement(node)}
+                        data-cy="ReportingList-reporting"
+                        data-index={virtualRow?.index}
+                      >
                         {row?.getVisibleCells().map(cell => (
                           <Row
                             key={cell.id}
@@ -170,10 +188,15 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                           </Row>
                         ))}
-                      </TableWithSelectableRows.BodyTr>
+                      </StyledBodyTr>
                     )
                   })}
                 </tbody>
+              )}
+              {paddingAfterRows > 0 && (
+                <tr>
+                  <td aria-label="padding after" colSpan={columns.length} style={{ height: paddingAfterRows }} />
+                </tr>
               )}
             </TableWithSelectableRows.Table>
           )}
@@ -208,6 +231,11 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
     </Page>
   )
 }
+
+const StyledBodyTr = styled(TableWithSelectableRows.BodyTr)`
+  height: 40px;
+  width: 100%;
+`
 
 const TableTop = styled.div<{
   $isFromUrl: boolean
@@ -252,8 +280,9 @@ const TableInnerWrapper = styled.div<{
   height: 619px; /* = table height - 5px (negative margin-top) + 1px for Chrome compatibility */
   min-width: 1290px; /* = table width + right padding + scrollbar width (8px) */
   padding-right: 8px;
-  overflow-y: scroll;
+  overflow: auto;
   width: auto;
+  position: relative;
 
   > table {
     margin-top: -5px;

@@ -11,6 +11,7 @@ export function useTableVirtualizer({ estimateSize, overscan, ref, rows }: UseTa
   return useVirtualizer({
     count: rows.length,
     estimateSize: () => estimateSize,
+    gap: 5,
     getItemKey: useCallback((index: number) => `${rows[index]?.id}`, [rows]),
     getScrollElement: () => ref.current,
     overscan,

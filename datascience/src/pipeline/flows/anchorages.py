@@ -290,7 +290,7 @@ def get_anchorage_h3_cells_rings(
     anchorage_h3_cells_rings[
         ["latitude", "longitude"]
     ] = anchorage_h3_cells_rings.apply(
-        lambda row: h3.h3_to_geo(row["h3"]), result_type="expand", axis=1
+        lambda row: h3.cell_to_latlng(row["h3"]), result_type="expand", axis=1
     )
 
     return anchorage_h3_cells_rings

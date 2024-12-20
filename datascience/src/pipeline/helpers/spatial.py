@@ -214,7 +214,7 @@ def get_h3_indices(
         res = pd.Series([], dtype=object)
     else:
         res = df.apply(
-            lambda row: h3.geo_to_h3(row["latitude"], row["longitude"], resolution),
+            lambda row: h3.latlng_to_cell(row[lat], row[lon], resolution),
             axis=1,
         )
 
@@ -235,7 +235,7 @@ def get_k_ring_of_h3_cells(h3_sequence: Iterable[str], k: int) -> Set[str]:
         sequence[str]: sequence of h3 cells belonging to the k-ring of at least one of
         the h3 cells in the input sequence
     """
-    h3_cells = [h3.k_ring(h, k) for h in h3_sequence]
+    h3_cells = [h3.grid_disk(h, k) for h in h3_sequence]
     return set.union(*h3_cells)
 
 
@@ -251,7 +251,7 @@ def point_dist(position1: Position, position2: Position) -> float:
         float: distance in meters between the two input Positions
     """
 
-    d = h3.point_dist(
+    d = h3.great_circle_distance(
         (position1.latitude, position1.longitude),
         (position2.latitude, position2.longitude),
         unit="m",
@@ -279,7 +279,8 @@ def get_step_distances(
         how (str): if, 'forward', computes the interval between each position and the
           next one. if 'backward', computes the interval between each position and
           the previous one.
-        unit (str): the distance unit (passed to h3.point_dist). Defaults to 'm'.
+        unit (str): the distance unit (passed to h3.great_circle_distance). Defaults to
+          'm'.
 
     Returns:
         np.array: array of distances between the successive positions.
@@ -288,7 +289,6 @@ def get_step_distances(
     if len(df) < 2:
         distances = [np.nan] * len(df)
     else:
-
         # For some reason, this is 100x faster than df[[lat, lon]].values
         lat_lon = np.concatenate(
             (df[lat].values[:, None], df[lon].values[:, None]), axis=1
@@ -302,7 +302,7 @@ def get_step_distances(
         # Using a list comprehension is 5x faster than using np.apply_over_axis here
         distances = np.array(
             [
-                h3.point_dist((lat1, lon1), (lat2, lon2), unit=unit)
+                h3.great_circle_distance((lat1, lon1), (lat2, lon2), unit=unit)
                 for lat1, lon1, lat2, lon2 in strides
             ]
         )
@@ -392,7 +392,6 @@ def compute_movement_metrics(
 
     # Compute time_emitting_at_sea
     if len(time_since_previous_position) > 0:
-
         #      time|
         # intervals|                                   _____ : cumsum of all time
         #   between|                vessel at sea     |        intervals between

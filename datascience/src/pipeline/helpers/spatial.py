@@ -214,9 +214,7 @@ def get_h3_indices(
         res = pd.Series([], dtype=object)
     else:
         res = df.apply(
-            lambda row: h3.latlng_to_cell(
-                row["latitude"], row["longitude"], resolution
-            ),
+            lambda row: h3.latlng_to_cell(row[lat], row[lon], resolution),
             axis=1,
         )
 

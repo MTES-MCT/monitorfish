@@ -106,7 +106,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
   const overscan = useMemo(() => (reportings.length > 500 ? 500 : 50), [reportings])
   const rowVirtualizer = useTableVirtualizer({ estimateSize: 42, overscan, ref: tableContainerRef, rows })
   const virtualRows = rowVirtualizer.getVirtualItems()
-  const [before, after] =
+  const [paddingBeforeRows, paddingAfterRows] =
     virtualRows.length > 0
       ? [
           notUndefined(virtualRows[0]).start - rowVirtualizer.options.scrollMargin,
@@ -153,7 +153,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
         <TableInnerWrapper ref={tableContainerRef} $hasError={isError}>
           {isError && <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR} />}
           {!isError && (
-            <TableWithSelectableRows.Table data-cy="side-window-reporting-list">
+            <TableWithSelectableRows.Table $withRowCheckbox data-cy="side-window-reporting-list">
               <TableWithSelectableRows.Head>
                 {table.getHeaderGroups().map(headerGroup => (
                   <TableWithSelectableRowsHeader key={headerGroup.id} headerGroup={headerGroup} />
@@ -161,9 +161,9 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
               </TableWithSelectableRows.Head>
 
               {!isLoading && reportings.length === 0 && <TableBodyEmptyData />}
-              {before > 0 && (
+              {paddingBeforeRows > 0 && (
                 <tr>
-                  <td aria-label="padding before" colSpan={columns.length} style={{ height: before }} />
+                  <td aria-label="padding before" colSpan={columns.length} style={{ height: paddingBeforeRows }} />
                 </tr>
               )}
               {!!rows.length && (
@@ -193,9 +193,9 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
                   })}
                 </tbody>
               )}
-              {after > 0 && (
+              {paddingAfterRows > 0 && (
                 <tr>
-                  <td aria-label="padding after" colSpan={columns.length} style={{ height: after }} />
+                  <td aria-label="padding after" colSpan={columns.length} style={{ height: paddingAfterRows }} />
                 </tr>
               )}
             </TableWithSelectableRows.Table>

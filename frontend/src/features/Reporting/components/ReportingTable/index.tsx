@@ -16,6 +16,7 @@ import { useTableVirtualizer } from '@hooks/useTableVirtualizer'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Icon, IconButton, TableWithSelectableRows, THEME } from '@mtes-mct/monitor-ui'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
+import { notUndefined } from '@tanstack/virtual-core'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import { pluralize } from '@utils/pluralize'
@@ -105,6 +106,13 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
   const overscan = useMemo(() => (reportings.length > 500 ? 500 : 50), [reportings])
   const rowVirtualizer = useTableVirtualizer({ estimateSize: 42, overscan, ref: tableContainerRef, rows })
   const virtualRows = rowVirtualizer.getVirtualItems()
+  const [before, after] =
+    virtualRows.length > 0
+      ? [
+          notUndefined(virtualRows[0]).start - rowVirtualizer.options.scrollMargin,
+          rowVirtualizer.getTotalSize() - notUndefined(virtualRows[virtualRows.length - 1]).end
+        ]
+      : [0, 0]
 
   return (
     <Page>
@@ -153,6 +161,11 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
               </StyledHead>
 
               {!isLoading && reportings.length === 0 && <TableBodyEmptyData />}
+              {before > 0 && (
+                <tr>
+                  <td colSpan={8} style={{ height: before }} />
+                </tr>
+              )}
               {!!rows.length && (
                 <StyledTbody $size={rowVirtualizer?.getTotalSize()}>
                   {virtualRows.map(virtualRow => {
@@ -180,6 +193,11 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
                     )
                   })}
                 </StyledTbody>
+              )}
+              {after > 0 && (
+                <tr>
+                  <td colSpan={8} style={{ height: after }} />
+                </tr>
               )}
             </StyledTable>
           )}
@@ -215,29 +233,18 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
   )
 }
 
-const StyledHead = styled(TableWithSelectableRows.Head)`
-  display: grid;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-`
+const StyledHead = styled(TableWithSelectableRows.Head)``
 
 const StyledTable = styled(TableWithSelectableRows.Table)``
 
 const StyledTbody = styled.tbody<{
   $size: number | undefined
-}>`
-  display: grid;
-  height: ${p => p.$size}px;
-  position: relative;
-`
+}>``
 
 const StyledBodyTr = styled(TableWithSelectableRows.BodyTr)<{
   $start: number | undefined
 }>`
-  display: flex;
-  position: absolute;
-  transform: ${p => `translateY(${p.$start}px)`};
+  height: 40px;
   width: 100%;
 `
 

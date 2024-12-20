@@ -1,11 +1,12 @@
 import { Icon, TableWithSelectableRows, THEME } from '@mtes-mct/monitor-ui'
 import { flexRender } from '@tanstack/react-table'
+import styled from 'styled-components'
 
 export function TableWithSelectableRowsHeader({ headerGroup }) {
   return (
     <tr key={headerGroup.id}>
       {headerGroup.headers.map(header => (
-        <TableWithSelectableRows.Th key={header.id} $width={header.column.getSize()}>
+        <StyledTh key={header.id} $width={header.column.getSize()}>
           {header.id === 'select' && flexRender(header.column.columnDef.header, header.getContext())}
           {header.id !== 'select' && !header.isPlaceholder && (
             <TableWithSelectableRows.SortContainer
@@ -23,8 +24,13 @@ export function TableWithSelectableRowsHeader({ headerGroup }) {
                 ))}
             </TableWithSelectableRows.SortContainer>
           )}
-        </TableWithSelectableRows.Th>
+        </StyledTh>
       ))}
     </tr>
   )
 }
+
+const StyledTh = styled(TableWithSelectableRows.Th)`
+  position: sticky;
+  top: 0;
+`

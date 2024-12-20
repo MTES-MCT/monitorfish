@@ -22,8 +22,9 @@ import {
 } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { uniq } from 'lodash'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
 import {
   LAST_CONTROL_PERIODS_AS_OPTIONS,
@@ -41,6 +42,7 @@ export function FilterBar() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
   const { newWindowContainerRef } = useNewWindow()
+  const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
   const listFilterValues = useMainAppSelector(store => store.priorNotification.listFilterValues)
 
   const { fleetSegmentsAsOptions } = useGetFleetSegmentsAsOptions()
@@ -104,8 +106,13 @@ export function FilterBar() {
     dispatch(priorNotificationActions.setListFilterValues({ priorNotificationTypes: nextPriorNotificationTypes }))
   }
 
-  const updateSearchQuery = (nextSearchQuery: string | undefined) => {
+  const updateSliceSearchQuery = useDebouncedCallback((nextSearchQuery: string | undefined) => {
     dispatch(priorNotificationActions.setListFilterValues({ searchQuery: nextSearchQuery }))
+  }, 250)
+
+  const updateSearchQuery = (nextSearchQuery: string | undefined) => {
+    setSearchQuery(nextSearchQuery)
+    updateSliceSearchQuery(nextSearchQuery)
   }
 
   const updateSpecyCodes = (nextSpecyCodes: string[] | undefined) => {
@@ -132,7 +139,7 @@ export function FilterBar() {
           onChange={updateSearchQuery}
           placeholder="Rechercher un navire"
           size={Size.LARGE}
-          value={listFilterValues.searchQuery}
+          value={searchQuery}
         />
       </Row>
 

@@ -70,7 +70,7 @@ dependencies {
     api("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.2")
     api("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     api("org.flywaydb:flyway-core:10.21.0")
-    api("org.flywaydb:flyway-database-postgresql:10.21.0")
+    api("org.flywaydb:flyway-database-postgresql:11.1.0")
     api("org.springdoc:springdoc-openapi-ui:1.8.0")
     api("org.jetbrains.kotlin:kotlin-reflect:2.1.0")
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.0")

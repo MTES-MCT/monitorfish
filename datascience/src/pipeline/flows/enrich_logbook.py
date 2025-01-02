@@ -18,6 +18,7 @@ from config import (
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract
 from src.pipeline.helpers.dates import Period
+from src.pipeline.helpers.segments import allocate_segments_to_catches
 from src.pipeline.processing import prepare_df_for_loading
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.dates import get_utcnow, make_periods
@@ -122,12 +123,12 @@ def extract_pno_trips_period(period: Period) -> Period:
         return None
 
 
-def extract_pno_species_and_gears(
+def extract_pno_catches(
     pno_emission_period: Period, trips_period: Period
 ) -> pd.DataFrame:
     return extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/pno_species_and_gears.sql",
+        query_filepath="monitorfish/pno_catches.sql",
         params={
             "min_pno_date": pno_emission_period.start,
             "max_pno_date": pno_emission_period.end,
@@ -138,7 +139,7 @@ def extract_pno_species_and_gears(
 
 
 def compute_pno_segments(
-    pno_species_and_gears: pd.DataFrame,
+    pno_catches: pd.DataFrame,
     segments: pd.DataFrame,
     all_control_priorities: pd.DataFrame,
 ) -> pd.DataFrame:
@@ -146,7 +147,7 @@ def compute_pno_segments(
     Computes the segments of the input PNO species and gears.
 
     Args:
-        pno_species_and_gears (pd.DataFrame): DataFrame of PNO species. 1 line = catch.
+        pno_catches (pd.DataFrame): DataFrame of PNO species. 1 line = catch.
           Must have columns :
 
           - logbook_reports_pno_id `int` `1`
@@ -155,6 +156,9 @@ def compute_pno_segments(
           - species `str` `'COD'`
           - fao_area `str` `'27.7.d'`
           - year `int` `2022`
+          - weight `float` `230.2`
+          - vessel_type `str` `Fishing vessel`
+          - scip_species_type `str` `DEMERSAL`
 
         segments (pd.DataFrame): DataFrame of segments definitions. 1 line = 1 segment.
           Must have columns :
@@ -164,8 +168,14 @@ def compute_pno_segments(
           - segment_name `str` `Nom du segment`
           - gears `List[str]` `["OTB", ...]`
           - fao_areas `List[str]` `["27.8", ...]`
-          - species `List[str]` `["COD", ...]`
+          - target_species `List[str]` `["COD", ...]`
           - impact_risk_factor `float` `2.8`
+          - min_mesh `float` `80.0`
+          - max_mesh `float` `120.0`
+          - min_share_of_target_species `float` `0.2`
+          - main_scip_species_type `str` `DEMERSAL`
+          - vessel_types `List[str]` `['Fishing vessel', 'Trawler']`
+          - priority `float` `1.0`
 
         all_control_priorities (pd.DataFrame): DataFrame of control priorities.
           Must have columns:
@@ -194,58 +204,48 @@ def compute_pno_segments(
             - impact_risk_factor `float` `2.8`
             - control_priority_level `float` `2.8`
     """
-    trip_gear_codes = (  # noqa: F841
-        pno_species_and_gears[["logbook_reports_pno_id", "trip_gears"]]
-        .explode("trip_gears")
-        .dropna()
-        .assign(trip_gear_codes=lambda x: x.trip_gears.map(lambda d: d["gear"]))
-        .groupby("logbook_reports_pno_id")[["trip_gear_codes"]]
-        .agg({"trip_gear_codes": "unique"})
-        .reset_index()
+    unnested_gears_catches = pno_catches.explode("trip_gears")
+    unnested_gears_catches["catch_id"] = range(len(unnested_gears_catches))
+    unnested_gears_catches["gear"] = unnested_gears_catches.trip_gears.map(
+        lambda d: d.get("gear", None), na_action="ignore"
+    ).astype(
+        str
+    )  # Necessary for case where there are only NULL values
+    unnested_gears_catches["mesh"] = unnested_gears_catches.trip_gears.map(
+        lambda d: d.get("mesh", None), na_action="ignore"
     )
 
-    db = duckdb.connect()
+    segmented_catches = allocate_segments_to_catches(  # noqa: F841
+        catches=unnested_gears_catches,
+        segments=segments,
+        batch_id_column="logbook_reports_pno_id",
+        catch_id_column="catch_id",
+    )
 
-    res = db.sql(
-        """
-        WITH trip_ids AS (
-            SELECT DISTINCT logbook_reports_pno_id
-            FROM pno_species_and_gears
-        ),
-
-        pnos_with_segments AS (
-            SELECT
-                sg.logbook_reports_pno_id,
-                LIST_SORT(ARRAY_AGG(DISTINCT {
-                    'segment': s.segment,
-                    'segmentName': s.segment_name
-                })) AS trip_segments,
-                MAX(s.impact_risk_factor) AS impact_risk_factor,
-                MAX(acp.control_priority_level) AS control_priority_level
-            FROM pno_species_and_gears sg
-            LEFT JOIN trip_gear_codes tgc
-            ON tgc.logbook_reports_pno_id = sg.logbook_reports_pno_id
-            JOIN segments s
-            ON
-                (sg.species = ANY(s.species) OR s.species = '[]'::VARCHAR[]) AND
-                (list_has_any(tgc.trip_gear_codes, s.gears) OR s.gears = '[]'::VARCHAR[]) AND
-                (length(filter(s.fao_areas, a -> sg.fao_area LIKE a || '%')) > 0 OR s.fao_areas = '[]'::VARCHAR[]) AND
-                s.year = sg.year
-            LEFT JOIN all_control_priorities acp
-            ON
-                acp.year = sg.year AND
-                acp.facade = sg.facade AND
-                acp.segment = s.segment
-            GROUP BY 1
-        )
-
-        SELECT t.logbook_reports_pno_id, s.trip_segments, s.impact_risk_factor, s.control_priority_level
-        FROM trip_ids t
-        LEFT JOIN pnos_with_segments s
-        ON t.logbook_reports_pno_id = s.logbook_reports_pno_id
+    query = """
+        SELECT
+            sc.logbook_reports_pno_id,
+            LIST_SORT(
+                ARRAY_AGG(
+                    DISTINCT {
+                        'segment': sc.segment,
+                        'segmentName': sc.segment_name
+                    }
+                ) FILTER (WHERE sc.segment IS NOT NULL)
+            ) AS trip_segments,
+            MAX(sc.impact_risk_factor) AS impact_risk_factor,
+            MAX(acp.control_priority_level) AS control_priority_level
+        FROM segmented_catches sc
+        LEFT JOIN all_control_priorities acp
+        ON
+            acp.year = sc.year AND
+            acp.facade = sc.facade AND
+            acp.segment = sc.segment
+        GROUP BY 1
         ORDER BY 1
     """
-    ).to_df()
+
+    res = duckdb.sql(query).to_df()
 
     res = res.fillna(
         {
@@ -258,13 +258,13 @@ def compute_pno_segments(
 
 
 def compute_pno_types(
-    pno_species_and_gears: pd.DataFrame, pno_types: pd.DataFrame
+    pno_catches: pd.DataFrame, pno_types: pd.DataFrame
 ) -> pd.DataFrame:
     """
     Computes the PNO types of the input PNO species and gears.
 
     Args:
-        pno_species_and_gears (pd.DataFrame): DataFrame of PNO species. 1 line = catch.
+        pno_catches (pd.DataFrame): DataFrame of PNO species. 1 line = catch.
           Must have columns :
 
           - logbook_reports_pno_id `int` `1`
@@ -315,7 +315,7 @@ def compute_pno_types(
                 ]```
     """
     trip_gear_codes = (  # noqa: F841
-        pno_species_and_gears[["logbook_reports_pno_id", "trip_gears"]]
+        pno_catches[["logbook_reports_pno_id", "trip_gears"]]
         .explode("trip_gears")
         .dropna()
         .assign(trip_gear_codes=lambda x: x.trip_gears.map(lambda d: d["gear"]))
@@ -324,7 +324,7 @@ def compute_pno_types(
         .reset_index()
     )
 
-    trips_info = pno_species_and_gears[
+    trips_info = pno_catches[
         [
             "logbook_reports_pno_id",
             "cfr",
@@ -334,7 +334,7 @@ def compute_pno_types(
         ]
     ].drop_duplicates()
 
-    pnos_trip_gears = pno_species_and_gears.drop_duplicates(  # noqa: F841
+    pnos_trip_gears = pno_catches.drop_duplicates(  # noqa: F841
         subset=["logbook_reports_pno_id"]
     )[["logbook_reports_pno_id", "trip_gears"]]
 
@@ -344,21 +344,21 @@ def compute_pno_types(
         """
         WITH pnos_pno_types_tmp AS (
             SELECT
-                sg.logbook_reports_pno_id,
+                pc.logbook_reports_pno_id,
                 t.pno_type_name,
                 t.minimum_notification_period,
                 t.has_designated_ports,
                 t.minimum_quantity_kg,
-                SUM(COALESCE(weight, 0)) OVER (PARTITION BY sg.logbook_reports_pno_id, pno_type_rule_id) AS pno_quantity_kg
-            FROM pno_species_and_gears sg
+                SUM(COALESCE(weight, 0)) OVER (PARTITION BY pc.logbook_reports_pno_id, pno_type_rule_id) AS pno_quantity_kg
+            FROM pno_catches pc
             LEFT JOIN trip_gear_codes tgc
-            ON tgc.logbook_reports_pno_id = sg.logbook_reports_pno_id
+            ON tgc.logbook_reports_pno_id = pc.logbook_reports_pno_id
             JOIN pno_types t
             ON
-                (sg.species = ANY(t.species) OR t.species = '[]'::VARCHAR[]) AND
+                (pc.species = ANY(t.species) OR t.species = '[]'::VARCHAR[]) AND
                 (list_has_any(tgc.trip_gear_codes, t.gears) OR t.gears = '[]'::VARCHAR[]) AND
-                (length(filter(t.fao_areas, a -> sg.fao_area LIKE a || '%')) > 0 OR t.fao_areas = '[]'::VARCHAR[]) AND
-                (sg.flag_state = ANY(t.flag_states) OR t.flag_states = '[]'::VARCHAR[])
+                (length(filter(t.fao_areas, a -> pc.fao_area LIKE a || '%')) > 0 OR t.fao_areas = '[]'::VARCHAR[]) AND
+                (pc.flag_state = ANY(t.flag_states) OR t.flag_states = '[]'::VARCHAR[])
         )
 
         SELECT
@@ -674,25 +674,23 @@ def extract_enrich_load_logbook(
         raise SKIP("No PNO to enrich.")
 
     logger.info("Extracting PNOs...")
-    pnos_species_and_gears = extract_pno_species_and_gears(
+    pnos_catches = extract_pno_catches(
         pno_emission_period=period, trips_period=trips_period
     )
     logger.info(
-        f"Extracted {len(pnos_species_and_gears)} PNO species from "
-        f"{pnos_species_and_gears.logbook_reports_pno_id.nunique()} PNOs."
+        f"Extracted {len(pnos_catches)} PNO catches from "
+        f"{pnos_catches.logbook_reports_pno_id.nunique()} PNOs."
     )
 
     logger.info("Computing PNO segments...")
     pnos_with_segments = compute_pno_segments(
-        pno_species_and_gears=pnos_species_and_gears,
+        pno_catches=pnos_catches,
         segments=segments,
         all_control_priorities=all_control_priorities,
     )
 
     logger.info("Computing PNO types...")
-    pnos_with_types = compute_pno_types(
-        pno_species_and_gears=pnos_species_and_gears, pno_types=pno_types
-    )
+    pnos_with_types = compute_pno_types(pno_catches=pnos_catches, pno_types=pno_types)
 
     logger.info("Merging PNO types and segments...")
     pnos = merge_pnos_data(pnos_with_types, pnos_with_segments)

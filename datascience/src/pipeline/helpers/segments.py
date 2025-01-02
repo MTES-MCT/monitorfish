@@ -135,7 +135,7 @@ def allocate_segments_to_catches(
                 AND (c.mesh < s.max_mesh OR s.max_mesh IS NULL)
                 AND (c.vessel_type = ANY(s.vessel_types) OR s.vessel_types = [])
                 AND (s.main_scip_species_type = c.main_scip_species_type OR s.main_scip_species_type IS NULL)
-            QUALIFY (share_of_target_species > s.min_share_of_target_species OR s.min_share_of_target_species IS NULL)
+            QUALIFY (share_of_target_species > s.min_share_of_target_species OR s.min_share_of_target_species IS NULL OR s.target_species = [])
         ),
 
         catches_top_priority_segment AS (

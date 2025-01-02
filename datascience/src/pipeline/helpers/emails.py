@@ -99,6 +99,7 @@ def create_html_email(
     msg["Subject"] = subject
     msg["From"] = from_
     msg["To"] = to
+    msg["Date"] = email.utils.formatdate(localtime=True)
 
     if cc:
         if isinstance(cc, list):

@@ -1,10 +1,12 @@
 import io
+from datetime import datetime
 
+import dateutil
 from pypdf import PdfReader
 from pytest import fixture
 
 from config import TEST_DATA_LOCATION
-from src.pipeline.helpers.emails import resize_pdf_to_A4
+from src.pipeline.helpers.emails import create_html_email, resize_pdf_to_A4
 
 
 @fixture
@@ -30,3 +32,24 @@ def test_resize_pdf_to_A4(A3_pdf):
     assert A3_page.mediabox.height == 1190.551181
     assert resized_page.mediabox.width == 595.275591
     assert resized_page.mediabox.height == 841.889764
+
+
+def test_create_html_email():
+    now = datetime.now().astimezone()
+    msg = create_html_email(
+        to=["someone@blabla.email"],
+        subject="Something",
+        html="I want you to know that",
+        cc="ccsomeone@blabla.email",
+        bcc="bccsomeone@blabla.email",
+        reply_to="notme@blabla.email",
+    )
+
+    assert msg["To"] == "someone@blabla.email"
+    assert msg["Subject"] == "Something"
+    assert msg["Cc"] == "ccsomeone@blabla.email"
+    assert msg["Bcc"] == "bccsomeone@blabla.email"
+    assert msg["Reply-To"] == "notme@blabla.email"
+
+    parsed_date = dateutil.parser.parse(msg["Date"])
+    assert (now - parsed_date).total_seconds() < 10

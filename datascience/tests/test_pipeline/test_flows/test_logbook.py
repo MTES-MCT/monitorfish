@@ -335,10 +335,10 @@ def test_flow(mock_move, reset_test_data):
 
     assert state.is_successful()
     final_logbook_reports = read_query(query, db="monitorfish_remote")
-    assert (~initial_logbook_reports.is_test_message).sum() == 46
+    assert (~initial_logbook_reports.is_test_message).sum() == 54
     assert initial_logbook_reports.is_test_message.sum() == 0
 
-    assert (~final_logbook_reports.is_test_message).sum() == 66
+    assert (~final_logbook_reports.is_test_message).sum() == 74
     assert final_logbook_reports.is_test_message.sum() == 1
     assert (
         final_logbook_reports.loc[

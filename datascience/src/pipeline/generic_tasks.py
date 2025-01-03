@@ -118,7 +118,7 @@ def load(
           - 'replace' to truncate the table before loading
           - 'append' to append the data to rows already in the table
           - 'upsert' to append the rows to the table, replacing the rows whose id is
-            already
+            already present in the table
         replace_with_truncate (bool): if `how` is `replace`, and
           `replace_with_truncate` is `True`, the table to replace will be truncated
           before loading the new data. If `how` is `replace`, and

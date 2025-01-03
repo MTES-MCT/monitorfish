@@ -99,19 +99,21 @@ catches AS (
     SELECT
         r.cfr,
         r.report_id,
-        (jsonb_array_elements(r.value -> 'hauls'))->>'gear' as gear,
-        ((jsonb_array_elements(r.value -> 'hauls'))->>'mesh')::DOUBLE PRECISION as mesh,
-        (jsonb_array_elements(r.value -> 'hauls'))->>'dimensions' as dimensions,
-        jsonb_array_elements((jsonb_array_elements(r.value -> 'hauls'))->'catches')->>'species' as species,
-        (jsonb_array_elements((jsonb_array_elements(r.value -> 'hauls'))->'catches')->>'weight')::DOUBLE PRECISION as weight,
-        jsonb_array_elements((jsonb_array_elements(r.value -> 'hauls'))->'catches')->>'faoZone' as fao_area
+        haul->>'gear' as gear,
+        (haul->>'mesh')::DOUBLE PRECISION as mesh,
+        haul->>'dimensions' as dimensions,
+        catch->>'species' as species,
+        (catch->>'weight')::DOUBLE PRECISION as weight,
+        catch->>'faoZone' as fao_area
     FROM public.logbook_reports r
     JOIN last_deps d
     ON r.cfr = d.cfr
     AND r.trip_number = d.trip_number
+    JOIN jsonb_array_elements(r.value -> 'hauls') haul ON true
+    LEFT JOIN jsonb_array_elements(haul->'catches') catch ON true -- LEFT JOIN to keep lines where there is gear information in the haul by no catch
     WHERE
         log_type = 'FAR'
-        AND operation_datetime_utc > CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL ':number_of_days days'
+        AND operation_datetime_utc > CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '90 days'
         AND report_id NOT IN (SELECT referenced_report_id FROM corrected_messages)
         AND NOT (
             report_id IN (SELECT referenced_report_id FROM acknowledged_deleted_messages)
@@ -136,6 +138,7 @@ summed_catches AS (
         mesh,
         SUM(weight) as weight
     FROM catches
+    WHERE weight IS NOT NULL
     GROUP BY cfr, species, gear, fao_area, mesh
 ),
 

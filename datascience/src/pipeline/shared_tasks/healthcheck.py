@@ -105,3 +105,43 @@ def assert_last_positions_flow_health(
                 f"{max_minutes_without_data} minutes old."
             )
         )
+
+
+@task(checkpoint=False)
+def assert_logbook_health(
+    healthcheck: MonitorfishHealthcheck,
+    utcnow: datetime = None,
+    max_minutes_without_data: int = 20,
+):
+    """
+    Checks if the `date_logbook_message_received` of in the input
+    `MonitorfishHealthcheck` is older than `max_minutes_without_data` minutes.
+
+    Args:
+        healthcheck (MonitorfishHealthcheck): `MonitorfishHealthcheck` to check.
+        utcnow (datetime, optional): Date with which to compare the
+          `date_logbook_message_received` of the input healthcheck. If not supplied,
+          the current server time is used. Defaults to None.
+        max_minutes_without_data (int, optional): Number of minutes above which an
+          absence of data is considered an unhealthy. Defaults to 20.
+
+    Raises:
+        MonitorfishHealthError: If the most recent data received is older than
+          `max_minutes_without_data`.
+    """
+    if not utcnow:
+        utcnow = datetime.utcnow()
+
+    time_without_data = utcnow - healthcheck.date_logbook_message_received
+    minutes_without_data = time_without_data.total_seconds() / 60
+
+    try:
+        assert minutes_without_data <= max_minutes_without_data
+    except AssertionError:
+        raise MonitorfishHealthError(
+            (
+                "The most recent logbook message is too old: it is "
+                f"{minutes_without_data} minutes old whereas it should be less than "
+                f"{max_minutes_without_data} minutes old."
+            )
+        )

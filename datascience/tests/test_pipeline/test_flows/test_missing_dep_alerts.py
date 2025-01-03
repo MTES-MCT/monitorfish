@@ -2,14 +2,23 @@ from datetime import datetime, timedelta, timezone
 
 import pandas as pd
 import pytest
+from prefect.engine.signals import TRIGGERFAIL
 from sqlalchemy import text
 
 from src.db_config import create_engine
+from src.pipeline.exceptions.monitorfish_health_error import MonitorfishHealthError
 from src.pipeline.flows.missing_dep_alerts import extract_missing_deps, flow
 from src.read_query import read_query
-from tests.mocks import mock_check_flow_not_running
+from tests.mocks import (
+    get_monitorfish_healthcheck_mock_factory,
+    mock_check_flow_not_running,
+)
 
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
+flow.replace(
+    flow.get_tasks("get_monitorfish_healthcheck")[0],
+    get_monitorfish_healthcheck_mock_factory(),
+)
 
 
 @pytest.fixture
@@ -143,3 +152,25 @@ def test_flow(reset_test_data_missing_dep_alerts):
         "flag_state": "FR",
     }
     assert abs((creation_date - datetime.now(timezone.utc)).total_seconds()) < 60
+
+
+def test_flow_fails_if_logbook_healthcheck_fails(reset_test_data):
+    flow.replace(
+        flow.get_tasks("get_monitorfish_healthcheck")[0],
+        get_monitorfish_healthcheck_mock_factory(
+            logbook_message_received_minutes_ago=25
+        ),
+    )
+
+    flow.schedule = None
+    state = flow.run()
+
+    assert not state.is_successful()
+    assert isinstance(
+        state.result[flow.get_tasks("assert_logbook_health")[0]].result,
+        MonitorfishHealthError,
+    )
+    assert isinstance(
+        state.result[flow.get_tasks("load_alerts")[0]].result,
+        TRIGGERFAIL,
+    )

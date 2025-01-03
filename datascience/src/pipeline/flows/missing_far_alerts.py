@@ -71,6 +71,7 @@ def make_positions_at_sea_query(
     eez_areas_table: Table = None,
     eez_to_monitor_iso3: list = None,
     only_fishing_positions: bool = False,
+    exclude_vessels_with_logbook_exemptions: bool = False,
 ) -> Select:
     """
     Generates the `sqlalchemy.Select` statement to run in order to get the positions of
@@ -96,6 +97,9 @@ def make_positions_at_sea_query(
         only_fishing_positions (bool, optional): if `True`, only positions which were
           detected as being in fishing operation will be considered.
           Defaults to `False`.
+        exclude_vessels_with_logbook_exemptions (bool, optional): if `True`, vessels
+           with an 'Exempté' logbook_equipment_status will be excluded.
+          Defaults to `False`.
 
     Raises:
         ValueError: If `minimum_length` is not `None` and the `vessels_table` is not
@@ -113,7 +117,7 @@ def make_positions_at_sea_query(
         isouter=True,
     )
 
-    if minimum_length:
+    if minimum_length or exclude_vessels_with_logbook_exemptions:
         try:
             assert isinstance(vessels_table, Table)
         except AssertionError:
@@ -166,6 +170,14 @@ def make_positions_at_sea_query(
             )
         )
     )
+
+    if exclude_vessels_with_logbook_exemptions:
+        q = q.where(
+            or_(
+                vessels_table.c.logbook_equipment_status != "Exempté",
+                vessels_table.c.logbook_equipment_status.is_(None),
+            )
+        )
 
     if only_fishing_positions:
         q = q.where(positions_table.c.is_fishing)
@@ -451,6 +463,7 @@ with Flow("Missing FAR alerts", executor=LocalDaskExecutor()) as flow:
             vessels_table=vessels_table,
             minimum_length=minimum_length,
             only_fishing_positions=only_raise_if_route_shows_fishing,
+            exclude_vessels_with_logbook_exemptions=True,
         )
 
         positions_at_sea_yesterday_in_french_eez_query = make_positions_at_sea_query(

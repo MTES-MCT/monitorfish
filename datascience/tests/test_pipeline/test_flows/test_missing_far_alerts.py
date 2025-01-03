@@ -179,7 +179,11 @@ def test_make_positions_at_sea_query():
     )
 
     vessels_table = Table(
-        "vessels", meta, Column("cfr", VARCHAR), Column("length", FLOAT)
+        "vessels",
+        meta,
+        Column("cfr", VARCHAR),
+        Column("length", FLOAT),
+        Column("logbook_equipment_status", VARCHAR),
     )
 
     eez_areas_table = Table(
@@ -199,6 +203,7 @@ def test_make_positions_at_sea_query():
         eez_areas_table=eez_areas_table,
         eez_to_monitor_iso3=["FRA"],
         only_fishing_positions=True,
+        exclude_vessels_with_logbook_exemptions=True,
     )
 
     query_string = str(query.compile(compile_kwargs={"literal_binds": True}))
@@ -225,6 +230,7 @@ def test_make_positions_at_sea_query():
         "positions.date_time < '2020-12-05 12:23:00' AND "
         "positions.internal_reference_number IS NOT NULL AND "
         "NOT positions.is_at_port AND "
+        "(vessels.logbook_equipment_status != 'Exempté' OR vessels.logbook_equipment_status IS NULL) AND "
         "positions.is_fishing AND "
         "positions.flag_state IN ('ES') AND "
         "(vessels.length >= 12.0 OR positions.flag_state != 'FR') AND "

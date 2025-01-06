@@ -5,7 +5,7 @@ ARG POSTGIS_VERSION
 ############################
 # Build tools binaries in separate image
 ############################
-ARG GO_VERSION=1.18.7
+ARG GO_VERSION=1.22.4
 FROM golang:${GO_VERSION}-alpine AS tools
 
 ENV TOOLS_VERSION 0.8.1

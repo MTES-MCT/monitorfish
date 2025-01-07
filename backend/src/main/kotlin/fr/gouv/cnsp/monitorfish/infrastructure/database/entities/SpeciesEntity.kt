@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
+import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.ScipSpeciesType
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -16,10 +17,13 @@ data class SpeciesEntity(
     val code: String,
     @Column(name = "species_name")
     val name: String,
+    @Column(name = "scip_species_type")
+    val scipSpeciesType: String?,
 ) {
     fun toSpecies() =
         Species(
             code = code,
             name = name,
+            scipSpeciesType = this.scipSpeciesType?.let { ScipSpeciesType.valueOf(it) }
         )
 }

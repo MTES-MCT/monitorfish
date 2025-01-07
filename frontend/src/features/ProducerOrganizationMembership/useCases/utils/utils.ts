@@ -47,7 +47,7 @@ export const getNextMembershipsFromFile = async (file: File): Promise<ProducerOr
 const getFieldOrThrow = (row: string[], columnIndex: number) => {
   const value = row[columnIndex]
   if (!value) {
-    throw new Error(`Le CSV contient un champ vide à la colonne ${columnIndex}`)
+    throw new Error(`Le CSV contient un champ vide à la colonne ${columnIndex + 1}`)
   }
 
   return value

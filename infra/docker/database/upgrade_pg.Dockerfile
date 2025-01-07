@@ -52,6 +52,11 @@ RUN \
     apt-get install -y timescaledb-$TIMESCALEDB_MAJOR-postgresql-$FROM_PG_MAJOR=$TIMESCALEDB_VERSION* timescaledb-$TIMESCALEDB_MAJOR-loader-postgresql-$FROM_PG_MAJOR=$TIMESCALEDB_VERSION* && \
     apt-get install -y timescaledb-$TIMESCALEDB_MAJOR-postgresql-$TO_PG_MAJOR=$TIMESCALEDB_VERSION* timescaledb-$TIMESCALEDB_MAJOR-loader-postgresql-$TO_PG_MAJOR=$TIMESCALEDB_VERSION*
 
+RUN for file in $(find /usr/share/postgresql -name 'postgresql.conf.sample'); do \
+    # We want timescaledb to be loaded in this image by every created cluster
+    sed -r -i "s/[#]*\s*(shared_preload_libraries)\s*=\s*'(.*)'/\1 = 'timescaledb,\2'/;s/,'/'/" "$file"; \
+done
+
 # Install PostGIS extension in both versions of Postgres
 RUN apt update
 RUN \

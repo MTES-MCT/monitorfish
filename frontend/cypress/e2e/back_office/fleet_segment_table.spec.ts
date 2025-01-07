@@ -61,7 +61,7 @@ context('BackOffice > Fleet Segments Table', () => {
         segment: 'ATL036',
         segmentName: 'All Trawls 45',
         targetSpecies: ['COD'],
-        year: 2024
+        year: currentYear
       })
     })
 

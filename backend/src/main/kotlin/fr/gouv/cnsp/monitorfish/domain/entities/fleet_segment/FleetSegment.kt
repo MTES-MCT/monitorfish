@@ -7,11 +7,15 @@ data class FleetSegment(
     val segment: String,
     // TODO Rename that to `name`.
     val segmentName: String,
-    val dirm: List<String> = listOf(),
+    val mainScipSpeciesType: ScipSpeciesType?,
+    val maxMesh: Double?,
+    val minMesh: Double?,
+    val minShareOfTargetSpecies: Double?,
+    val priority: Double,
+    val vesselTypes: List<String>,
     val gears: List<String>,
     val faoAreas: List<String>,
     val targetSpecies: List<String>,
-    val bycatchSpecies: List<String> = listOf(),
     val impactRiskFactor: Double,
     val year: Int,
 ) {

@@ -46,7 +46,7 @@ context('Vessel sidebar controls tab', () => {
 
     // Because date is set as "NOW - 1 YEAR - 1 MONTH", we might be in the first month of the year
     if (currentMonth === 0) {
-      cy.get(`ul > div[data-cy="vessel-control-years"] > div > div[title="${currentYear - 1}"]`).contains(
+      cy.get(`[data-cy="vessel-control-years"] > div > div[title="${currentYear - 1}"]`).contains(
         "1 contrôle, pas d'infraction"
       )
 

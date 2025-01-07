@@ -528,7 +528,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = customDayjs().utc().set('month', 1).set('date', 1) // Monday
+    const currentDate = customDayjs().utc().set('month', 1).set('day', 1) // Monday
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 

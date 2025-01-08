@@ -210,4 +210,18 @@ interface DBFleetSegmentRepository : CrudRepository<FleetSegmentEntity, Long> {
         currentYear: Int,
         nextYear: Int,
     )
+
+    @Query(
+        value = """
+        SELECT DISTINCT
+            unnest(gears)
+        FROM
+            fleet_segments
+        WHERE
+            year = :year AND
+            (min_mesh IS NOT NULL OR max_mesh IS NOT NULL)
+    """,
+        nativeQuery = true,
+    )
+    fun findAllSegmentsGearsHavingMinOrMaxMesh(year: Int): List<String>
 }

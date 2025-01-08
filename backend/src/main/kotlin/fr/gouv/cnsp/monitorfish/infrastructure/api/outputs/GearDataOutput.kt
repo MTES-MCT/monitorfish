@@ -7,6 +7,7 @@ data class GearDataOutput(
     val name: String,
     val category: String? = null,
     val groupId: Int? = null,
+    val isMeshRequiredForSegment: Boolean
 ) {
     companion object {
         fun fromGear(gear: Gear): GearDataOutput {
@@ -15,6 +16,7 @@ data class GearDataOutput(
                 name = gear.name,
                 category = gear.category,
                 groupId = gear.groupId,
+                isMeshRequiredForSegment = gear.isMeshRequiredForSegment ?: false,
             )
         }
     }

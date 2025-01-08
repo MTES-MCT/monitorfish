@@ -28,4 +28,6 @@ interface FleetSegmentRepository {
         currentYear: Int,
         nextYear: Int,
     )
+
+    fun findAllSegmentsGearsWithRequiredMesh(year: Int): List<String>
 }

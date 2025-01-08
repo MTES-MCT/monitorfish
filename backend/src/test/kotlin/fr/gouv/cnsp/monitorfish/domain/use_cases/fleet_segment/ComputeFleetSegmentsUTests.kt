@@ -32,7 +32,7 @@ class ComputeFleetSegmentsUTests {
     @Test
     fun `execute Should compute Lines segment`() {
         // Given
-        val paramSpeciesCatches =
+        val speciesCatches =
             listOf(
                 SpeciesCatchForSegmentCalculation(
                     mesh = null,
@@ -136,7 +136,7 @@ class ComputeFleetSegmentsUTests {
                 vesselRepository,
                 fixedClock,
             )
-                .execute(1, paramSpeciesCatches)
+                .execute(1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)
@@ -146,7 +146,7 @@ class ComputeFleetSegmentsUTests {
     @Test
     fun `execute Should compute T8-PEL segment`() {
         // Given
-        val paramSpeciesCatches =
+        val speciesCatches =
             listOf(
                 SpeciesCatchForSegmentCalculation(
                     mesh = 80.0,
@@ -186,7 +186,7 @@ class ComputeFleetSegmentsUTests {
                 vesselRepository,
                 fixedClock,
             )
-                .execute(1, paramSpeciesCatches)
+                .execute(1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)
@@ -196,7 +196,7 @@ class ComputeFleetSegmentsUTests {
     @Test
     fun `execute Should compute FT segment`() {
         // Given
-        val paramSpeciesCatches =
+        val speciesCatches =
             listOf(
                 SpeciesCatchForSegmentCalculation(
                     mesh = 90.0,
@@ -244,7 +244,7 @@ class ComputeFleetSegmentsUTests {
                 vesselRepository,
                 fixedClock,
             )
-                .execute(1, paramSpeciesCatches)
+                .execute(1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)
@@ -254,7 +254,7 @@ class ComputeFleetSegmentsUTests {
     @Test
     fun `execute Should compute T8-9 segment`() {
         // Given
-        val paramSpeciesCatches =
+        val speciesCatches =
             listOf(
                 SpeciesCatchForSegmentCalculation(
                     mesh = 90.0,
@@ -302,7 +302,7 @@ class ComputeFleetSegmentsUTests {
                 vesselRepository,
                 fixedClock,
             )
-                .execute(1, paramSpeciesCatches)
+                .execute(1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)
@@ -312,7 +312,7 @@ class ComputeFleetSegmentsUTests {
     @Test
     fun `execute Should compute L HKE segment`() {
         // Given
-        val paramSpeciesCatches =
+        val speciesCatches =
             listOf(
                 SpeciesCatchForSegmentCalculation(
                     mesh = null,
@@ -352,7 +352,57 @@ class ComputeFleetSegmentsUTests {
                 vesselRepository,
                 fixedClock,
             )
-                .execute(1, paramSpeciesCatches)
+                .execute(1, speciesCatches)
+
+        // Then
+        assertThat(fleetSegments).hasSize(1)
+        assertThat(fleetSegments[0].segment).isEqualTo("L HKE")
+    }
+
+    @Test
+    fun `execute Should compute PS BFT Prioritized segment`() {
+        // Given
+        val speciesCatches =
+            listOf(
+                SpeciesCatchForSegmentCalculation(
+                    mesh = null,
+                    weight = 50.0,
+                    gear = "PS",
+                    species = "BFT",
+                    faoArea = "27.8.a",
+                    scipSpeciesType = null,
+                ),
+                SpeciesCatchForSegmentCalculation(
+                    mesh = null,
+                    weight = 120.0,
+                    gear = "LLS",
+                    species = "HKE",
+                    faoArea = "27.8.a",
+                    scipSpeciesType = ScipSpeciesType.DEMERSAL,
+                ),
+            )
+        given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(fleetSegmentsForComputation)
+        given(vesselRepository.findVesselById(any())).willReturn(
+            Vessel(
+                id = 1,
+                internalReferenceNumber = "FR00022680",
+                vesselName = "MY AWESOME VESSEL",
+                flagState = CountryCode.FR,
+                declaredFishingGears = listOf("Trémails"),
+                vesselType = "Navire polyvalent",
+                districtCode = "AY",
+                hasLogbookEsacapt = false,
+            ),
+        )
+
+        // When
+        val fleetSegments =
+            ComputeFleetSegments(
+                fleetSegmentRepository,
+                vesselRepository,
+                fixedClock,
+            )
+                .execute(1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)

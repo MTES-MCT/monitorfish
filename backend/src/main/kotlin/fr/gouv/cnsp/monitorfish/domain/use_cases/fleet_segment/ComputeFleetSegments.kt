@@ -58,17 +58,29 @@ class ComputeFleetSegments(
                         /**
                          * minShareOfTargetSpecies
                          */
+                        val containsTargetSpecies =
+                            speciesCatches.any { summedSpecyCatch ->
+                                fleetSegment.targetSpecies.any { it == summedSpecyCatch.species }
+                            }
                         val sumOfTargetSpeciesWeight =
                             speciesCatches
                                 .filter { summedSpecyCatch ->
                                     fleetSegment.targetSpecies.any { it == summedSpecyCatch.species }
                                 }.sumOf { it.weight }
                         val shareOfTargetSpecies = sumOfTargetSpeciesWeight / totalSumOfSpeciesWeight
+
+                        // This condition is used to add "by hand" a fleet segment to a PNO or a control,
+                        // by adding a species with a 0.0 weight
+                        val hasZeroWeightTargetSpecies =
+                            containsTargetSpecies &&
+                                sumOfTargetSpeciesWeight == 0.0 &&
+                                fleetSegment.minShareOfTargetSpecies == 0.0
+
                         val hasMinShareOfTargetSpecies =
                             fleetSegment.minShareOfTargetSpecies == null ||
                                 fleetSegment.targetSpecies.isEmpty() ||
-                                shareOfTargetSpecies > fleetSegment.minShareOfTargetSpecies
-                        // TODO ajouter une condition sur le nombre d'espèces targetSpecies > 0 (pour gérer les BFT à 0kg)
+                                shareOfTargetSpecies > fleetSegment.minShareOfTargetSpecies ||
+                                hasZeroWeightTargetSpecies
 
                         /**
                          * gears
@@ -99,15 +111,6 @@ class ComputeFleetSegments(
                             fleetSegment.mainScipSpeciesType == null ||
                                 fleetSegment.mainScipSpeciesType == mainScipSpeciesType
 
-                        if (specyCatch.species == "PIL" && fleetSegment.segment == "T8-PEL") {
-                            logger.info(isContainingGearFromList.toString())
-                            logger.info(isContainingFaoAreaFromList.toString())
-                            logger.info(isMeshAboveMinMesh.toString())
-                            logger.info(isMeshBelowMaxMesh.toString())
-                            logger.info(hasRightVesselType.toString())
-                            logger.info(hasMainScipSpeciesType.toString())
-                            logger.info(hasMinShareOfTargetSpecies.toString())
-                        }
                         return@filter isContainingGearFromList &&
                             isContainingFaoAreaFromList &&
                             isMeshAboveMinMesh &&

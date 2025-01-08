@@ -28,6 +28,11 @@ class JpaFleetSegmentRepository(
         }
     }
 
+    @Cacheable(value = ["segments_with_gears_mesh_condition"])
+    override fun findAllSegmentsGearsWithRequiredMesh(year: Int): List<String> {
+        return dbFleetSegmentRepository.findAllSegmentsGearsHavingMinOrMaxMesh(year)
+    }
+
     @Transactional
     override fun update(
         segment: String,

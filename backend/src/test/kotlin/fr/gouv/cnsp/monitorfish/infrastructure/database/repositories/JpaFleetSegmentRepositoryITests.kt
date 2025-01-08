@@ -255,4 +255,20 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         val updatedFleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear + 1).sortedBy { it.segment }
         assertThat(updatedFleetSegments).hasSize(43)
     }
+
+    @Test
+    @Transactional
+    fun `findAllSegmentsGearsWithRequiredMesh Should return all gears having a min or max mesh`() {
+        // When
+        cacheManager.getCache("segments_with_gears_mesh_condition")?.clear()
+        val gears = jpaFleetSegmentRepository.findAllSegmentsGearsWithRequiredMesh(currentYear)
+
+        assertThat(gears).hasSize(26)
+        assertThat(gears).isEqualTo(
+            listOf(
+                "PTM", "GTN", "PTB", "GNF", "TBB", "TBS", "OTT", "TB", "SDN", "TM", "SSC", "OTM", "GTR", "GNC", "SX",
+                "TBN", "PT", "GN", "SV", "TX", "GEN", "SPR", "GNS", "OT", "TMS", "OTB",
+            ),
+        )
+    }
 }

@@ -15,7 +15,7 @@ data class FleetSegmentEntity(
     val segment: String,
     @Column(name = "segment_name")
     val segmentName: String,
-    @Column(name = "main_scip_species_type", nullable = true)
+    @Column(name = "main_scip_species_type", columnDefinition = "scip_species_type", nullable = true)
     val mainScipSpeciesType: String?,
     @Column(name = "priority", nullable = false)
     val priority: Double,
@@ -26,13 +26,13 @@ data class FleetSegmentEntity(
     @Column(name = "min_share_of_target_species", nullable = true)
     val minShareOfTargetSpecies: Double?,
     @Column(name = "vessel_types", columnDefinition = "varchar(15)[]")
-    val vesselTypes: List<String>,
+    val vesselTypes: List<String>?,
     @Column(name = "gears", columnDefinition = "varchar(3)[]")
-    val gears: List<String>,
+    val gears: List<String>?,
     @Column(name = "fao_areas", columnDefinition = "varchar(15)[]")
-    val faoAreas: List<String>,
+    val faoAreas: List<String>?,
     @Column(name = "target_species", columnDefinition = "varchar(3)[]")
-    val targetSpecies: List<String>,
+    val targetSpecies: List<String>?,
     @Column(name = "impact_risk_factor")
     val impactRiskFactor: Double,
     @Column(name = "year", nullable = false)
@@ -47,10 +47,10 @@ data class FleetSegmentEntity(
             minMesh = this.minMesh,
             minShareOfTargetSpecies = this.minShareOfTargetSpecies,
             priority = this.priority,
-            vesselTypes = this.vesselTypes,
-            gears = this.gears,
-            faoAreas = this.faoAreas,
-            targetSpecies = this.targetSpecies,
+            vesselTypes = this.vesselTypes ?: listOf(),
+            gears = this.gears ?: listOf(),
+            faoAreas = this.faoAreas ?: listOf(),
+            targetSpecies = this.targetSpecies ?: listOf(),
             impactRiskFactor = this.impactRiskFactor,
             year = this.year,
         )

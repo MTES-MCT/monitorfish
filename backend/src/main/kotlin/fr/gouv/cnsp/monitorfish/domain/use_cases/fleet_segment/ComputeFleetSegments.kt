@@ -32,65 +32,94 @@ class ComputeFleetSegments(
         val vesselType = vesselRepository.findVesselById(vesselId)?.vesselType
         val fleetSegments = fleetSegmentRepository.findAllByYear(currentYear)
 
-        val controlledPelagicSpeciesWeight = speciesCatches
-            .filter { speciesCatch ->
-                speciesCatch.scipSpeciesType == ScipSpeciesType.PELAGIC
-            }.sumOf { it.weight }
-        val controlledDemersalSpeciesWeight = speciesCatches
-            .filter { speciesCatch ->
-                speciesCatch.scipSpeciesType == ScipSpeciesType.DEMERSAL
-            }.sumOf { it.weight }
+        val controlledPelagicSpeciesWeight =
+            speciesCatches
+                .filter { speciesCatch ->
+                    speciesCatch.scipSpeciesType == ScipSpeciesType.PELAGIC
+                }.sumOf { it.weight }
+        val controlledDemersalSpeciesWeight =
+            speciesCatches
+                .filter { speciesCatch ->
+                    speciesCatch.scipSpeciesType == ScipSpeciesType.DEMERSAL
+                }.sumOf { it.weight }
         val totalSumOfSpeciesWeight = speciesCatches.sumOf { it.weight }
 
-        val mainScipSpeciesType = if (controlledPelagicSpeciesWeight > controlledDemersalSpeciesWeight)
-            ScipSpeciesType.PELAGIC
-        else
-            ScipSpeciesType.DEMERSAL
+        val mainScipSpeciesType =
+            if (controlledPelagicSpeciesWeight > controlledDemersalSpeciesWeight) {
+                ScipSpeciesType.PELAGIC
+            } else {
+                ScipSpeciesType.DEMERSAL
+            }
 
-        val speciesToSegments = speciesCatches.map { specyCatch ->
-            val computedSegment =
-                fleetSegments.filter { fleetSegment ->
-                    val sumOfTargetSpeciesWeight = speciesCatches
-                        .filter { summedSpecyCatch ->
-                            fleetSegment.targetSpecies.any { it == summedSpecyCatch.species }
-                        }.sumOf { it.weight }
-                    val shareOfTargetSpecies = sumOfTargetSpeciesWeight / totalSumOfSpeciesWeight
+        val speciesToSegments =
+            speciesCatches.map { specyCatch ->
+                val computedSegment =
+                    fleetSegments.filter { fleetSegment ->
+                        /**
+                         * minShareOfTargetSpecies
+                         */
+                        val sumOfTargetSpeciesWeight =
+                            speciesCatches
+                                .filter { summedSpecyCatch ->
+                                    fleetSegment.targetSpecies.any { it == summedSpecyCatch.species }
+                                }.sumOf { it.weight }
+                        val shareOfTargetSpecies = sumOfTargetSpeciesWeight / totalSumOfSpeciesWeight
+                        val hasMinShareOfTargetSpecies =
+                            fleetSegment.minShareOfTargetSpecies == null ||
+                                fleetSegment.targetSpecies.isEmpty() ||
+                                shareOfTargetSpecies > fleetSegment.minShareOfTargetSpecies
+                        // TODO ajouter une condition sur le nombre d'espèces targetSpecies > 0 (pour gérer les BFT à 0kg)
 
-                    val isContainingGearFromList =
-                        fleetSegment.gears.isEmpty() || fleetSegment.gears.any { gear -> gear == specyCatch.gear }
+                        /**
+                         * gears
+                         */
+                        val isContainingGearFromList =
+                            fleetSegment.gears.isEmpty() || fleetSegment.gears.any { gear -> gear == specyCatch.gear }
 
-                    val isContainingFaoAreaFromList =
-                        fleetSegment.faoAreas.isEmpty() ||
-                            fleetSegment.faoAreas.any { faoArea ->
-                                FaoArea(specyCatch.faoArea).hasFaoCodeIncludedIn(faoArea)
-                            }
+                        /**
+                         * faoAreas
+                         */
+                        val isContainingFaoAreaFromList =
+                            fleetSegment.faoAreas.isEmpty() ||
+                                fleetSegment.faoAreas.any { faoArea ->
+                                    FaoArea(specyCatch.faoArea).hasFaoCodeIncludedIn(faoArea)
+                                }
 
-                    val isMeshAboveMinMesh = fleetSegment.minMesh == null || (specyCatch.mesh != null && specyCatch.mesh >= fleetSegment.minMesh)
-                    val isMeshBelowMaxMesh = fleetSegment.maxMesh == null || (specyCatch.mesh != null && specyCatch.mesh < fleetSegment.maxMesh)
-                    val hasRightVesselType = fleetSegment.vesselTypes.isEmpty() || fleetSegment.vesselTypes.any { it == vesselType }
+                        /**
+                         * mesh
+                         */
+                        val isMeshAboveMinMesh =
+                            fleetSegment.minMesh == null || (specyCatch.mesh != null && specyCatch.mesh >= fleetSegment.minMesh)
+                        val isMeshBelowMaxMesh =
+                            fleetSegment.maxMesh == null || (specyCatch.mesh != null && specyCatch.mesh < fleetSegment.maxMesh)
+                        val hasRightVesselType =
+                            fleetSegment.vesselTypes.isEmpty() || fleetSegment.vesselTypes.any { it == vesselType }
 
-                    val hasMainScipSpeciesType = fleetSegment.mainScipSpeciesType == null ||
-                        fleetSegment.mainScipSpeciesType == mainScipSpeciesType
+                        val hasMainScipSpeciesType =
+                            fleetSegment.mainScipSpeciesType == null ||
+                                fleetSegment.mainScipSpeciesType == mainScipSpeciesType
 
-                    val hasMinShareOfTargetSpecies = fleetSegment.minShareOfTargetSpecies == null ||
-                        fleetSegment.targetSpecies.isEmpty() ||
-                        shareOfTargetSpecies > fleetSegment.minShareOfTargetSpecies
+                        if (specyCatch.species == "PIL" && fleetSegment.segment == "T8-PEL") {
+                            logger.info(isContainingGearFromList.toString())
+                            logger.info(isContainingFaoAreaFromList.toString())
+                            logger.info(isMeshAboveMinMesh.toString())
+                            logger.info(isMeshBelowMaxMesh.toString())
+                            logger.info(hasRightVesselType.toString())
+                            logger.info(hasMainScipSpeciesType.toString())
+                            logger.info(hasMinShareOfTargetSpecies.toString())
+                        }
+                        return@filter isContainingGearFromList &&
+                            isContainingFaoAreaFromList &&
+                            isMeshAboveMinMesh &&
+                            isMeshBelowMaxMesh &&
+                            hasRightVesselType &&
+                            hasMainScipSpeciesType &&
+                            hasMinShareOfTargetSpecies
+                    }.maxByOrNull { it.priority }
 
-                    return@filter isContainingGearFromList &&
-                        isContainingFaoAreaFromList &&
-                        isMeshAboveMinMesh &&
-                        isMeshBelowMaxMesh &&
-                        hasRightVesselType &&
-                        hasMainScipSpeciesType &&
-                        hasMinShareOfTargetSpecies
-                }
-                    .sortedByDescending { it.priority }
-                    .singleOrNull()
-
-            return@map Pair(specyCatch, computedSegment)
-        }
+                return@map Pair(specyCatch, computedSegment)
+            }
 
         return speciesToSegments.mapNotNull { it.second }.distinct()
     }
 }
-

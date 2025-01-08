@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
+import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.ScipSpeciesType
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.species.SpeciesAndSpeciesGroups
@@ -57,8 +58,21 @@ class DataReferentialControllerITests {
         // Given
         given(this.getAllSpeciesAndSpeciesGroups.execute()).willReturn(
             SpeciesAndSpeciesGroups(
-                listOf(Species("FAK", "Facochère")),
-                listOf(SpeciesGroup("FAKOKO", "Facochère group")),
+                species =
+                    listOf(
+                        Species(
+                            code = "FAK",
+                            name = "Facochère",
+                            scipSpeciesType = ScipSpeciesType.PELAGIC,
+                        ),
+                    ),
+                groups =
+                    listOf(
+                        SpeciesGroup(
+                            group = "FAKOKO",
+                            comment = "Facochère group",
+                        ),
+                    ),
             ),
         )
 

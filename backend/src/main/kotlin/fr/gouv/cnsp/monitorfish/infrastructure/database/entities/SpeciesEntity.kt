@@ -24,6 +24,6 @@ data class SpeciesEntity(
         Species(
             code = code,
             name = name,
-            scipSpeciesType = this.scipSpeciesType?.let { ScipSpeciesType.valueOf(it) }
+            scipSpeciesType = this.scipSpeciesType?.let { ScipSpeciesType.valueOf(it) },
         )
 }

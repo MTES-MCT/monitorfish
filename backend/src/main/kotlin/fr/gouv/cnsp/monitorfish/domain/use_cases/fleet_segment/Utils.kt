@@ -55,17 +55,17 @@ fun FaoArea.hasFaoCodeIncludedIn(faoCode: String?): Boolean {
     return this.faoCode.startsWith(faoCode)
 }
 
-// TODO Add tests
-fun getSpeciesCatchesForSegmentCalculation(faoAreas: List<String>,
-                                           gears: List<GearControl>,
-                                           species: List<SpeciesControl>,
-                                           allSpecies: List<Species>,
+fun getSpeciesCatchesForSegmentCalculation(
+    faoAreas: List<String>,
+    gears: List<GearControl>,
+    species: List<SpeciesControl>,
+    allSpecies: List<Species>,
 ): List<SpeciesCatchForSegmentCalculation> {
     return faoAreas.flatMap { faoArea ->
         gears.flatMap { gear ->
             species.map { specy ->
                 val scipSpeciesType = allSpecies.find { it.code == specy.speciesCode }?.scipSpeciesType
-                val mesh = gear.controlledMesh ?: gear.declaredMesh ?: 0.0
+                val mesh = gear.controlledMesh ?: gear.declaredMesh
                 val weight = specy.controlledWeight ?: specy.declaredWeight ?: 0.0
 
                 SpeciesCatchForSegmentCalculation(
@@ -74,17 +74,17 @@ fun getSpeciesCatchesForSegmentCalculation(faoAreas: List<String>,
                     gear = gear.gearCode,
                     species = specy.speciesCode,
                     faoArea = faoArea,
-                    scipSpeciesType = scipSpeciesType
+                    scipSpeciesType = scipSpeciesType,
                 )
             }
         }
     }
 }
 
-// TODO Add tests
-fun getSpeciesCatchesForSegmentCalculation(gearCodes: List<String>,
-                                           catches: List<LogbookFishingCatch>,
-                                           allSpecies: List<Species>,
+fun getSpeciesCatchesForSegmentCalculation(
+    gearCodes: List<String>,
+    catches: List<LogbookFishingCatch>,
+    allSpecies: List<Species>,
 ): List<SpeciesCatchForSegmentCalculation> {
     return gearCodes.flatMap { gearCode ->
         catches.map { specy ->
@@ -92,12 +92,13 @@ fun getSpeciesCatchesForSegmentCalculation(gearCodes: List<String>,
             val weight = specy.weight ?: 0.0
 
             SpeciesCatchForSegmentCalculation(
+                // TODO The mesh is not included in the manual PNO form
                 mesh = null,
                 weight = weight,
                 gear = gearCode,
                 species = specy.species,
                 faoArea = specy.faoZone!!, // A FAO area is always included
-                scipSpeciesType = scipSpeciesType
+                scipSpeciesType = scipSpeciesType,
             )
         }
     }

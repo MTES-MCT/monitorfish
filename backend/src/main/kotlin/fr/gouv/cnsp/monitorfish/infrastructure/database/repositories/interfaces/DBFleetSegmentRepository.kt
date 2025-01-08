@@ -6,6 +6,43 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
 interface DBFleetSegmentRepository : CrudRepository<FleetSegmentEntity, Long> {
+    @Modifying
+    @Query(
+        nativeQuery = true,
+        value = """
+        INSERT INTO fleet_segments (
+            segment,
+            segment_name,
+            main_scip_species_type,
+            priority,
+            max_mesh,
+            min_mesh,
+            min_share_of_target_species,
+            vessel_types,
+            gears,
+            fao_areas,
+            target_species,
+            impact_risk_factor,
+            year
+        ) VALUES (
+            :#{#fleetSegment.segment},
+            :#{#fleetSegment.segmentName},
+            CAST(:#{#fleetSegment.mainScipSpeciesType} AS scip_species_type),
+            :#{#fleetSegment.priority},
+            :#{#fleetSegment.maxMesh},
+            :#{#fleetSegment.minMesh},
+            :#{#fleetSegment.minShareOfTargetSpecies},
+            :#{#fleetSegment.vesselTypes},
+            :#{#fleetSegment.gears},
+            :#{#fleetSegment.faoAreas},
+            :#{#fleetSegment.targetSpecies},
+            :#{#fleetSegment.impactRiskFactor},
+            :#{#fleetSegment.year}
+        )
+        """,
+    )
+    fun saveFleetSegment(fleetSegment: FleetSegmentEntity)
+
     @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE fleet_segments SET segment = :nextSegment WHERE segment = :segment and year = :year",
@@ -25,6 +62,72 @@ interface DBFleetSegmentRepository : CrudRepository<FleetSegmentEntity, Long> {
     fun updateSegmentName(
         segment: String,
         segmentName: String,
+        year: Int,
+    )
+
+    @Modifying(clearAutomatically = true)
+    @Query(
+        value = "UPDATE fleet_segments SET main_scip_species_type = CAST(:mainScipSpeciesType AS scip_species_type) WHERE segment = :segment and year = :year",
+        nativeQuery = true,
+    )
+    fun updateMainScipSpeciesType(
+        segment: String,
+        mainScipSpeciesType: String,
+        year: Int,
+    )
+
+    @Modifying(clearAutomatically = true)
+    @Query(
+        value = "UPDATE fleet_segments SET priority = :priority WHERE segment = :segment and year = :year",
+        nativeQuery = true,
+    )
+    fun updatePriority(
+        segment: String,
+        priority: Double,
+        year: Int,
+    )
+
+    @Modifying(clearAutomatically = true)
+    @Query(
+        value = "UPDATE fleet_segments SET max_mesh = :maxMesh WHERE segment = :segment and year = :year",
+        nativeQuery = true,
+    )
+    fun updateMaxMesh(
+        segment: String,
+        maxMesh: Double,
+        year: Int,
+    )
+
+    @Modifying(clearAutomatically = true)
+    @Query(
+        value = "UPDATE fleet_segments SET min_mesh = :minMesh WHERE segment = :segment and year = :year",
+        nativeQuery = true,
+    )
+    fun updateMinMesh(
+        segment: String,
+        minMesh: Double,
+        year: Int,
+    )
+
+    @Modifying(clearAutomatically = true)
+    @Query(
+        value = "UPDATE fleet_segments SET min_share_of_target_species = :minShareOfTargetSpecies WHERE segment = :segment and year = :year",
+        nativeQuery = true,
+    )
+    fun updateMinShareOfTargetSpecies(
+        segment: String,
+        minShareOfTargetSpecies: Double,
+        year: Int,
+    )
+
+    @Modifying(clearAutomatically = true)
+    @Query(
+        value = "UPDATE fleet_segments SET vessel_types = :vesselTypes WHERE segment = :segment and year = :year",
+        nativeQuery = true,
+    )
+    fun updateVesselTypes(
+        segment: String,
+        vesselTypes: List<String>,
         year: Int,
     )
 
@@ -63,17 +166,6 @@ interface DBFleetSegmentRepository : CrudRepository<FleetSegmentEntity, Long> {
 
     @Modifying(clearAutomatically = true)
     @Query(
-        value = "UPDATE fleet_segments SET bycatch_species = cast(:bycatchSpecies AS varchar[]) WHERE segment = :segment and year = :year",
-        nativeQuery = true,
-    )
-    fun updateBycatchSpecies(
-        segment: String,
-        bycatchSpecies: String,
-        year: Int,
-    )
-
-    @Modifying(clearAutomatically = true)
-    @Query(
         value = "UPDATE fleet_segments SET impact_risk_factor = :impactRiskFactor WHERE segment = :segment and year = :year",
         nativeQuery = true,
     )
@@ -105,10 +197,12 @@ interface DBFleetSegmentRepository : CrudRepository<FleetSegmentEntity, Long> {
     @Modifying(clearAutomatically = true)
     @Query(
         value = """
-    INSERT INTO fleet_segments (segment, segment_name, dirm, gears, fao_areas, target_species, bycatch_species, impact_risk_factor, year)
-        SELECT segment, segment_name, dirm, gears, fao_areas, target_species, bycatch_species, impact_risk_factor, :nextYear
-        FROM fleet_segments AS old
-        WHERE old.year = :currentYear
+    INSERT INTO fleet_segments (segment, segment_name, main_scip_species_type, priority, max_mesh, min_mesh,
+        min_share_of_target_species, vessel_types, gears, fao_areas, target_species, impact_risk_factor, year)
+            SELECT segment, segment_name, main_scip_species_type, priority, max_mesh, min_mesh, min_share_of_target_species,
+                vessel_types, gears, fao_areas, target_species, impact_risk_factor, :nextYear
+            FROM fleet_segments AS old
+            WHERE old.year = :currentYear
     """,
         nativeQuery = true,
     )

@@ -51,8 +51,28 @@ class JpaFleetSegmentRepository(
                 dbFleetSegmentRepository.updateTargetSpecies(segment, it.toArrayString(), year)
             }
 
-            fields.bycatchSpecies?.let {
-                dbFleetSegmentRepository.updateBycatchSpecies(segment, it.toArrayString(), year)
+            fields.mainScipSpeciesType?.let {
+                dbFleetSegmentRepository.updateMainScipSpeciesType(segment, it.name, year)
+            }
+
+            fields.maxMesh?.let {
+                dbFleetSegmentRepository.updateMaxMesh(segment, it, year)
+            }
+
+            fields.minMesh?.let {
+                dbFleetSegmentRepository.updateMinMesh(segment, it, year)
+            }
+
+            fields.minShareOfTargetSpecies?.let {
+                dbFleetSegmentRepository.updateMinShareOfTargetSpecies(segment, it, year)
+            }
+
+            fields.priority?.let {
+                dbFleetSegmentRepository.updatePriority(segment, it, year)
+            }
+
+            fields.vesselTypes?.let {
+                dbFleetSegmentRepository.updateVesselTypes(segment, it, year)
             }
 
             fields.impactRiskFactor?.let {
@@ -89,8 +109,10 @@ class JpaFleetSegmentRepository(
     }
 
     @Transactional
-    override fun create(segment: FleetSegment): FleetSegment {
-        return dbFleetSegmentRepository.save(FleetSegmentEntity.fromFleetSegment(segment)).toFleetSegment()
+    override fun save(segment: FleetSegment): FleetSegment {
+        dbFleetSegmentRepository.saveFleetSegment(FleetSegmentEntity.fromFleetSegment(segment))
+
+        return dbFleetSegmentRepository.findBySegmentAndYearEquals(segment.segment, segment.year).toFleetSegment()
     }
 
     override fun findYearEntries(): List<Int> {

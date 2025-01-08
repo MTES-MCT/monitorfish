@@ -9,11 +9,19 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegment
 class CreateFleetSegment(private val fleetSegmentRepository: FleetSegmentRepository) {
     fun execute(fields: CreateOrUpdateFleetSegmentFields): FleetSegment {
         require(fields.segment != null) {
-            "Segment must be provided"
+            "`segment` must be provided"
         }
 
         require(fields.year != null) {
-            "Year must be provided"
+            "`year` must be provided"
+        }
+
+        require(fields.priority != null) {
+            "`priority` must be provided"
+        }
+
+        require(fields.vesselTypes != null) {
+            "`vesselTypes` must be provided"
         }
 
         val newSegment =
@@ -21,16 +29,20 @@ class CreateFleetSegment(private val fleetSegmentRepository: FleetSegmentReposit
                 FleetSegment(
                     segment = it.segment!!,
                     segmentName = it.segmentName ?: "",
-                    dirm = listOf(),
                     gears = it.gears ?: listOf(),
                     faoAreas = it.faoAreas ?: listOf(),
                     targetSpecies = it.targetSpecies ?: listOf(),
-                    bycatchSpecies = it.bycatchSpecies ?: listOf(),
                     impactRiskFactor = it.impactRiskFactor ?: 0.0,
                     year = it.year!!,
+                    mainScipSpeciesType = fields.mainScipSpeciesType,
+                    maxMesh = fields.maxMesh,
+                    minMesh = fields.minMesh,
+                    minShareOfTargetSpecies = fields.minShareOfTargetSpecies,
+                    priority = fields.priority,
+                    vesselTypes = fields.vesselTypes,
                 )
             }
 
-        return fleetSegmentRepository.create(newSegment)
+        return fleetSegmentRepository.save(newSegment)
     }
 }

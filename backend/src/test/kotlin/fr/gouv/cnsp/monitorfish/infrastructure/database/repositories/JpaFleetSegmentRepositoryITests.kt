@@ -43,7 +43,6 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
 
         assertThat(fleetSegments).hasSize(66)
         assertThat(fleetSegments.first().segment).isEqualTo("ATL01")
-        assertThat(fleetSegments.first().dirm).isEqualTo(listOf("MED", "SA", "NAMO", "MEMN"))
         assertThat(fleetSegments.first().gears).isEqualTo(
             listOf("OTM", "PTM"),
         )
@@ -153,17 +152,21 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         assertThat(fleetSegments).hasSize(66)
 
         // When
-        jpaFleetSegmentRepository.create(
+        jpaFleetSegmentRepository.save(
             FleetSegment(
                 segment = "SEGMENT1",
                 segmentName = "A NAME",
-                dirm = listOf(),
                 gears = listOf(),
                 faoAreas = listOf(),
                 targetSpecies = listOf(),
-                bycatchSpecies = listOf(),
                 impactRiskFactor = 2.3,
                 year = currentYear + 1,
+                mainScipSpeciesType = null,
+                maxMesh = null,
+                minMesh = null,
+                minShareOfTargetSpecies = null,
+                priority = 0.0,
+                vesselTypes = listOf(),
             ),
         )
 

@@ -31,7 +31,7 @@ class UpdateFleetSegmentUTests {
     @Test
     fun `execute Should update repository When a field is given`() {
         // Given
-        val fields = CreateOrUpdateFleetSegmentFields(bycatchSpecies = listOf("AMZ", "HKE"))
+        val fields = CreateOrUpdateFleetSegmentFields(targetSpecies = listOf("AMZ", "HKE"))
 
         // When
         UpdateFleetSegment(fleetSegmentRepository).execute("SEGMENT", fields, 2021)

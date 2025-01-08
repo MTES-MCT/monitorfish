@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 @Tag(name = "APIs for Fleet segments")
 class FleetSegmentController(
     private val getAllFleetSegmentsByYearByYear: GetAllFleetSegmentsByYear,
-    private val computeFleetSegmentsFromControl: ComputeFleetSegmentsFromControl
+    private val computeFleetSegmentsFromControl: ComputeFleetSegmentsFromControl,
 ) {
     @GetMapping("/{year}")
     @Operation(summary = "Get fleet segments")
@@ -34,11 +34,12 @@ class FleetSegmentController(
         @RequestBody
         computeFleetSegmentsDataInput: ComputeFleetSegmentsDataInput,
     ): List<FleetSegmentDataOutput> {
-        val fleetSegments = computeFleetSegmentsFromControl.execute(
-            computeFleetSegmentsDataInput.vesselId,
-            computeFleetSegmentsDataInput.faoAreas,
-            computeFleetSegmentsDataInput.gears.map { it.toGearControl() },
-            computeFleetSegmentsDataInput.species.map { it.toSpeciesControl() },
+        val fleetSegments =
+            computeFleetSegmentsFromControl.execute(
+                computeFleetSegmentsDataInput.vesselId,
+                computeFleetSegmentsDataInput.faoAreas,
+                computeFleetSegmentsDataInput.gears.map { it.toGearControl() },
+                computeFleetSegmentsDataInput.species.map { it.toSpeciesControl() },
             )
         return fleetSegments.map {
             FleetSegmentDataOutput.fromFleetSegment(it)

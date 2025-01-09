@@ -265,9 +265,8 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
 
         assertThat(gears).hasSize(26)
         assertThat(gears).isEqualTo(
-            listOf(
-                "PTM", "GTN", "PTB", "GNF", "TBB", "TBS", "OTT", "TB", "SDN", "TM", "SSC", "OTM", "GTR", "GNC", "SX",
-                "TBN", "PT", "GN", "SV", "TX", "GEN", "SPR", "GNS", "OT", "TMS", "OTB",
+            listOf("SV", "OTB", "TBB", "GTR", "PTB", "TMS", "OTT", "TM", "OTM", "GNC", "SX", "TBS", "SSC", "TBN",
+                "OT", "PTM", "TX", "SPR", "GNS", "TB", "SDN", "PT", "GN", "GEN", "GTN", "GNF",
             ),
         )
     }

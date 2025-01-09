@@ -133,7 +133,8 @@ export function FleetSegmentInput({
         marginRight: 0,
         marginTop: withinCell ? -8 : 5,
         paddingLeft: 5,
-        paddingRight: 10
+        paddingRight: 10,
+        width: 100
       }}
       type="text"
       value={value}
@@ -188,34 +189,6 @@ export function SegmentCellWithTitle({ dataKey, rowData, ...props }: SegmentCell
   )
 }
 
-type ExpandCellProps = Readonly<
-  Omit<InnerCellProps<any, any>, 'onChange' | 'rowData'> &
-    React.RefAttributes<HTMLDivElement> & {
-      expandedRowKeys: (number | string)[]
-      onChange: (rowData: any) => void
-      rowData?: any
-    }
->
-export function ExpandCell({ dataKey, expandedRowKeys, onChange, rowData, ...props }: ExpandCellProps) {
-  return (
-    <Cell
-      {...props}
-      onClick={() => {
-        onChange(rowData)
-      }}
-      style={{
-        background: THEME.color.gainsboro,
-        cursor: 'pointer',
-        fontSize: 19,
-        lineHeight: '13px',
-        width: 35
-      }}
-    >
-      {expandedRowKeys.some(key => key === rowData[rowKey]) ? '-' : '+'}
-    </Cell>
-  )
-}
-
 type RiskFactorCellProps = Readonly<
   Omit<InnerCellProps<any, any>, 'rowData'> & {
     expandedRowKeys?: (number | string)[]
@@ -226,7 +199,7 @@ type RiskFactorCellProps = Readonly<
 export function ImpactRiskFactorCell({ expandedRowKeys, onChange, rowData, ...props }: RiskFactorCellProps) {
   return (
     <Cell {...props} style={{ marginLeft: 13 }}>
-      <RiskFactorBox color={getRiskFactorColor(rowData.impactRiskFactor)} style={{ height: 8 }}>
+      <RiskFactorBox color={getRiskFactorColor(rowData.impactRiskFactor)}>
         {rowData.impactRiskFactor}
       </RiskFactorBox>
     </Cell>
@@ -258,46 +231,12 @@ const Wrapper = styled.div`
   }
 `
 
-export function renderTagPickerValue(items) {
-  return items.filter(tag => tag).map(tag => <Tag key={tag?.label}>{tag?.label}</Tag>)
-}
-
 const TagOnly = styled.div`
-  margin: -3px 0px 0px 0px;
+  margin-top: 7px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 `
-
-export const renderRowExpanded = rowData => (
-  <div
-    style={{
-      background: THEME.color.white,
-      padding: '0 20px 20px 40px'
-    }}
-  >
-    <Fields>
-      <TableBody>
-        <tr>
-          <Key>Engins</Key>
-          <Value>{rowData.gears?.join(', ') || <NoValue>-</NoValue>}</Value>
-        </tr>
-        <tr>
-          <Key>Zones FAO</Key>
-          <Value>{rowData.faoAreas?.join(', ') || <NoValue>-</NoValue>}</Value>
-        </tr>
-        <tr>
-          <Key>Espèces cibles</Key>
-          <Value>{rowData.targetSpecies?.join(', ') || <NoValue>-</NoValue>}</Value>
-        </tr>
-        <tr>
-          <Key>Prises accessoires</Key>
-          <Value>{rowData.bycatchSpecies?.join(', ') || <NoValue>-</NoValue>}</Value>
-        </tr>
-      </TableBody>
-    </Fields>
-  </div>
-)
 
 export function EditAndDeleteCell({ dataKey, id, onDelete, onEdit, ...props }) {
   const { rowData } = props
@@ -308,7 +247,7 @@ export function EditAndDeleteCell({ dataKey, id, onDelete, onEdit, ...props }) {
         accent={Accent.TERTIARY}
         data-cy={`edit-row-${rowData[id]}`}
         Icon={Icon.EditUnbordered}
-        iconSize={17}
+        iconSize={20}
         onClick={() => onEdit(rowData)}
         title="Editer la ligne"
       />
@@ -316,7 +255,8 @@ export function EditAndDeleteCell({ dataKey, id, onDelete, onEdit, ...props }) {
         accent={Accent.TERTIARY}
         data-cy={`delete-row-${rowData[id]}`}
         Icon={Icon.Delete}
-        iconSize={17}
+        iconSize={20}
+        style={{ marginLeft: 7 }}
         onClick={() => onDelete(rowData[id])}
         title="Supprimer la ligne"
       />
@@ -336,32 +276,10 @@ export function DeleteCell({ dataKey, id, onClick, ...props }) {
         iconSize={17}
         onClick={() => onClick(rowData[id], rowData[dataKey])}
         title="Supprimer la ligne"
+        style={{
+          margin: 8
+        }}
       />
     </Cell>
   )
 }
-
-const TableBody = styled.tbody``
-
-const Fields = styled.table`
-  text-align: left;
-`
-
-const Key = styled.th`
-  color: ${p => p.theme.color.slateGray};
-  font-size: 13px;
-  font-weight: normal;
-  line-height: 1.5;
-  width: 140px;
-`
-
-const Value = styled.td`
-  color: ${p => p.theme.color.gunMetal};
-  font-size: 13px;
-  font-weight: 500;
-`
-
-const NoValue = styled.span`
-  color: ${p => p.theme.color.slateGray};
-  font-weight: 300;
-`

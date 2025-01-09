@@ -25,7 +25,7 @@ data class FleetSegmentEntity(
     val minMesh: Double?,
     @Column(name = "min_share_of_target_species", nullable = true)
     val minShareOfTargetSpecies: Double?,
-    @Column(name = "vessel_types", columnDefinition = "varchar(15)[]")
+    @Column(name = "vessel_types", columnDefinition = "varchar[]")
     val vesselTypes: List<String>?,
     @Column(name = "gears", columnDefinition = "varchar(3)[]")
     val gears: List<String>?,

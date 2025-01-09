@@ -8,7 +8,7 @@ import { Table } from 'rsuite'
 import { getAllGearCodes } from '../../../../domain/use_cases/gearCode/getAllGearCodes'
 import { getAllSpecies } from '../../../../domain/use_cases/species/getAllSpecies'
 
-import type { FleetSegment, UpdateFleetSegment } from '@features/FleetSegment/types'
+import type { FleetSegment } from '@features/FleetSegment/types'
 import type { MainAppAsyncThunk } from '@store'
 
 const { Cell, Column, HeaderCell } = Table
@@ -17,7 +17,7 @@ type FleetSegmentsTableProps = Readonly<{
   faoAreas: string[]
   fleetSegments: FleetSegment[]
   onDeleteFleetSegment: (segment: string, year: number) => void
-  openEditFleetSegmentModal: (segment: string, year: number, nextFleetSegment: UpdateFleetSegment) => Promise<void>
+  openEditFleetSegmentModal: (fleetSegment: FleetSegment) => void
 }>
 export function FleetSegmentsTable({
   faoAreas,

@@ -13,7 +13,6 @@ import { RiskFactorBox } from '@features/Vessel/components/VesselSidebar/risk_fa
 import type { InnerCellProps } from 'rsuite-table/lib/Cell'
 
 const { Cell } = Table
-const rowKey = 'id'
 export const INPUT_TYPE = {
   DOUBLE: 'DOUBLE',
   INT: 'INT',

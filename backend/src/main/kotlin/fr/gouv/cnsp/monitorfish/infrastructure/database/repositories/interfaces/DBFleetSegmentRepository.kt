@@ -32,10 +32,10 @@ interface DBFleetSegmentRepository : CrudRepository<FleetSegmentEntity, Long> {
             :#{#fleetSegment.maxMesh},
             :#{#fleetSegment.minMesh},
             :#{#fleetSegment.minShareOfTargetSpecies},
-            :#{#fleetSegment.vesselTypes},
-            :#{#fleetSegment.gears},
-            :#{#fleetSegment.faoAreas},
-            :#{#fleetSegment.targetSpecies},
+            CAST(:#{#fleetSegment.vesselTypes} AS varchar[]),
+            CAST(:#{#fleetSegment.gears} AS varchar(3)[]),
+            CAST(:#{#fleetSegment.faoAreas} AS varchar(15)[]),
+            CAST(:#{#fleetSegment.targetSpecies} AS varchar(3)[]),
             :#{#fleetSegment.impactRiskFactor},
             :#{#fleetSegment.year}
         )

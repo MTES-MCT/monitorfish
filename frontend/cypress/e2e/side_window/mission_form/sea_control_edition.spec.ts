@@ -181,8 +181,8 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
           portLocode: null,
           segments: [
             {
-              segment: 'SWW01/02/03',
-              segmentName: 'Bottom trawls'
+              segment: 'SWW02',
+              segmentName: 'SWW02'
             }
           ],
           seizureAndDiversion: false,

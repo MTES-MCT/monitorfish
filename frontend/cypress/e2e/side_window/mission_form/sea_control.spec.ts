@@ -129,6 +129,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.fill('Ajouter un engin', 'OTB')
     cy.get('[name="gearOnboard[1].gearWasControlled"]').eq(1).click()
+    cy.get('[name="gearOnboard[1].declaredMesh"]').eq(1).type(50)
 
     // Espèces à bord
     cy.fill('Poids des espèces vérifiés', 'Oui')
@@ -218,7 +219,7 @@ context('Side Window > Mission Form > Sea Control', () => {
             {
               comments: null,
               controlledMesh: null,
-              declaredMesh: null,
+              declaredMesh: 50,
               gearCode: 'OTB',
               gearName: 'Chaluts de fond à panneaux',
               gearWasControlled: false,

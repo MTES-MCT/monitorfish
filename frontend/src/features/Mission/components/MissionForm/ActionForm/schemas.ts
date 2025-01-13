@@ -45,7 +45,22 @@ const actionDatetimeUtcValidator = string()
   })
 
 export const GearOnboardSchema = object({
-  gearWasControlled: boolean().required(HIDDEN_ERROR)
+  gearWasControlled: boolean().required(HIDDEN_ERROR),
+  declaredMesh: number().when(['gearCode', 'controlledMesh'], {
+    is: (gearCode, controlledMesh, context) => {
+      const { gears } = mainStore.getState().gear
+      const isMeshRequiredForSegment = gears.find(gear => gear.code === gearCode)
+      const declaredMesh = context?.parent?.declaredMesh
+
+      if (isMeshRequiredForSegment) {
+        return controlledMesh === undefined && declaredMesh === undefined
+      }
+
+      return false
+    },
+    then: schema => schema.required('Au moins un maillage déclaré ou contrôlé est requis pour cet engin.'),
+    otherwise: schema => schema.notRequired()
+  })
 })
 
 // -----------------------------------------------------------------------------

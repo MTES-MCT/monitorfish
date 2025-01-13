@@ -8,11 +8,12 @@ import {
   FormikNumberInput,
   FormikTextarea,
   Select,
-  SingleTag
+  SingleTag,
+  usePrevious
 } from '@mtes-mct/monitor-ui'
 import { useField, useFormikContext } from 'formik'
 import { append, remove as ramdaRemove } from 'ramda'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { CONTROL_CHECKS_AS_OPTIONS } from '../../constants'
@@ -31,9 +32,20 @@ type SpeciesFieldProps = Readonly<{
 export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const { values } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
+  const previousValue = usePrevious(input.value)
   const { updateSegments } = useGetMissionActionFormikUsecases()
 
   const getSpeciesApiQuery = useGetSpeciesQuery()
+
+  useEffect(() => {
+    if (input.value && input.value !== previousValue) {
+      updateSegments({
+        ...values,
+        speciesOnboard: input.value
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [input.value, previousValue])
 
   const speciesAsOptions: Array<Option<Specy>> = useMemo(
     () =>
@@ -86,10 +98,6 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     )
 
     helper.setValue(nextSpeciesOnboard)
-    updateSegments({
-      ...values,
-      speciesOnboard: nextSpeciesOnboard
-    })
   }
 
   const getSpecyNameFromSpecyCode = useCallback(
@@ -116,10 +124,6 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     const nextSpeciesOnboard = ramdaRemove(index, 1, input.value)
 
     helper.setValue(nextSpeciesOnboard)
-    updateSegments({
-      ...values,
-      speciesOnboard: nextSpeciesOnboard
-    })
   }
 
   if (!speciesAsOptions.length || !customSearch) {

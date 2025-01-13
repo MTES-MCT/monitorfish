@@ -82,7 +82,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
           otherComments: 'Commentaires post contrôle',
           otherInfractions: [],
           portLocode: null,
-          segments: [{ segment: 'PEL01', segmentName: 'Freezer Trawls - Mid water and mid water pair trawl' }],
+          segments: [{ segment: 'SWW04', segmentName: 'SWW04' }],
           seizureAndDiversion: false,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: 'NO',

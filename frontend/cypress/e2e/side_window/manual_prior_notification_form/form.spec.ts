@@ -361,7 +361,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         'updateManualPriorNotification'
       )
 
-      cy.fill('Engins utilisés', ['OTB', 'Trémails' /* (GTR) */], { index: 1 })
+      cy.fill('Engins utilisés', ['GN', 'Trémails' /* (GTR) */], { index: 1 })
       cy.fill('Zone globale de capture', '27.5.b')
 
       cy.wait('@computePriorNotification')

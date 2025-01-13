@@ -28,7 +28,7 @@ class JpaSpeciesRepositoryITests : AbstractDBTests() {
         // When
         val gears = jpaSpeciesRepository.findAll()
 
-        assertThat(gears).hasSize(12459)
+        assertThat(gears).hasSize(12460)
         assertThat(gears.first().code).isEqualTo("COD")
         assertThat(gears.first().name).isEqualTo("MORUE COMMUNE (CABILLAUD)")
     }

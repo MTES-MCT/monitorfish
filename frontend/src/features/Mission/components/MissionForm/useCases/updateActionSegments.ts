@@ -1,6 +1,5 @@
+import { computeFleetSegments } from '@features/FleetSegment/useCases/computeFleetSegments'
 import { MissionAction } from '@features/Mission/missionAction.types'
-
-import { computeFleetSegments } from '../../../../FleetSegment/useCases/computeFleetSegments'
 
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 import type { Option } from '@mtes-mct/monitor-ui'
@@ -16,8 +15,17 @@ export const updateActionSegments =
       return
     }
 
+    if (missionAction.vesselId === undefined) {
+      return
+    }
+
     const computedFleetSegments = await dispatch(
-      computeFleetSegments(missionAction.faoAreas, missionAction.gearOnboard, missionAction.speciesOnboard)
+      computeFleetSegments(
+        missionAction.faoAreas,
+        missionAction.gearOnboard,
+        missionAction.speciesOnboard,
+        missionAction.vesselId
+      )
     )
 
     const nextFleetSegments = fleetSegmentsAsOptions

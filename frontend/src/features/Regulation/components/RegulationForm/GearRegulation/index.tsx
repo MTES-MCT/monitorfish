@@ -43,13 +43,16 @@ export function GearRegulation() {
 
   // TODO Impossible to type and make this code safe as it is, should be refactored?
   const setGearRegulation = (subKey: any, value: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { isMeshRequiredForSegment, ...valueWithoutProperty } = value
+
     dispatch(
       regulationActions.updateProcessingRegulationByKeyAndSubKey({
         key: REGULATORY_REFERENCE_KEYS.GEAR_REGULATION as 'gearRegulation',
         // @ts-ignore
         subKey,
         // @ts-ignore
-        value
+        valueWithoutProperty
       })
     )
   }

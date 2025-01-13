@@ -26,9 +26,9 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.fill('Ajouter un engin', 'PTM')
 
     // Espèces à bord
-    cy.intercept('GET', 'bff/v1/fleet_segments/compute?faoAreas=27.8.a&gears=PTM&species=SPR').as('computeSegment')
+    cy.intercept('POST', 'bff/v1/fleet_segments/compute').as('computeFleetSegment')
     cy.fill('Ajouter une espèce', 'SPR')
-    cy.wait('@computeSegment')
+    cy.wait('@computeFleetSegment')
 
     cy.wait(500)
     // We need to wait for some time because there is a throttle on the form
@@ -105,7 +105,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
       .its('response.statusCode')
       .should('eq', 201)
 
-    cy.getDataCy('action-completion-status').contains('5 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('6 champs nécessaires aux statistiques à compléter')
   })
 
   it('Should modify the controlled vessel and updated the gears, species, faoAreas and segments fields', () => {
@@ -121,7 +121,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.get('*[data-cy="action-list-item"]').click()
     cy.wait(500)
 
-    cy.intercept('GET', 'bff/v1/fleet_segments/compute?faoAreas=27.8.b,27.8.c&gears=OTB&species=HKE,BLI').as(
+    cy.intercept('POST', 'bff/v1/fleet_segments/compute').as(
       'computeFleetSegments'
     )
     cy.get('input[placeholder="Rechercher un navire..."]').clear().type('phe')

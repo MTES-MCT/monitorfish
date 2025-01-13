@@ -1,7 +1,7 @@
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
 import _ from 'lodash'
 import { useCallback, useEffect } from 'react'
-import { MultiCascader, Radio, RadioGroup, type CheckboxProps } from 'rsuite'
+import { type CheckboxProps, MultiCascader, Radio, RadioGroup } from 'rsuite'
 import styled from 'styled-components'
 
 import { RegulatedGear } from './RegulatedGear'
@@ -112,7 +112,10 @@ export function RegulatedGears({
         } else if (currentRegulatedGears.includes(value)) {
           nextRegulatedGears[value] = { ...regulatedGears[value] }
         } else if (gearsByCode && gearsByCode[value]) {
-          nextRegulatedGears[value] = gearsByCode[value]
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { isMeshRequiredForSegment, ...valueWithoutProperty } = gearsByCode[value]
+
+          nextRegulatedGears[value] = valueWithoutProperty
         }
       })
 
@@ -154,14 +157,11 @@ export function RegulatedGears({
   }
 
   const setRegulatedGears = (key, value, gearCode) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { isMeshRequiredForSegment, ...valueWithoutProperty } = value
-
     const nextRegulatedGears = {
       ...regulatedGears,
       [gearCode]: {
         ...regulatedGears[gearCode],
-        [key]: valueWithoutProperty
+        [key]: value
       }
     }
 

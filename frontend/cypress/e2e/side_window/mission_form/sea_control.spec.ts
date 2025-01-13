@@ -128,8 +128,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('MIS : autres mesures et dispositifs', 'Autres mesures.')
 
     cy.fill('Ajouter un engin', 'OTB')
-    cy.get('[name="gearOnboard[1].gearWasControlled"]').eq(1).click()
-    cy.get('[name="gearOnboard[1].declaredMesh"]').eq(1).type('50')
+    cy.fill('Engin contrôlé', 'Non', { index: 1 })
+    cy.fill('Maillage déclaré', 50, { index: 1 })
 
     // Espèces à bord
     cy.fill('Poids des espèces vérifiés', 'Oui')

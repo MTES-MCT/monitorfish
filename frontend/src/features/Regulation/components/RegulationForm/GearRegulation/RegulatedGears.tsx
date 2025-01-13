@@ -154,11 +154,14 @@ export function RegulatedGears({
   }
 
   const setRegulatedGears = (key, value, gearCode) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { isMeshRequiredForSegment, ...valueWithoutProperty } = value
+
     const nextRegulatedGears = {
       ...regulatedGears,
       [gearCode]: {
         ...regulatedGears[gearCode],
-        [key]: value
+        [key]: valueWithoutProperty
       }
     }
 

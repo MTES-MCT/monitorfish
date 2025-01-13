@@ -118,7 +118,7 @@ export function GearsField() {
                 <StyledFieldGroup isInline>
                   <FormikNumberInput
                     isErrorMessageHidden
-                    isUndefinedWhenDisabled
+                    isRequired
                     label="Maillage déclaré"
                     name={`gearOnboard[${index}].declaredMesh`}
                   />

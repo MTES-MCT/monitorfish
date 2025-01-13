@@ -49,7 +49,7 @@ export const GearOnboardSchema = object({
   declaredMesh: number().when(['gearCode', 'controlledMesh'], {
     is: (gearCode, controlledMesh, context) => {
       const { gears } = mainStore.getState().gear
-      const isMeshRequiredForSegment = gears.find(gear => gear.code === gearCode)
+      const isMeshRequiredForSegment = gears.find(gear => gear.code === gearCode)?.isMeshRequiredForSegment
       const declaredMesh = context?.parent?.declaredMesh
 
       if (isMeshRequiredForSegment) {
@@ -60,7 +60,8 @@ export const GearOnboardSchema = object({
     },
     then: schema => schema.required('Au moins un maillage déclaré ou contrôlé est requis pour cet engin.'),
     otherwise: schema => schema.notRequired()
-  })
+  }),
+  controlledMesh: number()
 })
 
 // -----------------------------------------------------------------------------

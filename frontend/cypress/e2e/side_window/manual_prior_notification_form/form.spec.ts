@@ -300,11 +300,11 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.fill('Espèces à bord et à débarquer', 'MORUE COMMUNE')
     cy.fill('Poids (COD)', 5000)
 
-    cy.fill('Engins utilisés', ['OTB'], { index: 1 })
+    cy.fill('Engins utilisés', ['GN'], { index: 1 })
 
     cy.wait('@computePriorNotification')
     cy.getDataCy('VesselRiskFactor').contains('1.9').should('exist')
-    cy.get('.Element-Tag').contains('NWW01/02 – Trawl').should('exist')
+    cy.get('.Element-Tag').contains('NWW07 – NWW07').should('exist')
     cy.get('.Element-Tag').contains('Préavis type 1').should('exist')
     cy.get('.Element-Tag').contains('Préavis type 2').should('exist')
 
@@ -337,7 +337,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         globalFaoArea: '27.7.d',
         note: null,
         portLocode: 'FRVNE',
-        tripGearCodes: ['OTB']
+        tripGearCodes: ['GN']
       })
 
       // -----------------------------------------------------------------------
@@ -348,7 +348,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
       // TODO Check if we need to update the vessel risk factor in DB while saving a prior notification.
       // cy.getTableRowById(createdPriorNotification.reportId).getDataCy('VesselRiskFactor').contains('2')
-      cy.getTableRowById(createdPriorNotification.reportId).contains('NWW01/02')
+      cy.getTableRowById(createdPriorNotification.reportId).contains('NWW07')
       cy.getTableRowById(createdPriorNotification.reportId).contains('Préavis type 1')
       cy.getTableRowById(createdPriorNotification.reportId).contains('Préavis type 2')
 
@@ -361,13 +361,13 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         'updateManualPriorNotification'
       )
 
-      cy.fill('Engins utilisés', ['OTB', 'Chaluts de fond (non spécifiés)' /* (TB) */], { index: 1 })
+      cy.fill('Engins utilisés', ['OTB', 'Trémails' /* (GTR) */], { index: 1 })
       cy.fill('Zone globale de capture', '27.5.b')
 
       cy.wait('@computePriorNotification')
       cy.getDataCy('VesselRiskFactor').contains('1.9').should('exist')
-      cy.get('.Element-Tag').contains('NWW01/02 – Trawl').should('exist')
-      cy.get('.Element-Tag').contains('NWW03 – Deep water trawl ≥100 mm').should('exist')
+      cy.get('.Element-Tag').contains('NWW07 – NWW07').should('exist')
+      cy.get('.Element-Tag').contains('NWW08 – NWW08').should('exist')
       cy.get('.Element-Tag').contains('Préavis type 1').should('not.exist')
       cy.get('.Element-Tag').contains('Préavis type 2').should('not.exist')
 
@@ -380,7 +380,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
         const updatedPriorNotification = updateInterception.response.body
 
-        assert.includeMembers(updatedPriorNotification.tripGearCodes, ['OTB', 'TB'])
+        assert.includeMembers(updatedPriorNotification.tripGearCodes, ['GN', 'GTR'])
         assert.deepInclude(updatedPriorNotification, {
           ...omit(createdPriorNotification, ['tripGearCodes', 'updatedAt']),
           globalFaoArea: '27.5.b',
@@ -395,8 +395,8 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         openSideWindowPriorNotificationListAsSuperUser()
         cy.fill('Rechercher un navire', 'IN-ARÊTE-ABLE')
 
-        cy.getTableRowById(createdPriorNotification.reportId).contains('NWW01/02')
-        cy.getTableRowById(createdPriorNotification.reportId).contains('NWW03')
+        cy.getTableRowById(createdPriorNotification.reportId).contains('NWW07')
+        cy.getTableRowById(createdPriorNotification.reportId).contains('NWW08')
         cy.getTableRowById(createdPriorNotification.reportId).contains('Aucun type')
       })
     })

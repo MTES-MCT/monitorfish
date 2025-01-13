@@ -12,7 +12,7 @@ context('Vessel filters', () => {
     cy.get('*[data-cy="select-picker-menu-item-France"]').scrollIntoView().click()
     cy.wait(200)
     cy.get('*[data-cy="vessel-list-fleet-segment-filter"]').click({ force: true })
-    cy.get('*[data-cy^="select-picker-menu-item-NWW01/02"]').scrollIntoView().click()
+    cy.get('*[data-cy^="select-picker-menu-item-NWW01"]').scrollIntoView().click()
     cy.wait(200)
     cy.get('.rs-picker-search-input').eq(3).type('HKE{enter}')
 
@@ -28,7 +28,7 @@ context('Vessel filters', () => {
 
     cy.get('*[data-cy="vessel-filter-tag"]').eq(0).contains('France', { timeout: 10000 })
     cy.get('*[data-cy="vessel-filter-tag"]').eq(1).contains('HKE', { timeout: 10000 })
-    cy.get('*[data-cy="vessel-filter-tag"]').eq(2).contains('NWW01/02', { timeout: 10000 })
+    cy.get('*[data-cy="vessel-filter-tag"]').eq(2).contains('NWW01', { timeout: 10000 })
 
     // Then
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 18)

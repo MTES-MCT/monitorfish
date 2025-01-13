@@ -40,7 +40,7 @@ class ComputeManualPriorNotification(
         val vesselCfr = vessel.internalReferenceNumber
         val vesselFlagCountryCode = vessel.flagState
 
-        val speciesCatch = getSpeciesCatchesForSegmentCalculation(tripGearCodes, fishingCatches, species)
+        val speciesCatch = getSpeciesCatchesForSegmentCalculation(tripGearCodes, fishingCatchesWithFaoArea, species)
         val tripSegments = computeFleetSegments.execute(vessel.id, speciesCatch)
         val types = computePnoTypes.execute(fishingCatchesWithFaoArea, tripGearCodes, vesselFlagCountryCode)
         val vesselRiskFactor = computeRiskFactor.execute(portLocode, tripSegments, vesselCfr)

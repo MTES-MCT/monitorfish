@@ -1,7 +1,21 @@
+import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
+import { centerOnStation } from '@features/ControlUnit/useCases/centerOnStation'
+import { useGetStationsQuery } from '@features/Station/stationApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, getOptionsFromIdAndName, Icon, IconButton, MultiSelect, Select, TextInput } from '@mtes-mct/monitor-ui'
-import { useField } from 'formik'
+import {
+  Accent,
+  Button,
+  getOptionsFromIdAndName,
+  Icon,
+  IconButton,
+  MultiSelect,
+  Select,
+  Size,
+  TextInput
+} from '@mtes-mct/monitor-ui'
+import { displayedComponentActions } from 'domain/shared_slices/DisplayedComponent'
+import { useField, useFormikContext } from 'formik'
 import { sortBy, uniqBy } from 'lodash'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
@@ -48,7 +62,14 @@ export function ControlUnitSelect({
   onDelete
 }: ControlUnitSelectProps) {
   const selectedPath = useMainAppSelector(state => state.sideWindow.selectedPath)
+  const engagedControlUnit = useMainAppSelector(state => state.missionForm.engagedControlUnit)
+
+  const { data: stations } = useGetStationsQuery(undefined, RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS)
+
   const dispatch = useMainAppDispatch()
+
+  const { setFieldValue, values } = useFormikContext<MissionMainFormValues>()
+
   const [{ value }, ,] = useField<LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft>(
     `controlUnits.${index}`
   )
@@ -181,21 +202,46 @@ export function ControlUnitSelect({
     onDelete(index)
   }, [index, onDelete])
 
+  const zoomOnStation = () => {
+    const selectedControlUnit = allControlUnits?.find(controlUnit => controlUnit.id === value.id)
+    const stationsToHighlight = uniqBy(
+      stations?.filter(base =>
+        selectedControlUnit?.resources?.some(resource => base.controlUnitResourceIds.includes(resource.id))
+      ),
+      'id'
+    )
+    if (!selectedControlUnit) {
+      return
+    }
+    dispatch(
+      displayedComponentActions.setDisplayedComponents({
+        isStationLayerDisplayed: true
+      })
+    )
+    dispatch(centerOnStation(stationsToHighlight))
+  }
+
+  const addUnit = () => {
+    const nextControlUnits = [...values.controlUnits, INITIAL_MISSION_CONTROL_UNIT]
+
+    setFieldValue('controlUnits', nextControlUnits)
+  }
+
   return (
-    <Wrapper>
-      <UnitWrapper>
-        <Select
-          disabled={isLoading}
-          error={error?.administration}
-          isErrorMessageHidden
-          isRequired={index === 0}
-          label={`Administration ${index + 1}`}
-          name={`mission_control_unit_administration_${index}`}
-          onChange={handleAdministrationChange}
-          options={activeAndSelectedAdministrationAsOptions}
-          searchable
-          value={value.administration}
-        />
+    <UnitWrapper>
+      <Select
+        disabled={isLoading}
+        error={error?.administration}
+        isErrorMessageHidden
+        isRequired={index === 0}
+        label={`Administration ${index + 1}`}
+        name={`mission_control_unit_administration_${index}`}
+        onChange={handleAdministrationChange}
+        options={activeAndSelectedAdministrationAsOptions}
+        searchable
+        value={value.administration}
+      />
+      <SelectAndZoomContainer>
         <Select
           // TODO Investigate why updating `filteredNamesAsOptions` doesn't re-render the Select.
           key={JSON.stringify(filteredUnitsAsOptions)}
@@ -208,48 +254,61 @@ export function ControlUnitSelect({
           onChange={handleNameChange}
           options={filteredUnitsAsOptions}
           searchable
+          style={{ flex: 1 }}
           value={value.id}
         />
-        {!isEdition && <ControlUnitWarningMessage controlUnitIndex={index} missionId={missionId} />}
-        <MultiSelect
-          disabled={isLoading || !value.administration || !value.name}
-          isUndefinedWhenDisabled
-          label={`Moyen ${index + 1}`}
-          name={`mission_control_unit_resources_${index}`}
-          onChange={handleResourcesChange}
-          options={controlUnitResourcesAsOptions}
-          optionValueKey="id"
-          value={value.resources}
-        />
-        <TextInput
-          disabled={isLoading || !value.name}
-          label={`Contact de l’unité ${index + 1}`}
-          name={`mission_control_unit_contact_${index}`}
-          onChange={handleContactChange}
-          value={value.contact}
-        />
-      </UnitWrapper>
-
-      {index > 0 && (
-        <IconButton
+        <StyledIconButton
           accent={Accent.SECONDARY}
-          aria-label="Supprimer cette unité"
-          Icon={Icon.Delete}
-          onClick={handleDelete}
+          disabled={controlUnitResourcesAsOptions?.length === 0 || !value}
+          Icon={Icon.FocusZones}
+          onClick={zoomOnStation}
+          title={
+            controlUnitResourcesAsOptions?.length === 0 || !value.id
+              ? 'Cette unité n’a pas de moyens, donc pas de bases'
+              : 'Centrer la carte sur les bases de l’unité'
+          }
         />
-      )}
-    </Wrapper>
+      </SelectAndZoomContainer>
+      {!isEdition && <ControlUnitWarningMessage controlUnitIndex={index} missionId={missionId} />}
+      <MultiSelect
+        disabled={isLoading || !value.administration || !value.name}
+        isUndefinedWhenDisabled
+        label={`Moyen ${index + 1}`}
+        name={`mission_control_unit_resources_${index}`}
+        onChange={handleResourcesChange}
+        options={controlUnitResourcesAsOptions}
+        optionValueKey="id"
+        value={value.resources}
+      />
+      <TextInput
+        disabled={isLoading || !value.name}
+        label={`Contact de l’unité ${index + 1}`}
+        name={`mission_control_unit_contact_${index}`}
+        onChange={handleContactChange}
+        value={value.contact}
+      />
+      <Buttonscontainer>
+        {index > 0 && (
+          <StyledButton accent={Accent.SECONDARY} Icon={Icon.Delete} onClick={handleDelete} size={Size.SMALL}>
+            Supprimer l&apos;unité
+          </StyledButton>
+        )}
+        {values.controlUnits.length === index + 1 && (
+          <Button
+            accent={Accent.SECONDARY}
+            data-cy="add-other-control-unit"
+            disabled={!!engagedControlUnit}
+            Icon={Icon.Plus}
+            onClick={addUnit}
+            size={Size.SMALL}
+          >
+            Ajouter une autre unité
+          </Button>
+        )}
+      </Buttonscontainer>
+    </UnitWrapper>
   )
 }
-
-const Wrapper = styled.div`
-  align-items: flex-start;
-  display: flex;
-
-  > button {
-    margin: 22px 0 0 8px;
-  }
-`
 
 const UnitWrapper = styled.div`
   flex-grow: 1;
@@ -262,5 +321,23 @@ const UnitWrapper = styled.div`
 
   > div:not(:first-child) {
     margin-top: 8px;
+  }
+`
+const SelectAndZoomContainer = styled.div`
+  display: flex;
+  gap: 8px;
+`
+
+const StyledIconButton = styled(IconButton)`
+  align-self: end;
+`
+const Buttonscontainer = styled.div`
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+`
+const StyledButton = styled(Button)`
+  svg {
+    color: ${p => p.theme.color.maximumRed};
   }
 `

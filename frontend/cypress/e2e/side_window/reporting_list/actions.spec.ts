@@ -126,7 +126,7 @@ context('Side Window > Reporting List > Actions', () => {
     })
   })
 
-  it.only('A reporting Should be downloaded', () => {
+  it('A reporting Should be downloaded', () => {
     cy.cleanDownloadedFiles()
 
     // Given

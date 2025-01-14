@@ -374,7 +374,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
   })
 
   /**
-   * Non-regression test to prevent the modal to be showed when an action is created.
+   * Non-regression test to prevent the modal to be shown when an action is created.
    * The `isDirty` field was not reset after a POST request.
    */
   it('Should not show an unsaved modal confirmation When an action is created', () => {

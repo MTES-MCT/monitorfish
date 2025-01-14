@@ -129,9 +129,9 @@ class CaffeineConfiguration {
         val missionControlUnitsCache = buildMinutesCache(missionControlUnits, ticker, 120)
 
         // Ports
-        val portsCache = buildMinutesCache(ports, ticker, oneWeek)
-        val activePortsCache = buildMinutesCache(activePorts, ticker, oneDay)
-        val portCache = buildMinutesCache(port, ticker, oneWeek)
+        val portsCache = buildPermanentCache(ports)
+        val activePortsCache = buildPermanentCache(activePorts)
+        val portCache = buildPermanentCache(port)
 
         // Risk Factors
         val riskFactorCache = buildMinutesCache(riskFactor, ticker, 1)
@@ -241,6 +241,17 @@ class CaffeineConfiguration {
                 .expireAfterWrite(minutesToExpire.toLong(), TimeUnit.MINUTES)
                 .recordStats()
                 .ticker(ticker)
+                .build(),
+        )
+    }
+
+    private fun buildPermanentCache(
+        name: String,
+    ): CaffeineCache {
+        return CaffeineCache(
+            name,
+            Caffeine.newBuilder()
+                .recordStats()
                 .build(),
         )
     }

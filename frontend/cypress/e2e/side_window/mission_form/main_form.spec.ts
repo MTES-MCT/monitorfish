@@ -16,7 +16,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.get('label').contains('Administration 2').should('exist')
 
-    cy.clickButton('Supprimer cette unité')
+    cy.clickButton("Supprimer l'unité")
 
     cy.get('label').contains('Administration 2').should('not.exist')
   })

@@ -1,10 +1,11 @@
 from io import BytesIO
+from unittest.mock import patch
 
 import pandas as pd
 import pytest
 from prefect import task
 
-from src.pipeline.flows.ports import flow
+from src.pipeline.flows.ports import flow, invalidate_cache
 from src.read_query import read_query
 from tests.mocks import mock_check_flow_not_running, mock_update_resource
 
@@ -57,9 +58,18 @@ def mock_extract_local_ports() -> pd.DataFrame:
     return local_ports_data
 
 
+@task(checkpoint=False)
+def mock_invalidate_cache() -> pd.DataFrame:
+    with patch("src.pipeline.flows.ports.requests") as mock_requests:
+        invalidate_cache.run()
+
+    return mock_requests
+
+
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 flow.replace(flow.get_tasks("extract_local_ports")[0], mock_extract_local_ports)
 flow.replace(flow.get_tasks("update_resource")[0], mock_update_resource)
+flow.replace(flow.get_tasks("invalidate_cache")[0], mock_invalidate_cache)
 
 
 def test_flow(reset_test_data, expected_ports_open_data, expected_loaded_ports):
@@ -85,4 +95,10 @@ def test_flow(reset_test_data, expected_ports_open_data, expected_loaded_ports):
         df_from_csv_file_object.convert_dtypes(),
         expected_ports_open_data.convert_dtypes(),
         check_like=True,
+    )
+    mock_invalidate_cache_result = state.result[
+        flow.get_tasks("mock_invalidate_cache")[0]
+    ].result
+    mock_invalidate_cache_result.put.assert_called_once_with(
+        "https://monitor.fish/api/v1/ports/invalidate"
     )

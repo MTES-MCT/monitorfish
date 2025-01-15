@@ -10,10 +10,10 @@ from sqlalchemy import text
 from src.db_config import create_engine
 from src.pipeline.entities.missions import MissionActionType
 from src.pipeline.generic_tasks import extract
-from src.pipeline.helpers.segments import attribute_segments_to_catches
+from src.pipeline.helpers.segments import allocate_segments_to_catches
 from src.pipeline.processing import df_to_dict_series, prepare_df_for_loading
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
-from src.pipeline.shared_tasks.segments import extract_segments_of_year, unnest_segments
+from src.pipeline.shared_tasks.segments import extract_segments_of_year
 from src.pipeline.utils import psql_insert_copy
 
 
@@ -28,9 +28,6 @@ def extract_controls_catches(year: int, control_types: List[str]) -> pd.DataFram
     Returns:
         pd.DataFrame: DataFrame with controls data.
     """
-    parse_dates = ["action_datetime_utc"]
-    dtypes = {"id": "int"}
-
     try:
         assert isinstance(year, int)
     except AssertionError:
@@ -52,8 +49,6 @@ def extract_controls_catches(year: int, control_types: List[str]) -> pd.DataFram
     return extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/controls_catches.sql",
-        parse_dates=parse_dates,
-        dtypes=dtypes,
         params={"year": year, "control_types": tuple(control_types)},
     )
 
@@ -63,33 +58,38 @@ def compute_controls_segments(
     controls_catches: pd.DataFrame,
     segments: pd.DataFrame,
 ) -> pd.DataFrame:
-
-    controls_catches = controls_catches.where(controls_catches.notnull(), None)
     controls_segments = (
-        attribute_segments_to_catches(
+        allocate_segments_to_catches(
             controls_catches,
-            segments[["segment", "segment_name", "fao_area", "gear", "species"]],
-        )[["id", "segment", "segment_name"]]
+            segments,
+            catch_id_column="catch_id",
+            batch_id_column="control_id",
+        )[["control_id", "segment", "segment_name"]]
+        .dropna(subset=["control_id", "segment"])
         .drop_duplicates()
         .rename(columns={"segment_name": "segmentName"})
     )
+
     controls_segments["segment"] = df_to_dict_series(
         controls_segments[["segment", "segmentName"]]
     )
 
     controls_segments = (
-        controls_segments.groupby("id")[["segment", "segmentName"]]
+        controls_segments.groupby("control_id")["segment"]
         .agg(list)
+        .apply(lambda li: sorted(li, key=lambda s: s["segment"]))
         .reset_index()
-        .rename(columns={"segment": "segments"})[["id", "segments"]]
+        .rename(columns={"segment": "segments", "control_id": "id"})
     )
 
-    controls_without_segment = pd.DataFrame(
-        {"id": sorted(set(controls_catches.id) - set(controls_segments.id))}
+    control_ids_without_segment = pd.DataFrame(
+        {"id": sorted(set(controls_catches.control_id) - set(controls_segments.id))}
     )
-    controls_without_segment["segments"] = [list()] * len(controls_without_segment)
-    controls_segments = pd.concat([controls_segments, controls_without_segment])
-    controls_segments = controls_segments.reset_index(drop=True)
+    control_ids_without_segment["segments"] = [list()] * len(
+        control_ids_without_segment
+    )
+    controls_segments = pd.concat([controls_segments, control_ids_without_segment])
+    controls_segments = controls_segments.sort_values("id").reset_index(drop=True)
 
     return controls_segments
 
@@ -100,7 +100,6 @@ def load_controls_segments(controls_segments: pd.DataFrame):
 
     e = create_engine("monitorfish_remote")
     with e.begin() as connection:
-
         logger.info("Creating temporary table")
         connection.execute(
             text(
@@ -142,10 +141,8 @@ def load_controls_segments(controls_segments: pd.DataFrame):
 
 
 with Flow("Recompute controls segments", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         # Parameters
         year = Parameter("year")
         control_types = Parameter("control_types")
@@ -157,7 +154,6 @@ with Flow("Recompute controls segments", executor=LocalDaskExecutor()) as flow:
         segments = extract_segments_of_year(year=year)
 
         # Transform
-        segments = unnest_segments(segments)
         controls_segments = compute_controls_segments(controls_catches, segments)
 
         # Load

@@ -4,5 +4,6 @@ data class Gear(
     val code: String,
     val name: String,
     val category: String? = null,
-    var groupId: Int? = null,
+    val groupId: Int? = null,
+    val isMeshRequiredForSegment: Boolean? = null,
 )

@@ -1,24 +1,27 @@
+import type { Undefine } from '@mtes-mct/monitor-ui'
 import type { Float } from 'type-fest'
 
+export enum ScipSpeciesType {
+  DEMERSAL = 'DEMERSAL',
+  OTHER = 'OTHER',
+  PELAGIC = 'PELAGIC',
+  TUNA = 'TUNA'
+}
+
 export type FleetSegment = {
-  bycatchSpecies: string[] | undefined
   faoAreas: string[] | undefined
   gears: string[] | undefined
   impactRiskFactor: Float<number> | undefined
+  mainScipSpeciesType: ScipSpeciesType | undefined
+  maxMesh: number | undefined
+  minMesh: number | undefined
+  minShareOfTargetSpecies: number | undefined
+  priority: number
   segment: string
-  // TODO Can this be undefined?
   segmentName: string | undefined
   targetSpecies: string[] | undefined
+  vesselTypes: string[]
   year: number
 }
 
-export type UpdateFleetSegment = {
-  bycatchSpecies: string[] | undefined
-  faoAreas: string[] | undefined
-  gears: string[] | undefined
-  impactRiskFactor: Float<number> | undefined
-  segment: string | undefined
-  segmentName: string | undefined
-  targetSpecies: string[] | undefined
-  year: number | undefined
-}
+export type UpdateFleetSegment = Undefine<FleetSegment>

@@ -60,6 +60,7 @@ class CaffeineConfiguration {
     // Segments
     val currentSegments = "current_segments"
     val segmentsByYear = "segments_by_year"
+    val segmentsWithGearsMeshCondition = "segments_with_gears_mesh_condition"
 
     // Species
     val allSpecies = "all_species"
@@ -140,6 +141,7 @@ class CaffeineConfiguration {
         // Segments
         val currentSegmentsCache = buildMinutesCache(currentSegments, ticker, 1)
         val segmentsByYearCache = buildSecondsCache(segmentsByYear, ticker, 10)
+        val segmentsWithGearsMeshConditionCache = buildSecondsCache(segmentsWithGearsMeshCondition, ticker, 10)
 
         // Species
         val allSpeciesCache = buildMinutesCache(allSpecies, ticker, oneWeek)
@@ -183,6 +185,7 @@ class CaffeineConfiguration {
                 controlUnitsCache,
                 currentSegmentsCache,
                 segmentsByYearCache,
+                segmentsWithGearsMeshConditionCache,
                 districtCache,
                 faoAreasCache,
                 faoAreasSortedByUsageCache,

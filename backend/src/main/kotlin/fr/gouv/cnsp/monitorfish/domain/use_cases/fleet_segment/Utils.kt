@@ -1,6 +1,11 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment
 
 import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FaoArea
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearControl
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesControl
+import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.dtos.SpeciesCatchForSegmentCalculation
 
 /**
  * Filters the input sequence of FAO areas to keep only the smallest non overlapping areas.
@@ -48,4 +53,53 @@ fun FaoArea.hasFaoCodeIncludedIn(faoCode: String?): Boolean {
     }
 
     return this.faoCode.startsWith(faoCode)
+}
+
+fun getSpeciesCatchesForSegmentCalculation(
+    faoAreas: List<String>,
+    gears: List<GearControl>,
+    species: List<SpeciesControl>,
+    allSpecies: List<Species>,
+): List<SpeciesCatchForSegmentCalculation> {
+    return faoAreas.flatMap { faoArea ->
+        gears.flatMap { gear ->
+            species.map { specy ->
+                val scipSpeciesType = allSpecies.find { it.code == specy.speciesCode }?.scipSpeciesType
+                val mesh = gear.controlledMesh ?: gear.declaredMesh
+                val weight = specy.controlledWeight ?: specy.declaredWeight ?: 0.0
+
+                SpeciesCatchForSegmentCalculation(
+                    mesh = mesh,
+                    weight = weight,
+                    gear = gear.gearCode,
+                    species = specy.speciesCode,
+                    faoArea = faoArea,
+                    scipSpeciesType = scipSpeciesType,
+                )
+            }
+        }
+    }
+}
+
+fun getSpeciesCatchesForSegmentCalculation(
+    gearCodes: List<String>,
+    catches: List<LogbookFishingCatch>,
+    allSpecies: List<Species>,
+): List<SpeciesCatchForSegmentCalculation> {
+    return gearCodes.flatMap { gearCode ->
+        catches.map { specy ->
+            val scipSpeciesType = allSpecies.find { it.code == specy.species }?.scipSpeciesType
+            val weight = specy.weight ?: 0.0
+
+            SpeciesCatchForSegmentCalculation(
+                // TODO The mesh is not included in the manual PNO form
+                mesh = null,
+                weight = weight,
+                gear = gearCode,
+                species = specy.species,
+                faoArea = specy.faoZone!!, // A FAO area is always included
+                scipSpeciesType = scipSpeciesType,
+            )
+        }
+    }
 }

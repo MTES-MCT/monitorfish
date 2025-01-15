@@ -135,7 +135,7 @@ context('Side Window > Reporting List > Actions', () => {
     cy.wait(500)
     cy.getDataCy('side-window-reporting-tab').click()
 
-    // There should be one reporting either in SA or NAME sea front, depending of the previous
+    // There should be one reporting either in SA or NAME sea front, depending on the previous
     // Cypress test file runned by the CI
     cy.getDataCy('side-window-sub-menu-NAMO').then($number => {
       if ($number.text().includes('1')) {

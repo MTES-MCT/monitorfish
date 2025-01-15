@@ -154,7 +154,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         assertThat(jpaControlObjectivesRepository.findAllByYear(lastYear)).hasSize(62)
         val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(nextYear)
         assertThat(updatedControlObjectives).hasSize(62)
-        assertThat(updatedControlObjectives.first().id).isEqualTo(125)
+        assertThat(updatedControlObjectives.first().id).isEqualTo(144)
         assertThat(updatedControlObjectives.first().year).isEqualTo(nextYear)
     }
 }

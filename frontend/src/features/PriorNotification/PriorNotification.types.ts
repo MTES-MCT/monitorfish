@@ -1,5 +1,4 @@
 import { Logbook } from '@features/Logbook/Logbook.types'
-import { getOptionsFromLabelledEnum } from '@mtes-mct/monitor-ui'
 
 import type { Seafront } from '@constants/seafront'
 import type { Vessel } from '@features/Vessel/Vessel.types'
@@ -229,17 +228,9 @@ export namespace PriorNotification {
     PENDING_VERIFICATION: 'À vérifier (CNSP)',
     VERIFIED_AND_SENT: 'Vérifié et diffusé'
   }
-  export const STATE_LABELS_AS_OPTIONS = getOptionsFromLabelledEnum(STATE_LABEL, true)
 
   // ---------------------------------------------------------------------------
   // API
-
-  export type ApiLogbookComputeRequestData = {
-    isInVerificationScope: boolean
-    portLocode: string
-    segmentCodes: string[]
-    vesselId: number
-  }
 
   export type ApiManualComputeRequestData = Pick<
     ManualForm,

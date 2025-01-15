@@ -1,9 +1,17 @@
-SELECT 
+SELECT
+    year,
     segment,
     segment_name,
-    gears,
-    fao_areas,
-    target_species || bycatch_species as species,
+    COALESCE(gears, '{}'::VARCHAR[]) AS gears,
+    COALESCE(fao_areas, '{}'::VARCHAR[]) AS fao_areas,
+    min_mesh,
+    max_mesh,
+    COALESCE(target_species, '{}'::VARCHAR[]) AS target_species,
+    min_share_of_target_species,
+    main_scip_species_type,
+    priority,
+    COALESCE(vessel_types, '{}'::VARCHAR[]) AS vessel_types,
     impact_risk_factor
 FROM public.fleet_segments
 WHERE year = :year
+ORDER BY segment

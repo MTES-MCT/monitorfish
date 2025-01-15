@@ -1,33 +1,31 @@
 from datetime import datetime
 from pathlib import Path
 
-import geopandas as gpd
 import pandas as pd
 import prefect
-from prefect import Flow, case, task
+from prefect import Flow, Parameter, case, task
 from prefect.executors import LocalDaskExecutor
 
 from config import default_risk_factors
 from src.pipeline.generic_tasks import extract, load
-from src.pipeline.helpers.segments import attribute_segments_to_catches
+from src.pipeline.helpers.segments import allocate_segments_to_catches
 from src.pipeline.processing import df_to_dict_series
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.dates import get_current_year
-from src.pipeline.shared_tasks.facades import extract_facade_areas
-from src.pipeline.shared_tasks.infrastructure import get_table
-from src.pipeline.shared_tasks.segments import extract_segments_of_year, unnest_segments
-from src.pipeline.shared_tasks.vessels import add_vessel_id
+from src.pipeline.shared_tasks.segments import extract_segments_of_year
 
 
 @task(checkpoint=False)
-def extract_catches():
+def extract_current_catches(number_of_days: int) -> pd.DataFrame:
     return extract(
-        db_name="monitorfish_remote", query_filepath="monitorfish/current_catches.sql"
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/current_catches.sql",
+        params={"number_of_days": number_of_days},
     )
 
 
 @task(checkpoint=False)
-def extract_control_priorities():
+def extract_control_priorities() -> pd.DataFrame:
     return extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/control_priorities.sql",
@@ -40,62 +38,63 @@ def extract_last_positions():
     return extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/last_positions.sql",
-        backend="geopandas",
-        geom_col="geometry",
-        crs=4326,
     )
 
 
 @task(checkpoint=False)
-def compute_last_positions_facade(
-    last_positions: gpd.GeoDataFrame, facade_areas: gpd.GeoDataFrame
-) -> pd.DataFrame:
-
-    last_positions_facade_1 = gpd.sjoin(last_positions, facade_areas)[["cfr", "facade"]]
-
-    unassigned_last_positions = last_positions[
-        ~last_positions.cfr.isin(last_positions_facade_1.cfr)
-    ].copy(deep=True)
-
-    # Vessels that are not directly in a facade geometry are oftentimes vessels in a
-    # port, which facade geometries genereally do not encompass. In order to match
-    # these vessels to a nearby facade, we drawed a ~10km circle around them
-    # and attempt a spatial join on this buffered geometry.
-    unassigned_last_positions["geometry"] = unassigned_last_positions.buffer(0.1)
-
-    last_positions_facade_2 = gpd.sjoin(
-        unassigned_last_positions, facade_areas, how="left"
-    )[["cfr", "facade"]]
-
-    last_positions_facade_2 = last_positions_facade_2.drop_duplicates(subset=["cfr"])
-
-    last_positions_facade = pd.concat(
-        [last_positions_facade_1, last_positions_facade_2]
-    ).set_index("cfr")
-
-    return last_positions_facade
-
-
-@task(checkpoint=False)
-def compute_current_segments(catches, segments):
-
-    current_segments = attribute_segments_to_catches(
-        catches[["cfr", "gear", "fao_area", "species"]],
-        segments[
-            [
-                "segment",
-                "gear",
-                "fao_area",
-                "species",
-                "impact_risk_factor",
-            ]
-        ],
+def compute_current_segments(
+    current_catches, segments, last_positions, control_priorities
+):
+    segmented_catches = (
+        allocate_segments_to_catches(
+            current_catches[
+                [
+                    "catch_id",
+                    "cfr",
+                    "vessel_id",
+                    "year",
+                    "fao_area",
+                    "gear",
+                    "mesh",
+                    "species",
+                    "scip_species_type",
+                    "weight",
+                    "vessel_type",
+                    "ircs",
+                    "external_immatriculation",
+                    "last_logbook_message_datetime_utc",
+                    "departure_datetime_utc",
+                    "trip_number",
+                    "gear_onboard",
+                ]
+            ],
+            segments[
+                [
+                    "year",
+                    "segment",
+                    "segment_name",
+                    "gears",
+                    "fao_areas",
+                    "min_mesh",
+                    "max_mesh",
+                    "target_species",
+                    "min_share_of_target_species",
+                    "main_scip_species_type",
+                    "priority",
+                    "vessel_types",
+                    "impact_risk_factor",
+                ]
+            ],
+            catch_id_column="catch_id",
+            batch_id_column="cfr",
+        )
+        .dropna(subset=["segment"])
+        .reset_index(drop=True)
     )
 
     # Aggregate by vessel
-
     current_segments_impact = (
-        current_segments.sort_values("impact_risk_factor", ascending=False)
+        segmented_catches.sort_values("impact_risk_factor", ascending=False)
         .groupby("cfr")[["cfr", "segment", "impact_risk_factor"]]
         .head(1)
         .set_index("cfr")
@@ -107,10 +106,10 @@ def compute_current_segments(catches, segments):
     )
 
     current_segments = (
-        current_segments.groupby("cfr")["segment"].unique().rename("segments")
+        segmented_catches.groupby("cfr")["segment"].unique().rename("segments")
     )
 
-    total_catch_weight = catches.groupby("cfr")["weight"].sum()
+    total_catch_weight = current_catches.groupby("cfr")["weight"].sum()
     total_catch_weight = total_catch_weight.rename("total_weight_onboard")
 
     current_segments = pd.merge(
@@ -129,27 +128,15 @@ def compute_current_segments(catches, segments):
         how="outer",
     )
 
-    return current_segments
-
-
-@task(checkpoint=False)
-def compute_control_priorities(
-    current_segments: pd.DataFrame,
-    last_positions_facade: pd.DataFrame,
-    control_priorities: pd.DataFrame,
-) -> pd.DataFrame:
-
-    cfr_segment_facade = (
-        current_segments[["segments"]]
-        .join(last_positions_facade)
-        .explode("segments")
-        .rename(columns={"segments": "segment"})
-        .reset_index()
-        .dropna(subset=["segment", "facade"])
+    # Merge façade from last positions, then control priorities
+    segmented_catches_with_facade = pd.merge(
+        segmented_catches, last_positions, on="cfr", how="left"
     )
 
     control_priorities = (
-        pd.merge(cfr_segment_facade, control_priorities, on=["segment", "facade"])
+        pd.merge(
+            segmented_catches_with_facade, control_priorities, on=["segment", "facade"]
+        )
         .sort_values("control_priority_level", ascending=False)
         .groupby("cfr")[["cfr", "segment", "control_priority_level"]]
         .head(1)
@@ -161,25 +148,15 @@ def compute_control_priorities(
         )
     )
 
-    return control_priorities
-
-
-@task(checkpoint=False)
-def join(
-    catches: pd.DataFrame,
-    current_segments: pd.DataFrame,
-    control_priorities: pd.DataFrame,
-) -> pd.DataFrame:
-
     # Group catch data of each vessel in a list of dicts like
     # [{"gear": "DRB", "species": "SCE", "faoZone": "27.7", "weight": 156.2}, ...]
-    catch_columns = ["gear", "fao_area", "species", "weight"]
-    species_onboard = catches[catch_columns]
+    catch_columns = ["gear", "fao_area", "species", "mesh", "weight"]
+    species_onboard = current_catches[catch_columns]
     species_onboard = species_onboard.rename(columns={"fao_area": "faoZone"})
     species_onboard = df_to_dict_series(
         species_onboard.dropna(subset=["species"]), result_colname="species_onboard"
     )
-    species_onboard = catches[["cfr"]].join(species_onboard)
+    species_onboard = current_catches[["cfr"]].join(species_onboard)
     species_onboard = species_onboard.dropna(subset=["species_onboard"])
     species_onboard = species_onboard.groupby("cfr")["species_onboard"].apply(list)
 
@@ -189,13 +166,16 @@ def join(
         "cfr",
         "ircs",
         "external_immatriculation",
+        "vessel_id",
         "last_logbook_message_datetime_utc",
         "departure_datetime_utc",
         "trip_number",
         "gear_onboard",
     ]
 
-    last_logbook_report = catches[last_logbook_report_columns].groupby("cfr").head(1)
+    last_logbook_report = (
+        current_catches[last_logbook_report_columns].groupby("cfr").head(1)
+    )
     last_logbook_report = last_logbook_report.set_index("cfr")
 
     # Join departure, catches and segments information into a single table with 1 line
@@ -231,31 +211,20 @@ def load_current_segments(vessels_segments):  # pragma: no cover
 
 
 with Flow("Current segments", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         # Extract
+        number_of_days = Parameter("number_of_days", 90)
         current_year = get_current_year()
-        catches = extract_catches()
+        current_catches = extract_current_catches(number_of_days=number_of_days)
         last_positions = extract_last_positions()
         segments = extract_segments_of_year(current_year)
-        facade_areas = extract_facade_areas()
         control_priorities = extract_control_priorities()
 
-        vessels_table = get_table("vessels")
-
         # Transform
-        last_positions_facade = compute_last_positions_facade(
-            last_positions, facade_areas
+        current_segments = compute_current_segments(
+            current_catches, segments, last_positions, control_priorities
         )
-        segments = unnest_segments(segments)
-        current_segments = compute_current_segments(catches, segments)
-        control_priorities = compute_control_priorities(
-            current_segments, last_positions_facade, control_priorities
-        )
-        current_segments = join(catches, current_segments, control_priorities)
-        current_segments = add_vessel_id(current_segments, vessels_table)
 
         # Load
         load_current_segments(current_segments)

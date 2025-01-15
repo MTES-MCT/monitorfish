@@ -1,6 +1,9 @@
+from ast import literal_eval
+
 import pandas as pd
 import pytest
 
+from config import TEST_DATA_LOCATION
 from src.pipeline.entities.control_units import ControlUnit
 
 
@@ -331,3 +334,19 @@ def monitorenv_control_units() -> pd.DataFrame:
             phone_numbers=[],
         ),
     ]
+
+
+@pytest.fixture
+def segments_of_year() -> pd.DataFrame:
+    df = pd.read_csv(
+        TEST_DATA_LOCATION / "csv/segments.csv",
+        converters={
+            "gears": literal_eval,
+            "fao_areas": literal_eval,
+            "target_species": literal_eval,
+            "vessel_types": literal_eval,
+        },
+    )
+
+    df = df[df.year == 2050].reset_index(drop=True)
+    return df

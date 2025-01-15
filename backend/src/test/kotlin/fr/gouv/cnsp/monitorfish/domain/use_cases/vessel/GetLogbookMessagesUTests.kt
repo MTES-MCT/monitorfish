@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import com.nhaarman.mockitokotlin2.any
+import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.ScipSpeciesType
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
@@ -62,9 +63,9 @@ class GetLogbookMessagesUTests {
         )
         given(speciesRepository.findAll()).willReturn(
             listOf(
-                Species("TTV", "TORPILLE OCELLÉE"),
-                Species("SMV", "STOMIAS BREVIBARBATUS"),
-                Species("PNB", "CREVETTE ROYALE ROSE"),
+                Species(code = "TTV", name = "TORPILLE OCELLÉE", scipSpeciesType = ScipSpeciesType.PELAGIC),
+                Species(code = "SMV", name = "STOMIAS BREVIBARBATUS", scipSpeciesType = ScipSpeciesType.PELAGIC),
+                Species(code = "PNB", name = "CREVETTE ROYALE ROSE", scipSpeciesType = ScipSpeciesType.PELAGIC),
             ),
         )
 

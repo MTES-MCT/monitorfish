@@ -20,7 +20,7 @@ interface FleetSegmentRepository {
         year: Int,
     ): List<FleetSegment>
 
-    fun create(segment: FleetSegment): FleetSegment
+    fun save(segment: FleetSegment): FleetSegment
 
     fun findYearEntries(): List<Int>
 
@@ -28,4 +28,6 @@ interface FleetSegmentRepository {
         currentYear: Int,
         nextYear: Int,
     )
+
+    fun findAllSegmentsGearsWithRequiredMesh(year: Int): List<String>
 }

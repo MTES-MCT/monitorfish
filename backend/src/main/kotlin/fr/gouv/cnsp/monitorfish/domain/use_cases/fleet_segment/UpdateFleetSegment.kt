@@ -16,7 +16,6 @@ class UpdateFleetSegment(private val fleetSegmentRepository: FleetSegmentReposit
     ): FleetSegment {
         require(
             fields.segment != null ||
-                fields.bycatchSpecies != null ||
                 fields.segmentName != null ||
                 fields.faoAreas != null ||
                 fields.gears != null ||

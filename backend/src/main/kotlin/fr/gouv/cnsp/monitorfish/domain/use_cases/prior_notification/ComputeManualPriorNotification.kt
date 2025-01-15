@@ -4,11 +4,9 @@ import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
-import fr.gouv.cnsp.monitorfish.domain.repositories.PnoFleetSegmentSubscriptionRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PnoPortSubscriptionRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PnoVesselSubscriptionRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.ComputeFleetSegments
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.getSpeciesCatchesForSegmentCalculation
 
 @UseCase
 class ComputeManualPriorNotification(
@@ -16,6 +14,7 @@ class ComputeManualPriorNotification(
     private val pnoFleetSegmentSubscriptionRepository: PnoFleetSegmentSubscriptionRepository,
     private val pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository,
     private val vesselRepository: VesselRepository,
+    private val speciesRepository: SpeciesRepository,
     private val computeFleetSegments: ComputeFleetSegments,
     private val computePnoTypes: ComputePnoTypes,
     private val computeRiskFactor: ComputeRiskFactor,
@@ -29,16 +28,20 @@ class ComputeManualPriorNotification(
         vesselId: Int,
     ): ManualPriorNotificationComputedValues {
         val vessel = vesselRepository.findVesselById(vesselId)
+        requireNotNull(vessel) {
+            "The vessel $vesselId is not found."
+        }
 
-        val faoAreas = globalFaoArea?.let { listOf(globalFaoArea) } ?: fishingCatches.mapNotNull { it.faoZone }
+        val species = speciesRepository.findAll()
+
         val fishingCatchesWithFaoArea =
             globalFaoArea?.let { fishingCatches.map { it.copy(faoZone = globalFaoArea) } }
                 ?: fishingCatches
-        val specyCodes = fishingCatches.mapNotNull { it.species }
-        val vesselCfr = vessel?.internalReferenceNumber
-        val vesselFlagCountryCode = vessel?.flagState
+        val vesselCfr = vessel.internalReferenceNumber
+        val vesselFlagCountryCode = vessel.flagState
 
-        val tripSegments = computeFleetSegments.execute(faoAreas, tripGearCodes, specyCodes)
+        val speciesCatch = getSpeciesCatchesForSegmentCalculation(tripGearCodes, fishingCatchesWithFaoArea, species)
+        val tripSegments = computeFleetSegments.execute(vessel.id, speciesCatch)
         val types = computePnoTypes.execute(fishingCatchesWithFaoArea, tripGearCodes, vesselFlagCountryCode)
         val vesselRiskFactor = computeRiskFactor.execute(portLocode, tripSegments, vesselCfr)
 
@@ -52,7 +55,7 @@ class ComputeManualPriorNotification(
         val nextState = PriorNotification.getNextState(isInVerificationScope, isPartOfControlUnitSubscriptions)
 
         return ManualPriorNotificationComputedValues(
-            isVesselUnderCharter = vessel?.underCharter,
+            isVesselUnderCharter = vessel.underCharter,
             nextState,
             tripSegments,
             types,

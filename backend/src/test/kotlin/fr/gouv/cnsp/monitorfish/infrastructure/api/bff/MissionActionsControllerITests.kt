@@ -13,6 +13,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReport
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReports
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.GearControlDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions
@@ -226,11 +227,16 @@ class MissionActionsControllerITests {
         val newMission = TestUtils.getDummyMissionAction(dateTime).copy(flagState = CountryCode.UNDEFINED)
         given(updateMissionAction.execute(any(), any())).willReturn(newMission)
 
-        val gearControl = GearControl()
-        gearControl.declaredMesh = 60.0
-        gearControl.hasUncontrolledMesh = true
-        gearControl.gearCode = "OTB"
-        gearControl.gearWasControlled = false
+        val gearControl =
+            GearControlDataInput(
+                gearCode = "OTB",
+                gearName = null,
+                declaredMesh = 60.0,
+                controlledMesh = null,
+                hasUncontrolledMesh = true,
+                gearWasControlled = false,
+                comments = null,
+            )
         // When
         api.perform(
             put("/bff/v1/mission_actions/123")

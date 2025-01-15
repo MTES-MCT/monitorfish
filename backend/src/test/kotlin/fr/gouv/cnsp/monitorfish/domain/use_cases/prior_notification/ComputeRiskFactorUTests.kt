@@ -74,6 +74,12 @@ class ComputeRiskFactorUTests {
                     gears = listOf(),
                     faoAreas = listOf(),
                     targetSpecies = listOf(),
+                    mainScipSpeciesType = null,
+                    maxMesh = null,
+                    minMesh = null,
+                    minShareOfTargetSpecies = null,
+                    priority = 0.0,
+                    vesselTypes = listOf(),
                 ),
                 FleetSegment(
                     segment = "SW85",
@@ -83,6 +89,12 @@ class ComputeRiskFactorUTests {
                     gears = listOf(),
                     faoAreas = listOf(),
                     targetSpecies = listOf(),
+                    mainScipSpeciesType = null,
+                    maxMesh = null,
+                    minMesh = null,
+                    minShareOfTargetSpecies = null,
+                    priority = 0.0,
+                    vesselTypes = listOf(),
                 ),
             )
         val vesselCfr = "CFR"
@@ -122,6 +134,12 @@ class ComputeRiskFactorUTests {
                     gears = listOf(),
                     faoAreas = listOf(),
                     targetSpecies = listOf(),
+                    mainScipSpeciesType = null,
+                    maxMesh = null,
+                    minMesh = null,
+                    minShareOfTargetSpecies = null,
+                    priority = 0.0,
+                    vesselTypes = listOf(),
                 ),
             )
         val vesselCfr = "CFR"
@@ -162,6 +180,12 @@ class ComputeRiskFactorUTests {
                     gears = listOf(),
                     faoAreas = listOf(),
                     targetSpecies = listOf(),
+                    mainScipSpeciesType = null,
+                    maxMesh = null,
+                    minMesh = null,
+                    minShareOfTargetSpecies = null,
+                    priority = 0.0,
+                    vesselTypes = listOf(),
                 ),
             )
         val vesselCfr = "CFR"
@@ -228,6 +252,12 @@ class ComputeRiskFactorUTests {
                     gears = listOf(),
                     faoAreas = listOf(),
                     targetSpecies = listOf(),
+                    mainScipSpeciesType = null,
+                    maxMesh = null,
+                    minMesh = null,
+                    minShareOfTargetSpecies = null,
+                    priority = 0.0,
+                    vesselTypes = listOf(),
                 ),
                 FleetSegment(
                     segment = "NWW02",
@@ -237,6 +267,12 @@ class ComputeRiskFactorUTests {
                     gears = listOf(),
                     faoAreas = listOf(),
                     targetSpecies = listOf(),
+                    mainScipSpeciesType = null,
+                    maxMesh = null,
+                    minMesh = null,
+                    minShareOfTargetSpecies = null,
+                    priority = 0.0,
+                    vesselTypes = listOf(),
                 ),
             )
         val vesselCfr = "CFR"

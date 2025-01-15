@@ -14,7 +14,7 @@ from src.pipeline.flows.enrich_logbook import (
     compute_pno_types,
     extract_all_control_priorities,
     extract_control_anteriority,
-    extract_pno_species_and_gears,
+    extract_pno_catches,
     extract_pno_trips_period,
     extract_pno_types,
     flag_pnos_to_verify_and_send,
@@ -129,7 +129,7 @@ def expected_pno_types() -> pd.DataFrame:
 
 
 @pytest.fixture
-def sample_pno_species_and_gears() -> pd.DataFrame:
+def sample_pno_catches() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "logbook_reports_pno_id": [1, 2, 3, 4, 4, 4, 5, 5, 5, 6, 7, 8],
@@ -276,6 +276,8 @@ def sample_pno_species_and_gears() -> pd.DataFrame:
                 "Guadeloupe",
                 "Guadeloupe",
             ],
+            "vessel_type": ["Navire polyvalent"] * 12,
+            "scip_species_type": [None] * 12,
         }
     )
 
@@ -301,7 +303,7 @@ def sample_all_control_priorities() -> pd.DataFrame:
 
 
 @pytest.fixture
-def expected_pno_species_and_gears() -> pd.DataFrame:
+def expected_pno_catches() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "logbook_reports_pno_id": [13, 14],
@@ -321,6 +323,8 @@ def expected_pno_species_and_gears() -> pd.DataFrame:
             "flag_state": ["CYP", "CYP"],
             "locode": ["GBPHD", None],
             "facade": ["MEMN", None],
+            "vessel_type": [None, None],
+            "scip_species_type": ["DEMERSAL", None],
         }
     )
 
@@ -352,13 +356,19 @@ def segments() -> pd.DataFrame:
                 ["27.8", "27.9", "27.10"],
                 ["27.8", "27.9", "27.10"],
             ],
-            "species": [
+            "min_mesh": [50, None, 10, 50, 50],
+            "max_mesh": [150, None, 150, 150, 150],
+            "priority": [0.0, 1.0, 0.0, 0.0, 0.0],
+            "target_species": [
                 [],
                 ["HKE"],
                 [],
                 ["HKE", "COD"],
                 ["HKE", "COD"],
             ],
+            "min_share_of_target_species": [0.0, 0.0, 0.0, 0.0, 0.0],
+            "main_scip_species_type": [None, None, None, None, None],
+            "vessel_types": [[], [], [], [], []],
             "impact_risk_factor": [2.5, 2.8, 1.9, 3.5, 3.2],
         }
     )
@@ -496,7 +506,6 @@ def expected_computed_pno_segments() -> pd.DataFrame:
                 [{"segment": "SOTM", "segmentName": "Chaluts pélagiques"}],
                 [
                     {"segment": "SHKE27", "segmentName": "Merlu en zone 27"},
-                    {"segment": "SOTM", "segmentName": "Chaluts pélagiques"},
                 ],
                 [{"segment": "SOTM", "segmentName": "Chaluts pélagiques"}],
                 [{"segment": "NWW01", "segmentName": "Senne de plage"}],
@@ -517,7 +526,7 @@ def expected_computed_pno_segments() -> pd.DataFrame:
                 default_risk_factors["control_priority_level"],
                 2.3,
                 default_risk_factors["control_priority_level"],
-                2.1,
+                2.0,
                 2.4,
                 default_risk_factors["control_priority_level"],
             ],
@@ -810,7 +819,6 @@ def merged_pnos() -> pd.DataFrame:
                 [{"segment": "SOTM", "segmentName": "Chaluts pélagiques"}],
                 [
                     {"segment": "SHKE27", "segmentName": "Merlu en zone 27"},
-                    {"segment": "SOTM", "segmentName": "Chaluts pélagiques"},
                 ],
                 [{"segment": "SOTM", "segmentName": "Chaluts pélagiques"}],
                 [{"segment": "NWW01", "segmentName": "Senne de plage"}],
@@ -831,7 +839,7 @@ def merged_pnos() -> pd.DataFrame:
                 default_risk_factors["control_priority_level"],
                 2.3,
                 default_risk_factors["control_priority_level"],
-                2.1,
+                2.0,
                 2.4,
                 default_risk_factors["control_priority_level"],
             ],
@@ -850,7 +858,7 @@ def pnos_with_risk_factors(merged_pnos) -> pd.DataFrame:
             1.74110113,
             1.98943874,
             2.09127911,
-            2.90829063,
+            2.87303211,
             1.71949265,
             1.97958756,
         ]
@@ -900,8 +908,8 @@ def test_extract_pno_trips_period_when_no_pno_is_in_queried_period(reset_test_da
     assert trips_period is None
 
 
-def test_extract_pno_species_and_gears(reset_test_data, expected_pno_species_and_gears):
-    pno_species_and_gears = extract_pno_species_and_gears(
+def test_extract_pno_catches(reset_test_data, expected_pno_catches):
+    pno_catches = extract_pno_catches(
         pno_emission_period=Period(
             start=datetime(2020, 5, 6, 18, 30, 0), end=datetime(2020, 5, 6, 18, 50, 0)
         ),
@@ -912,10 +920,8 @@ def test_extract_pno_species_and_gears(reset_test_data, expected_pno_species_and
     )
 
     pd.testing.assert_frame_equal(
-        pno_species_and_gears.sort_values("logbook_reports_pno_id").reset_index(
-            drop=True
-        ),
-        expected_pno_species_and_gears,
+        pno_catches.sort_values("logbook_reports_pno_id").reset_index(drop=True),
+        expected_pno_catches,
     )
 
 
@@ -925,45 +931,43 @@ def test_extract_control_anteriority(reset_test_data, control_anteriority):
 
 
 def test_compute_pno_types(
-    expected_pno_types, sample_pno_species_and_gears, expected_computed_pno_types
+    expected_pno_types, sample_pno_catches, expected_computed_pno_types
 ):
-    res = compute_pno_types(sample_pno_species_and_gears, expected_pno_types)
+    res = compute_pno_types(sample_pno_catches, expected_pno_types)
     pd.testing.assert_frame_equal(res, expected_computed_pno_types)
 
 
 def test_compute_pno_types_with_empty_gears_list_only(
-    expected_pno_types, sample_pno_species_and_gears, expected_computed_pno_types
+    expected_pno_types, sample_pno_catches, expected_computed_pno_types
 ):
-    assert sample_pno_species_and_gears.loc[2, "trip_gears"] == []
-    res = compute_pno_types(sample_pno_species_and_gears.loc[[2]], expected_pno_types)
+    assert sample_pno_catches.loc[2, "trip_gears"] == []
+    res = compute_pno_types(sample_pno_catches.loc[[2]], expected_pno_types)
     pd.testing.assert_frame_equal(
         res, expected_computed_pno_types.loc[[2]].reset_index(drop=True)
     )
 
 
 def test_compute_pno_segments(
-    reset_test_data,
-    sample_pno_species_and_gears,
+    sample_pno_catches,
     segments,
     sample_all_control_priorities,
     expected_computed_pno_segments,
 ):
     res = compute_pno_segments(
-        sample_pno_species_and_gears, segments, sample_all_control_priorities
+        sample_pno_catches, segments, sample_all_control_priorities
     )
     pd.testing.assert_frame_equal(res, expected_computed_pno_segments)
 
 
 def test_compute_pno_segments_with_empty_gears_only(
-    reset_test_data,
-    sample_pno_species_and_gears,
+    sample_pno_catches,
     segments,
     sample_all_control_priorities,
     expected_computed_pno_segments,
 ):
-    assert sample_pno_species_and_gears.loc[2, "trip_gears"] == []
+    assert sample_pno_catches.loc[2, "trip_gears"] == []
     res = compute_pno_segments(
-        sample_pno_species_and_gears.loc[[2]], segments, sample_all_control_priorities
+        sample_pno_catches.loc[[2]], segments, sample_all_control_priorities
     )
     pd.testing.assert_frame_equal(
         res, expected_computed_pno_segments.loc[[2]].reset_index(drop=True)
@@ -1092,7 +1096,13 @@ def test_load_then_reset_logbook(
 
 def test_flow(reset_test_data):
     query = (
-        "SELECT id, enriched, trip_gears, value->'pnoTypes' AS pno_types, (value->>'riskFactor')::DOUBLE PRECISION AS risk_factor, trip_segments "
+        "SELECT "
+        "    id, "
+        "    enriched, "
+        "    trip_gears, "
+        "    value->'pnoTypes' AS pno_types, "
+        "    (value->>'riskFactor')::DOUBLE PRECISION AS risk_factor, "
+        "    trip_segments "
         "FROM logbook_reports "
         "WHERE "
         "   log_type = 'PNO' AND "

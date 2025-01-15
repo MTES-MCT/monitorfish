@@ -73,8 +73,8 @@ class GetPriorNotificationSubscribers(
     private fun filterPriorNotificationSubscribers(
         subscribers: List<PriorNotificationSubscriber>,
         filter: PriorNotificationSubscribersFilter,
-    ): List<PriorNotificationSubscriber> {
-        return subscribers.filter { subscriber ->
+    ): List<PriorNotificationSubscriber> =
+        subscribers.filter { subscriber ->
             val administrationIdMatches =
                 filter.administrationId?.let {
                     subscriber.controlUnit.administration.id == it
@@ -90,12 +90,14 @@ class GetPriorNotificationSubscribers(
                     val normalizedQuery = StringUtils.removeAccents(query).lowercase()
 
                     val controlUnitNameMatches =
-                        StringUtils.removeAccents(subscriber.controlUnit.name)
+                        StringUtils
+                            .removeAccents(subscriber.controlUnit.name)
                             .lowercase()
                             .contains(normalizedQuery)
 
                     val administrationNameMatches =
-                        StringUtils.removeAccents(subscriber.controlUnit.administration.name)
+                        StringUtils
+                            .removeAccents(subscriber.controlUnit.administration.name)
                             .lowercase()
                             .contains(normalizedQuery)
 
@@ -123,7 +125,6 @@ class GetPriorNotificationSubscribers(
 
             administrationIdMatches && portLocodeMatches && searchQueryMatches && withAtLeastOneSubscriptionMatches
         }
-    }
 
     private fun sortPriorNotificationSubscribers(
         subscribers: List<PriorNotificationSubscriber>,

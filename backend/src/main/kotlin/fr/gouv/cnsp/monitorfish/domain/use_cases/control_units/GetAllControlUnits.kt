@@ -8,7 +8,5 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.dtos.FullControlU
 class GetAllControlUnits(
     private val controlUnitsRepository: ControlUnitRepository,
 ) {
-    fun execute(): List<FullControlUnit> {
-        return controlUnitsRepository.findAll()
-    }
+    fun execute(): List<FullControlUnit> = controlUnitsRepository.findAll()
 }

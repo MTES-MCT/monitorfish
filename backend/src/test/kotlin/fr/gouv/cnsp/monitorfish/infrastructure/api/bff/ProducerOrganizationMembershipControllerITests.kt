@@ -45,7 +45,8 @@ class ProducerOrganizationMembershipControllerITests {
         whenever(getAllProducerOrganizationMemberships.execute()).thenReturn(memberships)
 
         // When Then
-        mockMvc.perform(get("/bff/v1/producer_organization_memberships"))
+        mockMvc
+            .perform(get("/bff/v1/producer_organization_memberships"))
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$[0].internalReferenceNumber").value("123"))
@@ -62,11 +63,11 @@ class ProducerOrganizationMembershipControllerITests {
             )
 
         // When Then
-        mockMvc.perform(
-            post("/bff/v1/producer_organization_memberships")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(memberships)),
-        )
-            .andExpect(status().isCreated)
+        mockMvc
+            .perform(
+                post("/bff/v1/producer_organization_memberships")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(memberships)),
+            ).andExpect(status().isCreated)
     }
 }

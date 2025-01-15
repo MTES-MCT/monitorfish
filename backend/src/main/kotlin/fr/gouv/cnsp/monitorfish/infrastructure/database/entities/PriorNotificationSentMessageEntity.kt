@@ -32,8 +32,8 @@ data class PriorNotificationSentMessageEntity(
     @Column(name = "success", nullable = false)
     val success: Boolean,
 ) {
-    fun toPriorNotificationSentMessage(): PriorNotificationSentMessage {
-        return PriorNotificationSentMessage(
+    fun toPriorNotificationSentMessage(): PriorNotificationSentMessage =
+        PriorNotificationSentMessage(
             id = id,
             communicationMeans = communicationMeans,
             dateTimeUtc = dateTimeUtc,
@@ -45,5 +45,4 @@ data class PriorNotificationSentMessageEntity(
             recipientOrganization = recipientOrganization,
             success = success,
         )
-    }
 }

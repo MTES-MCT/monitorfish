@@ -112,7 +112,8 @@ class VesselControllerITests {
                 estimatedCurrentLongitude = 48.2525,
                 speed = 1.8,
                 course = 180.0,
-                dateTime = farPastFixedDateTime, vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                dateTime = farPastFixedDateTime,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 gearOnboard =
                     listOf(
                         gear,
@@ -121,7 +122,8 @@ class VesselControllerITests {
         given(this.getLastPositions.execute()).willReturn(listOf(position))
 
         // When
-        api.perform(get("/bff/v1/vessels"))
+        api
+            .perform(get("/bff/v1/vessels"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$[0].vesselName", equalTo(position.vesselName)))
@@ -247,11 +249,12 @@ class VesselControllerITests {
         }
 
         // When
-        api.perform(
-            get(
-                "/bff/v1/vessels/find?vesselId=123&internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER",
-            ),
-        )
+        api
+            .perform(
+                get(
+                    "/bff/v1/vessels/find?vesselId=123&internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.vessel.declaredFishingGears[0]", equalTo("Trémails")))
@@ -298,11 +301,12 @@ class VesselControllerITests {
         }
 
         // When
-        api.perform(
-            get(
-                "/bff/v1/vessels/find?vesselId=&internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER",
-            ),
-        )
+        api
+            .perform(
+                get(
+                    "/bff/v1/vessels/find?vesselId=&internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER",
+                ),
+            )
             // Then
             .andExpect(status().isAccepted)
     }
@@ -324,12 +328,13 @@ class VesselControllerITests {
         }
 
         // When
-        api.perform(
-            get(
-                "/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123" +
-                    "&IRCS=IEF4&trackDepth=CUSTOM&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&afterDateTime=2021-03-24T22:07:00.000Z&beforeDateTime=2021-04-24T22:07:00.000Z",
-            ),
-        )
+        api
+            .perform(
+                get(
+                    "/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123" +
+                        "&IRCS=IEF4&trackDepth=CUSTOM&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&afterDateTime=2021-03-24T22:07:00.000Z&beforeDateTime=2021-04-24T22:07:00.000Z",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
 
@@ -421,11 +426,12 @@ class VesselControllerITests {
         }
 
         // When
-        api.perform(
-            get(
-                "/bff/v1/vessels/positions?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER",
-            ),
-        )
+        api
+            .perform(
+                get(
+                    "/bff/v1/vessels/positions?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(3)))
@@ -478,7 +484,8 @@ class VesselControllerITests {
         )
 
         // When
-        api.perform(get("/bff/v1/vessels/search?searched=VESSEL"))
+        api
+            .perform(get("/bff/v1/vessels/search?searched=VESSEL"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))
@@ -508,9 +515,12 @@ class VesselControllerITests {
         given(this.getVesselVoyage.execute(any(), any(), anyOrNull())).willReturn(voyage)
 
         // When
-        api.perform(
-            get("/bff/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=LAST&beforeDateTime="),
-        )
+        api
+            .perform(
+                get(
+                    "/bff/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=LAST&beforeDateTime=",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(6)))
@@ -526,8 +536,7 @@ class VesselControllerITests {
                     "$.logbookMessagesAndAlerts.logbookMessages[0].message.hauls[0].dimensions",
                     equalTo("150;120"),
                 ),
-            )
-            .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[1].messageType", equalTo("DEP")))
+            ).andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[1].messageType", equalTo("DEP")))
             .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[1].tripNumber", equalTo("345")))
             .andExpect(
                 jsonPath(
@@ -547,11 +556,12 @@ class VesselControllerITests {
         ).willThrow(BackendUsageException(BackendUsageErrorCode.NOT_FOUND_BUT_OK))
 
         // When
-        api.perform(
-            get(
-                "/bff/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=PREVIOUS&tripNumber=12345",
-            ),
-        )
+        api
+            .perform(
+                get(
+                    "/bff/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=PREVIOUS&tripNumber=12345",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.code", equalTo("NOT_FOUND_BUT_OK")))
@@ -594,58 +604,15 @@ class VesselControllerITests {
                 eq(123),
                 any(),
             ),
-        )
-            .willReturn(
-                VesselBeaconMalfunctionsResumeAndHistory(
-                    resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
-                    history =
-                        listOf(
-                            BeaconMalfunctionWithDetails(
-                                beaconMalfunction =
-                                    BeaconMalfunction(
-                                        id = 1,
-                                        internalReferenceNumber = "FR224226850",
-                                        externalReferenceNumber = "1236514",
-                                        ircs = "IRCS",
-                                        flagState = "fr",
-                                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                                        vesselName = "BIDUBULE",
-                                        vesselStatus = VesselStatus.AT_SEA,
-                                        stage = Stage.ARCHIVED,
-                                        malfunctionStartDateTime = ZonedDateTime.now(),
-                                        malfunctionEndDateTime = null,
-                                        vesselStatusLastModificationDateTime = ZonedDateTime.now(),
-                                        endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION,
-                                        beaconNumber = "123465",
-                                        beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
-                                        vesselId = 123,
-                                    ),
-                                comments =
-                                    listOf(
-                                        BeaconMalfunctionComment(
-                                            beaconMalfunctionId = 1,
-                                            comment = "A comment",
-                                            userType = BeaconMalfunctionCommentUserType.SIP,
-                                            dateTime = now,
-                                        ),
-                                    ),
-                                actions =
-                                    listOf(
-                                        BeaconMalfunctionAction(
-                                            beaconMalfunctionId = 1,
-                                            propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
-                                            nextValue = "A VALUE",
-                                            previousValue = "A VALUE",
-                                            dateTime = now,
-                                        ),
-                                    ),
-                            ),
-                        ),
-                    current =
+        ).willReturn(
+            VesselBeaconMalfunctionsResumeAndHistory(
+                resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
+                history =
+                    listOf(
                         BeaconMalfunctionWithDetails(
                             beaconMalfunction =
                                 BeaconMalfunction(
-                                    id = 2,
+                                    id = 1,
                                     internalReferenceNumber = "FR224226850",
                                     externalReferenceNumber = "1236514",
                                     ircs = "IRCS",
@@ -653,10 +620,11 @@ class VesselControllerITests {
                                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                                     vesselName = "BIDUBULE",
                                     vesselStatus = VesselStatus.AT_SEA,
-                                    stage = Stage.INITIAL_ENCOUNTER,
+                                    stage = Stage.ARCHIVED,
                                     malfunctionStartDateTime = ZonedDateTime.now(),
                                     malfunctionEndDateTime = null,
                                     vesselStatusLastModificationDateTime = ZonedDateTime.now(),
+                                    endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION,
                                     beaconNumber = "123465",
                                     beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                                     vesselId = 123,
@@ -681,15 +649,57 @@ class VesselControllerITests {
                                     ),
                                 ),
                         ),
-                ),
-            )
-
-        // When
-        api.perform(
-            get(
-                "/bff/v1/vessels/beacon_malfunctions?vesselId=123&afterDateTime=2021-03-24T22:07:00.000Z",
+                    ),
+                current =
+                    BeaconMalfunctionWithDetails(
+                        beaconMalfunction =
+                            BeaconMalfunction(
+                                id = 2,
+                                internalReferenceNumber = "FR224226850",
+                                externalReferenceNumber = "1236514",
+                                ircs = "IRCS",
+                                flagState = "fr",
+                                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                vesselName = "BIDUBULE",
+                                vesselStatus = VesselStatus.AT_SEA,
+                                stage = Stage.INITIAL_ENCOUNTER,
+                                malfunctionStartDateTime = ZonedDateTime.now(),
+                                malfunctionEndDateTime = null,
+                                vesselStatusLastModificationDateTime = ZonedDateTime.now(),
+                                beaconNumber = "123465",
+                                beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                                vesselId = 123,
+                            ),
+                        comments =
+                            listOf(
+                                BeaconMalfunctionComment(
+                                    beaconMalfunctionId = 1,
+                                    comment = "A comment",
+                                    userType = BeaconMalfunctionCommentUserType.SIP,
+                                    dateTime = now,
+                                ),
+                            ),
+                        actions =
+                            listOf(
+                                BeaconMalfunctionAction(
+                                    beaconMalfunctionId = 1,
+                                    propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
+                                    nextValue = "A VALUE",
+                                    previousValue = "A VALUE",
+                                    dateTime = now,
+                                ),
+                            ),
+                    ),
             ),
         )
+
+        // When
+        api
+            .perform(
+                get(
+                    "/bff/v1/vessels/beacon_malfunctions?vesselId=123&afterDateTime=2021-03-24T22:07:00.000Z",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.resume.numberOfBeaconsAtSea", equalTo(1)))
@@ -707,8 +717,7 @@ class VesselControllerITests {
                     "$.history[0].beaconMalfunction.endOfBeaconMalfunctionReason",
                     equalTo("RESUMED_TRANSMISSION"),
                 ),
-            )
-            .andExpect(jsonPath("$.history[0].actions[0].beaconMalfunctionId", equalTo(1)))
+            ).andExpect(jsonPath("$.history[0].actions[0].beaconMalfunctionId", equalTo(1)))
             .andExpect(jsonPath("$.history[0].actions[0].propertyName", equalTo("VESSEL_STATUS")))
             .andExpect(jsonPath("$.history[0].comments[0].beaconMalfunctionId", equalTo(1)))
             .andExpect(jsonPath("$.history[0].comments[0].comment", equalTo("A comment")))
@@ -765,62 +774,62 @@ class VesselControllerITests {
                 eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER),
                 any(),
             ),
-        )
-            .willReturn(
-                VesselReportings(
-                    summary =
-                        ReportingSummary(
-                            infractionSuspicionsSummary =
-                                listOf(
-                                    ReportingTitleAndNumberOfOccurrences(
-                                        title = "A title",
-                                        numberOfOccurrences = 2,
-                                    ),
-                                    ReportingTitleAndNumberOfOccurrences(
-                                        title = "A title",
-                                        numberOfOccurrences = 2,
-                                    ),
+        ).willReturn(
+            VesselReportings(
+                summary =
+                    ReportingSummary(
+                        infractionSuspicionsSummary =
+                            listOf(
+                                ReportingTitleAndNumberOfOccurrences(
+                                    title = "A title",
+                                    numberOfOccurrences = 2,
                                 ),
-                            numberOfInfractionSuspicions = 4,
-                            numberOfObservations = 5,
-                        ),
-                    current =
-                        listOf(
-                            ReportingAndOccurrences(
-                                otherOccurrencesOfSameAlert = listOf(),
-                                reporting = currentReporting,
-                                controlUnit = null,
-                            ),
-                            ReportingAndOccurrences(
-                                otherOccurrencesOfSameAlert = listOf(),
-                                reporting = currentReporting,
-                                controlUnit = null,
-                            ),
-                        ),
-                    archived =
-                        mapOf(
-                            2024 to
-                                listOf(
-                                    ReportingAndOccurrences(
-                                        otherOccurrencesOfSameAlert = listOf(),
-                                        reporting = archivedReporting,
-                                        controlUnit = null,
-                                    ),
+                                ReportingTitleAndNumberOfOccurrences(
+                                    title = "A title",
+                                    numberOfOccurrences = 2,
                                 ),
-                            2023 to emptyList(),
-                            2022 to emptyList(),
-                            2021 to emptyList(),
+                            ),
+                        numberOfInfractionSuspicions = 4,
+                        numberOfObservations = 5,
+                    ),
+                current =
+                    listOf(
+                        ReportingAndOccurrences(
+                            otherOccurrencesOfSameAlert = listOf(),
+                            reporting = currentReporting,
+                            controlUnit = null,
                         ),
-                ),
-            )
-
-        // When
-        api.perform(
-            get(
-                "/bff/v1/vessels/reportings?vesselId=123456&internalReferenceNumber=FR224226850" +
-                    "&externalReferenceNumber=123&ircs=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
+                        ReportingAndOccurrences(
+                            otherOccurrencesOfSameAlert = listOf(),
+                            reporting = currentReporting,
+                            controlUnit = null,
+                        ),
+                    ),
+                archived =
+                    mapOf(
+                        2024 to
+                            listOf(
+                                ReportingAndOccurrences(
+                                    otherOccurrencesOfSameAlert = listOf(),
+                                    reporting = archivedReporting,
+                                    controlUnit = null,
+                                ),
+                            ),
+                        2023 to emptyList(),
+                        2022 to emptyList(),
+                        2021 to emptyList(),
+                    ),
             ),
         )
+
+        // When
+        api
+            .perform(
+                get(
+                    "/bff/v1/vessels/reportings?vesselId=123456&internalReferenceNumber=FR224226850" +
+                        "&externalReferenceNumber=123&ircs=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.current.length()", equalTo(2)))
@@ -856,27 +865,27 @@ class VesselControllerITests {
                 eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER),
                 any(),
             ),
-        )
-            .willReturn(
-                VesselReportings(
-                    summary =
-                        ReportingSummary(
-                            infractionSuspicionsSummary = listOf(),
-                            numberOfInfractionSuspicions = 0,
-                            numberOfObservations = 0,
-                        ),
-                    current = listOf(),
-                    archived = mapOf(),
-                ),
-            )
-
-        // When
-        api.perform(
-            get(
-                "/bff/v1/vessels/reportings?vesselId=&internalReferenceNumber=FR224226850" +
-                    "&externalReferenceNumber=123&ircs=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
+        ).willReturn(
+            VesselReportings(
+                summary =
+                    ReportingSummary(
+                        infractionSuspicionsSummary = listOf(),
+                        numberOfInfractionSuspicions = 0,
+                        numberOfObservations = 0,
+                    ),
+                current = listOf(),
+                archived = mapOf(),
             ),
         )
+
+        // When
+        api
+            .perform(
+                get(
+                    "/bff/v1/vessels/reportings?vesselId=&internalReferenceNumber=FR224226850" +
+                        "&externalReferenceNumber=123&ircs=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
 
@@ -898,7 +907,8 @@ class VesselControllerITests {
         )
 
         // When
-        api.perform(get("/bff/v1/vessels/risk_factor?internalReferenceNumber=FR224226850"))
+        api
+            .perform(get("/bff/v1/vessels/risk_factor?internalReferenceNumber=FR224226850"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.impactRiskFactor", equalTo(1.0)))
@@ -913,7 +923,8 @@ class VesselControllerITests {
         given(this.getVesselRiskFactor.execute(any())).willThrow(IllegalArgumentException("Not found"))
 
         // When
-        api.perform(get("/bff/v1/vessels/risk_factor?internalReferenceNumber=FR224226850"))
+        api
+            .perform(get("/bff/v1/vessels/risk_factor?internalReferenceNumber=FR224226850"))
             // Then
             .andExpect(status().isBadRequest)
     }
@@ -924,9 +935,10 @@ class VesselControllerITests {
         given(this.getVesselLastTripNumbers.execute(any())).willReturn(listOf("2020000125", "2020000126", "2020000127"))
 
         // When
-        api.perform(
-            get("/bff/v1/vessels/logbook/last?internalReferenceNumber=FR224226850"),
-        )
+        api
+            .perform(
+                get("/bff/v1/vessels/logbook/last?internalReferenceNumber=FR224226850"),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(3)))

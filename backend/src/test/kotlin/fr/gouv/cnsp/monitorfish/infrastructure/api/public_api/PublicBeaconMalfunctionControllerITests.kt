@@ -49,10 +49,21 @@ class PublicBeaconMalfunctionControllerITests {
                 BeaconMalfunctionResumeAndDetails(
                     beaconMalfunction =
                         BeaconMalfunction(
-                            1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                            ZonedDateTime.now(), null, ZonedDateTime.now(),
-                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                            1,
+                            "CFR",
+                            "EXTERNAL_IMMAT",
+                            "IRCS",
+                            "fr",
+                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            "BIDUBULE",
+                            VesselStatus.AT_SEA,
+                            Stage.INITIAL_ENCOUNTER,
+                            ZonedDateTime.now(),
+                            null,
+                            ZonedDateTime.now(),
+                            beaconNumber = "123465",
+                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                            vesselId = 123,
                         ),
                     comments =
                         listOf(
@@ -79,15 +90,15 @@ class PublicBeaconMalfunctionControllerITests {
             )
 
         // When
-        api.perform(
-            put("/api/v1/beacon_malfunctions/123")
-                .content(
-                    objectMapper.writeValueAsString(
-                        UpdateBeaconMalfunctionDataInput(vesselStatus = VesselStatus.AT_SEA),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+        api
+            .perform(
+                put("/api/v1/beacon_malfunctions/123")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            UpdateBeaconMalfunctionDataInput(vesselStatus = VesselStatus.AT_SEA),
+                        ),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.comments.length()", equalTo(1)))
@@ -103,10 +114,13 @@ class PublicBeaconMalfunctionControllerITests {
             .willThrow(CouldNotUpdateBeaconMalfunctionException("FAIL"))
 
         // When
-        api.perform(
-            put("/api/v1/beacon_malfunctions/123", objectMapper.writeValueAsString(UpdateControlObjectiveDataInput()))
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+        api
+            .perform(
+                put(
+                    "/api/v1/beacon_malfunctions/123",
+                    objectMapper.writeValueAsString(UpdateControlObjectiveDataInput()),
+                ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isBadRequest)
     }
@@ -114,7 +128,8 @@ class PublicBeaconMalfunctionControllerITests {
     @Test
     fun `Should request a notification`() {
         // When
-        api.perform(put("/api/v1/beacon_malfunctions/123/MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION"))
+        api
+            .perform(put("/api/v1/beacon_malfunctions/123/MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION"))
             // Then
             .andExpect(status().isOk)
 
@@ -128,11 +143,12 @@ class PublicBeaconMalfunctionControllerITests {
     @Test
     fun `Should request a notification to a foreign fmc`() {
         // When
-        api.perform(
-            put(
-                "/api/v1/beacon_malfunctions/123/MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC?requestedNotificationForeignFmcCode=ABC",
-            ),
-        )
+        api
+            .perform(
+                put(
+                    "/api/v1/beacon_malfunctions/123/MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC?requestedNotificationForeignFmcCode=ABC",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
 

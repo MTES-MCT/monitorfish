@@ -75,8 +75,8 @@ class VesselLightController(
         @RequestParam(name = "beforeDateTime", required = false)
         @DateTimeFormat(pattern = zoneDateTimePattern)
         beforeDateTime: ZonedDateTime?,
-    ): ResponseEntity<VesselAndPositionsDataOutput> {
-        return runBlocking {
+    ): ResponseEntity<VesselAndPositionsDataOutput> =
+        runBlocking {
             val (vesselTrackHasBeenModified, vesselWithData) =
                 getVessel.execute(
                     vesselId,
@@ -93,7 +93,6 @@ class VesselLightController(
 
             ResponseEntity.status(returnCode).body(VesselAndPositionsDataOutput.fromVesselWithData(vesselWithData))
         }
-    }
 
     @GetMapping("/logbook/find")
     @Operation(summary = "Get vessel's Logbook messages")

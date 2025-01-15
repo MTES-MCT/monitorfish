@@ -38,13 +38,13 @@ class ComputeRiskFactor(
         val probabilityRiskFactor = storedRiskFactor?.probabilityRiskFactor ?: defaultProbabilityRiskFactor
         val controlRateRiskFactor = storedRiskFactor?.controlRateRiskFactor ?: defaultControlRateRiskFactor
         val highestControlPriorityLevel =
-            controlObjectivesRepository.findAllByYear(currentYear)
+            controlObjectivesRepository
+                .findAllByYear(currentYear)
                 .filter { controlObjective ->
                     !facade.isNullOrEmpty() &&
                         controlObjective.facade == facade &&
                         fleetSegments.map { it.segment }.contains(controlObjective.segment)
-                }
-                .maxByOrNull { it.controlPriorityLevel }
+                }.maxByOrNull { it.controlPriorityLevel }
                 ?.controlPriorityLevel ?: defaultControlPriorityLevel
 
         val computedRiskFactor =

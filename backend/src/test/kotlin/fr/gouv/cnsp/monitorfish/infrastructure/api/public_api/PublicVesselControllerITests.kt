@@ -2,17 +2,12 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.anyOrNull
-import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
-import org.mockito.BDDMockito
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
@@ -70,7 +65,8 @@ class PublicVesselControllerITests {
         )
 
         // When
-        api.perform(get("/api/v1/vessels/search?searched=VESSEL"))
+        api
+            .perform(get("/api/v1/vessels/search?searched=VESSEL"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))

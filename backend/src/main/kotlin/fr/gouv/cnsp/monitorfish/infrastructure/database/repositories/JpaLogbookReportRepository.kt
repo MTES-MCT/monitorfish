@@ -118,7 +118,8 @@ class JpaLogbookReportRepository(
     ): PriorNotification? {
         val logbookReport =
             dbLogbookReportRepository
-                .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(reportId, operationDate.toString()).firstOrNull()
+                .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(reportId, operationDate.toString())
+                .firstOrNull()
 
         return logbookReport?.let {
             val pno = PriorNotification.fromLogbookMessage(it.toLogbookMessage(objectMapper))
@@ -135,11 +136,12 @@ class JpaLogbookReportRepository(
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val lastTrip =
-                    dbLogbookReportRepository.findTripsBeforeDatetime(
-                        internalReferenceNumber,
-                        beforeDateTime.toInstant(),
-                        PageRequest.of(0, 1),
-                    ).first()
+                    dbLogbookReportRepository
+                        .findTripsBeforeDatetime(
+                            internalReferenceNumber,
+                            beforeDateTime.toInstant(),
+                            PageRequest.of(0, 1),
+                        ).first()
 
                 return VoyageDatesAndTripNumber(
                     lastTrip.tripNumber,
@@ -164,11 +166,13 @@ class JpaLogbookReportRepository(
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val previousTripNumber =
-                    dbLogbookReportRepository.findPreviousTripNumber(
-                        internalReferenceNumber,
-                        tripNumber,
-                        PageRequest.of(0, 1),
-                    ).first().tripNumber
+                    dbLogbookReportRepository
+                        .findPreviousTripNumber(
+                            internalReferenceNumber,
+                            tripNumber,
+                            PageRequest.of(0, 1),
+                        ).first()
+                        .tripNumber
                 val previousTrip =
                     dbLogbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
                         internalReferenceNumber,
@@ -230,11 +234,13 @@ class JpaLogbookReportRepository(
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val nextTripNumber =
-                    dbLogbookReportRepository.findNextTripNumber(
-                        internalReferenceNumber,
-                        tripNumber,
-                        PageRequest.of(0, 1),
-                    ).first().tripNumber
+                    dbLogbookReportRepository
+                        .findNextTripNumber(
+                            internalReferenceNumber,
+                            tripNumber,
+                            PageRequest.of(0, 1),
+                        ).first()
+                        .tripNumber
                 val nextTrip =
                     dbLogbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
                         internalReferenceNumber,
@@ -270,14 +276,15 @@ class JpaLogbookReportRepository(
     ): List<LogbookMessage> {
         try {
             if (internalReferenceNumber.isNotEmpty()) {
-                return dbLogbookReportRepository.findAllMessagesByTripNumberBetweenDates(
-                    internalReferenceNumber,
-                    afterDate.toInstant().toString(),
-                    beforeDate.toInstant().toString(),
-                    tripNumber,
-                ).map {
-                    it.toLogbookMessage(objectMapper)
-                }
+                return dbLogbookReportRepository
+                    .findAllMessagesByTripNumberBetweenDates(
+                        internalReferenceNumber,
+                        afterDate.toInstant().toString(),
+                        beforeDate.toInstant().toString(),
+                        tripNumber,
+                    ).map {
+                        it.toLogbookMessage(objectMapper)
+                    }
             }
 
             throw IllegalArgumentException("No CFR given to find the vessel.")
@@ -289,13 +296,11 @@ class JpaLogbookReportRepository(
     }
 
     @Cacheable(value = ["logbook_pno_types"])
-    override fun findDistinctPriorNotificationTypes(): List<String> {
-        return dbLogbookReportRepository.findDistinctPriorNotificationType() ?: emptyList()
-    }
+    override fun findDistinctPriorNotificationTypes(): List<String> =
+        dbLogbookReportRepository.findDistinctPriorNotificationType() ?: emptyList()
 
-    override fun findById(id: Long): LogbookMessage {
-        return dbLogbookReportRepository.findById(id).get().toLogbookMessage(objectMapper)
-    }
+    override fun findById(id: Long): LogbookMessage =
+        dbLogbookReportRepository.findById(id).get().toLogbookMessage(objectMapper)
 
     override fun findLastMessageDate(): ZonedDateTime {
         return try {
@@ -313,20 +318,22 @@ class JpaLogbookReportRepository(
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val lastTrip =
-                    dbLogbookReportRepository.findTripsBeforeDatetime(
-                        internalReferenceNumber,
-                        beforeDateTime.toInstant(),
-                        PageRequest.of(0, 1),
-                    ).first()
+                    dbLogbookReportRepository
+                        .findTripsBeforeDatetime(
+                            internalReferenceNumber,
+                            beforeDateTime.toInstant(),
+                            PageRequest.of(0, 1),
+                        ).first()
 
-                return dbLogbookReportRepository.findFirstAcknowledgedDateOfTrip(
-                    internalReferenceNumber = internalReferenceNumber,
-                    tripNumber = lastTrip.tripNumber,
-                    startDate = lastTrip.startDate,
-                    endDate = lastTrip.endDate,
-                ).atZone(
-                    UTC,
-                )
+                return dbLogbookReportRepository
+                    .findFirstAcknowledgedDateOfTrip(
+                        internalReferenceNumber = internalReferenceNumber,
+                        tripNumber = lastTrip.tripNumber,
+                        startDate = lastTrip.startDate,
+                        endDate = lastTrip.endDate,
+                    ).atZone(
+                        UTC,
+                    )
             }
 
             throw IllegalArgumentException("No CFR given to find the vessel.")
@@ -339,13 +346,11 @@ class JpaLogbookReportRepository(
         }
     }
 
-    override fun findLastThreeYearsTripNumbers(internalReferenceNumber: String): List<String> {
-        return dbLogbookReportRepository.findLastThreeYearsTripNumbers(internalReferenceNumber)
-    }
+    override fun findLastThreeYearsTripNumbers(internalReferenceNumber: String): List<String> =
+        dbLogbookReportRepository.findLastThreeYearsTripNumbers(internalReferenceNumber)
 
-    override fun findLastReportSoftware(internalReferenceNumber: String): String? {
-        return dbLogbookReportRepository.findLastReportSoftware(internalReferenceNumber)
-    }
+    override fun findLastReportSoftware(internalReferenceNumber: String): String? =
+        dbLogbookReportRepository.findLastReportSoftware(internalReferenceNumber)
 
     // For test purpose
     @Modifying
@@ -362,13 +367,12 @@ class JpaLogbookReportRepository(
 
     @Modifying
     @Transactional
-    override fun savePriorNotification(logbookMessageAndValue: LogbookMessageAndValue<PNO>): PriorNotification {
-        return PriorNotification.fromLogbookMessage(
+    override fun savePriorNotification(logbookMessageAndValue: LogbookMessageAndValue<PNO>): PriorNotification =
+        PriorNotification.fromLogbookMessage(
             dbLogbookReportRepository
                 .save(LogbookReportEntity.fromLogbookMessage(objectMapper, logbookMessageAndValue.logbookMessage))
                 .toLogbookMessage(objectMapper),
         )
-    }
 
     @Transactional
     @CacheEvict(value = ["pno_to_verify"], allEntries = true)

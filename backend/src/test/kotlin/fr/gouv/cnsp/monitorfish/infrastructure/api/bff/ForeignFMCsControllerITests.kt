@@ -37,7 +37,8 @@ class ForeignFMCsControllerITests {
         )
 
         // When
-        api.perform(get("/bff/v1/foreign_fmcs"))
+        api
+            .perform(get("/bff/v1/foreign_fmcs"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))

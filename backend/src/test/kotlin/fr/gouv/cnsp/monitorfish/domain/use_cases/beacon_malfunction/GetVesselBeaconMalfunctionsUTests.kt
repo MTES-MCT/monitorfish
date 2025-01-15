@@ -34,23 +34,44 @@ class GetVesselBeaconMalfunctionsUTests {
                 1,
                 now.minusYears(1),
             ),
-        )
-            .willReturn(
-                listOf(
-                    BeaconMalfunction(
-                        1, "FR224226850", "1236514", "IRCS",
-                        null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.ARCHIVED,
-                        ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1,
-                    ),
-                    BeaconMalfunction(
-                        2, "FR224226850", "1236514", "IRCS",
-                        null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                        ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1,
-                    ),
+        ).willReturn(
+            listOf(
+                BeaconMalfunction(
+                    1,
+                    "FR224226850",
+                    "1236514",
+                    "IRCS",
+                    null,
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    "BIDUBULE",
+                    VesselStatus.AT_SEA,
+                    Stage.ARCHIVED,
+                    ZonedDateTime.now(),
+                    null,
+                    ZonedDateTime.now(),
+                    beaconNumber = "123465",
+                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                    vesselId = 1,
                 ),
-            )
+                BeaconMalfunction(
+                    2,
+                    "FR224226850",
+                    "1236514",
+                    "IRCS",
+                    null,
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    "BIDUBULE",
+                    VesselStatus.AT_SEA,
+                    Stage.INITIAL_ENCOUNTER,
+                    ZonedDateTime.now(),
+                    null,
+                    ZonedDateTime.now(),
+                    beaconNumber = "123465",
+                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                    vesselId = 1,
+                ),
+            ),
+        )
         given(beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(1)).willReturn(
             listOf(
                 BeaconMalfunctionComment(
@@ -79,12 +100,15 @@ class GetVesselBeaconMalfunctionsUTests {
                 beaconMalfunctionsRepository,
                 beaconMalfunctionCommentsRepository,
                 beaconMalfunctionActionsRepository,
-            )
-                .execute(1, now.minusYears(1))
+            ).execute(1, now.minusYears(1))
 
         // Then
         assertThat(enrichedBeaconMalfunctions.history).hasSize(1)
-        assertThat(enrichedBeaconMalfunctions.history.first().beaconMalfunction.id).isEqualTo(1)
+        assertThat(
+            enrichedBeaconMalfunctions.history
+                .first()
+                .beaconMalfunction.id,
+        ).isEqualTo(1)
         assertThat(enrichedBeaconMalfunctions.history.first().actions).hasSize(1)
         assertThat(enrichedBeaconMalfunctions.history.first().comments).hasSize(1)
         assertThat(enrichedBeaconMalfunctions.current?.beaconMalfunction?.id).isEqualTo(2)

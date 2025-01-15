@@ -8,7 +8,9 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaBeaconRepository(private val dbBeaconRepository: DBBeaconRepository) : BeaconRepository {
+class JpaBeaconRepository(
+    private val dbBeaconRepository: DBBeaconRepository,
+) : BeaconRepository {
     @Cacheable(value = ["search_beacons"])
     override fun search(searched: String): List<Beacon> {
         if (searched.isEmpty()) {
@@ -27,7 +29,5 @@ class JpaBeaconRepository(private val dbBeaconRepository: DBBeaconRepository) : 
         }
     }
 
-    override fun findActivatedBeaconNumbers(): List<String> {
-        return dbBeaconRepository.findActivatedBeaconNumbers()
-    }
+    override fun findActivatedBeaconNumbers(): List<String> = dbBeaconRepository.findActivatedBeaconNumbers()
 }

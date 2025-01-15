@@ -10,7 +10,7 @@ import fr.gouv.cnsp.monitorfish.utils.ZonedDateTimeSerializer
 import java.time.ZonedDateTime
 
 // TODO Rename to `LogbookMessageValueForPno`.
-class PNO() : LogbookMessageValue {
+class PNO : LogbookMessageValue {
     var hasPortEntranceAuthorization: Boolean? = null
     var hasPortLandingAuthorization: Boolean? = null
 

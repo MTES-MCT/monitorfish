@@ -24,10 +24,9 @@ enum class SeafrontGroup {
                 NONE to emptyList(),
             )
 
-        fun fromSeafront(seafront: Seafront?): SeafrontGroup {
-            return seafront?.let { groupToSeafronts.entries.first { it.key != ALL && it.value.contains(seafront) }.key }
+        fun fromSeafront(seafront: Seafront?): SeafrontGroup =
+            seafront?.let { groupToSeafronts.entries.first { it.key != ALL && it.value.contains(seafront) }.key }
                 ?: NONE
-        }
     }
 
     fun hasSeafront(seafront: Seafront?): Boolean {
@@ -41,7 +40,5 @@ enum class SeafrontGroup {
         return groupToSeafronts[this]?.contains(seafront) ?: false
     }
 
-    fun toSeafronts(): List<Seafront> {
-        return groupToSeafronts[this] ?: emptyList()
-    }
+    fun toSeafronts(): List<Seafront> = groupToSeafronts[this] ?: emptyList()
 }

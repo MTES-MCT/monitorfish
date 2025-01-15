@@ -60,8 +60,7 @@ class GetAllCurrentReportingsUTests {
                 eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER),
                 eq("FRFGRGR"),
             ),
-        )
-            .willReturn(true)
+        ).willReturn(true)
 
         // When
         val reportings =

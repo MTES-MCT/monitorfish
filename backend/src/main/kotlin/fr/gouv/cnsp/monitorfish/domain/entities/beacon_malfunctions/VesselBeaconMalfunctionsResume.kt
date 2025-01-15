@@ -45,11 +45,11 @@ data class VesselBeaconMalfunctionsResume(
         private fun getNumberOfBeaconsMalfunctionsAt(
             vesselStatus: VesselStatus,
             lastYearBeaconMalfunctionsWithDetails: List<BeaconMalfunctionWithDetails>,
-        ): Int {
-            return lastYearBeaconMalfunctionsWithDetails.filter { beaconMalfunctionsWithDetails ->
-                getFirstVesselStatus(beaconMalfunctionsWithDetails) == vesselStatus
-            }.size
-        }
+        ): Int =
+            lastYearBeaconMalfunctionsWithDetails
+                .filter { beaconMalfunctionsWithDetails ->
+                    getFirstVesselStatus(beaconMalfunctionsWithDetails) == vesselStatus
+                }.size
 
         private fun getFirstVesselStatus(beaconMalfunctionsWithDetails: BeaconMalfunctionWithDetails): VesselStatus {
             val beaconMalfunctionVesselStatusActions =
@@ -60,7 +60,8 @@ data class VesselBeaconMalfunctionsResume(
                 true -> beaconMalfunctionsWithDetails.beaconMalfunction.vesselStatus
                 false ->
                     beaconMalfunctionVesselStatusActions
-                        .minByOrNull { action -> action.dateTime }?.let { action ->
+                        .minByOrNull { action -> action.dateTime }
+                        ?.let { action ->
                             VesselStatus.valueOf(action.previousValue)
                         }!!
             }
@@ -68,9 +69,12 @@ data class VesselBeaconMalfunctionsResume(
 
         private fun getLastVesselStatus(beaconMalfunction: BeaconMalfunctionWithDetails?): VesselStatus? {
             val lastVesselStatus =
-                beaconMalfunction?.actions?.filter { action ->
-                    action.propertyName == BeaconMalfunctionActionPropertyName.VESSEL_STATUS
-                }?.maxByOrNull { action -> action.dateTime }?.nextValue
+                beaconMalfunction
+                    ?.actions
+                    ?.filter { action ->
+                        action.propertyName == BeaconMalfunctionActionPropertyName.VESSEL_STATUS
+                    }?.maxByOrNull { action -> action.dateTime }
+                    ?.nextValue
 
             return lastVesselStatus?.let {
                 VesselStatus.valueOf(lastVesselStatus)

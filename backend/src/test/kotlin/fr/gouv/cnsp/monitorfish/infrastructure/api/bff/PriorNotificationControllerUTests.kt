@@ -116,11 +116,12 @@ class PriorNotificationControllerUTests {
         )
 
         // When
-        api.perform(
-            get(
-                "/bff/v1/prior_notifications?willArriveAfter=2000-01-01T00:00:00Z&willArriveBefore=2100-01-01T00:00:00Z&seafrontGroup=ALL&sortColumn=EXPECTED_ARRIVAL_DATE&sortDirection=DESC&pageNumber=0&pageSize=10",
-            ),
-        )
+        api
+            .perform(
+                get(
+                    "/bff/v1/prior_notifications?willArriveAfter=2000-01-01T00:00:00Z&willArriveBefore=2100-01-01T00:00:00Z&seafrontGroup=ALL&sortColumn=EXPECTED_ARRIVAL_DATE&sortDirection=DESC&pageNumber=0&pageSize=10",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.length()", equalTo(2)))
@@ -146,20 +147,19 @@ class PriorNotificationControllerUTests {
                 note = anyOrNull(),
                 updatedBy = anyOrNull(),
             ),
-        )
-            .willReturn(fakePriorNotification)
+        ).willReturn(fakePriorNotification)
 
         // When
         val requestBody = objectMapper.writeValueAsString(LogbookPriorNotificationFormDataInput(note = "Test !"))
         val pnoValue = fakePriorNotification.logbookMessageAndValue.value
-        api.perform(
-            put(
-                "/bff/v1/prior_notifications/logbook/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
+        api
+            .perform(
+                put(
+                    "/bff/v1/prior_notifications/logbook/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
+                ).contentType(MediaType.APPLICATION_JSON)
+                    .content(requestBody)
+                    .characterEncoding(UTF_8),
             )
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody)
-                .characterEncoding(UTF_8),
-        )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.note", equalTo(pnoValue.note)))
@@ -190,11 +190,12 @@ class PriorNotificationControllerUTests {
                     vesselId = 42,
                 ),
             )
-        api.perform(
-            post("/bff/v1/prior_notifications/manual/compute")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody),
-        )
+        api
+            .perform(
+                post("/bff/v1/prior_notifications/manual/compute")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestBody),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.riskFactor", equalTo(1.2)))
@@ -224,8 +225,7 @@ class PriorNotificationControllerUTests {
                 anyOrNull(),
                 anyOrNull(),
             ),
-        )
-            .willReturn(fakePriorNotification)
+        ).willReturn(fakePriorNotification)
 
         // When
         val requestBody =
@@ -246,11 +246,12 @@ class PriorNotificationControllerUTests {
                     vesselId = 42,
                 ),
             )
-        api.perform(
-            post("/bff/v1/prior_notifications/manual")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody),
-        )
+        api
+            .perform(
+                post("/bff/v1/prior_notifications/manual")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestBody),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
@@ -280,8 +281,7 @@ class PriorNotificationControllerUTests {
                 tripGearCodes = anyOrNull(),
                 vesselId = anyOrNull(),
             ),
-        )
-            .willReturn(fakePriorNotification)
+        ).willReturn(fakePriorNotification)
 
         // When
         val requestBody =
@@ -302,11 +302,12 @@ class PriorNotificationControllerUTests {
                     vesselId = 42,
                 ),
             )
-        api.perform(
-            put("/bff/v1/prior_notifications/manual/${fakePriorNotification.reportId!!}")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody),
-        )
+        api
+            .perform(
+                put("/bff/v1/prior_notifications/manual/${fakePriorNotification.reportId!!}")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestBody),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
@@ -320,11 +321,12 @@ class PriorNotificationControllerUTests {
         )
 
         // When
-        api.perform(
-            get(
-                "/bff/v1/prior_notifications/to_verify",
-            ),
-        )
+        api
+            .perform(
+                get(
+                    "/bff/v1/prior_notifications/to_verify",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.perSeafrontGroupCount['ALL']", equalTo(2)))
@@ -336,7 +338,8 @@ class PriorNotificationControllerUTests {
         given(getPriorNotificationTypes.execute()).willReturn(listOf("Préavis de Type A", "Préavis de Type B"))
 
         // When
-        api.perform(get("/bff/v1/prior_notifications/types"))
+        api
+            .perform(get("/bff/v1/prior_notifications/types"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))
@@ -355,15 +358,15 @@ class PriorNotificationControllerUTests {
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 false,
             ),
-        )
-            .willReturn(fakePriorNotification)
+        ).willReturn(fakePriorNotification)
 
         // When
-        api.perform(
-            get(
-                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
-            ),
-        )
+        api
+            .perform(
+                get(
+                    "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
@@ -383,13 +386,25 @@ class PriorNotificationControllerUTests {
                                     LogbookMessageFaker.fakePnoMessage().apply {
                                         catchOnboard =
                                             listOf(
-                                                LogbookMessageFaker.fakeLogbookFishingCatch(species = "COD", weight = 12.0),
-                                                LogbookMessageFaker.fakeLogbookFishingCatch(species = "HKE", weight = null),
+                                                LogbookMessageFaker.fakeLogbookFishingCatch(
+                                                    species = "COD",
+                                                    weight = 12.0,
+                                                ),
+                                                LogbookMessageFaker.fakeLogbookFishingCatch(
+                                                    species = "HKE",
+                                                    weight = null,
+                                                ),
                                             )
                                         catchToLand =
                                             listOf(
-                                                LogbookMessageFaker.fakeLogbookFishingCatch(species = "COD", weight = 12.0),
-                                                LogbookMessageFaker.fakeLogbookFishingCatch(species = "HKE", weight = null),
+                                                LogbookMessageFaker.fakeLogbookFishingCatch(
+                                                    species = "COD",
+                                                    weight = 12.0,
+                                                ),
+                                                LogbookMessageFaker.fakeLogbookFishingCatch(
+                                                    species = "HKE",
+                                                    weight = null,
+                                                ),
                                             )
                                     },
                             ),
@@ -404,15 +419,15 @@ class PriorNotificationControllerUTests {
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 false,
             ),
-        )
-            .willReturn(fakePriorNotification)
+        ).willReturn(fakePriorNotification)
 
         // When
-        api.perform(
-            get(
-                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
-            ),
-        )
+        api
+            .perform(
+                get(
+                    "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId!!)))
@@ -472,7 +487,8 @@ class PriorNotificationControllerUTests {
             )
 
         // When
-        api.perform(get("/bff/v1/prior_notifications/REPORT_ID/pdf"))
+        api
+            .perform(get("/bff/v1/prior_notifications/REPORT_ID/pdf"))
             // Then
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_PDF))
@@ -485,7 +501,8 @@ class PriorNotificationControllerUTests {
         given(getPriorNotificationPdfDocument.execute("REPORT_ID", true)).willReturn(null)
 
         // When
-        api.perform(get("/bff/v1/prior_notifications/REPORT_ID/pdf/exist"))
+        api
+            .perform(get("/bff/v1/prior_notifications/REPORT_ID/pdf/exist"))
             // Then
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -503,15 +520,15 @@ class PriorNotificationControllerUTests {
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 false,
             ),
-        )
-            .willReturn(fakePriorNotification)
+        ).willReturn(fakePriorNotification)
 
         // When
-        api.perform(
-            post(
-                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/verify_and_send?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
-            ),
-        )
+        api
+            .perform(
+                post(
+                    "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/verify_and_send?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
@@ -529,15 +546,15 @@ class PriorNotificationControllerUTests {
                 operationDate = anyOrNull(),
                 isManuallyCreated = anyOrNull(),
             ),
-        )
-            .willReturn(fakePriorNotification)
+        ).willReturn(fakePriorNotification)
 
         // When
-        api.perform(
-            put(
-                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/invalidate?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
-            ),
-        )
+        api
+            .perform(
+                put(
+                    "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/invalidate?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
@@ -546,8 +563,7 @@ class PriorNotificationControllerUTests {
                     "$.logbookMessage.message.isInvalidated",
                     equalTo(fakePriorNotification.logbookMessageAndValue.value.isInvalidated),
                 ),
-            )
-            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
+            ).andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
     }
 
     @Test
@@ -585,7 +601,8 @@ class PriorNotificationControllerUTests {
         )
 
         // When
-        api.perform(get("/bff/v1/prior_notifications/$fakeReportId/sent_messages"))
+        api
+            .perform(get("/bff/v1/prior_notifications/$fakeReportId/sent_messages"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))

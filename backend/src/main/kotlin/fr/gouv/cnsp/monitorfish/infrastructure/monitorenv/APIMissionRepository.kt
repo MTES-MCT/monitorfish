@@ -30,7 +30,8 @@ class APIMissionRepository(
     private val zoneDateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.000X")
 
     private val cache =
-        Caffeine.newBuilder()
+        Caffeine
+            .newBuilder()
             .maximumSize(500)
             .expireAfterWrite(1, TimeUnit.DAYS)
             .build<String, List<LegacyControlUnit>>()
@@ -49,8 +50,11 @@ class APIMissionRepository(
 
             try {
                 val controlUnits =
-                    apiClient.httpClient.get(missionsUrl)
-                        .body<MissionDataResponse>().controlUnits.map { it.toLegacyControlUnit() }
+                    apiClient.httpClient
+                        .get(missionsUrl)
+                        .body<MissionDataResponse>()
+                        .controlUnits
+                        .map { it.toLegacyControlUnit() }
 
                 cache.put(cacheKey, controlUnits)
 

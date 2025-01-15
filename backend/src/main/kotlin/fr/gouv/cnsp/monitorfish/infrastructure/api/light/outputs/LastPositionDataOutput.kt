@@ -46,8 +46,8 @@ data class LastPositionDataOutput(
     val beaconMalfunctionId: Int? = null,
 ) {
     companion object {
-        fun fromLastPosition(position: LastPosition): LastPositionDataOutput {
-            return LastPositionDataOutput(
+        fun fromLastPosition(position: LastPosition): LastPositionDataOutput =
+            LastPositionDataOutput(
                 vesselId = position.vesselId,
                 internalReferenceNumber = position.internalReferenceNumber,
                 ircs = position.ircs,
@@ -88,6 +88,5 @@ data class LastPositionDataOutput(
                 isAtPort = position.isAtPort,
                 beaconMalfunctionId = position.beaconMalfunctionId,
             )
-        }
     }
 }

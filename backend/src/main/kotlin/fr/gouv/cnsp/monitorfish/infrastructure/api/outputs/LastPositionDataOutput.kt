@@ -51,8 +51,8 @@ data class LastPositionDataOutput(
     val reportings: List<String> = listOf(),
 ) {
     companion object {
-        fun fromLastPosition(position: LastPosition): LastPositionDataOutput {
-            return LastPositionDataOutput(
+        fun fromLastPosition(position: LastPosition): LastPositionDataOutput =
+            LastPositionDataOutput(
                 vesselId = position.vesselId,
                 internalReferenceNumber = position.internalReferenceNumber,
                 ircs = position.ircs,
@@ -100,6 +100,5 @@ data class LastPositionDataOutput(
                 beaconMalfunctionId = position.beaconMalfunctionId,
                 reportings = position.reportings,
             )
-        }
     }
 }

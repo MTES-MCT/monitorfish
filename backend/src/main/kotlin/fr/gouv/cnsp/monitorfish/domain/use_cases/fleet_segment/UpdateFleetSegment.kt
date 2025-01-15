@@ -7,7 +7,9 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegmentFields
 
 @UseCase
-class UpdateFleetSegment(private val fleetSegmentRepository: FleetSegmentRepository) {
+class UpdateFleetSegment(
+    private val fleetSegmentRepository: FleetSegmentRepository,
+) {
     @Throws(CouldNotUpdateFleetSegmentException::class, IllegalArgumentException::class)
     fun execute(
         segment: String,

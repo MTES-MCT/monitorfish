@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice
 
 @ControllerAdvice
-class LogResponseWithBody(val mapper: ObjectMapper) : ResponseBodyAdvice<Any?> {
+class LogResponseWithBody(
+    val mapper: ObjectMapper,
+) : ResponseBodyAdvice<Any?> {
     private val logger = LoggerFactory.getLogger(LogGETRequests::class.java)
 
     override fun supports(
         returnType: MethodParameter,
         converterType: Class<out HttpMessageConverter<*>>,
-    ): Boolean {
-        return true
-    }
+    ): Boolean = true
 
     override fun beforeBodyWrite(
         body: Any?,

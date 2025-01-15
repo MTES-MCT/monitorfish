@@ -36,11 +36,10 @@ class ReportingController(
 
     @GetMapping(value = [""])
     @Operation(summary = "Get all current reportings")
-    fun getAllReportings(): List<ReportingDataOutput> {
-        return getAllCurrentReportings.execute().map {
+    fun getAllReportings(): List<ReportingDataOutput> =
+        getAllCurrentReportings.execute().map {
             ReportingDataOutput.fromReporting(it.first, it.second)
         }
-    }
 
     @PutMapping(value = ["/{reportingId}/archive"])
     @Operation(summary = "Archive a reporting")

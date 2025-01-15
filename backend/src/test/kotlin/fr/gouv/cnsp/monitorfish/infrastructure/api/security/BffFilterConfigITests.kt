@@ -66,10 +66,11 @@ class BffFilterConfigITests {
             "/bff/v1/reportings",
             "/bff/v1/vessels/risk_factors",
         ).forEach {
-            mockMvc.perform(
-                get(it)
-                    .header("Authorization", "Bearer $VALID_JWT"),
-            )
+            mockMvc
+                .perform(
+                    get(it)
+                        .header("Authorization", "Bearer $VALID_JWT"),
+                )
                 // Then
                 .andExpect(status().isUnauthorized)
         }
@@ -82,9 +83,10 @@ class BffFilterConfigITests {
             "/api/v1/authorization/management",
             "/api/v1/beacon_malfunctions/123",
         ).forEach {
-            mockMvc.perform(
-                get(it),
-            )
+            mockMvc
+                .perform(
+                    get(it),
+                )
                 // Then
                 .andExpect(status().isUnauthorized)
         }
@@ -96,9 +98,10 @@ class BffFilterConfigITests {
         listOf(
             "/api/v1/authorization/management/dummy@user.com",
         ).forEach {
-            mockMvc.perform(
-                delete(it),
-            )
+            mockMvc
+                .perform(
+                    delete(it),
+                )
                 // Then
                 .andExpect(status().isUnauthorized)
         }

@@ -50,8 +50,8 @@ data class PendingAlertEntity(
     @Column(name = "longitude")
     val longitude: Double? = null,
 ) {
-    fun toPendingAlert(mapper: ObjectMapper): PendingAlert {
-        return PendingAlert(
+    fun toPendingAlert(mapper: ObjectMapper): PendingAlert =
+        PendingAlert(
             id = id,
             vesselName = vesselName,
             internalReferenceNumber = internalReferenceNumber,
@@ -66,7 +66,6 @@ data class PendingAlertEntity(
             latitude = latitude,
             longitude = longitude,
         )
-    }
 
     companion object {
         fun fromPendingAlert(

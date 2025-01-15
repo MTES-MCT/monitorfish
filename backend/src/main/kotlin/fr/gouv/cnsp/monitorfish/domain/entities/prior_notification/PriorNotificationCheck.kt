@@ -31,8 +31,8 @@ data class PriorNotificationCheck(
             isVerified: Boolean = false,
             isBeingSent: Boolean = false,
             isSent: Boolean = false,
-        ): PriorNotificationCheck {
-            return PriorNotificationCheck(
+        ): PriorNotificationCheck =
+            PriorNotificationCheck(
                 reportId = reportId,
                 createdAt = CustomZonedDateTime.now().toString(),
                 isInVerificationScope = isInVerificationScope,
@@ -41,6 +41,5 @@ data class PriorNotificationCheck(
                 isSent = isSent,
                 updatedAt = CustomZonedDateTime.now().toString(),
             )
-        }
     }
 }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName
 import java.time.ZonedDateTime
 
 @JsonTypeName("haul")
-class Haul() {
+class Haul {
     var gear: String? = null
     var gearName: String? = null
     var catches: List<LogbookFishingCatch> = listOf()

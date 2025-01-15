@@ -17,13 +17,12 @@ data class ProducerOrganizationMembershipEntity(
     @Column(name = "organization_name", nullable = false)
     val organizationName: String,
 ) {
-    fun toProducerOrganizationMembership(): ProducerOrganizationMembership {
-        return ProducerOrganizationMembership(
+    fun toProducerOrganizationMembership(): ProducerOrganizationMembership =
+        ProducerOrganizationMembership(
             internalReferenceNumber = internalReferenceNumber,
             joiningDate = joiningDate,
             organizationName = organizationName,
         )
-    }
 
     companion object {
         fun fromProducerOrganizationMembership(producerOrganizationMembership: ProducerOrganizationMembership) =

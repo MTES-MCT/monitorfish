@@ -12,14 +12,16 @@ class SearchVessels(
 ) {
     fun execute(searched: String): List<VesselAndBeacon> {
         val vessels =
-            vesselRepository.search(searched).filter {
-                !(
-                    it.internalReferenceNumber.isNullOrEmpty() &&
-                        it.externalReferenceNumber.isNullOrEmpty() &&
-                        it.ircs.isNullOrEmpty() &&
-                        it.mmsi.isNullOrEmpty()
-                )
-            }.map { VesselAndBeacon(vessel = it) }
+            vesselRepository
+                .search(searched)
+                .filter {
+                    !(
+                        it.internalReferenceNumber.isNullOrEmpty() &&
+                            it.externalReferenceNumber.isNullOrEmpty() &&
+                            it.ircs.isNullOrEmpty() &&
+                            it.mmsi.isNullOrEmpty()
+                    )
+                }.map { VesselAndBeacon(vessel = it) }
 
         val beacons = beaconRepository.search(searched)
         val beaconsVesselId = beacons.mapNotNull { it.vesselId }

@@ -9,12 +9,11 @@ data class BeaconDataOutput(
     val loggingDatetimeUtc: ZonedDateTime? = null,
 ) {
     companion object {
-        fun fromBeacon(beacon: Beacon): BeaconDataOutput {
-            return BeaconDataOutput(
+        fun fromBeacon(beacon: Beacon): BeaconDataOutput =
+            BeaconDataOutput(
                 beaconNumber = beacon.beaconNumber,
                 isCoastal = beacon.isCoastal,
                 loggingDatetimeUtc = beacon.loggingDatetimeUtc,
             )
-        }
     }
 }

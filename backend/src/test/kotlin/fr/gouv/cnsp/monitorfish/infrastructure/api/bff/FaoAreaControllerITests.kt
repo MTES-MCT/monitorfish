@@ -38,7 +38,8 @@ class FaoAreaControllerITests {
         given(this.getFAOAreas.execute()).willReturn(listOf("27.1", "27.1.0", "28.1", "28.1.0", "28.1.1"))
 
         // When
-        api.perform(get("/bff/v1/fao_areas"))
+        api
+            .perform(get("/bff/v1/fao_areas"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(5)))
@@ -52,9 +53,12 @@ class FaoAreaControllerITests {
         )
 
         // When
-        api.perform(
-            get("/bff/v1/fao_areas/compute?internalReferenceNumber=DUMMY_CFR&latitude=12.65&longitude=&portLocode=AY"),
-        )
+        api
+            .perform(
+                get(
+                    "/bff/v1/fao_areas/compute?internalReferenceNumber=DUMMY_CFR&latitude=12.65&longitude=&portLocode=AY",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(5)))

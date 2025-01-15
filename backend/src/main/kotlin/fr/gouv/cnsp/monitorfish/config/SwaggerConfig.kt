@@ -14,18 +14,17 @@ class SwaggerConfig {
     private val hostProperties: HostProperties? = null
 
     @Bean
-    fun api(): OpenAPI {
-        return OpenAPI()
+    fun api(): OpenAPI =
+        OpenAPI()
             .info(
-                Info().title("MonitorFish API")
+                Info()
+                    .title("MonitorFish API")
                     .description("MonitorFish")
                     .version("v1.19.2")
                     .license(License().name("Apache 2.0").url("https://monitorfish.readthedocs.io/en/latest")),
-            )
-            .externalDocs(
+            ).externalDocs(
                 ExternalDocumentation()
                     .description("MonitorFish Documentation")
                     .url("https://monitorfish.readthedocs.io/en/latest"),
             )
-    }
 }

@@ -5,13 +5,15 @@ import fr.gouv.cnsp.monitorfish.domain.entities.control_objective.ControlObjecti
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository
 
 @UseCase
-class AddControlObjective(private val controlObjectivesRepository: ControlObjectivesRepository) {
+class AddControlObjective(
+    private val controlObjectivesRepository: ControlObjectivesRepository,
+) {
     fun execute(
         segment: String,
         facade: String,
         year: Int,
-    ): Int {
-        return controlObjectivesRepository.add(
+    ): Int =
+        controlObjectivesRepository.add(
             ControlObjective(
                 segment = segment,
                 facade = facade,
@@ -21,5 +23,4 @@ class AddControlObjective(private val controlObjectivesRepository: ControlObject
                 controlPriorityLevel = 1.0,
             ),
         )
-    }
 }

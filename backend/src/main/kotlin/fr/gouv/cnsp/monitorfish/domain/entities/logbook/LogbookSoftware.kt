@@ -1,6 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
-enum class LogbookSoftware(val software: String) {
+enum class LogbookSoftware(
+    val software: String,
+) {
     /**
      * Examples:
      * - JP/05883989/VISIOCaptures V1.7.6

@@ -6,7 +6,9 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotFindException
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 
 @UseCase
-class GetMissionAction(private val missionActionsRepository: MissionActionsRepository) {
+class GetMissionAction(
+    private val missionActionsRepository: MissionActionsRepository,
+) {
     @Throws(CouldNotFindException::class)
     fun execute(actionId: Int): MissionAction {
         try {

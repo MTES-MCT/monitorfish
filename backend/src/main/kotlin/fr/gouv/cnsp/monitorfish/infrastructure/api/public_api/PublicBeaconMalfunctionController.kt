@@ -25,16 +25,16 @@ class PublicBeaconMalfunctionController(
         beaconMalfunctionId: Int,
         @RequestBody
         updateBeaconMalfunctionData: UpdateBeaconMalfunctionDataInput,
-    ): BeaconMalfunctionResumeAndDetailsDataOutput {
-        return updateBeaconMalfunction.execute(
-            id = beaconMalfunctionId,
-            vesselStatus = updateBeaconMalfunctionData.vesselStatus,
-            stage = updateBeaconMalfunctionData.stage,
-            endOfBeaconMalfunctionReason = updateBeaconMalfunctionData.endOfBeaconMalfunctionReason,
-        ).let {
-            BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(it)
-        }
-    }
+    ): BeaconMalfunctionResumeAndDetailsDataOutput =
+        updateBeaconMalfunction
+            .execute(
+                id = beaconMalfunctionId,
+                vesselStatus = updateBeaconMalfunctionData.vesselStatus,
+                stage = updateBeaconMalfunctionData.stage,
+                endOfBeaconMalfunctionReason = updateBeaconMalfunctionData.endOfBeaconMalfunctionReason,
+            ).let {
+                BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(it)
+            }
 
     @PutMapping(value = ["/{beaconMalfunctionId}/{notificationRequested}"])
     @Operation(summary = "Request a notification")
@@ -48,11 +48,9 @@ class PublicBeaconMalfunctionController(
         @Parameter(name = "ISO3 country code of the FMC to notify")
         @RequestParam(name = "requestedNotificationForeignFmcCode")
         requestedNotificationForeignFmcCode: String? = null,
-    ) {
-        return requestNotification.execute(
-            id = beaconMalfunctionId,
-            notificationRequested = notificationRequested,
-            requestedNotificationForeignFmcCode = requestedNotificationForeignFmcCode,
-        )
-    }
+    ) = requestNotification.execute(
+        id = beaconMalfunctionId,
+        notificationRequested = notificationRequested,
+        requestedNotificationForeignFmcCode = requestedNotificationForeignFmcCode,
+    )
 }

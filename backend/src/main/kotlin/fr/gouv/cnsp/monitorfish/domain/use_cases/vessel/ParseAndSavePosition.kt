@@ -8,7 +8,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 @UseCase
-class ParseAndSavePosition(private val positionRepository: PositionRepository) {
+class ParseAndSavePosition(
+    private val positionRepository: PositionRepository,
+) {
     private val logger: Logger = LoggerFactory.getLogger(ParseAndSavePosition::class.java)
 
     @Throws(NAFMessageParsingException::class)

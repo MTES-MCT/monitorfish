@@ -508,7 +508,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         val messages = TestUtils.getDummyLogbookMessages()
         jpaLogbookReportRepository.save(
-            messages.first()
+            messages
+                .first()
                 .copy(
                     internalReferenceNumber = "FAK000999999",
                     operationNumber = "FPXE1546546114565",
@@ -518,7 +519,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
                 ),
         )
         jpaLogbookReportRepository.save(
-            messages.last()
+            messages
+                .last()
                 .copy(
                     internalReferenceNumber = "FAK000999999",
                     operationNumber = "FPXE1546545654481",

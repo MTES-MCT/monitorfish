@@ -10,7 +10,5 @@ class ZonedDateTimeDeserializer : JsonDeserializer<ZonedDateTime>() {
     override fun deserialize(
         jsonParser: JsonParser,
         deserializationContext: DeserializationContext,
-    ): ZonedDateTime {
-        return ZonedDateTime.parse(jsonParser.text).withZoneSameInstant(ZoneOffset.UTC)
-    }
+    ): ZonedDateTime = ZonedDateTime.parse(jsonParser.text).withZoneSameInstant(ZoneOffset.UTC)
 }

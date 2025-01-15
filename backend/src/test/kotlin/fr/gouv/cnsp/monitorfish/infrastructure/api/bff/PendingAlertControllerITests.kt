@@ -77,7 +77,8 @@ class PendingAlertControllerITests {
         )
 
         // When
-        api.perform(MockMvcRequestBuilders.get("/bff/v1/operational_alerts"))
+        api
+            .perform(MockMvcRequestBuilders.get("/bff/v1/operational_alerts"))
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.equalTo(1)))
@@ -88,7 +89,8 @@ class PendingAlertControllerITests {
     @Test
     fun `Should validate a pending alert`() {
         // When
-        api.perform(MockMvcRequestBuilders.put("/bff/v1/operational_alerts/666/validate"))
+        api
+            .perform(MockMvcRequestBuilders.put("/bff/v1/operational_alerts/666/validate"))
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
@@ -111,18 +113,19 @@ class PendingAlertControllerITests {
         val before = ZonedDateTime.now()
 
         // When
-        api.perform(
-            MockMvcRequestBuilders.put("/bff/v1/operational_alerts/666/silence")
-                .content(
-                    objectMapper.writeValueAsString(
-                        SilenceOperationalAlertDataInput(
-                            silencedAlertPeriod = SilenceAlertPeriod.CUSTOM,
-                            beforeDateTime = before,
+        api
+            .perform(
+                MockMvcRequestBuilders
+                    .put("/bff/v1/operational_alerts/666/silence")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            SilenceOperationalAlertDataInput(
+                                silencedAlertPeriod = SilenceAlertPeriod.CUSTOM,
+                                beforeDateTime = before,
+                            ),
                         ),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", Matchers.equalTo("FRFGRGR")))
@@ -157,7 +160,8 @@ class PendingAlertControllerITests {
         )
 
         // When
-        api.perform(MockMvcRequestBuilders.get("/bff/v1/operational_alerts/silenced"))
+        api
+            .perform(MockMvcRequestBuilders.get("/bff/v1/operational_alerts/silenced"))
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.equalTo(1)))
@@ -171,7 +175,8 @@ class PendingAlertControllerITests {
     @Test
     fun `Should delete a silenced alert`() {
         // When
-        api.perform(MockMvcRequestBuilders.delete("/bff/v1/operational_alerts/silenced/666"))
+        api
+            .perform(MockMvcRequestBuilders.delete("/bff/v1/operational_alerts/silenced/666"))
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
@@ -193,23 +198,24 @@ class PendingAlertControllerITests {
         )
 
         // When
-        api.perform(
-            MockMvcRequestBuilders.post("/bff/v1/operational_alerts/silenced")
-                .content(
-                    objectMapper.writeValueAsString(
-                        SilencedAlertDataInput(
-                            internalReferenceNumber = "FRFGRGR",
-                            externalReferenceNumber = "RGD",
-                            ircs = "6554fEE",
-                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                            flagState = CountryCode.FR,
-                            silencedBeforeDate = ZonedDateTime.now(),
-                            value = "{\"type\": \"THREE_MILES_TRAWLING_ALERT\"}",
+        api
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/bff/v1/operational_alerts/silenced")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            SilencedAlertDataInput(
+                                internalReferenceNumber = "FRFGRGR",
+                                externalReferenceNumber = "RGD",
+                                ircs = "6554fEE",
+                                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                flagState = CountryCode.FR,
+                                silencedBeforeDate = ZonedDateTime.now(),
+                                value = "{\"type\": \"THREE_MILES_TRAWLING_ALERT\"}",
+                            ),
                         ),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", Matchers.equalTo("FRFGRGR")))

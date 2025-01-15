@@ -30,8 +30,8 @@ object TestUtils {
         alertType: AlertTypeMapping?,
         isArchived: Boolean? = false,
         natinfCode: Int? = null,
-    ): Reporting {
-        return Reporting(
+    ): Reporting =
+        Reporting(
             id = id,
             validationDate = validationDate,
             creationDate = ZonedDateTime.now().minusDays(1),
@@ -67,10 +67,9 @@ object TestUtils {
             internalReferenceNumber = internalReferenceNumber,
             flagState = CountryCode.FR,
         )
-    }
 
-    fun getDummyReportings(dateTime: ZonedDateTime): List<Reporting> {
-        return listOf(
+    fun getDummyReportings(dateTime: ZonedDateTime): List<Reporting> =
+        listOf(
             Reporting(
                 id = 1,
                 type = ReportingType.ALERT,
@@ -117,7 +116,6 @@ object TestUtils {
                 isDeleted = false,
             ),
         )
-    }
 
     fun getDummyLogbookMessages(): List<LogbookMessage> {
         val gearOne = LogbookTripGear()
@@ -182,16 +180,17 @@ object TestUtils {
                 software = "TurboCatch (3.7-1)",
                 message = far,
                 reportDateTime =
-                    ZonedDateTime.of(
-                        2020,
-                        5,
-                        5,
-                        3,
-                        4,
-                        5,
-                        3,
-                        UTC,
-                    ).minusHours(12),
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            4,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
@@ -207,16 +206,17 @@ object TestUtils {
                 software = "e-Sacapt Secours ERSV3 V 1.0.10",
                 message = dep,
                 reportDateTime =
-                    ZonedDateTime.of(
-                        2020,
-                        5,
-                        5,
-                        3,
-                        4,
-                        5,
-                        3,
-                        UTC,
-                    ).minusHours(24),
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            4,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(24),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
@@ -232,16 +232,17 @@ object TestUtils {
                 software = "e-Sacapt Secours ERSV3 V 1.0.7",
                 message = pno,
                 reportDateTime =
-                    ZonedDateTime.of(
-                        2020,
-                        5,
-                        5,
-                        3,
-                        4,
-                        5,
-                        3,
-                        UTC,
-                    ).minusHours(0),
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            4,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(0),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
@@ -257,16 +258,17 @@ object TestUtils {
                 software = "e-Sacapt Secours ERSV3 V 1.0.7",
                 message = coe,
                 reportDateTime =
-                    ZonedDateTime.of(
-                        2020,
-                        5,
-                        5,
-                        3,
-                        4,
-                        5,
-                        3,
-                        UTC,
-                    ).minusHours(3),
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            4,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(3),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
@@ -351,16 +353,17 @@ object TestUtils {
                 software = "FT/VISIOCaptures V1.4.7",
                 message = dep,
                 reportDateTime =
-                    ZonedDateTime.of(
-                        2020,
-                        5,
-                        5,
-                        3,
-                        4,
-                        5,
-                        3,
-                        UTC,
-                    ).minusHours(24),
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            4,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(24),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
@@ -376,16 +379,17 @@ object TestUtils {
                 software = "FP/VISIOCaptures V1.4.7",
                 message = far,
                 reportDateTime =
-                    ZonedDateTime.of(
-                        2020,
-                        5,
-                        5,
-                        3,
-                        4,
-                        5,
-                        3,
-                        UTC,
-                    ).minusHours(12),
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            4,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
@@ -401,16 +405,17 @@ object TestUtils {
                 software = "TurboCatch (3.6-1)",
                 message = pno,
                 reportDateTime =
-                    ZonedDateTime.of(
-                        2020,
-                        5,
-                        5,
-                        3,
-                        4,
-                        5,
-                        3,
-                        UTC,
-                    ).minusHours(0),
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            4,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(0),
                 transmissionFormat = LogbookTransmissionFormat.FLUX,
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
@@ -451,16 +456,17 @@ object TestUtils {
                 messageType = "FAR",
                 message = far,
                 reportDateTime =
-                    ZonedDateTime.of(
-                        2020,
-                        5,
-                        5,
-                        3,
-                        4,
-                        5,
-                        3,
-                        UTC,
-                    ).minusHours(12),
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            4,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
@@ -476,16 +482,17 @@ object TestUtils {
                 messageType = "FAR",
                 message = correctedFar,
                 reportDateTime =
-                    ZonedDateTime.of(
-                        2020,
-                        5,
-                        5,
-                        3,
-                        4,
-                        5,
-                        3,
-                        UTC,
-                    ).minusHours(12),
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            4,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
@@ -533,16 +540,17 @@ object TestUtils {
                 messageType = "FAR",
                 message = far,
                 reportDateTime =
-                    ZonedDateTime.of(
-                        2020,
-                        5,
-                        5,
-                        3,
-                        4,
-                        5,
-                        3,
-                        UTC,
-                    ).minusHours(12),
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            4,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
@@ -557,16 +565,17 @@ object TestUtils {
                 messageType = "",
                 message = farBadAck,
                 reportDateTime =
-                    ZonedDateTime.of(
-                        2020,
-                        5,
-                        5,
-                        3,
-                        4,
-                        5,
-                        3,
-                        UTC,
-                    ).minusHours(12),
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            4,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
@@ -581,16 +590,17 @@ object TestUtils {
                 messageType = "FAR",
                 message = farTwo,
                 reportDateTime =
-                    ZonedDateTime.of(
-                        2020,
-                        5,
-                        5,
-                        3,
-                        4,
-                        5,
-                        3,
-                        UTC,
-                    ).minusHours(12),
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            4,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
@@ -605,16 +615,17 @@ object TestUtils {
                 messageType = "",
                 message = farAck,
                 reportDateTime =
-                    ZonedDateTime.of(
-                        2020,
-                        5,
-                        5,
-                        3,
-                        4,
-                        5,
-                        3,
-                        UTC,
-                    ).minusHours(12),
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            4,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
@@ -628,16 +639,17 @@ object TestUtils {
                 messageType = "",
                 message = farAck,
                 reportDateTime =
-                    ZonedDateTime.of(
-                        2020,
-                        5,
-                        5,
-                        3,
-                        4,
-                        5,
-                        3,
-                        UTC,
-                    ).minusHours(12),
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            4,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
@@ -652,16 +664,17 @@ object TestUtils {
                 messageType = "FAR",
                 message = far,
                 reportDateTime =
-                    ZonedDateTime.of(
-                        2020,
-                        5,
-                        5,
-                        3,
-                        9,
-                        5,
-                        3,
-                        UTC,
-                    ).minusHours(12),
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            9,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.FLUX,
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,

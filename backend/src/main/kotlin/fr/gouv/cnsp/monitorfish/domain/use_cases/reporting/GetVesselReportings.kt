@@ -237,9 +237,7 @@ class GetVesselReportings(
     private fun findReportingsByVesselId(
         vesselId: Int,
         fromDate: ZonedDateTime,
-    ): List<Reporting> {
-        return reportingRepository.findCurrentAndArchivedByVesselIdEquals(vesselId, fromDate)
-    }
+    ): List<Reporting> = reportingRepository.findCurrentAndArchivedByVesselIdEquals(vesselId, fromDate)
 
     private fun findReportingsByVesselIdentity(
         vesselIdentifier: VesselIdentifier?,
@@ -247,8 +245,8 @@ class GetVesselReportings(
         fromDate: ZonedDateTime,
         ircs: String,
         externalReferenceNumber: String,
-    ): List<Reporting> {
-        return when (vesselIdentifier) {
+    ): List<Reporting> =
+        when (vesselIdentifier) {
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
                 reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
                     vesselIdentifier,
@@ -274,5 +272,4 @@ class GetVesselReportings(
                     fromDate,
                 )
         }
-    }
 }

@@ -67,13 +67,9 @@ data class Vessel(
         return "$districtCode$identifier"
     }
 
-    fun isFrench(): Boolean {
-        return FRENCH_COUNTRY_CODES.contains(flagState.alpha2)
-    }
+    fun isFrench(): Boolean = FRENCH_COUNTRY_CODES.contains(flagState.alpha2)
 
-    fun isLessThanTwelveMetersVessel(): Boolean {
-        return length?.let { it < 12.0 } == true
-    }
+    fun isLessThanTwelveMetersVessel(): Boolean = length?.let { it < 12.0 } == true
 }
 
 val LIKELY_CONTROLLED_COUNTRY_CODES =

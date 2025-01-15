@@ -50,11 +50,10 @@ class PatchEntity<T : Any, S : Any> {
     private fun getValueFromOptional(
         existingValue: Any?,
         optional: Optional<*>?,
-    ): Any? {
-        return when {
+    ): Any? =
+        when {
             optional == null -> existingValue
             optional.isPresent -> optional.get()
             else -> null
         }
-    }
 }

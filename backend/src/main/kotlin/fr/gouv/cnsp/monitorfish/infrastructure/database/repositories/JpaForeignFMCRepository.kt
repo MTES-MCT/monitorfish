@@ -6,8 +6,8 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaForeignFMCRepository(private val dbForeignFMCRepository: DBForeignFMCRepository) : ForeignFMCRepository {
-    override fun findAll(): List<ForeignFMC> {
-        return dbForeignFMCRepository.findAll().map { it.toForeignFMC() }
-    }
+class JpaForeignFMCRepository(
+    private val dbForeignFMCRepository: DBForeignFMCRepository,
+) : ForeignFMCRepository {
+    override fun findAll(): List<ForeignFMC> = dbForeignFMCRepository.findAll().map { it.toForeignFMC() }
 }

@@ -19,15 +19,13 @@ class DataReferentialController(
 ) {
     @GetMapping("/v1/gears")
     @Operation(summary = "Get FAO fishing gear codes")
-    fun getGears(): List<GearDataOutput> {
-        return getAllGears.execute().map { gear ->
+    fun getGears(): List<GearDataOutput> =
+        getAllGears.execute().map { gear ->
             GearDataOutput.fromGear(gear)
         }
-    }
 
     @GetMapping("/v1/species")
     @Operation(summary = "Get FAO species codes and groups")
-    fun getSpecies(): SpeciesAndSpeciesGroupsDataOutput {
-        return SpeciesAndSpeciesGroupsDataOutput.fromSpeciesAndSpeciesGroups(getAllSpeciesAndSpeciesGroups.execute())
-    }
+    fun getSpecies(): SpeciesAndSpeciesGroupsDataOutput =
+        SpeciesAndSpeciesGroupsDataOutput.fromSpeciesAndSpeciesGroups(getAllSpeciesAndSpeciesGroups.execute())
 }

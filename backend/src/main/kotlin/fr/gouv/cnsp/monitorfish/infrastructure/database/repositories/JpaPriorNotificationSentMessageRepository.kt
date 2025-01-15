@@ -9,9 +9,8 @@ import org.springframework.stereotype.Repository
 class JpaPriorNotificationSentMessageRepository(
     private val dbPriorNotificationSentMessageRepository: DBPriorNotificationSentMessageRepository,
 ) : PriorNotificationSentMessageRepository {
-    override fun findAllByReportId(reportId: String): List<PriorNotificationSentMessage> {
-        return dbPriorNotificationSentMessageRepository
+    override fun findAllByReportId(reportId: String): List<PriorNotificationSentMessage> =
+        dbPriorNotificationSentMessageRepository
             .findAllByReportId(reportId)
             .map { it.toPriorNotificationSentMessage() }
-    }
 }

@@ -47,8 +47,8 @@ data class SilencedAlertEntity(
     @Column(name = "was_validated")
     val wasValidated: Boolean? = null,
 ) {
-    fun toSilencedAlert(mapper: ObjectMapper): SilencedAlert {
-        return SilencedAlert(
+    fun toSilencedAlert(mapper: ObjectMapper): SilencedAlert =
+        SilencedAlert(
             id = id,
             vesselName = vesselName,
             internalReferenceNumber = internalReferenceNumber,
@@ -61,7 +61,6 @@ data class SilencedAlertEntity(
             vesselId = vesselId,
             wasValidated = wasValidated,
         )
-    }
 
     companion object {
         fun fromPendingAlert(

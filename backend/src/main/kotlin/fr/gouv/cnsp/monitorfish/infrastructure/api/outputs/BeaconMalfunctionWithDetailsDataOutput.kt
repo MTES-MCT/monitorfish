@@ -10,8 +10,8 @@ data class BeaconMalfunctionWithDetailsDataOutput(
     companion object {
         fun fromBeaconMalfunctionWithDetails(
             beaconMalfunctionWithDetails: BeaconMalfunctionWithDetails,
-        ): BeaconMalfunctionWithDetailsDataOutput {
-            return BeaconMalfunctionWithDetailsDataOutput(
+        ): BeaconMalfunctionWithDetailsDataOutput =
+            BeaconMalfunctionWithDetailsDataOutput(
                 beaconMalfunction =
                     BeaconMalfunctionDataOutput.fromBeaconMalfunction(
                         beaconMalfunctionWithDetails.beaconMalfunction,
@@ -29,6 +29,5 @@ data class BeaconMalfunctionWithDetailsDataOutput(
                         )
                     },
             )
-        }
     }
 }

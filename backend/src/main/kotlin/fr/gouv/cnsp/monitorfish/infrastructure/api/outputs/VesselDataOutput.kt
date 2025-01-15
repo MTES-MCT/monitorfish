@@ -105,8 +105,8 @@ data class VesselDataOutput(
             )
         }
 
-        fun fromVessel(vessel: Vessel): VesselDataOutput {
-            return VesselDataOutput(
+        fun fromVessel(vessel: Vessel): VesselDataOutput =
+            VesselDataOutput(
                 vesselId = vessel.id,
                 internalReferenceNumber = vessel.internalReferenceNumber,
                 IMO = vessel.imo,
@@ -141,6 +141,5 @@ data class VesselDataOutput(
                 hasLogbookEsacapt = vessel.hasLogbookEsacapt,
                 hasVisioCaptures = vessel.hasVisioCaptures,
             )
-        }
     }
 }

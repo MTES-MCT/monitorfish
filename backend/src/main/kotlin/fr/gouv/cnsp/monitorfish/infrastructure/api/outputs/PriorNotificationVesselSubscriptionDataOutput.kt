@@ -14,8 +14,8 @@ data class PriorNotificationVesselSubscriptionDataOutput(
     companion object {
         fun fromPriorNotificationVesselSubscription(
             priorNotificationFleetVesselSubscription: PriorNotificationVesselSubscription,
-        ): PriorNotificationVesselSubscriptionDataOutput {
-            return PriorNotificationVesselSubscriptionDataOutput(
+        ): PriorNotificationVesselSubscriptionDataOutput =
+            PriorNotificationVesselSubscriptionDataOutput(
                 controlUnitId = priorNotificationFleetVesselSubscription.controlUnitId,
                 vesselId = priorNotificationFleetVesselSubscription.vesselId,
                 vesselCallSign = priorNotificationFleetVesselSubscription.vesselCallSign,
@@ -24,6 +24,5 @@ data class PriorNotificationVesselSubscriptionDataOutput(
                 vesselMmsi = priorNotificationFleetVesselSubscription.vesselMmsi,
                 vesselName = priorNotificationFleetVesselSubscription.vesselName,
             )
-        }
     }
 }

@@ -8,7 +8,6 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.*
 class GetPriorNotificationSentMessages(
     private val priorNotificationSentMessageRepository: PriorNotificationSentMessageRepository,
 ) {
-    fun execute(reportId: String): List<PriorNotificationSentMessage> {
-        return priorNotificationSentMessageRepository.findAllByReportId(reportId)
-    }
+    fun execute(reportId: String): List<PriorNotificationSentMessage> =
+        priorNotificationSentMessageRepository.findAllByReportId(reportId)
 }

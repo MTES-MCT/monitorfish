@@ -67,7 +67,13 @@ class SilencePendingAlertUTests {
             verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), any())
 
             assertThat(allValues.first().toString().split("T")[0])
-                .isEqualTo(ZonedDateTime.now().plusDays(1).toString().split("T")[0])
+                .isEqualTo(
+                    ZonedDateTime
+                        .now()
+                        .plusDays(1)
+                        .toString()
+                        .split("T")[0],
+                )
         }
     }
 
@@ -105,7 +111,13 @@ class SilencePendingAlertUTests {
             verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), any())
 
             assertThat(allValues.first().toString().split("T")[0])
-                .isEqualTo(ZonedDateTime.now().plusDays(26).toString().split("T")[0])
+                .isEqualTo(
+                    ZonedDateTime
+                        .now()
+                        .plusDays(26)
+                        .toString()
+                        .split("T")[0],
+                )
         }
     }
 

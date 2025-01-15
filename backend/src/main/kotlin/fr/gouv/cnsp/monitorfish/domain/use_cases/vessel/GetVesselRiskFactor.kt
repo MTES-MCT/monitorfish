@@ -7,7 +7,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 @UseCase
-class GetVesselRiskFactor(private val riskFactorRepository: RiskFactorRepository) {
+class GetVesselRiskFactor(
+    private val riskFactorRepository: RiskFactorRepository,
+) {
     private val logger: Logger = LoggerFactory.getLogger(GetVesselRiskFactor::class.java)
 
     fun execute(internalReferenceNumber: String): VesselRiskFactor {

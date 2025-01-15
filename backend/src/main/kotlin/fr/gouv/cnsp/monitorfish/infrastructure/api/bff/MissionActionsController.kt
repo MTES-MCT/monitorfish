@@ -38,13 +38,12 @@ class MissionActionsController(
         @RequestParam(name = "afterDateTime")
         @DateTimeFormat(pattern = VesselController.zoneDateTimePattern)
         afterDateTime: ZonedDateTime,
-    ): ControlsSummaryDataOutput {
-        return runBlocking {
+    ): ControlsSummaryDataOutput =
+        runBlocking {
             val actionsSummary = getVesselControls.execute(vesselId, afterDateTime)
 
             ControlsSummaryDataOutput.fromControlsSummary(actionsSummary)
         }
-    }
 
     @GetMapping("/controls/activity_reports")
     @Operation(summary = "Get vessels activity reports (ACT-REP)")
@@ -72,9 +71,10 @@ class MissionActionsController(
         @Parameter(description = "Mission id")
         @RequestParam(name = "missionId")
         missionId: Int,
-    ): List<MissionActionDataOutput> {
-        return getMissionActions.execute(missionId).map { MissionActionDataOutput.fromMissionAction(it) }
-    }
+    ): List<MissionActionDataOutput> =
+        getMissionActions.execute(missionId).map {
+            MissionActionDataOutput.fromMissionAction(it)
+        }
 
     @PostMapping(value = [""], consumes = ["application/json"])
     @Operation(summary = "Create a mission action")
@@ -82,9 +82,8 @@ class MissionActionsController(
     fun createMissionAction(
         @RequestBody
         actionInput: AddMissionActionDataInput,
-    ): MissionActionDataOutput {
-        return MissionActionDataOutput.fromMissionAction(addMissionAction.execute(actionInput.toMissionAction()))
-    }
+    ): MissionActionDataOutput =
+        MissionActionDataOutput.fromMissionAction(addMissionAction.execute(actionInput.toMissionAction()))
 
     @PutMapping(value = ["/{actionId}"], consumes = ["application/json"])
     @Operation(summary = "Update a mission action")
@@ -119,7 +118,5 @@ class MissionActionsController(
         @PathParam("Action id")
         @PathVariable(name = "actionId")
         actionId: Int,
-    ) {
-        return deleteMissionAction.execute(actionId)
-    }
+    ) = deleteMissionAction.execute(actionId)
 }

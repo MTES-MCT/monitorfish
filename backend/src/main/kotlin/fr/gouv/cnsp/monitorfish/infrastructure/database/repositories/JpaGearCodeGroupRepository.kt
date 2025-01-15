@@ -13,18 +13,16 @@ class JpaGearCodeGroupRepository(
     private val dbGearCodeGroupRepository: DBGearCodeGroupRepository,
 ) : GearCodeGroupRepository {
     @Cacheable(value = ["gear_code_groups"])
-    override fun findAll(): List<GearCodeGroup> {
-        return dbGearCodeGroupRepository.findAll().map {
+    override fun findAll(): List<GearCodeGroup> =
+        dbGearCodeGroupRepository.findAll().map {
             it.toGearCodeGroup()
         }
-    }
 
     @Cacheable(value = ["gear_code_group"])
-    override fun find(code: String): GearCodeGroup {
-        return try {
+    override fun find(code: String): GearCodeGroup =
+        try {
             dbGearCodeGroupRepository.findByCodeEquals(code).toGearCodeGroup()
         } catch (e: EmptyResultDataAccessException) {
             throw CodeNotFoundException("GearCodeGroup: code $code not found")
         }
-    }
 }

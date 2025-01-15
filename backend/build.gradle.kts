@@ -12,6 +12,11 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
 }
 
+// this is to address https://github.com/JLLeitschuh/ktlint-gradle/issues/809
+ktlint {
+    version = "1.5.0"
+}
+
 dependencyManagement {
     imports {
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:2024.0.0")

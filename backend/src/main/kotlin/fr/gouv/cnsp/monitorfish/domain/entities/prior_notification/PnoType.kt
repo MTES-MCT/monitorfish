@@ -7,11 +7,10 @@ data class PnoType(
     val hasDesignatedPorts: Boolean,
     val pnoTypeRules: List<PnoTypeRule>,
 ) {
-    fun toPriorNotificationType(): PriorNotificationType {
-        return PriorNotificationType(
+    fun toPriorNotificationType(): PriorNotificationType =
+        PriorNotificationType(
             hasDesignatedPorts,
             minimumNotificationPeriod,
             name,
         )
-    }
 }

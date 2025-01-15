@@ -24,13 +24,14 @@ class APIOIDCRepository(
     override fun getUserInfo(authorizationHeaderContent: String): UserInfo =
         runBlocking {
             val userInfoResponse =
-                apiClient.httpClient.get(
-                    oidcProperties.issuerUri!! + oidcProperties.userinfoEndpoint!!,
-                ) {
-                    headers {
-                        append(Authorization, authorizationHeaderContent)
-                    }
-                }.body<UserInfo>()
+                apiClient.httpClient
+                    .get(
+                        oidcProperties.issuerUri!! + oidcProperties.userinfoEndpoint!!,
+                    ) {
+                        headers {
+                            append(Authorization, authorizationHeaderContent)
+                        }
+                    }.body<UserInfo>()
 
             return@runBlocking userInfoResponse
         }

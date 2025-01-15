@@ -9,11 +9,10 @@ data class PatchableMissionActionDataInput(
     val actionEndDatetimeUtc: Optional<ZonedDateTime>?,
     val observationsByUnit: Optional<String>?,
 ) {
-    fun toPatchableMissionAction(): PatchableMissionAction {
-        return PatchableMissionAction(
+    fun toPatchableMissionAction(): PatchableMissionAction =
+        PatchableMissionAction(
             actionDatetimeUtc = actionDatetimeUtc,
             actionEndDatetimeUtc = actionEndDatetimeUtc,
             observationsByUnit = observationsByUnit,
         )
-    }
 }

@@ -37,7 +37,8 @@ class PortControllerITests {
         )
 
         // When
-        api.perform(get("/bff/v1/ports"))
+        api
+            .perform(get("/bff/v1/ports"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))

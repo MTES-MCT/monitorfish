@@ -18,10 +18,10 @@ class ProducerOrganizationMembershipController(
 ) {
     @GetMapping("")
     @Operation(summary = "Get all Producer Organization memberships")
-    fun getAll(): List<ProducerOrganizationMembershipDataOutput> {
-        return getAllProducerOrganizationMemberships.execute()
+    fun getAll(): List<ProducerOrganizationMembershipDataOutput> =
+        getAllProducerOrganizationMemberships
+            .execute()
             .map { ProducerOrganizationMembershipDataOutput.fromProducerOrganizationMembership(it) }
-    }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = [""], consumes = ["application/json"])

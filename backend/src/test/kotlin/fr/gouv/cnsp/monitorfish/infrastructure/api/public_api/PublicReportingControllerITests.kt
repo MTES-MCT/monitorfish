@@ -26,7 +26,8 @@ class PublicReportingControllerITests {
     @Test
     fun `Should archive a reporting`() {
         // When
-        api.perform(put("/api/v1/reportings/123/archive"))
+        api
+            .perform(put("/api/v1/reportings/123/archive"))
             // Then
             .andExpect(status().isOk)
 

@@ -6,9 +6,7 @@ import jakarta.persistence.Converter
 
 @Converter(autoApply = true)
 class CountryCodeConverter : AttributeConverter<CountryCode?, String?> {
-    override fun convertToDatabaseColumn(attribute: CountryCode?): String? {
-        return attribute?.name
-    }
+    override fun convertToDatabaseColumn(attribute: CountryCode?): String? = attribute?.name
 
     override fun convertToEntityAttribute(dbData: String?): CountryCode? {
         if (dbData == null) {

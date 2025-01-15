@@ -12,8 +12,8 @@ class FleetSegmentFaker {
             targetSpecies: List<String> = listOf("SPECIES1", "SPECIES2"),
             impactRiskFactor: Double = 1.0,
             year: Int = 2023,
-        ): FleetSegment {
-            return FleetSegment(
+        ): FleetSegment =
+            FleetSegment(
                 segment = segment,
                 segmentName = segmentName,
                 gears = gears,
@@ -28,6 +28,5 @@ class FleetSegmentFaker {
                 priority = 0.0,
                 vesselTypes = listOf(),
             )
-        }
     }
 }

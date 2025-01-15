@@ -6,7 +6,9 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegmentFields
 
 @UseCase
-class CreateFleetSegment(private val fleetSegmentRepository: FleetSegmentRepository) {
+class CreateFleetSegment(
+    private val fleetSegmentRepository: FleetSegmentRepository,
+) {
     fun execute(fields: CreateOrUpdateFleetSegmentFields): FleetSegment {
         require(fields.segment != null) {
             "`segment` must be provided"

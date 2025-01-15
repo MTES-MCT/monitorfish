@@ -34,7 +34,8 @@ class JpaPNOAndLANAlertRepository(
     ): List<PNOAndLANAlert> {
         val rulesAsString = types.map { it.name }
 
-        return dbPNOAndLANAlertRepository.findAlertsOfRules(rulesAsString, internalReferenceNumber, tripNumber)
+        return dbPNOAndLANAlertRepository
+            .findAlertsOfRules(rulesAsString, internalReferenceNumber, tripNumber)
             .map { it.toAlert(mapper) }
     }
 }

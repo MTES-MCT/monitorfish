@@ -135,8 +135,7 @@ class ComputeFleetSegmentsUTests {
                 fleetSegmentRepository,
                 vesselRepository,
                 fixedClock,
-            )
-                .execute(1, speciesCatches)
+            ).execute(1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)
@@ -185,8 +184,7 @@ class ComputeFleetSegmentsUTests {
                 fleetSegmentRepository,
                 vesselRepository,
                 fixedClock,
-            )
-                .execute(1, speciesCatches)
+            ).execute(1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)
@@ -243,8 +241,7 @@ class ComputeFleetSegmentsUTests {
                 fleetSegmentRepository,
                 vesselRepository,
                 fixedClock,
-            )
-                .execute(1, speciesCatches)
+            ).execute(1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)
@@ -301,8 +298,7 @@ class ComputeFleetSegmentsUTests {
                 fleetSegmentRepository,
                 vesselRepository,
                 fixedClock,
-            )
-                .execute(1, speciesCatches)
+            ).execute(1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)
@@ -351,8 +347,7 @@ class ComputeFleetSegmentsUTests {
                 fleetSegmentRepository,
                 vesselRepository,
                 fixedClock,
-            )
-                .execute(1, speciesCatches)
+            ).execute(1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)
@@ -401,8 +396,7 @@ class ComputeFleetSegmentsUTests {
                 fleetSegmentRepository,
                 vesselRepository,
                 fixedClock,
-            )
-                .execute(1, speciesCatches)
+            ).execute(1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)
@@ -432,8 +426,7 @@ class ComputeFleetSegmentsUTests {
                 fleetSegmentRepository,
                 vesselRepository,
                 fixedClock,
-            )
-                .execute(1, listOf())
+            ).execute(1, listOf())
 
         // Then
         assertThat(fleetSegments).hasSize(0)

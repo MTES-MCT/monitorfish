@@ -16,23 +16,20 @@ import org.springframework.stereotype.Repository
 class JpaFleetSegmentRepository(
     private val dbFleetSegmentRepository: DBFleetSegmentRepository,
 ) : FleetSegmentRepository {
-    override fun findAll(): List<FleetSegment> {
-        return dbFleetSegmentRepository.findAll().map {
+    override fun findAll(): List<FleetSegment> =
+        dbFleetSegmentRepository.findAll().map {
             it.toFleetSegment()
         }
-    }
 
     @Cacheable(value = ["segments_by_year"])
-    override fun findAllByYear(year: Int): List<FleetSegment> {
-        return dbFleetSegmentRepository.findAllByYearEquals(year).map {
+    override fun findAllByYear(year: Int): List<FleetSegment> =
+        dbFleetSegmentRepository.findAllByYearEquals(year).map {
             it.toFleetSegment()
         }
-    }
 
     @Cacheable(value = ["segments_with_gears_mesh_condition"])
-    override fun findAllSegmentsGearsWithRequiredMesh(year: Int): List<String> {
-        return dbFleetSegmentRepository.findAllSegmentsGearsHavingMinOrMaxMesh(year)
-    }
+    override fun findAllSegmentsGearsWithRequiredMesh(year: Int): List<String> =
+        dbFleetSegmentRepository.findAllSegmentsGearsHavingMinOrMaxMesh(year)
 
     @Transactional
     override fun update(
@@ -107,7 +104,8 @@ class JpaFleetSegmentRepository(
         try {
             dbFleetSegmentRepository.deleteBySegmentAndYearEquals(segment, year)
 
-            return dbFleetSegmentRepository.findAllByYearEquals(year)
+            return dbFleetSegmentRepository
+                .findAllByYearEquals(year)
                 .map { it.toFleetSegment() }
         } catch (e: Throwable) {
             throw CouldNotDeleteException("Could not delete fleet segment: ${e.message}")
@@ -132,9 +130,7 @@ class JpaFleetSegmentRepository(
         return dbFleetSegmentRepository.findBySegmentAndYearEquals(segment.segment, segment.year).toFleetSegment()
     }
 
-    override fun findYearEntries(): List<Int> {
-        return dbFleetSegmentRepository.findDistinctYears()
-    }
+    override fun findYearEntries(): List<Int> = dbFleetSegmentRepository.findDistinctYears()
 
     @Transactional
     override fun addYear(

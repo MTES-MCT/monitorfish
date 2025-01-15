@@ -102,7 +102,7 @@ export function SilencedAlerts() {
             <VesselName>Navire</VesselName>
             <AlertType colspan={7}>Titre</AlertType>
             <Natinf>NATINF</Natinf>
-            <DateColumn>Ignorée pour...</DateColumn>
+            <DateColumn>Suspendue pour...</DateColumn>
             <DateColumn>Reprise le...</DateColumn>
           </FlexboxGrid>
         </Row>

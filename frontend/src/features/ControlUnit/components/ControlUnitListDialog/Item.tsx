@@ -1,23 +1,13 @@
-import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { centerOnStation } from '@features/ControlUnit/useCases/centerOnStation'
 import { IconButton, type ControlUnit, Accent, Icon } from '@mtes-mct/monitor-ui'
 import { property, uniqBy } from 'lodash/fp'
-import { fromLonLat } from 'ol/proj'
 import styled from 'styled-components'
 
-import {
-  displayControlUnitResourcesFromControlUnit,
-  displayBaseNamesFromControlUnit,
-  getBufferedExtentFromStations
-} from './utils'
+import { displayControlUnitResourcesFromControlUnit, displayBaseNamesFromControlUnit } from './utils'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { FrontendError } from '../../../../libs/FrontendError'
-import { mapActions } from '../../../Map/slice'
-import { stationActions } from '../../../Station/slice'
 import { controlUnitDialogActions } from '../ControlUnitDialog/slice'
-
-const FIVE_SECONDS = 5000
 
 export type ItemProps = {
   controlUnit: ControlUnit.ControlUnit
@@ -31,30 +21,7 @@ export function Item({ controlUnit }: ItemProps) {
       property('id'),
       controlUnit.controlUnitResources.map(({ station }) => station)
     )
-
-    const highlightedStationIds = highlightedStations.map(station => station.id)
-
-    if (highlightedStations.length === 1) {
-      const station = highlightedStations[0]
-      if (!station) {
-        throw new FrontendError('`station` is undefined.')
-      }
-
-      const stationCoordinates = fromLonLat([station.longitude, station.latitude])
-
-      // Add this as a `monitorfishMap` method (vanilla).
-      monitorfishMap.getView().animate({ center: stationCoordinates })
-    } else {
-      const bufferedHighlightedStationsExtent = getBufferedExtentFromStations(highlightedStations, 0.5)
-
-      // Move this indirect method to `monitorfishMap` (vanilla).
-      dispatch(mapActions.fitToExtent(bufferedHighlightedStationsExtent))
-    }
-
-    dispatch(stationActions.highlightStationIds(highlightedStationIds))
-    setTimeout(() => {
-      dispatch(stationActions.highlightStationIds([]))
-    }, FIVE_SECONDS)
+    dispatch(centerOnStation(highlightedStations))
   }
 
   const edit = () => {

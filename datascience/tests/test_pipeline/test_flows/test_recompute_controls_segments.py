@@ -2,6 +2,7 @@ import pandas as pd
 import pytest
 from sqlalchemy import text
 
+from config import TEST_DATA_LOCATION
 from src.db_config import create_engine
 from src.pipeline.flows.recompute_controls_segments import (
     compute_controls_segments,
@@ -12,6 +13,53 @@ from src.read_query import read_query
 from tests.mocks import mock_check_flow_not_running
 
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
+
+
+@pytest.fixture
+def controls_catches() -> pd.DataFrame:
+    return pd.read_csv(TEST_DATA_LOCATION / "csv/controls_catches.csv")
+
+
+@pytest.fixture
+def controls_segments() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "id": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            "segments": [
+                [
+                    {"segment": "L", "segmentName": "Lines"},
+                    {
+                        "segment": "T8-9",
+                        "segmentName": "Trawls areas 8 and 9 targeting demersal",
+                    },
+                ],
+                [{"segment": "FT", "segmentName": "Freezer trawlers"}],
+                [
+                    {
+                        "segment": "T8-9",
+                        "segmentName": "Trawls areas 8 and 9 targeting demersal",
+                    }
+                ],
+                [{"segment": "L HKE", "segmentName": "Lines targeting HKE"}],
+                [],
+                [
+                    {
+                        "segment": "T8-PEL",
+                        "segmentName": "Trawls area 8 targeting pelagic",
+                    }
+                ],
+                [{"segment": "L", "segmentName": "Lines"}],
+                [
+                    {"segment": "L", "segmentName": "Lines"},
+                    {
+                        "segment": "T8-9",
+                        "segmentName": "Trawls areas 8 and 9 targeting demersal",
+                    },
+                ],
+                [],
+            ],
+        }
+    )
 
 
 @pytest.fixture
@@ -89,17 +137,31 @@ def test_extract_controls_catches(reset_test_data):
         year=2022, control_types=["LAND_CONTROL", "SEA_CONTROL"]
     )
     assert len(controls_catches) == 73
-    assert controls_catches.id.nunique() == 25
+    assert controls_catches.control_id.nunique() == 25
+
+    assert controls_catches.loc[3].to_dict() == {
+        "catch_id": 4,
+        "control_id": 1,
+        "year": 2022,
+        "fao_area": "27.8.a",
+        "gear": "OTB",
+        "mesh": 71.0,
+        "species": "GHL",
+        "scip_species_type": "DEMERSAL",
+        "weight": 125.0,
+        "vessel_type": "Navire polyvalent",
+    }
+
     controls_catches = extract_controls_catches.run(
         year=2022, control_types=["SEA_CONTROL"]
     )
     assert len(controls_catches) == 18
-    assert controls_catches.id.nunique() == 12
+    assert controls_catches.control_id.nunique() == 12
     controls_catches = extract_controls_catches.run(
         year=2022, control_types=["LAND_CONTROL"]
     )
     assert len(controls_catches) == 55
-    assert controls_catches.id.nunique() == 13
+    assert controls_catches.control_id.nunique() == 13
 
     with pytest.raises(ValueError):
         extract_controls_catches.run(
@@ -113,66 +175,11 @@ def test_extract_controls_catches(reset_test_data):
         extract_controls_catches.run(year=2022, control_types="THIS_SHOULD_BE_A_LIST")
 
 
-def test_compute_controls_segments():
-    segments = pd.DataFrame(
-        data=[
-            ["A", "AAA", "DRB", "27.7", "SCE", 1.1],
-            ["A", "AAA", None, "37", None, 1.1],
-            ["B", "BBB", "OTM", "27.7.b.4", "HKE", 1],
-            ["B", "BBB", "DRB", "27.7", "SCE", 1],
-            ["C", "CCC", "OTM", None, "BFT", 1],
-            ["D", "DDD", "OTB", "27.4", None, 1],
-            ["E", "EEE", "PTB", None, None, 3],
-            ["F", "FFF", None, None, "TUR", 1],
-        ],
-        columns=[
-            "segment",
-            "segment_name",
-            "gear",
-            "fao_area",
-            "species",
-            "impact_risk_factor",
-        ],
-    )
-
-    controls_catches = pd.DataFrame(
-        data=[
-            ["abc123", "DRB", "27.7.b", "SCE", 123.56],
-            ["abc123", "PTB", "37.5", "TUR", 1231.4],
-            ["def456", "OTM", "27.7.b", "HKE", 1203.4],
-            ["ghi789", "OTM", "27.7.b.4", "HKE", 13.4],
-            ["ghi789", "OTB", "27.4.b.1", "HKE", 1234],
-        ],
-        columns=["id", "gear", "fao_area", "species", "weight"],
-    )
-
-    res = compute_controls_segments.run(controls_catches, segments)
-
-    expected_res = pd.DataFrame(
-        {
-            "id": ["abc123", "ghi789", "def456"],
-            "segments": [
-                [
-                    {"segment": "A", "segmentName": "AAA"},
-                    {"segment": "B", "segmentName": "BBB"},
-                    {"segment": "E", "segmentName": "EEE"},
-                    {"segment": "F", "segmentName": "FFF"},
-                ],
-                [
-                    {"segment": "B", "segmentName": "BBB"},
-                    {"segment": "D", "segmentName": "DDD"},
-                ],
-                [],
-            ],
-        }
-    )
-
-    expected_res["segments"] = expected_res.segments.apply(
-        sorted, key=lambda d: d["segment"]
-    )
-    res["segments"] = res.segments.apply(sorted, key=lambda d: d["segment"])
-
-    pd.testing.assert_frame_equal(res, expected_res)
+def test_compute_controls_segments(
+    controls_catches, segments_of_year, controls_segments
+):
+    res = compute_controls_segments.run(controls_catches, segments_of_year)
+    pd.testing.assert_frame_equal(res, controls_segments)
 
 
 def test_recompute_controls_segments_flow(reset_test_data, updated_controls_segments):

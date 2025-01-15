@@ -8,22 +8,21 @@ export const computeFleetSegments =
   (
     faoAreas: string[] | undefined,
     gearOnBoard: MissionActionFormValues['gearOnboard'],
-    speciesOnboard: MissionActionFormValues['speciesOnboard']
+    speciesOnboard: MissionActionFormValues['speciesOnboard'],
+    vesselId: number
   ) =>
   async (dispatch): Promise<FleetSegment[]> => {
     if (!gearOnBoard?.length && !speciesOnboard?.length) {
       return []
     }
 
-    const gears = gearOnBoard?.map(gear => gear.gearCode)
-    const species = speciesOnboard?.map(specy => specy.speciesCode)
-
     const { data: fleetSegments } = await dispatch(
       fleetSegmentApi.endpoints.computeFleetSegments.initiate(
         {
           faoAreas: faoAreas ?? [],
-          gears: gears ?? [],
-          species: species ?? []
+          gears: gearOnBoard ?? [],
+          species: speciesOnboard ?? [],
+          vesselId
         },
         RTK_FORCE_REFETCH_QUERY_OPTIONS
       )

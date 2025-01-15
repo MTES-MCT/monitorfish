@@ -395,6 +395,12 @@ class GetActivityReportsUTests {
                     faoAreas = listOf("27.2.a", "27.4.a", "27.4.b", "27.4.c"),
                     year = ZonedDateTime.now().year,
                     impactRiskFactor = 2.56,
+                    mainScipSpeciesType = null,
+                    maxMesh = null,
+                    minMesh = null,
+                    minShareOfTargetSpecies = null,
+                    priority = 0.0,
+                    vesselTypes = emptyList(),
                 ),
             ),
         )

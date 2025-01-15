@@ -352,3 +352,26 @@ SET activity_datetime_utc = CASE
        ELSE NULL
    END
 WHERE log_type IS NOT NULL;
+
+-- Insert more RET
+INSERT INTO logbook_raw_messages (operation_number, xml_message) VALUES 
+    ('23', '<ERS>Message RET xml</ERS>'),
+    ('24', '<ERS>Message RET xml</ERS>'),
+    ('25', '<ERS>Message RET xml</ERS>'),
+    ('26', '<ERS>Message RET xml</ERS>'),
+    ('27', '<ERS>Message RET xml</ERS>'),
+    ('28', '<ERS>Message RET xml</ERS>'),
+    ('29', '<ERS>Message RET xml</ERS>'),
+    ('30', '<ERS>Message RET xml</ERS>');
+
+INSERT INTO logbook_reports (
+    operation_number, operation_country,                                              operation_datetime_utc, operation_type, referenced_report_id,                     value,                                            integration_datetime_utc, transmission_format)
+VALUES  
+    (           '23',             'OOF',         ((now() AT TIME ZONE 'UTC') - INTERVAL '2 days')::TIMESTAMP,          'RET',                  '1', '{"returnStatus": "000"}',         ((now() AT TIME ZONE 'UTC') - INTERVAL '2 days')::TIMESTAMP,               'ERS'),
+    (           '24',             'OOF',  ((now() AT TIME ZONE 'UTC') - INTERVAL '1 day 6 hours')::TIMESTAMP,          'RET',                  '2', '{"returnStatus": "000"}',  ((now() AT TIME ZONE 'UTC') - INTERVAL '1 day 6 hours')::TIMESTAMP,               'ERS'),
+    (           '25',             'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 5 days')::TIMESTAMP,          'RET',                  '3', '{"returnStatus": "000"}', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 5 days')::TIMESTAMP,               'ERS'),
+    (           '26',             'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 4 days')::TIMESTAMP,          'RET',                  '4', '{"returnStatus": "000"}', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 4 days')::TIMESTAMP,               'ERS'),
+    (           '27',             'OOF',  ((now() AT TIME ZONE 'UTC') - INTERVAL '1 week 5 days')::TIMESTAMP,          'RET',                  '5', '{"returnStatus": "000"}',  ((now() AT TIME ZONE 'UTC') - INTERVAL '1 week 5 days')::TIMESTAMP,               'ERS'),
+    (           '28',             'OOF',  ((now() AT TIME ZONE 'UTC') - INTERVAL '1 week 4 days')::TIMESTAMP,          'RET',                  '6', '{"returnStatus": "000"}',  ((now() AT TIME ZONE 'UTC') - INTERVAL '1 week 4 days')::TIMESTAMP,               'ERS'),
+    (           '29',             'OOF',  ((now() AT TIME ZONE 'UTC') - INTERVAL '1 week 3 days')::TIMESTAMP,          'RET',                  '7', '{"returnStatus": "000"}',  ((now() AT TIME ZONE 'UTC') - INTERVAL '1 week 3 days')::TIMESTAMP,               'ERS'),
+    (           '30',             'OOF',  ((now() AT TIME ZONE 'UTC') - INTERVAL '1 year 6 days')::TIMESTAMP,          'RET',                  '9', '{"returnStatus": "000"}',  ((now() AT TIME ZONE 'UTC') - INTERVAL '1 year 6 days')::TIMESTAMP,               'ERS');

@@ -1,4 +1,5 @@
 import { monitorfishApi, monitorfishApiKy } from '@api/api'
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
@@ -6,15 +7,19 @@ import type { FleetSegment, UpdateFleetSegment } from '@features/FleetSegment/ty
 
 export type ComputeFleetSegmentsParams = {
   faoAreas: string[]
-  gears: string[]
-  species: string[]
+  gears: MissionAction.GearControl[]
+  species: MissionAction.SpeciesControl[]
+  vesselId: number
 }
 
 export const fleetSegmentApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     computeFleetSegments: builder.query<FleetSegment[], ComputeFleetSegmentsParams>({
-      query: params =>
-        `fleet_segments/compute?faoAreas=${params.faoAreas}&gears=${params.gears}&species=${params.species}`,
+      query: params => ({
+        body: params,
+        method: 'POST',
+        url: `/fleet_segments/compute`
+      }),
       transformResponse: (baseQueryReturnValue: FleetSegment[]) =>
         baseQueryReturnValue.sort((a, b) => a.segment.localeCompare(b.segment))
     }),

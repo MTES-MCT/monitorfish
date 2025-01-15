@@ -8,11 +8,12 @@ import {
   FormikNumberInput,
   FormikTextarea,
   Select,
-  SingleTag
+  SingleTag,
+  usePrevious
 } from '@mtes-mct/monitor-ui'
 import { useField, useFormikContext } from 'formik'
 import { remove as ramdaRemove } from 'ramda'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
@@ -29,9 +30,20 @@ import type { PartialDeep } from 'type-fest'
 export function GearsField() {
   const { values } = useFormikContext<MissionActionFormValues>()
   const [input, meta, helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
+  const previousValue = usePrevious(input.value)
   const { updateSegments } = useGetMissionActionFormikUsecases()
 
   const getGearsApiQuery = useGetGearsQuery()
+
+  useEffect(() => {
+    if (input.value && input.value !== previousValue) {
+      updateSegments({
+        ...values,
+        gearOnboard: input.value
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [input.value, previousValue])
 
   const gearsAsOptions: Array<Option<Gear>> = useMemo(() => {
     if (!getGearsApiQuery.data) {
@@ -65,10 +77,6 @@ export function GearsField() {
     ]
 
     helper.setValue(nextGears)
-    updateSegments({
-      ...values,
-      gearOnboard: nextGears
-    })
   }
 
   const remove = (index: number) => {
@@ -80,10 +88,6 @@ export function GearsField() {
     const normalizedNextGearOnboard = nextGearOnboard.length > 0 ? nextGearOnboard : []
 
     helper.setValue(normalizedNextGearOnboard)
-    updateSegments({
-      ...values,
-      gearOnboard: normalizedNextGearOnboard
-    })
   }
 
   if (!gearsAsOptions.length) {
@@ -118,7 +122,7 @@ export function GearsField() {
                 <StyledFieldGroup isInline>
                   <FormikNumberInput
                     isErrorMessageHidden
-                    isUndefinedWhenDisabled
+                    isRequired
                     label="Maillage déclaré"
                     name={`gearOnboard[${index}].declaredMesh`}
                   />

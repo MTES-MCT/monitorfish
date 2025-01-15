@@ -57,15 +57,19 @@ class FleetSegmentAdminControllerITests {
         given(this.updateFleetSegment.execute(any(), any(), eq(2021)))
             .willReturn(
                 FleetSegment(
-                    "A_SEGMENT/WITH/SLASH",
-                    "",
-                    listOf("NAMO", "SA"),
-                    listOf("OTB", "OTC"),
-                    listOf(),
-                    listOf(),
-                    listOf(),
-                    1.2,
-                    2021,
+                    segment = "A_SEGMENT/WITH/SLASH",
+                    segmentName = "",
+                    gears = listOf("OTB", "OTC"),
+                    priority = 1.2,
+                    year = 2021,
+                    vesselTypes = listOf(),
+                    faoAreas = listOf(),
+                    targetSpecies = listOf(),
+                    impactRiskFactor = 0.0,
+                    mainScipSpeciesType = null,
+                    maxMesh = null,
+                    minMesh = null,
+                    minShareOfTargetSpecies = null,
                 ),
             )
 
@@ -73,7 +77,23 @@ class FleetSegmentAdminControllerITests {
         api.perform(
             put("/bff/v1/admin/fleet_segments?year=2021&segment=A_SEGMENT/WITH/SLASH")
                 .content(
-                    objectMapper.writeValueAsString(CreateOrUpdateFleetSegmentDataInput(gears = listOf("OTB", "OTC"))),
+                    objectMapper.writeValueAsString(
+                        CreateOrUpdateFleetSegmentDataInput(
+                            gears = listOf("OTB", "OTC"),
+                            segment = null,
+                            segmentName = null,
+                            faoAreas = null,
+                            targetSpecies = null,
+                            mainScipSpeciesType = null,
+                            maxMesh = null,
+                            minMesh = null,
+                            minShareOfTargetSpecies = null,
+                            priority = 0.0,
+                            vesselTypes = listOf(),
+                            impactRiskFactor = null,
+                            year = null,
+                        ),
+                    ),
                 )
                 .contentType(MediaType.APPLICATION_JSON),
         )
@@ -83,9 +103,14 @@ class FleetSegmentAdminControllerITests {
             .andExpect(jsonPath("$.gears[0]", equalTo("OTB")))
 
         Mockito.verify(updateFleetSegment).execute(
-            "A_SEGMENT/WITH/SLASH",
-            CreateOrUpdateFleetSegmentFields(gears = listOf("OTB", "OTC")),
-            2021,
+            segment = "A_SEGMENT/WITH/SLASH",
+            fields =
+                CreateOrUpdateFleetSegmentFields(
+                    gears = listOf("OTB", "OTC"),
+                    priority = 0.0,
+                    vesselTypes = listOf(),
+                ),
+            year = 2021,
         )
     }
 
@@ -110,7 +135,21 @@ class FleetSegmentAdminControllerITests {
         // Given
         given(createFleetSegment.execute(any()))
             .willReturn(
-                FleetSegment("SW1", "", listOf("NAMO", "SA"), listOf(), listOf(), listOf(), listOf(), 1.2, 2022),
+                FleetSegment(
+                    segment = "SW1",
+                    segmentName = "",
+                    year = 2022,
+                    gears = listOf("OTB", "OTC"),
+                    priority = 1.2,
+                    vesselTypes = listOf(),
+                    faoAreas = listOf(),
+                    targetSpecies = listOf(),
+                    impactRiskFactor = 1.2,
+                    mainScipSpeciesType = null,
+                    maxMesh = null,
+                    minMesh = null,
+                    minShareOfTargetSpecies = null,
+                ),
             )
 
         // When
@@ -122,6 +161,16 @@ class FleetSegmentAdminControllerITests {
                             segment = "SEGMENT",
                             gears = listOf("OTB", "OTC"),
                             year = 2022,
+                            segmentName = "",
+                            priority = 1.2,
+                            vesselTypes = listOf(),
+                            faoAreas = listOf(),
+                            targetSpecies = listOf(),
+                            impactRiskFactor = 1.2,
+                            mainScipSpeciesType = null,
+                            maxMesh = null,
+                            minMesh = null,
+                            minShareOfTargetSpecies = null,
                         ),
                     ),
                 )
@@ -131,7 +180,21 @@ class FleetSegmentAdminControllerITests {
             .andExpect(status().isCreated)
 
         Mockito.verify(createFleetSegment).execute(
-            CreateOrUpdateFleetSegmentFields(segment = "SEGMENT", gears = listOf("OTB", "OTC"), year = 2022),
+            CreateOrUpdateFleetSegmentFields(
+                segment = "SEGMENT",
+                gears = listOf("OTB", "OTC"),
+                year = 2022,
+                segmentName = "",
+                priority = 1.2,
+                vesselTypes = listOf(),
+                faoAreas = listOf(),
+                targetSpecies = listOf(),
+                impactRiskFactor = 1.2,
+                mainScipSpeciesType = null,
+                maxMesh = null,
+                minMesh = null,
+                minShareOfTargetSpecies = null,
+            ),
         )
     }
 
@@ -139,14 +202,28 @@ class FleetSegmentAdminControllerITests {
     fun `Should throw an exception When no year given to create a fleet segment`() {
         // Given
         given(createFleetSegment.execute(any()))
-            .willThrow(IllegalArgumentException("Year must be provided"))
+            .willThrow(IllegalArgumentException("`year` must be provided"))
 
         // When
         api.perform(
             post("/bff/v1/admin/fleet_segments")
                 .content(
                     objectMapper.writeValueAsString(
-                        CreateOrUpdateFleetSegmentDataInput(segment = "SEGMENT", gears = listOf("OTB", "OTC")),
+                        CreateOrUpdateFleetSegmentDataInput(
+                            segment = "SEGMENT",
+                            gears = listOf("OTB", "OTC"),
+                            segmentName = null,
+                            faoAreas = null,
+                            targetSpecies = null,
+                            mainScipSpeciesType = null,
+                            maxMesh = null,
+                            minMesh = null,
+                            minShareOfTargetSpecies = null,
+                            priority = 0.0,
+                            vesselTypes = listOf(),
+                            impactRiskFactor = null,
+                            year = null,
+                        ),
                     ),
                 )
                 .contentType(MediaType.APPLICATION_JSON),
@@ -155,7 +232,12 @@ class FleetSegmentAdminControllerITests {
             .andExpect(status().isBadRequest)
 
         Mockito.verify(createFleetSegment).execute(
-            CreateOrUpdateFleetSegmentFields(segment = "SEGMENT", gears = listOf("OTB", "OTC")),
+            CreateOrUpdateFleetSegmentFields(
+                segment = "SEGMENT",
+                gears = listOf("OTB", "OTC"),
+                priority = 0.0,
+                vesselTypes = listOf(),
+            ),
         )
     }
 }

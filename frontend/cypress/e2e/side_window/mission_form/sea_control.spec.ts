@@ -128,7 +128,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('MIS : autres mesures et dispositifs', 'Autres mesures.')
 
     cy.fill('Ajouter un engin', 'OTB')
-    cy.get('[name="gearOnboard[1].gearWasControlled"]').eq(1).click()
+    cy.fill('Engin contrôlé', 'Non', { index: 1 })
+    cy.fill('Maillage déclaré', 50, { index: 1 })
 
     // Espèces à bord
     cy.fill('Poids des espèces vérifiés', 'Oui')
@@ -218,7 +219,7 @@ context('Side Window > Mission Form > Sea Control', () => {
             {
               comments: null,
               controlledMesh: null,
-              declaredMesh: null,
+              declaredMesh: 50,
               gearCode: 'OTB',
               gearName: 'Chaluts de fond à panneaux',
               gearWasControlled: false,
@@ -366,7 +367,7 @@ context('Side Window > Mission Form > Sea Control', () => {
           otherComments: null,
           otherInfractions: [],
           portLocode: null,
-          segments: [{ segment: 'SWW01/02/03', segmentName: 'Bottom trawls' }],
+          segments: [{ segment: 'SWW02', segmentName: 'SWW02' }],
           seizureAndDiversion: false,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: null,

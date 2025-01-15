@@ -2,11 +2,9 @@ import { BackOfficeTitle } from '@features/BackOffice/components/BackOfficeTitle
 import {
   ControlPriorityCell,
   DeleteCell,
-  ExpandCell,
   ImpactRiskFactorCell,
   INPUT_TYPE,
   ModifiableCell,
-  renderRowExpanded,
   SegmentCellWithTitle
 } from '@features/Regulation/components/RegulationTables/tableCells'
 import { sortArrayByColumn, SortType } from '@features/Vessel/components/VesselList/tableSort'
@@ -38,7 +36,6 @@ export type SeafrontControlObjectivesProps = Readonly<{
   year: number
 }>
 export function SeafrontControlObjectives({ data, facade, title, year }: SeafrontControlObjectivesProps) {
-  const [expandedRowKeys, setExpandedRowKeys] = useState<number[]>([])
   const [controlObjectivesWithMaybeFleetSegment, setControlObjectivesWithMaybeFleetSegment] = useState<
     ControlObjectiveWithMaybeFleetSegment[]
   >([])
@@ -169,29 +166,6 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
     [updateControlObjectiveDebounced]
   )
 
-  // TODO Make that functional programming friendly.
-  const handleExpanded = useCallback(
-    (rowData: ControlObjectiveWithMaybeFleetSegment) => {
-      let open = false
-      const nextExpandedRowKeys: number[] = []
-
-      expandedRowKeys.forEach(id => {
-        if (id === rowData.id) {
-          open = true
-        } else {
-          nextExpandedRowKeys.push(id)
-        }
-      })
-
-      if (!open) {
-        nextExpandedRowKeys.push(rowData.id)
-      }
-
-      setExpandedRowKeys(nextExpandedRowKeys)
-    },
-    [expandedRowKeys]
-  )
-
   const handleSortColumn = useCallback((nextSortColumn: keyof ControlObjective, nextSortType: SortType) => {
     setSortColumn(nextSortColumn)
     setSortType(nextSortType)
@@ -235,26 +209,18 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
       <Table
         affixHorizontalScrollbar
         data={controlObjectivesWithMaybeFleetSegment}
-        expandedRowKeys={expandedRowKeys}
-        height={(controlObjectivesWithMaybeFleetSegment?.length || 0) * 36 + expandedRowKeys.length * 125 + 60}
+        height={(controlObjectivesWithMaybeFleetSegment?.length || 0) * 40 + 60}
         locale={{
           emptyMessage: 'Aucun résultat',
           loading: 'Chargement...'
         }}
         onSortColumn={handleSortColumn as any}
-        renderRowExpanded={renderRowExpanded}
-        rowExpandedHeight={100}
-        rowHeight={36}
+        rowHeight={40}
         rowKey="id"
         sortColumn={sortColumn}
         sortType={sortType}
         width={795}
       >
-        <Table.Column align="center" width={50}>
-          <Table.HeaderCell> </Table.HeaderCell>
-          <ExpandCell dataKey="id" expandedRowKeys={expandedRowKeys} onChange={handleExpanded} />
-        </Table.Column>
-
         <Table.Column sortable width={100}>
           <Table.HeaderCell>Segment</Table.HeaderCell>
           <SegmentCellWithTitle dataKey="segment" />

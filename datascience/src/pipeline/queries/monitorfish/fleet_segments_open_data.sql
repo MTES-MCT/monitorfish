@@ -4,6 +4,8 @@ SELECT
     segment_name,
     gears,
     fao_areas,
-    target_species || bycatch_species as species,
-    impact_risk_factor
+    target_species,
+    impact_risk_factor,
+    min_mesh,
+    max_mesh
 FROM fleet_segments

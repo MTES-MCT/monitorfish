@@ -59,16 +59,14 @@ def transform_fleet_segments_open_data(fleet_segments) -> pd.DataFrame:
         fleet_segments,
         logger=logger,
         nullable_integer_columns=["year"],
-        pg_array_columns=["gears", "fao_areas", "species"],
+        pg_array_columns=["gears", "fao_areas", "target_species"],
     )
     return fleet_segments
 
 
 with Flow("Controls open data", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         dataset_id = Parameter("dataset_id", default=CONTROLS_STATISTICS_DATASET_ID)
         controls_resource_id = Parameter(
             "controls_resource_id", default=CONTROLS_STATISTICS_CSV_RESOURCE_ID

@@ -1,12 +1,22 @@
 import { FLEET_SEGMENT_FORM_SCHEMA } from '@features/FleetSegment/components/FleetSegmentsBackoffice/schema'
+import { FLEET_SEGMENT_VESSEL_TYPES } from '@features/FleetSegment/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Button, FormikMultiSelect, FormikNumberInput, FormikTextInput, THEME } from '@mtes-mct/monitor-ui'
+import {
+  Button,
+  FormikMultiSelect,
+  FormikNumberInput,
+  FormikSelect,
+  FormikTextInput,
+  THEME
+} from '@mtes-mct/monitor-ui'
+import { getOptionsFromStrings } from '@utils/getOptionsFromStrings'
 import { Form, Formik } from 'formik'
 import { useMemo } from 'react'
 import { Footer, Modal } from 'rsuite'
 import styled from 'styled-components'
 
 import { StyledModalHeader } from '../../../commonComponents/StyledModalHeader'
+import { ScipSpeciesType } from '../../types'
 
 import type { FleetSegment, UpdateFleetSegment } from '../../types'
 
@@ -35,13 +45,18 @@ export function CreateOrEditFleetSegmentModal({
     }
 
     return {
-      bycatchSpecies: [],
       faoAreas: [],
       gears: [],
       impactRiskFactor: undefined,
+      mainScipSpeciesType: undefined,
+      maxMesh: undefined,
+      minMesh: undefined,
+      minShareOfTargetSpecies: undefined,
+      priority: 0,
       segment: undefined,
       segmentName: undefined,
       targetSpecies: [],
+      vesselTypes: [],
       year
     }
   }, [updatedFleetSegment, year])
@@ -62,7 +77,7 @@ export function CreateOrEditFleetSegmentModal({
   }
 
   return (
-    <ModalWithCustomHeight backdrop keyboard={false} onClose={onCancel} open size="xs" style={{ marginTop: 50 }}>
+    <ModalWithCustomHeight backdrop keyboard={false} onClose={onCancel} open size="md" style={{ marginTop: 50 }}>
       <StyledModalHeader>
         <Modal.Title>
           <Title>{updatedFleetSegment ? 'Modifier' : 'Ajouter'} un segment de flotte</Title>
@@ -72,42 +87,69 @@ export function CreateOrEditFleetSegmentModal({
         <Form>
           <Body>
             <Columns>
-              <Column>
-                <FormikTextInput label="Nom" name="segment" />
+              <Column style={{ width: 400 }}>
+                <Columns>
+                  <Column>
+                    <FormikTextInput label="Nom" name="segment" />
+                  </Column>
+                  <Column>
+                    <FormikNumberInput label="Note d’impact" name="impactRiskFactor" />
+                  </Column>
+                </Columns>
+                <FormikMultiSelect
+                  label="Engins"
+                  name="gears"
+                  options={gearsFAOList.map(gear => ({ label: gear.code, value: gear.code }))}
+                  searchable
+                  virtualized
+                />
+                <FormikMultiSelect
+                  label="Zones FAO"
+                  name="faoAreas"
+                  options={faoAreasList?.map(_faoAreas => ({ label: _faoAreas, value: _faoAreas }))}
+                  searchable
+                  virtualized
+                />
+                <FormikMultiSelect
+                  label="Types de navires"
+                  name="vesselTypes"
+                  options={getOptionsFromStrings(FLEET_SEGMENT_VESSEL_TYPES)}
+                  searchable
+                  virtualized
+                />
+                <Columns>
+                  <Column>
+                    <FormikNumberInput label="Maillage min." name="minMesh" />
+                  </Column>
+                  <Column>
+                    <FormikNumberInput label="Maillage max." name="maxMesh" />
+                  </Column>
+                </Columns>
               </Column>
-              <Column>
-                <FormikNumberInput label="Note d’impact" name="impactRiskFactor" />
+              <Column style={{ width: 400 }}>
+                <FormikTextInput label="Description" name="segmentName" />
+                <FormikMultiSelect
+                  label="Espèces ciblées"
+                  name="targetSpecies"
+                  options={faoSpeciesAsOptions}
+                  searchable
+                  virtualized
+                />
+                <FormikSelect
+                  label="Type espèce SCIP"
+                  name="mainScipSpeciesType"
+                  options={getOptionsFromStrings(Object.values(ScipSpeciesType))}
+                />
+                <Columns>
+                  <Column>
+                    <FormikNumberInput label="Pourcent. min. espèces" name="minShareOfTargetSpecies" />
+                  </Column>
+                  <Column>
+                    <FormikNumberInput label="Priorité" name="priority" />
+                  </Column>
+                </Columns>
               </Column>
             </Columns>
-            <FormikTextInput label="Description" name="segmentName" />
-            <FormikMultiSelect
-              label="Engins"
-              name="gears"
-              options={gearsFAOList.map(gear => ({ label: gear.code, value: gear.code }))}
-              searchable
-              virtualized
-            />
-            <FormikMultiSelect
-              label="Espèces ciblées"
-              name="targetSpecies"
-              options={faoSpeciesAsOptions}
-              searchable
-              virtualized
-            />
-            <FormikMultiSelect
-              label="Prises accessoires"
-              name="bycatchSpecies"
-              options={faoSpeciesAsOptions}
-              searchable
-              virtualized
-            />
-            <FormikMultiSelect
-              label="Zones FAO"
-              name="faoAreas"
-              options={faoAreasList?.map(_faoAreas => ({ label: _faoAreas, value: _faoAreas }))}
-              searchable
-              virtualized
-            />
           </Body>
           <Footer>
             <ValidateButton type="submit">{updatedFleetSegment ? 'Modifier' : 'Ajouter'}</ValidateButton>

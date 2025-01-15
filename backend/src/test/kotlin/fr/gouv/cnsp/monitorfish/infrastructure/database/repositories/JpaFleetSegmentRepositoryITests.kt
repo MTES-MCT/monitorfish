@@ -8,9 +8,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.CacheManager
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDate
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import kotlin.properties.Delegates
 
 class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
@@ -24,8 +22,7 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
     private var currentYear by Delegates.notNull<Int>()
 
     init {
-        val formatter = DateTimeFormatter.ofPattern("yyyy")
-        currentYear = LocalDate.now().format(formatter).toInt()
+        currentYear = ZonedDateTime.now().year
     }
 
     @BeforeEach
@@ -39,11 +36,11 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAll Should return all fleet segments`() {
         // When
-        val fleetSegments = jpaFleetSegmentRepository.findAll().sortedBy { it.segment }
+        cacheManager.getCache("segments_by_year")?.clear()
+        val fleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear).sortedBy { it.segment }
 
-        assertThat(fleetSegments).hasSize(66)
+        assertThat(fleetSegments).hasSize(67)
         assertThat(fleetSegments.first().segment).isEqualTo("ATL01")
-        assertThat(fleetSegments.first().dirm).isEqualTo(listOf("MED", "SA", "NAMO", "MEMN"))
         assertThat(fleetSegments.first().gears).isEqualTo(
             listOf("OTM", "PTM"),
         )
@@ -54,9 +51,10 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
     fun `update Should update a fleet segment key`() {
         // Given
         val currentYear = ZonedDateTime.now().year
-        val fleetSegments = jpaFleetSegmentRepository.findAll().sortedBy { it.segment }
+        cacheManager.getCache("segments_by_year")?.clear()
+        val fleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear).sortedBy { it.segment }
 
-        assertThat(fleetSegments).hasSize(66)
+        assertThat(fleetSegments).hasSize(67)
         assertThat(fleetSegments.first().segment).isEqualTo("ATL01")
 
         // When
@@ -77,21 +75,22 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
     fun `update Should update a fleet segment name`() {
         // Given
         val currentYear = ZonedDateTime.now().year
-        val fleetSegments = jpaFleetSegmentRepository.findAll().sortedBy { it.segment }
+        cacheManager.getCache("segments_by_year")?.clear()
+        val fleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear).sortedBy { it.segment }
 
-        assertThat(fleetSegments).hasSize(66)
-        assertThat(fleetSegments.first().segmentName).isEqualTo("All Trawls 3")
+        assertThat(fleetSegments).hasSize(67)
+        assertThat(fleetSegments.first().segmentName).isEqualTo("ATL01")
 
         // When
         val updatedFleetSegment =
             jpaFleetSegmentRepository.update(
                 "ATL01",
-                CreateOrUpdateFleetSegmentFields(segmentName = "All Trawls 666"),
+                CreateOrUpdateFleetSegmentFields(segmentName = "All Trawls 676"),
                 currentYear,
             )
 
         // Then
-        assertThat(updatedFleetSegment.segmentName).isEqualTo("All Trawls 666")
+        assertThat(updatedFleetSegment.segmentName).isEqualTo("All Trawls 676")
     }
 
     @Test
@@ -99,9 +98,10 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
     fun `update Should update fleet segment gears`() {
         // Given
         val currentYear = ZonedDateTime.now().year
-        val fleetSegments = jpaFleetSegmentRepository.findAll().sortedBy { it.segment }
+        cacheManager.getCache("segments_by_year")?.clear()
+        val fleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear).sortedBy { it.segment }
 
-        assertThat(fleetSegments).hasSize(66)
+        assertThat(fleetSegments).hasSize(67)
         assertThat(fleetSegments.first().segment).isEqualTo("ATL01")
         assertThat(fleetSegments.first().gears).isEqualTo(
             listOf("OTM", "PTM"),
@@ -125,51 +125,58 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
     fun `update Should update fleet segment FAO areas`() {
         // Given
         val currentYear = ZonedDateTime.now().year
-        val fleetSegments = jpaFleetSegmentRepository.findAll().sortedBy { it.segment }
+        cacheManager.getCache("segments_by_year")?.clear()
+        val fleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear).sortedBy { it.segment }
 
-        assertThat(fleetSegments).hasSize(66)
+        assertThat(fleetSegments).hasSize(67)
         assertThat(fleetSegments.first().segment).isEqualTo("ATL01")
-        assertThat(fleetSegments.first().faoAreas).isEqualTo(listOf("27.7", "27.8", "27.9", "27.10"))
+        assertThat(fleetSegments.first().faoAreas).isEqualTo(listOf("27.7", "27.8", "27.9", "27.10", "34.1.2"))
 
         // When
         val updatedFleetSegment =
             jpaFleetSegmentRepository.update(
                 "ATL01",
-                CreateOrUpdateFleetSegmentFields(faoAreas = listOf("66.6.6", "66.6.7")),
+                CreateOrUpdateFleetSegmentFields(faoAreas = listOf("67.6.6", "67.6.7")),
                 currentYear,
             )
 
         // Then
         assertThat(updatedFleetSegment.segment).isEqualTo("ATL01")
-        assertThat(updatedFleetSegment.faoAreas).isEqualTo(listOf("66.6.6", "66.6.7"))
+        assertThat(updatedFleetSegment.faoAreas).isEqualTo(listOf("67.6.6", "67.6.7"))
     }
 
     @Test
     @Transactional
     fun `create Should insert a new fleet segment`() {
         // Given
-        val fleetSegments = jpaFleetSegmentRepository.findAll()
+        cacheManager.getCache("segments_by_year")?.clear()
+        val fleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear)
 
-        assertThat(fleetSegments).hasSize(66)
+        assertThat(fleetSegments).hasSize(67)
 
         // When
-        jpaFleetSegmentRepository.create(
+        jpaFleetSegmentRepository.save(
             FleetSegment(
                 segment = "SEGMENT1",
                 segmentName = "A NAME",
-                dirm = listOf(),
                 gears = listOf(),
                 faoAreas = listOf(),
                 targetSpecies = listOf(),
-                bycatchSpecies = listOf(),
                 impactRiskFactor = 2.3,
-                year = currentYear + 1,
+                year = currentYear,
+                mainScipSpeciesType = null,
+                maxMesh = null,
+                minMesh = null,
+                minShareOfTargetSpecies = null,
+                priority = 0.0,
+                vesselTypes = listOf(),
             ),
         )
 
         // Then
-        val updatedFleetSegments = jpaFleetSegmentRepository.findAll()
-        assertThat(updatedFleetSegments).hasSize(67)
+        cacheManager.getCache("segments_by_year")?.clear()
+        val updatedFleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear)
+        assertThat(updatedFleetSegments).hasSize(68)
         val createdFleetSegment = updatedFleetSegments.find { it.segment == "SEGMENT1" }
         assertThat(createdFleetSegment?.segmentName).isEqualTo("A NAME")
     }
@@ -178,16 +185,18 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllByYear Should find all fleet segments of the given year`() {
         // When
+        cacheManager.getCache("segments_by_year")?.clear()
         val fleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear - 1)
 
         // Then
-        assertThat(fleetSegments).hasSize(23)
+        assertThat(fleetSegments).hasSize(43)
     }
 
     @Test
     @Transactional
     fun `delete Should delete a fleet segment`() {
         // Given
+        cacheManager.getCache("segments_by_year")?.clear()
         val fleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear - 1)
         val segmentToDelete = fleetSegments.first()
 
@@ -197,7 +206,7 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         // Then
         cacheManager.getCache("segments_by_year")?.clear()
         val expectedFleetSegment = jpaFleetSegmentRepository.findAllByYear(currentYear - 1)
-        assertThat(expectedFleetSegment).hasSize(22)
+        assertThat(expectedFleetSegment).hasSize(42)
         assertThat(expectedFleetSegment).doesNotContain(segmentToDelete)
     }
 
@@ -205,6 +214,7 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllByYear Should return no fleet segments When there is no objectives for a given year`() {
         // When
+        cacheManager.getCache("segments_by_year")?.clear()
         val fleetSegments = jpaFleetSegmentRepository.findAllByYear(2020)
 
         // Then
@@ -221,16 +231,18 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         val yearEntries = jpaFleetSegmentRepository.findYearEntries()
 
         // Then
-        assertThat(yearEntries).hasSize(2)
+        assertThat(yearEntries).hasSize(3)
         assertThat(yearEntries.first()).isEqualTo(currentYear)
-        assertThat(yearEntries.last()).isEqualTo(currentYear - 1)
+        assertThat(yearEntries.last()).isEqualTo(2022)
     }
 
     @Test
     @Transactional
     fun `addYear Should add a new year copied from the specified year`() {
         // Given
-        assertThat(jpaFleetSegmentRepository.findAllByYear(currentYear - 1)).hasSize(23)
+        cacheManager.getCache("segments_by_year")?.clear()
+        assertThat(jpaFleetSegmentRepository.findAllByYear(currentYear - 1)).hasSize(43)
+        cacheManager.getCache("segments_by_year")?.clear()
         assertThat(jpaFleetSegmentRepository.findAllByYear(currentYear + 1)).hasSize(0)
 
         // When
@@ -238,8 +250,24 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
 
         // Then
         cacheManager.getCache("segments_by_year")?.clear()
-        assertThat(jpaFleetSegmentRepository.findAllByYear(currentYear - 1)).hasSize(23)
+        assertThat(jpaFleetSegmentRepository.findAllByYear(currentYear - 1)).hasSize(43)
+        cacheManager.getCache("segments_by_year")?.clear()
         val updatedFleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear + 1).sortedBy { it.segment }
-        assertThat(updatedFleetSegments).hasSize(23)
+        assertThat(updatedFleetSegments).hasSize(43)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllSegmentsGearsWithRequiredMesh Should return all gears having a min or max mesh`() {
+        // When
+        cacheManager.getCache("segments_with_gears_mesh_condition")?.clear()
+        val gears = jpaFleetSegmentRepository.findAllSegmentsGearsWithRequiredMesh(currentYear)
+
+        assertThat(gears).hasSize(26)
+        assertThat(gears).isEqualTo(
+            listOf("SV", "OTB", "TBB", "GTR", "PTB", "TMS", "OTT", "TM", "OTM", "GNC", "SX", "TBS", "SSC", "TBN",
+                "OT", "PTM", "TX", "SPR", "GNS", "TB", "SDN", "PT", "GN", "GEN", "GTN", "GNF",
+            ),
+        )
     }
 }

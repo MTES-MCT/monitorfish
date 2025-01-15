@@ -2,7 +2,7 @@ WITH deleted_corrected_or_rejected_messages AS (
     SELECT referenced_report_id
     FROM logbook_reports
     WHERE
-        operation_datetime_utc >= :min_pno_date - INTERVAL '1 day'
+        operation_datetime_utc >= :min_trip_date - INTERVAL '1 day'
         AND operation_datetime_utc <= :max_pno_date + INTERVAL '1 week'
         AND 
             (
@@ -105,9 +105,15 @@ SELECT
     s.weight,
     s.flag_state,
     s.locode,
-    s.facade
+    s.facade,
+    v.vessel_type,
+    species.scip_species_type
 FROM pno_species s
 LEFT JOIN far_gears fg
 ON s.id = fg.id
 LEFT JOIN dep_gears dg
 ON s.id = dg.id
+LEFT JOIN species
+ON species.species_code = s.species
+LEFT JOIN vessels v
+ON v.cfr = s.cfr

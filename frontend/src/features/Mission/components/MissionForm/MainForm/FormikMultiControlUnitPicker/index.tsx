@@ -2,14 +2,14 @@ import { useGetLegacyControlUnitsQuery } from '@api/legacyControlUnit'
 import { getControlUnitsOptionsFromControlUnits } from '@features/ControlUnit/utils'
 import { useForceUpdate } from '@hooks/useForceUpdate'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, usePrevious } from '@mtes-mct/monitor-ui'
+import { usePrevious } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { remove, update } from 'ramda'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ControlUnitSelect } from './ControlUnitSelect'
-import { INITIAL_MISSION_CONTROL_UNIT, PAMControlUnitIds } from '../../constants'
+import { PAMControlUnitIds } from '../../constants'
 import { useGetMainFormFormikUsecases } from '../../hooks/useGetMainFormFormikUsecases'
 
 import type { MissionMainFormValues } from '../../types'
@@ -47,17 +47,6 @@ export function FormikMultiControlUnitPicker({
     administration: string
     name: string
   }>
-
-  const addUnit = useCallback(
-    () => {
-      const nextControlUnits = [...values[name], INITIAL_MISSION_CONTROL_UNIT]
-
-      setFieldValue(name, nextControlUnits)
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [values[name]]
-  )
 
   const removeUnit = useCallback(
     (index: number) => {
@@ -113,20 +102,14 @@ export function FormikMultiControlUnitPicker({
           />
         ))}
       </>
-
-      <Button
-        accent={Accent.SECONDARY}
-        data-cy="add-other-control-unit"
-        disabled={!!engagedControlUnit}
-        onClick={addUnit}
-      >
-        Ajouter une autre unité
-      </Button>
     </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   > button {
     margin-top: 16px;
   }

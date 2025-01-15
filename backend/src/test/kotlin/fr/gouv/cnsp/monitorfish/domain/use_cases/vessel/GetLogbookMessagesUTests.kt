@@ -77,8 +77,7 @@ class GetLogbookMessagesUTests {
                 speciesRepository,
                 portRepository,
                 logbookRawMessageRepository,
-            )
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+            ).execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(6)
@@ -99,10 +98,34 @@ class GetLogbookMessagesUTests {
         assertThat(ersMessages[1].rawMessage).isEqualTo("<xml>DUMMY XML MESSAGE</xml>")
         val far = ersMessages[1].message as FAR
         assertThat(far.hauls.size).isEqualTo(1)
-        assertThat(far.hauls.first().catches.first().species).isEqualTo("SMV")
-        assertThat(far.hauls.first().catches.first().speciesName).isEqualTo("STOMIAS BREVIBARBATUS")
-        assertThat(far.hauls.first().catches.last().species).isEqualTo("PNB")
-        assertThat(far.hauls.first().catches.last().speciesName).isEqualTo("CREVETTE ROYALE ROSE")
+        assertThat(
+            far.hauls
+                .first()
+                .catches
+                .first()
+                .species,
+        ).isEqualTo("SMV")
+        assertThat(
+            far.hauls
+                .first()
+                .catches
+                .first()
+                .speciesName,
+        ).isEqualTo("STOMIAS BREVIBARBATUS")
+        assertThat(
+            far.hauls
+                .first()
+                .catches
+                .last()
+                .species,
+        ).isEqualTo("PNB")
+        assertThat(
+            far.hauls
+                .first()
+                .catches
+                .last()
+                .speciesName,
+        ).isEqualTo("CREVETTE ROYALE ROSE")
         assertThat(far.hauls.first().gearName).isEqualTo("Chaluts de fond à panneaux")
 
         assertThat(ersMessages[2].message).isInstanceOf(COE::class.java)
@@ -152,8 +175,7 @@ class GetLogbookMessagesUTests {
                 speciesRepository,
                 portRepository,
                 logbookRawMessageRepository,
-            )
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+            ).execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(2)
@@ -191,8 +213,7 @@ class GetLogbookMessagesUTests {
                 speciesRepository,
                 portRepository,
                 logbookRawMessageRepository,
-            )
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+            ).execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(3)
@@ -270,8 +291,7 @@ class GetLogbookMessagesUTests {
                 speciesRepository,
                 portRepository,
                 logbookRawMessageRepository,
-            )
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+            ).execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(3)
@@ -300,8 +320,7 @@ class GetLogbookMessagesUTests {
                 speciesRepository,
                 portRepository,
                 logbookRawMessageRepository,
-            )
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+            ).execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(3)
@@ -327,8 +346,7 @@ class GetLogbookMessagesUTests {
                 speciesRepository,
                 portRepository,
                 logbookRawMessageRepository,
-            )
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+            ).execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(3)
@@ -360,8 +378,7 @@ class GetLogbookMessagesUTests {
                 speciesRepository,
                 portRepository,
                 logbookRawMessageRepository,
-            )
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+            ).execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(6)
@@ -386,16 +403,17 @@ class GetLogbookMessagesUTests {
                 messageType = "",
                 message = Acknowledgment().apply { returnStatus = "000" },
                 reportDateTime =
-                    ZonedDateTime.of(
-                        2020,
-                        5,
-                        5,
-                        3,
-                        4,
-                        5,
-                        3,
-                        UTC,
-                    ).minusHours(12),
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            4,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
@@ -416,8 +434,7 @@ class GetLogbookMessagesUTests {
                 speciesRepository,
                 portRepository,
                 logbookRawMessageRepository,
-            )
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+            ).execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(6)

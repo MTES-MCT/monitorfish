@@ -12,8 +12,8 @@ data class VoyageDataOutput(
     val logbookMessagesAndAlerts: LogbookMessagesAndAlertsDataOutput,
 ) {
     companion object {
-        fun fromVoyage(voyage: Voyage): VoyageDataOutput {
-            return VoyageDataOutput(
+        fun fromVoyage(voyage: Voyage): VoyageDataOutput =
+            VoyageDataOutput(
                 isLastVoyage = voyage.isLastVoyage,
                 isFirstVoyage = voyage.isFirstVoyage,
                 startDate = voyage.startDate,
@@ -23,6 +23,5 @@ data class VoyageDataOutput(
                     LogbookMessagesAndAlertsDataOutput
                         .fromLogbookMessagesAndAlerts(voyage.logbookMessagesAndAlerts),
             )
-        }
     }
 }

@@ -9,13 +9,14 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaDistrictRepository(private val dbDistrictRepository: DBDistrictRepository) : DistrictRepository {
+class JpaDistrictRepository(
+    private val dbDistrictRepository: DBDistrictRepository,
+) : DistrictRepository {
     @Cacheable(value = ["district"])
-    override fun find(districtCode: String): District {
-        return try {
+    override fun find(districtCode: String): District =
+        try {
             dbDistrictRepository.findByDistrictCodeEquals(districtCode).toDistrict()
         } catch (e: EmptyResultDataAccessException) {
             throw CodeNotFoundException("District: code $districtCode not found")
         }
-    }
 }

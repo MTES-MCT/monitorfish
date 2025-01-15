@@ -40,13 +40,9 @@ enum class JointDeploymentPlan(
     WESTERN_WATERS(WESTERN_WATERS_SPECIES, WESTERN_WATERS_OPERATIONAL_ZONES),
     ;
 
-    fun getSpeciesCodes(): List<String> {
-        return this.species.map { it.second }.distinct()
-    }
+    fun getSpeciesCodes(): List<String> = this.species.map { it.second }.distinct()
 
-    private fun getOperationalZones(): List<String> {
-        return this.operationalZones
-    }
+    private fun getOperationalZones(): List<String> = this.operationalZones
 
     /**
      * See "DÉCISION D’EXÉCUTION (UE) 2023/2376 DE LA COMMISSION":

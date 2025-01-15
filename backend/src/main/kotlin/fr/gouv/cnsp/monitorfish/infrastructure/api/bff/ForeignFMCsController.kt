@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/bff/v1/foreign_fmcs")
 @Tag(name = "APIs for foreign FMCs")
-class ForeignFMCsController(private val getAllForeignFMCs: GetAllForeignFMCs) {
+class ForeignFMCsController(
+    private val getAllForeignFMCs: GetAllForeignFMCs,
+) {
     @GetMapping("")
     @Operation(summary = "Get all foreign FMCs")
-    fun getAllForeignFMCs(): List<ForeignFMCDataOutput> {
-        return getAllForeignFMCs.execute().map { foreignFMC ->
+    fun getAllForeignFMCs(): List<ForeignFMCDataOutput> =
+        getAllForeignFMCs.execute().map { foreignFMC ->
             ForeignFMCDataOutput.fromForeignFMC(foreignFMC)
         }
-    }
 }

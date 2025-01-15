@@ -134,13 +134,12 @@ class GetVesselVoyage(
     private fun getIsFirstVoyage(
         internalReferenceNumber: String,
         tripNumber: String,
-    ): Boolean {
-        return try {
+    ): Boolean =
+        try {
             logbookReportRepository.findTripBeforeTripNumber(internalReferenceNumber, tripNumber)
 
             false
         } catch (e: NoLogbookFishingTripFound) {
             true
         }
-    }
 }

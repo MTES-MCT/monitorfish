@@ -9,8 +9,8 @@ class LogbookMessageGearDataOutput(
     val dimensions: String?,
 ) {
     companion object {
-        fun fromGear(gear: LogbookTripGear): LogbookMessageGearDataOutput? {
-            return gear.gear?.let { gearCode ->
+        fun fromGear(gear: LogbookTripGear): LogbookMessageGearDataOutput? =
+            gear.gear?.let { gearCode ->
                 LogbookMessageGearDataOutput(
                     gear = gearCode,
                     gearName = gear.gearName,
@@ -18,6 +18,5 @@ class LogbookMessageGearDataOutput(
                     dimensions = gear.dimensions,
                 )
             }
-        }
     }
 }

@@ -9,10 +9,9 @@ data class PriorNotificationsExtraDataOutput(
     companion object {
         fun fromPriorNotificationStats(
             priorNotificationStats: PriorNotificationStats,
-        ): PriorNotificationsExtraDataOutput {
-            return PriorNotificationsExtraDataOutput(
+        ): PriorNotificationsExtraDataOutput =
+            PriorNotificationsExtraDataOutput(
                 perSeafrontGroupCount = priorNotificationStats.perSeafrontGroupCount,
             )
-        }
     }
 }

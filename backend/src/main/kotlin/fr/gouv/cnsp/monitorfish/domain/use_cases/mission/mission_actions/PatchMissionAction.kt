@@ -16,8 +16,8 @@ class PatchMissionAction(
     fun execute(
         id: Int,
         patchableEnvActionEntity: PatchableMissionAction,
-    ): MissionAction {
-        return try {
+    ): MissionAction =
+        try {
             val previousMissionAction = missionActionsRepository.findById(id)
 
             val updatedMissionAction = patchMissionAction.execute(previousMissionAction, patchableEnvActionEntity)
@@ -26,5 +26,4 @@ class PatchMissionAction(
         } catch (e: Exception) {
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND, "Action $id not found", e)
         }
-    }
 }

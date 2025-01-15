@@ -10,7 +10,8 @@ import java.time.Instant
 
 @DynamicUpdate
 interface DBLogbookReportRepository :
-    CrudRepository<LogbookReportEntity, Long>, JpaSpecificationExecutor<LogbookReportEntity> {
+    CrudRepository<LogbookReportEntity, Long>,
+    JpaSpecificationExecutor<LogbookReportEntity> {
     @Query(
         """
         WITH

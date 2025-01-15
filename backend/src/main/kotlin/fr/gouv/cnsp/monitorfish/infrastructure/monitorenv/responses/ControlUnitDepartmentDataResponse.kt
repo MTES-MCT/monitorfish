@@ -9,10 +9,9 @@ data class ControlUnitDepartmentDataResponse(
     val inseeCode: String,
     val name: String,
 ) {
-    fun toControlUnitDepartmentArea(): ControlUnitDepartmentArea {
-        return ControlUnitDepartmentArea(
+    fun toControlUnitDepartmentArea(): ControlUnitDepartmentArea =
+        ControlUnitDepartmentArea(
             inseeCode = inseeCode,
             name = name,
         )
-    }
 }

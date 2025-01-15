@@ -5,7 +5,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
 
 @UseCase
-class RequestNotification(private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository) {
+class RequestNotification(
+    private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
+) {
     fun execute(
         id: Int,
         notificationRequested: BeaconMalfunctionNotificationType,

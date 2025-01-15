@@ -10,7 +10,6 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 class GetVesselById(
     private val vesselRepository: VesselRepository,
 ) {
-    fun execute(vesselId: Int): Vessel {
-        return vesselRepository.findVesselById(vesselId) ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
-    }
+    fun execute(vesselId: Int): Vessel =
+        vesselRepository.findVesselById(vesselId) ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 }

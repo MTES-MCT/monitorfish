@@ -92,9 +92,10 @@ class MissionsControllerITests {
         )
 
         // When
-        api.perform(
-            get(
-                """
+        api
+            .perform(
+                get(
+                    """
                     /bff/v1/missions?
                     pageNumber=1&
                     pageSize=&
@@ -104,8 +105,8 @@ class MissionsControllerITests {
                     missionStatus=&
                     seaFronts=MED
                 """.trim().replace("\\s+".toRegex(), ""),
-            ),
-        )
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
@@ -164,9 +165,10 @@ class MissionsControllerITests {
         )
 
         // When
-        api.perform(
-            get("/bff/v1/missions/123"),
-        )
+        api
+            .perform(
+                get("/bff/v1/missions/123"),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.isGeometryComputedFromControls", equalTo(false)))

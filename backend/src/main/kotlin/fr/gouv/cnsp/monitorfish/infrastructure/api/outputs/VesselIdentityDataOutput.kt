@@ -18,8 +18,8 @@ data class VesselIdentityDataOutput(
     val vesselName: String? = null,
 ) {
     companion object {
-        fun fromVessel(vessel: Vessel): VesselIdentityDataOutput {
-            return VesselIdentityDataOutput(
+        fun fromVessel(vessel: Vessel): VesselIdentityDataOutput =
+            VesselIdentityDataOutput(
                 districtCode = vessel.districtCode,
                 externalReferenceNumber = vessel.externalReferenceNumber,
                 flagState = vessel.flagState,
@@ -31,10 +31,9 @@ data class VesselIdentityDataOutput(
                 vesselLength = vessel.length,
                 vesselName = vessel.vesselName,
             )
-        }
 
-        fun fromVesselAndBeacon(vesselAndBeacon: VesselAndBeacon): VesselIdentityDataOutput {
-            return VesselIdentityDataOutput(
+        fun fromVesselAndBeacon(vesselAndBeacon: VesselAndBeacon): VesselIdentityDataOutput =
+            VesselIdentityDataOutput(
                 beaconNumber = vesselAndBeacon.beacon?.beaconNumber,
                 districtCode = vesselAndBeacon.vessel.districtCode,
                 externalReferenceNumber = vesselAndBeacon.vessel.externalReferenceNumber,
@@ -47,6 +46,5 @@ data class VesselIdentityDataOutput(
                 vesselLength = vesselAndBeacon.vessel.length,
                 vesselName = vesselAndBeacon.vessel.vesselName,
             )
-        }
     }
 }

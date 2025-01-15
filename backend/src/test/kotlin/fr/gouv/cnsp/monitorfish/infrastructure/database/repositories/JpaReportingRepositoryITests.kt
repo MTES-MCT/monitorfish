@@ -221,11 +221,12 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     fun `archive Should set the archived flag as true`() {
         // Given
         val reportingToArchive =
-            jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                "ABC000180832",
-                ZonedDateTime.now().minusYears(1),
-            ).first()
+            jpaReportingRepository
+                .findCurrentAndArchivedByVesselIdentifierEquals(
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    "ABC000180832",
+                    ZonedDateTime.now().minusYears(1),
+                ).first()
         assertThat(reportingToArchive.isArchived).isEqualTo(false)
 
         // When
@@ -233,11 +234,12 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
         // Then
         val archivedReporting =
-            jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                "ABC000180832",
-                ZonedDateTime.now().minusYears(1),
-            ).first()
+            jpaReportingRepository
+                .findCurrentAndArchivedByVesselIdentifierEquals(
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    "ABC000180832",
+                    ZonedDateTime.now().minusYears(1),
+                ).first()
         assertThat(archivedReporting.isArchived).isEqualTo(true)
     }
 

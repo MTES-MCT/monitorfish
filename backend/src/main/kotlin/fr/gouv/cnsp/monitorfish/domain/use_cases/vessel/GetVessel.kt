@@ -33,8 +33,8 @@ class GetVessel(
         vesselIdentifier: VesselIdentifier?,
         fromDateTime: ZonedDateTime? = null,
         toDateTime: ZonedDateTime? = null,
-    ): Pair<Boolean, VesselInformation> {
-        return coroutineScope {
+    ): Pair<Boolean, VesselInformation> =
+        coroutineScope {
             val (vesselTrackHasBeenModified, positions) =
                 GetVesselPositions(
                     positionRepository,
@@ -74,7 +74,8 @@ class GetVessel(
                         it,
                     )
                 }
-            val hasVisioCaptures = logbookSoftware?.let { LogbookSoftware.isVisioCaptureInRealTime(logbookSoftware) } ?: false
+            val hasVisioCaptures =
+                logbookSoftware?.let { LogbookSoftware.isVisioCaptureInRealTime(logbookSoftware) } ?: false
 
             Pair(
                 vesselTrackHasBeenModified,
@@ -91,5 +92,4 @@ class GetVessel(
                 ),
             )
         }
-    }
 }

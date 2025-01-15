@@ -9,20 +9,20 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaInfractionRepository(private val dbInfractionRepository: DBInfractionRepository) : InfractionRepository {
+class JpaInfractionRepository(
+    private val dbInfractionRepository: DBInfractionRepository,
+) : InfractionRepository {
     @Cacheable(value = ["infractions"])
-    override fun findAll(): List<Infraction> {
-        return dbInfractionRepository.findAll().map {
+    override fun findAll(): List<Infraction> =
+        dbInfractionRepository.findAll().map {
             it.toInfraction()
         }
-    }
 
     @Cacheable(value = ["infraction"])
-    override fun findInfractionByNatinfCode(natinfCode: Int): Infraction {
-        return try {
+    override fun findInfractionByNatinfCode(natinfCode: Int): Infraction =
+        try {
             dbInfractionRepository.findByNatinfCodeEquals(natinfCode).toInfraction()
         } catch (e: EmptyResultDataAccessException) {
             throw NatinfCodeNotFoundException("NATINF code $natinfCode not found")
         }
-    }
 }

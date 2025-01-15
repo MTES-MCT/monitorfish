@@ -13,7 +13,10 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAd
 import java.lang.reflect.Type
 
 @ControllerAdvice
-class LogRequestsWithBody(val request: HttpServletRequest, val mapper: ObjectMapper) : RequestBodyAdviceAdapter() {
+class LogRequestsWithBody(
+    val request: HttpServletRequest,
+    val mapper: ObjectMapper,
+) : RequestBodyAdviceAdapter() {
     private val logger = LoggerFactory.getLogger(LogGETRequests::class.java)
 
     override fun afterBodyRead(
@@ -35,7 +38,5 @@ class LogRequestsWithBody(val request: HttpServletRequest, val mapper: ObjectMap
         methodParameter: MethodParameter,
         targetType: Type,
         converterType: Class<out HttpMessageConverter<*>>,
-    ): Boolean {
-        return true
-    }
+    ): Boolean = true
 }

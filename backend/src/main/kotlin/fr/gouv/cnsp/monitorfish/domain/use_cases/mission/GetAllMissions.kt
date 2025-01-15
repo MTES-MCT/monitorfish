@@ -48,8 +48,7 @@ class GetAllMissions(
                 .map { chunkedMissions ->
                     val ids = chunkedMissions.map { it.id }
                     return@map missionActionsRepository.findMissionActionsIn(ids)
-                }
-                .flatten()
+                }.flatten()
         logger.info("Got ${allMissionsActions.size} mission actions associated to fetched missions.")
 
         return missions.map { mission ->

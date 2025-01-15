@@ -48,7 +48,9 @@ class PriorNotificationController(
     private val updateLogbookPriorNotification: UpdateLogbookPriorNotification,
     private val verifyAndSendPriorNotification: VerifyAndSendPriorNotification,
 ) {
-    data class Status(val status: String)
+    data class Status(
+        val status: String,
+    )
 
     @GetMapping("")
     @Operation(summary = "Get all prior notifications")
@@ -282,9 +284,7 @@ class PriorNotificationController(
 
     @GetMapping("/types")
     @Operation(summary = "Get all prior notification types")
-    fun getAllTypes(): List<String> {
-        return getPriorNotificationTypes.execute()
-    }
+    fun getAllTypes(): List<String> = getPriorNotificationTypes.execute()
 
     @GetMapping("/{reportId}")
     @Operation(summary = "Get a prior notification by its `reportId`")
@@ -298,10 +298,9 @@ class PriorNotificationController(
         @Parameter(description = "Operation date (to optimize SQL query via Timescale).")
         @RequestParam(name = "operationDate")
         operationDate: ZonedDateTime,
-    ): PriorNotificationDataOutput {
-        return PriorNotificationDataOutput
+    ): PriorNotificationDataOutput =
+        PriorNotificationDataOutput
             .fromPriorNotification(getPriorNotification.execute(reportId, operationDate, isManuallyCreated))
-    }
 
     @GetMapping("/{reportId}/pdf")
     @Operation(summary = "Get the PNO PDF document")
@@ -352,10 +351,9 @@ class PriorNotificationController(
         @Parameter(description = "Is the prior notification manually created?")
         @RequestParam(name = "isManuallyCreated")
         isManuallyCreated: Boolean,
-    ): PriorNotificationDataOutput {
-        return PriorNotificationDataOutput
+    ): PriorNotificationDataOutput =
+        PriorNotificationDataOutput
             .fromPriorNotification(verifyAndSendPriorNotification.execute(reportId, operationDate, isManuallyCreated))
-    }
 
     @PutMapping("/{reportId}/invalidate")
     @Operation(summary = "Invalidate a prior notification by its `reportId`")
@@ -386,10 +384,10 @@ class PriorNotificationController(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
-    ): List<PriorNotificationSentMessageDataOutput> {
-        return getPriorNotificationSentMessages.execute(reportId)
+    ): List<PriorNotificationSentMessageDataOutput> =
+        getPriorNotificationSentMessages
+            .execute(reportId)
             .map { PriorNotificationSentMessageDataOutput.fromPriorNotificationSentMessage(it) }
-    }
 
     @GetMapping("/{reportId}/uploads/{priorNotificationUploadId}")
     @Operation(summary = "Download a prior notification attachment")
@@ -418,10 +416,10 @@ class PriorNotificationController(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
-    ): List<PriorNotificationUploadDataOutput> {
-        return getPriorNotificationUploads.execute(reportId)
+    ): List<PriorNotificationUploadDataOutput> =
+        getPriorNotificationUploads
+            .execute(reportId)
             .map { PriorNotificationUploadDataOutput.fromPriorNotificationDocument(it) }
-    }
 
     @PostMapping("/{reportId}/uploads")
     @Operation(summary = "Attach a document to a prior notification")

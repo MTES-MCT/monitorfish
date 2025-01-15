@@ -10,7 +10,9 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
-class LoggingConfig(val mapper: ObjectMapper) : WebMvcConfigurer {
+class LoggingConfig(
+    val mapper: ObjectMapper,
+) : WebMvcConfigurer {
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(CorrelationInterceptor()).order(CORRELATION_ID_PRECEDENCE)
         registry.addInterceptor(LogGETRequests(mapper)).order(LOG_REQUEST_PRECEDENCE)

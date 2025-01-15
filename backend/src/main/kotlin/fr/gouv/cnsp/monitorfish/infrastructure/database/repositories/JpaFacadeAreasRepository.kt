@@ -7,11 +7,12 @@ import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaFacadeAreasRepository(private val dbFacadeAreasRepository: DBFacadeAreasRepository) : FacadeAreasRepository {
+class JpaFacadeAreasRepository(
+    private val dbFacadeAreasRepository: DBFacadeAreasRepository,
+) : FacadeAreasRepository {
     // TODO This could be cached via a `findAll()`.
-    override fun findByIncluding(point: Point): List<FacadeArea> {
-        return dbFacadeAreasRepository.findByIncluding(point).map {
+    override fun findByIncluding(point: Point): List<FacadeArea> =
+        dbFacadeAreasRepository.findByIncluding(point).map {
             it.toFacadeArea()
         }
-    }
 }

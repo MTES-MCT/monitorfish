@@ -56,7 +56,9 @@ class GetPriorNotification(
             when (priorNotification.isManuallyCreated) {
                 true ->
                     if (priorNotification.logbookMessageAndValue.logbookMessage.vesselId != null) {
-                        vesselRepository.findVesselById(priorNotification.logbookMessageAndValue.logbookMessage.vesselId!!)
+                        vesselRepository.findVesselById(
+                            priorNotification.logbookMessageAndValue.logbookMessage.vesselId!!,
+                        )
                     } else {
                         null
                     }

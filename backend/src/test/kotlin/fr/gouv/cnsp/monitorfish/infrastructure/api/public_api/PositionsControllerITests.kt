@@ -33,10 +33,12 @@ class PositionsControllerITests {
 
         // When
         val body =
-            api.perform(post("/api/v1/positions").content("TEST"))
+            api
+                .perform(post("/api/v1/positions").content("TEST"))
                 // Then
                 .andExpect(status().isOk)
-                .andReturn().response.contentAsString
+                .andReturn()
+                .response.contentAsString
 
         assertThat(body).contains("ARGH for NAF message")
     }
@@ -47,7 +49,8 @@ class PositionsControllerITests {
         val naf = "//SR//AD/FRA//FR/GBR//RD/20201006//RT/2141//FS/GBR//RC/MGXR6//IR/GBROOC21250//DA/20201006//TI/1625//LT/53.254//LG/.940//SP/96//CO/8//TM/POS//ER//"
 
         // When
-        api.perform(post("/api/v1/positions").content(naf))
+        api
+            .perform(post("/api/v1/positions").content(naf))
             // Then
             .andExpect(status().isCreated)
     }

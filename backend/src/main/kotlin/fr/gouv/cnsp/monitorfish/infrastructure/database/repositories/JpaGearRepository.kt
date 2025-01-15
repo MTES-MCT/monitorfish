@@ -9,20 +9,20 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaGearRepository(private val dbGearRepository: DBGearRepository) : GearRepository {
+class JpaGearRepository(
+    private val dbGearRepository: DBGearRepository,
+) : GearRepository {
     @Cacheable(value = ["gears"])
-    override fun findAll(): List<Gear> {
-        return dbGearRepository.findAll().map {
+    override fun findAll(): List<Gear> =
+        dbGearRepository.findAll().map {
             it.toGear()
         }
-    }
 
     @Cacheable(value = ["gear"])
-    override fun findByCode(code: String): Gear {
-        return try {
+    override fun findByCode(code: String): Gear =
+        try {
             dbGearRepository.findByCodeEquals(code).toGear()
         } catch (e: EmptyResultDataAccessException) {
             throw CodeNotFoundException("Gear: code $code not found")
         }
-    }
 }

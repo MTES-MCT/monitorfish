@@ -103,7 +103,9 @@ data class PriorNotification(
                 }
             } else {
                 logbookMessage.internalReferenceNumber?.let { vesselInternalReferenceNumber ->
-                    allRiskFactors.find { it.internalReferenceNumber == vesselInternalReferenceNumber }?.lastControlDatetime
+                    allRiskFactors
+                        .find { it.internalReferenceNumber == vesselInternalReferenceNumber }
+                        ?.lastControlDatetime
                 }
             }
     }
@@ -209,12 +211,11 @@ data class PriorNotification(
         fun getNextState(
             isInVerificationScope: Boolean,
             isPartOfControlUnitSubscriptions: Boolean,
-        ): PriorNotificationState {
-            return when {
+        ): PriorNotificationState =
+            when {
                 isInVerificationScope -> PriorNotificationState.PENDING_VERIFICATION
                 isPartOfControlUnitSubscriptions -> PriorNotificationState.AUTO_SEND_REQUESTED
                 else -> PriorNotificationState.OUT_OF_VERIFICATION_SCOPE
             }
-        }
     }
 }

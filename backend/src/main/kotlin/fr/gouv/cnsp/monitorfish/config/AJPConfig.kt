@@ -15,13 +15,12 @@ class AJPConfig {
     private val AJPProperties: AJPProperties? = null
 
     @Bean
-    fun servletContainer(): WebServerFactoryCustomizer<TomcatServletWebServerFactory?>? {
-        return WebServerFactoryCustomizer { server: TomcatServletWebServerFactory? ->
+    fun servletContainer(): WebServerFactoryCustomizer<TomcatServletWebServerFactory?>? =
+        WebServerFactoryCustomizer { server: TomcatServletWebServerFactory? ->
             if (server is TomcatServletWebServerFactory) {
                 server.addAdditionalTomcatConnectors(redirectConnector())
             }
         }
-    }
 
     private fun redirectConnector(): Connector? {
         val connector = Connector("AJP/1.3")

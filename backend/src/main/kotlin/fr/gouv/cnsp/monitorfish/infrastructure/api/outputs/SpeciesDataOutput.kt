@@ -7,11 +7,10 @@ data class SpeciesDataOutput(
     val name: String,
 ) {
     companion object {
-        fun fromSpecies(species: Species): SpeciesDataOutput {
-            return SpeciesDataOutput(
+        fun fromSpecies(species: Species): SpeciesDataOutput =
+            SpeciesDataOutput(
                 code = species.code,
                 name = species.name,
             )
-        }
     }
 }

@@ -4,7 +4,6 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import countries from 'i18n-iso-countries'
 import { useEffect, useMemo, useRef } from 'react'
-import { batch } from 'react-redux'
 import { FlexboxGrid, List } from 'rsuite'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
@@ -18,7 +17,6 @@ import type { LEGACY_PendingAlert } from '../../../types'
 import type { MutableRefObject, CSSProperties } from 'react'
 import type { Promisable } from 'type-fest'
 
-// TODO Type these props.
 export type PendingAlertRowProps = {
   alert: LEGACY_PendingAlert
   index: number
@@ -70,7 +68,7 @@ export function PendingAlertRow({
       )}
       {silencedAlertsQueueMatch && (
         <AlertTransition data-cy="side-window-alerts-is-silenced-transition" style={alertSilencedTransition}>
-          L’alerte sera ignorée {getSilencedAlertPeriodText(silencedAlertsQueueMatch.silencedAlertPeriodRequest)}
+          L’alerte sera suspendue {getSilencedAlertPeriodText(silencedAlertsQueueMatch.silencedAlertPeriodRequest)}
         </AlertTransition>
       )}
       {!alert.isValidated && (
@@ -120,13 +118,11 @@ export function PendingAlertRow({
           </FlexboxGrid.Item>
           <FlexboxGrid.Item style={iconStyle}>
             <Icon
-              alt="Ignorer"
+              alt="Suspendre"
               data-cy="side-window-alerts-silence-alert"
               onClick={() => {
-                batch(() => {
-                  setShowSilencedAlertForIndex(index + 1)
-                  setSilencedAlertId(alert.id)
-                })
+                setShowSilencedAlertForIndex(index + 1)
+                setSilencedAlertId(alert.id)
               }}
               onMouseOut={e => {
                 if (showSilencedAlertForIndex !== index + 1) {
@@ -142,7 +138,7 @@ export function PendingAlertRow({
                   : `${baseUrl}/Icone_ignorer_alerte.png`
               }
               style={silenceAlertStyle}
-              title="Ignorer l'alerte"
+              title="Suspendre l'alerte"
             />
           </FlexboxGrid.Item>
         </FlexboxGrid>

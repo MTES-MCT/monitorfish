@@ -13,13 +13,15 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 @Repository
-class JpaPositionRepository(private val dbPositionRepository: DBPositionRepository) : PositionRepository {
+class JpaPositionRepository(
+    private val dbPositionRepository: DBPositionRepository,
+) : PositionRepository {
     private val logger: Logger = LoggerFactory.getLogger(JpaPositionRepository::class.java)
 
-    override fun findAll(): List<Position> {
-        return dbPositionRepository.findAll()
+    override fun findAll(): List<Position> =
+        dbPositionRepository
+            .findAll()
             .map(PositionEntity::toPosition)
-    }
 
     override fun findVesselLastPositionsWithoutSpecifiedIdentifier(
         internalReferenceNumber: String,
@@ -48,30 +50,30 @@ class JpaPositionRepository(private val dbPositionRepository: DBPositionReposito
         internalReferenceNumber: String,
         from: ZonedDateTime,
         to: ZonedDateTime,
-    ): List<Position> {
-        return dbPositionRepository.findLastByInternalReferenceNumber(internalReferenceNumber, from, to)
+    ): List<Position> =
+        dbPositionRepository
+            .findLastByInternalReferenceNumber(internalReferenceNumber, from, to)
             .map(PositionEntity::toPosition)
-    }
 
     @Cacheable(value = ["vessel_track"])
     override fun findVesselLastPositionsByIrcs(
         ircs: String,
         from: ZonedDateTime,
         to: ZonedDateTime,
-    ): List<Position> {
-        return dbPositionRepository.findLastByIrcs(ircs, from, to)
+    ): List<Position> =
+        dbPositionRepository
+            .findLastByIrcs(ircs, from, to)
             .map(PositionEntity::toPosition)
-    }
 
     @Cacheable(value = ["vessel_track"])
     override fun findVesselLastPositionsByExternalReferenceNumber(
         externalReferenceNumber: String,
         from: ZonedDateTime,
         to: ZonedDateTime,
-    ): List<Position> {
-        return dbPositionRepository.findLastByExternalReferenceNumber(externalReferenceNumber, from, to)
+    ): List<Position> =
+        dbPositionRepository
+            .findLastByExternalReferenceNumber(externalReferenceNumber, from, to)
             .map(PositionEntity::toPosition)
-    }
 
     @Transactional
     override fun save(position: Position) {
@@ -79,12 +81,11 @@ class JpaPositionRepository(private val dbPositionRepository: DBPositionReposito
         dbPositionRepository.save(positionEntity)
     }
 
-    override fun findAllByMmsi(mmsi: String): List<Position> {
-        return dbPositionRepository.findAllByMmsi(mmsi)
+    override fun findAllByMmsi(mmsi: String): List<Position> =
+        dbPositionRepository
+            .findAllByMmsi(mmsi)
             .map(PositionEntity::toPosition)
-    }
 
-    override fun findLastPositionDate(): ZonedDateTime {
-        return dbPositionRepository.findLastPositionDateTime().atZone(ZoneOffset.UTC)
-    }
+    override fun findLastPositionDate(): ZonedDateTime =
+        dbPositionRepository.findLastPositionDateTime().atZone(ZoneOffset.UTC)
 }

@@ -42,7 +42,8 @@ class MapperConfiguration {
         mapper: ObjectMapper,
         enumOfTypeToAdd: Class<E>,
     ) where E : Enum<E>?, E : IAlertsHasImplementation? {
-        Arrays.stream(enumOfTypeToAdd.enumConstants)
+        Arrays
+            .stream(enumOfTypeToAdd.enumConstants)
             .map { enumItem -> NamedType(enumItem.getImplementation(), enumItem.name) }
             .forEach { type -> mapper.registerSubtypes(type) }
     }
@@ -51,7 +52,8 @@ class MapperConfiguration {
         mapper: ObjectMapper,
         enumOfTypeToAdd: Class<E>,
     ) where E : Enum<E>?, E : IReportingsHasImplementation? {
-        Arrays.stream(enumOfTypeToAdd.enumConstants)
+        Arrays
+            .stream(enumOfTypeToAdd.enumConstants)
             .map { enumItem -> NamedType(enumItem.getImplementation(), enumItem.name) }
             .forEach { type -> mapper.registerSubtypes(type) }
     }

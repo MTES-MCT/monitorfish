@@ -28,8 +28,8 @@ data class PositionDataOutput(
     val networkType: NetworkType? = null,
 ) {
     companion object {
-        fun fromPosition(position: Position): PositionDataOutput {
-            return PositionDataOutput(
+        fun fromPosition(position: Position): PositionDataOutput =
+            PositionDataOutput(
                 internalReferenceNumber = position.internalReferenceNumber,
                 ircs = position.ircs,
                 mmsi = position.mmsi,
@@ -50,6 +50,5 @@ data class PositionDataOutput(
                 isAtPort = position.isAtPort,
                 networkType = position.networkType,
             )
-        }
     }
 }

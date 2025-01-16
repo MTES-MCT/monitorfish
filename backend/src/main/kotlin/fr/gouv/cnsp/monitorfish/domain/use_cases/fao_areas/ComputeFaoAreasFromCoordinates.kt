@@ -8,7 +8,9 @@ import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 
 @UseCase
-class ComputeFaoAreasFromCoordinates(private val faoAreaRepository: FaoAreaRepository) {
+class ComputeFaoAreasFromCoordinates(
+    private val faoAreaRepository: FaoAreaRepository,
+) {
     fun execute(
         longitude: Double,
         latitude: Double,

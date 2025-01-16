@@ -12,21 +12,23 @@ import java.time.ZonedDateTime
 class JpaBeaconMalfunctionsRepository(
     private val dbBeaconMalfunctionsRepository: DBBeaconMalfunctionsRepository,
 ) : BeaconMalfunctionsRepository {
-    override fun findAll(): List<BeaconMalfunction> {
-        return dbBeaconMalfunctionsRepository.findAll().map { it.toBeaconMalfunction() }
-    }
+    override fun findAll(): List<BeaconMalfunction> =
+        dbBeaconMalfunctionsRepository.findAll().map {
+            it.toBeaconMalfunction()
+        }
 
-    override fun findAllExceptArchived(): List<BeaconMalfunction> {
-        return dbBeaconMalfunctionsRepository.findAllExceptArchived().map { it.toBeaconMalfunction() }
-    }
+    override fun findAllExceptArchived(): List<BeaconMalfunction> =
+        dbBeaconMalfunctionsRepository.findAllExceptArchived().map {
+            it.toBeaconMalfunction()
+        }
 
-    override fun findLastSixtyArchived(): List<BeaconMalfunction> {
-        return dbBeaconMalfunctionsRepository.findLastSixtyArchived().map { it.toBeaconMalfunction() }
-    }
+    override fun findLastSixtyArchived(): List<BeaconMalfunction> =
+        dbBeaconMalfunctionsRepository.findLastSixtyArchived().map {
+            it.toBeaconMalfunction()
+        }
 
-    override fun find(beaconMalfunctionId: Int): BeaconMalfunction {
-        return dbBeaconMalfunctionsRepository.findById(beaconMalfunctionId).get().toBeaconMalfunction()
-    }
+    override fun find(beaconMalfunctionId: Int): BeaconMalfunction =
+        dbBeaconMalfunctionsRepository.findById(beaconMalfunctionId).get().toBeaconMalfunction()
 
     @Transactional
     override fun update(
@@ -56,12 +58,12 @@ class JpaBeaconMalfunctionsRepository(
     override fun findAllByVesselId(
         vesselId: Int,
         afterDateTime: ZonedDateTime,
-    ): List<BeaconMalfunction> {
-        return dbBeaconMalfunctionsRepository
-            .findAllByVesselIdEqualsAfterDateTime(vesselId, afterDateTime.toInstant()).map {
+    ): List<BeaconMalfunction> =
+        dbBeaconMalfunctionsRepository
+            .findAllByVesselIdEqualsAfterDateTime(vesselId, afterDateTime.toInstant())
+            .map {
                 it.toBeaconMalfunction()
             }
-    }
 
     @Transactional
     override fun requestNotification(

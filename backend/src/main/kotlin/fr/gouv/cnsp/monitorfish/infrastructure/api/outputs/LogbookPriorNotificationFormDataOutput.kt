@@ -6,10 +6,9 @@ data class LogbookPriorNotificationFormDataOutput(
     val note: String?,
 ) {
     companion object {
-        fun fromPriorNotification(priorNotification: PriorNotification): LogbookPriorNotificationFormDataOutput {
-            return LogbookPriorNotificationFormDataOutput(
+        fun fromPriorNotification(priorNotification: PriorNotification): LogbookPriorNotificationFormDataOutput =
+            LogbookPriorNotificationFormDataOutput(
                 note = priorNotification.logbookMessageAndValue.value.note,
             )
-        }
     }
 }

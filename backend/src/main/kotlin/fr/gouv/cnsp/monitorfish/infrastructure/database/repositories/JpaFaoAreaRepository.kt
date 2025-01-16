@@ -8,24 +8,23 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaFaoAreaRepository(private val dbFAOAreaRepository: DBFaoAreaRepository) : FaoAreaRepository {
+class JpaFaoAreaRepository(
+    private val dbFAOAreaRepository: DBFaoAreaRepository,
+) : FaoAreaRepository {
     @Cacheable(value = ["fao_areas"])
-    override fun findAll(): List<FaoArea> {
-        return dbFAOAreaRepository.findAll().map {
+    override fun findAll(): List<FaoArea> =
+        dbFAOAreaRepository.findAll().map {
             it.toFaoArea()
         }
-    }
 
     @Cacheable(value = ["fao_areas_sorted_by_usage"])
-    override fun findAllSortedByUsage(): List<FaoArea> {
-        return dbFAOAreaRepository.findAllSortedByUsage().map {
+    override fun findAllSortedByUsage(): List<FaoArea> =
+        dbFAOAreaRepository.findAllSortedByUsage().map {
             it.toFaoArea()
         }
-    }
 
-    override fun findByIncluding(point: Point): List<FaoArea> {
-        return dbFAOAreaRepository.findByIncluding(point).map {
+    override fun findByIncluding(point: Point): List<FaoArea> =
+        dbFAOAreaRepository.findByIncluding(point).map {
             it.toFaoArea()
         }
-    }
 }

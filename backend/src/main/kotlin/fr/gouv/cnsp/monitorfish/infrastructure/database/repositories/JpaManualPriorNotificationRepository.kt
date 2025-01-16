@@ -21,8 +21,8 @@ import java.time.ZonedDateTime
 class JpaManualPriorNotificationRepository(
     private val dbManualPriorNotificationRepository: DBManualPriorNotificationRepository,
 ) : ManualPriorNotificationRepository {
-    override fun findAll(filter: PriorNotificationsFilter): List<PriorNotification> {
-        return dbManualPriorNotificationRepository
+    override fun findAll(filter: PriorNotificationsFilter): List<PriorNotification> =
+        dbManualPriorNotificationRepository
             .findAll(
                 flagStates = filter.flagStates ?: emptyList(),
                 hasOneOrMoreReportings = filter.hasOneOrMoreReportings,
@@ -38,11 +38,10 @@ class JpaManualPriorNotificationRepository(
                 willArriveAfter = filter.willArriveAfter,
                 willArriveBefore = filter.willArriveBefore,
             ).map { it.toPriorNotification() }
-    }
 
     @Cacheable(value = ["manual_pno_to_verify"])
-    override fun findAllToVerify(): List<PriorNotification> {
-        return dbManualPriorNotificationRepository
+    override fun findAllToVerify(): List<PriorNotification> =
+        dbManualPriorNotificationRepository
             .findAll(
                 flagStates = emptyList(),
                 hasOneOrMoreReportings = null,
@@ -61,15 +60,12 @@ class JpaManualPriorNotificationRepository(
                 it.value.isInVerificationScope == true &&
                     it.value.isVerified == false &&
                     it.value.isInvalidated != true
-            }
-            .map {
+            }.map {
                 it.toPriorNotification()
             }
-    }
 
-    override fun findByReportId(reportId: String): PriorNotification? {
-        return dbManualPriorNotificationRepository.findByReportId(reportId)?.toPriorNotification()
-    }
+    override fun findByReportId(reportId: String): PriorNotification? =
+        dbManualPriorNotificationRepository.findByReportId(reportId)?.toPriorNotification()
 
     @Transactional
     @CacheEvict(value = ["manual_pno_to_verify"], allEntries = true)

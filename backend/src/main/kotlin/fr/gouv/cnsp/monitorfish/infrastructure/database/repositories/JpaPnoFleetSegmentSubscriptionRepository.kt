@@ -16,34 +16,32 @@ class JpaPnoFleetSegmentSubscriptionRepository(
         dbPnoFleetSegmentsSubscriptionsRepository.deleteByControlUnitId(controlUnitId)
     }
 
-    override fun findAll(): List<PriorNotificationFleetSegmentSubscription> {
-        return dbPnoFleetSegmentsSubscriptionsRepository.findAll()
+    override fun findAll(): List<PriorNotificationFleetSegmentSubscription> =
+        dbPnoFleetSegmentsSubscriptionsRepository
+            .findAll()
             .map { it.toPriorNotificationFleetSegmentSubscription() }
-    }
 
-    override fun findByControlUnitId(controlUnitId: Int): List<PriorNotificationFleetSegmentSubscription> {
-        return dbPnoFleetSegmentsSubscriptionsRepository.findByControlUnitId(controlUnitId)
+    override fun findByControlUnitId(controlUnitId: Int): List<PriorNotificationFleetSegmentSubscription> =
+        dbPnoFleetSegmentsSubscriptionsRepository
+            .findByControlUnitId(controlUnitId)
             .map { it.toPriorNotificationFleetSegmentSubscription() }
-    }
 
     override fun has(
         portLocode: String,
         segmentCodes: List<String>,
-    ): Boolean {
-        return dbPnoFleetSegmentsSubscriptionsRepository.countByPortLocodeAndSegmentCodes(portLocode, segmentCodes) > 0
-    }
+    ): Boolean =
+        dbPnoFleetSegmentsSubscriptionsRepository.countByPortLocodeAndSegmentCodes(portLocode, segmentCodes) > 0
 
     @Transactional
     override fun saveAll(
         priorNotificationFleetSegmentSubscriptions: List<PriorNotificationFleetSegmentSubscription>,
-    ): List<PriorNotificationFleetSegmentSubscription> {
-        return dbPnoFleetSegmentsSubscriptionsRepository.saveAll(
-            priorNotificationFleetSegmentSubscriptions.map {
-                PnoFleetSegmentSubscriptionEntity.fromPriorNotificationFleetSegmentSubscription(
-                    it,
-                )
-            },
-        )
-            .map { it.toPriorNotificationFleetSegmentSubscription() }
-    }
+    ): List<PriorNotificationFleetSegmentSubscription> =
+        dbPnoFleetSegmentsSubscriptionsRepository
+            .saveAll(
+                priorNotificationFleetSegmentSubscriptions.map {
+                    PnoFleetSegmentSubscriptionEntity.fromPriorNotificationFleetSegmentSubscription(
+                        it,
+                    )
+                },
+            ).map { it.toPriorNotificationFleetSegmentSubscription() }
 }

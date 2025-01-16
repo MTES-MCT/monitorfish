@@ -8,7 +8,10 @@ import jakarta.persistence.Table
 import java.io.Serializable
 
 @Embeddable
-class PnoVesselSubscriptionId(val controlUnitId: Int, val vesselId: Int) : Serializable
+class PnoVesselSubscriptionId(
+    val controlUnitId: Int,
+    val vesselId: Int,
+) : Serializable
 
 @Entity
 @Table(name = "pno_vessels_subscriptions")
@@ -16,8 +19,8 @@ data class PnoVesselSubscriptionEntity(
     @EmbeddedId
     val id: PnoVesselSubscriptionId,
 ) {
-    fun toPriorNotificationVesselSubscription(): PriorNotificationVesselSubscription {
-        return PriorNotificationVesselSubscription(
+    fun toPriorNotificationVesselSubscription(): PriorNotificationVesselSubscription =
+        PriorNotificationVesselSubscription(
             controlUnitId = id.controlUnitId,
             vesselId = id.vesselId,
             vesselCallSign = null,
@@ -26,19 +29,17 @@ data class PnoVesselSubscriptionEntity(
             vesselMmsi = null,
             vesselName = null,
         )
-    }
 
     companion object {
         fun fromPriorNotificationVesselSubscription(
             priorNotificationVesselSubscription: PriorNotificationVesselSubscription,
-        ): PnoVesselSubscriptionEntity {
-            return PnoVesselSubscriptionEntity(
+        ): PnoVesselSubscriptionEntity =
+            PnoVesselSubscriptionEntity(
                 id =
                     PnoVesselSubscriptionId(
                         controlUnitId = priorNotificationVesselSubscription.controlUnitId,
                         vesselId = priorNotificationVesselSubscription.vesselId,
                     ),
             )
-        }
     }
 }

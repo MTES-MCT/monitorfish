@@ -79,7 +79,7 @@ services:
 
   keycloak:
     container_name: monitorfish_keycloak
-    image: quay.io/keycloak/keycloak:23.0.0
+    image: quay.io/keycloak/keycloak:26.1
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
@@ -96,12 +96,6 @@ services:
     command:
       - start-dev
       - --import-realm
-    healthcheck:
-      test: [ "CMD-SHELL",
-              "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep -q '200 OK'" ]
-      interval: 30s
-      timeout: 5s
-      retries: 20
 
   geoserver-monitorenv-stubs:
     image: rodolpheche/wiremock

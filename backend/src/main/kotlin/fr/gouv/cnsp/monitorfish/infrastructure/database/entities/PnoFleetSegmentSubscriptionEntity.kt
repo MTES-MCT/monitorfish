@@ -17,25 +17,23 @@ data class PnoFleetSegmentSubscriptionEntity(
     @EmbeddedId
     val id: PnoFleetSegmentSubscriptionId,
 ) {
-    fun toPriorNotificationFleetSegmentSubscription(): PriorNotificationFleetSegmentSubscription {
-        return PriorNotificationFleetSegmentSubscription(
+    fun toPriorNotificationFleetSegmentSubscription(): PriorNotificationFleetSegmentSubscription =
+        PriorNotificationFleetSegmentSubscription(
             controlUnitId = id.controlUnitId,
             segmentCode = id.segmentCode,
             segmentName = null,
         )
-    }
 
     companion object {
         fun fromPriorNotificationFleetSegmentSubscription(
             priorNotificationFleetSegmentSubscription: PriorNotificationFleetSegmentSubscription,
-        ): PnoFleetSegmentSubscriptionEntity {
-            return PnoFleetSegmentSubscriptionEntity(
+        ): PnoFleetSegmentSubscriptionEntity =
+            PnoFleetSegmentSubscriptionEntity(
                 id =
                     PnoFleetSegmentSubscriptionId(
                         controlUnitId = priorNotificationFleetSegmentSubscription.controlUnitId,
                         segmentCode = priorNotificationFleetSegmentSubscription.segmentCode,
                     ),
             )
-        }
     }
 }

@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.ZonedDateTime
 
-class COE() : LogbookMessageValue {
+class COE : LogbookMessageValue {
     var latitudeEntered: Double? = null
     var longitudeEntered: Double? = null
     var faoZoneEntered: String? = null

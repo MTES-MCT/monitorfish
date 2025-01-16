@@ -19,8 +19,8 @@ class ObservationDataOutput(
         fun fromObservation(
             observation: Observation,
             controlUnit: LegacyControlUnit? = null,
-        ): ObservationDataOutput {
-            return ObservationDataOutput(
+        ): ObservationDataOutput =
+            ObservationDataOutput(
                 reportingActor = observation.reportingActor,
                 controlUnitId = observation.controlUnitId,
                 controlUnit = controlUnit,
@@ -31,6 +31,5 @@ class ObservationDataOutput(
                 seaFront = observation.seaFront,
                 dml = observation.dml,
             )
-        }
     }
 }

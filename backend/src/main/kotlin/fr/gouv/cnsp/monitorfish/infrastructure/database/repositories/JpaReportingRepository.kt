@@ -35,9 +35,8 @@ class JpaReportingRepository(
         dbReportingRepository.save(ReportingEntity.fromPendingAlert(alert, validationDate, mapper))
     }
 
-    override fun save(reporting: Reporting): Reporting {
-        return dbReportingRepository.save(ReportingEntity.fromReporting(reporting, mapper)).toReporting(mapper)
-    }
+    override fun save(reporting: Reporting): Reporting =
+        dbReportingRepository.save(ReportingEntity.fromReporting(reporting, mapper)).toReporting(mapper)
 
     @Transactional
     override fun update(
@@ -96,30 +95,29 @@ class JpaReportingRepository(
         return entityManager.createQuery(criteriaQuery).resultList.map { it.toReporting(mapper) }
     }
 
-    override fun findById(reportingId: Int): Reporting {
-        return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
-    }
+    override fun findById(reportingId: Int): Reporting =
+        dbReportingRepository.findById(reportingId).get().toReporting(mapper)
 
     override fun findCurrentAndArchivedByVesselIdentifierEquals(
         vesselIdentifier: VesselIdentifier,
         value: String,
         fromDate: ZonedDateTime,
-    ): List<Reporting> {
-        return dbReportingRepository
-            .findCurrentAndArchivedByVesselIdentifier(vesselIdentifier.toString(), value, fromDate.toInstant()).map {
+    ): List<Reporting> =
+        dbReportingRepository
+            .findCurrentAndArchivedByVesselIdentifier(vesselIdentifier.toString(), value, fromDate.toInstant())
+            .map {
                 it.toReporting(mapper)
             }
-    }
 
     override fun findCurrentAndArchivedByVesselIdEquals(
         vesselId: Int,
         fromDate: ZonedDateTime,
-    ): List<Reporting> {
-        return dbReportingRepository
-            .findCurrentAndArchivedByVesselId(vesselId, fromDate.toInstant()).map {
+    ): List<Reporting> =
+        dbReportingRepository
+            .findCurrentAndArchivedByVesselId(vesselId, fromDate.toInstant())
+            .map {
                 it.toReporting(mapper)
             }
-    }
 
     override fun findCurrentAndArchivedWithoutVesselIdentifier(
         internalReferenceNumber: String,
@@ -168,8 +166,8 @@ class JpaReportingRepository(
         dbReportingRepository.archiveReporting(id)
     }
 
-    override fun findUnarchivedReportings(): List<Pair<Int, AlertType>> {
-        return dbReportingRepository.findAllUnarchivedAfterDEPLogbookMessage().map { result ->
+    override fun findUnarchivedReportings(): List<Pair<Int, AlertType>> =
+        dbReportingRepository.findAllUnarchivedAfterDEPLogbookMessage().map { result ->
             Pair(
                 result[0] as Int,
                 ReportingMapper.getReportingValueFromJSON(
@@ -179,11 +177,8 @@ class JpaReportingRepository(
                 ) as AlertType,
             )
         }
-    }
 
-    override fun archiveReportings(ids: List<Int>): Int {
-        return dbReportingRepository.archiveReportings(ids)
-    }
+    override fun archiveReportings(ids: List<Int>): Int = dbReportingRepository.archiveReportings(ids)
 
     @Transactional
     override fun delete(id: Int) {
@@ -194,31 +189,24 @@ class JpaReportingRepository(
         isArchived: Boolean,
         reportingEntity: Root<ReportingEntity>,
         criteriaBuilder: CriteriaBuilder,
-    ): Predicate {
-        return criteriaBuilder.equal(reportingEntity.get<Boolean>("isArchived"), isArchived)
-    }
+    ): Predicate = criteriaBuilder.equal(reportingEntity.get<Boolean>("isArchived"), isArchived)
 
     private fun getIsDeletedPredicate(
         isDeleted: Boolean,
         reportingEntity: Root<ReportingEntity>,
         criteriaBuilder: CriteriaBuilder,
-    ): Predicate {
-        return criteriaBuilder.equal(reportingEntity.get<Boolean>("isDeleted"), isDeleted)
-    }
+    ): Predicate = criteriaBuilder.equal(reportingEntity.get<Boolean>("isDeleted"), isDeleted)
 
     private fun getTypesPredicate(
         types: List<ReportingType>,
         reportingEntity: Root<ReportingEntity>,
-    ): Predicate {
-        return reportingEntity.get<ReportingType>("type").`in`(*types.toTypedArray())
-    }
+    ): Predicate = reportingEntity.get<ReportingType>("type").`in`(*types.toTypedArray())
 
     private fun getVesselInternalReferenceNumbersPredicate(
         vesselInternalReferenceNumbers: List<String>,
         reportingEntity: Root<ReportingEntity>,
-    ): Predicate {
-        return reportingEntity.get<String>("internalReferenceNumber").`in`(
+    ): Predicate =
+        reportingEntity.get<String>("internalReferenceNumber").`in`(
             *vesselInternalReferenceNumbers.toTypedArray(),
         )
-    }
 }

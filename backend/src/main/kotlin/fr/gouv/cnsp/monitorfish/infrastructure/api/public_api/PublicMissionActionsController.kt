@@ -24,9 +24,10 @@ class PublicMissionActionsController(
         @Parameter(description = "Mission id")
         @RequestParam(name = "missionId")
         missionId: Int,
-    ): List<MissionActionDataOutput> {
-        return getMissionActions.execute(missionId).map { MissionActionDataOutput.fromMissionAction(it) }
-    }
+    ): List<MissionActionDataOutput> =
+        getMissionActions.execute(missionId).map {
+            MissionActionDataOutput.fromMissionAction(it)
+        }
 
     @PatchMapping(value = ["/{actionId}"], consumes = ["application/json"])
     @Operation(summary = "Update a mission action")

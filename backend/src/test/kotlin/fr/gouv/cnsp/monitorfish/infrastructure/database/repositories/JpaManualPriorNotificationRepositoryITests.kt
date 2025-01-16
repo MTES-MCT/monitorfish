@@ -510,8 +510,10 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
                                     pnoTypes = emptyList()
                                     port = "FRVNE"
                                     portName = "Vannes"
-                                    predictedArrivalDatetimeUtc = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC)
-                                    predictedLandingDatetimeUtc = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC)
+                                    predictedArrivalDatetimeUtc =
+                                        ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC)
+                                    predictedLandingDatetimeUtc =
+                                        ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC)
                                     purpose = LogbookMessagePurpose.LAN
                                     riskFactor = 2.1
                                     statisticalRectangle = null

@@ -25,11 +25,10 @@ class BeaconMalfunctionController(
 ) {
     @GetMapping(value = [""])
     @Operation(summary = "Get all beacon malfunctions")
-    fun getAllBeaconMalfunctions(): List<BeaconMalfunctionDataOutput> {
-        return getAllBeaconMalfunctions.execute().map {
+    fun getAllBeaconMalfunctions(): List<BeaconMalfunctionDataOutput> =
+        getAllBeaconMalfunctions.execute().map {
             BeaconMalfunctionDataOutput.fromBeaconMalfunction(it)
         }
-    }
 
     @PutMapping(value = ["/{beaconMalfunctionId}"], consumes = ["application/json"])
     @Operation(summary = "Update a beacon malfunction")
@@ -39,16 +38,16 @@ class BeaconMalfunctionController(
         beaconMalfunctionId: Int,
         @RequestBody
         updateBeaconMalfunctionData: UpdateBeaconMalfunctionDataInput,
-    ): BeaconMalfunctionResumeAndDetailsDataOutput {
-        return updateBeaconMalfunction.execute(
-            id = beaconMalfunctionId,
-            vesselStatus = updateBeaconMalfunctionData.vesselStatus,
-            stage = updateBeaconMalfunctionData.stage,
-            endOfBeaconMalfunctionReason = updateBeaconMalfunctionData.endOfBeaconMalfunctionReason,
-        ).let {
-            BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(it)
-        }
-    }
+    ): BeaconMalfunctionResumeAndDetailsDataOutput =
+        updateBeaconMalfunction
+            .execute(
+                id = beaconMalfunctionId,
+                vesselStatus = updateBeaconMalfunctionData.vesselStatus,
+                stage = updateBeaconMalfunctionData.stage,
+                endOfBeaconMalfunctionReason = updateBeaconMalfunctionData.endOfBeaconMalfunctionReason,
+            ).let {
+                BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(it)
+            }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = ["/{beaconMalfunctionId}/comments"], consumes = ["application/json"])
@@ -59,15 +58,15 @@ class BeaconMalfunctionController(
         beaconMalfunctionId: Int,
         @RequestBody
         saveBeaconMalfunctionCommentDataInput: SaveBeaconMalfunctionCommentDataInput,
-    ): BeaconMalfunctionResumeAndDetailsDataOutput {
-        return saveBeaconMalfunctionComment.execute(
-            beaconMalfunctionId = beaconMalfunctionId,
-            comment = saveBeaconMalfunctionCommentDataInput.comment,
-            userType = saveBeaconMalfunctionCommentDataInput.userType,
-        ).let {
-            BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(it)
-        }
-    }
+    ): BeaconMalfunctionResumeAndDetailsDataOutput =
+        saveBeaconMalfunctionComment
+            .execute(
+                beaconMalfunctionId = beaconMalfunctionId,
+                comment = saveBeaconMalfunctionCommentDataInput.comment,
+                userType = saveBeaconMalfunctionCommentDataInput.userType,
+            ).let {
+                BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(it)
+            }
 
     @GetMapping(value = ["/{beaconMalfunctionId}"])
     @Operation(summary = "Get a beacon malfunction with the comments and history")
@@ -75,11 +74,10 @@ class BeaconMalfunctionController(
         @PathParam("Beacon malfunction id")
         @PathVariable(name = "beaconMalfunctionId")
         beaconMalfunctionId: Int,
-    ): BeaconMalfunctionResumeAndDetailsDataOutput {
-        return BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(
+    ): BeaconMalfunctionResumeAndDetailsDataOutput =
+        BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(
             getBeaconMalfunction.execute(beaconMalfunctionId),
         )
-    }
 
     @PutMapping(value = ["/{beaconMalfunctionId}/{notificationRequested}"])
     @Operation(summary = "Request a notification")
@@ -93,11 +91,9 @@ class BeaconMalfunctionController(
         @Parameter(name = "ISO3 country code of the FMC to notify")
         @RequestParam(name = "requestedNotificationForeignFmcCode")
         requestedNotificationForeignFmcCode: String? = null,
-    ) {
-        return requestNotification.execute(
-            id = beaconMalfunctionId,
-            notificationRequested = notificationRequested,
-            requestedNotificationForeignFmcCode = requestedNotificationForeignFmcCode,
-        )
-    }
+    ) = requestNotification.execute(
+        id = beaconMalfunctionId,
+        notificationRequested = notificationRequested,
+        requestedNotificationForeignFmcCode = requestedNotificationForeignFmcCode,
+    )
 }

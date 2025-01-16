@@ -44,7 +44,8 @@ class DataReferentialControllerITests {
         given(this.getAllGears.execute()).willReturn(listOf(Gear("CHL", "SUPER CHALUT", "CHALUT")))
 
         // When
-        api.perform(get("/bff/v1/gears"))
+        api
+            .perform(get("/bff/v1/gears"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
@@ -77,7 +78,8 @@ class DataReferentialControllerITests {
         )
 
         // When
-        api.perform(get("/bff/v1/species"))
+        api
+            .perform(get("/bff/v1/species"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.species.length()", equalTo(1)))

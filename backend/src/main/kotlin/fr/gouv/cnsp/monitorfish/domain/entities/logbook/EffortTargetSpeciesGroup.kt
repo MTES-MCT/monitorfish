@@ -1,6 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
-enum class EffortTargetSpeciesGroup(val value: String) {
+enum class EffortTargetSpeciesGroup(
+    val value: String,
+) {
     DEM("Démersal"),
     SCA("Coquille"),
     CRA("Crabe comestible et araignée de mer"),

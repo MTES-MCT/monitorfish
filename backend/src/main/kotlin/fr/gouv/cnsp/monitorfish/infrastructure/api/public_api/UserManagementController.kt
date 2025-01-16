@@ -22,9 +22,7 @@ class UserManagementController(
     fun saveUser(
         @RequestBody
         user: AddUserDataInput,
-    ) {
-        return saveUser.execute(user.email, user.isSuperUser)
-    }
+    ) = saveUser.execute(user.email, user.isSuperUser)
 
     @DeleteMapping(value = ["/{email}"])
     @Operation(summary = "Delete a given user")
@@ -32,7 +30,5 @@ class UserManagementController(
         @PathParam("User email")
         @PathVariable(name = "email")
         email: String,
-    ) {
-        return deleteUser.execute(email)
-    }
+    ) = deleteUser.execute(email)
 }

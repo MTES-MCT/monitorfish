@@ -74,29 +74,29 @@ class FleetSegmentAdminControllerITests {
             )
 
         // When
-        api.perform(
-            put("/bff/v1/admin/fleet_segments?year=2021&segment=A_SEGMENT/WITH/SLASH")
-                .content(
-                    objectMapper.writeValueAsString(
-                        CreateOrUpdateFleetSegmentDataInput(
-                            gears = listOf("OTB", "OTC"),
-                            segment = null,
-                            segmentName = null,
-                            faoAreas = null,
-                            targetSpecies = null,
-                            mainScipSpeciesType = null,
-                            maxMesh = null,
-                            minMesh = null,
-                            minShareOfTargetSpecies = null,
-                            priority = 0.0,
-                            vesselTypes = listOf(),
-                            impactRiskFactor = null,
-                            year = null,
+        api
+            .perform(
+                put("/bff/v1/admin/fleet_segments?year=2021&segment=A_SEGMENT/WITH/SLASH")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            CreateOrUpdateFleetSegmentDataInput(
+                                gears = listOf("OTB", "OTC"),
+                                segment = null,
+                                segmentName = null,
+                                faoAreas = null,
+                                targetSpecies = null,
+                                mainScipSpeciesType = null,
+                                maxMesh = null,
+                                minMesh = null,
+                                minShareOfTargetSpecies = null,
+                                priority = 0.0,
+                                vesselTypes = listOf(),
+                                impactRiskFactor = null,
+                                year = null,
+                            ),
                         ),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.segment", equalTo("A_SEGMENT/WITH/SLASH")))
@@ -117,7 +117,8 @@ class FleetSegmentAdminControllerITests {
     @Test
     fun `Should return Ok When a delete of a fleet segment is done`() {
         // When
-        api.perform(delete("/bff/v1/admin/fleet_segments?year=2021&segment=A_SEGMENT/WITH/SLASH"))
+        api
+            .perform(delete("/bff/v1/admin/fleet_segments?year=2021&segment=A_SEGMENT/WITH/SLASH"))
             // Then
             .andExpect(status().isOk)
     }
@@ -125,7 +126,8 @@ class FleetSegmentAdminControllerITests {
     @Test
     fun `Should return Ok When a new year is created`() {
         // When
-        api.perform(post("/bff/v1/admin/fleet_segments/2023"))
+        api
+            .perform(post("/bff/v1/admin/fleet_segments/2023"))
             // Then
             .andExpect(status().isCreated)
     }
@@ -153,29 +155,29 @@ class FleetSegmentAdminControllerITests {
             )
 
         // When
-        api.perform(
-            post("/bff/v1/admin/fleet_segments")
-                .content(
-                    objectMapper.writeValueAsString(
-                        CreateOrUpdateFleetSegmentDataInput(
-                            segment = "SEGMENT",
-                            gears = listOf("OTB", "OTC"),
-                            year = 2022,
-                            segmentName = "",
-                            priority = 1.2,
-                            vesselTypes = listOf(),
-                            faoAreas = listOf(),
-                            targetSpecies = listOf(),
-                            impactRiskFactor = 1.2,
-                            mainScipSpeciesType = null,
-                            maxMesh = null,
-                            minMesh = null,
-                            minShareOfTargetSpecies = null,
+        api
+            .perform(
+                post("/bff/v1/admin/fleet_segments")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            CreateOrUpdateFleetSegmentDataInput(
+                                segment = "SEGMENT",
+                                gears = listOf("OTB", "OTC"),
+                                year = 2022,
+                                segmentName = "",
+                                priority = 1.2,
+                                vesselTypes = listOf(),
+                                faoAreas = listOf(),
+                                targetSpecies = listOf(),
+                                impactRiskFactor = 1.2,
+                                mainScipSpeciesType = null,
+                                maxMesh = null,
+                                minMesh = null,
+                                minShareOfTargetSpecies = null,
+                            ),
                         ),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isCreated)
 
@@ -205,29 +207,29 @@ class FleetSegmentAdminControllerITests {
             .willThrow(IllegalArgumentException("`year` must be provided"))
 
         // When
-        api.perform(
-            post("/bff/v1/admin/fleet_segments")
-                .content(
-                    objectMapper.writeValueAsString(
-                        CreateOrUpdateFleetSegmentDataInput(
-                            segment = "SEGMENT",
-                            gears = listOf("OTB", "OTC"),
-                            segmentName = null,
-                            faoAreas = null,
-                            targetSpecies = null,
-                            mainScipSpeciesType = null,
-                            maxMesh = null,
-                            minMesh = null,
-                            minShareOfTargetSpecies = null,
-                            priority = 0.0,
-                            vesselTypes = listOf(),
-                            impactRiskFactor = null,
-                            year = null,
+        api
+            .perform(
+                post("/bff/v1/admin/fleet_segments")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            CreateOrUpdateFleetSegmentDataInput(
+                                segment = "SEGMENT",
+                                gears = listOf("OTB", "OTC"),
+                                segmentName = null,
+                                faoAreas = null,
+                                targetSpecies = null,
+                                mainScipSpeciesType = null,
+                                maxMesh = null,
+                                minMesh = null,
+                                minShareOfTargetSpecies = null,
+                                priority = 0.0,
+                                vesselTypes = listOf(),
+                                impactRiskFactor = null,
+                                year = null,
+                            ),
                         ),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isBadRequest)
 

@@ -8,7 +8,5 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.ProducerOrganizationMembersh
 class GetAllProducerOrganizationMemberships(
     private val producerOrganizationMembershipRepository: ProducerOrganizationMembershipRepository,
 ) {
-    fun execute(): List<ProducerOrganizationMembership> {
-        return producerOrganizationMembershipRepository.findAll()
-    }
+    fun execute(): List<ProducerOrganizationMembership> = producerOrganizationMembershipRepository.findAll()
 }

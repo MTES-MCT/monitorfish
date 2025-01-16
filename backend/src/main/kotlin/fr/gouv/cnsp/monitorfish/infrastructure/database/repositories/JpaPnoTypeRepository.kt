@@ -7,9 +7,9 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaPnoTypeRepository(private val dbPnoTypeRepository: DBPnoTypeRepository) : PnoTypeRepository {
+class JpaPnoTypeRepository(
+    private val dbPnoTypeRepository: DBPnoTypeRepository,
+) : PnoTypeRepository {
     @Cacheable(value = ["pno_types"])
-    override fun findAll(): List<PnoType> {
-        return dbPnoTypeRepository.findAll().map { it.toPnoType() }
-    }
+    override fun findAll(): List<PnoType> = dbPnoTypeRepository.findAll().map { it.toPnoType() }
 }

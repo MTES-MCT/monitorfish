@@ -58,9 +58,7 @@ class UserAuthorizationControllerITests {
     @TestConfiguration
     class TestApiClient {
         @Bean
-        fun mockApiClient(): ApiClient {
-            return getMockApiClient()
-        }
+        fun mockApiClient(): ApiClient = getMockApiClient()
     }
 
     @MockBean
@@ -73,10 +71,11 @@ class UserAuthorizationControllerITests {
         given(getAuthorizedUser.execute(any())).willReturn(UserAuthorization("email", true))
 
         // When
-        api.perform(
-            get("/bff/v1/authorization/current")
-                .header("Authorization", "Bearer $VALID_JWT"),
-        )
+        api
+            .perform(
+                get("/bff/v1/authorization/current")
+                    .header("Authorization", "Bearer $VALID_JWT"),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(header().string("EMAIL", "d44b8b1163276cb22a02d462de5883ceb60b461e20c4e27e905b72ec8b649807"))
@@ -90,10 +89,11 @@ class UserAuthorizationControllerITests {
         given(getAuthorizedUser.execute(any())).willReturn(UserAuthorization("email", true))
 
         // When
-        api.perform(
-            get("/bff/v1/authorization/current")
-                .header("Authorization", "Bearer $VALID_JWT"),
-        )
+        api
+            .perform(
+                get("/bff/v1/authorization/current")
+                    .header("Authorization", "Bearer $VALID_JWT"),
+            )
             // Then
             .andExpect(status().isUnauthorized)
     }
@@ -110,10 +110,11 @@ class UserAuthorizationControllerITests {
         )
 
         // When
-        api.perform(
-            get("/bff/v1/authorization/current")
-                .header("Authorization", "Bearer $VALID_JWT"),
-        )
+        api
+            .perform(
+                get("/bff/v1/authorization/current")
+                    .header("Authorization", "Bearer $VALID_JWT"),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(header().string("EMAIL", "d44b8b1163276cb22a02d462de5883ceb60b461e20c4e27e905b72ec8b649807"))

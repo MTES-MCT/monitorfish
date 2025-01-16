@@ -14,7 +14,9 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.properties.Delegates
 
-class NAFMessageMapper(private val naf: String) {
+class NAFMessageMapper(
+    private val naf: String,
+) {
     private val logger: Logger = LoggerFactory.getLogger(NAFMessageMapper::class.java)
 
     private lateinit var dateTime: ZonedDateTime
@@ -45,7 +47,8 @@ class NAFMessageMapper(private val naf: String) {
             throw NAFMessageParsingException("Invalid NAF format", naf)
         }
 
-        NAFCode.values()
+        NAFCode
+            .values()
             .filter { it.matches(naf) }
             .forEach {
                 val value: String = it.getValue(naf)!!
@@ -109,13 +112,12 @@ class NAFMessageMapper(private val naf: String) {
         return message.startsWith(startRecord) && message.endsWith(endRecord)
     }
 
-    private fun getCountryOrThrowIfCountryNotFound(value: String): CountryCode? {
-        return if (value.isNotEmpty() && value != noCountry) {
+    private fun getCountryOrThrowIfCountryNotFound(value: String): CountryCode? =
+        if (value.isNotEmpty() && value != noCountry) {
             CountryCode.getByAlpha3Code(value) ?: throw NAFMessageParsingException("Country \"$value\" not found", naf)
         } else {
             null
         }
-    }
 
     private fun setZoneDateTimeFromString() {
         if (date != null && time != null) {
@@ -133,7 +135,8 @@ class NAFMessageMapper(private val naf: String) {
         val regex = "([NSEW]{1})([0-9]{2,3})([0-9]{2})".toRegex()
 
         return try {
-            regex.matchEntire(value)
+            regex
+                .matchEntire(value)
                 ?.destructured
                 ?.let { (direction, degrees, minutes) ->
                     degreeMinuteToDecimal(direction, degrees.toInt(), minutes.toInt())
@@ -144,8 +147,8 @@ class NAFMessageMapper(private val naf: String) {
         }
     }
 
-    fun toPosition(): Position {
-        return Position(
+    fun toPosition(): Position =
+        Position(
             internalReferenceNumber = internalReferenceNumber,
             ircs = ircs,
             externalReferenceNumber = externalReferenceNumber,
@@ -163,5 +166,4 @@ class NAFMessageMapper(private val naf: String) {
             networkType = networkType,
             isManual = isManual,
         )
-    }
 }

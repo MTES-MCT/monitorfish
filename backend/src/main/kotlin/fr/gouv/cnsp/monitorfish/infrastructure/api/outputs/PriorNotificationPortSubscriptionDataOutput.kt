@@ -11,13 +11,12 @@ data class PriorNotificationPortSubscriptionDataOutput(
     companion object {
         fun fromPriorNotificationPortSubscription(
             priorNotificationPortSubscription: PriorNotificationPortSubscription,
-        ): PriorNotificationPortSubscriptionDataOutput {
-            return PriorNotificationPortSubscriptionDataOutput(
+        ): PriorNotificationPortSubscriptionDataOutput =
+            PriorNotificationPortSubscriptionDataOutput(
                 controlUnitId = priorNotificationPortSubscription.controlUnitId,
                 hasSubscribedToAllPriorNotifications = priorNotificationPortSubscription.hasSubscribedToAllPriorNotifications,
                 portLocode = priorNotificationPortSubscription.portLocode,
                 portName = priorNotificationPortSubscription.portName,
             )
-        }
     }
 }

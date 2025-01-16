@@ -18,9 +18,10 @@ class JpaPriorNotificationUploadRepository(
         dbPriorNotificationUploadRepository.deleteById(id)
     }
 
-    override fun findAllByReportId(reportId: String): List<PriorNotificationDocument> {
-        return dbPriorNotificationUploadRepository.findByReportId(reportId).map { it.toDocument() }
-    }
+    override fun findAllByReportId(reportId: String): List<PriorNotificationDocument> =
+        dbPriorNotificationUploadRepository.findByReportId(reportId).map {
+            it.toDocument()
+        }
 
     override fun findById(id: String): PriorNotificationDocument {
         try {
@@ -31,8 +32,8 @@ class JpaPriorNotificationUploadRepository(
     }
 
     @Transactional
-    override fun save(newPriorNotificationDocument: PriorNotificationDocument): PriorNotificationDocument {
-        return dbPriorNotificationUploadRepository
-            .save(PriorNotificationUploadEntity.fromDocument(newPriorNotificationDocument)).toDocument()
-    }
+    override fun save(newPriorNotificationDocument: PriorNotificationDocument): PriorNotificationDocument =
+        dbPriorNotificationUploadRepository
+            .save(PriorNotificationUploadEntity.fromDocument(newPriorNotificationDocument))
+            .toDocument()
 }

@@ -49,11 +49,11 @@ class GetVesselPositions(
                     try {
                         // We subtract 4h to this date to ensure the track starts at the port
                         // (the departure message may be sent after the departure)
-                        logbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(
-                            internalReferenceNumber,
-                            ZonedDateTime.now(),
-                        )
-                            .minusHours(4)
+                        logbookReportRepository
+                            .findFirstAcknowledgedDateOfTripBeforeDateTime(
+                                internalReferenceNumber,
+                                ZonedDateTime.now(),
+                            ).minusHours(4)
                     } catch (e: NoLogbookFishingTripFound) {
                         logger.warn(e.message)
                         isTrackDepthModified = true
@@ -101,41 +101,42 @@ class GetVesselPositions(
         to: ZonedDateTime?,
         ircs: String,
         externalReferenceNumber: String,
-    ): Deferred<List<Position>> {
-        return when (vesselIdentifier) {
+    ): Deferred<List<Position>> =
+        when (vesselIdentifier) {
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
                 async {
-                    positionRepository.findVesselLastPositionsByInternalReferenceNumber(
-                        internalReferenceNumber,
-                        from!!,
-                        to!!,
-                    )
-                        .sortedBy { it.dateTime }
+                    positionRepository
+                        .findVesselLastPositionsByInternalReferenceNumber(
+                            internalReferenceNumber,
+                            from!!,
+                            to!!,
+                        ).sortedBy { it.dateTime }
                 }
             VesselIdentifier.IRCS ->
                 async {
-                    positionRepository.findVesselLastPositionsByIrcs(ircs, from!!, to!!)
+                    positionRepository
+                        .findVesselLastPositionsByIrcs(ircs, from!!, to!!)
                         .sortedBy { it.dateTime }
                 }
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
                 async {
-                    positionRepository.findVesselLastPositionsByExternalReferenceNumber(
-                        externalReferenceNumber,
-                        from!!,
-                        to!!,
-                    )
-                        .sortedBy { it.dateTime }
+                    positionRepository
+                        .findVesselLastPositionsByExternalReferenceNumber(
+                            externalReferenceNumber,
+                            from!!,
+                            to!!,
+                        ).sortedBy { it.dateTime }
                 }
             else ->
                 async {
-                    positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(
-                        internalReferenceNumber = internalReferenceNumber,
-                        externalReferenceNumber = externalReferenceNumber,
-                        ircs = ircs,
-                        from = from!!,
-                        to = to!!,
-                    ).sortedBy { it.dateTime }
+                    positionRepository
+                        .findVesselLastPositionsWithoutSpecifiedIdentifier(
+                            internalReferenceNumber = internalReferenceNumber,
+                            externalReferenceNumber = externalReferenceNumber,
+                            ircs = ircs,
+                            from = from!!,
+                            to = to!!,
+                        ).sortedBy { it.dateTime }
                 }
         }
-    }
 }

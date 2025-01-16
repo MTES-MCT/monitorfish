@@ -12,13 +12,13 @@ import org.springframework.stereotype.Repository
 import kotlin.jvm.optionals.getOrNull
 
 @Repository
-class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : VesselRepository {
+class JpaVesselRepository(
+    private val dbVesselRepository: DBVesselRepository,
+) : VesselRepository {
     private val logger: Logger = LoggerFactory.getLogger(JpaVesselRepository::class.java)
 
     @Cacheable(value = ["vessels"])
-    override fun findAll(): List<Vessel> {
-        return dbVesselRepository.findAll().map { it.toVessel() }
-    }
+    override fun findAll(): List<Vessel> = dbVesselRepository.findAll().map { it.toVessel() }
 
     @Cacheable(value = ["vessel"])
     override fun findVessel(
@@ -44,9 +44,10 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
 
         if (!externalReferenceNumber.isNullOrEmpty()) {
             try {
-                return dbVesselRepository.findByExternalReferenceNumberIgnoreCaseContaining(
-                    externalReferenceNumber,
-                ).toVessel()
+                return dbVesselRepository
+                    .findByExternalReferenceNumberIgnoreCaseContaining(
+                        externalReferenceNumber,
+                    ).toVessel()
             } catch (e: EmptyResultDataAccessException) {
                 logger.warn("No vessel found for external marking $externalReferenceNumber", e)
             }
@@ -56,23 +57,18 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
     }
 
     // Only used in tests
-    override fun findFirstByInternalReferenceNumber(internalReferenceNumber: String): Vessel? {
-        return dbVesselRepository.findFirstByCfr(internalReferenceNumber)?.toVessel()
-    }
+    override fun findFirstByInternalReferenceNumber(internalReferenceNumber: String): Vessel? =
+        dbVesselRepository.findFirstByCfr(internalReferenceNumber)?.toVessel()
 
     @Cacheable(value = ["vessels_by_ids"])
-    override fun findVesselsByIds(ids: List<Int>): List<Vessel> {
-        return dbVesselRepository.findAllByIds(ids).map { it.toVessel() }
-    }
+    override fun findVesselsByIds(ids: List<Int>): List<Vessel> =
+        dbVesselRepository.findAllByIds(ids).map { it.toVessel() }
 
     @Cacheable(value = ["vessels_by_internal_reference_numbers"])
-    override fun findVesselsByInternalReferenceNumbers(internalReferenceNumbers: List<String>): List<Vessel> {
-        return dbVesselRepository.findAllByInternalReferenceNumbers(internalReferenceNumbers).map { it.toVessel() }
-    }
+    override fun findVesselsByInternalReferenceNumbers(internalReferenceNumbers: List<String>): List<Vessel> =
+        dbVesselRepository.findAllByInternalReferenceNumbers(internalReferenceNumbers).map { it.toVessel() }
 
-    override fun findVesselById(vesselId: Int): Vessel? {
-        return dbVesselRepository.findById(vesselId).getOrNull()?.toVessel()
-    }
+    override fun findVesselById(vesselId: Int): Vessel? = dbVesselRepository.findById(vesselId).getOrNull()?.toVessel()
 
     @Cacheable(value = ["search_vessels"])
     override fun search(searched: String): List<Vessel> {
@@ -80,7 +76,8 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
             return listOf()
         }
 
-        return dbVesselRepository.searchBy(searched)
+        return dbVesselRepository
+            .searchBy(searched)
             .map { it.toVessel() }
     }
 
@@ -88,7 +85,5 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
     override fun findUnderCharterForVessel(
         vesselIdentifier: VesselIdentifier,
         value: String,
-    ): Boolean {
-        return dbVesselRepository.findUnderCharterByVesselIdentifierEquals(vesselIdentifier.name, value)
-    }
+    ): Boolean = dbVesselRepository.findUnderCharterByVesselIdentifierEquals(vesselIdentifier.name, value)
 }

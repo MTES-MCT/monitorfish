@@ -19,10 +19,21 @@ class VesselBeaconMalfunctionsResumeUTests {
                 BeaconMalfunctionWithDetails(
                     beaconMalfunction =
                         BeaconMalfunction(
-                            1, "FR224226850", "1236514", "IRCS",
-                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA,
-                            Stage.ARCHIVED, now.minusYears(2), null, now.minusYears(2),
-                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                            1,
+                            "FR224226850",
+                            "1236514",
+                            "IRCS",
+                            "fr",
+                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            "BIDUBULE",
+                            VesselStatus.AT_SEA,
+                            Stage.ARCHIVED,
+                            now.minusYears(2),
+                            null,
+                            now.minusYears(2),
+                            beaconNumber = "123465",
+                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                            vesselId = 123,
                         ),
                     comments =
                         listOf(
@@ -47,10 +58,21 @@ class VesselBeaconMalfunctionsResumeUTests {
                 BeaconMalfunctionWithDetails(
                     beaconMalfunction =
                         BeaconMalfunction(
-                            2, "FR224226850", "1236514", "IRCS",
-                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA,
-                            Stage.ARCHIVED, now.minusMinutes(23), null, now.minusMinutes(23),
-                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                            2,
+                            "FR224226850",
+                            "1236514",
+                            "IRCS",
+                            "fr",
+                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            "BIDUBULE",
+                            VesselStatus.AT_SEA,
+                            Stage.ARCHIVED,
+                            now.minusMinutes(23),
+                            null,
+                            now.minusMinutes(23),
+                            beaconNumber = "123465",
+                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                            vesselId = 123,
                         ),
                     comments =
                         listOf(
@@ -75,10 +97,21 @@ class VesselBeaconMalfunctionsResumeUTests {
                 BeaconMalfunctionWithDetails(
                     beaconMalfunction =
                         BeaconMalfunction(
-                            3, "FR224226850", "1236514", "IRCS",
-                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA,
-                            Stage.ARCHIVED, now.minusMinutes(5), null, now.minusMinutes(5),
-                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                            3,
+                            "FR224226850",
+                            "1236514",
+                            "IRCS",
+                            "fr",
+                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            "BIDUBULE",
+                            VesselStatus.AT_SEA,
+                            Stage.ARCHIVED,
+                            now.minusMinutes(5),
+                            null,
+                            now.minusMinutes(5),
+                            beaconNumber = "123465",
+                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                            vesselId = 123,
                         ),
                     comments =
                         listOf(
@@ -110,10 +143,21 @@ class VesselBeaconMalfunctionsResumeUTests {
                 BeaconMalfunctionWithDetails(
                     beaconMalfunction =
                         BeaconMalfunction(
-                            4, "FR224226850", "1236514", "IRCS",
-                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_PORT,
-                            Stage.ARCHIVED, lastBeaconDateTime, null, lastBeaconDateTime,
-                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                            4,
+                            "FR224226850",
+                            "1236514",
+                            "IRCS",
+                            "fr",
+                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            "BIDUBULE",
+                            VesselStatus.AT_PORT,
+                            Stage.ARCHIVED,
+                            lastBeaconDateTime,
+                            null,
+                            lastBeaconDateTime,
+                            beaconNumber = "123465",
+                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                            vesselId = 123,
                         ),
                     comments =
                         listOf(
@@ -164,10 +208,21 @@ class VesselBeaconMalfunctionsResumeUTests {
                 BeaconMalfunctionWithDetails(
                     beaconMalfunction =
                         BeaconMalfunction(
-                            1, "FR224226850", "1236514", "IRCS",
-                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA,
-                            Stage.ARCHIVED, lastBeaconDateTime, null, lastBeaconDateTime,
-                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                            1,
+                            "FR224226850",
+                            "1236514",
+                            "IRCS",
+                            "fr",
+                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            "BIDUBULE",
+                            VesselStatus.AT_SEA,
+                            Stage.ARCHIVED,
+                            lastBeaconDateTime,
+                            null,
+                            lastBeaconDateTime,
+                            beaconNumber = "123465",
+                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                            vesselId = 123,
                         ),
                     comments =
                         listOf(
@@ -183,10 +238,21 @@ class VesselBeaconMalfunctionsResumeUTests {
                 BeaconMalfunctionWithDetails(
                     beaconMalfunction =
                         BeaconMalfunction(
-                            2, "FR224226852", "1236514", "IRCS",
-                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_PORT,
-                            Stage.ARCHIVED, now, null, now,
-                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                            2,
+                            "FR224226852",
+                            "1236514",
+                            "IRCS",
+                            "fr",
+                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            "BIDUBULE",
+                            VesselStatus.AT_PORT,
+                            Stage.ARCHIVED,
+                            now,
+                            null,
+                            now,
+                            beaconNumber = "123465",
+                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                            vesselId = 123,
                         ),
                     comments =
                         listOf(

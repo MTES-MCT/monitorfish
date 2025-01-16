@@ -35,7 +35,8 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
     fun `findVesselMissionActionsAfterDateTime Should return all vessel's controls after a date time`() {
         // Given
         val dateTime =
-            ZonedDateTime.now()
+            ZonedDateTime
+                .now()
                 .minusYears(1)
                 .minusMonths(1)
 

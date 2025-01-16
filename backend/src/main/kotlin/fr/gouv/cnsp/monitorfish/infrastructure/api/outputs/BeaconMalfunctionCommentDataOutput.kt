@@ -13,13 +13,12 @@ data class BeaconMalfunctionCommentDataOutput(
     companion object {
         fun fromBeaconMalfunctionComment(
             beaconMalfunctionComment: BeaconMalfunctionComment,
-        ): BeaconMalfunctionCommentDataOutput {
-            return BeaconMalfunctionCommentDataOutput(
+        ): BeaconMalfunctionCommentDataOutput =
+            BeaconMalfunctionCommentDataOutput(
                 beaconMalfunctionId = beaconMalfunctionComment.beaconMalfunctionId,
                 comment = beaconMalfunctionComment.comment,
                 userType = beaconMalfunctionComment.userType,
                 dateTime = beaconMalfunctionComment.dateTime,
             )
-        }
     }
 }

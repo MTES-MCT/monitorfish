@@ -151,17 +151,16 @@ class GetVesselUTests {
                     riskFactorRepository,
                     beaconRepository,
                     producerOrganizationMembershipRepository,
+                ).execute(
+                    123,
+                    "FR224226850",
+                    "",
+                    "",
+                    VesselTrackDepth.TWELVE_HOURS,
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    null,
+                    null,
                 )
-                    .execute(
-                        123,
-                        "FR224226850",
-                        "",
-                        "",
-                        VesselTrackDepth.TWELVE_HOURS,
-                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                        null,
-                        null,
-                    )
             }
 
         // Then
@@ -169,8 +168,16 @@ class GetVesselUTests {
         assertThat(pair.second.vessel?.id).isEqualTo(123)
         assertThat(pair.second.vessel?.hasVisioCaptures).isTrue()
         assertThat(pair.second.beacon?.beaconNumber).isEqualTo("A_BEACON_NUMBER")
-        assertThat(pair.second.positions.first().dateTime).isEqualTo(now.minusHours(4))
-        assertThat(pair.second.positions.last().dateTime).isEqualTo(now.minusHours(1))
+        assertThat(
+            pair.second.positions
+                .first()
+                .dateTime,
+        ).isEqualTo(now.minusHours(4))
+        assertThat(
+            pair.second.positions
+                .last()
+                .dateTime,
+        ).isEqualTo(now.minusHours(1))
         assertThat(pair.second.vesselRiskFactor.impactRiskFactor).isEqualTo(2.3)
         assertThat(pair.second.vesselRiskFactor.riskFactor).isEqualTo(3.2)
         assertThat(pair.second.producerOrganization?.organizationName).isEqualTo("Example Name 1")
@@ -195,17 +202,16 @@ class GetVesselUTests {
                     riskFactorRepository,
                     beaconRepository,
                     producerOrganizationMembershipRepository,
+                ).execute(
+                    123,
+                    "FR224226850",
+                    "",
+                    "",
+                    VesselTrackDepth.TWELVE_HOURS,
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    null,
+                    null,
                 )
-                    .execute(
-                        123,
-                        "FR224226850",
-                        "",
-                        "",
-                        VesselTrackDepth.TWELVE_HOURS,
-                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                        null,
-                        null,
-                    )
             }
 
         // Then
@@ -233,17 +239,16 @@ class GetVesselUTests {
                     riskFactorRepository,
                     beaconRepository,
                     producerOrganizationMembershipRepository,
+                ).execute(
+                    123,
+                    "FR224226850",
+                    "",
+                    "",
+                    VesselTrackDepth.TWELVE_HOURS,
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    null,
+                    null,
                 )
-                    .execute(
-                        123,
-                        "FR224226850",
-                        "",
-                        "",
-                        VesselTrackDepth.TWELVE_HOURS,
-                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                        null,
-                        null,
-                    )
             }
 
         // Then

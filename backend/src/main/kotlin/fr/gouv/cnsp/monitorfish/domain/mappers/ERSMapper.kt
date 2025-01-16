@@ -17,8 +17,8 @@ object ERSMapper {
         message: String?,
         messageType: String?,
         operationType: LogbookOperationType,
-    ): LogbookMessageValue? {
-        return try {
+    ): LogbookMessageValue? =
+        try {
             if (operationType == LogbookOperationType.RET && !message.isNullOrEmpty() && message != JSONB_NULL_STRING) {
                 val classType = LogbookOperationTypeMapping.getClassFromName(operationType.name)
 
@@ -33,5 +33,4 @@ object ERSMapper {
         } catch (e: Exception) {
             throw EntityConversionException("Error while converting 'LogbookMessage'. $message", e)
         }
-    }
 }

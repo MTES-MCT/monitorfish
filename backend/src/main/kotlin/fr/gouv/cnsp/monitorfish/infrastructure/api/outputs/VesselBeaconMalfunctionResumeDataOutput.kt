@@ -13,13 +13,12 @@ data class VesselBeaconMalfunctionResumeDataOutput(
     companion object {
         fun fromVesselBeaconMalfunctionResume(
             vesselBeaconMalfunctionsResume: VesselBeaconMalfunctionsResume,
-        ): VesselBeaconMalfunctionResumeDataOutput {
-            return VesselBeaconMalfunctionResumeDataOutput(
+        ): VesselBeaconMalfunctionResumeDataOutput =
+            VesselBeaconMalfunctionResumeDataOutput(
                 numberOfBeaconsAtSea = vesselBeaconMalfunctionsResume.numberOfBeaconsAtSea,
                 numberOfBeaconsAtPort = vesselBeaconMalfunctionsResume.numberOfBeaconsAtPort,
                 lastBeaconMalfunctionDateTime = vesselBeaconMalfunctionsResume.lastBeaconMalfunctionDateTime,
                 lastBeaconMalfunctionVesselStatus = vesselBeaconMalfunctionsResume.lastBeaconMalfunctionVesselStatus,
             )
-        }
     }
 }

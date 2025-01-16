@@ -18,7 +18,8 @@ class ScriptProxyController(
 
         val scriptResponse = restTemplate.getForEntity(smallChatUrl, String::class.java)
 
-        return ResponseEntity.ok()
+        return ResponseEntity
+            .ok()
             .header(HttpHeaders.CONTENT_TYPE, "application/javascript")
             .body(scriptResponse.body)
     }

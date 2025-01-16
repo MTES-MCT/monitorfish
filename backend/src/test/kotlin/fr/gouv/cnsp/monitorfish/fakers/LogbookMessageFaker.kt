@@ -7,8 +7,8 @@ import java.time.ZonedDateTime
 
 class LogbookMessageFaker {
     companion object {
-        fun fakePnoLogbookMessage(index: Int): LogbookMessage {
-            return LogbookMessage(
+        fun fakePnoLogbookMessage(index: Int): LogbookMessage =
+            LogbookMessage(
                 id = index.toLong(),
                 reportId = "FAKE_REPORT_ID_$index",
                 referencedReportId = null,
@@ -24,7 +24,6 @@ class LogbookMessageFaker {
                 reportDateTime = ZonedDateTime.now(),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
             )
-        }
 
         fun fakePnoLogbookMessage(
             id: Long? = null,
@@ -55,8 +54,8 @@ class LogbookMessageFaker {
             tripSegments: List<LogbookTripSegment>? = emptyList(),
             vesselId: Int? = null,
             vesselName: String? = null,
-        ): LogbookMessage {
-            return LogbookMessage(
+        ): LogbookMessage =
+            LogbookMessage(
                 id = id,
                 reportId = reportId,
                 referencedReportId = referencedReportId,
@@ -86,7 +85,6 @@ class LogbookMessageFaker {
                 vesselId = vesselId,
                 vesselName = vesselName,
             )
-        }
 
         fun fakeLogbookFishingCatch(
             conversionFactor: Double? = null,
@@ -102,8 +100,8 @@ class LogbookMessageFaker {
             speciesName: String? = "Fake Species HKE",
             statisticalRectangle: String? = null,
             weight: Double? = 42.0,
-        ): LogbookFishingCatch {
-            return LogbookFishingCatch(
+        ): LogbookFishingCatch =
+            LogbookFishingCatch(
                 conversionFactor = conversionFactor,
                 economicZone = economicZone,
                 effortZone = effortZone,
@@ -118,10 +116,9 @@ class LogbookMessageFaker {
                 statisticalRectangle = statisticalRectangle,
                 weight = weight,
             )
-        }
 
-        fun fakePnoMessage(): PNO {
-            return PNO().apply {
+        fun fakePnoMessage(): PNO =
+            PNO().apply {
                 hasPortEntranceAuthorization = null
                 hasPortLandingAuthorization = null
                 catchOnboard = listOf(fakeLogbookFishingCatch())
@@ -144,6 +141,5 @@ class LogbookMessageFaker {
                 purpose = LogbookMessagePurpose.LAN
                 statisticalRectangle = null
             }
-        }
     }
 }

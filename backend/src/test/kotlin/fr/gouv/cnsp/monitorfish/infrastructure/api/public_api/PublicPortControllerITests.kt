@@ -1,25 +1,24 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
+import fr.gouv.cnsp.monitorfish.domain.use_cases.port.GetActivePorts
 import fr.gouv.cnsp.monitorfish.fakers.PortFaker
 import fr.gouv.cnsp.monitorfish.infrastructure.cache.CaffeineConfiguration
-import fr.gouv.cnsp.monitorfish.domain.use_cases.port.GetActivePorts
 import org.assertj.core.api.Assertions.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
+import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.cache.CacheManager
 import org.springframework.context.annotation.Import
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.hamcrest.Matchers.equalTo
-import org.mockito.BDDMockito.given
 
 @Import(SentryConfig::class, CaffeineConfiguration::class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -45,7 +44,8 @@ class PublicPortControllerITests {
         )
 
         // When
-        api.perform(get("/api/v1/ports"))
+        api
+            .perform(get("/api/v1/ports"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))
@@ -62,7 +62,8 @@ class PublicPortControllerITests {
         assertThat(cacheManager.getCache("ports")?.get("PORT123")).isNotNull()
 
         // When
-        api.perform(put("/api/v1/ports/invalidate"))
+        api
+            .perform(put("/api/v1/ports/invalidate"))
             .andExpect(status().isOk)
 
         // Then

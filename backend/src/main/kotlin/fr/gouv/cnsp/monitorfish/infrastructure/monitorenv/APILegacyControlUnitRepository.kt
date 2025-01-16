@@ -26,7 +26,9 @@ class APILegacyControlUnitRepository(
             val legacyControlUnitsUrl = "${monitorenvProperties.url}/api/v1/control_units"
 
             try {
-                apiClient.httpClient.get(legacyControlUnitsUrl).body<List<LegacyControlUnitDataResponse>>()
+                apiClient.httpClient
+                    .get(legacyControlUnitsUrl)
+                    .body<List<LegacyControlUnitDataResponse>>()
                     .map { it.toLegacyControlUnit() }
             } catch (e: Exception) {
                 logger.error("Could not fetch legacy control units at $legacyControlUnitsUrl", e)

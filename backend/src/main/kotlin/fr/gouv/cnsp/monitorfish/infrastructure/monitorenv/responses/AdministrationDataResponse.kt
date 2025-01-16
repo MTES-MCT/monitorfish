@@ -9,11 +9,10 @@ data class AdministrationDataResponse(
     val isArchived: Boolean,
     val name: String,
 ) {
-    fun toAdministration(): Administration {
-        return Administration(
+    fun toAdministration(): Administration =
+        Administration(
             id = id,
             isArchived = isArchived,
             name = name,
         )
-    }
 }

@@ -40,7 +40,8 @@ class HealthcheckControllerITests {
         )
 
         // When
-        api.perform(get("/api/v1/healthcheck"))
+        api
+            .perform(get("/api/v1/healthcheck"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.dateLastPositionUpdatedByPrefect", equalTo("2020-12-21T15:01:00Z")))

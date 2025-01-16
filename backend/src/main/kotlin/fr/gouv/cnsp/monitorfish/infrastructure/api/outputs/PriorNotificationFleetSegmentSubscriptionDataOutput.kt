@@ -10,12 +10,11 @@ data class PriorNotificationFleetSegmentSubscriptionDataOutput(
     companion object {
         fun fromPriorNotificationSegmentSubscription(
             priorNotificationFleetSegmentSubscription: PriorNotificationFleetSegmentSubscription,
-        ): PriorNotificationFleetSegmentSubscriptionDataOutput {
-            return PriorNotificationFleetSegmentSubscriptionDataOutput(
+        ): PriorNotificationFleetSegmentSubscriptionDataOutput =
+            PriorNotificationFleetSegmentSubscriptionDataOutput(
                 controlUnitId = priorNotificationFleetSegmentSubscription.controlUnitId,
                 segmentCode = priorNotificationFleetSegmentSubscription.segmentCode,
                 segmentName = priorNotificationFleetSegmentSubscription.segmentName,
             )
-        }
     }
 }

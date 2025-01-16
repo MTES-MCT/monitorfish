@@ -13,8 +13,8 @@ data class ControlUnitContactDataResponse(
     val name: String,
     val phone: String?,
 ) {
-    fun toControlUnitContact(): ControlUnitContact {
-        return ControlUnitContact(
+    fun toControlUnitContact(): ControlUnitContact =
+        ControlUnitContact(
             id = id,
             controlUnitId = controlUnitId,
             email = email,
@@ -23,5 +23,4 @@ data class ControlUnitContactDataResponse(
             name = name,
             phone = phone,
         )
-    }
 }

@@ -51,8 +51,8 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
 
     companion object {
         @JvmStatic
-        fun getTestCases(): Stream<TestCase> {
-            return Stream.of(
+        fun getTestCases(): Stream<TestCase> =
+            Stream.of(
                 // -------------------------------------------------------------
                 // Logbook prior notifications
                 // "00000" -> "00101"
@@ -458,7 +458,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     PriorNotificationState.PENDING_SEND,
                 ),
             )
-        }
     }
 
     @ParameterizedTest

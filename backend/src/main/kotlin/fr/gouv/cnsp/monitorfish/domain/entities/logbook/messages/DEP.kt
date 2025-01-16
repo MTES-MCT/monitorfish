@@ -5,7 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripGear
 import java.time.ZonedDateTime
 
-class DEP() : LogbookMessageValue {
+class DEP : LogbookMessageValue {
     var anticipatedActivity: String? = null
     var departurePort: String? = null
     var departurePortName: String? = null

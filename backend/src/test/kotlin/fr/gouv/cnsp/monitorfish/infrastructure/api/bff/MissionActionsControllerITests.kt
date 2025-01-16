@@ -94,7 +94,8 @@ class MissionActionsControllerITests {
         )
 
         // When
-        api.perform(get("/bff/v1/mission_actions/controls?vesselId=123&afterDateTime=2020-05-04T03:04:05.000Z"))
+        api
+            .perform(get("/bff/v1/mission_actions/controls?vesselId=123&afterDateTime=2020-05-04T03:04:05.000Z"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.numberOfDiversions", equalTo(3)))
@@ -130,7 +131,8 @@ class MissionActionsControllerITests {
         )
 
         // When
-        api.perform(get("/bff/v1/mission_actions?missionId=123"))
+        api
+            .perform(get("/bff/v1/mission_actions?missionId=123"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
@@ -149,53 +151,53 @@ class MissionActionsControllerITests {
         given(addMissionAction.execute(any())).willReturn(newMission)
 
         // When
-        api.perform(
-            post("/bff/v1/mission_actions")
-                .content(
-                    objectMapper.writeValueAsString(
-                        AddMissionActionDataInput(
-                            actionDatetimeUtc = dateTime,
-                            missionId = 2,
-                            vesselId = 2,
-                            actionType = MissionActionType.SEA_CONTROL,
-                            logbookInfractions =
-                                listOf(
-                                    LogbookInfraction(
-                                        InfractionType.WITH_RECORD,
-                                        27689,
-                                        "Poids à bord MNZ supérieur de 50% au poids déclaré",
+        api
+            .perform(
+                post("/bff/v1/mission_actions")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            AddMissionActionDataInput(
+                                actionDatetimeUtc = dateTime,
+                                missionId = 2,
+                                vesselId = 2,
+                                actionType = MissionActionType.SEA_CONTROL,
+                                logbookInfractions =
+                                    listOf(
+                                        LogbookInfraction(
+                                            InfractionType.WITH_RECORD,
+                                            27689,
+                                            "Poids à bord MNZ supérieur de 50% au poids déclaré",
+                                        ),
                                     ),
-                                ),
-                            faoAreas = listOf("25.6.9", "25.7.9"),
-                            segments =
-                                listOf(
-                                    FleetSegment(
-                                        segment = "WWSS10",
-                                        segmentName = "World Wide Segment",
+                                faoAreas = listOf("25.6.9", "25.7.9"),
+                                segments =
+                                    listOf(
+                                        FleetSegment(
+                                            segment = "WWSS10",
+                                            segmentName = "World Wide Segment",
+                                        ),
                                     ),
-                                ),
-                            gearInfractions =
-                                listOf(
-                                    GearInfraction(
-                                        InfractionType.WITH_RECORD,
-                                        27689,
-                                        "Maille trop petite",
+                                gearInfractions =
+                                    listOf(
+                                        GearInfraction(
+                                            InfractionType.WITH_RECORD,
+                                            27689,
+                                            "Maille trop petite",
+                                        ),
                                     ),
-                                ),
-                            hasSomeGearsSeized = false,
-                            hasSomeSpeciesSeized = false,
-                            isAdministrativeControl = true,
-                            isComplianceWithWaterRegulationsControl = true,
-                            isSafetyEquipmentAndStandardsComplianceControl = true,
-                            isSeafarersControl = true,
-                            flagState = CountryCode.FR,
-                            userTrigram = "LTH",
-                            completion = Completion.TO_COMPLETE,
+                                hasSomeGearsSeized = false,
+                                hasSomeSpeciesSeized = false,
+                                isAdministrativeControl = true,
+                                isComplianceWithWaterRegulationsControl = true,
+                                isSafetyEquipmentAndStandardsComplianceControl = true,
+                                isSeafarersControl = true,
+                                flagState = CountryCode.FR,
+                                userTrigram = "LTH",
+                                completion = Completion.TO_COMPLETE,
+                            ),
                         ),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.missionId", equalTo(2)))
@@ -238,51 +240,51 @@ class MissionActionsControllerITests {
                 comments = null,
             )
         // When
-        api.perform(
-            put("/bff/v1/mission_actions/123")
-                .content(
-                    objectMapper.writeValueAsString(
-                        AddMissionActionDataInput(
-                            actionDatetimeUtc = dateTime,
-                            missionId = 2,
-                            vesselId = 2,
-                            actionType = MissionActionType.SEA_CONTROL,
-                            logbookInfractions =
-                                listOf(
-                                    LogbookInfraction(
-                                        InfractionType.WITH_RECORD,
-                                        27689,
-                                        "Poids à bord MNZ supérieur de 50% au poids déclaré",
+        api
+            .perform(
+                put("/bff/v1/mission_actions/123")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            AddMissionActionDataInput(
+                                actionDatetimeUtc = dateTime,
+                                missionId = 2,
+                                vesselId = 2,
+                                actionType = MissionActionType.SEA_CONTROL,
+                                logbookInfractions =
+                                    listOf(
+                                        LogbookInfraction(
+                                            InfractionType.WITH_RECORD,
+                                            27689,
+                                            "Poids à bord MNZ supérieur de 50% au poids déclaré",
+                                        ),
                                     ),
-                                ),
-                            faoAreas = listOf("25.6.9", "25.7.9"),
-                            segments =
-                                listOf(
-                                    FleetSegment(
-                                        segment = "WWSS10",
-                                        segmentName = "World Wide Segment",
+                                faoAreas = listOf("25.6.9", "25.7.9"),
+                                segments =
+                                    listOf(
+                                        FleetSegment(
+                                            segment = "WWSS10",
+                                            segmentName = "World Wide Segment",
+                                        ),
                                     ),
-                                ),
-                            gearInfractions =
-                                listOf(
-                                    GearInfraction(
-                                        InfractionType.WITH_RECORD,
-                                        27689,
-                                        "Maille trop petite",
+                                gearInfractions =
+                                    listOf(
+                                        GearInfraction(
+                                            InfractionType.WITH_RECORD,
+                                            27689,
+                                            "Maille trop petite",
+                                        ),
                                     ),
-                                ),
-                            gearOnboard = listOf(gearControl),
-                            hasSomeGearsSeized = false,
-                            hasSomeSpeciesSeized = false,
-                            isFromPoseidon = true,
-                            flagState = CountryCode.UNDEFINED,
-                            userTrigram = "LTH",
-                            completion = Completion.TO_COMPLETE,
+                                gearOnboard = listOf(gearControl),
+                                hasSomeGearsSeized = false,
+                                hasSomeSpeciesSeized = false,
+                                isFromPoseidon = true,
+                                flagState = CountryCode.UNDEFINED,
+                                userTrigram = "LTH",
+                                completion = Completion.TO_COMPLETE,
+                            ),
                         ),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.missionId", equalTo(2)))
@@ -316,31 +318,31 @@ class MissionActionsControllerITests {
         given(updateMissionAction.execute(any(), any())).willReturn(newMission)
 
         // When
-        api.perform(
-            put("/bff/v1/mission_actions/123")
-                .content(
-                    """
-                    {
-                        "id": 3540,
-                        "vesselId": 1778775,
-                        "vesselName": "TEST",
-                        "internalReferenceNumber": "FRA000936666",
-                        "externalReferenceNumber": "SEGESGES",
-                        "ircs": "FEFGEGSGE",
-                        "flagState": null,
-                        "districtCode": "AD",
-                        "faoAreas": [],
-                        "userTrigram": "LTH",
-                        "completion": "COMPLETED",
-                        "flightGoals": [],
-                        "missionId": 10556,
-                        "actionType": "OBSERVATION",
-                        "actionDatetimeUtc": "2024-02-01T14:29:00Z"
-                    }
-                    """.trimIndent(),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+        api
+            .perform(
+                put("/bff/v1/mission_actions/123")
+                    .content(
+                        """
+                        {
+                            "id": 3540,
+                            "vesselId": 1778775,
+                            "vesselName": "TEST",
+                            "internalReferenceNumber": "FRA000936666",
+                            "externalReferenceNumber": "SEGESGES",
+                            "ircs": "FEFGEGSGE",
+                            "flagState": null,
+                            "districtCode": "AD",
+                            "faoAreas": [],
+                            "userTrigram": "LTH",
+                            "completion": "COMPLETED",
+                            "flightGoals": [],
+                            "missionId": 10556,
+                            "actionType": "OBSERVATION",
+                            "actionDatetimeUtc": "2024-02-01T14:29:00Z"
+                        }
+                        """.trimIndent(),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isCreated)
     }
@@ -348,7 +350,8 @@ class MissionActionsControllerITests {
     @Test
     fun `Should delete a mission action`() {
         // When
-        api.perform(delete("/bff/v1/mission_actions/2"))
+        api
+            .perform(delete("/bff/v1/mission_actions/2"))
             // Then
             .andExpect(status().isNoContent())
 
@@ -401,11 +404,12 @@ class MissionActionsControllerITests {
         )
 
         // When
-        api.perform(
-            get(
-                "/bff/v1/mission_actions/controls/activity_reports?beforeDateTime=2020-05-04T03:04:05.000Z&afterDateTime=2020-03-04T03:04:05.000Z&jdp=MEDITERRANEAN_AND_EASTERN_ATLANTIC",
-            ),
-        )
+        api
+            .perform(
+                get(
+                    "/bff/v1/mission_actions/controls/activity_reports?beforeDateTime=2020-05-04T03:04:05.000Z&afterDateTime=2020-03-04T03:04:05.000Z&jdp=MEDITERRANEAN_AND_EASTERN_ATLANTIC",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.activityReports.length()", equalTo(1)))

@@ -54,8 +54,7 @@ class GetPriorNotificationUTests {
                 fakePriorNotification.reportId!!,
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             ),
-        )
-            .willReturn(fakePriorNotification)
+        ).willReturn(fakePriorNotification)
 
         // When
         val result =
@@ -116,8 +115,7 @@ class GetPriorNotificationUTests {
                 fakeLogbookMessageReferenceReportId,
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             ),
-        )
-            .willReturn(fakePriorNotification)
+        ).willReturn(fakePriorNotification)
 
         // When
         val result =

@@ -87,8 +87,8 @@ data class PositionEntity(
         )
 
     companion object {
-        fun fromPosition(position: Position): PositionEntity {
-            return PositionEntity(
+        fun fromPosition(position: Position): PositionEntity =
+            PositionEntity(
                 internalReferenceNumber = position.internalReferenceNumber,
                 ircs = position.ircs,
                 mmsi = position.mmsi,
@@ -108,6 +108,5 @@ data class PositionEntity(
                 isFishing = position.isFishing,
                 networkType = position.networkType,
             )
-        }
     }
 }

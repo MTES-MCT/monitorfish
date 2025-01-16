@@ -11,11 +11,10 @@ import kotlin.jvm.optionals.getOrNull
 class JpaProducerOrganizationMembership(
     private val dbProducerOrganizationMembership: DBProducerOrganizationMembership,
 ) : ProducerOrganizationMembershipRepository {
-    override fun findAll(): List<ProducerOrganizationMembership> {
-        return dbProducerOrganizationMembership.findAll().map {
+    override fun findAll(): List<ProducerOrganizationMembership> =
+        dbProducerOrganizationMembership.findAll().map {
             it.toProducerOrganizationMembership()
         }
-    }
 
     override fun saveAll(producerOrganizationMemberships: List<ProducerOrganizationMembership>) {
         dbProducerOrganizationMembership.saveAll(
@@ -24,8 +23,9 @@ class JpaProducerOrganizationMembership(
         )
     }
 
-    override fun findByInternalReferenceNumber(internalReferenceNumber: String): ProducerOrganizationMembership? {
-        return dbProducerOrganizationMembership.findById(internalReferenceNumber).getOrNull()
+    override fun findByInternalReferenceNumber(internalReferenceNumber: String): ProducerOrganizationMembership? =
+        dbProducerOrganizationMembership
+            .findById(internalReferenceNumber)
+            .getOrNull()
             ?.toProducerOrganizationMembership()
-    }
 }

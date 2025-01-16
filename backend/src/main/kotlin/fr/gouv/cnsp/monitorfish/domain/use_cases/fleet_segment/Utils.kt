@@ -60,8 +60,8 @@ fun getSpeciesCatchesForSegmentCalculation(
     gears: List<GearControl>,
     species: List<SpeciesControl>,
     allSpecies: List<Species>,
-): List<SpeciesCatchForSegmentCalculation> {
-    return faoAreas.flatMap { faoArea ->
+): List<SpeciesCatchForSegmentCalculation> =
+    faoAreas.flatMap { faoArea ->
         gears.flatMap { gear ->
             species.map { specy ->
                 val scipSpeciesType = allSpecies.find { it.code == specy.speciesCode }?.scipSpeciesType
@@ -79,14 +79,13 @@ fun getSpeciesCatchesForSegmentCalculation(
             }
         }
     }
-}
 
 fun getSpeciesCatchesForSegmentCalculation(
     gearCodes: List<String>,
     catches: List<LogbookFishingCatch>,
     allSpecies: List<Species>,
-): List<SpeciesCatchForSegmentCalculation> {
-    return gearCodes.flatMap { gearCode ->
+): List<SpeciesCatchForSegmentCalculation> =
+    gearCodes.flatMap { gearCode ->
         catches.map { specy ->
             val scipSpeciesType = allSpecies.find { it.code == specy.species }?.scipSpeciesType
             val weight = specy.weight ?: 0.0
@@ -102,4 +101,3 @@ fun getSpeciesCatchesForSegmentCalculation(
             )
         }
     }
-}

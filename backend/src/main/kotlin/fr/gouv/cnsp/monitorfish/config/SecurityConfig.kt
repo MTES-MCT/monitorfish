@@ -25,7 +25,6 @@ class SecurityConfig(
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf { it.disable() }
-            .cors { it.configurationSource(corsConfigurationSource()) }
             .authorizeHttpRequests { authorize ->
                 if (oidcProperties.enabled == null || oidcProperties.enabled == false) {
                     logger.warn(
@@ -42,38 +41,39 @@ class SecurityConfig(
                         """.trimIndent(),
                     )
 
-                    authorize.requestMatchers(
-                        "/",
-                        "/*.jpg",
-                        "/*.js",
-                        "/*.png",
-                        "/*.svg",
-                        "/api/**",
-                        "/asset-manifest.json",
-                        "/assets/**",
-                        "/backoffice",
-                        "/backoffice/**",
-                        // Used to redirect to the frontend SPA, see SpaController.kt
-                        "/error",
-                        "/ext",
-                        "/favicon-32.ico",
-                        "/favicon.ico",
-                        "/flags/**",
-                        "/index.html",
-                        "/light",
-                        "/load_light",
-                        "/login",
-                        "/map-icons/**",
-                        "/proxy/**",
-                        "/realms/**",
-                        "/register",
-                        "/resources/**",
-                        "/robots.txt",
-                        "/side_window",
-                        "/static/**",
-                        "/swagger-ui/**",
-                        "/version",
-                    ).permitAll()
+                    authorize
+                        .requestMatchers(
+                            "/",
+                            "/*.jpg",
+                            "/*.js",
+                            "/*.png",
+                            "/*.svg",
+                            "/api/**",
+                            "/asset-manifest.json",
+                            "/assets/**",
+                            "/backoffice",
+                            "/backoffice/**",
+                            // Used to redirect to the frontend SPA, see SpaController.kt
+                            "/error",
+                            "/ext",
+                            "/favicon-32.ico",
+                            "/favicon.ico",
+                            "/flags/**",
+                            "/index.html",
+                            "/light",
+                            "/load_light",
+                            "/login",
+                            "/map-icons/**",
+                            "/proxy/**",
+                            "/realms/**",
+                            "/register",
+                            "/resources/**",
+                            "/robots.txt",
+                            "/side_window",
+                            "/static/**",
+                            "/swagger-ui/**",
+                            "/version",
+                        ).permitAll()
                         .anyRequest()
                         .authenticated()
                 }

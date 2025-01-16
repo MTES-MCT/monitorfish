@@ -28,7 +28,8 @@ class GetVesselControls(
         coroutineScope {
             logger.debug("Searching controls for vessel {} after {}", vesselId, afterDateTime)
             val controls =
-                missionActionsRepository.findVesselMissionActionsAfterDateTime(vesselId, afterDateTime)
+                missionActionsRepository
+                    .findVesselMissionActionsAfterDateTime(vesselId, afterDateTime)
                     .filter {
                         it.actionType in
                             setOf(
@@ -40,33 +41,34 @@ class GetVesselControls(
             logger.debug("Found ${controls.size} controls for vessel $vesselId")
 
             val controlsWithCodeValues =
-                controls.map { action ->
-                    val controlUnits = missionRepository.findControlUnitsOfMission(this, action.missionId)
+                controls
+                    .map { action ->
+                        val controlUnits = missionRepository.findControlUnitsOfMission(this, action.missionId)
 
-                    Pair(action, controlUnits)
-                }.map { (control, controlUnits) ->
-                    control.controlUnits = controlUnits.await()
+                        Pair(action, controlUnits)
+                    }.map { (control, controlUnits) ->
+                        control.controlUnits = controlUnits.await()
 
-                    control.portLocode?.let { port ->
-                        try {
-                            control.portName = portRepository.findByLocode(port).name
-                        } catch (e: CodeNotFoundException) {
-                            logger.warn(e.message)
-                        }
-                    }
-
-                    control.gearOnboard.forEach { gearControl ->
-                        gearControl.gearCode?.let { gear ->
+                        control.portLocode?.let { port ->
                             try {
-                                gearControl.gearName = gearRepository.findByCode(gear).name
+                                control.portName = portRepository.findByLocode(port).name
                             } catch (e: CodeNotFoundException) {
                                 logger.warn(e.message)
                             }
                         }
-                    }
 
-                    control
-                }
+                        control.gearOnboard.forEach { gearControl ->
+                            gearControl.gearCode?.let { gear ->
+                                try {
+                                    gearControl.gearName = gearRepository.findByCode(gear).name
+                                } catch (e: CodeNotFoundException) {
+                                    logger.warn(e.message)
+                                }
+                            }
+                        }
+
+                        control
+                    }
 
             val numberOfDiversions =
                 controlsWithCodeValues

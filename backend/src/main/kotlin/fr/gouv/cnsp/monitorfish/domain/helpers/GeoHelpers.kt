@@ -1,6 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.helpers
 
-enum class Direction(val direction: String) {
+enum class Direction(
+    val direction: String,
+) {
     N("N"),
     S("S"),
     E("E"),

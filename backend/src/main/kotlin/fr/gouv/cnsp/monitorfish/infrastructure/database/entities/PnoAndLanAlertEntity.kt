@@ -29,8 +29,8 @@ data class PnoAndLanAlertEntity(
     @Column(name = "value", nullable = false, columnDefinition = "jsonb")
     val value: String,
 ) {
-    fun toAlert(mapper: ObjectMapper): PNOAndLANAlert {
-        return PNOAndLANAlert(
+    fun toAlert(mapper: ObjectMapper): PNOAndLANAlert =
+        PNOAndLANAlert(
             id = id,
             internalReferenceNumber = internalReferenceNumber,
             externalReferenceNumber = externalReferenceNumber,
@@ -39,7 +39,6 @@ data class PnoAndLanAlertEntity(
             tripNumber = tripNumber,
             value = mapper.readValue(value, AlertType::class.java),
         )
-    }
 
     companion object {
         fun fromAlert(

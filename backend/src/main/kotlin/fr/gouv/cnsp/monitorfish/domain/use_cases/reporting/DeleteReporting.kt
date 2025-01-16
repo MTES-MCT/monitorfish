@@ -6,7 +6,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 @UseCase
-class DeleteReporting(private val reportingRepository: ReportingRepository) {
+class DeleteReporting(
+    private val reportingRepository: ReportingRepository,
+) {
     private val logger: Logger = LoggerFactory.getLogger(DeleteReporting::class.java)
 
     fun execute(id: Int) {

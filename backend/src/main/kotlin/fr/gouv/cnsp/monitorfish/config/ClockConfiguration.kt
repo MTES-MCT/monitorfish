@@ -7,7 +7,5 @@ import java.time.Clock
 @Configuration
 class ClockConfiguration {
     @Bean
-    fun clock(): Clock {
-        return Clock.systemUTC()
-    }
+    fun clock(): Clock = Clock.systemUTC()
 }

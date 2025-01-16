@@ -21,7 +21,5 @@ class PublicOperationalAlertController(
         @PathParam("Alert id")
         @PathVariable(name = "id")
         id: Int,
-    ) {
-        return validatePendingAlert.execute(id)
-    }
+    ) = validatePendingAlert.execute(id)
 }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import java.time.ZonedDateTime
 
-class DIS() : LogbookMessageValue {
+class DIS : LogbookMessageValue {
     var catches: List<LogbookFishingCatch> = listOf()
 
     @JsonProperty("discardDatetimeUtc")

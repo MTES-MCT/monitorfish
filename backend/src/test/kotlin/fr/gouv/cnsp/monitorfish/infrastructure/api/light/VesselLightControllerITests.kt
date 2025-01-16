@@ -82,11 +82,30 @@ class VesselLightControllerITests {
         // Given
         val farPastFixedDateTime = ZonedDateTime.of(EPOCH, LocalTime.MAX.plusSeconds(1), ZoneId.of("UTC"))
         val position =
-            LastPosition(0, 1, "MMSI", null, null, null, null, CountryCode.FR, PositionType.AIS, 16.445, 48.2525, 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime, vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER)
+            LastPosition(
+                0,
+                1,
+                "MMSI",
+                null,
+                null,
+                null,
+                null,
+                CountryCode.FR,
+                PositionType.AIS,
+                16.445,
+                48.2525,
+                16.445,
+                48.2525,
+                1.8,
+                180.0,
+                farPastFixedDateTime,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            )
         given(this.getLastPositions.execute()).willReturn(listOf(position))
 
         // When
-        api.perform(get("/light/v1/vessels"))
+        api
+            .perform(get("/light/v1/vessels"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$[0].vesselName", equalTo(position.vesselName)))
@@ -208,11 +227,12 @@ class VesselLightControllerITests {
         }
 
         // When
-        api.perform(
-            get(
-                "/light/v1/vessels/find?vesselId=123&internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER",
-            ),
-        )
+        api
+            .perform(
+                get(
+                    "/light/v1/vessels/find?vesselId=123&internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.vessel.declaredFishingGears[0]", equalTo("Trémails")))
@@ -253,11 +273,12 @@ class VesselLightControllerITests {
         given(this.getVesselVoyage.execute(any(), any(), anyOrNull())).willReturn(voyage)
 
         // When
-        api.perform(
-            get(
-                "/light/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=LAST&beforeDateTime=",
-            ),
-        )
+        api
+            .perform(
+                get(
+                    "/light/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=LAST&beforeDateTime=",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(6)))
@@ -274,8 +295,7 @@ class VesselLightControllerITests {
                     "$.logbookMessagesAndAlerts.logbookMessages[1].reportDateTime",
                     equalTo("2020-05-04T03:04:05.000000003Z"),
                 ),
-            )
-            .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[1].rawMessage").doesNotExist())
+            ).andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[1].rawMessage").doesNotExist())
 
         Mockito.verify(getVesselVoyage).execute("FR224226850", VoyageRequest.LAST, null)
     }

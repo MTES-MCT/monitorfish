@@ -9,20 +9,20 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaSpeciesRepository(private val dbSpeciesRepository: DBSpeciesRepository) : SpeciesRepository {
+class JpaSpeciesRepository(
+    private val dbSpeciesRepository: DBSpeciesRepository,
+) : SpeciesRepository {
     @Cacheable(value = ["all_species"])
-    override fun findAll(): List<Species> {
-        return dbSpeciesRepository.findAll().map {
+    override fun findAll(): List<Species> =
+        dbSpeciesRepository.findAll().map {
             it.toSpecies()
         }
-    }
 
     @Cacheable(value = ["species"])
-    override fun findByCode(code: String): Species {
-        return try {
+    override fun findByCode(code: String): Species =
+        try {
             dbSpeciesRepository.findByCodeEquals(code).toSpecies()
         } catch (e: EmptyResultDataAccessException) {
             throw CodeNotFoundException("Species: code $code not found")
         }
-    }
 }

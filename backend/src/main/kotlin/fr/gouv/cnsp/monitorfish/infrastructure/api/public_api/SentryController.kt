@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/test")
-class SentryController(val sentryConfig: SentryConfig) {
+class SentryController(
+    val sentryConfig: SentryConfig,
+) {
     private val logger = LoggerFactory.getLogger(SentryController::class.java)
 
     // This route is for testing purpose only

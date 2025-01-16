@@ -13,8 +13,8 @@ data class LegacyControlUnitDataResponse(
     val resources: List<ControlResource>,
     val contact: String? = null,
 ) {
-    fun toLegacyControlUnit(): LegacyControlUnit {
-        return LegacyControlUnit(
+    fun toLegacyControlUnit(): LegacyControlUnit =
+        LegacyControlUnit(
             id = id,
             administration = administration,
             isArchived = isArchived,
@@ -22,5 +22,4 @@ data class LegacyControlUnitDataResponse(
             resources = resources,
             contact = contact,
         )
-    }
 }

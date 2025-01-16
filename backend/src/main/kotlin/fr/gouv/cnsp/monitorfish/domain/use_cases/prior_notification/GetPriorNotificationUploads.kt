@@ -8,7 +8,6 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.PriorNotificationUploadRepos
 class GetPriorNotificationUploads(
     private val priorNotificationUploadRepository: PriorNotificationUploadRepository,
 ) {
-    fun execute(reportId: String): List<PriorNotificationDocument> {
-        return priorNotificationUploadRepository.findAllByReportId(reportId)
-    }
+    fun execute(reportId: String): List<PriorNotificationDocument> =
+        priorNotificationUploadRepository.findAllByReportId(reportId)
 }

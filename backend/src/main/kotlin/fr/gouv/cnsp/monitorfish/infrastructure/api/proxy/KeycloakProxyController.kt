@@ -92,15 +92,17 @@ class KeycloakProxyController(
         // @see spring.cloud.gateway.mvc.form-filter.enabled=false
         val formData = StringBuilder()
         if (params.isNotEmpty()) {
-            params.entries.joinToString("&") { (key, values) ->
-                "$key=${values.joinToString(",")}"
-            }.let { formData.append(it) }
+            params.entries
+                .joinToString("&") { (key, values) ->
+                    "$key=${values.joinToString(",")}"
+                }.let { formData.append(it) }
         }
 
         val formDataBytes = formData.toString().toByteArray(StandardCharsets.UTF_8)
 
         // Ensure the content length matches the size of the byte array
-        proxy.header("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+        proxy
+            .header("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE)
             .header("Content-Length", formDataBytes.size.toString())
         return proxy.uri(targetUri.toString()).body(formDataBytes).post()
     }

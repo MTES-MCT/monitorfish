@@ -17,8 +17,8 @@ data class FullControlUnitResourceDataResponse(
     val stationId: Int,
     val type: ControlUnitResourceType,
 ) {
-    fun toFullControlUnitResource(): FullControlUnitResource {
-        return FullControlUnitResource(
+    fun toFullControlUnitResource(): FullControlUnitResource =
+        FullControlUnitResource(
             id = id,
             controlUnit = controlUnit.toControlUnit(),
             controlUnitId = controlUnitId,
@@ -30,5 +30,4 @@ data class FullControlUnitResourceDataResponse(
             stationId = stationId,
             type = type,
         )
-    }
 }

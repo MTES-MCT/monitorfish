@@ -13,20 +13,18 @@ import org.springframework.stereotype.Repository
 class JpaPriorNotificationPdfDocumentRepository(
     private val dbPriorNotificationPdfDocumentRepository: DBPriorNotificationPdfDocumentRepository,
 ) : PriorNotificationPdfDocumentRepository {
-    override fun findByReportId(reportId: String): PdfDocument {
-        return try {
+    override fun findByReportId(reportId: String): PdfDocument =
+        try {
             dbPriorNotificationPdfDocumentRepository.findByReportId(reportId).toPdfDocument()
         } catch (e: EmptyResultDataAccessException) {
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
         }
-    }
 
     @Modifying(clearAutomatically = true)
-    override fun deleteByReportId(reportId: String) {
-        return try {
+    override fun deleteByReportId(reportId: String) =
+        try {
             dbPriorNotificationPdfDocumentRepository.deleteById(reportId)
         } catch (e: EmptyResultDataAccessException) {
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
         }
-    }
 }

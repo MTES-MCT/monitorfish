@@ -5,7 +5,9 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.SilencedAlertRepository
 import org.slf4j.LoggerFactory
 
 @UseCase
-class DeleteSilencedAlert(private val silencedAlertRepository: SilencedAlertRepository) {
+class DeleteSilencedAlert(
+    private val silencedAlertRepository: SilencedAlertRepository,
+) {
     private val logger = LoggerFactory.getLogger(DeleteSilencedAlert::class.java)
 
     fun execute(silencedAlertId: Int) {

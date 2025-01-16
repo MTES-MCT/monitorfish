@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import java.time.ZonedDateTime
 
-class LAN() : LogbookMessageValue {
+class LAN : LogbookMessageValue {
     var port: String? = null
     var portName: String? = null
     var catchLanded: List<LogbookFishingCatch> = listOf()

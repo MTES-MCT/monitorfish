@@ -20,8 +20,20 @@ class JpaPnoTypeRepositoryITests : AbstractDBTests() {
         assertThat(pnoTypes.first().name).isEqualTo("Préavis type 1")
         assertThat(pnoTypes.first().minimumNotificationPeriod).isEqualTo(4.0)
         assertThat(pnoTypes.first().pnoTypeRules).hasSize(3)
-        assertThat(pnoTypes.first().pnoTypeRules.first().species).isEqualTo(listOf("HKE", "BSS", "COD", "ANF", "SOL"))
-        assertThat(pnoTypes.first().pnoTypeRules.first().faoAreas).isEqualTo(
+        assertThat(
+            pnoTypes
+                .first()
+                .pnoTypeRules
+                .first()
+                .species,
+        ).isEqualTo(listOf("HKE", "BSS", "COD", "ANF", "SOL"))
+        assertThat(
+            pnoTypes
+                .first()
+                .pnoTypeRules
+                .first()
+                .faoAreas,
+        ).isEqualTo(
             listOf("27.3.a", "27.4", "27.6", "27.7", "27.8.a", "27.8.b", "27.8.c", "27.8.d", "27.9.a"),
         )
     }

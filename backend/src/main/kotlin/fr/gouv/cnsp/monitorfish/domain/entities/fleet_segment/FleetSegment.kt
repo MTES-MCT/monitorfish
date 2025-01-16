@@ -19,7 +19,5 @@ data class FleetSegment(
     val impactRiskFactor: Double,
     val year: Int,
 ) {
-    fun toLogbookTripSegment(): LogbookTripSegment {
-        return LogbookTripSegment(segment, segmentName)
-    }
+    fun toLogbookTripSegment(): LogbookTripSegment = LogbookTripSegment(segment, segmentName)
 }

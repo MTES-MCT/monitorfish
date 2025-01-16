@@ -9,8 +9,8 @@ data class ManualPriorNotificationFishingCatchDataInput(
     val specyName: String,
     val weight: Double,
 ) {
-    fun toLogbookFishingCatch(): LogbookFishingCatch {
-        return LogbookFishingCatch(
+    fun toLogbookFishingCatch(): LogbookFishingCatch =
+        LogbookFishingCatch(
             conversionFactor = null,
             economicZone = null,
             effortZone = null,
@@ -25,5 +25,4 @@ data class ManualPriorNotificationFishingCatchDataInput(
             statisticalRectangle = null,
             weight = weight,
         )
-    }
 }

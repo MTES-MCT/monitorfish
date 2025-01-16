@@ -9,8 +9,8 @@ data class ReportingAndOccurrencesDataOutput(
     companion object {
         fun fromReportingAndOccurrences(
             reportingAndOccurrences: ReportingAndOccurrences,
-        ): ReportingAndOccurrencesDataOutput {
-            return ReportingAndOccurrencesDataOutput(
+        ): ReportingAndOccurrencesDataOutput =
+            ReportingAndOccurrencesDataOutput(
                 otherOccurrencesOfSameAlert =
                     reportingAndOccurrences.otherOccurrencesOfSameAlert.map { reporting ->
                         ReportingDataOutput.fromReporting(reporting, reportingAndOccurrences.controlUnit)
@@ -21,6 +21,5 @@ data class ReportingAndOccurrencesDataOutput(
                         reportingAndOccurrences.controlUnit,
                     ),
             )
-        }
     }
 }

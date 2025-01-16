@@ -89,8 +89,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .first { it.logbookMessageAndValue.value.predictedArrivalDatetimeUtc != null }
         assertThat(
             firstPriorNotificationWithNonNullArrivalDate.logbookMessageAndValue.value.predictedArrivalDatetimeUtc,
-        )
-            .isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
+        ).isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
         assertThat(result.data).hasSizeGreaterThan(0)
     }
 
@@ -122,8 +121,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .first { it.logbookMessageAndValue.value.predictedArrivalDatetimeUtc != null }
         assertThat(
             firstPriorNotificationWithNonNullArrivalDate.logbookMessageAndValue.value.predictedArrivalDatetimeUtc,
-        )
-            .isAfter(ZonedDateTime.now().minusHours(1))
+        ).isAfter(ZonedDateTime.now().minusHours(1))
         assertThat(result.data).hasSizeGreaterThan(0)
     }
 
@@ -155,8 +153,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .first { it.logbookMessageAndValue.value.predictedLandingDatetimeUtc != null }
         assertThat(
             firstPriorNotificationWithNonNullLandingDate.logbookMessageAndValue.value.predictedLandingDatetimeUtc,
-        )
-            .isEqualTo(ZonedDateTime.parse("2023-01-01T10:30:00Z"))
+        ).isEqualTo(ZonedDateTime.parse("2023-01-01T10:30:00Z"))
         assertThat(result.data).hasSizeGreaterThan(0)
     }
 
@@ -188,8 +185,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .first { it.logbookMessageAndValue.value.predictedLandingDatetimeUtc != null }
         assertThat(
             firstPriorNotificationWithNonNullLandingDate.logbookMessageAndValue.value.predictedLandingDatetimeUtc,
-        )
-            .isAfter(ZonedDateTime.now().plusHours(4))
+        ).isAfter(ZonedDateTime.now().plusHours(4))
         assertThat(result.data).hasSizeGreaterThan(0)
     }
 

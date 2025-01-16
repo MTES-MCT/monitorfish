@@ -22,8 +22,7 @@ class RequestNotificationUTests {
             catchThrowable {
                 RequestNotification(
                     beaconMalfunctionsRepository,
-                )
-                    .execute(1, BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC, null)
+                ).execute(1, BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC, null)
             }
 
         // Then
@@ -38,8 +37,7 @@ class RequestNotificationUTests {
         // When
         RequestNotification(
             beaconMalfunctionsRepository,
-        )
-            .execute(1, BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC, "ABC")
+        ).execute(1, BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC, "ABC")
 
         // Then
         Mockito.verify(beaconMalfunctionsRepository).requestNotification(
@@ -54,12 +52,11 @@ class RequestNotificationUTests {
         // When
         RequestNotification(
             beaconMalfunctionsRepository,
+        ).execute(
+            2,
+            BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION,
+            "Should not be passed to repository",
         )
-            .execute(
-                2,
-                BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION,
-                "Should not be passed to repository",
-            )
 
         // Then
         Mockito.verify(beaconMalfunctionsRepository).requestNotification(

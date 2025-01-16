@@ -20,8 +20,8 @@ data class InfractionSuspicionDataOutput(
         fun fromInfractionSuspicion(
             infractionSuspicion: InfractionSuspicion,
             controlUnit: LegacyControlUnit? = null,
-        ): InfractionSuspicionDataOutput {
-            return InfractionSuspicionDataOutput(
+        ): InfractionSuspicionDataOutput =
+            InfractionSuspicionDataOutput(
                 reportingActor = infractionSuspicion.reportingActor,
                 controlUnitId = infractionSuspicion.controlUnitId,
                 controlUnit = controlUnit,
@@ -33,6 +33,5 @@ data class InfractionSuspicionDataOutput(
                 dml = infractionSuspicion.dml,
                 seaFront = infractionSuspicion.seaFront,
             )
-        }
     }
 }

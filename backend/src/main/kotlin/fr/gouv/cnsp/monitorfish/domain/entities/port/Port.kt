@@ -13,7 +13,5 @@ data class Port(
     val longitude: Double?,
     val region: String?,
 ) {
-    fun isFrenchOrUnknown(): Boolean {
-        return this.countryCode === null || FRENCH_COUNTRY_CODES.contains(countryCode)
-    }
+    fun isFrenchOrUnknown(): Boolean = this.countryCode === null || FRENCH_COUNTRY_CODES.contains(countryCode)
 }

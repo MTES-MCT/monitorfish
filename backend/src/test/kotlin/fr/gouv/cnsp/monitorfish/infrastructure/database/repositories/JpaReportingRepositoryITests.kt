@@ -426,12 +426,23 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findUnarchivedReportings Should return archive candidates`() {
         // When
-        val reportings = jpaReportingRepository.findUnarchivedReportings()
+        val reportings = jpaReportingRepository.findUnarchivedReportingsAfterNewVoyage()
 
         // Then
         assertThat(reportings).hasSize(1)
         assertThat(reportings.first().first).isEqualTo(1)
         assertThat(reportings.first().second.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
+    }
+
+    @Test
+    @Transactional
+    fun `findExpiredReportings Should return expired reportings, hence archive candidates`() {
+        // When
+        val reportings = jpaReportingRepository.findExpiredReportings()
+
+        // Then
+        assertThat(reportings).hasSize(1)
+        assertThat(reportings.first()).isEqualTo(12)
     }
 
     @Test

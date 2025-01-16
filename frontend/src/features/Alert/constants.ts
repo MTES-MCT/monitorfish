@@ -16,32 +16,38 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
   PendingAlertValueType | 'PNO_LAN_WEIGHT_TOLERANCE_ALERT',
   MenuItem<PendingAlertValueType | 'PNO_LAN_WEIGHT_TOLERANCE_ALERT'> & {
     isOperationalAlert: boolean
+    isArchivedAfterDEPMessage: boolean
     nameWithAlertDetails?: Function
   }
 > = {
   FRENCH_EEZ_FISHING_ALERT: {
     code: PendingAlertValueType.FRENCH_EEZ_FISHING_ALERT,
     isOperationalAlert: true,
+    isArchivedAfterDEPMessage: false,
     name: 'Pêche en ZEE française par un navire tiers'
   },
   MISSING_DEP_ALERT: {
     code: PendingAlertValueType.MISSING_DEP_ALERT,
     isOperationalAlert: true,
+    isArchivedAfterDEPMessage: true,
     name: 'Sortie sans émission de message "DEP"'
   },
   MISSING_FAR_48_HOURS_ALERT: {
     code: PendingAlertValueType.MISSING_FAR_48_HOURS_ALERT,
     isOperationalAlert: true,
+    isArchivedAfterDEPMessage: false,
     name: 'Non-emission de message "FAR" en 48h'
   },
   MISSING_FAR_ALERT: {
     code: PendingAlertValueType.MISSING_FAR_ALERT,
     isOperationalAlert: true,
+    isArchivedAfterDEPMessage: true,
     name: 'Non-emission de message "FAR"'
   },
   PNO_LAN_WEIGHT_TOLERANCE_ALERT: {
     code: 'PNO_LAN_WEIGHT_TOLERANCE_ALERT',
     isOperationalAlert: false,
+    isArchivedAfterDEPMessage: false,
     name: 'Tolérance 10% non respectée',
     nameWithAlertDetails: (percentOfTolerance, minimumWeightThreshold) =>
       `Tolérance de ${percentOfTolerance}% non respectée, appliquée pour un poids minimum de ${minimumWeightThreshold}kg.`
@@ -49,21 +55,25 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
   RTC_FISHING_ALERT: {
     code: PendingAlertValueType.RTC_FISHING_ALERT,
     isOperationalAlert: true,
+    isArchivedAfterDEPMessage: false,
     name: 'Pêche en zone RTC'
   },
   SUSPICION_OF_UNDER_DECLARATION_ALERT: {
     code: PendingAlertValueType.SUSPICION_OF_UNDER_DECLARATION_ALERT,
     isOperationalAlert: true,
+    isArchivedAfterDEPMessage: true,
     name: 'Suspicion de sous-déclaration'
   },
   THREE_MILES_TRAWLING_ALERT: {
     code: PendingAlertValueType.THREE_MILES_TRAWLING_ALERT,
     isOperationalAlert: true,
+    isArchivedAfterDEPMessage: true,
     name: '3 milles - Chaluts'
   },
   TWELVE_MILES_FISHING_ALERT: {
     code: PendingAlertValueType.TWELVE_MILES_FISHING_ALERT,
     isOperationalAlert: true,
+    isArchivedAfterDEPMessage: false,
     name: '12 milles - Pêche sans droits historiques'
   }
 }
@@ -129,6 +139,11 @@ export enum SilencedAlertPeriod {
   TWO_HOURS = 'TWO_HOURS'
 }
 
-export const operationalAlertTypes = Object.keys(COMMON_ALERT_TYPE_OPTION)
+export const OPERATIONAL_ALERTS = Object.keys(COMMON_ALERT_TYPE_OPTION)
   .map(alertTypeName => COMMON_ALERT_TYPE_OPTION[alertTypeName])
   .filter(alertType => alertType.isOperationalAlert)
+
+export const ALERTS_ARCHIVED_AFTER_NEW_VOYAGE: string[] = Object.keys(COMMON_ALERT_TYPE_OPTION)
+  .map(alertTypeName => COMMON_ALERT_TYPE_OPTION[alertTypeName])
+  .filter(alertType => alertType.isArchivedAfterDEPMessage)
+  .map(alert => alert.code)

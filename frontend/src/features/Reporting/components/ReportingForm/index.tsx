@@ -69,6 +69,7 @@ export function ReportingForm({
         ircs: vesselIdentity.ircs,
         type: nextReportingValue.type,
         validationDate: null,
+        expirationDate: null,
         value: {
           ...nextReportingValue
         },
@@ -95,7 +96,7 @@ export function ReportingForm({
 
   return (
     <Formik
-      initialValues={getFormFields(editedReporting?.value, editedReporting?.type)}
+      initialValues={getFormFields(editedReporting?.value, editedReporting?.type, editedReporting?.expirationDate)}
       onSubmit={createOrEditReporting}
       validationSchema={CreateOrEditReportingSchema}
     >

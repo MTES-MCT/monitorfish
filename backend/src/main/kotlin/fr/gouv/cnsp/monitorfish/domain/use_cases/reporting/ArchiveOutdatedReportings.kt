@@ -15,18 +15,20 @@ class ArchiveOutdatedReportings(private val reportingRepository: ReportingReposi
     @Scheduled(fixedDelay = 300000, initialDelay = 6000)
     @Transactional
     fun execute() {
-        val reportingCandidatesToArchive = reportingRepository.findUnarchivedReportings()
+        val reportingCandidatesToArchive = reportingRepository.findUnarchivedReportingsAfterNewVoyage()
+        val expiredReportingsToArchive = reportingRepository.findExpiredReportings()
 
         val filteredReportingIdsToArchive =
             reportingCandidatesToArchive.filter {
                 it.second.type == AlertTypeMapping.MISSING_FAR_ALERT ||
-                    it.second.type == AlertTypeMapping.THREE_MILES_TRAWLING_ALERT ||
+                    it.second.type == AlertTypeMapping.THREE_/MILES_TRAWLING_ALERT ||
                     it.second.type == AlertTypeMapping.MISSING_DEP_ALERT ||
                     it.second.type == AlertTypeMapping.SUSPICION_OF_UNDER_DECLARATION_ALERT
             }.map { it.first }
 
-        logger.info("Found ${filteredReportingIdsToArchive.size} reportings to archive.")
-        val numberOfArchivedReportings = reportingRepository.archiveReportings(filteredReportingIdsToArchive)
+        logger.info("Found ${filteredReportingIdsToArchive.size} reportings alerts to archive.")
+        logger.info("Found ${expiredReportingsToArchive.size} expired reportings to archive.")
+        val numberOfArchivedReportings = reportingRepository.archiveReportings(filteredReportingIdsToArchive + expiredReportingsToArchive)
 
         logger.info("Archived $numberOfArchivedReportings reportings")
     }

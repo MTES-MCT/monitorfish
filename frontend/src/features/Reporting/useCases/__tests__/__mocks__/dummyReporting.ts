@@ -25,6 +25,7 @@ export const fortyHeightHourAlertReporting: PendingAlertReporting = {
   type: ReportingType.ALERT,
   underCharter: null,
   validationDate: '2023-10-30T15:08:05.845121Z',
+  expirationDate: null,
   value: {
     dml: null,
     natinfCode: 2610,

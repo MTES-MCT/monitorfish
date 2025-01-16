@@ -10,6 +10,7 @@ class UpdateReportingDataInput(
     val controlUnitId: Int? = null,
     val authorTrigram: String,
     val authorContact: String? = null,
+    val expirationDate: String? = null,
     val title: String,
     val description: String? = null,
     val natinfCode: Int? = null,
@@ -21,6 +22,8 @@ class UpdateReportingDataInput(
             controlUnitId = this.controlUnitId,
             authorTrigram = this.authorTrigram,
             authorContact = this.authorContact,
+            // TODO Finish this adding and get it from the use-case
+            expirationDate = this.expirationDate,
             title = this.title,
             description = this.description,
             natinfCode = this.natinfCode,

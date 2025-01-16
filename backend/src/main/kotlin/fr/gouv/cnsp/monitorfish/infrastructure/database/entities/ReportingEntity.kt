@@ -48,6 +48,8 @@ data class ReportingEntity(
     val creationDate: ZonedDateTime,
     @Column(name = "validation_date", nullable = true)
     val validationDate: ZonedDateTime? = null,
+    @Column(name = "expiration_date", nullable = true)
+    val expirationDate: ZonedDateTime? = null,
     @Type(JsonBinaryType::class)
     @Column(name = "value", nullable = false, columnDefinition = "jsonb")
     val value: String,

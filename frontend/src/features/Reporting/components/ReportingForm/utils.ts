@@ -4,10 +4,12 @@ import type { EditedReporting, InfractionSuspicion, Observation } from '@feature
 
 export function getFormFields(
   editedOrSavedReporting: InfractionSuspicion | Observation | undefined,
-  type: ReportingType.OBSERVATION | ReportingType.INFRACTION_SUSPICION | undefined
+  type: ReportingType.OBSERVATION | ReportingType.INFRACTION_SUSPICION | undefined,
+  expirationDate: string | undefined
 ): EditedReporting {
   const base = {
     authorContact: editedOrSavedReporting?.authorContact ?? undefined,
+    expirationDate: expirationDate,
     authorTrigram: editedOrSavedReporting?.authorTrigram ?? undefined,
     controlUnitId: editedOrSavedReporting?.controlUnitId ?? undefined,
     description: editedOrSavedReporting?.description,

@@ -321,6 +321,7 @@
                 "longitude": null,
                 "type": "INFRACTION_SUSPICION",
                 "validation_date": null,
+                "expiration_date:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '2 days'",
                 "value:jsonb": {
                     "authorContact": "Jean Bon (0623456789)",
                     "authorTrigram": "LTH",

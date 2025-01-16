@@ -49,7 +49,9 @@ interface ReportingRepository {
         fromDate: ZonedDateTime,
     ): List<Reporting>
 
-    fun findUnarchivedReportings(): List<Pair<Int, AlertType>>
+    fun findUnarchivedReportingsAfterNewVoyage(): List<Pair<Int, AlertType>>
+
+    fun findExpiredReportings(): List<Int>
 
     fun archive(id: Int)
 

@@ -35,6 +35,7 @@ export type BaseReporting = {
   type: ReportingType.ALERT | ReportingType.OBSERVATION | ReportingType.INFRACTION_SUSPICION
   underCharter: boolean | null | undefined
   validationDate: string | null | undefined
+  expirationDate: string | null | undefined
   vesselId: number | null | undefined
   vesselIdentifier: VesselIdentifier | null | undefined
   vesselName: string | null | undefined
@@ -71,6 +72,7 @@ export type ReportingCreation = BaseReportingCreation & {
 
 export type EditedReporting = Partial<InfractionSuspicion | Observation> & {
   type: ReportingType.INFRACTION_SUSPICION | ReportingType.OBSERVATION
+  expirationDate: string | undefined
 }
 
 type Year = number

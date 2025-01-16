@@ -9,11 +9,12 @@ import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { getFrenchOrdinal, getReportingActorLabel } from './utils'
-import { getDateTime } from '../../../../utils'
+import {getDate, getDateTime} from '../../../../utils'
 import { ReportingType, ReportingTypeCharacteristics } from '../../types'
 import { archiveReporting } from '../../useCases/archiveReporting'
 
 import type { Reporting } from '../../types'
+import {ALERTS_ARCHIVED_AFTER_NEW_VOYAGE} from "@features/Alert/constants";
 
 export type ReportingCardProps = Readonly<{
   isArchived?: boolean
@@ -36,6 +37,7 @@ export function ReportingCard({
   const reportingName = Object.values(ReportingTypeCharacteristics).find(
     reportingType => reportingType.code === reporting.type
   )?.name
+  const isArchivedAfterNewVoyage = ALERTS_ARCHIVED_AFTER_NEW_VOYAGE.includes(reporting.value.type)
   const canBeArchived = !(
     reporting.type === ReportingType.ALERT && reporting.value.type === PendingAlertValueType.MISSING_FAR_48_HOURS_ALERT
   )
@@ -56,6 +58,28 @@ export function ReportingCard({
 
     return getReportingActorLabel(reporting.value.reportingActor, reporting.value.controlUnit)
   }, [reporting, reportingName])
+
+  const expirationDateText = useMemo(() => {
+    if (!isArchivedAfterNewVoyage && !reporting.expirationDate) {
+      return "Pas de fin de validité"
+    }
+
+    if (isArchivedAfterNewVoyage && !reporting.isArchived) {
+      return "Fin de validité au prochain DEP du navire"
+    }
+
+    if (isArchivedAfterNewVoyage && reporting.isArchived) {
+      return "Invalidé suite au DEP du navire"
+    }
+
+    if (!!reporting.expirationDate && !reporting.isArchived) {
+      return `Fin de validité le ${getDate(reporting.expirationDate)}`
+    }
+
+    if (!!reporting.expirationDate && reporting.isArchived) {
+      return `Invalidé le ${getDate(reporting.expirationDate)}`
+    }
+  }, [reporting])
 
   const archive = () => {
     dispatch(archiveReporting(reporting))
@@ -142,6 +166,13 @@ export function ReportingCard({
               NATINF {reporting.value.natinfCode}
             </Natinf>
           )}
+          { !reporting.isArchived || (reporting.isArchived && (isArchivedAfterNewVoyage || reporting.expirationDate)) &&
+            <ExpirationDate>
+              <Icon.Clock color={THEME.color.slateGray} />
+              <ExpirationDateText isEmpty={!isArchivedAfterNewVoyage && !reporting.expirationDate}>
+                {expirationDateText}
+              </ExpirationDateText>
+            </ExpirationDate>}
         </Body>
 
         {isArchived && otherOccurrencesOfSameAlert.length > 0 && (
@@ -319,4 +350,16 @@ const Description = styled.div`
 const Author = styled.div`
   color: ${p => p.theme.color.gunMetal};
   font: normal normal normal 13px/18px Marianne;
+`
+
+const ExpirationDate = styled.div`
+  margin-top: 14px;
+`
+
+const ExpirationDateText = styled.span<{ isEmpty: boolean }>`
+  color: ${p => p.isEmpty ? p.theme.color.slateGray : p.theme.color.gunMetal};
+  font: normal normal normal 13px/18px Marianne;
+  font-style: ${p => p.isEmpty ? 'italic' : 'none'};
+  vertical-align: super;
+  margin-left: 6px;
 `

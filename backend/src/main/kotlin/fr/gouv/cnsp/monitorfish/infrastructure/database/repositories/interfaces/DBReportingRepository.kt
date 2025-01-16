@@ -122,6 +122,21 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
     )
     fun findAllUnarchivedAfterDEPLogbookMessage(): List<Array<Any>>
 
+    @Query(
+        value = """
+        SELECT
+            id
+        FROM
+            reportings
+        WHERE
+            archived is false AND
+            deleted is false AND
+            NOW() > expiration_date
+    """,
+        nativeQuery = true,
+    )
+    fun findExpiredReportings(): List<Int>
+
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(
         value = """

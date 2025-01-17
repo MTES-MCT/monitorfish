@@ -17,6 +17,7 @@ data class Reporting(
     val flagState: CountryCode,
     val creationDate: ZonedDateTime,
     val validationDate: ZonedDateTime? = null,
+    val expirationDate: ZonedDateTime? = null,
     val value: ReportingValue,
     val isArchived: Boolean,
     val isDeleted: Boolean,

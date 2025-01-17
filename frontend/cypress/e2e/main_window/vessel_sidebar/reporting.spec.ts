@@ -3,6 +3,7 @@
 import { addAndCreateReportingWithinVesselSidebar } from './utils'
 
 import type { Reporting } from '@features/Reporting/types'
+import {getUtcDateInMultipleFormats} from "../../utils/getUtcDateInMultipleFormats";
 
 context('Vessel sidebar reporting tab', () => {
   beforeEach(() => {
@@ -36,6 +37,7 @@ context('Vessel sidebar reporting tab', () => {
       .contains("Ce navire ne devrait pas être en mer, il n'a plus de points sur son permis")
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('Émetteur: Jean Bon (0612365896)')
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 2608')
+    cy.get('*[data-cy="reporting-card"]').first().contains('Pas de fin de validité')
 
     // The reporting should be found in the reporting tab of the side window
     cy.visit('/side_window')
@@ -50,6 +52,7 @@ context('Vessel sidebar reporting tab', () => {
   })
 
   it('An observation reporting should be modified to an Infraction suspicion', () => {
+    const date = getUtcDateInMultipleFormats('2166-06-08T13:54')
     cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
 
     // Given
@@ -73,6 +76,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.fill('Nom et contact (numéro, mail…) de l’émetteur', 'Jean Bon (0612365896)')
     cy.fill('Titre', 'Observation: Sortie non autorisée')
     cy.fill('Description', 'Ce navire ne devrait pas être en mer, mais ceci est une observation.')
+    cy.fill('Fin de validité', date.utcDateTuple)
     cy.fill('Saisi par', 'NTP')
 
     cy.clickButton('Valider')
@@ -85,15 +89,19 @@ context('Vessel sidebar reporting tab', () => {
       const createdPriorNotification: Reporting.Reporting = createInterception.response.body
 
       cy.intercept('PUT', `/bff/v1/reportings/${createdPriorNotification.id}`).as('updateReporting')
+      cy.get('*[data-cy="reporting-card"]').first().contains('Fin de validité le 08/06/2166')
 
       cy.get('*[data-cy^="edit-reporting-card"]').first().click({ timeout: 10000 })
       cy.fill('Type de signalement', 'Infraction (suspicion)')
       cy.fill('Natinf', '7059')
+      const nextDate = getUtcDateInMultipleFormats('2200-06-08T13:54')
+      cy.fill('Fin de validité', nextDate.utcDateTuple)
       cy.clickButton('Valider')
       cy.wait('@updateReporting')
       cy.wait(50)
 
       cy.get('*[data-cy="reporting-card"]').first().contains('NATINF 7059')
+      cy.get('*[data-cy="reporting-card"]').first().contains('Fin de validité le 08/06/2200')
       cy.get('*[data-cy="delete-reporting-card"]').eq(0).click()
       // Then, we confirm the reporting deletion
       cy.clickButton('Supprimer')
@@ -141,6 +149,9 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
     cy.wait('@getVesselReportings')
+
+    cy.get('*[data-cy="reporting-card"]').first().contains('Fin de validité au prochain DEP du navire')
+
     addAndCreateReportingWithinVesselSidebar()
     cy.get('[data-cy="archive-reporting-card"]').eq(0).click()
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-history-button"]').click()

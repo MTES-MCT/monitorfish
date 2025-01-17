@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import java.time.Instant
+import java.time.ZonedDateTime
 
 @DynamicUpdate
 interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
@@ -122,6 +123,21 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
     )
     fun findAllUnarchivedAfterDEPLogbookMessage(): List<Array<Any>>
 
+    @Query(
+        value = """
+        SELECT
+            id
+        FROM
+            reportings
+        WHERE
+            archived is false AND
+            deleted is false AND
+            NOW() > expiration_date
+    """,
+        nativeQuery = true,
+    )
+    fun findExpiredReportings(): List<Int>
+
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(
         value = """
@@ -153,7 +169,8 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         UPDATE reportings
         SET
             value = CAST(:value AS JSONB),
-            type = CAST(:type AS reporting_type)
+            type = CAST(:type AS reporting_type),
+            expiration_date = :expirationDate
         WHERE id = :id
     """,
         nativeQuery = true,
@@ -162,5 +179,6 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         id: Int,
         value: String,
         type: String,
+        expirationDate: Instant?,
     )
 }

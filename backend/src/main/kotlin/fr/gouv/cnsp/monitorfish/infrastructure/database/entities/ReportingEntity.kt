@@ -48,6 +48,8 @@ data class ReportingEntity(
     val creationDate: ZonedDateTime,
     @Column(name = "validation_date", nullable = true)
     val validationDate: ZonedDateTime? = null,
+    @Column(name = "expiration_date", nullable = true)
+    val expirationDate: ZonedDateTime? = null,
     @Type(JsonBinaryType::class)
     @Column(name = "value", nullable = false, columnDefinition = "jsonb")
     val value: String,
@@ -73,6 +75,7 @@ data class ReportingEntity(
             flagState = flagState,
             creationDate = creationDate,
             validationDate = validationDate,
+            expirationDate = expirationDate,
             value = ReportingMapper.getReportingValueFromJSON(mapper, value, type),
             isArchived = isArchived,
             isDeleted = isDeleted,
@@ -118,6 +121,7 @@ data class ReportingEntity(
             flagState = reporting.flagState,
             creationDate = reporting.creationDate,
             validationDate = reporting.validationDate,
+            expirationDate = reporting.expirationDate,
             value = mapper.writeValueAsString(reporting.value),
             isArchived = false,
             isDeleted = false,

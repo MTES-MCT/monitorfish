@@ -13,6 +13,7 @@ describe('Reportings/Current/utils.sortByValidationOrCreationDateDesc()', () => 
     // Given
     const firstReporting: PendingAlertReporting = {
       creationDate: '2023-10-30T09:10:00Z',
+      expirationDate: undefined,
       externalReferenceNumber: '',
       flagState: 'ES',
       id: 12345,
@@ -28,7 +29,7 @@ describe('Reportings/Current/utils.sortByValidationOrCreationDateDesc()', () => 
       isArchived: false,
       isDeleted: false,
       type: ReportingType.ALERT,
-      underCharter: null,
+      underCharter: undefined,
       validationDate: '2023-10-30T15:08:05.845121Z',
       value: {
         dml: null,

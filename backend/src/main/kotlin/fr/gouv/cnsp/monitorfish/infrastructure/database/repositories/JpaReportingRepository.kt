@@ -42,12 +42,14 @@ class JpaReportingRepository(
     @Transactional
     override fun update(
         reportingId: Int,
+        expirationDate: ZonedDateTime?,
         updatedInfractionSuspicion: InfractionSuspicion,
     ): Reporting {
         dbReportingRepository.update(
-            reportingId,
-            mapper.writeValueAsString(updatedInfractionSuspicion),
-            ReportingType.INFRACTION_SUSPICION.toString(),
+            id = reportingId,
+            value = mapper.writeValueAsString(updatedInfractionSuspicion),
+            type = ReportingType.INFRACTION_SUSPICION.toString(),
+            expirationDate = expirationDate?.toInstant(),
         )
 
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
@@ -56,12 +58,14 @@ class JpaReportingRepository(
     @Transactional
     override fun update(
         reportingId: Int,
+        expirationDate: ZonedDateTime?,
         updatedObservation: Observation,
     ): Reporting {
         dbReportingRepository.update(
-            reportingId,
-            mapper.writeValueAsString(updatedObservation),
-            ReportingType.OBSERVATION.toString(),
+            id = reportingId,
+            value = mapper.writeValueAsString(updatedObservation),
+            type = ReportingType.OBSERVATION.toString(),
+            expirationDate = expirationDate?.toInstant(),
         )
 
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
@@ -168,7 +172,7 @@ class JpaReportingRepository(
         dbReportingRepository.archiveReporting(id)
     }
 
-    override fun findUnarchivedReportings(): List<Pair<Int, AlertType>> {
+    override fun findUnarchivedReportingsAfterNewVoyage(): List<Pair<Int, AlertType>> {
         return dbReportingRepository.findAllUnarchivedAfterDEPLogbookMessage().map { result ->
             Pair(
                 result[0] as Int,
@@ -179,6 +183,10 @@ class JpaReportingRepository(
                 ) as AlertType,
             )
         }
+    }
+
+    override fun findExpiredReportings(): List<Int> {
+        return dbReportingRepository.findExpiredReportings()
     }
 
     override fun archiveReportings(ids: List<Int>): Int {

@@ -42,15 +42,13 @@ export function ReportingForm({
   }, [onClose, onIsDirty])
 
   const createOrEditReporting = useCallback(
-    async (reportingValue: EditedReporting) => {
-      const nextReportingValue = getReportingValue(reportingValue)
-
+    async (nextReporting: EditedReporting) => {
       if (editedReporting?.id) {
         await dispatch(
           updateReporting(
             getOnlyVesselIdentityProperties(editedReporting),
             editedReporting.id,
-            nextReportingValue,
+            nextReporting,
             editedReporting.type,
             windowContext
           )
@@ -61,20 +59,20 @@ export function ReportingForm({
         return
       }
 
+      const nextReportingValue = getReportingValue(nextReporting)
       const nextReportingWithMissingProperties = {
         creationDate: new Date().toISOString(),
-        externalReferenceNumber: vesselIdentity.externalReferenceNumber,
+        expirationDate: nextReporting.expirationDate,
+        externalReferenceNumber: vesselIdentity.externalReferenceNumber ?? undefined,
         flagState: vesselIdentity.flagState.toUpperCase(),
-        internalReferenceNumber: vesselIdentity.internalReferenceNumber,
-        ircs: vesselIdentity.ircs,
-        type: nextReportingValue.type,
-        validationDate: null,
-        value: {
-          ...nextReportingValue
-        },
-        vesselId: vesselIdentity.vesselId ?? null,
-        vesselIdentifier: vesselIdentity.vesselIdentifier ?? null,
-        vesselName: vesselIdentity.vesselName ?? null
+        internalReferenceNumber: vesselIdentity.internalReferenceNumber ?? undefined,
+        ircs: vesselIdentity.ircs ?? undefined,
+        type: nextReporting.type,
+        validationDate: undefined,
+        value: nextReportingValue,
+        vesselId: vesselIdentity.vesselId ?? undefined,
+        vesselIdentifier: vesselIdentity.vesselIdentifier ?? undefined,
+        vesselName: vesselIdentity.vesselName ?? undefined
       }
 
       dispatch(addReporting(nextReportingWithMissingProperties))
@@ -95,7 +93,7 @@ export function ReportingForm({
 
   return (
     <Formik
-      initialValues={getFormFields(editedReporting?.value, editedReporting?.type)}
+      initialValues={getFormFields(editedReporting?.value, editedReporting?.type, editedReporting?.expirationDate)}
       onSubmit={createOrEditReporting}
       validationSchema={CreateOrEditReportingSchema}
     >

@@ -380,6 +380,8 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
   it('Should not show an unsaved modal confirmation When an action is created', () => {
     // Given
     editSideWindowMissionListMissionWithId(34, SeafrontGroup.MEMN)
+    const endDate = getUtcDateInMultipleFormats(customDayjs().utc().add(7, 'day').toISOString())
+    cy.fill('Fin de mission', endDate.utcDateTupleWithTime)
     cy.intercept('POST', '/api/v1/missions/34', {
       body: {
         id: 1

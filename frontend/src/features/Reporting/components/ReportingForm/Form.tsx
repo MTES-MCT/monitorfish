@@ -6,6 +6,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import {
   Accent,
   Button,
+  FormikDatePicker,
   FormikMultiRadio,
   FormikSelect,
   FormikTextarea,
@@ -14,7 +15,7 @@ import {
   MultiRadio
 } from '@mtes-mct/monitor-ui'
 import { Form as FormikForm, useFormikContext } from 'formik'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -37,6 +38,7 @@ type FormProps = Readonly<{
 }>
 export function Form({ className, hasWhiteBackground, onClose, onIsDirty, windowContext }: FormProps) {
   const { dirty, setFieldValue, values } = useFormikContext<EditedReporting>()
+  const formRef = useRef<HTMLFormElement | null>(null)
 
   // TODO Replace that with a `useInfractionsAsOptions()` hook with RTK query.
   const infractions = useMainAppSelector(state => state.infraction.infractions)
@@ -74,6 +76,7 @@ export function Form({ className, hasWhiteBackground, onClose, onIsDirty, window
 
   return (
     <StyledForm
+      ref={formRef}
       $hasWhiteBackground={hasWhiteBackground}
       $isInfractionSuspicion={values.type === ReportingType.INFRACTION_SUSPICION}
       className={className}
@@ -155,6 +158,14 @@ export function Form({ className, hasWhiteBackground, onClose, onIsDirty, window
           title={infractionTitle}
         />
       )}
+      <FormikDatePicker
+        baseContainer={formRef.current as unknown as HTMLDivElement}
+        isLight={!hasWhiteBackground}
+        isStringDate
+        label="Fin de validité"
+        name="expirationDate"
+        withTime={false}
+      />
       <FormikTextInput isLight={!hasWhiteBackground} label="Saisi par" name="authorTrigram" placeholder="Ex: LTH" />
       <ValidateButton accent={Accent.PRIMARY} type="submit">
         Valider

@@ -4,13 +4,15 @@ import type { EditedReporting, InfractionSuspicion, Observation } from '@feature
 
 export function getFormFields(
   editedOrSavedReporting: InfractionSuspicion | Observation | undefined,
-  type: ReportingType.OBSERVATION | ReportingType.INFRACTION_SUSPICION | undefined
+  type: ReportingType.OBSERVATION | ReportingType.INFRACTION_SUSPICION | undefined,
+  expirationDate: string | undefined
 ): EditedReporting {
   const base = {
     authorContact: editedOrSavedReporting?.authorContact ?? undefined,
     authorTrigram: editedOrSavedReporting?.authorTrigram ?? undefined,
     controlUnitId: editedOrSavedReporting?.controlUnitId ?? undefined,
     description: editedOrSavedReporting?.description,
+    expirationDate,
     reportingActor: editedOrSavedReporting?.reportingActor ?? ReportingOriginActor.OPS,
     title: editedOrSavedReporting?.title ?? '',
     type: type ?? ReportingType.INFRACTION_SUSPICION
@@ -72,6 +74,7 @@ export function getReportingValue(editedReporting: EditedReporting): EditedRepor
   if (editedReporting.type === ReportingType.INFRACTION_SUSPICION) {
     return {
       ...(editedReporting as InfractionSuspicion),
+      expirationDate: editedReporting.expirationDate,
       natinfCode: (editedReporting as InfractionSuspicion).natinfCode
     }
   }

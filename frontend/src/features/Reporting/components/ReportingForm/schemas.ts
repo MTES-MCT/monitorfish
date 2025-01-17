@@ -1,6 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
 import { ReportingOriginActor, ReportingType } from '@features/Reporting/types'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { number, object, string } from 'yup'
 
 export const CreateOrEditReportingSchema = object({
@@ -16,6 +17,10 @@ export const CreateOrEditReportingSchema = object({
     message: 'Veuillez renseigner l&apos;unité',
     test: (controlUnitId, context) =>
       context.parent.reportingActor === ReportingOriginActor.UNIT ? !!controlUnitId : true
+  }),
+  expirationDate: string().test({
+    message: 'La date de fin de validité doit être dans le futur.',
+    test: expirationDate => (expirationDate ? customDayjs().isBefore(expirationDate) : true)
   }),
   authorContact: string().test({
     message: 'Veuillez renseigner le contact',

@@ -20,18 +20,21 @@ class ArchiveOutdatedReportingsUTests {
     @Test
     fun `execute Should archive outdated reportings`() {
         // Given
-        given(reportingRepository.findUnarchivedReportings()).willReturn(
+        given(reportingRepository.findUnarchivedReportingsAfterNewVoyage()).willReturn(
             listOf(
                 Pair(1, TwelveMilesFishingAlert("NAMO")),
                 Pair(2, ThreeMilesTrawlingAlert("NAMO")),
                 Pair(3, MissingFARAlert("NAMO")),
             ),
         )
+        given(reportingRepository.findExpiredReportings()).willReturn(
+            listOf(4, 5),
+        )
 
         // When
         ArchiveOutdatedReportings(reportingRepository).execute()
 
         // Then
-        verify(reportingRepository).archiveReportings(eq(listOf(2, 3)))
+        verify(reportingRepository).archiveReportings(eq(listOf(2, 3, 4, 5)))
     }
 }

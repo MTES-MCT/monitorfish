@@ -19,11 +19,13 @@ interface ReportingRepository {
 
     fun update(
         reportingId: Int,
+        expirationDate: ZonedDateTime?,
         updatedInfractionSuspicion: InfractionSuspicion,
     ): Reporting
 
     fun update(
         reportingId: Int,
+        expirationDate: ZonedDateTime?,
         updatedObservation: Observation,
     ): Reporting
 
@@ -49,7 +51,9 @@ interface ReportingRepository {
         fromDate: ZonedDateTime,
     ): List<Reporting>
 
-    fun findUnarchivedReportings(): List<Pair<Int, AlertType>>
+    fun findUnarchivedReportingsAfterNewVoyage(): List<Pair<Int, AlertType>>
+
+    fun findExpiredReportings(): List<Int>
 
     fun archive(id: Int)
 

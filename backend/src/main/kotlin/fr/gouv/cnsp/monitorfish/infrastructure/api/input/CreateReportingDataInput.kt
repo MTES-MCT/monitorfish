@@ -18,6 +18,7 @@ class CreateReportingDataInput(
     val flagState: CountryCode,
     val creationDate: ZonedDateTime,
     val validationDate: ZonedDateTime? = null,
+    val expirationDate: ZonedDateTime? = null,
     val value: InfractionSuspicionOrObservationType,
 ) {
     fun toReporting() =
@@ -32,6 +33,7 @@ class CreateReportingDataInput(
             flagState = this.flagState,
             creationDate = this.creationDate,
             validationDate = this.validationDate,
+            expirationDate = this.expirationDate,
             isDeleted = false,
             isArchived = false,
             value = this.value,

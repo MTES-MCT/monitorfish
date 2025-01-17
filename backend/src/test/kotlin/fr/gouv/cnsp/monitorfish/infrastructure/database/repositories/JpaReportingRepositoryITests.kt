@@ -352,7 +352,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             )
 
         // When
-        val reporting = jpaReportingRepository.update(7, updatedReporting)
+        val reporting = jpaReportingRepository.update(7, null, updatedReporting)
 
         // Then
         assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000042310")
@@ -371,6 +371,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `update Should update a given Observation`() {
         // Given
+        val updatedExpirationDate = ZonedDateTime.now()
         val updatedReporting =
             Observation(
                 ReportingActor.UNIT,
@@ -382,7 +383,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             )
 
         // When
-        val reporting = jpaReportingRepository.update(8, updatedReporting)
+        val reporting = jpaReportingRepository.update(8, updatedExpirationDate, updatedReporting)
 
         // Then
         assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000597493")
@@ -409,7 +410,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             )
 
         // When
-        val reporting = jpaReportingRepository.update(7, updatedReporting)
+        val reporting = jpaReportingRepository.update(7, null, updatedReporting)
 
         // Then
         assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000042310")
@@ -426,12 +427,23 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findUnarchivedReportings Should return archive candidates`() {
         // When
-        val reportings = jpaReportingRepository.findUnarchivedReportings()
+        val reportings = jpaReportingRepository.findUnarchivedReportingsAfterNewVoyage()
 
         // Then
         assertThat(reportings).hasSize(1)
         assertThat(reportings.first().first).isEqualTo(1)
         assertThat(reportings.first().second.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
+    }
+
+    @Test
+    @Transactional
+    fun `findExpiredReportings Should return expired reportings, hence archive candidates`() {
+        // When
+        val reportings = jpaReportingRepository.findExpiredReportings()
+
+        // Then
+        assertThat(reportings).hasSize(1)
+        assertThat(reportings.first()).isEqualTo(12)
     }
 
     @Test

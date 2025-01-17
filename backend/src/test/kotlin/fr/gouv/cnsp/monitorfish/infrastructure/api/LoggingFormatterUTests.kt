@@ -55,6 +55,7 @@ class LoggingFormatterUTests {
                 "\"controlUnitId\":null," +
                 "\"authorTrigram\":\"LTH\"," +
                 "\"authorContact\":null," +
+                "\"expirationDate\":null," +
                 "\"title\":\"A title\"," +
                 "\"description\":null," +
                 "\"natinfCode\":123456}",
@@ -104,6 +105,7 @@ class LoggingFormatterUTests {
                 "\"flagState\":\"FR\"," +
                 "\"creationDate\":\"2019-01-18T07:19:45.000000045Z\"," +
                 "\"validationDate\":null," +
+                "\"expirationDate\":null," +
                 "\"value\":{\"type\":\"INFRACTION_SUSPICION\"," +
                 "\"natinfCode\":123456," +
                 "\"type\":\"INFRACTION_SUSPICION\"," +
@@ -144,6 +146,7 @@ class LoggingFormatterUTests {
                 "\"controlUnitId\":null," +
                 "\"authorTrigram\":\"LTH\"," +
                 "\"authorContact\":null," +
+                "\"expirationDate\":null," +
                 "\"title\":\"A title\"," +
                 "\"description\":null," +
                 "\"natinfCode\":123456}",

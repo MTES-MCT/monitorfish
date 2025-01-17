@@ -344,8 +344,8 @@ interface DBLogbookReportRepository :
             SELECT *
             FROM logbook_reports
             WHERE referenced_report_id IN (select report_id FROM dat_cor)
-            AND operation_datetime_utc >= cast(:startDate AS TIMESTAMP) - INTERVAL '1 day'
-            AND operation_datetime_utc <= cast(:endDate AS TIMESTAMP) + INTERVAL '1 day'
+            AND operation_datetime_utc >= cast(:startDate AS TIMESTAMP) - INTERVAL '3 days'
+            AND operation_datetime_utc <= cast(:endDate AS TIMESTAMP) + INTERVAL '3 days'
             AND operation_type = 'RET'
             AND NOT is_test_message
         )
@@ -383,8 +383,8 @@ interface DBLogbookReportRepository :
            FROM logbook_reports
            WHERE
                referenced_report_id IN (select report_id FROM dat_cor) AND
-               operation_datetime_utc >= cast(?2 AS timestamp) - INTERVAL '1 day' AND
-               operation_datetime_utc < cast(?3 AS timestamp) + INTERVAL '1 day' AND
+               operation_datetime_utc >= cast(?2 AS timestamp) - INTERVAL '3 days' AND
+               operation_datetime_utc < cast(?3 AS timestamp) + INTERVAL '3 days' AND
                operation_type = 'RET'
                AND NOT is_test_message
            ORDER BY operation_datetime_utc DESC

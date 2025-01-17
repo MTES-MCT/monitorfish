@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import java.time.Instant
+import java.time.ZonedDateTime
 
 @DynamicUpdate
 interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
@@ -168,7 +169,8 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         UPDATE reportings
         SET
             value = CAST(:value AS JSONB),
-            type = CAST(:type AS reporting_type)
+            type = CAST(:type AS reporting_type),
+            expiration_date = :expirationDate
         WHERE id = :id
     """,
         nativeQuery = true,
@@ -177,5 +179,6 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         id: Int,
         value: String,
         type: String,
+        expirationDate: Instant?,
     )
 }

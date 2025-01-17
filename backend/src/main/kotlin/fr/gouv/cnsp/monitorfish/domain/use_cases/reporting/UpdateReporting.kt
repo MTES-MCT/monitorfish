@@ -23,6 +23,7 @@ class UpdateReporting(
         val currentReporting = reportingRepository.findById(reportingId)
         val controlUnits = getAllLegacyControlUnits.execute()
         logger.info("Updating reporting id $reportingId for vessel id ${currentReporting.vesselId}")
+        val expirationDate = updatedInfractionSuspicionOrObservation.expirationDate ?: currentReporting.expirationDate
 
         require(currentReporting.type != ReportingType.ALERT) {
             "The edited reporting must be an INFRACTION_SUSPICION or an OBSERVATION"
@@ -53,10 +54,15 @@ class UpdateReporting(
             when (nextReporting) {
                 is InfractionSuspicion ->
                     reportingRepository.update(
-                        reportingId,
-                        nextReporting,
+                        reportingId = reportingId,
+                        expirationDate = expirationDate,
+                        updatedInfractionSuspicion = nextReporting,
                     )
-                is Observation -> reportingRepository.update(reportingId, nextReporting)
+                is Observation -> reportingRepository.update(
+                    reportingId = reportingId,
+                    expirationDate = expirationDate,
+                    updatedObservation = nextReporting,
+                )
                 else -> throw IllegalArgumentException(
                     "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION",
                 )

@@ -42,12 +42,14 @@ class JpaReportingRepository(
     @Transactional
     override fun update(
         reportingId: Int,
+        expirationDate: ZonedDateTime?,
         updatedInfractionSuspicion: InfractionSuspicion,
     ): Reporting {
         dbReportingRepository.update(
-            reportingId,
-            mapper.writeValueAsString(updatedInfractionSuspicion),
-            ReportingType.INFRACTION_SUSPICION.toString(),
+            id = reportingId,
+            value = mapper.writeValueAsString(updatedInfractionSuspicion),
+            type = ReportingType.INFRACTION_SUSPICION.toString(),
+            expirationDate = expirationDate?.toInstant(),
         )
 
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
@@ -56,12 +58,14 @@ class JpaReportingRepository(
     @Transactional
     override fun update(
         reportingId: Int,
+        expirationDate: ZonedDateTime?,
         updatedObservation: Observation,
     ): Reporting {
         dbReportingRepository.update(
-            reportingId,
-            mapper.writeValueAsString(updatedObservation),
-            ReportingType.OBSERVATION.toString(),
+            id = reportingId,
+            value = mapper.writeValueAsString(updatedObservation),
+            type = ReportingType.OBSERVATION.toString(),
+            expirationDate = expirationDate?.toInstant(),
         )
 
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)

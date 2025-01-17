@@ -1,9 +1,8 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
 import { ReportingOriginActor, ReportingType } from '@features/Reporting/types'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { number, object, string } from 'yup'
-import {HIDDEN_ERROR} from "@features/Mission/components/MissionForm/constants";
-import {customDayjs} from "@mtes-mct/monitor-ui";
 
 export const CreateOrEditReportingSchema = object({
   reportingActor: string().required('Veuillez renseigner l&apos;origine du signalement.'),
@@ -19,12 +18,10 @@ export const CreateOrEditReportingSchema = object({
     test: (controlUnitId, context) =>
       context.parent.reportingActor === ReportingOriginActor.UNIT ? !!controlUnitId : true
   }),
-  expirationDate: string()
-    .test({
-      message: 'La date de fin de validité doit être dans le futur.',
-      test: (expirationDate) =>
-        expirationDate ? customDayjs().isBefore(expirationDate) : true
-    }),
+  expirationDate: string().test({
+    message: 'La date de fin de validité doit être dans le futur.',
+    test: expirationDate => (expirationDate ? customDayjs().isBefore(expirationDate) : true)
+  }),
   authorContact: string().test({
     message: 'Veuillez renseigner le contact',
     test: (authorContact, context) => {

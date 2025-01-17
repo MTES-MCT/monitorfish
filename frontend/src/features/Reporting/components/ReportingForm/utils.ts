@@ -9,10 +9,10 @@ export function getFormFields(
 ): EditedReporting {
   const base = {
     authorContact: editedOrSavedReporting?.authorContact ?? undefined,
-    expirationDate: expirationDate,
     authorTrigram: editedOrSavedReporting?.authorTrigram ?? undefined,
     controlUnitId: editedOrSavedReporting?.controlUnitId ?? undefined,
     description: editedOrSavedReporting?.description,
+    expirationDate,
     reportingActor: editedOrSavedReporting?.reportingActor ?? ReportingOriginActor.OPS,
     title: editedOrSavedReporting?.title ?? '',
     type: type ?? ReportingType.INFRACTION_SUSPICION
@@ -74,6 +74,7 @@ export function getReportingValue(editedReporting: EditedReporting): EditedRepor
   if (editedReporting.type === ReportingType.INFRACTION_SUSPICION) {
     return {
       ...(editedReporting as InfractionSuspicion),
+      expirationDate: editedReporting.expirationDate,
       natinfCode: (editedReporting as InfractionSuspicion).natinfCode
     }
   }

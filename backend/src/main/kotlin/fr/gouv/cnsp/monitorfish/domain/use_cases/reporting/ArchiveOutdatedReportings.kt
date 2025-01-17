@@ -21,7 +21,7 @@ class ArchiveOutdatedReportings(private val reportingRepository: ReportingReposi
         val filteredReportingIdsToArchive =
             reportingCandidatesToArchive.filter {
                 it.second.type == AlertTypeMapping.MISSING_FAR_ALERT ||
-                    it.second.type == AlertTypeMapping.THREE_/MILES_TRAWLING_ALERT ||
+                    it.second.type == AlertTypeMapping.THREE_MILES_TRAWLING_ALERT ||
                     it.second.type == AlertTypeMapping.MISSING_DEP_ALERT ||
                     it.second.type == AlertTypeMapping.SUSPICION_OF_UNDER_DECLARATION_ALERT
             }.map { it.first }

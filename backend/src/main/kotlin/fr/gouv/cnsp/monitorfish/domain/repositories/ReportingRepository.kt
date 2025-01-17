@@ -19,11 +19,13 @@ interface ReportingRepository {
 
     fun update(
         reportingId: Int,
+        expirationDate: ZonedDateTime?,
         updatedInfractionSuspicion: InfractionSuspicion,
     ): Reporting
 
     fun update(
         reportingId: Int,
+        expirationDate: ZonedDateTime?,
         updatedObservation: Observation,
     ): Reporting
 

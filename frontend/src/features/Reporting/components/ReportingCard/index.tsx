@@ -1,5 +1,6 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
+import { ALERTS_ARCHIVED_AFTER_NEW_VOYAGE } from '@features/Alert/constants'
 import { PendingAlertValueType } from '@features/Alert/types'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
@@ -9,12 +10,11 @@ import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { getFrenchOrdinal, getReportingActorLabel } from './utils'
-import {getDate, getDateTime} from '../../../../utils'
+import { getDate, getDateTime } from '../../../../utils'
 import { ReportingType, ReportingTypeCharacteristics } from '../../types'
 import { archiveReporting } from '../../useCases/archiveReporting'
 
 import type { Reporting } from '../../types'
-import {ALERTS_ARCHIVED_AFTER_NEW_VOYAGE} from "@features/Alert/constants";
 
 export type ReportingCardProps = Readonly<{
   isArchived?: boolean
@@ -37,7 +37,8 @@ export function ReportingCard({
   const reportingName = Object.values(ReportingTypeCharacteristics).find(
     reportingType => reportingType.code === reporting.type
   )?.name
-  const isArchivedAfterNewVoyage = ALERTS_ARCHIVED_AFTER_NEW_VOYAGE.includes(reporting.value.type)
+  const willExpireAfterNewVoyage = ALERTS_ARCHIVED_AFTER_NEW_VOYAGE.includes(reporting.value.type)
+  const willExpire = willExpireAfterNewVoyage || !!reporting.expirationDate
   const canBeArchived = !(
     reporting.type === ReportingType.ALERT && reporting.value.type === PendingAlertValueType.MISSING_FAR_48_HOURS_ALERT
   )
@@ -60,26 +61,28 @@ export function ReportingCard({
   }, [reporting, reportingName])
 
   const expirationDateText = useMemo(() => {
-    if (!isArchivedAfterNewVoyage && !reporting.expirationDate) {
-      return "Pas de fin de validité"
+    if (!willExpireAfterNewVoyage && !reporting.expirationDate) {
+      return 'Pas de fin de validité'
     }
 
-    if (isArchivedAfterNewVoyage && !reporting.isArchived) {
-      return "Fin de validité au prochain DEP du navire"
-    }
-
-    if (isArchivedAfterNewVoyage && reporting.isArchived) {
-      return "Invalidé suite au DEP du navire"
+    if (willExpireAfterNewVoyage && !reporting.isArchived) {
+      return 'Fin de validité au prochain DEP du navire'
     }
 
     if (!!reporting.expirationDate && !reporting.isArchived) {
       return `Fin de validité le ${getDate(reporting.expirationDate)}`
     }
 
-    if (!!reporting.expirationDate && reporting.isArchived) {
-      return `Invalidé le ${getDate(reporting.expirationDate)}`
+    if (willExpireAfterNewVoyage && reporting.isArchived) {
+      return 'Archivé automatiquement suite au DEP du navire'
     }
-  }, [reporting])
+
+    if (!!reporting.expirationDate && reporting.isArchived) {
+      return `La fin de validité était le ${getDate(reporting.expirationDate)}`
+    }
+
+    return ''
+  }, [reporting, willExpireAfterNewVoyage])
 
   const archive = () => {
     dispatch(archiveReporting(reporting))
@@ -166,13 +169,12 @@ export function ReportingCard({
               NATINF {reporting.value.natinfCode}
             </Natinf>
           )}
-          { !reporting.isArchived || (reporting.isArchived && (isArchivedAfterNewVoyage || reporting.expirationDate)) &&
+          {(!reporting.isArchived || (reporting.isArchived && willExpire)) && (
             <ExpirationDate>
               <Icon.Clock color={THEME.color.slateGray} />
-              <ExpirationDateText isEmpty={!isArchivedAfterNewVoyage && !reporting.expirationDate}>
-                {expirationDateText}
-              </ExpirationDateText>
-            </ExpirationDate>}
+              <ExpirationDateText isEmpty={!willExpire}>{expirationDateText}</ExpirationDateText>
+            </ExpirationDate>
+          )}
         </Body>
 
         {isArchived && otherOccurrencesOfSameAlert.length > 0 && (
@@ -357,9 +359,9 @@ const ExpirationDate = styled.div`
 `
 
 const ExpirationDateText = styled.span<{ isEmpty: boolean }>`
-  color: ${p => p.isEmpty ? p.theme.color.slateGray : p.theme.color.gunMetal};
+  color: ${p => (p.isEmpty ? p.theme.color.slateGray : p.theme.color.gunMetal)};
   font: normal normal normal 13px/18px Marianne;
-  font-style: ${p => p.isEmpty ? 'italic' : 'none'};
+  font-style: ${p => (p.isEmpty ? 'italic' : 'none')};
   vertical-align: super;
   margin-left: 6px;
 `

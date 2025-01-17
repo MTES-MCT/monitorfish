@@ -352,7 +352,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             )
 
         // When
-        val reporting = jpaReportingRepository.update(7, updatedReporting)
+        val reporting = jpaReportingRepository.update(7, null, updatedReporting)
 
         // Then
         assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000042310")
@@ -371,6 +371,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `update Should update a given Observation`() {
         // Given
+        val updatedExpirationDate = ZonedDateTime.now()
         val updatedReporting =
             Observation(
                 ReportingActor.UNIT,
@@ -382,7 +383,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             )
 
         // When
-        val reporting = jpaReportingRepository.update(8, updatedReporting)
+        val reporting = jpaReportingRepository.update(8, updatedExpirationDate, updatedReporting)
 
         // Then
         assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000597493")
@@ -409,7 +410,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             )
 
         // When
-        val reporting = jpaReportingRepository.update(7, updatedReporting)
+        val reporting = jpaReportingRepository.update(7, null, updatedReporting)
 
         // Then
         assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000042310")

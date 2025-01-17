@@ -148,7 +148,7 @@ class UpdateReportingUTests {
                 isDeleted = false,
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
-        given(reportingRepository.update(any(), isA<InfractionSuspicion>())).willReturn(reporting)
+        given(reportingRepository.update(any(), anyOrNull(), isA<InfractionSuspicion>())).willReturn(reporting)
         given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
             InfractionSuspicion(
                 reportingActor = reportingActor,
@@ -237,6 +237,7 @@ class UpdateReportingUTests {
     @Test
     fun `execute Should update the reporting`() {
         // Given
+        val expectedExpirationDate = ZonedDateTime.now().plusDays(2)
         val observation =
             Observation(
                 reportingActor = ReportingActor.UNIT,
@@ -257,12 +258,13 @@ class UpdateReportingUTests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
+                expirationDate = ZonedDateTime.now(),
                 value = observation as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
-        given(reportingRepository.update(any(), isA<Observation>())).willReturn(reporting)
+        given(reportingRepository.update(any(), anyOrNull(), isA<Observation>())).willReturn(reporting)
         given(
             getReportingWithDMLAndSeaFront.execute(any(), anyOrNull()),
         ).willReturn(observation.copy(description = "Test 2"))
@@ -279,6 +281,7 @@ class UpdateReportingUTests {
                 type = ReportingType.OBSERVATION,
                 controlUnitId = 1,
                 authorTrigram = "LTH",
+                expirationDate = expectedExpirationDate,
                 title = "A reporting",
                 description = "Test 2",
                 natinfCode = 1234,
@@ -287,7 +290,7 @@ class UpdateReportingUTests {
 
         // Then
         argumentCaptor<Observation>().apply {
-            verify(reportingRepository).update(any(), capture())
+            verify(reportingRepository).update(any(), eq(expectedExpirationDate), capture())
 
             assertThat(allValues.first().description).isEqualTo("Test 2")
         }
@@ -319,7 +322,7 @@ class UpdateReportingUTests {
                 isDeleted = false,
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
-        given(reportingRepository.update(any(), isA<Observation>())).willReturn(reporting)
+        given(reportingRepository.update(any(), anyOrNull(), isA<Observation>())).willReturn(reporting)
         given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
             Observation(
                 reportingActor = ReportingActor.UNIT,
@@ -349,7 +352,7 @@ class UpdateReportingUTests {
 
         // Then
         argumentCaptor<Observation>().apply {
-            verify(reportingRepository).update(any(), capture())
+            verify(reportingRepository).update(any(), anyOrNull(), capture())
 
             assertThat(allValues.first().description).isEqualTo("Test 2")
             assertThat(allValues.first().natinfCode).isNull()
@@ -383,7 +386,7 @@ class UpdateReportingUTests {
                 isDeleted = false,
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
-        given(reportingRepository.update(any(), isA<InfractionSuspicion>())).willReturn(reporting)
+        given(reportingRepository.update(any(), anyOrNull(), isA<InfractionSuspicion>())).willReturn(reporting)
         given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
             InfractionSuspicion(
                 reportingActor = ReportingActor.UNIT,
@@ -415,7 +418,7 @@ class UpdateReportingUTests {
 
         // Then
         argumentCaptor<InfractionSuspicion>().apply {
-            verify(reportingRepository).update(any(), capture())
+            verify(reportingRepository).update(any(), anyOrNull(), capture())
 
             assertThat(allValues.first().dml).isEqualTo("DML 56")
             assertThat(allValues.first().seaFront).isEqualTo("NAMO")
@@ -447,7 +450,7 @@ class UpdateReportingUTests {
                 isDeleted = false,
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
-        given(reportingRepository.update(any(), isA<Observation>())).willReturn(reporting)
+        given(reportingRepository.update(any(), anyOrNull(), isA<Observation>())).willReturn(reporting)
         given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
             (reporting.value as Observation).copy(controlUnitId = 1),
         )
@@ -472,7 +475,7 @@ class UpdateReportingUTests {
 
         // Then
         argumentCaptor<Observation>().apply {
-            verify(reportingRepository).update(any(), capture())
+            verify(reportingRepository).update(any(), anyOrNull(), capture())
         }
         assertThat(returnedReporting.first.flagState).isEqualTo(CountryCode.FR)
     }
@@ -502,7 +505,7 @@ class UpdateReportingUTests {
                 isDeleted = false,
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
-        given(reportingRepository.update(any(), isA<InfractionSuspicion>())).willReturn(reporting)
+        given(reportingRepository.update(any(), anyOrNull(), isA<InfractionSuspicion>())).willReturn(reporting)
         given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
             InfractionSuspicion(
                 reportingActor = ReportingActor.OPS,
@@ -533,7 +536,7 @@ class UpdateReportingUTests {
 
         // Then
         argumentCaptor<InfractionSuspicion>().apply {
-            verify(reportingRepository).update(any(), capture())
+            verify(reportingRepository).update(any(), anyOrNull(), capture())
 
             assertThat(allValues.first().type.toString()).isEqualTo(ReportingType.INFRACTION_SUSPICION.name)
             assertThat(allValues.first().dml).isEqualTo("DML 17")

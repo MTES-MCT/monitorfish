@@ -31,6 +31,7 @@ describe('ReportingCard()', () => {
 
     const reporting: PendingAlertReporting = {
       creationDate: '2023-10-30T09:10:00Z',
+      expirationDate: undefined,
       externalReferenceNumber: '',
       flagState: 'ES',
       id: 12345,
@@ -46,9 +47,8 @@ describe('ReportingCard()', () => {
       isArchived: false,
       isDeleted: false,
       type: ReportingType.ALERT,
-      underCharter: null,
+      underCharter: undefined,
       validationDate: '2023-10-30T15:08:05.845121Z',
-      expirationDate: null,
       value: {
         dml: null,
         natinfCode: 2610,

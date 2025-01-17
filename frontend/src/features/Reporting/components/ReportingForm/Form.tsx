@@ -5,7 +5,8 @@ import { sortArrayByColumn } from '@features/Vessel/components/VesselList/tableS
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import {
   Accent,
-  Button, DatePicker, FormikDatePicker,
+  Button,
+  FormikDatePicker,
   FormikMultiRadio,
   FormikSelect,
   FormikTextarea,
@@ -14,7 +15,7 @@ import {
   MultiRadio
 } from '@mtes-mct/monitor-ui'
 import { Form as FormikForm, useFormikContext } from 'formik'
-import {useEffect, useMemo, useRef} from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -37,7 +38,7 @@ type FormProps = Readonly<{
 }>
 export function Form({ className, hasWhiteBackground, onClose, onIsDirty, windowContext }: FormProps) {
   const { dirty, setFieldValue, values } = useFormikContext<EditedReporting>()
-  const formRef = useRef()
+  const formRef = useRef<HTMLFormElement | null>(null)
 
   // TODO Replace that with a `useInfractionsAsOptions()` hook with RTK query.
   const infractions = useMainAppSelector(state => state.infraction.infractions)
@@ -158,13 +159,12 @@ export function Form({ className, hasWhiteBackground, onClose, onIsDirty, window
         />
       )}
       <FormikDatePicker
+        baseContainer={formRef.current as unknown as HTMLDivElement}
+        isLight={!hasWhiteBackground}
         isStringDate
-        baseContainer={formRef.current}
         label="Fin de validité"
         name="expirationDate"
-        isLight={!hasWhiteBackground}
         withTime={false}
-        placement={windowContext === WindowContext.MainWindow ? 'topStart' : undefined}
       />
       <FormikTextInput isLight={!hasWhiteBackground} label="Saisi par" name="authorTrigram" placeholder="Ex: LTH" />
       <ValidateButton accent={Accent.PRIMARY} type="submit">

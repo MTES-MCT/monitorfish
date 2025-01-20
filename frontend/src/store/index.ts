@@ -84,7 +84,7 @@ const persistedBackofficeReducerConfig: PersistConfig<typeof backofficeReducer> 
   stateReconciler: autoMergeLevel2,
   storage,
   transforms: [SetRegulationStateTransform],
-  whitelist: ['regulation']
+  whitelist: []
 }
 const persistedBackofficeReducer = persistReducer(
   persistedBackofficeReducerConfig,

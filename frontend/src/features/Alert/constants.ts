@@ -34,7 +34,7 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
   },
   MISSING_FAR_48_HOURS_ALERT: {
     code: PendingAlertValueType.MISSING_FAR_48_HOURS_ALERT,
-    isArchivedAfterDEPMessage: false,
+    isArchivedAfterDEPMessage: true,
     isOperationalAlert: true,
     name: 'Non-emission de message "FAR" en 48h'
   },

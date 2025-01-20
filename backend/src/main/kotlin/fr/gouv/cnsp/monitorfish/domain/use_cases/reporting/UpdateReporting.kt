@@ -58,11 +58,12 @@ class UpdateReporting(
                         expirationDate = expirationDate,
                         updatedInfractionSuspicion = nextReporting,
                     )
-                is Observation -> reportingRepository.update(
-                    reportingId = reportingId,
-                    expirationDate = expirationDate,
-                    updatedObservation = nextReporting,
-                )
+                is Observation ->
+                    reportingRepository.update(
+                        reportingId = reportingId,
+                        expirationDate = expirationDate,
+                        updatedObservation = nextReporting,
+                    )
                 else -> throw IllegalArgumentException(
                     "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION",
                 )

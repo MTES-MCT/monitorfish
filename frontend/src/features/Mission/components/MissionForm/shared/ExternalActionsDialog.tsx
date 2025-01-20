@@ -9,6 +9,18 @@ type ExternalActionsModalProps = {
 
 export function ExternalActionsDialog({ onClose, sources }: ExternalActionsModalProps) {
   const isCACEM = sources.includes(Mission.MissionSource.MONITORENV)
+  const isRapportNav = sources.includes(Mission.MissionSource.RAPPORT_NAV)
+
+  const getPersonToContact = () => {
+    if (isCACEM) {
+      return 'le CACEM'
+    }
+    if (isRapportNav) {
+      return "l'unité"
+    }
+
+    return ''
+  }
 
   return (
     <Dialog data-cy="external-actions-modal" isAbsolute>
@@ -17,13 +29,9 @@ export function ExternalActionsDialog({ onClose, sources }: ExternalActionsModal
         <Alert>
           <Icon.Attention color={THEME.color.maximumRed} size={30} />
         </Alert>
-        <Text>{`La mission ne peut pas être supprimée, car elle comporte des événements ajoutés par ${
-          isCACEM ? 'le CACEM' : ''
-        }.`}</Text>
+        <Text>{`La mission ne peut pas être supprimée, car elle comporte des événements ajoutés par ${getPersonToContact()}.`}</Text>
         <Bold>
-          {`Si vous souhaitez tout de même la supprimer, veuillez contacter  ${
-            isCACEM ? 'le CACEM' : ''
-          } pour qu'il supprime d'abord
+          {`Si vous souhaitez tout de même la supprimer, veuillez contacter ${getPersonToContact()} pour qu'il supprime d'abord
             ses événements.`}
         </Bold>
       </Dialog.Body>

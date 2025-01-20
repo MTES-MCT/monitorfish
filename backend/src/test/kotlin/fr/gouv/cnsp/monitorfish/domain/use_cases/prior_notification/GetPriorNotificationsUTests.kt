@@ -158,10 +158,16 @@ class GetPriorNotificationsUTests {
 
         // Then
         assertThat(result.data).hasSize(2)
-        assertThat(result.data[0].logbookMessageAndValue.logbookMessage.reportId).isEqualTo(
+        assertThat(
+            result.data[0]
+                .logbookMessageAndValue.logbookMessage.reportId,
+        ).isEqualTo(
             "FAKE_REPORT_ID_1",
         )
-        assertThat(result.data[1].logbookMessageAndValue.logbookMessage.reportId).isEqualTo(
+        assertThat(
+            result.data[1]
+                .logbookMessageAndValue.logbookMessage.reportId,
+        ).isEqualTo(
             "FAKE_REPORT_ID_2_COR",
         )
     }

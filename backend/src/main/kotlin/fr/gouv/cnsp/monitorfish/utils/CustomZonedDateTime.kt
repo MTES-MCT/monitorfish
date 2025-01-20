@@ -10,7 +10,9 @@ import java.time.format.DateTimeFormatter
  * The overridden `toString()` method ensures seconds are always present in the output
  * (= never omitted when equal to `00`) and removes unnecessary milli/micro/nanoseconds.
  */
-data class CustomZonedDateTime(private val dateAsZonedDateTime: ZonedDateTime) {
+data class CustomZonedDateTime(
+    private val dateAsZonedDateTime: ZonedDateTime,
+) {
     companion object {
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX")
 
@@ -42,7 +44,5 @@ data class CustomZonedDateTime(private val dateAsZonedDateTime: ZonedDateTime) {
         return utcZonedDateTime.format(dateTimeFormatter)
     }
 
-    fun toZonedDateTime(): ZonedDateTime {
-        return dateAsZonedDateTime.withZoneSameInstant(ZoneOffset.UTC)
-    }
+    fun toZonedDateTime(): ZonedDateTime = dateAsZonedDateTime.withZoneSameInstant(ZoneOffset.UTC)
 }

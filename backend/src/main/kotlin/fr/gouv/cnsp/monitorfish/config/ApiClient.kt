@@ -9,7 +9,9 @@ import kotlinx.serialization.json.Json
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class ApiClient(engine: HttpClientEngine = Java.create()) {
+class ApiClient(
+    engine: HttpClientEngine = Java.create(),
+) {
     val httpClient =
         HttpClient(engine) {
             expectSuccess = true

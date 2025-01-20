@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpMethod.GET
 import org.springframework.web.servlet.HandlerInterceptor
 
-class LogGETRequests(val mapper: ObjectMapper) : HandlerInterceptor {
+class LogGETRequests(
+    val mapper: ObjectMapper,
+) : HandlerInterceptor {
     private val logger = LoggerFactory.getLogger(LogGETRequests::class.java)
 
     override fun preHandle(

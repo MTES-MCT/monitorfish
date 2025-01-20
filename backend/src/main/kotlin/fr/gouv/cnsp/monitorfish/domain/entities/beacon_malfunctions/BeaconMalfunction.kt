@@ -26,15 +26,18 @@ data class BeaconMalfunction(
     val beaconStatusAtMalfunctionCreation: BeaconStatus,
 ) {
     companion object {
-        fun getVesselFromBeaconMalfunction(beaconMalfunction: BeaconMalfunction): (LastPosition) -> Boolean {
-            return { lastPosition ->
+        fun getVesselFromBeaconMalfunction(beaconMalfunction: BeaconMalfunction): (LastPosition) -> Boolean =
+            { lastPosition ->
                 when (beaconMalfunction.vesselIdentifier) {
-                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> lastPosition.internalReferenceNumber == beaconMalfunction.internalReferenceNumber
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
+                        lastPosition.internalReferenceNumber ==
+                            beaconMalfunction.internalReferenceNumber
                     VesselIdentifier.IRCS -> lastPosition.ircs == beaconMalfunction.ircs
-                    VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> lastPosition.externalReferenceNumber == beaconMalfunction.externalReferenceNumber
+                    VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
+                        lastPosition.externalReferenceNumber ==
+                            beaconMalfunction.externalReferenceNumber
                     else -> false
                 }
             }
-        }
     }
 }

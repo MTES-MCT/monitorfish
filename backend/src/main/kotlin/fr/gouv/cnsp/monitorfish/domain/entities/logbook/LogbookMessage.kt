@@ -183,22 +183,21 @@ data class LogbookMessage(
         }
     }
 
-    private fun filterRelatedLogbookMessages(messages: List<LogbookMessage>): List<LogbookMessage> {
-        return messages.filter {
-            it.messageType == messageType && (
-                (reportId.isNullOrEmpty() && it.referencedReportId == reportId) ||
-                    (referencedReportId.isNullOrEmpty() && it.referencedReportId == referencedReportId)
-            )
+    private fun filterRelatedLogbookMessages(messages: List<LogbookMessage>): List<LogbookMessage> =
+        messages.filter {
+            it.messageType == messageType &&
+                (
+                    (reportId.isNullOrEmpty() && it.referencedReportId == reportId) ||
+                        (referencedReportId.isNullOrEmpty() && it.referencedReportId == referencedReportId)
+                )
         }
-    }
 
-    private fun findReferencedLogbookMessages(messages: List<LogbookMessage>): List<LogbookMessage> {
-        return if (!referencedReportId.isNullOrEmpty()) {
+    private fun findReferencedLogbookMessages(messages: List<LogbookMessage>): List<LogbookMessage> =
+        if (!referencedReportId.isNullOrEmpty()) {
             messages.filter { it.reportId == referencedReportId }
         } else {
             listOf()
         }
-    }
 
     private fun setAcknowledgeAsSuccessful() {
         this.acknowledgment = Acknowledgment(isSuccess = true)
@@ -219,9 +218,10 @@ data class LogbookMessage(
     ) {
         message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
             message.targetSpeciesNameOnEntry =
-                EffortTargetSpeciesGroup.entries.find {
-                    it.name == targetSpeciesOnEntry
-                }?.value
+                EffortTargetSpeciesGroup.entries
+                    .find {
+                        it.name == targetSpeciesOnEntry
+                    }?.value
 
             if (message.targetSpeciesNameOnEntry == null) {
                 message.targetSpeciesNameOnEntry = allSpecies.find { it.code == targetSpeciesOnEntry }?.name
@@ -235,9 +235,10 @@ data class LogbookMessage(
     ) {
         message.targetSpeciesOnExit?.let { targetSpeciesOnExit ->
             message.targetSpeciesNameOnExit =
-                EffortTargetSpeciesGroup.entries.find {
-                    it.name == targetSpeciesOnExit
-                }?.value
+                EffortTargetSpeciesGroup.entries
+                    .find {
+                        it.name == targetSpeciesOnExit
+                    }?.value
 
             if (message.targetSpeciesNameOnExit == null) {
                 message.targetSpeciesNameOnExit = allSpecies.find { it.code == targetSpeciesOnExit }?.name
@@ -251,9 +252,10 @@ data class LogbookMessage(
     ) {
         message.targetSpeciesOnExit?.let { targetSpeciesOnExit ->
             message.targetSpeciesNameOnExit =
-                EffortTargetSpeciesGroup.entries.find {
-                    it.name == targetSpeciesOnExit
-                }?.value
+                EffortTargetSpeciesGroup.entries
+                    .find {
+                        it.name == targetSpeciesOnExit
+                    }?.value
 
             if (message.targetSpeciesNameOnExit == null) {
                 message.targetSpeciesNameOnExit = allSpecies.find { it.code == targetSpeciesOnExit }?.name
@@ -262,9 +264,10 @@ data class LogbookMessage(
 
         message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
             message.targetSpeciesNameOnEntry =
-                EffortTargetSpeciesGroup.entries.find {
-                    it.name == targetSpeciesOnEntry
-                }?.value
+                EffortTargetSpeciesGroup.entries
+                    .find {
+                        it.name == targetSpeciesOnEntry
+                    }?.value
 
             if (message.targetSpeciesNameOnEntry == null) {
                 message.targetSpeciesNameOnEntry = allSpecies.find { it.code == targetSpeciesOnEntry }?.name

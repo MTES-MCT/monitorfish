@@ -42,7 +42,5 @@ enum class AlertTypeMapping(
     ),
     ;
 
-    override fun getImplementation(): Class<out AlertType> {
-        return clazz
-    }
+    override fun getImplementation(): Class<out AlertType> = clazz
 }

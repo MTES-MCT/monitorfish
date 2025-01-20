@@ -65,7 +65,8 @@ class ReportingControllerITests {
     @Test
     fun `Should archive a reporting`() {
         // When
-        api.perform(put("/bff/v1/reportings/123/archive"))
+        api
+            .perform(put("/bff/v1/reportings/123/archive"))
             // Then
             .andExpect(status().isOk)
 
@@ -75,11 +76,12 @@ class ReportingControllerITests {
     @Test
     fun `Should archive multiple reportings`() {
         // When
-        api.perform(
-            put("/bff/v1/reportings/archive")
-                .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+        api
+            .perform(
+                put("/bff/v1/reportings/archive")
+                    .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
+                    .contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isOk)
 
@@ -89,7 +91,8 @@ class ReportingControllerITests {
     @Test
     fun `Should delete a reporting`() {
         // When
-        api.perform(delete("/bff/v1/reportings/123"))
+        api
+            .perform(delete("/bff/v1/reportings/123"))
             // Then
             .andExpect(status().isOk)
 
@@ -99,11 +102,12 @@ class ReportingControllerITests {
     @Test
     fun `Should delete multiple reportings`() {
         // When
-        api.perform(
-            delete("/bff/v1/reportings")
-                .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+        api
+            .perform(
+                delete("/bff/v1/reportings")
+                    .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
+                    .contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isOk)
 
@@ -135,30 +139,30 @@ class ReportingControllerITests {
         given(addReporting.execute(any())).willReturn(Pair(reporting, null))
 
         // When
-        api.perform(
-            post("/bff/v1/reportings")
-                .content(
-                    objectMapper.writeValueAsString(
-                        CreateReportingDataInput(
-                            internalReferenceNumber = "FRFGRGR",
-                            externalReferenceNumber = "RGD",
-                            ircs = "6554fEE",
-                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                            flagState = CountryCode.FR,
-                            creationDate = ZonedDateTime.now(),
-                            value =
-                                InfractionSuspicion(
-                                    ReportingActor.OPS,
-                                    natinfCode = 123456,
-                                    authorTrigram = "LTH",
-                                    title = "A title",
-                                ),
-                            type = ReportingType.INFRACTION_SUSPICION,
+        api
+            .perform(
+                post("/bff/v1/reportings")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            CreateReportingDataInput(
+                                internalReferenceNumber = "FRFGRGR",
+                                externalReferenceNumber = "RGD",
+                                ircs = "6554fEE",
+                                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                flagState = CountryCode.FR,
+                                creationDate = ZonedDateTime.now(),
+                                value =
+                                    InfractionSuspicion(
+                                        ReportingActor.OPS,
+                                        natinfCode = 123456,
+                                        authorTrigram = "LTH",
+                                        title = "A title",
+                                    ),
+                                type = ReportingType.INFRACTION_SUSPICION,
+                            ),
                         ),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isCreated)
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
@@ -197,31 +201,31 @@ class ReportingControllerITests {
         )
 
         // When
-        api.perform(
-            post("/bff/v1/reportings")
-                .content(
-                    objectMapper.writeValueAsString(
-                        CreateReportingDataInput(
-                            internalReferenceNumber = "FRFGRGR",
-                            externalReferenceNumber = "RGD",
-                            ircs = "6554fEE",
-                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                            flagState = CountryCode.FR,
-                            creationDate = ZonedDateTime.now(),
-                            value =
-                                InfractionSuspicion(
-                                    ReportingActor.OPS,
-                                    natinfCode = 123456,
-                                    controlUnitId = 1234,
-                                    authorTrigram = "LTH",
-                                    title = "A title",
-                                ),
-                            type = ReportingType.INFRACTION_SUSPICION,
+        api
+            .perform(
+                post("/bff/v1/reportings")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            CreateReportingDataInput(
+                                internalReferenceNumber = "FRFGRGR",
+                                externalReferenceNumber = "RGD",
+                                ircs = "6554fEE",
+                                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                flagState = CountryCode.FR,
+                                creationDate = ZonedDateTime.now(),
+                                value =
+                                    InfractionSuspicion(
+                                        ReportingActor.OPS,
+                                        natinfCode = 123456,
+                                        controlUnitId = 1234,
+                                        authorTrigram = "LTH",
+                                        title = "A title",
+                                    ),
+                                type = ReportingType.INFRACTION_SUSPICION,
+                            ),
                         ),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isCreated)
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
@@ -262,7 +266,8 @@ class ReportingControllerITests {
         )
 
         // When
-        api.perform(get("/bff/v1/reportings"))
+        api
+            .perform(get("/bff/v1/reportings"))
             // Then
             .andExpect(status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("$.length()", equalTo(1)))
@@ -298,21 +303,21 @@ class ReportingControllerITests {
         given(updateReporting.execute(any(), any())).willReturn(Pair(reporting, null))
 
         // When
-        api.perform(
-            put("/bff/v1/reportings/123")
-                .content(
-                    objectMapper.writeValueAsString(
-                        UpdateReportingDataInput(
-                            reportingActor = ReportingActor.OPS,
-                            type = ReportingType.INFRACTION_SUSPICION,
-                            natinfCode = 123456,
-                            authorTrigram = "LTH",
-                            title = "A title",
+        api
+            .perform(
+                put("/bff/v1/reportings/123")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            UpdateReportingDataInput(
+                                reportingActor = ReportingActor.OPS,
+                                type = ReportingType.INFRACTION_SUSPICION,
+                                natinfCode = 123456,
+                                authorTrigram = "LTH",
+                                title = "A title",
+                            ),
                         ),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isOk)
 
@@ -343,29 +348,29 @@ class ReportingControllerITests {
         given(addReporting.execute(any())).willReturn(Pair(reporting, null))
 
         // When
-        api.perform(
-            post("/bff/v1/reportings")
-                .content(
-                    objectMapper.writeValueAsString(
-                        CreateReportingDataInput(
-                            internalReferenceNumber = "FRFGRGR",
-                            externalReferenceNumber = "RGD",
-                            flagState = CountryCode.FR,
-                            ircs = "6554fEE",
-                            creationDate = ZonedDateTime.now(),
-                            value =
-                                InfractionSuspicion(
-                                    ReportingActor.OPS,
-                                    natinfCode = 123456,
-                                    authorTrigram = "LTH",
-                                    title = "A title",
-                                ),
-                            type = ReportingType.INFRACTION_SUSPICION,
+        api
+            .perform(
+                post("/bff/v1/reportings")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            CreateReportingDataInput(
+                                internalReferenceNumber = "FRFGRGR",
+                                externalReferenceNumber = "RGD",
+                                flagState = CountryCode.FR,
+                                ircs = "6554fEE",
+                                creationDate = ZonedDateTime.now(),
+                                value =
+                                    InfractionSuspicion(
+                                        ReportingActor.OPS,
+                                        natinfCode = 123456,
+                                        authorTrigram = "LTH",
+                                        title = "A title",
+                                    ),
+                                type = ReportingType.INFRACTION_SUSPICION,
+                            ),
                         ),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isCreated)
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))

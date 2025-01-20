@@ -8,12 +8,11 @@ class LogbookMessageTripSegmentDataOutput(
     val name: String,
 ) {
     companion object {
-        fun fromFleetSegment(fleetSegment: FleetSegment): LogbookMessageTripSegmentDataOutput {
-            return LogbookMessageTripSegmentDataOutput(
+        fun fromFleetSegment(fleetSegment: FleetSegment): LogbookMessageTripSegmentDataOutput =
+            LogbookMessageTripSegmentDataOutput(
                 code = fleetSegment.segment,
                 name = fleetSegment.segmentName,
             )
-        }
 
         fun fromLogbookTripSegment(logbookTripSegment: LogbookTripSegment) =
             LogbookMessageTripSegmentDataOutput(

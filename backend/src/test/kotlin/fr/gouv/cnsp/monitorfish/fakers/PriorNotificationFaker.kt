@@ -7,8 +7,8 @@ import java.time.ZonedDateTime
 
 class PriorNotificationFaker {
     companion object {
-        fun fakePriorNotification(index: Int = 1): PriorNotification {
-            return PriorNotification(
+        fun fakePriorNotification(index: Int = 1): PriorNotification =
+            PriorNotification(
                 reportId = "FAKE_REPORT_ID_$index",
                 createdAt = ZonedDateTime.now(),
                 didNotFishAfterZeroNotice = false,
@@ -26,6 +26,5 @@ class PriorNotificationFaker {
                 vessel = VesselFaker.fakeVessel(),
                 lastControlDateTime = null,
             )
-        }
     }
 }

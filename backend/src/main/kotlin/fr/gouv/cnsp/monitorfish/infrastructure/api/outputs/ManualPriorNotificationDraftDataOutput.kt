@@ -49,7 +49,11 @@ data class ManualPriorNotificationDraftDataOutput(
             // - or have an FAO area field per fishing catch
             // while in Backend, we always have an FAO area field per fishing catch.
             // So we need to check if all fishing catches have the same FAO area to know which case we are in.
-            val hasGlobalFaoArea = pnoValue.catchOnboard.mapNotNull { it.faoZone }.distinct().size == 1
+            val hasGlobalFaoArea =
+                pnoValue.catchOnboard
+                    .mapNotNull { it.faoZone }
+                    .distinct()
+                    .size == 1
             val globalFaoArea =
                 if (hasGlobalFaoArea) {
                     pnoValue.catchOnboard.first().faoZone

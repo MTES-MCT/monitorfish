@@ -55,9 +55,10 @@ abstract class AbstractDBTests {
             container.followOutput(toStringConsumer, OutputFrame.OutputType.STDOUT)
 
             return "jdbc:postgresql://" + container.host + ":" +
-                container.getMappedPort(
-                    PostgreSQLContainer.POSTGRESQL_PORT,
-                ).toString() + "/testdb?user=postgres&password=postgres"
+                container
+                    .getMappedPort(
+                        PostgreSQLContainer.POSTGRESQL_PORT,
+                    ).toString() + "/testdb?user=postgres&password=postgres"
         }
     }
 }

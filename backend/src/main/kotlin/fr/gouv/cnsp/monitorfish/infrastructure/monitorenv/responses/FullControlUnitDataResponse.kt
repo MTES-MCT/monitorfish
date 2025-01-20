@@ -19,8 +19,8 @@ data class FullControlUnitDataResponse(
     val name: String,
     val termsNote: String?,
 ) {
-    fun toFullControlUnit(): FullControlUnit {
-        return FullControlUnit(
+    fun toFullControlUnit(): FullControlUnit =
+        FullControlUnit(
             id = id,
             areaNote = areaNote,
             administration = administration.toAdministration(),
@@ -35,5 +35,4 @@ data class FullControlUnitDataResponse(
             name = name,
             termsNote = termsNote,
         )
-    }
 }

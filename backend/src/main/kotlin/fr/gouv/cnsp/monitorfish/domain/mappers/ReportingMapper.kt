@@ -17,8 +17,8 @@ object ReportingMapper {
         mapper: ObjectMapper,
         message: String?,
         reportingType: ReportingType,
-    ): ReportingValue {
-        return try {
+    ): ReportingValue =
+        try {
             if (!message.isNullOrEmpty() && message != jsonbNullString) {
                 when (reportingType) {
                     ReportingType.ALERT -> mapper.readValue(message, AlertType::class.java)
@@ -31,5 +31,4 @@ object ReportingMapper {
         } catch (e: Exception) {
             throw EntityConversionException("Error while converting 'Reporting'. $message", e)
         }
-    }
 }

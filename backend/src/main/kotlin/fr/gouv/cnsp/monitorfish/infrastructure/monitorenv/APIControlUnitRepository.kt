@@ -26,7 +26,9 @@ class APIControlUnitRepository(
             val controlUnitsUrl = "${monitorenvProperties.url}/api/v2/control_units"
 
             try {
-                apiClient.httpClient.get(controlUnitsUrl).body<List<FullControlUnitDataResponse>>()
+                apiClient.httpClient
+                    .get(controlUnitsUrl)
+                    .body<List<FullControlUnitDataResponse>>()
                     .map { it.toFullControlUnit() }
             } catch (e: Exception) {
                 logger.error("Could not fetch control units at $controlUnitsUrl", e)

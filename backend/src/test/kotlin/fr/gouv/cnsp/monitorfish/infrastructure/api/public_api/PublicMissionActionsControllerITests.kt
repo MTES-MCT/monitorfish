@@ -66,7 +66,8 @@ class PublicMissionActionsControllerITests {
         )
 
         // When
-        api.perform(get("/api/v1/mission_actions?missionId=123"))
+        api
+            .perform(get("/api/v1/mission_actions?missionId=123"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
@@ -85,18 +86,18 @@ class PublicMissionActionsControllerITests {
         given(patchMissionAction.execute(any(), any())).willReturn(newMission)
 
         // When
-        api.perform(
-            patch("/api/v1/mission_actions/123")
-                .content(
-                    """
-                    {
-                        "observationsByUnit": "OBSERVATION",
-                        "actionEndDatetimeUtc": "2024-02-01T14:29:00Z"
-                    }
-                    """.trimIndent(),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+        api
+            .perform(
+                patch("/api/v1/mission_actions/123")
+                    .content(
+                        """
+                        {
+                            "observationsByUnit": "OBSERVATION",
+                            "actionEndDatetimeUtc": "2024-02-01T14:29:00Z"
+                        }
+                        """.trimIndent(),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isOk)
     }

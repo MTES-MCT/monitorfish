@@ -30,17 +30,19 @@ data class ManualPriorNotificationFormDataOutput(
             val pnoValue = priorNotification.logbookMessageAndValue.value
 
             val expectedArrivalDate =
-                CustomZonedDateTime.fromZonedDateTime(
-                    requireNotNull(pnoValue.predictedArrivalDatetimeUtc) {
-                        "`message.predictedArrivalDatetimeUtc` is null."
-                    },
-                ).toString()
+                CustomZonedDateTime
+                    .fromZonedDateTime(
+                        requireNotNull(pnoValue.predictedArrivalDatetimeUtc) {
+                            "`message.predictedArrivalDatetimeUtc` is null."
+                        },
+                    ).toString()
             val expectedLandingDate =
-                CustomZonedDateTime.fromZonedDateTime(
-                    requireNotNull(pnoValue.predictedLandingDatetimeUtc) {
-                        "`message.predictedLandingDatetimeUtc` is null."
-                    },
-                ).toString()
+                CustomZonedDateTime
+                    .fromZonedDateTime(
+                        requireNotNull(pnoValue.predictedLandingDatetimeUtc) {
+                            "`message.predictedLandingDatetimeUtc` is null."
+                        },
+                    ).toString()
             val portLocode = requireNotNull(pnoValue.port) { "`pnoValue.port` is null." }
             val purpose = requireNotNull(pnoValue.purpose) { "`pnoValue.purpose` is null." }
             val reportId = requireNotNull(priorNotification.reportId) { "`priorNotification.reportId` is null." }
@@ -52,9 +54,10 @@ data class ManualPriorNotificationFormDataOutput(
             val updatedAt =
                 requireNotNull(
                     priorNotification.updatedAt,
-                ) { "`priorNotification.updatedAt` is null." }.withZoneSameInstant(
-                    ZoneOffset.UTC,
-                ).toString()
+                ) { "`priorNotification.updatedAt` is null." }
+                    .withZoneSameInstant(
+                        ZoneOffset.UTC,
+                    ).toString()
             requireNotNull(priorNotification.vessel) {
                 "`priorNotification.vessel` is null."
             }.id
@@ -66,7 +69,11 @@ data class ManualPriorNotificationFormDataOutput(
             // - or have an FAO area field per fishing catch
             // while in Backend, we always have an FAO area field per fishing catch.
             // So we need to check if all fishing catches have the same FAO area to know which case we are in.
-            val hasGlobalFaoArea = pnoValue.catchOnboard.mapNotNull { it.faoZone }.distinct().size == 1
+            val hasGlobalFaoArea =
+                pnoValue.catchOnboard
+                    .mapNotNull { it.faoZone }
+                    .distinct()
+                    .size == 1
             val globalFaoArea =
                 if (hasGlobalFaoArea) {
                     pnoValue.catchOnboard.first().faoZone

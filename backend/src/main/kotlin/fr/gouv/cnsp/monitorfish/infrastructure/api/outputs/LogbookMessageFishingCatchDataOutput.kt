@@ -18,8 +18,8 @@ class LogbookMessageFishingCatchDataOutput(
     var weight: Double?,
 ) {
     companion object {
-        fun fromLogbookFishingCatch(logbookFishingCatch: LogbookFishingCatch): LogbookMessageFishingCatchDataOutput {
-            return LogbookMessageFishingCatchDataOutput(
+        fun fromLogbookFishingCatch(logbookFishingCatch: LogbookFishingCatch): LogbookMessageFishingCatchDataOutput =
+            LogbookMessageFishingCatchDataOutput(
                 conversionFactor = logbookFishingCatch.conversionFactor,
                 economicZone = logbookFishingCatch.economicZone,
                 effortZone = logbookFishingCatch.effortZone,
@@ -34,6 +34,5 @@ class LogbookMessageFishingCatchDataOutput(
                 statisticalRectangle = logbookFishingCatch.statisticalRectangle,
                 weight = logbookFishingCatch.weight,
             )
-        }
     }
 }

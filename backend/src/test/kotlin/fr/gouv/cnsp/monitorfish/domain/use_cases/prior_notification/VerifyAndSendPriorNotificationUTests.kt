@@ -31,8 +31,7 @@ class VerifyAndSendPriorNotificationUTests {
                 fakePriorNotification.reportId!!,
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             ),
-        )
-            .willReturn(fakePriorNotification)
+        ).willReturn(fakePriorNotification)
         given(manualPriorNotificationRepository.findByReportId(fakePriorNotification.reportId!!))
             .willReturn(null)
         given(
@@ -41,8 +40,7 @@ class VerifyAndSendPriorNotificationUTests {
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 false,
             ),
-        )
-            .willReturn(fakePriorNotification)
+        ).willReturn(fakePriorNotification)
 
         // When
         val result =
@@ -70,8 +68,7 @@ class VerifyAndSendPriorNotificationUTests {
                 fakePriorNotification.reportId!!,
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             ),
-        )
-            .willReturn(null)
+        ).willReturn(null)
         given(manualPriorNotificationRepository.findByReportId(fakePriorNotification.reportId!!))
             .willReturn(fakePriorNotification)
         given(
@@ -80,8 +77,7 @@ class VerifyAndSendPriorNotificationUTests {
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 true,
             ),
-        )
-            .willReturn(fakePriorNotification)
+        ).willReturn(fakePriorNotification)
 
         // When
         val result =

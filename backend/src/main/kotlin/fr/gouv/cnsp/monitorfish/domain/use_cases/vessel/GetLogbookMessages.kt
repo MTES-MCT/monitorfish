@@ -35,8 +35,7 @@ class GetLogbookMessages(
                     afterDepartureDate,
                     beforeDepartureDate,
                     tripNumber,
-                )
-                .sortedBy { it.reportDateTime }
+                ).sortedBy { it.reportDateTime }
                 .map { logbookMessage ->
                     logbookMessage.operationNumber?.let { operationNumber ->
                         try {

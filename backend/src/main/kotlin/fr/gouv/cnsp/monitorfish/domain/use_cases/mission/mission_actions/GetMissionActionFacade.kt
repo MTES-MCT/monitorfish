@@ -14,15 +14,14 @@ class GetMissionActionFacade(
     private val portsRepository: PortRepository,
     private val facadeAreasRepository: FacadeAreasRepository,
 ) {
-    fun execute(action: MissionAction): Seafront? {
-        return when (action.actionType) {
+    fun execute(action: MissionAction): Seafront? =
+        when (action.actionType) {
             MissionActionType.SEA_CONTROL -> getFacadeFromCoordinates(action)
             MissionActionType.LAND_CONTROL -> getFacadeFromPort(action)
             MissionActionType.AIR_CONTROL -> getFacadeFromCoordinates(action)
             MissionActionType.AIR_SURVEILLANCE -> null
             MissionActionType.OBSERVATION -> null
         }
-    }
 
     private fun getFacadeFromCoordinates(action: MissionAction): Seafront? {
         if (action.latitude == null || action.longitude == null) {

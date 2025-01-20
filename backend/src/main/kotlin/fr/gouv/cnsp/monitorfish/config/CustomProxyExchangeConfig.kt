@@ -16,7 +16,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
     havingValue = "true",
     matchIfMissing = false,
 )
-class CustomProxyExchangeConfig(private val restTemplate: RestTemplate) : WebMvcConfigurer {
+class CustomProxyExchangeConfig(
+    private val restTemplate: RestTemplate,
+) : WebMvcConfigurer {
     override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
         resolvers.add(ProxyExchangeArgumentResolver(restTemplate))
     }

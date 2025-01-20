@@ -9,20 +9,18 @@ class PriorNotificationTypeDataOutput(
     val name: String,
 ) {
     companion object {
-        fun fromPriorNotificationType(priorNotificationType: PriorNotificationType): PriorNotificationTypeDataOutput {
-            return PriorNotificationTypeDataOutput(
+        fun fromPriorNotificationType(priorNotificationType: PriorNotificationType): PriorNotificationTypeDataOutput =
+            PriorNotificationTypeDataOutput(
                 hasDesignatedPorts = priorNotificationType.hasDesignatedPorts,
                 minimumNotificationPeriod = priorNotificationType.minimumNotificationPeriod,
                 name = priorNotificationType.name ?: "Type de préavis inconnu",
             )
-        }
 
-        fun fromPnoType(pnoType: PnoType): PriorNotificationTypeDataOutput {
-            return PriorNotificationTypeDataOutput(
+        fun fromPnoType(pnoType: PnoType): PriorNotificationTypeDataOutput =
+            PriorNotificationTypeDataOutput(
                 hasDesignatedPorts = pnoType.hasDesignatedPorts,
                 minimumNotificationPeriod = pnoType.minimumNotificationPeriod,
                 name = pnoType.name,
             )
-        }
     }
 }

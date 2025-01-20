@@ -6,10 +6,9 @@ data class UserAuthorizationDataOutput(
     val isSuperUser: Boolean,
 ) {
     companion object {
-        fun fromUserAuthorization(userAuthorization: UserAuthorization): UserAuthorizationDataOutput {
-            return UserAuthorizationDataOutput(
+        fun fromUserAuthorization(userAuthorization: UserAuthorization): UserAuthorizationDataOutput =
+            UserAuthorizationDataOutput(
                 isSuperUser = userAuthorization.isSuperUser,
             )
-        }
     }
 }

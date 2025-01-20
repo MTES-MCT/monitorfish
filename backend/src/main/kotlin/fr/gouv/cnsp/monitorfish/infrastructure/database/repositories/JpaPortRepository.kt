@@ -9,27 +9,26 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaPortRepository(private val dbPortRepository: DBPortRepository) : PortRepository {
+class JpaPortRepository(
+    private val dbPortRepository: DBPortRepository,
+) : PortRepository {
     @Cacheable(value = ["ports"])
-    override fun findAll(): List<Port> {
-        return dbPortRepository.findAll().map {
+    override fun findAll(): List<Port> =
+        dbPortRepository.findAll().map {
             it.toPort()
         }
-    }
 
     @Cacheable(value = ["active_ports"])
-    override fun findAllActive(): List<Port> {
-        return dbPortRepository.findAllByIsActiveIsTrue().map {
+    override fun findAllActive(): List<Port> =
+        dbPortRepository.findAllByIsActiveIsTrue().map {
             it.toPort()
         }
-    }
 
     @Cacheable(value = ["port"])
-    override fun findByLocode(locode: String): Port {
-        return try {
+    override fun findByLocode(locode: String): Port =
+        try {
             dbPortRepository.findByLocodeEquals(locode).toPort()
         } catch (e: EmptyResultDataAccessException) {
             throw CodeNotFoundException("Port: code $locode not found")
         }
-    }
 }

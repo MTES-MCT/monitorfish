@@ -19,9 +19,7 @@ class FaoAreaController(
 ) {
     @GetMapping("/v1/fao_areas")
     @Operation(summary = "Get FAO areas")
-    fun getFAOAreas(): List<String> {
-        return getFAOAreas.execute()
-    }
+    fun getFAOAreas(): List<String> = getFAOAreas.execute()
 
     @GetMapping("/v1/fao_areas/compute")
     @Operation(summary = "Get FAO areas")
@@ -38,7 +36,5 @@ class FaoAreaController(
         @Parameter(description = "Port Locode")
         @RequestParam(name = "portLocode")
         portLocode: String?,
-    ): List<String> {
-        return computeVesselFAOAreas.execute(internalReferenceNumber, latitude, longitude, portLocode)
-    }
+    ): List<String> = computeVesselFAOAreas.execute(internalReferenceNumber, latitude, longitude, portLocode)
 }

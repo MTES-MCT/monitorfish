@@ -7,7 +7,5 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 class GetPriorNotificationTypes(
     private val logbookReportRepository: LogbookReportRepository,
 ) {
-    fun execute(): List<String> {
-        return logbookReportRepository.findDistinctPriorNotificationTypes()
-    }
+    fun execute(): List<String> = logbookReportRepository.findDistinctPriorNotificationTypes()
 }

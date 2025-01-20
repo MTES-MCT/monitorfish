@@ -19,8 +19,8 @@ data class FleetSegmentDataOutput(
     val year: Int,
 ) {
     companion object {
-        fun fromFleetSegment(fleetSegment: FleetSegment): FleetSegmentDataOutput {
-            return FleetSegmentDataOutput(
+        fun fromFleetSegment(fleetSegment: FleetSegment): FleetSegmentDataOutput =
+            FleetSegmentDataOutput(
                 segment = fleetSegment.segment,
                 segmentName = fleetSegment.segmentName,
                 mainScipSpeciesType = fleetSegment.mainScipSpeciesType,
@@ -35,6 +35,5 @@ data class FleetSegmentDataOutput(
                 impactRiskFactor = fleetSegment.impactRiskFactor,
                 year = fleetSegment.year,
             )
-        }
     }
 }

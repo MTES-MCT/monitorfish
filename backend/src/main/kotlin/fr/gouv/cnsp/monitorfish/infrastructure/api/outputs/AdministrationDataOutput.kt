@@ -7,11 +7,10 @@ data class AdministrationDataOutput(
     val name: String,
 ) {
     companion object {
-        fun fromAdministration(administration: Administration): AdministrationDataOutput {
-            return AdministrationDataOutput(
+        fun fromAdministration(administration: Administration): AdministrationDataOutput =
+            AdministrationDataOutput(
                 id = administration.id,
                 name = administration.name,
             )
-        }
     }
 }

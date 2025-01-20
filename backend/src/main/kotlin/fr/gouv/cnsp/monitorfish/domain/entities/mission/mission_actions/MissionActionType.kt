@@ -1,6 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions
 
-enum class MissionActionType(val value: String) {
+enum class MissionActionType(
+    val value: String,
+) {
     SEA_CONTROL("SEA_CONTROL"),
     LAND_CONTROL("LAND_CONTROL"),
     AIR_CONTROL("AIR_CONTROL"),

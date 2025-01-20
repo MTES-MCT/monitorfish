@@ -10,12 +10,11 @@ data class StationDataResponse(
     val longitude: Double,
     val name: String,
 ) {
-    fun toStation(): Station {
-        return Station(
+    fun toStation(): Station =
+        Station(
             id = id,
             latitude = latitude,
             longitude = longitude,
             name = name,
         )
-    }
 }

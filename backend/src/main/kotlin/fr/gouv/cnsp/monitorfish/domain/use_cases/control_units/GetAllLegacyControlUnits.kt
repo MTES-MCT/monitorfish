@@ -8,7 +8,5 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LegacyControlUnitRepository
 class GetAllLegacyControlUnits(
     private val legacyControlUnitsRepository: LegacyControlUnitRepository,
 ) {
-    fun execute(): List<LegacyControlUnit> {
-        return legacyControlUnitsRepository.findAll()
-    }
+    fun execute(): List<LegacyControlUnit> = legacyControlUnitsRepository.findAll()
 }

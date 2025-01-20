@@ -53,7 +53,11 @@ class CreateOrUpdateManualPriorNotification(
             reportId?.let {
                 manualPriorNotificationRepository.findByReportId(reportId)
             }
-        val existingMessageValue: PNO? = existingManualPriorNotification?.logbookMessageAndValue?.logbookMessage?.message as PNO?
+        val existingMessageValue: PNO? =
+            existingManualPriorNotification
+                ?.logbookMessageAndValue
+                ?.logbookMessage
+                ?.message as PNO?
 
         // /!\ Backend computed vessel risk factor is only used as a real time Frontend indicator.
         // The Backend should NEVER update `risk_factors` DB table, only the pipeline is allowed to update it.

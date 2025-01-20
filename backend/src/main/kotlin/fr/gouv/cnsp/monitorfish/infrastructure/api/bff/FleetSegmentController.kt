@@ -22,11 +22,10 @@ class FleetSegmentController(
         @PathParam("Year")
         @PathVariable(name = "year")
         year: Int,
-    ): List<FleetSegmentDataOutput> {
-        return getAllFleetSegmentsByYearByYear.execute(year).map { fleetSegment ->
+    ): List<FleetSegmentDataOutput> =
+        getAllFleetSegmentsByYearByYear.execute(year).map { fleetSegment ->
             FleetSegmentDataOutput.fromFleetSegment(fleetSegment)
         }
-    }
 
     @PostMapping("/compute")
     @Operation(summary = "compute fleet segments for the current year")

@@ -133,7 +133,13 @@ class GetVesselControlsUTests {
             assertThat(controlResumeAndControls.numberOfControlsWithSomeSpeciesSeized).isEqualTo(2)
 
             assertThat(controlResumeAndControls.controls.first().portName).isEqualTo("Al Jazeera Port")
-            assertThat(controlResumeAndControls.controls.first().gearOnboard.first().gearName).isEqualTo(
+            assertThat(
+                controlResumeAndControls.controls
+                    .first()
+                    .gearOnboard
+                    .first()
+                    .gearName,
+            ).isEqualTo(
                 "Chalut de fond",
             )
         }

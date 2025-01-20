@@ -64,7 +64,8 @@ class FleetSegmentControllerITests {
         )
 
         // When
-        api.perform(get("/bff/v1/fleet_segments/2021"))
+        api
+            .perform(get("/bff/v1/fleet_segments/2021"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
@@ -97,47 +98,47 @@ class FleetSegmentControllerITests {
         )
 
         // When
-        api.perform(
-            post("/bff/v1/fleet_segments/compute")
-                .content(
-                    objectMapper.writeValueAsString(
-                        ComputeFleetSegmentsDataInput(
-                            faoAreas = listOf("27.1.c", "27.1.b"),
-                            vesselId = 123,
-                            gears =
-                                listOf(
-                                    GearControlDataInput(
-                                        gearCode = "OTB",
-                                        gearName = null,
-                                        declaredMesh = null,
-                                        controlledMesh = null,
-                                        hasUncontrolledMesh = null,
-                                        gearWasControlled = null,
-                                        comments = null,
+        api
+            .perform(
+                post("/bff/v1/fleet_segments/compute")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            ComputeFleetSegmentsDataInput(
+                                faoAreas = listOf("27.1.c", "27.1.b"),
+                                vesselId = 123,
+                                gears =
+                                    listOf(
+                                        GearControlDataInput(
+                                            gearCode = "OTB",
+                                            gearName = null,
+                                            declaredMesh = null,
+                                            controlledMesh = null,
+                                            hasUncontrolledMesh = null,
+                                            gearWasControlled = null,
+                                            comments = null,
+                                        ),
                                     ),
-                                ),
-                            species =
-                                listOf(
-                                    SpeciesControlDataInput(
-                                        speciesCode = "HKE",
-                                        nbFish = null,
-                                        declaredWeight = null,
-                                        controlledWeight = null,
-                                        underSized = null,
+                                species =
+                                    listOf(
+                                        SpeciesControlDataInput(
+                                            speciesCode = "HKE",
+                                            nbFish = null,
+                                            declaredWeight = null,
+                                            controlledWeight = null,
+                                            underSized = null,
+                                        ),
+                                        SpeciesControlDataInput(
+                                            speciesCode = "BFT",
+                                            nbFish = null,
+                                            declaredWeight = null,
+                                            controlledWeight = null,
+                                            underSized = null,
+                                        ),
                                     ),
-                                    SpeciesControlDataInput(
-                                        speciesCode = "BFT",
-                                        nbFish = null,
-                                        declaredWeight = null,
-                                        controlledWeight = null,
-                                        underSized = null,
-                                    ),
-                                ),
+                            ),
                         ),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))

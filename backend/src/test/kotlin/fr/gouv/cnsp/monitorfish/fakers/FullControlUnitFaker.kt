@@ -22,8 +22,8 @@ class FullControlUnitFaker {
             isArchived: Boolean = false,
             name: String = "Fake Control Unit Name",
             termsNote: String? = "Default Terms Note",
-        ): FullControlUnit {
-            return FullControlUnit(
+        ): FullControlUnit =
+            FullControlUnit(
                 id = id,
                 areaNote = areaNote,
                 administration = administration,
@@ -38,19 +38,17 @@ class FullControlUnitFaker {
                 name = name,
                 termsNote = termsNote,
             )
-        }
 
         private fun fakeAdministration(
             id: Int = 1,
             isArchived: Boolean = false,
             name: String = "Fake Administration Name",
-        ): Administration {
-            return Administration(
+        ): Administration =
+            Administration(
                 id = id,
                 isArchived = isArchived,
                 name = name,
             )
-        }
 
         private fun fakeControlUnitContact(
             id: Int = 1,
@@ -60,8 +58,8 @@ class FullControlUnitFaker {
             isSmsSubscriptionContact: Boolean = false,
             name: String = "Fake Contact Name",
             phone: String? = "+1234567890",
-        ): ControlUnitContact {
-            return ControlUnitContact(
+        ): ControlUnitContact =
+            ControlUnitContact(
                 id = id,
                 controlUnitId = controlUnitId,
                 email = email,
@@ -70,7 +68,6 @@ class FullControlUnitFaker {
                 name = name,
                 phone = phone,
             )
-        }
 
         private fun fakeFullControlUnitResource(
             id: Int = 1,
@@ -83,8 +80,8 @@ class FullControlUnitFaker {
             station: Station = StationFaker.fakeStation(),
             stationId: Int = station.id,
             type: ControlUnitResourceType = ControlUnitResourceType.FRIGATE,
-        ): FullControlUnitResource {
-            return FullControlUnitResource(
+        ): FullControlUnitResource =
+            FullControlUnitResource(
                 id = id,
                 controlUnit = controlUnit,
                 controlUnitId = controlUnitId,
@@ -96,7 +93,6 @@ class FullControlUnitFaker {
                 stationId = stationId,
                 type = type,
             )
-        }
 
         private fun fakeControlUnit(
             id: Int = 1,
@@ -106,8 +102,8 @@ class FullControlUnitFaker {
             isArchived: Boolean = false,
             name: String = "Fake Control Unit Name",
             termsNote: String? = "Default Terms Note",
-        ): ControlUnit {
-            return ControlUnit(
+        ): ControlUnit =
+            ControlUnit(
                 id = id,
                 areaNote = areaNote,
                 administrationId = administrationId,
@@ -116,16 +112,14 @@ class FullControlUnitFaker {
                 name = name,
                 termsNote = termsNote,
             )
-        }
 
         private fun fakeControlUnitDepartmentArea(
             inseeCode: String = "00000",
             name: String = "Fake Department Area Name",
-        ): ControlUnitDepartmentArea {
-            return ControlUnitDepartmentArea(
+        ): ControlUnitDepartmentArea =
+            ControlUnitDepartmentArea(
                 inseeCode = inseeCode,
                 name = name,
             )
-        }
     }
 }

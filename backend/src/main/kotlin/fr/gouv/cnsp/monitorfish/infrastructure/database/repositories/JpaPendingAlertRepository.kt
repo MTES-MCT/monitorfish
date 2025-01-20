@@ -20,14 +20,16 @@ class JpaPendingAlertRepository(
     override fun findAlertsOfTypes(types: List<AlertTypeMapping>): List<PendingAlert> {
         val rulesAsString = types.map { it.name }
 
-        return dbPendingAlertRepository.findAlertsOfRules(rulesAsString)
+        return dbPendingAlertRepository
+            .findAlertsOfRules(rulesAsString)
             .map { it.toPendingAlert(mapper) }
     }
 
-    override fun find(id: Int): PendingAlert {
-        return dbPendingAlertRepository.findById(id).get()
+    override fun find(id: Int): PendingAlert =
+        dbPendingAlertRepository
+            .findById(id)
+            .get()
             .toPendingAlert(mapper)
-    }
 
     override fun delete(id: Int) {
         dbPendingAlertRepository.deleteById(id)

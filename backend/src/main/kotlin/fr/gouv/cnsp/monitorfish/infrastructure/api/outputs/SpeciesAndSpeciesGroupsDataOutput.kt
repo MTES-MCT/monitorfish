@@ -9,11 +9,10 @@ data class SpeciesAndSpeciesGroupsDataOutput(
     companion object {
         fun fromSpeciesAndSpeciesGroups(
             speciesAndSpeciesGroups: SpeciesAndSpeciesGroups,
-        ): SpeciesAndSpeciesGroupsDataOutput {
-            return SpeciesAndSpeciesGroupsDataOutput(
+        ): SpeciesAndSpeciesGroupsDataOutput =
+            SpeciesAndSpeciesGroupsDataOutput(
                 speciesAndSpeciesGroups.species.map { SpeciesDataOutput.fromSpecies(it) },
                 speciesAndSpeciesGroups.groups.map { SpeciesGroupDataOutput.fromSpeciesGroup(it) },
             )
-        }
     }
 }

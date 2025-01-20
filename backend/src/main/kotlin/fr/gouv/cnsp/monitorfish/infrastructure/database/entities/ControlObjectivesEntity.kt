@@ -37,8 +37,8 @@ data class ControlObjectivesEntity(
         )
 
     companion object {
-        fun fromControlObjective(controlObjective: ControlObjective): ControlObjectivesEntity {
-            return ControlObjectivesEntity(
+        fun fromControlObjective(controlObjective: ControlObjective): ControlObjectivesEntity =
+            ControlObjectivesEntity(
                 facade = Seafront.from(controlObjective.facade).toString(),
                 segment = controlObjective.segment,
                 year = controlObjective.year,
@@ -46,6 +46,5 @@ data class ControlObjectivesEntity(
                 targetNumberOfControlsAtPort = controlObjective.targetNumberOfControlsAtPort,
                 controlPriorityLevel = controlObjective.controlPriorityLevel,
             )
-        }
     }
 }

@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/bff/v1/ports")
 @Tag(name = "APIs for Ports")
-class PortController(private val getActivePorts: GetActivePorts) {
+class PortController(
+    private val getActivePorts: GetActivePorts,
+) {
     @GetMapping("")
     @Operation(summary = "Get all active ports")
-    fun getActivePorts(): List<PortDataOutput> {
-        return getActivePorts.execute().map { port ->
+    fun getActivePorts(): List<PortDataOutput> =
+        getActivePorts.execute().map { port ->
             PortDataOutput.fromPort(port)
         }
-    }
 }

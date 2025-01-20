@@ -38,10 +38,21 @@ class GetBeaconMalfunctionUTests {
         given(beaconMalfunctionsRepository.find(1))
             .willReturn(
                 BeaconMalfunction(
-                    1, "FR224226850", "1236514", "IRCS",
-                    null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.ARCHIVED,
-                    ZonedDateTime.now(), null, ZonedDateTime.now(),
-                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1,
+                    1,
+                    "FR224226850",
+                    "1236514",
+                    "IRCS",
+                    null,
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    "BIDUBULE",
+                    VesselStatus.AT_SEA,
+                    Stage.ARCHIVED,
+                    ZonedDateTime.now(),
+                    null,
+                    ZonedDateTime.now(),
+                    beaconNumber = "123465",
+                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                    vesselId = 1,
                 ),
             )
         given(
@@ -49,23 +60,44 @@ class GetBeaconMalfunctionUTests {
                 eq(1),
                 any(),
             ),
-        )
-            .willReturn(
-                listOf(
-                    BeaconMalfunction(
-                        1, "FR224226850", "1236514", "IRCS",
-                        null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.ARCHIVED,
-                        ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1,
-                    ),
-                    BeaconMalfunction(
-                        2, "FR224226850", "1236514", "IRCS",
-                        null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                        ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1,
-                    ),
+        ).willReturn(
+            listOf(
+                BeaconMalfunction(
+                    1,
+                    "FR224226850",
+                    "1236514",
+                    "IRCS",
+                    null,
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    "BIDUBULE",
+                    VesselStatus.AT_SEA,
+                    Stage.ARCHIVED,
+                    ZonedDateTime.now(),
+                    null,
+                    ZonedDateTime.now(),
+                    beaconNumber = "123465",
+                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                    vesselId = 1,
                 ),
-            )
+                BeaconMalfunction(
+                    2,
+                    "FR224226850",
+                    "1236514",
+                    "IRCS",
+                    null,
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    "BIDUBULE",
+                    VesselStatus.AT_SEA,
+                    Stage.INITIAL_ENCOUNTER,
+                    ZonedDateTime.now(),
+                    null,
+                    ZonedDateTime.now(),
+                    beaconNumber = "123465",
+                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                    vesselId = 1,
+                ),
+            ),
+        )
         given(beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(1)).willReturn(
             listOf(
                 BeaconMalfunctionComment(
@@ -90,25 +122,37 @@ class GetBeaconMalfunctionUTests {
         given(beaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(1)).willReturn(
             listOf(
                 BeaconMalfunctionNotification(
-                    id = 1, beaconMalfunctionId = 1, dateTimeUtc = now,
+                    id = 1,
+                    beaconMalfunctionId = 1,
+                    dateTimeUtc = now,
                     notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
                     communicationMeans = CommunicationMeans.SMS,
                     recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                    recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000", success = true,
+                    recipientName = "Jack Sparrow",
+                    recipientAddressOrNumber = "0000000000",
+                    success = true,
                 ),
                 BeaconMalfunctionNotification(
-                    id = 2, beaconMalfunctionId = 1, dateTimeUtc = now.plusDays(2),
+                    id = 2,
+                    beaconMalfunctionId = 1,
+                    dateTimeUtc = now.plusDays(2),
                     notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_REMINDER,
                     communicationMeans = CommunicationMeans.SMS,
                     recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                    recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000", success = true,
+                    recipientName = "Jack Sparrow",
+                    recipientAddressOrNumber = "0000000000",
+                    success = true,
                 ),
                 BeaconMalfunctionNotification(
-                    id = 3, beaconMalfunctionId = 1, dateTimeUtc = now.plusNanos(123),
+                    id = 3,
+                    beaconMalfunctionId = 1,
+                    dateTimeUtc = now.plusNanos(123),
                     notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
                     communicationMeans = CommunicationMeans.EMAIL,
                     recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                    recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000", success = true,
+                    recipientName = "Jack Sparrow",
+                    recipientAddressOrNumber = "0000000000",
+                    success = true,
                 ),
             ),
         )
@@ -121,8 +165,7 @@ class GetBeaconMalfunctionUTests {
                 beaconMalfunctionActionsRepository,
                 lastPositionRepository,
                 beaconMalfunctionNotificationsRepository,
-            )
-                .execute(1)
+            ).execute(1)
 
         // Then
         assertThat(beaconMalfunctions.resume?.numberOfBeaconsAtSea).isEqualTo(1)

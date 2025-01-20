@@ -16,31 +16,28 @@ class JpaPnoPortSubscriptionRepository(
         dbPnoPortsSubscriptionsRepository.deleteByControlUnitId(controlUnitId)
     }
 
-    override fun findAll(): List<PriorNotificationPortSubscription> {
-        return dbPnoPortsSubscriptionsRepository.findAll()
+    override fun findAll(): List<PriorNotificationPortSubscription> =
+        dbPnoPortsSubscriptionsRepository
+            .findAll()
             .map { it.toPriorNotificationPortSubscription() }
-    }
 
-    override fun findByControlUnitId(controlUnitId: Int): List<PriorNotificationPortSubscription> {
-        return dbPnoPortsSubscriptionsRepository.findByControlUnitId(controlUnitId)
+    override fun findByControlUnitId(controlUnitId: Int): List<PriorNotificationPortSubscription> =
+        dbPnoPortsSubscriptionsRepository
+            .findByControlUnitId(controlUnitId)
             .map { it.toPriorNotificationPortSubscription() }
-    }
 
-    override fun has(portLocode: String): Boolean {
-        return dbPnoPortsSubscriptionsRepository.countByPortLocode(portLocode) > 0
-    }
+    override fun has(portLocode: String): Boolean = dbPnoPortsSubscriptionsRepository.countByPortLocode(portLocode) > 0
 
     @Transactional
     override fun saveAll(
         priorNotificationPortSubscriptions: List<PriorNotificationPortSubscription>,
-    ): List<PriorNotificationPortSubscription> {
-        return dbPnoPortsSubscriptionsRepository.saveAll(
-            priorNotificationPortSubscriptions.map {
-                PnoPortSubscriptionEntity.fromPriorNotificationPortSubscription(
-                    it,
-                )
-            },
-        )
-            .map { it.toPriorNotificationPortSubscription() }
-    }
+    ): List<PriorNotificationPortSubscription> =
+        dbPnoPortsSubscriptionsRepository
+            .saveAll(
+                priorNotificationPortSubscriptions.map {
+                    PnoPortSubscriptionEntity.fromPriorNotificationPortSubscription(
+                        it,
+                    )
+                },
+            ).map { it.toPriorNotificationPortSubscription() }
 }

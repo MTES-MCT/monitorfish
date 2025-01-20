@@ -18,17 +18,17 @@ class JpaSilencedAlertRepository(
         alert: PendingAlert,
         silencedBeforeDate: ZonedDateTime,
         isValidated: Boolean,
-    ): SilencedAlert {
-        return dbSilencedAlertRepository.save(
-            SilencedAlertEntity.fromPendingAlert(mapper, alert, silencedBeforeDate, isValidated),
-        ).toSilencedAlert(mapper)
-    }
+    ): SilencedAlert =
+        dbSilencedAlertRepository
+            .save(
+                SilencedAlertEntity.fromPendingAlert(mapper, alert, silencedBeforeDate, isValidated),
+            ).toSilencedAlert(mapper)
 
-    override fun save(silencedAlert: SilencedAlert): SilencedAlert {
-        return dbSilencedAlertRepository.save(
-            SilencedAlertEntity.fromSilencedAlert(mapper, silencedAlert),
-        ).toSilencedAlert(mapper)
-    }
+    override fun save(silencedAlert: SilencedAlert): SilencedAlert =
+        dbSilencedAlertRepository
+            .save(
+                SilencedAlertEntity.fromSilencedAlert(mapper, silencedAlert),
+            ).toSilencedAlert(mapper)
 
     override fun findAllCurrentSilencedAlerts(): List<SilencedAlert> {
         val now = ZonedDateTime.now()

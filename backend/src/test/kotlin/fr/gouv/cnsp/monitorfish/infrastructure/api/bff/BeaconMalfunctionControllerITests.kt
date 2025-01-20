@@ -63,16 +63,28 @@ class BeaconMalfunctionControllerITests {
         given(this.getAllBeaconMalfunctions.execute()).willReturn(
             listOf(
                 BeaconMalfunction(
-                    1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                    "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                    ZonedDateTime.now(), null, ZonedDateTime.now(),
-                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                    1,
+                    "CFR",
+                    "EXTERNAL_IMMAT",
+                    "IRCS",
+                    "fr",
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    "BIDUBULE",
+                    VesselStatus.AT_SEA,
+                    Stage.INITIAL_ENCOUNTER,
+                    ZonedDateTime.now(),
+                    null,
+                    ZonedDateTime.now(),
+                    beaconNumber = "123465",
+                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                    vesselId = 123,
                 ),
             ),
         )
 
         // When
-        api.perform(get("/bff/v1/beacon_malfunctions"))
+        api
+            .perform(get("/bff/v1/beacon_malfunctions"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
@@ -89,10 +101,21 @@ class BeaconMalfunctionControllerITests {
                 BeaconMalfunctionResumeAndDetails(
                     beaconMalfunction =
                         BeaconMalfunction(
-                            1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                            ZonedDateTime.now(), null, ZonedDateTime.now(),
-                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                            1,
+                            "CFR",
+                            "EXTERNAL_IMMAT",
+                            "IRCS",
+                            "fr",
+                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            "BIDUBULE",
+                            VesselStatus.AT_SEA,
+                            Stage.INITIAL_ENCOUNTER,
+                            ZonedDateTime.now(),
+                            null,
+                            ZonedDateTime.now(),
+                            beaconNumber = "123465",
+                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                            vesselId = 123,
                         ),
                     comments =
                         listOf(
@@ -119,15 +142,15 @@ class BeaconMalfunctionControllerITests {
             )
 
         // When
-        api.perform(
-            put("/bff/v1/beacon_malfunctions/123")
-                .content(
-                    objectMapper.writeValueAsString(
-                        UpdateBeaconMalfunctionDataInput(vesselStatus = VesselStatus.AT_SEA),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+        api
+            .perform(
+                put("/bff/v1/beacon_malfunctions/123")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            UpdateBeaconMalfunctionDataInput(vesselStatus = VesselStatus.AT_SEA),
+                        ),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.comments.length()", equalTo(1)))
@@ -143,10 +166,13 @@ class BeaconMalfunctionControllerITests {
             .willThrow(CouldNotUpdateBeaconMalfunctionException("FAIL"))
 
         // When
-        api.perform(
-            put("/bff/v1/beacon_malfunctions/123", objectMapper.writeValueAsString(UpdateControlObjectiveDataInput()))
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+        api
+            .perform(
+                put(
+                    "/bff/v1/beacon_malfunctions/123",
+                    objectMapper.writeValueAsString(UpdateControlObjectiveDataInput()),
+                ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isBadRequest)
     }
@@ -159,10 +185,21 @@ class BeaconMalfunctionControllerITests {
                 BeaconMalfunctionResumeAndDetails(
                     beaconMalfunction =
                         BeaconMalfunction(
-                            1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                            ZonedDateTime.now(), null, ZonedDateTime.now(),
-                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                            1,
+                            "CFR",
+                            "EXTERNAL_IMMAT",
+                            "IRCS",
+                            "fr",
+                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            "BIDUBULE",
+                            VesselStatus.AT_SEA,
+                            Stage.INITIAL_ENCOUNTER,
+                            ZonedDateTime.now(),
+                            null,
+                            ZonedDateTime.now(),
+                            beaconNumber = "123465",
+                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                            vesselId = 123,
                         ),
                     resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
                     comments =
@@ -195,12 +232,16 @@ class BeaconMalfunctionControllerITests {
                                 notifications =
                                     listOf(
                                         BeaconMalfunctionNotification(
-                                            id = 1, beaconMalfunctionId = 1, dateTimeUtc = dateTimeUtc,
+                                            id = 1,
+                                            beaconMalfunctionId = 1,
+                                            dateTimeUtc = dateTimeUtc,
                                             notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
                                             communicationMeans = CommunicationMeans.SMS,
                                             recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                                            recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000",
-                                            success = false, errorMessage = "This message could not be delivered",
+                                            recipientName = "Jack Sparrow",
+                                            recipientAddressOrNumber = "0000000000",
+                                            success = false,
+                                            errorMessage = "This message could not be delivered",
                                         ),
                                     ),
                             ),
@@ -209,7 +250,8 @@ class BeaconMalfunctionControllerITests {
             )
 
         // When
-        api.perform(get("/bff/v1/beacon_malfunctions/123"))
+        api
+            .perform(get("/bff/v1/beacon_malfunctions/123"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.resume.numberOfBeaconsAtSea", equalTo(1)))
@@ -220,8 +262,7 @@ class BeaconMalfunctionControllerITests {
             .andExpect(jsonPath("$.beaconMalfunction.internalReferenceNumber", equalTo("CFR")))
             .andExpect(
                 jsonPath("$.notifications[0].notificationType", equalTo("MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION")),
-            )
-            .andExpect(jsonPath("$.notifications[0].notifications[0].recipientName", equalTo("Jack Sparrow")))
+            ).andExpect(jsonPath("$.notifications[0].notifications[0].recipientName", equalTo("Jack Sparrow")))
             .andExpect(jsonPath("$.notifications[0].notifications[0].success", equalTo(false)))
             .andExpect(
                 jsonPath(
@@ -238,10 +279,21 @@ class BeaconMalfunctionControllerITests {
                 BeaconMalfunctionResumeAndDetails(
                     beaconMalfunction =
                         BeaconMalfunction(
-                            1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                            ZonedDateTime.now(), null, ZonedDateTime.now(),
-                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                            1,
+                            "CFR",
+                            "EXTERNAL_IMMAT",
+                            "IRCS",
+                            "fr",
+                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            "BIDUBULE",
+                            VesselStatus.AT_SEA,
+                            Stage.INITIAL_ENCOUNTER,
+                            ZonedDateTime.now(),
+                            null,
+                            ZonedDateTime.now(),
+                            beaconNumber = "123465",
+                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                            vesselId = 123,
                         ),
                     comments =
                         listOf(
@@ -268,7 +320,8 @@ class BeaconMalfunctionControllerITests {
             )
 
         // When
-        api.perform(get("/bff/v1/beacon_malfunctions/123"))
+        api
+            .perform(get("/bff/v1/beacon_malfunctions/123"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.resume", equalTo(null)))
@@ -285,10 +338,21 @@ class BeaconMalfunctionControllerITests {
             BeaconMalfunctionResumeAndDetails(
                 beaconMalfunction =
                     BeaconMalfunction(
-                        1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                        "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                        ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                        1,
+                        "CFR",
+                        "EXTERNAL_IMMAT",
+                        "IRCS",
+                        "fr",
+                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        "BIDUBULE",
+                        VesselStatus.AT_SEA,
+                        Stage.INITIAL_ENCOUNTER,
+                        ZonedDateTime.now(),
+                        null,
+                        ZonedDateTime.now(),
+                        beaconNumber = "123465",
+                        beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                        vesselId = 123,
                     ),
                 comments =
                     listOf(
@@ -315,15 +379,15 @@ class BeaconMalfunctionControllerITests {
         )
 
         // When
-        api.perform(
-            post("/bff/v1/beacon_malfunctions/123/comments")
-                .content(
-                    objectMapper.writeValueAsString(
-                        SaveBeaconMalfunctionCommentDataInput("A comment", BeaconMalfunctionCommentUserType.SIP),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
+        api
+            .perform(
+                post("/bff/v1/beacon_malfunctions/123/comments")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            SaveBeaconMalfunctionCommentDataInput("A comment", BeaconMalfunctionCommentUserType.SIP),
+                        ),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.comments.length()", equalTo(1)))
@@ -334,7 +398,8 @@ class BeaconMalfunctionControllerITests {
     @Test
     fun `Should request a notification`() {
         // When
-        api.perform(put("/bff/v1/beacon_malfunctions/123/MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION"))
+        api
+            .perform(put("/bff/v1/beacon_malfunctions/123/MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION"))
             // Then
             .andExpect(status().isOk)
 
@@ -348,11 +413,12 @@ class BeaconMalfunctionControllerITests {
     @Test
     fun `Should request a notification to a foreign fmc`() {
         // When
-        api.perform(
-            put(
-                "/bff/v1/beacon_malfunctions/123/MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC?requestedNotificationForeignFmcCode=ABC",
-            ),
-        )
+        api
+            .perform(
+                put(
+                    "/bff/v1/beacon_malfunctions/123/MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC?requestedNotificationForeignFmcCode=ABC",
+                ),
+            )
             // Then
             .andExpect(status().isOk)
 

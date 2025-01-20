@@ -25,11 +25,10 @@ class PendingAlertController(
 ) {
     @GetMapping("")
     @Operation(summary = "Get pending operational alerts")
-    fun getOperationalAlerts(): List<PendingAlertDataOutput> {
-        return getPendingAlerts.execute().map {
+    fun getOperationalAlerts(): List<PendingAlertDataOutput> =
+        getPendingAlerts.execute().map {
             PendingAlertDataOutput.fromPendingAlert(it)
         }
-    }
 
     @PutMapping(value = ["/{id}/validate"])
     @Operation(summary = "Validate a pending operational alert")
@@ -37,9 +36,7 @@ class PendingAlertController(
         @PathParam("Alert id")
         @PathVariable(name = "id")
         id: Int,
-    ) {
-        return validatePendingAlert.execute(id)
-    }
+    ) = validatePendingAlert.execute(id)
 
     @PutMapping(value = ["/{id}/silence"], consumes = ["application/json"])
     @Operation(summary = "Silence a pending operational alert")
@@ -62,11 +59,10 @@ class PendingAlertController(
 
     @GetMapping(value = ["/silenced"])
     @Operation(summary = "Get all silenced operational alert")
-    fun getSilencedAlerts(): List<SilencedAlertDataOutput> {
-        return getSilencedAlerts.execute().map {
+    fun getSilencedAlerts(): List<SilencedAlertDataOutput> =
+        getSilencedAlerts.execute().map {
             SilencedAlertDataOutput.fromSilencedAlert(it)
         }
-    }
 
     @DeleteMapping(value = ["/silenced/{id}"])
     @Operation(summary = "Delete a silenced operational alert")
@@ -74,9 +70,7 @@ class PendingAlertController(
         @PathParam("Alert id")
         @PathVariable(name = "id")
         id: Int,
-    ) {
-        return deleteSilencedAlert.execute(id)
-    }
+    ) = deleteSilencedAlert.execute(id)
 
     @PostMapping(value = ["/silenced"], consumes = ["application/json"])
     @Operation(summary = "Silence an operational alert")

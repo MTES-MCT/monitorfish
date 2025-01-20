@@ -50,9 +50,7 @@ class VesselController(
         @PathParam("Vessel ID")
         @PathVariable(name = "vesselId")
         vesselId: Int,
-    ): VesselDataOutput {
-        return VesselDataOutput.fromVessel(getVesselById.execute(vesselId))
-    }
+    ): VesselDataOutput = VesselDataOutput.fromVessel(getVesselById.execute(vesselId))
 
     @GetMapping("/find")
     @Operation(summary = "Get vessel information and positions")
@@ -83,8 +81,8 @@ class VesselController(
         @RequestParam(name = "beforeDateTime", required = false)
         @DateTimeFormat(pattern = zoneDateTimePattern)
         beforeDateTime: ZonedDateTime?,
-    ): ResponseEntity<VesselAndPositionsDataOutput> {
-        return runBlocking {
+    ): ResponseEntity<VesselAndPositionsDataOutput> =
+        runBlocking {
             val (vesselTrackHasBeenModified, vesselWithData) =
                 getVessel.execute(
                     vesselId,
@@ -101,7 +99,6 @@ class VesselController(
 
             ResponseEntity.status(returnCode).body(VesselAndPositionsDataOutput.fromVesselInformation(vesselWithData))
         }
-    }
 
     @GetMapping("/beacon_malfunctions")
     @Operation(summary = "Get vessel's beacon malfunctions history")
@@ -225,11 +222,10 @@ class VesselController(
         )
         @RequestParam(name = "searched")
         searched: String,
-    ): List<VesselIdentityDataOutput> {
-        return searchVessels.execute(searched).map {
+    ): List<VesselIdentityDataOutput> =
+        searchVessels.execute(searched).map {
             VesselIdentityDataOutput.fromVesselAndBeacon(it)
         }
-    }
 
     @GetMapping("/logbook/find")
     @Operation(summary = "Get vessel's Logbook messages")
@@ -258,9 +254,7 @@ class VesselController(
         @Parameter(description = "Vessel internal reference number (CFR)", required = true)
         @RequestParam(name = "internalReferenceNumber")
         internalReferenceNumber: String,
-    ): List<String> {
-        return getVesselLastTripNumbers.execute(internalReferenceNumber)
-    }
+    ): List<String> = getVesselLastTripNumbers.execute(internalReferenceNumber)
 
     @GetMapping("/risk_factor")
     @Operation(summary = "Get vessel risk factor")

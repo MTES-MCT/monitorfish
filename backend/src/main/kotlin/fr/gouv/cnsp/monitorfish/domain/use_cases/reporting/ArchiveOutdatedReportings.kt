@@ -8,7 +8,9 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.transaction.annotation.Transactional
 
 @UseCase
-class ArchiveOutdatedReportings(private val reportingRepository: ReportingRepository) {
+class ArchiveOutdatedReportings(
+    private val reportingRepository: ReportingRepository,
+) {
     private val logger = LoggerFactory.getLogger(ArchiveOutdatedReportings::class.java)
 
     // At every 5 minutes, after 1 minute of initial delay
@@ -19,16 +21,20 @@ class ArchiveOutdatedReportings(private val reportingRepository: ReportingReposi
         val expiredReportingsToArchive = reportingRepository.findExpiredReportings()
 
         val filteredReportingIdsToArchive =
-            reportingCandidatesToArchive.filter {
-                it.second.type == AlertTypeMapping.MISSING_FAR_ALERT ||
-                    it.second.type == AlertTypeMapping.THREE_MILES_TRAWLING_ALERT ||
-                    it.second.type == AlertTypeMapping.MISSING_DEP_ALERT ||
-                    it.second.type == AlertTypeMapping.SUSPICION_OF_UNDER_DECLARATION_ALERT
-            }.map { it.first }
+            reportingCandidatesToArchive
+                .filter {
+                    it.second.type == AlertTypeMapping.MISSING_FAR_ALERT ||
+                        it.second.type == AlertTypeMapping.THREE_MILES_TRAWLING_ALERT ||
+                        it.second.type == AlertTypeMapping.MISSING_DEP_ALERT ||
+                        it.second.type == AlertTypeMapping.SUSPICION_OF_UNDER_DECLARATION_ALERT
+                }.map { it.first }
 
         logger.info("Found ${filteredReportingIdsToArchive.size} reportings alerts to archive.")
         logger.info("Found ${expiredReportingsToArchive.size} expired reportings to archive.")
-        val numberOfArchivedReportings = reportingRepository.archiveReportings(filteredReportingIdsToArchive + expiredReportingsToArchive)
+        val numberOfArchivedReportings =
+            reportingRepository.archiveReportings(
+                filteredReportingIdsToArchive + expiredReportingsToArchive,
+            )
 
         logger.info("Archived $numberOfArchivedReportings reportings")
     }

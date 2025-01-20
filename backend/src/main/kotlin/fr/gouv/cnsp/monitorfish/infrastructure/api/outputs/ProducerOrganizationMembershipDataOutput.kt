@@ -11,12 +11,11 @@ data class ProducerOrganizationMembershipDataOutput(
     companion object {
         fun fromProducerOrganizationMembership(
             producerOrganizationMembership: ProducerOrganizationMembership,
-        ): ProducerOrganizationMembershipDataOutput {
-            return ProducerOrganizationMembershipDataOutput(
+        ): ProducerOrganizationMembershipDataOutput =
+            ProducerOrganizationMembershipDataOutput(
                 internalReferenceNumber = producerOrganizationMembership.internalReferenceNumber,
                 joiningDate = producerOrganizationMembership.joiningDate,
                 organizationName = producerOrganizationMembership.organizationName,
             )
-        }
     }
 }

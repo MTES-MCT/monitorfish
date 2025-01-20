@@ -14,7 +14,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.NotImplemented 
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO as PNOMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.RTP as RTPMessage
 
-enum class LogbookMessageTypeMapping(private val clazz: Class<out LogbookMessageValue>) : IHasImplementation {
+enum class LogbookMessageTypeMapping(
+    private val clazz: Class<out LogbookMessageValue>,
+) : IHasImplementation {
     FAR(FARMessage::class.java),
     CPS(CPSMessage::class.java),
     DEP(DEPMessage::class.java),
@@ -37,17 +39,14 @@ enum class LogbookMessageTypeMapping(private val clazz: Class<out LogbookMessage
     `START-FISHING`(NotImplementedMessage::class.java),
     ;
 
-    override fun getImplementation(): Class<out LogbookMessageValue> {
-        return clazz
-    }
+    override fun getImplementation(): Class<out LogbookMessageValue> = clazz
 
     companion object {
-        fun getClassFromName(messageType: String): Class<out LogbookMessageValue> {
-            return try {
+        fun getClassFromName(messageType: String): Class<out LogbookMessageValue> =
+            try {
                 entries.first { it.name == messageType }.getImplementation()
             } catch (e: Exception) {
                 throw NoSuchElementException("Message type $messageType not found", e)
             }
-        }
     }
 }

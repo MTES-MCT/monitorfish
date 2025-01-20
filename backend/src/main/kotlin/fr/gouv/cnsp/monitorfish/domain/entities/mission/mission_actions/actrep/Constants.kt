@@ -213,6 +213,4 @@ val EU_QUOTAS_SPECIES =
 fun generateSpeciesWithFaoCode(
     faoZones: FaoZones,
     species: List<String>,
-): List<FaoZonesAndSpecy> {
-    return species.map { Pair(faoZones, it) }
-}
+): List<FaoZonesAndSpecy> = species.map { Pair(faoZones, it) }

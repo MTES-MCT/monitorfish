@@ -7,11 +7,10 @@ data class SpeciesGroupDataOutput(
     val comment: String,
 ) {
     companion object {
-        fun fromSpeciesGroup(speciesGroup: SpeciesGroup): SpeciesGroupDataOutput {
-            return SpeciesGroupDataOutput(
+        fun fromSpeciesGroup(speciesGroup: SpeciesGroup): SpeciesGroupDataOutput =
+            SpeciesGroupDataOutput(
                 group = speciesGroup.group,
                 comment = speciesGroup.comment,
             )
-        }
     }
 }

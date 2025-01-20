@@ -60,10 +60,11 @@ class SecurityConfigITests {
             )
 
             // When
-            mockMvc.perform(
-                get("/bff/v1/ports")
-                    .header("Authorization", "Bearer $jwtSignedByAnotherPrivateKey"),
-            )
+            mockMvc
+                .perform(
+                    get("/bff/v1/ports")
+                        .header("Authorization", "Bearer $jwtSignedByAnotherPrivateKey"),
+                )
                 // Then
                 .andExpect(status().isUnauthorized)
                 .andExpect(
@@ -109,7 +110,8 @@ class SecurityConfigITests {
             )
 
             // When
-            mockMvc.perform(get("/bff/v1/ports"))
+            mockMvc
+                .perform(get("/bff/v1/ports"))
                 // Then
                 .andExpect(status().isUnauthorized)
         }
@@ -121,7 +123,8 @@ class SecurityConfigITests {
             `when`(buildProperties.get("commit.hash")).thenReturn("DUMMY HASH")
 
             // When
-            mockMvc.perform(get("/version"))
+            mockMvc
+                .perform(get("/version"))
                 // Then
                 .andExpect(status().isOk)
         }
@@ -129,7 +132,8 @@ class SecurityConfigITests {
         @Test
         fun `Should return 200 When the root path is not protected (and redirected to error)`() {
             // When
-            mockMvc.perform(get("/"))
+            mockMvc
+                .perform(get("/"))
                 // Then
                 .andExpect(status().isOk)
         }
@@ -180,10 +184,11 @@ class SecurityConfigITests {
             )
 
             // When
-            mockMvc.perform(
-                get("/bff/v1/ports")
-                    .header("Authorization", "Bearer $jwt"),
-            )
+            mockMvc
+                .perform(
+                    get("/bff/v1/ports")
+                        .header("Authorization", "Bearer $jwt"),
+                )
                 // Then
                 .andExpect(status().isOk)
         }
@@ -225,10 +230,11 @@ class SecurityConfigITests {
             )
 
             // When
-            mockMvc.perform(
-                get("/bff/v1/ports")
-                    .header("Authorization", "Bearer $jwt"),
-            )
+            mockMvc
+                .perform(
+                    get("/bff/v1/ports")
+                        .header("Authorization", "Bearer $jwt"),
+                )
                 // Then
                 .andExpect(status().isUnauthorized)
                 .andExpect(

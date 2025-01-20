@@ -7,8 +7,8 @@ data class VesselAndPositionsDataOutput(
     val vessel: VesselDataOutput?,
 ) {
     companion object {
-        fun fromVesselInformation(vesselInformation: VesselInformation): VesselAndPositionsDataOutput {
-            return VesselAndPositionsDataOutput(
+        fun fromVesselInformation(vesselInformation: VesselInformation): VesselAndPositionsDataOutput =
+            VesselAndPositionsDataOutput(
                 vessel =
                     VesselDataOutput.fromVesselAndRelatedDatas(
                         vessel = vesselInformation.vessel,
@@ -21,6 +21,5 @@ data class VesselAndPositionsDataOutput(
                         PositionDataOutput.fromPosition(it)
                     },
             )
-        }
     }
 }

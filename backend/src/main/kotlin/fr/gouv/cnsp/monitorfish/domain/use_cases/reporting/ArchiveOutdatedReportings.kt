@@ -31,7 +31,10 @@ class ArchiveOutdatedReportings(
 
         logger.info("Found ${filteredReportingIdsToArchive.size} reportings alerts to archive.")
         logger.info("Found ${expiredReportingsToArchive.size} expired reportings to archive.")
-        val numberOfArchivedReportings = reportingRepository.archiveReportings(filteredReportingIdsToArchive + expiredReportingsToArchive)
+        val numberOfArchivedReportings =
+            reportingRepository.archiveReportings(
+                filteredReportingIdsToArchive + expiredReportingsToArchive,
+            )
 
         logger.info("Archived $numberOfArchivedReportings reportings")
     }

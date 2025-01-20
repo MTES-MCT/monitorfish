@@ -170,8 +170,8 @@ class JpaReportingRepository(
         dbReportingRepository.archiveReporting(id)
     }
 
-    override fun findUnarchivedReportingsAfterNewVoyage(): List<Pair<Int, AlertType>> {
-        return dbReportingRepository.findAllUnarchivedAfterDEPLogbookMessage().map { result ->
+    override fun findUnarchivedReportingsAfterNewVoyage(): List<Pair<Int, AlertType>> =
+        dbReportingRepository.findAllUnarchivedAfterDEPLogbookMessage().map { result ->
             Pair(
                 result[0] as Int,
                 ReportingMapper.getReportingValueFromJSON(
@@ -182,13 +182,9 @@ class JpaReportingRepository(
             )
         }
 
-    override fun findExpiredReportings(): List<Int> {
-        return dbReportingRepository.findExpiredReportings()
-    }
+    override fun findExpiredReportings(): List<Int> = dbReportingRepository.findExpiredReportings()
 
-    override fun archiveReportings(ids: List<Int>): Int {
-        return dbReportingRepository.archiveReportings(ids)
-    }
+    override fun archiveReportings(ids: List<Int>): Int = dbReportingRepository.archiveReportings(ids)
 
     @Transactional
     override fun delete(id: Int) {

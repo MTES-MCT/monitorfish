@@ -17,7 +17,7 @@ import { priorNotificationReducer, type PriorNotificationState } from '@features
 import { backofficePriorNotificationReducer } from '@features/PriorNotification/slice.backoffice'
 import { backofficeProducerOrganizationMembershipReducer } from '@features/ProducerOrganizationMembership/slice.backoffice'
 import { regulatoryLayerSearchReducer } from '@features/Regulation/components/RegulationSearch/slice'
-import { regulationReducer } from '@features/Regulation/slice'
+import { regulationReducer, type RegulationState } from '@features/Regulation/slice'
 import { reportingTableFiltersReducer } from '@features/Reporting/components/ReportingTable/Filters/slice'
 import { reportingReducer } from '@features/Reporting/slice'
 import { sideWindowReducer } from '@features/SideWindow/slice'
@@ -63,7 +63,10 @@ const commonReducerList = {
   gear: gearReducer,
   global: globalSliceReducer,
   map: mapReducer,
-  regulation: regulationReducer,
+  regulation: persistReducerTyped(
+    { ...getCommonPersistReducerConfig<RegulationState>('backofficePersistorRegulation', ['processingRegulation']) },
+    regulationReducer
+  ),
   species: speciesReducer
 }
 

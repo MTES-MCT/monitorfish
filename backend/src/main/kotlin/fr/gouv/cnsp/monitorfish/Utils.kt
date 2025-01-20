@@ -27,12 +27,11 @@ class Utils {
             start: ZonedDateTime,
             end: ZonedDateTime,
             isInclusive: Boolean = false,
-        ): Boolean {
-            return if (isInclusive) {
+        ): Boolean =
+            if (isInclusive) {
                 zonedDateTime >= start && zonedDateTime <= end
             } else {
                 zonedDateTime > start && zonedDateTime < end
             }
-        }
     }
 }

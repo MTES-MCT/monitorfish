@@ -1084,13 +1084,12 @@ class GetActivityReportsUTests {
 
     companion object {
         @JvmStatic
-        private fun getDoubleCountTestCases(): Stream<Arguments> {
-            return Stream.of(
+        private fun getDoubleCountTestCases(): Stream<Arguments> =
+            Stream.of(
                 Arguments.of(MissionActionType.LAND_CONTROL, JointDeploymentPlan.WESTERN_WATERS),
                 Arguments.of(MissionActionType.SEA_CONTROL, JointDeploymentPlan.WESTERN_WATERS),
                 Arguments.of(MissionActionType.LAND_CONTROL, JointDeploymentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC),
                 Arguments.of(MissionActionType.SEA_CONTROL, JointDeploymentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC),
             )
-        }
     }
 }

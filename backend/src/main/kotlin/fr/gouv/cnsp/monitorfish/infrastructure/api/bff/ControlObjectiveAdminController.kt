@@ -27,24 +27,19 @@ class ControlObjectiveAdminController(
         @PathParam("Year")
         @PathVariable(name = "year")
         year: Int,
-    ): List<ControlObjectiveDataOutput> {
-        return getControlObjectivesOfYear.execute(year).map { controlObjective ->
+    ): List<ControlObjectiveDataOutput> =
+        getControlObjectivesOfYear.execute(year).map { controlObjective ->
             ControlObjectiveDataOutput.fromControlObjective(controlObjective)
         }
-    }
 
     @GetMapping("/years")
     @Operation(summary = "Get control objective year entries")
-    fun getControlObjectiveYearEntries(): List<Int> {
-        return getControlObjectiveYearEntries.execute()
-    }
+    fun getControlObjectiveYearEntries(): List<Int> = getControlObjectiveYearEntries.execute()
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/years")
     @Operation(summary = "Add a control objective year")
-    fun addControlObjectiveYear() {
-        return addControlObjectiveYear.execute()
-    }
+    fun addControlObjectiveYear() = addControlObjectiveYear.execute()
 
     @PutMapping(value = ["/{controlObjectiveId}"], consumes = ["application/json"])
     @Operation(summary = "Update a control objective")
@@ -78,11 +73,10 @@ class ControlObjectiveAdminController(
     fun addControlObjective(
         @RequestBody
         addControlObjectiveData: AddControlObjectiveDataInput,
-    ): Int {
-        return addControlObjective.execute(
+    ): Int =
+        addControlObjective.execute(
             segment = addControlObjectiveData.segment,
             facade = addControlObjectiveData.facade,
             year = addControlObjectiveData.year,
         )
-    }
 }

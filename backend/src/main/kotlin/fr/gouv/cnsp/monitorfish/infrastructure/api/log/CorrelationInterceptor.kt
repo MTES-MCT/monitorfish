@@ -45,7 +45,5 @@ class CorrelationInterceptor : HandlerInterceptor {
         return correlationId
     }
 
-    private fun generateUniqueCorrelationId(): String {
-        return UUID.randomUUID().toString()
-    }
+    private fun generateUniqueCorrelationId(): String = UUID.randomUUID().toString()
 }

@@ -5,7 +5,9 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotDeleteException
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 
 @UseCase
-class DeleteMissionAction(private val missionActionsRepository: MissionActionsRepository) {
+class DeleteMissionAction(
+    private val missionActionsRepository: MissionActionsRepository,
+) {
     @Throws(CouldNotDeleteException::class)
     fun execute(actionId: Int) {
         try {

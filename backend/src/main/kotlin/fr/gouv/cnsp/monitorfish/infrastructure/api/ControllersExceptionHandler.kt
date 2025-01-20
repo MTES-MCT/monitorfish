@@ -18,20 +18,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 @Order(LOWEST_PRECEDENCE)
-class ControllersExceptionHandler(val sentryConfig: SentryConfig) {
+class ControllersExceptionHandler(
+    val sentryConfig: SentryConfig,
+) {
     private val logger: Logger = LoggerFactory.getLogger(ControllersExceptionHandler::class.java)
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(BackendInternalException::class)
-    fun handleBackendInternalException(e: BackendInternalException): BackendInternalErrorDataOutput {
-        return BackendInternalErrorDataOutput(code = e.code, message = e.message)
-    }
+    fun handleBackendInternalException(e: BackendInternalException): BackendInternalErrorDataOutput =
+        BackendInternalErrorDataOutput(code = e.code, message = e.message)
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(BackendRequestException::class)
-    fun handleBackendRequestException(e: BackendRequestException): BackendRequestErrorDataOutput {
-        return BackendRequestErrorDataOutput(code = e.code, data = e.data, message = e.message)
-    }
+    fun handleBackendRequestException(e: BackendRequestException): BackendRequestErrorDataOutput =
+        BackendRequestErrorDataOutput(code = e.code, data = e.data, message = e.message)
 
     @ExceptionHandler(BackendUsageException::class)
     fun handleBackendUsageException(e: BackendUsageException): ResponseEntity<BackendUsageErrorDataOutput> {

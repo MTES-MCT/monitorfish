@@ -141,8 +141,18 @@ class GetVesselPositionsUTests {
         // Then
         assertThat(pair.first).isTrue
         runBlocking {
-            assertThat(pair.second.await().first().dateTime).isEqualTo(now.minusHours(4))
-            assertThat(pair.second.await().last().dateTime).isEqualTo(now.minusHours(1))
+            assertThat(
+                pair.second
+                    .await()
+                    .first()
+                    .dateTime,
+            ).isEqualTo(now.minusHours(4))
+            assertThat(
+                pair.second
+                    .await()
+                    .last()
+                    .dateTime,
+            ).isEqualTo(now.minusHours(1))
         }
     }
 

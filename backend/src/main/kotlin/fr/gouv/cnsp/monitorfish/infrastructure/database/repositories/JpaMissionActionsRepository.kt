@@ -17,53 +17,50 @@ class JpaMissionActionsRepository(
     override fun findVesselMissionActionsAfterDateTime(
         vesselId: Int,
         afterDateTime: ZonedDateTime,
-    ): List<MissionAction> {
-        return dbMissionActionsRepository.findAllByVesselIdEqualsAndActionDatetimeUtcAfterAndIsDeletedIsFalse(
-            vesselId,
-            afterDateTime.toInstant(),
-        ).map { control -> control.toMissionAction(mapper) }
-    }
+    ): List<MissionAction> =
+        dbMissionActionsRepository
+            .findAllByVesselIdEqualsAndActionDatetimeUtcAfterAndIsDeletedIsFalse(
+                vesselId,
+                afterDateTime.toInstant(),
+            ).map { control -> control.toMissionAction(mapper) }
 
-    override fun findByMissionId(missionId: Int): List<MissionAction> {
-        return dbMissionActionsRepository.findAllByMissionIdAndIsDeletedIsFalse(missionId).map { action ->
+    override fun findByMissionId(missionId: Int): List<MissionAction> =
+        dbMissionActionsRepository.findAllByMissionIdAndIsDeletedIsFalse(missionId).map { action ->
             action.toMissionAction(
                 mapper,
             )
         }
-    }
 
-    override fun findMissionActionsIn(missionIds: List<Int>): List<MissionAction> {
-        return dbMissionActionsRepository.findAllByMissionIdInAndIsDeletedIsFalse(missionIds).map { action ->
+    override fun findMissionActionsIn(missionIds: List<Int>): List<MissionAction> =
+        dbMissionActionsRepository.findAllByMissionIdInAndIsDeletedIsFalse(missionIds).map { action ->
             action.toMissionAction(
                 mapper,
             )
         }
-    }
 
-    override fun save(missionAction: MissionAction): MissionAction {
-        return dbMissionActionsRepository.save(MissionActionEntity.fromMissionAction(mapper, missionAction))
+    override fun save(missionAction: MissionAction): MissionAction =
+        dbMissionActionsRepository
+            .save(MissionActionEntity.fromMissionAction(mapper, missionAction))
             .toMissionAction(mapper)
-    }
 
-    override fun findById(id: Int): MissionAction {
-        return dbMissionActionsRepository.findById(id).get().toMissionAction(mapper)
-    }
+    override fun findById(id: Int): MissionAction =
+        dbMissionActionsRepository.findById(id).get().toMissionAction(mapper)
 
     override fun findSeaAndLandControlBetweenDates(
         beforeDateTime: ZonedDateTime,
         afterDateTime: ZonedDateTime,
-    ): List<MissionAction> {
-        return dbMissionActionsRepository.findAllByActionDatetimeUtcBeforeAndActionDatetimeUtcAfterAndIsDeletedIsFalseAndActionTypeIn(
-            beforeDateTime.toInstant(),
-            afterDateTime.toInstant(),
-            listOf(
-                MissionActionType.SEA_CONTROL,
-                MissionActionType.LAND_CONTROL,
-            ),
-        ).map { action ->
-            action.toMissionAction(
-                mapper,
-            )
-        }
-    }
+    ): List<MissionAction> =
+        dbMissionActionsRepository
+            .findAllByActionDatetimeUtcBeforeAndActionDatetimeUtcAfterAndIsDeletedIsFalseAndActionTypeIn(
+                beforeDateTime.toInstant(),
+                afterDateTime.toInstant(),
+                listOf(
+                    MissionActionType.SEA_CONTROL,
+                    MissionActionType.LAND_CONTROL,
+                ),
+            ).map { action ->
+                action.toMissionAction(
+                    mapper,
+                )
+            }
 }

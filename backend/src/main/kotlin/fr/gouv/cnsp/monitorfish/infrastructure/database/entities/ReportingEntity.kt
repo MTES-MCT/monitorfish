@@ -62,8 +62,8 @@ data class ReportingEntity(
     @Column(name = "longitude")
     val longitude: Double? = null,
 ) {
-    fun toReporting(mapper: ObjectMapper): Reporting {
-        return Reporting(
+    fun toReporting(mapper: ObjectMapper): Reporting =
+        Reporting(
             id = id,
             vesselId = vesselId,
             type = type,
@@ -82,7 +82,6 @@ data class ReportingEntity(
             latitude = latitude,
             longitude = longitude,
         )
-    }
 
     companion object {
         fun fromPendingAlert(

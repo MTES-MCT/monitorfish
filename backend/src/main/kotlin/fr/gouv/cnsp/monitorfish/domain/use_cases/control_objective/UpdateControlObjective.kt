@@ -5,7 +5,9 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjective
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository
 
 @UseCase
-class UpdateControlObjective(private val controlObjectivesRepository: ControlObjectivesRepository) {
+class UpdateControlObjective(
+    private val controlObjectivesRepository: ControlObjectivesRepository,
+) {
     @Throws(CouldNotUpdateControlObjectiveException::class, IllegalArgumentException::class)
     fun execute(
         id: Int,

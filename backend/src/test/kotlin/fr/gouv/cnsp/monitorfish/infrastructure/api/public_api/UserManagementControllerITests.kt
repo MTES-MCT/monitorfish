@@ -36,11 +36,13 @@ class UserManagementControllerITests {
     @Test
     fun `Should save an user`() {
         // When
-        api.perform(
-            post("/api/v1/authorization/management").content(
-                objectMapper.writeValueAsString(AddUserDataInput("dummy@email.com", true)),
-            ).contentType(MediaType.APPLICATION_JSON),
-        )
+        api
+            .perform(
+                post("/api/v1/authorization/management")
+                    .content(
+                        objectMapper.writeValueAsString(AddUserDataInput("dummy@email.com", true)),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
             // Then
             .andExpect(status().isCreated)
     }
@@ -48,7 +50,8 @@ class UserManagementControllerITests {
     @Test
     fun `Should delete an user`() {
         // When
-        api.perform(delete("/api/v1/authorization/management/dummy@email.com"))
+        api
+            .perform(delete("/api/v1/authorization/management/dummy@email.com"))
             // Then
             .andExpect(status().isOk)
     }

@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository
 class JpaBeaconMalfunctionNotificationsRepository(
     private val dbBeaconMalfunctionNotificationsRepository: DBBeaconMalfunctionNotificationsRepository,
 ) : BeaconMalfunctionNotificationsRepository {
-    override fun findAllByBeaconMalfunctionId(beaconMalfunctionId: Int): List<BeaconMalfunctionNotification> {
-        return dbBeaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(beaconMalfunctionId)
+    override fun findAllByBeaconMalfunctionId(beaconMalfunctionId: Int): List<BeaconMalfunctionNotification> =
+        dbBeaconMalfunctionNotificationsRepository
+            .findAllByBeaconMalfunctionId(beaconMalfunctionId)
             .map {
                 it.toBeaconMalfunctionNotification()
             }
-    }
 }

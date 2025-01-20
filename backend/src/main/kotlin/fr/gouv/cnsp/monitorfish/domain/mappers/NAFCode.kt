@@ -2,7 +2,9 @@ package fr.gouv.cnsp.monitorfish.domain.mappers
 
 import java.util.regex.Pattern
 
-enum class NAFCode(val code: String) {
+enum class NAFCode(
+    val code: String,
+) {
     START_RECORD("SR"),
     END_RECORD("ER"),
     FROM("FR"),

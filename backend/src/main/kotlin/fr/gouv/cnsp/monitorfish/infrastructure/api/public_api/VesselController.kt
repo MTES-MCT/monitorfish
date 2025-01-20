@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController
 class PublicVesselController(
     private val searchVessels: SearchVessels,
 ) {
-
     @GetMapping("/search")
     @Operation(summary = "Search vessels")
     fun searchVessel(
@@ -27,9 +26,8 @@ class PublicVesselController(
         )
         @RequestParam(name = "searched")
         searched: String,
-    ): List<VesselIdentityDataOutput> {
-        return searchVessels.execute(searched).map {
+    ): List<VesselIdentityDataOutput> =
+        searchVessels.execute(searched).map {
             VesselIdentityDataOutput.fromVesselAndBeacon(it)
         }
-    }
 }

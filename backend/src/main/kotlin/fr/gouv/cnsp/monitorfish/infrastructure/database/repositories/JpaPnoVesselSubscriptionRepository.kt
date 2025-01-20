@@ -16,31 +16,28 @@ class JpaPnoVesselSubscriptionRepository(
         dbPnoVesselsSubscriptionsRepository.deleteByControlUnitId(controlUnitId)
     }
 
-    override fun findAll(): List<PriorNotificationVesselSubscription> {
-        return dbPnoVesselsSubscriptionsRepository.findAll()
+    override fun findAll(): List<PriorNotificationVesselSubscription> =
+        dbPnoVesselsSubscriptionsRepository
+            .findAll()
             .map { it.toPriorNotificationVesselSubscription() }
-    }
 
-    override fun findByControlUnitId(controlUnitId: Int): List<PriorNotificationVesselSubscription> {
-        return dbPnoVesselsSubscriptionsRepository.findByControlUnitId(controlUnitId)
+    override fun findByControlUnitId(controlUnitId: Int): List<PriorNotificationVesselSubscription> =
+        dbPnoVesselsSubscriptionsRepository
+            .findByControlUnitId(controlUnitId)
             .map { it.toPriorNotificationVesselSubscription() }
-    }
 
-    override fun has(vesselId: Int): Boolean {
-        return dbPnoVesselsSubscriptionsRepository.countByVesselId(vesselId) > 0
-    }
+    override fun has(vesselId: Int): Boolean = dbPnoVesselsSubscriptionsRepository.countByVesselId(vesselId) > 0
 
     @Transactional
     override fun saveAll(
         priorNotificationVesselSubscriptions: List<PriorNotificationVesselSubscription>,
-    ): List<PriorNotificationVesselSubscription> {
-        return dbPnoVesselsSubscriptionsRepository.saveAll(
-            priorNotificationVesselSubscriptions.map {
-                PnoVesselSubscriptionEntity.fromPriorNotificationVesselSubscription(
-                    it,
-                )
-            },
-        )
-            .map { it.toPriorNotificationVesselSubscription() }
-    }
+    ): List<PriorNotificationVesselSubscription> =
+        dbPnoVesselsSubscriptionsRepository
+            .saveAll(
+                priorNotificationVesselSubscriptions.map {
+                    PnoVesselSubscriptionEntity.fromPriorNotificationVesselSubscription(
+                        it,
+                    )
+                },
+            ).map { it.toPriorNotificationVesselSubscription() }
 }

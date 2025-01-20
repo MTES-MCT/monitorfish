@@ -24,8 +24,8 @@ data class BeaconMalfunctionDataOutput(
     val beaconNumber: String? = null,
 ) {
     companion object {
-        fun fromBeaconMalfunction(beaconMalfunction: BeaconMalfunction): BeaconMalfunctionDataOutput {
-            return BeaconMalfunctionDataOutput(
+        fun fromBeaconMalfunction(beaconMalfunction: BeaconMalfunction): BeaconMalfunctionDataOutput =
+            BeaconMalfunctionDataOutput(
                 id = beaconMalfunction.id,
                 internalReferenceNumber = beaconMalfunction.internalReferenceNumber,
                 ircs = beaconMalfunction.ircs,
@@ -44,6 +44,5 @@ data class BeaconMalfunctionDataOutput(
                 beaconNumber = beaconMalfunction.beaconNumber,
                 vesselId = beaconMalfunction.vesselId,
             )
-        }
     }
 }

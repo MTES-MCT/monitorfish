@@ -51,11 +51,10 @@ class FleetSegmentAdminController(
         @Parameter(description = "Segment")
         @RequestParam(name = "segment")
         segment: String,
-    ): List<FleetSegmentDataOutput> {
-        return deleteFleetSegment.execute(segment, year).map {
+    ): List<FleetSegmentDataOutput> =
+        deleteFleetSegment.execute(segment, year).map {
             FleetSegmentDataOutput.fromFleetSegment(it)
         }
-    }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = [""])
@@ -71,9 +70,7 @@ class FleetSegmentAdminController(
 
     @GetMapping("/years")
     @Operation(summary = "Get fleet segment year entries")
-    fun getFleetSegmentYearEntries(): List<Int> {
-        return getFleetSegmentYearEntries.execute()
-    }
+    fun getFleetSegmentYearEntries(): List<Int> = getFleetSegmentYearEntries.execute()
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{year}")
@@ -82,7 +79,5 @@ class FleetSegmentAdminController(
         @PathParam("Year")
         @PathVariable(name = "year")
         year: Int,
-    ) {
-        return addFleetSegmentYear.execute(year)
-    }
+    ) = addFleetSegmentYear.execute(year)
 }

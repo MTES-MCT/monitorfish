@@ -144,7 +144,8 @@ class APIMissionRepositoryITest {
             // When
             val controlUnits =
                 APIMissionRepository(monitorenvProperties, apiClient)
-                    .findControlUnitsOfMission(this, 1).await()
+                    .findControlUnitsOfMission(this, 1)
+                    .await()
 
             // Then
             assertThat(controlUnits).hasSize(3)
@@ -174,7 +175,8 @@ class APIMissionRepositoryITest {
             // When
             val controlUnits =
                 APIMissionRepository(monitorenvProperties, apiClient)
-                    .findControlUnitsOfMission(this, 1).await()
+                    .findControlUnitsOfMission(this, 1)
+                    .await()
 
             // Then
             assertThat(controlUnits).hasSize(0)
@@ -213,10 +215,14 @@ class APIMissionRepositoryITest {
 
             // Then
             assertThat(missions).hasSize(12)
-            assertThat(mockEngine.requestHistory.first().url.toString())
-                .isEqualTo(
-                    "http://test/api/v1/missions?pageNumber=&pageSize=&startedAfterDateTime=&startedBeforeDateTime=",
-                )
+            assertThat(
+                mockEngine.requestHistory
+                    .first()
+                    .url
+                    .toString(),
+            ).isEqualTo(
+                "http://test/api/v1/missions?pageNumber=&pageSize=&startedAfterDateTime=&startedBeforeDateTime=",
+            )
         }
     }
 
@@ -252,9 +258,13 @@ class APIMissionRepositoryITest {
 
             // Then
             assertThat(missions).hasSize(12)
-            assertThat(mockEngine.requestHistory.first().url.toString())
-                .isEqualTo(
-                    """
+            assertThat(
+                mockEngine.requestHistory
+                    .first()
+                    .url
+                    .toString(),
+            ).isEqualTo(
+                """
                     http://test/api/v1/missions?
                     pageNumber=1&
                     pageSize=2&
@@ -264,7 +274,7 @@ class APIMissionRepositoryITest {
                     missionTypes=SEA,LAND&
                     seaFronts=MED
                 """.trim().replace("\\s+".toRegex(), ""),
-                )
+            )
         }
     }
 
@@ -291,10 +301,14 @@ class APIMissionRepositoryITest {
 
             // Then
             assertThat(missions).hasSize(12)
-            assertThat(mockEngine.requestHistory.first().url.toString())
-                .isEqualTo(
-                    "http://test/api/v1/missions/find?ids=123,456",
-                )
+            assertThat(
+                mockEngine.requestHistory
+                    .first()
+                    .url
+                    .toString(),
+            ).isEqualTo(
+                "http://test/api/v1/missions/find?ids=123,456",
+            )
         }
     }
 
@@ -323,10 +337,14 @@ class APIMissionRepositoryITest {
             assertThat(mission.createdAtUtc.toString()).isEqualTo("2023-04-20T09:57Z")
             assertThat(mission.envActions).hasSize(2)
             assertThat(mission.envActions?.first()?.actionType).isEqualTo(EnvMissionActionType.CONTROL)
-            assertThat(mockEngine.requestHistory.first().url.toString())
-                .isEqualTo(
-                    "http://test/api/v1/missions/123",
-                )
+            assertThat(
+                mockEngine.requestHistory
+                    .first()
+                    .url
+                    .toString(),
+            ).isEqualTo(
+                "http://test/api/v1/missions/123",
+            )
         }
     }
 }

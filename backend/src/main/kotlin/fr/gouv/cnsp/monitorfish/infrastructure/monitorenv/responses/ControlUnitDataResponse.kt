@@ -13,8 +13,8 @@ data class ControlUnitDataResponse(
     val name: String,
     val termsNote: String?,
 ) {
-    fun toControlUnit(): ControlUnit {
-        return ControlUnit(
+    fun toControlUnit(): ControlUnit =
+        ControlUnit(
             id = id,
             areaNote = areaNote,
             administrationId = administrationId,
@@ -23,5 +23,4 @@ data class ControlUnitDataResponse(
             name = name,
             termsNote = termsNote,
         )
-    }
 }

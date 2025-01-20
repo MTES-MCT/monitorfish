@@ -16,8 +16,8 @@ data class PriorNotificationSentMessageDataOutput(
     companion object {
         fun fromPriorNotificationSentMessage(
             priorNotificationSentMessage: PriorNotificationSentMessage,
-        ): PriorNotificationSentMessageDataOutput {
-            return PriorNotificationSentMessageDataOutput(
+        ): PriorNotificationSentMessageDataOutput =
+            PriorNotificationSentMessageDataOutput(
                 id = priorNotificationSentMessage.id,
                 communicationMeans = priorNotificationSentMessage.communicationMeans,
                 dateTimeUtc = priorNotificationSentMessage.dateTimeUtc,
@@ -27,6 +27,5 @@ data class PriorNotificationSentMessageDataOutput(
                 recipientOrganization = priorNotificationSentMessage.recipientOrganization,
                 success = priorNotificationSentMessage.success,
             )
-        }
     }
 }

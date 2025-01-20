@@ -13,8 +13,8 @@ class PortFaker {
             longitude: Double? = null,
             name: String = "Fake Port $locode",
             region: String? = null,
-        ): Port {
-            return Port(
+        ): Port =
+            Port(
                 locode = locode,
                 countryCode = countryCode,
                 facade = facade,
@@ -24,6 +24,5 @@ class PortFaker {
                 name = name,
                 region = region,
             )
-        }
     }
 }

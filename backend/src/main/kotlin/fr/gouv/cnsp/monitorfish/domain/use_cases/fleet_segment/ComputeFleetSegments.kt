@@ -54,71 +54,75 @@ class ComputeFleetSegments(
         val speciesToSegments =
             speciesCatches.map { specyCatch ->
                 val computedSegment =
-                    fleetSegments.filter { fleetSegment ->
-                        /**
-                         * minShareOfTargetSpecies
-                         */
-                        val containsTargetSpecies =
-                            speciesCatches.any { summedSpecyCatch ->
-                                fleetSegment.targetSpecies.any { it == summedSpecyCatch.species }
-                            }
-                        val sumOfTargetSpeciesWeight =
-                            speciesCatches
-                                .filter { summedSpecyCatch ->
+                    fleetSegments
+                        .filter { fleetSegment ->
+                            /**
+                             * minShareOfTargetSpecies
+                             */
+                            val containsTargetSpecies =
+                                speciesCatches.any { summedSpecyCatch ->
                                     fleetSegment.targetSpecies.any { it == summedSpecyCatch.species }
-                                }.sumOf { it.weight }
-                        val shareOfTargetSpecies = sumOfTargetSpeciesWeight / totalSumOfSpeciesWeight
-
-                        // This condition is used to add "by hand" a fleet segment to a PNO or a control,
-                        // by adding a species with a 0.0 weight
-                        val hasZeroWeightTargetSpecies =
-                            containsTargetSpecies &&
-                                sumOfTargetSpeciesWeight == 0.0 &&
-                                fleetSegment.minShareOfTargetSpecies == 0.0
-
-                        val hasMinShareOfTargetSpecies =
-                            fleetSegment.minShareOfTargetSpecies == null ||
-                                fleetSegment.targetSpecies.isEmpty() ||
-                                shareOfTargetSpecies > fleetSegment.minShareOfTargetSpecies ||
-                                hasZeroWeightTargetSpecies
-
-                        /**
-                         * gears
-                         */
-                        val isContainingGearFromList =
-                            fleetSegment.gears.isEmpty() || fleetSegment.gears.any { gear -> gear == specyCatch.gear }
-
-                        /**
-                         * faoAreas
-                         */
-                        val isContainingFaoAreaFromList =
-                            fleetSegment.faoAreas.isEmpty() ||
-                                fleetSegment.faoAreas.any { faoArea ->
-                                    FaoArea(specyCatch.faoArea).hasFaoCodeIncludedIn(faoArea)
                                 }
+                            val sumOfTargetSpeciesWeight =
+                                speciesCatches
+                                    .filter { summedSpecyCatch ->
+                                        fleetSegment.targetSpecies.any { it == summedSpecyCatch.species }
+                                    }.sumOf { it.weight }
+                            val shareOfTargetSpecies = sumOfTargetSpeciesWeight / totalSumOfSpeciesWeight
 
-                        /**
-                         * mesh
-                         */
-                        val isMeshAboveMinMesh =
-                            fleetSegment.minMesh == null || (specyCatch.mesh != null && specyCatch.mesh >= fleetSegment.minMesh)
-                        val isMeshBelowMaxMesh =
-                            fleetSegment.maxMesh == null || (specyCatch.mesh != null && specyCatch.mesh < fleetSegment.maxMesh)
-                        val hasRightVesselType =
-                            fleetSegment.vesselTypes.isEmpty() || fleetSegment.vesselTypes.any { it == vesselType }
+                            // This condition is used to add "by hand" a fleet segment to a PNO or a control,
+                            // by adding a species with a 0.0 weight
+                            val hasZeroWeightTargetSpecies =
+                                containsTargetSpecies &&
+                                    sumOfTargetSpeciesWeight == 0.0 &&
+                                    fleetSegment.minShareOfTargetSpecies == 0.0
 
-                        val hasMainScipSpeciesType =
-                            fleetSegment.mainScipSpeciesType == null ||
-                                fleetSegment.mainScipSpeciesType == mainScipSpeciesType
+                            val hasMinShareOfTargetSpecies =
+                                fleetSegment.minShareOfTargetSpecies == null ||
+                                    fleetSegment.targetSpecies.isEmpty() ||
+                                    shareOfTargetSpecies > fleetSegment.minShareOfTargetSpecies ||
+                                    hasZeroWeightTargetSpecies
 
-                        return@filter isContainingGearFromList &&
-                            isContainingFaoAreaFromList &&
-                            isMeshAboveMinMesh &&
-                            isMeshBelowMaxMesh &&
-                            hasRightVesselType &&
-                            hasMainScipSpeciesType &&
-                            hasMinShareOfTargetSpecies
-                    }.maxByOrNull { it.priority }
+                            /**
+                             * gears
+                             */
+                            val isContainingGearFromList =
+                                fleetSegment.gears.isEmpty() ||
+                                    fleetSegment.gears.any { gear -> gear == specyCatch.gear }
+
+                            /**
+                             * faoAreas
+                             */
+                            val isContainingFaoAreaFromList =
+                                fleetSegment.faoAreas.isEmpty() ||
+                                    fleetSegment.faoAreas.any { faoArea ->
+                                        FaoArea(specyCatch.faoArea).hasFaoCodeIncludedIn(faoArea)
+                                    }
+
+                            /**
+                             * mesh
+                             */
+                            val isMeshAboveMinMesh =
+                                fleetSegment.minMesh == null ||
+                                    (specyCatch.mesh != null && specyCatch.mesh >= fleetSegment.minMesh)
+                            val isMeshBelowMaxMesh =
+                                fleetSegment.maxMesh == null ||
+                                    (specyCatch.mesh != null && specyCatch.mesh < fleetSegment.maxMesh)
+                            val hasRightVesselType =
+                                fleetSegment.vesselTypes.isEmpty() || fleetSegment.vesselTypes.any { it == vesselType }
+
+                            val hasMainScipSpeciesType =
+                                fleetSegment.mainScipSpeciesType == null ||
+                                    fleetSegment.mainScipSpeciesType == mainScipSpeciesType
+
+                            return@filter isContainingGearFromList &&
+                                isContainingFaoAreaFromList &&
+                                isMeshAboveMinMesh &&
+                                isMeshBelowMaxMesh &&
+                                hasRightVesselType &&
+                                hasMainScipSpeciesType &&
+                                hasMinShareOfTargetSpecies
+                        }.maxByOrNull { it.priority }
 
                 return@map Pair(specyCatch, computedSegment)
             }

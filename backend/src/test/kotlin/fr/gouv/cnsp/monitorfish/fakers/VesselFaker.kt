@@ -41,8 +41,8 @@ class VesselFaker {
             logbookSoftware: String? = null,
             hasLogbookEsacapt: Boolean = false,
             hasVisioCaptures: Boolean? = null,
-        ): Vessel {
-            return Vessel(
+        ): Vessel =
+            Vessel(
                 id = id,
                 internalReferenceNumber = internalReferenceNumber,
                 imo = imo,
@@ -78,6 +78,5 @@ class VesselFaker {
                 hasLogbookEsacapt = hasLogbookEsacapt,
                 hasVisioCaptures = hasVisioCaptures,
             )
-        }
     }
 }

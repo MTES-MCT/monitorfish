@@ -30,8 +30,8 @@ data class PriorNotificationUploadEntity(
     @Column(name = "updated_at", nullable = false)
     val updatedAt: ZonedDateTime,
 ) {
-    fun toDocument(): PriorNotificationDocument {
-        return PriorNotificationDocument(
+    fun toDocument(): PriorNotificationDocument =
+        PriorNotificationDocument(
             id = id!!,
             content = content,
             createdAt = CustomZonedDateTime.fromZonedDateTime(createdAt),
@@ -41,7 +41,6 @@ data class PriorNotificationUploadEntity(
             reportId = reportId,
             updatedAt = CustomZonedDateTime.fromZonedDateTime(updatedAt),
         )
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -74,8 +73,8 @@ data class PriorNotificationUploadEntity(
     }
 
     companion object {
-        fun fromDocument(priorNotificationDocument: PriorNotificationDocument): PriorNotificationUploadEntity {
-            return PriorNotificationUploadEntity(
+        fun fromDocument(priorNotificationDocument: PriorNotificationDocument): PriorNotificationUploadEntity =
+            PriorNotificationUploadEntity(
                 id = priorNotificationDocument.id,
                 content = priorNotificationDocument.content,
                 createdAt = priorNotificationDocument.createdAt.toZonedDateTime(),
@@ -85,6 +84,5 @@ data class PriorNotificationUploadEntity(
                 reportId = priorNotificationDocument.reportId,
                 updatedAt = priorNotificationDocument.updatedAt.toZonedDateTime(),
             )
-        }
     }
 }

@@ -41,15 +41,14 @@ class ComputePnoTypes(
             allPnoTypeRules.filter { (rule) ->
                 val allCatchesOfRule =
                     catchToPnoTypeRules
-                        .filter {
-                                (_, pnoTypeRules) ->
+                        .filter { (_, pnoTypeRules) ->
                             pnoTypeRules.any { pnoTypeRuleOfCatch -> pnoTypeRuleOfCatch.id == rule.id }
-                        }
-                        .map { (pnoCatch, _) -> pnoCatch }
+                        }.map { (pnoCatch, _) -> pnoCatch }
 
                 val hasEmptyGears = rule.gears.isEmpty()
                 val hasEmptyFlagStates = rule.flagStates.isEmpty()
-                val hasEmptyRequiredCatches = rule.species.isEmpty() && rule.faoAreas.isEmpty() && rule.cgpmAreas.isEmpty()
+                val hasEmptyRequiredCatches =
+                    rule.species.isEmpty() && rule.faoAreas.isEmpty() && rule.cgpmAreas.isEmpty()
 
                 val numberOfEmptyRules = listOf(hasEmptyGears, hasEmptyFlagStates, hasEmptyRequiredCatches).count { it }
 
@@ -67,7 +66,9 @@ class ComputePnoTypes(
                         when {
                             !hasEmptyGears && !hasEmptyFlagStates -> containsGear && containsFlagState
                             !hasEmptyGears && !hasEmptyRequiredCatches -> containsGear && hasCatchesAndMinimumQuantity
-                            !hasEmptyFlagStates && !hasEmptyRequiredCatches -> containsFlagState && hasCatchesAndMinimumQuantity
+                            !hasEmptyFlagStates && !hasEmptyRequiredCatches ->
+                                containsFlagState &&
+                                    hasCatchesAndMinimumQuantity
                             else -> false
                         }
 

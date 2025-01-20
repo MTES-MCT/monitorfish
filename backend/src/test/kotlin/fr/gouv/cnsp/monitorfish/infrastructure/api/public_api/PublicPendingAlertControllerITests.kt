@@ -25,7 +25,8 @@ class PublicPendingAlertControllerITests {
     @Test
     fun `Should validate an operational alert`() {
         // When
-        api.perform(MockMvcRequestBuilders.put("/api/v1/operational_alerts/666/validate"))
+        api
+            .perform(MockMvcRequestBuilders.put("/api/v1/operational_alerts/666/validate"))
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
     }

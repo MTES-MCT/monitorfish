@@ -151,7 +151,8 @@ export const MISSION_SOURCE_LABEL: Record<Mission.MissionSource, string> = {
   [Mission.MissionSource.MONITORENV]: 'CACEM',
   [Mission.MissionSource.MONITORFISH]: 'CNSP',
   [Mission.MissionSource.POSEIDON_CACEM]: 'CACEM (Poseidon)',
-  [Mission.MissionSource.POSEIDON_CNSP]: 'CNSP (Poseidon)'
+  [Mission.MissionSource.POSEIDON_CNSP]: 'CNSP (Poseidon)',
+  [Mission.MissionSource.RAPPORT_NAV]: 'RapportNav'
 }
 
 export const MISSION_TYPE_LABEL: Record<Mission.MissionType, string> = {

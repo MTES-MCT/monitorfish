@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2021, Vincent Chéry
+# Copyright (C) 2023, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-29 15:44+0200\n"
+"POT-Creation-Date: 2025-01-21 10:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,7 +51,7 @@ msgstr ""
 msgid "The obtained metric is therefore analogous to the *risk priority number (RPN)* of the widely used `FMEA <https://en.wikipedia.org/wiki/Failure_mode_and_effects_analysis>`_ risk assessment methodology, in which *probability*, *severity* and *detectability* are the 3 components of the RPN."
 msgstr ""
 
-#: ../source/risk-factor.rst:None
+#: ../source/risk-factor.rst:-1
 #: f141c420ff3f404e84d6d7087b2e4c00
 msgid "Risk factor components"
 msgstr ""
@@ -138,7 +138,7 @@ msgstr ""
 msgid "This can be illustrated as follows :"
 msgstr ""
 
-#: ../source/risk-factor.rst:None
+#: ../source/risk-factor.rst:-1
 #: 15ed7438c15f409fb327a65c460f49a8
 msgid "Schematic of the computation of the infraction score"
 msgstr ""
@@ -263,7 +263,7 @@ msgstr ""
 msgid "The controls of the past 3 years are counted with a linearly decreasing weight :"
 msgstr ""
 
-#: ../source/risk-factor.rst:None
+#: ../source/risk-factor.rst:-1
 #: 4197c9a67e2046b796b84e3803d1f131
 msgid "Schematic of the number of recent controls computation method"
 msgstr ""
@@ -283,7 +283,7 @@ msgstr ""
 msgid "Based on the above *number of recent controls*, as well as on the date of the most recent control, the *control level* is defined by binning according to the following schema :"
 msgstr ""
 
-#: ../source/risk-factor.rst:None
+#: ../source/risk-factor.rst:-1
 #: 67818ff8a59841b080b96911bc105910
 msgid "Schematic of the control level computation method"
 msgstr ""

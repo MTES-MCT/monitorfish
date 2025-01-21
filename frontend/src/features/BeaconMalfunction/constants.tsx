@@ -112,7 +112,7 @@ const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
     color: theme.color.maximumRed,
     hoursOffsetToRetrieveMalfunctionCreation: undefined,
     icon: <VesselStatusActivityDetected style={iconStyle} />,
-    label: 'Suspendu cause impayé',
+    label: 'Suspendu (impayé)',
     textColor: theme.color.white,
     value: BeaconMalfunctionVesselStatus.SUSPENDED_BECAUSE_UNPAID
   },

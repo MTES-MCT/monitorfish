@@ -1,36 +1,32 @@
 import { computeFleetSegments } from '@features/FleetSegment/useCases/computeFleetSegments'
 import { MissionAction } from '@features/Mission/missionAction.types'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 
+import type { FleetSegment } from '@features/FleetSegment/types'
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
-import type { Option } from '@mtes-mct/monitor-ui'
 
 export const updateActionSegments =
-  (
-    dispatch,
-    setFieldValue: (field: string, value: any) => void,
-    fleetSegmentsAsOptions: Option<MissionAction.FleetSegment>[]
-  ) =>
-  async (missionAction: MissionActionFormValues) => {
+  (dispatch, setFieldValue: (field: string, value: any) => void) => async (missionAction: MissionActionFormValues) => {
     if (missionAction.actionType === MissionAction.MissionActionType.AIR_CONTROL) {
       return
     }
 
-    if (missionAction.vesselId === undefined) {
-      return
-    }
+    const year = missionAction.actionDatetimeUtc ? customDayjs(missionAction.actionDatetimeUtc).get('year') : undefined
 
-    const computedFleetSegments = await dispatch(
+    const computedFleetSegments: FleetSegment[] = await dispatch(
       computeFleetSegments(
         missionAction.faoAreas,
         missionAction.gearOnboard,
         missionAction.speciesOnboard,
-        missionAction.vesselId
+        missionAction.vesselId,
+        year
       )
     )
 
-    const nextFleetSegments = fleetSegmentsAsOptions
-      .filter(({ value }) => computedFleetSegments?.find(fleetSegment => fleetSegment.segment === value.segment))
-      .map(({ value }) => value)
+    const nextFleetSegments = computedFleetSegments.map(segment => ({
+      segment: segment.segment,
+      segmentName: segment.segmentName
+    }))
 
     setFieldValue('segments', nextFleetSegments)
   }

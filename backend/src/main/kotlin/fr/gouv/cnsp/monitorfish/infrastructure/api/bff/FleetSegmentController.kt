@@ -28,7 +28,7 @@ class FleetSegmentController(
         }
 
     @PostMapping("/compute")
-    @Operation(summary = "compute fleet segments for the current year")
+    @Operation(summary = "compute fleet segments for the given year")
     fun computeFleetSegments(
         @RequestBody
         computeFleetSegmentsDataInput: ComputeFleetSegmentsDataInput,
@@ -39,6 +39,7 @@ class FleetSegmentController(
                 computeFleetSegmentsDataInput.faoAreas,
                 computeFleetSegmentsDataInput.gears.map { it.toGearControl() },
                 computeFleetSegmentsDataInput.species.map { it.toSpeciesControl() },
+                computeFleetSegmentsDataInput.year,
             )
         return fleetSegments.map {
             FleetSegmentDataOutput.fromFleetSegment(it)

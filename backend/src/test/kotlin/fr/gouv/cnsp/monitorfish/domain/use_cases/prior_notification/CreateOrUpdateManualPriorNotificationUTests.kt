@@ -53,7 +53,7 @@ class CreateOrUpdateManualPriorNotificationUTests {
 
         // Given
         given(vesselRepository.findVesselById(any())).willReturn(VesselFaker.fakeVessel())
-        given(computeManualPriorNotification.execute(any(), any(), any(), any(), any())).willReturn(
+        given(computeManualPriorNotification.execute(any(), any(), any(), any(), any(), any())).willReturn(
             ManualPriorNotificationComputedValues(
                 isVesselUnderCharter = null,
                 nextState = PriorNotificationState.OUT_OF_VERIFICATION_SCOPE,
@@ -116,7 +116,7 @@ class CreateOrUpdateManualPriorNotificationUTests {
             existingFakePriorNotification,
         )
         given(vesselRepository.findVesselById(any())).willReturn(VesselFaker.fakeVessel())
-        given(computeManualPriorNotification.execute(any(), any(), any(), any(), any())).willReturn(
+        given(computeManualPriorNotification.execute(any(), any(), any(), any(), any(), any())).willReturn(
             ManualPriorNotificationComputedValues(
                 isVesselUnderCharter = null,
                 nextState = PriorNotificationState.OUT_OF_VERIFICATION_SCOPE,

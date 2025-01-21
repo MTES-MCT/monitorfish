@@ -1,5 +1,4 @@
 import { useGetPortsQuery } from '@api/port'
-import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
 import { initMissionGeometry } from '@features/Mission/components/MissionForm/useCases/initMissionGeometry'
 import { updateActionFAOAreas } from '@features/Mission/components/MissionForm/useCases/updateActionFAOAreas'
 import { updateActionGearsOnboard } from '@features/Mission/components/MissionForm/useCases/updateActionGearsOnboard'
@@ -12,12 +11,8 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
-import { useMemo } from 'react'
-
-import { getFleetSegmentsAsOption } from '../ActionForm/shared/utils'
 
 import type { MissionActionFormValues } from '../types'
-import type { Option } from '@mtes-mct/monitor-ui'
 
 import MissionActionType = MissionAction.MissionActionType
 
@@ -27,17 +22,11 @@ export function useGetMissionActionFormikUsecases() {
   const draft = useMainAppSelector(state => state.missionForm.draft)
   const { setFieldValue: setMissionActionFieldValue } = useFormikContext<MissionActionFormValues>()
 
-  const getFleetSegmentsApiQuery = useGetFleetSegmentsQuery()
   const getPortsApiQuery = useGetPortsQuery()
   const getMissionApiQuery = useGetMissionQuery(draft?.mainFormValues?.id ?? skipToken)
 
-  const fleetSegmentsAsOptions: Option<MissionAction.FleetSegment>[] = useMemo(
-    () => getFleetSegmentsAsOption(getFleetSegmentsApiQuery.data),
-    [getFleetSegmentsApiQuery.data]
-  )
-
   const updateSegments = (missionActionValues: MissionActionFormValues) =>
-    updateActionSegments(dispatch, setMissionActionFieldValue, fleetSegmentsAsOptions)(missionActionValues)
+    updateActionSegments(dispatch, setMissionActionFieldValue)(missionActionValues)
 
   /**
    * Update FAO Areas and segments from the control coordinates or port input
@@ -47,8 +36,7 @@ export function useGetMissionActionFormikUsecases() {
 
     await updateActionSegments(
       dispatch,
-      setMissionActionFieldValue,
-      fleetSegmentsAsOptions
+      setMissionActionFieldValue
     )({
       ...missionActionValues,
       faoAreas
@@ -79,8 +67,7 @@ export function useGetMissionActionFormikUsecases() {
 
     await updateActionSegments(
       dispatch,
-      setMissionActionFieldValue,
-      fleetSegmentsAsOptions
+      setMissionActionFieldValue
     )({
       ...missionActionValues,
       faoAreas,

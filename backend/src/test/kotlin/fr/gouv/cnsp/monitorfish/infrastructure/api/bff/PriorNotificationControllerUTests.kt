@@ -168,7 +168,7 @@ class PriorNotificationControllerUTests {
     @Test
     fun `getManualComputation Should get a manual prior notification computed values`() {
         // Given
-        given(this.computeManualPriorNotification.execute(any(), any(), any(), any(), any()))
+        given(this.computeManualPriorNotification.execute(any(), any(), any(), any(), any(), any()))
             .willReturn(
                 ManualPriorNotificationComputedValues(
                     isVesselUnderCharter = null,
@@ -188,6 +188,7 @@ class PriorNotificationControllerUTests {
                     portLocode = "FRABC",
                     tripGearCodes = emptyList(),
                     vesselId = 42,
+                    year = 2025,
                 ),
             )
         api

@@ -8,8 +8,6 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.dtos.SpeciesCatchForSegmentCalculation
 import org.slf4j.LoggerFactory
-import java.time.Clock
-import java.time.ZonedDateTime
 
 /**
  * Return the computed fleet segments from the species catches.
@@ -18,19 +16,18 @@ import java.time.ZonedDateTime
 class ComputeFleetSegments(
     private val fleetSegmentRepository: FleetSegmentRepository,
     private val vesselRepository: VesselRepository,
-    private val clock: Clock,
 ) {
     private val logger = LoggerFactory.getLogger(ComputeFleetSegments::class.java)
 
     fun execute(
+        year: Int,
         vesselId: Int,
         speciesCatches: List<SpeciesCatchForSegmentCalculation>,
     ): List<FleetSegment> {
         logger.info("Got ${speciesCatches.size} catches to assign fleet segments")
 
-        val currentYear = ZonedDateTime.now(clock).year
         val vesselType = vesselRepository.findVesselById(vesselId)?.vesselType
-        val fleetSegments = fleetSegmentRepository.findAllByYear(currentYear)
+        val fleetSegments = fleetSegmentRepository.findAllByYear(year)
 
         val controlledPelagicSpeciesWeight =
             speciesCatches

@@ -6,7 +6,11 @@ Monitorifsh performs **real time fraud detection** using VMS, logbook and regula
 
 * trawling in the french 3 nautical miles coastal strip
 * fishing in the french 12 nautical miles coastal strip by a non-french vessel (excluding historic fishing rights for certains states)
-* fishing without logging any Fishing Activity Report (FAR) in the fishing logbook before midnight
+* fishing in the french Exclusive Economic Zone (EEZ) by a non-Community vessel
+* undeclared fishing activity : VMS track showing fishing activity with no corresponding Fishing Activity Report (FAR) in the electronic logbook
+* undeclared departure at sea : VMS track showing a departure at sea with no corresponding Departure (DEP) declaration in the electronic logbook
+* suspicion of under-declaration : fishing effort non consistent with declared quantities
+* RTC fishing alert : VMS track showing fishing activity in a Real Time Closure (RTC) area
 
 When signs of fraud are detected on a vessel, it appears on the map with a red halo :
 

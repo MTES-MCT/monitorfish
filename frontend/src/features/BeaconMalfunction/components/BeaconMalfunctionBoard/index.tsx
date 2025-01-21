@@ -8,32 +8,32 @@ import {
   useSensor,
   useSensors
 } from '@dnd-kit/core'
+import { STAGE_RECORD, VESSEL_STATUS } from '@features/BeaconMalfunction/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { createSelector } from '@reduxjs/toolkit'
-import { STAGE_RECORD, VESSEL_STATUS } from 'domain/entities/beaconMalfunction/constants'
-import { setError } from 'domain/shared_slices/Global'
-import { getAllBeaconMalfunctions } from 'domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
-import { updateBeaconMalfunctionFromKanban } from 'domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
 import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
 import { BeaconMalfunctionDetails } from './BeaconMalfunctionDetails'
-import { getBeaconMalfunctionsByStage, searchInBeaconMalfunctions } from './beaconMalfunctions'
 import { Droppable } from './Droppable'
 import { StageColumn } from './StageColumn'
+import { getBeaconMalfunctionsByStage, searchInBeaconMalfunctions } from './utils'
 import { VesselStatusSelect } from './VesselStatusSelect'
-import SearchIconSVG from '../../icons/Loupe_dark.svg?react'
+import { setError } from '../../../../domain/shared_slices/Global'
+import { getAllBeaconMalfunctions } from '../../../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
+import { updateBeaconMalfunctionFromKanban } from '../../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
+import { LegacyRsuiteComponentsWrapper } from '../../../../ui/LegacyRsuiteComponentsWrapper'
+import SearchIconSVG from '../../../icons/Loupe_dark.svg?react'
 
-import type { MainRootState } from '@store'
 import type {
   BeaconMalfunction,
   BeaconMalfunctionStageColumnValue,
   BeaconMalfunctionStatusValue
-} from 'domain/entities/beaconMalfunction/types'
+} from '@features/BeaconMalfunction/types'
+import type { MainRootState } from '@store'
 import type { CSSProperties, MutableRefObject } from 'react'
 
 const getMemoizedBeaconMalfunctionsByStage = createSelector(

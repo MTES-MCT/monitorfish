@@ -1,14 +1,14 @@
 import { COLORS } from '@constants/constants'
+import { BeaconMalfunctionDetailsFollowUp } from '@features/BeaconMalfunction/components/BeaconMalfunctionBoard/BeaconMalfunctionDetailsFollowUp'
+import { EquipmentTab } from '@features/BeaconMalfunction/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { getFirstVesselStatus } from 'domain/entities/beaconMalfunction'
-import { EquipmentTab } from 'domain/entities/beaconMalfunction/constants'
 import { setBeaconMalfunctionsTab } from 'domain/shared_slices/BeaconMalfunction'
 import styled from 'styled-components'
 import { getDateTime } from 'utils'
 
+import { getFirstVesselStatus } from '../../../../../BeaconMalfunction/utils'
 import ArrowSVG from '../../../../../icons/Picto_fleche-pleine-droite.svg?react'
-import { BeaconMalfunctionDetailsFollowUp } from '../../../../../SideWindow/BeaconMalfunctionBoard/BeaconMalfunctionDetailsFollowUp'
 import { BeaconMalfunctionBody } from '../resume/BeaconMalfunctionBody'
 import { CurrentBeaconMalfunctionBody } from '../resume/CurrentBeaconMalfunctionBody'
 

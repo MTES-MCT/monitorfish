@@ -7,7 +7,7 @@ import { CurrentBeaconMalfunctionBody } from './CurrentBeaconMalfunctionBody'
 import ArrowSVG from '../../../../../icons/Picto_fleche-pleine-droite.svg?react'
 import { Header, Zone } from '../../common_styles/common.style'
 
-import type { BeaconMalfunctionResumeAndDetails } from 'domain/entities/beaconMalfunction/types'
+import type { BeaconMalfunctionResumeAndDetails } from '@features/BeaconMalfunction/types'
 import type { Promisable } from 'type-fest'
 
 type CurrentBeaconMalfunctionProps = {

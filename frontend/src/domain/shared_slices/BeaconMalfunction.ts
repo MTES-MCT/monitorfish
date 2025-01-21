@@ -1,12 +1,11 @@
+import { EquipmentTab } from '@features/BeaconMalfunction/constants'
 import { createSlice } from '@reduxjs/toolkit'
-
-import { EquipmentTab } from '../entities/beaconMalfunction/constants'
 
 import type {
   BeaconMalfunction,
   BeaconMalfunctionResumeAndDetails,
   VesselBeaconMalfunctionsResumeAndHistory
-} from '../entities/beaconMalfunction/types'
+} from '@features/BeaconMalfunction/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { ValueOf } from 'type-fest'
 

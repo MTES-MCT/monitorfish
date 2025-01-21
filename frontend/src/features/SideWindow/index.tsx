@@ -19,7 +19,6 @@ import {
 } from 'react'
 import styled, { createGlobalStyle, css, StyleSheetManager } from 'styled-components'
 
-import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
 import { BannerStack } from './components/BannerStack'
 import { Menu } from './Menu'
 import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
@@ -34,6 +33,7 @@ import { getInfractions } from '../../domain/use_cases/infraction/getInfractions
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { SideWindowAlerts } from '../Alert/components/SideWindowAlerts'
+import { BeaconMalfunctionBoard } from '../BeaconMalfunction/components/BeaconMalfunctionBoard'
 import { Loader as MissionFormLoader } from '../Mission/components/MissionForm/Loader'
 import { MissionList } from '../Mission/components/MissionList'
 import { PriorNotificationList } from '../PriorNotification/components/PriorNotificationList'

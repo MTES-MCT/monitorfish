@@ -5,8 +5,8 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { SelectPicker } from 'rsuite'
 import styled from 'styled-components'
 
-import { NOTIFICATION_TYPE, SELECTABLE_NOTIFICATION_TYPES } from '../../../domain/entities/beaconMalfunction/constants'
-import { sendNotification } from '../../../domain/use_cases/beaconMalfunction/sendNotification'
+import { sendNotification } from '../../../../domain/use_cases/beaconMalfunction/sendNotification'
+import { NOTIFICATION_TYPE, SELECTABLE_NOTIFICATION_TYPES } from '../../constants'
 
 import type { CSSProperties } from 'react'
 

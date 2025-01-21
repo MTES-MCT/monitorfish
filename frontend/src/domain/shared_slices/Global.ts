@@ -1,7 +1,7 @@
+import { UserType } from '@features/BeaconMalfunction/constants'
 import { createSlice } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
-import { UserType } from '../entities/beaconMalfunction/constants'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel/vessel'
 
 import type { MapBox } from '@features/Map/constants'

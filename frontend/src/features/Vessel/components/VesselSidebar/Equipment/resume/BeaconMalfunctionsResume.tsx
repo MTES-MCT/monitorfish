@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 
-import { VESSEL_STATUS } from '../../../../../../domain/entities/beaconMalfunction/constants'
 import { getDateTime } from '../../../../../../utils'
+import { VESSEL_STATUS } from '../../../../../BeaconMalfunction/constants'
 import { NoValue, Header, Zone } from '../../common_styles/common.style'
 
-import type { VesselBeaconMalfunctionsResume } from '../../../../../../domain/entities/beaconMalfunction/types'
+import type { VesselBeaconMalfunctionsResume } from '../../../../../BeaconMalfunction/types'
 
 type VesselBeaconMalfunctionsResumeProps = {
   vesselBeaconMalfunctionsResume: VesselBeaconMalfunctionsResume | undefined

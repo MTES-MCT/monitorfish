@@ -7,12 +7,12 @@ import { BeaconMalfunctionDetails } from './details/BeaconMalfunctionDetails'
 import { EquipmentResume } from './resume/EquipmentResume'
 import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
 import { COLORS } from '../../../../../constants/constants'
-import { EquipmentTab } from '../../../../../domain/entities/beaconMalfunction/constants'
 import { vesselsAreEquals } from '../../../../../domain/entities/vessel/vessel'
 import { setBeaconMalfunctionsTab } from '../../../../../domain/shared_slices/BeaconMalfunction'
 import { getVesselBeaconMalfunctions } from '../../../../../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { EquipmentTab } from '../../../../BeaconMalfunction/constants'
 
 export function VesselEquipment() {
   const dispatch = useMainAppDispatch()

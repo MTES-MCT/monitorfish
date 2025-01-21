@@ -1,6 +1,5 @@
+import { COLORS } from '@constants/constants'
 import { useDroppable } from '@dnd-kit/core'
-
-import { COLORS } from '../../../constants/constants'
 
 export function Droppable({ children, disabled, id, index }) {
   const { isOver, setNodeRef } = useDroppable({

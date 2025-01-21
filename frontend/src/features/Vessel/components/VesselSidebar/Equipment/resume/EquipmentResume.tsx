@@ -10,9 +10,9 @@ import { BeaconMalfunctionsResume } from './BeaconMalfunctionsResume'
 import { CurrentBeaconMalfunction } from './CurrentBeaconMalfunction'
 import { YearsToBeaconMalfunctionList } from './YearsToBeaconMalfunctionList'
 import { useIsSuperUser } from '../../../../../../auth/hooks/useIsSuperUser'
-import { getYearsToBeaconMalfunctions } from '../../../../../../domain/entities/beaconMalfunction'
 import { setVesselBeaconMalfunctionsFromDate } from '../../../../../../domain/shared_slices/BeaconMalfunction'
 import { getDateTime } from '../../../../../../utils'
+import { getYearsToBeaconMalfunctions } from '../../../../../BeaconMalfunction/utils'
 
 import type { Promisable } from 'type-fest'
 

@@ -7,7 +7,7 @@ import type { MissionActionFormValues } from '../../types'
 
 export function DatePickerField() {
   const { newWindowContainerRef } = useNewWindow()
-  const { updateMissionLocation } = useGetMissionActionFormikUsecases()
+  const { updateMissionLocation, updateSegments } = useGetMissionActionFormikUsecases()
   const { errors, setFieldValue, values } = useFormikContext<MissionActionFormValues>()
 
   const error = errors.actionDatetimeUtc
@@ -16,6 +16,8 @@ export function DatePickerField() {
     setFieldValue('actionDatetimeUtc', nextActionDatetimeUtc)
 
     updateMissionLocation(values)
+
+    updateSegments({ ...values, actionDatetimeUtc: nextActionDatetimeUtc })
   }
 
   return (

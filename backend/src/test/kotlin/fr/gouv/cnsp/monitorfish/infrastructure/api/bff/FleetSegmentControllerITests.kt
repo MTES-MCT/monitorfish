@@ -77,7 +77,7 @@ class FleetSegmentControllerITests {
     @Test
     fun `Should compute fleet segments`() {
         // Given
-        given(this.computeFleetSegmentsFromControl.execute(any(), any(), any(), any())).willReturn(
+        given(this.computeFleetSegmentsFromControl.execute(any(), any(), any(), any(), any())).willReturn(
             listOf(
                 FleetSegment(
                     segment = "SWW01",
@@ -106,6 +106,7 @@ class FleetSegmentControllerITests {
                             ComputeFleetSegmentsDataInput(
                                 faoAreas = listOf("27.1.c", "27.1.b"),
                                 vesselId = 123,
+                                year = 2021,
                                 gears =
                                     listOf(
                                         GearControlDataInput(

@@ -1,5 +1,6 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
+import { SideWindowCard } from '@components/SideWindowCard'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { invalidatePriorNotification } from '@features/PriorNotification/useCases/invalidatePriorNotification'
 import { updateManualPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateManualPriorNotificationComputedValues'
@@ -17,7 +18,6 @@ import { useDebouncedCallback } from 'use-debounce'
 
 import { Form } from './Form'
 import { getPartialComputationRequestData } from './utils'
-import { SideWindowCard } from '../../../../components/SideWindowCard'
 import { PriorNotification } from '../../PriorNotification.types'
 import { CardBanner } from '../shared/CardBanner'
 import { CardBodyHead } from '../shared/CardBodyHead'
@@ -118,7 +118,8 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
       'fishingCatches',
       'portLocode',
       'tripGearCodes',
-      'vesselId'
+      'vesselId',
+      'year'
     ])
     if (
       !nextComputationRequestData ||

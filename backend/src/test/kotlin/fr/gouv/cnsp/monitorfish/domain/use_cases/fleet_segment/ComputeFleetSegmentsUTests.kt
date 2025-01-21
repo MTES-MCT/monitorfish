@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.ScipSpeciesType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
@@ -14,8 +15,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.time.Clock
-import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class ComputeFleetSegmentsUTests {
@@ -24,10 +23,6 @@ class ComputeFleetSegmentsUTests {
 
     @MockBean
     private lateinit var vesselRepository: VesselRepository
-
-    companion object {
-        val fixedClock: Clock = Clock.systemUTC()
-    }
 
     @Test
     fun `execute Should compute Lines segment`() {
@@ -115,7 +110,7 @@ class ComputeFleetSegmentsUTests {
                     scipSpeciesType = ScipSpeciesType.TUNA,
                 ),
             )
-        given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(fleetSegmentsForComputation)
+        given(fleetSegmentRepository.findAllByYear(eq(2025))).willReturn(fleetSegmentsForComputation)
         given(vesselRepository.findVesselById(any())).willReturn(
             Vessel(
                 id = 1,
@@ -134,8 +129,7 @@ class ComputeFleetSegmentsUTests {
             ComputeFleetSegments(
                 fleetSegmentRepository,
                 vesselRepository,
-                fixedClock,
-            ).execute(1, speciesCatches)
+            ).execute(2025, 1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)
@@ -164,7 +158,7 @@ class ComputeFleetSegmentsUTests {
                     scipSpeciesType = ScipSpeciesType.PELAGIC,
                 ),
             )
-        given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(fleetSegmentsForComputation)
+        given(fleetSegmentRepository.findAllByYear(eq(2025))).willReturn(fleetSegmentsForComputation)
         given(vesselRepository.findVesselById(any())).willReturn(
             Vessel(
                 id = 1,
@@ -183,8 +177,7 @@ class ComputeFleetSegmentsUTests {
             ComputeFleetSegments(
                 fleetSegmentRepository,
                 vesselRepository,
-                fixedClock,
-            ).execute(1, speciesCatches)
+            ).execute(2025, 1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)
@@ -221,7 +214,7 @@ class ComputeFleetSegmentsUTests {
                     scipSpeciesType = null,
                 ),
             )
-        given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(fleetSegmentsForComputation)
+        given(fleetSegmentRepository.findAllByYear(eq(2025))).willReturn(fleetSegmentsForComputation)
         given(vesselRepository.findVesselById(any())).willReturn(
             Vessel(
                 id = 1,
@@ -240,8 +233,7 @@ class ComputeFleetSegmentsUTests {
             ComputeFleetSegments(
                 fleetSegmentRepository,
                 vesselRepository,
-                fixedClock,
-            ).execute(1, speciesCatches)
+            ).execute(2025, 1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)
@@ -278,7 +270,7 @@ class ComputeFleetSegmentsUTests {
                     scipSpeciesType = null,
                 ),
             )
-        given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(fleetSegmentsForComputation)
+        given(fleetSegmentRepository.findAllByYear(eq(2025))).willReturn(fleetSegmentsForComputation)
         given(vesselRepository.findVesselById(any())).willReturn(
             Vessel(
                 id = 1,
@@ -297,8 +289,7 @@ class ComputeFleetSegmentsUTests {
             ComputeFleetSegments(
                 fleetSegmentRepository,
                 vesselRepository,
-                fixedClock,
-            ).execute(1, speciesCatches)
+            ).execute(2025, 1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)
@@ -327,7 +318,7 @@ class ComputeFleetSegmentsUTests {
                     scipSpeciesType = ScipSpeciesType.DEMERSAL,
                 ),
             )
-        given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(fleetSegmentsForComputation)
+        given(fleetSegmentRepository.findAllByYear(eq(2025))).willReturn(fleetSegmentsForComputation)
         given(vesselRepository.findVesselById(any())).willReturn(
             Vessel(
                 id = 1,
@@ -346,8 +337,7 @@ class ComputeFleetSegmentsUTests {
             ComputeFleetSegments(
                 fleetSegmentRepository,
                 vesselRepository,
-                fixedClock,
-            ).execute(1, speciesCatches)
+            ).execute(2025, 1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)
@@ -376,7 +366,7 @@ class ComputeFleetSegmentsUTests {
                     scipSpeciesType = ScipSpeciesType.DEMERSAL,
                 ),
             )
-        given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(fleetSegmentsForComputation)
+        given(fleetSegmentRepository.findAllByYear(eq(2025))).willReturn(fleetSegmentsForComputation)
         given(vesselRepository.findVesselById(any())).willReturn(
             Vessel(
                 id = 1,
@@ -395,8 +385,7 @@ class ComputeFleetSegmentsUTests {
             ComputeFleetSegments(
                 fleetSegmentRepository,
                 vesselRepository,
-                fixedClock,
-            ).execute(1, speciesCatches)
+            ).execute(2025, 1, speciesCatches)
 
         // Then
         assertThat(fleetSegments).hasSize(1)
@@ -406,7 +395,7 @@ class ComputeFleetSegmentsUTests {
     @Test
     fun `execute Should compute no segment`() {
         // Given
-        given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(fleetSegmentsForComputation)
+        given(fleetSegmentRepository.findAllByYear(eq(2025))).willReturn(fleetSegmentsForComputation)
         given(vesselRepository.findVesselById(any())).willReturn(
             Vessel(
                 id = 1,
@@ -425,8 +414,7 @@ class ComputeFleetSegmentsUTests {
             ComputeFleetSegments(
                 fleetSegmentRepository,
                 vesselRepository,
-                fixedClock,
-            ).execute(1, listOf())
+            ).execute(2025, 1, listOf())
 
         // Then
         assertThat(fleetSegments).hasSize(0)

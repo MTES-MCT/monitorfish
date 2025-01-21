@@ -9,10 +9,15 @@ export const computeFleetSegments =
     faoAreas: string[] | undefined,
     gearOnBoard: MissionActionFormValues['gearOnboard'],
     speciesOnboard: MissionActionFormValues['speciesOnboard'],
-    vesselId: number
+    vesselId: number | undefined,
+    year: number | undefined
   ) =>
   async (dispatch): Promise<FleetSegment[]> => {
     if (!gearOnBoard?.length && !speciesOnboard?.length) {
+      return []
+    }
+
+    if (vesselId === undefined || year === undefined) {
       return []
     }
 
@@ -22,7 +27,8 @@ export const computeFleetSegments =
           faoAreas: faoAreas ?? [],
           gears: gearOnBoard ?? [],
           species: speciesOnboard ?? [],
-          vesselId
+          vesselId,
+          year
         },
         RTK_FORCE_REFETCH_QUERY_OPTIONS
       )

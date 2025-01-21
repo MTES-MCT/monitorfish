@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2021, Vincent Chéry
+# Copyright (C) 2023, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-29 15:44+0200\n"
+"POT-Creation-Date: 2025-01-21 10:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,7 +81,7 @@ msgstr ""
 msgid "Fishing vessels' fleet segment(s) can then be visualized on the map in real time, filtered based on their fleet segments..."
 msgstr ""
 
-#: ../source/fleet-segments.rst:None
+#: ../source/fleet-segments.rst:-1
 #: 11b798b13cd84e2fa7be5df027c6178d
 msgid "Map showing vessels with fleet segments labels"
 msgstr ""

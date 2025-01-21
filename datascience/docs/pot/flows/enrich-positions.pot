@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2021, Vincent Chéry
+# Copyright (C) 2023, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"POT-Creation-Date: 2025-01-21 10:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,7 +71,7 @@ msgstr ""
 msgid "the vessel's *average speed* (i.e. the distance between two VMS positions divided by the time between the two positions) remains between 0.0025 and 5.5 knots twice in a row"
 msgstr ""
 
-#: ../source/flows/enrich-positions.rst:None
+#: ../source/flows/enrich-positions.rst:-1
 #: 92abd7325bdb4716a16e62b5695004a2
 msgid "Map with VMS tracks colored in green where fishing activity is detected"
 msgstr ""

@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2021, Vincent Chéry
+# Copyright (C) 2023, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"POT-Creation-Date: 2025-01-21 10:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,7 +51,7 @@ msgstr ""
 msgid "Flow that imports administrative areas :"
 msgstr ""
 
-#: ../source/flows.rst:None
+#: ../source/flows.rst:-1
 #: b72a3d3af8b340d582985db7b67bd35a
 msgid "Schematic of administrative areas data flow"
 msgstr ""
@@ -61,7 +61,7 @@ msgstr ""
 msgid "Flows that import repositories (species, gears, infractions...) :"
 msgstr ""
 
-#: ../source/flows.rst:None
+#: ../source/flows.rst:-1
 #: b72a3d3af8b340d582985db7b67bd35a
 msgid "Schematic of repositories flows"
 msgstr ""
@@ -71,7 +71,7 @@ msgstr ""
 msgid "Flows that import and perform a check-up on regulations data :"
 msgstr ""
 
-#: ../source/flows.rst:None
+#: ../source/flows.rst:-1
 #: b72a3d3af8b340d582985db7b67bd35a
 msgid "Schematic of regulation flows"
 msgstr ""
@@ -81,7 +81,7 @@ msgstr ""
 msgid "Flows that perform computations that are internal to Monitorfish (alerts, fishing detection...):"
 msgstr ""
 
-#: ../source/flows.rst:None
+#: ../source/flows.rst:-1
 #: b72a3d3af8b340d582985db7b67bd35a
 msgid "Schematic of internal computations flows"
 msgstr ""
@@ -91,7 +91,7 @@ msgstr ""
 msgid "Flows that contribute to maintaining an up-to-date `last_positions` table :"
 msgstr ""
 
-#: ../source/flows.rst:None
+#: ../source/flows.rst:-1
 #: b72a3d3af8b340d582985db7b67bd35a
 msgid "Schematic of last positions flows"
 msgstr ""

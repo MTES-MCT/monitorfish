@@ -5,10 +5,10 @@ import {
   BeaconMalfunctionPropertyName,
   BeaconMalfunctionsStage,
   EndOfBeaconMalfunctionReason
-} from '../../../../domain/entities/beaconMalfunction/constants'
-import { getActionText } from '../beaconMalfunctions'
+} from '../../../constants'
+import { getActionText } from '../utils'
 
-describe('features/SideWindow/BeaconMalfunctionBoard/beaconMalfunctions.tsx/getActionText()', () => {
+describe('features/SideWindow/BeaconMalfunctionBoard/utils.tsx/getActionText()', () => {
   it('should not show the end of malfunction reason when the stage value is not an end column', () => {
     const reason = EndOfBeaconMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED
     const action = {

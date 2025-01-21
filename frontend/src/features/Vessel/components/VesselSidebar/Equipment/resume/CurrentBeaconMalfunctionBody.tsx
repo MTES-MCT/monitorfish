@@ -1,16 +1,16 @@
+import { VesselStatusSelectValue } from '@features/BeaconMalfunction/components/BeaconMalfunctionBoard/VesselStatusSelectValue'
 import { useEffect, useRef } from 'react'
 import { SelectPicker } from 'rsuite'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../../../constants/constants'
-import { getMalfunctionStartDateText } from '../../../../../../domain/entities/beaconMalfunction'
-import { VESSEL_STATUS } from '../../../../../../domain/entities/beaconMalfunction/constants'
 import { updateBeaconMalfunctionFromKanban } from '../../../../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
 import { useMainAppDispatch } from '../../../../../../hooks/useMainAppDispatch'
+import { VESSEL_STATUS } from '../../../../../BeaconMalfunction/constants'
+import { getMalfunctionStartDateText } from '../../../../../BeaconMalfunction/utils'
 import TimeAgoSVG from '../../../../../icons/Label_horaire_VMS.svg?react'
-import { VesselStatusSelectValue } from '../../../../../SideWindow/BeaconMalfunctionBoard/VesselStatusSelectValue'
 
-import type { BeaconMalfunctionResumeAndDetails } from '../../../../../../domain/entities/beaconMalfunction/types'
+import type { BeaconMalfunctionResumeAndDetails } from '../../../../../BeaconMalfunction/types'
 
 type CurrentBeaconMalfunctionBodyProps = {
   currentBeaconMalfunctionWithDetails: BeaconMalfunctionResumeAndDetails | null | undefined

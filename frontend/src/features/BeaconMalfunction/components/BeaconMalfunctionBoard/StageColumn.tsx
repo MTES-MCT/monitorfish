@@ -1,16 +1,13 @@
+import { COLORS } from '@constants/constants'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useRef } from 'react'
 import styled from 'styled-components'
 
 import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
 import { Draggable } from './Draggable'
 import { StageColumnHeader } from './StageColumnHeader'
-import { COLORS } from '../../../constants/constants'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
-import type {
-  BeaconMalfunction,
-  BeaconMalfunctionStageColumnValue
-} from '../../../domain/entities/beaconMalfunction/types'
+import type { BeaconMalfunction, BeaconMalfunctionStageColumnValue } from '../../types'
 import type { CSSProperties, MutableRefObject } from 'react'
 
 type StageColumnType = {

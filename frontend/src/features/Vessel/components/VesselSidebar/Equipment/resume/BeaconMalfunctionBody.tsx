@@ -1,15 +1,15 @@
 import styled from 'styled-components'
 
-import { getFirstVesselStatus } from '../../../../../../domain/entities/beaconMalfunction'
+import { getDateTime } from '../../../../../../utils'
 import {
   BeaconMalfunctionPropertyName,
   BeaconMalfunctionVesselStatus,
   END_OF_MALFUNCTION_REASON_RECORD,
   VESSEL_STATUS
-} from '../../../../../../domain/entities/beaconMalfunction/constants'
-import { getDateTime } from '../../../../../../utils'
+} from '../../../../../BeaconMalfunction/constants'
+import { getFirstVesselStatus } from '../../../../../BeaconMalfunction/utils'
 
-import type { BeaconMalfunctionResumeAndDetails } from '../../../../../../domain/entities/beaconMalfunction/types'
+import type { BeaconMalfunctionResumeAndDetails } from '../../../../../BeaconMalfunction/types'
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24
 

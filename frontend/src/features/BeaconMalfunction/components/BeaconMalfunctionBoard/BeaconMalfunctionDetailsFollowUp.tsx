@@ -1,26 +1,23 @@
+import { COLORS } from '@constants/constants'
+import { useListenForScroll } from '@hooks/useListenForScroll'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { customDayjs } from '@mtes-mct/monitor-ui'
+import { pushToObjectAtIndex } from '@utils/pushToObjectAtIndex'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Toggle } from 'rsuite'
 import styled from 'styled-components'
 
 import { BeaconMalfunctionDetailsFollowUpItem } from './BeaconMalfunctionDetailsFollowUpItem'
 import { BeaconMalfunctionDetailsFollowUpRow } from './BeaconMalfunctionDetailsFollowUpRow'
-import { BeaconMalfunctionDetailsType, getContent } from './beaconMalfunctions'
-import { COLORS } from '../../../constants/constants'
-import { UserType, VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
-import { setUserType } from '../../../domain/shared_slices/Global'
-import { saveBeaconMalfunctionCommentFromKanban } from '../../../domain/use_cases/beaconMalfunction/saveBeaconMalfunctionCommentFromKanban'
-import { useListenForScroll } from '../../../hooks/useListenForScroll'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { getDate, mergeObjects } from '../../../utils'
-import { pushToObjectAtIndex } from '../../../utils/pushToObjectAtIndex'
-import CommentsSVG from '../../icons/Commentaires.svg?react'
+import { BeaconMalfunctionDetailsType, getContent } from './utils'
+import { setUserType } from '../../../../domain/shared_slices/Global'
+import { saveBeaconMalfunctionCommentFromKanban } from '../../../../domain/use_cases/beaconMalfunction/saveBeaconMalfunctionCommentFromKanban'
+import { getDate, mergeObjects } from '../../../../utils'
+import CommentsSVG from '../../../icons/Commentaires.svg?react'
+import { UserType, VESSEL_STATUS } from '../../constants'
 
-import type {
-  BeaconMalfunctionFollowUpItem,
-  BeaconMalfunctionStatusValue
-} from '../../../domain/entities/beaconMalfunction/types'
+import type { BeaconMalfunctionFollowUpItem, BeaconMalfunctionStatusValue } from '../../types'
 import type { CSSProperties } from 'react'
 
 export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails, firstStatus, smallSize }) {

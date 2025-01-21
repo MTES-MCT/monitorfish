@@ -1,7 +1,7 @@
+import { COLORS } from '@constants/constants'
 import { useDraggable } from '@dnd-kit/core'
 
-import { COLORS } from '../../../constants/constants'
-import { STAGE_RECORD } from '../../../domain/entities/beaconMalfunction/constants'
+import { STAGE_RECORD } from '../../constants'
 
 export function Draggable({ children, id, stageId }) {
   const { attributes, listeners, setNodeRef } = useDraggable({

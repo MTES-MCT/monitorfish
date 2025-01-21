@@ -1,5 +1,5 @@
+import { END_OF_MALFUNCTION_REASON_RECORD } from '@features/BeaconMalfunction/constants'
 import { vesselActions } from '@features/Vessel/slice'
-import { END_OF_MALFUNCTION_REASON_RECORD } from 'domain/entities/beaconMalfunction/constants'
 import { VesselSidebarTab } from 'domain/entities/vessel/vessel'
 import { VesselTrackDepth } from 'domain/entities/vesselTrackDepth'
 

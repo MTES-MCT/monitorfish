@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { YearBeaconMalfunctions } from './YearBeaconMalfunctions'
 import { COLORS } from '../../../../../../constants/constants'
 
-import type { BeaconMalfunctionResumeAndDetails } from '../../../../../../domain/entities/beaconMalfunction/types'
+import type { BeaconMalfunctionResumeAndDetails } from '../../../../../BeaconMalfunction/types'
 
 type YearsToBeaconMalfunctionListProps = {
   setIsCurrentBeaconMalfunctionDetails: (boolean) => void

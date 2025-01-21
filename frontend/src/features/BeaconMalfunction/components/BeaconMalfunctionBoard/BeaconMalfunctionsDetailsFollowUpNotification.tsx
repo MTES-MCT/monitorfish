@@ -1,14 +1,10 @@
+import { COLORS } from '@constants/constants'
 import { useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
-import {
-  NOTIFICATION_RECIPIENT_FUNCTION,
-  NOTIFICATION_TYPE,
-  COMMUNICATION_MEAN
-} from '../../../domain/entities/beaconMalfunction/constants'
-import NotOkSVG from '../../icons/Icon_not_OK.svg?react'
-import OkSVG from '../../icons/Icon_OK.svg?react'
+import NotOkSVG from '../../../icons/Icon_not_OK.svg?react'
+import OkSVG from '../../../icons/Icon_OK.svg?react'
+import { NOTIFICATION_RECIPIENT_FUNCTION, NOTIFICATION_TYPE, COMMUNICATION_MEAN } from '../../constants'
 
 import type { CSSProperties } from 'react'
 

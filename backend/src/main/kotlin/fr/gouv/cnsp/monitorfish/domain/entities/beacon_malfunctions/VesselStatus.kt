@@ -6,6 +6,7 @@ enum class VesselStatus {
     NO_NEWS,
     ACTIVITY_DETECTED,
     TECHNICAL_STOP,
+    TEMPORARY_STOP,
     ON_SALE,
     SUSPENDED_BECAUSE_UNPAID,
     IN_FOREIGN_EEZ,

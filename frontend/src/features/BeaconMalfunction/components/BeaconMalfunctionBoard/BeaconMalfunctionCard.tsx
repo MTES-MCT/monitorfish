@@ -1,16 +1,16 @@
+import { COLORS } from '@constants/constants'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
+import { getBeaconCreationOrModificationDate } from './utils'
 import { VesselStatusSelect } from './VesselStatusSelect'
-import { COLORS } from '../../../constants/constants'
-import { getMalfunctionStartDateText } from '../../../domain/entities/beaconMalfunction'
-import { END_OF_MALFUNCTION_REASON_RECORD, VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
-import { openBeaconMalfunctionInKanban } from '../../../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
-import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { openBeaconMalfunctionInKanban } from '../../../../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
+import { showVesselFromBeaconMalfunctionsKanban } from '../../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
+import { END_OF_MALFUNCTION_REASON_RECORD, VESSEL_STATUS } from '../../constants'
+import { getMalfunctionStartDateText } from '../../utils'
 
-import type { BeaconMalfunction } from '../../../domain/entities/beaconMalfunction/types'
+import type { BeaconMalfunction } from '../../types'
 import type { MutableRefObject } from 'react'
 
 export type BeaconMalfunctionCardProps = {

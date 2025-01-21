@@ -1,5 +1,6 @@
+import { NOTIFICATION_TYPE } from '@features/BeaconMalfunction/constants'
+
 import { sendNotificationFromAPI } from '../../../api/beaconMalfunction'
-import { NOTIFICATION_TYPE } from '../../entities/beaconMalfunction/constants'
 import { setError } from '../../shared_slices/Global'
 
 /**

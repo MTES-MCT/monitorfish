@@ -1,6 +1,7 @@
 import * as timeago from 'timeago.js'
 
 import { BeaconMalfunctionsDetailsFollowUpNotification } from './BeaconMalfunctionsDetailsFollowUpNotification'
+import { getDate, getTextForSearch, getTime } from '../../../../utils'
 import {
   BeaconMalfunctionPropertyName,
   BeaconMalfunctionsStage,
@@ -9,8 +10,7 @@ import {
   EndOfBeaconMalfunctionReason,
   STAGE_RECORD,
   VESSEL_STATUS
-} from '../../../domain/entities/beaconMalfunction/constants'
-import { getDate, getTextForSearch, getTime } from '../../../utils'
+} from '../../constants'
 
 import type {
   BeaconMalfunction,
@@ -18,7 +18,7 @@ import type {
   BeaconMalfunctionComment,
   BeaconMalfunctionFollowUpItem,
   BeaconMalfunctionStatusValue
-} from '../../../domain/entities/beaconMalfunction/types'
+} from '../../types'
 
 const BEACON_CREATION_AT_SEA_OFFSET = 6
 const BEACON_CREATION_AT_PORT_OFFSET = 24

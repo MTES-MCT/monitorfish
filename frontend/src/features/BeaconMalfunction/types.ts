@@ -4,8 +4,8 @@ import type {
   BeaconMalfunctionVesselStatus,
   EndOfBeaconMalfunctionReason
 } from './constants'
-import type { BeaconMalfunctionDetailsType } from '../../../features/SideWindow/BeaconMalfunctionBoard/beaconMalfunctions'
-import type { VesselIdentity } from '../vessel/types'
+import type { VesselIdentity } from '../../domain/entities/vessel/types'
+import type { BeaconMalfunctionDetailsType } from '@features/BeaconMalfunction/components/BeaconMalfunctionBoard/utils'
 import type { Integer } from 'type-fest'
 
 export type BeaconMalfunction = {
@@ -74,11 +74,6 @@ export type BeaconMalfunctionNotifications = {
   notifications: BeaconMalfunctionNotification[]
 }
 
-export type BeaconMalfunctionCommentInput = {
-  comment: string
-  userType: string
-}
-
 export type BeaconMalfunctionResumeAndDetails = {
   actions: BeaconMalfunctionAction[]
   beaconMalfunction: BeaconMalfunction
@@ -115,7 +110,7 @@ export type BeaconMalfunctionStatusValue = {
   icon: JSX.Element
   label: string
   textColor: string
-  value: string
+  value: BeaconMalfunctionVesselStatus
 }
 
 export type EnfOfBeaconMalfunctionStatusValue = {

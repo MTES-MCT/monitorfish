@@ -1,7 +1,7 @@
 import { expect } from '@jest/globals'
 
 import { BeaconMalfunctionVesselStatus, EndOfBeaconMalfunctionReason } from '../constants'
-import { getMalfunctionStartDateText } from '../index'
+import { getMalfunctionStartDateText } from '../utils'
 
 describe('domain/entities/beaconMalfunction/index.getMalfunctionStartDateText()', () => {
   it('should return the right status', () => {

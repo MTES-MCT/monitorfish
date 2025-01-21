@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { STAGE_RECORD } from '../../../domain/entities/beaconMalfunction/constants'
+import { STAGE_RECORD } from '../../constants'
 
 const MAX_ARCHIVED_ITEMS = 60
 

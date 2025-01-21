@@ -3,9 +3,9 @@ import { useEffect } from 'react'
 import { SelectPicker } from 'rsuite'
 
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
-import { VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
+import { VESSEL_STATUS } from '../../constants'
 
-import type { BeaconMalfunction } from '../../../domain/entities/beaconMalfunction/types'
+import type { BeaconMalfunction } from '../../types'
 
 type VesselStatusSelectProps = {
   beaconMalfunction: BeaconMalfunction | undefined
@@ -38,7 +38,7 @@ export function VesselStatusSelect({
         '*[data-cy="side-window-beacon-malfunctions-vessel-status"]'
       ) as HTMLElement
       if (toggleElement?.style) {
-        selectElement.style.setProperty('color', vesselStatus?.textColor ?? THEME.color.charcoal, 'important')
+        toggleElement.style.setProperty('color', vesselStatus?.textColor ?? THEME.color.charcoal, 'important')
       }
 
       const icons = domRef.current.querySelectorAll('.rs-icon') as HTMLElement[]

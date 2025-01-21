@@ -1,3 +1,4 @@
+import { getReducedTimeAgo } from '@features/BeaconMalfunction/components/BeaconMalfunctionBoard/utils'
 import _ from 'lodash'
 
 import {
@@ -6,8 +7,7 @@ import {
   END_OF_MALFUNCTION_REASON_RECORD,
   STAGE_RECORD
 } from './constants'
-import { getReducedTimeAgo } from '../../../features/SideWindow/BeaconMalfunctionBoard/beaconMalfunctions'
-import { getDate } from '../../../utils'
+import { getDate } from '../../utils'
 
 import type { BeaconMalfunction, BeaconMalfunctionResumeAndDetails } from './types'
 

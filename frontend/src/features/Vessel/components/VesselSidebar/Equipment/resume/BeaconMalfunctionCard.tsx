@@ -1,19 +1,19 @@
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { getFirstVesselStatus, getMalfunctionStartDateText } from '../../../../../../domain/entities/beaconMalfunction'
+import { setOpenedBeaconMalfunction } from '../../../../../../domain/shared_slices/BeaconMalfunction'
+import { useMainAppDispatch } from '../../../../../../hooks/useMainAppDispatch'
+import { getDateTime } from '../../../../../../utils'
 import {
   BeaconMalfunctionPropertyName,
   BeaconMalfunctionVesselStatus,
   VESSEL_STATUS
-} from '../../../../../../domain/entities/beaconMalfunction/constants'
-import { setOpenedBeaconMalfunction } from '../../../../../../domain/shared_slices/BeaconMalfunction'
-import { useMainAppDispatch } from '../../../../../../hooks/useMainAppDispatch'
-import { getDateTime } from '../../../../../../utils'
+} from '../../../../../BeaconMalfunction/constants'
+import { getFirstVesselStatus, getMalfunctionStartDateText } from '../../../../../BeaconMalfunction/utils'
 import AtSeaSVG from '../../../../../icons/Icone_avarie_mer.svg?react'
 import AtPortSVG from '../../../../../icons/Icone_avarie_quai.svg?react'
 
-import type { BeaconMalfunctionResumeAndDetails } from '../../../../../../domain/entities/beaconMalfunction/types'
+import type { BeaconMalfunctionResumeAndDetails } from '../../../../../BeaconMalfunction/types'
 import type { HTMLProps } from 'react'
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24

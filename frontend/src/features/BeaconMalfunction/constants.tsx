@@ -1,11 +1,12 @@
+import { Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import VesselStatusActivityDetectedSVG from '../../../features/icons/Avarie_statut_activite_detectee.svg?react'
-import VesselStatusTechnicalStopSVG from '../../../features/icons/Avarie_statut_arret_tech.svg?react'
-import VesselStatusAtPortSVG from '../../../features/icons/Avarie_statut_navire_a_quai.svg?react'
-import VesselStatusAtSeaSVG from '../../../features/icons/Avarie_statut_navire_en_mer.svg?react'
-import VesselStatusNoNewsSVG from '../../../features/icons/Avarie_statut_sans_nouvelles.svg?react'
-import { theme } from '../../../ui/theme'
+import { theme } from '../../ui/theme'
+import VesselStatusActivityDetectedSVG from '../icons/Avarie_statut_activite_detectee.svg?react'
+import VesselStatusTechnicalStopSVG from '../icons/Avarie_statut_arret_tech.svg?react'
+import VesselStatusAtPortSVG from '../icons/Avarie_statut_navire_a_quai.svg?react'
+import VesselStatusAtSeaSVG from '../icons/Avarie_statut_navire_en_mer.svg?react'
+import VesselStatusNoNewsSVG from '../icons/Avarie_statut_sans_nouvelles.svg?react'
 
 import type {
   BeaconMalfunctionStageColumnValue,
@@ -36,7 +37,8 @@ enum BeaconMalfunctionVesselStatus {
   NO_NEWS = 'NO_NEWS',
   ON_SALE = 'ON_SALE',
   SUSPENDED_BECAUSE_UNPAID = 'SUSPENDED_BECAUSE_UNPAID',
-  TECHNICAL_STOP = 'TECHNICAL_STOP'
+  TECHNICAL_STOP = 'TECHNICAL_STOP',
+  TEMPORARY_STOP = 'TEMPORARY_STOP'
 }
 
 const VesselStatusAtPort = styled(VesselStatusAtPortSVG)``
@@ -56,7 +58,7 @@ const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
     icon: <VesselStatusAtPort style={iconStyle} />,
     label: 'Navire à quai',
     textColor: theme.color.charcoal,
-    value: 'AT_PORT'
+    value: BeaconMalfunctionVesselStatus.AT_PORT
   },
   {
     color: theme.color.powderBlue,
@@ -64,7 +66,7 @@ const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
     icon: <VesselStatusAtSea style={iconStyle} />,
     label: 'Navire en mer',
     textColor: theme.color.charcoal,
-    value: 'AT_SEA'
+    value: BeaconMalfunctionVesselStatus.AT_SEA
   },
   {
     color: '#E6BC51',
@@ -72,7 +74,7 @@ const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
     icon: <VesselStatusNoNews style={iconStyle} />,
     label: 'Sans nouvelles',
     textColor: theme.color.charcoal,
-    value: 'NO_NEWS'
+    value: BeaconMalfunctionVesselStatus.NO_NEWS
   },
   {
     color: theme.color.maximumRed,
@@ -80,7 +82,7 @@ const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
     icon: <VesselStatusActivityDetected style={iconStyle} />,
     label: 'Activité détectée',
     textColor: theme.color.white,
-    value: 'ACTIVITY_DETECTED'
+    value: BeaconMalfunctionVesselStatus.ACTIVITY_DETECTED
   },
   {
     color: theme.color.wheat,
@@ -88,7 +90,15 @@ const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
     icon: <VesselStatusTechnicalStopSVG style={iconStyle} />,
     label: 'En arrêt technique',
     textColor: theme.color.charcoal,
-    value: 'TECHNICAL_STOP'
+    value: BeaconMalfunctionVesselStatus.TECHNICAL_STOP
+  },
+  {
+    color: theme.color.wheat,
+    hoursOffsetToRetrieveMalfunctionCreation: undefined,
+    icon: <Icon.Infringement />,
+    label: 'En arrêt temporaire',
+    textColor: theme.color.charcoal,
+    value: BeaconMalfunctionVesselStatus.TEMPORARY_STOP
   },
   {
     color: theme.color.wheat,
@@ -96,15 +106,15 @@ const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
     icon: <VesselStatusAtPort style={iconStyle} />,
     label: 'En vente',
     textColor: theme.color.charcoal,
-    value: 'ON_SALE'
+    value: BeaconMalfunctionVesselStatus.ON_SALE
   },
   {
     color: theme.color.maximumRed,
     hoursOffsetToRetrieveMalfunctionCreation: undefined,
     icon: <VesselStatusActivityDetected style={iconStyle} />,
-    label: 'Suspendu cause impayé',
+    label: 'Suspendu (impayé)',
     textColor: theme.color.white,
-    value: 'SUSPENDED_BECAUSE_UNPAID'
+    value: BeaconMalfunctionVesselStatus.SUSPENDED_BECAUSE_UNPAID
   },
   {
     color: theme.color.powderBlue,
@@ -112,7 +122,7 @@ const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
     icon: <VesselStatusAtSea style={iconStyle} />,
     label: 'Navire en ZEE étrangère',
     textColor: theme.color.charcoal,
-    value: 'IN_FOREIGN_EEZ'
+    value: BeaconMalfunctionVesselStatus.IN_FOREIGN_EEZ
   }
 ]
 

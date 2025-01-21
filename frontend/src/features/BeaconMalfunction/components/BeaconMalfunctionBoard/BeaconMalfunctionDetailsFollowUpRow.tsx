@@ -1,6 +1,5 @@
+import { COLORS } from '@constants/constants'
 import styled from 'styled-components'
-
-import { COLORS } from '../../../constants/constants'
 
 export function BeaconMalfunctionDetailsFollowUpRow({ children, date, hoveredDate, index, smallSize }) {
   return (

@@ -1,26 +1,23 @@
+import { COLORS } from '@constants/constants'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { BeaconMalfunctionDetailsFollowUp } from './BeaconMalfunctionDetailsFollowUp'
-import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
 import { SendNotification } from './SendNotification'
+import { getBeaconCreationOrModificationDate } from './utils'
 import { VesselStatusSelect } from './VesselStatusSelect'
-import { COLORS } from '../../../constants/constants'
-import { getFirstVesselStatus, getMalfunctionStartDateText } from '../../../domain/entities/beaconMalfunction'
-import { VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
-import { closeBeaconMalfunctionInKanban } from '../../../domain/shared_slices/BeaconMalfunction'
-import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { getDateTime } from '../../../utils'
-import CloseIconSVG from '../../icons/Croix_grise.svg?react'
-import AlertsSVG from '../../icons/Icone_alertes_gris.svg?react'
-import TimeAgoSVG from '../../icons/Label_horaire_VMS.svg?react'
+import { closeBeaconMalfunctionInKanban } from '../../../../domain/shared_slices/BeaconMalfunction'
+import { showVesselFromBeaconMalfunctionsKanban } from '../../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
+import { getDateTime } from '../../../../utils'
+import CloseIconSVG from '../../../icons/Croix_grise.svg?react'
+import AlertsSVG from '../../../icons/Icone_alertes_gris.svg?react'
+import TimeAgoSVG from '../../../icons/Label_horaire_VMS.svg?react'
+import { VESSEL_STATUS } from '../../constants'
+import { getFirstVesselStatus, getMalfunctionStartDateText } from '../../utils'
 
-import type {
-  BeaconMalfunction,
-  BeaconMalfunctionResumeAndDetails
-} from '../../../domain/entities/beaconMalfunction/types'
+import type { BeaconMalfunction, BeaconMalfunctionResumeAndDetails } from '../../types'
 import type { CSSProperties } from 'react'
 
 export type BeaconMalfunctionDetailsProps = {

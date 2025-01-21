@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
 import { COLORS } from '../../../../../../constants/constants'
-import { getNumberOfSeaAndLandBeaconMalfunctions } from '../../../../../../domain/entities/beaconMalfunction'
+import { getNumberOfSeaAndLandBeaconMalfunctions } from '../../../../../BeaconMalfunction/utils'
 import {
   YearListChevronIcon,
   YearListContent,
@@ -11,7 +11,7 @@ import {
   YearListTitleText
 } from '../../common_styles/YearList.style'
 
-import type { BeaconMalfunctionResumeAndDetails } from '../../../../../../domain/entities/beaconMalfunction/types'
+import type { BeaconMalfunctionResumeAndDetails } from '../../../../../BeaconMalfunction/types'
 
 type YearBeaconMalfunctionsProps = {
   setIsCurrentBeaconMalfunctionDetails: (boolean) => void

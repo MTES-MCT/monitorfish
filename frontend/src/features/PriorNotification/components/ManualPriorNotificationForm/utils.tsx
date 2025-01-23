@@ -5,24 +5,34 @@ import {
   BLUEFIN_TUNA_SPECY_CODE,
   SWORDFISH_SPECY_CODE
 } from '@features/PriorNotification/constants'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { INITIAL_FORM_VALUES } from './constants'
 
 import type { ManualPriorNotificationFormValues, ManualPriorNotificationFormValuesFishingCatch } from './types'
 
 export function getPartialComputationRequestData({
+  expectedArrivalDate,
+  expectedLandingDate,
   fishingCatches,
   globalFaoArea,
+  isExpectedLandingDateSameAsExpectedArrivalDate,
   portLocode,
   tripGearCodes,
   vesselIdentity
 }: ManualPriorNotificationFormValues) {
+  const computedExpectedLandingDate = isExpectedLandingDateSameAsExpectedArrivalDate
+    ? expectedArrivalDate
+    : expectedLandingDate
+  const year = computedExpectedLandingDate ? customDayjs(computedExpectedLandingDate).get('year') : undefined
+
   return {
     fishingCatches,
     globalFaoArea,
     portLocode,
     tripGearCodes,
-    vesselId: vesselIdentity?.vesselId
+    vesselId: vesselIdentity?.vesselId,
+    year
   }
 }
 

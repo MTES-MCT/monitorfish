@@ -6,4 +6,5 @@ data class ManualPriorNotificationComputeDataInput(
     val portLocode: String,
     val tripGearCodes: List<String>,
     val vesselId: Int,
+    val year: Int,
 )

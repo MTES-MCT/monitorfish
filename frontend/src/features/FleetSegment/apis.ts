@@ -10,6 +10,7 @@ export type ComputeFleetSegmentsParams = {
   gears: MissionAction.GearControl[]
   species: MissionAction.SpeciesControl[]
   vesselId: number
+  year: number
 }
 
 export const fleetSegmentApi = monitorfishApi.injectEndpoints({

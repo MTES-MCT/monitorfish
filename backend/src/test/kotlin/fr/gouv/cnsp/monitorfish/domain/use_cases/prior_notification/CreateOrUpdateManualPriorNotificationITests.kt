@@ -341,7 +341,7 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
         // Given
         val reportId = testCase.reportId
 
-        given { computeManualPriorNotification.execute(any(), any(), any(), any(), any()) }
+        given { computeManualPriorNotification.execute(any(), any(), any(), any(), any(), any()) }
             .willReturn(
                 ManualPriorNotificationComputedValues(
                     isVesselUnderCharter = false,
@@ -390,7 +390,7 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
         // Given
         val reportId = testCase.reportId
 
-        given { computeManualPriorNotification.execute(any(), any(), any(), any(), any()) }
+        given { computeManualPriorNotification.execute(any(), any(), any(), any(), any(), any()) }
             .willReturn(
                 ManualPriorNotificationComputedValues(
                     isVesselUnderCharter = false,

@@ -19,11 +19,12 @@ class ComputeFleetSegmentsFromControl(
         faoAreas: List<String>,
         gears: List<GearControl>,
         species: List<SpeciesControl>,
+        year: Int,
     ): List<FleetSegment> {
         val allSpecies = speciesRepository.findAll()
 
         val speciesCatches = getSpeciesCatchesForSegmentCalculation(faoAreas, gears, species, allSpecies)
 
-        return computeFleetSegments.execute(vesselId, speciesCatches)
+        return computeFleetSegments.execute(year, vesselId, speciesCatches)
     }
 }

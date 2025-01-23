@@ -5,4 +5,5 @@ data class ComputeFleetSegmentsDataInput(
     val vesselId: Int,
     val gears: List<GearControlDataInput>,
     val species: List<SpeciesControlDataInput>,
+    val year: Int,
 )

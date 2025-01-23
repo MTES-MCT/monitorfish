@@ -12,14 +12,19 @@ import { INITIAL_FORM_VALUES } from './constants'
 import type { ManualPriorNotificationFormValues, ManualPriorNotificationFormValuesFishingCatch } from './types'
 
 export function getPartialComputationRequestData({
+  expectedArrivalDate,
   expectedLandingDate,
   fishingCatches,
   globalFaoArea,
+  isExpectedLandingDateSameAsExpectedArrivalDate,
   portLocode,
   tripGearCodes,
   vesselIdentity
 }: ManualPriorNotificationFormValues) {
-  const year = expectedLandingDate ? customDayjs(expectedLandingDate).get('year') : undefined
+  const computedExpectedLandingDate = isExpectedLandingDateSameAsExpectedArrivalDate
+    ? expectedArrivalDate
+    : expectedLandingDate
+  const year = computedExpectedLandingDate ? customDayjs(computedExpectedLandingDate).get('year') : undefined
 
   return {
     fishingCatches,

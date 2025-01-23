@@ -237,6 +237,7 @@ export namespace PriorNotification {
     'fishingCatches' | 'globalFaoArea' | 'portLocode' | 'tripGearCodes'
   > & {
     vesselId: number
+    year: number
   }
 
   export type ApiManualCreateOrUpdateRequestData = Omit<ManualForm, 'reportId' | 'vesselIdentity'> & {

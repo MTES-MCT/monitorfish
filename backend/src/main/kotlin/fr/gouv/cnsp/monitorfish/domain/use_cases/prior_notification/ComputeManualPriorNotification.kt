@@ -26,6 +26,7 @@ class ComputeManualPriorNotification(
         portLocode: String,
         tripGearCodes: List<String>,
         vesselId: Int,
+        year: Int,
     ): ManualPriorNotificationComputedValues {
         val vessel = vesselRepository.findVesselById(vesselId)
         requireNotNull(vessel) {
@@ -41,7 +42,7 @@ class ComputeManualPriorNotification(
         val vesselFlagCountryCode = vessel.flagState
 
         val speciesCatch = getSpeciesCatchesForSegmentCalculation(tripGearCodes, fishingCatchesWithFaoArea, species)
-        val tripSegments = computeFleetSegments.execute(vessel.id, speciesCatch)
+        val tripSegments = computeFleetSegments.execute(year, vessel.id, speciesCatch)
         val types = computePnoTypes.execute(fishingCatchesWithFaoArea, tripGearCodes, vesselFlagCountryCode)
         val vesselRiskFactor = computeRiskFactor.execute(portLocode, tripSegments, vesselCfr)
 
@@ -56,10 +57,10 @@ class ComputeManualPriorNotification(
 
         return ManualPriorNotificationComputedValues(
             isVesselUnderCharter = vessel.underCharter,
-            nextState,
-            tripSegments,
-            types,
-            vesselRiskFactor,
+            nextState = nextState,
+            tripSegments = tripSegments,
+            types = types,
+            vesselRiskFactor = vesselRiskFactor,
         )
     }
 }

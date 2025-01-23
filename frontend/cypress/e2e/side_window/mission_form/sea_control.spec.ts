@@ -141,6 +141,13 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Sous-taille', true)
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
+    // This should trigger a computation of the fleet segment
+    cy.intercept('POST', 'bff/v1/fleet_segments/compute').as(
+      'computeFleetSegments'
+    )
+    cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
+    cy.wait('@computeFleetSegments')
+
     // Appréhension et déroutement
     cy.fill('Appréhension d’engin(s)', true)
     cy.fill('Appréhension d’espèce(s)', true)

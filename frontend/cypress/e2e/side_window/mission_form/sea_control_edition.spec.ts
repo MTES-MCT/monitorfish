@@ -82,7 +82,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
           otherComments: 'Commentaires post contrôle',
           otherInfractions: [],
           portLocode: null,
-          segments: [{ segment: 'SWW04', segmentName: 'SWW04' }],
+          segments: [],
           seizureAndDiversion: false,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: 'NO',
@@ -179,12 +179,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
           otherComments: 'Commentaires post contrôle',
           otherInfractions: [],
           portLocode: null,
-          segments: [
-            {
-              segment: 'SWW02',
-              segmentName: 'SWW02'
-            }
-          ],
+          segments: [],
           seizureAndDiversion: false,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: 'NO',

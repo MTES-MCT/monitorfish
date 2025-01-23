@@ -63,11 +63,12 @@ class CreateOrUpdateManualPriorNotification(
         // The Backend should NEVER update `risk_factors` DB table, only the pipeline is allowed to update it.
         val computedValues =
             computeManualPriorNotification.execute(
-                fishingCatches,
-                globalFaoArea,
-                portLocode,
-                tripGearCodes,
-                vesselId,
+                fishingCatches = fishingCatches,
+                globalFaoArea = globalFaoArea,
+                portLocode = portLocode,
+                tripGearCodes = tripGearCodes,
+                vesselId = vesselId,
+                year = expectedLandingDate.year,
             )
 
         val isPartOfControlUnitSubscriptions =

@@ -207,6 +207,7 @@ class PriorNotificationController(
                 portLocode = manualPriorNotificationComputeDataInput.portLocode,
                 tripGearCodes = manualPriorNotificationComputeDataInput.tripGearCodes,
                 vesselId = manualPriorNotificationComputeDataInput.vesselId,
+                year = manualPriorNotificationComputeDataInput.year,
             )
 
         return ManualPriorNotificationComputedValuesDataOutput

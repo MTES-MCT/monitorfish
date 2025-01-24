@@ -402,21 +402,6 @@ export const getPNOSpeciesInsightRecord = (
   return speciesToWeightPNOObject
 }
 
-export const getFAOZonesFromFARMessages = (farMessages: Logbook.FarMessage[]) =>
-  farMessages
-    .map(farMessage =>
-      farMessage.message.hauls.map(haul => haul.catches.map(speciesCatch => speciesCatch.faoZone)).flat()
-    )
-    .flat()
-    .filter((faoZone): faoZone is string => faoZone !== undefined)
-    .reduce((acc: string[], faoZone) => {
-      if (acc.indexOf(faoZone) < 0) {
-        acc.push(faoZone)
-      }
-
-      return acc
-    }, [])
-
 /**
  * Get the effective datetime from logbook message
  */

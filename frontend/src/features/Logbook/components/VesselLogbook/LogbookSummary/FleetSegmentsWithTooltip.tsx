@@ -1,29 +1,28 @@
+import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
 import { Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { getSegmentInfo, getTripSegments } from './utils'
-import { COLORS } from '../../../../../constants/constants'
-import { useGetFleetSegmentsQuery } from '../../../../FleetSegment/apis'
 
 export type FleetSegmentsProps = {
   segments: string[] | undefined
 }
-export function FleetSegments({ segments }: FleetSegmentsProps) {
+export function FleetSegmentsWithTooltip({ segments }: FleetSegmentsProps) {
   const { data: fleetSegments } = useGetFleetSegmentsQuery()
 
   const tripSegments = getTripSegments(segments, fleetSegments)
 
   return (
     <>
-      {tripSegments ? (
-        tripSegments.map((segment, index) => (
+      {segments ? (
+        segments.map((segment, index) => (
           // eslint-disable-next-line react/no-array-index-key
           <span key={index}>
-            {segment.segment}
-            <TitleWrapper title={getSegmentInfo(segment)}>
+            {segment}
+            <TitleWrapper title={getSegmentInfo(tripSegments[index])}>
               <StyledIconInfo size={16} />
             </TitleWrapper>
-            {tripSegments.length === index + 1 ? '' : ', '}
+            {segments.length === index + 1 ? '' : ', '}
           </span>
         ))
       ) : (
@@ -38,7 +37,7 @@ const TitleWrapper = styled.span`
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-weight: 300;
   line-height: normal;
 `

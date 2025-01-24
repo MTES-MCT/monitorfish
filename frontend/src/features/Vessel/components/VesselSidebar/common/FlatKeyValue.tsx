@@ -1,4 +1,4 @@
-import { type ForwardedRef, forwardRef, ReactElement } from 'react'
+import { type ForwardedRef, forwardRef, type ReactElement } from 'react'
 import styled from 'styled-components'
 
 type KeyValue = {

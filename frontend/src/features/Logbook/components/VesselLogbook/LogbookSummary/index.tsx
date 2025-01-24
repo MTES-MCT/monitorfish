@@ -1,4 +1,5 @@
 import { COMMON_ALERT_TYPE_OPTION } from '@features/Alert/constants'
+import { VesselCurrentFleetSegmentDetails } from '@features/FleetSegment/components/VesselCurrentFleetSegmentDetails'
 import { getLastLogbookTripsOptions } from '@features/Logbook/components/VesselLogbook/LogbookMessages/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -7,7 +8,7 @@ import { skipToken } from '@reduxjs/toolkit/query'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { FleetSegments } from './FleetSegments'
+import { FleetSegmentsWithTooltip } from './FleetSegmentsWithTooltip'
 import { CPSMessageResume } from './summaries/CPSMessageResume'
 import { DEPMessageResume } from './summaries/DEPMessageResume'
 import { DISMessageResume } from './summaries/DISMessageResume'
@@ -19,9 +20,8 @@ import ArrowSVG from '../../../../icons/Picto_fleche-pleine-droite.svg?react'
 import { useGetLastLogbookTripsQuery } from '../../../api'
 import { LogbookMessageType as LogbookMessageTypeEnum, LogbookOperationType, NavigateTo } from '../../../constants'
 import { useGetLogbookUseCase } from '../../../hooks/useGetLogbookUseCase'
-import { getFAOZonesFromFARMessages } from '../../../utils'
 import { CustomDatesShowedInfo } from '../CustomDatesShowedInfo'
-import { getLogbookTripSummary, getUniqueGears } from '../utils'
+import { getLogbookTripSummary } from '../utils'
 
 import type { LogbookTripSummary } from '../types'
 import type { Promisable } from 'type-fest'
@@ -45,8 +45,6 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
 
   const logbookTrip: LogbookTripSummary = useMemo(() => getLogbookTripSummary(fishingActivities), [fishingActivities])
 
-  const faoZones = getFAOZonesFromFARMessages(logbookTrip.far.logs)
-
   const catchesOverToleranceAlert = useMemo(() => {
     if (!fishingActivities?.alerts?.length) {
       return undefined
@@ -56,31 +54,6 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
       alert => alert?.value?.type === COMMON_ALERT_TYPE_OPTION.PNO_LAN_WEIGHT_TOLERANCE_ALERT.code
     )?.value
   }, [fishingActivities?.alerts])
-
-  const depGears = useMemo(() => {
-    if (!logbookTrip.dep?.log?.message?.gearOnboard?.length) {
-      return <NoValue>-</NoValue>
-    }
-
-    const uniqueGears = getUniqueGears(logbookTrip.dep.log.message.gearOnboard)
-
-    return uniqueGears.map(gear => {
-      if (!gear.gearName) {
-        return (
-          <span key={gear.gear}>
-            {gear.gear}
-            <br />
-          </span>
-        )
-      }
-
-      return (
-        <span key={gear.gear}>
-          {gear.gearName} ({gear.gear})<br />
-        </span>
-      )
-    })
-  }, [logbookTrip.dep?.log])
 
   const goToPreviousTrip = () => dispatch(getVesselLogbook(selectedVessel, NavigateTo.PREVIOUS, true))
   const goToNextTrip = () => dispatch(getVesselLogbook(selectedVessel, NavigateTo.NEXT, true))
@@ -96,38 +69,15 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
             <Title>
               <Text>Segment(s) de flotte(s) actuel(s)</Text>
               <TextValue>
-                <FleetSegments segments={selectedVessel?.segments} />
+                <FleetSegmentsWithTooltip segments={selectedVessel?.segments} />
               </TextValue>
             </Title>
-            <Fields>
-              <TableBody>
-                <Field>
-                  <Key>Engins à bord (JPE)</Key>
-                  <Value data-cy="vessel-fishing-gears">{depGears}</Value>
-                </Field>
-                <Field>
-                  <Key>Zones de la marée (JPE)</Key>
-                  <Value>
-                    {faoZones?.length ? (
-                      faoZones.map((faoZone, index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <span key={index}>
-                          {faoZone}
-                          {index === faoZones.length - 1 ? '' : ', '}
-                        </span>
-                      ))
-                    ) : (
-                      <NoValue>-</NoValue>
-                    )}
-                  </Value>
-                </Field>
-              </TableBody>
-            </Fields>
+            <StyledVesselCurrentFleetSegmentDetails />
           </Zone>
           <Zone>
             <Title $hasTwoLines={false}>
-              <Text hasTwoLines>Résumé du JPE</Text>
-              <TextValue data-cy="vessel-fishing-trip-number" hasTwoLines={false}>
+              <Text $hasTwoLines>Résumé du JPE</Text>
+              <TextValue $hasTwoLines={false} data-cy="vessel-fishing-trip-number">
                 <PreviousTrip
                   $disabled={!!isFirstVoyage}
                   accent={Accent.TERTIARY}
@@ -277,6 +227,10 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
   )
 }
 
+const StyledVesselCurrentFleetSegmentDetails = styled(VesselCurrentFleetSegmentDetails)`
+  padding: 6px 4px 4px;
+`
+
 export const PreviousTrip = styled(IconButton)<{
   $disabled: boolean
 }>`
@@ -345,23 +299,23 @@ const LogbookMessages = styled.ul`
 `
 
 const Text = styled.div<{
-  hasTwoLines?: boolean
+  $hasTwoLines?: boolean
 }>`
   color: ${p => p.theme.color.slateGray};
   font-size: 13px;
   font-weight: 500;
-  padding-top: ${p => (p.hasTwoLines ? '5px' : '0')};
+  padding-top: ${p => (p.$hasTwoLines ? '5px' : '0')};
 `
 
 const TextValue = styled.div<{
-  hasTwoLines?: boolean
+  $hasTwoLines?: boolean
 }>`
   font-size: 13px;
   color: ${p => p.theme.color.gunMetal};
   font-weight: 500;
   margin: 0;
   padding-left: 12px;
-  padding-top: ${p => (p.hasTwoLines ? '6px' : '0')};
+  padding-top: ${p => (p.$hasTwoLines ? '6px' : '0')};
 
   .Field-Select {
     background-color: ${p => p.theme.color.gainsboro};
@@ -397,8 +351,6 @@ const Body = styled.div`
   padding: 10px 10px 1px 10px;
 `
 
-const TableBody = styled.tbody``
-
 const Title = styled.div<{
   $hasTwoLines?: boolean
 }>`
@@ -420,50 +372,4 @@ const Zone = styled.div<{
   flex-wrap: wrap;
   text-align: left;
   margin-bottom: 10px;
-`
-
-const Fields = styled.table`
-  display: table;
-  margin: 15px 5px 10px 35px;
-  min-width: 40%;
-  width: inherit;
-`
-
-const Field = styled.tr`
-  margin: 5px 5px 5px 0;
-  border: none;
-  background: none;
-  line-height: 0.5em;
-`
-
-const Key = styled.th`
-  color: ${p => p.theme.color.slateGray};
-  display: inline-block;
-  margin: 0;
-  border: none;
-  padding: 5px 5px 5px 0;
-  background: none;
-  width: max-content;
-  line-height: 0.5em;
-  height: 0.5em;
-  font-size: 13px;
-  font-weight: normal;
-`
-
-const Value = styled.td`
-  font-size: 13px;
-  color: ${p => p.theme.color.gunMetal};
-  font-weight: 500;
-  margin: 0;
-  text-align: left;
-  padding: 1px 5px 5px 5px;
-  background: none;
-  border: none;
-  line-height: normal;
-`
-
-const NoValue = styled.span`
-  color: ${p => p.theme.color.slateGray};
-  font-weight: 300;
-  line-height: normal;
 `

@@ -91,7 +91,7 @@ const InfractionsResumeZone = styled.div`
 `
 
 const Zone = styled.div`
-  margin: 0px 5px 10px 45px;
+  margin: 0 5px 10px 45px;
   text-align: left;
   display: flex;
   flex-wrap: wrap;

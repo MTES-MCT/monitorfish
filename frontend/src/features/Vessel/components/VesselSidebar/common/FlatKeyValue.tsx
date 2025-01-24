@@ -1,6 +1,5 @@
+import { type ForwardedRef, forwardRef, ReactElement } from 'react'
 import styled from 'styled-components'
-
-import type { ReactElement } from 'react'
 
 type KeyValue = {
   hasMultipleLines?: boolean
@@ -14,9 +13,12 @@ type KeyValueTableProps = {
   keyWidth?: number | undefined
   valueEllipsisedForWidth?: number | undefined
 }
-export function FlatKeyValue({ className, column, keyWidth, valueEllipsisedForWidth }: KeyValueTableProps) {
+function FlatKeyValueWithRef(
+  { className, column, keyWidth, valueEllipsisedForWidth }: KeyValueTableProps,
+  ref: ForwardedRef<HTMLDivElement>
+) {
   return (
-    <Zone className={className}>
+    <Zone ref={ref ?? undefined} className={className}>
       <Fields>
         <TableBody>
           {column.map(({ hasMultipleLines, key, value }) => (
@@ -41,6 +43,8 @@ export function FlatKeyValue({ className, column, keyWidth, valueEllipsisedForWi
     </Zone>
   )
 }
+
+export const FlatKeyValue = forwardRef<HTMLDivElement, KeyValueTableProps>(FlatKeyValueWithRef)
 
 const TableBody = styled.tbody``
 
@@ -108,5 +112,4 @@ const NoValue = styled.td`
   line-height: normal;
   color: ${p => p.theme.color.slateGray};
   font-weight: 300;
-  line-height: normal;
 `

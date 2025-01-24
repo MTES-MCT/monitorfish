@@ -1,33 +1,20 @@
+import { VesselCurrentFleetSegmentDetails } from '@features/FleetSegment/components/VesselCurrentFleetSegmentDetails'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import styled from 'styled-components'
 
 import InfoSVG from '../../../../../icons/Information.svg?react'
 
 export function ImpactRiskFactorDetails({ isOpen }) {
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
-  const [faoZones, setFaoZones] = useState([])
-  const speciesElement = useRef<HTMLTableCellElement | null>(null)
-
-  // TODO  Fix `riskFactor` does not exist on type `AugmentedSelectedVessel`.
-  // @ts-ignore
-  const { riskFactor } = selectedVessel
-
-  useEffect(() => {
-    if (riskFactor && riskFactor.speciesOnboard) {
-      const nextFaoZones = riskFactor.speciesOnboard.map(species => species.faoZone)
-
-      setFaoZones(Array.from(new Set(nextFaoZones)) as any)
-    } else {
-      setFaoZones([])
-    }
-  }, [riskFactor])
+  const currentFleetSegmentDetailsElementRef = useRef<HTMLDivElement>(null)
+  const riskFactor = selectedVessel?.riskFactor
 
   return (
     <SubRiskDetails
-      $hasSegment={riskFactor?.segmentHighestImpact}
+      $elementHeight={currentFleetSegmentDetailsElementRef?.current?.clientHeight}
+      $hasSegment={!!riskFactor?.segmentHighestImpact}
       $isOpen={isOpen}
-      $speciesHeight={speciesElement?.current?.clientHeight}
     >
       <Line />
       <Zone>
@@ -36,68 +23,24 @@ export function ImpactRiskFactorDetails({ isOpen }) {
             <Fields>
               <TableBody>
                 <Field>
-                  <Key $isBig>Segment de flotte actuel</Key>
+                  <Key>Segment de flotte actuel</Key>
                   <Value>
-                    {riskFactor?.segmentHighestImpact ? (
-                      <>
-                        {riskFactor?.segmentHighestImpact}{' '}
-                        <Info
-                          title={
-                            'La note de risque de ce segment est la note attribuée par la DIRM de la ' +
-                            'façade dans son Plan de contrôle annuel.'
-                          }
-                        />
-                      </>
-                    ) : (
-                      <NoValue>-</NoValue>
-                    )}
+                    {riskFactor?.segmentHighestImpact}{' '}
+                    <Info
+                      title={
+                        'La note de risque de ce segment est la note attribuée par la DIRM de la ' +
+                        'façade dans son Plan de contrôle annuel.'
+                      }
+                    />
                   </Value>
                 </Field>
               </TableBody>
             </Fields>
-            <Fields>
-              <TableBody>
-                <Field>
-                  <Key>Engins à bord</Key>
-                  <Value>
-                    {riskFactor?.gearOnboard?.length ? (
-                      riskFactor?.gearOnboard?.map(gear => gear.gear).join(', ')
-                    ) : (
-                      <NoValue>-</NoValue>
-                    )}
-                  </Value>
-                </Field>
-                <Field>
-                  <Key>Espèces à bord</Key>
-                  <Value
-                    ref={speciesElement}
-                    title={
-                      riskFactor?.speciesOnboard?.length
-                        ? riskFactor?.speciesOnboard?.map(gear => gear.species).join(', ')
-                        : undefined
-                    }
-                  >
-                    {/* eslint-disable-next-line no-nested-ternary */}
-                    {riskFactor?.speciesOnboard?.length ? (
-                      riskFactor?.speciesOnboard?.length > 20 ? (
-                        `${riskFactor?.speciesOnboard
-                          ?.map(gear => gear.species)
-                          .join(', ')
-                          .substring(0, 104)}...`
-                      ) : (
-                        riskFactor?.speciesOnboard?.map(gear => gear.species).join(', ')
-                      )
-                    ) : (
-                      <NoValue>-</NoValue>
-                    )}
-                  </Value>
-                </Field>
-                <Field>
-                  <Key>Zones de la marée</Key>
-                  <Value>{faoZones.length ? faoZones.join(', ') : <NoValue>-</NoValue>}</Value>
-                </Field>
-              </TableBody>
-            </Fields>
+            <VesselCurrentFleetSegmentDetails ref={currentFleetSegmentDetailsElementRef} />
+            <Text>
+              Si le navire appartient à plusieurs segments, c&apos;est celui dont la note d&apos;impact est la plus
+              élevée qui est retenu.
+            </Text>
           </>
         ) : (
           <Text>
@@ -110,12 +53,6 @@ export function ImpactRiskFactorDetails({ isOpen }) {
   )
 }
 
-const NoValue = styled.span`
-  color: ${p => p.theme.color.slateGray};
-  font-weight: 300;
-  line-height: normal;
-`
-
 const Line = styled.div`
   width: 100%;
   border-bottom: 1px solid ${p => p.theme.color.lightGray};
@@ -127,26 +64,25 @@ const Info = styled(InfoSVG)<{
   width: 14px;
   vertical-align: text-bottom;
   margin-bottom: 2px;
-  margin-left: ${props => (props.$isInfoSegment ? '5px' : '2px')};
+  margin-left: ${p => (p.$isInfoSegment ? '5px' : '2px')};
 `
 
 const SubRiskDetails = styled.div<{
+  $elementHeight: number | undefined
   $hasSegment: boolean
   $isOpen: boolean
-  $speciesHeight: number | undefined
 }>`
   width: 100%;
-  z-index: ${props => props.$speciesHeight};
-  height: ${props =>
+  height: ${p =>
     // eslint-disable-next-line no-nested-ternary
-    props.$isOpen
-      ? props.$hasSegment
+    p.$isOpen
+      ? p.$hasSegment
         ? // eslint-disable-next-line no-nested-ternary
-          120 + (props.$speciesHeight ? (props.$speciesHeight < 60 ? props.$speciesHeight : 60) : 36)
+          95 + (p.$elementHeight ? p.$elementHeight : 36)
         : 80
       : 0}px;
-  opacity: ${props => (props.$isOpen ? '1' : '0')};
-  visibility: ${props => (props.$isOpen ? 'visible' : 'hidden')};
+  opacity: ${p => (p.$isOpen ? '1' : '0')};
+  visibility: ${p => (p.$isOpen ? 'visible' : 'hidden')};
   overflow: hidden;
   transition: 0.2s all;
 `
@@ -154,7 +90,7 @@ const SubRiskDetails = styled.div<{
 const TableBody = styled.tbody``
 
 const Zone = styled.div`
-  margin: 5px 5px 10px 45px;
+  margin: 5px 5px 10px 16px;
   text-align: left;
   display: flex;
   flex-wrap: wrap;
@@ -163,7 +99,7 @@ const Zone = styled.div`
 
 const Fields = styled.table`
   display: table;
-  margin: 10px 5px 5px 20px;
+  margin: 10px 5px 0 16px;
   min-width: 40%;
   width: inherit;
 `
@@ -175,27 +111,18 @@ const Field = styled.tr`
   line-height: 0.5em;
 `
 
-const Key = styled.th<{
-  $isBig?: boolean
-}>`
+const Key = styled.th`
   color: ${p => p.theme.color.slateGray};
-  flex: initial;
-  display: inline-block;
-  margin: 0;
-  border: none;
-  padding: 5px 5px 5px 0;
-  background: none;
-  width: ${props => (props.$isBig ? '160px' : '120px')};
+  padding: 1px 5px 5px 0;
   line-height: 0.5em;
-  height: 0.5em;
-  font-size: 13px;
   font-weight: normal;
+  width: 170px;
+  text-align: left;
 `
 
 const Value = styled.td`
   font-size: 13px;
   color: ${p => p.theme.color.gunMetal};
-  margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
   background: none;
@@ -207,13 +134,7 @@ const Value = styled.td`
 const Text = styled.div`
   font-size: 13px;
   color: ${p => p.theme.color.gunMetal};
-  margin: 0;
   text-align: left;
-  padding: 1px 5px 5px 5px;
-  background: none;
-  border: none;
-  line-height: normal;
   font-weight: 500;
-  margin-left: -15px;
-  margin-top: 5px;
+  margin: 4px 0 0 16px;
 `

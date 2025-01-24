@@ -23,7 +23,6 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy^="vessel-menu-fishing"]', { timeout: 10000 }).should('be.visible')
 
     // Then
-    cy.get('*[data-cy^="vessel-fishing-gears"]', { timeout: 10000 }).should('be.visible')
     // FAR messages are not acknowledged
     cy.get('*[data-cy="vessel-fishing-resume-title"]')
       .eq(1)
@@ -45,8 +44,10 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
     cy.get('*[data-cy^="vessel-menu-fishing"]', { timeout: 10000 }).should('be.visible')
 
-    cy.get('*[data-cy^="vessel-fishing-gears"]', { timeout: 10000 }).should('be.visible')
-    cy.get('*[data-cy^="vessel-fishing-gears"]').contains('Trémails et filets maillants combinés (GTN)')
+    cy.get('*[data-cy="Zones de la marée"]').contains('27.8.b, 27.8.c')
+    cy.get('*[data-cy="Engins de la marée (FAR)"]').contains('Chaluts de fond à panneaux (OTB)')
+    cy.get('*[data-cy="Majorité d\'espèces à bord"]').contains('Pélagique')
+    cy.get('*[data-cy="Espèces cibles à bord"]').contains('NEP (≥ 20% du total des captures)')
 
     cy.get('*[data-cy="vessel-fishing-resume-title"]').eq(2).click({ timeout: 10000 })
     cy.get('*[data-cy="cps-message-resume"]').contains('DAUPHIN COMMUN (DCO)')

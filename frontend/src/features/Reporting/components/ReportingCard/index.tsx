@@ -172,7 +172,7 @@ export function ReportingCard({
           {(!reporting.isArchived || (reporting.isArchived && willExpire)) && (
             <ExpirationDate>
               <Icon.Clock color={THEME.color.slateGray} />
-              <ExpirationDateText isEmpty={!willExpire}>{expirationDateText}</ExpirationDateText>
+              <ExpirationDateText $isEmpty={!willExpire}>{expirationDateText}</ExpirationDateText>
             </ExpirationDate>
           )}
         </Body>
@@ -358,10 +358,10 @@ const ExpirationDate = styled.div`
   margin-top: 14px;
 `
 
-const ExpirationDateText = styled.span<{ isEmpty: boolean }>`
-  color: ${p => (p.isEmpty ? p.theme.color.slateGray : p.theme.color.gunMetal)};
+const ExpirationDateText = styled.span<{ $isEmpty: boolean }>`
+  color: ${p => (p.$isEmpty ? p.theme.color.slateGray : p.theme.color.gunMetal)};
   font: normal normal normal 13px/18px Marianne;
-  font-style: ${p => (p.isEmpty ? 'italic' : 'none')};
+  font-style: ${p => (p.$isEmpty ? 'italic' : 'none')};
   vertical-align: super;
   margin-left: 6px;
 `

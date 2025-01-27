@@ -123,7 +123,19 @@ def allocate_segments_to_catches(
                 ) / (
                     SUM(weight)
                     OVER (PARTITION BY { batch_id_column }, s.segment)
-                ) AS share_of_target_species
+                ) AS share_of_target_species,
+                (
+                    SUM(
+                        CASE WHEN
+                            c.species = ANY(s.target_species)
+                        THEN
+                            1
+                        ELSE
+                            0
+                        END
+                    )
+                    OVER (PARTITION BY { batch_id_column }, s.segment)
+                ) > 0 AS has_target_species
 
             FROM catches_main_type c
             JOIN segments s
@@ -135,7 +147,14 @@ def allocate_segments_to_catches(
                 AND (c.mesh < s.max_mesh OR s.max_mesh IS NULL)
                 AND (c.vessel_type = ANY(s.vessel_types) OR s.vessel_types = [])
                 AND (s.main_scip_species_type = c.main_scip_species_type OR s.main_scip_species_type IS NULL)
-            QUALIFY (share_of_target_species > s.min_share_of_target_species OR s.min_share_of_target_species IS NULL OR s.target_species = [])
+            QUALIFY (
+                (
+                    has_target_species AND
+                    share_of_target_species >= s.min_share_of_target_species
+                ) OR
+                s.min_share_of_target_species IS NULL OR
+                s.target_species = []
+            )
         ),
 
         catches_top_priority_segment AS (

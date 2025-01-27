@@ -31,3 +31,5 @@
 32,"trip_L-HKE",2050,"27.8.a","LLS",,"COD","DEMERSAL",50,"Navire polyvalent","L HKE","Lines targeting HKE","2.2"
 33,"trip_L-BFT-0kg",2050,"27.8.a","LLS",,"BFT","DEMERSAL",0,"Navire polyvalent","L BFT","Lines targeting BFT","2.2"
 34,"trip_L-BFT-0kg",2050,"27.8.a","LLS",,"HKE","DEMERSAL",50,"Navire polyvalent","L BFT","Lines targeting BFT","2.2"
+35,"trip_L-BFT-0kg-total",2050,"27.8.a","LLS",,"BFT","DEMERSAL",0,"Navire polyvalent","L BFT","Lines targeting BFT","2.2"
+36,"trip_L-BFT-null-kg",2050,"27.8.a","LLS",,"BFT","DEMERSAL",,"Navire polyvalent","L BFT","Lines targeting BFT","2.2"

@@ -1,17 +1,19 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FaoArea
+import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.JointDeploymentPlan
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
-import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.hasFaoCodeIncludedIn
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReport
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReports
 import org.slf4j.LoggerFactory
+import java.time.Clock
 import java.time.ZonedDateTime
 
 @UseCase
@@ -20,6 +22,8 @@ class GetActivityReports(
     private val portRepository: PortRepository,
     private val vesselRepository: VesselRepository,
     private val missionRepository: MissionRepository,
+    private val fleetSegmentRepository: FleetSegmentRepository,
+    private val clock: Clock,
 ) {
     private val logger = LoggerFactory.getLogger(GetActivityReports::class.java)
 
@@ -28,6 +32,7 @@ class GetActivityReports(
         afterDateTime: ZonedDateTime,
         jdp: JointDeploymentPlan,
     ): ActivityReports {
+        val fleetSegments = fleetSegmentRepository.findAllByYear(ZonedDateTime.now(clock).year)
         val controls = missionActionsRepository.findSeaAndLandControlBetweenDates(beforeDateTime, afterDateTime)
         logger.info("Found ${controls.size} controls between dates [$afterDateTime, $beforeDateTime].")
 
@@ -121,16 +126,14 @@ class GetActivityReports(
                     }
                     val faoArea = jdp.getFirstFaoAreaIncludedInJdp(control)
 
+                    val segment = getFleetSegment(control, jdp, fleetSegments)
+
                     ActivityReport(
                         action = control,
                         activityCode = activityCode,
                         controlUnits = controlMission.controlUnits,
                         faoArea = faoArea?.faoCode,
-                        /**
-                         * The fleet segment is set as null, as we need to integrate the EFCA segments referential
-                         * see: https://github.com/MTES-MCT/monitorfish/issues/3157#issuecomment-2093036583
-                         */
-                        segment = null,
+                        segment = segment,
                         vesselNationalIdentifier = controlledVessel.getNationalIdentifier(),
                         vessel = controlledVessel,
                     )
@@ -140,5 +143,40 @@ class GetActivityReports(
             activityReports = activityReports,
             jdpSpecies = jdp.getSpeciesCodes(),
         )
+    }
+
+    /**
+     * Take in priority the control attributed segment for which a fao zone is included in the JDP operational zones.
+     * Otherwise, take the first segment.
+     */
+    private fun getFleetSegment(
+        control: MissionAction,
+        jdp: JointDeploymentPlan,
+        fleetSegments: List<FleetSegment>,
+    ): String? {
+        val jdpFaoZones = jdp.getOperationalZones()
+
+        val efcaSegments =
+            control.segments
+                .filter { it.segment?.let { segment -> !segment.contains("FR") } ?: true }
+
+        val segmentWithFaoZoneIncludedInJDP =
+            efcaSegments
+                .firstOrNull {
+                    val segment =
+                        fleetSegments.firstOrNull { segmentFromReferential ->
+                            segmentFromReferential.segment == it.segment
+                        }
+
+                    return@firstOrNull segment?.faoAreas?.any { segmentFaoZone ->
+                        val segmentFaoArea = FaoArea(segmentFaoZone)
+
+                        jdpFaoZones.any { jdpFaoArea ->
+                            segmentFaoArea.hasFaoCodeIncludedIn(jdpFaoArea)
+                        }
+                    } == true
+                }?.segment
+
+        return segmentWithFaoZoneIncludedInJDP ?: efcaSegments.firstOrNull()?.segment
     }
 }

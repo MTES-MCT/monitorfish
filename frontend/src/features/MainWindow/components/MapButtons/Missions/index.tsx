@@ -1,17 +1,17 @@
 import { COLORS } from '@constants/constants'
 import { MapBox } from '@features/Map/constants'
 import { addMission } from '@features/Mission/useCases/addMission'
+import { sideWindowActions } from '@features/SideWindow/slice'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, MapMenuDialog, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { SideWindowMenuKey, SideWindowStatus } from '../../../../../domain/entities/sideWindow/constants'
 import { setDisplayedComponents } from '../../../../../domain/shared_slices/DisplayedComponent'
 import { setLeftMapBoxOpened } from '../../../../../domain/shared_slices/Global'
-import { sideWindowActions } from '../../../../SideWindow/slice'
 import { MapToolBox } from '../shared/MapToolBox'
 import { MapToolButton } from '../shared/MapToolButton'
 
@@ -50,18 +50,17 @@ export function MissionsMenu() {
     <Wrapper>
       <MissionMenuBox $isLeftBox $isOpen={leftMapBoxOpened === MapBox.MISSIONS} data-cy="missions-menu-box">
         <MissionsMenuWrapper>
-          <MissionsMenuHeader>
-            <ToggleMissionMenuButton Icon={Icon.Close} onClick={toggleMissionsMenu} size={Size.NORMAL} />
-            <Title>Missions et contrôles</Title>
-            <ToggleMissionsButton
-              accent={Accent.TERTIARY}
+          <Header>
+            <CloseButton Icon={Icon.Close} onClick={toggleMissionsMenu} />
+            <MapMenuDialog.Title>Missions et contrôles</MapMenuDialog.Title>
+            <MapMenuDialog.VisibilityButton
+              accent={Accent.SECONDARY}
               data-cy="toggle-mission-layer"
               Icon={isMissionsLayerDisplayed ? Icon.Display : Icon.Hide}
               onClick={toggleMissionsLayer}
-              size={Size.NORMAL}
               title={isMissionsLayerDisplayed ? 'Cacher les missions' : 'Afficher les missions'}
             />
-          </MissionsMenuHeader>
+          </Header>
           <MissionsMenuBody>
             <Section>
               <BlockIconButton accent={Accent.PRIMARY} Icon={Icon.Plus} onClick={openNewMission}>
@@ -107,20 +106,12 @@ const MissionsMenuWrapper = styled.div`
   background-color: ${COLORS.white};
 `
 
-const MissionsMenuHeader = styled.div`
-  height: 40px;
-  background-color: ${COLORS.charcoal};
-  display: flex;
-  justify-content: space-between;
-  padding-right: 5px;
-  padding-left: 5px;
-  align-items: center;
+const CloseButton = styled(MapMenuDialog.CloseButton)`
+  margin-top: 4px;
 `
 
-const Title = styled.span`
-  font-size: 16px;
-  line-height: 22px;
-  color: ${COLORS.white};
+const Header = styled(MapMenuDialog.Header)`
+  height: 22px;
 `
 
 const MissionsMenuBody = styled.div``
@@ -131,19 +122,6 @@ const Section = styled.div`
   }
 `
 
-const ToggleMissionsButton = styled(IconButton)`
-  background: ${COLORS.white};
-
-  &:hover {
-    background: ${COLORS.white};
-  }
-  &:focus {
-    background: ${COLORS.white};
-  }
-`
-const ToggleMissionMenuButton = styled(IconButton)`
-  color: white;
-`
 const BlockIconButton = styled(Button)`
   width: 100%;
 `

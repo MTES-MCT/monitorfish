@@ -42,7 +42,7 @@ enum class JointDeploymentPlan(
 
     fun getSpeciesCodes(): List<String> = this.species.map { it.second }.distinct()
 
-    private fun getOperationalZones(): List<String> = this.operationalZones
+    fun getOperationalZones(): List<String> = this.operationalZones
 
     /**
      * See "DÉCISION D’EXÉCUTION (UE) 2023/2376 DE LA COMMISSION":

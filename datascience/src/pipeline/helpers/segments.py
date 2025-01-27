@@ -108,21 +108,24 @@ def allocate_segments_to_catches(
                 s.segment_name,
                 s.impact_risk_factor,
                 s.priority AS priority,
-                (
-                    SUM(
-                        CASE WHEN
-                            c.species = ANY(s.target_species) OR
-                            s.target_species = []
-                        THEN
-                            weight
-                        ELSE
-                            0
-                        END
-                    )
-                    OVER (PARTITION BY { batch_id_column }, s.segment)
-                ) / (
-                    SUM(weight)
-                    OVER (PARTITION BY { batch_id_column }, s.segment)
+                COALESCE(
+                    (
+                        SUM(
+                            CASE WHEN
+                                c.species = ANY(s.target_species) OR
+                                s.target_species = []
+                            THEN
+                                weight
+                            ELSE
+                                0
+                            END
+                        )
+                        OVER (PARTITION BY { batch_id_column }, s.segment)
+                    ) / (
+                        SUM(weight)
+                        OVER (PARTITION BY { batch_id_column }, s.segment)
+                    ),
+                    0
                 ) AS share_of_target_species,
                 (
                     SUM(

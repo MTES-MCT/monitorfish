@@ -385,7 +385,7 @@ class MissionActionsControllerITests {
                             vesselNationalIdentifier = "AYFR000654",
                             controlUnits = listOf(LegacyControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
                             faoArea = "27.7.c",
-                            segment = "NS01/03",
+                            segment = "NS01",
                             vessel =
                                 Vessel(
                                     id = 1,

@@ -5,3 +5,4 @@ Old-T8-PEL,Old trawls area 8 targeting pelagic,2000,"[""OTM"",""OTB"",""PTM"",""
 L,Lines,2050,"[""LLS"",""LLM"",""LHM"",""LHP""]",,,"[""27"",""37""]",[],,,[],1.9,0
 L HKE,Lines targeting HKE,2050,"[""LLS"",""LLM"",""LHM"",""LHP""]",,,"[""27"",""37""]","[""HKE"",""AAA"",""BBB""]",0.2,,[],2.2,1
 FT,Freezer trawlers,2050,"[""OTB"",""PTB""]",80,100,"[""27"",""37""]",[],,,"[""Chalutier congélateur"",""Chalutier pêche arrière congélateur""]",3.3,2
+L BFT,Lines targeting BFT,2050,"[""LLS"",""LLM"",""LHM"",""LHP""]",,,"[""27"",""37""]","[""BFT""]",0.0,,[],2.2,3

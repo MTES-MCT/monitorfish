@@ -17,7 +17,7 @@ import { deleteFleetSegment as deleteFleetSegmentAction } from '../../useCases/d
 import { getFleetSegmentsYearEntries } from '../../useCases/getFleetSegmentsYearEntries'
 import { updateFleetSegment } from '../../useCases/updateFleetSegment'
 
-import type { FleetSegment, UpdateFleetSegment } from '../../types'
+import type { FleetSegment } from '../../types'
 
 export function FleetSegmentsBackoffice() {
   const currentYear = customDayjs().year()
@@ -102,8 +102,8 @@ export function FleetSegmentsBackoffice() {
   )
 
   const onUpdateFleetSegment = useCallback(
-    async (segment: string, _year: number, nextFleetSegment: UpdateFleetSegment) => {
-      const nextFleetSegments = await dispatch(updateFleetSegment(segment, _year, nextFleetSegment, fleetSegments))
+    async (segment: string, nextFleetSegment: FleetSegment) => {
+      const nextFleetSegments = await dispatch(updateFleetSegment(segment, nextFleetSegment, fleetSegments))
       if (nextFleetSegments) {
         setFleetSegments(nextFleetSegments)
         closeCreateOrEditFleetSegmentModal()

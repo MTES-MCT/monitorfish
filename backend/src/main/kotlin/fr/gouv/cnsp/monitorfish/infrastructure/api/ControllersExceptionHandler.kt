@@ -83,18 +83,6 @@ class ControllersExceptionHandler(
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(CouldNotUpdateFleetSegmentException::class)
-    fun handleCouldNotUpdateFleetSegmentException(e: Exception): ApiError {
-        logger.error(e.message, e.cause)
-
-        if (sentryConfig.enabled == true) {
-            Sentry.captureException(e)
-        }
-
-        return ApiError(e)
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingServletRequestParameterException::class)
     fun handleNoParameter(e: MissingServletRequestParameterException): MissingParameterApiError {
         logger.error(e.message, e.cause)

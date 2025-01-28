@@ -24,6 +24,6 @@ class PatchMissionAction(
 
             missionActionsRepository.save(updatedMissionAction)
         } catch (e: Exception) {
-            throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND, "Action $id not found", e)
+            throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND, message = "Action $id not found", cause = e)
         }
 }

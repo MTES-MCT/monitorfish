@@ -37,14 +37,14 @@ context('BackOffice > Fleet Segments Table', () => {
     cy.log('Should update the segment')
 
     // When
-    cy.intercept('PUT', `/bff/v1/admin/fleet_segments?year=${currentYear}&segment=ATL01`).as('updateFleetSegment')
+    cy.intercept('PUT', `/bff/v1/admin/fleet_segments?segment=ATL01`).as('updateFleetSegment')
 
     cy.get('[aria-rowindex="2"]').find('[title="Editer la ligne"]').click()
-    cy.fill('Nom', 'ATL0036')
+    cy.fill('Code', 'ATL0036')
     cy.fill('Note d’impact', 1.2)
     cy.fill('Maillage min.', 50)
     cy.fill('Maillage max.', 100)
-    cy.fill('Description', 'All Trawls 45')
+    cy.fill('Nom', 'All Trawls 45')
     cy.fill('Engins', ['DRM', 'FAG'])
     cy.fill('Espèces ciblées', ['COD'])
     cy.fill('Zones FAO', ['21.0.A'])
@@ -100,9 +100,9 @@ context('BackOffice > Fleet Segments Table', () => {
 
     // When
     cy.clickButton('Ajouter un segment')
-    cy.fill('Nom', 'ABC123')
+    cy.fill('Code', 'ABC123')
     cy.fill('Note d’impact', 2.7)
-    cy.fill('Description', 'Malotru’s segment')
+    cy.fill('Nom', 'Malotru’s segment')
     cy.fill('Engins', ['DHS', 'FCN'])
     cy.fill('Zones FAO', ['21.1.A', '21.1.B'])
     cy.fill('Maillage min.', 50)

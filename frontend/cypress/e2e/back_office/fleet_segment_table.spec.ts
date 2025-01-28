@@ -37,7 +37,7 @@ context('BackOffice > Fleet Segments Table', () => {
     cy.log('Should update the segment')
 
     // When
-    cy.intercept('PUT', `/bff/v1/admin/fleet_segments?year=${currentYear}&segment=ATL01`).as('updateFleetSegment')
+    cy.intercept('PUT', `/bff/v1/admin/fleet_segments?segment=ATL01`).as('updateFleetSegment')
 
     cy.get('[aria-rowindex="2"]').find('[title="Editer la ligne"]').click()
     cy.fill('Code', 'ATL0036')

@@ -1,9 +1,10 @@
 import { monitorfishApi, monitorfishApiKy } from '@api/api'
+import { FleetSegmentSchema } from '@features/FleetSegment/types'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
-import type { FleetSegment, UpdateFleetSegment } from '@features/FleetSegment/types'
+import type { FleetSegment } from '@features/FleetSegment/types'
 
 export type ComputeFleetSegmentsParams = {
   faoAreas: string[]
@@ -11,6 +12,11 @@ export type ComputeFleetSegmentsParams = {
   species: MissionAction.SpeciesControl[]
   vesselId: number
   year: number
+}
+
+export type UpdateFleetSegmentParams = {
+  segment: string
+  updatedSegment: FleetSegment
 }
 
 export const fleetSegmentApi = monitorfishApi.injectEndpoints({
@@ -22,7 +28,9 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
         url: `/fleet_segments/compute`
       }),
       transformResponse: (baseQueryReturnValue: FleetSegment[]) =>
-        baseQueryReturnValue.sort((a, b) => a.segment.localeCompare(b.segment))
+        baseQueryReturnValue
+          .map(segment => FleetSegmentSchema.parse(segment))
+          .sort((a, b) => a.segment.localeCompare(b.segment))
     }),
     getFleetSegments: builder.query<FleetSegment[], number | void>({
       providesTags: () => [{ type: 'FleetSegments' }],
@@ -32,7 +40,22 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
         return `fleet_segments/${controlledYear}`
       },
       transformResponse: (baseQueryReturnValue: FleetSegment[]) =>
-        baseQueryReturnValue.sort((a, b) => a.segment.localeCompare(b.segment))
+        baseQueryReturnValue
+          .map(segment => FleetSegmentSchema.parse(segment))
+          .sort((a, b) => a.segment.localeCompare(b.segment))
+    }),
+    updateFleetSegment: builder.query<FleetSegment, UpdateFleetSegmentParams>({
+      query: params => {
+        const updatedSegment = FleetSegmentSchema.parse(params.updatedSegment)
+
+        return {
+          body: updatedSegment,
+          method: 'PUT',
+          url: `/admin/fleet_segments?segment=${params.segment}`
+        }
+      },
+      transformErrorResponse: response => new FrontendApiError(UPDATE_FLEET_SEGMENT_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: FleetSegment) => FleetSegmentSchema.parse(baseQueryReturnValue)
     })
   })
 })
@@ -46,27 +69,6 @@ export const GET_FLEET_SEGMENT_YEAR_ENTRIES_ERROR_MESSAGE =
   "Nous n'avons pas pu récupérer les années des segments de flotte"
 export const ADD_FLEET_SEGMENT_YEAR_ERROR_MESSAGE =
   "Nous n'avons pas pu ajouter une nouvelle année de segments de flotte"
-
-/**
- * Update a fleet segment
- *
- * @throws {@link FrontendApiError}
- */
-async function updateFleetSegmentFromAPI(
-  segment: string,
-  year: number,
-  updatedFields: UpdateFleetSegment
-): Promise<FleetSegment> {
-  try {
-    return await monitorfishApiKy
-      .put(`/bff/v1/admin/fleet_segments?year=${year}&segment=${segment}`, {
-        json: updatedFields
-      })
-      .json<FleetSegment>()
-  } catch (err) {
-    throw new FrontendApiError(UPDATE_FLEET_SEGMENT_ERROR_MESSAGE, (err as FrontendApiError).originalError)
-  }
-}
 
 /**
  * Delete a fleet segment
@@ -88,7 +90,7 @@ async function deleteFleetSegmentFromAPI(segment: string, year: number): Promise
  *
  * @throws {@link FrontendApiError}
  */
-async function createFleetSegmentFromAPI(segmentFields: UpdateFleetSegment): Promise<FleetSegment> {
+async function createFleetSegmentFromAPI(segmentFields: FleetSegment): Promise<FleetSegment> {
   try {
     return await monitorfishApiKy
       .post('/bff/v1/admin/fleet_segments', {
@@ -127,7 +129,6 @@ async function getFleetSegmentYearEntriesFromAPI(): Promise<number[]> {
 }
 
 export {
-  updateFleetSegmentFromAPI,
   deleteFleetSegmentFromAPI,
   createFleetSegmentFromAPI,
   getFleetSegmentYearEntriesFromAPI,

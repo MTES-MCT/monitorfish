@@ -1,10 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
+import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.ScipSpeciesType
-import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegmentFields
 
 data class CreateOrUpdateFleetSegmentDataInput(
-    val segment: String?,
+    val segment: String,
     val segmentName: String?,
     val gears: List<String>?,
     val faoAreas: List<String>?,
@@ -16,22 +16,22 @@ data class CreateOrUpdateFleetSegmentDataInput(
     val priority: Double,
     val vesselTypes: List<String>,
     val impactRiskFactor: Double?,
-    val year: Int?,
+    val year: Int,
 ) {
-    fun toCreateOrUpdateFleetSegmentFields() =
-        CreateOrUpdateFleetSegmentFields(
-            segment = segment,
-            segmentName = segmentName,
-            gears = gears,
-            faoAreas = faoAreas,
-            targetSpecies = targetSpecies,
-            mainScipSpeciesType = mainScipSpeciesType,
-            maxMesh = maxMesh,
-            minMesh = minMesh,
-            minShareOfTargetSpecies = minShareOfTargetSpecies,
-            priority = priority,
-            vesselTypes = vesselTypes,
-            impactRiskFactor = impactRiskFactor,
-            year = year,
+    fun toFleetSegment() =
+        FleetSegment(
+            segment = this.segment,
+            segmentName = this.segmentName ?: "",
+            gears = this.gears ?: listOf(),
+            faoAreas = this.faoAreas ?: listOf(),
+            targetSpecies = this.targetSpecies ?: listOf(),
+            impactRiskFactor = this.impactRiskFactor ?: 0.0,
+            year = this.year,
+            mainScipSpeciesType = this.mainScipSpeciesType,
+            maxMesh = this.maxMesh,
+            minMesh = this.minMesh,
+            minShareOfTargetSpecies = this.minShareOfTargetSpecies,
+            priority = this.priority,
+            vesselTypes = this.vesselTypes,
         )
 }

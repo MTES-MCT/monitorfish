@@ -45,13 +45,28 @@ interface DBFleetSegmentRepository : CrudRepository<FleetSegmentEntity, Long> {
 
     @Modifying(clearAutomatically = true)
     @Query(
-        value = "UPDATE fleet_segments SET segment = :nextSegment WHERE segment = :segment and year = :year",
         nativeQuery = true,
+        value = """
+        UPDATE fleet_segments SET
+            segment = :#{#fleetSegment.segment},
+            segment_name = :#{#fleetSegment.segmentName},
+            main_scip_species_type = CAST(:#{#fleetSegment.mainScipSpeciesType} AS scip_species_type),
+            priority = :#{#fleetSegment.priority},
+            max_mesh = :#{#fleetSegment.maxMesh},
+            min_mesh = :#{#fleetSegment.minMesh},
+            min_share_of_target_species = :#{#fleetSegment.minShareOfTargetSpecies},
+            vessel_types = CAST(:#{#fleetSegment.vesselTypes} AS varchar[]),
+            gears = CAST(:#{#fleetSegment.gears} AS varchar(3)[]),
+            fao_areas = CAST(:#{#fleetSegment.faoAreas} AS varchar(15)[]),
+            target_species = CAST(:#{#fleetSegment.targetSpecies} AS varchar(3)[]),
+            impact_risk_factor = :#{#fleetSegment.impactRiskFactor},
+            year = :#{#fleetSegment.year}
+        WHERE segment = :segment and year = :#{#fleetSegment.year}
+        """,
     )
-    fun updateSegment(
+    fun updateFleetSegment(
         segment: String,
-        nextSegment: String,
-        year: Int,
+        fleetSegment: FleetSegmentEntity,
     )
 
     @Modifying(clearAutomatically = true)

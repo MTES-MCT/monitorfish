@@ -41,7 +41,7 @@ context('Side Window > Mission List > Export Activity Reports', () => {
         )
         .should(
           'contains',
-          '"CALLME","FAK000999999","PHENOMENE","LAN","OTB",58.9,"27.4.a","","","","AEFAT","FRA","Fateh Terminal","","JAX",450,"","OTH",40'
+          '"CALLME","FAK000999999","PHENOMENE","LAN","OTB",58.9,"27.4.a","NS13","","","AEFAT","FRA","Fateh Terminal","","JAX",450,"","OTH",40'
         )
     })
   })

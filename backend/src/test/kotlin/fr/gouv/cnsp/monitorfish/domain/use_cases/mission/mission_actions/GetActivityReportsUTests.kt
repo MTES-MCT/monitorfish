@@ -23,6 +23,7 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.time.Clock
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.stream.Stream
@@ -45,6 +46,19 @@ class GetActivityReportsUTests {
     @MockBean
     private lateinit var missionRepository: MissionRepository
 
+    companion object {
+        val fixedClock: Clock = Clock.systemUTC()
+
+        @JvmStatic
+        private fun getDoubleCountTestCases(): Stream<Arguments> =
+            Stream.of(
+                Arguments.of(MissionActionType.LAND_CONTROL, JointDeploymentPlan.WESTERN_WATERS),
+                Arguments.of(MissionActionType.SEA_CONTROL, JointDeploymentPlan.WESTERN_WATERS),
+                Arguments.of(MissionActionType.LAND_CONTROL, JointDeploymentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC),
+                Arguments.of(MissionActionType.SEA_CONTROL, JointDeploymentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC),
+            )
+    }
+
     @Test
     fun `execute Should filter controls done in two fao areas When the first JDP found for this control is NORTH_SEA`() {
         // Given
@@ -66,8 +80,8 @@ class GetActivityReportsUTests {
                     faoAreas = listOf("27.7.b", "27.4.c"),
                     segments =
                         listOf(
-                            FleetSegment("NWW01/02", "Trawl"),
-                            FleetSegment("NS01/03", "North sea"),
+                            FleetSegment("NWW01", "Trawl"),
+                            FleetSegment("NS01", "North sea"),
                         ),
                     actionType = MissionActionType.LAND_CONTROL,
                     gearOnboard = listOf(),
@@ -185,6 +199,8 @@ class GetActivityReportsUTests {
                 portRepository,
                 vesselRepository,
                 missionRepository,
+                fleetSegmentRepository,
+                fixedClock,
             ).execute(
                 ZonedDateTime.now(),
                 ZonedDateTime.now().minusDays(1),
@@ -217,8 +233,8 @@ class GetActivityReportsUTests {
                     faoAreas = listOf("27.7.b", "27.4.c"),
                     segments =
                         listOf(
-                            FleetSegment("NWW01/02", "Trawl"),
-                            FleetSegment("NS01/03", "North sea"),
+                            FleetSegment("NWW01", "Trawl"),
+                            FleetSegment("NS01", "North sea"),
                         ),
                     actionType = MissionActionType.LAND_CONTROL,
                     gearOnboard = listOf(),
@@ -336,6 +352,8 @@ class GetActivityReportsUTests {
                 portRepository,
                 vesselRepository,
                 missionRepository,
+                fleetSegmentRepository,
+                fixedClock,
             ).execute(
                 ZonedDateTime.now(),
                 ZonedDateTime.now().minusDays(1),
@@ -350,7 +368,7 @@ class GetActivityReportsUTests {
             assertThat(landReport.activityCode).isEqualTo(ActivityCode.LAN)
             assertThat(landReport.vesselNationalIdentifier).isEqualTo("AYFR00022680")
             assertThat(landReport.faoArea).isEqualTo("27.4.c")
-            assertThat(landReport.segment).isNull()
+            assertThat(landReport.segment).isEqualTo("NWW01")
         }
         activityReports.activityReports.last().let { seaReport ->
             assertThat(seaReport.activityCode).isEqualTo(ActivityCode.FIS)
@@ -369,7 +387,7 @@ class GetActivityReportsUTests {
         given(fleetSegmentRepository.findAllByYear(any())).willReturn(
             listOf(
                 FullFleetSegment(
-                    "NS01/03",
+                    "NS01",
                     "Otter trawls/Seines",
                     gears =
                         listOf(
@@ -416,7 +434,7 @@ class GetActivityReportsUTests {
                     faoAreas = listOf("27.4.a"),
                     segments =
                         listOf(
-                            FleetSegment("NS01/03", "North Sea"),
+                            FleetSegment("NS01", "North Sea"),
                         ),
                     actionType = MissionActionType.LAND_CONTROL,
                     gearOnboard = listOf(),
@@ -474,6 +492,8 @@ class GetActivityReportsUTests {
                 portRepository,
                 vesselRepository,
                 missionRepository,
+                fleetSegmentRepository,
+                fixedClock,
             ).execute(
                 ZonedDateTime.now(),
                 ZonedDateTime.now().minusDays(1),
@@ -487,7 +507,7 @@ class GetActivityReportsUTests {
             assertThat(landReport.activityCode).isEqualTo(ActivityCode.LAN)
             assertThat(landReport.action.portName).isEqualTo("Al Jazeera Port")
             assertThat(landReport.faoArea).isEqualTo("27.4.a")
-            assertThat(landReport.segment).isNull()
+            assertThat(landReport.segment).isEqualTo("NS01")
         }
     }
 
@@ -559,6 +579,8 @@ class GetActivityReportsUTests {
                 portRepository,
                 vesselRepository,
                 missionRepository,
+                fleetSegmentRepository,
+                fixedClock,
             ).execute(
                 ZonedDateTime.now(),
                 ZonedDateTime.now().minusDays(1),
@@ -638,6 +660,8 @@ class GetActivityReportsUTests {
                 portRepository,
                 vesselRepository,
                 missionRepository,
+                fleetSegmentRepository,
+                fixedClock,
             ).execute(
                 ZonedDateTime.now(),
                 ZonedDateTime.now().minusDays(1),
@@ -774,6 +798,8 @@ class GetActivityReportsUTests {
                 portRepository,
                 vesselRepository,
                 missionRepository,
+                fleetSegmentRepository,
+                fixedClock,
             ).execute(
                 ZonedDateTime.now(),
                 ZonedDateTime.now().minusDays(1),
@@ -890,6 +916,8 @@ class GetActivityReportsUTests {
                 portRepository,
                 vesselRepository,
                 missionRepository,
+                fleetSegmentRepository,
+                fixedClock,
             ).execute(
                 ZonedDateTime.now(),
                 ZonedDateTime.now().minusDays(1),
@@ -971,6 +999,8 @@ class GetActivityReportsUTests {
                 portRepository,
                 vesselRepository,
                 missionRepository,
+                fleetSegmentRepository,
+                fixedClock,
             ).execute(
                 ZonedDateTime.now(),
                 ZonedDateTime.now().minusDays(1),
@@ -1072,6 +1102,8 @@ class GetActivityReportsUTests {
                 portRepository,
                 vesselRepository,
                 missionRepository,
+                fleetSegmentRepository,
+                fixedClock,
             ).execute(
                 ZonedDateTime.now(),
                 ZonedDateTime.now().minusDays(1),
@@ -1080,16 +1112,5 @@ class GetActivityReportsUTests {
 
         // Then
         assertThat(activityReports.activityReports).hasSize(1)
-    }
-
-    companion object {
-        @JvmStatic
-        private fun getDoubleCountTestCases(): Stream<Arguments> =
-            Stream.of(
-                Arguments.of(MissionActionType.LAND_CONTROL, JointDeploymentPlan.WESTERN_WATERS),
-                Arguments.of(MissionActionType.SEA_CONTROL, JointDeploymentPlan.WESTERN_WATERS),
-                Arguments.of(MissionActionType.LAND_CONTROL, JointDeploymentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC),
-                Arguments.of(MissionActionType.SEA_CONTROL, JointDeploymentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC),
-            )
     }
 }

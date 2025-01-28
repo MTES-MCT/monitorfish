@@ -36,6 +36,7 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
       return
     }
 
+    setError(undefined)
     const afterDateTimeStartOfDayUtc = getUtcizedDayjs(afterDateTimeUtc).startOf('day').toISOString()
     const beforeDateTimeEndOfDayUtc = getUtcizedDayjs(beforeDateTimeUtc).endOf('day').millisecond(0).toISOString()
 
@@ -57,7 +58,6 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
       }
     }
 
-    setError(undefined)
     onExit()
   }
 
@@ -112,7 +112,6 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
           }}
           options={jdpOptions}
           placeholder="JDP"
-          searchable
           value={jdp}
         />
       </StyledDialogBody>
@@ -174,7 +173,7 @@ const StyledSelect = styled(Select)`
   margin-top: 24px;
   margin-left: calc(36%);
 
-  .rs-picker-menu {
+  .rs-picker-select-menu {
     min-width: 270px !important;
   }
 `

@@ -565,7 +565,7 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
 
   // Non-regression test
   // https://github.com/MTES-MCT/monitorfish/issues/3683
-  it('Should create a manual prior notification Zero, remove a specy and calculate BFT total weight', () => {
+  it('Should create a manual prior notification Zero, remove a specy and calculate BFT total weight and quantity', () => {
     const { utcDateTupleWithTime: arrivalDateTupleWithTime } = getUtcDateInMultipleFormats(
       customDayjs().add(2, 'hours').startOf('minute').toISOString()
     )
@@ -586,6 +586,9 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.fill('Espèces à bord et à débarquer', 'SWO')
 
     cy.fill('Engins utilisés', ['OTP'], { index: 1 })
+    cy.fill('Quantité (BF1)', 2)
+    cy.fill('Quantité (BF2)', 3)
+    cy.get('[id="fishingCatches[0].quantity"]').should('have.value', '5')
 
     cy.clickButton('Créer le préavis')
 

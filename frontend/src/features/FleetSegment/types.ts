@@ -1,5 +1,4 @@
-import type { Undefine } from '@mtes-mct/monitor-ui'
-import type { Float } from 'type-fest'
+import { z } from 'zod'
 
 export enum ScipSpeciesType {
   DEMERSAL = 'DEMERSAL',
@@ -8,20 +7,20 @@ export enum ScipSpeciesType {
   TUNA = 'TUNA'
 }
 
-export type FleetSegment = {
-  faoAreas: string[] | undefined
-  gears: string[] | undefined
-  impactRiskFactor: Float<number> | undefined
-  mainScipSpeciesType: ScipSpeciesType | undefined
-  maxMesh: number | undefined
-  minMesh: number | undefined
-  minShareOfTargetSpecies: number | undefined
-  priority: number
-  segment: string
-  segmentName: string | undefined
-  targetSpecies: string[] | undefined
-  vesselTypes: string[]
-  year: number
-}
+export const FleetSegmentSchema = z.object({
+  faoAreas: z.array(z.string()),
+  gears: z.array(z.string()),
+  impactRiskFactor: z.number().optional(),
+  mainScipSpeciesType: z.nativeEnum(ScipSpeciesType).optional(),
+  maxMesh: z.number().optional(),
+  minMesh: z.number().optional(),
+  minShareOfTargetSpecies: z.number().optional(),
+  priority: z.number(),
+  segment: z.string(),
+  segmentName: z.string().optional(),
+  targetSpecies: z.array(z.string()),
+  vesselTypes: z.array(z.string()),
+  year: z.number()
+})
 
-export type UpdateFleetSegment = Undefine<FleetSegment>
+export type FleetSegment = z.infer<typeof FleetSegmentSchema>

@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
-import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegmentFields
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -27,7 +26,6 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
 
     @BeforeEach
     fun setup() {
-        cacheManager.getCache("fleet_segments")?.clear()
         cacheManager.getCache("current_segments")?.clear()
         cacheManager.getCache("segments_by_year")?.clear()
     }
@@ -55,14 +53,17 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         val fleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear).sortedBy { it.segment }
 
         assertThat(fleetSegments).hasSize(67)
-        assertThat(fleetSegments.first().segment).isEqualTo("ATL01")
+        val previous = fleetSegments.first()
+        assertThat(previous.segment).isEqualTo("ATL01")
 
         // When
         val updatedFleetSegment =
             jpaFleetSegmentRepository.update(
                 "ATL01",
-                CreateOrUpdateFleetSegmentFields("NEXT_ATL01", "A segment name"),
-                currentYear,
+                previous.copy(
+                    segment = "NEXT_ATL01",
+                    segmentName = "A segment name",
+                ),
             )
 
         // Then
@@ -79,14 +80,16 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         val fleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear).sortedBy { it.segment }
 
         assertThat(fleetSegments).hasSize(67)
-        assertThat(fleetSegments.first().segmentName).isEqualTo("ATL01")
+        val previous = fleetSegments.first()
+        assertThat(previous.segmentName).isEqualTo("ATL01")
 
         // When
         val updatedFleetSegment =
             jpaFleetSegmentRepository.update(
                 "ATL01",
-                CreateOrUpdateFleetSegmentFields(segmentName = "All Trawls 676"),
-                currentYear,
+                previous.copy(
+                    segmentName = "All Trawls 676",
+                ),
             )
 
         // Then
@@ -102,8 +105,9 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         val fleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear).sortedBy { it.segment }
 
         assertThat(fleetSegments).hasSize(67)
-        assertThat(fleetSegments.first().segment).isEqualTo("ATL01")
-        assertThat(fleetSegments.first().gears).isEqualTo(
+        val previous = fleetSegments.first()
+        assertThat(previous.segment).isEqualTo("ATL01")
+        assertThat(previous.gears).isEqualTo(
             listOf("OTM", "PTM"),
         )
 
@@ -111,8 +115,9 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         val updatedFleetSegment =
             jpaFleetSegmentRepository.update(
                 "ATL01",
-                CreateOrUpdateFleetSegmentFields(gears = listOf("OTB", "DOF")),
-                currentYear,
+                previous.copy(
+                    gears = listOf("OTB", "DOF"),
+                ),
             )
 
         // Then
@@ -129,20 +134,49 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         val fleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear).sortedBy { it.segment }
 
         assertThat(fleetSegments).hasSize(67)
-        assertThat(fleetSegments.first().segment).isEqualTo("ATL01")
-        assertThat(fleetSegments.first().faoAreas).isEqualTo(listOf("27.7", "27.8", "27.9", "27.10", "34.1.2"))
+        val previous = fleetSegments.first()
+        assertThat(previous.segment).isEqualTo("ATL01")
+        assertThat(previous.faoAreas).isEqualTo(listOf("27.7", "27.8", "27.9", "27.10", "34.1.2"))
 
         // When
         val updatedFleetSegment =
             jpaFleetSegmentRepository.update(
                 "ATL01",
-                CreateOrUpdateFleetSegmentFields(faoAreas = listOf("67.6.6", "67.6.7")),
-                currentYear,
+                previous.copy(
+                    faoAreas = listOf("67.6.6", "67.6.7"),
+                ),
             )
 
         // Then
         assertThat(updatedFleetSegment.segment).isEqualTo("ATL01")
         assertThat(updatedFleetSegment.faoAreas).isEqualTo(listOf("67.6.6", "67.6.7"))
+    }
+
+    @Test
+    @Transactional
+    fun `update Should update fleet segment vessel types`() {
+        // Given
+        val currentYear = ZonedDateTime.now().year
+        cacheManager.getCache("segments_by_year")?.clear()
+        val fleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear).sortedBy { it.segment }
+
+        assertThat(fleetSegments).hasSize(67)
+        val previous = fleetSegments.first()
+        assertThat(fleetSegments.first().segment).isEqualTo("ATL01")
+        assertThat(fleetSegments.first().vesselTypes).isEqualTo(listOf<String>())
+
+        // When
+        val updatedFleetSegment =
+            jpaFleetSegmentRepository.update(
+                "ATL01",
+                previous.copy(
+                    vesselTypes = listOf("Chalutier congélateur"),
+                ),
+            )
+
+        // Then
+        assertThat(updatedFleetSegment.segment).isEqualTo("ATL01")
+        assertThat(updatedFleetSegment.vesselTypes).isEqualTo(listOf("Chalutier congélateur"))
     }
 
     @Test

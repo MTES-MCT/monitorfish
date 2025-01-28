@@ -69,14 +69,14 @@ class GetVesselVoyage(
             } catch (e: IllegalArgumentException) {
                 throw BackendUsageException(
                     BackendUsageErrorCode.NOT_FOUND_BUT_OK,
-                    "Could not fetch voyage for request \"${voyageRequest}\"",
-                    e,
+                    message = "Could not fetch voyage for request \"${voyageRequest}\"",
+                    cause = e,
                 )
             } catch (e: NoLogbookFishingTripFound) {
                 throw BackendUsageException(
                     BackendUsageErrorCode.NOT_FOUND_BUT_OK,
-                    "Could not fetch voyage for request \"${voyageRequest}\"",
-                    e,
+                    message = "Could not fetch voyage for request \"${voyageRequest}\"",
+                    cause = e,
                 )
             }
 

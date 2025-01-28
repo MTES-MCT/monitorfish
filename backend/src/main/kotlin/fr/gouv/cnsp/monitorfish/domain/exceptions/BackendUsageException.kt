@@ -15,5 +15,6 @@ package fr.gouv.cnsp.monitorfish.domain.exceptions
 open class BackendUsageException(
     val code: BackendUsageErrorCode,
     final override val message: String? = null,
+    final override val cause: Throwable? = null,
     val data: Any? = null,
-) : Throwable(code.name)
+) : Throwable(code.name, cause)

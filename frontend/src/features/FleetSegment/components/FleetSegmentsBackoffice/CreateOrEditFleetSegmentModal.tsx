@@ -18,13 +18,13 @@ import styled from 'styled-components'
 import { StyledModalHeader } from '../../../commonComponents/StyledModalHeader'
 import { ScipSpeciesType } from '../../types'
 
-import type { FleetSegment, UpdateFleetSegment } from '../../types'
+import type { FleetSegment } from '../../types'
 
 type CreateOrEditFleetSegmentModalProps = Readonly<{
   faoAreasList: any
   onCancel: () => void
-  onCreate: (nextFleetSegment: UpdateFleetSegment) => void
-  onUpdate: (segment: string, year: number, nextFleetSegment: UpdateFleetSegment) => Promise<void>
+  onCreate: (nextFleetSegment: FleetSegment) => void
+  onUpdate: (segment: string, nextFleetSegment: FleetSegment) => Promise<void>
   updatedFleetSegment: FleetSegment | undefined
   year: number
 }>
@@ -39,7 +39,7 @@ export function CreateOrEditFleetSegmentModal({
   const gearsFAOList = useMainAppSelector(state => state.gear.gears)
   const speciesFAOList = useMainAppSelector(state => state.species.species)
 
-  const initialValues = useMemo(() => {
+  const initialValues: FleetSegment = useMemo(() => {
     if (updatedFleetSegment) {
       return updatedFleetSegment
     }
@@ -53,7 +53,7 @@ export function CreateOrEditFleetSegmentModal({
       minMesh: undefined,
       minShareOfTargetSpecies: undefined,
       priority: 0,
-      segment: undefined,
+      segment: '',
       segmentName: undefined,
       targetSpecies: [],
       vesselTypes: [],
@@ -68,7 +68,7 @@ export function CreateOrEditFleetSegmentModal({
 
   const handleSubmit = nextFleetSegment => {
     if (updatedFleetSegment) {
-      onUpdate(updatedFleetSegment.segment, year, nextFleetSegment)
+      onUpdate(updatedFleetSegment.segment, nextFleetSegment)
 
       return
     }
@@ -90,7 +90,7 @@ export function CreateOrEditFleetSegmentModal({
               <Column style={{ width: 400 }}>
                 <Columns>
                   <Column>
-                    <FormikTextInput label="Nom" name="segment" />
+                    <FormikTextInput label="Code" name="segment" />
                   </Column>
                   <Column>
                     <FormikNumberInput label="Note d’impact" name="impactRiskFactor" />
@@ -127,7 +127,7 @@ export function CreateOrEditFleetSegmentModal({
                 </Columns>
               </Column>
               <Column style={{ width: 400 }}>
-                <FormikTextInput label="Description" name="segmentName" />
+                <FormikTextInput label="Nom" name="segmentName" />
                 <FormikMultiSelect
                   label="Espèces ciblées"
                   name="targetSpecies"

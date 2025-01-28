@@ -7,7 +7,7 @@ export enum ScipSpeciesType {
   TUNA = 'TUNA'
 }
 
-export const FleetSegmentSchema = z.object({
+export const FleetSegmentSchema = z.strictObject({
   faoAreas: z.array(z.string()),
   gears: z.array(z.string()),
   impactRiskFactor: z.number().optional(),

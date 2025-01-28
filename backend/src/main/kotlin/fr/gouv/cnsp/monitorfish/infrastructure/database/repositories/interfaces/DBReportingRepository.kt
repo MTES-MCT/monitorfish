@@ -85,7 +85,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
             SELECT lr.cfr, lr.ircs, lr.external_identification, lr.operation_number, MAX(lr.operation_datetime_utc) as last_dep_date_time
             FROM logbook_reports lr
             WHERE
-                lr.operation_datetime_utc > NOW() - INTERVAL '1 hour' AND
+                lr.operation_datetime_utc > NOW() - INTERVAL '12 hour' AND
                 lr.log_type = 'DEP'
             GROUP BY lr.cfr, lr.ircs, lr.external_identification, lr.operation_number
         ),
@@ -94,7 +94,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
             SELECT DISTINCT referenced_report_id
             FROM logbook_reports lr
             WHERE
-                lr.operation_datetime_utc > NOW() - INTERVAL '1 hour' AND
+                lr.operation_datetime_utc > NOW() - INTERVAL '12 hour' AND
                 lr.operation_type = 'RET' AND
                 lr.value->>'returnStatus' = '000'
         )

@@ -2,13 +2,13 @@ import { createFleetSegmentFromAPI } from '@features/FleetSegment/apis'
 
 import { setError } from '../../../domain/shared_slices/Global'
 
-import type { FleetSegment, UpdateFleetSegment } from '../types'
+import type { FleetSegment } from '../types'
 
 /**
  * Create a fleet segment
  */
 export const createFleetSegment =
-  (segmentFields: UpdateFleetSegment, previousFleetSegments: FleetSegment[]) =>
+  (segmentFields: FleetSegment, previousFleetSegments: FleetSegment[]) =>
   async (dispatch): Promise<undefined | FleetSegment[]> => {
     try {
       if (!segmentFields?.segment) {

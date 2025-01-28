@@ -1,8 +1,8 @@
-import { updateFleetSegmentFromAPI } from '@features/FleetSegment/apis'
+import { fleetSegmentApi } from '@features/FleetSegment/apis'
 
 import { setError } from '../../../domain/shared_slices/Global'
 
-import type { FleetSegment, UpdateFleetSegment } from '../types'
+import type { FleetSegment } from '../types'
 
 /**
  * Update a fleet segment
@@ -10,17 +10,21 @@ import type { FleetSegment, UpdateFleetSegment } from '../types'
 export const updateFleetSegment =
   (
     segment: string,
-    year: number,
-    updatedFields: UpdateFleetSegment,
+    updatedSegment: FleetSegment,
     previousFleetSegments: FleetSegment[]
   ): ((dispatch, getState) => Promise<FleetSegment[] | undefined>) =>
   async dispatch => {
     try {
-      if (!segment || !year) {
-        throw new Error('Erreur lors de la modification du segment de flotte')
+      if (!segment) {
+        throw new Error('Le champ segment est requis')
       }
 
-      const updatedFleetSegment = await updateFleetSegmentFromAPI(segment, year, updatedFields)
+      const updatedFleetSegment = await dispatch(
+        fleetSegmentApi.endpoints.updateFleetSegment.initiate({
+          segment,
+          updatedSegment
+        })
+      ).unwrap()
 
       return updateFleetSegments(previousFleetSegments, segment, updatedFleetSegment)
     } catch (error) {

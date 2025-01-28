@@ -2,16 +2,13 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
-import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegmentFields
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateOrUpdateFleetSegmentDataInput
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
-import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -54,7 +51,7 @@ class FleetSegmentAdminControllerITests {
     @Test
     fun `Should update a fleet segment`() {
         // Given
-        given(this.updateFleetSegment.execute(any(), any(), eq(2021)))
+        given(this.updateFleetSegment.execute(any(), any()))
             .willReturn(
                 FleetSegment(
                     segment = "A_SEGMENT/WITH/SLASH",
@@ -76,12 +73,12 @@ class FleetSegmentAdminControllerITests {
         // When
         api
             .perform(
-                put("/bff/v1/admin/fleet_segments?year=2021&segment=A_SEGMENT/WITH/SLASH")
+                put("/bff/v1/admin/fleet_segments?segment=A_SEGMENT/WITH/SLASH")
                     .content(
                         objectMapper.writeValueAsString(
                             CreateOrUpdateFleetSegmentDataInput(
                                 gears = listOf("OTB", "OTC"),
-                                segment = null,
+                                segment = "A_SEGMENT",
                                 segmentName = null,
                                 faoAreas = null,
                                 targetSpecies = null,
@@ -92,7 +89,7 @@ class FleetSegmentAdminControllerITests {
                                 priority = 0.0,
                                 vesselTypes = listOf(),
                                 impactRiskFactor = null,
-                                year = null,
+                                year = 2021,
                             ),
                         ),
                     ).contentType(MediaType.APPLICATION_JSON),
@@ -101,17 +98,6 @@ class FleetSegmentAdminControllerITests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.segment", equalTo("A_SEGMENT/WITH/SLASH")))
             .andExpect(jsonPath("$.gears[0]", equalTo("OTB")))
-
-        Mockito.verify(updateFleetSegment).execute(
-            segment = "A_SEGMENT/WITH/SLASH",
-            fields =
-                CreateOrUpdateFleetSegmentFields(
-                    gears = listOf("OTB", "OTC"),
-                    priority = 0.0,
-                    vesselTypes = listOf(),
-                ),
-            year = 2021,
-        )
     }
 
     @Test
@@ -180,66 +166,5 @@ class FleetSegmentAdminControllerITests {
             )
             // Then
             .andExpect(status().isCreated)
-
-        Mockito.verify(createFleetSegment).execute(
-            CreateOrUpdateFleetSegmentFields(
-                segment = "SEGMENT",
-                gears = listOf("OTB", "OTC"),
-                year = 2022,
-                segmentName = "",
-                priority = 1.2,
-                vesselTypes = listOf(),
-                faoAreas = listOf(),
-                targetSpecies = listOf(),
-                impactRiskFactor = 1.2,
-                mainScipSpeciesType = null,
-                maxMesh = null,
-                minMesh = null,
-                minShareOfTargetSpecies = null,
-            ),
-        )
-    }
-
-    @Test
-    fun `Should throw an exception When no year given to create a fleet segment`() {
-        // Given
-        given(createFleetSegment.execute(any()))
-            .willThrow(IllegalArgumentException("`year` must be provided"))
-
-        // When
-        api
-            .perform(
-                post("/bff/v1/admin/fleet_segments")
-                    .content(
-                        objectMapper.writeValueAsString(
-                            CreateOrUpdateFleetSegmentDataInput(
-                                segment = "SEGMENT",
-                                gears = listOf("OTB", "OTC"),
-                                segmentName = null,
-                                faoAreas = null,
-                                targetSpecies = null,
-                                mainScipSpeciesType = null,
-                                maxMesh = null,
-                                minMesh = null,
-                                minShareOfTargetSpecies = null,
-                                priority = 0.0,
-                                vesselTypes = listOf(),
-                                impactRiskFactor = null,
-                                year = null,
-                            ),
-                        ),
-                    ).contentType(MediaType.APPLICATION_JSON),
-            )
-            // Then
-            .andExpect(status().isBadRequest)
-
-        Mockito.verify(createFleetSegment).execute(
-            CreateOrUpdateFleetSegmentFields(
-                segment = "SEGMENT",
-                gears = listOf("OTB", "OTC"),
-                priority = 0.0,
-                vesselTypes = listOf(),
-            ),
-        )
     }
 }

@@ -1,10 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotDeleteException
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateFleetSegmentException
 import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegmentFields
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.FleetSegmentEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBFleetSegmentRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.utils.toSqlArrayString
@@ -34,65 +34,37 @@ class JpaFleetSegmentRepository(
     @Transactional
     override fun update(
         segment: String,
-        fields: CreateOrUpdateFleetSegmentFields,
-        year: Int,
+        updatedSegment: FleetSegment,
     ): FleetSegment {
+        val fleetSegmentEntity = FleetSegmentEntity.fromFleetSegment(updatedSegment)
+
+        // The list properties needs to be formatted
+        val escapedFleetSegmentEntity =
+            fleetSegmentEntity.copy(
+                vesselTypes = toSqlArrayString(fleetSegmentEntity.vesselTypes)?.let { listOf(it) },
+                gears = toSqlArrayString(fleetSegmentEntity.gears)?.let { listOf(it) },
+                faoAreas = toSqlArrayString(fleetSegmentEntity.faoAreas)?.let { listOf(it) },
+                targetSpecies = toSqlArrayString(fleetSegmentEntity.targetSpecies)?.let { listOf(it) },
+            )
+
         try {
-            fields.segmentName?.let {
-                dbFleetSegmentRepository.updateSegmentName(segment, it, year)
-            }
-
-            fields.gears?.let {
-                dbFleetSegmentRepository.updateGears(segment, it.toArrayString(), year)
-            }
-
-            fields.faoAreas?.let {
-                dbFleetSegmentRepository.updateFAOAreas(segment, it.toArrayString(), year)
-            }
-
-            fields.targetSpecies?.let {
-                dbFleetSegmentRepository.updateTargetSpecies(segment, it.toArrayString(), year)
-            }
-
-            fields.mainScipSpeciesType?.let {
-                dbFleetSegmentRepository.updateMainScipSpeciesType(segment, it.name, year)
-            }
-
-            fields.maxMesh?.let {
-                dbFleetSegmentRepository.updateMaxMesh(segment, it, year)
-            }
-
-            fields.minMesh?.let {
-                dbFleetSegmentRepository.updateMinMesh(segment, it, year)
-            }
-
-            fields.minShareOfTargetSpecies?.let {
-                dbFleetSegmentRepository.updateMinShareOfTargetSpecies(segment, it, year)
-            }
-
-            fields.priority?.let {
-                dbFleetSegmentRepository.updatePriority(segment, it, year)
-            }
-
-            fields.vesselTypes?.let {
-                dbFleetSegmentRepository.updateVesselTypes(segment, it, year)
-            }
-
-            fields.impactRiskFactor?.let {
-                dbFleetSegmentRepository.updateImpactRiskFactor(segment, it, year)
-            }
-
-            fields.segment?.let {
-                dbFleetSegmentRepository.updateSegment(segment, it, year)
-            }
-
-            return fields.segment?.let {
-                dbFleetSegmentRepository.findBySegmentAndYearEquals(it, year).toFleetSegment()
-            } ?: run {
-                dbFleetSegmentRepository.findBySegmentAndYearEquals(segment, year).toFleetSegment()
-            }
+            dbFleetSegmentRepository.updateFleetSegment(segment, escapedFleetSegmentEntity)
         } catch (e: Throwable) {
-            throw CouldNotUpdateFleetSegmentException("Could not update fleet segment: ${e.message}", e)
+            throw BackendUsageException(
+                code = BackendUsageErrorCode.COULD_NOT_UPDATE,
+                message = "Could not update fleet segment",
+                cause = e,
+            )
+        }
+
+        return try {
+            dbFleetSegmentRepository
+                .findBySegmentAndYearEquals(
+                    updatedSegment.segment,
+                    updatedSegment.year,
+                ).toFleetSegment()
+        } catch (e: Throwable) {
+            throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
         }
     }
 

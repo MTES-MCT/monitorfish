@@ -95,6 +95,19 @@ export function FormikMainField({
                 </StyledSubRow>
               )}
 
+              {fishingCatch.specyCode === BLUEFIN_TUNA_SPECY_CODE && (
+                <FormikNumberInput
+                  areArrowsHidden
+                  isErrorMessageHidden
+                  isLabelHidden
+                  label={`Pièces (${fishingCatch.specyCode})`}
+                  name={`fishingCatches[${index}].quantity`}
+                  readOnly
+                  title="Le nombre de pièces est calculé à partir des pièces saisies dans les cases BF1, BF2, BF3"
+                  unit="pc"
+                />
+              )}
+
               <FormikNumberInput
                 areArrowsHidden
                 isErrorMessageHidden

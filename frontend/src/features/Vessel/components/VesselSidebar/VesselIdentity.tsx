@@ -11,7 +11,7 @@ import styled from 'styled-components'
 import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
 import { getDate } from '../../../../utils'
 
-export function Identity() {
+export function VesselIdentity() {
   const dispatch = useMainAppDispatch()
   const loadingVessel = useMainAppSelector(state => state.vessel.loadingVessel)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
@@ -292,8 +292,6 @@ const ValueWithLineBreak = styled.div`
 
 const Body = styled.div`
   padding: 5px 5px 10px 5px;
-  overflow-x: hidden;
-  max-height: 662px;
 `
 
 const LicenceActive = styled.span`

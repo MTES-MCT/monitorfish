@@ -105,7 +105,7 @@ export function VesselLogbook() {
 }
 
 const NoFishingActivities = styled.div`
-  padding: 50px 5px 0px 5px;
+  padding: 50px 5px 0 5px;
   margin: 10px 10px;
   height: 70px;
   background: ${p => p.theme.color.white};
@@ -113,10 +113,7 @@ const NoFishingActivities = styled.div`
   text-align: center;
 `
 
-const Wrapper = styled.div`
-  overflow-x: hidden;
-  max-height: 700px;
-`
+const Wrapper = styled.div``
 
 const UpdateFishingActivities = styled.div`
   background: ${p => p.theme.color.white};
@@ -126,7 +123,7 @@ const UpdateFishingActivities = styled.div`
   width: -moz-available;
   width: -webkit-fill-available;
   height: 55px;
-  box-shadow: -10px 5px 7px 0px rgba(81, 81, 81, 0.2);
+  box-shadow: -10px 5px 7px 0 rgba(81, 81, 81, 0.2);
   z-index: 9;
 `
 

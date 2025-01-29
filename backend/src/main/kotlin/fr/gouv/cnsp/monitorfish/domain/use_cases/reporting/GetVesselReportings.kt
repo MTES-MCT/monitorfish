@@ -77,19 +77,26 @@ class GetVesselReportings(
             }
         logger.info("TIME_RECORD - 'archivedYearsToReportings' took $archivedYearsToReportingsTimeTaken")
 
+        val twelveMonthsAgo = ZonedDateTime.now().minusMonths(12)
+        val lastTwelveMonthsReportings = reportings.filter { reporting ->
+            reporting.validationDate?.isAfter(twelveMonthsAgo)
+                ?: reporting.creationDate.isAfter(twelveMonthsAgo)
+        }
+
         val (infractionSuspicionsSummary, infractionSuspicionsSummaryTimeTaken) =
             measureTimedValue {
-                getInfractionSuspicionsSummary(reportings.filter { it.isArchived })
+                getInfractionSuspicionsSummary(lastTwelveMonthsReportings.filter { it.isArchived })
             }
         logger.info("TIME_RECORD - 'infractionSuspicionsSummary' took $infractionSuspicionsSummaryTimeTaken")
+
         val numberOfInfractionSuspicions = infractionSuspicionsSummary.sumOf { it.numberOfOccurrences }
         val numberOfObservation =
-            reportings
+            lastTwelveMonthsReportings
                 .filter { it.isArchived && it.type == ReportingType.OBSERVATION }
                 .size
 
-        val reportingSummary =
-            ReportingSummary(
+        val reportingTwelveMonthsSummary =
+            ReportingTwelveMonthsSummary(
                 infractionSuspicionsSummary = infractionSuspicionsSummary,
                 numberOfInfractionSuspicions = numberOfInfractionSuspicions,
                 numberOfObservations = numberOfObservation,
@@ -98,7 +105,7 @@ class GetVesselReportings(
         return VesselReportings(
             current = current,
             archived = archivedYearsToReportings,
-            summary = reportingSummary,
+            summary = reportingTwelveMonthsSummary,
         )
     }
 

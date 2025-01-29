@@ -6,7 +6,7 @@ context('Side Window > Mission List > Sea Front VesselFilter (= submenu)', () =>
   })
 
   it('Should have the expected submenu counters', () => {
-    cy.getDataCy('side-window-sub-menu-ALL-number').should('have.text', '14')
+    cy.getDataCy('side-window-sub-menu-ALL-number').should('have.text', '15')
     cy.getDataCy('side-window-sub-menu-MED-number').should('have.text', '3')
     cy.getDataCy('side-window-sub-menu-MEMN-number').should('have.text', '6')
   })
@@ -22,6 +22,6 @@ context('Side Window > Mission List > Sea Front VesselFilter (= submenu)', () =>
   it('Should filter for ALL missions', () => {
     cy.get('[data-cy="side-window-sub-menu-ALL"]').click()
 
-    cy.get('.TableBodyRow').should('have.length', 14)
+    cy.get('.TableBodyRow').should('have.length', 15)
   })
 })

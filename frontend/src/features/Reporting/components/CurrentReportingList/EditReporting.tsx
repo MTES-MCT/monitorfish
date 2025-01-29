@@ -6,13 +6,13 @@ import { ReportingForm } from '../ReportingForm'
 import { Loader as ReportingFormLoader } from '../ReportingForm/Loader'
 
 import type { Reporting } from '@features/Reporting/types'
-import type { VesselIdentity } from 'domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type EditReportingProps = Readonly<{
   editedReporting: Reporting.EditableReporting | undefined
   onClose: () => void
   onIsDirty: ((isDirty: boolean) => void) | undefined
-  vesselIdentity: VesselIdentity
+  vesselIdentity: Vessel.VesselIdentity
 }>
 export function EditReporting({ editedReporting, onClose, onIsDirty, vesselIdentity }: EditReportingProps) {
   return (

@@ -1,4 +1,3 @@
-import { VesselReportingListTab } from '@features/Vessel/components/VesselSidebar/ReportingList/constants'
 import { vesselActions } from '@features/Vessel/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Button, LinkButton } from '@mtes-mct/monitor-ui'
@@ -11,12 +10,12 @@ import { EditReporting } from './EditReporting'
 import { ReportingCard } from '../ReportingCard'
 
 import type { Reporting, ReportingAndOccurrences, VesselReportings } from '@features/Reporting/types'
-import type { VesselIdentity } from 'domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type ContentProps = Readonly<{
   className: string | undefined
   onIsDirty: ((isDirty: boolean) => void) | undefined
-  vesselIdentity: VesselIdentity
+  vesselIdentity: Vessel.VesselIdentity
   vesselReportings: VesselReportings
   withOpenedNewReportingForm: boolean
   withVesselSidebarHistoryLink: boolean
@@ -54,7 +53,6 @@ export function Content({
 
     dispatch(showVessel(vesselIdentity, false, true))
     dispatch(vesselActions.setSelectedVesselSidebarTab(VesselSidebarTab.REPORTING))
-    dispatch(vesselActions.setSelectedVesselSidebarReportingListTab(VesselReportingListTab.REPORTING_HISTORY))
   }
 
   return (
@@ -102,14 +100,14 @@ const Wrapper = styled.div`
   color: ${p => p.theme.color.slateGray};
   display: flex;
   flex-direction: column;
-  margin: 10px 5px 5px 5px;
-  padding: 16px;
+  margin: 5px 5px 0 5px;
+  padding: 16px 16px 0 16px;
   text-align: left;
 `
 
 const NewReportingButton = styled(Button)`
   align-self: flex-start;
-  margin: 0px 10px 10px 0px;
+  margin: 0 10px 10px 0;
 `
 
 const NoReporting = styled.div`

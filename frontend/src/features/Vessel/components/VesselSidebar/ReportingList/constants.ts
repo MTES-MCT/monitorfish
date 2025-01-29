@@ -1,4 +1,0 @@
-export enum VesselReportingListTab {
-  CURRENT_REPORTING = 'CURRENT_REPORTING',
-  REPORTING_HISTORY = 'REPORTING_HISTORY'
-}

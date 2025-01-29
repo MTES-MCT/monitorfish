@@ -193,8 +193,6 @@ const PhotoZone = styled.div`
 
 const Body = styled.div`
   padding: 5px 5px 1px 5px;
-  overflow-x: hidden;
-  max-height: 662px;
 `
 
 const Photo = styled.img<{

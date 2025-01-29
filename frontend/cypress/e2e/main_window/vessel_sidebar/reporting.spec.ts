@@ -130,9 +130,8 @@ context('Vessel sidebar reporting tab', () => {
 
     // Then
     cy.get('*[data-cy="reporting-card"]').should('not.exist')
-    cy.get('*[data-cy="vessel-sidebar-reporting-tab-history-button"]').click()
-    cy.get('*[data-cy="vessel-sidebar-reporting-tab-history"]').should('exist')
-    cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').eq(0).click()
+    cy.get('*[data-cy="vessel-sidebar-archived-reporting"]').should('exist')
+    cy.get('*[data-cy="vessel-sidebar-reporting-archive-year"]').eq(0).click()
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('OFB SD 56 / Sortie non autorisée')
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()
   })
@@ -154,8 +153,7 @@ context('Vessel sidebar reporting tab', () => {
 
     addAndCreateReportingWithinVesselSidebar()
     cy.get('[data-cy="archive-reporting-card"]').eq(0).click()
-    cy.get('*[data-cy="vessel-sidebar-reporting-tab-history-button"]').click()
-    cy.get('*[data-cy="vessel-sidebar-reporting-tab-history"]').should('exist')
+    cy.get('*[data-cy="vessel-sidebar-archived-reporting"]').should('exist')
 
     // Then
     // Summary
@@ -181,14 +179,13 @@ context('Vessel sidebar reporting tab', () => {
     cy.wait(100)
 
     // When
-    cy.get('*[data-cy="vessel-sidebar-reporting-tab-history-button"]').click()
-    cy.get('*[data-cy="vessel-sidebar-reporting-tab-history"]').should('exist')
-    cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').should('have.length', 6)
+    cy.get('*[data-cy="vessel-sidebar-archived-reporting"]').should('exist')
+    cy.get('*[data-cy="vessel-sidebar-reporting-archive-year"]').should('have.length', 6)
     cy.clickButton('Afficher plus de signalements')
 
     // Then
     cy.wait('@getVesselReportings')
-    cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').should('have.length', 7)
+    cy.get('*[data-cy="vessel-sidebar-reporting-archive-year"]').should('have.length', 7)
   })
 
   it('Reporting Should be deleted', () => {

@@ -12,7 +12,7 @@ export function BeaconMalfunctionWarning({ selectedVessel }) {
 
   return (
     <>
-      {selectedVessel?.beaconMalfunctionId ? (
+      {selectedVessel.beaconMalfunctionId ? (
         <BeaconMalfunction
           data-cy="vessel-sidebar-beacon-malfunction"
           onClick={() => showBeaconMalfunctionInSideWindow(dispatch, selectedVessel)}

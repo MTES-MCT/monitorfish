@@ -777,7 +777,7 @@ class VesselControllerITests {
         ).willReturn(
             VesselReportings(
                 summary =
-                    ReportingSummary(
+                    ReportingTwelveMonthsSummary(
                         infractionSuspicionsSummary =
                             listOf(
                                 ReportingTitleAndNumberOfOccurrences(
@@ -868,7 +868,7 @@ class VesselControllerITests {
         ).willReturn(
             VesselReportings(
                 summary =
-                    ReportingSummary(
+                    ReportingTwelveMonthsSummary(
                         infractionSuspicionsSummary = listOf(),
                         numberOfInfractionSuspicions = 0,
                         numberOfObservations = 0,

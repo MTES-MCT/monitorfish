@@ -175,7 +175,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
                       <StyledBodyTr
                         key={virtualRow.key}
                         ref={node => rowVirtualizer?.measureElement(node)}
-                        data-cy="ReportingList-reporting"
+                        data-cy="ReportingTable-reporting"
                         data-index={virtualRow?.index}
                       >
                         {row?.getVisibleCells().map(cell => (

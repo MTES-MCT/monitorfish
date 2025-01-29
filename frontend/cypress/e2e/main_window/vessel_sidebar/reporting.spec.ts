@@ -44,7 +44,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="side-window-reporting-tab"]').click()
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.wait(200)
-    cy.get('*[data-cy="ReportingList-reporting"]').first().contains('FRAIS AVIS MODE')
+    cy.get('*[data-cy="ReportingTable-reporting"]').first().contains('FRAIS AVIS MODE')
 
     // Archive the newly created reporting
     cy.get('table .rs-checkbox-wrapper').eq(1).click({ force: true })
@@ -181,12 +181,12 @@ context('Vessel sidebar reporting tab', () => {
 
     // When
     cy.get('*[data-cy="vessel-sidebar-archived-reporting"]').should('exist')
-    cy.get('*[data-cy="vessel-sidebar-reporting-archive-year"]').should('have.length', 6)
+    cy.get('*[data-cy="vessel-sidebar-reporting-archive-year"]').should('have.length', 4)
     cy.clickButton('Afficher plus de signalements')
 
     // Then
     cy.wait('@getVesselReportings')
-    cy.get('*[data-cy="vessel-sidebar-reporting-archive-year"]').should('have.length', 7)
+    cy.get('*[data-cy="vessel-sidebar-reporting-archive-year"]').should('have.length', 5)
   })
 
   it('Reporting Should be deleted', () => {

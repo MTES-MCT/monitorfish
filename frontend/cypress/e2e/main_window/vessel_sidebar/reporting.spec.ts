@@ -49,6 +49,7 @@ context('Vessel sidebar reporting tab', () => {
     // Archive the newly created reporting
     cy.get('table .rs-checkbox-wrapper').eq(1).click({ force: true })
     cy.clickButton('Archiver 1 signalement')
+    cy.clickButton('Archiver')
   })
 
   it('An observation reporting should be modified to an Infraction suspicion', () => {
@@ -91,7 +92,7 @@ context('Vessel sidebar reporting tab', () => {
       cy.intercept('PUT', `/bff/v1/reportings/${createdPriorNotification.id}`).as('updateReporting')
       cy.get('*[data-cy="reporting-card"]').first().contains('Fin de validité le 08/06/2166')
 
-      cy.get('*[data-cy^="edit-reporting-card"]').first().click({ timeout: 10000 })
+      cy.get('*[data-cy^="edit-reporting-card"]').first().scrollIntoView().click({ timeout: 10000 })
       cy.fill('Type de signalement', 'Infraction (suspicion)')
       cy.fill('Natinf', '7059')
       const nextDate = getUtcDateInMultipleFormats('2200-06-08T13:54')
@@ -102,7 +103,7 @@ context('Vessel sidebar reporting tab', () => {
 
       cy.get('*[data-cy="reporting-card"]').first().contains('NATINF 7059')
       cy.get('*[data-cy="reporting-card"]').first().contains('Fin de validité le 08/06/2200')
-      cy.get('*[data-cy="delete-reporting-card"]').eq(0).click()
+      cy.get('*[data-cy="delete-reporting-card"]').eq(0).scrollIntoView().click()
       // Then, we confirm the reporting deletion
       cy.clickButton('Supprimer')
     })
@@ -157,7 +158,7 @@ context('Vessel sidebar reporting tab', () => {
 
     // Then
     // Summary
-    cy.get('[data-cy="vessel-reporting-summary"]').contains('Résumé des derniers signalements (6 dernières années)')
+    cy.get('[data-cy="vessel-reporting-summary"]').contains('Résumé des derniers signalements (12 derniers mois)')
     cy.get('[data-cy="vessel-reporting-summary"]').contains('Signalement "3 milles - Chaluts (NATINF 7059)"')
     cy.get('[data-cy="vessel-reporting-summary"]').contains(
       "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne (NATINF 2608)"
@@ -206,10 +207,10 @@ context('Vessel sidebar reporting tab', () => {
     // When
     cy.get('*[data-cy="vessel-menu-reporting"]').contains(1)
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('OFB SD 56 / Sortie non autorisée')
-    cy.get('*[data-cy="delete-reporting-card"]').eq(0).click()
+    cy.get('*[data-cy="delete-reporting-card"]').eq(0).scrollIntoView().click()
     // First, we do not confirm the reporting deletion
     cy.clickButton('Annuler', { withinSelector: '.Component-Dialog' })
-    cy.get('*[data-cy="delete-reporting-card"]').eq(0).click()
+    cy.get('*[data-cy="delete-reporting-card"]').eq(0).scrollIntoView().click()
     // Then, we confirm the reporting deletion
     cy.clickButton('Supprimer')
 

@@ -1,9 +1,14 @@
+import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { ConfirmationModal } from '@components/ConfirmationModal'
+import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { SideWindowCard } from '@components/SideWindowCard'
 import { CurrentReportingList } from '@features/Reporting/components/CurrentReportingList'
+import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
+import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Icon, LinkButton } from '@mtes-mct/monitor-ui'
+import { Icon, LinkButton, THEME } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { useCallback, useState } from 'react'
@@ -21,6 +26,16 @@ export function ReportingList() {
   const vesselIdentity = useMainAppSelector(store => store.priorNotification.openedReportingListVesselIdentity)
   assertNotNullish(vesselIdentity)
   const isSuperUser = useIsSuperUser()
+
+  const { data: vesselReportings, isFetching } = useGetVesselReportingsByVesselIdentityQuery(
+    vesselIdentity
+      ? {
+          fromDate: getDefaultReportingsStartDate().toISOString(),
+          vesselIdentity
+        }
+      : skipToken,
+    RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
+  )
 
   const [isCancellationConfirmationModalOpen, setIsCancellationConfirmationModalOpen] = useState(false)
 
@@ -65,12 +80,18 @@ export function ReportingList() {
           )}
         </CardHeader>
 
-        <StyledCurrentReportingList
-          onIsDirty={handleIsDirty}
-          vesselIdentity={vesselIdentity}
-          withOpenedNewReportingForm={isPriorNotificationCardOpened}
-          withVesselSidebarHistoryLink
-        />
+        {(!vesselReportings || isFetching) && (
+          <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
+        )}
+        {!!vesselReportings && (
+          <StyledCurrentReportingList
+            onIsDirty={handleIsDirty}
+            vesselIdentity={vesselIdentity}
+            vesselReportings={vesselReportings}
+            withOpenedNewReportingForm={isPriorNotificationCardOpened}
+            withVesselSidebarHistoryLink
+          />
+        )}
       </StyledCard>
 
       {isCancellationConfirmationModalOpen && (

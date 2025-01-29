@@ -16,7 +16,7 @@ import { getVesselControls } from '../../../../../domain/use_cases/mission/getVe
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 
-export function Controls() {
+export function VesselControls() {
   const dispatch = useMainAppDispatch()
 
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
@@ -183,10 +183,4 @@ const UpdateControlsButton = styled.div`
 
 const Body = styled.div`
   padding: 0 5px 1px 5px;
-  overflow-x: hidden;
-  max-height: 700px;
-
-  ::-webkit-scrollbar {
-    width: 20px;
-  }
 `

@@ -50,7 +50,7 @@ export function YearReportings({ reportingAndOccurences, year }: YearReportingsP
       <YearListTitle
         $isEmpty={reportingAndOccurences.length === 0}
         $isOpen={isOpen}
-        data-cy="vessel-sidebar-reporting-tab-archive-year"
+        data-cy="vessel-sidebar-reporting-archive-year"
       >
         <YearListTitleText
           $isEmpty={reportingAndOccurences.length === 0}

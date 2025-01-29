@@ -1,34 +1,31 @@
 import { Header, Zone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
-import { customDayjs, Icon, THEME } from '@mtes-mct/monitor-ui'
+import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { InfractionSuspicionSummary } from './InfractionSuspicionSummary'
 
-import type { VesselReportings } from '@features/Reporting/types'
+import type { ReportingSummary } from '@features/Reporting/types'
 
 type ReportingListSummaryProps = Readonly<{
-  fromDate: Date
-  vesselReportings: VesselReportings
+  reportingSummary: ReportingSummary
 }>
-export function ReportingListSummary({ fromDate, vesselReportings }: ReportingListSummaryProps) {
-  const yearsDepth = customDayjs().utc().get('year') - customDayjs(fromDate).get('year') + 1
-
+export function TwelveMonthsSummary({ reportingSummary }: ReportingListSummaryProps) {
   return (
     <Zone data-cy="vessel-reporting-summary">
-      <Header>Résumé des derniers signalements ({yearsDepth} dernières années)</Header>
+      <Header>Résumé des derniers signalements (12 derniers mois)</Header>
       <Body>
         <Columns $isFirst>
           <IconColumn>
             <Icon.Alert color={THEME.color.slateGray} />
           </IconColumn>
-          <InfractionSuspicionSummary reportingSummary={vesselReportings.summary} />
+          <InfractionSuspicionSummary reportingSummary={reportingSummary} />
         </Columns>
         <Columns $isFirst={false}>
           <IconColumn>
             <Icon.Observation color={THEME.color.slateGray} />
           </IconColumn>
           <Label>
-            Observations <LabelNumber>{vesselReportings.summary?.numberOfObservations}</LabelNumber>
+            Observations <LabelNumber>{reportingSummary.numberOfObservations}</LabelNumber>
           </Label>
         </Columns>
       </Body>

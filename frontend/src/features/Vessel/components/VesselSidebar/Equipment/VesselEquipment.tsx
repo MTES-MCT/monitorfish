@@ -71,7 +71,6 @@ const NoBeacon = styled.div`
 
 const Wrapper = styled.div`
   overflow: hidden;
-  max-height: 700px;
 
   .rs-btn rs-btn-default rs-picker-toggle {
     background: #1675e0 !important;

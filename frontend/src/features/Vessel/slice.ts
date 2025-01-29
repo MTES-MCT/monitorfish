@@ -1,5 +1,4 @@
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
-import { VesselReportingListTab } from '@features/Vessel/components/VesselSidebar/ReportingList/constants'
 import { createEntityAdapter, createSlice, type EntityState, type PayloadAction } from '@reduxjs/toolkit'
 
 import {
@@ -39,8 +38,6 @@ export type VesselState = {
   selectedVessel: VesselTypes.AugmentedSelectedVessel | undefined
   selectedVesselIdentity: VesselIdentity | undefined
   selectedVesselPositions: VesselPosition[] | null
-  /** Used to open vessel sidebar reporting history from prior notification form reporting list. */
-  selectedVesselSidebarReportingListTab: VesselReportingListTab
   selectedVesselSidebarTab: VesselSidebarTab
   selectedVesselTrackRequest: TrackRequest | null
   tripMessagesLastToFormerDEPDateTimes: any[]
@@ -62,7 +59,6 @@ const INITIAL_STATE: VesselState = {
   selectedVessel: undefined,
   selectedVesselIdentity: undefined,
   selectedVesselPositions: null,
-  selectedVesselSidebarReportingListTab: VesselReportingListTab.CURRENT_REPORTING,
   selectedVesselSidebarTab: VesselSidebarTab.SUMMARY,
   selectedVesselTrackRequest: null,
   tripMessagesLastToFormerDEPDateTimes: [],
@@ -463,15 +459,8 @@ const vesselSlice = createSlice({
       state.selectedVesselTrackRequest = action.payload
     },
 
-    setSelectedVesselSidebarReportingListTab(state, action: PayloadAction<VesselReportingListTab>) {
-      state.selectedVesselSidebarReportingListTab = action.payload
-    },
-
     setSelectedVesselSidebarTab(state, action: PayloadAction<VesselSidebarTab>) {
       state.selectedVesselSidebarTab = action.payload
-      if (state.selectedVesselSidebarTab !== VesselSidebarTab.REPORTING) {
-        state.selectedVesselSidebarReportingListTab = VesselReportingListTab.CURRENT_REPORTING
-      }
     },
 
     setVessels(state, action: PayloadAction<VesselEnhancedLastPositionWebGLObject[]>) {

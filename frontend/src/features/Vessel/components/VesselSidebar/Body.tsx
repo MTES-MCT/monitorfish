@@ -5,16 +5,16 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { Controls } from './Controls'
+import { VesselControls } from './Controls'
 import { VesselEquipment } from './Equipment/VesselEquipment'
-import { Identity } from './Identity'
-import { ReportingList } from './ReportingList'
 import { VesselSummary } from './Summary'
+import { VesselIdentity } from './VesselIdentity'
 import { AlertWarning } from './warnings/AlertWarning'
 import { BeaconMalfunctionWarning } from './warnings/BeaconMalfunctionWarning'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { VesselSidebarTab } from '../../../../domain/entities/vessel/vessel'
 import { VesselLogbook } from '../../../Logbook/components/VesselLogbook'
+import { VesselReportings } from '../../../Reporting/components/VesselReportings'
 
 export function Body() {
   const isSuperUser = useIsSuperUser()
@@ -43,16 +43,18 @@ export function Body() {
   }
 
   return (
-    <Wrapper $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}>
+    <>
       {isSuperUser && selectedVessel && <AlertWarning selectedVessel={selectedVessel} />}
-      {isSuperUser && <BeaconMalfunctionWarning selectedVessel={selectedVessel} />}
-      {selectedVesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
-      {selectedVesselSidebarTab === VesselSidebarTab.IDENTITY && <Identity />}
-      {selectedVesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselLogbook />}
-      {selectedVesselSidebarTab === VesselSidebarTab.CONTROLS && <Controls />}
-      {isSuperUser && selectedVesselSidebarTab === VesselSidebarTab.REPORTING && <ReportingList />}
-      {selectedVesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselEquipment />}
-    </Wrapper>
+      {isSuperUser && selectedVessel && <BeaconMalfunctionWarning selectedVessel={selectedVessel} />}
+      <Wrapper $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}>
+        {selectedVesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
+        {selectedVesselSidebarTab === VesselSidebarTab.IDENTITY && <VesselIdentity />}
+        {selectedVesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselLogbook />}
+        {selectedVesselSidebarTab === VesselSidebarTab.CONTROLS && <VesselControls />}
+        {isSuperUser && selectedVesselSidebarTab === VesselSidebarTab.REPORTING && <VesselReportings />}
+        {selectedVesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselEquipment />}
+      </Wrapper>
+    </>
   )
 }
 
@@ -61,7 +63,8 @@ const Wrapper = styled.div<{
 }>`
   padding: 0;
   background: ${p => p.theme.color.gainsboro};
-  max-height: ${p => (p.$hasHealthcheckTextWarning ? 80 : 82)}vh;
+  max-height: ${p => (p.$hasHealthcheckTextWarning ? 74 : 76)}vh;
+  overflow-x: hidden;
 `
 
 const ErrorFallback = styled.div`

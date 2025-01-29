@@ -314,7 +314,7 @@ class GetVesselReportingsUTests {
         val alertReporting1 =
             createCurrentReporting(
                 id = 11223,
-                validationDate = ZonedDateTime.parse("2024-01-01T12:00:00Z"),
+                validationDate = ZonedDateTime.now().minusMonths(11),
                 internalReferenceNumber = "FR55667788",
                 type = ReportingType.ALERT,
                 alertType = AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
@@ -324,7 +324,7 @@ class GetVesselReportingsUTests {
         val alertReporting2 =
             createCurrentReporting(
                 id = 22334,
-                validationDate = ZonedDateTime.parse("2024-02-01T12:00:00Z"),
+                validationDate = ZonedDateTime.now().minusMonths(11),
                 internalReferenceNumber = "FR55667788",
                 type = ReportingType.ALERT,
                 alertType = AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
@@ -334,7 +334,7 @@ class GetVesselReportingsUTests {
         val infractionReporting =
             createCurrentReporting(
                 id = 33445,
-                validationDate = ZonedDateTime.parse("2024-03-01T12:00:00Z"),
+                validationDate = ZonedDateTime.now().minusMonths(10),
                 internalReferenceNumber = "FR55667788",
                 type = ReportingType.INFRACTION_SUSPICION,
                 alertType = null,
@@ -345,7 +345,7 @@ class GetVesselReportingsUTests {
         val infractionReporting2 =
             createCurrentReporting(
                 id = 33456,
-                validationDate = ZonedDateTime.parse("2024-03-01T12:00:00Z"),
+                validationDate = ZonedDateTime.now().minusMonths(8),
                 internalReferenceNumber = "FR55667788",
                 type = ReportingType.INFRACTION_SUSPICION,
                 alertType = null,
@@ -355,7 +355,7 @@ class GetVesselReportingsUTests {
         val alertReporting3 =
             createCurrentReporting(
                 id = 44556,
-                validationDate = ZonedDateTime.parse("2024-04-01T12:00:00Z"),
+                validationDate = ZonedDateTime.now().minusMonths(7),
                 internalReferenceNumber = "FR55667788",
                 type = ReportingType.ALERT,
                 alertType = AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT,
@@ -365,7 +365,7 @@ class GetVesselReportingsUTests {
         val observation =
             createCurrentReporting(
                 id = 44558,
-                validationDate = ZonedDateTime.parse("2024-04-01T12:00:00Z"),
+                validationDate = ZonedDateTime.now().minusMonths(4),
                 internalReferenceNumber = "FR55667788",
                 type = ReportingType.OBSERVATION,
                 alertType = null,

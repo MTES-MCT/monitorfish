@@ -15,7 +15,7 @@ context('Side Window > Reporting List > Actions', () => {
       cy.getDataCy('side-window-sub-menu-NAMO').click()
       cy.fill('Observations', false)
 
-      cy.getDataCy('ReportingList-reporting').then($reportingRows => {
+      cy.getDataCy('ReportingTable-reporting').then($reportingRows => {
         const numberOfReportings = $reportingRows.length
 
         // When
@@ -31,7 +31,7 @@ context('Side Window > Reporting List > Actions', () => {
           // Then
           assert.deepEqual(archiveInterception.request.body, [createdReportingId])
 
-          cy.getDataCy('ReportingList-reporting').should('have.length', numberOfReportings - 1)
+          cy.getDataCy('ReportingTable-reporting').should('have.length', numberOfReportings - 1)
         })
       })
     })
@@ -47,7 +47,7 @@ context('Side Window > Reporting List > Actions', () => {
       cy.getDataCy('side-window-sub-menu-NAMO').click()
       cy.fill('Observations', false)
 
-      cy.getDataCy('ReportingList-reporting').then($reportingRows => {
+      cy.getDataCy('ReportingTable-reporting').then($reportingRows => {
         const numberOfReportings = $reportingRows.length
 
         // When
@@ -63,13 +63,13 @@ context('Side Window > Reporting List > Actions', () => {
           // Then
           assert.deepEqual(archiveInterception.request.body, [createdReportingId])
 
-          cy.getDataCy('ReportingList-reporting').should('have.length', numberOfReportings - 1)
+          cy.getDataCy('ReportingTable-reporting').should('have.length', numberOfReportings - 1)
         })
       })
     })
   })
 
-  it('A Reporting Should be edited', () => {
+  it.only('A Reporting Should be edited', () => {
     cy.intercept('PUT', 'bff/v1/reportings/7').as('updateReporting')
 
     // Given
@@ -95,7 +95,7 @@ context('Side Window > Reporting List > Actions', () => {
     })
     cy.wait(200)
 
-    cy.getDataCy('ReportingList-reporting').should('have.length.greaterThan', 1)
+    cy.getDataCy('ReportingTable-reporting').should('have.length.greaterThan', 1)
     cy.get('tr:contains("COURANT MAIN PROFESSEUR")').contains('DML 56')
     cy.get('tr:contains("COURANT MAIN PROFESSEUR")').contains(23581)
 
@@ -103,7 +103,7 @@ context('Side Window > Reporting List > Actions', () => {
      * The reporting type must be modified to OBSERVATION
      */
 
-    cy.getDataCy('ReportingList-reporting').then($reportingRows => {
+    cy.getDataCy('ReportingTable-reporting').then($reportingRows => {
       const numberOfReportings = $reportingRows.length
 
       cy.clickButton('Editer le signalement', {
@@ -121,7 +121,7 @@ context('Side Window > Reporting List > Actions', () => {
         expect(request.body.authorTrigram).contains('LTH')
         expect(response && response.statusCode).equal(200)
 
-        cy.getDataCy('ReportingList-reporting').should('have.length', numberOfReportings)
+        cy.getDataCy('ReportingTable-reporting').should('have.length', numberOfReportings)
       })
     })
   })

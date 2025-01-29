@@ -20,7 +20,7 @@ export function ArchivedReportingList({ fromDate, onMore, vesselReportings }: Ar
   )
 
   return (
-    <Zone data-cy="vessel-sidebar-reporting-tab-history">
+    <Zone data-cy="vessel-sidebar-archived-reporting">
       <Header>Historique des signalements</Header>
       {reportingsByYearAsPairs.length === 0 && (
         <NoReporting>{`Aucun signalement depuis ${customDayjs(fromDate).get('year')}`}</NoReporting>
@@ -57,7 +57,7 @@ const NoReporting = styled.div`
 
 const SeeMoreBackground = styled.div`
   background: ${THEME.color.white};
-  margin: 0px 5px 5px 5px;
+  margin: 0 5px 5px 5px;
   padding: 10px 0 5px 0;
   text-align: center;
   width: 100%;

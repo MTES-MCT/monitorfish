@@ -12,7 +12,8 @@ import type { Option } from '@mtes-mct/monitor-ui'
 
 enum TagFrontCompletionStatusLabel {
   COMPLETED = 'Données complétées',
-  TO_COMPLETE = 'Données à compléter'
+  TO_COMPLETE = 'Données à compléter',
+  UP_TO_DATE = 'Données à jour'
 }
 
 export const MISSION_FILTER_LABEL_ENUMS: Record<MissionFilterType, Record<string, string> | undefined> = {

@@ -1,5 +1,5 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { vesselApi } from '@features/Vessel/vesselApi'
+import { riskFactorApi } from '@features/RiskFactor/apis'
 import { FrontendError } from '@libs/FrontendError'
 
 import type { Gear } from '../../../../../domain/types/Gear'
@@ -20,7 +20,7 @@ export const updateActionGearsOnboard =
     }
 
     const { data: riskFactor } = await dispatch(
-      vesselApi.endpoints.getRiskFactor.initiate(missionAction.internalReferenceNumber)
+      riskFactorApi.endpoints.getRiskFactor.initiate(missionAction.internalReferenceNumber)
     )
     if (!riskFactor) {
       return []

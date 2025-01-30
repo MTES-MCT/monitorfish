@@ -1,6 +1,7 @@
 import { WindowContext } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
 import { reportingActions } from '@features/Reporting/slice'
+import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -8,7 +9,6 @@ import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
 import CloseIconSVG from '../../../icons/Croix_grise.svg?react'
 import AlertsSVG from '../../../icons/Icone_alertes_gris.svg?react'
 import { ReportingForm } from '../ReportingForm'
@@ -21,7 +21,7 @@ export function EditReporting() {
   )
 
   const baseUrl = window.location.origin
-  const vesselIdentity = editedReporting ? getOnlyVesselIdentityProperties(editedReporting) : undefined
+  const vesselIdentity = editedReporting ? extractVesselIdentityProps(editedReporting) : undefined
 
   const closeForm = useCallback(() => {
     dispatch(reportingActions.unsetEditedReporting())

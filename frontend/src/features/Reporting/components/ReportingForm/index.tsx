@@ -1,17 +1,17 @@
 import { WindowContext } from '@api/constants'
 import { CreateOrEditReportingSchema } from '@features/Reporting/components/ReportingForm/schemas'
 import { getFormFields, getReportingValue } from '@features/Reporting/components/ReportingForm/utils'
+import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Formik } from 'formik'
 import { useCallback, useEffect } from 'react'
 
 import { Form } from './Form'
-import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
 import { addReporting } from '../../useCases/addReporting'
 import { updateReporting } from '../../useCases/updateReporting'
 
-import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 import type { EditedReporting, Reporting } from '../../types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type ReportingFormProps = {
   className?: string | undefined
@@ -19,7 +19,7 @@ type ReportingFormProps = {
   hasWhiteBackground?: boolean
   onClose: () => void
   onIsDirty?: ((isDirty: boolean) => void) | undefined
-  vesselIdentity: VesselIdentity
+  vesselIdentity: Vessel.VesselIdentity
   windowContext: WindowContext
 }
 export function ReportingForm({
@@ -46,7 +46,7 @@ export function ReportingForm({
       if (editedReporting?.id) {
         await dispatch(
           updateReporting(
-            getOnlyVesselIdentityProperties(editedReporting),
+            extractVesselIdentityProps(editedReporting),
             editedReporting.id,
             nextReporting,
             editedReporting.type,

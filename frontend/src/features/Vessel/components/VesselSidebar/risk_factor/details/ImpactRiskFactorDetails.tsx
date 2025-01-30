@@ -1,31 +1,32 @@
 import { VesselCurrentFleetSegmentDetails } from '@features/FleetSegment/components/VesselCurrentFleetSegmentDetails'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import { useRef } from 'react'
 import styled from 'styled-components'
 
 import InfoSVG from '../../../../../icons/Information.svg?react'
 
 export function ImpactRiskFactorDetails({ isOpen }) {
-  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
+  const riskFactor = useMainAppSelector(state => state.vessel.selectedVessel)?.riskFactor
+  assertNotNullish(riskFactor)
   const currentFleetSegmentDetailsElementRef = useRef<HTMLDivElement>(null)
-  const riskFactor = selectedVessel?.riskFactor
 
   return (
     <SubRiskDetails
       $elementHeight={currentFleetSegmentDetailsElementRef?.current?.clientHeight}
-      $hasSegment={!!riskFactor?.segmentHighestImpact}
+      $hasSegment={!!riskFactor.segmentHighestImpact}
       $isOpen={isOpen}
     >
       <Line />
       <Zone>
-        {riskFactor?.segmentHighestImpact ? (
+        {riskFactor.segmentHighestImpact ? (
           <>
             <Fields>
               <TableBody>
                 <Field>
                   <Key>Segment de flotte actuel</Key>
                   <Value>
-                    {riskFactor?.segmentHighestImpact}{' '}
+                    {riskFactor.segmentHighestImpact}{' '}
                     <Info
                       title={
                         'La note de risque de ce segment est la note attribuée par la DIRM de la ' +

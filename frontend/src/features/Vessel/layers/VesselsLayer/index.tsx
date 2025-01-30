@@ -5,7 +5,7 @@ import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/const
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { memo, useEffect } from 'react'
 
-import { getVesselLastPositionVisibilityDates, Vessel } from '../../../../domain/entities/vessel/vessel'
+import { getVesselLastPositionVisibilityDates, VesselFeature } from '../../../../domain/entities/vessel/vessel'
 import { theme } from '../../../../ui/theme'
 import { booleanToInt, customHexToRGB } from '../../../../utils'
 import { getWebGLVesselStyleVariables } from '../style'
@@ -24,7 +24,7 @@ function UnmemoizedVesselsLayer() {
 
   useEffect(() => {
     // styles derived from state
-    const isLight = Vessel.iconIsLight(selectedBaseLayer)
+    const isLight = VesselFeature.iconIsLight(selectedBaseLayer)
     const { vesselIsHidden, vesselIsOpacityReduced } =
       getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
     const filterColorRGBArray = customHexToRGB(
@@ -81,7 +81,7 @@ function UnmemoizedVesselsLayer() {
   }, [previewFilteredVesselsMode])
 
   useEffect(() => {
-    const isLight = Vessel.iconIsLight(selectedBaseLayer)
+    const isLight = VesselFeature.iconIsLight(selectedBaseLayer)
     VESSELS_VECTOR_LAYER.updateStyleVariables({ isLight: booleanToInt(isLight) })
   }, [selectedBaseLayer])
 

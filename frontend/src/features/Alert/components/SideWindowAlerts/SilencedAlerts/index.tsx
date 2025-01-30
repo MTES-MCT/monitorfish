@@ -1,6 +1,7 @@
 import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
 import { Flag } from '@features/Vessel/components/VesselList/tableCells'
 import { sortArrayByColumn, SortType } from '@features/Vessel/components/VesselList/tableSort'
+import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Button, CustomSearch, Icon } from '@mtes-mct/monitor-ui'
@@ -136,7 +137,8 @@ export function SilencedAlerts() {
                       alt="Voir sur la carte"
                       data-cy="side-window-silenced-alerts-show-vessel"
                       onClick={() => {
-                        dispatch(showVessel(alert, false, true))
+                        const identity = extractVesselIdentityProps(alert)
+                        dispatch(showVessel(identity, false, true))
                       }}
                       src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
                       title="Voir sur la carte"

@@ -1,7 +1,7 @@
 import { Seafront } from '@constants/seafront'
 
-import type { VesselIdentifier, VesselIdentity } from '../../domain/entities/vessel/types'
 import type { MissionAction } from '@features/Mission/missionAction.types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Except } from 'type-fest'
 
 export enum PendingAlertValueType {
@@ -25,7 +25,7 @@ export type PendingAlert = {
   ircs: string
   tripNumber: string
   value: PendingAlertValue
-  vesselIdentifier: VesselIdentifier
+  vesselIdentifier: Vessel.VesselIdentifier
   vesselName: string
 }
 
@@ -44,16 +44,16 @@ export type LEGACY_PendingAlert = PendingAlert & {
 }
 
 export type SilencedAlert = {
-  externalReferenceNumber: string | null
+  externalReferenceNumber: string | undefined
   flagState: string
   id: string
-  internalReferenceNumber: string | null
-  ircs: string | null
-  isReactivated: boolean | null
+  internalReferenceNumber: string | undefined
+  ircs: string | undefined
+  isReactivated: boolean | undefined
   silencedBeforeDate: string
   value: PendingAlertValue
-  vesselId: number | null
-  vesselIdentifier: VesselIdentifier
+  vesselId: number | undefined
+  vesselIdentifier: Vessel.VesselIdentifier
   vesselName: string
 }
 
@@ -74,6 +74,6 @@ export type SilenceAlertQueueItem = {
   silencedAlertPeriodRequest: SilencedAlertPeriodRequest
 }
 
-export type AlertNameAndVesselIdentity = VesselIdentity & {
+export type AlertNameAndVesselIdentity = Vessel.VesselIdentity & {
   name: string | null | undefined
 }

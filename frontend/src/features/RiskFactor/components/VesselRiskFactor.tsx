@@ -7,7 +7,7 @@ import {
   getImpactRiskFactorText,
   getProbabilityRiskFactorText,
   getRiskFactorColor
-} from '../../../domain/entities/vessel/riskFactor'
+} from '../utils'
 
 type VesselRiskFactorProps = Readonly<
   Undefine<{

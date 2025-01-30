@@ -3,13 +3,13 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
+import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
 import {
   getDetectabilityRiskFactorText,
   getImpactRiskFactorText,
   getProbabilityRiskFactorText,
   getRiskFactorColor
-} from '../../../../domain/entities/vessel/riskFactor'
-import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
+} from '../../../RiskFactor/utils'
 
 export function VesselLabel({
   featureId,

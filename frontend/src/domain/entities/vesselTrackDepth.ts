@@ -1,7 +1,8 @@
 import { NoDEPFoundError } from '../../errors/NoDEPFoundError'
 import { NoPositionsFoundError } from '../../errors/NoPositionsFoundError'
 
-import type { TrackRequest, TrackRequestPredefined, VesselPosition } from './vessel/types'
+import type { TrackRequest, TrackRequestPredefined } from './vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 export enum VesselTrackDepth {
   CUSTOM = 'CUSTOM',
@@ -71,7 +72,7 @@ export const getTrackRequestFromDates = (afterDateTime: Date, beforeDateTime: Da
 })
 
 export function throwCustomErrorFromAPIFeedback(
-  positions: VesselPosition[],
+  positions: Vessel.VesselPosition[],
   isTrackDepthModified: boolean,
   isFromUserAction: boolean
 ) {

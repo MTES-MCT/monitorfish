@@ -7,7 +7,7 @@ import { vesselApi } from '@features/Vessel/vesselApi'
 import { validateAlertFromAPI } from '../../../api/alert'
 import { deleteListItems } from '../../../utils/deleteListItems'
 import { updateListItemsProp } from '../../../utils/updateListItemsProp'
-import { Vessel } from '../../entities/vessel/vessel'
+import { VesselFeature } from '../../entities/vessel/vessel'
 import { setError } from '../../shared_slices/Global'
 
 import type { MainAppThunk } from '../../../store'
@@ -40,7 +40,7 @@ export const validateAlert =
         removeVesselAlertAndUpdateReporting({
           alertType: validatedAlert.value?.type,
           isValidated: true,
-          vesselFeatureId: Vessel.getVesselFeatureId(validatedAlert)
+          vesselFeatureId: VesselFeature.getVesselFeatureId(validatedAlert)
         })
       )
       dispatch(renderVesselFeatures())

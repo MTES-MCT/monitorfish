@@ -9,7 +9,7 @@ import { ShowFishingActivitiesOnMap } from './actions/show_fishing_activities'
 import { TrackRequest } from './actions/TrackRequest'
 import { Body } from './Body'
 import { Tabs } from './Tabs'
-import { Vessel } from '../../../../domain/entities/vessel/vessel'
+import { VesselFeature } from '../../../../domain/entities/vessel/vessel'
 import { MapComponent } from '../../../commonStyles/MapComponent'
 
 export function VesselSidebar() {
@@ -22,7 +22,7 @@ export function VesselSidebar() {
 
   useEffect(() => {
     if (selectedVessel) {
-      trackPage(Vessel.getVesselFeatureId(selectedVessel))
+      trackPage(VesselFeature.getVesselFeatureId(selectedVessel))
     }
   }, [trackPage, selectedVessel])
 

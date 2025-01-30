@@ -4,7 +4,7 @@ import VectorSource from 'ol/source/Vector'
 
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
 
-import type { VesselEnhancedLastPositionWebGLObject } from '../../entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 const vectorSource = new VectorSource({
   format: new GeoJSON({
@@ -13,7 +13,7 @@ const vectorSource = new VectorSource({
   })
 })
 
-export const getFilteredVessels = (vessels: VesselEnhancedLastPositionWebGLObject[], filters) => async () => {
+export const getFilteredVessels = (vessels: Vessel.VesselEnhancedLastPositionWebGLObject[], filters) => async () => {
   const monitorFishWorker = await MonitorFishWorker
   const workerFilters = getFiltersWithoutZonesSelected(filters)
 

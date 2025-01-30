@@ -31,13 +31,16 @@ type LogbookSummaryProps = Readonly<{
 }>
 export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
   const dispatch = useMainAppDispatch()
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const fishingActivities = useMainAppSelector(state => state.fishingActivities.fishingActivities)
   const isFirstVoyage = useMainAppSelector(state => state.fishingActivities.isFirstVoyage)
   const isLastVoyage = useMainAppSelector(state => state.fishingActivities.isLastVoyage)
   const tripNumber = useMainAppSelector(state => state.fishingActivities.tripNumber)
 
-  const { data: lastLogbookTrips } = useGetLastLogbookTripsQuery(selectedVessel?.internalReferenceNumber ?? skipToken)
+  const { data: lastLogbookTrips } = useGetLastLogbookTripsQuery(
+    selectedVesselIdentity?.internalReferenceNumber ?? skipToken
+  )
 
   const getVesselLogbook = useGetLogbookUseCase()
 
@@ -55,11 +58,11 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
     )?.value
   }, [fishingActivities?.alerts])
 
-  const goToPreviousTrip = () => dispatch(getVesselLogbook(selectedVessel, NavigateTo.PREVIOUS, true))
-  const goToNextTrip = () => dispatch(getVesselLogbook(selectedVessel, NavigateTo.NEXT, true))
-  const goToLastTrip = () => dispatch(getVesselLogbook(selectedVessel, NavigateTo.LAST, true))
+  const goToPreviousTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.PREVIOUS, true))
+  const goToNextTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.NEXT, true))
+  const goToLastTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
   const getLogbookTrip = (nextTripNumber: string | undefined) =>
-    dispatch(getVesselLogbook(selectedVessel, NavigateTo.EQUALS, true, nextTripNumber))
+    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.EQUALS, true, nextTripNumber))
 
   return (
     <>

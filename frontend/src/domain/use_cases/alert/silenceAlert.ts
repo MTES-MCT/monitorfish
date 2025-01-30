@@ -9,7 +9,7 @@ import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeat
 
 import { silenceAlertFromAPI } from '../../../api/alert'
 import { deleteListItems } from '../../../utils/deleteListItems'
-import { Vessel } from '../../entities/vessel/vessel'
+import { VesselFeature } from '../../entities/vessel/vessel'
 import { setError } from '../../shared_slices/Global'
 
 import type { MainAppThunk } from '../../../store'
@@ -43,7 +43,7 @@ export const silenceAlert =
         removeVesselAlertAndUpdateReporting({
           alertType: silencedAlert.value.type,
           isValidated: false,
-          vesselFeatureId: Vessel.getVesselFeatureId(silencedAlert)
+          vesselFeatureId: VesselFeature.getVesselFeatureId(silencedAlert)
         })
       )
 

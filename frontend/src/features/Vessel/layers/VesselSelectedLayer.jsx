@@ -7,7 +7,7 @@ import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 
 import { getSelectedVesselStyle } from './style'
-import { Vessel } from '../../../domain/entities/vessel/vessel'
+import { VesselFeature } from '../../../domain/entities/vessel/vessel'
 import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../Map/constants'
 import { monitorfishMap } from '../../Map/monitorfishMap'
 
@@ -22,7 +22,7 @@ function VesselSelectedLayer() {
       wrapX: false
     })
   )
-  const isLight = Vessel.iconIsLight(selectedBaseLayer)
+  const isLight = VesselFeature.iconIsLight(selectedBaseLayer)
   const style = getSelectedVesselStyle({ isLight })
   const layerRef = useRef(
     new Vector({

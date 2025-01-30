@@ -1,17 +1,12 @@
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 
-import {
-  VesselIdentifier,
-  type VesselEnhancedLastPositionWebGLObject,
-  type VesselIdentity,
-  type VesselLastPositionFeature
-} from '../../domain/entities/vessel/types'
+import { Vessel } from './Vessel.types'
 
-import type { Vessel } from './Vessel.types'
+import type { PendingAlert, SilencedAlert } from '@features/Alert/types'
 import type { Reporting } from '@features/Reporting/types'
 
-export function buildFeature(vessel: VesselEnhancedLastPositionWebGLObject): VesselLastPositionFeature {
+export function buildFeature(vessel: Vessel.VesselEnhancedLastPositionWebGLObject): Vessel.VesselLastPositionFeature {
   /**
    * The feature does contain ONLY required properties, it does not contain all properties of VesselLastPosition.
    */
@@ -52,14 +47,21 @@ export function buildFeature(vessel: VesselEnhancedLastPositionWebGLObject): Ves
     vesselIdentifier: vessel.vesselIdentifier,
     vesselName: vessel.vesselName,
     width: vessel.width
-  }) as VesselLastPositionFeature
+  }) as Vessel.VesselLastPositionFeature
   feature.setId(vessel.vesselFeatureId)
 
   return feature
 }
 
 export const extractVesselIdentityProps = (
-  vessel: Vessel.VesselEnhancedObject | Vessel.SelectedVessel | Vessel.EnrichedVessel | Reporting.Reporting
+  vessel:
+    | Vessel.VesselEnhancedObject
+    | Vessel.SelectedVessel
+    | Vessel.EnrichedVessel
+    | Reporting.Reporting
+    | PendingAlert
+    | SilencedAlert
+    | Vessel.VesselIdentity
 ): Vessel.VesselIdentity => ({
   beaconNumber: 'beaconNumber' in vessel && !!vessel.beaconNumber ? vessel.beaconNumber : undefined,
   districtCode: 'districtCode' in vessel && !!vessel.districtCode ? vessel.districtCode : undefined,
@@ -75,12 +77,12 @@ export const extractVesselIdentityProps = (
 })
 
 // Type to enforce strong typing: properties specified in `K` will be required, others will remain optional
-type VesselProperties<K extends keyof VesselEnhancedLastPositionWebGLObject> = Required<
-  Pick<VesselEnhancedLastPositionWebGLObject, K>
+type VesselProperties<K extends keyof Vessel.VesselEnhancedLastPositionWebGLObject> = Required<
+  Pick<Vessel.VesselEnhancedLastPositionWebGLObject, K>
 > &
-  Partial<Omit<VesselEnhancedLastPositionWebGLObject, K>>
-export function extractVesselPropertiesFromFeature<K extends keyof VesselEnhancedLastPositionWebGLObject>(
-  feature: VesselLastPositionFeature,
+  Partial<Omit<Vessel.VesselEnhancedLastPositionWebGLObject, K>>
+export function extractVesselPropertiesFromFeature<K extends keyof Vessel.VesselEnhancedLastPositionWebGLObject>(
+  feature: Vessel.VesselLastPositionFeature,
   requiredProperties: K[]
 ): VesselProperties<K> {
   const vesselProperties: any = {}
@@ -102,7 +104,9 @@ export function getVesselIdentityPropsAsEmptyStringsWhenUndefined(vesselIdentity
   }
 }
 
-export function getVesselIdentityFromLegacyVesselIdentity(legacyVesselIdentity: VesselIdentity): Vessel.VesselIdentity {
+export function getVesselIdentityFromLegacyVesselIdentity(
+  legacyVesselIdentity: Vessel.VesselIdentity
+): Vessel.VesselIdentity {
   return {
     beaconNumber: legacyVesselIdentity.beaconNumber ?? undefined,
     districtCode: legacyVesselIdentity.districtCode ?? undefined,
@@ -118,44 +122,7 @@ export function getVesselIdentityFromLegacyVesselIdentity(legacyVesselIdentity: 
   }
 }
 
-export function getVesselIdentityFromVessel(vessel: Vessel.Vessel): Vessel.VesselIdentity {
-  const vesselIdentifier = getVesselIdentifier(vessel)
-
-  return {
-    beaconNumber: undefined,
-    districtCode: vessel.districtCode,
-    externalReferenceNumber: vessel.externalReferenceNumber,
-    flagState: vessel.flagState,
-    internalReferenceNumber: vessel.internalReferenceNumber,
-    ircs: vessel.ircs,
-    mmsi: vessel.mmsi,
-    vesselId: vessel.vesselId,
-    vesselIdentifier,
-    vesselLength: vessel.length,
-    vesselName: vessel.vesselName
-  }
-}
-
-export function getVesselIdentifier({
-  externalReferenceNumber,
-  internalReferenceNumber,
-  ircs
-}: {
-  externalReferenceNumber: string | undefined
-  internalReferenceNumber: string | undefined
-  ircs: string | undefined
-}): VesselIdentifier | undefined {
-  switch (true) {
-    case !!internalReferenceNumber:
-      return VesselIdentifier.INTERNAL_REFERENCE_NUMBER
-
-    case !!externalReferenceNumber:
-      return VesselIdentifier.EXTERNAL_REFERENCE_NUMBER
-
-    case !!ircs:
-      return VesselIdentifier.IRCS
-
-    default:
-      return undefined
-  }
-}
+export const getVesselCompositeIdentifier: (vessel) => Vessel.VesselCompositeIdentifier = vessel =>
+  `${vessel.internalReferenceNumber ?? 'UNKNOWN'}/${vessel.ircs ?? 'UNKNOWN'}/${
+    vessel.externalReferenceNumber ?? 'UNKNOWN'
+  }`

@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { numberOrUndefined } from '../../types'
+
 export enum ScipSpeciesType {
   DEMERSAL = 'DEMERSAL',
   OTHER = 'OTHER',
@@ -10,14 +12,14 @@ export enum ScipSpeciesType {
 export const FleetSegmentSchema = z.strictObject({
   faoAreas: z.array(z.string()),
   gears: z.array(z.string()),
-  impactRiskFactor: z.number().optional(),
+  impactRiskFactor: z.number(),
   mainScipSpeciesType: z.nativeEnum(ScipSpeciesType).optional(),
-  maxMesh: z.number().optional(),
-  minMesh: z.number().optional(),
-  minShareOfTargetSpecies: z.number().optional(),
+  maxMesh: numberOrUndefined,
+  minMesh: numberOrUndefined,
+  minShareOfTargetSpecies: numberOrUndefined,
   priority: z.number(),
   segment: z.string(),
-  segmentName: z.string().optional(),
+  segmentName: z.string(),
   targetSpecies: z.array(z.string()),
   vesselTypes: z.array(z.string()),
   year: z.number()

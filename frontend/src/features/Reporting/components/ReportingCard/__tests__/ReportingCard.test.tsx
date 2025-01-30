@@ -2,6 +2,7 @@ import { Seafront } from '@constants/seafront'
 import { PendingAlertValueType } from '@features/Alert/types'
 import { ReportingCard } from '@features/Reporting/components/ReportingCard'
 import { ReportingType } from '@features/Reporting/types'
+import { Vessel } from '@features/Vessel/Vessel.types'
 import { afterAll, describe, expect, it, jest } from '@jest/globals'
 import { THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
 import { render, screen } from '@testing-library/react'
@@ -9,8 +10,6 @@ import userEvent from '@testing-library/user-event'
 import { noop } from 'lodash'
 import { Provider } from 'react-redux'
 import configureStore from 'redux-mock-store'
-
-import { VesselIdentifier } from '../../../../../domain/entities/vessel/types'
 
 import type { PendingAlertReporting } from '@features/Reporting/types'
 
@@ -56,7 +55,7 @@ describe('ReportingCard()', () => {
         type: PendingAlertValueType.TWELVE_MILES_FISHING_ALERT
       },
       vesselId: 1234568,
-      vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+      vesselIdentifier: Vessel.VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
       vesselName: 'A VESSEL'
     }
 

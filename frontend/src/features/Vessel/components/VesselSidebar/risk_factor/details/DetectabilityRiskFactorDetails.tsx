@@ -1,11 +1,9 @@
+import { getControlPriorityLevel, getControlRateRiskFactorText, getRiskFactorColor } from '@features/RiskFactor/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { isDefined } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import styled from 'styled-components'
 
-import {
-  getControlPriorityLevel,
-  getControlRateRiskFactorText,
-  getRiskFactorColor
-} from '../../../../../../domain/entities/vessel/riskFactor'
 import { getDate } from '../../../../../../utils'
 import { RiskFactorCursor } from '../RiskFactorCursor'
 
@@ -13,22 +11,19 @@ type DetectabilityRiskFactorDetailsProps = {
   isOpen: boolean
 }
 export function DetectabilityRiskFactorDetails({ isOpen }: DetectabilityRiskFactorDetailsProps) {
-  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
-
-  // TODO  Fix `riskFactor` does not exist on type `AugmentedSelectedVessel`.
-  // @ts-ignore
-  const { riskFactor } = selectedVessel
+  const riskFactor = useMainAppSelector(state => state.vessel.selectedVessel)?.riskFactor
+  assertNotNullish(riskFactor)
 
   return (
     <SubRiskDetails $isOpen={isOpen}>
       <Line />
       <Zone>
-        <InlineKey>Priorité du segment {riskFactor?.segmentHighestPriority}</InlineKey>
+        <InlineKey>Priorité du segment {riskFactor.segmentHighestPriority}</InlineKey>
         <InlineValue data-cy="risk-factor-priority-level">
-          {riskFactor?.controlPriorityLevel ? (
-            `${riskFactor?.controlPriorityLevel?.toFixed(1)} – ${getControlPriorityLevel(
-              riskFactor?.controlPriorityLevel,
-              riskFactor?.segmentHighestPriority
+          {riskFactor.controlPriorityLevel ? (
+            `${riskFactor.controlPriorityLevel?.toFixed(1)} – ${getControlPriorityLevel(
+              riskFactor.controlPriorityLevel,
+              riskFactor.segmentHighestPriority
             )}`
           ) : (
             <NoValue>-</NoValue>
@@ -36,19 +31,19 @@ export function DetectabilityRiskFactorDetails({ isOpen }: DetectabilityRiskFact
         </InlineValue>
         <FullWidth>
           <RiskFactorCursor
-            color={getRiskFactorColor(riskFactor?.controlPriorityLevel)}
+            color={getRiskFactorColor(riskFactor.controlPriorityLevel)}
             height={5}
             // eslint-disable-next-line no-unsafe-optional-chaining
-            progress={(100 * riskFactor?.controlPriorityLevel) / 4}
-            value={riskFactor?.controlPriorityLevel}
+            progress={(100 * riskFactor.controlPriorityLevel) / 4}
+            value={riskFactor.controlPriorityLevel}
             withoutBox
           />
         </FullWidth>
         <InlineKey>Priorité du navire</InlineKey>
         <InlineValue>
-          {riskFactor?.controlRateRiskFactor ? (
-            `${riskFactor?.controlRateRiskFactor?.toFixed(1)} – ${getControlRateRiskFactorText(
-              riskFactor?.controlRateRiskFactor
+          {riskFactor.controlRateRiskFactor ? (
+            `${riskFactor.controlRateRiskFactor?.toFixed(1)} – ${getControlRateRiskFactorText(
+              riskFactor.controlRateRiskFactor
             )}`
           ) : (
             <NoValue>-</NoValue>
@@ -56,11 +51,11 @@ export function DetectabilityRiskFactorDetails({ isOpen }: DetectabilityRiskFact
         </InlineValue>
         <FullWidth>
           <RiskFactorCursor
-            color={getRiskFactorColor(riskFactor?.controlRateRiskFactor)}
+            color={getRiskFactorColor(riskFactor.controlRateRiskFactor)}
             height={5}
             // eslint-disable-next-line no-unsafe-optional-chaining
-            progress={(100 * riskFactor?.controlRateRiskFactor) / 4}
-            value={riskFactor?.controlRateRiskFactor}
+            progress={(100 * riskFactor.controlRateRiskFactor) / 4}
+            value={riskFactor.controlRateRiskFactor}
             withoutBox
           />
         </FullWidth>
@@ -69,9 +64,9 @@ export function DetectabilityRiskFactorDetails({ isOpen }: DetectabilityRiskFact
             <Field>
               <Key>Temporalité</Key>
               <Value>
-                {riskFactor?.numberControlsLastThreeYears || riskFactor?.numberControlsLastThreeYears === 0 ? (
-                  `${riskFactor?.numberControlsLastThreeYears} contrôle${
-                    riskFactor?.numberControlsLastThreeYears > 1 ? 's' : ''
+                {isDefined(riskFactor.numberControlsLastThreeYears) ? (
+                  `${riskFactor.numberControlsLastThreeYears} contrôle${
+                    riskFactor.numberControlsLastThreeYears > 1 ? 's' : ''
                   } sur les 3 dernières années`
                 ) : (
                   <NoValue>-</NoValue>
@@ -81,8 +76,8 @@ export function DetectabilityRiskFactorDetails({ isOpen }: DetectabilityRiskFact
             <Field>
               <Key>Dernier contrôle</Key>
               <Value>
-                {riskFactor?.lastControlDatetime ? (
-                  `Le ${getDate(riskFactor?.lastControlDatetime)}`
+                {riskFactor.lastControlDatetime ? (
+                  `Le ${getDate(riskFactor.lastControlDatetime)}`
                 ) : (
                   <NoValue>-</NoValue>
                 )}

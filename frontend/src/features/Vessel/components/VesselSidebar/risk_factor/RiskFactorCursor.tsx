@@ -8,8 +8,8 @@ type RiskFactorCursorProps = {
   height: number
   isBig?: boolean
   progress: number
-  underCharter?: boolean
-  value: string
+  underCharter?: boolean | undefined
+  value: number | undefined
   withoutBox?: boolean
 }
 export function RiskFactorCursor({
@@ -34,7 +34,7 @@ export function RiskFactorCursor({
   return (
     <Wrapper $isBig={isBig} $withoutBox={withoutBox}>
       <RiskFactorBox color={color} hide={withoutBox} isBig={isBig}>
-        {value}
+        {value?.toFixed(1)}
       </RiskFactorBox>
       {underCharter ? <UnderCharter /> : null}
       <Bar $height={height} $isBig={isBig}>

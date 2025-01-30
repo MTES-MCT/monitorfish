@@ -1,8 +1,9 @@
 import { UserType } from '@features/BeaconMalfunction/constants'
+import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { createSlice } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
-import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel/vessel'
+import { vesselsAreEquals } from '../entities/vessel/vessel'
 
 import type { MapBox } from '@features/Map/constants'
 import type { PayloadAction } from '@reduxjs/toolkit'
@@ -60,7 +61,7 @@ export const globalSlice = createSlice({
      * @deprecated Can be replaced by a non-Redux function once `@features/VesselSearch` is replaced with `@features/Vessel/components/VesselSearch`.
      */
     addSearchedVessel(state, action) {
-      const vesselIdentityToAdd = getOnlyVesselIdentityProperties(action.payload)
+      const vesselIdentityToAdd = extractVesselIdentityProps(action.payload)
 
       // Remove vessel if already in the list
       state.lastSearchedVessels = state.lastSearchedVessels.filter(

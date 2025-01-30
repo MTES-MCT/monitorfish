@@ -1,4 +1,4 @@
-import { VesselRiskFactor } from '@features/Vessel/components/VesselRiskFactor'
+import { VesselRiskFactor } from '@features/RiskFactor/components/VesselRiskFactor'
 import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 

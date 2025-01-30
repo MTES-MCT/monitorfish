@@ -7,10 +7,11 @@ import { useSelector } from 'react-redux'
 
 import { getVesselAlertAndBeaconMalfunctionStyle } from './style'
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
-import { getVesselCompositeIdentifier, vesselIsShowed } from '../../../domain/entities/vessel/vessel'
+import { vesselIsShowed } from '../../../domain/entities/vessel/vessel'
 import { LayerProperties } from '../../Map/constants'
 import { monitorfishMap } from '../../Map/monitorfishMap'
 import { vesselSelectors } from '../slice'
+import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 
 function VesselAlertAndBeaconMalfunctionLayer() {
   const isSuperUser = useIsSuperUser()

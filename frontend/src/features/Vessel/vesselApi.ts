@@ -1,3 +1,4 @@
+import { monitorfishApi } from '@api/api'
 import { RtkCacheTagType } from '@api/constants'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
@@ -6,12 +7,9 @@ import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
 import { getVesselIdentityPropsAsEmptyStringsWhenUndefined } from './utils'
-import { monitorfishApi } from '../../api/api'
+import { Vessel } from './Vessel.types'
 
-import type { Vessel } from './Vessel.types'
 import type { VesselReportings } from '@features/Reporting/types'
-import type { RiskFactor } from 'domain/entities/vessel/riskFactor/types'
-import type { VesselLastPosition } from 'domain/entities/vessel/types'
 
 const GET_VESSEL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations de ce navire."
 const GET_VESSEL_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les signalements de ce navire."
@@ -19,11 +17,6 @@ const SEARCH_VESSELS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les navire
 
 export const vesselApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
-    getRiskFactor: builder.query<RiskFactor, string>({
-      providesTags: () => [{ type: 'RiskFactor' }],
-      query: internalReferenceNumber => `/vessels/risk_factor?internalReferenceNumber=${internalReferenceNumber}`
-    }),
-
     getVessel: builder.query<Vessel.Vessel, number>({
       providesTags: () => [{ type: RtkCacheTagType.Vessel }],
       query: id => `/vessels/${id}`,
@@ -62,8 +55,10 @@ export const vesselApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_VESSEL_REPORTINGS_ERROR_MESSAGE, response)
     }),
 
-    getVesselsLastPositions: builder.query<VesselLastPosition[], void>({
-      query: () => `/vessels`
+    getVesselsLastPositions: builder.query<Vessel.VesselLastPosition[], void>({
+      query: () => `/vessels`,
+      transformResponse: (baseQueryReturnValue: Vessel.VesselLastPosition[]) =>
+        baseQueryReturnValue.map(LastPosition => Vessel.VesselLastPositionSchema.parse(LastPosition))
     }),
 
     searchVessels: builder.query<Vessel.VesselIdentity[], Vessel.ApiSearchFilter>({

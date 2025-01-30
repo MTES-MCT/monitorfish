@@ -1,8 +1,7 @@
 import { LayerProperties } from '@features/Map/constants'
+import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import Feature from 'ol/Feature'
 import LineString from 'ol/geom/LineString'
-
-import { getVesselCompositeIdentifier } from './vessel/vessel'
 
 export class VesselLabelLine {
   static opacityProperty = 'opacity'

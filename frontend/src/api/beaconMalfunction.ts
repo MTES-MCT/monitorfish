@@ -2,7 +2,6 @@ import { FrontendApiError } from '@libs/FrontendApiError'
 
 import { monitorfishApiKy } from './api'
 
-import type { VesselId } from '../domain/entities/vessel/types'
 import type { NOTIFICATION_TYPE, UserType } from '@features/BeaconMalfunction/constants'
 import type {
   BeaconMalfunction,
@@ -10,6 +9,7 @@ import type {
   UpdateBeaconMalfunction,
   VesselBeaconMalfunctionsResumeAndHistory
 } from '@features/BeaconMalfunction/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 export const ARCHIVE_BEACON_MALFUNCTION = "Nous n'avons pas pu archiver les avaries VMS"
 export const GET_BEACON_MALFUNCTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les avaries VMS"
@@ -92,7 +92,7 @@ async function saveBeaconMalfunctionCommentFromAPI(
  * @throws {@link FrontendApiError}
  */
 async function getVesselBeaconsMalfunctionsFromAPI(
-  vesselId: VesselId,
+  vesselId: Vessel.VesselId,
   fromDate: Date
 ): Promise<VesselBeaconMalfunctionsResumeAndHistory> {
   try {

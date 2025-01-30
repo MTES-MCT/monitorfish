@@ -1,14 +1,15 @@
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { doNotAnimate } from '@features/Map/slice'
 import { addVesselTrackShowed, resetLoadingVessel } from '@features/Vessel/slice'
+import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { transform } from 'ol/proj'
 
 import { getVesselPositionsFromAPI } from '../../../api/vessel'
-import { getVesselCompositeIdentifier } from '../../entities/vessel/vessel'
 import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
 import { removeError, setError } from '../../shared_slices/Global'
 
-import type { TrackRequest, VesselIdentity } from '../../entities/vessel/types'
+import type { TrackRequest } from '../../entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppThunk } from '@store'
 
 /**
@@ -16,7 +17,7 @@ import type { MainAppThunk } from '@store'
  */
 export const showVesselTrack =
   (
-    vesselIdentity: VesselIdentity,
+    vesselIdentity: Vessel.VesselIdentity,
     isFromUserAction: boolean,
     trackRequest: TrackRequest | null,
     hasZoom: boolean = false

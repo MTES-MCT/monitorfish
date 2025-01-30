@@ -1,8 +1,8 @@
+import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { openBeaconMalfunction } from './openBeaconMalfunction'
 import { getVesselBeaconsMalfunctionsFromAPI } from '../../../api/beaconMalfunction'
-import { getOnlyVesselIdentityProperties } from '../../entities/vessel/vessel'
 import {
   loadVesselBeaconMalfunctions,
   resetVesselBeaconMalfunctionsResumeAndHistory,
@@ -37,7 +37,7 @@ export const getVesselBeaconMalfunctions = (isFromUserAction: boolean) => async 
     dispatch(
       setVesselBeaconMalfunctionsResumeAndHistory({
         ...vesselBeaconsMalfunctions,
-        vesselIdentity: getOnlyVesselIdentityProperties(selectedVessel)
+        vesselIdentity: extractVesselIdentityProps(selectedVessel)
       })
     )
 

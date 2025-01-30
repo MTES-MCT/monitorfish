@@ -7,6 +7,7 @@ import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 import { setMeasurement, startSpan } from '@sentry/react'
 import { normalizeRtkBaseQuery } from '@utils/normalizeRtkBaseQuery'
 import { sha256 } from '@utils/sha256'
+import { undefinedize } from '@utils/undefinedize'
 import ky, { HTTPError } from 'ky'
 
 import { RTK_MAX_RETRIES, RtkCacheTagType } from './constants'
@@ -208,6 +209,14 @@ export const monitorfishPublicApi = createApi({
 
 export const monitorfishApiKy = ky.extend({
   hooks: {
+    afterResponse: [
+      async (_input, _options, response) => {
+        const responseData = await response.json()
+        const normalizedResponse = undefinedize(responseData)
+
+        return new Response(JSON.stringify(normalizedResponse), response)
+      }
+    ],
     beforeError: [
       async error => {
         const { request, response } = error

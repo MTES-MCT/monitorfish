@@ -3,7 +3,7 @@ import LineString from 'ol/geom/LineString'
 import Point from 'ol/geom/Point'
 import { transform } from 'ol/proj'
 
-import { Vessel } from './vessel/vessel'
+import { VesselFeature } from './vessel/vessel'
 import { COLORS } from '../../constants/constants'
 import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../features/Map/constants'
 import { MonitorFishMap } from '../../features/Map/Map.types'
@@ -58,7 +58,7 @@ class EstimatedPosition {
       vesselColor = 'rgb(202, 204, 224)'
     }
 
-    const opacity = Vessel.getVesselOpacity(dateTime, options.vesselIsHidden, options.vesselIsOpacityReduced)
+    const opacity = VesselFeature.getVesselOpacity(dateTime, options.vesselIsHidden, options.vesselIsOpacityReduced)
 
     const lineFeature = new Feature({
       color: lineColor,

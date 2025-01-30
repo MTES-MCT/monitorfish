@@ -1,5 +1,6 @@
 import { END_OF_MALFUNCTION_REASON_RECORD } from '@features/BeaconMalfunction/constants'
 import { vesselActions } from '@features/Vessel/slice'
+import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { VesselSidebarTab } from 'domain/entities/vessel/vessel'
 import { VesselTrackDepth } from 'domain/entities/vesselTrackDepth'
 
@@ -27,7 +28,8 @@ export const showVesselFromBeaconMalfunctionsKanban = (beaconMalfunction, openVM
     await dispatch(vesselActions.setSelectedVesselCustomTrackRequest(trackRequest))
   }
 
-  await dispatch(showVessel(beaconMalfunction, false, true))
+  const identity = extractVesselIdentityProps(beaconMalfunction)
+  await dispatch(showVessel(identity, false, true))
 
   if (openVMRERSTab) {
     dispatch(vesselActions.setSelectedVesselSidebarTab(VesselSidebarTab.ERSVMS))

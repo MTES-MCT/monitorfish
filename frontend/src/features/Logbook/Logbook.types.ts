@@ -1,6 +1,6 @@
 import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
-import type { VesselIdentity } from 'domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 export namespace Logbook {
   export type Message =
@@ -358,7 +358,7 @@ export namespace Logbook {
     logbookMessagesAndAlerts: FishingActivities
     startDate: string | undefined
     tripNumber: string
-    vesselIdentity: VesselIdentity
+    vesselIdentity: Vessel.VesselIdentity
   }
 
   export type FishingActivities = {

@@ -8,14 +8,14 @@ import { useSelector } from 'react-redux'
 import { getVesselInfractionSuspicionStyle } from './style'
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
 import {
-  getVesselCompositeIdentifier,
   getVesselLastPositionVisibilityDates,
-  Vessel,
+  VesselFeature,
   vesselIsShowed
 } from '../../../domain/entities/vessel/vessel'
 import { LayerProperties } from '../../Map/constants'
 import { monitorfishMap } from '../../Map/monitorfishMap'
 import { vesselSelectors } from '../slice'
+import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 
 function VesselInfractionSuspicionLayer() {
   const isSuperUser = useIsSuperUser()
@@ -88,7 +88,7 @@ function VesselInfractionSuspicionLayer() {
         if (hideNonSelectedVessels && !vesselIsShowed(vessel, vesselsTracksShowed, selectedVesselIdentity)) {
           return features
         }
-        if (!Vessel.getVesselOpacity(vessel.dateTime, vesselIsHidden, vesselIsOpacityReduced)) {
+        if (!VesselFeature.getVesselOpacity(vessel.dateTime, vesselIsHidden, vesselIsOpacityReduced)) {
           return features
         }
 

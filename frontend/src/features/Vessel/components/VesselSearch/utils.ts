@@ -1,6 +1,4 @@
-import { VesselIdentifier } from '../../../../domain/entities/vessel/types'
-
-import type { Vessel } from '@features/Vessel/Vessel.types'
+import { Vessel } from '@features/Vessel/Vessel.types'
 
 export function enrichWithVesselIdentifierIfUndefined(identity: Vessel.VesselIdentity): Vessel.VesselIdentity {
   if (identity.vesselIdentifier) {
@@ -8,15 +6,15 @@ export function enrichWithVesselIdentifierIfUndefined(identity: Vessel.VesselIde
   }
 
   if (identity.internalReferenceNumber) {
-    return { ...identity, vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER }
+    return { ...identity, vesselIdentifier: Vessel.VesselIdentifier.INTERNAL_REFERENCE_NUMBER }
   }
 
   if (identity.ircs) {
-    return { ...identity, vesselIdentifier: VesselIdentifier.IRCS }
+    return { ...identity, vesselIdentifier: Vessel.VesselIdentifier.IRCS }
   }
 
   if (identity.externalReferenceNumber) {
-    return { ...identity, vesselIdentifier: VesselIdentifier.EXTERNAL_REFERENCE_NUMBER }
+    return { ...identity, vesselIdentifier: Vessel.VesselIdentifier.EXTERNAL_REFERENCE_NUMBER }
   }
 
   return identity

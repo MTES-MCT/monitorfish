@@ -12,14 +12,15 @@ import { throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth
 import { removeError, setError } from '../../shared_slices/Global'
 
 import type { MainAppDispatch, MainAppThunk } from '../../../store'
-import type { TrackRequest, VesselIdentity } from '../../entities/vessel/types'
+import type { TrackRequest } from '../../entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 /**
  * Modify the vessel track depth on map
  */
 export const updateSelectedVesselTrackRequest =
   (
-    vesselIdentity: VesselIdentity,
+    vesselIdentity: Vessel.VesselIdentity,
     trackRequest: TrackRequest,
     withoutFishingMessagesRerendering: boolean = false
   ): MainAppThunk =>

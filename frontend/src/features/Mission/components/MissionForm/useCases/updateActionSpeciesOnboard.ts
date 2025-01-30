@@ -1,9 +1,9 @@
 import { getSummedSpeciesOnBoard } from '@features/Logbook/utils'
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { vesselApi } from '@features/Vessel/vesselApi'
+import { riskFactorApi } from '@features/RiskFactor/apis'
 
-import type { RiskFactor } from '../../../../../domain/entities/vessel/riskFactor/types'
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
+import type { RiskFactor } from '@features/RiskFactor/types'
 
 export const updateActionSpeciesOnboard =
   (dispatch, setFieldValue: (field: string, value: any) => void) =>
@@ -13,7 +13,7 @@ export const updateActionSpeciesOnboard =
     }
 
     const { data: riskFactor } = await dispatch(
-      vesselApi.endpoints.getRiskFactor.initiate(missionAction.internalReferenceNumber)
+      riskFactorApi.endpoints.getRiskFactor.initiate(missionAction.internalReferenceNumber)
     )
     if (!riskFactor) {
       return []

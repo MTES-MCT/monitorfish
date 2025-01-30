@@ -4,7 +4,7 @@ import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
-import { Vessel } from '../../../domain/entities/vessel/vessel'
+import { VesselFeature } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { removeVesselReporting } from '../../Vessel/slice'
 import { reportingApi } from '../reportingApi'
@@ -32,7 +32,7 @@ export const archiveReporting =
       dispatch(
         removeVesselReporting({
           reportingType: reporting.type,
-          vesselFeatureId: Vessel.getVesselFeatureId(selectedVesselIdentity)
+          vesselFeatureId: VesselFeature.getVesselFeatureId(selectedVesselIdentity)
         })
       )
 

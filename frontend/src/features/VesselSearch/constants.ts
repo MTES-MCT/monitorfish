@@ -1,7 +1,7 @@
-import type { VesselEnhancedLastPositionWebGLObject } from '../../domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { IFuseOptions } from 'fuse.js'
 
-export const VESSEL_SEARCH_OPTIONS: IFuseOptions<VesselEnhancedLastPositionWebGLObject> = {
+export const VESSEL_SEARCH_OPTIONS: IFuseOptions<Vessel.VesselEnhancedLastPositionWebGLObject> = {
   distance: 50,
   // eslint-disable-next-line @typescript-eslint/naming-convention
   includeScore: true,

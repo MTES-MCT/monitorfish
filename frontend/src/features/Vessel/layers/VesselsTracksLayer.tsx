@@ -2,6 +2,7 @@ import CloseVesselTrackOverlay from '@features/Map/components/CloseVesselTrackOv
 import FishingActivityOverlay from '@features/Map/components/FishingActivityOverlay'
 import { LayerProperties } from '@features/Map/constants'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
@@ -18,7 +19,6 @@ import {
   removeVesselTrackFeatures,
   updateTrackCircleStyle
 } from '../../../domain/entities/vessel/track'
-import { getVesselCompositeIdentifier } from '../../../domain/entities/vessel/vessel'
 import { logbookActions } from '../../Logbook/slice'
 import { getFishingActivityFeatureOnTrackLine } from '../../Logbook/utils'
 import { animateToCoordinates } from '../../Map/slice'

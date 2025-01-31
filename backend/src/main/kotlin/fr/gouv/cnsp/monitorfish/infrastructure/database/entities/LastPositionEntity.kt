@@ -38,9 +38,9 @@ data class LastPositionEntity(
     @Column(name = "trip_number")
     val tripNumber: String? = null,
     @Column(name = "latitude")
-    val latitude: Double? = null,
+    val latitude: Double,
     @Column(name = "longitude")
-    val longitude: Double? = null,
+    val longitude: Double,
     @Column(name = "estimated_current_latitude")
     val estimatedCurrentLatitude: Double? = null,
     @Column(name = "estimated_current_longitude")

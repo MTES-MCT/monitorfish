@@ -4,19 +4,19 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import java.time.ZonedDateTime
 
 data class RiskFactorDataOutput(
-    val gearOnboard: List<GearLastPositionDataOutput>? = null,
-    val segments: List<String>? = listOf(),
-    val speciesOnboard: List<SpeciesLastPositionDataOutput>? = null,
-    val controlPriorityLevel: Double? = null,
+    val gearOnboard: List<GearLastPositionDataOutput>,
+    val segments: List<String>,
+    val speciesOnboard: List<SpeciesLastPositionDataOutput>,
+    val controlPriorityLevel: Double,
     val segmentHighestImpact: String? = null,
     val segmentHighestPriority: String? = null,
-    val numberControlsLastFiveYears: Short? = null,
-    val numberControlsLastThreeYears: Short? = null,
-    val numberInfractionsLastFiveYears: Short? = null,
-    val numberGearSeizuresLastFiveYears: Short? = null,
-    val numberSpeciesSeizuresLastFiveYears: Short? = null,
-    val numberVesselSeizuresLastFiveYears: Short? = null,
-    val controlRateRiskFactor: Double? = null,
+    val numberControlsLastFiveYears: Short,
+    val numberControlsLastThreeYears: Short,
+    val numberInfractionsLastFiveYears: Short,
+    val numberGearSeizuresLastFiveYears: Short,
+    val numberSpeciesSeizuresLastFiveYears: Short,
+    val numberVesselSeizuresLastFiveYears: Short,
+    val controlRateRiskFactor: Double,
     val lastControlDatetime: ZonedDateTime? = null,
     val impactRiskFactor: Double,
     val probabilityRiskFactor: Double,
@@ -26,7 +26,7 @@ data class RiskFactorDataOutput(
     companion object {
         fun fromVesselRiskFactor(vesselRiskFactor: VesselRiskFactor) =
             RiskFactorDataOutput(
-                gearOnboard = vesselRiskFactor.gearOnboard?.map { GearLastPositionDataOutput.fromGearLastPosition(it) },
+                gearOnboard = vesselRiskFactor.gearOnboard?.map { GearLastPositionDataOutput.fromGearLastPosition(it) } ?: listOf(),
                 segments = vesselRiskFactor.segments,
                 segmentHighestImpact = vesselRiskFactor.segmentHighestImpact,
                 segmentHighestPriority = vesselRiskFactor.segmentHighestPriority,
@@ -35,7 +35,7 @@ data class RiskFactorDataOutput(
                         SpeciesLastPositionDataOutput.fromSpeciesLastPosition(
                             it,
                         )
-                    },
+                    } ?: listOf(),
                 controlPriorityLevel = vesselRiskFactor.controlPriorityLevel,
                 controlRateRiskFactor = vesselRiskFactor.controlRateRiskFactor,
                 numberControlsLastFiveYears = vesselRiskFactor.numberControlsLastFiveYears,

@@ -26,7 +26,8 @@ export const updateActionSpeciesOnboard =
 
     const summedSpeciesOnboard = getSummedSpeciesOnBoard(speciesOnboard)
     const nextSpeciesOnboard = summedSpeciesOnboard
-      .sort((a, b) => b.weight - a.weight)
+      .filter(specy => !!specy.weight)
+      .sort((a, b) => (b.weight as number) - (a.weight as number))
       .map(specy => ({
         controlledWeight: undefined,
         declaredWeight: specy.weight,

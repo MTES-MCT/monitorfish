@@ -1,4 +1,4 @@
-import { createFleetSegmentFromAPI } from '@features/FleetSegment/apis'
+import { fleetSegmentApi } from '@features/FleetSegment/apis'
 
 import { setError } from '../../../domain/shared_slices/Global'
 
@@ -18,7 +18,7 @@ export const createFleetSegment =
         throw new Error("Le segment de flotte n'a pas d'année")
       }
 
-      const newSegment = await createFleetSegmentFromAPI(segmentFields)
+      const newSegment = await dispatch(fleetSegmentApi.endpoints.createFleetSegment.initiate(segmentFields)).unwrap()
 
       return addFleetSegments(previousFleetSegments, newSegment)
     } catch (error) {

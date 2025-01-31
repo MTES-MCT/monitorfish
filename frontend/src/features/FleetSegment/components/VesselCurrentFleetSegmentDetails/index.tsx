@@ -55,7 +55,7 @@ function VesselCurrentFleetSegmentDetailsWithRef(
         value: gearsWithName?.length ? (
           <>
             {gearsWithName?.map(gear => (
-              <ValueWithLineBreak>
+              <ValueWithLineBreak key={gear.gear}>
                 {gear.gearName} ({gear.gear})
               </ValueWithLineBreak>
             ))}
@@ -71,7 +71,7 @@ function VesselCurrentFleetSegmentDetailsWithRef(
         value: (
           <>
             {gearsWithName?.map(gear => (
-              <ValueWithLineBreak>
+              <ValueWithLineBreak key={gear.gear}>
                 {gear.mesh ? <>{gear.mesh} mm</> : <NoValue>-</NoValue>} ({gear.gear})
               </ValueWithLineBreak>
             ))}

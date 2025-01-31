@@ -151,7 +151,7 @@ export namespace Vessel {
     faoZone: z.string(),
     gear: z.string(),
     species: z.string(),
-    weight: z.number()
+    weight: numberOrUndefined
   })
   export type DeclaredLogbookSpecies = z.infer<typeof DeclaredLogbookSpeciesSchema>
 

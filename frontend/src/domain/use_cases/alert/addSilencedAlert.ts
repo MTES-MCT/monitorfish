@@ -12,6 +12,7 @@ import type { SilencedAlertData } from '@features/Alert/types'
 export const addSilencedAlert =
   (silencedAlert: SilencedAlertData): MainAppThunk =>
   async (dispatch, getState) => {
+    // @ts-ignore
     const previousSilencedAlerts = getState().alert.silencedAlerts
 
     try {
@@ -19,14 +20,7 @@ export const addSilencedAlert =
        * TODO Why is there this TS type issue as `data` is part of the response :
        * TS2339: Property 'data' does not exist on type '{ data: SilencedAlert; } | { error: FetchBaseQueryError | SerializedError; }'.
        */
-      // @ts-ignore
-      const { data: savedSilencedAlert, error: silencedAlertError } = await dispatch(
-        alertApi.endpoints.createSilencedAlert.initiate(silencedAlert)
-      )
-      if (silencedAlertError) {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal
-        throw silencedAlertError
-      }
+      const savedSilencedAlert = await dispatch(alertApi.endpoints.createSilencedAlert.initiate(silencedAlert)).unwrap()
 
       const nextSilencedAlerts = [savedSilencedAlert, ...previousSilencedAlerts]
       dispatch(setSilencedAlerts(nextSilencedAlerts))

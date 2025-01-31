@@ -32,8 +32,9 @@ export const updateActionGearsOnboard =
     }
 
     const nextGears = gearOnboard
+      .filter(gear => !!gear.gear)
       .map(gear => {
-        const gearByCode = gearsByCode[gear.gear]
+        const gearByCode = gearsByCode[gear.gear as string]
         if (!gearByCode) {
           throw new FrontendError('`gearByCode` is undefined.')
         }

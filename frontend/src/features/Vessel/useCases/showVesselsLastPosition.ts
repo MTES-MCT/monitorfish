@@ -55,7 +55,9 @@ function convertToEnhancedLastPositions(
     filterPreview: 0,
     flagState: vessel.flagState,
     fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
-    gearsArray: vessel.gearOnboard ? Array.from(new Set(vessel.gearOnboard.map(gear => gear.gear))) : [],
+    gearsArray: vessel.gearOnboard
+      ? Array.from(new Set(vessel.gearOnboard.map(gear => gear.gear).filter((gear): gear is string => !!gear)))
+      : [],
     hasAlert: !!vessel.alerts?.length,
     hasBeaconMalfunction: !!vessel.beaconMalfunctionId,
     hasInfractionSuspicion:

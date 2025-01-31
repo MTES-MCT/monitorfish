@@ -1,3 +1,4 @@
+import { VesselSearch } from '@features/VesselSearch'
 import { FormError, FormErrorCode } from '@libs/FormError'
 import { Legend, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
@@ -5,7 +6,6 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { UNKNOWN_VESSEL } from '../../../../../../domain/entities/vessel/vessel'
-import { VesselSearch } from '../../../../../VesselSearch'
 
 import type { SilencedAlertFormValues } from '../types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
@@ -14,15 +14,19 @@ export function VesselField() {
   const { errors, setValues, values } = useFormikContext<SilencedAlertFormValues>()
   const { newWindowContainerRef } = useNewWindow()
 
-  const defaultValue: Partial<Vessel.VesselIdentity> = useMemo(
+  const defaultValue: Vessel.VesselIdentity = useMemo(
     () => ({
-      externalReferenceNumber: values.externalReferenceNumber ?? undefined,
-      flagState: values.flagState ?? '',
-      internalReferenceNumber: values.internalReferenceNumber ?? undefined,
-      ircs: values.ircs ?? undefined,
-      vesselId: values.vesselId ?? undefined,
-      vesselIdentifier: values.vesselIdentifier ?? undefined,
-      vesselName: values.vesselName ?? undefined
+      beaconNumber: undefined,
+      districtCode: undefined,
+      externalReferenceNumber: values.externalReferenceNumber,
+      flagState: values.flagState ?? UNKNOWN_VESSEL.flagState,
+      internalReferenceNumber: values.internalReferenceNumber,
+      ircs: values.ircs,
+      mmsi: undefined,
+      vesselId: values.vesselId,
+      vesselIdentifier: values.vesselIdentifier,
+      vesselLength: undefined,
+      vesselName: values.vesselName
     }),
     [
       values.flagState,
@@ -35,7 +39,7 @@ export function VesselField() {
     ]
   )
 
-  const handleVesselSearchChange = (nextVessel: Partial<Vessel.VesselIdentity> | undefined) => {
+  const handleVesselSearchChange = (nextVessel: Vessel.VesselIdentity | undefined) => {
     if (!nextVessel) {
       setValues({
         ...values,
@@ -59,7 +63,7 @@ export function VesselField() {
     setValues({
       ...values,
       externalReferenceNumber: nextVessel.externalReferenceNumber ?? undefined,
-      flagState: nextVessel.flagState?.toUpperCase(),
+      flagState: nextVessel.flagState.toUpperCase(),
       internalReferenceNumber: nextVessel.internalReferenceNumber ?? undefined,
       ircs: nextVessel.ircs ?? undefined,
       vesselId: nextVessel.vesselId ?? undefined,

@@ -32,9 +32,9 @@ data class LastPositionDataOutput(
     val registryPortName: String? = null,
     val district: String? = null,
     val districtCode: String? = null,
-    val gearOnboard: List<GearLastPositionDataOutput>? = null,
-    val segments: List<String>? = listOf(),
-    val speciesOnboard: List<SpeciesLastPositionDataOutput>? = null,
+    val gearOnboard: List<GearLastPositionDataOutput>,
+    val segments: List<String>,
+    val speciesOnboard: List<SpeciesLastPositionDataOutput>,
     val totalWeightOnboard: Double? = null,
     val lastControlDateTime: ZonedDateTime? = null,
     val lastControlInfraction: Boolean? = null,
@@ -46,7 +46,7 @@ data class LastPositionDataOutput(
     val riskFactor: Double? = null,
     val underCharter: Boolean? = null,
     val isAtPort: Boolean? = null,
-    val alerts: List<String>? = listOf(),
+    val alerts: List<String>,
     val beaconMalfunctionId: Int? = null,
     val reportings: List<String> = listOf(),
 ) {
@@ -77,14 +77,15 @@ data class LastPositionDataOutput(
                 registryPortName = position.registryPortName,
                 district = position.district,
                 districtCode = position.districtCode,
-                gearOnboard = position.gearOnboard?.map { GearLastPositionDataOutput.fromGearLastPosition(it) },
-                segments = position.segments,
+                gearOnboard = position.gearOnboard?.map { GearLastPositionDataOutput.fromGearLastPosition(it) }
+                    ?: listOf(),
+                segments = position.segments ?: listOf(),
                 speciesOnboard =
                     position.speciesOnboard?.map {
                         SpeciesLastPositionDataOutput.fromSpeciesLastPosition(
                             it,
                         )
-                    },
+                    } ?: listOf(),
                 totalWeightOnboard = position.totalWeightOnboard,
                 lastControlDateTime = position.lastControlDateTime,
                 lastControlInfraction = position.lastControlInfraction,
@@ -96,7 +97,7 @@ data class LastPositionDataOutput(
                 riskFactor = position.riskFactor,
                 underCharter = position.underCharter,
                 isAtPort = position.isAtPort,
-                alerts = position.alerts,
+                alerts = position.alerts ?: listOf(),
                 beaconMalfunctionId = position.beaconMalfunctionId,
                 reportings = position.reportings,
             )

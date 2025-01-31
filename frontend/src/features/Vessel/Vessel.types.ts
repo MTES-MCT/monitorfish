@@ -141,19 +141,17 @@ export namespace Vessel {
     vessel: Vessel.EnrichedVessel
   }
 
-  // TODO Check which of these types are nullable or not
   export const DeclaredLogbookGearSchema = z.strictObject({
     dimensions: stringOrUndefined,
     gear: stringOrUndefined,
     mesh: numberOrUndefined
   })
 
-  // TODO Check which of these types are nullable or not
   export const DeclaredLogbookSpeciesSchema = z.strictObject({
-    faoZone: stringOrUndefined,
-    gear: stringOrUndefined,
-    species: stringOrUndefined,
-    weight: numberOrUndefined
+    faoZone: z.string(),
+    gear: z.string(),
+    species: z.string(),
+    weight: z.number()
   })
   export type DeclaredLogbookSpecies = z.infer<typeof DeclaredLogbookSpeciesSchema>
 
@@ -162,7 +160,7 @@ export namespace Vessel {
     alerts: z.array(z.union([z.nativeEnum(PendingAlertValueType), z.literal('PNO_LAN_WEIGHT_TOLERANCE_ALERT')])),
     beaconMalfunctionId: numberOrUndefined,
     beaconNumber: numberOrUndefined,
-    course: z.number(),
+    course: numberOrUndefined,
     dateTime: z.string(),
     departureDateTime: stringOrUndefined,
     destination: stringOrUndefined,
@@ -196,7 +194,7 @@ export namespace Vessel {
     riskFactor: numberOrUndefined,
     segments: z.array(z.string()),
     speciesOnboard: z.array(DeclaredLogbookSpeciesSchema),
-    speed: z.number(),
+    speed: numberOrUndefined,
     totalWeightOnboard: numberOrUndefined,
     tripNumber: stringOrUndefined,
     underCharter: booleanOrUndefined,
@@ -261,13 +259,13 @@ export namespace Vessel {
   }
   export type VesselEnhancedLastPositionWebGLObject = Vessel.VesselEnhancedObject & {
     coordinates: number[]
-    course: number
+    course: number | undefined
     filterPreview: number // 0 is False, 1 is True - for WebGL
     hasBeaconMalfunction: boolean
     isAtPort: boolean | undefined
     isFiltered: number // 0 is False, 1 is True - for WebGL
     lastPositionSentAt: number
-    speed: number
+    speed: number | undefined
     vesselFeatureId: VesselFeatureId
   }
 

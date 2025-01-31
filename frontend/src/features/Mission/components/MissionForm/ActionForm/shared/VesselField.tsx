@@ -31,13 +31,17 @@ export function VesselField() {
     }
 
     return {
-      districtCode: values.districtCode ?? null,
-      externalReferenceNumber: values.externalReferenceNumber ?? null,
-      flagState: values.flagState ?? '',
-      internalReferenceNumber: values.internalReferenceNumber ?? null,
-      ircs: values.ircs ?? null,
+      beaconNumber: undefined,
+      districtCode: values.districtCode,
+      externalReferenceNumber: values.externalReferenceNumber,
+      flagState: values.flagState ?? UNKNOWN_VESSEL.flagState,
+      internalReferenceNumber: values.internalReferenceNumber,
+      ircs: values.ircs,
+      mmsi: undefined,
       vesselId: values.vesselId,
-      vesselName: values.vesselName ?? null
+      vesselIdentifier: undefined,
+      vesselLength: undefined,
+      vesselName: values.vesselName
     }
   }, [
     values.flagState,

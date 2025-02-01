@@ -81,7 +81,7 @@ dependencies {
     api("org.locationtech.jts:jts-core:1.20.0")
     api("org.hibernate:hibernate-spatial:6.6.4.Final")
     api("io.sentry:sentry:7.19.1")
-    api("io.sentry:sentry-log4j2:7.19.1")
+    api("io.sentry:sentry-log4j2:8.1.0")
     implementation("org.springframework.cloud:spring-cloud-gateway-mvc:4.2.0")
     runtimeOnly("org.postgresql:postgresql:42.7.4")
     testImplementation("io.ktor:ktor-client-mock-jvm:3.0.3")

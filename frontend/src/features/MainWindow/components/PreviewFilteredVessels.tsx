@@ -1,22 +1,20 @@
-import React from 'react'
-import styled from 'styled-components'
-import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '@constants/constants.js'
+import { undoPreviewVessels } from '@features/Vessel/useCases/undoPreviewVessels'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import styled from 'styled-components'
+
 import BackToVesselsListSVG from '../../icons/Fleche_navigation_marees_gainsboro.svg?react'
-import { undoPreviewVessels } from '@features/Vessel/useCases/undoPreviewVessels.js'
 
-const PreviewFilteredVessels = () => {
-  const dispatch = useDispatch()
+export function PreviewFilteredVessels() {
+  const dispatch = useMainAppDispatch()
 
-  const previewFilteredVesselsMode = useSelector(state => state.global.previewFilteredVesselsMode)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
 
   return (
     <>
       {previewFilteredVesselsMode ? (
-        <Preview
-          onClick={() => dispatch(undoPreviewVessels())}
-          data-cy={'back-to-vessels-list'}
-        >
+        <Preview data-cy="back-to-vessels-list" onClick={() => dispatch(undoPreviewVessels())}>
           <Text>
             <BackToVesselsList />
             Revenir à la liste des navires
@@ -48,5 +46,3 @@ const Preview = styled.div`
   padding-top: 9px;
   cursor: pointer;
 `
-
-export default PreviewFilteredVessels

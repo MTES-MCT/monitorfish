@@ -56,7 +56,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
             vesselId,
             vesselIdentifier
           },
-          url: `/bff/v1/vessels/find`
+          url: `/vessels/find`
         }
       },
       transformErrorResponse: response => new FrontendApiError(VESSEL_POSITIONS_ERROR_MESSAGE, response),
@@ -96,7 +96,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
             vesselIdentifier
           },
 
-          url: `/bff/v1/vessels/positions`
+          url: `/vessels/positions`
         }
       },
       transformErrorResponse: response => new FrontendApiError(VESSEL_POSITIONS_ERROR_MESSAGE, response),

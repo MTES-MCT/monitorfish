@@ -35,7 +35,7 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
           afterDateTime: fromDate,
           vesselId
         },
-        url: '/bff/v1/mission_actions/controls'
+        url: '/mission_actions/controls'
       }),
       transformErrorResponse: response => new FrontendApiError(MISSION_ACTIONS_ERROR_MESSAGE, response)
     }),

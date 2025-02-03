@@ -166,7 +166,7 @@ jobs:
           mv /tmp/.buildx-cache-app-new /tmp/.buildx-cache-app
 
       - name: Upload image to artifacts
-        uses: ishworkh/docker-image-artifact-upload@v1
+        uses: ishworkh/container-image-artifact-upload@v2.0.0
         with:
           image: monitorfish-app:${{ env.VERSION }}
 

@@ -5,9 +5,9 @@ import styled from 'styled-components'
 
 import { getBeaconCreationOrModificationDate } from './utils'
 import { VesselStatusSelect } from './VesselStatusSelect'
-import { openBeaconMalfunctionInKanban } from '../../../../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import { showVesselFromBeaconMalfunctionsKanban } from '../../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
 import { END_OF_MALFUNCTION_REASON_RECORD, VESSEL_STATUS } from '../../constants'
+import { openBeaconMalfunctionInKanban } from '../../useCases/openBeaconMalfunctionInKanban'
 import { getMalfunctionStartDateText } from '../../utils'
 
 import type { BeaconMalfunction } from '../../types'
@@ -20,7 +20,7 @@ export type BeaconMalfunctionCardProps = {
   isDragging: boolean
   isDroppedId: boolean | undefined
   isShowed: boolean
-  updateVesselStatus: (beaconMalfunction: BeaconMalfunction | undefined, status: string | null) => void
+  updateVesselStatus: (beaconMalfunction: BeaconMalfunction | undefined, status: string) => void
   verticalScrollRef: MutableRefObject<HTMLDivElement> | undefined
 }
 
@@ -42,10 +42,13 @@ export function BeaconMalfunctionCard({
     ? verticalScrollRef?.current?.scrollHeight > verticalScrollRef?.current?.clientHeight
     : false
 
-  const endOfBeaconMalfunctionReason = useMemo(
-    () => END_OF_MALFUNCTION_REASON_RECORD[beaconMalfunction?.endOfBeaconMalfunctionReason],
-    [beaconMalfunction]
-  )
+  const endOfBeaconMalfunctionReason = useMemo(() => {
+    if (beaconMalfunction?.endOfBeaconMalfunctionReason) {
+      return END_OF_MALFUNCTION_REASON_RECORD[beaconMalfunction?.endOfBeaconMalfunctionReason]
+    }
+
+    return undefined
+  }, [beaconMalfunction])
 
   useEffect(() => {
     if (isShowed && beaconMalfunction && wrapperRef.current) {

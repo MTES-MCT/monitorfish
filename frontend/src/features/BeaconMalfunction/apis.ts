@@ -24,7 +24,7 @@ export const beaconMalfunctionApi = monitorfishApi.injectEndpoints({
     getAllBeaconMalfunctions: builder.query<BeaconMalfunction[], void>({
       query: () => ({
         method: 'GET',
-        url: '/bff/v1/beacon_malfunctions'
+        url: '/beacon_malfunctions'
       }),
       transformErrorResponse: response => new FrontendApiError(GET_BEACON_MALFUNCTIONS_ERROR_MESSAGE, response)
     }),
@@ -32,7 +32,7 @@ export const beaconMalfunctionApi = monitorfishApi.injectEndpoints({
     getBeaconMalfunction: builder.query<BeaconMalfunctionResumeAndDetails, number>({
       query: id => ({
         method: 'GET',
-        url: `/bff/v1/beacon_malfunctions/${id}`
+        url: `/beacon_malfunctions/${id}`
       }),
       transformErrorResponse: response => new FrontendApiError(GET_BEACON_MALFUNCTION_ERROR_MESSAGE, response)
     }),
@@ -47,7 +47,7 @@ export const beaconMalfunctionApi = monitorfishApi.injectEndpoints({
           afterDateTime: fromDate.toISOString(),
           vesselId
         },
-        url: '/bff/v1/vessels/beacon_malfunctions'
+        url: '/vessels/beacon_malfunctions'
       }),
       transformErrorResponse: response => new FrontendApiError(GET_VESSEL_BEACON_MALFUNCTIONS_ERROR_MESSAGE, response)
     }),
@@ -59,7 +59,7 @@ export const beaconMalfunctionApi = monitorfishApi.injectEndpoints({
       query: ({ comment, id }) => ({
         body: comment,
         method: 'POST',
-        url: `/bff/v1/beacon_malfunctions/${id}/comments`
+        url: `/beacon_malfunctions/${id}/comments`
       }),
       transformErrorResponse: response => new FrontendApiError(SAVE_BEACON_MALFUNCTION_COMMENT_ERROR_MESSAGE, response)
     }),
@@ -73,7 +73,7 @@ export const beaconMalfunctionApi = monitorfishApi.injectEndpoints({
         params: {
           requestedNotificationForeignFmcCode: foreignFmcCode
         },
-        url: `/bff/v1/beacon_malfunctions/${id}/${notificationType}`
+        url: `/beacon_malfunctions/${id}/${notificationType}`
       }),
       transformErrorResponse: response => new FrontendApiError(SEND_NOTIFICATION_ERROR_MESSAGE, response)
     }),
@@ -85,7 +85,7 @@ export const beaconMalfunctionApi = monitorfishApi.injectEndpoints({
       query: ({ id, updatedFields }) => ({
         body: updatedFields,
         method: 'PUT',
-        url: `/bff/v1/beacon_malfunctions/${id}`
+        url: `/beacon_malfunctions/${id}`
       }),
       transformErrorResponse: response => new FrontendApiError(UPDATE_BEACON_MALFUNCTIONS_ERROR_MESSAGE, response)
     })

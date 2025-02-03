@@ -32,7 +32,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
     addFleetSegmentYear: builder.mutation<void, number>({
       query: nextYear => ({
         method: 'POST',
-        url: `/bff/v1/admin/fleet_segments/${nextYear}`
+        url: `/admin/fleet_segments/${nextYear}`
       }),
       transformErrorResponse: response => new FrontendApiError(ADD_FLEET_SEGMENT_YEAR_ERROR_MESSAGE, response)
     }),
@@ -51,7 +51,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
       query: segmentFields => ({
         body: segmentFields,
         method: 'POST',
-        url: '/bff/v1/admin/fleet_segments'
+        url: '/admin/fleet_segments'
       }),
       transformErrorResponse: response => new FrontendApiError(CREATE_FLEET_SEGMENT_ERROR_MESSAGE, response),
       transformResponse: (baseQueryReturnValue: FleetSegment) => FleetSegmentSchema.parse(baseQueryReturnValue)
@@ -59,7 +59,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
     deleteFleetSegment: builder.mutation<FleetSegment[], { segment: string; year: number }>({
       query: ({ segment, year }) => ({
         method: 'DELETE',
-        url: `/bff/v1/admin/fleet_segments?year=${year}&segment=${segment}`
+        url: `/admin/fleet_segments?year=${year}&segment=${segment}`
       }),
       transformErrorResponse: response => new FrontendApiError(DELETE_FLEET_SEGMENT_ERROR_MESSAGE, response),
       transformResponse: (baseQueryReturnValue: FleetSegment[]) =>
@@ -80,7 +80,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
           .sort((a, b) => a.segment.localeCompare(b.segment))
     }),
     getFleetSegmentYearEntries: builder.query<number[], void>({
-      query: () => '/bff/v1/admin/fleet_segments/years',
+      query: () => '/admin/fleet_segments/years',
       transformErrorResponse: response => new FrontendApiError(GET_FLEET_SEGMENT_YEAR_ENTRIES_ERROR_MESSAGE, response)
     }),
     updateFleetSegment: builder.query<FleetSegment, UpdateFleetSegmentParams>({

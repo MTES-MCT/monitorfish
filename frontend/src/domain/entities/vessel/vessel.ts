@@ -1,9 +1,13 @@
-import { BaseLayer } from '@features/Map/constants'
-import { MonitorFishMap } from '@features/Map/Map.types'
-import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
+/**
+ * /!\ Do not shorten these 3 imports as they are required by the web worker `MonitorFishWebWorker`
+ * It will fail the Vite build : `Rollup failed to resolve import [...]`
+ */
 import countries from 'i18n-iso-countries'
 
 import { VesselLabel } from './label/types'
+import { BaseLayer } from '../../../features/Map/constants'
+import { MonitorFishMap } from '../../../features/Map/Map.types'
+import { getVesselCompositeIdentifier } from '../../../features/Vessel/utils'
 
 import type { ShowedVesselTrack } from './types'
 import type { PartialExcept } from '../../../types'

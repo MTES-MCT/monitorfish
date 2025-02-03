@@ -1,7 +1,7 @@
-import { missionActionApi } from '@api/missionAction'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 import { getMissionActionDataFromFormValues } from '@features/Mission/components/MissionForm/utils'
 import { isMissionActionFormValid } from '@features/Mission/components/MissionForm/utils/isMissionActionFormValid'
+import { missionActionApi } from '@features/Mission/missionActionApi'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'

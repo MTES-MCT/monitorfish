@@ -1,17 +1,18 @@
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
+import { missionActionApi } from '@features/Mission/missionActionApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
-import { getVesselControlsFromAPI } from '../../../api/missionAction'
-import { NoControlsFoundError } from '../../../errors/NoControlsFoundError'
 import {
   loadControls,
   resetLoadControls,
   setControlSummary,
   setNextControlSummary,
   unsetControlSummary
-} from '../../shared_slices/Control'
-import { displayedErrorActions } from '../../shared_slices/DisplayedError'
-import { removeError, setError } from '../../shared_slices/Global'
-import { displayOrLogError } from '../error/displayOrLogError'
+} from '../../../domain/shared_slices/Control'
+import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
+import { removeError, setError } from '../../../domain/shared_slices/Global'
+import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
+import { NoControlsFoundError } from '../../../errors/NoControlsFoundError'
 
 export const getVesselControls = (isFromUserAction: boolean) => async (dispatch, getState) => {
   const { selectedVessel } = getState().vessel
@@ -35,7 +36,16 @@ export const getVesselControls = (isFromUserAction: boolean) => async (dispatch,
   }
 
   try {
-    const controlSummary = await getVesselControlsFromAPI(selectedVessel.vesselId, controlsFromDate)
+    const controlSummary = await dispatch(
+      missionActionApi.endpoints.getVesselControls.initiate(
+        {
+          fromDate: controlsFromDate,
+          vesselId: selectedVessel.vesselId
+        },
+        RTK_FORCE_REFETCH_QUERY_OPTIONS
+      )
+    ).unwrap()
+
     if (isSameVesselAsCurrentlyShowed && !isFromUserAction) {
       if (controlSummary.controls?.length > currentControlSummary.missionActions?.length) {
         dispatch(setNextControlSummary(controlSummary))

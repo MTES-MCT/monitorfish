@@ -1,10 +1,11 @@
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { doNotAnimate } from '@features/Map/slice'
 import { addVesselTrackShowed, resetLoadingVessel } from '@features/Vessel/slice'
 import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
+import { vesselApi } from '@features/Vessel/vesselApi'
 import { transform } from 'ol/proj'
 
-import { getVesselPositionsFromAPI } from '../../../api/vessel'
 import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
 import { removeError, setError } from '../../shared_slices/Global'
 
@@ -30,7 +31,12 @@ export const showVesselTrack =
       dispatch(doNotAnimate(!isFromUserAction))
       dispatch(removeError())
 
-      const { isTrackDepthModified, positions } = await getVesselPositionsFromAPI(vesselIdentity, nextTrackRequest)
+      const { isTrackDepthModified, positions } = await dispatch(
+        vesselApi.endpoints.getVesselPositions.initiate(
+          { trackRequest: nextTrackRequest, vesselIdentity },
+          RTK_FORCE_REFETCH_QUERY_OPTIONS
+        )
+      ).unwrap()
       try {
         throwCustomErrorFromAPIFeedback(positions, isTrackDepthModified, isFromUserAction)
         dispatch(removeError())

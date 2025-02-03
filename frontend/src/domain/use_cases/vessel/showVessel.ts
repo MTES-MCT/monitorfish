@@ -1,7 +1,8 @@
-import { getVesselFromAPI } from '@api/vessel'
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { logbookActions } from '@features/Logbook/slice'
 import { doNotAnimate } from '@features/Map/slice'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel, vesselSelectors } from '@features/Vessel/slice'
+import { vesselApi } from '@features/Vessel/vesselApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { captureMessage } from '@sentry/react'
 import { omit } from 'lodash'
@@ -59,7 +60,13 @@ export const showVessel =
         dispatch(addSearchedVessel(vesselIdentity))
       }
 
-      const { isTrackDepthModified, vesselAndPositions } = await getVesselFromAPI(vesselIdentity, nextTrackRequest)
+      const { isTrackDepthModified, vesselAndPositions } = await dispatch(
+        vesselApi.endpoints.getVesselAndPositions.initiate(
+          { trackRequest: nextTrackRequest, vesselIdentity },
+          RTK_FORCE_REFETCH_QUERY_OPTIONS
+        )
+      ).unwrap()
+
       try {
         throwCustomErrorFromAPIFeedback(vesselAndPositions.positions, isTrackDepthModified, isFromUserAction)
       } catch (error) {

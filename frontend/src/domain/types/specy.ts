@@ -14,10 +14,3 @@ export type SpeciesAndSpeciesGroupsAPIData = {
   groups: SpecyGroup[]
   species: Specy[]
 }
-
-export type SpeciesAndSpecyGroups = {
-  groups: SpecyGroup[]
-  species: Specy[]
-  // TODO Type this prop.
-  speciesByCode: Record<string, Record<string, any>>
-}

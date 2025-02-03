@@ -9,10 +9,10 @@ import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
 import { COLORS } from '../../../../../constants/constants'
 import { vesselsAreEquals } from '../../../../../domain/entities/vessel/vessel'
 import { setBeaconMalfunctionsTab } from '../../../../../domain/shared_slices/BeaconMalfunction'
-import { getVesselBeaconMalfunctions } from '../../../../../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { EquipmentTab } from '../../../../BeaconMalfunction/constants'
+import { getVesselBeaconMalfunctions } from '../../../../BeaconMalfunction/useCases/getVesselBeaconMalfunctions'
 
 export function VesselEquipment() {
   const dispatch = useMainAppDispatch()

@@ -13,7 +13,7 @@ type VesselStatusSelectProps = {
   isAbsolute?: boolean
   isCleanable?: boolean
   marginTop?: number | undefined
-  updateVesselStatus: (beaconMalfunction: BeaconMalfunction | undefined, status: string | null) => void
+  updateVesselStatus: (beaconMalfunction: BeaconMalfunction | undefined, status: string) => void
   // TODO Type vesselStatus in constants.tsx
   vesselStatus: { color: string; icon: JSX.Element; label: string; textColor: string; value: string } | undefined
 }
@@ -61,7 +61,7 @@ export function VesselStatusSelect({
           ? { marginLeft: 40, marginTop: 120, position: 'absolute' }
           : { marginLeft: -5, marginTop: marginTop ?? -67, position: 'relative' }
       }
-      onChange={status => updateVesselStatus(beaconMalfunction, status)}
+      onChange={status => updateVesselStatus(beaconMalfunction, status as string)}
       placeholder="Statut"
       renderValue={(_, item) => <VesselStatusSelectValue item={item} />}
       searchable={false}

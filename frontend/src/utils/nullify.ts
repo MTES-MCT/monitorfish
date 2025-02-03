@@ -30,7 +30,7 @@ const nullifyObjectPropPair = ([key, value]: [string, NativeAny]) => [key, nulli
  * Transform all `undefined` values into `null` ones in any type of value
  *
  * @description
- * The value must be of native type and only contains native types.
+ * The value must be of native type and only contains native schemas.
  */
 export function nullify<T extends NativeAny>(value: T): Nullify<T> | null {
   if (value === null || value === undefined) {

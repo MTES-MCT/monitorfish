@@ -1,5 +1,6 @@
 import { monitorfishApi } from '@api/api'
 import { HttpStatusCode, RtkCacheTagType } from '@api/constants'
+import { VesselLastPositionSchema } from '@features/Vessel/schemas/VesselLastPositionSchema'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
@@ -140,7 +141,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
     getVesselsLastPositions: builder.query<Vessel.VesselLastPosition[], void>({
       query: () => `/vessels`,
       transformResponse: (baseQueryReturnValue: Vessel.VesselLastPosition[]) =>
-        baseQueryReturnValue.map(LastPosition => Vessel.VesselLastPositionSchema.parse(LastPosition))
+        baseQueryReturnValue.map(LastPosition => VesselLastPositionSchema.parse(LastPosition))
     }),
 
     searchVessels: builder.query<Vessel.VesselIdentity[], Vessel.ApiSearchFilter>({

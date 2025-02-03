@@ -1,4 +1,4 @@
-// TODO This should be moved to `entities/vessel/mission.types.ts`
+// TODO This should be moved to `entities/vessel/mission.schemas.ts`
 
 import type { VesselTrackDepth } from '../vesselTrackDepth'
 import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'

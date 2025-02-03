@@ -77,5 +77,6 @@ export namespace BackendApi {
 export interface Meta {
   response?: {
     headers: Headers
+    status: number
   }
 }

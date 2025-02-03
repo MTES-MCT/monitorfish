@@ -54,7 +54,7 @@ class VesselController(
 
     @GetMapping("/find")
     @Operation(summary = "Get vessel information and positions")
-    fun getVessel(
+    fun getVesselAndPositions(
         @Parameter(description = "Vessel internal id")
         @RequestParam(name = "vesselId")
         vesselId: Int?,

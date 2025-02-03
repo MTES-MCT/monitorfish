@@ -36,7 +36,7 @@ fiona = "^1.10.1"
 
 
 [tool.poetry.group.dev.dependencies]
-plotly = "^5.24.1"
+plotly = "^6.0.0"
 xlsxwriter = "^3.2.2"
 jupyter = "^1.1.1"
 matplotlib = "^3.10.0"

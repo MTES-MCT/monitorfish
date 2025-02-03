@@ -276,7 +276,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.contains('Créer le préavis').should('be.enabled')
   })
 
-  it('Should calculate and display manual prior notification fleet segments, risk factor & types', () => {
+  it('Should calculate and display manual prior notification fleet segments, risk factor & schemas', () => {
     // -------------------------------------------------------------------------
     // Add
 
@@ -402,7 +402,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     })
   })
 
-  it('Should only recalculate manual prior notification fleet segments, risk factor & types when necessary (creation)', () => {
+  it('Should only recalculate manual prior notification fleet segments, risk factor & schemas when necessary (creation)', () => {
     cy.intercept('POST', '/bff/v1/prior_notifications/manual/compute').as('computePriorNotification')
     cy.resetCountRequestsByAlias('@computePriorNotification')
 
@@ -446,7 +446,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 1)
   })
 
-  it('Should only recalculate manual prior notification fleet segments, risk factor & types when necessary (edition)', () => {
+  it('Should only recalculate manual prior notification fleet segments, risk factor & schemas when necessary (edition)', () => {
     cy.intercept('POST', '/bff/v1/prior_notifications/manual/compute').as('computePriorNotification')
     cy.resetCountRequestsByAlias('@computePriorNotification')
 

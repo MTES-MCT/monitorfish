@@ -1,6 +1,6 @@
 /**
- * Typescript types for the GeoJSON RFC7946 specification. This is not fully RFC-compliant due to lack of support for
- * ranged number data types.
+ * Typescript schemas for the GeoJSON RFC7946 specification. This is not fully RFC-compliant due to lack of support for
+ * ranged number data schemas.
  *
  * See https://tools.ietf.org/html/rfc7946
  */
@@ -13,13 +13,13 @@ export declare namespace GeoJSON {
   export type GeometryType = Geometry['type']
 
   /**
-   * ...the term "GeoJSON types" refers to nine case-sensitive strings: "Feature", "FeatureCollection", and the
-   * geometry types listed above.
+   * ...the term "GeoJSON schemas" refers to nine case-sensitive strings: "Feature", "FeatureCollection", and the
+   * geometry schemas listed above.
    */
   export type GeoJson = Geometry | Feature | FeatureCollection
   export type GeoJsonType = GeoJson['type']
 
-  // types
+  // schemas
 
   /**
    * A position is an array of numbers. There MUST be two or more elements. The first two elements are longitude and
@@ -34,7 +34,7 @@ export declare namespace GeoJSON {
   export type Record = { [key in string | number]: unknown }
 
   /**
-   * Properties inherit to all GeoJSON types
+   * Properties inherit to all GeoJSON schemas
    */
   export interface GeometryBase extends Record {
     /**
@@ -55,7 +55,7 @@ export declare namespace GeoJSON {
      */
   }
 
-  // geometry types
+  // geometry schemas
 
   export interface Point extends GeometryBase {
     /**
@@ -132,7 +132,7 @@ export declare namespace GeoJSON {
     type: 'GeometryCollection'
   }
 
-  // GeoJSON types
+  // GeoJSON schemas
 
   export interface Feature<Properties extends Record = Record, Id = string | number> {
     /**

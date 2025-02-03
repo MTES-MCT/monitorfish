@@ -7,7 +7,7 @@ context('BackOffice > Regulation Table > Table', () => {
     cy.wait(1000)
   })
 
-  it('regulatory zones are displayed by layer name and law types', () => {
+  it('regulatory zones are displayed by layer name and law schemas', () => {
     cy.get('[data-cy="backoffice-search-regulation"]').type('dra')
     cy.get('[data-cy="Reg. NAMO"]').eq(0).click()
     cy.get('[data-cy="backoffice-search-regulation"]').type('{backspace}{backspace}{backspace}')

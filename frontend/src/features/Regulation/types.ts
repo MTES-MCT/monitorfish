@@ -55,7 +55,7 @@ export type TimeInterval = {
   to: Date | undefined
 }
 
-// TODO It would be safer to use strict array types: `DateRange[]` and `DateAsStringRange[]`.
+// TODO It would be safer to use strict array schemas: `DateRange[]` and `DateAsStringRange[]`.
 export type FishingPeriod<DateType extends string | Date = string> = {
   always: boolean | undefined
   annualRecurrence: boolean | undefined

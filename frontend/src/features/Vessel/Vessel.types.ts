@@ -1,11 +1,10 @@
-import { PendingAlertValueType } from '@features/Alert/types'
-import { ReportingType } from '@features/Reporting/types'
 import { z } from 'zod'
 
-import { booleanOrUndefined, numberOrUndefined, stringOrUndefined } from '../../types'
+import { numberOrUndefined, stringOrUndefined } from '../../types'
 
 import type { ProducerOrganizationMembership } from '@features/ProducerOrganizationMembership/types'
 import type { RiskFactor } from '@features/RiskFactor/types'
+import type { VesselLastPositionSchema } from '@features/Vessel/schemas/VesselLastPositionSchema'
 import type Feature from 'ol/Feature'
 import type LineString from 'ol/geom/LineString'
 import type Point from 'ol/geom/Point'
@@ -155,54 +154,6 @@ export namespace Vessel {
   })
   export type DeclaredLogbookSpecies = z.infer<typeof DeclaredLogbookSpeciesSchema>
 
-  // TODO Check which of these types are nullable or not
-  export const VesselLastPositionSchema = z.strictObject({
-    alerts: z.array(z.union([z.nativeEnum(PendingAlertValueType), z.literal('PNO_LAN_WEIGHT_TOLERANCE_ALERT')])),
-    beaconMalfunctionId: numberOrUndefined,
-    beaconNumber: numberOrUndefined,
-    course: numberOrUndefined,
-    dateTime: z.string(),
-    departureDateTime: stringOrUndefined,
-    destination: stringOrUndefined,
-    detectabilityRiskFactor: numberOrUndefined,
-    district: stringOrUndefined,
-    districtCode: stringOrUndefined,
-    emissionPeriod: numberOrUndefined,
-    estimatedCurrentLatitude: numberOrUndefined,
-    estimatedCurrentLongitude: numberOrUndefined,
-    externalReferenceNumber: stringOrUndefined,
-    flagState: z.string(),
-    from: stringOrUndefined,
-    gearOnboard: z.array(DeclaredLogbookGearSchema),
-    impactRiskFactor: numberOrUndefined,
-    internalReferenceNumber: stringOrUndefined,
-    ircs: stringOrUndefined,
-    isAtPort: booleanOrUndefined,
-    lastControlDateTime: stringOrUndefined,
-    lastControlInfraction: booleanOrUndefined,
-    lastLogbookMessageDateTime: stringOrUndefined,
-    latitude: z.number(),
-    length: numberOrUndefined,
-    longitude: z.number(),
-    mmsi: stringOrUndefined,
-    positionType: z.string(),
-    postControlComment: stringOrUndefined,
-    probabilityRiskFactor: numberOrUndefined,
-    registryPortLocode: stringOrUndefined,
-    registryPortName: stringOrUndefined,
-    reportings: z.array(z.nativeEnum(ReportingType)),
-    riskFactor: numberOrUndefined,
-    segments: z.array(z.string()),
-    speciesOnboard: z.array(DeclaredLogbookSpeciesSchema),
-    speed: numberOrUndefined,
-    totalWeightOnboard: numberOrUndefined,
-    tripNumber: stringOrUndefined,
-    underCharter: booleanOrUndefined,
-    vesselId: numberOrUndefined,
-    vesselIdentifier: z.nativeEnum(VesselIdentifier),
-    vesselName: stringOrUndefined,
-    width: numberOrUndefined
-  })
   export type VesselLastPosition = z.infer<typeof VesselLastPositionSchema>
 
   export type VesselPosition = {

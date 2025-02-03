@@ -55,7 +55,7 @@ setupListeners(mainStore.dispatch)
 export const mainStorePersistor = persistStore(mainStore)
 
 // https://react-redux.js.org/using-react-redux/usage-with-typescript#define-root-state-and-dispatch-types
-// Infer the `MainRootState` and `AppDispatch` types from the store itself
+// Infer the `MainRootState` and `AppDispatch` schemas from the store itself
 export type MainAppDispatch = typeof mainStore.dispatch
 export type MainAppGetState = () => MainRootState
 export type MainAppThunk<ReturnType = void> = ThunkAction<ReturnType, MainRootState, undefined, AnyAction>

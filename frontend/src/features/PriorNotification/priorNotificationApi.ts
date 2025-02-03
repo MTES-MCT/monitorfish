@@ -11,7 +11,7 @@ import type { ListFilter } from './components/PriorNotificationList/types'
 import type { Logbook } from '@features/Logbook/Logbook.types'
 
 const COMPUTE_PRIOR_NOTIFICATION_ERROR_MESSAGE =
-  "Nous n'avons pas pu calculer note de risque, segments ou types pour ce préavis."
+  "Nous n'avons pas pu calculer note de risque, segments ou schemas pour ce préavis."
 const CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu créé le préavis."
 const DELETE_PRIOR_NOTIFICATION_UPLOAD_ERROR_MESSAGE = "Nous n'avons pas pu supprimer ce document attaché."
 const GET_PRIOR_NOTIFICATION_UPLOADS_ERROR_MESSAGE =
@@ -21,7 +21,7 @@ const GET_PRIOR_NOTIFICATION_SENT_MESSAGES_ERROR_MESSAGE =
 const UPDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu modifier le préavis."
 const GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le préavis."
 const GET_PRIOR_NOTIFICATIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des préavis."
-const GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des types de préavis."
+const GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des schemas de préavis."
 const GET_PRIOR_NOTIFICATION_PDF_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le PDF du préavis."
 const VERIFY_AND_SEND_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu vérifier et envoyer le préavis."
 const INVALIDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu invalider et envoyer le préavis."
@@ -139,7 +139,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
 
     getPriorNotificationTypes: builder.query<string[], void>({
       providesTags: () => [{ type: RtkCacheTagType.PriorNotificationTypes }],
-      query: () => '/prior_notifications/types',
+      query: () => '/prior_notifications/schemas',
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE, response)
     }),
 

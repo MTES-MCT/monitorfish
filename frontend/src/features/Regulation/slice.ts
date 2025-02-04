@@ -392,7 +392,7 @@ const regulationSlice = createSlice({
       }
     },
 
-    // TODO Fix these schemas and find a cleaner way to achieve that. Proposal: pass a partial `RegulatoryZoneDraft` as param and use a "deepMerge" function.
+    // TODO Fix these types and find a cleaner way to achieve that. Proposal: pass a partial `RegulatoryZoneDraft` as param and use a "deepMerge" function.
     updateProcessingRegulationByKeyAndSubKey(
       state,
       action: PayloadAction<{

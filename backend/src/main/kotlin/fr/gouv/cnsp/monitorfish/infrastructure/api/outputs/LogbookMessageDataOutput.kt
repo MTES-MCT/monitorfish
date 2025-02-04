@@ -4,34 +4,35 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.interfaces.BaseLogbookMessageDataOutput
 import java.time.ZonedDateTime
 
 data class LogbookMessageDataOutput(
-    val reportId: String?,
-    val operationNumber: String?,
-    val tripNumber: String?,
-    val referencedReportId: String?,
-    val operationDateTime: ZonedDateTime?,
-    val activityDateTime: ZonedDateTime?,
-    val reportDateTime: ZonedDateTime?,
-    val integrationDateTime: ZonedDateTime?,
-    val internalReferenceNumber: String?,
-    val externalReferenceNumber: String?,
-    val ircs: String?,
-    val vesselName: String?,
-    val flagState: String?,
-    val imo: String?,
+    override val reportId: String?,
+    override val operationNumber: String?,
+    override val tripNumber: String?,
+    override val referencedReportId: String?,
+    override val operationDateTime: ZonedDateTime?,
+    override val activityDateTime: ZonedDateTime?,
+    override val reportDateTime: ZonedDateTime?,
+    override val integrationDateTime: ZonedDateTime?,
+    override val internalReferenceNumber: String?,
+    override val externalReferenceNumber: String?,
+    override val ircs: String?,
+    override val vesselName: String?,
+    override val flagState: String?,
+    override val imo: String?,
+    override val acknowledgment: Acknowledgment?,
+    override val isCorrectedByNewerMessage: Boolean,
+    override val isDeleted: Boolean,
+    override val isSentByFailoverSoftware: Boolean,
+    override val message: LogbookMessageValue?,
+    override val messageType: String?,
+    override val operationType: LogbookOperationType,
     val rawMessage: String?,
-    val acknowledgment: Acknowledgment?,
-    val isCorrectedByNewerMessage: Boolean,
-    val isDeleted: Boolean,
-    val isSentByFailoverSoftware: Boolean,
-    val message: LogbookMessageValue?,
-    val messageType: String?,
-    val operationType: LogbookOperationType,
     val tripGears: List<LogbookMessageGearDataOutput>?,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>?,
-) {
+): BaseLogbookMessageDataOutput {
     companion object {
         fun fromLogbookMessage(logbookMessage: LogbookMessage): LogbookMessageDataOutput {
             val tripGears =

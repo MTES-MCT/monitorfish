@@ -56,8 +56,7 @@ export const alertApi = monitorfishApi.injectEndpoints({
     }),
     getSilencedAlerts: builder.query<LEGACY_SilencedAlert[], void>({
       query: () => '/operational_alerts/silenced',
-      transformErrorResponse: response => new FrontendApiError(ALERTS_ERROR_MESSAGE, response),
-      transformResponse: (response: SilencedAlert[]) => response
+      transformErrorResponse: response => new FrontendApiError(ALERTS_ERROR_MESSAGE, response)
     }),
     silenceAlert: builder.mutation<
       LEGACY_SilencedAlert,
@@ -71,8 +70,7 @@ export const alertApi = monitorfishApi.injectEndpoints({
         method: 'PUT',
         url: `/operational_alerts/${id}/silence`
       }),
-      transformErrorResponse: response => new FrontendApiError(SILENCE_ALERT_ERROR_MESSAGE, response),
-      transformResponse: (response: SilencedAlert) => response
+      transformErrorResponse: response => new FrontendApiError(SILENCE_ALERT_ERROR_MESSAGE, response)
     }),
     validateAlert: builder.mutation<void, string>({
       query: id => ({

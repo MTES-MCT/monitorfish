@@ -92,13 +92,9 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.intercept(
       'GET',
-      '/bff/v1/vessels/find?vesselId=2&' +
-        'internalReferenceNumber=U_W0NTFINDME&' +
-        'externalReferenceNumber=TALK2ME&' +
-        'IRCS=QGDF&' +
-        'vesselIdentifier=&' +
-        'trackDepth=TWELVE_HOURS&' +
-        'afterDateTime=&beforeDateTime='
+      'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=TALK2ME' +
+      '&internalReferenceNumber=U_W0NTFINDME&IRCS=QGDF&trackDepth=TWELVE_HOURS' +
+      '&vesselId=2&vesselIdentifier=',
     ).as('showVessel')
     cy.get('a:contains("Voir la fiche")').click()
     cy.wait('@showVessel')

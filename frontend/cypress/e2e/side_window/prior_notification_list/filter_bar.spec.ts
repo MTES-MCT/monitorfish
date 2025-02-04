@@ -227,7 +227,7 @@ context('Side Window > Prior Notification List > VesselFilter Bar', () => {
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
   })
 
-  it('Should filter prior notifications by schemas', () => {
+  it('Should filter prior notifications by types', () => {
     openSideWindowPriorNotificationListAsSuperUser()
 
     cy.intercept('GET', `${apiPathBase}*priorNotificationTypes=${encodeURI('Préavis type A,Préavis type C')}*`).as(

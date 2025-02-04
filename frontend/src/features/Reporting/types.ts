@@ -7,7 +7,7 @@ import type { Infraction } from '../../domain/types/infraction'
 import type { PendingAlertValue } from '../Alert/types'
 import type { LegacyControlUnit } from '../ControlUnit/legacyControlUnit'
 
-// TODO Move other schemas into new `Reporting` namespace.
+// TODO Move other types into new `Reporting` namespace.
 export namespace Reporting {
   export type Reporting = InfractionSuspicionReporting | ObservationReporting | PendingAlertReporting
   export type EditableReporting = InfractionSuspicionReporting | ObservationReporting
@@ -125,7 +125,7 @@ export type Observation = {
 }
 
 type ReportingTypeCharacteristic = {
-  // TODO It should be useless now that schemas are discriminated.
+  // TODO It should be useless now that types are discriminated.
   code: ReportingType
   displayName: string
   // TODO This should be named differently to avoid confusion with `ReportingType.INFRACTION_SUSPICION` type.

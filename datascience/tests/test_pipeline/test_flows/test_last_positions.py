@@ -138,7 +138,7 @@ def test_load_last_positions(reset_test_data):
                 ],
                 None,
             ],
-            "total_weight_onboard": [30.0, None],
+            "total_weight_onboard": [30.0, 0.0],
             "last_control_datetime_utc": [datetime(2020, 1, 5, 9, 5, 32), None],
             "last_control_infraction": [False, None],
             "post_control_comments": ["RAS", None],
@@ -496,7 +496,7 @@ def test_join():
             "probability_risk_factor": [1.3, 1.5, 2.1, 2.2],
             "detectability_risk_factor": [2.1, 2.3, 2.3, 1.4],
             "risk_factor": [1.8, 3.0, 1.9, 3.3],
-            "total_weight_onboard": [121.2, None, None, 4.0],
+            "total_weight_onboard": [121.2, 0.0, 0.0, 4.0],
         }
     )
 

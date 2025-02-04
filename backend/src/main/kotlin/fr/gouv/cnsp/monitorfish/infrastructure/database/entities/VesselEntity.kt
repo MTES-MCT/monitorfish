@@ -59,7 +59,7 @@ data class VesselEntity(
     @Column(name = "sailing_type")
     val sailingType: String? = null,
     @Column(name = "declared_fishing_gears", columnDefinition = "varchar(100)[]")
-    val declaredFishingGears: List<String>? = null,
+    val declaredFishingGears: List<String>,
     @Column(name = "nav_licence_expiration_date", columnDefinition = "date")
     val navigationLicenceExpirationDate: Date? = null,
     @Column(name = "nav_licence_extension_date", columnDefinition = "date")

@@ -18,7 +18,7 @@ export namespace Vessel {
   }
 
   export interface Vessel {
-    declaredFishingGears: string[] | undefined
+    declaredFishingGears: string[]
     district: string | undefined
     districtCode: string | undefined
     externalReferenceNumber: string | undefined

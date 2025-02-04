@@ -13,7 +13,7 @@ interface BaseLogbookMessageDataOutput {
     val operationDateTime: ZonedDateTime?
     val activityDateTime: ZonedDateTime?
     val reportDateTime: ZonedDateTime?
-    val integrationDateTime: ZonedDateTime?
+    val integrationDateTime: ZonedDateTime
     val internalReferenceNumber: String?
     val externalReferenceNumber: String?
     val ircs: String?

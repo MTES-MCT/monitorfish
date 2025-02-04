@@ -25,7 +25,7 @@ class VesselFaker {
             vesselType: String? = null,
             sailingCategory: String? = null,
             sailingType: String? = null,
-            declaredFishingGears: List<String>? = null,
+            declaredFishingGears: List<String> = listOf(),
             pinger: Boolean? = null,
             navigationLicenceExpirationDate: Date? = null,
             operatorName: String? = null,

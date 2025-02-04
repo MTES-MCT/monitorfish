@@ -35,17 +35,17 @@ data class LastPositionDataOutput(
     val gearOnboard: List<GearLastPositionDataOutput>,
     val segments: List<String>,
     val speciesOnboard: List<SpeciesLastPositionDataOutput>,
-    val totalWeightOnboard: Double? = null,
+    val totalWeightOnboard: Double,
     val lastControlDateTime: ZonedDateTime? = null,
     val lastControlInfraction: Boolean? = null,
     val postControlComment: String? = null,
     val vesselIdentifier: VesselIdentifier,
-    val impactRiskFactor: Double? = null,
-    val probabilityRiskFactor: Double? = null,
-    val detectabilityRiskFactor: Double? = null,
-    val riskFactor: Double? = null,
+    val impactRiskFactor: Double,
+    val probabilityRiskFactor: Double,
+    val detectabilityRiskFactor: Double,
+    val riskFactor: Double,
     val underCharter: Boolean? = null,
-    val isAtPort: Boolean? = null,
+    val isAtPort: Boolean,
     val alerts: List<String>,
     val beaconMalfunctionId: Int? = null,
     val reportings: List<String> = listOf(),
@@ -77,8 +77,9 @@ data class LastPositionDataOutput(
                 registryPortName = position.registryPortName,
                 district = position.district,
                 districtCode = position.districtCode,
-                gearOnboard = position.gearOnboard?.map { GearLastPositionDataOutput.fromGearLastPosition(it) }
-                    ?: listOf(),
+                gearOnboard =
+                    position.gearOnboard?.map { GearLastPositionDataOutput.fromGearLastPosition(it) }
+                        ?: listOf(),
                 segments = position.segments ?: listOf(),
                 speciesOnboard =
                     position.speciesOnboard?.map {

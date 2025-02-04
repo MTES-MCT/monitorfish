@@ -1,10 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
@@ -526,7 +523,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
                             operationType = LogbookOperationType.DAT,
                             // Replaced by the generated `sentAt` during the save operation.
                             reportDateTime = ZonedDateTime.now(),
-                            transmissionFormat = null,
+                            transmissionFormat = LogbookTransmissionFormat.FLUX,
                             vesselName = "Vessel Name",
                             vesselId = 123,
                         ),

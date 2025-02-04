@@ -37,12 +37,12 @@ data class LastPositionDataOutput(
     val gearOnboard: List<GearLastPositionDataOutput>? = null,
     val segments: List<String>? = listOf(),
     val speciesOnboard: List<SpeciesLastPositionDataOutput>? = null,
-    val totalWeightOnboard: Double? = null,
+    val totalWeightOnboard: Double,
     val lastControlDateTime: ZonedDateTime? = null,
     val lastControlInfraction: Boolean? = null,
     val vesselIdentifier: VesselIdentifier,
     val underCharter: Boolean? = null,
-    val isAtPort: Boolean? = null,
+    val isAtPort: Boolean,
     val beaconMalfunctionId: Int? = null,
 ) {
     companion object {

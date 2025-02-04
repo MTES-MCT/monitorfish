@@ -17,7 +17,7 @@ data class LogbookMessageDataOutput(
     override val operationDateTime: ZonedDateTime?,
     override val activityDateTime: ZonedDateTime?,
     override val reportDateTime: ZonedDateTime?,
-    override val integrationDateTime: ZonedDateTime?,
+    override val integrationDateTime: ZonedDateTime,
     override val internalReferenceNumber: String?,
     override val externalReferenceNumber: String?,
     override val ircs: String?,
@@ -29,7 +29,7 @@ data class LogbookMessageDataOutput(
     override val isDeleted: Boolean,
     override val message: LogbookMessageValue?,
     override val isSentByFailoverSoftware: Boolean,
-): BaseLogbookMessageDataOutput {
+) : BaseLogbookMessageDataOutput {
     companion object {
         fun fromLogbookMessage(logbookMessage: LogbookMessage) =
             LogbookMessageDataOutput(

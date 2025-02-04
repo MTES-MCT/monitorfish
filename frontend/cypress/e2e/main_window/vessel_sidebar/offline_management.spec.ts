@@ -83,7 +83,7 @@ context('Offline management', () => {
       {
         method: 'GET',
         path:
-          'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=DONTSINK' +
+          '/bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=DONTSINK' +
           '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS' +
           '&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER',
         times: 2

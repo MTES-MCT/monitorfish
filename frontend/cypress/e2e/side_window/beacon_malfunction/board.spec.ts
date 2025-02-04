@@ -239,7 +239,7 @@ context('Side Window > Beacon Malfunction Board', () => {
       'GET',
       new RegExp(
         `bff\\/v1\\/vessels\\/find\\?` +
-          `&afterDateTime=${oneWeeksBeforeDate.format('YYYY-MM-DD')}T\\d{2}%3A\\d{2}%3A\\d{2}\\.\\d{3}Z` +
+          `afterDateTime=${oneWeeksBeforeDate.format('YYYY-MM-DD')}T\\d{2}%3A\\d{2}%3A\\d{2}\\.\\d{3}Z` +
           `&beforeDateTime=${oneWeeksBeforePlusOneDayDate.format('YYYY-MM-DD')}T\\d{2}%3A\\d{2}%3A\\d{2}\\.\\d{3}Z` +
           `&externalReferenceNumber=DONTSINK&internalReferenceNumber=FAK000999999` +
           `&IRCS=CALLME&trackDepth=CUSTOM&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER`

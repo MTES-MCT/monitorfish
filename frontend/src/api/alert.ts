@@ -50,7 +50,7 @@ export const alertApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(DELETE_SILENCED_ALERT_ERROR_MESSAGE, response)
     }),
     getOperationalAlerts: builder.query<LEGACY_PendingAlert[], void>({
-      query: () => '/bff/v1/operational_alerts',
+      query: () => '/operational_alerts',
       transformErrorResponse: response => new FrontendApiError(ALERTS_ERROR_MESSAGE, response),
       transformResponse: (response: PendingAlert[]) => response.map(normalizePendingAlert)
     }),

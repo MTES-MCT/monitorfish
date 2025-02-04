@@ -31,7 +31,7 @@ const undefinedizeObjectPropPair = ([key, value]: [string, NativeAny]) => [key, 
  * Transform all `null` values into `undefined` ones in any type of value
  *
  * @description
- * The value must be of native type and only contains native schemas.
+ * The value must be of native type and only contains native types.
  */
 export function undefinedize<T extends NativeAny>(value: T): Undefinedized<T> | undefined {
   if (value === null || value === undefined) {

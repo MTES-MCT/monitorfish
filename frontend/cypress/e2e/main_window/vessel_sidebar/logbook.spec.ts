@@ -152,9 +152,9 @@ context('Vessel sidebar logbook tab', () => {
       .its('response.url')
       .should(
         'have.string',
-        '/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
-          '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
-          '&afterDateTime=2019-02-16T21:05:00.000Z&beforeDateTime=2019-10-15T13:01:00.000Z'
+        encodeURIComponent('/bff/v1/vessels/positions?afterDateTime=2019-02-16T21:05:00.000Z' +
+          '&beforeDateTime=2019-10-15T13:01:00.000Z&externalReferenceNumber=DONTSINK&internalReferenceNumber=FAK000999999' +
+          '&IRCS=CALLME&trackDepth=CUSTOM&vesselIdentifier=INTERNAL_REFERENCE_NUMBER')
       )
 
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 4)
@@ -171,9 +171,9 @@ context('Vessel sidebar logbook tab', () => {
       .its('response.url')
       .should(
         'have.string',
-        '/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
-          '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER' +
-          '&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime='
+        encodeURIComponent('/bff/v1/vessels/positions?&afterDateTime=&beforeDateTime=' +
+          '&externalReferenceNumber=DONTSINK&internalReferenceNumber=FAK000999999' +
+          '&IRCS=CALLME&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER')
       )
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
     // Go back to the default track depth

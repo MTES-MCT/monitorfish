@@ -85,7 +85,6 @@ export const vesselApi = monitorfishApi.injectEndpoints({
 
         return {
           method: 'GET',
-          // Pass query parameters
           params: {
             afterDateTime,
             beforeDateTime,

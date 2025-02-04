@@ -4,6 +4,7 @@ import { numberOrUndefined, stringOrUndefined } from '../../types'
 
 import type { ProducerOrganizationMembership } from '@features/ProducerOrganizationMembership/types'
 import type { RiskFactor } from '@features/RiskFactor/types'
+import type { VesselLastPositionLightSchema } from '@features/Vessel/schemas/VesselLastPositionLightSchema'
 import type { VesselLastPositionSchema } from '@features/Vessel/schemas/VesselLastPositionSchema'
 import type Feature from 'ol/Feature'
 import type LineString from 'ol/geom/LineString'
@@ -155,6 +156,7 @@ export namespace Vessel {
   export type DeclaredLogbookSpecies = z.infer<typeof DeclaredLogbookSpeciesSchema>
 
   export type VesselLastPosition = z.infer<typeof VesselLastPositionSchema>
+  export type VesselLightLastPosition = z.infer<typeof VesselLastPositionLightSchema>
 
   export type VesselPosition = {
     course: number

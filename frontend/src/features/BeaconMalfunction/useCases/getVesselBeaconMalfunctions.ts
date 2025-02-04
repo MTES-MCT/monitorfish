@@ -36,7 +36,7 @@ export const getVesselBeaconMalfunctions = (isFromUserAction: boolean) => async 
         { fromDate: vesselBeaconMalfunctionsFromDate, vesselId: selectedVessel.vesselId },
         RTK_FORCE_REFETCH_QUERY_OPTIONS
       )
-    )().unwrap()
+    ).unwrap()
 
     dispatch(
       setVesselBeaconMalfunctionsResumeAndHistory({

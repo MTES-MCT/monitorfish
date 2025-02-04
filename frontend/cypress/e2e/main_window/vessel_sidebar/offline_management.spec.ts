@@ -13,8 +13,9 @@ context('Offline management', () => {
     // Given
     cy.intercept(
       'GET',
-      'bff/v1/vessels/find?vesselId=1&internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
-        '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime=',
+      'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=DONTSINK' +
+      '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS' +
+      '&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER',
       { statusCode: 400 }
     ).as('openVessel')
     openVesselBySearch('Pheno')
@@ -82,8 +83,9 @@ context('Offline management', () => {
       {
         method: 'GET',
         path:
-          '/bff/v1/vessels/find?vesselId=1&internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
-          '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime=',
+          'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=DONTSINK' +
+          '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS' +
+          '&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER',
         times: 2
       },
       { statusCode: 400 }
@@ -96,8 +98,9 @@ context('Offline management', () => {
     cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les informations du navire")
     cy.intercept(
       'GET',
-      'bff/v1/vessels/find?vesselId=1&internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
-        '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime='
+      'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=DONTSINK' +
+      '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS' +
+      '&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER',
     ).as('openVessel')
     cy.clickButton('Réessayer')
     cy.wait('@openVessel')
@@ -105,8 +108,9 @@ context('Offline management', () => {
 
     // When clicking on Resume tab
     cy.intercept(
-      'bff/v1/vessels/find?vesselId=1&internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
-        '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime=',
+      'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=DONTSINK' +
+      '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS' +
+      '&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER',
       cy.spy().as('openVesselSpyed')
     )
     cy.get('*[data-cy="vessel-menu-summary"').click()

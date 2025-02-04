@@ -171,7 +171,7 @@ context('Vessel sidebar logbook tab', () => {
       .its('response.url')
       .should(
         'have.string',
-        '/bff/v1/vessels/positions?&afterDateTime=&beforeDateTime=' +
+        '/bff/v1/vessels/positions?afterDateTime=&beforeDateTime=' +
           '&externalReferenceNumber=DONTSINK&internalReferenceNumber=FAK000999999' +
           '&IRCS=CALLME&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER'
       )

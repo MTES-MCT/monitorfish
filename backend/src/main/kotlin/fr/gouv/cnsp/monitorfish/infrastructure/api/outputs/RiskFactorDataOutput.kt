@@ -26,7 +26,9 @@ data class RiskFactorDataOutput(
     companion object {
         fun fromVesselRiskFactor(vesselRiskFactor: VesselRiskFactor) =
             RiskFactorDataOutput(
-                gearOnboard = vesselRiskFactor.gearOnboard?.map { GearLastPositionDataOutput.fromGearLastPosition(it) } ?: listOf(),
+                gearOnboard =
+                    vesselRiskFactor.gearOnboard?.map { GearLastPositionDataOutput.fromGearLastPosition(it) }
+                        ?: listOf(),
                 segments = vesselRiskFactor.segments,
                 segmentHighestImpact = vesselRiskFactor.segmentHighestImpact,
                 segmentHighestPriority = vesselRiskFactor.segmentHighestPriority,

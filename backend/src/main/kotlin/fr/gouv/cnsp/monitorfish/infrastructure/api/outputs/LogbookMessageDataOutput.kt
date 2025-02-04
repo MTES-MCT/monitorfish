@@ -15,7 +15,7 @@ data class LogbookMessageDataOutput(
     override val operationDateTime: ZonedDateTime?,
     override val activityDateTime: ZonedDateTime?,
     override val reportDateTime: ZonedDateTime?,
-    override val integrationDateTime: ZonedDateTime?,
+    override val integrationDateTime: ZonedDateTime,
     override val internalReferenceNumber: String?,
     override val externalReferenceNumber: String?,
     override val ircs: String?,
@@ -32,7 +32,7 @@ data class LogbookMessageDataOutput(
     val rawMessage: String?,
     val tripGears: List<LogbookMessageGearDataOutput>?,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>?,
-): BaseLogbookMessageDataOutput {
+) : BaseLogbookMessageDataOutput {
     companion object {
         fun fromLogbookMessage(logbookMessage: LogbookMessage): LogbookMessageDataOutput {
             val tripGears =

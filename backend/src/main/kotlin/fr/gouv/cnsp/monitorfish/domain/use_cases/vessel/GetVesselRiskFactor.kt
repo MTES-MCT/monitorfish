@@ -15,11 +15,12 @@ class GetVesselRiskFactor(
     private val logger: Logger = LoggerFactory.getLogger(GetVesselRiskFactor::class.java)
 
     fun execute(internalReferenceNumber: String): VesselRiskFactor {
-        val riskFactor = riskFactorRepository.findByInternalReferenceNumber(internalReferenceNumber)
-            ?: throw BackendUsageException(
-                BackendUsageErrorCode.NOT_FOUND_BUT_OK,
-                message = "No risk factor found for vessel $internalReferenceNumber",
-            )
+        val riskFactor =
+            riskFactorRepository.findByInternalReferenceNumber(internalReferenceNumber)
+                ?: throw BackendUsageException(
+                    BackendUsageErrorCode.NOT_FOUND_BUT_OK,
+                    message = "No risk factor found for vessel $internalReferenceNumber",
+                )
 
         return riskFactor
     }

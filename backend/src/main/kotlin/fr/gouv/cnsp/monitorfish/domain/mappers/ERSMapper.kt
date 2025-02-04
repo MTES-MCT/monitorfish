@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 
 @Component
 object ERSMapper {
-    private const val JSONB_NULL_STRING = "null"
+    const val JSONB_NULL_STRING = "null"
 
     fun getERSMessageValueFromJSON(
         mapper: ObjectMapper,

@@ -34,9 +34,9 @@ data class VesselRiskFactor(
     /** CFR (Community Fleet Register Number). */
     val internalReferenceNumber: String? = null,
     val vesselId: Int? = null,
-    val gearOnboard: List<Gear>? = listOf(),
-    val speciesOnboard: List<Species>? = listOf(),
-    val totalWeightOnboard: Double? = null,
+    val gearOnboard: List<Gear> = listOf(),
+    val speciesOnboard: List<Species> = listOf(),
+    val totalWeightOnboard: Double = 0.0,
     val segments: List<String> = listOf(),
     val probableSegments: List<String>? = listOf(),
     val segmentHighestImpact: String? = null,

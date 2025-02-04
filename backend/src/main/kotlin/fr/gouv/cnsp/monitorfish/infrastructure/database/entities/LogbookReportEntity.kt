@@ -2,7 +2,9 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
+import fr.gouv.cnsp.monitorfish.domain.mappers.ERSMapper.JSONB_NULL_STRING
 import fr.gouv.cnsp.monitorfish.domain.mappers.ERSMapper.getERSMessageValueFromJSON
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.deserializeJSONList
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcType
@@ -54,23 +56,23 @@ data class LogbookReportEntity(
     @Column(name = "log_type")
     val messageType: String?,
     @Type(JsonBinaryType::class)
-    @Column(name = "value", nullable = true, columnDefinition = "jsonb")
+    @Column(name = "value", columnDefinition = "jsonb")
     val message: String?,
     @Column(name = "integration_datetime_utc")
     val integrationDateTime: Instant,
     @JdbcType(PostgreSQLEnumJdbcType::class)
     @Column(name = "transmission_format", columnDefinition = "logbook_message_transmission_format")
     @Enumerated(EnumType.STRING)
-    val transmissionFormat: LogbookTransmissionFormat?,
+    val transmissionFormat: LogbookTransmissionFormat,
     @Column(name = "software")
     val software: String?,
     @Column(name = "enriched")
-    val isEnriched: Boolean = false,
+    val isEnriched: Boolean,
     @Type(JsonBinaryType::class)
-    @Column(name = "trip_gears", nullable = true, columnDefinition = "jsonb")
+    @Column(name = "trip_gears", columnDefinition = "jsonb")
     val tripGears: String?,
     @Type(JsonBinaryType::class)
-    @Column(name = "trip_segments", nullable = true, columnDefinition = "jsonb")
+    @Column(name = "trip_segments", columnDefinition = "jsonb")
     val tripSegments: String?,
     @Column(name = "is_test_message")
     val isTestMessage: Boolean = false,
@@ -101,8 +103,8 @@ data class LogbookReportEntity(
             messageType = logbookMessage.messageType,
             operationCountry = null,
             operationType = logbookMessage.operationType,
-            tripGears = null,
-            tripSegments = null,
+            tripGears = JSONB_NULL_STRING,
+            tripSegments = JSONB_NULL_STRING,
         )
     }
 
@@ -137,17 +139,4 @@ data class LogbookReportEntity(
             tripSegments = tripSegments,
         )
     }
-
-    private fun <T> deserializeJSONList(
-        mapper: ObjectMapper,
-        json: String?,
-        clazz: Class<T>,
-    ): List<T> =
-        json?.let {
-            mapper.readValue(
-                json,
-                mapper.typeFactory
-                    .constructCollectionType(MutableList::class.java, clazz),
-            )
-        } ?: listOf()
 }

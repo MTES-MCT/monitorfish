@@ -30,13 +30,6 @@ export namespace MonitorFishMap {
     type: string
   }
 
-  export type AdministrativeOrRegulatoryLayerIdentity = {
-    id: string
-    topic: string | undefined
-    type: string
-    zone: string | undefined
-  }
-
   // TODO Maybe rename this type.
   export type LayerToFeatures = {
     area: number

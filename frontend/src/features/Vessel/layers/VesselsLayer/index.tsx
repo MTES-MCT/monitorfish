@@ -48,6 +48,12 @@ function UnmemoizedVesselsLayer() {
 
     monitorfishMap.getLayers().push(VESSELS_VECTOR_LAYER)
 
+    window.addEventListener('beforeunload', () => {
+      // @ts-ignore
+      monitorfishMap.removeLayer(VESSELS_VECTOR_LAYER)
+      VESSELS_VECTOR_LAYER.dispose()
+    })
+
     return () => {
       // @ts-ignore
       monitorfishMap.removeLayer(VESSELS_VECTOR_LAYER)

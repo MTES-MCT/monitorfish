@@ -76,6 +76,10 @@ function UnmemoizedMissionLayer() {
   useEffect(() => {
     getLayer().name = LayerProperties.MISSION_PIN_POINT.code
     monitorfishMap.getLayers().push(getLayer())
+    window.addEventListener('beforeunload', () => {
+      monitorfishMap.removeLayer(getLayer())
+      getLayer().dispose()
+    })
 
     return () => {
       monitorfishMap.removeLayer(getLayer())

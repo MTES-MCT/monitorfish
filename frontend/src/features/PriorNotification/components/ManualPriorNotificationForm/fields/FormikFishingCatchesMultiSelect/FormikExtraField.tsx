@@ -33,8 +33,14 @@ export function FormikExtraField({ fishingCatchIndex, isReadOnly }: FormikExtraF
         (fishinCatch.$bluefinTunaExtendedCatch.BF2.weight ?? 0) +
         (fishinCatch.$bluefinTunaExtendedCatch.BF3.weight ?? 0)
 
+      const totalQuantity =
+        (fishinCatch.$bluefinTunaExtendedCatch.BF1.quantity ?? 0) +
+        (fishinCatch.$bluefinTunaExtendedCatch.BF2.quantity ?? 0) +
+        (fishinCatch.$bluefinTunaExtendedCatch.BF3.quantity ?? 0)
+
       const nextFishingCatch: PriorNotification.FormDataFishingCatch = {
         ...fishinCatch,
+        quantity: totalQuantity,
         weight: totalWeight
       }
 

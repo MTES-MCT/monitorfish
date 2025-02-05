@@ -65,6 +65,7 @@ def reset_test_data_missing_dep_alerts(reset_test_data):
                 probability_risk_factor,
                 detectability_risk_factor,
                 risk_factor,
+                total_weight_onboard,
                 is_at_port
             ) VALUES
             (
@@ -81,6 +82,7 @@ def reset_test_data_missing_dep_alerts(reset_test_data):
                 2.5,
                 3.1,
                 2.58,
+                0.0,
                 false
             )
         """

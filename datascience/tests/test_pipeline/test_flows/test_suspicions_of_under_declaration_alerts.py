@@ -61,7 +61,8 @@ def reset_test_data_suspicions_of_under_declaration_alerts(reset_test_data):
                 risk_factor,
                 is_at_port,
                 latitude,
-                longitude
+                longitude,
+                total_weight_onboard,
             ) VALUES
             (
                 13639642,
@@ -77,7 +78,8 @@ def reset_test_data_suspicions_of_under_declaration_alerts(reset_test_data):
                 2.58,
                 false,
                 49.606,
-                -0.736
+                -0.736,
+                0.0
             )
         """
             )

@@ -1,12 +1,11 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { FormikCheckbox } from '@mtes-mct/monitor-ui'
+import { ControlUnit, FormikCheckbox } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useFormikContext } from 'formik'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 
-import { PAMControlUnitIds } from '../../constants'
 import { FieldsetGroup } from '../../shared/FieldsetGroup'
 import { missionFormActions } from '../../slice'
 
@@ -32,12 +31,15 @@ export function FormikOtherControlsCheckboxes() {
     }
   }, [dispatch, setFieldValue, mustResetOtherControlsCheckboxes])
 
-  const isCurrentControlUnitPAM = draft.mainFormValues.controlUnits.some(
-    controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id)
+  const isCurrentControlUnitPAMOrULAM = draft.mainFormValues.controlUnits.some(
+    controlUnit =>
+      controlUnit.id &&
+      (ControlUnit.PAMControlUnitIds.includes(controlUnit.id) ||
+        ControlUnit.ULAMControlUnitIds.includes(controlUnit.id))
   )
 
-  // Only PAM control units have these checkboxes displayed
-  if (!isCurrentControlUnitPAM) {
+  // Only PAM or ULAM control units have these checkboxes displayed
+  if (!isCurrentControlUnitPAMOrULAM) {
     return null
   }
 

@@ -317,7 +317,7 @@
                 "segment_highest_impact": "NWW10",
                 "segment_highest_priority": "PEL03",
                 "segments": ["NWW10", "PEL03"],
-                "total_weight_onboard": 12345.67,
+                "total_weight_onboard": null,
                 "trip_number": 123102,
                 "vessel_id": 117,
                 "gear_onboard:jsonb": [

@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-throw-literal */
 
-import {LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION} from '@features/Map/constants'
+import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
+import { FrontendApiError } from '@libs/FrontendApiError'
 import GML from 'ol/format/GML'
 import WFS from 'ol/format/WFS'
 
-import {HttpStatusCode} from './constants'
-import {RegulationActionType} from '../features/Regulation/utils'
+import { HttpStatusCode } from './constants'
+import { RegulationActionType } from '../features/Regulation/utils'
 
-import type {MonitorFishMap} from '@features/Map/Map.types'
-import type {Regulation} from '@features/Regulation/Regulation.types'
-import type {RegulatoryZone} from '@features/Regulation/types'
-import type {GeoJSON} from 'domain/types/GeoJSON'
-import type {Extent} from 'ol/extent'
-import type {GeoJSONFeatureCollection} from 'ol/format/GeoJSON'
-import {FrontendApiError} from "@libs/FrontendApiError";
+import type { MonitorFishMap } from '@features/Map/Map.types'
+import type { Regulation } from '@features/Regulation/Regulation.types'
+import type { RegulatoryZone } from '@features/Regulation/types'
+import type { GeoJSON } from 'domain/types/GeoJSON'
+import type { Extent } from 'ol/extent'
+import type { GeoJSONFeatureCollection } from 'ol/format/GeoJSON'
 
 export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la couche réglementaire"
 const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"

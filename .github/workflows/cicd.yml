@@ -317,13 +317,14 @@ jobs:
           docker cp monitorfish-temp:/home/monitorfish/public ./frontend_build
           docker rm monitorfish-temp
       - name: Generate and upload source maps to Sentry
-        uses: getsentry/action-release@v1
+        uses: getsentry/action-release@v1.9.0
         with:
           environment: ${{ env.ENV_PROFILE }}
           version: ${{ env.VERSION }}
           sourcemaps: ./frontend_build
           ignore_missing: true
           ignore_empty: true
+          inject: true
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}

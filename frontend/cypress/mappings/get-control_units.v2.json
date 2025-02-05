@@ -25,7 +25,7 @@
           {
             "id": 288,
             "controlUnitId": 10121,
-            "email": "pam-jeanne-barret.dirm-memn@developpement-durable.gouv.fr",
+            "email":"dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -34,7 +34,7 @@
           {
             "id": 289,
             "controlUnitId": 10121,
-            "email": "pam-jeanne-barret.dirm-memn@developpement-durable.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -43,7 +43,7 @@
           {
             "id": 287,
             "controlUnitId": 10121,
-            "email": null,
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "ONBOARD_PHONE",
@@ -52,7 +52,7 @@
           {
             "id": 290,
             "controlUnitId": 10121,
-            "email": "pam-jeanne-barret.dirm-memn@developpement-durable.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "ONBOARD_PHONE",
@@ -61,7 +61,7 @@
           {
             "id": 284,
             "controlUnitId": 10121,
-            "email": "pam-jeanne-barret.dirm-memn@developpement-durable.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "COMMANDER_B",
@@ -70,7 +70,7 @@
           {
             "id": 285,
             "controlUnitId": 10121,
-            "email": null,
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "COMMANDER_A",
@@ -79,7 +79,7 @@
           {
             "id": 286,
             "controlUnitId": 10121,
-            "email": null,
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "COMMANDER_B",
@@ -88,7 +88,7 @@
           {
             "id": 283,
             "controlUnitId": 10121,
-            "email": "pam-jeanne-barret.dirm-memn@developpement-durable.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "COMMANDER_A",
@@ -97,7 +97,7 @@
           {
             "id": 281,
             "controlUnitId": 10121,
-            "email": "alexandre.eveno@developpement-durable.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "OPERATIONAL_CENTER",
@@ -106,7 +106,7 @@
           {
             "id": 282,
             "controlUnitId": 10121,
-            "email": "alexandre.eveno@developpement-durable.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "OPERATIONAL_CENTER",
@@ -186,7 +186,7 @@
           {
             "id": 339,
             "controlUnitId": 10141,
-            "email": null,
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "ONBOARD_PHONE",
@@ -195,7 +195,7 @@
           {
             "id": 335,
             "controlUnitId": 10141,
-            "email": "pam.dirm-med@mer.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "COMMANDER_A",
@@ -204,7 +204,7 @@
           {
             "id": 336,
             "controlUnitId": 10141,
-            "email": "pam.dirm-med@mer.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "COMMANDER_B",
@@ -213,7 +213,7 @@
           {
             "id": 333,
             "controlUnitId": 10141,
-            "email": "aurelia.sargeot@mer.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "OPERATIONAL_CENTER",
@@ -222,7 +222,7 @@
           {
             "id": 334,
             "controlUnitId": 10141,
-            "email": "aurelia.sargeot@mer.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "OPERATIONAL_CENTER",
@@ -231,7 +231,7 @@
           {
             "id": 337,
             "controlUnitId": 10141,
-            "email": null,
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "PERMANENT_CONTACT_ONBOARD",
@@ -240,7 +240,7 @@
           {
             "id": 338,
             "controlUnitId": 10141,
-            "email": null,
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "PERMANENT_CONTACT_ONBOARD",
@@ -320,7 +320,7 @@
           {
             "id": 1076,
             "controlUnitId": 10484,
-            "email": "bgc-lorient@douane.finances.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -329,7 +329,7 @@
           {
             "id": 1073,
             "controlUnitId": 10484,
-            "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "OPERATIONAL_CENTER",
@@ -338,7 +338,7 @@
           {
             "id": 1074,
             "controlUnitId": 10484,
-            "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "OPERATIONAL_CENTER",
@@ -347,7 +347,7 @@
           {
             "id": 1075,
             "controlUnitId": 10484,
-            "email": null,
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "PERMANENT_CONTACT_ONBOARD",
@@ -402,7 +402,7 @@
           {
             "id": 727,
             "controlUnitId": 10336,
-            "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -411,7 +411,7 @@
           {
             "id": 728,
             "controlUnitId": 10336,
-            "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -420,7 +420,7 @@
           {
             "id": 729,
             "controlUnitId": 10336,
-            "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -429,7 +429,7 @@
           {
             "id": 730,
             "controlUnitId": 10336,
-            "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -438,7 +438,7 @@
           {
             "id": 726,
             "controlUnitId": 10336,
-            "email": "ggmaratlan@gendarmerie.defense.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "OPERATIONAL_CENTER",
@@ -543,7 +543,7 @@
           {
             "id": 1018,
             "controlUnitId": 10455,
-            "email": "pgmarc720.lorient@gendarmerie.defense.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -552,7 +552,7 @@
           {
             "id": 1019,
             "controlUnitId": 10455,
-            "email": "pgmarc720.lorient@gendarmerie.defense.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -561,7 +561,7 @@
           {
             "id": 1015,
             "controlUnitId": 10455,
-            "email": "ggmaratlan@gendarmerie.defense.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "OPERATIONAL_CENTER",
@@ -570,7 +570,7 @@
           {
             "id": 1016,
             "controlUnitId": 10455,
-            "email": null,
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "PERMANENT_CONTACT_ONBOARD",
@@ -579,7 +579,7 @@
           {
             "id": 1017,
             "controlUnitId": 10455,
-            "email": null,
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "PERMANENT_CONTACT_ONBOARD",
@@ -678,7 +678,7 @@
           {
             "id": 1121,
             "controlUnitId": 10499,
-            "email": "ddtm-samel@morbihan.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -687,7 +687,7 @@
           {
             "id": 1122,
             "controlUnitId": 10499,
-            "email": "ddtm-samel@morbihan.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -792,7 +792,7 @@
           {
             "id": 1014,
             "controlUnitId": 10454,
-            "email": "fabrice.bernard.bmibpl@ofb.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -801,7 +801,7 @@
           {
             "id": 1012,
             "controlUnitId": 10454,
-            "email": "sebastien.perusson@ofb.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "OPERATIONAL_CENTER",
@@ -810,7 +810,7 @@
           {
             "id": 1013,
             "controlUnitId": 10454,
-            "email": "sebastien.perusson@ofb.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "OPERATIONAL_CENTER",
@@ -865,7 +865,7 @@
           {
             "id": 733,
             "controlUnitId": 10338,
-            "email": "sd56@ofb.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -995,7 +995,7 @@
           {
             "id": 366,
             "controlUnitId": 10157,
-            "email": "ddtm-pre@morbihan.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -1050,7 +1050,7 @@
           {
             "id": 165,
             "controlUnitId": 10066,
-            "email": "ddtm-samel@morbihan.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -1180,7 +1180,7 @@
           {
             "id": 993,
             "controlUnitId": 10449,
-            "email": "ddtm-ulam@morbihan.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "Dml Auray",
@@ -1189,7 +1189,7 @@
           {
             "id": 994,
             "controlUnitId": 10449,
-            "email": "ddtm-ulam@morbihan.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "Dml Lorient",
@@ -1198,7 +1198,7 @@
           {
             "id": 995,
             "controlUnitId": 10449,
-            "email": "ddtm-ulam@morbihan.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -1207,7 +1207,7 @@
           {
             "id": 996,
             "controlUnitId": 10449,
-            "email": "ddtm-ulam@morbihan.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -1216,7 +1216,7 @@
           {
             "id": 997,
             "controlUnitId": 10449,
-            "email": "ddtm-ulam@morbihan.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -1225,7 +1225,7 @@
           {
             "id": 998,
             "controlUnitId": 10449,
-            "email": "ddtm-ulam@morbihan.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -1234,7 +1234,7 @@
           {
             "id": 999,
             "controlUnitId": 10449,
-            "email": "ddtm-ulam@morbihan.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
@@ -1243,7 +1243,7 @@
           {
             "id": 1000,
             "controlUnitId": 10449,
-            "email": "ddtm-ulam@morbihan.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",

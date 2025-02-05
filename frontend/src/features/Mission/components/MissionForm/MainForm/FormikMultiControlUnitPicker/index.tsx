@@ -2,14 +2,13 @@ import { useGetLegacyControlUnitsQuery } from '@api/legacyControlUnit'
 import { getControlUnitsOptionsFromControlUnits } from '@features/ControlUnit/utils'
 import { useForceUpdate } from '@hooks/useForceUpdate'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { usePrevious } from '@mtes-mct/monitor-ui'
+import { ControlUnit, usePrevious } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { remove, update } from 'ramda'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ControlUnitSelect } from './ControlUnitSelect'
-import { PAMControlUnitIds } from '../../constants'
 import { useGetMainFormFormikUsecases } from '../../hooks/useGetMainFormFormikUsecases'
 
 import type { MissionMainFormValues } from '../../types'
@@ -30,8 +29,13 @@ export function FormikMultiControlUnitPicker({
   const previousEngagedControlUnit = usePrevious(engagedControlUnit)
 
   const { updateMissionActionOtherControlsCheckboxes } = useGetMainFormFormikUsecases()
-  const isPreviousControlUnitPAM = !!usePrevious(
-    values.controlUnits?.some(controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id))
+  const isPreviousControlUnitPAMOrULAM = !!usePrevious(
+    values.controlUnits?.some(
+      controlUnit =>
+        controlUnit.id &&
+        (ControlUnit.PAMControlUnitIds.includes(controlUnit.id) ||
+          ControlUnit.ULAMControlUnitIds.includes(controlUnit.id))
+    )
   )
 
   const { forceUpdate } = useForceUpdate()
@@ -52,12 +56,12 @@ export function FormikMultiControlUnitPicker({
     (index: number) => {
       const nextControlUnits = remove(index, 1, values[name])
 
-      updateMissionActionOtherControlsCheckboxes(values, isPreviousControlUnitPAM)
+      updateMissionActionOtherControlsCheckboxes(values, isPreviousControlUnitPAMOrULAM)
       setFieldValue(name, nextControlUnits)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [values[name], isPreviousControlUnitPAM]
+    [values[name], isPreviousControlUnitPAMOrULAM]
   )
 
   const handleChange = useCallback(
@@ -67,13 +71,13 @@ export function FormikMultiControlUnitPicker({
     ) => {
       const nextControlUnits = update(index, nextControlUnit, values[name])
 
-      updateMissionActionOtherControlsCheckboxes(values, isPreviousControlUnitPAM)
+      updateMissionActionOtherControlsCheckboxes(values, isPreviousControlUnitPAMOrULAM)
       setFieldValue(name, nextControlUnits)
       forceUpdate()
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [values[name], isPreviousControlUnitPAM]
+    [values[name], isPreviousControlUnitPAMOrULAM]
   )
 
   useEffect(() => {

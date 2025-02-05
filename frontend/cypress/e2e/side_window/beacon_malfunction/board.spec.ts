@@ -238,11 +238,11 @@ context('Side Window > Beacon Malfunction Board', () => {
     cy.intercept(
       'GET',
       new RegExp(
-        `bff\\/v1\\/vessels\\/find\\?vesselId=1&internalReferenceNumber=FAK000999999` +
-          `&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER` +
-          `&trackDepth=CUSTOM` +
-          `&afterDateTime=${oneWeeksBeforeDate.format('YYYY-MM-DD')}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z` +
-          `&beforeDateTime=${oneWeeksBeforePlusOneDayDate.format('YYYY-MM-DD')}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z`
+        `bff\\/v1\\/vessels\\/find\\?` +
+          `afterDateTime=${oneWeeksBeforeDate.format('YYYY-MM-DD')}T\\d{2}%3A\\d{2}%3A\\d{2}\\.\\d{3}Z` +
+          `&beforeDateTime=${oneWeeksBeforePlusOneDayDate.format('YYYY-MM-DD')}T\\d{2}%3A\\d{2}%3A\\d{2}\\.\\d{3}Z` +
+          `&externalReferenceNumber=DONTSINK&internalReferenceNumber=FAK000999999` +
+          `&IRCS=CALLME&trackDepth=CUSTOM&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER`
       )
     ).as('showVesselPositionsOnMap')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-show-vessel"]').click()

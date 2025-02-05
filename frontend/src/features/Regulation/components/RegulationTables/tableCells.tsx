@@ -6,7 +6,7 @@ import { useCallback, type ChangeEvent } from 'react'
 import { SelectPicker, Table } from 'rsuite'
 import styled from 'styled-components'
 
-import { getRiskFactorColor } from 'domain/entities/vessel/riskFactor'
+import { getRiskFactorColor } from '@features/RiskFactor/utils'
 import { theme } from 'ui/theme'
 import { RiskFactorBox } from '@features/Vessel/components/VesselSidebar/risk_factor/RiskFactorBox'
 

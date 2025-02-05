@@ -3,7 +3,7 @@ import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeat
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
-import { Vessel } from '../../../domain/entities/vessel/vessel'
+import { VesselFeature } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { removeVesselReporting } from '../../Vessel/slice'
 import { reportingApi } from '../reportingApi'
@@ -24,7 +24,7 @@ export const deleteReporting =
       dispatch(
         removeVesselReporting({
           reportingType,
-          vesselFeatureId: Vessel.getVesselFeatureId(selectedVesselIdentity)
+          vesselFeatureId: VesselFeature.getVesselFeatureId(selectedVesselIdentity)
         })
       )
 

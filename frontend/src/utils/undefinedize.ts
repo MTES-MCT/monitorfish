@@ -34,8 +34,6 @@ const undefinedizeObjectPropPair = ([key, value]: [string, NativeAny]) => [key, 
  * The value must be of native type and only contains native types.
  */
 export function undefinedize<T extends NativeAny>(value: T): Undefinedized<T> | undefined {
-  // console.debug(value)
-
   if (value === null || value === undefined) {
     return undefined
   }

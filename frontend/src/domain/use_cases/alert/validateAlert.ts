@@ -1,17 +1,17 @@
+import { alertApi } from '@api/alert'
 import { RtkCacheTagType } from '@api/constants'
 import { setPendingAlerts } from '@features/Alert/components/SideWindowAlerts/slice'
 import { removeVesselAlertAndUpdateReporting } from '@features/Vessel/slice'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { vesselApi } from '@features/Vessel/vesselApi'
+import { deleteListItems } from '@utils/deleteListItems'
+import { updateListItemsProp } from '@utils/updateListItemsProp'
 
-import { validateAlertFromAPI } from '../../../api/alert'
-import { deleteListItems } from '../../../utils/deleteListItems'
-import { updateListItemsProp } from '../../../utils/updateListItemsProp'
-import { Vessel } from '../../entities/vessel/vessel'
+import { VesselFeature } from '../../entities/vessel/vessel'
 import { setError } from '../../shared_slices/Global'
 
-import type { MainAppThunk } from '../../../store'
 import type { LEGACY_PendingAlert } from '@features/Alert/types'
+import type { MainAppThunk } from '@store'
 
 export const validateAlert =
   (id: string): MainAppThunk =>
@@ -26,7 +26,8 @@ export const validateAlert =
     }, 3200)
 
     try {
-      await validateAlertFromAPI(id)
+      await dispatch(alertApi.endpoints.validateAlert.initiate(id)).unwrap()
+
       // We dispatch this action to update the reporting list
       // since it depends on the alerts list that we just updated
       dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
@@ -40,7 +41,7 @@ export const validateAlert =
         removeVesselAlertAndUpdateReporting({
           alertType: validatedAlert.value?.type,
           isValidated: true,
-          vesselFeatureId: Vessel.getVesselFeatureId(validatedAlert)
+          vesselFeatureId: VesselFeature.getVesselFeatureId(validatedAlert)
         })
       )
       dispatch(renderVesselFeatures())

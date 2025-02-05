@@ -1,9 +1,4 @@
 import { monitorfishApi } from '@api/api'
-import {
-  useCreateMissionActionMutation,
-  useDeleteMissionActionMutation,
-  useUpdateMissionActionMutation
-} from '@api/missionAction'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { useGetMissionFrontCompletion } from '@features/Mission/components/MissionForm/hooks/useGetMissionFrontCompletion'
 import { MainFormLiveSchema } from '@features/Mission/components/MissionForm/MainForm/schemas'
@@ -11,6 +6,11 @@ import { CompletionStatusTag } from '@features/Mission/components/MissionForm/sh
 import { isMissionActionFormValid } from '@features/Mission/components/MissionForm/utils/isMissionActionFormValid'
 import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
+import {
+  useCreateMissionActionMutation,
+  useDeleteMissionActionMutation,
+  useUpdateMissionActionMutation
+} from '@features/Mission/missionActionApi'
 import { autoSaveMission } from '@features/Mission/useCases/autoSaveMission'
 import { autoSaveMissionAction } from '@features/Mission/useCases/autoSaveMissionAction'
 import { deleteMission } from '@features/Mission/useCases/deleteMission'

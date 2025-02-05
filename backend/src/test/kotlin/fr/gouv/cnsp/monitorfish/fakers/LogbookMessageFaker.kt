@@ -48,7 +48,7 @@ class LogbookMessageFaker {
             rawMessage: String? = null,
             reportDateTime: ZonedDateTime? = null,
             software: String? = null,
-            transmissionFormat: LogbookTransmissionFormat? = null,
+            transmissionFormat: LogbookTransmissionFormat = LogbookTransmissionFormat.ERS,
             tripGears: List<LogbookTripGear>? = emptyList(),
             tripNumber: String? = null,
             tripSegments: List<LogbookTripSegment>? = emptyList(),

@@ -4,7 +4,7 @@ import Circle from 'ol/style/Circle'
 import Stroke from 'ol/style/Stroke'
 
 import {
-  Vessel,
+  VesselFeature,
   VESSEL_ALERT_AND_BEACON_MALFUNCTION,
   VESSEL_ALERT_STYLE,
   VESSEL_BEACON_MALFUNCTION_STYLE,
@@ -73,7 +73,7 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
       filterColor,
       defaultVesselColor
     ],
-    'icon-offset': ['case', ['>', ['get', 'speed'], Vessel.vesselIsMovingSpeed], [0, 0], [25, 0]],
+    'icon-offset': ['case', ['>', ['get', 'speed'], VesselFeature.vesselIsMovingSpeed], [0, 0], [25, 0]],
     'icon-opacity': [
       'case',
       featureHas('hasBeaconMalfunction'),

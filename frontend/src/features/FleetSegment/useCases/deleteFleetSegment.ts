@@ -1,4 +1,4 @@
-import { deleteFleetSegmentFromAPI } from '@features/FleetSegment/apis'
+import { fleetSegmentApi } from '@features/FleetSegment/apis'
 
 import { setError } from '../../../domain/shared_slices/Global'
 
@@ -11,7 +11,9 @@ export const deleteFleetSegment =
   (segment: string, year: number) =>
   async (dispatch): Promise<undefined | FleetSegment[]> => {
     try {
-      const updatedFleetSegments = await deleteFleetSegmentFromAPI(segment, year)
+      const updatedFleetSegments = await dispatch(
+        fleetSegmentApi.endpoints.deleteFleetSegment.initiate({ segment, year })
+      ).unwrap()
 
       return (Object.assign([], updatedFleetSegments) as FleetSegment[]).sort((a, b) =>
         a.segment.localeCompare(b.segment)

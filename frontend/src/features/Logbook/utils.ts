@@ -9,7 +9,8 @@ import { undefinedize } from '../../utils/undefinedize'
 
 import type { CatchProperty, CatchWithProperties, ProtectedCatchWithProperties } from './components/VesselLogbook/types'
 import type { SpeciesInsight, SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from './types'
-import type { DeclaredLogbookSpecies, FishingActivityShowedOnMap } from '../../domain/entities/vessel/types'
+import type { FishingActivityShowedOnMap } from '../../domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 function getCatchPropertiesObject(logbookCatch: Logbook.Catch): CatchProperty {
   return {
@@ -463,15 +464,15 @@ export const getLogbookMessageType = (message: Logbook.Message): string => {
 
 const NOT_FOUND = -1
 
-export function getSummedSpeciesOnBoard(speciesOnBoard: DeclaredLogbookSpecies[]) {
-  return speciesOnBoard.reduce((accumulator: DeclaredLogbookSpecies[], specy: DeclaredLogbookSpecies) => {
+export function getSummedSpeciesOnBoard(speciesOnBoard: Vessel.DeclaredLogbookSpecies[]) {
+  return speciesOnBoard.reduce((accumulator: Vessel.DeclaredLogbookSpecies[], specy: Vessel.DeclaredLogbookSpecies) => {
     const previousSpecyIndex = accumulator.findIndex(existingSpecy => existingSpecy.species === specy.species)
 
     if (previousSpecyIndex !== NOT_FOUND && accumulator[previousSpecyIndex]) {
       const nextSpecy = { ...accumulator[previousSpecyIndex] }
       // @ts-ignore
       nextSpecy.weight = (nextSpecy.weight ?? 0) + specy.weight
-      accumulator[previousSpecyIndex] = nextSpecy as DeclaredLogbookSpecies
+      accumulator[previousSpecyIndex] = nextSpecy as Vessel.DeclaredLogbookSpecies
 
       return accumulator
     }

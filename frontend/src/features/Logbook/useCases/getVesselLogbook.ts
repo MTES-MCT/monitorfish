@@ -12,7 +12,7 @@ import { logbookApi, logbookLightApi } from '../api'
 import { NavigateTo } from '../constants'
 import { logbookActions } from '../slice'
 
-import type { VesselIdentity } from '../../../domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppThunk } from '@store'
 
 /**
@@ -21,7 +21,7 @@ import type { MainAppThunk } from '@store'
 export const getVesselLogbook =
   (isInLightMode: boolean) =>
   (
-    vesselIdentity: VesselIdentity | undefined,
+    vesselIdentity: Vessel.VesselIdentity | undefined,
     navigateTo: NavigateTo | undefined,
     isFromUserAction: boolean,
     nextTripNumber?: string

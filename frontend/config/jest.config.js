@@ -25,7 +25,7 @@ export default {
             '@hooks/*': ['hooks/*'],
             '@libs/*': ['libs/*'],
             '@pages/*': ['pages/*'],
-            '@store': ['store/index.ts'],
+            '@store': ['store/utils.ts'],
             '@store/*': ['store/*'],
             '@utils/*': ['utils/*']
           },

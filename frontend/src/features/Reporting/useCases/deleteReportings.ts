@@ -3,7 +3,7 @@ import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeat
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { isNotNullish } from '@utils/isNotNullish'
 
-import { Vessel } from '../../../domain/entities/vessel/vessel'
+import { VesselFeature } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { removeVesselReportings } from '../../Vessel/slice'
 import { reportingApi } from '../reportingApi'
@@ -47,7 +47,7 @@ function getReportingsInformationFromIds(ids: number[], currentReportings: Repor
       return {
         id: foundReporting.id,
         type: foundReporting.type,
-        vesselFeatureId: Vessel.getVesselFeatureId(foundReporting)
+        vesselFeatureId: VesselFeature.getVesselFeatureId(foundReporting)
       }
     })
     .filter(isNotNullish)

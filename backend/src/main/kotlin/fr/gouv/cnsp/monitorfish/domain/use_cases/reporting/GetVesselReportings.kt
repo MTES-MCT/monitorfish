@@ -78,10 +78,11 @@ class GetVesselReportings(
         logger.info("TIME_RECORD - 'archivedYearsToReportings' took $archivedYearsToReportingsTimeTaken")
 
         val twelveMonthsAgo = ZonedDateTime.now().minusMonths(12)
-        val lastTwelveMonthsReportings = reportings.filter { reporting ->
-            reporting.validationDate?.isAfter(twelveMonthsAgo)
-                ?: reporting.creationDate.isAfter(twelveMonthsAgo)
-        }
+        val lastTwelveMonthsReportings =
+            reportings.filter { reporting ->
+                reporting.validationDate?.isAfter(twelveMonthsAgo)
+                    ?: reporting.creationDate.isAfter(twelveMonthsAgo)
+            }
 
         val (infractionSuspicionsSummary, infractionSuspicionsSummaryTimeTaken) =
             measureTimedValue {

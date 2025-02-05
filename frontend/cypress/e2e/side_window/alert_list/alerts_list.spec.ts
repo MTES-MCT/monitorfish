@@ -62,8 +62,8 @@ context('Side Window > Alert List', () => {
     // Show vessel on map
     cy.intercept(
       'GET',
-      'bff/v1/vessels/find?vesselId=&internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
-        '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime='
+      'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=DONTSINK' +
+      '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS&vesselId=&vesselIdentifier=INTERNAL_REFERENCE_NUMBER'
     ).as('showVesselPositionsOnMap')
     cy.get('*[data-cy="side-window-alerts-show-vessel"]').first().forceClick()
     cy.wait('@showVesselPositionsOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))

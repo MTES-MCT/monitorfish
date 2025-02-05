@@ -4,11 +4,11 @@ import { isNumeric } from '@utils/isNumeric'
 
 import { VesselTrackDepth } from '../../../../../../domain/entities/vesselTrackDepth'
 
-import type { VesselPosition } from '../../../../../../domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { ColumnDef } from '@tanstack/react-table'
 
-export const POSITION_TABLE_COLUMNS: Array<ColumnDef<VesselPosition & { id: number }>> = [
+export const POSITION_TABLE_COLUMNS: Array<ColumnDef<Vessel.VesselPosition & { id: number }>> = [
   {
     accessorKey: 'id',
     cell: info => <HighlightPositionCell row={info.row.original} value={info.getValue()} />,

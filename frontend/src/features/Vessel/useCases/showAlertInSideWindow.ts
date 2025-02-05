@@ -11,11 +11,18 @@ export const showAlertInSideWindow =
     dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
     dispatch(
       focusOnAlert({
+        beaconNumber: selectedVessel.beaconNumber,
+        districtCode: selectedVessel.districtCode,
         externalReferenceNumber: selectedVessel.externalReferenceNumber,
         flagState: selectedVessel.flagState,
         internalReferenceNumber: selectedVessel.internalReferenceNumber,
         ircs: selectedVessel.ircs,
-        name: selectedVessel.alerts?.length ? selectedVessel?.alerts[0] : null
+        mmsi: selectedVessel.mmsi,
+        name: selectedVessel.alerts?.length ? selectedVessel?.alerts[0] : undefined,
+        vesselId: selectedVessel.vesselId,
+        vesselIdentifier: selectedVessel.vesselIdentifier,
+        vesselLength: selectedVessel.length,
+        vesselName: selectedVessel.vesselName
       })
     )
   }

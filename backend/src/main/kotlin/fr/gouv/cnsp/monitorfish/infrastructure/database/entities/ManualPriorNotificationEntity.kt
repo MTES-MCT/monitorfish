@@ -103,7 +103,7 @@ data class ManualPriorNotificationEntity(
                     operationNumber = null,
                     operationType = LogbookOperationType.DAT,
                     reportDateTime = sentAt,
-                    transmissionFormat = null,
+                    transmissionFormat = LogbookTransmissionFormat.MANUAL,
                     tripGears = tripGears,
                     tripSegments = tripSegments,
                     vesselName = vesselName,

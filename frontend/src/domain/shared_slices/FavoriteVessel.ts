@@ -1,20 +1,17 @@
 // TODO Move that into Vessel slice, or into a User slice if there are other per-user customizable data.
 
+import { extractVesselIdentityProps, getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { createSlice } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
-import {
-  getOnlyVesselIdentityProperties,
-  getVesselCompositeIdentifier,
-  vesselsAreEquals
-} from '../entities/vessel/vessel'
+import { vesselsAreEquals } from '../entities/vessel/vessel'
 
-import type { VesselIdentity } from '../entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 const FAVORITE_VESSELS_LOCAL_STORAGE_KEY = 'favoriteVessels'
 
 export type FavoriteVesselState = {
-  favorites: VesselIdentity[]
+  favorites: Vessel.VesselIdentity[]
 }
 const INITIAL_STATE: FavoriteVesselState = {
   favorites: getLocalStorageState([], FAVORITE_VESSELS_LOCAL_STORAGE_KEY)
@@ -32,7 +29,7 @@ const favoriteVesselSlice = createSlice({
      * @param {{payload: Vessel}} action - The vessel
      */
     addVesselToFavorites(state, action) {
-      const newFavorite = getOnlyVesselIdentityProperties(action.payload)
+      const newFavorite = extractVesselIdentityProps(action.payload)
 
       // Remove vessel if found
       state.favorites = state.favorites.filter(favoriteVessel => !vesselsAreEquals(favoriteVessel, newFavorite))

@@ -1,7 +1,7 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
-import { missionActionApi } from '@api/missionAction'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 import { getMissionActionsToCreateUpdateOrDelete } from '@features/Mission/components/MissionForm/utils'
+import { missionActionApi } from '@features/Mission/missionActionApi'
 import { monitorfishMissionApi } from '@features/Mission/monitorfishMissionApi'
 import { saveMission } from '@features/Mission/useCases/saveMission'
 import { logSoftError } from '@mtes-mct/monitor-ui'

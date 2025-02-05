@@ -1,9 +1,10 @@
-import { monitorfishApi, monitorfishApiKy } from './api'
-import { FrontendApiError } from '../libs/FrontendApiError'
+import { monitorfishApi } from '@api/api'
+import { FrontendApiError } from '@libs/FrontendApiError'
 
 import type { MissionAction } from '@features/Mission/missionAction.types'
 
 const GET_MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les actions de la mission"
+export const MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les contrôles de ce navire"
 
 export const missionActionApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
@@ -27,6 +28,18 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_MISSION_ACTIONS_ERROR_MESSAGE, response)
     }),
 
+    getVesselControls: builder.query<MissionAction.MissionControlsSummary, { fromDate: string; vesselId: number }>({
+      query: ({ fromDate, vesselId }) => ({
+        method: 'GET',
+        params: {
+          afterDateTime: fromDate,
+          vesselId
+        },
+        url: '/mission_actions/controls'
+      }),
+      transformErrorResponse: response => new FrontendApiError(MISSION_ACTIONS_ERROR_MESSAGE, response)
+    }),
+
     updateMissionAction: builder.mutation<void, MissionAction.MissionAction>({
       query: missionAction => ({
         body: missionAction,
@@ -43,21 +56,3 @@ export const {
   useGetMissionActionsQuery,
   useUpdateMissionActionMutation
 } = missionActionApi
-
-export const MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les contrôles de ce navire"
-
-/**
- * Get vessel controls
- *
- * @throws {@link FrontendApiError}
- *
- */
-export async function getVesselControlsFromAPI(vesselId: number, fromDate: string) {
-  try {
-    return await monitorfishApiKy
-      .get(`/bff/v1/mission_actions/controls?vesselId=${vesselId}&afterDateTime=${fromDate}`)
-      .json<MissionAction.MissionControlsSummary>()
-  } catch (err) {
-    throw new FrontendApiError(MISSION_ACTIONS_ERROR_MESSAGE, (err as FrontendApiError).originalError)
-  }
-}

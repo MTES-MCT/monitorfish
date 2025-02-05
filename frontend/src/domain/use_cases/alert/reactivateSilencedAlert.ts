@@ -1,16 +1,16 @@
+import { alertApi } from '@api/alert'
 import { setSilencedAlerts } from '@features/Alert/components/SideWindowAlerts/slice'
+import { deleteListItems } from '@utils/deleteListItems'
+import { updateListItemsProp } from '@utils/updateListItemsProp'
 
-import { deleteSilencedAlertFromAPI } from '../../../api/alert'
-import { deleteListItems } from '../../../utils/deleteListItems'
-import { updateListItemsProp } from '../../../utils/updateListItemsProp'
 import { setError } from '../../shared_slices/Global'
 
-import type { MainAppThunk } from '../../../store'
 import type { LEGACY_SilencedAlert } from '@features/Alert/types'
+import type { MainAppThunk } from '@store'
 
 export const reactivateSilencedAlert =
   (id: string): MainAppThunk =>
-  (dispatch, getState) => {
+  async (dispatch, getState) => {
     const previousSilencedAlerts = getState().alert.silencedAlerts
     const previousSilencedAlertsWithReactivatedFlag = setAlertAsReactivated(previousSilencedAlerts, id)
     dispatch(setSilencedAlerts(previousSilencedAlertsWithReactivatedFlag))
@@ -20,19 +20,17 @@ export const reactivateSilencedAlert =
       dispatch(setSilencedAlerts(previousSilencedAlertsWithoutReactivatedFlag))
     }, 3200)
 
-    deleteSilencedAlertFromAPI(id).catch(error => {
+    try {
+      await dispatch(alertApi.endpoints.deleteSilencedAlert.initiate(id)).unwrap()
+    } catch (error) {
       clearTimeout(timeout)
       dispatch(setSilencedAlerts(previousSilencedAlerts))
       dispatch(setError(error))
-    })
+    }
   }
 
 function setAlertAsReactivated(previousSilencedAlerts: LEGACY_SilencedAlert[], id: string) {
   return updateListItemsProp(previousSilencedAlerts, 'id', id, {
     isReactivated: true
   })
-}
-
-export function removeAlert(previousAlerts: LEGACY_SilencedAlert[], id: string) {
-  return deleteListItems(previousAlerts, 'id', id)
 }

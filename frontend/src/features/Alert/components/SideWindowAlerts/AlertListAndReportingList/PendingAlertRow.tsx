@@ -1,5 +1,6 @@
 import { COLORS } from '@constants/constants'
 import { Flag } from '@features/Vessel/components/VesselList/tableCells'
+import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import countries from 'i18n-iso-countries'
@@ -93,7 +94,8 @@ export function PendingAlertRow({
               alt="Voir sur la carte"
               data-cy="side-window-alerts-show-vessel"
               onClick={() => {
-                dispatch(showVessel(alert, false, true))
+                const identity = extractVesselIdentityProps(alert)
+                dispatch(showVessel(identity, false, true))
               }}
               src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
               style={showIconStyle}

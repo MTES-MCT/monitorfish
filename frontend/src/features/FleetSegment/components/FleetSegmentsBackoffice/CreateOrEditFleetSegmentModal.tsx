@@ -47,14 +47,14 @@ export function CreateOrEditFleetSegmentModal({
     return {
       faoAreas: [],
       gears: [],
-      impactRiskFactor: undefined,
+      impactRiskFactor: 2.0,
       mainScipSpeciesType: undefined,
       maxMesh: undefined,
       minMesh: undefined,
       minShareOfTargetSpecies: undefined,
       priority: 0,
       segment: '',
-      segmentName: undefined,
+      segmentName: '',
       targetSpecies: [],
       vesselTypes: [],
       year

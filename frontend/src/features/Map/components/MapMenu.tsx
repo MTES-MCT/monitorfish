@@ -9,12 +9,12 @@ import MapMenuOverlay from './MapMenuOverlay'
 import { vesselSelectors } from '../../Vessel/slice'
 import { LayerProperties } from '../constants'
 
-import type { VesselEnhancedLastPositionWebGLObject } from '../../../domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 export function MapMenu() {
   const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
   const [coordinates, setCoordinates] = useState<number[]>([])
-  const vessel = useRef<VesselEnhancedLastPositionWebGLObject | undefined>()
+  const vessel = useRef<Vessel.VesselEnhancedLastPositionWebGLObject | undefined>()
 
   useEffect(() => {
     function showMenu(event) {

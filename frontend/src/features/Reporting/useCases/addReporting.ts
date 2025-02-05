@@ -1,7 +1,7 @@
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
-import { Vessel } from '../../../domain/entities/vessel/vessel'
+import { VesselFeature } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { addVesselReporting } from '../../Vessel/slice'
 import { reportingApi } from '../reportingApi'
@@ -20,7 +20,7 @@ export const addReporting =
       dispatch(
         addVesselReporting({
           reportingType: newReporting?.type,
-          vesselFeatureId: Vessel.getVesselFeatureId(selectedVesselIdentity)
+          vesselFeatureId: VesselFeature.getVesselFeatureId(selectedVesselIdentity)
         })
       )
 

@@ -1,6 +1,6 @@
 import type { BackofficeAppDispatch, BackofficeAppThunk, MainAppDispatch, MainAppThunk } from '@store'
 
-// These types are used for store-hybrid thunks (use cases)
+// These schemas are used for store-hybrid thunks (use cases)
 export type HybridAppDispatch = BackofficeAppDispatch | MainAppDispatch
 export type HybridAppThunk<T extends HybridAppDispatch, R = void> = T extends BackofficeAppDispatch
   ? BackofficeAppThunk<R>

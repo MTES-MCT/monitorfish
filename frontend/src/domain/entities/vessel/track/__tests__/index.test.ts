@@ -1,16 +1,14 @@
+import { Vessel } from '@features/Vessel/Vessel.types'
 import { describe, expect, it } from '@jest/globals'
 import { includes } from 'lodash'
 
+import { getFeaturesFromPositions, getTrackType } from '../index'
 import {
   DUMMY_VESSEL_TRACK,
   VESSEL_TRACK_ALL_SAME_COORDINATES,
   VESSEL_TRACK_FEW_SAME_COORDINATES
 } from './__mocks__/vesselTrack'
 import { DUMMY_VESSEL_TRACK_WITH_DUPLICATE_POSITIONS } from './__mocks__/vesselTrackWithDuplicatePositions'
-import { NetworkType } from '../../types'
-import { getFeaturesFromPositions, getTrackType } from '../index'
-
-import type { VesselLineFeature, VesselPointFeature, VesselPosition } from '../../types'
 
 describe('vessel/track', () => {
   it('getFeaturesFromPositions Should draw multiple points with the same coordinates', async () => {
@@ -45,16 +43,16 @@ describe('vessel/track', () => {
         from: 'FR',
         internalReferenceNumber: 'ABC000898396',
         ircs: 'ZBRI',
-        isAtPort: null,
-        isFishing: null,
-        isManual: null,
+        isAtPort: undefined,
+        isFishing: undefined,
+        isManual: undefined,
         latitude: 46.386,
         longitude: -3.328,
-        mmsi: null,
-        networkType: NetworkType.SATELLITE,
+        mmsi: undefined,
+        networkType: Vessel.NetworkType.SATELLITE,
         positionType: 'VMS',
         speed: 2.8,
-        tripNumber: null,
+        tripNumber: undefined,
         vesselName: 'CE DEVANT ÉLEVER'
       }
     ]
@@ -66,7 +64,7 @@ describe('vessel/track', () => {
     // Then
     expect(features).toHaveLength(1)
 
-    const feature = features[0] as VesselPointFeature
+    const feature = features[0] as Vessel.VesselPointFeature
     expect(feature).toMatchObject({
       course: 356,
       dateTime: '2022-10-27T16:10:20.4564+02:00',
@@ -99,7 +97,7 @@ describe('vessel/track', () => {
     expect(positionFeatures.map(position => position.course)).toEqual(expectedPositionsCourses)
 
     // First Line
-    const firstLineFeature = lineFeatures[0] as VesselLineFeature
+    const firstLineFeature = lineFeatures[0] as Vessel.VesselLineFeature
     expect(firstLineFeature!.course!.toString()).toContain('-1.8')
     expect(firstLineFeature!.speed).toEqual(2.8)
     expect(firstLineFeature!.isTimeEllipsis).toEqual(false)
@@ -114,7 +112,7 @@ describe('vessel/track', () => {
     ])
 
     // Second Line
-    const secondLineFeature = lineFeatures[1] as VesselLineFeature
+    const secondLineFeature = lineFeatures[1] as Vessel.VesselLineFeature
     expect(secondLineFeature!.course!.toString()).toContain('-2.57')
     expect(secondLineFeature!.speed).toEqual(2.9)
     expect(secondLineFeature!.isTimeEllipsis).toEqual(false)
@@ -128,7 +126,7 @@ describe('vessel/track', () => {
     ])
 
     // Last position
-    const positionFeature = positionFeatures[5] as VesselPointFeature
+    const positionFeature = positionFeatures[5] as Vessel.VesselPointFeature
     expect(positionFeature!.course).toEqual(263)
     expect(positionFeature!.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:position:5')
     // A Point geometry is of type Coordinate[]
@@ -153,7 +151,7 @@ describe('vessel/track', () => {
     expect(positionFeatures).toHaveLength(1)
     expect(arrowFeatures).toHaveLength(0)
 
-    const position = positionFeatures[0] as VesselPointFeature
+    const position = positionFeatures[0] as Vessel.VesselPointFeature
     expect(position.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:position:0')
     expect(position.dateTime).toEqual('2022-11-14T07:23:00Z')
   })
@@ -183,9 +181,9 @@ describe('vessel/track', () => {
 
   it('getTrackType Should return FISHING When two positions have the isFishing property set as true', async () => {
     // Given
-    const firstPosition = DUMMY_VESSEL_TRACK[0] as VesselPosition
+    const firstPosition = DUMMY_VESSEL_TRACK[0] as Vessel.VesselPosition
     firstPosition.isFishing = true
-    const secondPosition = DUMMY_VESSEL_TRACK[1] as VesselPosition
+    const secondPosition = DUMMY_VESSEL_TRACK[1] as Vessel.VesselPosition
     secondPosition.isFishing = true
 
     // When
@@ -197,9 +195,9 @@ describe('vessel/track', () => {
 
   it('getTrackType Should not return FISHING When first position does have the isFishing property set as true', async () => {
     // Given
-    const firstPosition = DUMMY_VESSEL_TRACK[0] as VesselPosition
+    const firstPosition = DUMMY_VESSEL_TRACK[0] as Vessel.VesselPosition
     firstPosition.isFishing = false
-    const secondPosition = DUMMY_VESSEL_TRACK[1] as VesselPosition
+    const secondPosition = DUMMY_VESSEL_TRACK[1] as Vessel.VesselPosition
     secondPosition.isFishing = true
 
     // When
@@ -211,9 +209,9 @@ describe('vessel/track', () => {
 
   it('getTrackType Should not return FISHING When second position does have the isFishing property set as true', async () => {
     // Given
-    const firstPosition = DUMMY_VESSEL_TRACK[0] as VesselPosition
+    const firstPosition = DUMMY_VESSEL_TRACK[0] as Vessel.VesselPosition
     firstPosition.isFishing = true
-    const secondPosition = DUMMY_VESSEL_TRACK[1] as VesselPosition
+    const secondPosition = DUMMY_VESSEL_TRACK[1] as Vessel.VesselPosition
     secondPosition.isFishing = false
 
     // When
@@ -225,7 +223,7 @@ describe('vessel/track', () => {
 
   it('getTrackType Should return FISHING When only one position is given and does have the isFishing property set as true', async () => {
     // Given
-    const firstPosition = DUMMY_VESSEL_TRACK[0] as VesselPosition
+    const firstPosition = DUMMY_VESSEL_TRACK[0] as Vessel.VesselPosition
     firstPosition.isFishing = true
 
     // When

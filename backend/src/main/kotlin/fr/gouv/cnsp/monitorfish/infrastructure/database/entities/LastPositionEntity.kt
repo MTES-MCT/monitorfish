@@ -38,9 +38,9 @@ data class LastPositionEntity(
     @Column(name = "trip_number")
     val tripNumber: String? = null,
     @Column(name = "latitude")
-    val latitude: Double? = null,
+    val latitude: Double,
     @Column(name = "longitude")
-    val longitude: Double? = null,
+    val longitude: Double,
     @Column(name = "estimated_current_latitude")
     val estimatedCurrentLatitude: Double? = null,
     @Column(name = "estimated_current_longitude")
@@ -82,7 +82,7 @@ data class LastPositionEntity(
     @Column(name = "species_onboard", columnDefinition = "jsonb")
     val speciesOnboard: String? = null,
     @Column(name = "total_weight_onboard")
-    val totalWeightOnboard: Double? = null,
+    val totalWeightOnboard: Double,
     @Column(name = "last_control_datetime_utc")
     val lastControlDateTime: ZonedDateTime? = null,
     @Column(name = "last_control_infraction")
@@ -93,17 +93,17 @@ data class LastPositionEntity(
     @Enumerated(EnumType.STRING)
     val vesselIdentifier: VesselIdentifier,
     @Column(name = "impact_risk_factor")
-    val impactRiskFactor: Double? = null,
+    val impactRiskFactor: Double,
     @Column(name = "probability_risk_factor")
-    val probabilityRiskFactor: Double? = null,
+    val probabilityRiskFactor: Double,
     @Column(name = "detectability_risk_factor")
-    val detectabilityRiskFactor: Double? = null,
+    val detectabilityRiskFactor: Double,
     @Column(name = "risk_factor")
-    val riskFactor: Double? = null,
+    val riskFactor: Double,
     @Column(name = "under_charter")
     val underCharter: Boolean? = null,
     @Column(name = "is_at_port")
-    val isAtPort: Boolean? = null,
+    val isAtPort: Boolean,
     @Column(name = "alerts", columnDefinition = "varchar(200)[]")
     val alerts: List<String>? = listOf(),
     @Column(name = "beacon_malfunction_id")

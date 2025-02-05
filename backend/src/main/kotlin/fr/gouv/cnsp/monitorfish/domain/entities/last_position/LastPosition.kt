@@ -2,6 +2,10 @@ package fr.gouv.cnsp.monitorfish.domain.entities.last_position
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultDetectabilityRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultImpactRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultProbabilityRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.Duration
 import java.time.ZonedDateTime
@@ -41,17 +45,17 @@ data class LastPosition(
     val gearOnboard: List<Gear>? = listOf(),
     val segments: List<String>? = listOf(),
     val speciesOnboard: List<Species>? = listOf(),
-    val totalWeightOnboard: Double? = null,
+    val totalWeightOnboard: Double = 0.0,
     val lastControlDateTime: ZonedDateTime? = null,
     val lastControlInfraction: Boolean? = null,
     val postControlComment: String? = null,
     val vesselIdentifier: VesselIdentifier,
-    val impactRiskFactor: Double? = null,
-    val probabilityRiskFactor: Double? = null,
-    val detectabilityRiskFactor: Double? = null,
-    val riskFactor: Double? = null,
+    val impactRiskFactor: Double = defaultImpactRiskFactor,
+    val probabilityRiskFactor: Double = defaultProbabilityRiskFactor,
+    val detectabilityRiskFactor: Double = defaultDetectabilityRiskFactor,
+    val riskFactor: Double = defaultRiskFactor,
     val underCharter: Boolean? = null,
-    val isAtPort: Boolean? = null,
+    val isAtPort: Boolean = false,
     val alerts: List<String>? = listOf(),
     val beaconMalfunctionId: Int? = null,
     val reportings: List<String> = listOf(),

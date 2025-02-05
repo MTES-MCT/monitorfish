@@ -1,10 +1,10 @@
 import { WSG84_PROJECTION } from '@features/Map/constants'
+import { Vessel } from '@features/Vessel/Vessel.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTracking } from '@hooks/useTracking'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
 import { getCoordinates } from 'coordinates'
 import dayjs from 'dayjs'
-import { NetworkType } from 'domain/entities/vessel/types'
 import countries from 'i18n-iso-countries'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
@@ -14,9 +14,8 @@ import { PrimaryButton } from '../../../../../commonStyles/Buttons.style'
 import ExportSVG from '../../../../../icons/Bouton_exporter_piste_navire.svg?react'
 
 import type { DownloadAsCsvMap } from '@utils/downloadAsCsv'
-import type { VesselPosition } from 'domain/entities/vessel/types'
 
-type VesselPositionWithId = VesselPosition & {
+type VesselPositionWithId = Vessel.VesselPosition & {
   id: string
   latitude: string
   longitude: string
@@ -87,11 +86,11 @@ export function ExportTrack() {
         networkType: {
           label: 'Type de réseau',
           transform: position => {
-            if (position.networkType === NetworkType.CELLULAR) {
+            if (position.networkType === Vessel.NetworkType.CELLULAR) {
               return 'Cellulaire'
             }
 
-            if (position.networkType === NetworkType.SATELLITE) {
+            if (position.networkType === Vessel.NetworkType.SATELLITE) {
               return 'Satellite'
             }
 

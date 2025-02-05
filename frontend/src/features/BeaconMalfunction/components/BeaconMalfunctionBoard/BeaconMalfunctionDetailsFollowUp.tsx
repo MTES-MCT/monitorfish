@@ -12,10 +12,10 @@ import { BeaconMalfunctionDetailsFollowUpItem } from './BeaconMalfunctionDetails
 import { BeaconMalfunctionDetailsFollowUpRow } from './BeaconMalfunctionDetailsFollowUpRow'
 import { BeaconMalfunctionDetailsType, getContent } from './utils'
 import { setUserType } from '../../../../domain/shared_slices/Global'
-import { saveBeaconMalfunctionCommentFromKanban } from '../../../../domain/use_cases/beaconMalfunction/saveBeaconMalfunctionCommentFromKanban'
 import { getDate, mergeObjects } from '../../../../utils'
 import CommentsSVG from '../../../icons/Commentaires.svg?react'
 import { UserType, VESSEL_STATUS } from '../../constants'
+import { saveBeaconMalfunctionCommentFromKanban } from '../../useCases/saveBeaconMalfunctionCommentFromKanban'
 
 import type { BeaconMalfunctionFollowUpItem, BeaconMalfunctionStatusValue } from '../../types'
 import type { CSSProperties } from 'react'

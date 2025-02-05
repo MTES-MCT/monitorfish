@@ -8,11 +8,11 @@ import { getExtentFromGeoJSON } from '../../../utils'
 import { animateToExtent } from '../../Map/slice'
 import { setPreviewFilteredVesselsFeatures } from '../slice'
 
-import type { VesselEnhancedLastPositionWebGLObject } from '../../../domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppThunk } from '@store'
 
 export const previewVessels =
-  (filteredVessels: VesselEnhancedLastPositionWebGLObject[]): MainAppThunk =>
+  (filteredVessels: Vessel.VesselEnhancedLastPositionWebGLObject[]): MainAppThunk =>
   async (dispatch, getState) => {
     const { zonesSelected } = getState().vesselList
     const vesselFeatureIds = filteredVessels.map(vessel => vessel.vesselFeatureId)

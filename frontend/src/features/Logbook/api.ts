@@ -6,14 +6,14 @@ import { NavigateTo } from './constants'
 import { Logbook } from './Logbook.types'
 import { monitorfishApi, monitorfishLightApi } from '../../api/api'
 
-import type { VesselIdentity } from '../../domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 const LAST_LOGBOOK_TRIPS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les dernières marées"
 const LOGBOOK_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les messages JPE de ce navire"
 
 export type GetVesselLogbookParams = {
   tripNumber: string | number | undefined
-  vesselIdentity: VesselIdentity
+  vesselIdentity: Vessel.VesselIdentity
   voyageRequest: NavigateTo | undefined
 }
 

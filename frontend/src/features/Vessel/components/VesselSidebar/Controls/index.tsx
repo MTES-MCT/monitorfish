@@ -1,4 +1,5 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
+import { getVesselControls } from '@features/Mission/useCases/getVesselControls'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
@@ -12,7 +13,6 @@ import {
   setControlFromDate,
   setControlSummary
 } from '../../../../../domain/shared_slices/Control'
-import { getVesselControls } from '../../../../../domain/use_cases/mission/getVesselControls'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 

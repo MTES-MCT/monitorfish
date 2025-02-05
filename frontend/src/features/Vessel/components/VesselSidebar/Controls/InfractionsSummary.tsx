@@ -3,9 +3,9 @@ import styled from 'styled-components'
 import { NoValue } from '../common_styles/common.style'
 
 type InfractionsSummaryProps = {
-  numberOfControlsWithSomeGearsSeized: number
-  numberOfControlsWithSomeSpeciesSeized: number
-  numberOfDiversions: number
+  numberOfControlsWithSomeGearsSeized: number | undefined
+  numberOfControlsWithSomeSpeciesSeized: number | undefined
+  numberOfDiversions: number | undefined
 }
 export function InfractionsSummary({
   numberOfControlsWithSomeGearsSeized,

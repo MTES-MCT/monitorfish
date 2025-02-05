@@ -1,7 +1,7 @@
 import { uniq } from 'lodash'
 
-import type { RiskFactor } from '../../../../domain/entities/vessel/riskFactor/types'
 import type { Gear } from '../../../../domain/types/Gear'
+import type { RiskFactor } from '../../../RiskFactor/types'
 import type { FleetSegment } from '@features/FleetSegment/types'
 
 export function getTargetSpeciesIncludedInSegments(

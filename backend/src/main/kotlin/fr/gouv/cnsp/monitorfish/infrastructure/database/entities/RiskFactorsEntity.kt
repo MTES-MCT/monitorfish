@@ -30,10 +30,10 @@ data class RiskFactorsEntity(
     val riskFactor: Double,
     @Type(JsonBinaryType::class)
     @Column(name = "gear_onboard", columnDefinition = "jsonb")
-    val gearOnboard: String,
+    val gearOnboard: String?,
     @Type(JsonBinaryType::class)
     @Column(name = "species_onboard", columnDefinition = "jsonb")
-    val speciesOnboard: String,
+    val speciesOnboard: String?,
     @Column(name = "segments", columnDefinition = "varchar(50)[]")
     val segments: List<String>,
     @Column(name = "segment_highest_impact")
@@ -47,7 +47,7 @@ data class RiskFactorsEntity(
     @Column(name = "control_rate_risk_factor")
     val controlRateRiskFactor: Double,
     @Column(name = "total_weight_onboard")
-    val totalWeightOnboard: Double,
+    val totalWeightOnboard: Double?,
     @Column(name = "infraction_score")
     val infractionScore: Double? = null,
     @Column(name = "number_controls_last_5_years")
@@ -78,7 +78,7 @@ data class RiskFactorsEntity(
             controlPriorityLevel = controlPriorityLevel,
             segmentHighestImpact = segmentHighestImpact,
             segmentHighestPriority = segmentHighestPriority,
-            totalWeightOnboard = totalWeightOnboard,
+            totalWeightOnboard = totalWeightOnboard ?: 0.0,
             lastControlDatetime = lastControlDatetime,
             controlRateRiskFactor = controlRateRiskFactor,
             numberControlsLastFiveYears = numberControlsLastFiveYears,

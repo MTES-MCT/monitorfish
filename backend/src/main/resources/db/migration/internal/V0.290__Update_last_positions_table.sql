@@ -9,4 +9,6 @@ ALTER TABLE public.last_positions
 ALTER TABLE public.last_positions
     ALTER COLUMN probability_risk_factor SET NOT NULL;
 ALTER TABLE public.last_positions
+    ALTER COLUMN detectability_risk_factor SET NOT NULL;
+ALTER TABLE public.last_positions
     ALTER COLUMN risk_factor SET NOT NULL;

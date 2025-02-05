@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-throw-literal */
 
-import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
+import {LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION} from '@features/Map/constants'
 import GML from 'ol/format/GML'
 import WFS from 'ol/format/WFS'
 
-import { HttpStatusCode } from './constants'
-import { RegulationActionType } from '../features/Regulation/utils'
-import { ApiError } from '../libs/ApiError'
+import {HttpStatusCode} from './constants'
+import {RegulationActionType} from '../features/Regulation/utils'
 
-import type { MonitorFishMap } from '@features/Map/Map.types'
-import type { Regulation } from '@features/Regulation/Regulation.types'
-import type { RegulatoryZone } from '@features/Regulation/types'
-import type { GeoJSON } from 'domain/types/GeoJSON'
-import type { Extent } from 'ol/extent'
-import type { GeoJSONFeatureCollection } from 'ol/format/GeoJSON'
+import type {MonitorFishMap} from '@features/Map/Map.types'
+import type {Regulation} from '@features/Regulation/Regulation.types'
+import type {RegulatoryZone} from '@features/Regulation/types'
+import type {GeoJSON} from 'domain/types/GeoJSON'
+import type {Extent} from 'ol/extent'
+import type {GeoJSONFeatureCollection} from 'ol/format/GeoJSON'
+import {FrontendApiError} from "@libs/FrontendApiError";
 
 export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la couche réglementaire"
 const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
@@ -23,7 +23,7 @@ const UPDATE_REGULATION_MESSAGE =
   'Une erreur est survenue lors de la mise à jour de la zone réglementaire dans GeoServer'
 
 function throwIrretrievableAdministrativeZoneError(e, type) {
-  throw new ApiError(`Nous n'avons pas pu récupérer la zone ${type}`, e)
+  throw new FrontendApiError(`Nous n'avons pas pu récupérer la zone ${type}`, e)
 }
 
 function getIrretrievableRegulatoryZoneError(e, regulatoryZone) {

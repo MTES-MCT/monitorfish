@@ -1,5 +1,13 @@
 // TODO Fix the `no-unsafe-optional-chaining` statements.
 
+import { ChevronIcon } from '@features/commonStyles/icons/ChevronIcon.style'
+import {
+  getDetectabilityRiskFactorText,
+  getImpactRiskFactorText,
+  getProbabilityRiskFactorText,
+  getRiskFactorColor
+} from '@features/RiskFactor/utils'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -8,14 +16,6 @@ import { ImpactRiskFactorDetails } from './details/ImpactRiskFactorDetails'
 import { ProbabilityRiskFactorDetails } from './details/ProbabilityRiskFactorDetails'
 import { RiskFactorCursor } from './RiskFactorCursor'
 import { RiskFactorExplanationModal } from './RiskFactorExplanationModal'
-import {
-  getDetectabilityRiskFactorText,
-  getImpactRiskFactorText,
-  getProbabilityRiskFactorText,
-  getRiskFactorColor
-} from '../../../../../domain/entities/vessel/riskFactor'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { ChevronIcon } from '../../../../commonStyles/icons/ChevronIcon.style'
 import RiskFactorControlSVG from '../../../../icons/Note_de_controle_gyrophare.svg?react'
 import RiskFactorImpactSVG from '../../../../icons/Note_impact_poisson.svg?react'
 import RiskFactorInfractionsSVG from '../../../../icons/Note_infraction_stop.svg?react'
@@ -36,14 +36,13 @@ export function RiskFactorResume() {
             <GlobalRiskFactor>Note de risque globale</GlobalRiskFactor>
             <GlobalRisk data-cy="global-risk-factor">
               <RiskFactorCursor
-                color={getRiskFactorColor(selectedVessel?.riskFactor?.riskFactor)}
+                color={getRiskFactorColor(selectedVessel.riskFactor.riskFactor)}
                 height={24}
                 isBig
                 // eslint-disable-next-line no-unsafe-optional-chaining
-                progress={(100 * selectedVessel?.riskFactor?.riskFactor) / 4}
+                progress={(100 * selectedVessel.riskFactor.riskFactor) / 4}
                 underCharter={selectedVessel.underCharter}
-                // TODO `selectedVessel?.riskFactor?.riskFactor` is a `string | number`. Fix that.
-                value={parseFloat(selectedVessel?.riskFactor?.riskFactor as unknown as string).toFixed(1)}
+                value={selectedVessel.riskFactor.riskFactor}
               />
               <GlobalText $underCharter={selectedVessel.underCharter}>
                 <SeeMore
@@ -64,22 +63,21 @@ export function RiskFactorResume() {
               </SubRiskHeader>
               <RiskFactorImpact />
               <RiskFactorCursor
-                color={getRiskFactorColor(selectedVessel?.riskFactor?.impactRiskFactor)}
+                color={getRiskFactorColor(selectedVessel.riskFactor.impactRiskFactor)}
                 height={8}
                 // eslint-disable-next-line no-unsafe-optional-chaining
-                progress={(100 * selectedVessel?.riskFactor?.impactRiskFactor) / 4}
-                // TODO `selectedVessel?.riskFactor?.riskFactor` is a `string | number`. Fix that.
-                value={parseFloat(selectedVessel?.riskFactor?.impactRiskFactor as unknown as string).toFixed(1)}
+                progress={(100 * selectedVessel.riskFactor.impactRiskFactor) / 4}
+                value={selectedVessel.riskFactor.impactRiskFactor}
               />
               <SubRiskText
                 title={getImpactRiskFactorText(
-                  selectedVessel?.riskFactor?.impactRiskFactor,
-                  !!selectedVessel?.riskFactor?.segmentHighestImpact
+                  selectedVessel.riskFactor.impactRiskFactor,
+                  !!selectedVessel.riskFactor.segmentHighestImpact
                 )}
               >
                 {getImpactRiskFactorText(
-                  selectedVessel?.riskFactor?.impactRiskFactor,
-                  !!selectedVessel?.riskFactor?.segmentHighestImpact
+                  selectedVessel.riskFactor.impactRiskFactor,
+                  !!selectedVessel.riskFactor.segmentHighestImpact
                 )}
               </SubRiskText>
             </SubRisk>
@@ -95,22 +93,21 @@ export function RiskFactorResume() {
               </SubRiskHeader>
               <RiskFactorInfractions />
               <RiskFactorCursor
-                color={getRiskFactorColor(selectedVessel?.riskFactor?.probabilityRiskFactor)}
+                color={getRiskFactorColor(selectedVessel.riskFactor.probabilityRiskFactor)}
                 height={8}
                 // eslint-disable-next-line no-unsafe-optional-chaining
-                progress={(100 * selectedVessel?.riskFactor?.probabilityRiskFactor) / 4}
-                // TODO `selectedVessel?.riskFactor?.riskFactor` is a `string | number`. Fix that.
-                value={parseFloat(selectedVessel?.riskFactor?.probabilityRiskFactor as unknown as string).toFixed(1)}
+                progress={(100 * selectedVessel.riskFactor.probabilityRiskFactor) / 4}
+                value={selectedVessel.riskFactor.probabilityRiskFactor}
               />
               <SubRiskText
                 title={getProbabilityRiskFactorText(
-                  selectedVessel?.riskFactor?.probabilityRiskFactor,
-                  !!selectedVessel?.riskFactor?.numberControlsLastFiveYears
+                  selectedVessel.riskFactor.probabilityRiskFactor,
+                  !!selectedVessel.riskFactor.numberControlsLastFiveYears
                 )}
               >
                 {getProbabilityRiskFactorText(
-                  selectedVessel?.riskFactor?.probabilityRiskFactor,
-                  !!selectedVessel?.riskFactor?.numberControlsLastFiveYears
+                  selectedVessel.riskFactor.probabilityRiskFactor,
+                  !!selectedVessel.riskFactor.numberControlsLastFiveYears
                 )}
               </SubRiskText>
             </SubRisk>
@@ -126,17 +123,16 @@ export function RiskFactorResume() {
               </SubRiskHeader>
               <RiskFactorControl />
               <RiskFactorCursor
-                color={getRiskFactorColor(selectedVessel?.riskFactor?.detectabilityRiskFactor)}
+                color={getRiskFactorColor(selectedVessel.riskFactor.detectabilityRiskFactor)}
                 height={8}
                 // eslint-disable-next-line no-unsafe-optional-chaining
-                progress={(100 * selectedVessel?.riskFactor?.detectabilityRiskFactor) / 4}
-                // TODO `selectedVessel?.riskFactor?.riskFactor` is a `string | number`. Fix that.
-                value={parseFloat(selectedVessel?.riskFactor?.detectabilityRiskFactor as unknown as string).toFixed(1)}
+                progress={(100 * selectedVessel.riskFactor.detectabilityRiskFactor) / 4}
+                value={selectedVessel.riskFactor.detectabilityRiskFactor}
               />
               <SubRiskText
-                title={getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true)}
+                title={getDetectabilityRiskFactorText(selectedVessel.riskFactor.detectabilityRiskFactor, true)}
               >
-                {getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true)}
+                {getDetectabilityRiskFactorText(selectedVessel.riskFactor.detectabilityRiskFactor, true)}
               </SubRiskText>
             </SubRisk>
             <DetectabilityRiskFactorDetails isOpen={detectabilityRiskFactorIsOpen} />
@@ -151,7 +147,7 @@ export function RiskFactorResume() {
 }
 
 const GlobalText = styled.div<{
-  $underCharter: boolean
+  $underCharter: boolean | undefined
 }>`
   ${p =>
     p.$underCharter
@@ -203,7 +199,7 @@ const GlobalRisk = styled.div`
 `
 
 const SeeMore = styled.a<{
-  $underCharter: boolean
+  $underCharter: boolean | undefined
 }>`
   font-size: 11px;
   color: ${p => p.theme.color.slateGray};

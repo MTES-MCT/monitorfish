@@ -26,7 +26,7 @@ data class VesselDataOutput(
     val vesselType: String? = null,
     val sailingCategory: String? = null,
     val sailingType: String? = null,
-    val declaredFishingGears: List<String>? = null,
+    val declaredFishingGears: List<String>,
     val pinger: Boolean? = null,
     val navigationLicenceExpirationDate: Date? = null,
     val navigationLicenceExtensionDate: Date? = null,

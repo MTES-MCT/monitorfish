@@ -2,7 +2,7 @@ import { LayerProperties } from '@features/Map/constants'
 import { getLabelLineStyle } from '@features/Map/layers/styles/labelLine.style'
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
-import { extractVesselPropertiesFromFeature } from '@features/Vessel/utils'
+import { extractVesselPropertiesFromFeature, getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
 import LineString from 'ol/geom/LineString'
@@ -12,11 +12,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
 import { drawMovedLabelLineIfFoundAndReturnOffset } from '../../../domain/entities/vessel/label'
-import {
-  getVesselCompositeIdentifier,
-  getVesselLastPositionVisibilityDates,
-  Vessel
-} from '../../../domain/entities/vessel/vessel'
+import { getVesselLastPositionVisibilityDates, VesselFeature } from '../../../domain/entities/vessel/vessel'
 import { VesselLabelLine } from '../../../domain/entities/vesselLabelLine'
 import { VesselLabelOverlay } from '../components/VesselLabelOverlay'
 import { vesselSelectors } from '../slice'
@@ -204,7 +200,11 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
       // @ts-ignore
       ?.getSource()
     vesselsLayer?.current?.forEachFeatureInExtent(monitorfishMap.getView().calculateExtent(), vesselFeature => {
-      const opacity = Vessel.getVesselOpacity(vesselFeature.get('dateTime'), vesselIsHidden, vesselIsOpacityReduced)
+      const opacity = VesselFeature.getVesselOpacity(
+        vesselFeature.get('dateTime'),
+        vesselIsHidden,
+        vesselIsOpacityReduced
+      )
       const identity = {
         externalReferenceNumber: vesselFeature.get('externalReferenceNumber'),
         internalReferenceNumber: vesselFeature.get('internalReferenceNumber'),
@@ -250,7 +250,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
           'vesselIdentifier',
           'vesselName'
         ])
-        const label = Vessel.getVesselFeatureLabel(vesselProperties, {
+        const label = VesselFeature.getVesselFeatureLabel(vesselProperties, {
           hideVesselsAtPort,
           isRiskFactorShowed: isSuperUser && riskFactorShowedOnMap,
           vesselLabel,
@@ -264,7 +264,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
         }
         const labelLineFeatureId = VesselLabelLine.getFeatureId(identity)
         const opacity =
-          Vessel.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced) ||
+          VesselFeature.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced) ||
           vesselProperties.beaconMalfunctionId
             ? 1
             : 0
@@ -333,7 +333,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
       const isFiltered = filterShowed && nonFilteredVesselsAreHidden // && filteredVesselsFeaturesUids?.length FIXME: if filterShowed, is it really necessary to check filteredVesselsFeaturesUids ?
       let featuresRequiringLabel
       if (hideNonSelectedVessels) {
-        const selectedVesselId = selectedVessel && Vessel.getVesselFeatureId(selectedVessel)
+        const selectedVesselId = selectedVessel && VesselFeature.getVesselFeatureId(selectedVessel)
         const showedFeaturesIdentities = Object.keys(vesselsTracksShowed)
         featuresRequiringLabel = featuresInExtent.filter(
           feature =>

@@ -2,7 +2,7 @@
 
 import { FrontendApiError } from '@libs/FrontendApiError'
 
-import { monitorfishApi, monitorfishApiKy } from './api'
+import { monitorfishApi } from './api'
 
 import type {
   LEGACY_PendingAlert,
@@ -41,97 +41,43 @@ export const alertApi = monitorfishApi.injectEndpoints({
         url: `/operational_alerts/silenced`
       }),
       transformErrorResponse: response => new FrontendApiError(CREATE_SILENCED_ALERT_ERROR_MESSAGE, response)
+    }),
+    deleteSilencedAlert: builder.mutation<void, string>({
+      query: id => ({
+        method: 'DELETE',
+        url: `/operational_alerts/silenced/${id}`
+      }),
+      transformErrorResponse: response => new FrontendApiError(DELETE_SILENCED_ALERT_ERROR_MESSAGE, response)
+    }),
+    getOperationalAlerts: builder.query<LEGACY_PendingAlert[], void>({
+      query: () => '/operational_alerts',
+      transformErrorResponse: response => new FrontendApiError(ALERTS_ERROR_MESSAGE, response),
+      transformResponse: (response: PendingAlert[]) => response.map(normalizePendingAlert)
+    }),
+    getSilencedAlerts: builder.query<LEGACY_SilencedAlert[], void>({
+      query: () => '/operational_alerts/silenced',
+      transformErrorResponse: response => new FrontendApiError(ALERTS_ERROR_MESSAGE, response)
+    }),
+    silenceAlert: builder.mutation<
+      LEGACY_SilencedAlert,
+      { id: string; silencedAlertPeriodRequest: SilencedAlertPeriodRequest }
+    >({
+      query: ({ id, silencedAlertPeriodRequest }) => ({
+        body: {
+          beforeDateTime: silencedAlertPeriodRequest.beforeDateTime?.toISOString() ?? '',
+          silencedAlertPeriod: silencedAlertPeriodRequest.silencedAlertPeriod ?? ''
+        },
+        method: 'PUT',
+        url: `/operational_alerts/${id}/silence`
+      }),
+      transformErrorResponse: response => new FrontendApiError(SILENCE_ALERT_ERROR_MESSAGE, response)
+    }),
+    validateAlert: builder.mutation<void, string>({
+      query: id => ({
+        method: 'PUT',
+        url: `/operational_alerts/${id}/validate`
+      }),
+      transformErrorResponse: response => new FrontendApiError(VALIDATE_ALERT_ERROR_MESSAGE, response)
     })
   })
 })
-
-export const { useCreateSilencedAlertMutation } = alertApi
-
-/**
- * Get operational alerts
- *
- * @throws {@link FrontendApiError}
- */
-async function getOperationalAlertsFromAPI(): Promise<LEGACY_PendingAlert[]> {
-  try {
-    const data = await monitorfishApiKy.get('/bff/v1/operational_alerts').json<PendingAlert[]>()
-
-    return data.map(normalizePendingAlert)
-  } catch (err) {
-    throw new FrontendApiError(ALERTS_ERROR_MESSAGE, (err as FrontendApiError).originalError)
-  }
-}
-
-/**
- * Validate an alert
- *
- * @throws {@link FrontendApiError}
- */
-async function validateAlertFromAPI(id: string): Promise<void> {
-  try {
-    await monitorfishApiKy.put(`/bff/v1/operational_alerts/${id}/validate`)
-  } catch (err) {
-    throw new FrontendApiError(VALIDATE_ALERT_ERROR_MESSAGE, (err as FrontendApiError).originalError)
-  }
-}
-
-/**
- * Silence an alert and returns the saved silenced alert
- *
- * @throws {@link FrontendApiError}
- */
-async function silenceAlertFromAPI(
-  id: string,
-  silencedAlertPeriodRequest: SilencedAlertPeriodRequest
-): Promise<LEGACY_SilencedAlert> {
-  // TODO Normalize this data before calling the api service rather than here.
-  const silencedAlertPeriod = silencedAlertPeriodRequest.silencedAlertPeriod ?? ''
-  const beforeDateTime = silencedAlertPeriodRequest.beforeDateTime?.toISOString() ?? ''
-
-  try {
-    return await monitorfishApiKy
-      .put(`/bff/v1/operational_alerts/${id}/silence`, {
-        json: {
-          beforeDateTime,
-          silencedAlertPeriod
-        }
-      })
-      .json<SilencedAlert>()
-  } catch (err) {
-    throw new FrontendApiError(SILENCE_ALERT_ERROR_MESSAGE, (err as FrontendApiError).originalError)
-  }
-}
-
-/**
- * Get silenced alerts
- *
- * @throws {@link FrontendApiError}
- */
-async function getSilencedAlertsFromAPI(): Promise<LEGACY_SilencedAlert[]> {
-  try {
-    return await monitorfishApiKy.get('/bff/v1/operational_alerts/silenced').json<SilencedAlert[]>()
-  } catch (err) {
-    throw new FrontendApiError(ALERTS_ERROR_MESSAGE, (err as FrontendApiError).originalError)
-  }
-}
-
-/**
- * Delete a silenced alert
- *
- * @throws {@link FrontendApiError}
- */
-async function deleteSilencedAlertFromAPI(id: string): Promise<void> {
-  try {
-    await monitorfishApiKy.delete(`/bff/v1/operational_alerts/silenced/${id}`)
-  } catch (err) {
-    throw new FrontendApiError(DELETE_SILENCED_ALERT_ERROR_MESSAGE, (err as FrontendApiError).originalError)
-  }
-}
-
-export {
-  getOperationalAlertsFromAPI,
-  validateAlertFromAPI,
-  silenceAlertFromAPI,
-  getSilencedAlertsFromAPI,
-  deleteSilencedAlertFromAPI
-}

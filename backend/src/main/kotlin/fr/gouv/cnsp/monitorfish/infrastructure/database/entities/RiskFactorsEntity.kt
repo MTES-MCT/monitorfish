@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.deserializeJSONList
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -29,10 +30,10 @@ data class RiskFactorsEntity(
     val riskFactor: Double,
     @Type(JsonBinaryType::class)
     @Column(name = "gear_onboard", columnDefinition = "jsonb")
-    val gearOnboard: String?,
+    val gearOnboard: String,
     @Type(JsonBinaryType::class)
     @Column(name = "species_onboard", columnDefinition = "jsonb")
-    val speciesOnboard: String?,
+    val speciesOnboard: String,
     @Column(name = "segments", columnDefinition = "varchar(50)[]")
     val segments: List<String>,
     @Column(name = "segment_highest_impact")
@@ -45,6 +46,8 @@ data class RiskFactorsEntity(
     val lastControlDatetime: ZonedDateTime? = null,
     @Column(name = "control_rate_risk_factor")
     val controlRateRiskFactor: Double,
+    @Column(name = "total_weight_onboard")
+    val totalWeightOnboard: Double,
     @Column(name = "infraction_score")
     val infractionScore: Double? = null,
     @Column(name = "number_controls_last_5_years")
@@ -69,22 +72,13 @@ data class RiskFactorsEntity(
             detectabilityRiskFactor = detectabilityRiskFactor,
             riskFactor = riskFactor,
             internalReferenceNumber = cfr,
-            gearOnboard =
-                mapper.readValue(
-                    gearOnboard,
-                    mapper.typeFactory
-                        .constructCollectionType(MutableList::class.java, Gear::class.java),
-                ),
-            speciesOnboard =
-                mapper.readValue(
-                    speciesOnboard,
-                    mapper.typeFactory
-                        .constructCollectionType(MutableList::class.java, Species::class.java),
-                ),
+            gearOnboard = deserializeJSONList(mapper, gearOnboard, Gear::class.java),
+            speciesOnboard = deserializeJSONList(mapper, speciesOnboard, Species::class.java),
             segments = segments,
             controlPriorityLevel = controlPriorityLevel,
             segmentHighestImpact = segmentHighestImpact,
             segmentHighestPriority = segmentHighestPriority,
+            totalWeightOnboard = totalWeightOnboard,
             lastControlDatetime = lastControlDatetime,
             controlRateRiskFactor = controlRateRiskFactor,
             numberControlsLastFiveYears = numberControlsLastFiveYears,

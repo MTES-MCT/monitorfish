@@ -1,9 +1,9 @@
+import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { VesselSearchResultItem } from './VesselSearchResultItem'
-import { getVesselCompositeIdentifier } from '../../domain/entities/vessel/vessel'
 
 export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, showLastSearchedVessels }) {
   const lastSearchedVessels = useMainAppSelector(state => state.global.lastSearchedVessels)

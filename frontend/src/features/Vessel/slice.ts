@@ -1,29 +1,17 @@
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
+import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { createEntityAdapter, createSlice, type EntityState, type PayloadAction } from '@reduxjs/toolkit'
 
-import {
-  atLeastOneVesselSelected,
-  getOnlyVesselIdentityProperties,
-  Vessel,
-  VesselSidebarTab
-} from '../../domain/entities/vessel/vessel'
+import { atLeastOneVesselSelected, VesselFeature, VesselSidebarTab } from '../../domain/entities/vessel/vessel'
 import { ReportingType, ReportingTypeCharacteristics } from '../Reporting/types'
 
-import type {
-  FishingActivityShowedOnMap,
-  ShowedVesselTrack,
-  TrackRequest,
-  VesselEnhancedLastPositionWebGLObject,
-  VesselFeatureId,
-  VesselIdentity,
-  VesselPosition
-} from '../../domain/entities/vessel/types'
-import type { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
+import type { FishingActivityShowedOnMap, ShowedVesselTrack, TrackRequest } from '../../domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 const NOT_FOUND = -1
 
 export const vesselsAdapter = createEntityAdapter({
-  selectId: (vessel: VesselEnhancedLastPositionWebGLObject) => vessel.vesselFeatureId,
+  selectId: (vessel: Vessel.VesselEnhancedLastPositionWebGLObject) => vessel.vesselFeatureId,
   sortComparer: false
 })
 
@@ -31,13 +19,13 @@ export const vesselsAdapter = createEntityAdapter({
 export type VesselState = {
   fishingActivitiesShowedOnMap: FishingActivityShowedOnMap[]
   hideNonSelectedVessels: boolean
-  highlightedVesselTrackPosition: VesselPosition | null
+  highlightedVesselTrackPosition: Vessel.VesselPosition | null
   isFocusedOnVesselSearch: boolean
   loadingPositions: boolean | null
   loadingVessel: boolean | null
-  selectedVessel: VesselTypes.AugmentedSelectedVessel | undefined
-  selectedVesselIdentity: VesselIdentity | undefined
-  selectedVesselPositions: VesselPosition[] | null
+  selectedVessel: Vessel.AugmentedSelectedVessel | undefined
+  selectedVesselIdentity: Vessel.VesselIdentity | undefined
+  selectedVesselPositions: Vessel.VesselPosition[] | null
   selectedVesselSidebarTab: VesselSidebarTab
   selectedVesselTrackRequest: TrackRequest | null
   tripMessagesLastToFormerDEPDateTimes: any[]
@@ -45,7 +33,7 @@ export type VesselState = {
   uniqueVesselsSpecies: any[]
   vesselSidebarIsOpen: boolean
   vesselTrackExtent: any | null
-  vessels: EntityState<VesselEnhancedLastPositionWebGLObject, VesselFeatureId>
+  vessels: EntityState<Vessel.VesselEnhancedLastPositionWebGLObject, Vessel.VesselFeatureId>
   vesselsEstimatedPositions: any[]
   vesselsTracksShowed: Record<string, ShowedVesselTrack>
 }
@@ -84,7 +72,7 @@ const vesselSlice = createSlice({
       state,
       action: PayloadAction<{
         reportingType: ReportingType
-        vesselFeatureId: VesselFeatureId
+        vesselFeatureId: Vessel.VesselFeatureId
       }>
     ) {
       const vessel = vesselSelectors.selectById(state.vessels, action.payload.vesselFeatureId)
@@ -104,7 +92,7 @@ const vesselSlice = createSlice({
 
       if (
         state.selectedVesselIdentity &&
-        Vessel.getVesselFeatureId(state.selectedVesselIdentity) === action.payload.vesselFeatureId
+        VesselFeature.getVesselFeatureId(state.selectedVesselIdentity) === action.payload.vesselFeatureId
       ) {
         let reportings: ReportingType[] = []
 
@@ -115,7 +103,7 @@ const vesselSlice = createSlice({
         const nextVesselReportings = reportings.concat(action.payload.reportingType)
 
         state.selectedVessel = {
-          ...(state.selectedVessel as VesselTypes.AugmentedSelectedVessel),
+          ...(state.selectedVessel as Vessel.AugmentedSelectedVessel),
           hasInfractionSuspicion: nextVesselReportings.some(reportingIsAnInfractionSuspicion),
           reportings: nextVesselReportings
         }
@@ -154,7 +142,7 @@ const vesselSlice = createSlice({
     /**
      * Highlight a vessel position on map from the vessel track positions table
      */
-    highlightVesselTrackPosition(state, action: PayloadAction<VesselPosition | null>) {
+    highlightVesselTrackPosition(state, action: PayloadAction<Vessel.VesselPosition | null>) {
       state.highlightedVesselTrackPosition = action.payload
     },
 
@@ -162,7 +150,7 @@ const vesselSlice = createSlice({
       state,
       action: PayloadAction<{
         calledFromCron: boolean
-        vesselIdentity: VesselIdentity
+        vesselIdentity: Vessel.VesselIdentity
       }>
     ) {
       state.selectedVesselIdentity = action.payload.vesselIdentity
@@ -183,7 +171,7 @@ const vesselSlice = createSlice({
       action: PayloadAction<{
         alertType: string
         isValidated: boolean
-        vesselFeatureId: VesselFeatureId
+        vesselFeatureId: Vessel.VesselFeatureId
       }>
     ) {
       const vessel = vesselSelectors.selectById(state.vessels, action.payload.vesselFeatureId)
@@ -225,7 +213,7 @@ const vesselSlice = createSlice({
         }
         reportingsWithAlert = reportingsWithAlert.concat([ReportingType.ALERT])
         state.selectedVessel = {
-          ...(state.selectedVessel as VesselTypes.AugmentedSelectedVessel),
+          ...(state.selectedVessel as Vessel.AugmentedSelectedVessel),
           alerts: filteredAlerts,
           hasAlert: !!filteredAlerts?.length,
           hasInfractionSuspicion: reportingsWithAlert.some(reportingType =>
@@ -243,7 +231,7 @@ const vesselSlice = createSlice({
       state,
       action: PayloadAction<{
         reportingType: string
-        vesselFeatureId: VesselFeatureId
+        vesselFeatureId: Vessel.VesselFeatureId
       }>
     ) {
       const vessel = vesselSelectors.selectById(state.vessels, action.payload.vesselFeatureId)
@@ -264,7 +252,7 @@ const vesselSlice = createSlice({
 
       if (
         state.selectedVessel &&
-        Vessel.getVesselFeatureId(state.selectedVesselIdentity) === action.payload.vesselFeatureId
+        VesselFeature.getVesselFeatureId(state.selectedVesselIdentity) === action.payload.vesselFeatureId
       ) {
         const vesselReportingWithoutFirstFoundReportingType =
           state.selectedVessel.reportings?.reduce(filterFirstFoundReportingType(action.payload.reportingType), []) || []
@@ -323,7 +311,7 @@ const vesselSlice = createSlice({
         return
       }
 
-      const selectedVesselFeatureId = Vessel.getVesselFeatureId(state.selectedVesselIdentity)
+      const selectedVesselFeatureId = VesselFeature.getVesselFeatureId(state.selectedVesselIdentity)
       if (
         state.selectedVessel &&
         vesselsFeatureIds.find(vesselFeatureId => selectedVesselFeatureId === vesselFeatureId)
@@ -337,19 +325,13 @@ const vesselSlice = createSlice({
         )
 
         state.selectedVessel = {
-          ...(state.selectedVessel as VesselTypes.AugmentedSelectedVessel),
+          ...(state.selectedVessel as Vessel.AugmentedSelectedVessel),
           hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingTypes.some(reportingType =>
             reportingIsAnInfractionSuspicion(reportingType)
           ),
           reportings: vesselReportingWithoutFirstFoundReportingTypes
         }
       }
-    },
-    /**
-     * Reset the highlighted vessel position
-     */
-    resetHighlightedVesselTrackPosition(state) {
-      state.highlightedVesselTrackPosition = null
     },
 
     resetLoadingVessel(state) {
@@ -384,7 +366,7 @@ const vesselSlice = createSlice({
       )
     },
 
-    setFilteredVesselsFeatures(state, action: PayloadAction<VesselFeatureId>) {
+    setFilteredVesselsFeatures(state, action: PayloadAction<Vessel.VesselFeatureId>) {
       const filteredVesselsFeaturesUids = action.payload
       const vesselIds = state.vessels.ids
 
@@ -436,14 +418,14 @@ const vesselSlice = createSlice({
     setSelectedVessel(
       state,
       action: PayloadAction<{
-        positions: VesselPosition[]
-        vessel: VesselTypes.SelectedVessel
+        positions: Vessel.VesselPosition[]
+        vessel: Vessel.SelectedVessel
       }>
     ) {
       state.loadingVessel = null
       state.loadingPositions = null
       state.selectedVessel = action.payload.vessel
-      state.selectedVesselIdentity = getOnlyVesselIdentityProperties(action.payload.vessel)
+      state.selectedVesselIdentity = extractVesselIdentityProps(action.payload.vessel)
       state.selectedVesselPositions = action.payload.positions
     },
 
@@ -463,7 +445,7 @@ const vesselSlice = createSlice({
       state.selectedVesselSidebarTab = action.payload
     },
 
-    setVessels(state, action: PayloadAction<VesselEnhancedLastPositionWebGLObject[]>) {
+    setVessels(state, action: PayloadAction<Vessel.VesselEnhancedLastPositionWebGLObject[]>) {
       if (!action.payload || !Array.isArray(action.payload)) {
         return
       }
@@ -490,7 +472,7 @@ const vesselSlice = createSlice({
     /**
      * Update the positions of the vessel
      */
-    updateSelectedVesselPositions(state, action: PayloadAction<VesselPosition[]>) {
+    updateSelectedVesselPositions(state, action: PayloadAction<Vessel.VesselPosition[]>) {
       state.loadingPositions = null
       state.selectedVesselPositions = action.payload
     },
@@ -593,7 +575,6 @@ export const {
   removeVesselAlertAndUpdateReporting,
   removeVesselReporting,
   removeVesselReportings,
-  resetHighlightedVesselTrackPosition,
   resetLoadingVessel,
   resetSelectedVessel,
   setAllVesselsAsUnfiltered,

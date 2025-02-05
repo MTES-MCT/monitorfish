@@ -1,33 +1,109 @@
-import { RtkCacheTagType } from '@api/constants'
+import { monitorfishApi } from '@api/api'
+import { HttpStatusCode, RtkCacheTagType } from '@api/constants'
+import { VesselLastPositionSchema } from '@features/Vessel/schemas/VesselLastPositionSchema'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
+import { parseResponseOrReturn } from '@utils/parseResponseOrReturn'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
-import { getVesselIdentityPropsAsEmptyStringsWhenUndefined } from './utils'
-import { monitorfishApi } from '../../api/api'
+import { getVesselIdentityFromLegacyVesselIdentity, getVesselIdentityPropsAsEmptyStringsWhenUndefined } from './utils'
+import { Vessel } from './Vessel.types'
 
-import type { Vessel } from './Vessel.types'
+import type { TrackRequest } from '../../domain/entities/vessel/types'
+import type { Meta } from '@api/BackendApi.types'
 import type { VesselReportings } from '@features/Reporting/types'
-import type { RiskFactor } from 'domain/entities/vessel/riskFactor/types'
-import type { VesselLastPosition } from 'domain/entities/vessel/types'
 
 const GET_VESSEL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations de ce navire."
 const GET_VESSEL_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les signalements de ce navire."
 const SEARCH_VESSELS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les navires correspondants à cette recherche."
+const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
 
 export const vesselApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
-    getRiskFactor: builder.query<RiskFactor, string>({
-      providesTags: () => [{ type: 'RiskFactor' }],
-      query: internalReferenceNumber => `/vessels/risk_factor?internalReferenceNumber=${internalReferenceNumber}`
-    }),
-
     getVessel: builder.query<Vessel.Vessel, number>({
       providesTags: () => [{ type: RtkCacheTagType.Vessel }],
       query: id => `/vessels/${id}`,
       transformErrorResponse: response => new FrontendApiError(GET_VESSEL_ERROR_MESSAGE, response)
+    }),
+
+    /**
+     * Get vessel information and positions.
+     *
+     * Transforms the response by reading the JSON body and setting
+     * `isTrackDepthModified` based on the response status.
+     */
+    getVesselAndPositions: builder.query<
+      { isTrackDepthModified: boolean; vesselAndPositions: Vessel.VesselAndPositions },
+      { trackRequest: TrackRequest; vesselIdentity: Vessel.VesselIdentity }
+    >({
+      query: ({ trackRequest, vesselIdentity }) => {
+        const { externalReferenceNumber, internalReferenceNumber, ircs, vesselId, vesselIdentifier } =
+          getVesselIdentityPropsAsEmptyStringsWhenUndefined(getVesselIdentityFromLegacyVesselIdentity(vesselIdentity))
+        const trackDepth = trackRequest.trackDepth ?? ''
+        const afterDateTime = trackRequest.afterDateTime?.toISOString() ?? ''
+        const beforeDateTime = trackRequest.beforeDateTime?.toISOString() ?? ''
+
+        return {
+          method: 'GET',
+          params: {
+            afterDateTime,
+            beforeDateTime,
+            externalReferenceNumber,
+            internalReferenceNumber,
+            IRCS: ircs,
+            trackDepth,
+            vesselId,
+            vesselIdentifier
+          },
+          url: `/vessels/find`
+        }
+      },
+      transformErrorResponse: response => new FrontendApiError(VESSEL_POSITIONS_ERROR_MESSAGE, response),
+      transformResponse: async (baseQueryReturnValue: Vessel.VesselAndPositions, meta: Meta) => ({
+        isTrackDepthModified: meta?.response?.status === HttpStatusCode.ACCEPTED,
+        vesselAndPositions: baseQueryReturnValue
+      })
+    }),
+
+    /**
+     * Get vessel positions.
+     *
+     * Transforms the response by reading the JSON body and setting
+     * `isTrackDepthModified` based on the response status.
+     */
+    getVesselPositions: builder.query<
+      { isTrackDepthModified: boolean; positions: Vessel.VesselPosition[] },
+      { trackRequest: TrackRequest; vesselIdentity: Vessel.VesselIdentity }
+    >({
+      query: ({ trackRequest, vesselIdentity }) => {
+        const { externalReferenceNumber, internalReferenceNumber, ircs, vesselIdentifier } =
+          getVesselIdentityPropsAsEmptyStringsWhenUndefined(getVesselIdentityFromLegacyVesselIdentity(vesselIdentity))
+        const trackDepth = trackRequest.trackDepth ?? ''
+        const afterDateTime = trackRequest.afterDateTime?.toISOString() ?? ''
+        const beforeDateTime = trackRequest.beforeDateTime?.toISOString() ?? ''
+
+        return {
+          method: 'GET',
+          params: {
+            afterDateTime,
+            beforeDateTime,
+            externalReferenceNumber,
+            internalReferenceNumber,
+            IRCS: ircs,
+            trackDepth,
+            vesselIdentifier
+          },
+
+          url: `/vessels/positions`
+        }
+      },
+      transformErrorResponse: response => new FrontendApiError(VESSEL_POSITIONS_ERROR_MESSAGE, response),
+      transformResponse: async (baseQueryReturnValue: Vessel.VesselPosition[], meta: Meta) => ({
+        isTrackDepthModified: meta?.response?.status === HttpStatusCode.ACCEPTED,
+        positions: baseQueryReturnValue
+      })
     }),
 
     getVesselReportingsByVesselIdentity: builder.query<
@@ -62,8 +138,10 @@ export const vesselApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_VESSEL_REPORTINGS_ERROR_MESSAGE, response)
     }),
 
-    getVesselsLastPositions: builder.query<VesselLastPosition[], void>({
-      query: () => `/vessels`
+    getVesselsLastPositions: builder.query<Vessel.VesselLastPosition[], void>({
+      query: () => `/vessels`,
+      transformResponse: (baseQueryReturnValue: Vessel.VesselLastPosition[]) =>
+        parseResponseOrReturn<Vessel.VesselLastPosition>(baseQueryReturnValue, VesselLastPositionSchema, true)
     }),
 
     searchVessels: builder.query<Vessel.VesselIdentity[], Vessel.ApiSearchFilter>({

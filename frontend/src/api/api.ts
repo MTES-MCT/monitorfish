@@ -108,7 +108,7 @@ export const monitorfishApi = createApi({
 
       if (result.error) {
         const error: CustomResponseError = {
-          path: typeof args === 'string' ? args : args.url,
+          path: `/bff/v1${typeof args === 'string' ? args : args.url}`,
           requestData: typeof args === 'string' ? undefined : args.body,
           responseData: result.error.data as BackendApi.ResponseBodyError,
           status: result.error.status

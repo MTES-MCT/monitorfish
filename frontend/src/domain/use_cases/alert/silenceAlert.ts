@@ -1,3 +1,4 @@
+import { alertApi } from '@api/alert'
 import {
   addToPendingAlertsBeingSilenced,
   removeFromSilencedAlertsQueue,
@@ -6,14 +7,13 @@ import {
 } from '@features/Alert/components/SideWindowAlerts/slice'
 import { removeVesselAlertAndUpdateReporting } from '@features/Vessel/slice'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { deleteListItems } from '@utils/deleteListItems'
 
-import { silenceAlertFromAPI } from '../../../api/alert'
-import { deleteListItems } from '../../../utils/deleteListItems'
-import { Vessel } from '../../entities/vessel/vessel'
+import { VesselFeature } from '../../entities/vessel/vessel'
 import { setError } from '../../shared_slices/Global'
 
-import type { MainAppThunk } from '../../../store'
 import type { SilencedAlertPeriodRequest } from '@features/Alert/types'
+import type { MainAppThunk } from '@store'
 
 /**
  * Silence an alert
@@ -38,12 +38,15 @@ export const silenceAlert =
     }, 3200)
 
     try {
-      const silencedAlert = await silenceAlertFromAPI(pendingAlertId, silencedAlertPeriodRequest)
+      const silencedAlert = await dispatch(
+        alertApi.endpoints.silenceAlert.initiate({ id: pendingAlertId, silencedAlertPeriodRequest })
+      ).unwrap()
+
       dispatch(
         removeVesselAlertAndUpdateReporting({
           alertType: silencedAlert.value.type,
           isValidated: false,
-          vesselFeatureId: Vessel.getVesselFeatureId(silencedAlert)
+          vesselFeatureId: VesselFeature.getVesselFeatureId(silencedAlert)
         })
       )
 

@@ -1,20 +1,20 @@
 import { WindowContext } from '@api/constants'
 import { ReportingType } from '@features/Reporting/types'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { Vessel } from '@features/Vessel/Vessel.types'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
-import { Vessel } from '../../../domain/entities/vessel/vessel'
+import { VesselFeature } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { addVesselReporting, removeVesselReporting } from '../../Vessel/slice'
 import { reportingApi } from '../reportingApi'
 
-import type { VesselIdentity } from '../../../domain/entities/vessel/types'
 import type { EditedReporting } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const updateReporting =
   (
-    vesselIdentity: VesselIdentity,
+    vesselIdentity: Vessel.VesselIdentity,
     id: number,
     nextReportingFormData: EditedReporting,
     previousReportingType: ReportingType,
@@ -31,7 +31,7 @@ export const updateReporting =
 
       // We update the reportings of the last positions vessels state
       if (previousReportingType !== nextReportingFormData.type) {
-        const vesselFeatureId = Vessel.getVesselFeatureId(vesselIdentity)
+        const vesselFeatureId = VesselFeature.getVesselFeatureId(vesselIdentity)
 
         dispatch(
           removeVesselReporting({

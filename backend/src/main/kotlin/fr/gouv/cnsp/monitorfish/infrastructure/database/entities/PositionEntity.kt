@@ -47,6 +47,10 @@ data class PositionEntity(
     @Column(name = "network_type")
     @Enumerated(EnumType.STRING)
     val networkType: NetworkType? = null,
+    @Column(name = "speed")
+    val speed: Double? = null,
+    @Column(name = "course")
+    val course: Double? = null,
     // Mandatory fields
     @Enumerated(EnumType.STRING)
     @Column(name = "position_type")
@@ -55,10 +59,6 @@ data class PositionEntity(
     val latitude: Double,
     @Column(name = "longitude")
     val longitude: Double,
-    @Column(name = "speed")
-    val speed: Double? = null,
-    @Column(name = "course")
-    val course: Double? = null,
     @Column(name = "date_time")
     val dateTime: ZonedDateTime,
 ) {

@@ -59,10 +59,13 @@ def reset_test_data_missing_dep_alerts(reset_test_data):
                 vessel_id,
                 vessel_identifier,
                 vessel_name,
+                latitude,
+                longitude,
                 impact_risk_factor,
                 probability_risk_factor,
                 detectability_risk_factor,
                 risk_factor,
+                total_weight_onboard,
                 is_at_port
             ) VALUES
             (
@@ -73,10 +76,13 @@ def reset_test_data_missing_dep_alerts(reset_test_data):
                 1,
                 'INTERNAL_REFERENCE_NUMBER',
                 'ÉTABLIR IMPRESSION LORSQUE',
+                8.322,
+                1.256,
                 1.5,
                 2.5,
                 3.1,
                 2.58,
+                0.0,
                 false
             )
         """

@@ -1,14 +1,15 @@
 import { FIVE_MINUTES, TWENTY_MINUTES } from '@api/APIWorker'
 import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
 import { showVesselsLastPosition } from '@features/Vessel/useCases/showVesselsLastPosition'
+import { Vessel } from '@features/Vessel/Vessel.types'
 import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
 import { setError } from '../../../domain/shared_slices/Global'
 import { MapComponent } from '../../commonStyles/MapComponent'
 import VesselSVG from '../../icons/Icone_navire.svg?react'
@@ -43,7 +44,8 @@ export function VesselLoader() {
       return
     }
 
-    dispatch(showVesselsLastPosition(vessels))
+    // TODO include the VesselLightLastPosition type to the redux state
+    dispatch(showVesselsLastPosition(vessels as Vessel.VesselLastPosition[]))
   }, [dispatch, vessels, isError, error])
 
   useEffect(() => {
@@ -56,7 +58,7 @@ export function VesselLoader() {
     <>
       {!isAppLoaded && (
         <FirstLoadWrapper>
-          <FulfillingBouncingCircleSpinner className="update-vessels" color={COLORS.white} size={100} />
+          <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.white} size={100} />
           <BigVessel />
           <Text data-cy="first-loader">Chargement...</Text>
         </FirstLoadWrapper>
@@ -64,8 +66,8 @@ export function VesselLoader() {
       <UpdateWrapper $isVesselSidebarOpen={vesselSidebarIsOpen}>
         {(isFetching || loadingPositions) && isAppLoaded && (
           <>
-            <FulfillingBouncingCircleSpinner className="update-vessels" color={COLORS.white} size={30} />
-            <Vessel />
+            <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.white} size={30} />
+            <VesselIcon />
           </>
         )}
       </UpdateWrapper>
@@ -76,12 +78,12 @@ export function VesselLoader() {
 const Text = styled.span`
   margin-top: 10px;
   font-size: 13px;
-  color: ${COLORS.white};
+  color: ${p => p.theme.color.white};
   bottom: -17px;
   position: relative;
 `
 
-const Vessel = styled(VesselSVG)`
+const VesselIcon = styled(VesselSVG)`
   position: absolute;
   top: 2px;
   left: 8px;

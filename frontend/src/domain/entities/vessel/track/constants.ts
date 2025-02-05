@@ -1,8 +1,8 @@
 import { THEME } from '@mtes-mct/monitor-ui'
 
-import type { TrackTypeRecordItem } from '../types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
-export const TRACK_TYPE_RECORD: Record<TrackType, TrackTypeRecordItem> = {
+export const TRACK_TYPE_RECORD: Record<TrackType, Vessel.TrackTypeRecordItem> = {
   ELLIPSIS: {
     arrow: 'arrow_gray.png',
     code: 'ELLIPSIS',

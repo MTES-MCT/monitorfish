@@ -4,20 +4,20 @@ import type {
   BeaconMalfunctionVesselStatus,
   EndOfBeaconMalfunctionReason
 } from './constants'
-import type { VesselIdentity } from '../../domain/entities/vessel/types'
 import type { BeaconMalfunctionDetailsType } from '@features/BeaconMalfunction/components/BeaconMalfunctionBoard/utils'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Integer } from 'type-fest'
 
 export type BeaconMalfunction = {
-  endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason
+  endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason | undefined
   externalReferenceNumber: string
   flagState: string
   id: number
   internalReferenceNumber: string
   ircs: string
-  malfunctionEndDateTime: string | null
+  malfunctionEndDateTime: string | undefined
   malfunctionStartDateTime: string
-  notificationRequested: string | null
+  notificationRequested: string | undefined
   stage: string
   vesselIdentifier: string
   vesselName: string
@@ -26,8 +26,8 @@ export type BeaconMalfunction = {
 }
 
 export type UpdateBeaconMalfunction = {
-  stage: BeaconMalfunctionsStage | null
-  vesselStatus: BeaconMalfunctionVesselStatus | null
+  stage: BeaconMalfunctionsStage | undefined
+  vesselStatus: BeaconMalfunctionVesselStatus | undefined
 }
 
 export type BeaconMalfunctionComment = {
@@ -58,13 +58,13 @@ export type BeaconMalfunctionNotification = {
   beaconMalfunctionId: Integer<number>
   communicationMeans: string
   dateTime: string
-  errorMessage: string | null
+  errorMessage: string | undefined
   id: number
   notificationType: string
   recipientAddressOrNumber: string
   recipientFunction: string
   recipientName: string
-  success: boolean | null
+  success: boolean | undefined
 }
 
 export type BeaconMalfunctionNotifications = {
@@ -83,15 +83,15 @@ export type BeaconMalfunctionResumeAndDetails = {
 }
 
 export type VesselBeaconMalfunctionsResumeAndHistory = {
-  current: BeaconMalfunctionResumeAndDetails | null
+  current: BeaconMalfunctionResumeAndDetails | undefined
   history: BeaconMalfunctionResumeAndDetails[]
   resume: VesselBeaconMalfunctionsResume
-  vesselIdentity: VesselIdentity
+  vesselIdentity: Vessel.VesselIdentity
 }
 
 export type VesselBeaconMalfunctionsResume = {
-  lastBeaconMalfunctionDateTime: string | null
-  lastBeaconMalfunctionVesselStatus: string | null
+  lastBeaconMalfunctionDateTime: string | undefined
+  lastBeaconMalfunctionVesselStatus: string | undefined
   numberOfBeaconsAtPort: number
   numberOfBeaconsAtSea: number
 }

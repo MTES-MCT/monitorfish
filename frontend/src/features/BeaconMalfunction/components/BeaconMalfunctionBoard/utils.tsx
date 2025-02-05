@@ -92,7 +92,7 @@ const getFirstStatusAction = (vesselStatus: BeaconMalfunctionStatusValue, malfun
 
 export function getActionText(
   action: BeaconMalfunctionAction,
-  endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason | null
+  endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason | undefined
 ) {
   switch (action.propertyName) {
     case BeaconMalfunctionPropertyName.VESSEL_STATUS: {

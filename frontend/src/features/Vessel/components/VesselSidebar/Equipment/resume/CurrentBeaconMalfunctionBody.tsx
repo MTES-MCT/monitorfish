@@ -4,9 +4,9 @@ import { SelectPicker } from 'rsuite'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../../../constants/constants'
-import { updateBeaconMalfunctionFromKanban } from '../../../../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
 import { useMainAppDispatch } from '../../../../../../hooks/useMainAppDispatch'
 import { VESSEL_STATUS } from '../../../../../BeaconMalfunction/constants'
+import { updateBeaconMalfunctionFromKanban } from '../../../../../BeaconMalfunction/useCases/updateBeaconMalfunctionFromKanban'
 import { getMalfunctionStartDateText } from '../../../../../BeaconMalfunction/utils'
 import TimeAgoSVG from '../../../../../icons/Label_horaire_VMS.svg?react'
 
@@ -49,6 +49,7 @@ export function CurrentBeaconMalfunctionBody({
 
     dispatch(
       updateBeaconMalfunctionFromKanban(beaconMalfunction.id, nextBeaconMalfunction, {
+        stage: nextBeaconMalfunction.stage,
         vesselStatus: nextBeaconMalfunction.vesselStatus
       })
     )

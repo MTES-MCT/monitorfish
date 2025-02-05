@@ -124,8 +124,8 @@ context('Vessel sidebar controls buttons', () => {
 
     // Then
     cy.wait('@getPositions').then(({ request }) => {
-      expect(request.url).contains(`${startDateAsDayjs.format('DD')}T00:00:00.000Z`)
-      expect(request.url).contains(`${endDateAsDayjs.format('DD')}T23:59:59.000Z`)
+      expect(request.url).contains(encodeURIComponent(`${startDateAsDayjs.format('DD')}T00:00:00.000Z`))
+      expect(request.url).contains(encodeURIComponent(`${endDateAsDayjs.format('DD')}T23:59:59.000Z`))
     })
 
     cy.wait(200)

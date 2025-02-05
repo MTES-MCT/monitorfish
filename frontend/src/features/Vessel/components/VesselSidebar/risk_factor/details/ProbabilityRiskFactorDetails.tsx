@@ -1,25 +1,23 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { isDefined } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../../../constants/constants'
-import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
 import { InfractionsSummary } from '../../Controls/InfractionsSummary'
 
 export function ProbabilityRiskFactorDetails({ isOpen }) {
-  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
+  const riskFactor = useMainAppSelector(state => state.vessel.selectedVessel)?.riskFactor
+  assertNotNullish(riskFactor)
   const currentYear = new Date().getUTCFullYear()
-
-  if (!selectedVessel) {
-    return <></>
-  }
 
   return (
     <SubRiskDetails $isOpen={isOpen}>
       <Line />
       <InfractionsResumeZone>
         <InfractionsSummary
-          numberOfControlsWithSomeGearsSeized={selectedVessel.riskFactor.numberGearSeizuresLastFiveYears}
-          numberOfControlsWithSomeSpeciesSeized={selectedVessel.riskFactor.numberSpeciesSeizuresLastFiveYears}
-          numberOfDiversions={selectedVessel.riskFactor.numberVesselSeizuresLastFiveYears}
+          numberOfControlsWithSomeGearsSeized={riskFactor.numberGearSeizuresLastFiveYears}
+          numberOfControlsWithSomeSpeciesSeized={riskFactor.numberSpeciesSeizuresLastFiveYears}
+          numberOfDiversions={riskFactor.numberVesselSeizuresLastFiveYears}
         />
       </InfractionsResumeZone>
       <Zone>
@@ -28,10 +26,9 @@ export function ProbabilityRiskFactorDetails({ isOpen }) {
             <Field>
               <Key>Temporalité</Key>
               <Value>
-                {selectedVessel.riskFactor.numberControlsLastFiveYears ||
-                selectedVessel.riskFactor.numberControlsLastFiveYears === 0 ? (
-                  `${selectedVessel.riskFactor.numberControlsLastFiveYears} contrôle${
-                    selectedVessel.riskFactor.numberControlsLastFiveYears > 1 ? 's' : ''
+                {isDefined(riskFactor.numberControlsLastFiveYears) ? (
+                  `${riskFactor.numberControlsLastFiveYears} contrôle${
+                    riskFactor.numberControlsLastFiveYears > 1 ? 's' : ''
                   } sur 5 ans (${new Date(currentYear - 4, 0, 1).getUTCFullYear()} - ${currentYear})`
                 ) : (
                   <NoValue>-</NoValue>
@@ -41,14 +38,12 @@ export function ProbabilityRiskFactorDetails({ isOpen }) {
             <Field>
               <Key>Infractions pêche</Key>
               <Value>
-                {(selectedVessel.riskFactor.numberInfractionsLastFiveYears ||
-                  selectedVessel.riskFactor.numberInfractionsLastFiveYears === 0) &&
-                (selectedVessel.riskFactor.numberControlsLastFiveYears ||
-                  selectedVessel.riskFactor.numberControlsLastFiveYears === 0) ? (
-                  `${selectedVessel.riskFactor.numberInfractionsLastFiveYears} infraction${
-                    selectedVessel.riskFactor.numberInfractionsLastFiveYears > 1 ? 's' : ''
-                  } pêche / ${selectedVessel.riskFactor.numberControlsLastFiveYears} contrôle${
-                    selectedVessel.riskFactor.numberControlsLastFiveYears > 1 ? 's' : ''
+                {isDefined(riskFactor.numberInfractionsLastFiveYears) &&
+                isDefined(riskFactor.numberControlsLastFiveYears) ? (
+                  `${riskFactor.numberInfractionsLastFiveYears} infraction${
+                    riskFactor.numberInfractionsLastFiveYears > 1 ? 's' : ''
+                  } pêche / ${riskFactor.numberControlsLastFiveYears} contrôle${
+                    riskFactor.numberControlsLastFiveYears > 1 ? 's' : ''
                   }`
                 ) : (
                   <NoValue>-</NoValue>
@@ -63,14 +58,14 @@ export function ProbabilityRiskFactorDetails({ isOpen }) {
 }
 
 const NoValue = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-weight: 300;
   line-height: normal;
 `
 
 const Line = styled.div`
   width: 100%;
-  border-bottom: 1px solid ${COLORS.lightGray};
+  border-bottom: 1px solid ${p => p.theme.color.lightGray};
 `
 
 const SubRiskDetails = styled.div<{
@@ -95,7 +90,7 @@ const Zone = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
 `
 
 const Fields = styled.table`
@@ -114,7 +109,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   flex: initial;
   display: inline-block;
   margin: 0;
@@ -130,7 +125,7 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;

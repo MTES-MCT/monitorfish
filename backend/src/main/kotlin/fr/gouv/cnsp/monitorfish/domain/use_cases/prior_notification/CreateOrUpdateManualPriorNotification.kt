@@ -122,7 +122,7 @@ class CreateOrUpdateManualPriorNotification(
                 reportDateTime = sentAt,
                 integrationDateTime = ZonedDateTime.now(),
                 rawMessage = null,
-                transmissionFormat = null,
+                transmissionFormat = LogbookTransmissionFormat.MANUAL,
                 software = null,
                 acknowledgment = null,
                 isCorrectedByNewerMessage = false,

@@ -9,14 +9,14 @@ import { showVessel } from '../../../../../domain/use_cases/vessel/showVessel'
 import { showVesselTrack } from '../../../../../domain/use_cases/vessel/showVesselTrack'
 import { unselectVessel } from '../../../../../domain/use_cases/vessel/unselectVessel'
 
-import type { VesselCompositeIdentifier, VesselIdentity } from '../../../../../domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type FavoriteVesselProps = Readonly<{
-  favorite: VesselIdentity
+  favorite: Vessel.VesselIdentity
   isLastItem: boolean
   isTrackShowed: boolean
   isVesselShowed: boolean
-  vesselCompositeIdentifier: VesselCompositeIdentifier
+  vesselCompositeIdentifier: Vessel.VesselCompositeIdentifier
 }>
 export function FavoriteVessel({
   favorite,

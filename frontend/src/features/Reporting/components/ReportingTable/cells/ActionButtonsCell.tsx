@@ -1,5 +1,6 @@
 import { reportingActions } from '@features/Reporting/slice'
 import { ReportingType } from '@features/Reporting/types'
+import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import { type CSSProperties, useCallback } from 'react'
@@ -30,7 +31,8 @@ export function ActionButtonsCell({ reporting }: ActionButtonsCellProps) {
 
   const focusOnMap = useCallback(
     (focusedReporting: Reporting.Reporting) => {
-      dispatch(showVessel(focusedReporting, false, true))
+      const identity = extractVesselIdentityProps(focusedReporting)
+      dispatch(showVessel(identity, false, true))
     },
     [dispatch]
   )

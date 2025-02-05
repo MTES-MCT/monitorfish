@@ -12,8 +12,8 @@ import {
   BLUEFIN_TUNA_NAME_FR,
   BLUEFIN_TUNA_SPECY_CODE
 } from '@features/PriorNotification/constants'
+import { Vessel } from '@features/Vessel/Vessel.types'
 import { THEME, customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange } from '@mtes-mct/monitor-ui'
-import { VesselIdentifier } from 'domain/entities/vessel/types'
 import { update } from 'lodash'
 import styled from 'styled-components'
 
@@ -30,7 +30,6 @@ import {
 import { PriorNotification } from '../../PriorNotification.types'
 
 import type { FilterStatus, ListFilter } from './types'
-import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Column } from '@tanstack/react-table'
 import type { CSSProperties } from 'react'
 
@@ -304,7 +303,7 @@ export function getVesselIdentityFromPriorNotification(
     vesselId: priorNotification.vesselId,
     // In practice, prior notifications always have a vessel CFR (`vesselInternalReferenceNumber`)
     // despite the `| undefined`
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
     vesselLength: priorNotification.vesselLength,
     vesselName: priorNotification.vesselName
   }

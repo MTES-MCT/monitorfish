@@ -10,13 +10,13 @@ import ManualPositionSVG from '../../../../../icons/Pastille_position_manuelle.s
 import { animateToCoordinates } from '../../../../../Map/slice'
 import { highlightVesselTrackPosition } from '../../../../slice'
 
-import type { VesselPosition } from '../../../../../../domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type HighlightPositionCellProps = {
   isAtPortPositionMarkerShowed?: boolean
   isManualPositionMarkerShowed?: boolean
   isNetworkTypeMarkerShowed?: boolean
-  row: VesselPosition
+  row: Vessel.VesselPosition
   value: unknown
 }
 export function HighlightPositionCell({

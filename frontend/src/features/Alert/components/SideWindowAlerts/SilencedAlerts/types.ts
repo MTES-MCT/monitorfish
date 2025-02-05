@@ -3,8 +3,8 @@ import type { SilencedAlertData } from '../../../types'
 export type SilencedAlertFormValues = Partial<SilencedAlertData>
 
 export const emptySilencedAlert: SilencedAlertFormValues = {
-  externalReferenceNumber: null,
-  internalReferenceNumber: null,
-  ircs: null,
-  vesselId: null
+  externalReferenceNumber: undefined,
+  internalReferenceNumber: undefined,
+  ircs: undefined,
+  vesselId: undefined
 }

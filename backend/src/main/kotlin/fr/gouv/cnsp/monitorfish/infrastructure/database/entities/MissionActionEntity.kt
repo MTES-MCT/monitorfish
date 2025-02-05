@@ -232,7 +232,7 @@ class MissionActionEntity(
                 } ?: listOf(),
             actionType = actionType,
             actionDatetimeUtc = actionDatetimeUtc.atZone(ZoneOffset.UTC),
-            actionEndDatetimeUtc = actionEndDatetimeUtc?.let { it.atZone(ZoneOffset.UTC) },
+            actionEndDatetimeUtc = actionEndDatetimeUtc?.atZone(ZoneOffset.UTC),
             emitsVms = emitsVms,
             emitsAis = emitsAis,
             logbookMatchesActivity = logbookMatchesActivity,

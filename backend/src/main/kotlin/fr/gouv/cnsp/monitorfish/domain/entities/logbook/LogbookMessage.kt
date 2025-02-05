@@ -26,7 +26,7 @@ data class LogbookMessage(
     // Reception date of the report by the data center
     val integrationDateTime: ZonedDateTime,
     var rawMessage: String? = null,
-    val transmissionFormat: LogbookTransmissionFormat?,
+    val transmissionFormat: LogbookTransmissionFormat,
     val software: String? = null,
     var acknowledgment: Acknowledgment? = null,
     var isCorrectedByNewerMessage: Boolean = false,

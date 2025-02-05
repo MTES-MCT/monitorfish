@@ -1,7 +1,7 @@
 import { COLORS } from '@constants/constants'
+import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { getVesselCompositeIdentifier } from 'domain/entities/vessel/vessel'
 import { addVesselToFavorites, removeVesselFromFavorites } from 'domain/shared_slices/FavoriteVessel'
 import { unselectVessel } from 'domain/use_cases/vessel/unselectVessel'
 import countries from 'i18n-iso-countries'

@@ -91,8 +91,9 @@ context('Vessel sidebar ers/vms tab', () => {
     // Go to the detail of a beacon malfunction and go back to resume
     cy.intercept(
       'GET',
-      'bff/v1/vessels/find?vesselId=1&internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
-        '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime='
+      'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=DONTSINK' +
+      '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS' +
+      '&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER',
     ).as('openVessel')
     openVesselBySearch('Pheno')
     cy.wait('@openVessel')
@@ -110,8 +111,9 @@ context('Vessel sidebar ers/vms tab', () => {
     // Search for another vessel
     cy.intercept(
       'GET',
-      'bff/v1/vessels/find?vesselId=2&internalReferenceNumber=U_W0NTFINDME&externalReferenceNumber=TALK2ME' +
-        '&IRCS=QGDF&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime='
+      'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=TALK2ME' +
+      '&internalReferenceNumber=U_W0NTFINDME&IRCS=QGDF&trackDepth=TWELVE_HOURS' +
+      '&vesselId=2&vesselIdentifier=INTERNAL_REFERENCE_NUMBER',
     ).as('openVesselTwo')
     cy.intercept('GET', '/bff/v1/vessels/beacon_malfunctions*').as('vesselTwoBeaconMalfunctions')
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()

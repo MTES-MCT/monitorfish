@@ -8,7 +8,12 @@ import {
   useSensor,
   useSensors
 } from '@dnd-kit/core'
-import { STAGE_RECORD, VESSEL_STATUS } from '@features/BeaconMalfunction/constants'
+import {
+  BeaconMalfunctionsStage,
+  BeaconMalfunctionVesselStatus,
+  STAGE_RECORD,
+  VESSEL_STATUS
+} from '@features/BeaconMalfunction/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
@@ -23,10 +28,10 @@ import { StageColumn } from './StageColumn'
 import { getBeaconMalfunctionsByStage, searchInBeaconMalfunctions } from './utils'
 import { VesselStatusSelect } from './VesselStatusSelect'
 import { setError } from '../../../../domain/shared_slices/Global'
-import { getAllBeaconMalfunctions } from '../../../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
-import { updateBeaconMalfunctionFromKanban } from '../../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
 import { LegacyRsuiteComponentsWrapper } from '../../../../ui/LegacyRsuiteComponentsWrapper'
 import SearchIconSVG from '../../../icons/Loupe_dark.svg?react'
+import { getAllBeaconMalfunctions } from '../../useCases/getAllBeaconMalfunctions'
+import { updateBeaconMalfunctionFromKanban } from '../../useCases/updateBeaconMalfunctionFromKanban'
 
 import type {
   BeaconMalfunction,
@@ -125,22 +130,22 @@ export function BeaconMalfunctionBoard() {
   )
 
   const updateVesselStatus = useCallback(
-    (beaconMalfunction: BeaconMalfunction | undefined, status: string | null) => {
+    (beaconMalfunction: BeaconMalfunction | undefined, status: string) => {
       if (!beaconMalfunction) {
         return
       }
 
       const nextBeaconMalfunction = {
         ...beaconMalfunction,
-        vesselStatus: status,
+        vesselStatus: status as BeaconMalfunctionVesselStatus,
         vesselStatusLastModificationDateTime: new Date().toISOString()
       }
 
       setIsDroppedId(beaconMalfunction.id)
       dispatch(
-        // @ts-ignore
         updateBeaconMalfunctionFromKanban(beaconMalfunction.id, nextBeaconMalfunction, {
-          vesselStatus: nextBeaconMalfunction.vesselStatus
+          stage: nextBeaconMalfunction.stage as BeaconMalfunctionsStage | undefined,
+          vesselStatus: nextBeaconMalfunction.vesselStatus as BeaconMalfunctionVesselStatus | undefined
         })
       )
     },

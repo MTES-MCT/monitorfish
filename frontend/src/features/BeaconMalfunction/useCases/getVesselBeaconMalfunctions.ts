@@ -1,16 +1,17 @@
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
+import { beaconMalfunctionApi } from '@features/BeaconMalfunction/apis'
+import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { openBeaconMalfunction } from './openBeaconMalfunction'
-import { getVesselBeaconsMalfunctionsFromAPI } from '../../../api/beaconMalfunction'
-import { getOnlyVesselIdentityProperties } from '../../entities/vessel/vessel'
 import {
   loadVesselBeaconMalfunctions,
   resetVesselBeaconMalfunctionsResumeAndHistory,
   setVesselBeaconMalfunctionsResumeAndHistory
-} from '../../shared_slices/BeaconMalfunction'
-import { displayedErrorActions } from '../../shared_slices/DisplayedError'
-import { removeError } from '../../shared_slices/Global'
-import { displayOrLogError } from '../error/displayOrLogError'
+} from '../../../domain/shared_slices/BeaconMalfunction'
+import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
+import { removeError } from '../../../domain/shared_slices/Global'
+import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 
 export const getVesselBeaconMalfunctions = (isFromUserAction: boolean) => async (dispatch, getState) => {
   const { selectedVessel } = getState().vessel
@@ -30,14 +31,17 @@ export const getVesselBeaconMalfunctions = (isFromUserAction: boolean) => async 
   }
 
   try {
-    const vesselBeaconsMalfunctions = await getVesselBeaconsMalfunctionsFromAPI(
-      selectedVessel.vesselId,
-      vesselBeaconMalfunctionsFromDate
-    )
+    const vesselBeaconsMalfunctions = await dispatch(
+      beaconMalfunctionApi.endpoints.getVesselBeaconsMalfunctions.initiate(
+        { fromDate: vesselBeaconMalfunctionsFromDate, vesselId: selectedVessel.vesselId },
+        RTK_FORCE_REFETCH_QUERY_OPTIONS
+      )
+    ).unwrap()
+
     dispatch(
       setVesselBeaconMalfunctionsResumeAndHistory({
         ...vesselBeaconsMalfunctions,
-        vesselIdentity: getOnlyVesselIdentityProperties(selectedVessel)
+        vesselIdentity: extractVesselIdentityProps(selectedVessel)
       })
     )
 

@@ -1,7 +1,5 @@
-import { VesselIdentifier } from '../../domain/entities/vessel/types'
-
-import type { VesselIdentity } from '../../domain/entities/vessel/types'
-import type { Vessel } from '@features/Vessel/Vessel.types'
+import { extractVesselIdentityProps } from '@features/Vessel/utils'
+import { Vessel } from '@features/Vessel/Vessel.types'
 
 /**
  * Remove duplicated vessels : keep vessels from APIs when a duplicate is found on either
@@ -9,9 +7,9 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
  * - vesselId (Vessel internal identifier)
  */
 export function removeDuplicatedFoundVessels(
-  foundVesselsFromAPI: VesselIdentity[],
-  foundVesselsOnMap: VesselIdentity[]
-): VesselIdentity[] {
+  foundVesselsFromAPI: Vessel.VesselIdentity[],
+  foundVesselsOnMap: Vessel.VesselIdentity[]
+): Vessel.VesselIdentity[] {
   const filteredVesselsFromMap = foundVesselsOnMap.filter(vesselFromMap => {
     if (!vesselFromMap.internalReferenceNumber) {
       return true
@@ -28,23 +26,25 @@ export function removeDuplicatedFoundVessels(
 }
 
 export function enrichWithVesselIdentifierIfNotFound(
-  identity: Vessel.VesselEnhancedObject | VesselIdentity
-): VesselIdentity {
-  if (identity.vesselIdentifier) {
-    return identity
+  identityOrVessel: Vessel.VesselEnhancedObject | Vessel.VesselIdentity
+): Vessel.VesselIdentity {
+  const vesselIdentity = extractVesselIdentityProps(identityOrVessel)
+
+  if (vesselIdentity.vesselIdentifier) {
+    return vesselIdentity
   }
 
-  if (identity.internalReferenceNumber) {
-    return { ...identity, vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER }
+  if (vesselIdentity.internalReferenceNumber) {
+    return { ...vesselIdentity, vesselIdentifier: Vessel.VesselIdentifier.INTERNAL_REFERENCE_NUMBER }
   }
 
-  if (identity.ircs) {
-    return { ...identity, vesselIdentifier: VesselIdentifier.IRCS }
+  if (vesselIdentity.ircs) {
+    return { ...vesselIdentity, vesselIdentifier: Vessel.VesselIdentifier.IRCS }
   }
 
-  if (identity.externalReferenceNumber) {
-    return { ...identity, vesselIdentifier: VesselIdentifier.EXTERNAL_REFERENCE_NUMBER }
+  if (vesselIdentity.externalReferenceNumber) {
+    return { ...vesselIdentity, vesselIdentifier: Vessel.VesselIdentifier.EXTERNAL_REFERENCE_NUMBER }
   }
 
-  return identity
+  return vesselIdentity
 }

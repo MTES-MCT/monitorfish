@@ -8,7 +8,7 @@ import { ActionButtonsCell } from './cells/ActionButtonsCell'
 import { StateCell } from './cells/StateCell'
 import { TypesCell } from './cells/TypesCell'
 import { None, StyledCountryFlag } from './styles'
-import { VesselRiskFactor } from '../../../Vessel/components/VesselRiskFactor'
+import { VesselRiskFactor } from '../../../RiskFactor/components/VesselRiskFactor'
 import { PriorNotification } from '../../PriorNotification.types'
 
 import type { CellContext, ColumnDef } from '@tanstack/react-table'

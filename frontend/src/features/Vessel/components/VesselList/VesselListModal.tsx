@@ -20,11 +20,11 @@ import { unselectVessel } from '../../../../domain/use_cases/vessel/unselectVess
 import { LegacyRsuiteComponentsWrapper } from '../../../../ui/LegacyRsuiteComponentsWrapper'
 import PreviewSVG from '../../../icons/Oeil_apercu_carte.svg?react'
 
-import type { VesselEnhancedLastPositionWebGLObject } from '../../../../domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 const NOT_FOUND = -1
 
-type CheckedVesselEnhancedLastPositionWebGLObject = VesselEnhancedLastPositionWebGLObject & {
+type CheckedVesselEnhancedLastPositionWebGLObject = Vessel.VesselEnhancedLastPositionWebGLObject & {
   checked?: boolean
 }
 

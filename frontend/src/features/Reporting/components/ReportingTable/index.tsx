@@ -220,7 +220,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
         <ConfirmationModal
           confirmationButtonLabel="Archiver"
           iconName="Archive"
-          message={`Êtes-vous sûr de vouloir archiver ${pluralize('ce', rowSelectionAsArray.length)} ${rowSelectionAsArray.length} ${pluralize('signalement', rowSelectionAsArray.length)} ?`}
+          message={`Êtes-vous sûr de vouloir archiver ${pluralize('ce', rowSelectionAsArray.length)} ${rowSelectionAsArray.length > 1 ? rowSelectionAsArray.length : ''} ${pluralize('signalement', rowSelectionAsArray.length)} ?`}
           onCancel={() => {
             setIsArchivingConfirmationDialogOpen(false)
           }}

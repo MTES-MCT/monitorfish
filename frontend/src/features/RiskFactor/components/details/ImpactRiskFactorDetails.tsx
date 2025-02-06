@@ -1,10 +1,9 @@
+import { FleetSegmentsWithTooltip } from '@features/FleetSegment/components/FleetSegmentsWithTooltip'
 import { VesselCurrentFleetSegmentDetails } from '@features/FleetSegment/components/VesselCurrentFleetSegmentDetails'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useRef } from 'react'
 import styled from 'styled-components'
-
-import InfoSVG from '../../../../../icons/Information.svg?react'
 
 export function ImpactRiskFactorDetails({ isOpen }) {
   const riskFactor = useMainAppSelector(state => state.vessel.selectedVessel)?.riskFactor
@@ -26,13 +25,7 @@ export function ImpactRiskFactorDetails({ isOpen }) {
                 <Field>
                   <Key>Segment de flotte actuel</Key>
                   <Value>
-                    {riskFactor.segmentHighestImpact}{' '}
-                    <Info
-                      title={
-                        'La note de risque de ce segment est la note attribuée par la DIRM de la ' +
-                        'façade dans son Plan de contrôle annuel.'
-                      }
-                    />
+                    <FleetSegmentsWithTooltip segments={[riskFactor.segmentHighestImpact]} />
                   </Value>
                 </Field>
               </TableBody>
@@ -57,15 +50,6 @@ export function ImpactRiskFactorDetails({ isOpen }) {
 const Line = styled.div`
   width: 100%;
   border-bottom: 1px solid ${p => p.theme.color.lightGray};
-`
-
-const Info = styled(InfoSVG)<{
-  $isInfoSegment?: boolean
-}>`
-  width: 14px;
-  vertical-align: text-bottom;
-  margin-bottom: 2px;
-  margin-left: ${p => (p.$isInfoSegment ? '5px' : '2px')};
 `
 
 const SubRiskDetails = styled.div<{

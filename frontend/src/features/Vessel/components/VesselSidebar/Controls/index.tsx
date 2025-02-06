@@ -1,6 +1,7 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { getVesselControls } from '@features/Mission/useCases/getVesselControls'
-import { customDayjs } from '@mtes-mct/monitor-ui'
+import { SidebarLoadMoreYears } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
+import { Accent, Button, customDayjs } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -92,9 +93,11 @@ export function VesselControls() {
         )}
         <>
           <YearsToControlList controlsFromDate={controlsFromDate} yearsToControls={yearsToActions} />
-          <SeeMoreBackground>
-            <SeeMore onClick={seeMore}>Afficher plus de contrôles</SeeMore>
-          </SeeMoreBackground>
+          <SidebarLoadMoreYears>
+            <Button accent={Accent.SECONDARY} onClick={seeMore}>
+              Afficher plus de contrôles
+            </Button>
+          </SidebarLoadMoreYears>
         </>
       </Body>
     </>
@@ -102,31 +105,12 @@ export function VesselControls() {
 }
 
 const NoControl = styled.div`
-  padding: 50px 5px 0px 5px;
+  padding: 50px 5px 0 5px;
   margin: 10px 10px;
   height: 70px;
   background: ${p => p.theme.color.white};
   color: ${p => p.theme.color.slateGray};
   text-align: center;
-`
-
-const SeeMoreBackground = styled.div`
-  background: ${COLORS.white};
-  margin: 0px 5px 10px 5px;
-  padding: 5px 0 5px 0;
-`
-
-const SeeMore = styled.div`
-  border: 1px solid ${COLORS.charcoal};
-  color: ${COLORS.gunMetal};
-  padding: 5px 10px 5px 10px;
-  width: max-content;
-  font-size: 13px;
-  cursor: pointer;
-  margin-left: auto;
-  margin-right: auto;
-  user-select: none;
-  background: ${COLORS.white};
 `
 
 const UpdateControls = styled.div`
@@ -182,5 +166,5 @@ const UpdateControlsButton = styled.div`
 `
 
 const Body = styled.div`
-  padding: 0 5px 1px 5px;
+  padding: 0 10px 10px 10px;
 `

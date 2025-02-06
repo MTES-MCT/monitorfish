@@ -3,7 +3,6 @@ import { usePrevious } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { BeaconMalfunctionDetails } from './details/BeaconMalfunctionDetails'
 import { EquipmentResume } from './resume/EquipmentResume'
 import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
 import { COLORS } from '../../../../../constants/constants'
@@ -11,6 +10,7 @@ import { vesselsAreEquals } from '../../../../../domain/entities/vessel/vessel'
 import { setBeaconMalfunctionsTab } from '../../../../../domain/shared_slices/BeaconMalfunction'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { BeaconMalfunctionDetails } from '../../../../BeaconMalfunction/components/BeaconMalfunctionDetails'
 import { EquipmentTab } from '../../../../BeaconMalfunction/constants'
 import { getVesselBeaconMalfunctions } from '../../../../BeaconMalfunction/useCases/getVesselBeaconMalfunctions'
 
@@ -70,6 +70,7 @@ const NoBeacon = styled.div`
 `
 
 const Wrapper = styled.div`
+  margin: 10px;
   overflow: hidden;
 
   .rs-btn rs-btn-default rs-picker-toggle {

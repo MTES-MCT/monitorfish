@@ -38,20 +38,22 @@ export function getGearsWithNames(gearsReferential: Gear[] | undefined, riskFact
     return undefined
   }
 
-  return riskFactor.gearOnboard.map(gear => {
-    const gearName =
-      gearsReferential?.find(gearFromReferential => gearFromReferential.code === gear.gear)?.name ?? undefined
+  return riskFactor.gearOnboard
+    .filter(gear => !!gear.gear)
+    .map(gear => {
+      const gearName =
+        gearsReferential?.find(gearFromReferential => gearFromReferential.code === gear.gear)?.name ?? undefined
 
-    return { ...gear, gearName }
-  })
+      return { ...gear, gearName }
+    })
 }
 
-export function getFaoZones(riskFactor: RiskFactor | undefined): string | undefined {
+export function getFaoZones(riskFactor: RiskFactor | undefined): string[] {
   if (!riskFactor?.speciesOnboard) {
-    return undefined
+    return []
   }
 
   const nextFaoZones = riskFactor.speciesOnboard.map(species => species.faoZone)
 
-  return uniq(nextFaoZones).join(', ')
+  return uniq(nextFaoZones)
 }

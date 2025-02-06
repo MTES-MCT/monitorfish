@@ -12,7 +12,7 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppThunk } from '@store'
 
 export const previewVessels =
-  (filteredVessels: Vessel.VesselEnhancedLastPositionWebGLObject[]): MainAppThunk =>
+  (filteredVessels: Vessel.VesselLastPosition[]): MainAppThunk =>
   async (dispatch, getState) => {
     const { zonesSelected } = getState().vesselList
     const vesselFeatureIds = filteredVessels.map(vessel => vessel.vesselFeatureId)

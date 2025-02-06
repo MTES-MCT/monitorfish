@@ -100,7 +100,6 @@ const Wrapper = styled.div`
   color: ${p => p.theme.color.slateGray};
   display: flex;
   flex-direction: column;
-  margin: 5px 5px 0 5px;
   padding: 16px 16px 0 16px;
   text-align: left;
 `

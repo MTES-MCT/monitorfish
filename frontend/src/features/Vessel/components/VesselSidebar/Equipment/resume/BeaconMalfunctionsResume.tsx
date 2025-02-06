@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import { getDateTime } from '../../../../../../utils'
 import { VESSEL_STATUS } from '../../../../../BeaconMalfunction/constants'
-import { NoValue, Header, Zone } from '../../common_styles/common.style'
+import { NoValue, SidebarHeader, SidebarZone } from '../../common_styles/common.style'
 
 import type { VesselBeaconMalfunctionsResume } from '../../../../../BeaconMalfunction/types'
 
@@ -11,8 +11,8 @@ type VesselBeaconMalfunctionsResumeProps = {
 }
 export function BeaconMalfunctionsResume({ vesselBeaconMalfunctionsResume }: VesselBeaconMalfunctionsResumeProps) {
   return vesselBeaconMalfunctionsResume ? (
-    <Zone>
-      <Header>Résumé des avaries VMS (sur 1 an)</Header>
+    <StyledSidebarZone>
+      <SidebarHeader>Résumé des avaries VMS (sur 1 an)</SidebarHeader>
       <Table>
         <Fields>
           <TableBody>
@@ -44,9 +44,13 @@ export function BeaconMalfunctionsResume({ vesselBeaconMalfunctionsResume }: Ves
           </TableBody>
         </Fields>
       </Table>
-    </Zone>
+    </StyledSidebarZone>
   ) : null
 }
+
+const StyledSidebarZone = styled(SidebarZone)`
+  margin-bottom: 10px;
+`
 
 const AtSea = styled.span`
   font-size: 13px;

@@ -3,14 +3,14 @@ import { BeaconMalfunctionDetailsFollowUp } from '@features/BeaconMalfunction/co
 import { EquipmentTab } from '@features/BeaconMalfunction/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { setBeaconMalfunctionsTab } from 'domain/shared_slices/BeaconMalfunction'
 import styled from 'styled-components'
-import { getDateTime } from 'utils'
 
-import { getFirstVesselStatus } from '../../../../../BeaconMalfunction/utils'
-import ArrowSVG from '../../../../../icons/Picto_fleche-pleine-droite.svg?react'
-import { BeaconMalfunctionBody } from '../resume/BeaconMalfunctionBody'
-import { CurrentBeaconMalfunctionBody } from '../resume/CurrentBeaconMalfunctionBody'
+import { setBeaconMalfunctionsTab } from '../../../domain/shared_slices/BeaconMalfunction'
+import { getDateTime } from '../../../utils'
+import ArrowSVG from '../../icons/Picto_fleche-pleine-droite.svg?react'
+import { BeaconMalfunctionBody } from '../../Vessel/components/VesselSidebar/Equipment/resume/BeaconMalfunctionBody'
+import { CurrentBeaconMalfunctionBody } from '../../Vessel/components/VesselSidebar/Equipment/resume/CurrentBeaconMalfunctionBody'
+import { getFirstVesselStatus } from '../utils'
 
 type BeaconMalfunctionDetailsProps = {
   isCurrentBeaconMalfunctionDetails: boolean
@@ -56,12 +56,10 @@ export function BeaconMalfunctionDetails({ isCurrentBeaconMalfunctionDetails }: 
 }
 
 const Wrapper = styled.div`
-  padding: 5px;
   text-align: left;
 `
 
 const Arrow = styled(ArrowSVG)`
-  margin-left: 5px;
   margin-right: 5px;
   transform: rotate(180deg);
   vertical-align: sub;
@@ -78,7 +76,8 @@ const Previous = styled.a`
 
 const Zone = styled.div`
   background: ${COLORS.white};
-  margin: 10px 5px 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   padding-bottom: 10px;
   text-align: left;
   width: 480px;

@@ -1,14 +1,14 @@
 import { COMMON_ALERT_TYPE_OPTION } from '@features/Alert/constants'
-import { VesselCurrentFleetSegmentDetails } from '@features/FleetSegment/components/VesselCurrentFleetSegmentDetails'
+import { VesselSidebarFleetSegments } from '@features/FleetSegment/components/VesselSidebarFleetSegments'
 import { getLastLogbookTripsOptions } from '@features/Logbook/components/VesselLogbook/LogbookMessages/utils'
+import { SidebarZone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Icon, IconButton, pluralize, Select } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Select } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { FleetSegmentsWithTooltip } from './FleetSegmentsWithTooltip'
 import { CPSMessageResume } from './summaries/CPSMessageResume'
 import { DEPMessageResume } from './summaries/DEPMessageResume'
 import { DISMessageResume } from './summaries/DISMessageResume'
@@ -64,25 +64,12 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
   const getLogbookTrip = (nextTripNumber: string | undefined) =>
     dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.EQUALS, true, nextTripNumber))
 
-  const numberOfSegments = selectedVessel?.segments?.length ?? 0
-
   return (
     <>
       {fishingActivities ? (
         <Body>
-          <Zone $isWhite>
-            <Title>
-              <Text>
-                {pluralize('Segment', numberOfSegments)} de {pluralize('flotte', numberOfSegments)}{' '}
-                {pluralize('actuel', numberOfSegments)}
-              </Text>
-              <TextValue>
-                <FleetSegmentsWithTooltip segments={selectedVessel?.segments} />
-              </TextValue>
-            </Title>
-            <StyledVesselCurrentFleetSegmentDetails />
-          </Zone>
-          <Zone>
+          <StyledVesselSidebarFleetSegments segments={selectedVessel?.segments} />
+          <SidebarZone>
             <Title $hasTwoLines={false}>
               <Text $hasTwoLines>Résumé du JPE</Text>
               <TextValue $hasTwoLines={false} data-cy="vessel-fishing-trip-number">
@@ -228,15 +215,15 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
             ) : (
               <NoMessage>Aucun message reçu</NoMessage>
             )}
-          </Zone>
+          </SidebarZone>
         </Body>
       ) : null}
     </>
   )
 }
 
-const StyledVesselCurrentFleetSegmentDetails = styled(VesselCurrentFleetSegmentDetails)`
-  padding: 6px 4px 4px;
+const StyledVesselSidebarFleetSegments = styled(VesselSidebarFleetSegments)`
+  margin-bottom: 10px;
 `
 
 export const PreviousTrip = styled(IconButton)<{
@@ -356,7 +343,7 @@ const TextValue = styled.div<{
 `
 
 const Body = styled.div`
-  padding: 10px 10px 1px 10px;
+  padding: 10px 10px 10px 10px;
 `
 
 const Title = styled.div<{
@@ -370,14 +357,4 @@ const Title = styled.div<{
   flex-grow: 2;
   display: flex;
   width: 400px;
-`
-
-const Zone = styled.div<{
-  $isWhite?: boolean
-}>`
-  background: ${p => (p.$isWhite ? p.theme.color.white : 'unset')};
-  display: flex;
-  flex-wrap: wrap;
-  text-align: left;
-  margin-bottom: 10px;
 `

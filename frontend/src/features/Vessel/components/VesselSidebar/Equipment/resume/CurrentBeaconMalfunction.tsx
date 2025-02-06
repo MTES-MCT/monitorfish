@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { CurrentBeaconMalfunctionBody } from './CurrentBeaconMalfunctionBody'
 import ArrowSVG from '../../../../../icons/Picto_fleche-pleine-droite.svg?react'
-import { Header, Zone } from '../../common_styles/common.style'
+import { SidebarHeader, SidebarZone } from '../../common_styles/common.style'
 
 import type { BeaconMalfunctionResumeAndDetails } from '@features/BeaconMalfunction/types'
 import type { Promisable } from 'type-fest'
@@ -21,8 +21,8 @@ export function CurrentBeaconMalfunction({
   const dispatch = useMainAppDispatch()
 
   return currentBeaconMalfunctionWithDetails ? (
-    <Zone>
-      <Header>
+    <StyledSidebarZone>
+      <SidebarHeader>
         Avarie en cours
         <ShowBeaconMalfunction
           data-cy="beacon-malfunction-current-see-details"
@@ -39,11 +39,15 @@ export function CurrentBeaconMalfunction({
           voir les détails de l&apos;avarie
           <Arrow />
         </ShowBeaconMalfunction>
-      </Header>
+      </SidebarHeader>
       <CurrentBeaconMalfunctionBody currentBeaconMalfunctionWithDetails={currentBeaconMalfunctionWithDetails} />
-    </Zone>
+    </StyledSidebarZone>
   ) : null
 }
+
+const StyledSidebarZone = styled(SidebarZone)`
+  margin-bottom: 10px;
+`
 
 const Arrow = styled(ArrowSVG)`
   margin-left: 5px;

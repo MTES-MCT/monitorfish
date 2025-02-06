@@ -8,7 +8,7 @@ import { LawReminders } from './LawReminders'
 // TODO Add the icon to https://github.com/MTES-MCT/monitor-ui
 import CautionSVG from '../../../../icons/Attention_controles.svg?react'
 import SeaSVG from '../../../../icons/Avarie_statut_navire_en_mer.svg?react'
-import { Header, Zone } from '../common_styles/common.style'
+import { SidebarHeader, SidebarZone } from '../common_styles/common.style'
 
 import type { MissionAction } from '../../../../Mission/missionAction.types'
 
@@ -23,8 +23,8 @@ export function ControlsSummary({ controlsFromDate, lastControls, summary }: Con
   const yearsDepth = customDayjs().utc().get('year') - customDayjs(controlsFromDate).get('year') + 1
 
   return (
-    <Zone data-cy="vessel-controls-summary">
-      <Header>Derniers contrôles ({yearsDepth} dernières années)</Header>
+    <StyledSidebarZone data-cy="vessel-controls-summary">
+      <SidebarHeader>Derniers contrôles ({yearsDepth} dernières années)</SidebarHeader>
       <Body>
         <InfractionsSummary
           numberOfControlsWithSomeGearsSeized={numberOfControlsWithSomeGearsSeized}
@@ -50,9 +50,13 @@ export function ControlsSummary({ controlsFromDate, lastControls, summary }: Con
           <LawReminders controls={controls} />
         </Columns>
       </Body>
-    </Zone>
+    </StyledSidebarZone>
   )
 }
+
+const StyledSidebarZone = styled(SidebarZone)`
+  margin: 10px 0 10px 0;
+`
 
 const Body = styled.div`
   margin: 0;

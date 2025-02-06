@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 import { getRiskFactorColor } from '@features/RiskFactor/utils'
 import { theme } from 'ui/theme'
-import { RiskFactorBox } from '@features/Vessel/components/VesselSidebar/risk_factor/RiskFactorBox'
+import { RiskFactorBox } from '@features/RiskFactor/components/RiskFactorBox'
 
 import type { InnerCellProps } from 'rsuite-table/lib/Cell'
 

@@ -31,6 +31,7 @@ export function ReportingCard({
   const dispatch = useMainAppDispatch()
 
   const [isDeletionConfirmationModalOpen, setIsDeletionConfirmationModalOpen] = useState(false)
+  const [isArchivingConfirmationModalOpen, setIsArchivingConfirmationModalOpen] = useState(false)
   const [isOtherOccurrencesDatesOpened, setIsOtherOccurrencesDatesOpened] = useState(false)
 
   const isAnInfractionSuspicion = reportingIsAnInfractionSuspicion(reporting.type)
@@ -84,10 +85,6 @@ export function ReportingCard({
     return ''
   }, [reporting, willExpireAfterNewVoyage])
 
-  const archive = () => {
-    dispatch(archiveReporting(reporting))
-  }
-
   const askForDeletionConfirmation = () => {
     setIsDeletionConfirmationModalOpen(true)
   }
@@ -100,6 +97,20 @@ export function ReportingCard({
     closeDeletionConfirmationModal()
 
     dispatch(deleteReporting(reporting.id, reporting.type))
+  }
+
+  const askForArchivingConfirmation = () => {
+    setIsArchivingConfirmationModalOpen(true)
+  }
+
+  const closeArchivingConfirmationModal = () => {
+    setIsArchivingConfirmationModalOpen(false)
+  }
+
+  const confirmArchive = () => {
+    closeArchivingConfirmationModal()
+
+    dispatch(archiveReporting(reporting))
   }
 
   const handleEdit = () => {
@@ -202,7 +213,7 @@ export function ReportingCard({
               data-cy="archive-reporting-card"
               Icon={Icon.Archive}
               iconSize={20}
-              onClick={archive}
+              onClick={askForArchivingConfirmation}
               title={
                 canBeArchived
                   ? 'Archiver ce signalement'
@@ -244,6 +255,16 @@ export function ReportingCard({
           onCancel={closeDeletionConfirmationModal}
           onConfirm={confirmDeletion}
           title="Suppression du signalement"
+        />
+      )}
+      {isArchivingConfirmationModalOpen && (
+        <ConfirmationModal
+          confirmationButtonLabel="Archiver"
+          iconName="Archive"
+          message="Êtes-vous sûr de vouloir archiver ce signalement ?"
+          onCancel={closeArchivingConfirmationModal}
+          onConfirm={confirmArchive}
+          title="Archivage du signalement"
         />
       )}
     </>

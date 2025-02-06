@@ -35,7 +35,14 @@ class JpaSilencedAlertRepository(
         return dbSilencedAlertRepository.findAllBySilencedBeforeDateAfter(now).map { it.toSilencedAlert(mapper) }
     }
 
+    // For test purpose
+    override fun findAll(): List<SilencedAlert> = dbSilencedAlertRepository.findAll().map { it.toSilencedAlert(mapper) }
+
     override fun delete(id: Int) {
         dbSilencedAlertRepository.deleteById(id)
+    }
+
+    override fun deleteSixMonthsOldSilencedAlerts() {
+        dbSilencedAlertRepository.deleteSixMonthsOldSilencedAlerts()
     }
 }

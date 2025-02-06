@@ -136,4 +136,17 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
         // Then, the last inserted alert is not fetched
         assertThat(alerts).hasSize(4)
     }
+
+    @Test
+    @Transactional
+    fun `deleteSixMonthsOldSilencedAlerts Should delete historical silenced alerts`() {
+        // Given
+        assertThat(jpaSilencedAlertRepository.findAll()).hasSize(5)
+
+        // When
+        jpaSilencedAlertRepository.deleteSixMonthsOldSilencedAlerts()
+
+        // Then, a silenced alert has been deleted
+        assertThat(jpaSilencedAlertRepository.findAll()).hasSize(4)
+    }
 }

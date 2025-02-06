@@ -16,4 +16,9 @@ interface SilencedAlertRepository {
     fun findAllCurrentSilencedAlerts(): List<SilencedAlert>
 
     fun delete(id: Int)
+
+    fun deleteSixMonthsOldSilencedAlerts()
+
+    // For test purpose
+    fun findAll(): List<SilencedAlert>
 }

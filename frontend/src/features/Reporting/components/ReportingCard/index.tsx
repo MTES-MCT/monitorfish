@@ -2,10 +2,11 @@ import { ConfirmationModal } from '@components/ConfirmationModal'
 import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
 import { ALERTS_ARCHIVED_AFTER_NEW_VOYAGE } from '@features/Alert/constants'
 import { PendingAlertValueType } from '@features/Alert/types'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Accent, Icon, IconButton, THEME, Link } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, THEME, Link, Level } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -97,6 +98,17 @@ export function ReportingCard({
     closeDeletionConfirmationModal()
 
     dispatch(deleteReporting(reporting.id, reporting.type))
+
+    dispatch(
+      addMainWindowBanner({
+        children: 'Signalement supprimé.',
+        closingDelay: 2000,
+        isClosable: true,
+        isFixed: true,
+        level: Level.SUCCESS,
+        withAutomaticClosing: true
+      })
+    )
   }
 
   const askForArchivingConfirmation = () => {
@@ -111,6 +123,17 @@ export function ReportingCard({
     closeArchivingConfirmationModal()
 
     dispatch(archiveReporting(reporting))
+
+    dispatch(
+      addMainWindowBanner({
+        children: 'Signalement archivé.',
+        closingDelay: 2000,
+        isClosable: true,
+        isFixed: true,
+        level: Level.SUCCESS,
+        withAutomaticClosing: true
+      })
+    )
   }
 
   const handleEdit = () => {

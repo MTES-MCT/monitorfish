@@ -109,7 +109,7 @@ function UnmemoizedVesselListTable({
         </Column>
         <Column resizable width={120}>
           <HeaderCell>Seg. flotte</HeaderCell>
-          <Cell>{rowData => <ContentWithEllipsis>{rowData.fleetSegmentsArray?.join(', ')}</ContentWithEllipsis>}</Cell>
+          <Cell>{rowData => <ContentWithEllipsis>{rowData.segments?.join(', ')}</ContentWithEllipsis>}</Cell>
         </Column>
         <Column resizable width={120}>
           <HeaderCell>Engins à bord</HeaderCell>

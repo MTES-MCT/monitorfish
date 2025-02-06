@@ -17,7 +17,7 @@ class EstimatedPosition {
 
   /**
    * For building OpenLayers estimated position feature
-   * @param {import('./vessel/types').VesselEnhancedLastPositionWebGLObject} vessel - The vessel
+   * @param {import('./vessel/types').VesselLastPosition} vessel - The vessel
    * @param {{
       isLight: boolean,
       vesselIsHidden: Date

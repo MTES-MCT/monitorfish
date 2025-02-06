@@ -26,7 +26,7 @@ export function removeDuplicatedFoundVessels(
 }
 
 export function enrichWithVesselIdentifierIfNotFound(
-  identityOrVessel: Vessel.VesselEnhancedObject | Vessel.VesselIdentity
+  identityOrVessel: Vessel.VesselLastPosition | Vessel.VesselIdentity
 ): Vessel.VesselIdentity {
   const vesselIdentity = extractVesselIdentityProps(identityOrVessel)
 

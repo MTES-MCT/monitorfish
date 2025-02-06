@@ -14,7 +14,7 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
 export function MapMenu() {
   const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
   const [coordinates, setCoordinates] = useState<number[]>([])
-  const vessel = useRef<Vessel.VesselEnhancedLastPositionWebGLObject | undefined>()
+  const vessel = useRef<Vessel.VesselLastPosition | undefined>()
 
   useEffect(() => {
     function showMenu(event) {

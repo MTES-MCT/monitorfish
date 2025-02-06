@@ -3,17 +3,17 @@ import styled from 'styled-components'
 
 import { RiskFactorBox } from './RiskFactorBox'
 import { RiskFactorExplanationSchema } from './RiskFactorExplanationSchema'
-import { StyledModalHeader } from '../../../../commonComponents/StyledModalHeader'
-import { basePrimaryButton, SecondaryButton } from '../../../../commonStyles/Buttons.style'
-import RiskFactorControlSVG from '../../../../icons/Note_de_controle_gyrophare.svg?react'
-import RiskFactorImpactSVG from '../../../../icons/Note_impact_poisson.svg?react'
-import RiskFactorInfractionsSVG from '../../../../icons/Note_infraction_stop.svg?react'
+import { StyledModalHeader } from '../../commonComponents/StyledModalHeader'
+import { basePrimaryButton, SecondaryButton } from '../../commonStyles/Buttons.style'
+import RiskFactorControlSVG from '../../icons/Note_de_controle_gyrophare.svg?react'
+import RiskFactorImpactSVG from '../../icons/Note_impact_poisson.svg?react'
+import RiskFactorInfractionsSVG from '../../icons/Note_infraction_stop.svg?react'
 import {
   getDetectabilityRiskFactorText,
   getImpactRiskFactorText,
   getProbabilityRiskFactorText,
   getRiskFactorColor
-} from '../../../../RiskFactor/utils'
+} from '../utils'
 
 import type { Promisable } from 'type-fest'
 

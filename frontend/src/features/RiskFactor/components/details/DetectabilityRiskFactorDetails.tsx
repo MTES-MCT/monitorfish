@@ -4,7 +4,7 @@ import { isDefined } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import styled from 'styled-components'
 
-import { getDate } from '../../../../../../utils'
+import { getDate } from '../../../../utils'
 import { RiskFactorCursor } from '../RiskFactorCursor'
 
 type DetectabilityRiskFactorDetailsProps = {

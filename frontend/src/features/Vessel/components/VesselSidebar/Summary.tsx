@@ -1,4 +1,5 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
+import { VesselSidebarFleetSegments } from '@features/FleetSegment/components/VesselSidebarFleetSegments'
 import { WSG84_PROJECTION } from '@features/Map/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -11,9 +12,9 @@ import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 import { getDateTime, timeagoFrenchLocale } from 'utils'
 
-import { RiskFactorResume } from './risk_factor/RiskFactorResume'
 import InfoSVG from '../../../icons/Information.svg?react'
 import NoVesselSVG from '../../../icons/Picto_photo_navire_manquante.svg?react'
+import { RiskFactorResume } from '../../../RiskFactor/components/RiskFactorResume'
 
 // @ts-ignore
 timeago.register('fr', timeagoFrenchLocale)
@@ -152,6 +153,7 @@ export function VesselSummary() {
         </Position>
       </ZoneWithoutBackground>
       {isSuperUser && <RiskFactorResume />}
+      {!isSuperUser && <VesselSidebarFleetSegments segments={selectedVessel?.segments} />}
     </Body>
   ) : (
     <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
@@ -187,12 +189,12 @@ const PhotoZone = styled.div`
   background: ${p => p.theme.color.white};
   display: flex;
   justify-content: center;
-  margin: 5px 5px 10px 5px;
+  margin-bottom: 10px;
   padding: 10px;
 `
 
 const Body = styled.div`
-  padding: 5px 5px 1px 5px;
+  padding: 10px;
 `
 
 const Photo = styled.img<{
@@ -210,7 +212,7 @@ const NoValue = styled.span`
 `
 
 const ZoneWithoutBackground = styled.div`
-  margin: 5px 5px 10px 5px;
+  margin-bottom: 10px;
   text-align: left;
   display: flex;
   flex-wrap: wrap;

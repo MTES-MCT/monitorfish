@@ -1,5 +1,5 @@
+import { FleetSegmentsWithTooltip } from '@features/FleetSegment/components/FleetSegmentsWithTooltip'
 import { VesselCurrentFleetSegmentDetails } from '@features/FleetSegment/components/VesselCurrentFleetSegmentDetails'
-import { FleetSegmentsWithTooltip } from '@features/Logbook/components/VesselLogbook/LogbookSummary/FleetSegmentsWithTooltip'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useRef } from 'react'

@@ -16,9 +16,9 @@ import { ImpactRiskFactorDetails } from './details/ImpactRiskFactorDetails'
 import { ProbabilityRiskFactorDetails } from './details/ProbabilityRiskFactorDetails'
 import { RiskFactorCursor } from './RiskFactorCursor'
 import { RiskFactorExplanationModal } from './RiskFactorExplanationModal'
-import RiskFactorControlSVG from '../../../../icons/Note_de_controle_gyrophare.svg?react'
-import RiskFactorImpactSVG from '../../../../icons/Note_impact_poisson.svg?react'
-import RiskFactorInfractionsSVG from '../../../../icons/Note_infraction_stop.svg?react'
+import RiskFactorControlSVG from '../../icons/Note_de_controle_gyrophare.svg?react'
+import RiskFactorImpactSVG from '../../icons/Note_impact_poisson.svg?react'
+import RiskFactorInfractionsSVG from '../../icons/Note_infraction_stop.svg?react'
 
 export function RiskFactorResume() {
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
@@ -223,7 +223,6 @@ const SeeMore = styled.a<{
 `
 
 const RiskFactorZone = styled.div`
-  margin: 5px 5px 10px 5px;
   padding-top: 10px;
   text-align: left;
   display: flex;

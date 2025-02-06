@@ -3,7 +3,7 @@ import { VesselCurrentFleetSegmentDetails } from '@features/FleetSegment/compone
 import { getLastLogbookTripsOptions } from '@features/Logbook/components/VesselLogbook/LogbookMessages/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Icon, IconButton, Select } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, pluralize, Select } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useMemo } from 'react'
 import styled from 'styled-components'
@@ -64,13 +64,18 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
   const getLogbookTrip = (nextTripNumber: string | undefined) =>
     dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.EQUALS, true, nextTripNumber))
 
+  const numberOfSegments = selectedVessel?.segments?.length ?? 0
+
   return (
     <>
       {fishingActivities ? (
         <Body>
           <Zone $isWhite>
             <Title>
-              <Text>Segment(s) de flotte(s) actuel(s)</Text>
+              <Text>
+                {pluralize('Segment', numberOfSegments)} de {pluralize('flotte', numberOfSegments)}{' '}
+                {pluralize('actuel', numberOfSegments)}
+              </Text>
               <TextValue>
                 <FleetSegmentsWithTooltip segments={selectedVessel?.segments} />
               </TextValue>

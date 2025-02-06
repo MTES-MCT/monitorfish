@@ -7,8 +7,8 @@ export const FLEET_SEGMENT_VESSEL_TYPES = [
 ]
 
 export const SpeciesTypeToSpeciesTypeLabel: Record<ScipSpeciesType, string> = {
-  [ScipSpeciesType.DEMERSAL]: 'Démersal',
+  [ScipSpeciesType.DEMERSAL]: 'Démersales',
   [ScipSpeciesType.OTHER]: 'Autres',
-  [ScipSpeciesType.PELAGIC]: 'Pélagique',
-  [ScipSpeciesType.TUNA]: 'Thon'
+  [ScipSpeciesType.PELAGIC]: 'Pélagiques',
+  [ScipSpeciesType.TUNA]: 'Thons'
 }

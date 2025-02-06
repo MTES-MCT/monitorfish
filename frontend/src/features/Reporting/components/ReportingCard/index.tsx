@@ -2,10 +2,11 @@ import { ConfirmationModal } from '@components/ConfirmationModal'
 import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
 import { ALERTS_ARCHIVED_AFTER_NEW_VOYAGE } from '@features/Alert/constants'
 import { PendingAlertValueType } from '@features/Alert/types'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Accent, Icon, IconButton, THEME, Link } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, THEME, Link, Level } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -31,6 +32,7 @@ export function ReportingCard({
   const dispatch = useMainAppDispatch()
 
   const [isDeletionConfirmationModalOpen, setIsDeletionConfirmationModalOpen] = useState(false)
+  const [isArchivingConfirmationModalOpen, setIsArchivingConfirmationModalOpen] = useState(false)
   const [isOtherOccurrencesDatesOpened, setIsOtherOccurrencesDatesOpened] = useState(false)
 
   const isAnInfractionSuspicion = reportingIsAnInfractionSuspicion(reporting.type)
@@ -84,10 +86,6 @@ export function ReportingCard({
     return ''
   }, [reporting, willExpireAfterNewVoyage])
 
-  const archive = () => {
-    dispatch(archiveReporting(reporting))
-  }
-
   const askForDeletionConfirmation = () => {
     setIsDeletionConfirmationModalOpen(true)
   }
@@ -100,6 +98,42 @@ export function ReportingCard({
     closeDeletionConfirmationModal()
 
     dispatch(deleteReporting(reporting.id, reporting.type))
+
+    dispatch(
+      addMainWindowBanner({
+        children: 'Signalement supprimé.',
+        closingDelay: 2000,
+        isClosable: true,
+        isFixed: true,
+        level: Level.SUCCESS,
+        withAutomaticClosing: true
+      })
+    )
+  }
+
+  const askForArchivingConfirmation = () => {
+    setIsArchivingConfirmationModalOpen(true)
+  }
+
+  const closeArchivingConfirmationModal = () => {
+    setIsArchivingConfirmationModalOpen(false)
+  }
+
+  const confirmArchive = () => {
+    closeArchivingConfirmationModal()
+
+    dispatch(archiveReporting(reporting))
+
+    dispatch(
+      addMainWindowBanner({
+        children: 'Signalement archivé.',
+        closingDelay: 2000,
+        isClosable: true,
+        isFixed: true,
+        level: Level.SUCCESS,
+        withAutomaticClosing: true
+      })
+    )
   }
 
   const handleEdit = () => {
@@ -202,7 +236,7 @@ export function ReportingCard({
               data-cy="archive-reporting-card"
               Icon={Icon.Archive}
               iconSize={20}
-              onClick={archive}
+              onClick={askForArchivingConfirmation}
               title={
                 canBeArchived
                   ? 'Archiver ce signalement'
@@ -244,6 +278,16 @@ export function ReportingCard({
           onCancel={closeDeletionConfirmationModal}
           onConfirm={confirmDeletion}
           title="Suppression du signalement"
+        />
+      )}
+      {isArchivingConfirmationModalOpen && (
+        <ConfirmationModal
+          confirmationButtonLabel="Archiver"
+          iconName="Archive"
+          message="Êtes-vous sûr de vouloir archiver ce signalement ?"
+          onCancel={closeArchivingConfirmationModal}
+          onConfirm={confirmArchive}
+          title="Archivage du signalement"
         />
       )}
     </>

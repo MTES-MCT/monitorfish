@@ -1,5 +1,5 @@
 import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
-import { Icon } from '@mtes-mct/monitor-ui'
+import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { getSegmentInfo, getTripSegments } from './utils'
@@ -17,13 +17,13 @@ export function FleetSegmentsWithTooltip({ segments }: FleetSegmentsProps) {
       {segments ? (
         segments.map((segment, index) => (
           // eslint-disable-next-line react/no-array-index-key
-          <span key={index}>
+          <Text key={index}>
             {segment}
             <TitleWrapper title={getSegmentInfo(tripSegments[index])}>
-              <StyledIconInfo size={16} />
+              <StyledIconInfo color={THEME.color.gunMetal} size={18} />
             </TitleWrapper>
             {segments.length === index + 1 ? '' : ', '}
-          </span>
+          </Text>
         ))
       ) : (
         <NoValue>-</NoValue>
@@ -32,8 +32,10 @@ export function FleetSegmentsWithTooltip({ segments }: FleetSegmentsProps) {
   )
 }
 
+const Text = styled.span``
+
 const TitleWrapper = styled.span`
-  vertical-align: baseline;
+  vertical-align: middle;
 `
 
 const NoValue = styled.span`

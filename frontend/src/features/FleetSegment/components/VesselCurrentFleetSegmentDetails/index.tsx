@@ -8,6 +8,7 @@ import {
 import { SpeciesTypeToSpeciesTypeLabel } from '@features/FleetSegment/constants'
 import { FlatKeyValue } from '@features/Vessel/components/VesselSidebar/common/FlatKeyValue'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { pluralize } from '@mtes-mct/monitor-ui'
 import { type ForwardedRef, forwardRef, useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -41,17 +42,18 @@ function VesselCurrentFleetSegmentDetailsWithRef(
 
   const targetSpeciesIncludedInSegments = getTargetSpeciesIncludedInSegments(riskFactor, fleetSegments)
   const gearsWithName = getGearsWithNames(gearsReferential, riskFactor)
+  const numberOfGears = gearsWithName?.length ?? 0
   const faoZones = getFaoZones(riskFactor)
 
   const columns = useMemo(() => {
     let baseColumns = [
       {
-        key: 'Zones de la marée',
-        value: faoZones
+        key: `${pluralize('Zone', faoZones.length)} de la marée`,
+        value: faoZones.length > 0 ? faoZones.join(', ') : undefined
       },
       {
         hasMultipleLines: true,
-        key: 'Engins de la marée (FAR)',
+        key: `${pluralize('Engin', numberOfGears)} de la marée (FAR)`,
         value: gearsWithName?.length ? (
           <>
             {gearsWithName?.map(gear => (
@@ -67,7 +69,7 @@ function VesselCurrentFleetSegmentDetailsWithRef(
     if (isFleetSegmentSpecifyingMeshSize) {
       baseColumns = baseColumns.concat({
         hasMultipleLines: true,
-        key: 'Maillage des engins',
+        key: `Maillage ${pluralize('de', numberOfGears)} ${numberOfGears === 1 ? "l'" : ''}${pluralize('engin', numberOfGears)}`,
         value: (
           <>
             {gearsWithName?.map(gear => (
@@ -95,7 +97,14 @@ function VesselCurrentFleetSegmentDetailsWithRef(
     }
 
     return baseColumns
-  }, [faoZones, mainScipSpeciesType, isFleetSegmentSpecifyingMeshSize, targetSpeciesIncludedInSegments, gearsWithName])
+  }, [
+    faoZones,
+    numberOfGears,
+    mainScipSpeciesType,
+    isFleetSegmentSpecifyingMeshSize,
+    targetSpeciesIncludedInSegments,
+    gearsWithName
+  ])
 
   return <FlatKeyValue ref={ref} className={className} column={columns} keyWidth={170} />
 }

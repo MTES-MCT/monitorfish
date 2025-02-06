@@ -1,6 +1,7 @@
 import { SpeciesTypeToSpeciesTypeLabel } from '@features/FleetSegment/constants'
+import { pluralize } from '@mtes-mct/monitor-ui'
 
-import type { FleetSegment } from '../../../../FleetSegment/types'
+import type { FleetSegment } from '@features/FleetSegment/types'
 
 export function getTripSegments(
   segments: string[] | undefined,
@@ -26,14 +27,17 @@ export function getSegmentInfo(segment: FleetSegment | undefined): string {
   }
 
   const gears = segment.gears?.length ? segment.gears.join(', ') : 'aucun'
+  const numberOfGears = segment.gears?.length ?? 0
   const faoAreas = segment.faoAreas?.length ? segment.faoAreas.join(', ') : 'aucune'
+  const numberOfFaoAreas = segment.faoAreas?.length ?? 0
   const targetSpecies = segment.targetSpecies?.length ? segment.targetSpecies.join(', ') : 'aucune'
+  const numberOfTargetSpecies = segment.targetSpecies?.length ?? 0
   const percent = segment.minShareOfTargetSpecies ? segment.minShareOfTargetSpecies * 100 : undefined
 
-  return `Zones : ${faoAreas}
-Engins : ${gears}
+  return `${pluralize('Zone', numberOfFaoAreas)} : ${faoAreas}
+${pluralize('Engin', numberOfGears)} : ${gears}
 Maillage min. : ${segment.minMesh ? `${segment.minMesh}mm` : 'aucun'}
 Maillage max. : ${segment.maxMesh ? `${segment.maxMesh}mm` : 'aucun'}
 Majorité d'espèces : ${segment.mainScipSpeciesType ? SpeciesTypeToSpeciesTypeLabel[segment.mainScipSpeciesType] : 'aucun'}
-Espèces cibles ${percent ? `(≥ ${percent}% du total des captures) ` : ''}: ${targetSpecies}`
+${pluralize('Espèce', numberOfTargetSpecies)} ${pluralize('cible', numberOfTargetSpecies)} ${percent ? `(≥ ${percent}% du total des captures) ` : ''}: ${targetSpecies}`
 }

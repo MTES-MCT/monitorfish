@@ -1,8 +1,9 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { FlatKeyValue } from '@features/Vessel/components/VesselSidebar/common/FlatKeyValue'
+import { SidebarLoadMoreYears } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Button, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -122,9 +123,11 @@ export function EquipmentResume({ setIsCurrentBeaconMalfunctionDetails }: Beacon
                 vesselBeaconMalfunctionsFromDate={vesselBeaconMalfunctionsFromDate}
                 yearsToBeaconMalfunctions={yearsToBeaconMalfunctions}
               />
-              <SeeMoreBackground>
-                <SeeMore onClick={seeMore}>Afficher plus d&apos;avaries</SeeMore>
-              </SeeMoreBackground>
+              <SidebarLoadMoreYears>
+                <Button accent={Accent.SECONDARY} onClick={seeMore}>
+                  Afficher plus d&apos;avaries
+                </Button>
+              </SidebarLoadMoreYears>
             </>
           )}
         </Body>
@@ -141,29 +144,7 @@ const Columns = styled.div`
 `
 
 const StyledFlatKeyValue = styled(FlatKeyValue)`
-  margin: 10px 5px 0;
-  width: 235px;
+  width: 240px;
 `
 
-const SeeMoreBackground = styled.div`
-  background: ${p => p.theme.color.white};
-  margin: 0px 5px 10px 5px;
-  padding: 5px 0 5px 0;
-`
-
-const SeeMore = styled.div`
-  border: 1px solid ${p => p.theme.color.charcoal};
-  color: ${p => p.theme.color.gunMetal};
-  padding: 5px 10px 5px 10px;
-  width: max-content;
-  font-size: 13px;
-  cursor: pointer;
-  margin-left: auto;
-  margin-right: auto;
-  user-select: none;
-  background: ${p => p.theme.color.white};
-`
-
-const Body = styled.div`
-  padding: 0 5px 1px 5px;
-`
+const Body = styled.div``

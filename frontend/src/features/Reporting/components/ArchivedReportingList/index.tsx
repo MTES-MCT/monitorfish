@@ -1,4 +1,8 @@
-import { Header, Zone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
+import {
+  SidebarHeader,
+  SidebarLoadMoreYears,
+  SidebarZone
+} from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
 import { Accent, Button, customDayjs, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
@@ -20,8 +24,8 @@ export function ArchivedReportingList({ fromDate, onMore, vesselReportings }: Ar
   )
 
   return (
-    <Zone data-cy="vessel-sidebar-archived-reporting">
-      <Header>Historique des signalements</Header>
+    <SidebarZone data-cy="vessel-sidebar-archived-reporting">
+      <SidebarHeader>Historique des signalements</SidebarHeader>
       {reportingsByYearAsPairs.length === 0 && (
         <NoReporting>{`Aucun signalement depuis ${customDayjs(fromDate).get('year')}`}</NoReporting>
       )}
@@ -32,12 +36,12 @@ export function ArchivedReportingList({ fromDate, onMore, vesselReportings }: Ar
           ))}
         </List>
       )}
-      <SeeMoreBackground>
+      <SidebarLoadMoreYears>
         <Button accent={Accent.SECONDARY} onClick={onMore}>
           Afficher plus de signalements
         </Button>
-      </SeeMoreBackground>
-    </Zone>
+      </SidebarLoadMoreYears>
+    </SidebarZone>
   )
 }
 
@@ -51,14 +55,6 @@ const NoReporting = styled.div`
   color: ${THEME.color.gunMetal};
   font-size: 13px;
   padding: 10px 0 10px 0;
-  text-align: center;
-  width: 100%;
-`
-
-const SeeMoreBackground = styled.div`
-  background: ${THEME.color.white};
-  margin: 0 5px 5px 5px;
-  padding: 10px 0 5px 0;
   text-align: center;
   width: 100%;
 `

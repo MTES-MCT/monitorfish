@@ -45,16 +45,20 @@ export function VesselReportings() {
 
   return (
     <Body data-cy="vessel-reporting">
-      <CurrentReportingList vesselIdentity={selectedVesselIdentity} vesselReportings={vesselReportings} />
+      <StyledCurrentReportingList vesselIdentity={selectedVesselIdentity} vesselReportings={vesselReportings} />
       <TwelveMonthsSummary reportingSummary={vesselReportings.summary} />
       <ArchivedReportingList fromDate={startDate} onMore={decreaseStartDate} vesselReportings={vesselReportings} />
     </Body>
   )
 }
 
+const StyledCurrentReportingList = styled(CurrentReportingList)`
+  margin-bottom: 10px;
+`
+
 const Body = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  padding: 5px 5px 10px 5px;
+  padding: 10px;
 `

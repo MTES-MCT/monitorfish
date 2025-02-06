@@ -1,4 +1,4 @@
-import { Header, Zone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
+import { SidebarHeader, SidebarZone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
@@ -11,8 +11,8 @@ type ReportingListSummaryProps = Readonly<{
 }>
 export function TwelveMonthsSummary({ reportingSummary }: ReportingListSummaryProps) {
   return (
-    <Zone data-cy="vessel-reporting-summary">
-      <Header>Résumé des derniers signalements (12 derniers mois)</Header>
+    <StyledSidebarZone data-cy="vessel-reporting-summary">
+      <SidebarHeader>Résumé des derniers signalements (12 derniers mois)</SidebarHeader>
       <Body>
         <Columns $isFirst>
           <IconColumn>
@@ -29,9 +29,13 @@ export function TwelveMonthsSummary({ reportingSummary }: ReportingListSummaryPr
           </Label>
         </Columns>
       </Body>
-    </Zone>
+    </StyledSidebarZone>
   )
 }
+
+const StyledSidebarZone = styled(SidebarZone)`
+  margin-bottom: 10px;
+`
 
 const Body = styled.div`
   margin: 0;

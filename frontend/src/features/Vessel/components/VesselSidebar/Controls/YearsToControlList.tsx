@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { YearControls } from './YearControls'
 import { COLORS } from '../../../../../constants/constants'
-import { Header, Zone } from '../common_styles/common.style'
+import { SidebarHeader, SidebarZone } from '../common_styles/common.style'
 
 import type { MissionAction } from '../../../../Mission/missionAction.types'
 
@@ -22,8 +22,8 @@ export function YearsToControlList({ controlsFromDate, yearsToControls }: YearsT
   )
 
   return (
-    <Zone>
-      <Header>Historique des contrôles</Header>
+    <SidebarZone>
+      <SidebarHeader>Historique des contrôles</SidebarHeader>
       {yearsToControls && Object.keys(yearsToControls) && Object.keys(yearsToControls).length ? (
         <List data-cy="vessel-control-years">
           {sortedYears.map(year => (
@@ -33,7 +33,7 @@ export function YearsToControlList({ controlsFromDate, yearsToControls }: YearsT
       ) : (
         <NoControls>Aucun contrôle {`depuis ${customDayjs(controlsFromDate).get('year')}`}</NoControls>
       )}
-    </Zone>
+    </SidebarZone>
   )
 }
 

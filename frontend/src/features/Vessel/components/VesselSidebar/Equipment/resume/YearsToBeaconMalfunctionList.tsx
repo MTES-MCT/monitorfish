@@ -1,3 +1,4 @@
+import { SidebarZone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -25,7 +26,7 @@ export function YearsToBeaconMalfunctionList({
   )
 
   return (
-    <Zone>
+    <SidebarZone>
       <Title>Historique des avaries VMS</Title>
       {yearsToBeaconMalfunctions && Object.keys(yearsToBeaconMalfunctions)?.length ? (
         <List data-cy="vessel-beacon-malfunctions-history">
@@ -43,7 +44,7 @@ export function YearsToBeaconMalfunctionList({
           Aucune avarie {`depuis ${vesselBeaconMalfunctionsFromDate.getUTCFullYear() + 1}`}
         </NoBeaconMalfunction>
       )}
-    </Zone>
+    </SidebarZone>
   )
 }
 
@@ -59,14 +60,6 @@ const NoBeaconMalfunction = styled.div`
   color: ${COLORS.gunMetal};
   font-size: 13px;
   width: 100%;
-`
-
-const Zone = styled.div`
-  margin: 10px 5px 0 5px;
-  text-align: left;
-  display: flex;
-  flex-wrap: wrap;
-  background: ${COLORS.white};
 `
 
 const Title = styled.div`

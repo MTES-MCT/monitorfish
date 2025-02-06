@@ -128,6 +128,8 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('OFB SD 56 / Sortie non autorisée')
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 2608')
     cy.get('*[data-cy="archive-reporting-card"]').eq(0).click()
+    // Then, we confirm the reporting deletion
+    cy.clickButton('Archiver')
 
     // Then
     cy.get('*[data-cy="reporting-card"]').should('not.exist')
@@ -154,6 +156,8 @@ context('Vessel sidebar reporting tab', () => {
 
     addAndCreateReportingWithinVesselSidebar()
     cy.get('[data-cy="archive-reporting-card"]').eq(0).click()
+    // Then, we confirm the reporting deletion
+    cy.clickButton('Archiver')
     cy.get('*[data-cy="vessel-sidebar-archived-reporting"]').should('exist')
 
     // Then

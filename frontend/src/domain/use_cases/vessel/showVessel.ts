@@ -42,7 +42,7 @@ export const showVessel =
       )
 
       const vesselFeatureId = VesselFeature.getVesselFeatureId(vesselIdentity)
-      const selectedVesselLastPosition: Vessel.VesselEnhancedObject | undefined = vessels.find(
+      const selectedVesselLastPosition: Vessel.VesselLastPosition | undefined = vessels.find(
         lastPosition => lastPosition.vesselFeatureId === vesselFeatureId
       )
 

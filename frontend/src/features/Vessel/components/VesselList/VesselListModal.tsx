@@ -24,7 +24,7 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
 
 const NOT_FOUND = -1
 
-type CheckedVesselEnhancedLastPositionWebGLObject = Vessel.VesselEnhancedLastPositionWebGLObject & {
+type CheckedLastPosition = Vessel.VesselLastPosition & {
   checked?: boolean
 }
 
@@ -39,7 +39,7 @@ export function VesselListModal({ onClose }) {
     firstUpdate.current = false
 
     dispatch(setBlockVesselsUpdate(true))
-    setVessels(vessels as CheckedVesselEnhancedLastPositionWebGLObject[])
+    setVessels(vessels as CheckedLastPosition[])
     setVesselsCountTotal(vessels?.length || 0)
 
     return () => {}
@@ -49,8 +49,8 @@ export function VesselListModal({ onClose }) {
   const [saveVesselFilterModalIsOpen, setSaveVesselFilterModalIsOpen] = useState(false)
   const [seeMoreIsOpen, setSeeMoreIsOpen] = useState(false)
 
-  const [_vessels, setVessels] = useState<CheckedVesselEnhancedLastPositionWebGLObject[]>([])
-  const [filteredVessels, setFilteredVessels] = useState<CheckedVesselEnhancedLastPositionWebGLObject[]>([])
+  const [_vessels, setVessels] = useState<CheckedLastPosition[]>([])
+  const [filteredVessels, setFilteredVessels] = useState<CheckedLastPosition[]>([])
   const [vesselsCountTotal, setVesselsCountTotal] = useState(0)
   const [vesselsCountShowed, setVesselsCountShowed] = useState(0)
   const [allVesselsChecked, setAllVesselsChecked] = useState(true)
@@ -132,7 +132,7 @@ export function VesselListModal({ onClose }) {
 
   const toggleSelectRow = useCallback(
     (vesselFeatureId, value) => {
-      const nextVessels: CheckedVesselEnhancedLastPositionWebGLObject[] = Object.assign([], _vessels)
+      const nextVessels: CheckedLastPosition[] = Object.assign([], _vessels)
 
       const toggledVesselIndex = nextVessels.findIndex(vessel => vessel.vesselFeatureId === vesselFeatureId)
       if (toggledVesselIndex === NOT_FOUND) {

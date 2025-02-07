@@ -11,7 +11,7 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
 const NOT_FOUND = -1
 
 export const vesselsAdapter = createEntityAdapter({
-  selectId: (vessel: Vessel.VesselEnhancedLastPositionWebGLObject) => vessel.vesselFeatureId,
+  selectId: (vessel: Vessel.VesselLastPosition) => vessel.vesselFeatureId,
   sortComparer: false
 })
 
@@ -33,7 +33,7 @@ export type VesselState = {
   uniqueVesselsSpecies: any[]
   vesselSidebarIsOpen: boolean
   vesselTrackExtent: any | null
-  vessels: EntityState<Vessel.VesselEnhancedLastPositionWebGLObject, Vessel.VesselFeatureId>
+  vessels: EntityState<Vessel.VesselLastPosition, Vessel.VesselFeatureId>
   vesselsEstimatedPositions: any[]
   vesselsTracksShowed: Record<string, ShowedVesselTrack>
 }
@@ -445,7 +445,7 @@ const vesselSlice = createSlice({
       state.selectedVesselSidebarTab = action.payload
     },
 
-    setVessels(state, action: PayloadAction<Vessel.VesselEnhancedLastPositionWebGLObject[]>) {
+    setVessels(state, action: PayloadAction<Vessel.VesselLastPosition[]>) {
       if (!action.payload || !Array.isArray(action.payload)) {
         return
       }

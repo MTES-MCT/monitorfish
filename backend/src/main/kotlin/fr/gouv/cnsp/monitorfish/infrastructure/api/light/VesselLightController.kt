@@ -39,11 +39,7 @@ class VesselLightController(
     fun getVessels(): List<LastPositionDataOutput> {
         val positions = getLastPositions.execute()
 
-        return positions.map { position ->
-            position.let {
-                LastPositionDataOutput.fromLastPosition(position)
-            }
-        }
+        return positions.map { position -> LastPositionDataOutput.fromLastPosition(position) }
     }
 
     @GetMapping("/find")

@@ -237,7 +237,7 @@ export class MonitorFishWebWorker {
       // For performance reason
       // eslint-disable-next-line no-param-reassign
       vessels = vessels.filter(vessel =>
-        fleetSegmentsFiltered.some(fleetSegment => vessel?.fleetSegmentsArray.includes(fleetSegment))
+        fleetSegmentsFiltered.some(fleetSegment => vessel?.segments.includes(fleetSegment))
       )
     }
 

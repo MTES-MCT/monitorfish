@@ -6,7 +6,7 @@ import { Vessel } from './Vessel.types'
 import type { PendingAlert, SilencedAlert } from '@features/Alert/types'
 import type { Reporting } from '@features/Reporting/types'
 
-export function buildFeature(vessel: Vessel.VesselEnhancedLastPositionWebGLObject): Vessel.VesselLastPositionFeature {
+export function buildFeature(vessel: Vessel.VesselLastPosition): Vessel.VesselLastPositionFeature {
   /**
    * The feature does contain ONLY required properties, it does not contain all properties of VesselLastPosition.
    */
@@ -55,7 +55,7 @@ export function buildFeature(vessel: Vessel.VesselEnhancedLastPositionWebGLObjec
 
 export const extractVesselIdentityProps = (
   vessel:
-    | Vessel.VesselEnhancedObject
+    | Vessel.VesselLastPosition
     | Vessel.SelectedVessel
     | Vessel.EnrichedVessel
     | Reporting.Reporting
@@ -77,11 +77,9 @@ export const extractVesselIdentityProps = (
 })
 
 // Type to enforce strong typing: properties specified in `K` will be required, others will remain optional
-type VesselProperties<K extends keyof Vessel.VesselEnhancedLastPositionWebGLObject> = Required<
-  Pick<Vessel.VesselEnhancedLastPositionWebGLObject, K>
-> &
-  Partial<Omit<Vessel.VesselEnhancedLastPositionWebGLObject, K>>
-export function extractVesselPropertiesFromFeature<K extends keyof Vessel.VesselEnhancedLastPositionWebGLObject>(
+type VesselProperties<K extends keyof Vessel.VesselLastPosition> = Required<Pick<Vessel.VesselLastPosition, K>> &
+  Partial<Omit<Vessel.VesselLastPosition, K>>
+export function extractVesselPropertiesFromFeature<K extends keyof Vessel.VesselLastPosition>(
   feature: Vessel.VesselLastPositionFeature,
   requiredProperties: K[]
 ): VesselProperties<K> {

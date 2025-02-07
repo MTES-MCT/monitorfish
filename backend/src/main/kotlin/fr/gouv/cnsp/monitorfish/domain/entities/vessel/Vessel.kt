@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.entities.vessel
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.FRENCH_COUNTRY_CODES
+import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import java.util.*
 
 // TODO Remove all default values.
@@ -51,6 +52,15 @@ data class Vessel(
     val hasLogbookEsacapt: Boolean,
     val hasVisioCaptures: Boolean? = null,
 ) {
+    companion object {
+        /**
+         * @description See in frontend: `VesselFeature.getVesselFeatureId()`
+         *  and `getVesselCompositeIdentifier()`
+         */
+        fun getVesselCompositeIdentifier(position: LastPosition): String =
+            "VESSELS_POINTS:${position.internalReferenceNumber ?: "UNKNOWN"}/${position.ircs ?: "UNKNOWN"}/${position.externalReferenceNumber ?: "UNKNOWN"}"
+    }
+
     fun getNationalIdentifier(): String {
         val internalReferenceNumberCountryCode =
             LIKELY_CONTROLLED_COUNTRY_CODES.find { countryAlpha3 ->

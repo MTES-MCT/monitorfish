@@ -1,8 +1,11 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.coordinates.transformCoordinates
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.Duration
 import java.time.ZonedDateTime
@@ -15,8 +18,8 @@ data class LastPositionDataOutput(
     val externalReferenceNumber: String? = null,
     val vesselName: String? = null,
     val flagState: CountryCode,
-    val latitude: Double? = null,
-    val longitude: Double? = null,
+    val latitude: Double,
+    val longitude: Double,
     val estimatedCurrentLatitude: Double? = null,
     val estimatedCurrentLongitude: Double? = null,
     val speed: Double? = null,
@@ -48,7 +51,20 @@ data class LastPositionDataOutput(
     val isAtPort: Boolean,
     val alerts: List<String>,
     val beaconMalfunctionId: Int? = null,
+    val vesselFeatureId: String,
     val reportings: List<String> = listOf(),
+    // Properties for efficient filtering in frontend
+    val gearsArray: List<String>,
+    val hasAlert: Boolean,
+    val hasInfractionSuspicion: Boolean,
+    val lastControlDateTimeTimestamp: Long?,
+    val speciesArray: List<String>,
+    // Properties for WebGL
+    val coordinates: List<Double>,
+    val filterPreview: Int, // 0 is False, 1 is True - for WebGL
+    val hasBeaconMalfunction: Boolean,
+    val isFiltered: Int, // 0 is False, 1 is True - for WebGL
+    val lastPositionSentAt: Long,
 ) {
     companion object {
         fun fromLastPosition(position: LastPosition): LastPositionDataOutput =
@@ -101,6 +117,24 @@ data class LastPositionDataOutput(
                 alerts = position.alerts ?: listOf(),
                 beaconMalfunctionId = position.beaconMalfunctionId,
                 reportings = position.reportings,
+                coordinates =
+                    transformCoordinates(
+                        longitude = position.longitude,
+                        latitude = position.latitude,
+                    ).toList(),
+                filterPreview = 0,
+                gearsArray = position.gearOnboard?.mapNotNull { it.gear }?.distinct() ?: listOf(),
+                hasAlert = position.alerts?.isNotEmpty() ?: false,
+                hasBeaconMalfunction = position.beaconMalfunctionId != null,
+                hasInfractionSuspicion =
+                    position.reportings.any {
+                        listOf(ReportingType.ALERT.name, ReportingType.INFRACTION_SUSPICION.name).contains(it)
+                    },
+                isFiltered = 0,
+                lastControlDateTimeTimestamp = position.lastControlDateTime?.toInstant()?.toEpochMilli(),
+                lastPositionSentAt = position.dateTime.toInstant().toEpochMilli(),
+                speciesArray = position.speciesOnboard?.mapNotNull { it.species }?.distinct() ?: listOf(),
+                vesselFeatureId = Vessel.getVesselCompositeIdentifier(position),
             )
     }
 }

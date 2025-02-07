@@ -35,7 +35,7 @@ export const CSVOptions = {
     name: 'MMSI'
   },
   fleetSegments: {
-    code: 'fleetSegmentsArray',
+    code: 'segments',
     name: 'Seg. flotte'
   },
   gears: {

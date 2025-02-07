@@ -45,7 +45,7 @@ export class VesselFeature {
    */
   static getVesselFeatureLabel(
     feature: PartialExcept<
-      Vessel.VesselEnhancedObject,
+      Vessel.VesselLastPosition,
       | 'beaconMalfunctionId'
       | 'dateTime'
       | 'detectabilityRiskFactor'

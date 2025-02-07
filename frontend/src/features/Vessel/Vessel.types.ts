@@ -63,16 +63,7 @@ export namespace Vessel {
     riskFactor: RiskFactor | undefined
   }
 
-  export type VesselEnhancedObject = VesselLastPosition & {
-    fleetSegmentsArray: string[]
-    gearsArray: string[]
-    hasAlert: boolean
-    hasInfractionSuspicion: boolean
-    lastControlDateTimeTimestamp: number | string
-    speciesArray: string[]
-  }
-
-  export type SelectedVessel = Omit<VesselEnhancedObject, 'riskFactor'> & Vessel.EnrichedVessel
+  export type SelectedVessel = Omit<VesselLastPosition, 'riskFactor'> & Vessel.EnrichedVessel
   export type AugmentedSelectedVessel = SelectedVessel & {
     hasAlert: boolean
     hasInfractionSuspicion: boolean
@@ -210,19 +201,8 @@ export namespace Vessel {
     color: string
     description: string
   }
-  export type VesselEnhancedLastPositionWebGLObject = Vessel.VesselEnhancedObject & {
-    coordinates: number[]
-    course: number | undefined
-    filterPreview: number // 0 is False, 1 is True - for WebGL
-    hasBeaconMalfunction: boolean
-    isAtPort: boolean | undefined
-    isFiltered: number // 0 is False, 1 is True - for WebGL
-    lastPositionSentAt: number
-    speed: number | undefined
-    vesselFeatureId: VesselFeatureId
-  }
 
-  export type VesselLastPositionFeature = Feature<Point> & VesselEnhancedLastPositionWebGLObject
+  export type VesselLastPositionFeature = Feature<Point> & Vessel.VesselLastPosition
 
   // ---------------------------------------------------------------------------
   // API

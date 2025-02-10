@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.GetAllMissions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.GetMission
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.dtos.InfractionFilterDTO
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissionWithActionsDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -39,13 +40,19 @@ class MissionController(
         @Parameter(description = "Origin")
         @RequestParam(name = "missionSource", required = false)
         missionSources: List<String>?,
-        @Parameter(description = "Types de mission")
+        @Parameter(description = "Mission types")
         @RequestParam(name = "missionTypes", required = false)
         missionTypes: List<String>?,
-        @Parameter(description = "Statuts de mission")
+        @Parameter(description = "Mission status")
         @RequestParam(name = "missionStatus", required = false)
         missionStatuses: List<String>?,
-        @Parameter(description = "Facades")
+        @Parameter(description = "Infractions")
+        @RequestParam(name = "infractions", required = false)
+        infractionsFilter: List<InfractionFilterDTO>?,
+        @Parameter(description = "Is mission part of a JointDeploymentPlan (JDP)")
+        @RequestParam(name = "isUnderJdp", required = false)
+        isUnderJdp: Boolean?,
+        @Parameter(description = "Seafronts")
         @RequestParam(name = "seaFronts", required = false)
         seaFronts: List<String>?,
     ): List<MissionWithActionsDataOutput> {
@@ -59,6 +66,8 @@ class MissionController(
                 seaFronts = seaFronts,
                 pageNumber = pageNumber,
                 pageSize = pageSize,
+                infractionsFilter = infractionsFilter,
+                isUnderJdp = isUnderJdp,
             )
         return missionsAndActions.map { MissionWithActionsDataOutput.fromMissionAndActions(it) }
     }

@@ -2,7 +2,7 @@ import { SeafrontGroup, type AllSeafrontGroup } from '@constants/seafront'
 import { getMissionCompletionFrontStatus, getMissionStatus } from '@features/Mission/utils'
 import { customDayjs, getOptionsFromLabelledEnum } from '@mtes-mct/monitor-ui'
 
-import { MissionDateRangeFilterLabel, MissionFilterType } from './types'
+import { InfractionFilterLabel, MissionDateRangeFilterLabel, MissionFilterType } from './types'
 import { UNKNOWN_VESSEL } from '../../../../domain/entities/vessel/vessel'
 import { Mission } from '../../mission.types'
 import { MissionAction } from '../../missionAction.types'
@@ -24,7 +24,9 @@ export const MISSION_FILTER_LABEL_ENUMS: Record<MissionFilterType, Record<string
   [MissionFilterType.COMPLETION_STATUS]: TagFrontCompletionStatusLabel,
   [MissionFilterType.WITH_ACTIONS]: undefined,
   [MissionFilterType.TYPE]: Mission.MissionTypeLabel,
-  [MissionFilterType.UNIT]: undefined
+  [MissionFilterType.UNIT]: undefined,
+  [MissionFilterType.UNDER_JDP]: undefined,
+  [MissionFilterType.INFRACTIONS]: InfractionFilterLabel
 }
 
 export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option<any>[]> = {
@@ -35,7 +37,9 @@ export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option<any>[]> = 
   [MissionFilterType.COMPLETION_STATUS]: getOptionsFromLabelledEnum(MissionAction.FrontCompletionStatusLabel),
   [MissionFilterType.TYPE]: getOptionsFromLabelledEnum(Mission.MissionTypeLabel),
   [MissionFilterType.WITH_ACTIONS]: [],
-  [MissionFilterType.UNIT]: []
+  [MissionFilterType.UNIT]: [],
+  [MissionFilterType.UNDER_JDP]: [],
+  [MissionFilterType.INFRACTIONS]: getOptionsFromLabelledEnum(InfractionFilterLabel)
 }
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */

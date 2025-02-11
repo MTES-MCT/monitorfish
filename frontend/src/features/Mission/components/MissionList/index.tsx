@@ -251,7 +251,7 @@ const HeaderButtonGroup = styled.div`
 const Body = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 40px;
+  padding: 40px 40px 0 40px;
 `
 
 const Table = styled.div.attrs(() => ({

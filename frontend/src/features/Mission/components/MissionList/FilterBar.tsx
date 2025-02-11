@@ -96,7 +96,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
       <Wrapper>
         <FormikEffect onChange={handleFilterFormChange} />
 
-        <Row>
+        <Row $marginTop={0}>
           <TextInput
             Icon={Icon.Search}
             isLabelHidden
@@ -110,7 +110,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           />
         </Row>
 
-        <Row>
+        <Row $marginTop={16}>
           <FormikSelect
             isCleanable={false}
             isLabelHidden
@@ -119,7 +119,6 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             name={MissionFilterType.DATE_RANGE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.DATE_RANGE]}
             placeholder="Période"
-            style={{ width: 176 }}
           />
           <FormikCheckPicker
             isLabelHidden
@@ -131,7 +130,6 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             renderValue={(_, items) =>
               items.length > 0 ? <OptionValue>Type de mission ({items.length}) </OptionValue> : <></>
             }
-            style={{ width: 176 }}
           />
           <FormikCheckPicker
             disabled={administrationsAsOptions.length === 0}
@@ -145,7 +143,6 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
               items.length > 0 ? <OptionValue>Administration ({items.length}) </OptionValue> : <></>
             }
             searchable
-            style={{ width: 200 }}
           />
           <FormikCheckPicker
             key={unitMultiSelectKey}
@@ -158,7 +155,17 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             placeholder="Unité"
             renderValue={(_, items) => (items.length > 0 ? <OptionValue>Unité ({items.length}) </OptionValue> : <></>)}
             searchable
-            style={{ width: 200 }}
+          />
+          <FormikCheckPicker
+            isLabelHidden
+            isTransparent
+            label="Résultat des contrôles"
+            name={MissionFilterType.INFRACTIONS}
+            options={MISSION_FILTER_OPTIONS[MissionFilterType.INFRACTIONS]}
+            placeholder="Résultat des contrôles"
+            renderValue={(_, items) =>
+              items.length > 0 ? <OptionValue>Infraction ({items.length}) </OptionValue> : <></>
+            }
           />
           <FormikCheckPicker
             isLabelHidden
@@ -168,7 +175,6 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             options={MISSION_FILTER_OPTIONS[MissionFilterType.STATUS]}
             placeholder="Statut de mission"
             renderValue={(_, items) => (items.length > 0 ? <OptionValue>Statut ({items.length}) </OptionValue> : <></>)}
-            style={{ width: 176 }}
           />
           <FormikCheckPicker
             isLabelHidden
@@ -180,13 +186,15 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             renderValue={(_, items) =>
               items.length > 0 ? <OptionValue>Etat des données ({items.length}) </OptionValue> : <></>
             }
-            style={{ width: 176 }}
           />
+        </Row>
+        <Row $marginTop={16}>
           <FormikCheckbox
             label="Missions avec actions CNSP"
             name={MissionFilterType.WITH_ACTIONS}
             style={{ width: 200 }}
           />
+          <FormikCheckbox label="Missions sous JDP" name={MissionFilterType.UNDER_JDP} style={{ width: 200 }} />
         </Row>
 
         <FormikFilterTagBar
@@ -194,8 +202,10 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           ignoredFilterKeys={[
             MissionFilterType.CUSTOM_DATE_RANGE,
             MissionFilterType.DATE_RANGE,
-            MissionFilterType.WITH_ACTIONS
+            MissionFilterType.WITH_ACTIONS,
+            MissionFilterType.UNDER_JDP
           ]}
+          isResetLinkDisplayed={isCustomDateRangeOpen}
         >
           {isCustomDateRangeOpen && (
             <FormikDateRangePicker
@@ -214,18 +224,17 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 24px;
-
-  > div:first-child {
-    margin-bottom: 24px;
-  }
 `
 
-const Row = styled.div`
+const Row = styled.div<{
+  $marginTop: number
+}>`
   display: flex;
   align-items: center;
+  margin-top: ${p => p.$marginTop}px;
 
   > div {
-    min-width: 176px;
+    min-width: 184px;
   }
   > div:not(:first-child) {
     margin-left: 16px;

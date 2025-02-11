@@ -6,6 +6,8 @@ import { monitorfishApi } from '../../api/api'
 const GET_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la mission."
 
 type GetMissionsFilter = {
+  infractions?: string[]
+  isUnderJdp?: boolean
   missionSource?: string
   missionStatus?: string[]
   missionTypes?: string[]
@@ -19,11 +21,13 @@ const getStartDateFilter = startedAfterDateTime =>
 const getEndDateFilter = startedBeforeDateTime =>
   startedBeforeDateTime && `startedBeforeDateTime=${encodeURIComponent(startedBeforeDateTime)}`
 const getMissionSourceFilter = missionSource => missionSource && `missionSource=${encodeURIComponent(missionSource)}`
+const getIsUnderJdpFilter = isUnderJdp => isUnderJdp && `isUnderJdp=${encodeURIComponent(isUnderJdp)}`
 const getMissionStatusFilter = missionStatus =>
   missionStatus?.length > 0 && `missionStatus=${encodeURIComponent(missionStatus)}`
 const getMissionTypesFilter = missionTypes =>
   missionTypes?.length > 0 && `missionTypes=${encodeURIComponent(missionTypes)}`
 const getSeafrontsFilter = seafronts => seafronts?.length > 0 && `seaFronts=${encodeURIComponent(seafronts)}`
+const getInfractionsFilter = infractions => infractions?.length > 0 && `infractions=${encodeURIComponent(infractions)}`
 
 enum MonitorenvStatusMapping {
   CLOSED = 'CLOSED',
@@ -50,7 +54,9 @@ export const monitorfishMissionApi = monitorfishApi.injectEndpoints({
           getMissionSourceFilter(filter.missionSource),
           getMissionStatusFilter(filter.missionStatus?.map(status => MonitorenvStatusMapping[status])),
           getMissionTypesFilter(filter.missionTypes),
-          getSeafrontsFilter(filter.seaFronts)
+          getSeafrontsFilter(filter.seaFronts),
+          getInfractionsFilter(filter.infractions),
+          getIsUnderJdpFilter(filter.isUnderJdp)
         ]
           .filter(v => v)
           .join('&')

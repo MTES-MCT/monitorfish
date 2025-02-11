@@ -314,4 +314,97 @@ class GetAllMissionsUTests {
         // Then
         assertThat(missionsAndActions).hasSize(18)
     }
+
+    @Test
+    fun `execute Should filter missions by infractions When INFRACTION_WITH_RECORD and WITHOUT_INFRACTIONS are selected`() {
+        // Given
+        val databaseProperties = DatabaseProperties()
+        databaseProperties.missionsActionsChunkSize = 5
+
+        val missions = getDummyMissions(20)
+        given(
+            missionRepository.findAllMissions(
+                pageNumber = anyOrNull(),
+                pageSize = anyOrNull(),
+                startedAfterDateTime = anyOrNull(),
+                startedBeforeDateTime = anyOrNull(),
+                missionSources = anyOrNull(),
+                missionTypes = anyOrNull(),
+                missionStatuses = anyOrNull(),
+                seaFronts = anyOrNull(),
+            ),
+        ).willReturn(missions)
+
+        val firstChunk = (1..5).toList()
+        val secondChunk = (6..10).toList()
+        val thirdChunk = (11..15).toList()
+        val fourthChunk = (16..20).toList()
+        val firstChunkMissionActions = getDummyMissionActions(firstChunk)
+        given(missionActionsRepository.findMissionActionsIn(eq(firstChunk)))
+            .willReturn(
+                listOf(
+                    firstChunkMissionActions.first().copy(
+                        speciesInfractions =
+                            listOf(
+                                SpeciesInfraction().apply {
+                                    infractionType = InfractionType.WITH_RECORD
+                                },
+                            ),
+                    ),
+                ) + firstChunkMissionActions.subList(2, 5),
+            )
+        val secondChunkMissionActions = getDummyMissionActions(secondChunk)
+        given(missionActionsRepository.findMissionActionsIn(eq(secondChunk)))
+            .willReturn(
+                secondChunkMissionActions +
+                    secondChunkMissionActions.last().copy(
+                        speciesInfractions =
+                            listOf(
+                                SpeciesInfraction().apply {
+                                    infractionType = InfractionType.WITHOUT_RECORD
+                                },
+                            ),
+                    ),
+            )
+        given(missionActionsRepository.findMissionActionsIn(eq(thirdChunk)))
+            .willReturn(getDummyMissionActions(thirdChunk))
+        given(missionActionsRepository.findMissionActionsIn(eq(fourthChunk)))
+            .willReturn(getDummyMissionActions(fourthChunk))
+
+        // When
+        val missionsAndActions =
+            GetAllMissions(
+                missionRepository,
+                missionActionsRepository,
+                databaseProperties,
+            ).execute(
+                pageNumber = null,
+                pageSize = null,
+                startedAfterDateTime = null,
+                startedBeforeDateTime = null,
+                missionSources = null,
+                missionTypes = null,
+                missionStatuses = null,
+                seaFronts = null,
+                infractionsFilter =
+                    listOf(
+                        InfractionFilterDTO.INFRACTION_WITH_RECORD,
+                        InfractionFilterDTO.WITHOUT_INFRACTIONS,
+                    ),
+                isUnderJdp = null,
+            )
+
+        // Then
+        assertThat(missionsAndActions).hasSize(20)
+        assertThat(missionsAndActions.first().actions).hasSize(17)
+        val firstMissionActions = missionsAndActions.first().actions
+        assertThat(
+            firstMissionActions.single { action ->
+                action.speciesInfractions.any {
+                    it.infractionType ==
+                        InfractionType.WITH_RECORD
+                }
+            },
+        ).isNotNull
+    }
 }

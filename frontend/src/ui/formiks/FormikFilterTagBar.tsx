@@ -1,3 +1,4 @@
+import { INITIAL_STATE } from '@features/Mission/components/MissionList/slice'
 import { SingleTag, Icon } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useCallback, useMemo, type ReactNode } from 'react'
@@ -42,7 +43,7 @@ export function FormikFilterTagBar({
 
   const removeAll = useCallback(
     () => {
-      setFilterValues({})
+      setFilterValues(INITIAL_STATE.listFilterValues)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

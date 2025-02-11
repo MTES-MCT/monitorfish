@@ -126,7 +126,9 @@ export function FilterTags() {
       {!areListFilterValuesEqualToDefaultOnes && (
         <Row>
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <Link onClick={reset}>Réinitialiser les filtres</Link>
+          <Link data-cy="prior-notification-reset-filters" onClick={reset}>
+            Réinitialiser les filtres
+          </Link>
         </Row>
       )}
     </>

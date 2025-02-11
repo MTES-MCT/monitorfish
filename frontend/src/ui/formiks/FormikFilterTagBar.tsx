@@ -1,4 +1,5 @@
-import { SingleTag } from '@mtes-mct/monitor-ui'
+import { INITIAL_STATE } from '@features/Mission/components/MissionList/slice'
+import { SingleTag, Icon } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useCallback, useMemo, type ReactNode } from 'react'
 import styled from 'styled-components'
@@ -7,8 +8,14 @@ type FormikFilterTagBarProps = {
   children: ReactNode
   filterLabelEnums: Record<string, Record<string, string> | undefined>
   ignoredFilterKeys?: string[]
+  isResetLinkDisplayed?: boolean
 }
-export function FormikFilterTagBar({ children, filterLabelEnums, ignoredFilterKeys = [] }: FormikFilterTagBarProps) {
+export function FormikFilterTagBar({
+  children,
+  filterLabelEnums,
+  ignoredFilterKeys = [],
+  isResetLinkDisplayed
+}: FormikFilterTagBarProps) {
   const {
     setFieldValue: setFilterValue,
     setValues: setFilterValues,
@@ -36,7 +43,7 @@ export function FormikFilterTagBar({ children, filterLabelEnums, ignoredFilterKe
 
   const removeAll = useCallback(
     () => {
-      setFilterValues({})
+      setFilterValues(INITIAL_STATE.listFilterValues)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -81,18 +88,27 @@ export function FormikFilterTagBar({ children, filterLabelEnums, ignoredFilterKe
         {children}
 
         {filterTags}
+        {(!!filterTags.length || !!isResetLinkDisplayed) && (
+          <ResetFilters>
+            {/* TODO Use `<Button accent={Accent.LINK} />` once available in Monitor UI. */}
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <Link data-cy="missions-reset-filters" onClick={removeAll}>
+              <Icon.Reset size={14} /> Réinitialiser les filtres
+            </Link>
+          </ResetFilters>
+        )}
       </Row>
-
-      {!!filterTags.length && (
-        <Row>
-          {/* TODO Use `<Button accent={Accent.LINK} />` once available in Monitor UI. */}
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <Link onClick={removeAll}>Réinitialiser les filtres</Link>
-        </Row>
-      )}
     </>
   )
 }
+
+const ResetFilters = styled.div`
+  height: 24px;
+
+  .Element-IconBox {
+    margin-right: 4px;
+  }
+`
 
 const Row = styled.div`
   align-items: flex-end;
@@ -102,19 +118,14 @@ const Row = styled.div`
 
   > div,
   > .Field-DateRangePicker {
-    margin: 0 24px 12px 0;
+    margin: 0 24px 0 0;
   }
 `
 
 const Link = styled.a`
-  align-items: center;
+  align-items: end;
   color: ${p => p.theme.color.charcoal};
   cursor: pointer;
   display: inline-flex;
   text-decoration: underline;
-
-  > span {
-    line-height: 1;
-    margin: -2px 0 0 8px;
-  }
 `

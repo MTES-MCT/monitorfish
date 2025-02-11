@@ -11,7 +11,7 @@ export interface MissionListState {
   listFilterValues: FilterValues
   listSeafrontGroup: SeafrontGroup | AllSeafrontGroup
 }
-const INITIAL_STATE: MissionListState = {
+export const INITIAL_STATE: MissionListState = {
   listFilterValues: {
     [MissionFilterType.DATE_RANGE]: MissionDateRangeFilter.WEEK,
     [MissionFilterType.STATUS]: [Mission.MissionStatus.IN_PROGRESS]

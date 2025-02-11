@@ -14,6 +14,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionA
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.GetAllMissions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.GetMission
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.dtos.InfractionFilterDTO
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -48,14 +49,16 @@ class MissionsControllerITests {
         // Given
         given {
             this.getAllMission.execute(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
+                pageNumber = anyOrNull(),
+                pageSize = anyOrNull(),
+                startedAfterDateTime = anyOrNull(),
+                startedBeforeDateTime = anyOrNull(),
+                missionSources = anyOrNull(),
+                missionTypes = anyOrNull(),
+                missionStatuses = anyOrNull(),
+                seaFronts = anyOrNull(),
+                infractionsFilter = anyOrNull(),
+                isUnderJdp = anyOrNull(),
             )
         }.willReturn(
             listOf(
@@ -103,7 +106,9 @@ class MissionsControllerITests {
                     startedBeforeDateTime=2022-05-05T03:04:05.000Z&
                     missionTypes=SEA,LAND&
                     missionStatus=&
-                    seaFronts=MED
+                    seaFronts=MED&
+                    isUnderJdp=&
+                    infractions=INFRACTION_WITH_RECORD
                 """.trim().replace("\\s+".toRegex(), ""),
                 ),
             )
@@ -115,14 +120,16 @@ class MissionsControllerITests {
 
         runBlocking {
             Mockito.verify(getAllMission).execute(
-                1,
-                null,
-                ZonedDateTime.parse("2021-05-05T03:04:05.000Z"),
-                ZonedDateTime.parse("2022-05-05T03:04:05.000Z"),
-                null,
-                listOf("SEA", "LAND"),
-                listOf(),
-                listOf("MED"),
+                pageNumber = 1,
+                pageSize = null,
+                startedAfterDateTime = ZonedDateTime.parse("2021-05-05T03:04:05.000Z"),
+                startedBeforeDateTime = ZonedDateTime.parse("2022-05-05T03:04:05.000Z"),
+                missionSources = null,
+                missionTypes = listOf("SEA", "LAND"),
+                missionStatuses = listOf(),
+                seaFronts = listOf("MED"),
+                infractionsFilter = listOf(InfractionFilterDTO.INFRACTION_WITH_RECORD),
+                isUnderJdp = null,
             )
         }
     }
@@ -176,7 +183,7 @@ class MissionsControllerITests {
 
         runBlocking {
             Mockito.verify(getMission).execute(
-                123,
+                missionId = 123,
             )
         }
     }

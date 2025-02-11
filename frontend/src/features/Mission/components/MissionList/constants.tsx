@@ -2,7 +2,8 @@ import { SeafrontGroup, type AllSeafrontGroup } from '@constants/seafront'
 import { getMissionCompletionFrontStatus, getMissionStatus } from '@features/Mission/utils'
 import { customDayjs, getOptionsFromLabelledEnum } from '@mtes-mct/monitor-ui'
 
-import { MissionDateRangeFilterLabel, MissionFilterType } from './types'
+import { InfractionFilterLabel, MissionDateRangeFilterLabel, MissionFilterType } from './types'
+import { getNumberOfInfractions } from '../../../../domain/entities/controls'
 import { UNKNOWN_VESSEL } from '../../../../domain/entities/vessel/vessel'
 import { Mission } from '../../mission.types'
 import { MissionAction } from '../../missionAction.types'
@@ -24,7 +25,9 @@ export const MISSION_FILTER_LABEL_ENUMS: Record<MissionFilterType, Record<string
   [MissionFilterType.COMPLETION_STATUS]: TagFrontCompletionStatusLabel,
   [MissionFilterType.WITH_ACTIONS]: undefined,
   [MissionFilterType.TYPE]: Mission.MissionTypeLabel,
-  [MissionFilterType.UNIT]: undefined
+  [MissionFilterType.UNIT]: undefined,
+  [MissionFilterType.UNDER_JDP]: undefined,
+  [MissionFilterType.INFRACTIONS]: InfractionFilterLabel
 }
 
 export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option<any>[]> = {
@@ -35,7 +38,9 @@ export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option<any>[]> = 
   [MissionFilterType.COMPLETION_STATUS]: getOptionsFromLabelledEnum(MissionAction.FrontCompletionStatusLabel),
   [MissionFilterType.TYPE]: getOptionsFromLabelledEnum(Mission.MissionTypeLabel),
   [MissionFilterType.WITH_ACTIONS]: [],
-  [MissionFilterType.UNIT]: []
+  [MissionFilterType.UNIT]: [],
+  [MissionFilterType.UNDER_JDP]: [],
+  [MissionFilterType.INFRACTIONS]: getOptionsFromLabelledEnum(InfractionFilterLabel)
 }
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
@@ -109,8 +114,12 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission.MissionWithActions
       label: 'Contrôles',
       labelTransform: mission => {
         const controls = mission.actions.filter(({ actionType }) => MISSION_ACTION_CONTROL_TYPES.includes(actionType))
+        const numberOfInfractions = controls
+          .map(control => getNumberOfInfractions(control))
+          .reduce((accumulator, infractions) => accumulator + infractions, 0)
+        const infractionsText = numberOfInfractions > 0 ? `(${numberOfInfractions} inf.)` : ''
 
-        return controls.length > 0 ? controls.length : '-'
+        return controls.length > 0 ? `${controls.length} ${infractionsText}` : '-'
       },
       transform: mission => mission.actions.length
     },
@@ -146,14 +155,6 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission.MissionWithActions
   defaultSortedKey: 'startDateTimeUtc',
   isDefaultSortingDesc: true,
   searchableKeys: ['inspectedVessels']
-}
-
-export const MISSION_SOURCE_LABEL: Record<Mission.MissionSource, string> = {
-  [Mission.MissionSource.MONITORENV]: 'CACEM',
-  [Mission.MissionSource.MONITORFISH]: 'CNSP',
-  [Mission.MissionSource.POSEIDON_CACEM]: 'CACEM (Poseidon)',
-  [Mission.MissionSource.POSEIDON_CNSP]: 'CNSP (Poseidon)',
-  [Mission.MissionSource.RAPPORT_NAV]: 'RapportNav'
 }
 
 export const MISSION_TYPE_LABEL: Record<Mission.MissionType, string> = {

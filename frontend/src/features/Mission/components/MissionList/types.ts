@@ -11,6 +11,18 @@ export enum MissionDateRangeFilterLabel {
   MONTH = 'Un mois',
   CUSTOM = 'Période spécifique'
 }
+
+export enum InfractionFilter {
+  WITHOUT_INFRACTIONS,
+  INFRACTION_WITH_RECORD,
+  INFRACTION_WITHOUT_RECORD
+}
+
+export enum InfractionFilterLabel {
+  WITHOUT_INFRACTIONS = 'Sans infraction',
+  INFRACTION_WITH_RECORD = 'Avec infraction et PV',
+  INFRACTION_WITHOUT_RECORD = 'Avec infraction sans PV'
+}
 /* eslint-enable typescript-sort-keys/string-enum */
 
 export enum MissionFilterType {
@@ -18,8 +30,10 @@ export enum MissionFilterType {
   COMPLETION_STATUS = 'COMPLETION_STATUS',
   CUSTOM_DATE_RANGE = 'CUSTOM_DATE_RANGE',
   DATE_RANGE = 'DATE_RANGE',
+  INFRACTIONS = 'INFRACTIONS',
   STATUS = 'STATUS',
   TYPE = 'TYPE',
+  UNDER_JDP = 'UNDER_JDP',
   UNIT = 'UNIT',
   WITH_ACTIONS = 'WITH_ACTIONS'
 }

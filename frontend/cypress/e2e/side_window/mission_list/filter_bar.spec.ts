@@ -127,13 +127,17 @@ context('Side Window > Mission List > VesselFilter Bar', () => {
     /**
      * Should filter missions with infractions filter
      */
-    cy.intercept('GET', `*infractions=WITHOUT_INFRACTIONS,INFRACTION_WITH_RECORD*`).as('getMissions')
-    cy.fill('Résultat des contrôles', ['Sans infraction', 'Avec infraction et PV'])
+    cy.intercept('GET', `*infractions=WITHOUT_INFRACTIONS*`).as('getMissions')
+    cy.fill('Résultat des contrôles', ['Sans infraction'], { delay: 20 })
     cy.wait('@getMissions')
-    cy.get('.TableBodyRow').should('have.length', 0)
+    cy.get('.TableBodyRow').should('have.length', 1)
 
-    cy.fill('Résultat des contrôles', ['Sans infraction'])
-    cy.get('.TableBodyRow').should('have.length.to.be.greaterThan', 0)
-    cy.getDataCy('missions-reset-filters').click()
+    cy.get('[id="INFRACTIONS"] > .rs-stack > .rs-stack-item > .rs-picker-clean').click()
+    cy.wait(500)
+
+    cy.intercept('GET', `*infractions=INFRACTION_WITH_RECORD*`).as('getMissionsTwo')
+    cy.fill('Résultat des contrôles', ['Avec infraction et PV'], { delay: 20 })
+    cy.wait('@getMissionsTwo')
+    cy.get('.TableBodyRow').should('have.length', 1)
   })
 })

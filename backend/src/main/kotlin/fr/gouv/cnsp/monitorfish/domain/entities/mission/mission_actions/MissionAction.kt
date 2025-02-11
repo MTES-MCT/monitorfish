@@ -98,6 +98,24 @@ data class MissionAction(
         }
     }
 
+    fun containsNoInfractions(): Boolean =
+        gearInfractions.isEmpty() &&
+            speciesInfractions.isEmpty() &&
+            logbookInfractions.isEmpty() &&
+            otherInfractions.isEmpty()
+
+    fun containsInfractionsWithRecord(): Boolean =
+        gearInfractions.any { it.infractionType == InfractionType.WITH_RECORD } ||
+            speciesInfractions.any { it.infractionType == InfractionType.WITH_RECORD } ||
+            logbookInfractions.any { it.infractionType == InfractionType.WITH_RECORD } ||
+            otherInfractions.any { it.infractionType == InfractionType.WITH_RECORD }
+
+    fun containsInfractionsWithoutRecord(): Boolean =
+        gearInfractions.any { it.infractionType == InfractionType.WITHOUT_RECORD } ||
+            speciesInfractions.any { it.infractionType == InfractionType.WITHOUT_RECORD } ||
+            logbookInfractions.any { it.infractionType == InfractionType.WITHOUT_RECORD } ||
+            otherInfractions.any { it.infractionType == InfractionType.WITHOUT_RECORD }
+
     private fun checkControlPosition() {
         require(this.longitude != null) {
             "A control must specify a position: the `longitude` must be given."

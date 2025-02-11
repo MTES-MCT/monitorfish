@@ -73,7 +73,11 @@ export const useGetFilteredMissionsQuery = (): {
 
   const { data, isError, isFetching } = useGetMissionsQuery(
     {
+      infractions: [listFilterValues[MissionFilterType.INFRACTIONS]],
+      isUnderJdp: listFilterValues[MissionFilterType.UNDER_JDP],
+
       missionStatus: listFilterValues[MissionFilterType.STATUS],
+
       missionTypes: [listFilterValues[MissionFilterType.TYPE]],
       // seafronts are filtered in memory
       seaFronts: [],

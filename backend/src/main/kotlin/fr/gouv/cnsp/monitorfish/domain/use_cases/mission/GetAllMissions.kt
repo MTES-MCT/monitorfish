@@ -81,6 +81,20 @@ class GetAllMissions(
             return true
         }
 
+        // If WITHOUT_INFRACTIONS is selected with another filter, we do not expect all actions to have no infractions
+        if (infractionsFilter.size == 2 && infractionsFilter.contains(InfractionFilterDTO.WITHOUT_INFRACTIONS)) {
+            when {
+                infractionsFilter.contains(InfractionFilterDTO.INFRACTION_WITHOUT_RECORD) ->
+                    return filteredMission.actions.any {
+                        it.containsNoInfractions() || it.containsInfractionsWithoutRecord()
+                    }
+                infractionsFilter.contains(InfractionFilterDTO.INFRACTION_WITH_RECORD) ->
+                    return filteredMission.actions.any {
+                        it.containsNoInfractions() || it.containsInfractionsWithRecord()
+                    }
+            }
+        }
+
         return infractionsFilter.all { filter ->
             when (filter) {
                 InfractionFilterDTO.WITHOUT_INFRACTIONS ->

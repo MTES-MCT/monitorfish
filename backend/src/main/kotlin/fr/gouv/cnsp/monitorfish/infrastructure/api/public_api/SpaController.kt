@@ -18,20 +18,23 @@ class SpaController : ErrorController {
     private val logger = LoggerFactory.getLogger(SpaController::class.java)
 
     companion object {
-        val FRONTEND_APP_ROUTES = listOf(
-            "/backoffice",
-            "/backoffice/**",
-            "/ext",
-            "/light",
-            "/load_light",
-            "/login",
-            "/register",
-            "/side_window")
+        val FRONTEND_APP_ROUTES =
+            listOf(
+                "/backoffice",
+                "/backoffice/**",
+                "/ext",
+                "/light",
+                "/load_light",
+                "/login",
+                "/register",
+                "/side_window",
+            )
     }
 
-    private fun isStaticResource(path: String): Boolean {
-        return path.matches(""".*\.(js|mjs|css|json|map|png|jpg|jpeg|gif|webp|svg|woff2?|ttf|txt|eot|otf|ico|xml)$""".toRegex())
-    }
+    private fun isStaticResource(path: String): Boolean =
+        path.matches(
+            """.*\.(js|mjs|css|json|map|png|jpg|jpeg|gif|webp|svg|woff2?|ttf|txt|eot|otf|ico|xml)$""".toRegex(),
+        )
 
     @RequestMapping("/error")
     fun error(
@@ -48,11 +51,18 @@ class SpaController : ErrorController {
             response.status = HttpStatus.NOT_FOUND.value()
             return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(mapOf("error" to "Resource Not Found", "path" to path))
+                .body(
+                    mapOf(
+                        "error" to errorMessage,
+                        "path" to path,
+                        "status" to status,
+                    ),
+                )
         }
 
         // Prevent returning index.html for failed API requests
-        if (path.startsWith("/bff") || path.startsWith("/api") || path.startsWith("/light")) {
+        // "/light/v1" is used to avoid clashes with the /light frontend route
+        if (path.startsWith("/bff") || path.startsWith("/api") || path.startsWith("/light/v1")) {
             logger.warn("API error: $path (status: $status)")
             return ResponseEntity
                 .status(status)

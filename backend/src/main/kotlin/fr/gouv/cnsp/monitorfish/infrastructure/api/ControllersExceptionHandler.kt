@@ -1,13 +1,11 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
-import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.exceptions.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import fr.gouv.cnsp.monitorfish.infrastructure.exceptions.BackendRequestException
-import io.sentry.Sentry
+import jakarta.annotation.Priority
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.core.Ordered.LOWEST_PRECEDENCE
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -17,10 +15,9 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
-@Order(LOWEST_PRECEDENCE)
-class ControllersExceptionHandler(
-    val sentryConfig: SentryConfig,
-) {
+@Priority(1)
+@Order(1)
+class ControllersExceptionHandler {
     private val logger: Logger = LoggerFactory.getLogger(ControllersExceptionHandler::class.java)
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -58,10 +55,6 @@ class ControllersExceptionHandler(
     fun handleNAFMessageParsingException(e: Exception): ApiError {
         logger.error(e.message, e.cause)
 
-        if (sentryConfig.enabled == true) {
-            Sentry.captureException(e)
-        }
-
         return ApiError(e)
     }
 
@@ -75,10 +68,6 @@ class ControllersExceptionHandler(
     fun handleIllegalArgumentException(e: Exception): ApiError {
         logger.error(e.message, e.cause)
 
-        if (sentryConfig.enabled == true) {
-            Sentry.captureException(e)
-        }
-
         return ApiError(IllegalArgumentException(e.message.toString(), e))
     }
 
@@ -86,10 +75,6 @@ class ControllersExceptionHandler(
     @ExceptionHandler(MissingServletRequestParameterException::class)
     fun handleNoParameter(e: MissingServletRequestParameterException): MissingParameterApiError {
         logger.error(e.message, e.cause)
-
-        if (sentryConfig.enabled == true) {
-            Sentry.captureException(e)
-        }
 
         return MissingParameterApiError("Parameter \"${e.parameterName}\" is missing.")
     }

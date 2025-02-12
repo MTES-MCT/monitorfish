@@ -92,7 +92,11 @@ const monitorfishBaseQuery = retry(
     baseUrl: `/bff/v1`,
     prepareHeaders: setAuthorizationHeader
   }),
-  { maxRetries: RTK_MAX_RETRIES }
+  {
+    maxRetries: RTK_MAX_RETRIES,
+    // @ts-ignore because `retryCondition?: RetryConditionFunction` declaration is not found in TS
+    retryCondition: error => !isUnauthorizedOrForbidden(error.status)
+  }
 )
 
 export const monitorfishApi = createApi({

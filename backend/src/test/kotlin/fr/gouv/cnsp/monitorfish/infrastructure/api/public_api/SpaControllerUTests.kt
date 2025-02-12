@@ -73,6 +73,10 @@ class SpaControllerUTests {
         // Then
         assertThat(response.status).isEqualTo(HttpStatus.NOT_FOUND.value())
         val textResponse = result.toString()
-        assertThat(textResponse).contains("{error=Resource Not Found, path=/missing.js}")
+        assertThat(textResponse).contains(
+            """
+            {error=Custom error message, path=/missing.js, status=404}
+            """.trimIndent(),
+        )
     }
 }

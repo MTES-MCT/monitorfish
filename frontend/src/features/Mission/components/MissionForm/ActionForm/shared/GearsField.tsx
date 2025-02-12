@@ -12,6 +12,7 @@ import {
   usePrevious
 } from '@mtes-mct/monitor-ui'
 import { useField, useFormikContext } from 'formik'
+import { isEqual } from 'lodash'
 import { remove as ramdaRemove } from 'ramda'
 import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
@@ -35,8 +36,21 @@ export function GearsField() {
 
   const getGearsApiQuery = useGetGearsQuery()
 
+  /**
+   * This is only used to re-compute fleet segments when a gear is modified
+   *  (`input.value.length === previousValue.length`).
+   * This should NOT re-compute when:
+   * - A gear is added
+   * - A gear is removed
+   * As these actions are handled below by functions `add()` and `remove()`.
+   * */
   useEffect(() => {
-    if (input.value && input.value !== previousValue) {
+    if (
+      !!input.value &&
+      !!previousValue &&
+      input.value.length === previousValue.length &&
+      !isEqual(input.value, previousValue)
+    ) {
       updateSegments({
         ...values,
         gearOnboard: input.value
@@ -76,6 +90,10 @@ export function GearsField() {
       }
     ]
 
+    updateSegments({
+      ...values,
+      gearOnboard: nextGears
+    })
     helper.setValue(nextGears)
   }
 
@@ -87,6 +105,10 @@ export function GearsField() {
     const nextGearOnboard = ramdaRemove(index, 1, input.value)
     const normalizedNextGearOnboard = nextGearOnboard.length > 0 ? nextGearOnboard : []
 
+    updateSegments({
+      ...values,
+      gearOnboard: normalizedNextGearOnboard
+    })
     helper.setValue(normalizedNextGearOnboard)
   }
 

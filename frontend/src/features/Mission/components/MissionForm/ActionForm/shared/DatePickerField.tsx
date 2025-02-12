@@ -16,7 +16,6 @@ export function DatePickerField() {
     setFieldValue('actionDatetimeUtc', nextActionDatetimeUtc)
 
     updateMissionLocation(values)
-
     updateSegments({ ...values, actionDatetimeUtc: nextActionDatetimeUtc })
   }
 

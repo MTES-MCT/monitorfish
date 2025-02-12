@@ -85,7 +85,11 @@ export function VesselField() {
       vesselName: nextVessel.vesselName
     })
 
-    const valuesWithVessel = { ...values, internalReferenceNumber: nextVessel.internalReferenceNumber ?? undefined }
+    const valuesWithVessel = {
+      ...values,
+      internalReferenceNumber: nextVessel.internalReferenceNumber ?? undefined,
+      vesselId: nextVessel.vesselId ?? undefined
+    }
     updateFieldsControlledByVessel(valuesWithVessel)
   }
 

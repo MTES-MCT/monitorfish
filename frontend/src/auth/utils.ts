@@ -19,6 +19,8 @@ export function redirectToLoginIfUnauthorized(error: CustomResponseError) {
     name: 'Après une erreur API 401'
   })
 
-  // We don't use `router.navigate()` to avoid circular dependency issues
-  window.location.href = ROUTER_PATHS.login
+  if (!window.location.pathname.includes(ROUTER_PATHS.login)) {
+    // We don't use `router.navigate()` to avoid circular dependency issues
+    window.location.href = ROUTER_PATHS.login
+  }
 }

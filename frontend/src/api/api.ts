@@ -16,6 +16,7 @@ import { redirectToLoginIfUnauthorized } from '../auth/utils'
 
 import type { BackendApi } from './BackendApi.types'
 import type { CustomResponseError, RTKBaseQueryArgs } from './types'
+import type { BaseQueryError } from '@reduxjs/toolkit/query'
 
 // Using local MonitorEnv stubs:
 export const MONITORENV_API_URL = import.meta.env.FRONTEND_MONITORENV_URL
@@ -92,7 +93,15 @@ const monitorfishBaseQuery = retry(
     baseUrl: `/bff/v1`,
     prepareHeaders: setAuthorizationHeader
   }),
-  { maxRetries: RTK_MAX_RETRIES }
+  {
+    retryCondition: (error: BaseQueryError<BaseQueryError<any>>, _, { attempt }) => {
+      if (attempt > RTK_MAX_RETRIES) {
+        return false
+      }
+
+      return !isUnauthorizedOrForbidden(error.status)
+    }
+  }
 )
 
 export const monitorfishApi = createApi({

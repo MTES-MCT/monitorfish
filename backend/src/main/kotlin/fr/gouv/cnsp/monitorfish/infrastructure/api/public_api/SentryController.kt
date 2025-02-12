@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
+import io.sentry.Sentry
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -21,6 +22,7 @@ class SentryController(
             throw IllegalArgumentException("Sentry test error triggered from get request.")
         } catch (e: Exception) {
             logger.error(e.message, e)
+            Sentry.captureException(e)
         }
 
         return mapOf(

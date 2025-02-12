@@ -12,6 +12,7 @@ import {
   usePrevious
 } from '@mtes-mct/monitor-ui'
 import { useField, useFormikContext } from 'formik'
+import { isEqual } from 'lodash'
 import { append, remove as ramdaRemove } from 'ramda'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
@@ -37,8 +38,21 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
 
   const getSpeciesApiQuery = useGetSpeciesQuery()
 
+  /**
+   * This is only used to re-compute fleet segments when a species is modified
+   *  (`input.value.length === previousValue.length`).
+   * This should NOT re-compute when:
+   * - A species is added
+   * - A species is removed
+   * As these actions are handled below by functions `add()` and `remove()`.
+   * */
   useEffect(() => {
-    if (input.value && input.value !== previousValue) {
+    if (
+      !!input.value &&
+      !!previousValue &&
+      input.value.length === previousValue.length &&
+      !isEqual(input.value, previousValue)
+    ) {
       updateSegments({
         ...values,
         speciesOnboard: input.value
@@ -97,6 +111,10 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
       input.value ?? []
     )
 
+    updateSegments({
+      ...values,
+      speciesOnboard: nextSpeciesOnboard
+    })
     helper.setValue(nextSpeciesOnboard)
   }
 
@@ -123,6 +141,10 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
 
     const nextSpeciesOnboard = ramdaRemove(index, 1, input.value)
 
+    updateSegments({
+      ...values,
+      speciesOnboard: nextSpeciesOnboard
+    })
     helper.setValue(nextSpeciesOnboard)
   }
 

@@ -17,6 +17,22 @@ import org.springframework.web.bind.annotation.RequestMapping
 class SpaController : ErrorController {
     private val logger = LoggerFactory.getLogger(SpaController::class.java)
 
+    companion object {
+        val FRONTEND_APP_ROUTES = listOf(
+            "/backoffice",
+            "/backoffice/**",
+            "/ext",
+            "/light",
+            "/load_light",
+            "/login",
+            "/register",
+            "/side_window")
+    }
+
+    private fun isStaticResource(path: String): Boolean {
+        return path.matches(""".*\.(js|mjs|css|json|map|png|jpg|jpeg|gif|webp|svg|woff2?|ttf|txt|eot|otf|ico|xml)$""".toRegex())
+    }
+
     @RequestMapping("/error")
     fun error(
         request: HttpServletRequest,
@@ -27,7 +43,7 @@ class SpaController : ErrorController {
         val status = response.status
 
         // Prevent returning index.html for failed asset requests
-        if (path.contains(".")) {
+        if (isStaticResource(path)) {
             logger.warn("API error or asset not found: $path (status: $status)")
             response.status = HttpStatus.NOT_FOUND.value()
             return ResponseEntity

@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.config
 
 import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
+import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.SpaController.Companion.FRONTEND_APP_ROUTES
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
@@ -45,6 +46,7 @@ class SecurityConfig(
                     authorize
                         .requestMatchers(
                             "/",
+                            *FRONTEND_APP_ROUTES.toTypedArray(),
                             "/*.jpg",
                             "/*.js",
                             "/*.png",
@@ -52,25 +54,17 @@ class SecurityConfig(
                             "/api/**",
                             "/asset-manifest.json",
                             "/assets/**",
-                            "/backoffice",
-                            "/backoffice/**",
                             // Used to redirect to the frontend SPA, see SpaController.kt
                             "/error",
-                            "/ext",
                             "/favicon-32.ico",
                             "/favicon.ico",
                             "/flags/**",
                             "/index.html",
-                            "/light",
-                            "/load_light",
-                            "/login",
                             "/map-icons/**",
                             "/proxy/**",
                             "/realms/**",
-                            "/register",
                             "/resources/**",
                             "/robots.txt",
-                            "/side_window",
                             "/static/**",
                             "/swagger-ui/**",
                             "/version",

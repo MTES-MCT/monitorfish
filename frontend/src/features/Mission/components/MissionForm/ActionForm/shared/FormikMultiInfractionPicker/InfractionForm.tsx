@@ -118,6 +118,6 @@ const FormButtonGroup = styled.div`
 const HackedFormikSelect = styled(FormikSelect)`
   .rs-picker-toggle {
     /* TODO Investigate both these props which are a hack to fix long NATINFs breaking the layout. */
-    max-width: 312px !important;
+    max-width: 600px !important;
   }
 `

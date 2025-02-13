@@ -12,6 +12,7 @@ export const FieldsetGroup = styled(Fieldset)<FieldsetGroupProps>`
   min-width: 0;
 
   > div {
+    width: calc(100% - 32px);
     display: flex;
     flex-direction: ${p => (p.isInline ? 'row' : 'column')};
 

@@ -23,7 +23,7 @@ const Wrapper = styled.div`
   font-size: 13px;
   text-align: center;
   width: 100vw;
-  padding-top: 35vh;
+  padding-top: 34vh;
   height: 100vh;
   overflow: hidden;
 

@@ -85,7 +85,7 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
     'icon-rotation': ['*', ['get', 'course'], Math.PI / 180],
     'icon-scale': 0.8,
     'icon-size': [25, 25],
-    'icon-src': 'boat_icons.png',
+    'icon-src': 'map-icons/boat_icons.png',
     variables: {}
   }
 }
@@ -120,28 +120,20 @@ export const getSelectedVesselStyle =
   ({ isLight }) =>
   feature => {
     const course = feature.get('course')
-    const selectorStyle = new Style({
-      image: new Icon({
-        color: isLight ? theme.color.lightGray : theme.color.charcoal,
-        opacity: 1,
-        scale: 0.5,
-        src: 'selecteur_navire.png'
-      }),
-      zIndex: VESSEL_SELECTOR_STYLE
-    })
-
     const vesselStyle = new Style({
       image: new Icon({
         color: isLight ? theme.color.lightGray : theme.color.charcoal,
+        offset: [0, 50],
         opacity: 1,
         rotation: degreesToRadian(course),
-        scale: 0.85,
-        src: 'boat.png'
+        scale: 0.8,
+        size: [50, 50],
+        src: 'map-icons/boat_icons.png'
       }),
       zIndex: VESSEL_SELECTOR_STYLE
     })
 
-    return [selectorStyle, vesselStyle]
+    return [vesselStyle]
   }
 
 export function degreesToRadian(course) {
@@ -150,7 +142,7 @@ export function degreesToRadian(course) {
 
 const vesselAlertBigCircleStyle = new Style({
   image: new Icon({
-    src: 'Double-cercle-alertes.png'
+    src: 'map-icons/Double-cercle-alertes.png'
   }),
   zIndex: VESSEL_ALERT_STYLE
 })
@@ -166,7 +158,7 @@ export const getVesselAlertStyle = (resolution: number) => {
 
 const vesselBeaconMalfunctionBigCircleStyle = new Style({
   image: new Icon({
-    src: 'Double-cercle_avaries.png'
+    src: 'map-icons/Double-cercle_avaries.png'
   }),
   zIndex: VESSEL_BEACON_MALFUNCTION_STYLE
 })
@@ -182,7 +174,7 @@ export const getVesselBeaconMalfunctionStyle = (resolution: number) => {
 
 const vesselAlertAndBeaconMalfunctionBigCircleStyle = new Style({
   image: new Icon({
-    src: 'Triple-cercle_alerte_et_avarie.png'
+    src: 'map-icons/Triple-cercle_alerte_et_avarie.png'
   }),
   zIndex: VESSEL_ALERT_AND_BEACON_MALFUNCTION
 })

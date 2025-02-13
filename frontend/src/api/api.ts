@@ -66,7 +66,7 @@ export const monitorenvApi = createApi({
 // Monitorfish API
 
 export const AUTHORIZATION_HEADER = 'authorization'
-export const CORRELATION_HEADER = 'X-Correlation-Id'
+export const CORRELATION_HEADER = 'x-correlation-id'
 const { IS_OIDC_ENABLED } = getOIDCConfig()
 
 const setAuthorizationHeader = async headers => {
@@ -117,6 +117,7 @@ export const monitorfishApi = createApi({
 
       if (result.error) {
         const error: CustomResponseError = {
+          correlationId: result.meta?.response?.headers?.get(CORRELATION_HEADER) ?? undefined,
           path: `/bff/v1${typeof args === 'string' ? args : args.url}`,
           requestData: typeof args === 'string' ? undefined : args.body,
           responseData: result.error.data as BackendApi.ResponseBodyError,

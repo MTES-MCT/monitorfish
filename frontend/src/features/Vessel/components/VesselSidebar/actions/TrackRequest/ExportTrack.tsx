@@ -112,7 +112,7 @@ export function ExportTrack() {
 
   return (
     <ExportTrackButton
-      isClickable={Boolean(exportedPositions?.length)}
+      $isClickable={Boolean(exportedPositions?.length)}
       onClick={() => downloadCSV(exportedPositions)}
       title="Exporter la piste"
     >
@@ -128,10 +128,10 @@ const StyledText = styled.span`
 `
 
 const ExportTrackButton = styled(PrimaryButton)<{
-  isClickable: boolean
+  $isClickable: boolean
 }>`
   align-self: flex-start;
-  cursor: ${p => (p.isClickable ? 'pointer' : 'not-allowed')};
+  cursor: ${p => (p.$isClickable ? 'pointer' : 'not-allowed')};
   margin: 0;
   padding: 4px 8px 8px 4px;
   text-align: left;

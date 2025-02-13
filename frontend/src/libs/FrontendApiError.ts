@@ -26,6 +26,7 @@ export class FrontendApiError extends FrontendError {
   override get scope() {
     const scope = new Scope()
     scope.setTags({
+      correlationId: this.originalError.correlationId,
       side: 'frontend',
       type: 'api_error'
     })

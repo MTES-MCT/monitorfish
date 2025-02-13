@@ -117,7 +117,7 @@ export const monitorfishApi = createApi({
 
       if (result.error) {
         const error: CustomResponseError = {
-          correlationId: result.meta.response.headers.get(CORRELATION_HEADER),
+          correlationId: result.meta?.response?.headers?.get(CORRELATION_HEADER) ?? undefined,
           path: `/bff/v1${typeof args === 'string' ? args : args.url}`,
           requestData: typeof args === 'string' ? undefined : args.body,
           responseData: result.error.data as BackendApi.ResponseBodyError,

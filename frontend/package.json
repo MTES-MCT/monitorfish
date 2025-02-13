@@ -10,9 +10,10 @@
     "npm": "10"
   },
   "scripts": {
-    "build": "npm run clean && vite build && cp ./build/assets/serviceWorker-*.js ./public/service-worker.js",
+    "build": "npm run clean && vite build && npm run bundle-sw",
     "clean": "rm -Rf ./build ./public/service-worker.js ./node-modules/.cache ./node-modules/.vite",
     "dev": "import-meta-env-prepare -x ./.env.local.defaults && vite --port 3000",
+    "bundle-sw": "esbuild src/workers/serviceWorker.ts --bundle --outfile=public/service-worker.js",
     "dev-monitorenv": "FRONTEND_MONITORENV_URL=//localhost:9880 import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",
     "dev-puppeteer": "FRONTEND_OIDC_ENABLED=false FRONTEND_MONITORENV_URL=//localhost:9880 import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",
     "prepare": "cd .. && ./frontend/node_modules/.bin/husky ./frontend/config/husky",
@@ -47,6 +48,7 @@
     "dayjs": "1.11.13",
     "deep-object-diff": "1.1.9",
     "diacritics": "1.3.0",
+    "esbuild": "0.25.0",
     "export-to-csv": "0.2.1",
     "formik": "2.4.6",
     "fuse.js": "7.0.0",

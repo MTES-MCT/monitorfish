@@ -92,6 +92,7 @@ self.addEventListener('activate', event => {
  * - UPDATE_CACHE:
  *      This message us used to write and update the WHITELISTED_AND_READ_ONLY_PATHS.
  *      These paths caches can't be updated by the `fetch()` method.
+ *      /!\ Note that this update of cache is no more used by the application.
  */
 self.addEventListener('message', async event => {
   if (event.data === CACHED_REQUEST_SIZE) {

@@ -1,12 +1,13 @@
 import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
-import { Accent, Button, Icon, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
+import { isCypress } from '@utils/isCypress'
 import { useEffect, useMemo, useState } from 'react'
 import { Progress } from 'rsuite'
 import styled from 'styled-components'
 
-import { isCypress } from '../../../utils/isCypress'
-import { CACHED_REQUEST_SIZE, UPDATE_CACHE } from '../../../workers/constants'
+import { CACHED_REQUEST_SIZE, DELETE_CACHE } from '../../../workers/constants'
 import { useGetServiceWorker } from '../../../workers/hooks/useGetServiceWorker'
+import { unregisterServiceWorker } from '../../../workers/unregisterServiceWorker'
 import { fetchAllFromServiceWorkerByChunk, getZoomToRequestPaths } from '../utils'
 
 /**
@@ -25,7 +26,6 @@ export function LoadOffline() {
   const [cachedRequestsLength, setCachedRequestsLength] = useState(0)
   const [usage, setUsage] = useState<string>('')
   const [isDownloading, setIsDownloading] = useState<boolean>(false)
-  const [isRegulationsUpdated, setIsRegulationsUpdated] = useState<boolean>(false)
 
   const percent = ((cachedRequestsLength * 100) / TOTAL_DOWNLOAD_REQUESTS).toFixed(1)
 
@@ -38,16 +38,6 @@ export function LoadOffline() {
     navigator.serviceWorker.addEventListener('message', async event => {
       if (event.data.type === CACHED_REQUEST_SIZE) {
         setCachedRequestsLength(event.data.data)
-      }
-
-      if (event.data.type === UPDATE_CACHE) {
-        if (event.data.data) {
-          // eslint-disable-next-line no-console
-          console.error(event.data.data)
-
-          return
-        }
-        setIsRegulationsUpdated(true)
       }
     })
 
@@ -65,11 +55,6 @@ export function LoadOffline() {
       })
     }
   }
-
-  const updateRegulations = () => {
-    serviceWorker?.postMessage(UPDATE_CACHE)
-  }
-
   const downloadAll = async () => {
     const zoomToRequestPaths = getZoomToRequestPaths()
     const zoomToRequestPathsToDownload = IS_CYPRESS ? zoomToRequestPaths.slice(0, 6) : zoomToRequestPaths
@@ -94,6 +79,11 @@ export function LoadOffline() {
     }
   }, [serviceWorker])
 
+  const deleteCache = () => {
+    serviceWorker?.postMessage(DELETE_CACHE)
+    unregisterServiceWorker()
+  }
+
   const getStatus = () => {
     if (parseInt(percent, 10) > 99) {
       return 'success'
@@ -110,8 +100,12 @@ export function LoadOffline() {
 
   return (
     <>
+      <Back>
+        <Arrow accent={Accent.TERTIARY} Icon={Icon.FilledArrow} iconSize={14} />
+        <a href="/">Revenir à l&apos;application</a>
+      </Back>
       <LoadBox>
-        <Title>Préchargement</Title>
+        <Title>Préchargement de la carte</Title>
         <p>Cette page permet de télécharger les fonds de cartes de MonitorFish.</p>
         {(isDownloading || parseInt(percent, 10) > 0) && (
           <StyledProgress percent={parseFloat(percent)} status={getStatus()} strokeWidth={10} />
@@ -128,24 +122,30 @@ export function LoadOffline() {
           </>
         )}
         {parseInt(percent, 10) >= 100 && <p>Toutes les données ont été chargées.</p>}
-        <Line />
-        <StyledButton
-          accent={Accent.PRIMARY}
-          Icon={isRegulationsUpdated ? Icon.Check : Icon.Reset}
-          onClick={updateRegulations}
-        >
-          {isRegulationsUpdated ? 'Données réglementaires à jour' : 'Mettre à jour les données réglementaires'}
-        </StyledButton>
       </LoadBox>
-      <span data-cy="load-offline-downloaded-tiles">
+      <Back data-cy="load-offline-downloaded-tiles">
         {cachedRequestsLength} tuiles sauvegardées ({usage} MB)
-      </span>
+        <br />
+        <StyledButton onClick={deleteCache}>Supprimer le cache</StyledButton>
+      </Back>
     </>
   )
 }
 
-const Line = styled.hr`
-  margin-top: 24px;
+const Back = styled.div`
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 16px;
+
+  a {
+    cursor: pointer;
+    color: ${p => p.theme.color.charcoal};
+    text-decoration: underline;
+  }
+`
+
+const Arrow = styled(IconButton)`
+  transform: rotate(180deg);
 `
 
 const StyledButton = styled(Button)`

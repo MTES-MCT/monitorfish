@@ -1,12 +1,13 @@
 import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
-import {Accent, Button, Icon, IconButton, THEME} from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
 import { isCypress } from '@utils/isCypress'
 import { useEffect, useMemo, useState } from 'react'
 import { Progress } from 'rsuite'
 import styled from 'styled-components'
 
-import { CACHED_REQUEST_SIZE } from '../../../workers/constants'
+import { CACHED_REQUEST_SIZE, DELETE_CACHE } from '../../../workers/constants'
 import { useGetServiceWorker } from '../../../workers/hooks/useGetServiceWorker'
+import { unregisterServiceWorker } from '../../../workers/unregisterServiceWorker'
 import { fetchAllFromServiceWorkerByChunk, getZoomToRequestPaths } from '../utils'
 
 /**
@@ -78,6 +79,11 @@ export function LoadOffline() {
     }
   }, [serviceWorker])
 
+  const deleteCache = () => {
+    serviceWorker?.postMessage(DELETE_CACHE)
+    unregisterServiceWorker()
+  }
+
   const getStatus = () => {
     if (parseInt(percent, 10) > 99) {
       return 'success'
@@ -96,11 +102,11 @@ export function LoadOffline() {
     <>
       <Back>
         <Arrow accent={Accent.TERTIARY} Icon={Icon.FilledArrow} iconSize={14} />
-        <a href={"/"}>Revenir à l'application</a>
+        <a href="/">Revenir à l&apos;application</a>
       </Back>
       <LoadBox>
         <Title>Préchargement de la carte</Title>
-        <p>Cette page permet de télécharger le fond de carte clair de MonitorFish.</p>
+        <p>Cette page permet de télécharger les fonds de cartes de MonitorFish.</p>
         {(isDownloading || parseInt(percent, 10) > 0) && (
           <StyledProgress percent={parseFloat(percent)} status={getStatus()} strokeWidth={10} />
         )}
@@ -117,9 +123,11 @@ export function LoadOffline() {
         )}
         {parseInt(percent, 10) >= 100 && <p>Toutes les données ont été chargées.</p>}
       </LoadBox>
-      <span data-cy="load-offline-downloaded-tiles">
+      <Back data-cy="load-offline-downloaded-tiles">
         {cachedRequestsLength} tuiles sauvegardées ({usage} MB)
-      </span>
+        <br />
+        <StyledButton onClick={deleteCache}>Supprimer le cache</StyledButton>
+      </Back>
     </>
   )
 }
@@ -130,6 +138,7 @@ const Back = styled.div`
   margin-bottom: 16px;
 
   a {
+    cursor: pointer;
     color: ${p => p.theme.color.charcoal};
     text-decoration: underline;
   }

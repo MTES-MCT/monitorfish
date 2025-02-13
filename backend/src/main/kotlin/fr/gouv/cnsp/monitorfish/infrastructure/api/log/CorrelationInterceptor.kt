@@ -11,7 +11,7 @@ import java.util.*
  */
 class CorrelationInterceptor : HandlerInterceptor {
     companion object {
-        private const val CORRELATION_ID_HEADER_NAME = "X-Correlation-Id"
+        private const val CORRELATION_ID_HEADER_NAME = "x-correlation-id"
         private const val CORRELATION_ID_LOG_VAR_NAME = "correlationId"
     }
 
@@ -22,6 +22,7 @@ class CorrelationInterceptor : HandlerInterceptor {
     ): Boolean {
         val correlationId = getCorrelationIdFromHeader(request)
         MDC.put(CORRELATION_ID_LOG_VAR_NAME, correlationId)
+        response.setHeader(CORRELATION_ID_HEADER_NAME, correlationId)
 
         return true
     }

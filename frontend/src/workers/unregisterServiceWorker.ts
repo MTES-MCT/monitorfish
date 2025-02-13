@@ -7,12 +7,12 @@
 export const unregisterServiceWorker = async () => {
   if ('serviceWorker' in navigator) {
     try {
-      navigator.serviceWorker.getRegistrations().then(registrations => {
-        // eslint-disable-next-line no-restricted-syntax
-        for (const registration of registrations) {
-          registration.unregister()
-        }
-      })
+      const registrations = await navigator.serviceWorker.getRegistrations()
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const registration of registrations) {
+        registration.unregister()
+      }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(`Service worker un-registration failed with ${error}`)

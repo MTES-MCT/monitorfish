@@ -107,16 +107,14 @@ self.addEventListener('message', async event => {
 
   if (event.data === DELETE_CACHE) {
     try {
-      caches.keys().then(cacheNames =>
-        Promise.all(
-          cacheNames.map(storedCacheName => {
-            // eslint-disable-next-line no-console
-            console.log(`Deleting cache ${storedCacheName}...`)
+      const cachesNames = await caches.keys()
 
-            return caches.delete(storedCacheName)
-          })
-        )
-      )
+      cachesNames.forEach(storedCacheName => {
+        // eslint-disable-next-line no-console
+        console.log(`Deleting cache ${storedCacheName}...`)
+
+        caches.delete(storedCacheName)
+      })
     } catch (e) {
       // eslint-disable-next-line no-console
       console.log(`Error: The cache could not be deleted: ${e}`)

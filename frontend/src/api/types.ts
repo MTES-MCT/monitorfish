@@ -13,6 +13,7 @@ export type RTKBaseQueryArgs =
     }
 
 export interface CustomResponseError {
+  correlationId?: string | undefined
   path: string
   requestData: AnyObject | undefined
   responseData: BackendApi.ResponseBodyError | undefined

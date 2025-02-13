@@ -18,7 +18,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         index: './index.html',
-        serviceWorker: './src/workers/serviceWorker.ts'
       },
 
       plugins: replace({

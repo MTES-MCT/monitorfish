@@ -3,11 +3,8 @@
 import {
   APPLICATION_ROUTES,
   CACHED_REQUEST_SIZE,
-  INFRACTIONS,
-  REGULATIONS,
+  DELETE_CACHE,
   STATIC_ASSETS,
-  UPDATE_CACHE,
-  WHITELISTED_AND_READ_ONLY_PATHS,
   WHITELISTED_BASE_MAPS_PATHS
 } from './constants'
 import { getCacheKey } from './utils'
@@ -89,6 +86,8 @@ self.addEventListener('activate', event => {
  * Types are:
  * - CACHED_REQUEST_SIZE:
  *      Get the size of all cached requests
+ * - DELETE_CACHE:
+ *      Delete all caches
  * - UPDATE_CACHE:
  *      This message us used to write and update the WHITELISTED_AND_READ_ONLY_PATHS.
  *      These paths caches can't be updated by the `fetch()` method.
@@ -106,39 +105,22 @@ self.addEventListener('message', async event => {
     })
   }
 
-  if (event.data === UPDATE_CACHE) {
-    const cache = await caches.open(CACHE_NAME)
-
+  if (event.data === DELETE_CACHE) {
     try {
-      await cache.delete(new Request(INFRACTIONS))
-      await cache.add(INFRACTIONS)
+      caches.keys().then(cacheNames =>
+        Promise.all(
+          cacheNames.map(storedCacheName => {
+            // eslint-disable-next-line no-console
+            console.log(`Deleting cache ${storedCacheName}...`)
+
+            return caches.delete(storedCacheName)
+          })
+        )
+      )
     } catch (e) {
-      // @ts-ignore
-      event.source?.postMessage({
-        data: e,
-        type: UPDATE_CACHE
-      })
-
-      return
+      // eslint-disable-next-line no-console
+      console.log(`Error: The cache could not be deleted: ${e}`)
     }
-
-    try {
-      await cache.delete(new Request(REGULATIONS))
-      await cache.add(REGULATIONS)
-    } catch (e) {
-      // @ts-ignore
-      event.source?.postMessage({
-        data: e,
-        type: UPDATE_CACHE
-      })
-
-      return
-    }
-
-    // @ts-ignore
-    event.source?.postMessage({
-      type: UPDATE_CACHE
-    })
   }
 })
 
@@ -160,12 +142,11 @@ self.addEventListener('fetch', event => {
 
 async function getResponse(cacheRequest: Request, request: Request) {
   const url = request.url.toString()
-  const isReadOnlyWhitelisted = WHITELISTED_AND_READ_ONLY_PATHS.find(path => url.endsWith(path))
 
   /**
    * If the request is not a whitelisted request, it will fetch the content and NOT cache it.
    */
-  if (!WHITELISTED_BASE_MAPS_PATHS.find(path => url.includes(path)) && !isReadOnlyWhitelisted) {
+  if (!WHITELISTED_BASE_MAPS_PATHS.find(path => url.includes(path))) {
     /**
      * If the route is part of React's router, redirect to index.html as it is a SPA
      */
@@ -188,6 +169,8 @@ async function getResponse(cacheRequest: Request, request: Request) {
    * If not, we fetch the request
    */
   const responseFromFetch = await fetch(request)
+  // eslint-disable-next-line no-console
+  console.log(`Fetching ${request.url.toString()}...`)
   if (responseFromFetch.status !== 200) {
     // eslint-disable-next-line no-console
     console.log(
@@ -197,12 +180,12 @@ async function getResponse(cacheRequest: Request, request: Request) {
     return responseFromFetch
   }
 
-  const cache = await caches.open(CACHE_NAME)
-  /**
-   * We store the new cache entry if not included in the read-only paths
-   */
-  if (!isReadOnlyWhitelisted) {
+  try {
+    const cache = await caches.open(CACHE_NAME)
     await cache.put(cacheRequest, responseFromFetch.clone())
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log(`Error: The cache could not be updated: ${e}`)
   }
 
   return responseFromFetch

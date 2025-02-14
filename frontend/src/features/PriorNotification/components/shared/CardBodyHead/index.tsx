@@ -1,4 +1,5 @@
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import { useForceUpdate } from '@hooks/useForceUpdate'
 import { LinkButton, type Undefine } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
@@ -33,7 +34,7 @@ export function CardBodyHead({
   types
 }: CardBodyHeadProps) {
   const [isSentMessageListExpanded, setIsSentMessageListExpanded] = useState(false)
-
+  const { forceUpdate } = useForceUpdate()
   const hasDesignatedPorts = detail?.logbookMessage.message.pnoTypes?.find(type => type.hasDesignatedPorts)
   const isInvalidated = detail?.logbookMessage.message.isInvalidated
   const isPendingVerification = detail?.state === PriorNotification.State.PENDING_VERIFICATION
@@ -44,6 +45,7 @@ export function CardBodyHead({
 
   const expandSentMessageList = () => {
     setIsSentMessageListExpanded(true)
+    forceUpdate() // We need this force update for the side window to re-render
   }
 
   return (

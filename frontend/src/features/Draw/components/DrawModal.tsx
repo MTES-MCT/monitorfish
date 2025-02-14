@@ -23,6 +23,7 @@ import { addFeatureToDrawedFeature } from '../useCases/addFeatureToDrawedFeature
 import { closeDraw } from '../useCases/closeDraw'
 import { eraseDrawedGeometries } from '../useCases/eraseDrawedGeometries'
 
+import type { GeoJSON as GeoJSONNamespace } from '../../../domain/types/GeoJSON'
 import type { Coordinates } from '@mtes-mct/monitor-ui'
 import type { MultiPolygon } from 'ol/geom'
 
@@ -54,6 +55,26 @@ export function DrawLayerModal() {
       featureProjection: OPENLAYERS_PROJECTION
     }).readFeature(currentGeometry)
   }, [initialGeometry, drawedGeometry])
+
+  const controlPointCoordinates = useMemo(() => {
+    if (listener !== InteractionListener.CONTROL_POINT) {
+      return undefined
+    }
+
+    if (drawedGeometry) {
+      const drawedCoordinates = (drawedGeometry as GeoJSONNamespace.Point).coordinates
+
+      return [drawedCoordinates[1], drawedCoordinates[0]]
+    }
+
+    if (initialGeometry) {
+      const initialCoordinates = (initialGeometry as GeoJSONNamespace.Point)?.coordinates
+
+      return [initialCoordinates[1], initialCoordinates[0]]
+    }
+
+    return undefined
+  }, [listener, initialGeometry, drawedGeometry])
 
   useEffect(() => {
     if (initialFeatureNumberRef.current !== undefined) {
@@ -152,7 +173,7 @@ export function DrawLayerModal() {
         <CoordinatesInputWrapper>
           <CoordinatesInput
             coordinatesFormat={coordinatesFormat}
-            defaultValue={undefined}
+            defaultValue={controlPointCoordinates}
             isLabelHidden
             label="Coordonnées"
             name="coordinates"

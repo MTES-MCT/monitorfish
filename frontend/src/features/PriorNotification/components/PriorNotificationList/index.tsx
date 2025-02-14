@@ -8,6 +8,7 @@ import { Body } from '@features/SideWindow/components/Body'
 import { Header } from '@features/SideWindow/components/Header'
 import { Page } from '@features/SideWindow/components/Page'
 import { SubMenu } from '@features/SideWindow/SubMenu'
+import { useForceUpdate } from '@hooks/useForceUpdate'
 import { useHandleFrontendApiError } from '@hooks/useHandleFrontendApiError'
 import { useListPagination } from '@hooks/useListPagination'
 import { useListSorting } from '@hooks/useListSorting'
@@ -45,6 +46,7 @@ type PriorNotificationListProps = Readonly<{
 }>
 export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps) {
   const lastFetchStartDateRef = useRef<number | undefined>(undefined)
+  const { forceUpdate } = useForceUpdate()
 
   const dispatch = useMainAppDispatch()
   const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
@@ -102,6 +104,14 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   const isBodyEmptyDataVisible = !isBodyLoaderVisible && !!priorNotifications && priorNotifications.length === 0
   const previousListFilter = usePrevious(listFilter)
   const title = getTitle(listFilter.seafrontGroup)
+
+  useEffect(() => {
+    /**
+     * We need this force update for the side window to re-render
+     * 95% of all transactions are done under 2 seconds (from duration percentiles in sentry)
+     * */
+    forceUpdate(2000)
+  }, [loadingState, forceUpdate])
 
   const handleSubMenuChange = useCallback(
     (nextSeafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup) => {

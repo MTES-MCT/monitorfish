@@ -1,6 +1,9 @@
 import { CountryFlag } from '@components/CountryFlag'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled, { keyframes } from 'styled-components'
+
+import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { ReactNode } from 'react'
@@ -21,6 +24,14 @@ export function CardHeader({
   withCloseButton = false,
   withFirstTitleRow = false
 }: CardHeaderProps) {
+  const dispatch = useMainAppDispatch()
+
+  function triggerShowVessel() {
+    if (selectedVesselIdentity) {
+      dispatch(showVessel(selectedVesselIdentity, false, true))
+    }
+  }
+
   return (
     <Wrapper>
       <Title>
@@ -53,10 +64,10 @@ export function CardHeader({
             </TitleRowIconBox>
 
             {selectedVesselIdentity ? (
-              <span>
+              <button onClick={triggerShowVessel} title="Voir la fiche navire" type="button">
                 <VesselName>{selectedVesselIdentity.vesselName ?? '...'}</VesselName> (
                 {selectedVesselIdentity.internalReferenceNumber ?? '...'})
-              </span>
+              </button>
             ) : (
               <Loader $height={22} />
             )}
@@ -104,6 +115,8 @@ const Title = styled.div`
     &:nth-child(2) {
       color: ${p => p.theme.color.gunMetal};
       margin-top: 8px;
+      cursor: pointer;
+      text-decoration: underline;
     }
   }
 `

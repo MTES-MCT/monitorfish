@@ -52,7 +52,7 @@ data class VesselDataOutput(
         fun fromVesselAndRelatedDatas(
             vessel: Vessel?,
             beacon: Beacon?,
-            vesselRiskFactor: VesselRiskFactor,
+            vesselRiskFactor: VesselRiskFactor?,
             producerOrganizationMembership: ProducerOrganizationMembership?,
         ): VesselDataOutput? {
             if (vessel == null) {
@@ -92,7 +92,7 @@ data class VesselDataOutput(
                 vesselPhones = vessel.vesselPhones,
                 vesselEmails = vessel.vesselEmails,
                 beacon = beacon?.let { BeaconDataOutput.fromBeacon(it) },
-                riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(vesselRiskFactor),
+                riskFactor = vesselRiskFactor?.let { RiskFactorDataOutput.fromVesselRiskFactor(it) },
                 underCharter = vessel.underCharter,
                 logbookEquipmentStatus = vessel.logbookEquipmentStatus,
                 logbookSoftware = vessel.logbookSoftware,

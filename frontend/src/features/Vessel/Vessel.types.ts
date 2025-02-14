@@ -1,69 +1,18 @@
 import { z } from 'zod'
 
-import { numberOrUndefined, stringOrUndefined } from '../../types'
-
-import type { ProducerOrganizationMembership } from '@features/ProducerOrganizationMembership/types'
-import type { RiskFactor } from '@features/RiskFactor/types'
 import type { VesselLastPositionLightSchema } from '@features/Vessel/schemas/VesselLastPositionLightSchema'
-import type { VesselLastPositionSchema } from '@features/Vessel/schemas/VesselLastPositionSchema'
+import type {
+  VesselLastPositionSchema,
+  DeclaredLogbookSpeciesSchema
+} from '@features/Vessel/schemas/VesselLastPositionSchema'
+import type { VesselSchema } from '@features/Vessel/schemas/VesselSchema'
 import type Feature from 'ol/Feature'
 import type LineString from 'ol/geom/LineString'
 import type Point from 'ol/geom/Point'
 
 export namespace Vessel {
-  export type Beacon = {
-    beaconNumber: string
-    isCoastal: string | undefined
-    loggingDatetimeUtc: string | undefined
-  }
-
-  export interface Vessel {
-    declaredFishingGears: string[]
-    district: string | undefined
-    districtCode: string | undefined
-    externalReferenceNumber: string | undefined
-    flagState: string
-    gauge: number | undefined
-    imo: string | undefined
-    internalReferenceNumber: string | undefined
-    ircs: string | undefined
-    length: number | undefined
-    mmsi: string | undefined
-    navigationLicenceExpirationDate: string | undefined
-    navigationLicenceExtensionDate: string | undefined
-    navigationLicenceStatus: string | undefined
-    operatorEmails: string[] | undefined
-    operatorName: string | undefined
-    operatorPhones: string[] | undefined
-    pinger: boolean | undefined
-    power: number | undefined
-    proprietorEmails: string[] | undefined
-    proprietorName: string | undefined
-    proprietorPhones: string[] | undefined
-    registryPort: string | undefined
-    sailingCategory: string | undefined
-    sailingType: string | undefined
-    underCharter: boolean | undefined
-    vesselEmails: string[] | undefined
-    /** ID. */
-    vesselId: number | undefined
-    vesselName: string | undefined
-    vesselPhones: string[] | undefined
-    vesselType: string | undefined
-    width: number | undefined
-  }
-
-  export interface EnrichedVessel extends Vessel {
-    beacon: Beacon | undefined
-    hasLogbookEsacapt: boolean
-    hasVisioCaptures: boolean | undefined
-    logbookEquipmentStatus: string | undefined
-    logbookSoftware: string | undefined
-    producerOrganization: ProducerOrganizationMembership | undefined
-    riskFactor: RiskFactor | undefined
-  }
-
-  export type SelectedVessel = Omit<VesselLastPosition, 'riskFactor'> & Vessel.EnrichedVessel
+  export type Vessel = z.infer<typeof VesselSchema>
+  export type SelectedVessel = Omit<VesselLastPosition, 'riskFactor'> & Vessel.Vessel
   export type AugmentedSelectedVessel = SelectedVessel & {
     hasAlert: boolean
     hasInfractionSuspicion: boolean
@@ -129,21 +78,9 @@ export namespace Vessel {
 
   export type VesselAndPositions = {
     positions: VesselPosition[]
-    vessel: Vessel.EnrichedVessel
+    vessel: Vessel.Vessel
   }
 
-  export const DeclaredLogbookGearSchema = z.strictObject({
-    dimensions: stringOrUndefined,
-    gear: stringOrUndefined,
-    mesh: numberOrUndefined
-  })
-
-  export const DeclaredLogbookSpeciesSchema = z.strictObject({
-    faoZone: z.string(),
-    gear: z.string(),
-    species: z.string(),
-    weight: numberOrUndefined
-  })
   export type DeclaredLogbookSpecies = z.infer<typeof DeclaredLogbookSpeciesSchema>
 
   export type VesselLastPosition = z.infer<typeof VesselLastPositionSchema>

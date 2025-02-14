@@ -57,7 +57,7 @@ export const extractVesselIdentityProps = (
   vessel:
     | Vessel.VesselLastPosition
     | Vessel.SelectedVessel
-    | Vessel.EnrichedVessel
+    | Vessel.Vessel
     | Reporting.Reporting
     | PendingAlert
     | SilencedAlert

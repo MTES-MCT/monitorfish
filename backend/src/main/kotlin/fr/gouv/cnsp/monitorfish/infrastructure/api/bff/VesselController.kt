@@ -83,21 +83,24 @@ class VesselController(
         beforeDateTime: ZonedDateTime?,
     ): ResponseEntity<VesselAndPositionsDataOutput> =
         runBlocking {
-            val (vesselTrackHasBeenModified, vesselWithData) =
+            val (vesselTrackHasBeenModified, vesselInformation) =
                 getVessel.execute(
-                    vesselId,
-                    internalReferenceNumber,
-                    externalReferenceNumber,
-                    IRCS,
-                    trackDepth,
-                    vesselIdentifier,
-                    afterDateTime,
-                    beforeDateTime,
+                    vesselId = vesselId,
+                    internalReferenceNumber = internalReferenceNumber,
+                    externalReferenceNumber = externalReferenceNumber,
+                    ircs = IRCS,
+                    trackDepth = trackDepth,
+                    vesselIdentifier = vesselIdentifier,
+                    fromDateTime = afterDateTime,
+                    toDateTime = beforeDateTime,
                 )
 
             val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
 
-            ResponseEntity.status(returnCode).body(VesselAndPositionsDataOutput.fromVesselInformation(vesselWithData))
+            ResponseEntity
+                .status(
+                    returnCode,
+                ).body(VesselAndPositionsDataOutput.fromVesselInformation(vesselInformation))
         }
 
     @GetMapping("/beacon_malfunctions")

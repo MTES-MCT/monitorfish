@@ -9,6 +9,6 @@ data class VesselInformation(
     val vessel: Vessel?,
     val beacon: Beacon?,
     val positions: List<Position>,
-    val vesselRiskFactor: VesselRiskFactor,
+    val vesselRiskFactor: VesselRiskFactor?,
     val producerOrganization: ProducerOrganizationMembership?,
 )

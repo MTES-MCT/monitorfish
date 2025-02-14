@@ -31,8 +31,8 @@ class GetVessel(
         ircs: String,
         trackDepth: VesselTrackDepth,
         vesselIdentifier: VesselIdentifier?,
-        fromDateTime: ZonedDateTime? = null,
-        toDateTime: ZonedDateTime? = null,
+        fromDateTime: ZonedDateTime?,
+        toDateTime: ZonedDateTime?,
     ): Pair<Boolean, VesselInformation> =
         coroutineScope {
             val (vesselTrackHasBeenModified, positions) =
@@ -53,27 +53,17 @@ class GetVessel(
                 async {
                     vesselId?.let { vesselRepository.findVesselById(vesselId) }
                 }
-
-            val vesselRiskFactorsFuture =
+            val beacon =
                 async {
-                    riskFactorRepository.findByInternalReferenceNumber(internalReferenceNumber)
+                    vesselId?.let { beaconRepository.findBeaconByVesselId(it) }
                 }
             val vesselProducerOrganization =
                 async {
                     producerOrganizationMembershipRepository.findByInternalReferenceNumber(internalReferenceNumber)
                 }
 
-            val vessel = vesselFuture.await()
-            val beacon =
-                async {
-                    vessel?.id?.let { vesselId -> beaconRepository.findBeaconByVesselId(vesselId) }
-                }
-            val logbookSoftware =
-                vessel?.internalReferenceNumber?.let {
-                    logbookReportRepository.findLastReportSoftware(
-                        it,
-                    )
-                }
+            val vesselRiskFactors = getVesselRiskFactors(vesselId, internalReferenceNumber)
+            val logbookSoftware = logbookReportRepository.findLastReportSoftware(internalReferenceNumber)
             val hasVisioCaptures =
                 logbookSoftware?.let { LogbookSoftware.isVisioCaptureInRealTime(logbookSoftware) } ?: false
 
@@ -81,15 +71,27 @@ class GetVessel(
                 vesselTrackHasBeenModified,
                 VesselInformation(
                     vessel =
-                        vessel?.copy(
+                        vesselFuture.await()?.copy(
                             hasVisioCaptures = hasVisioCaptures,
                             logbookSoftware = logbookSoftware,
                         ),
                     beacon = beacon.await(),
                     positions = positions.await(),
-                    vesselRiskFactor = vesselRiskFactorsFuture.await() ?: VesselRiskFactor(),
+                    vesselRiskFactor = vesselRiskFactors,
                     producerOrganization = vesselProducerOrganization.await(),
                 ),
             )
         }
+
+    private fun getVesselRiskFactors(
+        vesselId: Int?,
+        internalReferenceNumber: String,
+    ): VesselRiskFactor? {
+        val riskFactorByVesselId = vesselId?.let { riskFactorRepository.findByVesselId(it) }
+
+        val riskFactor =
+            riskFactorByVesselId ?: riskFactorRepository.findByInternalReferenceNumber(internalReferenceNumber)
+
+        return riskFactor
+    }
 }

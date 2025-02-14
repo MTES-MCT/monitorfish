@@ -5,9 +5,18 @@ import { z } from 'zod'
 
 import { booleanOrUndefined, numberOrUndefined, stringOrUndefined } from '../../../types'
 
-import DeclaredLogbookSpeciesSchema = Vessel.DeclaredLogbookSpeciesSchema
-import DeclaredLogbookGearSchema = Vessel.DeclaredLogbookGearSchema
-import VesselIdentifier = Vessel.VesselIdentifier
+export const DeclaredLogbookGearSchema = z.strictObject({
+  dimensions: stringOrUndefined,
+  gear: stringOrUndefined,
+  mesh: numberOrUndefined
+})
+
+export const DeclaredLogbookSpeciesSchema = z.strictObject({
+  faoZone: z.string(),
+  gear: z.string(),
+  species: z.string(),
+  weight: numberOrUndefined
+})
 
 export const VesselLastPositionSchema = z.strictObject({
   alerts: z.array(z.union([z.nativeEnum(PendingAlertValueType), z.literal('PNO_LAN_WEIGHT_TOLERANCE_ALERT')])),
@@ -63,7 +72,7 @@ export const VesselLastPositionSchema = z.strictObject({
   underCharter: booleanOrUndefined,
   vesselFeatureId: z.string(),
   vesselId: numberOrUndefined,
-  vesselIdentifier: z.nativeEnum(VesselIdentifier),
+  vesselIdentifier: z.nativeEnum(Vessel.VesselIdentifier),
   vesselName: stringOrUndefined,
   width: numberOrUndefined
 })

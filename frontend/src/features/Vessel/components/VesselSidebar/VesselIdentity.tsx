@@ -252,8 +252,8 @@ export function VesselIdentity() {
                 {!!selectedVessel?.operatorPhones && (
                   <ValueWithLineBreak>{selectedVessel?.operatorPhones.join(', ')}</ValueWithLineBreak>
                 )}
-                {!!selectedVessel?.operatorEmails && (
-                  <ValueWithLineBreak>{selectedVessel?.operatorEmails.join(', ')}</ValueWithLineBreak>
+                {!!selectedVessel?.operatorEmail && (
+                  <ValueWithLineBreak>{selectedVessel?.operatorEmail}</ValueWithLineBreak>
                 )}
               </>
             )

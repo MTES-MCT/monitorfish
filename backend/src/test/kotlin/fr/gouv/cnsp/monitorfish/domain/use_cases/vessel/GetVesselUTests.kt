@@ -46,14 +46,14 @@ class GetVesselUTests {
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition =
             Position(
-                null,
-                "FR224226850",
-                "224226850",
-                null,
-                null,
-                null,
-                null,
-                PositionType.AIS,
+                id = null,
+                internalReferenceNumber = "FR224226850",
+                mmsi = "224226850",
+                ircs = null,
+                externalReferenceNumber = null,
+                vesselName = null,
+                flagState = null,
+                positionType = PositionType.AIS,
                 isManual = false,
                 isFishing = false,
                 latitude = 16.445,
@@ -67,14 +67,14 @@ class GetVesselUTests {
             )
         val secondPosition =
             Position(
-                null,
-                "FR224226850",
-                "224226850",
-                null,
-                null,
-                null,
-                null,
-                PositionType.AIS,
+                id = null,
+                internalReferenceNumber = "FR224226850",
+                mmsi = "224226850",
+                ircs = null,
+                externalReferenceNumber = null,
+                vesselName = null,
+                flagState = null,
+                positionType = PositionType.AIS,
                 isManual = false,
                 isFishing = false,
                 latitude = 16.445,
@@ -88,14 +88,14 @@ class GetVesselUTests {
             )
         val thirdPosition =
             Position(
-                null,
-                "FR224226850",
-                "224226850",
-                null,
-                null,
-                null,
-                null,
-                PositionType.AIS,
+                id = null,
+                internalReferenceNumber = "FR224226850",
+                mmsi = "224226850",
+                ircs = null,
+                externalReferenceNumber = null,
+                vesselName = null,
+                flagState = null,
+                positionType = PositionType.AIS,
                 isManual = false,
                 isFishing = false,
                 latitude = 16.445,
@@ -109,14 +109,14 @@ class GetVesselUTests {
             )
         val fourthPosition =
             Position(
-                null,
-                "FR224226850",
-                "224226850",
-                null,
-                null,
-                null,
-                null,
-                PositionType.AIS,
+                id = null,
+                internalReferenceNumber = "FR224226850",
+                mmsi = "224226850",
+                ircs = null,
+                externalReferenceNumber = null,
+                vesselName = null,
+                flagState = null,
+                positionType = PositionType.AIS,
                 isManual = false,
                 isFishing = false,
                 latitude = 16.445,
@@ -152,14 +152,14 @@ class GetVesselUTests {
                     beaconRepository,
                     producerOrganizationMembershipRepository,
                 ).execute(
-                    123,
-                    "FR224226850",
-                    "",
-                    "",
-                    VesselTrackDepth.TWELVE_HOURS,
-                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                    null,
-                    null,
+                    vesselId = 123,
+                    internalReferenceNumber = "FR224226850",
+                    externalReferenceNumber = "",
+                    ircs = "",
+                    trackDepth = VesselTrackDepth.TWELVE_HOURS,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    fromDateTime = null,
+                    toDateTime = null,
                 )
             }
 
@@ -203,14 +203,14 @@ class GetVesselUTests {
                     beaconRepository,
                     producerOrganizationMembershipRepository,
                 ).execute(
-                    123,
-                    "FR224226850",
-                    "",
-                    "",
-                    VesselTrackDepth.TWELVE_HOURS,
-                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                    null,
-                    null,
+                    vesselId = 123,
+                    internalReferenceNumber = "FR224226850",
+                    externalReferenceNumber = "",
+                    ircs = "",
+                    trackDepth = VesselTrackDepth.TWELVE_HOURS,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    fromDateTime = null,
+                    toDateTime = null,
                 )
             }
 
@@ -240,19 +240,92 @@ class GetVesselUTests {
                     beaconRepository,
                     producerOrganizationMembershipRepository,
                 ).execute(
-                    123,
-                    "FR224226850",
-                    "",
-                    "",
-                    VesselTrackDepth.TWELVE_HOURS,
-                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                    null,
-                    null,
+                    vesselId = 123,
+                    internalReferenceNumber = "FR224226850",
+                    externalReferenceNumber = "",
+                    ircs = "",
+                    trackDepth = VesselTrackDepth.TWELVE_HOURS,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    fromDateTime = null,
+                    toDateTime = null,
                 )
             }
 
         // Then
         assertThat(pair.first).isFalse
         assertThat(pair.second.beacon?.beaconNumber).isNull()
+    }
+
+    @Test
+    fun `execute Should not throw an exception When no vessel id given`() {
+        // Given
+        given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
+            listOf(),
+        )
+        given(vesselRepository.findVesselById(any())).willReturn(null)
+        given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(VesselRiskFactor())
+        given(beaconRepository.findBeaconByVesselId(eq(123))).willReturn(null)
+
+        // When
+        val pair =
+            runBlocking {
+                GetVessel(
+                    vesselRepository,
+                    positionRepository,
+                    logbookReportRepository,
+                    riskFactorRepository,
+                    beaconRepository,
+                    producerOrganizationMembershipRepository,
+                ).execute(
+                    vesselId = null,
+                    internalReferenceNumber = "FR224226850",
+                    externalReferenceNumber = "",
+                    ircs = "",
+                    trackDepth = VesselTrackDepth.TWELVE_HOURS,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    fromDateTime = null,
+                    toDateTime = null,
+                )
+            }
+
+        // Then
+        assertThat(pair.second.vessel).isNull()
+    }
+
+    @Test
+    fun `execute Should return a default risk factor when not found`() {
+        // Given
+        given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
+            listOf(),
+        )
+        given(vesselRepository.findVesselById(any())).willReturn(null)
+        given(riskFactorRepository.findByVesselId(any())).willReturn(null)
+        given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(null)
+        given(beaconRepository.findBeaconByVesselId(eq(123))).willReturn(null)
+
+        // When
+        val pair =
+            runBlocking {
+                GetVessel(
+                    vesselRepository,
+                    positionRepository,
+                    logbookReportRepository,
+                    riskFactorRepository,
+                    beaconRepository,
+                    producerOrganizationMembershipRepository,
+                ).execute(
+                    vesselId = null,
+                    internalReferenceNumber = "FR224226850",
+                    externalReferenceNumber = "",
+                    ircs = "",
+                    trackDepth = VesselTrackDepth.TWELVE_HOURS,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    fromDateTime = null,
+                    toDateTime = null,
+                )
+            }
+
+        // Then
+        assertThat(pair.second.vesselRiskFactor).isNotNull
     }
 }

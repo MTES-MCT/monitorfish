@@ -27,17 +27,16 @@ data class RiskFactorDataOutput(
         fun fromVesselRiskFactor(vesselRiskFactor: VesselRiskFactor) =
             RiskFactorDataOutput(
                 gearOnboard =
-                    vesselRiskFactor.gearOnboard?.map { GearLastPositionDataOutput.fromGearLastPosition(it) }
-                        ?: listOf(),
+                    vesselRiskFactor.gearOnboard.map { GearLastPositionDataOutput.fromGearLastPosition(it) },
                 segments = vesselRiskFactor.segments,
                 segmentHighestImpact = vesselRiskFactor.segmentHighestImpact,
                 segmentHighestPriority = vesselRiskFactor.segmentHighestPriority,
                 speciesOnboard =
-                    vesselRiskFactor.speciesOnboard?.map {
+                    vesselRiskFactor.speciesOnboard.map {
                         SpeciesLastPositionDataOutput.fromSpeciesLastPosition(
                             it,
                         )
-                    } ?: listOf(),
+                    },
                 controlPriorityLevel = vesselRiskFactor.controlPriorityLevel,
                 controlRateRiskFactor = vesselRiskFactor.controlRateRiskFactor,
                 numberControlsLastFiveYears = vesselRiskFactor.numberControlsLastFiveYears,

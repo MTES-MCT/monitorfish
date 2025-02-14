@@ -1,4 +1,7 @@
-import { Vessel } from '@features/Vessel/Vessel.types'
+import {
+  DeclaredLogbookGearSchema,
+  DeclaredLogbookSpeciesSchema
+} from '@features/Vessel/schemas/VesselLastPositionSchema'
 import { z } from 'zod'
 
 import { stringOrUndefined } from '../../types'
@@ -7,7 +10,7 @@ export const RiskFactorSchema = z.strictObject({
   controlPriorityLevel: z.number(),
   controlRateRiskFactor: z.number(),
   detectabilityRiskFactor: z.number(),
-  gearOnboard: z.array(Vessel.DeclaredLogbookGearSchema),
+  gearOnboard: z.array(DeclaredLogbookGearSchema),
   impactRiskFactor: z.number(),
   lastControlDatetime: stringOrUndefined,
   numberControlsLastFiveYears: z.number(),
@@ -21,7 +24,7 @@ export const RiskFactorSchema = z.strictObject({
   segmentHighestImpact: stringOrUndefined,
   segmentHighestPriority: stringOrUndefined,
   segments: z.array(z.string()),
-  speciesOnboard: z.array(Vessel.DeclaredLogbookSpeciesSchema)
+  speciesOnboard: z.array(DeclaredLogbookSpeciesSchema)
 })
 
 export type RiskFactor = z.infer<typeof RiskFactorSchema>

@@ -1,6 +1,7 @@
 import { monitorfishApi } from '@api/api'
 import { HttpStatusCode, RtkCacheTagType } from '@api/constants'
 import { VesselLastPositionSchema } from '@features/Vessel/schemas/VesselLastPositionSchema'
+import { VesselSchema } from '@features/Vessel/schemas/VesselSchema'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
@@ -25,7 +26,9 @@ export const vesselApi = monitorfishApi.injectEndpoints({
     getVessel: builder.query<Vessel.Vessel, number>({
       providesTags: () => [{ type: RtkCacheTagType.Vessel }],
       query: id => `/vessels/${id}`,
-      transformErrorResponse: response => new FrontendApiError(GET_VESSEL_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(GET_VESSEL_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: Vessel.Vessel) =>
+        parseResponseOrReturn<Vessel.Vessel>(baseQueryReturnValue, VesselSchema, false)
     }),
 
     /**
@@ -61,10 +64,15 @@ export const vesselApi = monitorfishApi.injectEndpoints({
         }
       },
       transformErrorResponse: response => new FrontendApiError(VESSEL_POSITIONS_ERROR_MESSAGE, response),
-      transformResponse: async (baseQueryReturnValue: Vessel.VesselAndPositions, meta: Meta) => ({
-        isTrackDepthModified: meta?.response?.status === HttpStatusCode.ACCEPTED,
-        vesselAndPositions: baseQueryReturnValue
-      })
+      transformResponse: async (baseQueryReturnValue: Vessel.VesselAndPositions, meta: Meta) => {
+        // TODO We nee to also check the `positions` type
+        parseResponseOrReturn<Vessel.Vessel>(baseQueryReturnValue.vessel, VesselSchema, false)
+
+        return {
+          isTrackDepthModified: meta?.response?.status === HttpStatusCode.ACCEPTED,
+          vesselAndPositions: baseQueryReturnValue
+        }
+      }
     }),
 
     /**

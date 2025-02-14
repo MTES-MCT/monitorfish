@@ -178,8 +178,8 @@ class GetVesselUTests {
                 .last()
                 .dateTime,
         ).isEqualTo(now.minusHours(1))
-        assertThat(pair.second.vesselRiskFactor.impactRiskFactor).isEqualTo(2.3)
-        assertThat(pair.second.vesselRiskFactor.riskFactor).isEqualTo(3.2)
+        assertThat(pair.second.vesselRiskFactor?.impactRiskFactor).isEqualTo(2.3)
+        assertThat(pair.second.vesselRiskFactor?.riskFactor).isEqualTo(3.2)
         assertThat(pair.second.producerOrganization?.organizationName).isEqualTo("Example Name 1")
     }
 
@@ -293,7 +293,7 @@ class GetVesselUTests {
     }
 
     @Test
-    fun `execute Should return a default risk factor when not found`() {
+    fun `execute Should return a null risk factor when not found`() {
         // Given
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             listOf(),
@@ -326,6 +326,6 @@ class GetVesselUTests {
             }
 
         // Then
-        assertThat(pair.second.vesselRiskFactor).isNotNull
+        assertThat(pair.second.vesselRiskFactor).isNull()
     }
 }

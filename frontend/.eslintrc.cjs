@@ -14,7 +14,7 @@ module.exports = {
   },
   rules: {
     curly: ['error', 'all'],
-    'func-names': ['error', 'always'],
+    'func-names': 'off',
     'newline-before-return': 'error',
     'no-console': ['error', { allow: ['info', 'warn', 'error'] }],
 

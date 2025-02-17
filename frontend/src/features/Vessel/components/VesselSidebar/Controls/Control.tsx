@@ -1,18 +1,16 @@
+import { MissionAction } from '@features/Mission/missionAction.types'
+import { editMission } from '@features/Mission/useCases/editMission'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Button, Icon, Tag, TagGroup, THEME } from '@mtes-mct/monitor-ui'
-import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { GearOnboard } from './GearOnboard'
 import { Infraction } from './Infraction'
 import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
-import { COLORS } from '../../../../../constants/constants'
 import { getNumberOfInfractions } from '../../../../../domain/entities/controls'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { getDate } from '../../../../../utils'
 import GyroRedSVG from '../../../../icons/Gyrophare_controles_rouge.svg?react'
 import GyroGreenSVG from '../../../../icons/Gyrophare_controles_vert.svg?react'
-import { MissionAction } from '../../../../Mission/missionAction.types'
-import { editMission } from '../../../../Mission/useCases/editMission'
 
 type ControlProps = Readonly<{
   control: MissionAction.MissionAction
@@ -21,21 +19,16 @@ type ControlProps = Readonly<{
 export function Control({ control, isLastItem }: ControlProps) {
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
-  const numberOfInfractions = useMemo(() => getNumberOfInfractions(control), [control])
-  const gearAndSpeciesInfractionsLength = useMemo(
-    () => control.gearInfractions.length + control.speciesInfractions.length,
-    [control]
-  )
-  const gearSpeciesAndLogbookInfractionsLength = useMemo(
-    () => control.gearInfractions.length + control.speciesInfractions.length + control.logbookInfractions.length,
-    [control]
-  )
+  const numberOfInfractions = getNumberOfInfractions(control)
+  const gearAndSpeciesInfractionsLength = control.gearInfractions.length + control.speciesInfractions.length
+  const gearSpeciesAndLogbookInfractionsLength =
+    control.gearInfractions.length + control.speciesInfractions.length + control.logbookInfractions.length
 
-  const openMission = useCallback(async () => {
+  const openMission = () => {
     dispatch(editMission(control.missionId))
-  }, [dispatch, control.missionId])
+  }
 
-  const controlType = useMemo(() => {
+  const controlType = (function () {
     switch (control.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL:
         return 'AÉRIEN'
@@ -46,21 +39,18 @@ export function Control({ control, isLastItem }: ControlProps) {
       default:
         return ''
     }
-  }, [control])
+  })()
 
-  const controlPort = useMemo(() => {
+  const controlPort = (function () {
     switch (control.actionType) {
       case MissionAction.MissionActionType.LAND_CONTROL:
         return `${control.portName?.toUpperCase()} (${control.portLocode?.toUpperCase()})`
       default:
         return ''
     }
-  }, [control])
+  })()
 
-  const controlTitle = useMemo(
-    () => `CONTRÔLE ${controlType} DU ${getDate(control.actionDatetimeUtc)}`,
-    [control, controlType]
-  )
+  const controlTitle = `CONTRÔLE ${controlType} DU ${getDate(control.actionDatetimeUtc)}`
 
   return (
     <Wrapper isLastItem={isLastItem}>
@@ -192,7 +182,7 @@ const Wrapper = styled.div<{
   width: -webkit-fill-available;
   margin: 16px;
   padding: 12px 24px 16px 12px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   display: flex;
   white-space: initial;
 `

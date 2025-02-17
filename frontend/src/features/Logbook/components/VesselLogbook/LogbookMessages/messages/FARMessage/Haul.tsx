@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { buildCatchArray } from '../../../../../utils'
@@ -9,13 +8,13 @@ import { CatchMessageZone } from '../common/CatchMessageZone'
 import { SpecyCatch } from '../common/SpecyCatch'
 
 export function Haul({ hasManyHauls, haul, haulNumber }) {
-  const catchesWithProperties = useMemo(() => {
+  const catchesWithProperties = (function () {
     if (!haul?.catches) {
       return []
     }
 
     return buildCatchArray(haul.catches)
-  }, [haul])
+  })()
 
   return (
     <>

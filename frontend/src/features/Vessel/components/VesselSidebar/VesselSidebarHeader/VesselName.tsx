@@ -5,7 +5,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { addVesselToFavorites, removeVesselFromFavorites } from 'domain/shared_slices/FavoriteVessel'
 import { unselectVessel } from 'domain/use_cases/vessel/unselectVessel'
 import countries from 'i18n-iso-countries'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import CloseIconSVG from '../../../../icons/Croix_grise.svg?react'
@@ -26,27 +26,21 @@ export function VesselName({ focusOnVesselSearchInput }) {
     [selectedVesselIdentity, favorites]
   )
 
-  const addOrRemoveToFavorites = useCallback(
-    e => {
-      e.stopPropagation()
+  const addOrRemoveToFavorites = function (e) {
+    e.stopPropagation()
 
-      if (isFavorite) {
-        dispatch(removeVesselFromFavorites(getVesselCompositeIdentifier(selectedVesselIdentity)))
-      } else {
-        dispatch(addVesselToFavorites(selectedVesselIdentity))
-      }
-    },
-    [dispatch, selectedVesselIdentity, isFavorite]
-  )
+    if (isFavorite) {
+      dispatch(removeVesselFromFavorites(getVesselCompositeIdentifier(selectedVesselIdentity)))
+    } else {
+      dispatch(addVesselToFavorites(selectedVesselIdentity))
+    }
+  }
 
-  const close = useCallback(
-    e => {
-      e.stopPropagation()
+  const close = function (e) {
+    e.stopPropagation()
 
-      dispatch(unselectVessel())
-    },
-    [dispatch]
-  )
+    dispatch(unselectVessel())
+  }
 
   return (
     <Wrapper
@@ -64,10 +58,15 @@ export function VesselName({ focusOnVesselSearchInput }) {
         $isFavorite={!!isFavorite}
         $isFlagShown={!!selectedVesselIdentity?.flagState}
         data-cy="sidebar-add-vessel-to-favorites"
+        /* eslint-disable-next-line react/jsx-no-bind */
         onClick={addOrRemoveToFavorites}
       />
       <Name title={selectedVesselIdentity?.vesselName ?? undefined}>{getVesselName(selectedVesselIdentity)}</Name>
-      <CloseIcon data-cy="vessel-search-selected-vessel-close-title" onClick={close} />
+      <CloseIcon
+        data-cy="vessel-search-selected-vessel-close-title"
+        /* eslint-disable-next-line react/jsx-no-bind */
+        onClick={close}
+      />
     </Wrapper>
   )
 }

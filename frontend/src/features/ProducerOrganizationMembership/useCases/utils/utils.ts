@@ -1,6 +1,6 @@
-import { read, utils } from 'xlsx'
-
 import type { ProducerOrganizationMembership } from '@features/ProducerOrganizationMembership/types'
+
+const { read, utils } = await import('xlsx')
 
 const EMPTY_CSV_ERROR = 'Le CSV ajouté est vide.'
 

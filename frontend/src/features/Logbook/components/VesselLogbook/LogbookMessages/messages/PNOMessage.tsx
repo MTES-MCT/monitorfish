@@ -1,7 +1,7 @@
 import { useGetGearsQuery } from '@api/gear'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { FlatKeyValue } from '@features/Vessel/components/VesselSidebar/common/FlatKeyValue'
-import { uniq } from 'lodash'
+import { uniq } from 'lodash-es'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 

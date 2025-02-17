@@ -1,5 +1,5 @@
 import { ControlUnit, MapMenuDialog, type Station } from '@mtes-mct/monitor-ui'
-import { uniq } from 'lodash/fp'
+import { uniq } from 'lodash-es'
 import { useCallback, useEffect, useState, type Ref, forwardRef } from 'react'
 import styled from 'styled-components'
 

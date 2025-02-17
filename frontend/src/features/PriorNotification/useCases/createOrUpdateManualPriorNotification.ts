@@ -4,7 +4,7 @@ import { customDayjs } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { handleThunkError } from '@utils/handleThunkError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
-import { omit } from 'lodash'
+import { omit } from 'lodash-es'
 
 import { openManualPriorNotificationForm } from './openManualPriorNotificationForm'
 import { priorNotificationApi } from '../priorNotificationApi'

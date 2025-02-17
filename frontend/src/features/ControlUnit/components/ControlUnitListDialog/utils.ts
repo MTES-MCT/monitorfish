@@ -7,7 +7,7 @@ import {
   type Station,
   getControlUnitResourceCategoryFromType
 } from '@mtes-mct/monitor-ui'
-import { isEmpty, uniq } from 'lodash/fp'
+import { isEmpty, uniq } from 'lodash-es'
 import { createEmpty, extend, type Extent } from 'ol/extent'
 import { fromLonLat } from 'ol/proj'
 

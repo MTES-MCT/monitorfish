@@ -1,5 +1,5 @@
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
-import _ from 'lodash'
+import { isEqual } from 'lodash-es'
 import { useCallback, useEffect } from 'react'
 import { type CheckboxProps, MultiCascader, Radio, RadioGroup } from 'rsuite'
 import styled from 'styled-components'
@@ -132,7 +132,7 @@ export function RegulatedGears({
         [REGULATED_GEARS_KEYS.REGULATED_GEAR_CATEGORIES]: nextRegulatedGearCategories
       }
 
-      if (!_.isEqual(nextRegulatedGearsObject, regulatedGearsObject)) {
+      if (!isEqual(nextRegulatedGearsObject, regulatedGearsObject)) {
         setRegulatedGearsObject(authorized, nextRegulatedGearsObject)
       }
     }

@@ -21,7 +21,7 @@ import {
   useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
-import { uniq } from 'lodash'
+import { uniq } from 'lodash-es'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'

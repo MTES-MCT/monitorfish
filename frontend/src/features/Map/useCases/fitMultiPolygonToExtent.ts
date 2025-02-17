@@ -1,5 +1,5 @@
 import { fitToExtent } from '@features/Map/slice'
-import { flattenDepth } from 'lodash'
+import { flattenDepth } from 'lodash-es'
 import { boundingExtent } from 'ol/extent'
 import { GeoJSON } from 'ol/format'
 

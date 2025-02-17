@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
@@ -25,19 +25,12 @@ export function YearBeaconMalfunctions({
 }: YearBeaconMalfunctionsProps) {
   const [isOpen, setIsOpen] = useState(false)
   const isEmpty = yearBeaconMalfunctions.length === 0
-  const numberOfMalfunctions = useMemo(
-    () => getNumberOfSeaAndLandBeaconMalfunctions(yearBeaconMalfunctions),
-    [yearBeaconMalfunctions]
-  )
+  const numberOfMalfunctions = getNumberOfSeaAndLandBeaconMalfunctions(yearBeaconMalfunctions)
 
-  const sortedMalfunctions = useMemo(
-    () =>
-      yearBeaconMalfunctions.sort(
-        (a, b) =>
-          new Date(b.beaconMalfunction.malfunctionStartDateTime).getTime() -
-          new Date(a.beaconMalfunction.malfunctionStartDateTime).getTime()
-      ),
-    [yearBeaconMalfunctions]
+  const sortedMalfunctions = yearBeaconMalfunctions.sort(
+    (a, b) =>
+      new Date(b.beaconMalfunction.malfunctionStartDateTime).getTime() -
+      new Date(a.beaconMalfunction.malfunctionStartDateTime).getTime()
   )
 
   return (

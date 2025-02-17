@@ -1,5 +1,4 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { YearControls } from './YearControls'
@@ -13,13 +12,9 @@ type YearsToControlListProps = {
   yearsToControls: Record<number, MissionAction.MissionAction[]>
 }
 export function YearsToControlList({ controlsFromDate, yearsToControls }: YearsToControlListProps) {
-  const sortedYears = useMemo(
-    () =>
-      Object.keys(yearsToControls)
-        .sort((a, b) => Number(b) - Number(a))
-        .map(value => Number(value)),
-    [yearsToControls]
-  )
+  const sortedYears = Object.keys(yearsToControls)
+    .sort((a, b) => Number(b) - Number(a))
+    .map(value => Number(value))
 
   return (
     <SidebarZone>

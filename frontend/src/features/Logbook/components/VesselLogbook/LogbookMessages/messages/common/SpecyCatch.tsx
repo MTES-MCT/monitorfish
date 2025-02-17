@@ -1,5 +1,5 @@
 import { Icon } from '@mtes-mct/monitor-ui'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import { WeightType } from '../../constants'
@@ -23,13 +23,13 @@ export function SpecyCatch({
 }: SpecyCatchProps) {
   const [isOpen, setIsOpen] = useState(false)
 
-  const specyFullName = useMemo(() => {
+  const specyFullName = (function () {
     if (specyCatch.speciesName && specyCatch.species) {
       return `${specyCatch.speciesName} (${specyCatch.species})`
     }
 
     return specyCatch.species
-  }, [specyCatch])
+  })()
 
   return (
     <Species>

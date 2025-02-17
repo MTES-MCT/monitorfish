@@ -1,6 +1,5 @@
 import { useGetNatinfsAsOptions } from '@features/Mission/components/MissionForm/hooks/useGetNatinfsAsOptions'
 import { find } from 'lodash'
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../../constants/constants'
@@ -14,13 +13,13 @@ type InfractionProps = {
 export function Infraction({ index, infraction, infractionDomain }: InfractionProps) {
   const natinfsAsOptions = useGetNatinfsAsOptions()
 
-  const infractionWithLabel = useMemo(() => {
+  const infractionWithLabel = (function () {
     const infractionLabel = find(natinfsAsOptions, { value: infraction.natinf })?.label
 
     return { ...infraction, infractionLabel }
-  }, [natinfsAsOptions, infraction])
+  })()
 
-  const infractionDomainText = useMemo(() => {
+  const infractionDomainText = (function () {
     switch (infractionDomain) {
       case MissionAction.InfractionDomain.GEAR:
         return 'engin'
@@ -37,7 +36,7 @@ export function Infraction({ index, infraction, infractionDomain }: InfractionPr
       default:
         return ''
     }
-  }, [infractionDomain])
+  })()
 
   return (
     <Wrapper isFirstInfraction={index === 1}>

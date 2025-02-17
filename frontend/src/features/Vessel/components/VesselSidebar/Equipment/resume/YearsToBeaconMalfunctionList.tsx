@@ -1,5 +1,4 @@
 import { SidebarZone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { YearBeaconMalfunctions } from './YearBeaconMalfunctions'
@@ -17,13 +16,9 @@ export function YearsToBeaconMalfunctionList({
   vesselBeaconMalfunctionsFromDate,
   yearsToBeaconMalfunctions
 }: YearsToBeaconMalfunctionListProps) {
-  const sortedYears = useMemo(
-    () =>
-      Object.keys(yearsToBeaconMalfunctions)
-        .sort((a, b) => Number(b) - Number(a))
-        .map(value => Number(value)),
-    [yearsToBeaconMalfunctions]
-  )
+  const sortedYears = Object.keys(yearsToBeaconMalfunctions)
+    .sort((a, b) => Number(b) - Number(a))
+    .map(value => Number(value))
 
   return (
     <SidebarZone>

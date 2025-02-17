@@ -1,7 +1,5 @@
 import type { ProducerOrganizationMembership } from '@features/ProducerOrganizationMembership/types'
 
-const { read, utils } = await import('xlsx')
-
 const EMPTY_CSV_ERROR = 'Le CSV ajouté est vide.'
 
 /**
@@ -23,6 +21,7 @@ const EMPTY_CSV_ERROR = 'Le CSV ajouté est vide.'
  * @param file
  */
 export const getNextMembershipsFromFile = async (file: File): Promise<ProducerOrganizationMembership[]> => {
+  const { read, utils } = await import('xlsx')
   const arrayBuffer = await file.arrayBuffer()
 
   const workbook = read(arrayBuffer, { FS: ';', raw: true, type: 'array' })

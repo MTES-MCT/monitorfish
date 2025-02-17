@@ -5,7 +5,6 @@ import { Checkbox, useNewWindow } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { UNKNOWN_VESSEL } from 'domain/entities/vessel/vessel'
 import { useFormikContext } from 'formik'
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
@@ -21,7 +20,7 @@ export function VesselField() {
 
   const { data: vessel, isFetching } = useGetVesselQuery(values.vesselId ?? skipToken)
 
-  const defaultValue = useMemo(() => {
+  const defaultValue = (function () {
     if (!values.vesselId || !values.flagState) {
       return undefined
     }
@@ -43,15 +42,7 @@ export function VesselField() {
       vesselLength: undefined,
       vesselName: values.vesselName
     }
-  }, [
-    values.flagState,
-    values.vesselName,
-    values.districtCode,
-    values.externalReferenceNumber,
-    values.internalReferenceNumber,
-    values.vesselId,
-    values.ircs
-  ])
+  })()
 
   const handleVesselSearchChange = (nextVessel: Partial<Vessel.VesselIdentity> | undefined) => {
     if (!nextVessel) {

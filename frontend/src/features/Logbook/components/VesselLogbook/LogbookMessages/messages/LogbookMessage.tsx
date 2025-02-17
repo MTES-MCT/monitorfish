@@ -2,7 +2,6 @@ import { Ellipsised } from '@components/Ellipsised'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { getComponentFromMessageType } from './constants'
@@ -31,7 +30,7 @@ export function LogbookMessage({
   const dispatch = useMainAppDispatch()
   const fishingActivitiesShowedOnMap = useMainAppSelector(state => state.fishingActivities.fishingActivitiesShowedOnMap)
 
-  const logbookHeaderTitle = useMemo(() => {
+  const logbookHeaderTitle = (function () {
     switch (logbookMessage.messageType) {
       case LogbookMessageTypeEnum.DEP.code.toString(): {
         const depMessage = logbookMessage as Logbook.DepMessage
@@ -59,7 +58,7 @@ export function LogbookMessage({
         return LogbookMessageTypeEnum[logbookMessage.messageType].fullName
       }
     }
-  }, [logbookMessage, isManuallyCreated])
+  })()
 
   const openXML = (xml: string) => {
     const blob = new Blob([xml], { type: 'text/xml' })
@@ -68,10 +67,7 @@ export function LogbookMessage({
     URL.revokeObjectURL(url)
   }
 
-  const logbookMessageComponent = useMemo(
-    () => getComponentFromMessageType(logbookMessage, isManuallyCreated),
-    [logbookMessage, isManuallyCreated]
-  )
+  const logbookMessageComponent = getComponentFromMessageType(logbookMessage, isManuallyCreated)
 
   return (
     <Wrapper $isFirst={isFirst} data-cy="LogbookMessage" id={logbookMessage.operationNumber}>

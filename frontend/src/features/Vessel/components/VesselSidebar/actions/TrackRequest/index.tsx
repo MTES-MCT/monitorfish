@@ -3,7 +3,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DateRangePicker, THEME } from '@mtes-mct/monitor-ui'
 import { getTrackRequestFromTrackDepth, VesselTrackDepth } from 'domain/entities/vesselTrackDepth'
 import { updateSelectedVesselTrackRequest } from 'domain/use_cases/vessel/updateSelectedVesselTrackRequest'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 import { ExportTrack } from './ExportTrack'
@@ -28,14 +28,11 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
   const { selectedVesselIdentity } = useMainAppSelector(state => state.vessel)
   const [isOpenedFromClick, setIsOpenedFromClick] = useState(false)
 
-  const dateRangePickerDefaultValue = useMemo(
-    () =>
-      selectedVesselTrackRequest && selectedVesselTrackRequest.trackDepth === VesselTrackDepth.CUSTOM
-        ? ([selectedVesselTrackRequest.afterDateTime, selectedVesselTrackRequest.beforeDateTime] as DateRange)
-        : undefined,
-    [selectedVesselTrackRequest]
-  )
-  const isOpen = useMemo(() => isSidebarOpen && isOpenedFromClick, [isSidebarOpen, isOpenedFromClick])
+  const dateRangePickerDefaultValue =
+    selectedVesselTrackRequest && selectedVesselTrackRequest.trackDepth === VesselTrackDepth.CUSTOM
+      ? ([selectedVesselTrackRequest.afterDateTime, selectedVesselTrackRequest.beforeDateTime] as DateRange)
+      : undefined
+  const isOpen = isSidebarOpen && isOpenedFromClick
 
   const handleDateRangeRadioChange = useCallback(
     (nextTrackDepth: SelectableVesselTrackDepth | undefined) => {

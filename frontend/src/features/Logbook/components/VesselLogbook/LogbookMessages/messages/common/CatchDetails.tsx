@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { LogbookSpeciesPresentation, LogbookSpeciesPreservationState } from '../../../../../constants'
@@ -24,7 +23,7 @@ export function CatchDetails({
   },
   weightType
 }: CatchDetailsProps) {
-  const presentationFullName = useMemo(() => {
+  const presentationFullName = (function () {
     if (!presentation) {
       return undefined
     }
@@ -34,9 +33,9 @@ export function CatchDetails({
     }
 
     return presentation
-  }, [presentation])
+  })()
 
-  const preservationFullName = useMemo(() => {
+  const preservationFullName = (function () {
     if (!preservationState) {
       return undefined
     }
@@ -46,7 +45,7 @@ export function CatchDetails({
     }
 
     return preservationState
-  }, [preservationState])
+  })()
 
   return (
     <Wrapper key={`${faoZone}${weight}${statisticalRectangle}${economicZone}${presentation}`}>

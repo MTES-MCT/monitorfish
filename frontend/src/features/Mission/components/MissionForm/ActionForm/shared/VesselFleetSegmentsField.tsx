@@ -43,15 +43,11 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
     ))
   }
 
-  const fleetSegmentTags = useMemo(
-    () =>
-      values.segments
-        ? values.segments.map(({ segment, segmentName }) => (
-            <Tag key={segment} accent={Accent.PRIMARY}>{`${segment} - ${segmentName}`}</Tag>
-          ))
-        : [],
-    [values.segments]
-  )
+  const fleetSegmentTags = values.segments
+    ? values.segments.map(({ segment, segmentName }) => (
+        <Tag key={segment} accent={Accent.PRIMARY}>{`${segment} - ${segmentName}`}</Tag>
+      ))
+    : []
 
   if (isLoading) {
     return <FieldsetGroupSpinner isLight legend={label} />

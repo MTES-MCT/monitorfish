@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '@api/constants'
-import { isString } from 'lodash'
+import { isString } from 'lodash-es'
 
 export function isUnauthorizedOrForbidden(httpStatus: number | string | undefined) {
   if (!httpStatus || isString(httpStatus)) {

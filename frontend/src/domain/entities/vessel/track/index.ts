@@ -1,7 +1,7 @@
 import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { getArrowStyle, getCircleStyle, getLineStyle } from '@features/Vessel/layers/styles/vesselTrack.style'
 import { customDayjs } from '@mtes-mct/monitor-ui'
-import { uniqWith, isEqual } from 'lodash'
+import { uniqWith, isEqual } from 'lodash-es'
 import { extend } from 'ol/extent'
 import Feature from 'ol/Feature'
 import LineString from 'ol/geom/LineString'

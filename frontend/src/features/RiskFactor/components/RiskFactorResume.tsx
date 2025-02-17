@@ -167,7 +167,6 @@ const UnderCharterText = styled.span`
 `
 
 const NoRiskFactor = styled.div`
-  margin: 5px 5px 10px 5px;
   padding: 10px 10px 10px 25px;
   text-align: left;
   background: ${p => p.theme.color.white};

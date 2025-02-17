@@ -1,5 +1,5 @@
 import { useGetGearsQuery } from '@api/gear'
-import { uniq } from 'lodash'
+import { uniq } from 'lodash-es'
 import { useMemo } from 'react'
 
 import type { TreeOption } from '@mtes-mct/monitor-ui'

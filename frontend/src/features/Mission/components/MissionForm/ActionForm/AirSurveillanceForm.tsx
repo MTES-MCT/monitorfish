@@ -9,7 +9,7 @@ import {
   Icon
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { noop } from 'lodash/fp'
+import { noop } from 'lodash-es'
 import styled from 'styled-components'
 
 import { AirSurveillanceFormCompletionSchema, AirSurveillanceFormLiveSchema } from './schemas'

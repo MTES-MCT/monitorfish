@@ -11,8 +11,7 @@ import {
   FormikTextInput
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { isEqual, omit } from 'lodash'
-import { isEmpty, noop } from 'lodash/fp'
+import { isEqual, omit, isEmpty, noop } from 'lodash-es'
 import { memo, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 

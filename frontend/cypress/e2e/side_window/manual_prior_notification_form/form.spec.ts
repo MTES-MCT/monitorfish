@@ -1,5 +1,5 @@
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
-import { omit } from 'lodash'
+import { omit } from 'lodash-es'
 
 import { addManualSideWindowPriorNotification } from './utils'
 import { customDayjs } from '../../utils/customDayjs'

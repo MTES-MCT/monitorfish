@@ -7,10 +7,11 @@ import styled from 'styled-components'
 import { GearOnboard } from './GearOnboard'
 import { Infraction } from './Infraction'
 import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
-import { getNumberOfInfractions } from '../../../../../domain/entities/controls'
+import {
+  getNumberOfInfractionsWithoutRecord,
+  getNumberOfInfractionsWithRecord
+} from '../../../../../domain/entities/controls'
 import { getDate } from '../../../../../utils'
-import GyroRedSVG from '../../../../icons/Gyrophare_controles_rouge.svg?react'
-import GyroGreenSVG from '../../../../icons/Gyrophare_controles_vert.svg?react'
 
 type ControlProps = Readonly<{
   control: MissionAction.MissionAction
@@ -19,7 +20,9 @@ type ControlProps = Readonly<{
 export function Control({ control, isLastItem }: ControlProps) {
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
-  const numberOfInfractions = getNumberOfInfractions(control)
+  const numberOfInfractionsWithRecord = getNumberOfInfractionsWithRecord(control)
+  const numberOfInfractionsWithoutRecord = getNumberOfInfractionsWithoutRecord(control)
+  const numberOfInfractions = numberOfInfractionsWithRecord + numberOfInfractionsWithoutRecord
   const gearAndSpeciesInfractionsLength = control.gearInfractions.length + control.speciesInfractions.length
   const gearSpeciesAndLogbookInfractionsLength =
     control.gearInfractions.length + control.speciesInfractions.length + control.logbookInfractions.length
@@ -54,7 +57,13 @@ export function Control({ control, isLastItem }: ControlProps) {
 
   return (
     <Wrapper isLastItem={isLastItem}>
-      <GyroColumn>{numberOfInfractions ? <GyroRed /> : <GyroGreen />}</GyroColumn>
+      <GyroColumn>
+        {numberOfInfractionsWithRecord > 0 && <StyledControlUnitFilled color={THEME.color.maximumRed} />}
+        {numberOfInfractionsWithoutRecord > 0 && !numberOfInfractionsWithRecord && (
+          <StyledControlUnitFilled color={THEME.color.goldenPoppy} />
+        )}
+        {!numberOfInfractions && <StyledControlUnitFilled color={THEME.color.mediumSeaGreen} />}
+      </GyroColumn>
       <ContentColumn data-cy="vessel-control">
         <Title data-cy="vessel-control-title" title={`${controlTitle} ${controlPort}`}>
           {controlTitle}
@@ -193,16 +202,8 @@ const ContentColumn = styled.div`
   box-sizing: border-box;
 `
 
-const GyroGreen = styled(GyroGreenSVG)`
-  width: 16px;
-  margin: 0px 12px 0 2px;
-  vertical-align: sub;
-`
-
-const GyroRed = styled(GyroRedSVG)`
-  width: 16px;
-  margin: 0px 12px 0 2px;
-  vertical-align: sub;
+const StyledControlUnitFilled = styled(Icon.ControlUnitFilled)`
+  margin-right: 8px;
 `
 
 const StyledTagGroup = styled(TagGroup)`

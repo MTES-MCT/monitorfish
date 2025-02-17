@@ -1,7 +1,7 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import ShowFishingActivitiesSVG from '../../../../../icons/Bouton_afficher_messages_JPE_sur_piste.svg?react'
@@ -17,10 +17,7 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
     state => state.fishingActivities
   )
   const getVesselLogbook = useGetLogbookUseCase()
-  const areFishingActivitiesReallyShowedOnMap = useMemo(
-    () => areFishingActivitiesShowedOnMap || fishingActivitiesShowedOnMap?.length,
-    [areFishingActivitiesShowedOnMap, fishingActivitiesShowedOnMap]
-  )
+  const areFishingActivitiesReallyShowedOnMap = areFishingActivitiesShowedOnMap || fishingActivitiesShowedOnMap?.length
 
   useEffect(() => {
     if (!isSidebarOpen) {
@@ -28,20 +25,18 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
     }
   }, [dispatch, isSidebarOpen])
 
-  const showOrHideFishingActivities = useCallback(() => {
-    ;(async () => {
-      if (areFishingActivitiesReallyShowedOnMap) {
-        dispatch(logbookActions.hideAllOnMap())
+  const showOrHideFishingActivities = async function () {
+    if (areFishingActivitiesReallyShowedOnMap) {
+      dispatch(logbookActions.hideAllOnMap())
 
-        return
-      }
+      return
+    }
 
-      if (!fishingActivities) {
-        await dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
-      }
-      dispatch(logbookActions.showAllOnMap())
-    })()
-  }, [fishingActivities, getVesselLogbook, selectedVesselIdentity, areFishingActivitiesReallyShowedOnMap, dispatch])
+    if (!fishingActivities) {
+      await dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
+    }
+    dispatch(logbookActions.showAllOnMap())
+  }
 
   return (
     <VesselSidebarActionButton
@@ -52,6 +47,7 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
       data-cy="show-all-fishing-activities-on-map"
       disabled={!selectedVesselPositions?.length}
       isHidden={false}
+      /* eslint-disable-next-line react/jsx-no-bind */
       onClick={showOrHideFishingActivities}
       title={`${areFishingActivitiesReallyShowedOnMap ? 'Cacher' : 'Afficher'} les messages du JPE sur la piste`}
     >

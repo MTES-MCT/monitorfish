@@ -6,7 +6,7 @@ import { downloadAsCsv } from '@utils/downloadAsCsv'
 import { getCoordinates } from 'coordinates'
 import dayjs from 'dayjs'
 import countries from 'i18n-iso-countries'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import styled from 'styled-components'
 import { getDate } from 'utils'
 
@@ -26,29 +26,22 @@ export function ExportTrack() {
   const { selectedVesselPositions } = useMainAppSelector(state => state.vessel)
   const { trackEvent } = useTracking()
 
-  const exportedPositions: VesselPositionWithId[] = useMemo(
-    () =>
-      selectedVesselPositions
-        ?.map(position => {
-          const coordinates = getCoordinates(
-            [position.longitude, position.latitude],
-            WSG84_PROJECTION,
-            coordinatesFormat
-          )
-          if (!coordinates[0] || !coordinates[1]) {
-            return undefined
-          }
+  const exportedPositions: VesselPositionWithId[] =
+    selectedVesselPositions
+      ?.map(position => {
+        const coordinates = getCoordinates([position.longitude, position.latitude], WSG84_PROJECTION, coordinatesFormat)
+        if (!coordinates[0] || !coordinates[1]) {
+          return undefined
+        }
 
-          return {
-            ...position,
-            id: position.dateTime,
-            latitude: coordinates[0],
-            longitude: coordinates[1]
-          }
-        })
-        ?.filter((position): position is VesselPositionWithId => position !== undefined) ?? [],
-    [selectedVesselPositions, coordinatesFormat]
-  )
+        return {
+          ...position,
+          id: position.dateTime,
+          latitude: coordinates[0],
+          longitude: coordinates[1]
+        }
+      })
+      ?.filter((position): position is VesselPositionWithId => position !== undefined) ?? []
 
   const downloadCSV = useCallback(
     positions => {

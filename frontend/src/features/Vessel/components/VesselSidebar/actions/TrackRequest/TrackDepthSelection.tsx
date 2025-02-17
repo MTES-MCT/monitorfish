@@ -1,6 +1,5 @@
 import { SELECT_TRACK_DEPTH_OPTIONS } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/constants'
 import { Select } from '@mtes-mct/monitor-ui'
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { VesselTrackDepth } from '../../../../../../domain/entities/vesselTrackDepth'
@@ -16,10 +15,7 @@ type DateRangeRadioProps = {
   onChange: (nextTrackDepth: SelectableVesselTrackDepth | undefined) => Promisable<void>
 }
 export function TrackDepthSelection({ defaultValue, label, name, onChange }: DateRangeRadioProps) {
-  const normalizedDefaultValue = useMemo(
-    () => (defaultValue !== VesselTrackDepth.CUSTOM ? defaultValue : undefined),
-    [defaultValue]
-  )
+  const normalizedDefaultValue = defaultValue !== VesselTrackDepth.CUSTOM ? defaultValue : undefined
 
   return (
     <ColumnsBox>

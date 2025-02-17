@@ -12,5 +12,10 @@ export function useForceUpdate() {
 
   const forceDebouncedUpdate = useMemo(() => throttle(forceUpdate, 250), [forceUpdate])
 
-  return { forceDebouncedUpdate, forceUpdate }
+  return {
+    forceDebouncedUpdate,
+    forceUpdate: (timeout = 0) => {
+      setTimeout(() => forceUpdate(), timeout)
+    }
+  }
 }

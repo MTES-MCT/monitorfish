@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import { Control } from './Control'
@@ -20,7 +20,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const isEmpty = yearControls.length === 0
 
-  const numberOfInfractionsText = useMemo(() => {
+  const numberOfInfractionsText = (function () {
     const numberOfInfractions = yearControls.reduce(
       (accumulator, control) => accumulator + getNumberOfInfractions(control),
       0
@@ -71,14 +71,10 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
         , {numberOfInfractions} {pluralize('infraction', numberOfInfractions)} <Red />
       </>
     )
-  }, [yearControls, isEmpty])
+  })()
 
-  const sortedControls = useMemo(
-    () =>
-      yearControls.sort((a, b) =>
-        a.actionDatetimeUtc && b.actionDatetimeUtc && a.actionDatetimeUtc > b.actionDatetimeUtc ? -1 : 1
-      ),
-    [yearControls]
+  const sortedControls = yearControls.sort((a, b) =>
+    a.actionDatetimeUtc && b.actionDatetimeUtc && a.actionDatetimeUtc > b.actionDatetimeUtc ? -1 : 1
   )
 
   return (

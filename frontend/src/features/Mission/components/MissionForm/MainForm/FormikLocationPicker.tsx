@@ -14,7 +14,7 @@ import { useFormikContext } from 'formik'
 import { boundingExtent } from 'ol/extent'
 import { transformExtent } from 'ol/proj'
 import { remove } from 'ramda'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { useGetMainFormFormikUsecases } from '../hooks/useGetMainFormFormikUsecases'
@@ -31,13 +31,13 @@ export function FormikLocationPicker() {
   const { updateMissionLocation } = useGetMainFormFormikUsecases()
   const dispatch = useMainAppDispatch()
 
-  const polygons = useMemo(() => {
+  const polygons = (function () {
     if (!values.geom) {
       return []
     }
 
     return values.geom.coordinates || []
-  }, [values.geom])
+  })()
 
   const addZone = useCallback(async () => {
     dispatch(addOrEditMissionZone(undefined))

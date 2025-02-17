@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { Green, Red } from './Controls.style'
@@ -17,7 +16,7 @@ export function LastControl({ field }: LastControlProps) {
       ? control.controlUnits.map(controlUnit => controlUnit.name.replace('(historique)', '')).join(', ')
       : 'Unité manquante'
 
-  const numberOfInfractions = useMemo(() => getNumberOfInfractions(control), [control])
+  const numberOfInfractions = getNumberOfInfractions(control)
 
   return (
     <Fields data-cy="vessel-controls-summary-last-control">

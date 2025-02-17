@@ -22,7 +22,7 @@ export default defineConfig({
       },
       output: {
         manualChunks: {
-          '@mtes-mct/monitor-ui': ['@mtes-mct/monitor-ui']
+          'monitor-ui': ['@mtes-mct/monitor-ui']
         }
       },
       plugins: replace({

@@ -1,4 +1,4 @@
-import { uniq } from 'lodash/fp'
+import { uniq } from 'lodash-es'
 import styled from 'styled-components'
 
 import {

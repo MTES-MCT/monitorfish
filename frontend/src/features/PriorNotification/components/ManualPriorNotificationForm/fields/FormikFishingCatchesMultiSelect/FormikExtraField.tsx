@@ -1,6 +1,6 @@
 import { FormikNumberInput, usePrevious } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
-import { isEqual } from 'lodash'
+import { isEqual } from 'lodash-es'
 import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 

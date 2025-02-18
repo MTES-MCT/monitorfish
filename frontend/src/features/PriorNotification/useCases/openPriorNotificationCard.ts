@@ -6,7 +6,7 @@ import { Level } from '@mtes-mct/monitor-ui'
 import { handleThunkError } from '@utils/handleThunkError'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
-import { pick } from 'lodash'
+import { pick } from 'lodash-es'
 
 import { OpenedPriorNotificationType } from '../constants'
 import { priorNotificationApi } from '../priorNotificationApi'

@@ -29,6 +29,7 @@ const Wrapper = styled.button<{
   $hasHealthcheckTextWarning?: boolean | undefined
   $isHidden?: boolean | undefined
 }>`
+  padding: unset;
   margin-top: ${p => (p.$hasHealthcheckTextWarning ? 50 : 0)}px;
   visibility: ${p => (p.$isHidden ? 'hidden' : 'visible')};
 `

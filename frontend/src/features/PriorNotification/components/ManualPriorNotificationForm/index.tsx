@@ -11,7 +11,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { Formik } from 'formik'
-import { omit } from 'lodash'
+import { omit } from 'lodash-es'
 import { useState } from 'react'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 

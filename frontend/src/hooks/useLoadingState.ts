@@ -1,5 +1,5 @@
 import { usePrevious, type AnyObject } from '@mtes-mct/monitor-ui'
-import { isEqual } from 'lodash'
+import { isEqual } from 'lodash-es'
 import { useRef } from 'react'
 
 import { usePreviousIf } from './usePreviousIfTrue'

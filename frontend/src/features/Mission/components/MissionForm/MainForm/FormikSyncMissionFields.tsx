@@ -1,7 +1,7 @@
 import { logInDev } from '@utils/logInDev'
 import { diff } from 'deep-object-diff'
 import { useFormikContext } from 'formik'
-import { omit } from 'lodash'
+import { omit } from 'lodash-es'
 import { useEffect } from 'react'
 
 import { useListenToMissionEventUpdatesById } from '../hooks/useListenToMissionEventUpdatesById'

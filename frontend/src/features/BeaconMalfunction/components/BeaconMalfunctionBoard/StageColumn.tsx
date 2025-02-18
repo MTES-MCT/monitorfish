@@ -8,7 +8,7 @@ import { Draggable } from './Draggable'
 import { StageColumnHeader } from './StageColumnHeader'
 
 import type { BeaconMalfunction, BeaconMalfunctionStageColumnValue } from '../../types'
-import type { CSSProperties, MutableRefObject } from 'react'
+import type { MutableRefObject } from 'react'
 
 type StageColumnType = {
   activeBeaconMalfunction: BeaconMalfunction | null
@@ -38,7 +38,7 @@ export function StageColumn({
         numberOfItems={beaconMalfunctions?.length}
         stage={stage.title}
       />
-      <ScrollableContainer ref={verticalScrollRef} className="smooth-scroll" style={ScrollableContainerStyle}>
+      <ScrollableContainer ref={verticalScrollRef} className="smooth-scroll">
         {beaconMalfunctions.map(beaconMalfunction => (
           <Draggable key={beaconMalfunction.id} id={beaconMalfunction.id} stageId={stage.code}>
             <BeaconMalfunctionCard
@@ -58,12 +58,15 @@ export function StageColumn({
   )
 }
 
-const ScrollableContainer = styled.div``
-const ScrollableContainerStyle: CSSProperties = {
-  height: 'calc(100vh - 232px)',
-  overflowX: 'hidden',
-  overflowY: 'auto'
-}
+const ScrollableContainer = styled.div`
+  height: calc(100vh - 232px);
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  > button {
+    padding: unset !important;
+  }
+`
 
 const Wrapper = styled.div``
 const wrapperStyle = {

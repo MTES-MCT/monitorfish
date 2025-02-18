@@ -3,7 +3,7 @@ import { UpdateMissionActionCompletionEffect } from '@features/Mission/component
 import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
 import { FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { noop } from 'lodash/fp'
+import { noop } from 'lodash-es'
 
 import { AirControlFormCompletionSchema, AirControlFormLiveSchema } from './schemas'
 import { ActionFormHeader } from './shared/ActionFormHeader'

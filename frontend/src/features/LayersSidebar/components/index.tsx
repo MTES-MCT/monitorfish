@@ -119,6 +119,7 @@ const SidebarLayersButton = styled(MapButton)`
 `
 
 const SidebarLayersIcon = styled(IconButton)<{ $isActive: boolean }>`
+  padding: unset;
   border-radius: 2px;
   width: 40px;
   height: 40px;

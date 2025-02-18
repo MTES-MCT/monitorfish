@@ -1,5 +1,5 @@
 import { createSlice, current } from '@reduxjs/toolkit'
-import { isEqual } from 'lodash/fp'
+import { isEqual } from 'lodash-es'
 
 import type { MissionMainFormValues } from './types'
 import type { MissionWithActionsDraft } from '../../types'

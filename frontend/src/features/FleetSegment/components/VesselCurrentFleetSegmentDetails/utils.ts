@@ -1,4 +1,4 @@
-import { uniq } from 'lodash'
+import { uniq } from 'lodash-es'
 
 import type { Gear } from '../../../../domain/types/Gear'
 import type { RiskFactor } from '../../../RiskFactor/types'

@@ -1,5 +1,5 @@
 import { useGetNatinfsAsOptions } from '@features/Mission/components/MissionForm/hooks/useGetNatinfsAsOptions'
-import { find } from 'lodash'
+import { find } from 'lodash-es'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../../constants/constants'

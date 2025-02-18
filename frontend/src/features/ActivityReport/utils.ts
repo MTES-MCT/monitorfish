@@ -1,4 +1,4 @@
-import { range, sortBy } from 'lodash'
+import { range, sortBy } from 'lodash-es'
 
 import { JDP, UNTARGETED_SPECIES_CODE } from './constants'
 import { MissionAction } from '../Mission/missionAction.types'

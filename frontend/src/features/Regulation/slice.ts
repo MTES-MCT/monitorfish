@@ -4,7 +4,7 @@ import { localStorageManager } from '@libs/LocalStorageManager'
 import { LocalStorageKey } from '@libs/LocalStorageManager/constants'
 import { createSlice } from '@reduxjs/toolkit'
 import { isNotNullish } from '@utils/isNotNullish'
-import { fromPairs } from 'lodash/fp'
+import { fromPairs } from 'lodash-es'
 
 import { STATUS } from './components/RegulationTables/constants'
 import { DEFAULT_REGULATION, getRegulatoryLayersWithoutTerritory, REGULATORY_REFERENCE_KEYS } from './utils'

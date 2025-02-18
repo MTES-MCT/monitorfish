@@ -1,6 +1,6 @@
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { describe, expect, it } from '@jest/globals'
-import { includes } from 'lodash'
+import { includes } from 'lodash-es'
 
 import { getFeaturesFromPositions, getTrackType } from '../index'
 import {

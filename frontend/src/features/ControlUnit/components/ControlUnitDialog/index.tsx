@@ -1,6 +1,6 @@
 import { Accent, Button, ControlUnit, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { noop } from 'lodash/fp'
+import { noop } from 'lodash-es'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 

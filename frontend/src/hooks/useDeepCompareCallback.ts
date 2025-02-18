@@ -1,7 +1,7 @@
 // TODO Move that into monitor-ui.
 
 import { usePrevious } from '@mtes-mct/monitor-ui'
-import { isEqual } from 'lodash/fp'
+import { isEqual } from 'lodash-es'
 import { type DependencyList, useMemo } from 'react'
 
 export function useDeepCompareCallback<T extends Function>(callback: T, deps: DependencyList): T {

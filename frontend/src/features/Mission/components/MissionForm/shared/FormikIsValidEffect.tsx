@@ -1,6 +1,6 @@
 import { useDeepCompareEffect } from '@hooks/useDeepCompareEffect'
 import { useFormikContext } from 'formik'
-import { isEmpty } from 'lodash/fp'
+import { isEmpty } from 'lodash-es'
 
 /**
  * Triggers Formik validation when main form values are updated.

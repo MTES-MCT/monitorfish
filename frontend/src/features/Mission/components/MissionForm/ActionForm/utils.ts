@@ -1,6 +1,5 @@
 import { logSoftError } from '@mtes-mct/monitor-ui'
-import { isEqual } from 'lodash'
-import { isEmpty } from 'lodash/fp'
+import { isEqual, isEmpty } from 'lodash-es'
 
 import { UNKNOWN_VESSEL } from '../../../../../domain/entities/vessel/vessel'
 

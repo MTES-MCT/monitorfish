@@ -1,5 +1,5 @@
 import { Accent, ControlUnit, Icon, IconButton } from '@mtes-mct/monitor-ui'
-import { truncate } from 'lodash/fp'
+import { truncate } from 'lodash-es'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -32,7 +32,7 @@ export function Item({ controlUnitResource, onEdit }: ItemProps) {
           </div>
         </InfoBoxHeader>
         {/* 120 chars ~= 3 lines */}
-        {controlUnitResource.note && <p>{truncate({ length: 120 }, controlUnitResource.note)}</p>}
+        {controlUnitResource.note && <p>{truncate(controlUnitResource.note, { length: 120 })}</p>}
       </InfoBox>
     </Wrapper>
   )

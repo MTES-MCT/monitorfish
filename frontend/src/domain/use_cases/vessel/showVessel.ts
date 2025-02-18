@@ -5,7 +5,7 @@ import { loadingVessel, resetLoadingVessel, setSelectedVessel, vesselSelectors }
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { captureMessage } from '@sentry/react'
-import { omit } from 'lodash'
+import { omit } from 'lodash-es'
 
 import { VesselFeature } from '../../entities/vessel/vessel'
 import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'

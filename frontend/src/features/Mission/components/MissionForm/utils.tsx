@@ -1,6 +1,6 @@
 import { FormError, FormErrorCode } from '@libs/FormError'
 import { validateRequiredFormValues } from '@utils/validateRequiredFormValues'
-import { difference, omit } from 'lodash'
+import { difference, omit } from 'lodash-es'
 
 import { MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
 import { Mission } from '../../mission.types'

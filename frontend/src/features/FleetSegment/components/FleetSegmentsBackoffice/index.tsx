@@ -2,7 +2,7 @@ import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingC
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { Button, customDayjs, Select, THEME } from '@mtes-mct/monitor-ui'
-import _ from 'lodash'
+import { range } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -35,7 +35,7 @@ export function FleetSegmentsBackoffice() {
 
   const yearsToAdd = useMemo(
     () =>
-      _.range(currentYear - 10, currentYear + 10, 1)
+      range(currentYear - 10, currentYear + 10, 1)
         .filter(_year => !yearEntries.map(entry => entry.value).includes(_year))
         .map(_year => ({ label: String(_year), value: String(_year) })),
     [yearEntries, currentYear]

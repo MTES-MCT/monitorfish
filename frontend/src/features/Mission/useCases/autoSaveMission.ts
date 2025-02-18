@@ -1,7 +1,7 @@
 import { MainFormLiveSchema } from '@features/Mission/components/MissionForm/MainForm/schemas'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 import { saveMission } from '@features/Mission/useCases/saveMission'
-import { isEqual } from 'lodash'
+import { isEqual } from 'lodash-es'
 
 import type { MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MainAppThunk } from '@store'

@@ -1,6 +1,6 @@
 import { getOptionsFromStrings } from '@utils/getOptionsFromStrings'
 import { isNotArchived } from '@utils/isNotArchived'
-import { sortBy, uniq } from 'lodash'
+import { sortBy, uniq } from 'lodash-es'
 
 import type { LegacyControlUnit } from '@features/ControlUnit/legacyControlUnit'
 import type { Option } from '@mtes-mct/monitor-ui'

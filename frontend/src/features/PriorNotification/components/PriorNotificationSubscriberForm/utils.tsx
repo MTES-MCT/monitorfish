@@ -25,7 +25,7 @@ export function getPortSubscriptionTableColumns(
   onFullSubscriptionCheck: (portLocode: string) => Promisable<void>,
   onFullSubscriptionUncheck: (portLocode: string) => Promisable<void>,
   isDisabled: boolean
-): Array<ColumnDef<PriorNotificationSubscriber.PortSubscription, any>> {
+): Array<ColumnDef<PriorNotificationSubscriber.PortSubscription>> {
   return [
     {
       accessorFn: row => row.portName,
@@ -34,10 +34,8 @@ export function getPortSubscriptionTableColumns(
     },
     {
       accessorFn: row => row,
-      cell: (
-        context: CellContext<PriorNotificationSubscriber.PortSubscription, PriorNotificationSubscriber.PortSubscription>
-      ) => {
-        const portSubscription = context.getValue()
+      cell: context => {
+        const portSubscription = context.getValue() as PriorNotificationSubscriber.PortSubscription
 
         return (
           <StyledCheckbox
@@ -59,12 +57,12 @@ export function getPortSubscriptionTableColumns(
     },
     {
       accessorFn: row => row.portLocode,
-      cell: (context: CellContext<PriorNotificationSubscriber.PortSubscription, string>) => (
+      cell: context => (
         <IconButton
           accent={Accent.TERTIARY}
           disabled={isDisabled}
           Icon={Icon.Delete}
-          onClick={() => onRemove(context.getValue())}
+          onClick={() => onRemove(context.getValue() as string)}
           title="Désinscrire l'unité de tous les préavis liés à ce port"
         />
       ),

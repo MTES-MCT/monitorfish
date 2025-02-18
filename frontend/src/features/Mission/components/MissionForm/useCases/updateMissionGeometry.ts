@@ -2,7 +2,7 @@ import { missionFormActions } from '@features/Mission/components/MissionForm/sli
 import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { getLastControlCircleGeometry } from '@features/Mission/useCases/getLastControlCircleGeometry'
-import { first, orderBy } from 'lodash'
+import { first, orderBy } from 'lodash-es'
 
 import type { Port } from '../../../../../domain/types/port'
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'

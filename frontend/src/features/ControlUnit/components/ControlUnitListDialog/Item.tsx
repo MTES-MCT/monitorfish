@@ -1,6 +1,6 @@
 import { centerOnStation } from '@features/ControlUnit/useCases/centerOnStation'
 import { IconButton, type ControlUnit, Accent, Icon } from '@mtes-mct/monitor-ui'
-import { property, uniqBy } from 'lodash/fp'
+import { property, uniqBy } from 'lodash-es'
 import styled from 'styled-components'
 
 import { displayControlUnitResourcesFromControlUnit, displayBaseNamesFromControlUnit } from './utils'
@@ -18,8 +18,8 @@ export function Item({ controlUnit }: ItemProps) {
 
   const center = () => {
     const highlightedStations = uniqBy(
-      property('id'),
-      controlUnit.controlUnitResources.map(({ station }) => station)
+      controlUnit.controlUnitResources.map(({ station }) => station),
+      property('id')
     )
     dispatch(centerOnStation(highlightedStations))
   }

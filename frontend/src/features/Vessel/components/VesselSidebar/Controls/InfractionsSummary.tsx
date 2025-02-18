@@ -69,5 +69,5 @@ const Tag = styled.span`
   font-size: 13px;
   height: 22px;
   display: inline-block;
-  margin: 8px 8px 10px 8px;
+  margin: 8px 6px 10px 6px;
 `

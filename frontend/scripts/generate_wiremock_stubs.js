@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import { promises as fs } from 'fs'
-import _ from 'lodash/fp.js'
+import { uniq } from 'lodash/fp.js'
 import got from 'got'
 
 const CURRENT_DIRECTORY = process.cwd()
@@ -134,7 +134,7 @@ console.info(
   `[INFO] Selected control units:\n${selectedControlUnits.map(controlUnit => `  - ${controlUnit.name}`).join('\n')}`
 )
 
-const selectedControlUnitContactIds = _.uniq(
+const selectedControlUnitContactIds = uniq(
   selectedControlUnits.map(controlUnit => controlUnit.controlUnitContactIds).flat()
 )
 const selectedControlUnitContacts = controlUnitContacts.filter(controlUnitContact =>
@@ -146,7 +146,7 @@ console.info(
     .join('\n')}`
 )
 
-const selectedControlUnitResourceIds = _.uniq(
+const selectedControlUnitResourceIds = uniq(
   selectedControlUnits.map(controlUnit => controlUnit.controlUnitResourceIds).flat()
 )
 const selectedControlUnitResources = controlUnitResources.filter(controlUnitResource =>
@@ -158,11 +158,11 @@ console.info(
     .join('\n')}`
 )
 
-const selectedStationIds = _.uniq(selectedControlUnitResources.map(controlUnit => controlUnit.stationId))
+const selectedStationIds = uniq(selectedControlUnitResources.map(controlUnit => controlUnit.stationId))
 const selectedStations = stations.filter(station => selectedStationIds.includes(station.id))
 console.info(`[INFO] Selected stations:\n${selectedStations.map(station => `  - ${station.name}`).join('\n')}`)
 
-const selectedAdministrationIds = _.uniq([
+const selectedAdministrationIds = uniq([
   ...selectedControlUnits.map(controlUnit => controlUnit.administrationId),
   ...administrations
     .filter(administration => ADDITIONAL_ADMINISTRATION_NAMES.includes(administration.name))

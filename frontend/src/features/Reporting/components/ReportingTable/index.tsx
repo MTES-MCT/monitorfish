@@ -21,7 +21,7 @@ import { downloadAsCsv } from '@utils/downloadAsCsv'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import { pluralize } from '@utils/pluralize'
 import dayjs from 'dayjs'
-import { range } from 'lodash'
+import { range } from 'lodash-es'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 

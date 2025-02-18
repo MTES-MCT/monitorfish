@@ -15,8 +15,7 @@ import {
   usePrevious
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { noop } from 'lodash'
-import { isEqual } from 'lodash/fp'
+import { noop, isEqual } from 'lodash-es'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 

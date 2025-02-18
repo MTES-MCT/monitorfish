@@ -1,6 +1,6 @@
 import { useGetPortsQuery } from '@api/port'
 import { isDefined, type TreeOption } from '@mtes-mct/monitor-ui'
-import { uniq } from 'lodash'
+import { uniq } from 'lodash-es'
 import { useMemo } from 'react'
 
 /**

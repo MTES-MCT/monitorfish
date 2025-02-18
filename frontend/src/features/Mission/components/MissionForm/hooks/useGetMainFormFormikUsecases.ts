@@ -6,7 +6,7 @@ import { isAirOrSeaControl, isLandControl } from '@features/Mission/useCases/get
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { skipToken } from '@reduxjs/toolkit/query'
-import { sortBy } from 'lodash'
+import { sortBy } from 'lodash-es'
 
 import type { MissionMainFormValues } from '../types'
 

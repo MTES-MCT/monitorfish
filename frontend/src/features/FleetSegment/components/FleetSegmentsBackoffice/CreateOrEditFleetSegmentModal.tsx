@@ -1,5 +1,5 @@
 import { FLEET_SEGMENT_FORM_SCHEMA } from '@features/FleetSegment/components/FleetSegmentsBackoffice/schema'
-import { FLEET_SEGMENT_VESSEL_TYPES } from '@features/FleetSegment/constants'
+import { DEFAULT_FLEET_SEGMENT, FLEET_SEGMENT_VESSEL_TYPES } from '@features/FleetSegment/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import {
   Button,
@@ -44,21 +44,7 @@ export function CreateOrEditFleetSegmentModal({
       return updatedFleetSegment
     }
 
-    return {
-      faoAreas: [],
-      gears: [],
-      impactRiskFactor: 2.0,
-      mainScipSpeciesType: undefined,
-      maxMesh: undefined,
-      minMesh: undefined,
-      minShareOfTargetSpecies: undefined,
-      priority: 0,
-      segment: '',
-      segmentName: '',
-      targetSpecies: [],
-      vesselTypes: [],
-      year
-    }
+    return { ...DEFAULT_FLEET_SEGMENT, year }
   }, [updatedFleetSegment, year])
 
   const faoSpeciesAsOptions = useMemo(
@@ -67,13 +53,15 @@ export function CreateOrEditFleetSegmentModal({
   )
 
   const handleSubmit = nextFleetSegment => {
+    const nextFullFleetSegment = { ...DEFAULT_FLEET_SEGMENT, ...nextFleetSegment }
+
     if (updatedFleetSegment) {
-      onUpdate(updatedFleetSegment.segment, nextFleetSegment)
+      onUpdate(updatedFleetSegment.segment, nextFullFleetSegment)
 
       return
     }
 
-    onCreate(nextFleetSegment)
+    onCreate(nextFullFleetSegment)
   }
 
   return (

@@ -164,35 +164,35 @@ export enum BeaconMalfunctionsStage {
 const STAGE_RECORD: Record<BeaconMalfunctionsStage, BeaconMalfunctionStageColumnValue> = {
   INITIAL_ENCOUNTER: {
     index: 0,
-    code: 'INITIAL_ENCOUNTER',
+    code: BeaconMalfunctionsStage.INITIAL_ENCOUNTER,
     description: "Obtenir une réponse des navires qui ont cessé d'émettre.",
     isColumn: true,
     title: 'Premier contact'
   },
   FOUR_HOUR_REPORT: {
     index: 1,
-    code: 'FOUR_HOUR_REPORT',
+    code: BeaconMalfunctionsStage.FOUR_HOUR_REPORT,
     description: "Suivre les navires qui font leurs 4h report ou les relancer s'ils l'ont cessé.",
     isColumn: true,
     title: '4h report'
   },
   AT_QUAY: {
     index: 2,
-    code: 'AT_QUAY',
+    code: BeaconMalfunctionsStage.AT_QUAY,
     description: "Relancer les navires supposés à quai et avec lesquels aucun contact n'a été établi.",
     isColumn: true,
     title: 'Navires supposés à quai'
   },
   FOLLOWING: {
     index: 3,
-    code: 'FOLLOWING',
+    code: BeaconMalfunctionsStage.FOLLOWING,
     description: "Suivre les navires avec lesquels un contact a été établi (réparation en cours, pause d'activité...)",
     isColumn: true,
     title: 'Suivi en cours'
   },
   TARGETING_VESSEL: {
     index: 4,
-    code: 'TARGETING_VESSEL',
+    code: BeaconMalfunctionsStage.TARGETING_VESSEL,
     description:
       "Mobiliser les unités sur les navires dont on n'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.",
     isColumn: true,
@@ -200,7 +200,7 @@ const STAGE_RECORD: Record<BeaconMalfunctionsStage, BeaconMalfunctionStageColumn
   },
   ARCHIVED: {
     index: 6,
-    code: 'ARCHIVED',
+    code: BeaconMalfunctionsStage.ARCHIVED,
     description: 'NB : Seules les 60 dernières avaries restent dans le kanban.',
     isColumn: true,
     title: 'Avaries clôturées'
@@ -211,13 +211,13 @@ const STAGE_RECORD: Record<BeaconMalfunctionsStage, BeaconMalfunctionStageColumn
    */
   RESUMED_TRANSMISSION: {
     index: undefined,
-    code: 'RESUMED_TRANSMISSION',
+    code: BeaconMalfunctionsStage.RESUMED_TRANSMISSION,
     isColumn: false,
     title: 'Reprise des émissions'
   },
   END_OF_MALFUNCTION: {
     index: 5,
-    code: 'END_OF_MALFUNCTION',
+    code: BeaconMalfunctionsStage.END_OF_MALFUNCTION,
     description:
       "Envoyer un message de reprise aux unités dont les émissions ont repris et archiver les avaries qu'on ne suit plus.",
     isColumn: false,

@@ -50,9 +50,9 @@ const Description = styled.div`
 
 const NumberOfItems = styled.div`
   background: ${p => p.theme.color.lightGray};
-  border-radius: 2;
+  border-radius: 2px;
   direction: rtl;
   font-weight: 700;
   margin-left: auto;
-  padding: 0px 5px;
+  padding: 0 5px;
 `

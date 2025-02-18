@@ -79,7 +79,7 @@ const Name = styled.span`
   color: ${p => p.theme.color.gunMetal};
   display: inline-block;
   margin-left: 6px;
-  max-width: 390px;
+  max-width: 385px;
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: bottom;

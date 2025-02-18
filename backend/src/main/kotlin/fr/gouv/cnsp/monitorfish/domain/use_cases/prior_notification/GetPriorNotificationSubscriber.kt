@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.dtos.PriorNotificationSubscriber
+import java.time.ZonedDateTime
 
 @UseCase
 class GetPriorNotificationSubscriber(
@@ -26,7 +27,8 @@ class GetPriorNotificationSubscriber(
         val portSubscriptions = pnoPortSubscriptionRepository.findByControlUnitId(id)
         val vesselSubscriptions = pnoVesselSubscriptionRepository.findByControlUnitId(id)
 
-        val allFleetSegments = fleetSegmentRepository.findAll()
+        val currentYear = ZonedDateTime.now().year
+        val allFleetSegments = fleetSegmentRepository.findAllByYear(currentYear)
         val allPorts = portRepository.findAll()
         val vessels = vesselRepository.findVesselsByIds(vesselSubscriptions.map { it.vesselId })
 

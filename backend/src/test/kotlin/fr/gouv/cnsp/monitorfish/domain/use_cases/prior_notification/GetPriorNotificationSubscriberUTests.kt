@@ -54,7 +54,7 @@ class GetPriorNotificationSubscriberUTests {
                 FleetSegmentFaker.fakeFleetSegment(segment = "SEG001", segmentName = "Segment 1"),
                 FleetSegmentFaker.fakeFleetSegment(segment = "SEG002", segmentName = "Segment 2"),
             )
-        given(fleetSegmentRepository.findAll()).willReturn(allFakeFleetSegments)
+        given(fleetSegmentRepository.findAllByYear(any())).willReturn(allFakeFleetSegments)
 
         val allFakePorts =
             listOf(

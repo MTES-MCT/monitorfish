@@ -113,7 +113,7 @@ context('BackOffice > Prior Notification Form > Form', () => {
 
     editBackOfficePriorNotificationSubscriber(10484)
 
-    cy.get('td:visible:contains("MED01 (All Trawls 1)")').should('have.length', 0)
+    cy.get('td:visible:contains("MED01 (MED01)")').should('have.length', 0)
 
     // -------------------------------------------------------------------------
     // Add fleet segment subscription
@@ -129,15 +129,15 @@ context('BackOffice > Prior Notification Form > Form', () => {
         updateInterception1.response.body
 
       assert.deepEqual(updatedPriorNotificationSubscriber1.fleetSegmentSubscriptions, [
-        { controlUnitId: 10484, segmentCode: 'MED01', segmentName: 'All Trawls 1' }
+        { controlUnitId: 10484, segmentCode: 'MED01', segmentName: 'MED01' }
       ])
 
-      cy.get('td:visible:contains("MED01 (All Trawls 1)")').should('have.length', 1)
+      cy.get('td:visible:contains("MED01 (MED01)")').should('have.length', 1)
 
       // -------------------------------------------------------------------------
       // Remove fleet segment subscription
 
-      cy.get('td:visible:contains("MED01 (All Trawls 1)")')
+      cy.get('td:visible:contains("MED01 (MED01)")')
         .parent()
         .clickButton("Désinscrire l'unité de tous les préavis liés à ce segment de flotte")
 
@@ -155,7 +155,7 @@ context('BackOffice > Prior Notification Form > Form', () => {
 
         assert.isEmpty(updatedPriorNotificationSubscriber3.fleetSegmentSubscriptions)
 
-        cy.get('td:visible:contains("MED01 (All Trawls 1)")').should('have.length', 0)
+        cy.get('td:visible:contains("MED01 (MED01)")').should('have.length', 0)
       })
     })
   })

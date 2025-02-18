@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import { promises as fs } from 'fs'
-import { uniq } from 'lodash/fp.js'
+import { uniq } from 'lodash-es'
 import got from 'got'
 
 const CURRENT_DIRECTORY = process.cwd()

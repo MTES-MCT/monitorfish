@@ -70,6 +70,7 @@ const Wrapper = styled(MapButton)<{ $isSuperUser: boolean }>`
 `
 
 const PriorNotificationListIcon = styled(IconButton)<{ $isActive: boolean }>`
+  padding: unset;
   border-radius: 2px;
   width: 40px;
   height: 40px;

@@ -95,27 +95,6 @@ export const CustomGlobalStyle = createGlobalStyle`
     background: #3b4559;
   }
 
-  button,
-  [type='button'],
-  [type='submit'],
-  [type='reset'],
-  a.button,
-  label.button,
-  .button,
-  a[role='button'],
-  label[role='button'],
-  [role='button'],
-  [role='button']:hover,
-  [role='button']:focus {
-    background: unset;
-    color: unset;
-    border: unset;
-    text-decoration: unset;
-    border-radius: unset;
-    margin: unset;
-    padding: unset;
-  }
-
   label {
     padding: unset;
   }

@@ -34,7 +34,8 @@ export function getSegmentInfo(segment: FleetSegment | undefined): string {
   const numberOfTargetSpecies = segment.targetSpecies?.length ?? 0
   const percent = segment.minShareOfTargetSpecies ? segment.minShareOfTargetSpecies * 100 : undefined
 
-  return `${pluralize('Zone', numberOfFaoAreas)} : ${faoAreas}
+  return `Nom : ${segment.segmentName}
+${pluralize('Zone', numberOfFaoAreas)} : ${faoAreas}
 ${pluralize('Engin', numberOfGears)} : ${gears}
 Maillage min. : ${segment.minMesh ? `${segment.minMesh}mm` : 'aucun'}
 Maillage max. : ${segment.maxMesh ? `${segment.maxMesh}mm` : 'aucun'}

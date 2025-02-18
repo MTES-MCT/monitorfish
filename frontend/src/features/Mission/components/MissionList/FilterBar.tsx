@@ -155,7 +155,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             renderValue={(_, items) => (items.length > 0 ? <OptionValue>Unité ({items.length}) </OptionValue> : <></>)}
             searchable
           />
-          <FormikCheckPicker
+          <InfractionsFilter
             isLabelHidden
             isTransparent
             label="Résultat des contrôles"
@@ -218,6 +218,12 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
     </Formik>
   )
 }
+
+const InfractionsFilter = styled(FormikCheckPicker)`
+  div {
+    min-width: 180px;
+  }
+`
 
 const Wrapper = styled.div`
   display: flex;

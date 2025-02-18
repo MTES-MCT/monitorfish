@@ -34,7 +34,7 @@ import {
 } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
-import { omit } from 'lodash/fp'
+import { omit } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { NoRsuiteOverrideWrapper } from 'ui/NoRsuiteOverrideWrapper'
@@ -293,7 +293,7 @@ export function MissionForm() {
         return
       }
 
-      const actionCopy: MissionActionFormValues = omit(['id'], actionsFormValues[actionIndex])
+      const actionCopy: MissionActionFormValues = omit(actionsFormValues[actionIndex], ['id'])
       setEditedActionIndex(0)
 
       const createdId = await dispatch(autoSaveMissionAction(actionCopy, missionIdRef.current, isAutoSaveEnabled))

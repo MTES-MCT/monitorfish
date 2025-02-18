@@ -12,7 +12,7 @@ import {
   usePrevious
 } from '@mtes-mct/monitor-ui'
 import { useField, useFormikContext } from 'formik'
-import { isEqual } from 'lodash'
+import { isEqual } from 'lodash-es'
 import { remove as ramdaRemove } from 'ramda'
 import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'

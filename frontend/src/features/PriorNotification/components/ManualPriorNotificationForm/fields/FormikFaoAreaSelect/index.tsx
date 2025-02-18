@@ -1,7 +1,7 @@
 import { useGetFaoAreasAsOptions } from '@hooks/useGetFaoAreasAsOptions'
 import { FormikMultiRadio, FormikSelect, usePrevious } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
-import { omit } from 'lodash'
+import { omit } from 'lodash-es'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 

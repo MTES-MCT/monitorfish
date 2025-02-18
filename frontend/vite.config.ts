@@ -2,43 +2,48 @@
 
 import importMetaEnv from '@import-meta-env/unplugin'
 import replace from '@rollup/plugin-replace'
-import { sentryVitePlugin } from '@sentry/vite-plugin'
 import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import {defineConfig, type PluginOption} from 'vite'
 import svgr from 'vite-plugin-svgr'
 import viteTsconfigPaths from 'vite-tsconfig-paths'
+import {visualizer} from "rollup-plugin-visualizer";
 
 // https://vitejs.dev/config/
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
   build: {
-    minify: false,
+    minify: true,
     outDir: './build',
     sourcemap: true,
     rollupOptions: {
+      treeshake: true,
       input: {
         index: './index.html',
       },
-
-      plugins: replace({
-        'pointerEvents: isScrolling ? "none" : void 0': 'pointerEvents: null',
-        preventAssignment: true
-      })
-    }
+      output: {
+        manualChunks: {
+          'monitor-ui': ['@mtes-mct/monitor-ui']
+        }
+      },
+    },
+    target: 'esnext'
   },
 
   plugins: [
     react(),
+    replace({
+      'pointerEvents: isScrolling ? "none" : void 0': 'pointerEvents: null',
+      preventAssignment: true
+    }),
+    visualizer({
+      emitFile: true,
+      filename: "bundle_size.html",
+    }) as PluginOption,
     viteTsconfigPaths(),
     svgr(),
     importMetaEnv.vite({
       env: './.env',
       example: './.env.example'
-    }),
-    sentryVitePlugin({
-      org: 'betagouv',
-      project: 'monitorfish',
-      url: 'https://sentry.incubateur.net/'
     })
   ],
 

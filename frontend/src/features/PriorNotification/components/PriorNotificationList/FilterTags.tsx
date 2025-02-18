@@ -8,7 +8,7 @@ import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { SingleTag, getSelectedOptionFromOptionValueInTree } from '@mtes-mct/monitor-ui'
-import { isEqual, omit } from 'lodash'
+import { isEqual, omit } from 'lodash-es'
 import styled from 'styled-components'
 
 import { DEFAULT_LIST_FILTER_VALUES } from './constants'

@@ -1,5 +1,5 @@
 import { ControlUnit, Tag, pluralize } from '@mtes-mct/monitor-ui'
-import { isEmpty } from 'lodash/fp'
+import { isEmpty } from 'lodash-es'
 
 import { getIconFromControlUnitResourceType } from '../../../ControlUnit/components/ControlUnitDialog/ControlUnitResourceList/utils'
 

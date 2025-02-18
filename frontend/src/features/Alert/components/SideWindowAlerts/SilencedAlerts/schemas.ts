@@ -1,5 +1,5 @@
 import { logSoftError } from '@mtes-mct/monitor-ui'
-import { without } from 'lodash'
+import { without } from 'lodash-es'
 import { addMethod, number, object, ObjectSchema, string } from 'yup'
 
 import type { SilencedAlertData } from '../../../types'

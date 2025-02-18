@@ -11,7 +11,7 @@ import { Accent, Button, FormikEffect, Icon, Level, usePrevious } from '@mtes-mc
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { getDefinedObject } from '@utils/getDefinedObject'
 import { useFormikContext } from 'formik'
-import { isEqual } from 'lodash'
+import { isEqual } from 'lodash-es'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'

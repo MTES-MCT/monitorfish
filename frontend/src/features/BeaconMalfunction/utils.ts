@@ -1,5 +1,5 @@
 import { getReducedTimeAgo } from '@features/BeaconMalfunction/components/BeaconMalfunctionBoard/utils'
-import _ from 'lodash'
+import { minBy } from 'lodash-es'
 
 import {
   BeaconMalfunctionPropertyName,
@@ -104,7 +104,7 @@ const getFirstVesselStatus = (beaconMalfunctionWithDetails: BeaconMalfunctionRes
     case true:
       return beaconMalfunctionWithDetails?.beaconMalfunction?.vesselStatus
     case false:
-      return _.minBy(beaconMalfunctionsVesselStatusActions, action => action.dateTime)!.previousValue
+      return minBy(beaconMalfunctionsVesselStatusActions, action => action.dateTime)!.previousValue
     default:
       throw Error('Should not happen')
   }

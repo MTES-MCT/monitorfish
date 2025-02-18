@@ -1,5 +1,5 @@
 import ky from 'ky'
-import { chunk, range } from 'lodash'
+import { chunk, range } from 'lodash-es'
 
 import { ZOOM_TO_START_END_TILE_INDICES } from './constants'
 

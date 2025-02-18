@@ -16,7 +16,7 @@ import {
 } from '@mtes-mct/monitor-ui'
 import { displayedComponentActions } from 'domain/shared_slices/DisplayedComponent'
 import { useField, useFormikContext } from 'formik'
-import { sortBy, uniqBy } from 'lodash'
+import { sortBy, uniqBy } from 'lodash-es'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 

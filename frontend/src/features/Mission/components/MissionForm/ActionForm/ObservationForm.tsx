@@ -1,7 +1,7 @@
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
 import { FormikEffect, FormikTextarea, FormikTextInput, Icon } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { noop } from 'lodash'
+import { noop } from 'lodash-es'
 import { useMemo } from 'react'
 
 import { ObservationFormLiveSchema } from './schemas'

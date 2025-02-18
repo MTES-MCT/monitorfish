@@ -1,5 +1,5 @@
 import { usePrevious } from '@mtes-mct/monitor-ui'
-import { isEqual } from 'lodash'
+import { isEqual } from 'lodash-es'
 import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react'
 
 import type { BackendApi } from '@api/BackendApi.types'

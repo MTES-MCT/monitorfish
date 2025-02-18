@@ -14,7 +14,7 @@ import {
 } from '@features/PriorNotification/constants'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { THEME, customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange } from '@mtes-mct/monitor-ui'
-import { update } from 'lodash'
+import { update } from 'lodash-es'
 import styled from 'styled-components'
 
 import {

@@ -1,5 +1,5 @@
 import { getStartAndEndDatesSetWithCurrentYear } from '@features/Map/layers/styles/utils'
-import { isObject } from 'lodash'
+import { isObject } from 'lodash-es'
 
 import { WEEKDAYS } from '../../../utils'
 

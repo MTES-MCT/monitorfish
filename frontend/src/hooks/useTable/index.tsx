@@ -1,6 +1,6 @@
 import diacritics from 'diacritics'
 import Fuse from 'fuse.js'
-import { get, orderBy } from 'lodash'
+import { get, orderBy } from 'lodash-es'
 import { assocPath, equals, path, pipe, propEq } from 'ramda'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 

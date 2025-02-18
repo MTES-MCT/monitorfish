@@ -7,7 +7,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, IconButton, Select } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
-import { sortBy } from 'lodash'
+import { sortBy } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 

@@ -117,13 +117,15 @@ const Title = styled.div`
       margin-top: 8px;
       cursor: pointer;
       text-decoration: underline;
+    }
+    button {
       background: unset;
     }
   }
 `
 
 const TitleRow = styled.div`
-  align-items: flex-start;
+  align-items: center;
   display: flex;
   line-height: 22px;
 `

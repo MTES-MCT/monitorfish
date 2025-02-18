@@ -117,6 +117,7 @@ const Title = styled.div`
       margin-top: 8px;
       cursor: pointer;
       text-decoration: underline;
+      background: unset;
     }
   }
 `

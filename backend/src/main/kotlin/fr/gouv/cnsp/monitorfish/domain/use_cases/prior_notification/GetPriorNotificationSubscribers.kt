@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.dtos.PriorNotificationSubscriber
 import fr.gouv.cnsp.monitorfish.utils.StringUtils
 import org.springframework.data.domain.Sort
+import java.time.ZonedDateTime
 
 @UseCase
 class GetPriorNotificationSubscribers(
@@ -40,7 +41,8 @@ class GetPriorNotificationSubscribers(
         val allPortSubscriptions = pnoPortSubscriptionRepository.findAll()
         val allVesselSubscriptions = pnoVesselSubscriptionRepository.findAll()
 
-        val allFleetSegments = fleetSegmentRepository.findAll()
+        val currentYear = ZonedDateTime.now().year
+        val allFleetSegments = fleetSegmentRepository.findAllByYear(currentYear)
         val allPorts = portRepository.findAll()
         val vessels = vesselRepository.findVesselsByIds(allVesselSubscriptions.map { it.vesselId }.distinct())
 

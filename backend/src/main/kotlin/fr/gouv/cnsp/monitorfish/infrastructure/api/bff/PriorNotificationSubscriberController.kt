@@ -83,7 +83,6 @@ class PriorNotificationSubscriberController(
         val (fleetSegmentSubscriptions, portSubscriptions, vesselSubscriptions) =
             priorNotificationSubscriberDataInput.toSubscriptions()
 
-        println("controlUnitId: $controlUnitId")
         val updatedPriorNotificationSubscriber =
             updatePriorNotificationSubscriber.execute(
                 controlUnitId,

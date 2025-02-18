@@ -52,7 +52,7 @@ class GetPriorNotificationSubscribersUTests {
 
         val fakeFleetSegment1 = FleetSegmentFaker.fakeFleetSegment(segment = "SEG001", segmentName = "Segment 1")
         val fakeFleetSegment2 = FleetSegmentFaker.fakeFleetSegment(segment = "SEG002", segmentName = "Segment 2")
-        given(fleetSegmentRepository.findAll()).willReturn(listOf(fakeFleetSegment1, fakeFleetSegment2))
+        given(fleetSegmentRepository.findAllByYear(any())).willReturn(listOf(fakeFleetSegment1, fakeFleetSegment2))
 
         val fakePort1 = PortFaker.fakePort(locode = "FRABC", name = "Port ABC")
         val fakePort2 = PortFaker.fakePort(locode = "ESXYZ", name = "Port XYZ")
@@ -263,7 +263,7 @@ class GetPriorNotificationSubscribersUTests {
                 fakeFullControlUnit3,
             ),
         )
-        `when`(fleetSegmentRepository.findAll()).thenReturn(emptyList())
+        `when`(fleetSegmentRepository.findAllByYear(any())).thenReturn(emptyList())
         `when`(pnoPortSubscriptionRepository.findAll()).thenReturn(
             listOf(
                 fakePortSubscription1,

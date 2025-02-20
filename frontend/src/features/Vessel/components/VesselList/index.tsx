@@ -55,7 +55,7 @@ export function VesselList() {
       <Wrapper>
         <MapToolButton
           data-cy="vessel-list"
-          Icon={Icon.Vessel}
+          Icon={Icon.VesselList}
           isActive={isVesselListModalDisplayed}
           onClick={() =>
             dispatch(

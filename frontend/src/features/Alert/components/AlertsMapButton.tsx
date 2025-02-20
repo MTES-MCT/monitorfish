@@ -1,4 +1,3 @@
-import { BeaconMalfunctionsStage, BeaconMalfunctionVesselStatus } from '@features/BeaconMalfunction/constants'
 import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
 import { sideWindowActions } from '@features/SideWindow/slice'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
@@ -8,21 +7,13 @@ import { Icon } from '@mtes-mct/monitor-ui'
 
 import { SideWindowMenuKey, SideWindowStatus } from '../../../domain/entities/sideWindow/constants'
 
-export function BeaconMalfunctionsMapButton() {
+export function AlertsMapButton() {
   const dispatch = useMainAppDispatch()
-  const beaconMalfunctions = useMainAppSelector(state => state.beaconMalfunction.beaconMalfunctions)
   const sideWindow = useMainAppSelector(state => state.sideWindow)
-
-  const badgeNumber =
-    beaconMalfunctions?.filter(
-      beaconMalfunction =>
-        beaconMalfunction.stage === BeaconMalfunctionsStage.INITIAL_ENCOUNTER &&
-        beaconMalfunction.vesselStatus === BeaconMalfunctionVesselStatus.AT_SEA
-    )?.length || undefined
 
   const isActive =
     sideWindow.status !== SideWindowStatus.CLOSED &&
-    sideWindow.selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD
+    sideWindow.selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST
 
   const toggleSideWindow = () => {
     if (isActive) {
@@ -31,19 +22,18 @@ export function BeaconMalfunctionsMapButton() {
       return
     }
 
-    dispatch(openSideWindowPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_BOARD }))
+    dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
   }
 
   return (
     <MapToolButton
-      badgeNumber={badgeNumber}
-      data-cy="beacon-malfunction-button"
-      Icon={Icon.Vms}
+      data-cy="alerts-button"
+      Icon={Icon.Alert}
       isActive={isActive}
       isLeftButton
       onClick={toggleSideWindow}
-      style={{ top: 280 }}
-      title="Avaries VMS"
+      style={{ top: 184 }}
+      title="Alertes"
     />
   )
 }

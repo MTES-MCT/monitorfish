@@ -26,7 +26,7 @@ context('Favorite Vessel', () => {
      * A favorite vessel Should be added to the list from the map
      */
     // Given
-    cy.get('*[data-cy="favorite-vessels-number"]').contains(0)
+    cy.get('*[title="Mes navires suivis"]').parent('div').contains(0)
     cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
 
     // When
@@ -34,12 +34,12 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="add-vessel-to-favorites"]').click()
 
     // Then
-    cy.get('*[data-cy="favorite-vessels-number"]').contains(1)
+    cy.get('*[title="Mes navires suivis"]').parent('div').contains(1)
     cy.get('*[data-cy="favorite-vessel-name"]').contains('PHENOMENE')
 
     // Delete the vessel
     cy.get('*[data-cy="favorite-vessel-delete-vessel"]').click()
-    cy.get('*[data-cy="favorite-vessels-number"]').contains(0)
+    cy.get('*[title="Mes navires suivis"]').parent('div').contains(0)
     cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
     cy.get('*[data-cy="favorite-vessels"]').click()
 
@@ -48,7 +48,7 @@ context('Favorite Vessel', () => {
      */
     // Given
     cy.get('*[data-cy="favorite-vessels"]').click()
-    cy.get('*[data-cy="favorite-vessels-number"]').contains(0)
+    cy.get('*[title="Mes navires suivis"]').parent('div').contains(0)
     cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
 
     // When
@@ -57,12 +57,12 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]').children().should('have.css', 'fill', 'rgb(229, 229, 235)')
 
     // Then
-    cy.get('*[data-cy="favorite-vessels-number"]').contains(1)
+    cy.get('*[title="Mes navires suivis"]').parent('div').contains(1)
     cy.get('*[data-cy="favorite-vessel-name"]').contains('PHENOMENE')
 
     // Delete the vessel
     cy.get('*[data-cy="favorite-vessel-delete-vessel"]').click()
-    cy.get('*[data-cy="favorite-vessels-number"]').contains(0)
+    cy.get('*[title="Mes navires suivis"]').parent('div').contains(0)
     cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
     cy.get('*[data-cy="favorite-vessels"]').click()
   })
@@ -86,7 +86,7 @@ context('Favorite Vessel', () => {
 
     // Delete the vessel
     cy.get('*[data-cy="favorite-vessel-delete-vessel"]').click()
-    cy.get('*[data-cy="favorite-vessels-number"]').contains(0)
+    cy.get('*[title="Mes navires suivis"]').parent('div').contains(0)
     cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
     cy.get('*[data-cy="favorite-vessels"]').click()
   })

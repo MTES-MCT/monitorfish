@@ -2,13 +2,12 @@ import { MapBox } from '@features/Map/constants'
 import { useClickOutsideWhenOpenedAndExecute } from '@hooks/useClickOutsideWhenOpenedAndExecute'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { usePrevious } from '@mtes-mct/monitor-ui'
-import { useCallback, useRef } from 'react'
+import { Icon, usePrevious } from '@mtes-mct/monitor-ui'
+import { useRef } from 'react'
 import styled from 'styled-components'
 
 import { Filters } from './Filters'
 import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
-import FilterSVG from '../../../icons/standardized/Filter.svg?react'
 import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'
 
 export function VesselFiltersMapButton() {
@@ -16,9 +15,7 @@ export function VesselFiltersMapButton() {
   const filters = useMainAppSelector(state => state.filter.filters)
   const previousFilters = usePrevious(filters)
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
-  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
 
-  const isRightMenuShrinked = !rightMenuIsOpen
   const isOpen = rightMapBoxOpened === MapBox.FILTERS
   const wrapperRef = useRef(null)
 
@@ -26,28 +23,29 @@ export function VesselFiltersMapButton() {
     dispatch(setRightMapBoxOpened(undefined))
   })
 
-  const openOrCloseVesselFilters = useCallback(() => {
+  const openOrCloseVesselFilters = () => {
     if (isOpen) {
       dispatch(setRightMapBoxOpened(undefined))
-    } else {
-      dispatch(setRightMapBoxOpened(MapBox.FILTERS))
+
+      return
     }
-  }, [dispatch, isOpen])
+
+    dispatch(setRightMapBoxOpened(MapBox.FILTERS))
+  }
 
   const hasOneFilterAdded = !!(previousFilters && filters.length && filters.length > previousFilters.length)
 
   return (
     <>
       <Wrapper ref={wrapperRef}>
-        <VesselFiltersButton
+        <MapToolButton
           data-cy="vessel-filters"
+          Icon={Icon.Filter}
           isActive={isOpen}
           onClick={openOrCloseVesselFilters}
           style={{ top: 124 }}
           title="Mes filtres"
-        >
-          <FilterIcon $isRightMenuShrinked={isRightMenuShrinked} />
-        </VesselFiltersButton>
+        />
         <Filters />
       </Wrapper>
       <NewFilterAdded $hasOneFilterAdded={hasOneFilterAdded}>1 filtre ajouté</NewFilterAdded>
@@ -102,19 +100,4 @@ const NewFilterAdded = styled.div<{
 const Wrapper = styled.div`
   transition: all 0.2s;
   z-index: 1000;
-`
-
-const VesselFiltersButton = styled(MapToolButton)``
-
-const FilterIcon = styled(FilterSVG)<{
-  $isRightMenuShrinked: boolean
-}>`
-  height: 25px;
-  opacity: ${p => (p.$isRightMenuShrinked ? '0' : '1')};
-  transition: all 0.2s;
-  width: 25px;
-
-  path {
-    fill: ${p => p.theme.color.gainsboro};
-  }
 `

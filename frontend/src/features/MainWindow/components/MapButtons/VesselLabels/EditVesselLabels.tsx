@@ -2,7 +2,6 @@ import { MapBox } from '@features/Map/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { MultiRadio } from '@mtes-mct/monitor-ui'
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { SUPER_USER_VESSEL_LABEL_OPTION, VESSEL_LABEL_OPTIONS } from './constants'
@@ -21,8 +20,7 @@ export function EditVesselLabels() {
   const riskFactorShowedOnMap = useMainAppSelector(state => state.map.riskFactorShowedOnMap)
   const vesselLabelsShowedOnMap = useMainAppSelector(state => state.map.vesselLabelsShowedOnMap)
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
-
-  const isOpen = useMemo(() => rightMapBoxOpened === MapBox.VESSEL_LABELS, [rightMapBoxOpened])
+  const isOpen = rightMapBoxOpened === MapBox.VESSEL_LABELS
 
   return (
     <Wrapper $isOpen={isOpen}>

@@ -87,7 +87,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
     }),
     updateFleetSegment: builder.query<FleetSegment, UpdateFleetSegmentParams>({
       query: params => {
-        const updatedSegment = FleetSegmentSchema.parse(params.updatedSegment)
+        const updatedSegment = parseResponseOrReturn<FleetSegment>(params.updatedSegment, FleetSegmentSchema, false)
 
         return {
           body: updatedSegment,

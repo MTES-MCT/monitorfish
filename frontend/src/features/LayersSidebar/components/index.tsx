@@ -1,7 +1,8 @@
+import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
 import { MapBox } from '@features/Map/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
+import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { BaseLayers } from 'features/Map/components/BaseLayers'
 import { useEffect } from 'react'
 import styled from 'styled-components'
@@ -10,7 +11,6 @@ import { setLeftMapBoxOpened } from '../../../domain/shared_slices/Global'
 import { AdministrativeZones } from '../../AdministrativeZone/components/AdministrativeZones'
 import { MapComponent } from '../../commonStyles/MapComponent'
 import { CustomZones } from '../../CustomZone/components/CustomZones'
-import { MapButton } from '../../MainWindow/components/MapButtons/MapButton'
 import { RegulationSearch } from '../../Regulation/components/RegulationSearch'
 import { RegulatoryZoneMetadata } from '../../Regulation/components/RegulatoryZoneMetadata'
 import { RegulatoryZones } from '../../Regulation/components/RegulatoryZones'
@@ -23,7 +23,6 @@ export function LayersSidebar() {
   )
   const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
   const leftMapBoxOpened = useMainAppSelector(state => state.global.leftMapBoxOpened)
-  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
 
   useEffect(() => {
     if (leftMapBoxOpened !== MapBox.REGULATIONS) {
@@ -33,19 +32,16 @@ export function LayersSidebar() {
 
   return (
     <>
-      <SidebarLayersButton isHidden={!!previewFilteredVesselsMode}>
-        <SidebarLayersIcon
-          $isActive={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
-          accent={Accent.PRIMARY}
-          aria-label="Arbre des couches"
-          Icon={Icon.MapLayers}
-          onClick={() =>
-            dispatch(setLeftMapBoxOpened(leftMapBoxOpened === MapBox.REGULATIONS ? undefined : MapBox.REGULATIONS))
-          }
-          size={Size.LARGE}
-          title="Arbre des couches"
-        />
-      </SidebarLayersButton>
+      <MapToolButton
+        Icon={Icon.MapLayers}
+        isActive={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
+        isLeftButton
+        onClick={() =>
+          dispatch(setLeftMapBoxOpened(leftMapBoxOpened === MapBox.REGULATIONS ? undefined : MapBox.REGULATIONS))
+        }
+        style={{ top: 10 }}
+        title="Arbre des couches"
+      />
       <Sidebar
         $isOpen={leftMapBoxOpened === MapBox.REGULATIONS}
         $isVisible={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
@@ -110,19 +106,4 @@ const Layers = styled.div<{
   margin-top: 5px;
   width: 350px;
   max-height: calc(100vh - ${p => (p.$hasHealthcheckTextWarning ? '210px' : '160px')});
-`
-
-const SidebarLayersButton = styled(MapButton)`
-  position: absolute;
-  top: 10px;
-  left: 10px;
-`
-
-const SidebarLayersIcon = styled(IconButton)<{ $isActive: boolean }>`
-  padding: unset;
-  border-radius: 2px;
-  width: 40px;
-  height: 40px;
-  ${p => (p.$isActive ? `background: ${p.theme.color.blueGray};` : '')}
-  ${p => (p.$isActive ? `border-color: ${p.theme.color.blueGray};` : '')}
 `

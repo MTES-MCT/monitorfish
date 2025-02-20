@@ -121,7 +121,9 @@ export const mainReducer = {
     missionListReducer
   ),
   priorNotification: persistReducerTyped(
-    { ...getCommonPersistReducerConfig<PriorNotificationState>('mainPersistorPriorNotification', []) },
+    {
+      ...getCommonPersistReducerConfig<PriorNotificationState>('mainPersistorPriorNotification', ['listFilterValues'])
+    },
     priorNotificationReducer
   ),
   regulatoryLayerSearch: regulatoryLayerSearchReducer,

@@ -7,6 +7,8 @@ type MapButtonType = {
   children: ReactNode
   isHidden?: boolean | undefined
 } & HTMLProps<HTMLButtonElement>
+
+/** @deprecated Use `MapToolButton` instead. */
 export function MapButton({ children, isHidden, ...props }: MapButtonType) {
   const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
 

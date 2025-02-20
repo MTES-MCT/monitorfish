@@ -2,8 +2,8 @@ import { MapBox } from '@features/Map/constants'
 import { useClickOutsideWhenOpenedAndExecute } from '@hooks/useClickOutsideWhenOpenedAndExecute'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Icon, THEME } from '@mtes-mct/monitor-ui'
-import { useCallback, useMemo, useRef } from 'react'
+import { Icon } from '@mtes-mct/monitor-ui'
+import { useRef } from 'react'
 import styled from 'styled-components'
 
 import { EditVesselLabels } from './EditVesselLabels'
@@ -13,35 +13,33 @@ import { MapToolButton } from '../shared/MapToolButton'
 export function VesselLabelsMapButton() {
   const dispatch = useMainAppDispatch()
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
-  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
-
-  const isRightMenuShrinked = !rightMenuIsOpen
-  const isOpen = useMemo(() => rightMapBoxOpened === MapBox.VESSEL_LABELS, [rightMapBoxOpened])
+  const isOpen = rightMapBoxOpened === MapBox.VESSEL_LABELS
   const wrapperRef = useRef(null)
 
   useClickOutsideWhenOpenedAndExecute(wrapperRef, isOpen, () => {
     dispatch(setRightMapBoxOpened(undefined))
   })
 
-  const openOrCloseVesselLabels = useCallback(() => {
+  const openOrCloseVesselLabels = () => {
     if (!isOpen) {
       dispatch(setRightMapBoxOpened(MapBox.VESSEL_LABELS))
-    } else {
-      dispatch(setRightMapBoxOpened(undefined))
+
+      return
     }
-  }, [dispatch, isOpen])
+
+    dispatch(setRightMapBoxOpened(undefined))
+  }
 
   return (
     <Wrapper ref={wrapperRef}>
       <MapToolButton
         data-cy="vessel-labels"
+        Icon={Icon.Tag}
         isActive={isOpen}
         onClick={openOrCloseVesselLabels}
         style={{ top: 220 }}
         title="Affichage des labels"
-      >
-        <Icon.Tag color={isRightMenuShrinked ? THEME.color.charcoal : THEME.color.gainsboro} size={26} />
-      </MapToolButton>
+      />
       <EditVesselLabels />
     </Wrapper>
   )

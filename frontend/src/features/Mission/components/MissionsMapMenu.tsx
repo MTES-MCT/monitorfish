@@ -6,16 +6,15 @@ import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindow
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, Icon, MapMenuDialog, THEME } from '@mtes-mct/monitor-ui'
-import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { SideWindowMenuKey, SideWindowStatus } from '../../../../../domain/entities/sideWindow/constants'
-import { setDisplayedComponents } from '../../../../../domain/shared_slices/DisplayedComponent'
-import { setLeftMapBoxOpened } from '../../../../../domain/shared_slices/Global'
-import { MapToolBox } from '../shared/MapToolBox'
-import { MapToolButton } from '../shared/MapToolButton'
+import { SideWindowMenuKey, SideWindowStatus } from '../../../domain/entities/sideWindow/constants'
+import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
+import { setLeftMapBoxOpened } from '../../../domain/shared_slices/Global'
+import { MapToolBox } from '../../MainWindow/components/MapButtons/shared/MapToolBox'
+import { MapToolButton } from '../../MainWindow/components/MapButtons/shared/MapToolButton'
 
-export function MissionsMenu() {
+export function MissionsMapMenu() {
   const dispatch = useMainAppDispatch()
   const sideWindow = useMainAppSelector(state => state.sideWindow)
   const leftMapBoxOpened = useMainAppSelector(state => state.global.leftMapBoxOpened)
@@ -24,7 +23,7 @@ export function MissionsMenu() {
   const isActive =
     sideWindow.status !== SideWindowStatus.CLOSED && sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_LIST
 
-  const toggleMissionsWindow = useCallback(() => {
+  const toggleMissionsWindow = () => {
     if (isActive) {
       dispatch(sideWindowActions.close())
 
@@ -32,7 +31,7 @@ export function MissionsMenu() {
     }
 
     dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))
-  }, [dispatch, isActive])
+  }
 
   const openNewMission = () => {
     dispatch(addMission())
@@ -75,16 +74,16 @@ export function MissionsMenu() {
           </MissionsMenuBody>
         </MissionsMenuWrapper>
       </MissionMenuBox>
-      <MissionMenuButton
+      <MapToolButton
         data-cy="missions-map-button"
+        Icon={Icon.MissionAction}
+        iconSize={25}
         isActive={leftMapBoxOpened === MapBox.MISSIONS}
         isLeftButton
         onClick={toggleMissionsMenu}
         style={{ color: THEME.color.gainsboro, top: 136 }}
         title="Missions et contrôles"
-      >
-        <Icon.MissionAction size={26} />
-      </MissionMenuButton>
+      />
     </Wrapper>
   )
 }
@@ -98,8 +97,6 @@ const Wrapper = styled.div`
 const MissionMenuBox = styled(MapToolBox)`
   top: 136px;
 `
-
-const MissionMenuButton = styled(MapToolButton)``
 
 const MissionsMenuWrapper = styled.div`
   width: 320px;

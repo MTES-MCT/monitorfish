@@ -1,10 +1,11 @@
 import { COLORS } from '@constants/constants'
+import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
 import { MapBox } from '@features/Map/constants'
 import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { setLeftMapBoxOpened } from 'domain/shared_slices/Global'
-import { useRef } from 'react'
 import styled from 'styled-components'
 
 import { FavoriteVessel } from './FavoriteVessel'
@@ -12,43 +13,36 @@ import { MapPropertyTrigger } from '../../../../commonComponents/MapPropertyTrig
 import { MapComponent } from '../../../../commonStyles/MapComponent'
 import HidingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_actif.svg?react'
 import ShowingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_inactif.svg?react'
-import FavoriteSVG from '../../../../icons/favorite.svg?react'
 import { setHideNonSelectedVessels } from '../../../../Vessel/slice'
-import { MapButton } from '../MapButton'
 
 export function FavoriteVessels() {
   const dispatch = useMainAppDispatch()
-  const { favorites } = useMainAppSelector(state => state.favoriteVessel)
+  const favorites = useMainAppSelector(state => state.favoriteVessel.favorites)
   const { hideNonSelectedVessels, selectedVesselIdentity, vesselsTracksShowed } = useMainAppSelector(
     state => state.vessel
   )
   const leftMapBoxOpened = useMainAppSelector(state => state.global.leftMapBoxOpened)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
-
-  const wrapperRef = useRef(null)
+  const isActive = leftMapBoxOpened === MapBox.FAVORITE_VESSELS
 
   return (
-    <Wrapper ref={wrapperRef}>
-      <FavoriteVesselsNumber
-        $isOpen={leftMapBoxOpened === MapBox.FAVORITE_VESSELS}
-        data-cy="favorite-vessels-number"
-        isHidden={previewFilteredVesselsMode}
-      >
-        {favorites?.length || 0}
-      </FavoriteVesselsNumber>
-      <FavoriteVesselsIcon
-        $isOpen={leftMapBoxOpened === MapBox.FAVORITE_VESSELS}
+    <Wrapper>
+      <MapToolButton
+        badgeBackgroundColor={isActive ? THEME.color.charcoal : THEME.color.gainsboro}
+        badgeColor={isActive ? THEME.color.white : THEME.color.gunMetal}
+        badgeNumber={favorites?.length || 0}
         data-cy="favorite-vessels"
-        isHidden={!!previewFilteredVesselsMode}
+        Icon={Icon.Favorite}
+        isActive={isActive}
+        isLeftButton
         onClick={() =>
           dispatch(
             setLeftMapBoxOpened(leftMapBoxOpened === MapBox.FAVORITE_VESSELS ? undefined : MapBox.FAVORITE_VESSELS)
           )
         }
+        style={{ top: 73 }}
         title="Mes navires suivis"
-      >
-        <FavoritesIcon />
-      </FavoriteVesselsIcon>
+      />
       <FavoriteVesselsBox
         $isOpen={leftMapBoxOpened === MapBox.FAVORITE_VESSELS}
         data-cy="favorite-vessels-box"
@@ -94,25 +88,6 @@ export function FavoriteVessels() {
     </Wrapper>
   )
 }
-
-const FavoriteVesselsNumber = styled(MapComponent)<{
-  $isOpen: boolean
-}>`
-  display: inline-block;
-  position: absolute;
-  height: 15px;
-  border-radius: 10px;
-  top: 64px;
-  line-height: 14px;
-  left: 40px;
-  background-color: ${p => (p.$isOpen ? p.theme.color.charcoal : p.theme.color.gainsboro)};
-  transition: all 0.5s;
-  color: ${p => (p.$isOpen ? p.theme.color.white : p.theme.color.gunMetal)};
-  z-index: 100;
-  padding: 0 4px;
-  text-align: center;
-  font-size: 12px;
-`
 
 const List = styled.ul`
   margin: 0;
@@ -162,29 +137,4 @@ const FavoriteVesselsBox = styled(MapComponent)<{
   position: absolute;
   display: inline-block;
   transition: all 0.5s;
-`
-
-const FavoriteVesselsIcon = styled(MapButton)<{
-  $isOpen: boolean
-}>`
-  position: absolute;
-  display: inline-block;
-  z-index: 99;
-  top: 73px;
-  height: 40px;
-  width: 40px;
-  border-radius: 2px;
-  left: 10px;
-  background: ${p => (p.$isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
-  transition: all 0.3s;
-
-  &:hover,
-  &:focus {
-    background: ${p => (p.$isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
-  }
-`
-
-const FavoritesIcon = styled(FavoriteSVG)`
-  width: 40px;
-  height: 40px;
 `

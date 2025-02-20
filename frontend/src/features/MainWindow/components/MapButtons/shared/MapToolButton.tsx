@@ -1,71 +1,95 @@
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Accent, IconButton, Size } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { MapButton } from '../MapButton'
-
-import type { ReactNode, HTMLProps } from 'react'
+import type { IconButtonProps } from '@mtes-mct/monitor-ui/elements/IconButton'
 
 type MapToolButtonProps = {
-  children: ReactNode
+  className?: string | undefined
   isActive: boolean
   isLeftButton?: boolean
-} & HTMLProps<HTMLButtonElement>
-export function MapToolButton({ children, isActive, isLeftButton = false, ...props }: MapToolButtonProps) {
+  title: string
+} & IconButtonProps
+export function MapToolButton({ className, isActive, isLeftButton = false, title, ...props }: MapToolButtonProps) {
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
+  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
   const isRightMenuShrinked = !rightMenuIsOpen && !isLeftButton
 
   return (
-    /**
-     * TODO We have this error without the `ts-ignore` :
-     *  "TS2745: This JSX tag's 'children' prop expects type 'never' which requires multiple children,
-     *   but only a single child was provided"
-     */
-    // @ts-ignore
-    <StyledMapToolButton
+    <StyledButton
+      $hasBadgeNumber={!!props.badgeNumber}
+      $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}
       $isActive={isActive}
+      $isHidden={!!previewFilteredVesselsMode}
       $isLeftButton={isLeftButton}
       $isRightMenuShrinked={isRightMenuShrinked}
-      isHidden={!!previewFilteredVesselsMode}
-      /* eslint-disable-next-line react/jsx-props-no-spreading */
+      accent={Accent.PRIMARY}
+      aria-label={title}
+      className={className}
+      size={Size.LARGE}
+      title={title}
+      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
-    >
-      {children}
-    </StyledMapToolButton>
+    />
   )
 }
 
-const StyledMapToolButton = styled(MapButton)<{
+const StyledButton = styled(IconButton)<{
+  $hasBadgeNumber: boolean
+  $hasHealthcheckTextWarning: boolean | undefined
   $isActive: boolean
+  $isHidden: boolean | undefined
   $isLeftButton: boolean
   $isRightMenuShrinked: boolean
 }>`
+  height: 40px;
+  margin-top: ${p => (p.$hasHealthcheckTextWarning ? 50 : 0)}px;
+  visibility: ${p => (p.$isHidden ? 'hidden' : 'visible')};
   position: absolute;
   display: inline-block;
-  padding-top: 5px;
-  ${p => {
-    if (p.$isLeftButton) {
-      return 'margin-right: 5px;'
-    }
-
-    return 'margin-left: 5px;'
-  }}
   z-index: 99;
-  height: 40px;
   width: ${p => (p.$isRightMenuShrinked ? '5px' : '40px')};
   border-radius: ${p => (p.$isRightMenuShrinked ? '1px' : '2px')};
-  ${p => {
-    if (p.$isLeftButton) {
-      return `left: ${p.$isRightMenuShrinked ? 0 : 10}px;`
-    }
-
-    return `right: ${p.$isRightMenuShrinked ? 0 : 10}px;`
-  }}
   background: ${p => (p.$isActive ? p.theme.color.blueGray : p.theme.color.charcoal)};
   transition: all 0.3s;
-
-  &:hover,
-  &:focus {
-    background: ${p => (p.$isActive ? p.theme.color.blueGray : p.theme.color.charcoal)};
+  span {
+    opacity: ${p => (p.$isRightMenuShrinked ? '0' : '1')};
   }
+
+  ${p => {
+    const padding = p.$isRightMenuShrinked ? `padding: 6px 0px 6px 0px;` : `padding: 6px 6px 6px 6px;`
+    const activeProperties = p.$isActive
+      ? `
+      background: ${p.theme.color.blueGray};
+      border-color: ${p.theme.color.blueGray};
+    `
+      : ''
+
+    if (p.$hasBadgeNumber) {
+      return `button {
+        ${padding}
+        ${activeProperties}
+      }`
+    }
+
+    return `
+      ${padding}
+      ${activeProperties}
+    `
+  }}
+
+  ${p => {
+    if (p.$isLeftButton) {
+      return `
+        margin-right: 5px;
+        left: ${p.$isRightMenuShrinked ? 0 : 10}px;
+      `
+    }
+
+    return `
+      margin-left: 5px;
+      right: ${p.$isRightMenuShrinked ? 0 : 10}px;
+    `
+  }}
 `

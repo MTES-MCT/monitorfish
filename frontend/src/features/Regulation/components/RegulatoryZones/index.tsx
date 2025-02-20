@@ -21,7 +21,6 @@ export function RegulatoryZones() {
   const selectedRegulatoryLayers = useMainAppSelector(state => state.regulation.selectedRegulatoryLayers)
   const advancedSearchIsOpen = useMainAppSelector(state => state.regulatoryLayerSearch.advancedSearchIsOpen)
   const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
-
   const isOpen = layersSidebarOpenedLayerType === LayerType.REGULATORY
 
   const removeById = useCallback(

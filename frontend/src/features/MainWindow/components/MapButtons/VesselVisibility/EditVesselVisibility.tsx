@@ -3,7 +3,6 @@ import { TrackDepthSelection } from '@features/Vessel/components/VesselSidebar/a
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { LastPositionsSlider } from './LastPositionsSlider'
@@ -30,8 +29,7 @@ export function EditVesselVisibility() {
   const defaultVesselTrackDepth = useMainAppSelector(state => state.map.defaultVesselTrackDepth)
   const showingVesselsEstimatedPositions = useMainAppSelector(state => state.map.showingVesselsEstimatedPositions)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
-
-  const isOpen = useMemo(() => rightMapBoxOpened === MapBox.VESSEL_VISIBILITY, [rightMapBoxOpened])
+  const isOpen = rightMapBoxOpened === MapBox.VESSEL_VISIBILITY
 
   const updateVesselsLastPositionVisibility = (hidden, opacityReduced) => {
     dispatch(

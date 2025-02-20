@@ -2,25 +2,24 @@ import { MapBox } from '@features/Map/constants'
 import { useEscapeFromKeyboardAndExecute } from '@hooks/useEscapeFromKeyboardAndExecute'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { Icon } from '@mtes-mct/monitor-ui'
+import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import { EditInterestPoint } from './EditInterestPoint'
 import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
-import InterestPointSVG from '../../../icons/standardized/Landmark.svg?react'
 import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'
 import { deleteInterestPointBeingDrawed, drawInterestPoint, endInterestPointDraw } from '../../slice'
 
 export function InterestPointMapButton() {
   const dispatch = useMainAppDispatch()
-  const { rightMapBoxOpened, rightMenuIsOpen } = useMainAppSelector(state => state.global)
-  const isRightMenuShrinked = !rightMenuIsOpen
-  const isOpen = useMemo(() => rightMapBoxOpened === MapBox.INTEREST_POINT, [rightMapBoxOpened])
+  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
+  const isOpen = rightMapBoxOpened === MapBox.INTEREST_POINT
   const wrapperRef = useRef(null)
 
-  const close = useCallback(() => {
+  const close = () => {
     dispatch(setRightMapBoxOpened(undefined))
-  }, [dispatch])
+  }
 
   useEscapeFromKeyboardAndExecute(close)
 
@@ -31,26 +30,27 @@ export function InterestPointMapButton() {
     }
   }, [dispatch, isOpen])
 
-  const openOrCloseInterestPoint = useCallback(() => {
+  const openOrCloseInterestPoint = () => {
     if (!isOpen) {
       dispatch(drawInterestPoint())
       dispatch(setRightMapBoxOpened(MapBox.INTEREST_POINT))
-    } else {
-      close()
+
+      return
     }
-  }, [dispatch, isOpen, close])
+
+    close()
+  }
 
   return (
     <Wrapper ref={wrapperRef}>
-      <InterestPointButton
+      <MapToolButton
         data-cy="interest-point"
+        Icon={Icon.Report}
         isActive={isOpen}
         onClick={openOrCloseInterestPoint}
         style={{ top: 364 }}
         title="Créer un point d'intérêt"
-      >
-        <InterestPointIcon $isRightMenuShrinked={isRightMenuShrinked} />
-      </InterestPointButton>
+      />
       <EditInterestPoint close={close} isOpen={isOpen} />
     </Wrapper>
   )
@@ -59,23 +59,4 @@ export function InterestPointMapButton() {
 const Wrapper = styled.div`
   transition: all 0.2s;
   z-index: 1000;
-`
-
-const InterestPointButton = styled(MapToolButton)``
-
-const InterestPointIcon = styled(InterestPointSVG)<{
-  $isRightMenuShrinked: boolean
-}>`
-  height: 25px;
-  opacity: ${p => (p.$isRightMenuShrinked ? '0' : '1')};
-  transition: all 0.2s;
-  width: 25px;
-
-  rect:first-of-type {
-    fill: ${p => p.theme.color.gainsboro};
-  }
-
-  path:first-of-type {
-    fill: ${p => p.theme.color.gainsboro};
-  }
 `

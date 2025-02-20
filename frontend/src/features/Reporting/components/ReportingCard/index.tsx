@@ -215,7 +215,7 @@ export function ReportingCard({
           <NumberOfAlerts $isArchived>{otherOccurrencesOfSameAlert.length + 1}</NumberOfAlerts>
         )}
         {!isArchived && (
-          <Actions $hasOccurrences={otherOccurrencesOfSameAlert.length > 0}>
+          <Actions>
             {otherOccurrencesOfSameAlert.length > 0 && (
               <NumberOfAlerts>{otherOccurrencesOfSameAlert.length + 1}</NumberOfAlerts>
             )}
@@ -255,7 +255,7 @@ export function ReportingCard({
           </Actions>
         )}
         {isArchived && (
-          <Actions $hasOccurrences={otherOccurrencesOfSameAlert.length > 0}>
+          <Actions>
             <StyledIconButton
               accent={Accent.TERTIARY}
               color={THEME.color.charcoal}
@@ -343,11 +343,8 @@ const Body = styled.div<{
   width: 365px;
 `
 
-const Actions = styled.div<{
-  $hasOccurrences: boolean
-}>`
+const Actions = styled.div`
   border-left: 2px solid ${p => p.theme.color.white};
-  padding-top: ${p => (p.$hasOccurrences ? 8 : 3)}px;
   text-align: center;
   width: 32px;
   margin-left: auto;

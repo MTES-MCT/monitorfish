@@ -66,6 +66,7 @@ export function APIWorker() {
   const poll = useCallback(() => {
     dispatch(setIsUpdatingVessels())
     dispatch(updateVesselTracks())
+    dispatch(getAllBeaconMalfunctions())
 
     setUpdateVesselSidebarTab(true)
   }, [dispatch])

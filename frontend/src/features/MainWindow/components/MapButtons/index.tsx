@@ -4,15 +4,15 @@ import { VesselFiltersMapButton } from '@features/VesselFilter/components/Vessel
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
-import { AlertsMapButton } from './AlertsMapButton'
-import { BeaconMalfunctionsMapButton } from './BeaconMalfunctionsMapButton'
 import { FavoriteVessels } from './FavoriteVessels'
-import { MissionsMenu } from './Missions'
 import { VesselLabelsMapButton } from './VesselLabels'
 import { VesselVisibilityMapButton } from './VesselVisibility'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
+import { AlertsMapButton } from '../../../Alert/components/AlertsMapButton'
+import { BeaconMalfunctionsMapButton } from '../../../BeaconMalfunction/components/BeaconMalfunctionsMapButton'
 import { InterestPointMapButton } from '../../../InterestPoint/components/InterestPointMapButton'
 import { MeasurementMapButton } from '../../../Measurement/components/MeasurementMapButton'
+import { MissionsMapMenu } from '../../../Mission/components/MissionsMapMenu'
 import { PriorNotificationListButton } from '../../../PriorNotification/components/PriorNotificationListButton'
 
 export function MapButtons() {
@@ -51,7 +51,7 @@ export function MapButtons() {
     <>
       <LegacyRsuiteComponentsWrapper>
         {isFavoriteVesselsMapButtonDisplayed && <FavoriteVessels />}
-        {isSuperUser && isFavoriteVesselsMapButtonDisplayed && <MissionsMenu />}
+        {isSuperUser && isFavoriteVesselsMapButtonDisplayed && <MissionsMapMenu />}
         {isSuperUser && isAlertsMapButtonDisplayed && <AlertsMapButton />}
         {(isSuperUser || import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true') &&
           isPriorNotificationMapButtonDisplayed && <PriorNotificationListButton />}

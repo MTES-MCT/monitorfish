@@ -2,8 +2,8 @@ import { MapBox } from '@features/Map/constants'
 import { useClickOutsideWhenOpenedAndExecute } from '@hooks/useClickOutsideWhenOpenedAndExecute'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Icon, THEME } from '@mtes-mct/monitor-ui'
-import { useCallback, useMemo, useRef } from 'react'
+import { Icon } from '@mtes-mct/monitor-ui'
+import { useRef } from 'react'
 import styled from 'styled-components'
 
 import { EditVesselVisibility } from './EditVesselVisibility'
@@ -13,35 +13,33 @@ import { MapToolButton } from '../shared/MapToolButton'
 export function VesselVisibilityMapButton() {
   const dispatch = useMainAppDispatch()
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
-  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
-
-  const isRightMenuShrinked = !rightMenuIsOpen
-  const isOpen = useMemo(() => rightMapBoxOpened === MapBox.VESSEL_VISIBILITY, [rightMapBoxOpened])
+  const isOpen = rightMapBoxOpened === MapBox.VESSEL_VISIBILITY
   const wrapperRef = useRef(null)
 
   useClickOutsideWhenOpenedAndExecute(wrapperRef, isOpen, () => {
     dispatch(setRightMapBoxOpened(undefined))
   })
 
-  const openOrCloseVesselVisibility = useCallback(() => {
+  const openOrCloseVesselVisibility = () => {
     if (isOpen) {
       dispatch(setRightMapBoxOpened(undefined))
-    } else {
-      dispatch(setRightMapBoxOpened(MapBox.VESSEL_VISIBILITY))
+
+      return
     }
-  }, [dispatch, isOpen])
+
+    dispatch(setRightMapBoxOpened(MapBox.VESSEL_VISIBILITY))
+  }
 
   return (
     <Wrapper ref={wrapperRef}>
       <MapToolButton
         data-cy="vessel-visibility"
+        Icon={Icon.Vessel}
         isActive={isOpen}
         onClick={openOrCloseVesselVisibility}
         style={{ top: 172 }}
         title="Affichage des dernières positions"
-      >
-        <Icon.Vessel color={isRightMenuShrinked ? THEME.color.charcoal : THEME.color.gainsboro} size={26} />
-      </MapToolButton>
+      />
       <EditVesselVisibility />
     </Wrapper>
   )

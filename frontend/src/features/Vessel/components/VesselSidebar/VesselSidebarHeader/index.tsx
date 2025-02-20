@@ -1,7 +1,8 @@
-import { MapButton } from '@features/MainWindow/components/MapButtons/MapButton'
+import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
 import { setIsFocusedOnVesselSearch } from '@features/Vessel/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Icon } from '@mtes-mct/monitor-ui'
 import { vesselsAreEquals } from 'domain/entities/vessel/vessel'
 import { expandRightMenu } from 'domain/shared_slices/Global'
 import { showVessel } from 'domain/use_cases/vessel/showVessel'
@@ -10,7 +11,6 @@ import styled from 'styled-components'
 
 import { VesselName } from './VesselName'
 import { MapComponent } from '../../../../commonStyles/MapComponent'
-import SearchIconSVG from '../../../../icons/Loupe.svg?react'
 import { VesselSearch } from '../../../../VesselSearch'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
@@ -67,16 +67,14 @@ export function VesselSidebarHeader() {
           />
         )}
       </VesselNameOrInput>
-      <SearchButton
-        $isOpen={!!selectedVessel}
-        $isShrinked={isRightMenuShrinked}
-        isHidden={!!previewFilteredVesselsMode}
+      <MapToolButton
+        Icon={Icon.Search}
+        isActive={!!selectedVessel}
         onClick={() => dispatch(setIsFocusedOnVesselSearch(true))}
         onMouseEnter={() => dispatch(expandRightMenu())}
+        style={{ top: 10 }}
         title="Rechercher un navire"
-      >
-        <SearchIcon $isShrinked={isRightMenuShrinked} />
-      </SearchButton>
+      />
     </>
   )
 }
@@ -104,38 +102,4 @@ const VesselNameOrInput = styled(MapComponent)<{
   &:focus {
     background-color: none;
   }
-`
-
-const SearchButton = styled(MapButton)<{
-  $isOpen: boolean
-  $isShrinked: boolean
-}>`
-  width: 40px;
-  height: 40px;
-  right: 10px;
-  top: 10px;
-  z-index: 99;
-  cursor: pointer;
-  border-radius: 2px;
-  position: absolute;
-  width: ${p => (p.$isShrinked ? 5 : 40)}px;
-  border-radius: ${p => (p.$isShrinked ? 1 : 2)}px;
-  right: ${p => (p.$isShrinked ? 0 : 10)}px;
-  background: ${p => (p.$isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
-  transition: all 0.3s;
-
-  &:hover,
-  &:focus {
-    background: ${p => (p.$isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
-  }
-`
-
-const SearchIcon = styled(SearchIconSVG)<{
-  $isShrinked: boolean
-}>`
-  width: 24px;
-  height: 24x;
-  margin-top: 4px;
-  opacity: ${p => (p.$isShrinked ? '0' : '1')};
-  transition: all 0.2s;
 `

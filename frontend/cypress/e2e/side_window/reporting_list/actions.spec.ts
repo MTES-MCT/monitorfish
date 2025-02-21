@@ -69,7 +69,7 @@ context('Side Window > Reporting List > Actions', () => {
     })
   })
 
-  it.only('A Reporting Should be edited', () => {
+  it('A Reporting Should be edited', () => {
     cy.intercept('PUT', 'bff/v1/reportings/7').as('updateReporting')
 
     // Given

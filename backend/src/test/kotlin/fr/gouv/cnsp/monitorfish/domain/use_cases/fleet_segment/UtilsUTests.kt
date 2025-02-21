@@ -574,4 +574,43 @@ class UtilsUTests {
             .usingRecursiveFieldByFieldElementComparator()
             .containsExactlyElementsOf(expectedResults)
     }
+
+    @Test
+    fun `getSpeciesCatchesForSegmentCalculation Should return catches When there is no species`() {
+        // Given
+        val faoZones = listOf("37.1.1")
+        val gears =
+            listOf(
+                GearControl().also {
+                    it.gearCode = "GES"
+                    it.declaredMesh = 20.0
+                },
+            )
+        val expectedResults =
+            listOf(
+                SpeciesCatchForSegmentCalculation(
+                    mesh = 20.0,
+                    weight = 0.0,
+                    gear = "GES",
+                    species = null,
+                    faoArea = "37.1.1",
+                    scipSpeciesType = null,
+                ),
+            )
+
+        // When
+        val speciesCatches =
+            getSpeciesCatchesForSegmentCalculation(
+                faoZones,
+                gears,
+                listOf(),
+                listOf(),
+            )
+
+        // Then
+        assertThat(speciesCatches).hasSize(1)
+        assertThat(speciesCatches)
+            .usingRecursiveFieldByFieldElementComparator()
+            .containsExactlyElementsOf(expectedResults)
+    }
 }

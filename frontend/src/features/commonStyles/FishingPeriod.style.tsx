@@ -21,7 +21,6 @@ export const DateRanges = styled.div`
   align-items: center;
   font-size: 13px;
   color: ${THEME.color.slateGray};
-  margin-right: 10px;
 `
 
 export const ContentWrapper = styled.div<{

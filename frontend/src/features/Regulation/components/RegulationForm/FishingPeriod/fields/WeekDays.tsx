@@ -1,6 +1,6 @@
 import { DayPicker } from './DayPicker'
-import { Row } from '../../../../commonStyles/FishingPeriod.style'
-import { Label } from '../../../../commonStyles/Input.style'
+import { Row } from '../../../../../commonStyles/FishingPeriod.style'
+import { Label } from '../../../../../commonStyles/Input.style'
 
 type WeekDaysProps = Readonly<{
   disabled: boolean

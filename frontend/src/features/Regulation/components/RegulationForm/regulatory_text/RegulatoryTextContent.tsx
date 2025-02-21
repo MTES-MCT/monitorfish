@@ -38,16 +38,13 @@ export function RegulatoryTextContent({
 
   const [isEditing, setIsEditing] = useState<boolean>(true)
 
-  const set = useCallback(
-    (key, value) => {
-      const obj = {
-        ...regulatoryText,
-        [key]: value
-      }
-      setRegulatoryText(index, obj)
-    },
-    [index, regulatoryText, setRegulatoryText]
-  )
+  const set = (key, value) => {
+    const obj = {
+      ...regulatoryText,
+      [key]: value
+    }
+    setRegulatoryText(index, obj)
+  }
 
   useEffect(() => {
     if (saveForm) {

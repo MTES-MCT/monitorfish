@@ -1,11 +1,9 @@
-import { THEME } from '@mtes-mct/monitor-ui'
+import { Select } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { convertTimeToString, TIMES_SELECT_PICKER_VALUES } from '../../../utils'
-import { CustomSelectComponent } from '../custom_form/CustomSelectComponent'
+import { convertTimeToString, TIMES_SELECT_PICKER_VALUES } from '../../../../utils'
 
 import type { TimeInterval as TypeIntervalType } from '@features/Regulation/types'
-import type { CSSProperties } from 'react'
 
 type TimeIntervalProps = Readonly<{
   disabled: boolean | undefined
@@ -30,7 +28,7 @@ export function TimeInterval({
     // TODO Refactor this workaround `as` type.
     const newTimeInterval = {
       ...timeInterval,
-      [key]: date
+      [key]: date.toISOString()
     } as TypeIntervalType
 
     onTimeIntervalChange(id, newTimeInterval)
@@ -39,42 +37,39 @@ export function TimeInterval({
   return (
     <Wrapper $isLast={isLast}>
       De
-      <CustomSelectComponent
+      <StyledSelect
         cleanable={false}
-        data={TIMES_SELECT_PICKER_VALUES}
         disabled={disabled}
-        onChange={value => setTimeInterval('from', value)}
-        padding="0px"
+        isLabelHidden
+        label="De"
+        name="from"
+        onChange={value => setTimeInterval('from', value as string)}
+        options={TIMES_SELECT_PICKER_VALUES}
         placeholder={'\xa0\xa0\xa0\xa0\xa0:\xa0\xa0\xa0\xa0\xa0'}
-        placement="topStart"
-        searchable={false}
-        style={selectPickerStyle}
+        searchable
         value={convertTimeToString(timeInterval?.from)}
       />
       à
-      <CustomSelectComponent
+      <StyledSelect
         cleanable={false}
-        data={TIMES_SELECT_PICKER_VALUES}
         disabled={disabled}
-        onChange={value => setTimeInterval('to', value)}
-        padding="0px"
+        isLabelHidden
+        label="à"
+        name="to"
+        onChange={value => setTimeInterval('to', value as string)}
+        options={TIMES_SELECT_PICKER_VALUES}
         placeholder={'\xa0\xa0\xa0\xa0\xa0:\xa0\xa0\xa0\xa0\xa0'}
-        placement="topStart"
-        searchable={false}
-        style={selectPickerStyle}
+        searchable
         value={convertTimeToString(timeInterval?.to)}
       />
     </Wrapper>
   )
 }
 
-const selectPickerStyle: CSSProperties = {
-  borderColor: THEME.color.lightGray,
-  boxSizing: 'border-box',
-  margin: '0px 5px',
-  textOverflow: 'ellipsis',
-  width: '85px'
-}
+const StyledSelect = styled(Select)`
+  margin-left: 7px;
+  margin-right: 7px;
+`
 
 const Wrapper = styled.div<{
   $isLast: boolean
@@ -84,8 +79,4 @@ const Wrapper = styled.div<{
   align-items: center;
   ${p => (p.$isLast ? '' : 'margin-bottom: 5px;')}
   color: ${p => p.theme.color.slateGray};
-
-  .rs-picker-toggle {
-    width: 40px;
-  }
 `

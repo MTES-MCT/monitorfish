@@ -1,10 +1,10 @@
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 
 import { FishingPeriodForm } from './FishingPeriodForm'
-import { Section, OtherRemark } from '../../../../commonStyles/Backoffice.style'
-import { Label, CustomInput } from '../../../../commonStyles/Input.style'
+import { OtherRemark, Section } from '../../../../commonStyles/Backoffice.style'
+import { CustomInput, Label } from '../../../../commonStyles/Input.style'
 import { regulationActions } from '../../../slice'
 import { SectionTitle } from '../../RegulationTables/SectionTitle'
 
@@ -14,7 +14,9 @@ export function FishingPeriodSection() {
 
   const [show, setShow] = useState(false)
 
-  const onChange = useCallback(value => dispatch(regulationActions.setFishingPeriodOtherInfo(value)), [dispatch])
+  const onChange = value => {
+    dispatch(regulationActions.setFishingPeriodOtherInfo(value))
+  }
 
   return (
     <Section $show>

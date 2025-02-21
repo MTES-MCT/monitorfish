@@ -9,7 +9,7 @@ export type BaseRegulatoryZone = {
 
 export type RegulatoryZone = BaseRegulatoryZone & {
   color?: string
-  fishingPeriod: FishingPeriod<Date>
+  fishingPeriod: FishingPeriod
   gearRegulation: GearRegulation
   geometry: GeoJSON.Geometry | undefined
   id: number | string | undefined
@@ -46,22 +46,22 @@ export type RegulatoryText = {
 export type RegulatoryLawTypes = Record<string, Record<string, RegulatoryZone[]>>
 
 export type DateInterval = {
-  endDate: string | Date | undefined
-  startDate: string | Date | undefined
+  endDate: string | undefined
+  startDate: string | undefined
 }
 
 export type TimeInterval = {
-  from: Date | undefined
-  to: Date | undefined
+  from: string | undefined
+  to: string | undefined
 }
 
 // TODO It would be safer to use strict array types: `DateRange[]` and `DateAsStringRange[]`.
-export type FishingPeriod<DateType extends string | Date = string> = {
+export type FishingPeriod = {
   always: boolean | undefined
   annualRecurrence: boolean | undefined
   authorized: boolean | undefined
   dateRanges: DateInterval[]
-  dates: DateType[]
+  dates: string[]
   daytime: boolean | undefined
   holidays: boolean | undefined
   otherInfo: string | undefined

@@ -1,16 +1,14 @@
+import { SQUARE_BUTTON_TYPE } from '@constants/constants'
+import { usePopArrayInFishingPeriod } from '@features/Regulation/components/RegulationForm/FishingPeriod/hooks/usePopArrayInFishingPeriod'
+import { usePushArrayInFishingPeriod } from '@features/Regulation/components/RegulationForm/FishingPeriod/hooks/usePushArrayInFishingPeriod'
+import { useUpdateArrayInFishingPeriod } from '@features/Regulation/components/RegulationForm/FishingPeriod/hooks/useUpdateArrayInFishingPeriod'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
-import { useEffect } from 'react'
 
 import { DateRange } from './DateRange'
-import { SQUARE_BUTTON_TYPE } from '../../../../../constants/constants'
-import { usePopArrayInFishingPeriod } from '../../../../../hooks/fishingPeriod/usePopArrayInFishingPeriod'
-import { usePushArrayInFishingPeriod } from '../../../../../hooks/fishingPeriod/usePushArrayInFishingPeriod'
-import { useSetFishingPeriod } from '../../../../../hooks/fishingPeriod/useSetFishingPeriod'
-import { useUpdateArrayInFishingPeriod } from '../../../../../hooks/fishingPeriod/useUpdateArrayInFishingPeriod'
-import { SquareButton } from '../../../../commonStyles/Buttons.style'
-import { ContentWrapper, DateRanges, Row } from '../../../../commonStyles/FishingPeriod.style'
-import { Label } from '../../../../commonStyles/Input.style'
-import { DEFAULT_DATE_RANGE, FishingPeriodKey } from '../../../utils'
+import { SquareButton } from '../../../../../commonStyles/Buttons.style'
+import { ContentWrapper, DateRanges, Row } from '../../../../../commonStyles/FishingPeriod.style'
+import { Label } from '../../../../../commonStyles/Input.style'
+import { DEFAULT_DATE_RANGE, FishingPeriodKey } from '../../../../utils'
 
 import type { DateInterval } from '@features/Regulation/types'
 
@@ -18,32 +16,17 @@ type FishingPeriodDateRangesProps = Readonly<{
   disabled: boolean
 }>
 export function FishingPeriodDateRanges({ disabled }: FishingPeriodDateRangesProps) {
-  const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
-  // const { annualRecurrence, dateRanges } = useBackofficeAppSelector(
-  //   state => state.regulation.processingRegulation.fishingPeriod
-  // )
+  const fishingPeriod = useBackofficeAppSelector(state => state.regulation.processingRegulation.fishingPeriod)
   const updateDateRanges = useUpdateArrayInFishingPeriod<DateInterval>(
     FishingPeriodKey.DATE_RANGES,
-    processingRegulation.fishingPeriod?.dateRanges
+    fishingPeriod?.dateRanges
   )
   const addDateToDateRange = usePushArrayInFishingPeriod(
     FishingPeriodKey.DATE_RANGES,
-    processingRegulation.fishingPeriod?.dateRanges,
+    fishingPeriod?.dateRanges,
     DEFAULT_DATE_RANGE
   )
-  const removeDateFromDateRange = usePopArrayInFishingPeriod(
-    FishingPeriodKey.DATE_RANGES,
-    processingRegulation.fishingPeriod?.dateRanges
-  )
-  const setDateRange = useSetFishingPeriod(FishingPeriodKey.DATE_RANGES)
-
-  const { fishingPeriod } = processingRegulation
-
-  useEffect(() => {
-    if (disabled) {
-      setDateRange([])
-    }
-  }, [disabled, setDateRange])
+  const removeDateFromDateRange = usePopArrayInFishingPeriod(FishingPeriodKey.DATE_RANGES, fishingPeriod?.dateRanges)
 
   return (
     <Row>

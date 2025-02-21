@@ -1,21 +1,20 @@
 import { getTextForSearch } from '../../utils'
-import { isNotNullish } from '../../utils/isNotNullish'
 import { LayerProperties } from '../Map/constants'
 import { formatDataForSelectPicker } from './components/RegulationTables/utils'
 
 import type { Regulation } from './Regulation.types'
 import type {
+  DateInterval,
   FishingPeriod,
   Gear,
   GearRegulation,
   RegulatedGears,
   RegulatedSpecies,
   RegulatoryLawTypes,
-  RegulatoryZone,
-  SpeciesRegulation,
   RegulatoryText,
-  DateInterval,
-  RegulatoryZoneDraft
+  RegulatoryZone,
+  RegulatoryZoneDraft,
+  SpeciesRegulation
 } from './types'
 import type { Specy } from '../../domain/types/specy'
 
@@ -145,36 +144,18 @@ const parseJSON = text => (typeof text === 'string' ? JSON.parse(text) : text)
 
 export const parseFishingPeriod = (fishingPeriodAsString: string | undefined) => {
   if (fishingPeriodAsString) {
-    return mapToFishingPeriod(JSON.parse(fishingPeriodAsString) as FishingPeriod<string>)
+    return mapToFishingPeriod(JSON.parse(fishingPeriodAsString) as FishingPeriod)
   }
 
   return DEFAULT_FISHING_PERIOD_VALUES
 }
 
-const mapToFishingPeriod = (fishingPeriod: FishingPeriod<string | Date> | undefined): FishingPeriod<Date> => {
-  if (fishingPeriod) {
-    const { dateRanges, dates, timeIntervals } = fishingPeriod
-    const newDateRanges = dateRanges?.map(({ endDate, startDate }) => ({
-      endDate: endDate ? new Date(endDate) : undefined,
-      startDate: startDate ? new Date(startDate) : undefined
-    }))
-
-    const newDates = dates.map(date => (date ? new Date(date) : undefined)).filter(isNotNullish)
-
-    const newTimeIntervals = timeIntervals?.map(({ from, to }) => ({
-      from: from ? new Date(from) : undefined,
-      to: to ? new Date(to) : undefined
-    }))
-
-    return {
-      ...fishingPeriod,
-      dateRanges: newDateRanges,
-      dates: newDates,
-      timeIntervals: newTimeIntervals
-    }
+const mapToFishingPeriod = (fishingPeriod: FishingPeriod | undefined): FishingPeriod => {
+  if (!fishingPeriod) {
+    return DEFAULT_FISHING_PERIOD_VALUES
   }
 
-  return DEFAULT_FISHING_PERIOD_VALUES
+  return fishingPeriod
 }
 
 // TODO Type these `any`.
@@ -318,7 +299,7 @@ export const DEFAULT_DATE_RANGE: DateInterval = {
   startDate: undefined
 }
 
-const DEFAULT_FISHING_PERIOD_VALUES: FishingPeriod<Date> = {
+const DEFAULT_FISHING_PERIOD_VALUES: FishingPeriod = {
   always: undefined,
   annualRecurrence: undefined,
   authorized: undefined,
@@ -713,18 +694,19 @@ export const TIMES_SELECT_PICKER_VALUES = getHoursValues()
  * timeToString
  * Convert date time to string
  * 0 is added in front of number lesser than 10
- * @param {Date} date
+ * @param {string} dateString
  * @returns {string} date as string
  */
-export const convertTimeToString = date => {
-  if (date) {
+export const convertTimeToString = dateString => {
+  if (dateString) {
+    const date = new Date(dateString)
     const minutes = date.getMinutes()
     const hours = date.getHours()
 
     return `${hours < 10 ? `0${hours}` : hours}h${minutes === 0 ? `${minutes}0` : minutes}`
   }
 
-  return null
+  return undefined
 }
 
 /**
@@ -751,7 +733,7 @@ export const fishingPeriodToString = (fishingPeriod): string | undefined => {
       dateRanges
         .map(({ endDate, startDate }) => {
           if (startDate && endDate) {
-            return `du ${dateToString(startDate, annualRecurrence)} au ${dateToString(endDate, annualRecurrence)}`
+            return `du ${dateToString(new Date(startDate), annualRecurrence)} au ${dateToString(new Date(endDate), annualRecurrence)}`
           }
 
           return undefined
@@ -772,7 +754,7 @@ export const fishingPeriodToString = (fishingPeriod): string | undefined => {
       dates
         .map(date => {
           if (date) {
-            return `le ${dateToString(date)}`
+            return `le ${dateToString(new Date(date))}`
           }
 
           return undefined

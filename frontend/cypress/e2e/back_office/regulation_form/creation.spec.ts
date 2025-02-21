@@ -252,43 +252,15 @@ context('BackOffice > Regulation Form > Creation', () => {
 
     // Périodes de pêche
     cy.contains('Périodes de pêche').scrollIntoView().click()
-    cy.contains('autorisées').click().scrollIntoView()
-    // Récurrence annuelle
-    cy.contains('oui').click()
+    cy.get('[name="fishing_period_authorized"]').eq(0).click().scrollIntoView()
+    cy.get('[name="fishing_period_annual_recurrence"]').eq(0).click()
 
-    cy.contains('Plages de dates')
-      .parent()
-      .parent()
-      .find('input')
-      .eq(0)
-      .click({ force: true })
-      .wait(250)
-      .type('10102024', { delay: 150, force: true })
-    cy.contains('Plages de dates')
-      .parent()
-      .parent()
-      .find('input')
-      .eq(1)
-      .click({ force: true })
-      .wait(250)
-      .type('31102024', { delay: 500, force: true })
+    cy.fill('Début', [2024, 10, 10])
+    cy.fill('Début', [2024, 10, 31])
+
     cy.contains('Plages de dates').parent().parent().find('a').eq(0).click()
-    cy.contains('Plages de dates')
-      .parent()
-      .parent()
-      .find('input')
-      .eq(2)
-      .click({ force: true })
-      .wait(250)
-      .type('10122024', { delay: 500, force: true })
-    cy.contains('Plages de dates')
-      .parent()
-      .parent()
-      .find('input')
-      .eq(3)
-      .click({ force: true })
-      .wait(250)
-      .type('31122024', { delay: 500, force: true })
+    cy.fill('Début', [2024, 12, 10], { index: 1 })
+    cy.fill('Début', [2024, 12, 31], { index: 1 })
 
     cy.get('[data-cy="weekday-lundi"]').click()
     cy.get('[data-cy="weekday-mercredi"]').click()
@@ -298,10 +270,9 @@ context('BackOffice > Regulation Form > Creation', () => {
     cy.get('[data-cy="validate-button"]').click()
 
     // Then
-
     cy.wait('@postRegulation').then(({ request, response }) => {
       expect(request.body)
-        .contain('<Name>fishing_period</Name>' +
+        .contain('<Name>FishingPeriod</Name>' +
         '<Value>{"dateRanges":[{"endDate":"0002-10-31T00:00:00.000Z","startDate":"0002-10-10T00:00:00.000Z"},' +
         '{"endDate":"0002-12-31T00:00:00.000Z","startDate":"0002-12-10T00:00:00.000Z"}],"dates":[],"timeIntervals":[],' +
         '"weekdays":["lundi","mercredi"],"holidays":true,"authorized":true,"annualRecurrence":true}</Value>')

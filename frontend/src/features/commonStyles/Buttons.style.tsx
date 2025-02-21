@@ -111,8 +111,8 @@ export const SquareButton = styled.a<{
   position: relative;
   box-sizing: border-box;
   cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
-  width: 30px;
-  height: 30px;
+  width: 27px;
+  height: 27px;
   border: 1px solid ${p => p.theme.color.lightGray};
   border-radius: 2px;
   color: ${p => p.theme.color.lightGray};

@@ -419,4 +419,47 @@ class ComputeFleetSegmentsUTests {
         // Then
         assertThat(fleetSegments).hasSize(0)
     }
+
+    @Test
+    fun `execute Should compute Lines When there is no species`() {
+        // Given
+        given(fleetSegmentRepository.findAllByYear(eq(2025))).willReturn(fleetSegmentsForComputation)
+        given(vesselRepository.findVesselById(any())).willReturn(
+            Vessel(
+                id = 1,
+                internalReferenceNumber = "FR00022680",
+                vesselName = "MY AWESOME VESSEL",
+                flagState = CountryCode.FR,
+                declaredFishingGears = listOf("Trémails"),
+                vesselType = "Navire polyvalent",
+                districtCode = "AY",
+                hasLogbookEsacapt = false,
+            ),
+        )
+
+        // When
+        val fleetSegments =
+            ComputeFleetSegments(
+                fleetSegmentRepository,
+                vesselRepository,
+            ).execute(
+                year = 2025,
+                vesselId = 1,
+                speciesCatches =
+                    listOf(
+                        SpeciesCatchForSegmentCalculation(
+                            mesh = 20.0,
+                            weight = 0.0,
+                            gear = "LLS",
+                            species = null,
+                            faoArea = "37.1.1",
+                            scipSpeciesType = null,
+                        ),
+                    ),
+            )
+
+        // Then
+        assertThat(fleetSegments).hasSize(1)
+        assertThat(fleetSegments.first().segmentName).isEqualTo("Lines")
+    }
 }

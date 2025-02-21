@@ -62,13 +62,29 @@ fun getSpeciesCatchesForSegmentCalculation(
     allSpecies: List<Species>,
 ): List<SpeciesCatchForSegmentCalculation> =
     faoAreas.flatMap { faoArea ->
-        gears.flatMap { gear ->
+        // If there is no species, we return all gears
+        if (species.isEmpty()) {
+            return@flatMap gears.map { gear ->
+                val mesh = gear.controlledMesh ?: gear.declaredMesh
+
+                return@map SpeciesCatchForSegmentCalculation(
+                    mesh = mesh,
+                    weight = 0.0,
+                    gear = gear.gearCode,
+                    species = null,
+                    faoArea = faoArea,
+                    scipSpeciesType = null,
+                )
+            }
+        }
+
+        return@flatMap gears.flatMap { gear ->
             species.map { specy ->
                 val scipSpeciesType = allSpecies.find { it.code == specy.speciesCode }?.scipSpeciesType
                 val mesh = gear.controlledMesh ?: gear.declaredMesh
                 val weight = specy.controlledWeight ?: specy.declaredWeight ?: 0.0
 
-                SpeciesCatchForSegmentCalculation(
+                return@map SpeciesCatchForSegmentCalculation(
                     mesh = mesh,
                     weight = weight,
                     gear = gear.gearCode,

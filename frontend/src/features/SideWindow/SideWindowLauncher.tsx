@@ -1,9 +1,8 @@
 import { cleanMissionForm } from '@features/SideWindow/useCases/cleanMissionForm'
-import { useForceUpdate } from '@hooks/useForceUpdate'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { NewWindow } from '@mtes-mct/monitor-ui'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 
 import { SideWindow } from '.'
 import { sideWindowActions } from './slice'
@@ -19,7 +18,6 @@ export function SideWindowLauncher() {
       store.priorNotification.isReportingFormDirty
   )
   const status = useMainAppSelector(store => store.sideWindow.status)
-  const { forceUpdate } = useForceUpdate()
 
   const onChangeFocus = useCallback(
     (isFocused: boolean) => {
@@ -35,10 +33,6 @@ export function SideWindowLauncher() {
     dispatch(resetFocusOnPendingAlert())
     dispatch(cleanMissionForm())
   }
-
-  useEffect(() => {
-    forceUpdate()
-  }, [forceUpdate])
 
   if (status === SideWindowStatus.CLOSED) {
     return null

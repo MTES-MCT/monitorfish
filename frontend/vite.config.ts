@@ -12,7 +12,7 @@ import {visualizer} from "rollup-plugin-visualizer";
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
   build: {
-    minify: false,
+    minify: true,
     outDir: './build',
     sourcemap: true,
     rollupOptions: {
@@ -29,6 +29,7 @@ export default defineConfig({
     target: 'esnext'
   },
   plugins: [
+    react(),
     /**
      * Used to fix https://github.com/MTES-MCT/monitorfish/issues/3211
      * @see https://github.com/bvaughn/react-window/issues/227
@@ -39,7 +40,6 @@ export default defineConfig({
     replace({
       'pointerEvents: isScrolling ? "none" : undefined': 'pointerEvents: null',
     }),
-    react(),
     visualizer({
       emitFile: true,
       filename: "bundle_size.html",

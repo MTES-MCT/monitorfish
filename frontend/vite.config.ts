@@ -12,7 +12,7 @@ import {visualizer} from "rollup-plugin-visualizer";
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
   build: {
-    minify: false,
+    minify: true,
     outDir: './build',
     sourcemap: true,
     rollupOptions: {

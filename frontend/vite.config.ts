@@ -20,23 +20,26 @@ export default defineConfig({
       input: {
         index: './index.html',
       },
-      plugins: [
-        /**
-         * Used to fix https://github.com/MTES-MCT/monitorfish/issues/3211
-         * @see https://github.com/bvaughn/react-window/issues/227
-         */
-        replace({
-          'pointerEvents: isScrolling ? "none" : void 0': 'pointerEvents: null',
-        }),
-        replace({
-          'pointerEvents: isScrolling ? "none" : undefined': 'pointerEvents: null',
-        }),
-      ]
+      output: {
+        manualChunks: {
+          'monitor-ui': ['@mtes-mct/monitor-ui']
+        }
+      },
     },
     target: 'esnext'
   },
   plugins: [
     react(),
+    /**
+     * Used to fix https://github.com/MTES-MCT/monitorfish/issues/3211
+     * @see https://github.com/bvaughn/react-window/issues/227
+     */
+    replace({
+      'pointerEvents: isScrolling ? "none" : void 0': 'pointerEvents: null',
+    }),
+    replace({
+      'pointerEvents: isScrolling ? "none" : undefined': 'pointerEvents: null',
+    }),
     visualizer({
       emitFile: true,
       filename: "bundle_size.html",

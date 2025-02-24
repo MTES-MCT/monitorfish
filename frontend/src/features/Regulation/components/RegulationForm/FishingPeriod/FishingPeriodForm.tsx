@@ -70,7 +70,9 @@ export function FishingPeriodForm({ show }: FishingPeriodFormProps) {
             <DayTimeCheckbox disabled={disabled} timeIsDisabled={timeIsDisabled} />
           </ConditionalLines>
         </DateTime>
-        {fishingPeriodAsString && <PeriodAsString>{fishingPeriodAsString}</PeriodAsString>}
+        {fishingPeriodAsString && (
+          <PeriodAsString data-cy="regulation-backoffice-period-text">{fishingPeriodAsString}</PeriodAsString>
+        )}
       </FormContent>
     </FormSection>
   )

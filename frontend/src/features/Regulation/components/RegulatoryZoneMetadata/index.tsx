@@ -4,7 +4,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTracking } from '@hooks/useTracking'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
-import { useCallback } from 'react'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { FishingPeriodDisplayed } from './fishingPeriod'
@@ -24,11 +24,15 @@ export function RegulatoryZoneMetadata() {
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
   const regulatoryZoneMetadataPanelIsOpen = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
 
-  const onCloseIconClicked = useCallback(() => {
+  const onCloseIconClicked = () => {
     dispatch(closeRegulatoryZoneMetadata())
-  }, [dispatch])
+  }
 
-  trackPage(`/regulation_metadata/${regulatoryZoneMetadata?.topic}/${regulatoryZoneMetadata?.zone}`)
+  useEffect(() => {
+    if (regulatoryZoneMetadataPanelIsOpen) {
+      trackPage(`/regulation_metadata/${regulatoryZoneMetadata?.topic}/${regulatoryZoneMetadata?.zone}`)
+    }
+  }, [trackPage, regulatoryZoneMetadataPanelIsOpen, regulatoryZoneMetadata])
 
   return (
     <Wrapper $regulatoryZoneMetadataPanelIsOpen={!!regulatoryZoneMetadataPanelIsOpen}>

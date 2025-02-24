@@ -3,7 +3,7 @@
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useCallback } from 'react'
 
-import { regulationActions } from '../../features/Regulation/slice'
+import { regulationActions } from '../../../../slice'
 
 export function useSetFishingPeriod(key: string) {
   const dispatch = useBackofficeAppDispatch()

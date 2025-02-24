@@ -64,10 +64,6 @@ export function RegulationRegionLine({ isDisabled }) {
 const StyledMultiSelect = styled(MultiSelect)`
   margin-right: 8px;
   width: 150px;
-
-  .rs-picker-toggle {
-    width: 150px !important;
-  }
 `
 
 const StyledTag = styled(SingleTag)`

@@ -1,7 +1,7 @@
 import { Select } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { convertTimeToString, TIMES_SELECT_PICKER_VALUES } from '../../../../utils'
+import { TIMES_SELECT_PICKER_VALUES } from '../../../../utils'
 
 import type { TimeInterval as TypeIntervalType } from '@features/Regulation/types'
 
@@ -20,15 +20,9 @@ export function TimeInterval({
   timeInterval
 }: TimeIntervalProps) {
   const setTimeInterval = (key: keyof TypeIntervalType, value: string) => {
-    const split = value.split('h')
-    const date = new Date()
-    date.setHours(Number(split[0]))
-    date.setMinutes(Number(split[1]))
-
-    // TODO Refactor this workaround `as` type.
     const newTimeInterval = {
       ...timeInterval,
-      [key]: date.toISOString()
+      [key]: value
     } as TypeIntervalType
 
     onTimeIntervalChange(id, newTimeInterval)
@@ -47,7 +41,7 @@ export function TimeInterval({
         options={TIMES_SELECT_PICKER_VALUES}
         placeholder={'\xa0\xa0\xa0\xa0\xa0:\xa0\xa0\xa0\xa0\xa0'}
         searchable
-        value={convertTimeToString(timeInterval?.from)}
+        value={timeInterval?.from}
       />
       à
       <StyledSelect
@@ -60,7 +54,7 @@ export function TimeInterval({
         options={TIMES_SELECT_PICKER_VALUES}
         placeholder={'\xa0\xa0\xa0\xa0\xa0:\xa0\xa0\xa0\xa0\xa0'}
         searchable
-        value={convertTimeToString(timeInterval?.to)}
+        value={timeInterval?.to}
       />
     </Wrapper>
   )

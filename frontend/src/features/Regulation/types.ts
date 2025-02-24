@@ -51,8 +51,8 @@ export type DateInterval = {
 }
 
 export type TimeInterval = {
-  from: string | undefined
-  to: string | undefined
+  from: string | undefined // i.e '00h00'
+  to: string | undefined // i.e '02h00'
 }
 
 // TODO It would be safer to use strict array types: `DateRange[]` and `DateAsStringRange[]`.

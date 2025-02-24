@@ -563,58 +563,6 @@ export function gearCodeIsFoundInRegulatoryZone(gears: string[], uniqueGearCodes
   return gears.some(gearCodeFromREG => !!uniqueGearCodes.some(foundGearCode => foundGearCode === gearCodeFromREG))
 }
 
-// TODO Refactor that with a clean `toPairs` / `fromPairs` without param reassigning.
-export function orderByAlphabeticalLayer(foundRegulatoryLayers) {
-  if (foundRegulatoryLayers) {
-    Object.keys(foundRegulatoryLayers).forEach(lawType => {
-      Object.keys(foundRegulatoryLayers[lawType]).forEach(topic => {
-        // eslint-disable-next-line no-param-reassign
-        foundRegulatoryLayers[lawType][topic] = foundRegulatoryLayers[lawType][topic].sort((a, b) => {
-          if (a.zone && b.zone) {
-            return a.zone.localeCompare(b.zone)
-          }
-
-          return null
-        })
-      })
-    })
-  }
-}
-
-export function getMergedRegulatoryLayers(previousFoundRegulatoryLayers, nextFoundRegulatoryLayers) {
-  const mergedRegulatoryLayers = {}
-
-  Object.keys(previousFoundRegulatoryLayers).forEach(lawType => {
-    if (previousFoundRegulatoryLayers[lawType]) {
-      Object.keys(previousFoundRegulatoryLayers[lawType]).forEach(regulatoryTopic => {
-        previousFoundRegulatoryLayers[lawType][regulatoryTopic].forEach(zone => {
-          if (
-            nextFoundRegulatoryLayers &&
-            nextFoundRegulatoryLayers[lawType] &&
-            nextFoundRegulatoryLayers[lawType][regulatoryTopic] &&
-            nextFoundRegulatoryLayers[lawType][regulatoryTopic].length &&
-            nextFoundRegulatoryLayers[lawType][regulatoryTopic].some(
-              searchZone => searchZone.topic === zone.topic && searchZone.zone === zone.zone
-            )
-          ) {
-            if (mergedRegulatoryLayers[lawType] && mergedRegulatoryLayers[lawType][regulatoryTopic]) {
-              mergedRegulatoryLayers[lawType][regulatoryTopic] =
-                mergedRegulatoryLayers[lawType][regulatoryTopic].concat(zone)
-            } else {
-              if (!mergedRegulatoryLayers[lawType]) {
-                mergedRegulatoryLayers[lawType] = {}
-              }
-              mergedRegulatoryLayers[lawType][regulatoryTopic] = [].concat(zone)
-            }
-          }
-        })
-      })
-    }
-  })
-
-  return mergedRegulatoryLayers
-}
-
 /**
  * Remove the Territory part of the regulatory layer object (see `setRegulatoryLayers` method within the `Regulatory` reducer)
  */
@@ -691,25 +639,6 @@ const getHoursValues = () => {
 export const TIMES_SELECT_PICKER_VALUES = getHoursValues()
 
 /**
- * timeToString
- * Convert date time to string
- * 0 is added in front of number lesser than 10
- * @param {string} dateString
- * @returns {string} date as string
- */
-export const convertTimeToString = dateString => {
-  if (dateString) {
-    const date = new Date(dateString)
-    const minutes = date.getMinutes()
-    const hours = date.getHours()
-
-    return `${hours < 10 ? `0${hours}` : hours}h${minutes === 0 ? `${minutes}0` : minutes}`
-  }
-
-  return undefined
-}
-
-/**
  * fishingPeriodToString
  * Convert a fishing period object to a sentence understandable by a human
  * @param {FishingPeriod} fishingPeriod
@@ -780,7 +709,7 @@ export const fishingPeriodToString = (fishingPeriod): string | undefined => {
       timeIntervals
         .map(({ from, to }) => {
           if (from && to) {
-            return `de ${convertTimeToString(from)} à ${convertTimeToString(to)}`
+            return `de ${from} à ${to}`
           }
 
           return undefined
@@ -800,31 +729,6 @@ export const fishingPeriodToString = (fishingPeriod): string | undefined => {
   }
 
   return undefined
-}
-
-/**
- * sortLayersTopicsByRegTerritory
- * Sort the layer topics group by regulatory territory
- * respecting a particular order.
- * @param {Map<string, RegulatoryTopics} layersTopicsByRegTerritory
- * @returns {Map<string, RegulatoryTopics}
- */
-export const sortLayersTopicsByRegTerritory = layersTopicsByRegTerritory => {
-  const UEObject = { ...layersTopicsByRegTerritory[UE] }
-
-  const FRObject = { ...layersTopicsByRegTerritory[FRANCE] }
-  const newFRObject = {
-    [REG_MED]: FRObject[REG_MED],
-    [REG_MEMN]: FRObject[REG_MEMN],
-    [REG_NAMO]: FRObject[REG_NAMO],
-    [REG_OUTRE_MER]: FRObject[REG_OUTRE_MER],
-    [REG_SA]: FRObject[REG_SA]
-  }
-
-  return {
-    [FRANCE]: newFRObject,
-    [UE]: UEObject.sort()
-  }
 }
 
 export const getTitle = regulatory => (regulatory ? regulatory.zone : '')

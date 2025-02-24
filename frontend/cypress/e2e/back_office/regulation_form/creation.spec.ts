@@ -266,16 +266,22 @@ context('BackOffice > Regulation Form > Creation', () => {
     cy.get('[data-cy="weekday-mercredi"]').click()
     cy.get('[data-cy="holidays-checkbox"]').click()
 
+    cy.fill('De', '01h00')
+    cy.fill('à', '05h00')
+    cy.get('[data-cy="regulation-backoffice-period-text"]').contains('Pêche autorisée tous les ans du 10 octobre au 31 ' +
+      'octobre et du 10 décembre au 31 décembre, les lundi et mercredi, les jours fériés, de 01h00 à 05h00')
+
     // When
     cy.get('[data-cy="validate-button"]').click()
 
     // Then
     cy.wait('@postRegulation').then(({ request, response }) => {
       expect(request.body)
-        .contain('<Name>FishingPeriod</Name>' +
-        '<Value>{"dateRanges":[{"endDate":"0002-10-31T00:00:00.000Z","startDate":"0002-10-10T00:00:00.000Z"},' +
-        '{"endDate":"0002-12-31T00:00:00.000Z","startDate":"0002-12-10T00:00:00.000Z"}],"dates":[],"timeIntervals":[],' +
-        '"weekdays":["lundi","mercredi"],"holidays":true,"authorized":true,"annualRecurrence":true}</Value>')
+        .contain('<Name>fishing_period</Name>' +
+          '<Value>{"dateRanges":[{"endDate":"2024-10-31T00:00:00.000Z","startDate":"2024-10-10T00:00:00.000Z"},' +
+          '{"endDate":"2024-12-31T00:00:00.000Z","startDate":"2024-12-10T00:00:00.000Z"}],"dates":[],' +
+          '"timeIntervals":[{"from":"01h00","to":"05h00"}],"weekdays":["lundi","mercredi"],"authorized":true,' +
+          '"annualRecurrence":true,"holidays":true}</Value>')
 
       expect(response && response.statusCode).equal(200)
     })

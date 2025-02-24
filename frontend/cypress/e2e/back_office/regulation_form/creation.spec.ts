@@ -256,11 +256,11 @@ context('BackOffice > Regulation Form > Creation', () => {
     cy.get('[name="fishing_period_annual_recurrence"]').eq(0).click()
 
     cy.fill('Début', [2024, 10, 10])
-    cy.fill('Début', [2024, 10, 31])
+    cy.fill('Fin', [2024, 10, 31])
 
     cy.contains('Plages de dates').parent().parent().find('a').eq(0).click()
     cy.fill('Début', [2024, 12, 10], { index: 1 })
-    cy.fill('Début', [2024, 12, 31], { index: 1 })
+    cy.fill('Fin', [2024, 12, 31], { index: 1 })
 
     cy.get('[data-cy="weekday-lundi"]').click()
     cy.get('[data-cy="weekday-mercredi"]').click()

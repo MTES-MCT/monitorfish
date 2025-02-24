@@ -7,7 +7,7 @@ import { useSetFishingPeriod } from './useSetFishingPeriod'
 import type { DateInterval, TimeInterval } from '@features/Regulation/types'
 import type { FishingPeriodKey } from '@features/Regulation/utils'
 
-export function useUpdateArrayInFishingPeriod<T extends Date | DateInterval | TimeInterval>(
+export function useUpdateArrayInFishingPeriod<T extends string | DateInterval | TimeInterval>(
   key: FishingPeriodKey,
   dates: T[] | undefined
 ): (id: number, nextDate: T | undefined) => void {

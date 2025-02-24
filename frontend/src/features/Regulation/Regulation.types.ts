@@ -12,7 +12,7 @@ export namespace Regulation {
    *      bycatch: undefined,
    *      closingDate: undefined,
    *      deposit: undefined,
-   *      fishingPeriod: Object { authorized: undefined, annualRecurrence: undefined, dateRanges: [], … },
+   *      hooks: Object { authorized: undefined, annualRecurrence: undefined, dateRanges: [], … },
    *      gears: 'DHB, DRH, DHS',
    *      geometry: null,
    *      id: 3012,

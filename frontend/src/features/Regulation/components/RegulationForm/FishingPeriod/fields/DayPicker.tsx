@@ -1,36 +1,28 @@
-import { useSetFishingPeriod } from '@hooks/fishingPeriod/useSetFishingPeriod'
+import { regulationActions } from '@features/Regulation/slice'
+import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
-import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 
-import { FishingPeriodKey, WEEKDAYS } from '../../../utils'
+import { FishingPeriodKey, WEEKDAYS } from '../../../../utils'
 
 type DayPickerProps = Readonly<{
   disabled: boolean
 }>
 export function DayPicker({ disabled }: DayPickerProps) {
-  const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
-  const setWeekdays = useSetFishingPeriod(FishingPeriodKey.WEEKDAYS)
+  const dispatch = useBackofficeAppDispatch()
+  const fishingPeriod = useBackofficeAppSelector(state => state.regulation.processingRegulation.fishingPeriod)
 
-  const toggle = useCallback(
-    (weekdayKey: string) => {
-      let newSelectedList: string[]
+  const toggle = (weekdayKey: string) => {
+    let newSelectedList: string[]
 
-      if (processingRegulation.fishingPeriod?.weekdays?.includes(weekdayKey)) {
-        newSelectedList = processingRegulation.fishingPeriod?.weekdays.filter(elem => elem !== weekdayKey)
-      } else {
-        newSelectedList = [...(processingRegulation.fishingPeriod?.weekdays ?? []), weekdayKey]
-      }
-      setWeekdays(newSelectedList)
-    },
-    [processingRegulation.fishingPeriod?.weekdays, setWeekdays]
-  )
-
-  useEffect(() => {
-    if (disabled) {
-      setWeekdays([])
+    if (fishingPeriod?.weekdays?.includes(weekdayKey)) {
+      newSelectedList = fishingPeriod?.weekdays.filter(elem => elem !== weekdayKey)
+    } else {
+      newSelectedList = [...(fishingPeriod?.weekdays ?? []), weekdayKey]
     }
-  }, [disabled, setWeekdays])
+
+    dispatch(regulationActions.setFishingPeriod({ key: FishingPeriodKey.WEEKDAYS, value: newSelectedList }))
+  }
 
   return (
     <>
@@ -38,7 +30,7 @@ export function DayPicker({ disabled }: DayPickerProps) {
         <Circle
           key={weekdayKey}
           $disabled={disabled}
-          $isGray={processingRegulation.fishingPeriod.weekdays.includes(weekdayKey)}
+          $isGray={fishingPeriod.weekdays.includes(weekdayKey)}
           data-cy={`weekday-${weekdayKey}`}
           onClick={() => toggle(weekdayKey)}
         >
@@ -54,8 +46,8 @@ const Circle = styled.a<{
   $isGray: boolean
 }>`
   display: inline-block;
-  height: 30px;
-  width: 30px;
+  height: 27px;
+  width: 27px;
   border-radius: 50%;
   font-size: 13px;
   border: 1px solid ${p => p.theme.color.lightGray};

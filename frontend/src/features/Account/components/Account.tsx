@@ -44,7 +44,7 @@ export function Account() {
       )}
       <MapToolButton
         Icon={Icon.Account}
-        isActive={rightMapBoxOpened === MapBox.ACCOUNT}
+        isActive={isOpened}
         onClick={openOrClose}
         style={{ top: MARGIN_TOP }}
         title="Mon compte"

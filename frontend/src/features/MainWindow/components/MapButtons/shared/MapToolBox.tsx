@@ -19,10 +19,10 @@ export const MapToolBox = styled(MapComponent)<{
   opacity: ${p => (p.$isOpen ? '1' : '0')};
   ${p => {
     if (p.$isLeftBox) {
-      return 'left: 10px;'
+      return 'left: 12px;'
     }
 
-    return 'right: 10px;'
+    return 'right: 12px;'
   }}
   border-radius: 2px;
   position: absolute;

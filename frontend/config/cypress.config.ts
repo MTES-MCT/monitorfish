@@ -11,6 +11,14 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       initCypressMousePositionPlugin(on)
       initPlugin(on, config)
+      on('before:browser:launch', (browser, launchOptions) => {
+        if (browser.family === 'firefox') {
+          // Used to activate crypto.subtle
+          launchOptions.preferences['network.proxy.testing_localhost_is_secure_when_hijacked'] = true
+        }
+
+        return launchOptions
+      })
     },
     specPattern: 'cypress/e2e/**/*.spec.ts'
   },

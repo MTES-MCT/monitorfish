@@ -59,7 +59,7 @@ export function NewFeature({ date, feature, isDateDisplayed, isFirstItem }: NewF
   }
 
   return (
-    <Wrapper key={feature.title + feature.title}>
+    <Wrapper data-cy={feature.title}>
       <DateSeparator $isFirst={isFirstItem}>
         <Line />
         {isDateDisplayed && <Date>{date}</Date>}

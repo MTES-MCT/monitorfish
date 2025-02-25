@@ -1,10 +1,10 @@
-import { openVesselBySearch } from './main_window/utils'
+import { openVesselBySearch } from './utils'
 
 context('Map menu tools', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(1000)
+    cy.wait(2000)
   })
 
   it('Opening a tool should close the previous tool opened and open the selected tool', () => {

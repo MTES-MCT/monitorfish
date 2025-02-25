@@ -22,7 +22,7 @@ export function MeasurementMapButton() {
     rightMapBoxOpened === MapBox.MEASUREMENT_MENU
   )
   const { isOpened: isMeasurementToolOpen, isRendered: isMeasurementToolRendered } = useDisplayMapBox(
-    rightMapBoxOpened === MapBox.MEASUREMENT
+    rightMapBoxOpened === MapBox.MEASUREMENT && measurementTypeToAdd === MeasurementType.CIRCLE_RANGE
   )
 
   const wrapperRef = useRef(null)
@@ -36,14 +36,14 @@ export function MeasurementMapButton() {
   })
 
   useEffect(() => {
-    if (!isMeasurementMenuOpen && !isMeasurementToolOpen) {
+    if (!isMeasurementToolRendered && !isMeasurementMenuRendered) {
       dispatch(setMeasurementTypeToAdd(null))
     }
-  }, [dispatch, isMeasurementMenuOpen, isMeasurementToolOpen])
+  }, [dispatch, isMeasurementToolRendered, isMeasurementMenuRendered])
 
   const makeMeasurement = nextMeasurementTypeToAdd => {
-    dispatch(setMeasurementTypeToAdd(nextMeasurementTypeToAdd))
     dispatch(setRightMapBoxOpened(MapBox.MEASUREMENT))
+    dispatch(setMeasurementTypeToAdd(nextMeasurementTypeToAdd))
   }
 
   const measurementIcon = (function () {
@@ -98,7 +98,7 @@ export function MeasurementMapButton() {
           </MeasurementItem>
         </MeasurementOptions>
       )}
-      {isMeasurementToolRendered && <CustomCircleRange />}
+      {isMeasurementToolRendered && <CustomCircleRange isOpened={isMeasurementToolOpen} />}
     </Wrapper>
   )
 }

@@ -145,7 +145,7 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="interest-point-observations-input"]').should('have.value', '')
   })
 
-  it.only('An interest in drawing mode Should be stopped When closing the interest point tool', () => {
+  it('An interest in drawing mode Should be stopped When closing the interest point tool', () => {
     // When
     cy.clickButton('Créer un point d\'intérêt')
     cy.wait(100)

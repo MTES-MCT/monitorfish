@@ -62,7 +62,7 @@ export function NewFeature({ date, feature, isDateDisplayed, isFirstItem }: NewF
     <Wrapper data-cy={feature.title}>
       <DateSeparator $isFirst={isFirstItem}>
         <Line />
-        {isDateDisplayed && <Date>{date}</Date>}
+        {isDateDisplayed && <MonthAndYear>{date}</MonthAndYear>}
       </DateSeparator>
       <Content onClick={toggleOpen}>
         <VerticalBar $isChecked={isChecked} />
@@ -150,7 +150,7 @@ const DateSeparator = styled.div<{
   z-index: 999;
 `
 
-const Date = styled.div`
+const MonthAndYear = styled.div`
   background-color: ${p => p.theme.color.white};
   color: ${p => p.theme.color.slateGray};
   width: 96px;

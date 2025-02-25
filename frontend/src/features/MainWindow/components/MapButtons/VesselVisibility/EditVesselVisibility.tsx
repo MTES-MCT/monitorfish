@@ -1,4 +1,3 @@
-import { MapBox } from '@features/Map/constants'
 import { TrackDepthSelection } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/TrackDepthSelection'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -19,17 +18,15 @@ import {
 } from '../../../../Map/slice'
 import { setHideNonSelectedVessels } from '../../../../Vessel/slice'
 import { MapToolBox } from '../shared/MapToolBox'
-import { Header, Content } from '../shared/styles'
+import { Content, Header } from '../shared/styles'
 
-export function EditVesselVisibility() {
+export function EditVesselVisibility({ isOpened }) {
   const dispatch = useMainAppDispatch()
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
-  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
   const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
   const defaultVesselTrackDepth = useMainAppSelector(state => state.map.defaultVesselTrackDepth)
   const showingVesselsEstimatedPositions = useMainAppSelector(state => state.map.showingVesselsEstimatedPositions)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
-  const isOpen = rightMapBoxOpened === MapBox.VESSEL_VISIBILITY
 
   const updateVesselsLastPositionVisibility = (hidden, opacityReduced) => {
     dispatch(
@@ -41,7 +38,7 @@ export function EditVesselVisibility() {
   }
 
   return (
-    <Wrapper $isOpen={isOpen}>
+    <Wrapper $isOpen={isOpened}>
       <Header $isFirst>Gérer l&apos;affichage des dernières positions</Header>
       <Content>
         <LastPositionInfo>
@@ -138,10 +135,7 @@ const LastPositionInfo = styled.div`
   margin: 16px;
 `
 
-const Wrapper = styled(MapToolBox)<{
-  $isHidden?: boolean
-  $isOpen: boolean
-}>`
+const Wrapper = styled(MapToolBox)`
   top: 172px;
   width: 406px;
 `

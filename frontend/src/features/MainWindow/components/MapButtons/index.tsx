@@ -1,15 +1,16 @@
 import { Account } from '@features/Account/components/Account'
 import { ControlUnitListMapButton } from '@features/ControlUnit/components/ControlUnitListMapButton'
+import { NewFeatures } from '@features/NewFeatures/components/NewFeatures'
 import { VesselFiltersMapButton } from '@features/VesselFilter/components/VesselFilters'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
-import { FavoriteVessels } from './FavoriteVessels'
 import { VesselLabelsMapButton } from './VesselLabels'
 import { VesselVisibilityMapButton } from './VesselVisibility'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { AlertsMapButton } from '../../../Alert/components/AlertsMapButton'
 import { BeaconMalfunctionsMapButton } from '../../../BeaconMalfunction/components/BeaconMalfunctionsMapButton'
+import { FavoriteVessels } from '../../../FavoriteVessel/components/FavoriteVessels'
 import { InterestPointMapButton } from '../../../InterestPoint/components/InterestPointMapButton'
 import { MeasurementMapButton } from '../../../Measurement/components/MeasurementMapButton'
 import { MissionsMapMenu } from '../../../Mission/components/MissionsMapMenu'
@@ -18,6 +19,9 @@ import { PriorNotificationListButton } from '../../../PriorNotification/componen
 export function MapButtons() {
   const isSuperUser = useIsSuperUser()
   const isAlertsMapButtonDisplayed = useMainAppSelector(state => state.displayedComponent.isAlertsMapButtonDisplayed)
+  const isNewFeaturesMapButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isNewFeaturesMapButtonDisplayed
+  )
   const isAccountMapButtonDisplayed = useMainAppSelector(state => state.displayedComponent.isAccountMapButtonDisplayed)
   const isPriorNotificationMapButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isPriorNotificationMapButtonDisplayed
@@ -63,6 +67,7 @@ export function MapButtons() {
         {isInterestPointMapButtonDisplayed && <InterestPointMapButton />}
         {isVesselLabelsMapButtonDisplayed && <VesselLabelsMapButton />}
         {isAccountMapButtonDisplayed && <Account />}
+        {isNewFeaturesMapButtonDisplayed && <NewFeatures />}
       </LegacyRsuiteComponentsWrapper>
 
       {isSuperUser && isControlUnitListMapButtonDisplayed && <ControlUnitListMapButton />}

@@ -7,7 +7,7 @@ context('InterestPoint', () => {
 
   it('An interest point Should be created When clicking on the map', () => {
     // When
-    cy.clickButton('Créer un point d\'intérêt')
+    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
     cy.get('#root').click(490, 580, { timeout: 10000 })
 
     // Then
@@ -26,7 +26,7 @@ context('InterestPoint', () => {
 
   it('Multiple interest points Should be created When clicking on the map', () => {
     // When
-    cy.clickButton('Créer un point d\'intérêt')
+    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
     cy.get('#root').click(490, 580, { timeout: 10000 })
     cy.get('*[data-cy="interest-point-name-input"]').type('Phénomène')
     cy.get('*[data-cy="interest-point-observations-input"]').type('Est dans la bergerie')
@@ -36,7 +36,7 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="interest-point-observations"]').should('have.length', 1)
     cy.wait(300)
 
-    cy.clickButton('Créer un point d\'intérêt')
+    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
     cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 })
       .should('have.value', '__° __′ __″ _ ___° __′ __″ _')
     cy.get('#root').click(300, 430, { timeout: 10000 })
@@ -48,7 +48,7 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="interest-point-observations"]').contains('Est encore dans la bergerie', { timeout: 10000 })
     cy.wait(300)
 
-    cy.clickButton('Créer un point d\'intérêt')
+    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
     cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 })
       .should('have.value', '__° __′ __″ _ ___° __′ __″ _')
     cy.get('#root').click(650, 690, { timeout: 10000 })
@@ -66,7 +66,7 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="coordinates-selection"]').click({ force: true, timeout: 10000 })
     cy.get('#root').click(159, 1000, { timeout: 10000 })
     cy.get('*[data-cy="coordinates-selection-dd"]').click({ timeout: 10000 })
-    cy.clickButton('Créer un point d\'intérêt')
+    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
 
     // Then
     cy.get('*[data-cy^="coordinates-dd-input-lat"]').type('47.5525')
@@ -84,7 +84,7 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="coordinates-selection"]').click({ force: true, timeout: 10000 })
     cy.get('#root').click(159, 1000, { timeout: 10000 })
     cy.get('*[data-cy="coordinates-selection-dmd"]').click({ timeout: 10000 })
-    cy.clickButton('Créer un point d\'intérêt')
+    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
     cy.get('#root').click(490, 580, { timeout: 10000 })
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
     cy.wait(300)
@@ -102,7 +102,7 @@ context('InterestPoint', () => {
     // When
     cy.get('*[data-cy="coordinates-selection"]').click({ force: true, timeout: 10000 })
     cy.get('#root').click(159, 1000, { timeout: 10000 })
-    cy.clickButton('Créer un point d\'intérêt')
+    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
     cy.get('#root').click(490, 580, { timeout: 10000 })
     cy.fill('Type de point', 'Autre point')
 
@@ -133,7 +133,7 @@ context('InterestPoint', () => {
 
   it('An interest Should be deleted When it is in edit mode', () => {
     // When
-    cy.clickButton('Créer un point d\'intérêt')
+    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
     cy.get('#root').click(490, 580, { timeout: 10000 })
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
     cy.wait(300)
@@ -147,7 +147,7 @@ context('InterestPoint', () => {
 
   it('An interest in drawing mode Should be stopped When closing the interest point tool', () => {
     // When
-    cy.clickButton('Créer un point d\'intérêt')
+    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
     cy.wait(100)
     cy.get('body').type('{esc}')
     cy.wait(200)

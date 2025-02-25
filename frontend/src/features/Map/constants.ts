@@ -54,16 +54,6 @@ export enum OpenLayersGeometryType {
   POLYGON = 'Polygon'
 }
 
-export const InteractionListenerToOLGeometryType: Record<InteractionListener, OpenLayersGeometryType | undefined> = {
-  [InteractionListener.CONTROL_POINT]: undefined,
-  [InteractionListener.INTEREST_POINT]: undefined,
-  [InteractionListener.MEASUREMENT]: undefined,
-  [InteractionListener.REGULATION]: undefined,
-  [InteractionListener.SURVEILLANCE_ZONE]: undefined,
-  [InteractionListener.VESSELS_LIST]: undefined,
-  [InteractionListener.MISSION_ZONE]: OpenLayersGeometryType.MULTIPOLYGON
-}
-
 export const layersGroups: Record<string, MonitorFishMap.CodeAndName> = {
   NAVIGATION_CATEGORY: {
     code: 'navigation_category',

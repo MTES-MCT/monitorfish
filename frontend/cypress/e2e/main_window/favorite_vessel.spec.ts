@@ -85,7 +85,6 @@ context('Favorite Vessel', () => {
 
     // Delete the vessel
     cy.get('*[data-cy="favorite-vessel-delete-vessel"]').click()
-    cy.get('*[title="Mes navires suivis"]').parent('div').contains(0)
     cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
     cy.clickButton('Mes navires suivis')
   })

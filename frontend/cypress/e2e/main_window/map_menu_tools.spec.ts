@@ -15,34 +15,43 @@ context('Map menu tools', () => {
 
     // Measurement
     cy.get('*[data-cy="measurement"]').should('have.css', 'width', '5px')
-    cy.get('*[data-cy="measurement"]').click({ timeout: 10000 })
+    cy.clickButton("Mesurer une distance")
     cy.get('*[data-cy="measurement"]').should('have.css', 'width', '40px')
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-radius-input"]').should('be.visible')
 
     // Interest point
-    cy.get('*[data-cy="interest-point"]').click({ timeout: 10000 })
-    cy.get('*[data-cy="measurement-circle-radius-input"]').should('not.be.visible')
+    cy.clickButton("Créer un point d'intérêt")
+    cy.get('*[data-cy="measurement-circle-radius-input"]').should('not.exist')
     cy.get('*[data-cy="interest-point-name-input"]').should('be.visible')
 
     // Vessel label
-    cy.get('*[data-cy="vessel-labels"]').click({ timeout: 10000 })
-    cy.get('*[data-cy="interest-point-name-input"]').should('not.be.visible')
+    cy.clickButton('Affichage des labels')
+    cy.get('*[data-cy="interest-point-name-input"]').should('not.exist')
     cy.get('*[data-cy="map-property-trigger"]', { timeout: 10000 })
       .filter(':contains("étiquettes des navires")')
       .should('be.visible')
 
     // Vessel visibility
-    cy.get('*[data-cy="vessel-visibility"]').click({ timeout: 10000 })
+    cy.clickButton('Affichage des dernières positions')
     cy.get('*[data-cy="map-property-trigger"]', { timeout: 10000 })
       .filter(':contains("étiquettes des navires")')
-      .should('not.be.visible')
+      .should('not.exist')
     cy.get('body').contains('Afficher depuis').should('be.visible')
 
     // Vessel filters
-    cy.get('*[data-cy="vessel-filters"]').click({ timeout: 10000 })
-    cy.get('body').contains('Afficher depuis').should('not.be.visible')
+    cy.clickButton('Mes filtres')
+    cy.get('body').contains('Afficher depuis').should('not.exist')
     cy.get('*[data-cy="vessel-filters-create-new-filter"]').should('be.visible')
+
+    // Account
+    cy.clickButton('Mon compte')
+    cy.get('*[data-cy="vessel-filters-create-new-filter"]').should('not.exist')
+    cy.get('*[data-cy="map-account-box"]').should('be.visible')
+
+    // Account
+    cy.clickButton("Nouveautés MonitorFish")
+    cy.get('*[data-cy="map-account-box"]').should('not.exist')
 
     // Press on ESC should close the tool and shrink the menu
     cy.get('*[data-cy="vessel-filters"]').should('have.css', 'width', '40px')

@@ -1,6 +1,6 @@
-import { defineConfig } from 'cypress'
+import {defineConfig} from 'cypress'
 import initCypressMousePositionPlugin from 'cypress-mouse-position/plugin'
-import { initPlugin } from 'cypress-plugin-snapshots/plugin'
+import {initPlugin} from 'cypress-plugin-snapshots/plugin'
 
 const IS_CI = Boolean(process.env.CI)
 
@@ -11,14 +11,6 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       initCypressMousePositionPlugin(on)
       initPlugin(on, config)
-      on('before:browser:launch', (browser, launchOptions) => {
-        if (browser.family === 'firefox') {
-          // Used to activate crypto.subtle
-          launchOptions.preferences['network.proxy.testing_localhost_is_secure_when_hijacked'] = true
-        }
-
-        return launchOptions
-      })
     },
     specPattern: 'cypress/e2e/**/*.spec.ts'
   },

@@ -126,12 +126,6 @@ context('Vessels Track', () => {
     cy.get('body').type('+', { force: true }) // Because of the throttle, we zoom to refresh labels
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 1)
 
-    cy.log('Hide other vessels')
-    cy.clickButton('Affichage des dernières positions')
-    cy.get('*[data-cy^="map-property-trigger"]')
-      .filter(':contains("les navires non sélectionnés")')
-      .click()
-    cy.wait(200)
     cy.get('body').type('-', { force: true }) // Because of the throttle, we de-zoom to refresh labels
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 1)
 

@@ -2,7 +2,32 @@ context('Main Window > New features', () => {
   beforeEach(() => {
     cy.viewport(1920, 1080)
     cy.login('superuser')
-    cy.visit(`/`)
+    cy.visit(`/`, {
+      onBeforeLoad(window) {
+        if (!window.crypto) {
+          cy.stub(window, 'crypto').value({})
+        }
+
+        Object.defineProperty(window.crypto, 'subtle', {
+          value: { digest: () => {} },
+          configurable: true,
+        });
+
+        // Dummy hash function instead of sha256
+        cy.stub(window.crypto.subtle, 'digest').callsFake(async (_, data) => {
+          // Simple hash: XOR all bytes and repeat to 32-byte buffer
+          const input = new Uint8Array(data);
+          let hashValue = 0;
+
+          for (let byte of input) {
+            hashValue = (hashValue ^ byte) & 0xff; // XOR reduction
+          }
+
+          // Create a 32-byte fake hash with repeated XOR result
+          return new Uint8Array(32).fill(hashValue).buffer;
+        });
+      }
+    })
     cy.wait(5000)
   })
 

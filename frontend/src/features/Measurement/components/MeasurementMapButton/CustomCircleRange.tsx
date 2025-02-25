@@ -18,7 +18,7 @@ import {
 
 import type { Coordinates } from '@mtes-mct/monitor-ui'
 
-export function CustomCircleRange() {
+export function CustomCircleRange({ isOpened }) {
   const dispatch = useMainAppDispatch()
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const circleMeasurementInDrawing = useMainAppSelector(state => state.measurement.circleMeasurementInDrawing)
@@ -91,14 +91,14 @@ export function CustomCircleRange() {
     [dispatch]
   )
 
-  const cancelAddCircleRange = useCallback(() => {
+  const cancelAddCircleRange = () => {
     dispatch(setMeasurementTypeToAdd(null))
     dispatch(resetCircleMeasurementInDrawing())
     dispatch(setRightMapBoxOpened(undefined))
-  }, [dispatch])
+  }
 
   return (
-    <Wrapper $isOpen={measurementTypeToAdd === MeasurementType.CIRCLE_RANGE}>
+    <Wrapper $isOpen={isOpened}>
       <Header>Définir une valeur</Header>
       <Body>
         <p>Coordonnées</p>
@@ -201,6 +201,6 @@ const Header = styled.div`
 `
 
 const Wrapper = styled(MapToolBox)`
-  top: 291px;
+  top: 316px;
   width: 306px;
 `

@@ -21,6 +21,7 @@ export type DisplayedComponentState = {
   isMeasurementMapButtonDisplayed: boolean
   isMissionsLayerDisplayed: boolean
   isMissionsMapButtonDisplayed: boolean
+  isNewFeaturesMapButtonDisplayed: boolean
   isPriorNotificationMapButtonDisplayed: boolean
   isStationLayerDisplayed: boolean
   isVesselFiltersMapButtonDisplayed: boolean
@@ -48,6 +49,7 @@ const INITIAL_STATE: DisplayedComponentState = {
     'isMissionsLayerDisplayed'
   ),
   isMissionsMapButtonDisplayed: true,
+  isNewFeaturesMapButtonDisplayed: true,
   isPriorNotificationMapButtonDisplayed: true,
   isStationLayerDisplayed: false,
   isVesselFiltersMapButtonDisplayed: true,

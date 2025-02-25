@@ -1,6 +1,6 @@
-import { defineConfig } from 'cypress'
+import {defineConfig} from 'cypress'
 import initCypressMousePositionPlugin from 'cypress-mouse-position/plugin'
-import { initPlugin } from 'cypress-plugin-snapshots/plugin'
+import {initPlugin} from 'cypress-plugin-snapshots/plugin'
 
 const IS_CI = Boolean(process.env.CI)
 

@@ -1,9 +1,10 @@
 import { MapToolBox } from '@features/MainWindow/components/MapButtons/shared/MapToolBox'
 import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
 import { MapBox } from '@features/Map/constants'
+import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, Icon, MapMenuDialog, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
 import { useContext } from 'react'
 import styled from 'styled-components'
 
@@ -16,6 +17,7 @@ export function Account() {
   const dispatch = useMainAppDispatch()
   const userAccount = useContext(UserAccountContext)
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
+  const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.ACCOUNT)
 
   const openOrClose = () => {
     dispatch(setRightMapBoxOpened(rightMapBoxOpened === MapBox.ACCOUNT ? undefined : MapBox.ACCOUNT))
@@ -23,26 +25,28 @@ export function Account() {
 
   return (
     <Wrapper>
-      <MissionMenuBox $isOpen={rightMapBoxOpened === MapBox.ACCOUNT} data-cy="map-account-box">
-        <StyledContainer>
-          <MapMenuDialog.Header>
-            <MapMenuDialog.Title>Déconnexion</MapMenuDialog.Title>
-          </MapMenuDialog.Header>
-          <MapMenuDialog.Body>{userAccount.email ?? 'Vous n’êtes pas connecté avec Cerbère'}</MapMenuDialog.Body>
-          {userAccount.email && (
-            <MapMenuDialog.Footer>
-              <Button accent={Accent.SECONDARY} Icon={Icon.Logout} isFullWidth onClick={userAccount.logout}>
-                Se déconnecter
-              </Button>
-            </MapMenuDialog.Footer>
-          )}
-        </StyledContainer>
-      </MissionMenuBox>
+      {isRendered && (
+        <MapMenuDialogWrapper $hideBoxShadow $isOpen={isOpened} data-cy="map-account-box">
+          <StyledContainer>
+            <MapMenuDialog.Header>
+              <MapMenuDialog.Title>Déconnexion</MapMenuDialog.Title>
+            </MapMenuDialog.Header>
+            <MapMenuDialog.Body>{userAccount.email ?? 'Vous n’êtes pas connecté avec Cerbère'}</MapMenuDialog.Body>
+            {userAccount.email && (
+              <MapMenuDialog.Footer>
+                <Button accent={Accent.SECONDARY} Icon={Icon.Logout} isFullWidth onClick={userAccount.logout}>
+                  Se déconnecter
+                </Button>
+              </MapMenuDialog.Footer>
+            )}
+          </StyledContainer>
+        </MapMenuDialogWrapper>
+      )}
       <MapToolButton
         Icon={Icon.Account}
-        isActive={rightMapBoxOpened === MapBox.ACCOUNT}
+        isActive={isOpened}
         onClick={openOrClose}
-        style={{ color: THEME.color.gainsboro, cursor: 'pointer', top: MARGIN_TOP }}
+        style={{ top: MARGIN_TOP }}
         title="Mon compte"
       />
     </Wrapper>
@@ -63,6 +67,6 @@ const Wrapper = styled.div`
   }
 `
 
-const MissionMenuBox = styled(MapToolBox)`
+const MapMenuDialogWrapper = styled(MapToolBox)`
   top: ${MARGIN_TOP}px;
 `

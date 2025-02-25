@@ -13,13 +13,13 @@ export function redirectToLoginIfUnauthorized(error: CustomResponseError) {
     return
   }
 
-  trackEvent({
-    action: 'LOGIN',
-    category: 'REDIRECTION',
-    name: 'Après une erreur API 401'
-  })
-
   if (!window.location.pathname.includes(ROUTER_PATHS.login)) {
+    trackEvent({
+      action: 'LOGIN',
+      category: 'REDIRECTION',
+      name: 'Après une erreur API 401'
+    })
+
     // We don't use `router.navigate()` to avoid circular dependency issues
     window.location.href = ROUTER_PATHS.login
   }

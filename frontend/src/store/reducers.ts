@@ -4,6 +4,7 @@ import { controlUnitDialogReducer } from '@features/ControlUnit/components/Contr
 import { controlUnitListDialogPersistedReducer } from '@features/ControlUnit/components/ControlUnitListDialog/slice'
 import { customZoneReducer, type CustomZoneState } from '@features/CustomZone/slice'
 import { drawReducer } from '@features/Draw/slice'
+import { favoriteVesselReducer } from '@features/FavoriteVessel/slice'
 import { interestPointReducer } from '@features/InterestPoint/slice'
 import { logbookReducer } from '@features/Logbook/slice'
 import { mainWindowReducer } from '@features/MainWindow/slice'
@@ -13,6 +14,7 @@ import { mapReducer } from '@features/Map/slice'
 import { measurementReducer, type MeasurementState } from '@features/Measurement/slice'
 import { missionFormReducer } from '@features/Mission/components/MissionForm/slice'
 import { missionListReducer, type MissionListState } from '@features/Mission/components/MissionList/slice'
+import { newFeaturesReducer, type NewFeaturesState } from '@features/NewFeatures/slice'
 import { priorNotificationReducer, type PriorNotificationState } from '@features/PriorNotification/slice'
 import { backofficePriorNotificationReducer } from '@features/PriorNotification/slice.backoffice'
 import { backofficeProducerOrganizationMembershipReducer } from '@features/ProducerOrganizationMembership/slice.backoffice'
@@ -29,7 +31,6 @@ import { beaconMalfunctionReducer } from 'domain/shared_slices/BeaconMalfunction
 import { controlReducer } from 'domain/shared_slices/Control'
 import { displayedComponentReducer } from 'domain/shared_slices/DisplayedComponent'
 import { displayedErrorReducer } from 'domain/shared_slices/DisplayedError'
-import { favoriteVesselReducer } from 'domain/shared_slices/FavoriteVessel'
 import { gearReducer } from 'domain/shared_slices/Gear'
 import { globalSliceReducer } from 'domain/shared_slices/Global'
 import { infractionReducer } from 'domain/shared_slices/Infraction'
@@ -119,6 +120,10 @@ export const mainReducer = {
       version: 0
     },
     missionListReducer
+  ),
+  newFeatures: persistReducerTyped(
+    { ...getCommonPersistReducerConfig<NewFeaturesState>('mainPersistorNewFeatures', ['checkedFeatures']) },
+    newFeaturesReducer
   ),
   priorNotification: persistReducerTyped(
     {

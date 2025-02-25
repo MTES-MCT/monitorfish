@@ -1,5 +1,6 @@
 import { MapBox, MeasurementType } from '@features/Map/constants'
 import { useClickOutsideWhenOpenedAndExecute } from '@hooks/useClickOutsideWhenOpenedAndExecute'
+import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useEscapeFromKeyboardAndExecute } from '@hooks/useEscapeFromKeyboardAndExecute'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -17,11 +18,16 @@ export function MeasurementMapButton() {
   const dispatch = useMainAppDispatch()
   const measurementTypeToAdd = useMainAppSelector(state => state.measurement.measurementTypeToAdd)
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
-  const isOpen = rightMapBoxOpened === MapBox.MEASUREMENT_MENU
-  const isMeasurementToolOpen = rightMapBoxOpened === MapBox.MEASUREMENT
+  const { isOpened: isMeasurementMenuOpen, isRendered: isMeasurementMenuRendered } = useDisplayMapBox(
+    rightMapBoxOpened === MapBox.MEASUREMENT_MENU
+  )
+  const { isOpened: isMeasurementToolOpen, isRendered: isMeasurementToolRendered } = useDisplayMapBox(
+    rightMapBoxOpened === MapBox.MEASUREMENT && measurementTypeToAdd === MeasurementType.CIRCLE_RANGE
+  )
+
   const wrapperRef = useRef(null)
 
-  useClickOutsideWhenOpenedAndExecute(wrapperRef, isOpen, () => {
+  useClickOutsideWhenOpenedAndExecute(wrapperRef, isMeasurementMenuOpen, () => {
     dispatch(setRightMapBoxOpened(undefined))
   })
   useEscapeFromKeyboardAndExecute(() => {
@@ -30,14 +36,14 @@ export function MeasurementMapButton() {
   })
 
   useEffect(() => {
-    if (!isOpen && !isMeasurementToolOpen) {
+    if (!isMeasurementToolRendered && !isMeasurementMenuRendered) {
       dispatch(setMeasurementTypeToAdd(null))
     }
-  }, [dispatch, isOpen, isMeasurementToolOpen])
+  }, [dispatch, isMeasurementToolRendered, isMeasurementMenuRendered])
 
   const makeMeasurement = nextMeasurementTypeToAdd => {
-    dispatch(setMeasurementTypeToAdd(nextMeasurementTypeToAdd))
     dispatch(setRightMapBoxOpened(MapBox.MEASUREMENT))
+    dispatch(setMeasurementTypeToAdd(nextMeasurementTypeToAdd))
   }
 
   const measurementIcon = (function () {
@@ -67,30 +73,32 @@ export function MeasurementMapButton() {
       <MapToolButton
         data-cy="measurement"
         Icon={measurementIcon}
-        isActive={isOpen || !!measurementTypeToAdd}
+        isActive={isMeasurementMenuOpen || !!measurementTypeToAdd}
         onClick={openOrCloseMeasurementMenu}
         style={{ top: 316 }}
         title="Mesurer une distance"
       />
-      <MeasurementOptions $isOpen={isOpen}>
-        <MeasurementItem
-          className=".map-menu"
-          data-cy="measurement-multiline"
-          onClick={() => makeMeasurement(MeasurementType.MULTILINE)}
-          title="Mesure d'une distance avec lignes brisées"
-        >
-          <Icon.MeasureBrokenLine color={THEME.color.gainsboro} size={25} />
-        </MeasurementItem>
-        <MeasurementItem
-          className=".map-menu"
-          data-cy="measurement-circle-range"
-          onClick={() => makeMeasurement(MeasurementType.CIRCLE_RANGE)}
-          title="Rayon d'action"
-        >
-          <Icon.MeasureCircle color={THEME.color.gainsboro} size={25} />
-        </MeasurementItem>
-      </MeasurementOptions>
-      <CustomCircleRange />
+      {isMeasurementMenuRendered && (
+        <MeasurementOptions $isOpen={isMeasurementMenuOpen}>
+          <MeasurementItem
+            className=".map-menu"
+            data-cy="measurement-multiline"
+            onClick={() => makeMeasurement(MeasurementType.MULTILINE)}
+            title="Mesure d'une distance avec lignes brisées"
+          >
+            <Icon.MeasureBrokenLine color={THEME.color.gainsboro} size={25} />
+          </MeasurementItem>
+          <MeasurementItem
+            className=".map-menu"
+            data-cy="measurement-circle-range"
+            onClick={() => makeMeasurement(MeasurementType.CIRCLE_RANGE)}
+            title="Rayon d'action"
+          >
+            <Icon.MeasureCircle color={THEME.color.gainsboro} size={25} />
+          </MeasurementItem>
+        </MeasurementOptions>
+      )}
+      {isMeasurementToolRendered && <CustomCircleRange isOpened={isMeasurementToolOpen} />}
     </Wrapper>
   )
 }

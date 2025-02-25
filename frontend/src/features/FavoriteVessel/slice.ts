@@ -3,8 +3,8 @@
 import { extractVesselIdentityProps, getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { createSlice } from '@reduxjs/toolkit'
 
+import { vesselsAreEquals } from '../../domain/entities/vessel/vessel'
 import { getLocalStorageState } from '../../utils'
-import { vesselsAreEquals } from '../entities/vessel/vessel'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
 

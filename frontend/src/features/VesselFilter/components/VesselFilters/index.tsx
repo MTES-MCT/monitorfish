@@ -1,5 +1,6 @@
 import { MapBox } from '@features/Map/constants'
 import { useClickOutsideWhenOpenedAndExecute } from '@hooks/useClickOutsideWhenOpenedAndExecute'
+import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, usePrevious } from '@mtes-mct/monitor-ui'
@@ -15,16 +16,16 @@ export function VesselFiltersMapButton() {
   const filters = useMainAppSelector(state => state.filter.filters)
   const previousFilters = usePrevious(filters)
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
+  const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.FILTERS)
 
-  const isOpen = rightMapBoxOpened === MapBox.FILTERS
   const wrapperRef = useRef(null)
 
-  useClickOutsideWhenOpenedAndExecute(wrapperRef, isOpen, () => {
+  useClickOutsideWhenOpenedAndExecute(wrapperRef, isOpened, () => {
     dispatch(setRightMapBoxOpened(undefined))
   })
 
   const openOrCloseVesselFilters = () => {
-    if (isOpen) {
+    if (isOpened) {
       dispatch(setRightMapBoxOpened(undefined))
 
       return
@@ -41,14 +42,14 @@ export function VesselFiltersMapButton() {
         <MapToolButton
           data-cy="vessel-filters"
           Icon={Icon.Filter}
-          isActive={isOpen}
+          isActive={isOpened}
           onClick={openOrCloseVesselFilters}
           style={{ top: 124 }}
           title="Mes filtres"
         />
-        <Filters />
+        {isRendered && <Filters isOpened={isOpened} />}
       </Wrapper>
-      <NewFilterAdded $hasOneFilterAdded={hasOneFilterAdded}>1 filtre ajouté</NewFilterAdded>
+      {hasOneFilterAdded && <NewFilterAdded $hasOneFilterAdded={hasOneFilterAdded}>1 filtre ajouté</NewFilterAdded>}
     </>
   )
 }

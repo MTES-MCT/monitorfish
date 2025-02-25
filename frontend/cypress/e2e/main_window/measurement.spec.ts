@@ -30,10 +30,11 @@ context('Measurement', () => {
     cy.get('*[data-cy="dms-coordinates-input"]').should('have.value', '47° 45′ 31″ N 007° 54′ 51″ W')
     cy.get('*[data-cy="measurement-circle-radius-input"]').type('35', { timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-add"]').click({ timeout: 10000 })
-    cy.wait(100)
+    cy.wait(500)
 
     // Then
     cy.get('*[data-cy="measurement-value"]').contains('r = 35 nm', { timeout: 10000 })
+    cy.get('body').type('-', { force: true }) // Because of the throttle, we de-zoom to hide labels
     cy.get('*[data-cy="close-measurement"]').click({ force: true, timeout: 10000 })
     cy.get('*[data-cy="measurement-value"]').should('not.exist')
 
@@ -46,11 +47,11 @@ context('Measurement', () => {
     cy.get('*[data-cy="dms-coordinates-input"]').type('470123N0070123W', { timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-radius-input"]').type('47', { timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-add"]').click({ timeout: 10000 })
-    cy.wait(100)
+    cy.wait(500)
 
     // Then
     cy.get('*[data-cy="measurement-value"]').contains('r = 47 nm', { timeout: 10000 })
-    cy.get('body').click(789, 536, { timeout: 10000 })
+    cy.get('*[data-cy="close-measurement"]').click({ force: true, timeout: 10000 })
     cy.get('*[data-cy="measurement-value"]').should('not.exist')
   })
 
@@ -84,6 +85,7 @@ context('Measurement', () => {
     )
     cy.get('body').click(690, 680, { timeout: 10000 })
     cy.get('body').click(750, 785, { timeout: 10000 })
+    cy.wait(500)
     cy.get('*[data-cy="measurement-value"]').should('have.length', 2)
 
     // Then

@@ -12,7 +12,7 @@ context('Vessel visibility', () => {
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 1)
 
     // When
-    cy.clickButton('Affichage des dernières positions')
+    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
     cy.get('*[data-cy="map-property-trigger"]')
       .filter(':contains("les navires au port")')
       .click({ force: true, timeout: 10000 })
@@ -25,9 +25,9 @@ context('Vessel visibility', () => {
 
   it('Vessels default track depth Should be taken into account', () => {
     // Given
-    cy.clickButton('Affichage des dernières positions')
+    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
     cy.fill('Afficher depuis', '1 semaine')
-    cy.clickButton('Affichage des dernières positions')
+    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
 
     // When
     openVesselBySearch('Pheno')

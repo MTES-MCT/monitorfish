@@ -1,5 +1,4 @@
 import { COLORS } from '@constants/constants'
-import { MapBox } from '@features/Map/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import styled from 'styled-components'
 
@@ -7,14 +6,11 @@ import { Filter } from './Filter'
 import { FilterParameters } from './FilterParameters'
 import { MapToolBox } from '../../../MainWindow/components/MapButtons/shared/MapToolBox'
 
-export function Filters() {
+export function Filters({ isOpened }) {
   const filters = useMainAppSelector(state => state.filter.filters)
-  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
-
-  const isOpen = rightMapBoxOpened === MapBox.FILTERS
 
   return (
-    <VesselFilterBox $isOpen={isOpen}>
+    <VesselFilterBox $isOpen={isOpened}>
       <Header $isFirst>Mes filtres</Header>
       {filters.length > 0 ? (
         <FiltersSelectedList>

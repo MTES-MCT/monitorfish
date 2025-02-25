@@ -1,9 +1,10 @@
 import { MapBox } from '@features/Map/constants'
+import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useEscapeFromKeyboardAndExecute } from '@hooks/useEscapeFromKeyboardAndExecute'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { EditInterestPoint } from './EditInterestPoint'
@@ -14,8 +15,7 @@ import { deleteInterestPointBeingDrawed, drawInterestPoint, endInterestPointDraw
 export function InterestPointMapButton() {
   const dispatch = useMainAppDispatch()
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
-  const isOpen = rightMapBoxOpened === MapBox.INTEREST_POINT
-  const wrapperRef = useRef(null)
+  const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.INTEREST_POINT)
 
   const close = () => {
     dispatch(setRightMapBoxOpened(undefined))
@@ -24,14 +24,14 @@ export function InterestPointMapButton() {
   useEscapeFromKeyboardAndExecute(close)
 
   useEffect(() => {
-    if (!isOpen) {
+    if (!isOpened) {
       dispatch(endInterestPointDraw())
       dispatch(deleteInterestPointBeingDrawed())
     }
-  }, [dispatch, isOpen])
+  }, [dispatch, isOpened])
 
   const openOrCloseInterestPoint = () => {
-    if (!isOpen) {
+    if (!isOpened) {
       dispatch(drawInterestPoint())
       dispatch(setRightMapBoxOpened(MapBox.INTEREST_POINT))
 
@@ -42,16 +42,16 @@ export function InterestPointMapButton() {
   }
 
   return (
-    <Wrapper ref={wrapperRef}>
+    <Wrapper>
       <MapToolButton
         data-cy="interest-point"
         Icon={Icon.Report}
-        isActive={isOpen}
+        isActive={isOpened}
         onClick={openOrCloseInterestPoint}
         style={{ top: 364 }}
         title="Créer un point d'intérêt"
       />
-      <EditInterestPoint close={close} isOpen={isOpen} />
+      {isRendered && <EditInterestPoint close={close} isOpen={isOpened} />}
     </Wrapper>
   )
 }

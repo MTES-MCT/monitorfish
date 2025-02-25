@@ -1,4 +1,5 @@
 import { MapBox } from '@features/Map/constants'
+import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { MultiRadio } from '@mtes-mct/monitor-ui'
@@ -20,37 +21,39 @@ export function EditVesselLabels() {
   const riskFactorShowedOnMap = useMainAppSelector(state => state.map.riskFactorShowedOnMap)
   const vesselLabelsShowedOnMap = useMainAppSelector(state => state.map.vesselLabelsShowedOnMap)
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
-  const isOpen = rightMapBoxOpened === MapBox.VESSEL_LABELS
+  const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.VESSEL_LABELS)
 
   return (
-    <Wrapper $isOpen={isOpen}>
-      <Header>Affichage des étiquettes {isSuperUser ? 'et notes des navires' : ''}</Header>
-      <Content $hasMargin>
-        <MultiRadio
-          label="Choisir le libellé des étiquettes des navires"
-          name="vesselLabelRadio"
-          onChange={nextLabel => {
-            dispatch(setVesselLabel(nextLabel as string))
-          }}
-          options={isSuperUser ? VESSEL_LABEL_OPTIONS.concat(SUPER_USER_VESSEL_LABEL_OPTION) : VESSEL_LABEL_OPTIONS}
-          value={vesselLabel}
-        />
-      </Content>
-      <MapPropertyTrigger
-        booleanProperty={vesselLabelsShowedOnMap}
-        Icon={LabelSVG}
-        text="les étiquettes des navires"
-        updateBooleanProperty={isShowed => dispatch(setVesselLabelsShowedOnMap(isShowed))}
-      />
-      {isSuperUser && (
+    isRendered && (
+      <Wrapper $isOpen={isOpened}>
+        <Header>Affichage des étiquettes {isSuperUser ? 'et notes des navires' : ''}</Header>
+        <Content $hasMargin>
+          <MultiRadio
+            label="Choisir le libellé des étiquettes des navires"
+            name="vesselLabelRadio"
+            onChange={nextLabel => {
+              dispatch(setVesselLabel(nextLabel as string))
+            }}
+            options={isSuperUser ? VESSEL_LABEL_OPTIONS.concat(SUPER_USER_VESSEL_LABEL_OPTION) : VESSEL_LABEL_OPTIONS}
+            value={vesselLabel}
+          />
+        </Content>
         <MapPropertyTrigger
-          booleanProperty={riskFactorShowedOnMap}
-          Icon={RiskFactorSVG}
-          text="la note de risque des navires"
-          updateBooleanProperty={isShowed => dispatch(setRiskFactorShowedOnMap(isShowed))}
+          booleanProperty={vesselLabelsShowedOnMap}
+          Icon={LabelSVG}
+          text="les étiquettes des navires"
+          updateBooleanProperty={isShowed => dispatch(setVesselLabelsShowedOnMap(isShowed))}
         />
-      )}
-    </Wrapper>
+        {isSuperUser && (
+          <MapPropertyTrigger
+            booleanProperty={riskFactorShowedOnMap}
+            Icon={RiskFactorSVG}
+            text="la note de risque des navires"
+            updateBooleanProperty={isShowed => dispatch(setRiskFactorShowedOnMap(isShowed))}
+          />
+        )}
+      </Wrapper>
+    )
   )
 }
 

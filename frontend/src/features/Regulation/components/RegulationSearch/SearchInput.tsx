@@ -1,4 +1,4 @@
-import { LayerType as LayersType, InteractionListener, InteractionType } from '@features/Map/constants'
+import { InteractionListener, InteractionType, LayerType as LayersType } from '@features/Map/constants'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -12,7 +12,6 @@ import PolygonFilterSVG from '../../../icons/Filtre_zone_polygone.svg?react'
 import PolygonFilterSelectedSVG from '../../../icons/Filtre_zone_polygone_selected.svg?react'
 import BoxFilterSVG from '../../../icons/Filtre_zone_rectangle.svg?react'
 import BoxFilterSelectedSVG from '../../../icons/Filtre_zone_rectangle_selected.svg?react'
-import { regulationActions } from '../../slice'
 import { MINIMUM_SEARCH_CHARACTERS_NUMBER, searchRegulatoryLayers } from '../../useCases/searchRegulatoryLayers'
 
 import type { ZoneSelected } from '@features/VesselFilter/types'
@@ -49,7 +48,7 @@ export function SearchInput() {
 
   useEffect(() => {
     if (searchQuery === undefined) {
-      dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
+      // dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
     }
   }, [dispatch, searchQuery])
 

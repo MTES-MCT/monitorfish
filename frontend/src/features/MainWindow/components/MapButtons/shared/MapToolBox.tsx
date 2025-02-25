@@ -1,14 +1,14 @@
-import { COLORS } from '@constants/constants'
+import { MapComponent } from '@features/commonStyles/MapComponent'
 import styled from 'styled-components'
 
-import { MapComponent } from '../../../../commonStyles/MapComponent'
-
 export const MapToolBox = styled(MapComponent)<{
-  $isHidden?: boolean
+  $hideBoxShadow?: boolean
   $isLeftBox?: boolean
   $isOpen: boolean
+  $isTransparent?: boolean
+  isHidden?: boolean
 }>`
-  background: ${COLORS.white};
+  background: ${p => (p.$isTransparent ? 'unset' : p.theme.color.white)};
   ${p => {
     if (p.$isLeftBox) {
       return `margin-left: ${p.$isOpen ? '45px' : '-420px'};`
@@ -27,7 +27,7 @@ export const MapToolBox = styled(MapComponent)<{
   border-radius: 2px;
   position: absolute;
   display: inline-block;
-  transition: all 0.5s;
+  transition: all 0.3s;
   z-index: 9999;
-  box-shadow: 0px 3px 10px rgba(59, 69, 89, 0.5);
+  box-shadow: ${p => (p.$hideBoxShadow ? 'unset' : '0px 3px 10px rgba(59, 69, 89, 0.5)')};
 `

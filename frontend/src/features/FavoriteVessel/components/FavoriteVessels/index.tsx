@@ -31,7 +31,7 @@ export function FavoriteVessels() {
       <MapToolButton
         badgeBackgroundColor={isOpened ? THEME.color.charcoal : THEME.color.gainsboro}
         badgeColor={isOpened ? THEME.color.white : THEME.color.gunMetal}
-        badgeNumber={favorites?.length || 0}
+        badgeNumber={favorites?.length || undefined}
         data-cy="favorite-vessels"
         Icon={Icon.Favorite}
         isActive={isOpened}

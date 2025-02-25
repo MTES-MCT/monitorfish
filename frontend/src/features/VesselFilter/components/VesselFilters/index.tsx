@@ -49,7 +49,7 @@ export function VesselFiltersMapButton() {
         />
         {isRendered && <Filters isOpened={isOpened} />}
       </Wrapper>
-      <NewFilterAdded $hasOneFilterAdded={hasOneFilterAdded}>1 filtre ajouté</NewFilterAdded>
+      {hasOneFilterAdded && <NewFilterAdded $hasOneFilterAdded={hasOneFilterAdded}>1 filtre ajouté</NewFilterAdded>}
     </>
   )
 }

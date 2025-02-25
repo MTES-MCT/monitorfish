@@ -1,4 +1,5 @@
 import { InteractionListener, InteractionType, LayerType as LayersType } from '@features/Map/constants'
+import { regulationActions } from '@features/Regulation/slice'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -48,7 +49,7 @@ export function SearchInput() {
 
   useEffect(() => {
     if (searchQuery === undefined) {
-      // dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
+      dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
     }
   }, [dispatch, searchQuery])
 

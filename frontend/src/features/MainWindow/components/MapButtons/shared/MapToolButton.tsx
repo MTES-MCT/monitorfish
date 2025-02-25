@@ -83,13 +83,13 @@ const StyledButton = styled(IconButton)<{
     if (p.$isLeftButton) {
       return `
         margin-right: 5px;
-        left: ${p.$isRightMenuShrinked ? 0 : 10}px;
+        left: ${p.$isRightMenuShrinked ? 0 : 12}px;
       `
     }
 
     return `
       margin-left: 5px;
-      right: ${p.$isRightMenuShrinked ? 0 : 10}px;
+      right: ${p.$isRightMenuShrinked ? 0 : 12}px;
     `
   }}
 `

@@ -2,7 +2,7 @@ import type { MonitorFishFeature } from '@features/NewFeatures/types'
 
 export const dummyNewFeatures: MonitorFishFeature[] = [
   {
-    date: '2024-02-24',
+    date: '2024-02-25',
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.',
     for: 'ALL',

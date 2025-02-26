@@ -1,15 +1,12 @@
 import { TrackDepthSelection } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/TrackDepthSelection'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { THEME } from '@mtes-mct/monitor-ui'
+import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { LastPositionsSlider } from './LastPositionsSlider'
 import { updateDefaultVesselTrackDepth } from '../../../../../domain/use_cases/vessel/updateDefaultVesselTrackDepth'
 import { MapPropertyTrigger } from '../../../../commonComponents/MapPropertyTrigger'
-import HidingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_actif.svg?react'
-import ShowingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_inactif.svg?react'
-import HideVesselsAtPortSVG from '../../../../icons/Masquer_navires_au_port.svg?react'
 import EstimatedPositionSVG from '../../../../icons/Positions_estimees.svg?react'
 import {
   setHideVesselsAtPort,
@@ -64,20 +61,20 @@ export function EditVesselVisibility({ isOpened }) {
       </Content>
       <MapPropertyTrigger
         booleanProperty={showingVesselsEstimatedPositions}
-        Icon={EstimatedPosition}
+        IconSVG={EstimatedPosition}
         text="les positions estimées des navires"
         updateBooleanProperty={isShowed => dispatch(showVesselsEstimatedPositions(isShowed))}
       />
       <MapPropertyTrigger
         booleanProperty={hideNonSelectedVessels}
-        Icon={hideNonSelectedVessels ? ShowingOtherTracksSVG : HidingOtherTracksSVG}
+        Icon={hideNonSelectedVessels ? Icon.Display : Icon.Hide}
         inverse
         text="les navires non sélectionnés"
         updateBooleanProperty={isHidden => dispatch(setHideNonSelectedVessels(isHidden))}
       />
       <MapPropertyTrigger
         booleanProperty={hideVesselsAtPort}
-        Icon={HideVesselsAtPortSVG}
+        Icon={Icon.Anchor}
         inverse
         text="les navires au port"
         updateBooleanProperty={isHidden => dispatch(setHideVesselsAtPort(isHidden))}

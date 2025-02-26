@@ -8,7 +8,7 @@ import { favoriteVesselReducer } from '@features/FavoriteVessel/slice'
 import { interestPointReducer } from '@features/InterestPoint/slice'
 import { logbookReducer } from '@features/Logbook/slice'
 import { mainWindowReducer } from '@features/MainWindow/slice'
-import { layerReducer } from '@features/Map/layer.slice'
+import { layerReducer, type LayerState } from '@features/Map/layer.slice'
 import { backOfficeLayerReducer } from '@features/Map/layer.slice.backoffice'
 import { mapReducer } from '@features/Map/slice'
 import { measurementReducer, type MeasurementState } from '@features/Measurement/slice'
@@ -103,7 +103,10 @@ export const mainReducer = {
   fishingActivities: logbookReducer,
   infraction: infractionReducer,
   interestPoint: interestPointReducer,
-  layer: layerReducer,
+  layer: persistReducerTyped(
+    { ...getCommonPersistReducerConfig<LayerState>('mainPersistorLayer', ['isBaseMapCachedLocally']) },
+    layerReducer
+  ),
   mainWindow: mainWindowReducer,
   measurement: persistReducerTyped(
     { ...getCommonPersistReducerConfig<MeasurementState>('mainPersistorMeasurement', ['measurementsDrawed']) },

@@ -1,15 +1,13 @@
+import { MapPropertyTrigger } from '@features/commonComponents/MapPropertyTrigger'
 import { MapBox } from '@features/Map/constants'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { MultiRadio } from '@mtes-mct/monitor-ui'
+import { Icon, MultiRadio } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { SUPER_USER_VESSEL_LABEL_OPTION, VESSEL_LABEL_OPTIONS } from './constants'
 import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
-import { MapPropertyTrigger } from '../../../../commonComponents/MapPropertyTrigger'
-import RiskFactorSVG from '../../../../icons/Bouton_afficher_note_de_risque.svg?react'
-import LabelSVG from '../../../../icons/Menu_etiquettes_navires.svg?react'
 import { setRiskFactorShowedOnMap, setVesselLabel, setVesselLabelsShowedOnMap } from '../../../../Map/slice'
 import { MapToolBox } from '../shared/MapToolBox'
 import { Content, Header } from '../shared/styles'
@@ -40,14 +38,14 @@ export function EditVesselLabels() {
         </Content>
         <MapPropertyTrigger
           booleanProperty={vesselLabelsShowedOnMap}
-          Icon={LabelSVG}
+          Icon={Icon.Tag}
           text="les étiquettes des navires"
           updateBooleanProperty={isShowed => dispatch(setVesselLabelsShowedOnMap(isShowed))}
         />
         {isSuperUser && (
           <MapPropertyTrigger
             booleanProperty={riskFactorShowedOnMap}
-            Icon={RiskFactorSVG}
+            Icon={riskFactorShowedOnMap ? Icon.Display : Icon.Hide}
             text="la note de risque des navires"
             updateBooleanProperty={isShowed => dispatch(setRiskFactorShowedOnMap(isShowed))}
           />

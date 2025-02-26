@@ -14,8 +14,9 @@ import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 import type { Pixel } from 'ol/pixel'
 
-interface LayerState {
+export interface LayerState {
   administrativeZonesGeometryCache: Record<string, any>[]
+  isBaseMapCachedLocally: boolean
   lastShowedFeatures: Array<Feature<Geometry>>
   layersSidebarOpenedLayerType: string | undefined
   layersToFeatures: MonitorFishMap.LayerToFeatures[]
@@ -25,6 +26,7 @@ interface LayerState {
 
 const INITIAL_STATE: LayerState = {
   administrativeZonesGeometryCache: [],
+  isBaseMapCachedLocally: false,
   lastShowedFeatures: [],
   layersSidebarOpenedLayerType: undefined,
   layersToFeatures: [],
@@ -114,6 +116,10 @@ const layerSlice = createSlice({
 
       // TODO Use redux-persist to save showed layers.
       localStorageManager.set(LocalStorageKey.LayersShowedOnMap, state.showedLayers)
+    },
+
+    setIsBaseMapCachedLocally(state, action: PayloadAction<boolean>) {
+      state.isBaseMapCachedLocally = action.payload
     },
 
     setLastShowedFeatures(state, action: PayloadAction<Array<Feature<Geometry>>>) {

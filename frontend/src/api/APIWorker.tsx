@@ -66,10 +66,12 @@ export function APIWorker() {
   const poll = useCallback(() => {
     dispatch(setIsUpdatingVessels())
     dispatch(updateVesselTracks())
-    dispatch(getAllBeaconMalfunctions())
+    if (isSuperUser) {
+      dispatch(getAllBeaconMalfunctions())
+    }
 
     setUpdateVesselSidebarTab(true)
-  }, [dispatch])
+  }, [dispatch, isSuperUser])
 
   useEffect(() => {
     if (isSuperUser === undefined) {

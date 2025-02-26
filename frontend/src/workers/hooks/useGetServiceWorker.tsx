@@ -7,14 +7,16 @@ export const useGetServiceWorker = () => {
 
   useEffect(() => {
     ;(async () => {
-      const nextRegistration = await navigator.serviceWorker.getRegistration(SERVICE_WORKER_PATH)
-      setRegistration(nextRegistration)
+      if ('serviceWorker' in navigator) {
+        const nextRegistration = await navigator.serviceWorker.getRegistration(SERVICE_WORKER_PATH)
+        setRegistration(nextRegistration)
 
-      try {
-        nextRegistration?.update()
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log(e)
+        try {
+          nextRegistration?.update()
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.log(e)
+        }
       }
     })()
   }, [])

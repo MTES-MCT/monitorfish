@@ -1162,4 +1162,41 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val updatedCorReport = jpaLogbookReportRepository.findById(2109)
         assertThat((updatedCorReport.message as PNO).isInvalidated).isEqualTo(true)
     }
+
+    @Test
+    @Transactional
+    fun `findTripBetweenDates Should return the first trip found with the total count of trips`() {
+        // When
+        val trip =
+            jpaLogbookReportRepository.findTripBetweenDates(
+                "FAK000999999",
+                ZonedDateTime.parse("2018-02-17T01:05Z"),
+                ZonedDateTime.parse("2020-10-15T12:01Z"),
+            )
+
+        // Then
+        assertThat(trip.tripNumber).isEqualTo("9463715")
+        assertThat(trip.startDate.toString()).isEqualTo("2019-10-11T01:06Z")
+        assertThat(trip.endDate.toString()).isEqualTo("2019-10-22T11:06Z")
+        assertThat(trip.totalTripsFoundForDates).isEqualTo(4)
+    }
+
+    @Test
+    @Transactional
+    fun `findTripBetweenDates Should throw an exception When no trip found`() {
+        // When
+        val throwable =
+            catchThrowable {
+                jpaLogbookReportRepository.findTripBetweenDates(
+                    "FAK000999999",
+                    ZonedDateTime.parse("2010-02-17T01:05Z"),
+                    ZonedDateTime.parse("2010-10-15T12:01Z"),
+                )
+            }
+
+        // Then
+        assertThat(
+            throwable.message,
+        ).contains("No trip found for the vessel. (internalReferenceNumber: \"FAK000999999\")")
+    }
 }

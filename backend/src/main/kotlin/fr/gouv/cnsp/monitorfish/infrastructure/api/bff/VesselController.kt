@@ -26,6 +26,7 @@ class VesselController(
     private val getVesselById: GetVesselById,
     private val getVesselPositions: GetVesselPositions,
     private val getVesselVoyage: GetVesselVoyage,
+    private val getVesselVoyageByDates: GetVesselVoyageByDates,
     private val searchVessels: SearchVessels,
     private val getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions,
     private val getVesselReportings: GetVesselReportings,
@@ -116,8 +117,8 @@ class VesselController(
     ): BeaconMalfunctionsResumeAndHistoryDataOutput {
         val beaconMalfunctionsWithDetails =
             getVesselBeaconMalfunctions.execute(
-                vesselId,
-                afterDateTime,
+                vesselId = vesselId,
+                afterDateTime = afterDateTime,
             )
 
         return BeaconMalfunctionsResumeAndHistoryDataOutput.fromBeaconMalfunctionsResumeAndHistory(
@@ -155,13 +156,13 @@ class VesselController(
         return runBlocking {
             val (vesselTrackHasBeenModified, positions) =
                 getVesselPositions.execute(
-                    internalReferenceNumber,
-                    externalReferenceNumber,
-                    IRCS,
-                    trackDepth,
-                    vesselIdentifier,
-                    afterDateTime,
-                    beforeDateTime,
+                    internalReferenceNumber = internalReferenceNumber,
+                    externalReferenceNumber = externalReferenceNumber,
+                    ircs = IRCS,
+                    trackDepth = trackDepth,
+                    vesselIdentifier = vesselIdentifier,
+                    fromDateTime = afterDateTime,
+                    toDateTime = beforeDateTime,
                 )
 
             val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
@@ -230,6 +231,34 @@ class VesselController(
             VesselIdentityDataOutput.fromVesselAndBeacon(it)
         }
 
+    @GetMapping("/logbook/find_by_dates")
+    @Operation(summary = "Get vessel's Logbook messages by dates")
+    fun getVesselLogbookMessagesByDates(
+        @Parameter(description = "Vessel internal reference number (CFR)", required = true)
+        @RequestParam(name = "internalReferenceNumber")
+        internalReferenceNumber: String,
+        @Parameter(description = "Vessel track depth")
+        @RequestParam(name = "trackDepth")
+        trackDepth: VesselTrackDepth,
+        @Parameter(description = "from date")
+        @RequestParam(name = "afterDateTime", required = false)
+        @DateTimeFormat(pattern = zoneDateTimePattern)
+        afterDateTime: ZonedDateTime?,
+        @Parameter(description = "to date")
+        @RequestParam(name = "beforeDateTime", required = false)
+        @DateTimeFormat(pattern = zoneDateTimePattern)
+        beforeDateTime: ZonedDateTime?,
+    ): VoyageDataOutput {
+        val voyage =
+            getVesselVoyageByDates.execute(
+                internalReferenceNumber = internalReferenceNumber,
+                trackDepth = trackDepth,
+                fromDateTime = afterDateTime,
+                toDateTime = beforeDateTime,
+            )
+        return VoyageDataOutput.fromVoyage(voyage)
+    }
+
     @GetMapping("/logbook/find")
     @Operation(summary = "Get vessel's Logbook messages")
     fun getVesselLogbookMessages(
@@ -247,7 +276,12 @@ class VesselController(
         @RequestParam(name = "tripNumber", required = false)
         tripNumber: String?,
     ): VoyageDataOutput {
-        val voyage = getVesselVoyage.execute(internalReferenceNumber, voyageRequest, tripNumber)
+        val voyage =
+            getVesselVoyage.execute(
+                internalReferenceNumber = internalReferenceNumber,
+                voyageRequest = voyageRequest,
+                tripNumber = tripNumber,
+            )
         return VoyageDataOutput.fromVoyage(voyage)
     }
 

@@ -36,6 +36,12 @@ interface LogbookReportRepository {
         tripNumber: String,
     ): VoyageDatesAndTripNumber
 
+    fun findTripBetweenDates(
+        internalReferenceNumber: String,
+        afterDateTime: ZonedDateTime,
+        beforeDateTime: ZonedDateTime,
+    ): VoyageDatesAndTripNumber
+
     fun findAllMessagesByTripNumberBetweenDates(
         internalReferenceNumber: String,
         afterDate: ZonedDateTime,

@@ -88,6 +88,7 @@ export function Account() {
     })
     registerServiceWorker()
     dispatch(layerActions.setIsBaseMapCachedLocally(true))
+    setIsRegisterCacheConfirmationModalOpen(false)
     dispatch(
       addMainWindowBanner({
         children: 'Stockage des cartes en local activé.',

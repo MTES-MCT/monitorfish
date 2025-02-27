@@ -28,6 +28,10 @@ context('Main Window > My Account', () => {
 
     cy.get('*[data-cy="map-property-trigger"]').filter(':contains("les cartes en local")').click()
 
+    cy.contains('Êtes-vous sûr d\'activer le téléchargement des cartes en local ?').should('be.visible')
+
+    cy.clickButton('Activer et recharger')
+
     cy.getDataCy("map-account-box").contains('Taille des cartes téléchargées')
 
     cy.get('*[data-cy="map-property-trigger"]').filter(':contains("les cartes en local")').click()

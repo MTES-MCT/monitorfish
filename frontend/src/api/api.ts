@@ -67,6 +67,7 @@ export const monitorenvApi = createApi({
 
 export const AUTHORIZATION_HEADER = 'authorization'
 export const CORRELATION_HEADER = 'x-correlation-id'
+export const EMAIL_HEADER = 'email'
 const { IS_OIDC_ENABLED } = getOIDCConfig()
 
 const setAuthorizationHeader = async headers => {
@@ -124,7 +125,8 @@ export const monitorfishApi = createApi({
           status: result.error.status
         }
 
-        redirectToLoginIfUnauthorized(error)
+        const email = result.meta?.response?.headers?.get(EMAIL_HEADER) ?? undefined
+        redirectToLoginIfUnauthorized(error, email)
 
         return { error }
       }
@@ -244,7 +246,8 @@ export const monitorfishApiKy = ky.extend({
           responseData,
           status: response.status
         }
-        redirectToLoginIfUnauthorized(customError)
+        const email = response.headers.get(EMAIL_HEADER) ?? undefined
+        redirectToLoginIfUnauthorized(customError, email)
 
         // `beforeError` hook expect an HTTPError, so we fake it with `as unknown as HTTPError`
         return new FrontendApiError(customError.status.toString(), customError) as unknown as HTTPError

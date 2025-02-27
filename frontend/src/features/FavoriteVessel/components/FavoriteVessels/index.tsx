@@ -78,7 +78,7 @@ export function FavoriteVessels() {
           <MapPropertyTrigger
             booleanProperty={hideNonSelectedVessels}
             disabled={!favorites?.length}
-            Icon={hideNonSelectedVessels ? ShowingOtherTracksSVG : HidingOtherTracksSVG}
+            IconSVG={hideNonSelectedVessels ? ShowingOtherTracksSVG : HidingOtherTracksSVG}
             inverse
             text="les navires non sélectionnés"
             updateBooleanProperty={isHidden => dispatch(setHideNonSelectedVessels(isHidden))}

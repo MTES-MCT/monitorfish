@@ -8,16 +8,16 @@ import type { CustomResponseError } from '@api/types'
 /**
  * Redirect to Login page if any HTTP request in Unauthorized
  */
-export function redirectToLoginIfUnauthorized(error: CustomResponseError) {
+export function redirectToLoginIfUnauthorized(error: CustomResponseError, email?: string | undefined) {
   if (!error.path.includes(ROUTER_PATHS.backendForFrontend) || !isUnauthorizedOrForbidden(error.status)) {
     return
   }
 
   if (!window.location.pathname.includes(ROUTER_PATHS.login)) {
     trackEvent({
-      action: 'LOGIN',
+      action: 'Redirection vers la page de login après une erreur API 401',
       category: 'REDIRECTION',
-      name: 'Après une erreur API 401'
+      name: email ?? ''
     })
 
     // We don't use `router.navigate()` to avoid circular dependency issues

@@ -48,6 +48,8 @@ export function ConfirmationModal({
 // TODO Allow direct `width` prop control in MUI.
 // This is a mess. I wonder if we should add inner classes in MUI.
 const StyledDialog = styled(Dialog)`
+  z-index: 99999;
+
   ${Dialog.Title} {
     font-size: 23px;
   }

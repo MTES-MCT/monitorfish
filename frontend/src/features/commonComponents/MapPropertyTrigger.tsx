@@ -1,12 +1,17 @@
-import { THEME } from '@mtes-mct/monitor-ui'
-import { useCallback, useMemo } from 'react'
+import { IconButton, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import type { FunctionComponent, SVGProps } from 'react'
+import type { FunctionComponent, SVGProps, JSX } from 'react'
 
+/**
+ * `IconSVG` props is deprecated, use `Icon` instead.
+ */
 type MapPropertyTriggerProps = Readonly<{
-  Icon: FunctionComponent<SVGProps<SVGSVGElement> & { title?: string }>
+  Icon?: FunctionComponent<JSX.Element>
+  // TODO Remove this legacy props
+  IconSVG?: FunctionComponent<SVGProps<SVGSVGElement> & { title?: string }>
   booleanProperty: boolean
+  booleanVerbs?: [string, string]
   disabled?: boolean
   inverse?: boolean
   text: string
@@ -14,39 +19,56 @@ type MapPropertyTriggerProps = Readonly<{
 }>
 export function MapPropertyTrigger({
   booleanProperty,
+  booleanVerbs = ['Masquer', 'Afficher'],
   disabled,
   Icon,
+  IconSVG,
   inverse,
   text,
   updateBooleanProperty
 }: MapPropertyTriggerProps) {
-  const showOrHideText = useMemo(() => {
+  const booleanVerb = (function () {
     if (inverse) {
-      return booleanProperty ? 'Afficher' : 'Masquer'
+      return booleanProperty ? booleanVerbs[1] : booleanVerbs[0]
     }
 
-    return booleanProperty ? 'Masquer' : 'Afficher'
-  }, [inverse, booleanProperty])
+    return booleanProperty ? booleanVerbs[0] : booleanVerbs[1]
+  })()
 
-  const update = useCallback(() => {
+  const update = () => {
     if (!disabled) {
       updateBooleanProperty(!booleanProperty)
     }
-  }, [disabled, updateBooleanProperty, booleanProperty])
+  }
 
   return (
     <Wrapper disabled={disabled} onClick={update}>
-      <Icon
-        style={{
-          background: booleanProperty ? THEME.color.blueGray : THEME.color.charcoal,
-          cursor: disabled ? 'not-allowed' : 'pointer',
-          height: 36,
-          transition: 'all 0.2s',
-          width: 36
-        }}
-      />
+      {!!Icon && (
+        <IconButton
+          color={THEME.color.white}
+          Icon={Icon}
+          iconSize={24}
+          style={{
+            background: booleanProperty ? THEME.color.blueGray : THEME.color.charcoal,
+            border: 'unset',
+            cursor: disabled ? 'not-allowed' : 'pointer',
+            padding: 6
+          }}
+        />
+      )}
+      {!Icon && !!IconSVG && (
+        <IconSVG
+          style={{
+            background: booleanProperty ? THEME.color.blueGray : THEME.color.charcoal,
+            cursor: disabled ? 'not-allowed' : 'pointer',
+            height: 36,
+            transition: 'all 0.2s',
+            width: 36
+          }}
+        />
+      )}
       <ShowLabelText data-cy="map-property-trigger">
-        {showOrHideText} {text}
+        {booleanVerb} {text}
       </ShowLabelText>
     </Wrapper>
   )
@@ -55,6 +77,7 @@ export function MapPropertyTrigger({
 const Wrapper = styled.div<{
   disabled: boolean | undefined
 }>`
+  display: flex;
   background: ${p => p.theme.color.gainsboro};
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;

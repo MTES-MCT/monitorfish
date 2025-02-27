@@ -8,6 +8,7 @@ import { layerActions } from '@features/Map/layer.slice'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { useTracking } from '@hooks/useTracking'
 import { Accent, Button, Icon, Level, MapMenuDialog } from '@mtes-mct/monitor-ui'
 import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
@@ -24,6 +25,7 @@ const BYTE_TO_MEGA_BYTE_FACTOR = 0.000001
 
 export function Account() {
   const dispatch = useMainAppDispatch()
+  const { trackEvent } = useTracking()
   const { serviceWorker } = useGetServiceWorker()
   const userAccount = useContext(UserAccountContext)
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
@@ -32,6 +34,7 @@ export function Account() {
 
   const [usage, setUsage] = useState<string>('0')
   const [isUnregisterCacheConfirmationModalOpen, setIsUnregisterCacheConfirmationModalOpen] = useState(false)
+  const [isRegisterCacheConfirmationModalOpen, setIsRegisterCacheConfirmationModalOpen] = useState(false)
 
   const openOrClose = () => {
     dispatch(setRightMapBoxOpened(rightMapBoxOpened === MapBox.ACCOUNT ? undefined : MapBox.ACCOUNT))
@@ -60,6 +63,11 @@ export function Account() {
         withAutomaticClosing: true
       })
     )
+    trackEvent({
+      action: 'Réinitialisation des cartes sauvegardées en local',
+      category: 'CACHE',
+      name: userAccount.email ?? ''
+    })
   }
 
   const toggleCacheBaseMap = (isCached: boolean) => {
@@ -69,6 +77,15 @@ export function Account() {
       return
     }
 
+    setIsRegisterCacheConfirmationModalOpen(true)
+  }
+
+  const confirmActivateCacheBaseMap = () => {
+    trackEvent({
+      action: 'Activation de la sauvegarde des cartes en local',
+      category: 'CACHE',
+      name: userAccount.email ?? ''
+    })
     registerServiceWorker()
     dispatch(layerActions.setIsBaseMapCachedLocally(true))
     dispatch(
@@ -84,6 +101,11 @@ export function Account() {
   }
 
   const confirmDeactivateCacheBaseMap = () => {
+    trackEvent({
+      action: 'Dé-activation de la sauvegarde des cartes en local',
+      category: 'CACHE',
+      name: userAccount.email ?? ''
+    })
     unregisterServiceWorker()
     dispatch(layerActions.setIsBaseMapCachedLocally(false))
 
@@ -146,16 +168,36 @@ export function Account() {
           confirmationButtonLabel="Désactiver"
           message={
             <>
+              <p>Êtes-vous sûr de désactiver le téléchargement des cartes en local ?</p>
               <p>
-                Êtes-vous sûr de désactiver le téléchargement des cartes en local ?<br />
-                <i>L&apos;application sera rechargée après confirmation.</i>
-                <br />
-                <i>Si la deuxième fenêtre est ouverte, il faudra la fermer manuellement.</i>
+                <i>
+                  L&apos;application sera rechargée après confirmation, vous pouvez perdre votre travail en cours. Si la
+                  deuxième fenêtre est ouverte, il faudra la fermer manuellement.
+                </i>
               </p>
             </>
           }
           onCancel={() => setIsUnregisterCacheConfirmationModalOpen(false)}
           onConfirm={confirmDeactivateCacheBaseMap}
+          title="Téléchargement des cartes"
+        />
+      )}
+      {isRegisterCacheConfirmationModalOpen && (
+        <ConfirmationModal
+          confirmationButtonLabel="Activer et recharger"
+          message={
+            <>
+              <p>Êtes-vous sûr d&apos;activer le téléchargement des cartes en local ?</p>
+              <p>
+                <i>
+                  L&apos;application sera rechargée après confirmation, vous pouvez perdre votre travail en cours. Si la
+                  deuxième fenêtre est ouverte, il faudra la fermer manuellement.
+                </i>
+              </p>
+            </>
+          }
+          onCancel={() => setIsRegisterCacheConfirmationModalOpen(false)}
+          onConfirm={confirmActivateCacheBaseMap}
           title="Téléchargement des cartes"
         />
       )}

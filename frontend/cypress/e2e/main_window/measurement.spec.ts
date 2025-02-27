@@ -2,7 +2,7 @@ context('Measurement', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(2000)
+    cy.wait(3000)
   })
 
   it('A circle range measurement Should be created', () => {
@@ -57,6 +57,11 @@ context('Measurement', () => {
 
   it('A multi line range measurement Should be created When clicking on the map', () => {
     // When
+    cy.clickButton("Mesurer une distance", { withoutScroll: true })
+    cy.wait(400)
+    // Close then re-open
+    cy.clickButton("Mesurer une distance", { withoutScroll: true })
+    cy.wait(400)
     cy.clickButton("Mesurer une distance", { withoutScroll: true })
     cy.get('*[data-cy="measurement-multiline"]').click({ timeout: 10000 })
     cy.get('body').click(490, 580, { timeout: 10000 })

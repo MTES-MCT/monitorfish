@@ -5,7 +5,7 @@ import { useEscapeFromKeyboardAndExecute } from '@hooks/useEscapeFromKeyboardAnd
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import styled from 'styled-components'
 
 import { CustomCircleRange } from './CustomCircleRange'
@@ -35,12 +35,6 @@ export function MeasurementMapButton() {
     dispatch(setRightMapBoxOpened(undefined))
   })
 
-  useEffect(() => {
-    if (!isMeasurementToolRendered && !isMeasurementMenuRendered) {
-      dispatch(setMeasurementTypeToAdd(null))
-    }
-  }, [dispatch, isMeasurementToolRendered, isMeasurementMenuRendered])
-
   const makeMeasurement = nextMeasurementTypeToAdd => {
     dispatch(setRightMapBoxOpened(MapBox.MEASUREMENT))
     dispatch(setMeasurementTypeToAdd(nextMeasurementTypeToAdd))
@@ -58,7 +52,7 @@ export function MeasurementMapButton() {
   })()
 
   const openOrCloseMeasurementMenu = () => {
-    if (measurementTypeToAdd) {
+    if (isMeasurementMenuOpen) {
       dispatch(setMeasurementTypeToAdd(null))
       dispatch(setRightMapBoxOpened(undefined))
 
@@ -70,14 +64,6 @@ export function MeasurementMapButton() {
 
   return (
     <Wrapper ref={wrapperRef}>
-      <MapToolButton
-        data-cy="measurement"
-        Icon={measurementIcon}
-        isActive={isMeasurementMenuOpen || !!measurementTypeToAdd}
-        onClick={openOrCloseMeasurementMenu}
-        style={{ top: 316 }}
-        title="Mesurer une distance"
-      />
       {isMeasurementMenuRendered && (
         <MeasurementOptions $isOpen={isMeasurementMenuOpen}>
           <MeasurementItem
@@ -98,6 +84,14 @@ export function MeasurementMapButton() {
           </MeasurementItem>
         </MeasurementOptions>
       )}
+      <MapToolButton
+        data-cy="measurement"
+        Icon={measurementIcon}
+        isActive={isMeasurementMenuOpen || !!measurementTypeToAdd}
+        onClick={openOrCloseMeasurementMenu}
+        style={{ top: 316 }}
+        title="Mesurer une distance"
+      />
       {isMeasurementToolRendered && <CustomCircleRange isOpened={isMeasurementToolOpen} />}
     </Wrapper>
   )
@@ -136,7 +130,7 @@ const MeasurementOptions = styled(MapComponent)<{
   position: absolute;
   right: 10px;
   top: 316px;
-  transition: all 0.5s;
+  transition: all 0.3s;
   width: 135px;
-  z-index: 1000;
+  z-index: 98;
 `

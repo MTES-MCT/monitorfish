@@ -34,7 +34,7 @@ context('Main Window > New features', () => {
   it('Should display all new features and decrement the badge number when checked', () => {
     cy.get('[title="Nouveautés MonitorFish"]').parent().contains(3)
 
-    cy.clickButton('Nouveautés MonitorFish')
+    cy.clickButton('Nouveautés MonitorFish', { withoutScroll: true })
 
     cy.getDataCy('map-new-features-box').should('be.visible')
     cy.getDataCy('map-new-features-box').contains('Lorem ipsum dolor sit amet')

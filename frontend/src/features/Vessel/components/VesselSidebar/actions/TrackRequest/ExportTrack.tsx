@@ -94,7 +94,7 @@ export function ExportTrack() {
       /* eslint-enable sort-keys-fix/sort-keys-fix */
 
       trackEvent({
-        action: 'VESSEL_TRACK',
+        action: "Téléchargement des positions d'un navire",
         category: 'DOWNLOAD',
         name: fileName
       })

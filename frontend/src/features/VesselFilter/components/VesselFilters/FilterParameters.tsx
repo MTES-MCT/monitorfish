@@ -28,7 +28,7 @@ export function FilterParameters() {
       </CreateFilterWrapper>
       <MapPropertyTrigger
         booleanProperty={nonFilteredVesselsAreHidden}
-        Icon={nonFilteredVesselsAreHidden ? ShowingOtherVesselsSVG : HidingOtherVesselsSVG}
+        IconSVG={nonFilteredVesselsAreHidden ? ShowingOtherVesselsSVG : HidingOtherVesselsSVG}
         inverse
         text="les autres navires"
         updateBooleanProperty={isChecked => dispatch(hideOrShowNonFilteredVessels(isChecked))}

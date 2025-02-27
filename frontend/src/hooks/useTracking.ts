@@ -2,6 +2,7 @@ type TrackEvent = {
   action: string
   category: string
   name: string
+  value?: number
 }
 
 type Tracking = {
@@ -11,8 +12,14 @@ type Tracking = {
 }
 
 /* eslint-disable no-underscore-dangle */
-export function trackEvent({ action, category, name }: TrackEvent) {
-  window._paq?.push(['trackEvent', category, action, name])
+export function trackEvent({ action, category, name, value }: TrackEvent) {
+  if (!value) {
+    window._paq?.push(['trackEvent', category, action, name])
+
+    return
+  }
+
+  window._paq?.push(['trackEvent', category, action, name, value])
 }
 
 /**

@@ -1,20 +1,23 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
+import { useContext } from 'react'
 import styled from 'styled-components'
 
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { UserAccountContext } from '../../../../../context/UserAccountContext'
 import { getRegulatoryZoneTextTypeAsText } from '../../../utils'
 import { SectionTitle, Section, List, Label } from '../RegulatoryMetadata.style'
 
 export function RegulatoryReferencesDisplayed() {
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
+  const userAccount = useContext(UserAccountContext)
 
   const { regulatoryReferences } = regulatoryZoneMetadata ?? {}
 
   const sendTrackEvent = () => {
     trackEvent({
-      action: 'LIEN',
-      category: 'EXTERNE',
-      name: "Ouverture d'un lien Legipêche"
+      action: "Ouverture d'un lien Legipêche",
+      category: 'EXTERNAL_LINK',
+      name: userAccount.email ?? ''
     })
   }
 

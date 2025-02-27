@@ -45,7 +45,7 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
         downloadActivityReports(afterDateTimeStartOfDayUtc, beforeDateTimeEndOfDayUtc, jdp)
       )
       trackEvent({
-        action: 'ACTIVITY_REPORTS',
+        action: 'Téléchargement de Act-Rep',
         category: 'DOWNLOAD',
         name: fileName
       })

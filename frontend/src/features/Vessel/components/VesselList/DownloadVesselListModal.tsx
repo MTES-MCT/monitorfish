@@ -120,7 +120,7 @@ export function DownloadVesselListModal({ filteredVessels, isOpen, setIsOpen }) 
       csvExporter.generateCsv(objectsToExports)
 
       trackEvent({
-        action: 'VESSEL_LIST',
+        action: 'Téléchargement de la liste des navires',
         category: 'DOWNLOAD',
         name: csvExporter.options.filename
       })

@@ -10,7 +10,7 @@
     "npm": "10"
   },
   "scripts": {
-    "build": "npm run clean && vite build && npm run bundle-sw",
+    "build": "npm run clean && npm run bundle-sw && vite build",
     "clean": "rm -Rf ./build ./public/service-worker.js ./node-modules/.cache ./node-modules/.vite",
     "dev": "import-meta-env-prepare -x ./.env.local.defaults && vite --port 3000",
     "bundle-sw": "esbuild src/workers/serviceWorker.ts --bundle --outfile=public/service-worker.js",

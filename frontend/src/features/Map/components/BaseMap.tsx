@@ -51,8 +51,6 @@ export function BaseMap({
   const mapElement = useRef()
 
   const dispatch = useMainAppDispatch()
-  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
-  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
   const animateToRegulatoryLayer = useMainAppSelector(state => state.map.animateToRegulatoryLayer)
 
   const [cursorCoordinates, setCursorCoordinates] = useState<Coordinates | undefined>(undefined)
@@ -229,8 +227,6 @@ export function BaseMap({
       <MapContainer
         // @ts-ignore
         ref={mapElement}
-        $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}
-        $isPreviewFilteredVesselsMode={!!previewFilteredVesselsMode}
       />
       {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates} />}
       {showAttributions && <MapAttributionsBox />}
@@ -244,11 +240,8 @@ const MapWrapper = styled.div`
   flex: 1;
 `
 
-const MapContainer = styled.div<{
-  $hasHealthcheckTextWarning: boolean
-  $isPreviewFilteredVesselsMode: boolean
-}>`
-  height: ${p => (p.$hasHealthcheckTextWarning || p.$isPreviewFilteredVesselsMode ? 'calc(100vh - 50px)' : '100vh')};
+const MapContainer = styled.div`
+  height: 100vh;
   width: 100%;
   overflow-y: hidden;
   overflow-x: hidden;

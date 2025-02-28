@@ -97,7 +97,6 @@ const logbookSlice = createSlice({
      * Reset vessel fishing activities
      */
     reset(state) {
-      state.areFishingActivitiesShowedOnMap = false
       state.fishingActivitiesShowedOnMap = []
       state.fishingActivities = undefined
       state.loadingFishingActivities = false

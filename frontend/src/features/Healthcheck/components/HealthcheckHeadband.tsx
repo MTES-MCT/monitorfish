@@ -93,6 +93,9 @@ const WarningIcon = styled(WarningSVG)`
 const HealthcheckWarnings = styled.div<{
   $hasMultipleWarnings: boolean
 }>`
+  z-index: 9999;
+  position: absolute;
+  top: 0;
   font: normal normal bold 16px/22px Marianne;
   background: ${p => p.theme.color.goldenPoppy} 0% 0% no-repeat padding-box;
   width: calc(100vw - 26px);

@@ -38,6 +38,8 @@ const Text = styled.div`
 `
 
 const Preview = styled.div`
+  position: absolute;
+  top: 0;
   background: ${COLORS.charcoal} 0% 0% no-repeat padding-box;
   width 100%;
   height: 24px;

@@ -48,9 +48,6 @@ export const showVessel =
         defaultVesselTrackDepth,
         false
       )
-      if (areFishingActivitiesShowedOnMap && isFromUserAction) {
-        dispatch(logbookActions.removeAllFromMap())
-      }
 
       if (isFromSearch) {
         dispatch(addSearchedVessel(vesselIdentity))
@@ -62,7 +59,6 @@ export const showVessel =
           RTK_FORCE_REFETCH_QUERY_OPTIONS
         )
       ).unwrap()
-      await dispatch(getVesselLogbook(false)(vesselIdentity, undefined, true))
 
       dispatch(displayBannerWarningFromAPIFeedback(vesselAndPositions.positions, isTrackDepthModified, false))
 
@@ -91,6 +87,12 @@ export const showVessel =
           vessel: selectedVessel as Vessel.SelectedVessel
         })
       )
+
+      if (areFishingActivitiesShowedOnMap && isFromUserAction) {
+        dispatch(logbookActions.removeAllFromMap())
+        await dispatch(getVesselLogbook(false)(vesselIdentity, undefined, true))
+        dispatch(logbookActions.showAllOnMap())
+      }
     } catch (error) {
       dispatch(
         displayOrLogError(

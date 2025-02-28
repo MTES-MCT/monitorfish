@@ -88,4 +88,5 @@ const Wrapper = styled.div`
   font-size: 13px;
   overflow: hidden;
   width: 100vw;
+  height: 100vh;
 `

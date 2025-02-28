@@ -23,7 +23,7 @@ data class VoyageDataOutput(
                 logbookMessagesAndAlerts =
                     LogbookMessagesAndAlertsDataOutput
                         .fromLogbookMessagesAndAlerts(voyage.logbookMessagesAndAlerts),
-                totalTripsFoundForDates = voyage.totalTripsFoundForDates
+                totalTripsFoundForDates = voyage.totalTripsFoundForDates,
             )
     }
 }

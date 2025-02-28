@@ -26,6 +26,7 @@ import {
   updateInterestPointKeyBeingDrawed
 } from '../slice'
 import { coordinatesAreModified, coordinatesOrTypeAreModified, InterestPointType } from '../utils'
+import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
 
 const DRAW_START_EVENT = 'drawstart'
 const DRAW_ABORT_EVENT = 'drawabort'
@@ -333,6 +334,7 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
   function modifyInterestPoint(uuid) {
     dispatch(editInterestPoint(uuid))
     dispatch(setRightMapBoxOpened(MapBox.INTEREST_POINT))
+    dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
   }
 
   function deleteInterestPointBeingDrawedAndCloseTool() {

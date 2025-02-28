@@ -24,7 +24,7 @@ export type LogbookState = {
   vesselIdentity: Vessel.VesselIdentity | undefined
 }
 const INITIAL_STATE: LogbookState = {
-  areFishingActivitiesShowedOnMap: false,
+  areFishingActivitiesShowedOnMap: true,
   fishingActivities: undefined,
   fishingActivitiesShowedOnMap: [],
   fishingActivitiesTab: FishingActivitiesTab.SUMMARY,

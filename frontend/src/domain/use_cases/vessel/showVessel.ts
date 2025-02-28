@@ -1,5 +1,6 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { logbookActions } from '@features/Logbook/slice'
+import { getVesselLogbook } from '@features/Logbook/useCases/getVesselLogbook'
 import { doNotAnimate } from '@features/Map/slice'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel, vesselSelectors } from '@features/Vessel/slice'
 import { vesselApi } from '@features/Vessel/vesselApi'
@@ -10,7 +11,6 @@ import { omit } from 'lodash-es'
 import { displayBannerWarningFromAPIFeedback } from './displayBannerWarningFromAPIFeedback'
 import { VesselFeature } from '../../entities/vessel/vessel'
 import { getCustomOrDefaultTrackRequest } from '../../entities/vesselTrackDepth'
-import { displayedComponentActions } from '../../shared_slices/DisplayedComponent'
 import { displayedErrorActions } from '../../shared_slices/DisplayedError'
 import { addSearchedVessel, removeError } from '../../shared_slices/Global'
 import { displayOrLogError } from '../error/displayOrLogError'
@@ -29,18 +29,13 @@ export const showVessel =
   ): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
     try {
-      const { fishingActivities, map, vessel } = getState()
-      const { selectedVesselTrackRequest } = vessel
       const vessels = vesselSelectors.selectAll(getState().vessel.vessels)
-      const { defaultVesselTrackDepth } = map
-      const { areFishingActivitiesShowedOnMap } = fishingActivities
+      const {
+        fishingActivities: { areFishingActivitiesShowedOnMap },
+        map: { defaultVesselTrackDepth },
+        vessel: { selectedVesselTrackRequest }
+      } = getState()
       // TODO How to handle both the control unit dialog and the vessel sidebar ?
-      dispatch(
-        displayedComponentActions.setDisplayedComponents({
-          isControlUnitDialogDisplayed: false,
-          isControlUnitListDialogDisplayed: false
-        })
-      )
 
       const vesselFeatureId = VesselFeature.getVesselFeatureId(vesselIdentity)
       const selectedVesselLastPosition: Vessel.VesselLastPosition | undefined = vessels.find(
@@ -67,6 +62,7 @@ export const showVessel =
           RTK_FORCE_REFETCH_QUERY_OPTIONS
         )
       ).unwrap()
+      await dispatch(getVesselLogbook(false)(vesselIdentity, undefined, true))
 
       dispatch(displayBannerWarningFromAPIFeedback(vesselAndPositions.positions, isTrackDepthModified, false))
 

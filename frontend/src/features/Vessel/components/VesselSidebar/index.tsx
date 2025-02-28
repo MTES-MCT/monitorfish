@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { AnimateToTrack } from './actions/animate_to_track'
 import { HideNonSelectedVessels } from './actions/hide_non_selected_vessels'
-import { ShowFishingActivitiesOnMap } from './actions/show_fishing_activities'
+import { ShowFishingActivitiesOnMap } from './actions/ShowFishingActivitiesOnMap'
 import { TrackRequest } from './actions/TrackRequest'
 import { Body } from './Body'
 import { Tabs } from './Tabs'

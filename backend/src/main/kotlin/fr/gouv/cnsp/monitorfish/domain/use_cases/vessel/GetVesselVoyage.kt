@@ -33,26 +33,32 @@ class GetVesselVoyage(
                 when (voyageRequest) {
                     VoyageRequest.LAST ->
                         logbookReportRepository.findLastTripBeforeDateTime(
-                            internalReferenceNumber,
+                            internalReferenceNumber = internalReferenceNumber,
                             /**
                              * This 4-hour buffer prevents incorrect message datetime to be filtered.
                              * Sometimes, vessel inboard computers might have offset datetime.
                              */
-                            ZonedDateTime.now().plusHours(4),
+                            beforeDateTime = ZonedDateTime.now().plusHours(4),
                         )
                     VoyageRequest.PREVIOUS -> {
                         require(tripNumber != null) {
                             "Current trip number parameter must be not null"
                         }
 
-                        logbookReportRepository.findTripBeforeTripNumber(internalReferenceNumber, tripNumber)
+                        logbookReportRepository.findTripBeforeTripNumber(
+                            internalReferenceNumber = internalReferenceNumber,
+                            tripNumber = tripNumber,
+                        )
                     }
                     VoyageRequest.NEXT -> {
                         require(tripNumber != null) {
                             "Current trip number parameter must be not null"
                         }
 
-                        logbookReportRepository.findTripAfterTripNumber(internalReferenceNumber, tripNumber)
+                        logbookReportRepository.findTripAfterTripNumber(
+                            internalReferenceNumber = internalReferenceNumber,
+                            tripNumber = tripNumber,
+                        )
                     }
 
                     VoyageRequest.EQUALS -> {
@@ -61,8 +67,8 @@ class GetVesselVoyage(
                         }
 
                         logbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
-                            internalReferenceNumber,
-                            tripNumber,
+                            internalReferenceNumber = internalReferenceNumber,
+                            tripNumber = tripNumber,
                         )
                     }
                 }
@@ -85,26 +91,26 @@ class GetVesselVoyage(
 
         val alerts =
             PNOAndLANAlertRepository.findAlertsOfTypes(
-                listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
-                internalReferenceNumber,
-                trip.tripNumber,
+                types = listOf(element = AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
+                internalReferenceNumber = internalReferenceNumber,
+                tripNumber = trip.tripNumber,
             )
 
         val logbookMessages =
             getLogbookMessages.execute(
-                internalReferenceNumber,
-                trip.startDate,
-                trip.endDate,
-                trip.tripNumber,
+                internalReferenceNumber = internalReferenceNumber,
+                afterDepartureDate = trip.startDate,
+                beforeDepartureDate = trip.endDate,
+                tripNumber = trip.tripNumber,
             )
 
         return Voyage(
-            isLastVoyage,
-            isFirstVoyage,
-            trip.startDate,
-            trip.endDate,
-            trip.tripNumber,
-            LogbookMessagesAndAlerts(logbookMessages, alerts),
+            isLastVoyage = isLastVoyage,
+            isFirstVoyage = isFirstVoyage,
+            startDate = trip.startDate,
+            endDate = trip.endDate,
+            tripNumber = trip.tripNumber,
+            logbookMessagesAndAlerts = LogbookMessagesAndAlerts(logbookMessages, alerts),
         )
     }
 
@@ -123,7 +129,10 @@ class GetVesselVoyage(
         }
 
         return try {
-            logbookReportRepository.findTripAfterTripNumber(internalReferenceNumber, tripNumber)
+            logbookReportRepository.findTripAfterTripNumber(
+                internalReferenceNumber = internalReferenceNumber,
+                tripNumber = tripNumber,
+            )
 
             false
         } catch (e: NoLogbookFishingTripFound) {
@@ -136,7 +145,10 @@ class GetVesselVoyage(
         tripNumber: String,
     ): Boolean =
         try {
-            logbookReportRepository.findTripBeforeTripNumber(internalReferenceNumber, tripNumber)
+            logbookReportRepository.findTripBeforeTripNumber(
+                internalReferenceNumber = internalReferenceNumber,
+                tripNumber = tripNumber,
+            )
 
             false
         } catch (e: NoLogbookFishingTripFound) {

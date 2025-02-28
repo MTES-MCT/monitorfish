@@ -1,8 +1,8 @@
 import { vesselActions } from '@features/Vessel/slice'
+import { VesselSidebarTab } from '@features/Vessel/types/vessel'
+import { showVessel } from '@features/Vessel/useCases/showVessel'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Button, LinkButton } from '@mtes-mct/monitor-ui'
-import { VesselSidebarTab } from 'domain/entities/vessel/vessel'
-import { showVessel } from 'domain/use_cases/vessel/showVessel'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 

@@ -14,6 +14,7 @@ import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { UserAccountContext } from '../../../context/UserAccountContext'
+import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 import { DELETE_CACHE } from '../../../workers/constants'
 import { useGetServiceWorker } from '../../../workers/hooks/useGetServiceWorker'
@@ -37,6 +38,9 @@ export function Account() {
   const [isRegisterCacheConfirmationModalOpen, setIsRegisterCacheConfirmationModalOpen] = useState(false)
 
   const openOrClose = () => {
+    if (!rightMapBoxOpened) {
+      dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
+    }
     dispatch(setRightMapBoxOpened(rightMapBoxOpened === MapBox.ACCOUNT ? undefined : MapBox.ACCOUNT))
   }
 

@@ -7,6 +7,7 @@ import { useRef } from 'react'
 import styled from 'styled-components'
 
 import { EditVesselLabels } from './EditVesselLabels'
+import { displayedComponentActions } from '../../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxOpened } from '../../../../../domain/shared_slices/Global'
 import { MapToolButton } from '../shared/MapToolButton'
 
@@ -23,6 +24,7 @@ export function VesselLabelsMapButton() {
   const openOrCloseVesselLabels = () => {
     if (!isOpen) {
       dispatch(setRightMapBoxOpened(MapBox.VESSEL_LABELS))
+      dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
 
       return
     }

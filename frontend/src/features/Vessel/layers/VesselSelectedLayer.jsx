@@ -7,7 +7,7 @@ import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 
 import { getSelectedVesselStyle } from './style'
-import { VesselFeature } from '../../../domain/entities/vessel/vessel'
+import { VesselFeature } from '@features/Vessel/types/vessel'
 import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../Map/constants'
 import { monitorfishMap } from '../../Map/monitorfishMap'
 

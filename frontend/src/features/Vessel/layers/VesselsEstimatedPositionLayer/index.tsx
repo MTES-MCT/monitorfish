@@ -1,0 +1,51 @@
+import { VESSELS_ESTIMATED_POSITION_VECTOR_LAYER } from '@features/Vessel/layers/VesselsEstimatedPositionLayer/constants'
+import { updateEstimatedPositionFeatures } from '@features/Vessel/layers/VesselsEstimatedPositionLayer/useCases/updateEstimatedPositionFeatures'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import React, { useEffect } from 'react'
+
+import { monitorfishMap } from '../../../Map/monitorfishMap'
+import { vesselSelectors } from '../../slice'
+
+function UnmemoizedVesselEstimatedPositionLayer() {
+  const dispatch = useMainAppDispatch()
+
+  const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
+  const vesselsTracksShowed = useMainAppSelector(state => state.vessel.vesselsTracksShowed)
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+  const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
+  const nonFilteredVesselsAreHidden = useMainAppSelector(state => state.filter.nonFilteredVesselsAreHidden)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
+  const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
+  const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
+  const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
+  const showingVesselsEstimatedPositions = useMainAppSelector(state => state.map.showingVesselsEstimatedPositions)
+
+  useEffect(() => {
+    monitorfishMap.getLayers().push(VESSELS_ESTIMATED_POSITION_VECTOR_LAYER)
+
+    return () => {
+      monitorfishMap.removeLayer(VESSELS_ESTIMATED_POSITION_VECTOR_LAYER)
+    }
+  }, [])
+
+  useEffect(() => {
+    dispatch(updateEstimatedPositionFeatures())
+  }, [
+    dispatch,
+    vessels,
+    selectedBaseLayer,
+    vesselsTracksShowed,
+    selectedVesselIdentity,
+    showingVesselsEstimatedPositions,
+    previewFilteredVesselsMode,
+    nonFilteredVesselsAreHidden,
+    hideNonSelectedVessels,
+    hideVesselsAtPort,
+    vesselsLastPositionVisibility
+  ])
+
+  return null
+}
+
+export const VesselEstimatedPositionLayer = React.memo(UnmemoizedVesselEstimatedPositionLayer)

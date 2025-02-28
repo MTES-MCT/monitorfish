@@ -8,8 +8,8 @@ import countries from 'i18n-iso-countries'
 import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
 import { getDate } from '../../../../utils'
+import { showVessel } from '../../useCases/showVessel'
 
 export function VesselIdentity() {
   const dispatch = useMainAppDispatch()

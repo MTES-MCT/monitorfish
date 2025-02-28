@@ -2,11 +2,11 @@ import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import { getTrackRequestFromTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
-import { updateSelectedVesselTrackRequest } from '../../../../domain/use_cases/vessel/updateSelectedVesselTrackRequest'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { getDate } from '../../../../utils'
+import { getTrackRequestFromTrackDepth } from '../../../Vessel/types/vesselTrackDepth'
+import { updateSelectedVesselTrack } from '../../../Vessel/useCases/updateSelectedVesselTrack'
 
 type CustomDatesShowedInfoProps = {
   width?: number | undefined
@@ -23,7 +23,7 @@ export function CustomDatesShowedInfo({ width }: CustomDatesShowedInfoProps) {
 
     const trackRequest = getTrackRequestFromTrackDepth(defaultVesselTrackDepth)
 
-    dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest, false))
+    dispatch(updateSelectedVesselTrack(selectedVesselIdentity, trackRequest, false))
   }, [dispatch, defaultVesselTrackDepth, selectedVesselIdentity])
 
   return (

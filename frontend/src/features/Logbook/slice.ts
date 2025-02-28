@@ -1,10 +1,10 @@
+import { FishingActivitiesTab } from '@features/Vessel/types/vessel'
 import { createSlice } from '@reduxjs/toolkit'
 
 import { getActivityDateTimeFromMessage, getLogbookMessageType } from './utils'
-import { FishingActivitiesTab } from '../../domain/entities/vessel/vessel'
 
 import type { Logbook } from './Logbook.types'
-import type { FishingActivityShowedOnMap } from '../../domain/entities/vessel/types'
+import type { FishingActivityShowedOnMap } from '@features/Vessel/types/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
@@ -24,7 +24,7 @@ export type LogbookState = {
   vesselIdentity: Vessel.VesselIdentity | undefined
 }
 const INITIAL_STATE: LogbookState = {
-  areFishingActivitiesShowedOnMap: false,
+  areFishingActivitiesShowedOnMap: true,
   fishingActivities: undefined,
   fishingActivitiesShowedOnMap: [],
   fishingActivitiesTab: FishingActivitiesTab.SUMMARY,
@@ -143,6 +143,7 @@ const logbookSlice = createSlice({
       state.isFirstVoyage = action.payload.isFirstVoyage
       state.tripNumber = action.payload.tripNumber
       state.vesselIdentity = action.payload.vesselIdentity
+      state.loadingFishingActivities = false
     },
 
     /**

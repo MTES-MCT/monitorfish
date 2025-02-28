@@ -2,7 +2,7 @@ import { SELECT_TRACK_DEPTH_OPTIONS } from '@features/Vessel/components/VesselSi
 import { Select } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { VesselTrackDepth } from '../../../../../../domain/entities/vesselTrackDepth'
+import { VesselTrackDepth } from '../../../../types/vesselTrackDepth'
 
 import type { Promisable } from 'type-fest'
 

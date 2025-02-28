@@ -6,4 +6,5 @@ data class VoyageDatesAndTripNumber(
     val tripNumber: String,
     val startDate: ZonedDateTime,
     val endDate: ZonedDateTime,
+    val totalTripsFoundForDates: Number? = null,
 )

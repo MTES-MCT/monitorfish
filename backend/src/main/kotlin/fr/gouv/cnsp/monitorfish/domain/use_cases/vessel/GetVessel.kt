@@ -16,8 +16,8 @@ import java.time.ZonedDateTime
 @UseCase
 class GetVessel(
     private val vesselRepository: VesselRepository,
-    private val positionRepository: PositionRepository,
     private val logbookReportRepository: LogbookReportRepository,
+    private val getVesselPositions: GetVesselPositions,
     private val riskFactorRepository: RiskFactorRepository,
     private val beaconRepository: BeaconRepository,
     private val producerOrganizationMembershipRepository: ProducerOrganizationMembershipRepository,
@@ -36,10 +36,7 @@ class GetVessel(
     ): Pair<Boolean, VesselInformation> =
         coroutineScope {
             val (vesselTrackHasBeenModified, positions) =
-                GetVesselPositions(
-                    positionRepository,
-                    logbookReportRepository,
-                ).execute(
+                getVesselPositions.execute(
                     internalReferenceNumber = internalReferenceNumber,
                     externalReferenceNumber = externalReferenceNumber,
                     ircs = ircs,

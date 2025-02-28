@@ -2,12 +2,12 @@ import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { vesselApi } from '@features/Vessel/vesselApi'
 
-import { setError } from '../../shared_slices/Global'
+import { setError } from '../../../domain/shared_slices/Global'
 
 import type { MainAppThunk } from '@store'
 
-/** @deprecated Use Redux RTK `searchVessels()` query. */
-export const searchVessels =
+/** @deprecated Use Redux RTK `legacySearchVessels()` query. */
+export const legacySearchVessels =
   (searched: string): MainAppThunk<Promise<Vessel.VesselIdentity[] | undefined>> =>
   async dispatch => {
     try {

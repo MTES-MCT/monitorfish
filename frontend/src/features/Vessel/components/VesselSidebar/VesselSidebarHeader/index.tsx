@@ -1,11 +1,11 @@
 import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
 import { setIsFocusedOnVesselSearch } from '@features/Vessel/slice'
+import { vesselsAreEquals } from '@features/Vessel/types/vessel'
+import { showVessel } from '@features/Vessel/useCases/showVessel'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
-import { vesselsAreEquals } from 'domain/entities/vessel/vessel'
 import { expandRightMenu } from 'domain/shared_slices/Global'
-import { showVessel } from 'domain/use_cases/vessel/showVessel'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 

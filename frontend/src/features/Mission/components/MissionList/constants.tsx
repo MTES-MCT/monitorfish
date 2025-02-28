@@ -1,10 +1,10 @@
 import { SeafrontGroup, type AllSeafrontGroup } from '@constants/seafront'
 import { getMissionCompletionFrontStatus, getMissionStatus } from '@features/Mission/utils'
+import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { customDayjs, getOptionsFromLabelledEnum } from '@mtes-mct/monitor-ui'
 
 import { InfractionFilterLabel, MissionDateRangeFilterLabel, MissionFilterType } from './types'
 import { getNumberOfInfractions } from '../../../../domain/entities/controls'
-import { UNKNOWN_VESSEL } from '../../../../domain/entities/vessel/vessel'
 import { Mission } from '../../mission.types'
 import { MissionAction } from '../../missionAction.types'
 

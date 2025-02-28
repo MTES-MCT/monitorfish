@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { getInterestPointStyle, POIStyle } from './interestPoint.style'
 import { InterestPointLine } from './interestPointLine'
 import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
-import { saveInterestPointFeature } from '../../../domain/use_cases/interestPoint/saveInterestPointFeature'
+import { saveInterestPointFeature } from '../useCases/saveInterestPointFeature'
 import { MapBox, OPENLAYERS_PROJECTION, LayerProperties } from '../../Map/constants'
 import { monitorfishMap } from '../../Map/monitorfishMap'
 import { InterestPointOverlay } from '../components/InterestPointOverlay'
@@ -26,6 +26,7 @@ import {
   updateInterestPointKeyBeingDrawed
 } from '../slice'
 import { coordinatesAreModified, coordinatesOrTypeAreModified, InterestPointType } from '../utils'
+import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
 
 const DRAW_START_EVENT = 'drawstart'
 const DRAW_ABORT_EVENT = 'drawabort'
@@ -333,6 +334,7 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
   function modifyInterestPoint(uuid) {
     dispatch(editInterestPoint(uuid))
     dispatch(setRightMapBoxOpened(MapBox.INTEREST_POINT))
+    dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
   }
 
   function deleteInterestPointBeingDrawedAndCloseTool() {

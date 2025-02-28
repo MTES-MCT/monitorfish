@@ -1,6 +1,5 @@
+import { VesselLocation } from '@features/Vessel/types/vessel'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-
-import { VesselLocation } from '../../../../domain/entities/vessel/vessel'
 
 import type { GeoJSON } from '../../../../domain/types/GeoJSON'
 

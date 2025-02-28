@@ -1,9 +1,9 @@
 import { WindowContext } from '@api/constants'
+import { VesselFeature } from '@features/Vessel/types/vessel'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { isNotNullish } from '@utils/isNotNullish'
 
-import { VesselFeature } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { removeVesselReportings } from '../../Vessel/slice'
 import { reportingApi } from '../reportingApi'

@@ -1,9 +1,9 @@
 import { RtkCacheTagType } from '@api/constants'
+import { VesselFeature } from '@features/Vessel/types/vessel'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
-import { VesselFeature } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { removeVesselReporting } from '../../Vessel/slice'
 import { reportingApi } from '../reportingApi'

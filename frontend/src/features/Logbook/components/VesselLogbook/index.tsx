@@ -1,5 +1,6 @@
 import { FIVE_MINUTES } from '@api/APIWorker'
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
+import { FishingActivitiesTab, vesselsAreEquals } from '@features/Vessel/types/vessel'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
@@ -8,7 +9,6 @@ import styled from 'styled-components'
 
 import { LogbookMessages } from './LogbookMessages'
 import { LogbookSummary } from './LogbookSummary'
-import { FishingActivitiesTab, vesselsAreEquals } from '../../../../domain/entities/vessel/vessel'
 import { useGetLogbookUseCase } from '../../hooks/useGetLogbookUseCase'
 import { logbookActions } from '../../slice'
 

@@ -16,10 +16,13 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
+@Import(GetVesselPositions::class, GetDatesFromVesselTrackDepth::class)
 @ExtendWith(SpringExtension::class)
 class GetVesselUTests {
     @MockBean
@@ -39,6 +42,9 @@ class GetVesselUTests {
 
     @MockBean
     private lateinit var producerOrganizationMembershipRepository: ProducerOrganizationMembershipRepository
+
+    @Autowired
+    private lateinit var getVesselPositions: GetVesselPositions
 
     @Test
     fun `execute Should return the vessel and an ordered list of last positions for a given vessel`() {
@@ -145,12 +151,12 @@ class GetVesselUTests {
         val pair =
             runBlocking {
                 GetVessel(
-                    vesselRepository,
-                    positionRepository,
-                    logbookReportRepository,
-                    riskFactorRepository,
-                    beaconRepository,
-                    producerOrganizationMembershipRepository,
+                    vesselRepository = vesselRepository,
+                    logbookReportRepository = logbookReportRepository,
+                    getVesselPositions = getVesselPositions,
+                    riskFactorRepository = riskFactorRepository,
+                    beaconRepository = beaconRepository,
+                    producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
                 ).execute(
                     vesselId = 123,
                     internalReferenceNumber = "FR224226850",
@@ -196,12 +202,12 @@ class GetVesselUTests {
         val pair =
             runBlocking {
                 GetVessel(
-                    vesselRepository,
-                    positionRepository,
-                    logbookReportRepository,
-                    riskFactorRepository,
-                    beaconRepository,
-                    producerOrganizationMembershipRepository,
+                    vesselRepository = vesselRepository,
+                    logbookReportRepository = logbookReportRepository,
+                    getVesselPositions = getVesselPositions,
+                    riskFactorRepository = riskFactorRepository,
+                    beaconRepository = beaconRepository,
+                    producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
                 ).execute(
                     vesselId = 123,
                     internalReferenceNumber = "FR224226850",
@@ -233,12 +239,12 @@ class GetVesselUTests {
         val pair =
             runBlocking {
                 GetVessel(
-                    vesselRepository,
-                    positionRepository,
-                    logbookReportRepository,
-                    riskFactorRepository,
-                    beaconRepository,
-                    producerOrganizationMembershipRepository,
+                    vesselRepository = vesselRepository,
+                    logbookReportRepository = logbookReportRepository,
+                    getVesselPositions = getVesselPositions,
+                    riskFactorRepository = riskFactorRepository,
+                    beaconRepository = beaconRepository,
+                    producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
                 ).execute(
                     vesselId = 123,
                     internalReferenceNumber = "FR224226850",
@@ -270,12 +276,12 @@ class GetVesselUTests {
         val pair =
             runBlocking {
                 GetVessel(
-                    vesselRepository,
-                    positionRepository,
-                    logbookReportRepository,
-                    riskFactorRepository,
-                    beaconRepository,
-                    producerOrganizationMembershipRepository,
+                    vesselRepository = vesselRepository,
+                    logbookReportRepository = logbookReportRepository,
+                    getVesselPositions = getVesselPositions,
+                    riskFactorRepository = riskFactorRepository,
+                    beaconRepository = beaconRepository,
+                    producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
                 ).execute(
                     vesselId = null,
                     internalReferenceNumber = "FR224226850",
@@ -307,12 +313,12 @@ class GetVesselUTests {
         val pair =
             runBlocking {
                 GetVessel(
-                    vesselRepository,
-                    positionRepository,
-                    logbookReportRepository,
-                    riskFactorRepository,
-                    beaconRepository,
-                    producerOrganizationMembershipRepository,
+                    vesselRepository = vesselRepository,
+                    logbookReportRepository = logbookReportRepository,
+                    getVesselPositions = getVesselPositions,
+                    riskFactorRepository = riskFactorRepository,
+                    beaconRepository = beaconRepository,
+                    producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
                 ).execute(
                     vesselId = null,
                     internalReferenceNumber = "FR224226850",

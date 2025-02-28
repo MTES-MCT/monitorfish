@@ -2,8 +2,8 @@ import { z } from 'zod'
 
 import type { VesselLastPositionLightSchema } from '@features/Vessel/schemas/VesselLastPositionLightSchema'
 import type {
-  VesselLastPositionSchema,
-  DeclaredLogbookSpeciesSchema
+  DeclaredLogbookSpeciesSchema,
+  VesselLastPositionSchema
 } from '@features/Vessel/schemas/VesselLastPositionSchema'
 import type { VesselSchema } from '@features/Vessel/schemas/VesselSchema'
 import type Feature from 'ol/Feature'
@@ -137,6 +137,14 @@ export namespace Vessel {
     code: string
     color: string
     description: string
+  }
+
+  export interface VesselEstimatedPositionFeature extends Feature<Point | LineString> {
+    estimatedPosition: {
+      dateTime: string
+      latitude: number
+      longitude: number
+    }
   }
 
   export type VesselLastPositionFeature = Feature<Point> & Vessel.VesselLastPosition

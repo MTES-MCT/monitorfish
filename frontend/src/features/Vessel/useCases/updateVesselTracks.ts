@@ -1,7 +1,9 @@
 import { showVessel } from './showVessel'
 import { showVesselTrack } from './showVesselTrack'
 
-export const updateVesselTracks = () => (dispatch, getState) => {
+import type { MainAppThunk } from '@store'
+
+export const updateVesselTracks = (): MainAppThunk => (dispatch, getState) => {
   const { selectedVesselIdentity, vesselsTracksShowed } = getState().vessel
 
   if (selectedVesselIdentity) {

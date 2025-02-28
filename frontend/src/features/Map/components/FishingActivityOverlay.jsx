@@ -5,7 +5,7 @@ import { COLORS } from '../../../constants/constants'
 import { useDispatch } from 'react-redux'
 import AckNOkSVG from '../../icons/Message_JPE_non_acquitte_clair.svg?react'
 import DeletedSVG from '../../icons/Suppression_clair.svg?react'
-import { navigateToFishingActivity } from '../../../domain/use_cases/vessel/navigateToFishingActivity'
+import { navigateToFishingActivity } from '../../Logbook/useCases/navigateToFishingActivity.ts'
 import { monitorfishMap } from '../monitorfishMap.ts'
 
 const FishingActivityOverlay = ({ id, name, coordinates, isDeleted, isNotAcknowledged }) => {

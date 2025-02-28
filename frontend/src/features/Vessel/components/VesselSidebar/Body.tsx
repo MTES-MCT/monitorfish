@@ -1,3 +1,4 @@
+import { VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedError } from '@libs/DisplayedError'
@@ -12,7 +13,6 @@ import { VesselIdentity } from './VesselIdentity'
 import { AlertWarning } from './warnings/AlertWarning'
 import { BeaconMalfunctionWarning } from './warnings/BeaconMalfunctionWarning'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
-import { VesselSidebarTab } from '../../../../domain/entities/vessel/vessel'
 import { VesselLogbook } from '../../../Logbook/components/VesselLogbook'
 import { VesselReportings } from '../../../Reporting/components/VesselReportings'
 

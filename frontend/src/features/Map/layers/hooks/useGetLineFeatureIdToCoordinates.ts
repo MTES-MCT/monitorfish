@@ -1,7 +1,7 @@
 import LineString from 'ol/geom/LineString'
 import { useCallback, useState } from 'react'
 
-import { VesselLabelLine } from '../../../../domain/entities/vesselLabelLine'
+import { VesselLabelLine } from '../../../Vessel/types/vesselLabelLine'
 
 export function useGetLineFeatureIdToCoordinates(vectorSource) {
   const [featureIdToCoordinates, setFeatureIdToCoordinates] = useState(new Map())

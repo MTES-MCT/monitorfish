@@ -1,7 +1,7 @@
+import { VesselLocation, vesselSize } from '@features/Vessel/types/vessel'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 import * as Comlink from 'comlink'
 
-import { VesselLocation, vesselSize } from '../domain/entities/vessel/vessel'
 import {
   FRANCE,
   getRegulatoryLawTypesFromZones,

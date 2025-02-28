@@ -4,6 +4,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
 
 import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
+import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 
 export function ControlUnitListMapButton() {
   const dispatch = useMainAppDispatch()
@@ -16,11 +17,18 @@ export function ControlUnitListMapButton() {
 
   const toggle = () => {
     const willBeControlUnitListDialogDisplayed = !isControlUnitListDialogDisplayed
-    const willBeControlUnitListgDisplayed = isControlUnitDialogDisplayed && !willBeControlUnitListDialogDisplayed
+
+    // TODO Used to manage rightMapBoxOpened boxes and displayedComponent boxes closure.
+    // TODO Merge both slices
+    if (willBeControlUnitListDialogDisplayed) {
+      dispatch(setRightMapBoxOpened(undefined))
+    }
+
+    const willBeControlUnitDialogDisplayed = isControlUnitDialogDisplayed && !willBeControlUnitListDialogDisplayed
 
     dispatch(
       displayedComponentActions.setDisplayedComponents({
-        isControlUnitDialogDisplayed: willBeControlUnitListgDisplayed,
+        isControlUnitDialogDisplayed: willBeControlUnitDialogDisplayed,
         isControlUnitListDialogDisplayed: willBeControlUnitListDialogDisplayed
       })
     )

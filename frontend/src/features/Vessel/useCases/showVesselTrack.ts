@@ -6,10 +6,11 @@ import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { transform } from 'ol/proj'
 
-import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
-import { removeError, setError } from '../../shared_slices/Global'
+import { displayBannerWarningFromAPIFeedback } from './displayBannerWarningFromAPIFeedback'
+import { removeError, setError } from '../../../domain/shared_slices/Global'
+import { getCustomOrDefaultTrackRequest } from '../types/vesselTrackDepth'
 
-import type { TrackRequest } from '../../entities/vessel/types'
+import type { TrackRequest } from '@features/Vessel/types/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppThunk } from '@store'
 
@@ -37,12 +38,7 @@ export const showVesselTrack =
           RTK_FORCE_REFETCH_QUERY_OPTIONS
         )
       ).unwrap()
-      try {
-        throwCustomErrorFromAPIFeedback(positions, isTrackDepthModified, isFromUserAction)
-        dispatch(removeError())
-      } catch (error) {
-        dispatch(setError(error))
-      }
+      dispatch(displayBannerWarningFromAPIFeedback(positions, isTrackDepthModified, false))
 
       if (!positions?.length) {
         return

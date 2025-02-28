@@ -5,7 +5,6 @@ import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { LastPositionsSlider } from './LastPositionsSlider'
-import { updateDefaultVesselTrackDepth } from '../../../../../domain/use_cases/vessel/updateDefaultVesselTrackDepth'
 import { MapPropertyTrigger } from '../../../../commonComponents/MapPropertyTrigger'
 import EstimatedPositionSVG from '../../../../icons/Positions_estimees.svg?react'
 import {
@@ -14,6 +13,7 @@ import {
   showVesselsEstimatedPositions
 } from '../../../../Map/slice'
 import { setHideNonSelectedVessels } from '../../../../Vessel/slice'
+import { updateDefaultVesselTrackDepth } from '../../../../Vessel/useCases/updateDefaultVesselTrackDepth'
 import { MapToolBox } from '../shared/MapToolBox'
 import { Content, Header } from '../shared/styles'
 

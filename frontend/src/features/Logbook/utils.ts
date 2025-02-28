@@ -9,7 +9,7 @@ import { undefinedize } from '../../utils/undefinedize'
 
 import type { CatchProperty, CatchWithProperties, ProtectedCatchWithProperties } from './components/VesselLogbook/types'
 import type { SpeciesInsight, SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from './types'
-import type { FishingActivityShowedOnMap } from '../../domain/entities/vessel/types'
+import type { FishingActivityShowedOnMap } from '@features/Vessel/types/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
 function getCatchPropertiesObject(logbookCatch: Logbook.Catch): CatchProperty {

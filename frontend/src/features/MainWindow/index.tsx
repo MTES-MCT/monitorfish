@@ -28,9 +28,6 @@ export function MainWindow() {
   const isControlUnitDialogDisplayed = useMainAppSelector(
     state => state.displayedComponent.isControlUnitDialogDisplayed
   )
-  const isControlUnitListDialogDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isControlUnitListDialogDisplayed
-  )
   const isDrawLayerModalDisplayed = useMainAppSelector(state => state.displayedComponent.isDrawLayerModalDisplayed)
   const isVesselListDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselListDisplayed)
   const isVesselSearchDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselSearchDisplayed)
@@ -73,7 +70,7 @@ export function MainWindow() {
         {isVesselSidebarOpen && <VesselSidebar />}
 
         {isControlUnitDialogDisplayed && <ControlUnitDialog />}
-        {isControlUnitListDialogDisplayed && <ControlUnitListDialog />}
+        <ControlUnitListDialog />
 
         <VesselLoader />
         <APIWorker />

@@ -16,10 +16,13 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
+@Import(GetDatesFromVesselTrackDepth::class)
 @ExtendWith(SpringExtension::class)
 class GetVesselPositionsUTests {
     @MockBean
@@ -27,6 +30,9 @@ class GetVesselPositionsUTests {
 
     @MockBean
     private lateinit var logbookReportRepository: LogbookReportRepository
+
+    @Autowired
+    private lateinit var getDatesFromVesselTrackDepth: GetDatesFromVesselTrackDepth
 
     @Test
     fun `execute Should return the last 1 day positions When the DEP message is not found`() {
@@ -126,7 +132,7 @@ class GetVesselPositionsUTests {
         // When
         val pair =
             runBlocking {
-                GetVesselPositions(positionRepository, logbookReportRepository)
+                GetVesselPositions(positionRepository, getDatesFromVesselTrackDepth)
                     .execute(
                         internalReferenceNumber = "FR224226850",
                         externalReferenceNumber = "",
@@ -167,7 +173,7 @@ class GetVesselPositionsUTests {
         val throwable =
             catchThrowable {
                 runBlocking {
-                    GetVesselPositions(positionRepository, logbookReportRepository)
+                    GetVesselPositions(positionRepository, getDatesFromVesselTrackDepth)
                         .execute(
                             internalReferenceNumber = "FR224226850",
                             externalReferenceNumber = "",
@@ -195,7 +201,7 @@ class GetVesselPositionsUTests {
         val throwable =
             catchThrowable {
                 runBlocking {
-                    GetVesselPositions(positionRepository, logbookReportRepository)
+                    GetVesselPositions(positionRepository, getDatesFromVesselTrackDepth)
                         .execute(
                             internalReferenceNumber = "FR224226850",
                             externalReferenceNumber = "",
@@ -223,7 +229,7 @@ class GetVesselPositionsUTests {
         val throwable =
             catchThrowable {
                 runBlocking {
-                    GetVesselPositions(positionRepository, logbookReportRepository)
+                    GetVesselPositions(positionRepository, getDatesFromVesselTrackDepth)
                         .execute(
                             internalReferenceNumber = "FR224226850",
                             externalReferenceNumber = "",
@@ -252,7 +258,7 @@ class GetVesselPositionsUTests {
         val fromDateTime = ZonedDateTime.now().minusMinutes(15)
         val toDateTime = ZonedDateTime.now()
         runBlocking {
-            GetVesselPositions(positionRepository, logbookReportRepository)
+            GetVesselPositions(positionRepository, getDatesFromVesselTrackDepth)
                 .execute(
                     internalReferenceNumber = "FR224226850",
                     externalReferenceNumber = "",
@@ -366,7 +372,7 @@ class GetVesselPositionsUTests {
 
         // When
         runBlocking {
-            GetVesselPositions(positionRepository, logbookReportRepository)
+            GetVesselPositions(positionRepository, getDatesFromVesselTrackDepth)
                 .execute(
                     internalReferenceNumber = "FR224226850",
                     externalReferenceNumber = "",
@@ -483,7 +489,7 @@ class GetVesselPositionsUTests {
         // When
         val pair =
             runBlocking {
-                GetVesselPositions(positionRepository, logbookReportRepository)
+                GetVesselPositions(positionRepository, getDatesFromVesselTrackDepth)
                     .execute(
                         internalReferenceNumber = "FR224226850",
                         externalReferenceNumber = "",

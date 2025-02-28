@@ -1,29 +1,23 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { THEME } from '@mtes-mct/monitor-ui'
-import { useEffect } from 'react'
-import styled from 'styled-components'
+import { THEME, Icon } from '@mtes-mct/monitor-ui'
 
-import ShowFishingActivitiesSVG from '../../../../../icons/Bouton_afficher_messages_JPE_sur_piste.svg?react'
-import { useGetLogbookUseCase } from '../../../../../Logbook/hooks/useGetLogbookUseCase'
-import { logbookActions } from '../../../../../Logbook/slice'
-import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
+import { VesselSidebarActionButton } from './VesselSidebarActionButton'
+import { useGetLogbookUseCase } from '../../../../Logbook/hooks/useGetLogbookUseCase'
+import { logbookActions } from '../../../../Logbook/slice'
 
 export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
   const dispatch = useMainAppDispatch()
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
-  const { selectedVesselIdentity, selectedVesselPositions } = useMainAppSelector(state => state.vessel)
-  const { areFishingActivitiesShowedOnMap, fishingActivities, fishingActivitiesShowedOnMap } = useMainAppSelector(
-    state => state.fishingActivities
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+  const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
+  const areFishingActivitiesShowedOnMap = useMainAppSelector(
+    state => state.fishingActivities.areFishingActivitiesShowedOnMap
   )
+  const fishingActivities = useMainAppSelector(state => state.fishingActivities.fishingActivities)
+  const fishingActivitiesShowedOnMap = useMainAppSelector(state => state.fishingActivities.fishingActivitiesShowedOnMap)
   const getVesselLogbook = useGetLogbookUseCase()
   const areFishingActivitiesReallyShowedOnMap = areFishingActivitiesShowedOnMap || fishingActivitiesShowedOnMap?.length
-
-  useEffect(() => {
-    if (!isSidebarOpen) {
-      dispatch(logbookActions.hideAllOnMap())
-    }
-  }, [dispatch, isSidebarOpen])
 
   const showOrHideFishingActivities = async function () {
     if (areFishingActivitiesReallyShowedOnMap) {
@@ -51,11 +45,7 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
       onClick={showOrHideFishingActivities}
       title={`${areFishingActivitiesReallyShowedOnMap ? 'Cacher' : 'Afficher'} les messages du JPE sur la piste`}
     >
-      <ShowFishingActivities />
+      <Icon.ShowErsMessages color={THEME.color.white} style={{ margin: 5 }} />
     </VesselSidebarActionButton>
   )
 }
-
-const ShowFishingActivities = styled(ShowFishingActivitiesSVG)`
-  width: 30px;
-`

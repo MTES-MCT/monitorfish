@@ -6,7 +6,7 @@ import { customZoneReducer, type CustomZoneState } from '@features/CustomZone/sl
 import { drawReducer } from '@features/Draw/slice'
 import { favoriteVesselReducer } from '@features/FavoriteVessel/slice'
 import { interestPointReducer } from '@features/InterestPoint/slice'
-import { logbookReducer } from '@features/Logbook/slice'
+import { logbookReducer, type LogbookState } from '@features/Logbook/slice'
 import { mainWindowReducer } from '@features/MainWindow/slice'
 import { layerReducer, type LayerState } from '@features/Map/layer.slice'
 import { backOfficeLayerReducer } from '@features/Map/layer.slice.backoffice'
@@ -100,7 +100,10 @@ export const mainReducer = {
     },
     filterReducer
   ),
-  fishingActivities: logbookReducer,
+  fishingActivities: persistReducerTyped(
+    { ...getCommonPersistReducerConfig<LogbookState>('mainPersistorLogbook', ['areFishingActivitiesShowedOnMap']) },
+    logbookReducer
+  ),
   infraction: infractionReducer,
   interestPoint: interestPointReducer,
   layer: persistReducerTyped(

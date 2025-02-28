@@ -1,4 +1,6 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
+import { getVesselLogbookByDates } from '@features/Logbook/useCases/getVesselLogbookByDates'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { animateToExtent, doNotAnimate } from '@features/Map/slice'
 import {
   resetLoadingVessel,
@@ -7,9 +9,9 @@ import {
   updatingVesselTrackDepth
 } from '@features/Vessel/slice'
 import { vesselApi } from '@features/Vessel/vesselApi'
+import { Level } from '@mtes-mct/monitor-ui'
 
-import { logbookActions } from '../../../features/Logbook/slice'
-import { throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
+import { displayBannerWarningFromAPIFeedback } from './displayBannerWarningFromAPIFeedback'
 import { removeError, setError } from '../../shared_slices/Global'
 
 import type { MainAppDispatch, MainAppThunk } from '../../../store'
@@ -19,17 +21,15 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
 /**
  * Modify the vessel track depth on map
  */
-export const updateSelectedVesselTrackRequest =
+export const updateSelectedVesselTrack =
   (
     vesselIdentity: Vessel.VesselIdentity,
     trackRequest: TrackRequest,
-    withoutFishingMessagesRerendering: boolean = false
+    isCalledAfterLogbookFetch: boolean = false
   ): MainAppThunk =>
-  async (dispatch, getState) => {
+  async dispatch => {
     try {
-      const { areFishingActivitiesShowedOnMap } = getState().fishingActivities
-
-      dispatchUpdatingVessel(dispatch, true)
+      dispatchIsUpdating(dispatch)
 
       const { isTrackDepthModified, positions } = await dispatch(
         vesselApi.endpoints.getVesselPositions.initiate(
@@ -37,23 +37,34 @@ export const updateSelectedVesselTrackRequest =
           RTK_FORCE_REFETCH_QUERY_OPTIONS
         )
       ).unwrap()
-      throwCustomErrorFromAPIFeedback(positions, isTrackDepthModified, false)
+      dispatch(displayBannerWarningFromAPIFeedback(positions, isTrackDepthModified, false))
+
+      if (!isCalledAfterLogbookFetch) {
+        await dispatch(getVesselLogbookByDates(vesselIdentity, trackRequest))
+      }
 
       dispatch(removeError())
       dispatch(setSelectedVesselCustomTrackRequest(trackRequest))
       dispatch(updateSelectedVesselPositions(positions))
-      if (areFishingActivitiesShowedOnMap && !withoutFishingMessagesRerendering) {
-        dispatch(logbookActions.showAllOnMap())
-      }
       dispatch(animateToExtent())
     } catch (error) {
       dispatch(setError(error))
+      dispatch(
+        addMainWindowBanner({
+          children: (error as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          isFixed: true,
+          level: Level.WARNING,
+          withAutomaticClosing: true
+        })
+      )
       dispatch(resetLoadingVessel())
     }
   }
 
-function dispatchUpdatingVessel(dispatch: MainAppDispatch, doNotAnimateBoolean: boolean) {
-  dispatch(doNotAnimate(doNotAnimateBoolean))
+function dispatchIsUpdating(dispatch: MainAppDispatch) {
+  dispatch(doNotAnimate(true))
   dispatch(removeError())
   dispatch(updatingVesselTrackDepth())
 }

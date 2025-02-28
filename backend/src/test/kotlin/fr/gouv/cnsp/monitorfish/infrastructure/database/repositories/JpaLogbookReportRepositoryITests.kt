@@ -1183,6 +1183,24 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findTripBetweenDates Should return the whole trip found When the dates are included within the total trip`() {
+        // When
+        val trip =
+            jpaLogbookReportRepository.findTripBetweenDates(
+                "FAK000999999",
+                ZonedDateTime.parse("2019-10-11T01:05Z"),
+                ZonedDateTime.parse("2019-10-11T12:01Z"),
+            )
+
+        // Then
+        assertThat(trip.tripNumber).isEqualTo("9463715")
+        assertThat(trip.startDate.toString()).isEqualTo("2019-10-11T01:06Z")
+        assertThat(trip.endDate.toString()).isEqualTo("2019-10-22T11:06Z")
+        assertThat(trip.totalTripsFoundForDates).isEqualTo(1)
+    }
+
+    @Test
+    @Transactional
     fun `findTripBetweenDates Should throw an exception When no trip found`() {
         // When
         val throwable =

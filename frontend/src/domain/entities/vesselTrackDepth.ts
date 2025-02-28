@@ -1,8 +1,5 @@
-import { NoDEPFoundError } from '../../errors/NoDEPFoundError'
-import { NoPositionsFoundError } from '../../errors/NoPositionsFoundError'
-
 import type { TrackRequest, TrackRequestPredefined } from './vessel/types'
-import type { Vessel } from '@features/Vessel/Vessel.types'
+import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'
 
 export enum VesselTrackDepth {
   CUSTOM = 'CUSTOM',
@@ -42,7 +39,7 @@ export const getCustomOrDefaultTrackRequest = (
  * @param {VesselNS.TrackRequestPredefined['trackDepth']} trackDepth
  * @returns {VesselNS.TrackRequestPredefined} vessel track request
  */
-export const getTrackRequestFromTrackDepth = trackDepth => ({
+export const getTrackRequestFromTrackDepth = (trackDepth: SelectableVesselTrackDepth) => ({
   afterDateTime: null,
   beforeDateTime: null,
   trackDepth
@@ -70,34 +67,3 @@ export const getTrackRequestFromDates = (afterDateTime: Date, beforeDateTime: Da
   beforeDateTime,
   trackDepth: VesselTrackDepth.CUSTOM
 })
-
-export function throwCustomErrorFromAPIFeedback(
-  positions: Vessel.VesselPosition[],
-  isTrackDepthModified: boolean,
-  isFromUserAction: boolean
-) {
-  if (trackDepthHasBeenModifiedFromAPI(positions, isTrackDepthModified, isFromUserAction)) {
-    throw new NoDEPFoundError(
-      "Nous n'avons pas trouvé de dernier DEP pour ce navire, nous affichons " +
-        'les positions des dernières 24 heures.'
-    )
-  }
-  if (noPositionsFoundForVessel(positions, isFromUserAction)) {
-    throw new NoPositionsFoundError("Nous n'avons trouvé aucune position.")
-  }
-  if (noPositionsFoundForEnteredDateTime(positions)) {
-    throw new NoPositionsFoundError("Nous n'avons trouvé aucune position pour ces dates.")
-  }
-}
-
-function noPositionsFoundForVessel(positions, isFromUserAction) {
-  return !positions?.length && isFromUserAction
-}
-
-function noPositionsFoundForEnteredDateTime(positions) {
-  return !positions?.length
-}
-
-function trackDepthHasBeenModifiedFromAPI(positions, isTrackDepthModified, isFromUserAction) {
-  return positions?.length && isTrackDepthModified && isFromUserAction
-}

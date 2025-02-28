@@ -1,7 +1,7 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
+import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { FrontendError } from '@libs/FrontendError'
 import { Accent, Icon, IconButton, Tag, TagGroup, THEME } from '@mtes-mct/monitor-ui'
-import { UNKNOWN_VESSEL } from 'domain/entities/vessel/vessel'
 import { find } from 'lodash-es'
 import { useMemo } from 'react'
 import styled from 'styled-components'

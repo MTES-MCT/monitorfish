@@ -6,7 +6,7 @@ import { NavigateTo } from './constants'
 import { Logbook } from './Logbook.types'
 import { monitorfishApi, monitorfishLightApi } from '../../api/api'
 
-import type { TrackRequest } from '../../domain/entities/vessel/types'
+import type { TrackRequest } from '@features/Vessel/types/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
 const LAST_LOGBOOK_TRIPS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les dernières marées"

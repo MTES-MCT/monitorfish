@@ -1,12 +1,12 @@
 import { END_OF_MALFUNCTION_REASON_RECORD } from '@features/BeaconMalfunction/constants'
 import { vesselActions } from '@features/Vessel/slice'
+import { VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
-import { VesselSidebarTab } from 'domain/entities/vessel/vessel'
-import { VesselTrackDepth } from 'domain/entities/vesselTrackDepth'
 
 import { showVessel } from './showVessel'
+import { VesselTrackDepth } from '../types/vesselTrackDepth'
 
-import type { TrackRequest } from 'domain/entities/vessel/types'
+import type { TrackRequest } from '@features/Vessel/types/types'
 
 /**
  * Show the selected vessel on map.

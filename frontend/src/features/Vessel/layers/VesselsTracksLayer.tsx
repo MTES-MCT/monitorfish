@@ -6,10 +6,6 @@ import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
-import { Vector } from 'ol/layer'
-import VectorSource from 'ol/source/Vector'
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
-
 import {
   fishingActivityIsWithinTrackLineDates,
   getFeaturesFromPositions,
@@ -18,15 +14,19 @@ import {
   removeFishingActivitiesFeatures,
   removeVesselTrackFeatures,
   updateTrackCircleStyle
-} from '../../../domain/entities/vessel/track'
+} from 'features/Vessel/types/track'
+import { Vector } from 'ol/layer'
+import VectorSource from 'ol/source/Vector'
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
+
 import { logbookActions } from '../../Logbook/slice'
 import { getFishingActivityFeatureOnTrackLine } from '../../Logbook/utils'
 import { animateToCoordinates } from '../../Map/slice'
 import { setVesselTrackExtent, updateVesselTrackAsHidden, updateVesselTrackAsShowedWithExtend } from '../slice'
 
-import type { FishingActivityShowedOnMap } from '../../../domain/entities/vessel/types'
 import type { FishingActivityFeatureIdAndCoordinates } from '../../Logbook/types'
 import type { MonitorFishMap } from '@features/Map/Map.types'
+import type { FishingActivityShowedOnMap } from '@features/Vessel/types/types'
 import type { Feature } from 'ol'
 import type { Coordinate } from 'ol/coordinate'
 import type { Geometry } from 'ol/geom'

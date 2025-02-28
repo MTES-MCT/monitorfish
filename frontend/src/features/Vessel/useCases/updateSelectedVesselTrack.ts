@@ -12,11 +12,11 @@ import { vesselApi } from '@features/Vessel/vesselApi'
 import { Level } from '@mtes-mct/monitor-ui'
 
 import { displayBannerWarningFromAPIFeedback } from './displayBannerWarningFromAPIFeedback'
-import { removeError, setError } from '../../shared_slices/Global'
+import { removeError, setError } from '../../../domain/shared_slices/Global'
 
-import type { MainAppDispatch, MainAppThunk } from '../../../store'
-import type { TrackRequest } from '../../entities/vessel/types'
+import type { TrackRequest } from '@features/Vessel/types/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
+import type { MainAppDispatch, MainAppThunk } from '@store'
 
 /**
  * Modify the vessel track depth on map

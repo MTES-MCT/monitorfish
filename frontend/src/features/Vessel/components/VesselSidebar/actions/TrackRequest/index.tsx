@@ -1,20 +1,20 @@
+import { getTrackRequestFromTrackDepth, VesselTrackDepth } from '@features/Vessel/types/vesselTrackDepth'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DateRangePicker, THEME, Icon } from '@mtes-mct/monitor-ui'
-import { getTrackRequestFromTrackDepth, VesselTrackDepth } from 'domain/entities/vesselTrackDepth'
 import { useState } from 'react'
 import styled from 'styled-components'
 
 import { ExportTrack } from './ExportTrack'
 import { PositionsTable } from './PositionsTable'
 import { TrackDepthSelection } from './TrackDepthSelection'
-import { updateSelectedVesselTrack } from '../../../../../../domain/use_cases/vessel/updateSelectedVesselTrack'
 import { MapComponent } from '../../../../../commonStyles/MapComponent'
+import { updateSelectedVesselTrack } from '../../../../useCases/updateSelectedVesselTrack'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'
+import type { TrackRequestCustom, TrackRequestPredefined } from '@features/Vessel/types/types'
 import type { DateRange } from '@mtes-mct/monitor-ui'
-import type { TrackRequestCustom, TrackRequestPredefined } from 'domain/entities/vessel/types'
 
 type TrackRequestProps = {
   isSidebarOpen: boolean

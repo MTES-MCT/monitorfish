@@ -1,9 +1,9 @@
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
+import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { VesselSearch } from '@features/VesselSearch'
 import { Checkbox, useNewWindow } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
-import { UNKNOWN_VESSEL } from 'domain/entities/vessel/vessel'
 import { useFormikContext } from 'formik'
 import styled from 'styled-components'
 

@@ -1,4 +1,4 @@
-import { COLORS } from '@constants/constants.js'
+import { COLORS } from '@constants/constants'
 import { undoPreviewVessels } from '@features/Vessel/useCases/undoPreviewVessels'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'

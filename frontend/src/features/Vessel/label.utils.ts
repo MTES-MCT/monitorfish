@@ -1,8 +1,8 @@
-import { MissionLabelLine } from '../../missionLabelLine'
-import { VesselLabelLine } from '../../vesselLabelLine'
+import { VesselLabelLine } from './types/vesselLabelLine'
+import { MissionLabelLine } from '../../domain/entities/missionLabelLine'
 
 /**
- * @deprecated Do not use this method but instead `drawMovedLabelLineIfFound` (see below).
+ * @deprecated Do not use this method but instead `drawMovedLabelLine` (see below).
  */
 export function drawMovedLabelLineIfFoundAndReturnOffset(
   vectorSource,

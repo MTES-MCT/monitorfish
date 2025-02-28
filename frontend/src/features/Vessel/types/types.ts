@@ -1,6 +1,4 @@
-// TODO This should be moved to `entities/vessel/mission.types.ts`
-
-import type { VesselTrackDepth } from '../vesselTrackDepth'
+import type { VesselTrackDepth } from './vesselTrackDepth'
 import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Coordinate } from 'ol/coordinate'

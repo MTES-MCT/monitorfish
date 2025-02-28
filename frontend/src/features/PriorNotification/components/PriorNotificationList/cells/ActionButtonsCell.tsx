@@ -6,7 +6,7 @@ import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
-import { showVessel } from '../../../../../domain/use_cases/vessel/showVessel'
+import { showVessel } from '../../../../Vessel/useCases/showVessel'
 import { openPriorNotificationCard } from '../../../useCases/openPriorNotificationCard'
 import { getVesselIdentityFromPriorNotification } from '../utils'
 

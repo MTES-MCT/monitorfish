@@ -4,10 +4,10 @@
  */
 import countries from 'i18n-iso-countries'
 
-import { VesselLabel } from './label/types'
-import { BaseLayer } from '../../../features/Map/constants'
-import { MonitorFishMap } from '../../../features/Map/Map.types'
-import { getVesselCompositeIdentifier } from '../../../features/Vessel/utils'
+import { BaseLayer } from '../../Map/constants'
+import { MonitorFishMap } from '../../Map/Map.types'
+import { VesselLabel } from '../label.types'
+import { getVesselCompositeIdentifier } from '../utils'
 
 import type { ShowedVesselTrack } from './types'
 import type { PartialExcept } from '../../../types'

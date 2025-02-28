@@ -1,9 +1,9 @@
 import { UserType } from '@features/BeaconMalfunction/constants'
+import { vesselsAreEquals } from '@features/Vessel/types/vessel'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { createSlice } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
-import { vesselsAreEquals } from '../entities/vessel/vessel'
 
 import type { MapBox } from '@features/Map/constants'
 import type { PayloadAction } from '@reduxjs/toolkit'

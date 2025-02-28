@@ -3,6 +3,7 @@ import { LogbookSortKey } from '@features/Logbook/components/VesselLogbook/Logbo
 import { LastTrip, NextTrip, PreviousTrip } from '@features/Logbook/components/VesselLogbook/LogbookSummary'
 import { NavigateTo } from '@features/Logbook/constants'
 import { useGetLogbookUseCase } from '@features/Logbook/hooks/useGetLogbookUseCase'
+import { FishingActivitiesTab } from '@features/Vessel/types/vessel'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, IconButton, Select } from '@mtes-mct/monitor-ui'
@@ -18,7 +19,6 @@ import {
   getLastLogbookTripsOptions,
   LOGBOOK_SORT_LABELS_AS_OPTIONS
 } from './utils'
-import { FishingActivitiesTab } from '../../../../../domain/entities/vessel/vessel'
 import { logbookActions } from '../../../slice'
 import { CustomDatesShowedInfo } from '../CustomDatesShowedInfo'
 import { getLogbookMessagesTypeOptions } from '../utils'

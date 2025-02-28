@@ -8,7 +8,7 @@ export const VESSELS_ESTIMATED_POSITION_VECTOR_SOURCE = new VectorSource()
 
 export const VESSELS_ESTIMATED_POSITION_VECTOR_LAYER = (function () {
   const layer = new Vector({
-    renderBuffer: 4,
+    renderBuffer: -3,
     source: VESSELS_ESTIMATED_POSITION_VECTOR_SOURCE as any,
     style: feature => getEstimatedPositionStyle(feature),
     updateWhileAnimating: true,

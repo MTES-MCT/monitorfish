@@ -8,7 +8,7 @@ import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogE
 import { logbookApi } from '../api'
 import { logbookActions } from '../slice'
 
-import type { TrackRequest } from '../../../domain/entities/vessel/types'
+import type { TrackRequest } from '@features/Vessel/types/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppThunk } from '@store'
 

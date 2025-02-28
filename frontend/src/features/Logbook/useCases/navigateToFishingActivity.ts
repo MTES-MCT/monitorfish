@@ -1,7 +1,7 @@
 import { vesselActions } from '@features/Vessel/slice'
+import { FishingActivitiesTab, VesselSidebarTab } from '@features/Vessel/types/vessel'
 
-import { logbookActions } from '../../../features/Logbook/slice'
-import { FishingActivitiesTab, VesselSidebarTab } from '../../entities/vessel/vessel'
+import { logbookActions } from '../slice'
 
 import type { MainAppThunk } from '@store'
 

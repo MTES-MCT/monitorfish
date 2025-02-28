@@ -1,10 +1,10 @@
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 import { showRegulatoryZoneMetadata } from '@features/Regulation/useCases/showRegulatoryZoneMetadata'
 import { stationActions } from '@features/Station/slice'
+import { showVessel } from '@features/Vessel/useCases/showVessel'
+import { showVesselTrack } from '@features/Vessel/useCases/showVesselTrack'
 import { FeatureWithCodeAndEntityId } from '@libs/FeatureWithCodeAndEntityId'
 import { isControl } from 'domain/entities/controls'
-import { showVessel } from 'domain/use_cases/vessel/showVessel'
-import { showVesselTrack } from 'domain/use_cases/vessel/showVesselTrack'
 import GeoJSON from 'ol/format/GeoJSON'
 
 import { LayerProperties, OPENLAYERS_PROJECTION } from '../constants'

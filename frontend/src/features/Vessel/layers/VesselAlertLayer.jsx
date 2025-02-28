@@ -11,7 +11,7 @@ import {
   getVesselLastPositionVisibilityDates,
   VesselFeature,
   vesselIsShowed
-} from '../../../domain/entities/vessel/vessel'
+} from '@features/Vessel/types/vessel'
 import { LayerProperties } from '../../Map/constants'
 import { monitorfishMap } from '../../Map/monitorfishMap'
 import { vesselSelectors } from '../slice'

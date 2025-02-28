@@ -1,3 +1,4 @@
+import { VesselFeature } from '@features/Vessel/types/vessel'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTracking } from '@hooks/useTracking'
 import { useEffect, useState } from 'react'
@@ -9,7 +10,6 @@ import { ShowFishingActivitiesOnMap } from './actions/ShowFishingActivitiesOnMap
 import { TrackRequest } from './actions/TrackRequest'
 import { Body } from './Body'
 import { Tabs } from './Tabs'
-import { VesselFeature } from '../../../../domain/entities/vessel/vessel'
 import { MapComponent } from '../../../commonStyles/MapComponent'
 
 export function VesselSidebar() {

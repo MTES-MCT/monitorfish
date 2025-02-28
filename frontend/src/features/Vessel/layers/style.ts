@@ -1,8 +1,4 @@
 import { featureHas, featureHasNot, stateIs } from '@features/Map/layers/styles/utils/webgl'
-import { Icon, Style } from 'ol/style'
-import Circle from 'ol/style/Circle'
-import Stroke from 'ol/style/Stroke'
-
 import {
   VesselFeature,
   VESSEL_ALERT_AND_BEACON_MALFUNCTION,
@@ -10,7 +6,11 @@ import {
   VESSEL_BEACON_MALFUNCTION_STYLE,
   VESSEL_INFRACTION_SUSPICION_STYLE,
   VESSEL_SELECTOR_STYLE
-} from '../../../domain/entities/vessel/vessel'
+} from '@features/Vessel/types/vessel'
+import { Icon, Style } from 'ol/style'
+import Circle from 'ol/style/Circle'
+import Stroke from 'ol/style/Stroke'
+
 import { theme } from '../../../ui/theme'
 import { booleanToInt } from '../../../utils'
 

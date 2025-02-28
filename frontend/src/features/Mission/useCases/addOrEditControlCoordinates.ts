@@ -5,9 +5,9 @@ import { boundingExtent } from 'ol/extent'
 import { transformExtent } from 'ol/proj'
 
 import { openDrawLayerModal } from './addOrEditMissionZone'
-import { unselectVessel } from '../../../domain/use_cases/vessel/unselectVessel'
 import { setInitialGeometry, setInteractionTypeAndListener } from '../../Draw/slice'
 import { fitToExtent } from '../../Map/slice'
+import { unselectVessel } from '../../Vessel/useCases/unselectVessel'
 
 import type { GeoJSON as GeoJSONNamespace, GeoJSON } from '../../../domain/types/GeoJSON'
 import type { MainAppThunk } from '@store'

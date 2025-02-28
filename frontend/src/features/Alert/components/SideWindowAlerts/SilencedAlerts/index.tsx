@@ -14,9 +14,9 @@ import * as timeago from 'timeago.js'
 import { AddSilencedAlertDialog } from './AddSilencedAlertDialog'
 import { addSilencedAlert } from '../../../../../domain/use_cases/alert/addSilencedAlert'
 import { reactivateSilencedAlert } from '../../../../../domain/use_cases/alert/reactivateSilencedAlert'
-import { showVessel } from '../../../../../domain/use_cases/vessel/showVessel'
 import { getDateTime } from '../../../../../utils'
 import SearchIconSVG from '../../../../icons/Loupe_dark.svg?react'
+import { showVessel } from '../../../../Vessel/useCases/showVessel'
 
 import type { SilencedAlertData } from '../../../types'
 

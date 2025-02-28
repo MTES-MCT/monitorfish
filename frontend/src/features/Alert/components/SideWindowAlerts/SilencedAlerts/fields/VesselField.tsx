@@ -1,11 +1,10 @@
+import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { VesselSearch } from '@features/VesselSearch'
 import { FormError, FormErrorCode } from '@libs/FormError'
 import { Legend, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useMemo } from 'react'
 import styled from 'styled-components'
-
-import { UNKNOWN_VESSEL } from '../../../../../../domain/entities/vessel/vessel'
 
 import type { SilencedAlertFormValues } from '../types'
 import type { Vessel } from '@features/Vessel/Vessel.types'

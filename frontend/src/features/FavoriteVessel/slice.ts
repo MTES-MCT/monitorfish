@@ -1,9 +1,9 @@
 // TODO Move that into Vessel slice, or into a User slice if there are other per-user customizable data.
 
+import { vesselsAreEquals } from '@features/Vessel/types/vessel'
 import { extractVesselIdentityProps, getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { createSlice } from '@reduxjs/toolkit'
 
-import { vesselsAreEquals } from '../../domain/entities/vessel/vessel'
 import { getLocalStorageState } from '../../utils'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'

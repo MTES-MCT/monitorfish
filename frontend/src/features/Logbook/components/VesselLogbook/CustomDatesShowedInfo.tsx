@@ -2,11 +2,11 @@ import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import { getTrackRequestFromTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
-import { updateSelectedVesselTrack } from '../../../../domain/use_cases/vessel/updateSelectedVesselTrack'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { getDate } from '../../../../utils'
+import { getTrackRequestFromTrackDepth } from '../../../Vessel/types/vesselTrackDepth'
+import { updateSelectedVesselTrack } from '../../../Vessel/useCases/updateSelectedVesselTrack'
 
 type CustomDatesShowedInfoProps = {
   width?: number | undefined

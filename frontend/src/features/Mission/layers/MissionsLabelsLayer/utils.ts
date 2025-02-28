@@ -1,7 +1,7 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
+import { drawMovedLabelLine } from '@features/Vessel/label.utils'
 
 import { MissionLabelLine } from '../../../../domain/entities/missionLabelLine'
-import { drawMovedLabelLine } from '../../../../domain/entities/vessel/label'
 
 import type { FeatureAndLabel } from './types'
 import type { LegacyControlUnit } from '../../../ControlUnit/legacyControlUnit'

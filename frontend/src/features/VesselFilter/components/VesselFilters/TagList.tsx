@@ -1,12 +1,12 @@
 import { CountryFlag } from '@components/CountryFlag'
 import { COLORS } from '@constants/constants'
+import { vesselSize } from '@features/Vessel/types/vessel'
 import countries from 'i18n-iso-countries'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { FilterTag } from './FilterTag'
 import { IconTypes } from './TagIconType'
-import { vesselSize } from '../../../../domain/entities/vessel/vessel'
 
 import type { FilterValues } from '../../types'
 

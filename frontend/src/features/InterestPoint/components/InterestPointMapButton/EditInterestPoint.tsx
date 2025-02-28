@@ -8,10 +8,10 @@ import styled from 'styled-components'
 
 import { INTEREST_POINTS_OPTIONS } from './constants'
 import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
-import { saveInterestPointFeature } from '../../../../domain/use_cases/interestPoint/saveInterestPointFeature'
 import { MapToolBox } from '../../../MainWindow/components/MapButtons/shared/MapToolBox'
 import { Header } from '../../../MainWindow/components/MapButtons/shared/styles'
 import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../slice'
+import { saveInterestPointFeature } from '../../useCases/saveInterestPointFeature'
 import { InterestPointType } from '../../utils'
 
 import type { Coordinates } from '@mtes-mct/monitor-ui'

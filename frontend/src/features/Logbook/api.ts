@@ -6,6 +6,7 @@ import { NavigateTo } from './constants'
 import { Logbook } from './Logbook.types'
 import { monitorfishApi, monitorfishLightApi } from '../../api/api'
 
+import type { TrackRequest } from '../../domain/entities/vessel/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
 const LAST_LOGBOOK_TRIPS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les dernières marées"
@@ -15,6 +16,11 @@ export type GetVesselLogbookParams = {
   tripNumber: string | number | undefined
   vesselIdentity: Vessel.VesselIdentity
   voyageRequest: NavigateTo | undefined
+}
+
+export type GetVesselLogbookByDatesParams = {
+  trackRequest: TrackRequest
+  vesselIdentity: Vessel.VesselIdentity
 }
 
 const getVesselLogbookQueryArgs = {
@@ -49,7 +55,32 @@ export const logbookApi = monitorfishApi.injectEndpoints({
       query: internalReferenceNumber => `/vessels/logbook/last?internalReferenceNumber=${internalReferenceNumber}`,
       transformErrorResponse: response => new FrontendApiError(LAST_LOGBOOK_TRIPS_ERROR_MESSAGE, response)
     }),
-    getVesselLogbook: builder.query<Logbook.VesselVoyage | undefined, GetVesselLogbookParams>(getVesselLogbookQueryArgs)
+    getVesselLogbook: builder.query<Logbook.VesselVoyage | undefined, GetVesselLogbookParams>(
+      getVesselLogbookQueryArgs
+    ),
+    getVesselLogbookByDates: builder.query<Logbook.VesselVoyage | undefined, GetVesselLogbookByDatesParams>({
+      query: params => {
+        const { internalReferenceNumber } = params.vesselIdentity
+
+        return getUrlOrPathWithQueryParams(`/vessels/logbook/find_by_dates`, {
+          afterDateTime: params.trackRequest.afterDateTime?.toISOString() ?? '',
+          beforeDateTime: params.trackRequest.beforeDateTime?.toISOString() ?? '',
+          internalReferenceNumber: internalReferenceNumber ?? '',
+          trackDepth: params.trackRequest.trackDepth ?? ''
+        })
+      },
+      transformErrorResponse: response => new FrontendApiError(LOGBOOK_ERROR_MESSAGE, response),
+      transformResponse: (response: BackendApi.ResponseBodyError | Logbook.VesselVoyage) => {
+        if (
+          !isVesselVoyage(response) &&
+          (response as BackendApi.ResponseBodyError).code === BackendApi.ErrorCode.NOT_FOUND_BUT_OK
+        ) {
+          return undefined
+        }
+
+        return response as Logbook.VesselVoyage
+      }
+    })
   })
 })
 

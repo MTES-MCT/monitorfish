@@ -63,17 +63,17 @@ class GetVesselVoyageByDates(
 
         val alerts =
             PNOAndLANAlertRepository.findAlertsOfTypes(
-                listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
-                internalReferenceNumber,
-                trip.tripNumber,
+                types = listOf(element = AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
+                internalReferenceNumber = internalReferenceNumber,
+                tripNumber = trip.tripNumber,
             )
 
         val logbookMessages =
             getLogbookMessages.execute(
-                internalReferenceNumber,
-                trip.startDate,
-                trip.endDate,
-                trip.tripNumber,
+                internalReferenceNumber = internalReferenceNumber,
+                afterDepartureDate = trip.startDate,
+                beforeDepartureDate = trip.endDate,
+                tripNumber = trip.tripNumber,
             )
 
         return Voyage(

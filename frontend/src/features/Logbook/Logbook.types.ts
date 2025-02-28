@@ -357,6 +357,7 @@ export namespace Logbook {
     isLastVoyage: boolean
     logbookMessagesAndAlerts: FishingActivities
     startDate: string | undefined
+    totalTripsFoundForDates: number | undefined
     tripNumber: string
     vesselIdentity: Vessel.VesselIdentity
   }

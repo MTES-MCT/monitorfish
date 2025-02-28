@@ -143,6 +143,7 @@ const logbookSlice = createSlice({
       state.isFirstVoyage = action.payload.isFirstVoyage
       state.tripNumber = action.payload.tripNumber
       state.vesselIdentity = action.payload.vesselIdentity
+      state.loadingFishingActivities = false
     },
 
     /**

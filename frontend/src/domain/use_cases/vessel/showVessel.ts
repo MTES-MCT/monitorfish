@@ -7,11 +7,12 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { captureMessage } from '@sentry/react'
 import { omit } from 'lodash-es'
 
+import { displayBannerWarningFromAPIFeedback } from './displayBannerWarningFromAPIFeedback'
 import { VesselFeature } from '../../entities/vessel/vessel'
-import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
+import { getCustomOrDefaultTrackRequest } from '../../entities/vesselTrackDepth'
 import { displayedComponentActions } from '../../shared_slices/DisplayedComponent'
 import { displayedErrorActions } from '../../shared_slices/DisplayedError'
-import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
+import { addSearchedVessel, removeError } from '../../shared_slices/Global'
 import { displayOrLogError } from '../error/displayOrLogError'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
@@ -67,11 +68,7 @@ export const showVessel =
         )
       ).unwrap()
 
-      try {
-        throwCustomErrorFromAPIFeedback(vesselAndPositions.positions, isTrackDepthModified, isFromUserAction)
-      } catch (error) {
-        dispatch(setError(error))
-      }
+      dispatch(displayBannerWarningFromAPIFeedback(vesselAndPositions.positions, isTrackDepthModified, false))
 
       if (!selectedVesselLastPosition && !vesselAndPositions?.vessel) {
         captureMessage('Aucune dernière position trouvée pour un navire inconnu dans la table navires.', {

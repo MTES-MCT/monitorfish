@@ -347,20 +347,25 @@ interface DBLogbookReportRepository :
     ): List<VoyageTripNumberAndDates>
 
     @Query(
-        """SELECT
-            new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDates(e.tripNumber, MIN(e.operationDateTime), MAX(e.operationDateTime))
-        FROM
-            LogbookReportEntity e
-        WHERE
-            e.internalReferenceNumber = :internalReferenceNumber AND
-            e.tripNumber IS NOT NULL AND
-            e.operationType IN ('DAT', 'COR') AND
-            e.operationDateTime >= :afterDateTime AND
-            e.operationDateTime <= :beforeDateTime AND
-            NOT e.isTestMessage
-        GROUP BY
-            e.tripNumber
-        ORDER BY 2 DESC""",
+        """
+        SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDates(
+            e.tripNumber,
+            (SELECT MIN(lr_all.operationDateTime)
+             FROM LogbookReportEntity lr_all
+             WHERE lr_all.tripNumber = e.tripNumber),
+            (SELECT MAX(lr_all.operationDateTime)
+             FROM LogbookReportEntity lr_all
+             WHERE lr_all.tripNumber = e.tripNumber)
+    )
+    FROM LogbookReportEntity e
+    WHERE
+        e.internalReferenceNumber = :internalReferenceNumber
+        AND e.tripNumber IS NOT NULL
+        AND e.operationType IN ('DAT', 'COR')
+        AND e.operationDateTime BETWEEN :afterDateTime AND :beforeDateTime
+        AND NOT e.isTestMessage
+    GROUP BY e.tripNumber
+    ORDER BY MIN(e.operationDateTime) DESC""",
     )
     fun findTripsBetweenDates(
         internalReferenceNumber: String,

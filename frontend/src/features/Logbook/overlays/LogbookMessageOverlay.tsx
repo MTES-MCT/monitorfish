@@ -29,6 +29,7 @@ export function LogbookMessageOverlay({ logbookOverlay }: LogbookMessageOverlayP
   useEffect(() => {
     monitorfishMap.addOverlay(overlay)
     overlay.setElement(logbookOverlayRef.current)
+    overlay.setPosition(logbookOverlay.coordinates)
 
     return () => {
       monitorfishMap.removeOverlay(overlay)

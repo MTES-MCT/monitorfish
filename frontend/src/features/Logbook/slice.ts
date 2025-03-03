@@ -1,32 +1,29 @@
 import { FishingActivitiesTab } from '@features/Vessel/types/vessel'
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getActivityDateTimeFromMessage, getLogbookMessageType } from './utils'
-
 import type { Logbook } from './Logbook.types'
-import type { FishingActivityShowedOnMap } from '@features/Vessel/types/types'
+import type { DisplayedLogbookOverlay } from '@features/Vessel/types/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 // TODO Properly type this redux state.
 export type LogbookState = {
   areFishingActivitiesShowedOnMap: boolean
+  displayedLogbookOverlays: DisplayedLogbookOverlay[]
   fishingActivities: Logbook.FishingActivities | undefined
-  fishingActivitiesShowedOnMap: FishingActivityShowedOnMap[]
   fishingActivitiesTab: FishingActivitiesTab
   isFirstVoyage: boolean | null
   isLastVoyage: boolean | null
   lastFishingActivities: Logbook.FishingActivities
   loadingFishingActivities: boolean
   nextFishingActivities: Logbook.FishingActivities | null
-  redrawFishingActivitiesOnMap: boolean
   tripNumber: string | null
   vesselIdentity: Vessel.VesselIdentity | undefined
 }
 const INITIAL_STATE: LogbookState = {
   areFishingActivitiesShowedOnMap: true,
+  displayedLogbookOverlays: [],
   fishingActivities: undefined,
-  fishingActivitiesShowedOnMap: [],
   fishingActivitiesTab: FishingActivitiesTab.SUMMARY,
   isFirstVoyage: null,
   isLastVoyage: null,
@@ -36,7 +33,6 @@ const INITIAL_STATE: LogbookState = {
   },
   loadingFishingActivities: false,
   nextFishingActivities: null,
-  redrawFishingActivitiesOnMap: false,
   tripNumber: null,
   vesselIdentity: undefined
 }
@@ -46,67 +42,40 @@ const logbookSlice = createSlice({
   name: 'fishingActivities',
   reducers: {
     /**
-     * End redraw fishing activities on map
-     * @param {Object=} state
+     * Show a single fishing activity on the vessel track, on the map
      */
-    endRedrawOnMap(state) {
-      state.redrawFishingActivitiesOnMap = false
+    displayLogbookOverlay(state, action) {
+      state.displayedLogbookOverlays = state.displayedLogbookOverlays.concat(action.payload as DisplayedLogbookOverlay)
     },
 
     /**
-     * Hide fishing activities of the vessel track
-     * @param {Object=} state
+     * Show fishing activities on the vessel track, on the map
+     * Without the corrected messages
      */
-    hideAllOnMap(state) {
+    displayLogbookOverlays(state, action) {
+      state.displayedLogbookOverlays = action.payload
+    },
+
+    hideAllLogbookOverlays(state) {
       state.areFishingActivitiesShowedOnMap = false
-      state.fishingActivitiesShowedOnMap = []
+      state.displayedLogbookOverlays = []
     },
 
-    /**
-     * Init vessel fishing activities
-     */
-    init(state, action: PayloadAction<Vessel.VesselIdentity>) {
-      state.areFishingActivitiesShowedOnMap = false
-      state.fishingActivitiesShowedOnMap = []
-      state.fishingActivities = undefined
-      state.loadingFishingActivities = false
-      state.vesselIdentity = action.payload
-      state.nextFishingActivities = null
-    },
-
-    /**
-     * Remove fishing activities from the map
-     * @param {Object=} state
-     */
-    removeAllFromMap(state) {
-      state.fishingActivitiesShowedOnMap = []
-    },
-
-    /**
-     * Hide a single fishing activity showed on the vessel track
-     * @param {Object=} state
-     * @param {{payload: string}} action - The fishing activity id to hide
-     */
-    removeFromMap(state, action) {
-      state.fishingActivitiesShowedOnMap = state.fishingActivitiesShowedOnMap.filter(
-        showed => showed.id !== action.payload
-      )
+    hideLogbookOverlay(state, action) {
+      state.displayedLogbookOverlays = state.displayedLogbookOverlays.filter(showed => showed.id !== action.payload)
     },
 
     /**
      * Reset vessel fishing activities
      */
     reset(state) {
-      state.fishingActivitiesShowedOnMap = []
+      state.displayedLogbookOverlays = []
       state.fishingActivities = undefined
       state.loadingFishingActivities = false
       state.vesselIdentity = undefined
+      state.nextFishingActivities = null
     },
 
-    /**
-     * Reset the loading of fishing activities
-     * @param {Object=} state
-     */
     resetIsLoading(state) {
       state.loadingFishingActivities = false
     },
@@ -115,18 +84,15 @@ const logbookSlice = createSlice({
       state.nextFishingActivities = null
     },
 
-    /**
-     * Set fishing activities
-     */
+    setAreFishingActivitiesShowedOnMap(state, action) {
+      state.areFishingActivitiesShowedOnMap = action.payload
+    },
+
     setFishingActivities(state, action: PayloadAction<Logbook.FishingActivities>) {
       state.fishingActivities = action.payload
       state.loadingFishingActivities = false
     },
 
-    /**
-     * Set the loading of fishing activities to true, and shows a loader in the fishing activities tab
-     * @param {Object=} state
-     */
     setIsLoading(state) {
       state.loadingFishingActivities = true
     },
@@ -175,99 +141,9 @@ const logbookSlice = createSlice({
       state.tripNumber = tripNumber
       state.loadingFishingActivities = false
       state.vesselIdentity = vesselIdentity
-    },
-
-    /**
-     * Show fishing activities on the vessel track, on the map
-     * Without the corrected messages
-     */
-    showAllOnMap(state) {
-      state.areFishingActivitiesShowedOnMap = true
-      // TODO There is a typing issue that may reveal a code issue here.
-
-      if (!state.fishingActivities) {
-        return
-      }
-
-      state.fishingActivitiesShowedOnMap = state.fishingActivities.logbookMessages
-        .filter(fishingActivity => !fishingActivity.isCorrectedByNewerMessage)
-        .map(fishingActivity => ({
-          date: getActivityDateTimeFromMessage(fishingActivity),
-          id: fishingActivity.operationNumber,
-          isDeleted: fishingActivity.isDeleted,
-          isNotAcknowledged: !fishingActivity.acknowledgment?.isSuccess,
-          name: getLogbookMessageType(fishingActivity)
-        })) as any
-
-      state.redrawFishingActivitiesOnMap = true
-    },
-
-    /**
-     * Show a single fishing activity on the vessel track, on the map
-     */
-    showOnMap(state, action) {
-      if (!state.fishingActivities) {
-        return
-      }
-
-      const fishingActivityToShow = state.fishingActivities.logbookMessages.find(
-        fishingActivity => fishingActivity.operationNumber === action.payload
-      )
-      if (!fishingActivityToShow) {
-        return
-      }
-
-      state.fishingActivitiesShowedOnMap = state.fishingActivitiesShowedOnMap.concat({
-        date: getActivityDateTimeFromMessage(fishingActivityToShow),
-        id: fishingActivityToShow.operationNumber,
-        isDeleted: fishingActivityToShow.isDeleted,
-        isNotAcknowledged: !fishingActivityToShow.acknowledgment?.isSuccess,
-        name: getLogbookMessageType(fishingActivityToShow)
-      } as FishingActivityShowedOnMap)
-    },
-
-    /**
-     * Update coordinates of showed fishing activities
-     * @param {Object=} state
-     * @param {{payload: {
-     *   id: string,
-     *   coordinates: string[]
-     * }[]}} action - The fishing activities to update
-     */
-    updateShowedOnMapCoordinates(state, action) {
-      state.fishingActivitiesShowedOnMap = state.fishingActivitiesShowedOnMap.map(fishingActivity => {
-        const fishingActivityWithCoordinates = action.payload.find(
-          fishingActivityToUpdate => fishingActivityToUpdate.id === fishingActivity.id
-        )
-
-        if (fishingActivityWithCoordinates) {
-          return { ...fishingActivity, coordinates: fishingActivityWithCoordinates.coordinates }
-        }
-
-        return fishingActivity
-      })
     }
   }
 })
-
-export const {
-  endRedrawOnMap,
-  hideAllOnMap,
-  init,
-  removeAllFromMap,
-  removeFromMap,
-  reset,
-  resetIsLoading,
-  resetNextUpdate,
-  setIsLoading,
-  setLastVoyage,
-  setNextUpdate,
-  setTab,
-  setVoyage,
-  showAllOnMap,
-  showOnMap,
-  updateShowedOnMapCoordinates
-} = logbookSlice.actions
 
 export const logbookReducer = logbookSlice.reducer
 

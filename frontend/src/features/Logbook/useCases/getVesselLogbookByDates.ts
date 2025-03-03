@@ -17,12 +17,10 @@ import type { MainAppThunk } from '@store'
  */
 export const getVesselLogbookByDates =
   (vesselIdentity: Vessel.VesselIdentity | undefined, trackRequest: TrackRequest): MainAppThunk<Promise<void>> =>
-  async (dispatch, getState) => {
+  async dispatch => {
     if (!vesselIdentity) {
       return
     }
-
-    const { areFishingActivitiesShowedOnMap } = getState().fishingActivities
 
     try {
       const voyage = await dispatch(
@@ -62,7 +60,7 @@ export const getVesselLogbookByDates =
         ...voyage,
         vesselIdentity
       }
-      dispatch(saveVoyage(voyageWithVesselIdentity, areFishingActivitiesShowedOnMap))
+      dispatch(saveVoyage(voyageWithVesselIdentity))
 
       dispatch(removeError())
     } catch (error) {

@@ -44,7 +44,7 @@ import VesselSelectedLayer from '../../Vessel/layers/VesselSelectedLayer'
 import { VesselEstimatedPositionLayer } from '../../Vessel/layers/VesselsEstimatedPositionLayer'
 import { VesselsLabelsLayer } from '../../Vessel/layers/VesselsLabelsLayer'
 import { VesselsLayer } from '../../Vessel/layers/VesselsLayer'
-import { VesselsTracksLayerMemoized } from '../../Vessel/layers/VesselsTracksLayer'
+import { VesselsTracksLayerMemoized } from '../../Vessel/layers/VesselsTracksLayer/VesselsTracksLayer'
 import { BaseLayer } from '../layers/BaseLayer'
 
 export function MainMap() {

@@ -1,4 +1,6 @@
 import { Ellipsised } from '@components/Ellipsised'
+import { displayLogbookMessageOverlay } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlay'
+import { hideLogbookMessageOverlay } from '@features/Logbook/useCases/displayedLogbookOverlays/hideLogbookMessageOverlay'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
@@ -11,7 +13,6 @@ import ShowActivitySVG from '../../../../../icons/Position_message_JPE_Pin_gris_
 import HideActivitySVG from '../../../../../icons/Position_message_JPE_Pin_masquer.svg?react'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
 import { Logbook } from '../../../../Logbook.types'
-import { logbookActions } from '../../../../slice'
 import { getLogbookMessageType } from '../../../../utils'
 import { isPnoMessage } from '../utils'
 
@@ -28,7 +29,7 @@ export function LogbookMessage({
   withMapControls = false
 }: LogbookMessageComponentProps) {
   const dispatch = useMainAppDispatch()
-  const fishingActivitiesShowedOnMap = useMainAppSelector(state => state.fishingActivities.fishingActivitiesShowedOnMap)
+  const displayedLogbookOverlays = useMainAppSelector(state => state.fishingActivities.displayedLogbookOverlays)
 
   const logbookHeaderTitle = (function () {
     switch (logbookMessage.messageType) {
@@ -118,16 +119,16 @@ export function LogbookMessage({
 
         {withMapControls &&
           !logbookMessage.isCorrectedByNewerMessage &&
-          (fishingActivitiesShowedOnMap.find(showed => showed.id === logbookMessage.operationNumber) ? (
+          (displayedLogbookOverlays.find(showed => showed.id === logbookMessage.operationNumber) ? (
             <HideActivity
               data-cy="hide-fishing-activity"
-              onClick={() => dispatch(logbookActions.removeFromMap(logbookMessage.operationNumber))}
+              onClick={() => dispatch(hideLogbookMessageOverlay(logbookMessage.operationNumber))}
               title="Cacher le message sur la piste"
             />
           ) : (
             <ShowActivity
               data-cy="show-fishing-activity"
-              onClick={() => dispatch(logbookActions.showOnMap(logbookMessage.operationNumber))}
+              onClick={() => dispatch(displayLogbookMessageOverlay(logbookMessage.operationNumber))}
               title="Afficher le message sur la piste"
             />
           ))}

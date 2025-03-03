@@ -9,14 +9,13 @@ import type { MainAppThunk } from '@store'
 /**
  * Updates the vessel estimated position features in the map layer.
  */
-export const updateEstimatedPositionFeatures = (): MainAppThunk => (_, getState) => {
-  const state = getState()
+export const displayEstimatedPositionFeatures = (): MainAppThunk => (_, getState) => {
   const {
     filter: { nonFilteredVesselsAreHidden },
     global: { previewFilteredVesselsMode },
     map: { hideVesselsAtPort, selectedBaseLayer, showingVesselsEstimatedPositions, vesselsLastPositionVisibility },
     vessel: { hideNonSelectedVessels, selectedVesselIdentity, vessels: vesselsSelector, vesselsTracksShowed }
-  } = state
+  } = getState()
   const vessels = vesselSelectors.selectAll(vesselsSelector)
 
   if (!vessels || !showingVesselsEstimatedPositions) {

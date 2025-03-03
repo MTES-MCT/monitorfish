@@ -35,7 +35,7 @@ export const getVesselLogbook =
     }
 
     const {
-      fishingActivities: { areFishingActivitiesShowedOnMap, isLastVoyage, lastFishingActivities, tripNumber },
+      fishingActivities: { isLastVoyage, lastFishingActivities, tripNumber },
       map: { defaultVesselTrackDepth },
       vessel: { selectedVesselIdentity: currentSelectedVesselIdentity }
     } = getState()
@@ -58,7 +58,7 @@ export const getVesselLogbook =
         fetchVesselVoyage(vesselIdentity, nextTripNumber ?? tripNumber, isInLightMode, nextNavigateTo)
       )
       if (!voyage) {
-        dispatch(handleNoVoyageFound(vesselIdentity))
+        dispatch(handleNoVoyageFound())
 
         return
       }
@@ -80,8 +80,7 @@ export const getVesselLogbook =
         dispatch(displayVesselTrack(voyageWithVesselIdentity, vesselIdentity, defaultVesselTrackDepth))
       }
 
-      dispatch(saveVoyage(voyageWithVesselIdentity, areFishingActivitiesShowedOnMap))
-      dispatch(removeError())
+      await dispatch(saveVoyage(voyageWithVesselIdentity))
     } catch (error) {
       dispatch(
         displayOrLogError(
@@ -111,9 +110,8 @@ function fetchVesselVoyage(
   }
 }
 
-function handleNoVoyageFound(vesselIdentity: Vessel.VesselIdentity) {
+function handleNoVoyageFound() {
   return async dispatch => {
-    dispatch(logbookActions.init(vesselIdentity))
     dispatch(
       addMainWindowBanner({
         children: "Ce navire n'a pas envoyé de message JPE.",
@@ -124,6 +122,7 @@ function handleNoVoyageFound(vesselIdentity: Vessel.VesselIdentity) {
         withAutomaticClosing: true
       })
     )
+    dispatch(logbookActions.resetIsLoading())
   }
 }
 

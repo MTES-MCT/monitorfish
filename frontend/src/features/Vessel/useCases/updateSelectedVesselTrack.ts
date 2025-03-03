@@ -1,4 +1,5 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
+import { displayLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays'
 import { getVesselLogbookByDates } from '@features/Logbook/useCases/getVesselLogbookByDates'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { animateToExtent, doNotAnimate } from '@features/Map/slice'
@@ -41,6 +42,7 @@ export const updateSelectedVesselTrack =
 
       if (!isCalledAfterLogbookFetch) {
         await dispatch(getVesselLogbookByDates(vesselIdentity, trackRequest))
+        await dispatch(displayLogbookMessageOverlays())
       }
 
       dispatch(removeError())

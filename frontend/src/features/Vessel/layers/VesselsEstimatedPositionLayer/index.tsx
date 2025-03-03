@@ -1,5 +1,5 @@
 import { VESSELS_ESTIMATED_POSITION_VECTOR_LAYER } from '@features/Vessel/layers/VesselsEstimatedPositionLayer/constants'
-import { updateEstimatedPositionFeatures } from '@features/Vessel/layers/VesselsEstimatedPositionLayer/useCases/updateEstimatedPositionFeatures'
+import { displayEstimatedPositionFeatures } from '@features/Vessel/layers/VesselsEstimatedPositionLayer/useCases/displayEstimatedPositionFeatures'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import React, { useEffect } from 'react'
@@ -30,7 +30,7 @@ function UnmemoizedVesselEstimatedPositionLayer() {
   }, [])
 
   useEffect(() => {
-    dispatch(updateEstimatedPositionFeatures())
+    dispatch(displayEstimatedPositionFeatures())
   }, [
     dispatch,
     vessels,

@@ -1,13 +1,12 @@
 import type { VesselTrackDepth } from './vesselTrackDepth'
 import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
+import type { Coordinates } from '@mtes-mct/monitor-ui'
 import type { Coordinate } from 'ol/coordinate'
 
-export type FishingActivityShowedOnMap = {
+export type DisplayedLogbookOverlay = {
   /** The coordinates of the fishing activity */
-  coordinates?: string[]
-  /** The effective date of message */
-  date: string
+  coordinates: Coordinates
   /** The operation number for logbook */
   id: string
   /** true if the message was deleted */

@@ -85,7 +85,6 @@ context('Vessel sidebar controls buttons', () => {
   it('Vessel track dates Should be changed When walking in fishing trips', () => {
     // Given
     openVesselBySearch('Pheno')
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
@@ -109,7 +108,6 @@ context('Vessel sidebar controls buttons', () => {
 
     // Given
     openVesselBySearch('Pheno')
-    cy.getDataCy('vessel-sidebar').should('be.visible')
 
     // When
     cy.intercept('GET', '/bff/v1/vessels/positions*').as('getPositions')
@@ -144,7 +142,6 @@ context('Vessel sidebar controls buttons', () => {
     // Given
     cy.wait(50)
     openVesselBySearch('Pheno')
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
     cy.fill('Afficher la piste VMS depuis', '3 jours')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
@@ -173,7 +170,6 @@ context('Vessel sidebar controls buttons', () => {
 
     // Given
     openVesselBySearch('Pheno')
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
     cy.get('*[data-cy^="animate-to-track"]').click({ timeout: 10000 })

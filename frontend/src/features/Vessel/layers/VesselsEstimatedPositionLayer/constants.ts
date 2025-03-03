@@ -20,8 +20,3 @@ export const VESSELS_ESTIMATED_POSITION_VECTOR_LAYER = (function () {
 
   return layer
 })()
-
-export const EstimatedPositionFeatureColorProperty = 'color'
-export const EstimatedPositionFeatureOpacityProperty = 'opacity'
-export const EstimatedPositionFeatureIsCircleProperty = 'isCircle'
-export const EstimatedPositionFeatureIsHiddenProperty = 'isHidden'

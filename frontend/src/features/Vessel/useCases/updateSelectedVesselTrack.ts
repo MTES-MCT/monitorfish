@@ -40,15 +40,15 @@ export const updateSelectedVesselTrack =
       ).unwrap()
       dispatch(displayBannerWarningFromAPIFeedback(positions, isTrackDepthModified, false))
 
-      if (!isCalledAfterLogbookFetch) {
-        await dispatch(getVesselLogbookByDates(vesselIdentity, trackRequest))
-        await dispatch(displayLogbookMessageOverlays())
-      }
-
       dispatch(removeError())
       dispatch(setSelectedVesselCustomTrackRequest(trackRequest))
       dispatch(updateSelectedVesselPositions(positions))
       dispatch(animateToExtent())
+
+      if (!isCalledAfterLogbookFetch) {
+        await dispatch(getVesselLogbookByDates(vesselIdentity, trackRequest))
+        await dispatch(displayLogbookMessageOverlays())
+      }
     } catch (error) {
       dispatch(setError(error))
       dispatch(

@@ -129,7 +129,7 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy^="logbook-haul-number"]').should('have.length', 2)
   })
 
-  it.only('Fishing activities Should be changed according to the actual trip When walking in fishing trips', () => {
+  it('Fishing activities Should be changed according to the actual trip When walking in fishing trips', () => {
     // Given
     openVesselBySearch('Pheno')
     cy.wait(200)

@@ -174,11 +174,11 @@ export const atLeastOneVesselSelected = (vesselsTracksShowed, selectedVesselIden
  */
 export const vesselIsShowed = (
   vesselIdentity: Vessel.VesselIdentity,
-  vesselsTracksShowed: ShowedVesselTrack,
+  vesselsTrackShowed: ShowedVesselTrack | undefined,
   selectedVesselIdentity: Vessel.VesselIdentity
 ): boolean =>
   vesselsAreEquals(vesselIdentity, selectedVesselIdentity) ||
-  vesselsAreEquals(vesselIdentity, vesselsTracksShowed.vesselIdentity)
+  vesselsAreEquals(vesselIdentity, vesselsTrackShowed?.vesselIdentity)
 
 export const getVesselLastPositionVisibilityDates = vesselsLastPositionVisibility => {
   const vesselIsHidden = new Date()

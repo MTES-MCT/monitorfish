@@ -1,3 +1,4 @@
+import { resetDisplayedLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/resetDisplayedLogbookMessageOverlays'
 import { saveVoyage } from '@features/Logbook/useCases/saveVoyage'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { vesselsAreEquals } from '@features/Vessel/types/vessel'
@@ -51,6 +52,7 @@ export const getVesselLogbook =
     if (isFromUserAction) {
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
       dispatch(logbookActions.setIsLoading())
+      dispatch(resetDisplayedLogbookMessageOverlays())
     }
 
     try {

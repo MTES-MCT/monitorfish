@@ -76,7 +76,6 @@ function createEstimatedTrackFeatures(vessel, options) {
 
   return getEstimatedPositionFeatures(vessel, {
     ...options,
-    hideNonSelectedVessels:
-      hideNonSelectedVessels && vesselTrackShowed && !vesselIsShowed(vessel, vesselTrackShowed, selectedVesselIdentity)
+    isHidden: hideNonSelectedVessels && !vesselIsShowed(vessel, vesselTrackShowed, selectedVesselIdentity)
   })
 }

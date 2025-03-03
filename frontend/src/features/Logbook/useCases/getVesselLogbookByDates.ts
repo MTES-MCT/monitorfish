@@ -1,8 +1,10 @@
+import { resetDisplayedLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/resetDisplayedLogbookMessageOverlays'
 import { saveVoyage } from '@features/Logbook/useCases/saveVoyage'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Level } from '@mtes-mct/monitor-ui'
 
+import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
 import { removeError } from '../../../domain/shared_slices/Global'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { logbookApi } from '../api'
@@ -21,6 +23,8 @@ export const getVesselLogbookByDates =
     if (!vesselIdentity) {
       return
     }
+    dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
+    dispatch(resetDisplayedLogbookMessageOverlays())
 
     try {
       const voyage = await dispatch(

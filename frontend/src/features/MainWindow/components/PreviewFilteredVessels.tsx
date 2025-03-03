@@ -1,4 +1,3 @@
-import { COLORS } from '@constants/constants'
 import { undoPreviewVessels } from '@features/Vessel/useCases/undoPreviewVessels'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -13,14 +12,14 @@ export function PreviewFilteredVessels() {
 
   return (
     <>
-      {previewFilteredVesselsMode ? (
-        <Preview data-cy="back-to-vessels-list" onClick={() => dispatch(undoPreviewVessels())}>
+      {previewFilteredVesselsMode && (
+        <Wrapper data-cy="back-to-vessels-list" onClick={() => dispatch(undoPreviewVessels())}>
           <Text>
             <BackToVesselsList />
             Revenir à la liste des navires
           </Text>
-        </Preview>
-      ) : null}
+        </Wrapper>
+      )}
     </>
   )
 }
@@ -34,17 +33,18 @@ const BackToVesselsList = styled(BackToVesselsListSVG)`
 
 const Text = styled.div`
   font: normal normal normal 22px/31px Marianne;
-  color: ${COLORS.gainsboro};
+  color: ${p => p.theme.color.gainsboro};
 `
 
-const Preview = styled.div`
+const Wrapper = styled.div`
   position: absolute;
   top: 0;
-  background: ${COLORS.charcoal} 0% 0% no-repeat padding-box;
-  width 100%;
+  background: ${p => p.theme.color.charcoal} 0% 0% no-repeat padding-box;
+  width: 100%;
   height: 24px;
   text-align: center;
   padding: 17px;
   padding-top: 9px;
   cursor: pointer;
+  z-index: 1045;
 `

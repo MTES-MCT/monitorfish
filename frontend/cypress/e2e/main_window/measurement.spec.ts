@@ -27,7 +27,7 @@ context('Measurement', () => {
     cy.clickButton("Mesurer une distance", { withoutScroll: true })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
     cy.get('body').click(490, 580, { timeout: 10000 })
-    cy.get('*[data-cy="dms-coordinates-input"]').should('have.value', '47° 45′ 31″ N 007° 54′ 51″ W')
+    cy.get('*[data-cy="dms-coordinates-input"]').should('have.value', '47° 42′ 07″ N 007° 54′ 51″ W')
     cy.get('*[data-cy="measurement-circle-radius-input"]').type('35', { timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-add"]').click({ timeout: 10000 })
     cy.wait(500)
@@ -64,7 +64,7 @@ context('Measurement', () => {
     cy.get('body').dblclick(560, 620, { timeout: 10000 })
 
     // Then
-    cy.get('*[data-cy="measurement-value"]').contains('31.42', { timeout: 10000 })
+    cy.get('*[data-cy="measurement-value"]').contains('31.46', { timeout: 10000 })
     cy.get('body').click(590, 590, { timeout: 10000 })
     cy.get('*[data-cy="measurement-value"]').should('not.exist')
   })

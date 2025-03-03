@@ -11,7 +11,7 @@ import { transform } from 'ol/proj'
 export const getEstimatedPositionFeatures = (
   vessel: Vessel.VesselLastPosition,
   options: {
-    hideNonSelectedVessels: boolean
+    isHidden: boolean
     isLight: boolean
     vesselIsHidden: Date
     vesselIsOpacityReduced: Date
@@ -45,7 +45,7 @@ export const getEstimatedPositionFeatures = (
   const lineFeature = new Feature({
     color: lineColor,
     geometry: new LineString([currentCoordinates, estimatedCoordinates]),
-    isHidden: options.hideNonSelectedVessels,
+    isHidden: options.isHidden,
     opacity
   }) as Vessel.VesselEstimatedPositionFeature
   lineFeature.estimatedPosition = estimatedPositionData
@@ -55,7 +55,7 @@ export const getEstimatedPositionFeatures = (
     color: vesselColor,
     geometry: new Point(estimatedCoordinates),
     isCircle: true,
-    isHidden: options.hideNonSelectedVessels,
+    isHidden: options.isHidden,
     opacity
   }) as Vessel.VesselEstimatedPositionFeature
   circleFeature.estimatedPosition = estimatedPositionData

@@ -1,15 +1,14 @@
-import {
-  EstimatedPositionFeatureColorProperty,
-  EstimatedPositionFeatureIsCircleProperty,
-  EstimatedPositionFeatureIsHiddenProperty,
-  EstimatedPositionFeatureOpacityProperty
-} from '@features/Vessel/layers/VesselsEstimatedPositionLayer/constants'
 import CircleStyle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 import Style from 'ol/style/Style'
 
 import { getColorWithAlpha } from '../../../Map/layers/styles/utils'
+
+export const EstimatedPositionFeatureColorProperty = 'color'
+export const EstimatedPositionFeatureOpacityProperty = 'opacity'
+export const EstimatedPositionFeatureIsCircleProperty = 'isCircle'
+export const EstimatedPositionFeatureIsHiddenProperty = 'isHidden'
 
 const estimatedPositionStyleCache = new Map()
 

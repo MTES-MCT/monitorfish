@@ -1,11 +1,9 @@
-import { setSelectedVesselSidebarTab } from '@features/Vessel/slice'
 import { VesselSidebarTab } from '@features/Vessel/types/vessel'
+import { openVesselSidebarTab } from '@features/Vessel/useCases/openVesselSidebarTab'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Figure } from '@mtes-mct/monitor-ui'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
-import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 
@@ -26,35 +24,30 @@ export function Tabs() {
 
   useEffect(() => {
     if (!isSuperUser && forbiddenVesselSidebarPaths.includes(selectedVesselSidebarTab)) {
-      dispatch(setSelectedVesselSidebarTab(VesselSidebarTab.IDENTITY))
+      dispatch(openVesselSidebarTab(VesselSidebarTab.IDENTITY))
     }
   }, [dispatch, isSuperUser, selectedVesselSidebarTab])
-
-  function showTab(tab: VesselSidebarTab) {
-    dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
-    dispatch(setSelectedVesselSidebarTab(tab))
-  }
 
   return (
     <TabList>
       <Tab
         $isActive={selectedVesselSidebarTab === VesselSidebarTab.SUMMARY}
         data-cy="vessel-menu-summary"
-        onClick={() => showTab(VesselSidebarTab.SUMMARY)}
+        onClick={() => dispatch(openVesselSidebarTab(VesselSidebarTab.SUMMARY))}
       >
         <SummaryIcon /> <br /> Résumé
       </Tab>
       <Tab
         $isActive={selectedVesselSidebarTab === VesselSidebarTab.IDENTITY}
         data-cy="vessel-menu-identity"
-        onClick={() => showTab(VesselSidebarTab.IDENTITY)}
+        onClick={() => dispatch(openVesselSidebarTab(VesselSidebarTab.IDENTITY))}
       >
         <VesselIDIcon /> <br /> Identité
       </Tab>
       <Tab
         $isActive={selectedVesselSidebarTab === VesselSidebarTab.VOYAGES}
         data-cy="vessel-menu-fishing"
-        onClick={() => showTab(VesselSidebarTab.VOYAGES)}
+        onClick={() => dispatch(openVesselSidebarTab(VesselSidebarTab.VOYAGES))}
       >
         <FisheriesIcon /> <br /> Pêche
       </Tab>
@@ -62,7 +55,7 @@ export function Tabs() {
         <Tab
           $isActive={selectedVesselSidebarTab === VesselSidebarTab.REPORTING}
           data-cy="vessel-menu-reporting"
-          onClick={() => showTab(VesselSidebarTab.REPORTING)}
+          onClick={() => dispatch(openVesselSidebarTab(VesselSidebarTab.REPORTING))}
         >
           <ReportingIcon /> <br /> Signalements
           {!!selectedVessel?.reportings?.length && (
@@ -75,7 +68,7 @@ export function Tabs() {
       <Tab
         $isActive={selectedVesselSidebarTab === VesselSidebarTab.CONTROLS}
         data-cy="vessel-menu-controls"
-        onClick={() => showTab(VesselSidebarTab.CONTROLS)}
+        onClick={() => dispatch(openVesselSidebarTab(VesselSidebarTab.CONTROLS))}
       >
         <ControlsIcon /> <br /> Contrôles
       </Tab>
@@ -83,7 +76,7 @@ export function Tabs() {
         $isActive={selectedVesselSidebarTab === VesselSidebarTab.ERSVMS}
         $isLast
         data-cy="vessel-menu-ers-vms"
-        onClick={() => showTab(VesselSidebarTab.ERSVMS)}
+        onClick={() => dispatch(openVesselSidebarTab(VesselSidebarTab.ERSVMS))}
       >
         <VMSIcon /> <br /> VMS/JPE
       </Tab>

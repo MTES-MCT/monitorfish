@@ -49,13 +49,6 @@ export function VesselLogbook() {
       return
     }
 
-    if (!fishingActivities && !vesselIdentity) {
-      dispatch(logbookActions.resetNextUpdate())
-      dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
-
-      return
-    }
-
     if (showedLogbookIsOutdated) {
       dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
     }

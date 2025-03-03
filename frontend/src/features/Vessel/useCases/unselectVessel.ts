@@ -1,4 +1,5 @@
 import { logbookActions } from '@features/Logbook/slice'
+import { resetDisplayedLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/resetDisplayedLogbookMessageOverlays'
 import { closeVesselSidebar, resetSelectedVessel } from '@features/Vessel/slice'
 
 import { resetVesselBeaconMalfunctionsResumeAndHistory } from '../../../domain/shared_slices/BeaconMalfunction'
@@ -10,4 +11,5 @@ export const unselectVessel = () => dispatch => {
   dispatch(closeVesselSidebar())
   dispatch(resetVesselBeaconMalfunctionsResumeAndHistory())
   dispatch(expandRightMenu())
+  dispatch(resetDisplayedLogbookMessageOverlays())
 }

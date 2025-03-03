@@ -1,7 +1,11 @@
 import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
-import { getArrowStyle, getCircleStyle, getLineStyle } from '@features/Vessel/layers/styles/vesselTrack.style'
-import { customDayjs } from '@mtes-mct/monitor-ui'
-import { uniqWith, isEqual } from 'lodash-es'
+import {
+  getArrowStyle,
+  getCircleStyle,
+  getLineStyle
+} from '@features/Vessel/layers/VesselsTracksLayer/vesselTrack.style'
+import { type Coordinates, customDayjs } from '@mtes-mct/monitor-ui'
+import { isEqual, uniqWith } from 'lodash-es'
 import { extend } from 'ol/extent'
 import Feature from 'ol/Feature'
 import LineString from 'ol/geom/LineString'
@@ -12,7 +16,6 @@ import { TRACK_TYPE_RECORD } from './constants'
 import { calculatePointsDistance, calculateSplitPointCoordinates } from '../../../../utils'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
-import type { Coordinate } from 'ol/coordinate'
 
 const NUMBER_HOURS_TIME_ELLIPSIS = 4
 const FIRST_POSITION = 0
@@ -65,7 +68,7 @@ function getPositionFeatureOfIndex(
   }
 
   const coordinates = transform([position.longitude, position.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-  const feature = buildPointFeature(coordinates, FIRST_POSITION, position, vesselCompositeIdentifier)
+  const feature = buildPointFeature(coordinates as Coordinates, FIRST_POSITION, position, vesselCompositeIdentifier)
 
   return [feature]
 }
@@ -78,13 +81,13 @@ function buildPointFeatures(
     .map((position, currentIndex) => {
       const coordinates = transform([position.longitude, position.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
-      return buildPointFeature(coordinates, currentIndex, position, vesselCompositeIdentifier)
+      return buildPointFeature(coordinates as Coordinates, currentIndex, position, vesselCompositeIdentifier)
     })
     .filter((circlePoint): circlePoint is Vessel.VesselPointFeature => circlePoint !== null)
 }
 
 function buildPointFeature(
-  coordinates: Coordinate,
+  coordinates: Coordinates,
   index: number,
   position: Vessel.VesselPosition,
   vesselCompositeIdentifier: Vessel.VesselCompositeIdentifier
@@ -251,14 +254,6 @@ function isTimeEllipsisBetweenPositions(firstPositionDate: Date, secondPositionD
   return positionDateWithFourHoursOffset.getTime() < secondPositionDate.getTime()
 }
 
-export function getVesselTrackLines(features) {
-  return features.filter(
-    feature =>
-      feature?.getId()?.toString()?.includes(LayerProperties.VESSEL_TRACK.code) &&
-      feature?.getId()?.toString()?.includes('line')
-  )
-}
-
 export function removeFishingActivitiesFeatures(features, vectorSource) {
   features
     .filter(
@@ -273,13 +268,6 @@ export function removeVesselTrackFeatures(features, vectorSource, vesselComposit
   features
     .filter(feature => feature?.getId()?.toString()?.includes(vesselCompositeIdentifier))
     .map(feature => vectorSource.removeFeature(feature))
-}
-
-export function fishingActivityIsWithinTrackLineDates(fishingActivityDateTimestamp, line) {
-  return (
-    fishingActivityDateTimestamp > new Date(line.firstPositionDate).getTime() &&
-    fishingActivityDateTimestamp < new Date(line.secondPositionDate).getTime()
-  )
 }
 
 export function getVesselTrackExtent(vesselTrackFeatures, vesselCompositeIdentifier) {

@@ -1,24 +1,23 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import { Icon, Style } from 'ol/style'
 import CircleStyle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
-import { THEME } from '@mtes-mct/monitor-ui'
 
 const trackLineStyleCache = new Map()
 
 export const getLineStyle = (isTimeEllipsis, trackType) => {
-  const key = JSON.stringify({ isTimeEllipsis, color: trackType.color })
+  const key = JSON.stringify({ color: trackType.color, isTimeEllipsis })
 
   if (!trackLineStyleCache.has(key)) {
     const style = new Style({
       fill: new Fill({
-        color: trackType.color,
-        weight: 4
+        color: trackType.color
       }),
       stroke: new Stroke({
         color: isTimeEllipsis ? THEME.color.charcoalShadow : trackType.color,
-        width: 3,
-        lineDash: isTimeEllipsis ? [0.1, 5] : []
+        lineDash: isTimeEllipsis ? [0.1, 5] : [],
+        width: 3
       })
     })
 
@@ -28,16 +27,16 @@ export const getLineStyle = (isTimeEllipsis, trackType) => {
   return trackLineStyleCache.get(key)
 }
 
-export const getCircleStyle = (color, radius) => {
+export const getCircleStyle = (color, radius = 3) => {
   const key = JSON.stringify({ color, radius })
 
   if (!trackLineStyleCache.has(key)) {
     const circleStyle = new Style({
       image: new CircleStyle({
-        radius: radius || 3,
         fill: new Fill({
-          color: color
-        })
+          color
+        }),
+        radius
       })
     })
 
@@ -48,16 +47,16 @@ export const getCircleStyle = (color, radius) => {
 }
 
 export const getArrowStyle = (trackArrow, course) => {
-  const key = JSON.stringify({ trackArrow, course })
+  const key = JSON.stringify({ course, trackArrow })
 
   if (!trackLineStyleCache.has(trackArrow)) {
     const arrowStyle = new Style({
       image: new Icon({
-        src: trackArrow,
         offset: [0, 0],
-        imgSize: [15, 20],
+        rotation: course,
         scale: 1,
-        rotation: course
+        size: [15, 20],
+        src: trackArrow
       })
     })
 
@@ -73,10 +72,10 @@ export const getFishingActivityCircleStyle = () => {
   if (!trackLineStyleCache.has(key)) {
     const circleStyle = new Style({
       image: new CircleStyle({
-        radius: 3,
         fill: new Fill({
           color: THEME.color.gainsboro
         }),
+        radius: 3,
         stroke: new Stroke({
           color: THEME.color.charcoal,
           width: 2

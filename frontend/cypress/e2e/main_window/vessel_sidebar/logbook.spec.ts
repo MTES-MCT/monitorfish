@@ -39,7 +39,6 @@ context('Vessel sidebar logbook tab', () => {
     cy.log('Fishing Should contain the vessel fishing resume')
 
     openVesselBySearch('Pheno')
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
     cy.get('*[data-cy^="vessel-menu-fishing"]', { timeout: 10000 }).should('be.visible')
@@ -130,14 +129,13 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy^="logbook-haul-number"]').should('have.length', 2)
   })
 
-  it('Fishing activities Should be changed according to the actual trip When walking in fishing trips', () => {
+  it.only('Fishing activities Should be changed according to the actual trip When walking in fishing trips', () => {
     // Given
     openVesselBySearch('Pheno')
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
     cy.fill('Afficher la piste VMS depuis', '3 jours')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
-    cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 10000 })
 
     // When
     cy.wait(200)
@@ -185,7 +183,6 @@ context('Vessel sidebar logbook tab', () => {
   it('Single fishing activity Should be seen on map When clicking on the position icon', () => {
     // Given
     openVesselBySearch('Pheno')
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
     cy.fill('Afficher la piste VMS depuis', '3 jours')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })

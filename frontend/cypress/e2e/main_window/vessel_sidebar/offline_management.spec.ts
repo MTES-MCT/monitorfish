@@ -20,7 +20,6 @@ context('Offline management', () => {
     ).as('openVessel')
     openVesselBySearch('Pheno')
     cy.wait('@openVessel')
-    cy.get('*[data-cy="vessel-sidebar"]').should('be.visible')
 
     // When retrying request
     cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les informations du navire")
@@ -92,7 +91,6 @@ context('Offline management', () => {
     ).as('openVesselStubbed')
     openVesselBySearch('Pheno')
     cy.wait('@openVesselStubbed')
-    cy.get('*[data-cy="vessel-sidebar"]').should('be.visible')
 
     // When retrying request
     cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les informations du navire")

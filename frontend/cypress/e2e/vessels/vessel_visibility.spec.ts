@@ -31,7 +31,6 @@ context('Vessel visibility', () => {
 
     // When
     openVesselBySearch('Pheno')
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // Then
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click()

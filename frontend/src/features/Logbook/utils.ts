@@ -1,15 +1,9 @@
-import { LayerProperties } from '@features/Map/constants'
-import { getFishingActivityCircleStyle } from '@features/Vessel/layers/styles/vesselTrack.style'
-import { Feature } from 'ol'
-import Point from 'ol/geom/Point'
-
 import { LogbookMessageType } from './constants'
 import { Logbook } from './Logbook.types'
 import { undefinedize } from '../../utils/undefinedize'
 
 import type { CatchProperty, CatchWithProperties, ProtectedCatchWithProperties } from './components/VesselLogbook/types'
 import type { SpeciesInsight, SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from './types'
-import type { FishingActivityShowedOnMap } from '@features/Vessel/types/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
 function getCatchPropertiesObject(logbookCatch: Logbook.Catch): CatchProperty {
@@ -417,34 +411,6 @@ export const getActivityDateTimeFromMessage = (message: Logbook.Message): string
     }
     default:
       return message.activityDateTime ?? message.reportDateTime
-  }
-}
-
-export const getFishingActivityFeatureOnTrackLine = (
-  fishingActivity: FishingActivityShowedOnMap,
-  lineOfFishingActivity: any,
-  fishingActivityDateTimestamp: number
-) => {
-  const totalDistance =
-    new Date(lineOfFishingActivity.secondPositionDate).getTime() -
-    new Date(lineOfFishingActivity.firstPositionDate).getTime()
-  const fishingActivityDistanceFromFirstPoint =
-    fishingActivityDateTimestamp - new Date(lineOfFishingActivity.firstPositionDate).getTime()
-  const distanceFraction = fishingActivityDistanceFromFirstPoint / totalDistance
-
-  const coordinates = lineOfFishingActivity.getGeometry().getCoordinateAt(distanceFraction)
-  const feature = new Feature({
-    geometry: new Point(coordinates)
-  })
-  // @ts-ignore
-  feature.name = fishingActivity.name
-  feature.setStyle(getFishingActivityCircleStyle())
-  feature.setId(`${LayerProperties.VESSEL_TRACK.code}:logbook:${fishingActivityDateTimestamp}`)
-
-  return {
-    coordinates,
-    feature,
-    id: fishingActivity.id
   }
 }
 

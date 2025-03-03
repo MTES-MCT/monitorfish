@@ -1,35 +1,29 @@
+import { displayLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays'
+import { hideLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/hideLogbookMessageOverlays'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { THEME, Icon } from '@mtes-mct/monitor-ui'
+import { Icon, THEME } from '@mtes-mct/monitor-ui'
 
 import { VesselSidebarActionButton } from './VesselSidebarActionButton'
-import { useGetLogbookUseCase } from '../../../../Logbook/hooks/useGetLogbookUseCase'
-import { logbookActions } from '../../../../Logbook/slice'
 
 export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
   const dispatch = useMainAppDispatch()
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
-  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
   const areFishingActivitiesShowedOnMap = useMainAppSelector(
     state => state.fishingActivities.areFishingActivitiesShowedOnMap
   )
-  const fishingActivities = useMainAppSelector(state => state.fishingActivities.fishingActivities)
-  const fishingActivitiesShowedOnMap = useMainAppSelector(state => state.fishingActivities.fishingActivitiesShowedOnMap)
-  const getVesselLogbook = useGetLogbookUseCase()
-  const areFishingActivitiesReallyShowedOnMap = areFishingActivitiesShowedOnMap || fishingActivitiesShowedOnMap?.length
+  const displayedLogbookOverlays = useMainAppSelector(state => state.fishingActivities.displayedLogbookOverlays)
+  const areFishingActivitiesReallyShowedOnMap = areFishingActivitiesShowedOnMap || displayedLogbookOverlays?.length
 
   const showOrHideFishingActivities = async function () {
     if (areFishingActivitiesReallyShowedOnMap) {
-      dispatch(logbookActions.hideAllOnMap())
+      dispatch(hideLogbookMessageOverlays())
 
       return
     }
 
-    if (!fishingActivities) {
-      await dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
-    }
-    dispatch(logbookActions.showAllOnMap())
+    await dispatch(displayLogbookMessageOverlays())
   }
 
   return (

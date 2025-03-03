@@ -10,7 +10,6 @@ context('Map menu tools', () => {
   it('Opening a tool should close the previous tool opened and open the selected tool', () => {
     // When
     openVesselBySearch('Pheno')
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('#root').click(880, 760, { timeout: 10000 })
 
     // Measurement

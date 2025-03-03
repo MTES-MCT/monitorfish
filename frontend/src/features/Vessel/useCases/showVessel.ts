@@ -1,5 +1,6 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { logbookActions } from '@features/Logbook/slice'
+import { displayLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays'
 import { getVesselLogbook } from '@features/Logbook/useCases/getVesselLogbook'
 import { doNotAnimate } from '@features/Map/slice'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel, vesselSelectors } from '@features/Vessel/slice'
@@ -89,9 +90,8 @@ export const showVessel =
       )
 
       if (areFishingActivitiesShowedOnMap && isFromUserAction) {
-        dispatch(logbookActions.removeAllFromMap())
         await dispatch(getVesselLogbook(false)(vesselIdentity, undefined, true))
-        dispatch(logbookActions.showAllOnMap())
+        await dispatch(displayLogbookMessageOverlays())
       }
     } catch (error) {
       dispatch(
@@ -115,4 +115,5 @@ function dispatchLoadingVessel(dispatch, isFromUserAction: boolean, vesselIdenti
       vesselIdentity
     })
   )
+  dispatch(logbookActions.reset())
 }

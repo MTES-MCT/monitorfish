@@ -24,10 +24,9 @@ export type GetVesselLogbookByDatesParams = {
 }
 
 const getVesselLogbookQueryArgs = {
-  query: params => {
+  query: (params: GetVesselLogbookParams) => {
     const { internalReferenceNumber } = params.vesselIdentity
-    const { tripNumber } = params
-    const { voyageRequest } = params
+    const { tripNumber, voyageRequest } = params
 
     return getUrlOrPathWithQueryParams(`/vessels/logbook/find`, {
       internalReferenceNumber: internalReferenceNumber ?? '',

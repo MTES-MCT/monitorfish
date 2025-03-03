@@ -117,7 +117,7 @@ function handleNoVoyageFound() {
     dispatch(
       addMainWindowBanner({
         children: "Ce navire n'a pas envoyé de message JPE.",
-        closingDelay: 5000,
+        closingDelay: 2000,
         isClosable: true,
         isFixed: true,
         level: Level.WARNING,

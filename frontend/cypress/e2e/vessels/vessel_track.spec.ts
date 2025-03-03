@@ -125,14 +125,13 @@ context('Vessels Track', () => {
   it('A track Should be showed When clicking on a vessel with the custom map menu', () => {
     cy.log('Show a first vessel with a three day track depth')
     cy.wait(200)
-    // We must subtract 50 to Y (the real vessel coordinates is 480 + 50 = 530) as the application <Warning/> component offset the .vessels div
     cy.get('.VESSELS_POINTS').rightclick(460, 480, { force: true, timeout: 10000 })
     cy.get('*[data-cy^="show-vessel-tracks-menu-options"]').click({ force: true })
     cy.get('*[data-cy^="show-vessel-tracks-three-days"]').click({ force: true })
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 1)
 
     cy.log('Show a second vessel with a custom date range')
-    cy.get('.VESSELS_POINTS').rightclick(504, 269, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').rightclick(504, 290, { force: true, timeout: 10000 })
     cy.get('*[data-cy^="show-vessel-tracks-menu-options"]').click({ force: true })
     cy.get('*[data-cy^="show-vessel-tracks-custom-period"]').click({ force: true })
     cy.get('.rs-picker-daterange .rs-picker-caret-icon').eq(0).click(460, 480, { force: true, timeout: 10000 })

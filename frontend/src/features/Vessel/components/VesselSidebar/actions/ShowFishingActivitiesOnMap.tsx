@@ -13,8 +13,7 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
   const areFishingActivitiesShowedOnMap = useMainAppSelector(
     state => state.fishingActivities.areFishingActivitiesShowedOnMap
   )
-  const displayedLogbookOverlays = useMainAppSelector(state => state.fishingActivities.displayedLogbookOverlays)
-  const areFishingActivitiesReallyShowedOnMap = areFishingActivitiesShowedOnMap || displayedLogbookOverlays?.length
+  const areFishingActivitiesReallyShowedOnMap = areFishingActivitiesShowedOnMap
 
   const showOrHideFishingActivities = async function () {
     if (areFishingActivitiesReallyShowedOnMap) {

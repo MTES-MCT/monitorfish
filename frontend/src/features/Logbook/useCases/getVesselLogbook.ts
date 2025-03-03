@@ -29,7 +29,7 @@ export const getVesselLogbook =
     navigateTo: NavigateTo | undefined,
     isFromUserAction: boolean,
     nextTripNumber?: string
-  ): MainAppThunk<Promise<void>> =>
+  ): MainAppThunk<Promise<Logbook.FishingActivities | void>> =>
   async (dispatch, getState) => {
     if (!vesselIdentity) {
       return
@@ -60,7 +60,7 @@ export const getVesselLogbook =
         fetchVesselVoyage(vesselIdentity, nextTripNumber ?? tripNumber, isInLightMode, nextNavigateTo)
       )
       if (!voyage) {
-        dispatch(handleNoVoyageFound())
+        dispatch(handleNoVoyageFound(isSameVesselAsCurrentlyShowed))
 
         return
       }
@@ -83,6 +83,8 @@ export const getVesselLogbook =
       }
 
       await dispatch(saveVoyage(voyageWithVesselIdentity))
+
+      return voyageWithVesselIdentity.fishingActivities
     } catch (error) {
       dispatch(
         displayOrLogError(
@@ -112,7 +114,7 @@ function fetchVesselVoyage(
   }
 }
 
-function handleNoVoyageFound() {
+function handleNoVoyageFound(isSameVesselAsCurrentlyShowed: boolean) {
   return async dispatch => {
     dispatch(
       addMainWindowBanner({
@@ -125,6 +127,9 @@ function handleNoVoyageFound() {
       })
     )
     dispatch(logbookActions.resetIsLoading())
+    if (!isSameVesselAsCurrentlyShowed) {
+      dispatch(resetDisplayedLogbookMessageOverlays())
+    }
   }
 }
 

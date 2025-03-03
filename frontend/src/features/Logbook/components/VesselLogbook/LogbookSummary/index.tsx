@@ -58,11 +58,18 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
     )?.value
   }, [fishingActivities?.alerts])
 
-  const goToPreviousTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.PREVIOUS, true))
-  const goToNextTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.NEXT, true))
-  const goToLastTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
-  const getLogbookTrip = (nextTripNumber: string | undefined) =>
+  const goToPreviousTrip = () => {
+    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.PREVIOUS, true))
+  }
+  const goToNextTrip = () => {
+    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.NEXT, true))
+  }
+  const goToLastTrip = () => {
+    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
+  }
+  const getLogbookTrip = (nextTripNumber: string | undefined) => {
     dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.EQUALS, true, nextTripNumber))
+  }
 
   return (
     <>

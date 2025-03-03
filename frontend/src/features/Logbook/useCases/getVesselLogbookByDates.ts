@@ -1,6 +1,7 @@
 import { resetDisplayedLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/resetDisplayedLogbookMessageOverlays'
 import { saveVoyage } from '@features/Logbook/useCases/saveVoyage'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
+import { vesselsAreEquals } from '@features/Vessel/types/vessel'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Level } from '@mtes-mct/monitor-ui'
 
@@ -19,12 +20,17 @@ import type { MainAppThunk } from '@store'
  */
 export const getVesselLogbookByDates =
   (vesselIdentity: Vessel.VesselIdentity | undefined, trackRequest: TrackRequest): MainAppThunk<Promise<void>> =>
-  async dispatch => {
+  async (dispatch, getState) => {
     if (!vesselIdentity) {
       return
     }
+
+    const {
+      vessel: { selectedVesselIdentity: currentSelectedVesselIdentity }
+    } = getState()
+    const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, currentSelectedVesselIdentity)
+
     dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
-    dispatch(resetDisplayedLogbookMessageOverlays())
 
     try {
       const voyage = await dispatch(
@@ -46,6 +52,10 @@ export const getVesselLogbookByDates =
       }
 
       if (!voyage) {
+        if (!isSameVesselAsCurrentlyShowed) {
+          dispatch(resetDisplayedLogbookMessageOverlays())
+        }
+
         dispatch(
           addMainWindowBanner({
             children: "Ce navire n'a pas envoyé de message JPE pendant cette période.",

@@ -1,5 +1,6 @@
 import { logbookActions } from '@features/Logbook/slice'
 import { binarySearchLine } from '@features/Logbook/useCases/displayedLogbookOverlays/utils'
+import { getVesselLogbook } from '@features/Logbook/useCases/getVesselLogbook'
 import { getActivityDateTimeFromMessage, getLogbookMessageType } from '@features/Logbook/utils'
 import { LayerProperties } from '@features/Map/constants'
 import { VESSEL_TRACK_VECTOR_SOURCE } from '@features/Vessel/layers/VesselsTracksLayer/constants'
@@ -17,8 +18,11 @@ import type { Geometry } from 'ol/geom'
 
 export const displayLogbookMessageOverlays = (): MainAppThunk => async (dispatch, getState) => {
   const {
-    fishingActivities: { fishingActivities }
+    fishingActivities: { fishingActivities: existingFishingActivities },
+    vessel: { selectedVesselIdentity }
   } = getState()
+  const fishingActivities =
+    existingFishingActivities ?? (await dispatch(getVesselLogbook(false)(selectedVesselIdentity, undefined, true)))
   if (!fishingActivities) {
     return
   }

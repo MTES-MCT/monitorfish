@@ -1,4 +1,3 @@
-import { VesselLocation, vesselSize } from '@features/Vessel/types/vessel'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 import * as Comlink from 'comlink'
 
@@ -8,6 +7,7 @@ import {
   LAWTYPES_TO_TERRITORY,
   mapToRegulatoryZone
 } from '../features/Regulation/utils'
+import { VesselLocation, vesselSize } from '../features/Vessel/types/vessel'
 import { getDateMonthsBefore } from '../utils'
 import { isNotNullish } from '../utils/isNotNullish'
 

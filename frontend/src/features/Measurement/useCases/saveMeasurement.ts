@@ -1,5 +1,9 @@
 import { convertToGeoJSONGeometryObject } from '@features/Map/utils'
-import { addMeasurementDrawed, resetCircleMeasurementInDrawing } from '@features/Measurement/slice'
+import {
+  addMeasurementDrawed,
+  resetCircleMeasurementInDrawing,
+  resetMeasurementTypeToAdd
+} from '@features/Measurement/slice'
 import { trackEvent } from '@hooks/useTracking'
 import Feature from 'ol/Feature'
 import Circle from 'ol/geom/Circle'
@@ -11,6 +15,7 @@ import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 import type { SimpleGeometry } from 'ol/geom'
 
 export const saveMeasurement = (email?: string | undefined) => (feature: Feature, measurement: string) => dispatch => {
+  dispatch(resetMeasurementTypeToAdd())
   if (feature.getGeometry() instanceof Circle) {
     feature.setGeometry(fromCircle(feature.getGeometry() as Circle))
   }

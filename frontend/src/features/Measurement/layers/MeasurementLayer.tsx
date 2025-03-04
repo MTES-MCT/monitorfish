@@ -173,7 +173,6 @@ function UnmemoizedMeasurementLayer() {
         }
 
         unByKey(listener)
-        dispatch(resetMeasurementTypeToAdd())
         setMeasurementInProgress(undefined)
       })
 

@@ -37,17 +37,18 @@ class ZonesTable:
         Args:
             table (Table): A SQLAchemy `Table`
             geometry_column (str): name of the geometry column
-            filter_column (str): name of the column on which to filter (typically the
-            id or unique name of zones)
+            filter_column (str, optionnal): name of the column on which to filter
+            (typically the id or unique name of zones). Defaults to `None`.
 
         Raises:
-            AssertionError: if `filter_column` is not a column of `table` or
-            `geometry_column` is not a column of `Table` of type
+            AssertionError: if `filter_column` is given and is not a column of `table`
+            or `geometry_column` is not a column of `Table` of type
             `geoalchemy2.Geometry`
     """
 
-    def __init__(self, table: Table, geometry_column: str, filter_column: str):
-        assert filter_column in table.columns
+    def __init__(self, table: Table, geometry_column: str, filter_column: str = None):
+        if filter_column:
+            assert filter_column in table.columns
         assert geometry_column in table.columns
         assert isinstance(table.columns[geometry_column].type, Geometry)
         self.table = table
@@ -134,6 +135,11 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
             "table": "regulations",
             "filter_column": "law_type",
             "geometry_column": "geometry",
+        },
+        "NEAFC_FISHING_ALERT": {
+            "table": "neafc_regulatory_area",
+            "filter_column": None,
+            "geometry_column": "wkb_geometry",
         },
     }
 

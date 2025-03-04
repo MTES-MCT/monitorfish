@@ -1221,3 +1221,40 @@ def test_flow_rtc_fishing_alert(reset_test_data):
         ].values[0]
         == "ABC000306959"
     )
+
+
+def test_flow_neafc_fishing_alert(reset_test_data):
+    # With these parameters, 2 french vessels should be in alert.
+    alert_type = "NEAFC_FISHING_ALERT"
+    alert_config_name = "NEAFC_FISHING_ALERT"
+    zones = None
+    hours_from_now = 8
+    only_fishing_positions = True
+
+    flow.schedule = None
+    state = flow.run(
+        alert_type=alert_type,
+        alert_config_name=alert_config_name,
+        zones=zones,
+        hours_from_now=hours_from_now,
+        only_fishing_positions=only_fishing_positions,
+    )
+
+    assert state.is_successful()
+
+    pending_alerts = read_query(
+        """
+            SELECT *
+            FROM pending_alerts
+            WHERE alert_config_name = 'NEAFC_FISHING_ALERT'
+        """,
+        db="monitorfish_remote",
+    )
+    assert len(pending_alerts) == 1
+    assert (
+        pending_alerts.loc[
+            pending_alerts.alert_config_name == "NEAFC_FISHING_ALERT",
+            "internal_reference_number",
+        ].values[0]
+        == "ABC000306959"
+    )

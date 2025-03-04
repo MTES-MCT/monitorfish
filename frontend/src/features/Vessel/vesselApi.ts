@@ -125,7 +125,11 @@ export const vesselApi = monitorfishApi.injectEndpoints({
         } catch (err) {
           dispatch(
             displayOrLogError(
-              err, // `err` can only be a `FrontendApiError` that's what `transformErrorResponse()` always returns
+              (
+                err as {
+                  error: FrontendApiError
+                }
+              ).error, // `err.error` can only be a `FrontendApiError` that's what `transformErrorResponse()` always returns
               () => () => {
                 // TODO Maybe `displayOrLogError()` should automatically unset the error boundary in the retryable use case?
                 dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))

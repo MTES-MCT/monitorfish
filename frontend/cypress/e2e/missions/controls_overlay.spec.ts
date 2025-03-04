@@ -9,9 +9,9 @@ context('Controls overlay', () => {
     cy.wait(500)
   })
 
-  it('A control overlay Should be showed and closed', () => {
+  it('A control overlay Should be showed, moved and closed', () => {
     // First, open the mission overlay
-    cy.get('#root').click(611, 595)
+    cy.get('#root').click(611, 555)
 
     cy.get('*[data-cy="mission-overlay"]').contains('BSN STE MAXIME')
     cy.get('*[data-cy="mission-overlay"]').contains('et 2 autres unités')
@@ -21,31 +21,26 @@ context('Controls overlay', () => {
     cy.get('*[data-cy="mission-overlay"]').contains('1 contrôle réalisé')
     cy.get('*[data-cy="mission-overlay"]').contains('Actions CNSP')
 
+    cy.wait(500)
     // Open the control overlay
-    cy.get('#root').click(405, 624)
+    cy.get('#root').click(408, 604)
+    cy.wait(200)
     // Double the click to avoid many Cypress retries
-    cy.get('#root').click(404, 624)
+    cy.get('#root').click(407, 604)
 
     cy.get('*[data-cy="mission-action-overlay"]').contains('Contrôle du navire NOM INCONNU')
     cy.get('*[data-cy="mission-action-overlay"]').contains('Aucune infraction')
+    cy.get('*[data-cy="mission-action-overlay-close"]').click()
 
-    cy.intercept('GET', '/api/v1/missions/34').as('getMission')
-  })
-
-  it('A control overlay Should be movable', () => {
     cy.wait(200)
-    // First, open the mission overlay
-    cy.get('#root').click(611, 595)
-    cy.wait(100)
-
     // Open the control overlay
-    cy.get('#root').click(405, 624)
-    cy.wait(100)
+    cy.get('#root').click(408, 604)
+    cy.wait(200)
     // Double the click to avoid many Cypress retries
-    cy.get('#root').click(404, 624)
+    cy.get('#root').click(407, 604)
 
     cy.getComputedStyle('*[data-cy="mission-action-overlay"]', 2).then(styleBefore => {
-      expect(styleBefore.transform).contains('matrix(1, 0, 0, 1, 408, 580)')
+      expect(styleBefore.transform).contains('matrix(1, 0, 0, 1, 406, 602)')
     })
 
     // When
@@ -63,7 +58,7 @@ context('Controls overlay', () => {
 
     // Then
     cy.getComputedStyle('*[data-cy="mission-action-overlay"]', 2).then(styleAfter => {
-      expect(styleAfter.transform).contains('matrix(1, 0, 0, 1, 300, 347)')
+      expect(styleAfter.transform).contains('matrix(1, 0, 0, 1, 300, 397)')
     })
   })
 })

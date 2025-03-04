@@ -1,21 +1,17 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { FlatKeyValue } from '@features/Vessel/components/VesselSidebar/common/FlatKeyValue'
 import { FlatTwoColumnKeyValue } from '@features/Vessel/components/VesselSidebar/common/FlatTwoColumnKeyValue'
-import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { customDayjs, THEME } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { getDate } from '../../../../utils'
-import { showVessel } from '../../useCases/showVessel'
 
 export function VesselIdentity() {
-  const dispatch = useMainAppDispatch()
   const loadingVessel = useMainAppSelector(state => state.vessel.loadingVessel)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
-  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
   const gears = useMainAppSelector(state => state.gear.gears)
 
@@ -41,12 +37,6 @@ export function VesselIdentity() {
       }
     })
   }, [gears, selectedVessel])
-
-  useEffect(() => {
-    if (!lastPosition && !selectedVessel && !loadingVessel && selectedVesselIdentity) {
-      dispatch(showVessel(selectedVesselIdentity, false, true))
-    }
-  }, [dispatch, lastPosition, selectedVessel, loadingVessel, selectedVesselIdentity])
 
   function getVesselOrLastPositionProperty(propertyName) {
     if (selectedVessel && selectedVessel[propertyName]) {

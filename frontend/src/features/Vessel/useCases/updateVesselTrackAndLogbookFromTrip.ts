@@ -22,11 +22,12 @@ export const updateVesselTrackAndLogbookFromTrip =
   ): MainAppThunk =>
   async (dispatch, getState) => {
     const {
-      fishingActivities: { areFishingActivitiesShowedOnMap },
+      fishingActivities: { areFishingActivitiesShowedOnMap, tripNumber: currentTripNumber },
       map: { defaultVesselTrackDepth }
     } = getState()
 
-    const voyage = await dispatch(getVesselLogbook(vesselIdentity, navigateTo, isFromUserAction, nextTripNumber))
+    const tripNumber = nextTripNumber ?? currentTripNumber ?? undefined
+    const voyage = await dispatch(getVesselLogbook(vesselIdentity, navigateTo, isFromUserAction, tripNumber))
     if (!voyage || !vesselIdentity) {
       return
     }
@@ -55,7 +56,7 @@ function displayVesselTrack(
       ? getTrackRequestFromTrackDepth(defaultVesselTrackDepth)
       : getTrackRequestFromDates(afterDateTime, beforeDateTime)
 
-    dispatch(updateSelectedVesselTrack(vesselIdentity, trackRequest))
+    await dispatch(updateSelectedVesselTrack(vesselIdentity, trackRequest))
   }
 }
 

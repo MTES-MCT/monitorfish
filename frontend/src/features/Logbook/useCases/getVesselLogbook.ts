@@ -33,7 +33,7 @@ export const getVesselLogbook =
     }
 
     const {
-      fishingActivities: { isLastVoyage, lastFishingActivities, tripNumber },
+      fishingActivities: { isLastVoyage, lastFishingActivities },
       vessel: { selectedVesselIdentity: currentSelectedVesselIdentity }
     } = getState()
 
@@ -52,7 +52,7 @@ export const getVesselLogbook =
     }
 
     try {
-      const voyage = await dispatch(fetchVesselVoyage(vesselIdentity, nextTripNumber ?? tripNumber, nextNavigateTo))
+      const voyage = await dispatch(fetchVesselVoyage(vesselIdentity, nextTripNumber, nextNavigateTo))
       if (!voyage) {
         dispatch(handleNoVoyageFound(isSameVesselAsCurrentlyShowed))
 
@@ -88,11 +88,11 @@ export const getVesselLogbook =
 
 function fetchVesselVoyage(
   vesselIdentity: Vessel.VesselIdentity,
-  tripNumber: string | null,
+  tripNumber: string | undefined,
   voyageRequest: NavigateTo
 ) {
   return async dispatch => {
-    const requestArgs = { tripNumber: tripNumber ?? undefined, vesselIdentity, voyageRequest }
+    const requestArgs = { tripNumber, vesselIdentity, voyageRequest }
 
     return dispatch(
       logbookApi.endpoints.getVesselLogbook.initiate(requestArgs, RTK_FORCE_REFETCH_QUERY_OPTIONS)

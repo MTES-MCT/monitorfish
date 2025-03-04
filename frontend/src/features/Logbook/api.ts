@@ -4,7 +4,7 @@ import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
 
 import { NavigateTo } from './constants'
 import { Logbook } from './Logbook.types'
-import { monitorfishApi, monitorfishLightApi } from '../../api/api'
+import { monitorfishApi } from '../../api/api'
 
 import type { TrackRequest } from '@features/Vessel/types/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
@@ -23,30 +23,6 @@ export type GetVesselLogbookByDatesParams = {
   vesselIdentity: Vessel.VesselIdentity
 }
 
-const getVesselLogbookQueryArgs = {
-  query: (params: GetVesselLogbookParams) => {
-    const { internalReferenceNumber } = params.vesselIdentity
-    const { tripNumber, voyageRequest } = params
-
-    return getUrlOrPathWithQueryParams(`/vessels/logbook/find`, {
-      internalReferenceNumber: internalReferenceNumber ?? '',
-      tripNumber: tripNumber ?? '',
-      voyageRequest: voyageRequest ?? ''
-    })
-  },
-  transformErrorResponse: response => new FrontendApiError(LOGBOOK_ERROR_MESSAGE, response),
-  transformResponse: (response: BackendApi.ResponseBodyError | Logbook.VesselVoyage) => {
-    if (
-      !isVesselVoyage(response) &&
-      (response as BackendApi.ResponseBodyError).code === BackendApi.ErrorCode.NOT_FOUND_BUT_OK
-    ) {
-      return undefined
-    }
-
-    return response as Logbook.VesselVoyage
-  }
-}
-
 export const logbookApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     getLastLogbookTrips: builder.query<string[], string>({
@@ -54,9 +30,29 @@ export const logbookApi = monitorfishApi.injectEndpoints({
       query: internalReferenceNumber => `/vessels/logbook/last?internalReferenceNumber=${internalReferenceNumber}`,
       transformErrorResponse: response => new FrontendApiError(LAST_LOGBOOK_TRIPS_ERROR_MESSAGE, response)
     }),
-    getVesselLogbook: builder.query<Logbook.VesselVoyage | undefined, GetVesselLogbookParams>(
-      getVesselLogbookQueryArgs
-    ),
+    getVesselLogbook: builder.query<Logbook.VesselVoyage | undefined, GetVesselLogbookParams>({
+      query: (params: GetVesselLogbookParams) => {
+        const { internalReferenceNumber } = params.vesselIdentity
+        const { tripNumber, voyageRequest } = params
+
+        return getUrlOrPathWithQueryParams(`/vessels/logbook/find`, {
+          internalReferenceNumber: internalReferenceNumber ?? '',
+          tripNumber: tripNumber ?? '',
+          voyageRequest: voyageRequest ?? ''
+        })
+      },
+      transformErrorResponse: response => new FrontendApiError(LOGBOOK_ERROR_MESSAGE, response),
+      transformResponse: (response: BackendApi.ResponseBodyError | Logbook.VesselVoyage) => {
+        if (
+          !isVesselVoyage(response) &&
+          (response as BackendApi.ResponseBodyError).code === BackendApi.ErrorCode.NOT_FOUND_BUT_OK
+        ) {
+          return undefined
+        }
+
+        return response as Logbook.VesselVoyage
+      }
+    }),
     getVesselLogbookByDates: builder.query<Logbook.VesselVoyage | undefined, GetVesselLogbookByDatesParams>({
       query: params => {
         const { internalReferenceNumber } = params.vesselIdentity
@@ -80,12 +76,6 @@ export const logbookApi = monitorfishApi.injectEndpoints({
         return response as Logbook.VesselVoyage
       }
     })
-  })
-})
-
-export const logbookLightApi = monitorfishLightApi.injectEndpoints({
-  endpoints: builder => ({
-    getVesselLogbook: builder.query<Logbook.VesselVoyage | undefined, GetVesselLogbookParams>(getVesselLogbookQueryArgs)
   })
 })
 

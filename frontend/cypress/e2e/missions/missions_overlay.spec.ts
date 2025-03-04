@@ -1,12 +1,14 @@
 context('Missions overlay', () => {
   beforeEach(() => {
     cy.login('superuser')
+    cy.intercept('GET', `/bff/v1/missions*`).as('missions')
     cy.visit('/#@-188008.06,6245230.27,8.70')
+    cy.wait('@missions')
     cy.wait(3000)
   })
 
-  it('An overlay Should be showed and closed', () => {
-    cy.get('#root').click(337, 819)
+  it('An overlay Should be showed, movable and closed', () => {
+    cy.get('#root').click(331, 789)
 
     cy.get('*[data-cy="mission-overlay"]').contains('BGC LORIENT')
     cy.get('*[data-cy="mission-overlay"]').contains('Mission Air / Terre')
@@ -18,14 +20,13 @@ context('Missions overlay', () => {
 
     cy.get('*[data-cy="mission-overlay-close"]').click()
     cy.get('*[data-cy="mission-overlay"]').should('not.exist')
-  })
 
-  it('A mission overlay Should be movable', () => {
     // Given
-    cy.get('#root').click(337, 819)
+    cy.wait(100)
+    cy.get('#root').click(331, 789)
 
     cy.getComputedStyle('*[data-cy="mission-overlay"]', 2).then(styleBefore => {
-      expect(styleBefore.transform).contains('matrix(1, 0, 0, 1, 333, 782)')
+      expect(styleBefore.transform).contains('matrix(1, 0, 0, 1, 333, 807)')
     })
 
     // When
@@ -43,7 +44,7 @@ context('Missions overlay', () => {
 
     // Then
     cy.getComputedStyle('*[data-cy="mission-overlay"]', 2).then(styleAfter => {
-      expect(styleAfter.transform).contains('matrix(1, 0, 0, 1, 605, 703)')
+      expect(styleAfter.transform).contains('matrix(1, 0, 0, 1, 605, 753)')
     })
   })
 })

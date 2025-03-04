@@ -44,7 +44,6 @@ export function VesselLoader() {
       return
     }
 
-    // TODO include the VesselLightLastPosition type to the redux state
     dispatch(showVesselsLastPosition(vessels as Vessel.VesselLastPosition[]))
   }, [dispatch, vessels, isError, error])
 

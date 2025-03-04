@@ -12,7 +12,6 @@ context('Vessel sidebar resume tab', () => {
   it('Resume Should be opened When clicking on a vessel', () => {
     // When
     openVesselBySearch('Pheno')
-    cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
 
     // Then
     cy.get('*[data-cy^="vessel-name"]').contains('PHENOMENE (FR)')

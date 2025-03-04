@@ -1,3 +1,3 @@
-import { VesselSidebarTab } from '../domain/entities/vessel/vessel'
+import { VesselSidebarTab } from '@features/Vessel/types/vessel'
 
 export const forbiddenVesselSidebarPaths = [VesselSidebarTab.REPORTING]

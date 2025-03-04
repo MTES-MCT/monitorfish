@@ -1,11 +1,11 @@
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
+import { atLeastOneVesselSelected, VesselFeature, VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { createEntityAdapter, createSlice, type EntityState, type PayloadAction } from '@reduxjs/toolkit'
 
-import { atLeastOneVesselSelected, VesselFeature, VesselSidebarTab } from '../../domain/entities/vessel/vessel'
 import { ReportingType, ReportingTypeCharacteristics } from '../Reporting/types'
 
-import type { FishingActivityShowedOnMap, ShowedVesselTrack, TrackRequest } from '../../domain/entities/vessel/types'
+import type { ShowedVesselTrack, TrackRequest } from '@features/Vessel/types/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
 const NOT_FOUND = -1
@@ -17,7 +17,6 @@ export const vesselsAdapter = createEntityAdapter({
 
 // TODO Properly type this redux state.
 export type VesselState = {
-  fishingActivitiesShowedOnMap: FishingActivityShowedOnMap[]
   hideNonSelectedVessels: boolean
   highlightedVesselTrackPosition: Vessel.VesselPosition | null
   isFocusedOnVesselSearch: boolean
@@ -38,7 +37,6 @@ export type VesselState = {
   vesselsTracksShowed: Record<string, ShowedVesselTrack>
 }
 const INITIAL_STATE: VesselState = {
-  fishingActivitiesShowedOnMap: [],
   hideNonSelectedVessels: false,
   highlightedVesselTrackPosition: null,
   isFocusedOnVesselSearch: false,

@@ -1,0 +1,44 @@
+import { displayLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays'
+import { getVesselLogbook } from '@features/Logbook/useCases/getVesselLogbook'
+import { resetLoadingVessel } from '@features/Vessel/slice'
+import { displayVesselSidebarAndPositions } from '@features/Vessel/useCases/displayVesselSidebarAndPositions'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+
+import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
+
+import type { Vessel } from '@features/Vessel/Vessel.types'
+import type { MainAppThunk } from '@store'
+
+/**
+ * Show a specified vessel track, logbook and logbook message overlays on map
+ */
+export const showVessel =
+  (
+    vesselIdentity: Vessel.VesselIdentity,
+    isFromSearch: boolean,
+    isFromUserAction: boolean
+  ): MainAppThunk<Promise<void>> =>
+  async (dispatch, getState) => {
+    const {
+      fishingActivities: { areFishingActivitiesShowedOnMap }
+    } = getState()
+
+    try {
+      await dispatch(displayVesselSidebarAndPositions(vesselIdentity, isFromSearch, isFromUserAction))
+
+      await dispatch(getVesselLogbook(vesselIdentity, undefined, true))
+      if (areFishingActivitiesShowedOnMap && isFromUserAction) {
+        await dispatch(displayLogbookMessageOverlays())
+      }
+    } catch (error) {
+      dispatch(
+        displayOrLogError(
+          error as Error,
+          () => showVessel(vesselIdentity, isFromSearch, isFromUserAction),
+          isFromUserAction,
+          DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
+        )
+      )
+      dispatch(resetLoadingVessel())
+    }
+  }

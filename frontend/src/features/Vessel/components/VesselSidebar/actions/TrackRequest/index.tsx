@@ -1,31 +1,30 @@
+import { getTrackRequestFromTrackDepth, VesselTrackDepth } from '@features/Vessel/types/vesselTrackDepth'
+import { updateVesselTrackAndLogbookFromDates } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromDates'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { DateRangePicker, THEME } from '@mtes-mct/monitor-ui'
-import { getTrackRequestFromTrackDepth, VesselTrackDepth } from 'domain/entities/vesselTrackDepth'
-import { updateSelectedVesselTrackRequest } from 'domain/use_cases/vessel/updateSelectedVesselTrackRequest'
-import { useCallback, useState } from 'react'
+import { DateRangePicker, Icon, THEME } from '@mtes-mct/monitor-ui'
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import { ExportTrack } from './ExportTrack'
 import { PositionsTable } from './PositionsTable'
 import { TrackDepthSelection } from './TrackDepthSelection'
 import { MapComponent } from '../../../../../commonStyles/MapComponent'
-import VesselSVG from '../../../../../icons/Icone_navire.svg?react'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'
+import type { TrackRequestCustom, TrackRequestPredefined } from '@features/Vessel/types/types'
 import type { DateRange } from '@mtes-mct/monitor-ui'
-import type { TrackRequestCustom, TrackRequestPredefined } from 'domain/entities/vessel/types'
 
 type TrackRequestProps = {
   isSidebarOpen: boolean
 }
 export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
   const dispatch = useMainAppDispatch()
-  const { rightMenuIsOpen } = useMainAppSelector(state => state.global)
-  const { defaultVesselTrackDepth } = useMainAppSelector(state => state.map)
-  const { selectedVesselTrackRequest } = useMainAppSelector(state => state.vessel)
-  const { selectedVesselIdentity } = useMainAppSelector(state => state.vessel)
+  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
+  const defaultVesselTrackDepth = useMainAppSelector(state => state.map.defaultVesselTrackDepth)
+  const selectedVesselTrackRequest = useMainAppSelector(state => state.vessel.selectedVesselTrackRequest)
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const [isOpenedFromClick, setIsOpenedFromClick] = useState(false)
 
   const dateRangePickerDefaultValue =
@@ -34,48 +33,42 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       : undefined
   const isOpen = isSidebarOpen && isOpenedFromClick
 
-  const handleDateRangeRadioChange = useCallback(
-    (nextTrackDepth: SelectableVesselTrackDepth | undefined) => {
-      if (!selectedVesselIdentity || !nextTrackDepth) {
-        return
-      }
+  const handleDateRangeRadioChange = (nextTrackDepth: SelectableVesselTrackDepth | undefined) => {
+    if (!selectedVesselIdentity || !nextTrackDepth) {
+      return
+    }
 
-      const trackRequest: TrackRequestPredefined = {
-        afterDateTime: null,
-        beforeDateTime: null,
-        trackDepth: nextTrackDepth
-      }
+    const trackRequest: TrackRequestPredefined = {
+      afterDateTime: null,
+      beforeDateTime: null,
+      trackDepth: nextTrackDepth
+    }
 
-      dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest))
-    },
-    [dispatch, selectedVesselIdentity]
-  )
+    dispatch(updateVesselTrackAndLogbookFromDates(selectedVesselIdentity, trackRequest))
+  }
 
-  const handleDateRangePickerChange = useCallback(
-    (dateRange: DateRange | undefined) => {
-      if (!selectedVesselIdentity) {
-        return
-      }
+  const handleDateRangePickerChange = (dateRange: DateRange | undefined) => {
+    if (!selectedVesselIdentity) {
+      return
+    }
 
-      if (!dateRange) {
-        const trackRequest = getTrackRequestFromTrackDepth(VesselTrackDepth.TWELVE_HOURS)
+    if (!dateRange) {
+      const trackRequest = getTrackRequestFromTrackDepth(VesselTrackDepth.TWELVE_HOURS)
 
-        dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest))
+      dispatch(updateVesselTrackAndLogbookFromDates(selectedVesselIdentity, trackRequest))
 
-        return
-      }
+      return
+    }
 
-      const [startDate, endDate] = dateRange
-      const trackRequest: TrackRequestCustom = {
-        afterDateTime: startDate,
-        beforeDateTime: endDate,
-        trackDepth: VesselTrackDepth.CUSTOM
-      }
+    const [startDate, endDate] = dateRange
+    const trackRequest: TrackRequestCustom = {
+      afterDateTime: startDate,
+      beforeDateTime: endDate,
+      trackDepth: VesselTrackDepth.CUSTOM
+    }
 
-      dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest))
-    },
-    [dispatch, selectedVesselIdentity]
-  )
+    dispatch(updateVesselTrackAndLogbookFromDates(selectedVesselIdentity, trackRequest))
+  }
 
   return (
     <>
@@ -88,7 +81,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
         onClick={() => setIsOpenedFromClick(!isOpenedFromClick)}
         title="Paramétrer l'affichage de la piste VMS"
       >
-        <VesselIcon />
+        <Icon.Vessel color={THEME.color.white} style={{ margin: 5 }} />
       </VesselSidebarActionButton>
       {isOpen && (
         <TrackRequestBody $isRightMenuOpen={rightMenuIsOpen} $isSidebarOpen={isSidebarOpen}>
@@ -167,11 +160,4 @@ const TrackRequestBody = styled(MapComponent)<{
   top: 118px;
   transition: all 0.3s;
   width: 379px;
-`
-
-const VesselIcon = styled(VesselSVG)`
-  background: none;
-  margin-left: 2px;
-  margin-top: 2px;
-  width: 20px;
 `

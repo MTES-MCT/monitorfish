@@ -12,6 +12,7 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
+import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 
 const MARGIN_TOP = 476
@@ -25,6 +26,9 @@ export function NewFeatures() {
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.NEW_FEATURES)
 
   const openOrClose = () => {
+    if (!rightMapBoxOpened) {
+      dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
+    }
     dispatch(setRightMapBoxOpened(rightMapBoxOpened === MapBox.NEW_FEATURES ? undefined : MapBox.NEW_FEATURES))
   }
 

@@ -9,6 +9,7 @@ import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import { CustomCircleRange } from './CustomCircleRange'
+import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
 import { MapComponent } from '../../../commonStyles/MapComponent'
 import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'
@@ -43,6 +44,7 @@ export function MeasurementMapButton() {
 
   const makeMeasurement = nextMeasurementTypeToAdd => {
     dispatch(setRightMapBoxOpened(MapBox.MEASUREMENT))
+    dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
     dispatch(setMeasurementTypeToAdd(nextMeasurementTypeToAdd))
   }
 
@@ -66,6 +68,7 @@ export function MeasurementMapButton() {
     }
 
     dispatch(setRightMapBoxOpened(MapBox.MEASUREMENT_MENU))
+    dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
   }
 
   return (

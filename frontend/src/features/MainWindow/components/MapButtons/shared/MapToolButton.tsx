@@ -59,6 +59,10 @@ const StyledButton = styled(IconButton)<{
 
   ${p => {
     const padding = p.$isRightMenuShrinked ? `padding: 6px 0px 6px 0px;` : `padding: 6px 6px 6px 6px;`
+    const width = p.$isRightMenuShrinked ? 'width: 5px;' : 'width: 40px;'
+    const borderRadius = p.$isRightMenuShrinked ? 'border-radius: 1px;' : 'border-radius: 2px;'
+    const badgeVisibility = p.$isRightMenuShrinked ? 'div { visibility: hidden; left: -15px; }' : ''
+
     const activeProperties = p.$isActive
       ? `
       background: ${p.theme.color.blueGray};
@@ -67,14 +71,20 @@ const StyledButton = styled(IconButton)<{
       : ''
 
     if (p.$hasBadgeNumber) {
-      return `button {
+      return `
+      ${badgeVisibility}
+      button {
         ${padding}
+        ${width}
+        ${borderRadius}
         ${activeProperties}
       }`
     }
 
     return `
       ${padding}
+      ${width}
+      ${borderRadius}
       ${activeProperties}
     `
   }}

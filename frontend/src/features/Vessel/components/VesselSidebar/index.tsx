@@ -1,3 +1,4 @@
+import { VesselFeature } from '@features/Vessel/types/vessel'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTracking } from '@hooks/useTracking'
 import { useEffect, useState } from 'react'
@@ -5,11 +6,10 @@ import styled from 'styled-components'
 
 import { AnimateToTrack } from './actions/animate_to_track'
 import { HideNonSelectedVessels } from './actions/hide_non_selected_vessels'
-import { ShowFishingActivitiesOnMap } from './actions/show_fishing_activities'
+import { ShowFishingActivitiesOnMap } from './actions/ShowFishingActivitiesOnMap'
 import { TrackRequest } from './actions/TrackRequest'
 import { Body } from './Body'
 import { Tabs } from './Tabs'
-import { VesselFeature } from '../../../../domain/entities/vessel/vessel'
 import { MapComponent } from '../../../commonStyles/MapComponent'
 
 export function VesselSidebar() {

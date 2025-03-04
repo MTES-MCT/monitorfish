@@ -140,7 +140,7 @@ export function LANMessageResume({
                     <Weight>
                       <SubKey>Poids FAR</SubKey>
                       <SubValueWeight
-                        withPNOWeight={speciesToWeightOfPNO && speciesToWeightOfPNO[speciesCatch.species]}
+                        $withPNOWeight={speciesToWeightOfPNO && speciesToWeightOfPNO[speciesCatch.species]}
                       >
                         {speciesToWeightOfFAR && speciesToWeightOfFAR[speciesCatch.species] ? (
                           <span title={`${speciesToWeightOfFAR[speciesCatch.species].weight} kg`}>
@@ -154,7 +154,7 @@ export function LANMessageResume({
                     <Weight>
                       <SubKey>Poids PNO</SubKey>
                       <SubValueWeight
-                        withPNOWeight={speciesToWeightOfPNO && speciesToWeightOfPNO[speciesCatch.species]}
+                        $withPNOWeight={speciesToWeightOfPNO && speciesToWeightOfPNO[speciesCatch.species]}
                       >
                         {speciesToWeightOfPNO && speciesToWeightOfPNO[speciesCatch.species] ? (
                           <span title={`${speciesToWeightOfPNO[speciesCatch.species].weight} kg`}>
@@ -168,7 +168,7 @@ export function LANMessageResume({
                     <Weight>
                       <SubKey>Poids LAN</SubKey>
                       <SubValueWeight
-                        withPNOWeight={speciesToWeightOfPNO && speciesToWeightOfPNO[speciesCatch.species]}
+                        $withPNOWeight={speciesToWeightOfPNO && speciesToWeightOfPNO[speciesCatch.species]}
                       >
                         {speciesToWeightOfLAN && speciesToWeightOfLAN[speciesCatch.species] ? (
                           <span title={`${speciesToWeightOfLAN[speciesCatch.species].weight} kg`}>
@@ -252,12 +252,12 @@ const SubValue = styled.span`
 `
 
 const SubValueWeight = styled.span<{
-  withPNOWeight?: boolean
+  $withPNOWeight?: boolean
 }>`
   font-size: 13px;
   color: ${p => p.theme.color.gunMetal};
   margin-right: 10px;
-  max-width: ${p => (p.withPNOWeight ? '50' : '90')}px;
+  max-width: ${p => (p.$withPNOWeight ? '50' : '90')}px;
   text-overflow: ellipsis;
   overflow: hidden !important;
   white-space: nowrap;

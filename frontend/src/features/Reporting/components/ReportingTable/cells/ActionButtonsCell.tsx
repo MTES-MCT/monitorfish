@@ -6,7 +6,7 @@ import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import { type CSSProperties, useCallback } from 'react'
 import styled from 'styled-components'
 
-import { showVessel } from '../../../../../domain/use_cases/vessel/showVessel'
+import { showVessel } from '../../../../Vessel/useCases/showVessel'
 
 import type { InfractionSuspicionReporting, ObservationReporting, Reporting } from '@features/Reporting/types'
 

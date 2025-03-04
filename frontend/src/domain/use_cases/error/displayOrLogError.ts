@@ -18,6 +18,8 @@ export const displayOrLogError =
     errorBoundaryKey: keyof DisplayedErrorState
   ) =>
   async dispatch => {
+    // eslint-disable-next-line no-console
+    console.log(error)
     const errorMessage = error instanceof Error ? error.message : JSON.stringify(error)
 
     /**
@@ -30,7 +32,7 @@ export const displayOrLogError =
     }
 
     /**
-     * Else, the use-case was an user action, we show a fallback error UI to the user.
+     * Else, the use-case was a user action, we show a fallback error UI to the user.
      * We first check if the `displayedErrorBoundary` is correct (included in the DisplayedErrorState type)
      */
     if (!Object.keys(INITIAL_STATE).includes(errorBoundaryKey)) {

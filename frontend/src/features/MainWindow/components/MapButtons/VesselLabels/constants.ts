@@ -1,4 +1,4 @@
-import { VesselLabel } from '../../../../../domain/entities/vessel/label/types'
+import { VesselLabel } from '@features/Vessel/label.types'
 
 export const VESSEL_LABEL_OPTIONS = [
   { label: 'Nationalité', value: VesselLabel.VESSEL_NATIONALITY },

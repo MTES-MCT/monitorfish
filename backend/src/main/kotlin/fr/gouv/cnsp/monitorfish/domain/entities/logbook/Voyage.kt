@@ -9,4 +9,5 @@ data class Voyage(
     val endDate: ZonedDateTime?,
     val tripNumber: String,
     val logbookMessagesAndAlerts: LogbookMessagesAndAlerts,
+    val totalTripsFoundForDates: Number? = null,
 )

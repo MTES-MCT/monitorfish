@@ -1,3 +1,3 @@
-import { VesselTrackDepth } from '../../../../../../domain/entities/vesselTrackDepth'
+import { VesselTrackDepth } from '../../../../types/vesselTrackDepth'
 
 export type SelectableVesselTrackDepth = Exclude<VesselTrackDepth, VesselTrackDepth.CUSTOM>

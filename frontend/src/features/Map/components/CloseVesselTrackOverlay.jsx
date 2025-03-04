@@ -3,7 +3,7 @@ import React, { createRef, useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
-import { hideVesselTrack } from '../../../domain/use_cases/vessel/hideVesselTrack'
+import { hideVesselTrack } from '../../Vessel/useCases/hideVesselTrack'
 import CloseVesselTrackSVG from '../../icons/Croix_piste_VMS.svg?react'
 import { monitorfishMap } from '../monitorfishMap'
 

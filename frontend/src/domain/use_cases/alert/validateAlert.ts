@@ -2,12 +2,12 @@ import { alertApi } from '@api/alert'
 import { RtkCacheTagType } from '@api/constants'
 import { setPendingAlerts } from '@features/Alert/components/SideWindowAlerts/slice'
 import { removeVesselAlertAndUpdateReporting } from '@features/Vessel/slice'
+import { VesselFeature } from '@features/Vessel/types/vessel'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { deleteListItems } from '@utils/deleteListItems'
 import { updateListItemsProp } from '@utils/updateListItemsProp'
 
-import { VesselFeature } from '../../entities/vessel/vessel'
 import { setError } from '../../shared_slices/Global'
 
 import type { LEGACY_PendingAlert } from '@features/Alert/types'

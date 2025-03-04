@@ -82,9 +82,9 @@ class JpaLogbookReportRepository(
             .filter {
                 it.logbookMessageAndValue.value.predictedArrivalDatetimeUtc?.let { predictedArrivalDatetimeUtc ->
                     Utils.isZonedDateTimeBetween(
-                        predictedArrivalDatetimeUtc,
-                        ZonedDateTime.parse(filter.willArriveAfter),
-                        ZonedDateTime.parse(filter.willArriveBefore),
+                        zonedDateTime = predictedArrivalDatetimeUtc,
+                        start = ZonedDateTime.parse(filter.willArriveAfter),
+                        end = ZonedDateTime.parse(filter.willArriveBefore),
                         isInclusive = true,
                     )
                 } == true
@@ -118,14 +118,48 @@ class JpaLogbookReportRepository(
     ): PriorNotification? {
         val logbookReport =
             dbLogbookReportRepository
-                .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(reportId, operationDate.toString())
-                .firstOrNull()
+                .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(
+                    reportId = reportId,
+                    operationDate = operationDate.toString(),
+                ).firstOrNull()
 
         return logbookReport?.let {
             val pno = PriorNotification.fromLogbookMessage(it.toLogbookMessage(objectMapper))
             pno.markAsAcknowledged()
 
             return@let pno
+        }
+    }
+
+    override fun findTripBetweenDates(
+        internalReferenceNumber: String,
+        afterDateTime: ZonedDateTime,
+        beforeDateTime: ZonedDateTime,
+    ): VoyageDatesAndTripNumber {
+        try {
+            if (internalReferenceNumber.isNotEmpty()) {
+                val trips =
+                    dbLogbookReportRepository
+                        .findTripsBetweenDates(
+                            internalReferenceNumber = internalReferenceNumber,
+                            beforeDateTime = beforeDateTime.toInstant(),
+                            afterDateTime = afterDateTime.toInstant(),
+                        )
+                val firstTrip = trips.first()
+
+                return VoyageDatesAndTripNumber(
+                    tripNumber = firstTrip.tripNumber,
+                    startDate = firstTrip.startDate.atZone(UTC),
+                    endDate = firstTrip.endDate.atZone(UTC),
+                    totalTripsFoundForDates = trips.size,
+                )
+            }
+
+            throw IllegalArgumentException("No CFR given to find the vessel.")
+        } catch (e: NoSuchElementException) {
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
+        } catch (e: IllegalArgumentException) {
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
         }
     }
 
@@ -138,15 +172,15 @@ class JpaLogbookReportRepository(
                 val lastTrip =
                     dbLogbookReportRepository
                         .findTripsBeforeDatetime(
-                            internalReferenceNumber,
-                            beforeDateTime.toInstant(),
-                            PageRequest.of(0, 1),
+                            internalReferenceNumber = internalReferenceNumber,
+                            beforeDateTime = beforeDateTime.toInstant(),
+                            pageable = PageRequest.of(0, 1),
                         ).first()
 
                 return VoyageDatesAndTripNumber(
-                    lastTrip.tripNumber,
-                    lastTrip.startDate.atZone(UTC),
-                    lastTrip.endDate.atZone(UTC),
+                    tripNumber = lastTrip.tripNumber,
+                    startDate = lastTrip.startDate.atZone(UTC),
+                    endDate = lastTrip.endDate.atZone(UTC),
                 )
             }
 
@@ -168,21 +202,21 @@ class JpaLogbookReportRepository(
                 val previousTripNumber =
                     dbLogbookReportRepository
                         .findPreviousTripNumber(
-                            internalReferenceNumber,
-                            tripNumber,
-                            PageRequest.of(0, 1),
+                            internalReferenceNumber = internalReferenceNumber,
+                            tripNumber = tripNumber,
+                            pageable = PageRequest.of(0, 1),
                         ).first()
                         .tripNumber
                 val previousTrip =
                     dbLogbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
-                        internalReferenceNumber,
-                        previousTripNumber,
+                        internalReferenceNumber = internalReferenceNumber,
+                        tripNumber = previousTripNumber,
                     )
 
                 return VoyageDatesAndTripNumber(
-                    previousTripNumber,
-                    previousTrip.startDate.atZone(UTC),
-                    previousTrip.endDate.atZone(UTC),
+                    tripNumber = previousTripNumber,
+                    startDate = previousTrip.startDate.atZone(UTC),
+                    endDate = previousTrip.endDate.atZone(UTC),
                 )
             }
 
@@ -205,14 +239,14 @@ class JpaLogbookReportRepository(
             if (internalReferenceNumber.isNotEmpty()) {
                 val nextTrip =
                     dbLogbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
-                        internalReferenceNumber,
-                        tripNumber,
+                        internalReferenceNumber = internalReferenceNumber,
+                        tripNumber = tripNumber,
                     )
 
                 return VoyageDatesAndTripNumber(
-                    tripNumber,
-                    nextTrip.startDate.atZone(UTC),
-                    nextTrip.endDate.atZone(UTC),
+                    tripNumber = tripNumber,
+                    startDate = nextTrip.startDate.atZone(UTC),
+                    endDate = nextTrip.endDate.atZone(UTC),
                 )
             }
 
@@ -236,21 +270,21 @@ class JpaLogbookReportRepository(
                 val nextTripNumber =
                     dbLogbookReportRepository
                         .findNextTripNumber(
-                            internalReferenceNumber,
-                            tripNumber,
-                            PageRequest.of(0, 1),
+                            internalReferenceNumber = internalReferenceNumber,
+                            tripNumber = tripNumber,
+                            pageable = PageRequest.of(0, 1),
                         ).first()
                         .tripNumber
                 val nextTrip =
                     dbLogbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
-                        internalReferenceNumber,
-                        nextTripNumber,
+                        internalReferenceNumber = internalReferenceNumber,
+                        tripNumber = nextTripNumber,
                     )
 
                 return VoyageDatesAndTripNumber(
-                    nextTripNumber,
-                    nextTrip.startDate.atZone(UTC),
-                    nextTrip.endDate.atZone(UTC),
+                    tripNumber = nextTripNumber,
+                    startDate = nextTrip.startDate.atZone(UTC),
+                    endDate = nextTrip.endDate.atZone(UTC),
                 )
             }
 
@@ -278,10 +312,10 @@ class JpaLogbookReportRepository(
             if (internalReferenceNumber.isNotEmpty()) {
                 return dbLogbookReportRepository
                     .findAllMessagesByTripNumberBetweenDates(
-                        internalReferenceNumber,
-                        afterDate.toInstant().toString(),
-                        beforeDate.toInstant().toString(),
-                        tripNumber,
+                        internalReferenceNumber = internalReferenceNumber,
+                        afterDateTime = afterDate.toInstant().toString(),
+                        beforeDateTime = beforeDate.toInstant().toString(),
+                        tripNumber = tripNumber,
                     ).map {
                         it.toLogbookMessage(objectMapper)
                     }
@@ -320,9 +354,9 @@ class JpaLogbookReportRepository(
                 val lastTrip =
                     dbLogbookReportRepository
                         .findTripsBeforeDatetime(
-                            internalReferenceNumber,
-                            beforeDateTime.toInstant(),
-                            PageRequest.of(0, 1),
+                            internalReferenceNumber = internalReferenceNumber,
+                            beforeDateTime = beforeDateTime.toInstant(),
+                            pageable = PageRequest.of(0, 1),
                         ).first()
 
                 return dbLogbookReportRepository
@@ -414,8 +448,8 @@ class JpaLogbookReportRepository(
         val logbookReport =
             dbLogbookReportRepository
                 .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(
-                    reportId,
-                    operationDate.withZoneSameInstant(UTC).toString(),
+                    reportId = reportId,
+                    operationDate = operationDate.withZoneSameInstant(UTC).toString(),
                 ).firstOrNull()
                 ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
@@ -453,8 +487,8 @@ class JpaLogbookReportRepository(
         val logbookReport =
             dbLogbookReportRepository
                 .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(
-                    reportId,
-                    operationDate.withZoneSameInstant(UTC).toString(),
+                    reportId = reportId,
+                    operationDate = operationDate.withZoneSameInstant(UTC).toString(),
                 ).firstOrNull()
                 ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 

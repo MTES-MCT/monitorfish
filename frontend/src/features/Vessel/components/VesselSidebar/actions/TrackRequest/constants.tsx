@@ -2,7 +2,7 @@ import { HighlightPositionCell } from '@features/Vessel/components/VesselSidebar
 import { getLocalizedDayjs } from '@mtes-mct/monitor-ui'
 import { isNumeric } from '@utils/isNumeric'
 
-import { VesselTrackDepth } from '../../../../../../domain/entities/vesselTrackDepth'
+import { VesselTrackDepth } from '../../../../types/vesselTrackDepth'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Option } from '@mtes-mct/monitor-ui'

@@ -1,11 +1,13 @@
-import { logbookActions } from '@features/Logbook/slice'
+import { NavigateTo } from '@features/Logbook/constants'
 import { getVesselLogbook } from '@features/Logbook/useCases/getVesselLogbook'
 import { setSelectedVesselSidebarTab } from '@features/Vessel/slice'
 import { VesselSidebarTab } from '@features/Vessel/types/vessel'
 
 export const openVesselSidebarTab = (tab: VesselSidebarTab) => (dispatch, getState) => {
-  const { selectedVesselIdentity } = getState().vessel
-
+  const {
+    fishingActivities: { fishingActivities, isLastVoyage },
+    vessel: { selectedVesselIdentity }
+  } = getState()
   switch (tab) {
     case VesselSidebarTab.CONTROLS:
       break
@@ -18,8 +20,9 @@ export const openVesselSidebarTab = (tab: VesselSidebarTab) => (dispatch, getSta
     case VesselSidebarTab.SUMMARY:
       break
     case VesselSidebarTab.VOYAGES: {
-      dispatch(logbookActions.resetNextUpdate())
-      dispatch(getVesselLogbook(false)(selectedVesselIdentity, undefined, true))
+      if (!fishingActivities || isLastVoyage) {
+        dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
+      }
       break
     }
     default: {

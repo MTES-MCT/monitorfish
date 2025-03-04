@@ -5,7 +5,7 @@ import { type MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { monitorfishMap } from '../../Map/monitorfishMap'
-import { navigateToFishingActivity } from '../useCases/navigateToFishingActivity'
+import { scrollToLogbookMessage } from '../useCases/scrollToLogbookMessage'
 
 import type { DisplayedLogbookOverlay } from '@features/Vessel/types/types'
 
@@ -39,7 +39,7 @@ export function LogbookMessageOverlay({ logbookOverlay }: LogbookMessageOverlayP
     <div>
       <Wrapper ref={logbookOverlayRef as MutableRefObject<HTMLDivElement>}>
         <Body
-          onClick={() => dispatch(navigateToFishingActivity(logbookOverlay.id))}
+          onClick={() => dispatch(scrollToLogbookMessage(logbookOverlay.id))}
           title={`Voir le message ${logbookOverlay.isDeleted ? 'supprimé ' : ''}${logbookOverlay.isNotAcknowledged ? 'non acquitté' : ''}`}
         >
           {logbookOverlay.isNotAcknowledged && <Icon.Reject size={17} style={{ marginBottom: 1, marginRight: 3 }} />}

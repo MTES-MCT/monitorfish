@@ -1,3 +1,4 @@
+import { updateVesselTrackAndLogbookFromDates } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromDates'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -6,7 +7,6 @@ import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { getDate } from '../../../../utils'
 import { getTrackRequestFromTrackDepth } from '../../../Vessel/types/vesselTrackDepth'
-import { updateSelectedVesselTrack } from '../../../Vessel/useCases/updateSelectedVesselTrack'
 
 type CustomDatesShowedInfoProps = {
   width?: number | undefined
@@ -23,7 +23,7 @@ export function CustomDatesShowedInfo({ width }: CustomDatesShowedInfoProps) {
 
     const trackRequest = getTrackRequestFromTrackDepth(defaultVesselTrackDepth)
 
-    dispatch(updateSelectedVesselTrack(selectedVesselIdentity, trackRequest, false))
+    dispatch(updateVesselTrackAndLogbookFromDates(selectedVesselIdentity, trackRequest))
   }, [dispatch, defaultVesselTrackDepth, selectedVesselIdentity])
 
   return (

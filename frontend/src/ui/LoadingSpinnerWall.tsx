@@ -8,7 +8,7 @@ export type LoadingSpinnerWallProps = {
   isVesselShowed?: boolean
   message?: string
 }
-export function LoadingSpinnerWall({ isVesselShowed = false, message = 'Chargement...' }: LoadingSpinnerWallProps) {
+export function LoadingSpinnerWall({ isVesselShowed = false, message = '' }: LoadingSpinnerWallProps) {
   return (
     <Wrapper data-cy="first-loader">
       <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.lightGray} size={48} />

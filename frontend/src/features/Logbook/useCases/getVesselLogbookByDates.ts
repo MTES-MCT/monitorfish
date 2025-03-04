@@ -70,11 +70,12 @@ export const getVesselLogbookByDates =
         return
       }
 
-      const voyageWithVesselIdentity = {
-        ...voyage,
-        vesselIdentity
-      }
-      dispatch(saveVoyage(voyageWithVesselIdentity))
+      dispatch(
+        saveVoyage({
+          ...voyage,
+          vesselIdentity
+        })
+      )
 
       dispatch(removeError())
     } catch (error) {

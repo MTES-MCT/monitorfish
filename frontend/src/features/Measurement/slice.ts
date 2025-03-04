@@ -62,6 +62,7 @@ const measurementSlice = createSlice({
      */
     setCircleMeasurementToAdd(state, action: PayloadAction<CircleMeasurementToAdd>) {
       state.circleMeasurementToAdd = action.payload
+      state.circleMeasurementInDrawing = null
     },
 
     setMeasurementTypeToAdd(state, action) {

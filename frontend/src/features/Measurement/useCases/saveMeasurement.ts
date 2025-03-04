@@ -1,5 +1,10 @@
 import { convertToGeoJSONGeometryObject } from '@features/Map/utils'
-import { addMeasurementDrawed, resetCircleMeasurementInDrawing } from '@features/Measurement/slice'
+import {
+  addMeasurementDrawed,
+  resetCircleMeasurementInDrawing,
+  resetMeasurementTypeToAdd
+} from '@features/Measurement/slice'
+import { trackEvent } from '@hooks/useTracking'
 import Feature from 'ol/Feature'
 import Circle from 'ol/geom/Circle'
 import { fromCircle } from 'ol/geom/Polygon'
@@ -9,7 +14,8 @@ import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 
 import type { SimpleGeometry } from 'ol/geom'
 
-export const saveMeasurement = (feature: Feature, measurement: string) => dispatch => {
+export const saveMeasurement = (email?: string | undefined) => (feature: Feature, measurement: string) => dispatch => {
+  dispatch(resetMeasurementTypeToAdd())
   if (feature.getGeometry() instanceof Circle) {
     feature.setGeometry(fromCircle(feature.getGeometry() as Circle))
   }
@@ -29,6 +35,11 @@ export const saveMeasurement = (feature: Feature, measurement: string) => dispat
       measurement
     })
   )
+  trackEvent({
+    action: "Création d'une mesure dessinée sur la carte",
+    category: 'MEASURE',
+    name: email ?? ''
+  })
   dispatch(resetCircleMeasurementInDrawing())
   dispatch(setRightMapBoxOpened(undefined))
 }

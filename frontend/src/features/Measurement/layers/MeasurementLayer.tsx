@@ -13,9 +13,10 @@ import Draw from 'ol/interaction/Draw'
 import VectorLayer from 'ol/layer/Vector'
 import { unByKey } from 'ol/Observable'
 import VectorSource from 'ol/source/Vector'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 import { measurementStyle, measurementStyleWithCenter } from './measurement.style'
+import { UserAccountContext } from '../../../context/UserAccountContext'
 import MeasurementOverlay from '../components/MeasurementOverlay'
 import { removeMeasurementDrawed, resetMeasurementTypeToAdd, setCircleMeasurementInDrawing } from '../slice'
 import { saveMeasurement } from '../useCases/saveMeasurement'
@@ -32,10 +33,12 @@ const DRAW_END_EVENT = 'drawend'
 
 function UnmemoizedMeasurementLayer() {
   const dispatch = useMainAppDispatch()
+  const userAccount = useContext(UserAccountContext)
   const measurementTypeToAdd = useMainAppSelector(state => state.measurement.measurementTypeToAdd)
   const measurementsDrawed = useMainAppSelector(state => state.measurement.measurementsDrawed)
   const circleMeasurementToAdd = useMainAppSelector(state => state.measurement.circleMeasurementToAdd)
 
+  const saveMeasurementWithAccount = useMemo(() => saveMeasurement(userAccount?.email), [userAccount?.email])
   const [measurementInProgress, _setMeasurementInProgress] = useState<MeasurementInProgress | undefined>(undefined)
   const measurementInProgressRef = useRef<MeasurementInProgress | undefined>(measurementInProgress)
   const setMeasurementInProgress = (value: MeasurementInProgress | undefined) => {
@@ -166,11 +169,10 @@ function UnmemoizedMeasurementLayer() {
 
       draw.on(DRAW_END_EVENT, event => {
         if (measurementInProgressRef.current?.measurement) {
-          dispatch(saveMeasurement(event.feature, measurementInProgressRef.current.measurement))
+          dispatch(saveMeasurementWithAccount(event.feature, measurementInProgressRef.current.measurement))
         }
 
         unByKey(listener)
-        dispatch(resetMeasurementTypeToAdd())
         setMeasurementInProgress(undefined)
       })
 
@@ -180,7 +182,7 @@ function UnmemoizedMeasurementLayer() {
 
     addEmptyNextMeasurement()
     drawNewFeatureOnMap()
-  }, [dispatch, getVectorSource, measurementTypeToAdd])
+  }, [dispatch, getVectorSource, measurementTypeToAdd, saveMeasurementWithAccount])
 
   useEffect(() => {
     function removeInteraction() {

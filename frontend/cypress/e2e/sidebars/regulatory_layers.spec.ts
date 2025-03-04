@@ -54,8 +54,8 @@ context('Sidebars > Regulatory Layers', () => {
 
     // When F5 is pressed, the zones are still showed
     cy.reload()
-    cy.wait('@getRegulation').then(({ response }) => expect(response && response.statusCode).equal(200))
     cy.get('.regulatory', { timeout: 10000 }).click(490, 580, { force: true, timeout: 10000 })
+    cy.wait('@getRegulation').then(({ response }) => expect(response && response.statusCode).equal(200))
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
 
     // Close the metadata modal and hide the zone

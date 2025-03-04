@@ -44,7 +44,7 @@ export const addCustomCircleMeasurement =
       style: [measurementStyle, measurementStyleWithCenter]
     })
 
-    dispatch(saveMeasurement(circleFeature, `r = ${circleMeasurementToAdd?.circleRadiusToAdd} nm`))
+    dispatch(saveMeasurement()(circleFeature, `r = ${circleMeasurementToAdd?.circleRadiusToAdd} nm`))
 
     function circleMeasurementHasCoordinatesAndRadiusFromForm() {
       return circleMeasurementToAdd?.circleCoordinatesToAdd?.length === 2 && circleMeasurementToAdd?.circleRadiusToAdd

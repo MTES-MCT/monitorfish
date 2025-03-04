@@ -26,7 +26,7 @@ context('Missions overlay', () => {
     cy.get('#root').click(331, 789)
 
     cy.getComputedStyle('*[data-cy="mission-overlay"]', 2).then(styleBefore => {
-      expect(styleBefore.transform).contains('matrix(1, 0, 0, 1, 333, 807)')
+      expect(styleBefore.transform).contains('matrix(1, 0, 0, 1, 333, 810)')
     })
 
     // When

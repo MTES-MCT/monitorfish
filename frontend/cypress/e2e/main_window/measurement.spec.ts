@@ -35,7 +35,7 @@ context('Measurement', () => {
     // Then
     cy.get('*[data-cy="measurement-value"]').contains('r = 35 nm', { timeout: 10000 })
     cy.get('body').type('-', { force: true }) // Because of the throttle, we de-zoom to hide labels
-    cy.get('body').type('-', { force: true }) // Because of the throttle, we de-zoom to hide labels
+    cy.wait(1000)
     cy.get('*[data-cy="close-measurement"]').click({ force: true, timeout: 10000 })
     cy.get('*[data-cy="measurement-value"]').should('not.exist')
 

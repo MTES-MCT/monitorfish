@@ -1,7 +1,8 @@
 import { NavigateTo } from '@features/Logbook/constants'
+import { logbookActions } from '@features/Logbook/slice'
 import { getVesselLogbook } from '@features/Logbook/useCases/getVesselLogbook'
 import { setSelectedVesselSidebarTab } from '@features/Vessel/slice'
-import { VesselSidebarTab } from '@features/Vessel/types/vessel'
+import { FishingActivitiesTab, VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
@@ -28,6 +29,7 @@ export const openVesselSidebarTab = (tab: VesselSidebarTab) => (dispatch, getSta
       if (!fishingActivities || isLastVoyage) {
         dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
       }
+      dispatch(logbookActions.setTab(FishingActivitiesTab.SUMMARY))
       break
     }
     default: {

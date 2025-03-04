@@ -91,15 +91,18 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 10000 })
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
 
-    // TODO Fix the check of dates entered in DateRanges
     // Then
-    // cy.get('.rs-picker-toggle-value').contains('16-02-2019')
-    // cy.get('.rs-picker-toggle-value').contains('15-10-2019')
-    // cy.get('*[data-cy^="vessel-track-depth-three-days"]').should('not.have.class', 'rs-radio-checked')
+    cy.get('[aria-label="Jour de début"]').should('have.value', '16')
+    cy.get('[aria-label="Mois de début"]').should('have.value', '02')
+    cy.get('[aria-label="Année de début"]').should('have.value', '2019')
+    cy.get('[aria-label="Jour de fin"]').should('have.value', '15')
+    cy.get('[aria-label="Mois de fin"]').should('have.value', '10')
+    cy.get('[aria-label="Année de fin"]').should('have.value', '2019')
+    cy.get('[name="vessel-track-depth"]').should('have.value', '')
 
     // Then, back to another trip depth of three days
     cy.fill('Afficher la piste VMS depuis', '3 jours')
-    cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
+    cy.get('[name="vessel-track-depth"]').should('have.value', 'THREE_DAYS')
   })
 
   it('Vessel track dates Should be changed from the agenda', () => {
@@ -138,19 +141,19 @@ context('Vessel sidebar controls buttons', () => {
     )
   })
 
-  it('Fishing activities Should be seen on the vessel track and showed from the map', () => {
+  it('Fishing activities Should be seen on the vessel track, clicked and trip should be modified from dates', () => {
     // Given
     cy.wait(50)
     openVesselBySearch('Pheno')
+    cy.intercept(
+      'GET',
+      'bff/v1/vessels/logbook/find_by_dates?afterDateTime=&beforeDateTime=&internalReferenceNumber=FAK000999999&trackDepth=THREE_DAYS'
+    ).as('getLogbook')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
     cy.fill('Afficher la piste VMS depuis', '3 jours')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
-    cy.intercept(
-      'GET',
-      'bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&tripNumber=&voyageRequest=LAST'
-    ).as('getLogbook')
-    cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 10000 })
     cy.wait('@getLogbook')
+    cy.get('.Component-Banner').contains("Ce navire n'a pas envoyé de message JPE pendant cette période.")
 
     // Then
     cy.wait(200)
@@ -159,6 +162,19 @@ context('Vessel sidebar controls buttons', () => {
     cy.wait(200)
     cy.get('#OOF20191030059903').should('be.visible')
     cy.get('#OOF20190627059908').should('not.be.visible')
+
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
+
+    cy.get('input[aria-label="Jour de début"]').type('11')
+    cy.get('input[aria-label="Mois de début"]').type('10')
+    cy.get('input[aria-label="Année de début"]').type('2019')
+    cy.get('input[aria-label="Jour de fin"]').type('19')
+    cy.get('input[aria-label="Mois de fin"]').type('10')
+    cy.get('input[aria-label="Année de fin"]').type('2019')
+    cy.get('.Component-Banner')
+      .contains("Nous avons trouvé 2 marées pour ces dates, seulement la 1ère marée est affichée dans l'onglet JPE.")
+    cy.getDataCy('vessel-menu-fishing').click()
+    cy.getDataCy('custom-dates-showed-text').contains('Piste affichée du 11/10/19 au 19/10/19')
 
     // Hide fishing activities
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 10000 })

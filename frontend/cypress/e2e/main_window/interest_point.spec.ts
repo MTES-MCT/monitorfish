@@ -95,7 +95,7 @@ context('InterestPoint', () => {
     // Then
     cy.get('*[data-cy^="interest-point-coordinates"]')
       .first()
-      .contains('47° 45.520′ N 007° 54.500′ W', { timeout: 10000 })
+      .contains('47° 42.110′ N 007° 54.500′ W', { timeout: 10000 })
   })
 
   it('An interest Should be edited with East value When DMS coordinates are selected', () => {
@@ -121,11 +121,11 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="interest-point-edit"]').should('not.be.visible')
     cy.get('*[data-cy="interest-point-edit"]').click({ force: true })
     cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 })
-      .should('have.value', '47° 45′ 31″ N 007° 54′ 51″ E')
+      .should('have.value', '47° 42′ 07″ N 007° 54′ 51″ E')
     cy.get('.Field-MultiRadio').contains('Type de point').get('[aria-checked="true"]').contains('Autre point')
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
 
-    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('47° 45′', { timeout: 10000 })
+    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('47° 42′', { timeout: 10000 })
     cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('N', { timeout: 10000 })
     cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('007° 54′', { timeout: 10000 })
     cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('E', { timeout: 10000 })

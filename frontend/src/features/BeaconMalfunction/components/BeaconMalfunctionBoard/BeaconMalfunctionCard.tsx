@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { getBeaconCreationOrModificationDate } from './utils'
 import { VesselStatusSelect } from './VesselStatusSelect'
-import { showVesselFromBeaconMalfunctionsKanban } from '../../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
+import { showVesselFromBeaconMalfunctionsKanban } from '../../../Vessel/useCases/showVesselFromBeaconMalfunctionsKanban'
 import { END_OF_MALFUNCTION_REASON_RECORD, VESSEL_STATUS } from '../../constants'
 import { openBeaconMalfunctionInKanban } from '../../useCases/openBeaconMalfunctionInKanban'
 import { getMalfunctionStartDateText } from '../../utils'

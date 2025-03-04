@@ -10,19 +10,23 @@ export function RightMenuOnHoverArea() {
   const dispatch = useMainAppDispatch()
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
+  const isControlUnitListDialogDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isControlUnitListDialogDisplayed
+  )
 
   const areaRef = useRef(null)
   const clickedOutsideComponent = useClickOutsideWhenOpened(areaRef, !!selectedVessel)
 
   useEffect(() => {
-    if (!selectedVessel || rightMapBoxOpened) {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    if (!selectedVessel || rightMapBoxOpened || !!isControlUnitListDialogDisplayed) {
       dispatch(expandRightMenu())
 
       return
     }
 
     dispatch(contractRightMenu())
-  }, [dispatch, clickedOutsideComponent, rightMapBoxOpened, selectedVessel])
+  }, [dispatch, clickedOutsideComponent, rightMapBoxOpened, isControlUnitListDialogDisplayed, selectedVessel])
 
   return selectedVessel && <Area ref={areaRef} onMouseEnter={() => dispatch(expandRightMenu())} />
 }

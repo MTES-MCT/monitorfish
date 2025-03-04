@@ -8,6 +8,7 @@ import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { EditInterestPoint } from './EditInterestPoint'
+import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
 import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'
 import { deleteInterestPointBeingDrawed, drawInterestPoint, endInterestPointDraw } from '../../slice'
@@ -34,6 +35,7 @@ export function InterestPointMapButton() {
     if (!isOpened) {
       dispatch(drawInterestPoint())
       dispatch(setRightMapBoxOpened(MapBox.INTEREST_POINT))
+      dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
 
       return
     }

@@ -1,5 +1,8 @@
 import { FIVE_MINUTES } from '@api/APIWorker'
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
+import { NavigateTo } from '@features/Logbook/constants'
+import { FishingActivitiesTab, vesselsAreEquals } from '@features/Vessel/types/vessel'
+import { updateVesselTrackAndLogbookFromTrip } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromTrip'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
@@ -8,8 +11,6 @@ import styled from 'styled-components'
 
 import { LogbookMessages } from './LogbookMessages'
 import { LogbookSummary } from './LogbookSummary'
-import { FishingActivitiesTab, vesselsAreEquals } from '../../../../domain/entities/vessel/vessel'
-import { useGetLogbookUseCase } from '../../hooks/useGetLogbookUseCase'
 import { logbookActions } from '../../slice'
 
 import type { Logbook } from '@features/Logbook/Logbook.types'
@@ -17,10 +18,14 @@ import type { Logbook } from '@features/Logbook/Logbook.types'
 export function VesselLogbook() {
   const dispatch = useMainAppDispatch()
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
-  const { fishingActivities, fishingActivitiesTab, loadingFishingActivities, nextFishingActivities, vesselIdentity } =
-    useMainAppSelector(state => state.fishingActivities)
-
-  const getVesselLogbook = useGetLogbookUseCase()
+  const {
+    fishingActivities,
+    fishingActivitiesTab,
+    isLastVoyage,
+    loadingFishingActivities,
+    nextFishingActivities,
+    vesselIdentity
+  } = useMainAppSelector(state => state.fishingActivities)
 
   const showedLogbookIsOutdated = vesselIdentity && !vesselsAreEquals(vesselIdentity, selectedVesselIdentity)
   const [messageTypeFilter, setMessageTypeFilter] = useState<string | undefined>(undefined)
@@ -28,13 +33,15 @@ export function VesselLogbook() {
   // TODO This need to be moved to a RTK-Query's `pollingInterval`
   useEffect(() => {
     const interval = setInterval(() => {
-      dispatch(getVesselLogbook(selectedVesselIdentity, undefined, false))
+      if (isLastVoyage) {
+        dispatch(updateVesselTrackAndLogbookFromTrip(selectedVesselIdentity, NavigateTo.LAST, false))
+      }
     }, FIVE_MINUTES)
 
     return () => {
       clearInterval(interval)
     }
-  }, [dispatch, getVesselLogbook, selectedVesselIdentity])
+  }, [dispatch, isLastVoyage, selectedVesselIdentity])
 
   const showMessages = useCallback(
     (messageType: string | undefined) => {
@@ -49,21 +56,13 @@ export function VesselLogbook() {
       return
     }
 
-    if (!fishingActivities && !vesselIdentity) {
-      dispatch(logbookActions.resetNextUpdate())
-      dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
-
-      return
-    }
-
     if (showedLogbookIsOutdated) {
-      dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
+      dispatch(updateVesselTrackAndLogbookFromTrip(selectedVesselIdentity, undefined, true))
     }
   }, [
     dispatch,
     fishingActivities,
     vesselIdentity,
-    getVesselLogbook,
     loadingFishingActivities,
     selectedVesselIdentity,
     showedLogbookIsOutdated

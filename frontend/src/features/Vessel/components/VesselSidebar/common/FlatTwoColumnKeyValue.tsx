@@ -24,7 +24,7 @@ export function FlatTwoColumnKeyValue({ className, firstColumn, secondColumn }: 
           ))}
         </TableBody>
       </Fields>
-      <Fields isSecondColumn>
+      <Fields $isSecondColumn>
         <TableBody>
           {secondColumn.map(({ key, value }) => (
             <Field key={key}>
@@ -61,10 +61,10 @@ const Zone = styled.div`
 `
 
 const Fields = styled.table<{
-  isSecondColumn?: boolean
+  $isSecondColumn?: boolean
 }>`
   padding: 10px 5px 5px 20px;
-  margin: 10px ${p => (p.isSecondColumn ? 20 : 0)}px 10px ${p => (p.isSecondColumn ? 0 : 20)}px;
+  margin: 10px ${p => (p.$isSecondColumn ? 20 : 0)}px 10px ${p => (p.$isSecondColumn ? 0 : 20)}px;
   display: table;
   flex-basis: 200px;
   flex-shrink: 0;

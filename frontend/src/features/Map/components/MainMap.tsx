@@ -39,12 +39,12 @@ import VesselEstimatedPositionOverlay from '../../Vessel/components/VesselEstima
 import VesselAlertAndBeaconMalfunctionLayer from '../../Vessel/layers/VesselAlertAndBeaconMalfunctionLayer'
 import VesselAlertLayer from '../../Vessel/layers/VesselAlertLayer'
 import VesselBeaconMalfunctionLayer from '../../Vessel/layers/VesselBeaconMalfunctionLayer'
-import VesselEstimatedPositionLayer from '../../Vessel/layers/VesselEstimatedPositionLayer'
 import VesselInfractionSuspicionLayer from '../../Vessel/layers/VesselInfractionSuspicionLayer'
 import VesselSelectedLayer from '../../Vessel/layers/VesselSelectedLayer'
+import { VesselEstimatedPositionLayer } from '../../Vessel/layers/VesselsEstimatedPositionLayer'
 import { VesselsLabelsLayer } from '../../Vessel/layers/VesselsLabelsLayer'
 import { VesselsLayer } from '../../Vessel/layers/VesselsLayer'
-import { VesselsTracksLayerMemoized } from '../../Vessel/layers/VesselsTracksLayer'
+import { VesselsTracksLayerMemoized } from '../../Vessel/layers/VesselsTracksLayer/VesselsTracksLayer'
 import { BaseLayer } from '../layers/BaseLayer'
 
 export function MainMap() {

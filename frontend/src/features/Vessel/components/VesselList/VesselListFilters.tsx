@@ -16,6 +16,7 @@ import {
   setZonesFilter,
   setZonesSelected
 } from '@features/Vessel/components/VesselList/slice'
+import { VesselLocation, vesselSize } from '@features/Vessel/types/vessel'
 import { FilterTag } from '@features/VesselFilter/components/VesselFilters/FilterTag'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -26,12 +27,11 @@ import { Checkbox, CheckboxGroup, MultiCascader, SelectPicker, Tag, TagPicker } 
 import styled from 'styled-components'
 
 import { lastControlAfterLabels, lastPositionTimeAgoLabels } from './dataFormatting'
-import { VesselLocation, vesselSize } from '../../../../domain/entities/vessel/vessel'
 import { setBlockVesselsUpdate } from '../../../../domain/shared_slices/Global'
-import { addVesselListFilterZone } from '../../../../domain/use_cases/vessel/addVesselListFilterZone'
 import { getZonesAndSubZones } from '../../../AdministrativeZone/useCases/getZonesAndSubZones'
 import PolygonFilterSVG from '../../../icons/Filtre_zone_polygone.svg?react'
 import BoxFilterSVG from '../../../icons/Filtre_zone_rectangle.svg?react'
+import { addVesselListFilterZone } from '../../useCases/addVesselListFilterZone'
 
 function renderTagPickerMenuItem(item) {
   return <Label data-cy={`select-picker-menu-item-${item.label}`}>{item.label}</Label>

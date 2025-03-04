@@ -54,9 +54,7 @@ const Zone = styled.div`
   flex-direction: column;
 `
 
-const Fields = styled.table<{
-  isSecondColumn?: boolean
-}>`
+const Fields = styled.table`
   margin: 8px 8px 8px 16px;
   display: table;
   min-width: 40%;

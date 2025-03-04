@@ -13,7 +13,7 @@ import java.util.*
 @ExtendWith(SpringExtension::class)
 class LogbookMessageUTests {
     companion object {
-        private fun getFakeLogbookMessage(
+        fun getFakeLogbookMessage(
             operationType: LogbookOperationType,
             reportDateTime: ZonedDateTime?,
             referenceReportId: String? = null,

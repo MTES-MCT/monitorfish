@@ -29,7 +29,7 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
 
     // When
-    cy.get('.VESSELS_POINTS').rightclick(460, 460, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').rightclick(460, 480, { force: true, timeout: 10000 })
     cy.get('*[data-cy="add-vessel-to-favorites"]').click()
 
     // Then
@@ -96,7 +96,7 @@ context('Favorite Vessel', () => {
     cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
     cy.fill('Afficher depuis', '12 heures')
     cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
-    cy.get('.VESSELS_POINTS').rightclick(460, 460, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').rightclick(460, 480, { force: true, timeout: 10000 })
     cy.get('*[data-cy="add-vessel-to-favorites"]').click()
     cy.clickButton('Mes navires suivis', { withoutScroll: true })
 

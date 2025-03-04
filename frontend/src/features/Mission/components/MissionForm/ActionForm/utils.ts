@@ -1,7 +1,6 @@
+import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 import { isEqual, isEmpty } from 'lodash-es'
-
-import { UNKNOWN_VESSEL } from '../../../../../domain/entities/vessel/vessel'
 
 import type { MissionActionFormValues } from '../types'
 import type { FormikErrors } from 'formik'

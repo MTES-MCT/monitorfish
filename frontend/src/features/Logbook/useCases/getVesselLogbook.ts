@@ -1,17 +1,19 @@
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
+import { resetDisplayedLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/resetDisplayedLogbookMessageOverlays'
+import { saveVoyage } from '@features/Logbook/useCases/saveVoyage'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
+import { vesselsAreEquals } from '@features/Vessel/types/vessel'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { customDayjs } from '@mtes-mct/monitor-ui'
+import { Level } from '@mtes-mct/monitor-ui'
 
-import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
-import { getTrackRequestFromDates, getTrackRequestFromTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
-import { removeError, setError } from '../../../domain/shared_slices/Global'
+import { removeError } from '../../../domain/shared_slices/Global'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
-import { updateSelectedVesselTrackRequest } from '../../../domain/use_cases/vessel/updateSelectedVesselTrackRequest'
-import { NoLogbookMessagesFoundError } from '../../../errors/NoLogbookMessagesFoundError'
-import { logbookApi, logbookLightApi } from '../api'
+import { logbookApi } from '../api'
 import { NavigateTo } from '../constants'
 import { logbookActions } from '../slice'
 
+import type { Logbook } from '@features/Logbook/Logbook.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppThunk } from '@store'
 
@@ -19,138 +21,109 @@ import type { MainAppThunk } from '@store'
  * Get the vessel fishing voyage and update the vessel positions track when navigating in the trips
  */
 export const getVesselLogbook =
-  (isInLightMode: boolean) =>
   (
     vesselIdentity: Vessel.VesselIdentity | undefined,
     navigateTo: NavigateTo | undefined,
     isFromUserAction: boolean,
     nextTripNumber?: string
-  ): MainAppThunk<Promise<void>> =>
+  ): MainAppThunk<Promise<Logbook.VesselVoyage | undefined>> =>
   async (dispatch, getState) => {
     if (!vesselIdentity) {
-      return
+      return undefined
     }
 
-    const currentSelectedVesselIdentity = getState().vessel.selectedVesselIdentity
-    const { defaultVesselTrackDepth } = getState().map
-    const { areFishingActivitiesShowedOnMap, isLastVoyage, lastFishingActivities, tripNumber } =
-      getState().fishingActivities
+    const {
+      fishingActivities: { isLastVoyage, lastFishingActivities },
+      vessel: { selectedVesselIdentity: currentSelectedVesselIdentity }
+    } = getState()
 
-    const updateVesselTrack = navigateTo && isFromUserAction
-    const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, currentSelectedVesselIdentity)
     const nextNavigateTo = navigateTo ?? NavigateTo.LAST
-
     if (nextNavigateTo === NavigateTo.NEXT && isLastVoyage) {
-      return
+      return undefined
     }
+
+    const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, currentSelectedVesselIdentity)
 
     if (isFromUserAction) {
+      dispatch(logbookActions.resetNextUpdate())
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
       dispatch(logbookActions.setIsLoading())
+      dispatch(resetDisplayedLogbookMessageOverlays())
     }
 
     try {
-      const requestArgs = {
-        tripNumber: nextTripNumber ?? tripNumber ?? undefined,
-        vesselIdentity,
-        voyageRequest: nextNavigateTo
-      }
-      const initiateGetVesselLogbook = isInLightMode
-        ? logbookLightApi.endpoints.getVesselLogbook.initiate
-        : logbookApi.endpoints.getVesselLogbook.initiate
-
-      const voyage = await dispatch(initiateGetVesselLogbook(requestArgs)).unwrap()
+      const voyage = await dispatch(fetchVesselVoyage(vesselIdentity, nextTripNumber, nextNavigateTo))
       if (!voyage) {
-        dispatch(logbookActions.init(vesselIdentity))
-        dispatch(setError(new NoLogbookMessagesFoundError("Ce navire n'a pas envoyé de message JPE.")))
+        dispatch(handleNoVoyageFound(isSameVesselAsCurrentlyShowed))
 
-        return
+        return undefined
       }
 
-      if (isSameVesselAsCurrentlyShowed && !isFromUserAction) {
-        if (gotNewFishingActivitiesWithMoreMessagesOrAlerts(lastFishingActivities, voyage)) {
+      if (isSameVesselAsCurrentlyShowed && !isFromUserAction && isLastVoyage) {
+        if (hasNewFishingActivityUpdates(lastFishingActivities, voyage)) {
           dispatch(logbookActions.setNextUpdate(voyage.logbookMessagesAndAlerts))
           dispatch(removeError())
         }
 
-        return
+        return undefined
       }
 
-      const voyageWithVesselIdentity = {
-        ...voyage,
-        vesselIdentity
-      }
-      if (updateVesselTrack) {
-        await modifyVesselTrackAndVoyage(
-          voyageWithVesselIdentity,
-          dispatch,
-          vesselIdentity,
-          areFishingActivitiesShowedOnMap,
-          defaultVesselTrackDepth
-        )
+      await dispatch(saveVoyage({ ...voyage, vesselIdentity }))
 
-        return
-      }
-
-      dispatch(logbookActions.setLastVoyage(voyageWithVesselIdentity))
-      dispatch(logbookActions.setVoyage(voyageWithVesselIdentity))
-      if (areFishingActivitiesShowedOnMap) {
-        dispatch(logbookActions.showAllOnMap())
-      } else {
-        dispatch(logbookActions.hideAllOnMap())
-      }
-
-      dispatch(removeError())
+      return voyage
     } catch (error) {
       dispatch(
         displayOrLogError(
           error as Error,
-          () => getVesselLogbook(isInLightMode)(vesselIdentity, navigateTo, isFromUserAction, nextTripNumber),
+          () => getVesselLogbook(vesselIdentity, navigateTo, isFromUserAction, nextTripNumber),
           isFromUserAction,
           DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
         )
       )
       dispatch(logbookActions.resetIsLoading())
+
+      return undefined
     }
   }
 
-async function modifyVesselTrackAndVoyage(
-  voyage,
-  dispatch,
-  vesselIdentity,
-  areFishingActivitiesShowedOnMap,
-  defaultVesselTrackDepth
+function fetchVesselVoyage(
+  vesselIdentity: Vessel.VesselIdentity,
+  tripNumber: string | undefined,
+  voyageRequest: NavigateTo
 ) {
-  if (!voyage.startDate && !voyage.endDate) {
-    return
-  }
+  return async dispatch => {
+    const requestArgs = { tripNumber, vesselIdentity, voyageRequest }
 
-  const { afterDateTime, beforeDateTime } = getDateRangeMinusFourHoursPlusOneHour(voyage.startDate, voyage.endDate)
-  const trackRequest = voyage.isLastVoyage
-    ? getTrackRequestFromTrackDepth(defaultVesselTrackDepth)
-    : getTrackRequestFromDates(afterDateTime, beforeDateTime)
-
-  await dispatch(updateSelectedVesselTrackRequest(vesselIdentity, trackRequest, true))
-  await dispatch(logbookActions.setVoyage(voyage))
-
-  if (areFishingActivitiesShowedOnMap) {
-    dispatch(logbookActions.showAllOnMap())
-  } else {
-    dispatch(logbookActions.removeAllFromMap())
+    return dispatch(
+      logbookApi.endpoints.getVesselLogbook.initiate(requestArgs, RTK_FORCE_REFETCH_QUERY_OPTIONS)
+    ).unwrap()
   }
 }
 
-function getDateRangeMinusFourHoursPlusOneHour(afterDateTime, beforeDateTime) {
-  const nextAfterDateTime = customDayjs(afterDateTime).subtract(4, 'hours')
-  const nextBeforeDateTime = customDayjs(beforeDateTime).add(1, 'hour')
-
-  return {
-    afterDateTime: nextAfterDateTime.toDate(),
-    beforeDateTime: nextBeforeDateTime.toDate()
+function handleNoVoyageFound(isSameVesselAsCurrentlyShowed: boolean) {
+  return async dispatch => {
+    dispatch(
+      addMainWindowBanner({
+        children: "Ce navire n'a pas envoyé de message JPE.",
+        closingDelay: 2000,
+        isClosable: true,
+        isFixed: true,
+        level: Level.WARNING,
+        withAutomaticClosing: true
+      })
+    )
+    dispatch(logbookActions.resetIsLoading())
+    if (!isSameVesselAsCurrentlyShowed) {
+      dispatch(resetDisplayedLogbookMessageOverlays())
+    }
   }
 }
 
-function gotNewFishingActivitiesWithMoreMessagesOrAlerts(lastFishingActivities, voyage) {
+function hasNewFishingActivityUpdates(lastFishingActivities, voyage: Logbook.VesselVoyage): boolean {
+  if (!voyage.isLastVoyage) {
+    return false
+  }
+
   return (
     (lastFishingActivities.logbookMessages && !lastFishingActivities.logbookMessages.length) ||
     (lastFishingActivities.alerts &&

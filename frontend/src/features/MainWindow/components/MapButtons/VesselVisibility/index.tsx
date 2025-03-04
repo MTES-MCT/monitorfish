@@ -8,6 +8,7 @@ import { useRef } from 'react'
 import styled from 'styled-components'
 
 import { EditVesselVisibility } from './EditVesselVisibility'
+import { displayedComponentActions } from '../../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxOpened } from '../../../../../domain/shared_slices/Global'
 import { MapToolButton } from '../shared/MapToolButton'
 
@@ -30,6 +31,7 @@ export function VesselVisibilityMapButton() {
     }
 
     dispatch(setRightMapBoxOpened(MapBox.VESSEL_VISIBILITY))
+    dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
   }
 
   return (

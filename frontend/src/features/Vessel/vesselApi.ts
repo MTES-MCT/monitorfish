@@ -12,9 +12,9 @@ import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 import { getVesselIdentityFromLegacyVesselIdentity, getVesselIdentityPropsAsEmptyStringsWhenUndefined } from './utils'
 import { Vessel } from './Vessel.types'
 
-import type { TrackRequest } from '../../domain/entities/vessel/types'
 import type { Meta } from '@api/BackendApi.types'
 import type { VesselReportings } from '@features/Reporting/types'
+import type { TrackRequest } from '@features/Vessel/types/types'
 
 const GET_VESSEL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations de ce navire."
 const GET_VESSEL_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les signalements de ce navire."
@@ -125,7 +125,11 @@ export const vesselApi = monitorfishApi.injectEndpoints({
         } catch (err) {
           dispatch(
             displayOrLogError(
-              err, // `err` can only be a `FrontendApiError` that's what `transformErrorResponse()` always returns
+              (
+                err as {
+                  error: FrontendApiError
+                }
+              ).error, // `err.error` can only be a `FrontendApiError` that's what `transformErrorResponse()` always returns
               () => () => {
                 // TODO Maybe `displayOrLogError()` should automatically unset the error boundary in the retryable use case?
                 dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))

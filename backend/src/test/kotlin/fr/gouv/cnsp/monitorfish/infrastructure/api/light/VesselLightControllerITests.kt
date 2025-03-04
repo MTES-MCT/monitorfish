@@ -281,7 +281,6 @@ class VesselLightControllerITests {
             )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.length()", equalTo(6)))
             .andExpect(jsonPath("$.isLastVoyage", equalTo(true)))
             .andExpect(jsonPath("$.tripNumber", equalTo("1234")))
             .andExpect(jsonPath("$.isFirstVoyage", equalTo(false)))

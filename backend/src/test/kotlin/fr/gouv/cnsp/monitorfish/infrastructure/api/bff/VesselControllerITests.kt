@@ -70,6 +70,9 @@ class VesselControllerITests {
     private lateinit var getVesselVoyage: GetVesselVoyage
 
     @MockBean
+    private lateinit var getVesselVoyageByDates: GetVesselVoyageByDates
+
+    @MockBean
     private lateinit var searchVessels: SearchVessels
 
     @MockBean
@@ -523,7 +526,6 @@ class VesselControllerITests {
             )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.length()", equalTo(6)))
             .andExpect(jsonPath("$.isLastVoyage", equalTo(true)))
             .andExpect(jsonPath("$.tripNumber", equalTo("1234")))
             .andExpect(jsonPath("$.isFirstVoyage", equalTo(false)))
@@ -943,5 +945,39 @@ class VesselControllerITests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(3)))
             .andExpect(jsonPath("$[0]", equalTo("2020000125")))
+    }
+
+    @Test
+    fun `Should find logbook messages of a vessel by dates`() {
+        // Given
+        val voyage =
+            Voyage(
+                isLastVoyage = true,
+                isFirstVoyage = false,
+                startDate = ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"),
+                endDate = null,
+                tripNumber = "1234",
+                logbookMessagesAndAlerts = LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()),
+            )
+        given(this.getVesselVoyageByDates.execute(any(), any(), anyOrNull(), anyOrNull())).willReturn(voyage)
+
+        // When
+        api
+            .perform(
+                get(
+                    "/bff/v1/vessels/logbook/find_by_dates?internalReferenceNumber=FR224226850&trackDepth=TWO_DAYS&beforeDateTime=&afterDateTime=",
+                ),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.isLastVoyage", equalTo(true)))
+            .andExpect(jsonPath("$.tripNumber", equalTo("1234")))
+            .andExpect(jsonPath("$.isFirstVoyage", equalTo(false)))
+            .andExpect(jsonPath("$.startDate", equalTo("2021-01-21T10:21:26.617301+01:00")))
+            .andExpect(jsonPath("$.endDate", equalTo(null)))
+            .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages.length()", equalTo(6)))
+            .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[0].messageType", equalTo("FAR")))
+
+        Mockito.verify(getVesselVoyageByDates).execute("FR224226850", VesselTrackDepth.TWO_DAYS, null, null)
     }
 }

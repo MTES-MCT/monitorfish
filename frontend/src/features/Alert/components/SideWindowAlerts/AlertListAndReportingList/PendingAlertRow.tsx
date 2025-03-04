@@ -11,7 +11,7 @@ import * as timeago from 'timeago.js'
 
 import { getAlertNameFromType } from './utils'
 import { validateAlert } from '../../../../../domain/use_cases/alert/validateAlert'
-import { showVessel } from '../../../../../domain/use_cases/vessel/showVessel'
+import { showVessel } from '../../../../Vessel/useCases/showVessel'
 import { getSilencedAlertPeriodText } from '../../../utils'
 
 import type { LEGACY_PendingAlert } from '../../../types'

@@ -2,6 +2,7 @@ import { COMMON_ALERT_TYPE_OPTION } from '@features/Alert/constants'
 import { VesselSidebarFleetSegments } from '@features/FleetSegment/components/VesselSidebarFleetSegments'
 import { getLastLogbookTripsOptions } from '@features/Logbook/components/VesselLogbook/LogbookMessages/utils'
 import { SidebarZone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
+import { updateVesselTrackAndLogbookFromTrip } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromTrip'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, IconButton, Select } from '@mtes-mct/monitor-ui'
@@ -19,7 +20,6 @@ import { PNOMessageResume } from './summaries/PNOMessageResume'
 import ArrowSVG from '../../../../icons/Picto_fleche-pleine-droite.svg?react'
 import { useGetLastLogbookTripsQuery } from '../../../api'
 import { LogbookMessageType as LogbookMessageTypeEnum, LogbookOperationType, NavigateTo } from '../../../constants'
-import { useGetLogbookUseCase } from '../../../hooks/useGetLogbookUseCase'
 import { CustomDatesShowedInfo } from '../CustomDatesShowedInfo'
 import { getLogbookTripSummary } from '../utils'
 
@@ -42,8 +42,6 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
     selectedVesselIdentity?.internalReferenceNumber ?? skipToken
   )
 
-  const getVesselLogbook = useGetLogbookUseCase()
-
   const lastLogbookTripsOptions = getLastLogbookTripsOptions(lastLogbookTrips, tripNumber)
 
   const logbookTrip: LogbookTripSummary = useMemo(() => getLogbookTripSummary(fishingActivities), [fishingActivities])
@@ -58,11 +56,18 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
     )?.value
   }, [fishingActivities?.alerts])
 
-  const goToPreviousTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.PREVIOUS, true))
-  const goToNextTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.NEXT, true))
-  const goToLastTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
-  const getLogbookTrip = (nextTripNumber: string | undefined) =>
-    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.EQUALS, true, nextTripNumber))
+  const goToPreviousTrip = () => {
+    dispatch(updateVesselTrackAndLogbookFromTrip(selectedVesselIdentity, NavigateTo.PREVIOUS, true))
+  }
+  const goToNextTrip = () => {
+    dispatch(updateVesselTrackAndLogbookFromTrip(selectedVesselIdentity, NavigateTo.NEXT, true))
+  }
+  const goToLastTrip = () => {
+    dispatch(updateVesselTrackAndLogbookFromTrip(selectedVesselIdentity, NavigateTo.LAST, true))
+  }
+  const getLogbookTrip = (nextTripNumber: string | undefined) => {
+    dispatch(updateVesselTrackAndLogbookFromTrip(selectedVesselIdentity, NavigateTo.EQUALS, true, nextTripNumber))
+  }
 
   return (
     <>

@@ -3,7 +3,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled, { keyframes } from 'styled-components'
 
-import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
+import { showVessel } from '../../../Vessel/useCases/showVessel'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { ReactNode } from 'react'

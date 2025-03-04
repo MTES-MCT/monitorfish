@@ -1,9 +1,9 @@
 import { BaseLayer, CoordinatesFormat } from '@features/Map/constants'
+import { VesselLabel } from '@features/Vessel/label.types'
 import { createSlice } from '@reduxjs/toolkit'
 
-import { VesselLabel } from '../../domain/entities/vessel/label/types'
-import { VesselTrackDepth } from '../../domain/entities/vesselTrackDepth'
 import { getLocalStorageState } from '../../utils'
+import { VesselTrackDepth } from '../Vessel/types/vesselTrackDepth'
 
 import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'

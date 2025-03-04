@@ -1,7 +1,7 @@
+import { VesselFeature } from '@features/Vessel/types/vessel'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
-import { VesselFeature } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { addVesselReporting } from '../../Vessel/slice'
 import { reportingApi } from '../reportingApi'

@@ -270,11 +270,19 @@ interface DBLogbookReportRepository :
     @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MIN(e.operationDateTime))
         FROM LogbookReportEntity e
-        WHERE e.internalReferenceNumber = ?1
+        WHERE e.internalReferenceNumber = :internalReferenceNumber
         AND e.tripNumber IS NOT NULL
         AND e.operationType IN ('DAT', 'COR')
         AND NOT e.isTestMessage
-        AND e.operationDateTime < (SELECT MIN(er.operationDateTime) FROM LogbookReportEntity er WHERE er.internalReferenceNumber = ?1 AND er.tripNumber = ?2)
+        AND e.operationDateTime < (
+        SELECT
+            MIN(er.operationDateTime)
+        FROM
+            LogbookReportEntity er
+        WHERE
+            er.internalReferenceNumber = :internalReferenceNumber AND
+            er.tripNumber = :tripNumber
+        )
         GROUP BY e.tripNumber
         ORDER BY 2 DESC""",
     )
@@ -287,11 +295,19 @@ interface DBLogbookReportRepository :
     @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MAX(e.operationDateTime))
         FROM LogbookReportEntity e
-        WHERE e.internalReferenceNumber = ?1
+        WHERE e.internalReferenceNumber = :internalReferenceNumber
         AND e.tripNumber IS NOT NULL
         AND e.operationType IN ('DAT', 'COR')
         AND NOT e.isTestMessage
-        AND e.operationDateTime > (SELECT MAX(er.operationDateTime) FROM LogbookReportEntity er WHERE er.internalReferenceNumber = ?1 AND er.tripNumber = ?2)
+        AND e.operationDateTime > (
+            SELECT
+                MAX(er.operationDateTime)
+            FROM
+                LogbookReportEntity er
+            WHERE
+                er.internalReferenceNumber = :internalReferenceNumber AND
+                er.tripNumber = :tripNumber
+        )
         GROUP BY e.tripNumber
         ORDER BY 2 ASC""",
     )
@@ -304,8 +320,8 @@ interface DBLogbookReportRepository :
     @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageDates(MIN(e.operationDateTime), MAX(e.operationDateTime))
         FROM LogbookReportEntity e
-        WHERE e.internalReferenceNumber = ?1
-        AND e.tripNumber = ?2
+        WHERE e.internalReferenceNumber = :internalReferenceNumber
+        AND e.tripNumber = :tripNumber
         AND NOT e.isTestMessage""",
     )
     fun findFirstAndLastOperationsDatesOfTrip(
@@ -316,10 +332,10 @@ interface DBLogbookReportRepository :
     @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDates(e.tripNumber, MIN(e.operationDateTime), MAX(e.operationDateTime))
         FROM LogbookReportEntity e
-        WHERE e.internalReferenceNumber = ?1
+        WHERE e.internalReferenceNumber = :internalReferenceNumber
         AND e.tripNumber IS NOT NULL
         AND e.operationType IN ('DAT', 'COR')
-        AND e.operationDateTime <= ?2
+        AND e.operationDateTime <= :beforeDateTime
         AND NOT e.isTestMessage
         GROUP BY e.tripNumber
         ORDER BY 2 DESC """,
@@ -328,6 +344,33 @@ interface DBLogbookReportRepository :
         internalReferenceNumber: String,
         beforeDateTime: Instant,
         pageable: Pageable,
+    ): List<VoyageTripNumberAndDates>
+
+    @Query(
+        """
+        SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDates(
+            e.tripNumber,
+            (SELECT MIN(lr_all.operationDateTime)
+             FROM LogbookReportEntity lr_all
+             WHERE lr_all.tripNumber = e.tripNumber),
+            (SELECT MAX(lr_all.operationDateTime)
+             FROM LogbookReportEntity lr_all
+             WHERE lr_all.tripNumber = e.tripNumber)
+    )
+    FROM LogbookReportEntity e
+    WHERE
+        e.internalReferenceNumber = :internalReferenceNumber
+        AND e.tripNumber IS NOT NULL
+        AND e.operationType IN ('DAT', 'COR')
+        AND e.operationDateTime BETWEEN :afterDateTime AND :beforeDateTime
+        AND NOT e.isTestMessage
+    GROUP BY e.tripNumber
+    ORDER BY MIN(e.operationDateTime) DESC""",
+    )
+    fun findTripsBetweenDates(
+        internalReferenceNumber: String,
+        beforeDateTime: Instant,
+        afterDateTime: Instant,
     ): List<VoyageTripNumberAndDates>
 
     @Query(
@@ -370,10 +413,10 @@ interface DBLogbookReportRepository :
            SELECT *
            FROM logbook_reports
            WHERE
-               operation_datetime_utc >= cast(?2 AS timestamp) AND
-               operation_datetime_utc <= cast(?3 AS timestamp) AND
-               cfr = ?1 AND
-               trip_number = ?4 AND
+               operation_datetime_utc >= cast(:afterDateTime AS timestamp) AND
+               operation_datetime_utc <= cast(:beforeDateTime AS timestamp) AND
+               cfr = :internalReferenceNumber AND
+               trip_number = :tripNumber AND
                operation_type IN ('DAT', 'COR')
                AND NOT is_test_message
            ORDER BY operation_datetime_utc DESC
@@ -383,8 +426,8 @@ interface DBLogbookReportRepository :
            FROM logbook_reports
            WHERE
                referenced_report_id IN (select report_id FROM dat_cor) AND
-               operation_datetime_utc >= cast(?2 AS timestamp) - INTERVAL '1 day' AND
-               operation_datetime_utc < cast(?3 AS timestamp) + INTERVAL '3 days' AND
+               operation_datetime_utc >= cast(:afterDateTime AS timestamp) - INTERVAL '1 day' AND
+               operation_datetime_utc < cast(:beforeDateTime AS timestamp) + INTERVAL '3 days' AND
                operation_type = 'RET'
                AND NOT is_test_message
            ORDER BY operation_datetime_utc DESC
@@ -394,8 +437,8 @@ interface DBLogbookReportRepository :
            FROM logbook_reports
            WHERE
                referenced_report_id IN (select report_id FROM dat_cor) AND
-               operation_datetime_utc >= cast(?2 AS timestamp) AND
-               operation_datetime_utc < cast(?3 AS timestamp) + INTERVAL '1 week' AND
+               operation_datetime_utc >= cast(:afterDateTime AS timestamp) AND
+               operation_datetime_utc < cast(:beforeDateTime AS timestamp) + INTERVAL '1 week' AND
                operation_type = 'DEL'
                AND NOT is_test_message
            ORDER BY operation_datetime_utc desc
@@ -448,7 +491,7 @@ interface DBLogbookReportRepository :
     @Query(
         """SELECT distinct e.trip_number
         FROM logbook_reports e
-        WHERE e.cfr = ?1
+        WHERE e.cfr = :internalReferenceNumber
         AND e.trip_number IS NOT NULL
         AND e.operation_type IN ('DAT', 'COR')
         AND NOT e.is_test_message

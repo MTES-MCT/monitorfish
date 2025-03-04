@@ -44,7 +44,6 @@ export function VesselLoader() {
       return
     }
 
-    // TODO include the VesselLightLastPosition type to the redux state
     dispatch(showVesselsLastPosition(vessels as Vessel.VesselLastPosition[]))
   }, [dispatch, vessels, isError, error])
 
@@ -57,10 +56,9 @@ export function VesselLoader() {
   return (
     <>
       {!isAppLoaded && (
-        <FirstLoadWrapper>
+        <FirstLoadWrapper data-cy="first-loader">
           <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.white} size={100} />
           <BigVessel />
-          <Text data-cy="first-loader">Chargement...</Text>
         </FirstLoadWrapper>
       )}
       <UpdateWrapper $isVesselSidebarOpen={vesselSidebarIsOpen}>
@@ -74,14 +72,6 @@ export function VesselLoader() {
     </>
   )
 }
-
-const Text = styled.span`
-  margin-top: 10px;
-  font-size: 13px;
-  color: ${p => p.theme.color.white};
-  bottom: -17px;
-  position: relative;
-`
 
 const VesselIcon = styled(VesselSVG)`
   position: absolute;

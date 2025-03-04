@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 
 import { getVesselAlertAndBeaconMalfunctionStyle } from './style'
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
-import { vesselIsShowed } from '../../../domain/entities/vessel/vessel'
+import { vesselIsShowed } from '@features/Vessel/types/vessel'
 import { LayerProperties } from '../../Map/constants'
 import { monitorfishMap } from '../../Map/monitorfishMap'
 import { vesselSelectors } from '../slice'

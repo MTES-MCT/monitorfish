@@ -135,5 +135,5 @@ const MeasurementOptions = styled(MapComponent)<{
   top: 316px;
   transition: all 0.3s;
   width: 135px;
-  z-index: 98;
+  z-index: 9999;
 `

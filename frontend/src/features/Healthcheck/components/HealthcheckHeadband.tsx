@@ -121,7 +121,7 @@ const MultipleWarningsHeadband = styled.div<{
   padding: ${p => (p.$isOpen ? '13px 0 13px 0' : '0 0 0 0')};
   border-bottom: 2px solid #e3be05;
   color: ${p => p.theme.color.gunMetal};
-  z-index: 9999;
+  z-index: 1044;
   font: normal normal bold 16px/22px Marianne;
   transition: all 0.5s;
   opacity: ${p => (p.$isOpen ? 1 : 0)};

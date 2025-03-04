@@ -5,7 +5,7 @@ import { logbookActions } from '../slice'
 
 import type { MainAppThunk } from '@store'
 
-export const navigateToFishingActivity =
+export const scrollToLogbookMessage =
   (id: string): MainAppThunk =>
   (dispatch, getState) => {
     const { selectedVesselSidebarTab } = getState().vessel

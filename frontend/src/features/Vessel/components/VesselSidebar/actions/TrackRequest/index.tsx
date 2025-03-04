@@ -1,7 +1,8 @@
 import { getTrackRequestFromTrackDepth, VesselTrackDepth } from '@features/Vessel/types/vesselTrackDepth'
+import { updateVesselTrackAndLogbookFromDates } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromDates'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { DateRangePicker, THEME, Icon } from '@mtes-mct/monitor-ui'
+import { DateRangePicker, Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -9,7 +10,6 @@ import { ExportTrack } from './ExportTrack'
 import { PositionsTable } from './PositionsTable'
 import { TrackDepthSelection } from './TrackDepthSelection'
 import { MapComponent } from '../../../../../commonStyles/MapComponent'
-import { updateSelectedVesselTrack } from '../../../../useCases/updateSelectedVesselTrack'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'
@@ -44,7 +44,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       trackDepth: nextTrackDepth
     }
 
-    dispatch(updateSelectedVesselTrack(selectedVesselIdentity, trackRequest))
+    dispatch(updateVesselTrackAndLogbookFromDates(selectedVesselIdentity, trackRequest))
   }
 
   const handleDateRangePickerChange = (dateRange: DateRange | undefined) => {
@@ -55,7 +55,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
     if (!dateRange) {
       const trackRequest = getTrackRequestFromTrackDepth(VesselTrackDepth.TWELVE_HOURS)
 
-      dispatch(updateSelectedVesselTrack(selectedVesselIdentity, trackRequest))
+      dispatch(updateVesselTrackAndLogbookFromDates(selectedVesselIdentity, trackRequest))
 
       return
     }
@@ -67,7 +67,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       trackDepth: VesselTrackDepth.CUSTOM
     }
 
-    dispatch(updateSelectedVesselTrack(selectedVesselIdentity, trackRequest))
+    dispatch(updateVesselTrackAndLogbookFromDates(selectedVesselIdentity, trackRequest))
   }
 
   return (

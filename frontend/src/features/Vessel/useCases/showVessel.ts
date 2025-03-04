@@ -1,26 +1,16 @@
-import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
-import { logbookActions } from '@features/Logbook/slice'
 import { displayLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays'
 import { getVesselLogbook } from '@features/Logbook/useCases/getVesselLogbook'
-import { doNotAnimate } from '@features/Map/slice'
-import { loadingVessel, resetLoadingVessel, setSelectedVessel, vesselSelectors } from '@features/Vessel/slice'
-import { VesselFeature } from '@features/Vessel/types/vessel'
-import { vesselApi } from '@features/Vessel/vesselApi'
+import { resetLoadingVessel } from '@features/Vessel/slice'
+import { displayVesselSidebarAndPositions } from '@features/Vessel/useCases/displayVesselSidebarAndPositions'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { captureMessage } from '@sentry/react'
-import { omit } from 'lodash-es'
 
-import { displayBannerWarningFromAPIFeedback } from './displayBannerWarningFromAPIFeedback'
-import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
-import { addSearchedVessel, removeError } from '../../../domain/shared_slices/Global'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
-import { getCustomOrDefaultTrackRequest } from '../types/vesselTrackDepth'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppThunk } from '@store'
 
 /**
- * Show a specified vessel track on map and on the vessel right sidebar
+ * Show a specified vessel track, logbook and logbook message overlays on map
  */
 export const showVessel =
   (
@@ -29,68 +19,15 @@ export const showVessel =
     isFromUserAction: boolean
   ): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
+    const {
+      fishingActivities: { areFishingActivitiesShowedOnMap }
+    } = getState()
+
     try {
-      const vessels = vesselSelectors.selectAll(getState().vessel.vessels)
-      const {
-        fishingActivities: { areFishingActivitiesShowedOnMap },
-        map: { defaultVesselTrackDepth },
-        vessel: { selectedVesselTrackRequest }
-      } = getState()
-      // TODO How to handle both the control unit dialog and the vessel sidebar ?
+      await dispatch(displayVesselSidebarAndPositions(vesselIdentity, isFromSearch, isFromUserAction))
 
-      const vesselFeatureId = VesselFeature.getVesselFeatureId(vesselIdentity)
-      const selectedVesselLastPosition: Vessel.VesselLastPosition | undefined = vessels.find(
-        lastPosition => lastPosition.vesselFeatureId === vesselFeatureId
-      )
-
-      dispatchLoadingVessel(dispatch, isFromUserAction, vesselIdentity)
-      const nextTrackRequest = getCustomOrDefaultTrackRequest(
-        selectedVesselTrackRequest,
-        defaultVesselTrackDepth,
-        false
-      )
-
-      if (isFromSearch) {
-        dispatch(addSearchedVessel(vesselIdentity))
-      }
-
-      const { isTrackDepthModified, vesselAndPositions } = await dispatch(
-        vesselApi.endpoints.getVesselAndPositions.initiate(
-          { trackRequest: nextTrackRequest, vesselIdentity },
-          RTK_FORCE_REFETCH_QUERY_OPTIONS
-        )
-      ).unwrap()
-
-      dispatch(displayBannerWarningFromAPIFeedback(vesselAndPositions.positions, isTrackDepthModified, false))
-
-      if (!selectedVesselLastPosition && !vesselAndPositions?.vessel) {
-        captureMessage('Aucune dernière position trouvée pour un navire inconnu dans la table navires.', {
-          extra: {
-            vesselFeatureId,
-            vesselIdentity
-          }
-        })
-      }
-
-      const selectedVessel = {
-        // As a safeguard, the VesselIdentity is added as a base object (in case no last position and no vessel are found)
-        ...vesselIdentity,
-        // If we found a last position, we enrich the vessel
-        ...omit(selectedVesselLastPosition, ['riskFactor']),
-        // If we found a vessel from the vessels table, we enrich the vessel
-        ...vesselAndPositions?.vessel
-      }
-
-      dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
-      dispatch(
-        setSelectedVessel({
-          positions: vesselAndPositions.positions,
-          vessel: selectedVessel as Vessel.SelectedVessel
-        })
-      )
-
+      await dispatch(getVesselLogbook(vesselIdentity, undefined, true))
       if (areFishingActivitiesShowedOnMap && isFromUserAction) {
-        await dispatch(getVesselLogbook(false)(vesselIdentity, undefined, true))
         await dispatch(displayLogbookMessageOverlays())
       }
     } catch (error) {
@@ -105,15 +42,3 @@ export const showVessel =
       dispatch(resetLoadingVessel())
     }
   }
-
-function dispatchLoadingVessel(dispatch, isFromUserAction: boolean, vesselIdentity: Vessel.VesselIdentity) {
-  dispatch(doNotAnimate(!isFromUserAction))
-  dispatch(removeError())
-  dispatch(
-    loadingVessel({
-      calledFromCron: !isFromUserAction,
-      vesselIdentity
-    })
-  )
-  dispatch(logbookActions.reset())
-}

@@ -1,3 +1,4 @@
+import { logbookActions } from '@features/Logbook/slice'
 import { displayLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays'
 import { hideLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/hideLogbookMessageOverlays'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -22,6 +23,7 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
       return
     }
 
+    await dispatch(logbookActions.setAreFishingActivitiesShowedOnMap(true))
     await dispatch(displayLogbookMessageOverlays())
   }
 

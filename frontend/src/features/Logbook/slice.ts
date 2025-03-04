@@ -71,7 +71,6 @@ const logbookSlice = createSlice({
     reset(state) {
       state.displayedLogbookOverlays = []
       state.fishingActivities = undefined
-      state.loadingFishingActivities = false
       state.vesselIdentity = undefined
       state.nextFishingActivities = null
     },

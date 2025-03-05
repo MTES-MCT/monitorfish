@@ -2,7 +2,6 @@ import { getAllBeaconMalfunctions } from '@features/BeaconMalfunction/useCases/g
 import { getVesselBeaconMalfunctions } from '@features/BeaconMalfunction/useCases/getVesselBeaconMalfunctions'
 import { openBeaconMalfunctionInKanban } from '@features/BeaconMalfunction/useCases/openBeaconMalfunctionInKanban'
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
-import { getVesselControls } from '@features/Mission/useCases/getVesselControls'
 import { getAllRegulatoryLayers } from '@features/Regulation/useCases/getAllRegulatoryLayers'
 import { reportingApi } from '@features/Reporting/reportingApi'
 import { VesselSidebarTab } from '@features/Vessel/types/vessel'
@@ -144,9 +143,7 @@ export function APIWorker() {
       return
     }
 
-    if (selectedVesselSidebarTab === VesselSidebarTab.CONTROLS) {
-      dispatch(getVesselControls(false))
-    } else if (isSuperUser && selectedVesselSidebarTab === VesselSidebarTab.ERSVMS) {
+    if (isSuperUser && selectedVesselSidebarTab === VesselSidebarTab.ERSVMS) {
       dispatch(getVesselBeaconMalfunctions(false))
     }
 

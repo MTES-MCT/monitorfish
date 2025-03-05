@@ -2,6 +2,7 @@ import { NavigateTo } from '@features/Logbook/constants'
 import { logbookActions } from '@features/Logbook/slice'
 import { displayLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays'
 import { getVesselLogbook } from '@features/Logbook/useCases/getVesselLogbook'
+import { getVesselControls } from '@features/Vessel/components/VesselSidebar/useCases/getVesselControls'
 import { setSelectedVesselSidebarTab } from '@features/Vessel/slice'
 import { FishingActivitiesTab, VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -17,8 +18,10 @@ export const openVesselSidebarTab = (tab: VesselSidebarTab) => async (dispatch, 
   dispatch(setSelectedVesselSidebarTab(tab))
 
   switch (tab) {
-    case VesselSidebarTab.CONTROLS:
+    case VesselSidebarTab.CONTROLS: {
+      dispatch(getVesselControls(selectedVesselIdentity))
       break
+    }
     case VesselSidebarTab.ERSVMS:
       break
     case VesselSidebarTab.IDENTITY:

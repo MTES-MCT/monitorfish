@@ -1,5 +1,5 @@
 import type { VesselTrackDepth } from './vesselTrackDepth'
-import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'
+import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Coordinates } from '@mtes-mct/monitor-ui'
 import type { Coordinate } from 'ol/coordinate'

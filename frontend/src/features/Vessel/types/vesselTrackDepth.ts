@@ -1,4 +1,4 @@
-import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'
+import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/types'
 import type { TrackRequest, TrackRequestPredefined } from '@features/Vessel/types/types'
 
 export enum VesselTrackDepth {

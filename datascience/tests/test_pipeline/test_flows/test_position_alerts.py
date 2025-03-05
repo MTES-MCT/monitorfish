@@ -1328,7 +1328,6 @@ def test_flow_bli_bycatch_max_weight_exceeded_alert(reset_test_data):
 
     species_onboard = None
     flow.schedule = None
-    zones = None
     state = flow.run(
         alert_type=alert_type,
         alert_config_name=alert_config_name,

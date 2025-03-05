@@ -167,7 +167,7 @@ export function VesselSearch({
       return
     }
 
-    dispatch(showVessel(selectedVessel, false, true))
+    dispatch(showVessel(selectedVessel, false))
   }
 
   return (

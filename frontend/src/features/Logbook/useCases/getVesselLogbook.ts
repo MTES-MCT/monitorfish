@@ -1,10 +1,7 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { resetDisplayedLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/resetDisplayedLogbookMessageOverlays'
-import { saveVoyage } from '@features/Logbook/useCases/saveVoyage'
-import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { vesselsAreEquals } from '@features/Vessel/types/vessel'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Level } from '@mtes-mct/monitor-ui'
 
 import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
 import { removeError } from '../../../domain/shared_slices/Global'
@@ -33,7 +30,7 @@ export const getVesselLogbook =
     }
 
     const {
-      fishingActivities: { isLastVoyage, lastFishingActivities },
+      fishingActivities: { fishingActivities: lastFishingActivities, isLastVoyage },
       vessel: { selectedVesselIdentity: currentSelectedVesselIdentity }
     } = getState()
 
@@ -46,9 +43,9 @@ export const getVesselLogbook =
 
     if (isFromUserAction) {
       dispatch(logbookActions.resetNextUpdate())
-      dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
       dispatch(logbookActions.setIsLoading())
       dispatch(resetDisplayedLogbookMessageOverlays())
+      dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
     }
 
     try {
@@ -59,7 +56,7 @@ export const getVesselLogbook =
         return undefined
       }
 
-      if (isSameVesselAsCurrentlyShowed && !isFromUserAction && isLastVoyage) {
+      if (isSameVesselAsCurrentlyShowed && !isFromUserAction && !!lastFishingActivities && isLastVoyage) {
         if (hasNewFishingActivityUpdates(lastFishingActivities, voyage)) {
           dispatch(logbookActions.setNextUpdate(voyage.logbookMessagesAndAlerts))
           dispatch(removeError())
@@ -68,7 +65,7 @@ export const getVesselLogbook =
         return undefined
       }
 
-      await dispatch(saveVoyage({ ...voyage, vesselIdentity }))
+      await dispatch(logbookActions.setVoyage({ ...voyage, vesselIdentity }))
 
       return voyage
     } catch (error) {
@@ -102,16 +99,6 @@ function fetchVesselVoyage(
 
 function handleNoVoyageFound(isSameVesselAsCurrentlyShowed: boolean) {
   return async dispatch => {
-    dispatch(
-      addMainWindowBanner({
-        children: "Ce navire n'a pas envoyé de message JPE.",
-        closingDelay: 2000,
-        isClosable: true,
-        isFixed: true,
-        level: Level.WARNING,
-        withAutomaticClosing: true
-      })
-    )
     dispatch(logbookActions.resetIsLoading())
     if (!isSameVesselAsCurrentlyShowed) {
       dispatch(resetDisplayedLogbookMessageOverlays())

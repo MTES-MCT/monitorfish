@@ -220,6 +220,7 @@ const Filters = styled.div`
 
 const Arrow = styled(IconButton)`
   transform: rotate(180deg);
+  padding: 0;
 `
 
 const NoMessage = styled.div`

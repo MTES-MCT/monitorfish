@@ -1,5 +1,4 @@
 import { resetDisplayedLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/resetDisplayedLogbookMessageOverlays'
-import { saveVoyage } from '@features/Logbook/useCases/saveVoyage'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { vesselsAreEquals } from '@features/Vessel/types/vessel'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -70,12 +69,7 @@ export const getVesselLogbookByDates =
         return
       }
 
-      dispatch(
-        saveVoyage({
-          ...voyage,
-          vesselIdentity
-        })
-      )
+      dispatch(logbookActions.setVoyage({ ...voyage, vesselIdentity }))
 
       dispatch(removeError())
     } catch (error) {

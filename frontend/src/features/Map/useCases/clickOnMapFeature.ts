@@ -84,7 +84,7 @@ export const clickOnMapFeature =
         // Vessel dispatches can only be called from the main app (FronteOffice)
         ;(dispatch as MainAppDispatch)(showVesselTrack(clickedVessel, true, null))
       } else {
-        ;(dispatch as MainAppDispatch)(showVessel(clickedVessel, false, true))
+        ;(dispatch as MainAppDispatch)(showVessel(clickedVessel, false))
       }
     }
   }

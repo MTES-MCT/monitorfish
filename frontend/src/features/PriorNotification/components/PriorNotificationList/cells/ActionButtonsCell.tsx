@@ -49,7 +49,7 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
   const selectMainMapVessel = async () => {
     const vesselIdentity = getVesselIdentityFromPriorNotification(priorNotification)
 
-    dispatch(showVessel(vesselIdentity, false, true))
+    dispatch(showVessel(vesselIdentity, false))
   }
 
   return (

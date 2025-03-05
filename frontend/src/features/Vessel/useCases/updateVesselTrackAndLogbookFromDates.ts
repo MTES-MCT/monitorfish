@@ -12,16 +12,9 @@ import type { MainAppThunk } from '@store'
  */
 export const updateVesselTrackAndLogbookFromDates =
   (vesselIdentity: Vessel.VesselIdentity, trackRequest: TrackRequest): MainAppThunk =>
-  async (dispatch, getState) => {
-    const {
-      fishingActivities: { areFishingActivitiesShowedOnMap }
-    } = getState()
-
+  async dispatch => {
     dispatch(logbookActions.setIsLoading())
     await dispatch(updateSelectedVesselTrack(vesselIdentity, trackRequest))
     await dispatch(getVesselLogbookByDates(vesselIdentity, trackRequest))
-
-    if (areFishingActivitiesShowedOnMap) {
-      await dispatch(displayLogbookMessageOverlays())
-    }
+    await dispatch(displayLogbookMessageOverlays())
   }

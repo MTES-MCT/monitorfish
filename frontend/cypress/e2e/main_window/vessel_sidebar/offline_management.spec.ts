@@ -22,25 +22,25 @@ context('Offline management', () => {
     cy.wait('@openVessel')
 
     // When retrying request
-    cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les informations du navire")
+    cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les informations du navire")
     cy.clickButton('Réessayer')
     cy.wait('@openVessel')
-    cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les informations du navire")
+    cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les informations du navire")
 
     // When clicking on Resume tab
-    cy.get('*[data-cy="vessel-menu-summary"').click()
+    cy.getDataCy('vessel-menu-summary').click()
     cy.wait('@openVessel')
-    cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les informations du navire")
+    cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les informations du navire")
     cy.clickButton('Réessayer')
     cy.wait('@openVessel')
-    cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les informations du navire")
+    cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les informations du navire")
 
     // When clicking on Identity tab
-    cy.get('*[data-cy="vessel-menu-identity"').click()
-    cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les informations du navire")
+    cy.getDataCy('vessel-menu-identity').click()
+    cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les informations du navire")
     cy.clickButton('Réessayer')
     cy.wait('@openVessel')
-    cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les informations du navire")
+    cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les informations du navire")
 
     // When clicking on Logbook tab
     cy.intercept(
@@ -50,29 +50,29 @@ context('Offline management', () => {
         statusCode: 400
       }
     ).as('getLogbook')
-    cy.get('*[data-cy="vessel-menu-fishing"').click()
+    cy.getDataCy('vessel-menu-fishing').click()
     cy.wait('@getLogbook')
-    cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les messages JPE de ce navire")
+    cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les messages JPE de ce navire")
     cy.clickButton('Réessayer')
     cy.wait('@getLogbook')
-    cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les messages JPE de ce navire")
+    cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les messages JPE de ce navire")
 
     // When clicking on Reporting tab
     cy.intercept('GET', '/bff/v1/vessels/reportings?*', { statusCode: 400 }).as('getReportings')
-    cy.get('*[data-cy="vessel-menu-reporting"').click()
+    cy.getDataCy('vessel-menu-reporting').click()
     cy.wait('@getReportings')
-    cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les signalements de ce navire")
+    cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les signalements de ce navire")
     cy.clickButton('Réessayer')
     cy.wait('@getReportings')
-    cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les signalements de ce navire")
+    cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les signalements de ce navire")
 
     // When clicking on Controls tab
-    cy.get('*[data-cy="vessel-menu-controls"').click()
-    cy.get('*[data-cy="vessel-controls"]').contains('Nous n’avons trouvé aucun contrôle pour ce navire.')
+    cy.getDataCy('vessel-menu-controls').click()
+    cy.getDataCy('vessel-controls').contains('Nous n’avons trouvé aucun contrôle pour ce navire.')
 
     // When clicking on ERS/VMS tab
-    cy.get('*[data-cy="vessel-menu-ers-vms"').click()
-    cy.get('*[data-cy="vessel-beacon-malfunctions"]').contains('Nous n’avons trouvé aucune balise VMS pour ce navire.')
+    cy.getDataCy('vessel-menu-ers-vms').click()
+    cy.getDataCy('vessel-beacon-malfunctions').contains('Nous n’avons trouvé aucune balise VMS pour ce navire.')
   })
 
   it('Vessel sidebar tabs Should be shown When connexion is online back', () => {
@@ -92,16 +92,25 @@ context('Offline management', () => {
     cy.wait('@openVesselStubbed')
 
     // When retrying request
-    cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les informations du navire")
+    cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les informations du navire")
     cy.intercept(
       'GET',
       'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=DONTSINK' +
       '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS' +
       '&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER',
     ).as('openVessel')
+    cy.intercept(
+      {
+        method: 'GET',
+        path: '/bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&tripNumber=&voyageRequest=LAST',
+        times: 2
+      },
+      { statusCode: 400 }
+    ).as('getLogbookFirstStubbed')
     cy.clickButton('Réessayer')
     cy.wait('@openVessel')
-    cy.get('*[data-cy="vessel-sidebar-error"]').should('not.exist')
+    cy.wait('@getLogbookFirstStubbed')
+    cy.getDataCy('vessel-sidebar-error').should('not.exist')
 
     // When clicking on Resume tab
     cy.intercept(
@@ -110,14 +119,14 @@ context('Offline management', () => {
       '&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER',
       cy.spy().as('openVesselSpyed')
     )
-    cy.get('*[data-cy="vessel-menu-summary"').click()
+    cy.getDataCy('vessel-menu-summary').click()
     cy.get('@openVesselSpyed').should('not.have.been.called')
-    cy.get('*[data-cy="vessel-sidebar-error"]').should('not.exist')
+    cy.getDataCy('vessel-sidebar-error').should('not.exist')
 
     // When clicking on Identity tab
-    cy.get('*[data-cy="vessel-menu-identity"').click()
+    cy.getDataCy('vessel-menu-identity').click()
     cy.get('@openVesselSpyed').should('not.have.been.called')
-    cy.get('*[data-cy="vessel-sidebar-error"]').should('not.exist')
+    cy.getDataCy('vessel-sidebar-error').should('not.exist')
 
     // When clicking on Logbook tab
     cy.intercept(
@@ -128,15 +137,16 @@ context('Offline management', () => {
       },
       { statusCode: 400 }
     ).as('getLogbookStubbed')
-    cy.get('*[data-cy="vessel-menu-fishing"').click()
+    cy.getDataCy('vessel-menu-fishing').click()
     cy.wait('@getLogbookStubbed')
-    cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les messages JPE de ce navire")
+    cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les messages JPE de ce navire")
     cy.intercept('bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&tripNumber=&voyageRequest=LAST').as(
       'getLogbook'
     )
     cy.clickButton('Réessayer')
     cy.wait('@getLogbook')
-    cy.get('*[data-cy="vessel-sidebar-error"]').should('not.exist')
+    cy.getDataCy('vessel-sidebar-error').should('not.exist')
+    cy.getDataCy('vessel-fishing').should('exist')
 
     // When clicking on Reporting tab
     cy.intercept(
@@ -147,21 +157,21 @@ context('Offline management', () => {
       },
       { statusCode: 400 }
     ).as('getReportingsStubbed')
-    cy.get('*[data-cy="vessel-menu-reporting"').click()
+    cy.getDataCy('vessel-menu-reporting').click()
     cy.wait('@getReportingsStubbed')
-    cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les signalements de ce navire")
+    cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les signalements de ce navire")
     cy.intercept('/bff/v1/vessels/reportings?*').as('getReportings')
     cy.clickButton('Réessayer')
     cy.wait('@getReportings')
-    cy.get('*[data-cy="vessel-sidebar-error"]').should('not.exist')
+    cy.getDataCy('vessel-sidebar-error').should('not.exist')
 
     // When clicking on Controls tab
-    cy.get('*[data-cy="vessel-menu-controls"').click()
-    cy.get('*[data-cy="vessel-controls"]').should('not.contain', 'Nous n’avons trouvé aucun contrôle pour ce navire.')
+    cy.getDataCy('vessel-menu-controls').click()
+    cy.getDataCy('vessel-controls').should('not.contain', 'Nous n’avons trouvé aucun contrôle pour ce navire.')
 
     // When clicking on ERS/VMS tab
-    cy.get('*[data-cy="vessel-menu-ers-vms"').click()
-    cy.get('*[data-cy="vessel-beacon-malfunctions"]').should(
+    cy.getDataCy('vessel-menu-ers-vms').click()
+    cy.getDataCy('vessel-beacon-malfunctions').should(
       'not.contain',
       'Nous n’avons trouvé aucune balise VMS pour ce navire.'
     )

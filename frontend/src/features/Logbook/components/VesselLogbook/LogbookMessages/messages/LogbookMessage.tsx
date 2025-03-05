@@ -1,6 +1,6 @@
 import { Ellipsised } from '@components/Ellipsised'
-import { displayLogbookMessageOverlay } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlay'
 import { hideLogbookMessageOverlay } from '@features/Logbook/useCases/displayedLogbookOverlays/hideLogbookMessageOverlay'
+import { toggleAndDisplayLogbookMessageOverlay } from '@features/Logbook/useCases/displayedLogbookOverlays/toggleAndDisplayLogbookMessageOverlay'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
@@ -128,7 +128,7 @@ export function LogbookMessage({
           ) : (
             <ShowActivity
               data-cy="show-fishing-activity"
-              onClick={() => dispatch(displayLogbookMessageOverlay(logbookMessage.operationNumber))}
+              onClick={() => dispatch(toggleAndDisplayLogbookMessageOverlay(logbookMessage.operationNumber))}
               title="Afficher le message sur la piste"
             />
           ))}

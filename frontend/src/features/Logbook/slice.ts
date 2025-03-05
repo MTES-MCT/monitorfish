@@ -14,7 +14,6 @@ export type LogbookState = {
   fishingActivitiesTab: FishingActivitiesTab
   isFirstVoyage: boolean | null
   isLastVoyage: boolean | null
-  lastFishingActivities: Logbook.FishingActivities
   loadingFishingActivities: boolean
   nextFishingActivities: Logbook.FishingActivities | null
   tripNumber: string | null
@@ -27,10 +26,6 @@ const INITIAL_STATE: LogbookState = {
   fishingActivitiesTab: FishingActivitiesTab.SUMMARY,
   isFirstVoyage: null,
   isLastVoyage: null,
-  lastFishingActivities: {
-    alerts: [],
-    logbookMessages: []
-  },
   loadingFishingActivities: false,
   nextFishingActivities: null,
   tripNumber: null,
@@ -68,11 +63,29 @@ const logbookSlice = createSlice({
     /**
      * Reset vessel fishing activities
      */
+    init(state) {
+      state.displayedLogbookOverlays = []
+      state.fishingActivities = undefined
+      state.vesselIdentity = undefined
+      state.nextFishingActivities = null
+
+      state.isFirstVoyage = null
+      state.isLastVoyage = null
+      state.tripNumber = null
+    },
+
+    /**
+     * Reset vessel fishing activities
+     */
     reset(state) {
       state.displayedLogbookOverlays = []
       state.fishingActivities = undefined
       state.vesselIdentity = undefined
       state.nextFishingActivities = null
+
+      state.isFirstVoyage = null
+      state.isLastVoyage = null
+      state.tripNumber = null
     },
 
     resetIsLoading(state) {
@@ -97,20 +110,6 @@ const logbookSlice = createSlice({
     },
 
     /**
-     * Set selected vessel last voyage - This voyage is saved to be able to compare it
-     * with new last voyages we will receive from the CRON
-     */
-    setLastVoyage(state, action: PayloadAction<Logbook.VesselVoyage>) {
-      state.lastFishingActivities = action.payload.logbookMessagesAndAlerts
-      state.fishingActivities = action.payload.logbookMessagesAndAlerts
-      state.isLastVoyage = action.payload.isLastVoyage
-      state.isFirstVoyage = action.payload.isFirstVoyage
-      state.tripNumber = action.payload.tripNumber
-      state.vesselIdentity = action.payload.vesselIdentity
-      state.loadingFishingActivities = false
-    },
-
-    /**
      * Set selected next vessel fishing activities to propose an update of the current displayed fishing activities
      * @param {Object=} state
      * @param {{payload: FishingActivities}} action - the fishing activities with new messages
@@ -132,14 +131,12 @@ const logbookSlice = createSlice({
      * Set selected vessel voyage
      */
     setVoyage(state, action: PayloadAction<Logbook.VesselVoyage>) {
-      const { isFirstVoyage, isLastVoyage, logbookMessagesAndAlerts, tripNumber, vesselIdentity } = action.payload
-
-      state.fishingActivities = logbookMessagesAndAlerts
-      state.isLastVoyage = isLastVoyage
-      state.isFirstVoyage = isFirstVoyage
-      state.tripNumber = tripNumber
+      state.fishingActivities = action.payload.logbookMessagesAndAlerts
+      state.isLastVoyage = action.payload.isLastVoyage
+      state.isFirstVoyage = action.payload.isFirstVoyage
+      state.tripNumber = action.payload.tripNumber
+      state.vesselIdentity = action.payload.vesselIdentity
       state.loadingFishingActivities = false
-      state.vesselIdentity = vesselIdentity
     }
   }
 })

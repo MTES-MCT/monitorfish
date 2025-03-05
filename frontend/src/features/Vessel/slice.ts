@@ -144,20 +144,12 @@ const vesselSlice = createSlice({
       state.highlightedVesselTrackPosition = action.payload
     },
 
-    loadingVessel(
-      state,
-      action: PayloadAction<{
-        calledFromCron: boolean
-        vesselIdentity: Vessel.VesselIdentity
-      }>
-    ) {
-      state.selectedVesselIdentity = action.payload.vesselIdentity
+    loadingVessel(state, action: PayloadAction<Vessel.VesselIdentity>) {
+      state.selectedVesselIdentity = action.payload
       state.vesselSidebarIsOpen = true
-      if (!action.payload.calledFromCron) {
-        state.selectedVessel = undefined
-        state.loadingVessel = true
-        state.loadingPositions = true
-      }
+      state.selectedVessel = undefined
+      state.loadingVessel = true
+      state.loadingPositions = true
     },
 
     /**

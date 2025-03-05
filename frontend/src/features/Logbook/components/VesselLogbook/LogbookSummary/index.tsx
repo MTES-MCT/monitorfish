@@ -237,6 +237,7 @@ export const PreviousTrip = styled(IconButton)<{
   cursor: ${p => (p.$disabled ? 'not-allowed' : 'pointer')};
   vertical-align: middle;
   margin-right: 6px;
+  padding: 0;
   transform: rotate(90deg);
   display: inline-block;
 `
@@ -249,6 +250,7 @@ export const NextTrip = styled(IconButton)<{
   margin-left: 6px;
   margin-right: 2px;
   transform: rotate(-90deg);
+  padding: 0;
   display: inline-block;
 `
 
@@ -259,6 +261,7 @@ export const LastTrip = styled(IconButton)<{
   vertical-align: middle;
   transform: rotate(-90deg);
   display: inline-block;
+  padding: 0;
 `
 
 const NoMessage = styled.div`

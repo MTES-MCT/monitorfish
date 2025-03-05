@@ -51,7 +51,7 @@ export function Content({
       return
     }
 
-    dispatch(showVessel(vesselIdentity, false, true))
+    dispatch(showVessel(vesselIdentity, false))
     dispatch(vesselActions.setSelectedVesselSidebarTab(VesselSidebarTab.REPORTING))
   }
 

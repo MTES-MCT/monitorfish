@@ -4,7 +4,7 @@ import { removeFishingActivitiesFeatures } from '@features/Vessel/types/track'
 
 import type { MainAppThunk } from '@store'
 
-export const hideLogbookMessageOverlays = (): MainAppThunk => async dispatch => {
+export const toggleAndHideLogbookMessageOverlays = (): MainAppThunk => async dispatch => {
   await dispatch(logbookActions.hideAllLogbookOverlays())
 
   const features = VESSEL_TRACK_VECTOR_SOURCE.getFeatures()

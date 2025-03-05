@@ -7,6 +7,16 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2024-03-5',
+        description:
+          "Pour faciliter la consultation des marées d'un navire, la recherche de ses positions " +
+          "affiche la marée correspondante dans l'onglet JPE. Cette amélioration permet de retrouver plus rapidement " +
+          'une marée sur une période donnée.',
+        for: 'ALL',
+        title: 'Affichage de la marée à partir de la piste du navire',
+        type: 'IMPROVEMENT'
+      },
+      {
         date: '2024-02-26',
         description:
           "Pour améliorer les performances de l'application, il est désormais possible de stocker " +

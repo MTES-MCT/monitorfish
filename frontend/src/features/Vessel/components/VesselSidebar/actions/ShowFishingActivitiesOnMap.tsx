@@ -1,6 +1,6 @@
 import { logbookActions } from '@features/Logbook/slice'
 import { displayLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays'
-import { hideLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/hideLogbookMessageOverlays'
+import { toggleAndHideLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/toggleAndHideLogbookMessageOverlays'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
@@ -14,11 +14,10 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
   const areFishingActivitiesShowedOnMap = useMainAppSelector(
     state => state.fishingActivities.areFishingActivitiesShowedOnMap
   )
-  const areFishingActivitiesReallyShowedOnMap = areFishingActivitiesShowedOnMap
 
   const showOrHideFishingActivities = async function () {
-    if (areFishingActivitiesReallyShowedOnMap) {
-      dispatch(hideLogbookMessageOverlays())
+    if (areFishingActivitiesShowedOnMap) {
+      dispatch(toggleAndHideLogbookMessageOverlays())
 
       return
     }
@@ -29,7 +28,7 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
 
   return (
     <VesselSidebarActionButton
-      $backgroundColor={areFishingActivitiesReallyShowedOnMap ? THEME.color.blueGray : THEME.color.charcoal}
+      $backgroundColor={areFishingActivitiesShowedOnMap ? THEME.color.blueGray : THEME.color.charcoal}
       $isRightMenuOpen={rightMenuIsOpen}
       $isSidebarOpen={isSidebarOpen}
       $top={223}
@@ -38,7 +37,7 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
       isHidden={false}
       /* eslint-disable-next-line react/jsx-no-bind */
       onClick={showOrHideFishingActivities}
-      title={`${areFishingActivitiesReallyShowedOnMap ? 'Cacher' : 'Afficher'} les messages du JPE sur la piste`}
+      title={`${areFishingActivitiesShowedOnMap ? 'Cacher' : 'Afficher'} les messages du JPE sur la piste`}
     >
       <Icon.ShowErsMessages color={THEME.color.white} style={{ margin: 5 }} />
     </VesselSidebarActionButton>

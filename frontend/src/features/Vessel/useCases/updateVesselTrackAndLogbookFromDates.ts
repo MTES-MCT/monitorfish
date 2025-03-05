@@ -1,3 +1,4 @@
+import { logbookActions } from '@features/Logbook/slice'
 import { displayLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays'
 import { getVesselLogbookByDates } from '@features/Logbook/useCases/getVesselLogbookByDates'
 import { updateSelectedVesselTrack } from '@features/Vessel/useCases/updateSelectedVesselTrack'
@@ -16,6 +17,7 @@ export const updateVesselTrackAndLogbookFromDates =
       fishingActivities: { areFishingActivitiesShowedOnMap }
     } = getState()
 
+    dispatch(logbookActions.setIsLoading())
     await dispatch(updateSelectedVesselTrack(vesselIdentity, trackRequest))
     await dispatch(getVesselLogbookByDates(vesselIdentity, trackRequest))
 

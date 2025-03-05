@@ -41,7 +41,7 @@ export const getVesselLogbookByDates =
             children:
               `Nous avons trouvé ${voyage.totalTripsFoundForDates} marées pour ces dates, ` +
               "seulement la 1ère marée est affichée dans l'onglet JPE.",
-            closingDelay: 5000,
+            closingDelay: 3000,
             isClosable: true,
             isFixed: true,
             level: Level.WARNING,
@@ -58,7 +58,7 @@ export const getVesselLogbookByDates =
         dispatch(
           addMainWindowBanner({
             children: "Ce navire n'a pas envoyé de message JPE pendant cette période.",
-            closingDelay: 5000,
+            closingDelay: 3000,
             isClosable: true,
             isFixed: true,
             level: Level.WARNING,

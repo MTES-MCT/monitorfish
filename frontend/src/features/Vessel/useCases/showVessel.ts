@@ -18,17 +18,17 @@ import type { MainAppThunk } from '@store'
  */
 export const showVessel =
   (vesselIdentity: Vessel.VesselIdentity, isFromSearch: boolean): MainAppThunk<Promise<void>> =>
-  async dispatch => {
+  async (dispatch, getState) => {
     const {
       vessel: { selectedVesselSidebarTab }
     } = getState()
 
     try {
-      dispatch(getSidebarTabData(selectedVesselSidebarTab, vesselIdentity))
-
       dispatch(logbookActions.resetNextUpdate())
       dispatch(logbookActions.setIsLoading())
       dispatch(resetDisplayedLogbookMessageOverlays())
+
+      dispatch(getSidebarTabData(selectedVesselSidebarTab, vesselIdentity))
       await dispatch(displayVesselSidebarAndPositions(vesselIdentity, isFromSearch))
 
       await dispatch(getVesselLogbook(vesselIdentity, undefined, true))
@@ -53,15 +53,10 @@ const getSidebarTabData = (tab: VesselSidebarTab, vesselIdentity: Vessel.VesselI
       break
     }
     case VesselSidebarTab.ERSVMS:
-      break
-    case VesselSidebarTab.IDENTITY:
+      // TODO Add the fetch here
       break
     case VesselSidebarTab.REPORTING:
-      break
-    case VesselSidebarTab.SUMMARY:
-      break
-    case VesselSidebarTab.VOYAGES:
-      // The logbook data is fetched every time.
+      // TODO Add the fetch here
       break
     default: {
       break

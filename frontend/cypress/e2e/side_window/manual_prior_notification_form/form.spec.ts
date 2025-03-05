@@ -67,7 +67,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       })
       assert.deepInclude(createdPriorNotification.fishingCatches, {
         faoArea: null,
-        quantity: null,
+        quantity: 15,
         specyCode: 'BFT',
         specyName: 'THON ROUGE',
         weight: 150.0

@@ -26,18 +26,11 @@ export function displayBannerWarningFromAPIFeedback(
             'les positions des dernières 24 heures.'
         })
       )
+
+      return
     }
 
-    if (noPositionsFoundForVessel(positions, isFromUserAction)) {
-      dispatch(
-        addMainWindowBanner({
-          ...baseWarningObject,
-          children: "Nous n'avons trouvé aucune position."
-        })
-      )
-    }
-
-    if (noPositionsFoundForEnteredDateTime(positions)) {
+    if (noPositionsFoundForEnteredDateTime(positions, isFromUserAction)) {
       dispatch(
         addMainWindowBanner({
           ...baseWarningObject,
@@ -48,12 +41,8 @@ export function displayBannerWarningFromAPIFeedback(
   }
 }
 
-function noPositionsFoundForVessel(positions, isFromUserAction) {
+function noPositionsFoundForEnteredDateTime(positions, isFromUserAction) {
   return !positions?.length && isFromUserAction
-}
-
-function noPositionsFoundForEnteredDateTime(positions) {
-  return !positions?.length
 }
 
 function trackDepthHasBeenModifiedFromAPI(positions, isTrackDepthModified, isFromUserAction) {

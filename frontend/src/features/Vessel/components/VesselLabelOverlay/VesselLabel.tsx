@@ -66,7 +66,7 @@ export function VesselLabel({
                 data-cy="vessel-label-text"
                 onClick={() => {
                   if (!overlayIsPanning.current) {
-                    dispatch(showVessel(identity, false, true))
+                    dispatch(showVessel(identity, false))
                   }
                 }}
               >

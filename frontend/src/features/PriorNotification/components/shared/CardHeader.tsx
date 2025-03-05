@@ -28,7 +28,7 @@ export function CardHeader({
 
   function triggerShowVessel() {
     if (selectedVesselIdentity) {
-      dispatch(showVessel(selectedVesselIdentity, false, true))
+      dispatch(showVessel(selectedVesselIdentity, false))
     }
   }
 

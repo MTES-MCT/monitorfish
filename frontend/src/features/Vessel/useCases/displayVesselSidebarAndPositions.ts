@@ -1,5 +1,4 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
-import { logbookActions } from '@features/Logbook/slice'
 import { doNotAnimate } from '@features/Map/slice'
 import { loadingVessel, setSelectedVessel, vesselSelectors } from '@features/Vessel/slice'
 import { VesselFeature } from '@features/Vessel/types/vessel'
@@ -20,11 +19,7 @@ import type { MainAppThunk } from '@store'
  * Show a specified vessel track on map and on the vessel right sidebar
  */
 export const displayVesselSidebarAndPositions =
-  (
-    vesselIdentity: Vessel.VesselIdentity,
-    isFromSearch: boolean,
-    isFromUserAction: boolean
-  ): MainAppThunk<Promise<void>> =>
+  (vesselIdentity: Vessel.VesselIdentity, isFromSearch: boolean): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
     const vessels = vesselSelectors.selectAll(getState().vessel.vessels)
     const {
@@ -37,7 +32,9 @@ export const displayVesselSidebarAndPositions =
       lastPosition => lastPosition.vesselFeatureId === vesselFeatureId
     )
 
-    dispatchLoadingVessel(dispatch, isFromUserAction, vesselIdentity)
+    dispatch(doNotAnimate(false))
+    dispatch(removeError())
+    dispatch(loadingVessel(vesselIdentity))
     const nextTrackRequest = getCustomOrDefaultTrackRequest(selectedVesselTrackRequest, defaultVesselTrackDepth, false)
 
     if (isFromSearch) {
@@ -79,15 +76,3 @@ export const displayVesselSidebarAndPositions =
       })
     )
   }
-
-function dispatchLoadingVessel(dispatch, isFromUserAction: boolean, vesselIdentity: Vessel.VesselIdentity) {
-  dispatch(doNotAnimate(!isFromUserAction))
-  dispatch(removeError())
-  dispatch(
-    loadingVessel({
-      calledFromCron: !isFromUserAction,
-      vesselIdentity
-    })
-  )
-  dispatch(logbookActions.reset())
-}

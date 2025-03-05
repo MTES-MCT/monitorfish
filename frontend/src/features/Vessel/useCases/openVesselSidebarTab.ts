@@ -1,5 +1,6 @@
 import { NavigateTo } from '@features/Logbook/constants'
 import { logbookActions } from '@features/Logbook/slice'
+import { displayLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays'
 import { getVesselLogbook } from '@features/Logbook/useCases/getVesselLogbook'
 import { setSelectedVesselSidebarTab } from '@features/Vessel/slice'
 import { FishingActivitiesTab, VesselSidebarTab } from '@features/Vessel/types/vessel'
@@ -7,12 +8,13 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
 
-export const openVesselSidebarTab = (tab: VesselSidebarTab) => (dispatch, getState) => {
+export const openVesselSidebarTab = (tab: VesselSidebarTab) => async (dispatch, getState) => {
   const {
-    fishingActivities: { fishingActivities, isLastVoyage },
+    fishingActivities: { fishingActivities },
     vessel: { selectedVesselIdentity }
   } = getState()
   dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
+  dispatch(setSelectedVesselSidebarTab(tab))
 
   switch (tab) {
     case VesselSidebarTab.CONTROLS:
@@ -26,16 +28,18 @@ export const openVesselSidebarTab = (tab: VesselSidebarTab) => (dispatch, getSta
     case VesselSidebarTab.SUMMARY:
       break
     case VesselSidebarTab.VOYAGES: {
-      if (!fishingActivities || isLastVoyage) {
-        dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
-      }
       dispatch(logbookActions.setTab(FishingActivitiesTab.SUMMARY))
+
+      if (!fishingActivities) {
+        await dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
+      }
+
+      await dispatch(displayLogbookMessageOverlays())
+
       break
     }
     default: {
       break
     }
   }
-
-  dispatch(setSelectedVesselSidebarTab(tab))
 }

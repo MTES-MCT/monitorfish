@@ -22,7 +22,7 @@ export function PositionsTable({ openBox }) {
   }, [clickedOutsideComponent, dispatch, highlightedVesselTrackPosition])
 
   return (
-    <Wrapper ref={wrapperRef}>
+    <Wrapper ref={wrapperRef} $isEmpty={!selectedVesselPositions?.length}>
       <DataTable
         // TODO Why `accessorFn` is not defined ?
         columns={POSITION_TABLE_COLUMNS as any}
@@ -30,13 +30,18 @@ export function PositionsTable({ openBox }) {
           ...position,
           id: index
         }))}
+        emptyLabel="Aucune position"
         initialSorting={[{ desc: true, id: 'dateTime' }]}
       />
     </Wrapper>
   )
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{
+  $isEmpty: boolean
+}>`
+  padding: ${p => (p.$isEmpty ? 12 : 0)}px;
   max-height: 500px;
   overflow: auto;
+  text-align: center;
 `

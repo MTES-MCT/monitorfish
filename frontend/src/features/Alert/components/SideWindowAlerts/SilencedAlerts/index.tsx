@@ -138,7 +138,7 @@ export function SilencedAlerts() {
                       data-cy="side-window-silenced-alerts-show-vessel"
                       onClick={() => {
                         const identity = extractVesselIdentityProps(alert)
-                        dispatch(showVessel(identity, false, true))
+                        dispatch(showVessel(identity, false))
                       }}
                       src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
                       title="Voir sur la carte"

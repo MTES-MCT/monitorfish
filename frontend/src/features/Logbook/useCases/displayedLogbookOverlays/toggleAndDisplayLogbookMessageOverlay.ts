@@ -11,7 +11,7 @@ import { assertNotNullish } from '@utils/assertNotNullish'
 
 import type { MainAppThunk } from '@store'
 
-export const displayLogbookMessageOverlay =
+export const toggleAndDisplayLogbookMessageOverlay =
   (operationNumber: string | undefined): MainAppThunk =>
   async (dispatch, getState) => {
     if (!operationNumber) {

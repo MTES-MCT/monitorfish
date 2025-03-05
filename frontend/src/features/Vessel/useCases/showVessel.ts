@@ -16,11 +16,7 @@ import type { MainAppThunk } from '@store'
  */
 export const showVessel =
   (vesselIdentity: Vessel.VesselIdentity, isFromSearch: boolean): MainAppThunk<Promise<void>> =>
-  async (dispatch, getState) => {
-    const {
-      fishingActivities: { areFishingActivitiesShowedOnMap }
-    } = getState()
-
+  async dispatch => {
     try {
       dispatch(logbookActions.resetNextUpdate())
       dispatch(logbookActions.setIsLoading())
@@ -28,9 +24,7 @@ export const showVessel =
       await dispatch(displayVesselSidebarAndPositions(vesselIdentity, isFromSearch))
 
       await dispatch(getVesselLogbook(vesselIdentity, undefined, true))
-      if (areFishingActivitiesShowedOnMap) {
-        await dispatch(displayLogbookMessageOverlays())
-      }
+      await dispatch(displayLogbookMessageOverlays())
     } catch (error) {
       dispatch(
         displayOrLogError(

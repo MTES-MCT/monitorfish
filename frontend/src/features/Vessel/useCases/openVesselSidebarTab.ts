@@ -10,10 +10,11 @@ import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedEr
 
 export const openVesselSidebarTab = (tab: VesselSidebarTab) => async (dispatch, getState) => {
   const {
-    fishingActivities: { areFishingActivitiesShowedOnMap, fishingActivities },
+    fishingActivities: { fishingActivities },
     vessel: { selectedVesselIdentity }
   } = getState()
   dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
+  dispatch(setSelectedVesselSidebarTab(tab))
 
   switch (tab) {
     case VesselSidebarTab.CONTROLS:
@@ -33,9 +34,7 @@ export const openVesselSidebarTab = (tab: VesselSidebarTab) => async (dispatch, 
         await dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
       }
 
-      if (areFishingActivitiesShowedOnMap) {
-        await dispatch(displayLogbookMessageOverlays())
-      }
+      await dispatch(displayLogbookMessageOverlays())
 
       break
     }
@@ -43,6 +42,4 @@ export const openVesselSidebarTab = (tab: VesselSidebarTab) => async (dispatch, 
       break
     }
   }
-
-  dispatch(setSelectedVesselSidebarTab(tab))
 }

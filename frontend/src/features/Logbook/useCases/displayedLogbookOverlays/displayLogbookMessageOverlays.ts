@@ -17,13 +17,11 @@ import type { Geometry } from 'ol/geom'
 
 export const displayLogbookMessageOverlays = (): MainAppThunk => async (dispatch, getState) => {
   const {
-    fishingActivities: { fishingActivities }
+    fishingActivities: { areFishingActivitiesShowedOnMap, fishingActivities }
   } = getState()
-  if (!fishingActivities) {
+  if (!fishingActivities || !areFishingActivitiesShowedOnMap) {
     return
   }
-
-  await dispatch(logbookActions.setAreFishingActivitiesShowedOnMap(true))
 
   const features = VESSEL_TRACK_VECTOR_SOURCE.getFeatures()
 

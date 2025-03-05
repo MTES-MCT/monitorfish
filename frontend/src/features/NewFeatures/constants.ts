@@ -6,7 +6,25 @@ import type { MonitorFishFeature } from '@features/NewFeatures/types'
 export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
-      {
+    {
+      date: '2024-03-5',
+      description:
+        "Ajout d'alertes opérationnelles signalant qu'un navire a atteint la quantité maximale autorisée " +
+        'de lingue bleue par le R(UE) 1241 de 6 tonnes à bord en zone 27.6.a.',
+      for: 'CNSP',
+      title: 'Alertes captures accessoires de lingue bleue',
+      type: 'NEW_FEATURE'
+    },
+    {
+      date: '2024-03-5',
+      description:
+        "Ajout d'alertes opérationnelles de détection d'activité de pêche en zone NEAFC (pêche soumise à " +
+        'autorisation).',
+      for: 'CNSP',
+      title: 'Alertes pêche en zone NEAFC',
+      type: 'NEW_FEATURE'
+    },
+    {
         date: '2024-03-5',
         description:
           "Il est désormais possible d'afficher les positions et la marée du navire grâce au bouton " +

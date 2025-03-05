@@ -22,7 +22,7 @@ import { useMainAppSelector } from '../hooks/useMainAppSelector'
 
 import type { MainAppAsyncThunk } from '@store'
 
-export const FIVE_MINUTES = 1 * 60 * 1000
+export const FIVE_MINUTES = 5 * 60 * 1000
 export const TWENTY_MINUTES = 20 * 60 * 1000
 export const TWENTY_SECONDS = 20 * 1000
 

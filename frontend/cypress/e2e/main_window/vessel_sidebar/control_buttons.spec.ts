@@ -31,7 +31,7 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
 
     // When
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click()
+    cy.get('[title="Paramétrer l\'affichage de la piste VMS"]').click()
     cy.fill('Afficher la piste VMS depuis', '3 jours')
     cy.wait(500)
 
@@ -59,7 +59,7 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click()
+    cy.get('[title="Paramétrer l\'affichage de la piste VMS"]').click()
     cy.fill('Afficher la piste VMS depuis', '3 jours')
     cy.wait(500)
 

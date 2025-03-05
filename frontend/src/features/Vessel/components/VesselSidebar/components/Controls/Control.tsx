@@ -1,7 +1,13 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { editMission } from '@features/Mission/useCases/editMission'
+import { VesselSidebarTab } from '@features/Vessel/types/vessel'
+import { VesselTrackDepth } from '@features/Vessel/types/vesselTrackDepth'
+import { openVesselSidebarTab } from '@features/Vessel/useCases/openVesselSidebarTab'
+import { updateVesselTrackAndLogbookFromDates } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromDates'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Accent, Button, Icon, Size, Tag, TagGroup, THEME } from '@mtes-mct/monitor-ui'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Accent, Button, customDayjs, Icon, Size, Tag, TagGroup, THEME } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import styled from 'styled-components'
 
 import { GearOnboard } from './GearOnboard'
@@ -13,6 +19,8 @@ import {
 } from '../../../../../../domain/entities/controls'
 import { getDate } from '../../../../../../utils'
 
+import type { TrackRequestCustom } from '@features/Vessel/types/types'
+
 type ControlProps = Readonly<{
   control: MissionAction.MissionAction
   isLastItem: boolean
@@ -20,6 +28,9 @@ type ControlProps = Readonly<{
 export function Control({ control, isLastItem }: ControlProps) {
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+  assertNotNullish(selectedVesselIdentity)
+
   const numberOfInfractionsWithRecord = getNumberOfInfractionsWithRecord(control)
   const numberOfInfractionsWithoutRecord = getNumberOfInfractionsWithoutRecord(control)
   const numberOfInfractions = numberOfInfractionsWithRecord + numberOfInfractionsWithoutRecord
@@ -29,6 +40,20 @@ export function Control({ control, isLastItem }: ControlProps) {
 
   const openMission = () => {
     dispatch(editMission(control.missionId))
+  }
+
+  const openTripForControl = async () => {
+    const controlDate = customDayjs(control.actionDatetimeUtc)
+    const fromDate = controlDate.subtract(2, 'days')
+    const toDate = controlDate.add(2, 'days')
+    const trackRequest: TrackRequestCustom = {
+      afterDateTime: fromDate.toDate(),
+      beforeDateTime: toDate.toDate(),
+      trackDepth: VesselTrackDepth.CUSTOM
+    }
+
+    await dispatch(updateVesselTrackAndLogbookFromDates(selectedVesselIdentity, trackRequest))
+    dispatch(openVesselSidebarTab(VesselSidebarTab.VOYAGES))
   }
 
   const controlType = (function () {
@@ -141,7 +166,7 @@ export function Control({ control, isLastItem }: ControlProps) {
             Ouvrir le contrôle
           </StyledButton>
         )}
-        <StyledButton accent={Accent.SECONDARY} Icon={Icon.Fishery} onClick={openMission} size={Size.SMALL}>
+        <StyledButton accent={Accent.SECONDARY} Icon={Icon.Fishery} onClick={openTripForControl} size={Size.SMALL}>
           Voir la marée du contrôle
         </StyledButton>
       </ContentColumn>

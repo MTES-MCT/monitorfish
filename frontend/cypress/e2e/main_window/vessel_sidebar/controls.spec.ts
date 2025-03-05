@@ -132,6 +132,7 @@ context('Vessel sidebar controls tab', () => {
       cy.get('*[data-cy="vessel-control-title"]').contains(
         `CONTRÔLE EN MER DU ${dayjs(yearBeforeMinusOneMonth).format('DD/MM/YYYY')}`
       )
+      cy.get(`[data-cy="vessel-control-years"] > div > div[title="${currentYear - 2}"]`).click({ timeout: 10000 })
     } else {
       cy.get(`[data-cy="vessel-control-years"] > div > div[title="${currentYear - 1}"]`).click({ timeout: 10000 })
       const yearBefore = dayjs().subtract(1, 'year')
@@ -142,7 +143,23 @@ context('Vessel sidebar controls tab', () => {
       cy.get('*[data-cy="vessel-control-title"]')
         .eq(1)
         .contains(`CONTRÔLE EN MER DU ${dayjs(yearBeforeMinusOneMonth).format('DD/MM/YYYY')}`)
+      cy.get(`[data-cy="vessel-control-years"] > div > div[title="${currentYear - 1}"]`).click({ timeout: 10000 })
     }
+    /**
+     * Display the vessel trip from the control
+     */
+    cy.get(`[data-cy="vessel-control-years"] > div > div[title="${currentYear}"]`).click({ timeout: 10000 })
+    cy.intercept(
+      'GET',
+      'bff/v1/vessels/logbook/find_by_dates?afterDateTime=*&beforeDateTime=*&internalReferenceNumber=FAK000999999&trackDepth=CUSTOM'
+    ).as('getLogbook')
+    cy.clickButton('Voir la marée du contrôle')
+    cy.wait('@getLogbook')
+    cy.getDataCy('vessel-fishing').should('exist')
+    cy.get('.Component-Banner').contains("Ce navire n'a pas envoyé de message JPE pendant cette période.")
+    cy.get('[title="Paramétrer l\'affichage de la piste VMS"]').click()
+    // The default track depth is empty
+    cy.get('[name="vessel-track-depth"]').should('have.value', '')
   })
 
   it('A control mission Should be opened in the side window', () => {

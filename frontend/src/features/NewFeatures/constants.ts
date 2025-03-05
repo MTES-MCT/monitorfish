@@ -9,6 +9,15 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
       {
         date: '2024-03-5',
         description:
+          "Il est désormais possible d'afficher les positions et la marée du navire grâce au bouton " +
+          '"Voir la marée du contrôle", accessible dans les détails du contrôle de la fiche navire.',
+        for: 'ALL',
+        title: 'Affichage de la marée depuis le contrôle',
+        type: 'IMPROVEMENT'
+      },
+      {
+        date: '2024-03-5',
+        description:
           "Pour faciliter la consultation des marées d'un navire, la recherche de ses positions " +
           "affiche la marée correspondante dans l'onglet JPE. Cette amélioration permet de retrouver plus rapidement " +
           'une marée sur une période donnée.',

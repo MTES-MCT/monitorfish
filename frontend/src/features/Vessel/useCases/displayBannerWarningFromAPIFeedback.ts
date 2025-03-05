@@ -10,7 +10,7 @@ export function displayBannerWarningFromAPIFeedback(
 ) {
   return dispatch => {
     const baseWarningObject = {
-      closingDelay: 5000,
+      closingDelay: 3000,
       isClosable: true,
       isFixed: true,
       level: Level.WARNING,

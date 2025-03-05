@@ -33,7 +33,7 @@ context('Vessel visibility', () => {
     openVesselBySearch('Pheno')
 
     // Then
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click()
+    cy.get('[title="Paramétrer l\'affichage de la piste VMS"]').click()
     cy.get('[name="vessel-track-depth"]').should('have.value', 'ONE_WEEK')
   })
 })

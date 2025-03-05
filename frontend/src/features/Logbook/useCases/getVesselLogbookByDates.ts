@@ -65,6 +65,7 @@ export const getVesselLogbookByDates =
             withAutomaticClosing: true
           })
         )
+        dispatch(logbookActions.resetIsLoading())
 
         return
       }

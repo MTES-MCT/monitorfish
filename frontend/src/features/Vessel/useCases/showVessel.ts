@@ -1,4 +1,6 @@
+import { logbookActions } from '@features/Logbook/slice'
 import { displayLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays'
+import { resetDisplayedLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/resetDisplayedLogbookMessageOverlays'
 import { getVesselLogbook } from '@features/Logbook/useCases/getVesselLogbook'
 import { resetLoadingVessel } from '@features/Vessel/slice'
 import { displayVesselSidebarAndPositions } from '@features/Vessel/useCases/displayVesselSidebarAndPositions'
@@ -13,29 +15,28 @@ import type { MainAppThunk } from '@store'
  * Show a specified vessel track, logbook and logbook message overlays on map
  */
 export const showVessel =
-  (
-    vesselIdentity: Vessel.VesselIdentity,
-    isFromSearch: boolean,
-    isFromUserAction: boolean
-  ): MainAppThunk<Promise<void>> =>
+  (vesselIdentity: Vessel.VesselIdentity, isFromSearch: boolean): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
     const {
       fishingActivities: { areFishingActivitiesShowedOnMap }
     } = getState()
 
     try {
-      await dispatch(displayVesselSidebarAndPositions(vesselIdentity, isFromSearch, isFromUserAction))
+      dispatch(logbookActions.resetNextUpdate())
+      dispatch(logbookActions.setIsLoading())
+      dispatch(resetDisplayedLogbookMessageOverlays())
+      await dispatch(displayVesselSidebarAndPositions(vesselIdentity, isFromSearch))
 
       await dispatch(getVesselLogbook(vesselIdentity, undefined, true))
-      if (areFishingActivitiesShowedOnMap && isFromUserAction) {
+      if (areFishingActivitiesShowedOnMap) {
         await dispatch(displayLogbookMessageOverlays())
       }
     } catch (error) {
       dispatch(
         displayOrLogError(
           error as Error,
-          () => showVessel(vesselIdentity, isFromSearch, isFromUserAction),
-          isFromUserAction,
+          () => showVessel(vesselIdentity, isFromSearch),
+          true,
           DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
         )
       )

@@ -95,7 +95,7 @@ export function PendingAlertRow({
               data-cy="side-window-alerts-show-vessel"
               onClick={() => {
                 const identity = extractVesselIdentityProps(alert)
-                dispatch(showVessel(identity, false, true))
+                dispatch(showVessel(identity, false))
               }}
               src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
               style={showIconStyle}

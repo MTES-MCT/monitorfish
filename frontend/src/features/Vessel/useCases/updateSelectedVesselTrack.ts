@@ -7,6 +7,7 @@ import {
   updateSelectedVesselPositions,
   updatingVesselTrackDepth
 } from '@features/Vessel/slice'
+import { getCustomOrDefaultTrackRequest } from '@features/Vessel/types/vesselTrackDepth'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { Level } from '@mtes-mct/monitor-ui'
 
@@ -21,23 +22,32 @@ import type { MainAppDispatch, MainAppThunk } from '@store'
  * Modify the vessel track depth on map
  */
 export const updateSelectedVesselTrack =
-  (vesselIdentity: Vessel.VesselIdentity, trackRequest: TrackRequest): MainAppThunk =>
-  async dispatch => {
+  (vesselIdentity: Vessel.VesselIdentity, trackRequest?: TrackRequest): MainAppThunk =>
+  async (dispatch, getState) => {
     try {
+      const {
+        map: { defaultVesselTrackDepth },
+        vessel: { selectedVesselTrackRequest }
+      } = getState()
+      const nextTrackRequest =
+        trackRequest ?? getCustomOrDefaultTrackRequest(selectedVesselTrackRequest, defaultVesselTrackDepth, false)
+
       dispatchIsUpdating(dispatch)
 
       const { isTrackDepthModified, positions } = await dispatch(
         vesselApi.endpoints.getVesselPositions.initiate(
-          { trackRequest, vesselIdentity },
+          { trackRequest: nextTrackRequest, vesselIdentity },
           RTK_FORCE_REFETCH_QUERY_OPTIONS
         )
       ).unwrap()
-      dispatch(displayBannerWarningFromAPIFeedback(positions, isTrackDepthModified, false))
+      dispatch(displayBannerWarningFromAPIFeedback(positions, isTrackDepthModified, !!trackRequest))
 
-      dispatch(removeError())
-      dispatch(setSelectedVesselCustomTrackRequest(trackRequest))
+      dispatch(setSelectedVesselCustomTrackRequest(nextTrackRequest))
       dispatch(updateSelectedVesselPositions(positions))
-      dispatch(animateToExtent())
+
+      if (trackRequest) {
+        dispatch(animateToExtent())
+      }
     } catch (error) {
       dispatch(setError(error))
       dispatch(

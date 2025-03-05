@@ -32,7 +32,7 @@ export function ActionButtonsCell({ reporting }: ActionButtonsCellProps) {
   const focusOnMap = useCallback(
     (focusedReporting: Reporting.Reporting) => {
       const identity = extractVesselIdentityProps(focusedReporting)
-      dispatch(showVessel(identity, false, true))
+      dispatch(showVessel(identity, false))
     },
     [dispatch]
   )

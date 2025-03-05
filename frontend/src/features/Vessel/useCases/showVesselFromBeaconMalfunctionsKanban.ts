@@ -29,7 +29,7 @@ export const showVesselFromBeaconMalfunctionsKanban = (beaconMalfunction, openVM
   }
 
   const identity = extractVesselIdentityProps(beaconMalfunction)
-  await dispatch(showVessel(identity, false, true))
+  await dispatch(showVessel(identity, false))
 
   if (openVMRERSTab) {
     dispatch(vesselActions.setSelectedVesselSidebarTab(VesselSidebarTab.ERSVMS))

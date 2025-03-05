@@ -32,7 +32,7 @@ export function FavoriteVessel({
       dispatch(hideVesselTrack(vesselCompositeIdentifier))
     }
 
-    dispatch(showVessel(favorite, false, true))
+    dispatch(showVessel(favorite, false))
   }
 
   function hideVesselTrackOrSidebar() {

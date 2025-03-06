@@ -26,6 +26,12 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
     isOperationalAlert: true,
     name: 'Pêche en ZEE française par un navire tiers'
   },
+  BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT: {
+    code: PendingAlertValueType.BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT,
+    isArchivedAfterDEPMessage: false,
+    isOperationalAlert: true,
+    name: 'R(UE) 1241 - Plus de 6 tonnes de lingue bleue (BLI) à bord'
+  },
   MISSING_DEP_ALERT: {
     code: PendingAlertValueType.MISSING_DEP_ALERT,
     isArchivedAfterDEPMessage: true,
@@ -43,6 +49,12 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
     isArchivedAfterDEPMessage: true,
     isOperationalAlert: true,
     name: 'Non-emission de message "FAR"'
+  },
+  NEAFC_FISHING_ALERT: {
+    code: PendingAlertValueType.NEAFC_FISHING_ALERT,
+    isArchivedAfterDEPMessage: false,
+    isOperationalAlert: true,
+    name: 'Alerte de pêche en zone CPANE (NEAFC)'
   },
   PNO_LAN_WEIGHT_TOLERANCE_ALERT: {
     code: 'PNO_LAN_WEIGHT_TOLERANCE_ALERT',

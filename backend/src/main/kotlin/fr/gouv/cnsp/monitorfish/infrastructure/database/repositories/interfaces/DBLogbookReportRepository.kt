@@ -353,13 +353,13 @@ interface DBLogbookReportRepository :
             (SELECT MIN(lr_all.operationDateTime)
              FROM LogbookReportEntity lr_all
              WHERE
-                lr_all.internalReferenceNumber = :internalReferenceNumber
+                lr_all.internalReferenceNumber = :internalReferenceNumber AND
                 lr_all.tripNumber = e.tripNumber
              ),
             (SELECT MAX(lr_all.operationDateTime)
              FROM LogbookReportEntity lr_all
              WHERE
-                lr_all.internalReferenceNumber = :internalReferenceNumber
+                lr_all.internalReferenceNumber = :internalReferenceNumber AND
                 lr_all.tripNumber = e.tripNumber
              )
     )

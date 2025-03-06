@@ -19,10 +19,13 @@ from sqlalchemy import (
 
 from src.db_config import create_engine
 from src.pipeline.flows.position_alerts import (
+    VesselsFilter,
     ZonesTable,
     alert_has_gear_parameters,
     extract_current_gears,
+    extract_vessels_with_species_onboard,
     filter_on_gears,
+    filter_vessels,
     flow,
     get_alert_type_zones_table,
     get_vessels_in_alert,
@@ -332,6 +335,59 @@ def test_extract_current_gears(reset_test_data):
         ].iloc[0]
         is None
     )
+
+
+def test_extract_vessels_with_species_onboard(reset_test_data):
+    vessels_filter_1 = extract_vessels_with_species_onboard.run(
+        species_onboard=["SOL", "HKE"],
+        min_weight=2500.0,
+    )
+
+    assert vessels_filter_1 == VesselsFilter(
+        is_active=True, vessels_cfr=["ABC000542519"]
+    )
+
+    vessels_filter_2 = extract_vessels_with_species_onboard.run(
+        species_onboard=None,
+        min_weight=2500.0,
+    )
+
+    assert vessels_filter_2 == VesselsFilter(is_active=False, vessels_cfr=None)
+
+    vessels_filter_3 = extract_vessels_with_species_onboard.run(
+        species_onboard=["SOL", "HKE"],
+        min_weight=25000.0,
+    )
+
+    assert vessels_filter_3 == VesselsFilter(is_active=True, vessels_cfr=[])
+
+
+def test_filter_vessels():
+    positions_in_alert = pd.DataFrame(
+        {
+            "cfr": ["A", "B", "C", "D", None],
+            "some_data": [1.23, 5.56, 12.23, 5.236, 98.58],
+        }
+    )
+
+    filtered_positions_1 = filter_vessels.run(
+        positions_in_alert, VesselsFilter(is_active=True, vessels_cfr=["A", "B"])
+    )
+    filtered_positions_2 = filter_vessels.run(
+        positions_in_alert, VesselsFilter(is_active=False, vessels_cfr=["A", "B"])
+    )
+    filtered_positions_3 = filter_vessels.run(
+        positions_in_alert, VesselsFilter(is_active=True, vessels_cfr=[])
+    )
+    filtered_positions_4 = filter_vessels.run(
+        positions_in_alert.head(0),
+        VesselsFilter(is_active=True, vessels_cfr=["A", "B"]),
+    )
+
+    pd.testing.assert_frame_equal(filtered_positions_1, positions_in_alert.head(2))
+    pd.testing.assert_frame_equal(filtered_positions_2, positions_in_alert)
+    pd.testing.assert_frame_equal(filtered_positions_3, positions_in_alert.head(0))
+    pd.testing.assert_frame_equal(filtered_positions_4, positions_in_alert.head(0))
 
 
 def test_filter_on_gears():
@@ -1221,3 +1277,75 @@ def test_flow_rtc_fishing_alert(reset_test_data):
         ].values[0]
         == "ABC000306959"
     )
+
+
+def test_flow_neafc_fishing_alert(reset_test_data):
+    # With these parameters, 2 french vessels should be in alert.
+    alert_type = "NEAFC_FISHING_ALERT"
+    alert_config_name = "NEAFC_FISHING_ALERT"
+    zones = None
+    hours_from_now = 8
+    only_fishing_positions = True
+
+    flow.schedule = None
+    state = flow.run(
+        alert_type=alert_type,
+        alert_config_name=alert_config_name,
+        zones=zones,
+        hours_from_now=hours_from_now,
+        only_fishing_positions=only_fishing_positions,
+    )
+
+    assert state.is_successful()
+
+    pending_alerts = read_query(
+        """
+            SELECT *
+            FROM pending_alerts
+            WHERE alert_config_name = 'NEAFC_FISHING_ALERT'
+        """,
+        db="monitorfish_remote",
+    )
+    assert len(pending_alerts) == 1
+    assert (
+        pending_alerts.loc[
+            pending_alerts.alert_config_name == "NEAFC_FISHING_ALERT",
+            "internal_reference_number",
+        ].values[0]
+        == "ABC000306959"
+    )
+
+
+def test_flow_bli_bycatch_max_weight_exceeded_alert(reset_test_data):
+    # With these parameters, 2 french vessels should be in alert.
+    alert_type = "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT"
+    alert_config_name = "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT"
+    zones = ["27.8", "27.9"]
+    hours_from_now = 8
+    only_fishing_positions = False
+    species_onboard = ["SOL", "HKE", "ANE"]
+    species_onboard_min_weight = 500.0
+
+    flow.schedule = None
+    state = flow.run(
+        alert_type=alert_type,
+        alert_config_name=alert_config_name,
+        zones=zones,
+        hours_from_now=hours_from_now,
+        only_fishing_positions=only_fishing_positions,
+        species_onboard=species_onboard,
+        species_onboard_min_weight=species_onboard_min_weight,
+    )
+
+    assert state.is_successful()
+
+    pending_alerts = read_query(
+        """
+            SELECT *
+            FROM pending_alerts
+            WHERE alert_config_name = 'BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT'
+        """,
+        db="monitorfish_remote",
+    )
+    assert len(pending_alerts) == 1
+    assert pending_alerts["internal_reference_number"].values[0] == "ABC000306959"

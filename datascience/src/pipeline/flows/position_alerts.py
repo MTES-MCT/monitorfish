@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import List
@@ -37,17 +38,18 @@ class ZonesTable:
         Args:
             table (Table): A SQLAchemy `Table`
             geometry_column (str): name of the geometry column
-            filter_column (str): name of the column on which to filter (typically the
-            id or unique name of zones)
+            filter_column (str, optionnal): name of the column on which to filter
+            (typically the id or unique name of zones). Defaults to `None`.
 
         Raises:
-            AssertionError: if `filter_column` is not a column of `table` or
-            `geometry_column` is not a column of `Table` of type
+            AssertionError: if `filter_column` is given and is not a column of `table`
+            or `geometry_column` is not a column of `Table` of type
             `geoalchemy2.Geometry`
     """
 
-    def __init__(self, table: Table, geometry_column: str, filter_column: str):
-        assert filter_column in table.columns
+    def __init__(self, table: Table, geometry_column: str, filter_column: str = None):
+        if filter_column:
+            assert filter_column in table.columns
         assert geometry_column in table.columns
         assert isinstance(table.columns[geometry_column].type, Geometry)
         self.table = table
@@ -60,6 +62,12 @@ class ZonesTable:
             f"filter_column='{self.filter_column}', "
             f"geometry_column='{self.geometry_column}')"
         )
+
+
+@dataclass
+class VesselsFilter:
+    is_active: bool
+    vessels_cfr: List[str]
 
 
 @task(checkpoint=False)
@@ -134,6 +142,16 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
             "table": "regulations",
             "filter_column": "law_type",
             "geometry_column": "geometry",
+        },
+        "NEAFC_FISHING_ALERT": {
+            "table": "neafc_regulatory_area",
+            "filter_column": None,
+            "geometry_column": "wkb_geometry",
+        },
+        "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT": {
+            "table": "fao_areas",
+            "filter_column": "f_code",
+            "geometry_column": "wkb_geometry",
         },
     }
 
@@ -347,6 +365,39 @@ def extract_gear_codes(query: Select) -> set:
 
 
 @task(checkpoint=False)
+def extract_vessels_with_species_onboard(
+    species_onboard: list = None, min_weight: float = 0.0
+) -> VesselsFilter:
+    if species_onboard is None:
+        return VesselsFilter(is_active=False, vessels_cfr=None)
+
+    assert isinstance(species_onboard, list)
+    assert isinstance(min_weight, float)
+
+    vessels = extract(
+        "monitorfish_remote",
+        "monitorfish/vessels_with_species_onboard.sql",
+        params={
+            "species_onboard": tuple(species_onboard),
+            "min_weight": min_weight,
+        },
+    )
+    return VesselsFilter(is_active=True, vessels_cfr=vessels.cfr.tolist())
+
+
+@task(checkpoint=False)
+def filter_vessels(
+    positions_in_alert: pd.DataFrame, vessels_filter: VesselsFilter
+) -> pd.DataFrame:
+    if not vessels_filter.is_active:
+        return positions_in_alert
+    else:
+        return positions_in_alert[
+            positions_in_alert.cfr.isin(vessels_filter.vessels_cfr)
+        ].reset_index(drop=True)
+
+
+@task(checkpoint=False)
 def filter_on_gears(
     positions_in_alert: pd.DataFrame,
     current_gears: pd.DataFrame,
@@ -459,6 +510,10 @@ with Flow("Position alert", executor=LocalDaskExecutor()) as flow:
         except_flag_states = Parameter("except_flag_states", default=None)
         fishing_gears = Parameter("fishing_gears", default=None)
         fishing_gear_categories = Parameter("fishing_gear_categories", default=None)
+        species_onboard = Parameter("species_onboard", default=None)
+        species_onboard_min_weight = Parameter(
+            "species_onboard_min_weight", default=0.0
+        )
         include_vessels_unknown_gear = Parameter(
             "include_vessels_unknown_gear", default=True
         )
@@ -489,6 +544,14 @@ with Flow("Position alert", executor=LocalDaskExecutor()) as flow:
         )
 
         positions_in_alert = read_query_task("monitorfish_remote", positions_query)
+        species_onboard_vessels_filter = extract_vessels_with_species_onboard(
+            species_onboard=species_onboard,
+            min_weight=species_onboard_min_weight,
+        )
+
+        positions_in_alert = filter_vessels(
+            positions_in_alert, vessels_filter=species_onboard_vessels_filter
+        )
 
         with case(must_filter_on_gears, True):
             fishing_gears_table = get_table("fishing_gear_codes")

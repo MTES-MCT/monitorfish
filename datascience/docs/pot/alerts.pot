@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-21 10:14+0100\n"
+"POT-Creation-Date: 2025-03-05 15:32+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,7 +61,17 @@ msgstr ""
 msgid "RTC fishing alert : VMS track showing fishing activity in a Real Time Closure (RTC) area"
 msgstr ""
 
+#: ../source/alerts.rst:14
+#: 9c3383307b1a42cd945788bfc421b7c6
+msgid "NEAFC fishing alert : VMS track showing fishing activity in the NEAFC area (subject to authorization by NEAFC)"
+msgstr ""
+
 #: ../source/alerts.rst:15
+#: 8e634c6b8c1845deb395c07d3edbdb0c
+msgid "exceeding the maximum authorized blue ling (BLI) quantity held onboard : logbook data showing more than 6 tons of blue ling (BLI) onboard a vessel present in area 27.6.a, which is the maximum quantity authorized by R(UE) 1241."
+msgstr ""
+
+#: ../source/alerts.rst:17
 #: f495746f408b476c96fc885a0d404659
 msgid "When signs of fraud are detected on a vessel, it appears on the map with a red halo :"
 msgstr ""
@@ -71,17 +81,17 @@ msgstr ""
 msgid "Map showing a vessel's VMS track which presents signs of illegal trawling in the 3 nautical miles coastal strip"
 msgstr ""
 
-#: ../source/alerts.rst:21
+#: ../source/alerts.rst:23
 #: 15027adb885d4f9aaec559b7fe1343cc
 msgid "*Map showing a vessel's VMS track which presents signs of illegal trawling in the 3 nautical miles coastal strip*"
 msgstr ""
 
-#: ../source/alerts.rst:23
+#: ../source/alerts.rst:25
 #: 5f3dfbfba4564a2c858902e72634fe47
 msgid "Alerts are then humanly checked and validated / invalidated. Validated alerts become *reportings* which are stored in the Monitorfish database and add the vessel's history."
 msgstr ""
 
-#: ../source/alerts.rst:25
+#: ../source/alerts.rst:27
 #: 0ec65f29d69246f59de3219b7168d288
 msgid "Alerts make use of the fishing detection algorithm of the :doc:`enrich position flow <flows/enrich-positions>`."
 msgstr ""

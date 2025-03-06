@@ -20,6 +20,14 @@ enum class AlertTypeMapping(
         clazz = TwelveMilesFishingAlert::class.java,
         alertName = "12 milles - Pêche sans droits historiques",
     ),
+    BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT(
+        clazz = BliBycatchMaxWeightExceededAlert::class.java,
+        alertName = "R(UE) 1241 - Plus de 6 tonnes de lingue bleue (BLI) à bord",
+    ),
+    NEAFC_FISHING_ALERT(
+        clazz = NeafcFishingAlert::class.java,
+        alertName = "Alerte de pêche en zone CPANE (NEAFC)",
+    ),
     RTC_FISHING_ALERT(
         clazz = RTCFishingAlert::class.java,
         alertName = "Pêche en zone RTC",

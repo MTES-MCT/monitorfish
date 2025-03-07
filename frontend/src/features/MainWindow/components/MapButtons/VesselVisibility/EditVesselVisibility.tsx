@@ -1,4 +1,4 @@
-import { TrackDepthSelection } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/TrackDepthSelection'
+import { TrackDepthSelection } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/TrackDepthSelection'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'

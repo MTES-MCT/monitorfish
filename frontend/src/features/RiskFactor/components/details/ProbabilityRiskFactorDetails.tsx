@@ -1,9 +1,8 @@
+import { InfractionsSummary } from '@features/Vessel/components/VesselSidebar/components/Controls/InfractionsSummary'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { isDefined } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import styled from 'styled-components'
-
-import { InfractionsSummary } from '../../../Vessel/components/VesselSidebar/Controls/InfractionsSummary'
 
 export function ProbabilityRiskFactorDetails({ isOpen }) {
   const riskFactor = useMainAppSelector(state => state.vessel.selectedVessel)?.riskFactor

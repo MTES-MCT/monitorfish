@@ -6,7 +6,7 @@ import {
   getTargetSpeciesIncludedInSegments
 } from '@features/FleetSegment/components/VesselCurrentFleetSegmentDetails/utils'
 import { SpeciesTypeToSpeciesTypeLabel } from '@features/FleetSegment/constants'
-import { FlatKeyValue } from '@features/Vessel/components/VesselSidebar/common/FlatKeyValue'
+import { FlatKeyValue } from '@features/Vessel/components/VesselSidebar/components/common/FlatKeyValue'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { pluralize } from '@mtes-mct/monitor-ui'
 import { type ForwardedRef, forwardRef, useMemo } from 'react'

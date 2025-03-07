@@ -6,7 +6,7 @@ import { getLocalStorageState } from '../../utils'
 import { VesselTrackDepth } from '../Vessel/types/vesselTrackDepth'
 
 import type { MonitorFishMap } from '@features/Map/Map.types'
-import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'
+import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { Coordinate } from 'ol/coordinate'
 import type { Extent } from 'ol/extent'

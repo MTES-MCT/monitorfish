@@ -1,4 +1,5 @@
 import { COLORS } from '@constants/constants'
+import { DATE_RANGE_PICKER_LOCALE } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/DateRange'
 import { useClickOutsideWhenOpenedWithinRef } from '@hooks/useClickOutsideWhenOpenedWithinRef'
 import { useForceUpdate } from '@hooks/useForceUpdate'
 import { THEME } from '@mtes-mct/monitor-ui'
@@ -7,7 +8,6 @@ import DatePicker from 'rsuite/DatePicker'
 import { beforeToday } from 'rsuite/esm/DateRangePicker/disabledDateUtils'
 import styled from 'styled-components'
 
-import { DATE_RANGE_PICKER_LOCALE } from '../../../../Vessel/components/VesselSidebar/actions/TrackRequest/DateRange'
 import { SilencedAlertPeriod } from '../../../constants'
 
 import type { SilencedAlertPeriodRequest } from '../../../types'

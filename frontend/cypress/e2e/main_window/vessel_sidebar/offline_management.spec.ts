@@ -67,8 +67,13 @@ context('Offline management', () => {
     cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les signalements de ce navire")
 
     // When clicking on Controls tab
+    cy.intercept('GET', '/bff/v1/mission_actions/controls?*', { statusCode: 400 }).as('getControls')
     cy.getDataCy('vessel-menu-controls').click()
-    cy.getDataCy('vessel-controls').contains('Nous n’avons trouvé aucun contrôle pour ce navire.')
+    cy.wait('@getControls')
+    cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les contrôles de ce navire")
+    cy.clickButton('Réessayer')
+    cy.wait('@getControls')
+    cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les contrôles de ce navire")
 
     // When clicking on ERS/VMS tab
     cy.getDataCy('vessel-menu-ers-vms').click()
@@ -166,8 +171,21 @@ context('Offline management', () => {
     cy.getDataCy('vessel-sidebar-error').should('not.exist')
 
     // When clicking on Controls tab
+    cy.intercept(
+      {
+        method: 'GET',
+        pathname: '/bff/v1/mission_actions/controls',
+        times: 2
+      },
+      { statusCode: 400 }
+    ).as('getControlsStubbed')
     cy.getDataCy('vessel-menu-controls').click()
-    cy.getDataCy('vessel-controls').should('not.contain', 'Nous n’avons trouvé aucun contrôle pour ce navire.')
+    cy.wait('@getControlsStubbed')
+    cy.getDataCy('vessel-sidebar-error').contains("Nous n'avons pas pu récupérer les contrôles de ce navire")
+    cy.intercept('GET', '/bff/v1/mission_actions/controls?*').as('getControls')
+    cy.clickButton('Réessayer')
+    cy.wait('@getControls')
+    cy.getDataCy('vessel-sidebar-error').should('not.exist')
 
     // When clicking on ERS/VMS tab
     cy.getDataCy('vessel-menu-ers-vms').click()

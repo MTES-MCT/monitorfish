@@ -122,7 +122,7 @@ enrich_logbook.flow.schedule = Schedule(
 enrich_positions.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
-            "* * * * *",
+            "1-59 * * * *",
             parameter_defaults={
                 "start_hours_ago": 7,
                 "end_hours_ago": 0,
@@ -133,6 +133,20 @@ enrich_positions.flow.schedule = Schedule(
                 "min_fishing_speed_threshold": MIN_FISHING_SPEED_THRESHOLD,
                 "max_fishing_speed_threshold": MAX_FISHING_SPEED_THRESHOLD,
                 "recompute_all": False,
+            },
+        ),
+        clocks.CronClock(
+            "0 * * * *",
+            parameter_defaults={
+                "start_hours_ago": 24,
+                "end_hours_ago": 0,
+                "minutes_per_chunk": 1440,
+                "chunk_overlap_minutes": 0,
+                "minimum_consecutive_positions": MINIMUM_CONSECUTIVE_POSITIONS,
+                "minimum_minutes_of_emission_at_sea": MINIMUM_MINUTES_OF_EMISSION_AT_SEA,
+                "min_fishing_speed_threshold": MIN_FISHING_SPEED_THRESHOLD,
+                "max_fishing_speed_threshold": MAX_FISHING_SPEED_THRESHOLD,
+                "recompute_all": True,
             },
         ),
     ]

@@ -246,44 +246,13 @@ def load_fishing_activity(positions: pd.DataFrame, period: Period, logger: Logge
 
 
 @task(checkpoint=False)
-def reset_positions(period: Period):
-    """
-    Deletes enriched data from positions table in the designated Period.
-    """
-
-    logger = prefect.context.get("logger")
-    e = create_engine("monitorfish_remote")
-
-    logger.info(f"Resetting positions for period {period.start} - {period.end}.")
-
-    with e.begin() as connection:
-        connection.execute(
-            text(
-                "UPDATE public.positions p "
-                "SET "
-                "    is_at_port = NULL, "
-                "    meters_from_previous_position = NULL, "
-                "    time_since_previous_position = NULL, "
-                "    average_speed = NULL, "
-                "    is_fishing = NULL, "
-                "    time_emitting_at_sea = NULL "
-                "WHERE p.date_time >= :start "
-                "AND p.date_time <= :end;"
-            ),
-            {
-                "start": period.start,
-                "end": period.end,
-            },
-        )
-
-
-@task(checkpoint=False)
 def extract_enrich_load(
     period: Period,
     minimum_consecutive_positions: int,
     min_fishing_speed_threshold: float,
     max_fishing_speed_threshold: float,
     minimum_minutes_of_emission_at_sea: int,
+    recompute_all: bool = False,
 ):
     """Extract positions for the given `Period`, enrich and update the `positions`
     table.
@@ -303,12 +272,13 @@ def extract_enrich_load(
         f"Extracted {len(positions)} positions from {positions.cfr.nunique()} vessels."
     )
 
-    logger.info("Filtering...")
-    positions = filter_already_enriched_vessels(positions)
+    if not recompute_all:
+        logger.info("Filtering already enriched vessels...")
+        positions = filter_already_enriched_vessels(positions)
 
-    logger.info(
-        f"Retained {len(positions)} positions from {positions.cfr.nunique()} vessels."
-    )
+        logger.info(
+            f"Retained {len(positions)} positions from {positions.cfr.nunique()} vessels."
+        )
 
     logger.info("Tagging positions at port")
     positions = tag_positions_at_port.run(positions)
@@ -348,28 +318,15 @@ with Flow("Enrich positions") as flow:
             chunk_overlap_minutes,
         )
 
-        with case(recompute_all, True):
-            reset = reset_positions.map(periods)
-            extract_enrich_load.map(
-                periods,
-                minimum_consecutive_positions=unmapped(minimum_consecutive_positions),
-                min_fishing_speed_threshold=unmapped(min_fishing_speed_threshold),
-                max_fishing_speed_threshold=unmapped(max_fishing_speed_threshold),
-                minimum_minutes_of_emission_at_sea=unmapped(
-                    minimum_minutes_of_emission_at_sea
-                ),
-                upstream_tasks=[reset],
-            )
-
-        with case(recompute_all, False):
-            extract_enrich_load.map(
-                periods,
-                minimum_consecutive_positions=unmapped(minimum_consecutive_positions),
-                min_fishing_speed_threshold=unmapped(min_fishing_speed_threshold),
-                max_fishing_speed_threshold=unmapped(max_fishing_speed_threshold),
-                minimum_minutes_of_emission_at_sea=unmapped(
-                    minimum_minutes_of_emission_at_sea
-                ),
-            )
+        extract_enrich_load.map(
+            periods,
+            minimum_consecutive_positions=unmapped(minimum_consecutive_positions),
+            min_fishing_speed_threshold=unmapped(min_fishing_speed_threshold),
+            max_fishing_speed_threshold=unmapped(max_fishing_speed_threshold),
+            minimum_minutes_of_emission_at_sea=unmapped(
+                minimum_minutes_of_emission_at_sea
+            ),
+            recompute_all=unmapped(recompute_all),
+        )
 
 flow.file_name = Path(__file__).name

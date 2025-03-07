@@ -11,7 +11,6 @@ from src.pipeline.flows.enrich_positions import (
     filter_already_enriched_vessels,
     flow,
     load_fishing_activity,
-    reset_positions,
 )
 from src.pipeline.helpers.dates import Period
 from src.read_query import read_query
@@ -331,7 +330,7 @@ def test_enrich_positions_by_vessel_handles_empty_input():
     )
 
 
-def test_load_then_reset_fishing_activity(reset_test_data):
+def test_load_fishing_activity(reset_test_data):
     positions_1 = pd.DataFrame(
         {
             "id": [13632807],
@@ -401,37 +400,6 @@ def test_load_then_reset_fishing_activity(reset_test_data):
         loaded_positions,
         check_dtype=False,
     )
-
-    period = Period(start=now - timedelta(hours=4), end=now - timedelta(hours=2))
-    reset_positions.run(period)
-
-    not_enriched_ids = read_query(
-        "SELECT id FROM positions WHERE is_at_port IS NULL ORDER BY id",
-        db="monitorfish_remote",
-    )["id"].tolist()
-
-    assert not_enriched_ids == [
-        13632807,
-        13634205,
-        13635518,
-        13639642,
-        13740935,
-    ]
-
-    positions_reset = read_query(
-        """SELECT
-            is_at_port,
-            meters_from_previous_position,
-            time_since_previous_position,
-            average_speed,
-            is_fishing,
-            time_emitting_at_sea
-        FROM positions
-        WHERE id IN (13632807, 13634205, 13635518, 13639642)""",
-        db="monitorfish_remote",
-    )
-
-    assert positions_reset.isna().all().all()
 
 
 def test_extract_enrich_load(reset_test_data):
@@ -700,14 +668,14 @@ def test_flow_recomputes_all_when_asked_to(reset_test_data):
     expected_res = pd.DataFrame(
         columns=columns_to_check,
         data=[
-            [13632385, False, None, timedelta(), False],
-            [13633654, False, 0.747199, timedelta(minutes=30), False],
-            [13635013, False, 0.560395, timedelta(hours=1), False],
-            [13636534, False, 0.559126, timedelta(hours=1, minutes=30), False],
-            [13637980, False, 1.002370, timedelta(hours=2), True],
-            [13639240, False, 0.600405, timedelta(hours=2, minutes=30), True],
-            [13640592, False, 0.559129, timedelta(hours=3), False],
-            [13641745, False, 1.351540, timedelta(hours=3, minutes=30), None],
+            [13632385, False, 2.690000, timedelta(days=1), True],
+            [13633654, False, 0.747199, timedelta(days=1, minutes=30), True],
+            [13635013, False, 0.560395, timedelta(days=1, hours=1), False],
+            [13636534, False, 0.559126, timedelta(days=1, hours=1, minutes=30), False],
+            [13637980, False, 1.002370, timedelta(days=1, hours=2), True],
+            [13639240, False, 0.600405, timedelta(days=1, hours=2, minutes=30), True],
+            [13640592, False, 0.559129, timedelta(days=1, hours=3), False],
+            [13641745, False, 1.351540, timedelta(days=1, hours=3, minutes=30), None],
         ],
     )
     pd.testing.assert_frame_equal(expected_res, positions_after[columns_to_check])

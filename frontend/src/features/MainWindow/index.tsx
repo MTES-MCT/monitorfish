@@ -21,8 +21,8 @@ import { PreviewFilteredVessels } from './components/PreviewFilteredVessels'
 import { SideWindowLauncher } from '../SideWindow/SideWindowLauncher'
 import { VesselList } from '../Vessel/components/VesselList'
 import { VesselLoader } from '../Vessel/components/VesselLoader'
-import { VesselSidebar } from '../Vessel/components/VesselSidebar'
-import { VesselSidebarHeader } from '../Vessel/components/VesselSidebar/VesselSidebarHeader'
+import { VesselSidebar } from '../Vessel/components/VesselSidebar/components'
+import { VesselSidebarHeader } from '../Vessel/components/VesselSidebar/components/VesselSidebarHeader'
 
 export function MainWindow() {
   const isControlUnitDialogDisplayed = useMainAppSelector(

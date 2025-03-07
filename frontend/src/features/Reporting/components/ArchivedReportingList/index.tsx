@@ -2,7 +2,7 @@ import {
   SidebarHeader,
   SidebarLoadMoreYears,
   SidebarZone
-} from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
+} from '@features/Vessel/components/VesselSidebar/components/common_styles/common.style'
 import { Accent, Button, customDayjs, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'

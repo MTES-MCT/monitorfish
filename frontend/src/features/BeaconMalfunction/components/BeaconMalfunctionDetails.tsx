@@ -1,6 +1,8 @@
 import { COLORS } from '@constants/constants'
 import { BeaconMalfunctionDetailsFollowUp } from '@features/BeaconMalfunction/components/BeaconMalfunctionBoard/BeaconMalfunctionDetailsFollowUp'
 import { EquipmentTab } from '@features/BeaconMalfunction/constants'
+import { BeaconMalfunctionBody } from '@features/Vessel/components/VesselSidebar/components/Equipment/resume/BeaconMalfunctionBody'
+import { CurrentBeaconMalfunctionBody } from '@features/Vessel/components/VesselSidebar/components/Equipment/resume/CurrentBeaconMalfunctionBody'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import styled from 'styled-components'
@@ -8,8 +10,6 @@ import styled from 'styled-components'
 import { setBeaconMalfunctionsTab } from '../../../domain/shared_slices/BeaconMalfunction'
 import { getDateTime } from '../../../utils'
 import ArrowSVG from '../../icons/Picto_fleche-pleine-droite.svg?react'
-import { BeaconMalfunctionBody } from '../../Vessel/components/VesselSidebar/Equipment/resume/BeaconMalfunctionBody'
-import { CurrentBeaconMalfunctionBody } from '../../Vessel/components/VesselSidebar/Equipment/resume/CurrentBeaconMalfunctionBody'
 import { getFirstVesselStatus } from '../utils'
 
 type BeaconMalfunctionDetailsProps = {

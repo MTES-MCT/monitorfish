@@ -69,6 +69,8 @@ class GetPendingAlertsUTests {
                 AlertTypeMapping.MISSING_DEP_ALERT,
                 AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT,
                 AlertTypeMapping.SUSPICION_OF_UNDER_DECLARATION_ALERT,
+                AlertTypeMapping.BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT,
+                AlertTypeMapping.NEAFC_FISHING_ALERT,
             ),
         )
         Mockito.verify(infractionRepository, Mockito.times(1)).findInfractionByNatinfCode(eq(7059))

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-21 10:14+0100\n"
+"POT-Creation-Date: 2025-03-05 15:32+0100\n"
 "PO-Revision-Date: 2022-11-16 16:45+0000\n"
 "Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2025\n"
 "Language-Team: French (https://app.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
@@ -88,7 +88,27 @@ msgstr ""
 "alerte de pêche en zone RTC : Trace VMS indiquant une activité de pêche dans"
 " une zone de fermeture en temps réel (RTC)"
 
-#: ../source/alerts.rst:15 f495746f408b476c96fc885a0d404659
+#: ../source/alerts.rst:14 9c3383307b1a42cd945788bfc421b7c6
+msgid ""
+"NEAFC fishing alert : VMS track showing fishing activity in the NEAFC area "
+"(subject to authorization by NEAFC)"
+msgstr ""
+"alerte de pêche en zone CPANE : Trajectoire VMS indiquant une activité de "
+"pêche dans la zone CPANE (pêche soumise à autorisation de la CPANE)"
+
+#: ../source/alerts.rst:15 8e634c6b8c1845deb395c07d3edbdb0c
+msgid ""
+"exceeding the maximum authorized blue ling (BLI) quantity held onboard : "
+"logbook data showing more than 6 tons of blue ling (BLI) onboard a vessel "
+"present in area 27.6.a, which is the maximum quantity authorized by R(UE) "
+"1241."
+msgstr ""
+"dépassement de la quantité maximale autorisée de lingue bleue (BLI) détenue "
+"à bord : données du journal de bord indiquant la présence de plus de 6 "
+"tonnes de lingue bleue (BLI) à bord d'un navire présent dans la zone 27.6.a,"
+" qui est la quantité maximale autorisée par la R(UE) 1241."
+
+#: ../source/alerts.rst:17 f495746f408b476c96fc885a0d404659
 msgid ""
 "When signs of fraud are detected on a vessel, it appears on the map with a "
 "red halo :"
@@ -104,7 +124,7 @@ msgstr ""
 "Carte montrant la piste VMS d'un navire qui présente des signes de chalutage"
 " illégal dans la bande côtière des 3 milles nautiques."
 
-#: ../source/alerts.rst:21 15027adb885d4f9aaec559b7fe1343cc
+#: ../source/alerts.rst:23 15027adb885d4f9aaec559b7fe1343cc
 msgid ""
 "*Map showing a vessel's VMS track which presents signs of illegal trawling "
 "in the 3 nautical miles coastal strip*"
@@ -112,7 +132,7 @@ msgstr ""
 "*Carte montrant la trace VMS d'un navire qui présente des signes de "
 "chalutage illégal dans la bande côtière des 3 milles nautiques*."
 
-#: ../source/alerts.rst:23 5f3dfbfba4564a2c858902e72634fe47
+#: ../source/alerts.rst:25 5f3dfbfba4564a2c858902e72634fe47
 msgid ""
 "Alerts are then humanly checked and validated / invalidated. Validated "
 "alerts become *reportings* which are stored in the Monitorfish database and "
@@ -122,7 +142,7 @@ msgstr ""
 " alertes validées deviennent des *signalements* qui sont stockés dans la "
 "base de données Monitorfish et s'ajoutent à l'historique du navire."
 
-#: ../source/alerts.rst:25 0ec65f29d69246f59de3219b7168d288
+#: ../source/alerts.rst:27 0ec65f29d69246f59de3219b7168d288
 msgid ""
 "Alerts make use of the fishing detection algorithm of the :doc:`enrich "
 "position flow <flows/enrich-positions>`."

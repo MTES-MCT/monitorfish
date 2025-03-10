@@ -15,14 +15,21 @@ import { useListSorting } from '@hooks/useListSorting'
 import { useLoadingState } from '@hooks/useLoadingState'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { trackEvent } from '@hooks/useTracking'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button, Icon, Size, TableWithSelectableRows, usePrevious } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { captureMessage } from '@sentry/react'
-import { flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from '@tanstack/react-table'
+import {
+  type ExpandedState,
+  flexRender,
+  getCoreRowModel,
+  getExpandedRowModel,
+  useReactTable
+} from '@tanstack/react-table'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { getTableColumns } from './columns'
@@ -32,6 +39,7 @@ import { FilterTags } from './FilterTags'
 import { Row } from './Row'
 import { TableBodyEmptyData } from './TableBodyEmptyData'
 import { getTitle } from './utils'
+import { UserAccountContext } from '../../../../context/UserAccountContext'
 import { SkeletonRow } from '../../../../ui/Table/SkeletonRow'
 import { useGetPriorNotificationsQuery, useGetPriorNotificationsToVerifyQuery } from '../../priorNotificationApi'
 import { priorNotificationActions } from '../../slice'
@@ -47,6 +55,7 @@ type PriorNotificationListProps = Readonly<{
 export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps) {
   const lastFetchStartDateRef = useRef<number | undefined>(undefined)
   const { forceUpdate } = useForceUpdate()
+  const userAccount = useContext(UserAccountContext)
 
   const dispatch = useMainAppDispatch()
   const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
@@ -62,6 +71,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   const isSuperUser = useIsSuperUser()
 
   const [rowSelection, setRowSelection] = useState({})
+  const [expanded, setExpanded] = useState<ExpandedState>({})
   const [lastFetchDuration, setLastFetchDuration] = useState<number | undefined>(undefined)
 
   const { apiPaginationParams, reactTablePaginationState, setReactTablePaginationState } = useListPagination(
@@ -156,11 +166,20 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
     getRowId: row => row.reportId,
     manualPagination: true,
     manualSorting: true,
+    onExpandedChange: nexState => {
+      trackEvent({
+        action: "Ouverture/fermeture d'une ligne de préavis",
+        category: 'PNO',
+        name: userAccount?.email ?? ''
+      })
+      setExpanded(nexState)
+    },
     onPaginationChange: setReactTablePaginationState,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setReactTableSortingState,
     rowCount: totalLength ?? 0,
     state: {
+      expanded,
       pagination: reactTablePaginationState,
       rowSelection,
       sorting: reactTableSortingState

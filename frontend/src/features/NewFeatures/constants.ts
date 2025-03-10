@@ -7,7 +7,7 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
-        date: '2024-03-5',
+        date: '2024-03-10',
         description:
           "Ajout d'alertes opérationnelles signalant qu'un navire a atteint la quantité maximale autorisée " +
           'de lingue bleue par le R(UE) 1241 de 6 tonnes à bord en zone 27.6.a.',
@@ -16,7 +16,7 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
         type: 'NEW_FEATURE'
       },
       {
-        date: '2024-03-5',
+        date: '2024-03-10',
         description:
           "Ajout d'alertes opérationnelles de détection d'activité de pêche en zone NEAFC (pêche soumise à " +
           'autorisation).',

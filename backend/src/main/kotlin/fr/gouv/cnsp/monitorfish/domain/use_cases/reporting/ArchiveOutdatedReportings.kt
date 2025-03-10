@@ -27,7 +27,9 @@ class ArchiveOutdatedReportings(
                         it.second.type == AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT ||
                         it.second.type == AlertTypeMapping.THREE_MILES_TRAWLING_ALERT ||
                         it.second.type == AlertTypeMapping.MISSING_DEP_ALERT ||
-                        it.second.type == AlertTypeMapping.SUSPICION_OF_UNDER_DECLARATION_ALERT
+                        it.second.type == AlertTypeMapping.SUSPICION_OF_UNDER_DECLARATION_ALERT ||
+                        it.second.type == AlertTypeMapping.BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT ||
+                        it.second.type == AlertTypeMapping.NEAFC_FISHING_ALERT
                 }.map { it.first }
 
         logger.info("Found ${filteredReportingIdsToArchive.size} reportings alerts to archive.")

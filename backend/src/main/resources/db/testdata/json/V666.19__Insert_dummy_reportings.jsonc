@@ -408,7 +408,7 @@
                 "type": "ALERT",
                 "validation_date:sql": "NOW() - INTERVAL '2 year 1 hour'",
                 "value:jsonb": {
-                    "seaFront": "SA",
+                    "seaFront": "MED",
                     "riskFactor": 2.647,
                     "type": "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT",
                     "natinfCode": 2610

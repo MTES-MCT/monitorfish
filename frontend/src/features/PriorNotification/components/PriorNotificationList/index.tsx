@@ -1,46 +1,46 @@
-import {BackendApi} from '@api/BackendApi.types'
-import {RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS, RtkCacheTagType} from '@api/constants'
-import {ErrorWall} from '@components/ErrorWall'
-import {Logbook} from '@features/Logbook/Logbook.types'
-import {OpenedPriorNotificationType} from '@features/PriorNotification/constants'
-import {openManualPriorNotificationForm} from '@features/PriorNotification/useCases/openManualPriorNotificationForm'
-import {Body} from '@features/SideWindow/components/Body'
-import {Header} from '@features/SideWindow/components/Header'
-import {Page} from '@features/SideWindow/components/Page'
-import {SubMenu} from '@features/SideWindow/SubMenu'
-import {useForceUpdate} from '@hooks/useForceUpdate'
-import {useHandleFrontendApiError} from '@hooks/useHandleFrontendApiError'
-import {useListPagination} from '@hooks/useListPagination'
-import {useListSorting} from '@hooks/useListSorting'
-import {useLoadingState} from '@hooks/useLoadingState'
-import {useMainAppDispatch} from '@hooks/useMainAppDispatch'
-import {useMainAppSelector} from '@hooks/useMainAppSelector'
-import {DisplayedErrorKey} from '@libs/DisplayedError/constants'
-import {Accent, Button, Icon, Size, TableWithSelectableRows, usePrevious} from '@mtes-mct/monitor-ui'
-import {skipToken} from '@reduxjs/toolkit/query'
-import {captureMessage} from '@sentry/react'
-import {flexRender, getCoreRowModel, getExpandedRowModel, useReactTable} from '@tanstack/react-table'
-import {isLegacyFirefox} from '@utils/isLegacyFirefox'
-import {useIsSuperUser} from 'auth/hooks/useIsSuperUser'
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
-import styled, {css} from 'styled-components'
+import { BackendApi } from '@api/BackendApi.types'
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS, RtkCacheTagType } from '@api/constants'
+import { ErrorWall } from '@components/ErrorWall'
+import { Logbook } from '@features/Logbook/Logbook.types'
+import { OpenedPriorNotificationType } from '@features/PriorNotification/constants'
+import { openManualPriorNotificationForm } from '@features/PriorNotification/useCases/openManualPriorNotificationForm'
+import { Body } from '@features/SideWindow/components/Body'
+import { Header } from '@features/SideWindow/components/Header'
+import { Page } from '@features/SideWindow/components/Page'
+import { SubMenu } from '@features/SideWindow/SubMenu'
+import { useForceUpdate } from '@hooks/useForceUpdate'
+import { useHandleFrontendApiError } from '@hooks/useHandleFrontendApiError'
+import { useListPagination } from '@hooks/useListPagination'
+import { useListSorting } from '@hooks/useListSorting'
+import { useLoadingState } from '@hooks/useLoadingState'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { trackEvent } from '@hooks/useTracking'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+import { Accent, Button, Icon, Size, TableWithSelectableRows, usePrevious } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
+import { captureMessage } from '@sentry/react'
+import { flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from '@tanstack/react-table'
+import { isLegacyFirefox } from '@utils/isLegacyFirefox'
+import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import styled, { css } from 'styled-components'
 
-import {getTableColumns} from './columns'
-import {DEFAULT_PAGE_SIZE, SUB_MENUS_AS_OPTIONS} from './constants'
-import {FilterBar} from './FilterBar'
-import {FilterTags} from './FilterTags'
-import {Row} from './Row'
-import {TableBodyEmptyData} from './TableBodyEmptyData'
-import {getTitle} from './utils'
-import {SkeletonRow} from '../../../../ui/Table/SkeletonRow'
-import {useGetPriorNotificationsQuery, useGetPriorNotificationsToVerifyQuery} from '../../priorNotificationApi'
-import {priorNotificationActions} from '../../slice'
-import {LogbookPriorNotificationForm} from '../LogbookPriorNotificationForm'
-import {ManualPriorNotificationForm} from '../ManualPriorNotificationForm'
-import {ReportingList} from '../ReportingList'
+import { getTableColumns } from './columns'
+import { DEFAULT_PAGE_SIZE, SUB_MENUS_AS_OPTIONS } from './constants'
+import { FilterBar } from './FilterBar'
+import { FilterTags } from './FilterTags'
+import { Row } from './Row'
+import { TableBodyEmptyData } from './TableBodyEmptyData'
+import { getTitle } from './utils'
+import { SkeletonRow } from '../../../../ui/Table/SkeletonRow'
+import { useGetPriorNotificationsQuery, useGetPriorNotificationsToVerifyQuery } from '../../priorNotificationApi'
+import { priorNotificationActions } from '../../slice'
+import { LogbookPriorNotificationForm } from '../LogbookPriorNotificationForm'
+import { ManualPriorNotificationForm } from '../ManualPriorNotificationForm'
+import { ReportingList } from '../ReportingList'
 
-import type {AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup} from '@constants/seafront'
-import {trackEvent} from "@hooks/useTracking";
+import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 
 type PriorNotificationListProps = Readonly<{
   isFromUrl: boolean
@@ -158,21 +158,21 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
     getRowId: row => row.reportId,
     manualPagination: true,
     manualSorting: true,
-    onPaginationChange: setReactTablePaginationState,
-    onRowSelectionChange: setRowSelection,
-    onSortingChange: setReactTableSortingState,
     onExpandedChange: nexState => {
       trackEvent({
         action: "Ouverture/fermeture d'une ligne de préavis",
-        category: 'PNO',
+        category: 'PNO'
       })
       setExpanded(nexState)
     },
+    onPaginationChange: setReactTablePaginationState,
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setReactTableSortingState,
     rowCount: totalLength ?? 0,
     state: {
+      expanded,
       pagination: reactTablePaginationState,
       rowSelection,
-      expanded,
       sorting: reactTableSortingState
     }
   })

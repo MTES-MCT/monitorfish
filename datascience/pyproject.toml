@@ -33,6 +33,7 @@ duckdb = "^0.10.1"
 h3 = "^4.2.1"
 pypdf = "^5.3.1"
 fiona = "^1.10.1"
+clickhouse-connect = "^0.8.15"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -61,6 +62,7 @@ pygeos = "^0.14"
 odfpy = "^1.4.1"
 fuzzywuzzy = "^0.18.0"
 notebook = "^7.3.2"
+scikit-learn = "^1.6.1"
 
 [build-system]
 requires = ["poetry-core"]

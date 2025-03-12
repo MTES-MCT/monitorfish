@@ -61,6 +61,7 @@ pygeos = "^0.14"
 odfpy = "^1.4.1"
 fuzzywuzzy = "^0.18.0"
 notebook = "^7.3.2"
+scikit-learn = "^1.6.1"
 
 [build-system]
 requires = ["poetry-core"]

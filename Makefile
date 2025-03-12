@@ -1,5 +1,6 @@
 INFRA_FOLDER="$(shell pwd)/infra/configurations/"
 HOST_MIGRATIONS_FOLDER=$(shell pwd)/backend/src/main/resources/db/migration
+DATA_WAREHOUSE_INPUT_DATA_FOLDER=$(shell pwd)/datascience/tests/test_data/clickhouse_user_files
 
 SHELL := /bin/bash
 .SHELLFLAGS = -ec
@@ -284,8 +285,29 @@ docker-push-pipeline:
 
 install-pipeline:
 	cd datascience && poetry install
+
+stop-data-warehouse:
+	export DATA_WAREHOUSE_PASSWORD=password && \
+	export DATA_WAREHOUSE_USER=clickhouse_user && \
+	export DATA_WAREHOUSE_INPUT_DATA_FOLDER=$(DATA_WAREHOUSE_INPUT_DATA_FOLDER) && \
+	docker compose -f ./datascience/tests/docker-compose.yml down -v
+
+fetch-external-data:
+	git clone --depth=1 --branch=main https://github.com/MTES-MCT/fisheries-and-environment-data-warehouse.git ./datascience/tests/test_data/external/data_warehouse || echo "Data Warehouse repository already present - skipping git clone"
+
+erase-external-data:
+	rm -rf datascience/tests/test_data/external/data_warehouse
+
+run-data-warehouse:
+	export DATA_WAREHOUSE_PASSWORD=password && \
+	export DATA_WAREHOUSE_USER=clickhouse_user && \
+	export DATA_WAREHOUSE_INPUT_DATA_FOLDER=$(DATA_WAREHOUSE_INPUT_DATA_FOLDER) && \
+	docker compose -f ./datascience/tests/docker-compose.yml up -d --remove-orphans
+
 test-pipeline:
 	cd datascience && export TEST_LOCAL=True && poetry run coverage run -m pytest --pdb tests/ && poetry run coverage report && poetry run coverage html
+
+test-pipeline-with-data_warehouse: fetch-external-data run-data-warehouse test-pipeline stop-data-warehouse
 
 # ----------------------------------------------------------
 # Remote: Database commands

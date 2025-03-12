@@ -180,6 +180,10 @@ frontend/cypress/videos/
 /datascience/src/pipeline/data/non_commited_data/pno_segments_subscriptions.csv
 /datascience/src/pipeline/data/non_commited_data/pno_vessels_subscriptions.csv
 
+# Ignore downloaded external repositories
+datascience/tests/test_data/external/*
+!datascience/tests/test_data/external/README.md
+
 # Kotlin sessions
 .kotlin/
 

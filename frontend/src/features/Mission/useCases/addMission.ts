@@ -1,5 +1,5 @@
+import { SideWindowMenuKey, SideWindowStatus } from '@features/SideWindow/constants'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { SideWindowMenuKey, SideWindowStatus } from 'domain/entities/sideWindow/constants'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 
 import { askForSideWindowDraftCancellationConfirmation } from '../../SideWindow/useCases/askForSideWindowDraftCancellationConfirmation'

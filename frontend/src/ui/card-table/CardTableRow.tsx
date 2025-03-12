@@ -16,6 +16,6 @@ export const CardTableRow = styled(List.Item).attrs(() => ({
   height: 42px;
   margin-top: 6px;
   transition: background 3s;
-  animation: ${p => (p.toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset')};
+  animation: ${p => (p.toClose ? 'close-useCases-transition-item 3s ease forwards' : 'unset')};
   overflow: hidden;
 `

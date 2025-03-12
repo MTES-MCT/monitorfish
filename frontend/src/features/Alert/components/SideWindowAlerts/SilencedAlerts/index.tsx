@@ -1,4 +1,6 @@
 import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
+import { addSilencedAlert } from '@features/Alert/useCases/addSilencedAlert'
+import { reactivateSilencedAlert } from '@features/Alert/useCases/reactivateSilencedAlert'
 import { Flag } from '@features/Vessel/components/VesselList/tableCells'
 import { sortArrayByColumn, SortType } from '@features/Vessel/components/VesselList/tableSort'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
@@ -12,8 +14,6 @@ import styled, { css } from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { AddSilencedAlertDialog } from './AddSilencedAlertDialog'
-import { addSilencedAlert } from '../../../../../domain/use_cases/alert/addSilencedAlert'
-import { reactivateSilencedAlert } from '../../../../../domain/use_cases/alert/reactivateSilencedAlert'
 import { getDateTime } from '../../../../../utils'
 import SearchIconSVG from '../../../../icons/Loupe_dark.svg?react'
 import { showVessel } from '../../../../Vessel/useCases/showVessel'
@@ -288,7 +288,7 @@ const Row = styled(List.Item)<{
   $isHeader?: boolean
   $toClose?: boolean
 }>`
-  animation: ${p => (p.$toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset')};
+  animation: ${p => (p.$toClose ? 'close-useCases-transition-item 3s ease forwards' : 'unset')};
   background: ${p => {
     if (p.$isHeader) {
       return p.theme.color.white

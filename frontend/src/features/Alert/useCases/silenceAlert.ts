@@ -10,7 +10,7 @@ import { VesselFeature } from '@features/Vessel/types/vessel'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { deleteListItems } from '@utils/deleteListItems'
 
-import { setError } from '../../shared_slices/Global'
+import { setError } from '../../../domain/shared_slices/Global'
 
 import type { SilencedAlertPeriodRequest } from '@features/Alert/types'
 import type { MainAppThunk } from '@store'

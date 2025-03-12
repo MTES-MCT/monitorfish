@@ -14,7 +14,16 @@ import { deleteReporting } from '../deleteReporting'
  */
 
 // @ts-ignore
-jest.mock('../../reportingApi', () => jest.fn())
+jest.mock('../../reportingApi', () => ({
+  reportingApi: {
+    endpoints: {
+      archiveReporting: {
+        // @ts-ignore
+        initiate: jest.fn()
+      }
+    }
+  }
+}))
 // @ts-ignore
 jest.mock('../deleteReporting', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -43,7 +52,7 @@ describe('archiveReporting()', () => {
     jest.resetModules()
   })
 
-  it('Should delete reporting When alert is MISSING_FAR_48_HOURS_ALERT', async () => {
+  it('Should delete reporting When useCases is MISSING_FAR_48_HOURS_ALERT', async () => {
     // When
     mockedDispatch(archiveReporting(fortyHeightHourAlertReporting), INITIAL_STATE)
 
@@ -51,7 +60,7 @@ describe('archiveReporting()', () => {
     expect(deleteReporting).toHaveBeenCalled()
   })
 
-  it('Should not delete reporting When the alert is not an MISSING_FAR_48_HOURS_ALERT', async () => {
+  it('Should not delete reporting When the useCases is not an MISSING_FAR_48_HOURS_ALERT', async () => {
     // Given
     const otherAlertReporting = {
       ...fortyHeightHourAlertReporting,

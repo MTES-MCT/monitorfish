@@ -1,16 +1,11 @@
-/**
- * /!\ Do not shorten these 3 imports as they are required by the web worker `MonitorFishWebWorker`
- * It will fail the Vite build : `Rollup failed to resolve import [...]`
- */
+import { BaseLayer } from '@features/Map/constants'
+import { MonitorFishMap } from '@features/Map/Map.types'
+import { VesselLabel } from '@features/Vessel/label.types'
+import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import countries from 'i18n-iso-countries'
 
-import { BaseLayer } from '../../Map/constants'
-import { MonitorFishMap } from '../../Map/Map.types'
-import { VesselLabel } from '../label.types'
-import { getVesselCompositeIdentifier } from '../utils'
-
-import type { ShowedVesselTrack } from './types'
 import type { PartialExcept } from '../../../types'
+import type { ShowedVesselTrack } from '@features/Vessel/types/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
 export const VESSEL_ALERT_STYLE = 1

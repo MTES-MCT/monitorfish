@@ -2,11 +2,11 @@ import { Mission } from '@features/Mission/mission.types'
 
 import { openSideWindowNewMission } from './utils'
 import { SeafrontGroup } from '../../../../src/constants/seafront'
-import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 import { FAKE_MISSION_WITH_EXTERNAL_ACTIONS, FAKE_MISSION_WITHOUT_EXTERNAL_ACTIONS } from '../../constants'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
+import {SideWindowMenuLabel} from "@features/SideWindow/constants";
 
 context('Side Window > Mission Form > Main Form', () => {
   it('Should add and remove a control unit', () => {

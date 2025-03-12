@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 
 import { getHealthcheckWarnings } from '../utils'
 
-describe('Healthcheck/utils.tsx', () => {
+describe('Healthcheck/utils.ts', () => {
   it('getHealthcheckWarnings Should contain no warnings', async () => {
     // When
     const warnings = getHealthcheckWarnings({

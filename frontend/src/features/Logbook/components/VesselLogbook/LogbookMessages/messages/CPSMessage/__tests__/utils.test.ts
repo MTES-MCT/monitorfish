@@ -2,7 +2,7 @@ import { expect } from '@jest/globals'
 
 import { getHours, getRemainingMinutes } from '../utils'
 
-describe('Logbook/components/vesselLogbook/LogbookMessages/CPSMessage/utils.tsx', () => {
+describe('Logbook/components/vesselLogbook/LogbookMessages/CPSMessage/utils.ts', () => {
   it('getHours Should get the hours', async () => {
     const hours = getHours(1565)
 

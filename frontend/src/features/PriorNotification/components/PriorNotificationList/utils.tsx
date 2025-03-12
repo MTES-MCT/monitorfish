@@ -270,7 +270,7 @@ export function getStaticApiFilterFromListFilter(listFilter: ListFilter): Logboo
     specyCodes: listFilter.specyCodes,
     states: getStatesFromFilterStatuses(listFilter.statuses),
     tripGearCodes: listFilter.gearCodes,
-    tripSegmentCodes: listFilter.fleetSegmentSegments,
+    tripSegmentCodes: listFilter.fleetSegments,
     ...getApiFilterFromExpectedArrivalPeriod(listFilter.expectedArrivalPeriod, listFilter.expectedArrivalCustomPeriod),
     ...getApiFilterFromLastControlPeriod(listFilter.lastControlPeriod)
   }

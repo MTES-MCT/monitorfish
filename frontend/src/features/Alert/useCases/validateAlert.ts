@@ -8,7 +8,7 @@ import { vesselApi } from '@features/Vessel/vesselApi'
 import { deleteListItems } from '@utils/deleteListItems'
 import { updateListItemsProp } from '@utils/updateListItemsProp'
 
-import { setError } from '../../shared_slices/Global'
+import { setError } from '../../../domain/shared_slices/Global'
 
 import type { LEGACY_PendingAlert } from '@features/Alert/types'
 import type { MainAppThunk } from '@store'

@@ -3,11 +3,9 @@ import styled from 'styled-components'
 const RawHeader = styled.div`
   align-items: center;
   background-color: ${p => p.theme.color.white};
-  border-bottom: solid 2px ${p => p.theme.color.gainsboro};
   display: flex;
   justify-content: space-between;
-  min-height: 80px;
-  padding: 0 32px;
+  padding: 40px 32px 0;
 `
 
 const Title = styled.h1`

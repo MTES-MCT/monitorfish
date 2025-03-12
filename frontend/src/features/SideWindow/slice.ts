@@ -1,7 +1,7 @@
+import { SideWindowMenuKey, SideWindowStatus } from '@features/SideWindow/constants'
 import { createEntityAdapter, createSlice, type EntityState, type PayloadAction } from '@reduxjs/toolkit'
 
 import { getFullPathFromPath } from './utils'
-import { SideWindowMenuKey, SideWindowStatus } from '../../domain/entities/sideWindow/constants'
 
 import type { SideWindow } from './SideWindow.types'
 

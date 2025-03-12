@@ -5,7 +5,7 @@ import { useGetFilteredVesselsLastPositions } from '@features/Vessel/hooks/useGe
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTableVirtualizer } from '@hooks/useTableVirtualizer'
 import { trackEvent } from '@hooks/useTracking'
-import { Icon, TableWithSelectableRows, useNewWindow, usePrevious } from '@mtes-mct/monitor-ui'
+import { Icon, pluralize, TableWithSelectableRows, useNewWindow, usePrevious } from '@mtes-mct/monitor-ui'
 import {
   type ExpandedState,
   flexRender,
@@ -131,9 +131,9 @@ export function VesselList({ isFromUrl }: VesselListProps) {
 
           <TableOuterWrapper $isFromUrl={isFromUrl}>
             <TableTop $isFromUrl={isFromUrl}>
-              <TableLegend>{`${
+              <TableLegend data-cy="vessel-list-length">{`${
                 isFilteringVesselList || tableData.length === undefined ? '...' : tableData.length
-              } navires équipé VMS `}</TableLegend>
+              } ${pluralize('navire', tableData.length)} ${pluralize('équipé', tableData.length)} VMS `}</TableLegend>
             </TableTop>
 
             <TableInnerWrapper ref={tableContainerRef} $filterHeight={filterHeight} $hasError={false}>

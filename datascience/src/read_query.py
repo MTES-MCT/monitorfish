@@ -8,7 +8,7 @@ from sqlalchemy.engine import Connection, Engine
 
 from config import QUERIES_LOCATION
 
-from .db_config import create_engine
+from .db_config import create_datawarehouse_client, create_engine
 
 
 def read_saved_query(
@@ -73,7 +73,7 @@ def read_saved_query(
     """
     sql_filepath = QUERIES_LOCATION / sql_filepath
     with open(sql_filepath, "r") as sql_file:
-        query = text(sql_file.read())
+        query = sql_file.read()
 
     return read_query(
         query,
@@ -148,7 +148,11 @@ def read_query(
     Returns:
         Union[pd.DataFrame, gpd.DataFrame]: Query results
     """
-
+    if db == "data_warehouse":
+        client = create_datawarehouse_client()
+        return client.query_df(query, parameters=params)
+    else:
+        query = text(query)
     if db:
         con = create_engine(db=db, execution_options=dict(stream_results=True))
     elif con:

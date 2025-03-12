@@ -3,9 +3,9 @@ import { missionListActions } from '@features/Mission/components/MissionList/sli
 import { MissionDateRangeFilter, MissionFilterType } from '@features/Mission/components/MissionList/types'
 import { Mission } from '@features/Mission/mission.types'
 import { monitorenvMissionApi } from '@features/Mission/monitorenvMissionApi'
+import { SideWindowMenuKey } from '@features/SideWindow/constants'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { customDayjs, logSoftError } from '@mtes-mct/monitor-ui'
-import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
 
 export const cancelCreateAndRedirectToFilteredList =
   ({ controlUnitName, missionId }: { controlUnitName: string; missionId: number | undefined }) =>

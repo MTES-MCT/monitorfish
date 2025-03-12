@@ -2,6 +2,7 @@ import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_THIRTY_SECONDS_POLLING_QUERY_OPTIO
 import { ALL_SEAFRONT_GROUP } from '@constants/seafront'
 import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
 import { useGetPriorNotificationsToVerifyQuery } from '@features/PriorNotification/priorNotificationApi'
+import { SideWindowMenuKey, SideWindowStatus } from '@features/SideWindow/constants'
 import { sideWindowActions } from '@features/SideWindow/slice'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -10,7 +11,6 @@ import { Icon } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
-import { SideWindowMenuKey, SideWindowStatus } from '../../../domain/entities/sideWindow/constants'
 
 export function PriorNotificationListButton() {
   const isSuperUser = useIsSuperUser()

@@ -36,7 +36,7 @@ const slice = createSlice({
     },
 
     /**
-     * Focus a pending alert in the alert list
+     * Focus a pending useCases in the useCases list
      */
     focusOnAlert(state, action: PayloadAction<AlertNameAndVesselIdentity>) {
       const { externalReferenceNumber, internalReferenceNumber, ircs, name } = action.payload
@@ -80,7 +80,7 @@ const slice = createSlice({
     },
 
     /**
-     * Reset focus on alert
+     * Reset focus on useCases
      */
     resetFocusOnPendingAlert(state) {
       state.focusedPendingAlertId = undefined

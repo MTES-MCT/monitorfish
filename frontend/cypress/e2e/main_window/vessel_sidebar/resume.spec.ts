@@ -38,7 +38,7 @@ context('Vessel sidebar resume tab', () => {
     cy.get('*[data-cy^="show-risk-factor-explanation-modal"]').click({ force: true, timeout: 10000 })
   })
 
-  it('An alert should be shown on the vessel sidebar', () => {
+  it('An useCases should be shown on the vessel sidebar', () => {
     // When
     cy.get('*[data-cy^="vessel-search-input"]').type('tempete couleur')
     cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()

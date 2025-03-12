@@ -9,5 +9,6 @@ export enum DisplayedErrorKey {
   SIDE_WINDOW_PRIOR_NOTIFICATION_LIST_ERROR = 'sideWindowPriorNotificationListError',
   SIDE_WINDOW_REPORTING_FORM_ERROR = 'sideWindowReportingFormError',
   SIDE_WINDOW_REPORTING_LIST_ERROR = 'sideWindowReportingListError',
+  SIDE_WINDOW_VESSEL_LIST_ERROR = 'sideWindowVesselListError',
   VESSEL_SIDEBAR_ERROR = 'vesselSidebarError'
 }

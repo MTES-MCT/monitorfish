@@ -1,6 +1,5 @@
-import { SideWindowMenuLabel } from 'domain/entities/sideWindow/constants'
-
 import { openSideWindowAsSuperUser, openSideWindowAsUser } from '../utils'
+import {SideWindowMenuLabel} from "@features/SideWindow/constants";
 
 export const openSideWindowPriorNotificationListAsUser = openSideWindowAsUser
 

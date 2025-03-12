@@ -71,7 +71,7 @@ export const theme = {
     // gray: '#EEEEEE', // => `lightGray`
     // grayLighter: '#F0F0F0', // => `gainsboro`
     // orange: '#F6D012', // => `goldenPoppy`
-    // Red button in alert list menu to silence an alert
+    // Red button in useCases list menu to silence an useCases
     // overlayShadowDarker: '#7077859A', // => `charcoalShadow`
     // Dotted line when there is a big "hole" between 2 last VMS positions
     // + Estimated position line

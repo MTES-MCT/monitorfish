@@ -1,5 +1,6 @@
 import { COLORS } from '@constants/constants'
 import { NO_SEAFRONT_GROUP, type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
+import { silenceAlert } from '@features/Alert/useCases/silenceAlert'
 import { sortArrayByColumn, SortType } from '@features/Vessel/components/VesselList/tableSort'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -11,7 +12,6 @@ import styled from 'styled-components'
 import { PendingAlertRow } from './PendingAlertRow'
 import { SilenceAlertMenu } from './SilenceAlertMenu'
 import { getAlertNameFromType } from './utils'
-import { silenceAlert } from '../../../../../domain/use_cases/alert/silenceAlert'
 import SearchIconSVG from '../../../../icons/Loupe_dark.svg?react'
 import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../constants'
 import { SUB_MENU_LABEL } from '../constants'
@@ -255,7 +255,7 @@ const noAlertsStyle: CSSProperties = {
 const SearchVesselInput = styled.input``
 
 const listItemStyle = (isFocused: boolean, toClose: boolean): CSSProperties => ({
-  animation: toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset',
+  animation: toClose ? 'close-useCases-transition-item 3s ease forwards' : 'unset',
   background: isFocused ? COLORS.gainsboro : COLORS.cultured,
   border: `1px solid ${COLORS.lightGray}`,
   borderRadius: 1,

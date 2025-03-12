@@ -28,7 +28,7 @@ export function FilterTags() {
 
   const hasTags =
     !!listFilterValues.countryCodes ||
-    !!listFilterValues.fleetSegmentSegments ||
+    !!listFilterValues.fleetSegments ||
     !!listFilterValues.specyCodes ||
     !!listFilterValues.gearCodes ||
     !!listFilterValues.portLocodes ||
@@ -69,14 +69,11 @@ export function FilterTags() {
               </SingleTag>
             ))}
 
-          {!!listFilterValues.fleetSegmentSegments &&
+          {!!listFilterValues.fleetSegments &&
             !!fleetSegmentsAsOptions &&
-            listFilterValues.fleetSegmentSegments.map(fleetSegmentSegment => (
-              <SingleTag
-                key={`fleetSegmentSegments-${fleetSegmentSegment}`}
-                onDelete={() => remove('fleetSegmentSegments', fleetSegmentSegment)}
-              >
-                {String(fleetSegmentsAsOptions.find(option => option.value === fleetSegmentSegment)?.label)}
+            listFilterValues.fleetSegments.map(fleetSegment => (
+              <SingleTag key={`fleetSegments-${fleetSegment}`} onDelete={() => remove('fleetSegments', fleetSegment)}>
+                {String(fleetSegmentsAsOptions.find(option => option.value === fleetSegment)?.label)}
               </SingleTag>
             ))}
 

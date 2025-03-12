@@ -20,6 +20,7 @@ interface ImportMetaEnv {
   readonly FRONTEND_SENTRY_ENV?: string
   readonly FRONTEND_SENTRY_TRACING_ORIGINS?: string
   readonly FRONTEND_SHOM_KEY: string
+  readonly FRONTEND_VESSEL_LIST_ENABLED: string
 }
 
 interface ImportMeta {

@@ -22,7 +22,7 @@ const INITIAL_STATE: SideWindowState = {
   isDraftCancellationConfirmationDialogOpen: false,
   nextPath: undefined,
   selectedPath: getFullPathFromPath({
-    menu: SideWindowMenuKey.PRIOR_NOTIFICATION_LIST
+    menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST
   }),
   status: SideWindowStatus.CLOSED
 }

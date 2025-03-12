@@ -92,8 +92,7 @@ export function VesselList({ isFromUrl }: VesselListProps) {
 
   const { rows } = table.getRowModel()
 
-  const overscan = useMemo(() => (vessels.length > 50 ? 50 : 50), [vessels])
-  const rowVirtualizer = useTableVirtualizer({ estimateSize: 42, overscan, ref: tableContainerRef, rows })
+  const rowVirtualizer = useTableVirtualizer({ estimateSize: 42, overscan: 50, ref: tableContainerRef, rows })
   const virtualRows = rowVirtualizer.getVirtualItems()
   const [paddingBeforeRows, paddingAfterRows] =
     virtualRows.length > 0

@@ -288,7 +288,7 @@ const Row = styled(List.Item)<{
   $isHeader?: boolean
   $toClose?: boolean
 }>`
-  animation: ${p => (p.$toClose ? 'close-useCases-transition-item 3s ease forwards' : 'unset')};
+  animation: ${p => (p.$toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset')};
   background: ${p => {
     if (p.$isHeader) {
       return p.theme.color.white

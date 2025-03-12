@@ -5,7 +5,7 @@ export const TableRow = styled.tr<{
   isFocused?: boolean
   toClose?: boolean
 }>`
-  animation: ${p => (p.toClose ? 'close-useCases-transition-item 3s ease forwards' : 'unset')};
+  animation: ${p => (p.toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset')};
   background: ${p => (p.isFocused ? p.theme.color.gainsboro : p.theme.color.cultured)};
   border-radius: 1px;
   border: 1px solid ${p => p.theme.color.lightGray};

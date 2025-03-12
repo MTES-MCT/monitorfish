@@ -153,7 +153,6 @@
     "type-fest": "4.36.0",
     "typescript": "5.8.2",
     "vite": "5.4.14",
-    "vite-plugin-comlink": "^5.1.0",
     "vite-plugin-svgr": "4.3.0",
     "vite-tsconfig-paths": "5.1.4",
     "whatwg-fetch": "3.6.20"

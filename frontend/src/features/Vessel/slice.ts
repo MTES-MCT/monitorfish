@@ -159,7 +159,7 @@ const vesselSlice = createSlice({
     },
 
     /**
-     * Remove the vessel useCases and update the reporting in the vessels array and selected vessel object
+     * Remove the vessel alert and update the reporting in the vessels array and selected vessel object
      * before the /vessels API is fetched from the cron
      */
     removeVesselAlertAndUpdateReporting(

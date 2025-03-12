@@ -206,7 +206,7 @@ const silenceAlertStyle: CSSProperties = {
 }
 
 const listItemStyle = (isFocused, toClose) => ({
-  animation: toClose ? 'close-useCases-transition-item 3s ease forwards' : 'unset',
+  animation: toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset',
   background: isFocused ? COLORS.gainsboro : COLORS.cultured,
   border: `1px solid ${COLORS.lightGray}`,
   borderRadius: 1,

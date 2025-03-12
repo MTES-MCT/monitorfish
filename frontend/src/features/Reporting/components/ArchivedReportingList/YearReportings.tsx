@@ -23,7 +23,7 @@ export function YearReportings({ reportingAndOccurences, year }: YearReportingsP
     () =>
       reportingAndOccurences.reduce(
         (accumulator, reportingAndOccurrences) =>
-          // We must also add the useCases which is not "another" useCases (`+ 1`)
+          // We must also add the alert which is not "another" alert (`+ 1`)
           accumulator + reportingAndOccurrences.otherOccurrencesOfSameAlert.length + 1,
         0
       ),

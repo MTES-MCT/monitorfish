@@ -64,7 +64,8 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   const [isPreloading, setIsPreloading] = useState(true)
 
   useEffect(() => {
-    if (!isSuperUser && selectedPath?.menu !== SideWindowMenuKey.PRIOR_NOTIFICATION_LIST) {
+    const userPaths = [SideWindowMenuKey.PRIOR_NOTIFICATION_LIST, SideWindowMenuKey.VESSEL_LIST]
+    if (!isSuperUser && !userPaths.includes(selectedPath?.menu)) {
       dispatch(openSideWindowPath({ menu: SideWindowMenuKey.PRIOR_NOTIFICATION_LIST }))
     }
   }, [dispatch, isSuperUser, selectedPath?.menu])

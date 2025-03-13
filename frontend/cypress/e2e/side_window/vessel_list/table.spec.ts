@@ -4,6 +4,7 @@ context('Side Window > Vessel List > Table', () => {
     cy.login('superuser')
 
     cy.visit('/side_window')
+    cy.wait(250)
     cy.getDataCy('side-window-menu-vessel-list').click()
 
     /**
@@ -49,6 +50,7 @@ context('Side Window > Vessel List > Table', () => {
     cy.login('user')
 
     cy.visit('/side_window')
+    cy.wait(250)
     cy.getDataCy('side-window-menu-vessel-list').click()
 
     /**

@@ -23,7 +23,7 @@ class JpaRiskFactorRepository(
         return dbRiskFactorRepository.findAll().mapNotNull { it?.toVesselRiskFactor(mapper) }
     }
 
-    @Cacheable(value = ["risk_factor"])
+    @Cacheable(value = ["risk_factor_by_cfr"])
     override fun findByInternalReferenceNumber(internalReferenceNumber: String): VesselRiskFactor? {
         try {
             return dbRiskFactorRepository.findByCfr(internalReferenceNumber).toVesselRiskFactor(mapper)
@@ -34,12 +34,12 @@ class JpaRiskFactorRepository(
         return null
     }
 
-    @Cacheable(value = ["risk_factor"])
+    @Cacheable(value = ["risk_factor_by_vessel_id"])
     override fun findByVesselId(vesselId: Int): VesselRiskFactor? {
         try {
             return dbRiskFactorRepository.findByVesselId(vesselId).toVesselRiskFactor(mapper)
         } catch (e: EmptyResultDataAccessException) {
-            logger.warn("No current risk factor found for vesselId $vesselId.")
+            logger.warn("No current risk factor found for vesselId $vesselId: ${e.message}")
         }
 
         return null

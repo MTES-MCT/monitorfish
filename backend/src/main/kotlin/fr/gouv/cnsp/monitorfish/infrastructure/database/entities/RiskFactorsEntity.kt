@@ -18,8 +18,10 @@ import java.time.ZonedDateTime
 @Table(name = "risk_factors")
 data class RiskFactorsEntity(
     @Id
+    @Column(name = "id")
+    val id: Int,
     @Column(name = "cfr")
-    val cfr: String,
+    val cfr: String?,
     @Column(name = "impact_risk_factor")
     val impactRiskFactor: Double,
     @Column(name = "probability_risk_factor")
@@ -63,7 +65,7 @@ data class RiskFactorsEntity(
     @Column(name = "number_vessel_seizures_last_5_years")
     val numberVesselSeizuresLastFiveYears: Short,
     @Column(name = "vessel_id")
-    val vesselId: Int? = null,
+    val vesselId: Int?,
 ) : Serializable {
     fun toVesselRiskFactor(mapper: ObjectMapper) =
         VesselRiskFactor(

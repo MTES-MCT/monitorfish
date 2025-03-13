@@ -194,7 +194,7 @@
             // - Vessel: LE POISSON D'AVRIL
             // - Last control date: 2024-04-01
             {
-                "cfr": "CFR109",
+                "cfr": null,
                 "control_priority_level": 4,
                 "control_rate_risk_factor": 5,
                 "departure_datetime_utc": "2024-03-31 14:00:00",
@@ -223,8 +223,8 @@
                 "total_weight_onboard": 12345.67,
                 "trip_number": 123109,
                 "vessel_id": 109,
-                "gear_onboard:jsonb": [],
-                "species_onboard:jsonb": []
+                "gear_onboard": "null",
+                "species_onboard": "null"
             },
 
             // - Vessel: DOS FIN

@@ -1,5 +1,6 @@
+import { SideWindowMenuKey, SideWindowStatus } from '@features/SideWindow/constants'
+
 import { askForSideWindowDraftCancellationConfirmation } from './askForSideWindowDraftCancellationConfirmation'
-import { SideWindowMenuKey, SideWindowStatus } from '../../../domain/entities/sideWindow/constants'
 import { sideWindowActions } from '../slice'
 import { getFullPathFromPath } from '../utils'
 

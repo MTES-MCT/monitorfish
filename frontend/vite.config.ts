@@ -51,6 +51,9 @@ export default defineConfig({
       example: './.env.example'
     })
   ],
+  worker: {
+    plugins: () => [viteTsconfigPaths()],
+  },
 
   server: {
     host: 'localhost',

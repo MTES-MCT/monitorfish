@@ -15,7 +15,7 @@ export type ListFilter = UndefineExcept<
     expectedArrivalCustomPeriod: DateAsStringRange
     // TODO -5 days for operationDateTime to limit SQL query.
     expectedArrivalPeriod: ExpectedArrivalPeriod
-    fleetSegmentSegments: string[]
+    fleetSegments: string[]
     gearCodes: string[]
     hasOneOrMoreReportings: RichBoolean
     isLessThanTwelveMetersVessel: RichBoolean

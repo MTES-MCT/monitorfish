@@ -24,7 +24,7 @@ import {
   dummyLanMessageWithLVRCPresentationSpecies
 } from './__mocks__/logbookMessages'
 
-describe('Logbook/utils.tsx', () => {
+describe('Logbook/utils.ts', () => {
   it('getPNOMessage Should get the first valid PNO message', async () => {
     const pnosWithAnotherCorrectedMessage = dummyLogbookMessages.concat(correctedPNOMessage)
 

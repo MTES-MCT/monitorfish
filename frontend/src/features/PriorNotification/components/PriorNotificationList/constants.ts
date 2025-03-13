@@ -62,7 +62,7 @@ export const DEFAULT_LIST_FILTER_VALUES: ListFilter = {
   countryCodes: undefined,
   expectedArrivalCustomPeriod: undefined,
   expectedArrivalPeriod: ExpectedArrivalPeriod.IN_LESS_THAN_FOUR_HOURS,
-  fleetSegmentSegments: undefined,
+  fleetSegments: undefined,
   gearCodes: undefined,
   hasOneOrMoreReportings: RichBoolean.BOTH,
   isLessThanTwelveMetersVessel: RichBoolean.BOTH,

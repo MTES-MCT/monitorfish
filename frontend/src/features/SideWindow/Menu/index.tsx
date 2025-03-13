@@ -1,8 +1,8 @@
+import { SideWindowMenuKey, SideWindowMenuLabel } from '@features/SideWindow/constants'
 import { Icon, IconButton } from '@mtes-mct/monitor-ui'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import styled from 'styled-components'
 
-import { SideWindowMenuKey, SideWindowMenuLabel } from '../../../domain/entities/sideWindow/constants'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { openSideWindowPath } from '../useCases/openSideWindowPath'
 
@@ -15,26 +15,42 @@ export function Menu({ selectedMenu }: MenuProps) {
 
   return (
     <Wrapper role="menu">
-      <MenuButton
-        aria-label={SideWindowMenuKey.MISSION_LIST}
-        data-cy="side-window-menu-mission-list"
-        Icon={Icon.MissionAction}
-        iconSize={26}
-        onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))}
-        role="menuitem"
-        selected={selectedMenu === SideWindowMenuKey.MISSION_LIST}
-        title={SideWindowMenuLabel.MISSION_LIST}
-      />
-      <MenuButton
-        data-cy="side-window-menu-alerts"
-        Icon={Icon.Alert}
-        iconSize={26}
-        onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))}
-        role="menuitem"
-        selected={selectedMenu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST}
-        title={SideWindowMenuLabel.ALERT_LIST_AND_REPORTING_LIST}
-      />
-      {(isSuperUser || import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true') && (
+      {import.meta.env.FRONTEND_VESSEL_LIST_ENABLED === 'true' && (
+        <MenuButton
+          aria-label={SideWindowMenuKey.VESSEL_LIST}
+          data-cy="side-window-menu-vessel-list"
+          Icon={Icon.Vessel}
+          iconSize={26}
+          onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.VESSEL_LIST }))}
+          role="menuitem"
+          selected={selectedMenu === SideWindowMenuKey.VESSEL_LIST}
+          title={SideWindowMenuLabel.VESSEL_LIST}
+        />
+      )}
+      {isSuperUser && (
+        <MenuButton
+          aria-label={SideWindowMenuKey.MISSION_LIST}
+          data-cy="side-window-menu-mission-list"
+          Icon={Icon.MissionAction}
+          iconSize={26}
+          onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))}
+          role="menuitem"
+          selected={selectedMenu === SideWindowMenuKey.MISSION_LIST}
+          title={SideWindowMenuLabel.MISSION_LIST}
+        />
+      )}
+      {isSuperUser && (
+        <MenuButton
+          data-cy="side-window-menu-alerts"
+          Icon={Icon.Alert}
+          iconSize={26}
+          onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))}
+          role="menuitem"
+          selected={selectedMenu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST}
+          title={SideWindowMenuLabel.ALERT_LIST_AND_REPORTING_LIST}
+        />
+      )}
+      {import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true' && (
         <MenuButton
           aria-label={SideWindowMenuKey.PRIOR_NOTIFICATION_LIST}
           Icon={Icon.Fishery}
@@ -45,15 +61,17 @@ export function Menu({ selectedMenu }: MenuProps) {
           title={SideWindowMenuLabel.PRIOR_NOTIFICATION_LIST}
         />
       )}
-      <MenuButton
-        data-cy="side-window-menu-beacon-malfunctions"
-        Icon={Icon.Vms}
-        iconSize={26}
-        onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_BOARD }))}
-        role="menuitem"
-        selected={selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD}
-        title={SideWindowMenuLabel.BEACON_MALFUNCTION_BOARD}
-      />
+      {isSuperUser && (
+        <MenuButton
+          data-cy="side-window-menu-beacon-malfunctions"
+          Icon={Icon.Vms}
+          iconSize={26}
+          onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_BOARD }))}
+          role="menuitem"
+          selected={selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD}
+          title={SideWindowMenuLabel.BEACON_MALFUNCTION_BOARD}
+        />
+      )}
     </Wrapper>
   )
 }
@@ -65,7 +83,7 @@ const Wrapper = styled.div`
   height: 100%;
   flex-direction: column;
   max-width: 70px;
-  padding: 70px 0 0;
+  padding: 0;
   user-select: none;
 
   * {
@@ -82,7 +100,7 @@ const MenuButton = styled(IconButton)<{
   border: 0;
   border-bottom: solid 1px ${p => p.theme.color.slateGray};
   color: ${p => (p.selected ? p.theme.color.white : p.theme.color.gainsboro)};
-  padding: 22px;
+  padding: 18px 19px;
 
   &:hover,
   &:focus {

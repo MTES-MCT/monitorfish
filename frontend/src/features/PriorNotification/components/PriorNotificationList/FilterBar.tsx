@@ -73,8 +73,8 @@ export function FilterBar() {
     dispatch(priorNotificationActions.setListFilterValues({ expectedArrivalPeriod: nextexpectedArrivalPeriod }))
   }
 
-  const updateFleetSegments = (nextFleetSegmentSegments: string[] | undefined) => {
-    dispatch(priorNotificationActions.setListFilterValues({ fleetSegmentSegments: nextFleetSegmentSegments }))
+  const updateFleetSegments = (nextfleetSegments: string[] | undefined) => {
+    dispatch(priorNotificationActions.setListFilterValues({ fleetSegments: nextfleetSegments }))
   }
 
   const updateGearCodes = (nextGearCodes: string[] | undefined) => {
@@ -174,7 +174,7 @@ export function FilterBar() {
             items.length > 0 ? <SelectValue>Segments de flotte ({items.length})</SelectValue> : <></>
           }
           searchable
-          value={listFilterValues.fleetSegmentSegments}
+          value={listFilterValues.fleetSegments}
           virtualized
         />
         <CheckPicker

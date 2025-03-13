@@ -1,10 +1,10 @@
 import { openBeaconMalfunctionInKanban } from '@features/BeaconMalfunction/useCases/openBeaconMalfunctionInKanban'
+import { SideWindowMenuKey } from '@features/SideWindow/constants'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { SideWindowMenuKey } from '../../../../../../domain/entities/sideWindow/constants'
 import BeaconMalfunctionSVG from '../../../../../icons/Icone_VMS_dark.svg?react'
 
 export function BeaconMalfunctionWarning({ selectedVessel }) {

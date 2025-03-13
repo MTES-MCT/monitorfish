@@ -1,9 +1,8 @@
 import { monitorenvMissionApi } from '@features/Mission/monitorenvMissionApi'
+import { SideWindowMenuKey } from '@features/SideWindow/constants'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
-
-import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
 
 import type { MainAppThunk } from '@store'
 

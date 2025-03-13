@@ -8,7 +8,7 @@ import {
 } from '../../../constants'
 import { getActionText } from '../utils'
 
-describe('features/SideWindow/BeaconMalfunctionBoard/utils.tsx/getActionText()', () => {
+describe('features/SideWindow/BeaconMalfunctionBoard/utils.ts/getActionText()', () => {
   it('should not show the end of malfunction reason when the stage value is not an end column', () => {
     const reason = EndOfBeaconMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED
     const action = {

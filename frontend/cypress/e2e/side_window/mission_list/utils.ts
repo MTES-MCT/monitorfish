@@ -1,7 +1,8 @@
 import EventSource, { sources } from 'eventsourcemock'
 
 import { SeafrontGroup } from '../../../../src/constants/seafront'
-import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
+
+import {SideWindowMenuLabel} from "@features/SideWindow/constants";
 
 export const openSideWindowMissionList = () => {
   cy.viewport(1920, 1080)

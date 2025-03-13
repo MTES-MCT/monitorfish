@@ -1,10 +1,10 @@
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { assertNotNullish } from '@utils/assertNotNullish'
-import { SideWindowMenuLabel } from 'domain/entities/sideWindow/constants'
 
 import { openSideWindowPriorNotificationListAsSuperUser } from './utils'
 import { assertAll } from '../../utils/assertAll'
 import { customDayjs } from '../../utils/customDayjs'
+import {SideWindowMenuLabel} from "@features/SideWindow/constants";
 
 context('Side Window > Prior Notification List > Filter Bar', () => {
   const apiPathBase = '/bff/v1/prior_notifications?'

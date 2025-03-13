@@ -1,6 +1,6 @@
 import { focusOnAlert } from '@features/Alert/components/SideWindowAlerts/slice'
+import { SideWindowMenuKey } from '@features/SideWindow/constants'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
-import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
 
 import type { Vessel } from '../Vessel.types'
 import type { MainAppThunk } from '@store'

@@ -25,10 +25,14 @@ export const VesselLastPositionSchema = z.strictObject({
   coordinates: z.array(z.number()),
   course: numberOrUndefined,
   dateTime: z.string(),
+  // TODO To remove
   departureDateTime: stringOrUndefined,
+  // TODO To remove
   destination: stringOrUndefined,
   detectabilityRiskFactor: z.number(),
+  // TODO To remove
   district: stringOrUndefined,
+  // TODO To remove
   districtCode: stringOrUndefined,
   emissionPeriod: numberOrUndefined,
   estimatedCurrentLatitude: numberOrUndefined,
@@ -36,7 +40,9 @@ export const VesselLastPositionSchema = z.strictObject({
   externalReferenceNumber: stringOrUndefined,
   filterPreview: z.number(), // 0 is False, 1 is True - for WebGL
   flagState: z.string(),
+  // TODO To remove
   from: stringOrUndefined,
+  // TODO To remove
   gearOnboard: z.array(DeclaredLogbookGearSchema),
   gearsArray: z.array(z.string()),
   hasAlert: z.boolean(),
@@ -48,31 +54,41 @@ export const VesselLastPositionSchema = z.strictObject({
   isAtPort: z.boolean(),
   isFiltered: z.number(), // 0 is False, 1 is True - for WebGL
   lastControlDateTime: stringOrUndefined,
+  // TODO To remove
   lastControlDateTimeTimestamp: numberOrUndefined,
   lastControlInfraction: booleanOrUndefined,
   lastLogbookMessageDateTime: stringOrUndefined,
+  // TODO To remove
   lastPositionSentAt: z.number(),
   latitude: z.number(),
   length: numberOrUndefined,
   longitude: z.number(),
   mmsi: stringOrUndefined,
+  // TODO To remove
   positionType: z.string(),
+  // TODO To remove
   postControlComment: stringOrUndefined,
   probabilityRiskFactor: z.number(),
+  // TODO To remove
   registryPortLocode: stringOrUndefined,
+  // TODO To remove
   registryPortName: stringOrUndefined,
   reportings: z.array(z.nativeEnum(ReportingType)),
   riskFactor: z.number(),
   segments: z.array(z.string()),
   speciesArray: z.array(z.string()),
+  // TODO Add speciesName
   speciesOnboard: z.array(DeclaredLogbookSpeciesSchema),
   speed: numberOrUndefined,
+  // TODO To remove
   totalWeightOnboard: z.number(),
+  // TODO To remove
   tripNumber: stringOrUndefined,
   underCharter: booleanOrUndefined,
   vesselFeatureId: z.string(),
   vesselId: numberOrUndefined,
   vesselIdentifier: z.nativeEnum(Vessel.VesselIdentifier),
   vesselName: stringOrUndefined,
+  // TODO To remove
   width: numberOrUndefined
 })

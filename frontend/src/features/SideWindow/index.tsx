@@ -1,21 +1,27 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
+import { getOperationalAlerts } from '@features/Alert/useCases/getOperationalAlerts'
+import { getSilencedAlerts } from '@features/Alert/useCases/getSilencedAlerts'
 import { MissionForm } from '@features/Mission/components/MissionForm'
 import { useListenToAllMissionEventsUpdates } from '@features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates'
 import { reportingApi } from '@features/Reporting/reportingApi'
 import { reportingActions } from '@features/Reporting/slice'
+import { SideWindowMenuKey } from '@features/SideWindow/constants'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
-import { THEME, type NewWindowContextValue, NewWindowContext, Notifier } from '@mtes-mct/monitor-ui'
+import { VesselList } from '@features/Vessel/components/VesselListV2'
+import { setVessels } from '@features/Vessel/slice'
+import { vesselApi } from '@features/Vessel/vesselApi'
+import { NewWindowContext, type NewWindowContextValue, Notifier, THEME } from '@mtes-mct/monitor-ui'
 import {
   type CSSProperties,
+  Fragment,
   type HTMLAttributes,
   type MutableRefObject,
   useCallback,
   useEffect,
   useMemo,
   useRef,
-  useState,
-  Fragment
+  useState
 } from 'react'
 import styled, { createGlobalStyle, css, StyleSheetManager } from 'styled-components'
 
@@ -23,10 +29,7 @@ import { BannerStack } from './components/BannerStack'
 import { Menu } from './Menu'
 import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
 import { MissionEventContext } from '../../context/MissionEventContext'
-import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
-import { getOperationalAlerts } from '../../domain/use_cases/alert/getOperationalAlerts'
-import { getSilencedAlerts } from '../../domain/use_cases/alert/getSilencedAlerts'
 import { getAllGearCodes } from '../../domain/use_cases/gearCode/getAllGearCodes'
 import { getInfractions } from '../../domain/use_cases/infraction/getInfractions'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
@@ -61,7 +64,8 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   const [isPreloading, setIsPreloading] = useState(true)
 
   useEffect(() => {
-    if (!isSuperUser && selectedPath?.menu !== SideWindowMenuKey.PRIOR_NOTIFICATION_LIST) {
+    const userPaths = [SideWindowMenuKey.PRIOR_NOTIFICATION_LIST, SideWindowMenuKey.VESSEL_LIST]
+    if (!isSuperUser && !userPaths.includes(selectedPath?.menu)) {
       dispatch(openSideWindowPath({ menu: SideWindowMenuKey.PRIOR_NOTIFICATION_LIST }))
     }
   }, [dispatch, isSuperUser, selectedPath?.menu])
@@ -112,19 +116,23 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   }, [openedBeaconMalfunctionInKanban, editedReporting, selectedPath.menu])
 
   useEffect(() => {
-    if (!isFromURL) {
-      return
-    }
+    ;(async function () {
+      if (!isFromURL) {
+        return
+      }
 
-    if (isSuperUser) {
-      dispatch(getOperationalAlerts())
-      dispatch(getAllBeaconMalfunctions())
-      dispatch(getSilencedAlerts())
-      dispatch(reportingApi.endpoints.getReportings.initiate())
-    }
+      if (isSuperUser) {
+        dispatch(getOperationalAlerts())
+        dispatch(getAllBeaconMalfunctions())
+        dispatch(getSilencedAlerts())
+        dispatch(reportingApi.endpoints.getReportings.initiate())
+      }
 
-    dispatch(getInfractions())
-    dispatch(getAllGearCodes<MainAppAsyncThunk>())
+      const vessels = await dispatch(vesselApi.endpoints.getVesselsLastPositions.initiate()).unwrap()
+      await dispatch(setVessels(vessels))
+      dispatch(getInfractions())
+      dispatch(getAllGearCodes<MainAppAsyncThunk>())
+    })()
   }, [dispatch, isFromURL, isSuperUser])
 
   useEffect(() => {
@@ -140,7 +148,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
 
             <BannerStack />
 
-            {isSuperUser && <Menu selectedMenu={selectedPath.menu} />}
+            <Menu selectedMenu={selectedPath.menu} />
             {(selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD ||
               selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST) && (
               <GrayOverlay onClick={closeRightSidebar} style={grayOverlayStyle} />
@@ -158,6 +166,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
               )}
               {!isPreloading && (
                 <Content>
+                  {selectedPath.menu === SideWindowMenuKey.VESSEL_LIST && <VesselList isFromUrl={isFromURL} />}
                   {selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && (
                     <SideWindowAlerts baseRef={wrapperRef as MutableRefObject<HTMLDivElement>} isFromUrl={isFromURL} />
                   )}

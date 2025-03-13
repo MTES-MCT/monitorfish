@@ -1,25 +1,25 @@
-import { logSoftError } from '@mtes-mct/monitor-ui'
-import * as Comlink from 'comlink'
-
 import {
   FRANCE,
   getRegulatoryLawTypesFromZones,
   LAWTYPES_TO_TERRITORY,
   mapToRegulatoryZone
-} from '../features/Regulation/utils'
-import { VesselLocation, vesselSize } from '../features/Vessel/types/vessel'
+} from '@features/Regulation/utils'
+import { VesselSize } from '@features/Vessel/components/VesselListV2/constants'
+import { getLastControlledFilterFromLastControlPeriod } from '@features/Vessel/components/VesselListV2/utils'
+import { VesselLocation, vesselSize } from '@features/Vessel/types/vessel'
+import { Vessel } from '@features/Vessel/Vessel.types'
+import { customDayjs, logSoftError } from '@mtes-mct/monitor-ui'
+import { isNotNullish } from '@utils/isNotNullish'
+import * as Comlink from 'comlink'
+
 import { getDateMonthsBefore } from '../utils'
-import { isNotNullish } from '../utils/isNotNullish'
 
 import type { GeoJSON } from '../domain/types/GeoJSON'
-import type { Regulation } from '../features/Regulation/Regulation.types'
-import type { RegulatoryZone } from '../features/Regulation/types'
+import type { Regulation } from '@features/Regulation/Regulation.types'
+import type { RegulatoryZone } from '@features/Regulation/types'
+import type { VesselListFilter } from '@features/Vessel/components/VesselListV2/types'
+import type { SortingState } from '@tanstack/react-table'
 import type { Specy } from 'domain/types/specy'
-
-/**
- * /!\ Do not shorten imports in the Web worker.
- * It will fail the Vite build : `Rollup failed to resolve import [...]`
- */
 
 export class MonitorFishWebWorker {
   static getStructuredRegulationLawTypes(regulatoryZones) {
@@ -185,6 +185,7 @@ export class MonitorFishWebWorker {
     return { districts, species }
   }
 
+  /** @deprecated see getFilteredVesselsV2() * */
   static getFilteredVessels(vessels, filters) {
     const {
       countriesFiltered,
@@ -282,6 +283,175 @@ export class MonitorFishWebWorker {
     }
 
     return vessels
+  }
+
+  static getFilteredVesselsV2(vessels: Vessel.VesselLastPosition[], filters: VesselListFilter): string[] {
+    const now = customDayjs()
+    const vesselIsHidden = filters.lastPositionHoursAgo
+      ? now.set('hour', now.get('hour') - filters.lastPositionHoursAgo)
+      : now
+
+    const lastControlledFilter = filters.lastControlPeriod
+      ? getLastControlledFilterFromLastControlPeriod(filters.lastControlPeriod)
+      : undefined
+
+    const countrySet = filters.countryCodes ? new Set(filters.countryCodes) : undefined
+    const fleetSegmentsSet = filters.fleetSegments ? new Set(filters.fleetSegments) : undefined
+    const gearCodesSet = filters.gearCodes ? new Set(filters.gearCodes) : undefined
+    const specyCodesSet = filters.specyCodes ? new Set(filters.specyCodes) : undefined
+    const vesselsLocation = filters.vesselsLocation?.length === 1 ? filters.vesselsLocation[0] : undefined
+
+    /* TODO Implement these filters
+    lastLandingPortLocodes: string[]
+    producerOrganizations: string[]
+     */
+
+    return vessels
+      .filter(vessel => {
+        if (countrySet && !countrySet.has(vessel?.flagState)) {
+          return false
+        }
+
+        if (filters.hasLogbook !== undefined) {
+          switch (filters.hasLogbook) {
+            case true: {
+              const hasLogbook = !!vessel.lastLogbookMessageDateTime
+              if (!hasLogbook) {
+                return false
+              }
+              break
+            }
+            case false: {
+              const hasLogbook = !!vessel.lastLogbookMessageDateTime
+              if (hasLogbook) {
+                return false
+              }
+              break
+            }
+            default:
+              break
+          }
+        }
+
+        if (filters.riskFactors) {
+          const isBetween = filters.riskFactors?.some(riskFactor => {
+            switch (riskFactor) {
+              case 1: {
+                return vessel.riskFactor >= 1 && vessel.riskFactor < 2
+              }
+              case 2: {
+                return vessel.riskFactor >= 2 && vessel.riskFactor < 3
+              }
+              case 3: {
+                return vessel.riskFactor >= 3 && vessel.riskFactor <= 4
+              }
+              default: {
+                return true
+              }
+            }
+          })
+          if (!isBetween) {
+            return false
+          }
+        }
+
+        if (filters.lastPositionHoursAgo) {
+          const lastPosition = customDayjs(vessel.dateTime)
+          if (lastPosition.isBefore(vesselIsHidden)) {
+            return false
+          }
+        }
+
+        if (lastControlledFilter?.lastControlledBefore) {
+          const vesselDate = customDayjs(vessel?.lastControlDateTime)
+          const lastControlledBefore = customDayjs(lastControlledFilter.lastControlledBefore)
+
+          if (!vesselDate.isBefore(lastControlledBefore)) {
+            return false
+          }
+        }
+
+        if (lastControlledFilter?.lastControlledAfter) {
+          const vesselDate = customDayjs(vessel?.lastControlDateTime)
+          const lastControlledAfter = customDayjs(lastControlledFilter.lastControlledAfter)
+
+          if (!vesselDate.isAfter(lastControlledAfter)) {
+            return false
+          }
+        }
+
+        if (fleetSegmentsSet && !vessel?.segments.some(seg => fleetSegmentsSet.has(seg))) {
+          return false
+        }
+
+        if (gearCodesSet && !vessel?.gearsArray.some(gear => gearCodesSet.has(gear))) {
+          return false
+        }
+
+        if (specyCodesSet && !vessel?.speciesArray.some(species => specyCodesSet.has(species))) {
+          return false
+        }
+
+        if (vesselsLocation !== undefined) {
+          if (vesselsLocation === VesselLocation.PORT && !vessel.isAtPort) {
+            return false
+          }
+
+          if (vesselsLocation === VesselLocation.SEA && vessel.isAtPort) {
+            return false
+          }
+        }
+
+        if (filters.vesselSize) {
+          switch (filters.vesselSize) {
+            case VesselSize.ABOVE_TWELVE_METERS: {
+              const evaluation = vesselSize.ABOVE_TWELVE_METERS.evaluate(vessel.length)
+              if (!evaluation) {
+                return false
+              }
+              break
+            }
+            case VesselSize.BELOW_TEN_METERS: {
+              const evaluation = vesselSize.BELOW_TEN_METERS.evaluate(vessel.length)
+              if (!evaluation) {
+                return false
+              }
+              break
+            }
+            case VesselSize.BELOW_TWELVE_METERS: {
+              const evaluation = vesselSize.BELOW_TWELVE_METERS.evaluate(vessel.length)
+              if (!evaluation) {
+                return false
+              }
+              break
+            }
+            default:
+              break
+          }
+        }
+
+        return true
+      })
+      .map(vessel => vessel.vesselFeatureId)
+  }
+
+  // TODO Use to improve vessel list performance on sort
+  static sortTable(vessels: Vessel.VesselLastPosition[], sorting: SortingState): Vessel.VesselLastPosition[] {
+    return [...vessels].sort((a, b) => {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const sort of sorting) {
+        const { desc, id } = sort
+
+        if (a[id] < b[id]) {
+          return desc ? 1 : -1
+        }
+        if (a[id] > b[id]) {
+          return desc ? -1 : 1
+        }
+      }
+
+      return 0
+    })
   }
 
   static evaluateVesselsSize(vesselsSizeValuesChecked, length) {

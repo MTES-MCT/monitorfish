@@ -1,9 +1,9 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { monitorfishMissionApi } from '@features/Mission/monitorfishMissionApi'
+import { SideWindowMenuKey, SideWindowStatus } from '@features/SideWindow/constants'
 import { sideWindowActions } from '@features/SideWindow/slice'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { SideWindowMenuKey, SideWindowStatus } from 'domain/entities/sideWindow/constants'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 

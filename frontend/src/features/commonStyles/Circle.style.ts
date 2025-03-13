@@ -4,8 +4,8 @@ const circle = css<{
   $margin: string
 }>`
   display: inline-block;
-  height: 10px;
-  width: 10px;
+  height: 8px;
+  width: 8px;
   margin: ${p => p.$margin || 'unset'};
   border-radius: 50%;
   vertical-align: middle;
@@ -23,16 +23,4 @@ export const RedCircle = styled.span<{
 }>`
   ${circle}
   background-color: ${p => p.theme.color.maximumRed};
-`
-
-export const BlackCircle = styled.span<{
-  $margin: string
-}>`
-  display: inline-block;
-  height: 4px;
-  width: 4px;
-  border-radius: 50%;
-  vertical-align: middle;
-  margin-right: 6px;
-  background-color: ${p => p.theme.color.gunMetal};
 `

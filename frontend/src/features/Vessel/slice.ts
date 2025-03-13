@@ -1,10 +1,12 @@
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
+import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselListV2/constants'
 import { atLeastOneVesselSelected, VesselFeature, VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { createEntityAdapter, createSlice, type EntityState, type PayloadAction } from '@reduxjs/toolkit'
 
 import { ReportingType, ReportingTypeCharacteristics } from '../Reporting/types'
 
+import type { VesselListFilter } from '@features/Vessel/components/VesselListV2/types'
 import type { ShowedVesselTrack, TrackRequest } from '@features/Vessel/types/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
@@ -19,7 +21,9 @@ export const vesselsAdapter = createEntityAdapter({
 export type VesselState = {
   hideNonSelectedVessels: boolean
   highlightedVesselTrackPosition: Vessel.VesselPosition | null
+  isFilteringVesselList: boolean
   isFocusedOnVesselSearch: boolean
+  listFilterValues: VesselListFilter
   loadingPositions: boolean | null
   loadingVessel: boolean | null
   selectedVessel: Vessel.AugmentedSelectedVessel | undefined
@@ -39,7 +43,9 @@ export type VesselState = {
 const INITIAL_STATE: VesselState = {
   hideNonSelectedVessels: false,
   highlightedVesselTrackPosition: null,
+  isFilteringVesselList: false,
   isFocusedOnVesselSearch: false,
+  listFilterValues: DEFAULT_VESSEL_LIST_FILTER_VALUES,
   loadingPositions: null,
   loadingVessel: null,
   selectedVessel: undefined,
@@ -324,6 +330,12 @@ const vesselSlice = createSlice({
       }
     },
 
+    resetListFilterValues(state) {
+      state.listFilterValues = {
+        ...DEFAULT_VESSEL_LIST_FILTER_VALUES
+      }
+    },
+
     resetLoadingVessel(state) {
       state.loadingVessel = false
       state.loadingPositions = false
@@ -356,7 +368,9 @@ const vesselSlice = createSlice({
       )
     },
 
-    setFilteredVesselsFeatures(state, action: PayloadAction<Vessel.VesselFeatureId>) {
+    setFilteredVesselsFeatures(state, action: PayloadAction<Vessel.VesselFeatureId[]>) {
+      state.isFilteringVesselList = false
+
       const filteredVesselsFeaturesUids = action.payload
       const vesselIds = state.vessels.ids
 
@@ -381,6 +395,14 @@ const vesselSlice = createSlice({
 
     setIsFocusedOnVesselSearch(state, action) {
       state.isFocusedOnVesselSearch = action.payload
+    },
+
+    setListFilterValues(state, action: PayloadAction<Partial<VesselListFilter>>) {
+      state.isFilteringVesselList = true
+      state.listFilterValues = {
+        ...state.listFilterValues,
+        ...action.payload
+      }
     },
 
     /**

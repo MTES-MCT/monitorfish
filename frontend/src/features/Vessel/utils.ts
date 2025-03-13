@@ -31,6 +31,7 @@ export function buildFeature(vessel: Vessel.VesselLastPosition): Vessel.VesselLa
     isAtPort: vessel.isAtPort,
     isFiltered: vessel.isFiltered,
     lastControlDateTime: vessel.lastControlDateTime,
+    // TODO To remove
     lastControlDateTimeTimestamp: vessel.lastControlDateTimeTimestamp,
     lastLogbookMessageDateTime: vessel.lastLogbookMessageDateTime,
     lastPositionSentAt: vessel.lastPositionSentAt,
@@ -46,6 +47,7 @@ export function buildFeature(vessel: Vessel.VesselLastPosition): Vessel.VesselLa
     vesselId: vessel.vesselId,
     vesselIdentifier: vessel.vesselIdentifier,
     vesselName: vessel.vesselName,
+    // TODO To remove
     width: vessel.width
   }) as Vessel.VesselLastPositionFeature
   feature.setId(vessel.vesselFeatureId)

@@ -3,7 +3,7 @@ import { setSilencedAlerts } from '@features/Alert/components/SideWindowAlerts/s
 import { deleteListItems } from '@utils/deleteListItems'
 import { updateListItemsProp } from '@utils/updateListItemsProp'
 
-import { setError } from '../../shared_slices/Global'
+import { setError } from '../../../domain/shared_slices/Global'
 
 import type { LEGACY_SilencedAlert } from '@features/Alert/types'
 import type { MainAppThunk } from '@store'

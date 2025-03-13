@@ -1,3 +1,4 @@
+import { SideWindowStatus } from '@features/SideWindow/constants'
 import { cleanMissionForm } from '@features/SideWindow/useCases/cleanMissionForm'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -6,7 +7,6 @@ import { useCallback } from 'react'
 
 import { SideWindow } from '.'
 import { sideWindowActions } from './slice'
-import { SideWindowStatus } from '../../domain/entities/sideWindow/constants'
 import { resetFocusOnPendingAlert } from '../Alert/components/SideWindowAlerts/slice'
 
 export function SideWindowLauncher() {

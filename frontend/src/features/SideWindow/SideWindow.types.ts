@@ -1,5 +1,6 @@
+import { SideWindowMenuKey } from '@features/SideWindow/constants'
+
 import type { BannerProps } from '@mtes-mct/monitor-ui'
-import type { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
 
 export namespace SideWindow {
   export type BannerStackItem = {

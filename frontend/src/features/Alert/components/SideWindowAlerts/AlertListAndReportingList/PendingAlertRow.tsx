@@ -1,4 +1,5 @@
 import { COLORS } from '@constants/constants'
+import { validateAlert } from '@features/Alert/useCases/validateAlert'
 import { Flag } from '@features/Vessel/components/VesselList/tableCells'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -10,7 +11,6 @@ import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { getAlertNameFromType } from './utils'
-import { validateAlert } from '../../../../../domain/use_cases/alert/validateAlert'
 import { showVessel } from '../../../../Vessel/useCases/showVessel'
 import { getSilencedAlertPeriodText } from '../../../utils'
 

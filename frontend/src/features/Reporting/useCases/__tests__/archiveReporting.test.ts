@@ -14,7 +14,16 @@ import { deleteReporting } from '../deleteReporting'
  */
 
 // @ts-ignore
-jest.mock('../../reportingApi', () => jest.fn())
+jest.mock('../../reportingApi', () => ({
+  reportingApi: {
+    endpoints: {
+      archiveReporting: {
+        // @ts-ignore
+        initiate: jest.fn()
+      }
+    }
+  }
+}))
 // @ts-ignore
 jest.mock('../deleteReporting', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention

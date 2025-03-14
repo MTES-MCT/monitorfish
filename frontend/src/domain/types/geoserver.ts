@@ -1,12 +1,13 @@
+import type { FeatureCollection, Geometry } from 'geojson'
+
 export type CRS = {
   properties: Object
   type: string
 }
 
-export type WFSGetFeature = {
+export type WFSGetFeature<T extends Geometry> = FeatureCollection<T> & {
   bbox: number[]
   crs: CRS
-  features: Object[]
   numberMatched: number
   numberReturned: number
   timeStamp: string

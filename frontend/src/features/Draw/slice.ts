@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { GeoJSON, GeoJSON as GeoJSONType } from '../../domain/types/GeoJSON'
 import type { InteractionListener, InteractionType } from '@features/Map/constants'
 import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import type { Geometry } from 'geojson'
 
 export type DrawState = {
-  drawedGeometry: GeoJSON.Geometry | undefined
-  initialGeometry: GeoJSON.Geometry | undefined
+  drawedGeometry: Geometry | undefined
+  initialGeometry: Geometry | undefined
   interactionType: InteractionType | undefined
   listener: InteractionListener | undefined
 }
@@ -37,14 +37,14 @@ const drawReducerSlice = createSlice({
       state.initialGeometry = undefined
     },
 
-    setDrawedGeometry(state, action: PayloadAction<GeoJSONType.Geometry>) {
+    setDrawedGeometry(state, action: PayloadAction<Geometry>) {
       state.drawedGeometry = action.payload
     },
 
     /**
      * Set the initial geometry to edit with <DrawLayer/>
      */
-    setInitialGeometry(state, action: PayloadAction<GeoJSONType.Geometry>) {
+    setInitialGeometry(state, action: PayloadAction<Geometry>) {
       state.initialGeometry = action.payload
     },
 
@@ -67,7 +67,6 @@ const drawReducerSlice = createSlice({
 })
 
 export const {
-  resetGeometry,
   resetInteraction,
   setDrawedGeometry,
   setInitialGeometry,

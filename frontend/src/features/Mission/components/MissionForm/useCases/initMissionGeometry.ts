@@ -2,14 +2,14 @@ import { convertToGeoJSONGeometryObject } from '@features/Map/utils'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 import { MultiPolygon } from 'ol/geom'
 
-import type { GeoJSON } from '../../../../../domain/types/GeoJSON'
+import type { MultiPolygon as GeoJSONMultiPolygon } from 'geojson'
 
 export const initMissionGeometry = dispatch => async (isGeometryComputedFromControls: boolean | undefined) => {
   if (!isGeometryComputedFromControls) {
     return
   }
 
-  const emptyMissionGeometry = convertToGeoJSONGeometryObject(new MultiPolygon([])) as GeoJSON.MultiPolygon
+  const emptyMissionGeometry = convertToGeoJSONGeometryObject<GeoJSONMultiPolygon>(new MultiPolygon([]))
 
   dispatch(missionFormActions.setGeometryComputedFromControls(emptyMissionGeometry))
 }

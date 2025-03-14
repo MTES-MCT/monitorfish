@@ -124,7 +124,8 @@ describe('MonitorFishWebWorker.getFilteredVesselsV2', () => {
       riskFactors: [1],
       specyCodes: ['specy1'],
       vesselSize: VesselSize.ABOVE_TWELVE_METERS,
-      vesselsLocation: [VesselLocation.PORT]
+      vesselsLocation: [VesselLocation.PORT],
+      zones: undefined
     }
 
     const result = MonitorFishWebWorker.getFilteredVesselsV2(DUMMY_LAST_POSITIONS, filters)

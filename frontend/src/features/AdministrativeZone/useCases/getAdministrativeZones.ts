@@ -4,7 +4,7 @@ import { administrativeLayers } from '@features/Map/utils'
 
 import { getAdministrativeSubZonesFromAPI } from '../../../api/geoserver'
 
-import type { GeoJSON } from '../../../domain/types/GeoJSON'
+import type { FeatureCollection } from 'geojson'
 
 export type GroupAndZones = {
   group: MonitorFishMap.CodeAndName
@@ -38,7 +38,7 @@ export const getAdministrativeZones =
       .filter(zone => zone.hasFetchableZones)
       .map(zone =>
         getAdministrativeSubZonesFromAPI(zone.code, getState().global.isBackoffice).then(
-          (fetchedZones: GeoJSON.FeatureCollection) => {
+          (fetchedZones: FeatureCollection) => {
             const nextZones: MonitorFishMap.ShowableLayer[] = fetchedZones.features.map(feature => ({
               code: feature.id!.toString(),
               group: zone.group,

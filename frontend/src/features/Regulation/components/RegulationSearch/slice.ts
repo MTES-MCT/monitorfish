@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import type { RegulatoryLawTypes } from '../../types'
-import type { ZoneSelected } from '@features/VesselFilter/types'
+import type { ZoneFilter } from '@features/VesselFilter/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 type VesselListState = {
   advancedSearchIsOpen: boolean
   regulatoryLayersSearchResult: RegulatoryLawTypes | undefined
-  zoneSelected: ZoneSelected | undefined
+  zoneSelected: ZoneFilter | undefined
 }
 const INITIAL_STATE: VesselListState = {
   advancedSearchIsOpen: false,
@@ -47,7 +47,7 @@ const regulatoryLayerSearchSlice = createSlice({
     /**
      * Set the selected zone to filter regulations
      */
-    setZoneSelected(state, action: PayloadAction<ZoneSelected>) {
+    setZoneSelected(state, action: PayloadAction<ZoneFilter>) {
       state.zoneSelected = action.payload
     }
   }

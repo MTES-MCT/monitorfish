@@ -41,8 +41,8 @@ import { CustomInput, Label } from '../../../commonStyles/Input.style'
 import ChevronIconSVG from '../../../icons/Chevron_simple_gris.svg?react'
 import { STATUS } from '../RegulationTables/constants'
 
-import type { GeoJSON } from '../../../../domain/types/GeoJSON'
 import type { BackofficeAppPromiseThunk } from '@store'
+import type { Polygon } from 'geojson'
 
 type RegulationFormProps = Readonly<{
   isEdition: boolean
@@ -55,7 +55,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
 
   const layersTopicsByRegTerritory = useBackofficeAppSelector(state => state.regulation.layersTopicsByRegTerritory)
 
-  const [geometriesMap, setGeometriesMap] = useState<Record<string, GeoJSON.Geometry>>({})
+  const [geometriesMap, setGeometriesMap] = useState<Record<string, Polygon>>({})
   const [isRegulatoryPreviewDisplayed, setIsRegulatoryPreviewDisplayed] = useState(false)
   const geometryIdList = useMemo(
     () => (geometriesMap ? formatDataForSelectPicker(Object.keys(geometriesMap)) : []),

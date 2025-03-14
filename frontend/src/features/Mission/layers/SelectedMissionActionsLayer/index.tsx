@@ -11,7 +11,6 @@ import { useGetFilteredMissionsQuery } from '../../components/MissionList/hooks/
 import { getMissionActionFeature, getMissionActionFeatureZone } from '../../features'
 import { NEW_MISSION_ID } from '../constants'
 
-import type { GeoJSON } from '../../../../domain/types/GeoJSON'
 import type { Feature } from 'ol'
 import type { MutableRefObject } from 'react'
 
@@ -28,10 +27,7 @@ export function UnmemoizedSelectedMissionActionsLayer() {
 
     return (
       missions
-        .find(
-          missionsAndAction =>
-            missionsAndAction.id === (selectedMissionGeoJSON as GeoJSON.Feature).properties?.missionId
-        )
+        .find(missionsAndAction => missionsAndAction.id === selectedMissionGeoJSON.properties?.missionId)
         ?.actions?.map(action => getMissionActionFeature(action))
         .filter((feature): feature is Feature => Boolean(feature)) ?? []
     )
@@ -51,7 +47,7 @@ export function UnmemoizedSelectedMissionActionsLayer() {
         .find(
           missionsAndAction =>
             missionsAndAction.isGeometryComputedFromControls &&
-            missionsAndAction.id === (selectedMissionGeoJSON as GeoJSON.Feature).properties?.missionId
+            missionsAndAction.id === selectedMissionGeoJSON.properties?.missionId
         )
         ?.actions?.map(action => getMissionActionFeatureZone(action))
         .filter((feature): feature is Feature => Boolean(feature)) ?? []

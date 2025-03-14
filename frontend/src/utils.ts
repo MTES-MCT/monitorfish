@@ -5,7 +5,7 @@ import VectorSource from 'ol/source/Vector'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './features/Map/constants'
 
-import type { GeoJSON as GeoJSONType } from './domain/types/GeoJSON'
+import type { Polygon } from 'geojson'
 import type { Extent } from 'ol/extent'
 
 export const customHexToRGB = (hexColor: string | undefined): [number, number, number] => {
@@ -230,7 +230,7 @@ export function createGenericSlice(initialState, reducers, topic) {
 /**
  * Get the extent of the first feature found in the GeoJSON object
  */
-export const getExtentFromGeoJSON = (features: GeoJSONType.GeoJson): Extent | undefined => {
+export const getExtentFromGeoJSON = (features: Polygon): Extent | undefined => {
   const vectorSource = new VectorSource({
     format: new GeoJSON({
       dataProjection: WSG84_PROJECTION,

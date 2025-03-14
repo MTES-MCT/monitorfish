@@ -1,4 +1,4 @@
-import type { GeoJSON } from '../../domain/types/GeoJSON'
+import type { Polygon } from 'geojson'
 
 export type VesselFilter = {
   color: string
@@ -16,12 +16,12 @@ export type FilterValues = {
   lastControlMonthsAgo: number | null
   speciesFiltered: string[]
   vesselsSizeValuesChecked: string[]
-  zonesSelected: ZoneSelected[]
+  zonesSelected: ZoneFilter[]
 }
 
-export type ZoneSelected = {
+export type ZoneFilter = {
   code: string
-  feature: GeoJSON.Geometry
+  feature: Polygon
   name: string
 }
 

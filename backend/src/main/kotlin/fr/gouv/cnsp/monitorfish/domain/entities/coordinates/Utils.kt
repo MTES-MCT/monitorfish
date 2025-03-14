@@ -16,7 +16,7 @@ val transformFromWSG84ToOpenLayers: CoordinateTransform =
         OPENLAYERS_PROJECTION_CRS,
     )
 
-fun transformCoordinates(
+fun transformCoordinatesToOpenlayersProjection(
     longitude: Double,
     latitude: Double,
 ): Pair<Double, Double> {

@@ -36,4 +36,3 @@ PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/fao_SIOFA_areas.sql
 
 PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/rectangles_stat_areas.sql
 PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/situs_areas.sql
-PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/brexit_areas.sql

@@ -2,8 +2,8 @@ import { Seafront } from '@constants/seafront'
 
 import type { EnvMissionAction } from './envMissionAction.types'
 import type { MissionAction } from './missionAction.types'
-import type { GeoJSON } from '../../domain/types/GeoJSON'
 import type { LegacyControlUnit } from '../ControlUnit/legacyControlUnit'
+import type { MultiPolygon } from 'geojson'
 import type { Except } from 'type-fest'
 
 export namespace Mission {
@@ -14,7 +14,7 @@ export namespace Mission {
     endDateTimeUtc?: string
     envActions: EnvMissionAction.MissionAction[]
     facade?: Seafront
-    geom?: GeoJSON.MultiPolygon
+    geom?: MultiPolygon
     hasMissionOrder?: boolean | undefined
     id: number
     isGeometryComputedFromControls: boolean

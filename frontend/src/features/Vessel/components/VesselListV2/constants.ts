@@ -37,7 +37,7 @@ export const VESSEL_SIZE_AS_OPTIONS = getOptionsFromLabelledEnum(VESSEL_SIZE_LAB
 
 export const VESSEL_LOCATION_LABEL: Record<VesselLocation, string> = {
   PORT: 'Au port',
-  SEA: 'EN mer'
+  SEA: 'En mer'
 }
 
 export const LAST_POSITION_AS_OPTIONS = [
@@ -97,7 +97,8 @@ export const DEFAULT_VESSEL_LIST_FILTER_VALUES: VesselListFilter = {
   hasLogbook: undefined,
   specyCodes: undefined,
   riskFactors: undefined,
-  vesselSize: undefined
+  vesselSize: undefined,
+  zones: undefined
 }
 
 export const RISK_FACTOR_AS_OPTIONS: Option<number>[] = range(1, 4).map(riskFactor => ({

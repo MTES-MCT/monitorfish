@@ -2,10 +2,20 @@ import { Body } from '@features/SideWindow/components/Body'
 import { Header } from '@features/SideWindow/components/Header'
 import { Page } from '@features/SideWindow/components/Page'
 import { useGetFilteredVesselsLastPositions } from '@features/Vessel/hooks/useGetFilteredVesselsLastPositions'
+import { previewVessels } from '@features/Vessel/useCases/VesselListV2/previewVessels'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTableVirtualizer } from '@hooks/useTableVirtualizer'
 import { trackEvent } from '@hooks/useTracking'
-import { Icon, pluralize, TableWithSelectableRows, useNewWindow, usePrevious } from '@mtes-mct/monitor-ui'
+import {
+  Accent,
+  Button,
+  Icon,
+  pluralize,
+  TableWithSelectableRows,
+  useNewWindow,
+  usePrevious
+} from '@mtes-mct/monitor-ui'
 import {
   type ExpandedState,
   flexRender,
@@ -16,7 +26,6 @@ import {
 } from '@tanstack/react-table'
 import { notUndefined } from '@tanstack/react-virtual'
 import { assertNotNullish } from '@utils/assertNotNullish'
-import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -32,6 +41,7 @@ type VesselListProps = Readonly<{
   isFromUrl: boolean
 }>
 export function VesselList({ isFromUrl }: VesselListProps) {
+  const dispatch = useMainAppDispatch()
   const userAccount = useContext(UserAccountContext)
   const { newWindowContainerRef } = useNewWindow()
   const tableContainerRef = useRef<HTMLDivElement>(null)
@@ -131,9 +141,19 @@ export function VesselList({ isFromUrl }: VesselListProps) {
 
           <TableOuterWrapper $isFromUrl={isFromUrl}>
             <TableTop $isFromUrl={isFromUrl}>
-              <TableLegend data-cy="vessel-list-length">{`${
-                isFilteringVesselList || tableData.length === undefined ? '...' : tableData.length
-              } ${pluralize('navire', tableData.length)} ${pluralize('équipé', tableData.length)} VMS `}</TableLegend>
+              <TableLegend data-cy="vessel-list-length">
+                {`${
+                  isFilteringVesselList || tableData.length === undefined ? '...' : tableData.length
+                } ${pluralize('navire', tableData.length)} ${pluralize('équipé', tableData.length)} VMS `}
+              </TableLegend>
+              <PreviewButton
+                accent={Accent.SECONDARY}
+                data-cy="preview-filtered-vessels"
+                Icon={Icon.Focus}
+                onClick={() => dispatch(previewVessels())}
+              >
+                Aperçu sur la carte
+              </PreviewButton>
             </TableTop>
 
             <TableInnerWrapper ref={tableContainerRef} $filterHeight={filterHeight} $hasError={false}>
@@ -232,8 +252,7 @@ const TableTop = styled.div<{
   align-items: flex-end;
   display: flex;
   justify-content: space-between;
-  margin: 8px 0;
-  width: ${p => (!p.$isFromUrl && isLegacyFirefox() ? 1396 : 1391)}px; /* = table width */
+  margin: 8px 8px 8px 0;
 `
 
 const TableLegend = styled.p`
@@ -265,4 +284,14 @@ const TableInnerWrapper = styled.div<{
       display: flex;
       justify-content: center;
     `}
+`
+
+const PreviewButton = styled(Button)`
+  margin-left: auto;
+  margin-right: 0;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
 `

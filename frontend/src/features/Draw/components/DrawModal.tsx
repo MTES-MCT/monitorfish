@@ -23,19 +23,19 @@ import { addFeatureToDrawedFeature } from '../useCases/addFeatureToDrawedFeature
 import { closeDraw } from '../useCases/closeDraw'
 import { eraseDrawedGeometries } from '../useCases/eraseDrawedGeometries'
 
-import type { GeoJSON as GeoJSONNamespace } from '../../../domain/types/GeoJSON'
 import type { Coordinates } from '@mtes-mct/monitor-ui'
+import type { Point as GeoJSONPoint } from 'geojson'
 import type { MultiPolygon } from 'ol/geom'
 
 const INTERACTION_LISTENER_TITLE_PLACEHOLDER: Partial<Record<InteractionListener, string>> = {
   [InteractionListener.CONTROL_POINT]: 'un point de contrôle',
   [InteractionListener.MISSION_ZONE]: 'une zone de mission',
-  [InteractionListener.SURVEILLANCE_ZONE]: 'une zone de surveillance'
+  [InteractionListener.VESSELS_LIST]: 'une zone de filtre'
 }
 const INTERACTION_LISTENER_BUTTON_LABEL: Partial<Record<InteractionListener, string>> = {
   [InteractionListener.CONTROL_POINT]: 'le point de contrôle',
   [InteractionListener.MISSION_ZONE]: 'la zone de mission',
-  [InteractionListener.SURVEILLANCE_ZONE]: 'la zone de surveillance'
+  [InteractionListener.VESSELS_LIST]: 'la zone de filtre'
 }
 
 export function DrawLayerModal() {
@@ -62,13 +62,13 @@ export function DrawLayerModal() {
     }
 
     if (drawedGeometry) {
-      const drawedCoordinates = (drawedGeometry as GeoJSONNamespace.Point).coordinates
+      const drawedCoordinates = (drawedGeometry as GeoJSONPoint).coordinates
 
       return [drawedCoordinates[1], drawedCoordinates[0]]
     }
 
     if (initialGeometry) {
-      const initialCoordinates = (initialGeometry as GeoJSONNamespace.Point)?.coordinates
+      const initialCoordinates = (initialGeometry as GeoJSONPoint)?.coordinates
 
       return [initialCoordinates[1], initialCoordinates[0]]
     }
@@ -144,7 +144,7 @@ export function DrawLayerModal() {
   return (
     <MapInteraction
       customTools={
-        listener === InteractionListener.MISSION_ZONE && (
+        (listener === InteractionListener.MISSION_ZONE || listener === InteractionListener.VESSELS_LIST) && (
           <IconGroup>
             <IconButton
               className={interactionType === InteractionType.POLYGON ? '_active' : undefined}

@@ -8,12 +8,12 @@ import WFS from 'ol/format/WFS'
 import { HttpStatusCode } from './constants'
 import { RegulationActionType } from '../features/Regulation/utils'
 
+import type { WFSGetFeature } from '../domain/types/geoserver'
 import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { Regulation } from '@features/Regulation/Regulation.types'
 import type { RegulatoryZone } from '@features/Regulation/types'
-import type { GeoJSON } from 'domain/types/GeoJSON'
+import type { FeatureCollection, Polygon } from 'geojson'
 import type { Extent } from 'ol/extent'
-import type { GeoJSONFeatureCollection } from 'ol/format/GeoJSON'
 
 export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la couche réglementaire"
 const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
@@ -69,12 +69,8 @@ function getAllRegulatoryLayersFromAPI(fromBackoffice): Promise<Regulation.Regul
 /**
  * Get geometry object of regulatory area without regulation reference
  * @description This API isn't authenticated
- * @memberOf API
- * @param {boolean} fromBackoffice - From backoffice
- * @returns {Promise<GeoJSON>} The geometry as GeoJSON feature
- * @throws {Error}
- */
-function getAllGeometryWithoutProperty(fromBackoffice) {
+ ** */
+function getAllGeometryWithoutProperty(fromBackoffice): Promise<FeatureCollection> {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
   const filter =
@@ -110,7 +106,7 @@ export async function getAdministrativeZoneFromAPI(
   extent: Extent | undefined,
   subZone: string | undefined,
   fromBackoffice: boolean
-) {
+): Promise<WFSGetFeature<Polygon>> {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
   return fetch(getAdministrativeZoneURL(administrativeZone, extent, subZone, geoserverURL))
@@ -226,7 +222,7 @@ function getRegulatoryZoneURL(type: string, regulatoryZone: MonitorFishMap.Showe
 export function getRegulatoryZonesInExtentFromAPI(
   extent: Extent,
   fromBackoffice: boolean
-): Promise<GeoJSONFeatureCollection> {
+): Promise<Regulation.RegulatoryZoneGeoJsonFeatureCollection> {
   try {
     const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
@@ -313,10 +309,7 @@ function getRegulatoryFeatureMetadataFromAPI(
 /**
  * @description This API isn't authenticated
  */
-function getAdministrativeSubZonesFromAPI(
-  type: string,
-  fromBackoffice: boolean
-): Promise<GeoJSON.FeatureCollection<any, string>> {
+function getAdministrativeSubZonesFromAPI(type: string, fromBackoffice: boolean): Promise<FeatureCollection> {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
   let query

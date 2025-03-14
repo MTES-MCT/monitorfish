@@ -9,12 +9,11 @@ import { setInitialGeometry, setInteractionTypeAndListener } from '../../Draw/sl
 import { fitToExtent } from '../../Map/slice'
 import { unselectVessel } from '../../Vessel/useCases/unselectVessel'
 
-import type { GeoJSON as GeoJSONNamespace, GeoJSON } from '../../../domain/types/GeoJSON'
 import type { MainAppThunk } from '@store'
-import type { Coordinate } from 'ol/coordinate'
+import type { MultiPolygon, Point, Position } from 'geojson'
 
 export const addOrEditControlCoordinates =
-  (geometry: GeoJSONNamespace.Geometry | undefined): MainAppThunk<void> =>
+  (geometry: Point | undefined): MainAppThunk<void> =>
   (dispatch, getState) => {
     const { draft } = getState().missionForm
     if (!draft?.mainFormValues) {
@@ -27,11 +26,11 @@ export const addOrEditControlCoordinates =
     if (geometry) {
       dispatch(setInitialGeometry(geometry))
 
-      const featureCoordinates = (geometry as GeoJSONNamespace.Point).coordinates
-      const bufferedExtent = getCoordinatesExtent(featureCoordinates as Coordinate)
+      const featureCoordinates = geometry.coordinates
+      const bufferedExtent = getCoordinatesExtent(featureCoordinates)
       dispatch(fitToExtent(bufferedExtent))
     } else if (missionGeometry) {
-      const extent = getExtentOfPolygons(missionGeometry as Coordinate[][][])
+      const extent = getExtentOfPolygons(missionGeometry)
 
       if (extent) {
         dispatch(fitToExtent(extent))
@@ -47,16 +46,15 @@ export const addOrEditControlCoordinates =
     )
   }
 
-const getPolygons = (geometry: GeoJSON.MultiPolygon | undefined): Coordinate[][][] => {
+const getPolygons = (geometry: MultiPolygon | undefined): Position[][][] => {
   if (!geometry) {
     return []
   }
 
-  // @ts-ignore
   return geometry.coordinates || []
 }
 
-const getExtentOfPolygons = (polygons: Coordinate[][][]) => {
+const getExtentOfPolygons = (polygons: Position[][][]) => {
   const firstPolygon = polygons[0]
   if (!firstPolygon) {
     return undefined

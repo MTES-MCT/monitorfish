@@ -3,6 +3,7 @@ import { OpenLayersGeometryType } from '@features/Map/constants'
 import { addGeometryToMultiPolygonGeoJSON, convertToGeoJSONGeometryObject } from '@features/Map/utils'
 import { Geometry, MultiPolygon } from 'ol/geom'
 
+import type { Point, MultiPolygon as GeoJSONMultiPolygon } from 'geojson'
 import type Feature from 'ol/Feature'
 
 export const addFeatureToDrawedFeature = (feature: Feature<Geometry>) => (dispatch, getState) => {
@@ -14,7 +15,7 @@ export const addFeatureToDrawedFeature = (feature: Feature<Geometry>) => (dispat
   }
 
   if (geometry.getType() === OpenLayersGeometryType.POINT) {
-    const nextGeometry = convertToGeoJSONGeometryObject(geometry)
+    const nextGeometry = convertToGeoJSONGeometryObject<Point>(geometry)
     dispatch(setDrawedGeometry(nextGeometry))
 
     return
@@ -22,7 +23,7 @@ export const addFeatureToDrawedFeature = (feature: Feature<Geometry>) => (dispat
 
   if (!currentGeometry) {
     // @ts-ignore
-    const nextGeometry = convertToGeoJSONGeometryObject(new MultiPolygon([geometry]))
+    const nextGeometry = convertToGeoJSONGeometryObject<GeoJSONMultiPolygon>(new MultiPolygon([geometry]))
     dispatch(setDrawedGeometry(nextGeometry))
 
     return

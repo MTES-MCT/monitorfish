@@ -5,11 +5,11 @@ import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedC
 import { setInitialGeometry, setInteractionTypeAndListener } from '../../Draw/slice'
 import { unselectVessel } from '../../Vessel/useCases/unselectVessel'
 
-import type { GeoJSON as GeoJSONNamespace } from '../../../domain/types/GeoJSON'
 import type { MainAppThunk } from '@store'
+import type { MultiPolygon } from 'geojson'
 
 export const addOrEditMissionZone =
-  (geometry: GeoJSONNamespace.Geometry | undefined): MainAppThunk =>
+  (geometry: MultiPolygon | undefined): MainAppThunk =>
   dispatch => {
     dispatch(unselectVessel())
 

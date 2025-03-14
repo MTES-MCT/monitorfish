@@ -28,7 +28,7 @@ context('Side Window > Vessel List > Table', () => {
     cy.getDataCy('vessel-list-length').contains('1 navire équipé VMS')
     cy.get('.Table-SimpleTable tr').should('have.length', 2)
 
-    cy.fill('Date du dernier contrôle', 'Contrôlé il y a plus de 3 mois')
+    cy.fill('Dernier contrôle', 'Contrôlé il y a plus de 3 mois')
     cy.getDataCy('vessel-list-length').contains('1 navire équipé VMS')
     cy.get('.Table-SimpleTable tr').should('have.length', 2)
 
@@ -74,7 +74,7 @@ context('Side Window > Vessel List > Table', () => {
     cy.getDataCy('vessel-list-length').contains('1 navire équipé VMS')
     cy.get('.Table-SimpleTable tr').should('have.length', 2)
 
-    cy.fill('Date du dernier contrôle', 'Contrôlé il y a plus de 3 mois')
+    cy.fill('Dernier contrôle', 'Contrôlé il y a plus de 3 mois')
     cy.getDataCy('vessel-list-length').contains('1 navire équipé VMS')
     cy.get('.Table-SimpleTable tr').should('have.length', 2)
 

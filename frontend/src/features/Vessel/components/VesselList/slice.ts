@@ -1,11 +1,11 @@
 import { VesselLocation } from '@features/Vessel/types/vessel'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
-import type { GeoJSON } from '../../../../domain/types/GeoJSON'
+import type { Polygon } from 'geojson'
 
 type ZoneSelected = {
   code: string
-  feature: GeoJSON.GeoJson
+  feature: Polygon
   name: string
 }
 

@@ -115,24 +115,6 @@ export function getAdministrativeLayerStyle(type: string) {
             }`
           })
         })
-    case LayerProperties.brexit.code:
-      return (feature: Feature | undefined) =>
-        new Style({
-          stroke: new Stroke({
-            color: '#767AB2',
-            width: 2
-          }),
-          text: new Text({
-            fill: new Fill({ color: THEME.color.gunMetal }),
-            font: '12px Marianne',
-            stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${
-              (LayerProperties.brexit.zoneNamePropertyKey &&
-                feature?.get(LayerProperties.brexit.zoneNamePropertyKey)) ||
-              ''
-            }`
-          })
-        })
     case LayerProperties.rectangles_stat.code:
       return (feature: Feature | undefined) =>
         new Style({

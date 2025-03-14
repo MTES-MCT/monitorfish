@@ -9,17 +9,19 @@ import { getLastControlledFilterFromLastControlPeriod } from '@features/Vessel/c
 import { VesselLocation, vesselSize } from '@features/Vessel/types/vessel'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { customDayjs, logSoftError } from '@mtes-mct/monitor-ui'
+import { booleanPointInPolygon } from '@turf/boolean-point-in-polygon'
+import { point } from '@turf/helpers'
 import { isNotNullish } from '@utils/isNotNullish'
 import * as Comlink from 'comlink'
 
 import { getDateMonthsBefore } from '../utils'
 
-import type { GeoJSON } from '../domain/types/GeoJSON'
 import type { Regulation } from '@features/Regulation/Regulation.types'
 import type { RegulatoryZone } from '@features/Regulation/types'
 import type { VesselListFilter } from '@features/Vessel/components/VesselListV2/types'
 import type { SortingState } from '@tanstack/react-table'
 import type { Specy } from 'domain/types/specy'
+import type { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson'
 
 export class MonitorFishWebWorker {
   static getStructuredRegulationLawTypes(regulatoryZones) {
@@ -59,7 +61,7 @@ export class MonitorFishWebWorker {
   ): RegulatoryZone[] =>
     geoJSON.features.map(feature => mapToRegulatoryZone(feature, speciesByCode)).filter(isNotNullish)
 
-  static getGeometryIdFromFeatureId = (feature: GeoJSON.Feature): number | string => {
+  static getGeometryIdFromFeatureId = (feature: Feature): number | string => {
     const idFromProperties = feature.properties?.id as number | undefined
     if (idFromProperties) {
       return idFromProperties
@@ -73,7 +75,7 @@ export class MonitorFishWebWorker {
     return ''
   }
 
-  static getIdToGeometryObject(features: GeoJSON.FeatureCollection): Record<string, GeoJSON.Geometry> {
+  static getIdToGeometryObject(features: FeatureCollection): Record<string, Polygon> {
     const geometryListAsObject = {}
 
     features.features.forEach(feature => {
@@ -427,6 +429,15 @@ export class MonitorFishWebWorker {
             }
             default:
               break
+          }
+        }
+
+        if (filters.zones && !!vessel.latitude && !!vessel.longitude) {
+          const vesselPoint = point([vessel.longitude, vessel.latitude])
+
+          const features = filters.zones.map(zone => zone.feature)
+          if (!features.some(polygon => booleanPointInPolygon(vesselPoint, polygon as Polygon | MultiPolygon))) {
+            return false
           }
         }
 

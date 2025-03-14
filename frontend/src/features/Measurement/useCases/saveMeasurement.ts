@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 
+import type { Geometry } from 'geojson'
 import type { SimpleGeometry } from 'ol/geom'
 
 export const saveMeasurement = (email?: string | undefined) => (feature: Feature, measurement: string) => dispatch => {
@@ -25,7 +26,7 @@ export const saveMeasurement = (email?: string | undefined) => (feature: Feature
     return
   }
 
-  const geojsonGeometry = convertToGeoJSONGeometryObject(geometry)
+  const geojsonGeometry = convertToGeoJSONGeometryObject<Geometry>(geometry)
 
   dispatch(
     addMeasurementDrawed({

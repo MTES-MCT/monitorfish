@@ -20,6 +20,7 @@ import { getCoordinates } from '../../../../../../coordinates'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 
 import type { MissionActionFormValues } from '../../types'
+import type { Point as GeoJSONPoint } from 'geojson'
 import type { Coordinate } from 'ol/coordinate'
 
 import MissionActionType = MissionAction.MissionActionType
@@ -174,5 +175,5 @@ function getGeometryFromCoordinates(longitudeValue: number, latitudeValue: numbe
     geometry: new Point(coordinates)
   })
 
-  return convertToGeoJSONGeometryObject(feature.getGeometry() as Point)
+  return convertToGeoJSONGeometryObject<GeoJSONPoint>(feature.getGeometry() as Point)
 }

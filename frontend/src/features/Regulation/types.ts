@@ -1,6 +1,6 @@
 import type { GearMeshSizeEqualityComparator } from '../../domain/entities/backoffice'
-import type { GeoJSON } from '../../domain/types/GeoJSON'
 import type { UndefineExcept } from '@mtes-mct/monitor-ui'
+import type { Polygon } from 'geojson'
 
 export type BaseRegulatoryZone = {
   topic: string
@@ -11,7 +11,7 @@ export type RegulatoryZone = BaseRegulatoryZone & {
   color?: string
   fishingPeriod: FishingPeriod
   gearRegulation: GearRegulation
-  geometry: GeoJSON.Geometry | undefined
+  geometry: Polygon | undefined
   id: number | string | undefined
   lawType: string
   nextId: string | undefined

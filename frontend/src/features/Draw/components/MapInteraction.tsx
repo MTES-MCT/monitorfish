@@ -50,7 +50,7 @@ export function MapInteraction({
 const Wrapper = styled.div`
   position: absolute;
   top: 0;
-  z-index: 10;
+  z-index: 9999;
   width: 580px;
   margin-left: calc(50% - 290px);
   margin-right: calc(50% - 290px);

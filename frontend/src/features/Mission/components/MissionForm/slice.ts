@@ -5,7 +5,7 @@ import type { MissionMainFormValues } from './types'
 import type { MissionWithActionsDraft } from '../../types'
 import type { ControlUnit } from '@mtes-mct/monitor-ui'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import type { GeoJSON } from 'domain/types/GeoJSON'
+import type { Feature, Point } from 'geojson'
 
 export interface MissionFormState {
   draft: MissionWithActionsDraft | undefined
@@ -15,8 +15,8 @@ export interface MissionFormState {
   isListeningToEvents: boolean
   isMissionCreatedBannerDisplayed: boolean
   mustResetOtherControlsCheckboxes: boolean | undefined
-  selectedMissionActionGeoJSON: GeoJSON.GeoJson | undefined
-  selectedMissionGeoJSON: GeoJSON.GeoJson | undefined
+  selectedMissionActionGeoJSON: Feature<Point> | undefined
+  selectedMissionGeoJSON: Feature<Point> | undefined
 }
 const INITIAL_STATE: MissionFormState = {
   draft: undefined,
@@ -103,14 +103,14 @@ const missionFormSlice = createSlice({
     /**
      * Set selected mission action GeoJSON.
      */
-    setSelectedMissionActionGeoJSON(state, action: PayloadAction<GeoJSON.GeoJson>) {
+    setSelectedMissionActionGeoJSON(state, action: PayloadAction<Feature<Point>>) {
       state.selectedMissionActionGeoJSON = action.payload
     },
 
     /**
      * Set selected mission GeoJSON.
      */
-    setSelectedMissionGeoJSON(state, action: PayloadAction<GeoJSON.GeoJson>) {
+    setSelectedMissionGeoJSON(state, action: PayloadAction<Feature<Point>>) {
       state.selectedMissionGeoJSON = action.payload
     },
 

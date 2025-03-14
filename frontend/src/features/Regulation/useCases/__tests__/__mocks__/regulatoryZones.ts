@@ -39,8 +39,15 @@ export const regulatoryZones: RegulatoryZone[] = [
       }
     },
     geometry: {
-      coordinates: [1, 2],
-      type: 'Point'
+      coordinates: [
+        [
+          [9.4055, 43.0527],
+          [9.4055, 43.0777],
+          [9.4109, 43.0775],
+          [9.4152, 43.0771]
+        ]
+      ],
+      type: 'Polygon'
     },
     id: 123,
     lawType: 'Reg. MEMN',
@@ -130,8 +137,15 @@ export const regulatoryZones: RegulatoryZone[] = [
       }
     },
     geometry: {
-      coordinates: [1, 2],
-      type: 'Point'
+      coordinates: [
+        [
+          [9.4055, 43.0527],
+          [9.4055, 43.0777],
+          [9.4109, 43.0775],
+          [9.4152, 43.0771]
+        ]
+      ],
+      type: 'Polygon'
     },
     id: 1234,
     lawType: 'Reg. MEMN  TWO',
@@ -214,8 +228,15 @@ export const regulatoryZones: RegulatoryZone[] = [
       }
     },
     geometry: {
-      coordinates: [1, 2],
-      type: 'Point'
+      coordinates: [
+        [
+          [9.4055, 43.0527],
+          [9.4055, 43.0777],
+          [9.4109, 43.0775],
+          [9.4152, 43.0771]
+        ]
+      ],
+      type: 'Polygon'
     },
     id: 12345,
     lawType: 'Reg. NAMO',
@@ -288,8 +309,15 @@ export const regulatoryZones: RegulatoryZone[] = [
       }
     },
     geometry: {
-      coordinates: [1, 2],
-      type: 'Point'
+      coordinates: [
+        [
+          [9.4055, 43.0527],
+          [9.4055, 43.0777],
+          [9.4109, 43.0775],
+          [9.4152, 43.0771]
+        ]
+      ],
+      type: 'Polygon'
     },
     id: 123456,
     lawType: 'Reg. NAMO',
@@ -362,8 +390,15 @@ export const regulatoryZones: RegulatoryZone[] = [
       }
     },
     geometry: {
-      coordinates: [1, 2],
-      type: 'Point'
+      coordinates: [
+        [
+          [9.4055, 43.0527],
+          [9.4055, 43.0777],
+          [9.4109, 43.0775],
+          [9.4152, 43.0771]
+        ]
+      ],
+      type: 'Polygon'
     },
     id: 1234567,
     lawType: 'Reg. NAMO',

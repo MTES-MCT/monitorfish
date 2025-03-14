@@ -25,6 +25,7 @@ import { reportingReducer } from '@features/Reporting/slice'
 import { sideWindowReducer } from '@features/SideWindow/slice'
 import { stationReducer } from '@features/Station/slice'
 import { vesselListReducer } from '@features/Vessel/components/VesselList/slice'
+import { vesselListV2Reducer } from '@features/Vessel/components/VesselListV2/slice'
 import { controlReducer } from '@features/Vessel/components/VesselSidebar/control.slice'
 import { vesselReducer } from '@features/Vessel/slice'
 import { filterReducer, type VesselFilterState } from '@features/VesselFilter/slice'
@@ -143,7 +144,8 @@ export const mainReducer = {
   sideWindow: sideWindowReducer,
   station: stationReducer,
   vessel: vesselReducer,
-  vesselList: vesselListReducer
+  vesselList: vesselListReducer,
+  vesselListV2: vesselListV2Reducer
 }
 
 export const backofficeReducer = {

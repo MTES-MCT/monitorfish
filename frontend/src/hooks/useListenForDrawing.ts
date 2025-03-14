@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react'
 
 import { useMainAppSelector } from './useMainAppSelector'
 
-import type { GeoJSON } from '../domain/types/GeoJSON'
+import type { Geometry } from 'geojson'
 
 type GeometryAndInteractionType = {
-  drawedGeometry: GeoJSON.Geometry | undefined
+  drawedGeometry: Geometry | undefined
   interactionType: InteractionType | undefined
 }
 

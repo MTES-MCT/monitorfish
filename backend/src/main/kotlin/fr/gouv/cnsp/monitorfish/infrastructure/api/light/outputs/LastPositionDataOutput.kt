@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.light.outputs
 
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.coordinates.transformCoordinates
+import fr.gouv.cnsp.monitorfish.domain.entities.coordinates.transformCoordinatesToOpenlayersProjection
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -104,7 +104,7 @@ data class LastPositionDataOutput(
                 isAtPort = position.isAtPort,
                 beaconMalfunctionId = position.beaconMalfunctionId,
                 coordinates =
-                    transformCoordinates(
+                    transformCoordinatesToOpenlayersProjection(
                         longitude = position.longitude,
                         latitude = position.latitude,
                     ).toList(),

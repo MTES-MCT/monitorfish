@@ -1,6 +1,10 @@
-import { customDayjs } from '@mtes-mct/monitor-ui'
+import { getAdministrativeSubZonesFromAPI } from '@api/geoserver'
+import { LayerProperties } from '@features/Map/constants'
+import { customDayjs, type TreeOption } from '@mtes-mct/monitor-ui'
 
 import { LastControlPeriod } from './constants'
+
+import type { MonitorFishMap } from '@features/Map/Map.types'
 
 export function getLastControlledFilterFromLastControlPeriod(period: LastControlPeriod | undefined): Partial<{
   lastControlledAfter: string | undefined
@@ -40,4 +44,40 @@ export function getLastControlledFilterFromLastControlPeriod(period: LastControl
     default:
       return {}
   }
+}
+
+export async function getFilterableZonesAsTreeOptions(): Promise<TreeOption[]> {
+  const filterableLayers = Object.keys(LayerProperties)
+    .map<MonitorFishMap.ShowableLayer>(layerKey => LayerProperties[layerKey])
+    .filter(layer => !!layer.isIntersectable)
+
+  return Promise.all(
+    filterableLayers.map(async zone => {
+      if (!zone.hasSearchableZones) {
+        return {
+          children: [
+            {
+              label: zone.name,
+              value: zone.code
+            }
+          ],
+          label: zone.name ?? 'Aucun nom'
+        }
+      }
+
+      const result = await getAdministrativeSubZonesFromAPI(zone.code, false)
+      const features = result.features.map((subZone: any) => ({
+        label:
+          zone.zoneNamePropertyKey && subZone.properties[zone.zoneNamePropertyKey]
+            ? subZone.properties[zone.zoneNamePropertyKey].toString()
+            : 'Aucun nom',
+        value: subZone.id
+      }))
+
+      return {
+        children: features,
+        label: zone.name ?? 'Aucun nom'
+      }
+    })
+  )
 }

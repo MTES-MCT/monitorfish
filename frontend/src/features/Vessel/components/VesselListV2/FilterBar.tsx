@@ -1,16 +1,23 @@
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
+import { InteractionListener } from '@features/Map/constants'
 import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES, BLUEFIN_TUNA_SPECY_CODE } from '@features/PriorNotification/constants'
 import { VesselLocation } from '@features/Vessel/types/vessel'
 import { filterVessels } from '@features/Vessel/useCases/VesselListV2/filterVessels'
+import { filterVesselsWithZone } from '@features/Vessel/useCases/VesselListV2/filterVesselsWithZone'
+import { updateCustomZoneAndFilterVessels } from '@features/Vessel/useCases/VesselListV2/updateCustomZoneAndFilterVessels'
+import { useGetFilterableZonesAsTreeOptions } from '@hooks/useGetFilterableZonesAsTreeOptions'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
 import { useGetOrganizationMembershipNamesAsOptions } from '@hooks/useGetOrganizationMembershipNamesAsOptions'
 import { useGetPortsAsTreeOptions } from '@hooks/useGetPortsAsTreeOptions'
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
+import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Checkbox, CheckPicker, Icon, MultiCascader, Select, Size, TextInput } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import { uniq } from 'lodash-es'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -26,12 +33,22 @@ import {
 export function FilterBar() {
   const dispatch = useMainAppDispatch()
   const listFilterValues = useMainAppSelector(store => store.vessel.listFilterValues)
+  const areMoreFiltersDisplayed = useMainAppSelector(store => store.vesselListV2.areMoreFiltersDisplayed)
 
   const { fleetSegmentsAsOptions } = useGetFleetSegmentsAsOptions()
   const { gearsAsTreeOptions } = useGetGearsAsTreeOptions()
   const { portsAsTreeOptions } = useGetPortsAsTreeOptions()
   const { speciesAsOptions } = useGetSpeciesAsOptions()
+  const filterableZoneAsTreeOptions = useGetFilterableZonesAsTreeOptions()
   const organizationMembershipNames = useGetOrganizationMembershipNamesAsOptions()
+
+  const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.VESSELS_LIST)
+
+  useEffect(() => {
+    if (drawedGeometry) {
+      dispatch(updateCustomZoneAndFilterVessels())
+    }
+  }, [dispatch, drawedGeometry])
 
   const speciesAsCodeOptions =
     speciesAsOptions?.map(option => ({ label: option.label, value: option.value.code })) ?? []
@@ -50,6 +67,11 @@ export function FilterBar() {
 
   const updateGearCodes = (nextGearCodes: string[] | undefined) => {
     dispatch(filterVessels({ gearCodes: nextGearCodes }))
+  }
+
+  const updateZones = (nextZones: string[] | undefined) => {
+    assertNotNullish(filterableZoneAsTreeOptions)
+    dispatch(filterVesselsWithZone(filterableZoneAsTreeOptions, nextZones))
   }
 
   const updateLastControlPeriod = (nextLastControlPeriod: LastControlPeriod | undefined) => {
@@ -213,20 +235,18 @@ export function FilterBar() {
             items.length > 0 ? <SelectValue>Dernier port de débarque ({items.length})</SelectValue> : <></>
           }
           searchable
-          style={{ width: 230 }}
+          style={{ width: 210 }}
           value={listFilterValues.lastLandingPortLocodes}
         />
         <Select
           isLabelHidden
           isTransparent
-          label="Date du dernier contrôle"
+          label="Dernier contrôle"
           name="lastControlPeriod"
           onChange={updateLastControlPeriod}
           options={LAST_CONTROL_PERIODS_AS_OPTIONS}
-          placeholder="Date du dernier contrôle"
+          placeholder="Dernier contrôle"
           popupWidth={224}
-          // renderValue={value => (value !== undefined ? <SelectValue>Date du dernier contrôle (1)</SelectValue> : <></>)}
-          style={{ width: 230 }}
           value={listFilterValues.lastControlPeriod}
         />
         <CheckPicker
@@ -243,40 +263,64 @@ export function FilterBar() {
           searchable
           value={listFilterValues.producerOrganizations}
         />
-        <Select
+        <MultiCascader
+          disabled={!filterableZoneAsTreeOptions}
           isLabelHidden
           isTransparent
-          label="Longueur du navire"
-          name="vesselSize"
-          onChange={updateVesselSize}
-          options={VESSEL_SIZE_AS_OPTIONS}
-          placeholder="Longueur du navire"
-          // renderValue={value => (value !== undefined ? <SelectValue>Longueur du navire (1)</SelectValue> : <></>)}
-          value={listFilterValues.vesselSize}
+          label="Filtrer les navires avec une zone"
+          name="zones"
+          onChange={updateZones}
+          options={filterableZoneAsTreeOptions ?? []}
+          placeholder="Filtrer les navires avec une zone"
+          popupWidth={500}
+          renderValue={(_, items) => {
+            const itemsChildrens = items.filter(item => item.parent !== null)
+
+            return itemsChildrens.length > 0 ? (
+              <SelectValue>Zone de filtre ({itemsChildrens.length})</SelectValue>
+            ) : (
+              <></>
+            )
+          }}
+          searchable
+          style={{ width: 416 }}
+          uncheckableItemValues={['1', '2']}
+          value={listFilterValues.zones?.map(zone => zone.value)}
         />
-        <Select
-          isLabelHidden
-          isTransparent
-          label="Dernière position VMS"
-          name="lastPositionHoursAgo"
-          onChange={updateLastPositionHoursAgo}
-          options={LAST_POSITION_AS_OPTIONS}
-          placeholder="Dernière position VMS"
-          // renderValue={value => (value !== undefined ? <SelectValue>Dernière position VMS (1)</SelectValue> : <></>)}
-          style={{ width: 210 }}
-          value={listFilterValues.lastPositionHoursAgo}
-        />
-        <Select
-          isLabelHidden
-          isTransparent
-          label="Equipé JPE"
-          name="hasLogbook"
-          onChange={updateHasLogbook}
-          options={HAS_LOGBOOK_AS_OPTIONS}
-          placeholder="Equipé JPE"
-          // renderValue={value => (value !== undefined ? <SelectValue>Equipé JPE (1)</SelectValue> : <></>)}
-          value={listFilterValues.hasLogbook}
-        />
+        {areMoreFiltersDisplayed && (
+          <>
+            <Select
+              isLabelHidden
+              isTransparent
+              label="Longueur du navire"
+              name="vesselSize"
+              onChange={updateVesselSize}
+              options={VESSEL_SIZE_AS_OPTIONS}
+              placeholder="Longueur du navire"
+              value={listFilterValues.vesselSize}
+            />
+            <Select
+              isLabelHidden
+              isTransparent
+              label="Dernière position VMS"
+              name="lastPositionHoursAgo"
+              onChange={updateLastPositionHoursAgo}
+              options={LAST_POSITION_AS_OPTIONS}
+              placeholder="Dernière position VMS"
+              value={listFilterValues.lastPositionHoursAgo}
+            />
+            <Select
+              isLabelHidden
+              isTransparent
+              label="Equipé JPE"
+              name="hasLogbook"
+              onChange={updateHasLogbook}
+              options={HAS_LOGBOOK_AS_OPTIONS}
+              placeholder="Equipé JPE"
+              value={listFilterValues.hasLogbook}
+            />
+          </>
+        )}
         <Checkbox checked={isAtSea} label="En mer" name="always" onChange={updateVesselLocationAtSea} />
         <Checkbox checked={isAtPort} label="À quai" name="always" onChange={updateVesselLocationAtPort} />
       </Row>

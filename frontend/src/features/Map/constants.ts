@@ -17,7 +17,6 @@ export enum InteractionListener {
   MEASUREMENT = 'MEASUREMENT',
   MISSION_ZONE = 'MISSION_ZONE',
   REGULATION = 'REGULATION',
-  SURVEILLANCE_ZONE = 'SURVEILLANCE_ZONE',
   VESSELS_LIST = 'VESSELS_LIST'
 }
 
@@ -70,10 +69,6 @@ export const layersGroups: Record<string, MonitorFishMap.CodeAndName> = {
   VMS_SITUATION: {
     code: 'situs_areas',
     name: 'Zones pour situation VMS'
-  },
-  VMS_SITUATION_BREXIT: {
-    code: 'brexit_areas',
-    name: 'Zones pour situation VMS Brexit'
   }
 }
 
@@ -223,10 +218,12 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
   },
   [MonitorFishMap.MonitorFishLayer.CUSTOM]: {
     code: 'custom',
+    name: 'Zone manuelle',
     type: LayerType.CUSTOM,
     isClickable: false,
     isHoverable: false,
-    zIndex: 1009
+    zIndex: 1009,
+    isIntersectable: true
   },
   [MonitorFishMap.MonitorFishLayer.EEZ]: {
     code: 'eez_areas',
@@ -242,7 +239,7 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
     zoneNamePropertyKey: 'f_code',
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.THREE_MILES]: {
     code: '3_miles_areas',
@@ -264,56 +261,56 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
     name: 'Eaux occidentales australes',
     group: layersGroups.TWELVE_FORTY_ONE,
     type: LayerType.ADMINISTRATIVE,
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.eaux_occidentales_septentrionales]: {
     code: '1241_eaux_occidentales_septentrionales_areas',
     name: 'Eaux occidentales septentrionales',
     group: layersGroups.TWELVE_FORTY_ONE,
     type: LayerType.ADMINISTRATIVE,
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.eaux_union_dans_oi_et_atl_ouest]: {
     code: '1241_eaux_union_dans_oi_et_atl_ouest_areas',
     name: "Eaux de l'Union dans l'OI et l'Atl. ouest",
     group: layersGroups.TWELVE_FORTY_ONE,
     type: LayerType.ADMINISTRATIVE,
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.mer_baltique]: {
     code: '1241_mer_baltique_areas',
     name: 'Mer Baltique',
     group: layersGroups.TWELVE_FORTY_ONE,
     type: LayerType.ADMINISTRATIVE,
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.mer_du_nord]: {
     code: '1241_mer_du_nord_areas',
     name: 'Mer du Nord',
     group: layersGroups.TWELVE_FORTY_ONE,
     type: LayerType.ADMINISTRATIVE,
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.mer_mediterranee]: {
     code: '1241_mer_mediterranee_areas',
     name: 'Mer Méditerranée',
     group: layersGroups.TWELVE_FORTY_ONE,
     type: LayerType.ADMINISTRATIVE,
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.mer_noire]: {
     code: '1241_mer_noire_areas',
     name: 'Mer Noire',
     group: layersGroups.TWELVE_FORTY_ONE,
     type: LayerType.ADMINISTRATIVE,
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.mer_celtique]: {
     code: '1241_mer_celtique_areas',
     name: 'Mer Celtique',
     group: layersGroups.TWELVE_FORTY_ONE,
     type: LayerType.ADMINISTRATIVE,
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.cormoran]: {
     code: 'cormoran_areas',
@@ -321,7 +318,7 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
     zoneNamePropertyKey: 'zonex',
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.AEM]: {
     code: 'aem_areas',
@@ -334,42 +331,42 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
     name: 'CCAMLR',
     group: layersGroups.ORGP,
     type: LayerType.ADMINISTRATIVE,
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.ICCAT]: {
     code: 'fao_iccat_areas',
     name: 'ICCAT',
     group: layersGroups.ORGP,
     type: LayerType.ADMINISTRATIVE,
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.IOTC]: {
     code: 'fao_iotc_areas',
     name: 'IOTC',
     group: layersGroups.ORGP,
     type: LayerType.ADMINISTRATIVE,
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.NEAFC]: {
     code: 'neafc_regulatory_area',
     name: 'NEAFC',
     group: layersGroups.ORGP,
     type: LayerType.ADMINISTRATIVE,
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.NAFO]: {
     code: 'nafo_regulatory_area',
     name: 'NAFO',
     group: layersGroups.ORGP,
     type: LayerType.ADMINISTRATIVE,
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.SIOFA]: {
     code: 'fao_siofa_areas',
     name: 'SIOFA',
     group: layersGroups.ORGP,
     type: LayerType.ADMINISTRATIVE,
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.rectangles_stat]: {
     code: 'rectangles_stat_areas',
@@ -377,7 +374,7 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
     zoneNamePropertyKey: 'icesname',
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.cgpm_areas]: {
     code: 'cgpm_areas',
@@ -386,7 +383,7 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
     zoneNamePropertyKey: 'SMU_CODE',
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.cgpm_statistical_rectangles_areas]: {
     code: 'cgpm_statistical_rectangles_areas',
@@ -395,7 +392,7 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
     zoneNamePropertyKey: 'sect_cod',
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.effort_zones_areas]: {
     code: 'effort_zones_areas',
@@ -403,7 +400,7 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
     zoneNamePropertyKey: 'zone',
-    isIntersectable: true
+    isIntersectable: false
   },
   [MonitorFishMap.MonitorFishLayer.situations]: {
     code: 'situs_areas',
@@ -413,16 +410,6 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
     hasSearchableZones: true,
     hasFetchableZones: true,
     zoneNamePropertyKey: 'libelle',
-    isIntersectable: true
-  },
-  [MonitorFishMap.MonitorFishLayer.brexit]: {
-    code: 'brexit_areas',
-    name: 'Zones pour situation Brexit',
-    group: layersGroups.VMS_SITUATION_BREXIT,
-    type: LayerType.ADMINISTRATIVE,
-    hasSearchableZones: true,
-    hasFetchableZones: true,
-    zoneNamePropertyKey: 'nom',
     isIntersectable: true
   },
   [MonitorFishMap.MonitorFishLayer.REGULATORY_PREVIEW]: {

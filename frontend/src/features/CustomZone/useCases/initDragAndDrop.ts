@@ -14,7 +14,6 @@ import { customZoneActions } from '../slice'
 import { fitViewToFeatures } from '../utils/fitViewToFeatures'
 import { getLayer } from '../utils/getLayer'
 
-import type { GeoJSON as GeoJSONNamespace } from '../../../domain/types/GeoJSON'
 import type { MainAppThunk } from '../../../store'
 import type { DragAndDropEvent } from 'ol/interaction/DragAndDrop'
 import type { AnyAction } from 'redux'
@@ -58,7 +57,7 @@ function saveAndShowCustomZones(dispatch: ThunkDispatch<ReturnType<typeof mainSt
     const geoJSON = parser.writeFeaturesObject(event.features as Feature<Geometry>[], {
       dataProjection: WSG84_PROJECTION,
       featureProjection: event.projection
-    }) as GeoJSONNamespace.GeoJson
+    })
 
     dispatch(
       customZoneActions.add({

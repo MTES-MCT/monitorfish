@@ -23,7 +23,7 @@ import { Mission } from '../../mission.types'
 import { addMission } from '../../useCases/addMission'
 import { editMission } from '../../useCases/editMission'
 
-import type { GeoJSON as GeoJSONType } from '../../../../domain/types/GeoJSON'
+import type { MultiPolygon } from 'geojson'
 
 import FrontCompletionStatus = MissionAction.FrontCompletionStatus
 
@@ -74,7 +74,7 @@ export function MissionList() {
     [dispatch]
   )
 
-  const handleZoomToMission = (geometry: GeoJSONType.MultiPolygon | undefined) => {
+  const handleZoomToMission = (geometry: MultiPolygon | undefined) => {
     if (!geometry) {
       return
     }

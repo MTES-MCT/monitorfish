@@ -322,7 +322,6 @@ position_alerts.flow.schedule = Schedule(
             parameter_defaults={
                 "alert_type": "NEAFC_FISHING_ALERT",
                 "alert_config_name": "NEAFC_FISHING_ALERT",
-                "zones": None,
                 "hours_from_now": 8,
                 "only_fishing_positions": True,
             },

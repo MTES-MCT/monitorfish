@@ -55,6 +55,7 @@ export function VesselList({ isFromUrl }: VesselListProps) {
   const isBodyEmptyDataVisible = !!vessels && vessels.length === 0
 
   const [rowSelection, setRowSelection] = useState({})
+  const hasNoRowsSelected = Object.keys(rowSelection).length === 0
   const [expanded, setExpanded] = useState<ExpandedState>({})
   const [isExportVesselListDialogOpened, setIsExportVesselListDialogOpened] = useState(false)
 
@@ -151,6 +152,7 @@ export function VesselList({ isFromUrl }: VesselListProps) {
               </TableLegend>
               <RightButton
                 accent={Accent.SECONDARY}
+                disabled={hasNoRowsSelected}
                 Icon={Icon.Download}
                 onClick={() => setIsExportVesselListDialogOpened(true)}
                 title="Télécharger la liste des navires"

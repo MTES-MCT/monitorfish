@@ -1,6 +1,7 @@
 context('Side Window > Vessel List > Table', () => {
 
-  it('Should filter vessels and open a row When logged as super user', () => {
+  it('Should filter vessels, open a row and download the CSV When logged as super user', () => {
+    cy.cleanDownloadedFiles()
     cy.login('superuser')
 
     cy.visit('/side_window')
@@ -9,7 +10,7 @@ context('Side Window > Vessel List > Table', () => {
 
     /**
      * /!\ We need to apply a first filter to display the vessels in the table.
-     * This is to ensure the filter to be backward compatible
+     * This is to ensure the filter to be backward compatible with the vessel filter V1.
      */
 
     cy.fill('Nationalités', ['Espagne', 'France'])
@@ -44,9 +45,30 @@ context('Side Window > Vessel List > Table', () => {
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('OTB – Chaluts de fond à panneaux')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('ANF – 4164.47 kg')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('LEZ – 330.72 kg')
+
+    /**
+     * Download the CSV
+     */
+    cy.get('[title="Télécharger la liste des navires"]').should('have.attr', 'disabled')
+    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648"] > td > div > div > label').click({ force: true })
+    cy.get('[title="Télécharger la liste des navires"]').should('not.have.attr', 'disabled')
+    cy.clickButton('Télécharger la liste des navires')
+    cy.clickButton('Télécharger le tableau')
+
+    cy.wait(400)
+    cy.exec('cd cypress/downloads && ls').then(result => {
+      const downloadedCSVFilename = result.stdout
+
+      return cy
+        .readFile(`cypress/downloads/${downloadedCSVFilename}`)
+        .should('contains', 'Nationalité,Nom,CFR,C/S,MMSI,GDH (UTC),Latitude,Longitude,Cap,Vitesse')
+        .should('contains', '"France","PARENT EXPLIQUER COUCHER","ABC000452438","CC0029","211049483"')
+        .should('contains', '"47°43.740′N","003°21.600′W",0,0')
+    })
   })
 
-  it('Should filter vessels and open a row When logged as user', () => {
+
+  it('Should filter vessels and open a row When not logged as user', () => {
     cy.login('user')
 
     cy.visit('/side_window')

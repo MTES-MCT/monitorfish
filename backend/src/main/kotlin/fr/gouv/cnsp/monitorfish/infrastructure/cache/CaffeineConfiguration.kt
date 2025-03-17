@@ -54,7 +54,8 @@ class CaffeineConfiguration {
     val ports = "ports"
 
     // Risk Factors
-    val riskFactor = "risk_factor"
+    val riskFactorByCfr = "risk_factor_by_cfr"
+    val riskFactorByVesselId = "risk_factor_by_vessel_id"
     val riskFactors = "risk_factors"
 
     // Segments
@@ -135,7 +136,8 @@ class CaffeineConfiguration {
         val portCache = buildPermanentCache(port)
 
         // Risk Factors
-        val riskFactorCache = buildMinutesCache(riskFactor, ticker, 1)
+        val riskFactorByCfrCache = buildMinutesCache(riskFactorByCfr, ticker, 1)
+        val riskFactorByVesselIdCache = buildMinutesCache(riskFactorByVesselId, ticker, 1)
         val riskFactorsCache = buildMinutesCache(riskFactors, ticker, 2)
 
         // Segments
@@ -209,7 +211,8 @@ class CaffeineConfiguration {
                 portCache,
                 portsCache,
                 previousLogbookCache,
-                riskFactorCache,
+                riskFactorByCfrCache,
+                riskFactorByVesselIdCache,
                 riskFactorsCache,
                 searchBeaconsCache,
                 searchVesselsCache,

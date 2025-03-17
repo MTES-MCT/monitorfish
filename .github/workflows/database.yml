@@ -1,10 +1,11 @@
 name: CI/CD database docker image
 
 on:
-  push:
-    paths:
-      - ".github/workflows/database.yml"
-      - "infra/docker/database/*"
+  workflow_dispatch:
+  # push:
+  #   paths:
+  #     - ".github/workflows/database.yml"
+  #     - "infra/docker/database/*"
 
 jobs:
   build-database-image:

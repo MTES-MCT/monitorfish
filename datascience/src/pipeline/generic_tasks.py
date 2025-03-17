@@ -30,14 +30,21 @@ def extract(
     `pandas.DataFrame`.
 
     Args:
-        db_name (str): name of the database to extract from : "fmc", "ocan",
-            "monitorfish_local" or "monitorfish_remote"
+        db_name (str): name of the database to extract from. Possible values :
+          - 'fmc'
+          - 'ocan'
+          - 'monitorfish_local'
+          - 'monitorfish_remote'
+          - 'monitorenv_remove'
+          - 'cacem_local'
+          - 'data_warehouse'
+
         query_filepath (Union[Path, str]): path to .sql file, starting from the saved
-            queries folder. example : "ocan/nav_fr_peche.sql"
+          queries folder. example : "ocan/nav_fr_peche.sql"
         dtypes (Union[None, dict], optional): If specified, use {col: dtype, …}, where
-            col is a column label and dtype is a numpy.dtype or Python type to cast
-            one or more of the DataFrame’s columns to column-specific types.
-            Defaults to None.
+          col is a column label and dtype is a numpy.dtype or Python type to cast
+          one or more of the DataFrame’s columns to column-specific types.
+          Defaults to None.
         parse_dates (Union[list, dict, None], optional):
 
           - List of column names to parse as dates.

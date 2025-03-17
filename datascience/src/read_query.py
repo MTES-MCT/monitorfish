@@ -24,12 +24,13 @@ def read_saved_query(
     **kwargs,
 ) -> Union[pd.DataFrame, gpd.GeoDataFrame]:
     """Run saved SQLquery on a database. Supported databases :
-
       - 'ocan' : OCAN database
       - 'fmc': FMC database
       - 'monitorfish_remote': Monitorfish database
       - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
+      - 'monitorenv_remote': Monitorfish database
       - 'cacem_local' : CACEM PostGIS database hosted in CNSP
+      - 'data_warehouse' : Monitorfish/Monitorenv/RapportNav Data Warehouse
 
     Database credentials must be present in the environement.
 

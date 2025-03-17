@@ -1,0 +1,77 @@
+from datetime import datetime
+
+import pandas as pd
+from pytest import fixture
+
+from src.pipeline.flows.vessel_profiles import flow
+from src.read_query import read_query
+from tests.mocks import get_utcnow_mock_factory, mock_check_flow_not_running
+
+flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
+
+flow.replace(
+    flow.get_tasks("get_utcnow")[0],
+    get_utcnow_mock_factory(datetime(2050, 6, 19, 11, 14)),
+)
+
+
+@fixture
+def expected_vessel_profiles():
+    return pd.DataFrame(
+        {
+            "cfr": ["ABC000306959", "CFR000888888"],
+            "gears": [
+                [
+                    {"OTB": 0.9533061485568082},
+                    {"OTM": 0.03997761253697929},
+                    {"LLS": 0.006716238906212521},
+                ],
+                [{"OTB": 1.0}],
+            ],
+            "species": [
+                [
+                    {"ABC": 0.7995522507395858},
+                    {"DEF": 0.08795074758135445},
+                    {"GHI": 0.059966418805468935},
+                    {"PIL": 0.03997761253697929},
+                    {"NEP": 0.003997761253697929},
+                    {"BSS": 0.0031982090029583432},
+                    {"HKE": 0.0022787239146078195},
+                    {"SOL": 0.0015991045014791716},
+                    {"SWO": 0.0012792836011833373},
+                    {"COD": 0.00019988806268489645},
+                    {"BFT": 0.0},
+                ],
+                [
+                    {"ABC": 0.8438818565400844},
+                    {"DEF": 0.09282700421940929},
+                    {"GHI": 0.06329113924050633},
+                ],
+            ],
+            "segments": [
+                [
+                    {"NO_SEGMENT": 0.9104101703046295},
+                    {"T8-9_current_year": 0.06288478452066842},
+                    {"T8-PEL_current_year": 0.019988806268489645},
+                    {"L_current_year": 0.005836731430398976},
+                    {"L HKE_current_year": 0.000679619413128648},
+                    {"L BFT_current_year": 0.00019988806268489645},
+                ],
+                [
+                    {"FT_current_year": 0.9367088607594937},
+                    {"NO_SEGMENT": 0.06329113924050633},
+                ],
+            ],
+        }
+    )
+
+
+def test_flow(reset_test_data, add_enriched_catches, expected_vessel_profiles):
+    flow.schedule = None
+    state = flow.run()
+    assert state.is_successful()
+
+    query = "SELECT * FROM vessel_profiles ORDER BY cfr"
+    vessel_profiles = read_query(query, db="monitorfish_remote")
+
+    pd.testing.assert_frame_equal(vessel_profiles, expected_vessel_profiles)

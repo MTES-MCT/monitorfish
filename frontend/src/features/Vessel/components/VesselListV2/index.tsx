@@ -1,6 +1,7 @@
 import { Body } from '@features/SideWindow/components/Body'
 import { Header } from '@features/SideWindow/components/Header'
 import { Page } from '@features/SideWindow/components/Page'
+import { ExportVesselListDialog } from '@features/Vessel/components/ExportVesselListDialog'
 import { useGetFilteredVesselsLastPositions } from '@features/Vessel/hooks/useGetFilteredVesselsLastPositions'
 import { previewVessels } from '@features/Vessel/useCases/VesselListV2/previewVessels'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -11,6 +12,7 @@ import {
   Accent,
   Button,
   Icon,
+  IconButton,
   pluralize,
   TableWithSelectableRows,
   useNewWindow,
@@ -54,6 +56,7 @@ export function VesselList({ isFromUrl }: VesselListProps) {
 
   const [rowSelection, setRowSelection] = useState({})
   const [expanded, setExpanded] = useState<ExpandedState>({})
+  const [isExportVesselListDialogOpened, setIsExportVesselListDialogOpened] = useState(false)
 
   const [columns, tableData] = useMemo(
     () => [
@@ -146,6 +149,12 @@ export function VesselList({ isFromUrl }: VesselListProps) {
                   isFilteringVesselList || tableData.length === undefined ? '...' : tableData.length
                 } ${pluralize('navire', tableData.length)} ${pluralize('équipé', tableData.length)} VMS `}
               </TableLegend>
+              <RightButton
+                accent={Accent.SECONDARY}
+                Icon={Icon.Download}
+                onClick={() => setIsExportVesselListDialogOpened(true)}
+                title="Télécharger la liste des navires"
+              />
               <PreviewButton
                 accent={Accent.SECONDARY}
                 data-cy="preview-filtered-vessels"
@@ -216,6 +225,9 @@ export function VesselList({ isFromUrl }: VesselListProps) {
           </TableOuterWrapper>
         </StyledBody>
       </Page>
+      {isExportVesselListDialogOpened && (
+        <ExportVesselListDialog onExit={() => setIsExportVesselListDialogOpened(false)} selectedRows={rowSelection} />
+      )}
     </>
   )
 }
@@ -286,10 +298,17 @@ const TableInnerWrapper = styled.div<{
     `}
 `
 
-const PreviewButton = styled(Button)`
+const RightButton = styled(IconButton)`
   margin-left: auto;
-  margin-right: 0;
+  margin-right: 8px;
 
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+`
+
+const PreviewButton = styled(Button)`
   svg {
     width: 16px;
     height: 16px;

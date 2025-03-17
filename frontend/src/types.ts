@@ -8,7 +8,7 @@ import type { ConditionalKeys, Exact } from 'type-fest'
 
 export type CollectionItem = {
   [key: string]: any
-  id: number | string
+  id?: number | string
 }
 
 export type MenuItem<T = string> = {

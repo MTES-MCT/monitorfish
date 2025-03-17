@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "@turf/boolean-point-in-polygon": "^7.2.0",
-    "@turf/helpers": "^7.2.0",
-    "@turf/turf": "^7.2.0",
-    "turf": "^3.0.14"
-  }
-}

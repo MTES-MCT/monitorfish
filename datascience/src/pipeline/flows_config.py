@@ -318,7 +318,7 @@ position_alerts.flow.schedule = Schedule(
             },
         ),
         clocks.CronClock(
-            "2 * * * *",
+            "0 * * * *",
             parameter_defaults={
                 "alert_type": "NEAFC_FISHING_ALERT",
                 "alert_config_name": "NEAFC_FISHING_ALERT",
@@ -327,7 +327,7 @@ position_alerts.flow.schedule = Schedule(
             },
         ),
         clocks.CronClock(
-            "1 * * * *",
+            "6 * * 3-5 *",
             parameter_defaults={
                 "alert_type": "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT",
                 "alert_config_name": "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT",

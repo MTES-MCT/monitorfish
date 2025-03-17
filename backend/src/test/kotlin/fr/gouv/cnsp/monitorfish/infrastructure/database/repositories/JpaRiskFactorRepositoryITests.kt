@@ -17,7 +17,8 @@ class JpaRiskFactorRepositoryITests : AbstractDBTests() {
 
     @BeforeEach
     fun setup() {
-        cacheManager.getCache("risk_factor")?.clear()
+        cacheManager.getCache("risk_factor_by_cfr")?.clear()
+        cacheManager.getCache("risk_factor_by_vessel_id")?.clear()
         cacheManager.getCache("risk_factors")?.clear()
     }
 
@@ -29,6 +30,16 @@ class JpaRiskFactorRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(result.size).isGreaterThan(0)
+    }
+
+    @Test
+    @Transactional
+    fun `findByVesselId Should return a risk factor`() {
+        // When
+        val result = jpaRiskFactorRepository.findByVesselId(109)
+
+        // Then
+        assertThat(result?.riskFactor).isEqualTo(4.0)
     }
 
     @Test

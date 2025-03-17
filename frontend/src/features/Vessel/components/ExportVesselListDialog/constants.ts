@@ -11,14 +11,17 @@ export const VESSEL_LIST_EXPORT_CHECKBOX_OPTIONS = Object.keys(VESSEL_LIST_CSV_M
   }
 })
 
+/* eslint-disable sort-keys-fix/sort-keys-fix */
 export enum VesselListCsvExportFormat {
   SPECIFIC_EXPORT_FOR_CUSTOMS = 'SPECIFIC_EXPORT_FOR_CUSTOMS',
   VMS_SITUATION = 'VMS_SITUATION'
 }
 export const VESSEL_LIST_CSV_FORMAT_EXPORT_LABEL: Record<VesselListCsvExportFormat, string> = {
-  SPECIFIC_EXPORT_FOR_CUSTOMS: 'Export spécifique Douanes',
-  VMS_SITUATION: 'Export pour situation VMS'
+  VMS_SITUATION: 'Export pour situation VMS',
+  SPECIFIC_EXPORT_FOR_CUSTOMS: 'Export spécifique Douanes'
 }
+/* eslint-enable sort-keys-fix/sort-keys-fix */
+
 export const VESSEL_LIST_CSV_FORMAT_AS_OPTIONS = getOptionsFromLabelledEnum(VESSEL_LIST_CSV_FORMAT_EXPORT_LABEL)
 
 export const DEFAULT_CHECKBOXES_FIRST_COLUMN = ['flagState', 'vesselName', 'internalReferenceNumber', 'ircs', 'mmsi']

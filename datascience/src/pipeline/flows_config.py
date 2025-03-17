@@ -317,6 +317,28 @@ position_alerts.flow.schedule = Schedule(
                 "except_flag_states": ["FR", "PF", "VE", "BE", "NL", "DE", "ES"],
             },
         ),
+        clocks.CronClock(
+            "2 * * * *",
+            parameter_defaults={
+                "alert_type": "NEAFC_FISHING_ALERT",
+                "alert_config_name": "NEAFC_FISHING_ALERT",
+                "zones": None,
+                "hours_from_now": 8,
+                "only_fishing_positions": True,
+            },
+        ),
+        clocks.CronClock(
+            "1 * * * *",
+            parameter_defaults={
+                "alert_type": "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT",
+                "alert_config_name": "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT",
+                "zones": ["27.6.a"],
+                "hours_from_now": 8,
+                "only_fishing_positions": False,
+                "species_onboard": ["BLI"],
+                "species_onboard_min_weight": 6000.0,
+            },
+        ),
     ]
 )
 refresh_materialized_view.flow.schedule = Schedule(

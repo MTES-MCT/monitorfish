@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import List, Union
 
 import geopandas as gpd
 import pandas as pd
@@ -18,13 +18,13 @@ from src.read_query import read_query, read_saved_query
 
 def extract(
     db_name: str,
-    query_filepath: Union[Path, str],
-    dtypes: Optional[dict] = None,
-    parse_dates: Optional[Union[list, dict]] = None,
-    params=None,
+    query_filepath: Path | str,
+    dtypes: dict = None,
+    parse_dates: list | dict = None,
+    params: dict = None,
     backend: str = "pandas",
     geom_col: str = "geom",
-    crs: Optional[int] = None,
+    crs: int = None,
 ) -> Union[pd.DataFrame, gpd.GeoDataFrame]:
     """Run SQL query against the indicated database and return the result as a
     `pandas.DataFrame`.
@@ -89,20 +89,20 @@ def load(
     logger: logging.Logger,
     how: str = "replace",
     replace_with_truncate: bool = False,
-    db_name: Optional[str] = None,
-    pg_array_columns: Optional[list] = None,
+    db_name: str = None,
+    pg_array_columns: list = None,
     handle_array_conversion_errors: bool = True,
     value_on_array_conversion_error: str = "{}",
-    jsonb_columns: Optional[list] = None,
-    table_id_column: Optional[str] = None,
+    jsonb_columns: list = None,
+    table_id_column: str = None,
     df_id_column: str = None,
-    nullable_integer_columns: Optional[list] = None,
-    timedelta_columns: Optional[list] = None,
+    nullable_integer_columns: list = None,
+    timedelta_columns: list = None,
     enum_columns: list = None,
-    connection: Optional[Connection] = None,
-    init_ddls: Optional[List[DDL]] = None,
-    end_ddls: Optional[List[DDL]] = None,
-    bytea_columns: Optional[list] = None,
+    connection: Connection = None,
+    init_ddls: List[DDL] = None,
+    end_ddls: List[DDL] = None,
+    bytea_columns: list = None,
 ):
     r"""
     Load a DataFrame or GeoDataFrame to a database table using sqlalchemy. The table
@@ -239,10 +239,10 @@ def load_with_connection(
     logger: logging.Logger,
     how: str = "replace",
     replace_with_truncate: bool = False,
-    table_id_column: Optional[str] = None,
-    df_id_column: Optional[str] = None,
-    init_ddls: Optional[List[DDL]] = None,
-    end_ddls: Optional[List[DDL]] = None,
+    table_id_column: str = None,
+    df_id_column: str = None,
+    init_ddls: List[DDL] = None,
+    end_ddls: List[DDL] = None,
 ):
     if init_ddls:
         for ddl in init_ddls:

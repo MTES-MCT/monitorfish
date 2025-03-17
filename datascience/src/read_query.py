@@ -7,8 +7,7 @@ from sqlalchemy import text
 from sqlalchemy.engine import Connection, Engine
 
 from config import QUERIES_LOCATION
-
-from .db_config import create_engine
+from src.db_config import create_datawarehouse_client, create_engine
 
 
 def read_saved_query(
@@ -73,7 +72,7 @@ def read_saved_query(
     """
     sql_filepath = QUERIES_LOCATION / sql_filepath
     with open(sql_filepath, "r") as sql_file:
-        query = text(sql_file.read())
+        query = sql_file.read()
 
     return read_query(
         query,
@@ -108,15 +107,17 @@ def read_query(
       - 'fmc': FMC database
       - 'monitorfish_remote': Monitorfish database
       - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
+      - 'monitorenv_remote': Monitorenv database
       - 'cacem_local' : CACEM PostGIS database hosted in CNSP
+      - 'data_warehouse' : Monitorfish/Monitorenv/RapportNav Data Warehouse
 
     Database credentials must be present in the environement.
 
     Args:
         query (str): Query string or SQLAlchemy Selectable
         db (str, optional): Database name. Possible values :
-          'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'. If `db` is None,
-          `con` must be passed.
+          'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local',
+          'monitorenv_remote', 'cacem_local'. If `db` is None, `con` must be passed.
         con (Union[Connection, Engine], optional) : `sqlalchemy.engine.Connection` or
           `sqlalchemy.engine.Engine` object. Mandatory if no `db` is given. Ignored if
           `db` is given.
@@ -148,7 +149,11 @@ def read_query(
     Returns:
         Union[pd.DataFrame, gpd.DataFrame]: Query results
     """
-
+    if db == "data_warehouse":
+        client = create_datawarehouse_client()
+        return client.query_df(query, parameters=params)
+    else:
+        query = text(query)
     if db:
         con = create_engine(db=db, execution_options=dict(stream_results=True))
     elif con:
@@ -187,11 +192,13 @@ def read_table(db: str, schema: str, table_name: str):
       - 'fmc': FMC database
       - 'monitorfish_remote': Monitorfish database
       - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
+      - 'monitorenv_remote': Monitorenv database
       - 'cacem_local' : CACEM PostGIS database hosted in CNSP
 
     Args:
-        db (str): Database name. Possible values : 'ocan', 'fmc', 'monitorfish_remote',
-          'monitorfish_local'
+        db (str): Database name. Possible values :
+          'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local',
+          'monitorenv_remote', 'cacem_local'.
         schema (str): Schema name
         table_name (str): Table name
 

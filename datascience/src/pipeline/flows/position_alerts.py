@@ -503,7 +503,7 @@ with Flow("Position alert", executor=LocalDaskExecutor()) as flow:
     with case(flow_not_running, True):
         alert_type = Parameter("alert_type")
         alert_config_name = Parameter("alert_config_name")
-        zones = Parameter("zones")
+        zones = Parameter("zones", default=None)
         hours_from_now = Parameter("hours_from_now", default=8)
         only_fishing_positions = Parameter("only_fishing_positions", default=True)
         flag_states = Parameter("flag_states", default=None)

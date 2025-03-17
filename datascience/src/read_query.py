@@ -3,7 +3,7 @@ from typing import Union
 
 import geopandas as gpd
 import pandas as pd
-from sqlalchemy import text
+from sqlalchemy import Selectable, TextClause, text
 from sqlalchemy.engine import Connection, Engine
 
 from config import QUERIES_LOCATION
@@ -89,7 +89,7 @@ def read_saved_query(
 
 
 def read_query(
-    query,
+    query: str | Selectable | TextClause,
     *,
     db: str = None,
     con: Union[Connection, Engine] = None,
@@ -114,7 +114,8 @@ def read_query(
     Database credentials must be present in the environement.
 
     Args:
-        query (str): Query string or SQLAlchemy Selectable
+        query (str | Selectable | TextClause): Query to execute (must be a string if
+          querying data warehouse).
         db (str, optional): Database name. Possible values :
           'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local',
           'monitorenv_remote', 'cacem_local'. If `db` is None, `con` must be passed.
@@ -150,10 +151,14 @@ def read_query(
         Union[pd.DataFrame, gpd.DataFrame]: Query results
     """
     if db == "data_warehouse":
+        assert isinstance(query, str)
         client = create_datawarehouse_client()
         return client.query_df(query, parameters=params)
     else:
-        query = text(query)
+        if isinstance(query, str):
+            query = text(query)
+        else:
+            assert isinstance(query, (Selectable, TextClause))
     if db:
         con = create_engine(db=db, execution_options=dict(stream_results=True))
     elif con:

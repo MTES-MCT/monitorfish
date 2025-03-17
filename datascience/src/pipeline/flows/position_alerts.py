@@ -372,7 +372,7 @@ def extract_vessels_with_species_onboard(
         return VesselsFilter(is_active=False, vessels_cfr=None)
 
     assert isinstance(species_onboard, list)
-    assert isinstance(min_weight, float)
+    assert isinstance(min_weight, (float, int))
 
     vessels = extract(
         "monitorfish_remote",

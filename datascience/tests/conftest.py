@@ -219,19 +219,24 @@ def reset_test_data(create_tables):
 @pytest.fixture(scope="session", autouse=True)
 def wait_for_data_warehouse(set_environment_variables, create_docker_client):
     client = create_docker_client
-    health = None
+    health = ""
     timeout = 30
     stop_time = 1
     elapsed_time = 0
 
     # Wait for data warehouse to start
-    while health != "healthy" and elapsed_time < timeout:
+    while not ("Up" in health and "(healthy)" in health) and elapsed_time < timeout:
         print(f"Waiting for data warehouse to start ({elapsed_time}/{timeout})")
         sleep(stop_time)
-        health = client.inspect_container("data_warehouse")["State"]["Health"]["Status"]
+        container = [
+            c
+            for c in client.api.containers()
+            if True in ["data_warehouse" in n for n in c["Names"]]
+        ][0]
+        health = container["Status"]
         elapsed_time += stop_time
 
-    if health == "healthy":
+    if "Up" in health and "(healthy)" in health:
         print("Data warehouse started")
     else:
         raise RuntimeError("Could not start data warehouse.")

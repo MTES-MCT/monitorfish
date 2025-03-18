@@ -154,7 +154,11 @@ def read_query(
     if db == "data_warehouse":
         assert isinstance(query, str)
         client = create_datawarehouse_client()
-        return client.query_df(query, parameters=params)
+        # `query_df` returns an empty DataFrame without any column when there are no
+        # rows in the result set. Using query_arrow().to_pandas() returns
+        # an (empty) DataFrame with columns, thus presercing the consistency of the
+        # expected dataset.
+        return client.query_arrow(query, parameters=params).to_pandas()
     else:
         if isinstance(query, str):
             query = text(query)

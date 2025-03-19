@@ -80,6 +80,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(lastTrip.startDate.toString()).isEqualTo("2019-10-11T01:06Z")
+        assertThat(lastTrip.endDate.toString()).isEqualTo("2019-10-22T11:06Z")
         assertThat(lastTrip.tripNumber).isEqualTo("9463715")
     }
 

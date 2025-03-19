@@ -108,7 +108,7 @@ class GetVesselVoyage(
             isLastVoyage = isLastVoyage,
             isFirstVoyage = isFirstVoyage,
             startDate = trip.startDate,
-            endDate = trip.endDate,
+            endDate = trip.endDateWithoutLAN,
             tripNumber = trip.tripNumber,
             logbookMessagesAndAlerts = LogbookMessagesAndAlerts(logbookMessages, alerts),
         )

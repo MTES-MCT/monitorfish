@@ -174,19 +174,22 @@ const StyledPreviousTrip = styled(PreviousTrip)`
   margin-right: 8px;
   height: 30px;
   width: 30px;
+  flex-shrink: 0;
 `
 
 const StyledNextTrip = styled(NextTrip)`
   margin-left: 8px;
-  margin-right: 0px;
+  margin-right: 0;
   height: 30px;
   width: 30px;
+  flex-shrink: 0;
 `
 
 const StyledLastTrip = styled(LastTrip)`
   margin-left: -1px;
   height: 30px;
   width: 30px;
+  flex-shrink: 0;
 `
 
 const SelectTrip = styled(Select<string>)`

@@ -1,6 +1,7 @@
 INFRA_FOLDER="$(shell pwd)/infra/configurations/"
 HOST_MIGRATIONS_FOLDER=$(shell pwd)/backend/src/main/resources/db/migration
 DATA_WAREHOUSE_INPUT_DATA_FOLDER=$(shell pwd)/datascience/tests/test_data/clickhouse_user_files
+EXTERNAL_DATA_FOLDER=$(shell pwd)/datascience/tests/test_data/external
 
 SHELL := /bin/bash
 .SHELLFLAGS = -ec
@@ -272,7 +273,7 @@ docker-compose-puppeteer-up: docker-env
 docker-build-pipeline:
 	docker build -f ./infra/docker/datapipeline/Dockerfile . -t monitorfish-pipeline:$(VERSION)
 docker-test-pipeline: fetch-external-data run-data-warehouse
-	docker run --network host -v /var/run/docker.sock:/var/run/docker.sock -u monitorfish-pipeline:$(DOCKER_GROUP) --env-file datascience/.env.test --env HOST_MIGRATIONS_FOLDER=$(HOST_MIGRATIONS_FOLDER) monitorfish-pipeline:$(VERSION) coverage run -m pytest --pdb --ignore=tests/test_data/external tests
+	docker run --network host -v $(EXTERNAL_DATA_FOLDER):/home/monitorfish-pipeline/datascience/tests/test_data/external -v /var/run/docker.sock:/var/run/docker.sock -u monitorfish-pipeline:$(DOCKER_GROUP) --env-file datascience/.env.test --env HOST_MIGRATIONS_FOLDER=$(HOST_MIGRATIONS_FOLDER) monitorfish-pipeline:$(VERSION) coverage run -m pytest --pdb --ignore=tests/test_data/external tests
 docker-tag-pipeline:
 	docker tag monitorfish-pipeline:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(VERSION)
 docker-push-pipeline:

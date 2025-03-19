@@ -336,13 +336,7 @@ interface DBLogbookReportRepository :
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageDates(
             MIN(e.operationDateTime),
             MAX(e.operationDateTime),
-            (SELECT MAX(lr_all.operationDateTime)
-             FROM LogbookReportEntity lr_all
-             WHERE
-                lr_all.internalReferenceNumber = :internalReferenceNumber AND
-                lr_all.tripNumber = :tripNumber AND
-                lr_all.messageType != 'LAN'
-             )
+            MAX(CASE WHEN messageType != 'LAN' THEN e.operationDateTime END)
         )
         FROM LogbookReportEntity e
         WHERE e.internalReferenceNumber = :internalReferenceNumber
@@ -362,13 +356,7 @@ interface DBLogbookReportRepository :
             e.tripNumber,
             MIN(e.operationDateTime),
             MAX(e.operationDateTime),
-            (SELECT MAX(lr_all.operationDateTime)
-             FROM LogbookReportEntity lr_all
-             WHERE
-                lr_all.internalReferenceNumber = :internalReferenceNumber AND
-                lr_all.tripNumber = e.tripNumber AND
-                lr_all.messageType != 'LAN'
-             )
+            MAX(CASE WHEN messageType != 'LAN' THEN e.operationDateTime END)
         )
         FROM LogbookReportEntity e
         WHERE e.internalReferenceNumber = :internalReferenceNumber

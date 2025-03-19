@@ -264,6 +264,6 @@ context('Vessel sidebar logbook tab', () => {
 
     cy.fill('Numéro de marée', '20230086')
     cy.get('*[data-cy="LogbookMessage"]').should('have.length', 1)
-    cy.get('*[data-cy="LogbookMessage"]').eq(0).contains('Débarquement')
+    cy.get('*[data-cy="LogbookMessage"]').eq(0).contains('Déclaration de capture')
   })
 })

@@ -11,9 +11,11 @@ class VoyageTripNumberAndDates(
     var tripNumber: String,
     var startDate: Instant,
     var endDate: Instant,
+    var endDateWithoutLAN: Instant? = null,
 )
 
 class VoyageDates(
     var startDate: Instant,
     var endDate: Instant,
+    var endDateWithoutLAN: Instant? = null,
 )

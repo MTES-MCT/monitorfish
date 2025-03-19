@@ -268,7 +268,10 @@ interface DBLogbookReportRepository :
     ): List<LogbookReportEntity>
 
     @Query(
-        """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MIN(e.operationDateTime))
+        """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(
+            e.tripNumber,
+            MIN(e.operationDateTime)
+        )
         FROM LogbookReportEntity e
         WHERE e.internalReferenceNumber = :internalReferenceNumber
         AND e.tripNumber IS NOT NULL
@@ -292,11 +295,22 @@ interface DBLogbookReportRepository :
         pageable: Pageable,
     ): List<VoyageTripNumberAndDate>
 
+    /**
+     * We filter the LAN to ensure we do not miss a trip if there is a trip is ended before the LAN of the previous trip is sent.
+     * i.e, we want the "Trip 2" not to be missed:
+     *
+     *  [DEP, FAR, RTP,     ...LAN]                                  Trip 1 (current trip)
+     *            [DEP, FAR, RTP]                                    Trip 2
+     *                              [DEP, FAR, RTP,     ...LAN]      Trip 3
+     *
+     *  time ->
+     */
     @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MAX(e.operationDateTime))
         FROM LogbookReportEntity e
         WHERE e.internalReferenceNumber = :internalReferenceNumber
         AND e.tripNumber IS NOT NULL
+        AND e.tripNumber != :tripNumber
         AND e.operationType IN ('DAT', 'COR')
         AND NOT e.isTestMessage
         AND e.operationDateTime > (
@@ -306,7 +320,8 @@ interface DBLogbookReportRepository :
                 LogbookReportEntity er
             WHERE
                 er.internalReferenceNumber = :internalReferenceNumber AND
-                er.tripNumber = :tripNumber
+                er.tripNumber = :tripNumber AND
+                er.messageType != 'LAN'
         )
         GROUP BY e.tripNumber
         ORDER BY 2 ASC""",
@@ -318,7 +333,11 @@ interface DBLogbookReportRepository :
     ): List<VoyageTripNumberAndDate>
 
     @Query(
-        """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageDates(MIN(e.operationDateTime), MAX(e.operationDateTime))
+        """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageDates(
+            MIN(e.operationDateTime),
+            MAX(e.operationDateTime),
+            MAX(CASE WHEN messageType != 'LAN' THEN e.operationDateTime END)
+        )
         FROM LogbookReportEntity e
         WHERE e.internalReferenceNumber = :internalReferenceNumber
         AND e.tripNumber = :tripNumber
@@ -329,8 +348,16 @@ interface DBLogbookReportRepository :
         tripNumber: String,
     ): VoyageDates
 
+    /**
+     * The last `MAX(lr_all.operationDateTime)` date is used to display the fishing trip positions, hence LAN are excluded.
+     */
     @Query(
-        """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDates(e.tripNumber, MIN(e.operationDateTime), MAX(e.operationDateTime))
+        """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDates(
+            e.tripNumber,
+            MIN(e.operationDateTime),
+            MAX(e.operationDateTime),
+            MAX(CASE WHEN messageType != 'LAN' THEN e.operationDateTime END)
+        )
         FROM LogbookReportEntity e
         WHERE e.internalReferenceNumber = :internalReferenceNumber
         AND e.tripNumber IS NOT NULL
@@ -338,7 +365,7 @@ interface DBLogbookReportRepository :
         AND e.operationDateTime <= :beforeDateTime
         AND NOT e.isTestMessage
         GROUP BY e.tripNumber
-        ORDER BY 2 DESC """,
+        ORDER BY 2 DESC""",
     )
     fun findTripsBeforeDatetime(
         internalReferenceNumber: String,
@@ -346,6 +373,12 @@ interface DBLogbookReportRepository :
         pageable: Pageable,
     ): List<VoyageTripNumberAndDates>
 
+    /**
+     * Subqueries are required to get MIN and MAX date_time outside the clause :
+     *  `e.operationDateTime BETWEEN :afterDateTime AND :beforeDateTime`
+     *
+     *  The last `MAX(lr_all.activityDateTime)` date is used to display the fishing trip positions, hence LAN are excluded.
+     */
     @Query(
         """
         SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDates(
@@ -361,6 +394,13 @@ interface DBLogbookReportRepository :
              WHERE
                 lr_all.internalReferenceNumber = :internalReferenceNumber AND
                 lr_all.tripNumber = e.tripNumber
+             ),
+             (SELECT MAX(lr_all.operationDateTime)
+             FROM LogbookReportEntity lr_all
+             WHERE
+                lr_all.internalReferenceNumber = :internalReferenceNumber AND
+                lr_all.tripNumber = e.tripNumber AND
+                lr_all.messageType != 'LAN'
              )
     )
     FROM LogbookReportEntity e

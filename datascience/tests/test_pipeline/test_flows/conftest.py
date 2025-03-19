@@ -39,3 +39,30 @@ def add_enriched_catches(add_monitorfish_database):
     yield
     print("Dropping monitorfish.enriched_catches table")
     client.command("DROP TABLE monitorfish.enriched_catches")
+
+
+@fixture
+def add_landings(add_monitorfish_database):
+    client = create_datawarehouse_client()
+    print("Creating monitorfish.landings table")
+    with open(
+        TEST_DATA_LOCATION
+        / (
+            "external/data_warehouse/forklift/forklift/pipeline/"
+            "sql_scripts/ddl/monitorfish/create_landings_if_not_exists.sql"
+        ),
+        "r",
+    ) as f:
+        ddl = f.read()
+    client.command(ddl)
+
+    print("Inserting test data into monitorfish.landings table")
+    client.command(
+        """
+        INSERT INTO TABLE monitorfish.landings
+        SELECT * FROM file('landings.csv')
+    """
+    )
+    yield
+    print("Dropping monitorfish.landings table")
+    client.command("DROP TABLE monitorfish.landings")

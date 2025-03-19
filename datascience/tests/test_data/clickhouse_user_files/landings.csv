@@ -1,0 +1,10 @@
+"report_id","cfr","flag_state","trip_number","port_locode","port_name","port_latitude","port_longitude","operation_datetime_utc","landing_datetime_utc","fao_area","statistical_rectangle","economic_zone","species","weight","nb_fish","freshness","packaging","effort_zone","presentation","conversion_factor","preservation_state"
+"report_2","ABC000306959","FRA","Trip_2","FRXXX",,,,2051-05-12 00:03:00,2050-05-14 08:35:00,"27.8","E25A",,"PIL",5000,,,,,,,
+"report_2","ABC000306959","FRA","Trip_2","FRXXX",,,,2051-05-12 00:03:00,2050-05-14 08:35:00,"27.9","E25A",,"PIL",5000,2,,,,,,
+"report_3","CFR000888888","FRA","3","FRLEH","Somewhere over the ocean","-50.569","142.698",2051-05-12 00:03:00,2050-05-14 08:35:00,"27.7.d",,,"ABC",200000,3,,,,"GUT","1.23","FRO"
+"report_3","CFR000888888","FRA","3","FRLEH","Somewhere over the ocean","-50.569","142.698",2051-05-12 00:03:00,2050-05-14 08:35:00,"27.7.e",,,"DEF",22000,,,"BOX","C",,,
+"report_3","CFR000888888","FRA","3","FRLEH","Somewhere over the ocean",,,2051-05-12 00:03:00,2050-05-14 08:35:00,"28.8.a",,,"GHI",15000,,"FRE",,,,,
+"report_6","ABC000306959","FRA","Trip_6","FRZJZ","Somewhere over the top",,,2051-05-12 00:03:00,2050-05-16 08:55:00,"27.8.a",,,"BFT",0,,,,,,,
+"report_6","ABC000306959","FRA","Trip_6","FRZJZ","Somewhere over the top",,,2051-05-12 00:03:00,2050-05-16 08:55:00,"27.8.a",,,"HKE",50,,,,,,,
+"report_7","ABC000306959","FRA","7","FRBES","Somewhere over the hill",,,2051-05-12 00:03:00,2050-05-16 18:55:00,"27.8.a",,,"BFT",0,,,,,,,
+"report_8","ABC000306959","FRA","8","FRCQF","Somewhere over the rainbow",,,2051-05-12 00:03:00,2050-05-16 18:57:00,"27.8.a",,,"BFT",,,,,,,,

@@ -74,6 +74,7 @@ def expected_vessel_profiles():
                 ],
                 [{"FT": 0.9367088607594937}, {"NO_SEGMENT": 0.06329113924050633}],
             ],
+            "landing_ports": [[{"FRXXX": 1.0}], [{"FRLEH": 1.0}]],
             "recent_gears": [[{"OTB": 0.5}, {"LLS": 0.5}], None],
             "recent_species": [
                 [
@@ -90,11 +91,16 @@ def expected_vessel_profiles():
                 [{"L": 0.5}, {"NO_SEGMENT": 0.25}, {"T8-9": 0.25}],
                 None,
             ],
+            "recent_landing_ports": [[{"FRXXX": 1.0}], [{"FRLEH": 1.0}]],
+            "latest_landing_port": ["FRXXX", "FRLEH"],
+            "latest_landing_facade": ["Hors façade", "SA"],
         }
     )
 
 
-def test_flow(reset_test_data, add_enriched_catches, expected_vessel_profiles):
+def test_flow(
+    reset_test_data, add_enriched_catches, add_landings, expected_vessel_profiles
+):
     flow.schedule = None
     state = flow.run()
     assert state.is_successful()

@@ -1,6 +1,7 @@
 import datetime
 import logging
 import re
+from collections import ChainMap
 from functools import partial
 from io import StringIO
 from typing import Any, Hashable, List, Union
@@ -1012,3 +1013,16 @@ def get_matched_groups(string: str, regex: re.Pattern) -> pd.Series:
     else:
         result = pd.Series({i: None for i in regex.groupindex})
     return result
+
+
+def merge_dicts(list_of_dicts: List[dict]) -> dict:
+    """
+    Merges a list of dicts as a single dict
+
+    Args:
+        list_of_dicts (List[dict]): List of dictionnaries
+
+    Returns:
+        dict: Dictionnary containing all the entries of the input dictionnaries
+    """
+    return dict(ChainMap(*list_of_dicts))

@@ -6,6 +6,7 @@ import prefect
 from prefect import Flow, case, task
 
 from src.pipeline.generic_tasks import extract, load
+from src.pipeline.processing import merge_dicts
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.dates import get_utcnow
 
@@ -128,7 +129,7 @@ def transform_profiles(
     )
     profiles = (
         profiles.groupby("cfr")["share_dict"]
-        .agg(list)
+        .agg(merge_dicts)
         .rename(result_column_name)
         .reset_index()
     )

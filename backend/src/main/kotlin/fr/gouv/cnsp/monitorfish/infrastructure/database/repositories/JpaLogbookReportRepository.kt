@@ -151,6 +151,7 @@ class JpaLogbookReportRepository(
                     tripNumber = firstTrip.tripNumber,
                     startDate = firstTrip.startDate.atZone(UTC),
                     endDate = firstTrip.endDate.atZone(UTC),
+                    endDateWithoutLAN = firstTrip.endDateWithoutLAN?.atZone(UTC),
                     totalTripsFoundForDates = trips.size,
                 )
             }
@@ -181,6 +182,7 @@ class JpaLogbookReportRepository(
                     tripNumber = lastTrip.tripNumber,
                     startDate = lastTrip.startDate.atZone(UTC),
                     endDate = lastTrip.endDate.atZone(UTC),
+                    endDateWithoutLAN = lastTrip.endDateWithoutLAN?.atZone(UTC),
                 )
             }
 
@@ -217,6 +219,7 @@ class JpaLogbookReportRepository(
                     tripNumber = previousTripNumber,
                     startDate = previousTrip.startDate.atZone(UTC),
                     endDate = previousTrip.endDate.atZone(UTC),
+                    endDateWithoutLAN = previousTrip.endDateWithoutLAN?.atZone(UTC),
                 )
             }
 
@@ -247,6 +250,7 @@ class JpaLogbookReportRepository(
                     tripNumber = tripNumber,
                     startDate = nextTrip.startDate.atZone(UTC),
                     endDate = nextTrip.endDate.atZone(UTC),
+                    endDateWithoutLAN = nextTrip.endDateWithoutLAN?.atZone(UTC),
                 )
             }
 
@@ -285,6 +289,7 @@ class JpaLogbookReportRepository(
                     tripNumber = nextTripNumber,
                     startDate = nextTrip.startDate.atZone(UTC),
                     endDate = nextTrip.endDate.atZone(UTC),
+                    endDateWithoutLAN = nextTrip.endDateWithoutLAN?.atZone(UTC),
                 )
             }
 

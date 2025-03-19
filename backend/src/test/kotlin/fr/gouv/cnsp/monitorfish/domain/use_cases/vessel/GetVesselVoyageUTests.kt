@@ -32,12 +32,18 @@ class GetVesselVoyageUTests {
     fun `execute Should return a voyage with isFirstVoyage as true When requesting a LAST voyage with current trip number as null`() {
         // Given
         val endDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
+        val endDateWithoutLAN = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00").minusDays(1)
         val startDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
         given(logbookReportRepository.findTripBeforeTripNumber(any(), any())).willThrow(
             NoLogbookFishingTripFound("Not found"),
         )
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("1234", startDate, endDate),
+            VoyageDatesAndTripNumber(
+                tripNumber = "1234",
+                startDate = startDate,
+                endDate = endDate,
+                endDateWithoutLAN = endDateWithoutLAN,
+            ),
         )
 
         // When
@@ -54,7 +60,7 @@ class GetVesselVoyageUTests {
         assertThat(voyage.isFirstVoyage).isTrue
         assertThat(voyage.startDate).isEqualTo(startDate)
         assertThat(voyage.tripNumber).isEqualTo("1234")
-        assertThat(voyage.endDate).isEqualTo(endDate)
+        assertThat(voyage.endDate).isEqualTo(endDateWithoutLAN)
         assertThat(alerts).hasSize(0)
     }
 
@@ -78,10 +84,16 @@ class GetVesselVoyageUTests {
     fun `execute Should return a voyage with isLastVoyage as false When requesting a LAST voyage`() {
         // Given
         val endDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
+        val endDateWithoutLAN = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00").minusDays(1)
         val startDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
         val tripNumber = "123456789"
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber(tripNumber, startDate, endDate),
+            VoyageDatesAndTripNumber(
+                tripNumber = tripNumber,
+                startDate = startDate,
+                endDate = endDate,
+                endDateWithoutLAN = endDateWithoutLAN,
+            ),
         )
 
         // When
@@ -98,7 +110,7 @@ class GetVesselVoyageUTests {
         assertThat(voyage.isLastVoyage).isFalse
         assertThat(voyage.isFirstVoyage).isFalse
         assertThat(voyage.startDate).isEqualTo(startDate)
-        assertThat(voyage.endDate).isEqualTo(endDate)
+        assertThat(voyage.endDate).isEqualTo(endDateWithoutLAN)
         assertThat(alerts).hasSize(0)
     }
 
@@ -106,10 +118,16 @@ class GetVesselVoyageUTests {
     fun `execute Should return a voyage with isLastVoyage as true When no next voyage after the found voyage is found`() {
         // Given
         val expectedEndDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
+        val expectedEndDateWithoutLAN = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00").minusDays(1)
         val expectedStartDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
         val expectedTripNumber = "123456789"
         given(logbookReportRepository.findTripAfterTripNumber("FR224226850", "123456788")).willReturn(
-            VoyageDatesAndTripNumber(expectedTripNumber, expectedStartDate, expectedEndDate),
+            VoyageDatesAndTripNumber(
+                tripNumber = expectedTripNumber,
+                startDate = expectedStartDate,
+                endDate = expectedEndDate,
+                endDateWithoutLAN = expectedEndDateWithoutLAN,
+            ),
         )
         given(logbookReportRepository.findTripAfterTripNumber("FR224226850", expectedTripNumber)).willThrow(
             NoLogbookFishingTripFound("Not found"),
@@ -126,7 +144,7 @@ class GetVesselVoyageUTests {
         assertThat(voyage.isLastVoyage).isTrue
         assertThat(voyage.isFirstVoyage).isFalse
         assertThat(voyage.startDate).isEqualTo(expectedStartDate)
-        assertThat(voyage.endDate).isEqualTo(expectedEndDate)
+        assertThat(voyage.endDate).isEqualTo(expectedEndDateWithoutLAN)
         assertThat(alerts).hasSize(0)
     }
 
@@ -134,9 +152,15 @@ class GetVesselVoyageUTests {
     fun `execute Should return a voyage When a specific trip is requested`() {
         // Given
         val expectedEndDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
+        val expectedEndDateWithoutLAN = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00").minusDays(1)
         val expectedStartDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
         given(logbookReportRepository.findFirstAndLastOperationsDatesOfTrip("FR224226850", "123456788")).willReturn(
-            VoyageDatesAndTripNumber("123456788", expectedStartDate, expectedEndDate),
+            VoyageDatesAndTripNumber(
+                tripNumber = "123456788",
+                startDate = expectedStartDate,
+                endDate = expectedEndDate,
+                endDateWithoutLAN = expectedEndDateWithoutLAN,
+            ),
         )
 
         // When
@@ -150,7 +174,7 @@ class GetVesselVoyageUTests {
         assertThat(voyage.isLastVoyage).isFalse
         assertThat(voyage.isFirstVoyage).isFalse
         assertThat(voyage.startDate).isEqualTo(expectedStartDate)
-        assertThat(voyage.endDate).isEqualTo(expectedEndDate)
+        assertThat(voyage.endDate).isEqualTo(expectedEndDateWithoutLAN)
         assertThat(alerts).hasSize(0)
     }
 }

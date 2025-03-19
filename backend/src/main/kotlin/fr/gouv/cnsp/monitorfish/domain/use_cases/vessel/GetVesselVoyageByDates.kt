@@ -80,7 +80,7 @@ class GetVesselVoyageByDates(
             isLastVoyage = isLastVoyage,
             isFirstVoyage = isFirstVoyage,
             startDate = trip.startDate,
-            endDate = trip.endDate,
+            endDate = trip.endDateWithoutLAN,
             tripNumber = trip.tripNumber,
             totalTripsFoundForDates = trip.totalTripsFoundForDates,
             logbookMessagesAndAlerts = LogbookMessagesAndAlerts(logbookMessages, alerts),

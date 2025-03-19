@@ -23,13 +23,14 @@ export function AlertWarning({ selectedVessel }: AlertWarningProps) {
     return <></>
   }
 
+  const alertName =
+    selectedVessel.alerts.length === 1 ? getAlertNameFromType(firstAlert) : `${selectedVessel.alerts.length} alertes`
+
   return (
     <>
       <Alerts data-cy="vessel-sidebar-alert" onClick={open}>
         <AlertIcon />
-        {selectedVessel.alerts.length === 1
-          ? getAlertNameFromType(firstAlert)
-          : `${selectedVessel.alerts.length} alertes`}
+        <AlertName title={alertName}>{alertName}</AlertName>
         <SeeAlert>
           {selectedVessel.alerts.length === 1 ? "Voir l'alerte dans la liste" : 'Voir les alertes dans la liste'}
         </SeeAlert>
@@ -37,6 +38,14 @@ export function AlertWarning({ selectedVessel }: AlertWarningProps) {
     </>
   )
 }
+
+const AlertName = styled.span`
+  max-width: 310px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+`
 
 const SeeAlert = styled.span`
   float: right;
@@ -51,7 +60,7 @@ const AlertIcon = styled(AlertSVG)`
   animation: ring 4s 0.7s ease-in-out;
   animation-iteration-count: 1;
   height: 18px;
-  margin-bottom: -4px;
+  margin-bottom: -2px;
   margin-left: 7px;
   margin-right: 9px;
   transform-origin: 50% 4px;

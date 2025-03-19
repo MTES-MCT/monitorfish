@@ -258,7 +258,7 @@ context('Vessel sidebar logbook tab', () => {
 
     cy.get('*[data-cy="LogbookMessage"]').eq(0).contains('Départ')
     cy.clickButton('Trier par date antéchronologique')
-    cy.get('*[data-cy="LogbookMessage"]').eq(0).contains('Préavis')
+    cy.get('*[data-cy="LogbookMessage"]').eq(0).contains('Déclaration de capture')
     cy.clickButton('Trier par date chronologique')
     cy.get('*[data-cy="LogbookMessage"]').eq(0).contains('Départ')
 

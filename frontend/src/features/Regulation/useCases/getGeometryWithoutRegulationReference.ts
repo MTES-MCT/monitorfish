@@ -2,11 +2,11 @@ import { getAllGeometryWithoutProperty } from '../../../api/geoserver'
 import { setError } from '../../../domain/shared_slices/Global'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
 
-import type { GeoJSON } from '../../../domain/types/GeoJSON'
+import type { Polygon } from 'geojson'
 
 export const getGeometryWithoutRegulationReference =
   () =>
-  async (dispatch, getState): Promise<Record<string, GeoJSON.Geometry>> => {
+  async (dispatch, getState): Promise<Record<string, Polygon>> => {
     const monitorFishWorker = await MonitorFishWorker
 
     try {

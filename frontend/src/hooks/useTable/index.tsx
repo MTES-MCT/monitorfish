@@ -31,7 +31,8 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   const rawData = useMemo(() => maybeRawData ?? [], [maybeRawData])
 
   const attachIsCheckedProps = useMemo(
-    () => columns.map(() => (dataItem: T) => assocPath(['$isChecked'], checkedIds.includes(dataItem.id), dataItem)),
+    () =>
+      columns.map(() => (dataItem: T) => assocPath(['$isChecked'], checkedIds.includes(dataItem.id ?? ''), dataItem)),
     [checkedIds, columns]
   )
 
@@ -162,12 +163,19 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   }, [filteredAndSearchedTableData, isSortingDesc, sortingKey])
 
   const getCheckedData = useCallback(
-    () => filteredAndSearchedAndSortedTableData.filter(({ id }) => checkedIds.includes(id)),
+    () => filteredAndSearchedAndSortedTableData.filter(({ id }) => !!id && checkedIds.includes(id)),
     [checkedIds, filteredAndSearchedAndSortedTableData]
   )
 
   const toggleCheckAll = useCallback(() => {
-    setCheckedIds(isAllChecked ? [] : filteredAndSearchedAndSortedTableData.map(({ id }) => id).sort())
+    setCheckedIds(
+      isAllChecked
+        ? []
+        : filteredAndSearchedAndSortedTableData
+            .map(({ id }) => id)
+            .filter((id): id is number => !!id)
+            .sort()
+    )
   }, [filteredAndSearchedAndSortedTableData, isAllChecked])
 
   const sortColumn = useCallback((key: string, isDesc: boolean) => {

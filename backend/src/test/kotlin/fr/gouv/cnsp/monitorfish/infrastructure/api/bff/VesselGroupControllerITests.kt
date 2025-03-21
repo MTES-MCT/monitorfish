@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.AddOrUpdateDynamicVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroups
 import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.TestUtils.Companion.getMockApiClient
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.UserAuthorizationCheckFilter
@@ -23,6 +24,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -49,9 +51,6 @@ class VesselGroupControllerITests {
     @Autowired
     private lateinit var api: MockMvc
 
-    @MockBean
-    private lateinit var addOrUpdateDynamicVesselGroup: AddOrUpdateDynamicVesselGroup
-
     @Autowired
     private lateinit var jwtDecoder: JwtDecoder
 
@@ -63,6 +62,12 @@ class VesselGroupControllerITests {
         @Bean
         fun mockApiClient(): ApiClient = getMockApiClient()
     }
+
+    @MockBean
+    private lateinit var addOrUpdateDynamicVesselGroup: AddOrUpdateDynamicVesselGroup
+
+    @MockBean
+    private lateinit var getAllVesselGroups: GetAllVesselGroups
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -87,5 +92,27 @@ class VesselGroupControllerITests {
             .andExpect(jsonPath("$.name", equalTo("Mission Thémis – chaluts de fonds")))
 
         Mockito.verify(addOrUpdateDynamicVesselGroup).execute("email@domain-name.com", groupToSave.copy(id = null))
+    }
+
+    @Test
+    fun `Should get all dynamic vessel groups`() {
+        // Given
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
+        given(getAllVesselGroups.execute(any())).willReturn(TestUtils.getDynamicVesselGroups())
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessel_groups")
+                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}")
+                    .contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(2)))
+            .andExpect(jsonPath("$[0].name", equalTo("Mission Thémis – chaluts de fonds")))
+            .andExpect(jsonPath("$[0].filters.hasLogbook", equalTo(true)))
+
+        Mockito.verify(getAllVesselGroups).execute("email@domain-name.com")
     }
 }

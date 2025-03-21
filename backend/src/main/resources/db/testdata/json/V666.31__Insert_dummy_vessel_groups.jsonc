@@ -1,0 +1,158 @@
+[
+    {
+        "table": "vessel_groups",
+        "afterAll": "SELECT setval('vessel_groups_id_seq', (SELECT MAX(id) FROM vessel_groups));",
+        "beforeAll": "TRUNCATE TABLE vessel_groups RESTART IDENTITY CASCADE;",
+        "data": [
+            {
+                "id": 1,
+                "is_deleted": false,
+                "name": "Mission Thémis – chaluts de fonds",
+                "description": "Ciblage pour la mission du Thémis (bordée A) du 08/01 au 17/01/25.",
+                "points_of_attention": "Points d'attention : Si le navire X est dans le secteur, le contrôler pour suspicion blanchiment bar en 7.d.",
+                "color": "#4287f5",
+                "filters:jsonb": {
+                    "countryCodes": [
+                        "FR",
+                        "ES",
+                        "IT"
+                    ],
+                    "fleetSegments": [],
+                    "gearCodes": [
+                        "OTB",
+                        "OTM",
+                        "TBB",
+                        "PTB"
+                    ],
+                    "hasLogbook": true,
+                    "lastControlPeriod": "BEFORE_SIX_MONTHS_AGO",
+                    "lastLandingPortLocodes": [],
+                    "lastPositionHoursAgo": null,
+                    "producerOrganizations": [],
+                    "riskFactors": [
+                        2,
+                        3
+                    ],
+                    "specyCodes": [],
+                    "vesselSize": "ABOVE_TWELVE_METERS",
+                    "vesselsLocation": [
+                        "SEA"
+                    ],
+                    "zones": []
+                },
+                "vessels": null,
+                "sharing": "PRIVATE",
+                "type": "DYNAMIC",
+                "created_by": "dummy@email.gouv.fr",
+                "created_at_utc:sql": "NOW() - INTERVAL '1 day'",
+                "updated_at_utc:sql": null,
+                "end_of_validity_utc:sql": null
+            },
+            {
+                "id": 2,
+                "is_deleted": false,
+                "name": "Mission Thémis – semaine 03",
+                "description": "Ciblage pour la mission du Thémis (bordée B) du 08/01 au 17/01/25. Donner en priorité les franco-espagnols en PEL13 non contrôlés depuis plus d'un an.",
+                "points_of_attention": null,
+                "color": "#4287f5",
+                "filters:jsonb": {
+                    "countryCodes": [],
+                    "fleetSegments": [
+                        "PEL13"
+                    ],
+                    "gearCodes": [],
+                    "hasLogbook": true,
+                    "lastControlPeriod": "BEFORE_ONE_YEAR_AGO",
+                    "lastLandingPortLocodes": [],
+                    "lastPositionHoursAgo": null,
+                    "producerOrganizations": [],
+                    "riskFactors": [],
+                    "specyCodes": [],
+                    "vesselSize": null,
+                    "vesselsLocation": [
+                        "SEA"
+                    ],
+                    "zones": []
+                },
+                "vessels": null,
+                "sharing": "PRIVATE",
+                "type": "DYNAMIC",
+                "created_by": "dummy@email.gouv.fr",
+                "created_at_utc:sql": "NOW() - INTERVAL '15 day'",
+                "updated_at_utc:sql": "NOW() - INTERVAL '5 day'",
+                "end_of_validity_utc:sql": null
+            },
+            {
+                "id": 3,
+                "is_deleted": false,
+                "name": "Mission Thémis – semaine 04",
+                "description": "Ciblage pour la mission de l'IRIS (bordée A).",
+                "points_of_attention": null,
+                "color": "#4287f5",
+                "filters": null,
+                "vessels:jsonb": [
+                    {
+                        "vesselId": 1,
+                        "cfr": "FAK000999999",
+                        "ircs": "CALLME",
+                        "externalIdentification": "DONTSINK",
+                        "name": "PHENOMENE",
+                        "flagState": "FR",
+                        "vesselIdentifier": "INTERNAL_REFERENCE_NUMBER"
+                    },
+                    {
+                        "vesselId": 2,
+                        "cfr": "U_W0NTFINDME",
+                        "ircs": "QGDF",
+                        "externalIdentification": "TALK2ME",
+                        "name": "MALOTRU",
+                        "flagState": "UNDEFINED",
+                        "vesselIdentifier": "INTERNAL_REFERENCE_NUMBER"
+                    },
+                    {
+                        "vesselId": 3,
+                        "cfr": "FR263418260",
+                        "ircs": "IR12A",
+                        "externalIdentification": "08FR65324",
+                        "name": "LE b@TO",
+                        "flagState": "FR",
+                        "vesselIdentifier": "INTERNAL_REFERENCE_NUMBER"
+                    },
+                    {
+                        "vesselId": 4,
+                        "cfr": "",
+                        "ircs": null,
+                        "externalIdentification": "",
+                        "name": "NO NAME",
+                        "flagState": "FR",
+                        "vesselIdentifier": "INTERNAL_REFERENCE_NUMBER"
+                    },
+                    {
+                        "vesselId": 5,
+                        "cfr": "SOCR4T3",
+                        "ircs": "SCRT",
+                        "externalIdentification": "LePhiloFilou",
+                        "name": "SOCRATE",
+                        "flagState": "FR",
+                        "vesselIdentifier": "IRCS"
+                    },
+                    {
+                        "vesselId": 6,
+                        "cfr": "ABC000939217",
+                        "ircs": "SC6082",
+                        "externalIdentification": "RU460262",
+                        "name": "FRAIS AVIS MODE",
+                        "flagState": "FR",
+                        "vesselIdentifier": "INTERNAL_REFERENCE_NUMBER"
+                    }
+                ],
+                "sharing": "PRIVATE",
+                "type": "FIXED",
+                "created_by": "dummy@email.gouv.fr",
+                "created_at_utc:sql": "NOW() - INTERVAL '25 day'",
+                "updated_at_utc:sql": "NOW() - INTERVAL '6 day'",
+                "end_of_validity_utc:sql": null
+            }
+        ]
+    }
+]

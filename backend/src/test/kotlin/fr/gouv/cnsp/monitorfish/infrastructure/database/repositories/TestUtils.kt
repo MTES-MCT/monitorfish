@@ -2,7 +2,8 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
+import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
 object TestUtils {
@@ -71,4 +72,68 @@ object TestUtils {
         isSafetyEquipmentAndStandardsComplianceControl = true,
         isSeafarersControl = true,
     )
+
+    fun getDynamicVesselGroups() =
+        listOf(
+            DynamicVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Mission Thémis – chaluts de fonds",
+                description = "Ciblage pour la mission du Thémis (bordée A) du 08/01 au 17/01/25.",
+                pointsOfAttention =
+                    "Points d'attention : Si le navire X est dans le secteur, le contrôler pour " +
+                        "suspicion blanchiment bar en 7.d.",
+                color = "#4287f5",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.of(2019, 10, 11, 0, 4, 0, 0, UTC),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf("FR", "ES", "IT"),
+                        fleetSegments = emptyList(),
+                        gearCodes = listOf("OTB", "OTM", "TBB", "PTB"),
+                        hasLogbook = true,
+                        lastControlPeriod = LastControlPeriod.BEFORE_SIX_MONTHS_AGO,
+                        lastLandingPortLocodes = emptyList(),
+                        lastPositionHoursAgo = null,
+                        producerOrganizations = emptyList(),
+                        riskFactors = listOf(2, 3),
+                        specyCodes = emptyList(),
+                        vesselSize = VesselSize.ABOVE_TWELVE_METERS,
+                        vesselsLocation = listOf(VesselLocation.SEA),
+                        zones = emptyList(),
+                    ),
+            ),
+            DynamicVesselGroup(
+                id = 2,
+                isDeleted = false,
+                name = "Mission Thémis – chaluts de fonds",
+                description = "Ciblage pour la mission du Thémis (bordée A) du 08/01 au 17/01/25.",
+                pointsOfAttention = null,
+                color = "#4287f5",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.of(2019, 10, 11, 0, 4, 0, 0, UTC).minusMonths(1),
+                updatedAtUtc = ZonedDateTime.of(2019, 10, 11, 0, 4, 0, 0, UTC),
+                endOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf(),
+                        fleetSegments = listOf("PEL13"),
+                        gearCodes = listOf("OTB", "OTM", "TBB", "PTB"),
+                        hasLogbook = true,
+                        lastControlPeriod = LastControlPeriod.BEFORE_ONE_YEAR_AGO,
+                        lastLandingPortLocodes = emptyList(),
+                        lastPositionHoursAgo = null,
+                        producerOrganizations = emptyList(),
+                        riskFactors = listOf(2, 3),
+                        specyCodes = emptyList(),
+                        vesselSize = VesselSize.ABOVE_TWELVE_METERS,
+                        vesselsLocation = listOf(VesselLocation.SEA),
+                        zones = emptyList(),
+                    ),
+            ),
+        )
 }

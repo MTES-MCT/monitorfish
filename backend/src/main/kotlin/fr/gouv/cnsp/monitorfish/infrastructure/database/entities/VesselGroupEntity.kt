@@ -1,19 +1,20 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.GroupType
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.Sharing
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroup
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupFilters
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.deserializeJSONList
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
+import org.hibernate.annotations.Type
 import java.time.ZonedDateTime
 
 @Entity
 @Table(name = "vessel_groups")
 data class VesselGroupEntity(
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    val id: Int,
+    val id: Int?,
     @Column(name = "is_deleted")
     val isDeleted: Boolean,
     @Column(name = "name")
@@ -23,9 +24,13 @@ data class VesselGroupEntity(
     @Column(name = "color")
     val color: String,
     @Column(name = "points_of_attention")
-    val pointsOfAttention: String,
-    @Column(name = "filters")
-    val filters: String,
+    val pointsOfAttention: String?,
+    @Type(JsonBinaryType::class)
+    @Column(name = "filters", columnDefinition = "jsonb")
+    val filters: String? = null,
+    @Type(JsonBinaryType::class)
+    @Column(name = "vessels", columnDefinition = "jsonb")
+    val vessels: String? = null,
     @Column(name = "sharing")
     @Enumerated(EnumType.STRING)
     val sharing: Sharing,
@@ -41,27 +46,44 @@ data class VesselGroupEntity(
     @Column(name = "end_of_validity_utc")
     val endOfValidityUtc: ZonedDateTime? = null,
 ) {
-    fun toVesselGroup(mapper: ObjectMapper) =
-        VesselGroup(
-            id = id,
-            name = name,
-            isDeleted = isDeleted,
-            description = description,
-            color = color,
-            pointsOfAttention = pointsOfAttention,
-            filters = mapper.readValue(filters, VesselGroupFilters::class.java),
-            sharing = sharing,
-            type = type,
-            createdBy = createdBy,
-            createdAtUtc = createdAtUtc,
-            updatedAtUtc = updatedAtUtc,
-            endOfValidityUtc = endOfValidityUtc,
-        )
+    fun toVesselGroup(mapper: ObjectMapper): VesselGroupBase =
+        when (type) {
+            GroupType.DYNAMIC ->
+                DynamicVesselGroup(
+                    id = id,
+                    name = name,
+                    isDeleted = isDeleted,
+                    description = description,
+                    color = color,
+                    pointsOfAttention = pointsOfAttention,
+                    filters = mapper.readValue(filters, VesselGroupFilters::class.java),
+                    sharing = sharing,
+                    createdBy = createdBy,
+                    createdAtUtc = createdAtUtc,
+                    updatedAtUtc = updatedAtUtc,
+                    endOfValidityUtc = endOfValidityUtc,
+                )
+            GroupType.FIXED ->
+                FixedVesselGroup(
+                    id = id,
+                    name = name,
+                    isDeleted = isDeleted,
+                    description = description,
+                    color = color,
+                    pointsOfAttention = pointsOfAttention,
+                    vessels = deserializeJSONList(mapper, vessels, VesselIdentity::class.java),
+                    sharing = sharing,
+                    createdBy = createdBy,
+                    createdAtUtc = createdAtUtc,
+                    updatedAtUtc = updatedAtUtc,
+                    endOfValidityUtc = endOfValidityUtc,
+                )
+        }
 
     companion object {
-        fun fromVesselGroup(
+        fun fromDynamicVesselGroup(
             mapper: ObjectMapper,
-            vesselGroup: VesselGroup,
+            vesselGroup: DynamicVesselGroup,
         ) = VesselGroupEntity(
             id = vesselGroup.id,
             name = vesselGroup.name,
@@ -70,6 +92,25 @@ data class VesselGroupEntity(
             color = vesselGroup.color,
             pointsOfAttention = vesselGroup.pointsOfAttention,
             filters = mapper.writeValueAsString(vesselGroup.filters),
+            sharing = vesselGroup.sharing,
+            type = vesselGroup.type,
+            createdBy = vesselGroup.createdBy,
+            createdAtUtc = vesselGroup.createdAtUtc,
+            updatedAtUtc = vesselGroup.updatedAtUtc,
+            endOfValidityUtc = vesselGroup.endOfValidityUtc,
+        )
+
+        fun fromFixedVesselGroup(
+            mapper: ObjectMapper,
+            vesselGroup: FixedVesselGroup,
+        ) = VesselGroupEntity(
+            id = vesselGroup.id,
+            name = vesselGroup.name,
+            isDeleted = vesselGroup.isDeleted,
+            description = vesselGroup.description,
+            color = vesselGroup.color,
+            pointsOfAttention = vesselGroup.pointsOfAttention,
+            vessels = mapper.writeValueAsString(vesselGroup.vessels),
             sharing = vesselGroup.sharing,
             type = vesselGroup.type,
             createdBy = vesselGroup.createdBy,

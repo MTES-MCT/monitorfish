@@ -18,7 +18,17 @@ function setJsonbSqlPropsToNull(obj) {
     const processedObj = Array.isArray(currentObj) ? [] : {}
     Object.entries(currentObj).forEach(([key, value]) => {
       if (Array.isArray(value)) {
-        processedObj[key] = value.map(valueItem => processObject(valueItem))
+        processedObj[key] = value.map(valueItem => {
+          if (valueItem === null) {
+            return null
+          }
+
+          if (typeof valueItem === 'object') {
+            return processObject(valueItem)
+          }
+
+          return valueItem
+        })
       } else if (typeof value === 'object' && value !== null) {
         processedObj[key] = processObject(value)
       } else {

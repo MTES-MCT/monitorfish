@@ -26,6 +26,7 @@ from src.pipeline.processing import (
     is_a_value,
     join_on_multiple_keys,
     left_isin_right_by_decreasing_priority,
+    merge_dicts,
     prepare_df_for_loading,
     remove_nones_from_list,
     rows_belong_to_sequence,
@@ -913,3 +914,19 @@ def test_get_matched_groups():
     s_4 = None
     series_4 = get_matched_groups(s_4, regex)
     pd.testing.assert_series_equal(series_4, default_series)
+
+
+def test_merge_dicts():
+    d1 = {"a": 1, "b": 2}
+    d2 = {"c": 3, "d": 4}
+    empty_dict = dict()
+
+    assert merge_dicts([d1, d2]) == {
+        "a": 1,
+        "b": 2,
+        "c": 3,
+        "d": 4,
+    }
+    assert merge_dicts([d1, d1]) == d1
+    assert merge_dicts([d1, empty_dict]) == d1
+    assert merge_dicts([empty_dict, empty_dict]) == empty_dict

@@ -1,10 +1,14 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.AddOrUpdateDynamicVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroups
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.DynamicVesselGroupDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.DynamicVesselGroupDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.FixedVesselGroupDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.UserAuthorizationCheckFilter
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.*
 @Tag(name = "APIs for vessel groups")
 class VesselGroupController(
     private val addOrUpdateDynamicVesselGroup: AddOrUpdateDynamicVesselGroup,
+    private val getAllVesselGroups: GetAllVesselGroups,
 ) {
     private val logger = LoggerFactory.getLogger(VesselGroupController::class.java)
 
@@ -27,15 +32,32 @@ class VesselGroupController(
         @RequestBody
         vesselGroupInput: DynamicVesselGroupDataInput,
     ): DynamicVesselGroupDataOutput {
-        val email: String =
-            response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER)
-                ?: throw BackendUsageException(
-                    BackendUsageErrorCode.COULD_NOT_UPDATE,
-                    message = "Email not found. Rejecting request.",
-                )
+        val email: String = getEmail(response)
 
         return DynamicVesselGroupDataOutput.fromDynamicVesselGroup(
             addOrUpdateDynamicVesselGroup.execute(email, vesselGroupInput.toDynamicVesselGroup()),
         )
     }
+
+    @GetMapping("")
+    @Operation(summary = "Get all dynamic and fixed vessel groups")
+    fun getVesselGroups(response: HttpServletResponse): List<Any> {
+        val email: String = getEmail(response)
+
+        return getAllVesselGroups.execute(email).map {
+            when (it) {
+                is DynamicVesselGroup -> DynamicVesselGroupDataOutput.fromDynamicVesselGroup(it)
+                is FixedVesselGroup -> FixedVesselGroupDataOutput.fromFixedVesselGroup(it)
+            }
+        }
+    }
+
+    private fun getEmail(response: HttpServletResponse) =
+        (
+            response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER)
+                ?: throw BackendUsageException(
+                    BackendUsageErrorCode.COULD_NOT_UPDATE,
+                    message = "Email not found. Rejecting request.",
+                )
+        )
 }

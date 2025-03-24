@@ -68,14 +68,12 @@ def test_extract_positions(reset_test_data):
 
 
 def test_filter_already_enriched_vessels():
-    td = pd.Timedelta("1hour").to_numpy()
-
     positions = pd.DataFrame(
         {
             "cfr": ["A", "B", "A", "C", "C", "B"],
             "external_immatriculation": ["AA", "BB", None, "CC", "CC", "BBB"],
             "ircs": ["AAA", "BBB", "AAA", "CCC", "CCC", "BBB"],
-            "time_emitting_at_sea": [pd.NaT, td, td, td, None, 2 * td],
+            "time_emitting_at_sea": [None, 1, 1, 1, None, 2],
             "other_data": [None, False, False, True, None, False],
         }
     )
@@ -175,16 +173,16 @@ def test_enrich_positions_by_vessel():
                 False,
             ],
             "time_emitting_at_sea": [
-                pd.NaT,
-                pd.NaT,
-                13 * td,
-                pd.NaT,
-                pd.NaT,
-                pd.NaT,
-                pd.NaT,
-                pd.NaT,
-                pd.NaT,
-                pd.NaT,
+                None,
+                None,
+                13,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
             ],
         }
     )
@@ -212,15 +210,15 @@ def test_enrich_positions_by_vessel():
     ]
     expected_enriched_positions["time_since_previous_position"] = [
         None,
-        td,
+        1,
         None,
-        td,
-        td,
-        2 * td,
-        td,
-        td,
-        td,
-        td,
+        1,
+        1,
+        2,
+        1,
+        1,
+        1,
+        1,
     ]
     expected_enriched_positions["average_speed"] = [
         None,
@@ -248,16 +246,16 @@ def test_enrich_positions_by_vessel():
     ]
 
     expected_enriched_positions["time_emitting_at_sea"] = [
-        0 * td,
-        0 * td,
-        13 * td,
-        14 * td,
-        15 * td,
-        0 * td,
-        1 * td,
-        16 * td,
-        17 * td,
-        2 * td,
+        0.0,
+        0.0,
+        13.0,
+        14.0,
+        15.0,
+        0.0,
+        1.0,
+        16.0,
+        17.0,
+        2.0,
     ]
 
     pd.testing.assert_frame_equal(
@@ -271,7 +269,7 @@ def test_enrich_positions_by_vessel():
         minimum_consecutive_positions=3,
         min_fishing_speed_threshold=0.1,
         max_fishing_speed_threshold=4.5,
-        minimum_minutes_of_emission_at_sea=int((1.5 * td).total_seconds() / 90),
+        minimum_minutes_of_emission_at_sea=60,
     )
 
     expected_enriched_positions["is_fishing"] = [
@@ -336,12 +334,12 @@ def test_load_fishing_activity(reset_test_data):
             "id": [13632807],
             "is_at_port": [False],
             "meters_from_previous_position": [8963.2],
-            "time_since_previous_position": [timedelta(hours=1)],
+            "time_since_previous_position": [1.0],
             "average_speed": [2.3],
             "is_fishing": [True],
             "time_emitting_at_sea": [None],
         }
-    ).astype({"time_emitting_at_sea": "timedelta64[ns]"})
+    )
 
     positions_2 = pd.DataFrame(
         {
@@ -350,17 +348,17 @@ def test_load_fishing_activity(reset_test_data):
             "meters_from_previous_position": [None, 0.0, 1256.0, 5632.3],
             "time_since_previous_position": [
                 None,
-                timedelta(hours=1),
-                timedelta(hours=1),
-                timedelta(minutes=45),
+                1.0,
+                1.0,
+                0.75,
             ],
             "average_speed": [None, 0.0, 0.678, 3.04],
             "is_fishing": [None, False, False, False],
             "time_emitting_at_sea": [
                 None,
-                timedelta(hours=1),
-                timedelta(hours=1),
-                timedelta(minutes=45),
+                1.0,
+                1.0,
+                0.75,
             ],
         }
     )
@@ -391,9 +389,7 @@ def test_load_fishing_activity(reset_test_data):
     )
     expected_loaded_positions.loc[
         expected_loaded_positions.id == 13632807, "time_emitting_at_sea"
-    ] = timedelta(
-        hours=10
-    )  # From DB test data
+    ] = 10  # From DB test data
 
     pd.testing.assert_frame_equal(
         expected_loaded_positions,
@@ -495,65 +491,65 @@ def test_extract_enrich_load(reset_test_data):
     expected_res = pd.DataFrame(
         columns=columns_to_check,
         data=[
-            [13632385, "AS761555", 2.69, False, timedelta(days=1), True],
-            [13633654, "AS761555", 2.69, False, timedelta(days=1, minutes=30), True],
-            [13635013, "AS761555", 2.69, False, timedelta(days=1, hours=1), True],
+            [13632385, "AS761555", 2.69, False, 24, True],
+            [13633654, "AS761555", 2.69, False, 24.5, True],
+            [13635013, "AS761555", 2.69, False, 25, True],
             [
                 13636534,
                 "AS761555",
                 2.69,
                 False,
-                timedelta(days=1, hours=1, minutes=30),
+                25.5,
                 True,
             ],
-            [13637980, "AS761555", 2.69, False, timedelta(days=1, hours=2), True],
+            [13637980, "AS761555", 2.69, False, 26, True],
             [
                 13639240,
                 "AS761555",
                 2.69,
                 False,
-                timedelta(days=1, hours=2, minutes=30),
+                26.5,
                 True,
             ],
-            [13640592, "AS761555", 2.69, False, timedelta(days=1, hours=3), True],
+            [13640592, "AS761555", 2.69, False, 27, True],
             [
                 13641745,
                 "AS761555",
                 2.69,
                 False,
-                timedelta(days=1, hours=3, minutes=30),
+                27.5,
                 None,
             ],
-            [13634203, "RV348407", 1.107, True, timedelta(), True],
-            [13634204, "RV348407", 1.107, True, timedelta(), True],
-            [13634205, "RV348407", 1.107, True, timedelta(), False],
-            [13637054, "RV348407", 0.355284, False, timedelta(), False],
-            [13639642, "RV348407", 0.286178, False, timedelta(hours=1), False],
-            [13786524, "RO237719", 2.690000, False, timedelta(days=1), True],
+            [13634203, "RV348407", 1.107, True, 0, True],
+            [13634204, "RV348407", 1.107, True, 0, True],
+            [13634205, "RV348407", 1.107, True, 0, False],
+            [13637054, "RV348407", 0.355284, False, 0, False],
+            [13639642, "RV348407", 0.286178, False, 1, False],
+            [13786524, "RO237719", 2.690000, False, 24, True],
             [
                 13786525,
                 "RO237719",
                 2.690000,
                 False,
-                timedelta(days=1, minutes=30),
+                24.5,
                 True,
             ],
-            [13786526, "RO237719", 2.690000, False, timedelta(days=1, hours=1), True],
-            [13786527, "RO237719", 2.690000, False, timedelta(days=1, hours=1), True],
-            [13786528, "RO237719", 2.690000, False, timedelta(days=1, hours=1), True],
-            [13786529, "RO237719", 2.690000, False, timedelta(days=1, hours=1), True],
-            [13786530, "RO237719", 2.690000, False, timedelta(days=1, hours=1), True],
-            [13786532, "RO237719", 2.690000, False, timedelta(days=1, hours=1), True],
-            [13786531, "RO237719", 2.690000, True, timedelta(), False],
-            [13632807, "RO237719", 0.000000, True, timedelta(), False],
-            [13635518, "RO237719", 0.000000, True, timedelta(), False],
-            [13638407, "RO237719", 0.000000, True, timedelta(), False],
-            [13640935, "RO237719", 0.000000, True, timedelta(), False],
-            [13786523, "OHMYGOSH", 0.7, False, timedelta(days=3, hours=12), True],
-            [13732807, "ZZTOPACDC", 0.4, True, timedelta(days=3), False],
-            [13735518, "ZZTOPACDC", 0.4, False, timedelta(days=3, hours=4), False],
-            [13738407, "ZZTOPACDC", 0.4, False, timedelta(days=3, hours=8), False],
-            [13740935, "ZZTOPACDC", 1459.06, True, timedelta(), False],
+            [13786526, "RO237719", 2.690000, False, 25, True],
+            [13786527, "RO237719", 2.690000, False, 25, True],
+            [13786528, "RO237719", 2.690000, False, 25, True],
+            [13786529, "RO237719", 2.690000, False, 25, True],
+            [13786530, "RO237719", 2.690000, False, 25, True],
+            [13786532, "RO237719", 2.690000, False, 25, True],
+            [13786531, "RO237719", 2.690000, True, 0, False],
+            [13632807, "RO237719", 0.000000, True, 0, False],
+            [13635518, "RO237719", 0.000000, True, 0, False],
+            [13638407, "RO237719", 0.000000, True, 0, False],
+            [13640935, "RO237719", 0.000000, True, 0, False],
+            [13786523, "OHMYGOSH", 0.7, False, 84, True],
+            [13732807, "ZZTOPACDC", 0.4, True, 72, False],
+            [13735518, "ZZTOPACDC", 0.4, False, 76, False],
+            [13738407, "ZZTOPACDC", 0.4, False, 80, False],
+            [13740935, "ZZTOPACDC", 1459.06, True, 0, False],
         ],
     )
 
@@ -668,14 +664,14 @@ def test_flow_recomputes_all_when_asked_to(reset_test_data):
     expected_res = pd.DataFrame(
         columns=columns_to_check,
         data=[
-            [13632385, False, 2.690000, timedelta(days=1), True],
-            [13633654, False, 0.747199, timedelta(days=1, minutes=30), True],
-            [13635013, False, 0.560395, timedelta(days=1, hours=1), False],
-            [13636534, False, 0.559126, timedelta(days=1, hours=1, minutes=30), False],
-            [13637980, False, 1.002370, timedelta(days=1, hours=2), True],
-            [13639240, False, 0.600405, timedelta(days=1, hours=2, minutes=30), True],
-            [13640592, False, 0.559129, timedelta(days=1, hours=3), False],
-            [13641745, False, 1.351540, timedelta(days=1, hours=3, minutes=30), None],
+            [13632385, False, 2.690000, 24, True],
+            [13633654, False, 0.747199, 24.5, True],
+            [13635013, False, 0.560395, 25, False],
+            [13636534, False, 0.559126, 25.5, False],
+            [13637980, False, 1.002370, 26, True],
+            [13639240, False, 0.600405, 26.5, True],
+            [13640592, False, 0.559129, 27, False],
+            [13641745, False, 1.351540, 27.5, None],
         ],
     )
     pd.testing.assert_frame_equal(expected_res, positions_after[columns_to_check])

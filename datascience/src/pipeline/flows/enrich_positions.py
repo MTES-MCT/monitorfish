@@ -1,7 +1,6 @@
 from logging import Logger
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import prefect
 from prefect import Flow, Parameter, case, task, unmapped
@@ -13,7 +12,6 @@ from src.pipeline.helpers.dates import Period
 from src.pipeline.helpers.spatial import enrich_positions
 from src.pipeline.processing import (
     left_isin_right_by_decreasing_priority,
-    prepare_df_for_loading,
     zeros_ones_to_bools,
 )
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
@@ -39,10 +37,7 @@ def extract_positions(period: Period) -> pd.DataFrame:
             "start": period.start,
             "end": period.end,
         },
-        dtypes={
-            "datetime_utc": "datetime64[ns]",
-            "time_emitting_at_sea": "timedelta64[ns]",
-        },
+        dtypes={"datetime_utc": "datetime64[ns]", "time_emitting_at_sea": float},
     )
 
 
@@ -110,9 +105,6 @@ def enrich_positions_by_vessel(
 
           and with the `time_emitting_at_sea` values recomputed / updated.
     """
-    minimum_time_of_emission_at_sea = np.timedelta64(
-        minimum_minutes_of_emission_at_sea, "m"
-    )
 
     if len(positions) == 0:
         # With an empty DataFrame, the `groupby` has nothing to group on and therefore
@@ -121,14 +113,15 @@ def enrich_positions_by_vessel(
         # In this case, applying `enrich_positions` without any groupby just adds the
         # desired columns and solves the problem.
         res = enrich_positions(
-            positions, minimum_time_of_emission_at_sea=minimum_time_of_emission_at_sea
+            positions,
+            minimum_minutes_of_emission_at_sea=minimum_minutes_of_emission_at_sea,
         )
     else:
         res = positions.groupby(
             ["cfr", "ircs", "external_immatriculation"], dropna=False, group_keys=False
         ).apply(
             enrich_positions,
-            minimum_time_of_emission_at_sea=minimum_time_of_emission_at_sea,
+            minimum_minutes_of_emission_at_sea=minimum_minutes_of_emission_at_sea,
             minimum_consecutive_positions=minimum_consecutive_positions,
             min_fishing_speed_threshold=min_fishing_speed_threshold,
             max_fishing_speed_threshold=max_fishing_speed_threshold,
@@ -171,19 +164,13 @@ def load_fishing_activity(positions: pd.DataFrame, period: Period, logger: Logge
                 "    id INTEGER PRIMARY KEY,"
                 "    is_at_port BOOLEAN,"
                 "    meters_from_previous_position REAL,"
-                "    time_since_previous_position INTERVAL,"
+                "    time_since_previous_position DOUBLE PRECISION,"
                 "    average_speed REAL,"
                 "    is_fishing BOOLEAN,"
-                "    time_emitting_at_sea INTERVAL"
+                "    time_emitting_at_sea DOUBLE PRECISION"
                 ")"
                 "ON COMMIT DROP;"
             )
-        )
-
-        positions = prepare_df_for_loading(
-            positions,
-            logger,
-            timedelta_columns=["time_since_previous_position", "time_emitting_at_sea"],
         )
 
         columns_to_load = [

@@ -3,7 +3,7 @@ WITH fishing_efforts AS (
         p.internal_reference_number AS cfr,
         d.dml,
         COALESCE(p.flag_state, v.flag_state) AS flag_state,
-        v.power * EXTRACT(epoch FROM SUM(p.time_since_previous_position)) / 3600 AS fishing_effort_kwh
+        v.power * SUM(p.time_since_previous_position) AS fishing_effort_kwh
     FROM positions p
     LEFT JOIN vessels v
     ON v.cfr = p.internal_reference_number

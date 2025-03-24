@@ -20,7 +20,7 @@ WITH detected_recent_deps AS (
         p.date_time >= CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL ':hours_from_now hours'
         AND p.date_time < CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '2 hours'
         AND p.is_at_port = false
-        AND time_emitting_at_sea = INTERVAL '0'
+        AND time_emitting_at_sea = 0
         AND p.flag_state = 'FR'
         AND v.length >= 12
         AND (v.logbook_equipment_status != 'Exempté' OR v.logbook_equipment_status IS NULL)

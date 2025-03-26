@@ -1,6 +1,8 @@
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
+import { resetInteraction } from '@features/Draw/slice'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
-import { InteractionListener } from '@features/Map/constants'
+import { InteractionListener, LayerProperties } from '@features/Map/constants'
+import { MonitorFishMap } from '@features/Map/Map.types'
 import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES, BLUEFIN_TUNA_SPECY_CODE } from '@features/PriorNotification/constants'
 import {
   DEFAULT_VESSEL_LIST_FILTER_VALUES,
@@ -19,9 +21,10 @@ import { FormikCirclePicker } from '@features/VesselGroup/components/EditDynamic
 import { DEFAULT_DYNAMIC_VESSEL_GROUP } from '@features/VesselGroup/constants'
 import {
   type CreateOrUpdateDynamicVesselGroup,
-  CreateOrUpdateDynamicVesselGroupSchema
+  CreateOrUpdateDynamicVesselGroupSchema,
+  type DynamicVesselGroup
 } from '@features/VesselGroup/types'
-import { addVesselGroup } from '@features/VesselGroup/useCases/addVesselGroup'
+import { addOrUpdateVesselGroup } from '@features/VesselGroup/useCases/addOrUpdateVesselGroup'
 import { countFilteredVessels } from '@features/VesselGroup/useCases/countFilteredVessels'
 import { useGetFilterableZonesAsTreeOptions } from '@hooks/useGetFilterableZonesAsTreeOptions'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
@@ -56,10 +59,15 @@ import type { MultiPolygon } from 'geojson'
 import type { Promisable } from 'type-fest'
 
 type ExportActivityReportsDialogProps = {
+  editedVesselGroup?: DynamicVesselGroup
   initialListFilterValues: VesselListFilter
   onExit: () => Promisable<void>
 }
-export function EditDynamicVesselGroupDialog({ initialListFilterValues, onExit }: ExportActivityReportsDialogProps) {
+export function EditDynamicVesselGroupDialog({
+  editedVesselGroup = undefined,
+  initialListFilterValues,
+  onExit
+}: ExportActivityReportsDialogProps) {
   const { newWindowContainerRef } = useNewWindow()
   const dispatch = useMainAppDispatch()
   const [listFilterValues, setListFilterValues] = useState<VesselListFilter>(initialListFilterValues)
@@ -98,6 +106,7 @@ export function EditDynamicVesselGroupDialog({ initialListFilterValues, onExit }
       ]
       const nextListFilterValues = { ...listFilterValues, zones: nextZones }
       updateListFilterValuesAndCountVessels(nextListFilterValues)
+      dispatch(resetInteraction())
     }
     // We do want to listen to only drawedGeometry
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -210,7 +219,7 @@ export function EditDynamicVesselGroupDialog({ initialListFilterValues, onExit }
   const handleOnSubmit = async (values: CreateOrUpdateDynamicVesselGroup) => {
     const nextValues = { ...values, filters: listFilterValues }
 
-    const isSuccess = await dispatch(addVesselGroup(nextValues))
+    const isSuccess = await dispatch(addOrUpdateVesselGroup(nextValues))
     if (isSuccess) {
       onExit()
     }
@@ -218,7 +227,7 @@ export function EditDynamicVesselGroupDialog({ initialListFilterValues, onExit }
 
   return (
     <StyledDialog isAbsolute>
-      <StyledDialogTitle>Créer un groupe de navires dynamique</StyledDialogTitle>
+      <StyledDialogTitle>{editedVesselGroup ? 'Modifier' : 'Créer'} un groupe de navires dynamique</StyledDialogTitle>
       <StyledDialogBody>
         <VesselsCount>
           Actuellement,{' '}
@@ -360,7 +369,12 @@ export function EditDynamicVesselGroupDialog({ initialListFilterValues, onExit }
             placeholder="Filtrer les navires avec une zone"
             popupWidth={500}
             renderValue={(_, items) => {
-              const itemsChildrens = items.filter(item => item.parent !== null)
+              const itemsChildrens = items.filter(
+                item =>
+                  (item.label === LayerProperties[MonitorFishMap.MonitorFishLayer.CUSTOM]?.name &&
+                    item.parent === null) ||
+                  item.parent !== null
+              )
 
               return itemsChildrens.length > 0 ? (
                 <SelectValue>Zone de filtre ({itemsChildrens.length})</SelectValue>
@@ -412,7 +426,7 @@ export function EditDynamicVesselGroupDialog({ initialListFilterValues, onExit }
           onReset={() => updateListFilterValuesAndCountVessels(DEFAULT_VESSEL_LIST_FILTER_VALUES)}
         />
         <Formik
-          initialValues={DEFAULT_DYNAMIC_VESSEL_GROUP}
+          initialValues={editedVesselGroup ?? DEFAULT_DYNAMIC_VESSEL_GROUP}
           innerRef={formRef as MutableRefObject<FormikProps<CreateOrUpdateDynamicVesselGroup>>}
           onSubmit={handleOnSubmit}
           validationSchema={toFormikValidationSchema(CreateOrUpdateDynamicVesselGroupSchema)}
@@ -440,7 +454,7 @@ export function EditDynamicVesselGroupDialog({ initialListFilterValues, onExit }
       </StyledDialogBody>
       <StyledDialogAction>
         <Button accent={Accent.PRIMARY} disabled={areFiltersEmpty} onClick={() => formRef.current?.handleSubmit()}>
-          Créer le groupe
+          {String(`${editedVesselGroup ? 'Modifier' : 'Créer'} le groupe`)}
         </Button>
         <Button accent={Accent.TERTIARY} onClick={onExit}>
           Annuler

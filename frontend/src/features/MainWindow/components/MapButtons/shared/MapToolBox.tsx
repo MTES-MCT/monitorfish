@@ -28,6 +28,6 @@ export const MapToolBox = styled(MapComponent)<{
   position: absolute;
   display: inline-block;
   transition: all 0.3s;
-  z-index: 9999;
+  z-index: 8999;
   box-shadow: ${p => (p.$hideBoxShadow ? 'unset' : '0px 3px 10px rgba(59, 69, 89, 0.5)')};
 `

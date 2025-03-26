@@ -26,6 +26,7 @@ export type DisplayedComponentState = {
   isPriorNotificationMapButtonDisplayed: boolean
   isStationLayerDisplayed: boolean
   isVesselFiltersMapButtonDisplayed: boolean
+  isVesselGroupMainWindowEditionDisplayed: boolean
   isVesselGroupMapButtonDisplayed: boolean
   isVesselLabelsMapButtonDisplayed: boolean
   isVesselListMapButtonDisplayed: boolean
@@ -55,6 +56,7 @@ const INITIAL_STATE: DisplayedComponentState = {
   isPriorNotificationMapButtonDisplayed: true,
   isStationLayerDisplayed: false,
   isVesselFiltersMapButtonDisplayed: true,
+  isVesselGroupMainWindowEditionDisplayed: false,
   isVesselGroupMapButtonDisplayed: true,
   isVesselLabelsMapButtonDisplayed: true,
   isVesselListMapButtonDisplayed: true,

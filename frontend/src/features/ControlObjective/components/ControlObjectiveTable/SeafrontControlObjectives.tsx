@@ -7,7 +7,7 @@ import {
   ModifiableCell,
   SegmentCellWithTitle
 } from '@features/Regulation/components/RegulationTables/tableCells'
-import { sortArrayByColumn, SortType } from '@features/Vessel/components/VesselList/tableSort'
+import { sortArrayByColumn, SortType } from '@utils/sortArrayByColumn'
 import { useCallback, useEffect, useState } from 'react'
 import { SelectPicker, Table } from 'rsuite'
 import styled from 'styled-components'

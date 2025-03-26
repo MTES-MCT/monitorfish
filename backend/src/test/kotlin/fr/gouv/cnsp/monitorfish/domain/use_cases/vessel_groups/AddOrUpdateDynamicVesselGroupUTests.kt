@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateDynamicVesselGroups
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -22,7 +23,7 @@ class AddOrUpdateDynamicVesselGroupUTests {
 
     @Test
     fun `execute Should create a new vessel group when id is null`() {
-        val groupToSave = TestUtils.getDynamicVesselGroups().first().copy(id = null)
+        val groupToSave = getCreateOrUpdateDynamicVesselGroups().first().copy(id = null)
 
         // Given
         given(vesselGroupRepository.save(any<DynamicVesselGroup>())).willReturn(
@@ -40,14 +41,14 @@ class AddOrUpdateDynamicVesselGroupUTests {
 
     @Test
     fun `execute Should update new vessel group when user is the owner`() {
-        val groupToSave = TestUtils.getDynamicVesselGroups().first()
+        val groupToSave = getCreateOrUpdateDynamicVesselGroups().first()
 
         // Given
         given(vesselGroupRepository.findById(1)).willReturn(
-            groupToSave,
+            TestUtils.getDynamicVesselGroups().first(),
         )
         given(vesselGroupRepository.save(any<DynamicVesselGroup>())).willReturn(
-            groupToSave,
+            TestUtils.getDynamicVesselGroups().first(),
         )
 
         // When
@@ -61,14 +62,14 @@ class AddOrUpdateDynamicVesselGroupUTests {
 
     @Test
     fun `execute Should throw BackendUsageException When user is not the owner and update a dynamic group`() {
-        val groupToSave = TestUtils.getDynamicVesselGroups().first()
+        val groupToSave = getCreateOrUpdateDynamicVesselGroups().first()
 
         // Given
         given(vesselGroupRepository.findById(1)).willReturn(
-            groupToSave,
+            TestUtils.getDynamicVesselGroups().first(),
         )
         given(vesselGroupRepository.save(any<DynamicVesselGroup>())).willReturn(
-            groupToSave,
+            TestUtils.getDynamicVesselGroups().first(),
         )
 
         // When
@@ -83,7 +84,7 @@ class AddOrUpdateDynamicVesselGroupUTests {
 
     @Test
     fun `execute Should throw BackendUsageException When trying to update a fixed group to a dynamic group`() {
-        val groupToSave = TestUtils.getDynamicVesselGroups().first().copy()
+        val groupToSave = getCreateOrUpdateDynamicVesselGroups().first().copy()
 
         // Given
         given(vesselGroupRepository.findById(1)).willReturn(
@@ -105,7 +106,7 @@ class AddOrUpdateDynamicVesselGroupUTests {
             ),
         )
         given(vesselGroupRepository.save(any<DynamicVesselGroup>())).willReturn(
-            groupToSave,
+            TestUtils.getDynamicVesselGroups().first(),
         )
 
         // When

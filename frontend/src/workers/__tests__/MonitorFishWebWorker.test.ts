@@ -2,7 +2,7 @@ import {
   DEFAULT_VESSEL_LIST_FILTER_VALUES,
   LastControlPeriod,
   VesselSize
-} from '@features/Vessel/components/VesselListV2/constants'
+} from '@features/Vessel/components/VesselList/constants'
 import { VesselLocation } from '@features/Vessel/types/vessel'
 import { describe, it, expect } from '@jest/globals'
 
@@ -118,14 +118,14 @@ describe('MonitorFishWebWorker.getFilteredVesselsV2', () => {
       gearCodes: ['gear1'],
       hasLogbook: true,
       lastControlPeriod: undefined,
-      lastLandingPortLocodes: undefined,
+      lastLandingPortLocodes: [],
       lastPositionHoursAgo: 2,
-      producerOrganizations: undefined,
+      producerOrganizations: [],
       riskFactors: [1],
       specyCodes: ['specy1'],
       vesselSize: VesselSize.ABOVE_TWELVE_METERS,
       vesselsLocation: [VesselLocation.PORT],
-      zones: undefined
+      zones: []
     }
 
     const result = MonitorFishWebWorker.getFilteredVesselsV2(DUMMY_LAST_POSITIONS, filters)

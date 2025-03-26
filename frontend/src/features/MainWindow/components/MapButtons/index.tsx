@@ -1,7 +1,8 @@
 import { Account } from '@features/Account/components/Account'
 import { ControlUnitListMapButton } from '@features/ControlUnit/components/ControlUnitListMapButton'
 import { NewFeatures } from '@features/NewFeatures/components/NewFeatures'
-import { VesselFiltersMapButton } from '@features/VesselFilter/components/VesselFilters'
+import { VesselListMapButton } from '@features/Vessel/components/VesselListMapButton'
+import { VesselGroupMapButton } from '@features/VesselGroup/components/VesselGroupMapButton'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
@@ -41,14 +42,17 @@ export function MapButtons() {
   const isMeasurementMapButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isMeasurementMapButtonDisplayed
   )
-  const isVesselFiltersMapButtonDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isVesselFiltersMapButtonDisplayed
-  )
   const isVesselLabelsMapButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isVesselLabelsMapButtonDisplayed
   )
   const isVesselVisibilityMapButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isVesselVisibilityMapButtonDisplayed
+  )
+  const isVesselListMapButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isVesselListMapButtonDisplayed
+  )
+  const isVesselGroupMapButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isVesselGroupMapButtonDisplayed
   )
 
   return (
@@ -61,7 +65,8 @@ export function MapButtons() {
           isPriorNotificationMapButtonDisplayed && <PriorNotificationListButton />}
         {isSuperUser && isBeaconMalfunctionsMapButtonDisplayed && <BeaconMalfunctionsMapButton />}
 
-        {isVesselFiltersMapButtonDisplayed && <VesselFiltersMapButton />}
+        {isVesselListMapButtonDisplayed && <VesselListMapButton />}
+        {isVesselGroupMapButtonDisplayed && <VesselGroupMapButton />}
         {isVesselVisibilityMapButtonDisplayed && <VesselVisibilityMapButton />}
         {isMeasurementMapButtonDisplayed && <MeasurementMapButton />}
         {isInterestPointMapButtonDisplayed && <InterestPointMapButton />}

@@ -61,7 +61,6 @@ data class LastPositionDataOutput(
     val speciesArray: List<String>,
     // Properties for WebGL
     val coordinates: List<Double>,
-    val filterPreview: Int, // 0 is False, 1 is True - for WebGL
     val hasBeaconMalfunction: Boolean,
     val isFiltered: Int, // 0 is False, 1 is True - for WebGL
     val lastPositionSentAt: Long,
@@ -122,7 +121,6 @@ data class LastPositionDataOutput(
                         longitude = position.longitude,
                         latitude = position.latitude,
                     ).toList(),
-                filterPreview = 0,
                 gearsArray = position.gearOnboard?.mapNotNull { it.gear }?.distinct() ?: listOf(),
                 hasAlert = position.alerts?.isNotEmpty() ?: false,
                 hasBeaconMalfunction = position.beaconMalfunctionId != null,

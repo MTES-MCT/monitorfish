@@ -1,4 +1,3 @@
-import { createSlice } from '@reduxjs/toolkit'
 import GeoJSON from 'ol/format/GeoJSON'
 import { all } from 'ol/loadingstrategy'
 import VectorSource from 'ol/source/Vector'
@@ -213,18 +212,6 @@ export function getTextForSearch(text) {
 
 export function getNauticalMilesFromMeters(length) {
   return Math.round((length / 1000) * 100 * 0.539957) / 100
-}
-
-export function createGenericSlice(initialState, reducers, topic) {
-  const initialStateCopy = { ...initialState }
-  const reducersCopy = { ...reducers }
-  const sliceObject = {
-    initialState: initialStateCopy,
-    name: topic,
-    reducers: reducersCopy
-  }
-
-  return createSlice(sliceObject)
 }
 
 /**

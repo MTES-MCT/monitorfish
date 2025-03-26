@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.GroupType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.Sharing
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupFilters
 import java.time.ZonedDateTime
@@ -9,10 +10,11 @@ data class DynamicVesselGroupDataOutput(
     val id: Int?,
     val name: String,
     val isDeleted: Boolean,
-    val description: String,
+    val description: String?,
     val pointsOfAttention: String?,
     val color: String,
     val sharing: Sharing,
+    val type: GroupType,
     val createdBy: String,
     val createdAtUtc: ZonedDateTime,
     val updatedAtUtc: ZonedDateTime? = null,
@@ -29,6 +31,7 @@ data class DynamicVesselGroupDataOutput(
                 pointsOfAttention = vesselGroup.pointsOfAttention,
                 color = vesselGroup.color,
                 sharing = vesselGroup.sharing,
+                type = vesselGroup.type,
                 createdBy = vesselGroup.createdBy,
                 createdAtUtc = vesselGroup.createdAtUtc,
                 updatedAtUtc = vesselGroup.updatedAtUtc,

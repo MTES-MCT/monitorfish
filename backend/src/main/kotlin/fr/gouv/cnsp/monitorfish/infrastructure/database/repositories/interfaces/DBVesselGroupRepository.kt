@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.VesselGroupEntity
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
@@ -17,6 +18,7 @@ interface DBVesselGroupRepository : CrudRepository<VesselGroupEntity, Int> {
     )
     fun findAllByUser(user: String): List<VesselGroupEntity>
 
+    @Modifying
     @Query(
         """
             UPDATE vessel_groups

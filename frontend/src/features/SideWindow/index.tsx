@@ -8,10 +8,10 @@ import { reportingApi } from '@features/Reporting/reportingApi'
 import { reportingActions } from '@features/Reporting/slice'
 import { SideWindowMenuKey } from '@features/SideWindow/constants'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
-import { VesselList } from '@features/Vessel/components/VesselListV2'
 import { setVessels } from '@features/Vessel/slice'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { NewWindowContext, type NewWindowContextValue, Notifier, THEME } from '@mtes-mct/monitor-ui'
+import { VesselList } from 'features/Vessel/components/VesselList'
 import {
   type CSSProperties,
   Fragment,

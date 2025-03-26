@@ -1,4 +1,4 @@
-import { getFilterableZonesAsTreeOptions } from '@features/Vessel/components/VesselListV2/utils'
+import { getFilterableZonesAsTreeOptions } from '@features/Vessel/components/VesselList/utils'
 import { useEffect, useState } from 'react'
 
 import type { TreeOption } from '@mtes-mct/monitor-ui'

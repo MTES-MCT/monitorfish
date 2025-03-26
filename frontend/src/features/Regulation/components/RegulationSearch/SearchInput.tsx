@@ -15,7 +15,7 @@ import BoxFilterSVG from '../../../icons/Filtre_zone_rectangle.svg?react'
 import BoxFilterSelectedSVG from '../../../icons/Filtre_zone_rectangle_selected.svg?react'
 import { MINIMUM_SEARCH_CHARACTERS_NUMBER, searchRegulatoryLayers } from '../../useCases/searchRegulatoryLayers'
 
-import type { ZoneFilter } from '@features/VesselFilter/types'
+import type { ZoneFilter } from '@features/Regulation/types'
 import type { Polygon } from 'geojson'
 
 export function SearchInput() {

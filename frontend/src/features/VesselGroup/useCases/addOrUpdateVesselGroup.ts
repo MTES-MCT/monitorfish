@@ -7,11 +7,13 @@ import { Level } from '@mtes-mct/monitor-ui'
 import type { CreateOrUpdateDynamicVesselGroup } from '@features/VesselGroup/types'
 import type { MainAppThunk } from '@store'
 
-export const addVesselGroup =
+export const addOrUpdateVesselGroup =
   (vesselGroup: CreateOrUpdateDynamicVesselGroup): MainAppThunk<Promise<boolean>> =>
   async (dispatch): Promise<boolean> => {
+    const isUpdate = !!vesselGroup.id
+
     trackEvent({
-      action: "Création d'un groupe de navires",
+      action: `${isUpdate ? 'Modification' : 'Création'} d'un groupe de navires`,
       category: 'VESSEL_GROUP',
       name: vesselGroup.name
     })
@@ -19,7 +21,7 @@ export const addVesselGroup =
     try {
       await dispatch(vesselGroupApi.endpoints.createOrUpdateDynamicVesselGroup.initiate(vesselGroup)).unwrap()
 
-      const bannerText = `Le groupe de navires dynamique "${vesselGroup.name}" a bien été créé.`
+      const bannerText = `Le groupe de navires dynamique "${vesselGroup.name}" a bien été ${isUpdate ? 'modifié' : 'créé'}.`
       dispatch(
         addSideWindowBanner({
           children: bannerText,

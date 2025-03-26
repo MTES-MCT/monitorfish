@@ -9,7 +9,7 @@ import {
 import { SideWindowStatus } from '@features/SideWindow/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { CoordinatesInput, Icon, IconButton } from '@mtes-mct/monitor-ui'
+import { CoordinatesInput, Icon, IconButton, usePrevious } from '@mtes-mct/monitor-ui'
 import { Feature } from 'ol'
 import GeoJSON from 'ol/format/GeoJSON'
 import { Point } from 'ol/geom'
@@ -44,6 +44,7 @@ export function DrawLayerModal() {
   const dispatch = useMainAppDispatch()
   const { drawedGeometry, initialGeometry, interactionType, listener } = useMainAppSelector(state => state.draw)
   const sideWindowStatus = useMainAppSelector(state => state.sideWindow.status)
+  const previousSideWindowStatus = usePrevious(sideWindowStatus)
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const initialFeatureNumberRef = useRef<number | undefined>(undefined)
 
@@ -99,10 +100,10 @@ export function DrawLayerModal() {
   }, [feature])
 
   useEffect(() => {
-    if (sideWindowStatus === SideWindowStatus.CLOSED) {
+    if (previousSideWindowStatus === SideWindowStatus.FOCUSED && sideWindowStatus === SideWindowStatus.CLOSED) {
       dispatch(closeDraw())
     }
-  }, [dispatch, sideWindowStatus])
+  }, [dispatch, previousSideWindowStatus, sideWindowStatus])
 
   const handleSelectInteraction = (nextInteractionType: InteractionType) => () => {
     dispatch(setInteractionType(nextInteractionType))
@@ -113,7 +114,7 @@ export function DrawLayerModal() {
   }
 
   const handleValidate = () => {
-    dispatch(closeDraw())
+    dispatch(closeDraw(listener))
   }
 
   const handleWriteCoordinates = useCallback(
@@ -146,7 +147,9 @@ export function DrawLayerModal() {
   return (
     <MapInteraction
       customTools={
-        (listener === InteractionListener.MISSION_ZONE || listener === InteractionListener.VESSELS_LIST) && (
+        (listener === InteractionListener.MISSION_ZONE ||
+          listener === InteractionListener.VESSELS_LIST ||
+          listener === InteractionListener.EDIT_DYNAMIC_VESSEL_GROUP_DIALOG) && (
           <IconGroup>
             <IconButton
               className={interactionType === InteractionType.POLYGON ? '_active' : undefined}

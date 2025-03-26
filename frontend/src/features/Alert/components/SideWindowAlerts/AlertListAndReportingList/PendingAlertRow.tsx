@@ -1,6 +1,6 @@
 import { COLORS } from '@constants/constants'
 import { validateAlert } from '@features/Alert/useCases/validateAlert'
-import { Flag } from '@features/Vessel/components/VesselList/tableCells'
+import { Flag } from '@features/commonComponents/Flag'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'

@@ -38,7 +38,6 @@ export const VesselLastPositionSchema = z.strictObject({
   estimatedCurrentLatitude: numberOrUndefined,
   estimatedCurrentLongitude: numberOrUndefined,
   externalReferenceNumber: stringOrUndefined,
-  filterPreview: z.number(), // 0 is False, 1 is True - for WebGL
   flagState: z.string(),
   // TODO To remove
   from: stringOrUndefined,

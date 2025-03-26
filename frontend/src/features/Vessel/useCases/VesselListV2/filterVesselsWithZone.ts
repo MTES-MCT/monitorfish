@@ -2,36 +2,35 @@ import { getAdministrativeZoneFromAPI } from '@api/geoserver'
 import { setInteractionTypeAndListener } from '@features/Draw/slice'
 import { InteractionListener, InteractionType } from '@features/Map/constants'
 import { openDrawLayerModal } from '@features/Mission/useCases/addOrEditMissionZone'
-import { filterVessels } from '@features/Vessel/useCases/VesselListV2/filterVessels'
 import { getSelectedOptionFromOptionValueInTree } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { difference } from 'lodash-es'
 
-import type { ZoneFilter } from '@features/Vessel/components/VesselListV2/types'
+import type { ZoneFilter } from '@features/Vessel/components/VesselList/types'
 import type { TreeOption } from '@mtes-mct/monitor-ui'
 import type { MainAppThunk } from '@store'
 
 export const filterVesselsWithZone =
-  (filterableZoneAsTreeOptions: TreeOption[], nextZoneValues: string[] | undefined): MainAppThunk =>
-  async (dispatch, getState) => {
+  (
+    filterableZoneAsTreeOptions: TreeOption[],
+    listener: InteractionListener,
+    nextZoneValues: string[] | undefined,
+    previousZones?: ZoneFilter[] | undefined
+  ): MainAppThunk<Promise<ZoneFilter[] | undefined>> =>
+  async (dispatch, getState): Promise<ZoneFilter[] | undefined> => {
     if (!nextZoneValues?.length) {
-      dispatch(filterVessels({ zones: undefined }))
-
-      return
+      return []
     }
 
     const { isBackoffice } = getState().global
-    const previousZones: ZoneFilter[] = getState().vessel.listFilterValues.zones ?? []
-    const previousZoneCodes = previousZones.map(zone => zone.value)
+    const previousZonesFilter: ZoneFilter[] = previousZones ?? getState().vessel.listFilterValues.zones ?? []
+    const previousZoneCodes = previousZonesFilter.map(zone => zone.value)
 
     const zonesDeleted = difference(previousZoneCodes, nextZoneValues)
     if (zonesDeleted.length === 1) {
       const zoneDeleted = zonesDeleted[0]
-      const nextZones = previousZones.filter(zone => zone.value !== zoneDeleted)
 
-      dispatch(filterVessels({ zones: nextZones }))
-
-      return
+      return previousZonesFilter.filter(zone => zone.value !== zoneDeleted)
     }
 
     const zonesAdded = difference(nextZoneValues, previousZoneCodes)
@@ -43,12 +42,12 @@ export const filterVesselsWithZone =
         dispatch(openDrawLayerModal)
         dispatch(
           setInteractionTypeAndListener({
-            listener: InteractionListener.VESSELS_LIST,
+            listener,
             type: InteractionType.POLYGON
           })
         )
 
-        return
+        return undefined
       }
 
       const administrativeZoneCode = zoneAdded.split('.')?.[0] ?? ''
@@ -59,21 +58,21 @@ export const filterVesselsWithZone =
           `Zone returned ${zoneAdded} has ${result.numberReturned} features. It should have only 1 feature.`
         )
 
-        return
+        return undefined
       }
 
       const name = getSelectedOptionFromOptionValueInTree(filterableZoneAsTreeOptions, zoneAdded)?.label
       const feature = result.features[0]
       assertNotNullish(feature)
 
-      const nextZones = previousZones.concat([
+      return previousZonesFilter.concat([
         {
           feature: feature.geometry,
           label: `Zone - ${name}`,
           value: zoneAdded
         }
       ])
-
-      dispatch(filterVessels({ zones: nextZones }))
     }
+
+    return undefined
   }

@@ -44,9 +44,6 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
   const vesselLabelsShowedOnMap = useMainAppSelector(state => state.map.vesselLabelsShowedOnMap)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
 
-  const filters = useMainAppSelector(state => state.filter.filters)
-  const nonFilteredVesselsAreHidden = useMainAppSelector(state => state.filter.nonFilteredVesselsAreHidden)
-
   const [featuresAndLabels, setFeaturesAndLabels] = useState<
     {
       featureId: string
@@ -329,8 +326,6 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
         ?.getSource()
       const featuresInExtent = vesselsLayer?.getFeaturesInExtent(monitorfishMap.getView().calculateExtent()) || []
 
-      const filterShowed = filters.find(filter => filter.showed)
-      const isFiltered = filterShowed && nonFilteredVesselsAreHidden // && filteredVesselsFeaturesUids?.length FIXME: if filterShowed, is it really necessary to check filteredVesselsFeaturesUids ?
       let featuresRequiringLabel
       if (hideNonSelectedVessels) {
         const selectedVesselId = selectedVessel && VesselFeature.getVesselFeatureId(selectedVessel)
@@ -340,12 +335,8 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
             (!!selectedVessel && feature.getId() === selectedVesselId) ||
             showedFeaturesIdentities.find(identity => feature?.getId()?.toString()?.includes(identity))
         )
-      } else if (previewFilteredVesselsMode) {
-        featuresRequiringLabel = featuresInExtent.filter(feature => feature.get('filterPreview'))
-      } else if (isFiltered) {
-        featuresRequiringLabel = featuresInExtent.filter(feature => feature.get('isFiltered'))
       } else {
-        featuresRequiringLabel = featuresInExtent
+        featuresRequiringLabel = featuresInExtent.filter(feature => feature.get('isFiltered'))
       }
       const maxLabelsDisplayed = previewFilteredVesselsMode ? MAX_LABELS_DISPLAYED_IN_PREVIEW : MAX_LABELS_DISPLAYED
       if (featuresRequiringLabel.length < maxLabelsDisplayed) {
@@ -367,8 +358,6 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
     vessels,
     selectedVessel,
     mapMovingAndZoomEvent,
-    filters,
-    nonFilteredVesselsAreHidden,
     vesselLabelsShowedOnMap,
     riskFactorShowedOnMap,
     vesselLabel,

@@ -1,0 +1,66 @@
+context('Vessel groups', () => {
+  it('A vessel group Should be created and displayed on the map', () => {
+    cy.login('superuser')
+    cy.visit('/side_window')
+    cy.wait(250)
+
+    /**
+     * Add filters
+     */
+    cy.getDataCy('side-window-menu-vessel-list').click()
+    cy.fill('Nationalités', ['Espagne', 'France'])
+    cy.getDataCy('vessel-list-length').contains('1002 navires équipés VMS')
+    cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 2)
+
+    cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
+    cy.getDataCy('vessel-list-length').contains('4 navires équipés VMS')
+    cy.get('.Table-SimpleTable tr').should('have.length', 5)
+
+    cy.clickButton('Créer un groupe de navires')
+    cy.clickButton('Créer un groupe dynamique')
+
+    /**
+     * Create the vessel group
+     */
+    cy.get('.Component-Dialog').contains('Actuellement, 4 navires correspondent aux filtres sélectionnés.')
+    cy.get('.Component-Dialog').within(() => {
+      cy.get('.Component-SingleTag').should('have.length', 4)
+    })
+
+    cy.fill('Engins utilisés', ['OTT'], { index: 1 })
+    cy.get('.Component-Dialog').contains('Actuellement, 1 navire correspond aux filtres sélectionnés.')
+    cy.get('.Component-Dialog').within(() => {
+      cy.get('.Component-SingleTag').eq(4).within(() => {
+        cy.get('button').click()
+      })
+    })
+    cy.wait(200)
+    cy.get('.Component-Dialog').contains('Actuellement, 4 navires correspondent aux filtres sélectionnés.')
+
+    cy.get('[title="#8c2c17"]').click()
+    cy.fill("Nom du groupe", "Lorem ipsum dolor sit amet")
+    cy.fill("Description du groupe", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.")
+    cy.fill("Points d'attention", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+    cy.clickButton('Créer le groupe')
+    cy.contains('Le groupe de navires dynamique "Lorem ipsum dolor sit amet" a bien été créé.').should('be.visible')
+
+    /**
+     * Open the main window and display the created vessel group
+     */
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(1000)
+
+    cy.clickButton('Groupes de navires')
+    cy.get('[title="Lorem ipsum dolor sit amet"]').click()
+    cy.get('[title="Lorem ipsum dolor sit amet"]').contains('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.')
+    cy.get('[title="Lorem ipsum dolor sit amet"]').contains('Groupe dynamique')
+    cy.get('[title="Lorem ipsum dolor sit amet"]').within(() => {
+      cy.get('.Component-SingleTag').should('have.length', 4)
+    })
+
+    cy.get("[title=\'Supprimer le groupe \"Lorem ipsum dolor sit amet\"\']").click()
+    cy.clickButton('Confirmer la suppression')
+
+    cy.contains('Le groupe de navires a bien été supprimé.').should('be.visible')
+  })
+})

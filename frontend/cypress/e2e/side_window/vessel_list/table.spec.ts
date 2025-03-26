@@ -8,11 +8,6 @@ context('Side Window > Vessel List > Table', () => {
     cy.wait(250)
     cy.getDataCy('side-window-menu-vessel-list').click()
 
-    /**
-     * /!\ We need to apply a first filter to display the vessels in the table.
-     * This is to ensure the filter to be backward compatible with the vessel filter V1.
-     */
-
     cy.fill('Nationalités', ['Espagne', 'France'])
     cy.getDataCy('vessel-list-length').contains('1002 navires équipés VMS')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 2)

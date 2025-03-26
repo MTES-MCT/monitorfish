@@ -19,7 +19,6 @@ export function buildFeature(vessel: Vessel.VesselLastPosition): Vessel.VesselLa
     detectabilityRiskFactor: vessel.detectabilityRiskFactor,
     emissionPeriod: vessel.emissionPeriod,
     externalReferenceNumber: vessel.externalReferenceNumber,
-    filterPreview: vessel.filterPreview,
     flagState: vessel.flagState,
     geometry: new Point(vessel.coordinates),
     hasAlert: vessel.hasAlert,

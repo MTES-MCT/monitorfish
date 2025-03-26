@@ -125,3 +125,9 @@ export type RegulatedSpeciesDetail = {
   name: string
   remarks: string
 }
+
+export type ZoneFilter = {
+  code: string
+  feature: Polygon
+  name: string
+}

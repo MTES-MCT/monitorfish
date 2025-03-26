@@ -1,0 +1,56 @@
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
+import { vesselGroupApi } from '@features/VesselGroup/apis'
+import { trackEvent } from '@hooks/useTracking'
+import { Level } from '@mtes-mct/monitor-ui'
+
+import type { CreateOrUpdateDynamicVesselGroup } from '@features/VesselGroup/types'
+import type { MainAppThunk } from '@store'
+
+export const addVesselGroup =
+  (vesselGroup: CreateOrUpdateDynamicVesselGroup): MainAppThunk<Promise<boolean>> =>
+  async (dispatch): Promise<boolean> => {
+    trackEvent({
+      action: "Création d'un groupe de navires",
+      category: 'VESSEL_GROUP',
+      name: vesselGroup.name
+    })
+
+    try {
+      await dispatch(vesselGroupApi.endpoints.createOrUpdateDynamicVesselGroup.initiate(vesselGroup)).unwrap()
+
+      const bannerText = `Le groupe de navires dynamique "${vesselGroup.name}" a bien été créé.`
+      dispatch(
+        addSideWindowBanner({
+          children: bannerText,
+          closingDelay: 5000,
+          isClosable: true,
+          level: Level.SUCCESS,
+          withAutomaticClosing: true
+        })
+      )
+      dispatch(
+        addMainWindowBanner({
+          children: bannerText,
+          closingDelay: 5000,
+          isClosable: true,
+          level: Level.SUCCESS,
+          withAutomaticClosing: true
+        })
+      )
+
+      return true
+    } catch (error) {
+      dispatch(
+        addSideWindowBanner({
+          children: (error as Error).message,
+          closingDelay: 5000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
+
+      return false
+    }
+  }

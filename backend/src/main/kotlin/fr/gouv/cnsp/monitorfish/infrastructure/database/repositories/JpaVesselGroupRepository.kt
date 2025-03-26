@@ -9,7 +9,6 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.VesselGroupEnti
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBVesselGroupRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -26,7 +25,6 @@ class JpaVesselGroupRepository(
 
     override fun findById(id: Int): VesselGroupBase = dbVesselGroupRepository.findById(id).get().toVesselGroup(mapper)
 
-    @Modifying
     override fun save(vesselGroup: DynamicVesselGroup): DynamicVesselGroup {
         val savedGroup =
             dbVesselGroupRepository.save(
@@ -36,7 +34,6 @@ class JpaVesselGroupRepository(
         return savedGroup.toVesselGroup(mapper) as DynamicVesselGroup
     }
 
-    @Modifying
     override fun save(vesselGroup: FixedVesselGroup): FixedVesselGroup {
         val savedGroup =
             dbVesselGroupRepository.save(
@@ -46,7 +43,6 @@ class JpaVesselGroupRepository(
         return savedGroup.toVesselGroup(mapper) as FixedVesselGroup
     }
 
-    @Modifying
     override fun delete(id: Int) {
         dbVesselGroupRepository.deleteById(id)
     }

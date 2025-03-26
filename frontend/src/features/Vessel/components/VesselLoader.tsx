@@ -6,7 +6,6 @@ import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -20,7 +19,6 @@ export function VesselLoader() {
   const isInLightMode = useIsInLightMode()
   const dispatch = useMainAppDispatch()
 
-  const blockVesselsUpdate = useMainAppSelector(state => state.global.blockVesselsUpdate)
   const loadingPositions = useMainAppSelector(state => state.vessel.loadingPositions)
   const vesselSidebarIsOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
 
@@ -29,7 +27,7 @@ export function VesselLoader() {
     error,
     isError,
     isFetching
-  } = useGetVesselsLastPositionsQuery(blockVesselsUpdate ? skipToken : undefined, {
+  } = useGetVesselsLastPositionsQuery(undefined, {
     pollingInterval: isInLightMode ? TWENTY_MINUTES : FIVE_MINUTES
   })
 

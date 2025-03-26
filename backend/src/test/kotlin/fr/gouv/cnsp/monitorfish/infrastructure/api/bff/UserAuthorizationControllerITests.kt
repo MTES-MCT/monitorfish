@@ -7,16 +7,13 @@ import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
-import fr.gouv.cnsp.monitorfish.infrastructure.api.security.TestUtils.Companion.getMockApiClient
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.UserAuthorizationCheckFilter
 import fr.gouv.cnsp.monitorfish.infrastructure.oidc.APIOIDCRepository
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.test.web.servlet.MockMvc
@@ -33,6 +30,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
     SentryConfig::class,
     CustomAuthenticationEntryPoint::class,
     APIOIDCRepository::class,
+    TestApiClient::class,
 )
 @WebMvcTest(
     value = [(UserAuthorizationController::class)],
@@ -52,12 +50,6 @@ class UserAuthorizationControllerITests {
 
     @MockBean
     private lateinit var getAuthorizedUser: GetAuthorizedUser
-
-    @TestConfiguration
-    class TestApiClient {
-        @Bean
-        fun mockApiClient(): ApiClient = getMockApiClient()
-    }
 
     @MockBean
     private lateinit var getIsAuthorizedUser: GetIsAuthorizedUser

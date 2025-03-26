@@ -8,6 +8,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 const displayedComponentsLocalstorageKey = 'displayedComponents'
 
 export type DisplayedComponentState = {
+  areVesselGroupsDisplayed: boolean
   areVesselsDisplayed: boolean
   isAccountMapButtonDisplayed: boolean
   isAlertsMapButtonDisplayed: boolean
@@ -25,13 +26,14 @@ export type DisplayedComponentState = {
   isPriorNotificationMapButtonDisplayed: boolean
   isStationLayerDisplayed: boolean
   isVesselFiltersMapButtonDisplayed: boolean
+  isVesselGroupMapButtonDisplayed: boolean
   isVesselLabelsMapButtonDisplayed: boolean
-  isVesselListDisplayed: boolean
-  isVesselListModalDisplayed: boolean
+  isVesselListMapButtonDisplayed: boolean
   isVesselSearchDisplayed: boolean
   isVesselVisibilityMapButtonDisplayed: boolean
 }
 const INITIAL_STATE: DisplayedComponentState = {
+  areVesselGroupsDisplayed: true,
   areVesselsDisplayed: true,
   isAccountMapButtonDisplayed: true,
   isAlertsMapButtonDisplayed: true,
@@ -53,9 +55,9 @@ const INITIAL_STATE: DisplayedComponentState = {
   isPriorNotificationMapButtonDisplayed: true,
   isStationLayerDisplayed: false,
   isVesselFiltersMapButtonDisplayed: true,
+  isVesselGroupMapButtonDisplayed: true,
   isVesselLabelsMapButtonDisplayed: true,
-  isVesselListDisplayed: true,
-  isVesselListModalDisplayed: false,
+  isVesselListMapButtonDisplayed: true,
   isVesselSearchDisplayed: true,
   isVesselVisibilityMapButtonDisplayed: true
 }

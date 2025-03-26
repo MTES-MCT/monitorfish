@@ -43,24 +43,25 @@ const hideDeprecatedPositionsCondition = [
   false
 ]
 
-const showOnlyNonFilteredVessels = ['case', stateIs('nonFilteredVesselsAreHidden'), featureHas('isFiltered'), true]
+// TODO rename to : show only vessel group
+/*
+const showOnlyNonFilteredVessels = [
+  'case',
+  stateIs('areVesselsNotInVesselGroupsHidden'),
+  featureHas('isFiltered'),
+  true
+]
+ */
 
 export const getWebGLVesselStyle = (): WebGLStyle => {
   const filterColor = ['color', ['var', 'filterColorRed'], ['var', 'filterColorGreen'], ['var', 'filterColorBlue']]
   const defaultVesselColor = ['case', stateIs('isLight'), theme.color.lightGray, theme.color.charcoal]
   const booleanFilter = [
-    'case',
-    // in preview mode, show only vessels in preview mode
-    stateIs('previewFilteredVesselsMode'),
-    featureHas('filterPreview'),
-    // default
-    [
-      'all',
-      hideNonSelectedVesselsCondition,
-      hideDeprecatedPositionsCondition,
-      showOnlyNonFilteredVessels,
-      hideVesselsAtPortCondition
-    ]
+    'all',
+    hideNonSelectedVesselsCondition,
+    hideDeprecatedPositionsCondition,
+    featureHas('isFiltered'),
+    hideVesselsAtPortCondition
   ]
 
   return {
@@ -91,26 +92,25 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
 }
 
 export const getWebGLVesselStyleVariables = ({
+  areVesselsNotInVesselGroupsHidden,
   filterColorBlue,
   filterColorGreen,
   filterColorRed,
   hideNonSelectedVessels,
   hideVesselsAtPort,
   isLight,
-  nonFilteredVesselsAreHidden,
   previewFilteredVesselsMode,
   vesselIsHiddenTimeThreshold,
   vesselIsOpacityReducedTimeThreshold
 }) => ({
+  areVesselsNotInVesselGroupsHidden: booleanToInt(areVesselsNotInVesselGroupsHidden),
   filterColorBlue,
   filterColorGreen,
   filterColorRed,
-  filterPreview: 0,
   hideNonSelectedVessels: booleanToInt(hideNonSelectedVessels),
   hideVesselsAtPort: booleanToInt(hideVesselsAtPort),
   isFiltered: 0,
   isLight: booleanToInt(isLight),
-  nonFilteredVesselsAreHidden: booleanToInt(nonFilteredVesselsAreHidden),
   previewFilteredVesselsMode: booleanToInt(previewFilteredVesselsMode),
   vesselIsHiddenTimeThreshold,
   vesselIsOpacityReducedTimeThreshold

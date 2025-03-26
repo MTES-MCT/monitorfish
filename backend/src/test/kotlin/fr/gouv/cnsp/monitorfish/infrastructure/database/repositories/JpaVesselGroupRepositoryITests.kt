@@ -54,4 +54,19 @@ class JpaVesselGroupRepositoryITests : AbstractDBTests() {
         assertThat(savedGroup).isEqualTo(expectedGroup.copy(id = 4))
         assertThat(updatedGroups).hasSize(4)
     }
+
+    @Test
+    @Transactional
+    fun `delete Should delete a dynamic group`() {
+        // Given
+        val previousGroups = jpaVesselGroupRepository.findAllByUser("dummy@email.gouv.fr")
+        assertThat(previousGroups).hasSize(3)
+
+        // When
+        jpaVesselGroupRepository.delete(1)
+        val updatedGroups = jpaVesselGroupRepository.findAllByUser("dummy@email.gouv.fr")
+
+        // Then
+        assertThat(updatedGroups).hasSize(2)
+    }
 }

@@ -11,7 +11,7 @@ import { zoomInLayer } from '../../LayersSidebar/useCases/zoomInLayer'
 
 import type { BaseRegulatoryZone, RegulatoryZone } from '../types'
 import type { MonitorFishMap } from '@features/Map/Map.types'
-import type { ZoneFilter } from '@features/VesselFilter/types'
+import type { ZoneFilter } from '@features/Regulation/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 import type { MutableRefObject } from 'react'

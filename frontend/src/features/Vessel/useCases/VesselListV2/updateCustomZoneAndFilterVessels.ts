@@ -1,7 +1,7 @@
 import { InteractionListener } from '@features/Map/constants'
 import { filterVessels } from '@features/Vessel/useCases/VesselListV2/filterVessels'
 
-import type { ZoneFilter } from '@features/Vessel/components/VesselListV2/types'
+import type { ZoneFilter } from '@features/Vessel/components/VesselList/types'
 import type { MainAppThunk } from '@store'
 import type { MultiPolygon } from 'geojson'
 

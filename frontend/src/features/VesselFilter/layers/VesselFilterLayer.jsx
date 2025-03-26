@@ -4,14 +4,14 @@ import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import { Stroke, Style } from 'ol/style'
 import React, { useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION, LayerProperties } from '@features/Map/constants'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 
 function VesselFilterLayer() {
-  const filters = useSelector(state => state.filter.filters)
-  const zonesSelected = useSelector(state => state.vesselList.zonesSelected)
+  const filters = []
+  // TODO use vessel groups
+  const zonesSelected = undefined
 
   const showedFilter = filters?.find(filter => filter.showed)
   const currentDrawnFilterZone = zonesSelected && zonesSelected[0]?.feature

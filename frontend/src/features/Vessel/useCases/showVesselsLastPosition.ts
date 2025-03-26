@@ -1,23 +1,25 @@
-import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { Vessel } from '@features/Vessel/Vessel.types'
 
-import { applyFilterToVessels } from './applyFilterToVessels'
 import { resetIsUpdatingVessels } from '../../../domain/shared_slices/Global'
-import { getUniqueSpeciesAndDistricts } from '../../../domain/use_cases/species/getUniqueSpeciesAndDistricts'
-import { customHexToRGB } from '../../../utils'
-import { setVessels, setVesselsSpeciesAndDistricts } from '../slice'
+import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
+import { setFilteredVesselsFeatures, setVessels } from '../slice'
 
 import type { MainAppThunk } from '@store'
 
 export const showVesselsLastPosition =
   (vessels: Vessel.VesselLastPosition[]): MainAppThunk =>
   async (dispatch, getState) => {
-    const showedFilter = getState().filter?.filters?.find(filter => filter.showed)
+    const monitorFishWorker = await MonitorFishWorker
+    const { listFilterValues } = getState().vessel
 
     await dispatch(setVessels(vessels))
 
-    await dispatch(applyFilterToVessels())
+    const filteredVesselFeatureIds = await monitorFishWorker.getFilteredVesselsV2(vessels, listFilterValues)
+
+    await dispatch(setFilteredVesselsFeatures(filteredVesselFeatureIds))
+
+    /*
     if (showedFilter?.color) {
       const [red, green, blue] = customHexToRGB(showedFilter?.color)
 
@@ -27,15 +29,9 @@ export const showVesselsLastPosition =
         filterColorRed: red
       })
     }
+     */
 
     dispatch(renderVesselFeatures())
 
-    const speciesAndDistricts = await dispatch(getUniqueSpeciesAndDistricts(vessels))
-    dispatch(
-      setVesselsSpeciesAndDistricts({
-        districts: speciesAndDistricts.districts,
-        species: speciesAndDistricts.species
-      })
-    )
     dispatch(resetIsUpdatingVessels())
   }

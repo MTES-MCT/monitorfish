@@ -46,7 +46,8 @@ export enum RtkCacheTagType {
   PriorNotificationsToVerify = 'PriorNotificationsToVerify',
   ProducerOrganizationMemberships = 'ProducerOrganizationMemberships',
   Reportings = 'Reportings',
-  Vessel = 'Vessel'
+  Vessel = 'Vessel',
+  VesselGroups = 'VesselGroups'
 }
 
 export enum WindowContext {

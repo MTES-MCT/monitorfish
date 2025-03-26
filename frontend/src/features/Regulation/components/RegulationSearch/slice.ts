@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import type { RegulatoryLawTypes } from '../../types'
-import type { ZoneFilter } from '@features/VesselFilter/types'
+import type { ZoneFilter } from '@features/Regulation/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 type VesselListState = {

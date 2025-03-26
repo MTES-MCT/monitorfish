@@ -18,10 +18,6 @@ function VesselAlertAndBeaconMalfunctionLayer() {
   const { hideNonSelectedVessels, selectedVesselIdentity, vesselsTracksShowed } = useSelector(state => state.vessel)
   const vessels = useSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
 
-  const { nonFilteredVesselsAreHidden } = useSelector(state => state.filter)
-
-  const { previewFilteredVesselsMode } = useSelector(state => state.global)
-
   const { hideVesselsAtPort } = useSelector(state => state.map)
 
   const vectorSourceRef = useRef(null)
@@ -71,10 +67,7 @@ function VesselAlertAndBeaconMalfunctionLayer() {
         if (!vessel.hasAlert) {
           return _features
         }
-        if (nonFilteredVesselsAreHidden && !vessel.isFiltered) {
-          return _features
-        }
-        if (previewFilteredVesselsMode && !vessel.filterPreview) {
+        if (!vessel.isFiltered) {
           return _features
         }
         if (hideVesselsAtPort && vessel.isAtPort) {
@@ -101,8 +94,6 @@ function VesselAlertAndBeaconMalfunctionLayer() {
     vessels,
     selectedVesselIdentity,
     vesselsTracksShowed,
-    previewFilteredVesselsMode,
-    nonFilteredVesselsAreHidden,
     hideNonSelectedVessels,
     hideVesselsAtPort
   ])

@@ -10,6 +10,8 @@ import { Accent, Icon, IconButton, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
 
+import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
+
 import type { DynamicVesselGroup } from '@features/VesselGroup/types'
 
 type VesselGroupRowProps = {
@@ -26,6 +28,11 @@ export function VesselGroupRow({ vesselGroup }: VesselGroupRowProps) {
   const handleDeleteVesselGroup = () => {
     dispatch(deleteVesselGroup(vesselGroup.id))
     setIsDeleteConfirmationModalOpen(false)
+  }
+
+  const handleEditVesselGroup = () => {
+    dispatch(vesselGroupActions.vesselGroupEdited(vesselGroup))
+    dispatch(setDisplayedComponents({ isVesselGroupMainWindowEditionDisplayed: true }))
   }
 
   return (
@@ -92,7 +99,7 @@ export function VesselGroupRow({ vesselGroup }: VesselGroupRowProps) {
                 accent={Accent.TERTIARY}
                 Icon={Icon.Edit}
                 iconSize={20}
-                onClick={() => {}}
+                onClick={handleEditVesselGroup}
                 title={`Modifier le groupe "${vesselGroup.name}"`}
               />
               <IconButton

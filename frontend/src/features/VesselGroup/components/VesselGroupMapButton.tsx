@@ -35,5 +35,4 @@ export function VesselGroupMapButton() {
 
 const Wrapper = styled.div`
   transition: all 0.2s;
-  left: 10px;
 `

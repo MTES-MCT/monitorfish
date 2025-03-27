@@ -38,24 +38,25 @@ context('Map menu tools', () => {
       .should('not.exist')
     cy.get('body').contains('Afficher depuis').should('be.visible')
 
-    // Vessel filters
-    cy.clickButton('Mes filtres', { withoutScroll: true })
+    // Vessel groups
+    cy.clickButton('Groupes de navires', { withoutScroll: true })
     cy.get('body').contains('Afficher depuis').should('not.exist')
-    cy.get('*[data-cy="vessel-filters-create-new-filter"]').should('be.visible')
+    cy.getDataCy('vessel-groups-menu-box').should('be.visible')
 
     // Account
     cy.clickButton('Mon compte', { withoutScroll: true })
-    cy.get('*[data-cy="vessel-filters-create-new-filter"]').should('not.exist')
+    cy.getDataCy('vessel-groups-menu-box').should('not.exist')
     cy.get('*[data-cy="map-account-box"]').should('be.visible')
 
     // Account
     cy.clickButton("Nouveautés MonitorFish", { withoutScroll: true })
     cy.get('*[data-cy="map-account-box"]').should('not.exist')
+    cy.getDataCy('map-new-features-box').should('be.visible')
 
     // Press on ESC should close the tool and shrink the menu
-    cy.get('*[data-cy="vessel-filters"]').should('have.css', 'width', '40px')
+    cy.get('[aria-label="Nouveautés MonitorFish"]').should('have.css', 'width', '40px')
     cy.get('body').type('{esc}')
-    cy.get('*[data-cy="vessel-filters"]').should('have.css', 'width', '5px')
+    cy.get('[aria-label="Nouveautés MonitorFish"]').should('have.css', 'width', '5px')
     cy.get('*[data-cy="vessel-visibility"]').should('have.css', 'width', '5px')
     cy.get('*[data-cy="vessel-labels"]').should('have.css', 'width', '5px')
     cy.get('*[data-cy="interest-point"]').should('have.css', 'width', '5px')

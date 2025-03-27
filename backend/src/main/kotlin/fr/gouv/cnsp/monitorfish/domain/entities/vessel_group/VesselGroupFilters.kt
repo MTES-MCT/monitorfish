@@ -1,7 +1,9 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.vessel_group
 
+import com.neovisionaries.i18n.CountryCode
+
 data class VesselGroupFilters(
-    val countryCodes: List<String> = listOf(),
+    val countryCodes: List<CountryCode> = listOf(),
     val fleetSegments: List<String> = listOf(),
     val gearCodes: List<String> = listOf(),
     val hasLogbook: Boolean?,

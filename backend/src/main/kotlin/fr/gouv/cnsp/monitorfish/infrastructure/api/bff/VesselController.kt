@@ -5,10 +5,12 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
+import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.Utils.getEmail
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.servlet.http.HttpServletResponse
 import jakarta.websocket.server.PathParam
 import kotlinx.coroutines.runBlocking
 import org.springframework.format.annotation.DateTimeFormat
@@ -35,8 +37,9 @@ class VesselController(
 ) {
     @GetMapping("")
     @Operation(summary = "Get all vessels' last position")
-    fun getVessels(): List<LastPositionDataOutput> {
-        val positions = getLastPositions.execute()
+    fun getVessels(response: HttpServletResponse): List<LastPositionDataOutput> {
+        val email: String = getEmail(response)
+        val positions = getLastPositions.execute(email)
 
         return positions.map { position ->
             position.let {

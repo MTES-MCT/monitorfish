@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
@@ -90,7 +91,7 @@ class VesselGroupControllerITests {
                 endOfValidityUtc = null,
                 filters =
                     VesselGroupFilters(
-                        countryCodes = listOf("FR", "ES", "IT"),
+                        countryCodes = listOf(CountryCode.FR, CountryCode.ES, CountryCode.IT),
                         fleetSegments = emptyList(),
                         gearCodes = listOf("OTB", "OTM", "TBB", "PTB"),
                         hasLogbook = true,

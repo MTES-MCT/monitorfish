@@ -100,8 +100,9 @@ class VesselLightControllerITests {
                 180.0,
                 farPastFixedDateTime,
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                vesselGroups = listOf(),
             )
-        given(this.getLastPositions.execute()).willReturn(listOf(position))
+        given(this.getLastPositions.execute(any())).willReturn(listOf(position))
 
         // When
         api

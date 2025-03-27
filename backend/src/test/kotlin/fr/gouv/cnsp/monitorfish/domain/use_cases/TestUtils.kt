@@ -967,7 +967,7 @@ object TestUtils {
                 endOfValidityUtc = null,
                 filters =
                     VesselGroupFilters(
-                        countryCodes = listOf("FR", "ES", "IT"),
+                        countryCodes = listOf(CountryCode.FR, CountryCode.ES, CountryCode.IT),
                         fleetSegments = emptyList(),
                         gearCodes = listOf("OTB", "OTM", "TBB", "PTB"),
                         hasLogbook = true,

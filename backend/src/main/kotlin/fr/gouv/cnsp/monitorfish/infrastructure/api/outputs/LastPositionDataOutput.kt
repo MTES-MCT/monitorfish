@@ -64,6 +64,7 @@ data class LastPositionDataOutput(
     val hasBeaconMalfunction: Boolean,
     val isFiltered: Int, // 0 is False, 1 is True - for WebGL
     val lastPositionSentAt: Long,
+    val vesselGroups: List<LastPositionVesselGroupDataOutput>,
 ) {
     companion object {
         fun fromLastPosition(position: LastPosition): LastPositionDataOutput =
@@ -133,6 +134,20 @@ data class LastPositionDataOutput(
                 lastPositionSentAt = position.dateTime.toInstant().toEpochMilli(),
                 speciesArray = position.speciesOnboard?.mapNotNull { it.species }?.distinct() ?: listOf(),
                 vesselFeatureId = Vessel.getVesselCompositeIdentifier(position),
+                vesselGroups =
+                    position.vesselGroups.map {
+                        LastPositionVesselGroupDataOutput(
+                            id = it.id!!,
+                            color = it.color,
+                            name = it.name,
+                        )
+                    },
             )
     }
 }
+
+data class LastPositionVesselGroupDataOutput(
+    val id: Int,
+    val color: String,
+    val name: String,
+)

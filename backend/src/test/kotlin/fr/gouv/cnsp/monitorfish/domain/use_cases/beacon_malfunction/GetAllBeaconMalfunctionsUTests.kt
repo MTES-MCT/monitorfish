@@ -52,6 +52,7 @@ class GetAllBeaconMalfunctionsUTests {
                         4,
                     ),
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                vesselGroups = listOf(),
             )
         val secondPosition =
             LastPosition(
@@ -74,6 +75,7 @@ class GetAllBeaconMalfunctionsUTests {
                         3,
                     ),
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                vesselGroups = listOf(),
             )
         val thirdPosition =
             LastPosition(
@@ -96,6 +98,7 @@ class GetAllBeaconMalfunctionsUTests {
                         2,
                     ),
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                vesselGroups = listOf(),
             )
         val fourthPosition =
             LastPosition(
@@ -118,6 +121,7 @@ class GetAllBeaconMalfunctionsUTests {
                         1,
                     ),
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                vesselGroups = listOf(),
             )
         given(lastPositionRepository.findAll()).willReturn(
             listOf(firstPosition, fourthPosition, secondPosition, thirdPosition),

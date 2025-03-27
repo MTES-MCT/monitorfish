@@ -121,8 +121,9 @@ class VesselControllerITests {
                     listOf(
                         gear,
                     ),
+                vesselGroups = listOf(),
             )
-        given(this.getLastPositions.execute()).willReturn(listOf(position))
+        given(this.getLastPositions.execute(any())).willReturn(listOf(position))
 
         // When
         api

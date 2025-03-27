@@ -19,10 +19,10 @@ import { VesselLocation } from '@features/Vessel/types/vessel'
 import { filterVesselsWithZone } from '@features/Vessel/useCases/VesselListV2/filterVesselsWithZone'
 import { FormikCirclePicker } from '@features/VesselGroup/components/EditDynamicVesselGroupDialog/FormikCirclePicker'
 import { DEFAULT_DYNAMIC_VESSEL_GROUP } from '@features/VesselGroup/constants'
+import { vesselGroupActions } from '@features/VesselGroup/slice'
 import {
   type CreateOrUpdateDynamicVesselGroup,
-  CreateOrUpdateDynamicVesselGroupSchema,
-  type DynamicVesselGroup
+  CreateOrUpdateDynamicVesselGroupSchema
 } from '@features/VesselGroup/types'
 import { addOrUpdateVesselGroup } from '@features/VesselGroup/useCases/addOrUpdateVesselGroup'
 import { countFilteredVessels } from '@features/VesselGroup/useCases/countFilteredVessels'
@@ -40,6 +40,7 @@ import {
   CheckPicker,
   Dialog,
   FormikDatePicker,
+  FormikEffect,
   FormikTextarea,
   FormikTextInput,
   MultiCascader,
@@ -59,18 +60,22 @@ import type { MultiPolygon } from 'geojson'
 import type { Promisable } from 'type-fest'
 
 type ExportActivityReportsDialogProps = {
-  editedVesselGroup?: DynamicVesselGroup
+  editedVesselGroup?: CreateOrUpdateDynamicVesselGroup
   initialListFilterValues: VesselListFilter
+  isMainWindow?: boolean
   onExit: () => Promisable<void>
 }
 export function EditDynamicVesselGroupDialog({
   editedVesselGroup = undefined,
   initialListFilterValues,
+  isMainWindow = false,
   onExit
 }: ExportActivityReportsDialogProps) {
   const { newWindowContainerRef } = useNewWindow()
   const dispatch = useMainAppDispatch()
   const [listFilterValues, setListFilterValues] = useState<VesselListFilter>(initialListFilterValues)
+  // Used to save modification when a custom zone is drawn
+  const editedVesselGroupRef = useRef<CreateOrUpdateDynamicVesselGroup | undefined>(editedVesselGroup)
   const [vesselsFound, setVesselsFound] = useState<number | undefined>(undefined)
   const formRef = useRef<FormikProps<CreateOrUpdateDynamicVesselGroup>>()
 
@@ -146,6 +151,17 @@ export function EditDynamicVesselGroupDialog({
 
   const updateZones = async (nextZonesNames: string[] | undefined) => {
     assertNotNullish(filterableZoneAsTreeOptions)
+    if (isMainWindow) {
+      assertNotNullish(editedVesselGroupRef.current)
+
+      // We store the modified vessel group before closing the dialog
+      await dispatch(
+        vesselGroupActions.vesselGroupEdited({
+          ...editedVesselGroupRef.current,
+          filters: listFilterValues
+        })
+      )
+    }
     const nextZones = await dispatch(
       filterVesselsWithZone(
         filterableZoneAsTreeOptions,
@@ -431,25 +447,34 @@ export function EditDynamicVesselGroupDialog({
           onSubmit={handleOnSubmit}
           validationSchema={toFormikValidationSchema(CreateOrUpdateDynamicVesselGroupSchema)}
         >
-          <Columns>
-            <Column>
-              <FormikCirclePicker />
-              <StyledFormikTextInput isErrorMessageHidden isRequired label="Nom du groupe" name="name" />
-              <StyledFormikTextarea isErrorMessageHidden label="Description du groupe" name="description" rows={3} />
-            </Column>
-            <Column $width={304}>
-              <StyledFormikDatePicker
-                baseContainer={newWindowContainerRef.current}
-                isErrorMessageHidden
-                isHistorical={false}
-                isStringDate
-                label="Date de fin de validité du groupe"
-                name="endOfValidityUtc"
-                style={{ width: 220 }}
+          <>
+            {isMainWindow && (
+              <FormikEffect
+                onChange={nextValues => {
+                  editedVesselGroupRef.current = nextValues as CreateOrUpdateDynamicVesselGroup
+                }}
               />
-              <StyledFormikTextarea $isRed label="Points d'attention" name="pointsOfAttention" rows={3} />
-            </Column>
-          </Columns>
+            )}
+            <Columns>
+              <Column>
+                <FormikCirclePicker />
+                <StyledFormikTextInput isErrorMessageHidden isRequired label="Nom du groupe" name="name" />
+                <StyledFormikTextarea isErrorMessageHidden label="Description du groupe" name="description" rows={3} />
+              </Column>
+              <Column $width={304}>
+                <StyledFormikDatePicker
+                  baseContainer={newWindowContainerRef.current}
+                  isErrorMessageHidden
+                  isHistorical={false}
+                  isStringDate
+                  label="Date de fin de validité du groupe"
+                  name="endOfValidityUtc"
+                  style={{ width: 220 }}
+                />
+                <StyledFormikTextarea $isRed label="Points d'attention" name="pointsOfAttention" rows={3} />
+              </Column>
+            </Columns>
+          </>
         </Formik>
       </StyledDialogBody>
       <StyledDialogAction>

@@ -28,6 +28,7 @@ export function VesselGroupMainWindowEdition() {
         <EditDynamicVesselGroupDialog
           editedVesselGroup={editedVesselGroup}
           initialListFilterValues={editedVesselGroup.filters}
+          isMainWindow
           onExit={handleCloseEditVesselGroup}
         />
       )}

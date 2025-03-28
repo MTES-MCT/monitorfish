@@ -4,22 +4,24 @@ import {
   LAWTYPES_TO_TERRITORY,
   mapToRegulatoryZone
 } from '@features/Regulation/utils'
-import { VesselSize } from '@features/Vessel/components/VesselListV2/constants'
-import { getLastControlledFilterFromLastControlPeriod } from '@features/Vessel/components/VesselListV2/utils'
+import { VesselSize } from '@features/Vessel/components/VesselList/constants'
+import { getLastControlledFilterFromLastControlPeriod } from '@features/Vessel/components/VesselList/utils'
 import { VesselLocation, vesselSize } from '@features/Vessel/types/vessel'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { customDayjs, logSoftError } from '@mtes-mct/monitor-ui'
+import { booleanPointInPolygon } from '@turf/boolean-point-in-polygon'
+import { point } from '@turf/helpers'
 import { isNotNullish } from '@utils/isNotNullish'
 import * as Comlink from 'comlink'
 
 import { getDateMonthsBefore } from '../utils'
 
-import type { GeoJSON } from '../domain/types/GeoJSON'
 import type { Regulation } from '@features/Regulation/Regulation.types'
 import type { RegulatoryZone } from '@features/Regulation/types'
-import type { VesselListFilter } from '@features/Vessel/components/VesselListV2/types'
+import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
 import type { SortingState } from '@tanstack/react-table'
 import type { Specy } from 'domain/types/specy'
+import type { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson'
 
 export class MonitorFishWebWorker {
   static getStructuredRegulationLawTypes(regulatoryZones) {
@@ -59,7 +61,7 @@ export class MonitorFishWebWorker {
   ): RegulatoryZone[] =>
     geoJSON.features.map(feature => mapToRegulatoryZone(feature, speciesByCode)).filter(isNotNullish)
 
-  static getGeometryIdFromFeatureId = (feature: GeoJSON.Feature): number | string => {
+  static getGeometryIdFromFeatureId = (feature: Feature): number | string => {
     const idFromProperties = feature.properties?.id as number | undefined
     if (idFromProperties) {
       return idFromProperties
@@ -73,7 +75,7 @@ export class MonitorFishWebWorker {
     return ''
   }
 
-  static getIdToGeometryObject(features: GeoJSON.FeatureCollection): Record<string, GeoJSON.Geometry> {
+  static getIdToGeometryObject(features: FeatureCollection): Record<string, Polygon> {
     const geometryListAsObject = {}
 
     features.features.forEach(feature => {
@@ -152,37 +154,6 @@ export class MonitorFishWebWorker {
       layersTopicsByRegulatoryTerritory,
       layersWithoutGeometry: featuresWithoutGeometry
     }
-  }
-
-  static getUniqueSpeciesAndDistricts(vessels) {
-    const species = vessels
-      .map(vessel => vessel.speciesOnboard)
-      .flat()
-      .reduce((acc, _species) => {
-        if (acc.indexOf(_species?.species) < 0) {
-          acc.push(_species?.species)
-        }
-
-        return acc
-      }, [])
-      .filter(_species => _species)
-
-    const districts = vessels
-      .map(vessel => ({
-        district: vessel.district,
-        districtCode: vessel.districtCode
-      }))
-      .reduce((acc, district) => {
-        const found = acc.find(item => item.district === district.district)
-
-        if (!found) {
-          return acc.concat([district])
-        }
-
-        return acc
-      }, [])
-
-    return { districts, species }
   }
 
   /** @deprecated see getFilteredVesselsV2() * */
@@ -295,10 +266,10 @@ export class MonitorFishWebWorker {
       ? getLastControlledFilterFromLastControlPeriod(filters.lastControlPeriod)
       : undefined
 
-    const countrySet = filters.countryCodes ? new Set(filters.countryCodes) : undefined
-    const fleetSegmentsSet = filters.fleetSegments ? new Set(filters.fleetSegments) : undefined
-    const gearCodesSet = filters.gearCodes ? new Set(filters.gearCodes) : undefined
-    const specyCodesSet = filters.specyCodes ? new Set(filters.specyCodes) : undefined
+    const countrySet = filters.countryCodes?.length ? new Set(filters.countryCodes) : undefined
+    const fleetSegmentsSet = filters.fleetSegments?.length ? new Set(filters.fleetSegments) : undefined
+    const gearCodesSet = filters.gearCodes?.length ? new Set(filters.gearCodes) : undefined
+    const specyCodesSet = filters.specyCodes?.length ? new Set(filters.specyCodes) : undefined
     const vesselsLocation = filters.vesselsLocation?.length === 1 ? filters.vesselsLocation[0] : undefined
 
     /* TODO Implement these filters
@@ -333,7 +304,7 @@ export class MonitorFishWebWorker {
           }
         }
 
-        if (filters.riskFactors) {
+        if (filters.riskFactors?.length) {
           const isBetween = filters.riskFactors?.some(riskFactor => {
             switch (riskFactor) {
               case 1: {
@@ -427,6 +398,15 @@ export class MonitorFishWebWorker {
             }
             default:
               break
+          }
+        }
+
+        if (!!filters.zones?.length && !!vessel.latitude && !!vessel.longitude) {
+          const vesselPoint = point([vessel.longitude, vessel.latitude])
+
+          const features = filters.zones.map(zone => zone.feature)
+          if (!features.some(polygon => booleanPointInPolygon(vesselPoint, polygon as Polygon | MultiPolygon))) {
+            return false
           }
         }
 

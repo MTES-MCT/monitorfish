@@ -9,6 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.ProtectedSpeciesCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTypeMapping
+import org.n52.jackson.datatype.jts.JtsModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
@@ -22,6 +23,8 @@ class MapperConfiguration {
     @Bean
     fun objectMapper(): ObjectMapper {
         val mapper = Jackson2ObjectMapperBuilder().build<ObjectMapper>()
+
+        mapper.registerModule(JtsModule())
 
         // needed to handle java.time.ZonedDateTime serialization
         mapper.registerModule(JavaTimeModule())

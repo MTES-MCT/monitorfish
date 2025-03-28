@@ -11,7 +11,7 @@ import { zoomInLayer } from '../../LayersSidebar/useCases/zoomInLayer'
 
 import type { BaseRegulatoryZone, RegulatoryZone } from '../types'
 import type { MonitorFishMap } from '@features/Map/Map.types'
-import type { ZoneSelected } from '@features/VesselFilter/types'
+import type { ZoneFilter } from '@features/Regulation/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 import type { MutableRefObject } from 'react'
@@ -19,7 +19,7 @@ import type { UnknownAction } from 'redux'
 
 type RegulatoryPreviewLayerProps = Readonly<{
   regulatoryZonesToPreview: Array<Partial<RegulatoryZone>>
-  zoneSelected?: ZoneSelected | undefined
+  zoneSelected?: ZoneFilter | undefined
 }>
 function UnmemoizedRegulatoryPreviewLayer({ regulatoryZonesToPreview, zoneSelected }: RegulatoryPreviewLayerProps) {
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>

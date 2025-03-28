@@ -10,34 +10,26 @@ import {
   WSG84_PROJECTION
 } from './constants'
 
-import type { GeoJSON as GeoJSONType } from '../../domain/types/GeoJSON'
 import type { MonitorFishMap } from '@features/Map/Map.types'
+import type { Geometry as GeoJSONGeometry, MultiPolygon as GeoJSONMultiPolygon } from 'geojson'
 import type { MultiPolygon, Polygon } from 'ol/geom'
 import type Geometry from 'ol/geom/Geometry'
 
-/**
- *
- * @param {Object} baseMap
- * @param { String } baseMap.type
- * @param { String | null } baseMap.topic
- * @param { String | null } baseMap.zone
- * @returns String
- */
 export const getLayerNameNormalized = layer => [layer.type, layer.topic, layer.zone].filter(Boolean).join(':')
 
-export function convertToGeoJSONGeometryObject(feature: Geometry): GeoJSONType.Geometry {
+export function convertToGeoJSONGeometryObject<T extends GeoJSONGeometry>(feature: Geometry): T {
   const format = new GeoJSON()
 
   return format.writeGeometryObject(feature, {
     dataProjection: WSG84_PROJECTION,
     featureProjection: OPENLAYERS_PROJECTION
-  })
+  }) as T
 }
 
 export function addGeometryToMultiPolygonGeoJSON(
-  multiPolygon: GeoJSONType.Geometry,
+  multiPolygon: GeoJSONMultiPolygon,
   polygonToAdd: Geometry
-): GeoJSONType.Geometry | undefined {
+): GeoJSONGeometry | undefined {
   const nextGeometry = new GeoJSON({
     featureProjection: OPENLAYERS_PROJECTION
   }).readGeometry(multiPolygon)
@@ -53,13 +45,13 @@ export function addGeometryToMultiPolygonGeoJSON(
     ;(nextGeometry as MultiPolygon).appendPolygon(polygonToAdd as Polygon)
   }
 
-  return convertToGeoJSONGeometryObject(nextGeometry)
+  return convertToGeoJSONGeometryObject<GeoJSONMultiPolygon>(nextGeometry)
 }
 
 export function keepOnlyInitialGeometriesOfMultiPolygon(
-  multiPolygon: GeoJSONType.Geometry,
+  multiPolygon: GeoJSONMultiPolygon,
   initialFeatureNumber: number
-): GeoJSONType.Geometry | undefined {
+): GeoJSONMultiPolygon | undefined {
   const nextGeometry = new GeoJSON({
     featureProjection: OPENLAYERS_PROJECTION
   }).readGeometry(multiPolygon) as MultiPolygon
@@ -72,7 +64,7 @@ export function keepOnlyInitialGeometriesOfMultiPolygon(
   const nextCoordinates = coordinates.slice(0, initialFeatureNumber)
   nextGeometry?.setCoordinates(nextCoordinates)
 
-  return convertToGeoJSONGeometryObject(nextGeometry)
+  return convertToGeoJSONGeometryObject<GeoJSONMultiPolygon>(nextGeometry)
 }
 
 export function layersNotInCurrentOLMap(olLayers, layer) {

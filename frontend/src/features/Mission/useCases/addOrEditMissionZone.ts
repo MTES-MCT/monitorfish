@@ -5,11 +5,11 @@ import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedC
 import { setInitialGeometry, setInteractionTypeAndListener } from '../../Draw/slice'
 import { unselectVessel } from '../../Vessel/useCases/unselectVessel'
 
-import type { GeoJSON as GeoJSONNamespace } from '../../../domain/types/GeoJSON'
 import type { MainAppThunk } from '@store'
+import type { MultiPolygon } from 'geojson'
 
 export const addOrEditMissionZone =
-  (geometry: GeoJSONNamespace.Geometry | undefined): MainAppThunk =>
+  (geometry: MultiPolygon | undefined): MainAppThunk =>
   dispatch => {
     dispatch(unselectVessel())
 
@@ -44,8 +44,10 @@ export const openDrawLayerModal = dispatch => {
       isNewFeaturesMapButtonDisplayed: false,
       isPriorNotificationMapButtonDisplayed: false,
       isVesselFiltersMapButtonDisplayed: false,
+      isVesselGroupMainWindowEditionDisplayed: false,
+      isVesselGroupMapButtonDisplayed: false,
       isVesselLabelsMapButtonDisplayed: false,
-      isVesselListDisplayed: false,
+      isVesselListMapButtonDisplayed: false,
       isVesselSearchDisplayed: false,
       isVesselVisibilityMapButtonDisplayed: false
     })
@@ -69,8 +71,9 @@ export const closeDrawLayerModal = dispatch => {
       isNewFeaturesMapButtonDisplayed: true,
       isPriorNotificationMapButtonDisplayed: true,
       isVesselFiltersMapButtonDisplayed: true,
+      isVesselGroupMapButtonDisplayed: true,
       isVesselLabelsMapButtonDisplayed: true,
-      isVesselListDisplayed: true,
+      isVesselListMapButtonDisplayed: true,
       isVesselSearchDisplayed: true,
       isVesselVisibilityMapButtonDisplayed: true
     })

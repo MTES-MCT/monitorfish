@@ -18,26 +18,24 @@ function UnmemoizedVesselsLayer() {
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
 
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
-  const filters = useMainAppSelector(state => state.filter.filters)
-  const nonFilteredVesselsAreHidden = useMainAppSelector(state => state.filter.nonFilteredVesselsAreHidden)
-  const showedFilter = filters?.find(filter => filter.showed)
+  const areVesselsNotInVesselGroupsHidden = useMainAppSelector(
+    state => state.vesselGroup.areVesselsNotInVesselGroupsHidden
+  )
 
   useEffect(() => {
     // styles derived from state
     const isLight = VesselFeature.iconIsLight(selectedBaseLayer)
     const { vesselIsHidden, vesselIsOpacityReduced } =
       getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
-    const filterColorRGBArray = customHexToRGB(
-      !!showedFilter?.color || isLight ? theme.color.lightGray : COLORS.charcoal
-    )
+    const filterColorRGBArray = customHexToRGB(isLight ? theme.color.lightGray : COLORS.charcoal)
     const initStyles = {
+      areVesselsNotInVesselGroupsHidden,
       filterColorBlue: filterColorRGBArray[2],
       filterColorGreen: filterColorRGBArray[1],
       filterColorRed: filterColorRGBArray[0],
       hideNonSelectedVessels: false,
       hideVesselsAtPort: false,
       isLight,
-      nonFilteredVesselsAreHidden,
       previewFilteredVesselsMode,
       vesselIsHiddenTimeThreshold: vesselIsHidden.getTime(),
       vesselIsOpacityReducedTimeThreshold: vesselIsOpacityReduced.getTime()

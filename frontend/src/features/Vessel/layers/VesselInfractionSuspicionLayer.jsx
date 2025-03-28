@@ -23,8 +23,6 @@ function VesselInfractionSuspicionLayer() {
   const vesselsTracksShowed = useSelector(state => state.vessel.vesselsTracksShowed)
   const selectedVesselIdentity = useSelector(state => state.vessel.selectedVesselIdentity)
   const vessels = useSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
-  const nonFilteredVesselsAreHidden = useSelector(state => state.filter.nonFilteredVesselsAreHidden)
-  const previewFilteredVesselsMode = useSelector(state => state.global.previewFilteredVesselsMode)
   const hideVesselsAtPort = useSelector(state => state.map.hideVesselsAtPort)
   const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
 
@@ -76,10 +74,7 @@ function VesselInfractionSuspicionLayer() {
         if (!vessel.hasInfractionSuspicion) {
           return features
         }
-        if (nonFilteredVesselsAreHidden && !vessel.isFiltered) {
-          return features
-        }
-        if (previewFilteredVesselsMode && !vessel.filterPreview) {
+        if (!vessel.isFiltered) {
           return features
         }
         if (hideVesselsAtPort && vessel.isAtPort) {
@@ -109,8 +104,6 @@ function VesselInfractionSuspicionLayer() {
     vessels,
     selectedVesselIdentity,
     vesselsTracksShowed,
-    previewFilteredVesselsMode,
-    nonFilteredVesselsAreHidden,
     hideNonSelectedVessels,
     hideVesselsAtPort,
     vesselsLastPositionVisibility?.opacityReduced,

@@ -22,7 +22,7 @@ export const VesselLastPositionSchema = z.strictObject({
   alerts: z.array(z.union([z.nativeEnum(PendingAlertValueType), z.literal('PNO_LAN_WEIGHT_TOLERANCE_ALERT')])),
   beaconMalfunctionId: numberOrUndefined,
   beaconNumber: numberOrUndefined,
-  coordinates: z.array(z.number()),
+  coordinates: z.array(z.number()), // OPENLAYERS_PROJECTION
   course: numberOrUndefined,
   dateTime: z.string(),
   // TODO To remove
@@ -38,7 +38,6 @@ export const VesselLastPositionSchema = z.strictObject({
   estimatedCurrentLatitude: numberOrUndefined,
   estimatedCurrentLongitude: numberOrUndefined,
   externalReferenceNumber: stringOrUndefined,
-  filterPreview: z.number(), // 0 is False, 1 is True - for WebGL
   flagState: z.string(),
   // TODO To remove
   from: stringOrUndefined,
@@ -60,9 +59,9 @@ export const VesselLastPositionSchema = z.strictObject({
   lastLogbookMessageDateTime: stringOrUndefined,
   // TODO To remove
   lastPositionSentAt: z.number(),
-  latitude: z.number(),
+  latitude: z.number(), // WSG84_PROJECTION
   length: numberOrUndefined,
-  longitude: z.number(),
+  longitude: z.number(), // WSG84_PROJECTION
   mmsi: stringOrUndefined,
   // TODO To remove
   positionType: z.string(),

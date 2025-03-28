@@ -15,7 +15,8 @@ import BoxFilterSVG from '../../../icons/Filtre_zone_rectangle.svg?react'
 import BoxFilterSelectedSVG from '../../../icons/Filtre_zone_rectangle_selected.svg?react'
 import { MINIMUM_SEARCH_CHARACTERS_NUMBER, searchRegulatoryLayers } from '../../useCases/searchRegulatoryLayers'
 
-import type { ZoneSelected } from '@features/VesselFilter/types'
+import type { ZoneFilter } from '@features/Regulation/types'
+import type { Polygon } from 'geojson'
 
 export function SearchInput() {
   const dispatch = useMainAppDispatch()
@@ -27,7 +28,7 @@ export function SearchInput() {
   const selectedOrSelectingZoneIsPolygon = zoneSelected?.name === InteractionType.POLYGON
 
   const search = useCallback(
-    async (nextSearchQuery: string | undefined, nextZoneSelected: ZoneSelected | undefined) => {
+    async (nextSearchQuery: string | undefined, nextZoneSelected: ZoneFilter | undefined) => {
       setSearchQuery(nextSearchQuery)
 
       if ((!nextSearchQuery || nextSearchQuery.length < MINIMUM_SEARCH_CHARACTERS_NUMBER) && !nextZoneSelected) {
@@ -74,7 +75,7 @@ export function SearchInput() {
     dispatch(
       setZoneSelected({
         code: LayersType.FREE_DRAW,
-        feature: drawedGeometry,
+        feature: drawedGeometry as Polygon,
         name: interactionType?.toString() ?? ''
       })
     )

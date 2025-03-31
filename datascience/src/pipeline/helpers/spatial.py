@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from datetime import timedelta
 from typing import Iterable, Set, Tuple, Union
 from urllib.parse import quote
 
@@ -333,7 +332,7 @@ def compute_movement_metrics(
         - a column indicating the date and time of the position (datetime dtype)
         - a column indicating whether the vessel is at port (boolean dtype)
         - a column indicating how long the vessel has been continuously
-          emitting at sea (timedelta dtype)
+          emitting at sea in hours (float dtype)
 
     whose rows represent successive positions of a vessel, assumed to be sorted
     chronologically by ascending order.
@@ -353,8 +352,8 @@ def compute_movement_metrics(
           values.
         is_at_port_column (str) : column indicating whether the vessel is at port. May
           not contain null values.
-        time_emitting_at_sea_column (timedelta) : column indicating how long the vessel
-          has been continuously emitting at sea. May contain null values.
+        time_emitting_at_sea_column (float) : column indicating how long the vessel
+          has been continuously emitting at sea, in hours. May contain null values.
 
     Returns:
         pd.DataFrame: the same DataFrame, plus added columns with the computed features
@@ -374,19 +373,13 @@ def compute_movement_metrics(
 
     # Compute time_since_previous_position
     time_since_previous_position = get_datetime_intervals(
-        positions[datetime_column], how="backward"
+        positions[datetime_column], how="backward", unit="h"
     )
 
     positions["time_since_previous_position"] = time_since_previous_position
 
     # Compute average speed
-    seconds_since_previous_position = (
-        time_since_previous_position.map(lambda dt: dt.total_seconds())
-    ).values
-
-    average_speed = (
-        meters_from_previous_position / 1852 / (seconds_since_previous_position / 3600)
-    )
+    average_speed = meters_from_previous_position / 1852 / time_since_previous_position
 
     positions["average_speed"] = average_speed
 
@@ -421,7 +414,7 @@ def compute_movement_metrics(
         is_at_port_or_just_left_port = is_at_port | was_previously_at_port
 
         t0 = positions[time_emitting_at_sea_column].values[0]
-        t0 = timedelta(minutes=0) if np.isnat(t0) else t0
+        t0 = t0 if not np.isnan(t0) else 0
 
         time_emitting_at_sea_intervals = time_since_previous_position.values
         np.put(time_emitting_at_sea_intervals, 0, t0)
@@ -440,7 +433,7 @@ def compute_movement_metrics(
 
 def detect_fishing_activity(
     positions: pd.DataFrame,
-    minimum_time_of_emission_at_sea: np.timedelta64,
+    minimum_minutes_of_emission_at_sea: int,
     is_at_port_column: str = "is_at_port",
     average_speed_column: str = "average_speed",
     time_emitting_at_sea_column: str = "time_emitting_at_sea",
@@ -469,16 +462,18 @@ def detect_fishing_activity(
     Args:
         positions (pd.DataFrame) : DataFrame representing successive positions of a
           vessel, assumed to be sorted by ascending datetime
-        minimum_time_of_emission_at_sea (np.timedelta64): the minimum time a vessel is
-          required to emit continuously at sea in order to be considred as in fishing
-          activity. This avoids detecting fishing activity when vessels leave ports.
+        minimum_minutes_of_emission_at_sea (int): the minimum time a vessel is required
+          to emit continuously at sea in order to be considred as in fishing
+          activity, in minutes. This avoids detecting fishing activity when vessels
+          leave ports.
         is_at_port_column (str) : name of the column containing boolean values for
           whether a position is in at port or not
         average_speed_column (str) : name of the column containing average speed values
           (distance from previous position divided by time since the last position), in
           knots
         time_emitting_at_sea_column (str): name of the column containing the duration
-          for which the vessel has been continuously emitting at sea (outside ports)
+          (in hours) for which the vessel has been continuously emitting at sea outside
+          ports.
         minimum_consecutive_positions (int): minimum number of consecutive positions
           below fishing speed threshold to consider that a vessel is fishing
         min_fishing_speed_threshold (float): speed below which a vessel is considered
@@ -566,7 +561,7 @@ def detect_fishing_activity(
         )
 
         fishing_activity = np.where(
-            time_emitting_at_sea > minimum_time_of_emission_at_sea,
+            time_emitting_at_sea > minimum_minutes_of_emission_at_sea / 60.0,
             fishing_activity,
             False,
         )
@@ -581,7 +576,7 @@ def detect_fishing_activity(
 
 def enrich_positions(
     positions: pd.DataFrame,
-    minimum_time_of_emission_at_sea: np.timedelta64,
+    minimum_minutes_of_emission_at_sea: int,
     lat: str = "latitude",
     lon: str = "longitude",
     datetime_column: str = "datetime_utc",
@@ -609,7 +604,7 @@ def enrich_positions(
 
     positions = detect_fishing_activity(
         positions,
-        minimum_time_of_emission_at_sea=minimum_time_of_emission_at_sea,
+        minimum_minutes_of_emission_at_sea=minimum_minutes_of_emission_at_sea,
         is_at_port_column=is_at_port_column,
         average_speed_column="average_speed",
         time_emitting_at_sea_column=time_emitting_at_sea_column,

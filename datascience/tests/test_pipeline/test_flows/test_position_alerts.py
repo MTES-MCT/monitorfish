@@ -1320,7 +1320,7 @@ def test_flow_bli_bycatch_max_weight_exceeded_alert(reset_test_data):
     # With these parameters, 2 french vessels should be in alert.
     alert_type = "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT"
     alert_config_name = "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT"
-    zones = ["27.8", "27.9"]
+    zones = ["Mediterranée - filets"]
     hours_from_now = 8
     only_fishing_positions = False
     species_onboard = ["SOL", "HKE", "ANE"]

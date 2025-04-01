@@ -2,6 +2,7 @@ import { FIVE_MINUTES, TWENTY_MINUTES } from '@api/APIWorker'
 import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
 import { showVesselsLastPosition } from '@features/Vessel/useCases/showVesselsLastPosition'
 import { Vessel } from '@features/Vessel/Vessel.types'
+import { useGetVesselsLastPositionsQuery } from '@features/Vessel/vesselApi'
 import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -12,10 +13,8 @@ import styled from 'styled-components'
 import { setError } from '../../../domain/shared_slices/Global'
 import { MapComponent } from '../../commonStyles/MapComponent'
 import VesselSVG from '../../icons/Icone_navire.svg?react'
-import { useGetVesselsLastPositionsApi } from '../hooks/useGetVesselsLastPositionsApi'
 
 export function VesselLoader() {
-  const useGetVesselsLastPositionsQuery = useGetVesselsLastPositionsApi()
   const isInLightMode = useIsInLightMode()
   const dispatch = useMainAppDispatch()
 

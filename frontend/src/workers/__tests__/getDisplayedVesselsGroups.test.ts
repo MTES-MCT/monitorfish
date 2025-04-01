@@ -1,8 +1,8 @@
+import { Vessel } from '@features/Vessel/Vessel.types'
 import { describe, expect, it } from '@jest/globals'
 
 import { MonitorFishWebWorker } from '../MonitorFishWebWorker'
 import { DUMMY_LAST_POSITIONS } from './__mocks__/dummyLastPositions'
-import {Vessel} from "@features/Vessel/Vessel.types";
 
 const mockVessels = [
   {

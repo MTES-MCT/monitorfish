@@ -332,7 +332,7 @@ position_alerts.flow.schedule = Schedule(
             parameter_defaults={
                 "alert_type": "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT",
                 "alert_config_name": "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT",
-                "zones": ["27.6.a"],
+                "zones": ["EOS - Lingues bleues"],
                 "hours_from_now": 8,
                 "only_fishing_positions": False,
                 "species_onboard": ["BLI"],

@@ -25,12 +25,9 @@ jest.mock('../../reportingApi', () => ({
   }
 }))
 // @ts-ignore
-jest.mock('../deleteReporting', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  __esModule: true,
-  // @ts-ignore
-  deleteReporting: jest.fn()
-}))
+jest.mock('../deleteReporting', () => ({ deleteReporting: jest.fn() }))
+// @ts-ignore
+jest.mock('../../../Vessel/useCases/renderVesselFeatures', () => ({ renderVesselFeatures: jest.fn() }))
 
 describe('archiveReporting()', () => {
   const INITIAL_STATE = {

@@ -20,6 +20,7 @@ pno_species AS (
         cfr,
         flag_state,
         trip_number,
+        trip_number_was_computed,
         report_datetime_utc,
         p.locode,
         p.facade,
@@ -45,7 +46,9 @@ pno_trips AS (
         cfr,
         report_datetime_utc,
         trip_start_date,
-        predicted_arrival_datetime_utc
+        predicted_arrival_datetime_utc,
+        trip_number,
+        trip_number_was_computed
     FROM pno_species
 ),
 
@@ -67,10 +70,18 @@ far_gears AS (
         AND far.log_type = 'FAR'
         AND far.cfr = t.cfr
         AND far.report_id NOT IN (SELECT referenced_report_id FROM deleted_corrected_or_rejected_messages)
+        AND CASE
+            WHEN (t.trip_number IS NULL OR t.trip_number_was_computed) THEN true 
+            ELSE t.trip_number = far.trip_number 
+        END
     JOIN jsonb_array_elements(far.value->'hauls') haul
     ON
-        (haul->>'farDatetimeUtc')::TIMESTAMPTZ >= t.trip_start_date
-        AND (haul->>'farDatetimeUtc')::TIMESTAMPTZ <= GREATEST(t.predicted_arrival_datetime_utc, t.report_datetime_utc AT TIME ZONE 'UTC')
+        CASE
+            WHEN (t.trip_number IS NULL OR t.trip_number_was_computed) THEN
+                    (haul->>'farDatetimeUtc')::TIMESTAMPTZ >= t.trip_start_date AND
+                    (haul->>'farDatetimeUtc')::TIMESTAMPTZ <= GREATEST(t.predicted_arrival_datetime_utc, t.report_datetime_utc AT TIME ZONE 'UTC')
+            ELSE true
+        END
         AND haul->>'gear' IS NOT NULL
     GROUP BY t.id
 ),

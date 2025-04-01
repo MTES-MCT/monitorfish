@@ -13,9 +13,9 @@ import { booleanPointInPolygon } from '@turf/boolean-point-in-polygon'
 import { point } from '@turf/helpers'
 import { isNotNullish } from '@utils/isNotNullish'
 import * as Comlink from 'comlink'
+import { asArray } from 'ol/color'
 
-import { getDateMonthsBefore } from '../utils'
-
+import type { VesselGroupDisplayInformation } from './types'
 import type { Regulation } from '@features/Regulation/Regulation.types'
 import type { RegulatoryZone } from '@features/Regulation/types'
 import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
@@ -156,107 +156,39 @@ export class MonitorFishWebWorker {
     }
   }
 
-  /** @deprecated see getFilteredVesselsV2() * */
-  static getFilteredVessels(vessels, filters) {
-    const {
-      countriesFiltered,
-      districtsFiltered,
-      fleetSegmentsFiltered,
-      gearsFiltered,
-      lastControlMonthsAgo,
-      lastPositionTimeAgoFilter,
-      speciesFiltered,
-      vesselsLocationFilter,
-      vesselsSizeValuesChecked
-    } = filters
-
-    if (countriesFiltered?.length) {
-      // For performance reason
-      // eslint-disable-next-line no-param-reassign
-      vessels = vessels.filter(vessel => countriesFiltered.some(country => vessel?.flagState === country))
-    }
-
-    if (lastPositionTimeAgoFilter) {
-      const vesselIsHidden = new Date()
-      vesselIsHidden.setHours(vesselIsHidden.getHours() - lastPositionTimeAgoFilter)
-
-      // For performance reason
-      // eslint-disable-next-line no-param-reassign
-      vessels = vessels.filter(vessel => {
-        if (vessel?.beaconMalfunctionId) {
-          return true
-        }
-
-        const vesselDate = new Date(vessel.lastPositionSentAt)
-
-        return vesselDate > vesselIsHidden
-      })
-    }
-
-    if (lastControlMonthsAgo) {
-      const controlBefore = getDateMonthsBefore(new Date(), lastControlMonthsAgo)
-
-      // For performance reason
-      // eslint-disable-next-line no-param-reassign
-      vessels = vessels.filter(vessel => {
-        const vesselDate = new Date(vessel?.lastControlDateTimeTimestamp)
-
-        return vesselDate < controlBefore
-      })
-    }
-
-    if (fleetSegmentsFiltered?.length) {
-      // For performance reason
-      // eslint-disable-next-line no-param-reassign
-      vessels = vessels.filter(vessel =>
-        fleetSegmentsFiltered.some(fleetSegment => vessel?.segments.includes(fleetSegment))
+  static getDisplayedVesselsGroups(
+    vessels: Vessel.VesselLastPosition[],
+    vesselGroupsIdsDisplayed: number[],
+    vesselGroupsIdsPinned: number[]
+  ): VesselGroupDisplayInformation[] {
+    return vessels.map(vessel => {
+      const pinnedAndDisplayedVesselGroups = vesselGroupsIdsDisplayed.filter(groupId =>
+        vesselGroupsIdsPinned.includes(groupId)
       )
-    }
-
-    if (gearsFiltered?.length) {
-      // For performance reason
-      // eslint-disable-next-line no-param-reassign
-      vessels = vessels.filter(vessel => gearsFiltered.some(gear => vessel?.gearsArray.includes(gear)))
-    }
-
-    if (speciesFiltered?.length) {
-      // For performance reason
-      // eslint-disable-next-line no-param-reassign
-      vessels = vessels.filter(vessel => speciesFiltered.some(species => vessel?.speciesArray.includes(species)))
-    }
-
-    if (districtsFiltered?.length) {
-      // For performance reason
-      // eslint-disable-next-line no-param-reassign
-      vessels = vessels.filter(vessel => districtsFiltered.some(district => vessel?.district === district))
-    }
-
-    if (vesselsSizeValuesChecked?.length) {
-      // For performance reason
-      // eslint-disable-next-line no-param-reassign
-      vessels = vessels.filter(vessel =>
-        MonitorFishWebWorker.evaluateVesselsSize(vesselsSizeValuesChecked, vessel?.length)
+      const unpinnedAndDisplayedVesselGroups = vesselGroupsIdsDisplayed.filter(
+        groupId => !vesselGroupsIdsPinned.includes(groupId)
       )
-    }
+      const orderedDisplayedVesselGroups = pinnedAndDisplayedVesselGroups.concat(unpinnedAndDisplayedVesselGroups)
 
-    if (vesselsLocationFilter?.length === 1) {
-      if (vesselsLocationFilter.includes(VesselLocation.PORT)) {
-        // For performance reason
-        // eslint-disable-next-line no-param-reassign
-        vessels = vessels.filter(vessel => vessel.isAtPort)
+      const groupsDisplayed = orderedDisplayedVesselGroups
+        .map(id => vessel.vesselGroups.find(group => group.id === id))
+        .filter((group): group is Vessel.VesselGroup => !!group)
+
+      const numberOfGroupsHidden =
+        vessel.vesselGroups.length > groupsDisplayed.length ? vessel.vesselGroups.length - groupsDisplayed.length : 0
+
+      const firstGroupDisplayed = groupsDisplayed[0]
+      const groupColor = firstGroupDisplayed?.color ? asArray(firstGroupDisplayed.color) : [0, 0, 0]
+
+      return {
+        groupColor,
+        groupsDisplayed,
+        numberOfGroupsHidden
       }
-
-      if (vesselsLocationFilter.includes(VesselLocation.SEA)) {
-        // For performance reason
-        // eslint-disable-next-line no-param-reassign
-        vessels = vessels.filter(vessel => !vessel.isAtPort)
-      }
-    }
-
-    return vessels
+    })
   }
 
-  static getFilteredVesselsV2(vessels: Vessel.VesselLastPosition[], filters: VesselListFilter): string[] {
+  static getFilteredVessels(vessels: Vessel.VesselLastPosition[], filters: VesselListFilter): string[] {
     const now = customDayjs()
     const vesselIsHidden = filters.lastPositionHoursAgo
       ? now.set('hour', now.get('hour') - filters.lastPositionHoursAgo)

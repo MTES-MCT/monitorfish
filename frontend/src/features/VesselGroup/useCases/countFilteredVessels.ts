@@ -11,7 +11,7 @@ export const countFilteredVessels =
 
     const vessels = vesselSelectors.selectAll(getState().vessel.vessels)
 
-    const filteredVesselFeatureIds = await monitorFishWorker.getFilteredVesselsV2(vessels, listFilterValues)
+    const filteredVesselFeatureIds = await monitorFishWorker.getFilteredVessels(vessels, listFilterValues)
 
     return filteredVesselFeatureIds.length
   }

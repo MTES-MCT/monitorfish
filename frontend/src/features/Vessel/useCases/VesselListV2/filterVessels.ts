@@ -15,7 +15,7 @@ export const filterVessels =
     const { listFilterValues } = getState().vessel
     const vessels = vesselSelectors.selectAll(getState().vessel.vessels)
 
-    const filteredVesselFeatureIds = await monitorFishWorker.getFilteredVesselsV2(vessels, listFilterValues)
+    const filteredVesselFeatureIds = await monitorFishWorker.getFilteredVessels(vessels, listFilterValues)
 
     await dispatch(setFilteredVesselsFeatures(filteredVesselFeatureIds))
 

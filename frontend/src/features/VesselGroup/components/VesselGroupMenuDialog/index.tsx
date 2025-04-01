@@ -26,9 +26,22 @@ export function VesselGroupMenuDialog() {
   const areVesselsNotInVesselGroupsHidden = useMainAppSelector(
     state => state.vesselGroup.areVesselsNotInVesselGroupsHidden
   )
+  const vesselGroupsIdsPinned = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsPinned)
+
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.VESSEL_GROUPS)
 
   const { data: vesselGroups } = useGetAllVesselGroupsQuery()
+  const orderedVesselGroups = (() => {
+    if (!vesselGroups?.length) {
+      return []
+    }
+
+    const pinnedVesselGroups = vesselGroups.filter(vesselGroup => vesselGroupsIdsPinned.includes(vesselGroup.id))
+    const unpinnedVesselGroups = vesselGroups.filter(vesselGroup => !vesselGroupsIdsPinned.includes(vesselGroup.id))
+
+    return pinnedVesselGroups.concat(unpinnedVesselGroups)
+  })()
+
   const createNewGroup = () => {
     dispatch(openSideWindowPath({ menu: SideWindowMenuKey.VESSEL_LIST }))
   }
@@ -57,8 +70,12 @@ export function VesselGroupMenuDialog() {
         </Header>
         <StyledBody>
           <VesselGroupList>
-            {vesselGroups?.map((vesselGroup: DynamicVesselGroup) => (
-              <VesselGroupRow key={vesselGroup.id} vesselGroup={vesselGroup} />
+            {orderedVesselGroups.map((vesselGroup: DynamicVesselGroup, index: number) => (
+              <VesselGroupRow
+                key={vesselGroup.id}
+                isLastPinned={vesselGroupsIdsPinned.length === index + 1}
+                vesselGroup={vesselGroup}
+              />
             ))}
           </VesselGroupList>
         </StyledBody>
@@ -97,7 +114,6 @@ const VesselGroupList = styled.ul`
 const StyledFooter = styled(MapMenuDialog.Footer)`
   padding: 0;
   gap: 0;
-  border-top: 1px ${p => p.theme.color.lightGray} solid;
 `
 
 const StyledBody = styled(MapMenuDialog.Body)`

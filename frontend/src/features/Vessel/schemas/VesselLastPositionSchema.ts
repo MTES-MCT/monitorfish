@@ -18,6 +18,12 @@ export const DeclaredLogbookSpeciesSchema = z.strictObject({
   weight: numberOrUndefined
 })
 
+export const VesselGroupSchema = z.strictObject({
+  color: z.string(),
+  id: z.number(),
+  name: z.string()
+})
+
 export const VesselLastPositionSchema = z.strictObject({
   alerts: z.array(z.union([z.nativeEnum(PendingAlertValueType), z.literal('PNO_LAN_WEIGHT_TOLERANCE_ALERT')])),
   beaconMalfunctionId: numberOrUndefined,
@@ -85,6 +91,7 @@ export const VesselLastPositionSchema = z.strictObject({
   tripNumber: stringOrUndefined,
   underCharter: booleanOrUndefined,
   vesselFeatureId: z.string(),
+  vesselGroups: z.array(VesselGroupSchema),
   vesselId: numberOrUndefined,
   vesselIdentifier: z.nativeEnum(Vessel.VesselIdentifier),
   vesselName: stringOrUndefined,

@@ -1,11 +1,11 @@
-import { featureHas, featureHasNot, stateIs } from '@features/Map/layers/styles/utils/webgl'
+import { featureHas, featureHasNot, featurePropertyIsNotEmpty, stateIs } from '@features/Map/layers/styles/utils/webgl'
 import {
-  VesselFeature,
   VESSEL_ALERT_AND_BEACON_MALFUNCTION,
   VESSEL_ALERT_STYLE,
   VESSEL_BEACON_MALFUNCTION_STYLE,
   VESSEL_INFRACTION_SUSPICION_STYLE,
-  VESSEL_SELECTOR_STYLE
+  VESSEL_SELECTOR_STYLE,
+  VesselFeature
 } from '@features/Vessel/types/vessel'
 import { Icon, Style } from 'ol/style'
 import Circle from 'ol/style/Circle'
@@ -54,7 +54,19 @@ const showOnlyNonFilteredVessels = [
  */
 
 export const getWebGLVesselStyle = (): WebGLStyle => {
-  const filterColor = ['color', ['var', 'filterColorRed'], ['var', 'filterColorGreen'], ['var', 'filterColorBlue']]
+  const groupColor = [
+    'color',
+    ['get', 'groupColorRed', 'number'],
+    ['get', 'groupColorGreen', 'number'],
+    ['get', 'groupColorBlue', 'number']
+  ]
+  const hasGroupColor = [
+    'any',
+    featurePropertyIsNotEmpty('groupColorRed'),
+    featurePropertyIsNotEmpty('groupColorGreen'),
+    featurePropertyIsNotEmpty('groupColorBlue')
+  ]
+
   const defaultVesselColor = ['case', stateIs('isLight'), theme.color.lightGray, theme.color.charcoal]
   const booleanFilter = [
     'all',
@@ -70,8 +82,8 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
       'case',
       stateIs('previewFilteredVesselsMode'),
       defaultVesselColor,
-      featureHas('isFiltered'),
-      filterColor,
+      hasGroupColor,
+      groupColor,
       defaultVesselColor
     ],
     'icon-offset': ['case', ['>', ['get', 'speed'], VesselFeature.vesselIsMovingSpeed], [0, 0], [25, 0]],
@@ -93,25 +105,21 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
 
 export const getWebGLVesselStyleVariables = ({
   areVesselsNotInVesselGroupsHidden,
-  filterColorBlue,
-  filterColorGreen,
-  filterColorRed,
   hideNonSelectedVessels,
   hideVesselsAtPort,
   isLight,
   previewFilteredVesselsMode,
+  vesselGroupsIdsDisplayed,
   vesselIsHiddenTimeThreshold,
   vesselIsOpacityReducedTimeThreshold
 }) => ({
   areVesselsNotInVesselGroupsHidden: booleanToInt(areVesselsNotInVesselGroupsHidden),
-  filterColorBlue,
-  filterColorGreen,
-  filterColorRed,
   hideNonSelectedVessels: booleanToInt(hideNonSelectedVessels),
   hideVesselsAtPort: booleanToInt(hideVesselsAtPort),
   isFiltered: 0,
   isLight: booleanToInt(isLight),
   previewFilteredVesselsMode: booleanToInt(previewFilteredVesselsMode),
+  vesselGroupsIdsDisplayed,
   vesselIsHiddenTimeThreshold,
   vesselIsOpacityReducedTimeThreshold
 })

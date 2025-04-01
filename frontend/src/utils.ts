@@ -7,13 +7,15 @@ import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './features/Map/constant
 import type { Polygon } from 'geojson'
 import type { Extent } from 'ol/extent'
 
-export const customHexToRGB = (hexColor: string | undefined): [number, number, number] => {
+export const customHexToRGB = (
+  hexColor: string | undefined
+): [number | undefined, number | undefined, number | undefined] => {
   if (!hexColor) {
-    return [0, 0, 0]
+    return [undefined, undefined, undefined]
   }
   const [r, g, b] = hexColor.substring(1).match(/.{1,2}/g) ?? []
   if (!r || !g || !b) {
-    return [0, 0, 0]
+    return [undefined, undefined, undefined]
   }
 
   return [parseInt(r, 16), parseInt(g, 16), parseInt(b, 16)]

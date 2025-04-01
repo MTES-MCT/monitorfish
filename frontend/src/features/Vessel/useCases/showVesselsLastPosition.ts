@@ -15,23 +15,11 @@ export const showVesselsLastPosition =
 
     await dispatch(setVessels(vessels))
 
-    const filteredVesselFeatureIds = await monitorFishWorker.getFilteredVesselsV2(vessels, listFilterValues)
+    const filteredVesselFeatureIds = await monitorFishWorker.getFilteredVessels(vessels, listFilterValues)
 
     await dispatch(setFilteredVesselsFeatures(filteredVesselFeatureIds))
 
-    /*
-    if (showedFilter?.color) {
-      const [red, green, blue] = customHexToRGB(showedFilter?.color)
-
-      VESSELS_VECTOR_LAYER.updateStyleVariables({
-        filterColorBlue: blue,
-        filterColorGreen: green,
-        filterColorRed: red
-      })
-    }
-     */
-
-    dispatch(renderVesselFeatures())
+    await dispatch(renderVesselFeatures())
 
     dispatch(resetIsUpdatingVessels())
   }

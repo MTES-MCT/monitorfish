@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupFilters
@@ -26,7 +27,7 @@ class JpaVesselGroupRepositoryITests : AbstractDBTests() {
         val dynamicGroup = vesselGroups.first() as DynamicVesselGroup
         assertThat(dynamicGroup.name).isEqualTo("Mission Thémis – chaluts de fonds")
         assertThat(dynamicGroup.filters).isInstanceOf(VesselGroupFilters::class.java)
-        assertThat(dynamicGroup.filters.countryCodes).isEqualTo(listOf("FR", "ES", "IT"))
+        assertThat(dynamicGroup.filters.countryCodes).isEqualTo(listOf(CountryCode.FR, CountryCode.ES, CountryCode.IT))
         assertThat(dynamicGroup.filters.fleetSegments).isEqualTo(listOf<String>())
         assertThat(dynamicGroup.filters.gearCodes).isEqualTo(listOf("OTB", "OTM", "TBB", "PTB"))
 

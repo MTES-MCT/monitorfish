@@ -4,60 +4,30 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
-import fr.gouv.cnsp.monitorfish.config.OIDCProperties
-import fr.gouv.cnsp.monitorfish.config.ProtectedPathsAPIProperties
-import fr.gouv.cnsp.monitorfish.config.SecurityConfig
-import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateDynamicVesselGroups
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.AddOrUpdateDynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.DeleteVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroups
+import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.utils.ApiTestWithJWTSecurity
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.DynamicVesselGroupDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
-import fr.gouv.cnsp.monitorfish.infrastructure.api.security.UserAuthorizationCheckFilter
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
-import fr.gouv.cnsp.monitorfish.infrastructure.oidc.APIOIDCRepository
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
-import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@Import(
-    SecurityConfig::class,
-    OIDCProperties::class,
-    ProtectedPathsAPIProperties::class,
-    UserAuthorizationCheckFilter::class,
-    SentryConfig::class,
-    CustomAuthenticationEntryPoint::class,
-    APIOIDCRepository::class,
-    TestApiClient::class,
-)
-@WebMvcTest(
-    value = [(VesselGroupController::class)],
-    properties = [
-        "monitorfish.oidc.enabled=true",
-        "spring.security.oauth2.resourceserver.jwt.public-key-location=classpath:oidc-issuer.pub",
-        "monitorfish.oidc.userinfo-endpoint=/api/user",
-        "monitorfish.oidc.issuer-uri=http://issuer-uri.gouv.fr",
-    ],
-)
+@ApiTestWithJWTSecurity(value = [(VesselGroupController::class)])
 class VesselGroupControllerITests {
     @Autowired
     private lateinit var api: MockMvc
-
-    @Autowired
-    private lateinit var jwtDecoder: JwtDecoder
 
     @MockBean
     private lateinit var getIsAuthorizedUser: GetIsAuthorizedUser
@@ -147,6 +117,7 @@ class VesselGroupControllerITests {
             .andExpect(jsonPath("$.length()", equalTo(2)))
             .andExpect(jsonPath("$[0].name", equalTo("Mission Thémis – chaluts de fonds")))
             .andExpect(jsonPath("$[0].filters.hasLogbook", equalTo(true)))
+            .andExpect(jsonPath("$[0].filters.countryCodes", equalTo(listOf("FR", "ES", "IT"))))
 
         Mockito.verify(getAllVesselGroups).execute("email@domain-name.com")
     }

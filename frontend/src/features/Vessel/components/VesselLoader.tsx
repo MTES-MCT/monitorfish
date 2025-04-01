@@ -98,7 +98,7 @@ const UpdateWrapper = styled(MapComponent)<{
 
 const FirstLoadWrapper = styled(MapComponent)`
   position: fixed;
-  top: 15%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
 `

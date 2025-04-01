@@ -1,4 +1,3 @@
-import { COLORS } from '@constants/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
@@ -6,8 +5,7 @@ import { getVesselLastPositionVisibilityDates, VesselFeature } from '@features/V
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { memo, useEffect } from 'react'
 
-import { theme } from '../../../../ui/theme'
-import { booleanToInt, customHexToRGB } from '../../../../utils'
+import { booleanToInt } from '../../../../utils'
 import { getWebGLVesselStyleVariables } from '../style'
 
 function UnmemoizedVesselsLayer() {
@@ -16,6 +14,7 @@ function UnmemoizedVesselsLayer() {
   const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
+  const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
 
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
   const areVesselsNotInVesselGroupsHidden = useMainAppSelector(
@@ -27,16 +26,13 @@ function UnmemoizedVesselsLayer() {
     const isLight = VesselFeature.iconIsLight(selectedBaseLayer)
     const { vesselIsHidden, vesselIsOpacityReduced } =
       getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
-    const filterColorRGBArray = customHexToRGB(isLight ? theme.color.lightGray : COLORS.charcoal)
     const initStyles = {
       areVesselsNotInVesselGroupsHidden,
-      filterColorBlue: filterColorRGBArray[2],
-      filterColorGreen: filterColorRGBArray[1],
-      filterColorRed: filterColorRGBArray[0],
       hideNonSelectedVessels: false,
       hideVesselsAtPort: false,
       isLight,
       previewFilteredVesselsMode,
+      vesselGroupsIdsDisplayed,
       vesselIsHiddenTimeThreshold: vesselIsHidden.getTime(),
       vesselIsOpacityReducedTimeThreshold: vesselIsOpacityReduced.getTime()
     }

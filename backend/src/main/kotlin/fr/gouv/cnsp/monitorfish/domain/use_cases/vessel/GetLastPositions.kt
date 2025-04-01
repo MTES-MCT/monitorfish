@@ -38,7 +38,7 @@ class GetLastPositions(
         val now = ZonedDateTime.now()
         val lastPositions = lastPositionRepository.findAllInLastMonthOrWithBeaconMalfunction()
         val vesselGroups = vesselGroupRepository.findAllByUser(userEmail)
-        
+
         return lastPositions.map { lastPosition ->
             val foundVesselGroups =
                 vesselGroups.filter { vesselGroup ->

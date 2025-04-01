@@ -3,10 +3,14 @@ import Point from 'ol/geom/Point'
 
 import { Vessel } from './Vessel.types'
 
+import type { VesselGroupDisplayInformation } from '../../workers/types'
 import type { PendingAlert, SilencedAlert } from '@features/Alert/types'
 import type { Reporting } from '@features/Reporting/types'
 
-export function buildFeature(vessel: Vessel.VesselLastPosition): Vessel.VesselLastPositionFeature {
+export function buildFeature(
+  vessel: Vessel.VesselLastPosition,
+  vesselGroupDisplayed: VesselGroupDisplayInformation
+): Vessel.VesselLastPositionFeature {
   /**
    * The feature does contain ONLY required properties, it does not contain all properties of VesselLastPosition.
    */
@@ -21,6 +25,10 @@ export function buildFeature(vessel: Vessel.VesselLastPosition): Vessel.VesselLa
     externalReferenceNumber: vessel.externalReferenceNumber,
     flagState: vessel.flagState,
     geometry: new Point(vessel.coordinates),
+    groupColorBlue: vesselGroupDisplayed.groupColor[2],
+    groupColorGreen: vesselGroupDisplayed.groupColor[1],
+    groupColorRed: vesselGroupDisplayed.groupColor[0],
+    groupsDisplayed: vesselGroupDisplayed.groupsDisplayed,
     hasAlert: vessel.hasAlert,
     hasBeaconMalfunction: vessel.hasBeaconMalfunction,
     hasInfractionSuspicion: vessel.hasInfractionSuspicion,
@@ -36,6 +44,7 @@ export function buildFeature(vessel: Vessel.VesselLastPosition): Vessel.VesselLa
     lastPositionSentAt: vessel.lastPositionSentAt,
     length: vessel.length,
     mmsi: vessel.mmsi,
+    numberOfGroupsHidden: vesselGroupDisplayed.numberOfGroupsHidden,
     probabilityRiskFactor: vessel.probabilityRiskFactor,
     riskFactor: vessel.riskFactor,
     segments: vessel.segments,
@@ -78,9 +87,11 @@ export const extractVesselIdentityProps = (
 })
 
 // Type to enforce strong typing: properties specified in `K` will be required, others will remain optional
-type VesselProperties<K extends keyof Vessel.VesselLastPosition> = Required<Pick<Vessel.VesselLastPosition, K>> &
-  Partial<Omit<Vessel.VesselLastPosition, K>>
-export function extractVesselPropertiesFromFeature<K extends keyof Vessel.VesselLastPosition>(
+type VesselProperties<K extends keyof Vessel.VesselLastPositionFeature> = Required<
+  Pick<Vessel.VesselLastPositionFeature, K>
+> &
+  Partial<Omit<Vessel.VesselLastPositionFeature, K>>
+export function extractVesselPropertiesFromFeature<K extends keyof Vessel.VesselLastPositionFeature>(
   feature: Vessel.VesselLastPositionFeature,
   requiredProperties: K[]
 ): VesselProperties<K> {

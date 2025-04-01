@@ -5,7 +5,6 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
-import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
@@ -17,9 +16,12 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselInformation
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
+import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
+import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.UserAuthorizationControllerITests
+import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.utils.ApiTestWithJWTSecurity
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -27,10 +29,7 @@ import org.mockito.BDDMockito
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.context.annotation.Import
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -40,12 +39,13 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-@Import(SentryConfig::class)
-@AutoConfigureMockMvc(addFilters = false)
-@WebMvcTest(value = [(VesselLightController::class)])
+@ApiTestWithJWTSecurity(value = [(VesselLightController::class)])
 class VesselLightControllerITests {
     @Autowired
     private lateinit var api: MockMvc
+
+    @MockBean
+    private lateinit var getIsAuthorizedUser: GetIsAuthorizedUser
 
     @MockBean
     private lateinit var getLastPositions: GetLastPositions
@@ -80,6 +80,7 @@ class VesselLightControllerITests {
     @Test
     fun `Should get all vessels last positions`() {
         // Given
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         val farPastFixedDateTime = ZonedDateTime.of(EPOCH, LocalTime.MAX.plusSeconds(1), ZoneId.of("UTC"))
         val position =
             LastPosition(
@@ -106,7 +107,10 @@ class VesselLightControllerITests {
 
         // When
         api
-            .perform(get("/light/v1/vessels"))
+            .perform(
+                get("/light/v1/vessels")
+                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$[0].vesselName", equalTo(position.vesselName)))
@@ -136,6 +140,7 @@ class VesselLightControllerITests {
     @Test
     fun `Should get vessels with last positions`() {
         // Given
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition =
             Position(
@@ -232,7 +237,7 @@ class VesselLightControllerITests {
             .perform(
                 get(
                     "/light/v1/vessels/find?vesselId=123&internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER",
-                ),
+                ).header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
             )
             // Then
             .andExpect(status().isOk)
@@ -262,6 +267,7 @@ class VesselLightControllerITests {
     @Test
     fun `Should find the last logbook messages of vessels`() {
         // Given
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         val voyage =
             Voyage(
                 isLastVoyage = true,
@@ -278,7 +284,7 @@ class VesselLightControllerITests {
             .perform(
                 get(
                     "/light/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=LAST&beforeDateTime=",
-                ),
+                ).header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
             )
             // Then
             .andExpect(status().isOk)

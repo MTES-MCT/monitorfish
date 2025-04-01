@@ -100,6 +100,36 @@ context('Vessel groups', () => {
     })
 
     /**
+     * Pin and unpin vessel groups to change order
+     */
+    cy.getDataCy('vessel-groups-menu-box').within(() => {
+      cy.get('li').should('have.length', 4)
+      cy.get('li').eq(0).contains('Lorem ipsum dolor sit amet')
+      cy.get('li').eq(1).contains('Mission Thémis – semaine 04')
+      cy.get('li').eq(2).contains('Mission Thémis – semaine 03')
+      cy.get('li').eq(3).contains('Mission Thémis – chaluts de fonds')
+
+      cy.get("[title=\'Epingler le groupe \"Mission Thémis – chaluts de fonds\"\']").click()
+      cy.get('li').eq(0).contains('Mission Thémis – chaluts de fonds')
+      cy.get('li').eq(1).contains('Lorem ipsum dolor sit amet')
+      cy.get('li').eq(2).contains('Mission Thémis – semaine 04')
+      cy.get('li').eq(3).contains('Mission Thémis – semaine 03')
+
+      cy.get("[title=\'Epingler le groupe \"Mission Thémis – semaine 03\"\']").click()
+      cy.get('li').eq(0).contains('Mission Thémis – semaine 03')
+      cy.get('li').eq(1).contains('Mission Thémis – chaluts de fonds')
+      cy.get('li').eq(2).contains('Lorem ipsum dolor sit amet')
+      cy.get('li').eq(3).contains('Mission Thémis – semaine 04')
+
+      cy.get("[title=\'Dépingler le groupe \"Mission Thémis – chaluts de fonds\"\']").click()
+      cy.get("[title=\'Dépingler le groupe \"Mission Thémis – semaine 03\"\']").click()
+      cy.get('li').eq(0).contains('Lorem ipsum dolor sit amet')
+      cy.get('li').eq(1).contains('Mission Thémis – semaine 04')
+      cy.get('li').eq(2).contains('Mission Thémis – semaine 03')
+      cy.get('li').eq(3).contains('Mission Thémis – chaluts de fonds')
+    })
+
+    /**
      * Delete the created group
      */
     cy.get("[title=\'Supprimer le groupe \"Lorem ipsum dolor sit amet\"\']").click()

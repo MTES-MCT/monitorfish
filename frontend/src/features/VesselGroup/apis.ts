@@ -1,6 +1,9 @@
 import { monitorfishApi } from '@api/api'
 import { RtkCacheTagType } from '@api/constants'
+import { DynamicVesselGroupSchema } from '@features/VesselGroup/types'
 import { FrontendApiError } from '@libs/FrontendApiError'
+import { parseResponseOrReturn } from '@utils/parseResponseOrReturn'
+import { orderBy } from 'lodash-es'
 
 import type { CreateOrUpdateDynamicVesselGroup, DynamicVesselGroup } from '@features/VesselGroup/types'
 
@@ -17,7 +20,9 @@ export const vesselGroupApi = monitorfishApi.injectEndpoints({
         method: 'POST',
         url: `vessel_groups`
       }),
-      transformErrorResponse: response => new FrontendApiError(CREATE_VESSEL_GROUPS_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(CREATE_VESSEL_GROUPS_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: DynamicVesselGroup[]) =>
+        parseResponseOrReturn<DynamicVesselGroup>(baseQueryReturnValue, DynamicVesselGroupSchema, false)
     }),
     deleteVesselGroup: builder.mutation<void, number>({
       invalidatesTags: () => [{ type: RtkCacheTagType.VesselGroups }],
@@ -30,7 +35,13 @@ export const vesselGroupApi = monitorfishApi.injectEndpoints({
     getAllVesselGroups: builder.query<DynamicVesselGroup[], void>({
       providesTags: () => [{ type: RtkCacheTagType.VesselGroups }],
       query: () => 'vessel_groups',
-      transformErrorResponse: response => new FrontendApiError(GET_VESSELS_GROUPS_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(GET_VESSELS_GROUPS_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: DynamicVesselGroup[]) =>
+        orderBy(
+          parseResponseOrReturn<DynamicVesselGroup>(baseQueryReturnValue, DynamicVesselGroupSchema, true),
+          vesselGroup => vesselGroup.id,
+          ['desc']
+        )
     })
   })
 })

@@ -2,51 +2,24 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
-import fr.gouv.cnsp.monitorfish.config.*
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
-import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
-import fr.gouv.cnsp.monitorfish.infrastructure.api.security.UserAuthorizationCheckFilter
-import fr.gouv.cnsp.monitorfish.infrastructure.oidc.APIOIDCRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.utils.ApiTestWithJWTSecurity
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.context.annotation.Import
-import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@Import(
-    SecurityConfig::class,
-    OIDCProperties::class,
-    ProtectedPathsAPIProperties::class,
-    UserAuthorizationCheckFilter::class,
-    SentryConfig::class,
-    CustomAuthenticationEntryPoint::class,
-    APIOIDCRepository::class,
-    TestApiClient::class,
-)
-@WebMvcTest(
-    value = [(UserAuthorizationController::class)],
-    properties = [
-        "monitorfish.oidc.enabled=true",
-        "spring.security.oauth2.resourceserver.jwt.public-key-location=classpath:oidc-issuer.pub",
-        "monitorfish.oidc.userinfo-endpoint=/api/user",
-        "monitorfish.oidc.issuer-uri=http://issuer-uri.gouv.fr",
-    ],
-)
+@ApiTestWithJWTSecurity(value = [(UserAuthorizationController::class)])
 class UserAuthorizationControllerITests {
     @Autowired
     private lateinit var api: MockMvc
-
-    @Autowired
-    private lateinit var jwtDecoder: JwtDecoder
 
     @MockBean
     private lateinit var getAuthorizedUser: GetAuthorizedUser

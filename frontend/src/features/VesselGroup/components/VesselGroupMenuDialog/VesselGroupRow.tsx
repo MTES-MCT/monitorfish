@@ -1,6 +1,7 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { Square } from '@features/Regulation/components/ZonePreview'
 import { FilterTags } from '@features/Vessel/components/VesselList/FilterTags'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
 import { GroupType, Sharing } from '@features/VesselGroup/types'
 import { deleteVesselGroup } from '@features/VesselGroup/useCases/deleteVesselGroup'
@@ -15,15 +16,18 @@ import { setDisplayedComponents } from '../../../../domain/shared_slices/Display
 import type { DynamicVesselGroup } from '@features/VesselGroup/types'
 
 type VesselGroupRowProps = {
+  isLastPinned: boolean
   vesselGroup: DynamicVesselGroup
 }
-export function VesselGroupRow({ vesselGroup }: VesselGroupRowProps) {
+export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProps) {
   const dispatch = useMainAppDispatch()
   const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
+  const vesselGroupsIdsPinned = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsPinned)
   const isDisplayed = vesselGroupsIdsDisplayed.includes(vesselGroup.id)
 
   const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState<boolean>(false)
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const isPinned = vesselGroupsIdsPinned.includes(vesselGroup.id)
 
   const handleDeleteVesselGroup = () => {
     dispatch(deleteVesselGroup(vesselGroup.id))
@@ -35,23 +39,52 @@ export function VesselGroupRow({ vesselGroup }: VesselGroupRowProps) {
     dispatch(setDisplayedComponents({ isVesselGroupMainWindowEditionDisplayed: true }))
   }
 
+  const togglePinGroup = async event => {
+    event.stopPropagation()
+
+    if (isPinned) {
+      await dispatch(vesselGroupActions.vesselGroupIdUnpinned(vesselGroup.id))
+    } else {
+      await dispatch(vesselGroupActions.vesselGroupIdPinned(vesselGroup.id))
+    }
+
+    dispatch(renderVesselFeatures())
+  }
+
+  const hideGroup = async event => {
+    event.stopPropagation()
+    await dispatch(vesselGroupActions.vesselGroupIdHidden(vesselGroup.id))
+    dispatch(renderVesselFeatures())
+  }
+
+  const showGroup = async event => {
+    event.stopPropagation()
+    await dispatch(vesselGroupActions.vesselGroupIdDisplayed(vesselGroup.id))
+    dispatch(renderVesselFeatures())
+  }
+
   return (
     <>
-      <Wrapper title={vesselGroup?.name}>
+      <Wrapper $isLastPinned={isLastPinned} $isPinned={isPinned} title={vesselGroup?.name}>
         <Row onClick={() => setIsOpen(!isOpen)}>
           <ChevronIcon $isOpen={isOpen} color={THEME.color.slateGray} />
           <Square $fillColor={vesselGroup.color} $strokeColor={THEME.color.lightGray} />
           {vesselGroup.name}
           <RowIcons>
+            <IconButton
+              accent={Accent.TERTIARY}
+              aria-label="Sélectionner"
+              color={isPinned ? THEME.color.blueGray : THEME.color.gunMetal}
+              Icon={Icon.Pin}
+              onClick={togglePinGroup}
+              title={`${isPinned ? 'Dépingler' : 'Epingler'} le groupe "${vesselGroup.name}"`}
+            />
             {isDisplayed ? (
               <IconButton
                 accent={Accent.TERTIARY}
                 Icon={Icon.Display}
                 iconSize={20}
-                onClick={event => {
-                  dispatch(vesselGroupActions.vesselGroupIdHidden(vesselGroup.id))
-                  event.stopPropagation()
-                }}
+                onClick={hideGroup}
                 title={`Cacher le groupe "${vesselGroup.name}"`}
               />
             ) : (
@@ -60,10 +93,7 @@ export function VesselGroupRow({ vesselGroup }: VesselGroupRowProps) {
                 color={THEME.color.lightGray}
                 Icon={Icon.Hide}
                 iconSize={20}
-                onClick={event => {
-                  dispatch(vesselGroupActions.vesselGroupIdDisplayed(vesselGroup.id))
-                  event.stopPropagation()
-                }}
+                onClick={showGroup}
                 title={`Afficher le groupe "${vesselGroup.name}"`}
               />
             )}
@@ -72,9 +102,7 @@ export function VesselGroupRow({ vesselGroup }: VesselGroupRowProps) {
         {isOpen && (
           <OpenedGroup>
             <GroupInformation>
-              <Description>
-                <b>48 navires</b> – {vesselGroup.description}
-              </Description>
+              <Description>{vesselGroup.description}</Description>
               {vesselGroup.type === GroupType.DYNAMIC && (
                 <StyledTag borderColor={THEME.color.slateGray}>Groupe dynamique</StyledTag>
               )}
@@ -178,6 +206,7 @@ const RowIcons = styled.div`
   margin-right: 0;
   flex-shrink: 0;
   display: flex;
+  gap: 6px;
   height: 36px;
   align-items: center;
   cursor: pointer;
@@ -195,8 +224,12 @@ const ChevronIcon = styled(Icon.Chevron)<{
   transition: all 0.2s ease;
 `
 
-const Wrapper = styled.li`
+const Wrapper = styled.li<{
+  $isLastPinned: boolean
+  $isPinned: boolean
+}>`
   list-style-type: none;
   margin: 0;
-  border-bottom: 1px solid ${p => p.theme.color.lightGray};
+  border-bottom: ${p => (p.$isLastPinned ? 2 : 1)}px solid ${p => p.theme.color.lightGray};
+  background: ${p => (p.$isPinned ? p.theme.color.cultured : 'unset')};
 `

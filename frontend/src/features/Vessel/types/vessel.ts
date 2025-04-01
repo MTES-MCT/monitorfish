@@ -40,11 +40,12 @@ export class VesselFeature {
    */
   static getVesselFeatureLabel(
     feature: PartialExcept<
-      Vessel.VesselLastPosition,
+      Vessel.VesselLastPositionFeature,
       | 'beaconMalfunctionId'
       | 'dateTime'
       | 'detectabilityRiskFactor'
       | 'flagState'
+      | 'groupsDisplayed'
       | 'impactRiskFactor'
       | 'internalReferenceNumber'
       | 'isAtPort'
@@ -65,6 +66,7 @@ export class VesselFeature {
       vesselsLastPositionVisibility: MonitorFishMap.LastPositionVisibility
     }
   ): {
+    groupsDisplayed: Vessel.VesselGroup[]
     labelText: string | undefined
     riskFactor:
       | {
@@ -91,10 +93,12 @@ export class VesselFeature {
 
     // TODO Properly type this const.
     const label: {
+      groupsDisplayed: Vessel.VesselGroup[]
       labelText: string | undefined
       riskFactor: any | undefined
       underCharter: any
     } = {
+      groupsDisplayed: feature.groupsDisplayed,
       labelText: undefined,
       riskFactor: undefined,
       underCharter: feature.underCharter

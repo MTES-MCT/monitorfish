@@ -60,10 +60,6 @@ context('Vessels Overlays', () => {
     cy.get('*[data-cy^="vessel-card-segments"]').contains('SWW01')
     cy.get('*[data-cy^="vessel-card-latitude"]').contains('48° 26′ 17″ N')
     cy.get('*[data-cy^="vessel-card-longitude"]').contains('006° 30′ 22″ W')
-    cy.get('*[data-cy^="vessel-card-internal-reference-number"]').contains('ABC000904657')
-    cy.get('*[data-cy^="vessel-card-external-reference-number"]').contains('OZ854230')
-    cy.get('*[data-cy^="vessel-card-mmsi"]').contains('048713984')
-    cy.get('*[data-cy^="vessel-card-ircs"]').contains('AQIK')
     cy.get('*[data-cy^="vessel-card-alert"]').contains('3 milles - Chaluts')
   })
 

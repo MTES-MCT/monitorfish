@@ -152,18 +152,15 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
           key={identity.key}
           coordinates={identity.coordinates}
           featureId={featureId}
-          flagState={identity.flagState}
           identity={identity}
+          label={label}
           moveLine={moveVesselLabelLine}
           offset={offset}
           opacity={opacity}
           previewFilteredVesselsMode={previewFilteredVesselsMode}
-          riskFactor={label?.riskFactor}
           riskFactorDetailsShowed={vesselToRiskFactorDetailsShowed.get(featureId)}
-          text={label?.labelText}
           trackIsShown={trackIsShown}
           triggerShowRiskDetails={showLabelRiskFactorDetails}
-          underCharter={label?.underCharter}
           zoomHasChanged={previousMapZoom.current}
         />
       ))
@@ -235,6 +232,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
           'dateTime',
           'detectabilityRiskFactor',
           'flagState',
+          'groupsDisplayed',
           'impactRiskFactor',
           'internalReferenceNumber',
           'isAtPort',

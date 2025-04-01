@@ -3,7 +3,7 @@ import { PendingAlertValueType } from '@features/Alert/types'
 import { ReportingCard } from '@features/Reporting/components/ReportingCard'
 import { ReportingType } from '@features/Reporting/types'
 import { Vessel } from '@features/Vessel/Vessel.types'
-import { afterAll, describe, expect, it, jest } from '@jest/globals'
+import { afterAll, describe, expect, it } from '@jest/globals'
 import { THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -13,13 +13,25 @@ import configureStore from 'redux-mock-store'
 
 import type { PendingAlertReporting } from '@features/Reporting/types'
 
+/**
+ * Warning: We could not add `jest` import as it makes the test to fail.
+ * We need to have
+ * @see: https://github.com/swc-project/jest/issues/14#issuecomment-2525330413
+ */
+
+// @ts-ignore
 jest.mock('../../../useCases/archiveReporting', () => ({ archiveReporting: jest.fn() }))
+// @ts-ignore
 jest.mock('../../../../../hooks/useMainAppDispatch', () => ({ useMainAppDispatch: () => {} }))
+// @ts-ignore
 jest.mock('../../../useCases/deleteReporting', () => ({ deleteReporting: jest.fn() }))
+// @ts-ignore
+jest.mock('../../../../Vessel/useCases/renderVesselFeatures', () => ({ renderVesselFeatures: jest.fn() }))
 
 describe('ReportingCard()', () => {
   afterAll(() => {
     // Reset module registry to clear the mock
+    // @ts-ignore
     jest.resetModules()
   })
 

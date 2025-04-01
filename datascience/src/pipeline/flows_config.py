@@ -65,6 +65,7 @@ from src.pipeline.flows import (
     suspicions_of_under_declaration_alerts,
     update_beacon_malfunctions,
     validate_pending_alerts,
+    vessel_profiles,
     vessels,
 )
 from src.pipeline.helpers.country_codes import (
@@ -366,6 +367,7 @@ validate_pending_alerts.flow.schedule = Schedule(
         ),
     ]
 )
+vessel_profiles.flow.schedule = CronSchedule("51 * * * *")
 vessels.flow.schedule = CronSchedule("2 2,5,8,11,14,20,23 * * *")
 
 
@@ -414,6 +416,7 @@ flows_to_register = [
     species.flow,
     suspicions_of_under_declaration_alerts.flow,
     validate_pending_alerts.flow,
+    vessel_profiles.flow,
     vessels.flow,
 ]
 

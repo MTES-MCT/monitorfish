@@ -36,10 +36,10 @@ import { SelectedStationOverlay } from '../../Station/components/SelectedStation
 import { StationLayer } from '../../Station/components/StationLayer'
 import { VesselCardOverlay } from '../../Vessel/components/VesselCardOverlay'
 import VesselEstimatedPositionOverlay from '../../Vessel/components/VesselEstimatedPositionOverlay'
-import VesselAlertAndBeaconMalfunctionLayer from '../../Vessel/layers/VesselAlertAndBeaconMalfunctionLayer'
-import VesselAlertLayer from '../../Vessel/layers/VesselAlertLayer'
-import VesselBeaconMalfunctionLayer from '../../Vessel/layers/VesselBeaconMalfunctionLayer'
-import VesselInfractionSuspicionLayer from '../../Vessel/layers/VesselInfractionSuspicionLayer'
+import { VesselAlertAndBeaconMalfunctionLayer } from '../../Vessel/layers/VesselAlertAndBeaconMalfunctionLayer'
+import { VesselAlertLayer } from '../../Vessel/layers/VesselAlertLayer'
+import { VesselBeaconMalfunctionLayer } from '../../Vessel/layers/VesselBeaconMalfunctionLayer'
+import { VesselInfractionSuspicionLayer } from '../../Vessel/layers/VesselInfractionSuspicionLayer'
 import VesselSelectedLayer from '../../Vessel/layers/VesselSelectedLayer'
 import { VesselEstimatedPositionLayer } from '../../Vessel/layers/VesselsEstimatedPositionLayer'
 import { VesselsLabelsLayer } from '../../Vessel/layers/VesselsLabelsLayer'
@@ -144,10 +144,10 @@ export function MainMap() {
       <VesselsLayer />
       {areVesselsDisplayed && <VesselEstimatedPositionLayer />}
       {areVesselsDisplayed && <VesselSelectedLayer />}
-      {areVesselsDisplayed && <VesselAlertLayer />}
-      {areVesselsDisplayed && <VesselBeaconMalfunctionLayer />}
-      {areVesselsDisplayed && <VesselAlertAndBeaconMalfunctionLayer />}
-      {areVesselsDisplayed && <VesselInfractionSuspicionLayer />}
+      {areVesselsDisplayed && <VesselAlertLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />}
+      {areVesselsDisplayed && <VesselBeaconMalfunctionLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />}
+      {areVesselsDisplayed && <VesselAlertAndBeaconMalfunctionLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />}
+      {areVesselsDisplayed && <VesselInfractionSuspicionLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />}
       <VesselsTracksLayerMemoized />
       <VesselCardOverlay feature={hoveredFeature} />
       <TrackTypeOverlay feature={hoveredFeature} />

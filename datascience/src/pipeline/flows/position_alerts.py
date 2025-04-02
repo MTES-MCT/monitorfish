@@ -149,9 +149,9 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
             "geometry_column": "wkb_geometry",
         },
         "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT": {
-            "table": "fao_areas",
-            "filter_column": "f_code",
-            "geometry_column": "wkb_geometry",
+            "table": "regulations",
+            "filter_column": "topic",
+            "geometry_column": "geometry",
         },
     }
 

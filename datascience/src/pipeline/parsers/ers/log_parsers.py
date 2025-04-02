@@ -263,8 +263,7 @@ def parse_pno(pno):
     predicted_landing_datetime_utc = serialize_datetime(make_datetime(date, time))
 
     start_date = pno.get("DS")
-    activity_datetime_utc = make_datetime(start_date, None)
-    trip_start_date = serialize_datetime(activity_datetime_utc)
+    trip_start_date = serialize_datetime(make_datetime(start_date, None))
 
     children = tagged_children(pno)
 

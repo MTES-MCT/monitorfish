@@ -59,6 +59,7 @@ export class VesselFeature {
       | 'vesselName'
     >,
     options: {
+      areVesselsNotInVesselGroupsHidden: boolean
       hideVesselsAtPort: boolean
       isRiskFactorShowed: boolean
       vesselLabel: string
@@ -109,6 +110,10 @@ export class VesselFeature {
     }
 
     if (hideVesselsAtPort && feature.isAtPort) {
+      return label
+    }
+
+    if (options.areVesselsNotInVesselGroupsHidden && !feature.groupsDisplayed.length) {
       return label
     }
 

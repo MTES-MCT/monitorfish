@@ -1,6 +1,5 @@
 import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
 import { SideWindowMenuKey, SideWindowStatus } from '@features/SideWindow/constants'
-import { sideWindowActions } from '@features/SideWindow/slice'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { countVesselListFilter } from '@features/Vessel/components/VesselList/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -17,12 +16,6 @@ export function VesselListMapButton() {
     sideWindow.status !== SideWindowStatus.CLOSED && sideWindow.selectedPath.menu === SideWindowMenuKey.VESSEL_LIST
 
   const toggleSideWindow = () => {
-    if (isActive) {
-      dispatch(sideWindowActions.close())
-
-      return
-    }
-
     dispatch(openSideWindowPath({ menu: SideWindowMenuKey.VESSEL_LIST }))
   }
 

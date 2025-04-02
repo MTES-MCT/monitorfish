@@ -43,16 +43,6 @@ const hideDeprecatedPositionsCondition = [
   false
 ]
 
-// TODO rename to : show only vessel group
-/*
-const showOnlyNonFilteredVessels = [
-  'case',
-  stateIs('areVesselsNotInVesselGroupsHidden'),
-  featureHas('isFiltered'),
-  true
-]
- */
-
 export const getWebGLVesselStyle = (): WebGLStyle => {
   const groupColor = [
     'color',
@@ -66,6 +56,12 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
     featurePropertyIsNotEmpty('groupColorGreen'),
     featurePropertyIsNotEmpty('groupColorBlue')
   ]
+  const vesselsGroupsCondition = [
+    'case',
+    stateIs('areVesselsNotInVesselGroupsHidden'),
+    ['case', hasGroupColor, true, false],
+    true
+  ]
 
   const defaultVesselColor = ['case', stateIs('isLight'), theme.color.lightGray, theme.color.charcoal]
   const booleanFilter = [
@@ -73,7 +69,8 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
     hideNonSelectedVesselsCondition,
     hideDeprecatedPositionsCondition,
     featureHas('isFiltered'),
-    hideVesselsAtPortCondition
+    hideVesselsAtPortCondition,
+    vesselsGroupsCondition
   ]
 
   return {

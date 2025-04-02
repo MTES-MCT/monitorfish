@@ -178,8 +178,9 @@ export function VesselList({ isFromUrl }: VesselListProps) {
               <PreviewButton
                 accent={Accent.SECONDARY}
                 data-cy="preview-filtered-vessels"
-                Icon={Icon.Focus}
+                Icon={Icon.ViewOnMap}
                 onClick={() => dispatch(previewVessels())}
+                title="Afficher sur la carte les navires pour une capture d'écran"
               >
                 Aperçu sur la carte
               </PreviewButton>

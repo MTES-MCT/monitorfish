@@ -7,7 +7,7 @@ import { GroupType, Sharing } from '@features/VesselGroup/types'
 import { deleteVesselGroup } from '@features/VesselGroup/useCases/deleteVesselGroup'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Icon, IconButton, Tag, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Link, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -27,6 +27,7 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
 
   const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState<boolean>(false)
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [isGroupFilterCriteriaOpen, setIsGroupFilterCriteriaOpen] = useState<boolean>(false)
   const isPinned = vesselGroupsIdsPinned.includes(vesselGroup.id)
 
   const handleDeleteVesselGroup = () => {
@@ -62,6 +63,11 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
     await dispatch(vesselGroupActions.vesselGroupIdDisplayed(vesselGroup.id))
     dispatch(renderVesselFeatures())
   }
+
+  const description =
+    (vesselGroup.description ?? '').length > 140
+      ? `${vesselGroup.description?.substring(0, 140)}...`
+      : vesselGroup.description
 
   return (
     <>
@@ -102,7 +108,7 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
         {isOpen && (
           <OpenedGroup>
             <GroupInformation>
-              <Description>{vesselGroup.description}</Description>
+              <Description title={vesselGroup.description}>{description}</Description>
               {vesselGroup.type === GroupType.DYNAMIC && (
                 <StyledTag borderColor={THEME.color.slateGray}>Groupe dynamique</StyledTag>
               )}
@@ -120,7 +126,14 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
                   Groupe partagé
                 </StyledTag>
               )}
-              <StyledFilterTags isReadOnly listFilterValues={vesselGroup?.filters} />
+              {isGroupFilterCriteriaOpen && <StyledFilterTags isReadOnly listFilterValues={vesselGroup?.filters} />}
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <StyledLink
+                $isOpen={isGroupFilterCriteriaOpen}
+                onClick={() => setIsGroupFilterCriteriaOpen(!isGroupFilterCriteriaOpen)}
+              >
+                {isGroupFilterCriteriaOpen ? 'Masquer' : 'Afficher'} les critères de définition du groupe
+              </StyledLink>
             </GroupInformation>
             <OpenedGroupIcons>
               <IconButton
@@ -157,6 +170,14 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
     </>
   )
 }
+
+const StyledLink = styled(Link)<{
+  $isOpen: boolean
+}>`
+  cursor: pointer;
+  display: inline-block;
+  margin-top: ${p => (p.$isOpen ? 8 : 16)}px;
+`
 
 const StyledFilterTags = styled(FilterTags)`
   margin-top: 16px;

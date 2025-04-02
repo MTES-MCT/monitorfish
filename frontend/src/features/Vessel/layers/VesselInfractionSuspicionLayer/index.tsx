@@ -1,4 +1,8 @@
-import { filterNonSelectedVessels, getVesselFeaturesInExtent } from '@features/Vessel/layers/utils/utils'
+import {
+  filterNonSelectedVessels,
+  getVesselFeaturesInExtent,
+  isVesselGroupColorDefined
+} from '@features/Vessel/layers/utils/utils'
 import {
   VESSEL_INFRACTION_SUSPICION_LAYER,
   VESSEL_INFRACTION_SUSPICION_VECTOR_SOURCE
@@ -48,7 +52,7 @@ function UnmemoizedVesselInfractionSuspicionLayer({ mapMovingAndZoomEvent }) {
             feature =>
               feature.get('isFiltered') &&
               feature.get('hasInfractionSuspicion') &&
-              (areVesselsNotInVesselGroupsHidden ? feature.get('color') : true) &&
+              (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true) &&
               VesselFeature.getVesselOpacity(feature.get('dateTime'), vesselIsHidden, vesselIsOpacityReduced) !== 0
           )
           .filter(filterNonSelectedVessels(vesselsTracksShowed, hideNonSelectedVessels, selectedVesselIdentity))

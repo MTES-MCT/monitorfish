@@ -155,7 +155,7 @@ const UnderCharter = styled.span<{
 `
 
 const VesselGroups = styled.span`
-  margin-left: 6px;
+  margin-left: 2px;
 `
 
 const VesselGroup = styled.span<{
@@ -165,7 +165,7 @@ const VesselGroup = styled.span<{
   width: 10px;
   height: 10px;
   background: ${p => p.$color};
-  margin-left: 2px;
+  margin-left: 4px;
   display: inline-block;
 `
 

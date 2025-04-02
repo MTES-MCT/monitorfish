@@ -79,6 +79,20 @@ export function FilterBar() {
     }
   }
 
+  const updateNonCustomZones = async (nextZonesNames: string[] | undefined) => {
+    const nextZonesNamesWithCustomZone = listFilterValues.zones?.some(zone => zone.value === 'custom')
+      ? nextZonesNames?.concat('custom')
+      : nextZonesNames
+
+    updateZones(nextZonesNamesWithCustomZone)
+  }
+
+  const updateCustomZones = async (checked: boolean | undefined) => {
+    const zones = listFilterValues.zones?.map(zone => zone.value) ?? []
+
+    updateZones(checked ? zones.concat('custom') : zones.filter(zone => zone === 'custom'))
+  }
+
   const updateLastControlPeriod = (nextLastControlPeriod: LastControlPeriod | undefined) => {
     dispatch(filterVessels({ lastControlPeriod: nextLastControlPeriod }))
   }
@@ -125,6 +139,20 @@ export function FilterBar() {
 
     dispatch(filterVessels({ specyCodes: normalizedNextSpecyCodes ?? [] }))
   }
+
+  const renderMultiCascaderCustomZoneFooter = () => (
+    <MultiCascaderCustomZone>
+      <Checkbox
+        checked={listFilterValues.zones?.some(zone => zone.value === 'custom')}
+        inline
+        label="Filtrer avec une zone dessinée sur la carte"
+        name="custom_zone"
+        onChange={updateCustomZones}
+      >
+        Filtrer avec une zone dessinée sur la carte
+      </Checkbox>
+    </MultiCascaderCustomZone>
+  )
 
   return (
     <Wrapper className="vessel-list-filter-bar">
@@ -274,10 +302,11 @@ export function FilterBar() {
           isTransparent
           label="Filtrer les navires avec une zone"
           name="zones"
-          onChange={updateZones}
-          options={filterableZoneAsTreeOptions ?? []}
+          onChange={updateNonCustomZones}
+          options={filterableZoneAsTreeOptions?.filter(zone => zone.label !== 'Zone manuelle') ?? []}
           placeholder="Filtrer les navires avec une zone"
           popupWidth={500}
+          renderExtraFooter={renderMultiCascaderCustomZoneFooter}
           renderValue={(_, items) => {
             const itemsChildrens = items.filter(item => item.parent !== null)
 
@@ -289,7 +318,7 @@ export function FilterBar() {
           }}
           searchable
           style={{ width: 416 }}
-          uncheckableItemValues={['1', '2']}
+          uncheckableItemValues={['0', '1']}
           value={listFilterValues.zones?.map(zone => zone.value)}
         />
         {areMoreFiltersDisplayed && (
@@ -332,6 +361,11 @@ export function FilterBar() {
     </Wrapper>
   )
 }
+
+const MultiCascaderCustomZone = styled.div`
+  border-top: 1px solid ${p => p.theme.color.lightGray};
+  padding: 8px;
+`
 
 const Wrapper = styled.div`
   display: flex;

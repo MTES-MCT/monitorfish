@@ -1,8 +1,8 @@
+import { VesselLocation } from '@features/Vessel/types/vessel'
 import { getOptionsFromLabelledEnum, type Option } from '@mtes-mct/monitor-ui'
 import { range } from 'lodash-es'
 
 import type { VesselListFilter } from './types'
-import type { VesselLocation } from '@features/Vessel/types/vessel'
 
 /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
 export enum LastControlPeriod {
@@ -89,7 +89,7 @@ export const DEFAULT_VESSEL_LIST_FILTER_VALUES: VesselListFilter = {
   countryCodes: [],
   fleetSegments: [],
   gearCodes: [],
-  vesselsLocation: [],
+  vesselsLocation: [VesselLocation.SEA],
   lastControlPeriod: undefined,
   lastLandingPortLocodes: [],
   lastPositionHoursAgo: undefined,

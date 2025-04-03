@@ -16,9 +16,6 @@ const hideNonSelectedVesselsCondition = [
 
 const hideDeprecatedPositionsCondition = [
   'case',
-  // if there is a beacon malfunction, do not hide the vessel
-  featureHas('hasBeaconMalfunction'),
-  true,
   // if lastPosition is older than threshold, hide vessel
   ['<=', ['var', 'vesselIsHiddenTimeThreshold'], ['get', 'lastPositionSentAt']],
   true,
@@ -67,8 +64,6 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
     'icon-offset': ['case', ['>', ['get', 'speed'], VesselFeature.vesselIsMovingSpeed], [0, 0], [25, 0]],
     'icon-opacity': [
       'case',
-      featureHas('hasBeaconMalfunction'),
-      1,
       ['<', ['get', 'lastPositionSentAt'], ['var', 'vesselIsOpacityReducedTimeThreshold']],
       0.2,
       1

@@ -318,12 +318,11 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
       }
 
       const featuresInExtent = getVesselFeaturesInExtent()
-        .filter(feature =>
-          feature.get('isFiltered') &&
-          (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true) &&
-          !feature.get('hasBeaconMalfunction')
-            ? VesselFeature.getVesselOpacity(feature.get('dateTime'), vesselIsHidden, vesselIsOpacityReduced) !== 0
-            : true
+        .filter(
+          feature =>
+            feature.get('isFiltered') &&
+            (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true) &&
+            VesselFeature.getVesselOpacity(feature.get('dateTime'), vesselIsHidden, vesselIsOpacityReduced) !== 0
         )
         .filter(filterNonSelectedVessels(vesselsTracksShowed, hideNonSelectedVessels, selectedVesselIdentity))
 

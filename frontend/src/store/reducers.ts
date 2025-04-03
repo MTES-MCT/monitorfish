@@ -29,7 +29,7 @@ import { controlReducer } from '@features/Vessel/components/VesselSidebar/contro
 import { vesselReducer, type VesselState } from '@features/Vessel/slice'
 import { vesselGroupReducer } from '@features/VesselGroup/slice'
 import { beaconMalfunctionReducer } from 'domain/shared_slices/BeaconMalfunction'
-import { displayedComponentReducer } from 'domain/shared_slices/DisplayedComponent'
+import { displayedComponentReducer, type DisplayedComponentState } from 'domain/shared_slices/DisplayedComponent'
 import { displayedErrorReducer } from 'domain/shared_slices/DisplayedError'
 import { gearReducer } from 'domain/shared_slices/Gear'
 import { globalSliceReducer } from 'domain/shared_slices/Global'
@@ -89,7 +89,15 @@ export const mainReducer = {
     { ...getCommonPersistReducerConfig<CustomZoneState>('mainPersistorCustomZone', ['zones']) },
     customZoneReducer
   ),
-  displayedComponent: displayedComponentReducer,
+  displayedComponent: persistReducerTyped(
+    {
+      ...getCommonPersistReducerConfig<DisplayedComponentState>('mainPersistorDisplayedComponent', [
+        'isMissionsLayerDisplayed',
+        'areVesselGroupsDisplayed'
+      ])
+    },
+    displayedComponentReducer
+  ),
   draw: drawReducer,
   favoriteVessel: favoriteVesselReducer,
   fishingActivities: persistReducerTyped(

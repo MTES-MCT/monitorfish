@@ -62,7 +62,7 @@ export function VesselGroupMenuDialog() {
           <MapMenuDialog.Title>Groupes de navires</MapMenuDialog.Title>
           <MapMenuDialog.VisibilityButton
             accent={Accent.SECONDARY}
-            data-cy="toggle-mission-layer"
+            data-cy="toggle-vessel-groups-layer"
             Icon={areVesselGroupsDisplayed ? Icon.Display : Icon.Hide}
             onClick={toggleVesselGroupsDisplay}
             title={areVesselGroupsDisplayed ? 'Cacher les groupes' : 'Afficher les groupes'}

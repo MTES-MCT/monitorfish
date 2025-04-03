@@ -4,6 +4,7 @@ import { MonitorFishMap } from '@features/Map/Map.types'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { getMapResolution } from '@features/Map/utils'
 import { getOverlayMargins } from '@features/Vessel/components/VesselCardOverlay/utils'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import Overlay from 'ol/Overlay'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -24,14 +25,15 @@ export function VesselCardOverlay({ feature }) {
     marginsWithoutAlert.xMiddle
   ])
   const [overlayPosition, setOverlayPosition] = useState(OverlayPosition.BOTTOM)
+  const areVesselGroupsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselGroupsDisplayed)
 
   const numberOfWarnings = isSuperUser
     ? Number(feature?.get('hasAlert')) +
       Number(!!feature?.get('beaconMalfunctionId')) +
       Number(feature?.get('hasInfractionSuspicion'))
     : 0
-  const vesselGroupsAddedLines = Number(feature?.get('groupsDisplayed')?.length)
-  const numberOfGroupsHidden = Number(feature?.get('numberOfGroupsHidden'))
+  const vesselGroupsAddedLines = areVesselGroupsDisplayed ? Number(feature?.get('groupsDisplayed')?.length) : 0
+  const numberOfGroupsHidden = areVesselGroupsDisplayed ? Number(feature?.get('numberOfGroupsHidden')) : 0
   const numberOfWarningsOffset = numberOfWarnings * 28
   const vesselGroupsAddedLinesOffset =
     (vesselGroupsAddedLines > 0 || numberOfGroupsHidden > 0 ? 19.8 : 0) + vesselGroupsAddedLines * 27

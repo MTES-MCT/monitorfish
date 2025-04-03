@@ -1,4 +1,5 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -24,6 +25,8 @@ export function VesselLabel({
 }) {
   const { groupsDisplayed, labelText, riskFactor, underCharter } = label
   const dispatch = useMainAppDispatch()
+  const areVesselGroupsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselGroupsDisplayed)
+
   const [showRiskFactorDetails, setShowRiskFactorDetails] = useState(riskFactorDetailsShowed)
 
   useEffect(() => {
@@ -74,7 +77,7 @@ export function VesselLabel({
                 }}
               >
                 {labelText}
-                {groupsDisplayed.length > 0 && (
+                {areVesselGroupsDisplayed && groupsDisplayed.length > 0 && (
                   <VesselGroups>
                     {groupsDisplayed.map(vesselGroup => (
                       <VesselGroup key={vesselGroup.id} $color={vesselGroup.color} title={vesselGroup.name} />

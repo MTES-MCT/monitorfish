@@ -14,7 +14,7 @@ function UnmemoizedVesselsLayer() {
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
   const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
-
+  const areVesselGroupsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselGroupsDisplayed)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
   const areVesselsNotInVesselGroupsHidden = useMainAppSelector(
     state => state.vesselGroup.areVesselsNotInVesselGroupsHidden
@@ -26,6 +26,7 @@ function UnmemoizedVesselsLayer() {
     const { vesselIsHidden, vesselIsOpacityReduced } =
       getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
     const initStyles = {
+      areVesselGroupsDisplayed,
       areVesselsNotInVesselGroupsHidden,
       hideNonSelectedVessels: false,
       isLight,
@@ -74,6 +75,10 @@ function UnmemoizedVesselsLayer() {
   useEffect(() => {
     VESSELS_VECTOR_LAYER.updateStyleVariables({ previewFilteredVesselsMode: booleanToInt(previewFilteredVesselsMode) })
   }, [previewFilteredVesselsMode])
+
+  useEffect(() => {
+    VESSELS_VECTOR_LAYER.updateStyleVariables({ areVesselGroupsDisplayed: booleanToInt(areVesselGroupsDisplayed) })
+  }, [areVesselGroupsDisplayed])
 
   useEffect(() => {
     const isLight = VesselFeature.iconIsLight(selectedBaseLayer)

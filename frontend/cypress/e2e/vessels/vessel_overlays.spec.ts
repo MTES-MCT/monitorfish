@@ -38,6 +38,22 @@ context('Vessels Overlays', () => {
     cy.wait(50)
     cy.get('*[data-cy^="vessel-card-name"]').contains('DÉTACHER ROULER ÉCHAPPER')
     cy.get('*[data-cy^="vessel-card-groups"]').contains('Mission Thémis – chaluts de fonds')
+
+    // Hide vessel groups from map
+    cy.clickButton('Cacher les groupes')
+    cy.wait(250)
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 460, clientY: 480, force: true, pointerId: 1 })
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 506, clientY: 288, force: true, pointerId: 1 })
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 505, clientY: 287, force: true, pointerId: 1 })
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 507, clientY: 289, force: true, pointerId: 1 })
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 506, clientY: 288, force: true, pointerId: 1 })
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 505, clientY: 287, force: true, pointerId: 1 })
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 507, clientY: 289, force: true, pointerId: 1 })
+
+    // Then
+    cy.wait(50)
+    cy.get('*[data-cy^="vessel-card-name"]').contains('DÉTACHER ROULER ÉCHAPPER')
+    cy.get('*[data-cy^="vessel-card-groups"]').should('not.exist')
   })
 
   it('Last position card with Alert Should be seen on the map on pointer move', () => {

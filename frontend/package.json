@@ -156,7 +156,7 @@
     "ts-jest": "29.2.6",
     "type-fest": "4.36.0",
     "typescript": "5.8.2",
-    "vite": "6.2.2",
+    "vite": "6.2.4",
     "vite-plugin-svgr": "4.3.0",
     "vite-tsconfig-paths": "5.1.4",
     "whatwg-fetch": "3.6.20"

@@ -69,7 +69,7 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
       'case',
       stateIs('previewFilteredVesselsMode'),
       defaultVesselColor,
-      hasGroupColor,
+      ['all', stateIs('areVesselGroupsDisplayed'), hasGroupColor],
       groupColor,
       defaultVesselColor
     ],
@@ -91,6 +91,7 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
 }
 
 export const getWebGLVesselStyleVariables = ({
+  areVesselGroupsDisplayed,
   areVesselsNotInVesselGroupsHidden,
   hideNonSelectedVessels,
   isLight,
@@ -99,6 +100,7 @@ export const getWebGLVesselStyleVariables = ({
   vesselIsHiddenTimeThreshold,
   vesselIsOpacityReducedTimeThreshold
 }) => ({
+  areVesselGroupsDisplayed: booleanToInt(areVesselGroupsDisplayed),
   areVesselsNotInVesselGroupsHidden: booleanToInt(areVesselsNotInVesselGroupsHidden),
   hideNonSelectedVessels: booleanToInt(hideNonSelectedVessels),
   isFiltered: 0,

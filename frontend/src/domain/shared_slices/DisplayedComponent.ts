@@ -1,11 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getLocalStorageState } from '../../utils'
-import { getLocalstorageProperty } from '../../utils/getLocalstorageProperty'
-
 import type { PayloadAction } from '@reduxjs/toolkit'
-
-const displayedComponentsLocalstorageKey = 'displayedComponents'
 
 export type DisplayedComponentState = {
   areVesselGroupsDisplayed: boolean
@@ -46,11 +41,7 @@ const INITIAL_STATE: DisplayedComponentState = {
   isFavoriteVesselsMapButtonDisplayed: true,
   isInterestPointMapButtonDisplayed: true,
   isMeasurementMapButtonDisplayed: true,
-  isMissionsLayerDisplayed: getLocalstorageProperty(
-    true,
-    displayedComponentsLocalstorageKey,
-    'isMissionsLayerDisplayed'
-  ),
+  isMissionsLayerDisplayed: true,
   isMissionsMapButtonDisplayed: true,
   isNewFeaturesMapButtonDisplayed: true,
   isPriorNotificationMapButtonDisplayed: true,
@@ -64,28 +55,13 @@ const INITIAL_STATE: DisplayedComponentState = {
   isVesselVisibilityMapButtonDisplayed: true
 }
 
-/**
- * Components saved in local storage
- */
-const savedComponents = ['isMissionsLayerDisplayed']
-
 const displayedComponentSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'displayedComponent',
   reducers: {
     setDisplayedComponents(state, action: PayloadAction<Partial<DisplayedComponentState>>) {
       Object.keys(INITIAL_STATE).forEach(propertyKey => {
-        const value = getValueOrDefault(action.payload[propertyKey], state[propertyKey])
-
-        state[propertyKey] = value
-
-        // If the displayed component has to be saved in local storage
-        if (savedComponents.includes(propertyKey)) {
-          const localstorageState = getLocalStorageState({}, displayedComponentsLocalstorageKey)
-          localstorageState[propertyKey] = value
-
-          window.localStorage.setItem(displayedComponentsLocalstorageKey, JSON.stringify(localstorageState))
-        }
+        state[propertyKey] = getValueOrDefault(action.payload[propertyKey], state[propertyKey])
       })
     }
   }

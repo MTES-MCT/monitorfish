@@ -10,34 +10,35 @@ import { MonitorFishWebWorker } from '../MonitorFishWebWorker'
 import { DUMMY_LAST_POSITIONS } from './__mocks__/dummyLastPositions'
 
 describe('MonitorFishWebWorker.getFilteredVessels', () => {
-  it('should return vessels When there is no filter', () => {
-    const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, DEFAULT_VESSEL_LIST_FILTER_VALUES)
+  it('should return vessels When there is only default filter', () => {
+    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, vesselsLocation: [] }
+    const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
     expect(result).toEqual(expect.arrayContaining(['vessel1', 'vessel2', 'vessel3']))
   })
 
   it('should filters by countryCodes', () => {
-    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, countryCodes: ['US'] }
+    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, countryCodes: ['US'], vesselsLocation: [] }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
     expect(result).toContain('vessel1')
     expect(result).not.toContain('vessel2')
   })
 
   it('should filters by hasLogbook true', () => {
-    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, hasLogbook: true }
+    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, hasLogbook: true, vesselsLocation: [] }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
     expect(result).toContain('vessel1')
     expect(result).not.toContain('vessel2')
   })
 
   it('should filters by hasLogbook false', () => {
-    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, hasLogbook: false }
+    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, hasLogbook: false, vesselsLocation: [] }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
     expect(result).toContain('vessel2')
     expect(result).not.toContain('vessel1')
   })
 
   it('should filters by lastPositionHoursAgo', () => {
-    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, lastPositionHoursAgo: 2 }
+    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, lastPositionHoursAgo: 2, vesselsLocation: [] }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
     expect(result).toContain('vessel1')
     expect(result).not.toContain('vessel2')
@@ -46,28 +47,28 @@ describe('MonitorFishWebWorker.getFilteredVessels', () => {
   it('should filters by riskFactors', () => {
     // Provide a riskFactors filter of [1].
     // vessel1 (riskFactor 1.5) should pass, vessel2 (riskFactor 2.5) should be filtered out.
-    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, riskFactors: [1] }
+    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, riskFactors: [1], vesselsLocation: [] }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
     expect(result).toContain('vessel1')
     expect(result).not.toContain('vessel2')
   })
 
   it('should filters by fleetSegments', () => {
-    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, fleetSegments: ['segment1'] }
+    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, fleetSegments: ['segment1'], vesselsLocation: [] }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
     expect(result).toContain('vessel1')
     expect(result).not.toContain('vessel2')
   })
 
   it('should filters by gearCodes', () => {
-    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, gearCodes: ['gear1'] }
+    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, gearCodes: ['gear1'], vesselsLocation: [] }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
     expect(result).toContain('vessel1')
     expect(result).not.toContain('vessel2')
   })
 
   it('should filters by specyCodes', () => {
-    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, specyCodes: ['specy1'] }
+    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, specyCodes: ['specy1'], vesselsLocation: [] }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
     expect(result).toContain('vessel1')
     expect(result).not.toContain('vessel2')
@@ -91,21 +92,33 @@ describe('MonitorFishWebWorker.getFilteredVessels', () => {
 
   it('should filters by vesselSize', () => {
     // Using the ABOVE_TWELVE_METERS filter: vessel1 (length 15) passes, vessel2 (length 8) does not.
-    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, vesselSize: VesselSize.ABOVE_TWELVE_METERS }
+    const filters = {
+      ...DEFAULT_VESSEL_LIST_FILTER_VALUES,
+      vesselSize: VesselSize.ABOVE_TWELVE_METERS,
+      vesselsLocation: []
+    }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
     expect(result).toContain('vessel1')
     expect(result).not.toContain('vessel2')
   })
 
   it('should filters by lastControlPeriod (BEFORE_ONE_YEAR_AGO)', () => {
-    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, lastControlPeriod: LastControlPeriod.BEFORE_ONE_YEAR_AGO }
+    const filters = {
+      ...DEFAULT_VESSEL_LIST_FILTER_VALUES,
+      lastControlPeriod: LastControlPeriod.BEFORE_ONE_YEAR_AGO,
+      vesselsLocation: []
+    }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
     expect(result).toContain('vessel1')
     expect(result).not.toContain('vessel2')
   })
 
   it('should filters by lastControlPeriod (AFTER_ONE_MONTH_AGO)', () => {
-    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, lastControlPeriod: LastControlPeriod.AFTER_ONE_MONTH_AGO }
+    const filters = {
+      ...DEFAULT_VESSEL_LIST_FILTER_VALUES,
+      lastControlPeriod: LastControlPeriod.AFTER_ONE_MONTH_AGO,
+      vesselsLocation: []
+    }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
     expect(result).toContain('vessel2')
     expect(result).not.toContain('vessel1')

@@ -1,6 +1,6 @@
 import { LayerProperties } from '@features/Map/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
-import { getVesselInfractionSuspicionStyle } from '@features/Vessel/layers/style'
+import { getVesselInfractionSuspicionStyle } from '@features/Vessel/layers/VesselInfractionSuspicionLayer/style'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 

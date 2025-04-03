@@ -1,13 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getLocalStorageState } from '../../utils'
-import { getLocalstorageProperty } from '../../utils/getLocalstorageProperty'
-
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-const displayedComponentsLocalstorageKey = 'displayedComponents'
-
 export type DisplayedComponentState = {
+  areVesselGroupsDisplayed: boolean
   areVesselsDisplayed: boolean
   isAccountMapButtonDisplayed: boolean
   isAlertsMapButtonDisplayed: boolean
@@ -25,13 +21,15 @@ export type DisplayedComponentState = {
   isPriorNotificationMapButtonDisplayed: boolean
   isStationLayerDisplayed: boolean
   isVesselFiltersMapButtonDisplayed: boolean
+  isVesselGroupMainWindowEditionDisplayed: boolean
+  isVesselGroupMapButtonDisplayed: boolean
   isVesselLabelsMapButtonDisplayed: boolean
-  isVesselListDisplayed: boolean
-  isVesselListModalDisplayed: boolean
+  isVesselListMapButtonDisplayed: boolean
   isVesselSearchDisplayed: boolean
   isVesselVisibilityMapButtonDisplayed: boolean
 }
 const INITIAL_STATE: DisplayedComponentState = {
+  areVesselGroupsDisplayed: true,
   areVesselsDisplayed: true,
   isAccountMapButtonDisplayed: true,
   isAlertsMapButtonDisplayed: true,
@@ -43,27 +41,19 @@ const INITIAL_STATE: DisplayedComponentState = {
   isFavoriteVesselsMapButtonDisplayed: true,
   isInterestPointMapButtonDisplayed: true,
   isMeasurementMapButtonDisplayed: true,
-  isMissionsLayerDisplayed: getLocalstorageProperty(
-    true,
-    displayedComponentsLocalstorageKey,
-    'isMissionsLayerDisplayed'
-  ),
+  isMissionsLayerDisplayed: true,
   isMissionsMapButtonDisplayed: true,
   isNewFeaturesMapButtonDisplayed: true,
   isPriorNotificationMapButtonDisplayed: true,
   isStationLayerDisplayed: false,
   isVesselFiltersMapButtonDisplayed: true,
+  isVesselGroupMainWindowEditionDisplayed: false,
+  isVesselGroupMapButtonDisplayed: true,
   isVesselLabelsMapButtonDisplayed: true,
-  isVesselListDisplayed: true,
-  isVesselListModalDisplayed: false,
+  isVesselListMapButtonDisplayed: true,
   isVesselSearchDisplayed: true,
   isVesselVisibilityMapButtonDisplayed: true
 }
-
-/**
- * Components saved in local storage
- */
-const savedComponents = ['isMissionsLayerDisplayed']
 
 const displayedComponentSlice = createSlice({
   initialState: INITIAL_STATE,
@@ -71,17 +61,7 @@ const displayedComponentSlice = createSlice({
   reducers: {
     setDisplayedComponents(state, action: PayloadAction<Partial<DisplayedComponentState>>) {
       Object.keys(INITIAL_STATE).forEach(propertyKey => {
-        const value = getValueOrDefault(action.payload[propertyKey], state[propertyKey])
-
-        state[propertyKey] = value
-
-        // If the displayed component has to be saved in local storage
-        if (savedComponents.includes(propertyKey)) {
-          const localstorageState = getLocalStorageState({}, displayedComponentsLocalstorageKey)
-          localstorageState[propertyKey] = value
-
-          window.localStorage.setItem(displayedComponentsLocalstorageKey, JSON.stringify(localstorageState))
-        }
+        state[propertyKey] = getValueOrDefault(action.payload[propertyKey], state[propertyKey])
       })
     }
   }

@@ -40,11 +40,12 @@ export class VesselFeature {
    */
   static getVesselFeatureLabel(
     feature: PartialExcept<
-      Vessel.VesselLastPosition,
+      Vessel.VesselLastPositionFeature,
       | 'beaconMalfunctionId'
       | 'dateTime'
       | 'detectabilityRiskFactor'
       | 'flagState'
+      | 'groupsDisplayed'
       | 'impactRiskFactor'
       | 'internalReferenceNumber'
       | 'isAtPort'
@@ -58,13 +59,14 @@ export class VesselFeature {
       | 'vesselName'
     >,
     options: {
-      hideVesselsAtPort: boolean
+      areVesselsNotInVesselGroupsHidden: boolean
       isRiskFactorShowed: boolean
       vesselLabel: string
       vesselLabelsShowedOnMap: boolean
       vesselsLastPositionVisibility: MonitorFishMap.LastPositionVisibility
     }
   ): {
+    groupsDisplayed: Vessel.VesselGroup[]
     labelText: string | undefined
     riskFactor:
       | {
@@ -75,13 +77,7 @@ export class VesselFeature {
         }
       | undefined
   } {
-    const {
-      hideVesselsAtPort,
-      isRiskFactorShowed,
-      vesselLabel,
-      vesselLabelsShowedOnMap,
-      vesselsLastPositionVisibility
-    } = options
+    const { isRiskFactorShowed, vesselLabel, vesselLabelsShowedOnMap, vesselsLastPositionVisibility } = options
     const vesselDate = new Date(feature.dateTime)
     const vesselIsHidden = new Date()
     const hasBeenControlledLastFiveYears = feature.lastControlDateTime
@@ -91,10 +87,12 @@ export class VesselFeature {
 
     // TODO Properly type this const.
     const label: {
+      groupsDisplayed: Vessel.VesselGroup[]
       labelText: string | undefined
       riskFactor: any | undefined
       underCharter: any
     } = {
+      groupsDisplayed: feature.groupsDisplayed,
       labelText: undefined,
       riskFactor: undefined,
       underCharter: feature.underCharter
@@ -104,7 +102,7 @@ export class VesselFeature {
       return label
     }
 
-    if (hideVesselsAtPort && feature.isAtPort) {
+    if (options.areVesselsNotInVesselGroupsHidden && !feature.groupsDisplayed.length) {
       return label
     }
 

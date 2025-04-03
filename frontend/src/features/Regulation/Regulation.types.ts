@@ -1,5 +1,5 @@
 import type { RegulatoryZone } from './types'
-import type { GeoJSON } from 'domain/types/GeoJSON'
+import type { Feature, FeatureCollection, Polygon } from 'geojson'
 
 export namespace Regulation {
   /**
@@ -85,9 +85,6 @@ export namespace Regulation {
     topic: string
     zone: string
   }
-  export type RegulatoryZoneGeoJsonFeature = GeoJSON.Feature<RegulatoryZoneFeatureProperties, string>
-  export type RegulatoryZoneGeoJsonFeatureCollection = GeoJSON.FeatureCollection<
-    RegulatoryZoneFeatureProperties,
-    string
-  >
+  export type RegulatoryZoneGeoJsonFeature = Feature<Polygon, RegulatoryZoneFeatureProperties>
+  export type RegulatoryZoneGeoJsonFeatureCollection = FeatureCollection<Polygon, RegulatoryZoneFeatureProperties>
 }

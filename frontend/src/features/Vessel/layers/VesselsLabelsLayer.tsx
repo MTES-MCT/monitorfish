@@ -3,6 +3,7 @@ import { getLabelLineStyle } from '@features/Map/layers/styles/labelLine.style'
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { drawMovedLabelLineIfFoundAndReturnOffset } from '@features/Vessel/label.utils'
+import { getVesselFeaturesInExtent, isVesselGroupColorDefined } from '@features/Vessel/layers/utils/utils'
 import { getVesselLastPositionVisibilityDates, VesselFeature } from '@features/Vessel/types/vessel'
 import { extractVesselPropertiesFromFeature, getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -37,15 +38,14 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
   const vesselsTracksShowed = useMainAppSelector(state => state.vessel.vesselsTracksShowed)
   const areVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselsDisplayed)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
-
-  const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
+  const areVesselsNotInVesselGroupsHidden = useMainAppSelector(
+    state => state.vesselGroup.areVesselsNotInVesselGroupsHidden
+  )
+  const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
   const riskFactorShowedOnMap = useMainAppSelector(state => state.map.riskFactorShowedOnMap)
   const vesselLabel = useMainAppSelector(state => state.map.vesselLabel)
   const vesselLabelsShowedOnMap = useMainAppSelector(state => state.map.vesselLabelsShowedOnMap)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
-
-  const filters = useMainAppSelector(state => state.filter.filters)
-  const nonFilteredVesselsAreHidden = useMainAppSelector(state => state.filter.nonFilteredVesselsAreHidden)
 
   const [featuresAndLabels, setFeaturesAndLabels] = useState<
     {
@@ -155,18 +155,15 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
           key={identity.key}
           coordinates={identity.coordinates}
           featureId={featureId}
-          flagState={identity.flagState}
           identity={identity}
+          label={label}
           moveLine={moveVesselLabelLine}
           offset={offset}
           opacity={opacity}
           previewFilteredVesselsMode={previewFilteredVesselsMode}
-          riskFactor={label?.riskFactor}
           riskFactorDetailsShowed={vesselToRiskFactorDetailsShowed.get(featureId)}
-          text={label?.labelText}
           trackIsShown={trackIsShown}
           triggerShowRiskDetails={showLabelRiskFactorDetails}
-          underCharter={label?.underCharter}
           zoomHasChanged={previousMapZoom.current}
         />
       ))
@@ -181,7 +178,6 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
     vesselLabelsShowedOnMap,
     riskFactorShowedOnMap,
     vesselLabel,
-    hideVesselsAtPort,
     moveVesselLabelLine,
     previousFeaturesAndLabels,
     showLabelRiskFactorDetails,
@@ -238,6 +234,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
           'dateTime',
           'detectabilityRiskFactor',
           'flagState',
+          'groupsDisplayed',
           'impactRiskFactor',
           'internalReferenceNumber',
           'isAtPort',
@@ -251,7 +248,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
           'vesselName'
         ])
         const label = VesselFeature.getVesselFeatureLabel(vesselProperties, {
-          hideVesselsAtPort,
+          areVesselsNotInVesselGroupsHidden,
           isRiskFactorShowed: isSuperUser && riskFactorShowedOnMap,
           vesselLabel,
           vesselLabelsShowedOnMap,
@@ -320,17 +317,8 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
         return
       }
 
-      const vesselsLayer = monitorfishMap
-        .getLayers()
-        .getArray()
-        // @ts-ignore
-        ?.find(olLayer => olLayer.name === MonitorFishMap.MonitorFishLayer.VESSELS)
-        // @ts-ignore
-        ?.getSource()
-      const featuresInExtent = vesselsLayer?.getFeaturesInExtent(monitorfishMap.getView().calculateExtent()) || []
+      const featuresInExtent = getVesselFeaturesInExtent()
 
-      const filterShowed = filters.find(filter => filter.showed)
-      const isFiltered = filterShowed && nonFilteredVesselsAreHidden // && filteredVesselsFeaturesUids?.length FIXME: if filterShowed, is it really necessary to check filteredVesselsFeaturesUids ?
       let featuresRequiringLabel
       if (hideNonSelectedVessels) {
         const selectedVesselId = selectedVessel && VesselFeature.getVesselFeatureId(selectedVessel)
@@ -340,13 +328,12 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
             (!!selectedVessel && feature.getId() === selectedVesselId) ||
             showedFeaturesIdentities.find(identity => feature?.getId()?.toString()?.includes(identity))
         )
-      } else if (previewFilteredVesselsMode) {
-        featuresRequiringLabel = featuresInExtent.filter(feature => feature.get('filterPreview'))
-      } else if (isFiltered) {
-        featuresRequiringLabel = featuresInExtent.filter(feature => feature.get('isFiltered'))
       } else {
-        featuresRequiringLabel = featuresInExtent
+        featuresRequiringLabel = featuresInExtent.filter(feature =>
+          areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : feature.get('isFiltered')
+        )
       }
+
       const maxLabelsDisplayed = previewFilteredVesselsMode ? MAX_LABELS_DISPLAYED_IN_PREVIEW : MAX_LABELS_DISPLAYED
       if (featuresRequiringLabel.length < maxLabelsDisplayed) {
         addLabelToFeatures(featuresRequiringLabel)
@@ -367,8 +354,6 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
     vessels,
     selectedVessel,
     mapMovingAndZoomEvent,
-    filters,
-    nonFilteredVesselsAreHidden,
     vesselLabelsShowedOnMap,
     riskFactorShowedOnMap,
     vesselLabel,
@@ -377,9 +362,10 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
     previewFilteredVesselsMode,
     hideNonSelectedVessels,
     vesselsTracksShowed,
-    hideVesselsAtPort,
     getVectorSource,
-    areVesselsDisplayed
+    areVesselsDisplayed,
+    areVesselsNotInVesselGroupsHidden,
+    vesselGroupsIdsDisplayed
   ])
 
   useEffect(() => {

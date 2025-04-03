@@ -206,7 +206,7 @@ function UnmemoizedRegulatoryTopic({
 
 const Icons = styled.div`
   margin-left: auto;
-  margin-right: 0px;
+  margin-right: 0;
   flex-shrink: 0;
   display: flex;
   height: 36px;

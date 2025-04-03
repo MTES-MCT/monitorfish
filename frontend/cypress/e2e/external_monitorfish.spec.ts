@@ -44,8 +44,8 @@ context('External MonitorFish', () => {
     // Vessel list
     cy.get('*[data-cy="vessel-list"]').should('exist')
 
-    // filters
-    cy.get('*[data-cy="vessel-filters"]').should('exist')
+    // New features
+    cy.get('[aria-label="Nouveautés MonitorFish"]').should('exist')
 
     // No alerts
     cy.get('*[data-cy="alerts-button"]').should('not.exist')

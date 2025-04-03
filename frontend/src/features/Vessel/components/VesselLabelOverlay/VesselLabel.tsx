@@ -1,5 +1,5 @@
-import { COLORS } from '@constants/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -13,20 +13,20 @@ import { showVessel } from '../../useCases/showVessel'
 
 export function VesselLabel({
   featureId,
-  flagState,
   identity,
+  label,
   opacity,
   overlayIsPanning,
   overlayRef,
   previewFilteredVesselsMode,
-  riskFactor,
   riskFactorDetailsShowed,
   showed,
-  text,
-  triggerShowRiskDetails,
-  underCharter
+  triggerShowRiskDetails
 }) {
+  const { groupsDisplayed, labelText, riskFactor, underCharter } = label
   const dispatch = useMainAppDispatch()
+  const areVesselGroupsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselGroupsDisplayed)
+
   const [showRiskFactorDetails, setShowRiskFactorDetails] = useState(riskFactorDetailsShowed)
 
   useEffect(() => {
@@ -43,25 +43,31 @@ export function VesselLabel({
     }
   }, [showRiskFactorDetails, overlayRef])
 
-  if (!showed || (!text && !riskFactor) || !opacity) {
+  if (!showed || (!labelText && !riskFactor) || !opacity) {
     return null
   }
 
-  return previewFilteredVesselsMode ? (
-    <>
-      {text ? (
-        <ZoneText $isLittle data-cy="vessel-label-text">
-          {text}
-        </ZoneText>
-      ) : null}
-    </>
-  ) : (
+  if (previewFilteredVesselsMode) {
+    return (
+      <>
+        {labelText ? (
+          <ZoneText $isLittle data-cy="vessel-label-text">
+            {labelText}
+          </ZoneText>
+        ) : null}
+      </>
+    )
+  }
+
+  return (
     <>
       <VesselLabelOverlayElement>
         <Text>
-          {text && (
+          {labelText && (
             <>
-              {flagState ? <Flag $rel="preload" src={`flags/${flagState.toLowerCase()}.svg`} /> : null}
+              {identity.flagState ? (
+                <Flag $rel="preload" src={`flags/${identity.flagState.toLowerCase()}.svg`} />
+              ) : null}
               <ZoneText
                 data-cy="vessel-label-text"
                 onClick={() => {
@@ -70,14 +76,21 @@ export function VesselLabel({
                   }
                 }}
               >
-                {text}
+                {labelText}
+                {areVesselGroupsDisplayed && groupsDisplayed.length > 0 && (
+                  <VesselGroups>
+                    {groupsDisplayed.map(vesselGroup => (
+                      <VesselGroup key={vesselGroup.id} $color={vesselGroup.color} title={vesselGroup.name} />
+                    ))}
+                  </VesselGroups>
+                )}
               </ZoneText>
             </>
           )}
         </Text>
         {riskFactor?.globalRisk && (
           <RiskFactor
-            $hasText={text}
+            $hasText={labelText}
             color={getRiskFactorColor(riskFactor?.globalRisk)}
             data-cy="vessel-label-risk-factor"
             onClick={() => {
@@ -125,7 +138,7 @@ export function VesselLabel({
           </RiskFactorDetail>
         </RiskFactorDetails>
       )}
-      {underCharter && !showRiskFactorDetails && <UnderCharter $hasBoxShadow data-cy={`${text}-under-charter`} />}
+      {underCharter && !showRiskFactorDetails && <UnderCharter $hasBoxShadow data-cy={`${labelText}-under-charter`} />}
     </>
   )
 }
@@ -136,16 +149,31 @@ const UnderCharter = styled.span<{
   border-radius: 5px;
   width: 10px;
   height: 10px;
-  background: ${COLORS.mediumSeaGreen} 0% 0% no-repeat padding-box;
-  ${p => (p.$hasBoxShadow ? `box-shadow: 0px 2px 3px ${COLORS.slateGray}` : null)};
+  background: ${p => p.theme.color.mediumSeaGreen} 0% 0% no-repeat padding-box;
+  ${p => (p.$hasBoxShadow ? `box-shadow: 0px 2px 3px ${p.theme.color.slateGray}` : null)};
   margin-left: -5px;
   margin-top: -5px;
   margin-right: 2px;
   display: inline-block;
 `
 
+const VesselGroups = styled.span`
+  margin-left: 2px;
+`
+
+const VesselGroup = styled.span<{
+  $color?: string
+}>`
+  border-radius: 5px;
+  width: 10px;
+  height: 10px;
+  background: ${p => p.$color};
+  margin-left: 4px;
+  display: inline-block;
+`
+
 const Text = styled.div`
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   border-radius: 1px;
 `
 
@@ -159,7 +187,7 @@ const UnderCharterInfo = styled.div`
   text-align: left;
   font-size: 12px;
   font-weight: 500;
-  border-bottom: 2px solid ${COLORS.lightGray};
+  border-bottom: 2px solid ${p => p.theme.color.lightGray};
 `
 
 const UnderCharterText = styled.span`
@@ -171,7 +199,7 @@ const RiskFactorDetails = styled.div<{
   $underCharter: boolean
 }>`
   box-shadow: 0px 2px 3px ${p => p.theme.color.charcoalShadow};
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   line-height: 18px;
   height: ${p => (p.$underCharter ? 94 : 72)}px;
   margin-left: 2px;
@@ -196,7 +224,7 @@ const RiskFactorBox = styled.div`
   font-weight: 500;
   display: inline-block;
   user-select: none;
-  color: ${COLORS.white};
+  color: ${p => p.theme.color.white};
   background: ${p => p.color};
   line-height: 16px;
   text-align: center;
@@ -233,7 +261,7 @@ const ZoneText = styled.span<{
   font-weight: 500;
   display: inline-block;
   user-select: none;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   line-height: ${p => (p.$isLittle ? 35 : 17)}px;
   cursor: pointer;
   margin-left: 2px;
@@ -252,7 +280,7 @@ const RiskFactor = styled.span<{
   font-weight: 500;
   display: inline-block;
   user-select: none;
-  color: ${COLORS.white};
+  color: ${p => p.theme.color.white};
   background: ${p => p.color};
   line-height: 17px;
   cursor: pointer;

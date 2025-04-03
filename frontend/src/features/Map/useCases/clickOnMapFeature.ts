@@ -13,6 +13,7 @@ import { MonitorFishMap } from '../Map.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppDispatch } from '@store'
 import type { HybridAppDispatch, HybridAppThunk } from '@store/types'
+import type { Point, Feature as GeoJSONFeature } from 'geojson'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 
@@ -45,7 +46,7 @@ export const clickOnMapFeature =
       const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature as Feature<Geometry>, {
         featureProjection: OPENLAYERS_PROJECTION
       })
-      dispatch(missionFormActions.setSelectedMissionGeoJSON(featureGeoJSON))
+      dispatch(missionFormActions.setSelectedMissionGeoJSON(featureGeoJSON as GeoJSONFeature<Point>))
 
       return
     }
@@ -57,7 +58,7 @@ export const clickOnMapFeature =
       const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature as Feature<Geometry>, {
         featureProjection: OPENLAYERS_PROJECTION
       })
-      dispatch(missionFormActions.setSelectedMissionActionGeoJSON(featureGeoJSON))
+      dispatch(missionFormActions.setSelectedMissionActionGeoJSON(featureGeoJSON as GeoJSONFeature<Point>))
 
       return
     }

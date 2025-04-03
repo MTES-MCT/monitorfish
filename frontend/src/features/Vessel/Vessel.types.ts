@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
-import type { VesselLastPositionLightSchema } from '@features/Vessel/schemas/VesselLastPositionLightSchema'
 import type {
   DeclaredLogbookSpeciesSchema,
+  VesselGroupSchema,
   VesselLastPositionSchema
 } from '@features/Vessel/schemas/VesselLastPositionSchema'
 import type { VesselSchema } from '@features/Vessel/schemas/VesselSchema'
@@ -83,8 +83,8 @@ export namespace Vessel {
 
   export type DeclaredLogbookSpecies = z.infer<typeof DeclaredLogbookSpeciesSchema>
 
+  export type VesselGroup = z.infer<typeof VesselGroupSchema>
   export type VesselLastPosition = z.infer<typeof VesselLastPositionSchema>
-  export type VesselLightLastPosition = z.infer<typeof VesselLastPositionLightSchema>
 
   export type VesselPosition = {
     course: number
@@ -147,7 +147,12 @@ export namespace Vessel {
     }
   }
 
-  export type VesselLastPositionFeature = Feature<Point> & Vessel.VesselLastPosition
+  export type VesselLastPositionFeature = Feature<Point> &
+    Vessel.VesselLastPosition & {
+      color: string | undefined
+      groupsDisplayed: VesselGroup[]
+      numberOfGroupsHidden: number
+    }
 
   // ---------------------------------------------------------------------------
   // API

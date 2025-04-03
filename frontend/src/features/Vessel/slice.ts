@@ -1,16 +1,14 @@
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
-import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselListV2/constants'
+import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselList/constants'
 import { atLeastOneVesselSelected, VesselFeature, VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { createEntityAdapter, createSlice, type EntityState, type PayloadAction } from '@reduxjs/toolkit'
 
 import { ReportingType, ReportingTypeCharacteristics } from '../Reporting/types'
 
-import type { VesselListFilter } from '@features/Vessel/components/VesselListV2/types'
+import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
 import type { ShowedVesselTrack, TrackRequest } from '@features/Vessel/types/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
-
-const NOT_FOUND = -1
 
 export const vesselsAdapter = createEntityAdapter({
   selectId: (vessel: Vessel.VesselLastPosition) => vessel.vesselFeatureId,
@@ -32,8 +30,6 @@ export type VesselState = {
   selectedVesselSidebarTab: VesselSidebarTab
   selectedVesselTrackRequest: TrackRequest | null
   tripMessagesLastToFormerDEPDateTimes: any[]
-  uniqueVesselsDistricts: any[]
-  uniqueVesselsSpecies: any[]
   vesselSidebarIsOpen: boolean
   vesselTrackExtent: any | null
   vessels: EntityState<Vessel.VesselLastPosition, Vessel.VesselFeatureId>
@@ -54,8 +50,6 @@ const INITIAL_STATE: VesselState = {
   selectedVesselSidebarTab: VesselSidebarTab.SUMMARY,
   selectedVesselTrackRequest: null,
   tripMessagesLastToFormerDEPDateTimes: [],
-  uniqueVesselsDistricts: [],
-  uniqueVesselsSpecies: [],
   vessels: vesselsAdapter.getInitialState(),
   vesselsEstimatedPositions: [],
   vesselSidebarIsOpen: false,
@@ -406,25 +400,6 @@ const vesselSlice = createSlice({
     },
 
     /**
-     * Set  previewed vessel features
-     */
-    setPreviewFilteredVesselsFeatures(state, action: PayloadAction<string[]>) {
-      const previewFilteredVesselsFeaturesUids = action.payload
-      const vesselIds = state.vessels.ids
-
-      // Update only the vessels that match the filtered IDs
-      vesselsAdapter.updateMany(
-        state.vessels,
-        vesselIds.map(vesselId => ({
-          changes: {
-            filterPreview: previewFilteredVesselsFeaturesUids.indexOf(vesselId) !== NOT_FOUND ? 1 : 0
-          },
-          id: vesselId
-        }))
-      )
-    },
-
-    /**
      * Set the selected vessel and positions
      */
     setSelectedVessel(
@@ -467,11 +442,6 @@ const vesselSlice = createSlice({
 
     setVesselsEstimatedPositions(state, action) {
       state.vesselsEstimatedPositions = action.payload
-    },
-
-    setVesselsSpeciesAndDistricts(state, action) {
-      state.uniqueVesselsSpecies = action.payload.species
-      state.uniqueVesselsDistricts = action.payload.districts
     },
 
     /**
@@ -593,12 +563,10 @@ export const {
   setFilteredVesselsFeatures,
   setHideNonSelectedVessels,
   setIsFocusedOnVesselSearch,
-  setPreviewFilteredVesselsFeatures,
   setSelectedVessel,
   setSelectedVesselCustomTrackRequest,
   setSelectedVesselSidebarTab,
   setVessels,
-  setVesselsSpeciesAndDistricts,
   setVesselTrackExtent,
   updateSelectedVesselPositions,
   updateVesselTrackAsHidden,

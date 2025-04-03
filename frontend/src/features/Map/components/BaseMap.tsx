@@ -5,6 +5,7 @@ import { platformModifierKeyOnly } from 'ol/events/condition'
 import OpenLayerMap from 'ol/Map'
 import { Children, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+import { useThrottledCallback } from 'use-debounce'
 
 import { MapAttributionsBox } from './MapAttributionsBox'
 import { MapCoordinatesBox } from './MapCoordinatesBox'
@@ -24,7 +25,6 @@ import type { PropsWithChildren } from 'react'
 
 let lastEventForPointerMove
 let timeoutForPointerMove
-let timeoutForMove
 
 /**
  * BaseMap forwards map as props to children
@@ -113,20 +113,9 @@ export function BaseMap({
     [handlePointerMove, setCurrentFeature]
   )
 
-  const throttleAndHandleMovingAndZoom = useCallback(
-    (openLayerMap: OpenLayerMap) => {
-      if (timeoutForMove) {
-        return
-      }
-
-      timeoutForMove = setTimeout(() => {
-        timeoutForMove = null
-        if (handleMovingAndZoom) {
-          handleMovingAndZoom(openLayerMap)
-        }
-      }, 100)
-    },
-    [handleMovingAndZoom]
+  const throttleAndHandleMovingAndZoom = useThrottledCallback(
+    (openLayerMap: OpenLayerMap) => handleMovingAndZoom?.(openLayerMap),
+    100
   )
 
   const throttleAndHandlePointerMove = useCallback(
@@ -158,6 +147,7 @@ export function BaseMap({
     monitorfishMap.on('pointermove', event => throttleAndHandlePointerMove(event, monitorfishMap))
     monitorfishMap.on('movestart', () => throttleAndHandleMovingAndZoom(monitorfishMap))
     monitorfishMap.on('moveend', () => throttleAndHandleMovingAndZoom(monitorfishMap))
+    monitorfishMap.on('loadend', () => throttleAndHandleMovingAndZoom(monitorfishMap))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

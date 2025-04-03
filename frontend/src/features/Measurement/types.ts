@@ -1,9 +1,9 @@
-import type { GeoJSON as GeoJSONType } from '../../domain/types/GeoJSON'
+import type { Geometry } from 'geojson'
 import type { Coordinate } from 'ol/coordinate'
 
 export type DrawedMeasurement = {
   coordinates: Coordinate
-  geometry: GeoJSONType.Geometry
+  geometry: Geometry
   id: string
   measurement: string
 }

@@ -13,7 +13,6 @@ const lastSearchedVesselsLocalStorageKey = 'lastSearchedVessels'
 
 // TODO Properly type this redux state.
 export type GlobalState = {
-  blockVesselsUpdate: boolean
   error: any
   // TODO Rename this prop.
   healthcheckTextWarning: string[]
@@ -28,10 +27,8 @@ export type GlobalState = {
   rightMapBoxOpened: MapBox | undefined
   rightMenuIsOpen: boolean
   userType: string
-  vesselListModalIsOpen: boolean
 }
 const INITIAL_STATE: GlobalState = {
-  blockVesselsUpdate: false,
   error: null,
   healthcheckTextWarning: [],
   isBackoffice: false,
@@ -41,8 +38,7 @@ const INITIAL_STATE: GlobalState = {
   previewFilteredVesselsMode: undefined,
   rightMapBoxOpened: undefined,
   rightMenuIsOpen: false,
-  userType: getLocalStorageState(UserType.SIP, userTypeLocalStorageKey),
-  vesselListModalIsOpen: false
+  userType: getLocalStorageState(UserType.SIP, userTypeLocalStorageKey)
 }
 
 // TODO Properly type this redux reducers.
@@ -87,27 +83,12 @@ export const globalSlice = createSlice({
       state.rightMenuIsOpen = true
     },
 
-    openVesselListModal(state) {
-      state.vesselListModalIsOpen = true
-      state.rightMapBoxOpened = undefined
-    },
-
     removeError(state) {
       state.error = null
     },
 
     resetIsUpdatingVessels(state) {
       state.isUpdatingVessels = false
-    },
-
-    /**
-     * Block or not the vessel update cron - The vessel update is blocked when the
-     * vessel list table is opened or when vessels filters are previewed
-     * @param {Object=} state
-     * @param {{payload: boolean}} action - blocked when true
-     */
-    setBlockVesselsUpdate(state, action) {
-      state.blockVesselsUpdate = action.payload
     },
 
     setError(state, action: PayloadAction<any>) {
@@ -146,7 +127,6 @@ export const globalSlice = createSlice({
      */
     setPreviewFilteredVesselsMode(state, action: PayloadAction<boolean>) {
       state.previewFilteredVesselsMode = action.payload
-      state.blockVesselsUpdate = action.payload
     },
 
     /**
@@ -179,7 +159,6 @@ export const {
   expandRightMenu,
   removeError,
   resetIsUpdatingVessels,
-  setBlockVesselsUpdate,
   setError,
   setHealthcheckTextWarning,
   setIsBackoffice,

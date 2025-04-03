@@ -14,9 +14,10 @@ function UnmemoizedVesselEstimatedPositionLayer() {
   const vesselsTracksShowed = useMainAppSelector(state => state.vessel.vesselsTracksShowed)
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
-  const nonFilteredVesselsAreHidden = useMainAppSelector(state => state.filter.nonFilteredVesselsAreHidden)
+  const areVesselsNotInVesselGroupsHidden = useMainAppSelector(
+    state => state.vesselGroup.areVesselsNotInVesselGroupsHidden
+  )
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
-  const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
   const showingVesselsEstimatedPositions = useMainAppSelector(state => state.map.showingVesselsEstimatedPositions)
@@ -39,9 +40,8 @@ function UnmemoizedVesselEstimatedPositionLayer() {
     selectedVesselIdentity,
     showingVesselsEstimatedPositions,
     previewFilteredVesselsMode,
-    nonFilteredVesselsAreHidden,
+    areVesselsNotInVesselGroupsHidden,
     hideNonSelectedVessels,
-    hideVesselsAtPort,
     vesselsLastPositionVisibility
   ])
 

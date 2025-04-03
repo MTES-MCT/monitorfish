@@ -1,4 +1,3 @@
-import { COLORS } from '@constants/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
@@ -6,39 +5,33 @@ import { getVesselLastPositionVisibilityDates, VesselFeature } from '@features/V
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { memo, useEffect } from 'react'
 
-import { theme } from '../../../../ui/theme'
-import { booleanToInt, customHexToRGB } from '../../../../utils'
+import { booleanToInt } from '../../../../utils'
 import { getWebGLVesselStyleVariables } from '../style'
 
 function UnmemoizedVesselsLayer() {
   const areVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselsDisplayed)
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
-  const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
-
+  const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
+  const areVesselGroupsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselGroupsDisplayed)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
-  const filters = useMainAppSelector(state => state.filter.filters)
-  const nonFilteredVesselsAreHidden = useMainAppSelector(state => state.filter.nonFilteredVesselsAreHidden)
-  const showedFilter = filters?.find(filter => filter.showed)
+  const areVesselsNotInVesselGroupsHidden = useMainAppSelector(
+    state => state.vesselGroup.areVesselsNotInVesselGroupsHidden
+  )
 
   useEffect(() => {
     // styles derived from state
     const isLight = VesselFeature.iconIsLight(selectedBaseLayer)
     const { vesselIsHidden, vesselIsOpacityReduced } =
       getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
-    const filterColorRGBArray = customHexToRGB(
-      !!showedFilter?.color || isLight ? theme.color.lightGray : COLORS.charcoal
-    )
     const initStyles = {
-      filterColorBlue: filterColorRGBArray[2],
-      filterColorGreen: filterColorRGBArray[1],
-      filterColorRed: filterColorRGBArray[0],
+      areVesselGroupsDisplayed,
+      areVesselsNotInVesselGroupsHidden,
       hideNonSelectedVessels: false,
-      hideVesselsAtPort: false,
       isLight,
-      nonFilteredVesselsAreHidden,
       previewFilteredVesselsMode,
+      vesselGroupsIdsDisplayed,
       vesselIsHiddenTimeThreshold: vesselIsHidden.getTime(),
       vesselIsOpacityReducedTimeThreshold: vesselIsOpacityReduced.getTime()
     }
@@ -74,9 +67,6 @@ function UnmemoizedVesselsLayer() {
   }, [areVesselsDisplayed])
 
   // styles
-  useEffect(() => {
-    VESSELS_VECTOR_LAYER.updateStyleVariables({ hideVesselsAtPort: booleanToInt(hideVesselsAtPort) })
-  }, [hideVesselsAtPort])
 
   useEffect(() => {
     VESSELS_VECTOR_LAYER.updateStyleVariables({ hideNonSelectedVessels: booleanToInt(hideNonSelectedVessels) })
@@ -85,6 +75,10 @@ function UnmemoizedVesselsLayer() {
   useEffect(() => {
     VESSELS_VECTOR_LAYER.updateStyleVariables({ previewFilteredVesselsMode: booleanToInt(previewFilteredVesselsMode) })
   }, [previewFilteredVesselsMode])
+
+  useEffect(() => {
+    VESSELS_VECTOR_LAYER.updateStyleVariables({ areVesselGroupsDisplayed: booleanToInt(areVesselGroupsDisplayed) })
+  }, [areVesselGroupsDisplayed])
 
   useEffect(() => {
     const isLight = VesselFeature.iconIsLight(selectedBaseLayer)

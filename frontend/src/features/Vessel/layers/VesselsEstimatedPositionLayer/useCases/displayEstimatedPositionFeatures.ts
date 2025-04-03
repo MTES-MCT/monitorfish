@@ -11,14 +11,13 @@ import type { MainAppThunk } from '@store'
  */
 export const displayEstimatedPositionFeatures = (): MainAppThunk => (_, getState) => {
   const {
-    filter: { nonFilteredVesselsAreHidden },
-    global: { previewFilteredVesselsMode },
-    map: { hideVesselsAtPort, selectedBaseLayer, showingVesselsEstimatedPositions, vesselsLastPositionVisibility },
+    map: { selectedBaseLayer, showingVesselsEstimatedPositions, vesselsLastPositionVisibility },
     vessel: { hideNonSelectedVessels, selectedVesselIdentity, vessels: vesselsSelector, vesselsTracksShowed }
   } = getState()
   const vessels = vesselSelectors.selectAll(vesselsSelector)
+  const filteredVessel = vessels.filter(vessel => vessel.isFiltered)
 
-  if (!vessels || !showingVesselsEstimatedPositions) {
+  if (!filteredVessel || !showingVesselsEstimatedPositions) {
     VESSELS_ESTIMATED_POSITION_VECTOR_SOURCE.clear(true)
 
     return
@@ -27,14 +26,11 @@ export const displayEstimatedPositionFeatures = (): MainAppThunk => (_, getState
 
   const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
-  const estimatedCurrentPositionsFeatures = vessels
+  const estimatedCurrentPositionsFeatures = filteredVessel
     .map(vessel =>
       createEstimatedTrackFeatures(vessel, {
         hideNonSelectedVessels,
-        hideVesselsAtPort,
         isLight,
-        nonFilteredVesselsAreHidden,
-        previewFilteredVesselsMode,
         selectedVesselIdentity,
         vesselIsHidden,
         vesselIsOpacityReduced,
@@ -52,23 +48,9 @@ export const displayEstimatedPositionFeatures = (): MainAppThunk => (_, getState
  * Creates estimated track features for a vessel based on visibility rules.
  */
 function createEstimatedTrackFeatures(vessel, options) {
-  const { filterPreview, isAtPort, isFiltered } = vessel
-  const {
-    hideNonSelectedVessels,
-    hideVesselsAtPort,
-    nonFilteredVesselsAreHidden,
-    previewFilteredVesselsMode,
-    selectedVesselIdentity,
-    vesselsTracksShowed
-  } = options
+  const { hideNonSelectedVessels, selectedVesselIdentity, vesselsTracksShowed } = options
 
-  if (nonFilteredVesselsAreHidden && !isFiltered) {
-    return undefined
-  }
-  if (previewFilteredVesselsMode && !filterPreview) {
-    return undefined
-  }
-  if (hideVesselsAtPort && isAtPort) {
+  if (!vessel.isFiltered) {
     return undefined
   }
 

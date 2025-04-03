@@ -124,9 +124,7 @@ const RegulatoryLayersList = styled.ul<{
   $advancedSearchIsOpen: boolean
 }>`
   background-color: ${p => p.theme.color.white};
-  border-radius: 0;
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
+  border-radius: 0 0 2px 2px;
   color: ${p => p.theme.color.gunMetal};
   margin: 0;
   max-height: ${p => (p.$advancedSearchIsOpen ? 'calc(70vh - 235px)' : '70vh')};

@@ -87,7 +87,6 @@ export namespace MonitorFishMap {
     VESSEL_ESTIMATED_POSITION = 'VESSEL_ESTIMATED_POSITION',
     VESSEL_INFRACTION_SUSPICION = 'VESSEL_INFRACTION_SUSPICION',
     VESSEL_TRACK = 'VESSEL_TRACK',
-    brexit = 'brexit',
     cgpm_areas = 'cgpm_areas',
     cgpm_statistical_rectangles_areas = 'cgpm_statistical_rectangles_areas',
     cormoran = 'cormoran',

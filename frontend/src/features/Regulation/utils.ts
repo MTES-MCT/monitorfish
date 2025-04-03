@@ -30,7 +30,7 @@ export const mapToRegulatoryZone = (
     fishingPeriod: parseFishingPeriod(feature.properties.fishing_period),
     gearRegulation: parseGearRegulation(feature.properties.gears),
     geometry: feature.geometry ?? undefined,
-    id: feature.properties.id ?? feature.id?.split('.')[1],
+    id: feature.properties.id ?? feature.id?.toString()?.split('.')[1],
     lawType: feature.properties.law_type,
     nextId: feature.properties.next_id,
     otherInfo: feature.properties.other_info,

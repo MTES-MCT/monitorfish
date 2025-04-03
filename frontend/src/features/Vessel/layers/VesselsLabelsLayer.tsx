@@ -3,7 +3,11 @@ import { getLabelLineStyle } from '@features/Map/layers/styles/labelLine.style'
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { drawMovedLabelLineIfFoundAndReturnOffset } from '@features/Vessel/label.utils'
-import { getVesselFeaturesInExtent, isVesselGroupColorDefined } from '@features/Vessel/layers/utils/utils'
+import {
+  filterNonSelectedVessels,
+  getVesselFeaturesInExtent,
+  isVesselGroupColorDefined
+} from '@features/Vessel/layers/utils/utils'
 import { getVesselLastPositionVisibilityDates, VesselFeature } from '@features/Vessel/types/vessel'
 import { extractVesselPropertiesFromFeature, getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -33,8 +37,8 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
 
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
-  const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
-
+  const numberOfVessels = useMainAppSelector(state => vesselSelectors.selectTotal(state.vessel.vessels))
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const vesselsTracksShowed = useMainAppSelector(state => state.vessel.vesselsTracksShowed)
   const areVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselsDisplayed)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
@@ -46,6 +50,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
   const vesselLabel = useMainAppSelector(state => state.map.vesselLabel)
   const vesselLabelsShowedOnMap = useMainAppSelector(state => state.map.vesselLabelsShowedOnMap)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
+  const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
   const [featuresAndLabels, setFeaturesAndLabels] = useState<
     {
@@ -185,9 +190,6 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
   ])
 
   useEffect(() => {
-    const { vesselIsHidden, vesselIsOpacityReduced } =
-      getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
-
     const vesselsLayer = monitorfishMap
       .getLayers()
       .getArray()
@@ -212,17 +214,15 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
         feature.set(VesselLabelLine.opacityProperty, opacity)
       }
     })
-  }, [vesselsLastPositionVisibility])
+  }, [vesselIsHidden, vesselIsOpacityReduced])
 
   useEffect(() => {
-    if (isThrottled.current || !vessels) {
+    if (isThrottled.current || !numberOfVessels) {
       return
     }
 
     // functions definition
     function addLabelToFeatures(features) {
-      const { vesselIsHidden, vesselIsOpacityReduced } =
-        getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
       const showedTracksVesselsIdentities = Object.keys(vesselsTracksShowed)
       if (selectedVessel) {
         showedTracksVesselsIdentities.push(getVesselCompositeIdentifier(selectedVessel))
@@ -318,25 +318,17 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
       }
 
       const featuresInExtent = getVesselFeaturesInExtent()
-
-      let featuresRequiringLabel
-      if (hideNonSelectedVessels) {
-        const selectedVesselId = selectedVessel && VesselFeature.getVesselFeatureId(selectedVessel)
-        const showedFeaturesIdentities = Object.keys(vesselsTracksShowed)
-        featuresRequiringLabel = featuresInExtent.filter(
+        .filter(
           feature =>
-            (!!selectedVessel && feature.getId() === selectedVesselId) ||
-            showedFeaturesIdentities.find(identity => feature?.getId()?.toString()?.includes(identity))
+            feature.get('isFiltered') &&
+            (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true) &&
+            VesselFeature.getVesselOpacity(feature.get('dateTime'), vesselIsHidden, vesselIsOpacityReduced) !== 0
         )
-      } else {
-        featuresRequiringLabel = featuresInExtent.filter(feature =>
-          areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : feature.get('isFiltered')
-        )
-      }
+        .filter(filterNonSelectedVessels(vesselsTracksShowed, hideNonSelectedVessels, selectedVesselIdentity))
 
       const maxLabelsDisplayed = previewFilteredVesselsMode ? MAX_LABELS_DISPLAYED_IN_PREVIEW : MAX_LABELS_DISPLAYED
-      if (featuresRequiringLabel.length < maxLabelsDisplayed) {
-        addLabelToFeatures(featuresRequiringLabel)
+      if (featuresInExtent.length < maxLabelsDisplayed) {
+        addLabelToFeatures(featuresInExtent)
       } else {
         setFeaturesAndLabels([])
         getVectorSource().clear()
@@ -351,14 +343,17 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
     }, throttleDuration)
   }, [
     isSuperUser,
-    vessels,
+    numberOfVessels,
     selectedVessel,
+    selectedVesselIdentity,
+    vesselIsHidden,
+    vesselsLastPositionVisibility,
+    vesselIsOpacityReduced,
     mapMovingAndZoomEvent,
     vesselLabelsShowedOnMap,
     riskFactorShowedOnMap,
     vesselLabel,
     vesselToCoordinates,
-    vesselsLastPositionVisibility,
     previewFilteredVesselsMode,
     hideNonSelectedVessels,
     vesselsTracksShowed,

@@ -73,7 +73,7 @@ class GetLastPositions(
             val hasRiskFactorMatch =
                 filters.riskFactors.isEmpty() ||
                     filters.riskFactors.any { riskFactor ->
-                        lastPosition.riskFactor in riskFactor.toDouble() ..< (riskFactor + 1).toDouble()
+                        lastPosition.riskFactor in riskFactor.toDouble()..<(riskFactor + 1).toDouble()
                     }
 
             val vesselIsHidden =

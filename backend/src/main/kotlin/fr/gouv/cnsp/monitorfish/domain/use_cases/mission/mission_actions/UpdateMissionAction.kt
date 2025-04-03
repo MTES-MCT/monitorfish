@@ -16,18 +16,22 @@ class UpdateMissionAction(
         actionId: Int,
         action: MissionAction,
     ): MissionAction {
+        val previousMissionAction = missionActionsRepository.findById(actionId)
+
         logger.info("Updating mission action $actionId")
         action.verify()
 
         // We store the `storedValue` of the enum and not the enum uppercase value
         val facade = getMissionActionFacade.execute(action)?.toString()
 
-        val actionWithId =
+        val actionWithFixedFieldsAndId =
             action.copy(
+                actionEndDatetimeUtc = previousMissionAction.actionEndDatetimeUtc,
+                observationsByUnit = previousMissionAction.observationsByUnit,
                 id = actionId,
                 facade = facade,
             )
 
-        return missionActionsRepository.save(actionWithId)
+        return missionActionsRepository.save(actionWithFixedFieldsAndId)
     }
 }

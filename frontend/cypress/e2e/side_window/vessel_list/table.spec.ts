@@ -9,7 +9,7 @@ context('Side Window > Vessel List > Table', () => {
     cy.getDataCy('side-window-menu-vessel-list').click()
 
     cy.fill('Nationalités', ['Espagne', 'France'])
-    cy.getDataCy('vessel-list-length').contains('1002 navires équipés VMS')
+    cy.getDataCy('vessel-list-length').contains('841 navires équipés VMS')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 2)
 
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
@@ -28,7 +28,7 @@ context('Side Window > Vessel List > Table', () => {
     cy.getDataCy('vessel-list-length').contains('1 navire équipé VMS')
     cy.get('.Table-SimpleTable tr').should('have.length', 2)
 
-    cy.get('.Component-SingleTag').should('have.length', 9)
+    cy.get('.Component-SingleTag').should('have.length', 10)
 
     /**
      * Open a row
@@ -70,13 +70,8 @@ context('Side Window > Vessel List > Table', () => {
     cy.wait(250)
     cy.getDataCy('side-window-menu-vessel-list').click()
 
-    /**
-     * /!\ We need to apply a first filter to display the vessels in the table.
-     * This is to ensure the filter to be backward compatible
-     */
-
     cy.fill('Nationalités', ['Espagne', 'France'])
-    cy.getDataCy('vessel-list-length').contains('1002 navires équipés VMS')
+    cy.getDataCy('vessel-list-length').contains('841 navires équipés VMS')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 2)
 
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
@@ -95,7 +90,7 @@ context('Side Window > Vessel List > Table', () => {
     cy.getDataCy('vessel-list-length').contains('1 navire équipé VMS')
     cy.get('.Table-SimpleTable tr').should('have.length', 2)
 
-    cy.get('.Component-SingleTag').should('have.length', 9)
+    cy.get('.Component-SingleTag').should('have.length', 10)
 
     /**
      * Open a row

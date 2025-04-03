@@ -1,4 +1,5 @@
 import { InteractionListener } from '@features/Map/constants'
+import { MonitorFishMap } from '@features/Map/Map.types'
 import { filterVessels } from '@features/Vessel/useCases/VesselListV2/filterVessels'
 
 import type { ZoneFilter } from '@features/Vessel/components/VesselList/types'
@@ -10,14 +11,14 @@ export const updateCustomZoneAndFilterVessels = (): MainAppThunk => async (dispa
   const { drawedGeometry, listener } = getState().draw
 
   if (listener === InteractionListener.VESSELS_LIST && !!drawedGeometry) {
-    const previousZonesWithoutCustomZone = zones.filter(zone => zone.value !== 'custom')
+    const previousZonesWithoutCustomZone = zones.filter(zone => zone.value !== MonitorFishMap.MonitorFishLayer.CUSTOM)
 
     const nextZones = [
       ...previousZonesWithoutCustomZone,
       {
         feature: drawedGeometry as MultiPolygon,
         label: 'Zone de filtre manuelle',
-        value: 'custom' // TODO Rename to LayerType.CUSTOM
+        value: MonitorFishMap.MonitorFishLayer.CUSTOM
       }
     ]
     dispatch(filterVessels({ zones: nextZones }))

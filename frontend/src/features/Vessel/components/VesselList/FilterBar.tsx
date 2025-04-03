@@ -1,6 +1,7 @@
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
 import { InteractionListener } from '@features/Map/constants'
+import { MonitorFishMap } from '@features/Map/Map.types'
 import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES, BLUEFIN_TUNA_SPECY_CODE } from '@features/PriorNotification/constants'
 import { VesselLocation } from '@features/Vessel/types/vessel'
 import { filterVessels } from '@features/Vessel/useCases/VesselListV2/filterVessels'
@@ -80,8 +81,10 @@ export function FilterBar() {
   }
 
   const updateNonCustomZones = async (nextZonesNames: string[] | undefined) => {
-    const nextZonesNamesWithCustomZone = listFilterValues.zones?.some(zone => zone.value === 'custom')
-      ? nextZonesNames?.concat('custom')
+    const nextZonesNamesWithCustomZone = listFilterValues.zones?.some(
+      zone => zone.value === MonitorFishMap.MonitorFishLayer.CUSTOM
+    )
+      ? nextZonesNames?.concat(MonitorFishMap.MonitorFishLayer.CUSTOM)
       : nextZonesNames
 
     updateZones(nextZonesNamesWithCustomZone)
@@ -90,7 +93,11 @@ export function FilterBar() {
   const updateCustomZones = async (checked: boolean | undefined) => {
     const zones = listFilterValues.zones?.map(zone => zone.value) ?? []
 
-    updateZones(checked ? zones.concat('custom') : zones.filter(zone => zone === 'custom'))
+    updateZones(
+      checked
+        ? zones.concat(MonitorFishMap.MonitorFishLayer.CUSTOM)
+        : zones.filter(zone => zone === MonitorFishMap.MonitorFishLayer.CUSTOM)
+    )
   }
 
   const updateLastControlPeriod = (nextLastControlPeriod: LastControlPeriod | undefined) => {
@@ -143,7 +150,7 @@ export function FilterBar() {
   const renderMultiCascaderCustomZoneFooter = () => (
     <MultiCascaderCustomZone>
       <Checkbox
-        checked={listFilterValues.zones?.some(zone => zone.value === 'custom')}
+        checked={listFilterValues.zones?.some(zone => zone.value === MonitorFishMap.MonitorFishLayer.CUSTOM)}
         inline
         label="Filtrer avec une zone dessinée sur la carte"
         name="custom_zone"

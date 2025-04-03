@@ -11,7 +11,6 @@ import { getWebGLVesselStyleVariables } from '../style'
 function UnmemoizedVesselsLayer() {
   const areVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselsDisplayed)
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
-  const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
   const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
@@ -29,7 +28,6 @@ function UnmemoizedVesselsLayer() {
     const initStyles = {
       areVesselsNotInVesselGroupsHidden,
       hideNonSelectedVessels: false,
-      hideVesselsAtPort: false,
       isLight,
       previewFilteredVesselsMode,
       vesselGroupsIdsDisplayed,
@@ -68,9 +66,6 @@ function UnmemoizedVesselsLayer() {
   }, [areVesselsDisplayed])
 
   // styles
-  useEffect(() => {
-    VESSELS_VECTOR_LAYER.updateStyleVariables({ hideVesselsAtPort: booleanToInt(hideVesselsAtPort) })
-  }, [hideVesselsAtPort])
 
   useEffect(() => {
     VESSELS_VECTOR_LAYER.updateStyleVariables({ hideNonSelectedVessels: booleanToInt(hideNonSelectedVessels) })

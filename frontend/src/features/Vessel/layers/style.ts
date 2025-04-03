@@ -1,4 +1,4 @@
-import { featureHas, featureHasNot, featurePropertyIsNotEmpty, stateIs } from '@features/Map/layers/styles/utils/webgl'
+import { featureHas, featurePropertyIsNotEmpty, stateIs } from '@features/Map/layers/styles/utils/webgl'
 import {
   VESSEL_ALERT_AND_BEACON_MALFUNCTION,
   VESSEL_ALERT_STYLE,
@@ -15,15 +15,6 @@ import { theme } from '../../../ui/theme'
 import { booleanToInt } from '../../../utils'
 
 import type { WebGLStyle } from 'ol/style/webgl'
-
-const hideVesselsAtPortCondition = [
-  'case',
-  // if hideVesselsAtPort...
-  stateIs('hideVesselsAtPort'),
-  // ... hide vessels atPort
-  featureHasNot('isAtPort'),
-  true
-]
 
 const hideNonSelectedVesselsCondition = [
   '!',
@@ -69,7 +60,6 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
     hideNonSelectedVesselsCondition,
     hideDeprecatedPositionsCondition,
     featureHas('isFiltered'),
-    hideVesselsAtPortCondition,
     vesselsGroupsCondition
   ]
 
@@ -103,7 +93,6 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
 export const getWebGLVesselStyleVariables = ({
   areVesselsNotInVesselGroupsHidden,
   hideNonSelectedVessels,
-  hideVesselsAtPort,
   isLight,
   previewFilteredVesselsMode,
   vesselGroupsIdsDisplayed,
@@ -112,7 +101,6 @@ export const getWebGLVesselStyleVariables = ({
 }) => ({
   areVesselsNotInVesselGroupsHidden: booleanToInt(areVesselsNotInVesselGroupsHidden),
   hideNonSelectedVessels: booleanToInt(hideNonSelectedVessels),
-  hideVesselsAtPort: booleanToInt(hideVesselsAtPort),
   isFiltered: 0,
   isLight: booleanToInt(isLight),
   previewFilteredVesselsMode: booleanToInt(previewFilteredVesselsMode),

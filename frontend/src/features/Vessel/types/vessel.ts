@@ -60,7 +60,6 @@ export class VesselFeature {
     >,
     options: {
       areVesselsNotInVesselGroupsHidden: boolean
-      hideVesselsAtPort: boolean
       isRiskFactorShowed: boolean
       vesselLabel: string
       vesselLabelsShowedOnMap: boolean
@@ -78,13 +77,7 @@ export class VesselFeature {
         }
       | undefined
   } {
-    const {
-      hideVesselsAtPort,
-      isRiskFactorShowed,
-      vesselLabel,
-      vesselLabelsShowedOnMap,
-      vesselsLastPositionVisibility
-    } = options
+    const { isRiskFactorShowed, vesselLabel, vesselLabelsShowedOnMap, vesselsLastPositionVisibility } = options
     const vesselDate = new Date(feature.dateTime)
     const vesselIsHidden = new Date()
     const hasBeenControlledLastFiveYears = feature.lastControlDateTime
@@ -106,10 +99,6 @@ export class VesselFeature {
     }
 
     if (vesselDate.getTime() < vesselIsHidden.getTime() && !feature.beaconMalfunctionId) {
-      return label
-    }
-
-    if (hideVesselsAtPort && feature.isAtPort) {
       return label
     }
 

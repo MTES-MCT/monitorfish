@@ -1,6 +1,7 @@
 import { getAdministrativeZoneFromAPI } from '@api/geoserver'
 import { setInteractionTypeAndListener } from '@features/Draw/slice'
 import { InteractionListener, InteractionType } from '@features/Map/constants'
+import { MonitorFishMap } from '@features/Map/Map.types'
 import { openDrawLayerModal } from '@features/Mission/useCases/addOrEditMissionZone'
 import { getSelectedOptionFromOptionValueInTree } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
@@ -38,7 +39,7 @@ export const filterVesselsWithZone =
       const zoneAdded = zonesAdded[0]
       assertNotNullish(zoneAdded)
 
-      if (zoneAdded === 'custom') {
+      if (zoneAdded === MonitorFishMap.MonitorFishLayer.CUSTOM) {
         dispatch(openDrawLayerModal)
         dispatch(
           setInteractionTypeAndListener({

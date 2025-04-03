@@ -42,7 +42,6 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
     state => state.vesselGroup.areVesselsNotInVesselGroupsHidden
   )
   const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
-  const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
   const riskFactorShowedOnMap = useMainAppSelector(state => state.map.riskFactorShowedOnMap)
   const vesselLabel = useMainAppSelector(state => state.map.vesselLabel)
   const vesselLabelsShowedOnMap = useMainAppSelector(state => state.map.vesselLabelsShowedOnMap)
@@ -179,7 +178,6 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
     vesselLabelsShowedOnMap,
     riskFactorShowedOnMap,
     vesselLabel,
-    hideVesselsAtPort,
     moveVesselLabelLine,
     previousFeaturesAndLabels,
     showLabelRiskFactorDetails,
@@ -251,7 +249,6 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
         ])
         const label = VesselFeature.getVesselFeatureLabel(vesselProperties, {
           areVesselsNotInVesselGroupsHidden,
-          hideVesselsAtPort,
           isRiskFactorShowed: isSuperUser && riskFactorShowedOnMap,
           vesselLabel,
           vesselLabelsShowedOnMap,
@@ -365,7 +362,6 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
     previewFilteredVesselsMode,
     hideNonSelectedVessels,
     vesselsTracksShowed,
-    hideVesselsAtPort,
     getVectorSource,
     areVesselsDisplayed,
     areVesselsNotInVesselGroupsHidden,

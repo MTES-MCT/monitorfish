@@ -218,7 +218,7 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
     isHoverable: true
   },
   [MonitorFishMap.MonitorFishLayer.CUSTOM]: {
-    code: 'custom',
+    code: MonitorFishMap.MonitorFishLayer.CUSTOM,
     name: 'Zone manuelle',
     type: LayerType.CUSTOM,
     isClickable: false,

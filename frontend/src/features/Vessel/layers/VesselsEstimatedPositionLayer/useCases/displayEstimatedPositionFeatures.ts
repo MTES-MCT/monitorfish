@@ -11,7 +11,7 @@ import type { MainAppThunk } from '@store'
  */
 export const displayEstimatedPositionFeatures = (): MainAppThunk => (_, getState) => {
   const {
-    map: { hideVesselsAtPort, selectedBaseLayer, showingVesselsEstimatedPositions, vesselsLastPositionVisibility },
+    map: { selectedBaseLayer, showingVesselsEstimatedPositions, vesselsLastPositionVisibility },
     vessel: { hideNonSelectedVessels, selectedVesselIdentity, vessels: vesselsSelector, vesselsTracksShowed }
   } = getState()
   const vessels = vesselSelectors.selectAll(vesselsSelector)
@@ -30,7 +30,6 @@ export const displayEstimatedPositionFeatures = (): MainAppThunk => (_, getState
     .map(vessel =>
       createEstimatedTrackFeatures(vessel, {
         hideNonSelectedVessels,
-        hideVesselsAtPort,
         isLight,
         selectedVesselIdentity,
         vesselIsHidden,
@@ -49,13 +48,9 @@ export const displayEstimatedPositionFeatures = (): MainAppThunk => (_, getState
  * Creates estimated track features for a vessel based on visibility rules.
  */
 function createEstimatedTrackFeatures(vessel, options) {
-  const { isAtPort, isFiltered } = vessel
-  const { hideNonSelectedVessels, hideVesselsAtPort, selectedVesselIdentity, vesselsTracksShowed } = options
+  const { hideNonSelectedVessels, selectedVesselIdentity, vesselsTracksShowed } = options
 
-  if (!isFiltered) {
-    return undefined
-  }
-  if (hideVesselsAtPort && isAtPort) {
+  if (!vessel.isFiltered) {
     return undefined
   }
 

@@ -21,7 +21,6 @@ const baseLayerLocalStorageKey = 'baseLayer'
 const estimatedPositionsLocalStorageKey = 'estimatedPositions'
 const riskFactorLocalStorageKey = 'riskFactor'
 const coordinatesFormatLocalStorageKey = 'coordinatesFormat'
-const hideVesselsAtPortLocalStorageKey = 'hideVesselsAtPort'
 
 export type MapState = {
   /** End of vessels map properties */
@@ -38,7 +37,6 @@ export type MapState = {
   doNotAnimate: boolean
   extent: null
   fitToExtent: Extent | undefined
-  hideVesselsAtPort: boolean
   riskFactorShowedOnMap: boolean
   selectedBaseLayer: string
   showingVesselsEstimatedPositions: boolean
@@ -60,7 +58,6 @@ const INITIAL_STATE: MapState = {
   doNotAnimate: false,
   extent: getLocalStorageState(null, savedMapExtentLocalStorageKey),
   fitToExtent: undefined,
-  hideVesselsAtPort: getLocalStorageState(true, hideVesselsAtPortLocalStorageKey),
   riskFactorShowedOnMap: getLocalStorageState(true, riskFactorLocalStorageKey),
   selectedBaseLayer: getLocalStorageState(BaseLayer.LIGHT.code, baseLayerLocalStorageKey),
   showingVesselsEstimatedPositions: getLocalStorageState(true, estimatedPositionsLocalStorageKey),
@@ -156,17 +153,6 @@ const mapSlice = createSlice({
       state.defaultVesselTrackDepth = action.payload
     },
 
-    /**
-     * Show or hide the vessels located in a port
-     * @param {Object} state
-     * @param {{
-     * payload: boolean}} action - true if the vessels at port are hidden
-     */
-    setHideVesselsAtPort(state, action) {
-      window.localStorage.setItem(hideVesselsAtPortLocalStorageKey, JSON.stringify(action.payload))
-      state.hideVesselsAtPort = action.payload
-    },
-
     setRiskFactorShowedOnMap(state, action) {
       window.localStorage.setItem(riskFactorLocalStorageKey, JSON.stringify(action.payload))
       state.riskFactorShowedOnMap = action.payload
@@ -216,7 +202,6 @@ export const {
   selectBaseLayer,
   setCoordinatesFormat,
   setDefaultVesselTrackDepth,
-  setHideVesselsAtPort,
   setRiskFactorShowedOnMap,
   setVesselLabel,
   setVesselLabelsShowedOnMap,

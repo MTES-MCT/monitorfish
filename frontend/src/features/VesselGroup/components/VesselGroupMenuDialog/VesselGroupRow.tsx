@@ -131,6 +131,7 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
               <StyledLink
                 $isOpen={isGroupFilterCriteriaOpen}
                 onClick={() => setIsGroupFilterCriteriaOpen(!isGroupFilterCriteriaOpen)}
+                title={`${isGroupFilterCriteriaOpen ? 'Masquer' : 'Afficher'} les critères de définition du groupe`}
               >
                 {isGroupFilterCriteriaOpen ? 'Masquer' : 'Afficher'} les critères de définition du groupe
               </StyledLink>

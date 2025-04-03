@@ -99,14 +99,14 @@ export function EditDynamicVesselGroupDialog({
     if (drawedGeometry) {
       const zones: ZoneFilter[] = listFilterValues.zones ?? []
 
-      const previousZonesWithoutCustomZone = zones.filter(zone => zone.value !== 'custom')
+      const previousZonesWithoutCustomZone = zones.filter(zone => zone.value !== MonitorFishMap.MonitorFishLayer.CUSTOM)
 
       const nextZones = [
         ...previousZonesWithoutCustomZone,
         {
           feature: drawedGeometry as MultiPolygon,
           label: 'Zone de filtre manuelle',
-          value: 'custom' // TODO Rename to LayerType.CUSTOM
+          value: MonitorFishMap.MonitorFishLayer.CUSTOM
         }
       ]
       const nextListFilterValues = { ...listFilterValues, zones: nextZones }

@@ -9,7 +9,7 @@ context('Vessel groups', () => {
      */
     cy.getDataCy('side-window-menu-vessel-list').click()
     cy.fill('Nationalités', ['Espagne', 'France'])
-    cy.getDataCy('vessel-list-length').contains('1002 navires équipés VMS')
+    cy.getDataCy('vessel-list-length').contains('841 navires équipés VMS')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 2)
 
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
@@ -24,7 +24,7 @@ context('Vessel groups', () => {
      */
     cy.get('.Component-Dialog').contains('Actuellement, 4 navires correspondent aux filtres sélectionnés.')
     cy.get('.Component-Dialog').within(() => {
-      cy.get('.Component-SingleTag').should('have.length', 4)
+      cy.get('.Component-SingleTag').should('have.length', 5)
     })
 
     cy.fill('Engins utilisés', ['OTT'], { index: 1 })
@@ -54,9 +54,11 @@ context('Vessel groups', () => {
     cy.get('[title="Lorem ipsum dolor sit amet"]').click()
     cy.get('[title="Lorem ipsum dolor sit amet"]').contains('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.')
     cy.get('[title="Lorem ipsum dolor sit amet"]').contains('Groupe dynamique')
+    cy.get('[title="Afficher les critères de définition du groupe"]').click()
     cy.get('[title="Lorem ipsum dolor sit amet"]').within(() => {
-      cy.get('.Component-SingleTag').should('have.length', 4)
+      cy.get('.Component-SingleTag').should('have.length', 5)
     })
+    cy.get('[title="Masquer les critères de définition du groupe"]').click()
 
     /**
      * Modify the created group
@@ -83,7 +85,7 @@ context('Vessel groups', () => {
     cy.get('body').dblclick(560, 620)
     cy.clickButton('Valider la zone de groupe')
     cy.get('.Component-Dialog').within(() => {
-      cy.get('.Component-SingleTag').eq(3).contains('Zone de filtre manuelle')
+      cy.get('.Component-SingleTag').eq(4).contains('Zone de filtre manuelle')
     })
     cy.clickButton('Modifier le groupe')
     cy.contains('Le groupe de navires dynamique "Lorem ipsum dolor sit amet" a bien été modifié.').should('be.visible')
@@ -94,10 +96,12 @@ context('Vessel groups', () => {
     cy.get('[title="Lorem ipsum dolor sit amet"]').click()
     cy.get('[title="Lorem ipsum dolor sit amet"]')
       .contains('Modification de la description: consectetur adipiscing elit.')
+    cy.get('[title="Afficher les critères de définition du groupe"]').click()
     cy.get('[title="Lorem ipsum dolor sit amet"]').within(() => {
-      cy.get('.Component-SingleTag').should('have.length', 4)
-      cy.get('.Component-SingleTag').eq(3).contains('Zone de filtre manuelle')
+      cy.get('.Component-SingleTag').should('have.length', 5)
+      cy.get('.Component-SingleTag').eq(4).contains('Zone de filtre manuelle')
     })
+    cy.get('[title="Masquer les critères de définition du groupe"]').click()
 
     /**
      * Pin and unpin vessel groups to change order

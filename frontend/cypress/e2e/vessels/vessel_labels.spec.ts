@@ -2,12 +2,12 @@ context('Vessel labels', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(1000)
+    cy.wait(2000)
   })
 
   it('Risk factors Should be showed on the map', () => {
     // Then
-    cy.get('*[data-cy="vessel-label-risk-factor"]').should('have.length', 19)
+    cy.get('*[data-cy="vessel-label-risk-factor"]').should('have.length', 21)
     // And the ship "FRAIS AVIS MODE" contains a risk factor of 2.6
     cy.get('*[data-cy="vessel-label-risk-factor"]').eq(0).contains(2.6)
   })

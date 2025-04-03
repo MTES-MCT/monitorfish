@@ -8,7 +8,6 @@ import { getColorWithAlpha } from '../../../Map/layers/styles/utils'
 export const EstimatedPositionFeatureColorProperty = 'color'
 export const EstimatedPositionFeatureOpacityProperty = 'opacity'
 export const EstimatedPositionFeatureIsCircleProperty = 'isCircle'
-export const EstimatedPositionFeatureIsHiddenProperty = 'isHidden'
 
 const estimatedPositionStyleCache = new Map()
 
@@ -16,11 +15,6 @@ export const getEstimatedPositionStyle = feature => {
   const color = feature.get(EstimatedPositionFeatureColorProperty)
   const opacity = feature.get(EstimatedPositionFeatureOpacityProperty)
   const isCircle = feature.get(EstimatedPositionFeatureIsCircleProperty)
-  const isHidden = feature.get(EstimatedPositionFeatureIsHiddenProperty)
-
-  if (isHidden) {
-    return []
-  }
 
   const key = JSON.stringify({ color, isCircle, opacity })
 

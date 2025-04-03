@@ -1,6 +1,6 @@
 import { LayerProperties } from '@features/Map/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
-import { getVesselAlertAndBeaconMalfunctionStyle } from '@features/Vessel/layers/style'
+import { getVesselAlertAndBeaconMalfunctionStyle } from '@features/Vessel/layers/VesselAlertAndBeaconMalfunctionLayer/style'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 

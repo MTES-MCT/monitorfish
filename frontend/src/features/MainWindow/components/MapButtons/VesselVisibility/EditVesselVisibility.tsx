@@ -7,11 +7,7 @@ import styled from 'styled-components'
 import { LastPositionsSlider } from './LastPositionsSlider'
 import { MapPropertyTrigger } from '../../../../commonComponents/MapPropertyTrigger'
 import EstimatedPositionSVG from '../../../../icons/Positions_estimees.svg?react'
-import {
-  setHideVesselsAtPort,
-  setVesselsLastPositionVisibility,
-  showVesselsEstimatedPositions
-} from '../../../../Map/slice'
+import { setVesselsLastPositionVisibility, showVesselsEstimatedPositions } from '../../../../Map/slice'
 import { setHideNonSelectedVessels } from '../../../../Vessel/slice'
 import { updateDefaultVesselTrackDepth } from '../../../../Vessel/useCases/updateDefaultVesselTrackDepth'
 import { MapToolBox } from '../shared/MapToolBox'
@@ -20,7 +16,6 @@ import { Content, Header } from '../shared/styles'
 export function EditVesselVisibility({ isOpened }) {
   const dispatch = useMainAppDispatch()
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
-  const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
   const defaultVesselTrackDepth = useMainAppSelector(state => state.map.defaultVesselTrackDepth)
   const showingVesselsEstimatedPositions = useMainAppSelector(state => state.map.showingVesselsEstimatedPositions)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
@@ -71,13 +66,6 @@ export function EditVesselVisibility({ isOpened }) {
         inverse
         text="les navires non sélectionnés"
         updateBooleanProperty={isHidden => dispatch(setHideNonSelectedVessels(isHidden))}
-      />
-      <MapPropertyTrigger
-        booleanProperty={hideVesselsAtPort}
-        Icon={Icon.Anchor}
-        inverse
-        text="les navires au port"
-        updateBooleanProperty={isHidden => dispatch(setHideVesselsAtPort(isHidden))}
       />
     </Wrapper>
   )

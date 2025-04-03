@@ -26,10 +26,10 @@ import { sideWindowReducer } from '@features/SideWindow/slice'
 import { stationReducer } from '@features/Station/slice'
 import { vesselListReducer } from '@features/Vessel/components/VesselList/slice'
 import { controlReducer } from '@features/Vessel/components/VesselSidebar/control.slice'
-import { vesselReducer } from '@features/Vessel/slice'
-import { filterReducer, type VesselFilterState } from '@features/VesselFilter/slice'
+import { vesselReducer, type VesselState } from '@features/Vessel/slice'
+import { vesselGroupReducer } from '@features/VesselGroup/slice'
 import { beaconMalfunctionReducer } from 'domain/shared_slices/BeaconMalfunction'
-import { displayedComponentReducer } from 'domain/shared_slices/DisplayedComponent'
+import { displayedComponentReducer, type DisplayedComponentState } from 'domain/shared_slices/DisplayedComponent'
 import { displayedErrorReducer } from 'domain/shared_slices/DisplayedError'
 import { gearReducer } from 'domain/shared_slices/Gear'
 import { globalSliceReducer } from 'domain/shared_slices/Global'
@@ -42,6 +42,7 @@ import storage from 'redux-persist/es/storage' // LocalStorage
 
 import { MAIN_PERSISTOR_MISSION_MIGRATIONS } from './migrations'
 
+import type { VesselGroupState } from '@features/VesselGroup/slice'
 import type { Reducer } from 'redux'
 import type { PersistConfig } from 'redux-persist'
 
@@ -88,18 +89,17 @@ export const mainReducer = {
     { ...getCommonPersistReducerConfig<CustomZoneState>('mainPersistorCustomZone', ['zones']) },
     customZoneReducer
   ),
-  displayedComponent: displayedComponentReducer,
-  draw: drawReducer,
-  favoriteVessel: favoriteVesselReducer,
-  filter: persistReducerTyped(
+  displayedComponent: persistReducerTyped(
     {
-      ...getCommonPersistReducerConfig<VesselFilterState>('mainPersistorFilter', [
-        'filters',
-        'nonFilteredVesselsAreHidden'
+      ...getCommonPersistReducerConfig<DisplayedComponentState>('mainPersistorDisplayedComponent', [
+        'isMissionsLayerDisplayed',
+        'areVesselGroupsDisplayed'
       ])
     },
-    filterReducer
+    displayedComponentReducer
   ),
+  draw: drawReducer,
+  favoriteVessel: favoriteVesselReducer,
   fishingActivities: persistReducerTyped(
     { ...getCommonPersistReducerConfig<LogbookState>('mainPersistorLogbook', ['areFishingActivitiesShowedOnMap']) },
     logbookReducer
@@ -142,7 +142,21 @@ export const mainReducer = {
   reportingTableFilters: reportingTableFiltersReducer,
   sideWindow: sideWindowReducer,
   station: stationReducer,
-  vessel: vesselReducer,
+  vessel: persistReducerTyped(
+    {
+      ...getCommonPersistReducerConfig<VesselState>('mainPersistorVessel', ['listFilterValues'])
+    },
+    vesselReducer
+  ),
+  vesselGroup: persistReducerTyped(
+    {
+      ...getCommonPersistReducerConfig<VesselGroupState>('mainPersistorVesselGroup', [
+        'vesselGroupsIdsDisplayed',
+        'areVesselsNotInVesselGroupsHidden'
+      ])
+    },
+    vesselGroupReducer
+  ),
   vesselList: vesselListReducer
 }
 

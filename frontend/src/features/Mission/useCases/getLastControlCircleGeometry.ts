@@ -1,5 +1,6 @@
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { convertToGeoJSONGeometryObject } from '@features/Map/utils'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import Feature from 'ol/Feature'
 import { MultiPolygon } from 'ol/geom'
 import { circular } from 'ol/geom/Polygon'
@@ -7,13 +8,13 @@ import { circular } from 'ol/geom/Polygon'
 import { CONTROL_ZONE_RADIUS } from '../constants'
 import { MissionAction } from '../missionAction.types'
 
-import type { GeoJSON as GeoJSONType } from '../../../domain/types/GeoJSON'
 import type { Port } from '../../../domain/types/port'
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
+import type { Geometry } from 'geojson'
 
 export const getLastControlCircleGeometry =
   (ports: Port.Port[], actionFormValues: MissionActionFormValues | MissionAction.MissionAction) =>
-  (): GeoJSONType.Geometry | undefined => {
+  (): Geometry | undefined => {
     if (!isLandControl(actionFormValues) && !isAirOrSeaControl(actionFormValues)) {
       return undefined
     }
@@ -26,9 +27,9 @@ export const getLastControlCircleGeometry =
     const circleGeometry = new Feature({
       geometry: circular(coordinates, CONTROL_ZONE_RADIUS, 64).transform(WSG84_PROJECTION, OPENLAYERS_PROJECTION)
     }).getGeometry()
+    assertNotNullish(circleGeometry)
 
-    // @ts-ignore
-    return convertToGeoJSONGeometryObject(new MultiPolygon([circleGeometry]))
+    return convertToGeoJSONGeometryObject<Geometry>(new MultiPolygon([circleGeometry]))
   }
 
 /**

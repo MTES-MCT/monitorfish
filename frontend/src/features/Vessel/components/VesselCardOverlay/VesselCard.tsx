@@ -3,13 +3,15 @@
 import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
 import { OverlayPosition } from '@features/Map/components/Overlay'
 import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
+import { Square } from '@features/Regulation/components/ZonePreview'
+import { getOverlayMargins } from '@features/Vessel/components/VesselCardOverlay/utils'
 import { extractVesselPropertiesFromFeature } from '@features/Vessel/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Icon } from '@mtes-mct/monitor-ui'
+import { Icon, pluralize, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
-import { marginsWithOneWarning, marginsWithoutAlert, marginsWithThreeWarning, marginsWithTwoWarning } from './constants'
+import { marginsWithoutAlert } from './constants'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { getCoordinates } from '../../../../coordinates'
 import { timeagoFrenchLocale } from '../../../../utils'
@@ -18,26 +20,25 @@ import BeaconMalfunctionSVG from '../../../icons/Icone_VMS_dark.svg?react'
 // @ts-ignore
 timeago.register('fr', timeagoFrenchLocale)
 
-export function VesselCard({ feature, numberOfWarnings, overlayPosition }) {
+export function VesselCard({ feature, overlayPosition, yOffset }) {
   const isSuperUser = useIsSuperUser()
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
+  const areVesselGroupsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselGroupsDisplayed)
+
   const vesselProperties = extractVesselPropertiesFromFeature(feature, [
     'alerts',
     'beaconMalfunctionId',
     'course',
     'dateTime',
     'emissionPeriod',
-    'externalReferenceNumber',
     'flagState',
     'hasInfractionSuspicion',
-    'internalReferenceNumber',
-    'ircs',
     'lastLogbookMessageDateTime',
-    'length',
-    'mmsi',
+    'segments',
     'speed',
     'vesselName',
-    'width'
+    'groupsDisplayed',
+    'numberOfGroupsHidden'
   ])
   const featureCoordinates = feature.getGeometry().getCoordinates()
 
@@ -85,7 +86,7 @@ export function VesselCard({ feature, numberOfWarnings, overlayPosition }) {
           NON-ÉMISSION VMS
         </VesselCardBeaconMalfunction>
       )}
-      <VesselCardBody>
+      <ThreeColumnsBody>
         <LatLon>
           <FieldName>Latitude</FieldName>
           <FieldValue data-cy="vessel-card-latitude">
@@ -128,77 +129,48 @@ export function VesselCard({ feature, numberOfWarnings, overlayPosition }) {
             )}
           </FieldValue>
         </Position>
-      </VesselCardBody>
-      <VesselCardBottom>
-        <ColumnOne>
-          <Fields>
-            <Body>
-              <Field>
-                <Key>CFR</Key>
-                <Value data-cy="vessel-card-internal-reference-number">
-                  {vesselProperties.internalReferenceNumber ? (
-                    vesselProperties.internalReferenceNumber
-                  ) : (
-                    <NoValue>-</NoValue>
-                  )}
-                </Value>
-              </Field>
-              <Field>
-                <Key>MMSI</Key>
-                <Value data-cy="vessel-card-mmsi">
-                  {vesselProperties.mmsi ? vesselProperties.mmsi : <NoValue>-</NoValue>}
-                </Value>
-              </Field>
-            </Body>
-          </Fields>
-        </ColumnOne>
-        <ColumnTwo>
-          <Fields>
-            <Body>
-              <Field>
-                <Key>Marquage ext.</Key>
-                <Value data-cy="vessel-card-external-reference-number">
-                  {vesselProperties.externalReferenceNumber ? (
-                    vesselProperties.externalReferenceNumber
-                  ) : (
-                    <NoValue>-</NoValue>
-                  )}
-                </Value>
-              </Field>
-              <Field>
-                <Key>Call Sign (IRCS)</Key>
-                <Value data-cy="vessel-card-ircs">
-                  {vesselProperties.ircs ? vesselProperties.ircs : <NoValue>-</NoValue>}
-                </Value>
-              </Field>
-            </Body>
-          </Fields>
-        </ColumnTwo>
-      </VesselCardBottom>
-      <VesselCardBottom>
-        <ColumnOne>
-          <Fields>
-            <Body>
-              <Field>
-                <Key>Taille du navire</Key>
-                <Value>
-                  {vesselProperties.length ? vesselProperties.length : <NoValue>-</NoValue>} x{' '}
-                  {vesselProperties.width ? vesselProperties.width : <NoValue>-</NoValue>} m
-                </Value>
-              </Field>
-            </Body>
-          </Fields>
-        </ColumnOne>
-      </VesselCardBottom>
+      </ThreeColumnsBody>
+      <FleetSegments data-cy="vessel-card-segments">
+        <Key>{pluralize('Segment', vesselProperties.segments.length)} de flotte</Key>
+        <Value>
+          {vesselProperties.segments.length > 0 ? vesselProperties.segments.join(', ') : <NoValue>-</NoValue>}
+        </Value>
+      </FleetSegments>
+      {areVesselGroupsDisplayed &&
+        (vesselProperties.groupsDisplayed.length > 0 || vesselProperties.numberOfGroupsHidden > 0) && (
+          <VesselGroups data-cy="vessel-card-groups">
+            {vesselProperties.groupsDisplayed.map(vesselGroup => (
+              <VesselGroupRow key={vesselGroup.id}>
+                <Square $fillColor={vesselGroup.color} $strokeColor={THEME.color.lightGray} />
+                {vesselGroup.name}
+              </VesselGroupRow>
+            ))}
+            {vesselProperties.numberOfGroupsHidden > 0 && (
+              <OtherGroupsHidden>
+                {vesselProperties.numberOfGroupsHidden} {pluralize('autre', vesselProperties.numberOfGroupsHidden)}{' '}
+                {pluralize('groupe', vesselProperties.numberOfGroupsHidden)} non{' '}
+                {pluralize('affiché', vesselProperties.numberOfGroupsHidden)} sur la carte
+              </OtherGroupsHidden>
+            )}
+          </VesselGroups>
+        )}
       <TrianglePointer>
-        {overlayPosition === OverlayPosition.BOTTOM && <BottomTriangleShadow $numberOfWarnings={numberOfWarnings} />}
-        {overlayPosition === OverlayPosition.TOP && <TopTriangleShadow $numberOfWarnings={numberOfWarnings} />}
-        {overlayPosition === OverlayPosition.RIGHT && <RightTriangleShadow $numberOfWarnings={numberOfWarnings} />}
-        {overlayPosition === OverlayPosition.LEFT && <LeftTriangleShadow $numberOfWarnings={numberOfWarnings} />}
+        {overlayPosition === OverlayPosition.BOTTOM && <BottomTriangleShadow />}
+        {overlayPosition === OverlayPosition.TOP && <TopTriangleShadow $yOffset={yOffset} />}
+        {overlayPosition === OverlayPosition.RIGHT && <RightTriangleShadow $yOffset={yOffset} />}
+        {overlayPosition === OverlayPosition.LEFT && <LeftTriangleShadow $yOffset={yOffset} />}
       </TrianglePointer>
     </>
   )
 }
+
+const VesselGroupRow = styled.span``
+
+const OtherGroupsHidden = styled.span`
+  font-style: italic;
+  color: ${p => p.theme.color.slateGray};
+  font-weight: normal;
+`
 
 const AlertIcon = styled(Icon.Alert)`
   width: 17px;
@@ -290,53 +262,40 @@ const Flag = styled.img<{
   height: 20px;
   display: inline-block;
   vertical-align: middle;
-  margin-top: 0px;
+  margin-top: 0;
 `
 
-const Body = styled.tbody``
-
-const Fields = styled.table`
-  width: inherit;
-  display: table;
-  margin: 0;
-  padding-bottom: 0;
+const FleetSegments = styled.div`
+  display: flex;
+  margin: 0 5px 5px 5px;
+  padding: 10px;
+  background: ${p => p.theme.color.white};
 `
 
-const Field = styled.tr`
-  border: none;
-  background: none;
-  line-height: 0.5em;
+const VesselGroups = styled.div`
+  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  margin: 0 5px 5px 5px;
+  padding: 10px;
+  background: ${p => p.theme.color.white};
 `
 
-const Key = styled.th`
+const Key = styled.span`
   color: ${p => p.theme.color.slateGray};
-  flex: initial;
-  display: inline-block;
-  margin: 0;
-  border: none;
-  padding: 5px 5px 8px 0;
-  background: none;
-  width: max-content;
-  line-height: 0.5em;
-  height: 0.5em;
-  font-size: 13px;
+  margin-right: 10px;
   font-weight: normal;
+  width: 125px;
 `
 
-const Value = styled.td`
-  font-size: 13px;
+const Value = styled.span`
   color: ${p => p.theme.color.gunMetal};
   font-weight: 500;
-  margin: 0;
-  text-align: left;
-  padding: 0 0 0 5px;
-  background: none;
-  border: none;
-  line-height: normal;
   text-overflow: ellipsis;
   overflow: hidden !important;
   white-space: nowrap;
-  max-width: 100px;
+  max-width: 200px;
 `
 
 const TrianglePointer = styled.div`
@@ -346,36 +305,20 @@ const TrianglePointer = styled.div`
   width: auto;
 `
 
-const BottomTriangleShadow = styled.div<{
-  $numberOfWarnings: number
-}>`
+const BottomTriangleShadow = styled.div`
   position: absolute;
   width: 0;
   height: 0;
   border-style: solid;
   border-width: 11px 6px 0 6px;
   border-color: ${p => p.theme.color.gainsboro} transparent transparent transparent;
-  margin-left: ${p => {
-    if (p.$numberOfWarnings === 1) {
-      return -marginsWithOneWarning.xMiddle - 6
-    }
-
-    if (p.$numberOfWarnings === 2) {
-      return -marginsWithTwoWarning.xMiddle - 6
-    }
-
-    if (p.$numberOfWarnings === 3) {
-      return -marginsWithThreeWarning.xMiddle - 6
-    }
-
-    return -marginsWithoutAlert.xMiddle - 6
-  }}px;
+  margin-left: ${-marginsWithoutAlert.xMiddle - 6}px;
   margin-top: -1px;
   clear: top;
 `
 
 const TopTriangleShadow = styled.div<{
-  $numberOfWarnings: number
+  $yOffset: number
 }>`
   position: absolute;
   width: 0;
@@ -384,41 +327,13 @@ const TopTriangleShadow = styled.div<{
   border-right: 6px solid transparent;
   border-bottom: 11px solid ${p => p.theme.color.gainsboro};
   border-left: 6px solid transparent;
-  margin-left: ${p => {
-    if (p.$numberOfWarnings === 1) {
-      return -marginsWithOneWarning.xMiddle - 6
-    }
-
-    if (p.$numberOfWarnings === 2) {
-      return -marginsWithTwoWarning.xMiddle - 6
-    }
-
-    if (p.$numberOfWarnings === 3) {
-      return -marginsWithThreeWarning.xMiddle - 6
-    }
-
-    return -marginsWithoutAlert.xMiddle - 6
-  }}px;
-  margin-top: ${p => {
-    if (p.$numberOfWarnings === 1) {
-      return marginsWithOneWarning.yBottom + 18
-    }
-
-    if (p.$numberOfWarnings === 2) {
-      return marginsWithTwoWarning.yBottom + 18
-    }
-
-    if (p.$numberOfWarnings === 3) {
-      return marginsWithThreeWarning.yBottom + 18
-    }
-
-    return marginsWithoutAlert.yBottom + 18
-  }}px;
+  margin-left: ${-marginsWithoutAlert.xMiddle - 6}px;
+  margin-top: ${p => getOverlayMargins(p.$yOffset).yBottom + 12}px;
   clear: top;
 `
 
 const RightTriangleShadow = styled.div<{
-  $numberOfWarnings: number
+  $yOffset: number
 }>`
   position: absolute;
   width: 0;
@@ -427,41 +342,13 @@ const RightTriangleShadow = styled.div<{
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
   border-left: 11px solid ${p => p.theme.color.gainsboro};
-  margin-left: ${p => {
-    if (p.$numberOfWarnings === 1) {
-      return -marginsWithOneWarning.xRight - 20
-    }
-
-    if (p.$numberOfWarnings === 2) {
-      return -marginsWithTwoWarning.xRight - 20
-    }
-
-    if (p.$numberOfWarnings === 3) {
-      return -marginsWithThreeWarning.xRight - 20
-    }
-
-    return -marginsWithoutAlert.xRight - 20
-  }}px;
-  margin-top: ${p => {
-    if (p.$numberOfWarnings === 1) {
-      return marginsWithOneWarning.yMiddle - 6
-    }
-
-    if (p.$numberOfWarnings === 2) {
-      return marginsWithTwoWarning.yMiddle - 6
-    }
-
-    if (p.$numberOfWarnings === 3) {
-      return marginsWithThreeWarning.yMiddle - 6
-    }
-
-    return marginsWithoutAlert.yMiddle - 6
-  }}px;
+  margin-left: ${-marginsWithoutAlert.xRight - 20}px;
+  margin-top: ${p => getOverlayMargins(p.$yOffset).yMiddle + 12}px;
   clear: top;
 `
 
 const LeftTriangleShadow = styled.div<{
-  $numberOfWarnings: number
+  $yOffset: number
 }>`
   position: absolute;
   width: 0;
@@ -472,21 +359,7 @@ const LeftTriangleShadow = styled.div<{
   border-bottom: 6px solid transparent;
   border-left: transparent;
   margin-left: -11px;
-  margin-top: ${p => {
-    if (p.$numberOfWarnings === 1) {
-      return marginsWithOneWarning.yMiddle - 6
-    }
-
-    if (p.$numberOfWarnings === 2) {
-      return marginsWithTwoWarning.yMiddle - 6
-    }
-
-    if (p.$numberOfWarnings === 3) {
-      return marginsWithThreeWarning.yMiddle - 6
-    }
-
-    return marginsWithoutAlert.yMiddle - 6
-  }}px;
+  margin-top: ${p => getOverlayMargins(p.$yOffset).yMiddle + 12}px;
   clear: top;
 `
 
@@ -495,25 +368,6 @@ const NoValue = styled.span`
   font-weight: 300;
   margin: 0;
   line-height: normal;
-`
-
-const ColumnOne = styled.div`
-  order: 1;
-  padding: 10px 0 0 5px;
-  margin-bottom: 5px;
-  min-width: 100px;
-`
-
-const ColumnTwo = styled.div`
-  order: 2;
-  padding: 10px 5px 0 5px;
-  margin-bottom: 5px;
-`
-
-const VesselCardBottom = styled.div`
-  display: flex;
-  background: ${p => p.theme.color.white};
-  margin: 0 5px 5px 5px;
 `
 
 const FieldName = styled.div`
@@ -570,11 +424,11 @@ const VesselCardTitle = styled.span`
   margin-left: 5px;
   display: inline-block;
   vertical-align: middle;
-  margin-top: 0px;
+  margin-top: 0;
   font-size: 16px;
 `
 
-const VesselCardBody = styled.div`
+const ThreeColumnsBody = styled.div`
   display: flex;
   text-align: center;
 `

@@ -3,11 +3,13 @@ import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '@features
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { getMapResolution } from '@features/Map/utils'
+import { getOverlayMargins } from '@features/Vessel/components/VesselCardOverlay/utils'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import Overlay from 'ol/Overlay'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { marginsWithOneWarning, marginsWithoutAlert, marginsWithThreeWarning, marginsWithTwoWarning } from './constants'
+import { marginsWithoutAlert } from './constants'
 import { VesselCard } from './VesselCard'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 
@@ -23,7 +25,20 @@ export function VesselCardOverlay({ feature }) {
     marginsWithoutAlert.xMiddle
   ])
   const [overlayPosition, setOverlayPosition] = useState(OverlayPosition.BOTTOM)
-  const numberOfWarningsRef = useRef<number>(0)
+  const areVesselGroupsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselGroupsDisplayed)
+
+  const numberOfWarnings = isSuperUser
+    ? Number(feature?.get('hasAlert')) +
+      Number(!!feature?.get('beaconMalfunctionId')) +
+      Number(feature?.get('hasInfractionSuspicion'))
+    : 0
+  const vesselGroupsAddedLines = areVesselGroupsDisplayed ? Number(feature?.get('groupsDisplayed')?.length) : 0
+  const numberOfGroupsHidden = areVesselGroupsDisplayed ? Number(feature?.get('numberOfGroupsHidden')) : 0
+  const numberOfWarningsOffset = numberOfWarnings * 28
+  const vesselGroupsAddedLinesOffset =
+    (vesselGroupsAddedLines > 0 || numberOfGroupsHidden > 0 ? 19.8 : 0) + vesselGroupsAddedLines * 27
+  const numberOfGroupsHiddenOffset = numberOfGroupsHidden > 0 ? 20 : 0
+  const yOffset = numberOfWarningsOffset + vesselGroupsAddedLinesOffset + numberOfGroupsHiddenOffset
 
   const overlayCallback = useCallback(
     ref => {
@@ -49,16 +64,14 @@ export function VesselCardOverlay({ feature }) {
     }
   }, [overlayObjectRef])
 
-  const getNextOverlayPosition = useCallback(
-    numberOfWarnings => {
-      const [x, y] = feature.getGeometry().getCoordinates()
-      const extent = monitorfishMap.getView().calculateExtent()
-      const boxSize = getMapResolution() * overlayHeight + (numberOfWarnings ? 30 * numberOfWarnings : 0)
+  const getNextOverlayPosition = () => {
+    const [x, y] = feature.getGeometry().getCoordinates()
+    const extent = monitorfishMap.getView().calculateExtent()
 
-      return getOverlayPosition(boxSize, x, y, extent)
-    },
-    [feature]
-  )
+    const boxSize = getMapResolution() * overlayHeight + yOffset
+
+    return getOverlayPosition(boxSize, x, y, extent)
+  }
 
   useEffect(() => {
     if (!overlayRef.current || !overlayObjectRef.current) {
@@ -73,43 +86,22 @@ export function VesselCardOverlay({ feature }) {
     }
 
     setVesselFeatureToShowOnCard(feature)
-    numberOfWarningsRef.current = isSuperUser
-      ? Number(feature?.get('hasAlert')) +
-        Number(!!feature?.get('beaconMalfunctionId')) +
-        Number(feature?.get('hasInfractionSuspicion'))
-      : 0
     overlayRef.current.style.display = 'block'
     overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
 
-    const nextOverlayPosition = getNextOverlayPosition(numberOfWarningsRef.current)
+    const nextOverlayPosition = getNextOverlayPosition()
     setOverlayPosition(nextOverlayPosition)
 
-    let margins
-    switch (numberOfWarningsRef.current) {
-      case 1:
-        margins = marginsWithOneWarning
-        break
-      case 2:
-        margins = marginsWithTwoWarning
-        break
-      case 3:
-        margins = marginsWithThreeWarning
-        break
-      default:
-        margins = marginsWithoutAlert
-    }
+    const margins = getOverlayMargins(yOffset)
 
     setOverlayTopLeftMargin(getTopLeftMargin(nextOverlayPosition, margins))
-  }, [feature, setVesselFeatureToShowOnCard, overlayRef, overlayObjectRef, isSuperUser, getNextOverlayPosition])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [feature, setVesselFeatureToShowOnCard, overlayRef, overlayObjectRef])
 
   return (
     <VesselCardOverlayComponent ref={overlayCallback} $overlayTopLeftMargin={overlayTopLeftMargin}>
       {vesselFeatureToShowOnCard && (
-        <VesselCard
-          feature={vesselFeatureToShowOnCard}
-          numberOfWarnings={numberOfWarningsRef.current}
-          overlayPosition={overlayPosition}
-        />
+        <VesselCard feature={vesselFeatureToShowOnCard} overlayPosition={overlayPosition} yOffset={yOffset} />
       )}
     </VesselCardOverlayComponent>
   )

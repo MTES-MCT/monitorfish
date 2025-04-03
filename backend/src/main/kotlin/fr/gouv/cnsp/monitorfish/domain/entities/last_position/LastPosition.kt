@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultImpactRiskFac
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultProbabilityRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
 import java.time.Duration
 import java.time.ZonedDateTime
 
@@ -59,4 +60,5 @@ data class LastPosition(
     val alerts: List<String>? = listOf(),
     val beaconMalfunctionId: Int? = null,
     val reportings: List<String> = listOf(),
+    val vesselGroups: List<VesselGroupBase> = listOf(),
 )

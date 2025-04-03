@@ -1,9 +1,9 @@
-import { hideOrShowNonFilteredVessels } from '@features/VesselFilter/useCases/hideOrShowNonFilteredVessels'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 
 import { MonitorFishWorker } from '../../../../workers/MonitorFishWorker'
 import { setFilteredVesselsFeatures, vesselActions, vesselSelectors } from '../../slice'
 
-import type { VesselListFilter } from '@features/Vessel/components/VesselListV2/types'
+import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
 import type { MainAppThunk } from '@store'
 
 export const filterVessels =
@@ -15,9 +15,9 @@ export const filterVessels =
     const { listFilterValues } = getState().vessel
     const vessels = vesselSelectors.selectAll(getState().vessel.vessels)
 
-    const filteredVesselFeatureIds = await monitorFishWorker.getFilteredVesselsV2(vessels, listFilterValues)
+    const filteredVesselFeatureIds = await monitorFishWorker.getFilteredVessels(vessels, listFilterValues)
 
     await dispatch(setFilteredVesselsFeatures(filteredVesselFeatureIds))
 
-    dispatch(hideOrShowNonFilteredVessels(true))
+    dispatch(renderVesselFeatures())
   }

@@ -1,7 +1,6 @@
 import { WindowContext } from '@api/constants'
 import { useGetControlUnitsQuery } from '@features/ControlUnit/controlUnitApi'
 import { updateReportingActor } from '@features/Reporting/components/ReportingForm/utils'
-import { sortArrayByColumn } from '@features/Vessel/components/VesselList/tableSort'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import {
   Accent,
@@ -14,6 +13,7 @@ import {
   getOptionsFromLabelledEnum,
   MultiRadio
 } from '@mtes-mct/monitor-ui'
+import { sortArrayByColumn } from '@utils/sortArrayByColumn'
 import { Form as FormikForm, useFormikContext } from 'formik'
 import { useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'

@@ -36,7 +36,7 @@ context('Light MonitorFish', () => {
     cy.get('*[data-cy="vessel-list"]').should('exist')
 
     // filters
-    cy.get('*[data-cy="vessel-filters"]').should('exist')
+    cy.get('[aria-label="Nouveautés MonitorFish"]').should('exist')
 
     // No alerts
     cy.get('*[data-cy="alerts-button"]').should('not.exist')

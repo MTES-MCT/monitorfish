@@ -1,4 +1,4 @@
-import { Flag } from '@features/Vessel/components/VesselList/tableCells'
+import { Flag } from '@features/commonComponents/Flag'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { pluralize } from '@utils/pluralize'

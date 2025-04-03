@@ -319,19 +319,6 @@ EOF
 curl -v -u admin:geoserver -X POST http://0.0.0.0:$GEOSERVER_PORT/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "featureType": {
-    "name": "brexit_areas",
-    "nativeName": "brexit_areas",
-    "title": "Brexit",
-    "nativeCRS": "EPSG:4326",
-    "srs": "EPSG:4326",
-    "enabled": true,
-  }
-}
-EOF
-
-curl -v -u admin:geoserver -X POST http://0.0.0.0:$GEOSERVER_PORT/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
-{
-  "featureType": {
     "name": "aem_areas",
     "nativeName": "aem_areas",
     "title": "AEM areas",

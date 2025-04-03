@@ -1,6 +1,7 @@
 import { BannerStack } from '@features/MainWindow/components/BannerStack'
 import { MainMap } from '@features/Map/components/MainMap'
 import { SideWindowStatus } from '@features/SideWindow/constants'
+import { VesselGroupMainWindowEdition } from '@features/VesselGroup/components/VesselGroupMainWindowEdition'
 import { useCallback } from 'react'
 import { useBeforeUnload } from 'react-router-dom'
 import styled from 'styled-components'
@@ -18,7 +19,6 @@ import { PreviewFilteredVessels } from './components/PreviewFilteredVessels'
 import { APIWorker } from '../../api/APIWorker'
 import { Notifier } from '../../components/Notifier'
 import { SideWindowLauncher } from '../SideWindow/SideWindowLauncher'
-import { VesselList } from '../Vessel/components/VesselList'
 import { VesselLoader } from '../Vessel/components/VesselLoader'
 import { RightMenuOnHoverArea } from './components/MapButtons/shared/RightMenuOnHoverArea'
 import { VesselSidebar } from '../Vessel/components/VesselSidebar/components'
@@ -29,7 +29,6 @@ export function MainWindow() {
     state => state.displayedComponent.isControlUnitDialogDisplayed
   )
   const isDrawLayerModalDisplayed = useMainAppSelector(state => state.displayedComponent.isDrawLayerModalDisplayed)
-  const isVesselListDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselListDisplayed)
   const isVesselSearchDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselSearchDisplayed)
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
   const isDraftDirty = useMainAppSelector(state => state.missionForm.isDraftDirty)
@@ -65,7 +64,6 @@ export function MainWindow() {
           {isVesselSearchDisplayed && <VesselSidebarHeader />}
           <MapButtons />
           <RightMenuOnHoverArea />
-          {isVesselListDisplayed && <VesselList />}
         </LegacyRsuiteComponentsWrapper>
         {isVesselSidebarOpen && <VesselSidebar />}
 
@@ -79,6 +77,7 @@ export function MainWindow() {
 
         {status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}
         {isDrawLayerModalDisplayed && <DrawLayerModal />}
+        <VesselGroupMainWindowEdition />
       </Wrapper>
     </>
   )

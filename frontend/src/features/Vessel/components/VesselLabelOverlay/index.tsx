@@ -18,18 +18,15 @@ const INITIAL_OFFSET_VALUE_WHEN_SHOWN_TRACK = [33, -25]
 export function VesselLabelOverlay({
   coordinates,
   featureId,
-  flagState,
   identity,
+  label,
   moveLine,
   offset,
   opacity,
   previewFilteredVesselsMode,
-  riskFactor,
   riskFactorDetailsShowed,
-  text,
   trackIsShown,
   triggerShowRiskDetails,
-  underCharter,
   zoomHasChanged
 }) {
   const overlayElementRef = useRef<HTMLDivElement>() as MutableRefObject<HTMLDivElement>
@@ -124,18 +121,15 @@ export function VesselLabelOverlay({
       >
         <VesselLabel
           featureId={featureId}
-          flagState={flagState}
           identity={identity}
+          label={label}
           opacity={opacity}
           overlayIsPanning={overlayIsPanning}
           overlayRef={overlayElementRef}
           previewFilteredVesselsMode={previewFilteredVesselsMode}
-          riskFactor={riskFactor}
           riskFactorDetailsShowed={riskFactorDetailsShowed}
           showed={showed}
-          text={text}
           triggerShowRiskDetails={triggerShowRiskDetails}
-          underCharter={underCharter}
         />
       </Wrapper>
     </WrapperToBeKeptForDOMManagement>

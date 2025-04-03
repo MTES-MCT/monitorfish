@@ -19,6 +19,9 @@ enum class BackendUsageErrorCode {
     /** Thrown when a resource is expected to exist but doesn't. */
     NOT_FOUND,
 
+    /** Thrown when a resource could not be modified because of user rights */
+    UNAUTHORIZED,
+
     /** Thrown when a resource could not be updated. */
     COULD_NOT_UPDATE,
 

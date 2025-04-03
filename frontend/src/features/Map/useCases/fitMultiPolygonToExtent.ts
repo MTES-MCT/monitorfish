@@ -5,12 +5,12 @@ import { GeoJSON } from 'ol/format'
 
 import { OPENLAYERS_PROJECTION } from '../constants'
 
-import type { GeoJSON as GeoJSONNamespace } from 'domain/types/GeoJSON'
+import type { MultiPolygon as GeoJSONMultiPolygon } from 'geojson'
 import type { Coordinate } from 'ol/coordinate'
 import type { MultiPolygon } from 'ol/geom'
 
-export const fitMultiPolygonToExtent = (geometry: GeoJSONNamespace.Geometry | undefined) => dispatch => {
-  if (!(geometry as GeoJSONNamespace.MultiPolygon)?.coordinates?.length) {
+export const fitMultiPolygonToExtent = (geometry: GeoJSONMultiPolygon | undefined) => dispatch => {
+  if (!geometry?.coordinates?.length) {
     return
   }
 

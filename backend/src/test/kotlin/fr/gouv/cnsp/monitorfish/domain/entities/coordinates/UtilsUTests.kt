@@ -10,7 +10,7 @@ class UtilsUTests {
     @Test
     fun `transformCoordinates Should return a transformed coordinates`() {
         // When
-        val result = transformCoordinates(47.8979431461615, -4.09068770830146)
+        val result = transformCoordinatesToOpenlayersProjection(47.8979431461615, -4.09068770830146)
 
         // Then
         assertThat(result.first).isEqualTo(5331974.641075866)

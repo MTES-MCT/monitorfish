@@ -1,4 +1,4 @@
-import { undoPreviewVessels } from '@features/Vessel/useCases/undoPreviewVessels'
+import { undoPreviewVessels } from '@features/Vessel/useCases/VesselListV2/undoPreviewVessels'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import styled from 'styled-components'

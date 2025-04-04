@@ -79,6 +79,9 @@ function UnmemoizedVesselInfractionSuspicionLayer({ mapMovingAndZoomEvent }) {
     }
 
     return undefined
+
+    // vesselsLastPositionVisibility is enough for vesselIsHidden and vesselIsOpacityReduced variables
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isSuperUser,
     numberOfVessels,
@@ -87,8 +90,7 @@ function UnmemoizedVesselInfractionSuspicionLayer({ mapMovingAndZoomEvent }) {
     hideNonSelectedVessels,
     mapMovingAndZoomEvent,
     areVesselsNotInVesselGroupsHidden,
-    vesselIsHidden,
-    vesselIsOpacityReduced
+    vesselsLastPositionVisibility
   ])
 
   return null

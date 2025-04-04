@@ -5,19 +5,19 @@ context('Vessels Track', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(2000)
+    cy.wait(5000)
   })
 
   it('A track Should be showed When clicking on a vessel with CTRL key pressed', () => {
     // When
-    cy.wait(200)
+    cy.wait(400)
     cy.get('.VESSELS_POINTS').click(460, 480, { ctrlKey: true, force: true, timeout: 10000 })
-    cy.wait(200)
+    cy.wait(400)
     cy.get('.VESSELS_POINTS').click(504, 290, { ctrlKey: true, force: true, timeout: 10000 })
-    cy.wait(200)
+    cy.wait(400)
     cy.get('.VESSELS_POINTS').click(295, 300, { force: true, timeout: 10000 })
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 2)
-    cy.wait(200)
+    cy.wait(400)
 
     cy.log('Show only the selected vessels')
     cy.get('*[data-cy^="trigger-hide-other-vessels-from-sidebar"]').click({ timeout: 10000 })

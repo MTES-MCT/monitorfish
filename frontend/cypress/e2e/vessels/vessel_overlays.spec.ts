@@ -56,7 +56,10 @@ context('Vessels Overlays', () => {
     cy.get('*[data-cy^="vessel-card-groups"]').should('not.exist')
   })
 
-  it('Last position card with Alert Should be seen on the map on pointer move', () => {
+  it('Last position card Should contain Alert and Beacon malfunction', () => {
+    /**
+     * Alert
+     */
     // When we move the pointer cursor (from one point to another to emit an event)
     cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 460, clientY: 480, force: true, pointerId: 1 })
     cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 904, clientY: 255, force: true, pointerId: 1 })
@@ -77,25 +80,30 @@ context('Vessels Overlays', () => {
     cy.get('*[data-cy^="vessel-card-latitude"]').contains('48° 26′ 17″ N')
     cy.get('*[data-cy^="vessel-card-longitude"]').contains('006° 30′ 22″ W')
     cy.get('*[data-cy^="vessel-card-alert"]').contains('3 milles - Chaluts')
-  })
 
-  it('Last position card with Beacon malfunction Should be seen on the map on pointer move', () => {
+    /**
+     * Beacon malfunction
+     */
+    cy.get('*[data-cy^="vessel-search-input"]').type('EH VOLER MADAME')
+    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
+    cy.wait(2000)
+
     // When we move the pointer cursor (from one point to another to emit an event)
     cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 460, clientY: 530, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 980, clientY: 735, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 981, clientY: 737, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 910, clientY: 730, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 982, clientY: 737, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 980, clientY: 735, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 979, clientY: 735, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 985, clientY: 737, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 985, clientY: 737, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 984, clientY: 735, force: true, pointerId: 1 })
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 452, clientY: 511, force: true, pointerId: 1 })
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 453, clientY: 510, force: true, pointerId: 1 })
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 454, clientY: 509, force: true, pointerId: 1 })
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 453, clientY: 510, force: true, pointerId: 1 })
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 452, clientY: 511, force: true, pointerId: 1 })
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 451, clientY: 512, force: true, pointerId: 1 })
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 453, clientY: 511, force: true, pointerId: 1 })
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 454, clientY: 510, force: true, pointerId: 1 })
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 452, clientY: 509, force: true, pointerId: 1 })
 
     // Then
     cy.wait(50)
-    cy.get('*[data-cy^="vessel-card-segments"]').contains('W09')
-    cy.get('*[data-cy^="vessel-card-name"]').contains('FRAIS AVIS MODE')
+    cy.get('*[data-cy^="vessel-card-segments"]').contains('NWW01')
+    cy.get('*[data-cy^="vessel-card-name"]').contains('EH VOLER MADAME')
     cy.get('*[data-cy^="vessel-card-beacon-malfunction"]').contains('NON-ÉMISSION VMS')
   })
 

@@ -168,7 +168,7 @@ export const atLeastOneVesselSelected = (vesselsTracksShowed, selectedVesselIden
 export const vesselIsShowed = (
   vesselIdentity: Vessel.VesselIdentity,
   vesselsTrackShowed: ShowedVesselTrack | undefined,
-  selectedVesselIdentity: Vessel.VesselIdentity
+  selectedVesselIdentity: Vessel.VesselIdentity | undefined
 ): boolean =>
   vesselsAreEquals(vesselIdentity, selectedVesselIdentity) ||
   vesselsAreEquals(vesselIdentity, vesselsTrackShowed?.vesselIdentity)

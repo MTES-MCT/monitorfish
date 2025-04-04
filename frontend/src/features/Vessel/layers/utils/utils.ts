@@ -32,7 +32,7 @@ export function filterNonSelectedVessels(
     const properties = feature.getProperties()
     const vesselTrackShowed = vesselsTracksShowed[getVesselCompositeIdentifier(properties)]
 
-    return hideNonSelectedVessels && selectedVesselIdentity
+    return hideNonSelectedVessels
       ? vesselIsShowed(properties as Vessel.VesselIdentity, vesselTrackShowed, selectedVesselIdentity)
       : true
   }

@@ -2,7 +2,7 @@ import { COLORS } from '@constants/constants'
 import { Style } from 'ol/style'
 import Stroke from 'ol/style/Stroke'
 
-import { getColorWithAlpha } from './utils'
+import { getColorWithAlpha } from '../../../Map/layers/styles/utils'
 
 const labelLineStyleCache = new Map()
 

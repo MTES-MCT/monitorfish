@@ -1,30 +1,24 @@
-import { LayerProperties } from '@features/Map/constants'
-import { getLabelLineStyle } from '@features/Map/layers/styles/labelLine.style'
-import { MonitorFishMap } from '@features/Map/Map.types'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
-import { drawMovedLabelLineIfFoundAndReturnOffset } from '@features/Vessel/label.utils'
 import {
   filterNonSelectedVessels,
   getVesselFeaturesInExtent,
   isVesselGroupColorDefined
 } from '@features/Vessel/layers/utils/utils'
+import {
+  VESSELS_LABEL_VECTOR_LAYER,
+  VESSELS_LABEL_VECTOR_SOURCE
+} from '@features/Vessel/layers/VesselsLabelsLayer/constants'
+import { getLabelFromFeatures } from '@features/Vessel/layers/VesselsLabelsLayer/utils'
 import { getVesselLastPositionVisibilityDates, VesselFeature } from '@features/Vessel/types/vessel'
-import { extractVesselPropertiesFromFeature, getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
 import LineString from 'ol/geom/LineString'
-import { Vector } from 'ol/layer'
-import VectorSource from 'ol/source/Vector'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
-import { VesselLabelOverlay } from '../components/VesselLabelOverlay'
-import { vesselSelectors } from '../slice'
-import { VesselLabelLine } from '../types/vesselLabelLine'
-
-import type { Feature } from 'ol'
-import type { Geometry } from 'ol/geom'
-import type { MutableRefObject } from 'react'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
+import { VesselLabelOverlay } from '../../components/VesselLabelOverlay'
+import { vesselSelectors } from '../../slice'
+import { VesselLabelLine } from '../../types/vesselLabelLine'
 
 const MAX_LABELS_DISPLAYED = 200
 const MAX_LABELS_DISPLAYED_IN_PREVIEW = 400
@@ -67,64 +61,34 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
   const [vesselToCoordinates, setVesselToCoordinates] = useState(new Map())
   const [vesselToRiskFactorDetailsShowed, setVesselToRiskFactorDetailsShowed] = useState(new Map())
   const isThrottled = useRef(false)
-
-  const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
-  const layerRef = useRef() as MutableRefObject<MonitorFishMap.VectorLayerWithName>
   const [currentLabels, setCurrentLabels] = useState<JSX.Element[]>([])
 
-  const getVectorSource = useCallback(() => {
-    if (vectorSourceRef.current === undefined) {
-      vectorSourceRef.current = new VectorSource<Feature<Geometry>>({
-        features: [],
-        wrapX: false
-      })
-    }
-
-    return vectorSourceRef.current
-  }, [])
-
-  const getLayer = useCallback(() => {
-    if (layerRef.current === undefined) {
-      layerRef.current = new Vector({
-        renderBuffer: 7,
-        source: getVectorSource(),
-        style: getLabelLineStyle,
-        updateWhileAnimating: true,
-        updateWhileInteracting: true,
-        zIndex: LayerProperties.VESSELS_LABEL.zIndex
-      })
-    }
-
-    return layerRef.current
-  }, [getVectorSource])
-
   useEffect(() => {
-    getLayer().name = LayerProperties.VESSELS_LABEL.code
-    monitorfishMap.getLayers().push(getLayer())
+    monitorfishMap.getLayers().push(VESSELS_LABEL_VECTOR_LAYER)
 
     return () => {
-      monitorfishMap.removeLayer(getLayer())
+      monitorfishMap.removeLayer(VESSELS_LABEL_VECTOR_LAYER)
     }
-  }, [getLayer])
+  }, [])
 
   const moveVesselLabelLine = useCallback(
     (featureId, fromCoordinates, toCoordinates, offset, opacity) => {
       if (vesselToCoordinates.has(featureId)) {
-        const existingLabelLineFeature = getVectorSource().getFeatureById(featureId)
+        const existingLabelLineFeature = VESSELS_LABEL_VECTOR_SOURCE.getFeatureById(featureId)
         if (existingLabelLineFeature) {
           existingLabelLineFeature.setGeometry(new LineString([fromCoordinates, toCoordinates]))
         }
       } else {
         const labelLineFeature = VesselLabelLine.getFeature(fromCoordinates, toCoordinates, featureId, opacity)
 
-        getVectorSource().addFeature(labelLineFeature)
+        VESSELS_LABEL_VECTOR_SOURCE.addFeature(labelLineFeature)
       }
 
       const nextVesselToCoordinates = vesselToCoordinates
       nextVesselToCoordinates.set(featureId, { coordinates: toCoordinates, offset })
       setVesselToCoordinates(nextVesselToCoordinates)
     },
-    [vesselToCoordinates, getVectorSource]
+    [vesselToCoordinates]
   )
 
   const showLabelRiskFactorDetails = useCallback(
@@ -148,9 +112,9 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
 
       previousFeatureIdsList.forEach(id => {
         if (featureIdsList.indexOf(id) === NOT_FOUND) {
-          const feature = getVectorSource().getFeatureById(id)
+          const feature = VESSELS_LABEL_VECTOR_SOURCE.getFeatureById(id)
           if (feature) {
-            getVectorSource().removeFeature(feature)
+            VESSELS_LABEL_VECTOR_SOURCE.removeFeature(feature)
           }
         }
       })
@@ -185,116 +149,12 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
     vesselLabel,
     moveVesselLabelLine,
     previousFeaturesAndLabels,
-    showLabelRiskFactorDetails,
-    getVectorSource
+    showLabelRiskFactorDetails
   ])
-
-  useEffect(() => {
-    const vesselsLayer = monitorfishMap
-      .getLayers()
-      .getArray()
-      // @ts-ignore
-      ?.find(olLayer => olLayer.name === MonitorFishMap.MonitorFishLayer.VESSELS)
-      // @ts-ignore
-      ?.getSource()
-    vesselsLayer?.current?.forEachFeatureInExtent(monitorfishMap.getView().calculateExtent(), vesselFeature => {
-      const opacity = VesselFeature.getVesselOpacity(
-        vesselFeature.get('dateTime'),
-        vesselIsHidden,
-        vesselIsOpacityReduced
-      )
-      const identity = {
-        externalReferenceNumber: vesselFeature.get('externalReferenceNumber'),
-        internalReferenceNumber: vesselFeature.get('internalReferenceNumber'),
-        ircs: vesselFeature.get('ircs')
-      }
-      const labelLineFeatureId = VesselLabelLine.getFeatureId(identity)
-      const feature = vectorSourceRef?.current?.getFeatureById(labelLineFeatureId)
-      if (feature) {
-        feature.set(VesselLabelLine.opacityProperty, opacity)
-      }
-    })
-  }, [vesselIsHidden, vesselIsOpacityReduced])
 
   useEffect(() => {
     if (isThrottled.current || !numberOfVessels) {
       return
-    }
-
-    // functions definition
-    function addLabelToFeatures(features) {
-      const showedTracksVesselsIdentities = Object.keys(vesselsTracksShowed)
-      if (selectedVessel) {
-        showedTracksVesselsIdentities.push(getVesselCompositeIdentifier(selectedVessel))
-      }
-
-      const nextFeaturesAndLabels = features.map(feature => {
-        const vesselProperties = extractVesselPropertiesFromFeature(feature, [
-          'beaconMalfunctionId',
-          'dateTime',
-          'detectabilityRiskFactor',
-          'flagState',
-          'groupsDisplayed',
-          'impactRiskFactor',
-          'internalReferenceNumber',
-          'isAtPort',
-          'lastControlDateTime',
-          'probabilityRiskFactor',
-          'riskFactor',
-          'segments',
-          'underCharter',
-          'vesselId',
-          'vesselIdentifier',
-          'vesselName'
-        ])
-        const label = VesselFeature.getVesselFeatureLabel(vesselProperties, {
-          areVesselsNotInVesselGroupsHidden,
-          isRiskFactorShowed: isSuperUser && riskFactorShowedOnMap,
-          vesselLabel,
-          vesselLabelsShowedOnMap,
-          vesselsLastPositionVisibility
-        })
-        const identity = {
-          externalReferenceNumber: feature.get('externalReferenceNumber'),
-          internalReferenceNumber: feature.get('internalReferenceNumber'),
-          ircs: feature.get('ircs')
-        }
-        const labelLineFeatureId = VesselLabelLine.getFeatureId(identity)
-        const opacity =
-          VesselFeature.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced) ||
-          vesselProperties.beaconMalfunctionId
-            ? 1
-            : 0
-        const offset = drawMovedLabelLineIfFoundAndReturnOffset(
-          getVectorSource(),
-          vesselToCoordinates,
-          labelLineFeatureId,
-          feature,
-          opacity
-        )
-        const trackIsShown = showedTracksVesselsIdentities.includes(getVesselCompositeIdentifier(vesselProperties))
-
-        return {
-          featureId: labelLineFeatureId,
-          identity: {
-            coordinates: feature.getGeometry().getCoordinates(),
-            externalReferenceNumber: identity.externalReferenceNumber,
-            flagState: vesselProperties.flagState,
-            internalReferenceNumber: identity.internalReferenceNumber,
-            ircs: identity.ircs,
-            key: feature.ol_uid,
-            vesselId: vesselProperties.vesselId,
-            vesselIdentifier: vesselProperties.vesselIdentifier,
-            vesselName: vesselProperties.vesselName
-          },
-          label,
-          offset,
-          opacity,
-          trackIsShown
-        }
-      })
-
-      setFeaturesAndLabels(nextFeaturesAndLabels)
     }
 
     function addVesselLabelToAllFeaturesInExtent() {
@@ -305,14 +165,14 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
 
       if (doNotShowLabels) {
         setFeaturesAndLabels([])
-        getVectorSource().clear()
+        VESSELS_LABEL_VECTOR_SOURCE.clear()
 
         return
       }
 
       if (!vesselLabelsShowedOnMap && !riskFactorShowedOnMap) {
         setFeaturesAndLabels([])
-        getVectorSource().clear()
+        VESSELS_LABEL_VECTOR_SOURCE.clear()
 
         return
       }
@@ -328,10 +188,23 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
 
       const maxLabelsDisplayed = previewFilteredVesselsMode ? MAX_LABELS_DISPLAYED_IN_PREVIEW : MAX_LABELS_DISPLAYED
       if (featuresInExtent.length < maxLabelsDisplayed) {
-        addLabelToFeatures(featuresInExtent)
+        const features = getLabelFromFeatures(featuresInExtent, {
+          areVesselsNotInVesselGroupsHidden,
+          isSuperUser,
+          riskFactorShowedOnMap,
+          selectedVessel,
+          vesselIsHidden,
+          vesselIsOpacityReduced,
+          vesselLabel,
+          vesselLabelsShowedOnMap,
+          vesselsLastPositionVisibility,
+          vesselsTracksShowed,
+          vesselToCoordinates
+        })
+        setFeaturesAndLabels(features)
       } else {
         setFeaturesAndLabels([])
-        getVectorSource().clear()
+        VESSELS_LABEL_VECTOR_SOURCE.clear()
       }
     }
     // End of functions definition
@@ -341,14 +214,15 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
       addVesselLabelToAllFeaturesInExtent()
       isThrottled.current = false
     }, throttleDuration)
+
+    // vesselsLastPositionVisibility is enough for vesselIsHidden and vesselIsOpacityReduced variables
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isSuperUser,
     numberOfVessels,
     selectedVessel,
     selectedVesselIdentity,
-    vesselIsHidden,
     vesselsLastPositionVisibility,
-    vesselIsOpacityReduced,
     mapMovingAndZoomEvent,
     vesselLabelsShowedOnMap,
     riskFactorShowedOnMap,
@@ -357,7 +231,6 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
     previewFilteredVesselsMode,
     hideNonSelectedVessels,
     vesselsTracksShowed,
-    getVectorSource,
     areVesselsDisplayed,
     areVesselsNotInVesselGroupsHidden,
     vesselGroupsIdsDisplayed

@@ -76,6 +76,9 @@ function UnmemoizedVesselEstimatedPositionLayer({ mapMovingAndZoomEvent }) {
     }
 
     return undefined
+
+    // vesselsLastPositionVisibility is enough for vesselIsHidden and vesselIsOpacityReduced variables
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     numberOfVessels,
     selectedVesselIdentity,
@@ -85,8 +88,6 @@ function UnmemoizedVesselEstimatedPositionLayer({ mapMovingAndZoomEvent }) {
     mapMovingAndZoomEvent,
     vesselsLastPositionVisibility,
     areVesselsNotInVesselGroupsHidden,
-    vesselIsHidden,
-    vesselIsOpacityReduced,
     showingVesselsEstimatedPositions
   ])
 

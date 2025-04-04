@@ -8,6 +8,7 @@ import {
   VESSEL_BEACON_MALFUNCTION_VECTOR_SOURCE
 } from '@features/Vessel/layers/VesselBeaconMalfunctionLayer/constants'
 import { vesselSelectors } from '@features/Vessel/slice'
+import { getVesselLastPositionVisibilityDates, VesselFeature } from '@features/Vessel/types/vessel'
 import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { throttle } from 'lodash-es'
@@ -28,6 +29,8 @@ function UnmemoizedVesselBeaconMalfunctionLayer({ mapMovingAndZoomEvent }) {
     state => state.vesselGroup.areVesselsNotInVesselGroupsHidden
   )
   const numberOfVessels = useMainAppSelector(state => vesselSelectors.selectTotal(state.vessel.vessels))
+  const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
+  const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
   useEffect(() => {
     if (isSuperUser) {
@@ -50,7 +53,8 @@ function UnmemoizedVesselBeaconMalfunctionLayer({ mapMovingAndZoomEvent }) {
               feature.get('isFiltered') &&
               feature.get('hasBeaconMalfunction') &&
               !feature.get('hasAlert') &&
-              (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true)
+              (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true) &&
+              VesselFeature.getVesselOpacity(feature.get('dateTime'), vesselIsHidden, vesselIsOpacityReduced) !== 0
           )
           .filter(filterNonSelectedVessels(vesselsTracksShowed, hideNonSelectedVessels, selectedVesselIdentity))
           .map(feature => {
@@ -76,6 +80,9 @@ function UnmemoizedVesselBeaconMalfunctionLayer({ mapMovingAndZoomEvent }) {
     }
 
     return undefined
+
+    // vesselsLastPositionVisibility is enough for vesselIsHidden and vesselIsOpacityReduced variables
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isSuperUser,
     numberOfVessels,
@@ -83,7 +90,8 @@ function UnmemoizedVesselBeaconMalfunctionLayer({ mapMovingAndZoomEvent }) {
     vesselsTracksShowed,
     hideNonSelectedVessels,
     mapMovingAndZoomEvent,
-    areVesselsNotInVesselGroupsHidden
+    areVesselsNotInVesselGroupsHidden,
+    vesselsLastPositionVisibility
   ])
 
   return null

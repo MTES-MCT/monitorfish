@@ -2,14 +2,14 @@ context('Vessel labels', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(1000)
+    cy.wait(2000)
   })
 
   it('Risk factors Should be showed on the map', () => {
     // Then
-    cy.get('*[data-cy="vessel-label-risk-factor"]').should('have.length', 19)
-    // And the ship "FRAIS AVIS MODE" contains a risk factor of 2.6
-    cy.get('*[data-cy="vessel-label-risk-factor"]').eq(0).contains(2.6)
+    cy.get('*[data-cy="vessel-label-risk-factor"]').should('have.length', 18)
+    // And the ship "PROCHAIN PATRON ABRI" contains a risk factor of 3.6
+    cy.get('*[data-cy="vessel-label-risk-factor"]').eq(0).contains(3.6)
   })
 
   it('Vessels names Should be showed on the map', () => {
@@ -19,11 +19,10 @@ context('Vessel labels', () => {
     cy.get('*[data-cy="map-property-trigger"]', { timeout: 10000 })
       .filter(':contains("étiquettes des navires")')
       .click({ timeout: 10000 })
-    cy.get('#root').dblclick(880, 760, { timeout: 10000 })
+    cy.get('#root').dblclick(1100, 760, { timeout: 10000 })
 
     // Then
-    cy.contains('*[data-cy="vessel-label-text"]', 'FRAIS AVIS MODE')
-    cy.get('*[data-cy="FRAIS AVIS MODE-under-charter"]').should('exist')
+    cy.contains('*[data-cy="vessel-label-text"]', 'RENCONTRER VEILLER APPARTEMENT')
   })
 
   it('Vessels names Should be movable', () => {

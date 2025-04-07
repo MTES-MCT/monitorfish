@@ -20,7 +20,7 @@ export const VESSEL_LIST_CSV_MAP_BASE: DownloadAsCsvMap<Vessel.VesselLastPositio
   mmsi: 'MMSI',
   externalReferenceNumber: 'Marquage extérieur',
   length: {
-    label: 'Longueur du navire',
+    label: 'Longueur',
     transform: vessel => `${vessel.length} m`
   },
   segments: {

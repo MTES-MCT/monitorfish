@@ -93,6 +93,7 @@ export function VesselGroupMenuDialog() {
           <MapPropertyTrigger
             booleanProperty={areVesselsNotInVesselGroupsHidden}
             Icon={areVesselsNotInVesselGroupsHidden ? Icon.Display : Icon.Hide}
+            inverse
             text="les navires hors des groupes affichés"
             updateBooleanProperty={isChecked => dispatch(hideVesselsNotInVesselGroups(isChecked))}
           />

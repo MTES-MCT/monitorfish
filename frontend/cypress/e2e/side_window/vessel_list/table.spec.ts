@@ -56,8 +56,8 @@ context('Side Window > Vessel List > Table', () => {
 
       return cy
         .readFile(`cypress/downloads/${downloadedCSVFilename}`)
-        .should('contains', 'Nationalité,Nom,CFR,C/S,MMSI,GDH (UTC),Latitude,Longitude,Cap,Vitesse')
-        .should('contains', '"France","PARENT EXPLIQUER COUCHER","ABC000452438","CC0029","211049483"')
+        .should('contains', 'Nationalité,Nom,CFR,C/S,MMSI,Longueur,GDH (UTC),Latitude,Longitude,Cap,Vitesse')
+        .should('contains', '"France","PARENT EXPLIQUER COUCHER","ABC000452438","CC0029","211049483","30.1 m"')
         .should('contains', '"47°43.740′N","003°21.600′W",0,0')
     })
   })

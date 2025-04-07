@@ -78,7 +78,7 @@ export namespace Vessel {
 
   export type VesselAndPositions = {
     positions: VesselPosition[]
-    vessel: Vessel.Vessel
+    vessel: Vessel.Vessel | undefined
   }
 
   export type DeclaredLogbookSpecies = z.infer<typeof DeclaredLogbookSpeciesSchema>

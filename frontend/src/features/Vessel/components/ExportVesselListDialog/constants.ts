@@ -25,7 +25,7 @@ export const VESSEL_LIST_CSV_FORMAT_EXPORT_LABEL: Record<VesselListCsvExportForm
 export const VESSEL_LIST_CSV_FORMAT_AS_OPTIONS = getOptionsFromLabelledEnum(VESSEL_LIST_CSV_FORMAT_EXPORT_LABEL)
 
 export const DEFAULT_CHECKBOXES_FIRST_COLUMN = ['flagState', 'vesselName', 'internalReferenceNumber', 'ircs', 'mmsi']
-export const DEFAULT_CHECKBOXES_SECOND_COLUMN = []
+export const DEFAULT_CHECKBOXES_SECOND_COLUMN = ['length']
 export const DEFAULT_CHECKBOXES_THIRD_COLUMN = ['dateTime', 'latitude', 'longitude', 'course', 'speed']
 
 /**

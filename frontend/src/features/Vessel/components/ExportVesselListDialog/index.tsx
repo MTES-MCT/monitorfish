@@ -25,7 +25,7 @@ type ExportActivityReportsDialogProps = {
 export function ExportVesselListDialog({ onExit, selectedRows }: ExportActivityReportsDialogProps) {
   const dispatch = useMainAppDispatch()
   const [firstColumnsCsv, setFirstColumnsCsv] = useState(DEFAULT_CHECKBOXES_FIRST_COLUMN)
-  const [secondColumnsCsv, setSecondColumnsCsv] = useState<string[]>([])
+  const [secondColumnsCsv, setSecondColumnsCsv] = useState(DEFAULT_CHECKBOXES_SECOND_COLUMN)
   const [thirdColumnsCsv, setThirdColumnsCsv] = useState(DEFAULT_CHECKBOXES_THIRD_COLUMN)
   const [format, setFormat] = useState(VesselListCsvExportFormat.VMS_SITUATION)
   const { trackEvent } = useTracking()

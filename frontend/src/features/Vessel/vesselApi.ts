@@ -66,7 +66,9 @@ export const vesselApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(VESSEL_POSITIONS_ERROR_MESSAGE, response),
       transformResponse: async (baseQueryReturnValue: Vessel.VesselAndPositions, meta: Meta) => {
         // TODO We nee to also check the `positions` type
-        parseResponseOrReturn<Vessel.Vessel>(baseQueryReturnValue.vessel, VesselSchema, false)
+        if (baseQueryReturnValue.vessel) {
+          parseResponseOrReturn<Vessel.Vessel>(baseQueryReturnValue.vessel, VesselSchema, false)
+        }
 
         return {
           isTrackDepthModified: meta?.response?.status === HttpStatusCode.ACCEPTED,

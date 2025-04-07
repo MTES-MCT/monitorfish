@@ -112,7 +112,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
             <ExportTrack />
           </Section>
           <Header>Liste des positions VMS affichées</Header>
-          <PositionsTable openBox />
+          <PositionsTable />
         </TrackRequestBody>
       )}
     </>

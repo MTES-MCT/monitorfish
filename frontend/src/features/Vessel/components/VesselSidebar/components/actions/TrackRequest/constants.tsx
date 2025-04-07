@@ -1,14 +1,15 @@
 import { HighlightPositionCell } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/HighlightPositionCell'
+import { Vessel } from '@features/Vessel/Vessel.types'
 import { getLocalizedDayjs } from '@mtes-mct/monitor-ui'
 import { isNumeric } from '@utils/isNumeric'
 
 import { VesselTrackDepth } from '../../../../../types/vesselTrackDepth'
 
-import type { Vessel } from '@features/Vessel/Vessel.types'
+import type { VesselPositionWithId } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/types'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { ColumnDef } from '@tanstack/react-table'
 
-export const POSITION_TABLE_COLUMNS: Array<ColumnDef<Vessel.VesselPosition & { id: number }>> = [
+export const POSITION_TABLE_COLUMNS: Array<ColumnDef<VesselPositionWithId>> = [
   {
     accessorKey: 'id',
     cell: info => <HighlightPositionCell row={info.row.original} value={info.getValue()} />,
@@ -49,6 +50,28 @@ export const POSITION_TABLE_COLUMNS: Array<ColumnDef<Vessel.VesselPosition & { i
     size: 30
   }
 ]
+
+export const DUMMY_VESSEL_POSITION: Vessel.VesselPosition = {
+  course: 0,
+  dateTime: '',
+  destination: undefined,
+  externalReferenceNumber: undefined,
+  flagState: 'FR',
+  from: '',
+  internalReferenceNumber: undefined,
+  ircs: undefined,
+  isAtPort: undefined,
+  isFishing: undefined,
+  isManual: undefined,
+  latitude: 0,
+  longitude: 0,
+  mmsi: undefined,
+  networkType: undefined,
+  positionType: '',
+  speed: 0,
+  tripNumber: undefined,
+  vesselName: ''
+}
 
 export const SELECT_TRACK_DEPTH_OPTIONS: Option<VesselTrackDepth>[] = [
   {

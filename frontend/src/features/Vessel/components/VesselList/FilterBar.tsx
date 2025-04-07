@@ -1,3 +1,4 @@
+import { useGetDistrictsQuery } from '@api/district'
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
 import { InteractionListener } from '@features/Map/constants'
@@ -39,6 +40,7 @@ export function FilterBar() {
   const { fleetSegmentsAsOptions } = useGetFleetSegmentsAsOptions()
   const { gearsAsTreeOptions } = useGetGearsAsTreeOptions()
   const { portsAsTreeOptions } = useGetPortsAsTreeOptions()
+  const { data: districtsAsTreeOptions } = useGetDistrictsQuery()
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const filterableZoneAsTreeOptions = useGetFilterableZonesAsTreeOptions()
   const organizationMembershipNames = useGetOrganizationMembershipNamesAsOptions()
@@ -56,6 +58,10 @@ export function FilterBar() {
 
   const updateCountryCodes = (nextCountryCodes: string[] | undefined) => {
     dispatch(filterVessels({ countryCodes: nextCountryCodes ?? [] }))
+  }
+
+  const updateDistrictCodes = (nextDistrictCodes: string[] | undefined) => {
+    dispatch(filterVessels({ districtCodes: nextDistrictCodes ?? [] }))
   }
 
   const updateRiskFactors = (nextRiskFactors: number[] | undefined) => {
@@ -330,6 +336,21 @@ export function FilterBar() {
         />
         {areMoreFiltersDisplayed && (
           <>
+            <MultiCascader
+              isLabelHidden
+              isTransparent
+              label="Quartier"
+              name="districtCodes"
+              onChange={updateDistrictCodes}
+              options={districtsAsTreeOptions ?? []}
+              placeholder="Quartier"
+              popupWidth={500}
+              renderValue={(_, items) =>
+                items.length > 0 ? <SelectValue>Quartier ({items.length})</SelectValue> : <></>
+              }
+              searchable
+              value={listFilterValues.districtCodes}
+            />
             <Select
               isLabelHidden
               isTransparent

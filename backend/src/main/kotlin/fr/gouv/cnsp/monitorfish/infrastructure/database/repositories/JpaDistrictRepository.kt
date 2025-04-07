@@ -19,4 +19,7 @@ class JpaDistrictRepository(
         } catch (e: EmptyResultDataAccessException) {
             throw CodeNotFoundException("District: code $districtCode not found")
         }
+
+    @Cacheable(value = ["districts"])
+    override fun findAll() = dbDistrictRepository.findAll().map { it.toDistrict() }
 }

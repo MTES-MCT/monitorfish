@@ -6,4 +6,6 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 interface DistrictRepository {
     @Throws(CodeNotFoundException::class)
     fun find(districtCode: String): District
+
+    fun findAll(): List<District>
 }

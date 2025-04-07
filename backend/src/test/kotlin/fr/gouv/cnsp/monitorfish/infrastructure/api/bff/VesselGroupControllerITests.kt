@@ -62,6 +62,7 @@ class VesselGroupControllerITests {
                 filters =
                     VesselGroupFilters(
                         countryCodes = listOf(CountryCode.FR, CountryCode.ES, CountryCode.IT),
+                        districtCodes = listOf(),
                         fleetSegments = emptyList(),
                         gearCodes = listOf("OTB", "OTM", "TBB", "PTB"),
                         hasLogbook = true,

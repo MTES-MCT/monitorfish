@@ -197,6 +197,8 @@ const GroupInformation = styled.div`
 `
 const OpenedGroupIcons = styled.div`
   width: 23px;
+  margin-left: auto;
+
   .Element-IconButton {
     padding-right: 0;
   }

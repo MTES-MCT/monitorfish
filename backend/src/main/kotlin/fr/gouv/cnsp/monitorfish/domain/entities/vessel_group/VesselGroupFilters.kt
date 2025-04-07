@@ -4,6 +4,7 @@ import com.neovisionaries.i18n.CountryCode
 
 data class VesselGroupFilters(
     val countryCodes: List<CountryCode> = listOf(),
+    val districtCodes: List<String> = listOf(),
     val fleetSegments: List<String> = listOf(),
     val gearCodes: List<String> = listOf(),
     val hasLogbook: Boolean?,

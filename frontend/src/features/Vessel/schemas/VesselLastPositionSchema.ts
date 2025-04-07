@@ -36,9 +36,7 @@ export const VesselLastPositionSchema = z.strictObject({
   // TODO To remove
   destination: stringOrUndefined,
   detectabilityRiskFactor: z.number(),
-  // TODO To remove
   district: stringOrUndefined,
-  // TODO To remove
   districtCode: stringOrUndefined,
   emissionPeriod: numberOrUndefined,
   estimatedCurrentLatitude: numberOrUndefined,

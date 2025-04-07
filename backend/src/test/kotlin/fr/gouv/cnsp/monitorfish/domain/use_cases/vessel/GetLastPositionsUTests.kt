@@ -83,6 +83,7 @@ class GetLastPositionsUTests {
                     filters =
                         VesselGroupFilters(
                             countryCodes = listOf(CountryCode.FR),
+                            districtCodes = listOf(),
                             fleetSegments = emptyList(),
                             gearCodes = emptyList(),
                             hasLogbook = null,
@@ -145,6 +146,7 @@ class GetLastPositionsUTests {
                     filters =
                         VesselGroupFilters(
                             countryCodes = emptyList(),
+                            districtCodes = listOf(),
                             fleetSegments = listOf("NWW03"),
                             gearCodes = emptyList(),
                             hasLogbook = null,
@@ -212,6 +214,7 @@ class GetLastPositionsUTests {
                     filters =
                         VesselGroupFilters(
                             countryCodes = emptyList(),
+                            districtCodes = listOf(),
                             fleetSegments = emptyList(),
                             gearCodes = listOf("OTB"),
                             hasLogbook = null,
@@ -274,6 +277,7 @@ class GetLastPositionsUTests {
                     filters =
                         VesselGroupFilters(
                             countryCodes = emptyList(),
+                            districtCodes = listOf(),
                             fleetSegments = emptyList(),
                             gearCodes = emptyList(),
                             hasLogbook = true,
@@ -335,6 +339,7 @@ class GetLastPositionsUTests {
                     filters =
                         VesselGroupFilters(
                             countryCodes = emptyList(),
+                            districtCodes = listOf(),
                             fleetSegments = emptyList(),
                             gearCodes = emptyList(),
                             hasLogbook = null,
@@ -396,6 +401,7 @@ class GetLastPositionsUTests {
                     filters =
                         VesselGroupFilters(
                             countryCodes = emptyList(),
+                            districtCodes = listOf(),
                             fleetSegments = emptyList(),
                             gearCodes = emptyList(),
                             hasLogbook = null,
@@ -466,6 +472,7 @@ class GetLastPositionsUTests {
                     filters =
                         VesselGroupFilters(
                             countryCodes = emptyList(),
+                            districtCodes = listOf(),
                             fleetSegments = emptyList(),
                             gearCodes = emptyList(),
                             hasLogbook = null,
@@ -695,6 +702,260 @@ class GetLastPositionsUTests {
         assertThat(lastPositions).hasSize(1)
         val vesselGroups = lastPositions[0].vesselGroups.map { it.name }
         assertThat(vesselGroups).contains("Dummy group")
+    }
+
+    @Test
+    fun `execute Should return last positions without groups When vessel district code not match`() {
+        // Given
+        given(lastPositionRepository.findAllInLastMonthOrWithBeaconMalfunction()).willReturn(
+            listOf(
+                LastPosition(
+                    flagState = CountryCode.FR,
+                    positionType = PositionType.AIS,
+                    districtCode = "LO",
+                    latitude = 16.445,
+                    longitude = 48.2525,
+                    riskFactor = 2.23,
+                    dateTime = ZonedDateTime.now(),
+                    isAtPort = true,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                ),
+            ),
+        )
+        given(vesselGroupRepository.findAllByUser(any())).willReturn(
+            listOf(
+                DynamicVesselGroup(
+                    id = 1,
+                    isDeleted = false,
+                    name = "Dummy group",
+                    description = "",
+                    pointsOfAttention = "",
+                    color = "",
+                    sharing = Sharing.PRIVATE,
+                    createdBy = "dummy@email.gouv.fr",
+                    createdAtUtc = ZonedDateTime.now(),
+                    updatedAtUtc = null,
+                    endOfValidityUtc = null,
+                    filters =
+                        VesselGroupFilters(
+                            countryCodes = emptyList(),
+                            districtCodes = listOf("GV"),
+                            fleetSegments = emptyList(),
+                            gearCodes = emptyList(),
+                            hasLogbook = null,
+                            lastControlPeriod = null,
+                            lastLandingPortLocodes = emptyList(),
+                            lastPositionHoursAgo = null,
+                            producerOrganizations = emptyList(),
+                            riskFactors = emptyList(),
+                            specyCodes = emptyList(),
+                            vesselSize = null,
+                            vesselsLocation = emptyList(),
+                            zones = emptyList(),
+                        ),
+                ),
+            ),
+        )
+
+        // When
+        val lastPositions =
+            GetLastPositions(lastPositionRepository, vesselGroupRepository)
+                .execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(lastPositions).hasSize(1)
+        assertThat(lastPositions[0].vesselGroups).hasSize(0)
+    }
+
+    @Test
+    fun `execute Should return last positions with groups When vessel district code match`() {
+        // Given
+        given(lastPositionRepository.findAllInLastMonthOrWithBeaconMalfunction()).willReturn(
+            listOf(
+                LastPosition(
+                    flagState = CountryCode.FR,
+                    positionType = PositionType.AIS,
+                    districtCode = "GV",
+                    latitude = 16.445,
+                    longitude = 48.2525,
+                    riskFactor = 2.23,
+                    dateTime = ZonedDateTime.now(),
+                    isAtPort = true,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                ),
+            ),
+        )
+        given(vesselGroupRepository.findAllByUser(any())).willReturn(
+            listOf(
+                DynamicVesselGroup(
+                    id = 1,
+                    isDeleted = false,
+                    name = "Dummy group",
+                    description = "",
+                    pointsOfAttention = "",
+                    color = "",
+                    sharing = Sharing.PRIVATE,
+                    createdBy = "dummy@email.gouv.fr",
+                    createdAtUtc = ZonedDateTime.now(),
+                    updatedAtUtc = null,
+                    endOfValidityUtc = null,
+                    filters =
+                        VesselGroupFilters(
+                            countryCodes = emptyList(),
+                            districtCodes = listOf("GV"),
+                            fleetSegments = emptyList(),
+                            gearCodes = emptyList(),
+                            hasLogbook = null,
+                            lastControlPeriod = null,
+                            lastLandingPortLocodes = emptyList(),
+                            lastPositionHoursAgo = null,
+                            producerOrganizations = emptyList(),
+                            riskFactors = emptyList(),
+                            specyCodes = emptyList(),
+                            vesselSize = null,
+                            vesselsLocation = emptyList(),
+                            zones = emptyList(),
+                        ),
+                ),
+            ),
+        )
+
+        // When
+        val lastPositions =
+            GetLastPositions(lastPositionRepository, vesselGroupRepository)
+                .execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(lastPositions).hasSize(1)
+        val vesselGroups = lastPositions[0].vesselGroups.map { it.name }
+        assertThat(vesselGroups).contains("Dummy group")
+    }
+
+    @Test
+    fun `execute Should return last positions with groups When vessel Last Control Period match`() {
+        // Given
+        given(lastPositionRepository.findAllInLastMonthOrWithBeaconMalfunction()).willReturn(
+            listOf(
+                LastPosition(
+                    flagState = CountryCode.FR,
+                    positionType = PositionType.AIS,
+                    lastControlDateTime = ZonedDateTime.now().minusYears(2),
+                    latitude = 16.445,
+                    longitude = 48.2525,
+                    riskFactor = 2.23,
+                    dateTime = ZonedDateTime.now(),
+                    isAtPort = true,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                ),
+            ),
+        )
+        given(vesselGroupRepository.findAllByUser(any())).willReturn(
+            listOf(
+                DynamicVesselGroup(
+                    id = 1,
+                    isDeleted = false,
+                    name = "Dummy group",
+                    description = "",
+                    pointsOfAttention = "",
+                    color = "",
+                    sharing = Sharing.PRIVATE,
+                    createdBy = "dummy@email.gouv.fr",
+                    createdAtUtc = ZonedDateTime.now(),
+                    updatedAtUtc = null,
+                    endOfValidityUtc = null,
+                    filters =
+                        VesselGroupFilters(
+                            countryCodes = emptyList(),
+                            districtCodes = emptyList(),
+                            fleetSegments = emptyList(),
+                            gearCodes = emptyList(),
+                            hasLogbook = null,
+                            lastControlPeriod = LastControlPeriod.BEFORE_ONE_YEAR_AGO,
+                            lastLandingPortLocodes = emptyList(),
+                            lastPositionHoursAgo = null,
+                            producerOrganizations = emptyList(),
+                            riskFactors = emptyList(),
+                            specyCodes = emptyList(),
+                            vesselSize = null,
+                            vesselsLocation = emptyList(),
+                            zones = emptyList(),
+                        ),
+                ),
+            ),
+        )
+
+        // When
+        val lastPositions =
+            GetLastPositions(lastPositionRepository, vesselGroupRepository)
+                .execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(lastPositions).hasSize(1)
+        val vesselGroups = lastPositions[0].vesselGroups.map { it.name }
+        assertThat(vesselGroups).contains("Dummy group")
+    }
+
+    @Test
+    fun `execute Should return last positions with groups When vessel Last Control Period does not match`() {
+        // Given
+        given(lastPositionRepository.findAllInLastMonthOrWithBeaconMalfunction()).willReturn(
+            listOf(
+                LastPosition(
+                    flagState = CountryCode.FR,
+                    positionType = PositionType.AIS,
+                    lastControlDateTime = ZonedDateTime.now().minusYears(2),
+                    latitude = 16.445,
+                    longitude = 48.2525,
+                    riskFactor = 2.23,
+                    dateTime = ZonedDateTime.now(),
+                    isAtPort = true,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                ),
+            ),
+        )
+        given(vesselGroupRepository.findAllByUser(any())).willReturn(
+            listOf(
+                DynamicVesselGroup(
+                    id = 1,
+                    isDeleted = false,
+                    name = "Dummy group",
+                    description = "",
+                    pointsOfAttention = "",
+                    color = "",
+                    sharing = Sharing.PRIVATE,
+                    createdBy = "dummy@email.gouv.fr",
+                    createdAtUtc = ZonedDateTime.now(),
+                    updatedAtUtc = null,
+                    endOfValidityUtc = null,
+                    filters =
+                        VesselGroupFilters(
+                            countryCodes = emptyList(),
+                            districtCodes = emptyList(),
+                            fleetSegments = emptyList(),
+                            gearCodes = emptyList(),
+                            hasLogbook = null,
+                            lastControlPeriod = LastControlPeriod.AFTER_ONE_MONTH_AGO,
+                            lastLandingPortLocodes = emptyList(),
+                            lastPositionHoursAgo = null,
+                            producerOrganizations = emptyList(),
+                            riskFactors = emptyList(),
+                            specyCodes = emptyList(),
+                            vesselSize = null,
+                            vesselsLocation = emptyList(),
+                            zones = emptyList(),
+                        ),
+                ),
+            ),
+        )
+
+        // When
+        val lastPositions =
+            GetLastPositions(lastPositionRepository, vesselGroupRepository)
+                .execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(lastPositions).hasSize(1)
+        assertThat(lastPositions[0].vesselGroups).hasSize(0)
     }
 
     @Test

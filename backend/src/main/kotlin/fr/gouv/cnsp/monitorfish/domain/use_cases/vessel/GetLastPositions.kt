@@ -55,19 +55,19 @@ class GetLastPositions(
                             ?: false
                     LastControlPeriod.BEFORE_ONE_MONTH_AGO ->
                         lastPosition.lastControlDateTime?.isBefore(now.minusMonths(1))
-                            ?: false
+                            ?: true // If no control is found, it is before the expected date
                     LastControlPeriod.BEFORE_ONE_YEAR_AGO ->
                         lastPosition.lastControlDateTime?.isBefore(now.minusYears(1))
-                            ?: false
+                            ?: true // If no control is found, it is before the expected date
                     LastControlPeriod.BEFORE_SIX_MONTHS_AGO ->
                         lastPosition.lastControlDateTime?.isBefore(now.minusMonths(6))
-                            ?: false
+                            ?: true // If no control is found, it is before the expected date
                     LastControlPeriod.BEFORE_THREE_MONTHS_AGO ->
                         lastPosition.lastControlDateTime?.isBefore(now.minusMonths(3))
-                            ?: false
+                            ?: true // If no control is found, it is before the expected date
                     LastControlPeriod.BEFORE_TWO_YEARS_AGO ->
                         lastPosition.lastControlDateTime?.isBefore(now.minusYears(2))
-                            ?: false
+                            ?: true // If no control is found, it is before the expected date
                     null -> true
                 }
 

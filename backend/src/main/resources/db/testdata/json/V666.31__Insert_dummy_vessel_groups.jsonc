@@ -17,6 +17,7 @@
                         "ES",
                         "IT"
                     ],
+                    "districtCodes": [],
                     "fleetSegments": [],
                     "gearCodes": [
                         "OTB",
@@ -57,6 +58,7 @@
                 "color": "#4287f5",
                 "filters:jsonb": {
                     "countryCodes": [],
+                    "districtCodes": [],
                     "fleetSegments": [
                         "PEL13"
                     ],

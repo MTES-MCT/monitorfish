@@ -386,6 +386,10 @@ const regulationSlice = createSlice({
         return
       }
 
+      if (!state.processingRegulation[action.payload.key]) {
+        return
+      }
+
       state.processingRegulation[action.payload.key] = action.payload.value
       if (!state.regulationModified) {
         state.regulationModified = true

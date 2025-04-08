@@ -13,6 +13,7 @@ const MARGIN_TOP = 124
 export function VesselGroupMapButton() {
   const dispatch = useMainAppDispatch()
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
+  const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
 
   const toggleVesselGroupsMenu = () => {
     dispatch(setRightMapBoxOpened(rightMapBoxOpened === MapBox.VESSEL_GROUPS ? undefined : MapBox.VESSEL_GROUPS))
@@ -22,6 +23,9 @@ export function VesselGroupMapButton() {
     <Wrapper>
       <VesselGroupMenuDialog />
       <MapToolButton
+        badgeBackgroundColor={THEME.color.gainsboro}
+        badgeColor={THEME.color.gunMetal}
+        badgeNumber={vesselGroupsIdsDisplayed?.length || undefined}
         Icon={Icon.VesselGroups}
         iconSize={25}
         isActive={rightMapBoxOpened === MapBox.VESSEL_GROUPS}

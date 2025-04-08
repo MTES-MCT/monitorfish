@@ -14,6 +14,7 @@ export type ZoneFilter = z.infer<typeof ZoneFilterSchema>
 
 export const VesselListFilterSchema = z.object({
   countryCodes: z.array(z.string()),
+  districtCodes: z.array(z.string()),
   fleetSegments: z.array(z.string()),
   gearCodes: z.array(z.string()),
   hasLogbook: z.boolean().optional(),

@@ -62,7 +62,6 @@ context('Side Window > Vessel List > Table', () => {
     })
   })
 
-
   it('Should filter vessels and open a row When not logged as user', () => {
     cy.login('user')
 

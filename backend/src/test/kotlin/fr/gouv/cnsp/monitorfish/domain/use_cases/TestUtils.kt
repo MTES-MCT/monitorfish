@@ -968,6 +968,7 @@ object TestUtils {
                 filters =
                     VesselGroupFilters(
                         countryCodes = listOf(CountryCode.FR, CountryCode.ES, CountryCode.IT),
+                        districtCodes = listOf(),
                         fleetSegments = emptyList(),
                         gearCodes = listOf("OTB", "OTM", "TBB", "PTB"),
                         hasLogbook = true,
@@ -994,6 +995,7 @@ object TestUtils {
                 filters =
                     VesselGroupFilters(
                         countryCodes = listOf(),
+                        districtCodes = listOf(),
                         fleetSegments = listOf("PEL13"),
                         gearCodes = listOf("OTB", "OTM", "TBB", "PTB"),
                         hasLogbook = true,

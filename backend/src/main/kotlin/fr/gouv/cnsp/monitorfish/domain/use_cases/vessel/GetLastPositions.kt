@@ -9,26 +9,6 @@ import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import java.time.ZonedDateTime
 
-/* TODO
-val lastControlledFilter =
-    filters.lastControlPeriod?.let(
-        ::getLastControlledFilterFromLastControlPeriod,
-    )
- */
-
-/* TODO
-    (
-        lastControlledFilter?.lastControlledBefore?.let {
-            lastPosition.lastControlDateTime?.isBefore(it)
-        } ?: true
-        ) &&
-    (
-        lastControlledFilter?.lastControlledAfter?.let {
-            lastPosition.lastControlDateTime?.isAfter(it)
-        } ?: true
-        ) &&
- */
-
 @UseCase
 class GetLastPositions(
     private val lastPositionRepository: LastPositionRepository,
@@ -64,6 +44,32 @@ class GetLastPositions(
             val vesselsLocation = filters.vesselsLocation.singleOrNull()
 
             val hasCountryCodeMatch = filters.countryCodes.isEmpty() || lastPosition.flagState in filters.countryCodes
+
+            val hasDistrictCodeMatch =
+                filters.districtCodes.isEmpty() || lastPosition.districtCode in filters.districtCodes
+
+            val hasLastControlPeriodMatch =
+                when (filters.lastControlPeriod) {
+                    LastControlPeriod.AFTER_ONE_MONTH_AGO ->
+                        lastPosition.lastControlDateTime?.isAfter(now.minusMonths(1))
+                            ?: false
+                    LastControlPeriod.BEFORE_ONE_MONTH_AGO ->
+                        lastPosition.lastControlDateTime?.isBefore(now.minusMonths(1))
+                            ?: true // If no control is found, it is before the expected date
+                    LastControlPeriod.BEFORE_ONE_YEAR_AGO ->
+                        lastPosition.lastControlDateTime?.isBefore(now.minusYears(1))
+                            ?: true // If no control is found, it is before the expected date
+                    LastControlPeriod.BEFORE_SIX_MONTHS_AGO ->
+                        lastPosition.lastControlDateTime?.isBefore(now.minusMonths(6))
+                            ?: true // If no control is found, it is before the expected date
+                    LastControlPeriod.BEFORE_THREE_MONTHS_AGO ->
+                        lastPosition.lastControlDateTime?.isBefore(now.minusMonths(3))
+                            ?: true // If no control is found, it is before the expected date
+                    LastControlPeriod.BEFORE_TWO_YEARS_AGO ->
+                        lastPosition.lastControlDateTime?.isBefore(now.minusYears(2))
+                            ?: true // If no control is found, it is before the expected date
+                    null -> true
+                }
 
             val hasLogbookMatch =
                 filters.hasLogbook?.let {
@@ -124,6 +130,8 @@ class GetLastPositions(
                 } ?: true
 
             hasCountryCodeMatch &&
+                hasLastControlPeriodMatch &&
+                hasDistrictCodeMatch &&
                 hasLogbookMatch &&
                 hasRiskFactorMatch &&
                 hasLastPositionDateTimeMatch &&

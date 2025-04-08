@@ -1,3 +1,4 @@
+import { useGetDistrictsQuery } from '@api/district'
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
 import { resetInteraction } from '@features/Draw/slice'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
@@ -82,6 +83,7 @@ export function EditDynamicVesselGroupDialog({
   const { fleetSegmentsAsOptions } = useGetFleetSegmentsAsOptions()
   const { gearsAsTreeOptions } = useGetGearsAsTreeOptions()
   const { portsAsTreeOptions } = useGetPortsAsTreeOptions()
+  const { data: districtsAsTreeOptions } = useGetDistrictsQuery()
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const filterableZoneAsTreeOptions = useGetFilterableZonesAsTreeOptions()
   const organizationMembershipNames = useGetOrganizationMembershipNamesAsOptions()
@@ -131,6 +133,11 @@ export function EditDynamicVesselGroupDialog({
 
   const updateCountryCodes = async (nextCountryCodes: string[] | undefined) => {
     const nextListFilterValues = { ...listFilterValues, countryCodes: nextCountryCodes ?? [] }
+    updateListFilterValuesAndCountVessels(nextListFilterValues)
+  }
+
+  const updateDistrictCodes = (nextDistrictCodes: string[] | undefined) => {
+    const nextListFilterValues = { ...listFilterValues, districtCodes: nextDistrictCodes ?? [] }
     updateListFilterValuesAndCountVessels(nextListFilterValues)
   }
 
@@ -402,6 +409,21 @@ export function EditDynamicVesselGroupDialog({
             style={{ width: 416 }}
             uncheckableItemValues={['1', '2']}
             value={listFilterValues.zones?.map(zone => zone.value)}
+          />
+          <MultiCascader
+            isLabelHidden
+            isTransparent
+            label="Quartier"
+            name="districtCodes"
+            onChange={updateDistrictCodes}
+            options={districtsAsTreeOptions ?? []}
+            placeholder="Quartier"
+            popupWidth={500}
+            renderValue={(_, items) =>
+              items.length > 0 ? <SelectValue>Quartier ({items.length})</SelectValue> : <></>
+            }
+            searchable
+            value={listFilterValues.districtCodes}
           />
           <Select
             isLabelHidden

@@ -100,7 +100,6 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.numberOfVesselsFlownOver).isNull()
         assertThat(firstControl.unitWithoutOmegaGauge).isFalse
         assertThat(firstControl.controlQualityComments).isEqualTo("Ciblage CNSP non respecté")
-        assertThat(firstControl.feedbackSheetRequired).isTrue
         assertThat(firstControl.userTrigram).isEqualTo("DEF")
         assertThat(firstControl.segments).hasSize(2)
         assertThat(firstControl.segments.first().segment).isEqualTo("SWW04")
@@ -219,7 +218,6 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
                 externalReferenceNumber = "DONTSINK",
                 facade = "Sud Océan Indien",
                 faoAreas = listOf(),
-                feedbackSheetRequired = false,
                 flagState = CountryCode.FR,
                 flightGoals = listOf(),
                 gearInfractions = listOf(),

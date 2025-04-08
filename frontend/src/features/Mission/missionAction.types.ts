@@ -14,7 +14,6 @@ export namespace MissionAction {
     externalReferenceNumber: string | undefined
     facade: string | undefined
     faoAreas: string[]
-    feedbackSheetRequired: boolean | undefined
     flagState: string | undefined
     gearInfractions: Infraction[]
     gearOnboard: GearControl[]

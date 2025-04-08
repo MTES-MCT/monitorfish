@@ -39,7 +39,6 @@ data class MissionAction(
     val numberOfVesselsFlownOver: Int? = null,
     val unitWithoutOmegaGauge: Boolean? = null,
     val controlQualityComments: String? = null,
-    val feedbackSheetRequired: Boolean? = null,
     val userTrigram: String,
     val segments: List<FleetSegment> = listOf(),
     val facade: String? = null,

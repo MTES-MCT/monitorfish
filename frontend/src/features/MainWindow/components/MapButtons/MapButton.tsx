@@ -1,4 +1,4 @@
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { useGetTopOffset } from '@hooks/useGetTopOffset'
 import styled from 'styled-components'
 
 import type { HTMLProps, ReactNode } from 'react'
@@ -10,7 +10,7 @@ type MapButtonType = {
 
 /** @deprecated Use `MapToolButton` instead. */
 export function MapButton({ children, isHidden, ...props }: MapButtonType) {
-  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
+  const marginTop = useGetTopOffset()
 
   return (
     /**
@@ -20,7 +20,7 @@ export function MapButton({ children, isHidden, ...props }: MapButtonType) {
      */
     /* eslint-disable react/jsx-props-no-spreading */
     // @ts-ignore
-    <Wrapper $hasHealthcheckTextWarning={!!healthcheckTextWarning.length} $isHidden={isHidden} {...props}>
+    <Wrapper $isHidden={isHidden} $marginTop={marginTop} {...props}>
       {children}
     </Wrapper>
     /* eslint-enable react/jsx-props-no-spreading */
@@ -28,10 +28,10 @@ export function MapButton({ children, isHidden, ...props }: MapButtonType) {
 }
 
 const Wrapper = styled.button<{
-  $hasHealthcheckTextWarning?: boolean | undefined
   $isHidden?: boolean | undefined
+  $marginTop: number
 }>`
   padding: unset;
-  margin-top: ${p => (p.$hasHealthcheckTextWarning ? 50 : 0)}px;
+  margin-top: ${p => p.$marginTop}px;
   visibility: ${p => (p.$isHidden ? 'hidden' : 'visible')};
 `

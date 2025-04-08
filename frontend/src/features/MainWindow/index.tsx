@@ -1,6 +1,7 @@
 import { BannerStack } from '@features/MainWindow/components/BannerStack'
 import { MainMap } from '@features/Map/components/MainMap'
 import { SideWindowStatus } from '@features/SideWindow/constants'
+import { VesselFiltersHeadband } from '@features/Vessel/components/VesselFiltersHeadband'
 import { VesselGroupMainWindowEdition } from '@features/VesselGroup/components/VesselGroupMainWindowEdition'
 import { useCallback } from 'react'
 import { useBeforeUnload } from 'react-router-dom'
@@ -57,6 +58,7 @@ export function MainWindow() {
 
       <Wrapper id="mainWindowWrapper">
         <BannerStack />
+        <VesselFiltersHeadband />
         <MainMap />
 
         <LegacyRsuiteComponentsWrapper>

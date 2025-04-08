@@ -324,12 +324,6 @@ const vesselSlice = createSlice({
       }
     },
 
-    resetListFilterValues(state) {
-      state.listFilterValues = {
-        ...DEFAULT_VESSEL_LIST_FILTER_VALUES
-      }
-    },
-
     resetLoadingVessel(state) {
       state.loadingVessel = false
       state.loadingPositions = false

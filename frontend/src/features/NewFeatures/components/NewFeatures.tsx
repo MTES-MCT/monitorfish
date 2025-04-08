@@ -5,6 +5,7 @@ import { NewFeature } from '@features/NewFeatures/components/NewFeature'
 import { NEW_FEATURES } from '@features/NewFeatures/constants'
 import { getFeaturesByMonths, isFeatureDisplayed } from '@features/NewFeatures/utils'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
+import { useGetTopOffset } from '@hooks/useGetTopOffset'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, MapMenuDialog, THEME } from '@mtes-mct/monitor-ui'
@@ -20,7 +21,7 @@ const MARGIN_TOP = 476
 export function NewFeatures() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
-  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
+  const marginTop = useGetTopOffset()
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
   const checkedFeatures = useMainAppSelector(state => state.newFeatures.checkedFeatures)
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.NEW_FEATURES)
@@ -60,12 +61,7 @@ export function NewFeatures() {
   return (
     <Wrapper>
       {isRendered && (
-        <MapMenuDialogWrapper
-          $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}
-          $hideBoxShadow
-          $isOpen={isOpened}
-          data-cy="map-new-features-box"
-        >
+        <MapMenuDialogWrapper $hideBoxShadow $isOpen={isOpened} $marginTop={marginTop} data-cy="map-new-features-box">
           <StyledContainer>
             <MapMenuDialog.Header>
               <MapMenuDialog.Title>Nouveautés MonitorFish</MapMenuDialog.Title>
@@ -111,7 +107,7 @@ const Wrapper = styled.div`
 `
 
 const MapMenuDialogWrapper = styled(MapToolBox)<{
-  $hasHealthcheckTextWarning: boolean
+  $marginTop: number
 }>`
-  bottom: calc(100vh - ${p => (p.$hasHealthcheckTextWarning ? 50 : 0)}px - 40px - ${MARGIN_TOP}px);
+  bottom: calc(100vh - ${p => p.$marginTop}px - 40px - ${MARGIN_TOP}px);
 `

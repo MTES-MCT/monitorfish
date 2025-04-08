@@ -1,8 +1,9 @@
 import { getAdministrativeSubZonesFromAPI } from '@api/geoserver'
 import { LayerProperties } from '@features/Map/constants'
 import { customDayjs, type TreeOption } from '@mtes-mct/monitor-ui'
+import { isEqual } from 'lodash-es'
 
-import { LastControlPeriod } from './constants'
+import { DEFAULT_VESSEL_LIST_FILTER_VALUES, LastControlPeriod } from './constants'
 
 import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
@@ -84,6 +85,11 @@ export async function getFilterableZonesAsTreeOptions(): Promise<TreeOption[]> {
 }
 
 export function countVesselListFilter(listFilterValues: VesselListFilter) {
+  const areListFilterValuesEqualToDefaultOnes = isEqual(listFilterValues, DEFAULT_VESSEL_LIST_FILTER_VALUES)
+  if (areListFilterValuesEqualToDefaultOnes) {
+    return 0
+  }
+
   return (
     (listFilterValues.countryCodes?.length ?? 0) +
     (listFilterValues.fleetSegments?.length ?? 0) +

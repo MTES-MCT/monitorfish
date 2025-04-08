@@ -1,3 +1,4 @@
+import { useGetTopOffset } from '@hooks/useGetTopOffset'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, IconButton, Size } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
@@ -12,18 +13,19 @@ type MapToolButtonProps = {
 } & IconButtonProps
 export function MapToolButton({ className, isActive, isLeftButton = false, title, ...props }: MapToolButtonProps) {
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
-  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
+  const marginTop = useGetTopOffset()
+
   const isRightMenuShrinked = !rightMenuIsOpen && !isLeftButton
 
   return (
     <StyledButton
       $hasBadgeNumber={!!props.badgeNumber}
-      $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}
       $isActive={isActive}
       $isHidden={!!previewFilteredVesselsMode}
       $isLeftButton={isLeftButton}
       $isRightMenuShrinked={isRightMenuShrinked}
+      $marginTop={marginTop}
       accent={Accent.PRIMARY}
       aria-label={title}
       className={className}
@@ -37,14 +39,14 @@ export function MapToolButton({ className, isActive, isLeftButton = false, title
 
 const StyledButton = styled(IconButton)<{
   $hasBadgeNumber: boolean
-  $hasHealthcheckTextWarning: boolean | undefined
   $isActive: boolean
   $isHidden: boolean | undefined
   $isLeftButton: boolean
   $isRightMenuShrinked: boolean
+  $marginTop: number
 }>`
   height: 40px;
-  margin-top: ${p => (p.$hasHealthcheckTextWarning ? 50 : 0)}px;
+  margin-top: ${p => p.$marginTop}px;
   visibility: ${p => (p.$isHidden ? 'hidden' : 'visible')};
   position: absolute;
   display: inline-block;

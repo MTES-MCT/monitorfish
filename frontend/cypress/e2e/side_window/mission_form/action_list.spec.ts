@@ -70,7 +70,6 @@ context('Side Window > Mission Form > Action List', () => {
           externalReferenceNumber: null,
           facade: 'MEMN',
           faoAreas: ['27.8.a'],
-          feedbackSheetRequired: false,
           flagState: 'FR',
           flightGoals: [],
           gearInfractions: [],

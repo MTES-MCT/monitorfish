@@ -79,7 +79,6 @@ context('Side Window > Mission Form > Air Control', () => {
           emitsVms: null,
           externalReferenceNumber: 'DONTSINK',
           facade: null,
-          feedbackSheetRequired: null,
           flagState: 'FR',
           gearInfractions: [],
           gearOnboard: [],

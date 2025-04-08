@@ -80,7 +80,6 @@ context('Side Window > Mission Form > Air Surveillance', () => {
 
         // Qualité du contrôle
         cy.fill('Observations sur le déroulé de la surveillance', 'Une observation sur le déroulé de la surveillance.')
-        cy.fill('Fiche RETEX nécessaire', true)
 
         // Saisi par
         cy.fill('Saisi par', 'Marlin')
@@ -104,7 +103,6 @@ context('Side Window > Mission Form > Air Surveillance', () => {
               emitsAis: null,
               emitsVms: null,
               facade: null,
-              feedbackSheetRequired: true,
               flightGoals: ['VMS_AIS_CHECK'],
               gearInfractions: [],
               gearOnboard: [],

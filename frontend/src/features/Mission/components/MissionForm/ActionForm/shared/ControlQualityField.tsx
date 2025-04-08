@@ -26,7 +26,6 @@ export function ControlQualityField() {
         placeholder="Éléments marquants dans vos échanges avec l’unité, problèmes rencontrés..."
         rows={2}
       />
-      <FormikCheckbox label="Fiche RETEX nécessaire" name="feedbackSheetRequired" />
     </Wrapper>
   )
 }

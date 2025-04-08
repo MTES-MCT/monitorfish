@@ -57,7 +57,6 @@ object TestUtils {
                 ),
             ),
         controlQualityComments = "Ciblage CNSP respecté",
-        feedbackSheetRequired = true,
         userTrigram = "DEF",
         facade = "NAMO",
         longitude = -6.56,

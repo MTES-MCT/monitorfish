@@ -82,7 +82,7 @@ export function PositionsTable() {
       : [0, 0]
 
   return (
-    <Wrapper ref={tableContainerRef} $isEmpty={!selectedVesselPositions?.length}>
+    <Wrapper ref={tableContainerRef}>
       <SimpleTable.Table>
         <SimpleTable.Head>
           {table.getHeaderGroups().map(headerGroup => (
@@ -149,23 +149,7 @@ export function PositionsTable() {
   )
 }
 
-/*
- <DataTable
-        // TODO Why `accessorFn` is not defined ?
-        columns={POSITION_TABLE_COLUMNS as any}
-        data={selectedVesselPositions?.map((position, index) => ({
-          ...position,
-          id: index
-        }))}
-        emptyLabel="Aucune position"
-        initialSorting={[{ desc: true, id: 'dateTime' }]}
-      />
- */
-
-const Wrapper = styled.div<{
-  $isEmpty: boolean
-}>`
-  padding: ${p => (p.$isEmpty ? 12 : 0)}px;
+const Wrapper = styled.div`
   max-height: 500px;
   overflow: auto;
   text-align: center;

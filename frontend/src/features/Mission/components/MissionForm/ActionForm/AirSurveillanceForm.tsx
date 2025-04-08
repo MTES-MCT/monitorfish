@@ -1,16 +1,8 @@
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
 import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
-import {
-  FormikCheckbox,
-  FormikEffect,
-  FormikMultiSelect,
-  FormikNumberInput,
-  FormikTextarea,
-  Icon
-} from '@mtes-mct/monitor-ui'
+import { FormikEffect, FormikMultiSelect, FormikNumberInput, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash-es'
-import styled from 'styled-components'
 
 import { AirSurveillanceFormCompletionSchema, AirSurveillanceFormLiveSchema } from './schemas'
 import { ActionFormHeader } from './shared/ActionFormHeader'
@@ -65,7 +57,6 @@ export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillance
                 placeholder="Éléments marquants dans vos échanges avec l’unité, problèmes rencontrés..."
                 rows={2}
               />
-              <StyledFormikCheckBox label="Fiche RETEX nécessaire" name="feedbackSheetRequired" />
             </FieldsetGroup>
 
             <FormikAuthor />
@@ -75,7 +66,3 @@ export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillance
     </Formik>
   )
 }
-
-const StyledFormikCheckBox = styled(FormikCheckbox)`
-  margin-top: 8px;
-`

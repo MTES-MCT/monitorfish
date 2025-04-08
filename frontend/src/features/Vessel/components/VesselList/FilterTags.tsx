@@ -127,6 +127,13 @@ export function FilterTags({
           </SingleTag>
         )}
 
+        {!!listFilterValues.districtCodes &&
+          listFilterValues.districtCodes.map(districtCode => (
+            <SingleTag key={`districtCode-${districtCode}`} onDelete={() => remove('districtCodes', districtCode)}>
+              {String(`Quartier "${districtCode}"`)}
+            </SingleTag>
+          ))}
+
         {!!listFilterValues.vesselSize && (
           <SingleTag
             key={`vesselSize-${listFilterValues.vesselSize}`}

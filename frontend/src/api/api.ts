@@ -146,6 +146,7 @@ export const monitorfishApi = createApi({
     'Missions',
     'MissionActions',
     'Ports',
+    'Districts',
     'PriorNotifications',
     'PriorNotificationTypes',
     'Species',

@@ -23,6 +23,13 @@ describe('MonitorFishWebWorker.getFilteredVessels', () => {
     expect(result).not.toContain('vessel2')
   })
 
+  it('should filters by districtCodes', () => {
+    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, districtCodes: ['GV'] }
+    const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
+    expect(result).toContain('vessel2')
+    expect(result).not.toContain('vessel1')
+  })
+
   it('should filters by hasLogbook true', () => {
     const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, hasLogbook: true, vesselsLocation: [] }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
@@ -127,6 +134,7 @@ describe('MonitorFishWebWorker.getFilteredVessels', () => {
   it('should applies multiple filters simultaneously', () => {
     const filters = {
       countryCodes: ['US'],
+      districtCodes: [],
       fleetSegments: ['segment1'],
       gearCodes: ['gear1'],
       hasLogbook: true,

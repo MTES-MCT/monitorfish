@@ -74,7 +74,7 @@ export const DUMMY_LAST_POSITIONS = [
     destination: undefined,
     detectabilityRiskFactor: 0,
     district: undefined,
-    districtCode: undefined,
+    districtCode: 'GV',
     emissionPeriod: undefined,
     estimatedCurrentLatitude: undefined,
     estimatedCurrentLongitude: undefined,

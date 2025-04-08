@@ -199,6 +199,7 @@ export class MonitorFishWebWorker {
       : undefined
 
     const countrySet = filters.countryCodes?.length ? new Set(filters.countryCodes) : undefined
+    const districtSet = filters.districtCodes?.length ? new Set(filters.districtCodes) : undefined
     const fleetSegmentsSet = filters.fleetSegments?.length ? new Set(filters.fleetSegments) : undefined
     const gearCodesSet = filters.gearCodes?.length ? new Set(filters.gearCodes) : undefined
     const specyCodesSet = filters.specyCodes?.length ? new Set(filters.specyCodes) : undefined
@@ -211,7 +212,11 @@ export class MonitorFishWebWorker {
 
     return vessels
       .filter(vessel => {
-        if (countrySet && !countrySet.has(vessel?.flagState)) {
+        if (countrySet && !countrySet.has(vessel.flagState)) {
+          return false
+        }
+
+        if (districtSet && (!vessel.districtCode || !districtSet.has(vessel.districtCode))) {
           return false
         }
 

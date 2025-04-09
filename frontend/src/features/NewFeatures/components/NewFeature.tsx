@@ -4,6 +4,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Link, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { sha256 } from '@utils/sha256'
 import { useEffect, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
 import { type MonitorFishFeature } from '../types'
@@ -79,7 +80,7 @@ export function NewFeature({ date, feature, isDateDisplayed, isFirstItem }: NewF
           </HeaderBottom>
           {isOpened && (
             <Body>
-              {feature.description}
+              <ReactMarkdown>{feature.description}</ReactMarkdown>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <StyledLink $isCloseLink>Voir moins d&apos;infos</StyledLink>
             </Body>

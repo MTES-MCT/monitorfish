@@ -7,6 +7,33 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2025-04-8',
+        description: `Les filtres ont été remplacés par les Groupes de navires dynamiques.
+
+Cette nouvelle fonctionnalité permet :
+- D’afficher sur la carte les navires correspondant à des critères définis.
+- De visualiser plusieurs groupes en simultané.
+  - Vous pouvez épingler un groupe pour qu’il soit affiché en priorité.
+
+⚠️ Important: si vous aviez enregistré des filtres auparavant, il est nécessaire de les recréer en tant que groupes.
+          `,
+        for: 'ALL',
+        title: 'Ajout des groupes de navires dynamiques',
+        type: 'NEW_FEATURE'
+      },
+      {
+        date: '2025-04-7',
+        description: `La liste des navires équipés de VMS a été repensée : elle s’ouvre désormais dans une seconde fenêtre.
+
+Elle vous permet :
+- De filtrer les navires selon de nombreux critères : note de risque, segment de flotte, engins, espèces à bord, date du dernier contrôle, zone, quartier, etc.
+- De créer des groupes de navires dynamiques à partir des filtres appliqués.
+`,
+        for: 'ALL',
+        title: 'Nouvelle interface pour la liste des navires avec VMS',
+        type: 'IMPROVEMENT'
+      },
+      {
         date: '2024-03-10',
         description:
           "Ajout d'alertes opérationnelles signalant qu'un navire a atteint la quantité maximale autorisée " +

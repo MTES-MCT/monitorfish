@@ -8,8 +8,9 @@ import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useGetTopOffset } from '@hooks/useGetTopOffset'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { trackEvent } from '@hooks/useTracking'
 import { Icon, MapMenuDialog, THEME } from '@mtes-mct/monitor-ui'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
@@ -26,10 +27,21 @@ export function NewFeatures() {
   const checkedFeatures = useMainAppSelector(state => state.newFeatures.checkedFeatures)
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.NEW_FEATURES)
 
+  useEffect(() => {
+    if (isRendered) {
+      trackEvent({
+        action: `Ouverture de la vue "Nouveautés MonitorFish"`,
+        category: 'DISPLAY_FEATURE',
+        name: isSuperUser ? 'CNSP' : 'EXT'
+      })
+    }
+  }, [isRendered, isSuperUser])
+
   const openOrClose = () => {
     if (!rightMapBoxOpened) {
       dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
     }
+
     dispatch(setRightMapBoxOpened(rightMapBoxOpened === MapBox.NEW_FEATURES ? undefined : MapBox.NEW_FEATURES))
   }
 

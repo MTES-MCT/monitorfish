@@ -44,8 +44,8 @@ export function Control({ control, isLastItem }: ControlProps) {
 
   const openTripForControl = async () => {
     const controlDate = customDayjs(control.actionDatetimeUtc)
-    const fromDate = controlDate.subtract(2, 'days')
-    const toDate = controlDate.add(2, 'days')
+    const fromDate = controlDate.subtract(1, 'day')
+    const toDate = controlDate.add(1, 'day')
     const trackRequest: TrackRequestCustom = {
       afterDateTime: fromDate.toDate(),
       beforeDateTime: toDate.toDate(),

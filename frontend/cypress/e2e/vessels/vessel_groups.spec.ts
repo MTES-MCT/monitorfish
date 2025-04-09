@@ -106,7 +106,7 @@ context('Vessel groups', () => {
     /**
      * Pin and unpin vessel groups to change order
      */
-    cy.getDataCy('vessel-groups-menu-box').within(() => {
+    cy.getDataCy('vessel-groups-list').within(() => {
       cy.get('li').should('have.length', 4)
       cy.get('li').eq(0).contains('Lorem ipsum dolor sit amet')
       cy.get('li').eq(1).contains('Mission Thémis – semaine 04')
@@ -140,5 +140,24 @@ context('Vessel groups', () => {
     cy.clickButton('Confirmer la suppression')
 
     cy.contains('Le groupe de navires a bien été supprimé.').should('be.visible')
+
+    /**
+     * Create a group from the main window
+     */
+    cy.clickButton('Créer un nouveau groupe')
+    cy.clickButton('Créer un groupe dynamique')
+
+    cy.get('.Component-Dialog').contains('Actuellement, 842 navires correspondent aux filtres sélectionnés.')
+    cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
+    cy.get('.Component-Dialog').contains('Actuellement, 4 navires correspondent aux filtres sélectionnés.')
+
+    cy.get('[title="#8c2c17"]').click()
+    cy.fill("Nom du groupe", "Lorem ipsum")
+    cy.fill("Description du groupe", "Lorem ipsum dolor sit amet.")
+    cy.clickButton('Créer le groupe')
+    cy.contains('Le groupe de navires dynamique "Lorem ipsum" a bien été créé.').should('be.visible')
+
+    cy.clickButton('Groupes de navires')
+    cy.get('[title="Lorem ipsum"]').click()
   })
 })

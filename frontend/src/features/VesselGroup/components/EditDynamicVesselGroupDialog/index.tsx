@@ -248,9 +248,12 @@ export function EditDynamicVesselGroupDialog({
     }
   }
 
+  const createOrModifyText =
+    !!editedVesselGroup && !isEqual(editedVesselGroup, DEFAULT_DYNAMIC_VESSEL_GROUP) ? 'Modifier' : 'Créer'
+
   return (
     <StyledDialog isAbsolute>
-      <StyledDialogTitle>{editedVesselGroup ? 'Modifier' : 'Créer'} un groupe de navires dynamique</StyledDialogTitle>
+      <StyledDialogTitle>{createOrModifyText} un groupe de navires dynamique</StyledDialogTitle>
       <StyledDialogBody>
         <VesselsCount>
           Actuellement,{' '}
@@ -501,7 +504,7 @@ export function EditDynamicVesselGroupDialog({
       </StyledDialogBody>
       <StyledDialogAction>
         <Button accent={Accent.PRIMARY} disabled={areFiltersEmpty} onClick={() => formRef.current?.handleSubmit()}>
-          {String(`${editedVesselGroup ? 'Modifier' : 'Créer'} le groupe`)}
+          {String(`${createOrModifyText} le groupe`)}
         </Button>
         <Button accent={Accent.TERTIARY} onClick={onExit}>
           Annuler

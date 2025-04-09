@@ -6,10 +6,13 @@ import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { trackEvent } from '@hooks/useTracking'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { FavoriteVessel } from './FavoriteVessel'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { setLeftMapBoxOpened } from '../../../../domain/shared_slices/Global'
 import { MapPropertyTrigger } from '../../../commonComponents/MapPropertyTrigger'
 import HidingOtherTracksSVG from '../../../icons/Bouton_masquer_pistes_actif.svg?react'
@@ -18,6 +21,7 @@ import { setHideNonSelectedVessels } from '../../../Vessel/slice'
 
 export function FavoriteVessels() {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   const favorites = useMainAppSelector(state => state.favoriteVessel.favorites)
   const { hideNonSelectedVessels, selectedVesselIdentity, vesselsTracksShowed } = useMainAppSelector(
     state => state.vessel
@@ -25,6 +29,16 @@ export function FavoriteVessels() {
   const leftMapBoxOpened = useMainAppSelector(state => state.global.leftMapBoxOpened)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
   const { isOpened, isRendered } = useDisplayMapBox(leftMapBoxOpened === MapBox.FAVORITE_VESSELS)
+
+  useEffect(() => {
+    if (isRendered) {
+      trackEvent({
+        action: `Ouverture de la vue "Mes navires suivis"`,
+        category: 'DISPLAY_FEATURE',
+        name: isSuperUser ? 'CNSP' : 'EXT'
+      })
+    }
+  }, [isRendered, isSuperUser])
 
   return (
     <Wrapper>

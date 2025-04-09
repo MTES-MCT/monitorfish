@@ -9,6 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.CreateOrUpdateDynamicVesselGroup
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 @UseCase
@@ -30,9 +31,10 @@ class AddOrUpdateDynamicVesselGroup(
                 val vesselGroup =
                     vesselGroupCreation.toDynamicVesselGroup(
                         createdBy = userEmail,
-                        createdAtUtc = ZonedDateTime.now(),
+                        createdAtUtc = ZonedDateTime.now(ZoneOffset.UTC),
                         updatedAtUtc = null,
                     )
+
                 vesselGroupRepository.save(vesselGroup)
             }
             else -> {

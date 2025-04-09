@@ -3,7 +3,8 @@ import { MainMap } from '@features/Map/components/MainMap'
 import { SideWindowStatus } from '@features/SideWindow/constants'
 import { VesselFiltersHeadband } from '@features/Vessel/components/VesselFiltersHeadband'
 import { VesselGroupMainWindowEdition } from '@features/VesselGroup/components/VesselGroupMainWindowEdition'
-import { useCallback } from 'react'
+import { trackEvent } from '@hooks/useTracking'
+import { useCallback, useEffect } from 'react'
 import { useBeforeUnload } from 'react-router-dom'
 import styled from 'styled-components'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
@@ -18,6 +19,7 @@ import { HealthcheckHeadband } from '../Healthcheck/components/HealthcheckHeadba
 import { LayersSidebar } from '../LayersSidebar/components'
 import { PreviewFilteredVessels } from './components/PreviewFilteredVessels'
 import { APIWorker } from '../../api/APIWorker'
+import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
 import { Notifier } from '../../components/Notifier'
 import { SideWindowLauncher } from '../SideWindow/SideWindowLauncher'
 import { VesselLoader } from '../Vessel/components/VesselLoader'
@@ -29,11 +31,20 @@ export function MainWindow() {
   const isControlUnitDialogDisplayed = useMainAppSelector(
     state => state.displayedComponent.isControlUnitDialogDisplayed
   )
+  const isSuperUser = useIsSuperUser()
   const isDrawLayerModalDisplayed = useMainAppSelector(state => state.displayedComponent.isDrawLayerModalDisplayed)
   const isVesselSearchDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselSearchDisplayed)
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
   const isDraftDirty = useMainAppSelector(state => state.missionForm.isDraftDirty)
   const status = useMainAppSelector(state => state.sideWindow.status)
+
+  useEffect(() => {
+    trackEvent({
+      action: `Visite`,
+      category: 'VISIT',
+      name: isSuperUser ? 'CNSP' : 'EXT'
+    })
+  }, [isSuperUser])
 
   const warnOnUnload = useCallback(
     event => {

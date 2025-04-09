@@ -299,7 +299,7 @@ export const DEFAULT_DATE_RANGE: DateInterval = {
   startDate: undefined
 }
 
-const DEFAULT_FISHING_PERIOD_VALUES: FishingPeriod = {
+export const DEFAULT_FISHING_PERIOD_VALUES: FishingPeriod = {
   always: undefined,
   annualRecurrence: undefined,
   authorized: undefined,

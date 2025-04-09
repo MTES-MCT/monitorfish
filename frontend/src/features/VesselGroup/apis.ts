@@ -21,7 +21,7 @@ export const vesselGroupApi = monitorfishApi.injectEndpoints({
         url: `vessel_groups`
       }),
       transformErrorResponse: response => new FrontendApiError(CREATE_VESSEL_GROUPS_ERROR_MESSAGE, response),
-      transformResponse: (baseQueryReturnValue: DynamicVesselGroup[]) =>
+      transformResponse: (baseQueryReturnValue: DynamicVesselGroup) =>
         parseResponseOrReturn<DynamicVesselGroup>(baseQueryReturnValue, DynamicVesselGroupSchema, false)
     }),
     deleteVesselGroup: builder.mutation<void, number>({

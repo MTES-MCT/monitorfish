@@ -34,7 +34,7 @@ export const addOrUpdateVesselGroup =
       dispatch(
         addSideWindowBanner({
           children: bannerText,
-          closingDelay: 5000,
+          closingDelay: 3000,
           isClosable: true,
           level: Level.SUCCESS,
           withAutomaticClosing: true
@@ -43,7 +43,7 @@ export const addOrUpdateVesselGroup =
       dispatch(
         addMainWindowBanner({
           children: bannerText,
-          closingDelay: 5000,
+          closingDelay: 3000,
           isClosable: true,
           level: Level.SUCCESS,
           withAutomaticClosing: true

@@ -39,7 +39,7 @@ export function ControlUnitListMapButton() {
       Icon={Icon.ControlUnit}
       isActive={isControlUnitListDialogDisplayed || isControlUnitDialogDisplayed}
       onClick={toggle}
-      style={{ top: 268 }}
+      style={{ top: 220 }}
       title="Liste des unités de contrôle"
     />
   )

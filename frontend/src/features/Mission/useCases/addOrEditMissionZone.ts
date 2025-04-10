@@ -46,7 +46,6 @@ export const openDrawLayerModal = dispatch => {
       isVesselFiltersMapButtonDisplayed: false,
       isVesselGroupMainWindowEditionDisplayed: false,
       isVesselGroupMapButtonDisplayed: false,
-      isVesselLabelsMapButtonDisplayed: false,
       isVesselListMapButtonDisplayed: false,
       isVesselSearchDisplayed: false,
       isVesselVisibilityMapButtonDisplayed: false
@@ -72,7 +71,6 @@ export const closeDrawLayerModal = dispatch => {
       isPriorNotificationMapButtonDisplayed: true,
       isVesselFiltersMapButtonDisplayed: true,
       isVesselGroupMapButtonDisplayed: true,
-      isVesselLabelsMapButtonDisplayed: true,
       isVesselListMapButtonDisplayed: true,
       isVesselSearchDisplayed: true,
       isVesselVisibilityMapButtonDisplayed: true

@@ -1,10 +1,8 @@
 import { MapBox } from '@features/Map/constants'
-import { useClickOutsideWhenOpenedAndExecute } from '@hooks/useClickOutsideWhenOpenedAndExecute'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
-import { useRef } from 'react'
 import styled from 'styled-components'
 
 import { EditVesselVisibility } from './EditVesselVisibility'
@@ -16,12 +14,6 @@ export function VesselVisibilityMapButton() {
   const dispatch = useMainAppDispatch()
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.VESSEL_VISIBILITY)
-
-  const wrapperRef = useRef(null)
-
-  useClickOutsideWhenOpenedAndExecute(wrapperRef, isOpened, () => {
-    dispatch(setRightMapBoxOpened(undefined))
-  })
 
   const openOrCloseVesselVisibility = () => {
     if (isOpened) {
@@ -35,16 +27,16 @@ export function VesselVisibilityMapButton() {
   }
 
   return (
-    <Wrapper ref={wrapperRef}>
+    <Wrapper>
       <MapToolButton
         data-cy="vessel-visibility"
-        Icon={Icon.Vessel}
+        Icon={Icon.VesselTrackSettings}
         isActive={isOpened}
         onClick={openOrCloseVesselVisibility}
         style={{ top: 172 }}
         title="Affichage des dernières positions"
       />
-      {isRendered && <EditVesselVisibility isOpened={isOpened} />}
+      {isRendered && <EditVesselVisibility isOpened={isOpened} onClose={openOrCloseVesselVisibility} />}
     </Wrapper>
   )
 }

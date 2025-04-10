@@ -30,10 +30,6 @@ context('Map menu tools', () => {
     cy.get('*[data-cy="map-property-trigger"]', { timeout: 10000 })
       .filter(':contains("étiquettes des navires")')
       .should('be.visible')
-
-    cy.get('*[data-cy="map-property-trigger"]', { timeout: 10000 })
-      .filter(':contains("étiquettes des navires")')
-      .should('not.exist')
     cy.get('body').contains('Afficher depuis').should('be.visible')
 
     // Vessel groups

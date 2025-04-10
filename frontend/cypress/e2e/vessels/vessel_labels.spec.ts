@@ -14,7 +14,7 @@ context('Vessel labels', () => {
 
   it('Vessels names Should be showed on the map', () => {
     // When
-    cy.clickButton("Affichage des labels", { withoutScroll: true })
+    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
 
     cy.get('*[data-cy="map-property-trigger"]', { timeout: 10000 })
       .filter(':contains("étiquettes des navires")')
@@ -27,7 +27,7 @@ context('Vessel labels', () => {
 
   it('Vessels names Should be movable', () => {
     // When
-    cy.clickButton("Affichage des labels", { withoutScroll: true })
+    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
     cy.get('*[data-cy="map-property-trigger"]').filter(':contains("étiquettes des navires")').click({ timeout: 10000 })
     // cy.get('body').type('{upArrow}')
     cy.get('*[data-cy="vessel-label-draggable-FAK000999999/CALLME/DONTSINK"]').click({ timeout: 10000 })
@@ -72,7 +72,7 @@ context('Vessel labels', () => {
 
   it('Vessel sidebar should not open When moved', () => {
     // Given
-    cy.clickButton("Affichage des labels", { withoutScroll: true })
+    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
     cy.get('*[data-cy="map-property-trigger"]').filter(':contains("étiquettes des navires")').click({ timeout: 10000 })
 
     // When

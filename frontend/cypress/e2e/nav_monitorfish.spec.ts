@@ -42,11 +42,11 @@ context('Light MonitorFish', () => {
     cy.get('*[data-cy="alerts-button"]').should('not.exist')
 
     // No risk factors
-    cy.get('*[data-cy="vessel-labels"]').click({ timeout: 10000 })
+    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
     cy.get('*[data-cy="map-property-trigger"]', { timeout: 10000 })
       .filter(':contains("étiquettes des navires")')
       .click({ timeout: 10000 })
-    cy.get('*[data-cy="vessel-labels"]').click({ timeout: 10000 })
+    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
     // For the throttle of labels
     cy.get('body').type('{upArrow}')
     cy.get('*[data-cy="vessel-label-text"]').should('have.length.to.be.greaterThan', 5)

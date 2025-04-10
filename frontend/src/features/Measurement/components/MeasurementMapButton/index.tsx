@@ -92,7 +92,7 @@ export function MeasurementMapButton() {
         Icon={measurementIcon}
         isActive={isMeasurementMenuOpen || !!measurementTypeToAdd}
         onClick={openOrCloseMeasurementMenu}
-        style={{ top: 316 }}
+        style={{ top: 292 }}
         title="Mesurer une distance"
       />
       {isMeasurementToolRendered && <CustomCircleRange isOpened={isMeasurementToolOpen} />}
@@ -132,7 +132,7 @@ const MeasurementOptions = styled(MapComponent)<{
   opacity: ${p => (p.$isOpen ? '1' : '0')};
   position: absolute;
   right: 10px;
-  top: 316px;
+  top: 292px;
   transition: all 0.3s;
   width: 135px;
   z-index: 9999;

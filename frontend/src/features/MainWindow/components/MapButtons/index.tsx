@@ -6,7 +6,6 @@ import { VesselGroupMapButton } from '@features/VesselGroup/components/VesselGro
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
-import { VesselLabelsMapButton } from './VesselLabels'
 import { VesselVisibilityMapButton } from './VesselVisibility'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { AlertsMapButton } from '../../../Alert/components/AlertsMapButton'
@@ -42,9 +41,6 @@ export function MapButtons() {
   const isMeasurementMapButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isMeasurementMapButtonDisplayed
   )
-  const isVesselLabelsMapButtonDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isVesselLabelsMapButtonDisplayed
-  )
   const isVesselVisibilityMapButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isVesselVisibilityMapButtonDisplayed
   )
@@ -70,7 +66,6 @@ export function MapButtons() {
         {isVesselVisibilityMapButtonDisplayed && <VesselVisibilityMapButton />}
         {isMeasurementMapButtonDisplayed && <MeasurementMapButton />}
         {isInterestPointMapButtonDisplayed && <InterestPointMapButton />}
-        {isVesselLabelsMapButtonDisplayed && <VesselLabelsMapButton />}
         {isAccountMapButtonDisplayed && <Account />}
         {isNewFeaturesMapButtonDisplayed && <NewFeatures />}
       </LegacyRsuiteComponentsWrapper>

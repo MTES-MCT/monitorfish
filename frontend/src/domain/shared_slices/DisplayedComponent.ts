@@ -23,7 +23,6 @@ export type DisplayedComponentState = {
   isVesselFiltersMapButtonDisplayed: boolean
   isVesselGroupMainWindowEditionDisplayed: boolean
   isVesselGroupMapButtonDisplayed: boolean
-  isVesselLabelsMapButtonDisplayed: boolean
   isVesselListMapButtonDisplayed: boolean
   isVesselSearchDisplayed: boolean
   isVesselVisibilityMapButtonDisplayed: boolean
@@ -49,7 +48,6 @@ const INITIAL_STATE: DisplayedComponentState = {
   isVesselFiltersMapButtonDisplayed: true,
   isVesselGroupMainWindowEditionDisplayed: false,
   isVesselGroupMapButtonDisplayed: true,
-  isVesselLabelsMapButtonDisplayed: true,
   isVesselListMapButtonDisplayed: true,
   isVesselSearchDisplayed: true,
   isVesselVisibilityMapButtonDisplayed: true

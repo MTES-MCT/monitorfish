@@ -24,15 +24,13 @@ context('Map menu tools', () => {
     cy.get('*[data-cy="measurement-circle-radius-input"]').should('not.exist')
     cy.get('*[data-cy="interest-point-name-input"]').should('be.visible')
 
-    // Vessel label
-    cy.clickButton('Affichage des labels', { withoutScroll: true })
+    // Vessel visibility
+    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
     cy.get('*[data-cy="interest-point-name-input"]').should('not.exist')
     cy.get('*[data-cy="map-property-trigger"]', { timeout: 10000 })
       .filter(':contains("étiquettes des navires")')
       .should('be.visible')
 
-    // Vessel visibility
-    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
     cy.get('*[data-cy="map-property-trigger"]', { timeout: 10000 })
       .filter(':contains("étiquettes des navires")')
       .should('not.exist')
@@ -58,7 +56,6 @@ context('Map menu tools', () => {
     cy.get('body').type('{esc}')
     cy.get('[aria-label="Nouveautés MonitorFish"]').should('have.css', 'width', '5px')
     cy.get('*[data-cy="vessel-visibility"]').should('have.css', 'width', '5px')
-    cy.get('*[data-cy="vessel-labels"]').should('have.css', 'width', '5px')
     cy.get('*[data-cy="interest-point"]').should('have.css', 'width', '5px')
     cy.get('*[data-cy="measurement"]').should('have.css', 'width', '5px')
     cy.get('*[data-cy="vessel-list"]').should('have.css', 'width', '5px')

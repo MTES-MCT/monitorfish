@@ -19,21 +19,23 @@ data class FixedVesselGroupDataOutput(
     val vessels: List<VesselIdentity>,
 ) {
     companion object {
-        fun fromFixedVesselGroup(vesselGroup: FixedVesselGroup) =
-            FixedVesselGroupDataOutput(
-                id = vesselGroup.id,
-                name = vesselGroup.name,
-                isDeleted = vesselGroup.isDeleted,
-                description = vesselGroup.description,
-                pointsOfAttention = vesselGroup.pointsOfAttention,
-                color = vesselGroup.color,
-                sharing = vesselGroup.sharing,
-                type = vesselGroup.type,
-                createdBy = vesselGroup.createdBy,
-                createdAtUtc = vesselGroup.createdAtUtc,
-                updatedAtUtc = vesselGroup.updatedAtUtc,
-                endOfValidityUtc = vesselGroup.endOfValidityUtc,
-                vessels = vesselGroup.vessels,
-            )
+        fun fromFixedVesselGroup(
+            vesselGroup: FixedVesselGroup,
+            withVessels: Boolean,
+        ) = FixedVesselGroupDataOutput(
+            id = vesselGroup.id,
+            name = vesselGroup.name,
+            isDeleted = vesselGroup.isDeleted,
+            description = vesselGroup.description,
+            pointsOfAttention = vesselGroup.pointsOfAttention,
+            color = vesselGroup.color,
+            sharing = vesselGroup.sharing,
+            type = vesselGroup.type,
+            createdBy = vesselGroup.createdBy,
+            createdAtUtc = vesselGroup.createdAtUtc,
+            updatedAtUtc = vesselGroup.updatedAtUtc,
+            endOfValidityUtc = vesselGroup.endOfValidityUtc,
+            vessels = if (withVessels) vesselGroup.vessels else listOf(),
+        )
     }
 }

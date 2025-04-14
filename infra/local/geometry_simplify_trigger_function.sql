@@ -13,7 +13,7 @@ DROP FUNCTION IF EXISTS prod.simplify_geometry CASCADE;
 
 CREATE FUNCTION prod.simplify_geometry() RETURNS trigger AS $$
     BEGIN
-        NEW.geometry_simplified := ST_SimplifyPreserveTopology(ST_CurveToLine(NEW.geometry), 0.0001);
+        NEW.geometry_simplified := ST_MakeValid(ST_SimplifyPreserveTopology(ST_CurveToLine(NEW.geometry), 0.0001));
         NEW.geometry := ST_MakeValid(ST_CurveToLine(NEW.geometry));
         RETURN NEW;
     END;

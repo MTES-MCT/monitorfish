@@ -15,7 +15,7 @@ object TestUtils {
         val firstPosition =
             LastPosition(
                 id = null,
-                vesselId = null,
+                vesselId = 1,
                 internalReferenceNumber = "FR224226850",
                 mmsi = "224226850",
                 ircs = null,

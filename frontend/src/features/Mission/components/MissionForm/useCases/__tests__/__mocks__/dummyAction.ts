@@ -16,7 +16,6 @@ export const dummyAction = {
   externalReferenceNumber: 'DONTSINK',
   facade: 'NAMO',
   faoAreas: ['27.8.b', '27.8.c'],
-  feedbackSheetRequired: false,
   flagState: 'FR',
   flightGoals: [],
   gearInfractions: [],

@@ -26,7 +26,6 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   emitsAis: undefined,
   emitsVms: undefined,
   facade: undefined,
-  feedbackSheetRequired: undefined,
   gearInfractions: [],
   gearOnboard: [],
   id: undefined,

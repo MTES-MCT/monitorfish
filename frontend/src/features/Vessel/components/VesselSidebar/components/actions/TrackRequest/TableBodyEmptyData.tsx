@@ -5,7 +5,7 @@ export function TableBodyEmptyData() {
   return (
     <tbody>
       <Row>
-        <Cell colSpan={4} rowSpan={5}>
+        <Cell colSpan={4} rowSpan={2}>
           Aucune position
         </Cell>
       </Row>
@@ -23,7 +23,7 @@ const Row = styled(SimpleTable.BodyTr)`
 `
 
 const Cell = styled(SimpleTable.Td)`
-  height: 461px;
+  height: 150px;
   text-align: center;
   vertical-align: middle;
 `

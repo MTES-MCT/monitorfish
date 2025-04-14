@@ -226,39 +226,6 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
     border-radius: 4px;
   }
 
-  .rs-picker-default .rs-btn,
-  .rs-picker-input .rs-btn,
-  .rs-picker-default .rs-picker-toggle,
-  .rs-picker-input .rs-picker-toggle {
-    background: unset !important;
-  }
-
-  .rs-picker-tag-wrapper {
-    padding-bottom: 0;
-    min-height: 30px;
-  }
-
-  .rs-picker-input {
-    vertical-align: top;
-    border-radius: 2px;
-  }
-
-  .rs-picker-toggle {
-    border-radius: 2px;
-  }
-
-  .rs-picker-toggle-placeholder {
-    font-size: 11px;
-    color: #707785 !important;
-  }
-
-  .rs-picker-has-value .rs-btn .rs-picker-toggle-value,
-  .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
-    color: #707785;
-    font-size: 13px;
-    font-weight: normal;
-  }
-
   .rs-picker-tag > .rs-picker-toggle {
     width: 105px;
   }

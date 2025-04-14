@@ -21,7 +21,7 @@ import { useGetServiceWorker } from '../../../workers/hooks/useGetServiceWorker'
 import { registerServiceWorker } from '../../../workers/registerServiceWorker'
 import { unregisterServiceWorker } from '../../../workers/unregisterServiceWorker'
 
-const MARGIN_TOP = 428
+const MARGIN_TOP = 412
 const BYTE_TO_MEGA_BYTE_FACTOR = 0.000001
 
 export function Account() {

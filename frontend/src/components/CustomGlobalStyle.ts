@@ -60,39 +60,10 @@ export const CustomGlobalStyle = createGlobalStyle`
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
   }
 
-  .noUi-origin {
-    visibility: hidden;
-  }
-
   .available-width {
     width: -webkit-fill-available !important;
     width: -moz-available !important;
     width: stretch;
-  }
-
-  .noUi-target {
-    background: none;
-    border-radius: unset;
-    border: none;
-    box-shadow: none;
-  }
-
-  .noUi-connects {
-    border-radius: 0;
-    border: none;
-    height: 3px;
-  }
-
-  .noUi-connect:nth-child(1) {
-    background: #cccfd6;
-  }
-
-  .noUi-connect:nth-child(2) {
-    background: #9095a2;
-  }
-
-  .noUi-connect:nth-child(3) {
-    background: #3b4559;
   }
 
   label {

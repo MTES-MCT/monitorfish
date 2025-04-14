@@ -50,7 +50,7 @@ export function InterestPointMapButton() {
         Icon={Icon.Report}
         isActive={isOpened}
         onClick={openOrCloseInterestPoint}
-        style={{ top: 364 }}
+        style={{ top: 340 }}
         title="Créer un point d'intérêt"
       />
       {isRendered && <EditInterestPoint close={close} isOpen={isOpened} />}

@@ -17,7 +17,7 @@ import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
 import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 
-const MARGIN_TOP = 476
+const MARGIN_TOP = 460
 
 export function NewFeatures() {
   const dispatch = useMainAppDispatch()

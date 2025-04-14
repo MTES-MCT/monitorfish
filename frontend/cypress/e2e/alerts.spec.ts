@@ -9,7 +9,7 @@ context('Alerts', () => {
     cy.cleanScreenshots(1)
 
     // Given
-    cy.get('*[data-cy^="vessel-labels"]').click({ timeout: 10000 })
+    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
     cy.get('*[data-cy^="map-property-trigger"]', { timeout: 10000 })
       .filter(':contains("de risque des navires")')
       .click({ timeout: 10000 })

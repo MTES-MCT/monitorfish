@@ -6,6 +6,7 @@ import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/V
 import { useGetFilteredVesselsLastPositions } from '@features/Vessel/hooks/useGetFilteredVesselsLastPositions'
 import { filterVessels } from '@features/Vessel/useCases/VesselListV2/filterVessels'
 import { previewVessels } from '@features/Vessel/useCases/VesselListV2/previewVessels'
+import { EditFixedVesselGroupDialog } from '@features/VesselGroup/components/EditFixedVesselGroupDialog'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTableVirtualizer } from '@hooks/useTableVirtualizer'
@@ -63,6 +64,7 @@ export function VesselList({ isFromUrl }: VesselListProps) {
   const [expanded, setExpanded] = useState<ExpandedState>({})
   const [isExportVesselListDialogOpened, setIsExportVesselListDialogOpened] = useState(false)
   const [isEditDynamicVesselGroupOpened, setIsEditDynamicVesselGroupOpened] = useState(false)
+  const [isEditFixedVesselGroupOpened, setIsEditFixedVesselGroupOpened] = useState(false)
 
   const [columns, tableData] = useMemo(
     () => [
@@ -169,6 +171,12 @@ export function VesselList({ isFromUrl }: VesselListProps) {
               />
               <Dropdown Icon={Icon.Vessel} title="Créer un groupe de navires">
                 <StyledDropdownItem
+                  onClick={() => setIsEditFixedVesselGroupOpened(true)}
+                  title="Un groupe de navires fixe est constitué des navires sélectionnés manuellement, soit directement dans la liste, soit en chargeant un fichier. Vous pouvez le mettre à jour (suppression ou ajouts de navires) également de façon manuelle."
+                >
+                  Créer un groupe fixe <Icon.Info size={17} />
+                </StyledDropdownItem>
+                <StyledDropdownItem
                   onClick={() => setIsEditDynamicVesselGroupOpened(true)}
                   title="Un groupe de navires dynamique est constitué des navires répondant aux critères des filtres que vous aurez sélectionné. Il se met automatiquement à jour selon l'évolution des données des navires."
                 >
@@ -253,6 +261,12 @@ export function VesselList({ isFromUrl }: VesselListProps) {
         <EditDynamicVesselGroupDialog
           initialListFilterValues={listFilter}
           onExit={() => setIsEditDynamicVesselGroupOpened(false)}
+        />
+      )}
+      {isEditFixedVesselGroupOpened && (
+        <EditFixedVesselGroupDialog
+          onExit={() => setIsEditFixedVesselGroupOpened(false)}
+          vesselFeatureIds={Object.keys(rowSelection)}
         />
       )}
     </>

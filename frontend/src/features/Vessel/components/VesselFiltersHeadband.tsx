@@ -23,7 +23,7 @@ export function VesselFiltersHeadband() {
 
   return (
     <>
-      {!areListFilterValuesEqualToDefaultOnes && (
+      {!areListFilterValuesEqualToDefaultOnes && numberOfFilters > 0 && (
         <Wrapper $hasHealthcheckWarning={hasHealthcheckWarning}>
           {numberOfFilters} {pluralize('filtre', numberOfFilters)} {numberOfFilters > 1 ? 'sont' : 'est'}{' '}
           {pluralize('appliqué', numberOfFilters)} sur les navires affichés.

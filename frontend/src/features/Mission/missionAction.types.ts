@@ -159,6 +159,7 @@ export namespace MissionAction {
     declaredWeight: number | undefined
     nbFish: number | undefined
     speciesCode: string
+    speciesName: string | undefined
     underSized: boolean | undefined
   }
 

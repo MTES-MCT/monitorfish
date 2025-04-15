@@ -66,6 +66,7 @@ export const dummyAction = {
       declaredWeight: 471.2,
       nbFish: undefined,
       speciesCode: 'HKE',
+      speciesName: 'European Hake',
       underSized: false
     },
     {
@@ -73,6 +74,7 @@ export const dummyAction = {
       declaredWeight: 13.46,
       nbFish: undefined,
       speciesCode: 'BLI',
+      speciesName: undefined,
       underSized: false
     }
   ],

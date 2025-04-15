@@ -15,7 +15,7 @@ import styled from 'styled-components'
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
 
-import type { DynamicVesselGroup } from '@features/VesselGroup/types'
+import type { VesselGroup } from '@features/VesselGroup/types'
 
 const MARGIN_TOP = 124
 
@@ -71,7 +71,7 @@ export function VesselGroupMenuDialog() {
         </Header>
         <StyledBody>
           <VesselGroupList data-cy="vessel-groups-list">
-            {orderedVesselGroups.map((vesselGroup: DynamicVesselGroup, index: number) => (
+            {orderedVesselGroups.map((vesselGroup: VesselGroup, index: number) => (
               <VesselGroupRow
                 key={vesselGroup.id}
                 isLastPinned={vesselGroupsIdsPinned.length === index + 1}

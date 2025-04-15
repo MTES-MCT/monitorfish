@@ -171,7 +171,6 @@ export function FilterBar() {
     <Wrapper className="vessel-list-filter-bar">
       <Row>
         <TextInput
-          disabled
           Icon={Icon.Search}
           isLabelHidden
           isTransparent

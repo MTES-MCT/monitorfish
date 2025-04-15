@@ -1,5 +1,12 @@
+import { VesselFeature } from '@features/Vessel/types/vessel'
 import { EditDynamicVesselGroupDialog } from '@features/VesselGroup/components/EditDynamicVesselGroupDialog'
+import { EditFixedVesselGroupDialog } from '@features/VesselGroup/components/EditFixedVesselGroupDialog'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
+import {
+  type CreateOrUpdateDynamicVesselGroup,
+  type CreateOrUpdateFixedVesselGroup,
+  GroupType
+} from '@features/VesselGroup/types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 
@@ -24,12 +31,21 @@ export function VesselGroupMainWindowEdition() {
 
   return (
     <>
-      {isVesselGroupMainWindowEditionDisplayed && (
+      {isVesselGroupMainWindowEditionDisplayed && editedVesselGroup.type === GroupType.DYNAMIC && (
         <EditDynamicVesselGroupDialog
           editedVesselGroup={editedVesselGroup}
-          initialListFilterValues={editedVesselGroup.filters}
+          initialListFilterValues={(editedVesselGroup as CreateOrUpdateDynamicVesselGroup).filters}
           isMainWindow
           onExit={handleCloseEditVesselGroup}
+        />
+      )}
+      {isVesselGroupMainWindowEditionDisplayed && editedVesselGroup.type === GroupType.FIXED && (
+        <EditFixedVesselGroupDialog
+          editedVesselGroup={editedVesselGroup}
+          onExit={handleCloseEditVesselGroup}
+          vesselFeatureIds={(editedVesselGroup as CreateOrUpdateFixedVesselGroup).vessels.map(vessel =>
+            VesselFeature.getVesselFeatureId(vessel)
+          )}
         />
       )}
     </>

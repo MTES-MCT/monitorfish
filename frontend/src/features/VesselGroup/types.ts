@@ -1,7 +1,8 @@
 import { VesselListFilterSchema } from '@features/Vessel/components/VesselList/types'
+import { Vessel } from '@features/Vessel/Vessel.types'
 import z from 'zod'
 
-import { stringOrUndefined } from '../../types'
+import { numberOrUndefined, stringOrUndefined } from '../../types'
 
 export enum Sharing {
   PRIVATE = 'PRIVATE',
@@ -28,6 +29,10 @@ export const VesselGroupSchema = z.object({
   updatedAtUtc: z.union([z.string().datetime(), z.undefined()])
 })
 
+/**
+ * Dynamic vessel group
+ */
+
 export const DynamicVesselGroupSchema = VesselGroupSchema.extend({
   filters: VesselListFilterSchema,
   type: z.literal(GroupType.DYNAMIC)
@@ -43,3 +48,37 @@ export const CreateOrUpdateDynamicVesselGroupSchema = DynamicVesselGroupSchema.o
 
 export type DynamicVesselGroup = z.infer<typeof DynamicVesselGroupSchema>
 export type CreateOrUpdateDynamicVesselGroup = z.infer<typeof CreateOrUpdateDynamicVesselGroupSchema>
+
+/**
+ * Fixed vessel group
+ */
+
+export const VesselIdentitySchema = z.object({
+  cfr: stringOrUndefined,
+  externalIdentification: stringOrUndefined,
+  flagState: stringOrUndefined,
+  ircs: stringOrUndefined,
+  name: stringOrUndefined,
+  vesselId: numberOrUndefined,
+  vesselIdentifier: z.union([z.nativeEnum(Vessel.VesselIdentifier), z.undefined()])
+})
+
+export const FixedVesselGroupSchema = VesselGroupSchema.extend({
+  type: z.literal(GroupType.FIXED),
+  vessels: z.array(VesselIdentitySchema)
+})
+
+export const CreateOrUpdateFixedVesselGroupSchema = FixedVesselGroupSchema.omit({
+  createdAtUtc: true,
+  createdBy: true,
+  updatedAtUtc: true
+}).extend({
+  id: z.union([z.number(), z.undefined()])
+})
+
+export type FixedVesselGroup = z.infer<typeof FixedVesselGroupSchema>
+export type CreateOrUpdateFixedVesselGroup = z.infer<typeof CreateOrUpdateFixedVesselGroupSchema>
+export type VesselIdentityForVesselGroup = z.infer<typeof VesselIdentitySchema>
+
+export type VesselGroup = DynamicVesselGroup | FixedVesselGroup
+export type CreateOrUpdateVesselGroup = CreateOrUpdateDynamicVesselGroup | CreateOrUpdateFixedVesselGroup

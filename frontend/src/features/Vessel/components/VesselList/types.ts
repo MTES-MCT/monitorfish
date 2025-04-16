@@ -2,6 +2,7 @@ import { VesselLocation } from '@features/Vessel/types/vessel'
 import z from 'zod'
 
 import { LastControlPeriod, VesselSize } from './constants'
+import { stringOrUndefined } from '../../../../types'
 
 import type { MultiPolygon, Polygon } from 'geojson'
 
@@ -23,6 +24,7 @@ export const VesselListFilterSchema = z.object({
   lastPositionHoursAgo: z.number().optional(),
   producerOrganizations: z.array(z.string()),
   riskFactors: z.array(z.number()),
+  searchQuery: stringOrUndefined,
   specyCodes: z.array(z.string()).optional(),
   vesselSize: z.union([z.nativeEnum(VesselSize), z.undefined()]),
   vesselsLocation: z.array(z.custom<VesselLocation>()),

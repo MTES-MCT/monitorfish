@@ -33,8 +33,12 @@ export const VesselGroupSchema = z.strictObject({
  * Dynamic vessel group
  */
 
+export const VesselGroupFilterSchema = VesselListFilterSchema.omit({
+  searchQuery: true
+})
+
 export const DynamicVesselGroupSchema = VesselGroupSchema.extend({
-  filters: VesselListFilterSchema,
+  filters: VesselGroupFilterSchema,
   type: z.literal(GroupType.DYNAMIC)
 })
 

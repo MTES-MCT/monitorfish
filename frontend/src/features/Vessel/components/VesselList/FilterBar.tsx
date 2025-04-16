@@ -16,11 +16,12 @@ import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Checkbox, CheckPicker, Icon, MultiCascader, Select, Size, TextInput } from '@mtes-mct/monitor-ui'
+import { Checkbox, CheckPicker, MultiCascader, Select, Size, TextInput } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { uniq } from 'lodash-es'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
 import {
   HAS_LOGBOOK_AS_OPTIONS,
@@ -44,6 +45,11 @@ export function FilterBar() {
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const filterableZoneAsTreeOptions = useGetFilterableZonesAsTreeOptions()
   const organizationMembershipNames = useGetOrganizationMembershipNamesAsOptions()
+  const [searchQuery, setSearchQuery] = useState<string | undefined>(listFilterValues.searchQuery)
+
+  useEffect(() => {
+    setSearchQuery(listFilterValues.searchQuery)
+  }, [listFilterValues.searchQuery])
 
   const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.VESSELS_LIST)
 
@@ -55,6 +61,15 @@ export function FilterBar() {
 
   const speciesAsCodeOptions =
     speciesAsOptions?.map(option => ({ label: option.label, value: option.value.code })) ?? []
+
+  const filterVesselsWithQuery = useDebouncedCallback((nextSearchQuery: string | undefined) => {
+    dispatch(filterVessels({ searchQuery: nextSearchQuery }))
+  }, 250)
+
+  const updateSearchQuery = (nextSearchQuery: string | undefined) => {
+    setSearchQuery(nextSearchQuery)
+    filterVesselsWithQuery(nextSearchQuery)
+  }
 
   const updateCountryCodes = (nextCountryCodes: string[] | undefined) => {
     dispatch(filterVessels({ countryCodes: nextCountryCodes ?? [] }))
@@ -171,15 +186,15 @@ export function FilterBar() {
     <Wrapper className="vessel-list-filter-bar">
       <Row>
         <TextInput
-          Icon={Icon.Search}
           isLabelHidden
+          isSearchInput
           isTransparent
           label="Rechercher un navire"
           name="searchQuery"
-          onChange={() => {}}
+          onChange={updateSearchQuery}
           placeholder="Rechercher un navire"
           size={Size.LARGE}
-          value={undefined}
+          value={searchQuery}
         />
       </Row>
 

@@ -97,6 +97,7 @@ export const DEFAULT_VESSEL_LIST_FILTER_VALUES: VesselListFilter = {
   producerOrganizations: [],
   hasLogbook: undefined,
   specyCodes: [],
+  searchQuery: undefined,
   riskFactors: [],
   vesselSize: undefined,
   zones: []

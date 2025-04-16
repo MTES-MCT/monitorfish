@@ -10,7 +10,7 @@ import {
   type VesselIdentityForVesselGroup
 } from '@features/VesselGroup/types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, Dialog, pluralize } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Dialog, Link, pluralize } from '@mtes-mct/monitor-ui'
 import { type FormikProps } from 'formik'
 import { isEqual } from 'lodash-es'
 import { type MutableRefObject, useRef, useState } from 'react'
@@ -63,6 +63,7 @@ export function EditFixedVesselGroupDialog({
   // @ts-ignore All properties of `VesselIdentityForVesselGroup` are seen as optional, even if they are not defined as optional
   const vesselsIdentities = selectedVesselIdentities.concat(uploadedVessels)
   const numberOfVessels = vesselsIdentities.length
+  const baseUrl = window.location.origin
 
   return (
     <StyledDialog isAbsolute>
@@ -74,8 +75,8 @@ export function EditFixedVesselGroupDialog({
           </VesselsCount>
           <Example>
             Vous pouvez ajouter des navires après avoir créé le groupe, et/ou charger une liste de navires ci-dessous{' '}
-            <br />
-            (cliquez ici pour télécharger un exemple de tableau au bon format).
+            <br />(<Link href={`${baseUrl}/public/examples/navires_groupe_fixe.csv`}>cliquez ici</Link> pour télécharger
+            un exemple de tableau au bon format).
           </Example>
           <UploadVesselFile onChange={nextVessels => setUploadedVessels(nextVessels)} />
         </Row>

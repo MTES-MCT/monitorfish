@@ -1,13 +1,18 @@
 import { vesselSelectors } from '@features/Vessel/slice'
 import { Vessel } from '@features/Vessel/Vessel.types'
+import { UploadVesselFile } from '@features/VesselGroup/components/EditFixedVesselGroupDialog/UploadVesselFile'
 import { VesselGroupForm } from '@features/VesselGroup/components/VesselGroupForm'
 import { DEFAULT_FIXED_VESSEL_GROUP } from '@features/VesselGroup/constants'
-import { type CreateOrUpdateVesselGroup, GroupType } from '@features/VesselGroup/types'
+import {
+  type CreateOrUpdateVesselGroup,
+  GroupType,
+  type VesselIdentityForVesselGroup
+} from '@features/VesselGroup/types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, Dialog, pluralize } from '@mtes-mct/monitor-ui'
 import { type FormikProps } from 'formik'
 import { isEqual } from 'lodash-es'
-import { type MutableRefObject, useRef } from 'react'
+import { type MutableRefObject, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import type { Promisable } from 'type-fest'
@@ -15,27 +20,23 @@ import type { Promisable } from 'type-fest'
 type EditFixedVesselGroupDialogProps = {
   editedVesselGroup?: CreateOrUpdateVesselGroup
   onExit: () => Promisable<void>
-  vesselFeatureIds: string[]
+  selectedVesselFeatureIds: string[]
 }
 export function EditFixedVesselGroupDialog({
   editedVesselGroup = undefined,
   onExit,
-  vesselFeatureIds
+  selectedVesselFeatureIds
 }: EditFixedVesselGroupDialogProps) {
+  const formRef = useRef<FormikProps<CreateOrUpdateVesselGroup>>()
+
   const vessels: Vessel.VesselLastPosition[] = useMainAppSelector(state => {
     const entities = vesselSelectors.selectEntities(state.vessel.vessels)
 
-    return vesselFeatureIds
+    return selectedVesselFeatureIds
       .map(id => entities[id])
       .filter((vessel: Vessel.VesselLastPosition | undefined): vessel is Vessel.VesselLastPosition => !!vessel)
   })
-  const formRef = useRef<FormikProps<CreateOrUpdateVesselGroup>>()
-  const numberOfVessels = vesselFeatureIds.length
-
-  const createOrModifyText =
-    !!editedVesselGroup && !isEqual(editedVesselGroup, DEFAULT_FIXED_VESSEL_GROUP) ? 'Modifier' : 'Créer'
-
-  const vesselIdentities = vessels.map(vessel => ({
+  const selectedVesselIdentities = vessels.map(vessel => ({
     cfr: vessel.internalReferenceNumber,
     externalIdentification: vessel.ircs,
     flagState: vessel.flagState,
@@ -45,6 +46,15 @@ export function EditFixedVesselGroupDialog({
     vesselIdentifier: vessel.vesselIdentifier
   }))
 
+  const [uploadedVessels, setUploadedVessels] = useState<VesselIdentityForVesselGroup[]>([])
+
+  const createOrModifyText =
+    !!editedVesselGroup && !isEqual(editedVesselGroup, DEFAULT_FIXED_VESSEL_GROUP) ? 'Modifier' : 'Créer'
+
+  // @ts-ignore All properties of `VesselIdentityForVesselGroup` are seen as optional, even if they are not defined as optional
+  const vesselsIdentities = selectedVesselIdentities.concat(uploadedVessels)
+  const numberOfVessels = vesselsIdentities.length
+
   return (
     <StyledDialog isAbsolute>
       <StyledDialogTitle>{createOrModifyText} un groupe de navires fixe</StyledDialogTitle>
@@ -53,13 +63,19 @@ export function EditFixedVesselGroupDialog({
           <VesselsCount>
             {numberOfVessels} {pluralize('navire', numberOfVessels)} {pluralize('sélectionné', numberOfVessels)}.
           </VesselsCount>
+          <Example>
+            Vous pouvez ajouter des navires après avoir créé le groupe, et/ou charger une liste de navires ci-dessous{' '}
+            <br />
+            (cliquez ici pour télécharger un exemple de tableau au bon format).
+          </Example>
+          <UploadVesselFile onChange={nextVessels => setUploadedVessels(nextVessels)} />
         </Row>
         <VesselGroupForm
           editedVesselGroup={editedVesselGroup}
           formRef={formRef as MutableRefObject<FormikProps<CreateOrUpdateVesselGroup>>}
           groupType={GroupType.FIXED}
           onExit={onExit}
-          vesselIdentities={vesselIdentities}
+          vesselIdentities={vesselsIdentities}
         />
       </StyledDialogBody>
       <StyledDialogAction>
@@ -90,6 +106,12 @@ const VesselsCount = styled.div`
   font-weight: 500;
 `
 
+const Example = styled.div`
+  text-align: left;
+  color: ${p => p.theme.color.slateGray};
+  font-style: italic;
+`
+
 const StyledDialogTitle = styled(Dialog.Title)`
   line-height: 48px;
   margin: 0;
@@ -104,8 +126,5 @@ const StyledDialogBody = styled(Dialog.Body)`
 `
 
 const Row = styled.div`
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
   margin-bottom: 16px;
 `

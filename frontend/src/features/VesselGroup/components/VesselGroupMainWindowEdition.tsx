@@ -43,7 +43,7 @@ export function VesselGroupMainWindowEdition() {
         <EditFixedVesselGroupDialog
           editedVesselGroup={editedVesselGroup}
           onExit={handleCloseEditVesselGroup}
-          vesselFeatureIds={(editedVesselGroup as CreateOrUpdateFixedVesselGroup).vessels.map(vessel =>
+          selectedVesselFeatureIds={(editedVesselGroup as CreateOrUpdateFixedVesselGroup).vessels.map(vessel =>
             VesselFeature.getVesselFeatureId(vessel)
           )}
         />

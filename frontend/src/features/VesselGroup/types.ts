@@ -14,7 +14,7 @@ export enum GroupType {
   FIXED = 'FIXED'
 }
 
-export const VesselGroupSchema = z.object({
+export const VesselGroupSchema = z.strictObject({
   color: z.string().min(1),
   createdAtUtc: z.string().datetime(),
   createdBy: z.string(),
@@ -53,7 +53,7 @@ export type CreateOrUpdateDynamicVesselGroup = z.infer<typeof CreateOrUpdateDyna
  * Fixed vessel group
  */
 
-export const VesselIdentitySchema = z.object({
+export const VesselIdentitySchema = z.strictObject({
   cfr: stringOrUndefined,
   externalIdentification: stringOrUndefined,
   flagState: stringOrUndefined,

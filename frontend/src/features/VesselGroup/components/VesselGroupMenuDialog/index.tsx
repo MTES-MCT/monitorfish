@@ -3,7 +3,7 @@ import { MapToolBox } from '@features/MainWindow/components/MapButtons/shared/Ma
 import { MapBox } from '@features/Map/constants'
 import { useGetAllVesselGroupsQuery } from '@features/VesselGroup/apis'
 import { VesselGroupRow } from '@features/VesselGroup/components/VesselGroupMenuDialog/VesselGroupRow'
-import { DEFAULT_DYNAMIC_VESSEL_GROUP } from '@features/VesselGroup/constants'
+import { DEFAULT_DYNAMIC_VESSEL_GROUP, DEFAULT_FIXED_VESSEL_GROUP } from '@features/VesselGroup/constants'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
 import { hideVesselsNotInVesselGroups } from '@features/VesselGroup/useCases/hideVesselsNotInVesselGroups'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
@@ -42,8 +42,13 @@ export function VesselGroupMenuDialog() {
     return pinnedVesselGroups.concat(unpinnedVesselGroups)
   })()
 
-  const createNewGroup = () => {
+  const createNewDynamicGroup = () => {
     dispatch(vesselGroupActions.vesselGroupEdited(DEFAULT_DYNAMIC_VESSEL_GROUP))
+    dispatch(setDisplayedComponents({ isVesselGroupMainWindowEditionDisplayed: true }))
+  }
+
+  const createNewFixedGroup = () => {
+    dispatch(vesselGroupActions.vesselGroupEdited(DEFAULT_FIXED_VESSEL_GROUP))
     dispatch(setDisplayedComponents({ isVesselGroupMainWindowEditionDisplayed: true }))
   }
 
@@ -84,7 +89,13 @@ export function VesselGroupMenuDialog() {
           <Buttons>
             <StyledDropdown Icon={Icon.Plus} title="Créer un nouveau groupe">
               <StyledDropdownItem
-                onClick={createNewGroup}
+                onClick={createNewFixedGroup}
+                title="Un groupe de navires fixe est constitué des navires sélectionnés manuellement, soit directement dans la liste, soit en chargeant un fichier. Vous pouvez le mettre à jour (suppression ou ajouts de navires) également de façon manuelle."
+              >
+                Créer un groupe fixe <Icon.Info size={17} />
+              </StyledDropdownItem>
+              <StyledDropdownItem
+                onClick={createNewDynamicGroup}
                 title="Un groupe de navires dynamique est constitué des navires répondant aux critères des filtres que vous aurez sélectionné. Il se met automatiquement à jour selon l'évolution des données des navires."
               >
                 Créer un groupe dynamique <Icon.Info size={17} />

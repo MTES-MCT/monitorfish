@@ -15,7 +15,7 @@ export const getVesselsFromFile = async (file: File): Promise<VesselIdentityForV
   const { read, utils } = await import('xlsx')
   const arrayBuffer = await file.arrayBuffer()
 
-  const workbook = read(arrayBuffer, { FS: ';', raw: true, type: 'array' })
+  const workbook = read(arrayBuffer, { FS: ',', raw: true, type: 'array' })
   const sheetName = workbook.SheetNames[0]
   if (!sheetName) {
     throw new Error(EMPTY_CSV_ERROR)
@@ -30,7 +30,7 @@ export const getVesselsFromFile = async (file: File): Promise<VesselIdentityForV
   return rowsAsArray.map(row => ({
     cfr: row[0],
     externalIdentification: row[4],
-    flagState: row[2],
+    flagState: row[2] ?? 'UNDEFINED',
     ircs: row[3],
     name: row[1],
     vesselId: undefined,

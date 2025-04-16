@@ -1040,6 +1040,8 @@ class GetLastPositionsUTests {
         assertThat(lastPositions[3].vesselGroups).hasSize(0)
     }
 
+
+
     @Test
     fun `execute Should return fixed and dynamics groups When vessels are found in the last position table`() {
         // Given

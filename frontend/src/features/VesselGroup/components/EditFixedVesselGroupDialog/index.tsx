@@ -4,6 +4,7 @@ import { UploadVesselFile } from '@features/VesselGroup/components/EditFixedVess
 import { VesselGroupForm } from '@features/VesselGroup/components/VesselGroupForm'
 import { DEFAULT_FIXED_VESSEL_GROUP } from '@features/VesselGroup/constants'
 import {
+  type CreateOrUpdateFixedVesselGroup,
   type CreateOrUpdateVesselGroup,
   GroupType,
   type VesselIdentityForVesselGroup
@@ -20,7 +21,7 @@ import type { Promisable } from 'type-fest'
 type EditFixedVesselGroupDialogProps = {
   editedVesselGroup?: CreateOrUpdateVesselGroup
   onExit: () => Promisable<void>
-  selectedVesselFeatureIds: string[]
+  selectedVesselFeatureIds?: string[]
 }
 export function EditFixedVesselGroupDialog({
   editedVesselGroup = undefined,
@@ -29,22 +30,30 @@ export function EditFixedVesselGroupDialog({
 }: EditFixedVesselGroupDialogProps) {
   const formRef = useRef<FormikProps<CreateOrUpdateVesselGroup>>()
 
-  const vessels: Vessel.VesselLastPosition[] = useMainAppSelector(state => {
+  const selectedVessels: Vessel.VesselLastPosition[] = useMainAppSelector(state => {
     const entities = vesselSelectors.selectEntities(state.vessel.vessels)
 
-    return selectedVesselFeatureIds
-      .map(id => entities[id])
-      .filter((vessel: Vessel.VesselLastPosition | undefined): vessel is Vessel.VesselLastPosition => !!vessel)
+    return (
+      selectedVesselFeatureIds
+        ?.map(id => entities[id])
+        ?.filter((vessel: Vessel.VesselLastPosition | undefined): vessel is Vessel.VesselLastPosition => !!vessel) ?? []
+    )
   })
-  const selectedVesselIdentities = vessels.map(vessel => ({
-    cfr: vessel.internalReferenceNumber,
-    externalIdentification: vessel.ircs,
-    flagState: vessel.flagState,
-    ircs: vessel.ircs,
-    name: vessel.vesselName,
-    vesselId: vessel.vesselId,
-    vesselIdentifier: vessel.vesselIdentifier
-  }))
+  const selectedVesselIdentities = (function () {
+    if (editedVesselGroup) {
+      return (editedVesselGroup as CreateOrUpdateFixedVesselGroup).vessels
+    }
+
+    return selectedVessels.map(vessel => ({
+      cfr: vessel.internalReferenceNumber,
+      externalIdentification: vessel.ircs,
+      flagState: vessel.flagState,
+      ircs: vessel.ircs,
+      name: vessel.vesselName,
+      vesselId: vessel.vesselId,
+      vesselIdentifier: vessel.vesselIdentifier
+    }))
+  })()
 
   const [uploadedVessels, setUploadedVessels] = useState<VesselIdentityForVesselGroup[]>([])
 

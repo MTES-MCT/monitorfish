@@ -21,7 +21,6 @@ data class FixedVesselGroupDataOutput(
     companion object {
         fun fromFixedVesselGroup(
             vesselGroup: FixedVesselGroup,
-            withVessels: Boolean,
         ) = FixedVesselGroupDataOutput(
             id = vesselGroup.id,
             name = vesselGroup.name,
@@ -35,7 +34,7 @@ data class FixedVesselGroupDataOutput(
             createdAtUtc = vesselGroup.createdAtUtc,
             updatedAtUtc = vesselGroup.updatedAtUtc,
             endOfValidityUtc = vesselGroup.endOfValidityUtc,
-            vessels = if (withVessels) vesselGroup.vessels else listOf(),
+            vessels = vesselGroup.vessels,
         )
     }
 }

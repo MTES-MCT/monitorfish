@@ -67,7 +67,6 @@ class VesselGroupController(
 
         return FixedVesselGroupDataOutput.fromFixedVesselGroup(
             vesselGroup = vesselGroup,
-            withVessels = false,
         )
     }
 
@@ -96,7 +95,6 @@ class VesselGroupController(
                 is FixedVesselGroup ->
                     FixedVesselGroupDataOutput.fromFixedVesselGroup(
                         vesselGroup = it,
-                        withVessels = false,
                     )
             }
         }

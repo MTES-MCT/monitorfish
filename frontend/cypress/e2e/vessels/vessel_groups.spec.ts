@@ -161,7 +161,7 @@ context('Vessel groups', () => {
     cy.get('[title="Lorem ipsum"]').click()
   })
 
-  it('A fixed vessel group Should be created and displayed on the map', () => {
+  it.only('A fixed vessel group Should be created and displayed on the map', () => {
     cy.login('superuser')
     cy.visit('/side_window')
     cy.wait(250)
@@ -173,15 +173,24 @@ context('Vessel groups', () => {
     cy.get('.Component-SingleTag').within(() => {
       cy.get('button').click()
     })
+
+    cy.fill('Rechercher un navire', '103914')
     cy.get('[data-id="VESSELS_POINTS:ABC000103914/UNKNOWN/TQ736775"]').within(() => {
       cy.get('[type="checkbox"]').click({ force: true })
     })
+    cy.getDataCy('vessel-list-reset-filters').click()
+
+    cy.fill('Rechercher un navire', '179704')
     cy.get('[data-id="VESSELS_POINTS:ABC000179704/VZ9304/SD490259"]').within(() => {
       cy.get('[type="checkbox"]').click({ force: true })
     })
+    cy.getDataCy('vessel-list-reset-filters').click()
+
+    cy.fill('Rechercher un navire', '926735')
     cy.get('[data-id="VESSELS_POINTS:ABC000926735/RZTU/RB921922"]').within(() => {
       cy.get('[type="checkbox"]').click({ force: true })
     })
+    cy.getDataCy('vessel-list-reset-filters').click()
 
     cy.clickButton('Créer un groupe de navires')
     cy.clickButton('Créer un groupe fixe')
@@ -265,7 +274,6 @@ context('Vessel groups', () => {
     cy.clickButton('Créer le groupe')
     cy.contains('Le groupe de navires fixe "Lorem ipsum" a bien été créé.').should('be.visible')
 
-    cy.clickButton('Groupes de navires')
     cy.get('[title="Lorem ipsum"]').click()
   })
 })

@@ -10,7 +10,7 @@ import {
   type VesselIdentityForVesselGroup
 } from '@features/VesselGroup/types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, Dialog, Link, pluralize } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Dialog, Icon, Link, pluralize } from '@mtes-mct/monitor-ui'
 import { type FormikProps } from 'formik'
 import { isEqual } from 'lodash-es'
 import { type MutableRefObject, useRef, useState } from 'react'
@@ -76,7 +76,11 @@ export function EditFixedVesselGroupDialog({
           <Example>
             Vous pouvez ajouter des navires après avoir créé le groupe, et/ou charger une liste de navires ci-dessous{' '}
             <br />(<Link href={`${baseUrl}/public/examples/navires_groupe_fixe.csv`}>cliquez ici</Link> pour télécharger
-            un exemple de tableau au bon format).
+            un exemple de tableau au bon format).{' '}
+            <Icon.Info
+              size={17}
+              title="Un champ CFR, Call Sign ou Marquage externe doit à minima être renseigné pour chaque navire."
+            />
           </Example>
           <UploadVesselFile onChange={nextVessels => setUploadedVessels(nextVessels)} />
         </Row>
@@ -120,6 +124,10 @@ const Example = styled.div`
   text-align: left;
   color: ${p => p.theme.color.slateGray};
   font-style: italic;
+
+  span {
+    vertical-align: bottom;
+  }
 `
 
 const StyledDialogTitle = styled(Dialog.Title)`

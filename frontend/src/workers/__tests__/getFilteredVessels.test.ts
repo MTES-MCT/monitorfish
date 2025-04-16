@@ -16,6 +16,13 @@ describe('MonitorFishWebWorker.getFilteredVessels', () => {
     expect(result).toEqual(expect.arrayContaining(['vessel1', 'vessel2', 'vessel3']))
   })
 
+  it('should filter by search query', () => {
+    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, searchQuery: 'PHENO' }
+    const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
+    expect(result).toContain('vessel2')
+    expect(result).not.toContain('vessel1')
+  })
+
   it('should filters by countryCodes', () => {
     const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, countryCodes: ['US'], vesselsLocation: [] }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)

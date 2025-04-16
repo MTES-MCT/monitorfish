@@ -101,6 +101,7 @@ export function countVesselListFilter(listFilterValues: VesselListFilter) {
     (listFilterValues.producerOrganizations?.length ?? 0) +
     (listFilterValues.riskFactors?.length ?? 0) +
     (listFilterValues.specyCodes?.length ?? 0) +
+    (!!listFilterValues.searchQuery && listFilterValues.searchQuery.length > 0 ? 1 : 0) +
     (listFilterValues.vesselSize ? 1 : 0) +
     (listFilterValues.vesselsLocation?.length ?? 0) +
     (listFilterValues.zones?.length ?? 0)

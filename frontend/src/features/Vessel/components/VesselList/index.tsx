@@ -266,7 +266,7 @@ export function VesselList({ isFromUrl }: VesselListProps) {
       {isEditFixedVesselGroupOpened && (
         <EditFixedVesselGroupDialog
           onExit={() => setIsEditFixedVesselGroupOpened(false)}
-          vesselFeatureIds={Object.keys(rowSelection)}
+          selectedVesselFeatureIds={Object.keys(rowSelection)}
         />
       )}
     </>

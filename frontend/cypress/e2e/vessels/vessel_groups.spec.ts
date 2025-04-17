@@ -152,13 +152,16 @@ context('Vessel groups', () => {
     cy.get('.Component-Dialog').contains('Actuellement, 4 navires correspondent aux filtres sélectionnés.')
 
     cy.get('[title="#8c2c17"]').click()
-    cy.fill("Nom du groupe", "Lorem ipsum")
+    cy.fill("Nom du groupe", "Lorem ipsum dynamique")
     cy.fill("Description du groupe", "Lorem ipsum dolor sit amet.")
     cy.clickButton('Créer le groupe')
-    cy.contains('Le groupe de navires dynamique "Lorem ipsum" a bien été créé.').should('be.visible')
+    cy.contains('Le groupe de navires dynamique "Lorem ipsum dynamique" a bien été créé.').should('be.visible')
 
     cy.clickButton('Groupes de navires')
-    cy.get('[title="Lorem ipsum"]').click()
+    cy.get('[title="Lorem ipsum dynamique"]').click()
+
+    cy.get("[title=\'Supprimer le groupe \"Lorem ipsum dynamique\"\']").click()
+    cy.clickButton('Confirmer la suppression')
   })
 
   it('A fixed vessel group Should be created and displayed on the map', () => {

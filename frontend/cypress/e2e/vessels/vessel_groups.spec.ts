@@ -278,6 +278,7 @@ context('Vessel groups', () => {
     cy.clickButton('Créer le groupe')
     cy.wait(250)
 
+    cy.get('[title="Lorem ipsum"]').click()
     cy.get("[title=\'Supprimer le groupe \"Lorem ipsum\"\']").click()
     cy.clickButton('Confirmer la suppression')
   })

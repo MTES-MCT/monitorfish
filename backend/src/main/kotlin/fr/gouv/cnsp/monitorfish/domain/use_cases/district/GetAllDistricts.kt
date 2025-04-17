@@ -6,7 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.DistrictRepository
 
 @UseCase
 class GetAllDistricts(
-    private val districtRepository: DistrictRepository
+    private val districtRepository: DistrictRepository,
 ) {
     fun execute(): List<District> = districtRepository.findAll()
 }

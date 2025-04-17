@@ -60,7 +60,7 @@ export const DUMMY_LAST_POSITIONS = [
     vesselGroups: [],
     vesselId: undefined,
     vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-    vesselName: undefined,
+    vesselName: 'UNKNOWN',
     width: undefined
   },
   {
@@ -118,7 +118,7 @@ export const DUMMY_LAST_POSITIONS = [
     vesselGroups: [],
     vesselId: undefined,
     vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-    vesselName: undefined,
+    vesselName: 'PHENOMENE',
     width: undefined
   },
   {
@@ -176,7 +176,7 @@ export const DUMMY_LAST_POSITIONS = [
     vesselGroups: [],
     vesselId: undefined,
     vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-    vesselName: undefined,
+    vesselName: 'A BOAT',
     width: undefined
   }
 ]

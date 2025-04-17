@@ -8,7 +8,7 @@ import { VesselSize } from '@features/Vessel/components/VesselList/constants'
 import { getLastControlledFilterFromLastControlPeriod } from '@features/Vessel/components/VesselList/utils'
 import { VesselLocation, vesselSize } from '@features/Vessel/types/vessel'
 import { Vessel } from '@features/Vessel/Vessel.types'
-import { customDayjs, logSoftError } from '@mtes-mct/monitor-ui'
+import { customDayjs, CustomSearch, logSoftError } from '@mtes-mct/monitor-ui'
 import { booleanPointInPolygon } from '@turf/boolean-point-in-polygon'
 import { point } from '@turf/helpers'
 import { isNotNullish } from '@utils/isNotNullish'
@@ -205,12 +205,20 @@ export class MonitorFishWebWorker {
     const specyCodesSet = filters.specyCodes?.length ? new Set(filters.specyCodes) : undefined
     const vesselsLocation = filters.vesselsLocation?.length === 1 ? filters.vesselsLocation[0] : undefined
 
+    const fuse = new CustomSearch(
+      vessels,
+      ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs'],
+      { isStrict: true, threshold: 0.4 }
+    )
+
     /* TODO Implement these filters
     lastLandingPortLocodes: string[]
     producerOrganizations: string[]
      */
 
-    return vessels
+    const searchedVessels = filters.searchQuery ? fuse.find(filters.searchQuery) : vessels
+
+    return searchedVessels
       .filter(vessel => {
         if (countrySet && !countrySet.has(vessel.flagState)) {
           return false

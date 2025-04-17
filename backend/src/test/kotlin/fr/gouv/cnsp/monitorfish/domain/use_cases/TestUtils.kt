@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.*
-import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.*
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
@@ -12,6 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.CreateOrUpdateDynamicVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.CreateOrUpdateFixedVesselGroup
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
@@ -1008,6 +1009,74 @@ object TestUtils {
                         vesselSize = VesselSize.ABOVE_TWELVE_METERS,
                         vesselsLocation = listOf(VesselLocation.SEA),
                         zones = emptyList(),
+                    ),
+            ),
+        )
+
+    fun getCreateOrUpdateFixedVesselGroups() =
+        listOf(
+            CreateOrUpdateFixedVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Mission Thémis – chaluts de fonds",
+                description = "Ciblage pour la mission du Thémis (bordée A) du 08/01 au 17/01/25.",
+                pointsOfAttention =
+                    "Points d'attention : Si le navire X est dans le secteur, le contrôler pour " +
+                        "suspicion blanchiment bar en 7.d.",
+                color = "#4287f5",
+                sharing = Sharing.PRIVATE,
+                endOfValidityUtc = null,
+                vessels =
+                    listOf(
+                        VesselIdentity(
+                            vesselId = null,
+                            cfr = "FR123456785",
+                            name = "MY AWESOME VESSEL TWO",
+                            flagState = CountryCode.FR,
+                            ircs = null,
+                            externalIdentification = null,
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
+                        VesselIdentity(
+                            vesselId = 1,
+                            cfr = "FR00022680",
+                            name = "MY AWESOME VESSEL",
+                            flagState = CountryCode.FR,
+                            ircs = null,
+                            externalIdentification = null,
+                            vesselIdentifier = null,
+                        ),
+                    ),
+            ),
+            CreateOrUpdateFixedVesselGroup(
+                id = 2,
+                isDeleted = false,
+                name = "Mission Thémis – chaluts de fonds",
+                description = "Ciblage pour la mission du Thémis (bordée A) du 08/01 au 17/01/25.",
+                pointsOfAttention = null,
+                color = "#4287f5",
+                sharing = Sharing.PRIVATE,
+                endOfValidityUtc = null,
+                vessels =
+                    listOf(
+                        VesselIdentity(
+                            vesselId = null,
+                            cfr = "FR123456785",
+                            name = "MY AWESOME VESSEL TWO",
+                            flagState = CountryCode.FR,
+                            ircs = null,
+                            externalIdentification = null,
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
+                        VesselIdentity(
+                            vesselId = 1,
+                            cfr = "FR00022680",
+                            name = "MY AWESOME VESSEL",
+                            flagState = CountryCode.FR,
+                            ircs = null,
+                            externalIdentification = null,
+                            vesselIdentifier = null,
+                        ),
                     ),
             ),
         )

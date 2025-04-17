@@ -1,5 +1,7 @@
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { vesselGroupApi } from '@features/VesselGroup/apis'
+import { vesselGroupActions } from '@features/VesselGroup/slice'
 import { trackEvent } from '@hooks/useTracking'
 import { Level } from '@mtes-mct/monitor-ui'
 
@@ -16,6 +18,8 @@ export const deleteVesselGroup =
 
     try {
       await dispatch(vesselGroupApi.endpoints.deleteVesselGroup.initiate(vesselGroupId)).unwrap()
+      await dispatch(vesselGroupActions.vesselGroupIdHidden(vesselGroupId))
+      dispatch(renderVesselFeatures())
 
       dispatch(
         addMainWindowBanner({

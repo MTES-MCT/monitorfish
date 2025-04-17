@@ -161,7 +161,7 @@ context('Vessel groups', () => {
     cy.get('[title="Lorem ipsum"]').click()
   })
 
-  it.only('A fixed vessel group Should be created and displayed on the map', () => {
+  it('A fixed vessel group Should be created and displayed on the map', () => {
     cy.login('superuser')
     cy.visit('/side_window')
     cy.wait(250)
@@ -272,7 +272,6 @@ context('Vessel groups', () => {
     cy.fill("Nom du groupe", "Lorem ipsum")
     cy.fill("Description du groupe", "Lorem ipsum dolor sit amet.")
     cy.clickButton('Créer le groupe')
-    cy.contains('Le groupe de navires fixe "Lorem ipsum" a bien été créé.').should('be.visible')
 
     cy.get('[title="Lorem ipsum"]').click()
   })

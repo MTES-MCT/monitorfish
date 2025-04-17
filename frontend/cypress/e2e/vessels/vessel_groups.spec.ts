@@ -252,6 +252,7 @@ context('Vessel groups', () => {
     cy.clickButton('Confirmer la suppression')
 
     cy.contains('Le groupe de navires a bien été supprimé.').should('be.visible')
+    cy.wait(250)
 
     /**
      * Create a fixed group from the main window
@@ -272,7 +273,9 @@ context('Vessel groups', () => {
     cy.fill("Nom du groupe", "Lorem ipsum")
     cy.fill("Description du groupe", "Lorem ipsum dolor sit amet.")
     cy.clickButton('Créer le groupe')
+    cy.wait(250)
 
-    cy.get('[title="Lorem ipsum"]').click()
+    cy.get("[title=\'Supprimer le groupe \"Lorem ipsum\"\']").click()
+    cy.clickButton('Confirmer la suppression')
   })
 })

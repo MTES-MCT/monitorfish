@@ -1,7 +1,7 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { Square } from '@features/Regulation/components/ZonePreview'
 import { FilterTags } from '@features/Vessel/components/VesselList/FilterTags'
-import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
 import { GroupType, Sharing } from '@features/VesselGroup/types'
 import { deleteVesselGroup } from '@features/VesselGroup/useCases/deleteVesselGroup'

@@ -1,6 +1,6 @@
 import { WindowContext } from '@api/constants'
 import { VesselFeature } from '@features/Vessel/types/vessel'
-import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { isNotNullish } from '@utils/isNotNullish'
 

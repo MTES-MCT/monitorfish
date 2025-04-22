@@ -1,4 +1,4 @@
-import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { Vessel } from '@features/Vessel/Vessel.types'
 
 import { resetIsUpdatingVessels } from '../../../domain/shared_slices/Global'

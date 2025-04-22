@@ -20,7 +20,23 @@ export const getVesselFeaturesInExtent = throttle(
     return vesselsLayer?.getFeaturesInExtent(monitorfishMap.getView().calculateExtent()) || []
   },
   250,
-  { leading: true, trailing: true }
+  { leading: true }
+)
+
+export const getVesselFeatures = throttle(
+  (): Vessel.VesselPointFeature[] => {
+    const vesselsLayer = monitorfishMap
+      .getLayers()
+      .getArray()
+      // @ts-ignore
+      ?.find(olLayer => olLayer.name === MonitorFishMap.MonitorFishLayer.VESSELS)
+      // @ts-ignore
+      ?.getSource()
+
+    return vesselsLayer?.getFeatures() || []
+  },
+  250,
+  { leading: true }
 )
 
 export function filterNonSelectedVessels(

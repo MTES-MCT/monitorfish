@@ -7,7 +7,7 @@ import {
 } from '@features/Alert/components/SideWindowAlerts/slice'
 import { removeVesselAlertAndUpdateReporting } from '@features/Vessel/slice'
 import { VesselFeature } from '@features/Vessel/types/vessel'
-import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { deleteListItems } from '@utils/deleteListItems'
 
 import { setError } from '../../../domain/shared_slices/Global'

@@ -142,12 +142,12 @@ export function MainMap() {
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
       {/** <></> can't be used to group condition as BaseMap needs the layers to be direct children * */}
       <VesselsLayer />
-      {areVesselsDisplayed && <VesselEstimatedPositionLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />}
+      {areVesselsDisplayed && <VesselEstimatedPositionLayer />}
       {areVesselsDisplayed && <VesselSelectedLayer />}
-      {areVesselsDisplayed && <VesselAlertLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />}
-      {areVesselsDisplayed && <VesselBeaconMalfunctionLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />}
-      {areVesselsDisplayed && <VesselAlertAndBeaconMalfunctionLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />}
-      {areVesselsDisplayed && <VesselInfractionSuspicionLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />}
+      {areVesselsDisplayed && <VesselAlertLayer />}
+      {areVesselsDisplayed && <VesselBeaconMalfunctionLayer />}
+      {areVesselsDisplayed && <VesselAlertAndBeaconMalfunctionLayer />}
+      {areVesselsDisplayed && <VesselInfractionSuspicionLayer />}
       <VesselsTracksLayerMemoized />
       <VesselCardOverlay feature={hoveredFeature} />
       <TrackTypeOverlay feature={hoveredFeature} />

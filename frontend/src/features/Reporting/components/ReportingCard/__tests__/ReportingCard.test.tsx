@@ -26,7 +26,7 @@ jest.mock('../../../../../hooks/useMainAppDispatch', () => ({ useMainAppDispatch
 // @ts-ignore
 jest.mock('../../../useCases/deleteReporting', () => ({ deleteReporting: jest.fn() }))
 // @ts-ignore
-jest.mock('../../../../Vessel/useCases/renderVesselFeatures', () => ({ renderVesselFeatures: jest.fn() }))
+jest.mock('../../../../Vessel/useCases/rendering/renderVesselFeatures', () => ({ renderVesselFeatures: jest.fn() }))
 
 describe('ReportingCard()', () => {
   afterAll(() => {

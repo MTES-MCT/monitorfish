@@ -20,6 +20,10 @@ export function useGetTopOffset() {
       return 50
     }
 
+    if (!areListFilterValuesEqualToDefaultOnes) {
+      return 50
+    }
+
     return 0
   })()
 }

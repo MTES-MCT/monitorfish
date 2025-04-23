@@ -1,4 +1,5 @@
 import { VesselListFilterSchema } from '@features/Vessel/components/VesselList/types'
+import { VesselLastPositionSchema } from '@features/Vessel/schemas/VesselLastPositionSchema'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import z from 'zod'
 
@@ -86,3 +87,10 @@ export type VesselIdentityForVesselGroup = z.infer<typeof VesselIdentitySchema>
 
 export type VesselGroup = DynamicVesselGroup | FixedVesselGroup
 export type CreateOrUpdateVesselGroup = CreateOrUpdateDynamicVesselGroup | CreateOrUpdateFixedVesselGroup
+
+export const VesselGroupWithVesselsSchema = z.strictObject({
+  group: z.union([FixedVesselGroupSchema, DynamicVesselGroupSchema]),
+  vessels: z.array(VesselLastPositionSchema)
+})
+
+export type VesselGroupWithVessels = z.infer<typeof VesselGroupWithVesselsSchema>

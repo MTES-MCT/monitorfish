@@ -1,22 +1,24 @@
 import { monitorfishApi } from '@api/api'
 import { RtkCacheTagType } from '@api/constants'
-import { DynamicVesselGroupSchema, FixedVesselGroupSchema } from '@features/VesselGroup/types'
+import {
+  DynamicVesselGroupSchema,
+  FixedVesselGroupSchema,
+  type VesselGroupWithVessels,
+  type CreateOrUpdateDynamicVesselGroup,
+  type DynamicVesselGroup,
+  type CreateOrUpdateFixedVesselGroup,
+  type FixedVesselGroup,
+  type VesselGroup
+} from '@features/VesselGroup/types'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { parseResponseOrReturn } from '@utils/parseResponseOrReturn'
 import { orderBy } from 'lodash-es'
 import z from 'zod'
 
-import type {
-  CreateOrUpdateDynamicVesselGroup,
-  DynamicVesselGroup,
-  CreateOrUpdateFixedVesselGroup,
-  FixedVesselGroup,
-  VesselGroup
-} from '@features/VesselGroup/types'
-
 const CREATE_VESSEL_GROUPS_ERROR_MESSAGE = "Nous n'avons pas pu créer le groupe de navires."
 const GET_VESSELS_GROUPS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les groupes de navires."
 const DELETE_VESSEL_GROUP_ERROR_MESSAGE = "Nous n'avons pas pu supprimer le groupe de navires."
+const DELETE_VESSEL_FROM__GROUP_ERROR_MESSAGE = "Nous n'avons pas pu supprimer le navire du groupe de navires."
 
 export const vesselGroupApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
@@ -42,6 +44,14 @@ export const vesselGroupApi = monitorfishApi.injectEndpoints({
       transformResponse: (baseQueryReturnValue: FixedVesselGroup) =>
         parseResponseOrReturn<FixedVesselGroup>(baseQueryReturnValue, FixedVesselGroupSchema, false)
     }),
+    deleteVesselFromVesselGroup: builder.mutation<void, { groupId: number; vesselIndex: number }>({
+      invalidatesTags: () => [{ type: RtkCacheTagType.VesselGroups }],
+      query: ({ groupId, vesselIndex }) => ({
+        method: 'DELETE',
+        url: `/vessel_groups/${groupId}/${vesselIndex}`
+      }),
+      transformErrorResponse: response => new FrontendApiError(DELETE_VESSEL_FROM__GROUP_ERROR_MESSAGE, response)
+    }),
     deleteVesselGroup: builder.mutation<void, number>({
       invalidatesTags: () => [{ type: RtkCacheTagType.VesselGroups }],
       query: id => ({
@@ -64,8 +74,13 @@ export const vesselGroupApi = monitorfishApi.injectEndpoints({
           vesselGroup => vesselGroup.id,
           ['desc']
         )
+    }),
+    getVesselGroupsWithVessels: builder.query<VesselGroupWithVessels[], void>({
+      providesTags: () => [{ type: RtkCacheTagType.VesselGroups }],
+      query: () => `/vessel_groups/vessels`,
+      transformErrorResponse: response => new FrontendApiError(GET_VESSELS_GROUPS_ERROR_MESSAGE, response)
     })
   })
 })
 
-export const { useGetAllVesselGroupsQuery } = vesselGroupApi
+export const { useGetAllVesselGroupsQuery, useGetVesselGroupsWithVesselsQuery } = vesselGroupApi

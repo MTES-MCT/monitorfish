@@ -23,7 +23,7 @@ export function Menu({ selectedMenu }: MenuProps) {
           iconSize={26}
           onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.VESSEL_LIST }))}
           role="menuitem"
-          selected={selectedMenu === SideWindowMenuKey.VESSEL_LIST}
+          selected={selectedMenu === SideWindowMenuKey.VESSEL_LIST || selectedMenu === SideWindowMenuKey.VESSEL_GROUP}
           title={SideWindowMenuLabel.VESSEL_LIST}
         />
       )}

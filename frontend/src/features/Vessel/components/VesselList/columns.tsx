@@ -10,8 +10,12 @@ import { VesselRiskFactor } from '../../../RiskFactor/components/VesselRiskFacto
 
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
 
-export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<Vessel.VesselLastPosition, any>> {
+export function getTableColumns(
+  isFromUrl: boolean,
+  actionColumn: ColumnDef<Vessel.VesselLastPosition, any>
+): Array<ColumnDef<Vessel.VesselLastPosition, any>> {
   const legacyFirefoxOffset = !isFromUrl && isLegacyFirefox() ? -32 : 0
+  const actionColumnWithOffset = { ...actionColumn, size: (actionColumn.size ?? 60) + legacyFirefoxOffset }
 
   return [
     {
@@ -126,13 +130,15 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<Vessel.Vess
       id: 'hasInfractionSuspicion',
       size: 184 + legacyFirefoxOffset
     },
-    {
-      accessorFn: row => row.vesselFeatureId,
-      cell: (info: CellContext<Vessel.VesselLastPosition, string>) => <ActionButtonsCell vessel={info.row.original} />,
-      enableSorting: false,
-      header: () => '',
-      id: 'actions',
-      size: 60 + legacyFirefoxOffset
-    }
+    actionColumnWithOffset
   ]
+}
+
+export const vesselListActionColumn: ColumnDef<Vessel.VesselLastPosition, any> = {
+  accessorFn: row => row.vesselFeatureId,
+  cell: (info: CellContext<Vessel.VesselLastPosition, string>) => <ActionButtonsCell vessel={info.row.original} />,
+  enableSorting: false,
+  header: () => '',
+  id: 'actions',
+  size: 60
 }

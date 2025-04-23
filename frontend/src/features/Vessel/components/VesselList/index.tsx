@@ -1,6 +1,4 @@
 import { Body } from '@features/SideWindow/components/Body'
-import { Header } from '@features/SideWindow/components/Header'
-import { Page } from '@features/SideWindow/components/Page'
 import { ExportVesselListDialog } from '@features/Vessel/components/ExportVesselListDialog'
 import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselList/constants'
 import { useGetFilteredVesselsLastPositions } from '@features/Vessel/hooks/useGetFilteredVesselsLastPositions'
@@ -36,7 +34,7 @@ import { EditDynamicVesselGroupDialog } from 'features/VesselGroup/components/Ed
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
-import { getTableColumns } from './columns'
+import { getTableColumns, vesselListActionColumn } from './columns'
 import { FilterBar } from './FilterBar'
 import { FilterTags } from './FilterTags'
 import { Row } from './Row'
@@ -69,8 +67,8 @@ export function VesselList({ isFromUrl }: VesselListProps) {
   const [columns, tableData] = useMemo(
     () => [
       isFilteringVesselList
-        ? getTableColumns(isFromUrl).map(column => ({ ...column, cell: SkeletonRow }))
-        : getTableColumns(isFromUrl),
+        ? getTableColumns(isFromUrl, vesselListActionColumn).map(column => ({ ...column, cell: SkeletonRow }))
+        : getTableColumns(isFromUrl, vesselListActionColumn),
       isFilteringVesselList ? Array(8).fill({}) : (vessels ?? [])
     ],
     [isFilteringVesselList, isFromUrl, vessels]
@@ -139,121 +137,113 @@ export function VesselList({ isFromUrl }: VesselListProps) {
 
   return (
     <>
-      <Page>
-        <Header>
-          <StyledTitle>
-            <Icon.VesselList size={26} /> Tous les navires
-          </StyledTitle>
-        </Header>
-
-        <StyledBody>
-          <FilterBar />
-          <StyledFilterTags
-            areMoreFiltersDisplayable
-            className="vessel-list-filter-tags"
-            listFilterValues={listFilter}
-            onFilter={nextListFilterValues => dispatch(filterVessels(nextListFilterValues))}
-            onReset={() => dispatch(filterVessels(DEFAULT_VESSEL_LIST_FILTER_VALUES))}
-          />
-          <TableOuterWrapper $isFromUrl={isFromUrl}>
-            <TableTop $isFromUrl={isFromUrl}>
-              <TableLegend data-cy="vessel-list-length">
-                {`${
-                  isFilteringVesselList || tableData.length === undefined ? '...' : tableData.length
-                } ${pluralize('navire', tableData.length)} ${pluralize('équipé', tableData.length)} VMS `}
-              </TableLegend>
-              <RightButton
-                accent={Accent.SECONDARY}
-                disabled={hasNoRowsSelected}
-                Icon={Icon.Download}
-                onClick={() => setIsExportVesselListDialogOpened(true)}
-                title="Télécharger la liste des navires"
-              />
-              <Dropdown Icon={Icon.Vessel} title="Créer un groupe de navires">
-                <StyledDropdownItem
-                  onClick={() => setIsEditFixedVesselGroupOpened(true)}
-                  title="Un groupe de navires fixe est constitué des navires sélectionnés manuellement, soit directement dans la liste, soit en chargeant un fichier. Vous pouvez le mettre à jour (suppression ou ajouts de navires) également de façon manuelle."
-                >
-                  Créer un groupe fixe <Icon.Info size={17} />
-                </StyledDropdownItem>
-                <StyledDropdownItem
-                  onClick={() => setIsEditDynamicVesselGroupOpened(true)}
-                  title="Un groupe de navires dynamique est constitué des navires répondant aux critères des filtres que vous aurez sélectionné. Il se met automatiquement à jour selon l'évolution des données des navires."
-                >
-                  Créer un groupe dynamique <Icon.Info size={17} />
-                </StyledDropdownItem>
-              </Dropdown>
-              <PreviewButton
-                accent={Accent.SECONDARY}
-                data-cy="preview-filtered-vessels"
-                Icon={Icon.ViewOnMap}
-                onClick={() => dispatch(previewVessels())}
-                title="Afficher sur la carte les navires pour une capture d'écran"
+      <StyledBody>
+        <FilterBar />
+        <StyledFilterTags
+          areMoreFiltersDisplayable
+          className="vessel-list-filter-tags"
+          listFilterValues={listFilter}
+          onFilter={nextListFilterValues => dispatch(filterVessels(nextListFilterValues))}
+          onReset={() => dispatch(filterVessels(DEFAULT_VESSEL_LIST_FILTER_VALUES))}
+        />
+        <TableOuterWrapper $isFromUrl={isFromUrl}>
+          <TableTop $isFromUrl={isFromUrl}>
+            <TableLegend data-cy="vessel-list-length">
+              {`${
+                isFilteringVesselList || tableData.length === undefined ? '...' : tableData.length
+              } ${pluralize('navire', tableData.length)} ${pluralize('équipé', tableData.length)} VMS `}
+            </TableLegend>
+            <RightButton
+              accent={Accent.SECONDARY}
+              disabled={hasNoRowsSelected}
+              Icon={Icon.Download}
+              onClick={() => setIsExportVesselListDialogOpened(true)}
+              title="Télécharger la liste des navires"
+            />
+            <Dropdown Icon={Icon.Vessel} title="Créer un groupe de navires">
+              <StyledDropdownItem
+                onClick={() => setIsEditFixedVesselGroupOpened(true)}
+                title="Un groupe de navires fixe est constitué des navires sélectionnés manuellement, soit directement dans la liste, soit en chargeant un fichier. Vous pouvez le mettre à jour (suppression ou ajouts de navires) également de façon manuelle."
               >
-                Aperçu sur la carte
-              </PreviewButton>
-            </TableTop>
+                Créer un groupe fixe <Icon.Info size={17} />
+              </StyledDropdownItem>
+              <StyledDropdownItem
+                onClick={() => setIsEditDynamicVesselGroupOpened(true)}
+                title="Un groupe de navires dynamique est constitué des navires répondant aux critères des filtres que vous aurez sélectionné. Il se met automatiquement à jour selon l'évolution des données des navires."
+              >
+                Créer un groupe dynamique <Icon.Info size={17} />
+              </StyledDropdownItem>
+            </Dropdown>
+            <PreviewButton
+              accent={Accent.SECONDARY}
+              data-cy="preview-filtered-vessels"
+              Icon={Icon.ViewOnMap}
+              onClick={() => dispatch(previewVessels())}
+              title="Afficher sur la carte les navires pour une capture d'écran"
+            >
+              Aperçu sur la carte
+            </PreviewButton>
+          </TableTop>
 
-            <TableInnerWrapper ref={tableContainerRef} $filterHeight={filterHeight} $hasError={false}>
-              <TableWithSelectableRows.Table $withRowCheckbox>
-                <TableWithSelectableRows.Head>
-                  {table.getHeaderGroups().map(headerGroup => (
-                    <tr key={headerGroup.id}>
-                      {headerGroup.headers.map(header => (
-                        <TableWithSelectableRows.Th key={header.id} $width={header.column.getSize()}>
-                          {header.id === 'select' && flexRender(header.column.columnDef.header, header.getContext())}
-                          {header.id !== 'select' && !header.isPlaceholder && (
-                            <TableWithSelectableRows.SortContainer
-                              className={header.column.getCanSort() ? 'cursor-pointer' : ''}
-                              onClick={header.column.getToggleSortingHandler()}
-                            >
-                              {flexRender(header.column.columnDef.header, header.getContext())}
-                              {header.column.getCanSort() &&
-                                ({
-                                  asc: <Icon.SortSelectedDown size={14} />,
-                                  desc: <Icon.SortSelectedUp size={14} />
-                                }[header.column.getIsSorted() as string] ?? <Icon.SortingArrows size={14} />)}
-                            </TableWithSelectableRows.SortContainer>
-                          )}
-                        </TableWithSelectableRows.Th>
-                      ))}
-                    </tr>
-                  ))}
-                </TableWithSelectableRows.Head>
-
-                {isBodyEmptyDataVisible && <TableBodyEmptyData />}
-                {paddingBeforeRows > 0 && (
-                  <tr>
-                    <td aria-label="padding before" colSpan={columns.length} style={{ height: paddingBeforeRows }} />
+          <TableInnerWrapper ref={tableContainerRef} $filterHeight={filterHeight} $hasError={false}>
+            <TableWithSelectableRows.Table $withRowCheckbox>
+              <TableWithSelectableRows.Head>
+                {table.getHeaderGroups().map(headerGroup => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map(header => (
+                      <TableWithSelectableRows.Th key={header.id} $width={header.column.getSize()}>
+                        {header.id === 'select' && flexRender(header.column.columnDef.header, header.getContext())}
+                        {header.id !== 'select' && !header.isPlaceholder && (
+                          <TableWithSelectableRows.SortContainer
+                            className={header.column.getCanSort() ? 'cursor-pointer' : ''}
+                            onClick={header.column.getToggleSortingHandler()}
+                          >
+                            {flexRender(header.column.columnDef.header, header.getContext())}
+                            {header.column.getCanSort() &&
+                              ({
+                                asc: <Icon.SortSelectedDown size={14} />,
+                                desc: <Icon.SortSelectedUp size={14} />
+                              }[header.column.getIsSorted() as string] ?? <Icon.SortingArrows size={14} />)}
+                          </TableWithSelectableRows.SortContainer>
+                        )}
+                      </TableWithSelectableRows.Th>
+                    ))}
                   </tr>
-                )}
-                {!isBodyEmptyDataVisible && (
-                  <tbody>
-                    {virtualRows.map(virtualRow => {
-                      const row = rows[virtualRow?.index]
-                      assertNotNullish(row)
+                ))}
+              </TableWithSelectableRows.Head>
 
-                      return (
-                        <Row
-                          key={virtualRow.key}
-                          ref={node => rowVirtualizer?.measureElement(node)}
-                          index={virtualRow?.index}
-                          row={row}
-                        />
-                      )
-                    })}
-                  </tbody>
-                )}
-                {paddingAfterRows > 0 && (
-                  <tr>
-                    <td aria-label="padding after" colSpan={columns.length} style={{ height: paddingAfterRows }} />
-                  </tr>
-                )}
-              </TableWithSelectableRows.Table>
-            </TableInnerWrapper>
-          </TableOuterWrapper>
-        </StyledBody>
-      </Page>
+              {isBodyEmptyDataVisible && <TableBodyEmptyData />}
+              {paddingBeforeRows > 0 && (
+                <tr>
+                  <td aria-label="padding before" colSpan={columns.length} style={{ height: paddingBeforeRows }} />
+                </tr>
+              )}
+              {!isBodyEmptyDataVisible && (
+                <tbody>
+                  {virtualRows.map(virtualRow => {
+                    const row = rows[virtualRow?.index]
+                    assertNotNullish(row)
+
+                    return (
+                      <Row
+                        key={virtualRow.key}
+                        ref={node => rowVirtualizer?.measureElement(node)}
+                        index={virtualRow?.index}
+                        row={row}
+                      />
+                    )
+                  })}
+                </tbody>
+              )}
+              {paddingAfterRows > 0 && (
+                <tr>
+                  <td aria-label="padding after" colSpan={columns.length} style={{ height: paddingAfterRows }} />
+                </tr>
+              )}
+            </TableWithSelectableRows.Table>
+          </TableInnerWrapper>
+        </TableOuterWrapper>
+      </StyledBody>
       {isExportVesselListDialogOpened && (
         <ExportVesselListDialog onExit={() => setIsExportVesselListDialogOpened(false)} selectedRows={rowSelection} />
       )}
@@ -283,12 +273,6 @@ const StyledBody = styled(Body)`
   padding-top: 16px;
   padding-left: 16px;
   padding-bottom: 0;
-`
-
-const StyledTitle = styled(Header.Title)`
-  span:first-of-type {
-    vertical-align: sub;
-  }
 `
 
 const StyledDropdownItem = styled(Dropdown.Item)`
@@ -333,7 +317,7 @@ const TableInnerWrapper = styled.div<{
   $hasError: boolean
 }>`
   align-items: flex-start;
-  height: ${p => `calc(100vh - ${p.$filterHeight}px - 175px)`}; /* = window height - filters height - title height */
+  height: ${p => `calc(100vh - ${p.$filterHeight}px - 200px)`}; /* = window height - filters height - title height */
   min-width: 1407px; /* = table width + right padding + scrollbar width (8px) */
   padding-right: 8px;
   overflow-y: scroll;

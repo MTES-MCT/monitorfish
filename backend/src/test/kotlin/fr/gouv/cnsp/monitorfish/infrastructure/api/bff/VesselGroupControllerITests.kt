@@ -11,8 +11,12 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateFixe
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.AddOrUpdateDynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.AddOrUpdateFixedVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.DeleteFixedVesselGroupVessel
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.DeleteFixedVesselGroupVesselUTests
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.DeleteVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroups
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroupsWithVessels
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.VesselGroupWithVessels
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.utils.ApiTestWithJWTSecurity
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.DynamicVesselGroupDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.FixedVesselGroupDataInput
@@ -46,7 +50,13 @@ class VesselGroupControllerITests {
     private lateinit var getAllVesselGroups: GetAllVesselGroups
 
     @MockBean
+    private lateinit var getAllVesselGroupsWithVessels: GetAllVesselGroupsWithVessels
+
+    @MockBean
     private lateinit var deleteVesselGroup: DeleteVesselGroup
+
+    @MockBean
+    private lateinit var deleteFixedVesselGroupVessel: DeleteFixedVesselGroupVessel
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -191,6 +201,34 @@ class VesselGroupControllerITests {
     }
 
     @Test
+    fun `Should get all vessel groups with vessels`() {
+        // Given
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
+        given(getAllVesselGroupsWithVessels.execute(any())).willReturn(
+            TestUtils.getDynamicVesselGroups().map {
+                VesselGroupWithVessels(
+                    group = it,
+                    vessels = listOf()
+                )
+            }
+        )
+l
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessel_groups/vessels")
+                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}")
+                    .contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(2)))
+            .andExpect(jsonPath("$[0].group.name", equalTo("Mission Thémis – chaluts de fonds")))
+
+        Mockito.verify(getAllVesselGroupsWithVessels).execute("email@domain-name.com")
+    }
+
+    @Test
     fun `Should delete a dynamic vessel groups`() {
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
 
@@ -203,6 +241,26 @@ class VesselGroupControllerITests {
             // Then
             .andExpect(status().isNoContent)
 
-        Mockito.verify(deleteVesselGroup).execute("email@domain-name.com", 123)
+        Mockito.verify(deleteVesselGroup).execute(userEmail = "email@domain-name.com", id = 123)
+    }
+
+    @Test
+    fun `Should delete a vessel from a vessel groups`() {
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
+
+        // When
+        api
+            .perform(
+                delete("/bff/v1/vessel_groups/123/1")
+                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+            )
+            // Then
+            .andExpect(status().isNoContent)
+
+        Mockito.verify(deleteFixedVesselGroupVessel).execute(
+            userEmail = "email@domain-name.com",
+            groupId = 123,
+            vesselIndex = 1
+        )
     }
 }

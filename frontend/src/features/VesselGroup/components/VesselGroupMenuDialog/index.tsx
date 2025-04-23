@@ -1,9 +1,9 @@
 import { MapPropertyTrigger } from '@features/commonComponents/MapPropertyTrigger'
 import { MapToolBox } from '@features/MainWindow/components/MapButtons/shared/MapToolBox'
 import { MapBox } from '@features/Map/constants'
-import { useGetAllVesselGroupsQuery } from '@features/VesselGroup/apis'
 import { VesselGroupRow } from '@features/VesselGroup/components/VesselGroupMenuDialog/VesselGroupRow'
 import { DEFAULT_DYNAMIC_VESSEL_GROUP, DEFAULT_FIXED_VESSEL_GROUP } from '@features/VesselGroup/constants'
+import { useGetVesselGroups } from '@features/VesselGroup/hooks/useGetVesselGroups'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
 import { hideVesselsNotInVesselGroups } from '@features/VesselGroup/useCases/hideVesselsNotInVesselGroups'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
@@ -30,17 +30,8 @@ export function VesselGroupMenuDialog() {
 
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.VESSEL_GROUPS)
 
-  const { data: vesselGroups } = useGetAllVesselGroupsQuery()
-  const orderedVesselGroups = (() => {
-    if (!vesselGroups?.length) {
-      return []
-    }
-
-    const pinnedVesselGroups = vesselGroups.filter(vesselGroup => vesselGroupsIdsPinned.includes(vesselGroup.id))
-    const unpinnedVesselGroups = vesselGroups.filter(vesselGroup => !vesselGroupsIdsPinned.includes(vesselGroup.id))
-
-    return pinnedVesselGroups.concat(unpinnedVesselGroups)
-  })()
+  const { pinnedVesselGroups, unpinnedVesselGroups } = useGetVesselGroups()
+  const orderedVesselGroups = pinnedVesselGroups.concat(unpinnedVesselGroups)
 
   const createNewDynamicGroup = () => {
     dispatch(vesselGroupActions.vesselGroupEdited(DEFAULT_DYNAMIC_VESSEL_GROUP))

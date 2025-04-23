@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
@@ -146,39 +145,7 @@ class GetLastPositions(
 
         is FixedVesselGroup -> {
             vesselGroup.vessels.any {
-                if (lastPosition.vesselId != null && it.vesselId != null) {
-                    return@any it.vesselId == lastPosition.vesselId
-                }
-
-                if (it.vesselIdentifier != null) {
-                    return@any when (it.vesselIdentifier) {
-                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
-                            it.vesselIdentifier == lastPosition.vesselIdentifier &&
-                                it.cfr == lastPosition.internalReferenceNumber
-                        VesselIdentifier.IRCS ->
-                            it.vesselIdentifier == lastPosition.vesselIdentifier &&
-                                it.ircs == lastPosition.ircs
-                        VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
-                            it.vesselIdentifier == lastPosition.vesselIdentifier &&
-                                it.externalIdentification == lastPosition.externalReferenceNumber
-                    }
-                }
-
-                if (!it.cfr.isNullOrEmpty() && !lastPosition.internalReferenceNumber.isNullOrEmpty()) {
-                    return@any it.cfr == lastPosition.internalReferenceNumber
-                }
-
-                if (!it.ircs.isNullOrEmpty() && !lastPosition.ircs.isNullOrEmpty()) {
-                    return@any it.ircs == lastPosition.ircs
-                }
-
-                if (!it.externalIdentification.isNullOrEmpty() &&
-                    !lastPosition.externalReferenceNumber.isNullOrEmpty()
-                ) {
-                    return@any it.externalIdentification == lastPosition.externalReferenceNumber
-                }
-
-                false
+                return@any it.isEqualToLastPosition(lastPosition)
             }
         }
     }

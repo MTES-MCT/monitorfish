@@ -2,7 +2,7 @@ import { getVesselsDummyCsv } from '@features/VesselGroup/components/EditFixedVe
 import { getVesselsFromFile } from '@features/VesselGroup/components/EditFixedVesselGroupDialog/utils'
 import { expect } from '@jest/globals'
 
-describe('features/VesselGroup/components/EditFixedVesselGroupDialog/utils', () => {
+describe('features/VesselGroupList/components/EditFixedVesselGroupDialog/utils', () => {
   it('getVesselsFromFile Should return the vessels', async () => {
     // Given
     const csv = getVesselsDummyCsv()

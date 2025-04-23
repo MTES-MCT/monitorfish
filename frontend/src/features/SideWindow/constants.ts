@@ -12,6 +12,7 @@ export enum SideWindowMenuKey {
   MISSION_FORM = 'MISSION_FORM',
   MISSION_LIST = 'MISSION_LIST',
   PRIOR_NOTIFICATION_LIST = 'PRIOR_NOTIFICATION_LIST',
+  VESSEL_GROUP = 'VESSEL_GROUP',
   VESSEL_LIST = 'VESSEL_LIST'
 }
 
@@ -21,6 +22,7 @@ export const SideWindowMenuLabel: Record<SideWindowMenuKey, string> = {
   MISSION_FORM: 'Ajouter ou éditer une mission',
   MISSION_LIST: 'Missions et contrôles',
   PRIOR_NOTIFICATION_LIST: 'Préavis de débarquement',
+  VESSEL_GROUP: 'Groupes de navires',
   VESSEL_LIST: 'Liste des navires'
 }
 

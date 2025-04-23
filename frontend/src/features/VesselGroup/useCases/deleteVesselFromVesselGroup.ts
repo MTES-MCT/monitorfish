@@ -2,39 +2,26 @@ import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindow
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { vesselGroupApi } from '@features/VesselGroup/apis'
-import { vesselGroupActions } from '@features/VesselGroup/slice'
-import { trackEvent } from '@hooks/useTracking'
 import { Level } from '@mtes-mct/monitor-ui'
 
 import type { MainAppThunk } from '@store'
 
-export const deleteVesselGroup =
-  (vesselGroupId: number): MainAppThunk =>
+export const deleteVesselFromVesselGroup =
+  (vesselGroupId: number, vesselIndex: number): MainAppThunk =>
   async dispatch => {
-    trackEvent({
-      action: "Suppression d'un groupe de navires",
-      category: 'VESSEL_GROUP',
-      name: vesselGroupId.toString()
-    })
-
     try {
-      await dispatch(vesselGroupApi.endpoints.deleteVesselGroup.initiate(vesselGroupId)).unwrap()
-      await dispatch(vesselGroupActions.vesselGroupIdHidden(vesselGroupId))
+      await dispatch(
+        vesselGroupApi.endpoints.deleteVesselFromVesselGroup.initiate({
+          groupId: vesselGroupId,
+          vesselIndex
+        })
+      ).unwrap()
       dispatch(renderVesselFeatures())
 
       dispatch(
-        addMainWindowBanner({
-          children: 'Le groupe de navires a bien été supprimé.',
-          closingDelay: 3000,
-          isClosable: true,
-          level: Level.SUCCESS,
-          withAutomaticClosing: true
-        })
-      )
-      dispatch(
         addSideWindowBanner({
-          children: 'Le groupe de navires a bien été supprimé.',
-          closingDelay: 3000,
+          children: 'Le navire a bien été supprimé du groupe de navires.',
+          closingDelay: 2000,
           isClosable: true,
           level: Level.SUCCESS,
           withAutomaticClosing: true

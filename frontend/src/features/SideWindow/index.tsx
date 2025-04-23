@@ -8,10 +8,10 @@ import { reportingApi } from '@features/Reporting/reportingApi'
 import { reportingActions } from '@features/Reporting/slice'
 import { SideWindowMenuKey } from '@features/SideWindow/constants'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
+import { VesselListAndGroups } from '@features/Vessel/components/VesselListAndGroups'
 import { setVessels } from '@features/Vessel/slice'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { NewWindowContext, type NewWindowContextValue, Notifier, THEME } from '@mtes-mct/monitor-ui'
-import { VesselList } from 'features/Vessel/components/VesselList'
 import {
   type CSSProperties,
   Fragment,
@@ -166,7 +166,10 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
               )}
               {!isPreloading && (
                 <Content>
-                  {selectedPath.menu === SideWindowMenuKey.VESSEL_LIST && <VesselList isFromUrl={isFromURL} />}
+                  {(selectedPath.menu === SideWindowMenuKey.VESSEL_LIST ||
+                    selectedPath.menu === SideWindowMenuKey.VESSEL_GROUP) && (
+                    <VesselListAndGroups isFromUrl={isFromURL} />
+                  )}
                   {selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && (
                     <SideWindowAlerts baseRef={wrapperRef as MutableRefObject<HTMLDivElement>} isFromUrl={isFromURL} />
                   )}

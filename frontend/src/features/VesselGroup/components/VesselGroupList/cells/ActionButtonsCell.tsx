@@ -25,7 +25,7 @@ export function ActionButtonsCell({ groupId, vessel }: ActionButtonsCellProps) {
         accent={Accent.TERTIARY}
         Icon={Icon.Delete}
         onClick={() => dispatch(deleteVesselFromVesselGroup(groupId, vessel.id!!))}
-        title="Supprimer le navire du groupe"
+        title={`Supprimer le navire ${vessel.vesselName ? `"${vessel.vesselName}" ` : ''}du groupe`}
         withUnpropagatedClick
       />
       <IconButton

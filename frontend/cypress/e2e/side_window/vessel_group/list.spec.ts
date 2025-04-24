@@ -13,6 +13,19 @@ context('Side Window > Vessel Group List', () => {
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 
     /**
+     * Filter by group type
+     */
+    cy.get('[title="Groupes fixes"]').click()
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 1)
+    cy.get('[title="Groupes fixes"]').click()
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
+
+    cy.get('[title="Groupes dynamiques"]').click()
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
+    cy.get('[title="Groupes dynamiques"]').click()
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
+
+    /**
      * Pin a vessel group
      */
     cy.get('[title=\'Epingler le groupe "Mission Thémis – chaluts de fonds"\']').click()
@@ -20,14 +33,18 @@ context('Side Window > Vessel Group List', () => {
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
 
     /**
-     * Open a vessel group
+     * Open a dynamic vessel group and display vessels
      */
+    cy.get('[title="Mission Thémis – chaluts de fonds"]').contains('86 navires')
     cy.get('[title="Mission Thémis – chaluts de fonds"]').click()
     cy.get('[title="Mission Thémis – chaluts de fonds"]')
       .contains('Ciblage pour la mission du Thémis (bordée A) du 08/01 au 17/01/25.')
     cy.get('[title="Mission Thémis – chaluts de fonds"]')
       .contains('Points d\'attention : Si le navire X est dans le secteur, le contrôler pour suspicion ' +
         'blanchiment bar en 7.d.')
+    cy.get('[title="Mission Thémis – chaluts de fonds"]').within(() => {
+      cy.get('.Table-SimpleTable tr').should('have.length', 87)
+    })
 
     /**
      * Delete a vessel group
@@ -40,6 +57,7 @@ context('Side Window > Vessel Group List', () => {
     /**
      * Display vessels from fixed vessel groups and delete a vessel
      */
+    cy.get('[title="Mission Thémis – semaine 04"]').contains('6 navires')
     cy.get('[title="Mission Thémis – semaine 04"]').click()
     cy.get('[title="Mission Thémis – semaine 04"]').within(() => {
       cy.get('.Table-SimpleTable tr').should('have.length', 7)

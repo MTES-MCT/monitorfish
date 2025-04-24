@@ -149,6 +149,7 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
               {vesselGroupWithVessels.group.pointsOfAttention}
             </PointsOfAttention>
             <VesselTable
+              isFixedGroup={vesselGroupWithVessels.group.type === GroupType.FIXED}
               isFromUrl={isFromUrl}
               isPinned={isPinned}
               vesselGroupId={vesselGroupWithVessels.group.id}

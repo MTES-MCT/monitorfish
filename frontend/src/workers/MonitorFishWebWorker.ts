@@ -259,7 +259,7 @@ export class MonitorFishWebWorker {
                 return vessel.riskFactor >= 2 && vessel.riskFactor < 3
               }
               case 3: {
-                return vessel.riskFactor >= 3 && vessel.riskFactor <= 4
+                return vessel.riskFactor >= 3 && vessel.riskFactor < 4
               }
               default: {
                 return true
@@ -278,7 +278,7 @@ export class MonitorFishWebWorker {
           }
         }
 
-        if (lastControlledFilter?.lastControlledBefore) {
+        if (lastControlledFilter?.lastControlledBefore && !!vessel?.lastControlDateTime) {
           const vesselDate = customDayjs(vessel?.lastControlDateTime)
           const lastControlledBefore = customDayjs(lastControlledFilter.lastControlledBefore)
 
@@ -288,6 +288,10 @@ export class MonitorFishWebWorker {
         }
 
         if (lastControlledFilter?.lastControlledAfter) {
+          if (!vessel?.lastControlDateTime) {
+            return false
+          }
+
           const vesselDate = customDayjs(vessel?.lastControlDateTime)
           const lastControlledAfter = customDayjs(lastControlledFilter.lastControlledAfter)
 

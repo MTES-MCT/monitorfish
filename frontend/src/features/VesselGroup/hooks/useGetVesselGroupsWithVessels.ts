@@ -1,12 +1,14 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { useGetVesselGroupsWithVesselsQuery } from '@features/VesselGroup/apis'
+import { GroupType, type VesselGroupWithVessels } from '@features/VesselGroup/types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { CustomSearch } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 
-import type { VesselGroupWithVessels } from '@features/VesselGroup/types'
-
-export function useGetVesselGroupsWithVessels(searchQuery: string | undefined): {
+export function useGetVesselGroupsWithVessels(
+  searchQuery: string | undefined,
+  filteredGroupTypes: GroupType[]
+): {
   pinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
   unpinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
 } {
@@ -17,10 +19,15 @@ export function useGetVesselGroupsWithVessels(searchQuery: string | undefined): 
     RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
   )
 
+  const filteredVesselGroupsWithVesselsByGroupType = useMemo(
+    () => vesselGroupsWithVessels?.filter(vesselGroup => filteredGroupTypes.includes(vesselGroup.group.type)) ?? [],
+    [filteredGroupTypes, vesselGroupsWithVessels]
+  )
+
   const fuse = useMemo(
     () =>
       new CustomSearch<VesselGroupWithVessels>(
-        vesselGroupsWithVessels ?? [],
+        filteredVesselGroupsWithVesselsByGroupType,
         [
           {
             getFn: vesselGroupWithVessels => vesselGroupWithVessels.vessels.map(vessel => vessel.vesselName ?? ''),
@@ -43,21 +50,21 @@ export function useGetVesselGroupsWithVessels(searchQuery: string | undefined): 
         ],
         { threshold: 0.4 }
       ),
-    [vesselGroupsWithVessels]
+    [filteredVesselGroupsWithVesselsByGroupType]
   )
 
-  const filteredVesselGroupsWithVessels = useMemo(() => {
+  const filteredVesselGroupsWithVesselsBySearchQuery = useMemo(() => {
     if (!searchQuery || searchQuery.length < 2) {
-      return vesselGroupsWithVessels ?? []
+      return filteredVesselGroupsWithVesselsByGroupType ?? []
     }
 
     return fuse.find(searchQuery)
-  }, [vesselGroupsWithVessels, fuse, searchQuery])
+  }, [filteredVesselGroupsWithVesselsByGroupType, fuse, searchQuery])
 
-  const pinnedVesselGroupsWithVessels = filteredVesselGroupsWithVessels.filter(vesselGroup =>
+  const pinnedVesselGroupsWithVessels = filteredVesselGroupsWithVesselsBySearchQuery.filter(vesselGroup =>
     vesselGroupsIdsPinned.includes(vesselGroup.group.id)
   )
-  const unpinnedVesselGroupsWithVessels = filteredVesselGroupsWithVessels.filter(
+  const unpinnedVesselGroupsWithVessels = filteredVesselGroupsWithVesselsBySearchQuery.filter(
     vesselGroup => !vesselGroupsIdsPinned.includes(vesselGroup.group.id)
   )
 

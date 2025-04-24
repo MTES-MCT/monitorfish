@@ -16,12 +16,12 @@ context('Side Window > Vessel Group List', () => {
      * Filter by group type
      */
     cy.get('[title="Groupes fixes"]').click()
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 1)
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
     cy.get('[title="Groupes fixes"]').click()
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 
     cy.get('[title="Groupes dynamiques"]').click()
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 1)
     cy.get('[title="Groupes dynamiques"]').click()
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 

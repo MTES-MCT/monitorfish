@@ -32,7 +32,7 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
         <PinnedGroupsWrapper>
           <PinnedGroupsTitle>Groupes épinglés</PinnedGroupsTitle>
           {pinnedVesselGroupsWithVessels.length === 0 && <NoGroup>Aucun groupe épinglé.</NoGroup>}
-          <PinnedGroups>
+          <PinnedGroups data-cy="pinned-vessels-groups">
             {pinnedVesselGroupsWithVessels.map(groupWithVessels => (
               <VesselGroupRow
                 key={groupWithVessels.group.id}
@@ -44,7 +44,7 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
             ))}
           </PinnedGroups>
         </PinnedGroupsWrapper>
-        <UnpinnedGroups>
+        <UnpinnedGroups data-cy="unpinned-vessels-groups">
           {unpinnedVesselGroupsWithVessels.map(groupWithVessels => (
             <VesselGroupRow
               key={groupWithVessels.group.id}

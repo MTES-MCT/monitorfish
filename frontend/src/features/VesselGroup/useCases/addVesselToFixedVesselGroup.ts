@@ -1,28 +1,38 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
-import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { showVesselsLastPosition } from '@features/Vessel/useCases/showVesselsLastPosition'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { vesselGroupApi } from '@features/VesselGroup/apis'
-import { vesselGroupActions } from '@features/VesselGroup/slice'
-import { trackEvent } from '@hooks/useTracking'
+import { type FixedVesselGroup } from '@features/VesselGroup/types'
 import { Level } from '@mtes-mct/monitor-ui'
 
 import type { MainAppThunk } from '@store'
 
-export const deleteVesselGroup =
-  (vesselGroupId: number): MainAppThunk =>
-  async dispatch => {
-    trackEvent({
-      action: "Suppression d'un groupe de navires",
-      category: 'VESSEL_GROUP',
-      name: vesselGroupId.toString()
-    })
-
+export const addVesselToFixedVesselGroup =
+  (vessel: Vessel.VesselIdentity | undefined, vesselGroup: FixedVesselGroup): MainAppThunk<Promise<void>> =>
+  async (dispatch): Promise<void> => {
     try {
-      await dispatch(vesselGroupApi.endpoints.deleteVesselGroup.initiate(vesselGroupId)).unwrap()
-      await dispatch(vesselGroupActions.vesselGroupIdHidden(vesselGroupId))
+      if (!vessel) {
+        return
+      }
+
+      const vesselGroupIdentity = {
+        cfr: vessel.internalReferenceNumber,
+        externalIdentification: vessel.externalReferenceNumber,
+        flagState: vessel.flagState,
+        ircs: vessel.ircs,
+        name: vessel.vesselName,
+        vesselId: vessel.vesselId,
+        vesselIdentifier: vessel.vesselIdentifier
+      }
+
+      const vesselGroupWithVessel = {
+        ...vesselGroup,
+        vessels: vesselGroup.vessels.concat(vesselGroupIdentity)
+      }
+
+      await dispatch(vesselGroupApi.endpoints.createOrUpdateFixedVesselGroup.initiate(vesselGroupWithVessel)).unwrap()
 
       const vessels = await dispatch(
         vesselApi.endpoints.getVesselsLastPositions.initiate(undefined, RTK_FORCE_REFETCH_QUERY_OPTIONS)
@@ -30,17 +40,8 @@ export const deleteVesselGroup =
       dispatch(showVesselsLastPosition(vessels as Vessel.VesselLastPosition[]))
 
       dispatch(
-        addMainWindowBanner({
-          children: 'Le groupe de navires a bien été supprimé.',
-          closingDelay: 2000,
-          isClosable: true,
-          level: Level.SUCCESS,
-          withAutomaticClosing: true
-        })
-      )
-      dispatch(
         addSideWindowBanner({
-          children: 'Le groupe de navires a bien été supprimé.',
+          children: `Le navire a bien été ajouté au groupe "${vesselGroup.name}"`,
           closingDelay: 2000,
           isClosable: true,
           level: Level.SUCCESS,
@@ -49,7 +50,7 @@ export const deleteVesselGroup =
       )
     } catch (error) {
       dispatch(
-        addMainWindowBanner({
+        addSideWindowBanner({
           children: (error as Error).message,
           closingDelay: 5000,
           isClosable: true,

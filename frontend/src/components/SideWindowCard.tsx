@@ -21,7 +21,7 @@ const Box = styled.div`
   bottom: 0;
   display: flex;
   justify-content: flex-end;
-  left: 70px;
+  left: 64px;
   position: fixed;
   right: 0;
   top: 0;

@@ -1,18 +1,29 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { Square } from '@features/Regulation/components/ZonePreview'
+import { VesselSearchWithMapVessels } from '@features/Vessel/components/VesselSearch/VesselSearchWithMapVessels'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { EditDynamicVesselGroupDialog } from '@features/VesselGroup/components/EditDynamicVesselGroupDialog'
 import { EditFixedVesselGroupDialog } from '@features/VesselGroup/components/EditFixedVesselGroupDialog'
 import { VesselTable } from '@features/VesselGroup/components/VesselGroupList/VesselTable'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
-import { type DynamicVesselGroup, GroupType, Sharing, type VesselGroupWithVessels } from '@features/VesselGroup/types'
+import {
+  type DynamicVesselGroup,
+  type FixedVesselGroup,
+  GroupType,
+  Sharing,
+  type VesselGroupWithVessels
+} from '@features/VesselGroup/types'
+import { addVesselToFixedVesselGroup } from '@features/VesselGroup/useCases/addVesselToFixedVesselGroup'
 import { deleteVesselGroup } from '@features/VesselGroup/useCases/deleteVesselGroup'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Accent, Icon, IconButton, Tag, THEME } from '@mtes-mct/monitor-ui'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+import { Accent, Icon, IconButton, Tag, THEME, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { getDate } from '../../../../utils'
+
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type VesselGroupRowProps = {
   isFromUrl: boolean
@@ -21,6 +32,7 @@ type VesselGroupRowProps = {
   vesselGroupWithVessels: VesselGroupWithVessels
 }
 export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithVessels }: VesselGroupRowProps) {
+  const { newWindowContainerRef } = useNewWindow()
   const dispatch = useMainAppDispatch()
 
   const [isOpen, setIsOpen] = useState<boolean>(isOpened)
@@ -60,6 +72,10 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
     }
 
     dispatch(renderVesselFeatures())
+  }
+
+  const addVessel = (nextVessel: Vessel.VesselIdentity | undefined) => {
+    dispatch(addVesselToFixedVesselGroup(nextVessel, vesselGroupWithVessels.group as FixedVesselGroup))
   }
 
   return (
@@ -138,6 +154,17 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
               vesselGroupId={vesselGroupWithVessels.group.id}
               vessels={vesselGroupWithVessels.vessels}
             />
+            {vesselGroupWithVessels.group.type === GroupType.FIXED && (
+              <StyledVesselSearch
+                baseRef={newWindowContainerRef}
+                displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_VESSEL_GROUP_LIST_ERROR}
+                onChange={addVessel}
+                placeholder="Rechercher un navire pour l'ajouter au groupe"
+                shouldCloseOnClickOutside
+                shouldResetSelectedVesselOnChange
+                value={undefined}
+              />
+            )}
           </OpenedGroup>
         )}
       </Wrapper>
@@ -170,6 +197,17 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
     </>
   )
 }
+
+const StyledVesselSearch = styled(VesselSearchWithMapVessels)`
+  margin-top: 16px;
+  border: solid 1px ${p => p.theme.color.lightGray};
+  width: 480px;
+
+  > div:nth-child(2) {
+    border: solid 1px ${p => p.theme.color.lightGray};
+    width: 480px;
+  }
+`
 
 const StyledSquare = styled(Square)`
   margin-top: 4px;

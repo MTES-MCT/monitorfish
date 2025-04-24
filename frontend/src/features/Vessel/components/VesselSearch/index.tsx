@@ -25,6 +25,7 @@ export type VesselSearchProps = Readonly<
     onFocus?: () => Promisable<void>
     onVesselLinkClick?: (vessel: Vessel.VesselIdentity) => Promisable<void>
     shouldCloseOnClickOutside?: boolean
+    shouldResetSelectedVesselOnChange?: boolean
     value?: Vessel.VesselIdentity | undefined
     vesselIdentitiesFromLastPositions?: Vessel.VesselIdentity[]
     withLastSearchResults?: boolean
@@ -41,6 +42,7 @@ export function VesselSearch({
   onFocus,
   onVesselLinkClick,
   shouldCloseOnClickOutside,
+  shouldResetSelectedVesselOnChange = false,
   style,
   value,
   vesselIdentitiesFromLastPositions,
@@ -80,12 +82,16 @@ export function VesselSearch({
     (vesselIdentity: Vessel.VesselIdentity) => {
       const vesselWithIdentifier = enrichWithVesselIdentifierIfUndefined(vesselIdentity)
 
-      setInputValue(vesselWithIdentifier.vesselName ?? '')
       setIsOpen(false)
 
-      handleOnChange(vesselWithIdentifier)
+      if (shouldResetSelectedVesselOnChange) {
+        onChange(vesselWithIdentifier)
+        setInputValue('')
+      } else {
+        handleOnChange(vesselWithIdentifier)
+      }
     },
-    [handleOnChange]
+    [onChange, handleOnChange, shouldResetSelectedVesselOnChange]
   )
 
   const handleChange = useCallback(

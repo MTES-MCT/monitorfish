@@ -48,10 +48,9 @@ class DeleteFixedVesselGroupVessel(
                         throw BackendUsageException(
                             BackendUsageErrorCode.COULD_NOT_UPDATE,
                             message = "Incorrect vessel index",
-                            cause = e
+                            cause = e,
                         )
                     }
-
                 }
             }
 

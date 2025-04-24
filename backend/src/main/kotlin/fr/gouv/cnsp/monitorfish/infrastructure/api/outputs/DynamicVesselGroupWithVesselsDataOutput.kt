@@ -8,10 +8,12 @@ data class DynamicVesselGroupWithVesselsDataOutput(
     val vessels: List<LastPositionDataOutput>,
 ) {
     companion object {
-        fun fromDynamicVesselGroup(group: DynamicVesselGroup, vessels: List<LastPosition>) =
-            DynamicVesselGroupWithVesselsDataOutput(
-                group = DynamicVesselGroupDataOutput.fromDynamicVesselGroup(group),
-                vessels = vessels.map { LastPositionDataOutput.fromLastPosition(it) }
-            )
+        fun fromDynamicVesselGroup(
+            group: DynamicVesselGroup,
+            vessels: List<LastPosition>,
+        ) = DynamicVesselGroupWithVesselsDataOutput(
+            group = DynamicVesselGroupDataOutput.fromDynamicVesselGroup(group),
+            vessels = vessels.map { LastPositionDataOutput.fromLastPosition(it) },
+        )
     }
 }

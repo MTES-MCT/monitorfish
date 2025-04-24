@@ -4,7 +4,7 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselIdentity
 
-data class FixedVesselGroupVesselIdentityDataOutput (
+data class FixedVesselGroupVesselIdentityDataOutput(
     val vesselId: Int?,
     val cfr: String?,
     val ircs: String?,
@@ -12,7 +12,7 @@ data class FixedVesselGroupVesselIdentityDataOutput (
     val name: String?,
     val flagState: CountryCode,
     val vesselIdentifier: VesselIdentifier?,
-){
+) {
     companion object {
         fun fromVesselIdentity(vessel: VesselIdentity) =
             FixedVesselGroupVesselIdentityDataOutput(

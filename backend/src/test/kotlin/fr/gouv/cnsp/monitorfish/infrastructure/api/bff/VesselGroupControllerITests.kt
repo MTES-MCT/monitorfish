@@ -12,7 +12,6 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUs
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.AddOrUpdateDynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.AddOrUpdateFixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.DeleteFixedVesselGroupVessel
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.DeleteFixedVesselGroupVesselUTests
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.DeleteVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroups
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroupsWithVessels
@@ -208,11 +207,11 @@ class VesselGroupControllerITests {
             TestUtils.getDynamicVesselGroups().map {
                 VesselGroupWithVessels(
                     group = it,
-                    vessels = listOf()
+                    vessels = listOf(),
                 )
-            }
+            },
         )
-l
+
         // When
         api
             .perform(
@@ -260,7 +259,7 @@ l
         Mockito.verify(deleteFixedVesselGroupVessel).execute(
             userEmail = "email@domain-name.com",
             groupId = 123,
-            vesselIndex = 1
+            vesselIndex = 1,
         )
     }
 }

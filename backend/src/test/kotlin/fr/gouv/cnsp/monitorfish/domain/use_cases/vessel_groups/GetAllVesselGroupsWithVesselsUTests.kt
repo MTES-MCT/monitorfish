@@ -1,11 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 
-import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.verify
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselIdentity
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.TestUtils
@@ -34,9 +30,10 @@ class GetAllVesselGroupsWithVesselsUTests {
         given(vesselGroupRepository.findAllByUser(any())).willReturn(getFixedVesselGroups())
 
         // When
-        val vesselGroups = GetAllVesselGroupsWithVessels(vesselGroupRepository, lastPositionRepository).execute(
-            userEmail = "dummy@email.gouv.fr",
-        )
+        val vesselGroups =
+            GetAllVesselGroupsWithVessels(vesselGroupRepository, lastPositionRepository).execute(
+                userEmail = "dummy@email.gouv.fr",
+            )
 
         // Then
         assertThat(vesselGroups).hasSize(2)
@@ -46,11 +43,35 @@ class GetAllVesselGroupsWithVesselsUTests {
         assertThat((vesselGroups.first().group as FixedVesselGroup).vessels.last().cfr).isEqualTo("FR00022680")
 
         assertThat(vesselGroups.first().vessels).hasSize(2)
-        assertThat(vesselGroups.first().vessels.first().id).isEqualTo(0)
-        assertThat(vesselGroups.first().vessels.first().internalReferenceNumber).isEqualTo("FR123456785")
+        assertThat(
+            vesselGroups
+                .first()
+                .vessels
+                .first()
+                .id,
+        ).isEqualTo(0)
+        assertThat(
+            vesselGroups
+                .first()
+                .vessels
+                .first()
+                .internalReferenceNumber,
+        ).isEqualTo("FR123456785")
 
-        assertThat(vesselGroups.first().vessels.last().id).isEqualTo(1)
+        assertThat(
+            vesselGroups
+                .first()
+                .vessels
+                .last()
+                .id,
+        ).isEqualTo(1)
         // VesselId is matched from the last positions table: FR00022680 -> FR224226850
-        assertThat(vesselGroups.first().vessels.last().internalReferenceNumber).isEqualTo("FR224226850")
+        assertThat(
+            vesselGroups
+                .first()
+                .vessels
+                .last()
+                .internalReferenceNumber,
+        ).isEqualTo("FR224226850")
     }
 }

@@ -27,7 +27,7 @@ class VesselGroupController(
     private val getAllVesselGroups: GetAllVesselGroups,
     private val deleteVesselGroup: DeleteVesselGroup,
     private val deleteFixedVesselGroupVessel: DeleteFixedVesselGroupVessel,
-    private val getAllVesselGroupsWithVessels: GetAllVesselGroupsWithVessels
+    private val getAllVesselGroupsWithVessels: GetAllVesselGroupsWithVessels,
 ) {
     private val logger = LoggerFactory.getLogger(VesselGroupController::class.java)
 

@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory
 class GetAllVesselGroupsWithVessels(
     private val vesselGroupRepository: VesselGroupRepository,
     private val lastPositionRepository: LastPositionRepository,
-    ) {
+) {
     private val logger: Logger = LoggerFactory.getLogger(GetAllVesselGroupsWithVessels::class.java)
 
     fun execute(userEmail: String): List<VesselGroupWithVessels> {
@@ -22,34 +22,46 @@ class GetAllVesselGroupsWithVessels(
         val lastPositions = lastPositionRepository.findAllInLastMonthOrWithBeaconMalfunction()
 
         val byVesselId = lastPositions.filter { it.vesselId != null }.associateBy { it.vesselId }
-        val byCfr = lastPositions.filter { it.internalReferenceNumber != null }.associateBy { it.internalReferenceNumber }
+        val byCfr =
+            lastPositions
+                .filter {
+                    it.internalReferenceNumber != null
+                }.associateBy { it.internalReferenceNumber }
         val byIrcs = lastPositions.filter { it.ircs != null }.associateBy { it.ircs }
-        val byExternalId = lastPositions.filter { it.externalReferenceNumber != null }.associateBy { it.externalReferenceNumber }
+        val byExternalId =
+            lastPositions
+                .filter {
+                    it.externalReferenceNumber != null
+                }.associateBy { it.externalReferenceNumber }
 
         return vesselGroups.map { group ->
-            val vesselLastPositions = when (group) {
-                is DynamicVesselGroup -> listOf()
-                is FixedVesselGroup -> group.vessels.mapIndexed { index, vessel ->
-                    val match = when {
-                        vessel.vesselId != null -> byVesselId[vessel.vesselId]
-                        vessel.vesselIdentifier != null -> when (vessel.vesselIdentifier) {
-                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> byCfr[vessel.cfr]
-                            VesselIdentifier.IRCS -> byIrcs[vessel.ircs]
-                            VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> byExternalId[vessel.externalIdentification]
-                        }
-                        !vessel.cfr.isNullOrEmpty() -> byCfr[vessel.cfr]
-                        !vessel.ircs.isNullOrEmpty() -> byIrcs[vessel.ircs]
-                        !vessel.externalIdentification.isNullOrEmpty() -> byExternalId[vessel.externalIdentification]
-                        else -> null
-                    }
+            val vesselLastPositions =
+                when (group) {
+                    is DynamicVesselGroup -> listOf()
+                    is FixedVesselGroup ->
+                        group.vessels.mapIndexed { index, vessel ->
+                            val match =
+                                when {
+                                    vessel.vesselId != null -> byVesselId[vessel.vesselId]
+                                    vessel.vesselIdentifier != null ->
+                                        when (vessel.vesselIdentifier) {
+                                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> byCfr[vessel.cfr]
+                                            VesselIdentifier.IRCS -> byIrcs[vessel.ircs]
+                                            VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> byExternalId[vessel.externalIdentification]
+                                        }
+                                    !vessel.cfr.isNullOrEmpty() -> byCfr[vessel.cfr]
+                                    !vessel.ircs.isNullOrEmpty() -> byIrcs[vessel.ircs]
+                                    !vessel.externalIdentification.isNullOrEmpty() -> byExternalId[vessel.externalIdentification]
+                                    else -> null
+                                }
 
-                    match?.copy(id = index) ?: vessel.toLastPosition(index)
+                            match?.copy(id = index) ?: vessel.toLastPosition(index)
+                        }
                 }
-            }
 
             VesselGroupWithVessels(
                 group = group,
-                vessels = vesselLastPositions
+                vessels = vesselLastPositions,
             )
         }
     }

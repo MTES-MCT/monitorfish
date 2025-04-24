@@ -31,20 +31,25 @@ class DeleteFixedVesselGroupVesselUTests {
         DeleteFixedVesselGroupVessel(vesselGroupRepository).execute(
             userEmail = "dummy@email.gouv.fr",
             groupId = 1,
-            vesselIndex = 1
+            vesselIndex = 1,
         )
 
         // Then
         verify(vesselGroupRepository).save(
-            getFixedVesselGroups().first().copy(vessels = listOf(VesselIdentity(
-                vesselId = null,
-                cfr = "FR123456785",
-                name = "MY AWESOME VESSEL TWO",
-                flagState = CountryCode.FR,
-                ircs = null,
-                externalIdentification = null,
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            )))
+            getFixedVesselGroups().first().copy(
+                vessels =
+                    listOf(
+                        VesselIdentity(
+                            vesselId = null,
+                            cfr = "FR123456785",
+                            name = "MY AWESOME VESSEL TWO",
+                            flagState = CountryCode.FR,
+                            ircs = null,
+                            externalIdentification = null,
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
+                    ),
+            ),
         )
     }
 
@@ -56,13 +61,14 @@ class DeleteFixedVesselGroupVesselUTests {
         given(vesselGroupRepository.findById(any())).willReturn(groupToUpdate)
 
         // When
-        val throwable = catchThrowable {
-            DeleteFixedVesselGroupVessel(vesselGroupRepository).execute(
-                userEmail = "dummy@email.gouv.fr",
-                groupId = 1,
-                vesselIndex = 2
-            )
-        }
+        val throwable =
+            catchThrowable {
+                DeleteFixedVesselGroupVessel(vesselGroupRepository).execute(
+                    userEmail = "dummy@email.gouv.fr",
+                    groupId = 1,
+                    vesselIndex = 2,
+                )
+            }
 
         // Then
         assertThat(throwable.message).isEqualTo("Incorrect vessel index")

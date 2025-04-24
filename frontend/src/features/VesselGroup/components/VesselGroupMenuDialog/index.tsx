@@ -1,6 +1,8 @@
 import { MapPropertyTrigger } from '@features/commonComponents/MapPropertyTrigger'
 import { MapToolBox } from '@features/MainWindow/components/MapButtons/shared/MapToolBox'
 import { MapBox } from '@features/Map/constants'
+import { SideWindowMenuKey } from '@features/SideWindow/constants'
+import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { VesselGroupRow } from '@features/VesselGroup/components/VesselGroupMenuDialog/VesselGroupRow'
 import { DEFAULT_DYNAMIC_VESSEL_GROUP, DEFAULT_FIXED_VESSEL_GROUP } from '@features/VesselGroup/constants'
 import { useGetVesselGroups } from '@features/VesselGroup/hooks/useGetVesselGroups'
@@ -9,7 +11,7 @@ import { hideVesselsNotInVesselGroups } from '@features/VesselGroup/useCases/hid
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Dropdown, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Dropdown, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
@@ -49,6 +51,10 @@ export function VesselGroupMenuDialog() {
 
   const toggleVesselGroupsDisplay = () => {
     dispatch(setDisplayedComponents({ areVesselGroupsDisplayed: !areVesselGroupsDisplayed }))
+  }
+
+  const toggleVesselGroupList = () => {
+    dispatch(openSideWindowPath({ menu: SideWindowMenuKey.VESSEL_GROUP }))
   }
 
   return (
@@ -92,11 +98,9 @@ export function VesselGroupMenuDialog() {
                 Créer un groupe dynamique <Icon.Info size={17} />
               </StyledDropdownItem>
             </StyledDropdown>
-            {/**
-         <BlockIconButton accent={Accent.SECONDARY} Icon={Icon.Expand} onClick={toggleMissionsWindow}>
-         Voir la vue détaillée des groupes
-         </BlockIconButton>
-       * */}
+            <Button accent={Accent.SECONDARY} Icon={Icon.Expand} onClick={toggleVesselGroupList}>
+              Voir la vue détaillée des groupes
+            </Button>
           </Buttons>
           <MapPropertyTrigger
             booleanProperty={areVesselsNotInVesselGroupsHidden}
@@ -153,13 +157,13 @@ const Header = styled(MapMenuDialog.Header)`
 const Buttons = styled.div`
   padding: 16px 16px 8px 16px;
   gap: 8px;
+
+  button {
+    width: 100%;
+  }
 `
 
 const StyledDropdown = styled(Dropdown)`
   width: 100%;
   margin-bottom: 8px;
-
-  button {
-    width: 100%;
-  }
 `

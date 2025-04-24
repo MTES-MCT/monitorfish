@@ -8,9 +8,10 @@ import styled from 'styled-components'
 
 type ActionButtonsCellProps = Readonly<{
   groupId: number
+  isFixedGroup: boolean
   vessel: Vessel.VesselLastPosition
 }>
-export function ActionButtonsCell({ groupId, vessel }: ActionButtonsCellProps) {
+export function ActionButtonsCell({ groupId, isFixedGroup, vessel }: ActionButtonsCellProps) {
   const dispatch = useMainAppDispatch()
 
   const selectMainMapVessel = async () => {
@@ -21,13 +22,15 @@ export function ActionButtonsCell({ groupId, vessel }: ActionButtonsCellProps) {
 
   return (
     <Wrapper>
-      <IconButton
-        accent={Accent.TERTIARY}
-        Icon={Icon.Delete}
-        onClick={() => dispatch(deleteVesselFromVesselGroup(groupId, vessel.id!!))}
-        title={`Supprimer le navire ${vessel.vesselName ? `"${vessel.vesselName}" ` : ''}du groupe`}
-        withUnpropagatedClick
-      />
+      {isFixedGroup && (
+        <IconButton
+          accent={Accent.TERTIARY}
+          Icon={Icon.Delete}
+          onClick={() => dispatch(deleteVesselFromVesselGroup(groupId, vessel.id!!))}
+          title={`Supprimer le navire ${vessel.vesselName ? `"${vessel.vesselName}" ` : ''}du groupe`}
+          withUnpropagatedClick
+        />
+      )}
       <IconButton
         accent={Accent.TERTIARY}
         Icon={Icon.ViewOnMap}

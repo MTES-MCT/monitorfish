@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
@@ -9,6 +10,9 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.VesselGroupWithVessels
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.time.ZonedDateTime
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 
 @UseCase
 class GetAllVesselGroupsWithVessels(
@@ -20,24 +24,36 @@ class GetAllVesselGroupsWithVessels(
     fun execute(userEmail: String): List<VesselGroupWithVessels> {
         val vesselGroups = vesselGroupRepository.findAllByUser(userEmail)
         val lastPositions = lastPositionRepository.findAllInLastMonthOrWithBeaconMalfunction()
+        val now = ZonedDateTime.now()
 
-        val byVesselId = lastPositions.filter { it.vesselId != null }.associateBy { it.vesselId }
-        val byCfr =
-            lastPositions
-                .filter {
-                    it.internalReferenceNumber != null
-                }.associateBy { it.internalReferenceNumber }
-        val byIrcs = lastPositions.filter { it.ircs != null }.associateBy { it.ircs }
-        val byExternalId =
-            lastPositions
-                .filter {
-                    it.externalReferenceNumber != null
-                }.associateBy { it.externalReferenceNumber }
+        val byVesselId = mutableMapOf<Int, LastPosition>()
+        val byCfr = mutableMapOf<String, LastPosition>()
+        val byIrcs = mutableMapOf<String, LastPosition>()
+        val byExternalId = mutableMapOf<String, LastPosition>()
+
+        lastPositions.forEach { pos ->
+            pos.vesselId?.let { byVesselId[it] = pos }
+            pos.internalReferenceNumber?.let { byCfr[it] = pos }
+            pos.ircs?.let { byIrcs[it] = pos }
+            pos.externalReferenceNumber?.let { byExternalId[it] = pos }
+        }
+
+        val dynamicGroups = vesselGroups.filterIsInstance<DynamicVesselGroup>()
+        val dynamicGroupsToLastPositions = ConcurrentHashMap<DynamicVesselGroup, MutableList<LastPosition>>().apply {
+            dynamicGroups.forEach { this[it] = CopyOnWriteArrayList() }
+        }
+        lastPositions.parallelStream().forEach { lastPosition ->
+            dynamicGroups.forEach { group ->
+                if (lastPosition.isInGroup(group, now)) {
+                    dynamicGroupsToLastPositions[group]?.add(lastPosition)
+                }
+            }
+        }
 
         return vesselGroups.map { group ->
             val vesselLastPositions =
                 when (group) {
-                    is DynamicVesselGroup -> listOf()
+                    is DynamicVesselGroup -> dynamicGroupsToLastPositions[group] ?: emptyList()
                     is FixedVesselGroup ->
                         group.vessels.mapIndexed { index, vessel ->
                             val match =

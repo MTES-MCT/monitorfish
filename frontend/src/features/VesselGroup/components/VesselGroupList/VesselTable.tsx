@@ -12,19 +12,20 @@ import styled, { css } from 'styled-components'
 import { TableBodyEmptyData } from './TableBodyEmptyData'
 
 type VesselTableProps = Readonly<{
+  isFixedGroup: boolean
   isFromUrl: boolean
   isPinned: boolean
   vesselGroupId: number
   vessels: Vessel.VesselLastPosition[]
 }>
-export function VesselTable({ isFromUrl, isPinned, vesselGroupId, vessels }: VesselTableProps) {
+export function VesselTable({ isFixedGroup, isFromUrl, isPinned, vesselGroupId, vessels }: VesselTableProps) {
   const isBodyEmptyDataVisible = !!vessels && vessels.length === 0
 
   const [rowSelection, setRowSelection] = useState({})
 
   const [columns, tableData] = useMemo(
-    () => [getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId)), vessels ?? []],
-    [isFromUrl, vesselGroupId, vessels]
+    () => [getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId, isFixedGroup)), vessels ?? []],
+    [isFromUrl, vesselGroupId, isFixedGroup, vessels]
   )
 
   const table = useReactTable({

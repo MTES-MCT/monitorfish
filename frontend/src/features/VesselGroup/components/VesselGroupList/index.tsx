@@ -1,7 +1,8 @@
 import { Body } from '@features/SideWindow/components/Body'
 import { VesselGroupRow } from '@features/VesselGroup/components/VesselGroupList/VesselGroupRow'
 import { useGetVesselGroupsWithVessels } from '@features/VesselGroup/hooks/useGetVesselGroupsWithVessels'
-import { Size, TextInput } from '@mtes-mct/monitor-ui'
+import { GroupType } from '@features/VesselGroup/types'
+import { Checkbox, Size, TextInput } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -10,7 +11,33 @@ type VesselListProps = Readonly<{
 }>
 export function VesselGroupList({ isFromUrl }: VesselListProps) {
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
-  const { pinnedVesselGroupsWithVessels, unpinnedVesselGroupsWithVessels } = useGetVesselGroupsWithVessels(searchQuery)
+  const [filteredGroupTypes, setFilteredGroupTypes] = useState<GroupType[]>([GroupType.DYNAMIC, GroupType.FIXED])
+
+  const { pinnedVesselGroupsWithVessels, unpinnedVesselGroupsWithVessels } = useGetVesselGroupsWithVessels(
+    searchQuery,
+    filteredGroupTypes
+  )
+
+  const updateDynamicGroupType = (nextGroupType: boolean | undefined) => {
+    if (!nextGroupType) {
+      setFilteredGroupTypes(filteredGroupTypes.filter(value => value !== GroupType.DYNAMIC))
+
+      return
+    }
+
+    setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.DYNAMIC))
+  }
+
+  const updateFixedGroupType = (nextGroupType: boolean | undefined) => {
+    if (!nextGroupType) {
+      setFilteredGroupTypes(filteredGroupTypes.filter(value => value !== GroupType.FIXED))
+
+      return
+    }
+
+    setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.FIXED))
+  }
+
   const areGroupsOpened = !!searchQuery && searchQuery.length > 1
 
   return (
@@ -27,6 +54,20 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
             placeholder="Rechercher un navire"
             size={Size.LARGE}
             value={searchQuery}
+          />
+          <StyledCheckbox
+            checked={filteredGroupTypes.includes(GroupType.FIXED)}
+            label="Groupes fixes"
+            name="fixed"
+            onChange={updateFixedGroupType}
+            title="Groupes fixes"
+          />
+          <StyledCheckbox
+            checked={filteredGroupTypes.includes(GroupType.DYNAMIC)}
+            label="Groupes dynamiques"
+            name="dynamics"
+            onChange={updateDynamicGroupType}
+            title="Groupes dynamiques"
           />
         </Row>
         <PinnedGroupsWrapper>
@@ -59,6 +100,11 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
     </>
   )
 }
+
+const StyledCheckbox = styled(Checkbox)`
+  margin-left: 16px;
+  height: 35px;
+`
 
 const NoGroup = styled.div`
   color: ${p => p.theme.color.slateGray};

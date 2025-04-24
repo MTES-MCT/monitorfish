@@ -1,6 +1,9 @@
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
-import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { showVesselsLastPosition } from '@features/Vessel/useCases/showVesselsLastPosition'
+import { Vessel } from '@features/Vessel/Vessel.types'
+import { vesselApi } from '@features/Vessel/vesselApi'
 import { vesselGroupApi } from '@features/VesselGroup/apis'
 import { Level } from '@mtes-mct/monitor-ui'
 
@@ -16,7 +19,11 @@ export const deleteVesselFromVesselGroup =
           vesselIndex
         })
       ).unwrap()
-      dispatch(renderVesselFeatures())
+
+      const vessels = await dispatch(
+        vesselApi.endpoints.getVesselsLastPositions.initiate(undefined, RTK_FORCE_REFETCH_QUERY_OPTIONS)
+      ).unwrap()
+      dispatch(showVesselsLastPosition(vessels as Vessel.VesselLastPosition[]))
 
       dispatch(
         addSideWindowBanner({

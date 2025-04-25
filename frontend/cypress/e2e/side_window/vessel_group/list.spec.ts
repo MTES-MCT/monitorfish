@@ -84,10 +84,17 @@ context('Side Window > Vessel Group List', () => {
     /**
      * Search a vessel in the vessel groups
      */
-    cy.fill('Rechercher un navire', 'SOCR')
+    cy.fill('Rechercher un navire', 'SOCRA')
     // Only the found groups are displayed
     cy.getDataCy('pinned-vessels-groups').children().should('have.length', 0)
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 1)
+    cy.get('[title="Mission Thémis – semaine 04"]').within(() => {
+      cy.get('.Table-SimpleTable tr').should('have.length', 2)
+    })
+
+    cy.fill('Rechercher un navire', 'SOCRAERRORRRR')
+    cy.getDataCy('pinned-vessels-groups').children().should('have.length', 0)
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 0)
 
     cy.fill('Rechercher un navire', '')
     cy.getDataCy('pinned-vessels-groups').children().should('have.length', 0)

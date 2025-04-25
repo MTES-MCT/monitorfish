@@ -3,7 +3,9 @@ import { getTableColumns } from '@features/Vessel/components/VesselList/columns'
 import { Row } from '@features/Vessel/components/VesselList/Row'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { getVesselGroupActionColumn } from '@features/VesselGroup/components/VesselGroupList/columns'
-import { Icon, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import { SEARCH_QUERY_MIN_LENGTH } from '@features/VesselGroup/components/VesselGroupList/hooks/constants'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { CustomSearch, Icon, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useMemo, useState } from 'react'
@@ -21,12 +23,30 @@ type VesselTableProps = Readonly<{
 export function VesselTable({ isFixedGroup, isFromUrl, isPinned, vesselGroupId, vessels }: VesselTableProps) {
   const isBodyEmptyDataVisible = !!vessels && vessels.length === 0
 
+  const searchQuery = useMainAppSelector(state => state.vesselGroupList.searchQuery)
+
   const [rowSelection, setRowSelection] = useState({})
 
-  const [columns, tableData] = useMemo(
-    () => [getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId, isFixedGroup)), vessels ?? []],
-    [isFromUrl, vesselGroupId, isFixedGroup, vessels]
-  )
+  const [columns, tableData] = useMemo(() => {
+    /**
+     * `SEARCH_QUERY_MIN_LENGTH - 1` because we would like to avoid an initial rendering of
+     * the table when there is a filter be pre-searching for vessels.
+     * This is doable because SEARCH_QUERY_MIN_LENGTH also trigger the opening of the `VesselTable`
+     * (see `areGroupsOpened`in index.tsx)
+     * */
+    if (!searchQuery || searchQuery.length <= SEARCH_QUERY_MIN_LENGTH - 1) {
+      return [getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId, isFixedGroup)), vessels ?? []]
+    }
+
+    const fuse = new CustomSearch<Vessel.VesselLastPosition>(
+      vessels ?? [],
+      ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs'],
+      { isStrict: true, threshold: 0.4 }
+    )
+    const filteredVessels = fuse.find(searchQuery)
+
+    return [getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId, isFixedGroup)), filteredVessels]
+  }, [isFromUrl, vesselGroupId, isFixedGroup, vessels, searchQuery])
 
   const table = useReactTable({
     columns,

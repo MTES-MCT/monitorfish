@@ -1,22 +1,34 @@
 import { Body } from '@features/SideWindow/components/Body'
+import { SEARCH_QUERY_MIN_LENGTH } from '@features/VesselGroup/components/VesselGroupList/hooks/constants'
+import { useGetVesselGroupsWithVessels } from '@features/VesselGroup/components/VesselGroupList/hooks/useGetVesselGroupsWithVessels'
+import { vesselGroupListActions } from '@features/VesselGroup/components/VesselGroupList/slice'
 import { VesselGroupRow } from '@features/VesselGroup/components/VesselGroupList/VesselGroupRow'
-import { useGetVesselGroupsWithVessels } from '@features/VesselGroup/hooks/useGetVesselGroupsWithVessels'
 import { GroupType } from '@features/VesselGroup/types'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Checkbox, Size, TextInput } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
 type VesselListProps = Readonly<{
   isFromUrl: boolean
 }>
 export function VesselGroupList({ isFromUrl }: VesselListProps) {
+  const dispatch = useMainAppDispatch()
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
   const [filteredGroupTypes, setFilteredGroupTypes] = useState<GroupType[]>([GroupType.DYNAMIC, GroupType.FIXED])
 
-  const { pinnedVesselGroupsWithVessels, unpinnedVesselGroupsWithVessels } = useGetVesselGroupsWithVessels(
-    searchQuery,
-    filteredGroupTypes
-  )
+  const { pinnedVesselGroupsWithVessels, unpinnedVesselGroupsWithVessels } =
+    useGetVesselGroupsWithVessels(filteredGroupTypes)
+
+  const debouncedSetSearch = useDebouncedCallback(nextQuery => {
+    dispatch(vesselGroupListActions.setSearchQuery(nextQuery))
+  }, 250)
+
+  const toggleSetSearchQuery = (nextQuery: string | undefined) => {
+    setSearchQuery(nextQuery)
+    debouncedSetSearch(nextQuery)
+  }
 
   const updateDynamicGroupType = (nextGroupType: boolean | undefined) => {
     if (!nextGroupType) {
@@ -38,7 +50,7 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
     setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.FIXED))
   }
 
-  const areGroupsOpened = !!searchQuery && searchQuery.length > 1
+  const areGroupsOpened = !!searchQuery && searchQuery.length > SEARCH_QUERY_MIN_LENGTH
 
   return (
     <>
@@ -50,7 +62,7 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
             isTransparent
             label="Rechercher un navire"
             name="searchQuery"
-            onChange={nextValue => setSearchQuery(nextValue)}
+            onChange={nextValue => toggleSetSearchQuery(nextValue)}
             placeholder="Rechercher un navire"
             size={Size.LARGE}
             value={searchQuery}

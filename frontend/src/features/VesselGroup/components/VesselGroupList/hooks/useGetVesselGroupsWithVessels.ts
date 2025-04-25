@@ -5,14 +5,9 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useEffect, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
+import { MonitorFishWorker } from '../../../../../workers/MonitorFishWorker'
 
-const monitorFishWorker = await MonitorFishWorker
-
-export function useGetVesselGroupsWithVessels(
-  searchQuery: string | undefined,
-  filteredGroupTypes: GroupType[]
-): {
+export function useGetVesselGroupsWithVessels(filteredGroupTypes: GroupType[]): {
   pinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
   unpinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
 } {
@@ -24,7 +19,7 @@ export function useGetVesselGroupsWithVessels(
     unpinnedVesselGroupsWithVessels: []
   })
   const vesselGroupsIdsPinned = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsPinned)
-
+  const searchQuery = useMainAppSelector(state => state.vesselGroupList.searchQuery)
   const { data: vesselGroupsWithVessels } = useGetVesselGroupsWithVesselsQuery(
     undefined,
     RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
@@ -32,7 +27,7 @@ export function useGetVesselGroupsWithVessels(
 
   const debouncedSearch = useDebouncedCallback(
     async (debouncedSearchQuery: string | undefined, debouncedFilteredGroupTypes: GroupType[]) => {
-      const nextGroups = await monitorFishWorker.getFilteredVesselGroups(
+      const nextGroups = await MonitorFishWorker.getFilteredVesselGroups(
         vesselGroupsWithVessels ?? [],
         vesselGroupsIdsPinned,
         debouncedSearchQuery,
@@ -46,7 +41,7 @@ export function useGetVesselGroupsWithVessels(
 
   useEffect(() => {
     debouncedSearch(searchQuery, filteredGroupTypes)
-  }, [searchQuery, debouncedSearch, filteredGroupTypes])
+  }, [searchQuery, debouncedSearch, filteredGroupTypes, vesselGroupsIdsPinned, vesselGroupsWithVessels])
 
   return result
 }

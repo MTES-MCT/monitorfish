@@ -8,6 +8,7 @@ import { VesselSize } from '@features/Vessel/components/VesselList/constants'
 import { getLastControlledFilterFromLastControlPeriod } from '@features/Vessel/components/VesselList/utils'
 import { VesselLocation, vesselSize } from '@features/Vessel/types/vessel'
 import { Vessel } from '@features/Vessel/Vessel.types'
+import { SEARCH_QUERY_MIN_LENGTH } from '@features/VesselGroup/components/VesselGroupList/hooks/constants'
 import { GroupType, type VesselGroupWithVessels } from '@features/VesselGroup/types'
 import { customDayjs, CustomSearch, logSoftError } from '@mtes-mct/monitor-ui'
 import { booleanPointInPolygon } from '@turf/boolean-point-in-polygon'
@@ -223,11 +224,11 @@ export class MonitorFishWebWorker {
           name: 'vessels.ircs'
         }
       ],
-      { threshold: 0.4 }
+      { isStrict: true, threshold: 0.4 }
     )
 
     const filteredVesselGroupsWithVesselsBySearchQuery = (function () {
-      if (!searchQuery || searchQuery.length < 2) {
+      if (!searchQuery || searchQuery.length <= SEARCH_QUERY_MIN_LENGTH) {
         return filteredVesselGroupsWithVesselsByGroupType ?? []
       }
 

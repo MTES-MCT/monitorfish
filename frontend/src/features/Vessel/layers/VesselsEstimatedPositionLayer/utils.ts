@@ -12,8 +12,8 @@ export const getEstimatedPositionFeatures = (
   vessel: Vessel.VesselLastPosition,
   options: {
     isLight: boolean
-    vesselIsHidden: Date
-    vesselIsOpacityReduced: Date
+    vesselIsHiddenTimeThreshold: number
+    vesselIsOpacityReducedTimeThreshold: number
   }
 ): [Vessel.VesselEstimatedPositionFeature, Vessel.VesselEstimatedPositionFeature] | undefined => {
   const { dateTime, estimatedCurrentLatitude, estimatedCurrentLongitude, latitude, longitude } = vessel
@@ -39,7 +39,11 @@ export const getEstimatedPositionFeatures = (
   const lineColor = options.isLight ? 'rgba(202, 204, 224, 0.2)' : THEME.color.charcoalShadow
   const vesselColor = options.isLight ? 'rgb(202, 204, 224)' : THEME.color.charcoal
 
-  const opacity = VesselFeature.getVesselOpacity(dateTime, options.vesselIsHidden, options.vesselIsOpacityReduced)
+  const opacity = VesselFeature.getVesselOpacityWithTimestamp(
+    dateTime,
+    options.vesselIsHiddenTimeThreshold,
+    options.vesselIsOpacityReducedTimeThreshold
+  )
 
   const lineFeature = new Feature({
     color: lineColor,

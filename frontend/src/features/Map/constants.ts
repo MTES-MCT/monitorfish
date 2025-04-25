@@ -239,7 +239,7 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
     zoneNamePropertyKey: 'f_code',
-    isIntersectable: false
+    isIntersectable: true
   },
   [MonitorFishMap.MonitorFishLayer.THREE_MILES]: {
     code: '3_miles_areas',
@@ -318,7 +318,7 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
     zoneNamePropertyKey: 'zonex',
-    isIntersectable: false
+    isIntersectable: true
   },
   [MonitorFishMap.MonitorFishLayer.AEM]: {
     code: 'aem_areas',

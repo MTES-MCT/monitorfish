@@ -34,6 +34,19 @@ export class VesselFeature {
     return opacity
   }
 
+  static getVesselOpacityWithTimestamp(dateTime, vesselIsHiddenTimeThreshold, vesselIsOpacityReducedTimeThreshold) {
+    const vesselDate = new Date(dateTime)
+
+    let opacity = 1
+    if (vesselDate.getTime() < vesselIsHiddenTimeThreshold) {
+      opacity = 0
+    } else if (vesselDate.getTime() < vesselIsOpacityReducedTimeThreshold) {
+      opacity = 0.2
+    }
+
+    return opacity
+  }
+
   /**
    * Add text label to vessel feature
    * @return The label object

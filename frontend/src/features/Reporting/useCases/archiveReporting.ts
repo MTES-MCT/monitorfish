@@ -2,7 +2,7 @@ import { PendingAlertValueType } from '@features/Alert/types'
 import { ReportingType } from '@features/Reporting/types'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { VesselFeature } from '@features/Vessel/types/vessel'
-import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'

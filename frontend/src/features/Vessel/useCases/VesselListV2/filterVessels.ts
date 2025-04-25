@@ -1,4 +1,4 @@
-import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 
 import { MonitorFishWorker } from '../../../../workers/MonitorFishWorker'
 import { setFilteredVesselsFeatures, vesselActions, vesselSelectors } from '../../slice'

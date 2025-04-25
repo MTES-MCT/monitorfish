@@ -3,6 +3,7 @@ import {
   VESSEL_LABEL_OPTIONS
 } from '@features/MainWindow/components/MapButtons/VesselVisibility/constants'
 import { TrackDepthSelection } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/TrackDepthSelection'
+import { displayVesselsEstimatedPositions } from '@features/Vessel/useCases/displayVesselEstimatedPositions'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, MapMenuDialog, MultiRadio, THEME } from '@mtes-mct/monitor-ui'
@@ -12,12 +13,7 @@ import { LastPositionsVisibilitySlider } from './LastPositionsVisibilitySlider'
 import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
 import { MapPropertyTrigger } from '../../../../commonComponents/MapPropertyTrigger'
 import EstimatedPositionSVG from '../../../../icons/Positions_estimees.svg?react'
-import {
-  setRiskFactorShowedOnMap,
-  setVesselLabel,
-  setVesselLabelsShowedOnMap,
-  showVesselsEstimatedPositions
-} from '../../../../Map/slice'
+import { setRiskFactorShowedOnMap, setVesselLabel, setVesselLabelsShowedOnMap } from '../../../../Map/slice'
 import { setHideNonSelectedVessels } from '../../../../Vessel/slice'
 import { updateDefaultVesselTrackDepth } from '../../../../Vessel/useCases/updateDefaultVesselTrackDepth'
 import { MapToolBox } from '../shared/MapToolBox'
@@ -91,7 +87,7 @@ export function EditVesselVisibility({ isOpened, onClose }) {
         booleanProperty={showingVesselsEstimatedPositions}
         IconSVG={EstimatedPosition}
         text="les positions estimées des navires"
-        updateBooleanProperty={isShowed => dispatch(showVesselsEstimatedPositions(isShowed))}
+        updateBooleanProperty={isShowed => dispatch(displayVesselsEstimatedPositions(isShowed))}
       />
       <MapPropertyTrigger
         booleanProperty={hideNonSelectedVessels}

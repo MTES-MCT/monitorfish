@@ -27,7 +27,7 @@ jest.mock('../../reportingApi', () => ({
 // @ts-ignore
 jest.mock('../deleteReporting', () => ({ deleteReporting: jest.fn() }))
 // @ts-ignore
-jest.mock('../../../Vessel/useCases/renderVesselFeatures', () => ({ renderVesselFeatures: jest.fn() }))
+jest.mock('../../../Vessel/useCases/rendering/renderVesselFeatures', () => ({ renderVesselFeatures: jest.fn() }))
 
 describe('archiveReporting()', () => {
   const INITIAL_STATE = {

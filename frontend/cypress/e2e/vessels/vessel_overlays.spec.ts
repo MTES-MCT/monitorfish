@@ -1,11 +1,9 @@
 context('Vessels Overlays', () => {
-  beforeEach(() => {
+  it('Last position card with vessel groups Should be seen on the map on pointer move', () => {
     cy.login('superuser')
     cy.visit('/#@-840507.18,6232030.47,8.70')
     cy.wait(5000)
-  })
 
-  it('Last position card with vessel groups Should be seen on the map on pointer move', () => {
     // When we move the pointer cursor (from one point to another to emit an event)
     cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 460, clientY: 480, force: true, pointerId: 1 })
     cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 501, clientY: 435, force: true, pointerId: 1 })
@@ -57,6 +55,10 @@ context('Vessels Overlays', () => {
   })
 
   it('Last position card Should contain Alert and Beacon malfunction', () => {
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(5000)
+
     /**
      * Alert
      */
@@ -108,6 +110,10 @@ context('Vessels Overlays', () => {
   })
 
   it('Position card Should be seen on the map on vessel track pointer move', () => {
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(5000)
+
     // When we click on the vessel
     cy.wait(200)
     cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })

@@ -91,15 +91,15 @@ class GetLastPositions(
 
             val hasFleetSegmentMatch =
                 filters.fleetSegments.isEmpty() ||
-                    lastPosition.segments?.any { it in filters.fleetSegments } ?: true
+                    (lastPosition.segments?.any { it in filters.fleetSegments } ?: false)
 
             val hasGearMatch =
                 filters.gearCodes.isEmpty() ||
-                    lastPosition.gearOnboard?.any { it.gear in filters.gearCodes } ?: true
+                    (lastPosition.gearOnboard?.any { it.gear in filters.gearCodes } ?: false)
 
             val hasSpeciesMatch =
                 filters.specyCodes.isEmpty() ||
-                    lastPosition.speciesOnboard?.any { it.species in filters.specyCodes } ?: true
+                    (lastPosition.speciesOnboard?.any { it.species in filters.specyCodes } ?: false)
 
             val hasVesselLocationMatch =
                 vesselsLocation?.let {
@@ -108,14 +108,14 @@ class GetLastPositions(
                 } ?: true
 
             val hasVesselLengthMatch =
-                lastPosition.length?.let { length ->
-                    filters.vesselSize?.let {
+                filters.vesselSize?.let {
+                    lastPosition.length?.let { length ->
                         when (it) {
                             VesselSize.ABOVE_TWELVE_METERS -> length >= 12
                             VesselSize.BELOW_TEN_METERS -> length <= 10
                             VesselSize.BELOW_TWELVE_METERS -> length <= 12
                         }
-                    } ?: true
+                    } ?: false
                 } ?: true
 
             val hasZoneMatch =

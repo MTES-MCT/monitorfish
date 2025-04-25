@@ -1,5 +1,5 @@
 import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
-import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
 
 import { booleanToInt } from '../../../utils'

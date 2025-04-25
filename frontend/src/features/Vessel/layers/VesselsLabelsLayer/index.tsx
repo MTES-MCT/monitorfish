@@ -20,7 +20,7 @@ import { VesselLabelOverlay } from '../../components/VesselLabelOverlay'
 import { vesselSelectors } from '../../slice'
 import { VesselLabelLine } from '../../types/vesselLabelLine'
 
-const MAX_LABELS_DISPLAYED = 200
+const MAX_LABELS_DISPLAYED = 150
 const MAX_LABELS_DISPLAYED_IN_PREVIEW = 400
 const NOT_FOUND = -1
 

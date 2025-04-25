@@ -113,21 +113,37 @@ const mapSlice = createSlice({
       state.animateToRegulatoryLayer = action.payload
     },
 
+    /**
+     * Show or hide the vessels current estimated positions
+     * @param {Object} state
+     * @param {{
+     * payload: boolean}} action
+     */
+    displayVesselsEstimatedPositions(state, action) {
+      window.localStorage.setItem(estimatedPositionsLocalStorageKey, JSON.stringify(action.payload))
+      state.showingVesselsEstimatedPositions = action.payload
+    },
+
     doNotAnimate(state, action) {
       state.doNotAnimate = action.payload
     },
+
     fitToExtent(state, action: PayloadAction<Extent>) {
       state.fitToExtent = action.payload
     },
+
     resetAnimateToCoordinates(state) {
       state.animateToCoordinates = undefined
     },
+
     resetAnimateToExtent(state) {
       state.animateToExtent = false
     },
+
     resetAnimateToRegulatoryLayer(state) {
       state.animateToRegulatoryLayer = undefined
     },
+
     resetFitToExtent(state) {
       state.fitToExtent = undefined
     },
@@ -171,17 +187,6 @@ const mapSlice = createSlice({
     setVesselsLastPositionVisibility(state, action) {
       window.localStorage.setItem(vesselsLastPositionVisibilityLocalStorageKey, JSON.stringify(action.payload))
       state.vesselsLastPositionVisibility = action.payload
-    },
-
-    /**
-     * Show or hide the vessels current estimated positions
-     * @param {Object} state
-     * @param {{
-     * payload: boolean}} action
-     */
-    showVesselsEstimatedPositions(state, action) {
-      window.localStorage.setItem(estimatedPositionsLocalStorageKey, JSON.stringify(action.payload))
-      state.showingVesselsEstimatedPositions = action.payload
     }
   }
 })
@@ -205,6 +210,5 @@ export const {
   setRiskFactorShowedOnMap,
   setVesselLabel,
   setVesselLabelsShowedOnMap,
-  setVesselsLastPositionVisibility,
-  showVesselsEstimatedPositions
+  setVesselsLastPositionVisibility
 } = mapActions

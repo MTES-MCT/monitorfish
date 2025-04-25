@@ -331,7 +331,7 @@ export function FilterBar() {
           }}
           searchable
           style={{ width: 416 }}
-          uncheckableItemValues={['0', '1']}
+          uncheckableItemValues={['0', '1', '2', '3']}
           value={listFilterValues.zones?.map(zone => zone.value)}
         />
         {areMoreFiltersDisplayed && (

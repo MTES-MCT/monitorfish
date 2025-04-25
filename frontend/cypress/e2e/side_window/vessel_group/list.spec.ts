@@ -50,8 +50,8 @@ context('Side Window > Vessel Group List', () => {
      * Delete a vessel group
      */
     cy.get('[title=\'Supprimer le groupe "Mission Thémis – chaluts de fonds"\']').click()
-    cy.clickButton('Confirmer la suppression')
-    cy.getDataCy('pinned-vessels-groups').children().should('have.length', 0)
+    cy.clickButton('Annuler')
+    cy.getDataCy('pinned-vessels-groups').children().should('have.length', 1)
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
 
     /**
@@ -61,13 +61,11 @@ context('Side Window > Vessel Group List', () => {
     cy.get('[title="Mission Thémis – semaine 04"]').click()
     cy.get('[title="Mission Thémis – semaine 04"]').within(() => {
       cy.get('.Table-SimpleTable tr').should('have.length', 7)
-    })
-    cy.get('[title="MALOTRU"]').click()
-    cy.wait(200)
-    // Then close the row
-    cy.get('[title="MALOTRU"]').click()
-    cy.get('[title=\'Supprimer le navire "MALOTRU" du groupe\']').scrollIntoView().click()
-    cy.get('[title="Mission Thémis – semaine 04"]').within(() => {
+      cy.get('[title="MALOTRU"]').scrollIntoView().click()
+      cy.wait(200)
+      // Then close the row
+      cy.get('[title="MALOTRU"]').click()
+      cy.get('[title=\'Supprimer le navire "MALOTRU" du groupe\']').scrollIntoView().click()
       cy.get('.Table-SimpleTable tr').should('have.length', 6)
     })
 
@@ -86,10 +84,11 @@ context('Side Window > Vessel Group List', () => {
      */
     cy.fill('Rechercher un navire', 'SOCRA')
     // Only the found groups are displayed
-    cy.getDataCy('pinned-vessels-groups').children().should('have.length', 0)
+    cy.getDataCy('pinned-vessels-groups').children().should('have.length', 1)
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 1)
     cy.get('[title="Mission Thémis – semaine 04"]').within(() => {
       cy.get('.Table-SimpleTable tr').should('have.length', 2)
+      cy.get('.Table-SimpleTable tr').eq(1).contains('SOCRATE')
     })
 
     cy.fill('Rechercher un navire', 'SOCRAERRORRRR')
@@ -97,7 +96,7 @@ context('Side Window > Vessel Group List', () => {
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 0)
 
     cy.fill('Rechercher un navire', '')
-    cy.getDataCy('pinned-vessels-groups').children().should('have.length', 0)
+    cy.getDataCy('pinned-vessels-groups').children().should('have.length', 1)
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
 
     /**

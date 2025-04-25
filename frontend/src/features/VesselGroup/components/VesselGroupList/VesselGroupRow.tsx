@@ -207,6 +207,7 @@ const StyledVesselSearch = styled(VesselSearchWithMapVessels)`
   > div:nth-child(2) {
     border: solid 1px ${p => p.theme.color.lightGray};
     width: 480px;
+    position: unset;
   }
 `
 

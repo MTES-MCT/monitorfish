@@ -5,14 +5,15 @@ import { showVesselsLastPosition } from '@features/Vessel/useCases/showVesselsLa
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { vesselGroupApi } from '@features/VesselGroup/apis'
+import { GroupType } from '@features/VesselGroup/types'
 import { trackEvent } from '@hooks/useTracking'
 import { Level } from '@mtes-mct/monitor-ui'
 
-import type { CreateOrUpdateDynamicVesselGroup } from '@features/VesselGroup/types'
+import type { CreateOrUpdateVesselGroup } from '@features/VesselGroup/types'
 import type { MainAppThunk } from '@store'
 
 export const addOrUpdateVesselGroup =
-  (vesselGroup: CreateOrUpdateDynamicVesselGroup): MainAppThunk<Promise<boolean>> =>
+  (vesselGroup: CreateOrUpdateVesselGroup): MainAppThunk<Promise<boolean>> =>
   async (dispatch): Promise<boolean> => {
     const isUpdate = !!vesselGroup.id
 
@@ -23,18 +24,31 @@ export const addOrUpdateVesselGroup =
     })
 
     try {
-      await dispatch(vesselGroupApi.endpoints.createOrUpdateDynamicVesselGroup.initiate(vesselGroup)).unwrap()
+      switch (vesselGroup.type) {
+        case GroupType.DYNAMIC: {
+          await dispatch(vesselGroupApi.endpoints.createOrUpdateDynamicVesselGroup.initiate(vesselGroup)).unwrap()
+          break
+        }
+        case GroupType.FIXED: {
+          await dispatch(vesselGroupApi.endpoints.createOrUpdateFixedVesselGroup.initiate(vesselGroup)).unwrap()
+          break
+        }
+        default: {
+          break
+        }
+      }
 
       const vessels = await dispatch(
         vesselApi.endpoints.getVesselsLastPositions.initiate(undefined, RTK_FORCE_REFETCH_QUERY_OPTIONS)
       ).unwrap()
       dispatch(showVesselsLastPosition(vessels as Vessel.VesselLastPosition[]))
 
-      const bannerText = `Le groupe de navires dynamique "${vesselGroup.name}" a bien été ${isUpdate ? 'modifié' : 'créé'}.`
+      const bannerText = `Le groupe de navires ${vesselGroup.type === GroupType.DYNAMIC ? 'dynamique' : 'fixe'}
+      "${vesselGroup.name}" a bien été ${isUpdate ? 'modifié' : 'créé'}.`
       dispatch(
         addSideWindowBanner({
           children: bannerText,
-          closingDelay: 3000,
+          closingDelay: 2000,
           isClosable: true,
           level: Level.SUCCESS,
           withAutomaticClosing: true
@@ -43,7 +57,7 @@ export const addOrUpdateVesselGroup =
       dispatch(
         addMainWindowBanner({
           children: bannerText,
-          closingDelay: 3000,
+          closingDelay: 2000,
           isClosable: true,
           level: Level.SUCCESS,
           withAutomaticClosing: true

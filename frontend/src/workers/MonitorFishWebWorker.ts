@@ -8,7 +8,9 @@ import { VesselSize } from '@features/Vessel/components/VesselList/constants'
 import { getLastControlledFilterFromLastControlPeriod } from '@features/Vessel/components/VesselList/utils'
 import { VesselLocation, vesselSize } from '@features/Vessel/types/vessel'
 import { Vessel } from '@features/Vessel/Vessel.types'
-import { customDayjs, logSoftError } from '@mtes-mct/monitor-ui'
+import { SEARCH_QUERY_MIN_LENGTH } from '@features/VesselGroup/components/VesselGroupList/hooks/constants'
+import { GroupType, type VesselGroupWithVessels } from '@features/VesselGroup/types'
+import { customDayjs, CustomSearch, logSoftError } from '@mtes-mct/monitor-ui'
 import { booleanPointInPolygon } from '@turf/boolean-point-in-polygon'
 import { point } from '@turf/helpers'
 import { isNotNullish } from '@utils/isNotNullish'
@@ -188,6 +190,64 @@ export class MonitorFishWebWorker {
     })
   }
 
+  static getFilteredVesselGroups(
+    vesselGroupsWithVessels: VesselGroupWithVessels[],
+    vesselGroupsIdsPinned: number[],
+    searchQuery: string | undefined,
+    filteredGroupTypes: GroupType[]
+  ): {
+    pinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
+    unpinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
+  } {
+    const filteredVesselGroupsWithVesselsByGroupType =
+      vesselGroupsWithVessels?.filter(vesselGroup => filteredGroupTypes.includes(vesselGroup.group.type)) ?? []
+
+    const fuse = new CustomSearch<VesselGroupWithVessels>(
+      filteredVesselGroupsWithVesselsByGroupType,
+      [
+        {
+          getFn: vesselGroupWithVessels => vesselGroupWithVessels.vessels.map(vessel => vessel.vesselName ?? ''),
+          name: 'vessels.vesselName'
+        },
+        {
+          getFn: vesselGroupWithVessels =>
+            vesselGroupWithVessels.vessels.map(vessel => vessel.internalReferenceNumber ?? ''),
+          name: 'vessels.internalReferenceNumber'
+        },
+        {
+          getFn: vesselGroupWithVessels =>
+            vesselGroupWithVessels.vessels.map(vessel => vessel.externalReferenceNumber ?? ''),
+          name: 'vessels.externalReferenceNumber'
+        },
+        {
+          getFn: vesselGroupWithVessels => vesselGroupWithVessels.vessels.map(vessel => vessel.ircs ?? ''),
+          name: 'vessels.ircs'
+        }
+      ],
+      { isStrict: true, threshold: 0.4 }
+    )
+
+    const filteredVesselGroupsWithVesselsBySearchQuery = (function () {
+      if (!searchQuery || searchQuery.length <= SEARCH_QUERY_MIN_LENGTH) {
+        return filteredVesselGroupsWithVesselsByGroupType ?? []
+      }
+
+      return fuse.find(searchQuery)
+    })()
+
+    const pinnedVesselGroupsWithVessels = filteredVesselGroupsWithVesselsBySearchQuery.filter(vesselGroup =>
+      vesselGroupsIdsPinned.includes(vesselGroup.group.id)
+    )
+    const unpinnedVesselGroupsWithVessels = filteredVesselGroupsWithVesselsBySearchQuery.filter(
+      vesselGroup => !vesselGroupsIdsPinned.includes(vesselGroup.group.id)
+    )
+
+    return {
+      pinnedVesselGroupsWithVessels,
+      unpinnedVesselGroupsWithVessels
+    }
+  }
+
   static getFilteredVessels(vessels: Vessel.VesselLastPosition[], filters: VesselListFilter): string[] {
     const now = customDayjs()
     const vesselIsHidden = filters.lastPositionHoursAgo
@@ -205,12 +265,20 @@ export class MonitorFishWebWorker {
     const specyCodesSet = filters.specyCodes?.length ? new Set(filters.specyCodes) : undefined
     const vesselsLocation = filters.vesselsLocation?.length === 1 ? filters.vesselsLocation[0] : undefined
 
+    const fuse = new CustomSearch(
+      vessels,
+      ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs'],
+      { isStrict: true, threshold: 0.4 }
+    )
+
     /* TODO Implement these filters
     lastLandingPortLocodes: string[]
     producerOrganizations: string[]
      */
 
-    return vessels
+    const searchedVessels = filters.searchQuery ? fuse.find(filters.searchQuery) : vessels
+
+    return searchedVessels
       .filter(vessel => {
         if (countrySet && !countrySet.has(vessel.flagState)) {
           return false
@@ -251,7 +319,7 @@ export class MonitorFishWebWorker {
                 return vessel.riskFactor >= 2 && vessel.riskFactor < 3
               }
               case 3: {
-                return vessel.riskFactor >= 3 && vessel.riskFactor <= 4
+                return vessel.riskFactor >= 3 && vessel.riskFactor < 4
               }
               default: {
                 return true
@@ -270,7 +338,7 @@ export class MonitorFishWebWorker {
           }
         }
 
-        if (lastControlledFilter?.lastControlledBefore) {
+        if (lastControlledFilter?.lastControlledBefore && !!vessel?.lastControlDateTime) {
           const vesselDate = customDayjs(vessel?.lastControlDateTime)
           const lastControlledBefore = customDayjs(lastControlledFilter.lastControlledBefore)
 
@@ -280,6 +348,10 @@ export class MonitorFishWebWorker {
         }
 
         if (lastControlledFilter?.lastControlledAfter) {
+          if (!vessel?.lastControlDateTime) {
+            return false
+          }
+
           const vesselDate = customDayjs(vessel?.lastControlDateTime)
           const lastControlledAfter = customDayjs(lastControlledFilter.lastControlledAfter)
 

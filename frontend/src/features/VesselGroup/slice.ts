@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { CreateOrUpdateDynamicVesselGroup } from '@features/VesselGroup/types'
+import type { CreateOrUpdateVesselGroup } from '@features/VesselGroup/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type VesselGroupState = {
   areVesselsNotInVesselGroupsHidden: boolean
-  editedVesselGroup: CreateOrUpdateDynamicVesselGroup | undefined
+  editedVesselGroup: CreateOrUpdateVesselGroup | undefined
   vesselGroupsIdsDisplayed: number[]
   vesselGroupsIdsPinned: number[]
 }
@@ -23,7 +23,7 @@ const vesselGroupSlice = createSlice({
       state.areVesselsNotInVesselGroupsHidden = action.payload
     },
 
-    vesselGroupEdited(state, action: PayloadAction<CreateOrUpdateDynamicVesselGroup | undefined>) {
+    vesselGroupEdited(state, action: PayloadAction<CreateOrUpdateVesselGroup | undefined>) {
       state.editedVesselGroup = action.payload
     },
 

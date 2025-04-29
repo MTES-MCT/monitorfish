@@ -10,16 +10,15 @@ import type { MainAppThunk } from '@store'
 export const showVesselsLastPosition =
   (vessels: Vessel.VesselLastPosition[]): MainAppThunk =>
   async (dispatch, getState) => {
-    const monitorFishWorker = await MonitorFishWorker
     const { listFilterValues } = getState().vessel
 
-    await dispatch(setVessels(vessels))
+    dispatch(setVessels(vessels))
 
-    const filteredVesselFeatureIds = await monitorFishWorker.getFilteredVessels(vessels, listFilterValues)
+    const filteredVesselFeatureIds = await MonitorFishWorker.getFilteredVessels(vessels, listFilterValues)
 
-    await dispatch(setFilteredVesselsFeatures(filteredVesselFeatureIds))
+    dispatch(setFilteredVesselsFeatures(filteredVesselFeatureIds))
 
-    await dispatch(renderVesselFeatures())
+    dispatch(renderVesselFeatures())
 
     dispatch(resetIsUpdatingVessels())
   }

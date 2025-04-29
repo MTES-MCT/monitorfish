@@ -14,10 +14,11 @@ import * as timeago from 'timeago.js'
 import { None } from './styles'
 
 type RowProps = Readonly<{
+  hasWhiteBackground?: boolean
   index: number | undefined
   row: RowType<Vessel.VesselLastPosition>
 }>
-export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ index, row }, ref) => {
+export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackground = false, index, row }, ref) => {
   const vessel = row.original
   const gearsByCode = useMainAppSelector(state => state.gear.gearsByCode)
   const speciesByCode = useMainAppSelector(state => state.species.speciesByCode)
@@ -57,6 +58,7 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ index, row }, re
           <ExpandableRowCell
             key={cell.id}
             $hasRightBorder={['hasInfractionSuspicion'].includes(cell.column.id)}
+            $hasWhiteBackground={hasWhiteBackground}
             onClick={() => row.toggleExpanded()}
             style={getExpandableRowCellCustomStyle(cell.column)}
           >
@@ -66,7 +68,7 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ index, row }, re
       </TableWithSelectableRows.BodyTr>
 
       {row.getIsExpanded() && (
-        <ExpandedRow data-id={`${row.id}-expanded`}>
+        <ExpandedRow $hasWhiteBackground={hasWhiteBackground} data-id={`${row.id}-expanded`}>
           <ExpandedRowCell />
           <ExpandedRowCell />
           <ExpandedRowCell>
@@ -138,25 +140,29 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ index, row }, re
   )
 })
 
-const ExpandableRowCell = styled(TableWithSelectableRows.Td)`
+const ExpandableRowCell = styled(TableWithSelectableRows.Td)<{
+  $hasWhiteBackground: boolean
+}>`
   cursor: pointer;
   user-select: none;
   color: ${p => p.theme.color.charcoal};
-  background: ${p => p.theme.color.cultured};
+  background: ${p => (p.$hasWhiteBackground ? p.theme.color.white : p.theme.color.cultured)};
 `
 
 // TODO Add this feature in monitor-ui.
-const ExpandedRow = styled(TableWithSelectableRows.BodyTr)`
+const ExpandedRow = styled(TableWithSelectableRows.BodyTr)<{
+  $hasWhiteBackground: boolean
+}>`
   > td {
     overflow: hidden !important;
     color: ${p => p.theme.color.charcoal};
-    background: ${p => p.theme.color.cultured};
+    background: ${p => (p.$hasWhiteBackground ? p.theme.color.white : p.theme.color.cultured)};
   }
 
   &:hover {
     > td {
       /* Hack to disable hover background color in expanded rows */
-      background-color: ${p => p.theme.color.cultured};
+      background-color: ${p => (p.$hasWhiteBackground ? p.theme.color.white : p.theme.color.cultured)};
     }
   }
 `

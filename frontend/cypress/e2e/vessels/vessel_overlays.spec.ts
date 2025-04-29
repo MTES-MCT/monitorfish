@@ -16,7 +16,7 @@ context('Vessels Overlays', () => {
     // Then
     cy.wait(50)
     cy.get('*[data-cy^="vessel-card-name"]').contains('SOCRATE')
-    cy.get('*[data-cy^="vessel-card-groups"]').contains('1 autre groupe non affiché sur la carte')
+    cy.get('*[data-cy^="vessel-card-groups"]').contains('2 autres groupes non affichés sur la carte')
 
     /**
      * Display the vessel group
@@ -36,6 +36,7 @@ context('Vessels Overlays', () => {
     cy.wait(50)
     cy.get('*[data-cy^="vessel-card-name"]').contains('SOCRATE')
     cy.get('*[data-cy^="vessel-card-groups"]').contains('Mission Thémis – chaluts de fonds')
+    cy.get('*[data-cy^="vessel-card-groups"]').contains('1 autre groupe non affiché sur la carte')
 
     // Hide vessel groups from map
     cy.clickButton('Cacher les groupes')

@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
@@ -135,6 +136,80 @@ object TestUtils {
                         vesselSize = VesselSize.ABOVE_TWELVE_METERS,
                         vesselsLocation = listOf(VesselLocation.SEA),
                         zones = emptyList(),
+                    ),
+            ),
+        )
+
+    fun getFixedVesselGroups() =
+        listOf(
+            FixedVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Mission Thémis – chaluts de fonds",
+                description = "Ciblage pour la mission du Thémis (bordée A) du 08/01 au 17/01/25.",
+                pointsOfAttention =
+                    "Points d'attention : Si le navire X est dans le secteur, le contrôler pour " +
+                        "suspicion blanchiment bar en 7.d.",
+                color = "#4287f5",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.of(2019, 10, 11, 0, 4, 0, 0, UTC),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                vessels =
+                    listOf(
+                        VesselIdentity(
+                            vesselId = null,
+                            cfr = "FR123456785",
+                            name = "MY AWESOME VESSEL TWO",
+                            flagState = CountryCode.FR,
+                            ircs = null,
+                            externalIdentification = null,
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
+                        VesselIdentity(
+                            vesselId = 1,
+                            cfr = "FR00022680",
+                            name = "MY AWESOME VESSEL",
+                            flagState = CountryCode.FR,
+                            ircs = null,
+                            externalIdentification = null,
+                            vesselIdentifier = null,
+                        ),
+                    ),
+            ),
+            FixedVesselGroup(
+                id = 2,
+                isDeleted = false,
+                name = "Mission Thémis – chaluts de fonds",
+                description = "Ciblage pour la mission du Thémis (bordée A) du 08/01 au 17/01/25.",
+                pointsOfAttention = null,
+                color = "#4287f5",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.of(2019, 10, 11, 0, 4, 0, 0, UTC).minusMonths(1),
+                updatedAtUtc = ZonedDateTime.of(2019, 10, 11, 0, 4, 0, 0, UTC),
+                endOfValidityUtc = null,
+                vessels =
+                    listOf(
+                        VesselIdentity(
+                            vesselId = null,
+                            cfr = "FR123456785",
+                            name = "MY AWESOME VESSEL TWO",
+                            flagState = CountryCode.FR,
+                            ircs = null,
+                            externalIdentification = null,
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
+                        VesselIdentity(
+                            vesselId = 1,
+                            cfr = "FR00022680",
+                            name = "MY AWESOME VESSEL",
+                            flagState = CountryCode.FR,
+                            ircs = null,
+                            externalIdentification = null,
+                            vesselIdentifier = null,
+                        ),
                     ),
             ),
         )

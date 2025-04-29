@@ -3,7 +3,7 @@ import { Square } from '@features/Regulation/components/ZonePreview'
 import { FilterTags } from '@features/Vessel/components/VesselList/FilterTags'
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
-import { GroupType, Sharing } from '@features/VesselGroup/types'
+import { GroupType, Sharing, type VesselGroup } from '@features/VesselGroup/types'
 import { deleteVesselGroup } from '@features/VesselGroup/useCases/deleteVesselGroup'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -13,11 +13,9 @@ import styled from 'styled-components'
 
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 
-import type { DynamicVesselGroup } from '@features/VesselGroup/types'
-
 type VesselGroupRowProps = {
   isLastPinned: boolean
-  vesselGroup: DynamicVesselGroup
+  vesselGroup: VesselGroup
 }
 export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProps) {
   const dispatch = useMainAppDispatch()
@@ -112,10 +110,9 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
               {vesselGroup.type === GroupType.DYNAMIC && (
                 <StyledTag borderColor={THEME.color.slateGray}>Groupe dynamique</StyledTag>
               )}
-              {/**
-               vesselGroup.type === GroupType.FIXED && (
-               <StyledTag borderColor={THEME.color.slateGray}>Groupe fixe</StyledTag>
-               )* */}
+              {vesselGroup.type === GroupType.FIXED && (
+                <StyledTag borderColor={THEME.color.slateGray}>Groupe fixe</StyledTag>
+              )}
               {vesselGroup.sharing === Sharing.PRIVATE && (
                 <StyledTag backgroundColor={THEME.color.goldenPoppy25} borderColor={THEME.color.goldenPoppyBorder}>
                   Groupe privé
@@ -126,15 +123,19 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
                   Groupe partagé
                 </StyledTag>
               )}
-              {isGroupFilterCriteriaOpen && <StyledFilterTags isReadOnly listFilterValues={vesselGroup?.filters} />}
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <StyledLink
-                $isOpen={isGroupFilterCriteriaOpen}
-                onClick={() => setIsGroupFilterCriteriaOpen(!isGroupFilterCriteriaOpen)}
-                title={`${isGroupFilterCriteriaOpen ? 'Masquer' : 'Afficher'} les critères de définition du groupe`}
-              >
-                {isGroupFilterCriteriaOpen ? 'Masquer' : 'Afficher'} les critères de définition du groupe
-              </StyledLink>
+              {vesselGroup.type === GroupType.DYNAMIC && (
+                <>
+                  {isGroupFilterCriteriaOpen && <StyledFilterTags isReadOnly listFilterValues={vesselGroup?.filters} />}
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <StyledLink
+                    $isOpen={isGroupFilterCriteriaOpen}
+                    onClick={() => setIsGroupFilterCriteriaOpen(!isGroupFilterCriteriaOpen)}
+                    title={`${isGroupFilterCriteriaOpen ? 'Masquer' : 'Afficher'} les critères de définition du groupe`}
+                  >
+                    {isGroupFilterCriteriaOpen ? 'Masquer' : 'Afficher'} les critères de définition du groupe
+                  </StyledLink>
+                </>
+              )}
             </GroupInformation>
             <OpenedGroupIcons>
               <IconButton

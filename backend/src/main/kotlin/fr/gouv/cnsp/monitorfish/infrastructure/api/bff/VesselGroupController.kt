@@ -2,13 +2,14 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.AddOrUpdateDynamicVesselGroup
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.DeleteVesselGroup
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroups
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.Utils.getEmail
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.DynamicVesselGroupDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.FixedVesselGroupDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.DynamicVesselGroupDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.DynamicVesselGroupWithVesselsDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.FixedVesselGroupDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.FixedVesselGroupWithVesselsDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
@@ -22,22 +23,51 @@ import org.springframework.web.bind.annotation.*
 @Tag(name = "APIs for vessel groups")
 class VesselGroupController(
     private val addOrUpdateDynamicVesselGroup: AddOrUpdateDynamicVesselGroup,
+    private val addOrUpdateFixedVesselGroup: AddOrUpdateFixedVesselGroup,
     private val getAllVesselGroups: GetAllVesselGroups,
     private val deleteVesselGroup: DeleteVesselGroup,
+    private val deleteFixedVesselGroupVessel: DeleteFixedVesselGroupVessel,
+    private val getAllVesselGroupsWithVessels: GetAllVesselGroupsWithVessels,
 ) {
     private val logger = LoggerFactory.getLogger(VesselGroupController::class.java)
 
-    @PostMapping("")
+    @PostMapping("/dynamic")
     @Operation(summary = "Add or update a dynamic vessel group")
-    fun addOrUpdateVesselGroup(
+    fun addOrUpdateDynamicVesselGroup(
         response: HttpServletResponse,
         @RequestBody
         vesselGroupInput: DynamicVesselGroupDataInput,
     ): DynamicVesselGroupDataOutput {
         val email: String = getEmail(response)
 
+        val vesselGroup =
+            addOrUpdateDynamicVesselGroup.execute(
+                email,
+                vesselGroupInput.toCreateOrUpdateDynamicVesselGroup(),
+            )
+
         return DynamicVesselGroupDataOutput.fromDynamicVesselGroup(
-            addOrUpdateDynamicVesselGroup.execute(email, vesselGroupInput.toCreateOrUpdateDynamicVesselGroup()),
+            vesselGroup,
+        )
+    }
+
+    @PostMapping("/fixed")
+    @Operation(summary = "Add or update a fixed vessel group")
+    fun addOrUpdateFixedVesselGroup(
+        response: HttpServletResponse,
+        @RequestBody
+        vesselGroupInput: FixedVesselGroupDataInput,
+    ): FixedVesselGroupDataOutput {
+        val email: String = getEmail(response)
+
+        val vesselGroup =
+            addOrUpdateFixedVesselGroup.execute(
+                email,
+                vesselGroupInput.toCreateOrUpdateFixedVesselGroup(),
+            )
+
+        return FixedVesselGroupDataOutput.fromFixedVesselGroup(
+            vesselGroup = vesselGroup,
         )
     }
 
@@ -63,8 +93,50 @@ class VesselGroupController(
         return getAllVesselGroups.execute(email).map {
             when (it) {
                 is DynamicVesselGroup -> DynamicVesselGroupDataOutput.fromDynamicVesselGroup(it)
-                is FixedVesselGroup -> FixedVesselGroupDataOutput.fromFixedVesselGroup(it)
+                is FixedVesselGroup ->
+                    FixedVesselGroupDataOutput.fromFixedVesselGroup(
+                        vesselGroup = it,
+                    )
             }
         }
+    }
+
+    @GetMapping(value = ["/vessels"])
+    @Operation(summary = "Get all vessel groups with vessels")
+    fun getVesselGroupsWithVessels(response: HttpServletResponse): List<Any> {
+        val email: String = getEmail(response)
+        val groupWithVessels = getAllVesselGroupsWithVessels.execute(email)
+
+        return groupWithVessels.map { groupWithVessels ->
+            when (groupWithVessels.group) {
+                is DynamicVesselGroup ->
+                    DynamicVesselGroupWithVesselsDataOutput.fromDynamicVesselGroup(
+                        group = groupWithVessels.group,
+                        vessels = groupWithVessels.vessels,
+                    )
+                is FixedVesselGroup ->
+                    FixedVesselGroupWithVesselsDataOutput.fromFixedVesselGroup(
+                        group = groupWithVessels.group,
+                        vessels = groupWithVessels.vessels,
+                    )
+            }
+        }
+    }
+
+    @DeleteMapping(value = ["/{groupId}/{vesselIndex}"])
+    @Operation(summary = "Delete a vessel from a group")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteVesselFromGroup(
+        response: HttpServletResponse,
+        @PathParam("Vessel group id")
+        @PathVariable(name = "groupId")
+        groupId: Int,
+        @PathParam("Vessel index")
+        @PathVariable(name = "vesselIndex")
+        vesselIndex: Int,
+    ) {
+        val email: String = getEmail(response)
+
+        deleteFixedVesselGroupVessel.execute(userEmail = email, groupId = groupId, vesselIndex = vesselIndex)
     }
 }

@@ -30,7 +30,7 @@ export const addOrEditMissionZone =
 export const openDrawLayerModal = dispatch => {
   dispatch(
     setDisplayedComponents({
-      areVesselsDisplayed: false,
+      areVesselsDisplayed: true,
       isAccountMapButtonDisplayed: false,
       isAlertsMapButtonDisplayed: false,
       isBeaconMalfunctionsMapButtonDisplayed: false,

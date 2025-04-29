@@ -18,14 +18,14 @@ import {
 import { FilterTags } from '@features/Vessel/components/VesselList/FilterTags'
 import { VesselLocation } from '@features/Vessel/types/vessel'
 import { filterVesselsWithZone } from '@features/Vessel/useCases/VesselListV2/filterVesselsWithZone'
-import { FormikCirclePicker } from '@features/VesselGroup/components/EditDynamicVesselGroupDialog/FormikCirclePicker'
+import { VesselGroupForm } from '@features/VesselGroup/components/VesselGroupForm'
 import { DEFAULT_DYNAMIC_VESSEL_GROUP } from '@features/VesselGroup/constants'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
 import {
   type CreateOrUpdateDynamicVesselGroup,
-  CreateOrUpdateDynamicVesselGroupSchema
+  type CreateOrUpdateVesselGroup,
+  GroupType
 } from '@features/VesselGroup/types'
-import { addOrUpdateVesselGroup } from '@features/VesselGroup/useCases/addOrUpdateVesselGroup'
 import { countFilteredVessels } from '@features/VesselGroup/useCases/countFilteredVessels'
 import { useGetFilterableZonesAsTreeOptions } from '@hooks/useGetFilterableZonesAsTreeOptions'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
@@ -34,34 +34,19 @@ import { useGetPortsAsTreeOptions } from '@hooks/useGetPortsAsTreeOptions'
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import {
-  Accent,
-  Button,
-  Checkbox,
-  CheckPicker,
-  Dialog,
-  FormikDatePicker,
-  FormikEffect,
-  FormikTextarea,
-  FormikTextInput,
-  MultiCascader,
-  pluralize,
-  Select,
-  useNewWindow
-} from '@mtes-mct/monitor-ui'
+import { Accent, Button, Checkbox, CheckPicker, Dialog, MultiCascader, pluralize, Select } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
-import { Formik, type FormikProps } from 'formik'
+import { type FormikProps } from 'formik'
 import { isEqual, uniq } from 'lodash-es'
 import { type MutableRefObject, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { toFormikValidationSchema } from 'zod-formik-adapter'
 
 import type { VesselListFilter, ZoneFilter } from '@features/Vessel/components/VesselList/types'
 import type { MultiPolygon } from 'geojson'
 import type { Promisable } from 'type-fest'
 
 type ExportActivityReportsDialogProps = {
-  editedVesselGroup?: CreateOrUpdateDynamicVesselGroup
+  editedVesselGroup?: CreateOrUpdateVesselGroup
   initialListFilterValues: VesselListFilter
   isMainWindow?: boolean
   onExit: () => Promisable<void>
@@ -72,13 +57,12 @@ export function EditDynamicVesselGroupDialog({
   isMainWindow = false,
   onExit
 }: ExportActivityReportsDialogProps) {
-  const { newWindowContainerRef } = useNewWindow()
   const dispatch = useMainAppDispatch()
   const [listFilterValues, setListFilterValues] = useState<VesselListFilter>(initialListFilterValues)
   // Used to save modification when a custom zone is drawn
-  const editedVesselGroupRef = useRef<CreateOrUpdateDynamicVesselGroup | undefined>(editedVesselGroup)
+  const editedVesselGroupRef = useRef<CreateOrUpdateVesselGroup | undefined>(editedVesselGroup)
   const [vesselsFound, setVesselsFound] = useState<number | undefined>(undefined)
-  const formRef = useRef<FormikProps<CreateOrUpdateDynamicVesselGroup>>()
+  const formRef = useRef<FormikProps<CreateOrUpdateVesselGroup>>()
 
   const { fleetSegmentsAsOptions } = useGetFleetSegmentsAsOptions()
   const { gearsAsTreeOptions } = useGetGearsAsTreeOptions()
@@ -166,7 +150,7 @@ export function EditDynamicVesselGroupDialog({
         vesselGroupActions.vesselGroupEdited({
           ...editedVesselGroupRef.current,
           filters: listFilterValues
-        })
+        } as CreateOrUpdateDynamicVesselGroup)
       )
     }
     const nextZones = await dispatch(
@@ -237,15 +221,6 @@ export function EditDynamicVesselGroupDialog({
 
     const nextListFilterValues = { ...listFilterValues, specyCodes: normalizedNextSpecyCodes ?? [] }
     updateListFilterValuesAndCountVessels(nextListFilterValues)
-  }
-
-  const handleOnSubmit = async (values: CreateOrUpdateDynamicVesselGroup) => {
-    const nextValues = { ...values, filters: listFilterValues }
-
-    const isSuccess = await dispatch(addOrUpdateVesselGroup(nextValues))
-    if (isSuccess) {
-      onExit()
-    }
   }
 
   const createOrModifyText =
@@ -466,41 +441,17 @@ export function EditDynamicVesselGroupDialog({
           onFilter={nextListFilterValues => updateListFilterValuesAndCountVessels(nextListFilterValues)}
           onReset={() => updateListFilterValuesAndCountVessels(DEFAULT_VESSEL_LIST_FILTER_VALUES)}
         />
-        <Formik
-          initialValues={editedVesselGroup ?? DEFAULT_DYNAMIC_VESSEL_GROUP}
-          innerRef={formRef as MutableRefObject<FormikProps<CreateOrUpdateDynamicVesselGroup>>}
-          onSubmit={handleOnSubmit}
-          validationSchema={toFormikValidationSchema(CreateOrUpdateDynamicVesselGroupSchema)}
-        >
-          <>
-            {isMainWindow && (
-              <FormikEffect
-                onChange={nextValues => {
-                  editedVesselGroupRef.current = nextValues as CreateOrUpdateDynamicVesselGroup
-                }}
-              />
-            )}
-            <Columns>
-              <Column>
-                <FormikCirclePicker />
-                <StyledFormikTextInput isErrorMessageHidden isRequired label="Nom du groupe" name="name" />
-                <StyledFormikTextarea isErrorMessageHidden label="Description du groupe" name="description" rows={3} />
-              </Column>
-              <Column $width={304}>
-                <StyledFormikDatePicker
-                  baseContainer={newWindowContainerRef.current}
-                  isErrorMessageHidden
-                  isHistorical={false}
-                  isStringDate
-                  label="Date de fin de validité du groupe"
-                  name="endOfValidityUtc"
-                  style={{ width: 220 }}
-                />
-                <StyledFormikTextarea $isRed label="Points d'attention" name="pointsOfAttention" rows={3} />
-              </Column>
-            </Columns>
-          </>
-        </Formik>
+        <VesselGroupForm
+          editedVesselGroup={editedVesselGroup}
+          formRef={formRef as MutableRefObject<FormikProps<CreateOrUpdateVesselGroup>>}
+          groupType={GroupType.DYNAMIC}
+          isMainWindow={isMainWindow}
+          listFilterValues={listFilterValues}
+          onChange={nextValues => {
+            editedVesselGroupRef.current = nextValues
+          }}
+          onExit={onExit}
+        />
       </StyledDialogBody>
       <StyledDialogAction>
         <Button accent={Accent.PRIMARY} disabled={areFiltersEmpty} onClick={() => formRef.current?.handleSubmit()}>
@@ -517,51 +468,6 @@ export function EditDynamicVesselGroupDialog({
 const StyledFilterTags = styled(FilterTags)`
   margin-right: 16px;
   margin-bottom: 16px;
-`
-
-const StyledFormikTextInput = styled(FormikTextInput)`
-  margin-top: 16px;
-`
-
-const StyledFormikTextarea = styled(FormikTextarea)<{
-  $isRed?: boolean
-}>`
-  label {
-    ${p => p.$isRed && `color: ${p.theme.color.maximumRed};`}
-  }
-
-  textarea {
-    ${p => p.$isRed && `background-color: ${p.theme.color.maximumRed15};`}
-
-    &:active, &:hover, &:focus {
-      ${p => p.$isRed && `background-color: ${p.theme.color.maximumRed15};`}
-    }
-  }
-  margin-top: 16px;
-`
-
-const StyledFormikDatePicker = styled(FormikDatePicker)`
-  margin-top: 64px;
-  margin-bottom: 2px;
-  text-align: left;
-`
-
-const Column = styled.div<{
-  $width?: number
-}>`
-  margin-right: 24px;
-
-  ${p => {
-    if (p.$width) {
-      return `width: ${p.$width}px`
-    }
-
-    return 'flex-grow: 1;'
-  }}
-`
-
-const Columns = styled.div`
-  display: flex;
 `
 
 const VesselsCount = styled.div`

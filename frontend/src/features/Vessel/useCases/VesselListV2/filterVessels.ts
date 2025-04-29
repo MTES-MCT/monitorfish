@@ -9,15 +9,14 @@ import type { MainAppThunk } from '@store'
 export const filterVessels =
   (updatedListFilterValue: Partial<VesselListFilter>): MainAppThunk =>
   async (dispatch, getState) => {
-    await dispatch(vesselActions.setListFilterValues(updatedListFilterValue))
-    const monitorFishWorker = await MonitorFishWorker
+    dispatch(vesselActions.setListFilterValues(updatedListFilterValue))
 
     const { listFilterValues } = getState().vessel
     const vessels = vesselSelectors.selectAll(getState().vessel.vessels)
 
-    const filteredVesselFeatureIds = await monitorFishWorker.getFilteredVessels(vessels, listFilterValues)
+    const filteredVesselFeatureIds = await MonitorFishWorker.getFilteredVessels(vessels, listFilterValues)
 
-    await dispatch(setFilteredVesselsFeatures(filteredVesselFeatureIds))
+    dispatch(setFilteredVesselsFeatures(filteredVesselFeatureIds))
 
     dispatch(renderVesselFeatures())
   }

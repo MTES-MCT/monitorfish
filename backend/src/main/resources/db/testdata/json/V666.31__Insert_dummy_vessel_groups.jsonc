@@ -10,7 +10,7 @@
                 "name": "Mission Thémis – chaluts de fonds",
                 "description": "Ciblage pour la mission du Thémis (bordée A) du 08/01 au 17/01/25.",
                 "points_of_attention": "Points d'attention : Si le navire X est dans le secteur, le contrôler pour suspicion blanchiment bar en 7.d.",
-                "color": "#4287f5",
+                "color": "#303eff",
                 "filters:jsonb": {
                     "countryCodes": [
                         "FR",
@@ -55,7 +55,7 @@
                 "name": "Mission Thémis – semaine 03",
                 "description": "Ciblage pour la mission du Thémis (bordée B) du 08/01 au 17/01/25. Donner en priorité les franco-espagnols en PEL13 non contrôlés depuis plus d'un an.",
                 "points_of_attention": null,
-                "color": "#4287f5",
+                "color": "#303eff",
                 "filters:jsonb": {
                     "countryCodes": [],
                     "districtCodes": [],
@@ -90,7 +90,7 @@
                 "name": "Mission Thémis – semaine 04",
                 "description": "Ciblage pour la mission de l'IRIS (bordée A).",
                 "points_of_attention": null,
-                "color": "#4287f5",
+                "color": "#303eff",
                 "filters": null,
                 "vessels:jsonb": [
                     {

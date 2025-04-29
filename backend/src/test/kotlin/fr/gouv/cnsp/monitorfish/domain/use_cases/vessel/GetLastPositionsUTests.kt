@@ -979,4 +979,120 @@ class GetLastPositionsUTests {
             assertThat(position.vesselGroups).isEmpty() // No groups should be attached to the vessels
         }
     }
+
+    @Test
+    fun `execute Should return fixed groups When vessels are found in the last position table`() {
+        // Given
+        given(lastPositionRepository.findAllInLastMonthOrWithBeaconMalfunction()).willReturn(
+            TestUtils.getDummyLastPositions(),
+        )
+        given(vesselGroupRepository.findAllByUser(any())).willReturn(
+            listOf(
+                FixedVesselGroup(
+                    id = 1,
+                    isDeleted = false,
+                    name = "Dummy group",
+                    description = "",
+                    pointsOfAttention = "",
+                    color = "",
+                    sharing = Sharing.PRIVATE,
+                    createdBy = "dummy@email.gouv.fr",
+                    createdAtUtc = ZonedDateTime.now(),
+                    updatedAtUtc = null,
+                    endOfValidityUtc = null,
+                    vessels =
+                        listOf(
+                            VesselIdentity(
+                                vesselId = null,
+                                cfr = "FR123456785",
+                                name = "MY AWESOME VESSEL TWO",
+                                flagState = CountryCode.FR,
+                                ircs = null,
+                                externalIdentification = null,
+                                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            ),
+                            VesselIdentity(
+                                vesselId = 1,
+                                cfr = "FR00022680",
+                                name = "MY AWESOME VESSEL",
+                                flagState = CountryCode.FR,
+                                ircs = null,
+                                externalIdentification = null,
+                                vesselIdentifier = null,
+                            ),
+                        ),
+                ),
+            ),
+        )
+
+        // When
+        val lastPositions =
+            GetLastPositions(lastPositionRepository, vesselGroupRepository)
+                .execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(lastPositions).hasSize(4)
+        assertThat(lastPositions[0].vesselGroups).hasSize(1)
+        assertThat(lastPositions[0].vesselGroups.first().name).isEqualTo("Dummy group")
+        assertThat(lastPositions[1].vesselGroups).hasSize(1)
+        assertThat(lastPositions[1].vesselGroups.first().name).isEqualTo("Dummy group")
+        assertThat(lastPositions[2].vesselGroups).hasSize(0)
+        assertThat(lastPositions[3].vesselGroups).hasSize(0)
+    }
+
+    @Test
+    fun `execute Should return fixed and dynamics groups When vessels are found in the last position table`() {
+        // Given
+        given(lastPositionRepository.findAllInLastMonthOrWithBeaconMalfunction()).willReturn(
+            TestUtils.getDummyLastPositions(),
+        )
+        given(vesselGroupRepository.findAllByUser(any())).willReturn(
+            getDynamicVesselGroups() +
+                listOf(
+                    FixedVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        vessels =
+                            listOf(
+                                VesselIdentity(
+                                    vesselId = null,
+                                    cfr = "FR123456785",
+                                    name = "MY AWESOME VESSEL TWO",
+                                    flagState = CountryCode.FR,
+                                    ircs = null,
+                                    externalIdentification = null,
+                                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                ),
+                                VesselIdentity(
+                                    vesselId = 1,
+                                    cfr = "FR00022680",
+                                    name = "MY AWESOME VESSEL",
+                                    flagState = CountryCode.FR,
+                                    ircs = null,
+                                    externalIdentification = null,
+                                    vesselIdentifier = null,
+                                ),
+                            ),
+                    ),
+                ),
+        )
+
+        // When
+        val lastPositions =
+            GetLastPositions(lastPositionRepository, vesselGroupRepository)
+                .execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(lastPositions).hasSize(4)
+        assertThat(lastPositions[0].vesselGroups).hasSize(2)
+    }
 }

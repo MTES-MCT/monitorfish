@@ -12,10 +12,10 @@ export const VESSEL_ALERT_AND_BEACON_MALFUNCTION_LAYER = (function () {
     style: (_, resolution) => getVesselAlertAndBeaconMalfunctionStyle(resolution),
     updateWhileAnimating: true,
     updateWhileInteracting: true,
-    zIndex: LayerProperties.VESSEL_BEACON_MALFUNCTION.zIndex
+    zIndex: LayerProperties.VESSEL_ALERT_AND_BEACON_MALFUNCTION.zIndex
   }) as MonitorFishMap.VectorLayerWithName
 
-  layer.name = LayerProperties.VESSEL_BEACON_MALFUNCTION.code
+  layer.name = LayerProperties.VESSEL_ALERT_AND_BEACON_MALFUNCTION.code
 
   return layer
 })()

@@ -51,6 +51,7 @@ export const VesselLastPositionSchema = z.strictObject({
   hasAlert: z.boolean(),
   hasBeaconMalfunction: z.boolean(),
   hasInfractionSuspicion: z.boolean(),
+  id: numberOrUndefined,
   impactRiskFactor: z.number(),
   internalReferenceNumber: stringOrUndefined,
   ircs: stringOrUndefined,

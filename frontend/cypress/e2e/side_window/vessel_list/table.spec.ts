@@ -8,6 +8,11 @@ context('Side Window > Vessel List > Table', () => {
     cy.wait(250)
     cy.getDataCy('side-window-menu-vessel-list').click()
 
+    cy.fill('Rechercher un navire', 'PRISON')
+    cy.getDataCy('vessel-list-length').contains('2 navires équipés VMS')
+    cy.get('.Table-SimpleTable tr').should('have.length', 3)
+    cy.getDataCy('vessel-list-reset-filters').click()
+
     cy.fill('Nationalités', ['Espagne', 'France'])
     cy.getDataCy('vessel-list-length').contains('841 navires équipés VMS')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 2)
@@ -62,7 +67,7 @@ context('Side Window > Vessel List > Table', () => {
     })
   })
 
-  it('Should filter vessels and open a row When not logged as user', () => {
+  it('Should filter vessels and open a row When not logged as super user', () => {
     cy.login('user')
 
     cy.visit('/side_window')

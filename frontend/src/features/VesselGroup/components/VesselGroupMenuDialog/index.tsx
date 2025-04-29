@@ -1,21 +1,23 @@
 import { MapPropertyTrigger } from '@features/commonComponents/MapPropertyTrigger'
 import { MapToolBox } from '@features/MainWindow/components/MapButtons/shared/MapToolBox'
 import { MapBox } from '@features/Map/constants'
-import { useGetAllVesselGroupsQuery } from '@features/VesselGroup/apis'
+import { SideWindowMenuKey } from '@features/SideWindow/constants'
+import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { VesselGroupRow } from '@features/VesselGroup/components/VesselGroupMenuDialog/VesselGroupRow'
-import { DEFAULT_DYNAMIC_VESSEL_GROUP } from '@features/VesselGroup/constants'
+import { DEFAULT_DYNAMIC_VESSEL_GROUP, DEFAULT_FIXED_VESSEL_GROUP } from '@features/VesselGroup/constants'
+import { useGetVesselGroups } from '@features/VesselGroup/hooks/useGetVesselGroups'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
 import { hideVesselsNotInVesselGroups } from '@features/VesselGroup/useCases/hideVesselsNotInVesselGroups'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Dropdown, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Dropdown, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
 
-import type { DynamicVesselGroup } from '@features/VesselGroup/types'
+import type { VesselGroup } from '@features/VesselGroup/types'
 
 const MARGIN_TOP = 124
 
@@ -30,20 +32,16 @@ export function VesselGroupMenuDialog() {
 
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.VESSEL_GROUPS)
 
-  const { data: vesselGroups } = useGetAllVesselGroupsQuery()
-  const orderedVesselGroups = (() => {
-    if (!vesselGroups?.length) {
-      return []
-    }
+  const { pinnedVesselGroups, unpinnedVesselGroups } = useGetVesselGroups()
+  const orderedVesselGroups = pinnedVesselGroups.concat(unpinnedVesselGroups)
 
-    const pinnedVesselGroups = vesselGroups.filter(vesselGroup => vesselGroupsIdsPinned.includes(vesselGroup.id))
-    const unpinnedVesselGroups = vesselGroups.filter(vesselGroup => !vesselGroupsIdsPinned.includes(vesselGroup.id))
-
-    return pinnedVesselGroups.concat(unpinnedVesselGroups)
-  })()
-
-  const createNewGroup = () => {
+  const createNewDynamicGroup = () => {
     dispatch(vesselGroupActions.vesselGroupEdited(DEFAULT_DYNAMIC_VESSEL_GROUP))
+    dispatch(setDisplayedComponents({ isVesselGroupMainWindowEditionDisplayed: true }))
+  }
+
+  const createNewFixedGroup = () => {
+    dispatch(vesselGroupActions.vesselGroupEdited(DEFAULT_FIXED_VESSEL_GROUP))
     dispatch(setDisplayedComponents({ isVesselGroupMainWindowEditionDisplayed: true }))
   }
 
@@ -53,6 +51,10 @@ export function VesselGroupMenuDialog() {
 
   const toggleVesselGroupsDisplay = () => {
     dispatch(setDisplayedComponents({ areVesselGroupsDisplayed: !areVesselGroupsDisplayed }))
+  }
+
+  const toggleVesselGroupList = () => {
+    dispatch(openSideWindowPath({ menu: SideWindowMenuKey.VESSEL_GROUP }))
   }
 
   return (
@@ -71,7 +73,7 @@ export function VesselGroupMenuDialog() {
         </Header>
         <StyledBody>
           <VesselGroupList data-cy="vessel-groups-list">
-            {orderedVesselGroups.map((vesselGroup: DynamicVesselGroup, index: number) => (
+            {orderedVesselGroups.map((vesselGroup: VesselGroup, index: number) => (
               <VesselGroupRow
                 key={vesselGroup.id}
                 isLastPinned={vesselGroupsIdsPinned.length === index + 1}
@@ -84,17 +86,21 @@ export function VesselGroupMenuDialog() {
           <Buttons>
             <StyledDropdown Icon={Icon.Plus} title="Créer un nouveau groupe">
               <StyledDropdownItem
-                onClick={createNewGroup}
+                onClick={createNewFixedGroup}
+                title="Un groupe de navires fixe est constitué des navires sélectionnés manuellement, soit directement dans la liste, soit en chargeant un fichier. Vous pouvez le mettre à jour (suppression ou ajouts de navires) également de façon manuelle."
+              >
+                Créer un groupe fixe <Icon.Info size={17} />
+              </StyledDropdownItem>
+              <StyledDropdownItem
+                onClick={createNewDynamicGroup}
                 title="Un groupe de navires dynamique est constitué des navires répondant aux critères des filtres que vous aurez sélectionné. Il se met automatiquement à jour selon l'évolution des données des navires."
               >
                 Créer un groupe dynamique <Icon.Info size={17} />
               </StyledDropdownItem>
             </StyledDropdown>
-            {/**
-         <BlockIconButton accent={Accent.SECONDARY} Icon={Icon.Expand} onClick={toggleMissionsWindow}>
-         Voir la vue détaillée des groupes
-         </BlockIconButton>
-       * */}
+            <Button accent={Accent.SECONDARY} Icon={Icon.Expand} onClick={toggleVesselGroupList}>
+              Voir la vue détaillée des groupes
+            </Button>
           </Buttons>
           <MapPropertyTrigger
             booleanProperty={areVesselsNotInVesselGroupsHidden}
@@ -151,13 +157,13 @@ const Header = styled(MapMenuDialog.Header)`
 const Buttons = styled.div`
   padding: 16px 16px 8px 16px;
   gap: 8px;
+
+  button {
+    width: 100%;
+  }
 `
 
 const StyledDropdown = styled(Dropdown)`
   width: 100%;
   margin-bottom: 8px;
-
-  button {
-    width: 100%;
-  }
 `

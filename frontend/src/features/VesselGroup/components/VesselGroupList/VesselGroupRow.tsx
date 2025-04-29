@@ -1,6 +1,7 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { Square } from '@features/Regulation/components/ZonePreview'
 import { VesselSearchWithMapVessels } from '@features/Vessel/components/VesselSearch/VesselSearchWithMapVessels'
+import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { EditDynamicVesselGroupDialog } from '@features/VesselGroup/components/EditDynamicVesselGroupDialog'
 import { EditFixedVesselGroupDialog } from '@features/VesselGroup/components/EditFixedVesselGroupDialog'
 import { VesselTable } from '@features/VesselGroup/components/VesselGroupList/VesselTable'
@@ -23,7 +24,6 @@ import styled from 'styled-components'
 import { getDate } from '../../../../utils'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
-import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 
 type VesselGroupRowProps = {
   isFromUrl: boolean

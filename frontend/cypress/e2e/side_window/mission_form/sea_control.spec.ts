@@ -179,7 +179,6 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Navire ciblé par le CNSP', 'Oui')
     cy.fill('Unité sans jauge oméga', true)
     cy.fill('Observations sur le déroulé du contrôle', 'Une observation sur le déroulé du contrôle.')
-    cy.fill('Fiche RETEX nécessaire', true)
 
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
@@ -206,7 +205,6 @@ context('Side Window > Mission Form > Sea Control', () => {
           emitsVms: 'YES',
           externalReferenceNumber: 'TALK2ME',
           facade: null,
-          feedbackSheetRequired: true,
           flagState: 'UNDEFINED',
           gearInfractions: [],
           gearOnboard: [
@@ -340,7 +338,6 @@ context('Side Window > Mission Form > Sea Control', () => {
           externalReferenceNumber: 'DONTSINK',
           facade: null,
           faoAreas: ['27.8.b', '27.8.c'],
-          feedbackSheetRequired: false,
           flagState: 'FR',
           gearInfractions: [],
           gearOnboard: [

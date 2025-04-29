@@ -599,7 +599,6 @@ def make_missions_actions_and_missions_control_units(
     mission_actions["is_from_poseidon"] = True
     mission_actions = mission_actions.rename(columns={"open_by": "user_trigram"})
     mission_actions = mission_actions.rename(columns={"closed_by": "completed_by"})
-    mission_actions["feedback_sheet_required"] = False
 
     # Create missions_control_units
     missions_control_units_columns = ["id", "control_unit_id"]

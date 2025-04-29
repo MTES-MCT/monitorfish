@@ -48,7 +48,6 @@ context('Side Window > Mission Form > Observation', () => {
           emitsAis: null,
           emitsVms: null,
           facade: null,
-          feedbackSheetRequired: null,
           gearInfractions: [],
           gearOnboard: [],
           latitude: null,

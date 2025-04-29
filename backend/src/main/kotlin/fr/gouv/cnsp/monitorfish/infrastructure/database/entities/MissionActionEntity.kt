@@ -93,8 +93,6 @@ class MissionActionEntity(
     val unitWithoutOmegaGauge: Boolean? = null,
     @Column(name = "control_quality_comments")
     val controlQualityComments: String? = null,
-    @Column(name = "feedback_sheet_required")
-    val feedbackSheetRequired: Boolean? = null,
     @Column(name = "is_from_poseidon")
     val isFromPoseidon: Boolean,
     @Column(name = "user_trigram")
@@ -185,7 +183,6 @@ class MissionActionEntity(
                 numberOfVesselsFlownOver = missionAction.numberOfVesselsFlownOver,
                 unitWithoutOmegaGauge = missionAction.unitWithoutOmegaGauge,
                 controlQualityComments = missionAction.controlQualityComments,
-                feedbackSheetRequired = missionAction.feedbackSheetRequired,
                 userTrigram = missionAction.userTrigram,
                 segments = mapper.writeValueAsString(missionAction.segments),
                 facade = missionAction.facade?.let { Seafront.from(it).toString() },
@@ -260,7 +257,6 @@ class MissionActionEntity(
             numberOfVesselsFlownOver = numberOfVesselsFlownOver,
             unitWithoutOmegaGauge = unitWithoutOmegaGauge,
             controlQualityComments = controlQualityComments,
-            feedbackSheetRequired = feedbackSheetRequired,
             userTrigram = userTrigram,
             segments =
                 deserializeJSONList(

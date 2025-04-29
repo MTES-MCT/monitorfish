@@ -16,6 +16,8 @@ import { Accent, Button, Dialog, MultiCheckbox, MultiRadio } from '@mtes-mct/mon
 import { useState } from 'react'
 import styled from 'styled-components'
 
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
+
 import type { Promisable } from 'type-fest'
 
 type ExportActivityReportsDialogProps = {
@@ -24,6 +26,7 @@ type ExportActivityReportsDialogProps = {
 }
 export function ExportVesselListDialog({ onExit, selectedRows }: ExportActivityReportsDialogProps) {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   const [firstColumnsCsv, setFirstColumnsCsv] = useState(DEFAULT_CHECKBOXES_FIRST_COLUMN)
   const [secondColumnsCsv, setSecondColumnsCsv] = useState(DEFAULT_CHECKBOXES_SECOND_COLUMN)
   const [thirdColumnsCsv, setThirdColumnsCsv] = useState(DEFAULT_CHECKBOXES_THIRD_COLUMN)
@@ -62,6 +65,12 @@ export function ExportVesselListDialog({ onExit, selectedRows }: ExportActivityR
     setFormat(nextFormat)
   }
 
+  const VESSEL_LIST_CSV_FORMAT_AS_OPTIONS_FOR_USER = isSuperUser
+    ? VESSEL_LIST_CSV_FORMAT_AS_OPTIONS
+    : VESSEL_LIST_CSV_FORMAT_AS_OPTIONS.filter(
+        option => option.value !== VesselListCsvExportFormat.SPECIFIC_EXPORT_FOR_CUSTOMS
+      )
+
   return (
     <StyledDialog isAbsolute>
       <StyledDialogTitle>Télécharger la liste des navires</StyledDialogTitle>
@@ -72,7 +81,7 @@ export function ExportVesselListDialog({ onExit, selectedRows }: ExportActivityR
           label="Format du CSV"
           name="vessel-list-csv-format"
           onChange={nextValue => handleOnChangeFormat(nextValue as VesselListCsvExportFormat)}
-          options={VESSEL_LIST_CSV_FORMAT_AS_OPTIONS}
+          options={VESSEL_LIST_CSV_FORMAT_AS_OPTIONS_FOR_USER}
           value={format}
         />
         <hr />

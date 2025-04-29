@@ -75,7 +75,7 @@ export function EditFixedVesselGroupDialog({
           </VesselsCount>
           <Example>
             Vous pouvez ajouter des navires après avoir créé le groupe, et/ou charger une liste de navires ci-dessous{' '}
-            <br />(<Link href={`${baseUrl}/public/examples/navires_groupe_fixe.csv`}>cliquez ici</Link> pour télécharger
+            <br />(<Link href={`${baseUrl}/examples/navires_groupe_fixe.csv`}>cliquez ici</Link> pour télécharger
             un exemple de tableau au bon format).{' '}
             <Icon.Info
               size={17}

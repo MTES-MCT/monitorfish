@@ -66,6 +66,7 @@ class SecurityConfig(
                             "/resources/**",
                             "/robots.txt",
                             "/static/**",
+                            "/examples/**",
                             "/swagger-ui/**",
                             "/version",
                         ).permitAll()

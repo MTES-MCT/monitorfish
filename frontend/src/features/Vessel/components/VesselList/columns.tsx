@@ -76,7 +76,7 @@ export function getTableColumns(
     },
     {
       accessorFn: row =>
-        row.segments.length > 0 ? row.segments.map(tripSegment => tripSegment).join(', ') : undefined,
+        row.segments?.length > 0 ? row.segments.map(tripSegment => tripSegment).join(', ') : undefined,
       cell: (info: CellContext<Vessel.VesselLastPosition, string | undefined>) =>
         info.getValue() ? <Ellipsised>{info.getValue()}</Ellipsised> : <None>Aucun segment</None>,
       enableSorting: true,

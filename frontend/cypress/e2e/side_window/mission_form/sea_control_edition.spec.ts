@@ -52,7 +52,6 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
           externalReferenceNumber: null,
           facade: 'MEMN',
           faoAreas: ['27.8.a'],
-          feedbackSheetRequired: false,
           flagState: 'FR',
           gearInfractions: [],
           gearOnboard: [
@@ -151,7 +150,6 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
           externalReferenceNumber: 'DONTSINK',
           facade: 'MEMN',
           faoAreas: ['27.8.b', '27.8.c'],
-          feedbackSheetRequired: false,
           flagState: 'FR',
           gearInfractions: [],
           gearOnboard: [

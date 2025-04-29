@@ -112,7 +112,6 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Navire ciblé par le CNSP', 'Oui')
     cy.fill('Unité sans jauge oméga', true)
     cy.fill('Observations sur le déroulé du contrôle', 'Une observation sur le déroulé du contrôle.')
-    cy.fill('Fiche RETEX nécessaire', true)
 
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
@@ -140,7 +139,6 @@ context('Side Window > Mission Form > Land Control', () => {
           externalReferenceNumber: 'DONTSINK',
           facade: null,
           faoAreas: ['27.8.b', '27.8.c'],
-          feedbackSheetRequired: true,
           flagState: 'FR',
           gearInfractions: [],
           gearOnboard: [

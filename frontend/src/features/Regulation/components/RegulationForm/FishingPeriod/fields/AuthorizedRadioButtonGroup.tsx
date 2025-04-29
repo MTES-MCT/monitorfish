@@ -4,19 +4,49 @@ import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
 import { MultiRadio } from '@mtes-mct/monitor-ui'
 import styled, { css } from 'styled-components'
 
-import { FishingPeriodKey } from '../../../../utils'
+import { DEFAULT_FISHING_PERIOD_VALUES, FishingPeriodKey, REGULATORY_REFERENCE_KEYS } from '../../../../utils'
+
+enum Check {
+  NO = 'NO',
+  NOT_APPLICABLE = 'NOT_APPLICABLE',
+  YES = 'YES'
+}
 
 export function AuthorizedRadioButtonGroup() {
   const dispatch = useBackofficeAppDispatch()
 
   const fishingPeriod = useBackofficeAppSelector(state => state.regulation.processingRegulation.fishingPeriod)
 
-  const onChange = isAuthorized => {
-    if (isAuthorized) {
+  const isAuthorized = (function () {
+    if (fishingPeriod?.authorized === true) {
+      return Check.YES
+    }
+
+    if (fishingPeriod?.authorized === false) {
+      return Check.NO
+    }
+
+    return Check.NOT_APPLICABLE
+  })()
+
+  const onChange = (nextIsAuthorized: Check) => {
+    if (nextIsAuthorized === Check.YES) {
       dispatch(regulationActions.setFishingPeriod({ key: FishingPeriodKey.ALWAYS, value: undefined }))
     }
 
-    dispatch(regulationActions.setFishingPeriod({ key: FishingPeriodKey.AUTHORIZED, value: isAuthorized }))
+    if (nextIsAuthorized === Check.NOT_APPLICABLE) {
+      dispatch(
+        regulationActions.updateProcessingRegulationByKey({
+          key: REGULATORY_REFERENCE_KEYS.FISHING_PERIOD,
+          value: DEFAULT_FISHING_PERIOD_VALUES
+        })
+      )
+
+      return
+    }
+
+    const nextIsAuthorizedAsBoolean = nextIsAuthorized === Check.YES
+    dispatch(regulationActions.setFishingPeriod({ key: FishingPeriodKey.AUTHORIZED, value: nextIsAuthorizedAsBoolean }))
   }
 
   return (
@@ -27,18 +57,20 @@ export function AuthorizedRadioButtonGroup() {
         isLabelHidden
         label="Périodes"
         name="fishing_period_authorized"
-        onChange={onChange}
+        onChange={nextValue => onChange(nextValue as Check)}
         options={[
-          { label: 'autorisées', value: true },
-          { label: 'interdites', value: false }
+          { label: 'autorisées', value: Check.YES },
+          { label: 'interdites', value: Check.NO },
+          { label: 'aucune', value: Check.NOT_APPLICABLE }
         ]}
         renderMenuItem={(label, value) => (
           <>
-            {value ? <GreenCircle /> : <RedCircle />}
+            {value === Check.YES && <GreenCircle />}
+            {value === Check.NO && <RedCircle />}
             {label}
           </>
         )}
-        value={fishingPeriod?.authorized}
+        value={isAuthorized}
       />
     </>
   )

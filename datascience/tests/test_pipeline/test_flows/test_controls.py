@@ -780,18 +780,6 @@ expected_loaded_mission_actions_df = (
                     None,
                     None,
                 ],
-                "feedback_sheet_required": [
-                    False,
-                    False,
-                    False,
-                    False,
-                    False,
-                    False,
-                    False,
-                    False,
-                    False,
-                    False,
-                ],
                 "is_from_poseidon": [
                     True,
                     True,

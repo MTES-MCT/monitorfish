@@ -21,9 +21,7 @@ export function RegulationLawTypeLine({ selectData }) {
     dispatch(
       regulationActions.updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.TOPIC, value: undefined })
     )
-    await dispatch(
-      regulationActions.updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.LAW_TYPE, value })
-    )
+    dispatch(regulationActions.updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.LAW_TYPE, value }))
   }
 
   return (

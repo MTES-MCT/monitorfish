@@ -21,6 +21,12 @@ export const updateCustomZoneAndFilterVessels = (): MainAppThunk => async (dispa
         value: MonitorFishMap.MonitorFishLayer.CUSTOM
       }
     ]
+    /**
+     * /!\
+     * `addOrEditMissionZone/openDrawLayerModal()` should set `areVesselsDisplayed` to true for the
+     * vessels to be rendered, as `areVesselsDisplayed` unmount the layers and prevent the render
+     * functions (i.e `renderVesselAlertFeatures`) to update the layers.
+     */
     dispatch(filterVessels({ zones: nextZones }))
   }
 }

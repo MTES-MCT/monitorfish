@@ -9,12 +9,10 @@ import type { VesselGroupDisplayInformation } from '../../../../workers/types'
 import type { MainAppThunk } from '@store'
 
 export const renderVesselFeatures = (): MainAppThunk => async (dispatch, getState) => {
-  const monitorFishWorker = await MonitorFishWorker
-
   const { vesselGroupsIdsDisplayed, vesselGroupsIdsPinned } = getState().vesselGroup
   const vessels = vesselSelectors.selectAll(getState().vessel.vessels)
 
-  const displayedVesselsGroups = await monitorFishWorker.getDisplayedVesselsGroups(
+  const displayedVesselsGroups = await MonitorFishWorker.getDisplayedVesselsGroups(
     vessels,
     vesselGroupsIdsDisplayed,
     vesselGroupsIdsPinned

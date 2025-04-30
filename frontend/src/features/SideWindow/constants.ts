@@ -26,6 +26,12 @@ export const SideWindowMenuLabel: Record<SideWindowMenuKey, string> = {
   VESSEL_LIST: 'Liste des navires'
 }
 
+export const SIDE_WINDOW_EXTERNAL_USER_PATH = [
+  SideWindowMenuKey.PRIOR_NOTIFICATION_LIST,
+  SideWindowMenuKey.VESSEL_LIST,
+  SideWindowMenuKey.VESSEL_GROUP
+]
+
 export enum SideWindowStatus {
   BLURRED = 'BLURRED',
   CLOSED = 'CLOSED',

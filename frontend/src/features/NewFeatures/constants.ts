@@ -7,6 +7,17 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2025-05-1',
+        description: `Il est désormais possible de créer des **groupes de navires fixes**, permettant de regrouper manuellement une sélection de navires.
+
+Deux méthodes sont disponibles pour créer ces groupes :
+- **Depuis la liste des navires**, en cochant les navires souhaités ;
+- Par **import de fichier CSV**, directement depuis la fenêtre de création d’un groupe fixe (un exemple de fichier est fourni pour vous guider).`,
+        for: 'ALL',
+        title: 'Ajout des groupes de navires fixes',
+        type: 'NEW_FEATURE'
+      },
+      {
         date: '2025-04-8',
         description: `Les filtres ont été remplacés par les Groupes de navires dynamiques.
 

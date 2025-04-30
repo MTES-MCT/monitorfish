@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/bff/v1/districts")
 @Tag(name = "APIs for districts")
 class DistrictController(
-    private val getAllDistricts: GetAllDistricts
+    private val getAllDistricts: GetAllDistricts,
 ) {
     @GetMapping("")
     @Operation(summary = "Get all districts")

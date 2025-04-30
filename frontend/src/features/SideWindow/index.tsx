@@ -6,7 +6,7 @@ import { MissionForm } from '@features/Mission/components/MissionForm'
 import { useListenToAllMissionEventsUpdates } from '@features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates'
 import { reportingApi } from '@features/Reporting/reportingApi'
 import { reportingActions } from '@features/Reporting/slice'
-import { SideWindowMenuKey } from '@features/SideWindow/constants'
+import { SIDE_WINDOW_EXTERNAL_USER_PATH, SideWindowMenuKey } from '@features/SideWindow/constants'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { VesselListAndGroups } from '@features/Vessel/components/VesselListAndGroups'
 import { setVessels } from '@features/Vessel/slice'
@@ -64,8 +64,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   const [isPreloading, setIsPreloading] = useState(true)
 
   useEffect(() => {
-    const userPaths = [SideWindowMenuKey.PRIOR_NOTIFICATION_LIST, SideWindowMenuKey.VESSEL_LIST]
-    if (!isSuperUser && !userPaths.includes(selectedPath?.menu)) {
+    if (!isSuperUser && !SIDE_WINDOW_EXTERNAL_USER_PATH.includes(selectedPath?.menu)) {
       dispatch(openSideWindowPath({ menu: SideWindowMenuKey.PRIOR_NOTIFICATION_LIST }))
     }
   }, [dispatch, isSuperUser, selectedPath?.menu])

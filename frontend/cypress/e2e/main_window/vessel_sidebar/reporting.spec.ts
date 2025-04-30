@@ -155,6 +155,8 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="reporting-card"]').first().contains('Fin de validité au prochain DEP du navire')
 
     addAndCreateReportingWithinVesselSidebar()
+    cy.wait('@getVesselReportings')
+    cy.wait(200)
     cy.get('[data-cy="archive-reporting-card"]').eq(0).click()
     // Then, we confirm the reporting deletion
     cy.clickButton('Archiver')

@@ -42,6 +42,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
   const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
   const riskFactorShowedOnMap = useMainAppSelector(state => state.map.riskFactorShowedOnMap)
   const vesselLabel = useMainAppSelector(state => state.map.vesselLabel)
+  const areVesselGroupsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselGroupsDisplayed)
   const vesselLabelsShowedOnMap = useMainAppSelector(state => state.map.vesselLabelsShowedOnMap)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
   const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
@@ -181,7 +182,9 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
         .filter(
           feature =>
             feature.get('isFiltered') &&
-            (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true) &&
+            (areVesselsNotInVesselGroupsHidden && areVesselGroupsDisplayed
+              ? isVesselGroupColorDefined(feature)
+              : true) &&
             VesselFeature.getVesselOpacity(feature.get('dateTime'), vesselIsHidden, vesselIsOpacityReduced) !== 0
         )
         .filter(filterNonSelectedVessels(vesselsTracksShowed, hideNonSelectedVessels, selectedVesselIdentity))
@@ -233,7 +236,8 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
     vesselsTracksShowed,
     areVesselsDisplayed,
     areVesselsNotInVesselGroupsHidden,
-    vesselGroupsIdsDisplayed
+    vesselGroupsIdsDisplayed,
+    areVesselGroupsDisplayed
   ])
 
   useEffect(() => {

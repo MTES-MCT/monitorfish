@@ -82,32 +82,38 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
             title="Groupes dynamiques"
           />
         </Row>
-        <PinnedGroupsWrapper>
-          <PinnedGroupsTitle>Groupes épinglés</PinnedGroupsTitle>
-          {pinnedVesselGroupsWithVessels.length === 0 && <NoGroup>Aucun groupe épinglé.</NoGroup>}
-          <PinnedGroups data-cy="pinned-vessels-groups">
-            {pinnedVesselGroupsWithVessels.map(groupWithVessels => (
+        {pinnedVesselGroupsWithVessels.length > 0 && (
+          <PinnedGroupsWrapper>
+            <PinnedGroupsTitle>Groupes épinglés</PinnedGroupsTitle>
+            <PinnedGroups data-cy="pinned-vessels-groups">
+              {pinnedVesselGroupsWithVessels.map(groupWithVessels => (
+                <VesselGroupRow
+                  key={groupWithVessels.group.id}
+                  isFromUrl={isFromUrl}
+                  isOpened={areGroupsOpened}
+                  isPinned
+                  vesselGroupWithVessels={groupWithVessels}
+                />
+              ))}
+            </PinnedGroups>
+          </PinnedGroupsWrapper>
+        )}
+        {unpinnedVesselGroupsWithVessels.length > 0 && (
+          <UnpinnedGroups data-cy="unpinned-vessels-groups">
+            {unpinnedVesselGroupsWithVessels.map(groupWithVessels => (
               <VesselGroupRow
                 key={groupWithVessels.group.id}
                 isFromUrl={isFromUrl}
                 isOpened={areGroupsOpened}
-                isPinned
+                isPinned={false}
                 vesselGroupWithVessels={groupWithVessels}
               />
             ))}
-          </PinnedGroups>
-        </PinnedGroupsWrapper>
-        <UnpinnedGroups data-cy="unpinned-vessels-groups">
-          {unpinnedVesselGroupsWithVessels.map(groupWithVessels => (
-            <VesselGroupRow
-              key={groupWithVessels.group.id}
-              isFromUrl={isFromUrl}
-              isOpened={areGroupsOpened}
-              isPinned={false}
-              vesselGroupWithVessels={groupWithVessels}
-            />
-          ))}
-        </UnpinnedGroups>
+          </UnpinnedGroups>
+        )}
+        {pinnedVesselGroupsWithVessels.length + unpinnedVesselGroupsWithVessels.length === 0 && (
+          <NoGroup>Aucun groupe.</NoGroup>
+        )}
       </StyledBody>
     </>
   )
@@ -120,6 +126,8 @@ const StyledCheckbox = styled(Checkbox)`
 
 const NoGroup = styled.div`
   color: ${p => p.theme.color.slateGray};
+  margin-top: 16px;
+  margin-left: 30px;
 `
 
 const StyledTextInput = styled(TextInput)`

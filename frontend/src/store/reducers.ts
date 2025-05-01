@@ -41,7 +41,7 @@ import persistReducer from 'redux-persist/es/persistReducer'
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/es/storage' // LocalStorage
 
-import { MAIN_PERSISTOR_MISSION_MIGRATIONS } from './migrations'
+import { MAIN_PERSISTOR_MISSION_MIGRATIONS, MAIN_PERSISTOR_VESSEL_GROUPS_MIGRATIONS } from './migrations'
 
 import type { VesselGroupState } from '@features/VesselGroup/slice'
 import type { Reducer } from 'redux'
@@ -154,7 +154,9 @@ export const mainReducer = {
       ...getCommonPersistReducerConfig<VesselGroupState>('mainPersistorVesselGroup', [
         'vesselGroupsIdsDisplayed',
         'areVesselsNotInVesselGroupsHidden'
-      ])
+      ]),
+      migrate: createMigrate(MAIN_PERSISTOR_VESSEL_GROUPS_MIGRATIONS),
+      version: 0
     },
     vesselGroupReducer
   ),

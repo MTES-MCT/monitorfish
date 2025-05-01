@@ -68,8 +68,10 @@ data class LastPosition(
     val reportings: List<String> = listOf(),
     val vesselGroups: List<VesselGroupBase> = listOf(),
 ) {
-    fun isInGroup(vesselGroup: VesselGroupBase,
-                  now: ZonedDateTime): Boolean {
+    fun isInGroup(
+        vesselGroup: VesselGroupBase,
+        now: ZonedDateTime,
+    ): Boolean {
         if (vesselGroup !is DynamicVesselGroup) return false
 
         val filters = vesselGroup.filters
@@ -150,7 +152,6 @@ data class LastPosition(
                     }
                 } ?: false
             } ?: true
-
 
         val hasZoneMatch =
             filters.zones.takeIf { it.isNotEmpty() }?.let { zones ->

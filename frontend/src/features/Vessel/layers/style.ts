@@ -37,7 +37,7 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
   ]
   const vesselsGroupsCondition = [
     'case',
-    stateIs('areVesselsNotInVesselGroupsHidden'),
+    ['all', stateIs('areVesselsNotInVesselGroupsHidden'), stateIs('areVesselGroupsDisplayed')],
     ['case', hasGroupColor, true, false],
     true
   ]

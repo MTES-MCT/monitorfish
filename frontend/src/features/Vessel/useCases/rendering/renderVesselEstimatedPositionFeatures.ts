@@ -26,6 +26,8 @@ export const renderVesselEstimatedPositionFeatures = (): MainAppThunk => async (
 
   const { selectedVesselIdentity, vesselsTracksShowed } = getState().vessel
   const { selectedBaseLayer, showingVesselsEstimatedPositions } = getState().map
+  const { areVesselGroupsDisplayed } = getState().displayedComponent
+
   const isLight = VesselFeature.iconIsLight(selectedBaseLayer)
 
   const numberOfVessels = vesselSelectors.selectTotal(getState().vessel.vessels)
@@ -49,7 +51,7 @@ export const renderVesselEstimatedPositionFeatures = (): MainAppThunk => async (
       feature =>
         showingVesselsEstimatedPositions &&
         feature.get('isFiltered') &&
-        (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true) &&
+        (areVesselsNotInVesselGroupsHidden && areVesselGroupsDisplayed ? isVesselGroupColorDefined(feature) : true) &&
         VesselFeature.getVesselOpacityWithTimestamp(
           feature.get('dateTime'),
           vesselIsHiddenTimeThreshold,

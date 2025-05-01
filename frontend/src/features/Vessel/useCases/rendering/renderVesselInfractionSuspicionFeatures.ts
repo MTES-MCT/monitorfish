@@ -27,6 +27,7 @@ export const renderVesselInfractionSuspicionFeatures = (): MainAppThunk => async
   }
 
   const { selectedVesselIdentity, vesselsTracksShowed } = getState().vessel
+  const { areVesselGroupsDisplayed } = getState().displayedComponent
 
   const numberOfVessels = vesselSelectors.selectTotal(getState().vessel.vessels)
   if (!numberOfVessels) {
@@ -49,7 +50,7 @@ export const renderVesselInfractionSuspicionFeatures = (): MainAppThunk => async
       feature =>
         feature.get('isFiltered') &&
         feature.get('hasInfractionSuspicion') &&
-        (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true) &&
+        (areVesselsNotInVesselGroupsHidden && areVesselGroupsDisplayed ? isVesselGroupColorDefined(feature) : true) &&
         VesselFeature.getVesselOpacityWithTimestamp(
           feature.get('dateTime'),
           vesselIsHiddenTimeThreshold,

@@ -12,7 +12,8 @@ interface DBVesselGroupRepository : CrudRepository<VesselGroupEntity, Int> {
             FROM vessel_groups
             WHERE
                 created_by = :user AND
-                is_deleted IS FALSE
+                is_deleted IS FALSE AND
+                (end_of_validity_utc IS NULL OR end_of_validity_utc > NOW())
         """,
         nativeQuery = true,
     )

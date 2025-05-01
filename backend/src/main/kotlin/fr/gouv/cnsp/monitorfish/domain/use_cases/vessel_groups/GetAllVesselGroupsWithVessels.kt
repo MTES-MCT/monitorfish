@@ -39,9 +39,10 @@ class GetAllVesselGroupsWithVessels(
         }
 
         val dynamicGroups = vesselGroups.filterIsInstance<DynamicVesselGroup>()
-        val dynamicGroupsToLastPositions = ConcurrentHashMap<DynamicVesselGroup, MutableList<LastPosition>>().apply {
-            dynamicGroups.forEach { this[it] = CopyOnWriteArrayList() }
-        }
+        val dynamicGroupsToLastPositions =
+            ConcurrentHashMap<DynamicVesselGroup, MutableList<LastPosition>>().apply {
+                dynamicGroups.forEach { this[it] = CopyOnWriteArrayList() }
+            }
         lastPositions.parallelStream().forEach { lastPosition ->
             dynamicGroups.forEach { group ->
                 if (lastPosition.isInGroup(group, now)) {

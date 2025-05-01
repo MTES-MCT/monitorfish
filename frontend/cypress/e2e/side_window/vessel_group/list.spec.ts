@@ -9,7 +9,7 @@ context('Side Window > Vessel Group List', () => {
     cy.getDataCy('side-window-menu-vessel-list').click()
     cy.get('[title="Groupes de navires"]').click()
 
-    cy.getDataCy('pinned-vessels-groups').children().should('have.length', 0)
+    cy.getDataCy('pinned-vessels-groups').should('not.exist')
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 
     /**
@@ -92,8 +92,8 @@ context('Side Window > Vessel Group List', () => {
     })
 
     cy.fill('Rechercher un navire', 'SOCRAERRORRRR')
-    cy.getDataCy('pinned-vessels-groups').children().should('have.length', 0)
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 0)
+    cy.getDataCy('pinned-vessels-groups').should('not.exist')
+    cy.getDataCy('unpinned-vessels-groups').should('not.exist')
 
     cy.fill('Rechercher un navire', '')
     cy.getDataCy('pinned-vessels-groups').children().should('have.length', 1)

@@ -141,7 +141,11 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
           </RowIcons>
         </Row>
         {isOpen && (
-          <OpenedGroup>
+          <OpenedGroup
+            $hasDescription={
+              !!vesselGroupWithVessels.group.description || !!vesselGroupWithVessels.group.pointsOfAttention
+            }
+          >
             <Description title={vesselGroupWithVessels.group.description}>
               {vesselGroupWithVessels.group.description}
             </Description>
@@ -226,8 +230,10 @@ const PointsOfAttention = styled.p`
   color: ${THEME.color.maximumRed};
 `
 
-const OpenedGroup = styled.div`
-  margin: 16px 16px 16px 0;
+const OpenedGroup = styled.div<{
+  $hasDescription: boolean
+}>`
+  margin: ${p => (p.$hasDescription ? 16 : 0)}px 16px 16px 0;
   display: flex;
   flex-direction: column;
 `

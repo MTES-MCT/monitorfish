@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import type { PriorNotificationSubscriber } from '../../PriorNotificationSubscriber.types'
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
+import type { AccessorColumnDef } from '@tanstack/table-core/build/lib/types'
 import type { Promisable } from 'type-fest'
 
 export function getFormDataFromSubscriber(
@@ -25,7 +26,7 @@ export function getPortSubscriptionTableColumns(
   onFullSubscriptionCheck: (portLocode: string) => Promisable<void>,
   onFullSubscriptionUncheck: (portLocode: string) => Promisable<void>,
   isDisabled: boolean
-): Array<ColumnDef<PriorNotificationSubscriber.PortSubscription>> {
+): Array<AccessorColumnDef<PriorNotificationSubscriber.PortSubscription>> {
   return [
     {
       accessorFn: row => row.portName,

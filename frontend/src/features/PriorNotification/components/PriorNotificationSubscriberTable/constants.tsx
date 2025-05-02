@@ -7,7 +7,7 @@ import { ROUTER_PATHS } from 'paths'
 import { getSubscriberPortNames, getSubscriberPortNamesWithAllNotifications } from './utils'
 
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
-import type { ColumnDef } from '@tanstack/react-table'
+import type { AccessorColumnDef } from '@tanstack/table-core/build/lib/types'
 
 export const DEFAULT_TABLE_FILTER_VALUES: PriorNotificationSubscriber.ApiListFilter = {
   administrationId: undefined,
@@ -16,7 +16,7 @@ export const DEFAULT_TABLE_FILTER_VALUES: PriorNotificationSubscriber.ApiListFil
   withAtLeastOneSubscription: false
 }
 
-export const TABLE_COLUMNS: Array<ColumnDef<PriorNotificationSubscriber.Subscriber, any>> = [
+export const TABLE_COLUMNS: Array<AccessorColumnDef<PriorNotificationSubscriber.Subscriber, any>> = [
   {
     accessorFn: row => `${row.controlUnit.name} (${row.controlUnit.administration.name})`,
     cell: info => <Ellipsised>{info.getValue<string>()}</Ellipsised>,

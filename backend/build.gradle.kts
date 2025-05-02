@@ -67,7 +67,7 @@ dependencies {
     api("io.ktor:ktor-serialization-kotlinx-json-jvm:3.1.2")
     api("org.hibernate.validator:hibernate-validator:8.0.2.Final")
     api("jakarta.validation:jakarta.validation-api:3.1.1")
-    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.19.0")
+    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.2")
     api("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     api("org.flywaydb:flyway-core:11.8.0")
     api("org.flywaydb:flyway-database-postgresql:11.8.0")

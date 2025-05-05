@@ -17,9 +17,7 @@ export function RegulationGeometryLine({
   const id = useBackofficeAppSelector(state => state.regulation.processingRegulation?.id)
 
   const onCloseIconClicked = async () => {
-    await dispatch(
-      regulationActions.updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ID, value: undefined })
-    )
+    dispatch(regulationActions.updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ID, value: undefined }))
     setIsRegulatoryPreviewDisplayed(false)
   }
 

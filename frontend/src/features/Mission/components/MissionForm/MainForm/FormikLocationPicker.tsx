@@ -124,7 +124,7 @@ export function FormikLocationPicker() {
         dispatch(
           addSideWindowBanner({
             children: 'Une zone de mission a été modifiée à partir des contrôles de la mission',
-            closingDelay: 10000,
+            closingDelay: 3000,
             isClosable: true,
             level: Level.SUCCESS,
             withAutomaticClosing: true

@@ -1,12 +1,12 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.proxy
 
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
-import io.ktor.client.request.forms.*
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.cloud.gateway.mvc.ProxyExchange
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -34,7 +34,8 @@ class KeycloakProxyController(
         proxy: ProxyExchange<ByteArray?>,
         request: HttpServletRequest,
     ): ResponseEntity<*> {
-        val targetUri = StringBuilder("${oidcProperties.proxyUrl}${request.requestURI}?${request.queryString}")
+        val queryString = request.queryString?.let { "?$it" } ?: ""
+        val targetUri = "${oidcProperties.proxyUrl}${request.requestURI}$queryString"
         logger.info("Forwarding ${request.requestURI} to $targetUri")
 
         // TODO Use properties to pass all sensitive headers
@@ -43,13 +44,21 @@ class KeycloakProxyController(
         while (headerNames.hasMoreElements()) {
             val headerName = headerNames.nextElement()
             val headerValues = request.getHeaders(headerName)
-
             while (headerValues.hasMoreElements()) {
                 proxy.header(headerName, headerValues.nextElement())
             }
         }
 
-        return proxy.uri(targetUri.toString()).get()
+        val response = proxy.uri(targetUri).get()
+        return ResponseEntity
+            .status(response.statusCode)
+            .headers(
+                HttpHeaders().apply {
+                    putAll(response.headers)
+                    // Remove CORS header put by keycloak
+                    remove("Access-Control-Allow-Origin")
+                },
+            ).body(response.body)
     }
 
     @GetMapping("/resources/**")

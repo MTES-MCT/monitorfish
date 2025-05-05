@@ -232,7 +232,7 @@ context('Side Window > Mission Form > Action List', () => {
     cy.clickButton('Supprimer l’action')
 
     // There is still a valid control with a geometry that could be used for the mission zone
-    cy.get('.Toastify__toast--success').contains(
+    cy.get('.Component-Banner').contains(
       'Une zone de mission a été modifiée à partir des contrôles de la mission'
     )
     cy.get('*[data-cy="mission-main-form-location"]').should(

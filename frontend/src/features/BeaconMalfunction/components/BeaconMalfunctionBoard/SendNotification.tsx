@@ -2,13 +2,10 @@ import { useGetForeignFmcsQuery } from '@api/foreignFmc'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { type Option, Select, THEME } from '@mtes-mct/monitor-ui'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { SelectPicker } from 'rsuite'
 import styled from 'styled-components'
 
 import { NOTIFICATION_TYPE, SELECTABLE_NOTIFICATION_TYPES } from '../../constants'
 import { sendNotification } from '../../useCases/sendNotification'
-
-import type { CSSProperties } from 'react'
 
 export function SendNotification({ beaconMalfunction }) {
   const dispatch = useMainAppDispatch()
@@ -57,7 +54,7 @@ export function SendNotification({ beaconMalfunction }) {
     }
   }, [])
 
-  function onSelectNotification(status: string | null) {
+  async function onSelectNotification(status: string | undefined) {
     // Key of NOTIFICATION_TYPE.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC object
     if (status === 'MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC') {
       setIsShowingForeignFmcList(true)
@@ -66,13 +63,12 @@ export function SendNotification({ beaconMalfunction }) {
     }
 
     setIsShowingForeignFmcList(false)
-    dispatch(sendNotification(beaconMalfunction.id, status))?.then(notificationType => {
-      if (!notificationType) {
-        return
-      }
+    const notificationType = await dispatch(sendNotification(beaconMalfunction.id, status))
+    if (!notificationType) {
+      return
+    }
 
-      setIsSendingNotification(notificationType)
-    })
+    setIsSendingNotification(notificationType)
   }
 
   function onSelectForeignFmc(foreignFmcCode: string | undefined) {
@@ -95,21 +91,20 @@ export function SendNotification({ beaconMalfunction }) {
 
   return (
     <>
-      <SelectPicker
+      <Select
         cleanable={false}
-        container={() => selectMenuRef.current as any}
-        data={SELECTABLE_NOTIFICATION_TYPES.map(type => ({
+        isLabelHidden
+        label="Envoyer un message"
+        name="Envoyer un message"
+        onChange={status => onSelectNotification(status)}
+        options={SELECTABLE_NOTIFICATION_TYPES.map(type => ({
           label: NOTIFICATION_TYPE[type].followUpMessage,
           value: type
         }))}
-        menuStyle={{ marginLeft: 40, marginTop: 275, position: 'absolute' }}
-        onChange={status => onSelectNotification(status)}
         placeholder="Envoyer un message"
         searchable={false}
-        style={sendNotificationSelectStyle}
-        value={null}
+        value={undefined}
       />
-      <div ref={selectMenuRef as any} />
       {isShowingForeignFmcList && (
         <StyledForeignFmcSelect
           cleanable={false}
@@ -143,13 +138,9 @@ const SendingNotification = styled.div`
   color: ${p => p.theme.color.slateGray};
   display: flex;
   font-size: 11px;
-  margin-top: 0px;
+  margin-top: 0;
   max-width: 290px;
   overflow: hidden;
   text-overflow: ellipsis;
   text-transform: lowercase;
 `
-
-const sendNotificationSelectStyle: CSSProperties = {
-  width: '90px'
-}

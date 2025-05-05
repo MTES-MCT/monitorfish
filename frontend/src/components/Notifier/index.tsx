@@ -11,6 +11,8 @@ export { NotifierEvent as NotificationEvent }
 export type NotifierProps = {
   isSideWindow?: boolean
 }
+
+/** @deprecated Use addMainWindowBanner instead. */
 export function Notifier({ isSideWindow = false }: NotifierProps) {
   const [dialogMessage, setDialogMessage] = useState<string | undefined>(undefined)
 

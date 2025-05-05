@@ -1,14 +1,18 @@
-import { NotifierEvent } from '@components/Notifier/NotifierEvent'
-import { backofficeProducerOrganizationMembershipActions } from '@features/ProducerOrganizationMembership/slice.backoffice'
-import { updateProducerOrganizationMemberships } from '@features/ProducerOrganizationMembership/useCases/updateProducerOrganizationMemberships'
-import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
-import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
-import { Button, Icon, Size, TextInput } from '@mtes-mct/monitor-ui'
-import { useCallback, useRef } from 'react'
-import { Uploader } from 'rsuite'
+import {NotifierEvent} from '@components/Notifier/NotifierEvent'
+import {
+  backofficeProducerOrganizationMembershipActions
+} from '@features/ProducerOrganizationMembership/slice.backoffice'
+import {
+  updateProducerOrganizationMemberships
+} from '@features/ProducerOrganizationMembership/useCases/updateProducerOrganizationMemberships'
+import {useBackofficeAppDispatch} from '@hooks/useBackofficeAppDispatch'
+import {useBackofficeAppSelector} from '@hooks/useBackofficeAppSelector'
+import {Button, Icon, Size, TextInput} from '@mtes-mct/monitor-ui'
+import {useCallback, useRef} from 'react'
+import {Uploader} from 'rsuite'
 import styled from 'styled-components'
 
-import type { FileType } from 'rsuite/esm/Uploader/Uploader'
+import type {FileType} from 'rsuite/esm/Uploader/Uploader'
 
 export function FilterBar() {
   const dispatch = useBackofficeAppDispatch()

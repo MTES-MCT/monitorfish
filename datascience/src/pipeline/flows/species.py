@@ -115,7 +115,7 @@ def transform_species(species: pd.DataFrame) -> pd.DataFrame:
         "USK",
         "WHG",
     ]
-    tuna = ["BFT", "SWO", "ALB", "YFT", "SKJ", "BET", "BF1", "BF2", "BF3"]
+    tuna = ["BFT", "SWO", "YFT", "SKJ", "BET", "BF1", "BF2", "BF3"]
     other = ["DPS", "LKJ", "ARA", "ARS", "MUT", "MUX", "COL", "DOL"]
 
     species_type = {

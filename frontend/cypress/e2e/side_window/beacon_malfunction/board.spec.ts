@@ -378,8 +378,7 @@ context('Side Window > Beacon Malfunction Board', () => {
 
     // When
     // Click on send notification select menu
-    cy.getDataCy('side-window-beacon-malfunctions-detail').contains('Envoyer un message').click()
-    cy.get('[data-key="MALFUNCTION_AT_SEA_REMINDER"] > .rs-picker-select-menu-item').click()
+    cy.fill("Envoyer un message", "Relance pour avarie en mer")
 
     // Then
     cy.get('*[data-cy="side-window-beacon-malfunctions-sending-notification"]').contains(
@@ -400,8 +399,7 @@ context('Side Window > Beacon Malfunction Board', () => {
 
     // When
     // Click on send notification select menu
-    cy.getDataCy('side-window-beacon-malfunctions-detail').contains('Envoyer un message').click()
-    cy.get('[data-key="MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC"] > .rs-picker-select-menu-item').click()
+    cy.fill("Envoyer un message", "Notification à un FMC étranger")
     cy.fill('Choisir la nationalité du FMC', 'ABC')
 
     // Then

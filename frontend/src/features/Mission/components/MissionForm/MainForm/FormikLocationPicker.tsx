@@ -6,10 +6,11 @@ import {
 } from '@features/Map/constants'
 import { fitToExtent } from '@features/Map/slice'
 import { addOrEditMissionZone } from '@features/Mission/useCases/addOrEditMissionZone'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, Fieldset, Icon, IconButton, Label, NotificationEvent, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Fieldset, Icon, IconButton, Label, Level, THEME } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { boundingExtent } from 'ol/extent'
 import { transformExtent } from 'ol/proj'
@@ -62,12 +63,14 @@ export function FormikLocationPicker() {
 
         const isSuccess = await updateMissionLocation(true)
         if (!isSuccess) {
-          window.document.dispatchEvent(
-            new NotificationEvent(
-              'Aucune zone ajoutée. La zone de mission sera calculée à partir du prochain contrôle ajouté.',
-              'warning',
-              true
-            )
+          dispatch(
+            addSideWindowBanner({
+              children: 'Aucune zone ajoutée. La zone de mission sera calculée à partir du prochain contrôle ajouté.',
+              closingDelay: 5000,
+              isClosable: true,
+              level: Level.WARNING,
+              withAutomaticClosing: true
+            })
           )
         }
       }
@@ -118,12 +121,14 @@ export function FormikLocationPicker() {
       setFieldValue('geom', geometryComputedFromControls)
 
       if (geometryComputedFromControls.coordinates?.length) {
-        window.document.dispatchEvent(
-          new NotificationEvent(
-            'Une zone de mission a été modifiée à partir des contrôles de la mission',
-            'success',
-            true
-          )
+        dispatch(
+          addSideWindowBanner({
+            children: 'Une zone de mission a été modifiée à partir des contrôles de la mission',
+            closingDelay: 3000,
+            isClosable: true,
+            level: Level.SUCCESS,
+            withAutomaticClosing: true
+          })
         )
       }
 

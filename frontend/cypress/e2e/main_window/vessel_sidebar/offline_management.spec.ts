@@ -116,6 +116,7 @@ context('Offline management', () => {
     cy.wait('@openVessel')
     cy.wait('@getLogbookFirstStubbed')
     cy.getDataCy('vessel-sidebar-error').should('not.exist')
+    cy.wait(250) // Wait for the 2nd request of logbook to complete
 
     // When clicking on Resume tab
     cy.intercept(

@@ -7,6 +7,7 @@ export type NotifierEventDetail = {
   type: TypeOptions
 }
 
+/** @deprecated Use addMainWindowBanner instead. */
 export class NotifierEvent extends CustomEvent<NotifierEventDetail> {
   constructor(message: string, type: TypeOptions, isDialogError: boolean, isSideWindowError: boolean = false) {
     super('NOTIFIER_EVENT', {

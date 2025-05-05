@@ -8,7 +8,7 @@ import type { MainAppThunk } from '@store'
 export const sendNotification =
   (
     beaconMalfunctionId: number,
-    notificationType: string | null,
+    notificationType: string | undefined,
     foreignFmcCode?: string
   ): MainAppThunk<Promise<string | void>> =>
   async dispatch => {

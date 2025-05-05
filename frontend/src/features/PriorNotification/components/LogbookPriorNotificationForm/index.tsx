@@ -12,7 +12,7 @@ import { useTracking } from '@hooks/useTracking'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { Formik } from 'formik'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Footer } from './Footer'
 import { Form } from './Form'
@@ -99,6 +99,14 @@ export function LogbookPriorNotificationForm() {
     1000
   )
 
+  useEffect(() => {
+    if (!openedPriorNotificationDetail) {
+      return
+    }
+
+    trackPage(`/pnos/${openedPriorNotificationDetail.reportId}`)
+  }, [trackPage, openedPriorNotificationDetail])
+
   if (displayedErrorKey) {
     return <PriorNotificationCard detail={undefined} otherDisplayedErrorKey={displayedErrorKey} />
   }
@@ -106,8 +114,6 @@ export function LogbookPriorNotificationForm() {
   if (!editedLogbookPriorNotificationFormValues || !openedPriorNotificationDetail) {
     return <PriorNotificationCard detail={undefined} isLoading />
   }
-
-  trackPage(`/pnos/${openedPriorNotificationDetail.reportId}`)
 
   return (
     <>

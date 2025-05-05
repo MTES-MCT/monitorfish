@@ -488,7 +488,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.wait(250)
 
     // A mission zone should be automatically added (because of the stubbed coordinates update when IS_CYPRESS LocalSorage key is "true")
-    cy.get('.Toastify__toast--success').contains(
+    cy.get('.Component-Banner').contains(
       'Une zone de mission a été modifiée à partir des contrôles de la mission'
     )
     cy.get('*[data-cy="mission-main-form-location"]').should(
@@ -517,7 +517,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter un contrôle en mer')
 
     // The mission zone should be automatically updated (because of the stubbed coordinates update when IS_CYPRESS LocalSorage key is "true")
-    cy.get('.Toastify__toast--success').contains(
+    cy.get('.Component-Banner').contains(
       'Une zone de mission a été modifiée à partir des contrôles de la mission'
     )
     cy.get('*[data-cy="mission-main-form-location"]').should(

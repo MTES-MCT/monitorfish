@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.coordinates.transformCoordinatesToOpenlayersProjection
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
@@ -10,6 +11,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.Duration
 import java.time.ZonedDateTime
 
+/**
+ * We remove null fields from the payload to reduce JSON size.
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class LastPositionDataOutput(
     val id: Int? = null,
     val vesselId: Int? = null,
@@ -26,11 +31,9 @@ data class LastPositionDataOutput(
     val speed: Double? = null,
     val course: Double? = null,
     val dateTime: ZonedDateTime,
-    val tripNumber: String? = null,
     val positionType: PositionType,
     val emissionPeriod: Duration? = null,
     val lastLogbookMessageDateTime: ZonedDateTime? = null,
-    val departureDateTime: ZonedDateTime? = null,
     val width: Double? = null,
     val length: Double? = null,
     val registryPortName: String? = null,
@@ -39,10 +42,8 @@ data class LastPositionDataOutput(
     val gearOnboard: List<GearLastPositionDataOutput>,
     val segments: List<String>,
     val speciesOnboard: List<SpeciesLastPositionDataOutput>,
-    val totalWeightOnboard: Double,
     val lastControlDateTime: ZonedDateTime? = null,
     val lastControlInfraction: Boolean? = null,
-    val postControlComment: String? = null,
     val vesselIdentifier: VesselIdentifier,
     val impactRiskFactor: Double,
     val probabilityRiskFactor: Double,
@@ -85,11 +86,9 @@ data class LastPositionDataOutput(
                 speed = position.speed,
                 course = position.course,
                 flagState = position.flagState,
-                tripNumber = position.tripNumber,
                 positionType = position.positionType,
                 emissionPeriod = position.emissionPeriod,
                 lastLogbookMessageDateTime = position.lastLogbookMessageDateTime,
-                departureDateTime = position.departureDateTime,
                 width = position.width,
                 length = position.length,
                 registryPortName = position.registryPortName,
@@ -105,10 +104,8 @@ data class LastPositionDataOutput(
                             it,
                         )
                     } ?: listOf(),
-                totalWeightOnboard = position.totalWeightOnboard,
                 lastControlDateTime = position.lastControlDateTime,
                 lastControlInfraction = position.lastControlInfraction,
-                postControlComment = position.postControlComment,
                 vesselIdentifier = position.vesselIdentifier,
                 impactRiskFactor = position.impactRiskFactor,
                 probabilityRiskFactor = position.probabilityRiskFactor,

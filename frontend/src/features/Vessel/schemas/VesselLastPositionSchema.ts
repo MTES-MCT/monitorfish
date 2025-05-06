@@ -31,10 +31,6 @@ export const VesselLastPositionSchema = z.strictObject({
   coordinates: z.array(z.number()), // OPENLAYERS_PROJECTION
   course: numberOrUndefined,
   dateTime: z.string(),
-  // TODO To remove
-  departureDateTime: stringOrUndefined,
-  // TODO To remove
-  destination: stringOrUndefined,
   detectabilityRiskFactor: z.number(),
   district: stringOrUndefined,
   districtCode: stringOrUndefined,
@@ -43,8 +39,6 @@ export const VesselLastPositionSchema = z.strictObject({
   estimatedCurrentLongitude: numberOrUndefined,
   externalReferenceNumber: stringOrUndefined,
   flagState: z.string(),
-  // TODO To remove
-  from: stringOrUndefined,
   // TODO To remove
   gearOnboard: z.array(DeclaredLogbookGearSchema),
   gearsArray: z.array(z.string()),
@@ -58,20 +52,14 @@ export const VesselLastPositionSchema = z.strictObject({
   isAtPort: z.boolean(),
   isFiltered: z.number(), // 0 is False, 1 is True - for WebGL
   lastControlDateTime: stringOrUndefined,
-  // TODO To remove
-  lastControlDateTimeTimestamp: numberOrUndefined,
   lastControlInfraction: booleanOrUndefined,
   lastLogbookMessageDateTime: stringOrUndefined,
-  // TODO To remove
   lastPositionSentAt: z.number(),
   latitude: z.number(), // WSG84_PROJECTION
   length: numberOrUndefined,
   longitude: z.number(), // WSG84_PROJECTION
   mmsi: stringOrUndefined,
-  // TODO To remove
   positionType: z.string(),
-  // TODO To remove
-  postControlComment: stringOrUndefined,
   probabilityRiskFactor: z.number(),
   // TODO To remove
   registryPortLocode: stringOrUndefined,
@@ -84,10 +72,6 @@ export const VesselLastPositionSchema = z.strictObject({
   // TODO Add speciesName
   speciesOnboard: z.array(DeclaredLogbookSpeciesSchema),
   speed: numberOrUndefined,
-  // TODO To remove
-  totalWeightOnboard: z.number(),
-  // TODO To remove
-  tripNumber: stringOrUndefined,
   underCharter: booleanOrUndefined,
   vesselFeatureId: z.string(),
   vesselGroups: z.array(VesselGroupSchema),

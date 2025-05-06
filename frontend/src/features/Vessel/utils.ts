@@ -40,8 +40,6 @@ export function buildFeature(
     isAtPort: vessel.isAtPort,
     isFiltered: vessel.isFiltered,
     lastControlDateTime: vessel.lastControlDateTime,
-    // TODO To remove
-    lastControlDateTimeTimestamp: vessel.lastControlDateTimeTimestamp,
     lastLogbookMessageDateTime: vessel.lastLogbookMessageDateTime,
     lastPositionSentAt: vessel.lastPositionSentAt,
     latitude: vessel.latitude,

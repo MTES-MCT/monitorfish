@@ -66,7 +66,6 @@ data class LastPosition(
     val alerts: List<String>? = listOf(),
     val beaconMalfunctionId: Int? = null,
     val reportings: List<String> = listOf(),
-    val vesselGroups: List<VesselGroupBase> = listOf(),
 ) {
     fun isInGroup(
         vesselGroup: VesselGroupBase,

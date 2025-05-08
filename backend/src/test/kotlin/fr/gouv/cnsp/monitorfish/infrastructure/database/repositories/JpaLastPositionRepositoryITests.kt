@@ -179,4 +179,25 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         assertThat(previousLastPosition.alerts).contains("MISSING_FAR_ALERT")
         assertThat(lastPosition.reportings).hasSize(0)
     }
+
+    @Test
+    @Transactional
+    fun `findLastPositionsWithProfileAndVessel Should get last positions, profiles and vessel entities`() {
+        // Given
+
+        // When
+        val lastPositionsWithProfiles = jpaLastPositionRepository.findActiveVesselWithReferentialData()
+
+        // Then
+        assertThat(lastPositionsWithProfiles).hasSize(3334)
+        assertThat(lastPositionsWithProfiles.first().lastPosition).isNull()
+        assertThat(lastPositionsWithProfiles.first().vesselProfile).isNotNull()
+        assertThat(lastPositionsWithProfiles.first().vessel).isNull()
+        assertThat(lastPositionsWithProfiles.first().producerOrganizationMembership).isNull()
+
+        assertThat(lastPositionsWithProfiles.last().lastPosition).isNotNull()
+        assertThat(lastPositionsWithProfiles.last().vesselProfile).isNull()
+        assertThat(lastPositionsWithProfiles.last().vessel).isNull()
+        assertThat(lastPositionsWithProfiles.last().producerOrganizationMembership).isNull()
+    }
 }

@@ -3,17 +3,13 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.light
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetLastPositions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselVoyage
-import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.Utils.getEmail
-import fr.gouv.cnsp.monitorfish.infrastructure.api.light.outputs.LastPositionDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.light.outputs.VesselAndPositionsDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.light.outputs.VoyageDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.servlet.http.HttpServletResponse
 import kotlinx.coroutines.runBlocking
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
@@ -28,21 +24,11 @@ import java.time.ZonedDateTime
 @RequestMapping("/light/v1/vessels")
 @Tag(name = "APIs for Vessels in light mode")
 class VesselLightController(
-    private val getLastPositions: GetLastPositions,
     private val getVessel: GetVessel,
     private val getVesselVoyage: GetVesselVoyage,
 ) {
     companion object {
         const val zoneDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.000X"
-    }
-
-    @GetMapping("")
-    @Operation(summary = "Get all vessels' last position")
-    fun getVessels(response: HttpServletResponse): List<LastPositionDataOutput> {
-        val email: String = getEmail(response)
-        val positions = getLastPositions.execute(email)
-
-        return positions.map { position -> LastPositionDataOutput.fromLastPosition(position) }
     }
 
     @GetMapping("/find")

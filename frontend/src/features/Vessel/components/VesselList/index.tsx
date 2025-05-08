@@ -151,7 +151,7 @@ export function VesselList({ isFromUrl }: VesselListProps) {
             <TableLegend data-cy="vessel-list-length">
               {`${
                 isFilteringVesselList || tableData.length === undefined ? '...' : tableData.length
-              } ${pluralize('navire', tableData.length)} ${pluralize('équipé', tableData.length)} VMS `}
+              } ${pluralize('navire', tableData.length)}`}
             </TableLegend>
             <RightButton
               accent={Accent.SECONDARY}

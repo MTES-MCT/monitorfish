@@ -1,17 +1,18 @@
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselList/constants'
+import { ActiveVesselType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { atLeastOneVesselSelected, VesselFeature, VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
+import { Vessel } from '@features/Vessel/Vessel.types'
 import { createEntityAdapter, createSlice, type EntityState, type PayloadAction } from '@reduxjs/toolkit'
 
 import { ReportingType, ReportingTypeCharacteristics } from '../Reporting/types'
 
 import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
 import type { ShowedVesselTrack, TrackRequest } from '@features/Vessel/types/types'
-import type { Vessel } from '@features/Vessel/Vessel.types'
 
 export const vesselsAdapter = createEntityAdapter({
-  selectId: (vessel: Vessel.VesselLastPosition) => vessel.vesselFeatureId,
+  selectId: (vessel: Vessel.ActiveVessel) => vessel.vesselFeatureId,
   sortComparer: false
 })
 
@@ -32,7 +33,7 @@ export type VesselState = {
   tripMessagesLastToFormerDEPDateTimes: any[]
   vesselSidebarIsOpen: boolean
   vesselTrackExtent: any | null
-  vessels: EntityState<Vessel.VesselLastPosition, Vessel.VesselFeatureId>
+  vessels: EntityState<Vessel.ActiveVessel, Vessel.VesselFeatureId>
   vesselsEstimatedPositions: any[]
   vesselsTracksShowed: Record<string, ShowedVesselTrack>
 }
@@ -166,7 +167,7 @@ const vesselSlice = createSlice({
     ) {
       const vessel = vesselSelectors.selectById(state.vessels, action.payload.vesselFeatureId)
 
-      if (vessel) {
+      if (vessel && vessel.activeVesselType === ActiveVesselType.POSITION_ACTIVITY) {
         const filteredAlerts = vessel?.alerts?.filter(alert => alert !== action.payload.alertType)
 
         if (action.payload.isValidated) {
@@ -426,7 +427,7 @@ const vesselSlice = createSlice({
       state.selectedVesselSidebarTab = action.payload
     },
 
-    setVessels(state, action: PayloadAction<Vessel.VesselLastPosition[]>) {
+    setVessels(state, action: PayloadAction<Vessel.ActiveVessel[]>) {
       if (!action.payload || !Array.isArray(action.payload)) {
         return
       }

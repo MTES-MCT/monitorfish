@@ -1,10 +1,13 @@
-import {
-  DeclaredLogbookGearSchema,
-  DeclaredLogbookSpeciesSchema
-} from '@features/Vessel/schemas/VesselLastPositionSchema'
+import { DeclaredLogbookSpeciesSchema } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { z } from 'zod'
 
-import { stringOrUndefined } from '../../types'
+import { numberOrUndefined, stringOrUndefined } from '../../types'
+
+export const DeclaredLogbookGearSchema = z.strictObject({
+  dimensions: stringOrUndefined,
+  gear: stringOrUndefined,
+  mesh: numberOrUndefined
+})
 
 export const RiskFactorSchema = z.strictObject({
   controlPriorityLevel: z.number(),

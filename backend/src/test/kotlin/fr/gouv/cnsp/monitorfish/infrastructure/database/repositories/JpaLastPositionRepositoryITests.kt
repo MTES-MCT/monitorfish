@@ -192,7 +192,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         assertThat(lastPositionsWithProfiles).hasSize(3334)
         assertThat(lastPositionsWithProfiles.first().lastPosition).isNull()
         assertThat(lastPositionsWithProfiles.first().vesselProfile).isNotNull()
-        assertThat(lastPositionsWithProfiles.first().vessel).isNull()
+        assertThat(lastPositionsWithProfiles.first().vessel).isNotNull()
         assertThat(lastPositionsWithProfiles.first().producerOrganizationMembership).isNull()
 
         assertThat(lastPositionsWithProfiles.last().lastPosition).isNotNull()

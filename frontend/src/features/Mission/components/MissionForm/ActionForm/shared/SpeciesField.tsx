@@ -64,10 +64,12 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const speciesAsOptions: Array<Option<Specy>> = useMemo(
     () =>
       getSpeciesApiQuery.data
-        ? getSpeciesApiQuery.data.species.map(specy => ({
-            label: `${specy.code} - ${specy.name}`,
-            value: specy
-          }))
+        ? getSpeciesApiQuery.data.species
+            .map(specy => ({
+              label: `${specy.code} - ${specy.name}`,
+              value: specy
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label))
         : [],
     [getSpeciesApiQuery.data]
   )

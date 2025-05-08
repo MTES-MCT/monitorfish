@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LastPositionEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.ActiveVesselWithReferentialDataEntityDTO
 import org.hibernate.annotations.DynamicUpdate
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
@@ -22,6 +23,18 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
         nativeQuery = true,
     )
     fun findLastPositionDateTime(): Instant
+
+    @Query(
+        value = """
+            SELECT NEW fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.ActiveVesselWithReferentialDataEntityDTO(lp, vp, v, po, rf)
+            FROM LastPositionEntity lp
+            FULL JOIN VesselProfileEntity vp ON lp.internalReferenceNumber = vp.cfr
+            LEFT JOIN VesselEntity v ON v.internalReferenceNumber = vp.cfr
+            LEFT JOIN ProducerOrganizationMembershipEntity po ON po.internalReferenceNumber = vp.cfr
+            LEFT JOIN RiskFactorEntity rf ON rf.cfr = vp.cfr
+        """,
+    )
+    fun findActiveVesselWithReferentialData(dateTime: ZonedDateTime): List<ActiveVesselWithReferentialDataEntityDTO>
 
     @Modifying(clearAutomatically = true)
     @Query(

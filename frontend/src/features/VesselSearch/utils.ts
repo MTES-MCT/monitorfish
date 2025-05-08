@@ -1,3 +1,4 @@
+import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { Vessel } from '@features/Vessel/Vessel.types'
 
@@ -26,7 +27,7 @@ export function removeDuplicatedFoundVessels(
 }
 
 export function enrichWithVesselIdentifierIfNotFound(
-  identityOrVessel: Vessel.VesselLastPosition | Vessel.VesselIdentity
+  identityOrVessel: Vessel.ActiveVesselWithPosition | Vessel.VesselIdentity
 ): Vessel.VesselIdentity {
   const vesselIdentity = extractVesselIdentityProps(identityOrVessel)
 
@@ -35,15 +36,15 @@ export function enrichWithVesselIdentifierIfNotFound(
   }
 
   if (vesselIdentity.internalReferenceNumber) {
-    return { ...vesselIdentity, vesselIdentifier: Vessel.VesselIdentifier.INTERNAL_REFERENCE_NUMBER }
+    return { ...vesselIdentity, vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER }
   }
 
   if (vesselIdentity.ircs) {
-    return { ...vesselIdentity, vesselIdentifier: Vessel.VesselIdentifier.IRCS }
+    return { ...vesselIdentity, vesselIdentifier: VesselIdentifier.IRCS }
   }
 
   if (vesselIdentity.externalReferenceNumber) {
-    return { ...vesselIdentity, vesselIdentifier: Vessel.VesselIdentifier.EXTERNAL_REFERENCE_NUMBER }
+    return { ...vesselIdentity, vesselIdentifier: VesselIdentifier.EXTERNAL_REFERENCE_NUMBER }
   }
 
   return vesselIdentity

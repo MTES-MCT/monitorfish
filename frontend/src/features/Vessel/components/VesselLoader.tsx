@@ -1,8 +1,7 @@
 import { FIVE_MINUTES, TWENTY_MINUTES } from '@api/APIWorker'
 import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
-import { showVesselsLastPosition } from '@features/Vessel/useCases/showVesselsLastPosition'
-import { Vessel } from '@features/Vessel/Vessel.types'
-import { useGetVesselsLastPositionsQuery } from '@features/Vessel/vesselApi'
+import { saveActiveVesselsAndDisplayLastPositions } from '@features/Vessel/useCases/saveActiveVesselsAndDisplayLastPositions'
+import { useGetActiveVesselsQuery } from '@features/Vessel/vesselApi'
 import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -26,7 +25,7 @@ export function VesselLoader() {
     error,
     isError,
     isFetching
-  } = useGetVesselsLastPositionsQuery(undefined, {
+  } = useGetActiveVesselsQuery(undefined, {
     pollingInterval: isInLightMode ? TWENTY_MINUTES : FIVE_MINUTES
   })
 
@@ -41,7 +40,7 @@ export function VesselLoader() {
       return
     }
 
-    dispatch(showVesselsLastPosition(vessels as Vessel.VesselLastPosition[]))
+    dispatch(saveActiveVesselsAndDisplayLastPositions(vessels))
   }, [dispatch, vessels, isError, error])
 
   useEffect(() => {

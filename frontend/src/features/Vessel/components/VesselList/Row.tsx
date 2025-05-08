@@ -3,6 +3,7 @@ import {
   displayOnboardFishingSpecies,
   getExpandableRowCellCustomStyle
 } from '@features/Vessel/components/VesselList/cells/utils'
+import { ActiveVesselType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { TableWithSelectableRows } from '@mtes-mct/monitor-ui'
@@ -16,7 +17,7 @@ import { None } from './styles'
 type RowProps = Readonly<{
   hasWhiteBackground?: boolean
   index: number | undefined
-  row: RowType<Vessel.VesselLastPosition>
+  row: RowType<Vessel.ActiveVessel>
 }>
 export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackground = false, index, row }, ref) => {
   const vessel = row.original
@@ -88,7 +89,11 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
             </p>
             <p>
               <ExpandedRowLabel>Dernière position VMS :</ExpandedRowLabel>
-              <ExpandedRowValue>{timeago.format(vessel.lastPositionSentAt, 'fr')}</ExpandedRowValue>
+              <ExpandedRowValue>
+                {vessel.activeVesselType === ActiveVesselType.POSITION_ACTIVITY
+                  ? timeago.format(vessel.lastPositionSentAt, 'fr')
+                  : undefined}
+              </ExpandedRowValue>
             </p>
             <p>
               <ExpandedRowLabel>Statut de JPE :</ExpandedRowLabel>
@@ -97,7 +102,7 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
           </ExpandedRowCell>
           <ExpandedRowCell>
             <ExpandedRowLabel>Nom des segments</ExpandedRowLabel>
-            {vessel.segments.length > 0 ? (
+            {vessel.activeVesselType === ActiveVesselType.POSITION_ACTIVITY && vessel.segments.length > 0 ? (
               <ExpandedRowList>
                 {vessel.segments.map(tripSegment => (
                   <li key={tripSegment}>{`${tripSegment} – ${tripSegment}`}</li>

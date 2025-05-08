@@ -9,7 +9,7 @@ import styled from 'styled-components'
 type ActionButtonsCellProps = Readonly<{
   groupId: number
   isFixedGroup: boolean
-  vessel: Vessel.VesselLastPosition
+  vessel: Vessel.ActiveVessel
 }>
 export function ActionButtonsCell({ groupId, isFixedGroup, vessel }: ActionButtonsCellProps) {
   const dispatch = useMainAppDispatch()

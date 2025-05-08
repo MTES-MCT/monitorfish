@@ -127,7 +127,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
         dispatch(reportingApi.endpoints.getReportings.initiate())
       }
 
-      const vessels = await dispatch(vesselApi.endpoints.getVesselsLastPositions.initiate()).unwrap()
+      const vessels = await dispatch(vesselApi.endpoints.getActiveVessels.initiate()).unwrap()
       await dispatch(setVessels(vessels))
       dispatch(getInfractions())
       dispatch(getAllGearCodes<MainAppAsyncThunk>())

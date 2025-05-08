@@ -9,11 +9,11 @@ context('Vessel groups', () => {
      */
     cy.getDataCy('side-window-menu-vessel-list').click()
     cy.fill('Nationalités', ['Espagne', 'France'])
-    cy.getDataCy('vessel-list-length').contains('841 navires équipés VMS')
+    cy.getDataCy('vessel-list-length').contains('841 navires')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 2)
 
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
-    cy.getDataCy('vessel-list-length').contains('4 navires équipés VMS')
+    cy.getDataCy('vessel-list-length').contains('4 navires')
     cy.get('.Table-SimpleTable tr').should('have.length', 5)
 
     cy.clickButton('Créer un groupe de navires')

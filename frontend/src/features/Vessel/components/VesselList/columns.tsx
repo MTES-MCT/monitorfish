@@ -1,5 +1,6 @@
 import { Ellipsised } from '@components/Ellipsised'
 import { Titled } from '@components/Titled'
+import { ActiveVesselType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { customDayjs, TableWithSelectableRows, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
@@ -12,8 +13,8 @@ import type { CellContext, ColumnDef } from '@tanstack/react-table'
 
 export function getTableColumns(
   isFromUrl: boolean,
-  actionColumn: ColumnDef<Vessel.VesselLastPosition, any>
-): Array<ColumnDef<Vessel.VesselLastPosition, any>> {
+  actionColumn: ColumnDef<Vessel.ActiveVessel, any>
+): Array<ColumnDef<Vessel.ActiveVessel, any>> {
   const legacyFirefoxOffset = !isFromUrl && isLegacyFirefox() ? -32 : 0
   const actionColumnWithOffset = { ...actionColumn, size: (actionColumn.size ?? 60) + legacyFirefoxOffset }
 
@@ -40,7 +41,7 @@ export function getTableColumns(
     },
     {
       accessorFn: row => row.riskFactor,
-      cell: (info: CellContext<Vessel.VesselLastPosition, number | undefined>) => {
+      cell: (info: CellContext<Vessel.ActiveVessel, number | undefined>) => {
         const vessel = info.row.original
 
         return (
@@ -59,12 +60,12 @@ export function getTableColumns(
     },
     {
       accessorFn: row => row.vesselName ?? (row.vesselId === -1 ? 'Navire inconnu' : '-'),
-      cell: (info: CellContext<Vessel.VesselLastPosition, string>) => {
-        const priorNotification = info.row.original
+      cell: (info: CellContext<Vessel.ActiveVessel, string>) => {
+        const vessel = info.row.original
 
         return (
           <Ellipsised>
-            <StyledCountryFlag countryCode={priorNotification.flagState} size={[20, 14]} />
+            <StyledCountryFlag countryCode={vessel.flagState} size={[20, 14]} />
             <Titled>{info.getValue()}</Titled>
           </Ellipsised>
         )
@@ -76,8 +77,10 @@ export function getTableColumns(
     },
     {
       accessorFn: row =>
-        row.segments?.length > 0 ? row.segments.map(tripSegment => tripSegment).join(', ') : undefined,
-      cell: (info: CellContext<Vessel.VesselLastPosition, string | undefined>) =>
+        row.activeVesselType === ActiveVesselType.POSITION_ACTIVITY && row.segments?.length > 0
+          ? row.segments.map(tripSegment => tripSegment).join(', ')
+          : undefined,
+      cell: (info: CellContext<Vessel.ActiveVessel, string | undefined>) =>
         info.getValue() ? <Ellipsised>{info.getValue()}</Ellipsised> : <None>Aucun segment</None>,
       enableSorting: true,
       header: () => 'Segments',
@@ -86,7 +89,7 @@ export function getTableColumns(
     },
     {
       accessorFn: row => (row.gearsArray.length > 0 ? row.gearsArray.join(', ') : undefined),
-      cell: (info: CellContext<Vessel.VesselLastPosition, string | undefined>) =>
+      cell: (info: CellContext<Vessel.ActiveVessel, string | undefined>) =>
         info.getValue() ? <Ellipsised>{info.getValue()}</Ellipsised> : <None>Aucun engin</None>,
       enableSorting: false,
       header: () => 'Engins',
@@ -95,7 +98,7 @@ export function getTableColumns(
     },
     {
       accessorFn: row => (row.speciesArray.length > 0 ? row.speciesArray.join(', ') : undefined),
-      cell: (info: CellContext<Vessel.VesselLastPosition, string | undefined>) =>
+      cell: (info: CellContext<Vessel.ActiveVessel, string | undefined>) =>
         info.getValue() ? (
           <Ellipsised>{info.getValue()}</Ellipsised>
         ) : (
@@ -108,7 +111,7 @@ export function getTableColumns(
     },
     {
       accessorKey: 'lastControlDateTime',
-      cell: (info: CellContext<Vessel.VesselLastPosition, string | undefined>) =>
+      cell: (info: CellContext<Vessel.ActiveVessel, string | undefined>) =>
         info.getValue() ? customDayjs(info.getValue()).utc().format('[Le] DD/MM/YYYY') : <None>-</None>,
       enableSorting: true,
       header: () => 'Dernier contrôle',
@@ -117,7 +120,7 @@ export function getTableColumns(
     },
     {
       accessorKey: 'hasInfractionSuspicion',
-      cell: (info: CellContext<Vessel.VesselLastPosition, boolean>) =>
+      cell: (info: CellContext<Vessel.ActiveVessel, boolean>) =>
         info.getValue() ? (
           <Tag backgroundColor={THEME.color.maximumRed15} color={THEME.color.maximumRed}>
             Signalement(s)
@@ -134,9 +137,9 @@ export function getTableColumns(
   ]
 }
 
-export const vesselListActionColumn: ColumnDef<Vessel.VesselLastPosition, any> = {
+export const vesselListActionColumn: ColumnDef<Vessel.ActiveVessel, any> = {
   accessorFn: row => row.vesselFeatureId,
-  cell: (info: CellContext<Vessel.VesselLastPosition, string>) => <ActionButtonsCell vessel={info.row.original} />,
+  cell: (info: CellContext<Vessel.ActiveVessel, string>) => <ActionButtonsCell vessel={info.row.original} />,
   enableSorting: false,
   header: () => '',
   id: 'actions',

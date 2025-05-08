@@ -5,7 +5,6 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
-import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
@@ -34,9 +33,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.time.LocalDate.EPOCH
-import java.time.LocalTime
-import java.time.ZoneId
 import java.time.ZonedDateTime
 
 @ApiTestWithJWTSecurity(value = [(VesselLightController::class)])
@@ -46,9 +42,6 @@ class VesselLightControllerITests {
 
     @MockBean
     private lateinit var getIsAuthorizedUser: GetIsAuthorizedUser
-
-    @MockBean
-    private lateinit var getLastPositions: GetLastPositions
 
     @MockBean
     private lateinit var getVessel: GetVessel
@@ -76,62 +69,6 @@ class VesselLightControllerITests {
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
-
-    @Test
-    fun `Should get all vessels last positions`() {
-        // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
-        val farPastFixedDateTime = ZonedDateTime.of(EPOCH, LocalTime.MAX.plusSeconds(1), ZoneId.of("UTC"))
-        val position =
-            LastPosition(
-                0,
-                1,
-                "MMSI",
-                null,
-                null,
-                null,
-                null,
-                CountryCode.FR,
-                PositionType.AIS,
-                16.445,
-                48.2525,
-                16.445,
-                48.2525,
-                1.8,
-                180.0,
-                farPastFixedDateTime,
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                vesselGroups = listOf(),
-            )
-        given(this.getLastPositions.execute(any())).willReturn(listOf(position))
-
-        // When
-        api
-            .perform(
-                get("/light/v1/vessels")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
-            )
-            // Then
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$[0].vesselName", equalTo(position.vesselName)))
-            .andExpect(jsonPath("$[0].vesselId", equalTo(position.vesselId)))
-            .andExpect(jsonPath("$[0].mmsi", equalTo(position.mmsi)))
-            .andExpect(jsonPath("$[0].externalReferenceNumber", equalTo(position.externalReferenceNumber)))
-            .andExpect(jsonPath("$[0].internalReferenceNumber", equalTo(position.internalReferenceNumber)))
-            .andExpect(jsonPath("$[0].ircs", equalTo(position.ircs)))
-            .andExpect(jsonPath("$[0].flagState", equalTo(position.flagState.toString())))
-            .andExpect(jsonPath("$[0].latitude", equalTo(position.latitude)))
-            .andExpect(jsonPath("$[0].longitude", equalTo(position.longitude)))
-            .andExpect(jsonPath("$[0].estimatedCurrentLatitude", equalTo(position.estimatedCurrentLatitude)))
-            .andExpect(jsonPath("$[0].estimatedCurrentLongitude", equalTo(position.estimatedCurrentLongitude)))
-            .andExpect(jsonPath("$[0].speed", equalTo(position.speed)))
-            .andExpect(jsonPath("$[0].course", equalTo(position.course)))
-            .andExpect(jsonPath("$[0].positionType", equalTo(PositionType.AIS.toString())))
-            .andExpect(jsonPath("$[0].dateTime", equalTo(position.dateTime.toOffsetDateTime().toString())))
-            .andExpect(jsonPath("$[0].reportings.length()").doesNotExist())
-            .andExpect(jsonPath("$[0].postControlComment").doesNotExist())
-            .andExpect(jsonPath("$[0].alerts.length()").doesNotExist())
-    }
 
     private fun <T> givenSuspended(block: suspend () -> T) = given(runBlocking { block() })!!
 

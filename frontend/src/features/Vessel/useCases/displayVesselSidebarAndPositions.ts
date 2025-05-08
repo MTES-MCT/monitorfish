@@ -1,5 +1,6 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { doNotAnimate } from '@features/Map/slice'
+import { ActiveVesselType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { loadingVessel, setSelectedVessel, vesselSelectors } from '@features/Vessel/slice'
 import { VesselFeature } from '@features/Vessel/types/vessel'
 import { vesselApi } from '@features/Vessel/vesselApi'
@@ -21,16 +22,12 @@ import type { MainAppThunk } from '@store'
 export const displayVesselSidebarAndPositions =
   (vesselIdentity: Vessel.VesselIdentity, isFromSearch: boolean): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
-    const vessels = vesselSelectors.selectAll(getState().vessel.vessels)
+    const vesselFeatureId = VesselFeature.getVesselFeatureId(vesselIdentity)
+    const activeVessel = vesselSelectors.selectById(getState().vessel.vessels, vesselFeatureId)
     const {
       map: { defaultVesselTrackDepth },
       vessel: { selectedVesselTrackRequest }
     } = getState()
-
-    const vesselFeatureId = VesselFeature.getVesselFeatureId(vesselIdentity)
-    const selectedVesselLastPosition: Vessel.VesselLastPosition | undefined = vessels.find(
-      lastPosition => lastPosition.vesselFeatureId === vesselFeatureId
-    )
 
     dispatch(doNotAnimate(false))
     dispatch(removeError())
@@ -50,8 +47,8 @@ export const displayVesselSidebarAndPositions =
 
     dispatch(displayBannerWarningFromAPIFeedback(vesselAndPositions.positions, isTrackDepthModified, false))
 
-    if (!selectedVesselLastPosition && !vesselAndPositions?.vessel) {
-      captureMessage('Aucune dernière position trouvée pour un navire inconnu dans la table navires.', {
+    if (!activeVessel && !vesselAndPositions?.vessel) {
+      captureMessage('Aucun navire actif trouvé pour un navire inconnu dans la table navires.', {
         extra: {
           vesselFeatureId,
           vesselIdentity
@@ -59,11 +56,14 @@ export const displayVesselSidebarAndPositions =
       })
     }
 
+    const lastPosition =
+      activeVessel?.activeVesselType === ActiveVesselType.POSITION_ACTIVITY ? omit(activeVessel, ['riskFactor']) : {}
     const selectedVessel = {
       // As a safeguard, the VesselIdentity is added as a base object (in case no last position and no vessel are found)
       ...vesselIdentity,
       // If we found a last position, we enrich the vessel
-      ...omit(selectedVesselLastPosition, ['riskFactor']),
+      // TODO Remove this enrichment
+      ...(lastPosition as Vessel.ActiveVesselWithPosition),
       // If we found a vessel from the vessels table, we enrich the vessel
       ...vesselAndPositions?.vessel
     }

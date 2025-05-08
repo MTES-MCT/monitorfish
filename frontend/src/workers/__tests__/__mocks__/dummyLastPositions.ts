@@ -1,11 +1,10 @@
-import { Vessel } from '@features/Vessel/Vessel.types'
+import { ActiveVesselType, VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { customDayjs } from '@mtes-mct/monitor-ui'
-
-import VesselIdentifier = Vessel.VesselIdentifier
 
 const now = customDayjs()
 export const DUMMY_LAST_POSITIONS = [
   {
+    activeVesselType: ActiveVesselType.POSITION_ACTIVITY,
     alerts: [],
     beaconMalfunctionId: undefined,
     beaconNumber: undefined,
@@ -58,6 +57,7 @@ export const DUMMY_LAST_POSITIONS = [
     width: undefined
   },
   {
+    activeVesselType: ActiveVesselType.POSITION_ACTIVITY,
     alerts: [],
     beaconMalfunctionId: undefined,
     beaconNumber: undefined,
@@ -110,6 +110,7 @@ export const DUMMY_LAST_POSITIONS = [
     width: undefined
   },
   {
+    activeVesselType: ActiveVesselType.POSITION_ACTIVITY,
     alerts: [],
     beaconMalfunctionId: undefined,
     beaconNumber: undefined,

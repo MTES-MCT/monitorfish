@@ -61,6 +61,13 @@ data class Vessel(
             "VESSELS_POINTS:${position.internalReferenceNumber ?: "UNKNOWN"}/${position.ircs ?: "UNKNOWN"}/${position.externalReferenceNumber ?: "UNKNOWN"}"
     }
 
+    /**
+     * @description See in frontend: `VesselFeature.getVesselFeatureId()`
+     *  and `getVesselCompositeIdentifier()`
+     */
+    fun toVesselCompositeIdentifier(): String =
+        "VESSELS:${this.internalReferenceNumber ?: "UNKNOWN"}/${this.ircs ?: "UNKNOWN"}/${this.externalReferenceNumber ?: "UNKNOWN"}"
+
     fun getNationalIdentifier(): String {
         val internalReferenceNumberCountryCode =
             LIKELY_CONTROLLED_COUNTRY_CODES.find { countryAlpha3 ->

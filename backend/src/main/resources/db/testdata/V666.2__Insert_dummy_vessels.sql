@@ -86,3 +86,4623 @@ INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immat
 INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (129, 'CFR129', 'MMSI129', 'IRCS129', '{}', 'EXTIMM129', 'BON VENT', 'FR', 34.5, false);
 
 INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (130, 'CFR130', 'MMSI130', 'IRCS130', '{}', 'EXTIMM130', 'L''HIPPO CAMPE', 'FR', 19.2, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (131, 'ABC010331976', 'MMSI131', 'IRCS131', '{}', 'EXTIMM131', 'AIGLE BLEU', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (132, 'ABC010511983', 'MMSI132', 'IRCS132', '{}', 'EXTIMM132', 'AIGLE CALME', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (133, 'ABC011871989', 'MMSI133', 'IRCS133', '{}', 'EXTIMM133', 'AIGLE CINQUANTE-NEUF', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (134, 'ABC012312001', 'MMSI134', 'IRCS134', '{}', 'EXTIMM134', 'AIGLE CRYPTÉE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (135, 'ABC015542000', 'MMSI135', 'IRCS135', '{}', 'EXTIMM135', 'AIGLE DOUTEUX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (136, 'ABC020651986', 'MMSI136', 'IRCS136', '{}', 'EXTIMM136', 'AIGLE FLOTTANTE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (137, 'ABC030072023', 'MMSI137', 'IRCS137', '{}', 'EXTIMM137', 'AIGLE FURTIF', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (138, 'ABC030182000', 'MMSI138', 'IRCS138', '{}', 'EXTIMM138', 'AIGLE MUET', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (139, 'ABC030242021', 'MMSI139', 'IRCS139', '{}', 'EXTIMM139', 'AIGLE NOMADE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (140, 'ABC030262022', 'MMSI140', 'IRCS140', '{}', 'EXTIMM140', 'AIGLE NORDIQUE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (141, 'ABC030351997', 'MMSI141', 'IRCS141', '{}', 'EXTIMM141', 'AIGLE QUARANTE-QUATRE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (142, 'ABC030391982', 'MMSI142', 'IRCS142', '{}', 'EXTIMM142', 'AIGLE QUATRE-VINGT-QUATORZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (143, 'ABC030392021', 'MMSI143', 'IRCS143', '{}', 'EXTIMM143', 'AIGLE QUATRE-VINGT-QUINZE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (144, 'ABC030451996', 'MMSI144', 'IRCS144', '{}', 'EXTIMM144', 'AIGLE SOIXANTE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (145, 'ABC030471992', 'MMSI145', 'IRCS145', '{}', 'EXTIMM145', 'AIGLE UN', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (146, 'ABC030631987', 'MMSI146', 'IRCS146', '{}', 'EXTIMM146', 'AIGLE VINGT-QUATRE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (147, 'ABC030671983', 'MMSI147', 'IRCS147', '{}', 'EXTIMM147', 'AIGLE VINGT-TROIS', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (148, 'ABC030912021', 'MMSI148', 'IRCS148', '{}', 'EXTIMM148', 'AIGLE VIRGINAL', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (149, 'ABC030971994', 'MMSI149', 'IRCS149', '{}', 'EXTIMM149', 'ALBATROS CALME', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (150, 'ABC030981991', 'MMSI150', 'IRCS150', '{}', 'EXTIMM150', 'ALBATROS DISCRET', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (151, 'ABC030982021', 'MMSI151', 'IRCS151', '{}', 'EXTIMM151', 'ALBATROS DOUTEUX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (152, 'ABC030992022', 'MMSI152', 'IRCS152', '{}', 'EXTIMM152', 'ALBATROS JAUNE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (153, 'ABC031211992', 'MMSI153', 'IRCS153', '{}', 'EXTIMM153', 'ALBATROS NOIR', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (154, 'ABC032962000', 'MMSI154', 'IRCS154', '{}', 'EXTIMM154', 'ALBATROS ONZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (155, 'ABC034022000', 'MMSI155', 'IRCS155', '{}', 'EXTIMM155', 'ALBATROS POURPRE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (156, 'ABC034832001', 'MMSI156', 'IRCS156', '{}', 'EXTIMM156', 'ALBATROS QUATRE-VINGT-DIX-SEPT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (157, 'ABC034832021', 'MMSI157', 'IRCS157', '{}', 'EXTIMM157', 'ALBATROS QUINZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (158, 'ABC035102000', 'MMSI158', 'IRCS158', '{}', 'EXTIMM158', 'ALBATROS ROUGE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (159, 'ABC035261999', 'MMSI159', 'IRCS159', '{}', 'EXTIMM159', 'ALBATROS SOIXANTE-CINQ', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (160, 'ABC035681988', 'MMSI160', 'IRCS160', '{}', 'EXTIMM160', 'ALBATROS SOIXANTE-DIX-HUIT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (161, 'ABC035711989', 'MMSI161', 'IRCS161', '{}', 'EXTIMM161', 'ALBATROS TRENTE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (162, 'ABC035761999', 'MMSI162', 'IRCS162', '{}', 'EXTIMM162', 'ALBATROS UN', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (163, 'ABC035961988', 'MMSI163', 'IRCS163', '{}', 'EXTIMM163', 'ALBATROS VOLONTAIRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (164, 'ABC400660101', 'MMSI164', 'IRCS164', '{}', 'EXTIMM164', 'ATLANTIQUE BALISE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (165, 'ABC405030101', 'MMSI165', 'IRCS165', '{}', 'EXTIMM165', 'ATLANTIQUE BRUME', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (166, 'ABC000040071', 'MMSI166', 'IRCS166', '{}', 'EXTIMM166', 'ATLANTIQUE CODE VINGT-ET-UN', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (167, 'ABC000040851', 'MMSI167', 'IRCS167', '{}', 'EXTIMM167', 'ATLANTIQUE DRAGON', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (168, 'ABC000045520', 'MMSI168', 'IRCS168', '{}', 'EXTIMM168', 'ATLANTIQUE DRAGON HUIT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (169, 'ABC000045699', 'MMSI169', 'IRCS169', '{}', 'EXTIMM169', 'ATLANTIQUE DÉCODEUR', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (170, 'ABC000015478', 'MMSI170', 'IRCS170', '{}', 'EXTIMM170', 'ATLANTIQUE ENCRE QUATRE-VINGT-TROIS', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (171, 'ABC000016047', 'MMSI171', 'IRCS171', '{}', 'EXTIMM171', 'ATLANTIQUE FANTÔME DIX-HUIT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (172, 'ABC000022941', 'MMSI172', 'IRCS172', '{}', 'EXTIMM172', 'ATLANTIQUE HÉRÉSIE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (173, 'ABC000022972', 'MMSI173', 'IRCS173', '{}', 'EXTIMM173', 'ATLANTIQUE HÉRÉSIE HUIT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (174, 'ABC000022984', 'MMSI174', 'IRCS174', '{}', 'EXTIMM174', 'ATLANTIQUE MANTA SEIZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (175, 'ABC000023157', 'MMSI175', 'IRCS175', '{}', 'EXTIMM175', 'ATLANTIQUE MANTA VINGT-SIX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (176, 'ABC000023252', 'MMSI176', 'IRCS176', '{}', 'EXTIMM176', 'ATLANTIQUE PIRATE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (177, 'ABC000023422', 'MMSI177', 'IRCS177', '{}', 'EXTIMM177', 'ATLANTIQUE RAPACE SOIXANTE-DIX-SEPT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (178, 'ABC000023601', 'MMSI178', 'IRCS178', '{}', 'EXTIMM178', 'ATLANTIQUE RIVAGE SOIXANTE-DIX-SEPT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (179, 'ABC000023933', 'MMSI179', 'IRCS179', '{}', 'EXTIMM179', 'ATLANTIQUE SENTINELLE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (180, 'ABC000024117', 'MMSI180', 'IRCS180', '{}', 'EXTIMM180', 'ATLANTIQUE SOUTERRAIN SOIXANTE-NEUF', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (181, 'ABC000024436', 'MMSI181', 'IRCS181', '{}', 'EXTIMM181', 'ATLANTIQUE SPECTRE TRENTE-CINQ', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (182, 'ABC000024554', 'MMSI182', 'IRCS182', '{}', 'EXTIMM182', 'ATLANTIQUE ÉPAVE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (183, 'ABC000024588', 'MMSI183', 'IRCS183', '{}', 'EXTIMM183', 'BALISE ATLANTIQUE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (184, 'ABC000024996', 'MMSI184', 'IRCS184', '{}', 'EXTIMM184', 'BALISE IMPÉRIALE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (185, 'ABC000025109', 'MMSI185', 'IRCS185', '{}', 'EXTIMM185', 'BALISE INUTILE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (186, 'ABC000025300', 'MMSI186', 'IRCS186', '{}', 'EXTIMM186', 'BALISE ONZE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (187, 'ABC000025741', 'MMSI187', 'IRCS187', '{}', 'EXTIMM187', 'BALISE POURPRE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (188, 'ABC000025819', 'MMSI188', 'IRCS188', '{}', 'EXTIMM188', 'BALISE QUARANTE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (189, 'ABC000025951', 'MMSI189', 'IRCS189', '{}', 'EXTIMM189', 'BALISE QUARANTE-NEUF', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (190, 'ABC000026556', 'MMSI190', 'IRCS190', '{}', 'EXTIMM190', 'BALISE QUARANTE-SIX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (191, 'ABC000026559', 'MMSI191', 'IRCS191', '{}', 'EXTIMM191', 'BALISE QUATRE-VINGT-DOUZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (192, 'ABC000026887', 'MMSI192', 'IRCS192', '{}', 'EXTIMM192', 'BALISE SEIZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (193, 'ABC000027166', 'MMSI193', 'IRCS193', '{}', 'EXTIMM193', 'BALISE TACTIQUE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (194, 'ABC000114914', 'MMSI194', 'IRCS194', '{}', 'EXTIMM194', 'BALISE TRENTE-ET-UN', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (195, 'ABC000129399', 'MMSI195', 'IRCS195', '{}', 'EXTIMM195', 'BLEU AIGLE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (196, 'ABC000134011', 'MMSI196', 'IRCS196', '{}', 'EXTIMM196', 'BLEU BALISE VINGT-HUIT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (197, 'ABC000141113', 'MMSI197', 'IRCS197', '{}', 'EXTIMM197', 'BLEU CODE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (198, 'ABC000147148', 'MMSI198', 'IRCS198', '{}', 'EXTIMM198', 'BLEU CROIX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (199, 'ABC000148773', 'MMSI199', 'IRCS199', '{}', 'EXTIMM199', 'BLEU DENT VINGT-TROIS', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (200, 'ABC000149176', 'MMSI200', 'IRCS200', '{}', 'EXTIMM200', 'BLEU ENCRE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (201, 'ABC000151550', 'MMSI201', 'IRCS201', '{}', 'EXTIMM201', 'BLEU FÉLIN', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (202, 'ABC000153893', 'MMSI202', 'IRCS202', '{}', 'EXTIMM202', 'BLEU FÉLIN DIX-SEPT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (203, 'ABC000155922', 'MMSI203', 'IRCS203', '{}', 'EXTIMM203', 'BLEU FÉLIN SOIXANTE-DIX-NEUF', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (204, 'ABC000156474', 'MMSI204', 'IRCS204', '{}', 'EXTIMM204', 'BLEU GRANITE QUARANTE-SEPT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (205, 'ABC000157155', 'MMSI205', 'IRCS205', '{}', 'EXTIMM205', 'BLEU GRANITE SOIXANTE-TROIS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (206, 'ABC000160084', 'MMSI206', 'IRCS206', '{}', 'EXTIMM206', 'BLEU MANTA', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (207, 'ABC000161814', 'MMSI207', 'IRCS207', '{}', 'EXTIMM207', 'BLEU MANTA QUARANTE-DEUX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (208, 'ABC000161887', 'MMSI208', 'IRCS208', '{}', 'EXTIMM208', 'BLEU MODULE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (209, 'ABC000162412', 'MMSI209', 'IRCS209', '{}', 'EXTIMM209', 'BLEU MÉDUSE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (210, 'ABC000162439', 'MMSI210', 'IRCS210', '{}', 'EXTIMM210', 'BLEU PAQUEBOT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (211, 'ABC000172514', 'MMSI211', 'IRCS211', '{}', 'EXTIMM211', 'BLEU PIRATE QUATRE-VINGT-CINQ', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (212, 'ABC000173595', 'MMSI212', 'IRCS212', '{}', 'EXTIMM212', 'BLEU PYLÔNE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (213, 'ABC000174694', 'MMSI213', 'IRCS213', '{}', 'EXTIMM213', 'BLEU RADIOPHARE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (214, 'ABC000176164', 'MMSI214', 'IRCS214', '{}', 'EXTIMM214', 'BLEU RIVAGE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (215, 'ABC000176213', 'MMSI215', 'IRCS215', '{}', 'EXTIMM215', 'BLEU RIVAGE QUATRE-VINGT-NEUF', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (216, 'ABC000176257', 'MMSI216', 'IRCS216', '{}', 'EXTIMM216', 'BLEU SENTINELLE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (217, 'ABC000176269', 'MMSI217', 'IRCS217', '{}', 'EXTIMM217', 'BLEU SENTINELLE TRENTE-CINQ', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (218, 'ABC000176298', 'MMSI218', 'IRCS218', '{}', 'EXTIMM218', 'BLEU TRAITRE CINQUANTE-SIX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (219, 'ABC000180273', 'MMSI219', 'IRCS219', '{}', 'EXTIMM219', 'BLEU TYPHON VINGT-CINQ', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (220, 'ABC000180869', 'MMSI220', 'IRCS220', '{}', 'EXTIMM220', 'BLEU VORTEX QUARANTE-HUIT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (221, 'ABC000181150', 'MMSI221', 'IRCS221', '{}', 'EXTIMM221', 'BLEU VÉRITÉ', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (222, 'ABC000181164', 'MMSI222', 'IRCS222', '{}', 'EXTIMM222', 'BLEU ÉTOILE QUARANTE-NEUF', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (223, 'ABC000182253', 'MMSI223', 'IRCS223', '{}', 'EXTIMM223', 'BORGNE BRUME', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (224, 'ABC000184574', 'MMSI224', 'IRCS224', '{}', 'EXTIMM224', 'BORGNE CALYPSO', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (225, 'ABC000184610', 'MMSI225', 'IRCS225', '{}', 'EXTIMM225', 'BORGNE CALYPSO TRENTE-CINQ', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (226, 'ABC000185147', 'MMSI226', 'IRCS226', '{}', 'EXTIMM226', 'BORGNE CARGO', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (227, 'ABC000185176', 'MMSI227', 'IRCS227', '{}', 'EXTIMM227', 'BORGNE DENT SOIXANTE-QUATRE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (228, 'ABC000186184', 'MMSI228', 'IRCS228', '{}', 'EXTIMM228', 'BORGNE DÉCODEUR SOIXANTE-ET-UN', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (229, 'ABC000188000', 'MMSI229', 'IRCS229', '{}', 'EXTIMM229', 'BORGNE DÉRIVE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (230, 'ABC000189275', 'MMSI230', 'IRCS230', '{}', 'EXTIMM230', 'BORGNE FRÉQUENCE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (231, 'ABC000192622', 'MMSI231', 'IRCS231', '{}', 'EXTIMM231', 'BORGNE GRANITE DEUX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (232, 'ABC000195472', 'MMSI232', 'IRCS232', '{}', 'EXTIMM232', 'BORGNE LAME VINGT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (233, 'ABC000219755', 'MMSI233', 'IRCS233', '{}', 'EXTIMM233', 'BORGNE NARVAL HUIT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (234, 'ABC000220056', 'MMSI234', 'IRCS234', '{}', 'EXTIMM234', 'BORGNE NÉMÉSIS QUATRE-VINGT-DEUX', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (235, 'ABC000220841', 'MMSI235', 'IRCS235', '{}', 'EXTIMM235', 'BORGNE OPALE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (236, 'ABC000221314', 'MMSI236', 'IRCS236', '{}', 'EXTIMM236', 'BORGNE OPALE QUARANTE-NEUF', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (237, 'ABC000221341', 'MMSI237', 'IRCS237', '{}', 'EXTIMM237', 'BORGNE PAQUEBOT QUATRE-VINGT-NEUF', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (238, 'ABC000221404', 'MMSI238', 'IRCS238', '{}', 'EXTIMM238', 'BORGNE PONT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (239, 'ABC000221422', 'MMSI239', 'IRCS239', '{}', 'EXTIMM239', 'BORGNE RAPACE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (240, 'ABC000221443', 'MMSI240', 'IRCS240', '{}', 'EXTIMM240', 'BORGNE RAPACE DIX-NEUF', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (241, 'ABC000221444', 'MMSI241', 'IRCS241', '{}', 'EXTIMM241', 'BORGNE RIVAGE CINQUANTE-NEUF', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (242, 'ABC000222360', 'MMSI242', 'IRCS242', '{}', 'EXTIMM242', 'BORGNE SABORDS', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (243, 'ABC000222427', 'MMSI243', 'IRCS243', '{}', 'EXTIMM243', 'BORGNE TRITON', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (244, 'ABC000226043', 'MMSI244', 'IRCS244', '{}', 'EXTIMM244', 'BORGNE ÉQUINOXE NEUF', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (245, 'ABC000227600', 'MMSI245', 'IRCS245', '{}', 'EXTIMM245', 'BRISÉE BALISE SOIXANTE-QUATRE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (246, 'ABC000228329', 'MMSI246', 'IRCS246', '{}', 'EXTIMM246', 'BRISÉE CARGO', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (247, 'ABC000231879', 'MMSI247', 'IRCS247', '{}', 'EXTIMM247', 'BRISÉE CENTAURE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (248, 'ABC000231968', 'MMSI248', 'IRCS248', '{}', 'EXTIMM248', 'BRISÉE DENT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (249, 'ABC000232024', 'MMSI249', 'IRCS249', '{}', 'EXTIMM249', 'BRISÉE DENT VINGT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (250, 'ABC000232628', 'MMSI250', 'IRCS250', '{}', 'EXTIMM250', 'BRISÉE FANTÔME', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (251, 'ABC000235653', 'MMSI251', 'IRCS251', '{}', 'EXTIMM251', 'BRISÉE FÉLIN', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (252, 'ABC000238890', 'MMSI252', 'IRCS252', '{}', 'EXTIMM252', 'BRISÉE GLISSEMENT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (253, 'ABC000239081', 'MMSI253', 'IRCS253', '{}', 'EXTIMM253', 'BRISÉE GRANITE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (254, 'ABC000242502', 'MMSI254', 'IRCS254', '{}', 'EXTIMM254', 'BRISÉE GRANITE VINGT-QUATRE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (255, 'ABC000245531', 'MMSI255', 'IRCS255', '{}', 'EXTIMM255', 'BRISÉE NÉMÉSIS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (256, 'ABC000245965', 'MMSI256', 'IRCS256', '{}', 'EXTIMM256', 'BRISÉE OPALE SOIXANTE-DIX-SEPT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (257, 'ABC000248005', 'MMSI257', 'IRCS257', '{}', 'EXTIMM257', 'BRISÉE PAQUEBOT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (258, 'ABC000249821', 'MMSI258', 'IRCS258', '{}', 'EXTIMM258', 'BRISÉE PHARE QUATRE-VINGT-UN', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (259, 'ABC000249878', 'MMSI259', 'IRCS259', '{}', 'EXTIMM259', 'BRISÉE PONT VINGT-NEUF', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (260, 'ABC000249880', 'MMSI260', 'IRCS260', '{}', 'EXTIMM260', 'BRISÉE PYLÔNE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (261, 'ABC000249894', 'MMSI261', 'IRCS261', '{}', 'EXTIMM261', 'BRISÉE SPECTRE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (262, 'ABC000250245', 'MMSI262', 'IRCS262', '{}', 'EXTIMM262', 'BRISÉE SPECTRE SOIXANTE-QUATORZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (263, 'ABC000250714', 'MMSI263', 'IRCS263', '{}', 'EXTIMM263', 'BRISÉE TRITON CINQUANTE-HUIT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (264, 'ABC000250812', 'MMSI264', 'IRCS264', '{}', 'EXTIMM264', 'BRISÉE VORTEX TRENTE-CINQ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (265, 'ABC000250891', 'MMSI265', 'IRCS265', '{}', 'EXTIMM265', 'BRISÉE VÉRITÉ', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (266, 'ABC000250895', 'MMSI266', 'IRCS266', '{}', 'EXTIMM266', 'BRISÉE ÉPAVE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (267, 'ABC000252740', 'MMSI267', 'IRCS267', '{}', 'EXTIMM267', 'BRISÉE ÉPAVE CENT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (268, 'ABC000256107', 'MMSI268', 'IRCS268', '{}', 'EXTIMM268', 'BRISÉE ÉQUINOXE QUATRE-VINGT-DIX-NEUF', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (269, 'ABC000260598', 'MMSI269', 'IRCS269', '{}', 'EXTIMM269', 'BRUME DIX-SEPT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (270, 'ABC000260875', 'MMSI270', 'IRCS270', '{}', 'EXTIMM270', 'BRUME FURTIF', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (271, 'ABC000263924', 'MMSI271', 'IRCS271', '{}', 'EXTIMM271', 'BRUME FURTIVE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (272, 'ABC000264979', 'MMSI272', 'IRCS272', '{}', 'EXTIMM272', 'BRUME OMBRE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (273, 'ABC000265089', 'MMSI273', 'IRCS273', '{}', 'EXTIMM273', 'BRUME PASSAGÈRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (274, 'ABC000266386', 'MMSI274', 'IRCS274', '{}', 'EXTIMM274', 'BRUME QUARANTE-CINQ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (275, 'ABC000266507', 'MMSI275', 'IRCS275', '{}', 'EXTIMM275', 'BRUME QUATORZE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (276, 'ABC000267028', 'MMSI276', 'IRCS276', '{}', 'EXTIMM276', 'BRUME QUATRE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (277, 'ABC000268442', 'MMSI277', 'IRCS277', '{}', 'EXTIMM277', 'BRUME QUATRE-VINGT-HUIT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (278, 'ABC000268957', 'MMSI278', 'IRCS278', '{}', 'EXTIMM278', 'BRUME QUATRE-VINGT-SIX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (279, 'ABC000269002', 'MMSI279', 'IRCS279', '{}', 'EXTIMM279', 'BRUME ROUGE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (280, 'ABC000269468', 'MMSI280', 'IRCS280', '{}', 'EXTIMM280', 'BRUME SOIXANTE-ET-ONZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (281, 'ABC000269631', 'MMSI281', 'IRCS281', '{}', 'EXTIMM281', 'BRUME SÉRIEUSE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (282, 'ABC000269842', 'MMSI282', 'IRCS282', '{}', 'EXTIMM282', 'BRUME TRENTE-HUIT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (283, 'ABC000269856', 'MMSI283', 'IRCS283', '{}', 'EXTIMM283', 'BRUME VERTICALE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (284, 'ABC000269881', 'MMSI284', 'IRCS284', '{}', 'EXTIMM284', 'CACHÉE ALBATROS SOIXANTE-TREIZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (285, 'ABC000270755', 'MMSI285', 'IRCS285', '{}', 'EXTIMM285', 'CACHÉE BALISE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (286, 'ABC000273402', 'MMSI286', 'IRCS286', '{}', 'EXTIMM286', 'CACHÉE CALYPSO', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (287, 'ABC000273904', 'MMSI287', 'IRCS287', '{}', 'EXTIMM287', 'CACHÉE CODE ONZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (288, 'ABC000273952', 'MMSI288', 'IRCS288', '{}', 'EXTIMM288', 'CACHÉE CODE QUARANTE-QUATRE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (289, 'ABC000273972', 'MMSI289', 'IRCS289', '{}', 'EXTIMM289', 'CACHÉE ENCRE SOIXANTE-QUINZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (290, 'ABC000274003', 'MMSI290', 'IRCS290', '{}', 'EXTIMM290', 'CACHÉE ENCRE SOIXANTE-SEIZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (291, 'ABC000274045', 'MMSI291', 'IRCS291', '{}', 'EXTIMM291', 'CACHÉE FANTÔME CINQUANTE-SEPT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (292, 'ABC000274321', 'MMSI292', 'IRCS292', '{}', 'EXTIMM292', 'CACHÉE GRANITE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (293, 'ABC000276038', 'MMSI293', 'IRCS293', '{}', 'EXTIMM293', 'CACHÉE MANTA', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (294, 'ABC000276205', 'MMSI294', 'IRCS294', '{}', 'EXTIMM294', 'CACHÉE MODULE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (295, 'ABC000276206', 'MMSI295', 'IRCS295', '{}', 'EXTIMM295', 'CACHÉE MODULE CINQUANTE-SIX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (296, 'ABC000276344', 'MMSI296', 'IRCS296', '{}', 'EXTIMM296', 'CACHÉE MÉDUSE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (297, 'ABC000277588', 'MMSI297', 'IRCS297', '{}', 'EXTIMM297', 'CACHÉE NARVAL', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (298, 'ABC000278969', 'MMSI298', 'IRCS298', '{}', 'EXTIMM298', 'CACHÉE NARVAL CINQUANTE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (299, 'ABC000279377', 'MMSI299', 'IRCS299', '{}', 'EXTIMM299', 'CACHÉE NÉMÉSIS', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (300, 'ABC000280581', 'MMSI300', 'IRCS300', '{}', 'EXTIMM300', 'CACHÉE PHARE QUINZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (301, 'ABC000280625', 'MMSI301', 'IRCS301', '{}', 'EXTIMM301', 'CACHÉE PIRATE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (302, 'ABC000285098', 'MMSI302', 'IRCS302', '{}', 'EXTIMM302', 'CACHÉE PIRATE QUATRE-VINGT-QUATRE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (303, 'ABC000286312', 'MMSI303', 'IRCS303', '{}', 'EXTIMM303', 'CACHÉE RIVAGE TROIS', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (304, 'ABC000286322', 'MMSI304', 'IRCS304', '{}', 'EXTIMM304', 'CACHÉE SENTINELLE QUATRE-VINGT-DIX-SEPT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (305, 'ABC000287904', 'MMSI305', 'IRCS305', '{}', 'EXTIMM305', 'CACHÉE SOUTERRAIN', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (306, 'ABC000288027', 'MMSI306', 'IRCS306', '{}', 'EXTIMM306', 'CACHÉE SPECTRE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (307, 'ABC000288233', 'MMSI307', 'IRCS307', '{}', 'EXTIMM307', 'CACHÉE VORTEX SOIXANTE-TREIZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (308, 'ABC000288283', 'MMSI308', 'IRCS308', '{}', 'EXTIMM308', 'CACHÉE ÉTOILE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (309, 'ABC000288512', 'MMSI309', 'IRCS309', '{}', 'EXTIMM309', 'CALME ALBATROS', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (310, 'ABC000288534', 'MMSI310', 'IRCS310', '{}', 'EXTIMM310', 'CALME BALISE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (311, 'ABC000288544', 'MMSI311', 'IRCS311', '{}', 'EXTIMM311', 'CALME CALYPSO', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (312, 'ABC000288920', 'MMSI312', 'IRCS312', '{}', 'EXTIMM312', 'CALME CALYPSO CINQUANTE-QUATRE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (313, 'ABC000289473', 'MMSI313', 'IRCS313', '{}', 'EXTIMM313', 'CALME CODE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (314, 'ABC000289588', 'MMSI314', 'IRCS314', '{}', 'EXTIMM314', 'CALME CROIX', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (315, 'ABC000289612', 'MMSI315', 'IRCS315', '{}', 'EXTIMM315', 'CALME DRAGON QUATRE-VINGT-QUATORZE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (316, 'ABC000291636', 'MMSI316', 'IRCS316', '{}', 'EXTIMM316', 'CALME ENCRE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (317, 'ABC000291650', 'MMSI317', 'IRCS317', '{}', 'EXTIMM317', 'CALME FRÉQUENCE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (318, 'ABC000292648', 'MMSI318', 'IRCS318', '{}', 'EXTIMM318', 'CALME FÉLIN', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (319, 'ABC000293465', 'MMSI319', 'IRCS319', '{}', 'EXTIMM319', 'CALME HÉRÉSIE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (320, 'ABC000293786', 'MMSI320', 'IRCS320', '{}', 'EXTIMM320', 'CALME HÉRÉSIE DIX-SEPT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (321, 'ABC000294792', 'MMSI321', 'IRCS321', '{}', 'EXTIMM321', 'CALME MANTA', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (322, 'ABC000295304', 'MMSI322', 'IRCS322', '{}', 'EXTIMM322', 'CALME PIRATE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (323, 'ABC000296586', 'MMSI323', 'IRCS323', '{}', 'EXTIMM323', 'CALME PONT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (324, 'ABC000300126', 'MMSI324', 'IRCS324', '{}', 'EXTIMM324', 'CALME PYLÔNE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (325, 'ABC000302627', 'MMSI325', 'IRCS325', '{}', 'EXTIMM325', 'CALME RAPACE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (326, 'ABC000302862', 'MMSI326', 'IRCS326', '{}', 'EXTIMM326', 'CALME SABORDS QUATRE-VINGT-DIX-HUIT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (327, 'ABC000302887', 'MMSI327', 'IRCS327', '{}', 'EXTIMM327', 'CALME TYPHON CINQUANTE-SIX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (328, 'ABC000304026', 'MMSI328', 'IRCS328', '{}', 'EXTIMM328', 'CALME VORTEX DEUX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (329, 'ABC000307049', 'MMSI329', 'IRCS329', '{}', 'EXTIMM329', 'CALME VÉRITÉ', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (330, 'ABC000308340', 'MMSI330', 'IRCS330', '{}', 'EXTIMM330', 'CALYPSO CRYPTÉE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (331, 'ABC000308358', 'MMSI331', 'IRCS331', '{}', 'EXTIMM331', 'CALYPSO FURTIF', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (332, 'ABC000310456', 'MMSI332', 'IRCS332', '{}', 'EXTIMM332', 'CALYPSO HUIT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (333, 'ABC000310677', 'MMSI333', 'IRCS333', '{}', 'EXTIMM333', 'CALYPSO INUTILE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (334, 'ABC000310931', 'MMSI334', 'IRCS334', '{}', 'EXTIMM334', 'CALYPSO NOMADE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (335, 'ABC000312095', 'MMSI335', 'IRCS335', '{}', 'EXTIMM335', 'CALYPSO NORDIQUE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (336, 'ABC000312292', 'MMSI336', 'IRCS336', '{}', 'EXTIMM336', 'CALYPSO OMBRE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (337, 'ABC000313027', 'MMSI337', 'IRCS337', '{}', 'EXTIMM337', 'CALYPSO POURPRE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (338, 'ABC000313370', 'MMSI338', 'IRCS338', '{}', 'EXTIMM338', 'CALYPSO QUATRE-VINGT-DEUX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (339, 'ABC000313462', 'MMSI339', 'IRCS339', '{}', 'EXTIMM339', 'CALYPSO QUATRE-VINGT-DOUZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (340, 'ABC000313507', 'MMSI340', 'IRCS340', '{}', 'EXTIMM340', 'CALYPSO QUATRE-VINGT-NEUF', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (341, 'ABC000314761', 'MMSI341', 'IRCS341', '{}', 'EXTIMM341', 'CALYPSO SILENCIEUX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (342, 'ABC000314979', 'MMSI342', 'IRCS342', '{}', 'EXTIMM342', 'CALYPSO SOIXANTE-DIX-NEUF', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (343, 'ABC000315095', 'MMSI343', 'IRCS343', '{}', 'EXTIMM343', 'CALYPSO SÉRIEUSE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (344, 'ABC000315282', 'MMSI344', 'IRCS344', '{}', 'EXTIMM344', 'CALYPSO TRENTE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (345, 'ABC000315341', 'MMSI345', 'IRCS345', '{}', 'EXTIMM345', 'CALYPSO TRENTE-CINQ', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (346, 'ABC000315388', 'MMSI346', 'IRCS346', '{}', 'EXTIMM346', 'CALYPSO TROIS', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (347, 'ABC000316404', 'MMSI347', 'IRCS347', '{}', 'EXTIMM347', 'CALYPSO ZÉRO', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (348, 'ABC000317543', 'MMSI348', 'IRCS348', '{}', 'EXTIMM348', 'CARGO CENT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (349, 'ABC000317545', 'MMSI349', 'IRCS349', '{}', 'EXTIMM349', 'CARGO CINQUANTE-NEUF', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (350, 'ABC000317611', 'MMSI350', 'IRCS350', '{}', 'EXTIMM350', 'CARGO FLOTTANTE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (351, 'ABC000318345', 'MMSI351', 'IRCS351', '{}', 'EXTIMM351', 'CARGO INVISIBLE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (352, 'ABC000318792', 'MMSI352', 'IRCS352', '{}', 'EXTIMM352', 'CARGO JAUNE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (353, 'ABC000318852', 'MMSI353', 'IRCS353', '{}', 'EXTIMM353', 'CARGO NOCTURNE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (354, 'ABC000319555', 'MMSI354', 'IRCS354', '{}', 'EXTIMM354', 'CARGO POURPRE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (355, 'ABC000319725', 'MMSI355', 'IRCS355', '{}', 'EXTIMM355', 'CARGO QUARANTE-TROIS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (356, 'ABC000319742', 'MMSI356', 'IRCS356', '{}', 'EXTIMM356', 'CARGO QUATRE-VINGT-SEIZE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (357, 'ABC000319820', 'MMSI357', 'IRCS357', '{}', 'EXTIMM357', 'CARGO SILENCIEUX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (358, 'ABC000320093', 'MMSI358', 'IRCS358', '{}', 'EXTIMM358', 'CARGO SOIXANTE-DIX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (359, 'ABC000320125', 'MMSI359', 'IRCS359', '{}', 'EXTIMM359', 'CARGO SOIXANTE-DIX-HUIT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (360, 'ABC000320805', 'MMSI360', 'IRCS360', '{}', 'EXTIMM360', 'CARGO SOIXANTE-DIX-SEPT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (361, 'ABC000320810', 'MMSI361', 'IRCS361', '{}', 'EXTIMM361', 'CARGO SOIXANTE-HUIT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (362, 'ABC000321211', 'MMSI362', 'IRCS362', '{}', 'EXTIMM362', 'CARGO SOIXANTE-NEUF', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (363, 'ABC000326173', 'MMSI363', 'IRCS363', '{}', 'EXTIMM363', 'CARGO SOIXANTE-QUATORZE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (364, 'ABC000326215', 'MMSI364', 'IRCS364', '{}', 'EXTIMM364', 'CARGO SOIXANTE-SEIZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (365, 'ABC000326421', 'MMSI365', 'IRCS365', '{}', 'EXTIMM365', 'CARGO SOURD', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (366, 'ABC000329012', 'MMSI366', 'IRCS366', '{}', 'EXTIMM366', 'CARGO TRENTE-HUIT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (367, 'ABC000329195', 'MMSI367', 'IRCS367', '{}', 'EXTIMM367', 'CARGO TRENTE-TROIS', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (368, 'ABC000329320', 'MMSI368', 'IRCS368', '{}', 'EXTIMM368', 'CARGO VERTICALE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (369, 'ABC000329868', 'MMSI369', 'IRCS369', '{}', 'EXTIMM369', 'CARGO VIRGINAL', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (370, 'ABC000330139', 'MMSI370', 'IRCS370', '{}', 'EXTIMM370', 'CARGO VOLONTAIRE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (371, 'ABC000330140', 'MMSI371', 'IRCS371', '{}', 'EXTIMM371', 'CARGO ZÉRO', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (372, 'ABC000330146', 'MMSI372', 'IRCS372', '{}', 'EXTIMM372', 'CENTAURE BLEU', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (373, 'ABC000330150', 'MMSI373', 'IRCS373', '{}', 'EXTIMM373', 'CENTAURE CACHÉE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (374, 'ABC000330164', 'MMSI374', 'IRCS374', '{}', 'EXTIMM374', 'CENTAURE FURTIVE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (375, 'ABC000330168', 'MMSI375', 'IRCS375', '{}', 'EXTIMM375', 'CENTAURE IMPÉRIALE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (376, 'ABC000330175', 'MMSI376', 'IRCS376', '{}', 'EXTIMM376', 'CENTAURE NORDIQUE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (377, 'ABC000330784', 'MMSI377', 'IRCS377', '{}', 'EXTIMM377', 'CENTAURE QUARANTE-SIX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (378, 'ABC000332501', 'MMSI378', 'IRCS378', '{}', 'EXTIMM378', 'CENTAURE QUATRE-VINGT-QUINZE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (379, 'ABC000333193', 'MMSI379', 'IRCS379', '{}', 'EXTIMM379', 'CENTAURE SOIXANTE-DIX-SEPT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (380, 'ABC000333338', 'MMSI380', 'IRCS380', '{}', 'EXTIMM380', 'CENTAURE SOIXANTE-TROIS', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (381, 'ABC000333716', 'MMSI381', 'IRCS381', '{}', 'EXTIMM381', 'CENTAURE TRANSPARENT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (382, 'ABC000334416', 'MMSI382', 'IRCS382', '{}', 'EXTIMM382', 'CENTAURE TRENTE-SIX', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (383, 'ABC000334734', 'MMSI383', 'IRCS383', '{}', 'EXTIMM383', 'CENTAURE TROIS', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (384, 'ABC000334883', 'MMSI384', 'IRCS384', '{}', 'EXTIMM384', 'CENTAURE VERTICALE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (385, 'ABC000334944', 'MMSI385', 'IRCS385', '{}', 'EXTIMM385', 'CENTAURE VOLONTAIRE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (386, 'ABC000338276', 'MMSI386', 'IRCS386', '{}', 'EXTIMM386', 'CHIMERA BRISÉE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (387, 'ABC000338285', 'MMSI387', 'IRCS387', '{}', 'EXTIMM387', 'CHIMERA CINQUANTE-SEPT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (388, 'ABC000338317', 'MMSI388', 'IRCS388', '{}', 'EXTIMM388', 'CHIMERA CRYPTÉE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (389, 'ABC000339774', 'MMSI389', 'IRCS389', '{}', 'EXTIMM389', 'CHIMERA DISCRET', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (390, 'ABC000343451', 'MMSI390', 'IRCS390', '{}', 'EXTIMM390', 'CHIMERA DOUTEUX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (391, 'ABC000343698', 'MMSI391', 'IRCS391', '{}', 'EXTIMM391', 'CHIMERA FURTIF', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (392, 'ABC000343731', 'MMSI392', 'IRCS392', '{}', 'EXTIMM392', 'CHIMERA INUTILE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (393, 'ABC000350198', 'MMSI393', 'IRCS393', '{}', 'EXTIMM393', 'CHIMERA PASSAGÈRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (394, 'ABC000350449', 'MMSI394', 'IRCS394', '{}', 'EXTIMM394', 'CHIMERA QUARANTE-NEUF', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (395, 'ABC000352932', 'MMSI395', 'IRCS395', '{}', 'EXTIMM395', 'CHIMERA QUATRE-VINGT-UN', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (396, 'ABC000353220', 'MMSI396', 'IRCS396', '{}', 'EXTIMM396', 'CHIMERA SIX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (397, 'ABC000356972', 'MMSI397', 'IRCS397', '{}', 'EXTIMM397', 'CHIMERA SOIXANTE-QUATORZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (398, 'ABC000358586', 'MMSI398', 'IRCS398', '{}', 'EXTIMM398', 'CHIMERA SOIXANTE-TROIS', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (399, 'ABC000362427', 'MMSI399', 'IRCS399', '{}', 'EXTIMM399', 'CHIMERA TRANSPARENT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (400, 'ABC000365109', 'MMSI400', 'IRCS400', '{}', 'EXTIMM400', 'CHIMERA VERTICALE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (401, 'ABC000373082', 'MMSI401', 'IRCS401', '{}', 'EXTIMM401', 'CHIMERA VINGT-CINQ', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (402, 'ABC000373773', 'MMSI402', 'IRCS402', '{}', 'EXTIMM402', 'CHIMERA VOLONTAIRE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (403, 'ABC000373974', 'MMSI403', 'IRCS403', '{}', 'EXTIMM403', 'CHIMERA ÉGARÉ', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (404, 'ABC000374004', 'MMSI404', 'IRCS404', '{}', 'EXTIMM404', 'CODE CALME', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (405, 'ABC000374019', 'MMSI405', 'IRCS405', '{}', 'EXTIMM405', 'CODE CENT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (406, 'ABC000374063', 'MMSI406', 'IRCS406', '{}', 'EXTIMM406', 'CODE CINQUANTE-DEUX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (407, 'ABC000374073', 'MMSI407', 'IRCS407', '{}', 'EXTIMM407', 'CODE DISCRET', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (408, 'ABC000375739', 'MMSI408', 'IRCS408', '{}', 'EXTIMM408', 'CODE DIX-HUIT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (409, 'ABC000383561', 'MMSI409', 'IRCS409', '{}', 'EXTIMM409', 'CODE FRACTAL', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (410, 'ABC000385523', 'MMSI410', 'IRCS410', '{}', 'EXTIMM410', 'CODE FURTIF', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (411, 'ABC000385555', 'MMSI411', 'IRCS411', '{}', 'EXTIMM411', 'CODE IMPÉRIALE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (412, 'ABC000385647', 'MMSI412', 'IRCS412', '{}', 'EXTIMM412', 'CODE INUTILE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (413, 'ABC000386543', 'MMSI413', 'IRCS413', '{}', 'EXTIMM413', 'CODE NEUF', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (414, 'ABC000388083', 'MMSI414', 'IRCS414', '{}', 'EXTIMM414', 'CODE NOMADE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (415, 'ABC000389179', 'MMSI415', 'IRCS415', '{}', 'EXTIMM415', 'CODE NORDIQUE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (416, 'ABC000401037', 'MMSI416', 'IRCS416', '{}', 'EXTIMM416', 'CODE QUARANTE-HUIT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (417, 'ABC000401076', 'MMSI417', 'IRCS417', '{}', 'EXTIMM417', 'CODE QUATRE-VINGT-DEUX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (418, 'ABC000403638', 'MMSI418', 'IRCS418', '{}', 'EXTIMM418', 'CODE QUATRE-VINGT-DIX-NEUF', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (419, 'ABC000403978', 'MMSI419', 'IRCS419', '{}', 'EXTIMM419', 'CODE QUATRE-VINGT-TREIZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (420, 'ABC000406058', 'MMSI420', 'IRCS420', '{}', 'EXTIMM420', 'CODE SEIZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (421, 'ABC000407007', 'MMSI421', 'IRCS421', '{}', 'EXTIMM421', 'CODE SILENCIEUX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (422, 'ABC000407010', 'MMSI422', 'IRCS422', '{}', 'EXTIMM422', 'CODE SIX', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (423, 'ABC000407014', 'MMSI423', 'IRCS423', '{}', 'EXTIMM423', 'CODE SOIXANTE-SEPT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (424, 'ABC000407018', 'MMSI424', 'IRCS424', '{}', 'EXTIMM424', 'CODE SÉRIEUSE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (425, 'ABC000407019', 'MMSI425', 'IRCS425', '{}', 'EXTIMM425', 'CODE VINGT-HUIT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (426, 'ABC000407036', 'MMSI426', 'IRCS426', '{}', 'EXTIMM426', 'CODE VIRGINAL', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (427, 'ABC000407041', 'MMSI427', 'IRCS427', '{}', 'EXTIMM427', 'CROIX DIX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (428, 'ABC000409522', 'MMSI428', 'IRCS428', '{}', 'EXTIMM428', 'CROIX DIX-SEPT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (429, 'ABC000412013', 'MMSI429', 'IRCS429', '{}', 'EXTIMM429', 'CROIX DOUTEUX', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (430, 'ABC000418845', 'MMSI430', 'IRCS430', '{}', 'EXTIMM430', 'CROIX FURTIF', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (431, 'ABC000421703', 'MMSI431', 'IRCS431', '{}', 'EXTIMM431', 'CROIX NOCTURNE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (432, 'ABC000422412', 'MMSI432', 'IRCS432', '{}', 'EXTIMM432', 'CROIX POURPRE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (433, 'ABC000422436', 'MMSI433', 'IRCS433', '{}', 'EXTIMM433', 'CROIX QUATRE-VINGT-NEUF', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (434, 'ABC000422825', 'MMSI434', 'IRCS434', '{}', 'EXTIMM434', 'CROIX QUATRE-VINGT-QUINZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (435, 'ABC000422848', 'MMSI435', 'IRCS435', '{}', 'EXTIMM435', 'CROIX SILENCIEUX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (436, 'ABC000424710', 'MMSI436', 'IRCS436', '{}', 'EXTIMM436', 'CROIX SOIXANTE-ET-UN', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (437, 'ABC000424712', 'MMSI437', 'IRCS437', '{}', 'EXTIMM437', 'CROIX SOIXANTE-SEIZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (438, 'ABC000424713', 'MMSI438', 'IRCS438', '{}', 'EXTIMM438', 'CROIX TRANSPARENT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (439, 'ABC000424738', 'MMSI439', 'IRCS439', '{}', 'EXTIMM439', 'CROIX TRENTE-SIX', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (440, 'ABC000424796', 'MMSI440', 'IRCS440', '{}', 'EXTIMM440', 'CROIX VINGT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (441, 'ABC000424968', 'MMSI441', 'IRCS441', '{}', 'EXTIMM441', 'CROIX VIRGINAL', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (442, 'ABC000424972', 'MMSI442', 'IRCS442', '{}', 'EXTIMM442', 'CROIX ÉGARÉ', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (443, 'ABC000425080', 'MMSI443', 'IRCS443', '{}', 'EXTIMM443', 'CRYPTÉE AIGLE TRENTE-DEUX', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (444, 'ABC000425280', 'MMSI444', 'IRCS444', '{}', 'EXTIMM444', 'CRYPTÉE CENTAURE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (445, 'ABC000425281', 'MMSI445', 'IRCS445', '{}', 'EXTIMM445', 'CRYPTÉE CROIX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (446, 'ABC000425289', 'MMSI446', 'IRCS446', '{}', 'EXTIMM446', 'CRYPTÉE ENCRE CINQUANTE-DEUX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (447, 'ABC000425299', 'MMSI447', 'IRCS447', '{}', 'EXTIMM447', 'CRYPTÉE ENCRE QUARANTE-DEUX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (448, 'ABC000425303', 'MMSI448', 'IRCS448', '{}', 'EXTIMM448', 'CRYPTÉE LAME DIX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (449, 'ABC000425329', 'MMSI449', 'IRCS449', '{}', 'EXTIMM449', 'CRYPTÉE PHARE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (450, 'ABC000425333', 'MMSI450', 'IRCS450', '{}', 'EXTIMM450', 'CRYPTÉE PHARE QUATRE-VINGT-HUIT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (451, 'ABC000425385', 'MMSI451', 'IRCS451', '{}', 'EXTIMM451', 'CRYPTÉE PONT TRENTE-ET-UN', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (452, 'ABC000425386', 'MMSI452', 'IRCS452', '{}', 'EXTIMM452', 'CRYPTÉE RADIOPHARE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (453, 'ABC000425387', 'MMSI453', 'IRCS453', '{}', 'EXTIMM453', 'CRYPTÉE RAPACE QUATRE-VINGT-TROIS', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (454, 'ABC000425431', 'MMSI454', 'IRCS454', '{}', 'EXTIMM454', 'CRYPTÉE RIVAGE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (455, 'ABC000425433', 'MMSI455', 'IRCS455', '{}', 'EXTIMM455', 'CRYPTÉE SABORDS VINGT-HUIT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (456, 'ABC000426494', 'MMSI456', 'IRCS456', '{}', 'EXTIMM456', 'CRYPTÉE SENTINELLE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (457, 'ABC000427209', 'MMSI457', 'IRCS457', '{}', 'EXTIMM457', 'CRYPTÉE SOUTERRAIN', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (458, 'ABC000428367', 'MMSI458', 'IRCS458', '{}', 'EXTIMM458', 'CRYPTÉE TRITON', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (459, 'ABC000428373', 'MMSI459', 'IRCS459', '{}', 'EXTIMM459', 'CRYPTÉE VÉRITÉ', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (460, 'ABC000428384', 'MMSI460', 'IRCS460', '{}', 'EXTIMM460', 'CRYPTÉE VÉRITÉ DIX-SEPT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (461, 'ABC000428388', 'MMSI461', 'IRCS461', '{}', 'EXTIMM461', 'CRYPTÉE VÉRITÉ QUATRE-VINGT-QUINZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (462, 'ABC000428390', 'MMSI462', 'IRCS462', '{}', 'EXTIMM462', 'CRYPTÉE ÉQUINOXE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (463, 'ABC000429123', 'MMSI463', 'IRCS463', '{}', 'EXTIMM463', 'CRYPTÉE ÉTOILE CINQUANTE-SEPT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (464, 'ABC000429630', 'MMSI464', 'IRCS464', '{}', 'EXTIMM464', 'DENT ATLANTIQUE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (465, 'ABC000429662', 'MMSI465', 'IRCS465', '{}', 'EXTIMM465', 'DENT CACHÉE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (466, 'ABC000429732', 'MMSI466', 'IRCS466', '{}', 'EXTIMM466', 'DENT DIX-HUIT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (467, 'ABC000436521', 'MMSI467', 'IRCS467', '{}', 'EXTIMM467', 'DENT DOUTEUX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (468, 'ABC000436571', 'MMSI468', 'IRCS468', '{}', 'EXTIMM468', 'DENT FURTIVE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (469, 'ABC000436585', 'MMSI469', 'IRCS469', '{}', 'EXTIMM469', 'DENT INUTILE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (470, 'ABC000436626', 'MMSI470', 'IRCS470', '{}', 'EXTIMM470', 'DENT NOMADE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (471, 'ABC000436699', 'MMSI471', 'IRCS471', '{}', 'EXTIMM471', 'DENT NORDIQUE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (472, 'ABC000436731', 'MMSI472', 'IRCS472', '{}', 'EXTIMM472', 'DENT ONZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (473, 'ABC000436748', 'MMSI473', 'IRCS473', '{}', 'EXTIMM473', 'DENT QUARANTE-NEUF', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (474, 'ABC000436760', 'MMSI474', 'IRCS474', '{}', 'EXTIMM474', 'DENT QUATRE-VINGT-QUINZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (475, 'ABC000436776', 'MMSI475', 'IRCS475', '{}', 'EXTIMM475', 'DENT QUATRE-VINGT-SEIZE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (476, 'ABC000436781', 'MMSI476', 'IRCS476', '{}', 'EXTIMM476', 'DENT SILENCIEUX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (477, 'ABC000436787', 'MMSI477', 'IRCS477', '{}', 'EXTIMM477', 'DENT SOIXANTE-QUATRE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (478, 'ABC000439432', 'MMSI478', 'IRCS478', '{}', 'EXTIMM478', 'DENT SOIXANTE-SEIZE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (479, 'ABC000442549', 'MMSI479', 'IRCS479', '{}', 'EXTIMM479', 'DENT SOIXANTE-SEPT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (480, 'ABC000445907', 'MMSI480', 'IRCS480', '{}', 'EXTIMM480', 'DENT TREIZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (481, 'ABC000445969', 'MMSI481', 'IRCS481', '{}', 'EXTIMM481', 'DENT TRENTE-DEUX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (482, 'ABC000445971', 'MMSI482', 'IRCS482', '{}', 'EXTIMM482', 'DENT VINGT-CINQ', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (483, 'ABC000445974', 'MMSI483', 'IRCS483', '{}', 'EXTIMM483', 'DENT VINGT-ET-UN', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (484, 'ABC000448435', 'MMSI484', 'IRCS484', '{}', 'EXTIMM484', 'DENT VINGT-QUATRE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (485, 'ABC000449345', 'MMSI485', 'IRCS485', '{}', 'EXTIMM485', 'DENT VINGT-TROIS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (486, 'ABC000449489', 'MMSI486', 'IRCS486', '{}', 'EXTIMM486', 'DENT VIRGINAL', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (487, 'ABC000449858', 'MMSI487', 'IRCS487', '{}', 'EXTIMM487', 'DISCRET BALISE QUARANTE-NEUF', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (488, 'ABC000449897', 'MMSI488', 'IRCS488', '{}', 'EXTIMM488', 'DISCRET CENTAURE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (489, 'ABC000450575', 'MMSI489', 'IRCS489', '{}', 'EXTIMM489', 'DISCRET CHIMERA', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (490, 'ABC000453235', 'MMSI490', 'IRCS490', '{}', 'EXTIMM490', 'DISCRET DÉCODEUR', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (491, 'ABC000453320', 'MMSI491', 'IRCS491', '{}', 'EXTIMM491', 'DISCRET DÉRIVE QUARANTE-DEUX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (492, 'ABC000454877', 'MMSI492', 'IRCS492', '{}', 'EXTIMM492', 'DISCRET ENCRE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (493, 'ABC000455778', 'MMSI493', 'IRCS493', '{}', 'EXTIMM493', 'DISCRET GLISSEMENT QUATRE-VINGT-DIX-SEPT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (494, 'ABC000455912', 'MMSI494', 'IRCS494', '{}', 'EXTIMM494', 'DISCRET GLISSEMENT QUATRE-VINGT-TREIZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (495, 'ABC000460284', 'MMSI495', 'IRCS495', '{}', 'EXTIMM495', 'DISCRET GRANITE SOIXANTE-QUATORZE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (496, 'ABC000460612', 'MMSI496', 'IRCS496', '{}', 'EXTIMM496', 'DISCRET MANTA', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (497, 'ABC000460683', 'MMSI497', 'IRCS497', '{}', 'EXTIMM497', 'DISCRET MODULE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (498, 'ABC000460820', 'MMSI498', 'IRCS498', '{}', 'EXTIMM498', 'DISCRET NARVAL SOIXANTE-ET-UN', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (499, 'ABC000461599', 'MMSI499', 'IRCS499', '{}', 'EXTIMM499', 'DISCRET SABORDS', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (500, 'ABC000461803', 'MMSI500', 'IRCS500', '{}', 'EXTIMM500', 'DISCRET SENTINELLE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (501, 'ABC000462061', 'MMSI501', 'IRCS501', '{}', 'EXTIMM501', 'DISCRET SENTINELLE VINGT-SEPT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (502, 'ABC000463875', 'MMSI502', 'IRCS502', '{}', 'EXTIMM502', 'DISCRET SPECTRE SEPT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (503, 'ABC000463902', 'MMSI503', 'IRCS503', '{}', 'EXTIMM503', 'DISCRET TOURMENT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (504, 'ABC000463933', 'MMSI504', 'IRCS504', '{}', 'EXTIMM504', 'DISCRET TYPHON', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (505, 'ABC000466256', 'MMSI505', 'IRCS505', '{}', 'EXTIMM505', 'DORÉ BRUME', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (506, 'ABC000466769', 'MMSI506', 'IRCS506', '{}', 'EXTIMM506', 'DORÉ CALYPSO', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (507, 'ABC000466777', 'MMSI507', 'IRCS507', '{}', 'EXTIMM507', 'DORÉ CARGO SOIXANTE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (508, 'ABC000468050', 'MMSI508', 'IRCS508', '{}', 'EXTIMM508', 'DORÉ CHIMERA', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (509, 'ABC000468161', 'MMSI509', 'IRCS509', '{}', 'EXTIMM509', 'DORÉ CROIX SOIXANTE-QUINZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (510, 'ABC000473509', 'MMSI510', 'IRCS510', '{}', 'EXTIMM510', 'DORÉ CROIX SOIXANTE-TREIZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (511, 'ABC000473574', 'MMSI511', 'IRCS511', '{}', 'EXTIMM511', 'DORÉ DÉCODEUR SOIXANTE-DEUX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (512, 'ABC000476284', 'MMSI512', 'IRCS512', '{}', 'EXTIMM512', 'DORÉ DÉRIVE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (513, 'ABC000477411', 'MMSI513', 'IRCS513', '{}', 'EXTIMM513', 'DORÉ FANTÔME CINQUANTE-HUIT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (514, 'ABC000477458', 'MMSI514', 'IRCS514', '{}', 'EXTIMM514', 'DORÉ HÉRÉSIE QUATRE-VINGT-QUINZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (515, 'ABC000477578', 'MMSI515', 'IRCS515', '{}', 'EXTIMM515', 'DORÉ MANTA', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (516, 'ABC000478156', 'MMSI516', 'IRCS516', '{}', 'EXTIMM516', 'DORÉ MANTA UN', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (517, 'ABC000482468', 'MMSI517', 'IRCS517', '{}', 'EXTIMM517', 'DORÉ NÉMÉSIS SOIXANTE-DIX-HUIT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (518, 'ABC000482950', 'MMSI518', 'IRCS518', '{}', 'EXTIMM518', 'DORÉ OPALE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (519, 'ABC000487836', 'MMSI519', 'IRCS519', '{}', 'EXTIMM519', 'DORÉ PAQUEBOT QUARANTE-SEPT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (520, 'ABC000487837', 'MMSI520', 'IRCS520', '{}', 'EXTIMM520', 'DORÉ PAQUEBOT SOIXANTE-SIX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (521, 'ABC000489950', 'MMSI521', 'IRCS521', '{}', 'EXTIMM521', 'DORÉ PHARE SOIXANTE-QUATRE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (522, 'ABC000490147', 'MMSI522', 'IRCS522', '{}', 'EXTIMM522', 'DORÉ PIRATE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (523, 'ABC000492824', 'MMSI523', 'IRCS523', '{}', 'EXTIMM523', 'DORÉ PYLÔNE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (524, 'ABC000492958', 'MMSI524', 'IRCS524', '{}', 'EXTIMM524', 'DORÉ SABORDS SOIXANTE-ET-UN', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (525, 'ABC000492966', 'MMSI525', 'IRCS525', '{}', 'EXTIMM525', 'DORÉ SENTINELLE QUATRE-VINGT-ONZE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (526, 'ABC000493046', 'MMSI526', 'IRCS526', '{}', 'EXTIMM526', 'DORÉ SOUTERRAIN', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (527, 'ABC000493475', 'MMSI527', 'IRCS527', '{}', 'EXTIMM527', 'DORÉ ÉPAVE TRENTE-NEUF', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (528, 'ABC000494263', 'MMSI528', 'IRCS528', '{}', 'EXTIMM528', 'DORÉ ÉPAVE VINGT-QUATRE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (529, 'ABC000494698', 'MMSI529', 'IRCS529', '{}', 'EXTIMM529', 'DORÉ ÉQUINOXE DOUZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (530, 'ABC000494719', 'MMSI530', 'IRCS530', '{}', 'EXTIMM530', 'DOUTEUX AIGLE QUARANTE-SEPT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (531, 'ABC000496475', 'MMSI531', 'IRCS531', '{}', 'EXTIMM531', 'DOUTEUX AIGLE QUATRE-VINGT-ONZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (532, 'ABC000498080', 'MMSI532', 'IRCS532', '{}', 'EXTIMM532', 'DOUTEUX ALBATROS QUARANTE-DEUX', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (533, 'ABC000498410', 'MMSI533', 'IRCS533', '{}', 'EXTIMM533', 'DOUTEUX ALBATROS SIX', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (534, 'ABC000498802', 'MMSI534', 'IRCS534', '{}', 'EXTIMM534', 'DOUTEUX BALISE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (535, 'ABC000510796', 'MMSI535', 'IRCS535', '{}', 'EXTIMM535', 'DOUTEUX BRUME', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (536, 'ABC000511513', 'MMSI536', 'IRCS536', '{}', 'EXTIMM536', 'DOUTEUX CENTAURE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (537, 'ABC000511538', 'MMSI537', 'IRCS537', '{}', 'EXTIMM537', 'DOUTEUX CHIMERA', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (538, 'ABC000511553', 'MMSI538', 'IRCS538', '{}', 'EXTIMM538', 'DOUTEUX CODE VINGT-NEUF', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (539, 'ABC000511652', 'MMSI539', 'IRCS539', '{}', 'EXTIMM539', 'DOUTEUX CROIX TRENTE-SIX', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (540, 'ABC000513082', 'MMSI540', 'IRCS540', '{}', 'EXTIMM540', 'DOUTEUX DENT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (541, 'ABC000513361', 'MMSI541', 'IRCS541', '{}', 'EXTIMM541', 'DOUTEUX DENT SOIXANTE-QUATORZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (542, 'ABC000514559', 'MMSI542', 'IRCS542', '{}', 'EXTIMM542', 'DOUTEUX DENT VINGT-SEPT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (543, 'ABC000514570', 'MMSI543', 'IRCS543', '{}', 'EXTIMM543', 'DOUTEUX DÉCODEUR TRENTE-HUIT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (544, 'ABC000514571', 'MMSI544', 'IRCS544', '{}', 'EXTIMM544', 'DOUTEUX DÉCODEUR UN', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (545, 'ABC000514572', 'MMSI545', 'IRCS545', '{}', 'EXTIMM545', 'DOUTEUX DÉRIVE QUATRE-VINGT-DIX-HUIT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (546, 'ABC000517520', 'MMSI546', 'IRCS546', '{}', 'EXTIMM546', 'DOUTEUX GLISSEMENT SOIXANTE-QUINZE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (547, 'ABC000517594', 'MMSI547', 'IRCS547', '{}', 'EXTIMM547', 'DOUTEUX GLISSEMENT VINGT-SIX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (548, 'ABC000517931', 'MMSI548', 'IRCS548', '{}', 'EXTIMM548', 'DOUTEUX HÉRÉSIE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (549, 'ABC000518412', 'MMSI549', 'IRCS549', '{}', 'EXTIMM549', 'DOUTEUX LAME', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (550, 'ABC000518418', 'MMSI550', 'IRCS550', '{}', 'EXTIMM550', 'DOUTEUX MODULE TRENTE-NEUF', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (551, 'ABC000518496', 'MMSI551', 'IRCS551', '{}', 'EXTIMM551', 'DOUTEUX MÉDUSE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (552, 'ABC000520117', 'MMSI552', 'IRCS552', '{}', 'EXTIMM552', 'DOUTEUX MÉDUSE SEPT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (553, 'ABC000521745', 'MMSI553', 'IRCS553', '{}', 'EXTIMM553', 'DOUTEUX MÉDUSE SOIXANTE-QUATRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (554, 'ABC000522077', 'MMSI554', 'IRCS554', '{}', 'EXTIMM554', 'DOUTEUX NARVAL', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (555, 'ABC000522087', 'MMSI555', 'IRCS555', '{}', 'EXTIMM555', 'DOUTEUX NARVAL VINGT-SEPT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (556, 'ABC000522610', 'MMSI556', 'IRCS556', '{}', 'EXTIMM556', 'DOUTEUX NÉMÉSIS VINGT-SEPT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (557, 'ABC000522627', 'MMSI557', 'IRCS557', '{}', 'EXTIMM557', 'DOUTEUX OPALE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (558, 'ABC000522880', 'MMSI558', 'IRCS558', '{}', 'EXTIMM558', 'DOUTEUX OPALE QUATRE-VINGT-CINQ', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (559, 'ABC000522900', 'MMSI559', 'IRCS559', '{}', 'EXTIMM559', 'DOUTEUX PIRATE QUARANTE-TROIS', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (560, 'ABC000528866', 'MMSI560', 'IRCS560', '{}', 'EXTIMM560', 'DOUTEUX PIRATE VINGT-SIX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (561, 'ABC000528888', 'MMSI561', 'IRCS561', '{}', 'EXTIMM561', 'DOUTEUX PONT DIX-NEUF', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (562, 'ABC000528896', 'MMSI562', 'IRCS562', '{}', 'EXTIMM562', 'DOUTEUX PYLÔNE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (563, 'ABC000531360', 'MMSI563', 'IRCS563', '{}', 'EXTIMM563', 'DOUTEUX PYLÔNE TRENTE-NEUF', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (564, 'ABC000531378', 'MMSI564', 'IRCS564', '{}', 'EXTIMM564', 'DOUTEUX RIVAGE SOIXANTE-CINQ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (565, 'ABC000531447', 'MMSI565', 'IRCS565', '{}', 'EXTIMM565', 'DOUTEUX SABORDS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (566, 'ABC000533056', 'MMSI566', 'IRCS566', '{}', 'EXTIMM566', 'DOUTEUX SABORDS SOIXANTE-QUINZE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (567, 'ABC000535864', 'MMSI567', 'IRCS567', '{}', 'EXTIMM567', 'DOUTEUX SABORDS TRENTE-DEUX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (568, 'ABC000535899', 'MMSI568', 'IRCS568', '{}', 'EXTIMM568', 'DOUTEUX SOUTERRAIN SOIXANTE-TREIZE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (569, 'ABC000536336', 'MMSI569', 'IRCS569', '{}', 'EXTIMM569', 'DOUTEUX TOURMENT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (570, 'ABC000536354', 'MMSI570', 'IRCS570', '{}', 'EXTIMM570', 'DOUTEUX TRAITRE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (571, 'ABC000536451', 'MMSI571', 'IRCS571', '{}', 'EXTIMM571', 'DOUTEUX TRAITRE TRENTE-HUIT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (572, 'ABC000539177', 'MMSI572', 'IRCS572', '{}', 'EXTIMM572', 'DOUTEUX TRITON TRENTE-CINQ', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (573, 'ABC000539710', 'MMSI573', 'IRCS573', '{}', 'EXTIMM573', 'DOUTEUX TYPHON', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (574, 'ABC000539755', 'MMSI574', 'IRCS574', '{}', 'EXTIMM574', 'DOUTEUX VORTEX CINQUANTE-CINQ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (575, 'ABC000539799', 'MMSI575', 'IRCS575', '{}', 'EXTIMM575', 'DOUTEUX VÉRITÉ QUATRE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (576, 'ABC000539813', 'MMSI576', 'IRCS576', '{}', 'EXTIMM576', 'DOUTEUX ÉPAVE ONZE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (577, 'ABC000539821', 'MMSI577', 'IRCS577', '{}', 'EXTIMM577', 'DOUTEUX ÉQUINOXE TREIZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (578, 'ABC000540224', 'MMSI578', 'IRCS578', '{}', 'EXTIMM578', 'DRAGON CINQUANTE-CINQ', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (579, 'ABC000541114', 'MMSI579', 'IRCS579', '{}', 'EXTIMM579', 'DRAGON CRYPTÉE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (580, 'ABC000541534', 'MMSI580', 'IRCS580', '{}', 'EXTIMM580', 'DRAGON DISCRET', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (581, 'ABC000541564', 'MMSI581', 'IRCS581', '{}', 'EXTIMM581', 'DRAGON FAUSSE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (582, 'ABC000541682', 'MMSI582', 'IRCS582', '{}', 'EXTIMM582', 'DRAGON FRACTAL', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (583, 'ABC000541969', 'MMSI583', 'IRCS583', '{}', 'EXTIMM583', 'DRAGON FURTIVE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (584, 'ABC000542120', 'MMSI584', 'IRCS584', '{}', 'EXTIMM584', 'DRAGON IMPÉRIALE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (585, 'ABC000542275', 'MMSI585', 'IRCS585', '{}', 'EXTIMM585', 'DRAGON NOCTURNE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (586, 'ABC000542530', 'MMSI586', 'IRCS586', '{}', 'EXTIMM586', 'DRAGON OMBRE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (587, 'ABC000544572', 'MMSI587', 'IRCS587', '{}', 'EXTIMM587', 'DRAGON POURPRE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (588, 'ABC000544858', 'MMSI588', 'IRCS588', '{}', 'EXTIMM588', 'DRAGON QUARANTE-SEPT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (589, 'ABC000544928', 'MMSI589', 'IRCS589', '{}', 'EXTIMM589', 'DRAGON QUATRE-VINGT-CINQ', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (590, 'ABC000544929', 'MMSI590', 'IRCS590', '{}', 'EXTIMM590', 'DRAGON QUATRE-VINGT-NEUF', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (591, 'ABC000545164', 'MMSI591', 'IRCS591', '{}', 'EXTIMM591', 'DRAGON QUATRE-VINGT-SEIZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (592, 'ABC000545166', 'MMSI592', 'IRCS592', '{}', 'EXTIMM592', 'DRAGON QUATRE-VINGT-TREIZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (593, 'ABC000545334', 'MMSI593', 'IRCS593', '{}', 'EXTIMM593', 'DRAGON SEIZE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (594, 'ABC000545762', 'MMSI594', 'IRCS594', '{}', 'EXTIMM594', 'DRAGON SILENCIEUX', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (595, 'ABC000546041', 'MMSI595', 'IRCS595', '{}', 'EXTIMM595', 'DRAGON SOIXANTE-SIX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (596, 'ABC000546646', 'MMSI596', 'IRCS596', '{}', 'EXTIMM596', 'DRAGON SOIXANTE-TROIS', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (597, 'ABC000546686', 'MMSI597', 'IRCS597', '{}', 'EXTIMM597', 'DRAGON TACTIQUE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (598, 'ABC000546973', 'MMSI598', 'IRCS598', '{}', 'EXTIMM598', 'DRAGON VINGT-ET-UN', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (599, 'ABC000547400', 'MMSI599', 'IRCS599', '{}', 'EXTIMM599', 'DRAGON VIRGINAL', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (600, 'ABC000547407', 'MMSI600', 'IRCS600', '{}', 'EXTIMM600', 'DÉCODEUR DORÉ', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (601, 'ABC000550647', 'MMSI601', 'IRCS601', '{}', 'EXTIMM601', 'DÉCODEUR DOUTEUX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (602, 'ABC000550974', 'MMSI602', 'IRCS602', '{}', 'EXTIMM602', 'DÉCODEUR FAUSSE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (603, 'ABC000554112', 'MMSI603', 'IRCS603', '{}', 'EXTIMM603', 'DÉCODEUR INVISIBLE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (604, 'ABC000554137', 'MMSI604', 'IRCS604', '{}', 'EXTIMM604', 'DÉCODEUR NOIR', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (605, 'ABC000554149', 'MMSI605', 'IRCS605', '{}', 'EXTIMM605', 'DÉCODEUR QUARANTE-HUIT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (606, 'ABC000554169', 'MMSI606', 'IRCS606', '{}', 'EXTIMM606', 'DÉCODEUR QUARANTE-SEPT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (607, 'ABC000554620', 'MMSI607', 'IRCS607', '{}', 'EXTIMM607', 'DÉCODEUR QUATRE-VINGT-DIX-HUIT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (608, 'ABC000554922', 'MMSI608', 'IRCS608', '{}', 'EXTIMM608', 'DÉCODEUR QUATRE-VINGT-DOUZE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (609, 'ABC000555177', 'MMSI609', 'IRCS609', '{}', 'EXTIMM609', 'DÉCODEUR QUATRE-VINGT-SIX', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (610, 'ABC000555183', 'MMSI610', 'IRCS610', '{}', 'EXTIMM610', 'DÉCODEUR SOIXANTE-DIX-HUIT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (611, 'ABC000555185', 'MMSI611', 'IRCS611', '{}', 'EXTIMM611', 'DÉCODEUR TRENTE-HUIT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (612, 'ABC000555186', 'MMSI612', 'IRCS612', '{}', 'EXTIMM612', 'DÉCODEUR VERTICALE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (613, 'ABC000555231', 'MMSI613', 'IRCS613', '{}', 'EXTIMM613', 'DÉRIVE CINQUANTE-CINQ', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (614, 'ABC000555234', 'MMSI614', 'IRCS614', '{}', 'EXTIMM614', 'DÉRIVE DIX-NEUF', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (615, 'ABC000555239', 'MMSI615', 'IRCS615', '{}', 'EXTIMM615', 'DÉRIVE DORÉ', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (616, 'ABC000555502', 'MMSI616', 'IRCS616', '{}', 'EXTIMM616', 'DÉRIVE DOUTEUX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (617, 'ABC000555523', 'MMSI617', 'IRCS617', '{}', 'EXTIMM617', 'DÉRIVE FURTIVE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (618, 'ABC000557722', 'MMSI618', 'IRCS618', '{}', 'EXTIMM618', 'DÉRIVE MUET', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (619, 'ABC000557817', 'MMSI619', 'IRCS619', '{}', 'EXTIMM619', 'DÉRIVE NOMADE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (620, 'ABC000557981', 'MMSI620', 'IRCS620', '{}', 'EXTIMM620', 'DÉRIVE OMBRE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (621, 'ABC000558558', 'MMSI621', 'IRCS621', '{}', 'EXTIMM621', 'DÉRIVE QUARANTE-ET-UN', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (622, 'ABC000558647', 'MMSI622', 'IRCS622', '{}', 'EXTIMM622', 'DÉRIVE QUARANTE-NEUF', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (623, 'ABC000558687', 'MMSI623', 'IRCS623', '{}', 'EXTIMM623', 'DÉRIVE QUATRE-VINGT-SEPT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (624, 'ABC000558996', 'MMSI624', 'IRCS624', '{}', 'EXTIMM624', 'DÉRIVE QUINZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (625, 'ABC000560227', 'MMSI625', 'IRCS625', '{}', 'EXTIMM625', 'DÉRIVE ROUGE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (626, 'ABC000561262', 'MMSI626', 'IRCS626', '{}', 'EXTIMM626', 'DÉRIVE SEPT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (627, 'ABC000561546', 'MMSI627', 'IRCS627', '{}', 'EXTIMM627', 'DÉRIVE SOIXANTE-DIX-SEPT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (628, 'ABC000561601', 'MMSI628', 'IRCS628', '{}', 'EXTIMM628', 'DÉRIVE SOIXANTE-QUATRE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (629, 'ABC000561724', 'MMSI629', 'IRCS629', '{}', 'EXTIMM629', 'DÉRIVE SÉRIEUSE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (630, 'ABC000561725', 'MMSI630', 'IRCS630', '{}', 'EXTIMM630', 'DÉRIVE VERTICALE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (631, 'ABC000561887', 'MMSI631', 'IRCS631', '{}', 'EXTIMM631', 'DÉRIVE VIRGINAL', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (632, 'ABC000561949', 'MMSI632', 'IRCS632', '{}', 'EXTIMM632', 'ENCRE ATLANTIQUE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (633, 'ABC000562367', 'MMSI633', 'IRCS633', '{}', 'EXTIMM633', 'ENCRE BLEU', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (634, 'ABC000562558', 'MMSI634', 'IRCS634', '{}', 'EXTIMM634', 'ENCRE CACHÉE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (635, 'ABC000563029', 'MMSI635', 'IRCS635', '{}', 'EXTIMM635', 'ENCRE CINQ', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (636, 'ABC000563260', 'MMSI636', 'IRCS636', '{}', 'EXTIMM636', 'ENCRE CINQUANTE-CINQ', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (637, 'ABC000563348', 'MMSI637', 'IRCS637', '{}', 'EXTIMM637', 'ENCRE CINQUANTE-NEUF', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (638, 'ABC000563374', 'MMSI638', 'IRCS638', '{}', 'EXTIMM638', 'ENCRE FLOTTANTE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (639, 'ABC000567804', 'MMSI639', 'IRCS639', '{}', 'EXTIMM639', 'ENCRE FURTIVE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (640, 'ABC000568581', 'MMSI640', 'IRCS640', '{}', 'EXTIMM640', 'ENCRE IMPÉRIALE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (641, 'ABC000568849', 'MMSI641', 'IRCS641', '{}', 'EXTIMM641', 'ENCRE INUTILE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (642, 'ABC000571171', 'MMSI642', 'IRCS642', '{}', 'EXTIMM642', 'ENCRE MUET', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (643, 'ABC000571217', 'MMSI643', 'IRCS643', '{}', 'EXTIMM643', 'ENCRE NOIR', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (644, 'ABC000571294', 'MMSI644', 'IRCS644', '{}', 'EXTIMM644', 'ENCRE NORDIQUE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (645, 'ABC000571476', 'MMSI645', 'IRCS645', '{}', 'EXTIMM645', 'ENCRE POURPRE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (646, 'ABC000571554', 'MMSI646', 'IRCS646', '{}', 'EXTIMM646', 'ENCRE QUARANTE-HUIT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (647, 'ABC000571731', 'MMSI647', 'IRCS647', '{}', 'EXTIMM647', 'ENCRE QUATRE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (648, 'ABC000571766', 'MMSI648', 'IRCS648', '{}', 'EXTIMM648', 'ENCRE SOIXANTE-DEUX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (649, 'ABC000571972', 'MMSI649', 'IRCS649', '{}', 'EXTIMM649', 'ENCRE SOIXANTE-QUINZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (650, 'ABC000574900', 'MMSI650', 'IRCS650', '{}', 'EXTIMM650', 'ENCRE SÉRIEUSE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (651, 'ABC000577920', 'MMSI651', 'IRCS651', '{}', 'EXTIMM651', 'ENCRE TRENTE-TROIS', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (652, 'ABC000578100', 'MMSI652', 'IRCS652', '{}', 'EXTIMM652', 'ENCRE VERTICALE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (653, 'ABC000578971', 'MMSI653', 'IRCS653', '{}', 'EXTIMM653', 'ENCRE VINGT-ET-UN', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (654, 'ABC000582640', 'MMSI654', 'IRCS654', '{}', 'EXTIMM654', 'ENCRE VINGT-SIX', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (655, 'ABC000582664', 'MMSI655', 'IRCS655', '{}', 'EXTIMM655', 'ENCRE ZÉRO', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (656, 'ABC000582669', 'MMSI656', 'IRCS656', '{}', 'EXTIMM656', 'FANTÔME CINQUANTE-NEUF', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (657, 'ABC000582694', 'MMSI657', 'IRCS657', '{}', 'EXTIMM657', 'FANTÔME CINQUANTE-TROIS', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (658, 'ABC000583114', 'MMSI658', 'IRCS658', '{}', 'EXTIMM658', 'FANTÔME DOUTEUX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (659, 'ABC000583393', 'MMSI659', 'IRCS659', '{}', 'EXTIMM659', 'FANTÔME JAUNE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (660, 'ABC000583601', 'MMSI660', 'IRCS660', '{}', 'EXTIMM660', 'FANTÔME MUET', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (661, 'ABC000584485', 'MMSI661', 'IRCS661', '{}', 'EXTIMM661', 'FANTÔME NOMADE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (662, 'ABC000584738', 'MMSI662', 'IRCS662', '{}', 'EXTIMM662', 'FANTÔME NORDIQUE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (663, 'ABC000584823', 'MMSI663', 'IRCS663', '{}', 'EXTIMM663', 'FANTÔME QUARANTE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (664, 'ABC000584830', 'MMSI664', 'IRCS664', '{}', 'EXTIMM664', 'FANTÔME QUATRE-VINGT-DEUX', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (665, 'ABC000584861', 'MMSI665', 'IRCS665', '{}', 'EXTIMM665', 'FANTÔME QUATRE-VINGT-DIX-HUIT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (666, 'ABC000584865', 'MMSI666', 'IRCS666', '{}', 'EXTIMM666', 'FANTÔME QUATRE-VINGT-SEPT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (667, 'ABC000584924', 'MMSI667', 'IRCS667', '{}', 'EXTIMM667', 'FANTÔME QUATRE-VINGT-UN', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (668, 'ABC000584926', 'MMSI668', 'IRCS668', '{}', 'EXTIMM668', 'FANTÔME SOIXANTE-DEUX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (669, 'ABC000586826', 'MMSI669', 'IRCS669', '{}', 'EXTIMM669', 'FANTÔME SOIXANTE-ET-ONZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (670, 'ABC000588449', 'MMSI670', 'IRCS670', '{}', 'EXTIMM670', 'FANTÔME TRENTE-ET-UN', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (671, 'ABC000588772', 'MMSI671', 'IRCS671', '{}', 'EXTIMM671', 'FANTÔME TRENTE-TROIS', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (672, 'ABC000589668', 'MMSI672', 'IRCS672', '{}', 'EXTIMM672', 'FANTÔME VIRGINAL', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (673, 'ABC000589986', 'MMSI673', 'IRCS673', '{}', 'EXTIMM673', 'FAUSSE BALISE QUATRE-VINGT-DIX-NEUF', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (674, 'ABC000589995', 'MMSI674', 'IRCS674', '{}', 'EXTIMM674', 'FAUSSE BRUME', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (675, 'ABC000590003', 'MMSI675', 'IRCS675', '{}', 'EXTIMM675', 'FAUSSE CALYPSO', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (676, 'ABC000590099', 'MMSI676', 'IRCS676', '{}', 'EXTIMM676', 'FAUSSE CALYPSO SEPT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (677, 'ABC000590110', 'MMSI677', 'IRCS677', '{}', 'EXTIMM677', 'FAUSSE DENT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (678, 'ABC000590364', 'MMSI678', 'IRCS678', '{}', 'EXTIMM678', 'FAUSSE ENCRE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (679, 'ABC000590380', 'MMSI679', 'IRCS679', '{}', 'EXTIMM679', 'FAUSSE FRÉQUENCE VINGT-NEUF', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (680, 'ABC000590402', 'MMSI680', 'IRCS680', '{}', 'EXTIMM680', 'FAUSSE GLISSEMENT SOIXANTE-NEUF', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (681, 'ABC000590437', 'MMSI681', 'IRCS681', '{}', 'EXTIMM681', 'FAUSSE MANTA', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (682, 'ABC000592115', 'MMSI682', 'IRCS682', '{}', 'EXTIMM682', 'FAUSSE MÉDUSE QUATRE-VINGT-QUATRE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (683, 'ABC000593460', 'MMSI683', 'IRCS683', '{}', 'EXTIMM683', 'FAUSSE PAQUEBOT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (684, 'ABC000593846', 'MMSI684', 'IRCS684', '{}', 'EXTIMM684', 'FAUSSE PONT CINQUANTE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (685, 'ABC000594194', 'MMSI685', 'IRCS685', '{}', 'EXTIMM685', 'FAUSSE PYLÔNE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (686, 'ABC000594604', 'MMSI686', 'IRCS686', '{}', 'EXTIMM686', 'FAUSSE SABORDS', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (687, 'ABC000594900', 'MMSI687', 'IRCS687', '{}', 'EXTIMM687', 'FAUSSE SPECTRE QUARANTE-ET-UN', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (688, 'ABC000594934', 'MMSI688', 'IRCS688', '{}', 'EXTIMM688', 'FAUSSE ÉQUINOXE QUARANTE-QUATRE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (689, 'ABC000595005', 'MMSI689', 'IRCS689', '{}', 'EXTIMM689', 'FLOTTANTE AIGLE DIX-HUIT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (690, 'ABC000595094', 'MMSI690', 'IRCS690', '{}', 'EXTIMM690', 'FLOTTANTE BRUME', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (691, 'ABC000595126', 'MMSI691', 'IRCS691', '{}', 'EXTIMM691', 'FLOTTANTE CALYPSO CINQUANTE-CINQ', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (692, 'ABC000595691', 'MMSI692', 'IRCS692', '{}', 'EXTIMM692', 'FLOTTANTE CARGO SOIXANTE-DEUX', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (693, 'ABC000595970', 'MMSI693', 'IRCS693', '{}', 'EXTIMM693', 'FLOTTANTE FÉLIN', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (694, 'ABC000595980', 'MMSI694', 'IRCS694', '{}', 'EXTIMM694', 'FLOTTANTE GLISSEMENT DOUZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (695, 'ABC000597348', 'MMSI695', 'IRCS695', '{}', 'EXTIMM695', 'FLOTTANTE GLISSEMENT TRENTE-SEPT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (696, 'ABC000598329', 'MMSI696', 'IRCS696', '{}', 'EXTIMM696', 'FLOTTANTE HÉRÉSIE SOIXANTE-DEUX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (697, 'ABC000598822', 'MMSI697', 'IRCS697', '{}', 'EXTIMM697', 'FLOTTANTE HÉRÉSIE TRENTE-QUATRE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (698, 'ABC000599016', 'MMSI698', 'IRCS698', '{}', 'EXTIMM698', 'FLOTTANTE LAME', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (699, 'ABC000601016', 'MMSI699', 'IRCS699', '{}', 'EXTIMM699', 'FLOTTANTE MANTA', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (700, 'ABC000601100', 'MMSI700', 'IRCS700', '{}', 'EXTIMM700', 'FLOTTANTE MODULE QUARANTE-SIX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (701, 'ABC000601430', 'MMSI701', 'IRCS701', '{}', 'EXTIMM701', 'FLOTTANTE NÉMÉSIS', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (702, 'ABC000601460', 'MMSI702', 'IRCS702', '{}', 'EXTIMM702', 'FLOTTANTE NÉMÉSIS TRENTE-TROIS', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (703, 'ABC000602078', 'MMSI703', 'IRCS703', '{}', 'EXTIMM703', 'FLOTTANTE OPALE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (704, 'ABC000602284', 'MMSI704', 'IRCS704', '{}', 'EXTIMM704', 'FLOTTANTE PIRATE QUATRE-VINGT-DIX-SEPT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (705, 'ABC000602526', 'MMSI705', 'IRCS705', '{}', 'EXTIMM705', 'FLOTTANTE PYLÔNE HUIT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (706, 'ABC000606781', 'MMSI706', 'IRCS706', '{}', 'EXTIMM706', 'FLOTTANTE RAPACE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (707, 'ABC000606994', 'MMSI707', 'IRCS707', '{}', 'EXTIMM707', 'FLOTTANTE RIVAGE TRENTE-HUIT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (708, 'ABC000607569', 'MMSI708', 'IRCS708', '{}', 'EXTIMM708', 'FLOTTANTE SENTINELLE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (709, 'ABC000607865', 'MMSI709', 'IRCS709', '{}', 'EXTIMM709', 'FLOTTANTE SPECTRE VINGT-QUATRE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (710, 'ABC000608160', 'MMSI710', 'IRCS710', '{}', 'EXTIMM710', 'FLOTTANTE VORTEX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (711, 'ABC000608506', 'MMSI711', 'IRCS711', '{}', 'EXTIMM711', 'FLOTTANTE ÉPAVE QUATRE-VINGT-SIX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (712, 'ABC000609035', 'MMSI712', 'IRCS712', '{}', 'EXTIMM712', 'FLOTTANTE ÉTOILE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (713, 'ABC000609650', 'MMSI713', 'IRCS713', '{}', 'EXTIMM713', 'FRACTAL ALBATROS', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (714, 'ABC000610971', 'MMSI714', 'IRCS714', '{}', 'EXTIMM714', 'FRACTAL CARGO VINGT-SEPT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (715, 'ABC000611739', 'MMSI715', 'IRCS715', '{}', 'EXTIMM715', 'FRACTAL CROIX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (716, 'ABC000611804', 'MMSI716', 'IRCS716', '{}', 'EXTIMM716', 'FRACTAL DENT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (717, 'ABC000612270', 'MMSI717', 'IRCS717', '{}', 'EXTIMM717', 'FRACTAL DENT SOIXANTE-ET-ONZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (718, 'ABC000612366', 'MMSI718', 'IRCS718', '{}', 'EXTIMM718', 'FRACTAL ENCRE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (719, 'ABC000612392', 'MMSI719', 'IRCS719', '{}', 'EXTIMM719', 'FRACTAL FRÉQUENCE QUATRE-VINGT-DOUZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (720, 'ABC000613279', 'MMSI720', 'IRCS720', '{}', 'EXTIMM720', 'FRACTAL GRANITE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (721, 'ABC000613319', 'MMSI721', 'IRCS721', '{}', 'EXTIMM721', 'FRACTAL HÉRÉSIE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (722, 'ABC000613327', 'MMSI722', 'IRCS722', '{}', 'EXTIMM722', 'FRACTAL LAME', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (723, 'ABC000613335', 'MMSI723', 'IRCS723', '{}', 'EXTIMM723', 'FRACTAL MODULE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (724, 'ABC000613365', 'MMSI724', 'IRCS724', '{}', 'EXTIMM724', 'FRACTAL MÉDUSE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (725, 'ABC000613370', 'MMSI725', 'IRCS725', '{}', 'EXTIMM725', 'FRACTAL NARVAL VINGT-QUATRE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (726, 'ABC000613387', 'MMSI726', 'IRCS726', '{}', 'EXTIMM726', 'FRACTAL NÉMÉSIS SOIXANTE-TROIS', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (727, 'ABC000613392', 'MMSI727', 'IRCS727', '{}', 'EXTIMM727', 'FRACTAL RAPACE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (728, 'ABC000614064', 'MMSI728', 'IRCS728', '{}', 'EXTIMM728', 'FRACTAL RAPACE CINQUANTE-SIX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (729, 'ABC000614197', 'MMSI729', 'IRCS729', '{}', 'EXTIMM729', 'FRACTAL RIVAGE SOIXANTE-DOUZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (730, 'ABC000614203', 'MMSI730', 'IRCS730', '{}', 'EXTIMM730', 'FRACTAL SABORDS QUATRE-VINGT-CINQ', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (731, 'ABC000614250', 'MMSI731', 'IRCS731', '{}', 'EXTIMM731', 'FRACTAL SOUTERRAIN QUATRE-VINGT-DOUZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (732, 'ABC000614312', 'MMSI732', 'IRCS732', '{}', 'EXTIMM732', 'FRACTAL SPECTRE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (733, 'ABC000614655', 'MMSI733', 'IRCS733', '{}', 'EXTIMM733', 'FRACTAL SPECTRE QUATORZE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (734, 'ABC000614764', 'MMSI734', 'IRCS734', '{}', 'EXTIMM734', 'FRACTAL TOURMENT QUARANTE-CINQ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (735, 'ABC000614784', 'MMSI735', 'IRCS735', '{}', 'EXTIMM735', 'FRACTAL TOURMENT TRENTE-NEUF', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (736, 'ABC000614822', 'MMSI736', 'IRCS736', '{}', 'EXTIMM736', 'FRACTAL TRITON VINGT-SEPT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (737, 'ABC000614944', 'MMSI737', 'IRCS737', '{}', 'EXTIMM737', 'FRACTAL ÉQUINOXE SOIXANTE-DIX-SEPT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (738, 'ABC000615524', 'MMSI738', 'IRCS738', '{}', 'EXTIMM738', 'FRACTAL ÉTOILE SOIXANTE-DIX-HUIT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (739, 'ABC000618586', 'MMSI739', 'IRCS739', '{}', 'EXTIMM739', 'FRÉQUENCE ATLANTIQUE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (740, 'ABC000618660', 'MMSI740', 'IRCS740', '{}', 'EXTIMM740', 'FRÉQUENCE BRISÉE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (741, 'ABC000618904', 'MMSI741', 'IRCS741', '{}', 'EXTIMM741', 'FRÉQUENCE CINQUANTE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (742, 'ABC000621001', 'MMSI742', 'IRCS742', '{}', 'EXTIMM742', 'FRÉQUENCE DISCRET', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (743, 'ABC000621086', 'MMSI743', 'IRCS743', '{}', 'EXTIMM743', 'FRÉQUENCE FRACTAL', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (744, 'ABC000622312', 'MMSI744', 'IRCS744', '{}', 'EXTIMM744', 'FRÉQUENCE INUTILE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (745, 'ABC000622485', 'MMSI745', 'IRCS745', '{}', 'EXTIMM745', 'FRÉQUENCE NORDIQUE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (746, 'ABC000622598', 'MMSI746', 'IRCS746', '{}', 'EXTIMM746', 'FRÉQUENCE ONZE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (747, 'ABC000622969', 'MMSI747', 'IRCS747', '{}', 'EXTIMM747', 'FRÉQUENCE PASSAGÈRE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (748, 'ABC000623021', 'MMSI748', 'IRCS748', '{}', 'EXTIMM748', 'FRÉQUENCE QUARANTE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (749, 'ABC000623080', 'MMSI749', 'IRCS749', '{}', 'EXTIMM749', 'FRÉQUENCE QUARANTE-NEUF', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (750, 'ABC000623126', 'MMSI750', 'IRCS750', '{}', 'EXTIMM750', 'FRÉQUENCE QUATRE-VINGT-DOUZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (751, 'ABC000624101', 'MMSI751', 'IRCS751', '{}', 'EXTIMM751', 'FRÉQUENCE QUATRE-VINGT-TREIZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (752, 'ABC000624705', 'MMSI752', 'IRCS752', '{}', 'EXTIMM752', 'FRÉQUENCE SOIXANTE-DIX-HUIT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (753, 'ABC000624710', 'MMSI753', 'IRCS753', '{}', 'EXTIMM753', 'FRÉQUENCE SOIXANTE-DOUZE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (754, 'ABC000625201', 'MMSI754', 'IRCS754', '{}', 'EXTIMM754', 'FRÉQUENCE TRANSPARENT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (755, 'ABC000625216', 'MMSI755', 'IRCS755', '{}', 'EXTIMM755', 'FRÉQUENCE TREIZE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (756, 'ABC000625266', 'MMSI756', 'IRCS756', '{}', 'EXTIMM756', 'FRÉQUENCE TRENTE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (757, 'ABC000626612', 'MMSI757', 'IRCS757', '{}', 'EXTIMM757', 'FRÉQUENCE TRENTE-TROIS', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (758, 'ABC000626614', 'MMSI758', 'IRCS758', '{}', 'EXTIMM758', 'FRÉQUENCE VERTICALE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (759, 'ABC000626616', 'MMSI759', 'IRCS759', '{}', 'EXTIMM759', 'FURTIF BALISE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (760, 'ABC000626626', 'MMSI760', 'IRCS760', '{}', 'EXTIMM760', 'FURTIF BRUME', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (761, 'ABC000626630', 'MMSI761', 'IRCS761', '{}', 'EXTIMM761', 'FURTIF CALYPSO', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (762, 'ABC000626634', 'MMSI762', 'IRCS762', '{}', 'EXTIMM762', 'FURTIF CENTAURE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (763, 'ABC000626635', 'MMSI763', 'IRCS763', '{}', 'EXTIMM763', 'FURTIF CHIMERA QUATRE-VINGT-QUATORZE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (764, 'ABC000626638', 'MMSI764', 'IRCS764', '{}', 'EXTIMM764', 'FURTIF CHIMERA TRENTE-SEPT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (765, 'ABC000626639', 'MMSI765', 'IRCS765', '{}', 'EXTIMM765', 'FURTIF ENCRE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (766, 'ABC000626645', 'MMSI766', 'IRCS766', '{}', 'EXTIMM766', 'FURTIF GLISSEMENT QUATRE-VINGT-DIX-HUIT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (767, 'ABC000626647', 'MMSI767', 'IRCS767', '{}', 'EXTIMM767', 'FURTIF GRANITE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (768, 'ABC000626649', 'MMSI768', 'IRCS768', '{}', 'EXTIMM768', 'FURTIF GRANITE SEIZE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (769, 'ABC000627967', 'MMSI769', 'IRCS769', '{}', 'EXTIMM769', 'FURTIF LAME', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (770, 'ABC000628978', 'MMSI770', 'IRCS770', '{}', 'EXTIMM770', 'FURTIF MANTA TRENTE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (771, 'ABC000630168', 'MMSI771', 'IRCS771', '{}', 'EXTIMM771', 'FURTIF MODULE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (772, 'ABC000631225', 'MMSI772', 'IRCS772', '{}', 'EXTIMM772', 'FURTIF MÉDUSE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (773, 'ABC000631277', 'MMSI773', 'IRCS773', '{}', 'EXTIMM773', 'FURTIF NÉMÉSIS QUATRE-VINGT-QUATRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (774, 'ABC000632872', 'MMSI774', 'IRCS774', '{}', 'EXTIMM774', 'FURTIF PHARE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (775, 'ABC000633183', 'MMSI775', 'IRCS775', '{}', 'EXTIMM775', 'FURTIF RADIOPHARE QUATRE-VINGT-UN', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (776, 'ABC000633293', 'MMSI776', 'IRCS776', '{}', 'EXTIMM776', 'FURTIF RIVAGE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (777, 'ABC000633323', 'MMSI777', 'IRCS777', '{}', 'EXTIMM777', 'FURTIF SABORDS', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (778, 'ABC000633984', 'MMSI778', 'IRCS778', '{}', 'EXTIMM778', 'FURTIF SOUTERRAIN', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (779, 'ABC000635017', 'MMSI779', 'IRCS779', '{}', 'EXTIMM779', 'FURTIF TRITON SOIXANTE-SEPT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (780, 'ABC000635316', 'MMSI780', 'IRCS780', '{}', 'EXTIMM780', 'FURTIF VÉRITÉ', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (781, 'ABC000635662', 'MMSI781', 'IRCS781', '{}', 'EXTIMM781', 'FURTIF VÉRITÉ TRENTE-SIX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (782, 'ABC000635716', 'MMSI782', 'IRCS782', '{}', 'EXTIMM782', 'FURTIF ÉTOILE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (783, 'ABC000636287', 'MMSI783', 'IRCS783', '{}', 'EXTIMM783', 'FURTIVE DENT DIX-NEUF', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (784, 'ABC000636674', 'MMSI784', 'IRCS784', '{}', 'EXTIMM784', 'FURTIVE GLISSEMENT CINQUANTE-TROIS', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (785, 'ABC000636764', 'MMSI785', 'IRCS785', '{}', 'EXTIMM785', 'FURTIVE GRANITE TRENTE-SIX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (786, 'ABC000637415', 'MMSI786', 'IRCS786', '{}', 'EXTIMM786', 'FURTIVE HÉRÉSIE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (787, 'ABC000637585', 'MMSI787', 'IRCS787', '{}', 'EXTIMM787', 'FURTIVE NARVAL QUATRE-VINGT-QUINZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (788, 'ABC000637843', 'MMSI788', 'IRCS788', '{}', 'EXTIMM788', 'FURTIVE PHARE SOIXANTE-HUIT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (789, 'ABC000637960', 'MMSI789', 'IRCS789', '{}', 'EXTIMM789', 'FURTIVE PIRATE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (790, 'ABC000638316', 'MMSI790', 'IRCS790', '{}', 'EXTIMM790', 'FURTIVE RIVAGE QUATRE-VINGT-NEUF', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (791, 'ABC000638655', 'MMSI791', 'IRCS791', '{}', 'EXTIMM791', 'FURTIVE RIVAGE VINGT-TROIS', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (792, 'ABC000638737', 'MMSI792', 'IRCS792', '{}', 'EXTIMM792', 'FURTIVE SABORDS SOIXANTE-QUINZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (793, 'ABC000638749', 'MMSI793', 'IRCS793', '{}', 'EXTIMM793', 'FURTIVE SOUTERRAIN QUATRE-VINGT-NEUF', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (794, 'ABC000638753', 'MMSI794', 'IRCS794', '{}', 'EXTIMM794', 'FURTIVE TOURMENT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (795, 'ABC000638781', 'MMSI795', 'IRCS795', '{}', 'EXTIMM795', 'FURTIVE TRITON', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (796, 'ABC000638931', 'MMSI796', 'IRCS796', '{}', 'EXTIMM796', 'FURTIVE TRITON QUATRE-VINGT-DIX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (797, 'ABC000639098', 'MMSI797', 'IRCS797', '{}', 'EXTIMM797', 'FURTIVE ÉQUINOXE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (798, 'ABC000639133', 'MMSI798', 'IRCS798', '{}', 'EXTIMM798', 'FURTIVE ÉTOILE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (799, 'ABC000639135', 'MMSI799', 'IRCS799', '{}', 'EXTIMM799', 'FÉLIN ATLANTIQUE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (800, 'ABC000639150', 'MMSI800', 'IRCS800', '{}', 'EXTIMM800', 'FÉLIN BRISÉE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (801, 'ABC000639153', 'MMSI801', 'IRCS801', '{}', 'EXTIMM801', 'FÉLIN DOUTEUX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (802, 'ABC000639186', 'MMSI802', 'IRCS802', '{}', 'EXTIMM802', 'FÉLIN FLOTTANTE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (803, 'ABC000639426', 'MMSI803', 'IRCS803', '{}', 'EXTIMM803', 'FÉLIN FRACTAL', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (804, 'ABC000639449', 'MMSI804', 'IRCS804', '{}', 'EXTIMM804', 'FÉLIN FURTIF', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (805, 'ABC000639451', 'MMSI805', 'IRCS805', '{}', 'EXTIMM805', 'FÉLIN QUARANTE-DEUX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (806, 'ABC000639498', 'MMSI806', 'IRCS806', '{}', 'EXTIMM806', 'FÉLIN QUATRE-VINGT-DIX-HUIT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (807, 'ABC000639650', 'MMSI807', 'IRCS807', '{}', 'EXTIMM807', 'FÉLIN ROUGE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (808, 'ABC000639671', 'MMSI808', 'IRCS808', '{}', 'EXTIMM808', 'FÉLIN SIX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (809, 'ABC000639709', 'MMSI809', 'IRCS809', '{}', 'EXTIMM809', 'FÉLIN SOIXANTE-QUINZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (810, 'ABC000639735', 'MMSI810', 'IRCS810', '{}', 'EXTIMM810', 'FÉLIN SOIXANTE-SEPT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (811, 'ABC000639793', 'MMSI811', 'IRCS811', '{}', 'EXTIMM811', 'FÉLIN SOURD', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (812, 'ABC000639859', 'MMSI812', 'IRCS812', '{}', 'EXTIMM812', 'FÉLIN SÉRIEUSE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (813, 'ABC000640327', 'MMSI813', 'IRCS813', '{}', 'EXTIMM813', 'FÉLIN UN', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (814, 'ABC000640683', 'MMSI814', 'IRCS814', '{}', 'EXTIMM814', 'FÉLIN VERTICALE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (815, 'ABC000642082', 'MMSI815', 'IRCS815', '{}', 'EXTIMM815', 'FÉLIN VOLONTAIRE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (816, 'ABC000642084', 'MMSI816', 'IRCS816', '{}', 'EXTIMM816', 'GLISSEMENT CACHÉE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (817, 'ABC000642089', 'MMSI817', 'IRCS817', '{}', 'EXTIMM817', 'GLISSEMENT CINQUANTE-DEUX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (818, 'ABC000642095', 'MMSI818', 'IRCS818', '{}', 'EXTIMM818', 'GLISSEMENT CINQUANTE-SIX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (819, 'ABC000642098', 'MMSI819', 'IRCS819', '{}', 'EXTIMM819', 'GLISSEMENT DEUX', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (820, 'ABC000642406', 'MMSI820', 'IRCS820', '{}', 'EXTIMM820', 'GLISSEMENT INUTILE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (821, 'ABC000642407', 'MMSI821', 'IRCS821', '{}', 'EXTIMM821', 'GLISSEMENT JAUNE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (822, 'ABC000642409', 'MMSI822', 'IRCS822', '{}', 'EXTIMM822', 'GLISSEMENT NOIR', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (823, 'ABC000642413', 'MMSI823', 'IRCS823', '{}', 'EXTIMM823', 'GLISSEMENT QUARANTE-SIX', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (824, 'ABC000642424', 'MMSI824', 'IRCS824', '{}', 'EXTIMM824', 'GLISSEMENT QUATRE-VINGT-DIX-NEUF', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (825, 'ABC000642579', 'MMSI825', 'IRCS825', '{}', 'EXTIMM825', 'GLISSEMENT QUATRE-VINGT-TROIS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (826, 'ABC000642581', 'MMSI826', 'IRCS826', '{}', 'EXTIMM826', 'GLISSEMENT QUATRE-VINGT-UN', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (827, 'ABC000642582', 'MMSI827', 'IRCS827', '{}', 'EXTIMM827', 'GLISSEMENT SOIXANTE-TROIS', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (828, 'ABC000642584', 'MMSI828', 'IRCS828', '{}', 'EXTIMM828', 'GLISSEMENT TACTIQUE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (829, 'ABC000642594', 'MMSI829', 'IRCS829', '{}', 'EXTIMM829', 'GLISSEMENT VINGT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (830, 'ABC000642597', 'MMSI830', 'IRCS830', '{}', 'EXTIMM830', 'GLISSEMENT VINGT-SIX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (831, 'ABC000642953', 'MMSI831', 'IRCS831', '{}', 'EXTIMM831', 'GLISSEMENT ÉGARÉ', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (832, 'ABC000642958', 'MMSI832', 'IRCS832', '{}', 'EXTIMM832', 'GRANITE ATLANTIQUE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (833, 'ABC000642961', 'MMSI833', 'IRCS833', '{}', 'EXTIMM833', 'GRANITE CINQUANTE-NEUF', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (834, 'ABC000642963', 'MMSI834', 'IRCS834', '{}', 'EXTIMM834', 'GRANITE DOUTEUX', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (835, 'ABC000642969', 'MMSI835', 'IRCS835', '{}', 'EXTIMM835', 'GRANITE HUIT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (836, 'ABC000643319', 'MMSI836', 'IRCS836', '{}', 'EXTIMM836', 'GRANITE INVISIBLE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (837, 'ABC000643489', 'MMSI837', 'IRCS837', '{}', 'EXTIMM837', 'GRANITE NORDIQUE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (838, 'ABC000644260', 'MMSI838', 'IRCS838', '{}', 'EXTIMM838', 'GRANITE ONZE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (839, 'ABC000644516', 'MMSI839', 'IRCS839', '{}', 'EXTIMM839', 'GRANITE POURPRE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (840, 'ABC000644539', 'MMSI840', 'IRCS840', '{}', 'EXTIMM840', 'GRANITE QUARANTE-CINQ', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (841, 'ABC000644766', 'MMSI841', 'IRCS841', '{}', 'EXTIMM841', 'GRANITE QUARANTE-TROIS', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (842, 'ABC000645006', 'MMSI842', 'IRCS842', '{}', 'EXTIMM842', 'GRANITE SOIXANTE-DOUZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (843, 'ABC000645049', 'MMSI843', 'IRCS843', '{}', 'EXTIMM843', 'GRANITE SOIXANTE-QUATORZE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (844, 'ABC000645113', 'MMSI844', 'IRCS844', '{}', 'EXTIMM844', 'GRANITE TRANSPARENT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (845, 'ABC000648300', 'MMSI845', 'IRCS845', '{}', 'EXTIMM845', 'GRANITE TRENTE-CINQ', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (846, 'ABC000648670', 'MMSI846', 'IRCS846', '{}', 'EXTIMM846', 'GRANITE VERTICALE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (847, 'ABC000648920', 'MMSI847', 'IRCS847', '{}', 'EXTIMM847', 'HÉRÉSIE ATLANTIQUE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (848, 'ABC000648960', 'MMSI848', 'IRCS848', '{}', 'EXTIMM848', 'HÉRÉSIE BORGNE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (849, 'ABC000649008', 'MMSI849', 'IRCS849', '{}', 'EXTIMM849', 'HÉRÉSIE BRISÉE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (850, 'ABC000649352', 'MMSI850', 'IRCS850', '{}', 'EXTIMM850', 'HÉRÉSIE CALME', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (851, 'ABC000649484', 'MMSI851', 'IRCS851', '{}', 'EXTIMM851', 'HÉRÉSIE CRYPTÉE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (852, 'ABC000650436', 'MMSI852', 'IRCS852', '{}', 'EXTIMM852', 'HÉRÉSIE DEUX', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (853, 'ABC000651141', 'MMSI853', 'IRCS853', '{}', 'EXTIMM853', 'HÉRÉSIE DIX-NEUF', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (854, 'ABC000651309', 'MMSI854', 'IRCS854', '{}', 'EXTIMM854', 'HÉRÉSIE DORÉ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (855, 'ABC000651332', 'MMSI855', 'IRCS855', '{}', 'EXTIMM855', 'HÉRÉSIE DOUTEUX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (856, 'ABC000651340', 'MMSI856', 'IRCS856', '{}', 'EXTIMM856', 'HÉRÉSIE FAUSSE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (857, 'ABC000651910', 'MMSI857', 'IRCS857', '{}', 'EXTIMM857', 'HÉRÉSIE FLOTTANTE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (858, 'ABC000651913', 'MMSI858', 'IRCS858', '{}', 'EXTIMM858', 'HÉRÉSIE FURTIVE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (859, 'ABC000652423', 'MMSI859', 'IRCS859', '{}', 'EXTIMM859', 'HÉRÉSIE INVISIBLE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (860, 'ABC000653827', 'MMSI860', 'IRCS860', '{}', 'EXTIMM860', 'HÉRÉSIE NEUF', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (861, 'ABC000655039', 'MMSI861', 'IRCS861', '{}', 'EXTIMM861', 'HÉRÉSIE NOCTURNE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (862, 'ABC000655507', 'MMSI862', 'IRCS862', '{}', 'EXTIMM862', 'HÉRÉSIE NOIR', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (863, 'ABC000655759', 'MMSI863', 'IRCS863', '{}', 'EXTIMM863', 'HÉRÉSIE OMBRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (864, 'ABC000655974', 'MMSI864', 'IRCS864', '{}', 'EXTIMM864', 'HÉRÉSIE QUARANTE-NEUF', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (865, 'ABC000657434', 'MMSI865', 'IRCS865', '{}', 'EXTIMM865', 'HÉRÉSIE QUARANTE-TROIS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (866, 'ABC000657538', 'MMSI866', 'IRCS866', '{}', 'EXTIMM866', 'HÉRÉSIE QUATRE-VINGT-DIX-NEUF', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (867, 'ABC000658225', 'MMSI867', 'IRCS867', '{}', 'EXTIMM867', 'HÉRÉSIE QUATRE-VINGT-QUATORZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (868, 'ABC000658867', 'MMSI868', 'IRCS868', '{}', 'EXTIMM868', 'HÉRÉSIE QUATRE-VINGT-SEPT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (869, 'ABC000659484', 'MMSI869', 'IRCS869', '{}', 'EXTIMM869', 'HÉRÉSIE SILENCIEUX', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (870, 'ABC000659577', 'MMSI870', 'IRCS870', '{}', 'EXTIMM870', 'HÉRÉSIE SOIXANTE-TREIZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (871, 'ABC000660436', 'MMSI871', 'IRCS871', '{}', 'EXTIMM871', 'HÉRÉSIE SOIXANTE-TROIS', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (872, 'ABC000660498', 'MMSI872', 'IRCS872', '{}', 'EXTIMM872', 'HÉRÉSIE TRANSPARENT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (873, 'ABC000660594', 'MMSI873', 'IRCS873', '{}', 'EXTIMM873', 'HÉRÉSIE TRENTE-DEUX', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (874, 'ABC000660600', 'MMSI874', 'IRCS874', '{}', 'EXTIMM874', 'HÉRÉSIE TRENTE-HUIT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (875, 'ABC000660614', 'MMSI875', 'IRCS875', '{}', 'EXTIMM875', 'HÉRÉSIE TRENTE-SIX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (876, 'ABC000660653', 'MMSI876', 'IRCS876', '{}', 'EXTIMM876', 'IMPÉRIALE BALISE DIX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (877, 'ABC000660842', 'MMSI877', 'IRCS877', '{}', 'EXTIMM877', 'IMPÉRIALE CALYPSO QUARANTE-DEUX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (878, 'ABC000660875', 'MMSI878', 'IRCS878', '{}', 'EXTIMM878', 'IMPÉRIALE CENTAURE VINGT-CINQ', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (879, 'ABC000660922', 'MMSI879', 'IRCS879', '{}', 'EXTIMM879', 'IMPÉRIALE CHIMERA', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (880, 'ABC000661031', 'MMSI880', 'IRCS880', '{}', 'EXTIMM880', 'IMPÉRIALE CODE QUINZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (881, 'ABC000661051', 'MMSI881', 'IRCS881', '{}', 'EXTIMM881', 'IMPÉRIALE CROIX QUINZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (882, 'ABC000661246', 'MMSI882', 'IRCS882', '{}', 'EXTIMM882', 'IMPÉRIALE DENT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (883, 'ABC000661265', 'MMSI883', 'IRCS883', '{}', 'EXTIMM883', 'IMPÉRIALE ENCRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (884, 'ABC000661330', 'MMSI884', 'IRCS884', '{}', 'EXTIMM884', 'IMPÉRIALE GRANITE QUATRE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (885, 'ABC000661437', 'MMSI885', 'IRCS885', '{}', 'EXTIMM885', 'IMPÉRIALE MODULE QUARANTE-QUATRE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (886, 'ABC000661455', 'MMSI886', 'IRCS886', '{}', 'EXTIMM886', 'IMPÉRIALE NARVAL QUATRE-VINGT-HUIT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (887, 'ABC000661475', 'MMSI887', 'IRCS887', '{}', 'EXTIMM887', 'IMPÉRIALE NÉMÉSIS SOIXANTE-DIX-HUIT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (888, 'ABC000661476', 'MMSI888', 'IRCS888', '{}', 'EXTIMM888', 'IMPÉRIALE PHARE CINQUANTE-TROIS', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (889, 'ABC000661478', 'MMSI889', 'IRCS889', '{}', 'EXTIMM889', 'IMPÉRIALE PIRATE QUATRE-VINGT-NEUF', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (890, 'ABC000663275', 'MMSI890', 'IRCS890', '{}', 'EXTIMM890', 'IMPÉRIALE PONT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (891, 'ABC000663304', 'MMSI891', 'IRCS891', '{}', 'EXTIMM891', 'IMPÉRIALE PONT VINGT-NEUF', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (892, 'ABC000667156', 'MMSI892', 'IRCS892', '{}', 'EXTIMM892', 'IMPÉRIALE PYLÔNE QUATRE-VINGT-SEPT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (893, 'ABC000667404', 'MMSI893', 'IRCS893', '{}', 'EXTIMM893', 'IMPÉRIALE RADIOPHARE SOIXANTE-TROIS', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (894, 'ABC000669307', 'MMSI894', 'IRCS894', '{}', 'EXTIMM894', 'IMPÉRIALE SENTINELLE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (895, 'ABC000669362', 'MMSI895', 'IRCS895', '{}', 'EXTIMM895', 'IMPÉRIALE SOUTERRAIN SOIXANTE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (896, 'ABC000669381', 'MMSI896', 'IRCS896', '{}', 'EXTIMM896', 'IMPÉRIALE TRAITRE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (897, 'ABC000669384', 'MMSI897', 'IRCS897', '{}', 'EXTIMM897', 'IMPÉRIALE TRITON QUATRE-VINGT-SEPT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (898, 'ABC000669386', 'MMSI898', 'IRCS898', '{}', 'EXTIMM898', 'IMPÉRIALE TYPHON', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (899, 'ABC000669389', 'MMSI899', 'IRCS899', '{}', 'EXTIMM899', 'IMPÉRIALE VORTEX ONZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (900, 'ABC000669390', 'MMSI900', 'IRCS900', '{}', 'EXTIMM900', 'IMPÉRIALE VÉRITÉ DIX-SEPT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (901, 'ABC000670467', 'MMSI901', 'IRCS901', '{}', 'EXTIMM901', 'IMPÉRIALE ÉPAVE SOIXANTE-HUIT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (902, 'ABC000670485', 'MMSI902', 'IRCS902', '{}', 'EXTIMM902', 'IMPÉRIALE ÉQUINOXE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (903, 'ABC000670494', 'MMSI903', 'IRCS903', '{}', 'EXTIMM903', 'IMPÉRIALE ÉTOILE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (904, 'ABC000670961', 'MMSI904', 'IRCS904', '{}', 'EXTIMM904', 'INUTILE BALISE CENT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (905, 'ABC000671455', 'MMSI905', 'IRCS905', '{}', 'EXTIMM905', 'INUTILE BALISE QUATRE-VINGT-UN', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (906, 'ABC000671460', 'MMSI906', 'IRCS906', '{}', 'EXTIMM906', 'INUTILE CENTAURE UN', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (907, 'ABC000671982', 'MMSI907', 'IRCS907', '{}', 'EXTIMM907', 'INUTILE CHIMERA', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (908, 'ABC000672792', 'MMSI908', 'IRCS908', '{}', 'EXTIMM908', 'INUTILE CODE QUATRE-VINGT-DEUX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (909, 'ABC000677186', 'MMSI909', 'IRCS909', '{}', 'EXTIMM909', 'INUTILE DENT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (910, 'ABC000678634', 'MMSI910', 'IRCS910', '{}', 'EXTIMM910', 'INUTILE FANTÔME', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (911, 'ABC000678641', 'MMSI911', 'IRCS911', '{}', 'EXTIMM911', 'INUTILE FRÉQUENCE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (912, 'ABC000678718', 'MMSI912', 'IRCS912', '{}', 'EXTIMM912', 'INUTILE GLISSEMENT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (913, 'ABC000678936', 'MMSI913', 'IRCS913', '{}', 'EXTIMM913', 'INUTILE MANTA', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (914, 'ABC000678975', 'MMSI914', 'IRCS914', '{}', 'EXTIMM914', 'INUTILE MANTA SOIXANTE-DIX-NEUF', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (915, 'ABC000678993', 'MMSI915', 'IRCS915', '{}', 'EXTIMM915', 'INUTILE MÉDUSE TRENTE-NEUF', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (916, 'ABC000682324', 'MMSI916', 'IRCS916', '{}', 'EXTIMM916', 'INUTILE OPALE QUARANTE-HUIT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (917, 'ABC000682833', 'MMSI917', 'IRCS917', '{}', 'EXTIMM917', 'INUTILE PHARE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (918, 'ABC000683096', 'MMSI918', 'IRCS918', '{}', 'EXTIMM918', 'INUTILE PHARE QUATRE-VINGT-TROIS', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (919, 'ABC000683113', 'MMSI919', 'IRCS919', '{}', 'EXTIMM919', 'INUTILE PYLÔNE QUATRE-VINGT-ONZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (920, 'ABC000683421', 'MMSI920', 'IRCS920', '{}', 'EXTIMM920', 'INUTILE RAPACE QUATRE-VINGT-TREIZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (921, 'ABC000683447', 'MMSI921', 'IRCS921', '{}', 'EXTIMM921', 'INUTILE SPECTRE TRENTE-QUATRE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (922, 'ABC000683453', 'MMSI922', 'IRCS922', '{}', 'EXTIMM922', 'INUTILE TOURMENT QUARANTE-SEPT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (923, 'ABC000683454', 'MMSI923', 'IRCS923', '{}', 'EXTIMM923', 'INUTILE TRAITRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (924, 'ABC000683490', 'MMSI924', 'IRCS924', '{}', 'EXTIMM924', 'INUTILE TRAITRE VINGT-NEUF', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (925, 'ABC000683609', 'MMSI925', 'IRCS925', '{}', 'EXTIMM925', 'INUTILE TRITON', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (926, 'ABC000683638', 'MMSI926', 'IRCS926', '{}', 'EXTIMM926', 'INUTILE TRITON QUATRE-VINGT-QUINZE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (927, 'ABC000683666', 'MMSI927', 'IRCS927', '{}', 'EXTIMM927', 'INUTILE ÉPAVE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (928, 'ABC000683671', 'MMSI928', 'IRCS928', '{}', 'EXTIMM928', 'INVISIBLE AIGLE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (929, 'ABC000683685', 'MMSI929', 'IRCS929', '{}', 'EXTIMM929', 'INVISIBLE AIGLE QUARANTE-CINQ', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (930, 'ABC000683719', 'MMSI930', 'IRCS930', '{}', 'EXTIMM930', 'INVISIBLE CALYPSO TRENTE-ET-UN', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (931, 'ABC000683777', 'MMSI931', 'IRCS931', '{}', 'EXTIMM931', 'INVISIBLE CODE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (932, 'ABC000683834', 'MMSI932', 'IRCS932', '{}', 'EXTIMM932', 'INVISIBLE CROIX SOIXANTE-SEPT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (933, 'ABC000683849', 'MMSI933', 'IRCS933', '{}', 'EXTIMM933', 'INVISIBLE DRAGON', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (934, 'ABC000683869', 'MMSI934', 'IRCS934', '{}', 'EXTIMM934', 'INVISIBLE FANTÔME QUARANTE-ET-UN', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (935, 'ABC000683986', 'MMSI935', 'IRCS935', '{}', 'EXTIMM935', 'INVISIBLE FRÉQUENCE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (936, 'ABC000684186', 'MMSI936', 'IRCS936', '{}', 'EXTIMM936', 'INVISIBLE GLISSEMENT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (937, 'ABC000684262', 'MMSI937', 'IRCS937', '{}', 'EXTIMM937', 'INVISIBLE LAME', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (938, 'ABC000684904', 'MMSI938', 'IRCS938', '{}', 'EXTIMM938', 'INVISIBLE MÉDUSE SEPT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (939, 'ABC000685785', 'MMSI939', 'IRCS939', '{}', 'EXTIMM939', 'INVISIBLE PONT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (940, 'ABC000686070', 'MMSI940', 'IRCS940', '{}', 'EXTIMM940', 'INVISIBLE PONT SOIXANTE-DEUX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (941, 'ABC000686233', 'MMSI941', 'IRCS941', '{}', 'EXTIMM941', 'INVISIBLE RAPACE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (942, 'ABC000686276', 'MMSI942', 'IRCS942', '{}', 'EXTIMM942', 'INVISIBLE RIVAGE QUINZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (943, 'ABC000686349', 'MMSI943', 'IRCS943', '{}', 'EXTIMM943', 'INVISIBLE SABORDS VINGT-CINQ', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (944, 'ABC000686352', 'MMSI944', 'IRCS944', '{}', 'EXTIMM944', 'INVISIBLE SENTINELLE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (945, 'ABC000686357', 'MMSI945', 'IRCS945', '{}', 'EXTIMM945', 'INVISIBLE SOUTERRAIN', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (946, 'ABC000686371', 'MMSI946', 'IRCS946', '{}', 'EXTIMM946', 'INVISIBLE ÉTOILE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (947, 'ABC000686388', 'MMSI947', 'IRCS947', '{}', 'EXTIMM947', 'INVISIBLE ÉTOILE DEUX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (948, 'ABC000686425', 'MMSI948', 'IRCS948', '{}', 'EXTIMM948', 'JAUNE AIGLE QUATORZE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (949, 'ABC000686426', 'MMSI949', 'IRCS949', '{}', 'EXTIMM949', 'JAUNE BALISE TRENTE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (950, 'ABC000686485', 'MMSI950', 'IRCS950', '{}', 'EXTIMM950', 'JAUNE CALYPSO', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (951, 'ABC000686560', 'MMSI951', 'IRCS951', '{}', 'EXTIMM951', 'JAUNE CARGO', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (952, 'ABC000686600', 'MMSI952', 'IRCS952', '{}', 'EXTIMM952', 'JAUNE CODE QUATRE-VINGT-DOUZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (953, 'ABC000686635', 'MMSI953', 'IRCS953', '{}', 'EXTIMM953', 'JAUNE CROIX NEUF', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (954, 'ABC000686638', 'MMSI954', 'IRCS954', '{}', 'EXTIMM954', 'JAUNE DÉCODEUR', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (955, 'ABC000686677', 'MMSI955', 'IRCS955', '{}', 'EXTIMM955', 'JAUNE DÉCODEUR SIX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (956, 'ABC000686705', 'MMSI956', 'IRCS956', '{}', 'EXTIMM956', 'JAUNE GRANITE QUATRE-VINGT-HUIT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (957, 'ABC000686894', 'MMSI957', 'IRCS957', '{}', 'EXTIMM957', 'JAUNE NÉMÉSIS QUATRE-VINGT-SEPT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (958, 'ABC000686911', 'MMSI958', 'IRCS958', '{}', 'EXTIMM958', 'JAUNE OPALE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (959, 'ABC000687639', 'MMSI959', 'IRCS959', '{}', 'EXTIMM959', 'JAUNE PHARE VINGT-NEUF', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (960, 'ABC000687728', 'MMSI960', 'IRCS960', '{}', 'EXTIMM960', 'JAUNE PYLÔNE QUARANTE-CINQ', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (961, 'ABC000689018', 'MMSI961', 'IRCS961', '{}', 'EXTIMM961', 'JAUNE RADIOPHARE DIX-HUIT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (962, 'ABC000689043', 'MMSI962', 'IRCS962', '{}', 'EXTIMM962', 'JAUNE RAPACE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (963, 'ABC000689048', 'MMSI963', 'IRCS963', '{}', 'EXTIMM963', 'JAUNE SOUTERRAIN TRENTE-QUATRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (964, 'ABC000689051', 'MMSI964', 'IRCS964', '{}', 'EXTIMM964', 'JAUNE TOURMENT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (965, 'ABC000689107', 'MMSI965', 'IRCS965', '{}', 'EXTIMM965', 'JAUNE TRITON', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (966, 'ABC000689360', 'MMSI966', 'IRCS966', '{}', 'EXTIMM966', 'JAUNE VORTEX CINQUANTE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (967, 'ABC000689808', 'MMSI967', 'IRCS967', '{}', 'EXTIMM967', 'JAUNE VORTEX SOIXANTE-QUINZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (968, 'ABC000689866', 'MMSI968', 'IRCS968', '{}', 'EXTIMM968', 'JAUNE VÉRITÉ', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (969, 'ABC000689867', 'MMSI969', 'IRCS969', '{}', 'EXTIMM969', 'JAUNE ÉQUINOXE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (970, 'ABC000689878', 'MMSI970', 'IRCS970', '{}', 'EXTIMM970', 'LAME IMPÉRIALE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (971, 'ABC000689981', 'MMSI971', 'IRCS971', '{}', 'EXTIMM971', 'LAME INUTILE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (972, 'ABC000690085', 'MMSI972', 'IRCS972', '{}', 'EXTIMM972', 'LAME NOIR', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (973, 'ABC000690508', 'MMSI973', 'IRCS973', '{}', 'EXTIMM973', 'LAME QUATRE-VINGT-DIX-HUIT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (974, 'ABC000690520', 'MMSI974', 'IRCS974', '{}', 'EXTIMM974', 'LAME SOIXANTE-DIX-HUIT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (975, 'ABC000690527', 'MMSI975', 'IRCS975', '{}', 'EXTIMM975', 'LAME SOIXANTE-DIX-NEUF', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (976, 'ABC000690678', 'MMSI976', 'IRCS976', '{}', 'EXTIMM976', 'LAME TACTIQUE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (977, 'ABC000690727', 'MMSI977', 'IRCS977', '{}', 'EXTIMM977', 'LAME VERTICALE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (978, 'ABC000690794', 'MMSI978', 'IRCS978', '{}', 'EXTIMM978', 'LAME VINGT-CINQ', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (979, 'ABC000690814', 'MMSI979', 'IRCS979', '{}', 'EXTIMM979', 'LAME VINGT-SIX', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (980, 'ABC000690878', 'MMSI980', 'IRCS980', '{}', 'EXTIMM980', 'LAME ÉGARÉ', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (981, 'ABC000690935', 'MMSI981', 'IRCS981', '{}', 'EXTIMM981', 'MANTA ATLANTIQUE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (982, 'ABC000690937', 'MMSI982', 'IRCS982', '{}', 'EXTIMM982', 'MANTA BLEU', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (983, 'ABC000690938', 'MMSI983', 'IRCS983', '{}', 'EXTIMM983', 'MANTA BORGNE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (984, 'ABC000691280', 'MMSI984', 'IRCS984', '{}', 'EXTIMM984', 'MANTA CALME', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (985, 'ABC000691333', 'MMSI985', 'IRCS985', '{}', 'EXTIMM985', 'MANTA CENT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (986, 'ABC000691506', 'MMSI986', 'IRCS986', '{}', 'EXTIMM986', 'MANTA MUET', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (987, 'ABC000691534', 'MMSI987', 'IRCS987', '{}', 'EXTIMM987', 'MANTA QUARANTE-QUATRE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (988, 'ABC000691653', 'MMSI988', 'IRCS988', '{}', 'EXTIMM988', 'MANTA QUATRE-VINGT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (989, 'ABC000691713', 'MMSI989', 'IRCS989', '{}', 'EXTIMM989', 'MANTA QUATRE-VINGT-DIX-NEUF', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (990, 'ABC000691909', 'MMSI990', 'IRCS990', '{}', 'EXTIMM990', 'MANTA QUATRE-VINGT-DIX-SEPT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (991, 'ABC000691948', 'MMSI991', 'IRCS991', '{}', 'EXTIMM991', 'MANTA QUATRE-VINGT-QUATRE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (992, 'ABC000691951', 'MMSI992', 'IRCS992', '{}', 'EXTIMM992', 'MANTA TREIZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (993, 'ABC000691978', 'MMSI993', 'IRCS993', '{}', 'EXTIMM993', 'MANTA TRENTE-DEUX', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (994, 'ABC000692572', 'MMSI994', 'IRCS994', '{}', 'EXTIMM994', 'MANTA VINGT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (995, 'ABC000694215', 'MMSI995', 'IRCS995', '{}', 'EXTIMM995', 'MANTA VINGT-ET-UN', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (996, 'ABC000696728', 'MMSI996', 'IRCS996', '{}', 'EXTIMM996', 'MANTA VINGT-SIX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (997, 'ABC000696894', 'MMSI997', 'IRCS997', '{}', 'EXTIMM997', 'MANTA VINGT-TROIS', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (998, 'ABC000697142', 'MMSI998', 'IRCS998', '{}', 'EXTIMM998', 'MANTA VOLONTAIRE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (999, 'ABC000697407', 'MMSI999', 'IRCS999', '{}', 'EXTIMM999', 'MANTA ÉGARÉ', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1000, 'ABC000697470', 'MMSI1000', 'IRCS1000', '{}', 'EXTIMM1000', 'MODULE CINQUANTE-CINQ', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1001, 'ABC000697648', 'MMSI1001', 'IRCS1001', '{}', 'EXTIMM1001', 'MODULE DISCRET', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1002, 'ABC000698113', 'MMSI1002', 'IRCS1002', '{}', 'EXTIMM1002', 'MODULE DIX-HUIT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1003, 'ABC000699173', 'MMSI1003', 'IRCS1003', '{}', 'EXTIMM1003', 'MODULE IMPÉRIALE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1004, 'ABC000699629', 'MMSI1004', 'IRCS1004', '{}', 'EXTIMM1004', 'MODULE INUTILE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1005, 'ABC000700978', 'MMSI1005', 'IRCS1005', '{}', 'EXTIMM1005', 'MODULE NOMADE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1006, 'ABC000701718', 'MMSI1006', 'IRCS1006', '{}', 'EXTIMM1006', 'MODULE OMBRE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1007, 'ABC000701727', 'MMSI1007', 'IRCS1007', '{}', 'EXTIMM1007', 'MODULE POURPRE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1008, 'ABC000701734', 'MMSI1008', 'IRCS1008', '{}', 'EXTIMM1008', 'MODULE QUATRE-VINGT-NEUF', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1009, 'ABC000701744', 'MMSI1009', 'IRCS1009', '{}', 'EXTIMM1009', 'MODULE QUATRE-VINGT-TROIS', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1010, 'ABC000701752', 'MMSI1010', 'IRCS1010', '{}', 'EXTIMM1010', 'MODULE SOIXANTE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1011, 'ABC000701769', 'MMSI1011', 'IRCS1011', '{}', 'EXTIMM1011', 'MODULE SOIXANTE-CINQ', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1012, 'ABC000701774', 'MMSI1012', 'IRCS1012', '{}', 'EXTIMM1012', 'MODULE SOIXANTE-DIX-HUIT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1013, 'ABC000701783', 'MMSI1013', 'IRCS1013', '{}', 'EXTIMM1013', 'MODULE SOIXANTE-QUINZE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1014, 'ABC000703308', 'MMSI1014', 'IRCS1014', '{}', 'EXTIMM1014', 'MODULE SOIXANTE-SIX', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1015, 'ABC000703323', 'MMSI1015', 'IRCS1015', '{}', 'EXTIMM1015', 'MODULE SOIXANTE-TROIS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1016, 'ABC000703355', 'MMSI1016', 'IRCS1016', '{}', 'EXTIMM1016', 'MODULE SÉRIEUSE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1017, 'ABC000703367', 'MMSI1017', 'IRCS1017', '{}', 'EXTIMM1017', 'MODULE ÉGARÉ', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1018, 'ABC000703387', 'MMSI1018', 'IRCS1018', '{}', 'EXTIMM1018', 'MUET ALBATROS', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1019, 'ABC000703652', 'MMSI1019', 'IRCS1019', '{}', 'EXTIMM1019', 'MUET BALISE QUATRE-VINGT-TROIS', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1020, 'ABC000703653', 'MMSI1020', 'IRCS1020', '{}', 'EXTIMM1020', 'MUET CALYPSO SOIXANTE-TREIZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1021, 'ABC000703654', 'MMSI1021', 'IRCS1021', '{}', 'EXTIMM1021', 'MUET CENTAURE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1022, 'ABC000703909', 'MMSI1022', 'IRCS1022', '{}', 'EXTIMM1022', 'MUET CODE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1023, 'ABC000706595', 'MMSI1023', 'IRCS1023', '{}', 'EXTIMM1023', 'MUET DÉRIVE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1024, 'ABC000707251', 'MMSI1024', 'IRCS1024', '{}', 'EXTIMM1024', 'MUET FANTÔME SOIXANTE-SEPT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1025, 'ABC000707326', 'MMSI1025', 'IRCS1025', '{}', 'EXTIMM1025', 'MUET GLISSEMENT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1026, 'ABC000707330', 'MMSI1026', 'IRCS1026', '{}', 'EXTIMM1026', 'MUET GRANITE QUATRE-VINGT-TREIZE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1027, 'ABC000707356', 'MMSI1027', 'IRCS1027', '{}', 'EXTIMM1027', 'MUET LAME QUATRE-VINGT-DIX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1028, 'ABC000707358', 'MMSI1028', 'IRCS1028', '{}', 'EXTIMM1028', 'MUET NÉMÉSIS QUARANTE-CINQ', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1029, 'ABC000707361', 'MMSI1029', 'IRCS1029', '{}', 'EXTIMM1029', 'MUET OPALE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1030, 'ABC000707363', 'MMSI1030', 'IRCS1030', '{}', 'EXTIMM1030', 'MUET PAQUEBOT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1031, 'ABC000707396', 'MMSI1031', 'IRCS1031', '{}', 'EXTIMM1031', 'MUET RAPACE SOIXANTE-ET-ONZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1032, 'ABC000707398', 'MMSI1032', 'IRCS1032', '{}', 'EXTIMM1032', 'MUET TOURMENT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1033, 'ABC000707484', 'MMSI1033', 'IRCS1033', '{}', 'EXTIMM1033', 'MUET TOURMENT QUATRE-VINGT-HUIT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1034, 'ABC000707485', 'MMSI1034', 'IRCS1034', '{}', 'EXTIMM1034', 'MUET TRAITRE QUATRE-VINGT-HUIT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1035, 'ABC000707613', 'MMSI1035', 'IRCS1035', '{}', 'EXTIMM1035', 'MUET TRAITRE QUATRE-VINGT-NEUF', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1036, 'ABC000707670', 'MMSI1036', 'IRCS1036', '{}', 'EXTIMM1036', 'MUET TYPHON SOIXANTE-DIX-SEPT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1037, 'ABC000707671', 'MMSI1037', 'IRCS1037', '{}', 'EXTIMM1037', 'MUET VÉRITÉ QUATRE-VINGT-HUIT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1038, 'ABC000707753', 'MMSI1038', 'IRCS1038', '{}', 'EXTIMM1038', 'MÉDUSE CINQ', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1039, 'ABC000707819', 'MMSI1039', 'IRCS1039', '{}', 'EXTIMM1039', 'MÉDUSE CINQUANTE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1040, 'ABC000707900', 'MMSI1040', 'IRCS1040', '{}', 'EXTIMM1040', 'MÉDUSE CINQUANTE-HUIT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1041, 'ABC000707947', 'MMSI1041', 'IRCS1041', '{}', 'EXTIMM1041', 'MÉDUSE DIX-SEPT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1042, 'ABC000707950', 'MMSI1042', 'IRCS1042', '{}', 'EXTIMM1042', 'MÉDUSE DORÉ', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1043, 'ABC000707952', 'MMSI1043', 'IRCS1043', '{}', 'EXTIMM1043', 'MÉDUSE DOUTEUX', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1044, 'ABC000708206', 'MMSI1044', 'IRCS1044', '{}', 'EXTIMM1044', 'MÉDUSE DOUZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1045, 'ABC000711071', 'MMSI1045', 'IRCS1045', '{}', 'EXTIMM1045', 'MÉDUSE NOIR', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1046, 'ABC000711191', 'MMSI1046', 'IRCS1046', '{}', 'EXTIMM1046', 'MÉDUSE PASSAGÈRE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1047, 'ABC000711257', 'MMSI1047', 'IRCS1047', '{}', 'EXTIMM1047', 'MÉDUSE POURPRE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1048, 'ABC000711273', 'MMSI1048', 'IRCS1048', '{}', 'EXTIMM1048', 'MÉDUSE QUATRE-VINGT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1049, 'ABC000711283', 'MMSI1049', 'IRCS1049', '{}', 'EXTIMM1049', 'MÉDUSE QUATRE-VINGT-DIX-HUIT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1050, 'ABC000711330', 'MMSI1050', 'IRCS1050', '{}', 'EXTIMM1050', 'MÉDUSE QUATRE-VINGT-TROIS', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1051, 'ABC000711354', 'MMSI1051', 'IRCS1051', '{}', 'EXTIMM1051', 'MÉDUSE SOIXANTE-DOUZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1052, 'ABC000711385', 'MMSI1052', 'IRCS1052', '{}', 'EXTIMM1052', 'MÉDUSE SOIXANTE-HUIT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1053, 'ABC000711405', 'MMSI1053', 'IRCS1053', '{}', 'EXTIMM1053', 'MÉDUSE SOIXANTE-QUATRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1054, 'ABC000711464', 'MMSI1054', 'IRCS1054', '{}', 'EXTIMM1054', 'MÉDUSE SOIXANTE-TREIZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1055, 'ABC000711512', 'MMSI1055', 'IRCS1055', '{}', 'EXTIMM1055', 'MÉDUSE SOURD', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1056, 'ABC000711553', 'MMSI1056', 'IRCS1056', '{}', 'EXTIMM1056', 'MÉDUSE VINGT-DEUX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1057, 'ABC000711604', 'MMSI1057', 'IRCS1057', '{}', 'EXTIMM1057', 'MÉDUSE VINGT-TROIS', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1058, 'ABC000711693', 'MMSI1058', 'IRCS1058', '{}', 'EXTIMM1058', 'MÉDUSE ZÉRO', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1059, 'ABC000711694', 'MMSI1059', 'IRCS1059', '{}', 'EXTIMM1059', 'MÉDUSE ÉGARÉ', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1060, 'ABC000711700', 'MMSI1060', 'IRCS1060', '{}', 'EXTIMM1060', 'NARVAL BLEU', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1061, 'ABC000711789', 'MMSI1061', 'IRCS1061', '{}', 'EXTIMM1061', 'NARVAL CRYPTÉE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1062, 'ABC000711794', 'MMSI1062', 'IRCS1062', '{}', 'EXTIMM1062', 'NARVAL DIX-SEPT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1063, 'ABC000711864', 'MMSI1063', 'IRCS1063', '{}', 'EXTIMM1063', 'NARVAL DOUTEUX', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1064, 'ABC000711933', 'MMSI1064', 'IRCS1064', '{}', 'EXTIMM1064', 'NARVAL DOUZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1065, 'ABC000712100', 'MMSI1065', 'IRCS1065', '{}', 'EXTIMM1065', 'NARVAL FAUSSE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1066, 'ABC000712160', 'MMSI1066', 'IRCS1066', '{}', 'EXTIMM1066', 'NARVAL FRACTAL', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1067, 'ABC000712832', 'MMSI1067', 'IRCS1067', '{}', 'EXTIMM1067', 'NARVAL IMPÉRIALE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1068, 'ABC000713170', 'MMSI1068', 'IRCS1068', '{}', 'EXTIMM1068', 'NARVAL NOCTURNE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1069, 'ABC000713192', 'MMSI1069', 'IRCS1069', '{}', 'EXTIMM1069', 'NARVAL POURPRE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1070, 'ABC000713326', 'MMSI1070', 'IRCS1070', '{}', 'EXTIMM1070', 'NARVAL QUARANTE-CINQ', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1071, 'ABC000713657', 'MMSI1071', 'IRCS1071', '{}', 'EXTIMM1071', 'NARVAL QUARANTE-NEUF', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1072, 'ABC000713661', 'MMSI1072', 'IRCS1072', '{}', 'EXTIMM1072', 'NARVAL QUARANTE-SEPT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1073, 'ABC000713701', 'MMSI1073', 'IRCS1073', '{}', 'EXTIMM1073', 'NARVAL QUATRE-VINGT-DEUX', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1074, 'ABC000714496', 'MMSI1074', 'IRCS1074', '{}', 'EXTIMM1074', 'NARVAL QUATRE-VINGT-ONZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1075, 'ABC000714507', 'MMSI1075', 'IRCS1075', '{}', 'EXTIMM1075', 'NARVAL SOIXANTE-CINQ', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1076, 'ABC000714691', 'MMSI1076', 'IRCS1076', '{}', 'EXTIMM1076', 'NARVAL SOIXANTE-ET-UN', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1077, 'ABC000715367', 'MMSI1077', 'IRCS1077', '{}', 'EXTIMM1077', 'NARVAL SÉRIEUSE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1078, 'ABC000715569', 'MMSI1078', 'IRCS1078', '{}', 'EXTIMM1078', 'NARVAL TRANSPARENT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1079, 'ABC000715622', 'MMSI1079', 'IRCS1079', '{}', 'EXTIMM1079', 'NARVAL TRENTE-NEUF', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1080, 'ABC000715684', 'MMSI1080', 'IRCS1080', '{}', 'EXTIMM1080', 'NARVAL VERTICALE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1081, 'ABC000715791', 'MMSI1081', 'IRCS1081', '{}', 'EXTIMM1081', 'NARVAL VINGT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1082, 'ABC000716508', 'MMSI1082', 'IRCS1082', '{}', 'EXTIMM1082', 'NARVAL VINGT-CINQ', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1083, 'ABC000716514', 'MMSI1083', 'IRCS1083', '{}', 'EXTIMM1083', 'NARVAL VIRGINAL', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1084, 'ABC000716720', 'MMSI1084', 'IRCS1084', '{}', 'EXTIMM1084', 'NARVAL ÉGARÉ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1085, 'ABC000719738', 'MMSI1085', 'IRCS1085', '{}', 'EXTIMM1085', 'NOCTURNE ALBATROS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1086, 'ABC000719774', 'MMSI1086', 'IRCS1086', '{}', 'EXTIMM1086', 'NOCTURNE BALISE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1087, 'ABC000719984', 'MMSI1087', 'IRCS1087', '{}', 'EXTIMM1087', 'NOCTURNE BRUME SIX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1088, 'ABC000719992', 'MMSI1088', 'IRCS1088', '{}', 'EXTIMM1088', 'NOCTURNE CENTAURE CINQUANTE-QUATRE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1089, 'ABC000719993', 'MMSI1089', 'IRCS1089', '{}', 'EXTIMM1089', 'NOCTURNE DENT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1090, 'ABC000720288', 'MMSI1090', 'IRCS1090', '{}', 'EXTIMM1090', 'NOCTURNE FANTÔME QUATORZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1091, 'ABC000720298', 'MMSI1091', 'IRCS1091', '{}', 'EXTIMM1091', 'NOCTURNE FANTÔME QUATRE-VINGT-SIX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1092, 'ABC000720307', 'MMSI1092', 'IRCS1092', '{}', 'EXTIMM1092', 'NOCTURNE FRÉQUENCE TRENTE-DEUX', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1093, 'ABC000720308', 'MMSI1093', 'IRCS1093', '{}', 'EXTIMM1093', 'NOCTURNE GLISSEMENT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1094, 'ABC000720313', 'MMSI1094', 'IRCS1094', '{}', 'EXTIMM1094', 'NOCTURNE GLISSEMENT SOIXANTE-DIX', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1095, 'ABC000720490', 'MMSI1095', 'IRCS1095', '{}', 'EXTIMM1095', 'NOCTURNE GRANITE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1096, 'ABC000720636', 'MMSI1096', 'IRCS1096', '{}', 'EXTIMM1096', 'NOCTURNE LAME QUARANTE-SEPT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1097, 'ABC000720667', 'MMSI1097', 'IRCS1097', '{}', 'EXTIMM1097', 'NOCTURNE LAME TRENTE-ET-UN', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1098, 'ABC000720687', 'MMSI1098', 'IRCS1098', '{}', 'EXTIMM1098', 'NOCTURNE MODULE SOIXANTE-ET-UN', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1099, 'ABC000720801', 'MMSI1099', 'IRCS1099', '{}', 'EXTIMM1099', 'NOCTURNE NÉMÉSIS', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1100, 'ABC000721090', 'MMSI1100', 'IRCS1100', '{}', 'EXTIMM1100', 'NOCTURNE OPALE SEPT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1101, 'ABC000721220', 'MMSI1101', 'IRCS1101', '{}', 'EXTIMM1101', 'NOCTURNE PAQUEBOT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1102, 'ABC000721230', 'MMSI1102', 'IRCS1102', '{}', 'EXTIMM1102', 'NOCTURNE PHARE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1103, 'ABC000721250', 'MMSI1103', 'IRCS1103', '{}', 'EXTIMM1103', 'NOCTURNE PHARE QUARANTE-QUATRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1104, 'ABC000721350', 'MMSI1104', 'IRCS1104', '{}', 'EXTIMM1104', 'NOCTURNE PONT VINGT-QUATRE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1105, 'ABC000721430', 'MMSI1105', 'IRCS1105', '{}', 'EXTIMM1105', 'NOCTURNE PYLÔNE QUATRE-VINGT-QUINZE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1106, 'ABC000721470', 'MMSI1106', 'IRCS1106', '{}', 'EXTIMM1106', 'NOCTURNE RADIOPHARE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1107, 'ABC000721820', 'MMSI1107', 'IRCS1107', '{}', 'EXTIMM1107', 'NOCTURNE RAPACE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1108, 'ABC000721860', 'MMSI1108', 'IRCS1108', '{}', 'EXTIMM1108', 'NOCTURNE ÉPAVE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1109, 'ABC000721870', 'MMSI1109', 'IRCS1109', '{}', 'EXTIMM1109', 'NOCTURNE ÉQUINOXE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1110, 'ABC000721900', 'MMSI1110', 'IRCS1110', '{}', 'EXTIMM1110', 'NOCTURNE ÉQUINOXE SOIXANTE-DEUX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1111, 'ABC000722228', 'MMSI1111', 'IRCS1111', '{}', 'EXTIMM1111', 'NOIR BALISE HUIT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1112, 'ABC000722230', 'MMSI1112', 'IRCS1112', '{}', 'EXTIMM1112', 'NOIR CALYPSO', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1113, 'ABC000722233', 'MMSI1113', 'IRCS1113', '{}', 'EXTIMM1113', 'NOIR CARGO SOIXANTE-DIX-HUIT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1114, 'ABC000722240', 'MMSI1114', 'IRCS1114', '{}', 'EXTIMM1114', 'NOIR CROIX QUARANTE-NEUF', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1115, 'ABC000722249', 'MMSI1115', 'IRCS1115', '{}', 'EXTIMM1115', 'NOIR DENT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1116, 'ABC000722677', 'MMSI1116', 'IRCS1116', '{}', 'EXTIMM1116', 'NOIR FÉLIN QUARANTE-ET-UN', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1117, 'ABC000722680', 'MMSI1117', 'IRCS1117', '{}', 'EXTIMM1117', 'NOIR GRANITE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1118, 'ABC000722692', 'MMSI1118', 'IRCS1118', '{}', 'EXTIMM1118', 'NOIR HÉRÉSIE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1119, 'ABC000723823', 'MMSI1119', 'IRCS1119', '{}', 'EXTIMM1119', 'NOIR HÉRÉSIE QUARANTE-ET-UN', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1120, 'ABC000724076', 'MMSI1120', 'IRCS1120', '{}', 'EXTIMM1120', 'NOIR LAME', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1121, 'ABC000724206', 'MMSI1121', 'IRCS1121', '{}', 'EXTIMM1121', 'NOIR MÉDUSE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1122, 'ABC000724656', 'MMSI1122', 'IRCS1122', '{}', 'EXTIMM1122', 'NOIR PAQUEBOT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1123, 'ABC000724722', 'MMSI1123', 'IRCS1123', '{}', 'EXTIMM1123', 'NOIR PHARE CINQUANTE-TROIS', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1124, 'ABC000724743', 'MMSI1124', 'IRCS1124', '{}', 'EXTIMM1124', 'NOIR PONT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1125, 'ABC000724746', 'MMSI1125', 'IRCS1125', '{}', 'EXTIMM1125', 'NOIR SABORDS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1126, 'ABC000724967', 'MMSI1126', 'IRCS1126', '{}', 'EXTIMM1126', 'NOIR SABORDS SOIXANTE-TROIS', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1127, 'ABC000726105', 'MMSI1127', 'IRCS1127', '{}', 'EXTIMM1127', 'NOIR TYPHON', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1128, 'ABC000726519', 'MMSI1128', 'IRCS1128', '{}', 'EXTIMM1128', 'NOIR ÉPAVE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1129, 'ABC000726559', 'MMSI1129', 'IRCS1129', '{}', 'EXTIMM1129', 'NOMADE CALYPSO TRENTE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1130, 'ABC000726596', 'MMSI1130', 'IRCS1130', '{}', 'EXTIMM1130', 'NOMADE CENTAURE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1131, 'ABC000726675', 'MMSI1131', 'IRCS1131', '{}', 'EXTIMM1131', 'NOMADE CENTAURE QUARANTE-TROIS', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1132, 'ABC000726743', 'MMSI1132', 'IRCS1132', '{}', 'EXTIMM1132', 'NOMADE CHIMERA', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1133, 'ABC000730406', 'MMSI1133', 'IRCS1133', '{}', 'EXTIMM1133', 'NOMADE CODE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1134, 'ABC000730409', 'MMSI1134', 'IRCS1134', '{}', 'EXTIMM1134', 'NOMADE CROIX SOIXANTE-ET-UN', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1135, 'ABC000730413', 'MMSI1135', 'IRCS1135', '{}', 'EXTIMM1135', 'NOMADE DENT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1136, 'ABC000730417', 'MMSI1136', 'IRCS1136', '{}', 'EXTIMM1136', 'NOMADE FANTÔME', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1137, 'ABC000730419', 'MMSI1137', 'IRCS1137', '{}', 'EXTIMM1137', 'NOMADE FRÉQUENCE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1138, 'ABC000730423', 'MMSI1138', 'IRCS1138', '{}', 'EXTIMM1138', 'NOMADE FÉLIN QUARANTE-TROIS', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1139, 'ABC000730424', 'MMSI1139', 'IRCS1139', '{}', 'EXTIMM1139', 'NOMADE GRANITE SOIXANTE-CINQ', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1140, 'ABC000730700', 'MMSI1140', 'IRCS1140', '{}', 'EXTIMM1140', 'NOMADE MANTA QUATRE-VINGT-DEUX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1141, 'ABC000730701', 'MMSI1141', 'IRCS1141', '{}', 'EXTIMM1141', 'NOMADE PAQUEBOT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1142, 'ABC000730702', 'MMSI1142', 'IRCS1142', '{}', 'EXTIMM1142', 'NOMADE RADIOPHARE SEIZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1143, 'ABC000730708', 'MMSI1143', 'IRCS1143', '{}', 'EXTIMM1143', 'NOMADE RIVAGE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1144, 'ABC000730709', 'MMSI1144', 'IRCS1144', '{}', 'EXTIMM1144', 'NOMADE TRITON SOIXANTE-QUATRE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1145, 'ABC000730713', 'MMSI1145', 'IRCS1145', '{}', 'EXTIMM1145', 'NOMADE TYPHON SOIXANTE-QUATORZE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1146, 'ABC000730715', 'MMSI1146', 'IRCS1146', '{}', 'EXTIMM1146', 'NORDIQUE BALISE QUARANTE-TROIS', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1147, 'ABC000730716', 'MMSI1147', 'IRCS1147', '{}', 'EXTIMM1147', 'NORDIQUE CALYPSO', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1148, 'ABC000730718', 'MMSI1148', 'IRCS1148', '{}', 'EXTIMM1148', 'NORDIQUE CENTAURE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1149, 'ABC000730720', 'MMSI1149', 'IRCS1149', '{}', 'EXTIMM1149', 'NORDIQUE CHIMERA SOIXANTE-HUIT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1150, 'ABC000730724', 'MMSI1150', 'IRCS1150', '{}', 'EXTIMM1150', 'NORDIQUE DÉRIVE SOIXANTE-ET-UN', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1151, 'ABC000730807', 'MMSI1151', 'IRCS1151', '{}', 'EXTIMM1151', 'NORDIQUE DÉRIVE SOIXANTE-QUATORZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1152, 'ABC000730809', 'MMSI1152', 'IRCS1152', '{}', 'EXTIMM1152', 'NORDIQUE ENCRE TROIS', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1153, 'ABC000730810', 'MMSI1153', 'IRCS1153', '{}', 'EXTIMM1153', 'NORDIQUE FRÉQUENCE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1154, 'ABC000730811', 'MMSI1154', 'IRCS1154', '{}', 'EXTIMM1154', 'NORDIQUE FRÉQUENCE VINGT-CINQ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1155, 'ABC000730818', 'MMSI1155', 'IRCS1155', '{}', 'EXTIMM1155', 'NORDIQUE GRANITE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1156, 'ABC000732230', 'MMSI1156', 'IRCS1156', '{}', 'EXTIMM1156', 'NORDIQUE GRANITE QUATRE-VINGT-CINQ', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1157, 'ABC000732238', 'MMSI1157', 'IRCS1157', '{}', 'EXTIMM1157', 'NORDIQUE MANTA', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1158, 'ABC000732241', 'MMSI1158', 'IRCS1158', '{}', 'EXTIMM1158', 'NORDIQUE MÉDUSE CINQUANTE-SIX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1159, 'ABC000732368', 'MMSI1159', 'IRCS1159', '{}', 'EXTIMM1159', 'NORDIQUE PIRATE QUARANTE-HUIT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1160, 'ABC000732538', 'MMSI1160', 'IRCS1160', '{}', 'EXTIMM1160', 'NORDIQUE PIRATE SOIXANTE-CINQ', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1161, 'ABC000732555', 'MMSI1161', 'IRCS1161', '{}', 'EXTIMM1161', 'NORDIQUE RIVAGE DIX-HUIT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1162, 'ABC000732557', 'MMSI1162', 'IRCS1162', '{}', 'EXTIMM1162', 'NORDIQUE SABORDS QUATRE-VINGT-SIX', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1163, 'ABC000732773', 'MMSI1163', 'IRCS1163', '{}', 'EXTIMM1163', 'NORDIQUE SABORDS SOIXANTE-NEUF', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1164, 'ABC000733207', 'MMSI1164', 'IRCS1164', '{}', 'EXTIMM1164', 'NORDIQUE SENTINELLE SOIXANTE-HUIT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1165, 'ABC000733746', 'MMSI1165', 'IRCS1165', '{}', 'EXTIMM1165', 'NORDIQUE SPECTRE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1166, 'ABC000734077', 'MMSI1166', 'IRCS1166', '{}', 'EXTIMM1166', 'NORDIQUE SPECTRE QUATRE-VINGT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1167, 'ABC000734402', 'MMSI1167', 'IRCS1167', '{}', 'EXTIMM1167', 'NORDIQUE SPECTRE SOIXANTE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1168, 'ABC000734503', 'MMSI1168', 'IRCS1168', '{}', 'EXTIMM1168', 'NORDIQUE TRAITRE QUARANTE-ET-UN', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1169, 'ABC000734507', 'MMSI1169', 'IRCS1169', '{}', 'EXTIMM1169', 'NORDIQUE TRITON TROIS', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1170, 'ABC000734518', 'MMSI1170', 'IRCS1170', '{}', 'EXTIMM1170', 'NORDIQUE TYPHON', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1171, 'ABC000734530', 'MMSI1171', 'IRCS1171', '{}', 'EXTIMM1171', 'NORDIQUE VORTEX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1172, 'ABC000734551', 'MMSI1172', 'IRCS1172', '{}', 'EXTIMM1172', 'NORDIQUE ÉQUINOXE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1173, 'ABC000734557', 'MMSI1173', 'IRCS1173', '{}', 'EXTIMM1173', 'NORDIQUE ÉTOILE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1174, 'ABC000734637', 'MMSI1174', 'IRCS1174', '{}', 'EXTIMM1174', 'NÉMÉSIS BLEU', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1175, 'ABC000734681', 'MMSI1175', 'IRCS1175', '{}', 'EXTIMM1175', 'NÉMÉSIS BRISÉE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1176, 'ABC000734736', 'MMSI1176', 'IRCS1176', '{}', 'EXTIMM1176', 'NÉMÉSIS CRYPTÉE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1177, 'ABC000734958', 'MMSI1177', 'IRCS1177', '{}', 'EXTIMM1177', 'NÉMÉSIS DOUZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1178, 'ABC000735001', 'MMSI1178', 'IRCS1178', '{}', 'EXTIMM1178', 'NÉMÉSIS FAUSSE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1179, 'ABC000735002', 'MMSI1179', 'IRCS1179', '{}', 'EXTIMM1179', 'NÉMÉSIS IMPÉRIALE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1180, 'ABC000735016', 'MMSI1180', 'IRCS1180', '{}', 'EXTIMM1180', 'NÉMÉSIS MUET', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1181, 'ABC000735033', 'MMSI1181', 'IRCS1181', '{}', 'EXTIMM1181', 'NÉMÉSIS NOCTURNE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1182, 'ABC000735057', 'MMSI1182', 'IRCS1182', '{}', 'EXTIMM1182', 'NÉMÉSIS NORDIQUE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1183, 'ABC000735058', 'MMSI1183', 'IRCS1183', '{}', 'EXTIMM1183', 'NÉMÉSIS QUATRE-VINGT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1184, 'ABC000735379', 'MMSI1184', 'IRCS1184', '{}', 'EXTIMM1184', 'NÉMÉSIS QUATRE-VINGT-DIX', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1185, 'ABC000735383', 'MMSI1185', 'IRCS1185', '{}', 'EXTIMM1185', 'NÉMÉSIS SOIXANTE-DIX-SEPT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1186, 'ABC000735420', 'MMSI1186', 'IRCS1186', '{}', 'EXTIMM1186', 'NÉMÉSIS TRANSPARENT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1187, 'ABC000735421', 'MMSI1187', 'IRCS1187', '{}', 'EXTIMM1187', 'NÉMÉSIS TRENTE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1188, 'ABC000735422', 'MMSI1188', 'IRCS1188', '{}', 'EXTIMM1188', 'NÉMÉSIS TRENTE-NEUF', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1189, 'ABC000735730', 'MMSI1189', 'IRCS1189', '{}', 'EXTIMM1189', 'NÉMÉSIS VINGT-TROIS', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1190, 'ABC000735810', 'MMSI1190', 'IRCS1190', '{}', 'EXTIMM1190', 'NÉMÉSIS VIRGINAL', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1191, 'ABC000735890', 'MMSI1191', 'IRCS1191', '{}', 'EXTIMM1191', 'NÉMÉSIS VOLONTAIRE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1192, 'ABC000735930', 'MMSI1192', 'IRCS1192', '{}', 'EXTIMM1192', 'OMBRE CALYPSO QUATRE-VINGT-SEPT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1193, 'ABC000735940', 'MMSI1193', 'IRCS1193', '{}', 'EXTIMM1193', 'OMBRE CARGO', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1194, 'ABC000735950', 'MMSI1194', 'IRCS1194', '{}', 'EXTIMM1194', 'OMBRE CODE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1195, 'ABC000735992', 'MMSI1195', 'IRCS1195', '{}', 'EXTIMM1195', 'OMBRE DÉCODEUR', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1196, 'ABC000735995', 'MMSI1196', 'IRCS1196', '{}', 'EXTIMM1196', 'OMBRE DÉRIVE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1197, 'ABC000738040', 'MMSI1197', 'IRCS1197', '{}', 'EXTIMM1197', 'OMBRE FÉLIN QUARANTE-ET-UN', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1198, 'ABC000738057', 'MMSI1198', 'IRCS1198', '{}', 'EXTIMM1198', 'OMBRE GLISSEMENT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1199, 'ABC000738063', 'MMSI1199', 'IRCS1199', '{}', 'EXTIMM1199', 'OMBRE GLISSEMENT SOIXANTE-QUATORZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1200, 'ABC000738208', 'MMSI1200', 'IRCS1200', '{}', 'EXTIMM1200', 'OMBRE LAME', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1201, 'ABC000738244', 'MMSI1201', 'IRCS1201', '{}', 'EXTIMM1201', 'OMBRE NÉMÉSIS', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1202, 'ABC000738263', 'MMSI1202', 'IRCS1202', '{}', 'EXTIMM1202', 'OMBRE PAQUEBOT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1203, 'ABC000738306', 'MMSI1203', 'IRCS1203', '{}', 'EXTIMM1203', 'OMBRE PONT CINQ', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1204, 'ABC000738594', 'MMSI1204', 'IRCS1204', '{}', 'EXTIMM1204', 'OMBRE PYLÔNE TRENTE-CINQ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1205, 'ABC000738632', 'MMSI1205', 'IRCS1205', '{}', 'EXTIMM1205', 'OMBRE RADIOPHARE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1206, 'ABC000738676', 'MMSI1206', 'IRCS1206', '{}', 'EXTIMM1206', 'OMBRE SABORDS QUATRE-VINGT-SIX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1207, 'ABC000738693', 'MMSI1207', 'IRCS1207', '{}', 'EXTIMM1207', 'OMBRE TRAITRE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1208, 'ABC000738950', 'MMSI1208', 'IRCS1208', '{}', 'EXTIMM1208', 'OMBRE TYPHON CINQUANTE-SIX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1209, 'ABC000739098', 'MMSI1209', 'IRCS1209', '{}', 'EXTIMM1209', 'OMBRE TYPHON SOIXANTE-DOUZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1210, 'ABC000739101', 'MMSI1210', 'IRCS1210', '{}', 'EXTIMM1210', 'OMBRE VORTEX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1211, 'ABC000739139', 'MMSI1211', 'IRCS1211', '{}', 'EXTIMM1211', 'OMBRE VORTEX DEUX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1212, 'ABC000739476', 'MMSI1212', 'IRCS1212', '{}', 'EXTIMM1212', 'OMBRE VÉRITÉ', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1213, 'ABC000739545', 'MMSI1213', 'IRCS1213', '{}', 'EXTIMM1213', 'OMBRE ÉPAVE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1214, 'ABC000739637', 'MMSI1214', 'IRCS1214', '{}', 'EXTIMM1214', 'OMBRE ÉPAVE VINGT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1215, 'ABC000739749', 'MMSI1215', 'IRCS1215', '{}', 'EXTIMM1215', 'OPALE CENT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1216, 'ABC000739822', 'MMSI1216', 'IRCS1216', '{}', 'EXTIMM1216', 'OPALE FLOTTANTE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1217, 'ABC000739828', 'MMSI1217', 'IRCS1217', '{}', 'EXTIMM1217', 'OPALE FRACTAL', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1218, 'ABC000741321', 'MMSI1218', 'IRCS1218', '{}', 'EXTIMM1218', 'OPALE FURTIF', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1219, 'ABC000741343', 'MMSI1219', 'IRCS1219', '{}', 'EXTIMM1219', 'OPALE INVISIBLE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1220, 'ABC000741351', 'MMSI1220', 'IRCS1220', '{}', 'EXTIMM1220', 'OPALE NOCTURNE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1221, 'ABC000741357', 'MMSI1221', 'IRCS1221', '{}', 'EXTIMM1221', 'OPALE NOIR', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1222, 'ABC000741358', 'MMSI1222', 'IRCS1222', '{}', 'EXTIMM1222', 'OPALE NORDIQUE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1223, 'ABC000741361', 'MMSI1223', 'IRCS1223', '{}', 'EXTIMM1223', 'OPALE ONZE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1224, 'ABC000741365', 'MMSI1224', 'IRCS1224', '{}', 'EXTIMM1224', 'OPALE POURPRE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1225, 'ABC000741393', 'MMSI1225', 'IRCS1225', '{}', 'EXTIMM1225', 'OPALE QUARANTE-NEUF', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1226, 'ABC000741612', 'MMSI1226', 'IRCS1226', '{}', 'EXTIMM1226', 'OPALE ROUGE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1227, 'ABC000742053', 'MMSI1227', 'IRCS1227', '{}', 'EXTIMM1227', 'OPALE SEIZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1228, 'ABC000742806', 'MMSI1228', 'IRCS1228', '{}', 'EXTIMM1228', 'OPALE SOIXANTE-CINQ', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1229, 'ABC000743285', 'MMSI1229', 'IRCS1229', '{}', 'EXTIMM1229', 'OPALE SOIXANTE-QUATRE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1230, 'ABC000743459', 'MMSI1230', 'IRCS1230', '{}', 'EXTIMM1230', 'OPALE SOIXANTE-SIX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1231, 'ABC000745994', 'MMSI1231', 'IRCS1231', '{}', 'EXTIMM1231', 'OPALE SOIXANTE-TREIZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1232, 'ABC000749688', 'MMSI1232', 'IRCS1232', '{}', 'EXTIMM1232', 'OPALE TRANSPARENT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1233, 'ABC000750110', 'MMSI1233', 'IRCS1233', '{}', 'EXTIMM1233', 'OPALE VINGT-CINQ', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1234, 'ABC000750112', 'MMSI1234', 'IRCS1234', '{}', 'EXTIMM1234', 'OPALE VINGT-SEPT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1235, 'ABC000750156', 'MMSI1235', 'IRCS1235', '{}', 'EXTIMM1235', 'OPALE VIRGINAL', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1236, 'ABC000750175', 'MMSI1236', 'IRCS1236', '{}', 'EXTIMM1236', 'OPALE ZÉRO', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1237, 'ABC000750351', 'MMSI1237', 'IRCS1237', '{}', 'EXTIMM1237', 'PAQUEBOT ATLANTIQUE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1238, 'ABC000750359', 'MMSI1238', 'IRCS1238', '{}', 'EXTIMM1238', 'PAQUEBOT BLEU', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1239, 'ABC000750474', 'MMSI1239', 'IRCS1239', '{}', 'EXTIMM1239', 'PAQUEBOT BORGNE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1240, 'ABC000750475', 'MMSI1240', 'IRCS1240', '{}', 'EXTIMM1240', 'PAQUEBOT DEUX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1241, 'ABC000750694', 'MMSI1241', 'IRCS1241', '{}', 'EXTIMM1241', 'PAQUEBOT DISCRET', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1242, 'ABC000750714', 'MMSI1242', 'IRCS1242', '{}', 'EXTIMM1242', 'PAQUEBOT DOUTEUX', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1243, 'ABC000750718', 'MMSI1243', 'IRCS1243', '{}', 'EXTIMM1243', 'PAQUEBOT FAUSSE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1244, 'ABC000750742', 'MMSI1244', 'IRCS1244', '{}', 'EXTIMM1244', 'PAQUEBOT FURTIF', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1245, 'ABC000750756', 'MMSI1245', 'IRCS1245', '{}', 'EXTIMM1245', 'PAQUEBOT HUIT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1246, 'ABC000751689', 'MMSI1246', 'IRCS1246', '{}', 'EXTIMM1246', 'PAQUEBOT NOMADE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1247, 'ABC000752152', 'MMSI1247', 'IRCS1247', '{}', 'EXTIMM1247', 'PAQUEBOT OMBRE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1248, 'ABC000752166', 'MMSI1248', 'IRCS1248', '{}', 'EXTIMM1248', 'PAQUEBOT QUATRE-VINGT-CINQ', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1249, 'ABC000752221', 'MMSI1249', 'IRCS1249', '{}', 'EXTIMM1249', 'PAQUEBOT QUATRE-VINGT-QUATORZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1250, 'ABC000752550', 'MMSI1250', 'IRCS1250', '{}', 'EXTIMM1250', 'PAQUEBOT QUATRE-VINGT-UN', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1251, 'ABC000752558', 'MMSI1251', 'IRCS1251', '{}', 'EXTIMM1251', 'PAQUEBOT SOIXANTE-QUINZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1252, 'ABC000752562', 'MMSI1252', 'IRCS1252', '{}', 'EXTIMM1252', 'PAQUEBOT TACTIQUE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1253, 'ABC000752563', 'MMSI1253', 'IRCS1253', '{}', 'EXTIMM1253', 'PAQUEBOT TRENTE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1254, 'ABC000752577', 'MMSI1254', 'IRCS1254', '{}', 'EXTIMM1254', 'PAQUEBOT TROIS', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1255, 'ABC000752700', 'MMSI1255', 'IRCS1255', '{}', 'EXTIMM1255', 'PASSAGÈRE BALISE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1256, 'ABC000752710', 'MMSI1256', 'IRCS1256', '{}', 'EXTIMM1256', 'PASSAGÈRE CALYPSO QUATRE-VINGT-QUATORZE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1257, 'ABC000752720', 'MMSI1257', 'IRCS1257', '{}', 'EXTIMM1257', 'PASSAGÈRE CARGO', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1258, 'ABC000752965', 'MMSI1258', 'IRCS1258', '{}', 'EXTIMM1258', 'PASSAGÈRE CHIMERA', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1259, 'ABC000753091', 'MMSI1259', 'IRCS1259', '{}', 'EXTIMM1259', 'PASSAGÈRE CROIX', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1260, 'ABC000753172', 'MMSI1260', 'IRCS1260', '{}', 'EXTIMM1260', 'PASSAGÈRE FANTÔME QUATRE-VINGT-SIX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1261, 'ABC000753315', 'MMSI1261', 'IRCS1261', '{}', 'EXTIMM1261', 'PASSAGÈRE MÉDUSE QUARANTE-SIX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1262, 'ABC000753320', 'MMSI1262', 'IRCS1262', '{}', 'EXTIMM1262', 'PASSAGÈRE NARVAL SOIXANTE-ET-ONZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1263, 'ABC000753323', 'MMSI1263', 'IRCS1263', '{}', 'EXTIMM1263', 'PASSAGÈRE OPALE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1264, 'ABC000753364', 'MMSI1264', 'IRCS1264', '{}', 'EXTIMM1264', 'PASSAGÈRE PONT QUARANTE-SIX', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1265, 'ABC000753550', 'MMSI1265', 'IRCS1265', '{}', 'EXTIMM1265', 'PASSAGÈRE PONT TRENTE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1266, 'ABC000753553', 'MMSI1266', 'IRCS1266', '{}', 'EXTIMM1266', 'PASSAGÈRE PYLÔNE QUATRE-VINGT-SIX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1267, 'ABC000753559', 'MMSI1267', 'IRCS1267', '{}', 'EXTIMM1267', 'PASSAGÈRE RIVAGE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1268, 'ABC000753562', 'MMSI1268', 'IRCS1268', '{}', 'EXTIMM1268', 'PASSAGÈRE SOUTERRAIN QUATRE-VINGT-SEIZE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1269, 'ABC000755347', 'MMSI1269', 'IRCS1269', '{}', 'EXTIMM1269', 'PASSAGÈRE SPECTRE VINGT-DEUX', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1270, 'ABC000755672', 'MMSI1270', 'IRCS1270', '{}', 'EXTIMM1270', 'PASSAGÈRE TOURMENT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1271, 'ABC000757858', 'MMSI1271', 'IRCS1271', '{}', 'EXTIMM1271', 'PASSAGÈRE VÉRITÉ', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1272, 'ABC000758102', 'MMSI1272', 'IRCS1272', '{}', 'EXTIMM1272', 'PASSAGÈRE VÉRITÉ CINQUANTE-QUATRE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1273, 'ABC000759113', 'MMSI1273', 'IRCS1273', '{}', 'EXTIMM1273', 'PASSAGÈRE ÉQUINOXE SOIXANTE-DIX-SEPT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1274, 'ABC000760614', 'MMSI1274', 'IRCS1274', '{}', 'EXTIMM1274', 'PHARE CINQUANTE-QUATRE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1275, 'ABC000763742', 'MMSI1275', 'IRCS1275', '{}', 'EXTIMM1275', 'PHARE CINQUANTE-TROIS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1276, 'ABC000763754', 'MMSI1276', 'IRCS1276', '{}', 'EXTIMM1276', 'PHARE DOUTEUX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1277, 'ABC000764577', 'MMSI1277', 'IRCS1277', '{}', 'EXTIMM1277', 'PHARE FURTIF', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1278, 'ABC000764626', 'MMSI1278', 'IRCS1278', '{}', 'EXTIMM1278', 'PHARE HUIT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1279, 'ABC000764627', 'MMSI1279', 'IRCS1279', '{}', 'EXTIMM1279', 'PHARE INVISIBLE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1280, 'ABC000765568', 'MMSI1280', 'IRCS1280', '{}', 'EXTIMM1280', 'PHARE PASSAGÈRE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1281, 'ABC000766803', 'MMSI1281', 'IRCS1281', '{}', 'EXTIMM1281', 'PHARE QUARANTE-SEPT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1282, 'ABC000766880', 'MMSI1282', 'IRCS1282', '{}', 'EXTIMM1282', 'PHARE QUATRE-VINGT-DEUX', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1283, 'ABC000767125', 'MMSI1283', 'IRCS1283', '{}', 'EXTIMM1283', 'PHARE QUATRE-VINGT-DIX-HUIT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1284, 'ABC000767538', 'MMSI1284', 'IRCS1284', '{}', 'EXTIMM1284', 'PHARE SOIXANTE-DIX', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1285, 'ABC000768588', 'MMSI1285', 'IRCS1285', '{}', 'EXTIMM1285', 'PHARE SOIXANTE-DIX-HUIT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1286, 'ABC000769364', 'MMSI1286', 'IRCS1286', '{}', 'EXTIMM1286', 'PHARE SOURD', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1287, 'ABC000769398', 'MMSI1287', 'IRCS1287', '{}', 'EXTIMM1287', 'PHARE TRENTE-QUATRE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1288, 'ABC000769399', 'MMSI1288', 'IRCS1288', '{}', 'EXTIMM1288', 'PHARE TRENTE-SEPT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1289, 'ABC000769451', 'MMSI1289', 'IRCS1289', '{}', 'EXTIMM1289', 'PHARE VINGT-SEPT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1290, 'ABC000769735', 'MMSI1290', 'IRCS1290', '{}', 'EXTIMM1290', 'PHARE ZÉRO', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1291, 'ABC000770072', 'MMSI1291', 'IRCS1291', '{}', 'EXTIMM1291', 'PHARE ÉGARÉ', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1292, 'ABC000770090', 'MMSI1292', 'IRCS1292', '{}', 'EXTIMM1292', 'PIRATE CRYPTÉE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1293, 'ABC000773820', 'MMSI1293', 'IRCS1293', '{}', 'EXTIMM1293', 'PIRATE DOUTEUX', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1294, 'ABC000775341', 'MMSI1294', 'IRCS1294', '{}', 'EXTIMM1294', 'PIRATE FLOTTANTE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1295, 'ABC000775410', 'MMSI1295', 'IRCS1295', '{}', 'EXTIMM1295', 'PIRATE FURTIF', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1296, 'ABC000775415', 'MMSI1296', 'IRCS1296', '{}', 'EXTIMM1296', 'PIRATE NOMADE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1297, 'ABC000775424', 'MMSI1297', 'IRCS1297', '{}', 'EXTIMM1297', 'PIRATE ONZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1298, 'ABC000775437', 'MMSI1298', 'IRCS1298', '{}', 'EXTIMM1298', 'PIRATE PASSAGÈRE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1299, 'ABC000775484', 'MMSI1299', 'IRCS1299', '{}', 'EXTIMM1299', 'PIRATE QUARANTE-ET-UN', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1300, 'ABC000775533', 'MMSI1300', 'IRCS1300', '{}', 'EXTIMM1300', 'PIRATE QUARANTE-HUIT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1301, 'ABC000775589', 'MMSI1301', 'IRCS1301', '{}', 'EXTIMM1301', 'PIRATE QUARANTE-SEPT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1302, 'ABC000775760', 'MMSI1302', 'IRCS1302', '{}', 'EXTIMM1302', 'PIRATE QUATRE-VINGT-DIX-NEUF', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1303, 'ABC000775898', 'MMSI1303', 'IRCS1303', '{}', 'EXTIMM1303', 'PIRATE QUATRE-VINGT-QUATRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1304, 'ABC000775914', 'MMSI1304', 'IRCS1304', '{}', 'EXTIMM1304', 'PIRATE QUINZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1305, 'ABC000775925', 'MMSI1305', 'IRCS1305', '{}', 'EXTIMM1305', 'PIRATE SOIXANTE-ET-ONZE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1306, 'ABC000775930', 'MMSI1306', 'IRCS1306', '{}', 'EXTIMM1306', 'PIRATE SOIXANTE-QUATORZE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1307, 'ABC000776414', 'MMSI1307', 'IRCS1307', '{}', 'EXTIMM1307', 'PIRATE SOURD', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1308, 'ABC000776517', 'MMSI1308', 'IRCS1308', '{}', 'EXTIMM1308', 'PIRATE TRENTE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1309, 'ABC000777437', 'MMSI1309', 'IRCS1309', '{}', 'EXTIMM1309', 'PIRATE TRENTE-CINQ', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1310, 'ABC000777438', 'MMSI1310', 'IRCS1310', '{}', 'EXTIMM1310', 'PIRATE VINGT-TROIS', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1311, 'ABC000777466', 'MMSI1311', 'IRCS1311', '{}', 'EXTIMM1311', 'PIRATE VOLONTAIRE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1312, 'ABC000777477', 'MMSI1312', 'IRCS1312', '{}', 'EXTIMM1312', 'PIRATE ZÉRO', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1313, 'ABC000777537', 'MMSI1313', 'IRCS1313', '{}', 'EXTIMM1313', 'PONT BLEU', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1314, 'ABC000777685', 'MMSI1314', 'IRCS1314', '{}', 'EXTIMM1314', 'PONT CINQUANTE-DEUX', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1315, 'ABC000777686', 'MMSI1315', 'IRCS1315', '{}', 'EXTIMM1315', 'PONT CINQUANTE-TROIS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1316, 'ABC000778953', 'MMSI1316', 'IRCS1316', '{}', 'EXTIMM1316', 'PONT DOUTEUX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1317, 'ABC000779760', 'MMSI1317', 'IRCS1317', '{}', 'EXTIMM1317', 'PONT FURTIF', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1318, 'ABC000779894', 'MMSI1318', 'IRCS1318', '{}', 'EXTIMM1318', 'PONT FURTIVE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1319, 'ABC000781422', 'MMSI1319', 'IRCS1319', '{}', 'EXTIMM1319', 'PONT HUIT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1320, 'ABC000781464', 'MMSI1320', 'IRCS1320', '{}', 'EXTIMM1320', 'PONT NORDIQUE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1321, 'ABC000781490', 'MMSI1321', 'IRCS1321', '{}', 'EXTIMM1321', 'PONT QUATRE-VINGT-NEUF', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1322, 'ABC000781494', 'MMSI1322', 'IRCS1322', '{}', 'EXTIMM1322', 'PONT SEPT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1323, 'ABC000781757', 'MMSI1323', 'IRCS1323', '{}', 'EXTIMM1323', 'PONT SOIXANTE-ET-UN', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1324, 'ABC000783509', 'MMSI1324', 'IRCS1324', '{}', 'EXTIMM1324', 'PONT SOURD', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1325, 'ABC000783510', 'MMSI1325', 'IRCS1325', '{}', 'EXTIMM1325', 'PONT SÉRIEUSE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1326, 'ABC000783667', 'MMSI1326', 'IRCS1326', '{}', 'EXTIMM1326', 'PONT VOLONTAIRE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1327, 'ABC000783671', 'MMSI1327', 'IRCS1327', '{}', 'EXTIMM1327', 'PONT ZÉRO', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1328, 'ABC000783708', 'MMSI1328', 'IRCS1328', '{}', 'EXTIMM1328', 'POURPRE CALYPSO QUATRE-VINGT-TREIZE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1329, 'ABC000783749', 'MMSI1329', 'IRCS1329', '{}', 'EXTIMM1329', 'POURPRE CENTAURE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1330, 'ABC000783824', 'MMSI1330', 'IRCS1330', '{}', 'EXTIMM1330', 'POURPRE CHIMERA', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1331, 'ABC000783937', 'MMSI1331', 'IRCS1331', '{}', 'EXTIMM1331', 'POURPRE CODE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1332, 'ABC000784079', 'MMSI1332', 'IRCS1332', '{}', 'EXTIMM1332', 'POURPRE DRAGON', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1333, 'ABC000785270', 'MMSI1333', 'IRCS1333', '{}', 'EXTIMM1333', 'POURPRE FRÉQUENCE CINQUANTE-HUIT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1334, 'ABC000785310', 'MMSI1334', 'IRCS1334', '{}', 'EXTIMM1334', 'POURPRE FÉLIN', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1335, 'ABC000785315', 'MMSI1335', 'IRCS1335', '{}', 'EXTIMM1335', 'POURPRE GLISSEMENT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1336, 'ABC000785715', 'MMSI1336', 'IRCS1336', '{}', 'EXTIMM1336', 'POURPRE GRANITE SOIXANTE-DOUZE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1337, 'ABC000785720', 'MMSI1337', 'IRCS1337', '{}', 'EXTIMM1337', 'POURPRE LAME QUATRE-VINGT-HUIT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1338, 'ABC000786522', 'MMSI1338', 'IRCS1338', '{}', 'EXTIMM1338', 'POURPRE LAME TRENTE-DEUX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1339, 'ABC000786550', 'MMSI1339', 'IRCS1339', '{}', 'EXTIMM1339', 'POURPRE MANTA HUIT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1340, 'ABC000786809', 'MMSI1340', 'IRCS1340', '{}', 'EXTIMM1340', 'POURPRE MODULE TROIS', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1341, 'ABC000787256', 'MMSI1341', 'IRCS1341', '{}', 'EXTIMM1341', 'POURPRE MÉDUSE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1342, 'ABC000787312', 'MMSI1342', 'IRCS1342', '{}', 'EXTIMM1342', 'POURPRE NÉMÉSIS QUATRE-VINGT-DIX-NEUF', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1343, 'ABC000788630', 'MMSI1343', 'IRCS1343', '{}', 'EXTIMM1343', 'POURPRE RAPACE SOIXANTE-SEIZE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1344, 'ABC000790176', 'MMSI1344', 'IRCS1344', '{}', 'EXTIMM1344', 'POURPRE RAPACE TRENTE-HUIT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1345, 'ABC000790756', 'MMSI1345', 'IRCS1345', '{}', 'EXTIMM1345', 'POURPRE RIVAGE QUATRE-VINGT-SEIZE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1346, 'ABC000795450', 'MMSI1346', 'IRCS1346', '{}', 'EXTIMM1346', 'POURPRE SABORDS VINGT-TROIS', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1347, 'ABC000795473', 'MMSI1347', 'IRCS1347', '{}', 'EXTIMM1347', 'POURPRE SPECTRE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1348, 'ABC000796079', 'MMSI1348', 'IRCS1348', '{}', 'EXTIMM1348', 'POURPRE SPECTRE SOIXANTE-HUIT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1349, 'ABC000798530', 'MMSI1349', 'IRCS1349', '{}', 'EXTIMM1349', 'POURPRE TRAITRE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1350, 'ABC000798990', 'MMSI1350', 'IRCS1350', '{}', 'EXTIMM1350', 'POURPRE TRAITRE TRENTE-SIX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1351, 'ABC000799090', 'MMSI1351', 'IRCS1351', '{}', 'EXTIMM1351', 'POURPRE TYPHON SOIXANTE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1352, 'ABC000799250', 'MMSI1352', 'IRCS1352', '{}', 'EXTIMM1352', 'POURPRE VÉRITÉ VINGT-SIX', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1353, 'ABC000799460', 'MMSI1353', 'IRCS1353', '{}', 'EXTIMM1353', 'POURPRE ÉQUINOXE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1354, 'ABC000800629', 'MMSI1354', 'IRCS1354', '{}', 'EXTIMM1354', 'PYLÔNE BRISÉE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1355, 'ABC000801612', 'MMSI1355', 'IRCS1355', '{}', 'EXTIMM1355', 'PYLÔNE CINQUANTE-TROIS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1356, 'ABC000801698', 'MMSI1356', 'IRCS1356', '{}', 'EXTIMM1356', 'PYLÔNE CRYPTÉE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1357, 'ABC000801709', 'MMSI1357', 'IRCS1357', '{}', 'EXTIMM1357', 'PYLÔNE DIX-NEUF', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1358, 'ABC000801764', 'MMSI1358', 'IRCS1358', '{}', 'EXTIMM1358', 'PYLÔNE FAUSSE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1359, 'ABC000801809', 'MMSI1359', 'IRCS1359', '{}', 'EXTIMM1359', 'PYLÔNE NOIR', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1360, 'ABC000801906', 'MMSI1360', 'IRCS1360', '{}', 'EXTIMM1360', 'PYLÔNE QUARANTE-ET-UN', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1361, 'ABC000802063', 'MMSI1361', 'IRCS1361', '{}', 'EXTIMM1361', 'PYLÔNE SOIXANTE-ET-ONZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1362, 'ABC000802157', 'MMSI1362', 'IRCS1362', '{}', 'EXTIMM1362', 'PYLÔNE SÉRIEUSE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1363, 'ABC000804680', 'MMSI1363', 'IRCS1363', '{}', 'EXTIMM1363', 'PYLÔNE TACTIQUE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1364, 'ABC000804681', 'MMSI1364', 'IRCS1364', '{}', 'EXTIMM1364', 'PYLÔNE TRANSPARENT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1365, 'ABC000804686', 'MMSI1365', 'IRCS1365', '{}', 'EXTIMM1365', 'PYLÔNE VERTICALE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1366, 'ABC000804688', 'MMSI1366', 'IRCS1366', '{}', 'EXTIMM1366', 'PYLÔNE VIRGINAL', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1367, 'ABC000804689', 'MMSI1367', 'IRCS1367', '{}', 'EXTIMM1367', 'RADIOPHARE BLEU', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1368, 'ABC000804694', 'MMSI1368', 'IRCS1368', '{}', 'EXTIMM1368', 'RADIOPHARE CACHÉE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1369, 'ABC000805340', 'MMSI1369', 'IRCS1369', '{}', 'EXTIMM1369', 'RADIOPHARE CRYPTÉE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1370, 'ABC000805363', 'MMSI1370', 'IRCS1370', '{}', 'EXTIMM1370', 'RADIOPHARE NEUF', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1371, 'ABC000805383', 'MMSI1371', 'IRCS1371', '{}', 'EXTIMM1371', 'RADIOPHARE NOCTURNE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1372, 'ABC000805417', 'MMSI1372', 'IRCS1372', '{}', 'EXTIMM1372', 'RADIOPHARE PASSAGÈRE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1373, 'ABC000805544', 'MMSI1373', 'IRCS1373', '{}', 'EXTIMM1373', 'RADIOPHARE QUARANTE-DEUX', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1374, 'ABC000805763', 'MMSI1374', 'IRCS1374', '{}', 'EXTIMM1374', 'RADIOPHARE QUARANTE-NEUF', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1375, 'ABC000806052', 'MMSI1375', 'IRCS1375', '{}', 'EXTIMM1375', 'RADIOPHARE QUARANTE-TROIS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1376, 'ABC000806638', 'MMSI1376', 'IRCS1376', '{}', 'EXTIMM1376', 'RADIOPHARE SOIXANTE-DIX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1377, 'ABC000806962', 'MMSI1377', 'IRCS1377', '{}', 'EXTIMM1377', 'RADIOPHARE UN', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1378, 'ABC000807008', 'MMSI1378', 'IRCS1378', '{}', 'EXTIMM1378', 'RADIOPHARE VINGT-CINQ', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1379, 'ABC000807548', 'MMSI1379', 'IRCS1379', '{}', 'EXTIMM1379', 'RADIOPHARE VIRGINAL', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1380, 'ABC000812170', 'MMSI1380', 'IRCS1380', '{}', 'EXTIMM1380', 'RADIOPHARE ZÉRO', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1381, 'ABC000815108', 'MMSI1381', 'IRCS1381', '{}', 'EXTIMM1381', 'RAPACE BLEU', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1382, 'ABC000815511', 'MMSI1382', 'IRCS1382', '{}', 'EXTIMM1382', 'RAPACE BORGNE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1383, 'ABC000817601', 'MMSI1383', 'IRCS1383', '{}', 'EXTIMM1383', 'RAPACE CALME', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1384, 'ABC000818455', 'MMSI1384', 'IRCS1384', '{}', 'EXTIMM1384', 'RAPACE CINQUANTE-CINQ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1385, 'ABC000818466', 'MMSI1385', 'IRCS1385', '{}', 'EXTIMM1385', 'RAPACE CINQUANTE-NEUF', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1386, 'ABC000818467', 'MMSI1386', 'IRCS1386', '{}', 'EXTIMM1386', 'RAPACE CINQUANTE-SEPT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1387, 'ABC000819523', 'MMSI1387', 'IRCS1387', '{}', 'EXTIMM1387', 'RAPACE CINQUANTE-SIX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1388, 'ABC000819559', 'MMSI1388', 'IRCS1388', '{}', 'EXTIMM1388', 'RAPACE DOUTEUX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1389, 'ABC000819809', 'MMSI1389', 'IRCS1389', '{}', 'EXTIMM1389', 'RAPACE FLOTTANTE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1390, 'ABC000820644', 'MMSI1390', 'IRCS1390', '{}', 'EXTIMM1390', 'RAPACE FRACTAL', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1391, 'ABC000820809', 'MMSI1391', 'IRCS1391', '{}', 'EXTIMM1391', 'RAPACE HUIT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1392, 'ABC000826934', 'MMSI1392', 'IRCS1392', '{}', 'EXTIMM1392', 'RAPACE IMPÉRIALE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1393, 'ABC000826941', 'MMSI1393', 'IRCS1393', '{}', 'EXTIMM1393', 'RAPACE NOCTURNE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1394, 'ABC000826966', 'MMSI1394', 'IRCS1394', '{}', 'EXTIMM1394', 'RAPACE NORDIQUE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1395, 'ABC000829320', 'MMSI1395', 'IRCS1395', '{}', 'EXTIMM1395', 'RAPACE QUATRE-VINGT-DOUZE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1396, 'ABC000829360', 'MMSI1396', 'IRCS1396', '{}', 'EXTIMM1396', 'RAPACE SOIXANTE-DOUZE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1397, 'ABC000829400', 'MMSI1397', 'IRCS1397', '{}', 'EXTIMM1397', 'RAPACE SOIXANTE-QUINZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1398, 'ABC000829701', 'MMSI1398', 'IRCS1398', '{}', 'EXTIMM1398', 'RAPACE SOIXANTE-TROIS', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1399, 'ABC000831472', 'MMSI1399', 'IRCS1399', '{}', 'EXTIMM1399', 'RAPACE SOURD', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1400, 'ABC000832502', 'MMSI1400', 'IRCS1400', '{}', 'EXTIMM1400', 'RIVAGE BLEU', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1401, 'ABC000832736', 'MMSI1401', 'IRCS1401', '{}', 'EXTIMM1401', 'RIVAGE CINQUANTE-QUATRE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1402, 'ABC000832742', 'MMSI1402', 'IRCS1402', '{}', 'EXTIMM1402', 'RIVAGE FURTIVE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1403, 'ABC000832801', 'MMSI1403', 'IRCS1403', '{}', 'EXTIMM1403', 'RIVAGE IMPÉRIALE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1404, 'ABC000832809', 'MMSI1404', 'IRCS1404', '{}', 'EXTIMM1404', 'RIVAGE MUET', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1405, 'ABC000832819', 'MMSI1405', 'IRCS1405', '{}', 'EXTIMM1405', 'RIVAGE NORDIQUE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1406, 'ABC000832820', 'MMSI1406', 'IRCS1406', '{}', 'EXTIMM1406', 'RIVAGE QUARANTE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1407, 'ABC000832824', 'MMSI1407', 'IRCS1407', '{}', 'EXTIMM1407', 'RIVAGE QUARANTE-HUIT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1408, 'ABC000832966', 'MMSI1408', 'IRCS1408', '{}', 'EXTIMM1408', 'RIVAGE QUARANTE-SEPT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1409, 'ABC000833027', 'MMSI1409', 'IRCS1409', '{}', 'EXTIMM1409', 'RIVAGE QUATRE-VINGT-DOUZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1410, 'ABC000833129', 'MMSI1410', 'IRCS1410', '{}', 'EXTIMM1410', 'RIVAGE QUATRE-VINGT-SEPT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1411, 'ABC000833204', 'MMSI1411', 'IRCS1411', '{}', 'EXTIMM1411', 'RIVAGE SILENCIEUX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1412, 'ABC000833834', 'MMSI1412', 'IRCS1412', '{}', 'EXTIMM1412', 'RIVAGE SOIXANTE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1413, 'ABC000833835', 'MMSI1413', 'IRCS1413', '{}', 'EXTIMM1413', 'RIVAGE SOIXANTE-QUATRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1414, 'ABC000834367', 'MMSI1414', 'IRCS1414', '{}', 'EXTIMM1414', 'RIVAGE SOIXANTE-QUINZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1415, 'ABC000835970', 'MMSI1415', 'IRCS1415', '{}', 'EXTIMM1415', 'RIVAGE SOIXANTE-SEIZE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1416, 'ABC000836738', 'MMSI1416', 'IRCS1416', '{}', 'EXTIMM1416', 'RIVAGE SOIXANTE-SEPT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1417, 'ABC000836774', 'MMSI1417', 'IRCS1417', '{}', 'EXTIMM1417', 'RIVAGE SOIXANTE-TREIZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1418, 'ABC000838762', 'MMSI1418', 'IRCS1418', '{}', 'EXTIMM1418', 'RIVAGE SOURD', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1419, 'ABC000841532', 'MMSI1419', 'IRCS1419', '{}', 'EXTIMM1419', 'RIVAGE VINGT-TROIS', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1420, 'ABC000845952', 'MMSI1420', 'IRCS1420', '{}', 'EXTIMM1420', 'ROUGE ALBATROS UN', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1421, 'ABC000846241', 'MMSI1421', 'IRCS1421', '{}', 'EXTIMM1421', 'ROUGE CALYPSO', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1422, 'ABC000846740', 'MMSI1422', 'IRCS1422', '{}', 'EXTIMM1422', 'ROUGE CARGO DIX-HUIT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1423, 'ABC000846866', 'MMSI1423', 'IRCS1423', '{}', 'EXTIMM1423', 'ROUGE CARGO QUARANTE-HUIT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1424, 'ABC000847038', 'MMSI1424', 'IRCS1424', '{}', 'EXTIMM1424', 'ROUGE CARGO VINGT-NEUF', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1425, 'ABC000847352', 'MMSI1425', 'IRCS1425', '{}', 'EXTIMM1425', 'ROUGE CHIMERA TRENTE-QUATRE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1426, 'ABC000848804', 'MMSI1426', 'IRCS1426', '{}', 'EXTIMM1426', 'ROUGE CROIX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1427, 'ABC000851750', 'MMSI1427', 'IRCS1427', '{}', 'EXTIMM1427', 'ROUGE DÉCODEUR TRENTE-SIX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1428, 'ABC000851751', 'MMSI1428', 'IRCS1428', '{}', 'EXTIMM1428', 'ROUGE DÉCODEUR VINGT-DEUX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1429, 'ABC000851906', 'MMSI1429', 'IRCS1429', '{}', 'EXTIMM1429', 'ROUGE GLISSEMENT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1430, 'ABC000853149', 'MMSI1430', 'IRCS1430', '{}', 'EXTIMM1430', 'ROUGE MANTA', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1431, 'ABC000853251', 'MMSI1431', 'IRCS1431', '{}', 'EXTIMM1431', 'ROUGE NÉMÉSIS QUINZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1432, 'ABC000853388', 'MMSI1432', 'IRCS1432', '{}', 'EXTIMM1432', 'ROUGE PHARE SOIXANTE-DOUZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1433, 'ABC000853553', 'MMSI1433', 'IRCS1433', '{}', 'EXTIMM1433', 'ROUGE RADIOPHARE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1434, 'ABC000853835', 'MMSI1434', 'IRCS1434', '{}', 'EXTIMM1434', 'ROUGE SABORDS CINQ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1435, 'ABC000853869', 'MMSI1435', 'IRCS1435', '{}', 'EXTIMM1435', 'ROUGE SENTINELLE SOIXANTE-ET-ONZE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1436, 'ABC000853992', 'MMSI1436', 'IRCS1436', '{}', 'EXTIMM1436', 'ROUGE SOUTERRAIN QUATRE-VINGT-DIX-NEUF', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1437, 'ABC000854005', 'MMSI1437', 'IRCS1437', '{}', 'EXTIMM1437', 'ROUGE SPECTRE SEPT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1438, 'ABC000854090', 'MMSI1438', 'IRCS1438', '{}', 'EXTIMM1438', 'ROUGE TOURMENT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1439, 'ABC000854140', 'MMSI1439', 'IRCS1439', '{}', 'EXTIMM1439', 'ROUGE TRAITRE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1440, 'ABC000854150', 'MMSI1440', 'IRCS1440', '{}', 'EXTIMM1440', 'ROUGE VÉRITÉ', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1441, 'ABC000854158', 'MMSI1441', 'IRCS1441', '{}', 'EXTIMM1441', 'ROUGE ÉPAVE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1442, 'ABC000854159', 'MMSI1442', 'IRCS1442', '{}', 'EXTIMM1442', 'ROUGE ÉQUINOXE SOIXANTE-DEUX', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1443, 'ABC000854421', 'MMSI1443', 'IRCS1443', '{}', 'EXTIMM1443', 'SABORDS CACHÉE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1444, 'ABC000854429', 'MMSI1444', 'IRCS1444', '{}', 'EXTIMM1444', 'SABORDS CALME', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1445, 'ABC000854430', 'MMSI1445', 'IRCS1445', '{}', 'EXTIMM1445', 'SABORDS DIX-SEPT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1446, 'ABC000854753', 'MMSI1446', 'IRCS1446', '{}', 'EXTIMM1446', 'SABORDS FAUSSE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1447, 'ABC000859042', 'MMSI1447', 'IRCS1447', '{}', 'EXTIMM1447', 'SABORDS INVISIBLE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1448, 'ABC000859054', 'MMSI1448', 'IRCS1448', '{}', 'EXTIMM1448', 'SABORDS NORDIQUE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1449, 'ABC000859056', 'MMSI1449', 'IRCS1449', '{}', 'EXTIMM1449', 'SABORDS QUARANTE-CINQ', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1450, 'ABC000861643', 'MMSI1450', 'IRCS1450', '{}', 'EXTIMM1450', 'SABORDS QUATRE-VINGT-DIX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1451, 'ABC000863560', 'MMSI1451', 'IRCS1451', '{}', 'EXTIMM1451', 'SABORDS SOIXANTE-DEUX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1452, 'ABC000864281', 'MMSI1452', 'IRCS1452', '{}', 'EXTIMM1452', 'SABORDS SOIXANTE-SEIZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1453, 'ABC000865247', 'MMSI1453', 'IRCS1453', '{}', 'EXTIMM1453', 'SABORDS SOIXANTE-TROIS', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1454, 'ABC000866254', 'MMSI1454', 'IRCS1454', '{}', 'EXTIMM1454', 'SABORDS VINGT-QUATRE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1455, 'ABC000867725', 'MMSI1455', 'IRCS1455', '{}', 'EXTIMM1455', 'SENTINELLE ATLANTIQUE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1456, 'ABC000869883', 'MMSI1456', 'IRCS1456', '{}', 'EXTIMM1456', 'SENTINELLE BRISÉE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1457, 'ABC000869884', 'MMSI1457', 'IRCS1457', '{}', 'EXTIMM1457', 'SENTINELLE FURTIF', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1458, 'ABC000869888', 'MMSI1458', 'IRCS1458', '{}', 'EXTIMM1458', 'SENTINELLE FURTIVE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1459, 'ABC000869916', 'MMSI1459', 'IRCS1459', '{}', 'EXTIMM1459', 'SENTINELLE INUTILE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1460, 'ABC000870019', 'MMSI1460', 'IRCS1460', '{}', 'EXTIMM1460', 'SENTINELLE JAUNE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1461, 'ABC000870594', 'MMSI1461', 'IRCS1461', '{}', 'EXTIMM1461', 'SENTINELLE NOMADE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1462, 'ABC000870596', 'MMSI1462', 'IRCS1462', '{}', 'EXTIMM1462', 'SENTINELLE QUARANTE-HUIT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1463, 'ABC000874574', 'MMSI1463', 'IRCS1463', '{}', 'EXTIMM1463', 'SENTINELLE QUARANTE-SEPT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1464, 'ABC000874575', 'MMSI1464', 'IRCS1464', '{}', 'EXTIMM1464', 'SENTINELLE QUATRE-VINGT-QUINZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1465, 'ABC000874587', 'MMSI1465', 'IRCS1465', '{}', 'EXTIMM1465', 'SENTINELLE QUATRE-VINGT-SIX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1466, 'ABC000874594', 'MMSI1466', 'IRCS1466', '{}', 'EXTIMM1466', 'SENTINELLE QUATRE-VINGT-TROIS', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1467, 'ABC000874656', 'MMSI1467', 'IRCS1467', '{}', 'EXTIMM1467', 'SENTINELLE SOIXANTE-DIX-NEUF', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1468, 'ABC000874698', 'MMSI1468', 'IRCS1468', '{}', 'EXTIMM1468', 'SENTINELLE SÉRIEUSE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1469, 'ABC000874831', 'MMSI1469', 'IRCS1469', '{}', 'EXTIMM1469', 'SENTINELLE TACTIQUE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1470, 'ABC000874832', 'MMSI1470', 'IRCS1470', '{}', 'EXTIMM1470', 'SENTINELLE TRANSPARENT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1471, 'ABC000875662', 'MMSI1471', 'IRCS1471', '{}', 'EXTIMM1471', 'SENTINELLE TRENTE-CINQ', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1472, 'ABC000877470', 'MMSI1472', 'IRCS1472', '{}', 'EXTIMM1472', 'SENTINELLE VINGT-ET-UN', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1473, 'ABC000877570', 'MMSI1473', 'IRCS1473', '{}', 'EXTIMM1473', 'SENTINELLE VOLONTAIRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1474, 'ABC000878368', 'MMSI1474', 'IRCS1474', '{}', 'EXTIMM1474', 'SENTINELLE ÉGARÉ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1475, 'ABC000878371', 'MMSI1475', 'IRCS1475', '{}', 'EXTIMM1475', 'SILENCIEUX AIGLE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1476, 'ABC000878373', 'MMSI1476', 'IRCS1476', '{}', 'EXTIMM1476', 'SILENCIEUX ALBATROS', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1477, 'ABC000878498', 'MMSI1477', 'IRCS1477', '{}', 'EXTIMM1477', 'SILENCIEUX BALISE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1478, 'ABC000878713', 'MMSI1478', 'IRCS1478', '{}', 'EXTIMM1478', 'SILENCIEUX BRUME DIX-SEPT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1479, 'ABC000878714', 'MMSI1479', 'IRCS1479', '{}', 'EXTIMM1479', 'SILENCIEUX CARGO', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1480, 'ABC000882116', 'MMSI1480', 'IRCS1480', '{}', 'EXTIMM1480', 'SILENCIEUX CENTAURE TRENTE-SIX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1481, 'ABC000882297', 'MMSI1481', 'IRCS1481', '{}', 'EXTIMM1481', 'SILENCIEUX CHIMERA QUARANTE-SEPT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1482, 'ABC000882561', 'MMSI1482', 'IRCS1482', '{}', 'EXTIMM1482', 'SILENCIEUX CROIX CINQUANTE-SIX', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1483, 'ABC000883729', 'MMSI1483', 'IRCS1483', '{}', 'EXTIMM1483', 'SILENCIEUX DÉCODEUR', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1484, 'ABC000883742', 'MMSI1484', 'IRCS1484', '{}', 'EXTIMM1484', 'SILENCIEUX DÉRIVE QUATRE-VINGT-QUATRE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1485, 'ABC000885541', 'MMSI1485', 'IRCS1485', '{}', 'EXTIMM1485', 'SILENCIEUX ENCRE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1486, 'ABC000885569', 'MMSI1486', 'IRCS1486', '{}', 'EXTIMM1486', 'SILENCIEUX FANTÔME ONZE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1487, 'ABC000885663', 'MMSI1487', 'IRCS1487', '{}', 'EXTIMM1487', 'SILENCIEUX GRANITE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1488, 'ABC000885798', 'MMSI1488', 'IRCS1488', '{}', 'EXTIMM1488', 'SILENCIEUX HÉRÉSIE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1489, 'ABC000886007', 'MMSI1489', 'IRCS1489', '{}', 'EXTIMM1489', 'SILENCIEUX LAME', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1490, 'ABC000886135', 'MMSI1490', 'IRCS1490', '{}', 'EXTIMM1490', 'SILENCIEUX MANTA', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1491, 'ABC000886143', 'MMSI1491', 'IRCS1491', '{}', 'EXTIMM1491', 'SILENCIEUX NÉMÉSIS TREIZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1492, 'ABC000886182', 'MMSI1492', 'IRCS1492', '{}', 'EXTIMM1492', 'SILENCIEUX NÉMÉSIS VINGT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1493, 'ABC000886310', 'MMSI1493', 'IRCS1493', '{}', 'EXTIMM1493', 'SILENCIEUX OPALE SOIXANTE-ET-ONZE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1494, 'ABC000886445', 'MMSI1494', 'IRCS1494', '{}', 'EXTIMM1494', 'SILENCIEUX PAQUEBOT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1495, 'ABC000886461', 'MMSI1495', 'IRCS1495', '{}', 'EXTIMM1495', 'SILENCIEUX PONT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1496, 'ABC000886507', 'MMSI1496', 'IRCS1496', '{}', 'EXTIMM1496', 'SILENCIEUX RADIOPHARE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1497, 'ABC000886530', 'MMSI1497', 'IRCS1497', '{}', 'EXTIMM1497', 'SILENCIEUX RADIOPHARE VINGT-DEUX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1498, 'ABC000886574', 'MMSI1498', 'IRCS1498', '{}', 'EXTIMM1498', 'SILENCIEUX RAPACE QUATRE-VINGT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1499, 'ABC000886580', 'MMSI1499', 'IRCS1499', '{}', 'EXTIMM1499', 'SILENCIEUX SABORDS', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1500, 'ABC000886670', 'MMSI1500', 'IRCS1500', '{}', 'EXTIMM1500', 'SILENCIEUX SABORDS SEIZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1501, 'ABC000886672', 'MMSI1501', 'IRCS1501', '{}', 'EXTIMM1501', 'SILENCIEUX SENTINELLE VINGT-SIX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1502, 'ABC000887208', 'MMSI1502', 'IRCS1502', '{}', 'EXTIMM1502', 'SILENCIEUX TOURMENT NEUF', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1503, 'ABC000887708', 'MMSI1503', 'IRCS1503', '{}', 'EXTIMM1503', 'SILENCIEUX TRAITRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1504, 'ABC000888442', 'MMSI1504', 'IRCS1504', '{}', 'EXTIMM1504', 'SILENCIEUX VÉRITÉ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1505, 'ABC000889225', 'MMSI1505', 'IRCS1505', '{}', 'EXTIMM1505', 'SILENCIEUX ÉPAVE VINGT-CINQ', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1506, 'ABC000889315', 'MMSI1506', 'IRCS1506', '{}', 'EXTIMM1506', 'SILENCIEUX ÉQUINOXE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1507, 'ABC000889476', 'MMSI1507', 'IRCS1507', '{}', 'EXTIMM1507', 'SILENCIEUX ÉTOILE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1508, 'ABC000890133', 'MMSI1508', 'IRCS1508', '{}', 'EXTIMM1508', 'SILENCIEUX ÉTOILE TRENTE-CINQ', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1509, 'ABC000890204', 'MMSI1509', 'IRCS1509', '{}', 'EXTIMM1509', 'SOURD BALISE SOIXANTE-CINQ', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1510, 'ABC000890249', 'MMSI1510', 'IRCS1510', '{}', 'EXTIMM1510', 'SOURD CROIX SOIXANTE-ET-UN', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1511, 'ABC000890250', 'MMSI1511', 'IRCS1511', '{}', 'EXTIMM1511', 'SOURD FANTÔME QUARANTE-SEPT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1512, 'ABC000890274', 'MMSI1512', 'IRCS1512', '{}', 'EXTIMM1512', 'SOURD FÉLIN QUINZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1513, 'ABC000890286', 'MMSI1513', 'IRCS1513', '{}', 'EXTIMM1513', 'SOURD NARVAL', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1514, 'ABC000890304', 'MMSI1514', 'IRCS1514', '{}', 'EXTIMM1514', 'SOURD NARVAL QUATRE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1515, 'ABC000890317', 'MMSI1515', 'IRCS1515', '{}', 'EXTIMM1515', 'SOURD OPALE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1516, 'ABC000890325', 'MMSI1516', 'IRCS1516', '{}', 'EXTIMM1516', 'SOURD OPALE DIX-NEUF', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1517, 'ABC000890378', 'MMSI1517', 'IRCS1517', '{}', 'EXTIMM1517', 'SOURD PHARE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1518, 'ABC000890379', 'MMSI1518', 'IRCS1518', '{}', 'EXTIMM1518', 'SOURD PIRATE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1519, 'ABC000890399', 'MMSI1519', 'IRCS1519', '{}', 'EXTIMM1519', 'SOURD SPECTRE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1520, 'ABC000890403', 'MMSI1520', 'IRCS1520', '{}', 'EXTIMM1520', 'SOURD TRAITRE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1521, 'ABC000890411', 'MMSI1521', 'IRCS1521', '{}', 'EXTIMM1521', 'SOURD TRITON SIX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1522, 'ABC000890422', 'MMSI1522', 'IRCS1522', '{}', 'EXTIMM1522', 'SOURD TYPHON TREIZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1523, 'ABC000890434', 'MMSI1523', 'IRCS1523', '{}', 'EXTIMM1523', 'SOURD VÉRITÉ SOIXANTE-ET-UN', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1524, 'ABC000890467', 'MMSI1524', 'IRCS1524', '{}', 'EXTIMM1524', 'SOURD ÉPAVE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1525, 'ABC000890496', 'MMSI1525', 'IRCS1525', '{}', 'EXTIMM1525', 'SOURD ÉPAVE SOIXANTE-HUIT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1526, 'ABC000890499', 'MMSI1526', 'IRCS1526', '{}', 'EXTIMM1526', 'SOUTERRAIN CINQUANTE-ET-UN', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1527, 'ABC000890500', 'MMSI1527', 'IRCS1527', '{}', 'EXTIMM1527', 'SOUTERRAIN CINQUANTE-QUATRE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1528, 'ABC000890555', 'MMSI1528', 'IRCS1528', '{}', 'EXTIMM1528', 'SOUTERRAIN CINQUANTE-SEPT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1529, 'ABC000893425', 'MMSI1529', 'IRCS1529', '{}', 'EXTIMM1529', 'SOUTERRAIN CINQUANTE-SIX', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1530, 'ABC000893986', 'MMSI1530', 'IRCS1530', '{}', 'EXTIMM1530', 'SOUTERRAIN DIX-HUIT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1531, 'ABC000894000', 'MMSI1531', 'IRCS1531', '{}', 'EXTIMM1531', 'SOUTERRAIN DIX-NEUF', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1532, 'ABC000894008', 'MMSI1532', 'IRCS1532', '{}', 'EXTIMM1532', 'SOUTERRAIN DORÉ', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1533, 'ABC000894015', 'MMSI1533', 'IRCS1533', '{}', 'EXTIMM1533', 'SOUTERRAIN FRACTAL', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1534, 'ABC000894064', 'MMSI1534', 'IRCS1534', '{}', 'EXTIMM1534', 'SOUTERRAIN PASSAGÈRE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1535, 'ABC000894085', 'MMSI1535', 'IRCS1535', '{}', 'EXTIMM1535', 'SOUTERRAIN QUATRE-VINGT-DEUX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1536, 'ABC000894101', 'MMSI1536', 'IRCS1536', '{}', 'EXTIMM1536', 'SOUTERRAIN QUATRE-VINGT-HUIT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1537, 'ABC000894102', 'MMSI1537', 'IRCS1537', '{}', 'EXTIMM1537', 'SOUTERRAIN QUATRE-VINGT-TREIZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1538, 'ABC000895472', 'MMSI1538', 'IRCS1538', '{}', 'EXTIMM1538', 'SOUTERRAIN SILENCIEUX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1539, 'ABC000895479', 'MMSI1539', 'IRCS1539', '{}', 'EXTIMM1539', 'SOUTERRAIN SOIXANTE-DEUX', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1540, 'ABC000895514', 'MMSI1540', 'IRCS1540', '{}', 'EXTIMM1540', 'SOUTERRAIN SOIXANTE-DIX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1541, 'ABC000895516', 'MMSI1541', 'IRCS1541', '{}', 'EXTIMM1541', 'SOUTERRAIN SOIXANTE-NEUF', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1542, 'ABC000895517', 'MMSI1542', 'IRCS1542', '{}', 'EXTIMM1542', 'SOUTERRAIN SOIXANTE-SEIZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1543, 'ABC000895519', 'MMSI1543', 'IRCS1543', '{}', 'EXTIMM1543', 'SOUTERRAIN SOURD', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1544, 'ABC000895521', 'MMSI1544', 'IRCS1544', '{}', 'EXTIMM1544', 'SOUTERRAIN SÉRIEUSE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1545, 'ABC000895523', 'MMSI1545', 'IRCS1545', '{}', 'EXTIMM1545', 'SOUTERRAIN TRENTE-SIX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1546, 'ABC000895524', 'MMSI1546', 'IRCS1546', '{}', 'EXTIMM1546', 'SOUTERRAIN VINGT-ET-UN', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1547, 'ABC000896357', 'MMSI1547', 'IRCS1547', '{}', 'EXTIMM1547', 'SPECTRE BORGNE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1548, 'ABC000898402', 'MMSI1548', 'IRCS1548', '{}', 'EXTIMM1548', 'SPECTRE BRISÉE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1549, 'ABC000898404', 'MMSI1549', 'IRCS1549', '{}', 'EXTIMM1549', 'SPECTRE CENT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1550, 'ABC000898408', 'MMSI1550', 'IRCS1550', '{}', 'EXTIMM1550', 'SPECTRE CINQUANTE-QUATRE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1551, 'ABC000898409', 'MMSI1551', 'IRCS1551', '{}', 'EXTIMM1551', 'SPECTRE DIX-HUIT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1552, 'ABC000898410', 'MMSI1552', 'IRCS1552', '{}', 'EXTIMM1552', 'SPECTRE DOUTEUX', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1553, 'ABC000898416', 'MMSI1553', 'IRCS1553', '{}', 'EXTIMM1553', 'SPECTRE FRACTAL', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1554, 'ABC000898426', 'MMSI1554', 'IRCS1554', '{}', 'EXTIMM1554', 'SPECTRE FURTIVE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1555, 'ABC000898429', 'MMSI1555', 'IRCS1555', '{}', 'EXTIMM1555', 'SPECTRE QUARANTE-SEPT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1556, 'ABC000898432', 'MMSI1556', 'IRCS1556', '{}', 'EXTIMM1556', 'SPECTRE QUATORZE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1557, 'ABC000898442', 'MMSI1557', 'IRCS1557', '{}', 'EXTIMM1557', 'SPECTRE QUATRE-VINGT-SIX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1558, 'ABC000898445', 'MMSI1558', 'IRCS1558', '{}', 'EXTIMM1558', 'SPECTRE SILENCIEUX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1559, 'ABC000898457', 'MMSI1559', 'IRCS1559', '{}', 'EXTIMM1559', 'SPECTRE SOIXANTE-ET-UN', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1560, 'ABC000898465', 'MMSI1560', 'IRCS1560', '{}', 'EXTIMM1560', 'SPECTRE SOIXANTE-QUINZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1561, 'ABC000898466', 'MMSI1561', 'IRCS1561', '{}', 'EXTIMM1561', 'SPECTRE SÉRIEUSE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1562, 'ABC000898467', 'MMSI1562', 'IRCS1562', '{}', 'EXTIMM1562', 'SPECTRE TREIZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1563, 'ABC000898470', 'MMSI1563', 'IRCS1563', '{}', 'EXTIMM1563', 'SPECTRE TRENTE-DEUX', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1564, 'ABC000898472', 'MMSI1564', 'IRCS1564', '{}', 'EXTIMM1564', 'SPECTRE TRENTE-NEUF', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1565, 'ABC000898474', 'MMSI1565', 'IRCS1565', '{}', 'EXTIMM1565', 'SPECTRE TRENTE-SEPT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1566, 'ABC000898475', 'MMSI1566', 'IRCS1566', '{}', 'EXTIMM1566', 'SPECTRE TROIS', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1567, 'ABC000898476', 'MMSI1567', 'IRCS1567', '{}', 'EXTIMM1567', 'SPECTRE VINGT-ET-UN', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1568, 'ABC000898483', 'MMSI1568', 'IRCS1568', '{}', 'EXTIMM1568', 'SPECTRE VINGT-HUIT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1569, 'ABC000899731', 'MMSI1569', 'IRCS1569', '{}', 'EXTIMM1569', 'SPECTRE ZÉRO', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1570, 'ABC000899736', 'MMSI1570', 'IRCS1570', '{}', 'EXTIMM1570', 'SÉRIEUSE ALBATROS DIX-SEPT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1571, 'ABC000899751', 'MMSI1571', 'IRCS1571', '{}', 'EXTIMM1571', 'SÉRIEUSE CALYPSO QUATRE-VINGT-QUATORZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1572, 'ABC000899755', 'MMSI1572', 'IRCS1572', '{}', 'EXTIMM1572', 'SÉRIEUSE CHIMERA SOIXANTE-DIX', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1573, 'ABC000899756', 'MMSI1573', 'IRCS1573', '{}', 'EXTIMM1573', 'SÉRIEUSE DÉCODEUR', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1574, 'ABC000899783', 'MMSI1574', 'IRCS1574', '{}', 'EXTIMM1574', 'SÉRIEUSE DÉRIVE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1575, 'ABC000899788', 'MMSI1575', 'IRCS1575', '{}', 'EXTIMM1575', 'SÉRIEUSE ENCRE DEUX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1576, 'ABC000899791', 'MMSI1576', 'IRCS1576', '{}', 'EXTIMM1576', 'SÉRIEUSE FANTÔME', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1577, 'ABC000899794', 'MMSI1577', 'IRCS1577', '{}', 'EXTIMM1577', 'SÉRIEUSE GRANITE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1578, 'ABC000899808', 'MMSI1578', 'IRCS1578', '{}', 'EXTIMM1578', 'SÉRIEUSE MÉDUSE VINGT-TROIS', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1579, 'ABC000899812', 'MMSI1579', 'IRCS1579', '{}', 'EXTIMM1579', 'SÉRIEUSE PHARE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1580, 'ABC000899825', 'MMSI1580', 'IRCS1580', '{}', 'EXTIMM1580', 'SÉRIEUSE PONT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1581, 'ABC000899826', 'MMSI1581', 'IRCS1581', '{}', 'EXTIMM1581', 'SÉRIEUSE PYLÔNE QUATRE-VINGT-QUINZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1582, 'ABC000899828', 'MMSI1582', 'IRCS1582', '{}', 'EXTIMM1582', 'SÉRIEUSE RADIOPHARE QUATRE-VINGT-DIX-SEPT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1583, 'ABC000899835', 'MMSI1583', 'IRCS1583', '{}', 'EXTIMM1583', 'SÉRIEUSE RADIOPHARE SOIXANTE-HUIT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1584, 'ABC000899838', 'MMSI1584', 'IRCS1584', '{}', 'EXTIMM1584', 'SÉRIEUSE RAPACE QUARANTE-ET-UN', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1585, 'ABC000899841', 'MMSI1585', 'IRCS1585', '{}', 'EXTIMM1585', 'SÉRIEUSE RIVAGE QUARANTE-DEUX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1586, 'ABC000899846', 'MMSI1586', 'IRCS1586', '{}', 'EXTIMM1586', 'SÉRIEUSE SABORDS QUATRE-VINGT-SEIZE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1587, 'ABC000899847', 'MMSI1587', 'IRCS1587', '{}', 'EXTIMM1587', 'SÉRIEUSE SOUTERRAIN NEUF', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1588, 'ABC000899848', 'MMSI1588', 'IRCS1588', '{}', 'EXTIMM1588', 'SÉRIEUSE TOURMENT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1589, 'ABC000899857', 'MMSI1589', 'IRCS1589', '{}', 'EXTIMM1589', 'SÉRIEUSE TRAITRE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1590, 'ABC000899898', 'MMSI1590', 'IRCS1590', '{}', 'EXTIMM1590', 'SÉRIEUSE ÉPAVE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1591, 'ABC000899899', 'MMSI1591', 'IRCS1591', '{}', 'EXTIMM1591', 'SÉRIEUSE ÉQUINOXE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1592, 'ABC000899950', 'MMSI1592', 'IRCS1592', '{}', 'EXTIMM1592', 'SÉRIEUSE ÉTOILE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1593, 'ABC000899956', 'MMSI1593', 'IRCS1593', '{}', 'EXTIMM1593', 'TACTIQUE AIGLE QUATRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1594, 'ABC000899957', 'MMSI1594', 'IRCS1594', '{}', 'EXTIMM1594', 'TACTIQUE ENCRE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1595, 'ABC000899961', 'MMSI1595', 'IRCS1595', '{}', 'EXTIMM1595', 'TACTIQUE GRANITE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1596, 'ABC000899970', 'MMSI1596', 'IRCS1596', '{}', 'EXTIMM1596', 'TACTIQUE HÉRÉSIE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1597, 'ABC000899971', 'MMSI1597', 'IRCS1597', '{}', 'EXTIMM1597', 'TACTIQUE NÉMÉSIS', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1598, 'ABC000900041', 'MMSI1598', 'IRCS1598', '{}', 'EXTIMM1598', 'TACTIQUE OPALE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1599, 'ABC000900042', 'MMSI1599', 'IRCS1599', '{}', 'EXTIMM1599', 'TACTIQUE OPALE TROIS', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1600, 'ABC000900050', 'MMSI1600', 'IRCS1600', '{}', 'EXTIMM1600', 'TACTIQUE PAQUEBOT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1601, 'ABC000900059', 'MMSI1601', 'IRCS1601', '{}', 'EXTIMM1601', 'TACTIQUE PHARE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1602, 'ABC000900066', 'MMSI1602', 'IRCS1602', '{}', 'EXTIMM1602', 'TACTIQUE PONT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1603, 'ABC000900068', 'MMSI1603', 'IRCS1603', '{}', 'EXTIMM1603', 'TACTIQUE PYLÔNE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1604, 'ABC000900138', 'MMSI1604', 'IRCS1604', '{}', 'EXTIMM1604', 'TACTIQUE PYLÔNE TRENTE-TROIS', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1605, 'ABC000900177', 'MMSI1605', 'IRCS1605', '{}', 'EXTIMM1605', 'TACTIQUE SABORDS DIX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1606, 'ABC000900232', 'MMSI1606', 'IRCS1606', '{}', 'EXTIMM1606', 'TACTIQUE SABORDS QUARANTE-DEUX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1607, 'ABC000900243', 'MMSI1607', 'IRCS1607', '{}', 'EXTIMM1607', 'TACTIQUE SOUTERRAIN', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1608, 'ABC000900251', 'MMSI1608', 'IRCS1608', '{}', 'EXTIMM1608', 'TACTIQUE SOUTERRAIN SOIXANTE-DIX-SEPT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1609, 'ABC000900272', 'MMSI1609', 'IRCS1609', '{}', 'EXTIMM1609', 'TACTIQUE SPECTRE SOIXANTE-HUIT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1610, 'ABC000900283', 'MMSI1610', 'IRCS1610', '{}', 'EXTIMM1610', 'TACTIQUE ÉPAVE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1611, 'ABC000900290', 'MMSI1611', 'IRCS1611', '{}', 'EXTIMM1611', 'TACTIQUE ÉPAVE TRENTE-DEUX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1612, 'ABC000900300', 'MMSI1612', 'IRCS1612', '{}', 'EXTIMM1612', 'TOURMENT ATLANTIQUE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1613, 'ABC000900356', 'MMSI1613', 'IRCS1613', '{}', 'EXTIMM1613', 'TOURMENT BORGNE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1614, 'ABC000900360', 'MMSI1614', 'IRCS1614', '{}', 'EXTIMM1614', 'TOURMENT CALME', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1615, 'ABC000900362', 'MMSI1615', 'IRCS1615', '{}', 'EXTIMM1615', 'TOURMENT CINQUANTE-QUATRE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1616, 'ABC000900363', 'MMSI1616', 'IRCS1616', '{}', 'EXTIMM1616', 'TOURMENT CINQUANTE-SIX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1617, 'ABC000900379', 'MMSI1617', 'IRCS1617', '{}', 'EXTIMM1617', 'TOURMENT FLOTTANTE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1618, 'ABC000900452', 'MMSI1618', 'IRCS1618', '{}', 'EXTIMM1618', 'TOURMENT IMPÉRIALE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1619, 'ABC000900461', 'MMSI1619', 'IRCS1619', '{}', 'EXTIMM1619', 'TOURMENT NOIR', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1620, 'ABC000900462', 'MMSI1620', 'IRCS1620', '{}', 'EXTIMM1620', 'TOURMENT OMBRE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1621, 'ABC000900468', 'MMSI1621', 'IRCS1621', '{}', 'EXTIMM1621', 'TOURMENT QUARANTE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1622, 'ABC000900470', 'MMSI1622', 'IRCS1622', '{}', 'EXTIMM1622', 'TOURMENT QUARANTE-SEPT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1623, 'ABC000900471', 'MMSI1623', 'IRCS1623', '{}', 'EXTIMM1623', 'TOURMENT QUATRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1624, 'ABC000902286', 'MMSI1624', 'IRCS1624', '{}', 'EXTIMM1624', 'TOURMENT QUATRE-VINGT-CINQ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1625, 'ABC000903937', 'MMSI1625', 'IRCS1625', '{}', 'EXTIMM1625', 'TOURMENT SEPT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1626, 'ABC000903950', 'MMSI1626', 'IRCS1626', '{}', 'EXTIMM1626', 'TOURMENT SILENCIEUX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1627, 'ABC000904428', 'MMSI1627', 'IRCS1627', '{}', 'EXTIMM1627', 'TOURMENT SOIXANTE-DIX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1628, 'ABC000904443', 'MMSI1628', 'IRCS1628', '{}', 'EXTIMM1628', 'TOURMENT SOURD', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1629, 'ABC000904444', 'MMSI1629', 'IRCS1629', '{}', 'EXTIMM1629', 'TOURMENT TRANSPARENT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1630, 'ABC000904453', 'MMSI1630', 'IRCS1630', '{}', 'EXTIMM1630', 'TOURMENT TRENTE-ET-UN', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1631, 'ABC000904454', 'MMSI1631', 'IRCS1631', '{}', 'EXTIMM1631', 'TOURMENT TRENTE-NEUF', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1632, 'ABC000904461', 'MMSI1632', 'IRCS1632', '{}', 'EXTIMM1632', 'TOURMENT VERTICALE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1633, 'ABC000904466', 'MMSI1633', 'IRCS1633', '{}', 'EXTIMM1633', 'TOURMENT VINGT-QUATRE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1634, 'ABC000905326', 'MMSI1634', 'IRCS1634', '{}', 'EXTIMM1634', 'TOURMENT VINGT-SEPT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1635, 'ABC000905335', 'MMSI1635', 'IRCS1635', '{}', 'EXTIMM1635', 'TOURMENT ZÉRO', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1636, 'ABC000905344', 'MMSI1636', 'IRCS1636', '{}', 'EXTIMM1636', 'TOURMENT ÉGARÉ', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1637, 'ABC000905385', 'MMSI1637', 'IRCS1637', '{}', 'EXTIMM1637', 'TRAITRE ATLANTIQUE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1638, 'ABC000905421', 'MMSI1638', 'IRCS1638', '{}', 'EXTIMM1638', 'TRAITRE BRISÉE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1639, 'ABC000905453', 'MMSI1639', 'IRCS1639', '{}', 'EXTIMM1639', 'TRAITRE CACHÉE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1640, 'ABC000905647', 'MMSI1640', 'IRCS1640', '{}', 'EXTIMM1640', 'TRAITRE DORÉ', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1641, 'ABC000905656', 'MMSI1641', 'IRCS1641', '{}', 'EXTIMM1641', 'TRAITRE NORDIQUE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1642, 'ABC000905684', 'MMSI1642', 'IRCS1642', '{}', 'EXTIMM1642', 'TRAITRE ROUGE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1643, 'ABC000907636', 'MMSI1643', 'IRCS1643', '{}', 'EXTIMM1643', 'TRAITRE SOIXANTE-ET-UN', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1644, 'ABC000907641', 'MMSI1644', 'IRCS1644', '{}', 'EXTIMM1644', 'TRAITRE UN', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1645, 'ABC000907810', 'MMSI1645', 'IRCS1645', '{}', 'EXTIMM1645', 'TRAITRE VOLONTAIRE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1646, 'ABC000907812', 'MMSI1646', 'IRCS1646', '{}', 'EXTIMM1646', 'TRAITRE ZÉRO', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1647, 'ABC000907814', 'MMSI1647', 'IRCS1647', '{}', 'EXTIMM1647', 'TRAITRE ÉGARÉ', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1648, 'ABC000907879', 'MMSI1648', 'IRCS1648', '{}', 'EXTIMM1648', 'TRANSPARENT CALYPSO', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1649, 'ABC000907887', 'MMSI1649', 'IRCS1649', '{}', 'EXTIMM1649', 'TRANSPARENT CHIMERA VINGT-NEUF', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1650, 'ABC000907892', 'MMSI1650', 'IRCS1650', '{}', 'EXTIMM1650', 'TRANSPARENT CODE QUATRE-VINGT-TREIZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1651, 'ABC000907897', 'MMSI1651', 'IRCS1651', '{}', 'EXTIMM1651', 'TRANSPARENT DRAGON DEUX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1652, 'ABC000907911', 'MMSI1652', 'IRCS1652', '{}', 'EXTIMM1652', 'TRANSPARENT DRAGON QUATRE-VINGT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1653, 'ABC000907913', 'MMSI1653', 'IRCS1653', '{}', 'EXTIMM1653', 'TRANSPARENT FRÉQUENCE QUATRE-VINGT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1654, 'ABC000907926', 'MMSI1654', 'IRCS1654', '{}', 'EXTIMM1654', 'TRANSPARENT LAME CINQUANTE-DEUX', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1655, 'ABC000907927', 'MMSI1655', 'IRCS1655', '{}', 'EXTIMM1655', 'TRANSPARENT MANTA', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1656, 'ABC000907928', 'MMSI1656', 'IRCS1656', '{}', 'EXTIMM1656', 'TRANSPARENT MODULE QUATRE-VINGT-SEPT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1657, 'ABC000907929', 'MMSI1657', 'IRCS1657', '{}', 'EXTIMM1657', 'TRANSPARENT NARVAL QUARANTE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1658, 'ABC000907930', 'MMSI1658', 'IRCS1658', '{}', 'EXTIMM1658', 'TRANSPARENT RAPACE QUINZE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1659, 'ABC000907931', 'MMSI1659', 'IRCS1659', '{}', 'EXTIMM1659', 'TRANSPARENT SABORDS SIX', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1660, 'ABC000907940', 'MMSI1660', 'IRCS1660', '{}', 'EXTIMM1660', 'TRANSPARENT SOUTERRAIN', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1661, 'ABC000907942', 'MMSI1661', 'IRCS1661', '{}', 'EXTIMM1661', 'TRANSPARENT SPECTRE QUATRE-VINGT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1662, 'ABC000907950', 'MMSI1662', 'IRCS1662', '{}', 'EXTIMM1662', 'TRANSPARENT TRAITRE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1663, 'ABC000907953', 'MMSI1663', 'IRCS1663', '{}', 'EXTIMM1663', 'TRANSPARENT TRITON', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1664, 'ABC000907954', 'MMSI1664', 'IRCS1664', '{}', 'EXTIMM1664', 'TRANSPARENT TYPHON', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1665, 'ABC000907968', 'MMSI1665', 'IRCS1665', '{}', 'EXTIMM1665', 'TRANSPARENT VÉRITÉ', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1666, 'ABC000909369', 'MMSI1666', 'IRCS1666', '{}', 'EXTIMM1666', 'TRANSPARENT ÉQUINOXE VINGT-SIX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1667, 'ABC000909393', 'MMSI1667', 'IRCS1667', '{}', 'EXTIMM1667', 'TRITON ATLANTIQUE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1668, 'ABC000909398', 'MMSI1668', 'IRCS1668', '{}', 'EXTIMM1668', 'TRITON BORGNE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1669, 'ABC000909449', 'MMSI1669', 'IRCS1669', '{}', 'EXTIMM1669', 'TRITON CACHÉE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1670, 'ABC000909453', 'MMSI1670', 'IRCS1670', '{}', 'EXTIMM1670', 'TRITON DIX-HUIT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1671, 'ABC000909456', 'MMSI1671', 'IRCS1671', '{}', 'EXTIMM1671', 'TRITON DORÉ', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1672, 'ABC000909457', 'MMSI1672', 'IRCS1672', '{}', 'EXTIMM1672', 'TRITON DOUZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1673, 'ABC000909467', 'MMSI1673', 'IRCS1673', '{}', 'EXTIMM1673', 'TRITON FLOTTANTE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1674, 'ABC000909609', 'MMSI1674', 'IRCS1674', '{}', 'EXTIMM1674', 'TRITON NEUF', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1675, 'ABC000909611', 'MMSI1675', 'IRCS1675', '{}', 'EXTIMM1675', 'TRITON NOIR', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1676, 'ABC000909673', 'MMSI1676', 'IRCS1676', '{}', 'EXTIMM1676', 'TRITON NOMADE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1677, 'ABC000909678', 'MMSI1677', 'IRCS1677', '{}', 'EXTIMM1677', 'TRITON QUARANTE-HUIT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1678, 'ABC000909687', 'MMSI1678', 'IRCS1678', '{}', 'EXTIMM1678', 'TRITON QUATRE-VINGT-DIX-HUIT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1679, 'ABC000909690', 'MMSI1679', 'IRCS1679', '{}', 'EXTIMM1679', 'TRITON QUATRE-VINGT-DIX-SEPT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1680, 'ABC000910303', 'MMSI1680', 'IRCS1680', '{}', 'EXTIMM1680', 'TRITON QUATRE-VINGT-NEUF', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1681, 'ABC000910309', 'MMSI1681', 'IRCS1681', '{}', 'EXTIMM1681', 'TRITON SOIXANTE-CINQ', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1682, 'ABC000910349', 'MMSI1682', 'IRCS1682', '{}', 'EXTIMM1682', 'TRITON SOIXANTE-DIX', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1683, 'ABC000910434', 'MMSI1683', 'IRCS1683', '{}', 'EXTIMM1683', 'TRITON TREIZE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1684, 'ABC000910466', 'MMSI1684', 'IRCS1684', '{}', 'EXTIMM1684', 'TRITON TRENTE-CINQ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1685, 'ABC000910468', 'MMSI1685', 'IRCS1685', '{}', 'EXTIMM1685', 'TRITON ÉGARÉ', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1686, 'ABC000910501', 'MMSI1686', 'IRCS1686', '{}', 'EXTIMM1686', 'TYPHON BRISÉE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1687, 'ABC000911282', 'MMSI1687', 'IRCS1687', '{}', 'EXTIMM1687', 'TYPHON CINQUANTE-HUIT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1688, 'ABC000911289', 'MMSI1688', 'IRCS1688', '{}', 'EXTIMM1688', 'TYPHON CINQUANTE-SIX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1689, 'ABC000911313', 'MMSI1689', 'IRCS1689', '{}', 'EXTIMM1689', 'TYPHON CRYPTÉE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1690, 'ABC000911672', 'MMSI1690', 'IRCS1690', '{}', 'EXTIMM1690', 'TYPHON DOUZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1691, 'ABC000911813', 'MMSI1691', 'IRCS1691', '{}', 'EXTIMM1691', 'TYPHON FLOTTANTE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1692, 'ABC000912218', 'MMSI1692', 'IRCS1692', '{}', 'EXTIMM1692', 'TYPHON INUTILE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1693, 'ABC000912258', 'MMSI1693', 'IRCS1693', '{}', 'EXTIMM1693', 'TYPHON NOIR', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1694, 'ABC000912278', 'MMSI1694', 'IRCS1694', '{}', 'EXTIMM1694', 'TYPHON OMBRE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1695, 'ABC000912317', 'MMSI1695', 'IRCS1695', '{}', 'EXTIMM1695', 'TYPHON QUARANTE-DEUX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1696, 'ABC000912337', 'MMSI1696', 'IRCS1696', '{}', 'EXTIMM1696', 'TYPHON QUARANTE-QUATRE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1697, 'ABC000912338', 'MMSI1697', 'IRCS1697', '{}', 'EXTIMM1697', 'TYPHON QUARANTE-TROIS', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1698, 'ABC000912362', 'MMSI1698', 'IRCS1698', '{}', 'EXTIMM1698', 'TYPHON QUATRE-VINGT-CINQ', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1699, 'ABC000912369', 'MMSI1699', 'IRCS1699', '{}', 'EXTIMM1699', 'TYPHON SOIXANTE-DIX-HUIT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1700, 'ABC000912376', 'MMSI1700', 'IRCS1700', '{}', 'EXTIMM1700', 'TYPHON SOIXANTE-TROIS', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1701, 'ABC000912378', 'MMSI1701', 'IRCS1701', '{}', 'EXTIMM1701', 'TYPHON TRANSPARENT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1702, 'ABC000912514', 'MMSI1702', 'IRCS1702', '{}', 'EXTIMM1702', 'TYPHON VINGT-TROIS', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1703, 'ABC000912534', 'MMSI1703', 'IRCS1703', '{}', 'EXTIMM1703', 'VERTICALE BALISE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1704, 'ABC000913094', 'MMSI1704', 'IRCS1704', '{}', 'EXTIMM1704', 'VERTICALE BALISE QUARANTE-HUIT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1705, 'ABC000913251', 'MMSI1705', 'IRCS1705', '{}', 'EXTIMM1705', 'VERTICALE BRUME', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1706, 'ABC000914059', 'MMSI1706', 'IRCS1706', '{}', 'EXTIMM1706', 'VERTICALE BRUME QUATRE-VINGT-DIX-HUIT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1707, 'ABC000914060', 'MMSI1707', 'IRCS1707', '{}', 'EXTIMM1707', 'VERTICALE CARGO DIX-SEPT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1708, 'ABC000914098', 'MMSI1708', 'IRCS1708', '{}', 'EXTIMM1708', 'VERTICALE CHIMERA SOIXANTE-DIX-HUIT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1709, 'ABC000914099', 'MMSI1709', 'IRCS1709', '{}', 'EXTIMM1709', 'VERTICALE CROIX', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1710, 'ABC000914154', 'MMSI1710', 'IRCS1710', '{}', 'EXTIMM1710', 'VERTICALE DRAGON', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1711, 'ABC000914236', 'MMSI1711', 'IRCS1711', '{}', 'EXTIMM1711', 'VERTICALE DÉRIVE UN', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1712, 'ABC000914239', 'MMSI1712', 'IRCS1712', '{}', 'EXTIMM1712', 'VERTICALE ENCRE CINQUANTE-CINQ', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1713, 'ABC000914387', 'MMSI1713', 'IRCS1713', '{}', 'EXTIMM1713', 'VERTICALE FANTÔME SOIXANTE-DIX', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1714, 'ABC000914388', 'MMSI1714', 'IRCS1714', '{}', 'EXTIMM1714', 'VERTICALE FRÉQUENCE QUARANTE-CINQ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1715, 'ABC000914390', 'MMSI1715', 'IRCS1715', '{}', 'EXTIMM1715', 'VERTICALE FRÉQUENCE QUARANTE-NEUF', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1716, 'ABC000914709', 'MMSI1716', 'IRCS1716', '{}', 'EXTIMM1716', 'VERTICALE FÉLIN', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1717, 'ABC000915202', 'MMSI1717', 'IRCS1717', '{}', 'EXTIMM1717', 'VERTICALE FÉLIN QUATRE-VINGT-DOUZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1718, 'ABC000915991', 'MMSI1718', 'IRCS1718', '{}', 'EXTIMM1718', 'VERTICALE GLISSEMENT QUATRE-VINGT-DEUX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1719, 'ABC000916001', 'MMSI1719', 'IRCS1719', '{}', 'EXTIMM1719', 'VERTICALE GRANITE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1720, 'ABC000916021', 'MMSI1720', 'IRCS1720', '{}', 'EXTIMM1720', 'VERTICALE LAME QUATRE-VINGT-ONZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1721, 'ABC000916057', 'MMSI1721', 'IRCS1721', '{}', 'EXTIMM1721', 'VERTICALE OPALE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1722, 'ABC000916064', 'MMSI1722', 'IRCS1722', '{}', 'EXTIMM1722', 'VERTICALE OPALE DIX-SEPT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1723, 'ABC000916065', 'MMSI1723', 'IRCS1723', '{}', 'EXTIMM1723', 'VERTICALE OPALE QUATRE-VINGT-CINQ', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1724, 'ABC000916066', 'MMSI1724', 'IRCS1724', '{}', 'EXTIMM1724', 'VERTICALE PYLÔNE QUATRE-VINGT-NEUF', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1725, 'ABC000916067', 'MMSI1725', 'IRCS1725', '{}', 'EXTIMM1725', 'VERTICALE RAPACE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1726, 'ABC000916069', 'MMSI1726', 'IRCS1726', '{}', 'EXTIMM1726', 'VERTICALE RIVAGE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1727, 'ABC000916070', 'MMSI1727', 'IRCS1727', '{}', 'EXTIMM1727', 'VERTICALE SENTINELLE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1728, 'ABC000916071', 'MMSI1728', 'IRCS1728', '{}', 'EXTIMM1728', 'VERTICALE SOUTERRAIN QUATRE-VINGT-CINQ', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1729, 'ABC000916073', 'MMSI1729', 'IRCS1729', '{}', 'EXTIMM1729', 'VERTICALE SOUTERRAIN SEIZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1730, 'ABC000916078', 'MMSI1730', 'IRCS1730', '{}', 'EXTIMM1730', 'VERTICALE SPECTRE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1731, 'ABC000916084', 'MMSI1731', 'IRCS1731', '{}', 'EXTIMM1731', 'VERTICALE TOURMENT SOIXANTE-DIX-SEPT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1732, 'ABC000916106', 'MMSI1732', 'IRCS1732', '{}', 'EXTIMM1732', 'VERTICALE TRAITRE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1733, 'ABC000916457', 'MMSI1733', 'IRCS1733', '{}', 'EXTIMM1733', 'VERTICALE TRITON', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1734, 'ABC000916462', 'MMSI1734', 'IRCS1734', '{}', 'EXTIMM1734', 'VERTICALE VÉRITÉ SOIXANTE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1735, 'ABC000916465', 'MMSI1735', 'IRCS1735', '{}', 'EXTIMM1735', 'VIRGINAL BALISE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1736, 'ABC000916471', 'MMSI1736', 'IRCS1736', '{}', 'EXTIMM1736', 'VIRGINAL BRUME', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1737, 'ABC000916474', 'MMSI1737', 'IRCS1737', '{}', 'EXTIMM1737', 'VIRGINAL BRUME QUARANTE-NEUF', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1738, 'ABC000916475', 'MMSI1738', 'IRCS1738', '{}', 'EXTIMM1738', 'VIRGINAL BRUME SOIXANTE-SIX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1739, 'ABC000916482', 'MMSI1739', 'IRCS1739', '{}', 'EXTIMM1739', 'VIRGINAL CENTAURE TRENTE-NEUF', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1740, 'ABC000916488', 'MMSI1740', 'IRCS1740', '{}', 'EXTIMM1740', 'VIRGINAL DRAGON DIX-SEPT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1741, 'ABC000916524', 'MMSI1741', 'IRCS1741', '{}', 'EXTIMM1741', 'VIRGINAL DÉRIVE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1742, 'ABC000916528', 'MMSI1742', 'IRCS1742', '{}', 'EXTIMM1742', 'VIRGINAL FANTÔME', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1743, 'ABC000916536', 'MMSI1743', 'IRCS1743', '{}', 'EXTIMM1743', 'VIRGINAL HÉRÉSIE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1744, 'ABC000916539', 'MMSI1744', 'IRCS1744', '{}', 'EXTIMM1744', 'VIRGINAL MODULE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1745, 'ABC000916540', 'MMSI1745', 'IRCS1745', '{}', 'EXTIMM1745', 'VIRGINAL NARVAL', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1746, 'ABC000917312', 'MMSI1746', 'IRCS1746', '{}', 'EXTIMM1746', 'VIRGINAL NÉMÉSIS', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1747, 'ABC000917317', 'MMSI1747', 'IRCS1747', '{}', 'EXTIMM1747', 'VIRGINAL PAQUEBOT DIX-SEPT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1748, 'ABC000917322', 'MMSI1748', 'IRCS1748', '{}', 'EXTIMM1748', 'VIRGINAL PONT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1749, 'ABC000917325', 'MMSI1749', 'IRCS1749', '{}', 'EXTIMM1749', 'VIRGINAL TOURMENT QUATRE-VINGT-ONZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1750, 'ABC000917362', 'MMSI1750', 'IRCS1750', '{}', 'EXTIMM1750', 'VIRGINAL TRITON', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1751, 'ABC000917371', 'MMSI1751', 'IRCS1751', '{}', 'EXTIMM1751', 'VIRGINAL VORTEX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1752, 'ABC000917391', 'MMSI1752', 'IRCS1752', '{}', 'EXTIMM1752', 'VIRGINAL ÉPAVE TRENTE-HUIT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1753, 'ABC000917407', 'MMSI1753', 'IRCS1753', '{}', 'EXTIMM1753', 'VOLONTAIRE ALBATROS', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1754, 'ABC000917408', 'MMSI1754', 'IRCS1754', '{}', 'EXTIMM1754', 'VOLONTAIRE CARGO VINGT-HUIT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1755, 'ABC000918277', 'MMSI1755', 'IRCS1755', '{}', 'EXTIMM1755', 'VOLONTAIRE CENTAURE QUARANTE-SIX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1756, 'ABC000918284', 'MMSI1756', 'IRCS1756', '{}', 'EXTIMM1756', 'VOLONTAIRE CENTAURE VINGT-NEUF', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1757, 'ABC000918286', 'MMSI1757', 'IRCS1757', '{}', 'EXTIMM1757', 'VOLONTAIRE CHIMERA', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1758, 'ABC000918296', 'MMSI1758', 'IRCS1758', '{}', 'EXTIMM1758', 'VOLONTAIRE DRAGON VINGT-HUIT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1759, 'ABC000918297', 'MMSI1759', 'IRCS1759', '{}', 'EXTIMM1759', 'VOLONTAIRE DÉCODEUR', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1760, 'ABC000918484', 'MMSI1760', 'IRCS1760', '{}', 'EXTIMM1760', 'VOLONTAIRE DÉRIVE QUATRE-VINGT-DEUX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1761, 'ABC000918496', 'MMSI1761', 'IRCS1761', '{}', 'EXTIMM1761', 'VOLONTAIRE ENCRE SOIXANTE-SEPT', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1762, 'ABC000918498', 'MMSI1762', 'IRCS1762', '{}', 'EXTIMM1762', 'VOLONTAIRE FANTÔME', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1763, 'ABC000918500', 'MMSI1763', 'IRCS1763', '{}', 'EXTIMM1763', 'VOLONTAIRE GLISSEMENT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1764, 'ABC000918507', 'MMSI1764', 'IRCS1764', '{}', 'EXTIMM1764', 'VOLONTAIRE MANTA', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1765, 'ABC000918511', 'MMSI1765', 'IRCS1765', '{}', 'EXTIMM1765', 'VOLONTAIRE MODULE TROIS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1766, 'ABC000918513', 'MMSI1766', 'IRCS1766', '{}', 'EXTIMM1766', 'VOLONTAIRE NÉMÉSIS', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1767, 'ABC000918518', 'MMSI1767', 'IRCS1767', '{}', 'EXTIMM1767', 'VOLONTAIRE OPALE TRENTE-CINQ', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1768, 'ABC000918519', 'MMSI1768', 'IRCS1768', '{}', 'EXTIMM1768', 'VOLONTAIRE PAQUEBOT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1769, 'ABC000918520', 'MMSI1769', 'IRCS1769', '{}', 'EXTIMM1769', 'VOLONTAIRE PIRATE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1770, 'ABC000918521', 'MMSI1770', 'IRCS1770', '{}', 'EXTIMM1770', 'VOLONTAIRE PYLÔNE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1771, 'ABC000918524', 'MMSI1771', 'IRCS1771', '{}', 'EXTIMM1771', 'VOLONTAIRE RADIOPHARE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1772, 'ABC000918525', 'MMSI1772', 'IRCS1772', '{}', 'EXTIMM1772', 'VOLONTAIRE RIVAGE CINQ', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1773, 'ABC000918527', 'MMSI1773', 'IRCS1773', '{}', 'EXTIMM1773', 'VOLONTAIRE SABORDS CINQUANTE-ET-UN', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1774, 'ABC000918530', 'MMSI1774', 'IRCS1774', '{}', 'EXTIMM1774', 'VOLONTAIRE SENTINELLE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1775, 'ABC000918531', 'MMSI1775', 'IRCS1775', '{}', 'EXTIMM1775', 'VOLONTAIRE TRAITRE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1776, 'ABC000918536', 'MMSI1776', 'IRCS1776', '{}', 'EXTIMM1776', 'VOLONTAIRE TRAITRE SOIXANTE-DIX-SEPT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1777, 'ABC000918542', 'MMSI1777', 'IRCS1777', '{}', 'EXTIMM1777', 'VOLONTAIRE TRAITRE SOIXANTE-QUINZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1778, 'ABC000918545', 'MMSI1778', 'IRCS1778', '{}', 'EXTIMM1778', 'VOLONTAIRE TYPHON', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1779, 'ABC000918549', 'MMSI1779', 'IRCS1779', '{}', 'EXTIMM1779', 'VOLONTAIRE VORTEX CENT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1780, 'ABC000918903', 'MMSI1780', 'IRCS1780', '{}', 'EXTIMM1780', 'VOLONTAIRE VORTEX CINQUANTE-HUIT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1781, 'ABC000918928', 'MMSI1781', 'IRCS1781', '{}', 'EXTIMM1781', 'VOLONTAIRE VÉRITÉ', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1782, 'ABC000918974', 'MMSI1782', 'IRCS1782', '{}', 'EXTIMM1782', 'VOLONTAIRE VÉRITÉ CINQUANTE-QUATRE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1783, 'ABC000919024', 'MMSI1783', 'IRCS1783', '{}', 'EXTIMM1783', 'VOLONTAIRE ÉPAVE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1784, 'ABC000919025', 'MMSI1784', 'IRCS1784', '{}', 'EXTIMM1784', 'VOLONTAIRE ÉPAVE QUATRE-VINGT-SIX', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1785, 'ABC000919040', 'MMSI1785', 'IRCS1785', '{}', 'EXTIMM1785', 'VOLONTAIRE ÉPAVE SOIXANTE-HUIT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1786, 'ABC000919046', 'MMSI1786', 'IRCS1786', '{}', 'EXTIMM1786', 'VORTEX CALME', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1787, 'ABC000919049', 'MMSI1787', 'IRCS1787', '{}', 'EXTIMM1787', 'VORTEX CINQ', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1788, 'ABC000919060', 'MMSI1788', 'IRCS1788', '{}', 'EXTIMM1788', 'VORTEX CINQUANTE-QUATRE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1789, 'ABC000919070', 'MMSI1789', 'IRCS1789', '{}', 'EXTIMM1789', 'VORTEX FURTIF', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1790, 'ABC000919105', 'MMSI1790', 'IRCS1790', '{}', 'EXTIMM1790', 'VORTEX JAUNE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1791, 'ABC000919110', 'MMSI1791', 'IRCS1791', '{}', 'EXTIMM1791', 'VORTEX MUET', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1792, 'ABC000919163', 'MMSI1792', 'IRCS1792', '{}', 'EXTIMM1792', 'VORTEX NEUF', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1793, 'ABC000919206', 'MMSI1793', 'IRCS1793', '{}', 'EXTIMM1793', 'VORTEX NOIR', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1794, 'ABC000919213', 'MMSI1794', 'IRCS1794', '{}', 'EXTIMM1794', 'VORTEX QUARANTE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1795, 'ABC000919216', 'MMSI1795', 'IRCS1795', '{}', 'EXTIMM1795', 'VORTEX QUARANTE-ET-UN', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1796, 'ABC000919221', 'MMSI1796', 'IRCS1796', '{}', 'EXTIMM1796', 'VORTEX QUARANTE-NEUF', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1797, 'ABC000919226', 'MMSI1797', 'IRCS1797', '{}', 'EXTIMM1797', 'VORTEX QUATRE-VINGT-HUIT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1798, 'ABC000919238', 'MMSI1798', 'IRCS1798', '{}', 'EXTIMM1798', 'VORTEX QUATRE-VINGT-QUATORZE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1799, 'ABC000919254', 'MMSI1799', 'IRCS1799', '{}', 'EXTIMM1799', 'VORTEX SEPT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1800, 'ABC000919258', 'MMSI1800', 'IRCS1800', '{}', 'EXTIMM1800', 'VORTEX SOIXANTE-ET-ONZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1801, 'ABC000919266', 'MMSI1801', 'IRCS1801', '{}', 'EXTIMM1801', 'VORTEX SÉRIEUSE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1802, 'ABC000919283', 'MMSI1802', 'IRCS1802', '{}', 'EXTIMM1802', 'VORTEX TRENTE-ET-UN', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1803, 'ABC000919297', 'MMSI1803', 'IRCS1803', '{}', 'EXTIMM1803', 'VORTEX VINGT-ET-UN', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1804, 'ABC000919298', 'MMSI1804', 'IRCS1804', '{}', 'EXTIMM1804', 'VORTEX VINGT-SEPT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1805, 'ABC000919302', 'MMSI1805', 'IRCS1805', '{}', 'EXTIMM1805', 'VORTEX VOLONTAIRE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1806, 'ABC000919310', 'MMSI1806', 'IRCS1806', '{}', 'EXTIMM1806', 'VORTEX ZÉRO', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1807, 'ABC000919311', 'MMSI1807', 'IRCS1807', '{}', 'EXTIMM1807', 'VORTEX ÉGARÉ', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1808, 'ABC000919314', 'MMSI1808', 'IRCS1808', '{}', 'EXTIMM1808', 'VÉRITÉ BORGNE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1809, 'ABC000919337', 'MMSI1809', 'IRCS1809', '{}', 'EXTIMM1809', 'VÉRITÉ CINQUANTE-DEUX', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1810, 'ABC000919347', 'MMSI1810', 'IRCS1810', '{}', 'EXTIMM1810', 'VÉRITÉ CINQUANTE-HUIT', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1811, 'ABC000919353', 'MMSI1811', 'IRCS1811', '{}', 'EXTIMM1811', 'VÉRITÉ CINQUANTE-SIX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1812, 'ABC000919384', 'MMSI1812', 'IRCS1812', '{}', 'EXTIMM1812', 'VÉRITÉ DORÉ', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1813, 'ABC000919405', 'MMSI1813', 'IRCS1813', '{}', 'EXTIMM1813', 'VÉRITÉ FURTIF', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1814, 'ABC000919409', 'MMSI1814', 'IRCS1814', '{}', 'EXTIMM1814', 'VÉRITÉ OMBRE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1815, 'ABC000919426', 'MMSI1815', 'IRCS1815', '{}', 'EXTIMM1815', 'VÉRITÉ QUARANTE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1816, 'ABC000919436', 'MMSI1816', 'IRCS1816', '{}', 'EXTIMM1816', 'VÉRITÉ SOIXANTE-CINQ', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1817, 'ABC000919499', 'MMSI1817', 'IRCS1817', '{}', 'EXTIMM1817', 'VÉRITÉ SOIXANTE-DOUZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1818, 'ABC000919507', 'MMSI1818', 'IRCS1818', '{}', 'EXTIMM1818', 'VÉRITÉ SOIXANTE-NEUF', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1819, 'ABC000919509', 'MMSI1819', 'IRCS1819', '{}', 'EXTIMM1819', 'VÉRITÉ SOIXANTE-SEPT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1820, 'ABC000919530', 'MMSI1820', 'IRCS1820', '{}', 'EXTIMM1820', 'VÉRITÉ SOIXANTE-TREIZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1821, 'ABC000919539', 'MMSI1821', 'IRCS1821', '{}', 'EXTIMM1821', 'VÉRITÉ SÉRIEUSE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1822, 'ABC000919578', 'MMSI1822', 'IRCS1822', '{}', 'EXTIMM1822', 'VÉRITÉ TRENTE-CINQ', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1823, 'ABC000919589', 'MMSI1823', 'IRCS1823', '{}', 'EXTIMM1823', 'VÉRITÉ TRENTE-SEPT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1824, 'ABC000919594', 'MMSI1824', 'IRCS1824', '{}', 'EXTIMM1824', 'VÉRITÉ VINGT-HUIT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1825, 'ABC000919597', 'MMSI1825', 'IRCS1825', '{}', 'EXTIMM1825', 'VÉRITÉ ZÉRO', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1826, 'ABC000919601', 'MMSI1826', 'IRCS1826', '{}', 'EXTIMM1826', 'ZÉRO AIGLE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1827, 'ABC000919602', 'MMSI1827', 'IRCS1827', '{}', 'EXTIMM1827', 'ZÉRO AIGLE SOIXANTE-SIX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1828, 'ABC000919613', 'MMSI1828', 'IRCS1828', '{}', 'EXTIMM1828', 'ZÉRO ALBATROS SOIXANTE-SIX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1829, 'ABC000919618', 'MMSI1829', 'IRCS1829', '{}', 'EXTIMM1829', 'ZÉRO ALBATROS UN', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1830, 'ABC000919662', 'MMSI1830', 'IRCS1830', '{}', 'EXTIMM1830', 'ZÉRO CENTAURE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1831, 'ABC000919678', 'MMSI1831', 'IRCS1831', '{}', 'EXTIMM1831', 'ZÉRO CENTAURE DOUZE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1832, 'ABC000919683', 'MMSI1832', 'IRCS1832', '{}', 'EXTIMM1832', 'ZÉRO CENTAURE SOIXANTE-DIX-NEUF', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1833, 'ABC000919686', 'MMSI1833', 'IRCS1833', '{}', 'EXTIMM1833', 'ZÉRO CHIMERA', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1834, 'ABC000919693', 'MMSI1834', 'IRCS1834', '{}', 'EXTIMM1834', 'ZÉRO CHIMERA QUARANTE-NEUF', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1835, 'ABC000919697', 'MMSI1835', 'IRCS1835', '{}', 'EXTIMM1835', 'ZÉRO CROIX', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1836, 'ABC000919704', 'MMSI1836', 'IRCS1836', '{}', 'EXTIMM1836', 'ZÉRO DÉCODEUR SOIXANTE-DEUX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1837, 'ABC000919713', 'MMSI1837', 'IRCS1837', '{}', 'EXTIMM1837', 'ZÉRO DÉCODEUR SOIXANTE-TREIZE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1838, 'ABC000919716', 'MMSI1838', 'IRCS1838', '{}', 'EXTIMM1838', 'ZÉRO DÉRIVE SOIXANTE-QUATORZE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1839, 'ABC000919725', 'MMSI1839', 'IRCS1839', '{}', 'EXTIMM1839', 'ZÉRO ENCRE VINGT-DEUX', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1840, 'ABC000919727', 'MMSI1840', 'IRCS1840', '{}', 'EXTIMM1840', 'ZÉRO FANTÔME SOIXANTE-ET-UN', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1841, 'ABC000919739', 'MMSI1841', 'IRCS1841', '{}', 'EXTIMM1841', 'ZÉRO HÉRÉSIE QUATRE-VINGT-DEUX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1842, 'ABC000919769', 'MMSI1842', 'IRCS1842', '{}', 'EXTIMM1842', 'ZÉRO MODULE CENT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1843, 'ABC000919770', 'MMSI1843', 'IRCS1843', '{}', 'EXTIMM1843', 'ZÉRO MÉDUSE QUARANTE-ET-UN', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1844, 'ABC000919801', 'MMSI1844', 'IRCS1844', '{}', 'EXTIMM1844', 'ZÉRO MÉDUSE QUATRE-VINGT-DIX-SEPT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1845, 'ABC000919804', 'MMSI1845', 'IRCS1845', '{}', 'EXTIMM1845', 'ZÉRO NÉMÉSIS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1846, 'ABC000919999', 'MMSI1846', 'IRCS1846', '{}', 'EXTIMM1846', 'ZÉRO NÉMÉSIS QUATRE-VINGT-CINQ', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1847, 'ABC000920688', 'MMSI1847', 'IRCS1847', '{}', 'EXTIMM1847', 'ZÉRO PAQUEBOT QUATRE-VINGT-DIX-HUIT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1848, 'ABC000920843', 'MMSI1848', 'IRCS1848', '{}', 'EXTIMM1848', 'ZÉRO PONT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1849, 'ABC000922065', 'MMSI1849', 'IRCS1849', '{}', 'EXTIMM1849', 'ZÉRO PONT SOIXANTE-SEIZE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1850, 'ABC000922177', 'MMSI1850', 'IRCS1850', '{}', 'EXTIMM1850', 'ZÉRO PYLÔNE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1851, 'ABC000922247', 'MMSI1851', 'IRCS1851', '{}', 'EXTIMM1851', 'ZÉRO PYLÔNE CINQ', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1852, 'ABC000922248', 'MMSI1852', 'IRCS1852', '{}', 'EXTIMM1852', 'ZÉRO TYPHON', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1853, 'ABC000922256', 'MMSI1853', 'IRCS1853', '{}', 'EXTIMM1853', 'ZÉRO VORTEX', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1854, 'ABC000922261', 'MMSI1854', 'IRCS1854', '{}', 'EXTIMM1854', 'ZÉRO ÉQUINOXE QUATRE-VINGT-DEUX', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1855, 'ABC000922296', 'MMSI1855', 'IRCS1855', '{}', 'EXTIMM1855', 'ÉGARÉ CHIMERA DIX-HUIT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1856, 'ABC000922338', 'MMSI1856', 'IRCS1856', '{}', 'EXTIMM1856', 'ÉGARÉ CROIX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1857, 'ABC000922369', 'MMSI1857', 'IRCS1857', '{}', 'EXTIMM1857', 'ÉGARÉ DENT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1858, 'ABC000922384', 'MMSI1858', 'IRCS1858', '{}', 'EXTIMM1858', 'ÉGARÉ DENT SOIXANTE-ET-UN', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1859, 'ABC000922392', 'MMSI1859', 'IRCS1859', '{}', 'EXTIMM1859', 'ÉGARÉ DRAGON QUATRE-VINGT-QUATRE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1860, 'ABC000922401', 'MMSI1860', 'IRCS1860', '{}', 'EXTIMM1860', 'ÉGARÉ DÉCODEUR SIX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1861, 'ABC000922409', 'MMSI1861', 'IRCS1861', '{}', 'EXTIMM1861', 'ÉGARÉ DÉRIVE CINQUANTE-NEUF', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1862, 'ABC000922415', 'MMSI1862', 'IRCS1862', '{}', 'EXTIMM1862', 'ÉGARÉ ENCRE SOIXANTE-HUIT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1863, 'ABC000922417', 'MMSI1863', 'IRCS1863', '{}', 'EXTIMM1863', 'ÉGARÉ FRÉQUENCE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1864, 'ABC000922425', 'MMSI1864', 'IRCS1864', '{}', 'EXTIMM1864', 'ÉGARÉ FRÉQUENCE DIX-SEPT', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1865, 'ABC000922427', 'MMSI1865', 'IRCS1865', '{}', 'EXTIMM1865', 'ÉGARÉ MÉDUSE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1866, 'ABC000922428', 'MMSI1866', 'IRCS1866', '{}', 'EXTIMM1866', 'ÉGARÉ NARVAL QUATRE-VINGT-HUIT', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1867, 'ABC000922429', 'MMSI1867', 'IRCS1867', '{}', 'EXTIMM1867', 'ÉGARÉ NARVAL SOIXANTE-DIX-HUIT', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1868, 'ABC000922430', 'MMSI1868', 'IRCS1868', '{}', 'EXTIMM1868', 'ÉGARÉ SENTINELLE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1869, 'ABC000922437', 'MMSI1869', 'IRCS1869', '{}', 'EXTIMM1869', 'ÉGARÉ SENTINELLE QUATRE-VINGT', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1870, 'ABC000922443', 'MMSI1870', 'IRCS1870', '{}', 'EXTIMM1870', 'ÉGARÉ SENTINELLE SOIXANTE-QUATRE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1871, 'ABC000922447', 'MMSI1871', 'IRCS1871', '{}', 'EXTIMM1871', 'ÉGARÉ SOUTERRAIN QUARANTE-CINQ', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1872, 'ABC000922448', 'MMSI1872', 'IRCS1872', '{}', 'EXTIMM1872', 'ÉGARÉ TOURMENT QUARANTE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1873, 'ABC000922538', 'MMSI1873', 'IRCS1873', '{}', 'EXTIMM1873', 'ÉGARÉ VORTEX QUATORZE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1874, 'ABC000922539', 'MMSI1874', 'IRCS1874', '{}', 'EXTIMM1874', 'ÉGARÉ VÉRITÉ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1875, 'ABC000922540', 'MMSI1875', 'IRCS1875', '{}', 'EXTIMM1875', 'ÉGARÉ VÉRITÉ QUATRE-VINGT-ONZE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1876, 'ABC000922586', 'MMSI1876', 'IRCS1876', '{}', 'EXTIMM1876', 'ÉGARÉ ÉQUINOXE CINQUANTE-NEUF', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1877, 'ABC000922590', 'MMSI1877', 'IRCS1877', '{}', 'EXTIMM1877', 'ÉPAVE BORGNE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1878, 'ABC000922623', 'MMSI1878', 'IRCS1878', '{}', 'EXTIMM1878', 'ÉPAVE CALME', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1879, 'ABC000922626', 'MMSI1879', 'IRCS1879', '{}', 'EXTIMM1879', 'ÉPAVE CINQUANTE-CINQ', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1880, 'ABC000922631', 'MMSI1880', 'IRCS1880', '{}', 'EXTIMM1880', 'ÉPAVE CINQUANTE-NEUF', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1881, 'ABC000922633', 'MMSI1881', 'IRCS1881', '{}', 'EXTIMM1881', 'ÉPAVE CINQUANTE-QUATRE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1882, 'ABC000922650', 'MMSI1882', 'IRCS1882', '{}', 'EXTIMM1882', 'ÉPAVE DIX', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1883, 'ABC000922656', 'MMSI1883', 'IRCS1883', '{}', 'EXTIMM1883', 'ÉPAVE DIX-HUIT', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1884, 'ABC000922668', 'MMSI1884', 'IRCS1884', '{}', 'EXTIMM1884', 'ÉPAVE QUATORZE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1885, 'ABC000922669', 'MMSI1885', 'IRCS1885', '{}', 'EXTIMM1885', 'ÉPAVE QUATRE-VINGT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1886, 'ABC000922683', 'MMSI1886', 'IRCS1886', '{}', 'EXTIMM1886', 'ÉPAVE QUATRE-VINGT-TREIZE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1887, 'ABC000922685', 'MMSI1887', 'IRCS1887', '{}', 'EXTIMM1887', 'ÉPAVE SILENCIEUX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1888, 'ABC000922692', 'MMSI1888', 'IRCS1888', '{}', 'EXTIMM1888', 'ÉPAVE SIX', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1889, 'ABC000922694', 'MMSI1889', 'IRCS1889', '{}', 'EXTIMM1889', 'ÉPAVE SOIXANTE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1890, 'ABC000922696', 'MMSI1890', 'IRCS1890', '{}', 'EXTIMM1890', 'ÉPAVE SOIXANTE-QUINZE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1891, 'ABC000922707', 'MMSI1891', 'IRCS1891', '{}', 'EXTIMM1891', 'ÉPAVE UN', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1892, 'ABC000922714', 'MMSI1892', 'IRCS1892', '{}', 'EXTIMM1892', 'ÉPAVE VINGT-TROIS', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1893, 'ABC000922722', 'MMSI1893', 'IRCS1893', '{}', 'EXTIMM1893', 'ÉQUINOXE BLEU', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1894, 'ABC000922731', 'MMSI1894', 'IRCS1894', '{}', 'EXTIMM1894', 'ÉQUINOXE CINQUANTE-CINQ', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1895, 'ABC000922734', 'MMSI1895', 'IRCS1895', '{}', 'EXTIMM1895', 'ÉQUINOXE DISCRET', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1896, 'ABC000923123', 'MMSI1896', 'IRCS1896', '{}', 'EXTIMM1896', 'ÉQUINOXE DOUTEUX', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1897, 'ABC000923128', 'MMSI1897', 'IRCS1897', '{}', 'EXTIMM1897', 'ÉQUINOXE FURTIVE', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1898, 'ABC000923144', 'MMSI1898', 'IRCS1898', '{}', 'EXTIMM1898', 'ÉQUINOXE INUTILE', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1899, 'ABC000923164', 'MMSI1899', 'IRCS1899', '{}', 'EXTIMM1899', 'ÉQUINOXE JAUNE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1900, 'ABC000923458', 'MMSI1900', 'IRCS1900', '{}', 'EXTIMM1900', 'ÉQUINOXE NOMADE', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1901, 'ABC000923587', 'MMSI1901', 'IRCS1901', '{}', 'EXTIMM1901', 'ÉQUINOXE QUARANTE-SIX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1902, 'ABC000923589', 'MMSI1902', 'IRCS1902', '{}', 'EXTIMM1902', 'ÉQUINOXE QUATRE-VINGT-TREIZE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1903, 'ABC000923628', 'MMSI1903', 'IRCS1903', '{}', 'EXTIMM1903', 'ÉQUINOXE ROUGE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1904, 'ABC000923677', 'MMSI1904', 'IRCS1904', '{}', 'EXTIMM1904', 'ÉQUINOXE TACTIQUE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1905, 'ABC000923684', 'MMSI1905', 'IRCS1905', '{}', 'EXTIMM1905', 'ÉQUINOXE VINGT', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1906, 'ABC000923715', 'MMSI1906', 'IRCS1906', '{}', 'EXTIMM1906', 'ÉQUINOXE VINGT-TROIS', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1907, 'ABC000923716', 'MMSI1907', 'IRCS1907', '{}', 'EXTIMM1907', 'ÉTOILE BLEU', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1908, 'ABC000923750', 'MMSI1908', 'IRCS1908', '{}', 'EXTIMM1908', 'ÉTOILE CENT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1909, 'ABC000923753', 'MMSI1909', 'IRCS1909', '{}', 'EXTIMM1909', 'ÉTOILE CINQUANTE-DEUX', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1910, 'ABC000923774', 'MMSI1910', 'IRCS1910', '{}', 'EXTIMM1910', 'ÉTOILE CINQUANTE-SIX', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1911, 'ABC000924030', 'MMSI1911', 'IRCS1911', '{}', 'EXTIMM1911', 'ÉTOILE DOUTEUX', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1912, 'ABC000924205', 'MMSI1912', 'IRCS1912', '{}', 'EXTIMM1912', 'ÉTOILE FLOTTANTE', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1913, 'ABC000924400', 'MMSI1913', 'IRCS1913', '{}', 'EXTIMM1913', 'ÉTOILE INUTILE', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1914, 'ABC000924524', 'MMSI1914', 'IRCS1914', '{}', 'EXTIMM1914', 'ÉTOILE NOCTURNE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1915, 'ABC000924562', 'MMSI1915', 'IRCS1915', '{}', 'EXTIMM1915', 'ÉTOILE NOMADE', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1916, 'ABC000924575', 'MMSI1916', 'IRCS1916', '{}', 'EXTIMM1916', 'ÉTOILE PASSAGÈRE', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1917, 'ABC000924576', 'MMSI1917', 'IRCS1917', '{}', 'EXTIMM1917', 'ÉTOILE QUARANTE-DEUX', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1918, 'ABC000924577', 'MMSI1918', 'IRCS1918', '{}', 'EXTIMM1918', 'ÉTOILE SOIXANTE-HUIT', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1919, 'ABC000924578', 'MMSI1919', 'IRCS1919', '{}', 'EXTIMM1919', 'ÉTOILE TACTIQUE', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1920, 'ABC000924597', 'MMSI1920', 'IRCS1920', '{}', 'EXTIMM1920', 'ÉTOILE TRENTE-ET-UN', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1921, 'ABC000924675', 'MMSI1921', 'IRCS1921', '{}', 'EXTIMM1921', 'ÉTOILE VERTICALE', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1922, 'ABC000924680', 'MMSI1922', 'IRCS1922', '{}', 'EXTIMM1922', 'ÉTOILE VINGT', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1923, 'ABC000924689', 'MMSI1923', 'IRCS1923', '{}', 'EXTIMM1923', 'ÉTOILE VINGT-TROIS', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1924, 'ABC000924693', 'MMSI1924', 'IRCS1924', '{}', 'EXTIMM1924', 'ÉTOILE VOLONTAIRE', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1925, 'ABC000924694', 'MMSI1925', 'IRCS1925', '{}', 'EXTIMM1925', 'ÉTOILE VOLONTAIRE PERMIS', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2000, 'ABC000924706', 'MMSI2000', 'IRCS2000', '{}', 'EXTIMM2000', 'MODULE CINQUANTE-CINQ BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2001, 'ABC000924721', 'MMSI2001', 'IRCS2001', '{}', 'EXTIMM2001', 'MODULE DISCRET BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2002, 'ABC000924726', 'MMSI2002', 'IRCS2002', '{}', 'EXTIMM2002', 'MODULE DIX-HUIT BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2003, 'ABC000924730', 'MMSI2003', 'IRCS2003', '{}', 'EXTIMM2003', 'MODULE IMPÉRIALE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2004, 'ABC000924751', 'MMSI2004', 'IRCS2004', '{}', 'EXTIMM2004', 'MODULE INUTILE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2005, 'ABC000924784', 'MMSI2005', 'IRCS2005', '{}', 'EXTIMM2005', 'MODULE NOMADE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2006, 'ABC000924814', 'MMSI2006', 'IRCS2006', '{}', 'EXTIMM2006', 'MODULE OMBRE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2007, 'ABC000924816', 'MMSI2007', 'IRCS2007', '{}', 'EXTIMM2007', 'MODULE POURPRE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2008, 'ABC000924817', 'MMSI2008', 'IRCS2008', '{}', 'EXTIMM2008', 'MODULE QUATRE-VINGT-NEUF BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2009, 'ABC000924826', 'MMSI2009', 'IRCS2009', '{}', 'EXTIMM2009', 'MODULE QUATRE-VINGT-TROIS BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2010, 'ABC000924829', 'MMSI2010', 'IRCS2010', '{}', 'EXTIMM2010', 'MODULE SOIXANTE BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2011, 'ABC000924830', 'MMSI2011', 'IRCS2011', '{}', 'EXTIMM2011', 'MODULE SOIXANTE-CINQ BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2012, 'ABC000924833', 'MMSI2012', 'IRCS2012', '{}', 'EXTIMM2012', 'MODULE SOIXANTE-DIX-HUIT BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2013, 'ABC000924845', 'MMSI2013', 'IRCS2013', '{}', 'EXTIMM2013', 'MODULE SOIXANTE-QUINZE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2014, 'ABC000924864', 'MMSI2014', 'IRCS2014', '{}', 'EXTIMM2014', 'MODULE SOIXANTE-SIX BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2015, 'ABC000924873', 'MMSI2015', 'IRCS2015', '{}', 'EXTIMM2015', 'MODULE SOIXANTE-TROIS BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2016, 'ABC000924876', 'MMSI2016', 'IRCS2016', '{}', 'EXTIMM2016', 'MODULE SÉRIEUSE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2017, 'ABC000924905', 'MMSI2017', 'IRCS2017', '{}', 'EXTIMM2017', 'MODULE ÉGARÉ BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2018, 'ABC000925002', 'MMSI2018', 'IRCS2018', '{}', 'EXTIMM2018', 'MUET ALBATROS BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2019, 'ABC000925008', 'MMSI2019', 'IRCS2019', '{}', 'EXTIMM2019', 'MUET BALISE QUATRE-VINGT-TROIS BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2020, 'ABC000925050', 'MMSI2020', 'IRCS2020', '{}', 'EXTIMM2020', 'MUET CALYPSO SOIXANTE-TREIZE BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2021, 'ABC000925051', 'MMSI2021', 'IRCS2021', '{}', 'EXTIMM2021', 'MUET CENTAURE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2022, 'ABC000925072', 'MMSI2022', 'IRCS2022', '{}', 'EXTIMM2022', 'MUET CODE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2023, 'ABC000925078', 'MMSI2023', 'IRCS2023', '{}', 'EXTIMM2023', 'MUET DÉRIVE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2024, 'ABC000925082', 'MMSI2024', 'IRCS2024', '{}', 'EXTIMM2024', 'MUET FANTÔME SOIXANTE-SEPT BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2025, 'ABC000925083', 'MMSI2025', 'IRCS2025', '{}', 'EXTIMM2025', 'MUET GLISSEMENT BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2026, 'ABC000925084', 'MMSI2026', 'IRCS2026', '{}', 'EXTIMM2026', 'MUET GRANITE QUATRE-VINGT-TREIZE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2027, 'ABC000925094', 'MMSI2027', 'IRCS2027', '{}', 'EXTIMM2027', 'MUET LAME QUATRE-VINGT-DIX BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2028, 'ABC000925162', 'MMSI2028', 'IRCS2028', '{}', 'EXTIMM2028', 'MUET NÉMÉSIS QUARANTE-CINQ BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2029, 'ABC000925170', 'MMSI2029', 'IRCS2029', '{}', 'EXTIMM2029', 'MUET OPALE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2030, 'ABC000925226', 'MMSI2030', 'IRCS2030', '{}', 'EXTIMM2030', 'MUET PAQUEBOT BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2031, 'ABC000925231', 'MMSI2031', 'IRCS2031', '{}', 'EXTIMM2031', 'MUET RAPACE SOIXANTE-ET-ONZE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2032, 'ABC000925290', 'MMSI2032', 'IRCS2032', '{}', 'EXTIMM2032', 'MUET TOURMENT BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2033, 'ABC000925291', 'MMSI2033', 'IRCS2033', '{}', 'EXTIMM2033', 'MUET TOURMENT QUATRE-VINGT-HUIT BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2034, 'ABC000925295', 'MMSI2034', 'IRCS2034', '{}', 'EXTIMM2034', 'MUET TRAITRE QUATRE-VINGT-HUIT BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2035, 'ABC000925296', 'MMSI2035', 'IRCS2035', '{}', 'EXTIMM2035', 'MUET TRAITRE QUATRE-VINGT-NEUF BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2036, 'ABC000925304', 'MMSI2036', 'IRCS2036', '{}', 'EXTIMM2036', 'MUET TYPHON SOIXANTE-DIX-SEPT BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2037, 'ABC000925308', 'MMSI2037', 'IRCS2037', '{}', 'EXTIMM2037', 'MUET VÉRITÉ QUATRE-VINGT-HUIT BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2038, 'ABC000925322', 'MMSI2038', 'IRCS2038', '{}', 'EXTIMM2038', 'MÉDUSE CINQ BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2039, 'ABC000925336', 'MMSI2039', 'IRCS2039', '{}', 'EXTIMM2039', 'MÉDUSE CINQUANTE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2040, 'ABC000925347', 'MMSI2040', 'IRCS2040', '{}', 'EXTIMM2040', 'MÉDUSE CINQUANTE-HUIT BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2041, 'ABC000925355', 'MMSI2041', 'IRCS2041', '{}', 'EXTIMM2041', 'MÉDUSE DIX-SEPT BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2042, 'ABC000925356', 'MMSI2042', 'IRCS2042', '{}', 'EXTIMM2042', 'MÉDUSE DORÉ BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2043, 'ABC000925357', 'MMSI2043', 'IRCS2043', '{}', 'EXTIMM2043', 'MÉDUSE DOUTEUX BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2044, 'ABC000925358', 'MMSI2044', 'IRCS2044', '{}', 'EXTIMM2044', 'MÉDUSE DOUZE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2045, 'ABC000925372', 'MMSI2045', 'IRCS2045', '{}', 'EXTIMM2045', 'MÉDUSE NOIR BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2046, 'ABC000925395', 'MMSI2046', 'IRCS2046', '{}', 'EXTIMM2046', 'MÉDUSE PASSAGÈRE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2047, 'ABC000925408', 'MMSI2047', 'IRCS2047', '{}', 'EXTIMM2047', 'MÉDUSE POURPRE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2048, 'ABC000925410', 'MMSI2048', 'IRCS2048', '{}', 'EXTIMM2048', 'MÉDUSE QUATRE-VINGT BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2049, 'ABC000925411', 'MMSI2049', 'IRCS2049', '{}', 'EXTIMM2049', 'MÉDUSE QUATRE-VINGT-DIX-HUIT BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2050, 'ABC000925447', 'MMSI2050', 'IRCS2050', '{}', 'EXTIMM2050', 'MÉDUSE QUATRE-VINGT-TROIS BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2051, 'ABC000925473', 'MMSI2051', 'IRCS2051', '{}', 'EXTIMM2051', 'MÉDUSE SOIXANTE-DOUZE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2052, 'ABC000925479', 'MMSI2052', 'IRCS2052', '{}', 'EXTIMM2052', 'MÉDUSE SOIXANTE-HUIT BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2053, 'ABC000925480', 'MMSI2053', 'IRCS2053', '{}', 'EXTIMM2053', 'MÉDUSE SOIXANTE-QUATRE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2054, 'ABC000925482', 'MMSI2054', 'IRCS2054', '{}', 'EXTIMM2054', 'MÉDUSE SOIXANTE-TREIZE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2055, 'ABC000925487', 'MMSI2055', 'IRCS2055', '{}', 'EXTIMM2055', 'MÉDUSE SOURD BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2056, 'ABC000925488', 'MMSI2056', 'IRCS2056', '{}', 'EXTIMM2056', 'MÉDUSE VINGT-DEUX BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2057, 'ABC000925559', 'MMSI2057', 'IRCS2057', '{}', 'EXTIMM2057', 'MÉDUSE VINGT-TROIS BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2058, 'ABC000925601', 'MMSI2058', 'IRCS2058', '{}', 'EXTIMM2058', 'MÉDUSE ZÉRO BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2059, 'ABC000925603', 'MMSI2059', 'IRCS2059', '{}', 'EXTIMM2059', 'MÉDUSE ÉGARÉ BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2060, 'ABC000925605', 'MMSI2060', 'IRCS2060', '{}', 'EXTIMM2060', 'NARVAL BLEU BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2061, 'ABC000925607', 'MMSI2061', 'IRCS2061', '{}', 'EXTIMM2061', 'NARVAL CRYPTÉE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2062, 'ABC000925616', 'MMSI2062', 'IRCS2062', '{}', 'EXTIMM2062', 'NARVAL DIX-SEPT BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2063, 'ABC000925621', 'MMSI2063', 'IRCS2063', '{}', 'EXTIMM2063', 'NARVAL DOUTEUX BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2064, 'ABC000925622', 'MMSI2064', 'IRCS2064', '{}', 'EXTIMM2064', 'NARVAL DOUZE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2065, 'ABC000925652', 'MMSI2065', 'IRCS2065', '{}', 'EXTIMM2065', 'NARVAL FAUSSE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2066, 'ABC000925657', 'MMSI2066', 'IRCS2066', '{}', 'EXTIMM2066', 'NARVAL FRACTAL BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2067, 'ABC000925658', 'MMSI2067', 'IRCS2067', '{}', 'EXTIMM2067', 'NARVAL IMPÉRIALE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2068, 'ABC000925659', 'MMSI2068', 'IRCS2068', '{}', 'EXTIMM2068', 'NARVAL NOCTURNE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2069, 'ABC000925733', 'MMSI2069', 'IRCS2069', '{}', 'EXTIMM2069', 'NARVAL POURPRE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2070, 'ABC000925754', 'MMSI2070', 'IRCS2070', '{}', 'EXTIMM2070', 'NARVAL QUARANTE-CINQ BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2071, 'ABC000925755', 'MMSI2071', 'IRCS2071', '{}', 'EXTIMM2071', 'NARVAL QUARANTE-NEUF BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2072, 'ABC000925881', 'MMSI2072', 'IRCS2072', '{}', 'EXTIMM2072', 'NARVAL QUARANTE-SEPT BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2073, 'ABC000925955', 'MMSI2073', 'IRCS2073', '{}', 'EXTIMM2073', 'NARVAL QUATRE-VINGT-DEUX BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2074, 'ABC000925968', 'MMSI2074', 'IRCS2074', '{}', 'EXTIMM2074', 'NARVAL QUATRE-VINGT-ONZE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2075, 'ABC000926014', 'MMSI2075', 'IRCS2075', '{}', 'EXTIMM2075', 'NARVAL SOIXANTE-CINQ BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2076, 'ABC000926018', 'MMSI2076', 'IRCS2076', '{}', 'EXTIMM2076', 'NARVAL SOIXANTE-ET-UN BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2077, 'ABC000926020', 'MMSI2077', 'IRCS2077', '{}', 'EXTIMM2077', 'NARVAL SÉRIEUSE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2078, 'ABC000926022', 'MMSI2078', 'IRCS2078', '{}', 'EXTIMM2078', 'NARVAL TRANSPARENT BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2079, 'ABC000926024', 'MMSI2079', 'IRCS2079', '{}', 'EXTIMM2079', 'NARVAL TRENTE-NEUF BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2080, 'ABC000926030', 'MMSI2080', 'IRCS2080', '{}', 'EXTIMM2080', 'NARVAL VERTICALE BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2081, 'ABC000926039', 'MMSI2081', 'IRCS2081', '{}', 'EXTIMM2081', 'NARVAL VINGT BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2082, 'ABC000926042', 'MMSI2082', 'IRCS2082', '{}', 'EXTIMM2082', 'NARVAL VINGT-CINQ BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2083, 'ABC000926045', 'MMSI2083', 'IRCS2083', '{}', 'EXTIMM2083', 'NARVAL VIRGINAL BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2084, 'ABC000926060', 'MMSI2084', 'IRCS2084', '{}', 'EXTIMM2084', 'NARVAL ÉGARÉ BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2085, 'ABC000926061', 'MMSI2085', 'IRCS2085', '{}', 'EXTIMM2085', 'NOCTURNE ALBATROS BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2086, 'ABC000926093', 'MMSI2086', 'IRCS2086', '{}', 'EXTIMM2086', 'NOCTURNE BALISE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2087, 'ABC000926103', 'MMSI2087', 'IRCS2087', '{}', 'EXTIMM2087', 'NOCTURNE BRUME SIX BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2088, 'ABC000926139', 'MMSI2088', 'IRCS2088', '{}', 'EXTIMM2088', 'NOCTURNE CENTAURE CINQUANTE-QUATRE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2089, 'ABC000926153', 'MMSI2089', 'IRCS2089', '{}', 'EXTIMM2089', 'NOCTURNE DENT BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2090, 'ABC000926157', 'MMSI2090', 'IRCS2090', '{}', 'EXTIMM2090', 'NOCTURNE FANTÔME QUATORZE BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2091, 'ABC000926382', 'MMSI2091', 'IRCS2091', '{}', 'EXTIMM2091', 'NOCTURNE FANTÔME QUATRE-VINGT-SIX BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2092, 'ABC000926387', 'MMSI2092', 'IRCS2092', '{}', 'EXTIMM2092', 'NOCTURNE FRÉQUENCE TRENTE-DEUX BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2093, 'ABC000926392', 'MMSI2093', 'IRCS2093', '{}', 'EXTIMM2093', 'NOCTURNE GLISSEMENT BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2094, 'ABC000926406', 'MMSI2094', 'IRCS2094', '{}', 'EXTIMM2094', 'NOCTURNE GLISSEMENT SOIXANTE-DIX BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2095, 'ABC000926411', 'MMSI2095', 'IRCS2095', '{}', 'EXTIMM2095', 'NOCTURNE GRANITE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2096, 'ABC000926414', 'MMSI2096', 'IRCS2096', '{}', 'EXTIMM2096', 'NOCTURNE LAME QUARANTE-SEPT BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2097, 'ABC000926421', 'MMSI2097', 'IRCS2097', '{}', 'EXTIMM2097', 'NOCTURNE LAME TRENTE-ET-UN BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2098, 'ABC000926427', 'MMSI2098', 'IRCS2098', '{}', 'EXTIMM2098', 'NOCTURNE MODULE SOIXANTE-ET-UN BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2099, 'ABC000926442', 'MMSI2099', 'IRCS2099', '{}', 'EXTIMM2099', 'NOCTURNE NÉMÉSIS BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2100, 'ABC000926461', 'MMSI2100', 'IRCS2100', '{}', 'EXTIMM2100', 'NOCTURNE OPALE SEPT BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2101, 'ABC000926467', 'MMSI2101', 'IRCS2101', '{}', 'EXTIMM2101', 'NOCTURNE PAQUEBOT BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2102, 'ABC000926471', 'MMSI2102', 'IRCS2102', '{}', 'EXTIMM2102', 'NOCTURNE PHARE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2103, 'ABC000926557', 'MMSI2103', 'IRCS2103', '{}', 'EXTIMM2103', 'NOCTURNE PHARE QUARANTE-QUATRE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2104, 'ABC000926613', 'MMSI2104', 'IRCS2104', '{}', 'EXTIMM2104', 'NOCTURNE PONT VINGT-QUATRE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2105, 'ABC000926614', 'MMSI2105', 'IRCS2105', '{}', 'EXTIMM2105', 'NOCTURNE PYLÔNE QUATRE-VINGT-QUINZE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2106, 'ABC000926632', 'MMSI2106', 'IRCS2106', '{}', 'EXTIMM2106', 'NOCTURNE RADIOPHARE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2107, 'ABC000926639', 'MMSI2107', 'IRCS2107', '{}', 'EXTIMM2107', 'NOCTURNE RAPACE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2108, 'ABC000926650', 'MMSI2108', 'IRCS2108', '{}', 'EXTIMM2108', 'NOCTURNE ÉPAVE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2109, 'ABC000926683', 'MMSI2109', 'IRCS2109', '{}', 'EXTIMM2109', 'NOCTURNE ÉQUINOXE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2110, 'ABC000926689', 'MMSI2110', 'IRCS2110', '{}', 'EXTIMM2110', 'NOCTURNE ÉQUINOXE SOIXANTE-DEUX BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2111, 'ABC000926777', 'MMSI2111', 'IRCS2111', '{}', 'EXTIMM2111', 'NOIR BALISE HUIT BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2112, 'ABC000926955', 'MMSI2112', 'IRCS2112', '{}', 'EXTIMM2112', 'NOIR CALYPSO BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2113, 'ABC000927088', 'MMSI2113', 'IRCS2113', '{}', 'EXTIMM2113', 'NOIR CARGO SOIXANTE-DIX-HUIT BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2114, 'ABC000927232', 'MMSI2114', 'IRCS2114', '{}', 'EXTIMM2114', 'NOIR CROIX QUARANTE-NEUF BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2115, 'ABC000927364', 'MMSI2115', 'IRCS2115', '{}', 'EXTIMM2115', 'NOIR DENT BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2116, 'ABC000927368', 'MMSI2116', 'IRCS2116', '{}', 'EXTIMM2116', 'NOIR FÉLIN QUARANTE-ET-UN BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2117, 'ABC000927371', 'MMSI2117', 'IRCS2117', '{}', 'EXTIMM2117', 'NOIR GRANITE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2118, 'ABC000927380', 'MMSI2118', 'IRCS2118', '{}', 'EXTIMM2118', 'NOIR HÉRÉSIE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2119, 'ABC000927437', 'MMSI2119', 'IRCS2119', '{}', 'EXTIMM2119', 'NOIR HÉRÉSIE QUARANTE-ET-UN BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2120, 'ABC000927450', 'MMSI2120', 'IRCS2120', '{}', 'EXTIMM2120', 'NOIR LAME BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2121, 'ABC000927484', 'MMSI2121', 'IRCS2121', '{}', 'EXTIMM2121', 'NOIR MÉDUSE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2122, 'ABC000927545', 'MMSI2122', 'IRCS2122', '{}', 'EXTIMM2122', 'NOIR PAQUEBOT BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2123, 'ABC000927546', 'MMSI2123', 'IRCS2123', '{}', 'EXTIMM2123', 'NOIR PHARE CINQUANTE-TROIS BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2124, 'ABC000927576', 'MMSI2124', 'IRCS2124', '{}', 'EXTIMM2124', 'NOIR PONT BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2125, 'ABC000927598', 'MMSI2125', 'IRCS2125', '{}', 'EXTIMM2125', 'NOIR SABORDS BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2126, 'ABC000928376', 'MMSI2126', 'IRCS2126', '{}', 'EXTIMM2126', 'NOIR SABORDS SOIXANTE-TROIS BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2127, 'ABC000928451', 'MMSI2127', 'IRCS2127', '{}', 'EXTIMM2127', 'NOIR TYPHON BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2128, 'ABC000928652', 'MMSI2128', 'IRCS2128', '{}', 'EXTIMM2128', 'NOIR ÉPAVE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2129, 'ABC000928710', 'MMSI2129', 'IRCS2129', '{}', 'EXTIMM2129', 'NOMADE CALYPSO TRENTE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2130, 'ABC000928743', 'MMSI2130', 'IRCS2130', '{}', 'EXTIMM2130', 'NOMADE CENTAURE BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2131, 'ABC000928761', 'MMSI2131', 'IRCS2131', '{}', 'EXTIMM2131', 'NOMADE CENTAURE QUARANTE-TROIS BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2132, 'ABC000928772', 'MMSI2132', 'IRCS2132', '{}', 'EXTIMM2132', 'NOMADE CHIMERA BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2133, 'ABC000928824', 'MMSI2133', 'IRCS2133', '{}', 'EXTIMM2133', 'NOMADE CODE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2134, 'ABC000928886', 'MMSI2134', 'IRCS2134', '{}', 'EXTIMM2134', 'NOMADE CROIX SOIXANTE-ET-UN BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2135, 'ABC000928959', 'MMSI2135', 'IRCS2135', '{}', 'EXTIMM2135', 'NOMADE DENT BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2136, 'ABC000929066', 'MMSI2136', 'IRCS2136', '{}', 'EXTIMM2136', 'NOMADE FANTÔME BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2137, 'ABC000929082', 'MMSI2137', 'IRCS2137', '{}', 'EXTIMM2137', 'NOMADE FRÉQUENCE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2138, 'ABC000929099', 'MMSI2138', 'IRCS2138', '{}', 'EXTIMM2138', 'NOMADE FÉLIN QUARANTE-TROIS BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2139, 'ABC000929119', 'MMSI2139', 'IRCS2139', '{}', 'EXTIMM2139', 'NOMADE GRANITE SOIXANTE-CINQ BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2140, 'ABC000929138', 'MMSI2140', 'IRCS2140', '{}', 'EXTIMM2140', 'NOMADE MANTA QUATRE-VINGT-DEUX BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2141, 'ABC000929251', 'MMSI2141', 'IRCS2141', '{}', 'EXTIMM2141', 'NOMADE PAQUEBOT BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2142, 'ABC000929255', 'MMSI2142', 'IRCS2142', '{}', 'EXTIMM2142', 'NOMADE RADIOPHARE SEIZE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2143, 'ABC000929272', 'MMSI2143', 'IRCS2143', '{}', 'EXTIMM2143', 'NOMADE RIVAGE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2144, 'ABC000929302', 'MMSI2144', 'IRCS2144', '{}', 'EXTIMM2144', 'NOMADE TRITON SOIXANTE-QUATRE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2145, 'ABC000929341', 'MMSI2145', 'IRCS2145', '{}', 'EXTIMM2145', 'NOMADE TYPHON SOIXANTE-QUATORZE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2146, 'ABC000929456', 'MMSI2146', 'IRCS2146', '{}', 'EXTIMM2146', 'NORDIQUE BALISE QUARANTE-TROIS BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2147, 'ABC000929496', 'MMSI2147', 'IRCS2147', '{}', 'EXTIMM2147', 'NORDIQUE CALYPSO BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2148, 'ABC000929517', 'MMSI2148', 'IRCS2148', '{}', 'EXTIMM2148', 'NORDIQUE CENTAURE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2149, 'ABC000929533', 'MMSI2149', 'IRCS2149', '{}', 'EXTIMM2149', 'NORDIQUE CHIMERA SOIXANTE-HUIT BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2150, 'ABC000929557', 'MMSI2150', 'IRCS2150', '{}', 'EXTIMM2150', 'NORDIQUE DÉRIVE SOIXANTE-ET-UN BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2151, 'ABC000929558', 'MMSI2151', 'IRCS2151', '{}', 'EXTIMM2151', 'NORDIQUE DÉRIVE SOIXANTE-QUATORZE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2152, 'ABC000929602', 'MMSI2152', 'IRCS2152', '{}', 'EXTIMM2152', 'NORDIQUE ENCRE TROIS BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2153, 'ABC000929623', 'MMSI2153', 'IRCS2153', '{}', 'EXTIMM2153', 'NORDIQUE FRÉQUENCE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2154, 'ABC000929727', 'MMSI2154', 'IRCS2154', '{}', 'EXTIMM2154', 'NORDIQUE FRÉQUENCE VINGT-CINQ BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2155, 'ABC000929771', 'MMSI2155', 'IRCS2155', '{}', 'EXTIMM2155', 'NORDIQUE GRANITE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2156, 'ABC000929785', 'MMSI2156', 'IRCS2156', '{}', 'EXTIMM2156', 'NORDIQUE GRANITE QUATRE-VINGT-CINQ BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2157, 'ABC000929810', 'MMSI2157', 'IRCS2157', '{}', 'EXTIMM2157', 'NORDIQUE MANTA BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2158, 'ABC000929902', 'MMSI2158', 'IRCS2158', '{}', 'EXTIMM2158', 'NORDIQUE MÉDUSE CINQUANTE-SIX BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2159, 'ABC000929916', 'MMSI2159', 'IRCS2159', '{}', 'EXTIMM2159', 'NORDIQUE PIRATE QUARANTE-HUIT BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2160, 'ABC000929928', 'MMSI2160', 'IRCS2160', '{}', 'EXTIMM2160', 'NORDIQUE PIRATE SOIXANTE-CINQ BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2161, 'ABC000929938', 'MMSI2161', 'IRCS2161', '{}', 'EXTIMM2161', 'NORDIQUE RIVAGE DIX-HUIT BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2162, 'ABC000929947', 'MMSI2162', 'IRCS2162', '{}', 'EXTIMM2162', 'NORDIQUE SABORDS QUATRE-VINGT-SIX BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2163, 'ABC000930021', 'MMSI2163', 'IRCS2163', '{}', 'EXTIMM2163', 'NORDIQUE SABORDS SOIXANTE-NEUF BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2164, 'ABC000930045', 'MMSI2164', 'IRCS2164', '{}', 'EXTIMM2164', 'NORDIQUE SENTINELLE SOIXANTE-HUIT BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2165, 'ABC000930081', 'MMSI2165', 'IRCS2165', '{}', 'EXTIMM2165', 'NORDIQUE SPECTRE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2166, 'ABC000930085', 'MMSI2166', 'IRCS2166', '{}', 'EXTIMM2166', 'NORDIQUE SPECTRE QUATRE-VINGT BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2167, 'ABC000930125', 'MMSI2167', 'IRCS2167', '{}', 'EXTIMM2167', 'NORDIQUE SPECTRE SOIXANTE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2168, 'ABC000930158', 'MMSI2168', 'IRCS2168', '{}', 'EXTIMM2168', 'NORDIQUE TRAITRE QUARANTE-ET-UN BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2169, 'ABC000930190', 'MMSI2169', 'IRCS2169', '{}', 'EXTIMM2169', 'NORDIQUE TRITON TROIS BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2170, 'ABC000930220', 'MMSI2170', 'IRCS2170', '{}', 'EXTIMM2170', 'NORDIQUE TYPHON BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2171, 'ABC000930264', 'MMSI2171', 'IRCS2171', '{}', 'EXTIMM2171', 'NORDIQUE VORTEX BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2172, 'ABC000930276', 'MMSI2172', 'IRCS2172', '{}', 'EXTIMM2172', 'NORDIQUE ÉQUINOXE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2173, 'ABC000930301', 'MMSI2173', 'IRCS2173', '{}', 'EXTIMM2173', 'NORDIQUE ÉTOILE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2174, 'ABC000930417', 'MMSI2174', 'IRCS2174', '{}', 'EXTIMM2174', 'NÉMÉSIS BLEU BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2175, 'ABC000930432', 'MMSI2175', 'IRCS2175', '{}', 'EXTIMM2175', 'NÉMÉSIS BRISÉE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2176, 'ABC000930461', 'MMSI2176', 'IRCS2176', '{}', 'EXTIMM2176', 'NÉMÉSIS CRYPTÉE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2177, 'ABC000930478', 'MMSI2177', 'IRCS2177', '{}', 'EXTIMM2177', 'NÉMÉSIS DOUZE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2178, 'ABC000930507', 'MMSI2178', 'IRCS2178', '{}', 'EXTIMM2178', 'NÉMÉSIS FAUSSE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2179, 'ABC000930510', 'MMSI2179', 'IRCS2179', '{}', 'EXTIMM2179', 'NÉMÉSIS IMPÉRIALE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2180, 'ABC000930552', 'MMSI2180', 'IRCS2180', '{}', 'EXTIMM2180', 'NÉMÉSIS MUET BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2181, 'ABC000930604', 'MMSI2181', 'IRCS2181', '{}', 'EXTIMM2181', 'NÉMÉSIS NOCTURNE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2182, 'ABC000930624', 'MMSI2182', 'IRCS2182', '{}', 'EXTIMM2182', 'NÉMÉSIS NORDIQUE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2183, 'ABC000930675', 'MMSI2183', 'IRCS2183', '{}', 'EXTIMM2183', 'NÉMÉSIS QUATRE-VINGT BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2184, 'ABC000930745', 'MMSI2184', 'IRCS2184', '{}', 'EXTIMM2184', 'NÉMÉSIS QUATRE-VINGT-DIX BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2185, 'ABC000930821', 'MMSI2185', 'IRCS2185', '{}', 'EXTIMM2185', 'NÉMÉSIS SOIXANTE-DIX-SEPT BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2186, 'ABC000930953', 'MMSI2186', 'IRCS2186', '{}', 'EXTIMM2186', 'NÉMÉSIS TRANSPARENT BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2187, 'ABC000931078', 'MMSI2187', 'IRCS2187', '{}', 'EXTIMM2187', 'NÉMÉSIS TRENTE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2188, 'ABC000931233', 'MMSI2188', 'IRCS2188', '{}', 'EXTIMM2188', 'NÉMÉSIS TRENTE-NEUF BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2189, 'ABC000931234', 'MMSI2189', 'IRCS2189', '{}', 'EXTIMM2189', 'NÉMÉSIS VINGT-TROIS BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2190, 'ABC000931300', 'MMSI2190', 'IRCS2190', '{}', 'EXTIMM2190', 'NÉMÉSIS VIRGINAL BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2191, 'ABC000931328', 'MMSI2191', 'IRCS2191', '{}', 'EXTIMM2191', 'NÉMÉSIS VOLONTAIRE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2192, 'ABC000931350', 'MMSI2192', 'IRCS2192', '{}', 'EXTIMM2192', 'OMBRE CALYPSO QUATRE-VINGT-SEPT BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2193, 'ABC000931352', 'MMSI2193', 'IRCS2193', '{}', 'EXTIMM2193', 'OMBRE CARGO BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2194, 'ABC000931377', 'MMSI2194', 'IRCS2194', '{}', 'EXTIMM2194', 'OMBRE CODE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2195, 'ABC000931401', 'MMSI2195', 'IRCS2195', '{}', 'EXTIMM2195', 'OMBRE DÉCODEUR BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2196, 'ABC000931467', 'MMSI2196', 'IRCS2196', '{}', 'EXTIMM2196', 'OMBRE DÉRIVE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2197, 'ABC000931735', 'MMSI2197', 'IRCS2197', '{}', 'EXTIMM2197', 'OMBRE FÉLIN QUARANTE-ET-UN BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2198, 'ABC000931741', 'MMSI2198', 'IRCS2198', '{}', 'EXTIMM2198', 'OMBRE GLISSEMENT BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2199, 'ABC000931744', 'MMSI2199', 'IRCS2199', '{}', 'EXTIMM2199', 'OMBRE GLISSEMENT SOIXANTE-QUATORZE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2200, 'ABC000931749', 'MMSI2200', 'IRCS2200', '{}', 'EXTIMM2200', 'OMBRE LAME BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2201, 'ABC000931777', 'MMSI2201', 'IRCS2201', '{}', 'EXTIMM2201', 'OMBRE NÉMÉSIS BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2202, 'ABC000931832', 'MMSI2202', 'IRCS2202', '{}', 'EXTIMM2202', 'OMBRE PAQUEBOT BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2203, 'ABC000931870', 'MMSI2203', 'IRCS2203', '{}', 'EXTIMM2203', 'OMBRE PONT CINQ BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2204, 'ABC000931911', 'MMSI2204', 'IRCS2204', '{}', 'EXTIMM2204', 'OMBRE PYLÔNE TRENTE-CINQ BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2205, 'ABC000931913', 'MMSI2205', 'IRCS2205', '{}', 'EXTIMM2205', 'OMBRE RADIOPHARE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2206, 'ABC000931933', 'MMSI2206', 'IRCS2206', '{}', 'EXTIMM2206', 'OMBRE SABORDS QUATRE-VINGT-SIX BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2207, 'ABC000931960', 'MMSI2207', 'IRCS2207', '{}', 'EXTIMM2207', 'OMBRE TRAITRE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2208, 'ABC000932067', 'MMSI2208', 'IRCS2208', '{}', 'EXTIMM2208', 'OMBRE TYPHON CINQUANTE-SIX BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2209, 'ABC000932089', 'MMSI2209', 'IRCS2209', '{}', 'EXTIMM2209', 'OMBRE TYPHON SOIXANTE-DOUZE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2210, 'ABC000932123', 'MMSI2210', 'IRCS2210', '{}', 'EXTIMM2210', 'OMBRE VORTEX BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2211, 'ABC000932176', 'MMSI2211', 'IRCS2211', '{}', 'EXTIMM2211', 'OMBRE VORTEX DEUX BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2212, 'ABC000932206', 'MMSI2212', 'IRCS2212', '{}', 'EXTIMM2212', 'OMBRE VÉRITÉ BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2213, 'ABC000932207', 'MMSI2213', 'IRCS2213', '{}', 'EXTIMM2213', 'OMBRE ÉPAVE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2214, 'ABC000932222', 'MMSI2214', 'IRCS2214', '{}', 'EXTIMM2214', 'OMBRE ÉPAVE VINGT BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2215, 'ABC000932223', 'MMSI2215', 'IRCS2215', '{}', 'EXTIMM2215', 'OPALE CENT BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2216, 'ABC000932265', 'MMSI2216', 'IRCS2216', '{}', 'EXTIMM2216', 'OPALE FLOTTANTE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2217, 'ABC000932281', 'MMSI2217', 'IRCS2217', '{}', 'EXTIMM2217', 'OPALE FRACTAL BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2218, 'ABC000932286', 'MMSI2218', 'IRCS2218', '{}', 'EXTIMM2218', 'OPALE FURTIF BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2219, 'ABC000932287', 'MMSI2219', 'IRCS2219', '{}', 'EXTIMM2219', 'OPALE INVISIBLE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2220, 'ABC000932288', 'MMSI2220', 'IRCS2220', '{}', 'EXTIMM2220', 'OPALE NOCTURNE BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2221, 'ABC000932360', 'MMSI2221', 'IRCS2221', '{}', 'EXTIMM2221', 'OPALE NOIR BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2222, 'ABC000932374', 'MMSI2222', 'IRCS2222', '{}', 'EXTIMM2222', 'OPALE NORDIQUE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2223, 'ABC000932476', 'MMSI2223', 'IRCS2223', '{}', 'EXTIMM2223', 'OPALE ONZE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2224, 'ABC000932584', 'MMSI2224', 'IRCS2224', '{}', 'EXTIMM2224', 'OPALE POURPRE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2225, 'ABC000932659', 'MMSI2225', 'IRCS2225', '{}', 'EXTIMM2225', 'OPALE QUARANTE-NEUF BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2226, 'ABC000932687', 'MMSI2226', 'IRCS2226', '{}', 'EXTIMM2226', 'OPALE ROUGE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2227, 'ABC000932688', 'MMSI2227', 'IRCS2227', '{}', 'EXTIMM2227', 'OPALE SEIZE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2228, 'ABC000932694', 'MMSI2228', 'IRCS2228', '{}', 'EXTIMM2228', 'OPALE SOIXANTE-CINQ BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2229, 'ABC000932703', 'MMSI2229', 'IRCS2229', '{}', 'EXTIMM2229', 'OPALE SOIXANTE-QUATRE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2230, 'ABC000932734', 'MMSI2230', 'IRCS2230', '{}', 'EXTIMM2230', 'OPALE SOIXANTE-SIX BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2231, 'ABC000932880', 'MMSI2231', 'IRCS2231', '{}', 'EXTIMM2231', 'OPALE SOIXANTE-TREIZE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2232, 'ABC000932904', 'MMSI2232', 'IRCS2232', '{}', 'EXTIMM2232', 'OPALE TRANSPARENT BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2233, 'ABC000932944', 'MMSI2233', 'IRCS2233', '{}', 'EXTIMM2233', 'OPALE VINGT-CINQ BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2234, 'ABC000933006', 'MMSI2234', 'IRCS2234', '{}', 'EXTIMM2234', 'OPALE VINGT-SEPT BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2235, 'ABC000933015', 'MMSI2235', 'IRCS2235', '{}', 'EXTIMM2235', 'OPALE VIRGINAL BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2236, 'ABC000933018', 'MMSI2236', 'IRCS2236', '{}', 'EXTIMM2236', 'OPALE ZÉRO BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2237, 'ABC000933042', 'MMSI2237', 'IRCS2237', '{}', 'EXTIMM2237', 'PAQUEBOT ATLANTIQUE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2238, 'ABC000933043', 'MMSI2238', 'IRCS2238', '{}', 'EXTIMM2238', 'PAQUEBOT BLEU BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2239, 'ABC000933068', 'MMSI2239', 'IRCS2239', '{}', 'EXTIMM2239', 'PAQUEBOT BORGNE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2240, 'ABC000933108', 'MMSI2240', 'IRCS2240', '{}', 'EXTIMM2240', 'PAQUEBOT DEUX BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2241, 'ABC000933180', 'MMSI2241', 'IRCS2241', '{}', 'EXTIMM2241', 'PAQUEBOT DISCRET BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2242, 'ABC000933202', 'MMSI2242', 'IRCS2242', '{}', 'EXTIMM2242', 'PAQUEBOT DOUTEUX BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2243, 'ABC000933213', 'MMSI2243', 'IRCS2243', '{}', 'EXTIMM2243', 'PAQUEBOT FAUSSE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2244, 'ABC000933277', 'MMSI2244', 'IRCS2244', '{}', 'EXTIMM2244', 'PAQUEBOT FURTIF BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2245, 'ABC000933382', 'MMSI2245', 'IRCS2245', '{}', 'EXTIMM2245', 'PAQUEBOT HUIT BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2246, 'ABC000933426', 'MMSI2246', 'IRCS2246', '{}', 'EXTIMM2246', 'PAQUEBOT NOMADE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2247, 'ABC000933427', 'MMSI2247', 'IRCS2247', '{}', 'EXTIMM2247', 'PAQUEBOT OMBRE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2248, 'ABC000933512', 'MMSI2248', 'IRCS2248', '{}', 'EXTIMM2248', 'PAQUEBOT QUATRE-VINGT-CINQ BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2249, 'ABC000933513', 'MMSI2249', 'IRCS2249', '{}', 'EXTIMM2249', 'PAQUEBOT QUATRE-VINGT-QUATORZE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2250, 'ABC000933514', 'MMSI2250', 'IRCS2250', '{}', 'EXTIMM2250', 'PAQUEBOT QUATRE-VINGT-UN BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2251, 'ABC000933515', 'MMSI2251', 'IRCS2251', '{}', 'EXTIMM2251', 'PAQUEBOT SOIXANTE-QUINZE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2252, 'ABC000933536', 'MMSI2252', 'IRCS2252', '{}', 'EXTIMM2252', 'PAQUEBOT TACTIQUE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2253, 'ABC000933537', 'MMSI2253', 'IRCS2253', '{}', 'EXTIMM2253', 'PAQUEBOT TRENTE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2254, 'ABC000933547', 'MMSI2254', 'IRCS2254', '{}', 'EXTIMM2254', 'PAQUEBOT TROIS BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2255, 'ABC000933555', 'MMSI2255', 'IRCS2255', '{}', 'EXTIMM2255', 'PASSAGÈRE BALISE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2256, 'ABC000933558', 'MMSI2256', 'IRCS2256', '{}', 'EXTIMM2256', 'PASSAGÈRE CALYPSO QUATRE-VINGT-QUATORZE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2257, 'ABC000933571', 'MMSI2257', 'IRCS2257', '{}', 'EXTIMM2257', 'PASSAGÈRE CARGO BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2258, 'ABC000933572', 'MMSI2258', 'IRCS2258', '{}', 'EXTIMM2258', 'PASSAGÈRE CHIMERA BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2259, 'ABC000933573', 'MMSI2259', 'IRCS2259', '{}', 'EXTIMM2259', 'PASSAGÈRE CROIX BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2260, 'ABC000933574', 'MMSI2260', 'IRCS2260', '{}', 'EXTIMM2260', 'PASSAGÈRE FANTÔME QUATRE-VINGT-SIX BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2261, 'ABC000933575', 'MMSI2261', 'IRCS2261', '{}', 'EXTIMM2261', 'PASSAGÈRE MÉDUSE QUARANTE-SIX BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2262, 'ABC000933632', 'MMSI2262', 'IRCS2262', '{}', 'EXTIMM2262', 'PASSAGÈRE NARVAL SOIXANTE-ET-ONZE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2263, 'ABC000933651', 'MMSI2263', 'IRCS2263', '{}', 'EXTIMM2263', 'PASSAGÈRE OPALE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2264, 'ABC000933654', 'MMSI2264', 'IRCS2264', '{}', 'EXTIMM2264', 'PASSAGÈRE PONT QUARANTE-SIX BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2265, 'ABC000933655', 'MMSI2265', 'IRCS2265', '{}', 'EXTIMM2265', 'PASSAGÈRE PONT TRENTE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2266, 'ABC000933667', 'MMSI2266', 'IRCS2266', '{}', 'EXTIMM2266', 'PASSAGÈRE PYLÔNE QUATRE-VINGT-SIX BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2267, 'ABC000933683', 'MMSI2267', 'IRCS2267', '{}', 'EXTIMM2267', 'PASSAGÈRE RIVAGE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2268, 'ABC000933731', 'MMSI2268', 'IRCS2268', '{}', 'EXTIMM2268', 'PASSAGÈRE SOUTERRAIN QUATRE-VINGT-SEIZE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2269, 'ABC000933763', 'MMSI2269', 'IRCS2269', '{}', 'EXTIMM2269', 'PASSAGÈRE SPECTRE VINGT-DEUX BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2270, 'ABC000933771', 'MMSI2270', 'IRCS2270', '{}', 'EXTIMM2270', 'PASSAGÈRE TOURMENT BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2271, 'ABC000933780', 'MMSI2271', 'IRCS2271', '{}', 'EXTIMM2271', 'PASSAGÈRE VÉRITÉ BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2272, 'ABC000933781', 'MMSI2272', 'IRCS2272', '{}', 'EXTIMM2272', 'PASSAGÈRE VÉRITÉ CINQUANTE-QUATRE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2273, 'ABC000933782', 'MMSI2273', 'IRCS2273', '{}', 'EXTIMM2273', 'PASSAGÈRE ÉQUINOXE SOIXANTE-DIX-SEPT BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2274, 'ABC000933852', 'MMSI2274', 'IRCS2274', '{}', 'EXTIMM2274', 'PHARE CINQUANTE-QUATRE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2275, 'ABC000933854', 'MMSI2275', 'IRCS2275', '{}', 'EXTIMM2275', 'PHARE CINQUANTE-TROIS BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2276, 'ABC000933859', 'MMSI2276', 'IRCS2276', '{}', 'EXTIMM2276', 'PHARE DOUTEUX BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2277, 'ABC000933871', 'MMSI2277', 'IRCS2277', '{}', 'EXTIMM2277', 'PHARE FURTIF BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2278, 'ABC000933900', 'MMSI2278', 'IRCS2278', '{}', 'EXTIMM2278', 'PHARE HUIT BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2279, 'ABC000933932', 'MMSI2279', 'IRCS2279', '{}', 'EXTIMM2279', 'PHARE INVISIBLE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2280, 'ABC000933947', 'MMSI2280', 'IRCS2280', '{}', 'EXTIMM2280', 'PHARE PASSAGÈRE BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2281, 'ABC000933997', 'MMSI2281', 'IRCS2281', '{}', 'EXTIMM2281', 'PHARE QUARANTE-SEPT BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2282, 'ABC000934001', 'MMSI2282', 'IRCS2282', '{}', 'EXTIMM2282', 'PHARE QUATRE-VINGT-DEUX BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2283, 'ABC000934015', 'MMSI2283', 'IRCS2283', '{}', 'EXTIMM2283', 'PHARE QUATRE-VINGT-DIX-HUIT BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2284, 'ABC000934024', 'MMSI2284', 'IRCS2284', '{}', 'EXTIMM2284', 'PHARE SOIXANTE-DIX BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2285, 'ABC000934030', 'MMSI2285', 'IRCS2285', '{}', 'EXTIMM2285', 'PHARE SOIXANTE-DIX-HUIT BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2286, 'ABC000934038', 'MMSI2286', 'IRCS2286', '{}', 'EXTIMM2286', 'PHARE SOURD BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2287, 'ABC000934059', 'MMSI2287', 'IRCS2287', '{}', 'EXTIMM2287', 'PHARE TRENTE-QUATRE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2288, 'ABC000934116', 'MMSI2288', 'IRCS2288', '{}', 'EXTIMM2288', 'PHARE TRENTE-SEPT BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2289, 'ABC000934142', 'MMSI2289', 'IRCS2289', '{}', 'EXTIMM2289', 'PHARE VINGT-SEPT BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2290, 'ABC000934185', 'MMSI2290', 'IRCS2290', '{}', 'EXTIMM2290', 'PHARE ZÉRO BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2291, 'ABC000934186', 'MMSI2291', 'IRCS2291', '{}', 'EXTIMM2291', 'PHARE ÉGARÉ BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2292, 'ABC000934191', 'MMSI2292', 'IRCS2292', '{}', 'EXTIMM2292', 'PIRATE CRYPTÉE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2293, 'ABC000934193', 'MMSI2293', 'IRCS2293', '{}', 'EXTIMM2293', 'PIRATE DOUTEUX BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2294, 'ABC000934199', 'MMSI2294', 'IRCS2294', '{}', 'EXTIMM2294', 'PIRATE FLOTTANTE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2295, 'ABC000934216', 'MMSI2295', 'IRCS2295', '{}', 'EXTIMM2295', 'PIRATE FURTIF BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2296, 'ABC000934217', 'MMSI2296', 'IRCS2296', '{}', 'EXTIMM2296', 'PIRATE NOMADE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2297, 'ABC000934244', 'MMSI2297', 'IRCS2297', '{}', 'EXTIMM2297', 'PIRATE ONZE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2298, 'ABC000934245', 'MMSI2298', 'IRCS2298', '{}', 'EXTIMM2298', 'PIRATE PASSAGÈRE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2299, 'ABC000934246', 'MMSI2299', 'IRCS2299', '{}', 'EXTIMM2299', 'PIRATE QUARANTE-ET-UN BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2300, 'ABC000934247', 'MMSI2300', 'IRCS2300', '{}', 'EXTIMM2300', 'PIRATE QUARANTE-HUIT BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2301, 'ABC000934251', 'MMSI2301', 'IRCS2301', '{}', 'EXTIMM2301', 'PIRATE QUARANTE-SEPT BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2302, 'ABC000934264', 'MMSI2302', 'IRCS2302', '{}', 'EXTIMM2302', 'PIRATE QUATRE-VINGT-DIX-NEUF BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2303, 'ABC000934368', 'MMSI2303', 'IRCS2303', '{}', 'EXTIMM2303', 'PIRATE QUATRE-VINGT-QUATRE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2304, 'ABC000934378', 'MMSI2304', 'IRCS2304', '{}', 'EXTIMM2304', 'PIRATE QUINZE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2305, 'ABC000934379', 'MMSI2305', 'IRCS2305', '{}', 'EXTIMM2305', 'PIRATE SOIXANTE-ET-ONZE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2306, 'ABC000934438', 'MMSI2306', 'IRCS2306', '{}', 'EXTIMM2306', 'PIRATE SOIXANTE-QUATORZE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2307, 'ABC000934451', 'MMSI2307', 'IRCS2307', '{}', 'EXTIMM2307', 'PIRATE SOURD BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2308, 'ABC000934460', 'MMSI2308', 'IRCS2308', '{}', 'EXTIMM2308', 'PIRATE TRENTE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2309, 'ABC000934461', 'MMSI2309', 'IRCS2309', '{}', 'EXTIMM2309', 'PIRATE TRENTE-CINQ BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2310, 'ABC000934463', 'MMSI2310', 'IRCS2310', '{}', 'EXTIMM2310', 'PIRATE VINGT-TROIS BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2311, 'ABC000934464', 'MMSI2311', 'IRCS2311', '{}', 'EXTIMM2311', 'PIRATE VOLONTAIRE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2312, 'ABC000934514', 'MMSI2312', 'IRCS2312', '{}', 'EXTIMM2312', 'PIRATE ZÉRO BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2313, 'ABC000934538', 'MMSI2313', 'IRCS2313', '{}', 'EXTIMM2313', 'PONT BLEU BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2314, 'ABC000934541', 'MMSI2314', 'IRCS2314', '{}', 'EXTIMM2314', 'PONT CINQUANTE-DEUX BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2315, 'ABC000934544', 'MMSI2315', 'IRCS2315', '{}', 'EXTIMM2315', 'PONT CINQUANTE-TROIS BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2316, 'ABC000934581', 'MMSI2316', 'IRCS2316', '{}', 'EXTIMM2316', 'PONT DOUTEUX BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2317, 'ABC000934603', 'MMSI2317', 'IRCS2317', '{}', 'EXTIMM2317', 'PONT FURTIF BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2318, 'ABC000934611', 'MMSI2318', 'IRCS2318', '{}', 'EXTIMM2318', 'PONT FURTIVE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2319, 'ABC000934685', 'MMSI2319', 'IRCS2319', '{}', 'EXTIMM2319', 'PONT HUIT BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2320, 'ABC000934686', 'MMSI2320', 'IRCS2320', '{}', 'EXTIMM2320', 'PONT NORDIQUE BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2321, 'ABC000934688', 'MMSI2321', 'IRCS2321', '{}', 'EXTIMM2321', 'PONT QUATRE-VINGT-NEUF BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2322, 'ABC000934729', 'MMSI2322', 'IRCS2322', '{}', 'EXTIMM2322', 'PONT SEPT BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2323, 'ABC000934730', 'MMSI2323', 'IRCS2323', '{}', 'EXTIMM2323', 'PONT SOIXANTE-ET-UN BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2324, 'ABC000934776', 'MMSI2324', 'IRCS2324', '{}', 'EXTIMM2324', 'PONT SOURD BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2325, 'ABC000934786', 'MMSI2325', 'IRCS2325', '{}', 'EXTIMM2325', 'PONT SÉRIEUSE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2326, 'ABC000934792', 'MMSI2326', 'IRCS2326', '{}', 'EXTIMM2326', 'PONT VOLONTAIRE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2327, 'ABC000934835', 'MMSI2327', 'IRCS2327', '{}', 'EXTIMM2327', 'PONT ZÉRO BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2328, 'ABC000934836', 'MMSI2328', 'IRCS2328', '{}', 'EXTIMM2328', 'POURPRE CALYPSO QUATRE-VINGT-TREIZE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2329, 'ABC000934837', 'MMSI2329', 'IRCS2329', '{}', 'EXTIMM2329', 'POURPRE CENTAURE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2330, 'ABC000934868', 'MMSI2330', 'IRCS2330', '{}', 'EXTIMM2330', 'POURPRE CHIMERA BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2331, 'ABC000934869', 'MMSI2331', 'IRCS2331', '{}', 'EXTIMM2331', 'POURPRE CODE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2332, 'ABC000934870', 'MMSI2332', 'IRCS2332', '{}', 'EXTIMM2332', 'POURPRE DRAGON BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2333, 'ABC000934891', 'MMSI2333', 'IRCS2333', '{}', 'EXTIMM2333', 'POURPRE FRÉQUENCE CINQUANTE-HUIT BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2334, 'ABC000934904', 'MMSI2334', 'IRCS2334', '{}', 'EXTIMM2334', 'POURPRE FÉLIN BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2335, 'ABC000934925', 'MMSI2335', 'IRCS2335', '{}', 'EXTIMM2335', 'POURPRE GLISSEMENT BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2336, 'ABC000934927', 'MMSI2336', 'IRCS2336', '{}', 'EXTIMM2336', 'POURPRE GRANITE SOIXANTE-DOUZE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2337, 'ABC000934932', 'MMSI2337', 'IRCS2337', '{}', 'EXTIMM2337', 'POURPRE LAME QUATRE-VINGT-HUIT BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2338, 'ABC000934935', 'MMSI2338', 'IRCS2338', '{}', 'EXTIMM2338', 'POURPRE LAME TRENTE-DEUX BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2339, 'ABC000934958', 'MMSI2339', 'IRCS2339', '{}', 'EXTIMM2339', 'POURPRE MANTA HUIT BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2340, 'ABC000934964', 'MMSI2340', 'IRCS2340', '{}', 'EXTIMM2340', 'POURPRE MODULE TROIS BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2341, 'ABC000934965', 'MMSI2341', 'IRCS2341', '{}', 'EXTIMM2341', 'POURPRE MÉDUSE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2342, 'ABC000934976', 'MMSI2342', 'IRCS2342', '{}', 'EXTIMM2342', 'POURPRE NÉMÉSIS QUATRE-VINGT-DIX-NEUF BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2343, 'ABC000934983', 'MMSI2343', 'IRCS2343', '{}', 'EXTIMM2343', 'POURPRE RAPACE SOIXANTE-SEIZE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2344, 'ABC000935045', 'MMSI2344', 'IRCS2344', '{}', 'EXTIMM2344', 'POURPRE RAPACE TRENTE-HUIT BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2345, 'ABC000935046', 'MMSI2345', 'IRCS2345', '{}', 'EXTIMM2345', 'POURPRE RIVAGE QUATRE-VINGT-SEIZE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2346, 'ABC000935047', 'MMSI2346', 'IRCS2346', '{}', 'EXTIMM2346', 'POURPRE SABORDS VINGT-TROIS BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2347, 'ABC000935057', 'MMSI2347', 'IRCS2347', '{}', 'EXTIMM2347', 'POURPRE SPECTRE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2348, 'ABC000935059', 'MMSI2348', 'IRCS2348', '{}', 'EXTIMM2348', 'POURPRE SPECTRE SOIXANTE-HUIT BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2349, 'ABC000935060', 'MMSI2349', 'IRCS2349', '{}', 'EXTIMM2349', 'POURPRE TRAITRE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2350, 'ABC000935061', 'MMSI2350', 'IRCS2350', '{}', 'EXTIMM2350', 'POURPRE TRAITRE TRENTE-SIX BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2351, 'ABC000935062', 'MMSI2351', 'IRCS2351', '{}', 'EXTIMM2351', 'POURPRE TYPHON SOIXANTE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2352, 'ABC000935068', 'MMSI2352', 'IRCS2352', '{}', 'EXTIMM2352', 'POURPRE VÉRITÉ VINGT-SIX BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2353, 'ABC000935087', 'MMSI2353', 'IRCS2353', '{}', 'EXTIMM2353', 'POURPRE ÉQUINOXE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2354, 'ABC000935093', 'MMSI2354', 'IRCS2354', '{}', 'EXTIMM2354', 'PYLÔNE BRISÉE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2355, 'ABC000935134', 'MMSI2355', 'IRCS2355', '{}', 'EXTIMM2355', 'PYLÔNE CINQUANTE-TROIS BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2356, 'ABC000935157', 'MMSI2356', 'IRCS2356', '{}', 'EXTIMM2356', 'PYLÔNE CRYPTÉE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2357, 'ABC000935161', 'MMSI2357', 'IRCS2357', '{}', 'EXTIMM2357', 'PYLÔNE DIX-NEUF BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2358, 'ABC000935163', 'MMSI2358', 'IRCS2358', '{}', 'EXTIMM2358', 'PYLÔNE FAUSSE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2359, 'ABC000935176', 'MMSI2359', 'IRCS2359', '{}', 'EXTIMM2359', 'PYLÔNE NOIR BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2360, 'ABC000935210', 'MMSI2360', 'IRCS2360', '{}', 'EXTIMM2360', 'PYLÔNE QUARANTE-ET-UN BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2361, 'ABC000935224', 'MMSI2361', 'IRCS2361', '{}', 'EXTIMM2361', 'PYLÔNE SOIXANTE-ET-ONZE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2362, 'ABC000935288', 'MMSI2362', 'IRCS2362', '{}', 'EXTIMM2362', 'PYLÔNE SÉRIEUSE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2363, 'ABC000935357', 'MMSI2363', 'IRCS2363', '{}', 'EXTIMM2363', 'PYLÔNE TACTIQUE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2364, 'ABC000935360', 'MMSI2364', 'IRCS2364', '{}', 'EXTIMM2364', 'PYLÔNE TRANSPARENT BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2365, 'ABC000935371', 'MMSI2365', 'IRCS2365', '{}', 'EXTIMM2365', 'PYLÔNE VERTICALE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2366, 'ABC000935374', 'MMSI2366', 'IRCS2366', '{}', 'EXTIMM2366', 'PYLÔNE VIRGINAL BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2367, 'ABC000935404', 'MMSI2367', 'IRCS2367', '{}', 'EXTIMM2367', 'RADIOPHARE BLEU BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2368, 'ABC000935413', 'MMSI2368', 'IRCS2368', '{}', 'EXTIMM2368', 'RADIOPHARE CACHÉE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2369, 'ABC000935435', 'MMSI2369', 'IRCS2369', '{}', 'EXTIMM2369', 'RADIOPHARE CRYPTÉE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2370, 'ABC000935441', 'MMSI2370', 'IRCS2370', '{}', 'EXTIMM2370', 'RADIOPHARE NEUF BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2371, 'ABC000935457', 'MMSI2371', 'IRCS2371', '{}', 'EXTIMM2371', 'RADIOPHARE NOCTURNE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2372, 'ABC000935467', 'MMSI2372', 'IRCS2372', '{}', 'EXTIMM2372', 'RADIOPHARE PASSAGÈRE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2373, 'ABC000935470', 'MMSI2373', 'IRCS2373', '{}', 'EXTIMM2373', 'RADIOPHARE QUARANTE-DEUX BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2374, 'ABC000935508', 'MMSI2374', 'IRCS2374', '{}', 'EXTIMM2374', 'RADIOPHARE QUARANTE-NEUF BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2375, 'ABC000935554', 'MMSI2375', 'IRCS2375', '{}', 'EXTIMM2375', 'RADIOPHARE QUARANTE-TROIS BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2376, 'ABC000935612', 'MMSI2376', 'IRCS2376', '{}', 'EXTIMM2376', 'RADIOPHARE SOIXANTE-DIX BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2377, 'ABC000935646', 'MMSI2377', 'IRCS2377', '{}', 'EXTIMM2377', 'RADIOPHARE UN BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2378, 'ABC000935656', 'MMSI2378', 'IRCS2378', '{}', 'EXTIMM2378', 'RADIOPHARE VINGT-CINQ BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2379, 'ABC000935676', 'MMSI2379', 'IRCS2379', '{}', 'EXTIMM2379', 'RADIOPHARE VIRGINAL BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2380, 'ABC000935720', 'MMSI2380', 'IRCS2380', '{}', 'EXTIMM2380', 'RADIOPHARE ZÉRO BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2381, 'ABC000935751', 'MMSI2381', 'IRCS2381', '{}', 'EXTIMM2381', 'RAPACE BLEU BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2382, 'ABC000935763', 'MMSI2382', 'IRCS2382', '{}', 'EXTIMM2382', 'RAPACE BORGNE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2383, 'ABC000935771', 'MMSI2383', 'IRCS2383', '{}', 'EXTIMM2383', 'RAPACE CALME BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2384, 'ABC000935802', 'MMSI2384', 'IRCS2384', '{}', 'EXTIMM2384', 'RAPACE CINQUANTE-CINQ BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2385, 'ABC000935823', 'MMSI2385', 'IRCS2385', '{}', 'EXTIMM2385', 'RAPACE CINQUANTE-NEUF BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2386, 'ABC000935863', 'MMSI2386', 'IRCS2386', '{}', 'EXTIMM2386', 'RAPACE CINQUANTE-SEPT BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2387, 'ABC000935864', 'MMSI2387', 'IRCS2387', '{}', 'EXTIMM2387', 'RAPACE CINQUANTE-SIX BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2388, 'ABC000935870', 'MMSI2388', 'IRCS2388', '{}', 'EXTIMM2388', 'RAPACE DOUTEUX BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2389, 'ABC000935903', 'MMSI2389', 'IRCS2389', '{}', 'EXTIMM2389', 'RAPACE FLOTTANTE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2390, 'ABC000935909', 'MMSI2390', 'IRCS2390', '{}', 'EXTIMM2390', 'RAPACE FRACTAL BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2391, 'ABC000935969', 'MMSI2391', 'IRCS2391', '{}', 'EXTIMM2391', 'RAPACE HUIT BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2392, 'ABC000935972', 'MMSI2392', 'IRCS2392', '{}', 'EXTIMM2392', 'RAPACE IMPÉRIALE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2393, 'ABC000935992', 'MMSI2393', 'IRCS2393', '{}', 'EXTIMM2393', 'RAPACE NOCTURNE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2394, 'ABC000936017', 'MMSI2394', 'IRCS2394', '{}', 'EXTIMM2394', 'RAPACE NORDIQUE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2395, 'ABC000936029', 'MMSI2395', 'IRCS2395', '{}', 'EXTIMM2395', 'RAPACE QUATRE-VINGT-DOUZE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2396, 'ABC000936048', 'MMSI2396', 'IRCS2396', '{}', 'EXTIMM2396', 'RAPACE SOIXANTE-DOUZE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2397, 'ABC000936055', 'MMSI2397', 'IRCS2397', '{}', 'EXTIMM2397', 'RAPACE SOIXANTE-QUINZE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2398, 'ABC000936058', 'MMSI2398', 'IRCS2398', '{}', 'EXTIMM2398', 'RAPACE SOIXANTE-TROIS BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2399, 'ABC000936064', 'MMSI2399', 'IRCS2399', '{}', 'EXTIMM2399', 'RAPACE SOURD BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2400, 'ABC000936065', 'MMSI2400', 'IRCS2400', '{}', 'EXTIMM2400', 'RIVAGE BLEU BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2401, 'ABC000936072', 'MMSI2401', 'IRCS2401', '{}', 'EXTIMM2401', 'RIVAGE CINQUANTE-QUATRE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2402, 'ABC000936080', 'MMSI2402', 'IRCS2402', '{}', 'EXTIMM2402', 'RIVAGE FURTIVE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2403, 'ABC000936106', 'MMSI2403', 'IRCS2403', '{}', 'EXTIMM2403', 'RIVAGE IMPÉRIALE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2404, 'ABC000936145', 'MMSI2404', 'IRCS2404', '{}', 'EXTIMM2404', 'RIVAGE MUET BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2405, 'ABC000936152', 'MMSI2405', 'IRCS2405', '{}', 'EXTIMM2405', 'RIVAGE NORDIQUE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2406, 'ABC000936171', 'MMSI2406', 'IRCS2406', '{}', 'EXTIMM2406', 'RIVAGE QUARANTE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2407, 'ABC000936175', 'MMSI2407', 'IRCS2407', '{}', 'EXTIMM2407', 'RIVAGE QUARANTE-HUIT BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2408, 'ABC000936192', 'MMSI2408', 'IRCS2408', '{}', 'EXTIMM2408', 'RIVAGE QUARANTE-SEPT BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2409, 'ABC000936214', 'MMSI2409', 'IRCS2409', '{}', 'EXTIMM2409', 'RIVAGE QUATRE-VINGT-DOUZE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2410, 'ABC000936234', 'MMSI2410', 'IRCS2410', '{}', 'EXTIMM2410', 'RIVAGE QUATRE-VINGT-SEPT BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2411, 'ABC000936257', 'MMSI2411', 'IRCS2411', '{}', 'EXTIMM2411', 'RIVAGE SILENCIEUX BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2412, 'ABC000936258', 'MMSI2412', 'IRCS2412', '{}', 'EXTIMM2412', 'RIVAGE SOIXANTE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2413, 'ABC000936264', 'MMSI2413', 'IRCS2413', '{}', 'EXTIMM2413', 'RIVAGE SOIXANTE-QUATRE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2414, 'ABC000936270', 'MMSI2414', 'IRCS2414', '{}', 'EXTIMM2414', 'RIVAGE SOIXANTE-QUINZE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2415, 'ABC000936304', 'MMSI2415', 'IRCS2415', '{}', 'EXTIMM2415', 'RIVAGE SOIXANTE-SEIZE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2416, 'ABC000936324', 'MMSI2416', 'IRCS2416', '{}', 'EXTIMM2416', 'RIVAGE SOIXANTE-SEPT BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2417, 'ABC000936327', 'MMSI2417', 'IRCS2417', '{}', 'EXTIMM2417', 'RIVAGE SOIXANTE-TREIZE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2418, 'ABC000936330', 'MMSI2418', 'IRCS2418', '{}', 'EXTIMM2418', 'RIVAGE SOURD BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2419, 'ABC000936335', 'MMSI2419', 'IRCS2419', '{}', 'EXTIMM2419', 'RIVAGE VINGT-TROIS BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2420, 'ABC000936336', 'MMSI2420', 'IRCS2420', '{}', 'EXTIMM2420', 'ROUGE ALBATROS UN BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2421, 'ABC000936612', 'MMSI2421', 'IRCS2421', '{}', 'EXTIMM2421', 'ROUGE CALYPSO BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2422, 'ABC000936639', 'MMSI2422', 'IRCS2422', '{}', 'EXTIMM2422', 'ROUGE CARGO DIX-HUIT BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2423, 'ABC000936704', 'MMSI2423', 'IRCS2423', '{}', 'EXTIMM2423', 'ROUGE CARGO QUARANTE-HUIT BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2424, 'ABC000936841', 'MMSI2424', 'IRCS2424', '{}', 'EXTIMM2424', 'ROUGE CARGO VINGT-NEUF BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2425, 'ABC000936853', 'MMSI2425', 'IRCS2425', '{}', 'EXTIMM2425', 'ROUGE CHIMERA TRENTE-QUATRE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2426, 'ABC000936881', 'MMSI2426', 'IRCS2426', '{}', 'EXTIMM2426', 'ROUGE CROIX BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2427, 'ABC000936907', 'MMSI2427', 'IRCS2427', '{}', 'EXTIMM2427', 'ROUGE DÉCODEUR TRENTE-SIX BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2428, 'ABC000936966', 'MMSI2428', 'IRCS2428', '{}', 'EXTIMM2428', 'ROUGE DÉCODEUR VINGT-DEUX BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2429, 'ABC000936967', 'MMSI2429', 'IRCS2429', '{}', 'EXTIMM2429', 'ROUGE GLISSEMENT BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2430, 'ABC000936972', 'MMSI2430', 'IRCS2430', '{}', 'EXTIMM2430', 'ROUGE MANTA BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2431, 'ABC000937102', 'MMSI2431', 'IRCS2431', '{}', 'EXTIMM2431', 'ROUGE NÉMÉSIS QUINZE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2432, 'ABC000937111', 'MMSI2432', 'IRCS2432', '{}', 'EXTIMM2432', 'ROUGE PHARE SOIXANTE-DOUZE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2433, 'ABC000937114', 'MMSI2433', 'IRCS2433', '{}', 'EXTIMM2433', 'ROUGE RADIOPHARE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2434, 'ABC000937229', 'MMSI2434', 'IRCS2434', '{}', 'EXTIMM2434', 'ROUGE SABORDS CINQ BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2435, 'ABC000937230', 'MMSI2435', 'IRCS2435', '{}', 'EXTIMM2435', 'ROUGE SENTINELLE SOIXANTE-ET-ONZE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2436, 'ABC000937245', 'MMSI2436', 'IRCS2436', '{}', 'EXTIMM2436', 'ROUGE SOUTERRAIN QUATRE-VINGT-DIX-NEUF BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2437, 'ABC000937260', 'MMSI2437', 'IRCS2437', '{}', 'EXTIMM2437', 'ROUGE SPECTRE SEPT BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2438, 'ABC000937325', 'MMSI2438', 'IRCS2438', '{}', 'EXTIMM2438', 'ROUGE TOURMENT BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2439, 'ABC000937374', 'MMSI2439', 'IRCS2439', '{}', 'EXTIMM2439', 'ROUGE TRAITRE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2440, 'ABC000937382', 'MMSI2440', 'IRCS2440', '{}', 'EXTIMM2440', 'ROUGE VÉRITÉ BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2441, 'ABC000937452', 'MMSI2441', 'IRCS2441', '{}', 'EXTIMM2441', 'ROUGE ÉPAVE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2442, 'ABC000937504', 'MMSI2442', 'IRCS2442', '{}', 'EXTIMM2442', 'ROUGE ÉQUINOXE SOIXANTE-DEUX BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2443, 'ABC000937509', 'MMSI2443', 'IRCS2443', '{}', 'EXTIMM2443', 'SABORDS CACHÉE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2444, 'ABC000937536', 'MMSI2444', 'IRCS2444', '{}', 'EXTIMM2444', 'SABORDS CALME BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2445, 'ABC000937541', 'MMSI2445', 'IRCS2445', '{}', 'EXTIMM2445', 'SABORDS DIX-SEPT BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2446, 'ABC000937550', 'MMSI2446', 'IRCS2446', '{}', 'EXTIMM2446', 'SABORDS FAUSSE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2447, 'ABC000937570', 'MMSI2447', 'IRCS2447', '{}', 'EXTIMM2447', 'SABORDS INVISIBLE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2448, 'ABC000937609', 'MMSI2448', 'IRCS2448', '{}', 'EXTIMM2448', 'SABORDS NORDIQUE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2449, 'ABC000937617', 'MMSI2449', 'IRCS2449', '{}', 'EXTIMM2449', 'SABORDS QUARANTE-CINQ BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2450, 'ABC000937650', 'MMSI2450', 'IRCS2450', '{}', 'EXTIMM2450', 'SABORDS QUATRE-VINGT-DIX BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2451, 'ABC000937658', 'MMSI2451', 'IRCS2451', '{}', 'EXTIMM2451', 'SABORDS SOIXANTE-DEUX BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2452, 'ABC000937740', 'MMSI2452', 'IRCS2452', '{}', 'EXTIMM2452', 'SABORDS SOIXANTE-SEIZE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2453, 'ABC000937806', 'MMSI2453', 'IRCS2453', '{}', 'EXTIMM2453', 'SABORDS SOIXANTE-TROIS BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2454, 'ABC000937848', 'MMSI2454', 'IRCS2454', '{}', 'EXTIMM2454', 'SABORDS VINGT-QUATRE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2455, 'ABC000938008', 'MMSI2455', 'IRCS2455', '{}', 'EXTIMM2455', 'SENTINELLE ATLANTIQUE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2456, 'ABC000938042', 'MMSI2456', 'IRCS2456', '{}', 'EXTIMM2456', 'SENTINELLE BRISÉE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2457, 'ABC000938043', 'MMSI2457', 'IRCS2457', '{}', 'EXTIMM2457', 'SENTINELLE FURTIF BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2458, 'ABC000938089', 'MMSI2458', 'IRCS2458', '{}', 'EXTIMM2458', 'SENTINELLE FURTIVE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2459, 'ABC000938092', 'MMSI2459', 'IRCS2459', '{}', 'EXTIMM2459', 'SENTINELLE INUTILE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2460, 'ABC000938124', 'MMSI2460', 'IRCS2460', '{}', 'EXTIMM2460', 'SENTINELLE JAUNE BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2461, 'ABC000938214', 'MMSI2461', 'IRCS2461', '{}', 'EXTIMM2461', 'SENTINELLE NOMADE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2462, 'ABC000938251', 'MMSI2462', 'IRCS2462', '{}', 'EXTIMM2462', 'SENTINELLE QUARANTE-HUIT BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2463, 'ABC000938363', 'MMSI2463', 'IRCS2463', '{}', 'EXTIMM2463', 'SENTINELLE QUARANTE-SEPT BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2464, 'ABC000938397', 'MMSI2464', 'IRCS2464', '{}', 'EXTIMM2464', 'SENTINELLE QUATRE-VINGT-QUINZE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2465, 'ABC000938419', 'MMSI2465', 'IRCS2465', '{}', 'EXTIMM2465', 'SENTINELLE QUATRE-VINGT-SIX BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2466, 'ABC000938452', 'MMSI2466', 'IRCS2466', '{}', 'EXTIMM2466', 'SENTINELLE QUATRE-VINGT-TROIS BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2467, 'ABC000938489', 'MMSI2467', 'IRCS2467', '{}', 'EXTIMM2467', 'SENTINELLE SOIXANTE-DIX-NEUF BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2468, 'ABC000938508', 'MMSI2468', 'IRCS2468', '{}', 'EXTIMM2468', 'SENTINELLE SÉRIEUSE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2469, 'ABC000938530', 'MMSI2469', 'IRCS2469', '{}', 'EXTIMM2469', 'SENTINELLE TACTIQUE BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2470, 'ABC000938538', 'MMSI2470', 'IRCS2470', '{}', 'EXTIMM2470', 'SENTINELLE TRANSPARENT BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2471, 'ABC000938558', 'MMSI2471', 'IRCS2471', '{}', 'EXTIMM2471', 'SENTINELLE TRENTE-CINQ BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2472, 'ABC000938594', 'MMSI2472', 'IRCS2472', '{}', 'EXTIMM2472', 'SENTINELLE VINGT-ET-UN BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2473, 'ABC000938609', 'MMSI2473', 'IRCS2473', '{}', 'EXTIMM2473', 'SENTINELLE VOLONTAIRE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2474, 'ABC000938636', 'MMSI2474', 'IRCS2474', '{}', 'EXTIMM2474', 'SENTINELLE ÉGARÉ BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2475, 'ABC000938787', 'MMSI2475', 'IRCS2475', '{}', 'EXTIMM2475', 'SILENCIEUX AIGLE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2476, 'ABC000938820', 'MMSI2476', 'IRCS2476', '{}', 'EXTIMM2476', 'SILENCIEUX ALBATROS BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2477, 'ABC000938823', 'MMSI2477', 'IRCS2477', '{}', 'EXTIMM2477', 'SILENCIEUX BALISE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2478, 'ABC000939027', 'MMSI2478', 'IRCS2478', '{}', 'EXTIMM2478', 'SILENCIEUX BRUME DIX-SEPT BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2479, 'ABC000939168', 'MMSI2479', 'IRCS2479', '{}', 'EXTIMM2479', 'SILENCIEUX CARGO BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2480, 'ABC000939176', 'MMSI2480', 'IRCS2480', '{}', 'EXTIMM2480', 'SILENCIEUX CENTAURE TRENTE-SIX BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2481, 'ABC000939183', 'MMSI2481', 'IRCS2481', '{}', 'EXTIMM2481', 'SILENCIEUX CHIMERA QUARANTE-SEPT BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2482, 'ABC000939185', 'MMSI2482', 'IRCS2482', '{}', 'EXTIMM2482', 'SILENCIEUX CROIX CINQUANTE-SIX BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2483, 'ABC000939320', 'MMSI2483', 'IRCS2483', '{}', 'EXTIMM2483', 'SILENCIEUX DÉCODEUR BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2484, 'ABC000939415', 'MMSI2484', 'IRCS2484', '{}', 'EXTIMM2484', 'SILENCIEUX DÉRIVE QUATRE-VINGT-QUATRE BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2485, 'ABC000939421', 'MMSI2485', 'IRCS2485', '{}', 'EXTIMM2485', 'SILENCIEUX ENCRE BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2486, 'ABC000939466', 'MMSI2486', 'IRCS2486', '{}', 'EXTIMM2486', 'SILENCIEUX FANTÔME ONZE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2487, 'ABC000A14820', 'MMSI2487', 'IRCS2487', '{}', 'EXTIMM2487', 'SILENCIEUX GRANITE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2488, 'ABC000A20243', 'MMSI2488', 'IRCS2488', '{}', 'EXTIMM2488', 'SILENCIEUX HÉRÉSIE BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2489, 'ABC000B10066', 'MMSI2489', 'IRCS2489', '{}', 'EXTIMM2489', 'SILENCIEUX LAME BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2490, 'ABC000B10560', 'MMSI2490', 'IRCS2490', '{}', 'EXTIMM2490', 'SILENCIEUX MANTA BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2491, 'ABC000B11930', 'MMSI2491', 'IRCS2491', '{}', 'EXTIMM2491', 'SILENCIEUX NÉMÉSIS TREIZE BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2492, 'ABC000B12744', 'MMSI2492', 'IRCS2492', '{}', 'EXTIMM2492', 'SILENCIEUX NÉMÉSIS VINGT BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2493, 'ABC000B13488', 'MMSI2493', 'IRCS2493', '{}', 'EXTIMM2493', 'SILENCIEUX OPALE SOIXANTE-ET-ONZE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2494, 'ABC000B13544', 'MMSI2494', 'IRCS2494', '{}', 'EXTIMM2494', 'SILENCIEUX PAQUEBOT BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2495, 'ABC000B13756', 'MMSI2495', 'IRCS2495', '{}', 'EXTIMM2495', 'SILENCIEUX PONT BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2496, 'ABC000B13827', 'MMSI2496', 'IRCS2496', '{}', 'EXTIMM2496', 'SILENCIEUX RADIOPHARE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2497, 'ABC000C16559', 'MMSI2497', 'IRCS2497', '{}', 'EXTIMM2497', 'SILENCIEUX RADIOPHARE VINGT-DEUX BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2498, 'ABC000C17098', 'MMSI2498', 'IRCS2498', '{}', 'EXTIMM2498', 'SILENCIEUX RAPACE QUATRE-VINGT BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2499, 'ABC000C17445', 'MMSI2499', 'IRCS2499', '{}', 'EXTIMM2499', 'SILENCIEUX SABORDS BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2500, 'ABC000C18804', 'MMSI2500', 'IRCS2500', '{}', 'EXTIMM2500', 'SILENCIEUX SABORDS SEIZE BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2501, 'ABC000C20283', 'MMSI2501', 'IRCS2501', '{}', 'EXTIMM2501', 'SILENCIEUX SENTINELLE VINGT-SIX BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2502, 'ABC000C20969', 'MMSI2502', 'IRCS2502', '{}', 'EXTIMM2502', 'SILENCIEUX TOURMENT NEUF BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2503, 'ABC000C21269', 'MMSI2503', 'IRCS2503', '{}', 'EXTIMM2503', 'SILENCIEUX TRAITRE BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2504, 'ABC000114359', 'MMSI2504', 'IRCS2504', '{}', 'EXTIMM2504', 'SILENCIEUX VÉRITÉ BREIZH', 'FR', 19, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2505, 'ABC000I11722', 'MMSI2505', 'IRCS2505', '{}', 'EXTIMM2505', 'SILENCIEUX ÉPAVE VINGT-CINQ BREIZH', 'FR', 20, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2506, 'ABC000I12515', 'MMSI2506', 'IRCS2506', '{}', 'EXTIMM2506', 'SILENCIEUX ÉQUINOXE BREIZH', 'FR', 21, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2507, 'ABC000I15872', 'MMSI2507', 'IRCS2507', '{}', 'EXTIMM2507', 'SILENCIEUX ÉTOILE BREIZH', 'FR', 22, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2508, 'ABC000I15925', 'MMSI2508', 'IRCS2508', '{}', 'EXTIMM2508', 'SILENCIEUX ÉTOILE TRENTE-CINQ BREIZH', 'FR', 23, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2509, 'ABC196700682', 'MMSI2509', 'IRCS2509', '{}', 'EXTIMM2509', 'SOURD BALISE SOIXANTE-CINQ BREIZH', 'FR', 24, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2510, 'ABC198000455', 'MMSI2510', 'IRCS2510', '{}', 'EXTIMM2510', 'SOURD CROIX SOIXANTE-ET-UN BREIZH', 'FR', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2511, 'ABC198300393', 'MMSI2511', 'IRCS2511', '{}', 'EXTIMM2511', 'SOURD FANTÔME QUARANTE-SEPT BREIZH', 'FR', 16, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2512, 'ABC198700088', 'MMSI2512', 'IRCS2512', '{}', 'EXTIMM2512', 'SOURD FÉLIN QUINZE BREIZH', 'FR', 17, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2513, 'ABC199001204', 'MMSI2513', 'IRCS2513', '{}', 'EXTIMM2513', 'SOURD NARVAL BREIZH', 'FR', 18, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (2514, 'ABC199001509', 'MMSI2514', 'IRCS2514', '{}', 'EXTIMM2514', 'SOURD NARVAL QUATRE BREIZH', 'FR', 19, false);

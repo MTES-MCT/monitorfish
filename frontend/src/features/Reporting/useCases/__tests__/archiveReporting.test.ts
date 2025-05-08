@@ -1,7 +1,7 @@
 import { PendingAlertValueType } from '@features/Alert/types'
 import { fortyHeightHourAlertReporting } from '@features/Reporting/useCases/__tests__/__mocks__/dummyReporting'
 import { archiveReporting } from '@features/Reporting/useCases/archiveReporting'
-import { Vessel } from '@features/Vessel/Vessel.types'
+import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { describe, it, expect, afterAll } from '@jest/globals'
 import { mockedDispatch } from '@store/__tests__/utils'
 
@@ -37,7 +37,7 @@ describe('archiveReporting()', () => {
         flagState: '',
         internalReferenceNumber: '',
         vesselId: 1234568,
-        vesselIdentifier: Vessel.VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+        vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
         vesselName: ''
       }
     }

@@ -1,6 +1,6 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
-import { showVesselsLastPosition } from '@features/Vessel/useCases/showVesselsLastPosition'
+import { saveActiveVesselsAndDisplayLastPositions } from '@features/Vessel/useCases/saveActiveVesselsAndDisplayLastPositions'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { vesselGroupApi } from '@features/VesselGroup/apis'
@@ -35,9 +35,9 @@ export const addVesselToFixedVesselGroup =
       await dispatch(vesselGroupApi.endpoints.createOrUpdateFixedVesselGroup.initiate(vesselGroupWithVessel)).unwrap()
 
       const vessels = await dispatch(
-        vesselApi.endpoints.getVesselsLastPositions.initiate(undefined, RTK_FORCE_REFETCH_QUERY_OPTIONS)
+        vesselApi.endpoints.getActiveVessels.initiate(undefined, RTK_FORCE_REFETCH_QUERY_OPTIONS)
       ).unwrap()
-      dispatch(showVesselsLastPosition(vessels as Vessel.VesselLastPosition[]))
+      dispatch(saveActiveVesselsAndDisplayLastPositions(vessels))
 
       dispatch(
         addSideWindowBanner({

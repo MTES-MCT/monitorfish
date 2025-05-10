@@ -72,6 +72,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
             declaredWeight: 471.2,
             nbFish: undefined,
             speciesCode: 'HKE',
+            speciesName: 'European Hake',
             underSized: false
           },
           {
@@ -79,6 +80,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
             declaredWeight: 13.46,
             nbFish: undefined,
             speciesCode: 'BLI',
+            speciesName: undefined,
             underSized: false
           }
         ],
@@ -153,6 +155,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
             declaredWeight: 471.2,
             nbFish: undefined,
             speciesCode: 'HKE',
+            speciesName: 'European Hake',
             underSized: false
           },
           {
@@ -160,6 +163,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
             declaredWeight: 13.46,
             nbFish: undefined,
             speciesCode: 'BLI',
+            speciesName: undefined,
             underSized: false
           }
         ],
@@ -253,6 +257,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
             declaredWeight: 471.2,
             nbFish: undefined,
             speciesCode: 'HKE',
+            speciesName: 'European Hake',
             underSized: false
           },
           {
@@ -260,6 +265,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
             declaredWeight: 13.46,
             nbFish: undefined,
             speciesCode: 'BLI',
+            speciesName: undefined,
             underSized: false
           }
         ],
@@ -335,6 +341,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
             declaredWeight: 471.2,
             nbFish: undefined,
             speciesCode: 'HKE',
+            speciesName: 'European Hake',
             underSized: false
           },
           {
@@ -342,6 +349,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
             declaredWeight: 13.46,
             nbFish: undefined,
             speciesCode: 'BLI',
+            speciesName: undefined,
             underSized: false
           }
         ],

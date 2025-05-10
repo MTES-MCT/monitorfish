@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesC
 
 data class SpeciesControlDataInput(
     val speciesCode: String,
+    val speciesName: String? = null,
     val nbFish: Double?,
     val declaredWeight: Double?,
     val controlledWeight: Double?,
@@ -12,6 +13,7 @@ data class SpeciesControlDataInput(
     fun toSpeciesControl() =
         SpeciesControl().also { speciesControl ->
             speciesControl.speciesCode = speciesCode
+            speciesControl.speciesName = speciesName
             speciesControl.nbFish = nbFish
             speciesControl.declaredWeight = declaredWeight
             speciesControl.controlledWeight = controlledWeight

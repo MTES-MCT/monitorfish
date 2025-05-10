@@ -106,6 +106,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         declaredWeight: undefined,
         nbFish: undefined,
         speciesCode: newSpecy.code,
+        speciesName: newSpecy.name,
         underSized: false
       },
       input.value ?? []

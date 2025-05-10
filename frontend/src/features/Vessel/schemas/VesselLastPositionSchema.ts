@@ -15,6 +15,7 @@ export const DeclaredLogbookSpeciesSchema = z.strictObject({
   faoZone: z.string(),
   gear: z.string(),
   species: z.string(),
+  speciesName: stringOrUndefined,
   weight: numberOrUndefined
 })
 
@@ -81,7 +82,6 @@ export const VesselLastPositionSchema = z.strictObject({
   riskFactor: z.number(),
   segments: z.array(z.string()),
   speciesArray: z.array(z.string()),
-  // TODO Add speciesName
   speciesOnboard: z.array(DeclaredLogbookSpeciesSchema),
   speed: numberOrUndefined,
   // TODO To remove

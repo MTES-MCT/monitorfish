@@ -135,14 +135,6 @@ def extract_pno_catches(
             "min_trip_date": trips_period.start,
             "max_trip_date": trips_period.end,
         },
-        dtypes={
-            "species": str,
-            "fao_area": str,
-            "weight": float,
-            "facade": str,
-            "vessel_type": str,
-            "scip_species_type": str,
-        },
     )
 
 
@@ -287,7 +279,6 @@ def compute_pno_types(
           - weight `float` `150.5`
           - flag_state `str` `'FRA'`
           - locode `str` `CCXXX`
-          - facade `str` `NAMO`
 
         pno_types (pd.DataFrame): DataFrame of pno_types definitions. 1 line = 1 rule.
           Must have columns :

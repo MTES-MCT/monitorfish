@@ -109,6 +109,7 @@ export function getSpeciesOnboardWithUntargetedSpeciesGrouped(
     declaredWeight: otherSpeciesSummedWeight,
     nbFish: undefined,
     speciesCode: UNTARGETED_SPECIES_CODE,
+    speciesName: undefined,
     underSized: undefined
   }
 

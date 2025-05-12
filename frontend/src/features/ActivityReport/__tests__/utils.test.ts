@@ -36,11 +36,46 @@ describe('utils', () => {
   it('getSpeciesOnboardWithUntargetedSpeciesGrouped Should return untargeted species grouped as OTH', async () => {
     // Given
     const speciesOnboard = [
-      { controlledWeight: 500, declaredWeight: 471.2, nbFish: undefined, speciesCode: 'HKE', underSized: true },
-      { controlledWeight: undefined, declaredWeight: 13.46, nbFish: undefined, speciesCode: 'BLI', underSized: false },
-      { controlledWeight: 123.6, declaredWeight: undefined, nbFish: undefined, speciesCode: 'COD', underSized: false },
-      { controlledWeight: undefined, declaredWeight: 12.6, nbFish: undefined, speciesCode: 'ANZ', underSized: false },
-      { controlledWeight: undefined, declaredWeight: 45.5, nbFish: undefined, speciesCode: 'FMI', underSized: false }
+      {
+        controlledWeight: 500,
+        declaredWeight: 471.2,
+        nbFish: undefined,
+        speciesCode: 'HKE',
+        speciesName: 'species0',
+        underSized: true
+      },
+      {
+        controlledWeight: undefined,
+        declaredWeight: 13.46,
+        nbFish: undefined,
+        speciesCode: 'BLI',
+        speciesName: 'species1',
+        underSized: false
+      },
+      {
+        controlledWeight: 123.6,
+        declaredWeight: undefined,
+        nbFish: undefined,
+        speciesCode: 'COD',
+        speciesName: 'species2',
+        underSized: false
+      },
+      {
+        controlledWeight: undefined,
+        declaredWeight: 12.6,
+        nbFish: undefined,
+        speciesCode: 'ANZ',
+        speciesName: 'species3',
+        underSized: false
+      },
+      {
+        controlledWeight: undefined,
+        declaredWeight: 45.5,
+        nbFish: undefined,
+        speciesCode: 'FMI',
+        speciesName: 'species4',
+        underSized: false
+      }
     ]
 
     // When
@@ -49,19 +84,43 @@ describe('utils', () => {
     // Then
     expect(groupedSpeciesOnboard).toHaveLength(3)
     expect(groupedSpeciesOnboard[0]?.speciesCode).toEqual('HKE')
+    expect(groupedSpeciesOnboard[0]?.speciesName).toEqual('species0')
     expect(groupedSpeciesOnboard[0]?.controlledWeight).toEqual(500)
     expect(groupedSpeciesOnboard[1]?.speciesCode).toEqual('OTH')
+    expect(groupedSpeciesOnboard[1]?.speciesName).toEqual('species1')
     expect(groupedSpeciesOnboard[1]?.declaredWeight).toEqual(182.56)
     expect(groupedSpeciesOnboard[2]?.speciesCode).toEqual('ANZ')
+    expect(groupedSpeciesOnboard[2]?.speciesName).toEqual('species2')
     expect(groupedSpeciesOnboard[2]?.declaredWeight).toEqual(12.6)
   })
 
   it('getSpeciesOnboardWithUntargetedSpeciesGrouped Should not return untargeted species grouped as OTH When the weight is 0', async () => {
     // Given
     const speciesOnboard = [
-      { controlledWeight: 500, declaredWeight: 471.2, nbFish: undefined, speciesCode: 'HKE', underSized: true },
-      { controlledWeight: undefined, declaredWeight: 0, nbFish: undefined, speciesCode: 'BLI', underSized: false },
-      { controlledWeight: undefined, declaredWeight: 12.6, nbFish: undefined, speciesCode: 'ANZ', underSized: false }
+      {
+        controlledWeight: 500,
+        declaredWeight: 471.2,
+        nbFish: undefined,
+        speciesCode: 'HKE',
+        speciesName: 'species0',
+        underSized: true
+      },
+      {
+        controlledWeight: undefined,
+        declaredWeight: 0,
+        nbFish: undefined,
+        speciesCode: 'BLI',
+        speciesName: 'species1',
+        underSized: false
+      },
+      {
+        controlledWeight: undefined,
+        declaredWeight: 12.6,
+        nbFish: undefined,
+        speciesCode: 'ANZ',
+        speciesName: 'species2',
+        underSized: false
+      }
     ]
 
     // When
@@ -70,8 +129,10 @@ describe('utils', () => {
     // Then
     expect(groupedSpeciesOnboard).toHaveLength(2)
     expect(groupedSpeciesOnboard[0]?.speciesCode).toEqual('HKE')
+    expect(groupedSpeciesOnboard[0]?.speciesName).toEqual('species0')
     expect(groupedSpeciesOnboard[0]?.controlledWeight).toEqual(500)
     expect(groupedSpeciesOnboard[1]?.speciesCode).toEqual('ANZ')
+    expect(groupedSpeciesOnboard[1]?.speciesName).toEqual('species1')
     expect(groupedSpeciesOnboard[1]?.declaredWeight).toEqual(12.6)
   })
 

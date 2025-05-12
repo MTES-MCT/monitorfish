@@ -1219,3 +1219,26 @@ def test_flow_with_no_pno_in_period_does_nothing(reset_test_data):
     assert state.is_successful()
     final_logbook = read_query(query, db="monitorfish_remote")
     pd.testing.assert_frame_equal(initial_logbook, final_logbook)
+
+
+def test_flow_when_ports_are_unknown(reset_test_data):
+    now = datetime.utcnow()
+    engine = create_engine("monitorfish_remote")
+    with engine.begin() as con:
+        con.execute(text("DELETE FROM ports"))
+
+    pno_start_date = datetime(2020, 5, 5)
+    pno_end_date = datetime(2020, 5, 7)
+
+    start_hours_ago = int((now - pno_start_date).total_seconds() / 3600)
+    end_hours_ago = int((now - pno_end_date).total_seconds() / 3600)
+    minutes_per_chunk = 2 * 24 * 60
+
+    flow.schedule = None
+    state = flow.run(
+        start_hours_ago=start_hours_ago,
+        end_hours_ago=end_hours_ago,
+        minutes_per_chunk=minutes_per_chunk,
+        recompute_all=False,
+    )
+    assert state.is_successful()

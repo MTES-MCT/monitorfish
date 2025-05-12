@@ -22,6 +22,16 @@ export function trackEvent({ action, category, name, value }: TrackEvent) {
   window._paq?.push(['trackEvent', category, action, name, value])
 }
 
+export function trackPage(pageTitle: string) {
+  window._paq?.push(['setDocumentTitle', pageTitle])
+  window._paq?.push(['trackPageView'])
+}
+
+export function trackUserId(userId: string) {
+  window._paq?.push(['setUserId', userId])
+  window._paq?.push(['enableHeartBeatTimer', 30])
+}
+
 /**
  * Wrapper of UseMatomo script injected in `index.html`.
  *
@@ -31,14 +41,8 @@ export function trackEvent({ action, category, name, value }: TrackEvent) {
 export function useTracking(): Tracking {
   return {
     trackEvent,
-    trackPage: pageTitle => {
-      window._paq?.push(['setDocumentTitle', pageTitle])
-      window._paq?.push(['trackPageView'])
-    },
-    trackUserId: userId => {
-      window._paq?.push(['setUserId', userId])
-      window._paq?.push(['enableHeartBeatTimer', 30])
-    }
+    trackPage,
+    trackUserId
   }
 }
 /* eslint-enable no-underscore-dangle */

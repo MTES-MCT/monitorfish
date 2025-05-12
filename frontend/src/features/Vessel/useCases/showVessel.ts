@@ -31,7 +31,7 @@ export const showVessel =
       dispatch(getSidebarTabData(selectedVesselSidebarTab, vesselIdentity))
       await dispatch(displayVesselSidebarAndPositions(vesselIdentity, isFromSearch))
 
-      await dispatch(getVesselLogbook(vesselIdentity, undefined, true))
+      await dispatch(getVesselLogbook(vesselIdentity, undefined, false))
       await dispatch(displayLogbookMessageOverlays())
     } catch (error) {
       dispatch(

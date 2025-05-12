@@ -257,7 +257,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Port de contrôle', 'Auray')
 
     // A mission zone should be automatically added
-    cy.get('.Toastify__toast--success').contains(
+    cy.get('.Component-Banner').contains(
       'Une zone de mission a été modifiée à partir des contrôles de la mission'
     )
     cy.get('*[data-cy="mission-main-form-location"]').should(
@@ -288,7 +288,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Port de contrôle', 'Abu Musa')
 
     // The mission zone should be automatically updated
-    cy.get('.Toastify__toast--success').contains(
+    cy.get('.Component-Banner').contains(
       'Une zone de mission a été modifiée à partir des contrôles de la mission'
     )
 

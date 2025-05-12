@@ -1,6 +1,5 @@
 import Feature from 'ol/Feature'
 
-import { resetRegulation } from './resetRegulation'
 import { updateRegulation } from './updateRegulation'
 import { getRegulatoryFeatureId, mapToRegulatoryFeatureObject, RegulationActionType } from '../utils'
 
@@ -22,10 +21,12 @@ export const createOrUpdateBackofficeRegulation =
     feature.setId(getRegulatoryFeatureId(processingRegulation.id))
     if (isGeometryModified(previousId, processingRegulation.id)) {
       /**
-       * We first need to reset the previous regulation as there is an UNIQUE CONSTRAINT (topic, zone) of the table.
+       * We first need to delete the previous regulation as there is an UNIQUE CONSTRAINT (topic, zone) of the table.
        * /!\ This constraint is only applied to the local (CROSS) regulations table.
        */
-      dispatch(resetRegulation(previousId, processingRegulation.id))
+      const emptyFeature = new Feature({})
+      emptyFeature.setId(getRegulatoryFeatureId(previousId))
+      await dispatch(updateRegulation(emptyFeature, RegulationActionType.Delete))
 
       /**
        * We must wait for the reset to be done.

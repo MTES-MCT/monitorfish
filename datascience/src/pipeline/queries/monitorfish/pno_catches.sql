@@ -22,7 +22,7 @@ pno_species AS (
         trip_number,
         trip_number_was_computed,
         report_datetime_utc,
-        p.locode,
+        r.value->>'port' AS locode,
         p.facade,
         (r.value->>'tripStartDate')::TIMESTAMPTZ AS trip_start_date,
         (r.value->>'predictedArrivalDatetimeUtc')::TIMESTAMPTZ AS predicted_arrival_datetime_utc,

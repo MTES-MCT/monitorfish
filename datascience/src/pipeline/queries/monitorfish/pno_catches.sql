@@ -22,7 +22,7 @@ pno_species AS (
         trip_number,
         trip_number_was_computed,
         report_datetime_utc,
-        p.locode,
+        r.value->>'port' AS locode,
         p.facade,
         (r.value->>'tripStartDate')::TIMESTAMPTZ AS trip_start_date,
         (r.value->>'predictedArrivalDatetimeUtc')::TIMESTAMPTZ AS predicted_arrival_datetime_utc,
@@ -116,7 +116,7 @@ SELECT
     s.weight,
     s.flag_state,
     s.locode,
-    s.facade,
+    COALESCE(s.facade, 'Hors façade') AS facade,
     v.vessel_type,
     species.scip_species_type
 FROM pno_species s

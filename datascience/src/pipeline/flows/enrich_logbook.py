@@ -135,6 +135,14 @@ def extract_pno_catches(
             "min_trip_date": trips_period.start,
             "max_trip_date": trips_period.end,
         },
+        dtypes={
+            "species": str,
+            "fao_area": str,
+            "weight": float,
+            "facade": str,
+            "vessel_type": str,
+            "scip_species_type": str,
+        },
     )
 
 
@@ -156,6 +164,7 @@ def compute_pno_segments(
           - species `str` `'COD'`
           - fao_area `str` `'27.7.d'`
           - year `int` `2022`
+          - facade `str` `'MED'`
           - weight `float` `230.2`
           - vessel_type `str` `Fishing vessel`
           - scip_species_type `str` `DEMERSAL`

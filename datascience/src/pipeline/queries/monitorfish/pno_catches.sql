@@ -116,7 +116,7 @@ SELECT
     s.weight,
     s.flag_state,
     s.locode,
-    s.facade,
+    COALESCE(s.facade, 'Hors façade') AS facade,
     v.vessel_type,
     species.scip_species_type
 FROM pno_species s

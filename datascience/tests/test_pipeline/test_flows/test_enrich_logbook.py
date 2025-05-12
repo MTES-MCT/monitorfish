@@ -321,8 +321,8 @@ def expected_pno_catches() -> pd.DataFrame:
             "fao_area": ["27.7.a", None],
             "weight": [1500.0, None],
             "flag_state": ["CYP", "CYP"],
-            "locode": ["GBPHD", None],
-            "facade": ["MEMN", None],
+            "locode": ["GBPHD", "NOFAC"],
+            "facade": ["MEMN", "Hors façade"],
             "vessel_type": [None, None],
             "scip_species_type": ["DEMERSAL", None],
         }

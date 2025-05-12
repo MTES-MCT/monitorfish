@@ -156,6 +156,7 @@ def compute_pno_segments(
           - species `str` `'COD'`
           - fao_area `str` `'27.7.d'`
           - year `int` `2022`
+          - facade `str` `'MED'`
           - weight `float` `230.2`
           - vessel_type `str` `Fishing vessel`
           - scip_species_type `str` `DEMERSAL`
@@ -278,7 +279,6 @@ def compute_pno_types(
           - weight `float` `150.5`
           - flag_state `str` `'FRA'`
           - locode `str` `CCXXX`
-          - facade `str` `NAMO`
 
         pno_types (pd.DataFrame): DataFrame of pno_types definitions. 1 line = 1 rule.
           Must have columns :

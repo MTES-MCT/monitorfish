@@ -80,6 +80,14 @@ data class Vessel(
     fun isFrench(): Boolean = FRENCH_COUNTRY_CODES.contains(flagState.alpha2)
 
     fun isLessThanTwelveMetersVessel(): Boolean = length?.let { it < 12.0 } == true
+
+    fun isIdentifiable(): Boolean =
+        !(
+            internalReferenceNumber.isNullOrEmpty() &&
+                externalReferenceNumber.isNullOrEmpty() &&
+                ircs.isNullOrEmpty() &&
+                mmsi.isNullOrEmpty()
+        )
 }
 
 val LIKELY_CONTROLLED_COUNTRY_CODES =

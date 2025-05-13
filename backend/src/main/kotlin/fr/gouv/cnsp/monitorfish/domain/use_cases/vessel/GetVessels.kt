@@ -8,5 +8,8 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 class GetVessels(
     private val vesselRepository: VesselRepository,
 ) {
-    fun execute(): List<Vessel> = vesselRepository.findAll()
+    fun execute(): List<Vessel> =
+        vesselRepository.findAll().filter {
+            it.isIdentifiable()
+        }
 }

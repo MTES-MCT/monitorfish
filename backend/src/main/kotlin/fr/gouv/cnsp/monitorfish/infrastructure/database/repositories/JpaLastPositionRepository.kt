@@ -34,18 +34,6 @@ class JpaLastPositionRepository(
                 it.toLastPosition(mapper)
             }
 
-    @Cacheable(value = ["vessels_positions"])
-    override fun findAllInLastMonthOrWithBeaconMalfunction(): List<LastPosition> {
-        val nowMinusOneMonth = ZonedDateTime.now().minusMonths(1)
-        return dbLastPositionRepository
-            .findAllByDateTimeGreaterThanEqualOrBeaconMalfunctionIdNotNull(nowMinusOneMonth)
-            // We NEED this non filterNotNull (even if the IDE say not so, as the SQL request may return null internalReferenceNumber)
-            .filterNotNull()
-            .map {
-                it.toLastPosition(mapper)
-            }
-    }
-
     @Cacheable(value = ["active_vessels"])
     override fun findActiveVesselWithReferentialData(): List<ActiveVesselWithReferentialDataDTO> {
         val nowMinusOneMonth = ZonedDateTime.now().minusMonths(1)
@@ -66,18 +54,6 @@ class JpaLastPositionRepository(
                 riskFactor = it.riskFactor?.toVesselRiskFactor(mapper) ?: VesselRiskFactor(),
             )
         }
-    }
-
-    @Cacheable(value = ["vessels_positions_with_beacon_malfunctions"])
-    override fun findAllWithBeaconMalfunctionBeforeLast48Hours(): List<LastPosition> {
-        val nowMinus48Hours = ZonedDateTime.now().minusHours(48)
-        return dbLastPositionRepository
-            .findAllByDateTimeLessThanEqualAndBeaconMalfunctionIdNotNull(nowMinus48Hours)
-            // We NEED this non filterNotNull (even if the IDE say not so, as the SQL request may return null internalReferenceNumber)
-            .filterNotNull()
-            .map {
-                it.toLastPosition(mapper)
-            }
     }
 
     override fun findLastPositionDate(): ZonedDateTime =

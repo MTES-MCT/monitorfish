@@ -76,9 +76,7 @@ class CaffeineConfiguration {
     val vesselsAllPositions = "vessels_all_position"
     val vesselsByIds = "vessels_by_ids"
     val vesselsByInternalReferenceNumbers = "vessels_by_internal_reference_numbers"
-    val vesselsPositions = "vessels_positions"
     val activeVessels = "active_vessels"
-    val vesselsPositionsWithBeaconMalfunctions = "vessels_positions_with_beacon_malfunctions"
     val vesselCharter = "vessel_charter"
 
     // Others
@@ -161,14 +159,7 @@ class CaffeineConfiguration {
         val vesselsByInternalReferenceNumbersCache =
             buildMinutesCache(vesselsByInternalReferenceNumbers, ticker, 5)
         val vesselsAllPositionsCache = buildSecondsCache(vesselsAllPositions, ticker, 30)
-        val vesselsPositionsCache = buildSecondsCache(vesselsPositions, ticker, 30)
         val activeVesselsCache = buildSecondsCache(activeVessels, ticker, 60)
-        val vesselsPositionsWithBeaconMalfunctionsCache =
-            buildMinutesCache(
-                vesselsPositionsWithBeaconMalfunctions,
-                ticker,
-                1,
-            )
         val vesselCharterCache = buildMinutesCache(vesselCharter, ticker, 30)
 
         // Others
@@ -231,9 +222,7 @@ class CaffeineConfiguration {
                 vesselsAllPositionsCache,
                 vesselsByIdsCache,
                 vesselsByInternalReferenceNumbersCache,
-                vesselsPositionsCache,
                 activeVesselsCache,
-                vesselsPositionsWithBeaconMalfunctionsCache,
                 vesselCharterCache,
                 userInfoCache,
             ),

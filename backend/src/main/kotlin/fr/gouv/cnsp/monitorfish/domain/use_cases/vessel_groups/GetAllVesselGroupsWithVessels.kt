@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActiveVesselType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActiveVesselWithReferentialData
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
@@ -25,9 +26,10 @@ class GetAllVesselGroupsWithVessels(
 
     fun execute(userEmail: String): List<VesselGroupWithVessels> {
         val vesselGroups = vesselGroupRepository.findAllByUser(userEmail)
-        val activeVessels = lastPositionRepository
-            .findActiveVesselWithReferentialData()
-            .filter { it.hasLastPositionOrVesselProfileWithVessel() }
+        val activeVessels =
+            lastPositionRepository
+                .findActiveVesselWithReferentialData()
+                .filter { it.hasLastPositionOrVesselProfileWithVessel() }
         val now = ZonedDateTime.now()
 
         val byVesselId = mutableMapOf<Int, ActiveVesselWithReferentialDataDTO>()
@@ -54,7 +56,7 @@ class GetAllVesselGroupsWithVessels(
             val activeVesselsFromGroups =
                 when (group) {
                     is DynamicVesselGroup -> dynamicGroupsToActiveVessels[group] ?: emptyList()
-                    is FixedVesselGroup -> getVesselFromReferential(group, byVesselId, byCfr, byIrcs, byExternalId)
+                    is FixedVesselGroup -> getVesselsFromReferential(group, byVesselId, byCfr, byIrcs, byExternalId)
                 }.map {
                     ActiveVesselWithReferentialData(
                         lastPosition = it.lastPosition,
@@ -77,7 +79,7 @@ class GetAllVesselGroupsWithVessels(
         }
     }
 
-    private fun getVesselFromReferential(
+    private fun getVesselsFromReferential(
         group: FixedVesselGroup,
         byVesselId: MutableMap<Int, ActiveVesselWithReferentialDataDTO>,
         byCfr: MutableMap<String, ActiveVesselWithReferentialDataDTO>,
@@ -98,8 +100,30 @@ class GetAllVesselGroupsWithVessels(
                 !vessel.ircs.isNullOrEmpty() -> byIrcs[vessel.ircs]
                 !vessel.externalIdentification.isNullOrEmpty() -> byExternalId[vessel.externalIdentification]
                 else -> {
-                    // TODO Handle that case when the vessel is not found
-                    logger.warn("Vessel ${vessel.cfr} not found in profiles/vessels tables.")
+                    logger.warn("Vessel in group has no identifier.")
+
+                    null
+                }
+            } ?: when {
+                vessel.vesselId != null -> {
+                    ActiveVesselWithReferentialDataDTO(
+                        lastPosition = null,
+                        vesselProfile = null,
+                        vessel =
+                            Vessel(
+                                id = vessel.vesselId,
+                                internalReferenceNumber = vessel.cfr,
+                                externalReferenceNumber = vessel.externalIdentification,
+                                ircs = vessel.ircs,
+                                vesselName = vessel.name,
+                                flagState = vessel.flagState,
+                                hasLogbookEsacapt = false,
+                            ),
+                        producerOrganizationName = null,
+                    )
+                }
+                else -> {
+                    logger.warn("Vessel ${vessel.cfr} not found in vessels table, skipping it.")
 
                     null
                 }

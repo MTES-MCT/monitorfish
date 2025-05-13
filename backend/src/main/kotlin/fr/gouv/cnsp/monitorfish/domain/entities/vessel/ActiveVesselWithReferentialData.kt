@@ -15,10 +15,6 @@ data class ActiveVesselWithReferentialData(
     val riskFactor: VesselRiskFactor,
 ) {
     init {
-        require(lastPosition != null || vesselProfile != null) {
-            "Either a last position or vessel profile must be set."
-        }
-
         if (lastPosition == null) {
             require(vessel != null) {
                 "A vessel must be found from the referential when a vessel profile (${vesselProfile?.cfr}) is found."

@@ -1,5 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile
 
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
+
 data class VesselProfile(
     val cfr: String,
     val gears: Map<String, Double>? = null,
@@ -14,4 +17,26 @@ data class VesselProfile(
     val recentLandingPorts: Map<String, Double>? = null,
     val latestLandingPort: String? = null,
     val latestLandingFacade: String? = null,
-)
+) {
+    fun isInGroup(vesselGroup: VesselGroupBase): Boolean {
+        if (vesselGroup !is DynamicVesselGroup) return false
+
+        val filters = vesselGroup.filters
+
+        val hasFleetSegmentMatch =
+            filters.fleetSegments.isEmpty() ||
+                (this.recentSegments?.keys?.any { it in filters.fleetSegments } ?: false)
+
+        val hasGearMatch =
+            filters.gearCodes.isEmpty() ||
+                (this.recentGears?.keys?.any { it in filters.gearCodes } ?: false)
+
+        val hasSpeciesMatch =
+            filters.specyCodes.isEmpty() ||
+                (this.recentSpecies?.keys?.any { it in filters.specyCodes } ?: false)
+
+        return hasFleetSegmentMatch &&
+            hasGearMatch &&
+            hasSpeciesMatch
+    }
+}

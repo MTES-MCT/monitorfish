@@ -128,7 +128,7 @@ class VesselControllerITests {
                     lastPosition = position,
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
+                    producerOrganizationName = null,
                     riskFactor = VesselRiskFactor(),
                     activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
                     vesselGroups = listOf(),

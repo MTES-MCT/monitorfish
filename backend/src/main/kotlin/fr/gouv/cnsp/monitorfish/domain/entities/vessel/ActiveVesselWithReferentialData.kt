@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.vessel
 
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
-import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
@@ -12,7 +11,7 @@ data class ActiveVesselWithReferentialData(
     val lastPosition: LastPosition?,
     val vesselProfile: VesselProfile?,
     val vessel: Vessel?,
-    val producerOrganizationMembership: ProducerOrganizationMembership?,
+    val producerOrganizationName: String?,
     val riskFactor: VesselRiskFactor,
 ) {
     init {

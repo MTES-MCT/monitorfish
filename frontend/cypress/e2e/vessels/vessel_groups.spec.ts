@@ -9,7 +9,7 @@ context('Vessel groups', () => {
      */
     cy.getDataCy('side-window-menu-vessel-list').click()
     cy.fill('Nationalités', ['Espagne', 'France'])
-    cy.getDataCy('vessel-list-length').contains('841 navires')
+    cy.getDataCy('vessel-list-length').contains('3149 navires')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 2)
 
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])

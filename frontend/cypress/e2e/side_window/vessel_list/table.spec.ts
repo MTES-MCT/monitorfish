@@ -14,7 +14,7 @@ context('Side Window > Vessel List > Table', () => {
     cy.getDataCy('vessel-list-reset-filters').click()
 
     cy.fill('Nationalités', ['Espagne', 'France'])
-    cy.getDataCy('vessel-list-length').contains('841 navires')
+    cy.getDataCy('vessel-list-length').contains('3149 navires')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 2)
 
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
@@ -75,7 +75,7 @@ context('Side Window > Vessel List > Table', () => {
     cy.getDataCy('side-window-menu-vessel-list').click()
 
     cy.fill('Nationalités', ['Espagne', 'France'])
-    cy.getDataCy('vessel-list-length').contains('841 navires')
+    cy.getDataCy('vessel-list-length').contains('3149 navires')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 2)
 
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])

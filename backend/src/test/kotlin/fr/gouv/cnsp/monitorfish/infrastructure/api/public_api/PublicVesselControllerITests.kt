@@ -30,6 +30,57 @@ class PublicVesselControllerITests {
     @MockBean
     private lateinit var searchVessels: SearchVessels
 
+    @MockBean
+    private lateinit var getVessels: GetVessels
+
+    @Test
+    fun `Should return all vessels`() {
+        // Given
+        given(getVessels.execute()).willReturn(
+            listOf(
+                Vessel(
+                    id = 1,
+                    vesselName = "BLUE WHALE",
+                    flagState = CountryCode.FR,
+                    internalReferenceNumber = "FR999999",
+                    imo = "IMO1234567",
+                    mmsi = "111222333",
+                    ircs = "FRCODE",
+                    externalReferenceNumber = "EXT123",
+                    districtCode = "DC01",
+                    hasLogbookEsacapt = false,
+                ),
+                Vessel(
+                    id = 2,
+                    vesselName = "RED FISH",
+                    flagState = CountryCode.ES,
+                    internalReferenceNumber = "ES888888",
+                    imo = null,
+                    mmsi = null,
+                    ircs = null,
+                    externalReferenceNumber = null,
+                    districtCode = null,
+                    hasLogbookEsacapt = true,
+                ),
+            ),
+        )
+
+        // When
+        api
+            .perform(get("/api/v1/vessels"))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(2)))
+            .andExpect(jsonPath("$[0].vesselName", equalTo("BLUE WHALE")))
+            .andExpect(jsonPath("$[0].flagState", equalTo("FR")))
+            .andExpect(jsonPath("$[0].internalReferenceNumber", equalTo("FR999999")))
+            .andExpect(jsonPath("$[1].vesselName", equalTo("RED FISH")))
+            .andExpect(jsonPath("$[1].flagState", equalTo("ES")))
+            .andExpect(jsonPath("$[1].internalReferenceNumber", equalTo("ES888888")))
+
+        Mockito.verify(getVessels).execute()
+    }
+
     @Test
     fun `Should search for a vessel`() {
         // Given

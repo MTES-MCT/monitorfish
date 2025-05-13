@@ -3,10 +3,14 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.dtos.ActiveVesselWithReferentialDataDTO
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.*
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LastPositionEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.RiskFactorEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.VesselEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.VesselProfileEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLastPositionRepository
 import jakarta.transaction.Transactional
 import org.springframework.cache.annotation.Cacheable
@@ -42,15 +46,24 @@ class JpaLastPositionRepository(
             }
     }
 
+    @Cacheable(value = ["active_vessels"])
     override fun findActiveVesselWithReferentialData(): List<ActiveVesselWithReferentialDataDTO> {
         val nowMinusOneMonth = ZonedDateTime.now().minusMonths(1)
         return dbLastPositionRepository.findActiveVesselWithReferentialData(nowMinusOneMonth).map {
             ActiveVesselWithReferentialDataDTO(
-                lastPosition = it.lastPosition?.toLastPosition(mapper),
+                lastPosition =
+                    it.lastPosition?.let { lastPosition ->
+                        // There is no way to do a subquery in the JPQL query's FULL JOIN
+                        if (lastPosition.dateTime > nowMinusOneMonth || lastPosition.beaconMalfunctionId != null) {
+                            return@let lastPosition.toLastPosition(mapper)
+                        }
+
+                        return@let null
+                    },
                 vesselProfile = it.vesselProfile?.toVesselProfile(),
                 vessel = it.vessel?.toVessel(),
-                producerOrganizationMembership = it.producerOrganizationMembership?.toProducerOrganizationMembership(),
-                riskFactor = it.riskFactor?.toVesselRiskFactor(mapper),
+                producerOrganizationName = it.producerOrganizationName,
+                riskFactor = it.riskFactor?.toVesselRiskFactor(mapper) ?: VesselRiskFactor(),
             )
         }
     }
@@ -99,6 +112,6 @@ data class ActiveVesselWithReferentialDataEntityDTO(
     val lastPosition: LastPositionEntity?,
     val vesselProfile: VesselProfileEntity?,
     val vessel: VesselEntity?,
-    val producerOrganizationMembership: ProducerOrganizationMembershipEntity?,
     val riskFactor: RiskFactorEntity?,
+    val producerOrganizationName: String?,
 )

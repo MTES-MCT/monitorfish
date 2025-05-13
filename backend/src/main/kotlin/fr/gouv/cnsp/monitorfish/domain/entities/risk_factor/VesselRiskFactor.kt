@@ -2,6 +2,9 @@ package fr.gouv.cnsp.monitorfish.domain.entities.risk_factor
 
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.LastControlPeriod
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
 import java.time.ZonedDateTime
 
 /**
@@ -49,4 +52,44 @@ data class VesselRiskFactor(
     val numberGearSeizuresLastFiveYears: Short = 0,
     val numberSpeciesSeizuresLastFiveYears: Short = 0,
     val numberVesselSeizuresLastFiveYears: Short = 0,
-)
+) {
+    fun isInGroup(
+        vesselGroup: VesselGroupBase,
+        now: ZonedDateTime,
+    ): Boolean {
+        if (vesselGroup !is DynamicVesselGroup) return false
+
+        val filters = vesselGroup.filters
+
+        val hasLastControlPeriodMatch =
+            when (filters.lastControlPeriod) {
+                LastControlPeriod.AFTER_ONE_MONTH_AGO ->
+                    this.lastControlDatetime?.isAfter(now.minusMonths(1))
+                        ?: false
+                LastControlPeriod.BEFORE_ONE_MONTH_AGO ->
+                    this.lastControlDatetime?.isBefore(now.minusMonths(1))
+                        ?: true // If no control is found, it is before the expected date
+                LastControlPeriod.BEFORE_ONE_YEAR_AGO ->
+                    this.lastControlDatetime?.isBefore(now.minusYears(1))
+                        ?: true // If no control is found, it is before the expected date
+                LastControlPeriod.BEFORE_SIX_MONTHS_AGO ->
+                    this.lastControlDatetime?.isBefore(now.minusMonths(6))
+                        ?: true // If no control is found, it is before the expected date
+                LastControlPeriod.BEFORE_THREE_MONTHS_AGO ->
+                    this.lastControlDatetime?.isBefore(now.minusMonths(3))
+                        ?: true // If no control is found, it is before the expected date
+                LastControlPeriod.BEFORE_TWO_YEARS_AGO ->
+                    this.lastControlDatetime?.isBefore(now.minusYears(2))
+                        ?: true // If no control is found, it is before the expected date
+                null -> true
+            }
+
+        val hasRiskFactorMatch =
+            filters.riskFactors.isEmpty() ||
+                filters.riskFactors.any { riskFactor ->
+                    this.riskFactor in riskFactor.toDouble()..<(riskFactor + 1).toDouble()
+                }
+
+        return hasLastControlPeriodMatch && hasRiskFactorMatch
+    }
+}

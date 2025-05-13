@@ -12,6 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.LastControlPeriod
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselLocation
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselSize
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import java.time.Duration
@@ -69,6 +70,7 @@ data class LastPosition(
 ) {
     fun isInGroup(
         vesselGroup: VesselGroupBase,
+        profile: VesselProfile?,
         now: ZonedDateTime,
     ): Boolean {
         if (vesselGroup !is DynamicVesselGroup) return false
@@ -135,6 +137,17 @@ data class LastPosition(
             filters.specyCodes.isEmpty() ||
                 (this.speciesOnboard?.any { it.species in filters.specyCodes } ?: false)
 
+        /**
+         * If no match are found on real-time fleet segment, gear or species are found,
+         * we compute matches on vessel profile.
+         */
+        val hasProfileFieldsMatch =
+            if (hasFleetSegmentMatch && hasGearMatch && hasSpeciesMatch) {
+                true
+            } else {
+                profile?.isInGroup(vesselGroup) == true
+            }
+
         val hasVesselLocationMatch =
             vesselsLocation?.let {
                 (it == VesselLocation.PORT && this.isAtPort) ||
@@ -170,9 +183,7 @@ data class LastPosition(
             hasLogbookMatch &&
             hasRiskFactorMatch &&
             hasLastPositionDateTimeMatch &&
-            hasFleetSegmentMatch &&
-            hasGearMatch &&
-            hasSpeciesMatch &&
+            hasProfileFieldsMatch &&
             hasVesselLocationMatch &&
             hasVesselLengthMatch &&
             hasZoneMatch

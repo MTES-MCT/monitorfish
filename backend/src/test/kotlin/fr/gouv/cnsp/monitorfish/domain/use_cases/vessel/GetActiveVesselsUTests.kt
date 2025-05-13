@@ -39,8 +39,7 @@ class GetActiveVesselsUTests {
                     lastPosition = TestUtils.getDummyLastPositions().first(),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 ),
             ),
         )
@@ -77,8 +76,7 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 ),
             ),
         )
@@ -146,8 +144,7 @@ class GetActiveVesselsUTests {
                     ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 ),
             ),
         )
@@ -220,8 +217,7 @@ class GetActiveVesselsUTests {
                     ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 ),
             ),
         )
@@ -289,8 +285,7 @@ class GetActiveVesselsUTests {
                     ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 ),
             ),
         )
@@ -357,8 +352,7 @@ class GetActiveVesselsUTests {
                     ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 ),
             ),
         )
@@ -425,8 +419,7 @@ class GetActiveVesselsUTests {
                     ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 ),
             ),
         )
@@ -503,8 +496,7 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 ),
             ),
         )
@@ -573,8 +565,7 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 ),
             ),
         )
@@ -642,8 +633,7 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 ),
             ),
         )
@@ -711,8 +701,7 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 ),
             ),
         )
@@ -798,8 +787,7 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 ),
             ),
         )
@@ -868,8 +856,7 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 ),
             ),
         )
@@ -939,8 +926,7 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 ),
             ),
         )
@@ -1010,8 +996,7 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 ),
             ),
         )
@@ -1069,8 +1054,7 @@ class GetActiveVesselsUTests {
                     lastPosition = it,
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 )
             },
         )
@@ -1099,8 +1083,7 @@ class GetActiveVesselsUTests {
                     lastPosition = it,
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 )
             },
         )
@@ -1167,8 +1150,7 @@ class GetActiveVesselsUTests {
                     lastPosition = it,
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationMembership = null,
-                    riskFactor = null,
+                    producerOrganizationName = null,
                 )
             },
         )

@@ -147,7 +147,7 @@ context('Vessel groups', () => {
     cy.clickButton('Créer un nouveau groupe')
     cy.clickButton('Créer un groupe dynamique')
 
-    cy.get('.Component-Dialog').contains('Actuellement, 842 navires correspondent aux filtres sélectionnés.')
+    cy.get('.Component-Dialog').contains('Actuellement, 3150 navires correspondent aux filtres sélectionnés.')
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
     cy.get('.Component-Dialog').contains('Actuellement, 4 navires correspondent aux filtres sélectionnés.')
 

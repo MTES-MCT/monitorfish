@@ -41,8 +41,11 @@ class VesselController(
         val email: String = getEmail(response)
         val activeVessels = getActiveVessels.execute(email)
 
-        return activeVessels.map { vessel ->
-            ActiveVesselBaseDataOutput.fromActiveVesselWithReferentialData(vessel)
+        return activeVessels.mapIndexed { index, vessel ->
+            ActiveVesselBaseDataOutput.fromActiveVesselWithReferentialData(
+                activeVesselWithReferentialData = vessel,
+                index = index,
+            )
         }
     }
 

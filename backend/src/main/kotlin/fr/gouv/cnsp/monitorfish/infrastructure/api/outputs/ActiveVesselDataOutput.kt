@@ -52,10 +52,11 @@ sealed class ActiveVesselBaseDataOutput(
     companion object {
         fun fromActiveVesselWithReferentialData(
             activeVesselWithReferentialData: ActiveVesselWithReferentialData,
+            index: Int,
         ): ActiveVesselBaseDataOutput =
             activeVesselWithReferentialData.lastPosition?.let { lastPosition ->
                 ActiveVesselWithPositionDataOutput(
-                    id = lastPosition.id,
+                    id = index,
                     vesselId = lastPosition.vesselId,
                     internalReferenceNumber = lastPosition.internalReferenceNumber,
                     ircs = lastPosition.ircs,
@@ -122,11 +123,11 @@ sealed class ActiveVesselBaseDataOutput(
                 )
             } ?: run {
                 require(activeVesselWithReferentialData.vessel != null) {
-                    "A vessel must be found from the referential when a vessel profile is found."
+                    "A vessel must be found from the referential when a last position not found."
                 }
 
                 ActiveVesselWithLogbookDataOutput(
-                    id = activeVesselWithReferentialData.vessel.id,
+                    id = index,
                     vesselId = activeVesselWithReferentialData.vessel.id,
                     vesselFeatureId = activeVesselWithReferentialData.vessel.toVesselCompositeIdentifier(),
                     internalReferenceNumber = activeVesselWithReferentialData.vesselProfile?.cfr,

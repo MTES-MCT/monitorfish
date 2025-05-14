@@ -14,8 +14,11 @@ data class DynamicVesselGroupWithVesselsDataOutput(
         ) = DynamicVesselGroupWithVesselsDataOutput(
             group = DynamicVesselGroupDataOutput.fromDynamicVesselGroup(group),
             vessels =
-                vessels.map {
-                    ActiveVesselBaseDataOutput.fromActiveVesselWithReferentialData(it)
+                vessels.mapIndexed { index, it ->
+                    ActiveVesselBaseDataOutput.fromActiveVesselWithReferentialData(
+                        activeVesselWithReferentialData = it,
+                        index = index,
+                    )
                 },
         )
     }

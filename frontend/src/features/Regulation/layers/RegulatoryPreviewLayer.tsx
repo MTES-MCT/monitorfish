@@ -43,8 +43,8 @@ function UnmemoizedRegulatoryPreviewLayer({ regulatoryZonesToPreview, zoneSelect
         renderBuffer: 4,
         source: getVectorSource(),
         style: feature => [getRegulatoryLayerStyle(feature, feature.getProperties() as BaseRegulatoryZone)],
-        updateWhileAnimating: true,
-        updateWhileInteracting: true
+        updateWhileAnimating: false,
+        updateWhileInteracting: false
       })
     }
 

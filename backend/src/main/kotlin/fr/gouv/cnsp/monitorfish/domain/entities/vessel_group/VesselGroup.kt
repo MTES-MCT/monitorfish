@@ -60,6 +60,7 @@ data class DynamicVesselGroup(
         val hasVesselProfileMatch = activeVessel.vesselProfile?.isInGroup(this) == true
         val hasRiskFactorMatch = activeVessel.riskFactor.isInGroup(this, now)
         val hasVesselReferentialMatch = activeVessel.vessel?.isInGroup(this) == true
+
         return hasVesselProfileMatch && hasRiskFactorMatch && hasVesselReferentialMatch
     }
 }

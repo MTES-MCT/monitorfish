@@ -138,14 +138,25 @@ data class LastPosition(
                 (this.speciesOnboard?.any { it.species in filters.specyCodes } ?: false)
 
         /**
-         * If no match are found on real-time fleet segment, gear or species are found,
+         * IF
+         *  a filter on segment, gear or species is set AND the related data is empty in last position
+         * THEN
+         *  compute the matches on the profile to obtain the recent segment, gear or species
+         * ELSE
+         *  Use the
+         *
+         *
+         * no match are found on real-time fleet segment, gear or species are found,
          * we compute matches on vessel profile.
          */
         val hasProfileFieldsMatch =
-            if (hasFleetSegmentMatch && hasGearMatch && hasSpeciesMatch) {
-                true
-            } else {
+            if ((filters.fleetSegments.isNotEmpty() && this.segments?.isEmpty() == true) ||
+                (filters.gearCodes.isNotEmpty() && this.gearOnboard?.isEmpty() == true) ||
+                (filters.specyCodes.isNotEmpty() && this.speciesOnboard?.isEmpty() == true)
+            ) {
                 profile?.isInGroup(vesselGroup) == true
+            } else {
+                hasFleetSegmentMatch && hasGearMatch && hasSpeciesMatch
             }
 
         val hasVesselLocationMatch =

@@ -18,6 +18,10 @@ data class VesselProfile(
     val latestLandingPort: String? = null,
     val latestLandingFacade: String? = null,
 ) {
+    /**
+     * The recent species are not taken into account as they may pollute the group
+     * because of the size of the species list.
+     */
     fun isInGroup(vesselGroup: VesselGroupBase): Boolean {
         if (vesselGroup !is DynamicVesselGroup) return false
 
@@ -31,12 +35,6 @@ data class VesselProfile(
             filters.gearCodes.isEmpty() ||
                 (this.recentGears?.keys?.any { it in filters.gearCodes } ?: false)
 
-        val hasSpeciesMatch =
-            filters.specyCodes.isEmpty() ||
-                (this.recentSpecies?.keys?.any { it in filters.specyCodes } ?: false)
-
-        return hasFleetSegmentMatch &&
-            hasGearMatch &&
-            hasSpeciesMatch
+        return hasFleetSegmentMatch && hasGearMatch
     }
 }

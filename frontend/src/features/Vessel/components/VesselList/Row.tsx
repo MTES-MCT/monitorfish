@@ -1,4 +1,8 @@
 import { RedCircle } from '@features/commonStyles/Circle.style'
+import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
+import { getSegmentInfo } from '@features/FleetSegment/components/FleetSegmentsWithTooltip/utils'
+import { FleetSegmentSource, GearSource } from '@features/FleetSegment/constants'
+import { TagInfo } from '@features/Map/components/TagInfo'
 import {
   displayOnboardFishingSpecies,
   getExpandableRowCellCustomStyle
@@ -6,40 +10,60 @@ import {
 import { ActiveVesselType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { TableWithSelectableRows } from '@mtes-mct/monitor-ui'
-import { flexRender, type Row as RowType } from '@tanstack/react-table'
+import { pluralize, TableWithSelectableRows, THEME, type Undefine } from '@mtes-mct/monitor-ui'
+import { type Column, flexRender, type Row as RowType } from '@tanstack/react-table'
 import { forwardRef } from 'react'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { None } from './styles'
 
+import type { Gear } from '../../../../domain/types/Gear'
+import type { FleetSegment } from '@features/FleetSegment/types'
+
 type RowProps = Readonly<{
   hasWhiteBackground?: boolean
   index: number | undefined
-  row: RowType<Vessel.ActiveVessel>
+  /**
+   * All properties may be undefined when searching
+   * */
+  row: RowType<Vessel.ActiveVessel | Undefine<Vessel.ActiveVessel>>
 }>
 export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackground = false, index, row }, ref) => {
   const vessel = row.original
   const gearsByCode = useMainAppSelector(state => state.gear.gearsByCode)
   const speciesByCode = useMainAppSelector(state => state.species.speciesByCode)
+  const { data: fleetSegments } = useGetFleetSegmentsQuery()
 
   const gears = (function () {
-    return (
-      vessel.gearsArray?.map(code => {
-        const gear = gearsByCode?.[code]
-        const gearName = gear?.name ? `– ${gear.name}` : ''
+    if (!gearsByCode || !row.getIsExpanded()) {
+      return []
+    }
 
-        return (
-          <li key={code}>
-            {code} {gearName}
-          </li>
-        )
-      }) ?? <></>
-    )
+    if (!vessel.gearsArray?.length) {
+      return vessel.recentGearsArray?.map(getGearListElement(gearsByCode)) ?? []
+    }
+
+    return vessel.gearsArray?.map(getGearListElement(gearsByCode)) ?? []
+  })()
+
+  const segments = (function () {
+    if (!fleetSegments || !row.getIsExpanded()) {
+      return []
+    }
+
+    if (!vessel.segments?.length) {
+      return vessel.recentSegments?.map(getSegmentListElement(fleetSegments)) ?? []
+    }
+
+    return vessel.segments?.map(getSegmentListElement(fleetSegments)) ?? []
   })()
 
   const speciesOnboardWithName = (function () {
+    if (!row.getIsExpanded()) {
+      return []
+    }
+
     return (
       vessel.speciesOnboard?.map(specyOnboard => {
         const name = speciesByCode?.[specyOnboard.species]?.name
@@ -61,7 +85,7 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
             $hasRightBorder={['hasInfractionSuspicion'].includes(cell.column.id)}
             $hasWhiteBackground={hasWhiteBackground}
             onClick={() => row.toggleExpanded()}
-            style={getExpandableRowCellCustomStyle(cell.column)}
+            style={getExpandableRowCellCustomStyle(cell.column as Column<Vessel.ActiveVessel, any>)}
           >
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </ExpandableRowCell>
@@ -91,7 +115,7 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
               <ExpandedRowLabel>Dernière position VMS :</ExpandedRowLabel>
               <ExpandedRowValue>
                 {vessel.activeVesselType === ActiveVesselType.POSITION_ACTIVITY
-                  ? timeago.format(vessel.lastPositionSentAt, 'fr')
+                  ? vessel.lastPositionSentAt && timeago.format(vessel.lastPositionSentAt, 'fr')
                   : undefined}
               </ExpandedRowValue>
             </p>
@@ -102,22 +126,74 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
           </ExpandedRowCell>
           <ExpandedRowCell>
             <ExpandedRowLabel>Nom des segments</ExpandedRowLabel>
-            {vessel.activeVesselType === ActiveVesselType.POSITION_ACTIVITY && vessel.segments.length > 0 ? (
-              <ExpandedRowList>
-                {vessel.segments.map(tripSegment => (
-                  <li key={tripSegment}>{`${tripSegment} – ${tripSegment}`}</li>
-                ))}
-              </ExpandedRowList>
+            {!!vessel.segments?.length || !!vessel.recentSegments?.length ? (
+              <>
+                {!!vessel.segments?.length && (
+                  <>
+                    <ExpandedRowList>{segments}</ExpandedRowList>
+                    <StyledTagInfo
+                      backgroundColor={THEME.color.mediumSeaGreen25}
+                      color={THEME.color.charcoal}
+                      title={FleetSegmentSource.CURRENT}
+                    >
+                      {pluralize('Segment', vessel.segments?.length ?? 0)}{' '}
+                      {pluralize('actuel', vessel.segments?.length ?? 0)}
+                    </StyledTagInfo>
+                  </>
+                )}
+                {!vessel.segments?.length && (
+                  <>
+                    <ExpandedRowList>{segments}</ExpandedRowList>
+                    <StyledTagInfo
+                      backgroundColor={THEME.color.goldenPoppy25}
+                      color={THEME.color.charcoal}
+                      title={FleetSegmentSource.RECENT}
+                    >
+                      {pluralize('Segment', vessel.recentSegments?.length ?? 0)}{' '}
+                      {pluralize('récent', vessel.recentSegments?.length ?? 0)}
+                    </StyledTagInfo>
+                  </>
+                )}
+              </>
             ) : (
               <None>Aucun segment.</None>
             )}
           </ExpandedRowCell>
           <ExpandedRowCell>
-            <ExpandedRowLabel>Engins à bord (FAR)</ExpandedRowLabel>
-            {vessel.gearsArray.length > 0 ? (
-              <ExpandedRowList>{gears}</ExpandedRowList>
+            <ExpandedRowLabel>
+              Engins {!!vessel.gearsArray?.length && 'à bord (FAR)'}
+              {!vessel.gearsArray?.length && !!vessel.recentGearsArray?.length && '(7 derniers jours)'}
+            </ExpandedRowLabel>
+            {!!vessel.gearsArray?.length || !!vessel.recentGearsArray?.length ? (
+              <>
+                {!!vessel.gearsArray?.length && (
+                  <>
+                    <ExpandedRowList>{gears}</ExpandedRowList>
+                    <StyledTagInfo
+                      backgroundColor={THEME.color.mediumSeaGreen25}
+                      color={THEME.color.charcoal}
+                      title={GearSource.CURRENT}
+                    >
+                      {pluralize('Engin', vessel.gearsArray?.length ?? 0)} à bord
+                    </StyledTagInfo>
+                  </>
+                )}
+                {!vessel.gearsArray?.length && !!vessel.recentGearsArray?.length && (
+                  <>
+                    <ExpandedRowList>{gears}</ExpandedRowList>
+                    <StyledTagInfo
+                      backgroundColor={THEME.color.goldenPoppy25}
+                      color={THEME.color.charcoal}
+                      title={GearSource.RECENT}
+                    >
+                      {pluralize('Engin', vessel.recentGearsArray?.length ?? 0)}{' '}
+                      {pluralize('récent', vessel.recentGearsArray?.length ?? 0)}
+                    </StyledTagInfo>
+                  </>
+                )}
+              </>
             ) : (
-              <None>Aucun engin à bord.</None>
+              <None>Aucun engin.</None>
             )}
           </ExpandedRowCell>
           <ExpandedRowCell>
@@ -144,6 +220,35 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
     </>
   )
 })
+
+function getGearListElement(gearsByCode: Record<string, Gear>) {
+  return function (code: string) {
+    const gear = gearsByCode?.[code]
+    const gearName = gear?.name ? `– ${gear.name}` : ''
+
+    return (
+      <li key={code}>
+        {code} {gearName}
+      </li>
+    )
+  }
+}
+
+function getSegmentListElement(fleetSegments: FleetSegment[]) {
+  return function (code: string) {
+    const foundSegment = fleetSegments.find(segment => segment.segment === code)
+
+    return (
+      <li key={code} title={getSegmentInfo(foundSegment)}>
+        {code} – {foundSegment?.segmentName}
+      </li>
+    )
+  }
+}
+
+const StyledTagInfo = styled(TagInfo)`
+  margin-top: 0;
+`
 
 const ExpandableRowCell = styled(TableWithSelectableRows.Td)<{
   $hasWhiteBackground: boolean

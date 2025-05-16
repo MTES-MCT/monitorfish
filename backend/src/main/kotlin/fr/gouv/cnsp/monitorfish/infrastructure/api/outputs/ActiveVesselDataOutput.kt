@@ -40,6 +40,7 @@ sealed class ActiveVesselBaseDataOutput(
     open val detectabilityRiskFactor: Double,
     open val riskFactor: Double,
     open val segments: List<String>,
+    open val recentSegments: List<String>,
     open val underCharter: Boolean? = null,
     open val isAtPort: Boolean,
     open val producerOrganizationMembership: String? = null,
@@ -47,6 +48,7 @@ sealed class ActiveVesselBaseDataOutput(
     // Properties for efficient filtering in frontend
     open val isFiltered: Int, // 0 is False, 1 is True - for WebGL
     open val gearsArray: List<String>,
+    open val recentGearsArray: List<String>,
     open val hasInfractionSuspicion: Boolean,
     open val speciesArray: List<String>,
 ) {
@@ -79,6 +81,11 @@ sealed class ActiveVesselBaseDataOutput(
                     district = lastPosition.district,
                     districtCode = lastPosition.districtCode,
                     segments = lastPosition.segments ?: listOf(),
+                    recentSegments =
+                        activeVesselWithReferentialData.vesselProfile
+                            ?.recentSegments
+                            ?.keys
+                            ?.toList() ?: listOf(),
                     speciesOnboard =
                         lastPosition.speciesOnboard?.map {
                             SpeciesLastPositionDataOutput.fromSpeciesLastPosition(
@@ -103,6 +110,13 @@ sealed class ActiveVesselBaseDataOutput(
                             latitude = lastPosition.latitude,
                         ).toList(),
                     gearsArray = lastPosition.gearOnboard?.mapNotNull { it.gear }?.distinct() ?: listOf(),
+                    recentGearsArray =
+                        activeVesselWithReferentialData.vesselProfile
+                            ?.recentGears
+                            ?.keys
+                            ?.toList()
+                            ?.distinct()
+                            ?: listOf(),
                     hasAlert = lastPosition.alerts?.isNotEmpty() ?: false,
                     hasBeaconMalfunction = lastPosition.beaconMalfunctionId != null,
                     hasInfractionSuspicion =
@@ -155,7 +169,12 @@ sealed class ActiveVesselBaseDataOutput(
                     probabilityRiskFactor = activeVesselWithReferentialData.riskFactor.probabilityRiskFactor,
                     detectabilityRiskFactor = activeVesselWithReferentialData.riskFactor.detectabilityRiskFactor,
                     riskFactor = activeVesselWithReferentialData.riskFactor.riskFactor,
-                    segments = activeVesselWithReferentialData.riskFactor.segments,
+                    segments = listOf(),
+                    recentSegments =
+                        activeVesselWithReferentialData.vesselProfile
+                            ?.recentSegments
+                            ?.keys
+                            ?.toList() ?: listOf(),
                     underCharter = activeVesselWithReferentialData.vessel.underCharter,
                     isAtPort = false,
                     isFiltered = 0,
@@ -165,6 +184,13 @@ sealed class ActiveVesselBaseDataOutput(
                         activeVesselWithReferentialData.riskFactor.gearOnboard
                             .mapNotNull { it.gear }
                             .distinct(),
+                    recentGearsArray =
+                        activeVesselWithReferentialData.vesselProfile
+                            ?.recentGears
+                            ?.keys
+                            ?.toList()
+                            ?.distinct()
+                            ?: listOf(),
                     hasInfractionSuspicion = false,
                     speciesArray =
                         activeVesselWithReferentialData.riskFactor.speciesOnboard
@@ -198,12 +224,14 @@ data class ActiveVesselWithPositionDataOutput(
     override val detectabilityRiskFactor: Double,
     override val riskFactor: Double,
     override val segments: List<String>,
+    override val recentSegments: List<String>,
     override val underCharter: Boolean? = null,
     override val isAtPort: Boolean,
     override val producerOrganizationMembership: String? = null,
     override val reportings: List<String> = listOf(),
     // Properties for efficient filtering in frontend
     override val gearsArray: List<String>,
+    override val recentGearsArray: List<String>,
     override val hasInfractionSuspicion: Boolean,
     override val speciesArray: List<String>,
     override val isFiltered: Int, // 0 is False, 1 is True - for WebGL
@@ -248,12 +276,14 @@ data class ActiveVesselWithPositionDataOutput(
         detectabilityRiskFactor = detectabilityRiskFactor,
         riskFactor = riskFactor,
         segments = segments,
+        recentSegments = recentSegments,
         underCharter = underCharter,
         isAtPort = isAtPort,
         isFiltered = isFiltered,
         producerOrganizationMembership = producerOrganizationMembership,
         reportings = reportings,
         gearsArray = gearsArray,
+        recentGearsArray = recentGearsArray,
         hasInfractionSuspicion = hasInfractionSuspicion,
         speciesArray = speciesArray,
     )
@@ -281,6 +311,7 @@ data class ActiveVesselWithLogbookDataOutput(
     override val detectabilityRiskFactor: Double,
     override val riskFactor: Double,
     override val segments: List<String>,
+    override val recentSegments: List<String>,
     override val underCharter: Boolean? = null,
     override val isAtPort: Boolean,
     override val producerOrganizationMembership: String? = null,
@@ -288,6 +319,7 @@ data class ActiveVesselWithLogbookDataOutput(
     // Properties for efficient filtering in frontend
     override val isFiltered: Int, // 0 is False, 1 is True - for WebGL
     override val gearsArray: List<String>,
+    override val recentGearsArray: List<String>,
     override val hasInfractionSuspicion: Boolean,
     override val speciesArray: List<String>,
 ) : ActiveVesselBaseDataOutput(
@@ -314,11 +346,13 @@ data class ActiveVesselWithLogbookDataOutput(
         detectabilityRiskFactor = detectabilityRiskFactor,
         riskFactor = riskFactor,
         segments = segments,
+        recentSegments = recentSegments,
         underCharter = underCharter,
         isAtPort = isAtPort,
         producerOrganizationMembership = producerOrganizationMembership,
         reportings = reportings,
         gearsArray = gearsArray,
+        recentGearsArray = recentGearsArray,
         hasInfractionSuspicion = hasInfractionSuspicion,
         speciesArray = speciesArray,
         isFiltered = isFiltered,

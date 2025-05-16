@@ -1,6 +1,6 @@
 import { Ellipsised } from '@components/Ellipsised'
 import { Titled } from '@components/Titled'
-import { ActiveVesselType } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { FleetSegmentSource, GearSource } from '@features/FleetSegment/constants'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { customDayjs, TableWithSelectableRows, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
@@ -56,7 +56,7 @@ export function getTableColumns(
       enableSorting: true,
       header: () => 'Ndr',
       id: 'riskFactor',
-      size: 75 + legacyFirefoxOffset
+      size: 65 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row.vesselName ?? (row.vesselId === -1 ? 'Navire inconnu' : '-'),
@@ -76,21 +76,64 @@ export function getTableColumns(
       size: 244 + legacyFirefoxOffset
     },
     {
-      accessorFn: row =>
-        row.activeVesselType === ActiveVesselType.POSITION_ACTIVITY && row.segments?.length > 0
-          ? row.segments.map(tripSegment => tripSegment).join(', ')
-          : undefined,
+      accessorFn: row => {
+        if (row.segments.length > 0) {
+          return row.segments.map(tripSegment => tripSegment).join(', ')
+        }
+
+        return row.recentSegments.length > 0 ? row.recentSegments.map(tripSegment => tripSegment).join(', ') : undefined
+      },
       cell: (info: CellContext<Vessel.ActiveVessel, string | undefined>) =>
-        info.getValue() ? <Ellipsised>{info.getValue()}</Ellipsised> : <None>Aucun segment</None>,
+        info.getValue() ? (
+          <Ellipsised>
+            {!!info.row.original.segments.length && (
+              <Tag
+                backgroundColor={THEME.color.mediumSeaGreen25}
+                color={THEME.color.charcoal}
+                title={FleetSegmentSource.CURRENT}
+              >
+                {info.getValue()}
+              </Tag>
+            )}
+            {!info.row.original.segments.length && !!info.row.original.recentSegments?.length && (
+              <i title={FleetSegmentSource.RECENT}>{info.getValue()}</i>
+            )}
+          </Ellipsised>
+        ) : (
+          <None>Aucun segment</None>
+        ),
       enableSorting: true,
       header: () => 'Segments',
       id: 'segments',
-      size: 168 + legacyFirefoxOffset
+      size: 178 + legacyFirefoxOffset
     },
     {
-      accessorFn: row => (row.gearsArray.length > 0 ? row.gearsArray.join(', ') : undefined),
+      accessorFn: row => {
+        if (row.gearsArray.length) {
+          return row.gearsArray.join(', ')
+        }
+
+        return row.recentGearsArray.length > 0 ? row.recentGearsArray.join(', ') : undefined
+      },
       cell: (info: CellContext<Vessel.ActiveVessel, string | undefined>) =>
-        info.getValue() ? <Ellipsised>{info.getValue()}</Ellipsised> : <None>Aucun engin</None>,
+        info.getValue() ? (
+          <Ellipsised>
+            {!!info.row.original.gearsArray.length && (
+              <Tag
+                backgroundColor={THEME.color.mediumSeaGreen25}
+                color={THEME.color.charcoal}
+                title={GearSource.CURRENT}
+              >
+                {info.getValue()}
+              </Tag>
+            )}
+            {!info.row.original.gearsArray.length && !!info.row.original.recentGearsArray?.length && (
+              <i title={GearSource.RECENT}>{info.getValue()}</i>
+            )}
+          </Ellipsised>
+        ) : (
+          <None>Aucun engin</None>
+        ),
       enableSorting: false,
       header: () => 'Engins',
       id: 'gears',
@@ -99,11 +142,7 @@ export function getTableColumns(
     {
       accessorFn: row => (row.speciesArray.length > 0 ? row.speciesArray.join(', ') : undefined),
       cell: (info: CellContext<Vessel.ActiveVessel, string | undefined>) =>
-        info.getValue() ? (
-          <Ellipsised>{info.getValue()}</Ellipsised>
-        ) : (
-          <None>Le navire n&apos;a pas encore fait de FAR</None>
-        ),
+        info.getValue() ? <Ellipsised>{info.getValue()}</Ellipsised> : <None>Le navire n&apos;a pas fait de FAR</None>,
       enableSorting: false,
       header: () => 'Espèces',
       id: 'species',

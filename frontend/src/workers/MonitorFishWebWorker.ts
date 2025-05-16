@@ -374,18 +374,23 @@ export class MonitorFishWebWorker {
         }
 
         if (fleetSegmentsSet) {
-          // TODO Include segments from profiles
-          if (vessel.activeVesselType === ActiveVesselType.LOGBOOK_ACTIVITY) {
+          if (!!vessel?.segments.length && !vessel?.segments?.some(seg => fleetSegmentsSet.has(seg))) {
             return false
           }
 
-          if (!vessel?.segments.some(seg => fleetSegmentsSet.has(seg))) {
+          if (!vessel?.segments.length && !vessel?.recentSegments?.some(seg => fleetSegmentsSet.has(seg))) {
             return false
           }
         }
 
-        if (gearCodesSet && !vessel?.gearsArray.some(gear => gearCodesSet.has(gear))) {
-          return false
+        if (gearCodesSet) {
+          if (!!vessel?.gearsArray?.length && !vessel?.gearsArray?.some(gear => gearCodesSet.has(gear))) {
+            return false
+          }
+
+          if (!vessel?.gearsArray?.length && !vessel?.recentGearsArray?.some(gear => gearCodesSet.has(gear))) {
+            return false
+          }
         }
 
         if (specyCodesSet && !vessel?.speciesArray.some(species => specyCodesSet.has(species))) {

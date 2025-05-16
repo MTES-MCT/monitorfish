@@ -11,8 +11,8 @@ export const VESSELS_ESTIMATED_POSITION_VECTOR_LAYER = (function () {
     renderBuffer: -3,
     source: VESSELS_ESTIMATED_POSITION_VECTOR_SOURCE as any,
     style: feature => getEstimatedPositionStyle(feature),
-    updateWhileAnimating: true,
-    updateWhileInteracting: true,
+    updateWhileAnimating: false,
+    updateWhileInteracting: false,
     zIndex: LayerProperties.VESSEL_ESTIMATED_POSITION.zIndex
   }) as MonitorFishMap.VectorLayerWithName
 

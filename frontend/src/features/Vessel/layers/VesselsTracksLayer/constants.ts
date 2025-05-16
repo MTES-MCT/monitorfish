@@ -12,8 +12,8 @@ export const VESSEL_TRACK_VECTOR_LAYER = (function () {
   const layer = new Vector({
     renderBuffer: 4,
     source: VESSEL_TRACK_VECTOR_SOURCE as any,
-    updateWhileAnimating: true,
-    updateWhileInteracting: true,
+    updateWhileAnimating: false,
+    updateWhileInteracting: false,
     zIndex: LayerProperties.VESSEL_TRACK.zIndex
   }) as MonitorFishMap.VectorLayerWithName
 

@@ -11,8 +11,8 @@ export const VESSELS_LABEL_VECTOR_LAYER = (function () {
     renderBuffer: 7,
     source: VESSELS_LABEL_VECTOR_SOURCE,
     style: getLabelLineStyle,
-    updateWhileAnimating: true,
-    updateWhileInteracting: true,
+    updateWhileAnimating: false,
+    updateWhileInteracting: false,
     zIndex: LayerProperties.VESSELS_LABEL.zIndex
   }) as MonitorFishMap.VectorLayerWithName
 

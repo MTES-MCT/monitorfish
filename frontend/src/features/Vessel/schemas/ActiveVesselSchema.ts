@@ -49,8 +49,11 @@ const ActiveVesselBaseSchema = z.strictObject({
   length: z.number().optional(),
   mmsi: z.string().optional(),
   probabilityRiskFactor: z.number(),
+  recentGearsArray: z.array(z.string()),
+  recentSegments: z.array(z.string()),
   reportings: z.array(z.nativeEnum(ReportingType)),
   riskFactor: z.number(),
+  segments: z.array(z.string()),
   speciesArray: z.array(z.string()),
   speciesOnboard: z.array(DeclaredLogbookSpeciesSchema),
   underCharter: z.boolean().optional(),
@@ -76,7 +79,6 @@ export const ActiveVesselWithPositionSchema = ActiveVesselBaseSchema.extend({
   latitude: z.number(), // WSG84_PROJECTION
   longitude: z.number(), // WSG84_PROJECTION
   positionType: z.string(),
-  segments: z.array(z.string()),
   speed: z.number().optional(),
   vesselGroups: z.array(VesselGroupSchema)
 })

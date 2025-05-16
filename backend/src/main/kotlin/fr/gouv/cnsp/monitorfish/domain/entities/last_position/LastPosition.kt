@@ -139,24 +139,20 @@ data class LastPosition(
 
         /**
          * IF
-         *  a filter on segment, gear or species is set AND the related data is empty in last position
+         *  a filter on segment or gear is set AND
+         *  the current data is empty in last position (the vessel has not sent any FAR)
          * THEN
-         *  compute the matches on the profile to obtain the recent segment, gear or species
+         *  compute the matches on the profile to obtain the recent segment or gear
          * ELSE
-         *  Use the
-         *
-         *
-         * no match are found on real-time fleet segment, gear or species are found,
-         * we compute matches on vessel profile.
+         *  Match the segments and gears based on the current data
          */
         val hasProfileFieldsMatch =
             if ((filters.fleetSegments.isNotEmpty() && this.segments?.isEmpty() == true) ||
-                (filters.gearCodes.isNotEmpty() && this.gearOnboard?.isEmpty() == true) ||
-                (filters.specyCodes.isNotEmpty() && this.speciesOnboard?.isEmpty() == true)
+                (filters.gearCodes.isNotEmpty() && this.gearOnboard?.isEmpty() == true)
             ) {
                 profile?.isInGroup(vesselGroup) == true
             } else {
-                hasFleetSegmentMatch && hasGearMatch && hasSpeciesMatch
+                hasFleetSegmentMatch && hasGearMatch
             }
 
         val hasVesselLocationMatch =
@@ -195,6 +191,7 @@ data class LastPosition(
             hasRiskFactorMatch &&
             hasLastPositionDateTimeMatch &&
             hasProfileFieldsMatch &&
+            hasSpeciesMatch &&
             hasVesselLocationMatch &&
             hasVesselLengthMatch &&
             hasZoneMatch

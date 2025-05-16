@@ -75,9 +75,9 @@ describe('MonitorFishWebWorker.getFilteredVessels', () => {
   })
 
   it('should filters by recentSegments', () => {
-    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, recentSegments: ['segment1'], vesselsLocation: [] }
+    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, fleetSegments: ['segment666'], vesselsLocation: [] }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
-    expect(result).toContain('vessel2')
+    expect(result).toContain('vessel3')
     expect(result).not.toContain('vessel1')
   })
 
@@ -89,9 +89,9 @@ describe('MonitorFishWebWorker.getFilteredVessels', () => {
   })
 
   it('should filters by recentGearCodes', () => {
-    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, recentGearCodes: ['gear1'], vesselsLocation: [] }
+    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, gearCodes: ['gear666'], vesselsLocation: [] }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
-    expect(result).toContain('vessel2')
+    expect(result).toContain('vessel3')
     expect(result).not.toContain('vessel1')
   })
 

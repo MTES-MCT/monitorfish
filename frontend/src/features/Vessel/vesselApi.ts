@@ -1,6 +1,6 @@
 import { monitorfishApi } from '@api/api'
 import { HttpStatusCode, RtkCacheTagType } from '@api/constants'
-import { VesselLastPositionSchema } from '@features/Vessel/schemas/VesselLastPositionSchema'
+import { ActiveVesselSchema } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { VesselSchema } from '@features/Vessel/schemas/VesselSchema'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
@@ -23,6 +23,12 @@ const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les info
 
 export const vesselApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
+    getActiveVessels: builder.query<Vessel.ActiveVessel[], void>({
+      query: () => `/vessels`,
+      transformResponse: (baseQueryReturnValue: Vessel.ActiveVessel[]) =>
+        parseResponseOrReturn<Vessel.ActiveVessel>(baseQueryReturnValue, ActiveVesselSchema, true)
+    }),
+
     getVessel: builder.query<Vessel.Vessel, number>({
       providesTags: () => [{ type: RtkCacheTagType.Vessel }],
       query: id => `/vessels/${id}`,
@@ -152,12 +158,6 @@ export const vesselApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_VESSEL_REPORTINGS_ERROR_MESSAGE, response)
     }),
 
-    getVesselsLastPositions: builder.query<Vessel.VesselLastPosition[], void>({
-      query: () => `/vessels`,
-      transformResponse: (baseQueryReturnValue: Vessel.VesselLastPosition[]) =>
-        parseResponseOrReturn<Vessel.VesselLastPosition>(baseQueryReturnValue, VesselLastPositionSchema, true)
-    }),
-
     searchVessels: builder.query<Vessel.VesselIdentity[], Vessel.ApiSearchFilter>({
       query: filter => getUrlOrPathWithQueryParams('/vessels/search', filter),
       transformErrorResponse: response => new FrontendApiError(SEARCH_VESSELS_ERROR_MESSAGE, response)
@@ -165,5 +165,4 @@ export const vesselApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const { useGetVesselQuery, useGetVesselReportingsByVesselIdentityQuery, useGetVesselsLastPositionsQuery } =
-  vesselApi
+export const { useGetActiveVesselsQuery, useGetVesselQuery, useGetVesselReportingsByVesselIdentityQuery } = vesselApi

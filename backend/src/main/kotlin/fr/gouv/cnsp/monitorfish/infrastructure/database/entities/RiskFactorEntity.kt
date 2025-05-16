@@ -16,7 +16,7 @@ import java.time.ZonedDateTime
 
 @Entity
 @Table(name = "risk_factors")
-data class RiskFactorsEntity(
+data class RiskFactorEntity(
     @Id
     @Column(name = "id")
     val id: Int,

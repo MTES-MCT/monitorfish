@@ -1,9 +1,13 @@
 package fr.gouv.cnsp.monitorfish.config
 
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.jsontype.NamedType
+import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
@@ -13,6 +17,8 @@ import org.n52.jackson.datatype.jts.JtsModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.*
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.IHasImplementation as IAlertsHasImplementation
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripGear as GearLogbook
@@ -25,6 +31,11 @@ class MapperConfiguration {
         val mapper = Jackson2ObjectMapperBuilder().build<ObjectMapper>()
 
         mapper.registerModule(JtsModule())
+        mapper.registerModule(
+            SimpleModule().apply {
+                addSerializer(Double::class.java, Double5PrecisionSerializer())
+            },
+        )
 
         // needed to handle java.time.ZonedDateTime serialization
         mapper.registerModule(JavaTimeModule())
@@ -59,5 +70,20 @@ class MapperConfiguration {
             .stream(enumOfTypeToAdd.enumConstants)
             .map { enumItem -> NamedType(enumItem.getImplementation(), enumItem.name) }
             .forEach { type -> mapper.registerSubtypes(type) }
+    }
+}
+
+class Double5PrecisionSerializer : JsonSerializer<Double>() {
+    override fun serialize(
+        value: Double,
+        gen: JsonGenerator,
+        serializers: SerializerProvider,
+    ) {
+        val rounded =
+            BigDecimal(value)
+                .setScale(4, RoundingMode.HALF_UP)
+                .toDouble()
+
+        gen.writeNumber(rounded)
     }
 }

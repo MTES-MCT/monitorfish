@@ -1,11 +1,11 @@
 // TODO Wrap into a `Reporting` namespace.
 
 import { Seafront } from '@constants/seafront'
-import { Vessel } from '@features/Vessel/Vessel.types'
 
 import type { Infraction } from '../../domain/types/infraction'
 import type { PendingAlertValue } from '../Alert/types'
 import type { LegacyControlUnit } from '../ControlUnit/legacyControlUnit'
+import type { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 
 // TODO Move other types into new `Reporting` namespace.
 export namespace Reporting {
@@ -35,7 +35,7 @@ export type BaseReporting = {
   underCharter: boolean | undefined
   validationDate: string | undefined
   vesselId: number | undefined
-  vesselIdentifier: Vessel.VesselIdentifier | undefined
+  vesselIdentifier: VesselIdentifier | undefined
   vesselName: string | undefined
 
   // TODO These 2 props shouldn't be there at all and should be treated in a separated redux state.

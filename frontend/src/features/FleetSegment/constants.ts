@@ -29,3 +29,13 @@ export const DEFAULT_FLEET_SEGMENT: FleetSegment = {
   vesselTypes: [],
   year: customDayjs().year()
 }
+
+export enum FleetSegmentSource {
+  'CURRENT' = 'Segment(s) actuel(s) à partir des messages de captures',
+  'RECENT' = 'Segment(s) ces 7 derniers jours'
+}
+
+export enum GearSource {
+  'CURRENT' = 'Engin(s) utilisé(s) à partir des messages de captures',
+  'RECENT' = 'Engin(s) utilisé(s) ces 7 derniers jours'
+}

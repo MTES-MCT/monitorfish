@@ -3,8 +3,14 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.dtos.ActiveVesselWithReferentialDataDTO
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LastPositionEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.RiskFactorEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.VesselEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.VesselProfileEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLastPositionRepository
 import jakarta.transaction.Transactional
 import org.springframework.cache.annotation.Cacheable
@@ -28,28 +34,26 @@ class JpaLastPositionRepository(
                 it.toLastPosition(mapper)
             }
 
-    @Cacheable(value = ["vessels_positions"])
-    override fun findAllInLastMonthOrWithBeaconMalfunction(): List<LastPosition> {
+    @Cacheable(value = ["active_vessels"])
+    override fun findActiveVesselWithReferentialData(): List<ActiveVesselWithReferentialDataDTO> {
         val nowMinusOneMonth = ZonedDateTime.now().minusMonths(1)
-        return dbLastPositionRepository
-            .findAllByDateTimeGreaterThanEqualOrBeaconMalfunctionIdNotNull(nowMinusOneMonth)
-            // We NEED this non filterNotNull (even if the IDE say not so, as the SQL request may return null internalReferenceNumber)
-            .filterNotNull()
-            .map {
-                it.toLastPosition(mapper)
-            }
-    }
+        return dbLastPositionRepository.findActiveVesselWithReferentialData(nowMinusOneMonth).map {
+            ActiveVesselWithReferentialDataDTO(
+                lastPosition =
+                    it.lastPosition?.let { lastPosition ->
+                        // There is no way to do a subquery in the JPQL query's FULL JOIN
+                        if (lastPosition.dateTime > nowMinusOneMonth || lastPosition.beaconMalfunctionId != null) {
+                            return@let lastPosition.toLastPosition(mapper)
+                        }
 
-    @Cacheable(value = ["vessels_positions_with_beacon_malfunctions"])
-    override fun findAllWithBeaconMalfunctionBeforeLast48Hours(): List<LastPosition> {
-        val nowMinus48Hours = ZonedDateTime.now().minusHours(48)
-        return dbLastPositionRepository
-            .findAllByDateTimeLessThanEqualAndBeaconMalfunctionIdNotNull(nowMinus48Hours)
-            // We NEED this non filterNotNull (even if the IDE say not so, as the SQL request may return null internalReferenceNumber)
-            .filterNotNull()
-            .map {
-                it.toLastPosition(mapper)
-            }
+                        return@let null
+                    },
+                vesselProfile = it.vesselProfile?.toVesselProfile(),
+                vessel = it.vessel?.toVessel(),
+                producerOrganizationName = it.producerOrganizationName,
+                riskFactor = it.riskFactor?.toVesselRiskFactor(mapper) ?: VesselRiskFactor(),
+            )
+        }
     }
 
     override fun findLastPositionDate(): ZonedDateTime =
@@ -79,3 +83,11 @@ class JpaLastPositionRepository(
         dbLastPositionRepository.deleteAllInBatch()
     }
 }
+
+data class ActiveVesselWithReferentialDataEntityDTO(
+    val lastPosition: LastPositionEntity?,
+    val vesselProfile: VesselProfileEntity?,
+    val vessel: VesselEntity?,
+    val riskFactor: RiskFactorEntity?,
+    val producerOrganizationName: String?,
+)

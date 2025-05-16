@@ -1,7 +1,7 @@
 import { Seafront } from '@constants/seafront'
 import { PendingAlertValueType } from '@features/Alert/types'
 import { ReportingType } from '@features/Reporting/types'
-import { Vessel } from '@features/Vessel/Vessel.types'
+import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 
 import type { PendingAlertReporting } from '@features/Reporting/types'
 
@@ -32,6 +32,6 @@ export const fortyHeightHourAlertReporting: PendingAlertReporting = {
     type: PendingAlertValueType.MISSING_FAR_48_HOURS_ALERT
   },
   vesselId: 1234568,
-  vesselIdentifier: Vessel.VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+  vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
   vesselName: 'A VESSEL'
 }

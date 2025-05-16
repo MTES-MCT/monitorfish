@@ -52,7 +52,6 @@ object TestUtils {
                         4,
                     ),
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                vesselGroups = listOf(),
             )
         val secondPosition =
             LastPosition(
@@ -92,7 +91,6 @@ object TestUtils {
                         },
                     ),
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                vesselGroups = listOf(),
             )
         val thirdPosition =
             LastPosition(
@@ -118,7 +116,6 @@ object TestUtils {
                     ),
                 isAtPort = false,
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                vesselGroups = listOf(),
             )
         val fourthPosition =
             LastPosition(
@@ -144,7 +141,6 @@ object TestUtils {
                         1,
                     ),
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                vesselGroups = listOf(),
             )
 
         return listOf(firstPosition, secondPosition, thirdPosition, fourthPosition)

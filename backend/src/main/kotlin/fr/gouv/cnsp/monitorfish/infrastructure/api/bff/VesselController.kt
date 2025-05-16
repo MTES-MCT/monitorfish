@@ -23,7 +23,7 @@ import java.time.ZonedDateTime
 @RequestMapping("/bff/v1/vessels")
 @Tag(name = "APIs for Vessels")
 class VesselController(
-    private val getLastPositions: GetLastPositions,
+    private val getActiveVessels: GetActiveVessels,
     private val getVessel: GetVessel,
     private val getVesselById: GetVesselById,
     private val getVesselPositions: GetVesselPositions,
@@ -36,15 +36,16 @@ class VesselController(
     private val getVesselLastTripNumbers: GetVesselLastTripNumbers,
 ) {
     @GetMapping("")
-    @Operation(summary = "Get all vessels' last position")
-    fun getVessels(response: HttpServletResponse): List<LastPositionDataOutput> {
+    @Operation(summary = "Get all active vessels")
+    fun getVessels(response: HttpServletResponse): List<ActiveVesselBaseDataOutput> {
         val email: String = getEmail(response)
-        val positions = getLastPositions.execute(email)
+        val activeVessels = getActiveVessels.execute(email)
 
-        return positions.map { position ->
-            position.let {
-                LastPositionDataOutput.fromLastPosition(position)
-            }
+        return activeVessels.mapIndexed { index, vessel ->
+            ActiveVesselBaseDataOutput.fromActiveVesselWithReferentialData(
+                activeVesselWithReferentialData = vessel,
+                index = index,
+            )
         }
     }
 

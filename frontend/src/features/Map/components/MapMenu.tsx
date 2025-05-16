@@ -1,5 +1,6 @@
 import { HIT_PIXEL_TO_TOLERANCE } from '@constants/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
+import { ActiveVesselType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Point } from 'ol/geom'
 import { useEffect, useRef, useState } from 'react'
@@ -14,7 +15,7 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
 export function MapMenu() {
   const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
   const [coordinates, setCoordinates] = useState<number[]>([])
-  const vessel = useRef<Vessel.VesselLastPosition | undefined>()
+  const vessel = useRef<Vessel.ActiveVesselWithPosition | undefined>()
 
   useEffect(() => {
     function showMenu(event) {
@@ -34,7 +35,7 @@ export function MapMenu() {
       }
 
       const clickedVessel = vessels.find(lastPositionVessel => clickedFeatureId === lastPositionVessel.vesselFeatureId)
-      if (!clickedVessel) {
+      if (clickedVessel?.activeVesselType !== ActiveVesselType.POSITION_ACTIVITY) {
         return
       }
 

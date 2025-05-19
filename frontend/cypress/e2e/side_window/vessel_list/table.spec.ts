@@ -8,6 +8,16 @@ context('Side Window > Vessel List > Table', () => {
     cy.wait(250)
     cy.getDataCy('side-window-menu-vessel-list').click()
 
+    cy.fill('Rechercher un navire', 'AIGLE BLEU')
+    cy.getDataCy('vessel-list-length').contains('2 navires')
+    cy.get('.Table-SimpleTable tr').should('have.length', 3)
+    cy.get('[title="AIGLE BLEU"]').scrollIntoView().click({ force: true })
+    cy.get('[data-id="VESSELS:ABC010331976/IRCS131/EXTIMM131-expanded"]').contains('NWW05 – NWW05')
+    cy.get('[data-id="VESSELS:ABC010331976/IRCS131/EXTIMM131-expanded"]').contains('Segment récent')
+    cy.get('[data-id="VESSELS:ABC010331976/IRCS131/EXTIMM131-expanded"]').contains('TBB – Chaluts à perche')
+    cy.get('[data-id="VESSELS:ABC010331976/IRCS131/EXTIMM131-expanded"]').contains('Engin récent')
+    cy.getDataCy('vessel-list-reset-filters').click()
+
     cy.fill('Rechercher un navire', 'PRISON')
     cy.getDataCy('vessel-list-length').contains('2 navires')
     cy.get('.Table-SimpleTable tr').should('have.length', 3)
@@ -38,11 +48,13 @@ context('Side Window > Vessel List > Table', () => {
     /**
      * Open a row
      */
-    cy.get('[title="PARENT EXPLIQUER COUCHER"]').click()
+    cy.get('[title="PARENT EXPLIQUER COUCHER"]').scrollIntoView().click({ force: true })
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('NWW01 – NWW01')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('NWW03 – NWW03')
+    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('Segments actuels')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('OTT – Chaluts jumeaux à panneaux')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('OTB – Chaluts de fond à panneaux')
+    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('Engins à bord')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('ANF – 4164.47 kg')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('LEZ – 330.72 kg')
 
@@ -99,11 +111,13 @@ context('Side Window > Vessel List > Table', () => {
     /**
      * Open a row
      */
-    cy.get('[title="PARENT EXPLIQUER COUCHER"]').click()
+    cy.get('[title="PARENT EXPLIQUER COUCHER"]').scrollIntoView().click({ force: true })
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('NWW01 – NWW01')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('NWW03 – NWW03')
+    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('Segments actuels')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('OTT – Chaluts jumeaux à panneaux')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('OTB – Chaluts de fond à panneaux')
+    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('Engins à bord')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('ANF – 4164.47 kg')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('LEZ – 330.72 kg')
   })

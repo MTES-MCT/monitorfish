@@ -61,10 +61,10 @@ context('Side Window > Vessel Group List', () => {
     cy.get('[title="Mission Thémis – semaine 04"]').click()
     cy.get('[title="Mission Thémis – semaine 04"]').within(() => {
       cy.get('.Table-SimpleTable tr').should('have.length', 7)
-      cy.get('[title="MALOTRU"]').scrollIntoView().click()
+      cy.get('[title="MALOTRU"]').scrollIntoView().click({ force: true })
       cy.wait(200)
       // Then close the row
-      cy.get('[title="MALOTRU"]').click()
+      cy.get('[title="MALOTRU"]').click({ force: true })
       cy.get('[title=\'Supprimer le navire "MALOTRU" du groupe\']').scrollIntoView().click()
       cy.get('.Table-SimpleTable tr').should('have.length', 6)
     })

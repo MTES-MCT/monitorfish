@@ -1,5 +1,5 @@
 import { getColorWithAlpha, getHashDigitsFromString, getStyle } from '@features/Map/layers/styles/utils'
-import { THEME, customDayjs } from '@mtes-mct/monitor-ui'
+import { customDayjs, THEME } from '@mtes-mct/monitor-ui'
 
 import { isForbiddenPeriod } from './utils/isForbiddenPeriod'
 import { theme } from '../../../../ui/theme'
@@ -8,6 +8,23 @@ import type { BaseRegulatoryZone } from '../../types'
 import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { FeatureLike } from 'ol/Feature'
 import type { Style } from 'ol/style'
+
+const styleCache = new Map<string, Style>()
+
+export function getCachedRegulatoryStyle(
+  feature: FeatureLike | undefined,
+  regulation: BaseRegulatoryZone | MonitorFishMap.ShowedLayer | null
+): Style {
+  const key = `${regulation?.topic}:${regulation?.zone}:${feature?.get('metadataIsShowed')}`
+
+  if (!styleCache.has(key)) {
+    const style = getRegulatoryLayerStyle(feature, regulation)
+
+    styleCache.set(key, style)
+  }
+
+  return styleCache.get(key)!
+}
 
 export function getRegulatoryLayerStyle(
   feature: FeatureLike | undefined,

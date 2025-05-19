@@ -1,5 +1,6 @@
 import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { layerActions } from '@features/Map/layer.slice'
+import { getCachedRegulatoryStyle } from '@features/Regulation/layers/styles/regulatoryLayer.style'
 import BaseEvent from 'ol/events/Event'
 import { getArea, getCenter } from 'ol/extent'
 import GeoJSON from 'ol/format/GeoJSON'
@@ -70,8 +71,12 @@ export const getRegulatoryVectorSource =
             : regulatoryZone
           const format = vectorSource.getFormat()
           if (format) {
-            // TODO Type this any.
-            vectorSource.addFeatures(format.readFeatures(feature) as any)
+            const features = format.readFeatures(feature) as Feature<Geometry>[]
+            // eslint-disable-next-line no-restricted-syntax
+            for (const f of features) {
+              f.setStyle(getCachedRegulatoryStyle(f, regulatoryZoneProperties))
+            }
+            vectorSource.addFeatures(features)
           }
           const center = getCenter(vectorSource.getExtent())
           const centerHasValidCoordinates = center?.length && isNumeric(center[0]) && isNumeric(center[1])

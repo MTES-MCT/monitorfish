@@ -12,6 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.LastControlPeriod
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselLocation
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselSize
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import java.time.Duration
@@ -66,10 +67,10 @@ data class LastPosition(
     val alerts: List<String>? = listOf(),
     val beaconMalfunctionId: Int? = null,
     val reportings: List<String> = listOf(),
-    val vesselGroups: List<VesselGroupBase> = listOf(),
 ) {
     fun isInGroup(
         vesselGroup: VesselGroupBase,
+        profile: VesselProfile?,
         now: ZonedDateTime,
     ): Boolean {
         if (vesselGroup !is DynamicVesselGroup) return false
@@ -136,6 +137,24 @@ data class LastPosition(
             filters.specyCodes.isEmpty() ||
                 (this.speciesOnboard?.any { it.species in filters.specyCodes } ?: false)
 
+        /**
+         * IF
+         *  a filter on segment or gear is set AND
+         *  the current data is empty in last position (the vessel has not sent any FAR)
+         * THEN
+         *  compute the matches on the profile to obtain the recent segment or gear
+         * ELSE
+         *  Match the segments and gears based on the current data
+         */
+        val hasProfileFieldsMatch =
+            if ((filters.fleetSegments.isNotEmpty() && this.segments?.isEmpty() == true) ||
+                (filters.gearCodes.isNotEmpty() && this.gearOnboard?.isEmpty() == true)
+            ) {
+                profile?.isInGroup(vesselGroup) == true
+            } else {
+                hasFleetSegmentMatch && hasGearMatch
+            }
+
         val hasVesselLocationMatch =
             vesselsLocation?.let {
                 (it == VesselLocation.PORT && this.isAtPort) ||
@@ -171,8 +190,7 @@ data class LastPosition(
             hasLogbookMatch &&
             hasRiskFactorMatch &&
             hasLastPositionDateTimeMatch &&
-            hasFleetSegmentMatch &&
-            hasGearMatch &&
+            hasProfileFieldsMatch &&
             hasSpeciesMatch &&
             hasVesselLocationMatch &&
             hasVesselLengthMatch &&

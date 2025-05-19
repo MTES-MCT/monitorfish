@@ -11,7 +11,7 @@ export const showAlertInSideWindow =
     dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
     dispatch(
       focusOnAlert({
-        beaconNumber: selectedVessel.beaconNumber,
+        beaconNumber: undefined,
         districtCode: selectedVessel.districtCode,
         externalReferenceNumber: selectedVessel.externalReferenceNumber,
         flagState: selectedVessel.flagState,

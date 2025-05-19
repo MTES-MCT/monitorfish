@@ -6,6 +6,7 @@ import {
 } from '@features/Regulation/utils'
 import { VesselSize } from '@features/Vessel/components/VesselList/constants'
 import { getLastControlledFilterFromLastControlPeriod } from '@features/Vessel/components/VesselList/utils'
+import { ActiveVesselType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { VesselLocation, vesselSize } from '@features/Vessel/types/vessel'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { SEARCH_QUERY_MIN_LENGTH } from '@features/VesselGroup/components/VesselGroupList/hooks/constants'
@@ -158,36 +159,44 @@ export class MonitorFishWebWorker {
     }
   }
 
-  static getDisplayedVesselsGroups(
-    vessels: Vessel.VesselLastPosition[],
+  static getActiveVesselsWithPositionAndDisplayedVesselsGroups(
+    vessels: Vessel.ActiveVessel[],
     vesselGroupsIdsDisplayed: number[],
     vesselGroupsIdsPinned: number[]
-  ): VesselGroupDisplayInformation[] {
-    return vessels.map(vessel => {
-      const pinnedAndDisplayedVesselGroups = vesselGroupsIdsDisplayed.filter(groupId =>
-        vesselGroupsIdsPinned.includes(groupId)
-      )
-      const unpinnedAndDisplayedVesselGroups = vesselGroupsIdsDisplayed.filter(
-        groupId => !vesselGroupsIdsPinned.includes(groupId)
-      )
-      const orderedDisplayedVesselGroups = pinnedAndDisplayedVesselGroups.concat(unpinnedAndDisplayedVesselGroups)
+  ): Array<[Vessel.ActiveVesselWithPosition, VesselGroupDisplayInformation]> {
+    return vessels
+      .filter(vessel => vessel.activeVesselType === ActiveVesselType.POSITION_ACTIVITY)
+      .map(vessel => [vessel, this.getDisplayedVesselGroups(vessel, vesselGroupsIdsDisplayed, vesselGroupsIdsPinned)])
+  }
 
-      const groupsDisplayed = orderedDisplayedVesselGroups
-        .map(id => vessel.vesselGroups.find(group => group.id === id))
-        .filter((group): group is Vessel.VesselGroup => !!group)
+  static getDisplayedVesselGroups(
+    vessel: Vessel.ActiveVesselWithPosition,
+    vesselGroupsIdsDisplayed: number[],
+    vesselGroupsIdsPinned: number[]
+  ): VesselGroupDisplayInformation {
+    const pinnedAndDisplayedVesselGroups = vesselGroupsIdsDisplayed.filter(groupId =>
+      vesselGroupsIdsPinned.includes(groupId)
+    )
+    const unpinnedAndDisplayedVesselGroups = vesselGroupsIdsDisplayed.filter(
+      groupId => !vesselGroupsIdsPinned.includes(groupId)
+    )
+    const orderedDisplayedVesselGroups = pinnedAndDisplayedVesselGroups.concat(unpinnedAndDisplayedVesselGroups)
 
-      const numberOfGroupsHidden =
-        vessel.vesselGroups.length > groupsDisplayed.length ? vessel.vesselGroups.length - groupsDisplayed.length : 0
+    const groupsDisplayed = orderedDisplayedVesselGroups
+      .map(id => vessel.vesselGroups.find(group => group.id === id))
+      .filter((group): group is Vessel.VesselGroup => !!group)
 
-      const firstGroupDisplayed = groupsDisplayed[0]
-      const groupColor = firstGroupDisplayed?.color ? asArray(firstGroupDisplayed.color) : [0, 0, 0]
+    const numberOfGroupsHidden =
+      vessel.vesselGroups.length > groupsDisplayed.length ? vessel.vesselGroups.length - groupsDisplayed.length : 0
 
-      return {
-        groupColor,
-        groupsDisplayed,
-        numberOfGroupsHidden
-      }
-    })
+    const firstGroupDisplayed = groupsDisplayed[0]
+    const groupColor = firstGroupDisplayed?.color ? asArray(firstGroupDisplayed.color) : [0, 0, 0]
+
+    return {
+      groupColor,
+      groupsDisplayed,
+      numberOfGroupsHidden
+    }
   }
 
   static getFilteredVesselGroups(
@@ -248,7 +257,7 @@ export class MonitorFishWebWorker {
     }
   }
 
-  static getFilteredVessels(vessels: Vessel.VesselLastPosition[], filters: VesselListFilter): string[] {
+  static getFilteredVessels(vessels: Vessel.ActiveVessel[], filters: VesselListFilter): string[] {
     const now = customDayjs()
     const vesselIsHidden = filters.lastPositionHoursAgo
       ? now.set('hour', now.get('hour') - filters.lastPositionHoursAgo)
@@ -332,6 +341,10 @@ export class MonitorFishWebWorker {
         }
 
         if (filters.lastPositionHoursAgo) {
+          if (vessel.activeVesselType === ActiveVesselType.LOGBOOK_ACTIVITY) {
+            return false
+          }
+
           const lastPosition = customDayjs(vessel.dateTime)
           if (lastPosition.isBefore(vesselIsHidden)) {
             return false
@@ -360,12 +373,24 @@ export class MonitorFishWebWorker {
           }
         }
 
-        if (fleetSegmentsSet && !vessel?.segments.some(seg => fleetSegmentsSet.has(seg))) {
-          return false
+        if (fleetSegmentsSet) {
+          if (!!vessel?.segments.length && !vessel?.segments?.some(seg => fleetSegmentsSet.has(seg))) {
+            return false
+          }
+
+          if (!vessel?.segments.length && !vessel?.recentSegments?.some(seg => fleetSegmentsSet.has(seg))) {
+            return false
+          }
         }
 
-        if (gearCodesSet && !vessel?.gearsArray.some(gear => gearCodesSet.has(gear))) {
-          return false
+        if (gearCodesSet) {
+          if (!!vessel?.gearsArray?.length && !vessel?.gearsArray?.some(gear => gearCodesSet.has(gear))) {
+            return false
+          }
+
+          if (!vessel?.gearsArray?.length && !vessel?.recentGearsArray?.some(gear => gearCodesSet.has(gear))) {
+            return false
+          }
         }
 
         if (specyCodesSet && !vessel?.speciesArray.some(species => specyCodesSet.has(species))) {
@@ -410,7 +435,11 @@ export class MonitorFishWebWorker {
           }
         }
 
-        if (!!filters.zones?.length && !!vessel.latitude && !!vessel.longitude) {
+        if (filters.zones?.length) {
+          if (vessel.activeVesselType === ActiveVesselType.LOGBOOK_ACTIVITY) {
+            return false
+          }
+
           const vesselPoint = point([vessel.longitude, vessel.latitude])
 
           const features = filters.zones.map(zone => zone.feature)
@@ -425,7 +454,10 @@ export class MonitorFishWebWorker {
   }
 
   // TODO Use to improve vessel list performance on sort
-  static sortTable(vessels: Vessel.VesselLastPosition[], sorting: SortingState): Vessel.VesselLastPosition[] {
+  static sortTable(
+    vessels: Vessel.ActiveVesselWithPosition[],
+    sorting: SortingState
+  ): Vessel.ActiveVesselWithPosition[] {
     return [...vessels].sort((a, b) => {
       // eslint-disable-next-line no-restricted-syntax
       for (const sort of sorting) {

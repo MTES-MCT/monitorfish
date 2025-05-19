@@ -12,6 +12,7 @@ import {
   BLUEFIN_TUNA_NAME_FR,
   BLUEFIN_TUNA_SPECY_CODE
 } from '@features/PriorNotification/constants'
+import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { THEME, customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange } from '@mtes-mct/monitor-ui'
 import { update } from 'lodash-es'
@@ -303,7 +304,7 @@ export function getVesselIdentityFromPriorNotification(
     vesselId: priorNotification.vesselId,
     // In practice, prior notifications always have a vessel CFR (`vesselInternalReferenceNumber`)
     // despite the `| undefined`
-    vesselIdentifier: Vessel.VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
     vesselLength: priorNotification.vesselLength,
     vesselName: priorNotification.vesselName
   }

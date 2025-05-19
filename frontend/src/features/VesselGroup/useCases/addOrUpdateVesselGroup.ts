@@ -1,8 +1,7 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
-import { showVesselsLastPosition } from '@features/Vessel/useCases/showVesselsLastPosition'
-import { Vessel } from '@features/Vessel/Vessel.types'
+import { saveActiveVesselsAndDisplayLastPositions } from '@features/Vessel/useCases/saveActiveVesselsAndDisplayLastPositions'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { vesselGroupApi } from '@features/VesselGroup/apis'
 import { GroupType } from '@features/VesselGroup/types'
@@ -39,9 +38,9 @@ export const addOrUpdateVesselGroup =
       }
 
       const vessels = await dispatch(
-        vesselApi.endpoints.getVesselsLastPositions.initiate(undefined, RTK_FORCE_REFETCH_QUERY_OPTIONS)
+        vesselApi.endpoints.getActiveVessels.initiate(undefined, RTK_FORCE_REFETCH_QUERY_OPTIONS)
       ).unwrap()
-      dispatch(showVesselsLastPosition(vessels as Vessel.VesselLastPosition[]))
+      dispatch(saveActiveVesselsAndDisplayLastPositions(vessels))
 
       const bannerText = `Le groupe de navires ${vesselGroup.type === GroupType.DYNAMIC ? 'dynamique' : 'fixe'}
       "${vesselGroup.name}" a bien été ${isUpdate ? 'modifié' : 'créé'}.`

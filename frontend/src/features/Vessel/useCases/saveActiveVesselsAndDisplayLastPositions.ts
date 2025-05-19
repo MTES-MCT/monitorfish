@@ -7,8 +7,8 @@ import { setFilteredVesselsFeatures, setVessels } from '../slice'
 
 import type { MainAppThunk } from '@store'
 
-export const showVesselsLastPosition =
-  (vessels: Vessel.VesselLastPosition[]): MainAppThunk =>
+export const saveActiveVesselsAndDisplayLastPositions =
+  (vessels: Vessel.ActiveVessel[]): MainAppThunk =>
   async (dispatch, getState) => {
     const { listFilterValues } = getState().vessel
 

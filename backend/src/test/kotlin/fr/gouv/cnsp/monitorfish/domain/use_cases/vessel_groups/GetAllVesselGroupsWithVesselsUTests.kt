@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.TestUtils
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.dtos.ActiveVesselWithReferentialDataDTO
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDynamicVesselGroups
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getFixedVesselGroups
 import org.assertj.core.api.Assertions.assertThat
@@ -25,8 +26,15 @@ class GetAllVesselGroupsWithVesselsUTests {
     @Test
     fun `execute get all fixed groups with vessels from last positions`() {
         // Given
-        given(lastPositionRepository.findAllInLastMonthOrWithBeaconMalfunction()).willReturn(
-            TestUtils.getDummyLastPositions(),
+        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+            TestUtils.getDummyLastPositions().map {
+                ActiveVesselWithReferentialDataDTO(
+                    lastPosition = it,
+                    vesselProfile = null,
+                    vessel = null,
+                    producerOrganizationName = null,
+                )
+            },
         )
         given(vesselGroupRepository.findAllByUser(any())).willReturn(getFixedVesselGroups())
 
@@ -46,20 +54,25 @@ class GetAllVesselGroupsWithVesselsUTests {
         assertThat(vesselGroups.first().vessels).hasSize(2)
 
         val firstVessel = vesselGroups.first().vessels.first()
-        assertThat(firstVessel.id).isEqualTo(0)
-        assertThat(firstVessel.internalReferenceNumber).isEqualTo("FR123456785")
+        assertThat(firstVessel.lastPosition?.internalReferenceNumber).isEqualTo("FR123456785")
 
         val lastVessel = vesselGroups.first().vessels.last()
-        assertThat(lastVessel.id).isEqualTo(1)
-        // VesselId is matched from the last positions table: FR00022680 -> FR224226850
-        assertThat(lastVessel.internalReferenceNumber).isEqualTo("FR224226850")
+        // VesselId is matched from the getDummyLastPositions() stub: FR00022680 -> FR224226850
+        assertThat(lastVessel.lastPosition?.internalReferenceNumber).isEqualTo("FR224226850")
     }
 
     @Test
     fun `execute get all dynamic groups with vessels from last positions`() {
         // Given
-        given(lastPositionRepository.findAllInLastMonthOrWithBeaconMalfunction()).willReturn(
-            TestUtils.getDummyLastPositions(),
+        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+            TestUtils.getDummyLastPositions().map {
+                ActiveVesselWithReferentialDataDTO(
+                    lastPosition = it,
+                    vesselProfile = null,
+                    vessel = null,
+                    producerOrganizationName = null,
+                )
+            },
         )
         given(vesselGroupRepository.findAllByUser(any())).willReturn(getDynamicVesselGroups())
 
@@ -74,9 +87,14 @@ class GetAllVesselGroupsWithVesselsUTests {
         assertThat(vesselGroups.first().vessels).hasSize(1)
 
         val firstVessel = vesselGroups.first().vessels.first()
-        assertThat(firstVessel.vesselId).isEqualTo(1)
-        assertThat(firstVessel.internalReferenceNumber).isEqualTo("FR224226850")
+        assertThat(firstVessel.lastPosition?.vesselId).isEqualTo(1)
+        assertThat(firstVessel.lastPosition?.internalReferenceNumber).isEqualTo("FR224226850")
         // OTB is matching with the filter
-        assertThat(firstVessel.gearOnboard?.first()?.gear).isEqualTo("OTB")
+        assertThat(
+            firstVessel.lastPosition
+                ?.gearOnboard
+                ?.first()
+                ?.gear,
+        ).isEqualTo("OTB")
     }
 }

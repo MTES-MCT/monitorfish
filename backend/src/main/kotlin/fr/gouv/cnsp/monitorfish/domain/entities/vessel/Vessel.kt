@@ -3,6 +3,9 @@ package fr.gouv.cnsp.monitorfish.domain.entities.vessel
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.FRENCH_COUNTRY_CODES
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselSize
 import java.util.*
 
 // TODO Remove all default values.
@@ -61,6 +64,13 @@ data class Vessel(
             "VESSELS_POINTS:${position.internalReferenceNumber ?: "UNKNOWN"}/${position.ircs ?: "UNKNOWN"}/${position.externalReferenceNumber ?: "UNKNOWN"}"
     }
 
+    /**
+     * @description See in frontend: `VesselFeature.getVesselFeatureId()`
+     *  and `getVesselCompositeIdentifier()`
+     */
+    fun toVesselCompositeIdentifier(): String =
+        "VESSELS:${this.internalReferenceNumber ?: "UNKNOWN"}/${this.ircs ?: "UNKNOWN"}/${this.externalReferenceNumber ?: "UNKNOWN"}"
+
     fun getNationalIdentifier(): String {
         val internalReferenceNumberCountryCode =
             LIKELY_CONTROLLED_COUNTRY_CODES.find { countryAlpha3 ->
@@ -80,6 +90,32 @@ data class Vessel(
     fun isFrench(): Boolean = FRENCH_COUNTRY_CODES.contains(flagState.alpha2)
 
     fun isLessThanTwelveMetersVessel(): Boolean = length?.let { it < 12.0 } == true
+
+    fun isInGroup(vesselGroup: VesselGroupBase): Boolean {
+        if (vesselGroup !is DynamicVesselGroup) return false
+
+        val filters = vesselGroup.filters
+
+        val hasCountryCodeMatch = filters.countryCodes.isEmpty() || this.flagState in filters.countryCodes
+
+        val hasDistrictCodeMatch =
+            filters.districtCodes.isEmpty() || this.districtCode in filters.districtCodes
+
+        val hasVesselLengthMatch =
+            filters.vesselSize?.let {
+                this.length?.let { length ->
+                    when (it) {
+                        VesselSize.ABOVE_TWELVE_METERS -> length >= 12
+                        VesselSize.BELOW_TEN_METERS -> length <= 10
+                        VesselSize.BELOW_TWELVE_METERS -> length <= 12
+                    }
+                } ?: false
+            } ?: true
+
+        return hasCountryCodeMatch &&
+            hasDistrictCodeMatch &&
+            hasVesselLengthMatch
+    }
 }
 
 val LIKELY_CONTROLLED_COUNTRY_CODES =

@@ -6,10 +6,10 @@ import type { CellContext, ColumnDef } from '@tanstack/react-table'
 export function getVesselGroupActionColumn(
   groupId: number,
   isFixedGroup: boolean
-): ColumnDef<Vessel.VesselLastPosition, any> {
+): ColumnDef<Vessel.ActiveVessel, any> {
   return {
     accessorFn: row => row.vesselFeatureId,
-    cell: (info: CellContext<Vessel.VesselLastPosition, string>) => (
+    cell: (info: CellContext<Vessel.ActiveVessel, string>) => (
       <ActionButtonsCell groupId={groupId} isFixedGroup={isFixedGroup} vessel={info.row.original} />
     ),
     enableSorting: false,

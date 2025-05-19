@@ -2,7 +2,6 @@ import { LayerProperties } from '@features/Map/constants'
 import VectorImageLayer from 'ol/layer/VectorImage'
 
 import { getRegulatoryVectorSource } from './getRegulatoryVectorSource'
-import { getRegulatoryLayerStyle } from '../layers/styles/regulatoryLayer.style'
 
 import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { HybridAppDispatch, HybridAppThunk } from '@store/types'
@@ -20,8 +19,8 @@ export const getVectorOLLayer =
 
     const newLayer = new VectorImageLayer({
       className: 'regulatory',
-      source,
-      style: feature => [getRegulatoryLayerStyle(feature, nextVisibleLayer)]
+      renderBuffer: 500,
+      source
     })
     // TODO Fix generic `Feature<Geometry>` typings with custom ones.
     ;(newLayer as any).name = name

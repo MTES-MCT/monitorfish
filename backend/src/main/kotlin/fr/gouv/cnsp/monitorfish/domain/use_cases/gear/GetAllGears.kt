@@ -22,7 +22,8 @@ class GetAllGears(
     fun execute(): List<Gear> {
         val currentYear = ZonedDateTime.now(clock).year
 
-        val gearsWithRequiredMesh = fleetSegmentRepository.findAllSegmentsGearsWithRequiredMesh(currentYear)
+        val gearsWithRequiredMesh =
+            fleetSegmentRepository.findAllSegmentsGearsWithRequiredMesh(currentYear)
         val allGears = gearRepository.findAll()
 
         val allGearsWithGroup =
@@ -45,7 +46,7 @@ class GetAllGears(
                         groupId = groupId,
                         isMeshRequiredForSegment = isMeshRequiredForSegment,
                     )
-                }
+                }.sortedBy { it.code }
 
         return allGearsWithGroup
     }

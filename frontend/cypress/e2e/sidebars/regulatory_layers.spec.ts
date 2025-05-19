@@ -164,12 +164,12 @@ context('Sidebars > Regulatory Layers', () => {
     cy.get('*[data-cy="regulatory-layers-metadata-gears-category-with-infobox"]').should(
       'have.attr',
       'title',
-      'DHS - Drague à main manœuvrée à partir du rivage \n' +
-        'DHB - Drague à main manœuvrée à partir du bateau \n' +
-        'HMD - Dragues mécanisées incluant les dragues suceuses \n' +
-        "DRH - Dragues à main utilisées à bord d'un bateau \n" +
+      'DHB - Drague à main manœuvrée à partir du bateau \n' +
+        'DHS - Drague à main manœuvrée à partir du rivage \n' +
         'DRB - Dragues remorquées par bateau \n' +
-        'DRM - Dragues mécanisées \n'
+        "DRH - Dragues à main utilisées à bord d'un bateau \n" +
+        'DRM - Dragues mécanisées \n' +
+        'HMD - Dragues mécanisées incluant les dragues suceuses \n'
     )
 
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('URC (OURSINS NCA)')

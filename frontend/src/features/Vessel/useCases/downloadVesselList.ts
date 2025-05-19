@@ -18,13 +18,13 @@ export const downloadVesselList =
     const fileName = `export_vms_${now.utc().format('YYYY-MM-DDTHH-mm-ss[Z]')}`
     const selectedColumns = getSelectedColumns(columns, format)
 
-    downloadAsCsv(fileName, filteredVessel as Omit<Vessel.VesselLastPosition, 'id'>[], selectedColumns)
+    downloadAsCsv(fileName, filteredVessel as Omit<Vessel.ActiveVesselWithPosition, 'id'>[], selectedColumns)
   }
 
 function getSelectedColumns(
   columns: string[],
   format: VesselListCsvExportFormat
-): DownloadAsCsvMap<Omit<Vessel.VesselLastPosition, 'id'>> {
+): DownloadAsCsvMap<Omit<Vessel.ActiveVesselWithPosition, 'id'>> {
   switch (format) {
     case VesselListCsvExportFormat.SPECIFIC_EXPORT_FOR_CUSTOMS:
       return pick(VESSEL_LIST_CSV_MAP_BASE, SPECIFIC_EXPORT_FOR_CUSTOMS_CHECKBOXES_COLUMN_ORDER)

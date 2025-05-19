@@ -1,10 +1,12 @@
+import {
+  type DeclaredLogbookSpeciesSchema,
+  type VesselGroupSchema,
+  type ActiveVesselWithPositionSchema,
+  ActiveVesselSchema,
+  VesselIdentifier
+} from '@features/Vessel/schemas/ActiveVesselSchema'
 import { z } from 'zod'
 
-import type {
-  DeclaredLogbookSpeciesSchema,
-  VesselGroupSchema,
-  VesselLastPositionSchema
-} from '@features/Vessel/schemas/VesselLastPositionSchema'
 import type { VesselSchema } from '@features/Vessel/schemas/VesselSchema'
 import type Feature from 'ol/Feature'
 import type LineString from 'ol/geom/LineString'
@@ -12,7 +14,7 @@ import type Point from 'ol/geom/Point'
 
 export namespace Vessel {
   export type Vessel = z.infer<typeof VesselSchema>
-  export type SelectedVessel = Omit<VesselLastPosition, 'riskFactor'> & Vessel.Vessel
+  export type SelectedVessel = Omit<ActiveVesselWithPosition, 'riskFactor'> & Vessel.Vessel
   export type AugmentedSelectedVessel = SelectedVessel & {
     hasAlert: boolean
     hasInfractionSuspicion: boolean
@@ -65,12 +67,6 @@ export namespace Vessel {
    */
   export type VesselFeatureId = string
 
-  export enum VesselIdentifier {
-    EXTERNAL_REFERENCE_NUMBER = 'EXTERNAL_REFERENCE_NUMBER',
-    INTERNAL_REFERENCE_NUMBER = 'INTERNAL_REFERENCE_NUMBER',
-    IRCS = 'IRCS'
-  }
-
   export enum NetworkType {
     CELLULAR = 'CELLULAR',
     SATELLITE = 'SATELLITE'
@@ -84,7 +80,9 @@ export namespace Vessel {
   export type DeclaredLogbookSpecies = z.infer<typeof DeclaredLogbookSpeciesSchema>
 
   export type VesselGroup = z.infer<typeof VesselGroupSchema>
-  export type VesselLastPosition = z.infer<typeof VesselLastPositionSchema>
+
+  export type ActiveVesselWithPosition = z.infer<typeof ActiveVesselWithPositionSchema>
+  export type ActiveVessel = z.infer<typeof ActiveVesselSchema>
 
   export type VesselPosition = {
     course: number
@@ -148,7 +146,7 @@ export namespace Vessel {
   }
 
   export type VesselLastPositionFeature = Feature<Point> &
-    Vessel.VesselLastPosition & {
+    Vessel.ActiveVesselWithPosition & {
       color: string | undefined
       groupsDisplayed: VesselGroup[]
       numberOfGroupsHidden: number

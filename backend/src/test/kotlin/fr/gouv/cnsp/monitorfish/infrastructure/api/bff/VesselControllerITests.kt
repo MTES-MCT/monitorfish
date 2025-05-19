@@ -54,7 +54,7 @@ class VesselControllerITests {
     private lateinit var getIsAuthorizedUser: GetIsAuthorizedUser
 
     @MockBean
-    private lateinit var getLastPositions: GetLastPositions
+    private lateinit var getActiveVessels: GetActiveVessels
 
     @MockBean
     private lateinit var getVessel: GetVessel
@@ -121,9 +121,20 @@ class VesselControllerITests {
                     listOf(
                         gear,
                     ),
-                vesselGroups = listOf(),
             )
-        given(this.getLastPositions.execute(any())).willReturn(listOf(position))
+        given(this.getActiveVessels.execute(any())).willReturn(
+            listOf(
+                ActiveVesselWithReferentialData(
+                    lastPosition = position,
+                    vesselProfile = null,
+                    vessel = null,
+                    producerOrganizationName = null,
+                    riskFactor = VesselRiskFactor(),
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    vesselGroups = listOf(),
+                ),
+            ),
+        )
 
         // When
         api
@@ -133,12 +144,9 @@ class VesselControllerITests {
             )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$[0].vesselName", equalTo(position.vesselName)))
+            .andExpect(jsonPath("$.length()", equalTo(1)))
             .andExpect(jsonPath("$[0].vesselId", equalTo(position.vesselId)))
-            .andExpect(jsonPath("$[0].mmsi", equalTo(position.mmsi)))
-            .andExpect(jsonPath("$[0].externalReferenceNumber", equalTo(position.externalReferenceNumber)))
             .andExpect(jsonPath("$[0].internalReferenceNumber", equalTo(position.internalReferenceNumber)))
-            .andExpect(jsonPath("$[0].ircs", equalTo(position.ircs)))
             .andExpect(jsonPath("$[0].flagState", equalTo(position.flagState.toString())))
             .andExpect(jsonPath("$[0].latitude", equalTo(position.latitude)))
             .andExpect(jsonPath("$[0].longitude", equalTo(position.longitude)))
@@ -149,8 +157,8 @@ class VesselControllerITests {
             .andExpect(jsonPath("$[0].positionType", equalTo(PositionType.AIS.toString())))
             .andExpect(jsonPath("$[0].dateTime", equalTo(position.dateTime.toOffsetDateTime().toString())))
             .andExpect(jsonPath("$[0].reportings.length()", equalTo(0)))
-            .andExpect(jsonPath("$[0].gearOnboard.length()", equalTo(1)))
-            .andExpect(jsonPath("$[0].gearOnboard[0].dimensions", equalTo("12;123")))
+            .andExpect(jsonPath("$[0].gearsArray.length()", equalTo(1)))
+            .andExpect(jsonPath("$[0].gearsArray[0]", equalTo("OTB")))
             .andExpect(jsonPath("$[0].alerts.length()", equalTo(0)))
     }
 

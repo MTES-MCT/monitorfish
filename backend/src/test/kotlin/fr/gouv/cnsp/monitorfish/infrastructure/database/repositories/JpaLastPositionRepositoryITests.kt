@@ -56,29 +56,6 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllInLastMonth Should returns the last positions in the last month`() {
-        // Then
-        val positions = jpaLastPositionRepository.findAllInLastMonthOrWithBeaconMalfunction()
-
-        assertThat(positions).hasSize(1003)
-        val assertedVessel = positions.find { it.internalReferenceNumber == "ABC000339263" }
-        assertThat(assertedVessel?.dateTime).isBefore(ZonedDateTime.now().minusMonths(1))
-    }
-
-    @Test
-    @Transactional
-    fun `findAllWithBeaconMalfunctionBeforeLast48Hours Should returns the last positions with beacon malfunctions before the last 48 hours`() {
-        // Then
-        val positions = jpaLastPositionRepository.findAllWithBeaconMalfunctionBeforeLast48Hours()
-
-        assertThat(positions).hasSize(2)
-        assertThat(positions.first().internalReferenceNumber).isEqualTo("ABC000939217")
-        assertThat(positions.first().vesselName).isEqualTo("FRAIS AVIS MODE")
-        assertThat(positions.first().beaconMalfunctionId).isEqualTo(7)
-    }
-
-    @Test
-    @Transactional
     fun `findLastPositionDate Should find the last position date before now and not a date in the future`() {
         // Then
         val dateTime = jpaLastPositionRepository.findLastPositionDate()
@@ -178,5 +155,26 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         assertThat(lastPosition.alerts).hasSize(1)
         assertThat(previousLastPosition.alerts).contains("MISSING_FAR_ALERT")
         assertThat(lastPosition.reportings).hasSize(0)
+    }
+
+    @Test
+    @Transactional
+    fun `findLastPositionsWithProfileAndVessel Should get last positions, profiles and vessel entities`() {
+        // Given
+
+        // When
+        val lastPositionsWithProfiles = jpaLastPositionRepository.findActiveVesselWithReferentialData()
+
+        // Then
+        assertThat(lastPositionsWithProfiles).hasSize(3334)
+        assertThat(lastPositionsWithProfiles.first().lastPosition).isNull()
+        assertThat(lastPositionsWithProfiles.first().vesselProfile).isNotNull()
+        assertThat(lastPositionsWithProfiles.first().vessel).isNotNull()
+        assertThat(lastPositionsWithProfiles.first().producerOrganizationName).isNull()
+
+        assertThat(lastPositionsWithProfiles.last().lastPosition).isNotNull()
+        assertThat(lastPositionsWithProfiles.last().vesselProfile).isNull()
+        assertThat(lastPositionsWithProfiles.last().vessel).isNull()
+        assertThat(lastPositionsWithProfiles.last().producerOrganizationName).isNull()
     }
 }

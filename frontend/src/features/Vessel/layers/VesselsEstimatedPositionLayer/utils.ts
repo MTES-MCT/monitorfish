@@ -9,7 +9,7 @@ import Point from 'ol/geom/Point'
 import { transform } from 'ol/proj'
 
 export const getEstimatedPositionFeatures = (
-  vessel: Vessel.VesselLastPosition,
+  vessel: Vessel.ActiveVesselWithPosition,
   options: {
     isLight: boolean
     vesselIsHiddenTimeThreshold: number

@@ -62,7 +62,7 @@ export const renderVesselEstimatedPositionFeatures = (): MainAppThunk => async (
     .map(feature => {
       const properties = feature.getProperties()
 
-      return getEstimatedPositionFeatures(properties as Vessel.VesselLastPosition, {
+      return getEstimatedPositionFeatures(properties as Vessel.ActiveVesselWithPosition, {
         isLight,
         vesselIsHiddenTimeThreshold,
         vesselIsOpacityReducedTimeThreshold

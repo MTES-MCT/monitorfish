@@ -8,29 +8,39 @@ context('Side Window > Vessel List > Table', () => {
     cy.wait(250)
     cy.getDataCy('side-window-menu-vessel-list').click()
 
+    cy.fill('Rechercher un navire', 'AIGLE BLEU')
+    cy.getDataCy('vessel-list-length').contains('2 navires')
+    cy.get('.Table-SimpleTable tr').should('have.length', 3)
+    cy.get('[title="AIGLE BLEU"]').scrollIntoView().click({ force: true })
+    cy.get('[data-id="VESSELS:ABC010331976/IRCS131/EXTIMM131-expanded"]').contains('NWW05 – NWW05')
+    cy.get('[data-id="VESSELS:ABC010331976/IRCS131/EXTIMM131-expanded"]').contains('Segment récent')
+    cy.get('[data-id="VESSELS:ABC010331976/IRCS131/EXTIMM131-expanded"]').contains('TBB – Chaluts à perche')
+    cy.get('[data-id="VESSELS:ABC010331976/IRCS131/EXTIMM131-expanded"]').contains('Engin récent')
+    cy.getDataCy('vessel-list-reset-filters').click()
+
     cy.fill('Rechercher un navire', 'PRISON')
-    cy.getDataCy('vessel-list-length').contains('2 navires équipés VMS')
+    cy.getDataCy('vessel-list-length').contains('2 navires')
     cy.get('.Table-SimpleTable tr').should('have.length', 3)
     cy.getDataCy('vessel-list-reset-filters').click()
 
     cy.fill('Nationalités', ['Espagne', 'France'])
-    cy.getDataCy('vessel-list-length').contains('841 navires équipés VMS')
+    cy.getDataCy('vessel-list-length').contains('3149 navires')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 2)
 
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
-    cy.getDataCy('vessel-list-length').contains('4 navires équipés VMS')
+    cy.getDataCy('vessel-list-length').contains('4 navires')
     cy.get('.Table-SimpleTable tr').should('have.length', 5)
 
     cy.fill('Espèces à bord', ['FRF', 'HKE'])
-    cy.getDataCy('vessel-list-length').contains('4 navires équipés VMS')
+    cy.getDataCy('vessel-list-length').contains('4 navires')
     cy.get('.Table-SimpleTable tr').should('have.length', 5)
 
     cy.fill('Engins utilisés', ['OTT', 'TBS'])
-    cy.getDataCy('vessel-list-length').contains('1 navire équipé VMS')
+    cy.getDataCy('vessel-list-length').contains('1 navire')
     cy.get('.Table-SimpleTable tr').should('have.length', 2)
 
     cy.fill('Dernier contrôle', 'Contrôlé il y a plus de 3 mois')
-    cy.getDataCy('vessel-list-length').contains('1 navire équipé VMS')
+    cy.getDataCy('vessel-list-length').contains('1 navire')
     cy.get('.Table-SimpleTable tr').should('have.length', 2)
 
     cy.get('.Component-SingleTag').should('have.length', 10)
@@ -38,11 +48,13 @@ context('Side Window > Vessel List > Table', () => {
     /**
      * Open a row
      */
-    cy.get('[title="PARENT EXPLIQUER COUCHER"]').click()
+    cy.get('[title="PARENT EXPLIQUER COUCHER"]').scrollIntoView().click({ force: true })
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('NWW01 – NWW01')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('NWW03 – NWW03')
+    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('Segments actuels')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('OTT – Chaluts jumeaux à panneaux')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('OTB – Chaluts de fond à panneaux')
+    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('Engins à bord')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('ANF – 4164.47 kg')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('LEZ – 330.72 kg')
 
@@ -75,23 +87,23 @@ context('Side Window > Vessel List > Table', () => {
     cy.getDataCy('side-window-menu-vessel-list').click()
 
     cy.fill('Nationalités', ['Espagne', 'France'])
-    cy.getDataCy('vessel-list-length').contains('841 navires équipés VMS')
+    cy.getDataCy('vessel-list-length').contains('3149 navires')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 2)
 
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
-    cy.getDataCy('vessel-list-length').contains('4 navires équipés VMS')
+    cy.getDataCy('vessel-list-length').contains('4 navires')
     cy.get('.Table-SimpleTable tr').should('have.length', 5)
 
     cy.fill('Espèces à bord', ['FRF', 'HKE'])
-    cy.getDataCy('vessel-list-length').contains('4 navires équipés VMS')
+    cy.getDataCy('vessel-list-length').contains('4 navires')
     cy.get('.Table-SimpleTable tr').should('have.length', 5)
 
     cy.fill('Engins utilisés', ['OTT', 'TBS'])
-    cy.getDataCy('vessel-list-length').contains('1 navire équipé VMS')
+    cy.getDataCy('vessel-list-length').contains('1 navire')
     cy.get('.Table-SimpleTable tr').should('have.length', 2)
 
     cy.fill('Dernier contrôle', 'Contrôlé il y a plus de 3 mois')
-    cy.getDataCy('vessel-list-length').contains('1 navire équipé VMS')
+    cy.getDataCy('vessel-list-length').contains('1 navire')
     cy.get('.Table-SimpleTable tr').should('have.length', 2)
 
     cy.get('.Component-SingleTag').should('have.length', 10)
@@ -99,11 +111,13 @@ context('Side Window > Vessel List > Table', () => {
     /**
      * Open a row
      */
-    cy.get('[title="PARENT EXPLIQUER COUCHER"]').click()
+    cy.get('[title="PARENT EXPLIQUER COUCHER"]').scrollIntoView().click({ force: true })
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('NWW01 – NWW01')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('NWW03 – NWW03')
+    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('Segments actuels')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('OTT – Chaluts jumeaux à panneaux')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('OTB – Chaluts de fond à panneaux')
+    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('Engins à bord')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('ANF – 4164.47 kg')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('LEZ – 330.72 kg')
   })

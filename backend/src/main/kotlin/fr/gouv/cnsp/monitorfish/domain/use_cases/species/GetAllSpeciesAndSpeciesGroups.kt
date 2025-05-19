@@ -11,8 +11,8 @@ class GetAllSpeciesAndSpeciesGroups(
     private val speciesGroupRepository: SpeciesGroupRepository,
 ) {
     fun execute(): SpeciesAndSpeciesGroups {
-        val species = speciesRepository.findAll()
-        val groups = speciesGroupRepository.findAll()
+        val species = speciesRepository.findAll().sortedBy { it.code }
+        val groups = speciesGroupRepository.findAll().sortedBy { it.group }
 
         return SpeciesAndSpeciesGroups(species, groups)
     }

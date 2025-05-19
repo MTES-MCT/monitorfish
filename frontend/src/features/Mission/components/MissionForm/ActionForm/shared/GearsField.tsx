@@ -64,12 +64,10 @@ export function GearsField() {
       return []
     }
 
-    return getGearsApiQuery.data
-      .map(gear => ({
-        label: `${gear.code} - ${gear.name}`,
-        value: gear
-      }))
-      .sort((a, b) => a.label.localeCompare(b.label))
+    return getGearsApiQuery.data.map(gear => ({
+      label: `${gear.code} - ${gear.name}`,
+      value: gear
+    }))
   }, [getGearsApiQuery.data])
 
   const typedError = meta.error as unknown as PartialDeep<MissionAction.GearControl>[] | undefined

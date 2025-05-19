@@ -56,11 +56,11 @@ class GetAllGearsUTests {
 
         // Then
         assertThat(gears).hasSize(2)
-        assertThat(gears.first().code).isEqualTo("OTB")
-        assertThat(gears.first().groupId).isEqualTo(1)
-        assertThat(gears.first().isMeshRequiredForSegment).isTrue()
-        assertThat(gears.last().code).isEqualTo("DRB")
-        assertThat(gears.last().groupId).isNull()
-        assertThat(gears.last().isMeshRequiredForSegment).isFalse()
+        assertThat(gears.first().code).isEqualTo("DRB")
+        assertThat(gears.first().groupId).isNull()
+        assertThat(gears.first().isMeshRequiredForSegment).isFalse()
+        assertThat(gears.last().code).isEqualTo("OTB")
+        assertThat(gears.last().groupId).isEqualTo(1)
+        assertThat(gears.last().isMeshRequiredForSegment).isTrue()
     }
 }

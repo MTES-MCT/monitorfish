@@ -1,15 +1,14 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActiveVesselType
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActiveVesselWithReferentialData
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.dtos.ActiveVesselWithReferentialDataDTO
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.VesselGroupWithVessels
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -27,21 +26,19 @@ class GetAllVesselGroupsWithVessels(
     fun execute(userEmail: String): List<VesselGroupWithVessels> {
         val vesselGroups = vesselGroupRepository.findAllByUser(userEmail)
         val activeVessels =
-            lastPositionRepository
-                .findActiveVesselWithReferentialData()
-                .filter { it.hasLastPositionOrVesselProfileWithVessel() }
+            lastPositionRepository.findActiveVesselWithReferentialData()
         val now = ZonedDateTime.now()
 
-        val byVesselId = mutableMapOf<Int, ActiveVesselWithReferentialDataDTO>()
-        val byCfr = mutableMapOf<String, ActiveVesselWithReferentialDataDTO>()
-        val byIrcs = mutableMapOf<String, ActiveVesselWithReferentialDataDTO>()
-        val byExternalId = mutableMapOf<String, ActiveVesselWithReferentialDataDTO>()
+        val byVesselId = mutableMapOf<Int, EnrichedActiveVessel>()
+        val byCfr = mutableMapOf<String, EnrichedActiveVessel>()
+        val byIrcs = mutableMapOf<String, EnrichedActiveVessel>()
+        val byExternalId = mutableMapOf<String, EnrichedActiveVessel>()
         activeVessels.forEach { activeVessel ->
             buildMapOfIdentifiers(activeVessel, byVesselId, byCfr, byIrcs, byExternalId)
         }
         val dynamicGroups = vesselGroups.filterIsInstance<DynamicVesselGroup>()
         val dynamicGroupsToActiveVessels =
-            ConcurrentHashMap<DynamicVesselGroup, MutableList<ActiveVesselWithReferentialDataDTO>>().apply {
+            ConcurrentHashMap<DynamicVesselGroup, MutableList<EnrichedActiveVessel>>().apply {
                 dynamicGroups.forEach { this[it] = CopyOnWriteArrayList() }
             }
         activeVessels.parallelStream().forEach { activeVessel ->
@@ -57,19 +54,6 @@ class GetAllVesselGroupsWithVessels(
                 when (group) {
                     is DynamicVesselGroup -> dynamicGroupsToActiveVessels[group] ?: emptyList()
                     is FixedVesselGroup -> getVesselsFromReferential(group, byVesselId, byCfr, byIrcs, byExternalId)
-                }.map {
-                    ActiveVesselWithReferentialData(
-                        lastPosition = it.lastPosition,
-                        vesselProfile = it.vesselProfile,
-                        vessel = it.vessel,
-                        producerOrganizationName = it.producerOrganizationName,
-                        riskFactor = it.riskFactor,
-                        // TODO This is not used by the frontend at the moment
-                        vesselGroups = listOf(),
-                        activeVesselType =
-                            it.lastPosition?.let { ActiveVesselType.POSITION_ACTIVITY }
-                                ?: ActiveVesselType.LOGBOOK_ACTIVITY,
-                    )
                 }
 
             VesselGroupWithVessels(
@@ -81,11 +65,11 @@ class GetAllVesselGroupsWithVessels(
 
     private fun getVesselsFromReferential(
         group: FixedVesselGroup,
-        byVesselId: MutableMap<Int, ActiveVesselWithReferentialDataDTO>,
-        byCfr: MutableMap<String, ActiveVesselWithReferentialDataDTO>,
-        byIrcs: MutableMap<String, ActiveVesselWithReferentialDataDTO>,
-        byExternalId: MutableMap<String, ActiveVesselWithReferentialDataDTO>,
-    ): List<ActiveVesselWithReferentialDataDTO> =
+        byVesselId: MutableMap<Int, EnrichedActiveVessel>,
+        byCfr: MutableMap<String, EnrichedActiveVessel>,
+        byIrcs: MutableMap<String, EnrichedActiveVessel>,
+        byExternalId: MutableMap<String, EnrichedActiveVessel>,
+    ): List<EnrichedActiveVessel> =
         group.vessels.mapNotNull { vessel ->
             when {
                 vessel.vesselId != null -> byVesselId[vessel.vesselId]
@@ -106,7 +90,7 @@ class GetAllVesselGroupsWithVessels(
                 }
             } ?: when {
                 vessel.vesselId != null -> {
-                    ActiveVesselWithReferentialDataDTO(
+                    EnrichedActiveVessel(
                         lastPosition = null,
                         vesselProfile = null,
                         vessel =
@@ -119,7 +103,8 @@ class GetAllVesselGroupsWithVessels(
                                 flagState = vessel.flagState,
                                 hasLogbookEsacapt = false,
                             ),
-                        producerOrganizationName = null,
+                        producerOrganization = null,
+                        riskFactor = VesselRiskFactor(),
                     )
                 }
                 else -> {
@@ -131,11 +116,11 @@ class GetAllVesselGroupsWithVessels(
         }
 
     private fun buildMapOfIdentifiers(
-        activeVessel: ActiveVesselWithReferentialDataDTO,
-        byVesselId: MutableMap<Int, ActiveVesselWithReferentialDataDTO>,
-        byCfr: MutableMap<String, ActiveVesselWithReferentialDataDTO>,
-        byIrcs: MutableMap<String, ActiveVesselWithReferentialDataDTO>,
-        byExternalId: MutableMap<String, ActiveVesselWithReferentialDataDTO>,
+        activeVessel: EnrichedActiveVessel,
+        byVesselId: MutableMap<Int, EnrichedActiveVessel>,
+        byCfr: MutableMap<String, EnrichedActiveVessel>,
+        byIrcs: MutableMap<String, EnrichedActiveVessel>,
+        byExternalId: MutableMap<String, EnrichedActiveVessel>,
     ) {
         if (activeVessel.lastPosition != null) {
             activeVessel.lastPosition.vesselId?.let { byVesselId[it] = activeVessel }

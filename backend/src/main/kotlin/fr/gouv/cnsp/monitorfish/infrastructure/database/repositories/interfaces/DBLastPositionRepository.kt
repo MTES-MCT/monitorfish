@@ -25,6 +25,22 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
     )
     fun findLastPositionDateTime(): Instant
 
+    @Query(
+        """
+        SELECT * FROM last_positions WHERE
+            CASE
+                WHEN :vesselIdentifier = 'INTERNAL_REFERENCE_NUMBER' THEN cfr
+                WHEN :vesselIdentifier = 'IRCS' THEN ircs
+                WHEN :vesselIdentifier = 'EXTERNAL_REFERENCE_NUMBER' THEN external_immatriculation
+            END = :value
+    """,
+        nativeQuery = true,
+    )
+    fun findByVesselIdentifier(
+        vesselIdentifier: String,
+        value: String,
+    ): LastPositionEntity
+
     @Transactional(readOnly = true)
     @Query(
         value = """

@@ -8,7 +8,7 @@ import AlertSVG from '../../../../../icons/Icone_alertes.svg?react'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
 export type AlertWarningProps = Readonly<{
-  selectedVessel: Vessel.AugmentedSelectedVessel
+  selectedVessel: Vessel.SelectedVessel
 }>
 export function AlertWarning({ selectedVessel }: AlertWarningProps) {
   const dispatch = useMainAppDispatch()

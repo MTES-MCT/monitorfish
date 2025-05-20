@@ -163,14 +163,14 @@ export class MonitorFishWebWorker {
     vessels: Vessel.ActiveVessel[],
     vesselGroupsIdsDisplayed: number[],
     vesselGroupsIdsPinned: number[]
-  ): Array<[Vessel.ActiveVesselWithPosition, VesselGroupDisplayInformation]> {
+  ): Array<[Vessel.ActiveVesselEmittingPosition, VesselGroupDisplayInformation]> {
     return vessels
       .filter(vessel => vessel.activeVesselType === ActiveVesselType.POSITION_ACTIVITY)
       .map(vessel => [vessel, this.getDisplayedVesselGroups(vessel, vesselGroupsIdsDisplayed, vesselGroupsIdsPinned)])
   }
 
   static getDisplayedVesselGroups(
-    vessel: Vessel.ActiveVesselWithPosition,
+    vessel: Vessel.ActiveVesselEmittingPosition,
     vesselGroupsIdsDisplayed: number[],
     vesselGroupsIdsPinned: number[]
   ): VesselGroupDisplayInformation {
@@ -455,9 +455,9 @@ export class MonitorFishWebWorker {
 
   // TODO Use to improve vessel list performance on sort
   static sortTable(
-    vessels: Vessel.ActiveVesselWithPosition[],
+    vessels: Vessel.ActiveVesselEmittingPosition[],
     sorting: SortingState
-  ): Vessel.ActiveVesselWithPosition[] {
+  ): Vessel.ActiveVesselEmittingPosition[] {
     return [...vessels].sort((a, b) => {
       // eslint-disable-next-line no-restricted-syntax
       for (const sort of sorting) {

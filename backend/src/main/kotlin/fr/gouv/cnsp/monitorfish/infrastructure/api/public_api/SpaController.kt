@@ -61,8 +61,7 @@ class SpaController : ErrorController {
         }
 
         // Prevent returning index.html for failed API requests
-        // "/light/v1" is used to avoid clashes with the /light frontend route
-        if (path.startsWith("/bff") || path.startsWith("/api") || path.startsWith("/light/v1")) {
+        if (path.startsWith("/bff") || path.startsWith("/api")) {
             logger.error("API error: $path ($status): $errorMessage")
 
             return ResponseEntity

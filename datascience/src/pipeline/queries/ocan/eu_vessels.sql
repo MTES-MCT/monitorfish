@@ -53,5 +53,6 @@ WHERE ncp.est_actif = 1 AND
         'GBR000J10346',
         'GBR000J10070',
         'GBR000J10359',
-        'GBR000A10387'
+        'GBR000A10387',
+        'GBR000C17828'
     )

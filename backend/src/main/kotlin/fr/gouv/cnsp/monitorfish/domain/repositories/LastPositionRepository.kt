@@ -2,8 +2,8 @@ package fr.gouv.cnsp.monitorfish.domain.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.dtos.ActiveVesselWithReferentialDataDTO
 import java.time.ZonedDateTime
 
 interface LastPositionRepository {
@@ -11,7 +11,12 @@ interface LastPositionRepository {
 
     fun findLastPositionDate(): ZonedDateTime
 
-    fun findActiveVesselWithReferentialData(): List<ActiveVesselWithReferentialDataDTO>
+    fun findByVesselIdentifier(
+        vesselIdentifier: VesselIdentifier,
+        value: String,
+    ): LastPosition?
+
+    fun findActiveVesselWithReferentialData(): List<EnrichedActiveVessel>
 
     fun removeAlertToLastPositionByVesselIdentifierEquals(
         alertType: AlertTypeMapping,

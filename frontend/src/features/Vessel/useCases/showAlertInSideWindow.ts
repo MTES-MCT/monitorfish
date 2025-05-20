@@ -6,7 +6,7 @@ import type { Vessel } from '../Vessel.types'
 import type { MainAppThunk } from '@store'
 
 export const showAlertInSideWindow =
-  (selectedVessel: Vessel.AugmentedSelectedVessel): MainAppThunk =>
+  (selectedVessel: Vessel.SelectedVessel): MainAppThunk =>
   dispatch => {
     dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
     dispatch(

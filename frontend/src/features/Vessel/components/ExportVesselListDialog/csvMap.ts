@@ -8,7 +8,7 @@ import { getCoordinates } from '../../../../coordinates'
 import type { DownloadAsCsvMap } from '@utils/downloadAsCsv'
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-export const VESSEL_LIST_CSV_MAP_BASE: DownloadAsCsvMap<Omit<Vessel.ActiveVesselWithPosition, 'id'>> = {
+export const VESSEL_LIST_CSV_MAP_BASE: DownloadAsCsvMap<Omit<Vessel.ActiveVesselEmittingPosition, 'id'>> = {
   riskFactor: 'Note de risque',
   flagState: {
     label: 'Nationalité',

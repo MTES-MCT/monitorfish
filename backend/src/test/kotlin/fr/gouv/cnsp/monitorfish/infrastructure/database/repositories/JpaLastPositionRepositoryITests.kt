@@ -170,11 +170,11 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         assertThat(lastPositionsWithProfiles.first().lastPosition).isNull()
         assertThat(lastPositionsWithProfiles.first().vesselProfile).isNotNull()
         assertThat(lastPositionsWithProfiles.first().vessel).isNotNull()
-        assertThat(lastPositionsWithProfiles.first().producerOrganizationName).isNull()
+        assertThat(lastPositionsWithProfiles.first().producerOrganization).isNull()
 
         assertThat(lastPositionsWithProfiles.last().lastPosition).isNotNull()
         assertThat(lastPositionsWithProfiles.last().vesselProfile).isNull()
         assertThat(lastPositionsWithProfiles.last().vessel).isNull()
-        assertThat(lastPositionsWithProfiles.last().producerOrganizationName).isNull()
+        assertThat(lastPositionsWithProfiles.last().producerOrganization).isNull()
     }
 }

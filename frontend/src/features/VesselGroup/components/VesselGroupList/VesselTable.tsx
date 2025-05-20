@@ -18,7 +18,7 @@ type VesselTableProps = Readonly<{
   isFromUrl: boolean
   isPinned: boolean
   vesselGroupId: number
-  vessels: Vessel.ActiveVesselWithPosition[]
+  vessels: Vessel.ActiveVesselEmittingPosition[]
 }>
 export function VesselTable({ isFixedGroup, isFromUrl, isPinned, vesselGroupId, vessels }: VesselTableProps) {
   const isBodyEmptyDataVisible = !!vessels && vessels.length === 0
@@ -38,7 +38,7 @@ export function VesselTable({ isFixedGroup, isFromUrl, isPinned, vesselGroupId, 
       return [getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId, isFixedGroup)), vessels ?? []]
     }
 
-    const fuse = new CustomSearch<Vessel.ActiveVesselWithPosition>(
+    const fuse = new CustomSearch<Vessel.ActiveVesselEmittingPosition>(
       vessels ?? [],
       ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs'],
       { isStrict: true, threshold: 0.4 }

@@ -1,12 +1,8 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { doNotAnimate } from '@features/Map/slice'
-import { ActiveVesselType } from '@features/Vessel/schemas/ActiveVesselSchema'
-import { loadingVessel, setSelectedVessel, vesselSelectors } from '@features/Vessel/slice'
-import { VesselFeature } from '@features/Vessel/types/vessel'
+import { loadingVessel, setSelectedVessel } from '@features/Vessel/slice'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { captureMessage } from '@sentry/react'
-import { omit } from 'lodash-es'
 
 import { displayBannerWarningFromAPIFeedback } from './displayBannerWarningFromAPIFeedback'
 import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
@@ -22,8 +18,6 @@ import type { MainAppThunk } from '@store'
 export const displayVesselSidebarAndPositions =
   (vesselIdentity: Vessel.VesselIdentity, isFromSearch: boolean): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
-    const vesselFeatureId = VesselFeature.getVesselFeatureId(vesselIdentity)
-    const activeVessel = vesselSelectors.selectById(getState().vessel.vessels, vesselFeatureId)
     const {
       map: { defaultVesselTrackDepth },
       vessel: { selectedVesselTrackRequest }
@@ -47,32 +41,6 @@ export const displayVesselSidebarAndPositions =
 
     dispatch(displayBannerWarningFromAPIFeedback(vesselAndPositions.positions, isTrackDepthModified, false))
 
-    if (!activeVessel && !vesselAndPositions?.vessel) {
-      captureMessage('Aucun navire actif trouvé pour un navire inconnu dans la table navires.', {
-        extra: {
-          vesselFeatureId,
-          vesselIdentity
-        }
-      })
-    }
-
-    const lastPosition =
-      activeVessel?.activeVesselType === ActiveVesselType.POSITION_ACTIVITY ? omit(activeVessel, ['riskFactor']) : {}
-    const selectedVessel = {
-      // As a safeguard, the VesselIdentity is added as a base object (in case no last position and no vessel are found)
-      ...vesselIdentity,
-      // If we found a last position, we enrich the vessel
-      // TODO Remove this enrichment
-      ...(lastPosition as Vessel.ActiveVesselWithPosition),
-      // If we found a vessel from the vessels table, we enrich the vessel
-      ...vesselAndPositions?.vessel
-    }
-
     dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
-    dispatch(
-      setSelectedVessel({
-        positions: vesselAndPositions.positions,
-        vessel: selectedVessel as Vessel.SelectedVessel
-      })
-    )
+    dispatch(setSelectedVessel(vesselAndPositions))
   }

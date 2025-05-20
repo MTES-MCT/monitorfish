@@ -33,7 +33,9 @@ class MapperConfiguration {
         mapper.registerModule(JtsModule())
         mapper.registerModule(
             SimpleModule().apply {
-                addSerializer(Double::class.java, Double5PrecisionSerializer())
+                addSerializer(Double::class.java, RoundedDoubleSerializer())
+                addSerializer(Double::class.javaPrimitiveType, RoundedDoubleSerializer())
+                addSerializer(BigDecimal::class.java, RoundedBigDecimalSerializer())
             },
         )
 
@@ -73,7 +75,7 @@ class MapperConfiguration {
     }
 }
 
-class Double5PrecisionSerializer : JsonSerializer<Double>() {
+class RoundedDoubleSerializer : JsonSerializer<Double>() {
     override fun serialize(
         value: Double,
         gen: JsonGenerator,
@@ -84,6 +86,17 @@ class Double5PrecisionSerializer : JsonSerializer<Double>() {
                 .setScale(4, RoundingMode.HALF_UP)
                 .toDouble()
 
+        gen.writeNumber(rounded)
+    }
+}
+
+class RoundedBigDecimalSerializer : JsonSerializer<BigDecimal>() {
+    override fun serialize(
+        value: BigDecimal,
+        gen: JsonGenerator,
+        serializers: SerializerProvider,
+    ) {
+        val rounded = value.setScale(4, RoundingMode.HALF_UP)
         gen.writeNumber(rounded)
     }
 }

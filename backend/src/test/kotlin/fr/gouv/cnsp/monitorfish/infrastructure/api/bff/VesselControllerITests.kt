@@ -5,6 +5,7 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
+import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
@@ -26,7 +27,9 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUs
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
+import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.TestUtils.DUMMY_VESSEL_PROFILE
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.utils.ApiTestWithJWTSecurity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDynamicVesselGroups
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
@@ -36,16 +39,20 @@ import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.time.LocalDate.EPOCH
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
 @ApiTestWithJWTSecurity(value = [(VesselController::class)])
+@Import(MapperConfiguration::class)
 class VesselControllerITests {
     @Autowired
     private lateinit var api: MockMvc
@@ -124,11 +131,11 @@ class VesselControllerITests {
             )
         given(this.getActiveVessels.execute(any())).willReturn(
             listOf(
-                ActiveVesselWithReferentialData(
+                EnrichedActiveVessel(
                     lastPosition = position,
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
                     activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
                     vesselGroups = listOf(),
@@ -167,7 +174,7 @@ class VesselControllerITests {
     private infix fun <T> BDDMockito.BDDMyOngoingStubbing<T>.willReturn(block: () -> T) = willReturn(block())
 
     @Test
-    fun `Should get vessels with last positions and vessel data`() {
+    fun `Should get vessel with last positions and vessel data`() {
         // Given
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         val now = ZonedDateTime.now().minusDays(1)
@@ -235,11 +242,21 @@ class VesselControllerITests {
                     ),
             )
         givenSuspended {
-            getVessel.execute(eq(123), any(), any(), any(), any(), any(), eq(null), eq(null))
+            getVessel.execute(
+                userEmail = eq("email@domain-name.com"),
+                vesselId = eq(123),
+                internalReferenceNumber = any(),
+                externalReferenceNumber = any(),
+                ircs = any(),
+                trackDepth = any(),
+                vesselIdentifier = any(),
+                fromDateTime = eq(null),
+                toDateTime = eq(null),
+            )
         } willReturn {
             Pair(
                 false,
-                VesselInformation(
+                EnrichedActiveVesselWithPositions(
                     vessel =
                         Vessel(
                             id = 123,
@@ -260,6 +277,8 @@ class VesselControllerITests {
                             "01/10/2024",
                             "OP",
                         ),
+                    vesselProfile = DUMMY_VESSEL_PROFILE,
+                    vesselGroups = getDynamicVesselGroups(),
                 ),
             )
         }
@@ -283,17 +302,24 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.vessel.riskFactor.riskFactor", equalTo(3.2)))
             .andExpect(jsonPath("$.vessel.underCharter", equalTo(true)))
             .andExpect(jsonPath("$.vessel.producerOrganization.organizationName", equalTo("OP")))
+            .andExpect(
+                jsonPath(
+                    "$.profile.recentSpecies['ANF']",
+                    equalTo(BigDecimal(0.15513496742165686).setScale(17, RoundingMode.HALF_UP)),
+                ),
+            ).andExpect(jsonPath("$.groups[0].name", equalTo("Mission Thémis – chaluts de fonds")))
 
         runBlocking {
             Mockito.verify(getVessel).execute(
-                123,
-                "FR224226850",
-                "123",
-                "IEF4",
-                VesselTrackDepth.TWELVE_HOURS,
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                null,
-                null,
+                userEmail = "email@domain-name.com",
+                vesselId = 123,
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "123",
+                ircs = "IEF4",
+                trackDepth = VesselTrackDepth.TWELVE_HOURS,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                fromDateTime = null,
+                toDateTime = null,
             )
         }
     }
@@ -303,16 +329,28 @@ class VesselControllerITests {
         // Given
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         givenSuspended {
-            getVessel.execute(anyOrNull(), any(), any(), any(), any(), any(), eq(null), eq(null))
+            getVessel.execute(
+                userEmail = any(),
+                vesselId = anyOrNull(),
+                internalReferenceNumber = any(),
+                externalReferenceNumber = any(),
+                ircs = any(),
+                trackDepth = any(),
+                vesselIdentifier = any(),
+                fromDateTime = eq(null),
+                toDateTime = eq(null),
+            )
         } willReturn {
             Pair(
                 true,
-                VesselInformation(
+                EnrichedActiveVesselWithPositions(
                     vessel = null,
                     beacon = null,
                     positions = listOf(),
                     vesselRiskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
                     producerOrganization = null,
+                    vesselProfile = null,
+                    vesselGroups = listOf(),
                 ),
             )
         }
@@ -332,15 +370,29 @@ class VesselControllerITests {
     fun `Should get vessels's last positions and data When from and to date parameters are set`() {
         // Given
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
-        givenSuspended { getVessel.execute(anyOrNull(), any(), any(), any(), any(), any(), any(), any()) } willReturn {
+        givenSuspended {
+            getVessel.execute(
+                userEmail = any(),
+                vesselId = anyOrNull(),
+                internalReferenceNumber = any(),
+                externalReferenceNumber = any(),
+                ircs = any(),
+                trackDepth = any(),
+                vesselIdentifier = any(),
+                fromDateTime = any(),
+                toDateTime = any(),
+            )
+        } willReturn {
             Pair(
                 false,
-                VesselInformation(
+                EnrichedActiveVesselWithPositions(
                     vessel = null,
                     beacon = null,
                     positions = listOf(),
                     vesselRiskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
                     producerOrganization = null,
+                    vesselProfile = null,
+                    vesselGroups = listOf(),
                 ),
             )
         }
@@ -358,6 +410,7 @@ class VesselControllerITests {
 
         runBlocking {
             Mockito.verify(getVessel).execute(
+                userEmail = "email@domain-name.com",
                 vesselId = null,
                 internalReferenceNumber = "FR224226850",
                 externalReferenceNumber = "123",

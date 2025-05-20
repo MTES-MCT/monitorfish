@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.vessel_group
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.dtos.ActiveVesselWithReferentialDataDTO
 
 data class VesselIdentity(
     val vesselId: Int?,
@@ -13,7 +13,7 @@ data class VesselIdentity(
     val flagState: CountryCode,
     val vesselIdentifier: VesselIdentifier?,
 ) {
-    fun isEqualToActiveVessel(activeVessel: ActiveVesselWithReferentialDataDTO): Boolean {
+    fun isEqualToActiveVessel(activeVessel: EnrichedActiveVessel): Boolean {
         if (activeVessel.lastPosition != null) {
             return when {
                 this.vesselId != null && activeVessel.lastPosition.vesselId != null ->

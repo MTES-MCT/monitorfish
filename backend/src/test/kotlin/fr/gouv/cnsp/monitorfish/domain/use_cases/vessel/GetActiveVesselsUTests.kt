@@ -6,11 +6,13 @@ import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActiveVesselType
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.dtos.ActiveVesselWithReferentialDataDTO
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDynamicVesselGroups
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -35,11 +37,13 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             listOf(
-                ActiveVesselWithReferentialDataDTO(
+                EnrichedActiveVessel(
                     lastPosition = TestUtils.getDummyLastPositions().first(),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 ),
             ),
         )
@@ -63,7 +67,7 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             listOf(
-                ActiveVesselWithReferentialDataDTO(
+                EnrichedActiveVessel(
                     lastPosition =
                         LastPosition(
                             flagState = CountryCode.FR,
@@ -76,7 +80,9 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 ),
             ),
         )
@@ -131,20 +137,23 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             listOf(
-                ActiveVesselWithReferentialDataDTO(
-                    LastPosition(
-                        flagState = CountryCode.FR,
-                        segments = listOf("NWW03", "NWW06"),
-                        positionType = PositionType.AIS,
-                        latitude = 16.445,
-                        longitude = 48.2525,
-                        riskFactor = 2.23,
-                        dateTime = ZonedDateTime.now(),
-                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                    ),
+                EnrichedActiveVessel(
+                    lastPosition =
+                        LastPosition(
+                            flagState = CountryCode.FR,
+                            segments = listOf("NWW03", "NWW06"),
+                            positionType = PositionType.AIS,
+                            latitude = 16.445,
+                            longitude = 48.2525,
+                            riskFactor = 2.23,
+                            dateTime = ZonedDateTime.now(),
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 ),
             ),
         )
@@ -199,25 +208,28 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             listOf(
-                ActiveVesselWithReferentialDataDTO(
-                    LastPosition(
-                        flagState = CountryCode.FR,
-                        gearOnboard =
-                            listOf(
-                                Gear().apply {
-                                    this.gear = "OTB"
-                                },
-                            ),
-                        positionType = PositionType.AIS,
-                        latitude = 16.445,
-                        longitude = 48.2525,
-                        riskFactor = 2.23,
-                        dateTime = ZonedDateTime.now(),
-                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                    ),
+                EnrichedActiveVessel(
+                    lastPosition =
+                        LastPosition(
+                            flagState = CountryCode.FR,
+                            gearOnboard =
+                                listOf(
+                                    Gear().apply {
+                                        this.gear = "OTB"
+                                    },
+                                ),
+                            positionType = PositionType.AIS,
+                            latitude = 16.445,
+                            longitude = 48.2525,
+                            riskFactor = 2.23,
+                            dateTime = ZonedDateTime.now(),
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 ),
             ),
         )
@@ -272,20 +284,23 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             listOf(
-                ActiveVesselWithReferentialDataDTO(
-                    LastPosition(
-                        flagState = CountryCode.FR,
-                        lastLogbookMessageDateTime = ZonedDateTime.now(),
-                        positionType = PositionType.AIS,
-                        latitude = 16.445,
-                        longitude = 48.2525,
-                        riskFactor = 2.23,
-                        dateTime = ZonedDateTime.now(),
-                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                    ),
+                EnrichedActiveVessel(
+                    lastPosition =
+                        LastPosition(
+                            flagState = CountryCode.FR,
+                            lastLogbookMessageDateTime = ZonedDateTime.now(),
+                            positionType = PositionType.AIS,
+                            latitude = 16.445,
+                            longitude = 48.2525,
+                            riskFactor = 2.23,
+                            dateTime = ZonedDateTime.now(),
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 ),
             ),
         )
@@ -340,19 +355,22 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             listOf(
-                ActiveVesselWithReferentialDataDTO(
-                    LastPosition(
-                        flagState = CountryCode.FR,
-                        positionType = PositionType.AIS,
-                        latitude = 16.445,
-                        longitude = 48.2525,
-                        riskFactor = 2.23,
-                        dateTime = ZonedDateTime.now().minusHours(2),
-                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                    ),
+                EnrichedActiveVessel(
+                    lastPosition =
+                        LastPosition(
+                            flagState = CountryCode.FR,
+                            positionType = PositionType.AIS,
+                            latitude = 16.445,
+                            longitude = 48.2525,
+                            riskFactor = 2.23,
+                            dateTime = ZonedDateTime.now().minusHours(2),
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 ),
             ),
         )
@@ -407,19 +425,22 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             listOf(
-                ActiveVesselWithReferentialDataDTO(
-                    LastPosition(
-                        flagState = CountryCode.FR,
-                        positionType = PositionType.AIS,
-                        latitude = 16.445,
-                        longitude = 48.2525,
-                        riskFactor = 2.23,
-                        dateTime = ZonedDateTime.now(),
-                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                    ),
+                EnrichedActiveVessel(
+                    lastPosition =
+                        LastPosition(
+                            flagState = CountryCode.FR,
+                            positionType = PositionType.AIS,
+                            latitude = 16.445,
+                            longitude = 48.2525,
+                            riskFactor = 2.23,
+                            dateTime = ZonedDateTime.now(),
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 ),
             ),
         )
@@ -474,7 +495,7 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             listOf(
-                ActiveVesselWithReferentialDataDTO(
+                EnrichedActiveVessel(
                     lastPosition =
                         LastPosition(
                             speciesOnboard =
@@ -496,7 +517,9 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 ),
             ),
         )
@@ -551,7 +574,7 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             listOf(
-                ActiveVesselWithReferentialDataDTO(
+                EnrichedActiveVessel(
                     lastPosition =
                         LastPosition(
                             flagState = CountryCode.FR,
@@ -565,7 +588,9 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 ),
             ),
         )
@@ -619,7 +644,7 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             listOf(
-                ActiveVesselWithReferentialDataDTO(
+                EnrichedActiveVessel(
                     lastPosition =
                         LastPosition(
                             flagState = CountryCode.FR,
@@ -633,7 +658,9 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 ),
             ),
         )
@@ -687,7 +714,7 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             listOf(
-                ActiveVesselWithReferentialDataDTO(
+                EnrichedActiveVessel(
                     lastPosition =
                         LastPosition(
                             flagState = CountryCode.FR,
@@ -701,7 +728,9 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 ),
             ),
         )
@@ -772,7 +801,7 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             listOf(
-                ActiveVesselWithReferentialDataDTO(
+                EnrichedActiveVessel(
                     lastPosition =
                         LastPosition(
                             flagState = CountryCode.FR,
@@ -787,7 +816,9 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 ),
             ),
         )
@@ -841,7 +872,7 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             listOf(
-                ActiveVesselWithReferentialDataDTO(
+                EnrichedActiveVessel(
                     lastPosition =
                         LastPosition(
                             flagState = CountryCode.FR,
@@ -856,7 +887,9 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 ),
             ),
         )
@@ -911,7 +944,7 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             listOf(
-                ActiveVesselWithReferentialDataDTO(
+                EnrichedActiveVessel(
                     lastPosition =
                         LastPosition(
                             flagState = CountryCode.FR,
@@ -926,7 +959,9 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 ),
             ),
         )
@@ -981,7 +1016,7 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             listOf(
-                ActiveVesselWithReferentialDataDTO(
+                EnrichedActiveVessel(
                     lastPosition =
                         LastPosition(
                             flagState = CountryCode.FR,
@@ -996,7 +1031,9 @@ class GetActiveVesselsUTests {
                         ),
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 ),
             ),
         )
@@ -1050,11 +1087,13 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             TestUtils.getDummyLastPositions().map {
-                ActiveVesselWithReferentialDataDTO(
+                EnrichedActiveVessel(
                     lastPosition = it,
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 )
             },
         )
@@ -1079,11 +1118,13 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             TestUtils.getDummyLastPositions().map {
-                ActiveVesselWithReferentialDataDTO(
+                EnrichedActiveVessel(
                     lastPosition = it,
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 )
             },
         )
@@ -1146,11 +1187,13 @@ class GetActiveVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             TestUtils.getDummyLastPositions().map {
-                ActiveVesselWithReferentialDataDTO(
+                EnrichedActiveVessel(
                     lastPosition = it,
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
+                    riskFactor = VesselRiskFactor(),
                 )
             },
         )

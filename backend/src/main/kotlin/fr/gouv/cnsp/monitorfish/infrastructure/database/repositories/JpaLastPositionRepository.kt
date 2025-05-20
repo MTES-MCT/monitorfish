@@ -3,10 +3,11 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
+import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.dtos.ActiveVesselWithReferentialDataDTO
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LastPositionEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.RiskFactorEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.VesselEntity
@@ -34,26 +35,48 @@ class JpaLastPositionRepository(
                 it.toLastPosition(mapper)
             }
 
-    @Cacheable(value = ["active_vessels"])
-    override fun findActiveVesselWithReferentialData(): List<ActiveVesselWithReferentialDataDTO> {
-        val nowMinusOneMonth = ZonedDateTime.now().minusMonths(1)
-        return dbLastPositionRepository.findActiveVesselWithReferentialData(nowMinusOneMonth).map {
-            ActiveVesselWithReferentialDataDTO(
-                lastPosition =
-                    it.lastPosition?.let { lastPosition ->
-                        // There is no way to do a subquery in the JPQL query's FULL JOIN
-                        if (lastPosition.dateTime > nowMinusOneMonth || lastPosition.beaconMalfunctionId != null) {
-                            return@let lastPosition.toLastPosition(mapper)
-                        }
-
-                        return@let null
-                    },
-                vesselProfile = it.vesselProfile?.toVesselProfile(),
-                vessel = it.vessel?.toVessel(),
-                producerOrganizationName = it.producerOrganizationName,
-                riskFactor = it.riskFactor?.toVesselRiskFactor(mapper) ?: VesselRiskFactor(),
-            )
+    @Cacheable(value = ["active_vessel"])
+    override fun findByVesselIdentifier(
+        vesselIdentifier: VesselIdentifier,
+        value: String,
+    ): LastPosition? =
+        try {
+            dbLastPositionRepository.findByVesselIdentifier(vesselIdentifier.name, value).toLastPosition(mapper)
+        } catch (e: EmptyResultDataAccessException) {
+            null
         }
+
+    @Cacheable(value = ["active_vessels"])
+    override fun findActiveVesselWithReferentialData(): List<EnrichedActiveVessel> {
+        val nowMinusOneMonth = ZonedDateTime.now().minusMonths(1)
+        return dbLastPositionRepository
+            .findActiveVesselWithReferentialData(nowMinusOneMonth)
+            .map {
+                EnrichedActiveVessel(
+                    lastPosition =
+                        it.lastPosition?.let { lastPosition ->
+                            // There is no way to do a subquery in the JPQL query's FULL JOIN
+                            if (lastPosition.dateTime > nowMinusOneMonth || lastPosition.beaconMalfunctionId != null) {
+                                return@let lastPosition.toLastPosition(mapper)
+                            }
+
+                            return@let null
+                        },
+                    vesselProfile = it.vesselProfile?.toVesselProfile(),
+                    vessel = it.vessel?.toVessel(),
+                    /**
+                     * To avoid Spring Data JPA's hydration of `ProducerOrganizationMembershipEntity` for performance reason, we select
+                     * producerOrganizationName directly and build the class with dummy (unused) other fields.
+                     */
+                    producerOrganization =
+                        ProducerOrganizationMembership(
+                            internalReferenceNumber = it.vessel?.internalReferenceNumber ?: "",
+                            joiningDate = "",
+                            organizationName = it.producerOrganizationName ?: "",
+                        ),
+                    riskFactor = it.riskFactor?.toVesselRiskFactor(mapper) ?: VesselRiskFactor(),
+                )
+            }.filter { it.hasLastPositionOrVesselProfileWithVessel() }
     }
 
     override fun findLastPositionDate(): ZonedDateTime =

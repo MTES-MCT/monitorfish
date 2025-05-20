@@ -8,7 +8,7 @@ import type { PendingAlert, SilencedAlert } from '@features/Alert/types'
 import type { Reporting } from '@features/Reporting/types'
 
 export function buildFeature(
-  vessel: Vessel.ActiveVesselWithPosition,
+  vessel: Vessel.ActiveVesselEmittingPosition,
   vesselGroupDisplayed: VesselGroupDisplayInformation
 ): Vessel.VesselLastPositionFeature {
   /**
@@ -67,7 +67,6 @@ export const extractVesselIdentityProps = (
   vessel:
     | Vessel.ActiveVessel
     | Vessel.SelectedVessel
-    | Vessel.Vessel
     | Reporting.Reporting
     | PendingAlert
     | SilencedAlert

@@ -25,7 +25,7 @@ export type VesselState = {
   listFilterValues: VesselListFilter
   loadingPositions: boolean | null
   loadingVessel: boolean | null
-  selectedVessel: Vessel.AugmentedSelectedVessel | undefined
+  selectedVessel: Vessel.SelectedVessel | undefined
   selectedVesselIdentity: Vessel.VesselIdentity | undefined
   selectedVesselPositions: Vessel.VesselPosition[] | null
   selectedVesselSidebarTab: VesselSidebarTab
@@ -102,7 +102,7 @@ const vesselSlice = createSlice({
         const nextVesselReportings = reportings.concat(action.payload.reportingType)
 
         state.selectedVessel = {
-          ...(state.selectedVessel as Vessel.AugmentedSelectedVessel),
+          ...(state.selectedVessel as Vessel.SelectedVessel),
           hasInfractionSuspicion: nextVesselReportings.some(reportingIsAnInfractionSuspicion),
           reportings: nextVesselReportings
         }
@@ -204,7 +204,7 @@ const vesselSlice = createSlice({
         }
         reportingsWithAlert = reportingsWithAlert.concat([ReportingType.ALERT])
         state.selectedVessel = {
-          ...(state.selectedVessel as Vessel.AugmentedSelectedVessel),
+          ...(state.selectedVessel as Vessel.SelectedVessel),
           alerts: filteredAlerts,
           hasAlert: !!filteredAlerts?.length,
           hasInfractionSuspicion: reportingsWithAlert.some(reportingType =>
@@ -316,7 +316,7 @@ const vesselSlice = createSlice({
         )
 
         state.selectedVessel = {
-          ...(state.selectedVessel as Vessel.AugmentedSelectedVessel),
+          ...(state.selectedVessel as Vessel.SelectedVessel),
           hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingTypes.some(reportingType =>
             reportingIsAnInfractionSuspicion(reportingType)
           ),

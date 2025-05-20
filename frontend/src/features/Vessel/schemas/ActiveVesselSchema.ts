@@ -63,7 +63,7 @@ const ActiveVesselBaseSchema = z.strictObject({
   vesselName: z.string().optional()
 })
 
-export const ActiveVesselWithPositionSchema = ActiveVesselBaseSchema.extend({
+export const ActiveVesselEmittingPositionSchema = ActiveVesselBaseSchema.extend({
   activeVesselType: z.literal('POSITION_ACTIVITY'),
   alerts: z.array(z.union([z.nativeEnum(PendingAlertValueType), z.literal('PNO_LAN_WEIGHT_TOLERANCE_ALERT')])),
   beaconMalfunctionId: numberOrUndefined,
@@ -83,11 +83,11 @@ export const ActiveVesselWithPositionSchema = ActiveVesselBaseSchema.extend({
   vesselGroups: z.array(VesselGroupSchema)
 })
 
-export const ActiveVesselWithLogbookSchema = ActiveVesselBaseSchema.extend({
+export const ActiveVesselEmittingLogbookSchema = ActiveVesselBaseSchema.extend({
   activeVesselType: z.literal('LOGBOOK_ACTIVITY')
 })
 
 export const ActiveVesselSchema = z.discriminatedUnion('activeVesselType', [
-  ActiveVesselWithPositionSchema,
-  ActiveVesselWithLogbookSchema
+  ActiveVesselEmittingPositionSchema,
+  ActiveVesselEmittingLogbookSchema
 ])

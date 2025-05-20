@@ -1,6 +1,6 @@
 services:
   db:
-    image: clickhouse/clickhouse-server:24.12.3.47
+    image: clickhouse/clickhouse-server:25.4.2.31
     container_name: data_warehouse
     environment:
       - CLICKHOUSE_USER=$DATA_WAREHOUSE_USER

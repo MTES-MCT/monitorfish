@@ -1,13 +1,13 @@
 import { RedCircle } from '@features/commonStyles/Circle.style'
 import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
 import { getSegmentInfo } from '@features/FleetSegment/components/FleetSegmentsWithTooltip/utils'
-import { FleetSegmentSource, GearSource } from '@features/FleetSegment/constants'
+import { FLEET_SEGMENT_ORIGIN_LABEL, GEAR_ORIGIN_LABEL } from '@features/FleetSegment/constants'
 import { TagInfo } from '@features/Map/components/TagInfo'
 import {
   displayOnboardFishingSpecies,
   getExpandableRowCellCustomStyle
 } from '@features/Vessel/components/VesselList/cells/utils'
-import { ActiveVesselType } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { ActivityOrigin, ActivityType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { pluralize, TableWithSelectableRows, THEME, type Undefine } from '@mtes-mct/monitor-ui'
@@ -40,20 +40,12 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
       return []
     }
 
-    if (!vessel.gearsArray?.length) {
-      return vessel.recentGearsArray?.map(getGearListElement(gearsByCode)) ?? []
-    }
-
     return vessel.gearsArray?.map(getGearListElement(gearsByCode)) ?? []
   })()
 
   const segments = (function () {
     if (!fleetSegments || !row.getIsExpanded()) {
       return []
-    }
-
-    if (!vessel.segments?.length) {
-      return vessel.recentSegments?.map(getSegmentListElement(fleetSegments)) ?? []
     }
 
     return vessel.segments?.map(getSegmentListElement(fleetSegments)) ?? []
@@ -114,7 +106,7 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
             <p>
               <ExpandedRowLabel>Dernière position VMS :</ExpandedRowLabel>
               <ExpandedRowValue>
-                {vessel.activeVesselType === ActiveVesselType.POSITION_ACTIVITY
+                {vessel.activityType === ActivityType.POSITION_BASED
                   ? vessel.lastPositionSentAt && timeago.format(vessel.lastPositionSentAt, 'fr')
                   : undefined}
               </ExpandedRowValue>
@@ -126,31 +118,31 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
           </ExpandedRowCell>
           <ExpandedRowCell>
             <ExpandedRowLabel>Nom des segments</ExpandedRowLabel>
-            {!!vessel.segments?.length || !!vessel.recentSegments?.length ? (
+            {vessel.segments?.length ? (
               <>
-                {!!vessel.segments?.length && (
+                {vessel.activityOrigin === ActivityOrigin.FROM_LOGBOOK && (
                   <>
                     <ExpandedRowList>{segments}</ExpandedRowList>
                     <StyledTagInfo
                       backgroundColor={THEME.color.mediumSeaGreen25}
                       color={THEME.color.charcoal}
-                      title={FleetSegmentSource.CURRENT}
+                      title={FLEET_SEGMENT_ORIGIN_LABEL[vessel.activityOrigin]}
                     >
                       {pluralize('Segment', vessel.segments?.length ?? 0)}{' '}
                       {pluralize('actuel', vessel.segments?.length ?? 0)}
                     </StyledTagInfo>
                   </>
                 )}
-                {!vessel.segments?.length && (
+                {vessel.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && (
                   <>
                     <ExpandedRowList>{segments}</ExpandedRowList>
                     <StyledTagInfo
                       backgroundColor={THEME.color.goldenPoppy25}
                       color={THEME.color.charcoal}
-                      title={FleetSegmentSource.RECENT}
+                      title={FLEET_SEGMENT_ORIGIN_LABEL[vessel.activityOrigin]}
                     >
-                      {pluralize('Segment', vessel.recentSegments?.length ?? 0)}{' '}
-                      {pluralize('récent', vessel.recentSegments?.length ?? 0)}
+                      {pluralize('Segment', vessel.segments?.length ?? 0)}{' '}
+                      {pluralize('récent', vessel.segments?.length ?? 0)}
                     </StyledTagInfo>
                   </>
                 )}
@@ -161,33 +153,33 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
           </ExpandedRowCell>
           <ExpandedRowCell>
             <ExpandedRowLabel>
-              Engins {!!vessel.gearsArray?.length && 'à bord (FAR)'}
-              {!vessel.gearsArray?.length && !!vessel.recentGearsArray?.length && '(7 derniers jours)'}
+              Engins {vessel.activityOrigin === ActivityOrigin.FROM_LOGBOOK && 'à bord (FAR)'}
+              {vessel.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && '(7 derniers jours)'}
             </ExpandedRowLabel>
-            {!!vessel.gearsArray?.length || !!vessel.recentGearsArray?.length ? (
+            {vessel.gearsArray?.length ? (
               <>
-                {!!vessel.gearsArray?.length && (
+                {vessel.activityOrigin === ActivityOrigin.FROM_LOGBOOK && (
                   <>
                     <ExpandedRowList>{gears}</ExpandedRowList>
                     <StyledTagInfo
                       backgroundColor={THEME.color.mediumSeaGreen25}
                       color={THEME.color.charcoal}
-                      title={GearSource.CURRENT}
+                      title={GEAR_ORIGIN_LABEL[vessel.activityOrigin]}
                     >
                       {pluralize('Engin', vessel.gearsArray?.length ?? 0)} à bord
                     </StyledTagInfo>
                   </>
                 )}
-                {!vessel.gearsArray?.length && !!vessel.recentGearsArray?.length && (
+                {vessel.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && (
                   <>
                     <ExpandedRowList>{gears}</ExpandedRowList>
                     <StyledTagInfo
                       backgroundColor={THEME.color.goldenPoppy25}
                       color={THEME.color.charcoal}
-                      title={GearSource.RECENT}
+                      title={GEAR_ORIGIN_LABEL[vessel.activityOrigin]}
                     >
-                      {pluralize('Engin', vessel.recentGearsArray?.length ?? 0)}{' '}
-                      {pluralize('récent', vessel.recentGearsArray?.length ?? 0)}
+                      {pluralize('Engin', vessel.gearsArray?.length ?? 0)}{' '}
+                      {pluralize('récent', vessel.gearsArray?.length ?? 0)}
                     </StyledTagInfo>
                   </>
                 )}

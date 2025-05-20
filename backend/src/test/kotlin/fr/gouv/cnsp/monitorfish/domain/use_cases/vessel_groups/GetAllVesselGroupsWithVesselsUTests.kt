@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 
 import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActiveVesselType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
@@ -35,7 +34,6 @@ class GetAllVesselGroupsWithVesselsUTests {
                     vesselProfile = null,
                     vessel = null,
                     producerOrganization = null,
-                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
                     riskFactor = VesselRiskFactor(),
                 )
             },
@@ -75,7 +73,6 @@ class GetAllVesselGroupsWithVesselsUTests {
                     vesselProfile = null,
                     vessel = null,
                     producerOrganization = null,
-                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
                     riskFactor = VesselRiskFactor(),
                 )
             },

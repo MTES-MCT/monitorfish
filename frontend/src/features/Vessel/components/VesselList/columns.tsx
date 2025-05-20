@@ -1,6 +1,7 @@
 import { Ellipsised } from '@components/Ellipsised'
 import { Titled } from '@components/Titled'
-import { FleetSegmentSource, GearSource } from '@features/FleetSegment/constants'
+import { FLEET_SEGMENT_ORIGIN_LABEL, GEAR_ORIGIN_LABEL } from '@features/FleetSegment/constants'
+import { ActivityOrigin } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { customDayjs, TableWithSelectableRows, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
@@ -81,22 +82,22 @@ export function getTableColumns(
           return row.segments.map(tripSegment => tripSegment).join(', ')
         }
 
-        return row.recentSegments.length > 0 ? row.recentSegments.map(tripSegment => tripSegment).join(', ') : undefined
+        return undefined
       },
       cell: (info: CellContext<Vessel.ActiveVessel, string | undefined>) =>
         info.getValue() ? (
           <Ellipsised>
-            {!!info.row.original.segments.length && (
+            {info.row.original.activityOrigin === ActivityOrigin.FROM_LOGBOOK && (
               <Tag
                 backgroundColor={THEME.color.mediumSeaGreen25}
                 color={THEME.color.charcoal}
-                title={FleetSegmentSource.CURRENT}
+                title={FLEET_SEGMENT_ORIGIN_LABEL[info.row.original.activityOrigin]}
               >
                 {info.getValue()}
               </Tag>
             )}
-            {!info.row.original.segments.length && !!info.row.original.recentSegments?.length && (
-              <i title={FleetSegmentSource.RECENT}>{info.getValue()}</i>
+            {info.row.original.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && (
+              <i title={FLEET_SEGMENT_ORIGIN_LABEL[info.row.original.activityOrigin]}>{info.getValue()}</i>
             )}
           </Ellipsised>
         ) : (
@@ -113,22 +114,22 @@ export function getTableColumns(
           return row.gearsArray.join(', ')
         }
 
-        return row.recentGearsArray.length > 0 ? row.recentGearsArray.join(', ') : undefined
+        return undefined
       },
       cell: (info: CellContext<Vessel.ActiveVessel, string | undefined>) =>
         info.getValue() ? (
           <Ellipsised>
-            {!!info.row.original.gearsArray.length && (
+            {info.row.original.activityOrigin === ActivityOrigin.FROM_LOGBOOK && (
               <Tag
                 backgroundColor={THEME.color.mediumSeaGreen25}
                 color={THEME.color.charcoal}
-                title={GearSource.CURRENT}
+                title={GEAR_ORIGIN_LABEL[info.row.original.activityOrigin]}
               >
                 {info.getValue()}
               </Tag>
             )}
-            {!info.row.original.gearsArray.length && !!info.row.original.recentGearsArray?.length && (
-              <i title={GearSource.RECENT}>{info.getValue()}</i>
+            {info.row.original.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && (
+              <i title={GEAR_ORIGIN_LABEL[info.row.original.activityOrigin]}>{info.getValue()}</i>
             )}
           </Ellipsised>
         ) : (

@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LastPositionEntity
-import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.ActiveVesselWithReferentialDataEntityDTO
+import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.EnrichedActiveVesselDTO
 import org.hibernate.annotations.DynamicUpdate
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
@@ -44,7 +44,7 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
     @Transactional(readOnly = true)
     @Query(
         value = """
-            SELECT NEW fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.ActiveVesselWithReferentialDataEntityDTO(
+            SELECT NEW fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.EnrichedActiveVesselDTO(
             lp,
             vp,
             v,
@@ -58,7 +58,7 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
             LEFT JOIN RiskFactorEntity rf ON rf.cfr = vp.cfr
         """,
     )
-    fun findActiveVesselWithReferentialData(dateTime: ZonedDateTime): List<ActiveVesselWithReferentialDataEntityDTO>
+    fun findActiveVesselWithReferentialData(dateTime: ZonedDateTime): List<EnrichedActiveVesselDTO>
 
     @Modifying(clearAutomatically = true)
     @Query(

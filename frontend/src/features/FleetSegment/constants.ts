@@ -1,4 +1,5 @@
 import { type FleetSegment, ScipSpeciesType } from '@features/FleetSegment/types'
+import { ActivityOrigin } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 export const FLEET_SEGMENT_VESSEL_TYPES = [
@@ -30,12 +31,12 @@ export const DEFAULT_FLEET_SEGMENT: FleetSegment = {
   year: customDayjs().year()
 }
 
-export enum FleetSegmentSource {
-  'CURRENT' = 'Segment(s) actuel(s) à partir des messages de captures',
-  'RECENT' = 'Segment(s) ces 7 derniers jours'
+export const FLEET_SEGMENT_ORIGIN_LABEL: Record<ActivityOrigin, string> = {
+  [ActivityOrigin.FROM_LOGBOOK]: 'Segment(s) actuel(s) à partir des messages de captures',
+  [ActivityOrigin.FROM_RECENT_PROFILE]: 'Segment(s) ces 7 derniers jours'
 }
 
-export enum GearSource {
-  'CURRENT' = 'Engin(s) utilisé(s) à partir des messages de captures',
-  'RECENT' = 'Engin(s) utilisé(s) ces 7 derniers jours'
+export const GEAR_ORIGIN_LABEL: Record<ActivityOrigin, string> = {
+  [ActivityOrigin.FROM_LOGBOOK]: 'Engin(s) utilisé(s) à partir des messages de captures',
+  [ActivityOrigin.FROM_RECENT_PROFILE]: 'Engin(s) utilisé(s) ces 7 derniers jours'
 }

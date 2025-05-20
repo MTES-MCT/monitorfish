@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultImpactRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
@@ -106,9 +107,18 @@ class GetVesselUTests {
 
         // Then
         assertThat(pair.first).isFalse
-        assertThat(pair.second.vessel?.id).isEqualTo(123)
-        assertThat(pair.second.vessel?.hasVisioCaptures).isTrue()
-        assertThat(pair.second.beacon?.beaconNumber).isEqualTo("A_BEACON_NUMBER")
+        assertThat(
+            pair.second.enrichedActiveVessel.vessel
+                ?.id,
+        ).isEqualTo(123)
+        assertThat(
+            pair.second.enrichedActiveVessel.vessel
+                ?.hasVisioCaptures,
+        ).isTrue()
+        assertThat(
+            pair.second.enrichedActiveVessel.beacon
+                ?.beaconNumber,
+        ).isEqualTo("A_BEACON_NUMBER")
         assertThat(
             pair.second.positions
                 .first()
@@ -119,13 +129,19 @@ class GetVesselUTests {
                 .last()
                 .dateTime,
         ).isEqualTo(now.minusHours(1))
-        assertThat(pair.second.vesselRiskFactor?.impactRiskFactor).isEqualTo(2.3)
-        assertThat(pair.second.vesselRiskFactor?.riskFactor).isEqualTo(3.2)
-        assertThat(pair.second.producerOrganization?.organizationName).isEqualTo("Example Name 1")
-        assertThat(pair.second.vesselProfile?.species).hasSize(37)
-        assertThat(pair.second.vesselGroups).hasSize(1)
+        assertThat(pair.second.enrichedActiveVessel.riskFactor.impactRiskFactor).isEqualTo(2.3)
+        assertThat(pair.second.enrichedActiveVessel.riskFactor.riskFactor).isEqualTo(3.2)
         assertThat(
-            pair.second.vesselGroups
+            pair.second.enrichedActiveVessel.producerOrganization
+                ?.organizationName,
+        ).isEqualTo("Example Name 1")
+        assertThat(
+            pair.second.enrichedActiveVessel.vesselProfile
+                ?.species,
+        ).hasSize(37)
+        assertThat(pair.second.enrichedActiveVessel.vesselGroups).hasSize(1)
+        assertThat(
+            pair.second.enrichedActiveVessel.vesselGroups
                 .first()
                 .name,
         ).isEqualTo("Mission Thémis – chaluts de fonds")
@@ -168,7 +184,7 @@ class GetVesselUTests {
 
         // Then
         assertThat(pair.first).isFalse
-        assertThat(pair.second.vessel).isNull()
+        assertThat(pair.second.enrichedActiveVessel.vessel).isNull()
     }
 
     @Test
@@ -209,7 +225,10 @@ class GetVesselUTests {
 
         // Then
         assertThat(pair.first).isFalse
-        assertThat(pair.second.beacon?.beaconNumber).isNull()
+        assertThat(
+            pair.second.enrichedActiveVessel.beacon
+                ?.beaconNumber,
+        ).isNull()
     }
 
     @Test
@@ -249,11 +268,11 @@ class GetVesselUTests {
             }
 
         // Then
-        assertThat(pair.second.vessel).isNull()
+        assertThat(pair.second.enrichedActiveVessel.vessel).isNull()
     }
 
     @Test
-    fun `execute Should return a null risk factor when not found`() {
+    fun `execute Should return a default risk factor when not found`() {
         // Given
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             listOf(),
@@ -290,6 +309,6 @@ class GetVesselUTests {
             }
 
         // Then
-        assertThat(pair.second.vesselRiskFactor).isNull()
+        assertThat(pair.second.enrichedActiveVessel.riskFactor.impactRiskFactor).isEqualTo(defaultImpactRiskFactor)
     }
 }

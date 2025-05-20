@@ -76,7 +76,7 @@ class JpaLastPositionRepository(
                         ),
                     riskFactor = it.riskFactor?.toVesselRiskFactor(mapper) ?: VesselRiskFactor(),
                 )
-            }.filter { it.hasLastPositionOrVesselProfileWithVessel() }
+            }.filter { it.hasEitherLastPositionOrVesselProfileWithVessel() }
     }
 
     override fun findLastPositionDate(): ZonedDateTime =
@@ -107,7 +107,7 @@ class JpaLastPositionRepository(
     }
 }
 
-data class ActiveVesselWithReferentialDataEntityDTO(
+data class EnrichedActiveVesselDTO(
     val lastPosition: LastPositionEntity?,
     val vesselProfile: VesselProfileEntity?,
     val vessel: VesselEntity?,

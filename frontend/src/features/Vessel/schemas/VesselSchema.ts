@@ -32,38 +32,22 @@ export const VesselSchema = z.strictObject({
   lastPositionLatitude: z.number().optional(),
   // WSG84_PROJECTION
   lastPositionLongitude: z.number().optional(),
-
   // WSG84_PROJECTION
   lastPositionSpeed: z.number().optional(),
-
   length: numberOrUndefined,
-
   logbookEquipmentStatus: stringOrUndefined,
-
   logbookSoftware: stringOrUndefined,
-
   mmsi: stringOrUndefined,
-
   navigationLicenceExpirationDate: stringOrUndefined,
-
   navigationLicenceExtensionDate: stringOrUndefined,
-
   navigationLicenceStatus: stringOrUndefined,
-
   operatorEmail: stringOrUndefined,
-
   operatorName: stringOrUndefined,
-
   operatorPhones: z.array(z.string()),
-
   pinger: booleanOrUndefined,
-
   power: numberOrUndefined,
-
   producerOrganization: z.union([ProducerOrganizationMembershipSchema, z.undefined()]),
-
   proprietorEmails: z.array(z.string()),
-
   proprietorName: stringOrUndefined,
   proprietorPhones: z.array(z.string()),
   registryPort: stringOrUndefined,

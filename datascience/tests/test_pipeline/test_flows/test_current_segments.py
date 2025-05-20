@@ -417,7 +417,6 @@ def current_segments() -> pd.DataFrame:
             ],
             "segments": [[], [], ["SWW01/02/03"], [], []],
             "total_weight_onboard": [0.0, 713.0, 2583.0, 0.0, 0.0],
-            "probable_segments": [None, None, None, None, None],
             "impact_risk_factor": [1.0, 1.0, 3.0, 1.0, 1.0],
             "control_priority_level": [1.0, 1.0, 1.0, 1.0, 1.0],
             "segment_highest_impact": [None, None, "SWW01/02/03", None, None],

@@ -1,6 +1,6 @@
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselList/constants'
-import { ActiveVesselType } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { ActivityType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { atLeastOneVesselSelected, VesselFeature, VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { Vessel } from '@features/Vessel/Vessel.types'
@@ -167,7 +167,7 @@ const vesselSlice = createSlice({
     ) {
       const vessel = vesselSelectors.selectById(state.vessels, action.payload.vesselFeatureId)
 
-      if (vessel && vessel.activeVesselType === ActiveVesselType.POSITION_ACTIVITY) {
+      if (vessel && vessel.activityType === ActivityType.POSITION_BASED) {
         const filteredAlerts = vessel?.alerts?.filter(alert => alert !== action.payload.alertType)
 
         if (action.payload.isValidated) {

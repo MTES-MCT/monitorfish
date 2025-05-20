@@ -137,7 +137,6 @@ class VesselControllerITests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
-                    activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
                     vesselGroups = listOf(),
                 ),
             ),
@@ -257,28 +256,32 @@ class VesselControllerITests {
             Pair(
                 false,
                 EnrichedActiveVesselWithPositions(
-                    vessel =
-                        Vessel(
-                            id = 123,
-                            internalReferenceNumber = "FR224226850",
-                            vesselName = "MY AWESOME VESSEL",
-                            flagState = CountryCode.FR,
-                            declaredFishingGears = listOf("Trémails"),
-                            vesselType = "Fishing",
-                            underCharter = true,
-                            hasLogbookEsacapt = false,
+                    enrichedActiveVessel =
+                        EnrichedActiveVessel(
+                            vessel =
+                                Vessel(
+                                    id = 123,
+                                    internalReferenceNumber = "FR224226850",
+                                    vesselName = "MY AWESOME VESSEL",
+                                    flagState = CountryCode.FR,
+                                    declaredFishingGears = listOf("Trémails"),
+                                    vesselType = "Fishing",
+                                    underCharter = true,
+                                    hasLogbookEsacapt = false,
+                                ),
+                            riskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                            producerOrganization =
+                                ProducerOrganizationMembership(
+                                    internalReferenceNumber = "FR224226850",
+                                    "01/10/2024",
+                                    "OP",
+                                ),
+                            vesselProfile = DUMMY_VESSEL_PROFILE,
+                            vesselGroups = getDynamicVesselGroups(),
+                            beacon = null,
+                            lastPosition = null,
                         ),
-                    beacon = null,
                     positions = listOf(firstPosition, secondPosition, thirdPosition),
-                    vesselRiskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
-                    producerOrganization =
-                        ProducerOrganizationMembership(
-                            internalReferenceNumber = "FR224226850",
-                            "01/10/2024",
-                            "OP",
-                        ),
-                    vesselProfile = DUMMY_VESSEL_PROFILE,
-                    vesselGroups = getDynamicVesselGroups(),
                 ),
             )
         }
@@ -304,10 +307,10 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.vessel.producerOrganization.organizationName", equalTo("OP")))
             .andExpect(
                 jsonPath(
-                    "$.profile.recentSpecies['ANF']",
+                    "$.vessel.profile.recentSpecies['ANF']",
                     equalTo(BigDecimal(0.15513496742165686).setScale(17, RoundingMode.HALF_UP)),
                 ),
-            ).andExpect(jsonPath("$.groups[0].name", equalTo("Mission Thémis – chaluts de fonds")))
+            ).andExpect(jsonPath("$.vessel.groups[0].name", equalTo("Mission Thémis – chaluts de fonds")))
 
         runBlocking {
             Mockito.verify(getVessel).execute(
@@ -344,13 +347,17 @@ class VesselControllerITests {
             Pair(
                 true,
                 EnrichedActiveVesselWithPositions(
-                    vessel = null,
-                    beacon = null,
+                    enrichedActiveVessel =
+                        EnrichedActiveVessel(
+                            vessel = null,
+                            beacon = null,
+                            riskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                            producerOrganization = null,
+                            vesselProfile = null,
+                            vesselGroups = listOf(),
+                            lastPosition = null,
+                        ),
                     positions = listOf(),
-                    vesselRiskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
-                    producerOrganization = null,
-                    vesselProfile = null,
-                    vesselGroups = listOf(),
                 ),
             )
         }
@@ -386,13 +393,17 @@ class VesselControllerITests {
             Pair(
                 false,
                 EnrichedActiveVesselWithPositions(
-                    vessel = null,
-                    beacon = null,
+                    enrichedActiveVessel =
+                        EnrichedActiveVessel(
+                            vessel = null,
+                            beacon = null,
+                            riskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                            producerOrganization = null,
+                            vesselProfile = null,
+                            vesselGroups = listOf(),
+                            lastPosition = null,
+                        ),
                     positions = listOf(),
-                    vesselRiskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
-                    producerOrganization = null,
-                    vesselProfile = null,
-                    vesselGroups = listOf(),
                 ),
             )
         }

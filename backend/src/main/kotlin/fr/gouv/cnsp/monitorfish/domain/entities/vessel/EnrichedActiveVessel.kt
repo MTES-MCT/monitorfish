@@ -20,19 +20,50 @@ data class EnrichedActiveVessel(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(EnrichedActiveVessel::class.java)
 
-    val activeVesselType: ActiveVesselType
+    val activityType: ActivityType
+    val segments: List<String>
+    val gearsArray: List<String>
+    val activityOrigin: ActivityOrigin
 
     init {
-        activeVesselType = computeActiveVesselTypeFrom(lastPosition)
+        activityType = computeActivityTypeFrom(lastPosition)
+        activityOrigin = computeActivityOriginFrom(lastPosition)
+
+        segments =
+            if (activityOrigin == ActivityOrigin.FROM_LOGBOOK) {
+                lastPosition?.segments ?: listOf()
+            } else {
+                vesselProfile?.recentSegments?.keys?.toList() ?: listOf()
+            }
+
+        gearsArray =
+            if (activityOrigin == ActivityOrigin.FROM_LOGBOOK) {
+                lastPosition?.gearOnboard?.mapNotNull { it.gear }?.distinct() ?: listOf()
+            } else {
+                vesselProfile
+                    ?.recentGears
+                    ?.keys
+                    ?.toList()
+                    ?.distinct() ?: listOf()
+            }
     }
 
-    private fun computeActiveVesselTypeFrom(lastPosition: LastPosition?): ActiveVesselType =
+    private fun computeActivityOriginFrom(lastPosition: LastPosition?): ActivityOrigin {
+        val isEmittingLogbookCurrently = lastPosition?.gearOnboard?.isNotEmpty() ?: false
+
+        return when {
+            !isEmittingLogbookCurrently -> ActivityOrigin.FROM_RECENT_PROFILE
+            else -> ActivityOrigin.FROM_LOGBOOK
+        }
+    }
+
+    private fun computeActivityTypeFrom(lastPosition: LastPosition?): ActivityType =
         when {
-            lastPosition == null -> ActiveVesselType.LOGBOOK_ACTIVITY
-            else -> ActiveVesselType.POSITION_ACTIVITY
+            lastPosition == null -> ActivityType.LOGBOOK_BASED
+            else -> ActivityType.POSITION_BASED
         }
 
-    fun hasLastPositionOrVesselProfileWithVessel(): Boolean {
+    fun hasEitherLastPositionOrVesselProfileWithVessel(): Boolean {
         if (this.lastPosition == null && this.vesselProfile != null && this.vessel == null) {
             logger.warn(
                 "Vessel profile ${this.vesselProfile.cfr} could not be found in the vessel table, skipping.",

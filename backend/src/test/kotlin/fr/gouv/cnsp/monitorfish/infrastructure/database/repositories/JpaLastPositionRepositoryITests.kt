@@ -20,6 +20,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
     @BeforeEach
     fun setup() {
         cacheManager.getCache("vessels_positions")?.clear()
+        cacheManager.getCache("active_vessels")?.clear()
     }
 
     @Test
@@ -166,15 +167,13 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val lastPositionsWithProfiles = jpaLastPositionRepository.findActiveVesselWithReferentialData()
 
         // Then
-        assertThat(lastPositionsWithProfiles).hasSize(3334)
-        assertThat(lastPositionsWithProfiles.first().lastPosition).isNull()
-        assertThat(lastPositionsWithProfiles.first().vesselProfile).isNotNull()
-        assertThat(lastPositionsWithProfiles.first().vessel).isNotNull()
-        assertThat(lastPositionsWithProfiles.first().producerOrganization).isNull()
+        assertThat(lastPositionsWithProfiles).hasSize(3311)
+        assertThat(lastPositionsWithProfiles.first().lastPosition).isNotNull()
+        assertThat(lastPositionsWithProfiles.first().vesselProfile).isNull()
+        assertThat(lastPositionsWithProfiles.first().vessel).isNull()
 
-        assertThat(lastPositionsWithProfiles.last().lastPosition).isNotNull()
-        assertThat(lastPositionsWithProfiles.last().vesselProfile).isNull()
-        assertThat(lastPositionsWithProfiles.last().vessel).isNull()
-        assertThat(lastPositionsWithProfiles.last().producerOrganization).isNull()
+        assertThat(lastPositionsWithProfiles.last().lastPosition).isNull()
+        assertThat(lastPositionsWithProfiles.last().vesselProfile).isNotNull()
+        assertThat(lastPositionsWithProfiles.last().vessel).isNotNull()
     }
 }

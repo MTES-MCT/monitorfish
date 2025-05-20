@@ -85,8 +85,7 @@ sealed class ActiveVesselBaseDataOutput(
                         activeVesselWithReferentialData.vesselProfile
                             ?.recentSegments
                             ?.keys
-                            ?.toList()
-                            ?.filter { it != "NO_SEGMENT" } ?: listOf(),
+                            ?.toList() ?: listOf(),
                     speciesOnboard =
                         lastPosition.speciesOnboard?.map {
                             SpeciesLastPositionDataOutput.fromSpeciesLastPosition(
@@ -175,8 +174,7 @@ sealed class ActiveVesselBaseDataOutput(
                         activeVesselWithReferentialData.vesselProfile
                             ?.recentSegments
                             ?.keys
-                            ?.toList()
-                            ?.filter { it != "NO_SEGMENT" } ?: listOf(),
+                            ?.toList() ?: listOf(),
                     underCharter = activeVesselWithReferentialData.vessel.underCharter,
                     isAtPort = false,
                     isFiltered = 0,

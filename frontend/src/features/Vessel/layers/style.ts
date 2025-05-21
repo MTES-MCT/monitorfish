@@ -1,6 +1,5 @@
 import { featureHas, featurePropertyIsNotEmpty, stateIs } from '@features/Map/layers/styles/utils/webgl'
-import { VESSEL_SELECTOR_STYLE, VesselFeature } from '@features/Vessel/types/vessel'
-import { Icon, Style } from 'ol/style'
+import { VesselFeature } from '@features/Vessel/types/vessel'
 
 import { theme } from '../../../ui/theme'
 import { booleanToInt } from '../../../utils'
@@ -96,26 +95,6 @@ export const getWebGLVesselStyleVariables = ({
   vesselIsHiddenTimeThreshold,
   vesselIsOpacityReducedTimeThreshold
 })
-
-export const getSelectedVesselStyle =
-  ({ isLight }) =>
-  feature => {
-    const course = feature.get('course')
-    const vesselStyle = new Style({
-      image: new Icon({
-        color: isLight ? theme.color.lightGray : theme.color.charcoal,
-        offset: [0, 50],
-        opacity: 1,
-        rotation: degreesToRadian(course),
-        scale: 0.8,
-        size: [50, 50],
-        src: 'map-icons/boat_icons.png'
-      }),
-      zIndex: VESSEL_SELECTOR_STYLE
-    })
-
-    return [vesselStyle]
-  }
 
 export function degreesToRadian(course) {
   return (course * Math.PI) / 180

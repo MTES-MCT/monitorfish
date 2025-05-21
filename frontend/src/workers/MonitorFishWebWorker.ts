@@ -373,16 +373,12 @@ export class MonitorFishWebWorker {
           }
         }
 
-        if (fleetSegmentsSet) {
-          if (!!vessel?.segments.length && !vessel?.segments?.some(seg => fleetSegmentsSet.has(seg))) {
-            return false
-          }
+        if (fleetSegmentsSet && !vessel?.segments?.some(seg => fleetSegmentsSet.has(seg))) {
+          return false
         }
 
-        if (gearCodesSet) {
-          if (!!vessel?.gearsArray?.length && !vessel?.gearsArray?.some(gear => gearCodesSet.has(gear))) {
-            return false
-          }
+        if (gearCodesSet && !vessel?.gearsArray?.some(gear => gearCodesSet.has(gear))) {
+          return false
         }
 
         if (specyCodesSet && !vessel?.speciesArray.some(species => specyCodesSet.has(species))) {

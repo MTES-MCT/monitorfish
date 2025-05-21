@@ -1,7 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -11,6 +13,10 @@ import java.time.Duration
 import java.time.ZonedDateTime
 import java.util.*
 
+/**
+ * We remove null fields from the payload to reduce JSON size.
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class SelectedVesselDataOutput(
     val vesselId: Int? = null,
     val beaconMalfunctionId: Int? = null,
@@ -37,11 +43,11 @@ data class SelectedVesselDataOutput(
     val navigationLicenceExtensionDate: Date? = null,
     val navigationLicenceStatus: String? = null,
     val operatorName: String? = null,
-    val operatorPhones: List<String>? = null,
+    val operatorPhones: List<String> = listOf(),
     val operatorEmail: String? = null,
     val proprietorName: String? = null,
-    val proprietorPhones: List<String>? = null,
-    val proprietorEmails: List<String>? = null,
+    val proprietorPhones: List<String> = listOf(),
+    val proprietorEmails: List<String> = listOf(),
     val lastPositionLatitude: Double? = null,
     val lastPositionLongitude: Double? = null,
     val lastPositionSpeed: Double? = null,
@@ -53,10 +59,10 @@ data class SelectedVesselDataOutput(
     val vesselIdentifier: VesselIdentifier? = null,
     val hasInfractionSuspicion: Boolean = false,
     val hasAlert: Boolean = false,
-    val segments: List<String>? = listOf(),
+    val segments: List<String> = listOf(),
     val vesselPhones: List<String> = listOf(),
     val vesselEmails: List<String> = listOf(),
-    val riskFactor: RiskFactorDataOutput? = null,
+    val riskFactor: RiskFactorDataOutput,
     val beacon: BeaconDataOutput? = null,
     val underCharter: Boolean? = null,
     val logbookEquipmentStatus: String? = null,
@@ -66,12 +72,13 @@ data class SelectedVesselDataOutput(
     val producerOrganization: ProducerOrganizationMembershipDataOutput? = null,
     val profile: VesselProfileDataOutput? = null,
     // Could be either `DynamicVesselGroupDataOutput` or `FixedVesselGroupDataOutput`
-    val groups: List<Any>? = listOf(),
+    val groups: List<Any> = listOf(),
 ) {
     companion object {
         fun fromEnrichedActiveVessel(enrichedActiveVessel: EnrichedActiveVessel): SelectedVesselDataOutput? =
             SelectedVesselDataOutput(
                 vesselId = enrichedActiveVessel.vessel?.id,
+                beaconMalfunctionId = enrichedActiveVessel.lastPosition?.beaconMalfunctionId,
                 internalReferenceNumber =
                     enrichedActiveVessel.vessel?.internalReferenceNumber
                         ?: enrichedActiveVessel.lastPosition?.internalReferenceNumber,
@@ -102,11 +109,11 @@ data class SelectedVesselDataOutput(
                 navigationLicenceExtensionDate = enrichedActiveVessel.vessel?.navigationLicenceExtensionDate,
                 navigationLicenceStatus = enrichedActiveVessel.vessel?.navigationLicenceStatus,
                 operatorName = enrichedActiveVessel.vessel?.operatorName,
-                operatorPhones = enrichedActiveVessel.vessel?.operatorPhones,
+                operatorPhones = enrichedActiveVessel.vessel?.operatorPhones ?: listOf(),
                 operatorEmail = enrichedActiveVessel.vessel?.operatorEmail,
                 proprietorName = enrichedActiveVessel.vessel?.proprietorName,
-                proprietorPhones = enrichedActiveVessel.vessel?.proprietorPhones,
-                proprietorEmails = enrichedActiveVessel.vessel?.proprietorEmails,
+                proprietorPhones = enrichedActiveVessel.vessel?.proprietorPhones ?: listOf(),
+                proprietorEmails = enrichedActiveVessel.vessel?.proprietorEmails ?: listOf(),
                 vesselPhones = enrichedActiveVessel.vessel?.vesselPhones ?: listOf(),
                 vesselEmails = enrichedActiveVessel.vessel?.vesselEmails ?: listOf(),
                 beacon = enrichedActiveVessel.beacon?.let { BeaconDataOutput.fromBeacon(it) },
@@ -134,7 +141,7 @@ data class SelectedVesselDataOutput(
                         listOf(ReportingType.ALERT.name, ReportingType.INFRACTION_SUSPICION.name).contains(it)
                     } ?: false,
                 vesselIdentifier = enrichedActiveVessel.lastPosition?.vesselIdentifier,
-                segments = enrichedActiveVessel.lastPosition?.segments,
+                segments = enrichedActiveVessel.lastPosition?.segments ?: listOf(),
                 groups =
                     enrichedActiveVessel.vesselGroups.map {
                         when (it) {
@@ -183,6 +190,8 @@ data class SelectedVesselDataOutput(
                 logbookEquipmentStatus = vessel.logbookEquipmentStatus,
                 hasLogbookEsacapt = vessel.hasLogbookEsacapt,
                 hasVisioCaptures = vessel.hasVisioCaptures,
+                // TODO Unused in the frontend - to remove ?
+                riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(VesselRiskFactor())
             )
     }
 }

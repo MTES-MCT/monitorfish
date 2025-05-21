@@ -2,67 +2,66 @@ import { PendingAlertValueType } from '@features/Alert/types'
 import { ProducerOrganizationMembershipSchema } from '@features/ProducerOrganizationMembership/schemas/ProducerOrganizationMembershipSchema'
 import { ReportingType } from '@features/Reporting/types'
 import { RiskFactorSchema } from '@features/RiskFactor/types'
-import { VesselGroupSchema, VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { BeaconSchema } from '@features/Vessel/schemas/BeaconSchema'
+import { VesselProfileSchema } from '@features/Vessel/schemas/VesselProfileSchema'
+import { DynamicVesselGroupSchema, FixedVesselGroupSchema } from '@features/VesselGroup/types'
 import { z } from 'zod'
-
-import { booleanOrUndefined, numberOrUndefined, stringOrUndefined } from '../../../types'
 
 export const VesselSchema = z.strictObject({
   alerts: z.array(z.union([z.nativeEnum(PendingAlertValueType), z.literal('PNO_LAN_WEIGHT_TOLERANCE_ALERT')])),
-  beacon: z.union([BeaconSchema, z.undefined()]),
+  beacon: BeaconSchema.optional(),
   beaconMalfunctionId: z.number().optional(),
   course: z.number().optional(),
   declaredFishingGears: z.array(z.string()),
-  district: stringOrUndefined,
-  districtCode: stringOrUndefined,
+  district: z.string().optional(),
+  districtCode: z.string().optional(),
   emissionPeriod: z.number().optional(),
-  externalReferenceNumber: stringOrUndefined,
+  externalReferenceNumber: z.string().optional(),
   flagState: z.string(),
-  gauge: numberOrUndefined,
+  gauge: z.number().optional(),
+  groups: z.array(z.union([FixedVesselGroupSchema, DynamicVesselGroupSchema])),
   hasAlert: z.boolean(),
   hasInfractionSuspicion: z.boolean(),
   hasLogbookEsacapt: z.boolean(),
-  hasVisioCaptures: booleanOrUndefined,
-  imo: stringOrUndefined,
-  internalReferenceNumber: stringOrUndefined,
-  ircs: stringOrUndefined,
+  hasVisioCaptures: z.boolean().optional(),
+  imo: z.string().optional(),
+  internalReferenceNumber: z.string().optional(),
+  ircs: z.string().optional(),
   lastPositionCourse: z.number().optional(),
   lastPositionDateTime: z.string().optional(),
-  lastPositionLatitude: z.number().optional(),
-  // WSG84_PROJECTION
-  lastPositionLongitude: z.number().optional(),
-  // WSG84_PROJECTION
+  lastPositionLatitude: z.number().optional(), // WSG84_PROJECTION
+  lastPositionLongitude: z.number().optional(), // WSG84_PROJECTION
   lastPositionSpeed: z.number().optional(),
-  length: numberOrUndefined,
-  logbookEquipmentStatus: stringOrUndefined,
-  logbookSoftware: stringOrUndefined,
-  mmsi: stringOrUndefined,
-  navigationLicenceExpirationDate: stringOrUndefined,
-  navigationLicenceExtensionDate: stringOrUndefined,
-  navigationLicenceStatus: stringOrUndefined,
-  operatorEmail: stringOrUndefined,
-  operatorName: stringOrUndefined,
+  length: z.number().optional(),
+  logbookEquipmentStatus: z.string().optional(),
+  logbookSoftware: z.string().optional(),
+  mmsi: z.string().optional(),
+  navigationLicenceExpirationDate: z.string().optional(),
+  navigationLicenceExtensionDate: z.string().optional(),
+  navigationLicenceStatus: z.string().optional(),
+  operatorEmail: z.string().optional(),
+  operatorName: z.string().optional(),
   operatorPhones: z.array(z.string()),
-  pinger: booleanOrUndefined,
-  power: numberOrUndefined,
-  producerOrganization: z.union([ProducerOrganizationMembershipSchema, z.undefined()]),
+  pinger: z.boolean().optional(),
+  power: z.number().optional(),
+  producerOrganization: ProducerOrganizationMembershipSchema.optional(),
+  profile: VesselProfileSchema.optional(),
   proprietorEmails: z.array(z.string()),
-  proprietorName: stringOrUndefined,
+  proprietorName: z.string().optional(),
   proprietorPhones: z.array(z.string()),
-  registryPort: stringOrUndefined,
+  registryPort: z.string().optional(),
   reportings: z.array(z.nativeEnum(ReportingType)),
-  riskFactor: z.union([RiskFactorSchema, z.undefined()]),
-  sailingCategory: stringOrUndefined,
-  sailingType: stringOrUndefined,
-  segments: z.array(z.string()).optional(),
-  underCharter: booleanOrUndefined,
+  riskFactor: RiskFactorSchema,
+  sailingCategory: z.string().optional(),
+  sailingType: z.string().optional(),
+  segments: z.array(z.string()),
+  underCharter: z.boolean().optional(),
   vesselEmails: z.array(z.string()),
-  vesselGroups: z.array(VesselGroupSchema),
-  vesselId: numberOrUndefined,
+  vesselId: z.number().optional(),
   vesselIdentifier: z.nativeEnum(VesselIdentifier).optional(),
-  vesselName: stringOrUndefined,
+  vesselName: z.string().optional(),
   vesselPhones: z.array(z.string()),
-  vesselType: stringOrUndefined,
-  width: numberOrUndefined
+  vesselType: z.string().optional(),
+  width: z.number().optional()
 })

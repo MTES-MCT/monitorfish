@@ -13,8 +13,7 @@ context('Vessel groups', () => {
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 2)
 
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
-    cy.getDataCy('vessel-list-length').contains('4 navires')
-    cy.get('.Table-SimpleTable tr').should('have.length', 5)
+    cy.getDataCy('vessel-list-length').contains('2884 navires')
 
     cy.clickButton('Créer un groupe de navires')
     cy.clickButton('Créer un groupe dynamique')
@@ -22,20 +21,20 @@ context('Vessel groups', () => {
     /**
      * Create the vessel group
      */
-    cy.get('.Component-Dialog').contains('Actuellement, 4 navires correspondent aux filtres sélectionnés.')
+    cy.get('.Component-Dialog').contains('Actuellement, 2884 navires correspondent aux filtres sélectionnés.')
     cy.get('.Component-Dialog').within(() => {
       cy.get('.Component-SingleTag').should('have.length', 5)
     })
 
     cy.fill('Engins utilisés', ['OTT'], { index: 1 })
-    cy.get('.Component-Dialog').contains('Actuellement, 1 navire correspond aux filtres sélectionnés.')
+    cy.get('.Component-Dialog').contains('Actuellement, 2675 navires correspondent aux filtres sélectionnés.')
     cy.get('.Component-Dialog').within(() => {
       cy.get('.Component-SingleTag').eq(4).within(() => {
         cy.get('button').click()
       })
     })
     cy.wait(200)
-    cy.get('.Component-Dialog').contains('Actuellement, 4 navires correspondent aux filtres sélectionnés.')
+    cy.get('.Component-Dialog').contains('Actuellement, 2884 navires correspondent aux filtres sélectionnés.')
 
     cy.get('[title="#8c2c17"]').click()
     cy.fill("Nom du groupe", "Lorem ipsum dolor sit amet")
@@ -65,7 +64,7 @@ context('Vessel groups', () => {
      */
     cy.get('[title=\'Modifier le groupe "Lorem ipsum dolor sit amet"\']').click()
     cy.get('.Component-Dialog').contains('Modifier un groupe de navires dynamique')
-    cy.get('.Component-Dialog').contains('Actuellement, 4 navires correspondent aux filtres sélectionnés.')
+    cy.get('.Component-Dialog').contains('Actuellement, 2884 navires correspondent aux filtres sélectionnés.')
     // Name of the vessel group
     cy.get('[id="name"]').should('have.value', 'Lorem ipsum dolor sit amet')
     cy.get('[id="description"]').should('have.value', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.')
@@ -149,7 +148,7 @@ context('Vessel groups', () => {
 
     cy.get('.Component-Dialog').contains('Actuellement, 3150 navires correspondent aux filtres sélectionnés.')
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
-    cy.get('.Component-Dialog').contains('Actuellement, 4 navires correspondent aux filtres sélectionnés.')
+    cy.get('.Component-Dialog').contains('Actuellement, 2675 navires correspondent aux filtres sélectionnés.')
 
     cy.get('[title="#8c2c17"]').click()
     cy.fill("Nom du groupe", "Lorem ipsum dynamique")

@@ -5,6 +5,7 @@ import pytest
 
 from src.pipeline.shared_tasks.segments import (
     extract_all_segments,
+    extract_control_priorities,
     extract_segments_of_year,
 )
 
@@ -80,3 +81,12 @@ def test_extract_segments_of_year(
 def test_extract_all_segments(reset_test_data, expected_all_segments):
     segments = extract_all_segments.run()
     pd.testing.assert_frame_equal(segments, expected_all_segments)
+
+
+def test_extract_control_priorities(reset_test_data):
+    control_priorities = extract_control_priorities.run()
+    expected_control_priorities = pd.DataFrame(
+        columns=["facade", "segment", "control_priority_level"],
+        data=[["SA", "SWW01/02/03", 1.0], ["SA", "SWW04", 3.0]],
+    )
+    pd.testing.assert_frame_equal(control_priorities, expected_control_priorities)

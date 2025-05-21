@@ -8,7 +8,6 @@ from dateutil import relativedelta
 from config import TEST_DATA_LOCATION
 from src.pipeline.flows.current_segments import (
     compute_current_segments,
-    extract_control_priorities,
     extract_current_catches,
     extract_last_positions,
     flow,
@@ -448,15 +447,6 @@ def test_extract_current_catches(reset_test_data, current_catches):
     assert list(catches) == list(
         current_catches.drop(columns=["segment", "impact_risk_factor"])
     )
-
-
-def test_extract_control_priorities(reset_test_data):
-    control_priorities = extract_control_priorities.run()
-    expected_control_priorities = pd.DataFrame(
-        columns=["facade", "segment", "control_priority_level"],
-        data=[["SA", "SWW01/02/03", 1.0], ["SA", "SWW04", 3.0]],
-    )
-    pd.testing.assert_frame_equal(control_priorities, expected_control_priorities)
 
 
 def test_extract_last_positions(reset_test_data, expected_last_positions):

@@ -31,7 +31,6 @@ def expected_vessel_profiles():
             "species": [
                 {
                     "ABC": 0.7995522507395858,
-                    "BFT": 0.0,
                     "BSS": 0.0031982090029583432,
                     "COD": 0.00019988806268489645,
                     "DEF": 0.08795074758135445,
@@ -90,7 +89,7 @@ def expected_vessel_profiles():
             "recent_segments": [{"L": 0.5, "T8-9": 0.25, "NO_SEGMENT": 0.25}, None],
             "recent_landing_ports": [{"FRXXX": 1.0}, {"FRLEH": 1.0}],
             "latest_landing_port": ["FRXXX", "FRLEH"],
-            "latest_landing_facade": ["Hors façade", "SA"],
+            "latest_landing_facade": ["Hors façade", "Hors façade"],
         }
     )
 

@@ -66,7 +66,11 @@
                         "species": "NEP",
                         "weight": 235.6
                     }
-                ]
+                ],
+                "recent_segments_impact_risk_factor": 1.0,
+                "recent_segments_detectability_risk_factor": 1.0,
+                "recent_segments_risk_factor": 1.0,
+                "recent_segments_control_priority_level": 1.0
             },
 
             // - Vessel: VIVA ESPANA
@@ -127,7 +131,11 @@
                         "species": "HKE",
                         "weight": 235.6
                     }
-                ]
+                ],
+                "recent_segments_impact_risk_factor": 1.0,
+                "recent_segments_detectability_risk_factor": 1.0,
+                "recent_segments_risk_factor": 1.0,
+                "recent_segments_control_priority_level": 1.0
             },
 
             // - Vessel: LEVE NEDERLAND
@@ -188,7 +196,11 @@
                         "species": "HKE",
                         "weight": 235.6
                     }
-                ]
+                ],
+                "recent_segments_impact_risk_factor": 1.0,
+                "recent_segments_detectability_risk_factor": 1.0,
+                "recent_segments_risk_factor": 1.0,
+                "recent_segments_control_priority_level": 1.0
             },
 
             // - Vessel: LE POISSON D'AVRIL
@@ -224,7 +236,11 @@
                 "trip_number": 123109,
                 "vessel_id": 109,
                 "gear_onboard": "null",
-                "species_onboard": "null"
+                "species_onboard": "null",
+                "recent_segments_impact_risk_factor": 1.0,
+                "recent_segments_detectability_risk_factor": 1.0,
+                "recent_segments_risk_factor": 1.0,
+                "recent_segments_control_priority_level": 1.0
             },
 
             // - Vessel: DOS FIN
@@ -285,7 +301,11 @@
                         "species": "HKE",
                         "weight": 235.6
                     }
-                ]
+                ],
+                "recent_segments_impact_risk_factor": 1.0,
+                "recent_segments_detectability_risk_factor": 1.0,
+                "recent_segments_risk_factor": 1.0,
+                "recent_segments_control_priority_level": 1.0
             },
 
             // - Vessel: QUEUE DE POISSON
@@ -346,7 +366,11 @@
                         "species": "HKE",
                         "weight": 235.6
                     }
-                ]
+                ],
+                "recent_segments_impact_risk_factor": 1.0,
+                "recent_segments_detectability_risk_factor": 1.0,
+                "recent_segments_risk_factor": 1.0,
+                "recent_segments_control_priority_level": 1.0
             }
         ]
     }

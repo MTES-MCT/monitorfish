@@ -1,7 +1,7 @@
 import { COMMON_ALERT_TYPE_OPTION } from '@features/Alert/constants'
 import { VesselSidebarFleetSegments } from '@features/FleetSegment/components/VesselSidebarFleetSegments'
 import { getLastLogbookTripsOptions } from '@features/Logbook/components/VesselLogbook/LogbookMessages/utils'
-import { SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common_styles/common.style'
+import { SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { updateVesselTrackAndLogbookFromTrip } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromTrip'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'

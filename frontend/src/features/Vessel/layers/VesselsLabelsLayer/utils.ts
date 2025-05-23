@@ -14,7 +14,7 @@ export function getLabelFromFeatures(
     areVesselsNotInVesselGroupsHidden: boolean
     isSuperUser: boolean
     riskFactorShowedOnMap: boolean
-    selectedVessel: Vessel.AugmentedSelectedVessel | undefined
+    selectedVessel: Vessel.SelectedVessel | undefined
     vesselIsHidden: Date
     vesselIsOpacityReduced: Date
     vesselLabel: string

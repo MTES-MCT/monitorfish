@@ -3,14 +3,17 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
-import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
-import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultImpactRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.DUMMY_VESSEL
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.TestUtils.getDummyLastPositions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.TestUtils.getDummyPositions
+import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.TestUtils.DUMMY_VESSEL_PROFILE
+import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -46,102 +49,31 @@ class GetVesselUTests {
     @Autowired
     private lateinit var getVesselPositions: GetVesselPositions
 
+    @MockBean
+    private lateinit var vesselGroupRepository: VesselGroupRepository
+
+    @MockBean
+    private lateinit var vesselProfileRepository: VesselProfileRepository
+
+    @MockBean
+    private lateinit var lastPositionRepository: LastPositionRepository
+
     @Test
     fun `execute Should return the vessel and an ordered list of last positions for a given vessel`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
-        val firstPosition =
-            Position(
-                id = null,
-                internalReferenceNumber = "FR224226850",
-                mmsi = "224226850",
-                ircs = null,
-                externalReferenceNumber = null,
-                vesselName = null,
-                flagState = null,
-                positionType = PositionType.AIS,
-                isManual = false,
-                isFishing = false,
-                latitude = 16.445,
-                longitude = 48.2525,
-                speed = 1.8,
-                course = 180.0,
-                dateTime =
-                    now.minusHours(
-                        4,
-                    ),
-            )
-        val secondPosition =
-            Position(
-                id = null,
-                internalReferenceNumber = "FR224226850",
-                mmsi = "224226850",
-                ircs = null,
-                externalReferenceNumber = null,
-                vesselName = null,
-                flagState = null,
-                positionType = PositionType.AIS,
-                isManual = false,
-                isFishing = false,
-                latitude = 16.445,
-                longitude = 48.2525,
-                speed = 1.8,
-                course = 180.0,
-                dateTime =
-                    now.minusHours(
-                        3,
-                    ),
-            )
-        val thirdPosition =
-            Position(
-                id = null,
-                internalReferenceNumber = "FR224226850",
-                mmsi = "224226850",
-                ircs = null,
-                externalReferenceNumber = null,
-                vesselName = null,
-                flagState = null,
-                positionType = PositionType.AIS,
-                isManual = false,
-                isFishing = false,
-                latitude = 16.445,
-                longitude = 48.2525,
-                speed = 1.8,
-                course = 180.0,
-                dateTime =
-                    now.minusHours(
-                        2,
-                    ),
-            )
-        val fourthPosition =
-            Position(
-                id = null,
-                internalReferenceNumber = "FR224226850",
-                mmsi = "224226850",
-                ircs = null,
-                externalReferenceNumber = null,
-                vesselName = null,
-                flagState = null,
-                positionType = PositionType.AIS,
-                isManual = false,
-                isFishing = false,
-                latitude = 16.445,
-                longitude = 48.2525,
-                speed = 1.8,
-                course = 180.0,
-                dateTime =
-                    now.minusHours(
-                        1,
-                    ),
-            )
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
-            listOf(firstPosition, fourthPosition, secondPosition, thirdPosition),
+            getDummyPositions(now),
         )
+        given(lastPositionRepository.findByVesselIdentifier(any(), any()))
+            .willReturn(getDummyLastPositions().first())
         given(vesselRepository.findVesselById(any())).willReturn(DUMMY_VESSEL)
         given(logbookReportRepository.findLastReportSoftware(any())).willReturn("FT_E-Sacapt")
         given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(
             VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
         )
+        given(vesselGroupRepository.findAllByUser(any())).willReturn(TestUtils.getDynamicVesselGroups())
+        given(vesselProfileRepository.findByCfr(any())).willReturn(DUMMY_VESSEL_PROFILE)
         given(beaconRepository.findBeaconByVesselId(eq(123))).willReturn(Beacon("A_BEACON_NUMBER", vesselId = 123))
         given(producerOrganizationMembershipRepository.findByInternalReferenceNumber(any())).willReturn(
             ProducerOrganizationMembership("FR224226850", "01/10/2024", "Example Name 1"),
@@ -157,6 +89,9 @@ class GetVesselUTests {
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
+                    vesselGroupRepository = vesselGroupRepository,
+                    vesselProfileRepository = vesselProfileRepository,
+                    lastPositionRepository = lastPositionRepository,
                 ).execute(
                     vesselId = 123,
                     internalReferenceNumber = "FR224226850",
@@ -166,14 +101,24 @@ class GetVesselUTests {
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     fromDateTime = null,
                     toDateTime = null,
+                    userEmail = "user@gouv.fr",
                 )
             }
 
         // Then
         assertThat(pair.first).isFalse
-        assertThat(pair.second.vessel?.id).isEqualTo(123)
-        assertThat(pair.second.vessel?.hasVisioCaptures).isTrue()
-        assertThat(pair.second.beacon?.beaconNumber).isEqualTo("A_BEACON_NUMBER")
+        assertThat(
+            pair.second.enrichedActiveVessel.vessel
+                ?.id,
+        ).isEqualTo(123)
+        assertThat(
+            pair.second.enrichedActiveVessel.vessel
+                ?.hasVisioCaptures,
+        ).isTrue()
+        assertThat(
+            pair.second.enrichedActiveVessel.beacon
+                ?.beaconNumber,
+        ).isEqualTo("A_BEACON_NUMBER")
         assertThat(
             pair.second.positions
                 .first()
@@ -184,9 +129,22 @@ class GetVesselUTests {
                 .last()
                 .dateTime,
         ).isEqualTo(now.minusHours(1))
-        assertThat(pair.second.vesselRiskFactor?.impactRiskFactor).isEqualTo(2.3)
-        assertThat(pair.second.vesselRiskFactor?.riskFactor).isEqualTo(3.2)
-        assertThat(pair.second.producerOrganization?.organizationName).isEqualTo("Example Name 1")
+        assertThat(pair.second.enrichedActiveVessel.riskFactor.impactRiskFactor).isEqualTo(2.3)
+        assertThat(pair.second.enrichedActiveVessel.riskFactor.riskFactor).isEqualTo(3.2)
+        assertThat(
+            pair.second.enrichedActiveVessel.producerOrganization
+                ?.organizationName,
+        ).isEqualTo("Example Name 1")
+        assertThat(
+            pair.second.enrichedActiveVessel.vesselProfile
+                ?.species,
+        ).hasSize(37)
+        assertThat(pair.second.enrichedActiveVessel.vesselGroups).hasSize(1)
+        assertThat(
+            pair.second.enrichedActiveVessel.vesselGroups
+                .first()
+                .name,
+        ).isEqualTo("Mission Thémis – chaluts de fonds")
     }
 
     @Test
@@ -208,6 +166,9 @@ class GetVesselUTests {
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
+                    vesselGroupRepository = vesselGroupRepository,
+                    vesselProfileRepository = vesselProfileRepository,
+                    lastPositionRepository = lastPositionRepository,
                 ).execute(
                     vesselId = 123,
                     internalReferenceNumber = "FR224226850",
@@ -217,12 +178,13 @@ class GetVesselUTests {
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     fromDateTime = null,
                     toDateTime = null,
+                    userEmail = "user@gouv.fr",
                 )
             }
 
         // Then
         assertThat(pair.first).isFalse
-        assertThat(pair.second.vessel).isNull()
+        assertThat(pair.second.enrichedActiveVessel.vessel).isNull()
     }
 
     @Test
@@ -245,6 +207,9 @@ class GetVesselUTests {
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
+                    vesselGroupRepository = vesselGroupRepository,
+                    vesselProfileRepository = vesselProfileRepository,
+                    lastPositionRepository = lastPositionRepository,
                 ).execute(
                     vesselId = 123,
                     internalReferenceNumber = "FR224226850",
@@ -254,12 +219,16 @@ class GetVesselUTests {
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     fromDateTime = null,
                     toDateTime = null,
+                    userEmail = "user@gouv.fr",
                 )
             }
 
         // Then
         assertThat(pair.first).isFalse
-        assertThat(pair.second.beacon?.beaconNumber).isNull()
+        assertThat(
+            pair.second.enrichedActiveVessel.beacon
+                ?.beaconNumber,
+        ).isNull()
     }
 
     @Test
@@ -282,6 +251,9 @@ class GetVesselUTests {
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
+                    vesselGroupRepository = vesselGroupRepository,
+                    vesselProfileRepository = vesselProfileRepository,
+                    lastPositionRepository = lastPositionRepository,
                 ).execute(
                     vesselId = null,
                     internalReferenceNumber = "FR224226850",
@@ -291,15 +263,16 @@ class GetVesselUTests {
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     fromDateTime = null,
                     toDateTime = null,
+                    userEmail = "user@gouv.fr",
                 )
             }
 
         // Then
-        assertThat(pair.second.vessel).isNull()
+        assertThat(pair.second.enrichedActiveVessel.vessel).isNull()
     }
 
     @Test
-    fun `execute Should return a null risk factor when not found`() {
+    fun `execute Should return a default risk factor when not found`() {
         // Given
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             listOf(),
@@ -319,6 +292,9 @@ class GetVesselUTests {
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
+                    vesselGroupRepository = vesselGroupRepository,
+                    vesselProfileRepository = vesselProfileRepository,
+                    lastPositionRepository = lastPositionRepository,
                 ).execute(
                     vesselId = null,
                     internalReferenceNumber = "FR224226850",
@@ -328,10 +304,11 @@ class GetVesselUTests {
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     fromDateTime = null,
                     toDateTime = null,
+                    userEmail = "user@gouv.fr",
                 )
             }
 
         // Then
-        assertThat(pair.second.vesselRiskFactor).isNull()
+        assertThat(pair.second.enrichedActiveVessel.riskFactor.impactRiskFactor).isEqualTo(defaultImpactRiskFactor)
     }
 }

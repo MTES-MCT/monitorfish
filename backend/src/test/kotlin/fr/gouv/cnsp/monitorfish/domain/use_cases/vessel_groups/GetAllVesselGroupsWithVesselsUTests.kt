@@ -1,11 +1,12 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 
 import com.nhaarman.mockitokotlin2.any
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.TestUtils
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.dtos.ActiveVesselWithReferentialDataDTO
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDynamicVesselGroups
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getFixedVesselGroups
 import org.assertj.core.api.Assertions.assertThat
@@ -28,11 +29,12 @@ class GetAllVesselGroupsWithVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             TestUtils.getDummyLastPositions().map {
-                ActiveVesselWithReferentialDataDTO(
+                EnrichedActiveVessel(
                     lastPosition = it,
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    riskFactor = VesselRiskFactor(),
                 )
             },
         )
@@ -66,11 +68,12 @@ class GetAllVesselGroupsWithVesselsUTests {
         // Given
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             TestUtils.getDummyLastPositions().map {
-                ActiveVesselWithReferentialDataDTO(
+                EnrichedActiveVessel(
                     lastPosition = it,
                     vesselProfile = null,
                     vessel = null,
-                    producerOrganizationName = null,
+                    producerOrganization = null,
+                    riskFactor = VesselRiskFactor(),
                 )
             },
         )

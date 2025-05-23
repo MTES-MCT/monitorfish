@@ -72,12 +72,15 @@ class CaffeineConfiguration {
     val searchVessels = "search_vessels"
     val vesselTrack = "vessel_track"
     val vessel = "vessel"
+    val vesselProfile = "vessel_profile"
     val vessels = "vessels"
     val vesselsAllPositions = "vessels_all_position"
     val vesselsByIds = "vessels_by_ids"
     val vesselsByInternalReferenceNumbers = "vessels_by_internal_reference_numbers"
     val activeVessels = "active_vessels"
+    val activeVessel = "active_vessel"
     val vesselCharter = "vessel_charter"
+    val vesselProducerOrganization = "vessel_producer_organization"
 
     // Others
     val controlAnteriority = "control_anteriority"
@@ -154,13 +157,16 @@ class CaffeineConfiguration {
         val searchVesselsCache = buildMinutesCache(searchVessels, ticker, 60)
         val vesselTrackCache = buildMinutesCache(vesselTrack, ticker, 1)
         val vesselCache = buildMinutesCache(vessel, ticker, 60)
+        val vesselProfileCache = buildMinutesCache(vesselProfile, ticker, 15)
         val vesselsCache = buildMinutesCache(vessels, ticker, 120)
         val vesselsByIdsCache = buildMinutesCache(vesselsByIds, ticker, 5)
         val vesselsByInternalReferenceNumbersCache =
             buildMinutesCache(vesselsByInternalReferenceNumbers, ticker, 5)
         val vesselsAllPositionsCache = buildSecondsCache(vesselsAllPositions, ticker, 30)
         val activeVesselsCache = buildSecondsCache(activeVessels, ticker, 60)
+        val activeVesselCache = buildSecondsCache(activeVessel, ticker, 60)
         val vesselCharterCache = buildMinutesCache(vesselCharter, ticker, 30)
+        val vesselProducerOrganizationCache = buildMinutesCache(vesselProducerOrganization, ticker, 120)
 
         // Others
         val controlAnteriorityCache = buildMinutesCache(controlAnteriority, ticker, 1)
@@ -217,13 +223,16 @@ class CaffeineConfiguration {
                 suddenDropOfPositionsReceivedCache,
                 userAuthorizationCache,
                 vesselCache,
+                vesselProfileCache,
                 vesselsCache,
                 vesselTrackCache,
                 vesselsAllPositionsCache,
                 vesselsByIdsCache,
                 vesselsByInternalReferenceNumbersCache,
                 activeVesselsCache,
+                activeVesselCache,
                 vesselCharterCache,
+                vesselProducerOrganizationCache,
                 userInfoCache,
             ),
         )

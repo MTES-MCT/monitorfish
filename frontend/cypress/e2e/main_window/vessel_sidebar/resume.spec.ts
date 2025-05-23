@@ -36,9 +36,13 @@ context('Vessel sidebar resume tab', () => {
     cy.get('*[data-cy^="risk-factor-priority-level"]').contains('2.6 – élevée')
 
     cy.get('*[data-cy^="show-risk-factor-explanation-modal"]').click({ force: true, timeout: 10000 })
-  })
 
-  it('An useCases should be shown on the vessel sidebar', () => {
+    cy.clickButton('Fermer')
+    cy.get('*[data-cy="vessel-search-selected-vessel-close-title"]').click()
+
+    /**
+     * An alert should be shown on the vessel sidebar
+     */
     // When
     cy.get('*[data-cy^="vessel-search-input"]').type('tempete couleur')
     cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
@@ -49,5 +53,46 @@ context('Vessel sidebar resume tab', () => {
     cy.get('*[data-cy^="vessel-sidebar-alert"]').contains('Pêche en ZEE française par un navire tiers', {
       timeout: 10000
     })
+  })
+
+  it('Groups may be displayed, added and removed', () => {
+    // When
+    cy.get('*[data-cy^="vessel-search-input"]').type('tempete couleur')
+    cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselOne')
+    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
+    cy.wait('@updateVesselOne')
+    cy.wait(200)
+    cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
+
+    // Add a group
+    cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselTwo')
+    cy.fill('Ajouter le navire à un groupe fixe', ['Mission Thémis – semaine 04'])
+    cy.wait('@updateVesselTwo')
+    cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
+      .scrollIntoView()
+      .should('exist')
+
+    // Remove the vessel from the group
+    cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselThree')
+    cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]').next().click({ force: true })
+    cy.wait('@updateVesselThree')
+    cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
+      .should('not.exist')
+
+    // Re-add a group
+    cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselFour')
+    cy.fill('Ajouter le navire à un groupe fixe', ['Mission Thémis – semaine 04'])
+    cy.wait('@updateVesselFour')
+    cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
+      .scrollIntoView()
+      .should('exist')
+
+    // Re-remove the vessel from the group (checkpicker)
+    cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselFive')
+    cy.get('[id="vesselGroups"]').scrollIntoView().click({ force: true})
+    cy.get('[title="Mission Thémis – semaine 04"]').scrollIntoView().click({ force: true})
+    cy.wait('@updateVesselFive')
+    cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
+      .should('not.exist')
   })
 })

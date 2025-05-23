@@ -1,5 +1,5 @@
 import { COLORS } from '@constants/constants'
-import { SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common_styles/common.style'
+import { SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import styled from 'styled-components'
 
 import { YearBeaconMalfunctions } from './YearBeaconMalfunctions'

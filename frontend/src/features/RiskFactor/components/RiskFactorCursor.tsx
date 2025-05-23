@@ -69,7 +69,7 @@ const Wrapper = styled.div<{
   margin: ${p => (p.$withoutBox ? 0 : 9)}px 0;
   padding-bottom: 1px;
   display: flex;
-  margin-left: ${p => (p.$isBig ? 35 : 0)}px;
+  margin-left: ${p => (p.$isBig ? 24 : 0)}px;
 `
 
 const Bar = styled.div<{

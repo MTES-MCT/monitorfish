@@ -1,6 +1,6 @@
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselList/constants'
-import { ActiveVesselType } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { ActivityType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { atLeastOneVesselSelected, VesselFeature, VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { Vessel } from '@features/Vessel/Vessel.types'
@@ -25,7 +25,7 @@ export type VesselState = {
   listFilterValues: VesselListFilter
   loadingPositions: boolean | null
   loadingVessel: boolean | null
-  selectedVessel: Vessel.AugmentedSelectedVessel | undefined
+  selectedVessel: Vessel.SelectedVessel | undefined
   selectedVesselIdentity: Vessel.VesselIdentity | undefined
   selectedVesselPositions: Vessel.VesselPosition[] | null
   selectedVesselSidebarTab: VesselSidebarTab
@@ -102,7 +102,7 @@ const vesselSlice = createSlice({
         const nextVesselReportings = reportings.concat(action.payload.reportingType)
 
         state.selectedVessel = {
-          ...(state.selectedVessel as Vessel.AugmentedSelectedVessel),
+          ...(state.selectedVessel as Vessel.SelectedVessel),
           hasInfractionSuspicion: nextVesselReportings.some(reportingIsAnInfractionSuspicion),
           reportings: nextVesselReportings
         }
@@ -167,7 +167,7 @@ const vesselSlice = createSlice({
     ) {
       const vessel = vesselSelectors.selectById(state.vessels, action.payload.vesselFeatureId)
 
-      if (vessel && vessel.activeVesselType === ActiveVesselType.POSITION_ACTIVITY) {
+      if (vessel && vessel.activityType === ActivityType.POSITION_BASED) {
         const filteredAlerts = vessel?.alerts?.filter(alert => alert !== action.payload.alertType)
 
         if (action.payload.isValidated) {
@@ -204,7 +204,7 @@ const vesselSlice = createSlice({
         }
         reportingsWithAlert = reportingsWithAlert.concat([ReportingType.ALERT])
         state.selectedVessel = {
-          ...(state.selectedVessel as Vessel.AugmentedSelectedVessel),
+          ...(state.selectedVessel as Vessel.SelectedVessel),
           alerts: filteredAlerts,
           hasAlert: !!filteredAlerts?.length,
           hasInfractionSuspicion: reportingsWithAlert.some(reportingType =>
@@ -316,7 +316,7 @@ const vesselSlice = createSlice({
         )
 
         state.selectedVessel = {
-          ...(state.selectedVessel as Vessel.AugmentedSelectedVessel),
+          ...(state.selectedVessel as Vessel.SelectedVessel),
           hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingTypes.some(reportingType =>
             reportingIsAnInfractionSuspicion(reportingType)
           ),

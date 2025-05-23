@@ -1,4 +1,4 @@
-import { monitorenvApi, monitorfishApi, monitorfishLightApi, monitorfishPublicApi } from '@api/api'
+import { monitorenvApi, monitorfishApi, monitorfishPublicApi } from '@api/api'
 import { alertReducer } from '@features/Alert/components/SideWindowAlerts/slice'
 import { controlUnitDialogReducer } from '@features/ControlUnit/components/ControlUnitDialog/slice'
 import { controlUnitListDialogPersistedReducer } from '@features/ControlUnit/components/ControlUnitListDialog/slice'
@@ -75,8 +75,6 @@ const commonReducerList = {
 
 export const mainReducer = {
   ...commonReducerList,
-
-  [monitorfishLightApi.reducerPath]: monitorfishLightApi.reducer,
 
   alert: alertReducer,
   beaconMalfunction: beaconMalfunctionReducer,

@@ -11,15 +11,15 @@ export const DeclaredLogbookSpeciesSchema = z.strictObject({
   weight: numberOrUndefined
 })
 
-export const VesselGroupSchema = z.strictObject({
+export const VesselGroupOfActiveVesselSchema = z.strictObject({
   color: z.string(),
   id: z.number(),
   name: z.string()
 })
 
-export enum ActiveVesselType {
-  LOGBOOK_ACTIVITY = 'LOGBOOK_ACTIVITY',
-  POSITION_ACTIVITY = 'POSITION_ACTIVITY'
+export enum ActivityType {
+  LOGBOOK_BASED = 'LOGBOOK_BASED',
+  POSITION_BASED = 'POSITION_BASED'
 }
 
 export enum VesselIdentifier {
@@ -28,8 +28,14 @@ export enum VesselIdentifier {
   IRCS = 'IRCS'
 }
 
+export enum ActivityOrigin {
+  FROM_LOGBOOK = 'FROM_LOGBOOK',
+  FROM_RECENT_PROFILE = 'FROM_RECENT_PROFILE'
+}
+
 const ActiveVesselBaseSchema = z.strictObject({
-  activeVesselType: z.nativeEnum(ActiveVesselType),
+  activityOrigin: z.nativeEnum(ActivityOrigin),
+  activityType: z.nativeEnum(ActivityType),
   detectabilityRiskFactor: z.number(),
   district: z.string().optional(),
   districtCode: z.string().optional(),
@@ -42,15 +48,14 @@ const ActiveVesselBaseSchema = z.strictObject({
   internalReferenceNumber: z.string().optional(),
   ircs: z.string().optional(),
   isAtPort: z.boolean(),
-  isFiltered: z.number(), // 0 is False, 1 is True - for WebGL
+  isFiltered: z.number(),
+  // 0 is False, 1 is True - for WebGL
   lastControlDateTime: z.string().optional(),
   lastControlInfraction: z.boolean().optional(),
   lastLogbookMessageDateTime: z.string().optional(),
   length: z.number().optional(),
   mmsi: z.string().optional(),
   probabilityRiskFactor: z.number(),
-  recentGearsArray: z.array(z.string()),
-  recentSegments: z.array(z.string()),
   reportings: z.array(z.nativeEnum(ReportingType)),
   riskFactor: z.number(),
   segments: z.array(z.string()),
@@ -63,8 +68,8 @@ const ActiveVesselBaseSchema = z.strictObject({
   vesselName: z.string().optional()
 })
 
-export const ActiveVesselWithPositionSchema = ActiveVesselBaseSchema.extend({
-  activeVesselType: z.literal('POSITION_ACTIVITY'),
+export const ActiveVesselEmittingPositionSchema = ActiveVesselBaseSchema.extend({
+  activityType: z.literal('POSITION_BASED'),
   alerts: z.array(z.union([z.nativeEnum(PendingAlertValueType), z.literal('PNO_LAN_WEIGHT_TOLERANCE_ALERT')])),
   beaconMalfunctionId: numberOrUndefined,
   coordinates: z.array(z.number()), // OPENLAYERS_PROJECTION
@@ -80,14 +85,14 @@ export const ActiveVesselWithPositionSchema = ActiveVesselBaseSchema.extend({
   longitude: z.number(), // WSG84_PROJECTION
   positionType: z.string(),
   speed: z.number().optional(),
-  vesselGroups: z.array(VesselGroupSchema)
+  vesselGroups: z.array(VesselGroupOfActiveVesselSchema)
 })
 
-export const ActiveVesselWithLogbookSchema = ActiveVesselBaseSchema.extend({
-  activeVesselType: z.literal('LOGBOOK_ACTIVITY')
+export const ActiveVesselEmittingLogbookSchema = ActiveVesselBaseSchema.extend({
+  activityType: z.literal('LOGBOOK_BASED')
 })
 
-export const ActiveVesselSchema = z.discriminatedUnion('activeVesselType', [
-  ActiveVesselWithPositionSchema,
-  ActiveVesselWithLogbookSchema
+export const ActiveVesselSchema = z.discriminatedUnion('activityType', [
+  ActiveVesselEmittingPositionSchema,
+  ActiveVesselEmittingLogbookSchema
 ])

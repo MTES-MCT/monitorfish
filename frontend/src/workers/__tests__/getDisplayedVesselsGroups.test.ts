@@ -11,12 +11,12 @@ const firstMockVessels = {
     { color: '#12ad2b', id: 2, name: 'Vessel Group 2' },
     { color: '#af2c4b', id: 3, name: 'Vessel Group 3' }
   ]
-} as Vessel.ActiveVesselWithPosition
+} as Vessel.ActiveVesselEmittingPosition
 
 const secondMockVessels = {
   ...DUMMY_LAST_POSITIONS[1],
   vesselGroups: [{ color: '#12ad2b', id: 2, name: 'Vessel Group 2' }]
-} as Vessel.ActiveVesselWithPosition
+} as Vessel.ActiveVesselEmittingPosition
 
 describe('MonitorFishWebWorker.getDisplayedVesselsGroups', () => {
   it('should return the correct group information when all groups are displayed and no group pinned (1)', () => {

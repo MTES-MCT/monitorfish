@@ -6,7 +6,7 @@ import {
 } from '@features/Regulation/utils'
 import { VesselSize } from '@features/Vessel/components/VesselList/constants'
 import { getLastControlledFilterFromLastControlPeriod } from '@features/Vessel/components/VesselList/utils'
-import { ActiveVesselType } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { ActivityType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { VesselLocation, vesselSize } from '@features/Vessel/types/vessel'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { SEARCH_QUERY_MIN_LENGTH } from '@features/VesselGroup/components/VesselGroupList/hooks/constants'
@@ -163,14 +163,14 @@ export class MonitorFishWebWorker {
     vessels: Vessel.ActiveVessel[],
     vesselGroupsIdsDisplayed: number[],
     vesselGroupsIdsPinned: number[]
-  ): Array<[Vessel.ActiveVesselWithPosition, VesselGroupDisplayInformation]> {
+  ): Array<[Vessel.ActiveVesselEmittingPosition, VesselGroupDisplayInformation]> {
     return vessels
-      .filter(vessel => vessel.activeVesselType === ActiveVesselType.POSITION_ACTIVITY)
+      .filter(vessel => vessel.activityType === ActivityType.POSITION_BASED)
       .map(vessel => [vessel, this.getDisplayedVesselGroups(vessel, vesselGroupsIdsDisplayed, vesselGroupsIdsPinned)])
   }
 
   static getDisplayedVesselGroups(
-    vessel: Vessel.ActiveVesselWithPosition,
+    vessel: Vessel.ActiveVesselEmittingPosition,
     vesselGroupsIdsDisplayed: number[],
     vesselGroupsIdsPinned: number[]
   ): VesselGroupDisplayInformation {
@@ -184,7 +184,7 @@ export class MonitorFishWebWorker {
 
     const groupsDisplayed = orderedDisplayedVesselGroups
       .map(id => vessel.vesselGroups.find(group => group.id === id))
-      .filter((group): group is Vessel.VesselGroup => !!group)
+      .filter((group): group is Vessel.VesselGroupOfActiveVessel => !!group)
 
     const numberOfGroupsHidden =
       vessel.vesselGroups.length > groupsDisplayed.length ? vessel.vesselGroups.length - groupsDisplayed.length : 0
@@ -341,7 +341,7 @@ export class MonitorFishWebWorker {
         }
 
         if (filters.lastPositionHoursAgo) {
-          if (vessel.activeVesselType === ActiveVesselType.LOGBOOK_ACTIVITY) {
+          if (vessel.activityType === ActivityType.LOGBOOK_BASED) {
             return false
           }
 
@@ -373,24 +373,12 @@ export class MonitorFishWebWorker {
           }
         }
 
-        if (fleetSegmentsSet) {
-          if (!!vessel?.segments.length && !vessel?.segments?.some(seg => fleetSegmentsSet.has(seg))) {
-            return false
-          }
-
-          if (!vessel?.segments.length && !vessel?.recentSegments?.some(seg => fleetSegmentsSet.has(seg))) {
-            return false
-          }
+        if (fleetSegmentsSet && !vessel?.segments?.some(seg => fleetSegmentsSet.has(seg))) {
+          return false
         }
 
-        if (gearCodesSet) {
-          if (!!vessel?.gearsArray?.length && !vessel?.gearsArray?.some(gear => gearCodesSet.has(gear))) {
-            return false
-          }
-
-          if (!vessel?.gearsArray?.length && !vessel?.recentGearsArray?.some(gear => gearCodesSet.has(gear))) {
-            return false
-          }
+        if (gearCodesSet && !vessel?.gearsArray?.some(gear => gearCodesSet.has(gear))) {
+          return false
         }
 
         if (specyCodesSet && !vessel?.speciesArray.some(species => specyCodesSet.has(species))) {
@@ -436,7 +424,7 @@ export class MonitorFishWebWorker {
         }
 
         if (filters.zones?.length) {
-          if (vessel.activeVesselType === ActiveVesselType.LOGBOOK_ACTIVITY) {
+          if (vessel.activityType === ActivityType.LOGBOOK_BASED) {
             return false
           }
 
@@ -455,9 +443,9 @@ export class MonitorFishWebWorker {
 
   // TODO Use to improve vessel list performance on sort
   static sortTable(
-    vessels: Vessel.ActiveVesselWithPosition[],
+    vessels: Vessel.ActiveVesselEmittingPosition[],
     sorting: SortingState
-  ): Vessel.ActiveVesselWithPosition[] {
+  ): Vessel.ActiveVesselEmittingPosition[] {
     return [...vessels].sort((a, b) => {
       // eslint-disable-next-line no-restricted-syntax
       for (const sort of sorting) {

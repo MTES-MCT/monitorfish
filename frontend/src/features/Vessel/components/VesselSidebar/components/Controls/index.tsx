@@ -1,5 +1,5 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
-import { SidebarLoadMoreYears } from '@features/Vessel/components/VesselSidebar/components/common_styles/common.style'
+import { SidebarLoadMoreYears } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { getVesselControls } from '@features/Vessel/components/VesselSidebar/useCases/getVesselControls'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'

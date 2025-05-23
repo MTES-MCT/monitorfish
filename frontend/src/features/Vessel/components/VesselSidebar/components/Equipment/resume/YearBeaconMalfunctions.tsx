@@ -4,7 +4,7 @@ import {
   YearListContent,
   YearListTitle,
   YearListTitleText
-} from '@features/Vessel/components/VesselSidebar/components/common_styles/YearList.style'
+} from '@features/Vessel/components/VesselSidebar/components/common/YearList.style'
 import { useState } from 'react'
 import styled from 'styled-components'
 

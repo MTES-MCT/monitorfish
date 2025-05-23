@@ -24,7 +24,7 @@ class DeleteFixedVesselGroupVessel(
             "Updating vessel group $groupId from user $userEmail.",
         )
 
-        val vesselGroup =
+        val updatedVesselGroup =
             when (val savedVesselGroup = vesselGroupRepository.findById(groupId)) {
                 is DynamicVesselGroup -> throw BackendUsageException(
                     BackendUsageErrorCode.COULD_NOT_UPDATE,
@@ -54,6 +54,6 @@ class DeleteFixedVesselGroupVessel(
                 }
             }
 
-        return vesselGroupRepository.save(vesselGroup)
+        return vesselGroupRepository.save(updatedVesselGroup)
     }
 }

@@ -231,21 +231,21 @@ const RiskFactorZone = styled.div`
 
 const RiskFactorImpact = styled(RiskFactorImpactSVG)`
   width: 22px;
-  margin-left: 35px;
+  margin-left: 24px;
   margin-top: 9px;
   margin-right: 7px;
 `
 
 const RiskFactorControl = styled(RiskFactorControlSVG)`
   width: 22px;
-  margin-left: 35px;
+  margin-left: 24px;
   margin-top: 7px;
   margin-right: 7px;
 `
 
 const RiskFactorInfractions = styled(RiskFactorInfractionsSVG)`
   width: 22px;
-  margin-left: 35px;
+  margin-left: 24px;
   margin-top: 8px;
   margin-right: 7px;
 `
@@ -256,7 +256,7 @@ const Line = styled.div`
 `
 
 const GlobalRiskFactor = styled.span`
-  padding-left: 35px;
+  padding-left: 24px;
   font-size: 15px;
   color: ${p => p.theme.color.slateGray};
   width: 100%;
@@ -265,7 +265,7 @@ const GlobalRiskFactor = styled.span`
 const SubRiskTitle = styled.div`
   font-size: 13px;
   color: ${p => p.theme.color.slateGray};
-  padding-left: 35px;
+  padding-left: 24px;
   margin-top: 10px;
   width: 100%;
 `

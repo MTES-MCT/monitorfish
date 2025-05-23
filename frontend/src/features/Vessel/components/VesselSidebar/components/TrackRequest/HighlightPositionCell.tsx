@@ -5,10 +5,10 @@ import { Accent, Icon, Tag } from '@mtes-mct/monitor-ui'
 import { transform } from 'ol/proj'
 import styled from 'styled-components'
 
-import { getCoordinates } from '../../../../../../../coordinates'
-import ManualPositionSVG from '../../../../../../icons/Pastille_position_manuelle.svg?react'
-import { animateToCoordinates } from '../../../../../../Map/slice'
-import { highlightVesselTrackPosition } from '../../../../../slice'
+import { getCoordinates } from '../../../../../../coordinates'
+import ManualPositionSVG from '../../../../../icons/Pastille_position_manuelle.svg?react'
+import { animateToCoordinates } from '../../../../../Map/slice'
+import { highlightVesselTrackPosition } from '../../../../slice'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
 

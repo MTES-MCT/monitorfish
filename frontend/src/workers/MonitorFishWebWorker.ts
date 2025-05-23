@@ -184,7 +184,7 @@ export class MonitorFishWebWorker {
 
     const groupsDisplayed = orderedDisplayedVesselGroups
       .map(id => vessel.vesselGroups.find(group => group.id === id))
-      .filter((group): group is Vessel.VesselGroup => !!group)
+      .filter((group): group is Vessel.VesselGroupOfActiveVessel => !!group)
 
     const numberOfGroupsHidden =
       vessel.vesselGroups.length > groupsDisplayed.length ? vessel.vesselGroups.length - groupsDisplayed.length : 0

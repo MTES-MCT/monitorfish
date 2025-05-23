@@ -1,7 +1,4 @@
-import {
-  SidebarHeader,
-  SidebarZone
-} from '@features/Vessel/components/VesselSidebar/components/common_styles/common.style'
+import { SidebarHeader, SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 

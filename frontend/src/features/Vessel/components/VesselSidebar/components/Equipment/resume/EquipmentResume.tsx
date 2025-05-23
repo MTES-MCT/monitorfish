@@ -1,6 +1,6 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
+import { SidebarLoadMoreYears } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { FlatKeyValue } from '@features/Vessel/components/VesselSidebar/components/common/FlatKeyValue'
-import { SidebarLoadMoreYears } from '@features/Vessel/components/VesselSidebar/components/common_styles/common.style'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, THEME } from '@mtes-mct/monitor-ui'

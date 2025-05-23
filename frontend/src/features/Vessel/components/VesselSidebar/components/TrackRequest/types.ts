@@ -1,6 +1,6 @@
 import { Vessel } from '@features/Vessel/Vessel.types'
 
-import { VesselTrackDepth } from '../../../../../types/vesselTrackDepth'
+import { VesselTrackDepth } from '../../../../types/vesselTrackDepth'
 
 export type SelectableVesselTrackDepth = Exclude<VesselTrackDepth, VesselTrackDepth.CUSTOM>
 

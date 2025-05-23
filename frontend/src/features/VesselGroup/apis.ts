@@ -1,14 +1,14 @@
 import { monitorfishApi } from '@api/api'
 import { RtkCacheTagType } from '@api/constants'
 import {
-  DynamicVesselGroupSchema,
-  FixedVesselGroupSchema,
-  type VesselGroupWithVessels,
   type CreateOrUpdateDynamicVesselGroup,
-  type DynamicVesselGroup,
   type CreateOrUpdateFixedVesselGroup,
+  type DynamicVesselGroup,
+  DynamicVesselGroupSchema,
   type FixedVesselGroup,
-  type VesselGroup
+  FixedVesselGroupSchema,
+  type VesselGroup,
+  type VesselGroupWithVessels
 } from '@features/VesselGroup/types'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { parseResponseOrReturn } from '@utils/parseResponseOrReturn'

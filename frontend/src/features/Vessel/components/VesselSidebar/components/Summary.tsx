@@ -3,6 +3,7 @@ import { VesselSidebarFleetSegments } from '@features/FleetSegment/components/Ve
 import { WSG84_PROJECTION } from '@features/Map/constants'
 import { RiskFactorResume } from '@features/RiskFactor/components/RiskFactorResume'
 import { showVessel } from '@features/Vessel/useCases/showVessel'
+import { SelectedVesselGroups } from '@features/VesselGroup/components/SelectedVesselGroups'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
@@ -125,6 +126,7 @@ export function VesselSummary() {
       </ZoneWithoutBackground>
       {isSuperUser && <RiskFactorResume />}
       {!isSuperUser && <VesselSidebarFleetSegments segments={selectedVessel?.segments} />}
+      <SelectedVesselGroups />
     </Body>
   ) : (
     <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />

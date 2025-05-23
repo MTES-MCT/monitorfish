@@ -11,7 +11,7 @@ export const DeclaredLogbookSpeciesSchema = z.strictObject({
   weight: numberOrUndefined
 })
 
-export const VesselGroupSchema = z.strictObject({
+export const VesselGroupOfActiveVesselSchema = z.strictObject({
   color: z.string(),
   id: z.number(),
   name: z.string()
@@ -85,7 +85,7 @@ export const ActiveVesselEmittingPositionSchema = ActiveVesselBaseSchema.extend(
   longitude: z.number(), // WSG84_PROJECTION
   positionType: z.string(),
   speed: z.number().optional(),
-  vesselGroups: z.array(VesselGroupSchema)
+  vesselGroups: z.array(VesselGroupOfActiveVesselSchema)
 })
 
 export const ActiveVesselEmittingLogbookSchema = ActiveVesselBaseSchema.extend({

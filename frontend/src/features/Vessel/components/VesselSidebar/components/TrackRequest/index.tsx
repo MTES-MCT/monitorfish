@@ -9,10 +9,10 @@ import styled from 'styled-components'
 import { ExportTrack } from './ExportTrack'
 import { PositionsTable } from './PositionsTable'
 import { TrackDepthSelection } from './TrackDepthSelection'
-import { MapComponent } from '../../../../../../commonStyles/MapComponent'
+import { MapComponent } from '../../../../../commonStyles/MapComponent'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
-import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/types'
+import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/types'
 import type { TrackRequestCustom, TrackRequestPredefined } from '@features/Vessel/types/types'
 import type { DateRange } from '@mtes-mct/monitor-ui'
 

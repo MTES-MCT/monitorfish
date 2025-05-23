@@ -1,9 +1,9 @@
-import { SELECT_TRACK_DEPTH_OPTIONS } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/constants'
+import { SELECT_TRACK_DEPTH_OPTIONS } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/constants'
 import { Select } from '@mtes-mct/monitor-ui'
 import { type MutableRefObject, useRef } from 'react'
 import styled from 'styled-components'
 
-import { VesselTrackDepth } from '../../../../../types/vesselTrackDepth'
+import { VesselTrackDepth } from '../../../../types/vesselTrackDepth'
 
 import type { Promisable } from 'type-fest'
 

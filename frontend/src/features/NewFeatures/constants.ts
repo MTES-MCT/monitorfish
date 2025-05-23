@@ -7,6 +7,26 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2025-05-20',
+        description: `La liste des navires inclut désormais **l’ensemble des navires ayant eu une activité**, qu’ils soient équipés ou non du VMS.
+Cela comprend :
+- les navires avec VMS ;
+- les navires sans VMS, mais ayant une activité identifiée via le JPE, VisioCaptures ou fiches papier.
+
+Grâce à cette amélioration, vous pouvez créer des groupes fixes - intégrant des navires sans VMS - mais également des groupes dynamiques, en s’appuyant sur les données du JPE en temps réél (lorsqu’elles sont disponibles), ou sur **les engins utilisés et les segments de flotte récents.**
+  `,
+        for: 'ALL',
+        title: 'Affichage des navires actifs et filtrage selon l’activité récente',
+        type: 'NEW_FEATURE'
+      },
+      {
+        date: '2025-05-15',
+        description: `La fiche détaillée de chaque navire affiche désormais les groupes auxquels il est rattaché. Cela vous permet de visualiser d’un coup d’œil son appartenance à différents groupes, qu’ils soient fixes ou dynamiques.`,
+        for: 'ALL',
+        title: `Consultation des groupes depuis la fiche navire`,
+        type: 'IMPROVEMENT'
+      },
+      {
         date: '2025-05-1',
         description: `Il est désormais possible de créer des **groupes de navires fixes**, permettant de regrouper manuellement une sélection de navires.
 

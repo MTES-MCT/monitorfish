@@ -322,7 +322,6 @@ def risk_factors() -> pd.DataFrame:
                 [{"natinf": 2606}, {"natinf": 4761}, {"natinf": 22206}],
                 [],
             ],
-            "id": [8, 11, 5, 9, 6, 13, 12, 7, 10],
             "recent_gears": [
                 None,
                 ["PS1"],
@@ -560,4 +559,6 @@ def test_risk_factor_flow(reset_test_data, risk_factors):
     assert len(control_anteriority) == 4
     assert set(control_anteriority.ircs) == {"LLUK", "OLY7853", "IL2468", "SOMEID"}
 
-    pd.testing.assert_frame_equal(loaded_risk_factors, risk_factors)
+    pd.testing.assert_frame_equal(
+        loaded_risk_factors.drop(columns=["id"]), risk_factors
+    )

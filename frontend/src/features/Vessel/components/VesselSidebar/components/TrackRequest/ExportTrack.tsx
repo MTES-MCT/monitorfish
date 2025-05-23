@@ -8,10 +8,10 @@ import countries from 'i18n-iso-countries'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { getCoordinates } from '../../../../../../../coordinates'
-import { getDate } from '../../../../../../../utils'
-import { PrimaryButton } from '../../../../../../commonStyles/Buttons.style'
-import ExportSVG from '../../../../../../icons/Bouton_exporter_piste_navire.svg?react'
+import { getCoordinates } from '../../../../../../coordinates'
+import { getDate } from '../../../../../../utils'
+import { PrimaryButton } from '../../../../../commonStyles/Buttons.style'
+import ExportSVG from '../../../../../icons/Bouton_exporter_piste_navire.svg?react'
 
 import type { DownloadAsCsvMap } from '@utils/downloadAsCsv'
 

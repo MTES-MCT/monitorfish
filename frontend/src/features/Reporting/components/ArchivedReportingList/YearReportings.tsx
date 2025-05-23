@@ -5,7 +5,7 @@ import {
   YearListContent,
   YearListTitle,
   YearListTitleText
-} from '@features/Vessel/components/VesselSidebar/components/common_styles/YearList.style'
+} from '@features/Vessel/components/VesselSidebar/components/common/YearList.style'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'

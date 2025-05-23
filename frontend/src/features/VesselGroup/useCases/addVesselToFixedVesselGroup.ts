@@ -4,9 +4,9 @@ import { saveActiveVesselsAndDisplayLastPositions } from '@features/Vessel/useCa
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { vesselGroupApi } from '@features/VesselGroup/apis'
-import { type FixedVesselGroup } from '@features/VesselGroup/types'
 import { Level } from '@mtes-mct/monitor-ui'
 
+import type { FixedVesselGroup } from '@features/VesselGroup/types'
 import type { MainAppThunk } from '@store'
 
 export const addVesselToFixedVesselGroup =

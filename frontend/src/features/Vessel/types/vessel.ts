@@ -79,7 +79,7 @@ export class VesselFeature {
       vesselsLastPositionVisibility: MonitorFishMap.LastPositionVisibility
     }
   ): {
-    groupsDisplayed: Vessel.VesselGroup[]
+    groupsDisplayed: Vessel.VesselGroupOfActiveVessel[]
     labelText: string | undefined
     riskFactor:
       | {
@@ -100,7 +100,7 @@ export class VesselFeature {
 
     // TODO Properly type this const.
     const label: {
-      groupsDisplayed: Vessel.VesselGroup[]
+      groupsDisplayed: Vessel.VesselGroupOfActiveVessel[]
       labelText: string | undefined
       riskFactor: any | undefined
       underCharter: any

@@ -1,5 +1,5 @@
 import { VesselListFilterSchema } from '@features/Vessel/components/VesselList/types'
-import { ActiveVesselEmittingPositionSchema, VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { ActiveVesselSchema, VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import z from 'zod'
 
 import { numberOrUndefined, stringOrUndefined } from '../../types'
@@ -89,7 +89,7 @@ export type CreateOrUpdateVesselGroup = CreateOrUpdateDynamicVesselGroup | Creat
 
 export const VesselGroupWithVesselsSchema = z.strictObject({
   group: z.union([FixedVesselGroupSchema, DynamicVesselGroupSchema]),
-  vessels: z.array(ActiveVesselEmittingPositionSchema)
+  vessels: z.array(ActiveVesselSchema)
 })
 
 export type VesselGroupWithVessels = z.infer<typeof VesselGroupWithVesselsSchema>

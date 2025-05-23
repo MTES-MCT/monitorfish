@@ -18,7 +18,7 @@ type VesselTableProps = Readonly<{
   isFromUrl: boolean
   isPinned: boolean
   vesselGroupId: number
-  vessels: Vessel.ActiveVesselEmittingPosition[]
+  vessels: Vessel.ActiveVessel[]
 }>
 export function VesselTable({ isFixedGroup, isFromUrl, isPinned, vesselGroupId, vessels }: VesselTableProps) {
   const isBodyEmptyDataVisible = !!vessels && vessels.length === 0
@@ -32,13 +32,13 @@ export function VesselTable({ isFixedGroup, isFromUrl, isPinned, vesselGroupId, 
      * `SEARCH_QUERY_MIN_LENGTH - 1` because we would like to avoid an initial rendering of
      * the table when there is a filter be pre-searching for vessels.
      * This is doable because SEARCH_QUERY_MIN_LENGTH also trigger the opening of the `VesselTable`
-     * (see `areGroupsOpened`in index.tsx)
+     * (see `areGroupsOpened`in HideNonSelectedVessels.tsx)
      * */
     if (!searchQuery || searchQuery.length <= SEARCH_QUERY_MIN_LENGTH - 1) {
       return [getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId, isFixedGroup)), vessels ?? []]
     }
 
-    const fuse = new CustomSearch<Vessel.ActiveVesselEmittingPosition>(
+    const fuse = new CustomSearch<Vessel.ActiveVessel>(
       vessels ?? [],
       ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs'],
       { isStrict: true, threshold: 0.4 }

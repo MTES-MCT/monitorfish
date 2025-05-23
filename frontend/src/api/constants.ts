@@ -46,6 +46,7 @@ export enum RtkCacheTagType {
   PriorNotificationsToVerify = 'PriorNotificationsToVerify',
   ProducerOrganizationMemberships = 'ProducerOrganizationMemberships',
   Reportings = 'Reportings',
+  SelectedVessel = 'SelectedVessel',
   Vessel = 'Vessel',
   VesselGroups = 'VesselGroups'
 }

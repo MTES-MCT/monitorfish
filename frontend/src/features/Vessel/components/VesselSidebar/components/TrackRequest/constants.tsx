@@ -1,11 +1,11 @@
-import { HighlightPositionCell } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/HighlightPositionCell'
+import { HighlightPositionCell } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/HighlightPositionCell'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { getLocalizedDayjs } from '@mtes-mct/monitor-ui'
 import { isNumeric } from '@utils/isNumeric'
 
-import { VesselTrackDepth } from '../../../../../types/vesselTrackDepth'
+import { VesselTrackDepth } from '../../../../types/vesselTrackDepth'
 
-import type { VesselPositionWithId } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/types'
+import type { VesselPositionWithId } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/types'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { ColumnDef } from '@tanstack/react-table'
 

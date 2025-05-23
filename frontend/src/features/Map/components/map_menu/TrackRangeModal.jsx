@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { Modal } from 'rsuite'
-import { DateRange } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/DateRange'
+import { DateRange } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/DateRange'
 import { StyledModalHeader } from '../../../commonComponents/StyledModalHeader'
 
 /**

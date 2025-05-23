@@ -38,7 +38,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
     }),
 
     /**
-     * Get vessel information and positions.
+     * Get enriched selected vessel and positions.
      *
      * Transforms the response by reading the JSON body and setting
      * `isTrackDepthModified` based on the response status.
@@ -47,6 +47,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
       { isTrackDepthModified: boolean; vesselAndPositions: Vessel.VesselAndPositions },
       { trackRequest: TrackRequest; vesselIdentity: Vessel.VesselIdentity }
     >({
+      providesTags: () => [{ type: RtkCacheTagType.SelectedVessel }],
       query: ({ trackRequest, vesselIdentity }) => {
         const { externalReferenceNumber, internalReferenceNumber, ircs, vesselId, vesselIdentifier } =
           getVesselIdentityPropsAsEmptyStringsWhenUndefined(getVesselIdentityFromLegacyVesselIdentity(vesselIdentity))

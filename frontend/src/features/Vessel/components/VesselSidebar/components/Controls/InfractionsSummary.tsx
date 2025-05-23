@@ -1,4 +1,4 @@
-import { NoValue } from '@features/Vessel/components/VesselSidebar/components/common_styles/common.style'
+import { NoValue } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import styled from 'styled-components'
 
 type InfractionsSummaryProps = {

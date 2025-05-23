@@ -2,7 +2,7 @@ import {
   SUPER_USER_VESSEL_LABEL_OPTION,
   VESSEL_LABEL_OPTIONS
 } from '@features/MainWindow/components/MapButtons/VesselVisibility/constants'
-import { TrackDepthSelection } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/TrackDepthSelection'
+import { TrackDepthSelection } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/TrackDepthSelection'
 import { displayVesselsEstimatedPositions } from '@features/Vessel/useCases/displayVesselEstimatedPositions'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'

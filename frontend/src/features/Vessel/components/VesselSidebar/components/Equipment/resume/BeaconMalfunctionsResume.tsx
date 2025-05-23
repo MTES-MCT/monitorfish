@@ -2,7 +2,7 @@ import {
   NoValue,
   SidebarHeader,
   SidebarZone
-} from '@features/Vessel/components/VesselSidebar/components/common_styles/common.style'
+} from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import styled from 'styled-components'
 
 import { getDateTime } from '../../../../../../../utils'

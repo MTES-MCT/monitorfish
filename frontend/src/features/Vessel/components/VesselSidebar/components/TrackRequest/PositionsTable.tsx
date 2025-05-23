@@ -1,8 +1,8 @@
 import {
   DUMMY_VESSEL_POSITION,
   POSITION_TABLE_COLUMNS
-} from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/constants'
-import { TableBodyEmptyData } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/TableBodyEmptyData'
+} from '@features/Vessel/components/VesselSidebar/components/TrackRequest/constants'
+import { TableBodyEmptyData } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/TableBodyEmptyData'
 import { useClickOutsideWhenOpenedAndExecute } from '@hooks/useClickOutsideWhenOpenedAndExecute'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -15,10 +15,10 @@ import { range } from 'lodash-es'
 import { useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import { SkeletonRow } from '../../../../../../../ui/Table/SkeletonRow'
-import { highlightVesselTrackPosition } from '../../../../../slice'
+import { SkeletonRow } from '../../../../../../ui/Table/SkeletonRow'
+import { highlightVesselTrackPosition } from '../../../../slice'
 
-import type { VesselPositionWithId } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/types'
+import type { VesselPositionWithId } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/types'
 
 export function PositionsTable() {
   const dispatch = useMainAppDispatch()

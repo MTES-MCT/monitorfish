@@ -4,7 +4,7 @@ import {
   SidebarHeader,
   SidebarHeaderValue,
   SidebarZone
-} from '@features/Vessel/components/VesselSidebar/components/common_styles/common.style'
+} from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { pluralize } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 

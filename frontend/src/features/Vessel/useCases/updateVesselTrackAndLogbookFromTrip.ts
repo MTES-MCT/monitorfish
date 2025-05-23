@@ -6,7 +6,7 @@ import { updateSelectedVesselTrack } from '@features/Vessel/useCases/updateSelec
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import type { Logbook } from '@features/Logbook/Logbook.types'
-import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/types'
+import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppThunk } from '@store'
 

@@ -2,7 +2,7 @@ import {
   type ActiveVesselEmittingPositionSchema,
   ActiveVesselSchema,
   type DeclaredLogbookSpeciesSchema,
-  type VesselGroupSchema,
+  type VesselGroupOfActiveVesselSchema,
   VesselIdentifier
 } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { z } from 'zod'
@@ -74,7 +74,7 @@ export namespace Vessel {
 
   export type DeclaredLogbookSpecies = z.infer<typeof DeclaredLogbookSpeciesSchema>
 
-  export type VesselGroup = z.infer<typeof VesselGroupSchema>
+  export type VesselGroupOfActiveVessel = z.infer<typeof VesselGroupOfActiveVesselSchema>
 
   export type ActiveVesselEmittingPosition = z.infer<typeof ActiveVesselEmittingPositionSchema>
   export type ActiveVessel = z.infer<typeof ActiveVesselSchema>
@@ -143,7 +143,7 @@ export namespace Vessel {
   export type VesselLastPositionFeature = Feature<Point> &
     Vessel.ActiveVesselEmittingPosition & {
       color: string | undefined
-      groupsDisplayed: VesselGroup[]
+      groupsDisplayed: VesselGroupOfActiveVessel[]
       numberOfGroupsHidden: number
     }
 

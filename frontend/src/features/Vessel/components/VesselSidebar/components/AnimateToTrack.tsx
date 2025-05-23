@@ -3,8 +3,8 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import styled from 'styled-components'
 
-import ShowTrackSVG from '../../../../../../icons/Bouton_afficher_toute_la_piste.svg?react'
-import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
+import { VesselSidebarActionButton } from './VesselSidebarActionButton'
+import ShowTrackSVG from '../../../../icons/Bouton_afficher_toute_la_piste.svg?react'
 
 export function AnimateToTrack({ isSidebarOpen }) {
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)

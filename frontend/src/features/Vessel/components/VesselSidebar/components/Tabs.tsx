@@ -98,7 +98,7 @@ const BadgeNumber = styled.div<{
   background: ${p => (p.$hasInfractionSuspicion ? p.theme.color.maximumRed : p.theme.color.gunMetal)};
   color: ${p => p.theme.color.white};
   font-size: 11px;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   font-weight: 700;
   margin-left: -30px;
 `

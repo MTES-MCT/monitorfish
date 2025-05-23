@@ -1,3 +1,4 @@
+import pandas as pd
 from pytest import fixture
 
 from config import TEST_DATA_LOCATION
@@ -66,3 +67,14 @@ def add_landings(add_monitorfish_database):
     yield
     print("Dropping monitorfish.landings table")
     client.command("DROP TABLE monitorfish.landings")
+
+
+@fixture
+def control_priorities() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "facade": ["Facade 1", "Facade 1", "Facade 2", "Facade 2"],
+            "segment": ["T8-9", "L", "T8-9", "L"],
+            "control_priority_level": [2.5, 2.8, 2.9, 2.4],
+        }
+    )

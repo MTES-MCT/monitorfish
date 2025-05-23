@@ -37,7 +37,7 @@ export const addOrRemoveVesselToGroupFromCheckPicker =
           category: 'VESSEL_GROUP',
           name: editedVesselGroup.name
         })
-        dispatch(addVesselToFixedVesselGroup(vesselIdentity, editedVesselGroup))
+        await dispatch(addVesselToFixedVesselGroup(vesselIdentity, editedVesselGroup))
       }
 
       const groupsRemoved = difference(currentVesselGroupIds ?? [], nextGroupIds)
@@ -70,7 +70,7 @@ export const addOrRemoveVesselToGroupFromCheckPicker =
           category: 'VESSEL_GROUP',
           name: editedVesselGroup.name
         })
-        dispatch(deleteVesselFromVesselGroup(editedVesselGroup.id, vesselIndex))
+        await dispatch(deleteVesselFromVesselGroup(editedVesselGroup.id, vesselIndex))
       }
 
       dispatch(displayVesselSidebarAndPositions(vesselIdentity, false))

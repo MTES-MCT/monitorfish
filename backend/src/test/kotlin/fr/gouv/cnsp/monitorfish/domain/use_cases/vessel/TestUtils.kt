@@ -4,6 +4,7 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
+import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
@@ -141,6 +142,95 @@ object TestUtils {
                         1,
                     ),
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            )
+
+        return listOf(firstPosition, secondPosition, thirdPosition, fourthPosition)
+    }
+
+    fun getDummyPositions(baseDateTime: ZonedDateTime): List<Position> {
+        val firstPosition =
+            Position(
+                id = null,
+                internalReferenceNumber = "FR224226850",
+                mmsi = "224226850",
+                ircs = null,
+                externalReferenceNumber = null,
+                vesselName = null,
+                flagState = null,
+                positionType = PositionType.AIS,
+                isManual = false,
+                isFishing = false,
+                latitude = 16.445,
+                longitude = 48.2525,
+                speed = 1.8,
+                course = 180.0,
+                dateTime =
+                    baseDateTime.minusHours(
+                        4,
+                    ),
+            )
+        val secondPosition =
+            Position(
+                id = null,
+                internalReferenceNumber = "FR224226850",
+                mmsi = "224226850",
+                ircs = null,
+                externalReferenceNumber = null,
+                vesselName = null,
+                flagState = null,
+                positionType = PositionType.AIS,
+                isManual = false,
+                isFishing = false,
+                latitude = 16.445,
+                longitude = 48.2525,
+                speed = 1.8,
+                course = 180.0,
+                dateTime =
+                    baseDateTime.minusHours(
+                        3,
+                    ),
+            )
+        val thirdPosition =
+            Position(
+                id = null,
+                internalReferenceNumber = "FR224226850",
+                mmsi = "224226850",
+                ircs = null,
+                externalReferenceNumber = null,
+                vesselName = null,
+                flagState = null,
+                positionType = PositionType.AIS,
+                isManual = false,
+                isFishing = false,
+                latitude = 16.445,
+                longitude = 48.2525,
+                speed = 1.8,
+                course = 180.0,
+                dateTime =
+                    baseDateTime.minusHours(
+                        2,
+                    ),
+            )
+        val fourthPosition =
+            Position(
+                id = null,
+                internalReferenceNumber = "FR224226850",
+                mmsi = "224226850",
+                ircs = null,
+                externalReferenceNumber = null,
+                vesselName = null,
+                flagState = null,
+                positionType = PositionType.AIS,
+                isManual = false,
+                isFishing = false,
+                latitude = 16.445,
+                longitude = 48.2525,
+                speed = 1.8,
+                course = 180.0,
+                dateTime =
+                    baseDateTime.minusHours(
+                        1,
+                    ),
             )
 
         return listOf(firstPosition, secondPosition, thirdPosition, fourthPosition)

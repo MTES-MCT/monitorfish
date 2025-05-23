@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOr
 import fr.gouv.cnsp.monitorfish.domain.repositories.ProducerOrganizationMembershipRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ProducerOrganizationMembershipEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBProducerOrganizationMembership
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import kotlin.jvm.optionals.getOrNull
 
@@ -23,6 +24,7 @@ class JpaProducerOrganizationMembership(
         )
     }
 
+    @Cacheable(value = ["vessel_producer_organization"])
     override fun findByInternalReferenceNumber(internalReferenceNumber: String): ProducerOrganizationMembership? =
         dbProducerOrganizationMembership
             .findById(internalReferenceNumber)

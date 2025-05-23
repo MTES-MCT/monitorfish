@@ -1,7 +1,9 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { VesselSidebarFleetSegments } from '@features/FleetSegment/components/VesselSidebarFleetSegments'
 import { WSG84_PROJECTION } from '@features/Map/constants'
+import { RiskFactorResume } from '@features/RiskFactor/components/RiskFactorResume'
 import { showVessel } from '@features/Vessel/useCases/showVessel'
+import { SelectedVesselGroups } from '@features/VesselGroup/components/SelectedVesselGroups'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
@@ -14,7 +16,6 @@ import { getCoordinates } from '../../../../../coordinates'
 import { getDateTime, timeagoFrenchLocale } from '../../../../../utils'
 import InfoSVG from '../../../../icons/Information.svg?react'
 import NoVesselSVG from '../../../../icons/Picto_photo_navire_manquante.svg?react'
-import { RiskFactorResume } from '../../../../RiskFactor/components/RiskFactorResume'
 
 // @ts-ignore
 timeago.register('fr', timeagoFrenchLocale)
@@ -23,22 +24,22 @@ export function VesselSummary() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
-  const { loadingVessel, selectedVessel, selectedVesselIdentity, selectedVesselPositions } = useMainAppSelector(
-    state => state.vessel
-  )
+  const loadingVessel = useMainAppSelector(state => state.vessel.loadingVessel)
+  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+
   const [photoFallback, setPhotoFallback] = useState(false)
-  const [lastPosition, setLastPosition] = useState<
-    | {
-        course
-        dateTime
-        latitude
-        longitude
-        speed
-      }
-    | undefined
-  >(undefined)
+  const coordinates =
+    !Number.isNaN(selectedVessel?.lastPositionLatitude) && !Number.isNaN(selectedVessel?.lastPositionLongitude)
+      ? getCoordinates(
+          [selectedVessel?.lastPositionLongitude, selectedVessel?.lastPositionLatitude],
+          WSG84_PROJECTION,
+          coordinatesFormat
+        )
+      : undefined
 
   useEffect(() => {
+    // The MMSI is required for the vessel picture to be available
     if (!selectedVessel?.mmsi) {
       setPhotoFallback(true)
 
@@ -47,33 +48,6 @@ export function VesselSummary() {
 
     setPhotoFallback(false)
   }, [selectedVessel])
-
-  useEffect(() => {
-    if (selectedVessel?.dateTime) {
-      const { course, dateTime, latitude, longitude, speed } = selectedVessel
-
-      setLastPosition({
-        course,
-        dateTime,
-        latitude,
-        longitude,
-        speed
-      })
-
-      return
-    }
-
-    if (selectedVesselPositions?.length) {
-      const sortedPositionsByDateTimeDesc = selectedVesselPositions
-        .slice()
-        .sort((a, b) => -a.dateTime.localeCompare(b.dateTime))
-      setLastPosition(sortedPositionsByDateTimeDesc[0])
-
-      return
-    }
-
-    setLastPosition(undefined)
-  }, [selectedVessel, selectedVesselPositions])
 
   useEffect(() => {
     if (!selectedVessel && !loadingVessel && selectedVesselIdentity) {
@@ -104,37 +78,35 @@ export function VesselSummary() {
         <LatLon>
           <FieldName>Latitude</FieldName>
           <FieldValue data-cy="vessel-summary-latitude">
-            {!Number.isNaN(lastPosition?.latitude) && !Number.isNaN(lastPosition?.longitude) ? (
-              getCoordinates([lastPosition?.longitude, lastPosition?.latitude], WSG84_PROJECTION, coordinatesFormat)[0]
-            ) : (
-              <NoValue>-</NoValue>
-            )}
+            {coordinates ? coordinates[0] : <NoValue>-</NoValue>}
           </FieldValue>
           <FieldName>Longitude</FieldName>
-          <FieldValue>
-            {!Number.isNaN(lastPosition?.latitude) && !Number.isNaN(lastPosition?.longitude) ? (
-              getCoordinates([lastPosition?.longitude, lastPosition?.latitude], WSG84_PROJECTION, coordinatesFormat)[1]
-            ) : (
-              <NoValue>-</NoValue>
-            )}
-          </FieldValue>
+          <FieldValue>{coordinates ? coordinates[1] : <NoValue>-</NoValue>}</FieldValue>
         </LatLon>
         <Course>
           <FieldName>Route</FieldName>
           <FieldValue>
-            {!Number.isNaN(lastPosition?.course) ? <>{lastPosition?.course}°</> : <NoValue>-</NoValue>}
+            {!Number.isNaN(selectedVessel?.lastPositionCourse) ? (
+              <>{selectedVessel?.lastPositionCourse}°</>
+            ) : (
+              <NoValue>-</NoValue>
+            )}
           </FieldValue>
           <FieldName>Vitesse</FieldName>
           <FieldValue>
-            {!Number.isNaN(lastPosition?.speed) ? <>{lastPosition?.speed} Nds</> : <NoValue>-</NoValue>}
+            {!Number.isNaN(selectedVessel?.lastPositionSpeed) ? (
+              <>{selectedVessel?.lastPositionSpeed} Nds</>
+            ) : (
+              <NoValue>-</NoValue>
+            )}
           </FieldValue>
         </Course>
         <Position>
           <FieldName>Dernier signal VMS</FieldName>
           <FieldValue>
-            {lastPosition?.dateTime ? (
+            {selectedVessel?.lastPositionDateTime ? (
               <>
-                {getDateTime(lastPosition?.dateTime, true)} <Gray>(UTC)</Gray>
+                {getDateTime(selectedVessel?.lastPositionDateTime, true)} <Gray>(UTC)</Gray>
               </>
             ) : (
               <NoValue>-</NoValue>
@@ -154,6 +126,7 @@ export function VesselSummary() {
       </ZoneWithoutBackground>
       {isSuperUser && <RiskFactorResume />}
       {!isSuperUser && <VesselSidebarFleetSegments segments={selectedVessel?.segments} />}
+      <SelectedVesselGroups />
     </Body>
   ) : (
     <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />

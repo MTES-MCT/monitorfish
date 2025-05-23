@@ -1,5 +1,5 @@
 import { COLORS } from '@constants/constants'
-import { DATE_RANGE_PICKER_LOCALE } from '@features/Vessel/components/VesselSidebar/components/actions/TrackRequest/DateRange'
+import { DATE_RANGE_PICKER_LOCALE } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/DateRange'
 import { useClickOutsideWhenOpenedWithinRef } from '@hooks/useClickOutsideWhenOpenedWithinRef'
 import { useForceUpdate } from '@hooks/useForceUpdate'
 import { THEME } from '@mtes-mct/monitor-ui'

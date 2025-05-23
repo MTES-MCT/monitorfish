@@ -5,10 +5,7 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.coordinates.transformCoordinatesToOpenlayersProjection
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActiveVesselType
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActiveVesselWithReferentialData
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.*
 import java.time.Duration
 import java.time.ZonedDateTime
 
@@ -20,7 +17,8 @@ sealed class ActiveVesselBaseDataOutput(
     open val id: Int? = null,
     open val vesselId: Int? = null,
     open val vesselFeatureId: String,
-    open val activeVesselType: ActiveVesselType,
+    open val activityType: ActivityType,
+    open val activityOrigin: ActivityOrigin,
     open val internalReferenceNumber: String? = null,
     open val mmsi: String? = null,
     open val ircs: String? = null,
@@ -40,7 +38,6 @@ sealed class ActiveVesselBaseDataOutput(
     open val detectabilityRiskFactor: Double,
     open val riskFactor: Double,
     open val segments: List<String>,
-    open val recentSegments: List<String>,
     open val underCharter: Boolean? = null,
     open val isAtPort: Boolean,
     open val producerOrganizationMembership: String? = null,
@@ -48,17 +45,16 @@ sealed class ActiveVesselBaseDataOutput(
     // Properties for efficient filtering in frontend
     open val isFiltered: Int, // 0 is False, 1 is True - for WebGL
     open val gearsArray: List<String>,
-    open val recentGearsArray: List<String>,
     open val hasInfractionSuspicion: Boolean,
     open val speciesArray: List<String>,
 ) {
     companion object {
         fun fromActiveVesselWithReferentialData(
-            activeVesselWithReferentialData: ActiveVesselWithReferentialData,
+            enrichedActiveVessel: EnrichedActiveVessel,
             index: Int,
         ): ActiveVesselBaseDataOutput =
-            activeVesselWithReferentialData.lastPosition?.let { lastPosition ->
-                ActiveVesselWithPositionDataOutput(
+            enrichedActiveVessel.lastPosition?.let { lastPosition ->
+                ActiveVesselEmittingPositionDataOutput(
                     id = index,
                     vesselId = lastPosition.vesselId,
                     internalReferenceNumber = lastPosition.internalReferenceNumber,
@@ -80,12 +76,7 @@ sealed class ActiveVesselBaseDataOutput(
                     length = lastPosition.length,
                     district = lastPosition.district,
                     districtCode = lastPosition.districtCode,
-                    segments = lastPosition.segments ?: listOf(),
-                    recentSegments =
-                        activeVesselWithReferentialData.vesselProfile
-                            ?.recentSegments
-                            ?.keys
-                            ?.toList() ?: listOf(),
+                    segments = enrichedActiveVessel.segments,
                     speciesOnboard =
                         lastPosition.speciesOnboard?.map {
                             SpeciesLastPositionDataOutput.fromSpeciesLastPosition(
@@ -109,14 +100,7 @@ sealed class ActiveVesselBaseDataOutput(
                             longitude = lastPosition.longitude,
                             latitude = lastPosition.latitude,
                         ).toList(),
-                    gearsArray = lastPosition.gearOnboard?.mapNotNull { it.gear }?.distinct() ?: listOf(),
-                    recentGearsArray =
-                        activeVesselWithReferentialData.vesselProfile
-                            ?.recentGears
-                            ?.keys
-                            ?.toList()
-                            ?.distinct()
-                            ?: listOf(),
+                    gearsArray = enrichedActiveVessel.gearsArray,
                     hasAlert = lastPosition.alerts?.isNotEmpty() ?: false,
                     hasBeaconMalfunction = lastPosition.beaconMalfunctionId != null,
                     hasInfractionSuspicion =
@@ -128,86 +112,77 @@ sealed class ActiveVesselBaseDataOutput(
                     speciesArray = lastPosition.speciesOnboard?.mapNotNull { it.species }?.distinct() ?: listOf(),
                     vesselFeatureId = Vessel.getVesselCompositeIdentifier(lastPosition),
                     vesselGroups =
-                        activeVesselWithReferentialData.vesselGroups.map {
+                        enrichedActiveVessel.vesselGroups.map {
                             LastPositionVesselGroupDataOutput(
                                 id = it.id!!,
                                 color = it.color,
                                 name = it.name,
                             )
                         },
+                    activityType = enrichedActiveVessel.activityType,
+                    activityOrigin = enrichedActiveVessel.activityOrigin,
                 )
             } ?: run {
-                require(activeVesselWithReferentialData.vessel != null) {
+                require(enrichedActiveVessel.vessel != null) {
                     "A vessel must be found from the referential when a last position not found."
                 }
 
-                ActiveVesselWithLogbookDataOutput(
+                ActiveVesselEmittingLogbookDataOutput(
                     id = index,
-                    vesselId = activeVesselWithReferentialData.vessel.id,
-                    vesselFeatureId = activeVesselWithReferentialData.vessel.toVesselCompositeIdentifier(),
-                    internalReferenceNumber = activeVesselWithReferentialData.vesselProfile?.cfr,
-                    ircs = activeVesselWithReferentialData.vessel.ircs,
-                    mmsi = activeVesselWithReferentialData.vessel.mmsi,
-                    externalReferenceNumber = activeVesselWithReferentialData.vessel.externalReferenceNumber,
-                    vesselName = activeVesselWithReferentialData.vessel.vesselName,
-                    flagState = activeVesselWithReferentialData.vessel.flagState,
+                    vesselId = enrichedActiveVessel.vessel.id,
+                    vesselFeatureId = enrichedActiveVessel.vessel.toVesselCompositeIdentifier(),
+                    internalReferenceNumber = enrichedActiveVessel.vesselProfile?.cfr,
+                    ircs = enrichedActiveVessel.vessel.ircs,
+                    mmsi = enrichedActiveVessel.vessel.mmsi,
+                    externalReferenceNumber = enrichedActiveVessel.vessel.externalReferenceNumber,
+                    vesselName = enrichedActiveVessel.vessel.vesselName,
+                    flagState = enrichedActiveVessel.vessel.flagState,
                     lastLogbookMessageDateTime = null,
-                    length = activeVesselWithReferentialData.vessel.length,
-                    district = activeVesselWithReferentialData.vessel.district,
-                    districtCode = activeVesselWithReferentialData.vessel.districtCode,
+                    length = enrichedActiveVessel.vessel.length,
+                    district = enrichedActiveVessel.vessel.district,
+                    districtCode = enrichedActiveVessel.vessel.districtCode,
                     speciesOnboard =
-                        activeVesselWithReferentialData.riskFactor.speciesOnboard.map {
+                        enrichedActiveVessel.riskFactor.speciesOnboard.map {
                             SpeciesLastPositionDataOutput.fromSpeciesLastPosition(
                                 it,
                             )
                         },
-                    lastControlDateTime = activeVesselWithReferentialData.riskFactor.lastControlDatetime,
+                    lastControlDateTime = enrichedActiveVessel.riskFactor.lastControlDatetime,
                     // TODO add last infraction
                     lastControlInfraction = null,
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                    impactRiskFactor = activeVesselWithReferentialData.riskFactor.impactRiskFactor,
-                    probabilityRiskFactor = activeVesselWithReferentialData.riskFactor.probabilityRiskFactor,
-                    detectabilityRiskFactor = activeVesselWithReferentialData.riskFactor.detectabilityRiskFactor,
-                    riskFactor = activeVesselWithReferentialData.riskFactor.riskFactor,
-                    segments = listOf(),
-                    recentSegments =
-                        activeVesselWithReferentialData.vesselProfile
-                            ?.recentSegments
-                            ?.keys
-                            ?.toList() ?: listOf(),
-                    underCharter = activeVesselWithReferentialData.vessel.underCharter,
+                    impactRiskFactor = enrichedActiveVessel.riskFactor.impactRiskFactor,
+                    probabilityRiskFactor = enrichedActiveVessel.riskFactor.probabilityRiskFactor,
+                    detectabilityRiskFactor = enrichedActiveVessel.riskFactor.detectabilityRiskFactor,
+                    riskFactor = enrichedActiveVessel.riskFactor.riskFactor,
+                    segments = enrichedActiveVessel.segments,
+                    underCharter = enrichedActiveVessel.vessel.underCharter,
                     isAtPort = false,
                     isFiltered = 0,
                     // TODO add reportings
                     reportings = listOf(),
-                    gearsArray =
-                        activeVesselWithReferentialData.riskFactor.gearOnboard
-                            .mapNotNull { it.gear }
-                            .distinct(),
-                    recentGearsArray =
-                        activeVesselWithReferentialData.vesselProfile
-                            ?.recentGears
-                            ?.keys
-                            ?.toList()
-                            ?.distinct()
-                            ?: listOf(),
+                    gearsArray = enrichedActiveVessel.gearsArray,
                     hasInfractionSuspicion = false,
                     speciesArray =
-                        activeVesselWithReferentialData.riskFactor.speciesOnboard
+                        enrichedActiveVessel.riskFactor.speciesOnboard
                             .mapNotNull { it.species }
                             .distinct(),
+                    activityType = enrichedActiveVessel.activityType,
+                    activityOrigin = enrichedActiveVessel.activityOrigin,
                 )
             }
     }
 }
 
-data class ActiveVesselWithPositionDataOutput(
+data class ActiveVesselEmittingPositionDataOutput(
     override val id: Int? = null,
     override val vesselId: Int? = null,
     override val vesselFeatureId: String,
     override val internalReferenceNumber: String? = null,
     override val mmsi: String? = null,
     override val ircs: String? = null,
+    override val activityType: ActivityType,
+    override val activityOrigin: ActivityOrigin,
     override val externalReferenceNumber: String? = null,
     override val vesselName: String? = null,
     override val flagState: CountryCode? = null,
@@ -224,14 +199,12 @@ data class ActiveVesselWithPositionDataOutput(
     override val detectabilityRiskFactor: Double,
     override val riskFactor: Double,
     override val segments: List<String>,
-    override val recentSegments: List<String>,
     override val underCharter: Boolean? = null,
     override val isAtPort: Boolean,
     override val producerOrganizationMembership: String? = null,
     override val reportings: List<String> = listOf(),
     // Properties for efficient filtering in frontend
     override val gearsArray: List<String>,
-    override val recentGearsArray: List<String>,
     override val hasInfractionSuspicion: Boolean,
     override val speciesArray: List<String>,
     override val isFiltered: Int, // 0 is False, 1 is True - for WebGL
@@ -256,7 +229,6 @@ data class ActiveVesselWithPositionDataOutput(
         id = id,
         vesselId = vesselId,
         vesselFeatureId = vesselFeatureId,
-        activeVesselType = ActiveVesselType.POSITION_ACTIVITY,
         internalReferenceNumber = internalReferenceNumber,
         mmsi = mmsi,
         ircs = ircs,
@@ -276,22 +248,24 @@ data class ActiveVesselWithPositionDataOutput(
         detectabilityRiskFactor = detectabilityRiskFactor,
         riskFactor = riskFactor,
         segments = segments,
-        recentSegments = recentSegments,
         underCharter = underCharter,
         isAtPort = isAtPort,
         isFiltered = isFiltered,
         producerOrganizationMembership = producerOrganizationMembership,
         reportings = reportings,
         gearsArray = gearsArray,
-        recentGearsArray = recentGearsArray,
         hasInfractionSuspicion = hasInfractionSuspicion,
         speciesArray = speciesArray,
+        activityType = activityType,
+        activityOrigin = activityOrigin,
     )
 
-data class ActiveVesselWithLogbookDataOutput(
+data class ActiveVesselEmittingLogbookDataOutput(
     override val id: Int? = null,
     override val vesselId: Int? = null,
     override val vesselFeatureId: String,
+    override val activityType: ActivityType,
+    override val activityOrigin: ActivityOrigin,
     override val internalReferenceNumber: String? = null,
     override val mmsi: String? = null,
     override val ircs: String? = null,
@@ -311,7 +285,6 @@ data class ActiveVesselWithLogbookDataOutput(
     override val detectabilityRiskFactor: Double,
     override val riskFactor: Double,
     override val segments: List<String>,
-    override val recentSegments: List<String>,
     override val underCharter: Boolean? = null,
     override val isAtPort: Boolean,
     override val producerOrganizationMembership: String? = null,
@@ -319,14 +292,12 @@ data class ActiveVesselWithLogbookDataOutput(
     // Properties for efficient filtering in frontend
     override val isFiltered: Int, // 0 is False, 1 is True - for WebGL
     override val gearsArray: List<String>,
-    override val recentGearsArray: List<String>,
     override val hasInfractionSuspicion: Boolean,
     override val speciesArray: List<String>,
 ) : ActiveVesselBaseDataOutput(
         id = id,
         vesselId = vesselId,
         vesselFeatureId = vesselFeatureId,
-        activeVesselType = ActiveVesselType.LOGBOOK_ACTIVITY,
         internalReferenceNumber = internalReferenceNumber,
         mmsi = mmsi,
         ircs = ircs,
@@ -346,16 +317,16 @@ data class ActiveVesselWithLogbookDataOutput(
         detectabilityRiskFactor = detectabilityRiskFactor,
         riskFactor = riskFactor,
         segments = segments,
-        recentSegments = recentSegments,
         underCharter = underCharter,
         isAtPort = isAtPort,
         producerOrganizationMembership = producerOrganizationMembership,
         reportings = reportings,
         gearsArray = gearsArray,
-        recentGearsArray = recentGearsArray,
         hasInfractionSuspicion = hasInfractionSuspicion,
         speciesArray = speciesArray,
         isFiltered = isFiltered,
+        activityType = activityType,
+        activityOrigin = activityOrigin,
     )
 
 data class LastPositionVesselGroupDataOutput(

@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.vessel_group
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.dtos.ActiveVesselWithReferentialDataDTO
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import java.time.ZonedDateTime
 
 sealed class VesselGroupBase(
@@ -46,7 +46,7 @@ data class DynamicVesselGroup(
         endOfValidityUtc = endOfValidityUtc,
     ) {
     fun containsActiveVessel(
-        activeVessel: ActiveVesselWithReferentialDataDTO,
+        activeVessel: EnrichedActiveVessel,
         now: ZonedDateTime,
     ): Boolean {
         if (activeVessel.lastPosition != null) {
@@ -92,6 +92,6 @@ data class FixedVesselGroup(
         updatedAtUtc = updatedAtUtc,
         endOfValidityUtc = endOfValidityUtc,
     ) {
-    fun containsActiveVessel(activeVessel: ActiveVesselWithReferentialDataDTO) =
+    fun containsActiveVessel(activeVessel: EnrichedActiveVessel) =
         vessels.any { vessel -> vessel.isEqualToActiveVessel(activeVessel) }
 }

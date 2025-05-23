@@ -1,8 +1,8 @@
 import {
-  type DeclaredLogbookSpeciesSchema,
-  type VesselGroupSchema,
-  type ActiveVesselWithPositionSchema,
+  type ActiveVesselEmittingPositionSchema,
   ActiveVesselSchema,
+  type DeclaredLogbookSpeciesSchema,
+  type VesselGroupOfActiveVesselSchema,
   VesselIdentifier
 } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { z } from 'zod'
@@ -13,12 +13,7 @@ import type LineString from 'ol/geom/LineString'
 import type Point from 'ol/geom/Point'
 
 export namespace Vessel {
-  export type Vessel = z.infer<typeof VesselSchema>
-  export type SelectedVessel = Omit<ActiveVesselWithPosition, 'riskFactor'> & Vessel.Vessel
-  export type AugmentedSelectedVessel = SelectedVessel & {
-    hasAlert: boolean
-    hasInfractionSuspicion: boolean
-  }
+  export type SelectedVessel = z.infer<typeof VesselSchema>
 
   export type VesselIdentity = {
     beaconNumber: number | undefined
@@ -74,14 +69,14 @@ export namespace Vessel {
 
   export type VesselAndPositions = {
     positions: VesselPosition[]
-    vessel: Vessel.Vessel | undefined
+    vessel: Vessel.SelectedVessel
   }
 
   export type DeclaredLogbookSpecies = z.infer<typeof DeclaredLogbookSpeciesSchema>
 
-  export type VesselGroup = z.infer<typeof VesselGroupSchema>
+  export type VesselGroupOfActiveVessel = z.infer<typeof VesselGroupOfActiveVesselSchema>
 
-  export type ActiveVesselWithPosition = z.infer<typeof ActiveVesselWithPositionSchema>
+  export type ActiveVesselEmittingPosition = z.infer<typeof ActiveVesselEmittingPositionSchema>
   export type ActiveVessel = z.infer<typeof ActiveVesselSchema>
 
   export type VesselPosition = {
@@ -146,9 +141,9 @@ export namespace Vessel {
   }
 
   export type VesselLastPositionFeature = Feature<Point> &
-    Vessel.ActiveVesselWithPosition & {
+    Vessel.ActiveVesselEmittingPosition & {
       color: string | undefined
-      groupsDisplayed: VesselGroup[]
+      groupsDisplayed: VesselGroupOfActiveVessel[]
       numberOfGroupsHidden: number
     }
 

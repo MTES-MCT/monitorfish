@@ -1,10 +1,11 @@
-import { ActiveVesselType, VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { ActivityOrigin, ActivityType, VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 const now = customDayjs()
 export const DUMMY_LAST_POSITIONS = [
   {
-    activeVesselType: ActiveVesselType.POSITION_ACTIVITY,
+    activityOrigin: ActivityOrigin.FROM_LOGBOOK,
+    activityType: ActivityType.POSITION_BASED,
     alerts: [],
     beaconMalfunctionId: undefined,
     beaconNumber: undefined,
@@ -33,14 +34,12 @@ export const DUMMY_LAST_POSITIONS = [
     lastControlInfraction: undefined,
     lastLogbookMessageDateTime: now.subtract(7, 'hours').toISOString(),
     lastPositionSentAt: 0,
-    latitude: 0,
+    latitude: 47.1585,
     length: 15,
-    longitude: 0,
+    longitude: -6.12355,
     mmsi: undefined,
     positionType: 'VMS',
     probabilityRiskFactor: 0,
-    recentGearsArray: [],
-    recentSegments: [],
     registryPortLocode: undefined,
     registryPortName: undefined,
     reportings: [],
@@ -59,7 +58,8 @@ export const DUMMY_LAST_POSITIONS = [
     width: undefined
   },
   {
-    activeVesselType: ActiveVesselType.POSITION_ACTIVITY,
+    activityOrigin: ActivityOrigin.FROM_LOGBOOK,
+    activityType: ActivityType.POSITION_BASED,
     alerts: [],
     beaconMalfunctionId: undefined,
     beaconNumber: undefined,
@@ -94,8 +94,6 @@ export const DUMMY_LAST_POSITIONS = [
     mmsi: undefined,
     positionType: 'VMS',
     probabilityRiskFactor: 0,
-    recentGearsArray: [],
-    recentSegments: [],
     registryPortLocode: undefined,
     registryPortName: undefined,
     reportings: [],
@@ -114,7 +112,8 @@ export const DUMMY_LAST_POSITIONS = [
     width: undefined
   },
   {
-    activeVesselType: ActiveVesselType.POSITION_ACTIVITY,
+    activityOrigin: ActivityOrigin.FROM_RECENT_PROFILE,
+    activityType: ActivityType.POSITION_BASED,
     alerts: [],
     beaconMalfunctionId: undefined,
     beaconNumber: undefined,
@@ -149,8 +148,6 @@ export const DUMMY_LAST_POSITIONS = [
     mmsi: undefined,
     positionType: 'VMS',
     probabilityRiskFactor: 0,
-    recentGearsArray: ['gear666'],
-    recentSegments: ['segment666'],
     registryPortLocode: undefined,
     registryPortName: undefined,
     reportings: [],

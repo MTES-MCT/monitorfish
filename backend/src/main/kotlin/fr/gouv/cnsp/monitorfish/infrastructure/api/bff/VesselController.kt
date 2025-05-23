@@ -43,7 +43,7 @@ class VesselController(
 
         return activeVessels.mapIndexed { index, vessel ->
             ActiveVesselBaseDataOutput.fromActiveVesselWithReferentialData(
-                activeVesselWithReferentialData = vessel,
+                enrichedActiveVessel = vessel,
                 index = index,
             )
         }
@@ -55,7 +55,7 @@ class VesselController(
         @PathParam("Vessel ID")
         @PathVariable(name = "vesselId")
         vesselId: Int,
-    ): VesselDataOutput = VesselDataOutput.fromVessel(getVesselById.execute(vesselId))
+    ): SelectedVesselDataOutput = SelectedVesselDataOutput.fromVessel(getVesselById.execute(vesselId))
 
     @GetMapping("/find")
     @Operation(summary = "Get vessel information and positions")
@@ -86,8 +86,11 @@ class VesselController(
         @RequestParam(name = "beforeDateTime", required = false)
         @DateTimeFormat(pattern = zoneDateTimePattern)
         beforeDateTime: ZonedDateTime?,
-    ): ResponseEntity<VesselAndPositionsDataOutput> =
+        response: HttpServletResponse,
+    ): ResponseEntity<SelectedVesselAndPositionsDataOutput> =
         runBlocking {
+            val email: String = getEmail(response)
+
             val (vesselTrackHasBeenModified, vesselInformation) =
                 getVessel.execute(
                     vesselId = vesselId,
@@ -98,6 +101,7 @@ class VesselController(
                     vesselIdentifier = vesselIdentifier,
                     fromDateTime = afterDateTime,
                     toDateTime = beforeDateTime,
+                    userEmail = email,
                 )
 
             val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
@@ -105,7 +109,7 @@ class VesselController(
             ResponseEntity
                 .status(
                     returnCode,
-                ).body(VesselAndPositionsDataOutput.fromVesselInformation(vesselInformation))
+                ).body(SelectedVesselAndPositionsDataOutput.fromEnrichedActiveVesselWithPositions(vesselInformation))
         }
 
     @GetMapping("/beacon_malfunctions")

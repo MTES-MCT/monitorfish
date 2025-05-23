@@ -1,8 +1,5 @@
 import { COLORS } from '@constants/constants'
-import {
-  SidebarHeader,
-  SidebarZone
-} from '@features/Vessel/components/VesselSidebar/components/common_styles/common.style'
+import { SidebarHeader, SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 

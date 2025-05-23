@@ -1,5 +1,5 @@
 import { FleetSegmentSchema } from '@features/FleetSegment/types'
-import { ActiveVesselWithPositionSchema } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { ActiveVesselEmittingPositionSchema } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { expect } from '@jest/globals'
 import { parseResponseOrReturn } from '@utils/parseResponseOrReturn'
 
@@ -7,7 +7,7 @@ describe('utils/parseResponseOrReturn()', () => {
   it('should return the original response and print an error', () => {
     const object = { dummy: true }
 
-    const result = parseResponseOrReturn(object, ActiveVesselWithPositionSchema, false)
+    const result = parseResponseOrReturn(object, ActiveVesselEmittingPositionSchema, false)
 
     expect(result).toStrictEqual(object)
   })
@@ -15,7 +15,7 @@ describe('utils/parseResponseOrReturn()', () => {
   it('should return the original response and print an error with an array', () => {
     const object = { dummy: true }
 
-    const result = parseResponseOrReturn([object], ActiveVesselWithPositionSchema, true)
+    const result = parseResponseOrReturn([object], ActiveVesselEmittingPositionSchema, true)
 
     expect(result).toStrictEqual([object])
   })

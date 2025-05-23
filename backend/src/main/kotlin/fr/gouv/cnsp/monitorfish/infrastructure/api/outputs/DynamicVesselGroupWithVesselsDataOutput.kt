@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActiveVesselWithReferentialData
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 
 data class DynamicVesselGroupWithVesselsDataOutput(
@@ -10,13 +10,13 @@ data class DynamicVesselGroupWithVesselsDataOutput(
     companion object {
         fun fromDynamicVesselGroup(
             group: DynamicVesselGroup,
-            vessels: List<ActiveVesselWithReferentialData>,
+            vessels: List<EnrichedActiveVessel>,
         ) = DynamicVesselGroupWithVesselsDataOutput(
             group = DynamicVesselGroupDataOutput.fromDynamicVesselGroup(group),
             vessels =
                 vessels.mapIndexed { index, it ->
                     ActiveVesselBaseDataOutput.fromActiveVesselWithReferentialData(
-                        activeVesselWithReferentialData = it,
+                        enrichedActiveVessel = it,
                         index = index,
                     )
                 },

@@ -6,13 +6,7 @@ import { EditDynamicVesselGroupDialog } from '@features/VesselGroup/components/E
 import { EditFixedVesselGroupDialog } from '@features/VesselGroup/components/EditFixedVesselGroupDialog'
 import { VesselTable } from '@features/VesselGroup/components/VesselGroupList/VesselTable'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
-import {
-  type DynamicVesselGroup,
-  type FixedVesselGroup,
-  GroupType,
-  Sharing,
-  type VesselGroupWithVessels
-} from '@features/VesselGroup/types'
+import { type DynamicVesselGroup, GroupType, Sharing, type VesselGroupWithVessels } from '@features/VesselGroup/types'
 import { addVesselToFixedVesselGroup } from '@features/VesselGroup/useCases/addVesselToFixedVesselGroup'
 import { deleteVesselGroup } from '@features/VesselGroup/useCases/deleteVesselGroup'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -66,16 +60,20 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
     event.stopPropagation()
 
     if (isPinned) {
-      await dispatch(vesselGroupActions.vesselGroupIdUnpinned(vesselGroupWithVessels.group.id))
+      dispatch(vesselGroupActions.vesselGroupIdUnpinned(vesselGroupWithVessels.group.id))
     } else {
-      await dispatch(vesselGroupActions.vesselGroupIdPinned(vesselGroupWithVessels.group.id))
+      dispatch(vesselGroupActions.vesselGroupIdPinned(vesselGroupWithVessels.group.id))
     }
 
     dispatch(renderVesselFeatures())
   }
 
   const addVessel = (nextVessel: Vessel.VesselIdentity | undefined) => {
-    dispatch(addVesselToFixedVesselGroup(nextVessel, vesselGroupWithVessels.group as FixedVesselGroup))
+    if (vesselGroupWithVessels.group.type !== GroupType.FIXED) {
+      return
+    }
+
+    dispatch(addVesselToFixedVesselGroup(nextVessel, vesselGroupWithVessels.group))
   }
 
   return (

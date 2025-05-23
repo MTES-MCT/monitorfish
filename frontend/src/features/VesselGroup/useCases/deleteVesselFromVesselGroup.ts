@@ -9,8 +9,8 @@ import { Level } from '@mtes-mct/monitor-ui'
 import type { MainAppThunk } from '@store'
 
 export const deleteVesselFromVesselGroup =
-  (vesselGroupId: number, vesselIndex: number): MainAppThunk =>
-  async dispatch => {
+  (vesselGroupId: number, vesselIndex: number): MainAppThunk<Promise<void>> =>
+  async (dispatch): Promise<void> => {
     try {
       await dispatch(
         vesselGroupApi.endpoints.deleteVesselFromVesselGroup.initiate({

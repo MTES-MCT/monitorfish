@@ -90,6 +90,10 @@ def expected_vessel_profiles():
             "recent_landing_ports": [{"FRXXX": 1.0}, {"FRLEH": 1.0}],
             "latest_landing_port": ["FRXXX", "FRLEH"],
             "latest_landing_facade": ["Hors façade", "Hors façade"],
+            "recent_gears_details": [
+                [{"gear": "LLS", "mesh": None}, {"gear": "OTB", "mesh": 80.0}],
+                None,
+            ],
         }
     )
 

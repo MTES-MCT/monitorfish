@@ -46,7 +46,7 @@ export function EditFixedVesselGroupDialog({
 
     return selectedVessels.map(vessel => ({
       cfr: vessel.internalReferenceNumber,
-      externalIdentification: vessel.ircs,
+      externalIdentification: vessel.externalReferenceNumber,
       flagState: vessel.flagState,
       ircs: vessel.ircs,
       name: vessel.vesselName,

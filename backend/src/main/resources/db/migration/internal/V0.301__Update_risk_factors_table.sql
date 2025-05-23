@@ -1,3 +1,6 @@
+-- The table must be empty in order to add columns with NOT NULL constraints
+DELETE FROM risk_factors;
+
 ALTER TABLE risk_factors
     ADD COLUMN recent_gears JSONB,
     ADD COLUMN recent_segments varchar(100)[],

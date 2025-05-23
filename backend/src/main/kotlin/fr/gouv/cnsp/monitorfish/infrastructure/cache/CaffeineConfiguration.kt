@@ -73,6 +73,7 @@ class CaffeineConfiguration {
     val vesselTrack = "vessel_track"
     val vessel = "vessel"
     val vessels = "vessels"
+    val identifiableVessels = "identifiable_vessels"
     val vesselsAllPositions = "vessels_all_position"
     val vesselsByIds = "vessels_by_ids"
     val vesselsByInternalReferenceNumbers = "vessels_by_internal_reference_numbers"
@@ -155,6 +156,7 @@ class CaffeineConfiguration {
         val vesselTrackCache = buildMinutesCache(vesselTrack, ticker, 1)
         val vesselCache = buildMinutesCache(vessel, ticker, 60)
         val vesselsCache = buildMinutesCache(vessels, ticker, 120)
+        val identifiableVesselsCache = buildMinutesCache(identifiableVessels, ticker, 120)
         val vesselsByIdsCache = buildMinutesCache(vesselsByIds, ticker, 5)
         val vesselsByInternalReferenceNumbersCache =
             buildMinutesCache(vesselsByInternalReferenceNumbers, ticker, 5)
@@ -218,6 +220,7 @@ class CaffeineConfiguration {
                 userAuthorizationCache,
                 vesselCache,
                 vesselsCache,
+                identifiableVesselsCache,
                 vesselTrackCache,
                 vesselsAllPositionsCache,
                 vesselsByIdsCache,

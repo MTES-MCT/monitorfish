@@ -42,17 +42,6 @@ def current_catches() -> pd.DataFrame:
 
 
 @pytest.fixture
-def control_priorities() -> pd.DataFrame:
-    return pd.DataFrame(
-        {
-            "facade": ["Facade 1", "Facade 1", "Facade 2", "Facade 2"],
-            "segment": ["T8-9", "L", "T8-9", "L"],
-            "control_priority_level": [2.5, 2.8, 2.9, 2.4],
-        }
-    )
-
-
-@pytest.fixture
 def last_positions() -> pd.DataFrame:
     return pd.DataFrame(
         {

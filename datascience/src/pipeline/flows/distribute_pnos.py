@@ -238,6 +238,9 @@ def pre_render_pno(
         bft_per_caliber_summary = ", ".join([summarize_bft(d) for d in bft_per_caliber])
         bft_summary = bft_per_caliber_summary or bft_total_summary or None
 
+        if set(df.species_code) & {"BF1", "BF2", "BF3"}:
+            df = df[df.species_code != "BFT"].reset_index(drop=True)
+
         df["fao_area"] = df.fao_area.fillna("-")
         sum_by_area = (
             df.groupby(["species_name_code", "fao_area"], dropna=False)

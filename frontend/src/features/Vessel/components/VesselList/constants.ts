@@ -87,6 +87,7 @@ export const HAS_LOGBOOK_AS_OPTIONS = [
 
 export const DEFAULT_VESSEL_LIST_FILTER_VALUES: VesselListFilter = {
   countryCodes: [],
+  emitsPositions: [],
   districtCodes: [],
   fleetSegments: [],
   gearCodes: [],

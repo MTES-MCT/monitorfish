@@ -94,6 +94,15 @@ def expected_vessel_profiles():
                 [{"gear": "LLS", "mesh": None}, {"gear": "OTB", "mesh": 80.0}],
                 None,
             ],
+            "gear_onboard": [
+                [
+                    {"gear": "LLS", "mesh": None},
+                    {"gear": "OTB", "mesh": 90.0},
+                    {"gear": "OTM", "mesh": 80.0},
+                    {"gear": "OTB", "mesh": 80.0},
+                ],
+                [{"gear": "OTB", "mesh": 90.0}],
+            ],
         }
     )
 

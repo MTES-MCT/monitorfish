@@ -257,6 +257,11 @@ export enum VesselLocation {
   SEA = 'SEA'
 }
 
+export enum VesselEmitsPosition {
+  NO = 'NO',
+  YES = 'YES'
+}
+
 export enum VesselSidebarTab {
   CONTROLS = 'CONTROLS',
   ERSVMS = 'ERSVMS',

@@ -66,6 +66,7 @@ context('Vessel sidebar resume tab', () => {
 
     // Add a group
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselTwo')
+    cy.get('Ajouter le navire à un groupe fixe').click({ force: true })
     cy.fill('Ajouter le navire à un groupe fixe', ['Mission Thémis – semaine 04'])
     cy.wait('@updateVesselTwo')
     cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')

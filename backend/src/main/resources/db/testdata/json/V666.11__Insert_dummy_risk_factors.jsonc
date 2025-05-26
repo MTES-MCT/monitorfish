@@ -70,7 +70,11 @@
                 "recent_segments_impact_risk_factor": 1.0,
                 "recent_segments_detectability_risk_factor": 1.0,
                 "recent_segments_risk_factor": 1.0,
-                "recent_segments_control_priority_level": 1.0
+                "recent_segments_control_priority_level": 1.0,
+                "usual_segments_impact_risk_factor": 1.0,
+                "usual_segments_detectability_risk_factor": 1.0,
+                "usual_segments_risk_factor": 1.0,
+                "usual_segments_control_priority_level": 1.0
             },
 
             // - Vessel: VIVA ESPANA
@@ -135,7 +139,11 @@
                 "recent_segments_impact_risk_factor": 1.0,
                 "recent_segments_detectability_risk_factor": 1.0,
                 "recent_segments_risk_factor": 1.0,
-                "recent_segments_control_priority_level": 1.0
+                "recent_segments_control_priority_level": 1.0,
+                "usual_segments_impact_risk_factor": 1.0,
+                "usual_segments_detectability_risk_factor": 1.0,
+                "usual_segments_risk_factor": 1.0,
+                "usual_segments_control_priority_level": 1.0
             },
 
             // - Vessel: LEVE NEDERLAND
@@ -200,7 +208,11 @@
                 "recent_segments_impact_risk_factor": 1.0,
                 "recent_segments_detectability_risk_factor": 1.0,
                 "recent_segments_risk_factor": 1.0,
-                "recent_segments_control_priority_level": 1.0
+                "recent_segments_control_priority_level": 1.0,
+                "usual_segments_impact_risk_factor": 1.0,
+                "usual_segments_detectability_risk_factor": 1.0,
+                "usual_segments_risk_factor": 1.0,
+                "usual_segments_control_priority_level": 1.0
             },
 
             // - Vessel: LE POISSON D'AVRIL
@@ -240,7 +252,11 @@
                 "recent_segments_impact_risk_factor": 1.0,
                 "recent_segments_detectability_risk_factor": 1.0,
                 "recent_segments_risk_factor": 1.0,
-                "recent_segments_control_priority_level": 1.0
+                "recent_segments_control_priority_level": 1.0,
+                "usual_segments_impact_risk_factor": 1.0,
+                "usual_segments_detectability_risk_factor": 1.0,
+                "usual_segments_risk_factor": 1.0,
+                "usual_segments_control_priority_level": 1.0
             },
 
             // - Vessel: DOS FIN
@@ -305,7 +321,11 @@
                 "recent_segments_impact_risk_factor": 1.0,
                 "recent_segments_detectability_risk_factor": 1.0,
                 "recent_segments_risk_factor": 1.0,
-                "recent_segments_control_priority_level": 1.0
+                "recent_segments_control_priority_level": 1.0,
+                "usual_segments_impact_risk_factor": 1.0,
+                "usual_segments_detectability_risk_factor": 1.0,
+                "usual_segments_risk_factor": 1.0,
+                "usual_segments_control_priority_level": 1.0
             },
 
             // - Vessel: QUEUE DE POISSON
@@ -370,7 +390,11 @@
                 "recent_segments_impact_risk_factor": 1.0,
                 "recent_segments_detectability_risk_factor": 1.0,
                 "recent_segments_risk_factor": 1.0,
-                "recent_segments_control_priority_level": 1.0
+                "recent_segments_control_priority_level": 1.0,
+                "usual_segments_impact_risk_factor": 1.0,
+                "usual_segments_detectability_risk_factor": 1.0,
+                "usual_segments_risk_factor": 1.0,
+                "usual_segments_control_priority_level": 1.0
             }
         ]
     }

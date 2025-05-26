@@ -66,7 +66,6 @@ context('Vessel sidebar resume tab', () => {
 
     // Add a group
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselTwo')
-    cy.get('Ajouter le navire à un groupe fixe').click({ force: true })
     cy.fill('Ajouter le navire à un groupe fixe', ['Mission Thémis – semaine 04'])
     cy.wait('@updateVesselTwo')
     cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
@@ -109,16 +108,17 @@ context('Vessel sidebar resume tab', () => {
     cy.getDataCy('vessel-profile').contains('Profil du navire').scrollIntoView()
 
     // Gear
+    // The scrollbar in Cypress is 6px width (in dev mode in Firefox the width is 422px)
     cy.get('[title="OTB (100.0%)"]')
-      .should('have.css', 'width', '422px')
+      .should('have.css', 'width', '416px')
       .contains('OTB (100.0%)')
 
     // Species
     cy.get('[title="MNZ (73.4%)"]')
-      .should('have.css', 'width', '307px')
+      .should('have.css', 'width', '303px')
       .contains('MNZ (73.4%)')
     cy.get('[title="LEZ (9.7%)"]')
-      .should('have.css', 'width', '32px')
+      .should('have.css', 'width', '31px')
       .contains('LEZ')
     cy.get('[title="JOD (5.8%)"]')
       .should('have.css', 'width', '15px')
@@ -132,7 +132,7 @@ context('Vessel sidebar resume tab', () => {
 
     // Fao zones
     cy.get('[title="27.7.b (98.2%)"]')
-      .should('have.css', 'width', '414px')
+      .should('have.css', 'width', '408px')
       .contains('27.7.b (98.2%)')
     cy.get('[title="27.7.c.2 (1.8%)"]')
       .should('have.css', 'width', '0px')
@@ -140,7 +140,7 @@ context('Vessel sidebar resume tab', () => {
 
     // Landing ports
     cy.get('[title="Brest (100.0%)"]')
-      .should('have.css', 'width', '422px')
+      .should('have.css', 'width', '416px')
       .contains('Brest (100.0%)')
   })
 })

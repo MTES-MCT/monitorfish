@@ -3,22 +3,31 @@ from enum import Enum
 
 class VesselProfileType(Enum):
     RECENT = "RECENT"
-    FULL = "FULL"
+    USUAL = "USUAL"
 
     @property
     def duration_in_days(self):
         durations_dict = {
             "RECENT": 14,
-            "FULL": 365,
+            "USUAL": 365,
         }
 
         return durations_dict[self.name]
 
     @property
-    def prefix(self):
+    def vessel_profiles_prefix(self):
         prefix_dict = {
             "RECENT": "recent_",
-            "FULL": "",
+            "USUAL": "",
+        }
+
+        return prefix_dict[self.name]
+
+    @property
+    def risk_factors_prefix(self):
+        prefix_dict = {
+            "RECENT": "recent_",
+            "USUAL": "usual_",
         }
 
         return prefix_dict[self.name]

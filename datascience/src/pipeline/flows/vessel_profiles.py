@@ -110,7 +110,7 @@ def transform_profiles(
 
     assert isinstance(profiles, pd.DataFrame)
 
-    profile_type_prefix = VesselProfileType[profile_type].prefix
+    profile_type_prefix = VesselProfileType[profile_type].vessel_profiles_prefix
 
     profile_dimension_label = {
         "fao_area": "fao_areas",
@@ -138,7 +138,7 @@ def transform_profiles(
 def transform_gear_onboard(
     gear_onboard: pd.DataFrame, profile_type: str
 ) -> pd.DataFrame:
-    profile_type_prefix = VesselProfileType[profile_type].prefix
+    profile_type_prefix = VesselProfileType[profile_type].vessel_profiles_prefix
     gear_onboard = gear_onboard.copy(deep=True)
     gear_onboard_column = f"{profile_type_prefix}gear_onboard"
     gear_onboard[gear_onboard_column] = gear_onboard.apply(
@@ -234,19 +234,19 @@ with Flow("Vessel profiles") as flow:
         ports_facade = extract_ports_facade()
 
         gear_profiles = extract_profiles(
-            profile_datetime_utc=now, profile_dimension="gear", profile_type="FULL"
+            profile_datetime_utc=now, profile_dimension="gear", profile_type="USUAL"
         )
         species_profiles = extract_profiles(
-            profile_datetime_utc=now, profile_dimension="species", profile_type="FULL"
+            profile_datetime_utc=now, profile_dimension="species", profile_type="USUAL"
         )
         fao_area_profiles = extract_profiles(
-            profile_datetime_utc=now, profile_dimension="fao_area", profile_type="FULL"
+            profile_datetime_utc=now, profile_dimension="fao_area", profile_type="USUAL"
         )
         segment_profiles = extract_profiles(
-            profile_datetime_utc=now, profile_dimension="segment", profile_type="FULL"
+            profile_datetime_utc=now, profile_dimension="segment", profile_type="USUAL"
         )
         port_profiles = extract_port_profiles(
-            profile_datetime_utc=now, profile_type="FULL"
+            profile_datetime_utc=now, profile_type="USUAL"
         )
 
         recent_gear_profiles = extract_profiles(
@@ -269,26 +269,26 @@ with Flow("Vessel profiles") as flow:
 
         latest_port_profiles = extract_latest_port_profiles(profile_datetime_utc=now)
         gear_onboard = extract_gear_onboard(
-            profile_datetime_utc=now, profile_type="FULL"
+            profile_datetime_utc=now, profile_type="USUAL"
         )
         recent_gear_onboard = extract_gear_onboard(
             profile_datetime_utc=now, profile_type="RECENT"
         )
         # Transform
         gear_profiles = transform_profiles(
-            gear_profiles, profile_dimension="gear", profile_type="FULL"
+            gear_profiles, profile_dimension="gear", profile_type="USUAL"
         )
         species_profiles = transform_profiles(
-            species_profiles, profile_dimension="species", profile_type="FULL"
+            species_profiles, profile_dimension="species", profile_type="USUAL"
         )
         fao_area_profiles = transform_profiles(
-            fao_area_profiles, profile_dimension="fao_area", profile_type="FULL"
+            fao_area_profiles, profile_dimension="fao_area", profile_type="USUAL"
         )
         segment_profiles = transform_profiles(
-            segment_profiles, profile_dimension="segment", profile_type="FULL"
+            segment_profiles, profile_dimension="segment", profile_type="USUAL"
         )
         port_profiles = transform_profiles(
-            port_profiles, profile_dimension="port_locode", profile_type="FULL"
+            port_profiles, profile_dimension="port_locode", profile_type="USUAL"
         )
 
         recent_gear_profiles = transform_profiles(
@@ -316,7 +316,7 @@ with Flow("Vessel profiles") as flow:
         recent_gear_onboard = transform_gear_onboard(
             recent_gear_onboard, profile_type="RECENT"
         )
-        gear_onboard = transform_gear_onboard(gear_onboard, profile_type="FULL")
+        gear_onboard = transform_gear_onboard(gear_onboard, profile_type="USUAL")
 
         vessel_profiles = merge_vessel_profiles(
             gear_profiles,

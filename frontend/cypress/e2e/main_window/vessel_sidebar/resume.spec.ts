@@ -57,12 +57,8 @@ context('Vessel sidebar resume tab', () => {
 
   it('Groups may be displayed, added and removed', () => {
     // When
-    cy.get('*[data-cy^="vessel-search-input"]').type('tempete couleur')
-    cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselOne')
-    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
-    cy.wait('@updateVesselOne')
-    cy.wait(200)
-    cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
+    openVesselBySearch('tempete couleur')
+    cy.wait(500)
 
     // Add a group
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselTwo')
@@ -71,6 +67,7 @@ context('Vessel sidebar resume tab', () => {
     cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
       .scrollIntoView()
       .should('exist')
+    cy.wait(200)
 
     // Remove the vessel from the group
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselThree')
@@ -78,6 +75,7 @@ context('Vessel sidebar resume tab', () => {
     cy.wait('@updateVesselThree')
     cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
       .should('not.exist')
+    cy.wait(200)
 
     // Re-add a group
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselFour')
@@ -86,6 +84,7 @@ context('Vessel sidebar resume tab', () => {
     cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
       .scrollIntoView()
       .should('exist')
+    cy.wait(200)
 
     // Re-remove the vessel from the group (checkpicker)
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselFive')
@@ -98,12 +97,7 @@ context('Vessel sidebar resume tab', () => {
 
   it('Vessel profile must be displayed', () => {
     // When
-    cy.get('*[data-cy^="vessel-search-input"]').type('ABC000022984')
-    cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselOne')
-    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
-    cy.wait('@updateVesselOne')
-    cy.wait(200)
-    cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
+    openVesselBySearch('ABC000022984')
 
     cy.getDataCy('vessel-profile').contains('Profil du navire').scrollIntoView()
 

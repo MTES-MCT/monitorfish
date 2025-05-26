@@ -97,6 +97,7 @@ def liberte_egalite_fraternite_gif() -> bytes:
 @pytest.fixture
 def species_names() -> dict:
     return {
+        "BF1": "(Capitaine) Haddock calibre 1",
         "BFT": "(Capitaine) Haddock",
         "GHL": "Pou Hasse Caille",
         "SWO": "Friture sur la ligne",
@@ -693,6 +694,19 @@ def pno_to_render_1() -> PnoToRender:
                 "statisticalRectangle": "47E6",
             },
             {
+                "nbFish": 2,
+                "weight": 150.0,
+                "faoZone": "27.8.a",
+                "species": "BF1",
+                "statisticalRectangle": "47E3",
+            },
+            {
+                "nbFish": 2,
+                "weight": 150.0,
+                "species": "BF1",
+                "statisticalRectangle": "47E6",
+            },
+            {
                 "nbFish": None,
                 "weight": 250.0,
                 "faoZone": "27.8.b",
@@ -764,7 +778,7 @@ def pre_rendered_pno_1_catch_onboard() -> pd.DataFrame:
                 "- (HKE)",
                 "- (ABC)",
                 "Pou Hasse Caille (GHL)",
-                "(Capitaine) Haddock (BFT)",
+                "(Capitaine) Haddock calibre 1 (BF1)",
                 "Friture sur la ligne (SWO)",
             ],
             "Zones de pêche": [
@@ -795,7 +809,7 @@ def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
         flag_state="FRA",
         purpose="Débarquement",
         catch_onboard=pre_rendered_pno_1_catch_onboard,
-        bft_summary="300 kg pour 4 BFT",
+        bft_summary="300 kg pour 4 BF1",
         port_locode="FRCQF",
         port_name="Somewhere over the rainbow",
         facade="NAMO",
@@ -1679,6 +1693,7 @@ def test_render_pno_1_pdf(
         expected_pdf = pypdf.PdfReader(io.BytesIO(f.read()))
 
     assert expected_pdf.pages[0].extract_text() == pdf.pages[0].extract_text()
+    assert expected_pdf.pages[1].extract_text() == pdf.pages[1].extract_text()
 
     assert pno.report_id == "11"
     assert pno.source == PnoSource.LOGBOOK

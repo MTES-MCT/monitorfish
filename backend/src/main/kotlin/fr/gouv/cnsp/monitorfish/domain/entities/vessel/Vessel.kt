@@ -116,6 +116,14 @@ data class Vessel(
             hasDistrictCodeMatch &&
             hasVesselLengthMatch
     }
+
+    fun isIdentifiable(): Boolean =
+        !(
+            internalReferenceNumber.isNullOrEmpty() &&
+                externalReferenceNumber.isNullOrEmpty() &&
+                ircs.isNullOrEmpty() &&
+                mmsi.isNullOrEmpty()
+        )
 }
 
 val LIKELY_CONTROLLED_COUNTRY_CODES =

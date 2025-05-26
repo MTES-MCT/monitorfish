@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.vessel_group
 
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActivityType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import java.time.ZonedDateTime
 
@@ -61,7 +62,14 @@ data class DynamicVesselGroup(
         val hasRiskFactorMatch = activeVessel.riskFactor.isInGroup(this, now)
         val hasVesselReferentialMatch = activeVessel.vessel?.isInGroup(this) == true
 
-        return hasVesselProfileMatch && hasRiskFactorMatch && hasVesselReferentialMatch
+        val emitsPositions = filters.emitsPositions.singleOrNull()
+        val hasPositionsMatch =
+            emitsPositions?.let {
+                (it == VesselEmitsPositions.YES && activeVessel.activityType == ActivityType.POSITION_BASED) ||
+                    (it == VesselEmitsPositions.NO && activeVessel.activityType != ActivityType.POSITION_BASED)
+            } ?: true
+
+        return hasVesselProfileMatch && hasRiskFactorMatch && hasVesselReferentialMatch && hasPositionsMatch
     }
 }
 

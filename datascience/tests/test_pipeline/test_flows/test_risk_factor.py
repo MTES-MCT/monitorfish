@@ -322,14 +322,14 @@ def risk_factors() -> pd.DataFrame:
                 [{"natinf": 2606}, {"natinf": 4761}, {"natinf": 22206}],
                 [],
             ],
-            "recent_gears": [
+            "recent_gear_onboard": [
                 None,
-                ["PS1"],
+                [{"gear": "PS1", "mesh": 80.0}],
                 None,
-                ["OTB"],
+                [{"gear": "OTB", "mesh": 80.0}],
                 None,
-                ["OTB"],
-                ["FPO", "GTR"],
+                [{"gear": "OTB", "mesh": 80.0}],
+                [{"gear": "FPO", "mesh": 80.0}, {"gear": "GTR", "mesh": 80.0}],
                 None,
                 None,
             ],
@@ -422,11 +422,11 @@ def expected_recent_segments() -> pd.DataFrame:
             "cfr": ["ABC000145907", "ABC000542519", "DEF000115851", "DEF000155891"],
             "ircs": [None, "FQ7058", None, None],
             "external_immatriculation": [None, "RO237719", None, None],
-            "recent_gears": [
-                {"PS1": 1.0},
-                {"OTB": 1.0},
-                {"OTB": 1.0},
-                {"FPO": 0.8, "GTR": 0.2},
+            "recent_gear_onboard": [
+                [{"gear": "PS1", "mesh": 80.0}],
+                [{"gear": "OTB", "mesh": 80.0}],
+                [{"gear": "OTB", "mesh": 80.0}],
+                [{"gear": "FPO", "mesh": 80.0}, {"gear": "GTR", "mesh": 80.0}],
             ],
             "recent_segments": [
                 {"SWW04": 1.0},
@@ -453,12 +453,12 @@ def recent_segments() -> pd.DataFrame:
             ],
             "ircs": [None, "FQ7058", None, None, None],
             "external_immatriculation": [None, "RO237719", None, None, None],
-            "recent_gears": [
-                {"PS1": 1.0},
-                {"OTB": 1.0},
-                {"OTB": 1.0},
-                {"FPO": 0.8, "GTR": 0.2},
-                {"OTM": 1.0},
+            "recent_gear_onboard": [
+                [{"gear": "PS1", "mesh": 80.0}],
+                [{"gear": "OTB", "mesh": 80.0}],
+                [{"gear": "OTB", "mesh": 80.0}],
+                [{"gear": "FPO", "mesh": 80.0}, {"gear": "GTR", "mesh": 80.0}],
+                [{"gear": "OTM", "mesh": 100.0}],
             ],
             "recent_segments": [
                 {"T8-9": 1.0},
@@ -486,7 +486,13 @@ def computed_recent_segments() -> pd.DataFrame:
             "vessel_id": [None, 2.0, None, None, None],
             "ircs": [None, "FQ7058", None, None, None],
             "external_immatriculation": [None, "RO237719", None, None, None],
-            "recent_gears": [["PS1"], ["OTB"], ["OTB"], ["FPO", "GTR"], ["OTM"]],
+            "recent_gear_onboard": [
+                [{"gear": "PS1", "mesh": 80.0}],
+                [{"gear": "OTB", "mesh": 80.0}],
+                [{"gear": "OTB", "mesh": 80.0}],
+                [{"gear": "FPO", "mesh": 80.0}, {"gear": "GTR", "mesh": 80.0}],
+                [{"gear": "OTM", "mesh": 100.0}],
+            ],
             "recent_segments": [
                 ["T8-9"],
                 ["L"],

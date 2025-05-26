@@ -92,7 +92,7 @@ def compute_recent_segments_impact_and_priority(
             "vessel_id",
             "ircs",
             "external_immatriculation",
-            "recent_gears",
+            "recent_gear_onboard",
             "recent_segments",
             "recent_segment_highest_impact",
             "recent_segments_impact_risk_factor",
@@ -100,7 +100,6 @@ def compute_recent_segments_impact_and_priority(
             "recent_segments_control_priority_level",
         ]
     ]
-    res["recent_gears"] = res.recent_gears.map(lambda d: list(d.keys()))
     res["recent_segments"] = res.recent_segments.map(lambda d: list(d.keys()))
 
     return res
@@ -137,7 +136,7 @@ def merge(
             cs.control_priority_level,
             cs.segment_highest_impact,
             cs.segment_highest_priority,
-            rs.recent_gears,
+            rs.recent_gear_onboard,
             rs.recent_segments,
             rs.recent_segment_highest_impact,
             rs.recent_segments_impact_risk_factor,
@@ -268,7 +267,7 @@ def load_risk_factors(risk_factors: pd.DataFrame):
             "last_control_gear_infractions",
             "last_control_species_infractions",
             "last_control_other_infractions",
-            "recent_gears",
+            "recent_gear_onboard",
         ],
         nullable_integer_columns=["vessel_id"],
         how="replace",

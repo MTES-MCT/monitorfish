@@ -17,11 +17,15 @@ export function VesselProfile() {
   }, {})
 
   return (
-    <Wrapper>
+    <Wrapper data-cy="vessel-profile">
       <Header>
         Profil du navire{' '}
         <StyledIcon size={16} title="Le profile de navire est calculé sur 1 an de déclarations de captures." />
       </Header>
+      {!selectedVessel?.profile?.gears &&
+        !selectedVessel?.profile?.species &&
+        !selectedVessel?.profile?.faoAreas &&
+        !selectedVessel?.profile?.landingPorts && <EmptyProfile>Aucun profil</EmptyProfile>}
       {selectedVessel?.profile?.gears && (
         <ProfileBarChart profile={selectedVessel?.profile?.gears} title="Engins habituels" />
       )}
@@ -58,4 +62,9 @@ const Header = styled.span`
   .Element-IconBox {
     vertical-align: sub;
   }
+`
+
+const EmptyProfile = styled.div`
+  text-align: center;
+  margin-bottom: 14px;
 `

@@ -95,4 +95,51 @@ context('Vessel sidebar resume tab', () => {
     cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
       .should('not.exist')
   })
+
+  it('Vessel profile must be displayed', () => {
+    // When
+    cy.get('*[data-cy^="vessel-search-input"]').type('ABC000022984')
+    cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselOne')
+    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
+    cy.wait('@updateVesselOne')
+    cy.wait(200)
+    cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
+
+    cy.getDataCy('vessel-profile').contains('Profil du navire').scrollIntoView()
+
+    // Gear
+    cy.get('[title="OTB (100.0%)"]')
+      .should('have.css', 'width', '422px')
+      .contains('OTB (100.0%)')
+
+    // Species
+    cy.get('[title="MNZ (73.4%)"]')
+      .should('have.css', 'width', '307px')
+      .contains('MNZ (73.4%)')
+    cy.get('[title="LEZ (9.7%)"]')
+      .should('have.css', 'width', '32px')
+      .contains('LEZ')
+    cy.get('[title="JOD (5.8%)"]')
+      .should('have.css', 'width', '15px')
+      .contains('JOD')
+    cy.get('[title="WIT (3.0%)"]')
+      .should('have.css', 'width', '3px')
+      .and('have.prop', 'innerText', '')
+    cy.get('[title="Autres (8.1%)"]')
+      .should('have.css', 'width', '25px')
+      .contains('Autres')
+
+    // Fao zones
+    cy.get('[title="27.7.b (98.2%)"]')
+      .should('have.css', 'width', '414px')
+      .contains('27.7.b (98.2%)')
+    cy.get('[title="27.7.c.2 (1.8%)"]')
+      .should('have.css', 'width', '0px')
+      .and('have.prop', 'innerText', '')
+
+    // Landing ports
+    cy.get('[title="Brest (100.0%)"]')
+      .should('have.css', 'width', '422px')
+      .contains('Brest (100.0%)')
+  })
 })

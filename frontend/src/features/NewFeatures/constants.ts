@@ -7,6 +7,20 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2025-05-26',
+        description: `L’onglet "Résumé" de la fiche navire intègre désormais un **profil d’activité** basé sur les données de l’année écoulée. Ce profil permet d’identifier les caractéristiques récurrentes du navire :
+- Engins de pêche les plus fréquemment utilisés
+- Espèces principalement capturées
+- Zones de pêche les plus exploitées
+- Ports de débarquement les plus fréquentés
+
+Ces informations sont calculées automatiquement à partir des **déclarations de captures**.
+`,
+        for: 'ALL',
+        title: 'Ajout du profil de navire',
+        type: 'NEW_FEATURE'
+      },
+      {
         date: '2025-05-20',
         description: `La liste des navires inclut désormais **l’ensemble des navires ayant eu une activité**, qu’ils soient équipés ou non du VMS.
 Cela comprend :

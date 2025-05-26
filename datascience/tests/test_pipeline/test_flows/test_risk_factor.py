@@ -3,8 +3,9 @@ import pytest
 from sqlalchemy import text
 
 from src.db_config import create_engine
+from src.pipeline.entities.vessel_profiles import VesselProfileType
 from src.pipeline.flows.risk_factor import (
-    compute_recent_segments_impact_and_priority,
+    compute_profile_segments_impact_and_priority,
     extract_recent_segments,
     flow,
 )
@@ -410,6 +411,84 @@ def risk_factors() -> pd.DataFrame:
                 None,
                 None,
             ],
+            "usual_gear_onboard": [
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+            ],
+            "usual_segments": [[], [], [], [], [], [], [], [], []],
+            "usual_segments_impact_risk_factor": [
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+            ],
+            "usual_segments_detectability_risk_factor": [
+                1.3228756555323,
+                2.0,
+                1.3228756555323,
+                2.0,
+                1.3228756555323,
+                2.0,
+                2.0,
+                1.3228756555323,
+                2.0,
+            ],
+            "usual_segments_risk_factor": [
+                1.1501633168956,
+                1.74110112659225,
+                1.1501633168956,
+                1.74110112659225,
+                1.1501633168956,
+                1.74110112659225,
+                1.74110112659225,
+                1.1501633168956,
+                1.74110112659225,
+            ],
+            "usual_segments_control_priority_level": [
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+            ],
+            "usual_segment_highest_impact": [
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+            ],
+            "usual_segment_highest_priority": [
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+            ],
         }
     )
 
@@ -422,13 +501,13 @@ def expected_recent_segments() -> pd.DataFrame:
             "cfr": ["ABC000145907", "ABC000542519", "DEF000115851", "DEF000155891"],
             "ircs": [None, "FQ7058", None, None],
             "external_immatriculation": [None, "RO237719", None, None],
-            "recent_gear_onboard": [
+            "gear_onboard": [
                 [{"gear": "PS1", "mesh": 80.0}],
                 [{"gear": "OTB", "mesh": 80.0}],
                 [{"gear": "OTB", "mesh": 80.0}],
                 [{"gear": "FPO", "mesh": 80.0}, {"gear": "GTR", "mesh": 80.0}],
             ],
-            "recent_segments": [
+            "segments": [
                 {"SWW04": 1.0},
                 {"SWW04": 1.0},
                 {"SWW04": 1.0},
@@ -453,14 +532,14 @@ def recent_segments() -> pd.DataFrame:
             ],
             "ircs": [None, "FQ7058", None, None, None],
             "external_immatriculation": [None, "RO237719", None, None, None],
-            "recent_gear_onboard": [
+            "gear_onboard": [
                 [{"gear": "PS1", "mesh": 80.0}],
                 [{"gear": "OTB", "mesh": 80.0}],
                 [{"gear": "OTB", "mesh": 80.0}],
                 [{"gear": "FPO", "mesh": 80.0}, {"gear": "GTR", "mesh": 80.0}],
                 [{"gear": "OTM", "mesh": 100.0}],
             ],
-            "recent_segments": [
+            "segments": [
                 {"T8-9": 1.0},
                 {"L": 1.0},
                 {"T8-9": 1.0},
@@ -513,13 +592,11 @@ def test_extract_recent_segments(reset_test_data, expected_recent_segments):
     pd.testing.assert_frame_equal(res, expected_recent_segments)
 
 
-def test_compute_recent_segments_impact_and_priority(
+def test_compute_profile_segments_impact_and_priority(
     recent_segments, segments_of_year, control_priorities, computed_recent_segments
 ):
-    res = compute_recent_segments_impact_and_priority.run(
-        recent_segments,
-        segments_of_year,
-        control_priorities,
+    res = compute_profile_segments_impact_and_priority.run(
+        recent_segments, segments_of_year, control_priorities, VesselProfileType.RECENT
     )
     pd.testing.assert_frame_equal(res, computed_recent_segments)
 

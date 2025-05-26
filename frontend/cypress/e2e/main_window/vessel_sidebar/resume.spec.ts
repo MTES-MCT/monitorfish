@@ -57,12 +57,8 @@ context('Vessel sidebar resume tab', () => {
 
   it('Groups may be displayed, added and removed', () => {
     // When
-    cy.get('*[data-cy^="vessel-search-input"]').type('tempete couleur')
-    cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselOne')
-    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
-    cy.wait('@updateVesselOne')
-    cy.wait(200)
-    cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
+    openVesselBySearch('tempete couleur')
+    cy.wait(500)
 
     // Add a group
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselTwo')
@@ -71,6 +67,7 @@ context('Vessel sidebar resume tab', () => {
     cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
       .scrollIntoView()
       .should('exist')
+    cy.wait(200)
 
     // Remove the vessel from the group
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselThree')
@@ -78,6 +75,7 @@ context('Vessel sidebar resume tab', () => {
     cy.wait('@updateVesselThree')
     cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
       .should('not.exist')
+    cy.wait(200)
 
     // Re-add a group
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselFour')
@@ -86,6 +84,7 @@ context('Vessel sidebar resume tab', () => {
     cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
       .scrollIntoView()
       .should('exist')
+    cy.wait(200)
 
     // Re-remove the vessel from the group (checkpicker)
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselFive')
@@ -94,5 +93,48 @@ context('Vessel sidebar resume tab', () => {
     cy.wait('@updateVesselFive')
     cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
       .should('not.exist')
+  })
+
+  it('Vessel profile must be displayed', () => {
+    // When
+    openVesselBySearch('ABC000022984')
+
+    cy.getDataCy('vessel-profile').contains('Profil du navire').scrollIntoView()
+
+    // Gear
+    // The scrollbar in Cypress is 6px width (in dev mode in Firefox the width is 422px)
+    cy.get('[title="OTB (100.0%)"]')
+      .should('have.css', 'width', '416px')
+      .contains('OTB (100.0%)')
+
+    // Species
+    cy.get('[title="MNZ (73.4%)"]')
+      .should('have.css', 'width', '303px')
+      .contains('MNZ (73.4%)')
+    cy.get('[title="LEZ (9.7%)"]')
+      .should('have.css', 'width', '31px')
+      .contains('LEZ')
+    cy.get('[title="JOD (5.8%)"]')
+      .should('have.css', 'width', '15px')
+      .contains('JOD')
+    cy.get('[title="WIT (3.0%)"]')
+      .should('have.css', 'width', '3px')
+      .and('have.prop', 'innerText', '')
+    cy.get('[title="Autres (8.1%)"]')
+      .should('have.css', 'width', '25px')
+      .contains('Autres')
+
+    // Fao zones
+    cy.get('[title="27.7.b (98.2%)"]')
+      .should('have.css', 'width', '408px')
+      .contains('27.7.b (98.2%)')
+    cy.get('[title="27.7.c.2 (1.8%)"]')
+      .should('have.css', 'width', '0px')
+      .and('have.prop', 'innerText', '')
+
+    // Landing ports
+    cy.get('[title="Brest (100.0%)"]')
+      .should('have.css', 'width', '416px')
+      .contains('Brest (100.0%)')
   })
 })

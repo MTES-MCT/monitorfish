@@ -307,8 +307,8 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.vessel.producerOrganization.organizationName", equalTo("OP")))
             .andExpect(
                 jsonPath(
-                    "$.vessel.profile.recentSpecies['ANF']",
-                    equalTo(BigDecimal(0.15513496742165686).setScale(17, RoundingMode.HALF_UP)),
+                    "$.vessel.profile.species['ANF']",
+                    equalTo(BigDecimal(0.15138120208784955).setScale(17, RoundingMode.HALF_UP)),
                 ),
             ).andExpect(jsonPath("$.vessel.groups[0].name", equalTo("Mission Thémis – chaluts de fonds")))
 

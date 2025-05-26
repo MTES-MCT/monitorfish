@@ -14,7 +14,8 @@ export function ProfileBarChart({ profile, title }: ProfileBarChartProps) {
       <Chart>
         {sortedProfileBarsByDesc.map(bar => (
           <Bar $backgroundColor={bar.color} $width={Number(bar.value)} title={`${bar.key} (${bar.value}%)`}>
-            <span style={{ fontWeight: 500 }}>{bar.key}</span>
+            {Number(bar.value) > 5 && Number(bar.value) <= 15 && <span style={{ fontWeight: 500 }}>{bar.key}</span>}
+            {Number(bar.value) > 15 && <span style={{ fontWeight: 500 }}>{`${bar.key} (${bar.value}%)`}</span>}
           </Bar>
         ))}
       </Chart>
@@ -47,9 +48,11 @@ const Bar = styled.div<{
   color: ${p => p.theme.color.gunMetal};
   background: ${p => p.$backgroundColor};
   height: 20px;
-  width: calc(${p => p.$width}% - 2px);
+  width: round(calc(${p => p.$width}% - 8px - 2px), 1px);
   margin-right: 2px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  flex-shrink: 0;
+  flex-grow: 0;
 `

@@ -20,7 +20,7 @@ def extract_profiles(
         "fao_area",
         "gear",
         "species",
-        "segment",
+        "segment_current_year",
     )
 
     duration_in_days = VesselProfileType[profile_type].duration_in_days
@@ -116,7 +116,7 @@ def transform_profiles(
         "fao_area": "fao_areas",
         "gear": "gears",
         "species": "species",
-        "segment": "segments",
+        "segment_current_year": "segments",
         "port_locode": "landing_ports",
     }[profile_dimension]
     result_column_name = f"{profile_type_prefix}{profile_dimension_label}"
@@ -243,7 +243,9 @@ with Flow("Vessel profiles") as flow:
             profile_datetime_utc=now, profile_dimension="fao_area", profile_type="USUAL"
         )
         segment_profiles = extract_profiles(
-            profile_datetime_utc=now, profile_dimension="segment", profile_type="USUAL"
+            profile_datetime_utc=now,
+            profile_dimension="segment_current_year",
+            profile_type="USUAL",
         )
         port_profiles = extract_port_profiles(
             profile_datetime_utc=now, profile_type="USUAL"
@@ -261,7 +263,9 @@ with Flow("Vessel profiles") as flow:
             profile_type="RECENT",
         )
         recent_segment_profiles = extract_profiles(
-            profile_datetime_utc=now, profile_dimension="segment", profile_type="RECENT"
+            profile_datetime_utc=now,
+            profile_dimension="segment_current_year",
+            profile_type="RECENT",
         )
         recent_port_profiles = extract_port_profiles(
             profile_datetime_utc=now, profile_type="RECENT"
@@ -285,7 +289,9 @@ with Flow("Vessel profiles") as flow:
             fao_area_profiles, profile_dimension="fao_area", profile_type="USUAL"
         )
         segment_profiles = transform_profiles(
-            segment_profiles, profile_dimension="segment", profile_type="USUAL"
+            segment_profiles,
+            profile_dimension="segment_current_year",
+            profile_type="USUAL",
         )
         port_profiles = transform_profiles(
             port_profiles, profile_dimension="port_locode", profile_type="USUAL"
@@ -303,7 +309,9 @@ with Flow("Vessel profiles") as flow:
             profile_type="RECENT",
         )
         recent_segment_profiles = transform_profiles(
-            recent_segment_profiles, profile_dimension="segment", profile_type="RECENT"
+            recent_segment_profiles,
+            profile_dimension="segment_current_year",
+            profile_type="RECENT",
         )
         recent_port_profiles = transform_profiles(
             recent_port_profiles, profile_dimension="port_locode", profile_type="RECENT"

@@ -98,4 +98,40 @@ class VesselUTests {
         // Then
         assertThat(result).isFalse()
     }
+
+    @Test
+    fun `isIdentifiable Should return false when all identifiers are null`() {
+        // Given
+        val vessel =
+            VesselFaker.fakeVessel(
+                internalReferenceNumber = null,
+                externalReferenceNumber = null,
+                ircs = null,
+                mmsi = null,
+            )
+
+        // When
+        val result = vessel.isIdentifiable()
+
+        // Then
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun `isIdentifiable Should return true when some identifiers are not null`() {
+        // Given
+        val vessel =
+            VesselFaker.fakeVessel(
+                internalReferenceNumber = "1234",
+                externalReferenceNumber = null,
+                ircs = null,
+                mmsi = null,
+            )
+
+        // When
+        val result = vessel.isIdentifiable()
+
+        // Then
+        assertThat(result).isTrue()
+    }
 }

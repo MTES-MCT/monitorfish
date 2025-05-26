@@ -15,12 +15,7 @@ class SearchVessels(
             vesselRepository
                 .search(searched)
                 .filter {
-                    !(
-                        it.internalReferenceNumber.isNullOrEmpty() &&
-                            it.externalReferenceNumber.isNullOrEmpty() &&
-                            it.ircs.isNullOrEmpty() &&
-                            it.mmsi.isNullOrEmpty()
-                    )
+                    it.isIdentifiable()
                 }.map { VesselAndBeacon(vessel = it) }
 
         val beacons = beaconRepository.search(searched)

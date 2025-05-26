@@ -3,7 +3,7 @@ SELECT
     p.cfr,
     v.ircs,
     v.external_immatriculation,
-    recent_gears,
+    recent_gear_onboard,
     recent_segments - 'NO_SEGMENT' AS recent_segments,
     COALESCE(f.facade, latest_landing_facade) AS facade
 FROM vessel_profiles p
@@ -16,4 +16,4 @@ ON
     lp.last_position_datetime_utc < CURRENT_TIMESTAMP AT TIME ZONE 'UTC' + INTERVAL '2 HOURS'
 LEFT JOIN facade_areas_subdivided f
 ON ST_Intersects(ST_SetSRId(ST_MakePoint(lp.longitude, lp.latitude), 4326), f.geometry)
-WHERE p.recent_gears != 'null' AND p.recent_segments != 'null'
+WHERE p.recent_segments != 'null' AND p.recent_gear_onboard != 'null'

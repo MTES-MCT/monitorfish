@@ -2,7 +2,7 @@
 DELETE FROM risk_factors;
 
 ALTER TABLE risk_factors
-    ADD COLUMN recent_gears JSONB,
+    ADD COLUMN recent_gear_onboard JSONB,
     ADD COLUMN recent_segments varchar(100)[],
     ADD COLUMN recent_segments_impact_risk_factor DOUBLE PRECISION NOT NULL,
     ADD COLUMN recent_segments_detectability_risk_factor DOUBLE PRECISION NOT NULL,

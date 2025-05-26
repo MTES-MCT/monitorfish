@@ -91,13 +91,13 @@ def extract_ports_facade() -> dict:
 
 
 @task(checkpoint=False)
-def extract_recent_gears_details(
+def extract_recent_gear_onboard(
     profile_datetime_utc: datetime,
 ) -> pd.DataFrame:
     duration_in_days = 14
     return extract(
         db_name="data_warehouse",
-        query_filepath="data_warehouse/recent_gears_details.sql",
+        query_filepath="data_warehouse/recent_gear_onboard.sql",
         params={
             "profile_datetime_utc": profile_datetime_utc,
             "duration_in_days": duration_in_days,
@@ -153,12 +153,12 @@ def transform_profiles(
 
 
 @task(checkpoint=False)
-def transform_recent_gears_details(recent_gears_details: pd.DataFrame) -> pd.DataFrame:
-    recent_gears_details = recent_gears_details.copy(deep=True)
-    recent_gears_details["recent_gears_details"] = recent_gears_details.apply(
+def transform_recent_gear_onboard(recent_gear_onboard: pd.DataFrame) -> pd.DataFrame:
+    recent_gear_onboard = recent_gear_onboard.copy(deep=True)
+    recent_gear_onboard["recent_gear_onboard"] = recent_gear_onboard.apply(
         lambda row: {"gear": row["gear"], "mesh": row["mesh"]}, axis=1
     )
-    res = recent_gears_details.groupby("cfr")["recent_gears_details"].agg(list)
+    res = recent_gear_onboard.groupby("cfr")["recent_gear_onboard"].agg(list)
     return res
 
 
@@ -175,7 +175,7 @@ def merge_vessel_profiles(
     recent_segment_profiles: pd.DataFrame,
     recent_port_profiles: pd.DataFrame,
     latest_port_profiles: pd.DataFrame,
-    recent_gears_details: pd.DataFrame,
+    recent_gear_onboard: pd.DataFrame,
 ) -> pd.DataFrame:
     vessel_profiles = pd.merge(
         gear_profiles, species_profiles, on="cfr", how="outer", validate="1:1"
@@ -190,7 +190,7 @@ def merge_vessel_profiles(
         recent_segment_profiles,
         recent_port_profiles,
         latest_port_profiles,
-        recent_gears_details,
+        recent_gear_onboard,
     ]:
         vessel_profiles = pd.merge(
             vessel_profiles, profiles, on="cfr", how="outer", validate="1:1"
@@ -229,7 +229,7 @@ def load_vessel_profiles(vessel_profiles: pd.DataFrame):
             "recent_fao_areas",
             "recent_segments",
             "recent_landing_ports",
-            "recent_gears_details",
+            "recent_gear_onboard",
         ],
     )
 
@@ -279,7 +279,7 @@ with Flow("Vessel profiles") as flow:
         )
 
         latest_port_profiles = extract_latest_port_profiles(profile_datetime_utc=now)
-        recent_gears_details = extract_recent_gears_details(profile_datetime_utc=now)
+        recent_gear_onboard = extract_recent_gear_onboard(profile_datetime_utc=now)
         # Transform
         gear_profiles = transform_profiles(
             gear_profiles, profile_dimension="gear", profile_type="full"
@@ -319,7 +319,7 @@ with Flow("Vessel profiles") as flow:
             latest_port_profiles, ports_facade
         )
 
-        recent_gears_details = transform_recent_gears_details(recent_gears_details)
+        recent_gear_onboard = transform_recent_gear_onboard(recent_gear_onboard)
 
         vessel_profiles = merge_vessel_profiles(
             gear_profiles,
@@ -333,7 +333,7 @@ with Flow("Vessel profiles") as flow:
             recent_segment_profiles,
             recent_port_profiles,
             latest_port_profiles,
-            recent_gears_details,
+            recent_gear_onboard,
         )
         # Load
         load_vessel_profiles(vessel_profiles)

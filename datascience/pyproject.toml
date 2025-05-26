@@ -9,7 +9,7 @@ readme = "README.md"
 python = "3.11.6"
 pandas = {extras = ["postgresql"], version = "^2.2.1"}
 black = "^25.1.0"
-isort = "^5.12.0"
+isort = "^6.0.1"
 coverage = "^7.8.0"
 pre-commit = "^4.2.0"
 flake8 = "^7.2.0"

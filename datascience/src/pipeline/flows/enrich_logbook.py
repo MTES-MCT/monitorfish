@@ -57,7 +57,7 @@ def extract_control_anteriority() -> pd.DataFrame:
 def extract_vessels_with_active_reportings() -> set:
     vessels_with_active_reportings = extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/vessels_with_active_reportings.sql",
+        query_filepath="monitorfish/vessels_with_active_reportings_for_pnos.sql",
     )
 
     return set(vessels_with_active_reportings.internal_reference_number)

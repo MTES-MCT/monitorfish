@@ -58,22 +58,22 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
                     AND mpn.value->>'predictedArrivalDatetimeUtc' <= :willArriveBefore
             ),
 
-            distinct_vessel_ids AS (
+            distinct_vessel_ids AS MATERIALIZED (
                 SELECT DISTINCT vessel_id
                 FROM manual_prior_notifications_with_extra_columns
             ),
 
             vessel_id_reporting_counts AS (
                 SELECT
-                    dc.vessel_id,
-                    COUNT(r.id) AS reporting_count
-                FROM distinct_vessel_ids dc
-                LEFT JOIN reportings r ON dc.vessel_id = r.vessel_id
+                    vessel_id,
+                    COUNT(*) AS reporting_count
+                FROM reportings
                 WHERE
-                    r.type = 'INFRACTION_SUSPICION'
-                    AND r.archived = FALSE
-                    AND r.deleted = FALSE
-                GROUP BY dc.vessel_id
+                    vessel_id IN (SELECT vessel_id FROM distinct_vessel_ids)
+                    AND type = 'INFRACTION_SUSPICION'
+                    AND archived = FALSE
+                    AND deleted = FALSE
+                GROUP BY vessel_id
             ),
 
             manual_prior_notifications_with_extra_columns_and_reporting_count AS (

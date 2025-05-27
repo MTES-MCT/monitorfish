@@ -7,7 +7,7 @@ import {
 import { VesselSize } from '@features/Vessel/components/VesselList/constants'
 import { getLastControlledFilterFromLastControlPeriod } from '@features/Vessel/components/VesselList/utils'
 import { ActivityType } from '@features/Vessel/schemas/ActiveVesselSchema'
-import { VesselLocation, vesselSize } from '@features/Vessel/types/vessel'
+import { VesselEmitsPosition, VesselLocation, vesselSize } from '@features/Vessel/types/vessel'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { SEARCH_QUERY_MIN_LENGTH } from '@features/VesselGroup/components/VesselGroupList/hooks/constants'
 import { GroupType, type VesselGroupWithVessels } from '@features/VesselGroup/types'
@@ -273,11 +273,29 @@ export class MonitorFishWebWorker {
     const gearCodesSet = filters.gearCodes?.length ? new Set(filters.gearCodes) : undefined
     const specyCodesSet = filters.specyCodes?.length ? new Set(filters.specyCodes) : undefined
     const vesselsLocation = filters.vesselsLocation?.length === 1 ? filters.vesselsLocation[0] : undefined
+    const emitsPositions = filters.emitsPositions?.length === 1 ? filters.emitsPositions[0] : undefined
 
-    const fuse = new CustomSearch(
+    const fuse = new CustomSearch<Vessel.ActiveVessel>(
       vessels,
-      ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs'],
-      { isStrict: true, threshold: 0.4 }
+      [
+        {
+          getFn: vessel => vessel.vesselName ?? '',
+          name: 'vessel.vesselName'
+        },
+        {
+          getFn: vessel => vessel.internalReferenceNumber ?? '',
+          name: 'vessel.internalReferenceNumber'
+        },
+        {
+          getFn: vessel => vessel.externalReferenceNumber ?? '',
+          name: 'vessel.externalReferenceNumber'
+        },
+        {
+          getFn: vessel => vessel.ircs ?? '',
+          name: 'vessel.ircs'
+        }
+      ],
+      { isDiacriticSensitive: false, isStrict: true, threshold: 0.4 }
     )
 
     /* TODO Implement these filters
@@ -391,6 +409,16 @@ export class MonitorFishWebWorker {
           }
 
           if (vesselsLocation === VesselLocation.SEA && vessel.isAtPort) {
+            return false
+          }
+        }
+
+        if (emitsPositions !== undefined) {
+          if (emitsPositions === VesselEmitsPosition.YES && vessel.activityType !== ActivityType.POSITION_BASED) {
+            return false
+          }
+
+          if (emitsPositions === VesselEmitsPosition.NO && vessel.activityType !== ActivityType.LOGBOOK_BASED) {
             return false
           }
         }

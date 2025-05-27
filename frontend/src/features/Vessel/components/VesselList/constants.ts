@@ -1,4 +1,4 @@
-import { VesselLocation } from '@features/Vessel/types/vessel'
+import { VesselEmitsPosition, VesselLocation } from '@features/Vessel/types/vessel'
 import { getOptionsFromLabelledEnum, type Option } from '@mtes-mct/monitor-ui'
 import { range } from 'lodash-es'
 
@@ -38,6 +38,11 @@ export const VESSEL_SIZE_AS_OPTIONS = getOptionsFromLabelledEnum(VESSEL_SIZE_LAB
 export const VESSEL_LOCATION_LABEL: Record<VesselLocation, string> = {
   PORT: 'Au port',
   SEA: 'En mer'
+}
+
+export const VESSEL_EMIT_POSITIONS_LABEL: Record<VesselEmitsPosition, string> = {
+  NO: 'Non équipé VMS',
+  YES: 'Équipé VMS'
 }
 
 export const LAST_POSITION_AS_OPTIONS = [
@@ -87,6 +92,7 @@ export const HAS_LOGBOOK_AS_OPTIONS = [
 
 export const DEFAULT_VESSEL_LIST_FILTER_VALUES: VesselListFilter = {
   countryCodes: [],
+  emitsPositions: [],
   districtCodes: [],
   fleetSegments: [],
   gearCodes: [],

@@ -16,7 +16,7 @@ import {
   VesselSize
 } from '@features/Vessel/components/VesselList/constants'
 import { FilterTags } from '@features/Vessel/components/VesselList/FilterTags'
-import { VesselLocation } from '@features/Vessel/types/vessel'
+import { VesselEmitsPosition, VesselLocation } from '@features/Vessel/types/vessel'
 import { filterVesselsWithZone } from '@features/Vessel/useCases/VesselListV2/filterVesselsWithZone'
 import { VesselGroupForm } from '@features/VesselGroup/components/VesselGroupForm'
 import { DEFAULT_DYNAMIC_VESSEL_GROUP } from '@features/VesselGroup/constants'
@@ -200,6 +200,9 @@ export function EditDynamicVesselGroupDialog({
   const isAtSea = !!listFilterValues.vesselsLocation?.includes(VesselLocation.SEA)
   const isAtPort = !!listFilterValues.vesselsLocation?.includes(VesselLocation.PORT)
 
+  const emitsPositions = !!listFilterValues.emitsPositions?.includes(VesselEmitsPosition.YES)
+  const emitsNoPositions = !!listFilterValues.emitsPositions?.includes(VesselEmitsPosition.NO)
+
   const updateVesselLocationAtSea = async (nextAtSea: boolean | undefined) => {
     const nextVesselsLocation = nextAtSea ? [VesselLocation.SEA] : []
     const previousAtPort = isAtPort ? [VesselLocation.PORT] : []
@@ -211,6 +214,26 @@ export function EditDynamicVesselGroupDialog({
     const nextVesselsLocation = nextAtPort ? [VesselLocation.PORT] : []
     const previousAtSea = isAtSea ? [VesselLocation.SEA] : []
     const nextListFilterValues = { ...listFilterValues, vesselsLocation: previousAtSea.concat(nextVesselsLocation) }
+    updateListFilterValuesAndCountVessels(nextListFilterValues)
+  }
+
+  const updateEmitsPositions = (value: boolean | undefined) => {
+    const nextEmitsPositions = value ? [VesselEmitsPosition.YES] : []
+    const previousEmitsNoPositions = emitsNoPositions ? [VesselEmitsPosition.NO] : []
+    const nextListFilterValues = {
+      ...listFilterValues,
+      emitsPositions: previousEmitsNoPositions.concat(nextEmitsPositions)
+    }
+    updateListFilterValuesAndCountVessels(nextListFilterValues)
+  }
+
+  const updateEmitsNoPositions = (value: boolean | undefined) => {
+    const nextEmitsNoPositions = value ? [VesselEmitsPosition.NO] : []
+    const previousEmitsPositions = emitsNoPositions ? [VesselEmitsPosition.YES] : []
+    const nextListFilterValues = {
+      ...listFilterValues,
+      emitsPositions: previousEmitsPositions.concat(nextEmitsNoPositions)
+    }
     updateListFilterValuesAndCountVessels(nextListFilterValues)
   }
 
@@ -433,6 +456,15 @@ export function EditDynamicVesselGroupDialog({
             placeholder="Equipé JPE"
             value={listFilterValues.hasLogbook}
           />
+          <div style={{ width: 200 }} />
+          <Checkbox checked={emitsPositions} label="Équipé VMS" name="emitsPositions" onChange={updateEmitsPositions} />
+          <Checkbox
+            checked={emitsNoPositions}
+            label="Non équipé VMS"
+            name="emitsNoPositions"
+            onChange={updateEmitsNoPositions}
+          />
+          <VerticalBar />
           <Checkbox checked={isAtSea} label="En mer" name="always" onChange={updateVesselLocationAtSea} />
           <Checkbox checked={isAtPort} label="À quai" name="always" onChange={updateVesselLocationAtPort} />
         </Row>
@@ -464,6 +496,14 @@ export function EditDynamicVesselGroupDialog({
     </StyledDialog>
   )
 }
+
+const VerticalBar = styled.span`
+  background: ${p => p.theme.color.lightGray};
+  height: 20px;
+  width: 2px;
+  margin-top: 16px;
+  margin-right: 16px;
+`
 
 const StyledFilterTags = styled(FilterTags)`
   margin-right: 16px;

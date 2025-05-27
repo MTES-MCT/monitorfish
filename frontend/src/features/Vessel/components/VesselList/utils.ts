@@ -104,6 +104,7 @@ export function countVesselListFilter(listFilterValues: VesselListFilter) {
     (!!listFilterValues.searchQuery && listFilterValues.searchQuery.length > 0 ? 1 : 0) +
     (listFilterValues.vesselSize ? 1 : 0) +
     (listFilterValues.vesselsLocation?.length ?? 0) +
+    (listFilterValues.emitsPositions?.length ?? 0) +
     (listFilterValues.zones?.length ?? 0)
   )
 }

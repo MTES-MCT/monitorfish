@@ -3,7 +3,7 @@ import {
   LastControlPeriod,
   VesselSize
 } from '@features/Vessel/components/VesselList/constants'
-import { VesselLocation } from '@features/Vessel/types/vessel'
+import { VesselEmitsPosition, VesselLocation } from '@features/Vessel/types/vessel'
 import { describe, expect, it } from '@jest/globals'
 
 import { MonitorFishWebWorker } from '../MonitorFishWebWorker'
@@ -123,10 +123,21 @@ describe('MonitorFishWebWorker.getFilteredVessels', () => {
     expect(result).toStrictEqual(['vessel2'])
   })
 
+  it('should filters by emitsPositions (AFTER_ONE_MONTH_AGO)', () => {
+    const filters = {
+      ...DEFAULT_VESSEL_LIST_FILTER_VALUES,
+      emitsPositions: [VesselEmitsPosition.NO],
+      vesselsLocation: []
+    }
+    const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
+    expect(result).toStrictEqual([])
+  })
+
   it('should applies multiple filters simultaneously', () => {
     const filters = {
       countryCodes: ['US'],
       districtCodes: [],
+      emitsPositions: [],
       fleetSegments: ['segment1'],
       gearCodes: ['gear1'],
       hasLogbook: true,

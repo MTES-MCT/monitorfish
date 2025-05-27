@@ -5,6 +5,7 @@ import {
   LAST_POSITION_AS_OPTIONS,
   LastControlPeriod,
   RISK_FACTOR_AS_OPTIONS,
+  VESSEL_EMIT_POSITIONS_LABEL,
   VESSEL_LOCATION_LABEL,
   VESSEL_SIZE_LABEL,
   VesselSize
@@ -147,6 +148,13 @@ export function FilterTags({
           listFilterValues.vesselsLocation.map(location => (
             <SingleTag key={`vesselsLocation-${location}`} onDelete={() => remove('vesselsLocation', location)}>
               {String(VESSEL_LOCATION_LABEL[location])}
+            </SingleTag>
+          ))}
+
+        {!!listFilterValues.emitsPositions &&
+          listFilterValues.emitsPositions.map(hasPosition => (
+            <SingleTag key={`emitsPositions-${hasPosition}`} onDelete={() => remove('emitsPositions', hasPosition)}>
+              {String(VESSEL_EMIT_POSITIONS_LABEL[hasPosition])}
             </SingleTag>
           ))}
 

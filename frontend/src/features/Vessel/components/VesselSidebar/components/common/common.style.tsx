@@ -15,7 +15,7 @@ export const SidebarHeader = styled.div`
   flex-shrink: 0;
   font-size: 13px;
   font-weight: 500;
-  padding: 8px 10px 10px 20px;
+  padding: 8px 0 10px 20px;
   width: 400px;
   vertical-align: middle;
   user-select: none;
@@ -35,7 +35,8 @@ export const SidebarHeaderValue = styled.div<{
   font-size: 13px;
   color: ${p => p.theme.color.gunMetal};
   font-weight: 500;
-  padding-left: 12px;
+  padding-left: 8px;
+  display: flex;
 `
 
 export const NoValue = styled.span`

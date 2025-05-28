@@ -7,9 +7,10 @@ import {
 } from '@features/FleetSegment/components/VesselCurrentFleetSegmentDetails/utils'
 import { SpeciesTypeToSpeciesTypeLabel } from '@features/FleetSegment/constants'
 import { FlatKeyValue } from '@features/Vessel/components/VesselSidebar/components/common/FlatKeyValue'
+import { ActivityOrigin } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { pluralize } from '@mtes-mct/monitor-ui'
-import { type ForwardedRef, forwardRef, useMemo } from 'react'
+import { type ForwardedRef, forwardRef } from 'react'
 import styled from 'styled-components'
 
 import type { FleetSegment } from '@features/FleetSegment/types'
@@ -25,6 +26,7 @@ function VesselCurrentFleetSegmentDetailsWithRef(
   const { data: gearsReferential } = useGetGearsQuery()
   const { data: fleetSegmentsReferential } = useGetFleetSegmentsQuery()
   const riskFactor = selectedVessel?.riskFactor
+  const isRecentFleetSegment = selectedVessel?.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE
 
   const fleetSegments: FleetSegment[] =
     riskFactor?.segments
@@ -45,7 +47,27 @@ function VesselCurrentFleetSegmentDetailsWithRef(
   const numberOfGears = gearsWithName?.length ?? 0
   const faoZones = getFaoZones(riskFactor)
 
-  const columns = useMemo(() => {
+  if (isRecentFleetSegment) {
+    return (
+      <FlatKeyValue
+        ref={ref}
+        className={className}
+        column={[
+          {
+            key: 'Zones de la marée',
+            value: undefined
+          },
+          {
+            key: 'Engins de la marée (FAR)',
+            value: undefined
+          }
+        ]}
+        keyWidth={170}
+      />
+    )
+  }
+
+  const columns = (function () {
     let baseColumns = [
       {
         key: `${pluralize('Zone', faoZones.length)} de la marée`,
@@ -97,14 +119,7 @@ function VesselCurrentFleetSegmentDetailsWithRef(
     }
 
     return baseColumns
-  }, [
-    faoZones,
-    numberOfGears,
-    mainScipSpeciesType,
-    isFleetSegmentSpecifyingMeshSize,
-    targetSpeciesIncludedInSegments,
-    gearsWithName
-  ])
+  })()
 
   return <FlatKeyValue ref={ref} className={className} column={columns} keyWidth={170} />
 }

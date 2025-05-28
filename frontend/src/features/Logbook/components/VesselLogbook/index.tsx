@@ -81,10 +81,6 @@ export function VesselLogbook() {
     return <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
   }
 
-  if (!fishingActivities) {
-    return <NoFishingActivities data-cy="vessel-fishing">Ce navire n’a pas envoyé de message JPE.</NoFishingActivities>
-  }
-
   return (
     <Wrapper className="smooth-scroll" data-cy="vessel-fishing">
       {nextFishingActivities && (
@@ -102,15 +98,6 @@ export function VesselLogbook() {
     </Wrapper>
   )
 }
-
-const NoFishingActivities = styled.div`
-  padding: 50px 5px 0 5px;
-  margin: 10px 10px;
-  height: 70px;
-  background: ${p => p.theme.color.white};
-  color: ${p => p.theme.color.slateGray};
-  text-align: center;
-`
 
 const Wrapper = styled.div``
 

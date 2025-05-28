@@ -17,15 +17,18 @@ class DynamicVesselGroupUTests {
     @Test
     fun `containsActiveVessel should match a vessel emitting positions`() {
         // Given
-        val vessel = TestUtils.getDummyLastPositions().map {
-            EnrichedActiveVessel(
-                lastPosition = it,
-                vesselProfile = null,
-                vessel = null,
-                producerOrganization = null,
-                riskFactor = VesselRiskFactor(),
-            )
-        }.first()
+        val vessel =
+            TestUtils
+                .getDummyLastPositions()
+                .map {
+                    EnrichedActiveVessel(
+                        lastPosition = it,
+                        vesselProfile = null,
+                        vessel = null,
+                        producerOrganization = null,
+                        riskFactor = VesselRiskFactor(),
+                    )
+                }.first()
 
         val group =
             DynamicVesselGroup(
@@ -61,10 +64,11 @@ class DynamicVesselGroupUTests {
             )
 
         // When
-        val containsVessel = group.containsActiveVessel(
-            activeVessel = vessel,
-            now = ZonedDateTime.now()
-        )
+        val containsVessel =
+            group.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
 
         // Then
         assertThat(containsVessel).isTrue
@@ -73,22 +77,24 @@ class DynamicVesselGroupUTests {
     @Test
     fun `containsActiveVessel should match a vessel emitting no positions`() {
         // Given
-        val vessel = EnrichedActiveVessel(
-            lastPosition = null,
-            vesselProfile = DUMMY_VESSEL_PROFILE,
-            vessel = Vessel(
-                id = 123,
-                internalReferenceNumber = "FR224226850",
-                vesselName = "MY AWESOME VESSEL",
-                flagState = CountryCode.FR,
-                declaredFishingGears = listOf("Trémails"),
-                vesselType = "Fishing",
-                underCharter = true,
-                hasLogbookEsacapt = false,
-            ),
-            producerOrganization = null,
-            riskFactor = VesselRiskFactor(),
-        )
+        val vessel =
+            EnrichedActiveVessel(
+                lastPosition = null,
+                vesselProfile = DUMMY_VESSEL_PROFILE,
+                vessel =
+                    Vessel(
+                        id = 123,
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        underCharter = true,
+                        hasLogbookEsacapt = false,
+                    ),
+                producerOrganization = null,
+                riskFactor = VesselRiskFactor(),
+            )
 
         val group =
             DynamicVesselGroup(
@@ -124,10 +130,11 @@ class DynamicVesselGroupUTests {
             )
 
         // When
-        val containsVessel = group.containsActiveVessel(
-            activeVessel = vessel,
-            now = ZonedDateTime.now()
-        )
+        val containsVessel =
+            group.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
 
         // Then
         assertThat(containsVessel).isTrue

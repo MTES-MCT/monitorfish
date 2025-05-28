@@ -1,6 +1,7 @@
 import { BaseLayer } from '@features/Map/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { VesselLabel } from '@features/Vessel/label.types'
+import { ActivityOrigin } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import countries from 'i18n-iso-countries'
 
@@ -54,6 +55,7 @@ export class VesselFeature {
   static getVesselFeatureLabel(
     feature: PartialExcept<
       Vessel.VesselLastPositionFeature,
+      | 'activityOrigin'
       | 'beaconMalfunctionId'
       | 'dateTime'
       | 'detectabilityRiskFactor'
@@ -101,11 +103,13 @@ export class VesselFeature {
     // TODO Properly type this const.
     const label: {
       groupsDisplayed: Vessel.VesselGroupOfActiveVessel[]
+      isRecentSegment: boolean
       labelText: string | undefined
       riskFactor: any | undefined
       underCharter: any
     } = {
       groupsDisplayed: feature.groupsDisplayed,
+      isRecentSegment: feature.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE,
       labelText: undefined,
       riskFactor: undefined,
       underCharter: feature.underCharter

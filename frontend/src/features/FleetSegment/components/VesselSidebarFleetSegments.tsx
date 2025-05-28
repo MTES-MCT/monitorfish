@@ -5,23 +5,24 @@ import {
   SidebarHeaderValue,
   SidebarZone
 } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
+import { ActivityOrigin } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { pluralize } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 type VesselSidebarFleetSegmentsProps = {
+  activityOrigin: ActivityOrigin | undefined
   className?: string | undefined
   segments: string[] | undefined
 }
-export function VesselSidebarFleetSegments({ className, segments }: VesselSidebarFleetSegmentsProps) {
+export function VesselSidebarFleetSegments({ activityOrigin, className, segments }: VesselSidebarFleetSegmentsProps) {
   const numberOfSegments = segments?.length ?? 0
 
   return (
     <SidebarZone className={className}>
       <SidebarHeader>
         {pluralize('Segment', numberOfSegments)} de {pluralize('flotte', numberOfSegments)}{' '}
-        {pluralize('actuel', numberOfSegments)}
         <SidebarHeaderValue>
-          <FleetSegmentsWithTooltip segments={segments} />
+          <FleetSegmentsWithTooltip activityOrigin={activityOrigin} segments={segments} />
         </SidebarHeaderValue>
       </SidebarHeader>
       <StyledVesselCurrentFleetSegmentDetails />

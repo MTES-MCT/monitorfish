@@ -3,7 +3,7 @@ import { pluralize } from '@mtes-mct/monitor-ui'
 
 import type { FleetSegment } from '@features/FleetSegment/types'
 
-export function getTripSegments(
+export function getSegmentsWithProperties(
   segments: string[] | undefined,
   segmentsReferential: FleetSegment[] | undefined
 ): Array<FleetSegment | undefined> {

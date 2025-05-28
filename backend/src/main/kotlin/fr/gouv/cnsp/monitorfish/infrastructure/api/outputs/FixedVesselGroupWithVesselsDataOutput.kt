@@ -15,7 +15,7 @@ data class FixedVesselGroupWithVesselsDataOutput(
             group = FixedVesselGroupDataOutput.fromFixedVesselGroup(group),
             vessels =
                 vessels.mapIndexed { index, it ->
-                    ActiveVesselBaseDataOutput.fromActiveVesselWithReferentialData(
+                    ActiveVesselBaseDataOutput.fromEnrichedActiveVessel(
                         enrichedActiveVessel = it,
                         index = index,
                     )

@@ -19,6 +19,14 @@ context('Vessel sidebar resume tab', () => {
 
     cy.get('*[data-cy^="impact-risk-factor"]').contains('2.1')
     cy.get('*[data-cy^="impact-risk-factor"]').click({ force: true, timeout: 10000 })
+    cy.get('[title="Nom : NWW10\n' +
+      'Zones : 27.5.b, 27.6, 27.7\n' +
+      'Engins : FPO, FIX\n' +
+      'Maillage min. : aucun\n' +
+      'Maillage max. : aucun\n' +
+      'Majorité d\'espèces : aucun\n' +
+      'Espèce cible (≥ 20% du total des captures) : NEP"]').should('exist')
+    cy.get('[title="Segment(s) actuel(s) à partir des messages de captures"]').should('exist')
     cy.get('*[data-cy="Zones de la marée"]').contains('27.8.b, 27.8.c')
     cy.get('*[data-cy="Engin de la marée (FAR)"]').contains('Chaluts de fond à panneaux (OTB)')
     cy.get('*[data-cy="Majorité d\'espèces à bord"]').contains('Pélagique')
@@ -53,6 +61,42 @@ context('Vessel sidebar resume tab', () => {
     cy.get('*[data-cy^="vessel-sidebar-alert"]').contains('Pêche en ZEE française par un navire tiers', {
       timeout: 10000
     })
+    cy.get('*[data-cy="vessel-search-selected-vessel-close-title"]').click()
+
+    /**
+     * Vessel with a recent profile
+     */
+    openVesselBySearch('CFR117')
+    cy.get('*[data-cy^="impact-risk-factor"]').click({ force: true, timeout: 10000 })
+    cy.get('[title="Nom : NWW10\n' +
+      'Zones : 27.5.b, 27.6, 27.7\n' +
+      'Engins : FPO, FIX\n' +
+      'Maillage min. : aucun\n' +
+      'Maillage max. : aucun\n' +
+      'Majorité d\'espèces : aucun\n' +
+      'Espèce cible (≥ 20% du total des captures) : NEP"]').should('exist')
+    cy.get('[title="Segment(s) ces 14 derniers jours"]').should('exist')
+
+    /**
+     * Fleet segments should be displayed also in the logbook tab
+     */
+    cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
+    cy.get('*[data-cy^="vessel-menu-fishing"]', { timeout: 10000 }).should('be.visible')
+    cy.get('[title="Nom : NWW10\n' +
+      'Zones : 27.5.b, 27.6, 27.7\n' +
+      'Engins : FPO, FIX\n' +
+      'Maillage min. : aucun\n' +
+      'Maillage max. : aucun\n' +
+      'Majorité d\'espèces : aucun\n' +
+      'Espèce cible (≥ 20% du total des captures) : NEP"]').should('exist')
+    cy.get('[title="Nom : PEL03\n' +
+      'Zones : 27.4, 27.7, 27.8, 27.9\n' +
+      'Engins : OTB, PTB\n' +
+      'Maillage min. : aucun\n' +
+      'Maillage max. : aucun\n' +
+      'Majorité d\'espèces : Pélagiques\n' +
+      'Espèce cible : aucune"]').should('exist')
+    cy.get('[title="Segment(s) ces 14 derniers jours"]').should('exist')
   })
 
   it('Groups may be displayed, added and removed', () => {

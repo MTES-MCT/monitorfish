@@ -29,8 +29,11 @@
                 "probability_risk_factor": 2,
                 "risk_factor": 2.473,
                 "segment_highest_impact": "NWW10",
+                "recent_segment_highest_impact": "NWW10",
                 "segment_highest_priority": "PEL03",
+                "recent_segment_highest_priority": "PEL03",
                 "segments": ["NWW10", "PEL03"],
+                "recent_segments": ["NWW10", "PEL03"],
                 "total_weight_onboard": 1235.36,
                 "trip_number": 123101,
                 "vessel_id": 1,
@@ -66,7 +69,15 @@
                         "species": "NEP",
                         "weight": 235.6
                     }
-                ]
+                ],
+                "recent_segments_impact_risk_factor": 1.0,
+                "recent_segments_detectability_risk_factor": 1.0,
+                "recent_segments_risk_factor": 1.0,
+                "recent_segments_control_priority_level": 1.0,
+                "usual_segments_impact_risk_factor": 1.0,
+                "usual_segments_detectability_risk_factor": 1.0,
+                "usual_segments_risk_factor": 1.0,
+                "usual_segments_control_priority_level": 1.0
             },
 
             // - Vessel: VIVA ESPANA
@@ -96,8 +107,11 @@
                 "probability_risk_factor": 4,
                 "risk_factor": 4,
                 "segment_highest_impact": "NWW10",
+                "recent_segment_highest_impact": "NWW10",
                 "segment_highest_priority": "PEL03",
+                "recent_segment_highest_priority": "PEL03",
                 "segments": ["NWW10", "PEL03"],
+                "recent_segments": ["NWW10", "PEL03"],
                 "total_weight_onboard": 12345.67,
                 "trip_number": 123102,
                 "vessel_id": 101,
@@ -127,7 +141,15 @@
                         "species": "HKE",
                         "weight": 235.6
                     }
-                ]
+                ],
+                "recent_segments_impact_risk_factor": 1.0,
+                "recent_segments_detectability_risk_factor": 1.0,
+                "recent_segments_risk_factor": 1.0,
+                "recent_segments_control_priority_level": 1.0,
+                "usual_segments_impact_risk_factor": 1.0,
+                "usual_segments_detectability_risk_factor": 1.0,
+                "usual_segments_risk_factor": 1.0,
+                "usual_segments_control_priority_level": 1.0
             },
 
             // - Vessel: LEVE NEDERLAND
@@ -157,8 +179,11 @@
                 "probability_risk_factor": 4,
                 "risk_factor": 4,
                 "segment_highest_impact": "NWW10",
+                "recent_segment_highest_impact": "NWW10",
                 "segment_highest_priority": "PEL03",
+                "recent_segment_highest_priority": "PEL03",
                 "segments": ["NWW10", "PEL03"],
+                "recent_segments": ["NWW10", "PEL03"],
                 "total_weight_onboard": 12345.67,
                 "trip_number": 123103,
                 "vessel_id": 102,
@@ -188,7 +213,15 @@
                         "species": "HKE",
                         "weight": 235.6
                     }
-                ]
+                ],
+                "recent_segments_impact_risk_factor": 1.0,
+                "recent_segments_detectability_risk_factor": 1.0,
+                "recent_segments_risk_factor": 1.0,
+                "recent_segments_control_priority_level": 1.0,
+                "usual_segments_impact_risk_factor": 1.0,
+                "usual_segments_detectability_risk_factor": 1.0,
+                "usual_segments_risk_factor": 1.0,
+                "usual_segments_control_priority_level": 1.0
             },
 
             // - Vessel: LE POISSON D'AVRIL
@@ -218,13 +251,24 @@
                 "probability_risk_factor": 4,
                 "risk_factor": 4,
                 "segment_highest_impact": "NWW10",
+                "recent_segment_highest_impact": "NWW10",
                 "segment_highest_priority": "PEL03",
+                "recent_segment_highest_priority": "PEL03",
                 "segments": ["NWW10", "PEL03"],
+                "recent_segments": ["NWW10", "PEL03"],
                 "total_weight_onboard": 12345.67,
                 "trip_number": 123109,
                 "vessel_id": 109,
                 "gear_onboard": "null",
-                "species_onboard": "null"
+                "species_onboard": "null",
+                "recent_segments_impact_risk_factor": 1.0,
+                "recent_segments_detectability_risk_factor": 1.0,
+                "recent_segments_risk_factor": 1.0,
+                "recent_segments_control_priority_level": 1.0,
+                "usual_segments_impact_risk_factor": 1.0,
+                "usual_segments_detectability_risk_factor": 1.0,
+                "usual_segments_risk_factor": 1.0,
+                "usual_segments_control_priority_level": 1.0
             },
 
             // - Vessel: DOS FIN
@@ -254,8 +298,11 @@
                 "probability_risk_factor": 4,
                 "risk_factor": 2.5,
                 "segment_highest_impact": "NWW10",
+                "recent_segment_highest_impact": "NWW10",
                 "segment_highest_priority": "PEL03",
+                "recent_segment_highest_priority": "PEL03",
                 "segments": ["NWW10", "PEL03"],
+                "recent_segments": ["NWW10", "PEL03"],
                 "total_weight_onboard": 12345.67,
                 "trip_number": 123102,
                 "vessel_id": 115,
@@ -285,7 +332,15 @@
                         "species": "HKE",
                         "weight": 235.6
                     }
-                ]
+                ],
+                "recent_segments_impact_risk_factor": 1.0,
+                "recent_segments_detectability_risk_factor": 1.0,
+                "recent_segments_risk_factor": 1.0,
+                "recent_segments_control_priority_level": 1.0,
+                "usual_segments_impact_risk_factor": 1.0,
+                "usual_segments_detectability_risk_factor": 1.0,
+                "usual_segments_risk_factor": 1.0,
+                "usual_segments_control_priority_level": 1.0
             },
 
             // - Vessel: QUEUE DE POISSON
@@ -315,8 +370,11 @@
                 "probability_risk_factor": 3,
                 "risk_factor": 2.2,
                 "segment_highest_impact": "NWW10",
+                "recent_segment_highest_impact": "NWW10",
                 "segment_highest_priority": "PEL03",
+                "recent_segment_highest_priority": "PEL03",
                 "segments": ["NWW10", "PEL03"],
+                "recent_segments": ["NWW10", "PEL03"],
                 "total_weight_onboard": null,
                 "trip_number": 123102,
                 "vessel_id": 117,
@@ -346,7 +404,15 @@
                         "species": "HKE",
                         "weight": 235.6
                     }
-                ]
+                ],
+                "recent_segments_impact_risk_factor": 1.0,
+                "recent_segments_detectability_risk_factor": 1.0,
+                "recent_segments_risk_factor": 1.0,
+                "recent_segments_control_priority_level": 1.0,
+                "usual_segments_impact_risk_factor": 1.0,
+                "usual_segments_detectability_risk_factor": 1.0,
+                "usual_segments_risk_factor": 1.0,
+                "usual_segments_control_priority_level": 1.0
             }
         ]
     }

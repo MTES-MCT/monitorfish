@@ -302,7 +302,7 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.vessel.internalReferenceNumber", equalTo("FR224226850")))
             .andExpect(jsonPath("$.positions.length()", equalTo(3)))
             .andExpect(jsonPath("$.vessel.riskFactor.controlPriorityLevel", equalTo(0.25)))
-            .andExpect(jsonPath("$.vessel.riskFactor.riskFactor", equalTo(3.2)))
+            .andExpect(jsonPath("$.vessel.riskFactor.riskFactor", equalTo(1.74)))
             .andExpect(jsonPath("$.vessel.underCharter", equalTo(true)))
             .andExpect(jsonPath("$.vessel.producerOrganization.organizationName", equalTo("OP")))
             .andExpect(

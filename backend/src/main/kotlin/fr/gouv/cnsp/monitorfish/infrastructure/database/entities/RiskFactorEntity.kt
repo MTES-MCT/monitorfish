@@ -24,12 +24,18 @@ data class RiskFactorEntity(
     val cfr: String?,
     @Column(name = "impact_risk_factor")
     val impactRiskFactor: Double,
+    @Column(name = "recent_segments_impact_risk_factor")
+    val recentSegmentsImpactRiskFactor: Double,
     @Column(name = "probability_risk_factor")
     val probabilityRiskFactor: Double,
     @Column(name = "detectability_risk_factor")
     val detectabilityRiskFactor: Double,
+    @Column(name = "recent_segments_detectability_risk_factor")
+    val recentSegmentsDetectabilityRiskFactor: Double,
     @Column(name = "risk_factor")
     val riskFactor: Double,
+    @Column(name = "recent_segments_risk_factor")
+    val recentSegmentsRiskFactor: Double,
     @Type(JsonBinaryType::class)
     @Column(name = "gear_onboard", columnDefinition = "jsonb")
     val gearOnboard: String?,
@@ -38,12 +44,20 @@ data class RiskFactorEntity(
     val speciesOnboard: String?,
     @Column(name = "segments", columnDefinition = "varchar(50)[]")
     val segments: List<String>,
+    @Column(name = "recent_segments", columnDefinition = "varchar(50)[]")
+    val recentSegments: List<String>?,
     @Column(name = "segment_highest_impact")
     val segmentHighestImpact: String? = null,
+    @Column(name = "recent_segment_highest_impact")
+    val recentSegmentHighestImpact: String? = null,
     @Column(name = "segment_highest_priority")
     val segmentHighestPriority: String? = null,
+    @Column(name = "recent_segment_highest_priority")
+    val recentSegmentHighestPriority: String? = null,
     @Column(name = "control_priority_level")
     val controlPriorityLevel: Double,
+    @Column(name = "recent_segments_control_priority_level")
+    val recentControlPriorityLevel: Double,
     @Column(name = "last_control_datetime_utc")
     val lastControlDatetime: ZonedDateTime? = null,
     @Column(name = "control_rate_risk_factor")
@@ -89,5 +103,12 @@ data class RiskFactorEntity(
             numberGearSeizuresLastFiveYears = numberGearSeizuresLastFiveYears,
             numberSpeciesSeizuresLastFiveYears = numberSpeciesSeizuresLastFiveYears,
             numberVesselSeizuresLastFiveYears = numberVesselSeizuresLastFiveYears,
+            recentSegmentsImpactRiskFactor = recentSegmentsImpactRiskFactor,
+            recentSegmentsDetectabilityRiskFactor = recentSegmentsDetectabilityRiskFactor,
+            recentSegmentsRiskFactor = recentSegmentsRiskFactor,
+            recentSegments = recentSegments ?: listOf(),
+            recentSegmentHighestImpact = recentSegmentHighestImpact,
+            recentSegmentHighestPriority = recentSegmentHighestPriority,
+            recentControlPriorityLevel = recentControlPriorityLevel,
         )
 }

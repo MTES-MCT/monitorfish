@@ -42,7 +42,7 @@ class VesselController(
         val activeVessels = getActiveVessels.execute(email)
 
         return activeVessels.mapIndexed { index, vessel ->
-            ActiveVesselBaseDataOutput.fromActiveVesselWithReferentialData(
+            ActiveVesselBaseDataOutput.fromEnrichedActiveVessel(
                 enrichedActiveVessel = vessel,
                 index = index,
             )

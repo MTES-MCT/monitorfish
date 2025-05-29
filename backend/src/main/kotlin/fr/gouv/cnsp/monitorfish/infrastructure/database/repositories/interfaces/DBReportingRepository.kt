@@ -70,6 +70,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         FROM reportings
         WHERE
             vessel_id = :vesselId AND
+            type IN ('ALERT', 'INFRACTION_SUSPICION') AND
             archived IS FALSE AND
             deleted IS FALSE
         """,

@@ -1,10 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
-import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
-import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationType
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
@@ -98,7 +96,7 @@ class CreateOrUpdateManualPriorNotification(
                 portLocode = portLocode,
                 purpose = purpose,
                 author = author,
-                computedVesselFlagCountryCode = vessel?.flagState,
+                isInVerificationScope = computedValues.isInVerificationScope,
                 computedVesselRiskFactor = computedValues.vesselRiskFactor,
                 isPartOfControlUnitSubscriptions = isPartOfControlUnitSubscriptions,
             )
@@ -188,17 +186,15 @@ class CreateOrUpdateManualPriorNotification(
         pnoTypes: List<PriorNotificationType>,
         portLocode: String,
         author: String?,
-        computedVesselFlagCountryCode: CountryCode?,
         computedVesselRiskFactor: Double?,
         isPartOfControlUnitSubscriptions: Boolean,
+        isInVerificationScope: Boolean,
     ): PNO {
         val allPorts = portRepository.findAll()
 
         val authorTrigram = existingMessageValue?.authorTrigram
         val createdBy = existingMessageValue?.createdBy ?: existingMessageValue?.authorTrigram ?: author
-        val isInVerificationScope =
-            ManualPriorNotificationComputedValues
-                .isInVerificationScope(computedVesselFlagCountryCode, computedVesselRiskFactor)
+
         // If the prior notification is not in verification scope,
         // we pass `isBeingSent` as `true` in order to ask the workflow to send it.
         val isBeingSent = !isInVerificationScope && isPartOfControlUnitSubscriptions

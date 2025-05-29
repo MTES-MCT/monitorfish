@@ -14,6 +14,7 @@ class ComputeManualPriorNotification(
     private val pnoFleetSegmentSubscriptionRepository: PnoFleetSegmentSubscriptionRepository,
     private val pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository,
     private val vesselRepository: VesselRepository,
+    private val reportingRepository: ReportingRepository,
     private val speciesRepository: SpeciesRepository,
     private val computeFleetSegments: ComputeFleetSegments,
     private val computePnoTypes: ComputePnoTypes,
@@ -33,6 +34,9 @@ class ComputeManualPriorNotification(
             "The vessel $vesselId is not found."
         }
 
+        // We select reportings only by NAVPRO vessel id as the vessel is FRA.
+        val infractionSuspicions = reportingRepository.findCurrentInfractionSuspicionsByVesselId(vesselId)
+
         val species = speciesRepository.findAll()
 
         val fishingCatchesWithFaoArea =
@@ -48,7 +52,7 @@ class ComputeManualPriorNotification(
 
         val isInVerificationScope =
             ManualPriorNotificationComputedValues
-                .isInVerificationScope(vesselFlagCountryCode, vesselRiskFactor)
+                .isInVerificationScope(vesselFlagCountryCode, vesselRiskFactor, infractionSuspicions)
         val isPartOfControlUnitSubscriptions =
             pnoPortSubscriptionRepository.has(portLocode) ||
                 pnoVesselSubscriptionRepository.has(vesselId) ||
@@ -61,6 +65,7 @@ class ComputeManualPriorNotification(
             tripSegments = tripSegments,
             types = types,
             vesselRiskFactor = vesselRiskFactor,
+            isInVerificationScope = isInVerificationScope,
         )
     }
 }

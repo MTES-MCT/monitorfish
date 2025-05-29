@@ -113,6 +113,13 @@ class JpaReportingRepository(
                 it.toReporting(mapper)
             }
 
+    override fun findCurrentInfractionSuspicionsByVesselId(vesselId: Int): List<Reporting> =
+        dbReportingRepository
+            .findCurrentInfractionSuspicionsByVesselId(vesselId)
+            .map {
+                it.toReporting(mapper)
+            }
+
     override fun findCurrentAndArchivedByVesselIdEquals(
         vesselId: Int,
         fromDate: ZonedDateTime,

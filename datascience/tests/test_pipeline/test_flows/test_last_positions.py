@@ -83,14 +83,19 @@ def test_extract_reportings(reset_test_data):
     reportings = extract_reportings.run()
     expected_reportings = pd.DataFrame(
         {
-            "vessel_id": [6],
-            "cfr": [None],
-            "ircs": ["ZZ000000"],
-            "external_immatriculation": ["ZZTOPACDC"],
-            "reportings": [["ALERT"]],
+            "vessel_id": [6, None],
+            "cfr": [None, "SOME_VESSEL"],
+            "ircs": ["ZZ000000", None],
+            "external_immatriculation": ["ZZTOPACDC", "BLABLABLA"],
+            "reportings": [["ALERT"], ["ALERT"]],
         }
     )
-    pd.testing.assert_frame_equal(reportings, expected_reportings)
+    pd.testing.assert_frame_equal(
+        reportings.sort_values("external_immatriculation", ascending=False).reset_index(
+            drop=True
+        ),
+        expected_reportings,
+    )
 
 
 def test_load_last_positions(reset_test_data):

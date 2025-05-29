@@ -99,12 +99,17 @@ def test_extract_active_reportings(reset_test_data):
     )
     expected_active_reportings = pd.DataFrame(
         {
-            "internal_reference_number": [None],
-            "external_reference_number": ["ZZTOPACDC"],
-            "ircs": ["ZZ000000"],
+            "internal_reference_number": [None, "SOME_VESSEL"],
+            "external_reference_number": ["ZZTOPACDC", "BLABLABLA"],
+            "ircs": ["ZZ000000", None],
         }
     )
-    pd.testing.assert_frame_equal(active_reportings, expected_active_reportings)
+    pd.testing.assert_frame_equal(
+        active_reportings.sort_values(
+            "external_reference_number", ascending=False
+        ).reset_index(drop=True),
+        expected_active_reportings,
+    )
 
     active_reportings = extract_active_reportings.run(AlertType.MISSING_FAR_ALERT.value)
     pd.testing.assert_frame_equal(active_reportings, expected_active_reportings.head(0))
@@ -121,7 +126,7 @@ def test_extract_pending_alerts_ids_of_type(reset_test_data):
 def test_extract_non_archived_reportings_ids_of_type(reset_test_data):
     assert extract_non_archived_reportings_ids_of_type.run(
         reporting_type="THREE_MILES_TRAWLING_ALERT"
-    ) == [56]
+    ) == [56, 57]
 
     assert (
         extract_non_archived_reportings_ids_of_type.run(

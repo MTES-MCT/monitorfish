@@ -176,6 +176,7 @@ class PriorNotificationControllerUTests {
                     tripSegments = emptyList(),
                     types = emptyList(),
                     vesselRiskFactor = 1.2,
+                    isInVerificationScope = false,
                 ),
             )
 

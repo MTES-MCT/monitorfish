@@ -5,4 +5,5 @@ SELECT DISTINCT
 FROM reportings
 WHERE
     NOT archived
+    AND NOT deleted
     AND value->>'type' = :alert_type

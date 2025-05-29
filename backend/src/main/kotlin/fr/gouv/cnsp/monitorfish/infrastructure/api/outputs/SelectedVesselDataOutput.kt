@@ -191,7 +191,7 @@ data class SelectedVesselDataOutput(
                 hasLogbookEsacapt = vessel.hasLogbookEsacapt,
                 hasVisioCaptures = vessel.hasVisioCaptures,
                 // TODO Unused in the frontend - to remove ?
-                riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(VesselRiskFactor())
+                riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(VesselRiskFactor()),
             )
     }
 }

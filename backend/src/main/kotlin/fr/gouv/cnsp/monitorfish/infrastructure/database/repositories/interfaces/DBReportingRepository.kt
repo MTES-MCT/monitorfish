@@ -64,6 +64,19 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         fromDate: Instant,
     ): List<ReportingEntity>
 
+    @Query(
+        value = """
+        SELECT *
+        FROM reportings
+        WHERE
+            vessel_id = :vesselId AND
+            archived IS FALSE AND
+            deleted IS FALSE
+        """,
+        nativeQuery = true,
+    )
+    fun findCurrentInfractionSuspicionsByVesselId(vesselId: Int): List<ReportingEntity>
+
     @Modifying(clearAutomatically = true)
     @Query(
         value = """

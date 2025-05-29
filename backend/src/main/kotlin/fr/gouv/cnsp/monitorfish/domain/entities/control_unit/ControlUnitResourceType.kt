@@ -23,7 +23,7 @@ enum class ControlUnitResourceType(
     NO_RESOURCE("Aucun moyen"),
     OTHER("Autre"),
     PATROL_BOAT("Patrouilleur"),
-    PEDESTRIAN("Piéton"),
+    PEDESTRIAN("Pédestre"),
     PIROGUE("Pirogue"),
     RIGID_HULL("Coque rigide"),
     SEA_SCOOTER("Scooter de mer"),

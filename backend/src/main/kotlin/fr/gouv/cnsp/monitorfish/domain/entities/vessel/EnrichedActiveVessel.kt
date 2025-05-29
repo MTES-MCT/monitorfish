@@ -33,7 +33,7 @@ data class EnrichedActiveVessel(
             if (activityOrigin == ActivityOrigin.FROM_LOGBOOK) {
                 lastPosition?.segments ?: listOf()
             } else {
-                vesselProfile?.recentSegments?.keys?.toList() ?: listOf()
+                vesselProfile?.recentSegments?.keys?.toList()?.filter { it != "NO_SEGMENTS" } ?: listOf()
             }
 
         gearsArray =

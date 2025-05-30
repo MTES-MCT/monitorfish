@@ -7,6 +7,14 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2025-05-30',
+        description: `Le filtre "Organisation de Producteurs" (OP) a été ajouté à la liste des navires.
+Il est désormais possible de créer des groupes dynamiques en utilisant ce critère, ce qui peut s’avérer utile pour surveiller une fermeture de quotas.`,
+        for: 'ALL',
+        title: `Ajout du filtre "Organisation de Producteur"`,
+        type: 'IMPROVEMENT'
+      },
+      {
         date: '2025-05-26',
         description: `L’onglet "Résumé" de la fiche navire intègre désormais un **profil d’activité** basé sur les données de l’année écoulée. Ce profil permet d’identifier les caractéristiques récurrentes du navire :
 - Engins de pêche les plus fréquemment utilisés

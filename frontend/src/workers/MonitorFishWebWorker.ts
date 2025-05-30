@@ -267,6 +267,9 @@ export class MonitorFishWebWorker {
       ? getLastControlledFilterFromLastControlPeriod(filters.lastControlPeriod)
       : undefined
 
+    const producerOrganizationSet = filters.producerOrganizations?.length
+      ? new Set(filters.producerOrganizations)
+      : undefined
     const countrySet = filters.countryCodes?.length ? new Set(filters.countryCodes) : undefined
     const districtSet = filters.districtCodes?.length ? new Set(filters.districtCodes) : undefined
     const fleetSegmentsSet = filters.fleetSegments?.length ? new Set(filters.fleetSegments) : undefined
@@ -300,7 +303,6 @@ export class MonitorFishWebWorker {
 
     /* TODO Implement these filters
     lastLandingPortLocodes: string[]
-    producerOrganizations: string[]
      */
 
     const searchedVessels = filters.searchQuery ? fuse.find(filters.searchQuery) : vessels
@@ -312,6 +314,13 @@ export class MonitorFishWebWorker {
         }
 
         if (districtSet && (!vessel.districtCode || !districtSet.has(vessel.districtCode))) {
+          return false
+        }
+
+        if (
+          producerOrganizationSet &&
+          (!vessel.producerOrganization || !producerOrganizationSet.has(vessel.producerOrganization))
+        ) {
           return false
         }
 

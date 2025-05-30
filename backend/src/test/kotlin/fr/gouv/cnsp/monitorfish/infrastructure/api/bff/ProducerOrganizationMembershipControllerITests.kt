@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
 import fr.gouv.cnsp.monitorfish.domain.use_cases.producer_organization_membership.GetAllProducerOrganizationMemberships
+import fr.gouv.cnsp.monitorfish.domain.use_cases.producer_organization_membership.GetDistinctProducerOrganizations
 import fr.gouv.cnsp.monitorfish.domain.use_cases.producer_organization_membership.SetProducerOrganizationMemberships
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,6 +31,9 @@ class ProducerOrganizationMembershipControllerITests {
 
     @MockBean
     private lateinit var getAllProducerOrganizationMemberships: GetAllProducerOrganizationMemberships
+
+    @MockBean
+    private lateinit var getDistinctProducerOrganizations: GetDistinctProducerOrganizations
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -69,5 +73,19 @@ class ProducerOrganizationMembershipControllerITests {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(memberships)),
             ).andExpect(status().isCreated)
+    }
+
+    @Test
+    fun `Should return distinct producer organization`() {
+        // Given
+        whenever(getDistinctProducerOrganizations.execute()).thenReturn(listOf("OP_NORD", "OP"))
+
+        // When Then
+        mockMvc
+            .perform(get("/bff/v1/producer_organization_memberships/distinct"))
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$[0]").value("OP_NORD"))
+            .andExpect(jsonPath("$[1]").value("OP"))
     }
 }

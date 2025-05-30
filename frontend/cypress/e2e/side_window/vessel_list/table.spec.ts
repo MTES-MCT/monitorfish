@@ -18,6 +18,11 @@ context('Side Window > Vessel List > Table', () => {
     cy.get('[data-id="VESSELS:ABC010331976/IRCS131/EXTIMM131-expanded"]').contains('Engin récent')
     cy.getDataCy('vessel-list-reset-filters').click()
 
+    cy.fill('Adhésion à une OP', ['SA THO AN'])
+    cy.getDataCy('vessel-list-length').contains('2 navires')
+    cy.get('.Table-SimpleTable tr').should('have.length', 3)
+    cy.getDataCy('vessel-list-reset-filters').click()
+
     cy.fill('Rechercher un navire', 'PRISON')
     cy.getDataCy('vessel-list-length').contains('2 navires')
     cy.get('.Table-SimpleTable tr').should('have.length', 3)

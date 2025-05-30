@@ -2,7 +2,7 @@ import { useGetDistrictsQuery } from '@api/district'
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
 import { resetInteraction } from '@features/Draw/slice'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
-import { InteractionListener, LayerProperties } from '@features/Map/constants'
+import { InteractionListener } from '@features/Map/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES, BLUEFIN_TUNA_SPECY_CODE } from '@features/PriorNotification/constants'
 import {
@@ -29,8 +29,8 @@ import {
 import { countFilteredVessels } from '@features/VesselGroup/useCases/countFilteredVessels'
 import { useGetFilterableZonesAsTreeOptions } from '@hooks/useGetFilterableZonesAsTreeOptions'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
-import { useGetOrganizationMembershipNamesAsOptions } from '@hooks/useGetOrganizationMembershipNamesAsOptions'
 import { useGetPortsAsTreeOptions } from '@hooks/useGetPortsAsTreeOptions'
+import { useGetProducerOrganizationsAsOptions } from '@hooks/useGetProducerOrganizationsAsOptions'
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -70,7 +70,7 @@ export function EditDynamicVesselGroupDialog({
   const { data: districtsAsTreeOptions } = useGetDistrictsQuery()
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const filterableZoneAsTreeOptions = useGetFilterableZonesAsTreeOptions()
-  const organizationMembershipNames = useGetOrganizationMembershipNamesAsOptions()
+  const organizationMembershipNames = useGetProducerOrganizationsAsOptions()
 
   const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.EDIT_DYNAMIC_VESSEL_GROUP_DIALOG)
 
@@ -146,7 +146,7 @@ export function EditDynamicVesselGroupDialog({
       assertNotNullish(editedVesselGroupRef.current)
 
       // We store the modified vessel group before closing the dialog
-      await dispatch(
+      dispatch(
         vesselGroupActions.vesselGroupEdited({
           ...editedVesselGroupRef.current,
           filters: listFilterValues
@@ -165,6 +165,16 @@ export function EditDynamicVesselGroupDialog({
       const nextListFilterValues = { ...listFilterValues, zones: nextZones }
       updateListFilterValuesAndCountVessels(nextListFilterValues)
     }
+  }
+
+  const updateCustomZones = async (checked: boolean | undefined) => {
+    const zones = listFilterValues.zones?.map(zone => zone.value) ?? []
+
+    updateZones(
+      checked
+        ? zones.concat(MonitorFishMap.MonitorFishLayer.CUSTOM)
+        : zones.filter(zone => zone === MonitorFishMap.MonitorFishLayer.CUSTOM)
+    )
   }
 
   const updateLastControlPeriod = async (nextLastControlPeriod: LastControlPeriod | undefined) => {
@@ -248,6 +258,20 @@ export function EditDynamicVesselGroupDialog({
 
   const createOrModifyText =
     !!editedVesselGroup && !isEqual(editedVesselGroup, DEFAULT_DYNAMIC_VESSEL_GROUP) ? 'Modifier' : 'Créer'
+
+  const renderMultiCascaderCustomZoneFooter = () => (
+    <MultiCascaderCustomZone>
+      <Checkbox
+        checked={listFilterValues.zones?.some(zone => zone.value === MonitorFishMap.MonitorFishLayer.CUSTOM)}
+        inline
+        label="Filtrer avec une zone dessinée sur la carte"
+        name="custom_zone"
+        onChange={updateCustomZones}
+      >
+        Filtrer avec une zone dessinée sur la carte
+      </Checkbox>
+    </MultiCascaderCustomZone>
+  )
 
   return (
     <StyledDialog isAbsolute>
@@ -389,16 +413,12 @@ export function EditDynamicVesselGroupDialog({
             label="Filtrer les navires avec une zone"
             name="zones"
             onChange={updateZones}
-            options={filterableZoneAsTreeOptions ?? []}
+            options={filterableZoneAsTreeOptions?.filter(zone => zone.label !== 'Zone manuelle') ?? []}
             placeholder="Filtrer les navires avec une zone"
             popupWidth={500}
+            renderExtraFooter={renderMultiCascaderCustomZoneFooter}
             renderValue={(_, items) => {
-              const itemsChildrens = items.filter(
-                item =>
-                  (item.label === LayerProperties[MonitorFishMap.MonitorFishLayer.CUSTOM]?.name &&
-                    item.parent === null) ||
-                  item.parent !== null
-              )
+              const itemsChildrens = items.filter(item => item.parent !== null)
 
               return itemsChildrens.length > 0 ? (
                 <SelectValue>Zone de filtre ({itemsChildrens.length})</SelectValue>
@@ -408,7 +428,7 @@ export function EditDynamicVesselGroupDialog({
             }}
             searchable
             style={{ width: 416 }}
-            uncheckableItemValues={['1', '2']}
+            uncheckableItemValues={['0', '1', '2', '3']}
             value={listFilterValues.zones?.map(zone => zone.value)}
           />
           <MultiCascader
@@ -496,6 +516,11 @@ export function EditDynamicVesselGroupDialog({
     </StyledDialog>
   )
 }
+
+const MultiCascaderCustomZone = styled.div`
+  border-top: 1px solid ${p => p.theme.color.lightGray};
+  padding: 8px;
+`
 
 const VerticalBar = styled.span`
   background: ${p => p.theme.color.lightGray};

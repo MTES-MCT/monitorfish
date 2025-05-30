@@ -10,8 +10,8 @@ import { filterVesselsWithZone } from '@features/Vessel/useCases/VesselListV2/fi
 import { updateCustomZoneAndFilterVessels } from '@features/Vessel/useCases/VesselListV2/updateCustomZoneAndFilterVessels'
 import { useGetFilterableZonesAsTreeOptions } from '@hooks/useGetFilterableZonesAsTreeOptions'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
-import { useGetOrganizationMembershipNamesAsOptions } from '@hooks/useGetOrganizationMembershipNamesAsOptions'
 import { useGetPortsAsTreeOptions } from '@hooks/useGetPortsAsTreeOptions'
+import { useGetProducerOrganizationsAsOptions } from '@hooks/useGetProducerOrganizationsAsOptions'
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -44,7 +44,7 @@ export function FilterBar() {
   const { data: districtsAsTreeOptions } = useGetDistrictsQuery()
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const filterableZoneAsTreeOptions = useGetFilterableZonesAsTreeOptions()
-  const organizationMembershipNames = useGetOrganizationMembershipNamesAsOptions()
+  const producerOrganizations = useGetProducerOrganizationsAsOptions()
   const [searchQuery, setSearchQuery] = useState<string | undefined>(listFilterValues.searchQuery)
 
   useEffect(() => {
@@ -325,13 +325,12 @@ export function FilterBar() {
           value={listFilterValues.lastControlPeriod}
         />
         <CheckPicker
-          disabled
           isLabelHidden
           isTransparent
           label="Adhésion à une OP"
           name="producerOrganizations"
           onChange={updateProducerOrganizations}
-          options={organizationMembershipNames}
+          options={producerOrganizations}
           placeholder="Adhésion à une OP"
           popupWidth={320}
           renderValue={(_, items) => (items.length > 0 ? <SelectValue>OP ({items.length})</SelectValue> : <></>)}

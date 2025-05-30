@@ -10,6 +10,13 @@ const SET_PRODUCER_ORGANIZATION_MEMBERSHIPS_ERROR_MESSAGE = "Nous n'avons pas pu
 
 export const producerOrganizationMembershipApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
+    getDistinctProducerOrganization: builder.query<string[], void>({
+      providesTags: () => [{ type: RtkCacheTagType.ProducerOrganizationMemberships }],
+      query: () => `/producer_organization_memberships/distinct`,
+      transformErrorResponse: response =>
+        new FrontendApiError(GET_PRODUCER_ORGANIZATION_MEMBERSHIPS_ERROR_MESSAGE, response)
+    }),
+
     getProducerOrganizationMemberships: builder.query<ProducerOrganizationMembership[], void>({
       providesTags: () => [{ type: RtkCacheTagType.ProducerOrganizationMemberships }],
       query: () => `/producer_organization_memberships`,
@@ -30,4 +37,5 @@ export const producerOrganizationMembershipApi = monitorfishApi.injectEndpoints(
   })
 })
 
-export const { useGetProducerOrganizationMembershipsQuery } = producerOrganizationMembershipApi
+export const { useGetDistinctProducerOrganizationQuery, useGetProducerOrganizationMembershipsQuery } =
+  producerOrganizationMembershipApi

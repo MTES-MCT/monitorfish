@@ -51,10 +51,11 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
             rf,
             po.organizationName)
             FROM VesselProfileEntity vp
-            FULL JOIN LastPositionEntity lp
-            ON lp.internalReferenceNumber = vp.cfr
+            FULL JOIN LastPositionEntity lp ON lp.internalReferenceNumber = vp.cfr
             LEFT JOIN VesselEntity v ON v.internalReferenceNumber = vp.cfr
-            LEFT JOIN ProducerOrganizationMembershipEntity po ON po.internalReferenceNumber = vp.cfr
+            LEFT JOIN ProducerOrganizationMembershipEntity po ON
+                po.internalReferenceNumber = vp.cfr OR
+                po.internalReferenceNumber = lp.internalReferenceNumber
             LEFT JOIN RiskFactorEntity rf ON rf.cfr = vp.cfr
         """,
     )

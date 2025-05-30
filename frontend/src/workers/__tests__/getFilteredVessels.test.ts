@@ -133,6 +133,16 @@ describe('MonitorFishWebWorker.getFilteredVessels', () => {
     expect(result).toStrictEqual([])
   })
 
+  it('should filters by producerOrganizations', () => {
+    const filters = {
+      ...DEFAULT_VESSEL_LIST_FILTER_VALUES,
+      producerOrganizations: ['SA THO'],
+      vesselsLocation: []
+    }
+    const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
+    expect(result).toStrictEqual(['vessel1', 'vessel3'])
+  })
+
   it('should applies multiple filters simultaneously', () => {
     const filters = {
       countryCodes: ['US'],

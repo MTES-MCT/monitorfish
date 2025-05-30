@@ -56,6 +56,7 @@ const ActiveVesselBaseSchema = z.strictObject({
   length: z.number().optional(),
   mmsi: z.string().optional(),
   probabilityRiskFactor: z.number(),
+  producerOrganization: z.string().optional(),
   reportings: z.array(z.nativeEnum(ReportingType)),
   riskFactor: z.number(),
   segments: z.array(z.string()),

@@ -34,7 +34,7 @@ h3 = "^4.2.2"
 pypdf = "^5.4.0"
 fiona = "^1.10.1"
 clickhouse-connect = "^0.8.17"
-pyarrow = "^19.0.1"
+pyarrow = "^20.0.0"
 
 
 [tool.poetry.group.dev.dependencies]

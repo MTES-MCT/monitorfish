@@ -90,8 +90,6 @@ context('Favorite Vessel', () => {
   })
 
   it('A favorite vessel track Should be seen on the map and the global track depth Should update the track', () => {
-    cy.cleanScreenshots(2)
-
     // Given
     cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
     cy.fill('Afficher depuis', '12 heures')
@@ -105,33 +103,22 @@ context('Favorite Vessel', () => {
     cy.wait(1500)
 
     // Then
-    cy.get('.VESSELS_POINTS').toMatchImageSnapshot({
-      imageConfig: {
-        threshold: 0.05,
-        thresholdType: 'percent'
-      },
-      screenshotConfig: {
-        clip: { height: 900, width: 400, x: 300, y: 50 }
-      }
+    cy.getFeaturesFromLayer('VESSEL_TRACK').then((features) => {
+      expect(features.length).to.be.equal(4)
     })
 
     cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
     cy.fill('Afficher depuis', '1 semaine')
     cy.wait(1500)
 
-    cy.get('.VESSELS_POINTS').toMatchImageSnapshot({
-      imageConfig: {
-        threshold: 0.05,
-        thresholdType: 'percent'
-      },
-      screenshotConfig: {
-        clip: { height: 900, width: 400, x: 300, y: 50 }
-      }
+    cy.getFeaturesFromLayer('VESSEL_TRACK').then((features) => {
+      expect(features.length).to.be.equal(28)
     })
 
     cy.get('*[data-cy^="close-vessel-track"]').click({ force: true })
     cy.get('*[data-cy^="close-vessel-track"]').should('not.exist')
-
-    cy.cleanScreenshots(2)
+    cy.getFeaturesFromLayer('VESSEL_TRACK').then((features) => {
+      expect(features.length).to.be.equal(0)
+    })
   })
 })

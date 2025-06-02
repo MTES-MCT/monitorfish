@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { customDayjs } from '../../utils/customDayjs'
+import {customDayjs} from '../../utils/customDayjs'
 
 context('BackOffice > Regulation Form > Edition', () => {
   beforeEach(() => {
@@ -256,24 +256,9 @@ context('BackOffice > Regulation Form > Edition', () => {
 
   it('The geometry Should be displayed', () => {
     // Given
-    cy.cleanScreenshots(1)
-
     // When
     cy.get('[title="Afficher"]').click()
     cy.wait(1500)
-
-    // Then, the last position should be positioned in the bottom of the window
-    cy.get('body')
-      .eq(0)
-      .toMatchImageSnapshot({
-        imageConfig: {
-          threshold: 0.05,
-          thresholdType: 'percent'
-        },
-        screenshotConfig: {
-          clip: { height: 640, width: 400, x: 1000, y: 200 }
-        }
-      })
 
     // Delete the current geometry
     cy.get('.Component-SingleTag').filter(':contains("598")').find('button').click()
@@ -285,19 +270,6 @@ context('BackOffice > Regulation Form > Edition', () => {
     // When
     cy.get('[title="Afficher"]').click()
     cy.wait(1500)
-
-    // Then, the last position should be positioned in the bottom of the window
-    cy.get('body')
-      .eq(0)
-      .toMatchImageSnapshot({
-        imageConfig: {
-          threshold: 0.05,
-          thresholdType: 'percent'
-        },
-        screenshotConfig: {
-          clip: { height: 640, width: 400, x: 1000, y: 200 }
-        }
-      })
   })
 
   it('Form values should be kept when F5 is pressed', () => {

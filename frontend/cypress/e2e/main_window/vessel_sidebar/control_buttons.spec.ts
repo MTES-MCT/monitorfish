@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 
-import { openVesselBySearch } from '../utils'
+import {openVesselBySearch} from '../utils'
 
 context('Vessel sidebar controls buttons', () => {
   beforeEach(() => {
@@ -182,8 +182,6 @@ context('Vessel sidebar controls buttons', () => {
   })
 
   it('Vessel track Should fit the view box When I click on animate to track', () => {
-    cy.cleanScreenshots(1)
-
     // Given
     openVesselBySearch('Pheno')
 
@@ -192,18 +190,8 @@ context('Vessel sidebar controls buttons', () => {
     cy.wait(1500)
 
     // Then, the last position should be positioned in the bottom of the window
-    cy.get('.VESSELS_POINTS')
-      .eq(0)
-      .toMatchImageSnapshot({
-        imageConfig: {
-          threshold: 0.05,
-          thresholdType: 'percent'
-        },
-        screenshotConfig: {
-          clip: { height: 840, width: 500, x: 210, y: 0 }
-        }
-      })
-
-    cy.cleanScreenshots(1)
+    cy.getViewCenter().then((coordinates) => {
+      expect(coordinates).to.be.deep.equal([-859573.1791051632, 6070529.740170794])
+    })
   })
 })

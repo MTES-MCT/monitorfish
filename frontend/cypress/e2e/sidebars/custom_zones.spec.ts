@@ -8,20 +8,12 @@ context('Sidebars > Custom Zones', () => {
     cy.visit('/#@-9649561.29,3849836.62,7.84')
     cy.wait(500)
 
-    cy.cleanScreenshots(1)
-
     cy.get('*[title="Arbre des couches"]').click()
     cy.get('*[data-cy="custom-zones-toggle"]').click()
 
     // When it displays the zone at init
-    cy.get('.CUSTOM').toMatchImageSnapshot({
-      imageConfig: {
-        threshold: 0.05,
-        thresholdType: 'percent'
-      },
-      screenshotConfig: {
-        clip: { height: 1000, width: 600, x: 410, y: 0 }
-      }
+    cy.getFeaturesFromLayer('CUSTOM').then((features) => {
+      expect(features.length).to.be.equal(1)
     })
 
     // Display the zone from the button
@@ -32,17 +24,13 @@ context('Sidebars > Custom Zones', () => {
         const zones = JSON.parse(customZonesItem.zones)
         expect(zones['b2f8aea3-7814-4247-98fa-ddc58c922d09'].isShown).equal(false)
       })
-    cy.cleanScreenshots(1)
+    cy.getFeaturesFromLayer('CUSTOM').then((features) => {
+      expect(features.length).to.be.equal(0)
+    })
 
     cy.get('*[data-cy="custom-zone-display-button"]').click()
-    cy.get('.CUSTOM').toMatchImageSnapshot({
-      imageConfig: {
-        threshold: 0.05,
-        thresholdType: 'percent'
-      },
-      screenshotConfig: {
-        clip: { height: 1000, width: 600, x: 410, y: 0 }
-      }
+    cy.getFeaturesFromLayer('CUSTOM').then((features) => {
+      expect(features.length).to.be.equal(1)
     })
 
     cy.get('*[data-cy="custom-zone-zoom-button"]').click()

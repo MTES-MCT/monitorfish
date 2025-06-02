@@ -22,7 +22,7 @@ export default defineConfig({
     openMode: 0,
     runMode: 5
   },
-  pageLoadTimeout: 120,
+  pageLoadTimeout: 120000,
   screenshotOnRunFailure: true,
   scrollBehavior: false,
   video: false,

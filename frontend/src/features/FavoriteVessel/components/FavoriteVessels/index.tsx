@@ -8,6 +8,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
+import { sortBy } from 'lodash-es'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 
@@ -64,7 +65,7 @@ export function FavoriteVessels() {
           <Header $isFirst>Mes navires suivis</Header>
           {favorites?.length ? (
             <List>
-              {favorites.map((favoriteVessel, index) => {
+              {sortBy(favorites, favorite => favorite.vesselName).map((favoriteVessel, index) => {
                 const vesselCompositeIdentifier = getVesselCompositeIdentifier(favoriteVessel)
                 const isTrackShowed = !!Object.values(vesselsTracksShowed)?.find(
                   vessel => vessel.vesselCompositeIdentifier === vesselCompositeIdentifier

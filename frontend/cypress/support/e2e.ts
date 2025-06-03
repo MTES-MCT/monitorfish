@@ -3,19 +3,19 @@
 // https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests#Support-file
 /// <reference path="../../node_modules/@mtes-mct/monitor-ui/cypress/global.d.ts" />
 
-import 'cypress-mouse-position/commands'
-import 'cypress-plugin-snapshots/commands'
-
 import './commands'
 import './commands/dragTo'
 import './commands/login'
+import type {FeatureType} from "ol/format/WFS";
+import type {Coordinate} from "ol/coordinate";
 
 declare global {
   namespace Cypress {
     interface Chainable {
       before(property: string): string
       cleanDownloadedFiles(): void
-      cleanScreenshots(fromNumber: number): void
+      getFeaturesFromLayer(layerName: string): Cypress.Chainable<Array<FeatureType>>
+      getViewCenter(): Cypress.Chainable<Coordinate | undefined>
       countRequestsByAlias(alias: string, waitForInMs?: number): Cypress.Chainable<number>
       dragTo(
         selector: string,
@@ -38,19 +38,6 @@ declare global {
           normalizeJson: boolean
           replace: any
           name: string
-        }>
-      ): Chainable<null>
-      toMatchImageSnapshot(
-        options?: Partial<{
-          imageConfig: Partial<{
-            createDiffImage: boolean
-            threshold: number
-            thresholdType: 'percent' | 'pixels'
-            resizeDevicePixelRatio: boolean
-          }>
-          screenshotConfig: Partial<ScreenshotDefaultsOptions>
-          name: string
-          separator: string
         }>
       ): Chainable<null>
     }

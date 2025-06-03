@@ -172,6 +172,9 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         assertThat(lastPositionsWithProfiles.first().vesselProfile).isNull()
         assertThat(lastPositionsWithProfiles.first().vessel).isNull()
 
+        val vesselWithProducerOrganization = lastPositionsWithProfiles.first { it.lastPosition?.vesselId == 1 }
+        assertThat(vesselWithProducerOrganization.producerOrganization?.organizationName).isEqualTo("SA THO AN")
+
         assertThat(lastPositionsWithProfiles.last().lastPosition).isNull()
         assertThat(lastPositionsWithProfiles.last().vesselProfile).isNotNull()
         assertThat(lastPositionsWithProfiles.last().vessel).isNotNull()

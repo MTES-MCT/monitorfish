@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.vessel_group
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
@@ -138,5 +139,275 @@ class DynamicVesselGroupUTests {
 
         // Then
         assertThat(containsVessel).isTrue
+    }
+
+    @Test
+    fun `containsActiveVessel should not match a filter with producer organizations When the vessel is a last position`() {
+        // Given
+        val vessel =
+            TestUtils
+                .getDummyLastPositions()
+                .map {
+                    EnrichedActiveVessel(
+                        lastPosition = it,
+                        vesselProfile = null,
+                        vessel = null,
+                        producerOrganization = null,
+                        riskFactor = VesselRiskFactor(),
+                    )
+                }.first()
+
+        val group =
+            DynamicVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Dummy group",
+                description = "",
+                pointsOfAttention = "",
+                color = "",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.now(),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf(CountryCode.FR),
+                        districtCodes = listOf(),
+                        fleetSegments = emptyList(),
+                        emitsPositions = listOf(VesselEmitsPositions.YES),
+                        gearCodes = emptyList(),
+                        hasLogbook = null,
+                        lastControlPeriod = null,
+                        lastLandingPortLocodes = emptyList(),
+                        lastPositionHoursAgo = null,
+                        producerOrganizations = listOf("OP_NORD"),
+                        riskFactors = emptyList(),
+                        specyCodes = emptyList(),
+                        vesselSize = null,
+                        vesselsLocation = emptyList(),
+                        zones = emptyList(),
+                    ),
+            )
+
+        // When
+        val containsVessel =
+            group.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
+
+        // Then
+        assertThat(containsVessel).isFalse
+    }
+
+    @Test
+    fun `containsActiveVessel should match a filter with producer organizations When the vessel is a last position`() {
+        // Given
+        val vessel =
+            TestUtils
+                .getDummyLastPositions()
+                .map {
+                    EnrichedActiveVessel(
+                        lastPosition = it,
+                        vesselProfile = null,
+                        vessel = null,
+                        producerOrganization =
+                            ProducerOrganizationMembership(
+                                joiningDate = "2021",
+                                organizationName = "OP_NORD",
+                                internalReferenceNumber = "CFR",
+                            ),
+                        riskFactor = VesselRiskFactor(),
+                    )
+                }.first()
+
+        val group =
+            DynamicVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Dummy group",
+                description = "",
+                pointsOfAttention = "",
+                color = "",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.now(),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf(CountryCode.FR),
+                        districtCodes = listOf(),
+                        fleetSegments = emptyList(),
+                        emitsPositions = listOf(VesselEmitsPositions.YES),
+                        gearCodes = emptyList(),
+                        hasLogbook = null,
+                        lastControlPeriod = null,
+                        lastLandingPortLocodes = emptyList(),
+                        lastPositionHoursAgo = null,
+                        producerOrganizations = listOf("OP_NORD"),
+                        riskFactors = emptyList(),
+                        specyCodes = emptyList(),
+                        vesselSize = null,
+                        vesselsLocation = emptyList(),
+                        zones = emptyList(),
+                    ),
+            )
+
+        // When
+        val containsVessel =
+            group.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
+
+        // Then
+        assertThat(containsVessel).isTrue
+    }
+
+    @Test
+    fun `containsActiveVessel should match a filter with producer organizations When the vessel is not a last position`() {
+        // Given
+        val vessel =
+            TestUtils
+                .getDummyLastPositions()
+                .map {
+                    EnrichedActiveVessel(
+                        lastPosition = null,
+                        vesselProfile = DUMMY_VESSEL_PROFILE,
+                        vessel =
+                            Vessel(
+                                id = 123,
+                                internalReferenceNumber = "FR224226850",
+                                vesselName = "MY AWESOME VESSEL",
+                                flagState = CountryCode.FR,
+                                declaredFishingGears = listOf("Trémails"),
+                                vesselType = "Fishing",
+                                underCharter = true,
+                                hasLogbookEsacapt = false,
+                            ),
+                        producerOrganization =
+                            ProducerOrganizationMembership(
+                                joiningDate = "2021",
+                                organizationName = "OP_NORD",
+                                internalReferenceNumber = "CFR",
+                            ),
+                        riskFactor = VesselRiskFactor(),
+                    )
+                }.first()
+
+        val group =
+            DynamicVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Dummy group",
+                description = "",
+                pointsOfAttention = "",
+                color = "",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.now(),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf(CountryCode.FR),
+                        districtCodes = listOf(),
+                        fleetSegments = emptyList(),
+                        emitsPositions = emptyList(),
+                        gearCodes = emptyList(),
+                        hasLogbook = null,
+                        lastControlPeriod = null,
+                        lastLandingPortLocodes = emptyList(),
+                        lastPositionHoursAgo = null,
+                        producerOrganizations = listOf("OP_NORD"),
+                        riskFactors = emptyList(),
+                        specyCodes = emptyList(),
+                        vesselSize = null,
+                        vesselsLocation = emptyList(),
+                        zones = emptyList(),
+                    ),
+            )
+
+        // When
+        val containsVessel =
+            group.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
+
+        // Then
+        assertThat(containsVessel).isTrue
+    }
+
+    @Test
+    fun `containsActiveVessel should not match a filter with producer organizations When the vessel is not a last position`() {
+        // Given
+        val vessel =
+            TestUtils
+                .getDummyLastPositions()
+                .map {
+                    EnrichedActiveVessel(
+                        lastPosition = null,
+                        vesselProfile = DUMMY_VESSEL_PROFILE,
+                        vessel =
+                            Vessel(
+                                id = 123,
+                                internalReferenceNumber = "FR224226850",
+                                vesselName = "MY AWESOME VESSEL",
+                                flagState = CountryCode.FR,
+                                declaredFishingGears = listOf("Trémails"),
+                                vesselType = "Fishing",
+                                underCharter = true,
+                                hasLogbookEsacapt = false,
+                            ),
+                        producerOrganization = null,
+                        riskFactor = VesselRiskFactor(),
+                    )
+                }.first()
+
+        val group =
+            DynamicVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Dummy group",
+                description = "",
+                pointsOfAttention = "",
+                color = "",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.now(),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf(CountryCode.FR),
+                        districtCodes = listOf(),
+                        fleetSegments = emptyList(),
+                        emitsPositions = emptyList(),
+                        gearCodes = emptyList(),
+                        hasLogbook = null,
+                        lastControlPeriod = null,
+                        lastLandingPortLocodes = emptyList(),
+                        lastPositionHoursAgo = null,
+                        producerOrganizations = listOf("OP_NORD"),
+                        riskFactors = emptyList(),
+                        specyCodes = emptyList(),
+                        vesselSize = null,
+                        vesselsLocation = emptyList(),
+                        zones = emptyList(),
+                    ),
+            )
+
+        // When
+        val containsVessel =
+            group.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
+
+        // Then
+        assertThat(containsVessel).isFalse
     }
 }

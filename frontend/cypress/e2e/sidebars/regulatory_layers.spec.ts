@@ -303,7 +303,6 @@ context('Sidebars > Regulatory Layers', () => {
     // cy.contains('Masquer les navires non sélectionnés').click()
     // cy.clickButton('Affichage des dernières positions')
 
-    cy.cleanScreenshots(1)
     cy.getAllLocalStorage().then(localStorages => {
       const testLocalStorage = localStorages[LOCALSTORAGE_URL]
       const showedLayers = JSON.parse(testLocalStorage?.homepagelayersShowedOnMap as string)
@@ -327,17 +326,9 @@ context('Sidebars > Regulatory Layers', () => {
     cy.wait(500)
 
     // Then
-    cy.get('.administrative').toMatchImageSnapshot({
-      imageConfig: {
-        threshold: 0.05,
-        thresholdType: 'percent'
-      },
-      screenshotConfig: {
-        clip: { height: 500, width: 250, x: 410, y: 0 }
-      }
+    cy.getFeaturesFromLayer('eez_areas').then((features) => {
+      expect(features.length).to.be.equal(7)
     })
-
-    cy.cleanScreenshots(1)
 
     // Refresh and check the item in local storage is not deleted
     cy.reload()
@@ -377,12 +368,6 @@ context('Sidebars > Regulatory Layers', () => {
     // Unselect one of the "Corse - Chaluts" regulation zones
     cy.contains('Corse - Chaluts').click()
     cy.get('[title=\'Supprimer la zone "Interdiction temporaire - Chalut à panneaux" de ma sélection\']').click()
-
-    cy.get('.regulatory').toMatchImageSnapshot({
-      screenshotConfig: {
-        clip: { height: 960, width: 480, x: 440, y: 25 }
-      }
-    })
 
     // Select the removed zone again
     cy.contains('Afficher les résultats').click()

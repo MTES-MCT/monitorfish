@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.use_cases.producer_organization_membership.GetAllProducerOrganizationMemberships
+import fr.gouv.cnsp.monitorfish.domain.use_cases.producer_organization_membership.GetDistinctProducerOrganizations
 import fr.gouv.cnsp.monitorfish.domain.use_cases.producer_organization_membership.SetProducerOrganizationMemberships
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ProducerOrganizationMembershipDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ProducerOrganizationMembershipDataOutput
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*
 class ProducerOrganizationMembershipController(
     private val setProducerOrganizationMemberships: SetProducerOrganizationMemberships,
     private val getAllProducerOrganizationMemberships: GetAllProducerOrganizationMemberships,
+    private val getDistinctProducerOrganizations: GetDistinctProducerOrganizations,
 ) {
     @GetMapping("")
     @Operation(summary = "Get all Producer Organization memberships")
@@ -22,6 +24,10 @@ class ProducerOrganizationMembershipController(
         getAllProducerOrganizationMemberships
             .execute()
             .map { ProducerOrganizationMembershipDataOutput.fromProducerOrganizationMembership(it) }
+
+    @GetMapping("/distinct")
+    @Operation(summary = "Get distinct Producer Organizations")
+    fun getDistinct(): List<String> = getDistinctProducerOrganizations.execute()
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = [""], consumes = ["application/json"])

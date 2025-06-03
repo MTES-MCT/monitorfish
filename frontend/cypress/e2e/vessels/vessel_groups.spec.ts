@@ -79,7 +79,8 @@ context('Vessel groups', () => {
     })
 
     // Add a custom zone
-    cy.fill('Filtrer les navires avec une zone', ['Zone manuelle'])
+    cy.get('div[id="zones"]').click({ force: true })
+    cy.get('input[name="custom_zone"]').click({ force: true })
     cy.get('body').click(490, 580)
     cy.get('body').click(420, 635)
     cy.get('body').dblclick(560, 620)

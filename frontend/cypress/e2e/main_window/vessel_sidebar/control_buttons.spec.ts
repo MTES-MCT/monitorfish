@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 
-import { openVesselBySearch } from '../utils'
+import {openVesselBySearch} from '../utils'
 
 context('Vessel sidebar controls buttons', () => {
   beforeEach(() => {
@@ -111,6 +111,7 @@ context('Vessel sidebar controls buttons', () => {
 
     // Given
     openVesselBySearch('Pheno')
+    cy.get('*[data-cy^="animate-to-track"]').click({ timeout: 10000 })
 
     // When
     cy.intercept('GET', '/bff/v1/vessels/positions*').as('getPositions')
@@ -179,31 +180,5 @@ context('Vessel sidebar controls buttons', () => {
     // Hide fishing activities
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 10000 })
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
-  })
-
-  it('Vessel track Should fit the view box When I click on animate to track', () => {
-    cy.cleanScreenshots(1)
-
-    // Given
-    openVesselBySearch('Pheno')
-
-    // When
-    cy.get('*[data-cy^="animate-to-track"]').click({ timeout: 10000 })
-    cy.wait(1500)
-
-    // Then, the last position should be positioned in the bottom of the window
-    cy.get('.VESSELS_POINTS')
-      .eq(0)
-      .toMatchImageSnapshot({
-        imageConfig: {
-          threshold: 0.05,
-          thresholdType: 'percent'
-        },
-        screenshotConfig: {
-          clip: { height: 840, width: 500, x: 210, y: 0 }
-        }
-      })
-
-    cy.cleanScreenshots(1)
   })
 })

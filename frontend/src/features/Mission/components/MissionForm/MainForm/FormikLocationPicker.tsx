@@ -12,10 +12,11 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, Fieldset, Icon, IconButton, Label, Level, THEME } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
+import { debounce } from 'lodash-es'
 import { boundingExtent } from 'ol/extent'
 import { transformExtent } from 'ol/proj'
 import { remove } from 'ramda'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useGetMainFormFormikUsecases } from '../hooks/useGetMainFormFormikUsecases'
@@ -108,6 +109,22 @@ export function FormikLocationPicker() {
     [drawedGeometry]
   )
 
+  const debouncedBanner = useMemo(
+    () =>
+      debounce(() => {
+        dispatch(
+          addSideWindowBanner({
+            children: 'Une zone de mission a été modifiée à partir des contrôles de la mission',
+            closingDelay: 3000,
+            isClosable: true,
+            level: Level.SUCCESS,
+            withAutomaticClosing: true
+          })
+        )
+      }, 500),
+    [dispatch]
+  )
+
   /**
    * We use `geometryComputedFromControls` to dispatch the mission geometry computed
    * in the control form as the Formik's <ActionForm/> can't access the context of Formik's <MainForm/>
@@ -121,15 +138,7 @@ export function FormikLocationPicker() {
       setFieldValue('geom', geometryComputedFromControls)
 
       if (geometryComputedFromControls.coordinates?.length) {
-        dispatch(
-          addSideWindowBanner({
-            children: 'Une zone de mission a été modifiée à partir des contrôles de la mission',
-            closingDelay: 3000,
-            isClosable: true,
-            level: Level.SUCCESS,
-            withAutomaticClosing: true
-          })
-        )
+        debouncedBanner()
       }
 
       dispatch(missionFormActions.unsetGeometryComputedFromControls())

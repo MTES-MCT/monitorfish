@@ -218,6 +218,25 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findCurrentInfractionSuspicionsByVesselId Should return current reportings`() {
+        // When
+        val reporting =
+            jpaReportingRepository.findCurrentInfractionSuspicionsByVesselId(
+                123456,
+            )
+
+        // Then
+        assertThat(reporting).hasSize(1)
+
+        assertThat(reporting.first().internalReferenceNumber).isEqualTo("ABC000180832")
+        assertThat(reporting.first().isArchived).isEqualTo(false)
+        assertThat(reporting.first().isDeleted).isEqualTo(false)
+        val alertTwo = reporting.first().value as ThreeMilesTrawlingAlert
+        assertThat(alertTwo.seaFront).isEqualTo("NAMO")
+    }
+
+    @Test
+    @Transactional
     fun `archive Should set the archived flag as true`() {
         // Given
         val reportingToArchive =

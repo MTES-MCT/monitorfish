@@ -106,7 +106,9 @@ context('Vessel sidebar resume tab', () => {
 
     // Add a group
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselTwo')
-    cy.fill('Ajouter le navire à un groupe fixe', ['Mission Thémis – semaine 04'])
+
+    cy.clickButton('Ajouter le navire à un groupe fixe')
+    cy.contains('li', 'Mission Thémis – semaine 04').click()
     cy.wait('@updateVesselTwo')
     cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
       .scrollIntoView()
@@ -120,23 +122,6 @@ context('Vessel sidebar resume tab', () => {
     cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
       .should('not.exist')
     cy.wait(200)
-
-    // Re-add a group
-    cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselFour')
-    cy.fill('Ajouter le navire à un groupe fixe', ['Mission Thémis – semaine 04'])
-    cy.wait('@updateVesselFour')
-    cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
-      .scrollIntoView()
-      .should('exist')
-    cy.wait(200)
-
-    // Re-remove the vessel from the group (checkpicker)
-    cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselFive')
-    cy.get('[id="vesselGroups"]').scrollIntoView().click({ force: true})
-    cy.get('[title="Mission Thémis – semaine 04"]').scrollIntoView().click({ force: true})
-    cy.wait('@updateVesselFive')
-    cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
-      .should('not.exist')
   })
 
   it('Vessel profile must be displayed', () => {

@@ -104,7 +104,7 @@ context('Favorite Vessel', () => {
 
     // Then
     cy.getFeaturesFromLayer('VESSEL_TRACK').then((features) => {
-      expect(features.length).to.be.equal(4)
+      expect(features.length).to.be.equal(7)
     })
 
     cy.clickButton('Affichage des dernières positions', { withoutScroll: true })

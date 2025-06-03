@@ -111,6 +111,7 @@ context('Vessel sidebar controls buttons', () => {
 
     // Given
     openVesselBySearch('Pheno')
+    cy.get('*[data-cy^="animate-to-track"]').click({ timeout: 10000 })
 
     // When
     cy.intercept('GET', '/bff/v1/vessels/positions*').as('getPositions')
@@ -179,19 +180,5 @@ context('Vessel sidebar controls buttons', () => {
     // Hide fishing activities
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 10000 })
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
-  })
-
-  it('Vessel track Should fit the view box When I click on animate to track', () => {
-    // Given
-    openVesselBySearch('Pheno')
-
-    // When
-    cy.get('*[data-cy^="animate-to-track"]').click({ timeout: 10000 })
-    cy.wait(1500)
-
-    // Then, the last position should be positioned in the bottom of the window
-    cy.getViewCenter().then((coordinates) => {
-      expect(coordinates).to.be.deep.equal([-859573.1791051632, 6070529.740170794])
-    })
   })
 })

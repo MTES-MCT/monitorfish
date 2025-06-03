@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from enum import Enum
 from typing import List
 
 import pytz
@@ -7,10 +8,42 @@ from prefect import task
 from src.pipeline.helpers import dates
 
 
+class TimeUnit(Enum):
+    YEAR = "YEAR"
+    MONTH = "MONTH"
+    DAY = "DAY"
+    HOUR = "HOUR"
+    MINUTE = "MINUTE"
+    SECOND = "SECOND"
+
+
 @task(checkpoint=False)
 def get_utcnow():
     """Task version of `datetime.utcnow`"""
     return datetime.utcnow()
+
+
+@task(checkpoint=False)
+def date_trunc(d: datetime, unit: str):
+    time_unit = TimeUnit(unit)
+
+    if time_unit == TimeUnit.SECOND:
+        return d.replace(microsecond=0)
+
+    if time_unit == TimeUnit.MINUTE:
+        return d.replace(second=0, microsecond=0)
+
+    if time_unit == TimeUnit.HOUR:
+        return d.replace(minute=0, second=0, microsecond=0)
+
+    if time_unit == TimeUnit.DAY:
+        return d.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    if time_unit == TimeUnit.MONTH:
+        return d.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+
+    if time_unit == TimeUnit.YEAR:
+        return d.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
 
 
 @task(checkpoint=False)

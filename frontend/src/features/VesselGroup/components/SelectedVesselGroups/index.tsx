@@ -1,11 +1,11 @@
 import { Square } from '@features/Regulation/components/ZonePreview'
 import { useGetAllVesselGroupsQuery } from '@features/VesselGroup/apis'
-import { addOrRemoveVesselToGroupFromCheckPicker } from '@features/VesselGroup/components/SelectedVesselGroups/useCases/addOrRemoveVesselToGroupFromCheckPicker'
+import { addVesselToGroupFromDropdown } from '@features/VesselGroup/components/SelectedVesselGroups/useCases/addVesselToGroupFromDropdown'
 import { removeVesselFromGroup } from '@features/VesselGroup/components/SelectedVesselGroups/useCases/removeVesselFromGroup'
 import { type FixedVesselGroup, GroupType } from '@features/VesselGroup/types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, CheckPicker, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Dropdown, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 export function SelectedVesselGroups() {
@@ -13,13 +13,13 @@ export function SelectedVesselGroups() {
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const { data: vesselGroups } = useGetAllVesselGroupsQuery()
 
+  const currentVesselGroupIds = selectedVessel?.groups?.map(group => group.id) ?? []
   const vesselsGroupsAsOptions = vesselGroups
-    ?.filter(group => group.type === GroupType.FIXED)
+    ?.filter(group => group.type === GroupType.FIXED && !currentVesselGroupIds.includes(group.id))
     ?.map(group => ({
       label: group.name,
-      value: group.id
+      value: group as FixedVesselGroup
     }))
-  const currentVesselGroupIds = selectedVessel?.groups?.map(group => group.id)
 
   return (
     <Wrapper>
@@ -43,27 +43,36 @@ export function SelectedVesselGroups() {
           />
         </Row>
       ))}
+
       {!selectedVessel?.groups?.length && <EmptyGroups>Aucun groupe</EmptyGroups>}
-      <StyledCheckPicker
-        cleanable={false}
-        isLabelHidden
-        isTransparent
-        label="Ajouter le navire à un groupe fixe"
-        name="vesselGroups"
-        onChange={nextGroups => dispatch(addOrRemoveVesselToGroupFromCheckPicker(currentVesselGroupIds, nextGroups))}
-        options={vesselsGroupsAsOptions}
-        placeholder="Ajouter le navire à un groupe fixe"
-        placement="topStart"
-        renderValue={() => <>Ajouter le navire à un groupe fixe</>}
-        searchable
-        value={currentVesselGroupIds}
-      />
+      <DropdownWrapper>
+        <StyledDropdown
+          disabled={!vesselsGroupsAsOptions?.length}
+          Icon={Icon.Plus}
+          placement="topStart"
+          title="Ajouter le navire à un groupe fixe"
+        >
+          {vesselsGroupsAsOptions?.map(group => (
+            <Dropdown.Item onClick={() => dispatch(addVesselToGroupFromDropdown(group.value))}>
+              {group.label}
+            </Dropdown.Item>
+          ))}
+        </StyledDropdown>
+      </DropdownWrapper>
     </Wrapper>
   )
 }
 
-const StyledCheckPicker = styled(CheckPicker)`
+const DropdownWrapper = styled.div`
   margin: 16px 24px;
+
+  button {
+    width: 100%;
+  }
+`
+
+const StyledDropdown = styled(Dropdown)`
+  width: 100%;
 `
 
 const EmptyGroups = styled.div`

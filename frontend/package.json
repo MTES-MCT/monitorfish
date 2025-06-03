@@ -120,7 +120,7 @@
     "@vitejs/plugin-react": "4.4.1",
     "assert": "2.1.0",
     "codecov": "3.8.3",
-    "cypress": "14.3.2",
+    "cypress": "14.4.0",
     "cypress-mouse-position": "1.0.0",
     "dotenv": "16.5.0",
     "eslint": "8.57.1",

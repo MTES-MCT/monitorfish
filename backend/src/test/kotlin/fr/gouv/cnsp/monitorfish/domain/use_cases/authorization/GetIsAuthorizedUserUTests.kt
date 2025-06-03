@@ -19,7 +19,12 @@ class GetIsAuthorizedUserUTests {
     @Test
     fun `execute Should return true When the user is found and super-user When the path is super-user protected`() {
         given(userAuthorizationRepository.findByHashedEmail(any())).willReturn(
-            UserAuthorization("58GE5S8VXE871FGGd2", true),
+            UserAuthorization(
+                hashedEmail = "58GE5S8VXE871FGGd2",
+                isSuperUser = true,
+                service = null,
+                isAdministrator = false,
+            ),
         )
 
         // When
@@ -36,7 +41,12 @@ class GetIsAuthorizedUserUTests {
     @Test
     fun `execute Should return false When the user is found but not super-user When the path is super-user protected`() {
         given(userAuthorizationRepository.findByHashedEmail(any())).willReturn(
-            UserAuthorization("58GE5S8VXE871FGGd2", false),
+            UserAuthorization(
+                hashedEmail = "58GE5S8VXE871FGGd2",
+                isSuperUser = false,
+                service = null,
+                isAdministrator = false,
+            ),
         )
 
         // When

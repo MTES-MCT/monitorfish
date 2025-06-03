@@ -40,7 +40,14 @@ class UserManagementControllerITests {
             .perform(
                 post("/api/v1/authorization/management")
                     .content(
-                        objectMapper.writeValueAsString(AddUserDataInput("dummy@email.com", true)),
+                        objectMapper.writeValueAsString(
+                            AddUserDataInput(
+                                email = "dummy@email.com",
+                                isSuperUser = true,
+                                service = null,
+                                isAdministrator = false,
+                            ),
+                        ),
                     ).contentType(MediaType.APPLICATION_JSON),
             )
             // Then

@@ -18,7 +18,7 @@ class JpaUserAuthorizationRepository(
 
     @Modifying
     override fun save(user: UserAuthorization) {
-        dbUserAuthorizationRepository.save(UserAuthorizationEntity.fromUserAuthorization(user))
+        dbUserAuthorizationRepository.saveUserAuthorization(UserAuthorizationEntity.fromUserAuthorization(user))
     }
 
     @Modifying

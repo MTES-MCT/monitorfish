@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.hash
 import org.assertj.core.api.Assertions.assertThat
@@ -23,6 +24,8 @@ class JpaUserAuthorisationRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(user.isSuperUser).isEqualTo(true)
+        assertThat(user.service).isEqualTo(CnspService.POLE_OPS_METROPOLE)
+        assertThat(user.isAdministrator).isEqualTo(true)
     }
 
     @Test
@@ -32,7 +35,14 @@ class JpaUserAuthorisationRepositoryITests : AbstractDBTests() {
         val email = hash("another_new_dummy@email.gouv.fr")
 
         // When
-        jpaUserAuthorizationRepository.save(UserAuthorization(email, true))
+        jpaUserAuthorizationRepository.save(
+            UserAuthorization(
+                hashedEmail = email,
+                isSuperUser = true,
+                service = CnspService.POLE_OPS_METROPOLE,
+                isAdministrator = false,
+            ),
+        )
 
         // Then
         val user = jpaUserAuthorizationRepository.findByHashedEmail(email)
@@ -44,7 +54,14 @@ class JpaUserAuthorisationRepositoryITests : AbstractDBTests() {
     fun `delete Should delete a user`() {
         // Given
         val email = hash("another_new_dummy@email.gouv.fr")
-        jpaUserAuthorizationRepository.save(UserAuthorization(email, true))
+        jpaUserAuthorizationRepository.save(
+            UserAuthorization(
+                hashedEmail = email,
+                isSuperUser = true,
+                service = CnspService.POLE_OPS_METROPOLE,
+                isAdministrator = false,
+            ),
+        )
 
         // When
         jpaUserAuthorizationRepository.delete(email)

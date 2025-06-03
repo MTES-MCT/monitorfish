@@ -320,7 +320,7 @@ jobs:
         uses: getsentry/action-release@v3
         with:
           environment: ${{ env.ENV_PROFILE }}
-          version: ${{ env.VERSION }}
+          release: ${{ env.VERSION }}
           sourcemaps: ./frontend_build
           ignore_missing: true
           ignore_empty: true

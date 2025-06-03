@@ -3,6 +3,7 @@ from enum import Enum
 from typing import List
 
 import pytz
+from dateutil.relativedelta import relativedelta
 from prefect import task
 
 from src.pipeline.helpers import dates
@@ -61,6 +62,12 @@ def get_timezone_aware_utcnow():
 def make_timedelta(**kwargs) -> timedelta:
     """Task version of `datetime.timedelta`"""
     return timedelta(**kwargs)
+
+
+@task(checkpoint=False)
+def make_relativedelta(**kwargs) -> timedelta:
+    """Task version of `dateutil.relativedelta`"""
+    return relativedelta(**kwargs)
 
 
 @task(checkpoint=False)

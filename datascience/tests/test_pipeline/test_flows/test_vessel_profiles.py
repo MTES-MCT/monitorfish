@@ -31,6 +31,7 @@ def expected_vessel_profiles():
             "species": [
                 {
                     "ABC": 0.7995522507395858,
+                    "BFT": 0.0,
                     "BSS": 0.0031982090029583432,
                     "COD": 0.00019988806268489645,
                     "DEF": 0.08795074758135445,
@@ -64,17 +65,14 @@ def expected_vessel_profiles():
             ],
             "segments": [
                 {
+                    "L": 0.005836731430398976,
+                    "T8-9": 0.06288478452066842,
+                    "L BFT": 0.00019988806268489645,
+                    "L HKE": 0.000679619413128648,
+                    "T8-PEL": 0.019988806268489645,
                     "NO_SEGMENT": 0.9104101703046295,
-                    "L_current_year": 0.005836731430398976,
-                    "T8-9_current_year": 0.06288478452066842,
-                    "L BFT_current_year": 0.00019988806268489645,
-                    "L HKE_current_year": 0.000679619413128648,
-                    "T8-PEL_current_year": 0.019988806268489645,
                 },
-                {
-                    "NO_SEGMENT": 0.06329113924050633,
-                    "FT_current_year": 0.9367088607594937,
-                },
+                {"FT": 0.9367088607594937, "NO_SEGMENT": 0.06329113924050633},
             ],
             "landing_ports": [{"FRXXX": 1.0}, {"FRLEH": 1.0}],
             "recent_gears": [{"LLS": 0.5, "OTB": 0.5}, None],
@@ -89,26 +87,10 @@ def expected_vessel_profiles():
                 None,
             ],
             "recent_fao_areas": [{"27.7.a": 0.5, "27.8.a": 0.5}, None],
-            "recent_segments": [
-                {"NO_SEGMENT": 0.25, "L_current_year": 0.5, "T8-9_current_year": 0.25},
-                None,
-            ],
+            "recent_segments": [{"L": 0.5, "T8-9": 0.25, "NO_SEGMENT": 0.25}, None],
             "recent_landing_ports": [{"FRXXX": 1.0}, {"FRLEH": 1.0}],
             "latest_landing_port": ["FRXXX", "FRLEH"],
-            "latest_landing_facade": ["Hors façade", "Hors façade"],
-            "recent_gear_onboard": [
-                [{"gear": "LLS", "mesh": None}, {"gear": "OTB", "mesh": 80.0}],
-                None,
-            ],
-            "gear_onboard": [
-                [
-                    {"gear": "LLS", "mesh": None},
-                    {"gear": "OTB", "mesh": 90.0},
-                    {"gear": "OTM", "mesh": 80.0},
-                    {"gear": "OTB", "mesh": 80.0},
-                ],
-                [{"gear": "OTB", "mesh": 90.0}],
-            ],
+            "latest_landing_facade": ["Hors façade", "SA"],
         }
     )
 

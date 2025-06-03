@@ -41,6 +41,7 @@ data class VesselRiskFactor(
     val speciesOnboard: List<Species> = listOf(),
     val totalWeightOnboard: Double = 0.0,
     val segments: List<String> = listOf(),
+    val probableSegments: List<String>? = listOf(),
     val segmentHighestImpact: String? = null,
     val segmentHighestPriority: String? = null,
     val lastControlDatetime: ZonedDateTime? = null,
@@ -51,13 +52,6 @@ data class VesselRiskFactor(
     val numberGearSeizuresLastFiveYears: Short = 0,
     val numberSpeciesSeizuresLastFiveYears: Short = 0,
     val numberVesselSeizuresLastFiveYears: Short = 0,
-    val recentSegmentsImpactRiskFactor: Double = defaultImpactRiskFactor,
-    val recentSegmentsDetectabilityRiskFactor: Double = defaultDetectabilityRiskFactor,
-    val recentSegmentsRiskFactor: Double = defaultRiskFactor,
-    val recentSegments: List<String> = listOf(),
-    val recentSegmentHighestImpact: String? = null,
-    val recentSegmentHighestPriority: String? = null,
-    val recentControlPriorityLevel: Double = controlPriorityLevelCoefficient,
 ) {
     fun isInGroup(
         vesselGroup: VesselGroupBase,

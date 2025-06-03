@@ -1,21 +1,14 @@
 from pathlib import Path
 
-import duckdb
 import pandas as pd
 import prefect
 from prefect import Flow, case, task
 from prefect.executors import LocalDaskExecutor
 
 from config import default_risk_factors, risk_factor_coefficients
-from src.pipeline.entities.vessel_profiles import VesselProfileType
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import join_on_multiple_keys
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
-from src.pipeline.shared_tasks.dates import get_current_year
-from src.pipeline.shared_tasks.segments import (
-    extract_control_priorities,
-    extract_segments_of_year,
-)
 
 
 @task(checkpoint=False)
@@ -23,114 +16,6 @@ def extract_current_segments():
     return extract(
         db_name="monitorfish_remote", query_filepath="monitorfish/current_segments.sql"
     )
-
-
-@task(checkpoint=False)
-def extract_recent_segments():
-    return extract(
-        db_name="monitorfish_remote", query_filepath="monitorfish/recent_segments.sql"
-    )
-
-
-@task(checkpoint=False)
-def extract_usual_segments():
-    return extract(
-        db_name="monitorfish_remote", query_filepath="monitorfish/usual_segments.sql"
-    )
-
-
-@task(checkpoint=False)
-def compute_profile_segments_impact_and_priority(
-    profile_segments: pd.DataFrame,
-    segments: pd.DataFrame,
-    control_priorities: pd.DataFrame,
-    profile_type: VesselProfileType,
-) -> pd.DataFrame:
-    segments_column = f"{profile_type.risk_factors_prefix}segments"
-    segment_highest_impact_column = (
-        f"{profile_type.risk_factors_prefix}segment_highest_impact"
-    )
-    impact_risk_factor_column = (
-        f"{profile_type.risk_factors_prefix}segments_impact_risk_factor"
-    )
-    segment_highest_priority_column = (
-        f"{profile_type.risk_factors_prefix}segment_highest_priority"
-    )
-    control_priority_level_column = (
-        f"{profile_type.risk_factors_prefix}segments_control_priority_level"
-    )
-    gear_onboard_column = f"{profile_type.risk_factors_prefix}gear_onboard"
-
-    segments_impact_dict = (
-        segments[["segment", "impact_risk_factor"]]
-        .set_index("segment")
-        .to_dict()["impact_risk_factor"]
-    )
-    unnested_profile_segments = profile_segments.explode("segments").rename(
-        columns={"segments": "segment"}
-    )[["vessel_id", "cfr", "segment", "facade"]]
-    unnested_profile_segments[
-        "impact_risk_factor"
-    ] = unnested_profile_segments.segment.map(segments_impact_dict)
-    unnested_profile_segments = unnested_profile_segments.dropna(
-        subset=["impact_risk_factor"]
-    ).reset_index(drop=True)
-
-    profile_segments_impact = (
-        unnested_profile_segments.sort_values("impact_risk_factor", ascending=False)
-        .groupby("cfr")[["cfr", "segment", "impact_risk_factor"]]
-        .head(1)
-        .set_index("cfr")
-        .rename(
-            columns={
-                "segment": segment_highest_impact_column,
-                "impact_risk_factor": impact_risk_factor_column,
-            }
-        )
-    )
-
-    profile_segments_control_priorities = (
-        pd.merge(
-            unnested_profile_segments, control_priorities, on=["segment", "facade"]
-        )
-        .sort_values("control_priority_level", ascending=False)
-        .groupby("cfr")[["cfr", "segment", "control_priority_level"]]
-        .head(1)
-        .set_index("cfr")
-        .rename(
-            columns={
-                "segment": segment_highest_priority_column,
-                "control_priority_level": control_priority_level_column,
-            }
-        )
-    )
-
-    res = (
-        profile_segments.rename(columns={"segments": segments_column})
-        .set_index("cfr")
-        .join(profile_segments_impact)
-        .join(profile_segments_control_priorities)
-        .rename(columns={"gear_onboard": gear_onboard_column})
-        .reset_index()
-    )
-
-    res = res[
-        [
-            "cfr",
-            "vessel_id",
-            "ircs",
-            "external_immatriculation",
-            gear_onboard_column,
-            segments_column,
-            segment_highest_impact_column,
-            impact_risk_factor_column,
-            segment_highest_priority_column,
-            control_priority_level_column,
-        ]
-    ]
-    res[segments_column] = res[segments_column].map(lambda d: list(d.keys()))
-
-    return res
 
 
 @task(checkpoint=False)
@@ -143,59 +28,12 @@ def extract_control_anteriority():
 
 
 @task(checkpoint=False)
-def merge(
-    current_segments: pd.DataFrame,
-    recent_segments: pd.DataFrame,
-    usual_segments: pd.DataFrame,
-) -> pd.DataFrame:
-    merged_segments = duckdb.sql(
-        """
-        SELECT
-            COALESCE(cs.cfr, rs.cfr, us.cfr) AS cfr,
-            COALESCE(cs.vessel_id, rs.vessel_id, us.vessel_id) AS vessel_id,
-            COALESCE(cs.ircs, rs.ircs, us.ircs) AS ircs,
-            COALESCE(cs.external_immatriculation, rs.external_immatriculation, us.external_immatriculation) AS external_immatriculation,
-            cs.last_logbook_message_datetime_utc,
-            cs.departure_datetime_utc,
-            cs.trip_number,
-            cs.gear_onboard,
-            cs.species_onboard,
-            cs.segments,
-            cs.total_weight_onboard,
-            cs.impact_risk_factor,
-            cs.control_priority_level,
-            cs.segment_highest_impact,
-            cs.segment_highest_priority,
-            rs.recent_gear_onboard,
-            rs.recent_segments,
-            rs.recent_segment_highest_impact,
-            rs.recent_segments_impact_risk_factor,
-            rs.recent_segment_highest_priority,
-            rs.recent_segments_control_priority_level,
-            us.usual_gear_onboard,
-            us.usual_segments,
-            us.usual_segment_highest_impact,
-            us.usual_segments_impact_risk_factor,
-            us.usual_segment_highest_priority,
-            us.usual_segments_control_priority_level
-        FROM current_segments cs
-        FULL OUTER JOIN recent_segments rs
-        ON cs.cfr = rs.cfr
-        FULL OUTER JOIN usual_segments us
-        ON rs.cfr = us.cfr
-    """
-    ).to_df()
-
-    return merged_segments
-
-
-@task(checkpoint=False)
 def compute_risk_factors(
-    merged_segments: pd.DataFrame, control_anteriority: pd.DataFrame
+    current_segments: pd.DataFrame, control_anteriority: pd.DataFrame
 ):
     risk_factors = join_on_multiple_keys(
         control_anteriority,
-        merged_segments,
+        current_segments,
         # Matching on CFR is required for vessels that no longer reside in the
         # `vessels` table and therefore have no `vessel_id` in the `current_segments`
         # DataFrame but have a control history and therefore have a non null
@@ -238,14 +76,6 @@ def compute_risk_factors(
         risk_factors["control_rate_risk_factor"]
         * risk_factors["control_priority_level"]
     ) ** 0.5
-    risk_factors["recent_segments_detectability_risk_factor"] = (
-        risk_factors["control_rate_risk_factor"]
-        * risk_factors["recent_segments_control_priority_level"]
-    ) ** 0.5
-    risk_factors["usual_segments_detectability_risk_factor"] = (
-        risk_factors["control_rate_risk_factor"]
-        * risk_factors["usual_segments_control_priority_level"]
-    ) ** 0.5
 
     risk_factors["risk_factor"] = (
         (risk_factors["impact_risk_factor"] ** risk_factor_coefficients["impact"])
@@ -255,34 +85,6 @@ def compute_risk_factors(
         )
         * (
             risk_factors["detectability_risk_factor"]
-            ** risk_factor_coefficients["detectability"]
-        )
-    )
-    risk_factors["recent_segments_risk_factor"] = (
-        (
-            risk_factors["recent_segments_impact_risk_factor"]
-            ** risk_factor_coefficients["impact"]
-        )
-        * (
-            risk_factors["probability_risk_factor"]
-            ** risk_factor_coefficients["probability"]
-        )
-        * (
-            risk_factors["recent_segments_detectability_risk_factor"]
-            ** risk_factor_coefficients["detectability"]
-        )
-    )
-    risk_factors["usual_segments_risk_factor"] = (
-        (
-            risk_factors["usual_segments_impact_risk_factor"]
-            ** risk_factor_coefficients["impact"]
-        )
-        * (
-            risk_factors["probability_risk_factor"]
-            ** risk_factor_coefficients["probability"]
-        )
-        * (
-            risk_factors["usual_segments_detectability_risk_factor"]
             ** risk_factor_coefficients["detectability"]
         )
     )
@@ -298,6 +100,14 @@ def compute_risk_factors(
             "number_vessel_seizures_last_5_years": int,
         }
     )
+
+    def float_or_na_to_str(float_or_na) -> str:
+        if pd.isna(float_or_na):
+            return ""
+        else:
+            return str(int(float_or_na))
+
+    risk_factors["vessel_id"] = risk_factors.vessel_id.map(float_or_na_to_str)
 
     return risk_factors
 
@@ -316,7 +126,7 @@ def load_risk_factors(risk_factors: pd.DataFrame):
         schema="public",
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
-        pg_array_columns=["segments", "recent_segments", "usual_segments"],
+        pg_array_columns=["segments"],
         jsonb_columns=[
             "gear_onboard",
             "species_onboard",
@@ -324,10 +134,7 @@ def load_risk_factors(risk_factors: pd.DataFrame):
             "last_control_gear_infractions",
             "last_control_species_infractions",
             "last_control_other_infractions",
-            "recent_gear_onboard",
-            "usual_gear_onboard",
         ],
-        nullable_integer_columns=["vessel_id"],
         how="replace",
     )
 
@@ -335,21 +142,9 @@ def load_risk_factors(risk_factors: pd.DataFrame):
 with Flow("Risk factor", executor=LocalDaskExecutor()) as flow:
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-        current_year = get_current_year()
-        control_priorities = extract_control_priorities()
-        segments = extract_segments_of_year(current_year)
         current_segments = extract_current_segments()
-        recent_segments = extract_recent_segments()
-        usual_segments = extract_usual_segments()
-        recent_segments = compute_profile_segments_impact_and_priority(
-            recent_segments, segments, control_priorities, VesselProfileType.RECENT
-        )
-        usual_segments = compute_profile_segments_impact_and_priority(
-            usual_segments, segments, control_priorities, VesselProfileType.USUAL
-        )
-        merged_segments = merge(current_segments, recent_segments, usual_segments)
         control_anteriority = extract_control_anteriority()
-        risk_factors = compute_risk_factors(merged_segments, control_anteriority)
+        risk_factors = compute_risk_factors(current_segments, control_anteriority)
         load_risk_factors(risk_factors)
 
 flow.file_name = Path(__file__).name

@@ -49,7 +49,7 @@ sealed class ActiveVesselBaseDataOutput(
     open val speciesArray: List<String>,
 ) {
     companion object {
-        fun fromEnrichedActiveVessel(
+        fun fromActiveVesselWithReferentialData(
             enrichedActiveVessel: EnrichedActiveVessel,
             index: Int,
         ): ActiveVesselBaseDataOutput =

@@ -126,12 +126,7 @@ export function VesselSummary() {
         </Position>
       </ZoneWithoutBackground>
       {isSuperUser && <RiskFactorResume />}
-      {!isSuperUser && (
-        <VesselSidebarFleetSegments
-          activityOrigin={selectedVessel?.activityOrigin}
-          segments={selectedVessel?.riskFactor?.segments}
-        />
-      )}
+      {!isSuperUser && <VesselSidebarFleetSegments segments={selectedVessel?.segments} />}
       <VesselProfile />
       <SelectedVesselGroups />
     </Body>

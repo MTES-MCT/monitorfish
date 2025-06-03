@@ -31,7 +31,6 @@ export function getLabelFromFeatures(
 
   return features.map(feature => {
     const vesselProperties = extractVesselPropertiesFromFeature(feature, [
-      'activityOrigin',
       'beaconMalfunctionId',
       'dateTime',
       'detectabilityRiskFactor',

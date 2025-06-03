@@ -9,9 +9,7 @@ INSERT INTO risk_factors
     impact_risk_factor, probability_risk_factor, detectability_risk_factor, risk_factor, 
     control_priority_level, control_rate_risk_factor, infraction_rate_risk_factor, infraction_score, 
     number_controls_last_3_years, number_controls_last_5_years, number_gear_seizures_last_5_years, number_species_seizures_last_5_years, number_infractions_last_5_years, number_recent_controls, number_vessel_seizures_last_5_years,
-    last_control_logbook_infractions, last_control_gear_infractions, last_control_species_infractions, last_control_other_infractions,
-    recent_segments_impact_risk_factor, recent_segments_detectability_risk_factor, recent_segments_risk_factor, recent_segments_control_priority_level,
-    usual_segments_impact_risk_factor, usual_segments_detectability_risk_factor, usual_segments_risk_factor, usual_segments_control_priority_level
+    last_control_logbook_infractions, last_control_gear_infractions, last_control_species_infractions, last_control_other_infractions
     )
 VALUES
 (
@@ -22,9 +20,7 @@ VALUES
     2.0, 3.0, 1.80277563773199, 2.14443662414848, 
     1.0, 3.25, 3.0, 17.0, 
     1.0, 2.0, 0.0, 0.0, 3.0, 0.0, 1.0,
-    '[]', '[]', '[]', '[]',
-    1, 2, 1.42, 1,
-    1, 2, 1.42, 1
+    '[]', '[]', '[]', '[]'
 ),
 (
     2, 'ABC000542519', 'RO237719', 'FQ7058',
@@ -34,7 +30,5 @@ VALUES
     3.3, 2.0, 1.80277563773199,  2.09885592141872,  
     1.0, 3.25, 2.0, 3.3,
     8.0, 13.0, 0.0, 0.0, 5.0, 3.0, 1.0,
-    '[]', '[{"infractionType": "WITHOUT_RECORD", "comments": "Infraction engin", "natinf": 27724}]', '[]', '[{"natinf": 2606}, {"natinf": 4761}, {"natinf": 22206}]',
-    1, 2, 1.42, 1,
-    1, 2, 1.42, 1
+    '[]', '[{"infractionType": "WITHOUT_RECORD", "comments": "Infraction engin", "natinf": 27724}]', '[]', '[{"natinf": 2606}, {"natinf": 4761}, {"natinf": 22206}]'
 );

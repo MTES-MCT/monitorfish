@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActivityOrigin
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -20,7 +19,6 @@ import java.util.*
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class SelectedVesselDataOutput(
     val vesselId: Int? = null,
-    val activityOrigin: ActivityOrigin? = null,
     val beaconMalfunctionId: Int? = null,
     val internalReferenceNumber: String? = null,
     val IMO: String? = null,
@@ -79,7 +77,6 @@ data class SelectedVesselDataOutput(
     companion object {
         fun fromEnrichedActiveVessel(enrichedActiveVessel: EnrichedActiveVessel): SelectedVesselDataOutput? =
             SelectedVesselDataOutput(
-                activityOrigin = enrichedActiveVessel.activityOrigin,
                 vesselId = enrichedActiveVessel.vessel?.id,
                 beaconMalfunctionId = enrichedActiveVessel.lastPosition?.beaconMalfunctionId,
                 internalReferenceNumber =
@@ -120,11 +117,7 @@ data class SelectedVesselDataOutput(
                 vesselPhones = enrichedActiveVessel.vessel?.vesselPhones ?: listOf(),
                 vesselEmails = enrichedActiveVessel.vessel?.vesselEmails ?: listOf(),
                 beacon = enrichedActiveVessel.beacon?.let { BeaconDataOutput.fromBeacon(it) },
-                riskFactor =
-                    RiskFactorDataOutput.fromVesselRiskFactor(
-                        vesselRiskFactor = enrichedActiveVessel.riskFactor,
-                        isRecentProfile = enrichedActiveVessel.activityOrigin == ActivityOrigin.FROM_RECENT_PROFILE,
-                    ),
+                riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(enrichedActiveVessel.riskFactor),
                 underCharter = enrichedActiveVessel.vessel?.underCharter,
                 logbookEquipmentStatus = enrichedActiveVessel.vessel?.logbookEquipmentStatus,
                 logbookSoftware = enrichedActiveVessel.vessel?.logbookSoftware,
@@ -164,7 +157,6 @@ data class SelectedVesselDataOutput(
 
         fun fromVessel(vessel: Vessel): SelectedVesselDataOutput =
             SelectedVesselDataOutput(
-                activityOrigin = null,
                 vesselId = vessel.id,
                 internalReferenceNumber = vessel.internalReferenceNumber,
                 IMO = vessel.imo,
@@ -199,7 +191,7 @@ data class SelectedVesselDataOutput(
                 hasLogbookEsacapt = vessel.hasLogbookEsacapt,
                 hasVisioCaptures = vessel.hasVisioCaptures,
                 // TODO Unused in the frontend - to remove ?
-                riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(VesselRiskFactor()),
+                riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(VesselRiskFactor())
             )
     }
 }

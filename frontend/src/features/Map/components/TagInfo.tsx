@@ -6,7 +6,7 @@ import type { TagProps } from '@mtes-mct/monitor-ui/elements/Tag'
 export function TagInfo({ children, ...props }: TagProps) {
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <StyledTag {...props} Icon={Icon.Info} withCircleIcon>
+    <StyledTag {...props} Icon={Icon.Attention} withCircleIcon>
       {children}
     </StyledTag>
   )
@@ -19,13 +19,11 @@ const StyledTag = styled(Tag)`
   margin-bottom: 16px;
 
   svg {
-    width: 16px;
-    height: 16px;
+    transform: rotate(180deg);
   }
 
   .Element-IconBox {
-    margin-top: 2px;
-    margin-left: 6px;
-    margin-right: 2px;
+    margin-left: 4px;
+    margin-right: 0;
   }
 `

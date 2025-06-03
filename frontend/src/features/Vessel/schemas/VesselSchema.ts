@@ -2,14 +2,13 @@ import { PendingAlertValueType } from '@features/Alert/types'
 import { ProducerOrganizationMembershipSchema } from '@features/ProducerOrganizationMembership/schemas/ProducerOrganizationMembershipSchema'
 import { ReportingType } from '@features/Reporting/types'
 import { RiskFactorSchema } from '@features/RiskFactor/types'
-import { ActivityOrigin, VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { BeaconSchema } from '@features/Vessel/schemas/BeaconSchema'
 import { VesselProfileSchema } from '@features/Vessel/schemas/VesselProfileSchema'
 import { DynamicVesselGroupSchema, FixedVesselGroupSchema } from '@features/VesselGroup/types'
 import { z } from 'zod'
 
 export const VesselSchema = z.strictObject({
-  activityOrigin: z.nativeEnum(ActivityOrigin).optional(),
   alerts: z.array(z.union([z.nativeEnum(PendingAlertValueType), z.literal('PNO_LAN_WEIGHT_TOLERANCE_ALERT')])),
   beacon: BeaconSchema.optional(),
   beaconMalfunctionId: z.number().optional(),

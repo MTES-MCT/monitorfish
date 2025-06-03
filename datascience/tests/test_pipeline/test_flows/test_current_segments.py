@@ -8,6 +8,7 @@ from dateutil import relativedelta
 from config import TEST_DATA_LOCATION
 from src.pipeline.flows.current_segments import (
     compute_current_segments,
+    extract_control_priorities,
     extract_current_catches,
     extract_last_positions,
     flow,
@@ -39,6 +40,17 @@ def current_catches() -> pd.DataFrame:
         ],
     )
     return df
+
+
+@pytest.fixture
+def control_priorities() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "facade": ["Facade 1", "Facade 1", "Facade 2", "Facade 2"],
+            "segment": ["T8-9", "L", "T8-9", "L"],
+            "control_priority_level": [2.5, 2.8, 2.9, 2.4],
+        }
+    )
 
 
 @pytest.fixture
@@ -405,6 +417,7 @@ def current_segments() -> pd.DataFrame:
             ],
             "segments": [[], [], ["SWW01/02/03"], [], []],
             "total_weight_onboard": [0.0, 713.0, 2583.0, 0.0, 0.0],
+            "probable_segments": [None, None, None, None, None],
             "impact_risk_factor": [1.0, 1.0, 3.0, 1.0, 1.0],
             "control_priority_level": [1.0, 1.0, 1.0, 1.0, 1.0],
             "segment_highest_impact": [None, None, "SWW01/02/03", None, None],
@@ -436,6 +449,15 @@ def test_extract_current_catches(reset_test_data, current_catches):
     assert list(catches) == list(
         current_catches.drop(columns=["segment", "impact_risk_factor"])
     )
+
+
+def test_extract_control_priorities(reset_test_data):
+    control_priorities = extract_control_priorities.run()
+    expected_control_priorities = pd.DataFrame(
+        columns=["facade", "segment", "control_priority_level"],
+        data=[["SA", "SWW01/02/03", 1.0], ["SA", "SWW04", 3.0]],
+    )
+    pd.testing.assert_frame_equal(control_priorities, expected_control_priorities)
 
 
 def test_extract_last_positions(reset_test_data, expected_last_positions):

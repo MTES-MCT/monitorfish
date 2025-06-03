@@ -154,7 +154,7 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
           <ExpandedRowCell>
             <ExpandedRowLabel>
               Engins {vessel.activityOrigin === ActivityOrigin.FROM_LOGBOOK && 'à bord (FAR)'}
-              {vessel.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && '(14 derniers jours)'}
+              {vessel.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && '(7 derniers jours)'}
             </ExpandedRowLabel>
             {vessel.gearsArray?.length ? (
               <>

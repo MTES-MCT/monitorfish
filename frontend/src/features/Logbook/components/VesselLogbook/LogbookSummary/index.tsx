@@ -69,26 +69,11 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
     dispatch(updateVesselTrackAndLogbookFromTrip(selectedVesselIdentity, NavigateTo.EQUALS, true, nextTripNumber))
   }
 
-  if (!fishingActivities) {
-    return (
-      <Body>
-        <StyledVesselSidebarFleetSegments
-          activityOrigin={selectedVessel?.activityOrigin}
-          segments={selectedVessel?.riskFactor?.segments}
-        />
-        <NoFishingActivities data-cy="vessel-fishing">Ce navire n’a pas envoyé de message JPE.</NoFishingActivities>
-      </Body>
-    )
-  }
-
   return (
     <>
       {fishingActivities ? (
         <Body>
-          <StyledVesselSidebarFleetSegments
-            activityOrigin={selectedVessel?.activityOrigin}
-            segments={selectedVessel?.riskFactor?.segments}
-          />
+          <StyledVesselSidebarFleetSegments segments={selectedVessel?.segments} />
           <SidebarZone>
             <Title $hasTwoLines={false}>
               <Text $hasTwoLines>Résumé du JPE</Text>
@@ -241,14 +226,6 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
     </>
   )
 }
-
-const NoFishingActivities = styled.div`
-  padding: 50px 5px 0 5px;
-  height: 70px;
-  background: ${p => p.theme.color.white};
-  color: ${p => p.theme.color.slateGray};
-  text-align: center;
-`
 
 const StyledVesselSidebarFleetSegments = styled(VesselSidebarFleetSegments)`
   margin-bottom: 10px;

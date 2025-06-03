@@ -33,10 +33,10 @@ export const DEFAULT_FLEET_SEGMENT: FleetSegment = {
 
 export const FLEET_SEGMENT_ORIGIN_LABEL: Record<ActivityOrigin, string> = {
   [ActivityOrigin.FROM_LOGBOOK]: 'Segment(s) actuel(s) à partir des messages de captures',
-  [ActivityOrigin.FROM_RECENT_PROFILE]: 'Segment(s) ces 14 derniers jours'
+  [ActivityOrigin.FROM_RECENT_PROFILE]: 'Segment(s) ces 7 derniers jours'
 }
 
 export const GEAR_ORIGIN_LABEL: Record<ActivityOrigin, string> = {
   [ActivityOrigin.FROM_LOGBOOK]: 'Engin(s) utilisé(s) à partir des messages de captures',
-  [ActivityOrigin.FROM_RECENT_PROFILE]: 'Engin(s) utilisé(s) ces 14 derniers jours'
+  [ActivityOrigin.FROM_RECENT_PROFILE]: 'Engin(s) utilisé(s) ces 7 derniers jours'
 }

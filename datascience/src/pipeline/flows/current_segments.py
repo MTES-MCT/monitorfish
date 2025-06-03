@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -11,10 +12,7 @@ from src.pipeline.helpers.segments import allocate_segments_to_catches
 from src.pipeline.processing import df_to_dict_series
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.dates import get_current_year
-from src.pipeline.shared_tasks.segments import (
-    extract_control_priorities,
-    extract_segments_of_year,
-)
+from src.pipeline.shared_tasks.segments import extract_segments_of_year
 
 
 @task(checkpoint=False)
@@ -23,6 +21,15 @@ def extract_current_catches(number_of_days: int) -> pd.DataFrame:
         db_name="monitorfish_remote",
         query_filepath="monitorfish/current_catches.sql",
         params={"number_of_days": number_of_days},
+    )
+
+
+@task(checkpoint=False)
+def extract_control_priorities() -> pd.DataFrame:
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/control_priorities.sql",
+        params={"year": datetime.utcnow().year},
     )
 
 

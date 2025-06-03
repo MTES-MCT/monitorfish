@@ -1,6 +1,5 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -24,7 +23,7 @@ export function VesselLabel({
   showed,
   triggerShowRiskDetails
 }) {
-  const { groupsDisplayed, isRecentSegment, labelText, riskFactor, underCharter } = label
+  const { groupsDisplayed, labelText, riskFactor, underCharter } = label
   const dispatch = useMainAppDispatch()
   const areVesselGroupsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselGroupsDisplayed)
 
@@ -118,12 +117,7 @@ export function VesselLabel({
             <RiskFactorBox color={getRiskFactorColor(riskFactor?.impactRiskFactor)}>
               {parseFloat(riskFactor?.impactRiskFactor).toFixed(1)}
             </RiskFactorBox>
-            <SubRiskText>
-              {getImpactRiskFactorText(riskFactor?.impactRiskFactor, riskFactor?.hasSegments)}
-              {isRecentSegment && (
-                <StyledIconInfo color={THEME.color.slateGray} size={16} title="Segment(s) ces 14 derniers jours" />
-              )}
-            </SubRiskText>
+            <SubRiskText>{getImpactRiskFactorText(riskFactor?.impactRiskFactor, riskFactor?.hasSegments)}</SubRiskText>
           </RiskFactorDetail>
           <RiskFactorDetail>
             <RiskFactorBox color={getRiskFactorColor(riskFactor?.probabilityRiskFactor)}>
@@ -148,10 +142,6 @@ export function VesselLabel({
     </>
   )
 }
-
-const StyledIconInfo = styled(Icon.Info)`
-  margin-left: 4px;
-`
 
 const UnderCharter = styled.span<{
   $hasBoxShadow?: boolean
@@ -189,23 +179,18 @@ const Text = styled.div`
 
 const SubRiskText = styled.span`
   vertical-align: bottom;
-  font-size: 11px;
-
-  .Element-IconBox {
-    vertical-align: middle;
-  }
 `
 
 const UnderCharterInfo = styled.div`
   display: block;
   padding: 1px 3px;
   text-align: left;
+  font-size: 12px;
   font-weight: 500;
   border-bottom: 2px solid ${p => p.theme.color.lightGray};
 `
 
 const UnderCharterText = styled.span`
-  font-size: 11px;
   vertical-align: bottom;
   margin-left: 9px;
 `
@@ -213,7 +198,7 @@ const UnderCharterText = styled.span`
 const RiskFactorDetails = styled.div<{
   $underCharter: boolean
 }>`
-  box-shadow: 0 2px 3px ${p => p.theme.color.charcoalShadow};
+  box-shadow: 0px 2px 3px ${p => p.theme.color.charcoalShadow};
   background: ${p => p.theme.color.white};
   line-height: 18px;
   height: ${p => (p.$underCharter ? 94 : 72)}px;
@@ -224,9 +209,10 @@ const RiskFactorDetails = styled.div<{
 
 const RiskFactorDetail = styled.div`
   display: block;
-  margin: 3px 6px 3px 3px;
+  margin: 3px;
+  margin-right: 6px;
   text-align: left;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
 `
 
@@ -242,7 +228,7 @@ const RiskFactorBox = styled.div`
   background: ${p => p.color};
   line-height: 16px;
   text-align: center;
-  margin-right: 5px;
+  margin-right: 3px;
   border-radius: 1px;
 `
 

@@ -60,6 +60,7 @@ class CreateOrUpdateManualPriorNotificationUTests {
                 tripSegments = emptyList(),
                 types = emptyList(),
                 vesselRiskFactor = null,
+                isInVerificationScope = false,
             ),
         )
         given(manualPriorNotificationRepository.save(any())).willReturn(newFakePriorNotification)
@@ -123,6 +124,7 @@ class CreateOrUpdateManualPriorNotificationUTests {
                 tripSegments = emptyList(),
                 types = emptyList(),
                 vesselRiskFactor = null,
+                isInVerificationScope = false,
             ),
         )
         given(manualPriorNotificationRepository.save(any())).willReturn(updatedFakePriorNotification)

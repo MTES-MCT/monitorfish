@@ -54,6 +54,16 @@ def extract_control_anteriority() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
+def extract_vessels_with_active_reportings() -> set:
+    vessels_with_active_reportings = extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/vessels_with_active_reportings_for_pnos.sql",
+    )
+
+    return set(vessels_with_active_reportings.internal_reference_number)
+
+
+@task(checkpoint=False)
 def reset_pnos(period: Period):
     """
     Deletes enriched data from pnos in logbook table in the designated Period.
@@ -464,12 +474,15 @@ def flag_pnos_to_verify_and_send(
     pno_units_targeting_vessels: pd.DataFrame,
     pno_units_ports_and_segments_subscriptions: pd.DataFrame,
     predicted_arrival_threshold: datetime,
+    vessels_with_active_reportings: set,
 ):
     pnos = pnos.copy(deep=True)
 
     pnos["is_in_verification_scope"] = (
-        pnos.risk_factor >= RISK_FACTOR_VERIFICATION_THRESHOLD
-    ) | (~pnos.flag_state.isin(FLAG_STATES_WITHOUT_SYSTEMATIC_VERIFICATION))
+        (pnos.risk_factor >= RISK_FACTOR_VERIFICATION_THRESHOLD)
+        | (~pnos.flag_state.isin(FLAG_STATES_WITHOUT_SYSTEMATIC_VERIFICATION))
+        | (pnos.cfr.isin(vessels_with_active_reportings))
+    )
 
     pnos["is_verified"] = False
     pnos["is_sent"] = False
@@ -657,6 +670,7 @@ def extract_enrich_load_logbook(
     pno_units_targeting_vessels: pd.DataFrame,
     pno_units_ports_and_segments_subscriptions: pd.DataFrame,
     utcnow: datetime,
+    vessels_with_active_reportings: set,
 ):
     """Extract pnos for the given `Period`, enrich and update the `logbook` table.
 
@@ -706,6 +720,7 @@ def extract_enrich_load_logbook(
         pno_units_targeting_vessels=pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions=pno_units_ports_and_segments_subscriptions,
         predicted_arrival_threshold=utcnow,
+        vessels_with_active_reportings=vessels_with_active_reportings,
     )
 
     logger.info("Loading")
@@ -736,6 +751,7 @@ with Flow("Enrich Logbook") as flow:
         pno_units_ports_and_segments_subscriptions = (
             extract_pno_units_ports_and_segments_subscriptions()
         )
+        vessels_with_active_reportings = extract_vessels_with_active_reportings()
 
         with case(recompute_all, True):
             reset = reset_pnos.map(periods)
@@ -750,6 +766,7 @@ with Flow("Enrich Logbook") as flow:
                     pno_units_ports_and_segments_subscriptions
                 ),
                 utcnow=unmapped(utcnow),
+                vessels_with_active_reportings=unmapped(vessels_with_active_reportings),
                 upstream_tasks=[reset],
             )
 
@@ -765,6 +782,7 @@ with Flow("Enrich Logbook") as flow:
                     pno_units_ports_and_segments_subscriptions
                 ),
                 utcnow=unmapped(utcnow),
+                vessels_with_active_reportings=unmapped(vessels_with_active_reportings),
             )
 
 flow.file_name = Path(__file__).name

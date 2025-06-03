@@ -39,6 +39,8 @@ interface ReportingRepository {
         fromDate: ZonedDateTime,
     ): List<Reporting>
 
+    fun findCurrentInfractionSuspicionsByVesselId(vesselId: Int): List<Reporting>
+
     fun findCurrentAndArchivedByVesselIdEquals(
         vesselId: Int,
         fromDate: ZonedDateTime,

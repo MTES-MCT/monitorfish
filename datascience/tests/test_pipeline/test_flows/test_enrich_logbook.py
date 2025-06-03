@@ -17,6 +17,7 @@ from src.pipeline.flows.enrich_logbook import (
     extract_pno_catches,
     extract_pno_trips_period,
     extract_pno_types,
+    extract_vessels_with_active_reportings,
     flag_pnos_to_verify_and_send,
     flow,
     load_enriched_pnos,
@@ -875,6 +876,14 @@ def flagged_pnos(pnos_with_risk_factors) -> pd.DataFrame:
     )
 
 
+@pytest.fixture
+def flagged_pnos_with_active_reportings(flagged_pnos) -> pd.DataFrame:
+    return flagged_pnos.assign(
+        is_in_verification_scope=[True, False, True, False, False, True, True, False],
+        is_being_sent=[False, False, False, False, True, False, False, True],
+    )
+
+
 def test_extract_all_control_priorities(
     reset_test_data, expected_all_control_priorities
 ):
@@ -928,6 +937,11 @@ def test_extract_pno_catches(reset_test_data, expected_pno_catches):
 def test_extract_control_anteriority(reset_test_data, control_anteriority):
     res = extract_control_anteriority.run()
     pd.testing.assert_frame_equal(res, control_anteriority)
+
+
+def test_extract_vessels_with_active_reportings():
+    res = extract_vessels_with_active_reportings.run()
+    assert res == {"SOME_VESSEL"}
 
 
 def test_compute_pno_types(
@@ -999,16 +1013,29 @@ def test_compute_pno_risk_factors(
 def test_flag_pnos_to_verify_and_send(
     pnos_with_risk_factors,
     flagged_pnos,
+    flagged_pnos_with_active_reportings,
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
 ):
+    # Test without vessels with active reportings
     res = flag_pnos_to_verify_and_send(
         pnos=pnos_with_risk_factors,
         pno_units_targeting_vessels=pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions=pno_units_ports_and_segments_subscriptions,
         predicted_arrival_threshold=datetime(2023, 5, 2, 14, 12, 25),
+        vessels_with_active_reportings=set(),
     )
     pd.testing.assert_frame_equal(res, flagged_pnos)
+
+    # Test with vessels with active reportings
+    res = flag_pnos_to_verify_and_send(
+        pnos=pnos_with_risk_factors,
+        pno_units_targeting_vessels=pno_units_targeting_vessels,
+        pno_units_ports_and_segments_subscriptions=pno_units_ports_and_segments_subscriptions,
+        predicted_arrival_threshold=datetime(2023, 5, 2, 14, 12, 25),
+        vessels_with_active_reportings=set(["CFR000000001", "CFR000000006"]),
+    )
+    pd.testing.assert_frame_equal(res, flagged_pnos_with_active_reportings)
 
 
 def test_load_then_reset_logbook(

@@ -349,6 +349,7 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
                     tripSegments = emptyList(),
                     types = emptyList(),
                     vesselRiskFactor = 0.0,
+                    isInVerificationScope = false,
                 ),
             )
 
@@ -398,6 +399,7 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
                     tripSegments = emptyList(),
                     types = emptyList(),
                     vesselRiskFactor = 5.0,
+                    isInVerificationScope = true,
                 ),
             )
 

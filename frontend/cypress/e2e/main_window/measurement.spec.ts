@@ -80,19 +80,24 @@ context('Measurement', () => {
     cy.clickButton("Mesurer une distance", { withoutScroll: true })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
     cy.get('body').click(490, 580, { timeout: 10000 })
+    cy.wait(250)
     cy.get('body').click(450, 585, { timeout: 10000 })
     cy.get('*[data-cy="measurement-value"]').should('have.length', 1)
+    cy.wait(500)
 
     cy.clickButton("Mesurer une distance", { withoutScroll: true })
+    cy.wait(250)
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
     cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 }).should(
       'have.value',
       '__° __′ __″ _ ___° __′ __″ _'
     )
     cy.get('body').click(690, 680, { timeout: 10000 })
+    cy.wait(250)
     cy.get('body').click(750, 785, { timeout: 10000 })
     cy.wait(500)
     cy.get('*[data-cy="measurement-value"]').should('have.length', 2)
+    cy.wait(500)
 
     // Then
     cy.get('*[data-cy="measurement-value"]').eq(1).contains('r = 5.', { timeout: 10000 })

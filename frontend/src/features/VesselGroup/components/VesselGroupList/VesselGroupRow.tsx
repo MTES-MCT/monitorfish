@@ -5,6 +5,7 @@ import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/render
 import { EditDynamicVesselGroupDialog } from '@features/VesselGroup/components/EditDynamicVesselGroupDialog'
 import { EditFixedVesselGroupDialog } from '@features/VesselGroup/components/EditFixedVesselGroupDialog'
 import { VesselTable } from '@features/VesselGroup/components/VesselGroupList/VesselTable'
+import { CNSP_SERVICE_LABEL } from '@features/VesselGroup/constants'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
 import { type DynamicVesselGroup, GroupType, Sharing, type VesselGroupWithVessels } from '@features/VesselGroup/types'
 import { addVesselToFixedVesselGroup } from '@features/VesselGroup/useCases/addVesselToFixedVesselGroup'
@@ -99,18 +100,23 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
             <StyledTag borderColor={THEME.color.slateGray}>Groupe fixe</StyledTag>
           )}
           {vesselGroupWithVessels.group.sharing === Sharing.PRIVATE && (
-            <StyledTag backgroundColor={THEME.color.goldenPoppy25} borderColor={THEME.color.goldenPoppyBorder}>
-              Groupe privé
+            <StyledTag backgroundColor={THEME.color.gainsboro} borderColor={THEME.color.lightGray}>
+              Groupe personnel
             </StyledTag>
           )}
           {vesselGroupWithVessels.group.sharing === Sharing.SHARED && (
-            <StyledTag backgroundColor={THEME.color.goldenPoppy25} borderColor={THEME.color.goldenPoppyBorder}>
+            <StyledTag
+              backgroundColor={THEME.color.goldenPoppy25}
+              borderColor={THEME.color.goldenPoppyBorder}
+              title={vesselGroupWithVessels.group.sharedTo?.map(shared => CNSP_SERVICE_LABEL[shared])?.join(', ')}
+            >
               Groupe partagé
             </StyledTag>
           )}
           <RowIcons>
             <span>
-              <b>{vesselGroupWithVessels.vessels.length} navires</b> – Créé le{' '}
+              <b>{vesselGroupWithVessels.vessels.length} navires</b> – Créé par{' '}
+              {vesselGroupWithVessels.group.createdBy.split('@')?.[0]} le{' '}
               {getDate(vesselGroupWithVessels.group.createdAtUtc)}
               {vesselGroupWithVessels.group.updatedAtUtc &&
                 `, modifié le ${getDate(vesselGroupWithVessels.group.updatedAtUtc)}`}
@@ -175,9 +181,14 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
         <ConfirmationModal
           confirmationButtonLabel="Confirmer la suppression"
           message={
-            <p>
+            <ConfirmDeletionBody>
               <b>Êtes-vous sûr de vouloir supprimer ce groupe de navires ?</b>
-            </p>
+              {vesselGroupWithVessels.group.sharing === Sharing.SHARED && (
+                <span>
+                  Attention, il sera également supprimé pour les autres utilisateurs avec lesquels il est partagé.
+                </span>
+              )}
+            </ConfirmDeletionBody>
           }
           onCancel={() => setIsDeleteConfirmationModalOpen(false)}
           onConfirm={handleDeleteVesselGroup}
@@ -200,6 +211,15 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
     </>
   )
 }
+
+const ConfirmDeletionBody = styled.p`
+  span {
+    margin-top: 24px;
+    display: block;
+    font-size: 16px;
+    color: ${p => p.theme.color.maximumRed};
+  }
+`
 
 const StyledVesselSearch = styled(VesselSearchWithMapVessels)`
   margin-top: 16px;
@@ -269,6 +289,7 @@ const RowIcons = styled.div`
   > span {
     color: ${p => p.theme.color.slateGray};
     font-weight: normal;
+    font-style: italic;
   }
 
   > span > b {

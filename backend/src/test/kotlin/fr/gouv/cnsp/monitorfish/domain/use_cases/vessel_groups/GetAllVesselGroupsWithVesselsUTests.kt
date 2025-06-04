@@ -1,11 +1,14 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.TestUtils
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDynamicVesselGroups
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getFixedVesselGroups
@@ -24,9 +27,20 @@ class GetAllVesselGroupsWithVesselsUTests {
     @MockBean
     private lateinit var lastPositionRepository: LastPositionRepository
 
+    @MockBean
+    private lateinit var getAuthorizedUser: GetAuthorizedUser
+
     @Test
     fun `execute get all fixed groups with vessels from last positions`() {
         // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+                isSuperUser = true,
+                service = null,
+                isAdministrator = false,
+            ),
+        )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
@@ -38,11 +52,11 @@ class GetAllVesselGroupsWithVesselsUTests {
                 )
             },
         )
-        given(vesselGroupRepository.findAllByUser(any())).willReturn(getFixedVesselGroups())
+        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(getFixedVesselGroups())
 
         // When
         val vesselGroups =
-            GetAllVesselGroupsWithVessels(vesselGroupRepository, lastPositionRepository).execute(
+            GetAllVesselGroupsWithVessels(vesselGroupRepository, lastPositionRepository, getAuthorizedUser).execute(
                 userEmail = "dummy@email.gouv.fr",
             )
 
@@ -66,6 +80,14 @@ class GetAllVesselGroupsWithVesselsUTests {
     @Test
     fun `execute get all dynamic groups with vessels from last positions`() {
         // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+                isSuperUser = true,
+                service = null,
+                isAdministrator = false,
+            ),
+        )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
@@ -77,11 +99,11 @@ class GetAllVesselGroupsWithVesselsUTests {
                 )
             },
         )
-        given(vesselGroupRepository.findAllByUser(any())).willReturn(getDynamicVesselGroups())
+        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(getDynamicVesselGroups())
 
         // When
         val vesselGroups =
-            GetAllVesselGroupsWithVessels(vesselGroupRepository, lastPositionRepository).execute(
+            GetAllVesselGroupsWithVessels(vesselGroupRepository, lastPositionRepository, getAuthorizedUser).execute(
                 userEmail = "dummy@email.gouv.fr",
             )
 

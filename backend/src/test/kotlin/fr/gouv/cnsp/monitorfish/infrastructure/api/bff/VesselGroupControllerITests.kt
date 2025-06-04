@@ -74,6 +74,7 @@ class VesselGroupControllerITests {
                         "suspicion blanchiment bar en 7.d.",
                 color = "#4287f5",
                 sharing = Sharing.PRIVATE,
+                sharedTo = null,
                 endOfValidityUtc = null,
                 filters =
                     VesselGroupFilters(
@@ -130,6 +131,7 @@ class VesselGroupControllerITests {
                         "suspicion blanchiment bar en 7.d.",
                 color = "#4287f5",
                 sharing = Sharing.PRIVATE,
+                sharedTo = null,
                 endOfValidityUtc = null,
                 vessels =
                     listOf(

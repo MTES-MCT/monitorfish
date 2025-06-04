@@ -27,7 +27,7 @@ export function VesselListMapButton() {
       isActive={isActive}
       onClick={toggleSideWindow}
       style={{ top: 76 }}
-      title="Liste des navires avec VMS"
+      title="Liste des navires"
     />
   )
 }

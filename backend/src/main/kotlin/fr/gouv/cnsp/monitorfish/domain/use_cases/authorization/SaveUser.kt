@@ -24,6 +24,6 @@ class SaveUser(
                 isAdministrator = isAdministrator,
             )
 
-        userAuthorizationRepository.save(user)
+        userAuthorizationRepository.upsert(user)
     }
 }

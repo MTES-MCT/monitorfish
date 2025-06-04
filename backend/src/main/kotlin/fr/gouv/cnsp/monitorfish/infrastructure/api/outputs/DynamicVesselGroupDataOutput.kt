@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.GroupType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.Sharing
@@ -14,6 +15,7 @@ data class DynamicVesselGroupDataOutput(
     val pointsOfAttention: String?,
     val color: String,
     val sharing: Sharing,
+    val sharedTo: List<CnspService>? = null,
     val type: GroupType,
     val createdBy: String,
     val createdAtUtc: ZonedDateTime,
@@ -31,6 +33,7 @@ data class DynamicVesselGroupDataOutput(
                 pointsOfAttention = vesselGroup.pointsOfAttention,
                 color = vesselGroup.color,
                 sharing = vesselGroup.sharing,
+                sharedTo = vesselGroup.sharedTo,
                 type = vesselGroup.type,
                 createdBy = vesselGroup.createdBy,
                 createdAtUtc = vesselGroup.createdAtUtc,

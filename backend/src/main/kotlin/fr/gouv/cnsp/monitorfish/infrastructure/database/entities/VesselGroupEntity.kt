@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.deserializeJSONList
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
@@ -34,6 +35,8 @@ data class VesselGroupEntity(
     @Column(name = "sharing")
     @Enumerated(EnumType.STRING)
     val sharing: Sharing,
+    @Column(name = "shared_to", columnDefinition = "cnsp_service[]")
+    val sharedTo: List<String>? = listOf(),
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     val type: GroupType,
@@ -58,6 +61,7 @@ data class VesselGroupEntity(
                     pointsOfAttention = pointsOfAttention,
                     filters = mapper.readValue(filters, VesselGroupFilters::class.java),
                     sharing = sharing,
+                    sharedTo = sharedTo?.map { CnspService.fromValue(it) } ?: listOf(),
                     createdBy = createdBy,
                     createdAtUtc = createdAtUtc,
                     updatedAtUtc = updatedAtUtc,
@@ -73,6 +77,7 @@ data class VesselGroupEntity(
                     pointsOfAttention = pointsOfAttention,
                     vessels = deserializeJSONList(mapper, vessels, VesselIdentity::class.java),
                     sharing = sharing,
+                    sharedTo = sharedTo?.map { CnspService.fromValue(it) } ?: listOf(),
                     createdBy = createdBy,
                     createdAtUtc = createdAtUtc,
                     updatedAtUtc = updatedAtUtc,
@@ -93,6 +98,7 @@ data class VesselGroupEntity(
             pointsOfAttention = vesselGroup.pointsOfAttention,
             filters = mapper.writeValueAsString(vesselGroup.filters),
             sharing = vesselGroup.sharing,
+            sharedTo = vesselGroup.sharedTo?.map { it.value },
             type = vesselGroup.type,
             createdBy = vesselGroup.createdBy,
             createdAtUtc = vesselGroup.createdAtUtc,
@@ -112,6 +118,7 @@ data class VesselGroupEntity(
             pointsOfAttention = vesselGroup.pointsOfAttention,
             vessels = mapper.writeValueAsString(vesselGroup.vessels),
             sharing = vesselGroup.sharing,
+            sharedTo = vesselGroup.sharedTo?.map { it.value },
             type = vesselGroup.type,
             createdBy = vesselGroup.createdBy,
             createdAtUtc = vesselGroup.createdAtUtc,

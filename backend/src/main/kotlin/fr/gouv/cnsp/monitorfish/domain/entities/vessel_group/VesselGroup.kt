@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.vessel_group
 
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActivityType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import java.time.ZonedDateTime
@@ -12,12 +13,25 @@ sealed class VesselGroupBase(
     open val pointsOfAttention: String?,
     open val color: String,
     open val sharing: Sharing,
+    open val sharedTo: List<CnspService>? = listOf(),
     open val type: GroupType,
     open val createdBy: String,
     open val createdAtUtc: ZonedDateTime,
     open val updatedAtUtc: ZonedDateTime? = null,
     open val endOfValidityUtc: ZonedDateTime? = null,
-)
+) {
+    fun hasUserRights(
+        userEmail: String,
+        userService: CnspService?,
+    ) = when (sharing) {
+        Sharing.PRIVATE -> createdBy == userEmail
+        Sharing.SHARED -> {
+            val containsUserService = sharedTo?.contains(userService) ?: true
+
+            createdBy == userEmail || containsUserService
+        }
+    }
+}
 
 data class DynamicVesselGroup(
     override val id: Int?,
@@ -27,6 +41,7 @@ data class DynamicVesselGroup(
     override val pointsOfAttention: String?,
     override val color: String,
     override val sharing: Sharing,
+    override val sharedTo: List<CnspService>? = listOf(),
     override val createdBy: String,
     override val createdAtUtc: ZonedDateTime,
     override val updatedAtUtc: ZonedDateTime? = null,
@@ -40,6 +55,7 @@ data class DynamicVesselGroup(
         pointsOfAttention = pointsOfAttention,
         color = color,
         sharing = sharing,
+        sharedTo = sharedTo,
         type = GroupType.DYNAMIC,
         createdBy = createdBy,
         createdAtUtc = createdAtUtc,
@@ -99,6 +115,7 @@ data class FixedVesselGroup(
     override val pointsOfAttention: String?,
     override val color: String,
     override val sharing: Sharing,
+    override val sharedTo: List<CnspService>? = listOf(),
     override val createdBy: String,
     override val createdAtUtc: ZonedDateTime,
     override val updatedAtUtc: ZonedDateTime? = null,
@@ -112,6 +129,7 @@ data class FixedVesselGroup(
         pointsOfAttention = pointsOfAttention,
         color = color,
         sharing = sharing,
+        sharedTo = sharedTo,
         type = GroupType.FIXED,
         createdBy = createdBy,
         createdAtUtc = createdAtUtc,

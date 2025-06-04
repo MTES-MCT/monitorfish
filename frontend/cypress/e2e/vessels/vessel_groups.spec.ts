@@ -41,6 +41,8 @@ context('Vessel groups', () => {
     cy.fill("Nom du groupe", "Lorem ipsum dolor sit amet")
     cy.fill("Description du groupe", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.")
     cy.fill("Points d'attention", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+    cy.fill("Partage du groupe", "Groupe partagé")
+    cy.fill("Partager le groupe avec...", ['Pôle OPS métropole'])
     cy.clickButton('Créer le groupe')
     cy.contains('Le groupe de navires dynamique "Lorem ipsum dolor sit amet" a bien été créé.').should('be.visible')
 
@@ -54,6 +56,7 @@ context('Vessel groups', () => {
     cy.get('[title="Lorem ipsum dolor sit amet"]').click()
     cy.get('[title="Lorem ipsum dolor sit amet"]').contains('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.')
     cy.get('[title="Lorem ipsum dolor sit amet"]').contains('Groupe dynamique')
+    cy.get('[title="Lorem ipsum dolor sit amet"]').contains('Groupe partagé')
     cy.get('[title="Afficher les critères de définition du groupe"]').click()
     cy.get('[title="Lorem ipsum dolor sit amet"]').within(() => {
       cy.get('.Component-SingleTag').should('have.length', 5)

@@ -5,13 +5,23 @@ import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.hash
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.CacheManager
 import org.springframework.transaction.annotation.Transactional
 
 class JpaUserAuthorisationRepositoryITests : AbstractDBTests() {
     @Autowired
     private lateinit var jpaUserAuthorizationRepository: JpaUserAuthorizationRepository
+
+    @Autowired
+    lateinit var cacheManager: CacheManager
+
+    @BeforeEach
+    fun setup() {
+        cacheManager.getCache("user_authorization")?.clear()
+    }
 
     @Test
     @Transactional
@@ -30,12 +40,12 @@ class JpaUserAuthorisationRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `save Should save a user`() {
+    fun `upsert Should save a user`() {
         // Given
         val email = hash("another_new_dummy@email.gouv.fr")
 
         // When
-        jpaUserAuthorizationRepository.save(
+        jpaUserAuthorizationRepository.upsert(
             UserAuthorization(
                 hashedEmail = email,
                 isSuperUser = true,
@@ -51,10 +61,31 @@ class JpaUserAuthorisationRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `upsert Should update a user`() {
+        // Given
+        val email = hash("dummy@email.gouv.fr")
+
+        // When
+        jpaUserAuthorizationRepository.upsert(
+            UserAuthorization(
+                hashedEmail = email,
+                isSuperUser = true,
+                service = CnspService.POLE_SIP,
+                isAdministrator = false,
+            ),
+        )
+
+        // Then
+        val user = jpaUserAuthorizationRepository.findByHashedEmail(email)
+        assertThat(user.service).isEqualTo(CnspService.POLE_SIP)
+    }
+
+    @Test
+    @Transactional
     fun `delete Should delete a user`() {
         // Given
         val email = hash("another_new_dummy@email.gouv.fr")
-        jpaUserAuthorizationRepository.save(
+        jpaUserAuthorizationRepository.upsert(
             UserAuthorization(
                 hashedEmail = email,
                 isSuperUser = true,

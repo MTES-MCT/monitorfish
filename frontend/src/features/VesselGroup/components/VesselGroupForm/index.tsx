@@ -1,5 +1,6 @@
 import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselList/constants'
 import { FormikCirclePicker } from '@features/VesselGroup/components/VesselGroupForm/FormikCirclePicker'
+import { FormikSharingOptions } from '@features/VesselGroup/components/VesselGroupForm/FormikSharingOptions'
 import { DEFAULT_DYNAMIC_VESSEL_GROUP, DEFAULT_FIXED_VESSEL_GROUP } from '@features/VesselGroup/constants'
 import {
   CreateOrUpdateDynamicVesselGroupSchema,
@@ -109,6 +110,7 @@ export function VesselGroupForm({
             <StyledFormikTextarea $isRed label="Points d'attention" name="pointsOfAttention" rows={3} />
           </Column>
         </Columns>
+        <FormikSharingOptions />
       </>
     </Formik>
   )

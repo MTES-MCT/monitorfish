@@ -43,6 +43,7 @@
                 },
                 "vessels": null,
                 "sharing": "PRIVATE",
+                "shared_to": null,
                 "type": "DYNAMIC",
                 "created_by": "dummy@email.gouv.fr",
                 "created_at_utc:sql": "NOW() - INTERVAL '1 day'",
@@ -77,7 +78,8 @@
                     "zones": []
                 },
                 "vessels": null,
-                "sharing": "PRIVATE",
+                "sharing": "SHARED",
+                "shared_to": ["Pôle OPS métropole"],
                 "type": "DYNAMIC",
                 "created_by": "dummy@email.gouv.fr",
                 "created_at_utc:sql": "NOW() - INTERVAL '15 day'",
@@ -149,6 +151,7 @@
                     }
                 ],
                 "sharing": "PRIVATE",
+                "shared_to": null,
                 "type": "FIXED",
                 "created_by": "dummy@email.gouv.fr",
                 "created_at_utc:sql": "NOW() - INTERVAL '25 day'",

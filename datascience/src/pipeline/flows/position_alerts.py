@@ -15,6 +15,7 @@ from sqlalchemy.sql import Select
 
 from src.db_config import create_engine
 from src.pipeline import utils
+from src.pipeline.entities.alerts import AlertType
 from src.pipeline.generic_tasks import extract, read_query_task
 from src.pipeline.processing import coalesce, join_on_multiple_keys
 from src.pipeline.shared_tasks.alerts import (
@@ -121,34 +122,34 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
         ValueError: if the input `alert_type` does not correspond to one of the
           expected types of alert.
     """
-
+    alert_type = AlertType(alert_type)
     alert_type_zones_tables = {
-        "THREE_MILES_TRAWLING_ALERT": {
+        AlertType.THREE_MILES_TRAWLING_ALERT: {
             "table": "n_miles_to_shore_areas_subdivided",
             "filter_column": "miles_to_shore",
             "geometry_column": "geometry",
         },
-        "TWELVE_MILES_FISHING_ALERT": {
+        AlertType.TWELVE_MILES_FISHING_ALERT: {
             "table": "n_miles_to_shore_areas_subdivided",
             "filter_column": "miles_to_shore",
             "geometry_column": "geometry",
         },
-        "FRENCH_EEZ_FISHING_ALERT": {
+        AlertType.FRENCH_EEZ_FISHING_ALERT: {
             "table": "eez_areas",
             "filter_column": "iso_sov1",
             "geometry_column": "wkb_geometry",
         },
-        "RTC_FISHING_ALERT": {
+        AlertType.RTC_FISHING_ALERT: {
             "table": "regulations",
             "filter_column": "law_type",
             "geometry_column": "geometry",
         },
-        "NEAFC_FISHING_ALERT": {
+        AlertType.NEAFC_FISHING_ALERT: {
             "table": "neafc_regulatory_area",
             "filter_column": None,
             "geometry_column": "wkb_geometry",
         },
-        "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT": {
+        AlertType.BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT: {
             "table": "regulations",
             "filter_column": "topic",
             "geometry_column": "geometry",

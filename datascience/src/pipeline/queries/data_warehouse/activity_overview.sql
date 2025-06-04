@@ -1,6 +1,6 @@
 WITH t AS (
     SELECT 
-        toStartOfWeek(far_datetime_utc)::DateTime AS far_week,
+        toStartOfWeek(far_datetime_utc)::DateTime64 AS far_week,
         facade,
         landing_facade,
         COALESCE('Dept. ' || landing_region, '-') AS landing_department,

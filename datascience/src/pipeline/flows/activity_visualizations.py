@@ -28,8 +28,8 @@ def extract_activity_overview_data(
 @task(checkpoint=False)
 def get_time_range(df: pd.DataFrame) -> list:
     time_range = [
-        int(df.far_week.min()) * 1000,
-        int(df.far_week.max()) * 1000,
+        int(df.far_week.min().timestamp()) * 1000,
+        int(df.far_week.max().timestamp()) * 1000,
     ]
     return time_range
 
@@ -419,6 +419,8 @@ def make_config(time_range: list) -> dict:
 
 @task(checkpoint=False)
 def generate_html(df: pd.DataFrame, config: dict) -> str:
+    df = df.copy(deep=True)
+    df["far_week"] = df.far_week.map(lambda ts: ts.isoformat(sep=" "))
     map_1 = KeplerGl()
     map_1.add_data(df, name="activity_dataset")
     map_1.config = config

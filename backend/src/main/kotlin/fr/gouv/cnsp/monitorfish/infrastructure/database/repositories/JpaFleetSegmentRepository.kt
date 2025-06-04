@@ -111,6 +111,4 @@ class JpaFleetSegmentRepository(
     ) {
         dbFleetSegmentRepository.duplicateCurrentYearAsNextYear(currentYear, nextYear)
     }
-
-    fun List<String>.toArrayString(): String = this.joinToString(",", "{", "}")
 }

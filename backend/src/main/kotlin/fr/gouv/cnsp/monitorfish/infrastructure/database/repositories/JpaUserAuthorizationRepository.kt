@@ -17,8 +17,8 @@ class JpaUserAuthorizationRepository(
         dbUserAuthorizationRepository.findByHashedEmail(hashedEmail).toUserAuthorization()
 
     @Modifying
-    override fun save(user: UserAuthorization) {
-        dbUserAuthorizationRepository.saveUserAuthorization(UserAuthorizationEntity.fromUserAuthorization(user))
+    override fun upsert(user: UserAuthorization) {
+        dbUserAuthorizationRepository.upsertUserAuthorization(UserAuthorizationEntity.fromUserAuthorization(user))
     }
 
     @Modifying

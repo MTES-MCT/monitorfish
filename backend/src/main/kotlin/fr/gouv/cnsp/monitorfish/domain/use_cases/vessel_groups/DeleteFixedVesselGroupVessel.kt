@@ -6,12 +6,14 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 @UseCase
 class DeleteFixedVesselGroupVessel(
     private val vesselGroupRepository: VesselGroupRepository,
+    private val getAuthorizedUser: GetAuthorizedUser,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(DeleteFixedVesselGroupVessel::class.java)
 
@@ -23,6 +25,7 @@ class DeleteFixedVesselGroupVessel(
         logger.info(
             "Updating vessel group $groupId from user $userEmail.",
         )
+        val userService = getAuthorizedUser.execute(userEmail).service
 
         val updatedVesselGroup =
             when (val savedVesselGroup = vesselGroupRepository.findById(groupId)) {
@@ -31,7 +34,8 @@ class DeleteFixedVesselGroupVessel(
                     message = "Could not update a dynamic group to a fixed group.",
                 )
                 is FixedVesselGroup -> {
-                    if (savedVesselGroup.createdBy != userEmail) {
+                    val hasRight = savedVesselGroup.hasUserRights(userEmail, userService)
+                    if (!hasRight) {
                         throw BackendUsageException(
                             BackendUsageErrorCode.COULD_NOT_UPDATE,
                             message = "Your are not allowed to update this fixed group.",
@@ -54,6 +58,6 @@ class DeleteFixedVesselGroupVessel(
                 }
             }
 
-        return vesselGroupRepository.save(updatedVesselGroup)
+        return vesselGroupRepository.upsert(updatedVesselGroup)
     }
 }

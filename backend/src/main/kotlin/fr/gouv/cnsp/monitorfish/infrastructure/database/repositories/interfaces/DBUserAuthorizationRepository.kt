@@ -30,5 +30,5 @@ interface DBUserAuthorizationRepository : CrudRepository<UserAuthorizationEntity
           is_administrator = EXCLUDED.is_administrator;
     """,
     )
-    fun saveUserAuthorization(user: UserAuthorizationEntity)
+    fun upsertUserAuthorization(user: UserAuthorizationEntity)
 }

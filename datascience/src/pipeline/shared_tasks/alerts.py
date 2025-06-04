@@ -63,11 +63,12 @@ def extract_pending_alerts_ids_of_type(alert_type: str) -> List[int]:
     """
     Return ids of pending alerts corresponding to `alert_type`
     """
+    alert_type = AlertType(alert_type)
     logger = prefect.context.get("logger")
     pending_alerts = extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/pending_alerts_of_type.sql",
-        params={"alert_type": alert_type},
+        params={"alert_type": alert_type.value},
     )
     ids = pending_alerts.id.unique().tolist()
     logger.info(f"Returning {len(ids)} pending alerts ids.")
@@ -75,15 +76,16 @@ def extract_pending_alerts_ids_of_type(alert_type: str) -> List[int]:
 
 
 @task(checkpoint=False)
-def extract_non_archived_reportings_ids_of_type(reporting_type: str) -> List[int]:
+def extract_non_archived_reportings_ids_of_type(alert_type: str) -> List[int]:
     """
-    Return ids of pending alerts corresponding to `alert_type`
+    Return ids of reportings corresponding to `alert_type`
     """
+    alert_type = AlertType(alert_type)
     logger = prefect.context.get("logger")
     reportings = extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/non_archived_reportings_of_type.sql",
-        params={"reporting_type": reporting_type},
+        params={"reporting_type": alert_type.value},
     )
     ids = reportings.id.unique().tolist()
     logger.info(f"Returning {len(ids)} reportings ids.")
@@ -159,7 +161,7 @@ def make_alerts(
     if "longitude" not in alerts:
         alerts["longitude"] = None
 
-    alerts["type"] = alert_type
+    alerts["type"] = AlertType(alert_type).value
     alerts["value"] = df_to_dict_series(
         alerts.rename(
             columns={

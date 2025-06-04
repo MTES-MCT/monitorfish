@@ -7,6 +7,20 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2025-06-04',
+        description: `Il est désormais possible de créer des groupes de navires partagés entre les utilisateurs du CNSP.
+Les groupes, qu’ils soient fixes ou dynamiques, peuvent être partagés au sein des pôles :
+- OPS métropole
+- OPS outre-mer
+- Réglementation/Planification
+- SIP
+
+⚠️ Attention : tous les utilisateurs ayant accès à un groupe partagé peuvent le modifier ou le supprimer.`,
+        for: 'CNSP',
+        title: `Ajout du groupes partagés`,
+        type: 'NEW_FEATURE'
+      },
+      {
         date: '2025-05-30',
         description: `Le filtre "Organisation de Producteurs" (OP) a été ajouté à la liste des navires.
 Il est désormais possible de créer des groupes dynamiques en utilisant ce critère, ce qui peut s’avérer utile pour surveiller une fermeture de quotas.`,

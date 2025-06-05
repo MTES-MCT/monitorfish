@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.TestUtils.getDummyFarMessages
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
 import org.assertj.core.api.Assertions.assertThat
@@ -229,5 +230,33 @@ class LogbookMessageUTests {
         assertThat(logbookMessage.acknowledgment?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC))
         assertThat(logbookMessage.acknowledgment?.returnStatus).isEqualTo("000")
+    }
+
+    @Test
+    fun `enrich Should enrich a correction message And update isCorrectedByNewerMessage of the corrected message`() {
+        // Given
+        val correctionMessage = getDummyFarMessages.first()
+        val correctedMessage = getDummyFarMessages.last()
+
+        // When
+        correctionMessage.enrich(getDummyFarMessages, listOf(), listOf(), listOf())
+
+        // Then
+        assertThat(correctionMessage.isCorrectedByNewerMessage).isEqualTo(false)
+        assertThat(correctedMessage.isCorrectedByNewerMessage).isEqualTo(true)
+        assertThat(correctionMessage.acknowledgment?.isSuccess).isEqualTo(true)
+    }
+
+    @Test
+    fun `enrich Should enrich a corrected message`() {
+        // Given
+        val correctedMessage = getDummyFarMessages.last()
+
+        // When
+        correctedMessage.enrich(getDummyFarMessages, listOf(), listOf(), listOf())
+
+        // Then
+        assertThat(correctedMessage.isCorrectedByNewerMessage).isEqualTo(false)
+        assertThat(correctedMessage.acknowledgment?.isSuccess).isEqualTo(true)
     }
 }

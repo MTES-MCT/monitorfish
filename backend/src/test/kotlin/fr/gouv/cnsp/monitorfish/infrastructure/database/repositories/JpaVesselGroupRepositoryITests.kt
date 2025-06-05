@@ -63,7 +63,11 @@ class JpaVesselGroupRepositoryITests : AbstractDBTests() {
         // Given
         val previousGroups = jpaVesselGroupRepository.findAllByUserAndSharing("dummy@email.gouv.fr", null)
         assertThat(previousGroups).hasSize(3)
-        val expectedGroup = getDynamicVesselGroups().first().copy(id = null, sharedTo = listOf(CnspService.POLE_OPS_METROPOLE))
+        val expectedGroup =
+            getDynamicVesselGroups().first().copy(
+                id = null,
+                sharedTo = listOf(CnspService.POLE_OPS_METROPOLE),
+            )
 
         // When
         val savedGroup = jpaVesselGroupRepository.upsert(expectedGroup)

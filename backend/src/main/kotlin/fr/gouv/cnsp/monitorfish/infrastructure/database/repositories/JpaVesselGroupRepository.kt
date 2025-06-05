@@ -37,13 +37,13 @@ class JpaVesselGroupRepository(
             vesselGroup.id?.let { id ->
                 dbVesselGroupRepository.updateVesselGroup(
                     VesselGroupEntity.fromDynamicVesselGroup(mapper, vesselGroup),
-                    toSqlArrayString(vesselGroup.sharedTo?.map { it.value })
+                    toSqlArrayString(vesselGroup.sharedTo?.map { it.value }),
                 )
 
                 id
             } ?: dbVesselGroupRepository.saveVesselGroup(
                 VesselGroupEntity.fromDynamicVesselGroup(mapper, vesselGroup),
-                toSqlArrayString(vesselGroup.sharedTo?.map { it.value })
+                toSqlArrayString(vesselGroup.sharedTo?.map { it.value }),
             )
 
         return findById(savedGroupId) as DynamicVesselGroup
@@ -55,13 +55,13 @@ class JpaVesselGroupRepository(
             vesselGroup.id?.let { id ->
                 dbVesselGroupRepository.updateVesselGroup(
                     VesselGroupEntity.fromFixedVesselGroup(mapper, vesselGroup),
-                    toSqlArrayString(vesselGroup.sharedTo?.map { it.value })
+                    toSqlArrayString(vesselGroup.sharedTo?.map { it.value }),
                 )
 
                 id
             } ?: dbVesselGroupRepository.saveVesselGroup(
                 VesselGroupEntity.fromFixedVesselGroup(mapper, vesselGroup),
-                toSqlArrayString(vesselGroup.sharedTo?.map { it.value })
+                toSqlArrayString(vesselGroup.sharedTo?.map { it.value }),
             )
 
         return findById(savedGroupId) as FixedVesselGroup

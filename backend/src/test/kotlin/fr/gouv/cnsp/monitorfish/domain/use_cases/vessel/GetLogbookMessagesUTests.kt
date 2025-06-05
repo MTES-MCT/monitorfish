@@ -434,7 +434,12 @@ class GetLogbookMessagesUTests {
                 speciesRepository,
                 portRepository,
                 logbookRawMessageRepository,
-            ).execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+            ).execute(
+                internalReferenceNumber = "FR224226850",
+                afterDepartureDate = ZonedDateTime.now().minusMinutes(5),
+                beforeDepartureDate = ZonedDateTime.now(),
+                tripNumber = "345",
+            )
 
         // Then
         assertThat(ersMessages).hasSize(6)

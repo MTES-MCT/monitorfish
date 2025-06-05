@@ -1,0 +1,329 @@
+// /!\ TO KEEP: For foreign key between logbook_raw_messages and logbook_reports operation_number
+
+[
+    {
+        "table": "logbook_raw_messages",
+        "data": [
+            {
+                "operation_number": "OOF20190126059903",
+                "xml_message": "<ers:OPS AD=\"FRA\" FR=\"OOE\" ON=\"OOF20190126059903\" OD=\"2021-01-28\" OT=\"23:53\" EVL=\"TurboCatch (3.5-5)\">\n<ers:DAT TM=\"CU\">\n<ers:ERS RN=\"OOE20210128025702\" RD=\"2021-01-28\" RT=\"23:53\">\n<ers:LOG IR=\"FRA000730810\" RC=\"FGRH\" XR=\"GV710812\" NA=\"LE MUREX\" MA=\"YALA\" MD=\"PENMARCH \" FS=\"FRA\">\n<ers:FAR LR=\"0\" IS=\"0\" DA=\"2021-01-28\" TI=\"22:01\">\n<ers:POS LT=\"51.323\" LG=\"-5.724\"/>\n<ers:GEA GE=\"OTT\" ME=\"110\" GC=\"20;2\" FO=\"4\" DU=\"960\" FD=\"80\"/>\n<ers:SPE SN=\"ANF\" WT=\"207.40\" MM=\"EST\">\n<ers:RAS FA=\"27\" SA=\"7\" ID=\"g\" EZ=\"GBR\" SR=\"31E4\"/>\n<ers:PRO PS=\"FRE\" PR=\"GUT\" TY=\"BUL\" CF=\"1.22\"/>\n<ers:ESPE Type=\"nat\" MR=\"20210035\"/>\n</ers:SPE>\n...\n</ers:FAR>\n<ers:ELOG Type=\"nat\" TN=\"20210035\"/>\n</ers:LOG>\n</ers:ERS>\n</ers:DAT>\n</ers:OPS>"
+            },
+            {
+                "operation_number": "OOF20190223059904",
+                "xml_message": "<ers:OPS AD=\"FRA\" FR=\"OOF\" ON=\"OOF20190223059904\" OD=\"2021-01-28\" OT=\"23:52\" EVL=\"IKTUS 4.5.8\">\n<ers:DAT TM=\"CU\">\n<ers:ERS RN=\"OOF20210129058100\" RD=\"2021-01-28\" RT=\"23:52\">\n<ers:LOG IR=\"FRA000911294\" RC=\"FIZX\" XR=\"CC911294\" NA=\"ROSELEND\" MA=\"jaffrezic\" MD=\"hameau de keroulas pendruc - 299010 tregunc\" FS=\"FRA\">\n<ers:EOF DA=\"2021-01-27\" TI=\"14:00\"/>\n<ers:ELOG Type=\"nat\" TN=\"20210001\"/>\n</ers:LOG>\n</ers:ERS>\n</ers:DAT>\n</ers:OPS>"
+            },
+            {
+                "operation_number": "OOF20190223059905",
+                "xml_message": "<ers:OPS AD=\"FRA\" FR=\"OOF\" ON=\"OOF20190223059905\" OD=\"2021-01-28\" OT=\"23:52\" EVL=\"IKTUS 4.5.8\">\n<ers:DAT TM=\"CU\">\n<ers:ERS RN=\"OOF20210129058100\" RD=\"2021-01-28\" RT=\"23:52\">\n<ers:LOG IR=\"FRA000911294\" RC=\"FIZX\" XR=\"CC911294\" NA=\"ROSELEND\" MA=\"jaffrezic\" MD=\"hameau de keroulas pendruc - 299010 tregunc\" FS=\"FRA\">\n<ers:EOF DA=\"2021-01-27\" TI=\"14:00\"/>\n<ers:ELOG Type=\"nat\" TN=\"20210001\"/>\n</ers:LOG>\n</ers:ERS>\n</ers:DAT>\n</ers:OPS>"
+            },
+            {
+                "operation_number": "OOF20190227059900",
+                "xml_message": "<ers:OPS AD=\"FRA\" FR=\"OOE\" ON=\"OOE20210128028606\" OD=\"2021-01-28\" OT=\"23:49\" EVL=\"TurboCatch (3.6-1)\">\n<ers:DAT TM=\"CU\">\n<ers:ERS RN=\"OOE20210128028606\" RD=\"2021-01-28\" RT=\"23:49\">\n<ers:LOG IR=\"FRA00088842\" RC=\"FHLG\" XR=\"LO88442\" NA=\"PHALENE\" MA=\"phillipe\" MD=\"frrf\" FS=\"FRA\">\n<ers:DEP DA=\"2021-01-28\" TI=\"23:49\" PO=\"FRLRT\" AA=\"FSH\">\n<ers:GEA GE=\"TBN\" ME=\"80\" GC=\"17\"/>\n</ers:DEP>\n<ers:ELOG Type=\"nat\" TN=\"20210336\"/>\n</ers:LOG>\n</ers:ERS>\n</ers:DAT>\n</ers:OPS>"
+            },
+            {
+                "operation_number": "OOF20191030059902",
+                "xml_message": "<ers:OPS AD=\"FRA\" FR=\"OOE\" ON=\"OOF20190126059903\" OD=\"2021-01-28\" OT=\"23:53\" EVL=\"TurboCatch (3.5-5)\">\n<ers:DAT TM=\"CU\">\n<ers:ERS RN=\"OOE20210128025702\" RD=\"2021-01-28\" RT=\"23:53\">\n<ers:LOG IR=\"FRA000730810\" RC=\"FGRH\" XR=\"GV710812\" NA=\"LE MUREX\" MA=\"YALA\" MD=\"PENMARCH \" FS=\"FRA\">\n<ers:FAR LR=\"0\" IS=\"0\" DA=\"2021-01-28\" TI=\"22:01\">\n...\n</ers:FAR>\n<ers:ELOG Type=\"nat\" TN=\"20210035\"/>\n</ers:LOG>\n</ers:ERS>\n</ers:DAT>\n</ers:OPS>"
+            },
+            {
+                "operation_number": "OOF20190430059907",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190617059901",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190618059902",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190619059905",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190627059906",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190627059908",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190710059906",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190722059907",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190830059906",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20191015059904",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20191011059900",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20191011059902",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20191203059903",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190403059904",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20191030059903",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20191030059909",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190830059966",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190403059909",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20103048321388",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF22123048321388",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF22113048321388",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190617056738",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF22103048321399",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190223059906",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190430059918",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF22103048321388",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF69850430059918",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190433689918",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190430056936",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190430056396",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190430056397",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF99190430056936",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF91190430056936",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190227059999",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF22103048321398",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20191205059902",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190265896325",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190227050000",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190227050001",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190227050002",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190227050003",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF22103048326325",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20191030056523",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190126036598",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20103048326985",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20103048323658",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "cc7ee632-e515-460f-a1c1-f82222a6d419",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "a3c52754-97e1-4a21-ba2e-d8f16f4544e9",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "d5c3b039-aaee-4cca-bcae-637fa8effe14",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "7cfcdde3-286c-4713-8460-2ed82a59be34",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "4f971076-e6c6-48f6-b87e-deae90fe4705",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "8f06061e-e723-4b89-8577-3801a61582a2",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "8db132d1-68fc-4ae6-b12e-4af594351701",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "b509d82f-ce27-46c2-b5a3-d2bcae09de8a",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "6c26236d-51ad-4aee-ac37-8e83978346a0",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "81cf0182-db9c-4384-aca3-a75b1067c41a",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "ab1058c7-b7cf-4345-a0b3-a9f472cc6ef6",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "8826952f-b240-4570-a9dc-59f3a24c7bf1",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "5ee8be46-2efe-4a29-b2df-bdf2d3ed66a1",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "48794a8f-adfa-43b2-b4c3-2e8d3581bfb4",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "196aca16-da66-4077-b340-ecad701be662",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "4a4c8d24-f4be-4ccb-8aef-99ab5aae7e02",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "251db84c-1d8b-49be-b426-f70bb2c68a2d",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "08a125d6-6b6d-4f90-b26a-bf8426673eea",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "9e38840b-f05a-49a4-ab34-e41131749fd0",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "60e0d2e0-2713-43d7-9fa1-fcf968e34d82",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "0e1ea2b6-f4f5-4958-bc48-cfb016a22f58",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "3cffa378-0f8c-4540-b849-747621cfcb4a",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "7bf7401d-cbb1-4e6f-bad8-7e309ee004cf",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "9376ccbd-be2f-4d3d-b4ac-3c559ac9586a",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            },
+            {
+                "operation_number": "OOF20190015146541",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190158541231",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190439686456",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "OOF20190439686457",
+                "xml_message": ""
+            },
+            {
+                "operation_number": "d5c3b039-aaee-4cca-bcae-637f5fe574f5",
+                "xml_message": "<Flux>Message FLUX xml</Flux>"
+            }
+        ]
+    }
+]

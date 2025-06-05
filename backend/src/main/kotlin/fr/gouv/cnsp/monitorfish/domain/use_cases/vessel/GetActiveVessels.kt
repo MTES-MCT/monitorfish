@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
@@ -14,13 +15,20 @@ import java.time.ZonedDateTime
 class GetActiveVessels(
     private val lastPositionRepository: LastPositionRepository,
     private val vesselGroupRepository: VesselGroupRepository,
+    private val getAuthorizedUser: GetAuthorizedUser,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetActiveVessels::class.java)
 
     fun execute(userEmail: String): List<EnrichedActiveVessel> {
         val now = ZonedDateTime.now()
+        val userService = getAuthorizedUser.execute(userEmail).service
+
         val lastPositionsWithProfileAndVessel = lastPositionRepository.findActiveVesselWithReferentialData()
-        val vesselGroups = vesselGroupRepository.findAllByUser(userEmail)
+        val vesselGroups =
+            vesselGroupRepository.findAllByUserAndSharing(
+                user = userEmail,
+                service = userService,
+            )
 
         return lastPositionsWithProfileAndVessel
             .map { activeVessel ->

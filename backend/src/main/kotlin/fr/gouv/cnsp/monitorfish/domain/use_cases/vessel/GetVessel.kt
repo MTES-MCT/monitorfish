@@ -10,6 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.slf4j.Logger
@@ -27,6 +28,7 @@ class GetVessel(
     private val vesselGroupRepository: VesselGroupRepository,
     private val vesselProfileRepository: VesselProfileRepository,
     private val lastPositionRepository: LastPositionRepository,
+    private val getAuthorizedUser: GetAuthorizedUser,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetVessel::class.java)
 
@@ -43,6 +45,7 @@ class GetVessel(
     ): Pair<Boolean, EnrichedActiveVesselWithPositions> =
         coroutineScope {
             val now = ZonedDateTime.now()
+            val userService = getAuthorizedUser.execute(userEmail).service
 
             val (vesselTrackHasBeenModified, positions) =
                 getVesselPositions.execute(
@@ -70,7 +73,10 @@ class GetVessel(
 
             val userVesselGroups =
                 async {
-                    vesselGroupRepository.findAllByUser(userEmail)
+                    vesselGroupRepository.findAllByUserAndSharing(
+                        user = userEmail,
+                        service = userService,
+                    )
                 }
             val vesselProfile =
                 async {

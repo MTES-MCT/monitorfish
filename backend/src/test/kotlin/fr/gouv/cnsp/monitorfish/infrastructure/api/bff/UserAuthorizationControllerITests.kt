@@ -31,7 +31,14 @@ class UserAuthorizationControllerITests {
     fun `Should return 200 if the user is found`() {
         // Given
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
-        given(getAuthorizedUser.execute(any())).willReturn(UserAuthorization("email", true))
+        given(getAuthorizedUser.execute(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "email",
+                isSuperUser = true,
+                service = null,
+                isAdministrator = false,
+            ),
+        )
 
         // When
         api
@@ -49,7 +56,14 @@ class UserAuthorizationControllerITests {
     fun `Should return 401 if the user is not authorized`() {
         // Given
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(false)
-        given(getAuthorizedUser.execute(any())).willReturn(UserAuthorization("email", true))
+        given(getAuthorizedUser.execute(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "email",
+                isSuperUser = false,
+                service = null,
+                isAdministrator = false,
+            ),
+        )
 
         // When
         api
@@ -69,6 +83,8 @@ class UserAuthorizationControllerITests {
             UserAuthorization(
                 hashedEmail = "d44b8b1163276cb22a02d462de5883ceb60b461e20c4e27e905b72ec8b649807",
                 isSuperUser = false,
+                service = null,
+                isAdministrator = false,
             ),
         )
 

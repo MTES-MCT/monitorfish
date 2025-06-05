@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos
 
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.Sharing
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupFilters
@@ -13,6 +14,7 @@ data class CreateOrUpdateDynamicVesselGroup(
     val pointsOfAttention: String?,
     val color: String,
     val sharing: Sharing,
+    val sharedTo: List<CnspService>?,
     val endOfValidityUtc: ZonedDateTime? = null,
     val filters: VesselGroupFilters,
 ) {
@@ -28,6 +30,7 @@ data class CreateOrUpdateDynamicVesselGroup(
         pointsOfAttention = pointsOfAttention,
         color = color,
         sharing = sharing,
+        sharedTo = sharedTo,
         createdBy = createdBy,
         createdAtUtc = createdAtUtc,
         updatedAtUtc = updatedAtUtc,

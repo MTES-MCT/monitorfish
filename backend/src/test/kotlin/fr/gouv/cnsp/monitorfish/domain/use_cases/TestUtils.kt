@@ -965,6 +965,7 @@ object TestUtils {
                         "suspicion blanchiment bar en 7.d.",
                 color = "#4287f5",
                 sharing = Sharing.PRIVATE,
+                sharedTo = null,
                 endOfValidityUtc = null,
                 filters =
                     VesselGroupFilters(
@@ -992,6 +993,7 @@ object TestUtils {
                 pointsOfAttention = null,
                 color = "#4287f5",
                 sharing = Sharing.PRIVATE,
+                sharedTo = null,
                 endOfValidityUtc = null,
                 filters =
                     VesselGroupFilters(
@@ -1025,6 +1027,7 @@ object TestUtils {
                         "suspicion blanchiment bar en 7.d.",
                 color = "#4287f5",
                 sharing = Sharing.PRIVATE,
+                sharedTo = null,
                 endOfValidityUtc = null,
                 vessels =
                     listOf(
@@ -1056,6 +1059,7 @@ object TestUtils {
                 pointsOfAttention = null,
                 color = "#4287f5",
                 sharing = Sharing.PRIVATE,
+                sharedTo = null,
                 endOfValidityUtc = null,
                 vessels =
                     listOf(

@@ -239,7 +239,7 @@ function getSegmentListElement(fleetSegments: FleetSegment[]) {
 }
 
 const StyledTagInfo = styled(TagInfo)`
-  margin-top: 0;
+  margin-top: 10px;
 `
 
 const ExpandableRowCell = styled(TableWithSelectableRows.Td)<{

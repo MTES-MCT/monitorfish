@@ -1,7 +1,9 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
@@ -10,6 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.DUMMY_VESSEL
+import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.TestUtils.getDummyLastPositions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.TestUtils.getDummyPositions
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.TestUtils.DUMMY_VESSEL_PROFILE
@@ -58,9 +61,20 @@ class GetVesselUTests {
     @MockBean
     private lateinit var lastPositionRepository: LastPositionRepository
 
+    @MockBean
+    private lateinit var getAuthorizedUser: GetAuthorizedUser
+
     @Test
     fun `execute Should return the vessel and an ordered list of last positions for a given vessel`() {
         // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+                isSuperUser = true,
+                service = null,
+                isAdministrator = false,
+            ),
+        )
         val now = ZonedDateTime.now().minusDays(1)
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             getDummyPositions(now),
@@ -72,7 +86,9 @@ class GetVesselUTests {
         given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(
             VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
         )
-        given(vesselGroupRepository.findAllByUser(any())).willReturn(TestUtils.getDynamicVesselGroups())
+        given(
+            vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull()),
+        ).willReturn(TestUtils.getDynamicVesselGroups())
         given(vesselProfileRepository.findByCfr(any())).willReturn(DUMMY_VESSEL_PROFILE)
         given(beaconRepository.findBeaconByVesselId(eq(123))).willReturn(Beacon("A_BEACON_NUMBER", vesselId = 123))
         given(producerOrganizationMembershipRepository.findByInternalReferenceNumber(any())).willReturn(
@@ -92,6 +108,7 @@ class GetVesselUTests {
                     vesselGroupRepository = vesselGroupRepository,
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
+                    getAuthorizedUser = getAuthorizedUser,
                 ).execute(
                     vesselId = 123,
                     internalReferenceNumber = "FR224226850",
@@ -150,6 +167,14 @@ class GetVesselUTests {
     @Test
     fun `execute Should not throw an exception When no Vessel found And return null`() {
         // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+                isSuperUser = true,
+                service = null,
+                isAdministrator = false,
+            ),
+        )
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             listOf(),
         )
@@ -169,6 +194,7 @@ class GetVesselUTests {
                     vesselGroupRepository = vesselGroupRepository,
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
+                    getAuthorizedUser = getAuthorizedUser,
                 ).execute(
                     vesselId = 123,
                     internalReferenceNumber = "FR224226850",
@@ -190,6 +216,14 @@ class GetVesselUTests {
     @Test
     fun `execute Should not throw an exception When no beacon found`() {
         // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+                isSuperUser = true,
+                service = null,
+                isAdministrator = false,
+            ),
+        )
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             listOf(),
         )
@@ -210,6 +244,7 @@ class GetVesselUTests {
                     vesselGroupRepository = vesselGroupRepository,
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
+                    getAuthorizedUser = getAuthorizedUser,
                 ).execute(
                     vesselId = 123,
                     internalReferenceNumber = "FR224226850",
@@ -234,6 +269,14 @@ class GetVesselUTests {
     @Test
     fun `execute Should not throw an exception When no vessel id given`() {
         // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+                isSuperUser = true,
+                service = null,
+                isAdministrator = false,
+            ),
+        )
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             listOf(),
         )
@@ -254,6 +297,7 @@ class GetVesselUTests {
                     vesselGroupRepository = vesselGroupRepository,
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
+                    getAuthorizedUser = getAuthorizedUser,
                 ).execute(
                     vesselId = null,
                     internalReferenceNumber = "FR224226850",
@@ -274,6 +318,14 @@ class GetVesselUTests {
     @Test
     fun `execute Should return a default risk factor when not found`() {
         // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+                isSuperUser = true,
+                service = null,
+                isAdministrator = false,
+            ),
+        )
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             listOf(),
         )
@@ -295,6 +347,7 @@ class GetVesselUTests {
                     vesselGroupRepository = vesselGroupRepository,
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
+                    getAuthorizedUser = getAuthorizedUser,
                 ).execute(
                     vesselId = null,
                     internalReferenceNumber = "FR224226850",

@@ -69,10 +69,10 @@ export default defineConfig({
         target: 'http://localhost:8880'
       },
       '/realms': {
-        target: 'http://localhost:8880'
+        target: 'http://localhost:8085'
       },
       '/resources': {
-        target: 'http://localhost:8880'
+        target: 'http://localhost:8085'
       }
     }
   }

@@ -93,11 +93,7 @@ export function EditFixedVesselGroupDialog({
         />
       </StyledDialogBody>
       <StyledDialogAction>
-        <Button
-          accent={Accent.PRIMARY}
-          disabled={numberOfVessels === 0}
-          onClick={() => formRef.current?.handleSubmit()}
-        >
+        <Button accent={Accent.PRIMARY} onClick={() => formRef.current?.handleSubmit()}>
           {String(`${createOrModifyText} le groupe`)}
         </Button>
         <Button accent={Accent.TERTIARY} onClick={onExit}>

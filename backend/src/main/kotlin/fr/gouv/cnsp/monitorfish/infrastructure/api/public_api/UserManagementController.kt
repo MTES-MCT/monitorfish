@@ -22,7 +22,12 @@ class UserManagementController(
     fun saveUser(
         @RequestBody
         user: AddUserDataInput,
-    ) = saveUser.execute(user.email, user.isSuperUser)
+    ) = saveUser.execute(
+        email = user.email,
+        isSuperUser = user.isSuperUser,
+        service = user.service,
+        isAdministrator = user.isAdministrator,
+    )
 
     @DeleteMapping(value = ["/{email}"])
     @Operation(summary = "Delete a given user")

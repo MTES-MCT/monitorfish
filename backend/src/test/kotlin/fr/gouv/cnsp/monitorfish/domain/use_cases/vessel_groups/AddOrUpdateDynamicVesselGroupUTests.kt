@@ -1,10 +1,12 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 
 import com.nhaarman.mockitokotlin2.any
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateDynamicVesselGroups
+import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -21,18 +23,29 @@ class AddOrUpdateDynamicVesselGroupUTests {
     @MockBean
     private lateinit var vesselGroupRepository: VesselGroupRepository
 
+    @MockBean
+    private lateinit var getAuthorizedUser: GetAuthorizedUser
+
     @Test
     fun `execute Should create a new vessel group when id is null`() {
         val groupToSave = getCreateOrUpdateDynamicVesselGroups().first().copy(id = null)
 
         // Given
-        given(vesselGroupRepository.save(any<DynamicVesselGroup>())).willReturn(
+        given(getAuthorizedUser.execute(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+                isSuperUser = true,
+                service = null,
+                isAdministrator = false,
+            ),
+        )
+        given(vesselGroupRepository.upsert(any<DynamicVesselGroup>())).willReturn(
             TestUtils.getDynamicVesselGroups().first(),
         )
 
         // When
         val savedGroup =
-            AddOrUpdateDynamicVesselGroup(vesselGroupRepository)
+            AddOrUpdateDynamicVesselGroup(vesselGroupRepository, getAuthorizedUser)
                 .execute("dummy@email.gouv.fr", groupToSave)
 
         // Then
@@ -44,16 +57,24 @@ class AddOrUpdateDynamicVesselGroupUTests {
         val groupToSave = getCreateOrUpdateDynamicVesselGroups().first()
 
         // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+                isSuperUser = true,
+                service = null,
+                isAdministrator = false,
+            ),
+        )
         given(vesselGroupRepository.findById(1)).willReturn(
             TestUtils.getDynamicVesselGroups().first(),
         )
-        given(vesselGroupRepository.save(any<DynamicVesselGroup>())).willReturn(
+        given(vesselGroupRepository.upsert(any<DynamicVesselGroup>())).willReturn(
             TestUtils.getDynamicVesselGroups().first(),
         )
 
         // When
         val savedGroup =
-            AddOrUpdateDynamicVesselGroup(vesselGroupRepository)
+            AddOrUpdateDynamicVesselGroup(vesselGroupRepository, getAuthorizedUser)
                 .execute("dummy@email.gouv.fr", groupToSave)
 
         // Then
@@ -65,16 +86,24 @@ class AddOrUpdateDynamicVesselGroupUTests {
         val groupToSave = getCreateOrUpdateDynamicVesselGroups().first()
 
         // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+                isSuperUser = true,
+                service = null,
+                isAdministrator = false,
+            ),
+        )
         given(vesselGroupRepository.findById(1)).willReturn(
             TestUtils.getDynamicVesselGroups().first(),
         )
-        given(vesselGroupRepository.save(any<DynamicVesselGroup>())).willReturn(
+        given(vesselGroupRepository.upsert(any<DynamicVesselGroup>())).willReturn(
             TestUtils.getDynamicVesselGroups().first(),
         )
 
         // When
         assertThatThrownBy {
-            AddOrUpdateDynamicVesselGroup(vesselGroupRepository)
+            AddOrUpdateDynamicVesselGroup(vesselGroupRepository, getAuthorizedUser)
                 .execute("other_email!@email.gouv.fr", groupToSave)
         }
             // Then
@@ -87,6 +116,14 @@ class AddOrUpdateDynamicVesselGroupUTests {
         val groupToSave = getCreateOrUpdateDynamicVesselGroups().first().copy()
 
         // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+                isSuperUser = true,
+                service = null,
+                isAdministrator = false,
+            ),
+        )
         given(vesselGroupRepository.findById(1)).willReturn(
             FixedVesselGroup(
                 id = 1,
@@ -105,13 +142,13 @@ class AddOrUpdateDynamicVesselGroupUTests {
                 vessels = listOf(),
             ),
         )
-        given(vesselGroupRepository.save(any<DynamicVesselGroup>())).willReturn(
+        given(vesselGroupRepository.upsert(any<DynamicVesselGroup>())).willReturn(
             TestUtils.getDynamicVesselGroups().first(),
         )
 
         // When
         assertThatThrownBy {
-            AddOrUpdateDynamicVesselGroup(vesselGroupRepository)
+            AddOrUpdateDynamicVesselGroup(vesselGroupRepository, getAuthorizedUser)
                 .execute("dummy@email.gouv.fr", groupToSave)
         }
             // Then

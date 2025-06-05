@@ -14,6 +14,13 @@ export enum GroupType {
   FIXED = 'FIXED'
 }
 
+export enum CnspService {
+  POLE_OPS_METROPOLE = 'POLE_OPS_METROPOLE',
+  POLE_OPS_OUTRE_MER = 'POLE_OPS_OUTRE_MER',
+  POLE_REG_PLANIF = 'POLE_REG_PLANIF',
+  POLE_SIP = 'POLE_SIP'
+}
+
 export const VesselGroupSchema = z.strictObject({
   color: z.string().min(1),
   createdAtUtc: z.string().datetime(),
@@ -24,6 +31,7 @@ export const VesselGroupSchema = z.strictObject({
   isDeleted: z.boolean(),
   name: z.string().min(1).max(255),
   pointsOfAttention: stringOrUndefined,
+  sharedTo: z.union([z.array(z.nativeEnum(CnspService)), z.undefined()]),
   sharing: z.nativeEnum(Sharing),
   type: z.nativeEnum(GroupType),
   updatedAtUtc: z.union([z.string().datetime(), z.undefined()])

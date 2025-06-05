@@ -24,6 +24,8 @@ class GetAuthorizedUser(
             UserAuthorization(
                 hashedEmail = hashedEmail,
                 isSuperUser = false,
+                service = null,
+                isAdministrator = false,
             )
         }
     }

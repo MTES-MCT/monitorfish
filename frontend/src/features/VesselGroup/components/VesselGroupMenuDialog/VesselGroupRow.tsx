@@ -2,6 +2,7 @@ import { ConfirmationModal } from '@components/ConfirmationModal'
 import { Square } from '@features/Regulation/components/ZonePreview'
 import { FilterTags } from '@features/Vessel/components/VesselList/FilterTags'
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
+import { CNSP_SERVICE_LABEL } from '@features/VesselGroup/constants'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
 import { GroupType, Sharing, type VesselGroup } from '@features/VesselGroup/types'
 import { deleteVesselGroup } from '@features/VesselGroup/useCases/deleteVesselGroup'
@@ -114,12 +115,16 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
                 <StyledTag borderColor={THEME.color.slateGray}>Groupe fixe</StyledTag>
               )}
               {vesselGroup.sharing === Sharing.PRIVATE && (
-                <StyledTag backgroundColor={THEME.color.goldenPoppy25} borderColor={THEME.color.goldenPoppyBorder}>
-                  Groupe privé
+                <StyledTag backgroundColor={THEME.color.gainsboro} borderColor={THEME.color.lightGray}>
+                  Groupe personnel
                 </StyledTag>
               )}
               {vesselGroup.sharing === Sharing.SHARED && (
-                <StyledTag backgroundColor={THEME.color.goldenPoppy25} borderColor={THEME.color.goldenPoppyBorder}>
+                <StyledTag
+                  backgroundColor={THEME.color.goldenPoppy25}
+                  borderColor={THEME.color.goldenPoppyBorder}
+                  title={vesselGroup.sharedTo?.map(shared => CNSP_SERVICE_LABEL[shared])?.join(', ')}
+                >
                   Groupe partagé
                 </StyledTag>
               )}
@@ -160,9 +165,14 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
         <ConfirmationModal
           confirmationButtonLabel="Confirmer la suppression"
           message={
-            <p>
+            <ConfirmDeletionBody>
               <b>Êtes-vous sûr de vouloir supprimer ce groupe de navires ?</b>
-            </p>
+              {vesselGroup.sharing === Sharing.SHARED && (
+                <span>
+                  Attention, il sera également supprimé pour les autres utilisateurs avec lesquels il est partagé.
+                </span>
+              )}
+            </ConfirmDeletionBody>
           }
           onCancel={() => setIsDeleteConfirmationModalOpen(false)}
           onConfirm={handleDeleteVesselGroup}
@@ -172,6 +182,15 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
     </>
   )
 }
+
+const ConfirmDeletionBody = styled.p`
+  span {
+    margin-top: 24px;
+    display: block;
+    font-size: 16px;
+    color: ${p => p.theme.color.maximumRed};
+  }
+`
 
 const StyledLink = styled(Link)<{
   $isOpen: boolean

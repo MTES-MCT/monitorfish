@@ -116,8 +116,9 @@ context('Vessel sidebar resume tab', () => {
     cy.wait(200)
 
     // Remove the vessel from the group
-    cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselThree')
     cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]').next().click({ force: true })
+    cy.intercept('GET', `/bff/v1/vessels/find*`).as('updateVesselThree')
+    cy.clickButton('Confirmer la suppression')
     cy.wait('@updateVesselThree')
     cy.get('[title="Mission Thémis – semaine 04 - Ciblage pour la mission de l\'IRIS (bordée A)."]')
       .should('not.exist')

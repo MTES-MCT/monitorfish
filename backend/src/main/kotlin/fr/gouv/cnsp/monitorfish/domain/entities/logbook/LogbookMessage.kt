@@ -177,14 +177,6 @@ data class LogbookMessage(
         }
     }
 
-    /*
-    it.messageType == messageType && (
-                // Message with empty reportId is a RET
-                (reportId.isNullOrEmpty() && it.referencedReportId == reportId) ||
-                    (referencedReportId.isNullOrEmpty() && it.referencedReportId == referencedReportId)
-                )
-     */
-
     private fun findSuccessorsLogbookMessagesWithoutRet(messages: List<LogbookMessage>): List<LogbookMessage> =
         messages.filter {
             it.operationType != LogbookOperationType.RET &&

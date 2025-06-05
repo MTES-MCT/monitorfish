@@ -1,10 +1,104 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.FAR
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LAN
 import java.time.ZonedDateTime
 
 object TestUtils {
-    val getDummyFarMessages =
+    val dummyCorrectedLanMessages =
+        listOf(
+            LogbookMessage(
+                id = null,
+                operationNumber = "OOF20190430059907",
+                tripNumber = "9463714",
+                operationType = LogbookOperationType.DAT,
+                reportId = "OOF20190430059907",
+                referencedReportId = null,
+                reportDateTime = ZonedDateTime.parse("2019-04-30T12:41:00Z"),
+                operationDateTime = ZonedDateTime.parse("2019-04-30T12:41:00Z"),
+                internalReferenceNumber = "FAK000999999",
+                ircs = "CALLME",
+                externalReferenceNumber = "DONTSINK",
+                vesselName = "PHENOMENE",
+                flagState = "FRA",
+                imo = null,
+                messageType = "LAN",
+                message = LAN(),
+                activityDateTime = ZonedDateTime.parse("2019-09-03T12:18Z"),
+                integrationDateTime = ZonedDateTime.parse("2021-01-18T07:17:31.532639Z"),
+                transmissionFormat = LogbookTransmissionFormat.ERS,
+                software = "TurboCatch (3.7-1)",
+            ),
+            LogbookMessage(
+                id = null,
+                operationNumber = "OOF20190430059918",
+                tripNumber = "9463714",
+                operationType = LogbookOperationType.RET,
+                reportId = null,
+                referencedReportId = "OOF20190430059907",
+                reportDateTime = ZonedDateTime.parse("2019-10-30T11:32:00Z"),
+                operationDateTime = ZonedDateTime.parse("2019-10-17T11:36:00Z"),
+                internalReferenceNumber = null,
+                ircs = null,
+                externalReferenceNumber = null,
+                vesselName = null,
+                flagState = null,
+                imo = null,
+                messageType = "",
+                message = Acknowledgment(returnStatus = "000"),
+                activityDateTime = null,
+                integrationDateTime = ZonedDateTime.parse("2021-01-18T07:19:28.384921Z"),
+                transmissionFormat = LogbookTransmissionFormat.ERS,
+                software = "TurboCatch (3.7-1)",
+            ),
+            LogbookMessage(
+                id = null,
+                operationNumber = "OOF69850430059918",
+                tripNumber = "9463714",
+                operationType = LogbookOperationType.COR,
+                reportId = "OOF69850430059918",
+                referencedReportId = "OOF20190430059907",
+                reportDateTime = ZonedDateTime.parse("2019-04-30T12:41:00Z"),
+                operationDateTime = ZonedDateTime.parse("2019-04-30T12:41:00Z"),
+                internalReferenceNumber = "FAK000999999",
+                ircs = "CALLME",
+                externalReferenceNumber = "DONTSINK",
+                vesselName = "PHENOMENE",
+                flagState = "FRA",
+                imo = null,
+                messageType = "LAN",
+                message = LAN(),
+                activityDateTime = ZonedDateTime.parse("2019-09-03T12:18Z"),
+                integrationDateTime = ZonedDateTime.parse("2021-01-18T07:17:31.532639Z"),
+                transmissionFormat = LogbookTransmissionFormat.ERS,
+                software = "TurboCatch (3.7-1)",
+            ),
+            LogbookMessage(
+                id = null,
+                operationNumber = "OOF20190433689918",
+                tripNumber = null,
+                operationType = LogbookOperationType.RET,
+                reportId = null,
+                referencedReportId = "OOF69850430059918",
+                reportDateTime = ZonedDateTime.parse("2019-10-30T11:32:00Z"),
+                operationDateTime = ZonedDateTime.parse("2019-10-17T11:36:00Z"),
+                internalReferenceNumber = null,
+                ircs = null,
+                externalReferenceNumber = null,
+                vesselName = null,
+                flagState = null,
+                imo = null,
+                messageType = "",
+                message = Acknowledgment(returnStatus = "000"),
+                activityDateTime = null,
+                integrationDateTime = ZonedDateTime.parse("2021-01-18T07:19:28.384921Z"),
+                transmissionFormat = LogbookTransmissionFormat.ERS,
+                software = "TurboCatch (3.7-1)",
+            ),
+        )
+
+    val dummyFarMessages =
         listOf(
             LogbookMessage(
                 id = null,

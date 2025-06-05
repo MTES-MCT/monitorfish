@@ -136,8 +136,8 @@ data class LogbookMessage(
     }
 
     private fun enrichAcknowledgeCorrectionAndDeletion(contextLogbookMessages: List<LogbookMessage>) {
-        val predecessorsLogbookMessages = findPredecessorsLogbookMessages(contextLogbookMessages)
-        val successorsLogbookMessages = filterSuccessorsLogbookMessages(contextLogbookMessages)
+        val predecessorsLogbookMessages = findPredecessorsLogbookMessagesWithoutRet(contextLogbookMessages)
+        val successorsLogbookMessages = findSuccessorsLogbookMessagesWithoutRet(contextLogbookMessages)
 
         if (operationType == LogbookOperationType.COR) {
             if (predecessorsLogbookMessages.isEmpty()) {
@@ -149,7 +149,7 @@ data class LogbookMessage(
             predecessorsLogbookMessages.forEach {
                 it.isCorrectedByNewerMessage = true
             }
-            setIsCorrectedByNewerMessage(successorsLogbookMessages)
+            setCorrectionAsCorrectedByNewerMessage(successorsLogbookMessages)
         }
 
         if (operationType == LogbookOperationType.RET && !referencedReportId.isNullOrEmpty()) {
@@ -177,15 +177,27 @@ data class LogbookMessage(
         }
     }
 
-    private fun filterSuccessorsLogbookMessages(messages: List<LogbookMessage>): List<LogbookMessage> =
+    /*
+    it.messageType == messageType && (
+                // Message with empty reportId is a RET
+                (reportId.isNullOrEmpty() && it.referencedReportId == reportId) ||
+                    (referencedReportId.isNullOrEmpty() && it.referencedReportId == referencedReportId)
+                )
+     */
+
+    private fun findSuccessorsLogbookMessagesWithoutRet(messages: List<LogbookMessage>): List<LogbookMessage> =
         messages.filter {
-            it.referencedReportId == reportId
+            it.operationType != LogbookOperationType.RET &&
+                it.messageType == messageType &&
+                it.referencedReportId == reportId
         }
 
-    private fun findPredecessorsLogbookMessages(messages: List<LogbookMessage>): List<LogbookMessage> =
+    private fun findPredecessorsLogbookMessagesWithoutRet(messages: List<LogbookMessage>): List<LogbookMessage> =
         if (!referencedReportId.isNullOrEmpty()) {
-            // We do not filter by message type as the RET message has no message type
-            messages.filter { it.reportId == referencedReportId }
+            messages.filter {
+                it.operationType != LogbookOperationType.RET &&
+                    it.reportId == referencedReportId
+            }
         } else {
             listOf()
         }
@@ -194,7 +206,7 @@ data class LogbookMessage(
         this.acknowledgment = Acknowledgment(isSuccess = true)
     }
 
-    private fun setIsCorrectedByNewerMessage(successorsLogbookMessages: List<LogbookMessage>) {
+    private fun setCorrectionAsCorrectedByNewerMessage(successorsLogbookMessages: List<LogbookMessage>) {
         isCorrectedByNewerMessage =
             successorsLogbookMessages.any {
                 operationType == LogbookOperationType.COR &&

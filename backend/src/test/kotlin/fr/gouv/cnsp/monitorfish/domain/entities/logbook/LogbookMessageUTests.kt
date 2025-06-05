@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.TestUtils.getDummyFarMessages
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.TestUtils.dummyCorrectedLanMessages
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.TestUtils.dummyFarMessages
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
 import org.assertj.core.api.Assertions.assertThat
@@ -235,11 +236,11 @@ class LogbookMessageUTests {
     @Test
     fun `enrich Should enrich a correction message And update isCorrectedByNewerMessage of the corrected message`() {
         // Given
-        val correctionMessage = getDummyFarMessages.first()
-        val correctedMessage = getDummyFarMessages.last()
+        val correctionMessage = dummyFarMessages.first()
+        val correctedMessage = dummyFarMessages.last()
 
         // When
-        correctionMessage.enrich(getDummyFarMessages, listOf(), listOf(), listOf())
+        correctionMessage.enrich(dummyFarMessages, listOf(), listOf(), listOf())
 
         // Then
         assertThat(correctionMessage.isCorrectedByNewerMessage).isEqualTo(false)
@@ -250,13 +251,36 @@ class LogbookMessageUTests {
     @Test
     fun `enrich Should enrich a corrected message`() {
         // Given
-        val correctedMessage = getDummyFarMessages.last()
+        val correctedMessage = dummyFarMessages.last()
 
         // When
-        correctedMessage.enrich(getDummyFarMessages, listOf(), listOf(), listOf())
+        correctedMessage.enrich(dummyFarMessages, listOf(), listOf(), listOf())
 
         // Then
         assertThat(correctedMessage.isCorrectedByNewerMessage).isEqualTo(false)
         assertThat(correctedMessage.acknowledgment?.isSuccess).isEqualTo(true)
+    }
+
+    @Test
+    fun `enrich Should enrich corrected LAN messages`() {
+        // When
+        dummyCorrectedLanMessages.forEach { it.enrich(dummyCorrectedLanMessages, listOf(), listOf(), listOf()) }
+
+        val farAndCorMessages =
+            dummyCorrectedLanMessages.filter {
+                listOf(
+                    LogbookOperationType.DAT,
+                    LogbookOperationType.COR,
+                ).contains(it.operationType)
+            }
+
+        // Then
+        assertThat(farAndCorMessages.first().reportId).isEqualTo("OOF20190430059907")
+        assertThat(farAndCorMessages.first().isCorrectedByNewerMessage).isEqualTo(true)
+        assertThat(farAndCorMessages.first().acknowledgment?.isSuccess).isEqualTo(true)
+
+        assertThat(farAndCorMessages.last().reportId).isEqualTo("OOF69850430059918")
+        assertThat(farAndCorMessages.last().isCorrectedByNewerMessage).isEqualTo(false)
+        assertThat(farAndCorMessages.last().acknowledgment?.isSuccess).isEqualTo(true)
     }
 }

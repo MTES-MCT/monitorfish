@@ -1,5 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.TestUtils.dummyCorrectedLanMessages
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.TestUtils.dummyFarMessages
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
 import org.assertj.core.api.Assertions.assertThat
@@ -229,5 +231,56 @@ class LogbookMessageUTests {
         assertThat(logbookMessage.acknowledgment?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC))
         assertThat(logbookMessage.acknowledgment?.returnStatus).isEqualTo("000")
+    }
+
+    @Test
+    fun `enrich Should enrich a correction message And update isCorrectedByNewerMessage of the corrected message`() {
+        // Given
+        val correctionMessage = dummyFarMessages.first()
+        val correctedMessage = dummyFarMessages.last()
+
+        // When
+        correctionMessage.enrich(dummyFarMessages, listOf(), listOf(), listOf())
+
+        // Then
+        assertThat(correctionMessage.isCorrectedByNewerMessage).isEqualTo(false)
+        assertThat(correctedMessage.isCorrectedByNewerMessage).isEqualTo(true)
+        assertThat(correctionMessage.acknowledgment?.isSuccess).isEqualTo(true)
+    }
+
+    @Test
+    fun `enrich Should enrich a corrected message`() {
+        // Given
+        val correctedMessage = dummyFarMessages.last()
+
+        // When
+        correctedMessage.enrich(dummyFarMessages, listOf(), listOf(), listOf())
+
+        // Then
+        assertThat(correctedMessage.isCorrectedByNewerMessage).isEqualTo(false)
+        assertThat(correctedMessage.acknowledgment?.isSuccess).isEqualTo(true)
+    }
+
+    @Test
+    fun `enrich Should enrich corrected LAN messages`() {
+        // When
+        dummyCorrectedLanMessages.forEach { it.enrich(dummyCorrectedLanMessages, listOf(), listOf(), listOf()) }
+
+        val farAndCorMessages =
+            dummyCorrectedLanMessages.filter {
+                listOf(
+                    LogbookOperationType.DAT,
+                    LogbookOperationType.COR,
+                ).contains(it.operationType)
+            }
+
+        // Then
+        assertThat(farAndCorMessages.first().reportId).isEqualTo("OOF20190430059907")
+        assertThat(farAndCorMessages.first().isCorrectedByNewerMessage).isEqualTo(true)
+        assertThat(farAndCorMessages.first().acknowledgment?.isSuccess).isEqualTo(true)
+
+        assertThat(farAndCorMessages.last().reportId).isEqualTo("OOF69850430059918")
+        assertThat(farAndCorMessages.last().isCorrectedByNewerMessage).isEqualTo(false)
+        assertThat(farAndCorMessages.last().acknowledgment?.isSuccess).isEqualTo(true)
     }
 }

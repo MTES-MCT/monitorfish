@@ -44,62 +44,7 @@ class JpaLogbookRawMessageRepositoryITests : AbstractDBTests() {
                 "<ers:PRO PS=\"FRE\" PR=\"GUT\" TY=\"BUL\" CF=\"1.22\"/>\n" +
                 "<ers:ESPE Type=\"nat\" MR=\"20210035\"/>\n" +
                 "</ers:SPE>\n" +
-                "<ers:SPE SN=\"COD\" WT=\"35.10\" MM=\"EST\">\n" +
-                "<ers:RAS FA=\"27\" SA=\"7\" ID=\"g\" EZ=\"GBR\" SR=\"31E4\"/>\n" +
-                "<ers:PRO PS=\"FRE\" PR=\"GUT\" TY=\"BUL\" CF=\"1.17\"/>\n" +
-                "<ers:ESPE Type=\"nat\" MR=\"20210035\"/>\n" +
-                "</ers:SPE>\n" +
-                "<ers:SPE SN=\"RJC\" WT=\"339.00\" MM=\"EST\">\n" +
-                "<ers:RAS FA=\"27\" SA=\"7\" ID=\"g\" EZ=\"GBR\" SR=\"31E4\"/>\n" +
-                "<ers:PRO PS=\"FRE\" PR=\"GUT\" TY=\"BUL\" CF=\"1.13\"/>\n" +
-                "<ers:ESPE Type=\"nat\" MR=\"20210035\"/>\n" +
-                "</ers:SPE>\n" +
-                "<ers:SPE SN=\"RJM\" WT=\"728.85\" MM=\"EST\">\n" +
-                "<ers:RAS FA=\"27\" SA=\"7\" ID=\"g\" EZ=\"GBR\" SR=\"31E4\"/>\n" +
-                "<ers:PRO PS=\"FRE\" PR=\"GUT\" TY=\"BUL\" CF=\"1.13\"/>\n" +
-                "<ers:ESPE Type=\"nat\" MR=\"20210035\"/>\n" +
-                "</ers:SPE>\n" +
-                "<ers:SPE SN=\"LEZ\" WT=\"26.50\" MM=\"EST\">\n" +
-                "<ers:RAS FA=\"27\" SA=\"7\" ID=\"g\" EZ=\"GBR\" SR=\"31E4\"/>\n" +
-                "<ers:PRO PS=\"FRE\" PR=\"GUT\" TY=\"BUL\" CF=\"1.06\"/>\n" +
-                "<ers:ESPE Type=\"nat\" MR=\"20210035\"/>\n" +
-                "</ers:SPE>\n" +
-                "<ers:SPE SN=\"WIT\" WT=\"84.80\" MM=\"EST\">\n" +
-                "<ers:RAS FA=\"27\" SA=\"7\" ID=\"g\" EZ=\"GBR\" SR=\"31E4\"/>\n" +
-                "<ers:PRO PS=\"FRE\" PR=\"GUT\" TY=\"BUL\" CF=\"1.06\"/>\n" +
-                "<ers:ESPE Type=\"nat\" MR=\"20210035\"/>\n" +
-                "</ers:SPE>\n" +
-                "<ers:SPE SN=\"HAD\" WT=\"228.15\" MM=\"EST\">\n" +
-                "<ers:RAS FA=\"27\" SA=\"7\" ID=\"g\" EZ=\"GBR\" SR=\"31E4\"/>\n" +
-                "<ers:PRO PS=\"FRE\" PR=\"GUT\" TY=\"BUL\" CF=\"1.17\"/>\n" +
-                "<ers:ESPE Type=\"nat\" MR=\"20210035\"/>\n" +
-                "</ers:SPE>\n" +
-                "<ers:SPE SN=\"SOL\" WT=\"13.52\" MM=\"EST\">\n" +
-                "<ers:RAS FA=\"27\" SA=\"7\" ID=\"g\" EZ=\"GBR\" SR=\"31E4\"/>\n" +
-                "<ers:PRO PS=\"FRE\" PR=\"GUT\" TY=\"BUL\" CF=\"1.04\"/>\n" +
-                "<ers:ESPE Type=\"nat\" MR=\"20210035\"/>\n" +
-                "</ers:SPE>\n" +
-                "<ers:SPE SN=\"SDV\" WT=\"6.65\" MM=\"EST\">\n" +
-                "<ers:RAS FA=\"27\" SA=\"7\" ID=\"g\" EZ=\"GBR\" SR=\"31E4\"/>\n" +
-                "<ers:PRO PS=\"FRE\" PR=\"GUT\" TY=\"BUL\" CF=\"1.33\"/>\n" +
-                "<ers:ESPE Type=\"nat\" MR=\"20210035\"/>\n" +
-                "</ers:SPE>\n" +
-                "<ers:SPE SN=\"SCL\" WT=\"25.00\" MM=\"EST\">\n" +
-                "<ers:RAS FA=\"27\" SA=\"7\" ID=\"g\" EZ=\"GBR\" SR=\"31E4\"/>\n" +
-                "<ers:PRO PS=\"FRE\" PR=\"GUT\" TY=\"BUL\" CF=\"1\"/>\n" +
-                "<ers:ESPE Type=\"nat\" MR=\"20210035\"/>\n" +
-                "</ers:SPE>\n" +
-                "<ers:SPE SN=\"TUR\" WT=\"27.25\" MM=\"EST\">\n" +
-                "<ers:RAS FA=\"27\" SA=\"7\" ID=\"g\" EZ=\"GBR\" SR=\"31E4\"/>\n" +
-                "<ers:PRO PS=\"FRE\" PR=\"GUT\" TY=\"BUL\" CF=\"1.09\"/>\n" +
-                "<ers:ESPE Type=\"nat\" MR=\"20210035\"/>\n" +
-                "</ers:SPE>\n" +
-                "<ers:SPE SN=\"POL\" WT=\"5.85\" MM=\"EST\">\n" +
-                "<ers:RAS FA=\"27\" SA=\"7\" ID=\"g\" EZ=\"GBR\" SR=\"31E4\"/>\n" +
-                "<ers:PRO PS=\"FRE\" PR=\"GUT\" TY=\"BUL\" CF=\"1.17\"/>\n" +
-                "<ers:ESPE Type=\"nat\" MR=\"20210035\"/>\n" +
-                "</ers:SPE>\n" +
-                "<ers:EFAR Type=\"nat\" DF=\"8\"/>\n" +
+                "...\n" +
                 "</ers:FAR>\n" +
                 "<ers:ELOG Type=\"nat\" TN=\"20210035\"/>\n" +
                 "</ers:LOG>\n" +

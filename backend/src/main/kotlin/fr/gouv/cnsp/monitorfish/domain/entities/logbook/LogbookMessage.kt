@@ -136,42 +136,36 @@ data class LogbookMessage(
     }
 
     private fun enrichAcknowledgeCorrectionAndDeletion(contextLogbookMessages: List<LogbookMessage>) {
-        val referenceLogbookMessages = findReferencedLogbookMessages(contextLogbookMessages)
-        val relatedLogbookMessages = filterRelatedLogbookMessages(contextLogbookMessages)
+        val predecessorsLogbookMessages = findPredecessorsLogbookMessagesWithoutRet(contextLogbookMessages)
+        val successorsLogbookMessages = findSuccessorsLogbookMessagesWithoutRet(contextLogbookMessages)
 
-        when (true) {
-            (operationType == LogbookOperationType.COR) -> {
-                if (referenceLogbookMessages.isEmpty()) {
-                    logger.warn(
-                        "Original message $referencedReportId corrected by message COR $operationNumber is not found.",
-                    )
-                }
-
-                referenceLogbookMessages.forEach {
-                    it.isCorrectedByNewerMessage = true
-                }
-                setIsCorrectedByNewerMessage(relatedLogbookMessages)
+        if (operationType == LogbookOperationType.COR) {
+            if (predecessorsLogbookMessages.isEmpty()) {
+                logger.warn(
+                    "Original message $referencedReportId corrected by message COR $operationNumber is not found.",
+                )
             }
 
-            (operationType == LogbookOperationType.RET && !referencedReportId.isNullOrEmpty()) -> {
-                referenceLogbookMessages.forEach {
-                    it.setAcknowledge(this.copy())
-                }
+            predecessorsLogbookMessages.forEach {
+                it.isCorrectedByNewerMessage = true
             }
+            setCorrectionAsCorrectedByNewerMessage(successorsLogbookMessages)
+        }
 
-            (transmissionFormat == LogbookTransmissionFormat.FLUX),
-            (LogbookSoftware.isVisioCapture(software)),
-            -> {
-                setAcknowledgeAsSuccessful()
+        if (operationType == LogbookOperationType.RET && !referencedReportId.isNullOrEmpty()) {
+            predecessorsLogbookMessages.forEach {
+                it.setAcknowledge(this.copy())
             }
+        }
 
-            (operationType == LogbookOperationType.DEL && !referencedReportId.isNullOrEmpty()) -> {
-                referenceLogbookMessages.forEach {
-                    it.isDeleted = true
-                }
+        if (operationType == LogbookOperationType.DEL && !referencedReportId.isNullOrEmpty()) {
+            predecessorsLogbookMessages.forEach {
+                it.isDeleted = true
             }
+        }
 
-            else -> {}
+        if (transmissionFormat == LogbookTransmissionFormat.FLUX || LogbookSoftware.isVisioCapture(software)) {
+            setAcknowledgeAsSuccessful()
         }
 
         enrichIsSentByFailoverSoftware()
@@ -183,18 +177,19 @@ data class LogbookMessage(
         }
     }
 
-    private fun filterRelatedLogbookMessages(messages: List<LogbookMessage>): List<LogbookMessage> =
+    private fun findSuccessorsLogbookMessagesWithoutRet(messages: List<LogbookMessage>): List<LogbookMessage> =
         messages.filter {
-            it.messageType == messageType &&
-                (
-                    (reportId.isNullOrEmpty() && it.referencedReportId == reportId) ||
-                        (referencedReportId.isNullOrEmpty() && it.referencedReportId == referencedReportId)
-                )
+            it.operationType != LogbookOperationType.RET &&
+                it.messageType == messageType &&
+                it.referencedReportId == reportId
         }
 
-    private fun findReferencedLogbookMessages(messages: List<LogbookMessage>): List<LogbookMessage> =
+    private fun findPredecessorsLogbookMessagesWithoutRet(messages: List<LogbookMessage>): List<LogbookMessage> =
         if (!referencedReportId.isNullOrEmpty()) {
-            messages.filter { it.reportId == referencedReportId }
+            messages.filter {
+                it.operationType != LogbookOperationType.RET &&
+                    it.reportId == referencedReportId
+            }
         } else {
             listOf()
         }
@@ -203,9 +198,9 @@ data class LogbookMessage(
         this.acknowledgment = Acknowledgment(isSuccess = true)
     }
 
-    private fun setIsCorrectedByNewerMessage(relatedMessages: List<LogbookMessage>) {
+    private fun setCorrectionAsCorrectedByNewerMessage(successorsLogbookMessages: List<LogbookMessage>) {
         isCorrectedByNewerMessage =
-            relatedMessages.any {
+            successorsLogbookMessages.any {
                 operationType == LogbookOperationType.COR &&
                     it.reportDateTime != null &&
                     it.reportDateTime > reportDateTime

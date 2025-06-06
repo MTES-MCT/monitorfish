@@ -179,10 +179,10 @@ def merge(
             us.usual_segment_highest_priority,
             us.usual_segments_control_priority_level
         FROM current_segments cs
-        FULL OUTER JOIN recent_segments rs
-        ON cs.cfr = rs.cfr
         FULL OUTER JOIN usual_segments us
-        ON rs.cfr = us.cfr
+        ON us.cfr = cs.cfr
+        FULL OUTER JOIN recent_segments rs
+        ON rs.cfr = COALESCE(us.cfr, cs.cfr)
     """
     ).to_df()
 

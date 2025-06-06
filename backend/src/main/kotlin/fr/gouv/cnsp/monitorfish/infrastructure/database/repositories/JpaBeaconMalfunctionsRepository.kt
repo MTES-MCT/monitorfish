@@ -1,7 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconMalfunctionException
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBBeaconMalfunctionsRepository
 import org.springframework.stereotype.Repository
@@ -51,7 +52,10 @@ class JpaBeaconMalfunctionsRepository(
                 dbBeaconMalfunctionsRepository.updateEndOfMalfunctionReason(id, it.toString(), updateDateTime)
             }
         } catch (e: Throwable) {
-            throw CouldNotUpdateBeaconMalfunctionException("Could not update beacon malfunction: ${e.message}")
+            throw BackendUsageException(
+                code = BackendUsageErrorCode.COULD_NOT_UPDATE,
+                message = "Could not update beacon malfunction: ${e.message}",
+            )
         }
     }
 

@@ -27,7 +27,7 @@ class ReportingMapperUTests {
 
         // Then
         assertThat(throwable).isNotNull
-        assertThat(throwable.message).isEqualTo("No 'Reporting' value found.")
+        assertThat(throwable.message).isEqualTo("Error while converting 'Reporting': No 'Reporting' value found.")
     }
 
     @Test

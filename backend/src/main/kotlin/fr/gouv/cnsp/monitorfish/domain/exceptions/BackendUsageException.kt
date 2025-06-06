@@ -17,4 +17,4 @@ open class BackendUsageException(
     final override val message: String? = null,
     final override val cause: Throwable? = null,
     val data: Any? = null,
-) : Throwable(code.name, cause)
+) : RuntimeException(code.name, cause)

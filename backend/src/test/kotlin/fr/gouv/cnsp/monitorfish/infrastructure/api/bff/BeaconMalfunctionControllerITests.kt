@@ -2,18 +2,20 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.CommunicationMeans
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconMalfunctionException
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselBeaconMalfunctions
+import fr.gouv.cnsp.monitorfish.infrastructure.api.ControllersExceptionHandler
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCommentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -29,9 +31,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
 
-@Import(SentryConfig::class)
+@Import(SentryConfig::class, ControllersExceptionHandler::class)
 @AutoConfigureMockMvc(addFilters = false)
-@WebMvcTest(value = [(BeaconMalfunctionController::class)])
+@WebMvcTest(value = [BeaconMalfunctionController::class])
 class BeaconMalfunctionControllerITests {
     @Autowired
     private lateinit var api: MockMvc
@@ -96,7 +98,7 @@ class BeaconMalfunctionControllerITests {
 
     @Test
     fun `Should return Ok When an update of a beacon malfunction is done`() {
-        given(this.updateBeaconMalfunction.execute(123, VesselStatus.AT_SEA, null, null))
+        given(this.updateBeaconMalfunction.execute(eq(123), eq(VesselStatus.AT_SEA), anyOrNull(), anyOrNull()))
             .willReturn(
                 BeaconMalfunctionResumeAndDetails(
                     beaconMalfunction =
@@ -162,16 +164,24 @@ class BeaconMalfunctionControllerITests {
 
     @Test
     fun `Should return Bad request When an update of a beacon malfunction is empty`() {
-        given(this.updateBeaconMalfunction.execute(1, null, null, null))
-            .willThrow(CouldNotUpdateBeaconMalfunctionException("FAIL"))
+        given(
+            this.updateBeaconMalfunction.execute(
+                id = anyOrNull(),
+                vesselStatus = anyOrNull(),
+                stage = anyOrNull(),
+                endOfBeaconMalfunctionReason = anyOrNull(),
+            ),
+        ).willThrow(BackendUsageException(BackendUsageErrorCode.COULD_NOT_UPDATE))
 
         // When
         api
             .perform(
-                put(
-                    "/bff/v1/beacon_malfunctions/123",
-                    objectMapper.writeValueAsString(UpdateControlObjectiveDataInput()),
-                ).contentType(MediaType.APPLICATION_JSON),
+                put("/bff/v1/beacon_malfunctions/123")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            UpdateBeaconMalfunctionDataInput(vesselStatus = VesselStatus.AT_SEA),
+                        ),
+                    ).contentType(MediaType.APPLICATION_JSON),
             )
             // Then
             .andExpect(status().isBadRequest)
@@ -180,7 +190,7 @@ class BeaconMalfunctionControllerITests {
     @Test
     fun `Should return a beacon malfunction`() {
         val dateTimeUtc = ZonedDateTime.now()
-        given(this.getBeaconMalfunction.execute(123))
+        given(this.getBeaconMalfunction.execute(eq(123)))
             .willReturn(
                 BeaconMalfunctionResumeAndDetails(
                     beaconMalfunction =

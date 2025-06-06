@@ -16,7 +16,7 @@ open class BackendInternalException(
     final override val message: String = "An internal error occurred.",
     originalException: Exception? = null,
     val code: BackendInternalErrorCode? = null,
-) : Throwable(message) {
+) : RuntimeException(message) {
     private val logger: Logger = LoggerFactory.getLogger(BackendInternalException::class.java)
 
     init {

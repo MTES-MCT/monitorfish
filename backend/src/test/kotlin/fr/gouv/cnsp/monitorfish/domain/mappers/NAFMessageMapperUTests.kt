@@ -128,6 +128,7 @@ internal class NAFMessageMapperUTests {
         val throwable = catchThrowable { NAFMessageMapper(naf) }
 
         // Then
+        assertThat(throwable.cause?.message).contains("Country \"LOL\" not found")
         assertThat(throwable.message).contains("Country \"LOL\" not found")
     }
 

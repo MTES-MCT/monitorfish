@@ -29,7 +29,8 @@ class PositionsControllerITests {
     @Test
     fun `A bad NAF param Should return 200 for the sender not to be worried`() {
         // Given
-        given(parseAndSavePosition.execute(anyString())).willAnswer { throw NAFMessageParsingException("ARGH", "NAF") }
+        given(parseAndSavePosition.execute(anyString()))
+            .willAnswer { throw NAFMessageParsingException("ARGH", "NAF") }
 
         // When
         val body =
@@ -40,7 +41,9 @@ class PositionsControllerITests {
                 .andReturn()
                 .response.contentAsString
 
-        assertThat(body).contains("ARGH for NAF message")
+        assertThat(
+            body,
+        ).isEqualTo("{\"error\":\"ARGH for NAF message \\\"NAF\\\"\",\"type\":\"NAFMessageParsingException\"}")
     }
 
     @Test

@@ -25,6 +25,11 @@ class ControllersExceptionHandler {
     fun handleBackendInternalException(e: BackendInternalException): BackendInternalErrorDataOutput =
         BackendInternalErrorDataOutput(code = e.code, message = e.message)
 
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(BackendRequestException::class)
+    fun handleBackendRequestException(e: BackendRequestException): BackendRequestErrorDataOutput =
+        BackendRequestErrorDataOutput(code = e.code, data = e.data, message = e.message)
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException::class)
     fun handleBackendRuntimeException(e: RuntimeException): BackendInternalErrorDataOutput {
@@ -32,11 +37,6 @@ class ControllersExceptionHandler {
 
         return BackendInternalErrorDataOutput(code = null, message = e.message ?: BackendInternalException().message)
     }
-
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    @ExceptionHandler(BackendRequestException::class)
-    fun handleBackendRequestException(e: BackendRequestException): BackendRequestErrorDataOutput =
-        BackendRequestErrorDataOutput(code = e.code, data = e.data, message = e.message)
 
     @ExceptionHandler(BackendUsageException::class)
     fun handleBackendUsageException(e: BackendUsageException): ResponseEntity<BackendUsageErrorDataOutput> {
@@ -63,12 +63,13 @@ class ControllersExceptionHandler {
     fun handleNAFMessageParsingException(e: Exception): ApiError {
         logger.error(e.message, e.cause)
 
-        return ApiError(e)
+        return ApiError(IllegalArgumentException(e.message.toString(), e))
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(
         IllegalArgumentException::class,
+        // IllegalStateException::class,
         CouldNotUpdateControlObjectiveException::class,
         CouldNotFindException::class,
         NoSuchElementException::class,

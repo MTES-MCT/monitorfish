@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconMalfunctionException
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
 import java.time.ZonedDateTime
@@ -13,7 +12,6 @@ class UpdateBeaconMalfunction(
     private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository,
     private val getBeaconMalfunction: GetBeaconMalfunction,
 ) {
-    @Throws(CouldNotUpdateBeaconMalfunctionException::class, IllegalArgumentException::class)
     fun execute(
         id: Int,
         vesselStatus: VesselStatus?,

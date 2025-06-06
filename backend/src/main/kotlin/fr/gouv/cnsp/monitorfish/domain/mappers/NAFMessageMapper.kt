@@ -99,7 +99,7 @@ class NAFMessageMapper(
                         }
                     }
                 } catch (e: Exception) {
-                    throw NAFMessageParsingException("Incorrect value at field $it", naf, e)
+                    throw NAFMessageParsingException("Incorrect value at field $it: ${e.message}", naf, e)
                 }
             }.run {
                 setZoneDateTimeFromString()

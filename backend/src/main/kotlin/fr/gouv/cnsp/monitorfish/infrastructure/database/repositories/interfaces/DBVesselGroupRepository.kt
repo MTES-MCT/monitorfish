@@ -76,7 +76,10 @@ interface DBVesselGroupRepository : CrudRepository<VesselGroupEntity, Int> {
         ) RETURNING id
     """,
     )
-    fun saveVesselGroup(vg: VesselGroupEntity, sharedTo: String?): Int
+    fun saveVesselGroup(
+        vg: VesselGroupEntity,
+        sharedTo: String?,
+    ): Int
 
     @Modifying
     @Query(
@@ -101,5 +104,8 @@ interface DBVesselGroupRepository : CrudRepository<VesselGroupEntity, Int> {
         WHERE id = :#{#vg.id}
     """,
     )
-    fun updateVesselGroup(vg: VesselGroupEntity, sharedTo: String?)
+    fun updateVesselGroup(
+        vg: VesselGroupEntity,
+        sharedTo: String?,
+    )
 }

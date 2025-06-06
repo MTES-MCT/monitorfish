@@ -15,7 +15,7 @@ open class BackendRequestException(
     val code: BackendRequestErrorCode,
     final override val message: String? = null,
     val data: Any? = null,
-) : Throwable(code.name) {
+) : RuntimeException(code.name) {
     private val logger: Logger = LoggerFactory.getLogger(BackendRequestException::class.java)
 
     init {

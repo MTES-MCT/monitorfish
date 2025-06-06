@@ -1,16 +1,17 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconMalfunctionException
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.RequestNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.UpdateBeaconMalfunction
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -110,16 +111,24 @@ class PublicBeaconMalfunctionControllerITests {
 
     @Test
     fun `Should return Bad request When an update of a beacon malfunction is empty`() {
-        given(this.updateBeaconMalfunction.execute(1, null, null, null))
-            .willThrow(CouldNotUpdateBeaconMalfunctionException("FAIL"))
+        given(
+            this.updateBeaconMalfunction.execute(
+                id = anyOrNull(),
+                vesselStatus = anyOrNull(),
+                stage = anyOrNull(),
+                endOfBeaconMalfunctionReason = anyOrNull(),
+            ),
+        ).willThrow(BackendUsageException(BackendUsageErrorCode.COULD_NOT_UPDATE))
 
         // When
         api
             .perform(
-                put(
-                    "/api/v1/beacon_malfunctions/123",
-                    objectMapper.writeValueAsString(UpdateControlObjectiveDataInput()),
-                ).contentType(MediaType.APPLICATION_JSON),
+                put("/api/v1/beacon_malfunctions/123")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            UpdateBeaconMalfunctionDataInput(vesselStatus = VesselStatus.AT_SEA),
+                        ),
+                    ).contentType(MediaType.APPLICATION_JSON),
             )
             // Then
             .andExpect(status().isBadRequest)

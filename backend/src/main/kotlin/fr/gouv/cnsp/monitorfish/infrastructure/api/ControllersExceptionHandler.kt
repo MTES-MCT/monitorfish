@@ -30,6 +30,14 @@ class ControllersExceptionHandler {
     fun handleBackendRequestException(e: BackendRequestException): BackendRequestErrorDataOutput =
         BackendRequestErrorDataOutput(code = e.code, data = e.data, message = e.message)
 
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(RuntimeException::class)
+    fun handleBackendRuntimeException(e: RuntimeException): BackendInternalErrorDataOutput {
+        logger.error(e.message, e.cause)
+
+        return BackendInternalErrorDataOutput(code = null, message = e.message ?: BackendInternalException().message)
+    }
+
     @ExceptionHandler(BackendUsageException::class)
     fun handleBackendUsageException(e: BackendUsageException): ResponseEntity<BackendUsageErrorDataOutput> {
         val responseBody = BackendUsageErrorDataOutput(code = e.code, data = e.data, message = null)
@@ -55,12 +63,13 @@ class ControllersExceptionHandler {
     fun handleNAFMessageParsingException(e: Exception): ApiError {
         logger.error(e.message, e.cause)
 
-        return ApiError(e)
+        return ApiError(IllegalArgumentException(e.message.toString(), e))
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(
         IllegalArgumentException::class,
+        // IllegalStateException::class,
         CouldNotUpdateControlObjectiveException::class,
         CouldNotFindException::class,
         NoSuchElementException::class,

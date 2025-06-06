@@ -29,6 +29,6 @@ object ReportingMapper {
                 throw EntityConversionException("No 'Reporting' value found.")
             }
         } catch (e: Exception) {
-            throw EntityConversionException("Error while converting 'Reporting'. $message", e)
+            throw EntityConversionException("Error while converting 'Reporting': ${e.message}", e)
         }
 }

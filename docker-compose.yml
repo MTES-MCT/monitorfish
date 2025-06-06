@@ -9,6 +9,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./infra/dev/database/enable_pg_query_stats_and_history.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+      - ./backend/src/main/resources/db/testdata/csv/:/testdata/csv
     ports:
       - 5432:5432
     healthcheck:

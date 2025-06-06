@@ -13,6 +13,7 @@ import org.testcontainers.containers.output.OutputFrame
 import org.testcontainers.containers.output.ToStringConsumer
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.junit.jupiter.Testcontainers
+import org.testcontainers.utility.MountableFile
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 
@@ -39,6 +40,12 @@ abstract class AbstractDBTests {
                     withEnv("POSTGRES_PASSWORD", "postgres")
                     waitingFor(
                         Wait.forLogMessage(".*ready to accept connections.*\\s", 2),
+                    )
+                    withCopyToContainer(
+                        MountableFile.forClasspathResource(
+                            "./db/testdata/csv"
+                        ),
+                        "/testdata/csv"
                     )
                     withStartupTimeout(Duration.of(60L, ChronoUnit.SECONDS))
                     this.start()

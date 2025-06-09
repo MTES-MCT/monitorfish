@@ -92,14 +92,6 @@ data class LastPositionEntity(
     @Column(name = "vessel_identifier")
     @Enumerated(EnumType.STRING)
     val vesselIdentifier: VesselIdentifier,
-    @Column(name = "impact_risk_factor")
-    val impactRiskFactor: Double,
-    @Column(name = "probability_risk_factor")
-    val probabilityRiskFactor: Double,
-    @Column(name = "detectability_risk_factor")
-    val detectabilityRiskFactor: Double,
-    @Column(name = "risk_factor")
-    val riskFactor: Double,
     @Column(name = "under_charter")
     val underCharter: Boolean? = null,
     @Column(name = "is_at_port")
@@ -162,10 +154,6 @@ data class LastPositionEntity(
             lastControlInfraction = lastControlInfraction,
             postControlComment = postControlComment,
             vesselIdentifier = vesselIdentifier,
-            impactRiskFactor = impactRiskFactor,
-            probabilityRiskFactor = probabilityRiskFactor,
-            detectabilityRiskFactor = detectabilityRiskFactor,
-            riskFactor = riskFactor,
             underCharter = underCharter,
             isAtPort = isAtPort,
             alerts = alerts,

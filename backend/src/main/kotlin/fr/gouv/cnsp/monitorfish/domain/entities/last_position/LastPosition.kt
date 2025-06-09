@@ -2,16 +2,8 @@ package fr.gouv.cnsp.monitorfish.domain.entities.last_position
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
-import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultDetectabilityRiskFactor
-import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultImpactRiskFactor
-import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultProbabilityRiskFactor
-import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.LastControlPeriod
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselLocation
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselSize
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
@@ -58,10 +50,6 @@ data class LastPosition(
     val lastControlInfraction: Boolean? = null,
     val postControlComment: String? = null,
     val vesselIdentifier: VesselIdentifier,
-    val impactRiskFactor: Double = defaultImpactRiskFactor,
-    val probabilityRiskFactor: Double = defaultProbabilityRiskFactor,
-    val detectabilityRiskFactor: Double = defaultDetectabilityRiskFactor,
-    val riskFactor: Double = defaultRiskFactor,
     val underCharter: Boolean? = null,
     val isAtPort: Boolean = false,
     val alerts: List<String>? = listOf(),
@@ -111,12 +99,6 @@ data class LastPosition(
             filters.hasLogbook?.let {
                 this.lastLogbookMessageDateTime != null
             } ?: true
-
-        val hasRiskFactorMatch =
-            filters.riskFactors.isEmpty() ||
-                filters.riskFactors.any { riskFactor ->
-                    this.riskFactor in riskFactor.toDouble()..<(riskFactor + 1).toDouble()
-                }
 
         val vesselIsHidden =
             filters.lastPositionHoursAgo?.let { now.minusHours(it.toLong()) } ?: now
@@ -188,7 +170,6 @@ data class LastPosition(
             hasLastControlPeriodMatch &&
             hasDistrictCodeMatch &&
             hasLogbookMatch &&
-            hasRiskFactorMatch &&
             hasLastPositionDateTimeMatch &&
             hasProfileFieldsMatch &&
             hasSpeciesMatch &&

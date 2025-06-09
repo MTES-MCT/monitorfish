@@ -11,14 +11,19 @@ class GetBeaconMalfunction(
     private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
     private val beaconMalfunctionCommentsRepository: BeaconMalfunctionCommentsRepository,
     private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository,
-    private val lastPositionRepository: LastPositionRepository,
+    private val riskFactorRepository: RiskFactorRepository,
     private val beaconMalfunctionNotificationsRepository: BeaconMalfunctionNotificationsRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetBeaconMalfunction::class.java)
 
     fun execute(beaconMalfunctionId: Int): BeaconMalfunctionResumeAndDetails {
-        val lastPositions = lastPositionRepository.findAll()
         val beaconMalfunction = beaconMalfunctionsRepository.find(beaconMalfunctionId)
+        val riskFactor =
+            beaconMalfunction.internalReferenceNumber?.let {
+                riskFactorRepository.findByInternalReferenceNumber(it)?.riskFactor
+            }
+        beaconMalfunction.riskFactor = riskFactor
+
         val beaconMalfunctionComments =
             beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(
                 beaconMalfunctionId,
@@ -31,13 +36,6 @@ class GetBeaconMalfunction(
             beaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(
                 beaconMalfunctionId,
             )
-
-        val riskFactor =
-            lastPositions
-                .find(
-                    BeaconMalfunction.getVesselFromBeaconMalfunction(beaconMalfunction),
-                )?.riskFactor
-        beaconMalfunction.riskFactor = riskFactor
 
         if (riskFactor == null) {
             logger.warn(

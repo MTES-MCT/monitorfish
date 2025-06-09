@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom'
 
-import { LoginBackground } from './Login'
+import { Wrapper } from './Login'
 import { UserAccountContext } from '../../context/UserAccountContext'
 import { ROUTER_PATHS } from '../../paths'
 import { LoadingSpinnerWall } from '../../ui/LoadingSpinnerWall'
@@ -10,9 +10,9 @@ export function RequireAuth({ children, redirect = false, requireSuperUser = fal
   const userAccount = useGetUserAccount()
   if (!userAccount) {
     return (
-      <LoginBackground>
+      <Wrapper>
         <LoadingSpinnerWall isVesselShowed />
-      </LoginBackground>
+      </Wrapper>
     )
   }
 

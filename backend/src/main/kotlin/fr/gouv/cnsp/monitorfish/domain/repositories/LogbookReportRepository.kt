@@ -70,6 +70,8 @@ interface LogbookReportRepository {
 
     fun findLastReportSoftware(internalReferenceNumber: String): String?
 
+    fun findAllCfrWithVisioCaptures(): List<String>
+
     // Only used in tests
     fun save(message: LogbookMessage)
 

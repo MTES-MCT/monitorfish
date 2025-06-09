@@ -35,14 +35,5 @@ enum class LogbookSoftware(
 
             return isESacapt ?: false
         }
-
-        fun isVisioCaptureInRealTime(software: String?): Boolean {
-            val isVisioCapture =
-                software?.let {
-                    it.startsWith("FT") || it.startsWith("JT")
-                }
-
-            return isVisioCapture ?: false
-        }
     }
 }

@@ -44,6 +44,7 @@ class CaffeineConfiguration {
     val logbookPnoTypes = "logbook_pno_types"
     val pnoToVerify = "pno_to_verify"
     val manualPnoToVerify = "manual_pno_to_verify"
+    val allVisioCapturesVessels = "all_visiocaptures_vessels"
 
     // Missions
     val missionControlUnits = "mission_control_units"
@@ -130,6 +131,7 @@ class CaffeineConfiguration {
         val manualPnoToVerifyCache = buildMinutesCache(manualPnoToVerify, ticker, 5)
         val pnoTypesCache = buildMinutesCache(pnoTypes, ticker, 123)
         val logbookPnoTypesCache = buildMinutesCache(logbookPnoTypes, ticker, oneDay)
+        val allVisioCapturesVesselsCache = buildMinutesCache(allVisioCapturesVessels, ticker, oneWeek)
 
         // Missions
         val missionControlUnitsCache = buildMinutesCache(missionControlUnits, ticker, 120)
@@ -210,6 +212,7 @@ class CaffeineConfiguration {
                 nextLogbookCache,
                 pnoTypesCache,
                 logbookPnoTypesCache,
+                allVisioCapturesVesselsCache,
                 pnoToVerifyCache,
                 manualPnoToVerifyCache,
                 portCache,

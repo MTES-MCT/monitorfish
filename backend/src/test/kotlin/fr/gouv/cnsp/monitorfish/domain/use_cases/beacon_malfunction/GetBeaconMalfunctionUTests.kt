@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.CommunicationMeans
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import org.assertj.core.api.Assertions.assertThat
@@ -29,12 +30,13 @@ class GetBeaconMalfunctionUTests {
     private lateinit var beaconMalfunctionNotificationsRepository: BeaconMalfunctionNotificationsRepository
 
     @MockBean
-    private lateinit var lastPositionRepository: LastPositionRepository
+    private lateinit var riskFactorRepository: RiskFactorRepository
 
     @Test
     fun `execute Should return the detailed beacon malfunction`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
+        given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(VesselRiskFactor())
         given(beaconMalfunctionsRepository.find(1))
             .willReturn(
                 BeaconMalfunction(
@@ -163,7 +165,7 @@ class GetBeaconMalfunctionUTests {
                 beaconMalfunctionsRepository,
                 beaconMalfunctionCommentsRepository,
                 beaconMalfunctionActionsRepository,
-                lastPositionRepository,
+                riskFactorRepository,
                 beaconMalfunctionNotificationsRepository,
             ).execute(1)
 
@@ -192,5 +194,6 @@ class GetBeaconMalfunctionUTests {
         assertThat(beaconMalfunctions.notifications[1].notifications[0].recipientName).isEqualTo("Jack Sparrow")
 
         assertThat(beaconMalfunctions.beaconMalfunction.internalReferenceNumber).isEqualTo("FR224226850")
+        assertThat(beaconMalfunctions.beaconMalfunction.riskFactor).isEqualTo(1.74)
     }
 }

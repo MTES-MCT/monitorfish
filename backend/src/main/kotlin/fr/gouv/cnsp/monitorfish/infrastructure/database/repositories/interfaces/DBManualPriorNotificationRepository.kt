@@ -58,7 +58,7 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
                     AND mpn.value->>'predictedArrivalDatetimeUtc' <= :willArriveBefore
             ),
 
-            distinct_vessel_ids AS (
+            distinct_vessel_ids AS MATERIALIZED (
                 SELECT DISTINCT vessel_id
                 FROM manual_prior_notifications_with_extra_columns
             ),

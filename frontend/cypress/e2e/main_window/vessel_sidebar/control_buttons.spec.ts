@@ -55,6 +55,7 @@ context('Vessel sidebar controls buttons', () => {
 
   it('Vessel track Should be downloaded', () => {
     // Given
+    cy.cleanDownloadedFiles()
     cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('Pheno')
     cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
     cy.wait(200)

@@ -115,26 +115,26 @@ context('Side Window > Mission Form > Sea Control', () => {
     )
 
     // Engins à bord
-    cy.fill('Ajouter un engin', 'MIS')
-    cy.fill('Engin contrôlé', 'Oui')
-    cy.fill('Maillage déclaré', 10)
-    cy.fill('Maillage mesuré', 20)
-    // This will modify the "Maillage mesuré" input as `undefined`
-    cy.fill('Maillage non mesuré', true)
-    cy.fill('MIS : autres mesures et dispositifs', 'Autres mesures.')
+    // OTB
+    cy.fill('Engin contrôlé', 'Non')
+    cy.fill('Maillage déclaré', 50)
 
-    cy.fill('Ajouter un engin', 'OTB')
-    cy.fill('Engin contrôlé', 'Non', { index: 1 })
-    cy.fill('Maillage déclaré', 50, { index: 1 })
+    cy.fill('Ajouter un engin', 'MIS')
+    cy.fill('Engin contrôlé', 'Oui', { index: 1 })
+    cy.fill('Maillage déclaré', 10, { index: 1 })
+    cy.fill('Maillage mesuré', 20, { index: 1 })
+    // This will modify the "Maillage mesuré" input as `undefined`
+    cy.fill('Maillage non mesuré', true, { index: 1 })
+    cy.fill('MIS : autres mesures et dispositifs', 'Autres mesures.')
 
     // Espèces à bord
     cy.fill('Poids des espèces vérifiés', 'Oui')
     cy.fill('Taille des espèces vérifiées', 'Non')
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
     cy.fill('Ajouter une espèce', 'COD')
-    cy.fill('Qté déclarée', 10)
-    cy.fill('Qté estimée', 20)
-    cy.fill('Sous-taille', true)
+    cy.fill('Qté déclarée', 10, { index: 2 })
+    cy.fill('Qté estimée', 20, { index: 2 })
+    cy.fill('Sous-taille', true, { index: 2 })
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
     // This should trigger a computation of the fleet segment
@@ -260,6 +260,8 @@ context('Side Window > Mission Form > Sea Control', () => {
           ],
           speciesObservations: 'Une observation hors infraction sur les espèces.',
           speciesOnboard: [
+            { controlledWeight: null, declaredWeight: 235.6, nbFish: null, speciesCode: 'HKE', underSized: false },
+            { controlledWeight: null, declaredWeight: 13.46, nbFish: null, speciesCode: 'BLI', underSized: false },
             { controlledWeight: 20, declaredWeight: 10, nbFish: null, speciesCode: 'COD', underSized: true }
           ],
           speciesQuantitySeized: 6289.5,

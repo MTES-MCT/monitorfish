@@ -56,7 +56,9 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
             LEFT JOIN ProducerOrganizationMembershipEntity po ON
                 po.internalReferenceNumber = vp.cfr OR
                 po.internalReferenceNumber = lp.internalReferenceNumber
-            LEFT JOIN RiskFactorEntity rf ON rf.cfr = vp.cfr
+            LEFT JOIN RiskFactorEntity rf ON
+                rf.cfr = vp.cfr OR
+                rf.cfr = lp.internalReferenceNumber
         """,
     )
     fun findActiveVesselWithReferentialData(dateTime: ZonedDateTime): List<EnrichedActiveVesselDTO>

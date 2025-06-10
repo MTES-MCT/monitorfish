@@ -9,9 +9,9 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
       {
         date: '2025-06-09',
         description: `
-      Nous analysons désormais l'activité annuelle des navires afin de déterminer s'ils disposent de VisioCaptures.
+Nous analysons désormais l'activité annuelle des navires afin de déterminer s'ils disposent de VisioCaptures.
 
-      ➡️ Cette information est disponible dans l'onglet ERS/VMS de la fiche navire.
+Cette information est disponible dans l'onglet ERS/VMS de la fiche navire.
       `,
         for: 'ALL',
         title: `Affichage des navires sous VisioCaptures`,

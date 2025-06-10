@@ -74,7 +74,7 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
         <Row onClick={() => setIsOpen(!isOpen)}>
           <ChevronIcon $isOpen={isOpen} color={THEME.color.slateGray} />
           <Square $fillColor={vesselGroup.color} $strokeColor={THEME.color.lightGray} />
-          {vesselGroup.name}
+          <GroupTitle>{vesselGroup.name}</GroupTitle>
           <RowIcons>
             <IconButton
               accent={Accent.TERTIARY}
@@ -239,10 +239,15 @@ const Row = styled.div`
   height: 23px;
   padding: 8px 16px 8px 8px;
   user-select: none;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   font-weight: 700;
   cursor: pointer;
+`
+
+const GroupTitle = styled.span`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 250px;
+  overflow: hidden;
 `
 
 const RowIcons = styled.div`

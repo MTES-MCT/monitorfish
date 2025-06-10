@@ -158,7 +158,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastPositionsWithProfileAndVessel Should get last positions, profiles and vessel entities`() {
         // Given
-
+    
         // When
         val lastPositionsWithProfiles = jpaLastPositionRepository.findActiveVesselWithReferentialData()
 

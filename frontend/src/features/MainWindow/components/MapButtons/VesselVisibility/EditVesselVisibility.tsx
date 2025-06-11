@@ -1,7 +1,4 @@
-import {
-  SUPER_USER_VESSEL_LABEL_OPTION,
-  VESSEL_LABEL_OPTIONS
-} from '@features/MainWindow/components/MapButtons/VesselVisibility/constants'
+import { VESSEL_LABEL_OPTIONS } from '@features/MainWindow/components/MapButtons/VesselVisibility/constants'
 import { TrackDepthSelection } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/TrackDepthSelection'
 import { displayVesselsEstimatedPositions } from '@features/Vessel/useCases/displayVesselEstimatedPositions'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -65,7 +62,7 @@ export function EditVesselVisibility({ isOpened, onClose }) {
           onChange={nextLabel => {
             dispatch(setVesselLabel(nextLabel as string))
           }}
-          options={isSuperUser ? VESSEL_LABEL_OPTIONS.concat(SUPER_USER_VESSEL_LABEL_OPTION) : VESSEL_LABEL_OPTIONS}
+          options={VESSEL_LABEL_OPTIONS}
           value={vesselLabel}
         />
       </MapMenuDialog.Body>

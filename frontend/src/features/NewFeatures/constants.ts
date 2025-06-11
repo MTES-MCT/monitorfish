@@ -7,6 +7,14 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2025-06-11',
+        description: `Il est désormais possible d'afficher directement sur la cartographie les segments de flottes des
+ navires depuis l'onglet "Gérer l'affichage des dernières positions".`,
+        for: 'EXTERNAL',
+        title: `Affichage des segments de flottes sur la carte`,
+        type: 'IMPROVEMENT'
+      },
+      {
         date: '2025-06-04',
         description: `Il est désormais possible de créer des groupes de navires partagés entre les utilisateurs du CNSP.
 Les groupes, qu’ils soient fixes ou dynamiques, peuvent être partagés au sein des pôles :

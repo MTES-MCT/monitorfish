@@ -26,6 +26,12 @@ context('Measurement', () => {
     // When
     cy.clickButton("Mesurer une distance", { withoutScroll: true })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
+
+    /**
+     * Non-regression test : When I enter a radius before the coordinates, the app should not crash
+     */
+    cy.get('*[data-cy="measurement-circle-radius-input"]').type('35', { timeout: 10000 })
+
     cy.get('body').click(490, 580, { timeout: 10000 })
     cy.get('*[data-cy="dms-coordinates-input"]').should('have.value', '47° 42′ 07″ N 007° 54′ 51″ W')
     cy.get('*[data-cy="measurement-circle-radius-input"]').type('35', { timeout: 10000 })

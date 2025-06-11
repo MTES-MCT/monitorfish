@@ -37,7 +37,7 @@ export function CustomCircleRange({ isOpened }) {
     ).map(coordinate => parseFloat(coordinate.replace(/°/g, ''))) as Coordinates
   }, [measurementTypeToAdd, circleMeasurementInDrawing])
 
-  const circleRadius = useMemo(() => {
+  const circleRadius: string = useMemo(() => {
     if (measurementTypeToAdd !== MeasurementType.CIRCLE_RANGE || !circleMeasurementInDrawing?.measurement) {
       return ''
     }
@@ -61,13 +61,12 @@ export function CustomCircleRange({ isOpened }) {
   }
 
   const updateCustomCircleRange = useCallback(
-    (nextCoordinates, nextCircleRadius) => {
+    (nextCoordinates: [number, number] | undefined, nextCircleRadius: string) => {
       // Convert to [longitude, latitude] and OpenLayers projection
-      const updatedCoordinates = transform(
-        [nextCoordinates[1], nextCoordinates[0]],
-        WSG84_PROJECTION,
-        OPENLAYERS_PROJECTION
-      )
+      const updatedCoordinates =
+        nextCoordinates?.length === 2
+          ? transform([nextCoordinates[1], nextCoordinates[0]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+          : undefined
 
       dispatch(
         setCircleMeasurementInDrawing({
@@ -80,7 +79,11 @@ export function CustomCircleRange({ isOpened }) {
   )
 
   const addCustomCircleRange = useCallback(
-    (nextCoordinates, nextCircleRadius) => {
+    (nextCoordinates: [number, number] | undefined, nextCircleRadius: string) => {
+      if (nextCoordinates?.length !== 2) {
+        return
+      }
+
       dispatch(
         setCircleMeasurementToAdd({
           circleCoordinatesToAdd: nextCoordinates,

@@ -1,6 +1,6 @@
 services:
   monitorfish-db:
-    image: timescale/timescaledb-postgis:1.7.4-pg11
+    image: ghcr.io/mtes-mct/monitorfish/monitorfish-database:pg16-ts2.14.2-postgis3.4.2
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

@@ -98,4 +98,18 @@ data class VesselRiskFactor(
 
         return hasLastControlPeriodMatch && hasRiskFactorMatch
     }
+
+    fun isLastPositionInGroup(vesselGroup: VesselGroupBase): Boolean {
+        if (vesselGroup !is DynamicVesselGroup) return false
+
+        val filters = vesselGroup.filters
+
+        val hasRiskFactorMatch =
+            filters.riskFactors.isEmpty() ||
+                filters.riskFactors.any { riskFactor ->
+                    this.riskFactor in riskFactor.toDouble()..<(riskFactor + 1).toDouble()
+                }
+
+        return hasRiskFactorMatch
+    }
 }

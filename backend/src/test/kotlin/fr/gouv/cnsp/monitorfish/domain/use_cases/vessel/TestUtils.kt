@@ -30,7 +30,6 @@ object TestUtils {
                 estimatedCurrentLatitude = 1.8,
                 estimatedCurrentLongitude = 180.0,
                 lastLogbookMessageDateTime = ZonedDateTime.now(),
-                riskFactor = 2.23,
                 length = 12.6,
                 gearOnboard =
                     listOf(
@@ -69,7 +68,6 @@ object TestUtils {
                 longitude = 48.2525,
                 estimatedCurrentLatitude = 1.8,
                 estimatedCurrentLongitude = 180.0,
-                riskFactor = 1.54,
                 length = 12.6,
                 gearOnboard =
                     listOf(
@@ -109,7 +107,6 @@ object TestUtils {
                 estimatedCurrentLatitude = 1.8,
                 estimatedCurrentLongitude = 180.0,
                 lastLogbookMessageDateTime = ZonedDateTime.now(),
-                riskFactor = 3.98,
                 length = 9.0,
                 dateTime =
                     now.minusHours(
@@ -134,7 +131,6 @@ object TestUtils {
                 estimatedCurrentLatitude = 1.8,
                 estimatedCurrentLongitude = 180.0,
                 lastLogbookMessageDateTime = ZonedDateTime.now(),
-                riskFactor = 2.24,
                 length = 12.0,
                 isAtPort = false,
                 dateTime =

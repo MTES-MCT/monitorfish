@@ -391,6 +391,9 @@ class JpaLogbookReportRepository(
     override fun findLastReportSoftware(internalReferenceNumber: String): String? =
         dbLogbookReportRepository.findLastReportSoftware(internalReferenceNumber)
 
+    @Cacheable(value = ["all_visiocaptures_vessels"])
+    override fun findAllCfrWithVisioCaptures(): List<String> = dbLogbookReportRepository.findAllCfrWithVisioCaptures()
+
     // For test purpose
     @Modifying
     @Transactional

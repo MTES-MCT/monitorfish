@@ -1,13 +1,11 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction
 
-import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
-import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
-import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -22,7 +20,7 @@ class GetAllBeaconMalfunctionsUTests {
     private lateinit var beaconMalfunctionsRepository: BeaconMalfunctionsRepository
 
     @MockBean
-    private lateinit var lastPositionRepository: LastPositionRepository
+    private lateinit var riskFactorRepository: RiskFactorRepository
 
     @MockBean
     private lateinit var beaconRepository: BeaconRepository
@@ -30,98 +28,13 @@ class GetAllBeaconMalfunctionsUTests {
     @Test
     fun `execute Should return the beacon malfunctions filtered and enriched with the risk factor found in the last position table`() {
         // Given
-        val now = ZonedDateTime.now().minusDays(1)
-        val firstPosition =
-            LastPosition(
-                null,
-                null,
-                "FR224226850",
-                "224226850",
-                null,
-                null,
-                null,
-                CountryCode.FR,
-                PositionType.AIS,
-                16.445,
-                48.2525,
-                1.8,
-                180.0,
-                riskFactor = 1.23,
-                dateTime =
-                    now.minusHours(
-                        4,
-                    ),
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+        val riskFactors =
+            listOf(
+                VesselRiskFactor(riskFactor = 1.23, internalReferenceNumber = "FR224226850"),
+                VesselRiskFactor(riskFactor = 1.68, internalReferenceNumber = "FR000123456"),
+                VesselRiskFactor(riskFactor = 1.54, internalReferenceNumber = "FR123456785"),
             )
-        val secondPosition =
-            LastPosition(
-                null,
-                null,
-                "FR123456785",
-                "224226850",
-                null,
-                null,
-                null,
-                CountryCode.FR,
-                PositionType.AIS,
-                16.445,
-                48.2525,
-                1.8,
-                180.0,
-                riskFactor = 1.54,
-                dateTime =
-                    now.minusHours(
-                        3,
-                    ),
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            )
-        val thirdPosition =
-            LastPosition(
-                null,
-                null,
-                "FR224226856",
-                "224226850",
-                null,
-                null,
-                null,
-                CountryCode.FR,
-                PositionType.AIS,
-                16.445,
-                48.2525,
-                1.8,
-                180.0,
-                riskFactor = 1.98,
-                dateTime =
-                    now.minusHours(
-                        2,
-                    ),
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            )
-        val fourthPosition =
-            LastPosition(
-                null,
-                null,
-                "FR224226857",
-                "224226850",
-                null,
-                null,
-                null,
-                CountryCode.FR,
-                PositionType.AIS,
-                16.445,
-                48.2525,
-                1.8,
-                180.0,
-                riskFactor = 1.24,
-                dateTime =
-                    now.minusHours(
-                        1,
-                    ),
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            )
-        given(lastPositionRepository.findAll()).willReturn(
-            listOf(firstPosition, fourthPosition, secondPosition, thirdPosition),
-        )
+        given(riskFactorRepository.findAll()).willReturn(riskFactors)
         given(beaconMalfunctionsRepository.findAllExceptArchived()).willReturn(
             listOf(
                 BeaconMalfunction(
@@ -205,9 +118,9 @@ class GetAllBeaconMalfunctionsUTests {
         // When
         val filteredAndEnrichedBeaconMalfunctions =
             GetAllBeaconMalfunctions(
-                beaconMalfunctionsRepository,
-                lastPositionRepository,
-                beaconRepository,
+                beaconMalfunctionsRepository = beaconMalfunctionsRepository,
+                riskFactorRepository = riskFactorRepository,
+                beaconRepository = beaconRepository,
             ).execute()
 
         // Then

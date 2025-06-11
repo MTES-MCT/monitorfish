@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultImpactRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -48,11 +49,6 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         assertThat(position?.lastControlInfraction).isTrue
         assertThat(position?.postControlComment).isEqualTo("Tout va bien")
         assertThat(position?.vesselIdentifier).isEqualTo(VesselIdentifier.INTERNAL_REFERENCE_NUMBER)
-
-        assertThat(position?.impactRiskFactor).isEqualTo(2.1)
-        assertThat(position?.probabilityRiskFactor).isEqualTo(2.0)
-        assertThat(position?.detectabilityRiskFactor).isEqualTo(3.0)
-        assertThat(position?.riskFactor).isEqualTo(2.473)
     }
 
     @Test
@@ -162,19 +158,39 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastPositionsWithProfileAndVessel Should get last positions, profiles and vessel entities`() {
         // Given
-
+    
         // When
         val lastPositionsWithProfiles = jpaLastPositionRepository.findActiveVesselWithReferentialData()
 
         // Then
-        assertThat(lastPositionsWithProfiles).hasSize(3311)
+        /**
+         * Only a last position without a profile
+         */
+        assertThat(lastPositionsWithProfiles).hasSize(3313)
         assertThat(lastPositionsWithProfiles.first().lastPosition).isNotNull()
         assertThat(lastPositionsWithProfiles.first().vesselProfile).isNull()
         assertThat(lastPositionsWithProfiles.first().vessel).isNull()
 
+        /**
+         * The OP is attached to the last position
+         */
         val vesselWithProducerOrganization = lastPositionsWithProfiles.first { it.lastPosition?.vesselId == 1 }
         assertThat(vesselWithProducerOrganization.producerOrganization?.organizationName).isEqualTo("SA THO AN")
 
+        /**
+         * A vessel with risk factor is attached to a last position even if there is no profile for this vessel
+         * (i.e a foreign vessel without logbook activity)
+         */
+        val vesselWithRiskFactorNotInProfile =
+            lastPositionsWithProfiles.first {
+                it.riskFactor.impactRiskFactor != defaultImpactRiskFactor &&
+                    it.vesselProfile == null
+            }
+        assertThat(vesselWithRiskFactorNotInProfile.lastPosition?.internalReferenceNumber).isEqualTo("ABC000103914")
+
+        /**
+         * Only a profile without a last position
+         */
         assertThat(lastPositionsWithProfiles.last().lastPosition).isNull()
         assertThat(lastPositionsWithProfiles.last().vesselProfile).isNotNull()
         assertThat(lastPositionsWithProfiles.last().vessel).isNotNull()

@@ -70,7 +70,7 @@ export function EditDynamicVesselGroupDialog({
   const { data: districtsAsTreeOptions } = useGetDistrictsQuery()
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const filterableZoneAsTreeOptions = useGetFilterableZonesAsTreeOptions()
-  const organizationMembershipNames = useGetProducerOrganizationsAsOptions()
+  const producerOrganizations = useGetProducerOrganizationsAsOptions()
 
   const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.EDIT_DYNAMIC_VESSEL_GROUP_DIALOG)
 
@@ -393,13 +393,12 @@ export function EditDynamicVesselGroupDialog({
             value={listFilterValues.lastControlPeriod}
           />
           <CheckPicker
-            disabled
             isLabelHidden
             isTransparent
             label="Adhésion à une OP"
             name="producerOrganizations"
             onChange={updateProducerOrganizations}
-            options={organizationMembershipNames}
+            options={producerOrganizations}
             placeholder="Adhésion à une OP"
             popupWidth={320}
             renderValue={(_, items) => (items.length > 0 ? <SelectValue>OP ({items.length})</SelectValue> : <></>)}

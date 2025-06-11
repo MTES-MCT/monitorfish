@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookSoftware
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVesselWithPositions
@@ -87,8 +86,8 @@ class GetVessel(
                     getVesselRiskFactor(vesselId, internalReferenceNumber)
                 }
             val logbookSoftware = logbookReportRepository.findLastReportSoftware(internalReferenceNumber)
-            val hasVisioCaptures =
-                logbookSoftware?.let { LogbookSoftware.isVisioCaptureInRealTime(logbookSoftware) } ?: false
+            val allCfrWithVisioCaptures = logbookReportRepository.findAllCfrWithVisioCaptures()
+            val hasVisioCaptures = allCfrWithVisioCaptures.firstOrNull { it == internalReferenceNumber } != null
 
             val lastPosition =
                 when (vesselIdentifier) {

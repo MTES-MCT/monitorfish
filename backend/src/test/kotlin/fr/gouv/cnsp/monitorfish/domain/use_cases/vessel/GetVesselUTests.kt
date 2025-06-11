@@ -83,6 +83,7 @@ class GetVesselUTests {
             .willReturn(getDummyLastPositions().first())
         given(vesselRepository.findVesselById(any())).willReturn(DUMMY_VESSEL)
         given(logbookReportRepository.findLastReportSoftware(any())).willReturn("FT_E-Sacapt")
+        given(logbookReportRepository.findAllCfrWithVisioCaptures()).willReturn(listOf("FR224226850"))
         given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(
             VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
         )
@@ -179,6 +180,7 @@ class GetVesselUTests {
             listOf(),
         )
         given(vesselRepository.findVesselById(any())).willReturn(null)
+        given(logbookReportRepository.findAllCfrWithVisioCaptures()).willReturn(listOf())
         given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(VesselRiskFactor())
 
         // When
@@ -228,6 +230,7 @@ class GetVesselUTests {
             listOf(),
         )
         given(vesselRepository.findVesselById(any())).willReturn(null)
+        given(logbookReportRepository.findAllCfrWithVisioCaptures()).willReturn(listOf())
         given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(VesselRiskFactor())
         given(beaconRepository.findBeaconByVesselId(eq(123))).willReturn(null)
 
@@ -281,6 +284,7 @@ class GetVesselUTests {
             listOf(),
         )
         given(vesselRepository.findVesselById(any())).willReturn(null)
+        given(logbookReportRepository.findAllCfrWithVisioCaptures()).willReturn(listOf())
         given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(VesselRiskFactor())
         given(beaconRepository.findBeaconByVesselId(eq(123))).willReturn(null)
 
@@ -330,6 +334,7 @@ class GetVesselUTests {
             listOf(),
         )
         given(vesselRepository.findVesselById(any())).willReturn(null)
+        given(logbookReportRepository.findAllCfrWithVisioCaptures()).willReturn(listOf())
         given(riskFactorRepository.findByVesselId(any())).willReturn(null)
         given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(null)
         given(beaconRepository.findBeaconByVesselId(eq(123))).willReturn(null)

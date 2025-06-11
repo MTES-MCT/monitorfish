@@ -95,7 +95,7 @@ class GetAllVesselGroupsWithVesselsUTests {
                     vesselProfile = null,
                     vessel = null,
                     producerOrganization = null,
-                    riskFactor = VesselRiskFactor(),
+                    riskFactor = VesselRiskFactor(riskFactor = 2.3),
                 )
             },
         )

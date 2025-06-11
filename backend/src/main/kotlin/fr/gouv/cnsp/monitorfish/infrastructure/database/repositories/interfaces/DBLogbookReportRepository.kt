@@ -559,4 +559,18 @@ interface DBLogbookReportRepository :
         nativeQuery = true,
     )
     fun findDistinctPriorNotificationType(): List<String>?
+
+    @Query(
+        """
+        SELECT DISTINCT
+            cfr
+        FROM
+            logbook_reports
+        WHERE
+            (software LIKE 'JT%' OR software LIKE 'FT%') AND
+            operation_datetime_utc >= CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '12 months'
+        """,
+        nativeQuery = true,
+    )
+    fun findAllCfrWithVisioCaptures(): List<String>
 }

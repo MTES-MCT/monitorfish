@@ -77,7 +77,7 @@ export function EditInterestPoint({ close, isOpen }: EditInterestPointProps) {
   )
 
   const updateType = useCallback(
-    type => {
+    (type: InterestPointType) => {
       if (type && interestPointBeingDrawed?.type !== type && coordinates?.length) {
         dispatch(
           updateInterestPointKeyBeingDrawed({
@@ -97,22 +97,24 @@ export function EditInterestPoint({ close, isOpen }: EditInterestPointProps) {
    */
   const updateCoordinates = useCallback(
     (nextCoordinates: Coordinates | undefined, previousCoordinates: Coordinates | undefined) => {
-      if (nextCoordinates?.length) {
-        if (!previousCoordinates?.length || coordinatesAreDistinct(nextCoordinates, previousCoordinates)) {
-          const [latitude, longitude] = nextCoordinates
-          if (!latitude || !longitude) {
-            return
-          }
+      if (!nextCoordinates?.length) {
+        return
+      }
 
-          // Convert to [longitude, latitude] and OpenLayers projection
-          const updatedCoordinates = transform([longitude, latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-          dispatch(
-            updateInterestPointKeyBeingDrawed({
-              key: 'coordinates',
-              value: updatedCoordinates
-            })
-          )
+      if (!previousCoordinates?.length || coordinatesAreDistinct(nextCoordinates, previousCoordinates)) {
+        const [latitude, longitude] = nextCoordinates
+        if (!latitude || !longitude) {
+          return
         }
+
+        // Convert to [longitude, latitude] and OpenLayers projection
+        const updatedCoordinates = transform([longitude, latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+        dispatch(
+          updateInterestPointKeyBeingDrawed({
+            key: 'coordinates',
+            value: updatedCoordinates
+          })
+        )
       }
     },
     [dispatch]
@@ -145,7 +147,7 @@ export function EditInterestPoint({ close, isOpen }: EditInterestPointProps) {
           <MultiRadio
             label="Type de point"
             name="interest-point-type-radio"
-            onChange={nextValue => updateType(nextValue)}
+            onChange={nextValue => updateType(nextValue as InterestPointType)}
             options={INTEREST_POINTS_OPTIONS}
             value={
               INTEREST_POINTS_OPTIONS.find(

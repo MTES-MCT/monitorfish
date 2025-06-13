@@ -22,6 +22,7 @@ from config import (
     WEEKLY_CONTROL_REPORT_EMAIL_TEST_MODE,
 )
 from src.pipeline.flows import (
+    activity_visualizations,
     admin_areas,
     anchorages,
     beacons,
@@ -74,6 +75,7 @@ from src.pipeline.helpers.country_codes import (
 )
 
 ################################ Define flow schedules ################################
+activity_visualizations.flow.schedule = CronSchedule("0 20 1 * *")
 admin_areas.flow.schedule = CronSchedule("43 4 * * 1,2,3,4,5")
 beacons.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
 clean_flow_runs.flow.schedule = CronSchedule("8,18,28,38,48,58 * * * *")
@@ -373,6 +375,7 @@ vessels.flow.schedule = CronSchedule("2 2,5,8,11,14,20,23 * * *")
 
 ###################### List flows to register with prefect server #####################
 flows_to_register = [
+    activity_visualizations.flow,
     admin_areas.flow,
     anchorages.flow,
     beacons.flow,

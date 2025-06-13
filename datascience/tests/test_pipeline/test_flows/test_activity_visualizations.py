@@ -12,6 +12,7 @@ flow.replace(
 
 
 def test_flow(reset_test_data, add_enriched_catches):
+    flow.schedule = None
     state = flow.run(start_months_ago=12, end_months_ago=0)
     assert state.is_successful()
     activity_visualizations = read_query(

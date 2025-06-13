@@ -6,8 +6,8 @@ export class InterestPointLine {
   static isHiddenByZoomProperty = 'isHiddenByZoom'
   /**
    * InterestPointLine object for building OpenLayers interest point line to draggable overlay
-   * @param {string[]} fromCoordinates - The [longitude, latitude] of the start of the line (the interest point position)
-   * @param {string[]} toCoordinates - The [longitude, latitude] of the overlay position
+   * @param {number[]} fromCoordinates - The [longitude, latitude] of the start of the line (the interest point position)
+   * @param {number[]} toCoordinates - The [longitude, latitude] of the overlay position
    * @param {string} featureId - The feature identifier
    */
   static getFeature(fromCoordinates, toCoordinates, featureId) {

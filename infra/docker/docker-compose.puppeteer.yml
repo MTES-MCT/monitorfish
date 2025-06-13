@@ -7,6 +7,7 @@ services:
       - POSTGRES_DB=monitorfishdb
     volumes:
       - monitorfish-db-data:/var/lib/postgresql/data
+      - ../../backend/src/main/resources/db/testdata/csv/:/testdata/csv
     ports:
       - ${DB_PUBLIC_PORT:-5432}:5432
     healthcheck:

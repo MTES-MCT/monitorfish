@@ -31,31 +31,31 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="interest-point-name-input"]').type('Phénomène')
     cy.get('*[data-cy="interest-point-observations-input"]').type('Est dans la bergerie')
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
-    cy.get('*[data-cy="save-interest-point"]').should('be.visible')
+    cy.get('*[data-cy="edit-interest-point"]').should('be.visible')
     cy.get('*[data-cy="interest-point-observations"]').contains('Est dans la bergerie', { timeout: 10000 })
     cy.get('*[data-cy="interest-point-observations"]').should('have.length', 1)
     cy.wait(300)
 
     cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
     cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 })
-      .should('have.value', '__° __′ __″ _ ___° __′ __″ _')
+      .should('have.value', '47° 51′ 23″ N 007° 24′ 25″ W')
     cy.get('#root').click(300, 430, { timeout: 10000 })
     cy.get('*[data-cy="interest-point-name-input"]').type('Phénomène 2')
     cy.get('*[data-cy="interest-point-observations-input"]').type('Est encore dans la bergerie')
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
-    cy.get('*[data-cy="save-interest-point"]').should('be.visible')
+    cy.get('*[data-cy="edit-interest-point"]').should('be.visible')
     cy.get('*[data-cy="interest-point-observations"]').should('have.length', 2)
     cy.get('*[data-cy="interest-point-observations"]').contains('Est encore dans la bergerie', { timeout: 10000 })
     cy.wait(300)
 
     cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
     cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 })
-      .should('have.value', '__° __′ __″ _ ___° __′ __″ _')
+      .should('have.value', '47° 51′ 23″ N 007° 24′ 25″ W')
     cy.get('#root').click(650, 690, { timeout: 10000 })
     cy.get('*[data-cy="interest-point-name-input"]').type('Phénomène 3')
     cy.get('*[data-cy="interest-point-observations-input"]').type('Est encore encore dans la bergerie')
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
-    cy.get('*[data-cy="save-interest-point"]').should('be.visible')
+    cy.get('*[data-cy="edit-interest-point"]').should('be.visible')
     cy.get('*[data-cy="interest-point-observations"]').should('have.length', 3)
     cy.get('*[data-cy="interest-point-observations"]')
       .contains('Est encore encore dans la bergerie', { timeout: 10000 })
@@ -69,8 +69,10 @@ context('InterestPoint', () => {
     cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
 
     // Then
+    cy.get('*[data-cy^="coordinates-dd-input-lat"]').clear()
+    cy.get('*[data-cy^="coordinates-dd-input-lon"]').clear()
     cy.get('*[data-cy^="coordinates-dd-input-lat"]').type('47.5525')
-    cy.get('*[data-cy^="coordinates-dd-input-lon"]').type('-007.5563')
+    cy.get('*[data-cy^="coordinates-dd-input-lon"]').type('-7.5563')
 
     cy.get('*[data-cy^="interest-point-name"]').first().contains('Aucun Libellé', { timeout: 10000 })
     cy.get('*[data-cy^="interest-point-observations"]').first().contains('Aucune observation', { timeout: 10000 })
@@ -95,7 +97,7 @@ context('InterestPoint', () => {
     // Then
     cy.get('*[data-cy^="interest-point-coordinates"]')
       .first()
-      .contains('47° 42.110′ N 007° 54.500′ W', { timeout: 10000 })
+      .contains('47° 42.111′ N 007° 54.500′ W', { timeout: 10000 })
   })
 
   it('An interest Should be edited with East value When DMS coordinates are selected', () => {
@@ -115,7 +117,7 @@ context('InterestPoint', () => {
 
     // Then
     cy.get('#root').click(536, 600, { timeout: 10000 })
-    cy.get('*[data-cy="save-interest-point"]').should('not.be.visible')
+    cy.get('*[data-cy="edit-interest-point"]').should('not.be.visible')
 
     cy.wait(300)
     cy.get('*[data-cy="interest-point-edit"]').should('not.be.visible')

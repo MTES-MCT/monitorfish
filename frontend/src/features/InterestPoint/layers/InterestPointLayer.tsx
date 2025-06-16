@@ -71,6 +71,13 @@ export function InterestPointLayer({ mapMovingAndZoomEvent }) {
 
   useEffect(() => {
     if (!isCreation) {
+      if (drawRef.current) {
+        monitorfishMap.removeInteraction(drawRef.current as Draw)
+        drawRef.current = undefined
+        dispatch(interestPointActions.interestPointEditionEnded())
+        dispatch(setRightMapBoxOpened(undefined))
+      }
+
       return
     }
 

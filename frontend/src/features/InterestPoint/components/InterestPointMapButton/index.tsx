@@ -3,6 +3,7 @@ import { InterestPointType } from '@features/InterestPoint/utils'
 import { MapBox } from '@features/Map/constants'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
+import { useEscapeFromKeyboardAndExecute } from '@hooks/useEscapeFromKeyboardAndExecute'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
@@ -13,7 +14,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { EditInterestPoint } from './EditInterestPoint'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
-import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
+import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
 import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'
 import { interestPointActions } from '../../slice'
 
@@ -26,8 +27,10 @@ export function InterestPointMapButton() {
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.INTEREST_POINT)
 
   const onClose = () => {
-    dispatch(setRightMapBoxOpened(undefined))
+    dispatch(setRightMapBoxDisplayed(undefined))
   }
+
+  useEscapeFromKeyboardAndExecute(onClose)
 
   const openOrCloseInterestPoint = () => {
     if (!isOpened) {
@@ -40,7 +43,7 @@ export function InterestPointMapButton() {
       feature.setId(uuidv4())
       dispatch(interestPointActions.interestPointCreation(getGeoJSONFromFeature(feature) as InterestPoint))
 
-      dispatch(setRightMapBoxOpened(MapBox.INTEREST_POINT))
+      dispatch(setRightMapBoxDisplayed(MapBox.INTEREST_POINT))
       dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
 
       return

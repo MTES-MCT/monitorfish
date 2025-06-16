@@ -103,13 +103,13 @@ export function EditInterestPoint({ isOpen, onClose }: EditInterestPointProps) {
   }
 
   const saveInterestPoint = () => {
+    dispatch(interestPointActions.interestPointEditionEnded())
     onClose()
     trackEvent({
       action: `Création ou édition d'un point d'intérêt`,
       category: 'INTEREST_POINT',
       name: isSuperUser ? 'CNSP' : 'EXT'
     })
-    dispatch(interestPointActions.interestPointEditionEnded())
   }
 
   const onCancel = () => {

@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from 'react'
 import { POIStyle } from './interestPoint.style'
 import { InterestPointLine } from './interestPointLine'
 import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
-import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
+import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
 import { MapBox, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../Map/constants'
 import { monitorfishMap } from '../../Map/monitorfishMap'
 import { InterestPointOverlay } from '../components/InterestPointOverlay'
@@ -33,6 +33,8 @@ export function InterestPointLayer({ mapMovingAndZoomEvent }) {
   const interestPoints = useMainAppSelector(state =>
     interestPointSelectors.selectAll(state.interestPoint.interestPoints)
   )
+  const interestPointIdEdited = useMainAppSelector(state => state.interestPoint.interestPointIdEdited)
+
   const isCreation = useMainAppSelector(state => state.interestPoint.isCreation)
 
   const drawRef = useRef<Draw | undefined>(undefined)
@@ -75,7 +77,6 @@ export function InterestPointLayer({ mapMovingAndZoomEvent }) {
         monitorfishMap.removeInteraction(drawRef.current as Draw)
         drawRef.current = undefined
         dispatch(interestPointActions.interestPointEditionEnded())
-        dispatch(setRightMapBoxOpened(undefined))
       }
 
       return
@@ -92,7 +93,7 @@ export function InterestPointLayer({ mapMovingAndZoomEvent }) {
       monitorfishMap.removeInteraction(drawRef.current as Draw)
       drawRef.current = undefined
       dispatch(interestPointActions.interestPointEditionEnded())
-      dispatch(setRightMapBoxOpened(undefined))
+      dispatch(setRightMapBoxDisplayed(undefined))
     })
 
     draw.once(DRAW_END_EVENT, event => {
@@ -158,12 +159,15 @@ export function InterestPointLayer({ mapMovingAndZoomEvent }) {
     }
 
     dispatch(interestPointActions.interestPointEdited(id))
-    dispatch(setRightMapBoxOpened(MapBox.INTEREST_POINT))
+    dispatch(setRightMapBoxDisplayed(MapBox.INTEREST_POINT))
     dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
   }
 
   const onDelete = (id: string) => {
     dispatch(deleteInterestPoint(id))
+    if (id === interestPointIdEdited) {
+      dispatch(setRightMapBoxDisplayed(undefined))
+    }
   }
 
   return (

@@ -1,6 +1,5 @@
 import { interestPointActions } from '@features/InterestPoint/slice'
 
-import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 import { INTEREST_POINT_VECTOR_SOURCE } from '../layers/constants'
 import { InterestPointLine } from '../layers/interestPointLine'
 
@@ -23,6 +22,5 @@ export const deleteInterestPoint = (id: string) => (dispatch, getState) => {
 
   if (id === interestPointIdEdited) {
     dispatch(interestPointActions.interestPointEditionEnded())
-    dispatch(setRightMapBoxOpened(undefined))
   }
 }

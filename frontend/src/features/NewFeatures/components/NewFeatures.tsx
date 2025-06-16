@@ -15,7 +15,7 @@ import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
 import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
-import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
+import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
 
 const MARGIN_TOP = 460
 
@@ -42,7 +42,7 @@ export function NewFeatures() {
       dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
     }
 
-    dispatch(setRightMapBoxOpened(rightMapBoxOpened === MapBox.NEW_FEATURES ? undefined : MapBox.NEW_FEATURES))
+    dispatch(setRightMapBoxDisplayed(rightMapBoxOpened === MapBox.NEW_FEATURES ? undefined : MapBox.NEW_FEATURES))
   }
 
   const authorizedFeatures = useMemo(() => NEW_FEATURES.filter(isFeatureDisplayed(isSuperUser)), [isSuperUser])

@@ -7,7 +7,7 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
-import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
+import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
 import { MapToolBox } from '../../../MainWindow/components/MapButtons/shared/MapToolBox'
 import {
   resetCircleMeasurementInDrawing,
@@ -97,7 +97,7 @@ export function CustomCircleRange({ isOpened }) {
   const cancelAddCircleRange = () => {
     dispatch(setMeasurementTypeToAdd(null))
     dispatch(resetCircleMeasurementInDrawing())
-    dispatch(setRightMapBoxOpened(undefined))
+    dispatch(setRightMapBoxDisplayed(undefined))
   }
 
   return (

@@ -5,7 +5,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
+import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
 import { MapToolButton } from '../../MainWindow/components/MapButtons/shared/MapToolButton'
 
 const MARGIN_TOP = 124
@@ -16,7 +16,7 @@ export function VesselGroupMapButton() {
   const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
 
   const toggleVesselGroupsMenu = () => {
-    dispatch(setRightMapBoxOpened(rightMapBoxOpened === MapBox.VESSEL_GROUPS ? undefined : MapBox.VESSEL_GROUPS))
+    dispatch(setRightMapBoxDisplayed(rightMapBoxOpened === MapBox.VESSEL_GROUPS ? undefined : MapBox.VESSEL_GROUPS))
   }
 
   return (

@@ -3,13 +3,11 @@ import { InterestPointType } from '@features/InterestPoint/utils'
 import { MapBox } from '@features/Map/constants'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
-import { useEscapeFromKeyboardAndExecute } from '@hooks/useEscapeFromKeyboardAndExecute'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
 import Feature from 'ol/Feature'
 import { Point } from 'ol/geom'
-import { useEffect } from 'react'
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -30,15 +28,6 @@ export function InterestPointMapButton() {
   const onClose = () => {
     dispatch(setRightMapBoxOpened(undefined))
   }
-
-  useEscapeFromKeyboardAndExecute(onClose)
-
-  useEffect(() => {
-    if (!isOpened) {
-      // dispatch(endInterestPointDraw())
-      // dispatch(deleteInterestPointBeingDrawed())
-    }
-  }, [dispatch, isOpened])
 
   const openOrCloseInterestPoint = () => {
     if (!isOpened) {

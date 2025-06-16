@@ -32,8 +32,10 @@ export function MeasurementMapButton() {
     dispatch(setRightMapBoxOpened(undefined))
   })
   useEscapeFromKeyboardAndExecute(() => {
-    dispatch(setMeasurementTypeToAdd(null))
-    dispatch(setRightMapBoxOpened(undefined))
+    if (isMeasurementMenuOpen || isMeasurementToolOpen) {
+      dispatch(setMeasurementTypeToAdd(null))
+      dispatch(setRightMapBoxOpened(undefined))
+    }
   })
 
   const makeMeasurement = nextMeasurementTypeToAdd => {

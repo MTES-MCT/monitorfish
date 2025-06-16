@@ -83,7 +83,7 @@ export function EditInterestPoint({ isOpen, onClose }: EditInterestPointProps) {
     assertNotNullish(interestPointIdEdited)
     assertNotNullish(interestPointEdited)
 
-    if (!coordinatesAreDistinct(nextCoordinates, previousCoordinates)) {
+    if (!nextCoordinates?.length || !coordinatesAreDistinct(nextCoordinates, previousCoordinates)) {
       return
     }
 
@@ -112,7 +112,7 @@ export function EditInterestPoint({ isOpen, onClose }: EditInterestPointProps) {
   }
 
   return (
-    <Wrapper $isOpen={isOpen} data-cy="save-interest-point">
+    <Wrapper $isOpen={isOpen} data-cy="edit-interest-point">
       <Header>Créer un point d&apos;intérêt</Header>
       <Body>
         <p>Coordonnées</p>

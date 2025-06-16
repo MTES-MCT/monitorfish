@@ -1,11 +1,13 @@
 import { deleteInterestPoint } from '@features/InterestPoint/useCases/deleteInterestPoint'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { trackEvent } from '@hooks/useTracking'
 import { type Coordinates, coordinatesAreDistinct, CoordinatesInput, MultiRadio, THEME } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import styled from 'styled-components'
 
 import { INTEREST_POINTS_OPTIONS } from './constants'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { MapToolBox } from '../../../MainWindow/components/MapButtons/shared/MapToolBox'
 import { Header } from '../../../MainWindow/components/MapButtons/shared/styles'
 import { interestPointActions, interestPointSelectors } from '../../slice'
@@ -20,6 +22,7 @@ type EditInterestPointProps = Readonly<{
 }>
 export function EditInterestPoint({ isOpen, onClose }: EditInterestPointProps) {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const interestPointIdEdited = useMainAppSelector(state => state.interestPoint.interestPointIdEdited)
   const isEdition = useMainAppSelector(state => state.interestPoint.isEdition)
@@ -101,6 +104,11 @@ export function EditInterestPoint({ isOpen, onClose }: EditInterestPointProps) {
 
   const saveInterestPoint = () => {
     onClose()
+    trackEvent({
+      action: `Création ou édition d'un point d'intérêt`,
+      category: 'INTEREST_POINT',
+      name: isSuperUser ? 'CNSP' : 'EXT'
+    })
     dispatch(interestPointActions.interestPointEditionEnded())
   }
 

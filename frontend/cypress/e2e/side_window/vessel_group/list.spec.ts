@@ -113,5 +113,19 @@ context('Side Window > Vessel Group List', () => {
 
     cy.get('[title="Mission Thémis – semaine 04"]')
       .contains('Nouvelle valeur.')
+
+    /**
+     * Download a group
+     */
+    cy.get('[title=\'Télécharger le groupe "Mission Thémis – semaine 04"\']').click()
+
+    cy.wait(400)
+    cy.exec('cd cypress/downloads && ls').then(result => {
+      const downloadedCSVFilename = result.stdout
+
+      return cy
+        .readFile(`cypress/downloads/${downloadedCSVFilename}`)
+        .should('contains', '"Royaume-Uni","PHENOMENE","FAK000999999","CALLME","","DONTSINK","14.3 m","W10, PEL03","OTB","BLI, HKE"')
+    })
   })
 })

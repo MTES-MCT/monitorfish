@@ -6,8 +6,7 @@ import {
   GroupType,
   Sharing
 } from '@features/VesselGroup/types'
-
-import type { Option } from '@mtes-mct/monitor-ui'
+import { type Option } from '@mtes-mct/monitor-ui'
 
 export const DEFAULT_DYNAMIC_VESSEL_GROUP: CreateOrUpdateDynamicVesselGroup = {
   color: '',

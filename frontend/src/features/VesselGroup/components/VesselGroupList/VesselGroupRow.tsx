@@ -1,5 +1,6 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { Square } from '@features/Regulation/components/ZonePreview'
+import { VESSEL_LIST_CSV_MAP_BASE } from '@features/Vessel/components/ExportVesselListDialog/csvMap'
 import { VesselSearchWithMapVessels } from '@features/Vessel/components/VesselSearch/VesselSearchWithMapVessels'
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { EditDynamicVesselGroupDialog } from '@features/VesselGroup/components/EditDynamicVesselGroupDialog'
@@ -13,6 +14,7 @@ import { deleteVesselGroup } from '@features/VesselGroup/useCases/deleteVesselGr
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Icon, IconButton, Tag, THEME, useNewWindow } from '@mtes-mct/monitor-ui'
+import { downloadAsCsv } from '@utils/downloadAsCsv'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -77,6 +79,17 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
     dispatch(addVesselToFixedVesselGroup(nextVessel, vesselGroupWithVessels.group))
   }
 
+  const downloadVesselGroup = () => {
+    const date = new Date()
+    const fileName = `${vesselGroupWithVessels.group.name}_${getDate(date.toISOString())}`
+
+    downloadAsCsv(
+      fileName,
+      vesselGroupWithVessels.vessels as Omit<Vessel.ActiveVesselEmittingPosition, 'id'>[],
+      VESSEL_LIST_CSV_MAP_BASE
+    )
+  }
+
   return (
     <>
       <Wrapper title={vesselGroupWithVessels.group.name}>
@@ -122,6 +135,16 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
                 `, modifié le ${getDate(vesselGroupWithVessels.group.updatedAtUtc)}`}
             </span>
             <Separator />
+            <IconButton
+              accent={Accent.TERTIARY}
+              Icon={Icon.Download}
+              iconSize={20}
+              onClick={event => {
+                event.stopPropagation()
+                downloadVesselGroup()
+              }}
+              title={`Télécharger le groupe "${vesselGroupWithVessels.group.name}"`}
+            />
             <IconButton
               accent={Accent.TERTIARY}
               Icon={Icon.Delete}
@@ -281,7 +304,7 @@ const RowIcons = styled.div`
   margin-right: 0;
   flex-shrink: 0;
   display: flex;
-  gap: 16px;
+  gap: 10px;
   height: 36px;
   align-items: center;
   cursor: pointer;

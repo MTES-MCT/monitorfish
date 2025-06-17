@@ -130,7 +130,8 @@ export const globalSlice = createSlice({
     },
 
     /**
-     * Set the right map box
+     * Set the right map box.
+     * /!\ DO NOT USE DIRECTLY, use `setRightMapBoxDisplayed` use-case.
      */
     setRightMapBoxOpened(state, action: PayloadAction<MapBox | undefined>) {
       state.rightMapBoxOpened = action.payload
@@ -165,6 +166,5 @@ export const {
   setIsUpdatingVessels,
   setLeftMapBoxOpened,
   setPreviewFilteredVesselsMode,
-  setRightMapBoxOpened,
   setUserType
 } = globalSlice.actions

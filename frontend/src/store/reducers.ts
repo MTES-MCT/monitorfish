@@ -5,7 +5,7 @@ import { controlUnitListDialogPersistedReducer } from '@features/ControlUnit/com
 import { customZoneReducer, type CustomZoneState } from '@features/CustomZone/slice'
 import { drawReducer } from '@features/Draw/slice'
 import { favoriteVesselReducer } from '@features/FavoriteVessel/slice'
-import { interestPointReducer } from '@features/InterestPoint/slice'
+import { interestPointReducer, type InterestPointState } from '@features/InterestPoint/slice'
 import { logbookReducer, type LogbookState } from '@features/Logbook/slice'
 import { mainWindowReducer } from '@features/MainWindow/slice'
 import { layerReducer, type LayerState } from '@features/Map/layer.slice'
@@ -104,7 +104,10 @@ export const mainReducer = {
     logbookReducer
   ),
   infraction: infractionReducer,
-  interestPoint: interestPointReducer,
+  interestPoint: persistReducerTyped(
+    { ...getCommonPersistReducerConfig<InterestPointState>('mainPersistorInterestPoint', ['interestPoints']) },
+    interestPointReducer
+  ),
   layer: persistReducerTyped(
     { ...getCommonPersistReducerConfig<LayerState>('mainPersistorLayer', ['isBaseMapCachedLocally']) },
     layerReducer

@@ -5,12 +5,12 @@ import { useEscapeFromKeyboardAndExecute } from '@hooks/useEscapeFromKeyboardAnd
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
+import { setRightMapBoxDisplayed } from 'domain/use_cases/setRightMapBoxDisplayed'
 import { useRef } from 'react'
 import styled from 'styled-components'
 
 import { CustomCircleRange } from './CustomCircleRange'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
-import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
 import { MapComponent } from '../../../commonStyles/MapComponent'
 import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'
 import { setMeasurementTypeToAdd } from '../../slice'
@@ -28,16 +28,17 @@ export function MeasurementMapButton() {
 
   const wrapperRef = useRef(null)
 
-  useClickOutsideWhenOpenedAndExecute(wrapperRef, isMeasurementMenuOpen, () => {
-    dispatch(setRightMapBoxOpened(undefined))
+  useClickOutsideWhenOpenedAndExecute(wrapperRef, rightMapBoxOpened === MapBox.MEASUREMENT_MENU, () => {
+    dispatch(setRightMapBoxDisplayed(undefined))
   })
   useEscapeFromKeyboardAndExecute(() => {
-    dispatch(setMeasurementTypeToAdd(null))
-    dispatch(setRightMapBoxOpened(undefined))
+    if (isMeasurementMenuOpen || isMeasurementToolOpen) {
+      dispatch(setRightMapBoxDisplayed(undefined))
+    }
   })
 
   const makeMeasurement = nextMeasurementTypeToAdd => {
-    dispatch(setRightMapBoxOpened(MapBox.MEASUREMENT))
+    dispatch(setRightMapBoxDisplayed(MapBox.MEASUREMENT))
     dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
     dispatch(setMeasurementTypeToAdd(nextMeasurementTypeToAdd))
   }
@@ -55,13 +56,12 @@ export function MeasurementMapButton() {
 
   const openOrCloseMeasurementMenu = () => {
     if (isMeasurementMenuOpen) {
-      dispatch(setMeasurementTypeToAdd(null))
-      dispatch(setRightMapBoxOpened(undefined))
+      dispatch(setRightMapBoxDisplayed(undefined))
 
       return
     }
 
-    dispatch(setRightMapBoxOpened(MapBox.MEASUREMENT_MENU))
+    dispatch(setRightMapBoxDisplayed(MapBox.MEASUREMENT_MENU))
     dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
   }
 

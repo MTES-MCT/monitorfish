@@ -1,133 +1,126 @@
-import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
+import { deleteInterestPoint } from '@features/InterestPoint/useCases/deleteInterestPoint'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { MultiRadio, THEME, CoordinatesInput } from '@mtes-mct/monitor-ui'
-import { transform } from 'ol/proj'
-import { useCallback, useMemo } from 'react'
+import { trackEvent } from '@hooks/useTracking'
+import { type Coordinates, coordinatesAreDistinct, CoordinatesInput, MultiRadio, THEME } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import styled from 'styled-components'
 
 import { INTEREST_POINTS_OPTIONS } from './constants'
-import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { MapToolBox } from '../../../MainWindow/components/MapButtons/shared/MapToolBox'
 import { Header } from '../../../MainWindow/components/MapButtons/shared/styles'
-import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../slice'
-import { saveInterestPointFeature } from '../../useCases/saveInterestPointFeature'
+import { interestPointActions, interestPointSelectors } from '../../slice'
 import { InterestPointType } from '../../utils'
-
-import type { Coordinates } from '@mtes-mct/monitor-ui'
 
 // TODO Refactor this component
 // - Move the state logic to the reducer
 // - Use formik (or at least uncontrolled form components)
 type EditInterestPointProps = Readonly<{
-  close: () => void
   isOpen: boolean
+  onClose: () => void
 }>
-export function EditInterestPoint({ close, isOpen }: EditInterestPointProps) {
+export function EditInterestPoint({ isOpen, onClose }: EditInterestPointProps) {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
-  const interestPointBeingDrawed = useMainAppSelector(state => state.interestPoint.interestPointBeingDrawed)
-  const isEditing = useMainAppSelector(state => state.interestPoint.isEditing)
+  const interestPointIdEdited = useMainAppSelector(state => state.interestPoint.interestPointIdEdited)
+  const isEdition = useMainAppSelector(state => state.interestPoint.isEdition)
+
+  const interestPointEdited = useMainAppSelector(state =>
+    interestPointIdEdited
+      ? interestPointSelectors.selectById(state.interestPoint.interestPoints, interestPointIdEdited)
+      : undefined
+  )
 
   /** Coordinates formatted in DD [latitude, longitude] */
-  const coordinates: Coordinates | undefined = useMemo(() => {
-    if (!interestPointBeingDrawed?.coordinates?.length) {
-      return undefined
-    }
+  const coordinates: Coordinates | undefined = interestPointEdited?.geometry?.coordinates?.length
+    ? [interestPointEdited?.geometry?.coordinates[1] as number, interestPointEdited?.geometry?.coordinates[0] as number]
+    : undefined
 
-    const [latitude, longitude] = getCoordinates(
-      interestPointBeingDrawed.coordinates,
-      OPENLAYERS_PROJECTION,
-      CoordinatesFormat.DECIMAL_DEGREES,
-      false
+  const updateName = name => {
+    assertNotNullish(interestPointEdited)
+    dispatch(
+      interestPointActions.interestPointUpdated({
+        ...interestPointEdited,
+        properties: {
+          ...interestPointEdited.properties,
+          name
+        }
+      })
     )
-    if (!latitude || !longitude) {
-      return undefined
-    }
+  }
 
-    return [parseFloat(latitude.replace(/°/g, '')), parseFloat(longitude.replace(/°/g, ''))] as Coordinates
-  }, [interestPointBeingDrawed?.coordinates])
+  const updateObservations = (observations: string) => {
+    assertNotNullish(interestPointEdited)
+    dispatch(
+      interestPointActions.interestPointUpdated({
+        ...interestPointEdited,
+        properties: {
+          ...interestPointEdited.properties,
+          observations
+        }
+      })
+    )
+  }
 
-  const updateName = useCallback(
-    name => {
-      if (interestPointBeingDrawed?.name !== name) {
-        dispatch(
-          updateInterestPointKeyBeingDrawed({
-            key: 'name',
-            value: name
-          })
-        )
-      }
-    },
-    [dispatch, interestPointBeingDrawed?.name]
-  )
-
-  const updateObservations = useCallback(
-    observations => {
-      if (interestPointBeingDrawed?.observations !== observations) {
-        dispatch(
-          updateInterestPointKeyBeingDrawed({
-            key: 'observations',
-            value: observations
-          })
-        )
-      }
-    },
-    [dispatch, interestPointBeingDrawed?.observations]
-  )
-
-  const updateType = useCallback(
-    type => {
-      if (type && interestPointBeingDrawed?.type !== type && coordinates?.length) {
-        dispatch(
-          updateInterestPointKeyBeingDrawed({
-            key: 'type',
-            value: type
-          })
-        )
-      }
-    },
-    [dispatch, interestPointBeingDrawed?.type, coordinates]
-  )
+  const updateType = (type: InterestPointType) => {
+    assertNotNullish(interestPointEdited)
+    dispatch(
+      interestPointActions.interestPointUpdated({
+        ...interestPointEdited,
+        properties: {
+          ...interestPointEdited.properties,
+          type
+        }
+      })
+    )
+  }
 
   /**
    * Compare with previous coordinates and update interest point coordinates
    * @param {number[]} nextCoordinates - Coordinates ([latitude, longitude]) to update, in decimal format.
-   * @param {number[]} coordinates - Previous coordinates ([latitude, longitude]), in decimal format.
+   * @param {number[]} previousCoordinates - Coordinates ([latitude, longitude]), in decimal format.
    */
-  const updateCoordinates = useCallback(
-    (nextCoordinates: Coordinates | undefined, previousCoordinates: Coordinates | undefined) => {
-      if (nextCoordinates?.length) {
-        if (!previousCoordinates?.length || coordinatesAreDistinct(nextCoordinates, previousCoordinates)) {
-          const [latitude, longitude] = nextCoordinates
-          if (!latitude || !longitude) {
-            return
-          }
+  const updateCoordinates = (nextCoordinates: number[], previousCoordinates: number[]) => {
+    assertNotNullish(interestPointIdEdited)
+    assertNotNullish(interestPointEdited)
 
-          // Convert to [longitude, latitude] and OpenLayers projection
-          const updatedCoordinates = transform([longitude, latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-          dispatch(
-            updateInterestPointKeyBeingDrawed({
-              key: 'coordinates',
-              value: updatedCoordinates
-            })
-          )
+    if (!nextCoordinates?.length || !coordinatesAreDistinct(nextCoordinates, previousCoordinates)) {
+      return
+    }
+
+    const nextCoordinatesInLonLat = [nextCoordinates[1] as number, nextCoordinates[0] as number]
+    dispatch(
+      interestPointActions.interestPointUpdated({
+        ...interestPointEdited,
+        geometry: {
+          ...interestPointEdited.geometry,
+          coordinates: nextCoordinatesInLonLat
         }
-      }
-    },
-    [dispatch]
-  )
+      })
+    )
+  }
 
   const saveInterestPoint = () => {
-    if (coordinates?.length) {
-      dispatch(saveInterestPointFeature())
-      dispatch(addInterestPoint())
-      close()
-    }
+    dispatch(interestPointActions.interestPointEditionEnded())
+    onClose()
+    trackEvent({
+      action: `Création ou édition d'un point d'intérêt`,
+      category: 'INTEREST_POINT',
+      name: isSuperUser ? 'CNSP' : 'EXT'
+    })
+  }
+
+  const onCancel = () => {
+    assertNotNullish(interestPointIdEdited)
+
+    dispatch(deleteInterestPoint(interestPointIdEdited))
+    onClose()
   }
 
   return (
-    <Wrapper $isOpen={isOpen} data-cy="save-interest-point">
+    <Wrapper $isOpen={isOpen} data-cy="edit-interest-point">
       <Header>Créer un point d&apos;intérêt</Header>
       <Body>
         <p>Coordonnées</p>
@@ -145,11 +138,12 @@ export function EditInterestPoint({ close, isOpen }: EditInterestPointProps) {
           <MultiRadio
             label="Type de point"
             name="interest-point-type-radio"
-            onChange={nextValue => updateType(nextValue)}
+            onChange={nextValue => updateType(nextValue as InterestPointType)}
             options={INTEREST_POINTS_OPTIONS}
             value={
               INTEREST_POINTS_OPTIONS.find(
-                option => option.value === interestPointBeingDrawed?.type || option.value === InterestPointType.OTHER
+                option =>
+                  option.value === interestPointEdited?.properties.type || option.value === InterestPointType.OTHER
               )?.value
             }
           />
@@ -159,18 +153,18 @@ export function EditInterestPoint({ close, isOpen }: EditInterestPointProps) {
           data-cy="interest-point-name-input"
           onChange={e => updateName(e.target.value)}
           type="text"
-          value={interestPointBeingDrawed?.name ?? ''}
+          value={interestPointEdited?.properties.name ?? ''}
         />
         <p>Observations</p>
         <textarea
           data-cy="interest-point-observations-input"
           onChange={e => updateObservations(e.target.value)}
-          value={interestPointBeingDrawed?.observations ?? ''}
+          value={interestPointEdited?.properties.observations ?? ''}
         />
         <OkButton data-cy="interest-point-save" onClick={saveInterestPoint}>
           OK
         </OkButton>
-        <CancelButton disabled={isEditing} onClick={close}>
+        <CancelButton disabled={isEdition} onClick={onCancel}>
           Annuler
         </CancelButton>
       </Body>

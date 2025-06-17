@@ -15,7 +15,7 @@ import { Accent, Button, Dropdown, Icon, MapMenuDialog } from '@mtes-mct/monitor
 import styled from 'styled-components'
 
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
-import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
+import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
 
 import type { VesselGroup } from '@features/VesselGroup/types'
 
@@ -46,7 +46,7 @@ export function VesselGroupMenuDialog() {
   }
 
   const toggleVesselGroupsMenu = () => {
-    dispatch(setRightMapBoxOpened(rightMapBoxOpened === MapBox.VESSEL_GROUPS ? undefined : MapBox.VESSEL_GROUPS))
+    dispatch(setRightMapBoxDisplayed(rightMapBoxOpened === MapBox.VESSEL_GROUPS ? undefined : MapBox.VESSEL_GROUPS))
   }
 
   const toggleVesselGroupsDisplay = () => {

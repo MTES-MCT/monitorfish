@@ -10,7 +10,7 @@ import Circle from 'ol/geom/Circle'
 import { fromCircle } from 'ol/geom/Polygon'
 import { v4 as uuidv4 } from 'uuid'
 
-import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
+import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
 
 import type { Geometry } from 'geojson'
 import type { SimpleGeometry } from 'ol/geom'
@@ -42,5 +42,5 @@ export const saveMeasurement = (email?: string | undefined) => (feature: Feature
     name: email ?? ''
   })
   dispatch(resetCircleMeasurementInDrawing())
-  dispatch(setRightMapBoxOpened(undefined))
+  dispatch(setRightMapBoxDisplayed(undefined))
 }

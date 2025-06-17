@@ -15,7 +15,7 @@ import styled from 'styled-components'
 
 import { UserAccountContext } from '../../../context/UserAccountContext'
 import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
-import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
+import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
 import { DELETE_CACHE } from '../../../workers/constants'
 import { useGetServiceWorker } from '../../../workers/hooks/useGetServiceWorker'
 import { registerServiceWorker } from '../../../workers/registerServiceWorker'
@@ -41,7 +41,7 @@ export function Account() {
     if (!rightMapBoxOpened) {
       dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
     }
-    dispatch(setRightMapBoxOpened(rightMapBoxOpened === MapBox.ACCOUNT ? undefined : MapBox.ACCOUNT))
+    dispatch(setRightMapBoxDisplayed(rightMapBoxOpened === MapBox.ACCOUNT ? undefined : MapBox.ACCOUNT))
   }
 
   useEffect(() => {

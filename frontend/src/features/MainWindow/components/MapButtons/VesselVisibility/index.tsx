@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 import { EditVesselVisibility } from './EditVesselVisibility'
 import { displayedComponentActions } from '../../../../../domain/shared_slices/DisplayedComponent'
-import { setRightMapBoxOpened } from '../../../../../domain/shared_slices/Global'
+import { setRightMapBoxDisplayed } from '../../../../../domain/use_cases/setRightMapBoxDisplayed'
 import { MapToolButton } from '../shared/MapToolButton'
 
 export function VesselVisibilityMapButton() {
@@ -17,12 +17,12 @@ export function VesselVisibilityMapButton() {
 
   const openOrCloseVesselVisibility = () => {
     if (isOpened) {
-      dispatch(setRightMapBoxOpened(undefined))
+      dispatch(setRightMapBoxDisplayed(undefined))
 
       return
     }
 
-    dispatch(setRightMapBoxOpened(MapBox.VESSEL_VISIBILITY))
+    dispatch(setRightMapBoxDisplayed(MapBox.VESSEL_VISIBILITY))
     dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
   }
 

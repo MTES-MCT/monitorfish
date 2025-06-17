@@ -8,7 +8,6 @@ import { useEscapeFromKeyboardAndExecute } from '@hooks/useEscapeFromKeyboardAnd
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
-import { assertNotNullish } from '@utils/assertNotNullish'
 import Feature from 'ol/Feature'
 import { Point } from 'ol/geom'
 import styled from 'styled-components'
@@ -34,9 +33,10 @@ export function InterestPointMapButton() {
   }
 
   useEscapeFromKeyboardAndExecute(() => {
-    assertNotNullish(interestPointIdEdited)
+    if (interestPointIdEdited) {
+      dispatch(deleteInterestPoint(interestPointIdEdited))
+    }
 
-    dispatch(deleteInterestPoint(interestPointIdEdited))
     onClose()
   })
 

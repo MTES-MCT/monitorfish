@@ -1,3 +1,4 @@
+import { deleteInterestPoint } from '@features/InterestPoint/useCases/deleteInterestPoint'
 import { getGeoJSONFromFeature } from '@features/InterestPoint/useCases/updateInterestPointFeatureFromDraw'
 import { InterestPointType } from '@features/InterestPoint/utils'
 import { MapBox } from '@features/Map/constants'
@@ -7,6 +8,7 @@ import { useEscapeFromKeyboardAndExecute } from '@hooks/useEscapeFromKeyboardAnd
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import Feature from 'ol/Feature'
 import { Point } from 'ol/geom'
 import styled from 'styled-components'
@@ -25,12 +27,18 @@ export function InterestPointMapButton() {
   const dispatch = useMainAppDispatch()
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.INTEREST_POINT)
+  const interestPointIdEdited = useMainAppSelector(state => state.interestPoint.interestPointIdEdited)
 
   const onClose = () => {
     dispatch(setRightMapBoxDisplayed(undefined))
   }
 
-  useEscapeFromKeyboardAndExecute(onClose)
+  useEscapeFromKeyboardAndExecute(() => {
+    assertNotNullish(interestPointIdEdited)
+
+    dispatch(deleteInterestPoint(interestPointIdEdited))
+    onClose()
+  })
 
   const openOrCloseInterestPoint = () => {
     if (!isOpened) {

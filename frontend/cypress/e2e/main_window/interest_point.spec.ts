@@ -146,4 +146,16 @@ context('InterestPoint', () => {
     // Then
     cy.get('*[data-cy="interest-point-observations-input"]').should('have.value', '')
   })
+
+  it('An interest in drawing mode Should be stopped When closing the interest point tool', () => {
+    // When
+    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
+    cy.wait(100)
+    cy.get('body').type('{esc}')
+    cy.wait(200)
+    cy.get('#root').click(490, 580, { timeout: 10000 })
+    cy.get('*[data-cy="interest-point-save"]').should('not.exist')
+    cy.wait(300)
+    cy.get('*[data-cy="interest-point-edit"]').should('not.exist')
+  })
 })

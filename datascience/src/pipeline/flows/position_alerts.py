@@ -159,7 +159,7 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
             "filter_column": "topic",
             "geometry_column": "geometry",
         },
-        AlertType.BOTTOM_GEAR_800_METERS_FISHING_ALERT: {
+        AlertType.BOTTOM_TRAWL_800_METERS_FISHING_ALERT: {
             "table": "regulations",
             "filter_column": "zone",
             "geometry_column": "geometry",

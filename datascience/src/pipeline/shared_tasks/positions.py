@@ -3,6 +3,7 @@ from prefect import task
 
 from config import ANCHORAGES_H3_CELL_RESOLUTION
 from src.pipeline.generic_tasks import extract
+from src.pipeline.helpers.bathymetry import get_depth
 from src.pipeline.helpers.spatial import get_h3_indices
 from src.pipeline.processing import get_first_non_null_column_name
 
@@ -77,6 +78,16 @@ def add_vessel_identifier(positions: pd.DataFrame) -> pd.DataFrame:
     positions["vessel_identifier"] = get_first_non_null_column_name(
         positions[["cfr", "ircs", "external_immatriculation"]],
         vessel_identifier_labels,
+    )
+
+    return positions
+
+
+@task(checkpoint=False)
+def add_depth(positions: pd.DataFrame) -> pd.DataFrame:
+    positions = positions.copy(deep=True)
+    positions["depth"] = positions.apply(
+        lambda row: get_depth(lon=row["longitude"], lat=row["latitude"]), axis=1
     )
 
     return positions

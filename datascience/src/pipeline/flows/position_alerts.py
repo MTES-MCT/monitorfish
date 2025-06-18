@@ -24,9 +24,12 @@ from src.pipeline.shared_tasks.alerts import (
     load_alerts,
     make_alerts,
 )
-from src.pipeline.shared_tasks.control_flow import check_flow_not_running
+from src.pipeline.shared_tasks.control_flow import (
+    check_flow_not_running,
+    param_is_given,
+)
 from src.pipeline.shared_tasks.infrastructure import get_table
-from src.pipeline.shared_tasks.positions import add_vessel_identifier
+from src.pipeline.shared_tasks.positions import add_depth, add_vessel_identifier
 from src.pipeline.shared_tasks.risk_factors import extract_current_risk_factors
 from src.pipeline.shared_tasks.vessels import add_vessel_id, add_vessels_columns
 from src.read_query import read_query
@@ -462,6 +465,13 @@ def filter_on_gears(
 
 
 @task(checkpoint=False)
+def filter_on_depth(positions_in_alert: pd.DataFrame, min_depth: float) -> pd.DataFrame:
+    # Positions depth is assumed to be negative below sea level.
+    # Deeper = more negative.
+    return positions_in_alert[positions_in_alert.depth <= -min_depth]
+
+
+@task(checkpoint=False)
 def merge_risk_factor(
     positions_in_alert: pd.DataFrame, current_risk_factors: pd.DataFrame
 ) -> pd.DataFrame:
@@ -484,21 +494,7 @@ def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
     vessels_in_alerts = (
         positions_in_alert.sort_values("date_time", ascending=False)
         .groupby(["cfr", "ircs", "external_immatriculation"], dropna=False)
-        .head(1)[
-            [
-                "cfr",
-                "external_immatriculation",
-                "ircs",
-                "vessel_name",
-                "flag_state",
-                "facade",
-                "risk_factor",
-                "vessel_identifier",
-                "date_time",
-                "latitude",
-                "longitude",
-            ]
-        ]
+        .head(1)
         .rename(
             columns={
                 "date_time": "triggering_behaviour_datetime_utc",
@@ -529,10 +525,12 @@ with Flow("Position alert", executor=LocalDaskExecutor()) as flow:
             "include_vessels_unknown_gear", default=True
         )
         eez_areas = Parameter("eez_areas", default=None)
+        min_depth = Parameter("min_depth", default=None)
 
         must_filter_on_gears = alert_has_gear_parameters(
             fishing_gears, fishing_gear_categories
         )
+        alert_has_min_depth_parameter = param_is_given(min_depth)
 
         positions_table = get_table("positions")
         vessels_table = get_table("vessels")
@@ -588,6 +586,20 @@ with Flow("Position alert", executor=LocalDaskExecutor()) as flow:
             positions_in_alert_1, positions_in_alert_2, checkpoint=False
         )
 
+        with case(alert_has_min_depth_parameter, True):
+            positions_in_alert_with_depth = add_depth(positions_in_alert)
+            positions_in_alert_with_depth = filter_on_depth(
+                positions_in_alert_with_depth, min_depth
+            )
+
+        with case(alert_has_min_depth_parameter, False):
+            positions_in_alert_without_depth = positions_in_alert
+
+        positions_in_alert = merge(
+            positions_in_alert_with_depth,
+            positions_in_alert_without_depth,
+            checkpoint=False,
+        )
         positions_in_alert = add_vessel_identifier(positions_in_alert)
         current_risk_factors = extract_current_risk_factors()
         positions_in_alert = merge_risk_factor(positions_in_alert, current_risk_factors)

@@ -365,6 +365,7 @@ position_alerts.flow.schedule = Schedule(
                 ],
                 "fishing_gear_categories": ["Dragues", "Pièges et casiers"],
                 "include_vessels_unknown_gear": True,
+                "min_depth": 400.0,
             },
         ),
         clocks.CronClock(
@@ -379,6 +380,7 @@ position_alerts.flow.schedule = Schedule(
                 "only_fishing_positions": True,
                 "fishing_gears": ["TB", "OTB", "OTT", "PTB", "TBB", "TBN", "TBS"],
                 "include_vessels_unknown_gear": True,
+                "min_depth": 800.0,
             },
         ),
     ]

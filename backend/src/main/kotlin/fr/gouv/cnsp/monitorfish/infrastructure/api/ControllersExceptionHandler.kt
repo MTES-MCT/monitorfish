@@ -40,7 +40,7 @@ class ControllersExceptionHandler {
 
     @ExceptionHandler(BackendUsageException::class)
     fun handleBackendUsageException(e: BackendUsageException): ResponseEntity<BackendUsageErrorDataOutput> {
-        val responseBody = BackendUsageErrorDataOutput(code = e.code, data = e.data, message = null)
+        val responseBody = BackendUsageErrorDataOutput(code = e.code, data = e.data, message = e.message)
 
         return when (e.code) {
             BackendUsageErrorCode.NOT_FOUND -> {

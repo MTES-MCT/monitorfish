@@ -1,4 +1,4 @@
-import { PendingAlertValueType } from '@features/Alert/types'
+import { PendingAlertValueType } from '@features/Alert/constants'
 import { fortyHeightHourAlertReporting } from '@features/Reporting/useCases/__tests__/__mocks__/dummyReporting'
 import { archiveReporting } from '@features/Reporting/useCases/archiveReporting'
 import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'

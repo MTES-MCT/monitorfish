@@ -1,7 +1,6 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
-import { ALERTS_ARCHIVED_AFTER_NEW_VOYAGE } from '@features/Alert/constants'
-import { PendingAlertValueType } from '@features/Alert/types'
+import { ALERTS_ARCHIVED_AFTER_NEW_VOYAGE, PendingAlertValueType } from '@features/Alert/constants'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'

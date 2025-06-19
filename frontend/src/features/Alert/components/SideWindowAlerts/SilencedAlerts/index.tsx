@@ -63,7 +63,7 @@ export function SilencedAlerts() {
   )
 
   const reactivateSilencedAlertCallback = useCallback(
-    (id: string) => {
+    (id: number) => {
       dispatch(reactivateSilencedAlert(id))
     },
     [dispatch]

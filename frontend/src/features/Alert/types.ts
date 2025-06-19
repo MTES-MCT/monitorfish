@@ -1,28 +1,16 @@
-import { Seafront } from '@constants/seafront'
+import { PendingAlertValueSchema, SilencedAlertSchema } from '@features/Alert/schemas/SilencedAlertSchema'
+import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
+import z from 'zod'
 
 import type { MissionAction } from '@features/Mission/missionAction.types'
-import type { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Except } from 'type-fest'
-
-export enum PendingAlertValueType {
-  BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT = 'BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT',
-  FRENCH_EEZ_FISHING_ALERT = 'FRENCH_EEZ_FISHING_ALERT',
-  MISSING_DEP_ALERT = 'MISSING_DEP_ALERT',
-  MISSING_FAR_48_HOURS_ALERT = 'MISSING_FAR_48_HOURS_ALERT',
-  MISSING_FAR_ALERT = 'MISSING_FAR_ALERT',
-  NEAFC_FISHING_ALERT = 'NEAFC_FISHING_ALERT',
-  RTC_FISHING_ALERT = 'RTC_FISHING_ALERT',
-  SUSPICION_OF_UNDER_DECLARATION_ALERT = 'SUSPICION_OF_UNDER_DECLARATION_ALERT',
-  THREE_MILES_TRAWLING_ALERT = 'THREE_MILES_TRAWLING_ALERT',
-  TWELVE_MILES_FISHING_ALERT = 'TWELVE_MILES_FISHING_ALERT'
-}
 
 export type PendingAlert = {
   creationDate: string
   externalReferenceNumber: string
   flagState: string
-  id: string
+  id: number
   infraction: MissionAction.Infraction | null
   internalReferenceNumber: string
   ircs: string
@@ -32,40 +20,16 @@ export type PendingAlert = {
   vesselName: string
 }
 
-export type PendingAlertValue = {
-  dml?: string | null
-  natinfCode?: number | null
-  riskFactor?: number
-  seaFront?: Seafront | null
-  speed?: number
-  type: PendingAlertValueType
-}
+export type PendingAlertValue = z.infer<typeof PendingAlertValueSchema>
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export type LEGACY_PendingAlert = PendingAlert & {
   isValidated: boolean
 }
 
-export type SilencedAlert = {
-  externalReferenceNumber: string | undefined
-  flagState: string
-  id: string
-  internalReferenceNumber: string | undefined
-  ircs: string | undefined
-  isReactivated: boolean | undefined
-  silencedBeforeDate: string
-  value: PendingAlertValue
-  vesselId: number | undefined
-  vesselIdentifier: VesselIdentifier
-  vesselName: string
-}
+export type SilencedAlert = z.infer<typeof SilencedAlertSchema>
 
 export type SilencedAlertData = Except<SilencedAlert, 'id' | 'isReactivated'>
-
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export type LEGACY_SilencedAlert = SilencedAlert & {
-  silencedPeriod?: SilencedAlertPeriodRequest
-}
 
 export type SilencedAlertPeriodRequest = {
   beforeDateTime: Date | null
@@ -73,7 +37,7 @@ export type SilencedAlertPeriodRequest = {
 }
 
 export type SilenceAlertQueueItem = {
-  pendingAlertId: string
+  pendingAlertId: number
   silencedAlertPeriodRequest: SilencedAlertPeriodRequest
 }
 

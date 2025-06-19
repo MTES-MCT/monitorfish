@@ -1,8 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
 import fr.gouv.cnsp.monitorfish.config.ProtectedPathsAPIProperties
-import io.ktor.client.call.*
-import io.ktor.client.request.*
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

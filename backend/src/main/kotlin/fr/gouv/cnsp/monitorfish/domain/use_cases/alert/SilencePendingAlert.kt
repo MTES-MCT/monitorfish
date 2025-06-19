@@ -5,6 +5,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilenceAlertPeriod
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilencedAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.SilencedAlertRepository
@@ -44,7 +46,15 @@ class SilencePendingAlert(
                 SilenceAlertPeriod.CUSTOM -> beforeDateTime!!
             }
 
-        val silencedAlert = pendingAlertRepository.find(alertId)
+        val silencedAlert = try {
+            pendingAlertRepository.find(alertId)
+        } catch (e: NoSuchElementException) {
+            throw BackendUsageException(
+                BackendUsageErrorCode.NOT_FOUND_BUT_OK,
+                message = "L'alerte n'est plus active",
+                cause = e
+            )
+        }
 
         val savedSilencedAlert =
             silencedAlertRepository.save(

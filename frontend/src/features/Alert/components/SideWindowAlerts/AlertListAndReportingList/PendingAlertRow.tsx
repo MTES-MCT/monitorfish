@@ -1,9 +1,10 @@
-import { COLORS } from '@constants/constants'
 import { validateAlert } from '@features/Alert/useCases/validateAlert'
 import { Flag } from '@features/commonComponents/Flag'
+import { showVessel } from '@features/Vessel/useCases/showVessel'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import { useEffect, useMemo, useRef } from 'react'
 import { FlexboxGrid, List } from 'rsuite'
@@ -11,19 +12,19 @@ import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { getAlertNameFromType } from './utils'
-import { showVessel } from '../../../../Vessel/useCases/showVessel'
 import { getSilencedAlertPeriodText } from '../../../utils'
 
-import type { LEGACY_PendingAlert } from '../../../types'
-import type { MutableRefObject, CSSProperties } from 'react'
+import type { LEGACY_PendingAlert, PendingAlert } from '../../../types'
+import type { CSSProperties, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
 export type PendingAlertRowProps = {
   alert: LEGACY_PendingAlert
   index: number
-  setShowSilencedAlertForIndex: (index: number) => Promisable<void>
-  setSilencedAlertId: (id: string) => Promisable<void>
-  showSilencedAlertForIndex?: number | undefined
+  setSilenceAlertMenuDisplayedFor: (
+    silenceAlertMenuDisplayedFor: { index: number; pendingAlert: PendingAlert } | undefined
+  ) => Promisable<void>
+  silencedAlertMenuDisplayedOnIndex?: number | undefined
 }
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
@@ -31,9 +32,8 @@ export type PendingAlertRowProps = {
 export function PendingAlertRow({
   alert,
   index,
-  setShowSilencedAlertForIndex,
-  setSilencedAlertId,
-  showSilencedAlertForIndex
+  setSilenceAlertMenuDisplayedFor,
+  silencedAlertMenuDisplayedOnIndex
 }: PendingAlertRowProps) {
   const dispatch = useMainAppDispatch()
   const ref = useRef() as MutableRefObject<HTMLDivElement>
@@ -123,11 +123,10 @@ export function PendingAlertRow({
               alt="Suspendre"
               data-cy="side-window-alerts-silence-alert"
               onClick={() => {
-                setShowSilencedAlertForIndex(index + 1)
-                setSilencedAlertId(alert.id)
+                setSilenceAlertMenuDisplayedFor({ index: index + 1, pendingAlert: alert })
               }}
               onMouseOut={e => {
-                if (showSilencedAlertForIndex !== index + 1) {
+                if (silencedAlertMenuDisplayedOnIndex !== index + 1) {
                   e.currentTarget.src = `${baseUrl}/Icone_ignorer_alerte.png`
                 }
               }}
@@ -135,7 +134,7 @@ export function PendingAlertRow({
                 e.currentTarget.src = `${baseUrl}/Icone_ignorer_alerte_pleine.png`
               }}
               src={
-                showSilencedAlertForIndex === index + 1
+                silencedAlertMenuDisplayedOnIndex === index + 1
                   ? `${baseUrl}/Icone_ignorer_alerte_pleine.png`
                   : `${baseUrl}/Icone_ignorer_alerte.png`
               }
@@ -152,7 +151,7 @@ export function PendingAlertRow({
 const AlertTransition = styled.div``
 const alertSilencedTransition: CSSProperties = {
   background: '#E1000F33 0% 0% no-repeat padding-box',
-  color: COLORS.maximumRed,
+  color: THEME.color.maximumRed,
   fontWeight: 500,
   height: 41,
   lineHeight: '41px',
@@ -162,7 +161,7 @@ const alertSilencedTransition: CSSProperties = {
 
 const alertValidatedTransition: CSSProperties = {
   background: '#29B36133 0% 0% no-repeat padding-box',
-  color: COLORS.mediumSeaGreen,
+  color: THEME.color.mediumSeaGreen,
   fontWeight: 500,
   height: 41,
   lineHeight: '41px',
@@ -207,8 +206,8 @@ const silenceAlertStyle: CSSProperties = {
 
 const listItemStyle = (isFocused, toClose) => ({
   animation: toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset',
-  background: isFocused ? COLORS.gainsboro : COLORS.cultured,
-  border: `1px solid ${COLORS.lightGray}`,
+  background: isFocused ? THEME.color.gainsboro : THEME.color.cultured,
+  border: `1px solid ${THEME.color.lightGray}`,
   borderRadius: 1,
   height: 42,
   marginTop: 6,
@@ -252,7 +251,7 @@ const iconStyle = {
 
 const rowBorderStyle = {
   ...styleCenter,
-  borderLeft: `1px solid ${COLORS.lightGray}`,
+  borderLeft: `1px solid ${THEME.color.lightGray}`,
   height: 43,
   marginRight: 5,
   marginTop: -14,

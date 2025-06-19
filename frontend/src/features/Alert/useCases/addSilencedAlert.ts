@@ -1,4 +1,4 @@
-import { alertApi } from '@api/alert'
+import { alertApi } from '@features/Alert/apis'
 import { setSilencedAlerts } from '@features/Alert/components/SideWindowAlerts/slice'
 
 import { setError } from '../../../domain/shared_slices/Global'

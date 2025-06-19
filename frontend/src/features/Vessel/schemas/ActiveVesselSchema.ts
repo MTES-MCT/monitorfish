@@ -1,4 +1,4 @@
-import { PendingAlertValueType } from '@features/Alert/types'
+import { PendingAlertValueType } from '@features/Alert/constants'
 import { ReportingType } from '@features/Reporting/types'
 import { z } from 'zod'
 

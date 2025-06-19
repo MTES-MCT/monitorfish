@@ -7,17 +7,21 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.mappers.PatchEntity
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
+import org.slf4j.LoggerFactory
 
 @UseCase
 class PatchMissionAction(
     private val missionActionsRepository: MissionActionsRepository,
     private val patchMissionAction: PatchEntity<MissionAction, PatchableMissionAction>,
 ) {
+    private val logger = LoggerFactory.getLogger(GetVesselControls::class.java)
+
     fun execute(
         id: Int,
         patchableEnvActionEntity: PatchableMissionAction,
-    ): MissionAction =
-        try {
+    ): MissionAction = try {
+            logger.info("Patching mission action $id")
+
             val previousMissionAction = missionActionsRepository.findById(id)
 
             val updatedMissionAction = patchMissionAction.execute(previousMissionAction, patchableEnvActionEntity)

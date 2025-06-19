@@ -19,16 +19,30 @@ class PatchMissionAction(
     fun execute(
         id: Int,
         patchableEnvActionEntity: PatchableMissionAction,
-    ): MissionAction =
-        try {
-            logger.info("Patching mission action $id")
+    ): MissionAction {
+        val previousMissionAction =
+            try {
+                logger.info("Patching mission action $id")
 
-            val previousMissionAction = missionActionsRepository.findById(id)
+                missionActionsRepository.findById(id)
+            } catch (e: Exception) {
+                throw BackendUsageException(
+                    BackendUsageErrorCode.NOT_FOUND,
+                    message = "Action $id not found",
+                    cause = e,
+                )
+            }
 
+        return try {
             val updatedMissionAction = patchMissionAction.execute(previousMissionAction, patchableEnvActionEntity)
 
             missionActionsRepository.save(updatedMissionAction)
         } catch (e: Exception) {
-            throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND, message = "Action $id not found", cause = e)
+            throw BackendUsageException(
+                BackendUsageErrorCode.COULD_NOT_UPDATE,
+                message = e.message,
+                cause = e,
+            )
         }
+    }
 }

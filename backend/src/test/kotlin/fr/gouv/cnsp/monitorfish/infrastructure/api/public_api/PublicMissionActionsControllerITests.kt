@@ -101,4 +101,29 @@ class PublicMissionActionsControllerITests {
             // Then
             .andExpect(status().isOk)
     }
+
+    @Test
+    fun `Should patch a mission action When NULL`() {
+        // Given
+        val dateTime = ZonedDateTime.parse("2022-05-05T03:04:05.000Z")
+        val newMission = TestUtils.getDummyMissionAction(dateTime).copy(flagState = CountryCode.UNDEFINED)
+        given(patchMissionAction.execute(any(), any())).willReturn(newMission)
+
+        // When
+        api
+            .perform(
+                patch("/api/v1/mission_actions/123")
+                    .content(
+                        """
+                        {
+                            "observationsByUnit": "OBSERVATION",
+                            "actionEndDatetimeUtc": "2024-02-01T14:29:00Z",
+                            "actionDatetimeUtc": null
+                        }
+                        """.trimIndent(),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isOk)
+    }
 }

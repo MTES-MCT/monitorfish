@@ -4,6 +4,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Patchabl
 import java.time.ZonedDateTime
 import java.util.*
 
+/**
+ * If the value is set as null in the JSON payload, the value will be Optional.isEmpty: we set is as null.
+ * If the property is not passed to the JSON payload: we keep the existing value
+ */
 data class PatchableMissionActionDataInput(
     val actionDatetimeUtc: Optional<ZonedDateTime>?,
     val actionEndDatetimeUtc: Optional<ZonedDateTime>?,

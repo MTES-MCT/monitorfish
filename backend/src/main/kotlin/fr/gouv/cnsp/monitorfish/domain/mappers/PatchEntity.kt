@@ -40,7 +40,11 @@ class PatchEntity<T : Any, S : Any> {
                         sourceValue ?: existingValue
                     }
 
-                targetProp.setter.call(target, finalValue)
+                try {
+                    targetProp.setter.call(target, finalValue)
+                } catch (e: IllegalArgumentException) {
+                    throw IllegalArgumentException("Could not set property '${targetProp.name}'", e)
+                }
             }
         }
 
@@ -52,8 +56,16 @@ class PatchEntity<T : Any, S : Any> {
         optional: Optional<*>?,
     ): Any? =
         when {
+            /**
+             * The property is not passed to the PATCH payload, we keep the existing value
+             */
             optional == null -> existingValue
             optional.isPresent -> optional.get()
+            /**
+             * If the value is set as null in the payload, the value will be Optional.isEmpty.
+             * So we set is as null.
+             */
+            optional.isEmpty -> null
             else -> null
         }
 }

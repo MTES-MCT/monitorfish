@@ -17,7 +17,7 @@ import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../constants'
 import { SUB_MENU_LABEL } from '../constants'
 import { resetFocusOnPendingAlert } from '../slice'
 
-import type { SilencedAlertPeriodRequest } from '../../../types'
+import type { PendingAlert, SilencedAlertPeriodRequest } from '../../../types'
 import type { CSSProperties, MutableRefObject, RefObject } from 'react'
 
 export type PendingAlertsListProps = Readonly<{
@@ -34,8 +34,9 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
   const pendingAlerts = useMainAppSelector(state => state.alert.pendingAlerts)
   const baseUrl = window.location.origin
   const [searchQuery, setSearchQuery] = useState<string>()
-  const [showSilencedAlertForIndex, setShowSilencedAlertForIndex] = useState<number>()
-  const [silencedAlertId, setSilencedAlertId] = useState<string>()
+  const [silenceAlertMenuDisplayedFor, setSilenceAlertMenuDisplayedFor] = useState<
+    { index: number; pendingAlert: PendingAlert } | undefined
+  >()
   const scrollableContainerRef = useRef() as MutableRefObject<HTMLDivElement>
 
   const sortColumn = 'creationDate'
@@ -115,10 +116,9 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
   }, [dispatch, focusedPendingAlertId])
 
   const silenceAlertCallback = useCallback(
-    (silencedAlertPeriodRequest: SilencedAlertPeriodRequest, id: string) => {
-      setShowSilencedAlertForIndex(undefined)
-      setSilencedAlertId(undefined)
-      dispatch(silenceAlert(silencedAlertPeriodRequest, id))
+    (silencedAlertPeriodRequest: SilencedAlertPeriodRequest, pendingAlert: PendingAlert) => {
+      setSilenceAlertMenuDisplayedFor(undefined)
+      dispatch(silenceAlert(silencedAlertPeriodRequest, pendingAlert))
     },
     [dispatch]
   )
@@ -178,19 +178,18 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
               key={alert.id}
               alert={alert}
               index={index}
-              setShowSilencedAlertForIndex={setShowSilencedAlertForIndex}
-              setSilencedAlertId={setSilencedAlertId}
-              showSilencedAlertForIndex={showSilencedAlertForIndex}
+              setSilenceAlertMenuDisplayedFor={setSilenceAlertMenuDisplayedFor}
+              silencedAlertMenuDisplayedOnIndex={silenceAlertMenuDisplayedFor?.index}
             />
           ))}
         </ScrollableContainer>
-        {showSilencedAlertForIndex && silencedAlertId && (
+        {!!silenceAlertMenuDisplayedFor && (
           <SilenceAlertMenu
             baseRef={baseRef}
-            id={silencedAlertId}
+            pendingAlert={silenceAlertMenuDisplayedFor.pendingAlert}
+            pendingAlertIndex={silenceAlertMenuDisplayedFor.index}
             scrollableContainer={scrollableContainerRef}
-            setShowSilencedAlertForIndex={setShowSilencedAlertForIndex}
-            showSilencedAlertForIndex={showSilencedAlertForIndex}
+            setSilenceAlertMenuDisplayedFor={setSilenceAlertMenuDisplayedFor}
             silenceAlert={silenceAlertCallback}
           />
         )}

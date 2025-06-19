@@ -554,7 +554,6 @@ export const {
   removeVesselReportings,
   resetLoadingVessel,
   resetSelectedVessel,
-  setAllVesselsAsUnfiltered,
   setFilteredVesselsFeatures,
   setHideNonSelectedVessels,
   setIsFocusedOnVesselSearch,

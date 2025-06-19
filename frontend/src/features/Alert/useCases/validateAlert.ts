@@ -1,5 +1,5 @@
-import { alertApi } from '@api/alert'
 import { RtkCacheTagType } from '@api/constants'
+import { alertApi } from '@features/Alert/apis'
 import { setPendingAlerts } from '@features/Alert/components/SideWindowAlerts/slice'
 import { removeVesselAlertAndUpdateReporting } from '@features/Vessel/slice'
 import { VesselFeature } from '@features/Vessel/types/vessel'
@@ -14,7 +14,7 @@ import type { LEGACY_PendingAlert } from '@features/Alert/types'
 import type { MainAppThunk } from '@store'
 
 export const validateAlert =
-  (id: string): MainAppThunk =>
+  (id: number): MainAppThunk =>
   async (dispatch, getState) => {
     const previousAlerts = getState().alert.pendingAlerts
     const previousAlertsWithValidatedFlag = setAlertAsValidated(previousAlerts, id)
@@ -52,7 +52,7 @@ export const validateAlert =
     }
   }
 
-function setAlertAsValidated(previousAlerts: LEGACY_PendingAlert[], id: string): LEGACY_PendingAlert[] {
+function setAlertAsValidated(previousAlerts: LEGACY_PendingAlert[], id: number): LEGACY_PendingAlert[] {
   return updateListItemsProp(previousAlerts, 'id', id, {
     isValidated: true
   })

@@ -1,4 +1,3 @@
-import { COLORS } from '@constants/constants'
 import { DATE_RANGE_PICKER_LOCALE } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/DateRange'
 import { useClickOutsideWhenOpenedWithinRef } from '@hooks/useClickOutsideWhenOpenedWithinRef'
 import { useForceUpdate } from '@hooks/useForceUpdate'
@@ -10,31 +9,33 @@ import styled from 'styled-components'
 
 import { SilencedAlertPeriod } from '../../../constants'
 
-import type { SilencedAlertPeriodRequest } from '../../../types'
+import type { PendingAlert, SilencedAlertPeriodRequest } from '../../../types'
 import type { CSSProperties, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
 export type SilenceAlertMenuProps = {
   baseRef: any
-  id: string
+  pendingAlert: PendingAlert
+  pendingAlertIndex: number
   scrollableContainer: MutableRefObject<HTMLDivElement>
-  setShowSilencedAlertForIndex: (index?: number) => Promisable<void>
-  showSilencedAlertForIndex: number
-  silenceAlert: (silencerAlertPeriodRequest: SilencedAlertPeriodRequest, id: string) => Promisable<void>
+  setSilenceAlertMenuDisplayedFor: (
+    silenceAlertMenuDisplayedFor: { index: number; pendingAlert: PendingAlert } | undefined
+  ) => Promisable<void>
+  silenceAlert: (silencerAlertPeriodRequest: SilencedAlertPeriodRequest, pendingAlert: PendingAlert) => Promisable<void>
 }
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
  */
 export function SilenceAlertMenu({
   baseRef,
-  id,
+  pendingAlert,
+  pendingAlertIndex,
   scrollableContainer,
-  setShowSilencedAlertForIndex,
-  showSilencedAlertForIndex,
+  setSilenceAlertMenuDisplayedFor,
   silenceAlert
 }: SilenceAlertMenuProps) {
   const silencedAlertRef = useRef() as MutableRefObject<HTMLDivElement>
-  const clickedOutside = useClickOutsideWhenOpenedWithinRef(silencedAlertRef, showSilencedAlertForIndex, baseRef)
+  const clickedOutside = useClickOutsideWhenOpenedWithinRef(silencedAlertRef, pendingAlertIndex, baseRef)
   const { forceUpdate } = useForceUpdate()
 
   useEffect(() => {
@@ -43,9 +44,9 @@ export function SilenceAlertMenu({
 
   useEffect(() => {
     if (clickedOutside) {
-      setShowSilencedAlertForIndex()
+      setSilenceAlertMenuDisplayedFor(undefined)
     }
-  }, [clickedOutside, setShowSilencedAlertForIndex])
+  }, [clickedOutside, setSilenceAlertMenuDisplayedFor])
 
   const selectDate = useCallback(
     (selectedDate: Date) => {
@@ -53,27 +54,25 @@ export function SilenceAlertMenu({
         return
       }
 
-      setShowSilencedAlertForIndex()
-
       const silenceAlertPeriodRequest: SilencedAlertPeriodRequest = {
         beforeDateTime: selectedDate,
         silencedAlertPeriod: SilencedAlertPeriod.CUSTOM
       }
 
-      silenceAlert(silenceAlertPeriodRequest, id)
+      silenceAlert(silenceAlertPeriodRequest, pendingAlert)
     },
-    [id, setShowSilencedAlertForIndex, silenceAlert]
+    [pendingAlert, silenceAlert]
   )
 
   return (
     <Wrapper
       ref={silencedAlertRef}
-      style={silenceMenuStyle(showSilencedAlertForIndex, scrollableContainer?.current.scrollTop || 0)}
+      style={silenceMenuStyle(pendingAlertIndex, scrollableContainer?.current.scrollTop || 0)}
     >
       <>
         <MenuLink style={menuLinkStyle(true, false)}>Suspendre l’alerte pour...</MenuLink>
         <MenuLink
-          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.THIS_OCCURRENCE), id)}
+          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.THIS_OCCURRENCE), pendingAlert)}
           onMouseOut={e => setBackgroundAsNotHovered(e)}
           onMouseOver={e => setBackgroundAsHovered(e)}
           style={menuLinkStyle(false, true)}
@@ -82,7 +81,7 @@ export function SilenceAlertMenu({
         </MenuLink>
         <MenuLink
           data-cy="side-window-silence-alert-one-hour"
-          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_HOUR), id)}
+          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_HOUR), pendingAlert)}
           onMouseOut={e => setBackgroundAsNotHovered(e)}
           onMouseOver={e => setBackgroundAsHovered(e)}
           style={menuLinkStyle(false, true)}
@@ -90,7 +89,7 @@ export function SilenceAlertMenu({
           1 heure
         </MenuLink>
         <MenuLink
-          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.TWO_HOURS), id)}
+          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.TWO_HOURS), pendingAlert)}
           onMouseOut={e => setBackgroundAsNotHovered(e)}
           onMouseOver={e => setBackgroundAsHovered(e)}
           style={menuLinkStyle(false, true)}
@@ -98,7 +97,7 @@ export function SilenceAlertMenu({
           2 heures
         </MenuLink>
         <MenuLink
-          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.SIX_HOURS), id)}
+          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.SIX_HOURS), pendingAlert)}
           onMouseOut={e => setBackgroundAsNotHovered(e)}
           onMouseOver={e => setBackgroundAsHovered(e)}
           style={menuLinkStyle(false, true)}
@@ -106,7 +105,7 @@ export function SilenceAlertMenu({
           6 heures
         </MenuLink>
         <MenuLink
-          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.TWELVE_HOURS), id)}
+          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.TWELVE_HOURS), pendingAlert)}
           onMouseOut={e => setBackgroundAsNotHovered(e)}
           onMouseOver={e => setBackgroundAsHovered(e)}
           style={menuLinkStyle(false, true)}
@@ -114,7 +113,7 @@ export function SilenceAlertMenu({
           12 heures
         </MenuLink>
         <MenuLink
-          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_DAY), id)}
+          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_DAY), pendingAlert)}
           onMouseOut={e => setBackgroundAsNotHovered(e)}
           onMouseOver={e => setBackgroundAsHovered(e)}
           style={menuLinkStyle(false, true)}
@@ -122,7 +121,7 @@ export function SilenceAlertMenu({
           24 heures
         </MenuLink>
         <MenuLink
-          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_WEEK), id)}
+          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_WEEK), pendingAlert)}
           onMouseOut={e => setBackgroundAsNotHovered(e)}
           onMouseOver={e => setBackgroundAsHovered(e)}
           style={menuLinkStyle(false, true)}
@@ -130,7 +129,7 @@ export function SilenceAlertMenu({
           1 semaine
         </MenuLink>
         <MenuLink
-          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_MONTH), id)}
+          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_MONTH), pendingAlert)}
           onMouseOut={e => setBackgroundAsNotHovered(e)}
           onMouseOver={e => setBackgroundAsHovered(e)}
           style={menuLinkStyle(false, true)}
@@ -138,7 +137,7 @@ export function SilenceAlertMenu({
           1 mois
         </MenuLink>
         <MenuLink
-          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_YEAR), id)}
+          onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_YEAR), pendingAlert)}
           onMouseOut={e => setBackgroundAsNotHovered(e)}
           onMouseOver={e => setBackgroundAsHovered(e)}
           style={menuLinkStyle(false, true)}
@@ -177,11 +176,11 @@ const silenceAlertRequestFromMenu = period => ({
 })
 
 function setBackgroundAsHovered(e) {
-  e.currentTarget.style.background = COLORS.gainsboro
+  e.currentTarget.style.background = THEME.color.gainsboro
 }
 
 function setBackgroundAsNotHovered(e) {
-  e.currentTarget.style.background = COLORS.white
+  e.currentTarget.style.background = THEME.color.white
 }
 
 const Wrapper = styled.div``
@@ -197,9 +196,9 @@ const silenceMenuStyle = (index: number, scrollY: number): CSSProperties => ({
 
 const MenuLink = styled.span``
 const menuLinkStyle = (withBottomLine: boolean, hasLink: boolean, isCalendar: boolean = false): CSSProperties => ({
-  background: COLORS.white,
-  borderBottom: `${withBottomLine ? 1 : 0}px solid ${COLORS.lightGray}`,
-  color: COLORS.slateGray,
+  background: THEME.color.white,
+  borderBottom: `${withBottomLine ? 1 : 0}px solid ${THEME.color.lightGray}`,
+  color: THEME.color.slateGray,
   cursor: hasLink ? 'pointer' : 'unset',
   display: 'flex',
   height: 25,

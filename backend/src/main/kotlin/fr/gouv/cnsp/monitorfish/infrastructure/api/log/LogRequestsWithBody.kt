@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.core.MethodParameter
 import org.springframework.http.HttpInputMessage
+import org.springframework.http.HttpMethod.PATCH
 import org.springframework.http.HttpMethod.POST
 import org.springframework.http.HttpMethod.PUT
 import org.springframework.http.converter.HttpMessageConverter
@@ -26,7 +27,7 @@ class LogRequestsWithBody(
         targetType: Type,
         converterType: Class<out HttpMessageConverter<*>>,
     ): Any {
-        if (request.method == PUT.name() || request.method == POST.name()) {
+        if (request.method == PUT.name() || request.method == POST.name() || request.method == PATCH.name()) {
             val requestLog = LoggingFormatter.formatRequest(mapper, request, body)
             requestLog?.let { logger.info(it) }
         }

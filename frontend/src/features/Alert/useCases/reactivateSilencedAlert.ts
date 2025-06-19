@@ -1,15 +1,15 @@
-import { alertApi } from '@api/alert'
+import { alertApi } from '@features/Alert/apis'
 import { setSilencedAlerts } from '@features/Alert/components/SideWindowAlerts/slice'
 import { deleteListItems } from '@utils/deleteListItems'
 import { updateListItemsProp } from '@utils/updateListItemsProp'
 
 import { setError } from '../../../domain/shared_slices/Global'
 
-import type { LEGACY_SilencedAlert } from '@features/Alert/types'
+import type { SilencedAlert } from '@features/Alert/types'
 import type { MainAppThunk } from '@store'
 
 export const reactivateSilencedAlert =
-  (id: string): MainAppThunk =>
+  (id: number): MainAppThunk =>
   async (dispatch, getState) => {
     const previousSilencedAlerts = getState().alert.silencedAlerts
     const previousSilencedAlertsWithReactivatedFlag = setAlertAsReactivated(previousSilencedAlerts, id)
@@ -29,7 +29,7 @@ export const reactivateSilencedAlert =
     }
   }
 
-function setAlertAsReactivated(previousSilencedAlerts: LEGACY_SilencedAlert[], id: string) {
+function setAlertAsReactivated(previousSilencedAlerts: SilencedAlert[], id: number) {
   return updateListItemsProp(previousSilencedAlerts, 'id', id, {
     isReactivated: true
   })

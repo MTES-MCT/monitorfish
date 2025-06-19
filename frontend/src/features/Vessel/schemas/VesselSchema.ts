@@ -1,4 +1,4 @@
-import { PendingAlertValueType } from '@features/Alert/types'
+import { PendingAlertValueType } from '@features/Alert/constants'
 import { ProducerOrganizationMembershipSchema } from '@features/ProducerOrganizationMembership/schemas/ProducerOrganizationMembershipSchema'
 import { ReportingType } from '@features/Reporting/types'
 import { RiskFactorSchema } from '@features/RiskFactor/types'

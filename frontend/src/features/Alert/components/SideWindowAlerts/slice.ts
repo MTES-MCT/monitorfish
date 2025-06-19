@@ -4,18 +4,13 @@ import { deleteListItems } from '@utils/deleteListItems'
 import { propEq } from 'ramda'
 
 import type { AlertSubMenu } from './constants'
-import type {
-  AlertNameAndVesselIdentity,
-  LEGACY_PendingAlert,
-  LEGACY_SilencedAlert,
-  SilenceAlertQueueItem
-} from '../../types'
+import type { AlertNameAndVesselIdentity, LEGACY_PendingAlert, SilencedAlert, SilenceAlertQueueItem } from '../../types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type AlertState = {
-  focusedPendingAlertId: string | undefined
+  focusedPendingAlertId: number | undefined
   pendingAlerts: LEGACY_PendingAlert[]
-  silencedAlerts: LEGACY_SilencedAlert[]
+  silencedAlerts: SilencedAlert[]
   silencedAlertsQueue: SilenceAlertQueueItem[]
   subMenu: AlertSubMenu
 }
@@ -75,7 +70,7 @@ const slice = createSlice({
     /**
      * @param action - Original `PendingAlert.id`
      */
-    removeFromSilencedAlertsQueue(state, action: PayloadAction<string>) {
+    removeFromSilencedAlertsQueue(state, action: PayloadAction<number>) {
       state.silencedAlertsQueue = deleteListItems(state.silencedAlertsQueue, 'pendingAlertId', action.payload)
     },
 
@@ -96,7 +91,7 @@ const slice = createSlice({
     /**
      * Set silenced alerts
      */
-    setSilencedAlerts(state, action: PayloadAction<LEGACY_SilencedAlert[]>) {
+    setSilencedAlerts(state, action: PayloadAction<SilencedAlert[]>) {
       state.silencedAlerts = action.payload
     },
 

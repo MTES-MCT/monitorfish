@@ -13,6 +13,8 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.SilencedAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.ValidatePendingAlert
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
@@ -71,5 +73,28 @@ class ValidatePendingAlertUTests {
             "FRFGRGR",
             true,
         )
+    }
+
+    @Test
+    fun `execute Should catch a NoSuchElementException exception When an alert is not found`() {
+        // Given
+        given(pendingAlertRepository.find(any()))
+            .willThrow(NoSuchElementException("No value present"))
+
+        // When
+        val exception =
+            catchThrowable {
+                ValidatePendingAlert(
+                    pendingAlertRepository,
+                    reportingRepository,
+                    silencedAlertRepository,
+                    lastPositionRepository,
+                ).execute(
+                    666,
+                )
+            }
+
+        // Then
+        assertThat(exception.message).isEqualTo("L'alerte n'est plus active")
     }
 }

@@ -19,7 +19,8 @@ class PatchMissionAction(
     fun execute(
         id: Int,
         patchableEnvActionEntity: PatchableMissionAction,
-    ): MissionAction = try {
+    ): MissionAction =
+        try {
             logger.info("Patching mission action $id")
 
             val previousMissionAction = missionActionsRepository.findById(id)

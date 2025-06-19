@@ -82,16 +82,17 @@ class ValidatePendingAlertUTests {
             .willThrow(NoSuchElementException("No value present"))
 
         // When
-        val exception = catchThrowable {
-            ValidatePendingAlert(
-                pendingAlertRepository,
-                reportingRepository,
-                silencedAlertRepository,
-                lastPositionRepository,
-            ).execute(
-                666,
-            )
-        }
+        val exception =
+            catchThrowable {
+                ValidatePendingAlert(
+                    pendingAlertRepository,
+                    reportingRepository,
+                    silencedAlertRepository,
+                    lastPositionRepository,
+                ).execute(
+                    666,
+                )
+            }
 
         // Then
         assertThat(exception.message).isEqualTo("L'alerte n'est plus active")

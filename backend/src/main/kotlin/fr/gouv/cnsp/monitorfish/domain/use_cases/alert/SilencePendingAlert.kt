@@ -46,15 +46,16 @@ class SilencePendingAlert(
                 SilenceAlertPeriod.CUSTOM -> beforeDateTime!!
             }
 
-        val silencedAlert = try {
-            pendingAlertRepository.find(alertId)
-        } catch (e: NoSuchElementException) {
-            throw BackendUsageException(
-                BackendUsageErrorCode.NOT_FOUND_BUT_OK,
-                message = "L'alerte n'est plus active",
-                cause = e
-            )
-        }
+        val silencedAlert =
+            try {
+                pendingAlertRepository.find(alertId)
+            } catch (e: NoSuchElementException) {
+                throw BackendUsageException(
+                    BackendUsageErrorCode.NOT_FOUND_BUT_OK,
+                    message = "L'alerte n'est plus active",
+                    cause = e,
+                )
+            }
 
         val savedSilencedAlert =
             silencedAlertRepository.save(

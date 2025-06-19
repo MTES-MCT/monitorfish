@@ -23,15 +23,16 @@ class ValidatePendingAlert(
 
     fun execute(alertId: Int) {
         val now = ZonedDateTime.now()
-        val validatedAlert = try {
-            pendingAlertRepository.find(alertId)
-        } catch (e: NoSuchElementException) {
-            throw BackendUsageException(
-                BackendUsageErrorCode.NOT_FOUND_BUT_OK,
-                message = "L'alerte n'est plus active",
-                cause = e
-            )
-        }
+        val validatedAlert =
+            try {
+                pendingAlertRepository.find(alertId)
+            } catch (e: NoSuchElementException) {
+                throw BackendUsageException(
+                    BackendUsageErrorCode.NOT_FOUND_BUT_OK,
+                    message = "L'alerte n'est plus active",
+                    cause = e,
+                )
+            }
 
         silencedAlertRepository.save(
             alert = validatedAlert,

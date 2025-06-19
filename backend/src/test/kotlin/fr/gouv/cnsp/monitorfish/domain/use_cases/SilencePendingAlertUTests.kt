@@ -166,17 +166,18 @@ class SilencePendingAlertUTests {
             .willThrow(NoSuchElementException("No value present"))
 
         // When
-        val exception = catchThrowable {
-            SilencePendingAlert(
-                pendingAlertRepository,
-                silencedAlertRepository,
-                lastPositionRepository,
-            ).execute(
-                666,
-                SilenceAlertPeriod.CUSTOM,
-                ZonedDateTime.now().plusDays(26),
-            )
-        }
+        val exception =
+            catchThrowable {
+                SilencePendingAlert(
+                    pendingAlertRepository,
+                    silencedAlertRepository,
+                    lastPositionRepository,
+                ).execute(
+                    666,
+                    SilenceAlertPeriod.CUSTOM,
+                    ZonedDateTime.now().plusDays(26),
+                )
+            }
 
         // Then
         assertThat(exception.message).isEqualTo("L'alerte n'est plus active")

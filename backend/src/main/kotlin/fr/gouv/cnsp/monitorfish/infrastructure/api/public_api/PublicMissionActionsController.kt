@@ -39,6 +39,7 @@ class PublicMissionActionsController(
         @RequestBody
         actionInput: PatchableMissionActionDataInput,
     ): MissionActionDataOutput {
+        println(actionInput)
         val updatedMissionAction = patchMissionAction.execute(actionId, actionInput.toPatchableMissionAction())
 
         return MissionActionDataOutput.fromMissionAction(updatedMissionAction)

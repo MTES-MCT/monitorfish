@@ -158,4 +158,27 @@ class SilencePendingAlertUTests {
             "end date must be not null when ignoring an operational alert with a custom period",
         )
     }
+
+    @Test
+    fun `execute Should catch a NoSuchElementException exception When an alert is not found`() {
+        // Given
+        given(pendingAlertRepository.find(any()))
+            .willThrow(NoSuchElementException("No value present"))
+
+        // When
+        val exception = catchThrowable {
+            SilencePendingAlert(
+                pendingAlertRepository,
+                silencedAlertRepository,
+                lastPositionRepository,
+            ).execute(
+                666,
+                SilenceAlertPeriod.CUSTOM,
+                ZonedDateTime.now().plusDays(26),
+            )
+        }
+
+        // Then
+        assertThat(exception.message).isEqualTo("L'alerte n'est plus active")
+    }
 }

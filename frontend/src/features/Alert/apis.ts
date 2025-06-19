@@ -1,17 +1,17 @@
 // TODO We could remove the type discrimation normalization step if we had it done on API side.
 
-import { FrontendApiError } from '@libs/FrontendApiError'
-
-import { monitorfishApi } from './api'
-
-import type {
-  LEGACY_PendingAlert,
-  LEGACY_SilencedAlert,
-  PendingAlert,
-  SilencedAlert,
-  SilencedAlertData,
-  SilencedAlertPeriodRequest
+import { monitorfishApi } from '@api/api'
+import { BackendApi } from '@api/BackendApi.types'
+import { valueOrUndefinedIfNotFoundOrThrow } from '@api/utils'
+import { SilencedAlertSchema } from '@features/Alert/schemas/SilencedAlertSchema'
+import {
+  type LEGACY_PendingAlert,
+  type PendingAlert,
+  type SilencedAlert,
+  type SilencedAlertData,
+  type SilencedAlertPeriodRequest
 } from '@features/Alert/types'
+import { FrontendApiError } from '@libs/FrontendApiError'
 
 export const ALERTS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les alertes opérationelles"
 export const VALIDATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu valider l'alerte opérationelle"
@@ -42,7 +42,7 @@ export const alertApi = monitorfishApi.injectEndpoints({
       }),
       transformErrorResponse: response => new FrontendApiError(CREATE_SILENCED_ALERT_ERROR_MESSAGE, response)
     }),
-    deleteSilencedAlert: builder.mutation<void, string>({
+    deleteSilencedAlert: builder.mutation<void, number>({
       query: id => ({
         method: 'DELETE',
         url: `/operational_alerts/silenced/${id}`
@@ -54,13 +54,13 @@ export const alertApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(ALERTS_ERROR_MESSAGE, response),
       transformResponse: (response: PendingAlert[]) => response.map(normalizePendingAlert)
     }),
-    getSilencedAlerts: builder.query<LEGACY_SilencedAlert[], void>({
+    getSilencedAlerts: builder.query<SilencedAlert[], void>({
       query: () => '/operational_alerts/silenced',
       transformErrorResponse: response => new FrontendApiError(ALERTS_ERROR_MESSAGE, response)
     }),
     silenceAlert: builder.mutation<
-      LEGACY_SilencedAlert,
-      { id: string; silencedAlertPeriodRequest: SilencedAlertPeriodRequest }
+      SilencedAlert | undefined,
+      { id: number; silencedAlertPeriodRequest: SilencedAlertPeriodRequest }
     >({
       query: ({ id, silencedAlertPeriodRequest }) => ({
         body: {
@@ -70,9 +70,14 @@ export const alertApi = monitorfishApi.injectEndpoints({
         method: 'PUT',
         url: `/operational_alerts/${id}/silence`
       }),
-      transformErrorResponse: response => new FrontendApiError(SILENCE_ALERT_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(SILENCE_ALERT_ERROR_MESSAGE, response),
+      transformResponse: (response: BackendApi.ResponseBodyError | SilencedAlert) => {
+        const result = SilencedAlertSchema.safeParse(response)
+
+        return valueOrUndefinedIfNotFoundOrThrow<SilencedAlert>(result, response)
+      }
     }),
-    validateAlert: builder.mutation<void, string>({
+    validateAlert: builder.mutation<void, number>({
       query: id => ({
         method: 'PUT',
         url: `/operational_alerts/${id}/validate`

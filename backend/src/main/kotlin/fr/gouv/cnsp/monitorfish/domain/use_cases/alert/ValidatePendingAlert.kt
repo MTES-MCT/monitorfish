@@ -3,6 +3,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.alert
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
@@ -21,7 +23,15 @@ class ValidatePendingAlert(
 
     fun execute(alertId: Int) {
         val now = ZonedDateTime.now()
-        val validatedAlert = pendingAlertRepository.find(alertId)
+        val validatedAlert = try {
+            pendingAlertRepository.find(alertId)
+        } catch (e: NoSuchElementException) {
+            throw BackendUsageException(
+                BackendUsageErrorCode.NOT_FOUND_BUT_OK,
+                message = "L'alerte n'est plus active",
+                cause = e
+            )
+        }
 
         silencedAlertRepository.save(
             alert = validatedAlert,

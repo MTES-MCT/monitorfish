@@ -1,5 +1,5 @@
-import { alertApi } from '@api/alert'
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
+import { alertApi } from '@features/Alert/apis'
 import { setPendingAlerts } from '@features/Alert/components/SideWindowAlerts/slice'
 
 import { setError } from '../../../domain/shared_slices/Global'

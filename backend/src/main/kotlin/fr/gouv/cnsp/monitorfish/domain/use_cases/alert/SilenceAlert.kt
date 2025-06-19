@@ -16,7 +16,7 @@ class SilenceAlert(
         // We recreate the object from the `value.type` as the AlertType class from our domain contains the `natinfCode`
         val silencedAlertWithNatinf = getSilencedAlertWithNatinf(silencedAlert)
 
-        val savedSilencedAlert= silencedAlertRepository.save(silencedAlertWithNatinf)
+        val savedSilencedAlert = silencedAlertRepository.save(silencedAlertWithNatinf)
 
         // If the silenced alert is of type MISSING_FAR_ALERT or MISSING_FAR_48_HOURS_ALERT, we need to save the other silenced alert
         when (silencedAlert.value.type) {

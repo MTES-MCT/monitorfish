@@ -43,9 +43,9 @@ abstract class AbstractDBTests {
                     )
                     withCopyToContainer(
                         MountableFile.forClasspathResource(
-                            "./db/testdata/csv"
+                            "./db/testdata/csv",
                         ),
-                        "/testdata/csv"
+                        "/testdata/csv",
                     )
                     withStartupTimeout(Duration.of(60L, ChronoUnit.SECONDS))
                     this.start()

@@ -164,7 +164,6 @@ pipeline/.monitorfish
 github_token.txt
 /infra/remote/backup/pg_backup.config
 datascience/dam-si-jupyter-config.py
-pipeline/dam-si-jupyter-config.py
 
 # Notebooks
 /datascience/notebooks

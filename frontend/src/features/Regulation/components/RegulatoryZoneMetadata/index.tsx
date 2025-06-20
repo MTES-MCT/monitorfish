@@ -1,9 +1,8 @@
-import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { ZonePreview } from '@features/Regulation/components/ZonePreview'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTracking } from '@hooks/useTracking'
-import { Icon, THEME } from '@mtes-mct/monitor-ui'
+import { FingerprintLoader, Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 
@@ -61,8 +60,7 @@ export function RegulatoryZoneMetadata() {
           </Content>
         </>
       ) : (
-        // eslint-disable-next-line react/forbid-component-props
-        <FingerprintSpinner className="radar" color={THEME.color.white} size={100} />
+        <FingerprintLoader className="radar" />
       )}
     </Wrapper>
   )

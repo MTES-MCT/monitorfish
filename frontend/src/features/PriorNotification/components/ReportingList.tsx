@@ -1,13 +1,12 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { ConfirmationModal } from '@components/ConfirmationModal'
-import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { SideWindowCard } from '@components/SideWindowCard'
 import { CurrentReportingList } from '@features/Reporting/components/CurrentReportingList'
 import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
 import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Icon, LinkButton, THEME } from '@mtes-mct/monitor-ui'
+import { FingerprintLoader, Icon, LinkButton, THEME } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
@@ -80,9 +79,7 @@ export function ReportingList() {
           )}
         </CardHeader>
 
-        {(!vesselReportings || isFetching) && (
-          <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
-        )}
+        {(!vesselReportings || isFetching) && <FingerprintLoader className="radar" color={THEME.color.charcoal} />}
         {!!vesselReportings && (
           <StyledCurrentReportingList
             onIsDirty={handleIsDirty}

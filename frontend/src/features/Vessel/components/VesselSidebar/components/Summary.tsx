@@ -1,4 +1,3 @@
-import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { VesselSidebarFleetSegments } from '@features/FleetSegment/components/VesselSidebarFleetSegments'
 import { WSG84_PROJECTION } from '@features/Map/constants'
 import { RiskFactorResume } from '@features/RiskFactor/components/RiskFactorResume'
@@ -7,7 +6,7 @@ import { showVessel } from '@features/Vessel/useCases/showVessel'
 import { SelectedVesselGroups } from '@features/VesselGroup/components/SelectedVesselGroups'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { THEME } from '@mtes-mct/monitor-ui'
+import { FingerprintLoader, THEME } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
@@ -136,7 +135,7 @@ export function VesselSummary() {
       <SelectedVesselGroups />
     </Body>
   ) : (
-    <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
+    <FingerprintLoader className="radar" color={THEME.color.charcoal} />
   )
 }
 

@@ -1,5 +1,4 @@
-import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
-import { Accent, Button, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Button, FulfillingBouncingCircleLoader, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import { isCypress } from '@utils/isCypress'
 import { useEffect, useMemo, useState } from 'react'
 import { Progress } from 'rsuite'
@@ -117,7 +116,7 @@ export function LoadOffline() {
         )}
         {isDownloading && (
           <>
-            <FulfillingBouncingCircleSpinner className="loader" color={THEME.color.white} size={30} />
+            <FulfillingBouncingCircleLoader className="loader" size={30} />
             <p>{remainingMinutes} minutes restantes</p>
           </>
         )}

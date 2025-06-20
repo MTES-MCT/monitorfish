@@ -1,5 +1,4 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
-import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { ArchivedReportingList } from '@features/Reporting/components/ArchivedReportingList'
 import { CurrentReportingList } from '@features/Reporting/components/CurrentReportingList'
 import { TwelveMonthsSummary } from '@features/Reporting/components/ReportingListSummary'
@@ -7,7 +6,7 @@ import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
 import { getVesselIdentityFromLegacyVesselIdentity } from '@features/Vessel/utils'
 import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { customDayjs, THEME } from '@mtes-mct/monitor-ui'
+import { customDayjs, FingerprintLoader, THEME } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
@@ -40,7 +39,7 @@ export function VesselReportings() {
   }
 
   if (!selectedVesselIdentity || !vesselReportings) {
-    return <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
+    return <FingerprintLoader className="radar" color={THEME.color.charcoal} />
   }
 
   return (

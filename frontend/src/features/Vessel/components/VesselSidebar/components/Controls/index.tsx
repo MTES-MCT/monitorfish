@@ -1,9 +1,8 @@
-import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { SidebarLoadMoreYears } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { getVesselControls } from '@features/Vessel/components/VesselSidebar/useCases/getVesselControls'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, customDayjs, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Button, customDayjs, FingerprintLoader, THEME } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import styled from 'styled-components'
 
@@ -52,7 +51,7 @@ export function VesselControls() {
   }
 
   if (isLoadingControls) {
-    return <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
+    return <FingerprintLoader className="radar" color={THEME.color.charcoal} />
   }
 
   return (

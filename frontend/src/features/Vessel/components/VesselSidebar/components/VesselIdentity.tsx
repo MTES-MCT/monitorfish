@@ -1,8 +1,7 @@
-import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { FlatKeyValue } from '@features/Vessel/components/VesselSidebar/components/common/FlatKeyValue'
 import { FlatTwoColumnKeyValue } from '@features/Vessel/components/VesselSidebar/components/common/FlatTwoColumnKeyValue'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { customDayjs, THEME } from '@mtes-mct/monitor-ui'
+import { customDayjs, FingerprintLoader, THEME } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import { useMemo } from 'react'
 import styled from 'styled-components'
@@ -267,7 +266,7 @@ export function VesselIdentity() {
       />
     </Body>
   ) : (
-    <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
+    <FingerprintLoader className="radar" color={THEME.color.charcoal} />
   )
 }
 

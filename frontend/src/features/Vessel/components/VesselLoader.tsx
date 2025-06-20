@@ -1,11 +1,10 @@
 import { FIVE_MINUTES, TWENTY_MINUTES } from '@api/APIWorker'
-import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
 import { saveActiveVesselsAndDisplayLastPositions } from '@features/Vessel/useCases/saveActiveVesselsAndDisplayLastPositions'
 import { useGetActiveVesselsQuery } from '@features/Vessel/vesselApi'
 import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { THEME } from '@mtes-mct/monitor-ui'
+import { FulfillingBouncingCircleLoader } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -53,14 +52,14 @@ export function VesselLoader() {
     <>
       {!isAppLoaded && (
         <FirstLoadWrapper data-cy="first-loader">
-          <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.white} size={100} />
+          <FulfillingBouncingCircleLoader className="update-vessels" />
           <BigVessel />
         </FirstLoadWrapper>
       )}
       <UpdateWrapper $isVesselSidebarOpen={vesselSidebarIsOpen}>
         {(isFetching || loadingPositions) && isAppLoaded && (
           <>
-            <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.white} size={30} />
+            <FulfillingBouncingCircleLoader className="update-vessels" size={30} />
             <VesselIcon />
           </>
         )}

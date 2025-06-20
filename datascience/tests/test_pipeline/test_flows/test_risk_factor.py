@@ -589,7 +589,9 @@ def computed_recent_segments() -> pd.DataFrame:
 
 def test_extract_recent_segments(reset_test_data, expected_recent_segments):
     res = extract_recent_segments.run()
-    pd.testing.assert_frame_equal(res, expected_recent_segments)
+    pd.testing.assert_frame_equal(
+        res.sort_values("cfr").reset_index(drop=True), expected_recent_segments
+    )
 
 
 def test_compute_profile_segments_impact_and_priority(

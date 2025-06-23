@@ -3,10 +3,10 @@
 import importMetaEnv from '@import-meta-env/unplugin'
 import replace from '@rollup/plugin-replace'
 import react from '@vitejs/plugin-react'
-import {defineConfig, type PluginOption} from 'vite'
+import { visualizer } from 'rollup-plugin-visualizer'
+import { defineConfig, type PluginOption } from 'vite'
 import svgr from 'vite-plugin-svgr'
 import viteTsconfigPaths from 'vite-tsconfig-paths'
-import {visualizer} from "rollup-plugin-visualizer";
 
 // https://vitejs.dev/config/
 // eslint-disable-next-line import/no-default-export
@@ -18,13 +18,13 @@ export default defineConfig({
     rollupOptions: {
       treeshake: true,
       input: {
-        index: './index.html',
+        index: './index.html'
       },
       output: {
         manualChunks: {
           'monitor-ui': ['@mtes-mct/monitor-ui']
         }
-      },
+      }
     },
     target: 'esnext'
   },
@@ -35,14 +35,14 @@ export default defineConfig({
      * @see https://github.com/bvaughn/react-window/issues/227
      */
     replace({
-      'pointerEvents: isScrolling ? "none" : void 0': 'pointerEvents: null',
+      'pointerEvents: isScrolling ? "none" : void 0': 'pointerEvents: null'
     }),
     replace({
-      'pointerEvents: isScrolling ? "none" : undefined': 'pointerEvents: null',
+      'pointerEvents: isScrolling ? "none" : undefined': 'pointerEvents: null'
     }),
     visualizer({
       emitFile: true,
-      filename: "bundle_size.html",
+      filename: 'bundle_size.html'
     }) as PluginOption,
     viteTsconfigPaths(),
     svgr(),
@@ -52,11 +52,11 @@ export default defineConfig({
     })
   ],
   worker: {
-    plugins: () => [viteTsconfigPaths()],
+    plugins: () => [viteTsconfigPaths()]
   },
 
   server: {
-    host: 'localhost',
+    host: '0.0.0.0',
     port: 3000,
     proxy: {
       '/api': {

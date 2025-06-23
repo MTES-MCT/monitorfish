@@ -308,6 +308,10 @@ run-data-warehouse:
 test-pipeline:
 	cd datascience && export TEST_LOCAL=True && poetry run coverage run -m pytest --pdb --ignore=tests/test_data/external tests/ && poetry run coverage report && poetry run coverage html
 
+test-pipeline-prefect-3:
+	cd pipeline && export TEST_LOCAL=True && poetry run coverage run -m pytest --pdb --ignore=tests/test_data/external tests/ && poetry run coverage report && poetry run coverage html
+
+
 test-pipeline-with-data_warehouse: fetch-external-data run-data-warehouse test-pipeline stop-data-warehouse
 
 # ----------------------------------------------------------

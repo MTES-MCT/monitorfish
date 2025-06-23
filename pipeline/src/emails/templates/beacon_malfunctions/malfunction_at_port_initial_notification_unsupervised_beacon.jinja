@@ -1,0 +1,20 @@
+{% extends "base_template.jinja" %}
+{% block message %}
+{% block beginning %}
+<p>Nous vous informons que <strong>le CNSP ne reçoit pas les positions de votre navire par le
+système de surveillance satellitaire des navires (VMS).
+{% if last_position_latitude and last_position_longitude and last_position_datetime_utc %}
+ </strong>La dernière position reçue date du {{ last_position_datetime_utc }}, 
+latitude {{ last_position_latitude }}, longitude {{ last_position_longitude }}.
+{%endif%}
+</p>
+{% endblock %}
+
+<p>Si l'absence d'émission est liée à un problème technique, veuillez contacter votre installateur ou votre 
+opérateur satellitaire pour régler le problème.</p>
+
+<p>Pour rappel, <strong>votre navire n'est pas autorisé à reprendre la
+mer tant que votre installation VMS n'est pas en état de fonctionnement*.</strong></p>
+
+<p>Le non-respect de ces obligations peut être sanctionné par une amende de 22 500€**.</p>
+{% endblock %}

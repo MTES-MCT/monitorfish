@@ -145,7 +145,7 @@ dist
 
 # Env variables
 /datascience/.env
-/datascience_3/.env
+pipeline/.env
 # Our .env files follow the `import-meta-env` convention:
 # - `.env`: git-ignored, generated from `.env.local.defaults`, overriden by `.env.local`.
 # - `.env.example`: git-commited, only for /frontend, used to enforce the env that must be injected at runtime via `import-meta-env`.
@@ -163,42 +163,42 @@ dist
 github_token.txt
 /infra/remote/backup/pg_backup.config
 datascience/dam-si-jupyter-config.py
-datascience_3/dam-si-jupyter-config.py
+pipeline/dam-si-jupyter-config.py
 
 # Notebooks
 /datascience/notebooks
-/datascience_3/notebooks
+pipeline/notebooks
 /datascience/.local
-/datascience_3/.local
+pipeline/.local
 /datascience/.ipython
-/datascience_3/.ipython
+pipeline/.ipython
 /datascience/.cache
-/datascience_3/.cache
+pipeline/.cache
 .ipynb_checkpoints/
 .jupyter/
 
 # Coverage reports
 datascience/htmlcov/
-datascience_3/htmlcov/
+pipeline/htmlcov/
 datascience/.coverage
-datascience_3/.coverage
+pipeline/.coverage
 frontend/cypress/videos/
 
 # Local data
 /datascience/data
-/datascience_3/data
-/datascience/src/pipeline/data/non_commited_data/pno_ports_subscriptions.csv
-/datascience_3/src/pipeline/data/non_commited_data/pno_ports_subscriptions.csv
-/datascience/src/pipeline/data/non_commited_data/pno_segments_subscriptions.csv
-/datascience_3/src/pipeline/data/non_commited_data/pno_segments_subscriptions.csv
-/datascience/src/pipeline/data/non_commited_data/pno_vessels_subscriptions.csv
-/datascience_3/src/pipeline/data/non_commited_data/pno_vessels_subscriptions.csv
+pipeline/data
+/datascience/src/data/non_commited_data/pno_ports_subscriptions.csv
+pipeline/src/data/non_commited_data/pno_ports_subscriptions.csv
+/datascience/src/data/non_commited_data/pno_segments_subscriptions.csv
+pipeline/src/data/non_commited_data/pno_segments_subscriptions.csv
+/datascience/src/data/non_commited_data/pno_vessels_subscriptions.csv
+pipeline/src/data/non_commited_data/pno_vessels_subscriptions.csv
 
 # Ignore downloaded external repositories
 datascience/tests/test_data/external/*
-datascience_3/tests/test_data/external/*
+pipeline/tests/test_data/external/*
 !datascience/tests/test_data/external/README.md
-!datascience_3/tests/test_data/external/README.md
+!pipeline/tests/test_data/external/README.md
 
 # Kotlin sessions
 .kotlin/
@@ -206,7 +206,7 @@ datascience_3/tests/test_data/external/*
 # Python
 *.pyc
 datascience/monitorfish.egg-info
-datascience_3/monitorfish.egg-info
+pipeline/monitorfish.egg-info
 
 # IDEs
 .vscode
@@ -215,7 +215,7 @@ datascience_3/monitorfish.egg-info
 # Doc
 docs/redmine_wiki/*
 datascience/docs/build
-datascience_3/docs/build
+pipeline/docs/build
 
 # Secrets (used by act)
 .secrets

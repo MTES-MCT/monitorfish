@@ -1,0 +1,96 @@
+<rsm:FLUXFAReportMessage xsi:schemaLocation="urn:un:unece:uncefact:data:standard:FLUXFAReportMessage:3 xsd/FLUXFAReportMessage_3p1/FLUXFAReportMessage_3p1.xsd" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" xmlns:rsm="urn:un:unece:uncefact:data:standard:FLUXFAReportMessage:3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+         <rsm:FLUXReportDocument>
+            <ram:ID schemeID="UUID">9e38840b-f05a-49a4-ab34-e41131749fd0</ram:ID>
+            <ram:CreationDateTime>
+               <udt:DateTime>2020-05-06T18:40:22.885Z</udt:DateTime>
+            </ram:CreationDateTime>
+            <ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
+            <ram:Purpose>FLUX-FA-EU-710523 </ram:Purpose>
+            <ram:OwnerFLUXParty>
+               <ram:ID schemeID="FLUX_GP_PARTY">SRC</ram:ID>
+            </ram:OwnerFLUXParty>
+         </rsm:FLUXReportDocument>
+         <rsm:FAReportDocument>
+            <ram:TypeCode listID="FLUX_FA_REPORT_TYPE">DECLARATION</ram:TypeCode>
+            <ram:AcceptanceDateTime>
+               <udt:DateTime>2020-05-06T13:40:22.885Z</udt:DateTime>
+            </ram:AcceptanceDateTime>
+            <ram:RelatedFLUXReportDocument>
+               <ram:ID schemeID="UUID">1706938b-c3c8-4d34-b32f-54c8d2c0705a</ram:ID>
+               <ram:CreationDateTime>
+                  <udt:DateTime>2020-05-06T15:40:22.885Z</udt:DateTime>
+               </ram:CreationDateTime>
+               <ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
+               <ram:OwnerFLUXParty>
+                  <ram:ID schemeID="FLUX_GP_PARTY">SRC</ram:ID>
+               </ram:OwnerFLUXParty>
+            </ram:RelatedFLUXReportDocument>
+            <ram:SpecifiedFishingActivity>
+               <ram:TypeCode listID="FLUX_FA_TYPE">FISHING_OPERATION</ram:TypeCode>
+               
+               <ram:OccurrenceDateTime>
+                     <udt:DateTime>2020-05-06T11:40:22.885Z</udt:DateTime>
+                </ram:OccurrenceDateTime>
+                
+                <ram:VesselRelatedActivityCode listID="VESSEL_ACTIVITY">STE</ram:VesselRelatedActivityCode>
+                <ram:OperationsQuantity unitCode="C62">0</ram:OperationsQuantity>
+
+                <!--Optional in EU / Mandatory for NEAFC-->
+                <ram:SpecifiedFACatch>
+                  <ram:SpeciesCode listID="FAO_SPECIES">MZZ</ram:SpeciesCode>
+                  <ram:WeightMeasure unitCode="KGM">0</ram:WeightMeasure>
+                  <ram:TypeCode listID="FA_CATCH_TYPE">ONBOARD</ram:TypeCode>
+                  <!--optional in NEAFC, mandatory in EU-->
+                  <ram:SpecifiedSizeDistribution>
+                     <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                  </ram:SpecifiedSizeDistribution>                 
+                </ram:SpecifiedFACatch>
+               
+                <ram:RelatedFLUXLocation>
+                  <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                  <ram:ID schemeID="MANAGEMENT_AREA">NEAFC_RA</ram:ID>
+                </ram:RelatedFLUXLocation>
+
+                <ram:RelatedFLUXLocation>
+                  <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                  <ram:ID schemeID="FAO_AREA">27.8.e.1</ram:ID>
+                </ram:RelatedFLUXLocation>
+
+               <!--Trip information-->
+               <ram:SpecifiedFishingTrip>
+                  <ram:ID schemeID="EU_TRIP_ID">SRC-TRP-TTT20200506194022885</ram:ID>
+               </ram:SpecifiedFishingTrip>
+               
+            </ram:SpecifiedFishingActivity>
+            
+            <!--reporting vessel-->
+            <ram:SpecifiedVesselTransportMeans>
+               <ram:ID schemeID="CFR">CYP123456789</ram:ID>
+               <ram:ID schemeID="IRCS">IRCS6</ram:ID>
+			<ram:ID schemeID="EXT_MARK">XR006</ram:ID>
+			<ram:ID schemeID="UVI">1234567</ram:ID>
+               <ram:Name>GOLF</ram:Name>
+               <ram:RegistrationVesselCountry>
+                  <ram:ID schemeID="TERRITORY">CYP</ram:ID>
+               </ram:RegistrationVesselCountry>
+               
+               <!--master name and address-->
+               <ram:SpecifiedContactParty>
+                  <ram:RoleCode listID="FLUX_CONTACT_ROLE">MASTER</ram:RoleCode>
+                  <ram:SpecifiedStructuredAddress>
+                     <ram:StreetName>ABC</ram:StreetName>
+                     <ram:CityName>CABOURG</ram:CityName>
+                     <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                     <ram:PlotIdentification>17</ram:PlotIdentification>
+                     <ram:PostalArea> 14390</ram:PostalArea>
+                  </ram:SpecifiedStructuredAddress>
+                  <ram:SpecifiedContactPerson>
+                     <ram:GivenName>John</ram:GivenName>
+                     <ram:FamilyName>Doe</ram:FamilyName>
+                     <ram:Alias>Captain Jack</ram:Alias>
+                  </ram:SpecifiedContactPerson>
+               </ram:SpecifiedContactParty>
+            </ram:SpecifiedVesselTransportMeans>
+            
+         </rsm:FAReportDocument>
+      </rsm:FLUXFAReportMessage>

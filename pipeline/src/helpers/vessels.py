@@ -172,7 +172,7 @@ def merge_vessel_id(
 
         warning_message = (
             "The following identifiers are ambiguous as they could correspond to "
-            "more than one vessel:\n" + str(ambiguous_vessels.to_markdown(index=False))
+            "more than one vessel:\n" + str(ambiguous_vessels.to_string(index=False))
         )
 
         logger.warning(warning_message)
@@ -186,7 +186,7 @@ def merge_vessel_id(
         warning_message = (
             "The following identifiers conflict with one another - "
             "more than one match the same vessel:\n"
-            + str(vessels_in_conflict.to_markdown(index=False))
+            + str(vessels_in_conflict.to_string(index=False))
         )
 
         logger.warning(warning_message)

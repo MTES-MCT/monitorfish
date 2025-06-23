@@ -80,7 +80,9 @@ WEEKLY_CONTROL_REPORT_EMAIL_TEST_MODE = os.getenv(
 )
 
 # Flow execution configuration
-DOCKER_IMAGE = "docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline"
+DOCKER_IMAGE = (
+    "docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline-prefect-3"
+)
 MONITORFISH_VERSION = os.getenv("MONITORFISH_VERSION")
 FLOWS_LOCATION = Path("src/flows")  # relative to the WORKDIR in the image
 FLOWS_LABEL = "monitorfish"

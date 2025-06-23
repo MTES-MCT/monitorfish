@@ -1,0 +1,16 @@
+h1 {
+    font-size: 1.999rem;
+}
+
+h2 {
+font-size: 1.414rem;
+}
+
+body {
+    text-align: unset;
+    max-width: 54rem;
+}
+
+strong {
+    font-weight: bold;
+}

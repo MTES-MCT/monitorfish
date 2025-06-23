@@ -1,0 +1,28 @@
+services:
+  db:
+    image: clickhouse/clickhouse-server:25.4.2.31
+    container_name: data_warehouse
+    environment:
+      - CLICKHOUSE_USER=$DATA_WAREHOUSE_USER
+      - CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1 
+      - CLICKHOUSE_PASSWORD=$DATA_WAREHOUSE_PASSWORD
+    volumes:
+      - data-warehouse-db:/var/lib/clickhouse/
+      - data-warehouse-logs:/var/log/clickhouse-server/
+      - $DATA_WAREHOUSE_INPUT_DATA_FOLDER:/var/lib/clickhouse/user_files
+    ports:
+      - 8123:8123
+      - 9000:9000
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "wget http://localhost:8123/ping || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    network_mode: host
+
+volumes:
+  data-warehouse-db:
+    driver: local
+  data-warehouse-logs:
+    driver: local

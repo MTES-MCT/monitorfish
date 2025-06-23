@@ -1,0 +1,23 @@
+SELECT
+    vessel_id,
+    cfr,
+    ircs,
+    external_immatriculation,
+    last_control_datetime_utc,
+    last_control_infraction,
+    post_control_comments,
+    control_rate_risk_factor,
+    infraction_rate_risk_factor,
+    infraction_score,
+    number_controls_last_3_years,
+    number_controls_last_5_years,
+    number_gear_seizures_last_5_years,
+    number_species_seizures_last_5_years,
+    number_vessel_seizures_last_5_years,
+    number_infractions_last_5_years,
+    number_recent_controls,
+    last_control_logbook_infractions,
+    last_control_gear_infractions,
+    last_control_species_infractions,
+    last_control_other_infractions
+FROM control_anteriority

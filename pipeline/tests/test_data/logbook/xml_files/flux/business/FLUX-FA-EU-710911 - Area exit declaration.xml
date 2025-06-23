@@ -1,0 +1,94 @@
+<rsm:FLUXFAReportMessage xsi:schemaLocation="urn:un:unece:uncefact:data:standard:FLUXFAReportMessage:3 xsd/FLUXFAReportMessage_3p1/FLUXFAReportMessage_3p1.xsd" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" xmlns:rsm="urn:un:unece:uncefact:data:standard:FLUXFAReportMessage:3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+         <rsm:FLUXReportDocument>
+            <ram:ID schemeID="UUID">a3c52754-97e1-4a21-ba2e-d8f16f4544e9</ram:ID>
+            <ram:CreationDateTime>
+               <udt:DateTime>2020-05-06T18:40:57.580Z</udt:DateTime>
+            </ram:CreationDateTime>
+            <ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
+            <ram:Purpose>FLUX-FA-EU-710911 </ram:Purpose>
+            <ram:OwnerFLUXParty>
+               <ram:ID schemeID="FLUX_GP_PARTY">SRC</ram:ID>
+            </ram:OwnerFLUXParty>
+         </rsm:FLUXReportDocument>
+         <rsm:FAReportDocument>
+            <ram:TypeCode listID="FLUX_FA_REPORT_TYPE">DECLARATION</ram:TypeCode>
+            <ram:AcceptanceDateTime>
+               <udt:DateTime>2020-05-06T13:40:57.580Z</udt:DateTime>
+            </ram:AcceptanceDateTime>
+            <ram:RelatedFLUXReportDocument>
+               <ram:ID schemeID="UUID">9d1ddd34-1394-470e-b8a6-469b86150e1e</ram:ID>
+               <ram:CreationDateTime>
+                  <udt:DateTime>2020-05-06T15:40:57.580Z</udt:DateTime>
+               </ram:CreationDateTime>
+               <ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
+               <ram:OwnerFLUXParty>
+                  <ram:ID schemeID="FLUX_GP_PARTY">SRC</ram:ID>
+               </ram:OwnerFLUXParty>
+            </ram:RelatedFLUXReportDocument>
+            <ram:SpecifiedFishingActivity>
+               <ram:TypeCode listID="FLUX_FA_TYPE">AREA_EXIT</ram:TypeCode>
+               
+               <!--Exact time of exit-->
+               <ram:OccurrenceDateTime>
+                  <udt:DateTime>2020-05-06T11:40:57.580Z</udt:DateTime>
+               </ram:OccurrenceDateTime>
+               
+               <!--Catch on board at time of exit-->
+               <ram:SpecifiedFACatch>
+                  <ram:SpeciesCode listID="FAO_SPECIES">COD</ram:SpeciesCode>
+                  <ram:WeightMeasure unitCode="KGM">52.65</ram:WeightMeasure>
+                  <ram:TypeCode listID="FA_CATCH_TYPE">ONBOARD</ram:TypeCode>
+                  <ram:SpecifiedSizeDistribution>
+                     <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                  </ram:SpecifiedSizeDistribution>
+               </ram:SpecifiedFACatch>
+
+               <!--Area being exited-->
+               <ram:RelatedFLUXLocation>
+                  <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                  <ram:ID schemeID="EFFORT_ZONE">A</ram:ID>
+               </ram:RelatedFLUXLocation>
+
+			<!--Position of area exit-->
+			<ram:RelatedFLUXLocation>
+                  <ram:TypeCode listID="FLUX_LOCATION_TYPE">POSITION</ram:TypeCode>
+                  <ram:SpecifiedPhysicalFLUXGeographicalCoordinate>
+                     <ram:LongitudeMeasure>-14.616</ram:LongitudeMeasure>
+                     <ram:LatitudeMeasure>46.678</ram:LatitudeMeasure>
+                  </ram:SpecifiedPhysicalFLUXGeographicalCoordinate>
+               </ram:RelatedFLUXLocation>
+               
+               <!--Trip information-->
+               <ram:SpecifiedFishingTrip>
+                  <ram:ID schemeID="EU_TRIP_ID">SRC-TRP-TTT20200506194057580</ram:ID>
+               </ram:SpecifiedFishingTrip>
+            </ram:SpecifiedFishingActivity>
+
+            <!--Reporting vessel-->
+            <ram:SpecifiedVesselTransportMeans>
+               <ram:ID schemeID="CFR">CYP123456789</ram:ID>
+               
+               <ram:RegistrationVesselCountry>
+                  <ram:ID schemeID="TERRITORY">CYP</ram:ID>
+               </ram:RegistrationVesselCountry>
+               
+               <!--master name and address-->
+               <ram:SpecifiedContactParty>
+                  <ram:RoleCode listID="FLUX_CONTACT_ROLE">MASTER</ram:RoleCode>
+                  <ram:SpecifiedStructuredAddress>
+                     <ram:StreetName>ABC</ram:StreetName>
+                     <ram:CityName>CABOURG</ram:CityName>
+                     <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                     <ram:PlotIdentification>17</ram:PlotIdentification>
+                     <ram:PostalArea> 14390</ram:PostalArea>
+                  </ram:SpecifiedStructuredAddress>
+                  <ram:SpecifiedContactPerson>
+                     <ram:GivenName>John</ram:GivenName>
+                     <ram:FamilyName>Doe</ram:FamilyName>
+                     <ram:Alias>Captain Jack</ram:Alias>
+                  </ram:SpecifiedContactPerson>
+               </ram:SpecifiedContactParty>
+            </ram:SpecifiedVesselTransportMeans>
+
+         </rsm:FAReportDocument>
+      </rsm:FLUXFAReportMessage>

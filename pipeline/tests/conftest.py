@@ -248,9 +248,7 @@ def wait_for_data_warehouse(set_environment_variables, create_docker_client):
 
 
 ############################ Share fixtures between modules ############################
-pytest_plugins = [
-    "tests.test_shared_tasks.test_segments",
-]
+pytest_plugins = []
 
 
 @pytest.fixture

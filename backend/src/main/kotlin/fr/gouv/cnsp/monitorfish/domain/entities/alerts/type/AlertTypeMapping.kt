@@ -20,6 +20,14 @@ enum class AlertTypeMapping(
         clazz = TwelveMilesFishingAlert::class.java,
         alertName = "12 milles - Pêche sans droits historiques",
     ),
+    BOTTOM_GEAR_VME_FISHING_ALERT(
+        clazz = TwelveMilesFishingAlert::class.java,
+        alertName = "Pêche en zone EMV avec un engin de fond à plus de 400m de profondeur",
+    ),
+    BOTTOM_TRAWL_800_METERS_FISHING_ALERT(
+        clazz = TwelveMilesFishingAlert::class.java,
+        alertName = "Chalutage de fond à plus de 800m de profondeur",
+    ),
     BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT(
         clazz = BliBycatchMaxWeightExceededAlert::class.java,
         alertName = "R(UE) 1241 - Plus de 6 tonnes de lingue bleue (BLI) à bord",

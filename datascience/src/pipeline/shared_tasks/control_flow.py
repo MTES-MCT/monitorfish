@@ -1,6 +1,6 @@
 from datetime import datetime, tzinfo
 from pathlib import Path
-from typing import List
+from typing import Any, List
 
 import prefect
 from prefect import task
@@ -41,7 +41,10 @@ def get_flow_runs(
 
     query = {
         "query": {
-            with_args("flow_run", {"where": {"_and": filters}},): {
+            with_args(
+                "flow_run",
+                {"where": {"_and": filters}},
+            ): {
                 "id",
                 "flow {name}",
                 "state",
@@ -183,3 +186,8 @@ def filter_results(task_results) -> List:
         ]
     elif task_results is None:
         raise SKIP
+
+
+@task(checkpoint=False)
+def param_is_given(param: Any) -> bool:
+    return param is not None

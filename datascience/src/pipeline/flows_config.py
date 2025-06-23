@@ -341,6 +341,48 @@ position_alerts.flow.schedule = Schedule(
                 "species_onboard_min_weight": 6000.0,
             },
         ),
+        clocks.CronClock(
+            "16,46 * * * *",
+            parameter_defaults={
+                "alert_type": "BOTTOM_GEAR_VME_FISHING_ALERT",
+                "alert_config_name": "BOTTOM_GEAR_VME_FISHING_ALERT",
+                "zones": [
+                    "Atlantique 400m - Ecosystèmes Marins Vulnérables (EMV) - Engins de fond"
+                ],
+                "hours_from_now": 8,
+                "only_fishing_positions": True,
+                "fishing_gears": [
+                    "TB",
+                    "GNS",
+                    "LLS",
+                    "LVS",
+                    "OTB",
+                    "OTT",
+                    "PTB",
+                    "TBB",
+                    "TBN",
+                    "TBS",
+                ],
+                "fishing_gear_categories": ["Dragues", "Pièges et casiers"],
+                "include_vessels_unknown_gear": True,
+                "min_depth": 400.0,
+            },
+        ),
+        clocks.CronClock(
+            "26,56 * * * *",
+            parameter_defaults={
+                "alert_type": "BOTTOM_TRAWL_800_METERS_FISHING_ALERT",
+                "alert_config_name": "BOTTOM_TRAWL_800_METERS_FISHING_ALERT",
+                "zones": [
+                    "Interdiction chalutage de fond ATL - Profondeur supérieure à 800m"
+                ],
+                "hours_from_now": 8,
+                "only_fishing_positions": True,
+                "fishing_gears": ["TB", "OTB", "OTT", "PTB", "TBB", "TBN", "TBS"],
+                "include_vessels_unknown_gear": True,
+                "min_depth": 800.0,
+            },
+        ),
     ]
 )
 refresh_materialized_view.flow.schedule = Schedule(

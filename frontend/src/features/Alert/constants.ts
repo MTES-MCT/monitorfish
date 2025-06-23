@@ -12,6 +12,8 @@ import type { MenuItem } from '../../types'
 
 export enum PendingAlertValueType {
   BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT = 'BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT',
+  BOTTOM_GEAR_VME_FISHING_ALERT = 'BOTTOM_GEAR_VME_FISHING_ALERT',
+  BOTTOM_TRAWL_800_METERS_FISHING_ALERT = 'BOTTOM_TRAWL_800_METERS_FISHING_ALERT',
   FRENCH_EEZ_FISHING_ALERT = 'FRENCH_EEZ_FISHING_ALERT',
   MISSING_DEP_ALERT = 'MISSING_DEP_ALERT',
   MISSING_FAR_48_HOURS_ALERT = 'MISSING_FAR_48_HOURS_ALERT',
@@ -36,6 +38,18 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
     isArchivedAfterDEPMessage: false,
     isOperationalAlert: true,
     name: 'R(UE) 1241 - Plus de 6 tonnes de lingue bleue (BLI) à bord'
+  },
+  BOTTOM_GEAR_VME_FISHING_ALERT: {
+    code: PendingAlertValueType.BOTTOM_GEAR_VME_FISHING_ALERT,
+    isArchivedAfterDEPMessage: false,
+    isOperationalAlert: true,
+    name: 'Pêche en zone EMV avec un engin de fond à plus de 400m de profondeur'
+  },
+  BOTTOM_TRAWL_800_METERS_FISHING_ALERT: {
+    code: PendingAlertValueType.BOTTOM_TRAWL_800_METERS_FISHING_ALERT,
+    isArchivedAfterDEPMessage: false,
+    isOperationalAlert: true,
+    name: 'Chalutage de fond à plus de 800m de profondeur'
   },
   FRENCH_EEZ_FISHING_ALERT: {
     code: PendingAlertValueType.FRENCH_EEZ_FISHING_ALERT,

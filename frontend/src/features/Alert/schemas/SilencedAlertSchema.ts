@@ -6,6 +6,7 @@ import z from 'zod'
 import { booleanOrUndefined, numberOrUndefined, stringOrUndefined } from '../../../types'
 
 export const PendingAlertValueSchema = z.strictObject({
+  depth: z.number().optional(),
   dml: z.string().nullable().optional(),
   natinfCode: z.number().nullable().optional(),
   riskFactor: z.number().optional(),

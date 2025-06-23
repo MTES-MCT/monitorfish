@@ -38,6 +38,10 @@ from tests.mocks import mock_check_flow_not_running, mock_datetime_utcnow
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 
+def mock_get_depth(lon: float, lat: float):
+    return lon
+
+
 def test_zones_table():
     meta = MetaData()
     table = Table(
@@ -489,7 +493,9 @@ def test_get_vessels_in_alert():
             "longitude": [39.25, -42.25],
         }
     )
-    pd.testing.assert_frame_equal(vessels_in_alert, expected_vessels_in_alert)
+    pd.testing.assert_frame_equal(
+        vessels_in_alert, expected_vessels_in_alert, check_like=True
+    )
 
 
 def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test_data):
@@ -1126,6 +1132,126 @@ def test_flow_filters_on_flag_states(reset_test_data):
             "latitude": [53.435],
             "longitude": [5.553],
             "flag_state": ["NL"],
+        }
+    )
+
+    pd.testing.assert_frame_equal(
+        pending_alerts.sort_values("vessel_id")
+        .reset_index(drop=True)
+        .drop(columns=["creation_date", "id"]),
+        expected_pending_alerts.sort_values("vessel_id")
+        .reset_index(drop=True)
+        .drop(columns=["creation_date"]),
+    )
+
+    # Dates inserted in the database test data by `CURRENT_TIMESTAMP` cannot be mocked
+    # and are not exactly equal to `datetime.utcnow()` above, so we need to make an
+    # 'almost equal' check.
+    assert (
+        (
+            (
+                pending_alerts.sort_values("vessel_id")
+                .reset_index(drop=True)
+                .creation_date
+                - expected_pending_alerts.sort_values("vessel_id")
+                .reset_index(drop=True)
+                .creation_date
+            ).map(lambda td: td.total_seconds())
+        )
+        < 10
+    ).all()
+
+
+@patch("src.pipeline.shared_tasks.positions.get_depth", mock_get_depth)
+def test_flow_filters_on_depth(reset_test_data):
+    # We delete the silenced alerts first
+    e = create_engine("monitorfish_remote")
+    with e.begin() as connection:
+        connection.execute(text("DELETE FROM silenced_alerts;"))
+
+    now = pytz.utc.localize(datetime.utcnow())
+
+    # With these parameters, all 5 vessels should be in alert.
+    alert_type = "THREE_MILES_TRAWLING_ALERT"
+    alert_config_name = "ALERTE_1"
+    zones = ["0-3", "3-6"]
+    hours_from_now = 48
+    only_fishing_positions = False
+    flag_states = None
+    fishing_gears = None
+    fishing_gear_categories = None
+    include_vessels_unknown_gear = True
+    min_depth = 0.5
+
+    flow.schedule = None
+    state = flow.run(
+        alert_type=alert_type,
+        alert_config_name=alert_config_name,
+        zones=zones,
+        hours_from_now=hours_from_now,
+        only_fishing_positions=only_fishing_positions,
+        flag_states=flag_states,
+        fishing_gears=fishing_gears,
+        fishing_gear_categories=fishing_gear_categories,
+        include_vessels_unknown_gear=include_vessels_unknown_gear,
+        min_depth=min_depth,
+    )
+
+    assert state.is_successful()
+
+    pending_alerts = read_query("SELECT * FROM pending_alerts", db="monitorfish_remote")
+
+    expected_pending_alerts = pd.DataFrame(
+        {
+            "vessel_name": [
+                "ÉTABLIR IMPRESSION LORSQUE",
+                "MYNAMEIS",
+            ],
+            "internal_reference_number": [
+                "ABC000306959",
+                "ABC000658985",
+            ],
+            "external_reference_number": [
+                "RV348407",
+                "OHMYGOSH",
+            ],
+            "ircs": [
+                "LLUK",
+                "OGMJ",
+            ],
+            "creation_date": [
+                now,
+                now,
+            ],
+            "trip_number": [None, None],
+            "value": [
+                {
+                    "dml": "DML 29",
+                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "seaFront": "SA",
+                    "riskFactor": None,
+                    "depth": -0.740,
+                },
+                {
+                    "dml": None,
+                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "seaFront": "SA",
+                    "riskFactor": None,
+                    "depth": -0.736,
+                },
+            ],
+            "vessel_identifier": [
+                "INTERNAL_REFERENCE_NUMBER",
+                "INTERNAL_REFERENCE_NUMBER",
+            ],
+            "alert_config_name": [alert_config_name] * 2,
+            "vessel_id": [1, None],
+            "latitude": [49.610, 49.606],
+            "longitude": [-0.740, -0.736],
+            "flag_state": [
+                "FR",
+                "FR",
+            ],
         }
     )
 

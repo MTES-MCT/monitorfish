@@ -63,11 +63,12 @@ def extract_pending_alerts_ids_of_type(alert_type: str) -> List[int]:
     """
     Return ids of pending alerts corresponding to `alert_type`
     """
+    alert_type = AlertType(alert_type)
     logger = prefect.context.get("logger")
     pending_alerts = extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/pending_alerts_of_type.sql",
-        params={"alert_type": alert_type},
+        params={"alert_type": alert_type.value},
     )
     ids = pending_alerts.id.unique().tolist()
     logger.info(f"Returning {len(ids)} pending alerts ids.")
@@ -75,15 +76,16 @@ def extract_pending_alerts_ids_of_type(alert_type: str) -> List[int]:
 
 
 @task(checkpoint=False)
-def extract_non_archived_reportings_ids_of_type(reporting_type: str) -> List[int]:
+def extract_non_archived_reportings_ids_of_type(alert_type: str) -> List[int]:
     """
-    Return ids of pending alerts corresponding to `alert_type`
+    Return ids of reportings corresponding to `alert_type`
     """
+    alert_type = AlertType(alert_type)
     logger = prefect.context.get("logger")
     reportings = extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/non_archived_reportings_of_type.sql",
-        params={"reporting_type": reporting_type},
+        params={"reporting_type": alert_type.value},
     )
     ids = reportings.id.unique().tolist()
     logger.info(f"Returning {len(ids)} reportings ids.")
@@ -129,10 +131,12 @@ def make_alerts(
       - `flag_state`
       - `risk_factor`
       - `triggering_behaviour_datetime_utc`
-      - and optionally, `latitude` and `longitude`
+      - and optionally, `depth`, `latitude` and `longitude`
 
     If `latitude` and `longitude` are not columns of the input, they are added and
     filled with null values in the result.
+
+    If `depth` is a column of the input, it is added to the `value` attributes.
 
     Args:
         vessels_in_alert (pd.DataFrame): `DateFrame` of vessels for which to
@@ -159,14 +163,19 @@ def make_alerts(
     if "longitude" not in alerts:
         alerts["longitude"] = None
 
-    alerts["type"] = alert_type
+    alerts["type"] = AlertType(alert_type).value
+
+    value_cols = ["seaFront", "type", "riskFactor", "dml"]
+    if "depth" in alerts.columns:
+        value_cols += ["depth"]
+
     alerts["value"] = df_to_dict_series(
         alerts.rename(
             columns={
                 "facade": "seaFront",
                 "risk_factor": "riskFactor",
             }
-        )[["seaFront", "type", "riskFactor", "dml"]]
+        )[value_cols]
     )
 
     alerts["alert_config_name"] = alert_config_name

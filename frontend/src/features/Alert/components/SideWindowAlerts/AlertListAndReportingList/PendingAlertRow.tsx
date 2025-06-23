@@ -77,7 +77,9 @@ export function PendingAlertRow({
           <FlexboxGrid.Item style={timeAgoColumnStyle} title={alert.creationDate}>
             {timeago.format(new Date(alert.creationDate).getTime(), 'fr')}
           </FlexboxGrid.Item>
-          <FlexboxGrid.Item style={alertTypeStyle}>{getAlertNameFromType(alert.value.type)}</FlexboxGrid.Item>
+          <FlexboxGrid.Item style={alertTypeStyle} title={getAlertNameFromType(alert.value.type)}>
+            {getAlertNameFromType(alert.value.type, alert.value)}
+          </FlexboxGrid.Item>
           <FlexboxGrid.Item style={alertNatinfStyle}>{alert.value.natinfCode}</FlexboxGrid.Item>
           <FlexboxGrid.Item style={vesselNameColumnStyle}>
             <Flag
@@ -235,7 +237,12 @@ const timeAgoColumnStyle = {
 
 const alertTypeStyle = {
   ...styleCenter,
-  width: 410
+  display: 'inline-block',
+  marginRight: 10,
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  width: 400
 }
 
 const alertNatinfStyle = {

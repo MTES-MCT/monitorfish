@@ -33,6 +33,18 @@ export const CustomGlobalStyle = createGlobalStyle`
     font-size: 13px;
   }
 
+  .Element-FulfillingBouncingCircleLoader {
+    * {
+      box-sizing: border-box;
+    }
+  }
+
+  .Element-FingerprintLoader  {
+    * {
+      box-sizing: border-box;
+    }
+  }
+
   /* TODO Attempt to progressively migrate to "box-sizing: border-box" everywhere. */
   * {
     -webkit-box-sizing: revert;

@@ -1,0 +1,85 @@
+<rsm:FLUXFAReportMessage xsi:schemaLocation="urn:un:unece:uncefact:data:standard:FLUXFAReportMessage:3 xsd/FLUXFAReportMessage_3p1/FLUXFAReportMessage_3p1.xsd" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" xmlns:rsm="urn:un:unece:uncefact:data:standard:FLUXFAReportMessage:3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+         <rsm:FLUXReportDocument>
+            <ram:ID schemeID="UUID">7cfcdde3-286c-4713-8460-2ed82a59be34</ram:ID>
+            <ram:CreationDateTime>
+               <udt:DateTime>2020-05-06T18:41:09.200Z</udt:DateTime>
+            </ram:CreationDateTime>
+            <ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
+            <ram:Purpose>FLUX-FA-EU-711002 </ram:Purpose>
+            <ram:OwnerFLUXParty>
+               <ram:ID schemeID="FLUX_GP_PARTY">SRC</ram:ID>
+            </ram:OwnerFLUXParty>
+         </rsm:FLUXReportDocument>
+         <rsm:FAReportDocument>
+            <ram:TypeCode listID="FLUX_FA_REPORT_TYPE">NOTIFICATION</ram:TypeCode>
+            <ram:AcceptanceDateTime>
+               <udt:DateTime>2020-05-06T13:41:09.200Z</udt:DateTime>
+            </ram:AcceptanceDateTime>
+            <ram:RelatedFLUXReportDocument>
+               <ram:ID schemeID="UUID">fc16ea8a-3148-44b2-977f-de2a2ae550b9</ram:ID>
+               <ram:CreationDateTime>
+                  <udt:DateTime>2020-05-06T15:41:09.200Z</udt:DateTime>
+               </ram:CreationDateTime>
+               <ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
+               <ram:OwnerFLUXParty>
+                  <ram:ID schemeID="FLUX_GP_PARTY">SRC</ram:ID>
+               </ram:OwnerFLUXParty>
+            </ram:RelatedFLUXReportDocument>
+            <ram:SpecifiedFishingActivity>
+               <ram:TypeCode listID="FLUX_FA_TYPE">ARRIVAL</ram:TypeCode>
+               
+               <!--Estimated time of arrival to port-->
+               <ram:OccurrenceDateTime>
+                  <udt:DateTime>2020-05-06T11:41:09.200Z</udt:DateTime>
+               </ram:OccurrenceDateTime>
+
+               <!--Reason for return to port: shelter-->
+               <ram:ReasonCode listID="FA_REASON_ARRIVAL">SHE</ram:ReasonCode>
+
+               <!--port location-->
+               <ram:RelatedFLUXLocation>
+                  <ram:TypeCode listID="FLUX_LOCATION_TYPE">LOCATION</ram:TypeCode>
+                  <ram:CountryID schemeID="TERRITORY">GBR</ram:CountryID>
+                  <ram:ID schemeID="LOCATION">GBPHD</ram:ID>
+               </ram:RelatedFLUXLocation>
+
+               <!--Trip information-->
+               <ram:SpecifiedFishingTrip>
+                    <ram:ID schemeID="EU_TRIP_ID">SRC-TRP-TTT20200506194109200</ram:ID>
+                    <!--mandatory in EU-->
+	               <ram:SpecifiedDelimitedPeriod>
+	                  	<ram:StartDateTime>
+	                     	<udt:DateTime>2020-05-04T19:41:09.200Z</udt:DateTime>
+	                  	</ram:StartDateTime>
+               	</ram:SpecifiedDelimitedPeriod>
+               </ram:SpecifiedFishingTrip>
+               
+            </ram:SpecifiedFishingActivity>
+            
+            <!--reporting vessel-->
+            <ram:SpecifiedVesselTransportMeans>
+               <ram:ID schemeID="CFR">CYP123456789</ram:ID>
+               <ram:RegistrationVesselCountry>
+                  <ram:ID schemeID="TERRITORY">CYP</ram:ID>
+               </ram:RegistrationVesselCountry>
+               
+               <!--master name and address-->
+               <ram:SpecifiedContactParty>
+                  <ram:RoleCode listID="FLUX_CONTACT_ROLE">MASTER</ram:RoleCode>
+                  <ram:SpecifiedStructuredAddress>
+                     <ram:StreetName>ABC</ram:StreetName>
+                     <ram:CityName>CABOURG</ram:CityName>
+                     <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                     <ram:PlotIdentification>17</ram:PlotIdentification>
+                     <ram:PostalArea> 14390</ram:PostalArea>
+                  </ram:SpecifiedStructuredAddress>
+                  <ram:SpecifiedContactPerson>
+                     <ram:GivenName>John</ram:GivenName>
+                     <ram:FamilyName>Doe</ram:FamilyName>
+                     <ram:Alias>Captain Jack</ram:Alias>
+                  </ram:SpecifiedContactPerson>
+               </ram:SpecifiedContactParty>
+            </ram:SpecifiedVesselTransportMeans>
+            
+         </rsm:FAReportDocument>
+      </rsm:FLUXFAReportMessage>

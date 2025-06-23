@@ -120,20 +120,17 @@ def test_extract_pending_alerts_ids_of_type(reset_test_data):
         alert_type="THREE_MILES_TRAWLING_ALERT"
     ) == [12]
 
-    assert extract_pending_alerts_ids_of_type.run(alert_type="NON_EXISTING_ALERT") == []
+    with pytest.raises(ValueError):
+        extract_pending_alerts_ids_of_type.run(alert_type="NON_EXISTING_ALERT")
 
 
 def test_extract_non_archived_reportings_ids_of_type(reset_test_data):
     assert extract_non_archived_reportings_ids_of_type.run(
-        reporting_type="THREE_MILES_TRAWLING_ALERT"
+        alert_type="THREE_MILES_TRAWLING_ALERT"
     ) == [56, 57]
 
-    assert (
-        extract_non_archived_reportings_ids_of_type.run(
-            reporting_type="NON_EXISTING_ALERT"
-        )
-        == []
-    )
+    with pytest.raises(ValueError):
+        extract_non_archived_reportings_ids_of_type.run(alert_type="NON_EXISTING_ALERT")
 
 
 @patch("src.pipeline.shared_tasks.alerts.requests")

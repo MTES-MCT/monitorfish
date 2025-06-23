@@ -15,6 +15,7 @@ from sqlalchemy.sql import Select
 
 from src.db_config import create_engine
 from src.pipeline import utils
+from src.pipeline.entities.alerts import AlertType
 from src.pipeline.generic_tasks import extract, read_query_task
 from src.pipeline.processing import coalesce, join_on_multiple_keys
 from src.pipeline.shared_tasks.alerts import (
@@ -23,9 +24,12 @@ from src.pipeline.shared_tasks.alerts import (
     load_alerts,
     make_alerts,
 )
-from src.pipeline.shared_tasks.control_flow import check_flow_not_running
+from src.pipeline.shared_tasks.control_flow import (
+    check_flow_not_running,
+    param_is_given,
+)
 from src.pipeline.shared_tasks.infrastructure import get_table
-from src.pipeline.shared_tasks.positions import add_vessel_identifier
+from src.pipeline.shared_tasks.positions import add_depth, add_vessel_identifier
 from src.pipeline.shared_tasks.risk_factors import extract_current_risk_factors
 from src.pipeline.shared_tasks.vessels import add_vessel_id, add_vessels_columns
 from src.read_query import read_query
@@ -121,36 +125,46 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
         ValueError: if the input `alert_type` does not correspond to one of the
           expected types of alert.
     """
-
+    alert_type = AlertType(alert_type)
     alert_type_zones_tables = {
-        "THREE_MILES_TRAWLING_ALERT": {
+        AlertType.THREE_MILES_TRAWLING_ALERT: {
             "table": "n_miles_to_shore_areas_subdivided",
             "filter_column": "miles_to_shore",
             "geometry_column": "geometry",
         },
-        "TWELVE_MILES_FISHING_ALERT": {
+        AlertType.TWELVE_MILES_FISHING_ALERT: {
             "table": "n_miles_to_shore_areas_subdivided",
             "filter_column": "miles_to_shore",
             "geometry_column": "geometry",
         },
-        "FRENCH_EEZ_FISHING_ALERT": {
+        AlertType.FRENCH_EEZ_FISHING_ALERT: {
             "table": "eez_areas",
             "filter_column": "iso_sov1",
             "geometry_column": "wkb_geometry",
         },
-        "RTC_FISHING_ALERT": {
+        AlertType.RTC_FISHING_ALERT: {
             "table": "regulations",
             "filter_column": "law_type",
             "geometry_column": "geometry",
         },
-        "NEAFC_FISHING_ALERT": {
+        AlertType.NEAFC_FISHING_ALERT: {
             "table": "neafc_regulatory_area",
             "filter_column": None,
             "geometry_column": "wkb_geometry",
         },
-        "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT": {
+        AlertType.BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT: {
             "table": "regulations",
             "filter_column": "topic",
+            "geometry_column": "geometry",
+        },
+        AlertType.BOTTOM_GEAR_VME_FISHING_ALERT: {
+            "table": "regulations",
+            "filter_column": "topic",
+            "geometry_column": "geometry",
+        },
+        AlertType.BOTTOM_TRAWL_800_METERS_FISHING_ALERT: {
+            "table": "regulations",
+            "filter_column": "zone",
             "geometry_column": "geometry",
         },
     }
@@ -451,6 +465,13 @@ def filter_on_gears(
 
 
 @task(checkpoint=False)
+def filter_on_depth(positions_in_alert: pd.DataFrame, min_depth: float) -> pd.DataFrame:
+    # Positions depth is assumed to be negative below sea level.
+    # Deeper = more negative.
+    return positions_in_alert[positions_in_alert.depth <= -min_depth]
+
+
+@task(checkpoint=False)
 def merge_risk_factor(
     positions_in_alert: pd.DataFrame, current_risk_factors: pd.DataFrame
 ) -> pd.DataFrame:
@@ -473,21 +494,7 @@ def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
     vessels_in_alerts = (
         positions_in_alert.sort_values("date_time", ascending=False)
         .groupby(["cfr", "ircs", "external_immatriculation"], dropna=False)
-        .head(1)[
-            [
-                "cfr",
-                "external_immatriculation",
-                "ircs",
-                "vessel_name",
-                "flag_state",
-                "facade",
-                "risk_factor",
-                "vessel_identifier",
-                "date_time",
-                "latitude",
-                "longitude",
-            ]
-        ]
+        .head(1)
         .rename(
             columns={
                 "date_time": "triggering_behaviour_datetime_utc",
@@ -518,10 +525,12 @@ with Flow("Position alert", executor=LocalDaskExecutor()) as flow:
             "include_vessels_unknown_gear", default=True
         )
         eez_areas = Parameter("eez_areas", default=None)
+        min_depth = Parameter("min_depth", default=None)
 
         must_filter_on_gears = alert_has_gear_parameters(
             fishing_gears, fishing_gear_categories
         )
+        alert_has_min_depth_parameter = param_is_given(min_depth)
 
         positions_table = get_table("positions")
         vessels_table = get_table("vessels")
@@ -577,6 +586,20 @@ with Flow("Position alert", executor=LocalDaskExecutor()) as flow:
             positions_in_alert_1, positions_in_alert_2, checkpoint=False
         )
 
+        with case(alert_has_min_depth_parameter, True):
+            positions_in_alert_with_depth = add_depth(positions_in_alert)
+            positions_in_alert_with_depth = filter_on_depth(
+                positions_in_alert_with_depth, min_depth
+            )
+
+        with case(alert_has_min_depth_parameter, False):
+            positions_in_alert_without_depth = positions_in_alert
+
+        positions_in_alert = merge(
+            positions_in_alert_with_depth,
+            positions_in_alert_without_depth,
+            checkpoint=False,
+        )
         positions_in_alert = add_vessel_identifier(positions_in_alert)
         current_risk_factors = extract_current_risk_factors()
         positions_in_alert = merge_risk_factor(positions_in_alert, current_risk_factors)

@@ -195,6 +195,9 @@ const VesselCardAlert = styled.div`
   width: 100%;
   text-align: center;
   padding: 5px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 const VesselCardInfractionSuspicion = styled.div`
@@ -206,6 +209,9 @@ const VesselCardInfractionSuspicion = styled.div`
   width: 100%;
   text-align: center;
   padding: 5px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 const VesselCardBeaconMalfunction = styled.div`

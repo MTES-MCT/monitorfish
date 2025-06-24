@@ -54,6 +54,11 @@ sealed class ActiveVesselBaseDataOutput(
             index: Int,
         ): ActiveVesselBaseDataOutput =
             enrichedActiveVessel.lastPosition?.let { lastPosition ->
+                val riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(
+                    vesselRiskFactor = enrichedActiveVessel.riskFactor,
+                    isRecentProfile = enrichedActiveVessel.activityOrigin == ActivityOrigin.FROM_RECENT_PROFILE,
+                )
+
                 ActiveVesselEmittingPositionDataOutput(
                     id = index,
                     vesselId = lastPosition.vesselId,
@@ -86,10 +91,10 @@ sealed class ActiveVesselBaseDataOutput(
                     lastControlDateTime = lastPosition.lastControlDateTime,
                     lastControlInfraction = lastPosition.lastControlInfraction,
                     vesselIdentifier = lastPosition.vesselIdentifier,
-                    impactRiskFactor = enrichedActiveVessel.riskFactor.impactRiskFactor,
-                    probabilityRiskFactor = enrichedActiveVessel.riskFactor.probabilityRiskFactor,
-                    detectabilityRiskFactor = enrichedActiveVessel.riskFactor.detectabilityRiskFactor,
-                    riskFactor = enrichedActiveVessel.riskFactor.riskFactor,
+                    impactRiskFactor = riskFactor.impactRiskFactor,
+                    probabilityRiskFactor = riskFactor.probabilityRiskFactor,
+                    detectabilityRiskFactor = riskFactor.detectabilityRiskFactor,
+                    riskFactor = riskFactor.riskFactor,
                     underCharter = lastPosition.underCharter,
                     isAtPort = lastPosition.isAtPort,
                     alerts = lastPosition.alerts ?: listOf(),
@@ -127,6 +132,10 @@ sealed class ActiveVesselBaseDataOutput(
                 require(enrichedActiveVessel.vessel != null) {
                     "A vessel must be found from the referential when a last position not found."
                 }
+                val riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(
+                    vesselRiskFactor = enrichedActiveVessel.riskFactor,
+                    isRecentProfile = enrichedActiveVessel.activityOrigin == ActivityOrigin.FROM_RECENT_PROFILE,
+                )
 
                 ActiveVesselEmittingLogbookDataOutput(
                     id = index,
@@ -148,14 +157,14 @@ sealed class ActiveVesselBaseDataOutput(
                                 it,
                             )
                         },
-                    lastControlDateTime = enrichedActiveVessel.riskFactor.lastControlDatetime,
+                    lastControlDateTime = riskFactor.lastControlDatetime,
                     // TODO add last infraction
                     lastControlInfraction = null,
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                    impactRiskFactor = enrichedActiveVessel.riskFactor.impactRiskFactor,
-                    probabilityRiskFactor = enrichedActiveVessel.riskFactor.probabilityRiskFactor,
-                    detectabilityRiskFactor = enrichedActiveVessel.riskFactor.detectabilityRiskFactor,
-                    riskFactor = enrichedActiveVessel.riskFactor.riskFactor,
+                    impactRiskFactor = riskFactor.impactRiskFactor,
+                    probabilityRiskFactor = riskFactor.probabilityRiskFactor,
+                    detectabilityRiskFactor = riskFactor.detectabilityRiskFactor,
+                    riskFactor = riskFactor.riskFactor,
                     segments = enrichedActiveVessel.segments,
                     underCharter = enrichedActiveVessel.vessel.underCharter,
                     isAtPort = false,
@@ -166,7 +175,7 @@ sealed class ActiveVesselBaseDataOutput(
                     gearsArray = enrichedActiveVessel.gearsArray,
                     hasInfractionSuspicion = false,
                     speciesArray =
-                        enrichedActiveVessel.riskFactor.speciesOnboard
+                        riskFactor.speciesOnboard
                             .mapNotNull { it.species }
                             .distinct(),
                     activityType = enrichedActiveVessel.activityType,

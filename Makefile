@@ -1,7 +1,8 @@
 INFRA_FOLDER="$(shell pwd)/infra/configurations/"
 HOST_MIGRATIONS_FOLDER=$(shell pwd)/backend/src/main/resources/db/migration
-DATA_WAREHOUSE_INPUT_DATA_FOLDER=$(shell pwd)/datascience/tests/test_data/clickhouse_user_files
+DATA_WAREHOUSE_INPUT_DATA_FOLDER=$(shell pwd)/pipeline/tests/test_data/clickhouse_user_files
 EXTERNAL_DATA_FOLDER=$(shell pwd)/datascience/tests/test_data/external
+EXTERNAL_DATA_FOLDER_PREFECT_3=$(shell pwd)/pipeline/tests/test_data/external
 
 SHELL := /bin/bash
 .SHELLFLAGS = -ec
@@ -270,8 +271,6 @@ docker-compose-puppeteer-up: docker-env
 # ----------------------------------------------------------
 # CI: Pipeline Commands
 
-docker-build-pipeline:
-	docker build -f ./infra/docker/datapipeline/Dockerfile . -t monitorfish-pipeline:$(VERSION)
 docker-test-pipeline: fetch-external-data run-data-warehouse
 	docker run --network host -v $(EXTERNAL_DATA_FOLDER):/home/monitorfish-pipeline/datascience/tests/test_data/external -v /var/run/docker.sock:/var/run/docker.sock -u monitorfish-pipeline:$(DOCKER_GROUP) --env-file datascience/.env.test --env HOST_MIGRATIONS_FOLDER=$(HOST_MIGRATIONS_FOLDER) monitorfish-pipeline:$(VERSION) coverage run -m pytest --pdb --ignore=tests/test_data/external tests
 docker-tag-pipeline:
@@ -279,31 +278,39 @@ docker-tag-pipeline:
 docker-push-pipeline:
 	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(VERSION)
 
-
+docker-test-pipeline-prefect3: fetch-external-data-prefect-3 run-data-warehouse-prefect-3
+	docker run --network host -v $(EXTERNAL_DATA_FOLDER_PREFECT_3):/home/monitorfish-pipeline/pipeline/tests/test_data/external -v /var/run/docker.sock:/var/run/docker.sock -u monitorfish-pipeline:$(DOCKER_GROUP) --env-file pipeline/.env.test --env HOST_MIGRATIONS_FOLDER=$(HOST_MIGRATIONS_FOLDER) monitorfish-pipeline-prefect3:$(VERSION) coverage run -m pytest --pdb --ignore=tests/test_data/external tests
+docker-tag-pipeline-prefect3:
+	docker tag monitorfish-pipeline-prefect3:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$(VERSION)
+docker-push-pipeline-prefect3:
+	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$(VERSION)
 
 # ----------------------------------------------------------
 # Remote: Pipeline commands
-
-install-pipeline:
-	cd datascience && poetry install
 
 stop-data-warehouse:
 	export DATA_WAREHOUSE_PASSWORD=password && \
 	export DATA_WAREHOUSE_USER=clickhouse_user && \
 	export DATA_WAREHOUSE_INPUT_DATA_FOLDER=$(DATA_WAREHOUSE_INPUT_DATA_FOLDER) && \
-	docker compose -f ./datascience/tests/docker-compose.yml down -v
+	docker compose -f ./pipeline/tests/docker-compose.yml down -v
 
 fetch-external-data:
 	git clone --depth=1 --branch=main https://github.com/MTES-MCT/fisheries-and-environment-data-warehouse.git ./datascience/tests/test_data/external/data_warehouse || echo "Data Warehouse repository already present - skipping git clone"
 
+fetch-external-data-prefect-3:
+	git clone --depth=1 --branch=main https://github.com/MTES-MCT/fisheries-and-environment-data-warehouse.git ./pipeline/tests/test_data/external/data_warehouse || echo "Data Warehouse repository already present - skipping git clone"
+
 erase-external-data:
 	rm -rf datascience/tests/test_data/external/data_warehouse
+
+erase-external-data-prefect-3:
+	rm -rf pipeline/tests/test_data/external/data_warehouse
 
 run-data-warehouse:
 	export DATA_WAREHOUSE_PASSWORD=password && \
 	export DATA_WAREHOUSE_USER=clickhouse_user && \
 	export DATA_WAREHOUSE_INPUT_DATA_FOLDER=$(DATA_WAREHOUSE_INPUT_DATA_FOLDER) && \
-	docker compose -f ./datascience/tests/docker-compose.yml up -d --remove-orphans
+	docker compose -f ./pipeline/tests/docker-compose.yml up -d --remove-orphans
 
 test-pipeline:
 	cd datascience && export TEST_LOCAL=True && poetry run coverage run -m pytest --pdb --ignore=tests/test_data/external tests/ && poetry run coverage report && poetry run coverage html
@@ -311,8 +318,9 @@ test-pipeline:
 test-pipeline-prefect-3:
 	cd pipeline && export TEST_LOCAL=True && poetry run coverage run -m pytest --pdb --ignore=tests/test_data/external tests/ && poetry run coverage report && poetry run coverage html
 
-
 test-pipeline-with-data_warehouse: fetch-external-data run-data-warehouse test-pipeline stop-data-warehouse
+
+test-pipeline-with-data_warehouse-prefect-3: fetch-external-data-prefect-3 run-data-warehouse-prefect-3 test-pipeline-prefect-3 stop-data-warehouse-prefect-3
 
 # ----------------------------------------------------------
 # Remote: Database commands

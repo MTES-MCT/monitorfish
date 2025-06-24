@@ -3,23 +3,29 @@ import { SEARCH_QUERY_MIN_LENGTH } from '@features/VesselGroup/components/Vessel
 import { useGetVesselGroupsWithVessels } from '@features/VesselGroup/components/VesselGroupList/hooks/useGetVesselGroupsWithVessels'
 import { vesselGroupListActions } from '@features/VesselGroup/components/VesselGroupList/slice'
 import { VesselGroupRow } from '@features/VesselGroup/components/VesselGroupList/VesselGroupRow'
-import { GroupType } from '@features/VesselGroup/types'
+import { GroupType, Sharing } from '@features/VesselGroup/types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Checkbox, Size, TextInput } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
+
 type VesselListProps = Readonly<{
   isFromUrl: boolean
 }>
 export function VesselGroupList({ isFromUrl }: VesselListProps) {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
   const [filteredGroupTypes, setFilteredGroupTypes] = useState<GroupType[]>([GroupType.DYNAMIC, GroupType.FIXED])
+  const [filteredSharing, setFilteredSharing] = useState<Sharing[]>([Sharing.SHARED, Sharing.PRIVATE])
 
-  const { pinnedVesselGroupsWithVessels, unpinnedVesselGroupsWithVessels } =
-    useGetVesselGroupsWithVessels(filteredGroupTypes)
+  const { pinnedVesselGroupsWithVessels, unpinnedVesselGroupsWithVessels } = useGetVesselGroupsWithVessels(
+    filteredGroupTypes,
+    filteredSharing
+  )
 
   const debouncedSetSearch = useDebouncedCallback(nextQuery => {
     dispatch(vesselGroupListActions.setSearchQuery(nextQuery))
@@ -48,6 +54,26 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
     }
 
     setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.FIXED))
+  }
+
+  const updatePrivateSharing = (nextSharing: boolean | undefined) => {
+    if (!nextSharing) {
+      setFilteredSharing(filteredSharing.filter(value => value !== Sharing.PRIVATE))
+
+      return
+    }
+
+    setFilteredSharing(filteredSharing.concat(Sharing.PRIVATE))
+  }
+
+  const updateSharedSharing = (nextSharing: boolean | undefined) => {
+    if (!nextSharing) {
+      setFilteredSharing(filteredSharing.filter(value => value !== Sharing.SHARED))
+
+      return
+    }
+
+    setFilteredSharing(filteredSharing.concat(Sharing.SHARED))
   }
 
   const areGroupsOpened = !!searchQuery && searchQuery.length > SEARCH_QUERY_MIN_LENGTH
@@ -81,6 +107,25 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
             onChange={updateDynamicGroupType}
             title="Groupes dynamiques"
           />
+          {isSuperUser && (
+            <>
+              <VerticalBar />
+              <StyledCheckbox
+                checked={filteredSharing.includes(Sharing.PRIVATE)}
+                label="Groupes personnels"
+                name="private"
+                onChange={updatePrivateSharing}
+                title="Groupes personnels"
+              />
+              <StyledCheckbox
+                checked={filteredSharing.includes(Sharing.SHARED)}
+                label="Groupes partagés"
+                name="shared"
+                onChange={updateSharedSharing}
+                title="Groupes partagés"
+              />
+            </>
+          )}
         </Row>
         {pinnedVesselGroupsWithVessels.length > 0 && (
           <PinnedGroupsWrapper>
@@ -143,6 +188,14 @@ const Row = styled.div`
   > .Field-TextInput {
     min-width: 280px;
   }
+`
+
+const VerticalBar = styled.span`
+  background: ${p => p.theme.color.lightGray};
+  height: 20px;
+  width: 2px;
+  margin-bottom: 16px;
+  margin-left: 16px;
 `
 
 const StyledBody = styled(Body)`

@@ -320,7 +320,7 @@ test-pipeline-prefect-3:
 
 test-pipeline-with-data_warehouse: fetch-external-data run-data-warehouse test-pipeline stop-data-warehouse
 
-test-pipeline-with-data_warehouse-prefect-3: fetch-external-data-prefect-3 run-data-warehouse-prefect-3 test-pipeline-prefect-3 stop-data-warehouse-prefect-3
+test-pipeline-with-data_warehouse-prefect-3: fetch-external-data-prefect-3 run-data-warehouse test-pipeline-prefect-3 stop-data-warehouse
 
 # ----------------------------------------------------------
 # Remote: Database commands

@@ -1,7 +1,6 @@
-import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
-import { Button, customDayjs, Select, THEME } from '@mtes-mct/monitor-ui'
+import { Button, customDayjs, FulfillingBouncingCircleLoader, Select, THEME } from '@mtes-mct/monitor-ui'
 import { range } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
@@ -168,7 +167,7 @@ export function FleetSegmentsBackoffice() {
         </>
       ) : (
         <Loading>
-          <FulfillingBouncingCircleSpinner className="update-vessels" color={theme.color.lightGray} size={100} />
+          <FulfillingBouncingCircleLoader className="update-vessels" color={theme.color.lightGray} />
         </Loading>
       )}
 

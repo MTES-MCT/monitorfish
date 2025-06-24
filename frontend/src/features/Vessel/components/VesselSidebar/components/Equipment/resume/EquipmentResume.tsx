@@ -1,9 +1,8 @@
-import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { SidebarLoadMoreYears } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { FlatKeyValue } from '@features/Vessel/components/VesselSidebar/components/common/FlatKeyValue'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Button, FingerprintLoader, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -132,7 +131,7 @@ export function EquipmentResume({ setIsCurrentBeaconMalfunctionDetails }: Beacon
           )}
         </Body>
       ) : (
-        <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
+        <FingerprintLoader className="radar" color={THEME.color.charcoal} />
       )}
     </>
   )

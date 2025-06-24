@@ -10,7 +10,7 @@ import { ActivityType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { VesselEmitsPosition, VesselLocation, vesselSize } from '@features/Vessel/types/vessel'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { SEARCH_QUERY_MIN_LENGTH } from '@features/VesselGroup/components/VesselGroupList/hooks/constants'
-import { GroupType, type VesselGroupWithVessels } from '@features/VesselGroup/types'
+import { GroupType, Sharing, type VesselGroupWithVessels } from '@features/VesselGroup/types'
 import { customDayjs, CustomSearch, logSoftError } from '@mtes-mct/monitor-ui'
 import { booleanPointInPolygon } from '@turf/boolean-point-in-polygon'
 import { point } from '@turf/helpers'
@@ -203,16 +203,19 @@ export class MonitorFishWebWorker {
     vesselGroupsWithVessels: VesselGroupWithVessels[],
     vesselGroupsIdsPinned: number[],
     searchQuery: string | undefined,
-    filteredGroupTypes: GroupType[]
+    filteredGroupTypes: GroupType[],
+    filteredGroupSharing: Sharing[]
   ): {
     pinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
     unpinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
   } {
-    const filteredVesselGroupsWithVesselsByGroupType =
-      vesselGroupsWithVessels?.filter(vesselGroup => filteredGroupTypes.includes(vesselGroup.group.type)) ?? []
+    const filteredVesselGroups =
+      vesselGroupsWithVessels
+        ?.filter(vesselGroup => filteredGroupTypes.includes(vesselGroup.group.type))
+        ?.filter(vesselGroup => filteredGroupSharing.includes(vesselGroup.group.sharing)) ?? []
 
     const fuse = new CustomSearch<VesselGroupWithVessels>(
-      filteredVesselGroupsWithVesselsByGroupType,
+      filteredVesselGroups,
       [
         {
           getFn: vesselGroupWithVessels => vesselGroupWithVessels.vessels.map(vessel => vessel.vesselName ?? ''),
@@ -238,7 +241,7 @@ export class MonitorFishWebWorker {
 
     const filteredVesselGroupsWithVesselsBySearchQuery = (function () {
       if (!searchQuery || searchQuery.length <= SEARCH_QUERY_MIN_LENGTH) {
-        return filteredVesselGroupsWithVesselsByGroupType ?? []
+        return filteredVesselGroups ?? []
       }
 
       return fuse.find(searchQuery)

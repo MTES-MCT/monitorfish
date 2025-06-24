@@ -26,6 +26,19 @@ context('Side Window > Vessel Group List', () => {
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 
     /**
+     * Filter by sharing
+     */
+    cy.get('[title="Groupes personnels"]').click()
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 1)
+    cy.get('[title="Groupes personnels"]').click()
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
+
+    cy.get('[title="Groupes partagés"]').click()
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
+    cy.get('[title="Groupes partagés"]').click()
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
+
+    /**
      * Pin a vessel group
      */
     cy.get('[title=\'Epingler le groupe "Mission Thémis – chaluts de fonds"\']').click()

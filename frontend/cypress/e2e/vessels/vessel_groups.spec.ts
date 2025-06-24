@@ -57,30 +57,28 @@ context('Vessel groups', () => {
     /**
      * Filter by group type
      */
-    cy.getDataCy('vessel-groups-list').within(() => {
-      cy.get('[title="Groupes fixes"]').click()
-      cy.get('li').should('have.length', 2)
-      cy.get('[title="Groupes fixes"]').click()
-      cy.get('li').should('have.length', 3)
+    cy.get('[title="Groupes fixes"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 2)
+    cy.get('[title="Groupes fixes"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 3)
 
-      cy.get('[title="Groupes dynamiques"]').click()
-      cy.get('li').should('have.length', 1)
-      cy.get('[title="Groupes dynamiques"]').click()
-      cy.get('li').should('have.length', 3)
+    cy.get('[title="Groupes dynamiques"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 1)
+    cy.get('[title="Groupes dynamiques"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 3)
 
-      /**
-       * Filter list by sharing
-       */
-      cy.get('[title="Groupes personnels"]').click()
-      cy.get('li').should('have.length', 1)
-      cy.get('[title="Groupes personnels"]').click()
-      cy.get('li').should('have.length', 3)
+    /**
+     * Filter list by sharing
+     */
+    cy.get('[title="Groupes personnels"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 1)
+    cy.get('[title="Groupes personnels"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 3)
 
-      cy.get('[title="Groupes partagés"]').click()
-      cy.get('li').should('have.length', 2)
-      cy.get('[title="Groupes partagés"]').click()
-      cy.get('li').should('have.length', 3)
-    })
+    cy.get('[title="Groupes partagés"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 2)
+    cy.get('[title="Groupes partagés"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 3)
 
     /**
      * Display the created vessel group

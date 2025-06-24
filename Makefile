@@ -278,11 +278,11 @@ docker-tag-pipeline:
 docker-push-pipeline:
 	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(VERSION)
 
-docker-test-pipeline-prefect3: fetch-external-data-prefect-3 run-data-warehouse-prefect-3
+docker-test-pipeline-prefect-3: fetch-external-data-prefect-3 run-data-warehouse-prefect-3
 	docker run --network host -v $(EXTERNAL_DATA_FOLDER_PREFECT_3):/home/monitorfish-pipeline/pipeline/tests/test_data/external -v /var/run/docker.sock:/var/run/docker.sock -u monitorfish-pipeline:$(DOCKER_GROUP) --env-file pipeline/.env.test --env HOST_MIGRATIONS_FOLDER=$(HOST_MIGRATIONS_FOLDER) monitorfish-pipeline-prefect3:$(VERSION) coverage run -m pytest --pdb --ignore=tests/test_data/external tests
-docker-tag-pipeline-prefect3:
+docker-tag-pipeline-prefect-3:
 	docker tag monitorfish-pipeline-prefect3:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$(VERSION)
-docker-push-pipeline-prefect3:
+docker-push-pipeline-prefect-3:
 	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$(VERSION)
 
 # ----------------------------------------------------------

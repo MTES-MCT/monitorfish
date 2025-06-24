@@ -1,9 +1,7 @@
-import { FingerprintSpinner } from '@components/FingerprintSpinner'
-import { COLORS } from '@constants/constants'
 import { vesselsAreEquals } from '@features/Vessel/types/vessel'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { usePrevious } from '@mtes-mct/monitor-ui'
+import { FingerprintLoader, THEME, usePrevious } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -45,7 +43,7 @@ export function VesselEquipment() {
   }
 
   if (loadingVesselBeaconMalfunctions || !vesselBeaconMalfunctionsResumeAndHistory) {
-    return <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />
+    return <FingerprintLoader className="radar" color={THEME.color.charcoal} />
   }
 
   return (
@@ -118,7 +116,7 @@ const Wrapper = styled.div`
     margin: 3px 7px 0 7px;
   }
   .rs-btn-toggle::after {
-    background: ${COLORS.slateGray} 0% 0% no-repeat padding-box;
+    background: ${p => p.theme.color.slateGray} 0% 0% no-repeat padding-box;
     top: 1px;
   }
 `

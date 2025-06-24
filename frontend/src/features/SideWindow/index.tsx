@@ -1,5 +1,4 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
-import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
 import { getOperationalAlerts } from '@features/Alert/useCases/getOperationalAlerts'
 import { getSilencedAlerts } from '@features/Alert/useCases/getSilencedAlerts'
 import { MissionForm } from '@features/Mission/components/MissionForm'
@@ -11,7 +10,13 @@ import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindow
 import { VesselListAndGroups } from '@features/Vessel/components/VesselListAndGroups'
 import { setVessels } from '@features/Vessel/slice'
 import { vesselApi } from '@features/Vessel/vesselApi'
-import { NewWindowContext, type NewWindowContextValue, Notifier, THEME } from '@mtes-mct/monitor-ui'
+import {
+  FulfillingBouncingCircleLoader,
+  NewWindowContext,
+  type NewWindowContextValue,
+  Notifier,
+  THEME
+} from '@mtes-mct/monitor-ui'
 import {
   type CSSProperties,
   Fragment,
@@ -155,11 +160,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
             <FrontendErrorBoundary>
               {isPreloading && (
                 <Loading>
-                  <FulfillingBouncingCircleSpinner
-                    className="update-vessels"
-                    color={THEME.color.lightGray}
-                    size={100}
-                  />
+                  <FulfillingBouncingCircleLoader className="update-vessels" color={THEME.color.lightGray} />
                   <Text data-cy="first-loader">Chargement...</Text>
                 </Loading>
               )}

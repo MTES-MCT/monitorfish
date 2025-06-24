@@ -1,11 +1,10 @@
 import { FIVE_MINUTES } from '@api/APIWorker'
-import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { NavigateTo } from '@features/Logbook/constants'
 import { FishingActivitiesTab, vesselsAreEquals } from '@features/Vessel/types/vessel'
 import { updateVesselTrackAndLogbookFromTrip } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromTrip'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { THEME } from '@mtes-mct/monitor-ui'
+import { FingerprintLoader, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -78,7 +77,7 @@ export function VesselLogbook() {
   }
 
   if (loadingFishingActivities) {
-    return <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
+    return <FingerprintLoader className="radar" color={THEME.color.charcoal} />
   }
 
   return (

@@ -1,5 +1,4 @@
-import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
-import { THEME } from '@mtes-mct/monitor-ui'
+import { FulfillingBouncingCircleLoader, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import VesselSVG from '../features/icons/Icone_navire.svg?react'
@@ -11,7 +10,7 @@ export type LoadingSpinnerWallProps = {
 export function LoadingSpinnerWall({ isVesselShowed = false, message = '' }: LoadingSpinnerWallProps) {
   return (
     <Wrapper data-cy="first-loader">
-      <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.lightGray} size={48} />
+      <FulfillingBouncingCircleLoader className="update-vessels" color={THEME.color.lightGray} size={48} />
       {isVesselShowed && <BigVessel />}
       <p style={{ marginTop: isVesselShowed ? '-12px' : '16px' }}>{message}</p>
     </Wrapper>

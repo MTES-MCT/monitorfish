@@ -1,0 +1,2 @@
+# Add this line to the crontab file and update the repository location to match the setup on the machine
+2 11 * * * <ABSOLUTE_PATH_TO_FILL_HERE>/truncate-prefect-logs.sh >> cron_truncate_prefect_logs.out

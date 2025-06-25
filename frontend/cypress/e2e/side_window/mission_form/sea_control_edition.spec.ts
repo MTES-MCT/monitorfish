@@ -394,6 +394,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
       statusCode: 201
     }).as('updateAction')
     cy.clickButton('Supprimer l’action')
+    cy.clickButton('Supprimer')
     cy.wait(500)
 
     // When
@@ -427,6 +428,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.get('[id="mission_control_unit_administration_0"]').contains('DREAL')
     cy.get('[id="mission_control_unit_name_0"]').contains('DREAL Pays-de-La-Loire')
     cy.clickButton('Supprimer l’action')
+    cy.clickButton('Supprimer')
     cy.wait(500)
     cy.get('button:contains("Enregistrer")').should('not.be.disabled')
 

@@ -121,6 +121,7 @@ context('Side Window > Mission Form > Action List', () => {
     editSideWindowMissionListMissionWithId(4, SeafrontGroup.MEMN)
 
     cy.clickButton('Supprimer l’action', { index: 1 })
+    cy.clickButton('Supprimer')
 
     cy.wait(250)
   })
@@ -144,6 +145,7 @@ context('Side Window > Mission Form > Action List', () => {
     cy.wait(250)
 
     cy.clickButton('Supprimer l’action')
+    cy.clickButton('Supprimer')
 
     cy.wait(250)
 
@@ -230,6 +232,7 @@ context('Side Window > Mission Form > Action List', () => {
 
     cy.wait(500)
     cy.clickButton('Supprimer l’action')
+    cy.clickButton('Supprimer')
 
     // There is still a valid control with a geometry that could be used for the mission zone
     cy.get('.Component-Banner').contains(
@@ -243,6 +246,7 @@ context('Side Window > Mission Form > Action List', () => {
 
     cy.wait(250)
     cy.clickButton('Supprimer l’action')
+    cy.clickButton('Supprimer')
 
     cy.get('*[data-cy="mission-main-form-location"]').should(
       'not.contain',

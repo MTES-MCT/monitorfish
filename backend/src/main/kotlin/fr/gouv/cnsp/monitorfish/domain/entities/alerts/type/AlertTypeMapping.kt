@@ -10,7 +10,7 @@ enum class AlertTypeMapping(
     ),
     THREE_MILES_TRAWLING_ALERT(
         clazz = ThreeMilesTrawlingAlert::class.java,
-        alertName = "3 milles - Chaluts",
+        alertName = "Chalutage dans les 3 milles",
     ),
     FRENCH_EEZ_FISHING_ALERT(
         clazz = FrenchEEZFishingAlert::class.java,
@@ -18,7 +18,7 @@ enum class AlertTypeMapping(
     ),
     TWELVE_MILES_FISHING_ALERT(
         clazz = TwelveMilesFishingAlert::class.java,
-        alertName = "12 milles - Pêche sans droits historiques",
+        alertName = "Pêche dans les 12 milles sans droits historiques",
     ),
     BOTTOM_GEAR_VME_FISHING_ALERT(
         clazz = TwelveMilesFishingAlert::class.java,
@@ -46,11 +46,11 @@ enum class AlertTypeMapping(
     ),
     MISSING_FAR_ALERT(
         clazz = MissingFARAlert::class.java,
-        alertName = "Non-emission de message \"FAR\"",
+        alertName = "FAR manquant en 24h",
     ),
     MISSING_FAR_48_HOURS_ALERT(
         clazz = MissingFAR48HoursAlert::class.java,
-        alertName = "Non-emission de message \"FAR\" en 48h",
+        alertName = "FAR manquant en 48h",
     ),
     SUSPICION_OF_UNDER_DECLARATION_ALERT(
         clazz = SuspicionOfUnderDeclarationAlert::class.java,

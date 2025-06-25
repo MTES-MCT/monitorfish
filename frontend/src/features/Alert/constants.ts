@@ -45,8 +45,7 @@ export const COMMON_ALERT_TYPE_OPTION: Record<PendingAlertValueType | 'PNO_LAN_W
       isArchivedAfterDEPMessage: false,
       isOperationalAlert: true,
       name: 'R(UE) 1241 - Plus de 6 tonnes de lingue bleue (BLI) à bord',
-      rules: `
-_Sur les 8 dernières heures_
+      rules: `_Sur les 8 dernières heures_
 
 Pour tous les navires sur les zones REG "EOS - Lingues bleues", avec plus de 6 tonnes de BLI à bord.
     `
@@ -59,8 +58,7 @@ Pour tous les navires sur les zones REG "EOS - Lingues bleues", avec plus de 6 t
       isArchivedAfterDEPMessage: false,
       isOperationalAlert: true,
       name: 'Pêche en zone EMV avec un engin de fond à plus de 400m de profondeur',
-      rules: `
-_Sur les 8 dernières heures_
+      rules: `_Sur les 8 dernières heures_
 
 Pour tous les navires en pêche sur la zone REG "Atlantique 400m - Ecosystèmes Marins Vulnérables (EMV) - Engins de fond",
 à une profondeur supérieure à 400m avec les engins :
@@ -86,8 +84,7 @@ Pour tous les navires en pêche sur la zone REG "Atlantique 400m - Ecosystèmes 
       isArchivedAfterDEPMessage: false,
       isOperationalAlert: true,
       name: 'Chalutage de fond à plus de 800m de profondeur',
-      rules: `
-_Sur les 8 dernières heures_
+      rules: `_Sur les 8 dernières heures_
 
 Pour tous les navires en pêche sur la zone REG "Interdiction chalutage de fond ATL - Profondeur supérieure à 800m", à une profondeur supérieure à 800m avec les engins :
 - TB (Chaluts de fond (non spécifiés))
@@ -107,8 +104,7 @@ Pour tous les navires en pêche sur la zone REG "Interdiction chalutage de fond 
       isArchivedAfterDEPMessage: false,
       isOperationalAlert: true,
       name: 'Pêche en ZEE française par un navire tiers',
-      rules: `
-_Sur les 8 dernières heures_
+      rules: `_Sur les 8 dernières heures_
 
 Pour tous les navires tiers en pêche en ZEE française.`
     },
@@ -120,8 +116,7 @@ Pour tous les navires tiers en pêche en ZEE française.`
       isArchivedAfterDEPMessage: true,
       isOperationalAlert: true,
       name: 'Sortie sans émission de message "DEP"',
-      rules: `
-_Dans une fenêtre de +/- 6h autour de la sortie de port détectée._
+      rules: `_Dans une fenêtre de +/- 6h autour de la sortie de port détectée._
 
 Pour les navires français de +12 m (à l'exclusion des exemptés de JPE) n'ayant pas fait de DEP.
 La sortie de port est détectée sur les dernières 48h, avec le navire en mer depuis au moins 2h.`
@@ -134,8 +129,7 @@ La sortie de port est détectée sur les dernières 48h, avec le navire en mer d
       isArchivedAfterDEPMessage: true,
       isOperationalAlert: true,
       name: 'FAR manquant en 48h',
-      rules: `
-_Sur la journée de la veille et de l'avant-veille_
+      rules: `_Sur la journée de la veille et de l'avant-veille_
 
 Mêmes règles que pour l'alerte "FAR manquant en 24h" mais sur 2 jours consécutifs.
     `
@@ -149,8 +143,7 @@ Mêmes règles que pour l'alerte "FAR manquant en 24h" mais sur 2 jours consécu
       isArchivedAfterDEPMessage: true,
       isOperationalAlert: true,
       name: 'FAR manquant en 24h',
-      rules: `
-_Sur la journée de la veille_
+      rules: `_Sur la journée de la veille_
 
 Pour tous les navires français et pour les navires étrangers dont on a le JPE en ZEE française (aujourd'hui les Belges), qui ont été détectés "en pêche" la veille et n'ont pas fait de FAR.
     `
@@ -163,8 +156,7 @@ Pour tous les navires français et pour les navires étrangers dont on a le JPE 
       isArchivedAfterDEPMessage: false,
       isOperationalAlert: true,
       name: 'Pêche en zone CPANE (NEAFC)',
-      rules: `
-_Sur les 8 dernières heures_
+      rules: `_Sur les 8 dernières heures_
 
 Pêche en zone CPANE (NEAFC).`
     },
@@ -188,8 +180,7 @@ Pêche en zone CPANE (NEAFC).`
       isArchivedAfterDEPMessage: false,
       isOperationalAlert: true,
       name: 'Pêche en zone RTC',
-      rules: `
-_Sur les 8 dernières heures_
+      rules: `_Sur les 8 dernières heures_
 
 Pour les navires français dans toutes les zones RTC du monde.
 Pour les autres navires dans les zones RTC de ZEE française`
@@ -202,8 +193,7 @@ Pour les autres navires dans les zones RTC de ZEE française`
       isArchivedAfterDEPMessage: true,
       isOperationalAlert: true,
       name: 'Suspicion de sous-déclaration',
-      rules: `
-_Sur les 7 jours précédents_
+      rules: `_Sur les 7 jours précédents_
 
 Pour les navires français de + 12 m qui déclarent un poids de captures incohérent par rapport à leur effort de pêche.
 Permet de détecter des navires qui font des FAR 0 à répétition ou des FAR avec quelques kilos.
@@ -220,8 +210,7 @@ Les navires remontent si kg des FAR < 0,015 kg x effort de pêche (kW/h)_
       isArchivedAfterDEPMessage: true,
       isOperationalAlert: true,
       name: 'Chalutage dans les 3 milles',
-      rules: `
-_Sur les 8 dernières heures_
+      rules: `_Sur les 8 dernières heures_
 
 Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.`
     },
@@ -233,8 +222,7 @@ Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un cha
       isArchivedAfterDEPMessage: false,
       isOperationalAlert: true,
       name: 'Pêche dans les 12 milles sans droits historiques',
-      rules: `
-_Sur les 8 dernières heures_
+      rules: `_Sur les 8 dernières heures_
 
 Pour les navires allemands, espagnols, néerlandais et belges en pêche dans les 12 milles hors de leurs zones de droits historiques propres.
 Et pour tous les autres navires UE ou tiers en pêche dans les 12 milles.`

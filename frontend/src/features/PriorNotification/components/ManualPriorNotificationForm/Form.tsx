@@ -14,7 +14,8 @@ import {
   FormikSelect,
   FormikTextarea,
   getOptionsFromLabelledEnum,
-  LinkButton
+  LinkButton,
+  useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useCallback, useState } from 'react'
@@ -33,6 +34,7 @@ type FormProps = Readonly<{
 }>
 export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
   const { values } = useFormikContext<ManualPriorNotificationFormValues>()
+  const { newWindowContainerRef } = useNewWindow()
 
   const dispatch = useMainAppDispatch()
   const { gearsAsOptions } = useGetGearsAsOptions()
@@ -79,6 +81,7 @@ export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
       />
 
       <FormikDatePicker
+        baseContainer={newWindowContainerRef.current}
         isStringDate
         label="Date et heure de réception du préavis (UTC)"
         name="sentAt"
@@ -87,6 +90,7 @@ export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
       />
 
       <FormikDatePicker
+        baseContainer={newWindowContainerRef.current}
         isStringDate
         label="Date et heure estimées d'arrivée au port (UTC)"
         name="expectedArrivalDate"
@@ -96,6 +100,7 @@ export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
 
       <FieldGroup>
         <FormikDatePicker
+          baseContainer={newWindowContainerRef.current}
           disabled={values.isExpectedLandingDateSameAsExpectedArrivalDate}
           isStringDate
           label="Date et heure prévues de débarque (UTC)"

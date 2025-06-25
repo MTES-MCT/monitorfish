@@ -47,12 +47,42 @@ context('Vessel groups', () => {
     cy.contains('Le groupe de navires dynamique "Lorem ipsum dolor sit amet" a bien été créé.').should('be.visible')
 
     /**
-     * Open the main window and display the created vessel group
+     * Open the main window
      */
     cy.visit('/#@-824534.42,6082993.21,8.70')
     cy.wait(3000)
 
     cy.clickButton('Groupes de navires')
+
+    /**
+     * Filter by group type
+     */
+    cy.get('[title="Groupes fixes"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 3)
+    cy.get('[title="Groupes fixes"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 4)
+
+    cy.get('[title="Groupes dynamiques"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 1)
+    cy.get('[title="Groupes dynamiques"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 4)
+
+    /**
+     * Filter list by sharing
+     */
+    cy.get('[title="Groupes personnels"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 2)
+    cy.get('[title="Groupes personnels"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 4)
+
+    cy.get('[title="Groupes partagés"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 2)
+    cy.get('[title="Groupes partagés"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 4)
+
+    /**
+     * Display the created vessel group
+     */
     cy.get('[title="Lorem ipsum dolor sit amet"]').click()
     cy.get('[title="Lorem ipsum dolor sit amet"]').contains('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.')
     cy.get('[title="Lorem ipsum dolor sit amet"]').contains('Groupe dynamique')

@@ -3,26 +3,28 @@ import { MapToolBox } from '@features/MainWindow/components/MapButtons/shared/Ma
 import { MapBox } from '@features/Map/constants'
 import { SideWindowMenuKey } from '@features/SideWindow/constants'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
+import { useGetVesselGroups } from '@features/VesselGroup/components/VesselGroupMenuDialog/hooks/useGetVesselGroups'
 import { VesselGroupRow } from '@features/VesselGroup/components/VesselGroupMenuDialog/VesselGroupRow'
 import { DEFAULT_DYNAMIC_VESSEL_GROUP, DEFAULT_FIXED_VESSEL_GROUP } from '@features/VesselGroup/constants'
-import { useGetVesselGroups } from '@features/VesselGroup/hooks/useGetVesselGroups'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
+import { GroupType, Sharing, type VesselGroup } from '@features/VesselGroup/types'
 import { hideVesselsNotInVesselGroups } from '@features/VesselGroup/useCases/hideVesselsNotInVesselGroups'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, Dropdown, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Checkbox, Dropdown, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
+import { useState } from 'react'
 import styled from 'styled-components'
 
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
-
-import type { VesselGroup } from '@features/VesselGroup/types'
 
 const MARGIN_TOP = 124
 
 export function VesselGroupMenuDialog() {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
   const areVesselGroupsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselGroupsDisplayed)
   const areVesselsNotInVesselGroupsHidden = useMainAppSelector(
@@ -32,8 +34,51 @@ export function VesselGroupMenuDialog() {
 
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.VESSEL_GROUPS)
 
-  const { pinnedVesselGroups, unpinnedVesselGroups } = useGetVesselGroups()
+  const [filteredGroupTypes, setFilteredGroupTypes] = useState<GroupType[]>([GroupType.DYNAMIC, GroupType.FIXED])
+  const [filteredSharing, setFilteredSharing] = useState<Sharing[]>([Sharing.SHARED, Sharing.PRIVATE])
+
+  const { pinnedVesselGroups, unpinnedVesselGroups } = useGetVesselGroups(filteredGroupTypes, filteredSharing)
   const orderedVesselGroups = pinnedVesselGroups.concat(unpinnedVesselGroups)
+
+  const updateDynamicGroupType = (nextGroupType: boolean | undefined) => {
+    if (!nextGroupType) {
+      setFilteredGroupTypes(filteredGroupTypes.filter(value => value !== GroupType.DYNAMIC))
+
+      return
+    }
+
+    setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.DYNAMIC))
+  }
+
+  const updateFixedGroupType = (nextGroupType: boolean | undefined) => {
+    if (!nextGroupType) {
+      setFilteredGroupTypes(filteredGroupTypes.filter(value => value !== GroupType.FIXED))
+
+      return
+    }
+
+    setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.FIXED))
+  }
+
+  const updatePrivateSharing = (nextSharing: boolean | undefined) => {
+    if (!nextSharing) {
+      setFilteredSharing(filteredSharing.filter(value => value !== Sharing.PRIVATE))
+
+      return
+    }
+
+    setFilteredSharing(filteredSharing.concat(Sharing.PRIVATE))
+  }
+
+  const updateSharedSharing = (nextSharing: boolean | undefined) => {
+    if (!nextSharing) {
+      setFilteredSharing(filteredSharing.filter(value => value !== Sharing.SHARED))
+
+      return
+    }
+
+    setFilteredSharing(filteredSharing.concat(Sharing.SHARED))
+  }
 
   const createNewDynamicGroup = () => {
     dispatch(vesselGroupActions.vesselGroupEdited(DEFAULT_DYNAMIC_VESSEL_GROUP))
@@ -72,6 +117,40 @@ export function VesselGroupMenuDialog() {
           />
         </Header>
         <StyledBody>
+          <Columns>
+            <FirstColumnCheckbox
+              checked={filteredGroupTypes.includes(GroupType.FIXED)}
+              label="Groupes fixes"
+              name="fixed"
+              onChange={updateFixedGroupType}
+              title="Groupes fixes"
+            />
+            <SecondColumnCheckbox
+              checked={filteredGroupTypes.includes(GroupType.DYNAMIC)}
+              label="Groupes dynamiques"
+              name="dynamics"
+              onChange={updateDynamicGroupType}
+              title="Groupes dynamiques"
+            />
+          </Columns>
+          {isSuperUser && (
+            <Columns>
+              <FirstColumnCheckbox
+                checked={filteredSharing.includes(Sharing.PRIVATE)}
+                label="Groupes personnels"
+                name="private"
+                onChange={updatePrivateSharing}
+                title="Groupes personnels"
+              />
+              <SecondColumnCheckbox
+                checked={filteredSharing.includes(Sharing.SHARED)}
+                label="Groupes partagés"
+                name="shared"
+                onChange={updateSharedSharing}
+                title="Groupes partagés"
+              />
+            </Columns>
+          )}
           <VesselGroupList data-cy="vessel-groups-list">
             {orderedVesselGroups.map((vesselGroup: VesselGroup, index: number) => (
               <VesselGroupRow
@@ -115,6 +194,31 @@ export function VesselGroupMenuDialog() {
   )
 }
 
+const Columns = styled.div`
+  display: flex;
+`
+
+const FirstColumnCheckbox = styled(Checkbox)`
+  margin-left: 16px;
+  height: 34px;
+  width: 160px;
+  flex-shrink: 0;
+
+  label {
+    vertical-align: middle;
+  }
+`
+
+const SecondColumnCheckbox = styled(Checkbox)`
+  margin-left: 16px;
+  height: 34px;
+  flex-shrink: 0;
+
+  label {
+    vertical-align: middle;
+  }
+`
+
 const StyledDropdownItem = styled(Dropdown.Item)`
   padding: 9px 10px 9px 10px;
 
@@ -130,6 +234,7 @@ const VesselGroupList = styled.ul`
   overflow-x: hidden;
   padding: 0;
   transition: 0.5s all;
+  border-top: ${p => `1px solid ${p.theme.color.lightGray}`};
 `
 
 const StyledFooter = styled(MapMenuDialog.Footer)`
@@ -138,7 +243,7 @@ const StyledFooter = styled(MapMenuDialog.Footer)`
 `
 
 const StyledBody = styled(MapMenuDialog.Body)`
-  padding: 0;
+  padding: 16px 0 0;
 `
 
 const VesselGroupMenuDialogWrapper = styled(MapToolBox)`

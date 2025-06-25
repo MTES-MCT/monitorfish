@@ -578,6 +578,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.wait(500)
 
     cy.clickButton('Supprimer l’action')
+    cy.clickButton('Supprimer')
     // We stub the response as the DELETE request was mocked
     cy.intercept('GET', '/bff/v1/mission_actions?missionId=43', {
       body: [],
@@ -698,6 +699,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.wait(500)
 
     cy.clickButton('Supprimer l’action')
+    cy.clickButton('Supprimer')
     // We stub the response as the DELETE request was mocked
     cy.intercept('GET', '/bff/v1/mission_actions?missionId=43', {
       body: [],

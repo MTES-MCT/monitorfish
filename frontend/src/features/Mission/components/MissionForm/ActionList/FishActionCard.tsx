@@ -1,9 +1,11 @@
+import { ConfirmationModal } from '@components/ConfirmationModal'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { FrontendError } from '@libs/FrontendError'
-import { Accent, Icon, IconButton, Tag, TagGroup, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Tag, TagGroup, THEME, useNewWindow } from '@mtes-mct/monitor-ui'
 import { find } from 'lodash-es'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
 import { ActionLabel, Head, NoteContent } from './styles'
@@ -20,6 +22,8 @@ type FishActionCardProps = Readonly<{
 }>
 export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishActionCardProps) {
   const natinfsAsOptions = useGetNatinfsAsOptions()
+  const [isDeletionConfirmationModalOpen, setIsDeletionConfirmationModalOpen] = useState(false)
+  const { newWindowContainerRef } = useNewWindow()
 
   const isControlAction =
     missionAction.actionType === MissionAction.MissionActionType.AIR_CONTROL ||
@@ -139,7 +143,7 @@ export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishAct
           color={THEME.color.maximumRed}
           Icon={Icon.Delete}
           iconSize={20}
-          onClick={onRemove}
+          onClick={() => setIsDeletionConfirmationModalOpen(true)}
           title="Supprimer l’action"
           withUnpropagatedClick
         />
@@ -147,6 +151,19 @@ export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishAct
 
       {isControlAction && redTags.length > 0 && <StyledTagGroup>{redTags}</StyledTagGroup>}
       {isControlAction && infractionTags.length > 0 && <StyledTagGroup>{infractionTags}</StyledTagGroup>}
+      {isDeletionConfirmationModalOpen &&
+        createPortal(
+          <ConfirmationModal
+            color={THEME.color.maximumRed}
+            confirmationButtonLabel="Supprimer"
+            iconName="Delete"
+            message="Êtes-vous sûr de vouloir supprimer cette action ?"
+            onCancel={() => setIsDeletionConfirmationModalOpen(false)}
+            onConfirm={onRemove}
+            title="Suppression de l'action"
+          />,
+          newWindowContainerRef.current
+        )}
     </>
   )
 }

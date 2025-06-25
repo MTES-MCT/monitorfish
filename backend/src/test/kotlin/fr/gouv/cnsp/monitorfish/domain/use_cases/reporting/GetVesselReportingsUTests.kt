@@ -415,11 +415,11 @@ class GetVesselReportingsUTests {
         assertThat(infractionSuspicionsSummary[0].numberOfOccurrences).isEqualTo(2)
         assertThat(
             infractionSuspicionsSummary[0].title,
-        ).isEqualTo("12 milles - Pêche sans droits historiques (NATINF 2610)")
+        ).isEqualTo("Pêche dans les 12 milles sans droits historiques (NATINF 2610)")
         assertThat(infractionSuspicionsSummary[1].numberOfOccurrences).isEqualTo(1)
         assertThat(
             infractionSuspicionsSummary[1].title,
-        ).isEqualTo("Non-emission de message \"FAR\" en 48h (NATINF 27689)")
+        ).isEqualTo("FAR manquant en 48h (NATINF 27689)")
         assertThat(infractionSuspicionsSummary[2].numberOfOccurrences).isEqualTo(1)
         assertThat(
             infractionSuspicionsSummary[2].title,

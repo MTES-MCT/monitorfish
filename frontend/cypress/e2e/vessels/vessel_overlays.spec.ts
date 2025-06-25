@@ -82,7 +82,7 @@ context('Vessels Overlays', () => {
     cy.get('*[data-cy^="vessel-card-segments"]').contains('SWW01')
     cy.get('*[data-cy^="vessel-card-latitude"]').contains('48° 26′ 17″ N')
     cy.get('*[data-cy^="vessel-card-longitude"]').contains('006° 30′ 22″ W')
-    cy.get('*[data-cy^="vessel-card-alert"]').contains('3 milles - Chaluts')
+    cy.get('*[data-cy^="vessel-card-alert"]').contains('Chalutage dans les 3 milles')
 
     /**
      * Beacon malfunction

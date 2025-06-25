@@ -3,6 +3,7 @@ import { getOptionsFromLabelledEnum } from '@mtes-mct/monitor-ui'
 import type { NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 
 export enum AdditionalSubMenu {
+  ALERT_RULES = 'ALERT_RULES',
   SUSPENDED_ALERTS = 'SUSPENDED_ALERTS'
 }
 
@@ -17,7 +18,8 @@ export const SUB_MENU_LABEL: Record<AlertSubMenu, string> = {
   OUTREMEROA: 'OUTRE-MER OA',
   OUTREMEROI: 'OUTRE-MER OI',
   NONE: 'Hors façade',
-  SUSPENDED_ALERTS: 'Suspension d’alertes'
+  SUSPENDED_ALERTS: 'Suspension d’alertes',
+  ALERT_RULES: 'Règles des alertes'
 }
 /* eslint-enable sort-keys-fix/sort-keys-fix */
 

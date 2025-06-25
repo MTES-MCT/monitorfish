@@ -1,11 +1,3 @@
-import { SeafrontGroup } from '@constants/seafront'
-
-export enum AdditionalSubMenu {
-  SUSPENDED_ALERTS = 'SUSPENDED_ALERTS'
-}
-
-export type SideWindowSubMenu = SeafrontGroup | AdditionalSubMenu
-
 export enum SideWindowMenuKey {
   ALERT_LIST_AND_REPORTING_LIST = 'ALERT_LIST_AND_REPORTING_LIST',
   BEACON_MALFUNCTION_BOARD = 'BEACON_MALFUNCTION_BOARD',

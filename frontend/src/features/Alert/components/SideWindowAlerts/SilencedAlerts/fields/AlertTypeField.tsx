@@ -5,12 +5,11 @@ import styled from 'styled-components'
 import { OPERATIONAL_ALERTS, PendingAlertValueType } from '../../../../constants'
 
 import type { SilencedAlertFormValues } from '../types'
-import type { Option } from '@mtes-mct/monitor-ui'
 
 export function AlertTypeField() {
   const [input, meta, helper] = useField<SilencedAlertFormValues['value']>('value')
 
-  const alertsAsOptions: Array<Option<PendingAlertValueType>> = OPERATIONAL_ALERTS.map(alert => ({
+  const alertsAsOptions = OPERATIONAL_ALERTS.map(alert => ({
     label: alert.name,
     value: alert.code
   }))

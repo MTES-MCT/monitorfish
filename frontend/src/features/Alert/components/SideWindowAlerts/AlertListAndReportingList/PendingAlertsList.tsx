@@ -3,7 +3,7 @@ import { NO_SEAFRONT_GROUP, type NoSeafrontGroup, SeafrontGroup } from '@constan
 import { silenceAlert } from '@features/Alert/useCases/silenceAlert'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { CustomSearch, ExclamationPoint, THEME } from '@mtes-mct/monitor-ui'
+import { CustomSearch, Icon, Link, pluralize, Size, Tag, TextInput, THEME } from '@mtes-mct/monitor-ui'
 import { sortArrayByColumn, SortType } from '@utils/sortArrayByColumn'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FlexboxGrid, List } from 'rsuite'
@@ -12,10 +12,9 @@ import styled from 'styled-components'
 import { PendingAlertRow } from './PendingAlertRow'
 import { SilenceAlertMenu } from './SilenceAlertMenu'
 import { getAlertNameFromType } from './utils'
-import SearchIconSVG from '../../../../icons/Loupe_dark.svg?react'
 import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../constants'
-import { SUB_MENU_LABEL } from '../constants'
-import { resetFocusOnPendingAlert } from '../slice'
+import { AdditionalSubMenu, SUB_MENU_LABEL } from '../constants'
+import { resetFocusOnPendingAlert, setSubMenu } from '../slice'
 
 import type { PendingAlert, SilencedAlertPeriodRequest } from '../../../types'
 import type { CSSProperties, MutableRefObject, RefObject } from 'react'
@@ -25,14 +24,10 @@ export type PendingAlertsListProps = Readonly<{
   numberOfSilencedAlerts: number
   selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup
 }>
-/**
- * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
- */
 export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSeafrontGroup }: PendingAlertsListProps) {
   const dispatch = useMainAppDispatch()
   const focusedPendingAlertId = useMainAppSelector(state => state.alert.focusedPendingAlertId)
   const pendingAlerts = useMainAppSelector(state => state.alert.pendingAlerts)
-  const baseUrl = window.location.origin
   const [searchQuery, setSearchQuery] = useState<string>()
   const [silenceAlertMenuDisplayedFor, setSilenceAlertMenuDisplayedFor] = useState<
     { index: number; pendingAlert: PendingAlert } | undefined
@@ -53,13 +48,9 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
         (ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts || []).includes(pendingAlert.value.seaFront)
     )
   }, [pendingAlerts, selectedSeafrontGroup])
-  const numberOfAlertsMessage = useMemo(
-    () =>
-      `Suspension d’alerte sur ${numberOfSilencedAlerts} navire${numberOfSilencedAlerts > 1 ? 's' : ''} en ${
-        SUB_MENU_LABEL[selectedSeafrontGroup]
-      }`,
-    [numberOfSilencedAlerts, selectedSeafrontGroup]
-  )
+  const numberOfAlertsMessage = `${numberOfSilencedAlerts} ${pluralize('suspension', numberOfSilencedAlerts)} d'${pluralize('alerte', numberOfSilencedAlerts)} en ${
+    SUB_MENU_LABEL[selectedSeafrontGroup]
+  }`
 
   const fuse = useMemo(
     () =>
@@ -124,32 +115,44 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
   )
 
   return (
-    <Content style={contentStyle}>
-      <Title style={titleStyle}>ALERTES AUTOMATIQUES À VÉRIFIER</Title>
-      {numberOfSilencedAlerts > 0 && (
-        <NumberOfSilencedAlerts
-          data-cy="side-window-alerts-number-silenced-vessels"
-          style={numberOfSilencedAlertsStyle}
-        >
-          <StyledExclamationPoint color={THEME.color.white} size={15}>
-            !
-          </StyledExclamationPoint>
-          {numberOfAlertsMessage}
-        </NumberOfSilencedAlerts>
-      )}
-      <SearchVesselInput
+    <Content>
+      <StyledTextInput
         data-cy="side-window-alerts-search-vessel"
-        onChange={e => setSearchQuery(e.target.value)}
+        isLabelHidden
+        isSearchInput
+        isTransparent
+        label="Rechercher un navire ou une alerte"
+        name="searchQuery"
+        onChange={setSearchQuery}
         placeholder="Rechercher un navire ou une alerte"
-        style={searchVesselInputStyle(baseUrl)}
-        type="text"
-        value={searchQuery ?? ''}
+        size={Size.LARGE}
+        value={searchQuery}
       />
+      <Row>
+        <NumberOfAlerts>{filteredAlerts.length} alertes</NumberOfAlerts>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <StyledLink onClick={() => dispatch(setSubMenu(AdditionalSubMenu.ALERT_RULES))}>
+          {' '}
+          (en savoir plus sur le fonctionnement des alertes)
+        </StyledLink>
+        {numberOfSilencedAlerts > 0 && (
+          <StyledTagInfo
+            backgroundColor={THEME.color.gainsboro}
+            color={THEME.color.charcoal}
+            Icon={Icon.Info}
+            iconColor={THEME.color.goldenPoppy}
+            withCircleIcon
+          >
+            {numberOfAlertsMessage}
+          </StyledTagInfo>
+        )}
+      </Row>
+      {/** TODO Use table from monitor-ui */}
       <List
         data-cy="side-window-alerts-list"
         style={{
           ...rowStyle(sortedAlerts?.length),
-          marginTop: 10,
+          marginTop: 8,
           overflow: 'visible'
         }}
       >
@@ -199,48 +202,33 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
   )
 }
 
-const StyledExclamationPoint = styled(ExclamationPoint)`
-  margin-right: 5px;
+const NumberOfAlerts = styled.span`
+  font-weight: 500;
 `
 
-const NumberOfSilencedAlerts = styled.div``
-const numberOfSilencedAlertsStyle = {
-  color: COLORS.slateGray,
-  marginBottom: 15,
-  textDecoration: 'underline'
-}
+const StyledLink = styled(Link)`
+  margin-left: 4px;
+  cursor: pointer;
+`
 
-const Title = styled.div``
-const titleStyle = {
-  color: COLORS.gunMetal,
-  fontSize: 16,
-  fontWeight: 700,
-  marginBottom: 20
-}
+const StyledTagInfo = styled(Tag)`
+  margin-right: 0;
+  margin-left: auto;
+  font-weight: 500;
+`
 
-const searchVesselInputStyle = baseUrl => ({
-  ':hover, :focus': {
-    borderBottom: `1px ${COLORS.lightGray} solid`
-  },
-  backgroundColor: 'white',
-  backgroundImage: `url(${baseUrl}${SearchIconSVG})`,
-  backgroundPosition: 'bottom 3px right 5px',
-  backgroundRepeat: 'no-repeat',
-  backgroundSize: 25,
-  border: `1px ${COLORS.lightGray} solid`,
-  borderRadius: 0,
-  color: COLORS.gunMetal,
-  flex: 3,
-  fontSize: 13,
-  height: 40,
-  marginBottom: 5,
-  padding: '0 5px 0 10px',
-  width: 280
-})
+const StyledTextInput = styled(TextInput)`
+  width: 310px;
+`
+
+const Row = styled.div`
+  margin-top: 28px;
+  display: flex;
+`
 
 const ScrollableContainer = styled.div``
 const ScrollableContainerStyle: CSSProperties = {
-  maxHeight: '50vh',
+  maxHeight: '70vh',
   overflowY: 'auto'
 }
 
@@ -250,8 +238,6 @@ const noAlertsStyle: CSSProperties = {
   marginTop: 20,
   textAlign: 'center'
 }
-
-const SearchVesselInput = styled.input``
 
 const listItemStyle = (isFocused: boolean, toClose: boolean): CSSProperties => ({
   animation: toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset',
@@ -301,11 +287,7 @@ const alertNatinfStyle = {
   width: 150
 }
 
-const Content = styled.div``
-const contentStyle = {
-  background: COLORS.gainsboro,
-  marginLeft: 36,
-  marginTop: 36,
-  padding: '30px 40px 40px 40px',
-  width: 'fit-content'
-}
+const Content = styled.div`
+  padding: 32px 32px 32px 32px;
+  width: fit-content;
+`

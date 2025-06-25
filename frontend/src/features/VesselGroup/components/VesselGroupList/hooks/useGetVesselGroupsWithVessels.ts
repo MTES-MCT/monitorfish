@@ -1,13 +1,16 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { useGetVesselGroupsWithVesselsQuery } from '@features/VesselGroup/apis'
-import { GroupType, type VesselGroupWithVessels } from '@features/VesselGroup/types'
+import { GroupType, Sharing, type VesselGroupWithVessels } from '@features/VesselGroup/types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useEffect, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { MonitorFishWorker } from '../../../../../workers/MonitorFishWorker'
 
-export function useGetVesselGroupsWithVessels(filteredGroupTypes: GroupType[]): {
+export function useGetVesselGroupsWithVessels(
+  filteredGroupTypes: GroupType[],
+  filteredSharing: Sharing[]
+): {
   pinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
   unpinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
 } {
@@ -26,12 +29,17 @@ export function useGetVesselGroupsWithVessels(filteredGroupTypes: GroupType[]): 
   )
 
   const debouncedSearch = useDebouncedCallback(
-    async (debouncedSearchQuery: string | undefined, debouncedFilteredGroupTypes: GroupType[]) => {
+    async (
+      debouncedSearchQuery: string | undefined,
+      debouncedFilteredGroupTypes: GroupType[],
+      debouncedFilteredSharing: Sharing[]
+    ) => {
       const nextGroups = await MonitorFishWorker.getFilteredVesselGroups(
         vesselGroupsWithVessels ?? [],
         vesselGroupsIdsPinned,
         debouncedSearchQuery,
-        debouncedFilteredGroupTypes
+        debouncedFilteredGroupTypes,
+        debouncedFilteredSharing
       )
 
       setResult(nextGroups)
@@ -40,8 +48,15 @@ export function useGetVesselGroupsWithVessels(filteredGroupTypes: GroupType[]): 
   )
 
   useEffect(() => {
-    debouncedSearch(searchQuery, filteredGroupTypes)
-  }, [searchQuery, debouncedSearch, filteredGroupTypes, vesselGroupsIdsPinned, vesselGroupsWithVessels])
+    debouncedSearch(searchQuery, filteredGroupTypes, filteredSharing)
+  }, [
+    searchQuery,
+    debouncedSearch,
+    filteredGroupTypes,
+    filteredSharing,
+    vesselGroupsIdsPinned,
+    vesselGroupsWithVessels
+  ])
 
   return result
 }

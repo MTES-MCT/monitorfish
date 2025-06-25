@@ -7,6 +7,14 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2025-06-25',
+        description: `Vous pouvez désormais retrouver dans l'onglet "Règles des alerte" de la fenêtre des alertes l'explication
+du fonctionnement de celles-ci.`,
+        for: 'CNSP',
+        title: `Explication du fonctionnement des alertes`,
+        type: 'NEW_FEATURE'
+      },
+      {
         date: '2025-06-11',
         description: `Il est désormais possible d'afficher directement sur la cartographie les segments de flottes des
  navires depuis l'onglet "Gérer l'affichage des dernières positions".`,

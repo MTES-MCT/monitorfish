@@ -50,12 +50,12 @@ context('Side Window > Alert List', () => {
 
     // Then
     cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains('10')
-    cy.get('*[data-cy^="side-window-alerts-number-silenced-vessels"]').contains(
-      'Suspension d’alerte sur 2 navires en NAMO'
+    cy.get('body').contains(
+      '2 suspensions d\'alertes en NAMO'
     )
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 10)
 
-    cy.get(':nth-child(10)').contains('3 milles - Chaluts')
+    cy.get(':nth-child(10)').contains('Chalutage dans les 3 milles')
     cy.get(':nth-child(10)').contains('LE b@TO')
     cy.get(':nth-child(10)').contains('7059')
 
@@ -69,7 +69,7 @@ context('Side Window > Alert List', () => {
     cy.wait('@showVesselPositionsOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))
   })
 
-  it('An useCases Should be validated', function () {
+  it('An alert Should be validated', function () {
     // Given
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
     const expectedAlerts = this.previousAlerts.length - 1
@@ -85,7 +85,7 @@ context('Side Window > Alert List', () => {
     cy.visit('/side_window')
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', expectedAlerts)
-    // As the useCases is validated, it will be silenced for 4 hours but not shown in the silenced alerts table
+    // As the alert is validated, it will be silenced for 4 hours but not shown in the silenced alerts table
     cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
     cy.get('*[data-cy^="side-window-silenced-alerts-list"]')
       .children()
@@ -94,7 +94,7 @@ context('Side Window > Alert List', () => {
       .should('have.length', previousSilencedAlerts)
   })
 
-  it('An useCases Should be silenced', function () {
+  it('An alert Should be silenced', function () {
     // Given
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
     const expectedSilencedAlerts = this.previousSilencedAlerts.length + 1
@@ -129,7 +129,7 @@ context('Side Window > Alert List', () => {
       .should('have.length', expectedSilencedAlerts)
   })
 
-  it('A silenced useCases Should be created', function () {
+  it('A silenced alert Should be created', function () {
     // Given
     cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
     const now = getUtcDateInMultipleFormats('2066-06-08T13:54')

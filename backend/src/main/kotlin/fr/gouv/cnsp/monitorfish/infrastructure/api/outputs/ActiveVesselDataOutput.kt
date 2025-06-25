@@ -54,10 +54,11 @@ sealed class ActiveVesselBaseDataOutput(
             index: Int,
         ): ActiveVesselBaseDataOutput =
             enrichedActiveVessel.lastPosition?.let { lastPosition ->
-                val riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(
-                    vesselRiskFactor = enrichedActiveVessel.riskFactor,
-                    isRecentProfile = enrichedActiveVessel.activityOrigin == ActivityOrigin.FROM_RECENT_PROFILE,
-                )
+                val riskFactor =
+                    RiskFactorDataOutput.fromVesselRiskFactor(
+                        vesselRiskFactor = enrichedActiveVessel.riskFactor,
+                        isRecentProfile = enrichedActiveVessel.activityOrigin == ActivityOrigin.FROM_RECENT_PROFILE,
+                    )
 
                 ActiveVesselEmittingPositionDataOutput(
                     id = index,
@@ -132,10 +133,11 @@ sealed class ActiveVesselBaseDataOutput(
                 require(enrichedActiveVessel.vessel != null) {
                     "A vessel must be found from the referential when a last position not found."
                 }
-                val riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(
-                    vesselRiskFactor = enrichedActiveVessel.riskFactor,
-                    isRecentProfile = enrichedActiveVessel.activityOrigin == ActivityOrigin.FROM_RECENT_PROFILE,
-                )
+                val riskFactor =
+                    RiskFactorDataOutput.fromVesselRiskFactor(
+                        vesselRiskFactor = enrichedActiveVessel.riskFactor,
+                        isRecentProfile = enrichedActiveVessel.activityOrigin == ActivityOrigin.FROM_RECENT_PROFILE,
+                    )
 
                 ActiveVesselEmittingLogbookDataOutput(
                     id = index,

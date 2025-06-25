@@ -202,6 +202,9 @@ export function ReportingCard({
               NATINF {reporting.value.natinfCode}
             </Natinf>
           )}
+          {reporting.type === ReportingType.ALERT && !!reporting.value.depth && (
+            <Natinf>Profondeur: {reporting.value.depth}m</Natinf>
+          )}
           {(!reporting.isArchived || (reporting.isArchived && willExpire)) && (
             <ExpirationDate>
               <Icon.Clock color={THEME.color.slateGray} />

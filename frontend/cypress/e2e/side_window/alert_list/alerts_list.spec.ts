@@ -55,7 +55,7 @@ context('Side Window > Alert List', () => {
     )
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 10)
 
-    cy.get(':nth-child(10)').contains('3 milles - Chaluts')
+    cy.get(':nth-child(10)').contains('Chalutage dans les 3 milles')
     cy.get(':nth-child(10)').contains('LE b@TO')
     cy.get(':nth-child(10)').contains('7059')
 

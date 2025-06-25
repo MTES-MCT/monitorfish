@@ -1,5 +1,6 @@
 import { NO_SEAFRONT_GROUP, type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import { ReportingTable } from '@features/Reporting/components/ReportingTable'
+import { Header } from '@features/SideWindow/components/Header'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useMemo } from 'react'
 import styled from 'styled-components'
@@ -42,7 +43,7 @@ export function AlertListAndReportingList({
 
   return (
     <Wrapper>
-      <Header>
+      <StyledHeader>
         <Title
           $isSelected={selectedTab === AlertAndReportingTab.ALERT}
           onClick={() => setSelectedTab(AlertAndReportingTab.ALERT)}
@@ -56,7 +57,7 @@ export function AlertListAndReportingList({
         >
           Signalements
         </Title>
-      </Header>
+      </StyledHeader>
 
       {selectedTab === AlertAndReportingTab.ALERT && (
         <PendingAlertsList
@@ -77,24 +78,17 @@ const Wrapper = styled.div`
   overflow: auto;
 `
 
-const Header = styled.div`
-  margin-left: 32px;
+const StyledHeader = styled(Header)`
+  display: inline-block;
 `
 
-// TODO This should be a `<a />` or a `<button />`.
-const Title = styled.h2<{
+const Title = styled(Header.Title)<{
   $isSelected: boolean
 }>`
   border-bottom: 5px solid ${p => (p.$isSelected ? p.theme.color.charcoal : p.theme.color.white)};
-  color: ${p => p.theme.color.gunMetal};
   cursor: pointer;
-  display: inline-block;
-  font-size: 22px;
-  font-weight: 700;
-  margin-top: 30px;
-  margin-right: 30px;
-  text-align: left;
-  transition: all 0.2s;
   width: fit-content;
-  user-select: none;
+  display: inline-block;
+  margin-right: 50px;
+  height: 38px;
 `

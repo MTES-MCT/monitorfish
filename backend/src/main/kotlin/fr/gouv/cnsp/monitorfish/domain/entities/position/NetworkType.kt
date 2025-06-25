@@ -6,8 +6,19 @@ import org.slf4j.LoggerFactory
 enum class NetworkType(
     val codes: List<String>,
 ) {
-    CELLULAR(listOf("CEL", "GSM")),
-    SATELLITE(listOf("SAT")),
+    CELLULAR(
+        listOf(
+            "CEL", // NEMO (CLS) and CLS
+            "GSM", // Agiltech
+        ),
+    ),
+    SATELLITE(
+        listOf(
+            "SAT", // Agiltech
+            "VAR", // NEMO (CLS)
+            "IRI", // CLS
+        ),
+    ),
     ;
 
     companion object {

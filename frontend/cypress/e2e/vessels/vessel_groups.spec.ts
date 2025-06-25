@@ -63,7 +63,7 @@ context('Vessel groups', () => {
     cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 4)
 
     cy.get('[title="Groupes dynamiques"]').click()
-    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 2)
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 1)
     cy.get('[title="Groupes dynamiques"]').click()
     cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 4)
 

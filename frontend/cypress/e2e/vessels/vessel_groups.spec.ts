@@ -58,14 +58,14 @@ context('Vessel groups', () => {
      * Filter by group type
      */
     cy.get('[title="Groupes fixes"]').click()
-    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 2)
-    cy.get('[title="Groupes fixes"]').click()
     cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 3)
+    cy.get('[title="Groupes fixes"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 4)
 
     cy.get('[title="Groupes dynamiques"]').click()
-    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 1)
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 2)
     cy.get('[title="Groupes dynamiques"]').click()
-    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 3)
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 4)
 
     /**
      * Filter list by sharing
@@ -73,12 +73,12 @@ context('Vessel groups', () => {
     cy.get('[title="Groupes personnels"]').click()
     cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 1)
     cy.get('[title="Groupes personnels"]').click()
-    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 3)
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 4)
 
     cy.get('[title="Groupes partagés"]').click()
-    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 2)
-    cy.get('[title="Groupes partagés"]').click()
     cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 3)
+    cy.get('[title="Groupes partagés"]').click()
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 4)
 
     /**
      * Display the created vessel group

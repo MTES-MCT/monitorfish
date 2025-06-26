@@ -389,7 +389,7 @@ const Description = styled.div`
   color: ${p => p.theme.color.gunMetal};
   font: normal normal bold 13px/18px Marianne;
   margin-top: 10px;
-  white-space: normal;
+  white-space: pre-wrap;
 `
 
 const Author = styled.div`

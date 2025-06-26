@@ -185,7 +185,7 @@ const OtherCommentsTitle = styled.div`
 
 const OtherComments = styled.div`
   margin-top: 16px;
-  white-space: normal;
+  white-space: pre-wrap;
   width: 100%;
   padding-right: 24px;
   box-sizing: border-box;

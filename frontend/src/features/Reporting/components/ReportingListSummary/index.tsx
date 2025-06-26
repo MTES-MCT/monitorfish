@@ -46,6 +46,7 @@ const Body = styled.div`
 const Label = styled.div`
   color: ${p => p.theme.color.slateGray};
   margin-right: 8px;
+  white-space: pre-wrap;
 `
 
 const LabelNumber = styled.span`

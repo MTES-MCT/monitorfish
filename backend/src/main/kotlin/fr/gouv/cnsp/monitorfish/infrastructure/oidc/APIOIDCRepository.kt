@@ -23,6 +23,8 @@ class APIOIDCRepository(
     @Cacheable(value = ["user_info"])
     override fun getUserInfo(authorizationHeaderContent: String): UserInfo =
         runBlocking {
+            logger.info("Fetching user info at: ${oidcProperties.issuerUri!! + oidcProperties.userinfoEndpoint!!}")
+
             val userInfoResponse =
                 apiClient.httpClient
                     .get(

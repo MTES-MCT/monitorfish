@@ -4625,14 +4625,14 @@ virtualenv = ">=20.10.0"
 
 [[package]]
 name = "prefect"
-version = "3.4.6"
+version = "3.4.7"
 description = "Workflow orchestration and management."
 optional = false
 python-versions = "<3.14,>=3.9"
 groups = ["main"]
 files = [
-    {file = "prefect-3.4.6-py3-none-any.whl", hash = "sha256:e4dbe49cd4f4a7c87b1fc059cb7a65c50aefbde9189c6dd07b698002acf6363c"},
-    {file = "prefect-3.4.6.tar.gz", hash = "sha256:5ac5d5e1f8386454b684790cbe484f63fcf728a760b437efa6742999ba6d7a14"},
+    {file = "prefect-3.4.7-py3-none-any.whl", hash = "sha256:624cbe945d3c7c960f1218442137ebe597fc501d6cd9f25c232d17e5e2bdc193"},
+    {file = "prefect-3.4.7.tar.gz", hash = "sha256:5ce64b87f3426cc3510885a9cac0a7db573ddace39877dd6bcb87cf250f4b454"},
 ]
 
 [package.dependencies]
@@ -4665,6 +4665,7 @@ opentelemetry-api = ">=1.27.0,<2.0.0"
 orjson = ">=3.7,<4.0"
 packaging = ">=21.3,<25.1"
 pathspec = ">=0.8.0"
+prefect-docker = {version = ">=0.6.0", optional = true, markers = "extra == \"docker\""}
 prometheus-client = ">=0.20.0"
 pydantic = ">=2.9,<2.10.0 || >2.10.0,<2.11.0 || >2.11.0,<2.11.1 || >2.11.1,<2.11.2 || >2.11.2,<2.11.3 || >2.11.3,<2.11.4 || >2.11.4,<3.0.0"
 pydantic-core = ">=2.12.0,<3.0.0"
@@ -4679,6 +4680,7 @@ readchar = ">=4.0.0,<5.0.0"
 rfc3339-validator = ">=0.1.4,<0.2.0"
 rich = ">=11.0,<15.0"
 ruamel-yaml = ">=0.17.0"
+semver = ">=3.0.4"
 sniffio = ">=1.3.0,<2.0.0"
 sqlalchemy = {version = ">=2.0,<3.0.0", extras = ["asyncio"]}
 toml = ">=0.10.0"
@@ -4710,6 +4712,23 @@ shell = ["prefect-shell (>=0.3.0)"]
 slack = ["prefect-slack (>=0.3.0)"]
 snowflake = ["prefect-snowflake (>=0.28.0)"]
 sqlalchemy = ["prefect-sqlalchemy (>=0.5.0)"]
+
+[[package]]
+name = "prefect-docker"
+version = "0.6.6"
+description = "Prefect integrations for interacting with Docker."
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "prefect_docker-0.6.6-py3-none-any.whl", hash = "sha256:5b9ab447bfa563cf3304e66b32113727d40fd451144ea3a199e5b6406293eb0b"},
+    {file = "prefect_docker-0.6.6.tar.gz", hash = "sha256:fd9a927b36d4b86ccbfd810688b186be07a0b2c99afbae5864aaec89963fa078"},
+]
+
+[package.dependencies]
+docker = ">=6.1.1"
+exceptiongroup = "*"
+prefect = ">=3.3.5"
 
 [[package]]
 name = "prometheus-client"
@@ -6340,6 +6359,18 @@ pandas = ">=1.2"
 dev = ["flake8", "flit", "mypy", "pandas-stubs", "pre-commit", "pytest", "pytest-cov", "pytest-xdist"]
 docs = ["ipykernel", "nbconvert", "numpydoc", "pydata_sphinx_theme (==0.10.0rc2)", "pyyaml", "sphinx (<6.0.0)", "sphinx-copybutton", "sphinx-design", "sphinx-issues"]
 stats = ["scipy (>=1.7)", "statsmodels (>=0.12)"]
+
+[[package]]
+name = "semver"
+version = "3.0.4"
+description = "Python helper for Semantic Versioning (https://semver.org)"
+optional = false
+python-versions = ">=3.7"
+groups = ["main"]
+files = [
+    {file = "semver-3.0.4-py3-none-any.whl", hash = "sha256:9c824d87ba7f7ab4a1890799cec8596f15c1241cb473404ea1cb0c55e4b04746"},
+    {file = "semver-3.0.4.tar.gz", hash = "sha256:afc7d8c584a5ed0a11033af086e8af226a9c0b206f313e0301f8dd7b6b589602"},
+]
 
 [[package]]
 name = "send2trash"
@@ -8135,4 +8166,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "3.13.5"
-content-hash = "2a7906ce5b1aaa1e3496a017d685d613ac462e805d885011e4e3ff7164a1403e"
+content-hash = "a5a4261bda34c72f871195a39c2ebd8ac0314c09e5d63885205fa83df250e145"

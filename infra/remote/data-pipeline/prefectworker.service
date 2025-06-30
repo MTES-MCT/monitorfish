@@ -1,11 +1,9 @@
 [Unit]
-Description=Prefect Docker Agent
+Description=Prefect Worker
 
 [Service]
-Type=simple
-
 User=<USER-TO-CHANGE>
-ExecStart=<SCRIPT-LOCATION-TO-CHANGE>/prefectdockeragent.sh
+ExecStart=<SCRIPT-LOCATION-TO-CHANGE>/prefectworker.sh
 Restart=always
 RestartSec=30
 

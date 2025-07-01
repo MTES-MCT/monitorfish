@@ -139,6 +139,7 @@ class AddOrUpdateFixedVesselGroupUTests {
                 createdAtUtc = ZonedDateTime.of(2019, 10, 11, 0, 4, 0, 0, UTC),
                 updatedAtUtc = null,
                 endOfValidityUtc = null,
+                startOfValidityUtc = null,
                 filters =
                     VesselGroupFilters(
                         countryCodes = listOf(),

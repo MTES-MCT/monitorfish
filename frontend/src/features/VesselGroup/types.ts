@@ -33,6 +33,7 @@ export const VesselGroupSchema = z.strictObject({
   pointsOfAttention: stringOrUndefined,
   sharedTo: z.union([z.array(z.nativeEnum(CnspService)), z.undefined()]),
   sharing: z.nativeEnum(Sharing),
+  startOfValidityUtc: z.union([z.string().datetime(), z.undefined()]),
   type: z.nativeEnum(GroupType),
   updatedAtUtc: z.union([z.string().datetime(), z.undefined()])
 })

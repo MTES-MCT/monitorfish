@@ -13,13 +13,11 @@ interface DBVesselGroupRepository : CrudRepository<VesselGroupEntity, Int> {
             WHERE
                 (
                     created_by = :user AND
-                    is_deleted IS FALSE AND
-                    (end_of_validity_utc IS NULL OR end_of_validity_utc > NOW())
+                    is_deleted IS FALSE
                 ) OR (
                     sharing = 'SHARED' AND
                     CAST(:service as cnsp_service) = ANY(shared_to) AND
-                    is_deleted IS FALSE AND
-                    (end_of_validity_utc IS NULL OR end_of_validity_utc > NOW())
+                    is_deleted IS FALSE
                 )
         """,
         nativeQuery = true,
@@ -57,7 +55,8 @@ interface DBVesselGroupRepository : CrudRepository<VesselGroupEntity, Int> {
             created_by,
             created_at_utc,
             updated_at_utc,
-            end_of_validity_utc
+            end_of_validity_utc,
+            start_of_validity_utc
         ) VALUES (
             :#{#vg.isDeleted},
             :#{#vg.name},
@@ -72,7 +71,8 @@ interface DBVesselGroupRepository : CrudRepository<VesselGroupEntity, Int> {
             :#{#vg.createdBy},
             :#{#vg.createdAtUtc},
             :#{#vg.updatedAtUtc},
-            :#{#vg.endOfValidityUtc}
+            :#{#vg.endOfValidityUtc},
+            :#{#vg.startOfValidityUtc}
         ) RETURNING id
     """,
     )
@@ -100,7 +100,8 @@ interface DBVesselGroupRepository : CrudRepository<VesselGroupEntity, Int> {
             created_by = :#{#vg.createdBy},
             created_at_utc = :#{#vg.createdAtUtc},
             updated_at_utc = :#{#vg.updatedAtUtc},
-            end_of_validity_utc = :#{#vg.endOfValidityUtc}
+            end_of_validity_utc = :#{#vg.endOfValidityUtc},
+            start_of_validity_utc = :#{#vg.startOfValidityUtc}
         WHERE id = :#{#vg.id}
     """,
     )

@@ -97,16 +97,27 @@ export function VesselGroupForm({
             <StyledFormikTextInput isErrorMessageHidden isRequired label="Nom du groupe" name="name" />
             <StyledFormikTextarea isErrorMessageHidden label="Description du groupe" name="description" rows={3} />
           </Column>
-          <Column $width={304}>
-            <StyledFormikDatePicker
-              baseContainer={newWindowContainerRef.current}
-              isErrorMessageHidden
-              isHistorical={false}
-              isStringDate
-              label="Date de fin de validité du groupe"
-              name="endOfValidityUtc"
-              style={{ width: 220 }}
-            />
+          <Column $width={408}>
+            <DatesWrapper>
+              <StyledFormikDatePicker
+                baseContainer={newWindowContainerRef.current}
+                isErrorMessageHidden
+                isHistorical={false}
+                isStringDate
+                label="Date de début de validité"
+                name="startOfValidityUtc"
+                style={{ width: 300 }}
+              />
+              <StyledFormikDatePicker
+                baseContainer={newWindowContainerRef.current}
+                isErrorMessageHidden
+                isHistorical={false}
+                isStringDate
+                label="Date de fin de validité"
+                name="endOfValidityUtc"
+                style={{ width: 300 }}
+              />
+            </DatesWrapper>
             <StyledFormikTextarea $isRed label="Points d'attention" name="pointsOfAttention" rows={3} />
           </Column>
         </Columns>
@@ -141,6 +152,11 @@ const StyledFormikDatePicker = styled(FormikDatePicker)`
   margin-top: 64px;
   margin-bottom: 2px;
   text-align: left;
+  > .Element-Fieldset__InnerBox {
+    > div > span > div {
+      width: 177px;
+    }
+  }
 `
 
 const Column = styled.div<{
@@ -158,5 +174,8 @@ const Column = styled.div<{
 `
 
 const Columns = styled.div`
+  display: flex;
+`
+const DatesWrapper = styled.div`
   display: flex;
 `

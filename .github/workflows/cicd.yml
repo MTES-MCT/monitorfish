@@ -199,7 +199,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download image
-        uses: ishworkh/container-image-artifact-download@v2.0.0
+        uses: ishworkh/container-image-artifact-download@v2.1.0
         with:
           image: monitorfish-app:${{ env.VERSION }}
 
@@ -259,7 +259,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download image
-        uses: ishworkh/container-image-artifact-download@v2.0.0
+        uses: ishworkh/container-image-artifact-download@v2.1.0
         with:
           image: monitorfish-app:${{ env.VERSION }}
 
@@ -307,7 +307,7 @@ jobs:
           fetch-depth: 100
 
       - name: Download image
-        uses: ishworkh/container-image-artifact-download@v2.0.0
+        uses: ishworkh/container-image-artifact-download@v2.1.0
         with:
           image: monitorfish-app:${{ env.VERSION }}
 
@@ -353,7 +353,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download image
-        uses: ishworkh/container-image-artifact-download@v2.0.0
+        uses: ishworkh/container-image-artifact-download@v2.1.0
         with:
           image: monitorfish-app:${{ env.VERSION }}
 

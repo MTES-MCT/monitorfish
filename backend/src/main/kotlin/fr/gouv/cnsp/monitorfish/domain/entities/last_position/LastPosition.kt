@@ -4,7 +4,6 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import java.time.Duration
@@ -58,7 +57,6 @@ data class LastPosition(
 ) {
     fun isInGroup(
         vesselGroup: VesselGroupBase,
-        profile: VesselProfile?,
         now: ZonedDateTime,
     ): Boolean {
         if (vesselGroup !is DynamicVesselGroup) return false
@@ -107,36 +105,6 @@ data class LastPosition(
                 this.dateTime.isAfter(vesselIsHidden)
             } ?: true
 
-        val hasFleetSegmentMatch =
-            filters.fleetSegments.isEmpty() ||
-                (this.segments?.any { it in filters.fleetSegments } ?: false)
-
-        val hasGearMatch =
-            filters.gearCodes.isEmpty() ||
-                (this.gearOnboard?.any { it.gear in filters.gearCodes } ?: false)
-
-        val hasSpeciesMatch =
-            filters.specyCodes.isEmpty() ||
-                (this.speciesOnboard?.any { it.species in filters.specyCodes } ?: false)
-
-        /**
-         * IF
-         *  a filter on segment or gear is set AND
-         *  the current data is empty in last position (the vessel has not sent any FAR)
-         * THEN
-         *  compute the matches on the profile to obtain the recent segment or gear
-         * ELSE
-         *  Match the segments and gears based on the current data
-         */
-        val hasProfileFieldsMatch =
-            if ((filters.fleetSegments.isNotEmpty() && this.segments?.isEmpty() == true) ||
-                (filters.gearCodes.isNotEmpty() && this.gearOnboard?.isEmpty() == true)
-            ) {
-                profile?.isInGroup(vesselGroup) == true
-            } else {
-                hasFleetSegmentMatch && hasGearMatch
-            }
-
         val hasVesselLocationMatch =
             vesselsLocation?.let {
                 (it == VesselLocation.PORT && this.isAtPort) ||
@@ -171,8 +139,6 @@ data class LastPosition(
             hasDistrictCodeMatch &&
             hasLogbookMatch &&
             hasLastPositionDateTimeMatch &&
-            hasProfileFieldsMatch &&
-            hasSpeciesMatch &&
             hasVesselLocationMatch &&
             hasVesselLengthMatch &&
             hasZoneMatch

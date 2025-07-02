@@ -9,8 +9,16 @@ import {
 } from '@features/VesselGroup/types'
 import { addOrUpdateVesselGroup } from '@features/VesselGroup/useCases/addOrUpdateVesselGroup'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { FormikDatePicker, FormikEffect, FormikTextarea, FormikTextInput, useNewWindow } from '@mtes-mct/monitor-ui'
+import {
+  FieldError,
+  FormikDatePicker,
+  FormikEffect,
+  FormikTextarea,
+  FormikTextInput,
+  useNewWindow
+} from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
+import { useRef, type MutableRefObject } from 'react'
 import styled from 'styled-components'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 
@@ -21,7 +29,6 @@ import type {
   VesselIdentityForVesselGroup
 } from '@features/VesselGroup/types'
 import type { FormikProps } from 'formik'
-import type { MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
 type VesselGroupFormProps = {
@@ -46,6 +53,7 @@ export function VesselGroupForm({
 }: VesselGroupFormProps) {
   const dispatch = useMainAppDispatch()
   const { newWindowContainerRef } = useNewWindow()
+  const ref = useRef<HTMLDivElement>(null)
 
   const newOrEditedVesselGroup = (function () {
     if (editedVesselGroup) {
@@ -77,53 +85,60 @@ export function VesselGroupForm({
   }
 
   return (
-    <Formik
-      initialValues={newOrEditedVesselGroup}
-      innerRef={formRef as MutableRefObject<FormikProps<CreateOrUpdateVesselGroup>>}
-      onSubmit={handleOnSubmit}
-      validationSchema={validationSchema}
-    >
-      <>
-        {isMainWindow && groupType === GroupType.DYNAMIC && (
-          <FormikEffect
-            onChange={nextValues => {
-              onChange?.(nextValues as CreateOrUpdateDynamicVesselGroup)
-            }}
-          />
+    <div ref={ref}>
+      <Formik
+        initialValues={newOrEditedVesselGroup}
+        innerRef={formRef as MutableRefObject<FormikProps<CreateOrUpdateVesselGroup>>}
+        onSubmit={handleOnSubmit}
+        validationSchema={validationSchema}
+      >
+        {({ errors }) => (
+          <>
+            {isMainWindow && groupType === GroupType.DYNAMIC && (
+              <FormikEffect
+                onChange={nextValues => {
+                  onChange?.(nextValues as CreateOrUpdateDynamicVesselGroup)
+                }}
+              />
+            )}
+            <Columns>
+              <Column>
+                <FormikCirclePicker />
+                <StyledFormikTextInput isErrorMessageHidden isRequired label="Nom du groupe" name="name" />
+                <StyledFormikTextarea isErrorMessageHidden label="Description du groupe" name="description" rows={3} />
+              </Column>
+              <Column $width={408}>
+                <div>
+                  <DatesWrapper>
+                    <StyledFormikDatePicker
+                      baseContainer={(isMainWindow ? ref.current : newWindowContainerRef.current) ?? undefined}
+                      isErrorMessageHidden
+                      isHistorical={false}
+                      isStringDate
+                      label="Date de début de validité"
+                      name="startOfValidityUtc"
+                      style={{ width: 300 }}
+                    />
+                    <StyledFormikDatePicker
+                      baseContainer={(isMainWindow ? ref.current : newWindowContainerRef.current) ?? undefined}
+                      isErrorMessageHidden
+                      isHistorical={false}
+                      isStringDate
+                      label="Date de fin de validité"
+                      name="endOfValidityUtc"
+                      style={{ width: 300 }}
+                    />
+                  </DatesWrapper>
+                  <StyledFieldError>{errors.endOfValidityUtc}</StyledFieldError>
+                </div>
+                <StyledFormikTextarea $isRed label="Points d'attention" name="pointsOfAttention" rows={3} />
+              </Column>
+            </Columns>
+            <FormikSharingOptions />
+          </>
         )}
-        <Columns>
-          <Column>
-            <FormikCirclePicker />
-            <StyledFormikTextInput isErrorMessageHidden isRequired label="Nom du groupe" name="name" />
-            <StyledFormikTextarea isErrorMessageHidden label="Description du groupe" name="description" rows={3} />
-          </Column>
-          <Column $width={408}>
-            <DatesWrapper>
-              <StyledFormikDatePicker
-                baseContainer={newWindowContainerRef.current}
-                isErrorMessageHidden
-                isHistorical={false}
-                isStringDate
-                label="Date de début de validité"
-                name="startOfValidityUtc"
-                style={{ width: 300 }}
-              />
-              <StyledFormikDatePicker
-                baseContainer={newWindowContainerRef.current}
-                isErrorMessageHidden
-                isHistorical={false}
-                isStringDate
-                label="Date de fin de validité"
-                name="endOfValidityUtc"
-                style={{ width: 300 }}
-              />
-            </DatesWrapper>
-            <StyledFormikTextarea $isRed label="Points d'attention" name="pointsOfAttention" rows={3} />
-          </Column>
-        </Columns>
-        <FormikSharingOptions />
-      </>
-    </Formik>
+      </Formik>
+    </div>
   )
 }
 
@@ -178,4 +193,7 @@ const Columns = styled.div`
 `
 const DatesWrapper = styled.div`
   display: flex;
+`
+const StyledFieldError = styled(FieldError)`
+  text-align: left;
 `

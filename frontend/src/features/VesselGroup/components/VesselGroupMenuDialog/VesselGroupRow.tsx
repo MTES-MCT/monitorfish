@@ -78,7 +78,7 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
         <Row onClick={() => setIsOpen(!isOpen)}>
           <ChevronIcon $isOpen={isOpen} color={THEME.color.slateGray} />
           <Square $fillColor={vesselGroup.color} $strokeColor={THEME.color.lightGray} />
-          <GroupTitle $isInFuture={isInFuture}>{vesselGroup.name}</GroupTitle>
+          <GroupTitle>{vesselGroup.name}</GroupTitle>
           <ValidityText>{isInFuture ? ' – À venir' : ''}</ValidityText>
           <RowIcons>
             <IconButton
@@ -248,7 +248,7 @@ const Row = styled.div`
   cursor: pointer;
 `
 
-const GroupTitle = styled.span<{ $isInFuture?: boolean }>`
+const GroupTitle = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

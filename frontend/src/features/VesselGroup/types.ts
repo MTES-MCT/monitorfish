@@ -4,6 +4,18 @@ import z from 'zod'
 
 import { numberOrUndefined, stringOrUndefined } from '../../types'
 
+const validateDates = data => {
+  const { endOfValidityUtc, startOfValidityUtc } = data
+  if (!startOfValidityUtc || !endOfValidityUtc) {
+    return true
+  }
+
+  const start = new Date(startOfValidityUtc)
+  const end = new Date(endOfValidityUtc)
+
+  return end >= start
+}
+
 export enum Sharing {
   PRIVATE = 'PRIVATE',
   SHARED = 'SHARED'
@@ -55,9 +67,14 @@ export const CreateOrUpdateDynamicVesselGroupSchema = DynamicVesselGroupSchema.o
   createdAtUtc: true,
   createdBy: true,
   updatedAtUtc: true
-}).extend({
-  id: z.union([z.number(), z.undefined()])
 })
+  .extend({
+    id: z.union([z.number(), z.undefined()])
+  })
+  .refine(data => validateDates(data), {
+    message: 'La date de fin doit être postérieure à la date de début',
+    path: ['endOfValidityUtc']
+  })
 
 export type DynamicVesselGroup = z.infer<typeof DynamicVesselGroupSchema>
 export type CreateOrUpdateDynamicVesselGroup = z.infer<typeof CreateOrUpdateDynamicVesselGroupSchema>
@@ -85,9 +102,14 @@ export const CreateOrUpdateFixedVesselGroupSchema = FixedVesselGroupSchema.omit(
   createdAtUtc: true,
   createdBy: true,
   updatedAtUtc: true
-}).extend({
-  id: z.union([z.number(), z.undefined()])
 })
+  .extend({
+    id: z.union([z.number(), z.undefined()])
+  })
+  .refine(data => validateDates(data), {
+    message: 'La date de fin doit être postérieure à la date de début',
+    path: ['endOfValidityUtc']
+  })
 
 export type FixedVesselGroup = z.infer<typeof FixedVesselGroupSchema>
 export type CreateOrUpdateFixedVesselGroup = z.infer<typeof CreateOrUpdateFixedVesselGroupSchema>

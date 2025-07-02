@@ -4,14 +4,13 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
-import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
-import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
@@ -48,11 +47,21 @@ class GetActiveVesselsUTests {
                 isAdministrator = false,
             ),
         )
+        val lastPosition = TestUtils.getDummyLastPositions().first()
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
             listOf(
                 EnrichedActiveVessel(
-                    lastPosition = TestUtils.getDummyLastPositions().first(),
-                    vesselProfile = null,
+                    lastPosition = lastPosition,
+                    vesselProfile =
+                        VesselProfile(
+                            cfr = "",
+                            segments =
+                                lastPosition.segments?.associate { it to 0.985446 },
+                            gears =
+                                lastPosition.gearOnboard?.mapNotNull { it.gear }?.associate { it to 0.985446 },
+                            species =
+                                lastPosition.speciesOnboard?.mapNotNull { it.species }?.associate { it to 0.985446 },
+                        ),
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(riskFactor = 2.3),
@@ -167,14 +176,21 @@ class GetActiveVesselsUTests {
                     lastPosition =
                         LastPosition(
                             flagState = CountryCode.FR,
-                            segments = listOf("NWW03", "NWW06"),
                             positionType = PositionType.AIS,
                             latitude = 16.445,
                             longitude = 48.2525,
                             dateTime = ZonedDateTime.now(),
                             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                         ),
-                    vesselProfile = null,
+                    vesselProfile =
+                        VesselProfile(
+                            cfr = "",
+                            segments =
+                                mapOf(
+                                    "NWW03" to 0.546465,
+                                    "NWW06" to 0.546465,
+                                ),
+                        ),
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
@@ -244,19 +260,20 @@ class GetActiveVesselsUTests {
                     lastPosition =
                         LastPosition(
                             flagState = CountryCode.FR,
-                            gearOnboard =
-                                listOf(
-                                    Gear().apply {
-                                        this.gear = "OTB"
-                                    },
-                                ),
                             positionType = PositionType.AIS,
                             latitude = 16.445,
                             longitude = 48.2525,
                             dateTime = ZonedDateTime.now(),
                             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                         ),
-                    vesselProfile = null,
+                    vesselProfile =
+                        VesselProfile(
+                            cfr = "",
+                            gears =
+                                mapOf(
+                                    "OTB" to 0.546465,
+                                ),
+                        ),
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
@@ -554,15 +571,6 @@ class GetActiveVesselsUTests {
                 EnrichedActiveVessel(
                     lastPosition =
                         LastPosition(
-                            speciesOnboard =
-                                listOf(
-                                    Species().apply {
-                                        this.species = "AMZ"
-                                    },
-                                    Species().apply {
-                                        this.species = "HKE"
-                                    },
-                                ),
                             flagState = CountryCode.FR,
                             positionType = PositionType.AIS,
                             latitude = 16.445,
@@ -570,7 +578,15 @@ class GetActiveVesselsUTests {
                             dateTime = ZonedDateTime.now(),
                             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                         ),
-                    vesselProfile = null,
+                    vesselProfile =
+                        VesselProfile(
+                            cfr = "",
+                            species =
+                                mapOf(
+                                    "AMZ" to 0.546465,
+                                    "HKE" to 0.546465,
+                                ),
+                        ),
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
@@ -1307,7 +1323,16 @@ class GetActiveVesselsUTests {
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
                     lastPosition = it,
-                    vesselProfile = null,
+                    vesselProfile =
+                        VesselProfile(
+                            cfr = "",
+                            segments =
+                                it.segments?.associate { it to 0.985446 },
+                            gears =
+                                it.gearOnboard?.mapNotNull { it.gear }?.associate { it to 0.985446 },
+                            species =
+                                it.speciesOnboard?.mapNotNull { it.species }?.associate { it to 0.985446 },
+                        ),
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(riskFactor = 2.3),
@@ -1361,6 +1386,7 @@ class GetActiveVesselsUTests {
 
         // Then
         assertThat(activeVessels).hasSize(4)
+        assertThat(activeVessels[0].lastPosition?.internalReferenceNumber).isEqualTo("FR224226850")
         assertThat(activeVessels[0].vesselGroups).hasSize(2)
     }
 }

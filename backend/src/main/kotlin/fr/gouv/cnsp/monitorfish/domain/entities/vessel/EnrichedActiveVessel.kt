@@ -37,7 +37,7 @@ data class EnrichedActiveVessel(
                     ?.recentSegments
                     ?.keys
                     ?.toList()
-                    ?.filter { it != "NO_SEGMENTS" } ?: listOf()
+                    ?.filter { it != "NO_SEGMENT" } ?: listOf()
             }
 
         gearsArray =

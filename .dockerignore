@@ -6,6 +6,7 @@ frontend/node_modules
 
 # Env variables
 datascience/.env
+pipeline/.env
 
 #Docs
 /datascience/docs

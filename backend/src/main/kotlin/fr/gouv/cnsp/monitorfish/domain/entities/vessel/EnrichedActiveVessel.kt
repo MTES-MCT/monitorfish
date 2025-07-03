@@ -23,6 +23,7 @@ data class EnrichedActiveVessel(
     val activityType: ActivityType
     val segments: List<String>
     val gearsArray: List<String>
+    val speciesArray: List<String>
     val activityOrigin: ActivityOrigin
 
     init {
@@ -50,8 +51,23 @@ data class EnrichedActiveVessel(
                     ?.toList()
                     ?.distinct() ?: listOf()
             }
+
+        speciesArray =
+            if (activityOrigin == ActivityOrigin.FROM_LOGBOOK) {
+                lastPosition?.speciesOnboard?.mapNotNull { it.species }?.distinct() ?: listOf()
+            } else {
+                vesselProfile
+                    ?.species
+                    ?.keys
+                    ?.toList()
+                    ?.distinct() ?: listOf()
+            }
     }
 
+    /**
+     * The last_positions table is updated more frequently than vessel_profiles/risk_factors tables,
+     * so we prefer using last_positions.
+     */
     private fun computeActivityOriginFrom(lastPosition: LastPosition?): ActivityOrigin {
         val isEmittingLogbookCurrently = lastPosition?.gearOnboard?.isNotEmpty() ?: false
 

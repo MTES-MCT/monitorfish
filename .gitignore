@@ -146,6 +146,7 @@ dist
 # Env variables
 /datascience/.env
 pipeline/.env
+pipeline/.monitorfish
 # Our .env files follow the `import-meta-env` convention:
 # - `.env`: git-ignored, generated from `.env.local.defaults`, overriden by `.env.local`.
 # - `.env.example`: git-commited, only for /frontend, used to enforce the env that must be injected at runtime via `import-meta-env`.

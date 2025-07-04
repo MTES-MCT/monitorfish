@@ -1,10 +1,10 @@
 import prefect
 
-from src.flows_config import flows_to_register
+from src.deployments import deployments
 
 
 def test_flows_registration():
-    for flow in flows_to_register:
+    for flow in deployments:
         # Check that the flow and its params can be serialized and deserialized
         serialized_flow = flow.serialize()
         prefect.serialization.flow.FlowSchema().load(serialized_flow)

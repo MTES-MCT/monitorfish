@@ -1,5 +1,4 @@
 from prefect.runner.storage import LocalStorage
-from prefect.schedules import Schedule
 
 from config import (
     ERS_FILES_LOCATION,
@@ -8,18 +7,20 @@ from config import (
     PREFECT_API_URL,
     ROOT_DIRECTORY,
 )
-from src.flows.github_stars import github_stars_flow
+
+# from prefect.schedules import Schedule
+
 
 ################################# List flows to deploy ################################
 deployments = [
-    (
-        github_stars_flow.to_deployment(
-            name=github_stars_flow.__name__,
-            schedule=Schedule(
-                cron="* * * * *", parameters={"repos": ["Repo 1", "Repo 2"]}
-            ),
-        )
-    )
+    # (
+    #     github_stars_flow.to_deployment(
+    #         name=github_stars_flow.__name__,
+    #         schedule=Schedule(
+    #             cron="* * * * *", parameters={"repos": ["Repo 1", "Repo 2"]}
+    #         ),
+    #     )
+    # )
 ]
 
 ################### Define flows' run config ####################

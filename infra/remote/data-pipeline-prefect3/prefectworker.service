@@ -1,0 +1,11 @@
+[Unit]
+Description=Prefect Worker
+
+[Service]
+User=<USER-TO-CHANGE>
+ExecStart=<SCRIPT-LOCATION-TO-CHANGE>/prefectworker.sh
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

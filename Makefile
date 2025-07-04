@@ -3,6 +3,7 @@ HOST_MIGRATIONS_FOLDER=$(shell pwd)/backend/src/main/resources/db/migration
 DATA_WAREHOUSE_INPUT_DATA_FOLDER=$(shell pwd)/pipeline/tests/test_data/clickhouse_user_files
 EXTERNAL_DATA_FOLDER=$(shell pwd)/datascience/tests/test_data/external
 EXTERNAL_DATA_FOLDER_PREFECT_3=$(shell pwd)/pipeline/tests/test_data/external
+PIPELINE_TEST_ENV_FILE=$(shell pwd)/pipeline/.env.test
 
 SHELL := /bin/bash
 .SHELLFLAGS = -ec
@@ -283,7 +284,16 @@ docker-push-pipeline:
 	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(VERSION)
 
 docker-test-pipeline-prefect-3: fetch-external-data-prefect-3 run-data-warehouse-prefect-3
-	docker run --network host -v $(EXTERNAL_DATA_FOLDER_PREFECT_3):/home/monitorfish-pipeline/pipeline/tests/test_data/external -v /var/run/docker.sock:/var/run/docker.sock -u monitorfish-pipeline:$(DOCKER_GROUP) --env-file pipeline/.env.test --env HOST_MIGRATIONS_FOLDER=$(HOST_MIGRATIONS_FOLDER) monitorfish-pipeline-prefect3:$(VERSION) coverage run -m pytest --pdb --ignore=tests/test_data/external tests
+	docker run \
+	 --network host \
+	 -e HOST_MIGRATIONS_FOLDER=$(HOST_MIGRATIONS_FOLDER) \
+	 -e TEST=True \
+	 -v $(PIPELINE_TEST_ENV_FILE):/home/monitorfish-pipeline/pipeline/.env.test \
+	 -v $(EXTERNAL_DATA_FOLDER_PREFECT_3):/home/monitorfish-pipeline/pipeline/tests/test_data/external \
+	 -v /var/run/docker.sock:/var/run/docker.sock \
+	 -u monitorfish-pipeline:$(DOCKER_GROUP) \
+	 monitorfish-pipeline-prefect3:$(VERSION) \
+	 coverage run -m pytest --pdb --ignore=tests/test_data/external tests
 docker-tag-pipeline-prefect-3:
 	docker tag monitorfish-pipeline-prefect3:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$(VERSION)
 docker-push-pipeline-prefect-3:
@@ -320,7 +330,11 @@ test-pipeline:
 	cd datascience && export TEST_LOCAL=True && poetry run coverage run -m pytest --pdb --ignore=tests/test_data/external tests/ && poetry run coverage report && poetry run coverage html
 
 test-pipeline-prefect-3:
-	cd pipeline && export TEST_LOCAL=True && poetry run coverage run -m pytest --pdb --ignore=tests/test_data/external tests/ && poetry run coverage report && poetry run coverage html
+	cd pipeline && \
+	export TEST=True && \
+	poetry run coverage run -m pytest --pdb --ignore=tests/test_data/external tests/ && \
+	poetry run coverage report && \
+	poetry run coverage html
 
 test-pipeline-with-data_warehouse: fetch-external-data run-data-warehouse test-pipeline stop-data-warehouse
 

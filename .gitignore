@@ -158,6 +158,7 @@ pipeline/.monitorfish
 /frontend/.env.local
 /infra/docker/.env
 /infra/docker/.env.local
+/infra/remote/data-pipeline-prefect3/.prefect-worker
 
 # Configuration files
 github_token.txt

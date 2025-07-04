@@ -11,6 +11,7 @@ import docker
 import pandas as pd
 import pytest
 from dotenv import dotenv_values
+from prefect.testing.utilities import prefect_test_harness
 from pytest import MonkeyPatch
 from sqlalchemy import text
 
@@ -127,6 +128,12 @@ def set_environment_variables(monkeysession):
 
     for k, v in dotenv_values(ROOT_DIRECTORY / ".env.test").items():
         monkeysession.setenv(k, v)
+
+
+@pytest.fixture(autouse=True, scope="session")
+def prefect_test_fixture():
+    with prefect_test_harness():
+        yield
 
 
 @pytest.fixture(scope="session")

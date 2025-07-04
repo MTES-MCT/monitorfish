@@ -92,7 +92,7 @@ def make_connection_string(db: str) -> str:
         assert USER
         assert PWD
     except AssertionError as e:
-        raise ValueError("Database connection credentials not found in env file") from e
+        raise KeyError("Database connection credentials not found in env file") from e
 
     return f"{CLIENT}://{USER}:{PWD}@{HOST}:{PORT}/{SID}"
 

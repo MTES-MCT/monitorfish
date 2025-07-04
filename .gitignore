@@ -145,6 +145,8 @@ dist
 
 # Env variables
 /datascience/.env
+pipeline/.env
+pipeline/.monitorfish
 # Our .env files follow the `import-meta-env` convention:
 # - `.env`: git-ignored, generated from `.env.local.defaults`, overriden by `.env.local`.
 # - `.env.example`: git-commited, only for /frontend, used to enforce the env that must be injected at runtime via `import-meta-env`.
@@ -156,33 +158,48 @@ dist
 /frontend/.env.local
 /infra/docker/.env
 /infra/docker/.env.local
+/infra/remote/data-pipeline-prefect3/.prefect-worker
 
 # Configuration files
 github_token.txt
 /infra/remote/backup/pg_backup.config
+datascience/dam-si-jupyter-config.py
+pipeline/dam-si-jupyter-config.py
 
 # Notebooks
 /datascience/notebooks
+pipeline/notebooks
 /datascience/.local
+pipeline/.local
 /datascience/.ipython
+pipeline/.ipython
 /datascience/.cache
+pipeline/.cache
 .ipynb_checkpoints/
 .jupyter/
 
 # Coverage reports
 datascience/htmlcov/
+pipeline/htmlcov/
 datascience/.coverage
+pipeline/.coverage
 frontend/cypress/videos/
 
 # Local data
 /datascience/data
-/datascience/src/pipeline/data/non_commited_data/pno_ports_subscriptions.csv
-/datascience/src/pipeline/data/non_commited_data/pno_segments_subscriptions.csv
-/datascience/src/pipeline/data/non_commited_data/pno_vessels_subscriptions.csv
+pipeline/data
+/datascience/src/data/non_commited_data/pno_ports_subscriptions.csv
+pipeline/src/data/non_commited_data/pno_ports_subscriptions.csv
+/datascience/src/data/non_commited_data/pno_segments_subscriptions.csv
+pipeline/src/data/non_commited_data/pno_segments_subscriptions.csv
+/datascience/src/data/non_commited_data/pno_vessels_subscriptions.csv
+pipeline/src/data/non_commited_data/pno_vessels_subscriptions.csv
 
 # Ignore downloaded external repositories
 datascience/tests/test_data/external/*
+pipeline/tests/test_data/external/*
 !datascience/tests/test_data/external/README.md
+!pipeline/tests/test_data/external/README.md
 
 # Kotlin sessions
 .kotlin/
@@ -190,6 +207,7 @@ datascience/tests/test_data/external/*
 # Python
 *.pyc
 datascience/monitorfish.egg-info
+pipeline/monitorfish.egg-info
 
 # IDEs
 .vscode
@@ -198,6 +216,7 @@ datascience/monitorfish.egg-info
 # Doc
 docs/redmine_wiki/*
 datascience/docs/build
+pipeline/docs/build
 
 # Secrets (used by act)
 .secrets

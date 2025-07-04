@@ -177,6 +177,10 @@ restart-remote-app:
 	cd infra/remote && docker compose pull && docker compose up -d --build app --force-recreate
 
 .PHONY: register-pipeline-flows-prod ##RUN ▶️  Register pipeline flows in PROD
+deploy-pipeline-flows:
+	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$(MONITORFISH_VERSION) && \
+	infra/remote/data-pipeline-prefect3/deploy-flows.sh
+
 register-pipeline-flows-prod:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
 	infra/remote/data-pipeline/register-flows-prod.sh

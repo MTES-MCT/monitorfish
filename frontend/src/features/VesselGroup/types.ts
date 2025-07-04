@@ -1,5 +1,6 @@
 import { VesselListFilterSchema } from '@features/Vessel/components/VesselList/types'
 import { ActiveVesselSchema, VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import z from 'zod'
 
 import { numberOrUndefined, stringOrUndefined } from '../../types'
@@ -10,10 +11,7 @@ const validateDates = data => {
     return true
   }
 
-  const start = new Date(startOfValidityUtc)
-  const end = new Date(endOfValidityUtc)
-
-  return end >= start
+  return customDayjs(endOfValidityUtc).isAfter(customDayjs(startOfValidityUtc))
 }
 
 export enum Sharing {

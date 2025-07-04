@@ -21,10 +21,12 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
   const [filteredGroupTypes, setFilteredGroupTypes] = useState<GroupType[]>([GroupType.DYNAMIC, GroupType.FIXED])
   const [filteredSharing, setFilteredSharing] = useState<Sharing[]>([Sharing.SHARED, Sharing.PRIVATE])
+  const [filteredExpired, setFilterExpired] = useState<boolean>(false)
 
   const { pinnedVesselGroupsWithVessels, unpinnedVesselGroupsWithVessels } = useGetVesselGroupsWithVessels(
     filteredGroupTypes,
-    filteredSharing
+    filteredSharing,
+    filteredExpired
   )
 
   const debouncedSetSearch = useDebouncedCallback(nextQuery => {
@@ -74,6 +76,10 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
     }
 
     setFilteredSharing(filteredSharing.concat(Sharing.SHARED))
+  }
+
+  const updateExpiredGroups = (nextExpired: boolean | undefined) => {
+    setFilterExpired(!!nextExpired)
   }
 
   const areGroupsOpened = !!searchQuery && searchQuery.length > SEARCH_QUERY_MIN_LENGTH
@@ -126,6 +132,16 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
               />
             </>
           )}
+          <>
+            <VerticalBar />
+            <StyledCheckbox
+              checked={filteredExpired}
+              label="Groupes expirés"
+              name="expired"
+              onChange={updateExpiredGroups}
+              title="Groupes expirés"
+            />
+          </>
         </Row>
         {pinnedVesselGroupsWithVessels.length > 0 && (
           <PinnedGroupsWrapper>

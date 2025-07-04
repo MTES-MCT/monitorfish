@@ -16,6 +16,7 @@ data class FixedVesselGroupDataInput(
     val sharing: Sharing,
     val sharedTo: List<CnspService>?,
     val endOfValidityUtc: ZonedDateTime? = null,
+    val startOfValidityUtc: ZonedDateTime? = null,
     val vessels: List<VesselIdentity>,
 ) {
     fun toCreateOrUpdateFixedVesselGroup() =
@@ -29,6 +30,7 @@ data class FixedVesselGroupDataInput(
             sharing = sharing,
             sharedTo = sharedTo,
             endOfValidityUtc = endOfValidityUtc,
+            startOfValidityUtc = startOfValidityUtc,
             vessels = vessels,
         )
 }

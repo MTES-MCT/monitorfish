@@ -21,6 +21,7 @@ data class DynamicVesselGroupDataOutput(
     val createdAtUtc: ZonedDateTime,
     val updatedAtUtc: ZonedDateTime? = null,
     val endOfValidityUtc: ZonedDateTime? = null,
+    val startOfValidityUtc: ZonedDateTime? = null,
     val filters: VesselGroupFilters,
 ) {
     companion object {
@@ -39,6 +40,7 @@ data class DynamicVesselGroupDataOutput(
                 createdAtUtc = vesselGroup.createdAtUtc,
                 updatedAtUtc = vesselGroup.updatedAtUtc,
                 endOfValidityUtc = vesselGroup.endOfValidityUtc,
+                startOfValidityUtc = vesselGroup.startOfValidityUtc,
                 filters = vesselGroup.filters,
             )
     }

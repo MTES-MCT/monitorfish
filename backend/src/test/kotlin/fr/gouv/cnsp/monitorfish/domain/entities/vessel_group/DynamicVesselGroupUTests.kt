@@ -44,6 +44,7 @@ class DynamicVesselGroupUTests {
                 createdAtUtc = ZonedDateTime.now(),
                 updatedAtUtc = null,
                 endOfValidityUtc = null,
+                startOfValidityUtc = null,
                 filters =
                     VesselGroupFilters(
                         countryCodes = listOf(CountryCode.FR),
@@ -110,6 +111,7 @@ class DynamicVesselGroupUTests {
                 createdAtUtc = ZonedDateTime.now(),
                 updatedAtUtc = null,
                 endOfValidityUtc = null,
+                startOfValidityUtc = null,
                 filters =
                     VesselGroupFilters(
                         countryCodes = listOf(),
@@ -170,6 +172,7 @@ class DynamicVesselGroupUTests {
                 createdAtUtc = ZonedDateTime.now(),
                 updatedAtUtc = null,
                 endOfValidityUtc = null,
+                startOfValidityUtc = null,
                 filters =
                     VesselGroupFilters(
                         countryCodes = listOf(CountryCode.FR),
@@ -235,6 +238,7 @@ class DynamicVesselGroupUTests {
                 createdAtUtc = ZonedDateTime.now(),
                 updatedAtUtc = null,
                 endOfValidityUtc = null,
+                startOfValidityUtc = null,
                 filters =
                     VesselGroupFilters(
                         countryCodes = listOf(CountryCode.FR),
@@ -310,6 +314,7 @@ class DynamicVesselGroupUTests {
                 createdAtUtc = ZonedDateTime.now(),
                 updatedAtUtc = null,
                 endOfValidityUtc = null,
+                startOfValidityUtc = null,
                 filters =
                     VesselGroupFilters(
                         countryCodes = listOf(CountryCode.FR),
@@ -380,6 +385,7 @@ class DynamicVesselGroupUTests {
                 createdAtUtc = ZonedDateTime.now(),
                 updatedAtUtc = null,
                 endOfValidityUtc = null,
+                startOfValidityUtc = null,
                 filters =
                     VesselGroupFilters(
                         countryCodes = listOf(CountryCode.FR),

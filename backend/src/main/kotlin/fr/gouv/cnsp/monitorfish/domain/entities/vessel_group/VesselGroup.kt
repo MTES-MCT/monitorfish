@@ -19,6 +19,7 @@ sealed class VesselGroupBase(
     open val createdAtUtc: ZonedDateTime,
     open val updatedAtUtc: ZonedDateTime? = null,
     open val endOfValidityUtc: ZonedDateTime? = null,
+    open val startOfValidityUtc: ZonedDateTime? = null,
 ) {
     fun hasUserRights(
         userEmail: String,
@@ -46,6 +47,7 @@ data class DynamicVesselGroup(
     override val createdAtUtc: ZonedDateTime,
     override val updatedAtUtc: ZonedDateTime? = null,
     override val endOfValidityUtc: ZonedDateTime? = null,
+    override val startOfValidityUtc: ZonedDateTime? = null,
     val filters: VesselGroupFilters,
 ) : VesselGroupBase(
         id = id,
@@ -61,6 +63,7 @@ data class DynamicVesselGroup(
         createdAtUtc = createdAtUtc,
         updatedAtUtc = updatedAtUtc,
         endOfValidityUtc = endOfValidityUtc,
+        startOfValidityUtc = startOfValidityUtc,
     ) {
     fun containsActiveVessel(
         activeVessel: EnrichedActiveVessel,
@@ -122,6 +125,7 @@ data class FixedVesselGroup(
     override val createdAtUtc: ZonedDateTime,
     override val updatedAtUtc: ZonedDateTime? = null,
     override val endOfValidityUtc: ZonedDateTime? = null,
+    override val startOfValidityUtc: ZonedDateTime? = null,
     val vessels: List<VesselIdentity>,
 ) : VesselGroupBase(
         id = id,
@@ -137,6 +141,7 @@ data class FixedVesselGroup(
         createdAtUtc = createdAtUtc,
         updatedAtUtc = updatedAtUtc,
         endOfValidityUtc = endOfValidityUtc,
+        startOfValidityUtc = startOfValidityUtc,
     ) {
     fun containsActiveVessel(activeVessel: EnrichedActiveVessel) =
         vessels.any { vessel -> vessel.isEqualToActiveVessel(activeVessel) }

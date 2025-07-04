@@ -33,6 +33,8 @@ class JpaVesselGroupRepositoryITests : AbstractDBTests() {
         assertThat(dynamicGroup.filters.countryCodes).isEqualTo(listOf(CountryCode.FR, CountryCode.ES, CountryCode.IT))
         assertThat(dynamicGroup.filters.fleetSegments).isEqualTo(listOf<String>())
         assertThat(dynamicGroup.filters.gearCodes).isEqualTo(listOf("OTB", "OTM", "TBB", "PTB"))
+        assertThat(dynamicGroup.startOfValidityUtc).isNotNull()
+        assertThat(dynamicGroup.endOfValidityUtc).isNotNull()
 
         val fixedGroup = vesselGroups.last() as FixedVesselGroup
         assertThat(fixedGroup.name).isEqualTo("Mission Thémis – semaine 04")
@@ -40,6 +42,8 @@ class JpaVesselGroupRepositoryITests : AbstractDBTests() {
         assertThat(fixedGroup.vessels).hasSize(6)
         assertThat(fixedGroup.vessels.first().vesselId).isEqualTo(1)
         assertThat(fixedGroup.vessels.first().cfr).isEqualTo("FAK000999999")
+        assertThat(fixedGroup.startOfValidityUtc).isNull()
+        assertThat(fixedGroup.endOfValidityUtc).isNotNull()
     }
 
     @Test

@@ -16,6 +16,7 @@ data class CreateOrUpdateFixedVesselGroup(
     val sharing: Sharing,
     val sharedTo: List<CnspService>?,
     val endOfValidityUtc: ZonedDateTime? = null,
+    val startOfValidityUtc: ZonedDateTime? = null,
     val vessels: List<VesselIdentity>,
 ) {
     fun toFixedVesselGroup(
@@ -35,6 +36,7 @@ data class CreateOrUpdateFixedVesselGroup(
         createdAtUtc = createdAtUtc,
         updatedAtUtc = updatedAtUtc,
         endOfValidityUtc = endOfValidityUtc,
+        startOfValidityUtc = startOfValidityUtc,
         vessels = vessels,
     )
 }

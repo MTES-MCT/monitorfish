@@ -18,6 +18,7 @@ data class FixedVesselGroupDataOutput(
     val createdAtUtc: ZonedDateTime,
     val updatedAtUtc: ZonedDateTime? = null,
     val endOfValidityUtc: ZonedDateTime? = null,
+    val startOfValidityUtc: ZonedDateTime? = null,
     val vessels: List<FixedVesselGroupVesselIdentityDataOutput>,
 ) {
     companion object {
@@ -36,6 +37,7 @@ data class FixedVesselGroupDataOutput(
                 createdAtUtc = vesselGroup.createdAtUtc,
                 updatedAtUtc = vesselGroup.updatedAtUtc,
                 endOfValidityUtc = vesselGroup.endOfValidityUtc,
+                startOfValidityUtc = vesselGroup.startOfValidityUtc,
                 vessels =
                     vesselGroup.vessels
                         .map { FixedVesselGroupVesselIdentityDataOutput.fromVesselIdentity(it) },

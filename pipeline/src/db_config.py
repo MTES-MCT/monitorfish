@@ -1,8 +1,9 @@
-import os
-
 import clickhouse_connect as ch
 import sqlalchemy as sa
 from clickhouse_connect.driver.httpclient import HttpClient
+from dotenv import get_key
+
+from config import DOTENV_PATH
 
 db_env = {
     "ocan": {
@@ -77,20 +78,21 @@ def make_connection_string(db: str) -> str:
         ValueError: with credentials for the selected database are not found in
         environment variables.
     """
-
-    import config  # To load env vars in "local test" and "local run" configurations
-
     try:
-        CLIENT = os.environ[db_env[db]["client"]]
-        HOST = os.environ[db_env[db]["host"]]
-        PORT = os.environ[db_env[db]["port"]]
-        SID = os.environ[db_env[db]["sid"]]
-        USER = os.environ[db_env[db]["usr"]]
-        PWD = os.environ[db_env[db]["pwd"]]
-    except KeyError as e:
-        raise KeyError(
-            "Database connection credentials not found in environment: ", e.args
-        )
+        CLIENT = get_key(DOTENV_PATH, db_env[db]["client"])
+        HOST = get_key(DOTENV_PATH, db_env[db]["host"])
+        PORT = get_key(DOTENV_PATH, db_env[db]["port"])
+        SID = get_key(DOTENV_PATH, db_env[db]["sid"])
+        USER = get_key(DOTENV_PATH, db_env[db]["usr"])
+        PWD = get_key(DOTENV_PATH, db_env[db]["pwd"])
+        assert CLIENT
+        assert HOST
+        assert PORT
+        assert SID
+        assert USER
+        assert PWD
+    except AssertionError as e:
+        raise ValueError("Database connection credentials not found in env file") from e
 
     return f"{CLIENT}://{USER}:{PWD}@{HOST}:{PORT}/{SID}"
 
@@ -119,14 +121,11 @@ def create_datawarehouse_client() -> HttpClient:
     Returns:
         HttpClient: clickhouse client for data_warehouse.
     """
-
-    import config  # To load env vars in "local test" configuration
-
     client = ch.get_client(
-        host=os.environ[db_env["data_warehouse"]["host"]],
-        port=os.environ[db_env["data_warehouse"]["port"]],
-        username=os.environ[db_env["data_warehouse"]["usr"]],
-        password=os.environ[db_env["data_warehouse"]["pwd"]],
+        host=get_key(DOTENV_PATH, db_env["data_warehouse"]["host"]),
+        port=get_key(DOTENV_PATH, db_env["data_warehouse"]["port"]),
+        username=get_key(DOTENV_PATH, db_env["data_warehouse"]["usr"]),
+        password=get_key(DOTENV_PATH, db_env["data_warehouse"]["pwd"]),
     )
 
     return client

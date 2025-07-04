@@ -1,10 +1,17 @@
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
+from dotenv import get_key
+
+PREFECT_API_URL = os.getenv("PREFECT_API_URL")
+
+# Must be set to true when running tests
+TEST = os.getenv("TEST", "False").lower() in ("true", "t", "yes", "y")
+env_file = ".env.test" if TEST else ".env"
 
 # Package structure
 ROOT_DIRECTORY = Path(__file__).parent
+DOTENV_PATH = ROOT_DIRECTORY / env_file
 LIBRARY_LOCATION = ROOT_DIRECTORY / Path("src")
 PIPELINE_DATA_LOCATION = LIBRARY_LOCATION / Path("data")
 NON_COMMITED_DATA_LOCATION = PIPELINE_DATA_LOCATION / Path("non_commited_data")
@@ -15,7 +22,8 @@ LOCAL_MIGRATIONS_FOLDER = str(
 )
 # HOST_MIGRATIONS_FOLDER envirionment variable is needed when running tests in CI to
 # mount migrations folder from the host to the database container
-HOST_MIGRATIONS_FOLDER = os.getenv("HOST_MIGRATIONS_FOLDER", LOCAL_MIGRATIONS_FOLDER)
+HOST_MIGRATIONS_FOLDER = os.getenv("HOST_MIGRATIONS_FOLDER") or LOCAL_MIGRATIONS_FOLDER
+HOST_ENV_FILE_LOCATION = os.getenv("HOST_ENV_FILE_LOCATION")
 
 EMAIL_TEMPLATES_LOCATION = LIBRARY_LOCATION / Path("emails/templates")
 EMAIL_IMAGES_LOCATION = LIBRARY_LOCATION / Path("emails/images")
@@ -31,19 +39,9 @@ EMAIL_FONTS_LOCATION = LIBRARY_LOCATION / Path("emails/fonts")
 EMAIL_STYLESHEETS_LOCATION = LIBRARY_LOCATION / Path("emails/stylesheets")
 SMS_TEMPLATES_LOCATION = LIBRARY_LOCATION / Path("sms")
 
-# Must be set to true when running tests locally
-TEST_LOCAL = os.getenv("TEST_LOCAL", "False").lower() in ("true", "t", "yes", "y")
-if TEST_LOCAL:
-    load_dotenv(ROOT_DIRECTORY / ".env.test")
-
-# Must be set to true when running flows locally
-RUN_LOCAL = os.getenv("RUN_LOCAL", "False").lower() in ("true", "t", "yes", "y")
-if RUN_LOCAL:
-    load_dotenv(ROOT_DIRECTORY / ".env")
-
 # Must be set to true to avoid external side effects (emails, data.gouv uploads...) in
 # integration
-IS_INTEGRATION = os.getenv("IS_INTEGRATION", "False").lower() in (
+IS_INTEGRATION = (get_key(DOTENV_PATH, "IS_INTEGRATION") or "False").lower() in (
     "true",
     "t",
     "yes",
@@ -52,7 +50,7 @@ IS_INTEGRATION = os.getenv("IS_INTEGRATION", "False").lower() in (
 
 # Must be set to true to send prior notifications to the FMC IT dept, and
 # not to real addressees (control units)
-PNO_TEST_MODE = os.getenv("PNO_TEST_MODE", "False").lower() in (
+PNO_TEST_MODE = (get_key(DOTENV_PATH, "PNO_TEST_MODE") or "False").lower() in (
     "true",
     "t",
     "yes",
@@ -61,7 +59,7 @@ PNO_TEST_MODE = os.getenv("PNO_TEST_MODE", "False").lower() in (
 
 # Must be set to true to send beacon malfunction notifications to the FMC IT dept, and
 # not to real addressees (fishermen, shipowners and satellite operators)
-TEST_MODE = os.getenv("TEST_MODE", "False").lower() in (
+TEST_MODE = (get_key(DOTENV_PATH, "TEST_MODE") or "False").lower() in (
     "true",
     "t",
     "yes",
@@ -70,8 +68,8 @@ TEST_MODE = os.getenv("TEST_MODE", "False").lower() in (
 
 # Must be set to true to send prior notifications to the FMC, and
 # not to real addressees (control units)
-WEEKLY_CONTROL_REPORT_EMAIL_TEST_MODE = os.getenv(
-    "WEEKLY_CONTROL_REPORT_EMAIL_TEST_MODE", "False"
+WEEKLY_CONTROL_REPORT_EMAIL_TEST_MODE = (
+    get_key(DOTENV_PATH, "WEEKLY_CONTROL_REPORT_EMAIL_TEST_MODE") or "False"
 ).lower() in (
     "true",
     "t",
@@ -85,18 +83,15 @@ DOCKER_IMAGE = (
 )
 MONITORFISH_VERSION = os.getenv("MONITORFISH_VERSION")
 FLOWS_LOCATION = Path("src/flows")  # relative to the WORKDIR in the image
-FLOWS_LABEL = "monitorfish"
-MAX_FLOW_RUN_MINUTES = 50
-FLOW_STATES_TO_CLEAN = ["Running"]
-LOGBOOK_FILES_GID = os.getenv("LOGBOOK_FILES_GID")
+LOGBOOK_FILES_GID = os.getenv(DOTENV_PATH, "LOGBOOK_FILES_GID")
 
 # Location where ERS xml files can be fetched
 ERS_FILES_LOCATION = Path("/opt2/monitorfish-data/ers")
 
 # Proxies for pipeline flows requiring Internet access
 PROXIES = {
-    "http": os.environ.get("HTTP_PROXY_"),
-    "https": os.environ.get("HTTPS_PROXY_"),
+    "http": get_key(DOTENV_PATH, "HTTP_PROXY_"),
+    "https": get_key(DOTENV_PATH, "HTTPS_PROXY_"),
 }
 
 # URLs to fetch data from
@@ -197,11 +192,8 @@ FLAG_STATES_WITHOUT_SYSTEMATIC_VERIFICATION = ["FRA"]
 MISSING_DEP_TRACK_ANALYSIS_HOURS = 48
 
 # App URL
-MONITORFISH_URL = os.getenv("MONITORFISH_URL")  # http://monitor.fish/
+MONITORFISH_URL = get_key(DOTENV_PATH, "MONITORFISH_URL")  # http://monitor.fish/
 BACKOFFICE_REGULATION_URL = MONITORFISH_URL + "backoffice/regulation"
-
-# Prefect Server endpoint
-PREFECT_SERVER_URL = os.getenv("PREFECT_SERVER_URL")
 
 # Backend endpoints
 API_ENDPOINT = MONITORFISH_URL + "api/v1/"
@@ -216,41 +208,43 @@ REPORTING_ARCHIVING_ENDPOINT_TEMPLATE = (
 PORTS_CACHE_INVALIDATION_ENDPOINT = API_ENDPOINT + "ports/invalidate"
 
 # Backend api key
-BACKEND_API_KEY = os.environ.get("MONITORFISH_BACKEND_API_KEY")
+BACKEND_API_KEY = get_key(DOTENV_PATH, "MONITORFISH_BACKEND_API_KEY")
 
 # Monitorenv endpoint
-MONITORENV_URL = os.environ.get("MONITORENV_URL")
+MONITORENV_URL = get_key(DOTENV_PATH, "MONITORENV_URL")
 MONITORENV_API_ENDPOINT = MONITORENV_URL + "api/v2/"
 
 # Email server
-MONITORFISH_EMAIL_SERVER_URL = os.environ.get("MONITORFISH_EMAIL_SERVER_URL")
-MONITORFISH_EMAIL_SERVER_PORT = os.environ.get("MONITORFISH_EMAIL_SERVER_PORT")
-MONITORFISH_EMAIL_ADDRESS = os.environ.get("MONITORFISH_EMAIL_ADDRESS")
+MONITORFISH_EMAIL_SERVER_URL = get_key(DOTENV_PATH, "MONITORFISH_EMAIL_SERVER_URL")
+MONITORFISH_EMAIL_SERVER_PORT = get_key(DOTENV_PATH, "MONITORFISH_EMAIL_SERVER_PORT")
+MONITORFISH_EMAIL_ADDRESS = get_key(DOTENV_PATH, "MONITORFISH_EMAIL_ADDRESS")
 
 # SMS server
-MONITORFISH_SMS_SERVER_URL = os.environ.get("MONITORFISH_SMS_SERVER_URL")
-MONITORFISH_SMS_SERVER_PORT = os.environ.get("MONITORFISH_SMS_SERVER_PORT")
-MONITORFISH_SMS_DOMAIN = os.environ.get("MONITORFISH_SMS_DOMAIN")
+MONITORFISH_SMS_SERVER_URL = get_key(DOTENV_PATH, "MONITORFISH_SMS_SERVER_URL")
+MONITORFISH_SMS_SERVER_PORT = get_key(DOTENV_PATH, "MONITORFISH_SMS_SERVER_PORT")
+MONITORFISH_SMS_DOMAIN = get_key(DOTENV_PATH, "MONITORFISH_SMS_DOMAIN")
 
 # Fax server
-MONITORFISH_FAX_SERVER_URL = os.environ.get("MONITORFISH_FAX_SERVER_URL")
-MONITORFISH_FAX_SERVER_PORT = os.environ.get("MONITORFISH_FAX_SERVER_PORT")
-MONITORFISH_FAX_DOMAIN = os.environ.get("MONITORFISH_FAX_DOMAIN")
+MONITORFISH_FAX_SERVER_URL = get_key(DOTENV_PATH, "MONITORFISH_FAX_SERVER_URL")
+MONITORFISH_FAX_SERVER_PORT = get_key(DOTENV_PATH, "MONITORFISH_FAX_SERVER_PORT")
+MONITORFISH_FAX_DOMAIN = get_key(DOTENV_PATH, "MONITORFISH_FAX_DOMAIN")
 
 # Recipients
-CNSP_SIP_DEPARTMENT_MOBILE_PHONE = os.environ.get("CNSP_SIP_DEPARTMENT_MOBILE_PHONE")
-CNSP_SIP_DEPARTMENT_FAX = os.environ.get("CNSP_SIP_DEPARTMENT_FAX")
-CNSP_SIP_DEPARTMENT_EMAIL = os.environ.get("CNSP_SIP_DEPARTMENT_EMAIL")
-PNO_TEST_EMAIL = os.environ.get("PNO_TEST_EMAIL")
-CNSP_FRANCE_EMAIL_ADDRESS = os.environ.get("CNSP_FRANCE_EMAIL_ADDRESS")
+CNSP_SIP_DEPARTMENT_MOBILE_PHONE = get_key(
+    DOTENV_PATH, "CNSP_SIP_DEPARTMENT_MOBILE_PHONE"
+)
+CNSP_SIP_DEPARTMENT_FAX = get_key(DOTENV_PATH, "CNSP_SIP_DEPARTMENT_FAX")
+CNSP_SIP_DEPARTMENT_EMAIL = get_key(DOTENV_PATH, "CNSP_SIP_DEPARTMENT_EMAIL")
+PNO_TEST_EMAIL = get_key(DOTENV_PATH, "PNO_TEST_EMAIL")
+CNSP_FRANCE_EMAIL_ADDRESS = get_key(DOTENV_PATH, "CNSP_FRANCE_EMAIL_ADDRESS")
 
 # Tokens
-LOCATIONIQ_TOKEN = os.getenv("LOCATIONIQ_TOKEN")
-GOOGLE_API_TOKEN = os.getenv("GOOGLE_API_TOKEN")
+LOCATIONIQ_TOKEN = get_key(DOTENV_PATH, "LOCATIONIQ_TOKEN")
+GOOGLE_API_TOKEN = get_key(DOTENV_PATH, "GOOGLE_API_TOKEN")
 
 # data.gouv.fr configuration
 DATAGOUV_API_ENDPOINT = "https://www.data.gouv.fr/api/1"
-DATAGOUV_API_KEY = os.getenv("DATAGOUV_API_KEY")
+DATAGOUV_API_KEY = get_key(DOTENV_PATH, "DATAGOUV_API_KEY")
 
 # data.gouv.fr resource ids
 REGULATIONS_DATASET_ID = "60c0ad5b8d17ba18c7b17bd0"

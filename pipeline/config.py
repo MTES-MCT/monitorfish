@@ -83,7 +83,7 @@ DOCKER_IMAGE = (
 )
 MONITORFISH_VERSION = os.getenv("MONITORFISH_VERSION")
 FLOWS_LOCATION = Path("src/flows")  # relative to the WORKDIR in the image
-LOGBOOK_FILES_GID = os.getenv(DOTENV_PATH, "LOGBOOK_FILES_GID")
+LOGBOOK_FILES_GID = os.getenv("LOGBOOK_FILES_GID")
 
 # Location where ERS xml files can be fetched
 ERS_FILES_LOCATION = Path("/opt2/monitorfish-data/ers")

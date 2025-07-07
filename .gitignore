@@ -212,6 +212,7 @@ pipeline/monitorfish.egg-info
 # IDEs
 .vscode
 .idea
+CLAUDE.md
 
 # Doc
 docs/redmine_wiki/*

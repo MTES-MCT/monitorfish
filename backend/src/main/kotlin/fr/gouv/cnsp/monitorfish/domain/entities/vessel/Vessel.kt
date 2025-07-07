@@ -41,6 +41,8 @@ data class Vessel(
     val navigationLicenceExpirationDate: Date? = null,
     val navigationLicenceExtensionDate: Date? = null,
     val navigationLicenceStatus: String? = null,
+    val bossName: String? = null,
+    val bossAddress: String? = null,
     val operatorName: String? = null,
     val operatorPhones: List<String> = listOf(),
     val operatorEmail: String? = null,

@@ -363,7 +363,7 @@ def delete_rows(
             )
 
 
-@task(checkpoint=False)
+@task()
 def read_query_task(database: str, query: Select) -> pd.DataFrame:
     """
     Prefect `task` decorated version of `read_query`.

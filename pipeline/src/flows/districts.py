@@ -1,15 +1,11 @@
-from pathlib import Path
-
 import pandas as pd
-import prefect
-from prefect import Flow, task
-from prefect.executors import LocalDaskExecutor
+from prefect import flow, get_run_logger, task
 
 from config import LIBRARY_LOCATION
 from src.generic_tasks import load
 
 
-@task(checkpoint=False)
+@task
 def extract_districts():
     return pd.read_csv(
         LIBRARY_LOCATION / "data/districts.csv",
@@ -18,20 +14,19 @@ def extract_districts():
     )
 
 
-@task(checkpoint=False)
+@task
 def load_districts(districts):
     load(
         districts,
         table_name="districts",
         schema="public",
         db_name="monitorfish_remote",
-        logger=prefect.context.get("logger"),
         how="replace",
+        logger=get_run_logger(),
     )
 
 
-with Flow("Districts", executor=LocalDaskExecutor()) as flow:
+@flow(name="Districts")
+def districts_flow():
     districts = extract_districts()
     load_districts(districts)
-
-flow.file_name = Path(__file__).name

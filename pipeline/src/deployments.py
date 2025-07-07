@@ -7,12 +7,16 @@ from config import (
     PREFECT_API_URL,
     ROOT_DIRECTORY,
 )
+from src.flows.districts import districts_flow
 
 # from prefect.schedules import Schedule
 
 
 ################################# List flows to deploy ################################
 deployments = [
+    districts_flow.to_deployment(
+        name=districts_flow.name,
+    ),
     # (
     #     github_stars_flow.to_deployment(
     #         name=github_stars_flow.__name__,

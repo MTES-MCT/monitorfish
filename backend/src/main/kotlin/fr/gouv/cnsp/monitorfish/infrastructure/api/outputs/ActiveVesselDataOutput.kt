@@ -116,7 +116,7 @@ sealed class ActiveVesselBaseDataOutput(
                         },
                     isFiltered = 0,
                     lastPositionSentAt = lastPosition.dateTime.toInstant().toEpochMilli(),
-                    speciesArray = lastPosition.speciesOnboard?.mapNotNull { it.species }?.distinct() ?: listOf(),
+                    speciesArray = enrichedActiveVessel.speciesArray,
                     vesselFeatureId = Vessel.getVesselCompositeIdentifier(lastPosition),
                     vesselGroups =
                         enrichedActiveVessel.vesselGroups.map {
@@ -176,10 +176,7 @@ sealed class ActiveVesselBaseDataOutput(
                     producerOrganization = enrichedActiveVessel.producerOrganization?.organizationName,
                     gearsArray = enrichedActiveVessel.gearsArray,
                     hasInfractionSuspicion = false,
-                    speciesArray =
-                        riskFactor.speciesOnboard
-                            .mapNotNull { it.species }
-                            .distinct(),
+                    speciesArray = enrichedActiveVessel.speciesArray,
                     activityType = enrichedActiveVessel.activityType,
                     activityOrigin = enrichedActiveVessel.activityOrigin,
                 )

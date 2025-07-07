@@ -131,7 +131,7 @@ def set_environment_variables(monkeysession):
 
 
 @pytest.fixture(autouse=True, scope="session")
-def prefect_test_fixture():
+def prefect_test_fixture(set_environment_variables):
     with prefect_test_harness():
         yield
 

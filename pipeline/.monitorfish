@@ -1,3 +1,0 @@
-export MONITORFISH_VERSION=local
-export PREFECT_API_URL=http://localhost:4200/api
-export LOGBOOK_FILES_GID=1001

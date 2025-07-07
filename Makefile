@@ -283,7 +283,7 @@ docker-tag-pipeline:
 docker-push-pipeline:
 	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(VERSION)
 
-docker-test-pipeline-prefect-3: fetch-external-data-prefect-3 run-data-warehouse-prefect-3
+docker-test-pipeline-prefect-3: fetch-external-data-prefect-3 run-data-warehouse
 	docker run \
 	 --network host \
 	 -e HOST_MIGRATIONS_FOLDER=$(HOST_MIGRATIONS_FOLDER) \

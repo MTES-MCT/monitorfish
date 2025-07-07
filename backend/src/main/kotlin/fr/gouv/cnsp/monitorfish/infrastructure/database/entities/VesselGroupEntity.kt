@@ -48,6 +48,8 @@ data class VesselGroupEntity(
     val updatedAtUtc: ZonedDateTime? = null,
     @Column(name = "end_of_validity_utc")
     val endOfValidityUtc: ZonedDateTime? = null,
+    @Column(name = "start_of_validity_utc")
+    val startOfValidityUtc: ZonedDateTime? = null,
 ) {
     fun toVesselGroup(mapper: ObjectMapper): VesselGroupBase =
         when (type) {
@@ -66,6 +68,7 @@ data class VesselGroupEntity(
                     createdAtUtc = createdAtUtc,
                     updatedAtUtc = updatedAtUtc,
                     endOfValidityUtc = endOfValidityUtc,
+                    startOfValidityUtc = startOfValidityUtc,
                 )
             GroupType.FIXED ->
                 FixedVesselGroup(
@@ -82,6 +85,7 @@ data class VesselGroupEntity(
                     createdAtUtc = createdAtUtc,
                     updatedAtUtc = updatedAtUtc,
                     endOfValidityUtc = endOfValidityUtc,
+                    startOfValidityUtc = startOfValidityUtc,
                 )
         }
 
@@ -104,6 +108,7 @@ data class VesselGroupEntity(
             createdAtUtc = vesselGroup.createdAtUtc,
             updatedAtUtc = vesselGroup.updatedAtUtc,
             endOfValidityUtc = vesselGroup.endOfValidityUtc,
+            startOfValidityUtc = vesselGroup.startOfValidityUtc,
         )
 
         fun fromFixedVesselGroup(
@@ -124,6 +129,7 @@ data class VesselGroupEntity(
             createdAtUtc = vesselGroup.createdAtUtc,
             updatedAtUtc = vesselGroup.updatedAtUtc,
             endOfValidityUtc = vesselGroup.endOfValidityUtc,
+            startOfValidityUtc = vesselGroup.startOfValidityUtc,
         )
     }
 }

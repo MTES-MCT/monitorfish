@@ -90,6 +90,28 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
     )
   }
 
+  const getValidityText = () => {
+    if (vesselGroupWithVessels.group.startOfValidityUtc) {
+      const startOfValidity = getDate(vesselGroupWithVessels.group.startOfValidityUtc)
+
+      if (vesselGroupWithVessels.group.endOfValidityUtc) {
+        const endOfValidity = getDate(vesselGroupWithVessels.group.endOfValidityUtc)
+
+        return `Valide du ${startOfValidity} au ${endOfValidity}. `
+      }
+
+      return `Valide à partir du ${startOfValidity}. `
+    }
+
+    if (vesselGroupWithVessels.group.endOfValidityUtc) {
+      const endOfValidity = getDate(vesselGroupWithVessels.group.endOfValidityUtc)
+
+      return `Valide jusqu'au ${endOfValidity}. `
+    }
+
+    return ''
+  }
+
   return (
     <>
       <Wrapper title={vesselGroupWithVessels.group.name}>
@@ -128,8 +150,8 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
           )}
           <RowIcons>
             <span>
-              <b>{vesselGroupWithVessels.vessels.length} navires</b> – Créé par{' '}
-              {vesselGroupWithVessels.group.createdBy.split('@')?.[0]} le{' '}
+              <b>{vesselGroupWithVessels.vessels.length} navires</b> – {getValidityText()}
+              Créé par {vesselGroupWithVessels.group.createdBy.split('@')?.[0]} le{' '}
               {getDate(vesselGroupWithVessels.group.createdAtUtc)}
               {vesselGroupWithVessels.group.updatedAtUtc &&
                 `, modifié le ${getDate(vesselGroupWithVessels.group.updatedAtUtc)}`}

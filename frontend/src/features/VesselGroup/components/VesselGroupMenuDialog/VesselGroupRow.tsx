@@ -8,7 +8,7 @@ import { GroupType, Sharing, type VesselGroup } from '@features/VesselGroup/type
 import { deleteVesselGroup } from '@features/VesselGroup/useCases/deleteVesselGroup'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Icon, IconButton, Link, Tag, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, customDayjs, Icon, IconButton, Link, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -68,6 +68,10 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
       ? `${vesselGroup.description?.substring(0, 140)}...`
       : vesselGroup.description
 
+  const isInFuture = vesselGroup.startOfValidityUtc
+    ? customDayjs(vesselGroup.startOfValidityUtc).isAfter(customDayjs(), 'day')
+    : false
+
   return (
     <>
       <Wrapper $isLastPinned={isLastPinned} $isPinned={isPinned} title={vesselGroup?.name}>
@@ -75,6 +79,7 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
           <ChevronIcon $isOpen={isOpen} color={THEME.color.slateGray} />
           <Square $fillColor={vesselGroup.color} $strokeColor={THEME.color.lightGray} />
           <GroupTitle>{vesselGroup.name}</GroupTitle>
+          <ValidityText>{isInFuture ? ' – À venir' : ''}</ValidityText>
           <RowIcons>
             <IconButton
               accent={Accent.TERTIARY}
@@ -246,8 +251,14 @@ const Row = styled.div`
 const GroupTitle = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 250px;
   overflow: hidden;
+`
+const ValidityText = styled.span`
+  color: ${p => p.theme.color.slateGray};
+  display: flex;
+  font-style: italic;
+  font-weight: 400;
+  white-space: nowrap;
 `
 
 const RowIcons = styled.div`

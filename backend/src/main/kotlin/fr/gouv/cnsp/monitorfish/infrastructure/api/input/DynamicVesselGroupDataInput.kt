@@ -16,6 +16,7 @@ data class DynamicVesselGroupDataInput(
     val sharing: Sharing,
     val sharedTo: List<CnspService>?,
     val endOfValidityUtc: ZonedDateTime? = null,
+    val startOfValidityUtc: ZonedDateTime? = null,
     val filters: VesselGroupFilters,
 ) {
     fun toCreateOrUpdateDynamicVesselGroup() =
@@ -29,6 +30,7 @@ data class DynamicVesselGroupDataInput(
             sharing = sharing,
             sharedTo = sharedTo,
             endOfValidityUtc = endOfValidityUtc,
+            startOfValidityUtc = startOfValidityUtc,
             filters = filters,
         )
 }

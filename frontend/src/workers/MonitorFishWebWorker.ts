@@ -204,7 +204,8 @@ export class MonitorFishWebWorker {
     vesselGroupsIdsPinned: number[],
     searchQuery: string | undefined,
     filteredGroupTypes: GroupType[],
-    filteredGroupSharing: Sharing[]
+    filteredGroupSharing: Sharing[],
+    filteredExpired: boolean
   ): {
     pinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
     unpinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
@@ -212,7 +213,12 @@ export class MonitorFishWebWorker {
     const filteredVesselGroups =
       vesselGroupsWithVessels
         ?.filter(vesselGroup => filteredGroupTypes.includes(vesselGroup.group.type))
-        ?.filter(vesselGroup => filteredGroupSharing.includes(vesselGroup.group.sharing)) ?? []
+        ?.filter(vesselGroup => filteredGroupSharing.includes(vesselGroup.group.sharing))
+        ?.filter(vesselGroup =>
+          vesselGroup.group.endOfValidityUtc && !filteredExpired
+            ? customDayjs(vesselGroup.group.endOfValidityUtc).isAfter(customDayjs(), 'day')
+            : true
+        ) ?? []
 
     const fuse = new CustomSearch<VesselGroupWithVessels>(
       filteredVesselGroups,

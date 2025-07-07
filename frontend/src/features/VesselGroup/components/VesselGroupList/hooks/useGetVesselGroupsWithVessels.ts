@@ -9,7 +9,8 @@ import { MonitorFishWorker } from '../../../../../workers/MonitorFishWorker'
 
 export function useGetVesselGroupsWithVessels(
   filteredGroupTypes: GroupType[],
-  filteredSharing: Sharing[]
+  filteredSharing: Sharing[],
+  filteredExpired: boolean
 ): {
   pinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
   unpinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
@@ -32,14 +33,16 @@ export function useGetVesselGroupsWithVessels(
     async (
       debouncedSearchQuery: string | undefined,
       debouncedFilteredGroupTypes: GroupType[],
-      debouncedFilteredSharing: Sharing[]
+      debouncedFilteredSharing: Sharing[],
+      debouncedFilteredExpired: boolean
     ) => {
       const nextGroups = await MonitorFishWorker.getFilteredVesselGroups(
         vesselGroupsWithVessels ?? [],
         vesselGroupsIdsPinned,
         debouncedSearchQuery,
         debouncedFilteredGroupTypes,
-        debouncedFilteredSharing
+        debouncedFilteredSharing,
+        debouncedFilteredExpired
       )
 
       setResult(nextGroups)
@@ -48,12 +51,13 @@ export function useGetVesselGroupsWithVessels(
   )
 
   useEffect(() => {
-    debouncedSearch(searchQuery, filteredGroupTypes, filteredSharing)
+    debouncedSearch(searchQuery, filteredGroupTypes, filteredSharing, filteredExpired)
   }, [
     searchQuery,
     debouncedSearch,
     filteredGroupTypes,
     filteredSharing,
+    filteredExpired,
     vesselGroupsIdsPinned,
     vesselGroupsWithVessels
   ])

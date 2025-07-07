@@ -48,7 +48,8 @@
                 "created_by": "dummy@email.gouv.fr",
                 "created_at_utc:sql": "NOW() - INTERVAL '1 day'",
                 "updated_at_utc:sql": null,
-                "end_of_validity_utc:sql": null
+                "end_of_validity_utc:sql": "NOW() + INTERVAL '7 day'",
+                "start_of_validity_utc:sql": "NOW()"
             },
             {
                 "id": 2,
@@ -84,7 +85,8 @@
                 "created_by": "dummy@email.gouv.fr",
                 "created_at_utc:sql": "NOW() - INTERVAL '15 day'",
                 "updated_at_utc:sql": "NOW() - INTERVAL '5 day'",
-                "end_of_validity_utc:sql": null
+                "end_of_validity_utc:sql": "NOW() - INTERVAL '7 day'",
+                "start_of_validity_utc:sql": null
             },
             {
                 "id": 3,
@@ -156,7 +158,8 @@
                 "created_by": "dummy@email.gouv.fr",
                 "created_at_utc:sql": "NOW() - INTERVAL '25 day'",
                 "updated_at_utc:sql": "NOW() - INTERVAL '6 day'",
-                "end_of_validity_utc:sql": null
+                "end_of_validity_utc:sql": "NOW() + INTERVAL '7 day'",
+                "start_of_validity_utc:sql": null
             }
         ]
     }

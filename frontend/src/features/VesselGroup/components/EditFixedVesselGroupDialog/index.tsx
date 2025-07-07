@@ -20,11 +20,13 @@ import type { Promisable } from 'type-fest'
 
 type EditFixedVesselGroupDialogProps = {
   editedVesselGroup?: CreateOrUpdateVesselGroup
+  isMainWindow?: boolean
   onExit: () => Promisable<void>
   selectedVesselFeatureIds?: string[]
 }
 export function EditFixedVesselGroupDialog({
   editedVesselGroup = undefined,
+  isMainWindow = false,
   onExit,
   selectedVesselFeatureIds
 }: EditFixedVesselGroupDialogProps) {
@@ -88,6 +90,7 @@ export function EditFixedVesselGroupDialog({
           editedVesselGroup={editedVesselGroup}
           formRef={formRef as MutableRefObject<FormikProps<CreateOrUpdateVesselGroup>>}
           groupType={GroupType.FIXED}
+          isMainWindow={isMainWindow}
           onExit={onExit}
           vesselIdentities={vesselsIdentities}
         />

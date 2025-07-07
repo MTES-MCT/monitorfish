@@ -35,7 +35,11 @@ export function VesselGroupMainWindowEdition() {
         />
       )}
       {isVesselGroupMainWindowEditionDisplayed && editedVesselGroup.type === GroupType.FIXED && (
-        <EditFixedVesselGroupDialog editedVesselGroup={editedVesselGroup} onExit={handleCloseEditVesselGroup} />
+        <EditFixedVesselGroupDialog
+          editedVesselGroup={editedVesselGroup}
+          isMainWindow
+          onExit={handleCloseEditVesselGroup}
+        />
       )}
     </>
   )

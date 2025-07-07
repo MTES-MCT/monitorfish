@@ -76,6 +76,7 @@ class VesselGroupControllerITests {
                 sharing = Sharing.PRIVATE,
                 sharedTo = null,
                 endOfValidityUtc = null,
+                startOfValidityUtc = null,
                 filters =
                     VesselGroupFilters(
                         countryCodes = listOf(CountryCode.FR, CountryCode.ES, CountryCode.IT),
@@ -133,6 +134,7 @@ class VesselGroupControllerITests {
                 sharing = Sharing.PRIVATE,
                 sharedTo = null,
                 endOfValidityUtc = null,
+                startOfValidityUtc = null,
                 vessels =
                     listOf(
                         VesselIdentity(

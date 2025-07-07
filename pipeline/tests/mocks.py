@@ -59,14 +59,14 @@ def mock_datetime_utcnow(utcnow: datetime):
 
 
 def get_utcnow_mock_factory(utcnow: datetime):
-    @task(checkpoint=False)
+    @task
     def mock_get_utcnow():
         return utcnow
 
     return mock_get_utcnow
 
 
-@task(checkpoint=False)
+@task
 def mock_check_flow_not_running():
     return True
 
@@ -77,7 +77,7 @@ def get_monitorfish_healthcheck_mock_factory(
     last_position_received_by_api_minutes_ago: int = 0,
     logbook_message_received_minutes_ago: int = 0,
 ):
-    @task(checkpoint=False)
+    @task
     def get_monitorfish_healthcheck() -> MonitorfishHealthcheck:
         utcnow = datetime.utcnow()
         return MonitorfishHealthcheck(
@@ -95,7 +95,7 @@ def get_monitorfish_healthcheck_mock_factory(
 def extract_satellite_operators_statuses_mock_factory(
     operator_1_status: bool = None, operator_2_status: bool = None
 ):
-    @task(checkpoint=False)
+    @task
     def extract_satellite_operators_statuses() -> pd.DataFrame:
         return pd.DataFrame(
             {
@@ -107,7 +107,7 @@ def extract_satellite_operators_statuses_mock_factory(
     return extract_satellite_operators_statuses
 
 
-@task(checkpoint=False)
+@task
 def mock_update_resource(
     dataset_id: str,
     resource_id: str,

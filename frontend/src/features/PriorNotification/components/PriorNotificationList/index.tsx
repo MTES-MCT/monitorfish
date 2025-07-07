@@ -120,8 +120,10 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
      * We need this force update for the side window to re-render
      * 95% of all transactions are done under 2 seconds (from duration percentiles in sentry)
      * */
-    forceUpdate(2000)
-  }, [loadingState, forceUpdate])
+    if (loadingState.isLoadingNewPage || loadingState.isLoadingNextPage) {
+      forceUpdate(2000)
+    }
+  }, [loadingState.isLoadingNewPage, loadingState.isLoadingNextPage, forceUpdate])
 
   const handleSubMenuChange = useCallback(
     (nextSeafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup) => {

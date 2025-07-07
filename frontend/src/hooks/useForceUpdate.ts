@@ -15,7 +15,7 @@ export function useForceUpdate() {
   return {
     forceDebouncedUpdate,
     forceUpdate: (timeout = 0) => {
-      setTimeout(() => forceUpdate(), timeout)
+      setTimeout(() => forceDebouncedUpdate(), timeout)
     }
   }
 }

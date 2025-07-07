@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
@@ -92,7 +93,16 @@ class GetAllVesselGroupsWithVesselsUTests {
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
                     lastPosition = it,
-                    vesselProfile = null,
+                    vesselProfile =
+                        VesselProfile(
+                            cfr = "",
+                            segments =
+                                it.segments?.associate { it to 0.985446 },
+                            gears =
+                                it.gearOnboard?.mapNotNull { it.gear }?.associate { it to 0.985446 },
+                            species =
+                                it.speciesOnboard?.mapNotNull { it.species }?.associate { it to 0.985446 },
+                        ),
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(riskFactor = 2.3),

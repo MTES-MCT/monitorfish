@@ -132,7 +132,7 @@ data class LastPosition(
             if ((filters.fleetSegments.isNotEmpty() && this.segments?.isEmpty() == true) ||
                 (filters.gearCodes.isNotEmpty() && this.gearOnboard?.isEmpty() == true)
             ) {
-                profile?.isInGroup(vesselGroup) == true
+                profile?.isRecentInGroup(vesselGroup) == true
             } else {
                 hasFleetSegmentMatch && hasGearMatch
             }

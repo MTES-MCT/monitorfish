@@ -7,6 +7,7 @@ from config import (
     PREFECT_API_URL,
     ROOT_DIRECTORY,
 )
+from src.flows.anchorages import anchorages_flow
 from src.flows.districts import districts_flow
 
 # from prefect.schedules import Schedule
@@ -14,6 +15,9 @@ from src.flows.districts import districts_flow
 
 ################################# List flows to deploy ################################
 deployments = [
+    anchorages_flow.to_deployment(
+        name=anchorages_flow.name,
+    ),
     districts_flow.to_deployment(
         name=districts_flow.name,
     ),

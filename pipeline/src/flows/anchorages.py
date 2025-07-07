@@ -1,15 +1,12 @@
 import io
 from dataclasses import dataclass
-from pathlib import Path
 from typing import List, Set
 
 import geopandas as gpd
 import h3
 import pandas as pd
-import prefect
 import requests
-from prefect import Flow, Parameter, task
-from prefect.executors import LocalDaskExecutor
+from prefect import flow, get_run_logger, task
 from vptree import VPTree
 
 from config import (
@@ -84,7 +81,7 @@ class PortsVPTree(VPTree):
 ############### Flow to compute anchorages and attribute cells to ports ###############
 
 
-@task(checkpoint=False)
+@task
 def extract_ports() -> pd.DataFrame:
     """
     Extracts ports locode, name, latitude and longitude from processed.ports. This
@@ -110,7 +107,7 @@ def extract_ports() -> pd.DataFrame:
     return read_query(query, db="monitorfish_remote")
 
 
-@task(checkpoint=False)
+@task
 def extract_control_ports_locodes():
     """
     Returns the set of distinct port locodes where at least one control
@@ -135,7 +132,7 @@ def extract_control_ports_locodes():
     return control_ports_locodes
 
 
-@task(checkpoint=False)
+@task
 def extract_ers_ports_locodes() -> Set[str]:
     """
     Returns the set of distinct port locodes used at least once in an ERS
@@ -162,7 +159,7 @@ def extract_ers_ports_locodes() -> Set[str]:
     return ers_ports_locodes
 
 
-@task(checkpoint=False)
+@task
 def extract_ais_anchorage_coordinates() -> pd.DataFrame:
     """
     Returns a DataFrame with latitude, longitude columns corresponding to
@@ -179,7 +176,7 @@ def extract_ais_anchorage_coordinates() -> pd.DataFrame:
     )
 
 
-@task(checkpoint=False)
+@task
 def extract_vms_static_positions(parquet_file_relative_path) -> pd.DataFrame:
     """
     Read local file with vms positions that have speed zero.
@@ -190,7 +187,7 @@ def extract_vms_static_positions(parquet_file_relative_path) -> pd.DataFrame:
     return pd.read_parquet(ROOT_DIRECTORY / parquet_file_relative_path)
 
 
-@task(checkpoint=False)
+@task
 def extract_manual_anchorages_coordinates() -> pd.DataFrame:
     gdf = gpd.read_file(LIBRARY_LOCATION / "data/mymaps_manual_anchorages.csv")
     gdf = gdf.drop(columns=["WKT"])
@@ -201,7 +198,7 @@ def extract_manual_anchorages_coordinates() -> pd.DataFrame:
     return manual_anchorages_coordinates
 
 
-@task(checkpoint=False)
+@task
 def get_anchorage_h3_cells(
     static_positions: pd.DataFrame,
     h3_resolution: int = 9,
@@ -240,7 +237,7 @@ def get_anchorage_h3_cells(
     return anchorage_h3_cells
 
 
-@task(checkpoint=False)
+@task
 def get_anchorage_h3_cells_rings(
     ais_anchorage_h3_cells: Set[str],
     vms_anchorage_h3_cells: Set[str],
@@ -296,7 +293,7 @@ def get_anchorage_h3_cells_rings(
     return anchorage_h3_cells_rings
 
 
-@task(checkpoint=False)
+@task
 def get_ports_locations(ports: pd.DataFrame) -> List[PortLocation]:
     """
     Transforms a DataFrame into a list of PortLocation objects.
@@ -313,7 +310,7 @@ def get_ports_locations(ports: pd.DataFrame) -> List[PortLocation]:
     return ports_locations
 
 
-@task(checkpoint=False)
+@task
 def get_anchorages_closest_port(
     anchorage_h3_cells_rings: pd.DataFrame, ports_locations: List[PortLocation]
 ) -> pd.DataFrame:
@@ -334,7 +331,7 @@ def get_anchorages_closest_port(
     )
 
 
-@task(checkpoint=False)
+@task
 def unite_ports_locodes(
     ers_ports_locode: Set[str], control_ports_locodes: Set[str]
 ) -> Set[str]:
@@ -352,7 +349,7 @@ def unite_ports_locodes(
     return ers_ports_locode.union(control_ports_locodes)
 
 
-@task(checkpoint=False)
+@task
 def get_active_ports(
     ports: pd.DataFrame, active_ports_locodes: Set[str]
 ) -> pd.DataFrame:
@@ -360,7 +357,7 @@ def get_active_ports(
     return active_ports
 
 
-@task(checkpoint=False)
+@task
 def merge_closest_port_closest_active_port(
     anchorages_closest_port: pd.DataFrame, anchorages_closest_active_port: pd.DataFrame
 ) -> pd.DataFrame:
@@ -384,7 +381,7 @@ def merge_closest_port_closest_active_port(
     )
 
 
-@task(checkpoint=False)
+@task
 def load_processed_anchorages(anchorages: pd.DataFrame):
     """
     Load anchorages to processed.anchorages
@@ -402,19 +399,17 @@ def load_processed_anchorages(anchorages: pd.DataFrame):
     )
 
 
-with Flow("Anchorages") as flow_compute_anchorages:
-    h3_resolution = Parameter("h3_resolution", ANCHORAGES_H3_CELL_RESOLUTION)
-    number_signals_threshold = Parameter("number_signals_threshold", 100)
-    static_vms_positions_file_relative_path = Parameter(
-        "static_vms_positions_file_path",
-        "data/raw/anchorages/static_vms_positions_2021_03_to_10.parquet",
-    )
+@flow(name="Anchorages Compute")
+def anchorages_compute_flow(
+    h3_resolution: int = ANCHORAGES_H3_CELL_RESOLUTION,
+    number_signals_threshold: int = 100,
+    static_vms_positions_file_path: str = "data/raw/anchorages/static_vms_positions_2021_03_to_10.parquet",
+):
+    """Flow to compute anchorages and attribute cells to ports"""
 
     # Extract
     ais_anchorage_coordinates = extract_ais_anchorage_coordinates()
-    vms_static_positions = extract_vms_static_positions(
-        static_vms_positions_file_relative_path
-    )
+    vms_static_positions = extract_vms_static_positions(static_vms_positions_file_path)
     ports = extract_ports()
     ers_ports_locodes = extract_ers_ports_locodes()
     control_ports_locodes = extract_control_ports_locodes()
@@ -467,7 +462,7 @@ with Flow("Anchorages") as flow_compute_anchorages:
 ### Flow to extract anchorages from data.gouv.fr and upload to Monitorfish database ###
 
 
-@task(checkpoint=False)
+@task
 def extract_datagouv_anchorages(anchorages_url: str, proxies: dict) -> pd.DataFrame:
     """
     Downloads anchorages csv file, returns the result as a pandas DataFrame.
@@ -500,7 +495,7 @@ def extract_datagouv_anchorages(anchorages_url: str, proxies: dict) -> pd.DataFr
     return anchorages
 
 
-@task(checkpoint=False)
+@task
 def load_anchorages_to_monitorfish(anchorages: pd.DataFrame):
     """
     Loads anchorages data to monitorfish database.
@@ -514,16 +509,16 @@ def load_anchorages_to_monitorfish(anchorages: pd.DataFrame):
         table_name="anchorages",
         schema="public",
         db_name="monitorfish_remote",
-        logger=prefect.context.get("logger"),
+        logger=get_run_logger(),
         how="replace",
         replace_with_truncate=True,
     )
 
 
-with Flow("Anchorages", executor=LocalDaskExecutor()) as flow:
+@flow(name="Anchorages")
+def anchorages_flow():
+    """Main anchorages flow - extract from data.gouv.fr and load to database"""
     anchorages = extract_datagouv_anchorages(
         anchorages_url=ANCHORAGES_URL, proxies=PROXIES
     )
     load_anchorages_to_monitorfish(anchorages)
-
-flow.file_name = Path(__file__).name

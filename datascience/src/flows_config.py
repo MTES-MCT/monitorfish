@@ -24,7 +24,6 @@ from config import (
 from src.flows import (
     activity_visualizations,
     admin_areas,
-    anchorages,
     beacons,
     clean_flow_runs,
     control_anteriority,
@@ -418,7 +417,6 @@ vessels.flow.schedule = CronSchedule("2 2,5,8,11,14,20,23 * * *")
 flows_to_register = [
     activity_visualizations.flow,
     admin_areas.flow,
-    anchorages.flow,
     beacons.flow,
     clean_flow_runs.flow,
     control_anteriority.flow,

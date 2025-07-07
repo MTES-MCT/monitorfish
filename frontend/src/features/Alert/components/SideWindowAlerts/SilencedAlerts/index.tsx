@@ -5,7 +5,7 @@ import { Flag } from '@features/commonComponents/Flag'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Button, CustomSearch, Icon } from '@mtes-mct/monitor-ui'
+import { Button, CustomSearch, Icon, pluralize, Size, TextInput } from '@mtes-mct/monitor-ui'
 import { sortArrayByColumn, SortType } from '@utils/sortArrayByColumn'
 import countries from 'i18n-iso-countries'
 import { useCallback, useMemo, useState } from 'react'
@@ -15,7 +15,6 @@ import * as timeago from 'timeago.js'
 
 import { AddSilencedAlertDialog } from './AddSilencedAlertDialog'
 import { getDateTime } from '../../../../../utils'
-import SearchIconSVG from '../../../../icons/Loupe_dark.svg?react'
 import { showVessel } from '../../../../Vessel/useCases/showVessel'
 
 import type { SilencedAlertData } from '../../../types'
@@ -85,18 +84,25 @@ export function SilencedAlerts() {
     <Wrapper>
       <Title>Suspension d’alertes</Title>
       <Filters>
-        <SearchVesselInput
-          $baseUrl={baseUrl}
+        <StyledTextInput
           data-cy="side-window-silenced-alerts-search-vessel"
-          onChange={e => setSearchQuery(e.target.value)}
+          isLabelHidden
+          isSearchInput
+          isTransparent
+          label="Rechercher un navire ou une alerte"
+          name="searchQuery"
+          onChange={setSearchQuery}
           placeholder="Rechercher un navire ou une alerte"
-          type="text"
+          size={Size.LARGE}
           value={searchQuery}
         />
         <AddSilencedAlert Icon={Icon.Plus} onClick={() => setIsAddSilencedAlertDialogOpen(true)}>
           Ajouter une nouvelle suspension
         </AddSilencedAlert>
       </Filters>
+      <NumberOfAlerts>
+        {sortedAlerts.length} {pluralize('suspension', sortedAlerts.length)}
+      </NumberOfAlerts>
       <StyledList $count={sortedAlerts?.length} data-cy="side-window-silenced-alerts-list">
         <Row key={0} $isHeader index={0}>
           <FlexboxGrid>
@@ -167,6 +173,16 @@ export function SilencedAlerts() {
   )
 }
 
+const NumberOfAlerts = styled.span`
+  font-weight: 500;
+  margin-top: 28px;
+  display: flex;
+`
+
+const StyledTextInput = styled(TextInput)`
+  width: 310px;
+`
+
 const AddSilencedAlert = styled(Button)`
   margin-left: auto;
   vertical-align: bottom;
@@ -174,7 +190,8 @@ const AddSilencedAlert = styled(Button)`
 `
 
 const Wrapper = styled.div`
-  margin-left: 40px;
+  margin-left: 32px;
+  margin-bottom: 20px;
 `
 
 const Filters = styled.div`
@@ -205,7 +222,7 @@ const AlertTransition = styled.div`
 `
 
 const ScrollableContainer = styled.div`
-  max-height: calc(100vh - 210px);
+  max-height: calc(100vh - 240px);
   overflow-y: auto;
 `
 
@@ -213,31 +230,6 @@ const NoAlerts = styled.div`
   color: ${p => p.theme.color.slateGray};
   margin-top: 20px;
   text-align: center;
-`
-
-const SearchVesselInput = styled.input<{
-  $baseUrl: string
-}>`
-  background-color: ${p => p.theme.color.white};
-  background-image: ${p => `url(${p.$baseUrl}${SearchIconSVG})`};
-  background-position: bottom 3px right 5px;
-  background-repeat: no-repeat;
-  background-size: 25px;
-  border: ${p => `1px ${p.theme.color.lightGray} solid`};
-  border-radius: 0;
-  color: ${p => p.theme.color.gunMetal};
-  flex: 3;
-  font-size: 13px;
-  height: 40px;
-  margin-bottom: 5px;
-  padding: 0 5px 0 10px;
-  width: 280px;
-  min-width: 280px;
-  flex-grow: 0;
-
-  &:hover, &:focus: {
-    border-bottom: ${p => `1px ${p.theme.color.lightGray} solid`};
-  }
 `
 
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
@@ -279,8 +271,8 @@ const StyledList = styled(List)<{
   font-weight: 500;
   width: ${p => (p.$count && p.$count > 9 ? 1260 + 16 : 1260)}px;
   margin-bottom: 10px;
-  margin-top: 10px;
-  overflow: 'visible';
+  margin-top: 13px;
+  overflow: visible;
 `
 
 const Row = styled(List.Item)<{

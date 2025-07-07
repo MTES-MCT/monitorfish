@@ -3,8 +3,8 @@ from prefect import task
 
 from config import ANCHORAGES_H3_CELL_RESOLUTION
 from src.generic_tasks import extract
+from src.helpers.bathymetry import get_depth
 from src.helpers.spatial import get_h3_indices
-from src.pipeline.helpers.bathymetry import get_depth
 from src.processing import get_first_non_null_column_name
 
 

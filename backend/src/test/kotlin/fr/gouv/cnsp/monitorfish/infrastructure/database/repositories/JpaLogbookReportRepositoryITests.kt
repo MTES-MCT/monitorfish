@@ -1098,6 +1098,26 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findLastOperationNumber Should return the operation number of the last message`() {
+        // When
+        val operationNumber = jpaLogbookReportRepository.findLastOperationNumber("U_W0NTFINDME")
+
+        // Then
+        assertThat(operationNumber).isEqualTo("OOF20190126036598")
+    }
+
+    @Test
+    @Transactional
+    fun `findLastOperationNumber Should return null if no message found`() {
+        // When
+        val operationNumber = jpaLogbookReportRepository.findLastOperationNumber("UNKNOWN_CFR")
+
+        // Then
+        assertThat(operationNumber).isNull()
+    }
+
+    @Test
+    @Transactional
     fun `updatePriorNotificationState Should update writable state values for an existing PNO logbook report`() {
         // Given
         val currentCorReport = jpaLogbookReportRepository.findById(103)

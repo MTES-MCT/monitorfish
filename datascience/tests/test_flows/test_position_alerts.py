@@ -1162,7 +1162,7 @@ def test_flow_filters_on_flag_states(reset_test_data):
     ).all()
 
 
-@patch("src.pipeline.shared_tasks.positions.get_depth", mock_get_depth)
+@patch("src.shared_tasks.positions.get_depth", mock_get_depth)
 def test_flow_filters_on_depth(reset_test_data):
     # We delete the silenced alerts first
     e = create_engine("monitorfish_remote")

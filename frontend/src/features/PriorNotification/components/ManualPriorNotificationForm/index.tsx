@@ -53,7 +53,7 @@ export function ManualPriorNotificationForm() {
       )
     },
     isBeingSent,
-    1000
+    5000
   )
 
   const [shouldValidateOnChange, setShouldValidateOnChange] = useState(false)

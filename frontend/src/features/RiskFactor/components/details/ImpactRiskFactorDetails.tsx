@@ -31,7 +31,6 @@ export function ImpactRiskFactorDetails({ isOpen }) {
                   <Value>
                     <FleetSegmentsWithTooltip
                       activityOrigin={selectedVessel?.activityOrigin}
-                      hasWhiteBackground
                       segments={[riskFactor.segmentHighestImpact]}
                     />
                   </Value>

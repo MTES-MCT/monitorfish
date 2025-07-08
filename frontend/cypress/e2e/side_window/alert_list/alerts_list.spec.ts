@@ -132,6 +132,8 @@ context('Side Window > Alert List', () => {
   it('A silenced alert Should be created', function () {
     // Given
     cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
+
+
     const now = getUtcDateInMultipleFormats('2066-06-08T13:54')
     const expectedSilencedAlerts = this.previousSilencedAlerts.length + 1
 

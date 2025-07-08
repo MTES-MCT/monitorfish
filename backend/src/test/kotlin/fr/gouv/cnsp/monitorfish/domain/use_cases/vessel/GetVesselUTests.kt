@@ -41,6 +41,9 @@ class GetVesselUTests {
     private lateinit var logbookReportRepository: LogbookReportRepository
 
     @MockBean
+    private lateinit var logbookRawMessageRepository: LogbookRawMessageRepository
+
+    @MockBean
     private lateinit var riskFactorRepository: RiskFactorRepository
 
     @MockBean
@@ -83,6 +86,12 @@ class GetVesselUTests {
             .willReturn(getDummyLastPositions().first())
         given(vesselRepository.findVesselById(any())).willReturn(DUMMY_VESSEL)
         given(logbookReportRepository.findLastReportSoftware(any())).willReturn("FT_E-Sacapt")
+        given(logbookReportRepository.findLastOperationNumber(any())).willReturn("123456")
+        given(logbookRawMessageRepository.findRawMessage(any())).willReturn(
+            """
+            <?xml version="1.0" encoding="UTF-8" standalone="yes"?><ers:OPS xmlns:ers="http://ec.europa.eu/fisheries/schema/ers/v3" AD="FRA" FR="OOF" ON="OOF20250704017200" OD="2025-07-04" OT="21:44" EVL="IKTUS 4.6.7"><ers:DAT TM="CU"><ers:ERS RN="OOF20250704017200" RD="2025-07-04" RT="21:44"><ers:LOG IR="XXX" RC="" XR="" NA="VESSEL NAME" MA="Jean Bon" MD="56, rue du Croisic, 44100, Nantes" FS="FRA"><ers:DEP DA="2025-07-04" TI="21:44" PO="FROII" AA="FSH"><ers:GEA GE="OTT" ME="80" GC="17.0;0.0"/></ers:DEP><ers:ELOG Type="nat" CH="FRA" TN="20250055"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>
+            """.trimIndent(),
+        )
         given(logbookReportRepository.findAllCfrWithVisioCaptures()).willReturn(listOf("FR224226850"))
         given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(
             VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
@@ -102,6 +111,7 @@ class GetVesselUTests {
                 GetVessel(
                     vesselRepository = vesselRepository,
                     logbookReportRepository = logbookReportRepository,
+                    logbookRawMessageRepository = logbookRawMessageRepository,
                     getVesselPositions = getVesselPositions,
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
@@ -133,6 +143,10 @@ class GetVesselUTests {
             pair.second.enrichedActiveVessel.vessel
                 ?.hasVisioCaptures,
         ).isTrue()
+        assertThat(
+            pair.second.enrichedActiveVessel.vessel
+                ?.bossAddress,
+        ).isEqualTo("56, rue du Croisic, 44100, Nantes")
         assertThat(
             pair.second.enrichedActiveVessel.beacon
                 ?.beaconNumber,
@@ -189,6 +203,7 @@ class GetVesselUTests {
                 GetVessel(
                     vesselRepository = vesselRepository,
                     logbookReportRepository = logbookReportRepository,
+                    logbookRawMessageRepository = logbookRawMessageRepository,
                     getVesselPositions = getVesselPositions,
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
@@ -240,6 +255,7 @@ class GetVesselUTests {
                 GetVessel(
                     vesselRepository = vesselRepository,
                     logbookReportRepository = logbookReportRepository,
+                    logbookRawMessageRepository = logbookRawMessageRepository,
                     getVesselPositions = getVesselPositions,
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
@@ -294,6 +310,7 @@ class GetVesselUTests {
                 GetVessel(
                     vesselRepository = vesselRepository,
                     logbookReportRepository = logbookReportRepository,
+                    logbookRawMessageRepository = logbookRawMessageRepository,
                     getVesselPositions = getVesselPositions,
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
@@ -345,6 +362,7 @@ class GetVesselUTests {
                 GetVessel(
                     vesselRepository = vesselRepository,
                     logbookReportRepository = logbookReportRepository,
+                    logbookRawMessageRepository = logbookRawMessageRepository,
                     getVesselPositions = getVesselPositions,
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,

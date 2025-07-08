@@ -25,10 +25,15 @@ export function FormikCirclePicker() {
           '#af6f1b',
           '#e0876c',
           '#eabd00',
-          '#fc4c0d'
+          '#fc4c0d',
+          '#0099A5',
+          '#949C00',
+          '#EA57CD',
+          '#9D57EA',
+          '#65A930'
         ]}
         onChangeComplete={color => helpers.setValue(color.hex)}
-        width="300px"
+        width="500px"
       />
     </>
   )

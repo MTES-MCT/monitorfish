@@ -8,6 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.extractBossNameAndAddressFromERS
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import kotlinx.coroutines.async
@@ -20,6 +21,7 @@ import java.time.ZonedDateTime
 class GetVessel(
     private val vesselRepository: VesselRepository,
     private val logbookReportRepository: LogbookReportRepository,
+    private val logbookRawMessageRepository: LogbookRawMessageRepository,
     private val getVesselPositions: GetVesselPositions,
     private val riskFactorRepository: RiskFactorRepository,
     private val beaconRepository: BeaconRepository,
@@ -86,6 +88,13 @@ class GetVessel(
                     getVesselRiskFactor(vesselId, internalReferenceNumber)
                 }
             val logbookSoftware = logbookReportRepository.findLastReportSoftware(internalReferenceNumber)
+            val lastLogbookOperationNumber = logbookReportRepository.findLastOperationNumber(internalReferenceNumber)
+            val lastLogbookRawMessage =
+                lastLogbookOperationNumber?.let {
+                    logbookRawMessageRepository.findRawMessage(it)
+                }
+            val bossNameAndAddress = extractBossNameAndAddressFromERS(lastLogbookRawMessage)
+
             val allCfrWithVisioCaptures = logbookReportRepository.findAllCfrWithVisioCaptures()
             val hasVisioCaptures = allCfrWithVisioCaptures.firstOrNull { it == internalReferenceNumber } != null
 
@@ -118,6 +127,8 @@ class GetVessel(
                         vesselFuture.await()?.copy(
                             hasVisioCaptures = hasVisioCaptures,
                             logbookSoftware = logbookSoftware,
+                            bossName = bossNameAndAddress?.first,
+                            bossAddress = bossNameAndAddress?.second,
                         ),
                     producerOrganization = vesselProducerOrganization.await(),
                     riskFactor = vesselRiskFactor.await() ?: VesselRiskFactor(),

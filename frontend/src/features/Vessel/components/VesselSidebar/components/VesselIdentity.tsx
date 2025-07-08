@@ -249,6 +249,18 @@ export function VesselIdentity() {
           },
           {
             hasMultipleLines: true,
+            key: 'Coordonnées patron',
+            value: (
+              <>
+                {!!selectedVessel?.bossName && <ValueWithLineBreak>{selectedVessel?.bossName}</ValueWithLineBreak>}
+                {!!selectedVessel?.bossAddress && (
+                  <ValueWithLineBreak>{selectedVessel?.bossAddress}</ValueWithLineBreak>
+                )}
+              </>
+            )
+          },
+          {
+            hasMultipleLines: true,
             key: 'Contact navire',
             value: (
               <>

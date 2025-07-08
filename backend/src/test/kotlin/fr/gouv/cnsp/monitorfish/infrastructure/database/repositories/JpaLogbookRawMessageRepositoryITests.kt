@@ -32,25 +32,7 @@ class JpaLogbookRawMessageRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(rawMessage).isEqualTo(
-            "<ers:OPS AD=\"FRA\" FR=\"OOE\" ON=\"OOF20190126059903\" OD=\"2021-01-28\" OT=\"23:53\" EVL=\"TurboCatch (3.5-5)\">\n" +
-                "<ers:DAT TM=\"CU\">\n" +
-                "<ers:ERS RN=\"OOE20210128025702\" RD=\"2021-01-28\" RT=\"23:53\">\n" +
-                "<ers:LOG IR=\"FRA000730810\" RC=\"FGRH\" XR=\"GV710812\" NA=\"LE MUREX\" MA=\"YALA\" MD=\"PENMARCH \" FS=\"FRA\">\n" +
-                "<ers:FAR LR=\"0\" IS=\"0\" DA=\"2021-01-28\" TI=\"22:01\">\n" +
-                "<ers:POS LT=\"51.323\" LG=\"-5.724\"/>\n" +
-                "<ers:GEA GE=\"OTT\" ME=\"110\" GC=\"20;2\" FO=\"4\" DU=\"960\" FD=\"80\"/>\n" +
-                "<ers:SPE SN=\"ANF\" WT=\"207.40\" MM=\"EST\">\n" +
-                "<ers:RAS FA=\"27\" SA=\"7\" ID=\"g\" EZ=\"GBR\" SR=\"31E4\"/>\n" +
-                "<ers:PRO PS=\"FRE\" PR=\"GUT\" TY=\"BUL\" CF=\"1.22\"/>\n" +
-                "<ers:ESPE Type=\"nat\" MR=\"20210035\"/>\n" +
-                "</ers:SPE>\n" +
-                "...\n" +
-                "</ers:FAR>\n" +
-                "<ers:ELOG Type=\"nat\" TN=\"20210035\"/>\n" +
-                "</ers:LOG>\n" +
-                "</ers:ERS>\n" +
-                "</ers:DAT>\n" +
-                "</ers:OPS>",
+            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ers:OPS xmlns:ers=\"http://ec.europa.eu/fisheries/schema/ers/v3\" AD=\"FRA\" FR=\"OOF\" ON=\"OOF20250704017200\" OD=\"2025-07-04\" OT=\"21:44\" EVL=\"IKTUS 4.6.7\"><ers:DAT TM=\"CU\"><ers:ERS RN=\"OOF20250704017200\" RD=\"2025-07-04\" RT=\"21:44\"><ers:LOG IR=\"XXX\" RC=\"\" XR=\"\" NA=\"VESSEL NAME\" MA=\"Jean Bon\" MD=\"56, rue du Croisic, 44100, Nantes\" FS=\"FRA\"><ers:DEP DA=\"2025-07-04\" TI=\"21:44\" PO=\"FROII\" AA=\"FSH\"><ers:GEA GE=\"OTT\" ME=\"80\" GC=\"17.0;0.0\"/></ers:DEP><ers:ELOG Type=\"nat\" CH=\"FRA\" TN=\"20250055\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>",
         )
     }
 

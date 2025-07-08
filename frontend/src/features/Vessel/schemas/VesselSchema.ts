@@ -13,6 +13,8 @@ export const VesselSchema = z.strictObject({
   alerts: z.array(z.union([z.nativeEnum(PendingAlertValueType), z.literal('PNO_LAN_WEIGHT_TOLERANCE_ALERT')])),
   beacon: BeaconSchema.optional(),
   beaconMalfunctionId: z.number().optional(),
+  bossAddress: z.string().optional(),
+  bossName: z.string().optional(),
   course: z.number().optional(),
   declaredFishingGears: z.array(z.string()),
   district: z.string().optional(),

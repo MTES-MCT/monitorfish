@@ -15,6 +15,8 @@ import { setHideNonSelectedVessels } from '../../../../Vessel/slice'
 import { updateDefaultVesselTrackDepth } from '../../../../Vessel/useCases/updateDefaultVesselTrackDepth'
 import { MapToolBox } from '../shared/MapToolBox'
 
+import type { VesselLabel } from '@features/Vessel/label.types'
+
 export function EditVesselVisibility({ isOpened, onClose }) {
   const dispatch = useMainAppDispatch()
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
@@ -60,7 +62,7 @@ export function EditVesselVisibility({ isOpened, onClose }) {
           label="Choisir le libellé des étiquettes des navires"
           name="vesselLabelRadio"
           onChange={nextLabel => {
-            dispatch(setVesselLabel(nextLabel as string))
+            dispatch(setVesselLabel(nextLabel as VesselLabel))
           }}
           options={VESSEL_LABEL_OPTIONS}
           value={vesselLabel}

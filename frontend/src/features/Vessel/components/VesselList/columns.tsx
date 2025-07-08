@@ -97,7 +97,13 @@ export function getTableColumns(
               </Tag>
             )}
             {info.row.original.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && (
-              <i title={FLEET_SEGMENT_ORIGIN_LABEL[info.row.original.activityOrigin]}>{info.getValue()}</i>
+              <Tag
+                backgroundColor={THEME.color.white}
+                color={THEME.color.charcoal}
+                title={FLEET_SEGMENT_ORIGIN_LABEL[info.row.original.activityOrigin]}
+              >
+                <i>{info.getValue()}</i>
+              </Tag>
             )}
           </Ellipsised>
         ) : (
@@ -129,7 +135,13 @@ export function getTableColumns(
               </Tag>
             )}
             {info.row.original.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && (
-              <i title={GEAR_ORIGIN_LABEL[info.row.original.activityOrigin]}>{info.getValue()}</i>
+              <Tag
+                backgroundColor={THEME.color.white}
+                color={THEME.color.charcoal}
+                title={GEAR_ORIGIN_LABEL[info.row.original.activityOrigin]}
+              >
+                <i>{info.getValue()}</i>
+              </Tag>
             )}
           </Ellipsised>
         ) : (

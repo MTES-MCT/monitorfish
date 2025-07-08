@@ -6,7 +6,7 @@ import Overlay from 'ol/Overlay'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { VesselLabel } from './VesselLabel'
+import { VesselLabelContent } from './VesselLabelContent'
 
 import type { MutableRefObject } from 'react'
 
@@ -119,7 +119,7 @@ export function VesselLabelOverlay({
           }
         }}
       >
-        <VesselLabel
+        <VesselLabelContent
           featureId={featureId}
           identity={identity}
           label={label}

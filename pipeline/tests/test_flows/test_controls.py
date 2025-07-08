@@ -6,17 +6,18 @@ import pytest
 import pytz
 import sqlalchemy
 from prefect import task
+from prefect.logging import disable_run_logger
 
 from config import POSEIDON_CONTROL_ID_TO_MONITORENV_MISSION_ID_SHIFT
 from src.entities.missions import MissionActionType, MissionOrigin
 from src.flows.controls import (
+    controls_flow,
     extract_catch_controls,
     extract_controls,
-    flow,
     transform_controls,
 )
 from src.read_query import read_query
-from tests.mocks import mock_check_flow_not_running, mock_extract_side_effect
+from tests.mocks import mock_extract_side_effect
 
 y = datetime.utcnow().year
 
@@ -1044,75 +1045,53 @@ def expected_missions_control_units() -> pd.DataFrame:
     return expected_missions_control_units_df
 
 
-@task(checkpoint=False)
+@task
 def mock_extract_controls(number_of_months: int) -> pd.DataFrame:
-    def mock_read_saved_query(*args, **kwargs):
-        return controls_df
-
-    with patch("src.generic_tasks.read_saved_query", mock_read_saved_query):
-        return extract_controls.run(number_of_months=number_of_months)
-
-
-# Using `patch` in a task results in flaky errors when using a LocalDaskExecutor so we
-# need to make a mock task without `patch` to test the flow.
-@task(checkpoint=False)
-def mock_extract_controls_in_flow(number_of_months: int) -> pd.DataFrame:
     return controls_df
 
 
-@task(checkpoint=False)
-def mock_extract_catch_controls_in_flow() -> pd.DataFrame:
+@task
+def mock_extract_catch_controls() -> pd.DataFrame:
     return catch_controls_df
 
 
-@task(checkpoint=False)
+@task
 def mock_load_missions_and_missions_control_units(
     missions: pd.DataFrame, missions_control_units: pd.DataFrame, loading_mode: str
 ):
-    pass
+    return missions, missions_control_units
 
 
 @patch("src.flows.controls.extract")
 def test_extract_controls_query_file_is_found(mock_extract):
     mock_extract.side_effect = mock_extract_side_effect
-    query = extract_controls.run(number_of_months=12)
+    query = extract_controls.fn(number_of_months=12)
     assert isinstance(query, sqlalchemy.sql.elements.TextClause)
 
 
 @patch("src.flows.controls.extract")
 def test_extract_catch_controls_query_file_is_found(mock_extract):
     mock_extract.side_effect = mock_extract_side_effect
-    query = extract_catch_controls.run()
+    query = extract_catch_controls.fn()
     assert isinstance(query, sqlalchemy.sql.elements.TextClause)
 
 
 @patch("src.flows.controls.extract")
 def test_extract_controls_raises_if_intput_is_not_valid(mock_extract):
     with pytest.raises(ValueError):
-        extract_controls.run(number_of_months="12")
+        extract_controls.fn(number_of_months="12")
 
     with pytest.raises(ValueError):
-        extract_controls.run(number_of_months=None)
+        extract_controls.fn(number_of_months=None)
 
     with pytest.raises(ValueError):
-        extract_controls.run(number_of_months=[1, 2, 3])
+        extract_controls.fn(number_of_months=[1, 2, 3])
 
     with pytest.raises(ValueError):
-        extract_controls.run(number_of_months=-1)
+        extract_controls.fn(number_of_months=-1)
 
     with pytest.raises(ValueError):
-        extract_controls.run(number_of_months=245)
-
-
-flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
-flow.replace(flow.get_tasks("extract_controls")[0], mock_extract_controls_in_flow)
-flow.replace(
-    flow.get_tasks("extract_catch_controls")[0], mock_extract_catch_controls_in_flow
-)
-flow.replace(
-    flow.get_tasks("load_missions_and_missions_control_units")[0],
-    mock_load_missions_and_missions_control_units,
-)
+        extract_controls.fn(number_of_months=245)
 
 
 @pytest.mark.parametrize(
@@ -1135,13 +1114,17 @@ def test_flow(
         mission_actions_query, db="monitorfish_remote"
     ).drop(columns=["is_deleted"])
 
-    flow.schedule = None
-    state = flow.run(loading_mode=loading_mode, number_of_months=12)
-    assert state.is_successful()
+    state = controls_flow(
+        loading_mode=loading_mode,
+        number_of_months=12,
+        extract_controls_fn=mock_extract_controls,
+        extract_catch_controls_fn=mock_extract_catch_controls,
+        load_missions_and_missions_control_units_fn=mock_load_missions_and_missions_control_units,
+        return_state=True,
+    )
+    assert state.is_completed()
 
-    missions, mission_actions, missions_control_units = state.result[
-        flow.get_tasks("make_missions_actions_and_missions_control_units")[0]
-    ].result
+    missions, missions_control_units = state.result()
 
     # Test missions output
     pd.testing.assert_frame_equal(
@@ -1191,28 +1174,22 @@ def test_flow(
             initial_mission_actions.loc[initial_mission_actions.is_from_poseidon, "id"]
         ) == {-199999, -144762}
 
-        assert (
-            len(final_mission_actions[final_mission_actions.is_from_poseidon])
-            == len(mission_actions)
-            == 10
-        )
+        assert len(final_mission_actions[final_mission_actions.is_from_poseidon]) == 10
 
-        assert (
-            set(final_mission_actions.loc[final_mission_actions.is_from_poseidon, "id"])
-            == set(mission_actions.id)
-            == {
-                -144762,
-                -144731,
-                -144699,
-                -144698,
-                -144577,
-                -144266,
-                -144201,
-                -143973,
-                -143851,
-                -143784,
-            }
-        )
+        assert set(
+            final_mission_actions.loc[final_mission_actions.is_from_poseidon, "id"]
+        ) == {
+            -144762,
+            -144731,
+            -144699,
+            -144698,
+            -144577,
+            -144266,
+            -144201,
+            -143973,
+            -143851,
+            -143784,
+        }
 
         df_1 = expected_loaded_mission_actions.set_index("id").sort_index()
         df_2 = (
@@ -1236,29 +1213,23 @@ def test_flow(
             initial_mission_actions.loc[initial_mission_actions.is_from_poseidon, "id"]
         ) == {-199999, -144762}
 
-        assert (
-            len(final_mission_actions[final_mission_actions.is_from_poseidon])
-            == len(mission_actions) + 1
-            == 11
-        )
+        assert len(final_mission_actions[final_mission_actions.is_from_poseidon]) == 11
 
-        assert (
-            set(final_mission_actions.loc[final_mission_actions.is_from_poseidon, "id"])
-            == set(mission_actions.id).union({-199999})
-            == {
-                -199999,
-                -144762,
-                -144731,
-                -144699,
-                -144698,
-                -144577,
-                -144266,
-                -144201,
-                -143973,
-                -143851,
-                -143784,
-            }
-        )
+        assert set(
+            final_mission_actions.loc[final_mission_actions.is_from_poseidon, "id"]
+        ) == {
+            -199999,
+            -144762,
+            -144731,
+            -144699,
+            -144698,
+            -144577,
+            -144266,
+            -144201,
+            -143973,
+            -143851,
+            -143784,
+        }
 
         assert (
             initial_mission_actions.loc[
@@ -1279,4 +1250,5 @@ def test_flow(
 
 
 def test_transform_empty_controls(empty_controls):
-    transform_controls.run(empty_controls)
+    with disable_run_logger():
+        transform_controls.fn(empty_controls)

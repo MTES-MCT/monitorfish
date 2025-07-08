@@ -40,7 +40,7 @@ export type MapState = {
   riskFactorShowedOnMap: boolean
   selectedBaseLayer: string
   showingVesselsEstimatedPositions: boolean
-  vesselLabel: string
+  vesselLabel: VesselLabel
   vesselLabelsShowedOnMap: boolean
   /** Vessels map properties */
   vesselsLastPositionVisibility: MonitorFishMap.LastPositionVisibility
@@ -174,7 +174,7 @@ const mapSlice = createSlice({
       state.riskFactorShowedOnMap = action.payload
     },
 
-    setVesselLabel(state, action: PayloadAction<string>) {
+    setVesselLabel(state, action: PayloadAction<VesselLabel>) {
       window.localStorage.setItem(vesselLabelLocalStorageKey, JSON.stringify(action.payload))
       state.vesselLabel = action.payload
     },

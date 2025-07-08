@@ -127,13 +127,11 @@ export function PositionsTable() {
                   data-id={row.id}
                   data-index={virtualRow?.index}
                 >
-                  {row
-                    ?.getVisibleCells()
-                    .map(cell => (
-                      <SimpleTable.Td key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </SimpleTable.Td>
-                    ))}
+                  {row?.getVisibleCells().map(cell => (
+                    <SimpleTable.Td key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </SimpleTable.Td>
+                  ))}
                 </SimpleTable.BodyTr>
               )
             })}

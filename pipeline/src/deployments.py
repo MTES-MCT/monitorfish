@@ -10,6 +10,7 @@ from config import (
 from src.flows.anchorages import anchorages_flow
 from src.flows.controls import controls_flow
 from src.flows.districts import districts_flow
+from src.flows.species import species_flow
 
 # from prefect.schedules import Schedule
 
@@ -24,6 +25,9 @@ deployments = [
     ),
     districts_flow.to_deployment(
         name=districts_flow.name,
+    ),
+    species_flow.to_deployment(
+        name=species_flow.name,
     ),
     # (
     #     github_stars_flow.to_deployment(

@@ -1,18 +1,15 @@
 import io
-from pathlib import Path
 
 import pandas as pd
-import prefect
 import requests
-from prefect import Flow, task
-from prefect.executors import LocalDaskExecutor
+from prefect import flow, get_run_logger, task
 
 from config import DATA_GOUV_SPECIES_URL, PROXIES
 from src.generic_tasks import load
 from src.processing import coalesce
 
 
-@task(checkpoint=False)
+@task
 def extract_species(url: str, proxies: dict) -> pd.DataFrame:
     r = requests.get(url, proxies=proxies)
     r.encoding = "utf8"
@@ -28,7 +25,7 @@ def extract_species(url: str, proxies: dict) -> pd.DataFrame:
     return species
 
 
-@task(checkpoint=False)
+@task
 def transform_species(species: pd.DataFrame) -> pd.DataFrame:
     res = species.copy(deep=True)
 
@@ -130,22 +127,21 @@ def transform_species(species: pd.DataFrame) -> pd.DataFrame:
     return res
 
 
-@task(checkpoint=False)
+@task
 def load_species(species: pd.DataFrame):
     load(
         species,
         table_name="species",
         schema="public",
         db_name="monitorfish_remote",
-        logger=prefect.context.get("logger"),
+        logger=get_run_logger(),
         how="replace",
         replace_with_truncate=True,
     )
 
 
-with Flow("Species", executor=LocalDaskExecutor()) as flow:
-    species = extract_species(url=DATA_GOUV_SPECIES_URL, proxies=PROXIES)
+@flow(name="Species")
+def species_flow(extract_species_task=extract_species):
+    species = extract_species_task(url=DATA_GOUV_SPECIES_URL, proxies=PROXIES)
     species = transform_species(species)
     load_species(species)
-
-flow.file_name = Path(__file__).name

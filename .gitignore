@@ -188,12 +188,6 @@ frontend/cypress/videos/
 # Local data
 /datascience/data
 pipeline/data
-/datascience/src/data/non_commited_data/pno_ports_subscriptions.csv
-pipeline/src/data/non_commited_data/pno_ports_subscriptions.csv
-/datascience/src/data/non_commited_data/pno_segments_subscriptions.csv
-pipeline/src/data/non_commited_data/pno_segments_subscriptions.csv
-/datascience/src/data/non_commited_data/pno_vessels_subscriptions.csv
-pipeline/src/data/non_commited_data/pno_vessels_subscriptions.csv
 
 # Ignore downloaded external repositories
 datascience/tests/test_data/external/*

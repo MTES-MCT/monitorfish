@@ -84,7 +84,7 @@ const DataTableWrapper = styled.div`
 `
 
 const Wrapper = styled.div`
-  margin-left: 40px;
+  margin-left: 32px;
   padding-right: 80px;
   width: 100%;
   overflow: auto;

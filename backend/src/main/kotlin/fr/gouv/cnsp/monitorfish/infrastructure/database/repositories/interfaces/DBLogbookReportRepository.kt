@@ -521,6 +521,22 @@ interface DBLogbookReportRepository :
     @Query(
         """
             SELECT
+                operation_number
+            FROM
+                logbook_reports
+            where
+                cfr = :internalReferenceNumber AND
+                operation_datetime_utc < now()
+            ORDER BY operation_datetime_utc DESC
+            LIMIT 1
+        """,
+        nativeQuery = true,
+    )
+    fun findLastOperationNumber(internalReferenceNumber: String): String?
+
+    @Query(
+        """
+            SELECT
                 software
             FROM
                 logbook_reports

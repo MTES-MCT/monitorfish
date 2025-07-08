@@ -6,15 +6,15 @@
         "data": [
             {
                 "operation_number": "OOF20190126059903",
-                "xml_message": "<ers:OPS AD=\"FRA\" FR=\"OOE\" ON=\"OOF20190126059903\" OD=\"2021-01-28\" OT=\"23:53\" EVL=\"TurboCatch (3.5-5)\">\n<ers:DAT TM=\"CU\">\n<ers:ERS RN=\"OOE20210128025702\" RD=\"2021-01-28\" RT=\"23:53\">\n<ers:LOG IR=\"FRA000730810\" RC=\"FGRH\" XR=\"GV710812\" NA=\"LE MUREX\" MA=\"YALA\" MD=\"PENMARCH \" FS=\"FRA\">\n<ers:FAR LR=\"0\" IS=\"0\" DA=\"2021-01-28\" TI=\"22:01\">\n<ers:POS LT=\"51.323\" LG=\"-5.724\"/>\n<ers:GEA GE=\"OTT\" ME=\"110\" GC=\"20;2\" FO=\"4\" DU=\"960\" FD=\"80\"/>\n<ers:SPE SN=\"ANF\" WT=\"207.40\" MM=\"EST\">\n<ers:RAS FA=\"27\" SA=\"7\" ID=\"g\" EZ=\"GBR\" SR=\"31E4\"/>\n<ers:PRO PS=\"FRE\" PR=\"GUT\" TY=\"BUL\" CF=\"1.22\"/>\n<ers:ESPE Type=\"nat\" MR=\"20210035\"/>\n</ers:SPE>\n...\n</ers:FAR>\n<ers:ELOG Type=\"nat\" TN=\"20210035\"/>\n</ers:LOG>\n</ers:ERS>\n</ers:DAT>\n</ers:OPS>"
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190223059904",
-                "xml_message": "<ers:OPS AD=\"FRA\" FR=\"OOF\" ON=\"OOF20190223059904\" OD=\"2021-01-28\" OT=\"23:52\" EVL=\"IKTUS 4.5.8\">\n<ers:DAT TM=\"CU\">\n<ers:ERS RN=\"OOF20210129058100\" RD=\"2021-01-28\" RT=\"23:52\">\n<ers:LOG IR=\"FRA000911294\" RC=\"FIZX\" XR=\"CC911294\" NA=\"ROSELEND\" MA=\"jaffrezic\" MD=\"hameau de keroulas pendruc - 299010 tregunc\" FS=\"FRA\">\n<ers:EOF DA=\"2021-01-27\" TI=\"14:00\"/>\n<ers:ELOG Type=\"nat\" TN=\"20210001\"/>\n</ers:LOG>\n</ers:ERS>\n</ers:DAT>\n</ers:OPS>"
+                "xml_message": "<ers:OPS AD=\"FRA\" FR=\"OOF\" ON=\"OOF20190223059904\" OD=\"2021-01-28\" OT=\"23:52\" EVL=\"IKTUS 4.5.8\">\n<ers:DAT TM=\"CU\">\n<ers:ERS RN=\"OOF20210129058100\" RD=\"2021-01-28\" RT=\"23:52\">\n<ers:LOG IR=\"FRA000911294\" RC=\"FIZX\" XR=\"CC911294\" NA=\"ROSELEND\" MA=\"UN NOM\" MD=\"PENMARCH\" FS=\"FRA\">\n<ers:EOF DA=\"2021-01-27\" TI=\"14:00\"/>\n<ers:ELOG Type=\"nat\" TN=\"20210001\"/>\n</ers:LOG>\n</ers:ERS>\n</ers:DAT>\n</ers:OPS>"
             },
             {
                 "operation_number": "OOF20190223059905",
-                "xml_message": "<ers:OPS AD=\"FRA\" FR=\"OOF\" ON=\"OOF20190223059905\" OD=\"2021-01-28\" OT=\"23:52\" EVL=\"IKTUS 4.5.8\">\n<ers:DAT TM=\"CU\">\n<ers:ERS RN=\"OOF20210129058100\" RD=\"2021-01-28\" RT=\"23:52\">\n<ers:LOG IR=\"FRA000911294\" RC=\"FIZX\" XR=\"CC911294\" NA=\"ROSELEND\" MA=\"jaffrezic\" MD=\"hameau de keroulas pendruc - 299010 tregunc\" FS=\"FRA\">\n<ers:EOF DA=\"2021-01-27\" TI=\"14:00\"/>\n<ers:ELOG Type=\"nat\" TN=\"20210001\"/>\n</ers:LOG>\n</ers:ERS>\n</ers:DAT>\n</ers:OPS>"
+                "xml_message": "<ers:OPS AD=\"FRA\" FR=\"OOF\" ON=\"OOF20190223059905\" OD=\"2021-01-28\" OT=\"23:52\" EVL=\"IKTUS 4.5.8\">\n<ers:DAT TM=\"CU\">\n<ers:ERS RN=\"OOF20210129058100\" RD=\"2021-01-28\" RT=\"23:52\">\n<ers:LOG IR=\"FRA000911294\" RC=\"FIZX\" XR=\"CC911294\" NA=\"ROSELEND\" MA=\"UN NOM\" MD=\"PENMARCH\" FS=\"FRA\">\n<ers:EOF DA=\"2021-01-27\" TI=\"14:00\"/>\n<ers:ELOG Type=\"nat\" TN=\"20210001\"/>\n</ers:LOG>\n</ers:ERS>\n</ers:DAT>\n</ers:OPS>"
             },
             {
                 "operation_number": "OOF20190227059900",
@@ -22,191 +22,189 @@
             },
             {
                 "operation_number": "OOF20191030059902",
-                "xml_message": "<ers:OPS AD=\"FRA\" FR=\"OOE\" ON=\"OOF20190126059903\" OD=\"2021-01-28\" OT=\"23:53\" EVL=\"TurboCatch (3.5-5)\">\n<ers:DAT TM=\"CU\">\n<ers:ERS RN=\"OOE20210128025702\" RD=\"2021-01-28\" RT=\"23:53\">\n<ers:LOG IR=\"FRA000730810\" RC=\"FGRH\" XR=\"GV710812\" NA=\"LE MUREX\" MA=\"YALA\" MD=\"PENMARCH \" FS=\"FRA\">\n<ers:FAR LR=\"0\" IS=\"0\" DA=\"2021-01-28\" TI=\"22:01\">\n...\n</ers:FAR>\n<ers:ELOG Type=\"nat\" TN=\"20210035\"/>\n</ers:LOG>\n</ers:ERS>\n</ers:DAT>\n</ers:OPS>"
-            },
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"},
             {
                 "operation_number": "OOF20190430059907",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190617059901",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190618059902",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190619059905",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190627059906",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190627059908",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190710059906",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190722059907",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190830059906",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20191015059904",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20191011059900",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20191011059902",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20191203059903",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190403059904",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20191030059903",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20191030059909",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190830059966",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190403059909",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20103048321388",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF22123048321388",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF22113048321388",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190617056738",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF22103048321399",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190223059906",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190430059918",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF22103048321388",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF69850430059918",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190433689918",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190430056936",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190430056396",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190430056397",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF99190430056936",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF91190430056936",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190227059999",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF22103048321398",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20191205059902",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190265896325",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190227050000",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190227050001",
-                "xml_message": ""
-            },
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"},
             {
                 "operation_number": "OOF20190227050002",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190227050003",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF22103048326325",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20191030056523",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190126036598",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20103048326985",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20103048323658",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "cc7ee632-e515-460f-a1c1-f82222a6d419",
@@ -306,19 +304,19 @@
             },
             {
                 "operation_number": "OOF20190015146541",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190158541231",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190439686456",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "OOF20190439686457",
-                "xml_message": ""
+                "xml_message": "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><ers:OPS xmlns:ers=\\\"http://ec.europa.eu/fisheries/schema/ers/v3\\\" AD=\\\"FRA\\\" FR=\\\"OOF\\\" ON=\\\"OOF20250704017200\\\" OD=\\\"2025-07-04\\\" OT=\\\"21:44\\\" EVL=\\\"IKTUS 4.6.7\\\"><ers:DAT TM=\\\"CU\\\"><ers:ERS RN=\\\"OOF20250704017200\\\" RD=\\\"2025-07-04\\\" RT=\\\"21:44\\\"><ers:LOG IR=\\\"XXX\\\" RC=\\\"\\\" XR=\\\"\\\" NA=\\\"VESSEL NAME\\\" MA=\\\"Jean Bon\\\" MD=\\\"56, rue du Croisic, 44100, Nantes\\\" FS=\\\"FRA\\\"><ers:DEP DA=\\\"2025-07-04\\\" TI=\\\"21:44\\\" PO=\\\"FROII\\\" AA=\\\"FSH\\\"><ers:GEA GE=\\\"OTT\\\" ME=\\\"80\\\" GC=\\\"17.0;0.0\\\"/></ers:DEP><ers:ELOG Type=\\\"nat\\\" CH=\\\"FRA\\\" TN=\\\"20250055\\\"/></ers:LOG></ers:ERS></ers:DAT></ers:OPS>"
             },
             {
                 "operation_number": "d5c3b039-aaee-4cca-bcae-637f5fe574f5",

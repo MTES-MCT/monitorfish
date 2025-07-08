@@ -1,16 +1,14 @@
 import io
 import zipfile
-from pathlib import Path
 
 import pandas as pd
 import requests
-from prefect import Flow, Parameter, task
-from prefect.executors import LocalDaskExecutor
+from prefect import flow, task
 
 from config import FAO_SPECIES_URL, ISSCAAP_GROUPS_URL, PROXIES
 
 
-@task(checkpoint=False)
+@task
 def extract_species(url: str, proxies: dict) -> pd.DataFrame:
     # Extract zipfile from fao.org
     r = requests.get(url, proxies=proxies)
@@ -51,7 +49,7 @@ def extract_species(url: str, proxies: dict) -> pd.DataFrame:
     return species
 
 
-@task(checkpoint=False)
+@task
 def extract_isscaap_groups(url: str, proxies: dict) -> pd.DataFrame:
     # Extract isscaap codes table
     r = requests.get(url, proxies=proxies)
@@ -63,7 +61,7 @@ def extract_isscaap_groups(url: str, proxies: dict) -> pd.DataFrame:
     return isscaap_groups
 
 
-@task(checkpoint=False)
+@task
 def transform_species(
     species: pd.DataFrame, isscaap_groups: pd.DataFrame
 ) -> pd.DataFrame:
@@ -98,16 +96,14 @@ def transform_species(
     return res[column_order]
 
 
-@task(checkpoint=False)
+@task
 def export_species(species: pd.DataFrame, csv_filepath: str) -> None:
     species.to_csv(csv_filepath, index=False, encoding="utf8")
 
 
-with Flow("Species", executor=LocalDaskExecutor()) as flow:
-    csv_filepath = Parameter("csv_filepath")
+@flow(name="Export Species")
+def export_species_flow(csv_filepath: str):
     species = extract_species(url=FAO_SPECIES_URL, proxies=PROXIES)
     isscaap_groups = extract_isscaap_groups(url=ISSCAAP_GROUPS_URL, proxies=PROXIES)
     species = transform_species(species, isscaap_groups)
     export_species(species, csv_filepath=csv_filepath)
-
-flow.file_name = Path(__file__).name

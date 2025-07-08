@@ -8,6 +8,7 @@ from config import (
     ROOT_DIRECTORY,
 )
 from src.flows.anchorages import anchorages_flow
+from src.flows.controls import controls_flow
 from src.flows.districts import districts_flow
 
 # from prefect.schedules import Schedule
@@ -17,6 +18,9 @@ from src.flows.districts import districts_flow
 deployments = [
     anchorages_flow.to_deployment(
         name=anchorages_flow.name,
+    ),
+    controls_flow.to_deployment(
+        name=controls_flow.name,
     ),
     districts_flow.to_deployment(
         name=districts_flow.name,

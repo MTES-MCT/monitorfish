@@ -1,11 +1,8 @@
-from pathlib import Path
-from typing import Tuple
+from typing import Callable, Tuple
 
 import geopandas as gpd
 import pandas as pd
-import prefect
-from prefect import Flow, Parameter, case, task
-from prefect.executors import LocalDaskExecutor
+from prefect import flow, get_run_logger, task
 from sqlalchemy import DDL
 
 from config import POSEIDON_CONTROL_ID_TO_MONITORENV_MISSION_ID_SHIFT
@@ -20,12 +17,11 @@ from src.generic_tasks import extract, load
 from src.helpers.controls import make_infractions
 from src.helpers.fao_areas import remove_redundant_fao_area_codes
 from src.processing import df_to_dict_series, zeros_ones_to_bools
-from src.shared_tasks.control_flow import check_flow_not_running
 from src.shared_tasks.facades import extract_facade_areas
 
 
 # ********************************** Tasks and flow ***********************************
-@task(checkpoint=False)
+@task
 def extract_controls(number_of_months: int) -> pd.DataFrame:
     """
     Extracts controls data from FMC database for the specified number of months, going
@@ -67,7 +63,7 @@ def extract_controls(number_of_months: int) -> pd.DataFrame:
     )
 
 
-@task(checkpoint=False)
+@task
 def extract_catch_controls() -> pd.DataFrame:
     return extract(
         db_name="fmc",
@@ -75,7 +71,7 @@ def extract_catch_controls() -> pd.DataFrame:
     )
 
 
-@task(checkpoint=False)
+@task
 def extract_ports() -> pd.DataFrame:
     """
     Extracts ports as a `DataFrame`.
@@ -89,7 +85,7 @@ def extract_ports() -> pd.DataFrame:
     )
 
 
-@task(checkpoint=False)
+@task
 def extract_fao_areas() -> gpd.GeoDataFrame:
     """
     Extracts FAO areas as a `GeoDataFrame`.
@@ -106,7 +102,7 @@ def extract_fao_areas() -> gpd.GeoDataFrame:
     )
 
 
-@task(checkpoint=False)
+@task
 def transform_catch_controls(catch_controls: pd.DataFrame) -> pd.DataFrame:
     catch_controls = catch_controls.copy(deep=True)
     catch_controls_columns = {
@@ -127,10 +123,10 @@ def transform_catch_controls(catch_controls: pd.DataFrame) -> pd.DataFrame:
     return catch_controls
 
 
-@task(checkpoint=False)
+@task
 def transform_controls(controls: pd.DataFrame):
     controls = controls.copy(deep=True)
-    logger = prefect.context.get("logger")
+    logger = get_run_logger()
 
     # ---------------------------------------------------------------------------------
     # Transform boolean values stored as "0"s and "1"s in Oracle to booleans
@@ -355,7 +351,7 @@ def transform_controls(controls: pd.DataFrame):
     return controls
 
 
-@task(checkpoint=False)
+@task
 def compute_controls_fao_areas(
     controls: pd.DataFrame, fao_areas: gpd.GeoDataFrame, ports: pd.DataFrame
 ) -> pd.DataFrame:
@@ -430,7 +426,7 @@ def compute_controls_fao_areas(
     return controls_fao_areas
 
 
-@task(checkpoint=False)
+@task
 def compute_controls_facade(
     controls: pd.DataFrame, facade_areas: gpd.GeoDataFrame, ports: pd.DataFrame
 ) -> pd.DataFrame:
@@ -495,7 +491,7 @@ def compute_controls_facade(
     return controls_facade
 
 
-@task(checkpoint=False)
+@task
 def merge_controls_data(
     controls: pd.DataFrame,
     catch_controls: pd.DataFrame,
@@ -531,7 +527,7 @@ def merge_controls_data(
     return controls
 
 
-@task(checkpoint=False)
+@task
 def make_missions_actions_and_missions_control_units(
     controls: pd.DataFrame,
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
@@ -611,7 +607,7 @@ def make_missions_actions_and_missions_control_units(
     return missions, mission_actions, missions_control_units
 
 
-@task(checkpoint=False)
+@task
 def load_missions_and_missions_control_units(
     missions: pd.DataFrame, missions_control_units: pd.DataFrame, loading_mode: str
 ):
@@ -631,7 +627,7 @@ def load_missions_and_missions_control_units(
             table_name="missions",
             schema="public",
             connection=connection,
-            logger=prefect.context.get("logger"),
+            logger=get_run_logger(),
             pg_array_columns=["mission_types"],
             how="upsert",
             table_id_column=id_column,
@@ -690,12 +686,12 @@ def load_missions_and_missions_control_units(
             table_name="missions_control_units",
             schema="public",
             connection=connection,
-            logger=prefect.context.get("logger"),
+            logger=get_run_logger(),
             how="append",
         )
 
 
-@task(checkpoint=False)
+@task
 def load_mission_actions(mission_actions: pd.DataFrame, loading_mode: str):
     # In "replace" loading mode, we want to replace all `mission_actions` for which
     # `is_from_poseidon` is True. So we use `is_from_poseidon` as the identifier.
@@ -711,7 +707,7 @@ def load_mission_actions(mission_actions: pd.DataFrame, loading_mode: str):
         table_name="mission_actions",
         schema="public",
         db_name="monitorfish_remote",
-        logger=prefect.context.get("logger"),
+        logger=get_run_logger(),
         pg_array_columns=["fao_areas"],
         jsonb_columns=[
             "segments",
@@ -729,46 +725,48 @@ def load_mission_actions(mission_actions: pd.DataFrame, loading_mode: str):
     )
 
 
-with Flow("Controls", executor=LocalDaskExecutor()) as flow:
-    flow_not_running = check_flow_not_running()
-    with case(flow_not_running, True):
-        # Parameters
-        loading_mode = Parameter("loading_mode")
-        number_of_months = Parameter("number_of_months")
+@flow(name="Controls")
+def controls_flow(
+    loading_mode: str,
+    number_of_months: int,
+    extract_controls_fn: Callable = extract_controls,
+    extract_catch_controls_fn: Callable = extract_catch_controls,
+    load_missions_and_missions_control_units_fn: Callable = load_missions_and_missions_control_units,
+):
+    """
+    Controls flow - extracts and processes control data from FMC database
 
-        # Extract
-        controls = extract_controls(number_of_months=number_of_months)
-        fao_areas = extract_fao_areas()
-        facade_areas = extract_facade_areas()
-        ports = extract_ports()
-        catch_controls = extract_catch_controls()
+    Args:
+        loading_mode: Either "replace" or "upsert" mode for loading data
+        number_of_months: Number of months of data to extract
+    """
+    # Extract
+    controls = extract_controls_fn(number_of_months=number_of_months)
+    fao_areas = extract_fao_areas()
+    facade_areas = extract_facade_areas()
+    ports = extract_ports()
+    catch_controls = extract_catch_controls_fn()
 
-        # Transform
-        controls = transform_controls(controls)
-        catch_controls = transform_catch_controls(catch_controls)
-        controls_fao_areas = compute_controls_fao_areas(controls, fao_areas, ports)
-        controls_facade = compute_controls_facade(controls, facade_areas, ports)
-        controls = merge_controls_data(
-            controls, catch_controls, controls_fao_areas, controls_facade
-        )
-        (
-            missions,
-            mission_actions,
-            missions_control_units,
-        ) = make_missions_actions_and_missions_control_units(controls)
+    # Transform
+    controls = transform_controls(controls)
+    catch_controls = transform_catch_controls(catch_controls)
+    controls_fao_areas = compute_controls_fao_areas(controls, fao_areas, ports)
+    controls_facade = compute_controls_facade(controls, facade_areas, ports)
+    controls = merge_controls_data(
+        controls, catch_controls, controls_fao_areas, controls_facade
+    )
+    (
+        missions,
+        mission_actions,
+        missions_control_units,
+    ) = make_missions_actions_and_missions_control_units(controls)
 
-        # Load
-        loaded_missions_and_missions_control_units = (
-            load_missions_and_missions_control_units(
-                missions, missions_control_units, loading_mode=loading_mode
-            )
-        )
+    # Load
+    load_mission_actions(
+        mission_actions,
+        loading_mode=loading_mode,
+    )
 
-        load_mission_actions(
-            mission_actions,
-            loading_mode=loading_mode,
-            upstream_tasks=[loaded_missions_and_missions_control_units],
-        )
-
-
-flow.file_name = Path(__file__).name
+    return load_missions_and_missions_control_units_fn(
+        missions, missions_control_units, loading_mode=loading_mode
+    )

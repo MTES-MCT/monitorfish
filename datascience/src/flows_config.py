@@ -15,7 +15,6 @@ from config import (
     MINIMUM_CONSECUTIVE_POSITIONS,
     MINIMUM_MINUTES_OF_EMISSION_AT_SEA,
     MONITORFISH_VERSION,
-    NON_COMMITED_DATA_LOCATION,
     PNO_TEST_MODE,
     ROOT_DIRECTORY,
     TEST_MODE,
@@ -40,7 +39,6 @@ from src.flows import (
     foreign_fmcs,
     infractions,
     init_2025_segments,
-    init_pno_subscriptions,
     init_pno_types,
     init_species_groups,
     last_positions,
@@ -434,7 +432,6 @@ flows_to_register = [
     infractions.flow,
     init_2025_segments.flow,
     init_pno_types.flow,
-    init_pno_subscriptions.flow,
     init_species_groups.flow,
     last_positions.flow,
     missing_dep_alerts.flow,
@@ -479,17 +476,6 @@ for flow in flows_to_register:
                 Mount(
                     target="/opt2/monitorfish-data/ers",
                     source="/opt2/monitorfish-data/ers",
-                    type="bind",
-                )
-            ],
-        }
-
-    elif flow.name in (init_pno_subscriptions.flow.name,):
-        host_config = {
-            "mounts": [
-                Mount(
-                    target=NON_COMMITED_DATA_LOCATION.as_posix(),
-                    source="/opt/pipeline-data",
                     type="bind",
                 )
             ],

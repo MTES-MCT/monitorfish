@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 ROOT_DIRECTORY = Path(__file__).parent
 LIBRARY_LOCATION = ROOT_DIRECTORY / Path("src")
 PIPELINE_DATA_LOCATION = LIBRARY_LOCATION / Path("data")
-NON_COMMITED_DATA_LOCATION = PIPELINE_DATA_LOCATION / Path("non_commited_data")
 QUERIES_LOCATION = LIBRARY_LOCATION / Path("queries")
 TEST_DATA_LOCATION = ROOT_DIRECTORY / Path("tests/test_data")
 LOCAL_MIGRATIONS_FOLDER = str(

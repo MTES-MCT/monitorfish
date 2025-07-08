@@ -2,12 +2,12 @@ import pandas as pd
 import pytest
 from prefect import task
 
-from src.flows.species import flow
+from src.flows.species import species_flow
 from src.read_query import read_query
 
 
-@task(checkpoint=False)
-def mock_extract_species() -> pd.DataFrame:
+@task
+def mock_extract_species(url: str, proxies: dict) -> pd.DataFrame:
     return pd.DataFrame(
         {
             "species_code": ["BFT", "SOL", "BSS", "HKE"],
@@ -20,9 +20,6 @@ def mock_extract_species() -> pd.DataFrame:
             ],
         }
     )
-
-
-flow.replace(flow.get_tasks("extract_species")[0], mock_extract_species)
 
 
 @pytest.fixture
@@ -57,9 +54,9 @@ def test_flow(reset_test_data, expected_loaded_species):
     query = "SELECT * FROM species ORDER BY id"
 
     initial_species = read_query(query, db="monitorfish_remote")
-    state = flow.run()
+    state = species_flow(extract_species_task=mock_extract_species, return_state=True)
 
-    assert state.is_successful()
+    assert state.is_completed()
     final_species = read_query(query, db="monitorfish_remote")
 
     with pytest.raises(AssertionError):

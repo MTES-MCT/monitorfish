@@ -292,7 +292,6 @@ const Flag = styled.img<{
 const ZoneText = styled.span<{
   $isLittle?: boolean
 }>`
-  margin-bottom: ${p => (p.$isLittle ? 0 : 0)}px;
   margin-right: 4px;
   margin-left: 4px;
   font-size: ${p => (p.$isLittle ? 8 : 11)}px;

@@ -22,7 +22,9 @@ export function FishingPeriodDates({ disabled }) {
         <Label>Dates précises</Label>
       </ContentWrapper>
       <DateList>
-        {fishingPeriod?.dates?.map((date, id) => <FishingPeriodDate date={date} disabled={disabled} id={id} />)}
+        {fishingPeriod?.dates?.map((date, id) => (
+          <FishingPeriodDate date={date} disabled={disabled} id={id} />
+        ))}
       </DateList>
       <ContentWrapper $alignSelf="flex-end">
         <SquareButton disabled={disabled} onClick={addDate} />

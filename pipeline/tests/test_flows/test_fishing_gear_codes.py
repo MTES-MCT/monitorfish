@@ -1,15 +1,14 @@
 import pandas as pd
 
 from config import LIBRARY_LOCATION
-from src.flows.fishing_gear_codes import flow
+from src.flows.fishing_gear_codes import fishing_gear_codes_flow
 from src.read_query import read_query
 
 
 def test_fishing_gear_codes_flow(reset_test_data):
-    flow.schedule = None
-    state = flow.run()
+    state = fishing_gear_codes_flow(return_state=True)
 
-    assert state.is_successful()
+    assert state.is_completed()
 
     fishing_gear_codes = read_query(
         "SELECT * FROM fishing_gear_codes", db="monitorfish_remote"

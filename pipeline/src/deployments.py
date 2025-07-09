@@ -16,6 +16,7 @@ from src.flows.anchorages import anchorages_flow
 from src.flows.controls import controls_flow
 from src.flows.districts import districts_flow
 from src.flows.facade_areas import facade_areas_flow
+from src.flows.fao_areas import fao_areas_flow
 from src.flows.species import species_flow
 
 
@@ -32,6 +33,7 @@ flows_to_deploy = [
     FlowAndSchedules(flow=districts_flow),
     FlowAndSchedules(flow=species_flow),
     FlowAndSchedules(flow=facade_areas_flow),
+    FlowAndSchedules(flow=fao_areas_flow),
 ]
 
 

@@ -1,4 +1,9 @@
+from dataclasses import dataclass
+from typing import List
+
+from prefect import Flow
 from prefect.runner.storage import LocalStorage
+from prefect.schedules import Schedule
 
 from config import (
     ERS_FILES_LOCATION,
@@ -13,34 +18,28 @@ from src.flows.districts import districts_flow
 from src.flows.facade_areas import facade_areas_flow
 from src.flows.species import species_flow
 
-# from prefect.schedules import Schedule
-
 
 ################################# List flows to deploy ################################
+@dataclass
+class FlowAndSchedules:
+    flow: Flow
+    schedules: List[Schedule] = None
+
+
+flows_to_deploy = [
+    FlowAndSchedules(flow=anchorages_flow),
+    FlowAndSchedules(flow=controls_flow),
+    FlowAndSchedules(flow=districts_flow),
+    FlowAndSchedules(flow=species_flow),
+    FlowAndSchedules(flow=facade_areas_flow),
+]
+
+
 deployments = [
-    anchorages_flow.to_deployment(
-        name=anchorages_flow.name,
-    ),
-    controls_flow.to_deployment(
-        name=controls_flow.name,
-    ),
-    districts_flow.to_deployment(
-        name=districts_flow.name,
-    ),
-    species_flow.to_deployment(
-        name=species_flow.name,
-    ),
-    facade_areas_flow.to_deployment(
-        name=facade_areas_flow.name,
-    ),
-    # (
-    #     github_stars_flow.to_deployment(
-    #         name=github_stars_flow.__name__,
-    #         schedule=Schedule(
-    #             cron="* * * * *", parameters={"repos": ["Repo 1", "Repo 2"]}
-    #         ),
-    #     )
-    # )
+    flow_to_deploy.flow.to_deployment(
+        name=flow_to_deploy.flow.name, schedules=flow_to_deploy.schedules
+    )
+    for flow_to_deploy in flows_to_deploy
 ]
 
 ################### Define flows' run config ####################

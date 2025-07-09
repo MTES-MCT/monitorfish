@@ -1,24 +1,48 @@
-import prefect
+import inspect
+from typing import List
 
-from src.deployments import deployments
+from prefect import Flow
+from prefect.schedules import Schedule
+
+from src.deployments import flows_to_deploy
 
 
-def test_flows_registration():
-    for flow in deployments:
-        # Check that the flow and its params can be serialized and deserialized
-        serialized_flow = flow.serialize()
-        prefect.serialization.flow.FlowSchema().load(serialized_flow)
+def validate_schedule_parameters(
+    flow_function: Flow, schedules: List[Schedule] = None
+) -> None:
+    """
+    Validates that all scheduled runs have parameters matching the flow's signature.
 
-        # Check that the default parameters include all required parameters
-        required_parameters = {p for p in flow.parameters() if p.required}
-        if flow.schedule is not None and required_parameters:
-            required_names = {p.name for p in required_parameters}
-            for c in flow.schedule.clocks:
-                try:
-                    assert required_names <= set(c.parameter_defaults.keys())
-                except AssertionError:
-                    raise ValueError(
-                        "Some of the flow's required parameters are missing from the "
-                        "clock's default parameters :"
-                        f"{required_names - set(c.parameter_defaults.keys())}"
-                    )
+    Args:
+        flow_function: The flow function to validate against
+        schedules: List of schedule configurations with parameters
+
+    Raises:
+        ValueError: If any schedule parameters don't match the flow signature
+    """
+    flow_params = inspect.signature(flow_function).parameters
+
+    if schedules is None:
+        schedules = []
+
+    for schedule in schedules:
+        schedule_params = schedule.parameters
+
+        for name, param in flow_params.items():
+            if param.default == inspect.Parameter.empty and name not in schedule_params:
+                raise ValueError(
+                    f"Schedule is missing required parameter '{name}' "
+                    f"for flow '{flow_function.__name__}'"
+                )
+
+        for param_name in schedule_params:
+            if param_name not in flow_params:
+                raise ValueError(
+                    f"Schedule contains unknown parameter '{param_name}' "
+                    f"for flow '{flow_function.__name__}'"
+                )
+
+
+def test_deployments():
+    for flow_to_deploy in flows_to_deploy:
+        validate_schedule_parameters(flow_to_deploy.flow, flow_to_deploy.schedules)

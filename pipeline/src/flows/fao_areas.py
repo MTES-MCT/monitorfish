@@ -1,16 +1,12 @@
-from pathlib import Path
-
 import geopandas as gpd
-import prefect
 import requests
-from prefect import Flow, task
-from prefect.executors import LocalDaskExecutor
+from prefect import Task, flow, get_run_logger, task
 
 from config import FAO_AREAS_URL, PROXIES
 from src.generic_tasks import load
 
 
-@task(checkpoint=False)
+@task
 def extract_fao_areas(url: str, proxies: dict) -> gpd.GeoDataFrame:
     """
     Download shapefile of FAO areas and load to GeoDataFrame.
@@ -29,7 +25,7 @@ def extract_fao_areas(url: str, proxies: dict) -> gpd.GeoDataFrame:
     return fao_areas
 
 
-@task(checkpoint=False)
+@task
 def transform_fao_areas(fao_areas: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     """
     Transforms the ``fao_areas`` DataFrame to match the desired table columns.
@@ -45,9 +41,9 @@ def transform_fao_areas(fao_areas: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     return fao_areas
 
 
-@task(checkpoint=False)
+@task
 def load_fao_areas(fao_areas: gpd.GeoDataFrame):
-    logger = prefect.context.get("logger")
+    logger = get_run_logger()
 
     load(
         fao_areas,
@@ -60,9 +56,12 @@ def load_fao_areas(fao_areas: gpd.GeoDataFrame):
     )
 
 
-with Flow("FAO areas", executor=LocalDaskExecutor()) as flow:
-    fao_areas = extract_fao_areas(url=FAO_AREAS_URL, proxies=PROXIES)
+@flow(name="FAO areas")
+def fao_areas_flow(
+    url: str = FAO_AREAS_URL,
+    proxies: dict = PROXIES,
+    extract_fao_areas_fn: Task = extract_fao_areas,
+):
+    fao_areas = extract_fao_areas_fn(url=url, proxies=proxies)
     fao_areas = transform_fao_areas(fao_areas)
     load_fao_areas(fao_areas)
-
-flow.file_name = Path(__file__).name

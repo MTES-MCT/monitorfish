@@ -1,13 +1,13 @@
 import geopandas as gpd
 from prefect import task
 
-from src.flows.fao_areas import flow
+from src.flows.fao_areas import fao_areas_flow
 from src.read_query import read_query
 from tests.test_utils import make_square_multipolygon
 
 
-@task(checkpoint=False)
-def mock_extract_fao_areas() -> gpd.GeoDataFrame:
+@task
+def mock_extract_fao_areas(url: str, proxies: dict) -> gpd.GeoDataFrame:
     fao_areas = gpd.GeoDataFrame(
         {
             "id": [
@@ -50,16 +50,14 @@ def mock_extract_fao_areas() -> gpd.GeoDataFrame:
     return fao_areas
 
 
-flow.replace(flow.get_tasks("extract_fao_areas")[0], mock_extract_fao_areas)
-
-
 def test_flow(reset_test_data):
     query = "SELECT * FROM fao_areas"
     initial_fao_areas = read_query(query, db="monitorfish_remote")
 
-    flow.schedule = None
-    state = flow.run()
-    assert state.is_successful()
+    state = fao_areas_flow(
+        extract_fao_areas_fn=mock_extract_fao_areas, return_state=True
+    )
+    assert state.is_completed()
 
     # Check loaded ports
     loaded_fao_areas = read_query(query, db="monitorfish_remote")

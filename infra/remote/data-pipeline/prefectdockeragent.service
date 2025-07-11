@@ -1,0 +1,13 @@
+[Unit]
+Description=Prefect Docker Agent
+
+[Service]
+Type=simple
+
+User=<USER-TO-CHANGE>
+ExecStart=<SCRIPT-LOCATION-TO-CHANGE>/prefectdockeragent.sh
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

@@ -1,21 +1,17 @@
 from ast import literal_eval
-from pathlib import Path
 
 import pandas as pd
-import prefect
-from prefect import Flow, case, task
-from prefect.executors import LocalDaskExecutor
+from prefect import flow, get_run_logger, task
 from sqlalchemy import DDL, Table
 
 from config import LIBRARY_LOCATION
 from src.db_config import create_engine
 from src.generic_tasks import load
-from src.shared_tasks.control_flow import check_flow_not_running
 from src.shared_tasks.infrastructure import get_table
 from src.utils import delete
 
 
-@task(checkpoint=False)
+@task
 def extract_pno_types():
     return pd.read_csv(
         LIBRARY_LOCATION / "data/pno_types.csv",
@@ -24,7 +20,7 @@ def extract_pno_types():
     )
 
 
-@task(checkpoint=False)
+@task
 def extract_pno_type_rules():
     return pd.read_csv(
         LIBRARY_LOCATION / "data/pno_type_rules.csv",
@@ -35,14 +31,14 @@ def extract_pno_type_rules():
     )
 
 
-@task(checkpoint=False)
+@task
 def load_pno_types_and_rules(
     pno_types: pd.DataFrame,
     pno_type_rules: pd.DataFrame,
     pno_types_table: Table,
     pno_type_rules_table: Table,
 ):
-    logger = prefect.context.get("logger")
+    logger = get_run_logger()
 
     e = create_engine("monitorfish_remote")
 
@@ -58,7 +54,7 @@ def load_pno_types_and_rules(
             table_name="pno_types",
             schema="public",
             connection=con,
-            logger=prefect.context.get("logger"),
+            logger=logger,
             how="append",
             end_ddls=[
                 DDL(
@@ -76,7 +72,7 @@ def load_pno_types_and_rules(
             table_name="pno_type_rules",
             schema="public",
             connection=con,
-            logger=prefect.context.get("logger"),
+            logger=logger,
             how="append",
             pg_array_columns=[
                 "species",
@@ -95,15 +91,12 @@ def load_pno_types_and_rules(
         )
 
 
-with Flow("Init pno types", executor=LocalDaskExecutor()) as flow:
-    flow_not_running = check_flow_not_running()
-    with case(flow_not_running, True):
-        pno_types_table = get_table("pno_types")
-        pno_type_rules_table = get_table("pno_type_rules")
-        pno_types = extract_pno_types()
-        pno_type_rules = extract_pno_type_rules()
-        load_pno_types_and_rules(
-            pno_types, pno_type_rules, pno_types_table, pno_type_rules_table
-        )
-
-flow.file_name = Path(__file__).name
+@flow(name="Init pno types")
+def init_pno_types_flow():
+    pno_types_table = get_table("pno_types")
+    pno_type_rules_table = get_table("pno_type_rules")
+    pno_types = extract_pno_types()
+    pno_type_rules = extract_pno_type_rules()
+    load_pno_types_and_rules(
+        pno_types, pno_type_rules, pno_types_table, pno_type_rules_table
+    )

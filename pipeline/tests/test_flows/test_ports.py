@@ -5,9 +5,9 @@ import pandas as pd
 import pytest
 from prefect import task
 
-from src.flows.ports import flow, invalidate_cache
+from src.flows.ports import invalidate_cache, ports_flow
 from src.read_query import read_query
-from tests.mocks import mock_check_flow_not_running, mock_update_resource
+from tests.mocks import mock_update_resource
 
 local_ports_data = pd.DataFrame(
     {
@@ -53,37 +53,44 @@ def expected_ports_open_data(expected_loaded_ports) -> pd.DataFrame:
     return df
 
 
-@task(checkpoint=False)
+@task
 def mock_extract_local_ports() -> pd.DataFrame:
     return local_ports_data
 
 
-@task(checkpoint=False)
+mock_calls = []
+
+
+@task
 def mock_invalidate_cache() -> pd.DataFrame:
     with patch("src.flows.ports.requests") as mock_requests:
-        invalidate_cache.run()
+        invalidate_cache.fn()
 
-    return mock_requests
-
-
-flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
-flow.replace(flow.get_tasks("extract_local_ports")[0], mock_extract_local_ports)
-flow.replace(flow.get_tasks("update_resource")[0], mock_update_resource)
-flow.replace(flow.get_tasks("invalidate_cache")[0], mock_invalidate_cache)
+    mock_calls.append(mock_requests)
 
 
 def test_flow(reset_test_data, expected_ports_open_data, expected_loaded_ports):
-    flow.schedule = None
-    state = flow.run()
-    assert state.is_successful()
+    state = ports_flow(
+        extract_local_ports_fn=mock_extract_local_ports,
+        update_resource_fn=mock_update_resource,
+        invalidate_cache_fn=mock_invalidate_cache,
+        return_state=True,
+    )
+    assert state.is_completed()
 
     # Check loaded ports
     query = "SELECT * FROM ports ORDER BY locode"
     loaded_ports = read_query(query, db="monitorfish_remote")
     pd.testing.assert_frame_equal(loaded_ports, expected_loaded_ports, check_like=True)
 
-    # Check csv file object
-    csv_file_object = state.result[flow.get_tasks("get_csv_file_object")[0]].result
+    # Check cache invalidation
+    mock_call = mock_calls.pop()
+    mock_call.put.assert_called_once_with(
+        "https://monitor.fish/api/v1/ports/invalidate"
+    )
+
+    # Check open data publication
+    csv_file_object = state.result()
     assert isinstance(csv_file_object, BytesIO)
     df_from_csv_file_object = (
         pd.read_csv(csv_file_object, dtype={"region": str})
@@ -95,10 +102,4 @@ def test_flow(reset_test_data, expected_ports_open_data, expected_loaded_ports):
         df_from_csv_file_object.convert_dtypes(),
         expected_ports_open_data.convert_dtypes(),
         check_like=True,
-    )
-    mock_invalidate_cache_result = state.result[
-        flow.get_tasks("mock_invalidate_cache")[0]
-    ].result
-    mock_invalidate_cache_result.put.assert_called_once_with(
-        "https://monitor.fish/api/v1/ports/invalidate"
     )

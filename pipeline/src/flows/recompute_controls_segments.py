@@ -1,10 +1,7 @@
-from pathlib import Path
 from typing import List
 
 import pandas as pd
-import prefect
-from prefect import Flow, Parameter, case, task
-from prefect.executors import LocalDaskExecutor
+from prefect import flow, get_run_logger, task
 from sqlalchemy import text
 
 from src.db_config import create_engine
@@ -12,12 +9,11 @@ from src.entities.missions import MissionActionType
 from src.generic_tasks import extract
 from src.helpers.segments import allocate_segments_to_catches
 from src.processing import df_to_dict_series, prepare_df_for_loading
-from src.shared_tasks.control_flow import check_flow_not_running
 from src.shared_tasks.segments import extract_segments_of_year
 from src.utils import psql_insert_copy
 
 
-@task(checkpoint=False)
+@task
 def extract_controls_catches(year: int, control_types: List[str]) -> pd.DataFrame:
     """
     Extracts controls data from the specified year.
@@ -53,7 +49,7 @@ def extract_controls_catches(year: int, control_types: List[str]) -> pd.DataFram
     )
 
 
-@task(checkpoint=False)
+@task
 def compute_controls_segments(
     controls_catches: pd.DataFrame,
     segments: pd.DataFrame,
@@ -94,9 +90,9 @@ def compute_controls_segments(
     return controls_segments
 
 
-@task(checkpoint=False)
+@task
 def load_controls_segments(controls_segments: pd.DataFrame):
-    logger = prefect.context.get("logger")
+    logger = get_run_logger()
 
     e = create_engine("monitorfish_remote")
     with e.begin() as connection:
@@ -140,23 +136,14 @@ def load_controls_segments(controls_segments: pd.DataFrame):
         )
 
 
-with Flow("Recompute controls segments", executor=LocalDaskExecutor()) as flow:
-    flow_not_running = check_flow_not_running()
-    with case(flow_not_running, True):
-        # Parameters
-        year = Parameter("year")
-        control_types = Parameter("control_types")
+@flow(name="Recompute controls segments")
+def recompute_controls_segments_flow(year: int, control_types: List[str]):
+    # Extract
+    controls_catches = extract_controls_catches(year=year, control_types=control_types)
+    segments = extract_segments_of_year(year=year)
 
-        # Extract
-        controls_catches = extract_controls_catches(
-            year=year, control_types=control_types
-        )
-        segments = extract_segments_of_year(year=year)
+    # Transform
+    controls_segments = compute_controls_segments(controls_catches, segments)
 
-        # Transform
-        controls_segments = compute_controls_segments(controls_catches, segments)
-
-        # Load
-        load_controls_segments(controls_segments)
-
-flow.file_name = Path(__file__).name
+    # Load
+    load_controls_segments(controls_segments)

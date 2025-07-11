@@ -6,9 +6,8 @@ from dotenv import load_dotenv
 # Package structure
 ROOT_DIRECTORY = Path(__file__).parent
 LIBRARY_LOCATION = ROOT_DIRECTORY / Path("src")
-PIPELINE_DATA_LOCATION = LIBRARY_LOCATION / Path("pipeline/data")
-NON_COMMITED_DATA_LOCATION = PIPELINE_DATA_LOCATION / Path("non_commited_data")
-QUERIES_LOCATION = LIBRARY_LOCATION / Path("pipeline/queries")
+PIPELINE_DATA_LOCATION = LIBRARY_LOCATION / Path("data")
+QUERIES_LOCATION = LIBRARY_LOCATION / Path("queries")
 TEST_DATA_LOCATION = ROOT_DIRECTORY / Path("tests/test_data")
 LOCAL_MIGRATIONS_FOLDER = str(
     (ROOT_DIRECTORY / Path("../backend/src/main/resources/db/migration")).resolve()
@@ -17,8 +16,8 @@ LOCAL_MIGRATIONS_FOLDER = str(
 # mount migrations folder from the host to the database container
 HOST_MIGRATIONS_FOLDER = os.getenv("HOST_MIGRATIONS_FOLDER", LOCAL_MIGRATIONS_FOLDER)
 
-EMAIL_TEMPLATES_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/templates")
-EMAIL_IMAGES_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/images")
+EMAIL_TEMPLATES_LOCATION = LIBRARY_LOCATION / Path("emails/templates")
+EMAIL_IMAGES_LOCATION = LIBRARY_LOCATION / Path("emails/images")
 STATE_FLAGS_ICONS_LOCATION = EMAIL_IMAGES_LOCATION / Path("flags")
 CNSP_LOGO_PATH = EMAIL_IMAGES_LOCATION / "logo_cnsp.jpg"
 SE_MER_LOGO_PATH = EMAIL_IMAGES_LOCATION / "logo_se_mer.jpg"
@@ -27,9 +26,9 @@ MARIANNE_LOGO_PATH = EMAIL_IMAGES_LOCATION / "marianne.gif"
 LIBERTE_EGALITE_FRATERNITE_LOGO_PATH = (
     EMAIL_IMAGES_LOCATION / "liberte_egalite_fraternite.gif"
 )
-EMAIL_FONTS_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/fonts")
-EMAIL_STYLESHEETS_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/stylesheets")
-SMS_TEMPLATES_LOCATION = LIBRARY_LOCATION / Path("pipeline/sms")
+EMAIL_FONTS_LOCATION = LIBRARY_LOCATION / Path("emails/fonts")
+EMAIL_STYLESHEETS_LOCATION = LIBRARY_LOCATION / Path("emails/stylesheets")
+SMS_TEMPLATES_LOCATION = LIBRARY_LOCATION / Path("sms")
 
 # Must be set to true when running tests locally
 TEST_LOCAL = os.getenv("TEST_LOCAL", "False").lower() in ("true", "t", "yes", "y")
@@ -82,7 +81,7 @@ WEEKLY_CONTROL_REPORT_EMAIL_TEST_MODE = os.getenv(
 # Flow execution configuration
 DOCKER_IMAGE = "docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline"
 MONITORFISH_VERSION = os.getenv("MONITORFISH_VERSION")
-FLOWS_LOCATION = Path("src/pipeline/flows")  # relative to the WORKDIR in the image
+FLOWS_LOCATION = Path("src/flows")  # relative to the WORKDIR in the image
 FLOWS_LABEL = "monitorfish"
 MAX_FLOW_RUN_MINUTES = 50
 FLOW_STATES_TO_CLEAN = ["Running"]
@@ -110,9 +109,6 @@ ISSCAAP_GROUPS_URL = (
 )
 
 FAO_SPECIES_URL = "http://www.fao.org/fishery/static/ASFIS/ASFIS_sp.zip"
-DATA_GOUV_SPECIES_URL = (
-    "https://www.data.gouv.fr/fr/datasets/r/32616122-6931-4875-8e26-a57832012419"
-)
 
 FAO_AREAS_URL = (
     "https://www.fao.org/fishery/geoserver/fifao/ows?"

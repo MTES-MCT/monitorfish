@@ -1,0 +1,84 @@
+name: CI/CD data processing pipeline - Prefect 3
+
+on:
+  push:
+    paths:
+      - "pipeline/**"
+      - "backend/src/main/resources/db/migration/**"
+      - ".github/workflows/*"
+      - "infra/docker/datapipeline/**"
+      - "Makefile"
+  schedule:
+    - cron: "38 11 */3 * *"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build & test docker image
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get last release version
+        id: lastrelease
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          repository: mtes-mct/monitorfish
+
+      - name: Set ENV_PROFILE as PROD when it is a release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: echo "ENV_PROFILE=prod" >> $GITHUB_ENV
+
+      - name: Set VERSION
+        run: |
+          if [ "${ENV_PROFILE}" != "prod" ]; then\
+              echo "VERSION=${{ steps.lastrelease.outputs.release }}_snapshot" >> $GITHUB_ENV
+          else\
+              echo "VERSION=${{ steps.lastrelease.outputs.release }}" >> $GITHUB_ENV
+          fi
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@master
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache-pipeline-prefect3
+          key: ${{ runner.os }}-single-buildx-data-pipeline-prefect3-${{ github.ref_name }}
+          restore-keys: |
+            ${{ runner.os }}-single-buildx-data-pipeline-prefect3-
+
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          builder: ${{ steps.buildx.outputs.name }}
+          file: infra/docker/datapipeline/prefect3.Dockerfile
+          push: false
+          tags: monitorfish-pipeline-prefect3:${{ env.VERSION }}
+          cache-from: type=local,src=/tmp/.buildx-cache-pipeline-prefect3
+          cache-to: type=local,dest=/tmp/.buildx-cache-pipeline-prefect3-new
+
+        # Temp fix
+        # https://github.com/docker/build-push-action/issues/252
+        # https://github.com/moby/buildkit/issues/1896
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache-pipeline-prefect3
+          mv /tmp/.buildx-cache-pipeline-prefect3-new /tmp/.buildx-cache-pipeline-prefect3
+
+      - name: Set DOCKER_GROUP
+        run: echo "DOCKER_GROUP=$(getent group docker | cut --delimiter=":" -f3)" >> $GITHUB_ENV
+
+      - name: Test docker image
+        run: make docker-test-pipeline-prefect-3
+
+      - name: Push docker image to registry
+        if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v1') || startsWith(github.ref, 'refs/heads/v1') || startsWith(github.ref, 'refs/tags/v2') || startsWith(github.ref, 'refs/heads/v2')
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
+          make docker-tag-pipeline-prefect-3
+          make docker-push-pipeline-prefect-3

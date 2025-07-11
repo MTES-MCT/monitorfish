@@ -1,0 +1,1 @@
+DELETE FROM emails_sent_to_control_units;

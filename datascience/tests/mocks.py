@@ -8,9 +8,9 @@ import pandas as pd
 import requests
 from prefect import task
 
-from src.pipeline.entities.monitorfish_healthcheck import MonitorfishHealthcheck
-from src.pipeline.generic_tasks import extract
-from src.pipeline.shared_tasks.datagouv import update_resource
+from src.entities.monitorfish_healthcheck import MonitorfishHealthcheck
+from src.generic_tasks import extract
+from src.shared_tasks.datagouv import update_resource
 
 
 def mock_extract_side_effect(
@@ -121,7 +121,7 @@ def mock_update_resource(
         r.url = url
         return r
 
-    with patch("src.pipeline.shared_tasks.datagouv.requests.post", return_200):
+    with patch("src.shared_tasks.datagouv.requests.post", return_200):
         return update_resource.run(
             dataset_id=dataset_id,
             resource_id=resource_id,

@@ -41,6 +41,7 @@ RUN echo ${ENV_PROFILE}
 
 COPY frontend/ /tmp/frontend/
 COPY infra/ /tmp/infra/
+COPY .env.example/ /tmp/.env.example
 WORKDIR /tmp/frontend
 
 # Files are expected to be in /tmp/frontend/dist/monitorfish-frontend

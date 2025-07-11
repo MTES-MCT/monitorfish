@@ -20,6 +20,7 @@ from src.flows.fao_areas import fao_areas_flow
 from src.flows.fishing_gear_codes import fishing_gear_codes_flow
 from src.flows.init_pno_types import init_pno_types_flow
 from src.flows.init_species_groups import init_species_groups_flow
+from src.flows.ports import ports_flow
 from src.flows.species import species_flow
 
 
@@ -40,6 +41,7 @@ flows_to_deploy = [
     FlowAndSchedules(flow=fishing_gear_codes_flow),
     FlowAndSchedules(flow=init_pno_types_flow),
     FlowAndSchedules(flow=init_species_groups_flow),
+    FlowAndSchedules(flow=ports_flow),
 ]
 
 

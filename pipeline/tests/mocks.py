@@ -122,7 +122,7 @@ def mock_update_resource(
         return r
 
     with patch("src.shared_tasks.datagouv.requests.post", return_200):
-        return update_resource.run(
+        return update_resource.fn(
             dataset_id=dataset_id,
             resource_id=resource_id,
             resource_title=resource_title,

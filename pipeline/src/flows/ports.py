@@ -2,14 +2,12 @@ import os
 import re
 from datetime import date
 from itertools import product
-from pathlib import Path
 from time import sleep
+from typing import Callable
 
 import pandas as pd
-import prefect
 import requests
-from prefect import Flow, Parameter, case, task
-from prefect.executors import LocalDaskExecutor
+from prefect import flow, get_run_logger, task
 from sqlalchemy import text
 
 from config import (
@@ -25,7 +23,6 @@ from src.helpers.fao_areas import remove_redundant_fao_area_codes
 from src.helpers.spatial import geocode, geocode_google
 from src.processing import coalesce, prepare_df_for_loading
 from src.read_query import read_query, read_table
-from src.shared_tasks.control_flow import check_flow_not_running
 from src.shared_tasks.datagouv import get_csv_file_object, update_resource
 from src.utils import psql_insert_copy
 
@@ -127,7 +124,7 @@ def make_lat_lon(lat_lon: str):
 # Source : https://unece.org/trade/cefact/codes-trade
 
 
-@task(checkpoint=False)
+@task
 def extract_unece_locations(csv_directory_path):
     csv_files = os.listdir(csv_directory_path)
     csv_filepaths = [
@@ -164,7 +161,7 @@ def extract_unece_locations(csv_directory_path):
     return locations
 
 
-@task(checkpoint=False)
+@task
 def clean_unece(locations):
     # Remove duplicate locodes by taking only the most recent one
     locations["relevant_date_yymm"] = locations.relevant_date_yymm.map(make_date)
@@ -204,7 +201,7 @@ def clean_unece(locations):
     return locations
 
 
-@task(checkpoint=False)
+@task
 def load_unece(locations):
     engine = create_engine("monitorfish_remote")
     locations.to_sql(
@@ -216,8 +213,8 @@ def load_unece(locations):
     )
 
 
-with Flow("Create UNECE ports codes table") as flow_make_unece_ports:
-    csv_directory_path = Parameter("csv_directory_path")
+@flow(name="Create UNECE ports codes table")
+def flow_make_unece_ports(csv_directory_path: str):
     locations = extract_unece_locations(csv_directory_path)
     locations = clean_unece(locations)
     load_unece(locations)
@@ -226,14 +223,14 @@ with Flow("Create UNECE ports codes table") as flow_make_unece_ports:
 # ** Flow to extract data from csv file downloaded from CIRCABC Master Data Register **
 
 
-@task(checkpoint=False)
+@task
 def extract_circabc_locations(csv_filepath):
     locations = pd.read_csv(csv_filepath, encoding="utf-8", header=[0])
 
     return locations
 
 
-@task(checkpoint=False)
+@task
 def clean_circabc(locations):
     rename_cols = {
         "Code": "locode",
@@ -269,7 +266,7 @@ def clean_circabc(locations):
     return locations
 
 
-@task(checkpoint=False)
+@task
 def load_circabc(locations):
     engine = create_engine("monitorfish_remote")
     locations.to_sql(
@@ -281,8 +278,8 @@ def load_circabc(locations):
     )
 
 
-with Flow("Create CIRCABC ports codes table") as flow_make_circabc_ports:
-    csv_filepath = Parameter("csv_filepath")
+@flow(name="Create CIRCABC ports codes table")
+def flow_make_circabc_ports(csv_filepath: str):
     locations = extract_circabc_locations(csv_filepath)
     locations = clean_circabc(locations)
     load_circabc(locations)
@@ -291,19 +288,19 @@ with Flow("Create CIRCABC ports codes table") as flow_make_circabc_ports:
 # ************** Flow to extract ports from CIRCABC and UNECE and merge ***************
 
 
-@task(checkpoint=False)
+@task
 def extract_unece_ports():
     unece_ports = read_table("monitorfish_remote", "external", "unece_port_codes")
     return unece_ports
 
 
-@task(checkpoint=False)
+@task
 def extract_circabc_ports():
     circabc_ports = read_table("monitorfish_remote", "external", "circabc_port_codes")
     return circabc_ports
 
 
-@task(checkpoint=False)
+@task
 def merge_circabc_unece(circabc_ports, unece_ports):
     keep_unece_cols = ["region", "locode", "latitude", "longitude"]
 
@@ -318,7 +315,7 @@ def merge_circabc_unece(circabc_ports, unece_ports):
     return ports
 
 
-@task(checkpoint=False)
+@task
 def combine_columns_into_value(ports):
     combine_cols = {
         "latitude": ["latitude_circabc", "latitude_unece"],
@@ -335,7 +332,7 @@ def combine_columns_into_value(ports):
     return res
 
 
-@task(checkpoint=False)
+@task
 def clean_ports(ports: pd.DataFrame) -> pd.DataFrame:
     """
     Rename ambiguous port names and change incorrect country codes
@@ -410,7 +407,7 @@ def clean_ports(ports: pd.DataFrame) -> pd.DataFrame:
     return ports
 
 
-@task(checkpoint=False)
+@task
 def parse_ports_names(ports):
     pattern = re.compile(r"^(?P<location_or_city>.*?)(\((?P<city>.*)\))?$")
 
@@ -435,7 +432,7 @@ def parse_ports_names(ports):
     return ports
 
 
-@task(checkpoint=False)
+@task
 def load_port_codes(ports):
     engine = create_engine("monitorfish_remote")
     ports.to_sql(
@@ -447,9 +444,8 @@ def load_port_codes(ports):
     )
 
 
-with Flow(
-    "Extract combine CIRCABC and UNECE ports referencials"
-) as flow_combine_circabc_unece_ports:
+@flow(name="Extract combine CIRCABC and UNECE ports referencials")
+def flow_combine_circabc_unece_ports():
     circabc_ports = extract_circabc_ports()
     unece_ports = extract_unece_ports()
     ports = merge_circabc_unece(circabc_ports, unece_ports)
@@ -584,13 +580,13 @@ def geocode_row_google(row):
     return pd.Series([lat, lon], index=["geocoded_latitude", "geocoded_longitude"])
 
 
-@task(checkpoint=False)
+@task
 def extract_port_codes():
     ports = read_table("monitorfish_remote", "interim", "port_codes")
     return ports
 
 
-@task(checkpoint=False)
+@task
 def extract_active_ports_locodes() -> set:
     csv_file_path = "../../../data/external/monitorfish_prod/active_ports_locodes.csv"
     ports_locodes = pd.read_csv(csv_file_path)
@@ -598,14 +594,14 @@ def extract_active_ports_locodes() -> set:
     return ports_locodes_set
 
 
-@task(checkpoint=False)
+@task
 def flag_active_ports(ports: pd.DataFrame, active_ports_locodes: set) -> pd.DataFrame:
     ports = ports.copy(deep=True)
     ports["is_active"] = ports.locode.isin(active_ports_locodes)
     return ports
 
 
-@task(checkpoint=False)
+@task
 def geocode_ports(ports):
     country_codes_to_geocode = [
         "FR",
@@ -632,7 +628,7 @@ def geocode_ports(ports):
     return geocoded_ports
 
 
-@task(checkpoint=False)
+@task
 def load_geocoded_ports(geocoded_ports):
     engine = create_engine("monitorfish_remote")
     geocoded_ports.to_sql(
@@ -644,7 +640,8 @@ def load_geocoded_ports(geocoded_ports):
     )
 
 
-with Flow("Geocode ports") as flow_geocode_ports:
+@flow(name="Geocode ports")
+def flow_geocode_ports():
     ports = extract_port_codes()
     active_ports_locodes = extract_active_ports_locodes()
     ports = flag_active_ports(ports, active_ports_locodes)
@@ -656,12 +653,12 @@ with Flow("Geocode ports") as flow_geocode_ports:
 # Exported on 2023/07/04
 # /!\/!\ BE EXTRA CAREFUL WHEN USING THIS FLOW, AS IT MIGHT ERASE LOCAL CHANGES /!\/!\
 
-# @task(checkpoint=False)
+# @task
 # def extract_geocoded_ports() -> gpd.GeoDataFrame:
 #     return extract("monitorfish_remote", "monitorfish/geocoded_ports.sql")
 #
 #
-# @task(checkpoint=False)
+# @task
 # def load_ports_to_local_db(ports: gpd.GeoDataFrame) :
 #     load(
 #         ports,
@@ -684,17 +681,17 @@ with Flow("Geocode ports") as flow_geocode_ports:
 #                  liste-des-ports-du-systeme-ers-avec-donnees-de-position/
 
 
-@task(checkpoint=False)
+@task
 def extract_local_ports() -> pd.DataFrame:
     return extract("monitorfish_local", "cross/ports.sql")
 
 
-@task(checkpoint=False)
+@task
 def compute_ports_zones(ports: pd.DataFrame) -> pd.DataFrame:
     """
     Compute ports FAO areas, façades and departments.
     """
-    logger = prefect.context.get("logger")
+    logger = get_run_logger()
     engine = create_engine("monitorfish_remote")
 
     with engine.begin() as connection:
@@ -841,7 +838,7 @@ def compute_ports_zones(ports: pd.DataFrame) -> pd.DataFrame:
     return ports
 
 
-@task(checkpoint=False)
+@task
 def clean_fao_areas(ports: pd.DataFrame) -> pd.DataFrame:
     """
     Keep only the smallest FAO area(s) of each port.
@@ -853,9 +850,9 @@ def clean_fao_areas(ports: pd.DataFrame) -> pd.DataFrame:
     return ports
 
 
-@task(checkpoint=False)
+@task
 def transform_ports_open_data(ports: pd.DataFrame) -> pd.DataFrame:
-    logger = prefect.context.get("logger")
+    logger = get_run_logger()
     ports_open_data = prepare_df_for_loading(
         ports,
         logger=logger,
@@ -864,59 +861,53 @@ def transform_ports_open_data(ports: pd.DataFrame) -> pd.DataFrame:
     return ports_open_data
 
 
-@task(checkpoint=False)
+@task
 def invalidate_cache():
     requests.put(PORTS_CACHE_INVALIDATION_ENDPOINT)
 
 
-@task(checkpoint=False)
+@task
 def load_ports(ports):
+    logger = get_run_logger()
     load(
         ports,
         table_name="ports",
         schema="public",
         db_name="monitorfish_remote",
-        logger=prefect.context.get("logger"),
+        logger=logger,
         how="replace",
         replace_with_truncate=True,
         pg_array_columns=["fao_areas"],
     )
 
 
-with Flow("Ports", executor=LocalDaskExecutor()) as flow:
-    flow_not_running = check_flow_not_running()
-    with case(flow_not_running, True):
-        # Parameters
-        dataset_id = Parameter("dataset_id", default=PORTS_DATASET_ID)
-        ports_resource_id = Parameter(
-            "ports_resource_id", default=PORTS_CSV_RESOURCE_ID
-        )
-        ports_resource_title = Parameter(
-            "ports_resource_title", default=PORTS_CSV_RESOURCE_TITLE
-        )
+@flow(name="Ports")
+def ports_flow(
+    dataset_id: str = PORTS_DATASET_ID,
+    ports_resource_id: str = PORTS_CSV_RESOURCE_ID,
+    ports_resource_title: str = PORTS_CSV_RESOURCE_TITLE,
+    is_integration: bool = IS_INTEGRATION,
+    extract_local_ports_fn: Callable = extract_local_ports,
+    update_resource_fn: Callable = update_resource,
+    invalidate_cache_fn: Callable = invalidate_cache,
+):
+    # Extract
+    ports = extract_local_ports_fn()
 
-        is_integration = Parameter("is_integration", default=IS_INTEGRATION)
+    # Transform
+    ports = compute_ports_zones(ports)
+    ports = clean_fao_areas(ports)
+    ports_open_data = transform_ports_open_data(ports)
 
-        # Extract
-        ports = extract_local_ports()
-
-        # Transform
-        ports = compute_ports_zones(ports)
-        ports = clean_fao_areas(ports)
-        ports_open_data = transform_ports_open_data(ports)
-
-        # Load
-        loaded_ports = load_ports(ports)
-        invalidate_cache(upstream_tasks=[loaded_ports])
-
-        ports_open_data_csv_file = get_csv_file_object(ports_open_data)
-        update_resource(
-            dataset_id=dataset_id,
-            resource_id=ports_resource_id,
-            resource_title=ports_resource_title,
-            resource=ports_open_data_csv_file,
-            mock_update=is_integration,
-        )
-
-
-flow.file_name = Path(__file__).name
+    # Load
+    loaded_ports = load_ports(ports)
+    invalidate_cache_fn(wait_for=[loaded_ports])
+    ports_open_data_csv_file = get_csv_file_object(ports_open_data)
+    update_resource_fn(
+        dataset_id=dataset_id,
+        resource_id=ports_resource_id,
+        resource_title=ports_resource_title,
+        resource=ports_open_data_csv_file,
+        mock_update=is_integration,
+    )
+    return ports_open_data_csv_file

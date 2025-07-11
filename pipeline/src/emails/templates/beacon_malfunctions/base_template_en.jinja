@@ -1,0 +1,14 @@
+{% extends "base_template.jinja" %}
+
+{% block language %}lang="en"{% endblock %}>
+{% block sender %}From{% endblock %}
+{% block addressees %}
+    <h3>To</h3>
+    <p>{% if foreign_fmc_name %}{{ foreign_fmc_name }} {% endif %}FMC</p>{% endblock %}
+{% block subject %}Subject{% endblock %}
+{% block le %}{% endblock %}
+{% block bonjour %}Dear Sir or Madam,{% endblock %}
+
+{% block salutations %}<p>Best regards,</p>
+<p class="right-align">Fisheries Information Systems Dept., France FMC</p>{% endblock %}
+{% block footer %}{% endblock %}

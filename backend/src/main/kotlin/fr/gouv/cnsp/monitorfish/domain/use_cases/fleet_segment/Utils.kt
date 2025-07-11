@@ -16,7 +16,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.dtos.SpeciesCatch
  *         ['27.8.a', '27', '37.1'] will filter to ['27.8.a', '37.1']
  *
  * @see: Python implementation :
- *      https://github.com/MTES-MCT/monitorfish/blob/master/datascience/src/pipeline/helpers/fao_areas.py#L4
+ *      https://github.com/MTES-MCT/monitorfish/blob/master/datascience/src/helpers/fao_areas.py#L4
  */
 fun removeRedundantFaoArea(faoAreas: List<FaoArea>): List<FaoArea> {
     val distinctFAOAreas = faoAreas.distinctBy { it.faoCode }

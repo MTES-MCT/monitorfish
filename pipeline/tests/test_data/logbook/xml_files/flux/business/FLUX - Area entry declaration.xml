@@ -1,0 +1,83 @@
+<FLUXFAReportMessage xmlns="urn:un:unece:uncefact:data:standard:FLUXFAReportMessage:3" xmlns:cmtc="urn:un:unece:uncefact:codelist:standard:UNECE:CommunicationMeansTypeCode:D16A" xmlns:qdt="urn:un:unece:uncefact:data:Standard:QualifiedDataType:20" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20">
+	<FLUXReportDocument>
+		<ram:ID schemeID="UUID">9376ccbd-be2f-4d3d-b4ac-3c559ac9586a</ram:ID>
+		<ram:CreationDateTime>
+			<udt:DateTime>2021-01-31T12:29:02.149Z</udt:DateTime>
+		</ram:CreationDateTime>
+		<ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
+		<ram:OwnerFLUXParty>
+			<ram:ID schemeID="FLUX_GP_PARTY">BEL</ram:ID>
+			<ram:Name>000000000</ram:Name>
+		</ram:OwnerFLUXParty>
+	</FLUXReportDocument>	
+	<FAReportDocument>
+		<ram:TypeCode listID="FLUX_FA_REPORT_TYPE">DECLARATION</ram:TypeCode>
+		<ram:AcceptanceDateTime>
+			<udt:DateTime>2021-01-22T09:02:47.319Z</udt:DateTime>
+		</ram:AcceptanceDateTime>
+		<ram:RelatedFLUXReportDocument>
+			<ram:ID schemeID="UUID">8eec0190-c353-4147-8a65-fcc697fbadbc</ram:ID>
+			<ram:CreationDateTime>
+				<udt:DateTime>2021-01-22T09:02:47.705Z</udt:DateTime>
+			</ram:CreationDateTime>
+			<ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
+			<ram:OwnerFLUXParty>
+				<ram:ID schemeID="FLUX_GP_PARTY">BEL</ram:ID>
+				<ram:Name>000000000</ram:Name>
+			</ram:OwnerFLUXParty>
+		</ram:RelatedFLUXReportDocument>
+		<ram:SpecifiedFishingActivity>
+			<ram:TypeCode listID="FLUX_FA_TYPE">AREA_ENTRY</ram:TypeCode>
+			<ram:OccurrenceDateTime>
+				<udt:DateTime>2021-01-22T09:00:00Z</udt:DateTime>
+			</ram:OccurrenceDateTime>
+			<ram:ReasonCode listID="FA_REASON_ENTRY">FIS</ram:ReasonCode>
+			<ram:SpeciesTargetCode listID="TARGET_SPECIES_GROUP">DEMERSAL</ram:SpeciesTargetCode>
+			<ram:RelatedFLUXLocation>
+				<ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+				<ram:ID schemeID="TERRITORY">BEL</ram:ID>
+			</ram:RelatedFLUXLocation>
+			<ram:RelatedFLUXLocation>
+				<ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+				<ram:ID schemeID="FAO_AREA">27.4.c</ram:ID>
+			</ram:RelatedFLUXLocation>
+			<ram:RelatedFLUXLocation>
+				<ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+				<ram:ID schemeID="STAT_RECTANGLE">31F3</ram:ID>
+			</ram:RelatedFLUXLocation>
+			<ram:RelatedFLUXLocation>
+				<ram:TypeCode listID="FLUX_LOCATION_TYPE">POSITION</ram:TypeCode>
+				<ram:SpecifiedPhysicalFLUXGeographicalCoordinate>
+					<ram:LongitudeMeasure>3.2</ram:LongitudeMeasure>
+					<ram:LatitudeMeasure>51.333333</ram:LatitudeMeasure>
+				</ram:SpecifiedPhysicalFLUXGeographicalCoordinate>
+			</ram:RelatedFLUXLocation>
+			<ram:SpecifiedFishingTrip>
+				<ram:ID schemeID="EU_TRIP_ID">BEL-TRP-Z510-2021012200107</ram:ID>
+			</ram:SpecifiedFishingTrip>
+		</ram:SpecifiedFishingActivity>
+		<ram:SpecifiedVesselTransportMeans>
+			<ram:ID schemeID="CFR">BEL035102000</ram:ID>
+			<ram:ID schemeID="IRCS">OPUF</ram:ID>
+			<ram:ID schemeID="EXT_MARK">Z.510</ram:ID>
+			<ram:Name>Dennis</ram:Name>
+			<ram:RegistrationVesselCountry>
+				<ram:ID schemeID="TERRITORY">BEL</ram:ID>
+			</ram:RegistrationVesselCountry>
+			<ram:SpecifiedContactParty>
+				<ram:RoleCode listID="FLUX_CONTACT_ROLE">MASTER</ram:RoleCode>
+				<ram:SpecifiedStructuredAddress>
+					<ram:StreetName>rozenstraat</ram:StreetName>
+					<ram:CityName>Uitkerke</ram:CityName>
+					<ram:CountryID schemeID="TERRITORY">BEL</ram:CountryID>
+					<ram:CountryName>BELGIUM</ram:CountryName>
+					<ram:PlotIdentification>16</ram:PlotIdentification>
+					<ram:PostalArea>8370</ram:PostalArea>
+				</ram:SpecifiedStructuredAddress>
+				<ram:SpecifiedContactPerson>
+					<ram:Alias>vanden broele james</ram:Alias>
+				</ram:SpecifiedContactPerson>
+			</ram:SpecifiedContactParty>
+		</ram:SpecifiedVesselTransportMeans>
+	</FAReportDocument>
+</FLUXFAReportMessage>

@@ -41,6 +41,7 @@ RUN echo ${ENV_PROFILE}
 
 COPY frontend/ /tmp/frontend/
 COPY infra/ /tmp/infra/
+COPY .env.example/ /tmp/.env.example
 WORKDIR /tmp/frontend
 
 # Files are expected to be in /tmp/frontend/dist/monitorfish-frontend
@@ -87,6 +88,7 @@ ENV JAVA_TOOL_OPTIONS="-Dcom.sun.management.jmxremote.ssl=false \
 # Copy files for the back
 COPY --from=build-back /tmp/build/libs/monitorfish-${VERSION}.jar /home/monitorfish
 COPY infra/configurations /home/monitorfish/configurations/
+COPY .env.example /home/monitorfish/
 
 USER monitorfish
 # Copy files for the front
@@ -95,7 +97,6 @@ COPY --from=build-front /tmp/frontend/build /home/monitorfish/public/
 
 # Copy import-meta-env
 COPY --from=build-front /tmp/frontend/import-meta-env /home/monitorfish/
-COPY --from=build-front /tmp/frontend/.env.example /home/monitorfish/
 COPY --from=build-front /tmp/infra/docker/app/env.sh /home/monitorfish/
 
 # Add logs folder to be mounted as volume

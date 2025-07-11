@@ -25,7 +25,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 class SecurityConfigITests {
     /**
-     * The public-key-location is set to an inner class in order to override the application.properties
+     * The public-key-location is set to an inner class in order to override the application.yml
      * only for this test case using the public key `bad-oidc-issuer.pub`
      */
     @Nested
@@ -77,7 +77,7 @@ class SecurityConfigITests {
     }
 
     /**
-     * The public-key-location is set to an inner class in order to override the application.properties
+     * The public-key-location is set to an inner class in order to override the application.yml
      * only for this test case using the public key `oidc-issuer.pub`
      */
     @Nested
@@ -195,7 +195,7 @@ class SecurityConfigITests {
     }
 
     /**
-     * The public-key-location is set to an inner class in order to override the application.properties
+     * The public-key-location is set to an inner class in order to override the application.yml
      * only for this test case using the public key `another-oidc-issuer.pub`
      */
     @Nested

@@ -59,6 +59,7 @@ dependencies {
     api("org.springframework.boot:spring-boot-configuration-processor:3.3.5")
     api("org.springframework.boot:spring-boot-starter-cache:3.3.5")
     api("org.springframework.boot:spring-boot-starter-log4j2:3.3.5")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.3.5")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     api("io.ktor:ktor-client-core-jvm:3.0.3")

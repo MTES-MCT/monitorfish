@@ -12,6 +12,7 @@ from config import (
     PREFECT_API_URL,
     ROOT_DIRECTORY,
 )
+from src.flows.activity_visualizations import activity_visualizations_flow
 from src.flows.admin_areas import admin_areas_flow
 from src.flows.anchorages import anchorages_flow
 from src.flows.controls import controls_flow
@@ -34,6 +35,9 @@ class FlowAndSchedules:
 
 
 flows_to_deploy = [
+    FlowAndSchedules(
+        flow=activity_visualizations_flow, schedules=[Schedule(cron="0 20 1 * *")]
+    ),
     FlowAndSchedules(
         flow=admin_areas_flow, schedules=[Schedule(cron="43 4 * * 1,2,3,4,5")]
     ),

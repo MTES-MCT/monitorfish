@@ -6,12 +6,9 @@ import { FrontendApiError } from '@libs/FrontendApiError'
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 import { setMeasurement, startSpan } from '@sentry/react'
 import { normalizeRtkBaseQuery } from '@utils/normalizeRtkBaseQuery'
-import { sha256 } from '@utils/sha256'
 import ky, { HTTPError } from 'ky'
 
 import { RTK_MAX_RETRIES, RtkCacheTagType } from './constants'
-import { getOIDCConfig } from '../auth/getOIDCConfig'
-import { getOIDCUser } from '../auth/getOIDCUser'
 import { redirectToLoginIfUnauthorized } from '../auth/utils'
 
 import type { BackendApi } from './BackendApi.types'
@@ -65,34 +62,14 @@ export const monitorenvApi = createApi({
 // =============================================================================
 // Monitorfish API
 
-export const AUTHORIZATION_HEADER = 'authorization'
 export const CORRELATION_HEADER = 'x-correlation-id'
 export const EMAIL_HEADER = 'email'
-const { IS_OIDC_ENABLED } = getOIDCConfig()
-
-const setAuthorizationHeader = async headers => {
-  const user = getOIDCUser()
-  const token = user?.access_token
-
-  // If we have a token set in state, we pass it.
-  if (IS_OIDC_ENABLED && token) {
-    headers.set(AUTHORIZATION_HEADER, `Bearer ${token}`)
-
-    if (crypto?.subtle) {
-      const hashedToken = await sha256(token)
-
-      headers.set(CORRELATION_HEADER, hashedToken)
-    }
-  }
-
-  return headers
-}
 
 const monitorfishBaseQuery = retry(
   fetchBaseQuery({
     // TODO Remove the /v1 from the baseUrl as it make harder to update APIs (vX are designed for that)
     baseUrl: `/bff/v1`,
-    prepareHeaders: setAuthorizationHeader
+    credentials: 'include'
   }),
   {
     retryCondition: (error: BaseQueryError<BaseQueryError<any>>, _, { attempt }) => {
@@ -188,6 +165,7 @@ export const monitorfishPublicApi = createApi({
 })
 
 export const monitorfishApiKy = ky.extend({
+  credentials: 'include',
   hooks: {
     beforeError: [
       async error => {
@@ -222,43 +200,12 @@ export const monitorfishApiKy = ky.extend({
         return new FrontendApiError(customError.status.toString(), customError) as unknown as HTTPError
       }
     ],
-    beforeRequest: [
-      async request => {
-        const user = getOIDCUser()
-        const token = user?.access_token
-
-        // If we have a token set in state, we pass it.
-        if (IS_OIDC_ENABLED && token) {
-          request.headers.set(AUTHORIZATION_HEADER, `Bearer ${token}`)
-
-          if (crypto?.subtle) {
-            const hashedToken = await sha256(token)
-
-            request.headers.set(CORRELATION_HEADER, hashedToken)
-          }
-        }
-      }
-    ],
     beforeRetry: [
-      async ({ error, request }) => {
+      async ({ error }) => {
         if (error) {
           // Retry is not necessary when request is unauthorized
           if (isUnauthorizedOrForbidden((error as HTTPError).response?.status)) {
             return ky.stop
-          }
-        }
-
-        const user = getOIDCUser()
-        const token = user?.access_token
-
-        // If we have a token set in state, we pass it.
-        if (IS_OIDC_ENABLED && token) {
-          request.headers.set(AUTHORIZATION_HEADER, `Bearer ${token}`)
-
-          if (crypto?.subtle) {
-            const hashedToken = await sha256(token)
-
-            request.headers.set(CORRELATION_HEADER, hashedToken)
           }
         }
 

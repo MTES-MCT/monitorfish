@@ -12,10 +12,10 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.FixedVesselGroupDataO
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.FixedVesselGroupWithVesselsDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.servlet.http.HttpServletResponse
 import jakarta.websocket.server.PathParam
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -34,11 +34,11 @@ class VesselGroupController(
     @PostMapping("/dynamic")
     @Operation(summary = "Add or update a dynamic vessel group")
     fun addOrUpdateDynamicVesselGroup(
-        response: HttpServletResponse,
         @RequestBody
         vesselGroupInput: DynamicVesselGroupDataInput,
+        @AuthenticationPrincipal principal: Any,
     ): DynamicVesselGroupDataOutput {
-        val email: String = getEmail(response)
+        val email: String = getEmail(principal)
 
         val vesselGroup =
             addOrUpdateDynamicVesselGroup.execute(
@@ -54,11 +54,11 @@ class VesselGroupController(
     @PostMapping("/fixed")
     @Operation(summary = "Add or update a fixed vessel group")
     fun addOrUpdateFixedVesselGroup(
-        response: HttpServletResponse,
+        @AuthenticationPrincipal principal: Any,
         @RequestBody
         vesselGroupInput: FixedVesselGroupDataInput,
     ): FixedVesselGroupDataOutput {
-        val email: String = getEmail(response)
+        val email: String = getEmail(principal)
 
         val vesselGroup =
             addOrUpdateFixedVesselGroup.execute(
@@ -75,20 +75,22 @@ class VesselGroupController(
     @Operation(summary = "Delete a vessel group")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteVesselGroup(
-        response: HttpServletResponse,
+        @AuthenticationPrincipal principal: Any,
         @PathParam("Vessel group id")
         @PathVariable(name = "id")
         id: Int,
     ) {
-        val email: String = getEmail(response)
+        val email: String = getEmail(principal)
 
         deleteVesselGroup.execute(email, id)
     }
 
     @GetMapping("")
     @Operation(summary = "Get all dynamic and fixed vessel groups")
-    fun getVesselGroups(response: HttpServletResponse): List<Any> {
-        val email: String = getEmail(response)
+    fun getVesselGroups(
+        @AuthenticationPrincipal principal: Any,
+    ): List<Any> {
+        val email: String = getEmail(principal)
 
         return getAllVesselGroups.execute(email).map {
             when (it) {
@@ -103,8 +105,10 @@ class VesselGroupController(
 
     @GetMapping(value = ["/vessels"])
     @Operation(summary = "Get all vessel groups with vessels")
-    fun getVesselGroupsWithVessels(response: HttpServletResponse): List<Any> {
-        val email: String = getEmail(response)
+    fun getVesselGroupsWithVessels(
+        @AuthenticationPrincipal principal: Any,
+    ): List<Any> {
+        val email: String = getEmail(principal)
         val groupWithVessels = getAllVesselGroupsWithVessels.execute(email)
 
         return groupWithVessels.map { groupWithVessels ->
@@ -127,7 +131,7 @@ class VesselGroupController(
     @Operation(summary = "Delete a vessel from a group")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteVesselFromGroup(
-        response: HttpServletResponse,
+        @AuthenticationPrincipal principal: Any,
         @PathParam("Vessel group id")
         @PathVariable(name = "groupId")
         groupId: Int,
@@ -135,7 +139,7 @@ class VesselGroupController(
         @PathVariable(name = "vesselIndex")
         vesselIndex: Int,
     ) {
-        val email: String = getEmail(response)
+        val email: String = getEmail(principal)
 
         deleteFixedVesselGroupVessel.execute(userEmail = email, groupId = groupId, vesselIndex = vesselIndex)
     }

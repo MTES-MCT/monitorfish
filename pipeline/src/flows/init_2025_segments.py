@@ -1,16 +1,13 @@
 from ast import literal_eval
-from pathlib import Path
 
 import pandas as pd
-import prefect
-from prefect import Flow, task
-from prefect.executors import LocalDaskExecutor
+from prefect import flow, get_run_logger, task
 
 from config import LIBRARY_LOCATION
 from src.generic_tasks import load
 
 
-@task(checkpoint=False)
+@task
 def extract_2025_segments():
     return pd.read_csv(
         LIBRARY_LOCATION / "data/segments_2025.csv",
@@ -23,14 +20,16 @@ def extract_2025_segments():
     )
 
 
-@task(checkpoint=False)
+@task
 def load_2025_segments(segments: pd.DataFrame):
+    logger = get_run_logger()
+
     load(
         segments,
         table_name="fleet_segments",
         schema="public",
         db_name="monitorfish_remote",
-        logger=prefect.context.get("logger"),
+        logger=logger,
         how="upsert",
         df_id_column="year",
         table_id_column="year",
@@ -43,8 +42,7 @@ def load_2025_segments(segments: pd.DataFrame):
     )
 
 
-with Flow("Init 2025 segments", executor=LocalDaskExecutor()) as flow:
+@flow(name="Init 2025 segments")
+def init_2025_segments_flow():
     segments = extract_2025_segments()
     load_2025_segments(segments)
-
-flow.file_name = Path(__file__).name

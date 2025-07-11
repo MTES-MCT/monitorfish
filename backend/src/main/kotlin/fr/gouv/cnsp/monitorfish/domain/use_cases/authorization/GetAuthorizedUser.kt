@@ -20,8 +20,6 @@ class GetAuthorizedUser(
 
             AuthorizedUser.fromUserAuthorization(userAuthorization = userAuthorization, email = email)
         } catch (e: Throwable) {
-            logger.error(e.message)
-            logger.info("User $hashedEmail not found, defaulting to super-user=false")
             logger.info("User $email not found, defaulting to super-user=false")
 
             // By default, a user not found is not super-user

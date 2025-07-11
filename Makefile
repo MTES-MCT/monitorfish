@@ -13,6 +13,12 @@ MAKEFLAGS += --silent
 
 .DEFAULT_GOAL: help
 
+ifneq (,$(wildcard .env))
+	include .env
+	echo "GOT env"
+	export
+endif
+
 .PHONY: help ##OTHER 🛟 To display this prompts. This will list all available targets with their documentation
 help:
 	echo "❓ Use \`make <target>' where <target> is one of 👇"
@@ -72,8 +78,9 @@ install-front:
 
 .PHONY: run-back ##LOCAL ▶️  Run backend API
 run-back: run-stubbed-apis
+	./frontend/node_modules/.bin/import-meta-env-prepare -u -x ./.env.example -p ./.env.local.defaults
 	docker compose up -d --quiet-pull --wait db keycloak
-	cd backend && ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+	@bash -c 'set -a; source .env; cd backend && ./gradlew bootRun'
 
 .PHONY: run-front ##LOCAL ▶️  Run frontend for development
 run-front:

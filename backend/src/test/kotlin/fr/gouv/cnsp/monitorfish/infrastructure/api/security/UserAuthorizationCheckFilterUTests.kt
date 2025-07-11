@@ -6,12 +6,7 @@ import com.nhaarman.mockitokotlin2.verify
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.ProtectedPathsAPIProperties
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
-import fr.gouv.cnsp.monitorfish.infrastructure.api.security.TestUtils.Companion.getMockApiClient
-import fr.gouv.cnsp.monitorfish.infrastructure.oidc.APIOIDCRepository
-import io.ktor.client.engine.mock.*
-import io.ktor.http.*
 import io.ktor.http.HttpHeaders.Authorization
-import io.ktor.utils.io.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -34,23 +29,17 @@ class UserAuthorizationCheckFilterUTests {
         // Given
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = false
-        oidcProperties.userinfoEndpoint = null
-        oidcProperties.issuerUri = null
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/**")
 
-        val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
-
-        val apiOIDCRepository = APIOIDCRepository(oidcProperties, mockApi)
 
         // When
         val request = MockHttpServletRequest()
         UserAuthorizationCheckFilter(
             oidcProperties,
             superUserAPIProperties,
-            apiOIDCRepository,
             getIsAuthorizedUser,
         ).doFilter(
             request,
@@ -67,23 +56,17 @@ class UserAuthorizationCheckFilterUTests {
         // Given
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = true
-        oidcProperties.userinfoEndpoint = null
-        oidcProperties.issuerUri = null
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/**")
 
-        val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
-
-        val apiOIDCRepository = APIOIDCRepository(oidcProperties, mockApi)
 
         // When
         val request = MockHttpServletRequest()
         UserAuthorizationCheckFilter(
             oidcProperties,
             superUserAPIProperties,
-            apiOIDCRepository,
             getIsAuthorizedUser,
         ).doFilter(
             request,
@@ -101,15 +84,11 @@ class UserAuthorizationCheckFilterUTests {
         // Given
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = true
-        oidcProperties.userinfoEndpoint = null
-        oidcProperties.issuerUri = null
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/**")
 
-        val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
-        val apiOIDCRepository = APIOIDCRepository(oidcProperties, mockApi)
 
         // When
         val request = MockHttpServletRequest()
@@ -117,7 +96,6 @@ class UserAuthorizationCheckFilterUTests {
         UserAuthorizationCheckFilter(
             oidcProperties,
             superUserAPIProperties,
-            apiOIDCRepository,
             getIsAuthorizedUser,
         ).doFilter(
             request,
@@ -135,15 +113,11 @@ class UserAuthorizationCheckFilterUTests {
         // Given
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = true
-        oidcProperties.userinfoEndpoint = "/api/user"
-        oidcProperties.issuerUri = null
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/**")
 
-        val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
-        val apiOIDCRepository = APIOIDCRepository(oidcProperties, mockApi)
 
         // When
         val request = MockHttpServletRequest()
@@ -151,7 +125,6 @@ class UserAuthorizationCheckFilterUTests {
         UserAuthorizationCheckFilter(
             oidcProperties,
             superUserAPIProperties,
-            apiOIDCRepository,
             getIsAuthorizedUser,
         ).doFilter(
             request,
@@ -169,15 +142,11 @@ class UserAuthorizationCheckFilterUTests {
         // Given
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = true
-        oidcProperties.userinfoEndpoint = "/api/user"
-        oidcProperties.issuerUri = "http://issuer-uri.gouv.fr"
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/**")
 
-        val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
-        val apiOIDCRepository = APIOIDCRepository(oidcProperties, mockApi)
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
 
         // When
@@ -186,7 +155,6 @@ class UserAuthorizationCheckFilterUTests {
         UserAuthorizationCheckFilter(
             oidcProperties,
             superUserAPIProperties,
-            apiOIDCRepository,
             getIsAuthorizedUser,
         ).doFilter(
             request,
@@ -203,15 +171,11 @@ class UserAuthorizationCheckFilterUTests {
         // Given
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = true
-        oidcProperties.userinfoEndpoint = "/api/user"
-        oidcProperties.issuerUri = "http://issuer-uri.gouv.fr"
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/**")
 
-        val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
-        val apiOIDCRepository = APIOIDCRepository(oidcProperties, mockApi)
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(false)
 
         // When
@@ -221,7 +185,6 @@ class UserAuthorizationCheckFilterUTests {
         UserAuthorizationCheckFilter(
             oidcProperties,
             superUserAPIProperties,
-            apiOIDCRepository,
             getIsAuthorizedUser,
         ).doFilter(
             request,
@@ -239,15 +202,11 @@ class UserAuthorizationCheckFilterUTests {
         // Given
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = true
-        oidcProperties.userinfoEndpoint = "/api/user"
-        oidcProperties.issuerUri = "http://issuer-uri.gouv.fr"
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/v1/vessels/risk_factors")
 
-        val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
-        val apiOIDCRepository = APIOIDCRepository(oidcProperties, mockApi)
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(false)
 
         // When
@@ -257,7 +216,6 @@ class UserAuthorizationCheckFilterUTests {
         UserAuthorizationCheckFilter(
             oidcProperties,
             superUserAPIProperties,
-            apiOIDCRepository,
             getIsAuthorizedUser,
         ).doFilter(
             request,
@@ -274,15 +232,11 @@ class UserAuthorizationCheckFilterUTests {
         // Given
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = true
-        oidcProperties.userinfoEndpoint = "/api/user"
-        oidcProperties.issuerUri = "http://issuer-uri.gouv.fr"
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/v1/vessels/risk_factors")
 
-        val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
-        val apiOIDCRepository = APIOIDCRepository(oidcProperties, mockApi)
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(false)
 
         // When
@@ -292,7 +246,6 @@ class UserAuthorizationCheckFilterUTests {
         UserAuthorizationCheckFilter(
             oidcProperties,
             superUserAPIProperties,
-            apiOIDCRepository,
             getIsAuthorizedUser,
         ).doFilter(
             request,
@@ -309,15 +262,11 @@ class UserAuthorizationCheckFilterUTests {
         // Given
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = true
-        oidcProperties.userinfoEndpoint = "/api/user"
-        oidcProperties.issuerUri = "http://issuer-uri.gouv.fr"
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/v1/vessels/risk_factors")
 
-        val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
-        val apiOIDCRepository = APIOIDCRepository(oidcProperties, mockApi)
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
 
         // When
@@ -327,7 +276,6 @@ class UserAuthorizationCheckFilterUTests {
         UserAuthorizationCheckFilter(
             oidcProperties,
             superUserAPIProperties,
-            apiOIDCRepository,
             getIsAuthorizedUser,
         ).doFilter(
             request,

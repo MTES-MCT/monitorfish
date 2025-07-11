@@ -7,7 +7,6 @@ import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.VesselGroupController
 import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.UserAuthorizationCheckFilter
-import fr.gouv.cnsp.monitorfish.infrastructure.oidc.APIOIDCRepository
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.core.annotation.AliasFor
@@ -22,7 +21,6 @@ import kotlin.reflect.KClass
     UserAuthorizationCheckFilter::class,
     SentryConfig::class,
     CustomAuthenticationEntryPoint::class,
-    APIOIDCRepository::class,
     TestApiClient::class,
     JwtDecoderTestConfig::class,
 )

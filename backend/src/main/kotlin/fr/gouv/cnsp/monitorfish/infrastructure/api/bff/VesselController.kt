@@ -10,12 +10,12 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.servlet.http.HttpServletResponse
 import jakarta.websocket.server.PathParam
 import kotlinx.coroutines.runBlocking
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.time.ZonedDateTime
 
@@ -37,8 +37,10 @@ class VesselController(
 ) {
     @GetMapping("")
     @Operation(summary = "Get all active vessels")
-    fun getVessels(response: HttpServletResponse): List<ActiveVesselBaseDataOutput> {
-        val email: String = getEmail(response)
+    fun getVessels(
+        @AuthenticationPrincipal principal: Any,
+    ): List<ActiveVesselBaseDataOutput> {
+        val email: String = getEmail(principal)
         val activeVessels = getActiveVessels.execute(email)
 
         return activeVessels.mapIndexed { index, vessel ->
@@ -86,10 +88,10 @@ class VesselController(
         @RequestParam(name = "beforeDateTime", required = false)
         @DateTimeFormat(pattern = zoneDateTimePattern)
         beforeDateTime: ZonedDateTime?,
-        response: HttpServletResponse,
+        @AuthenticationPrincipal principal: Any,
     ): ResponseEntity<SelectedVesselAndPositionsDataOutput> =
         runBlocking {
-            val email: String = getEmail(response)
+            val email: String = getEmail(principal)
 
             val (vesselTrackHasBeenModified, vesselInformation) =
                 getVessel.execute(

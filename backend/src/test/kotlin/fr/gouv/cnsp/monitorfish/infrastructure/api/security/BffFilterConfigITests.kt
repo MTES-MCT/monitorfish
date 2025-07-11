@@ -1,11 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
 import fr.gouv.cnsp.monitorfish.config.*
-import fr.gouv.cnsp.monitorfish.domain.repositories.OIDCRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.VersionController
-import fr.gouv.cnsp.monitorfish.infrastructure.oidc.APIOIDCRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.info.BuildProperties
@@ -25,7 +23,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
     ApiClient::class,
     SentryConfig::class,
     CustomAuthenticationEntryPoint::class,
-    APIOIDCRepository::class,
 )
 @WebMvcTest(
     value = [VersionController::class],
@@ -46,9 +43,6 @@ class BffFilterConfigITests {
 
     @MockBean
     private lateinit var buildProperties: BuildProperties
-
-    @Autowired
-    private lateinit var oidcRepository: OIDCRepository
 
     @Test
     fun `Should return 401 for all user authorization protected paths`() {

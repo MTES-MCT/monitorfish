@@ -4,7 +4,7 @@ export type UserAccountContextType = {
   email: undefined | string
   isAuthenticated: boolean
   isSuperUser: boolean
-  logout: () => void
+  logout?: () => void
 }
 export const UserAccountContext = React.createContext<UserAccountContextType>({
   email: undefined,

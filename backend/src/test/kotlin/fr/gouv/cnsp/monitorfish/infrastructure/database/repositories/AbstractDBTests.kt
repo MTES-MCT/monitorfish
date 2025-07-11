@@ -18,7 +18,7 @@ import java.time.Duration
 import java.time.temporal.ChronoUnit
 
 @Testcontainers
-@TestPropertySource("classpath:/application.properties")
+@TestPropertySource("classpath:/application.yml")
 @SpringBootTest(
     properties = ["monitorfish.scheduling.enabled=false"],
 )

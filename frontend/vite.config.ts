@@ -48,7 +48,7 @@ export default defineConfig({
     svgr(),
     importMetaEnv.vite({
       env: './.env',
-      example: './.env.example'
+      example: '../.env.example'
     })
   ],
   worker: {
@@ -63,6 +63,12 @@ export default defineConfig({
         target: 'http://localhost:8880'
       },
       '/bff': {
+        target: 'http://localhost:8880'
+      },
+      '/logout': {
+        target: 'http://localhost:8880'
+      },
+      '/oauth2': {
         target: 'http://localhost:8880'
       },
       '/proxy': {

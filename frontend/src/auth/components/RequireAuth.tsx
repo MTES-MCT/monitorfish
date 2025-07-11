@@ -1,18 +1,18 @@
 import { Navigate } from 'react-router-dom'
 
-import { LoginBackground } from './Login'
+import { Wrapper } from './Login'
 import { UserAccountContext } from '../../context/UserAccountContext'
 import { ROUTER_PATHS } from '../../paths'
 import { LoadingSpinnerWall } from '../../ui/LoadingSpinnerWall'
 import { useGetUserAccount } from '../hooks/useGetUserAccount'
 
 export function RequireAuth({ children, redirect = false, requireSuperUser = false }) {
-  const userAccount = useGetUserAccount()
-  if (!userAccount) {
+  const { isLoading, userAccount } = useGetUserAccount()
+  if (isLoading) {
     return (
-      <LoginBackground>
+      <Wrapper>
         <LoadingSpinnerWall isVesselShowed />
-      </LoginBackground>
+      </Wrapper>
     )
   }
 
@@ -24,7 +24,7 @@ export function RequireAuth({ children, redirect = false, requireSuperUser = fal
     return null
   }
 
-  if (!userAccount.isAuthenticated) {
+  if (!userAccount?.isAuthenticated) {
     return handleRedirect(ROUTER_PATHS.login, redirect)
   }
 

@@ -1,0 +1,102 @@
+server:
+    port: ${MONITORFISH_SERVER_PORT}
+    use-forward-headers: true
+    forward-headers-strategy: framework
+    compression:
+        enabled: true
+        excluded-user-agents: ""
+        mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript
+        min-response-size: 2048
+
+host:
+    ip: ${HOST_IP}
+
+monitorfish:
+    ajp:
+        port: ${MONITORFISH_AJP_PORT}
+    database:
+        missionsActionsChunkSize: ${MONITORFISH_DATABASE_MISSIONS_ACTIONS_CHUNK_SIZE}
+    api:
+        protected:
+            paths: ${MONITORFISH_API_PROTECTED_PATHS}
+            super-user-paths: ${MONITORFISH_API_PROTECTED_SUPER_USER_PATHS}
+            public-paths: ${MONITORFISH_API_PROTECTED_PUBLIC_PATHS}
+            api-key: ${MONITORFISH_API_PROTECTED_API_KEY}
+    oidc:
+        enabled: ${MONITORFISH_OIDC_ENABLED}
+        loginUrl: ${MONITORFISH_OIDC_LOGIN_URL}
+        successUrl: ${MONITORFISH_OIDC_SUCCESS_URL}
+        errorUrl: ${MONITORFISH_OIDC_ERROR_URL}
+        authorizedSirets: ${MONITORFISH_OIDC_AUTHORIZED_SIRETS}
+    scheduling:
+        enabled: ${MONITORFISH_SCHEDULING_ENABLED}
+    sentry:
+        enabled: ${MONITORFISH_SENTRY_ENABLED}
+        dsn: ${SENTRY_DSN}
+
+logging:
+    level:
+        org.springframework.security.web.authentication.logout: DEBUG
+
+spring:
+    jmx:
+        enabled: true
+    mvc:
+        static-path-pattern: "/**"
+    resources:
+        static-locations: file:${STATIC_FILES_PATH}
+    jpa:
+        hibernate:
+            ddl-auto: validate
+        properties:
+            hibernate:
+                temp:
+                    use_jdbc_metadata_defaults: false
+                jdbc:
+                    time_zone: UTC
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                type:
+                    preferred_uuid_jdbc_type: CHAR
+    flyway:
+        locations: ${MONITORFISH_MIGRATION_PATH}
+    datasource:
+        url: ${ENV_DB_URL}
+        driver-class-name: ${ENV_DB_DRIVER_CLASS_NAME}
+        hikari:
+            maxLifetime: 60000
+            maximum-pool-size: 30
+    security:
+        oauth2:
+            client:
+                registration:
+                    proconnect:
+                        provider: proconnect
+                        client-id: ${MONITORFISH_OIDC_CLIENT_ID}
+                        client-secret: ${MONITORFISH_OIDC_CLIENT_SECRET}
+                        authorization-grant-type: authorization_code
+                        redirect-uri: ${MONITORFISH_OIDC_REDIRECT_URI}
+                        scope: openid,profile
+                provider:
+                    proconnect:
+                        issuer-uri: ${MONITORFISH_OIDC_ISSUER_URI}
+    servlet:
+        multipart:
+            max-file-size: 5MB
+
+management:
+    endpoint:
+        health:
+            show-details: always
+        metrics:
+            enable: false
+    endpoints:
+        web:
+            exposure:
+                include: "*"
+
+log4j2:
+    script:
+        enableLanguages: javascript
+
+springdoc:
+    packagesToScan: fr.gouv.cnsp.monitorfish

@@ -1,10 +1,7 @@
 import pandas as pd
 
-from src.flows.init_pno_types import flow
+from src.flows.init_pno_types import init_pno_types_flow
 from src.read_query import read_query
-from tests.mocks import mock_check_flow_not_running
-
-flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 
 def test_flow(reset_test_data):
@@ -13,9 +10,8 @@ def test_flow(reset_test_data):
     initial_pno_types = read_query(pno_types_query, db="monitorfish_remote")
     initial_pno_type_rules = read_query(pno_type_rules_query, db="monitorfish_remote")
 
-    flow.schedule = None
-    state = flow.run()
-    assert state.is_successful()
+    state = init_pno_types_flow(return_state=True)
+    assert state.is_completed()
 
     pno_types_after_first_run = read_query(pno_types_query, db="monitorfish_remote")
     pno_type_rules_after_first_run = read_query(
@@ -28,8 +24,8 @@ def test_flow(reset_test_data):
     assert len(pno_type_rules_after_first_run) == 49
 
     # Re-running should succeed and lead to the same pno types
-    state = flow.run()
-    assert state.is_successful()
+    state = init_pno_types_flow(return_state=True)
+    assert state.is_completed()
 
     pno_types_after_second_run = read_query(pno_types_query, db="monitorfish_remote")
     pno_type_rules_after_second_run = read_query(

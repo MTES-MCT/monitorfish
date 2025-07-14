@@ -63,13 +63,13 @@ services:
       - MONITORFISH_OIDC_ENABLED=true
       - MONITORFISH_OIDC_PROXY_URL=http://keycloak:8080
       - MONITORFISH_OIDC_ISSUER_URI=http://keycloak:8080/realms/monitor
-      - MONITORFISH_OIDC_ISSUER_URI_EXTERNAL=http://localhost:8880/realms/monitor
+      - MONITORFISH_OIDC_ISSUER_URI_EXTERNAL=http://0.0.0.0:8880/realms/monitor
       - MONITORFISH_OIDC_CLIENT_ID=monitorfish
       - MONITORFISH_OIDC_CLIENT_SECRET=BHKLjYpcN2NzFlU2kTu63z8rDxQgUl8z
-      - MONITORFISH_OIDC_REDIRECT_URI=http://localhost:8880/login/oauth2/code/proconnect
+      - MONITORFISH_OIDC_REDIRECT_URI=http://0.0.0.0:8880/login/oauth2/code/proconnect
       - MONITORFISH_OIDC_LOGIN_URL=/oauth2/authorization/proconnect
-      - MONITORFISH_OIDC_SUCCESS_URL=http://localhost:8880
-      - MONITORFISH_OIDC_ERROR_URL=http://localhost:8880/register
+      - MONITORFISH_OIDC_SUCCESS_URL=http://0.0.0.0:8880
+      - MONITORFISH_OIDC_ERROR_URL=http://0.0.0.0:8880/register
       - MONITORFISH_OIDC_AUTHORIZED_SIRETS=1234567890,0987654321
       - MONITORFISH_OIDC_USERINFO_ENDPOINT=/protocol/openid-connect/userinfo
       - MONITORFISH_OIDC_PROVIDER=proconnect

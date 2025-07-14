@@ -235,7 +235,7 @@ jobs:
           install-command: npm ci
           parallel: true
           record: true
-          wait-on: "http://0.0.0.0:8880"
+          wait-on: "http://localhost:8880"
           working-directory: ./frontend
 
   e2e_multi_windows_test:

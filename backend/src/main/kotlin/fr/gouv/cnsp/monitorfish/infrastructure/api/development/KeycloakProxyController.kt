@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.api.proxy
+package fr.gouv.cnsp.monitorfish.infrastructure.api.development
 
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import io.ktor.client.request.forms.*
@@ -15,7 +15,21 @@ import org.springframework.web.bind.annotation.RestController
 import java.nio.charset.StandardCharsets
 
 /**
- * Used for E2E tests
+ * ⚠️ DEVELOPMENT ONLY - Keycloak Authentication Proxy
+ *
+ * This controller is ONLY used for local development and E2E testing.
+ * It provides a proxy between the MonitorFish application and a Keycloak server
+ * to handle authentication flows during development.
+ *
+ * ❌ This controller is NEVER enabled in production environments.
+ * ✅ Only activated when `monitorfish.keycloak.proxy.enabled=true`
+ *
+ * Purpose:
+ * - Local development authentication testing
+ * - E2E/Cypress test authentication flows
+ * - URL rewriting for localhost development environment
+ *
+ * @see KeycloakProxyProperties for configuration
  */
 @RestController
 @ConditionalOnProperty(
@@ -28,6 +42,22 @@ class KeycloakProxyController(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(KeycloakProxyController::class.java)
 
+    init {
+        logger.warn(
+            """
+            ⚠️ DEVELOPMENT ONLY: Keycloak Proxy Controller is ACTIVE
+            This controller should NEVER be enabled in production!
+            Current configuration: monitorfish.keycloak.proxy.enabled=true
+            """.trimIndent(),
+        )
+    }
+
+    /**
+     * ⚠️ DEVELOPMENT ONLY - Proxy GET requests to Keycloak realms
+     *
+     * Forwards authentication page requests to the Keycloak server
+     * and rewrites HTML responses to fix URLs for local development.
+     */
     @GetMapping("/realms/**")
     @Throws(Exception::class)
     fun get(
@@ -35,10 +65,11 @@ class KeycloakProxyController(
         request: HttpServletRequest,
     ): ResponseEntity<*> {
         val targetUri = StringBuilder("${oidcProperties.proxyUrl}${request.requestURI}?${request.queryString}")
-        logger.info("Forwarding ${request.requestURI} to $targetUri")
+        logger.info("[DEV-PROXY] Forwarding ${request.requestURI} to $targetUri")
 
         // TODO Use properties to pass all sensitive headers
         // @see https://docs.spring.io/spring-cloud-gateway/reference/appendix.html
+        // NOTE: This is acceptable for development/testing only
         val headerNames = request.headerNames
         while (headerNames.hasMoreElements()) {
             val headerName = headerNames.nextElement()
@@ -59,6 +90,12 @@ class KeycloakProxyController(
         }
     }
 
+    /**
+     * ⚠️ DEVELOPMENT ONLY - Proxy GET requests for Keycloak resources
+     *
+     * Forwards requests for Keycloak static resources (CSS, JS, images)
+     * to the Keycloak server for local development.
+     */
     @GetMapping("/resources/**")
     @Throws(Exception::class)
     fun getResources(
@@ -70,6 +107,12 @@ class KeycloakProxyController(
         return proxy.uri(targetUri).get()
     }
 
+    /**
+     * ⚠️ DEVELOPMENT ONLY - Proxy POST requests to Keycloak realms
+     *
+     * Forwards form submissions (login, logout, etc.) to the Keycloak server
+     * and rewrites HTML responses to fix URLs for local development.
+     */
     @PostMapping(
         value = ["/realms/**"],
         consumes = ["application/x-www-form-urlencoded", "application/x-www-form-urlencoded;charset=UTF-8"],
@@ -81,10 +124,11 @@ class KeycloakProxyController(
     ): ResponseEntity<*> {
         val params = request.parameterMap
         val targetUri = StringBuilder("${oidcProperties.proxyUrl}${request.requestURI}?${request.queryString}")
-        logger.info("Forwarding ${request.requestURI} to $targetUri")
+        logger.info("[DEV-PROXY] Forwarding ${request.requestURI} to $targetUri")
 
         // TODO Use properties to pass all sensitive headers
         // @see https://docs.spring.io/spring-cloud-gateway/reference/appendix.html
+        // NOTE: This is acceptable for development/testing only
         val headerNames = request.headerNames
         while (headerNames.hasMoreElements()) {
             val headerName = headerNames.nextElement()
@@ -97,6 +141,7 @@ class KeycloakProxyController(
 
         // TODO Use properties to pass form data
         // @see spring.cloud.gateway.mvc.form-filter.enabled=false
+        // NOTE: This is acceptable for development/testing only
         val formData = StringBuilder()
         if (params.isNotEmpty()) {
             params.entries
@@ -131,7 +176,7 @@ class KeycloakProxyController(
             val body = response.body as? ByteArray ?: return response
             val html = String(body, StandardCharsets.UTF_8)
 
-            // Replace Keycloak internal URLs with proxy URLs
+            // Replace Keycloak internal URLs with proxy URLs for local development
             val rewrittenHtml =
                 html
                     .replace("http://keycloak:8080", "http://localhost:8880")

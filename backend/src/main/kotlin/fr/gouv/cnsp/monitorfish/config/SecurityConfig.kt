@@ -140,6 +140,8 @@ class SecurityConfig(
                     .invalidateHttpSession(true)
                     .clearAuthentication(true)
                     .deleteCookies("JSESSIONID")
+            }.csrf { csrf ->
+                csrf.ignoringRequestMatchers("/oauth2/**", "/login/oauth2/**", "/realms/**")
             }
 
         return http.build()
@@ -161,7 +163,7 @@ class SecurityConfig(
             ) {
                 logger.error("Authentication failed: ${exception.message}", exception)
 
-                response.sendRedirect("/logout")
+                // response.sendRedirect("/logout")
 
                 super.onAuthenticationFailure(request, response, exception)
             }
@@ -171,7 +173,7 @@ class SecurityConfig(
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration =
             CorsConfiguration().apply {
-                allowedOrigins = listOf("*")
+                allowedOriginPatterns = listOf("*")
                 allowedMethods = listOf("HEAD", "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 allowedHeaders = listOf("Authorization", "Cache-Control", "Content-Type")
                 allowCredentials = true

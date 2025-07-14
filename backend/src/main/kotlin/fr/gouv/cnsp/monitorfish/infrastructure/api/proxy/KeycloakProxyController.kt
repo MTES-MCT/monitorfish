@@ -49,7 +49,14 @@ class KeycloakProxyController(
             }
         }
 
-        return proxy.uri(targetUri.toString()).get()
+        val response = proxy.uri(targetUri.toString()).get()
+
+        // Rewrite HTML responses to fix form action URLs
+        return if (isHtmlResponse(response)) {
+            rewriteHtmlResponse(response)
+        } else {
+            response
+        }
     }
 
     @GetMapping("/resources/**")
@@ -104,6 +111,50 @@ class KeycloakProxyController(
         proxy
             .header("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE)
             .header("Content-Length", formDataBytes.size.toString())
-        return proxy.uri(targetUri.toString()).body(formDataBytes).post()
+        val response = proxy.uri(targetUri.toString()).body(formDataBytes).post()
+
+        // Rewrite HTML responses to fix form action URLs
+        return if (isHtmlResponse(response)) {
+            rewriteHtmlResponse(response)
+        } else {
+            response
+        }
+    }
+
+    private fun isHtmlResponse(response: ResponseEntity<*>): Boolean {
+        val contentType = response.headers.contentType
+        return contentType?.toString()?.contains("text/html") == true
+    }
+
+    private fun rewriteHtmlResponse(response: ResponseEntity<*>): ResponseEntity<*> {
+        try {
+            val body = response.body as? ByteArray ?: return response
+            val html = String(body, StandardCharsets.UTF_8)
+
+            // Replace Keycloak internal URLs with proxy URLs
+            val rewrittenHtml =
+                html
+                    .replace("http://keycloak:8080", "http://localhost:8880")
+                    .replace("action=\"/realms/", "action=\"http://localhost:8880/realms/")
+                    .replace("href=\"/realms/", "href=\"http://localhost:8880/realms/")
+                    .replace("src=\"/realms/", "src=\"http://localhost:8880/realms/")
+
+            val rewrittenBody = rewrittenHtml.toByteArray(StandardCharsets.UTF_8)
+
+            // Create new headers without Content-Length (Spring will set it automatically)
+            val newHeaders = response.headers.toMutableMap()
+            newHeaders.remove("Content-Length")
+
+            return ResponseEntity
+                .status(response.statusCode)
+                .headers { headers ->
+                    newHeaders.forEach { (key, values) ->
+                        headers.addAll(key, values)
+                    }
+                }.body(rewrittenBody)
+        } catch (e: Exception) {
+            logger.error("Error rewriting HTML response", e)
+            return response
+        }
     }
 }

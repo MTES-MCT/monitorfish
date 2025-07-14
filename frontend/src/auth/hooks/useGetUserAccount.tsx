@@ -20,10 +20,6 @@ export function useGetUserAccount(): { isLoading: boolean; userAccount: UserAcco
     }
   }, [trackUserId, user])
 
-  const onLogout = () => {
-    window.location.href = '/logout'
-  }
-
   const userAccount = useMemo(() => {
     if (!oidcEnabled) {
       return {
@@ -41,9 +37,11 @@ export function useGetUserAccount(): { isLoading: boolean; userAccount: UserAcco
       email: user.email,
       isAuthenticated: true,
       isSuperUser: user.isSuperUser,
-      logout: onLogout
+      logout: () => {
+        window.location.href = '/logout'
+      }
     }
-  }, [onLogout, oidcEnabled, user])
+  }, [oidcEnabled, user])
 
   return { isLoading, userAccount }
 }

@@ -78,13 +78,13 @@ services:
       # OIDC Configuration
       - MONITORFISH_OIDC_ENABLED=false
       - MONITORFISH_OIDC_PROXY_URL=http://keycloak:8080
-      - MONITORFISH_OIDC_ISSUER_URI=http://0.0.0.0:8880/realms/monitor
+      - MONITORFISH_OIDC_ISSUER_URI=http://keycloak:8080/realms/monitor
       - MONITORFISH_OIDC_CLIENT_ID=monitorfish
       - MONITORFISH_OIDC_CLIENT_SECRET=BHKLjYpcN2NzFlU2kTu63z8rDxQgUl8z
       - MONITORFISH_OIDC_REDIRECT_URI=http://localhost:8880/login/oauth2/code/proconnect
       - MONITORFISH_OIDC_LOGIN_URL=/oauth2/authorization/proconnect
-      - MONITORFISH_OIDC_SUCCESS_URL=http://localhost:3000
-      - MONITORFISH_OIDC_ERROR_URL=http://localhost:3000/register
+      - MONITORFISH_OIDC_SUCCESS_URL=http://0.0.0.0:8880
+      - MONITORFISH_OIDC_ERROR_URL=http://0.0.0.0:8880/register
       - MONITORFISH_OIDC_AUTHORIZED_SIRETS=1234567890,0987654321
       - MONITORFISH_OIDC_USERINFO_ENDPOINT=/protocol/openid-connect/userinfo
       - MONITORFISH_OIDC_PROVIDER=proconnect
@@ -105,7 +105,6 @@ services:
       - FRONTEND_OIDC_CLIENT_ID=monitorfish
       - FRONTEND_OIDC_ENABLED=false
       - FRONTEND_OIDC_REDIRECT_URI=http://0.0.0.0:8880
-      - FRONTEND_OIDC_LOGOUT_REDIRECT_URI=http://0.0.0.0:8880/login
       - FRONTEND_MONITORFISH_VERSION=
       - FRONTEND_SENTRY_DSN=https://a5f3272efa794bb9ada2ffea90f2fec5@sentry.incubateur.net/8
       - FRONTEND_SENTRY_TRACING_ORIGINS=

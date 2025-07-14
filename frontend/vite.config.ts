@@ -48,7 +48,7 @@ export default defineConfig({
     svgr(),
     importMetaEnv.vite({
       env: './.env',
-      example: '../.env.example'
+      example: './.env.example'
     })
   ],
   worker: {

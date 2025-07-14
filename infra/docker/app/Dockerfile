@@ -32,16 +32,11 @@ RUN gradle assemble
 FROM node:20-alpine AS build-front
 
 ARG VERSION
-ARG ENV_PROFILE
 ENV CI=true
-ENV ENV_PROFILE=$ENV_PROFILE
 ENV PUPPETEER_SKIP_DOWNLOAD=true
-
-RUN echo ${ENV_PROFILE}
 
 COPY frontend/ /tmp/frontend/
 COPY infra/ /tmp/infra/
-COPY .env.example/ /tmp/.env.example
 WORKDIR /tmp/frontend
 
 # Files are expected to be in /tmp/frontend/dist/monitorfish-frontend
@@ -60,9 +55,6 @@ FROM azul/zulu-openjdk-alpine:17-jre
 
 ARG VERSION
 ENV VERSION=$VERSION
-
-ARG ENV_PROFILE
-ENV ENV_PROFILE=$ENV_PROFILE
 
 ENV ENV_DB_URL=""
 
@@ -88,7 +80,6 @@ ENV JAVA_TOOL_OPTIONS="-Dcom.sun.management.jmxremote.ssl=false \
 # Copy files for the back
 COPY --from=build-back /tmp/build/libs/monitorfish-${VERSION}.jar /home/monitorfish
 COPY infra/configurations /home/monitorfish/configurations/
-COPY .env.example /home/monitorfish/
 
 USER monitorfish
 # Copy files for the front
@@ -97,6 +88,7 @@ COPY --from=build-front /tmp/frontend/build /home/monitorfish/public/
 
 # Copy import-meta-env
 COPY --from=build-front /tmp/frontend/import-meta-env /home/monitorfish/
+COPY --from=build-front /tmp/frontend/.env.example /home/monitorfish/
 COPY --from=build-front /tmp/infra/docker/app/env.sh /home/monitorfish/
 
 # Add logs folder to be mounted as volume
@@ -105,11 +97,6 @@ RUN mkdir /home/monitorfish/logs
 # Set up environment variable that define the root folder use for serving static files
 # It must point to the front (React) files
 ENV STATIC_FILES_PATH="/home/monitorfish/public"
-
-# Default profile is for local. Can be overriden at start : docker run -e "SPRING_PROFILES_ACTIVE=prod"
-ENV SPRING_PROFILES_ACTIVE=$ENV_PROFILE
-
-RUN echo ${ENV_PROFILE}
 
 USER root
 RUN chown monitorfish /home/monitorfish/import-meta-env
@@ -127,5 +114,4 @@ ENTRYPOINT ["/home/monitorfish/env.sh"]
 CMD exec java -Dhttp.proxyHost=${MONITORFISH_HTTP_PROXY_HOST} -Dhttp.proxyPort=${MONITORFISH_HTTP_PROXY_PORT} \
               -Dhttps.proxyHost=${MONITORFISH_HTTP_PROXY_HOST} -Dhttps.proxyPort=${MONITORFISH_HTTP_PROXY_PORT} \
               -Dhttp.nonProxyHosts=${MONITORFISH_HTTP_NON_PROXY_HOSTS} -Dhttps.nonProxyHosts=${MONITORFISH_HTTP_NON_PROXY_HOSTS} \
-              -Dspring.config.additional-location="/home/monitorfish/configurations/" \
               -jar "monitorfish-${VERSION}.jar"

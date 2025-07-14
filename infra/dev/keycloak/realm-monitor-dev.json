@@ -8,12 +8,12 @@
       "protocol": "openid-connect",
       "redirectUris": [
         "http://localhost:8880/login/oauth2/code/proconnect",
-        "http://0.0.0.0:8880",
-        "http://0.0.0.0:8880/login/oauth2/code/proconnect",
+        "http://localhost:8880",
         "http://localhost:3000"
       ],
       "webOrigins": [
-        "http://localhost:3000"
+        "http://localhost:3000",
+        "http://localhost:8880"
       ],
       "publicClient": false,
       "secret": "BHKLjYpcN2NzFlU2kTu63z8rDxQgUl8z",

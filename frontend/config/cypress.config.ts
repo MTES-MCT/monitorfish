@@ -1,6 +1,6 @@
 import {defineConfig} from 'cypress'
 
-const IS_CI = Boolean(process.env.CI) || true
+const IS_CI = Boolean(process.env.CI)
 
 export default defineConfig({
   e2e: {

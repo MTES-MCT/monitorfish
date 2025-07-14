@@ -10,6 +10,7 @@ import org.springframework.boot.info.BuildProperties
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -20,7 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
     OIDCProperties::class,
     ProtectedPathsAPIProperties::class,
     BffFilterConfig::class,
-    ApiClient::class,
+    KeycloakProxyProperties::class,
     SentryConfig::class,
     CustomAuthenticationEntryPoint::class,
 )
@@ -28,13 +29,19 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
     value = [VersionController::class],
     properties = [
         "monitorfish.oidc.enabled=true",
-        "spring.security.oauth2.resourceserver.jwt.public-key-location=classpath:oidc-issuer.pub",
-        "monitorfish.oidc.userinfo-endpoint=/api/user",
+        "monitorfish.oidc.login-url=http://localhost:8080/login",
+        "monitorfish.oidc.success-url=http://localhost:8080/",
+        "monitorfish.oidc.error-url=http://localhost:8080/error",
+        "monitorfish.oidc.authorized-sirets=123456789",
+        "monitorfish.oidc.issuer-uri=http://localhost:8080/auth",
+        "monitorfish.api.protected.paths=/bff/**",
+        "monitorfish.api.protected.super-user-paths=/bff/**",
+        "monitorfish.api.protected.public-paths=/api/**",
+        "monitorfish.api.protected.api-key=test-key",
+        "monitorfish.keycloak.proxy.enabled=false",
     ],
 )
 class BffFilterConfigITests {
-    val VALID_JWT = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJpc3N1ZXIuZ291di5mciIsInN1YiI6ImFsbWEiLCJhdWQiOiJzaGVuaXF1YSIsImlhdCI6MTY4NDI0MDAxOCwiZXhwIjo5MzU0MjQwNjE4fQ.l7x_Yp_0oFsLpu__PEOOc-F5MlzXrhfFDYDG25kj7dsq5_KkRm06kprIJMTtnA7JiYm44D7sFS6n6LzlkJLqjyxE17AnUUBEu1UXe373okUD9tMoLZt31e9tYyO8pQVy0roEGLepDGpJ-lvkC3hTvu-uwAxvXXK-OFx7f-GlMDpfkGNMhXYczfDmPmrCjStHAYGW8gfbE7elSXw51cbVuHOKsnqBm3SFJz3d_laO4c3SV5XFpcrlEdvP9ImQWnJU3pjiaViMB3Lj1UquCWxohT154WiVnodC549T50LkHXV4Q7ho04GK2Ivltl_CnR4rgS7HOkOZV3RICOIQm3sbXA"
-
     @Autowired
     private lateinit var mockMvc: MockMvc
 
@@ -42,15 +49,17 @@ class BffFilterConfigITests {
     private lateinit var getIsAuthorizedUser: GetIsAuthorizedUser
 
     @MockBean
+    private lateinit var clientRegistrationRepository: ClientRegistrationRepository
+
+    @MockBean
     private lateinit var buildProperties: BuildProperties
 
     @Test
-    fun `Should return 401 for all user authorization protected paths`() {
+    fun `Should return 302 redirect for all user authorization protected paths`() {
         // When
         /**
-         * This test return a 401 http code as the issuer uri could not be fetched (404 not found because of the dummy url).
-         * Hence, the bearer is valid but the request is invalid
-         * When this test is failing, a 404 http code will be returned (as the controllers are not mounted in this test)
+         * This test returns a 302 redirect to the login page when no valid OIDC authentication is provided.
+         * With OIDC enabled, these paths require proper authentication and redirect to login.
          */
         listOf(
             "/bff/v1/vessels",
@@ -61,43 +70,44 @@ class BffFilterConfigITests {
             "/bff/v1/vessels/risk_factors",
         ).forEach {
             mockMvc
-                .perform(
-                    get(it)
-                        .header("Authorization", "Bearer $VALID_JWT"),
-                )
+                .perform(get(it))
                 // Then
-                .andExpect(status().isUnauthorized)
+                .andExpect(status().isFound)
         }
     }
 
     @Test
-    fun `Should return 401 for all public but protected paths`() {
+    fun `Should return 404 for all public but protected paths`() {
         // When
+        /**
+         * These paths are public but require authentication when OIDC is enabled.
+         * However, without the controllers mounted in this test, they return 404.
+         */
         listOf(
             "/api/v1/authorization/management",
             "/api/v1/beacon_malfunctions/123",
         ).forEach {
             mockMvc
-                .perform(
-                    get(it),
-                )
+                .perform(get(it))
                 // Then
-                .andExpect(status().isUnauthorized)
+                .andExpect(status().isNotFound)
         }
     }
 
     @Test
-    fun `Should return 401 for When deleting an user`() {
+    fun `Should return 403 When deleting an user`() {
         // When
+        /**
+         * DELETE operations on user management paths require authentication.
+         * Without proper OIDC authentication, they return 403 Forbidden.
+         */
         listOf(
             "/api/v1/authorization/management/dummy@user.com",
         ).forEach {
             mockMvc
-                .perform(
-                    delete(it),
-                )
+                .perform(delete(it))
                 // Then
-                .andExpect(status().isUnauthorized)
+                .andExpect(status().isForbidden)
         }
     }
 }

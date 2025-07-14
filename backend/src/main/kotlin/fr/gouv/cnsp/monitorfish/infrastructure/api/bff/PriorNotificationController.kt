@@ -6,7 +6,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
-import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.Utils.getEmail
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.LogbookPriorNotificationFormDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationComputeDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationFormDataInput
@@ -23,6 +22,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.time.ZonedDateTime
@@ -177,9 +177,9 @@ class PriorNotificationController(
         operationDate: ZonedDateTime,
         @RequestBody
         logbookPriorNotificationFormDataInput: LogbookPriorNotificationFormDataInput,
-        @AuthenticationPrincipal principal: Any,
+        @AuthenticationPrincipal principal: OidcUser,
     ): LogbookPriorNotificationFormDataOutput {
-        val email = getEmail(principal)
+        val email = principal.email
 
         val updatedPriorNotification =
             updateLogbookPriorNotification.execute(
@@ -221,9 +221,9 @@ class PriorNotificationController(
     fun createManual(
         @RequestBody
         manualPriorNotificationFormDataInput: ManualPriorNotificationFormDataInput,
-        @AuthenticationPrincipal principal: Any,
+        @AuthenticationPrincipal principal: OidcUser,
     ): ManualPriorNotificationFormDataOutput {
-        val email = getEmail(principal)
+        val email = principal.email
 
         val createdPriorNotification =
             createOrUpdateManualPriorNotification.execute(
@@ -255,9 +255,9 @@ class PriorNotificationController(
         reportId: String,
         @RequestBody
         manualPriorNotificationFormDataInput: ManualPriorNotificationFormDataInput,
-        @AuthenticationPrincipal principal: Any,
+        @AuthenticationPrincipal principal: OidcUser,
     ): ManualPriorNotificationFormDataOutput {
-        val email = getEmail(principal)
+        val email = principal.email
 
         val updatedPriorNotification =
             createOrUpdateManualPriorNotification.execute(

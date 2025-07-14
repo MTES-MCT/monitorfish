@@ -3,8 +3,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify
-import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.Sharing
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselIdentity

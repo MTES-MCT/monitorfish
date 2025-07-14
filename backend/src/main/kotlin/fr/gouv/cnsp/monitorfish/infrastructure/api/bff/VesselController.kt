@@ -5,7 +5,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
-import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.Utils.getEmail
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -16,6 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.web.bind.annotation.*
 import java.time.ZonedDateTime
 
@@ -38,9 +38,9 @@ class VesselController(
     @GetMapping("")
     @Operation(summary = "Get all active vessels")
     fun getVessels(
-        @AuthenticationPrincipal principal: Any,
+        @AuthenticationPrincipal principal: OidcUser,
     ): List<ActiveVesselBaseDataOutput> {
-        val email: String = getEmail(principal)
+        val email: String = principal.email
         val activeVessels = getActiveVessels.execute(email)
 
         return activeVessels.mapIndexed { index, vessel ->
@@ -88,10 +88,10 @@ class VesselController(
         @RequestParam(name = "beforeDateTime", required = false)
         @DateTimeFormat(pattern = zoneDateTimePattern)
         beforeDateTime: ZonedDateTime?,
-        @AuthenticationPrincipal principal: Any,
+        @AuthenticationPrincipal principal: OidcUser,
     ): ResponseEntity<SelectedVesselAndPositionsDataOutput> =
         runBlocking {
-            val email: String = getEmail(principal)
+            val email: String = principal.email
 
             val (vesselTrackHasBeenModified, vesselInformation) =
                 getVessel.execute(

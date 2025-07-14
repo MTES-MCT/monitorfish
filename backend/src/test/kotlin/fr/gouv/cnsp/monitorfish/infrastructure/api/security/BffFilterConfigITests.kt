@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
     KeycloakProxyProperties::class,
     SentryConfig::class,
     CustomAuthenticationEntryPoint::class,
+    ApiKeyCheckFilter::class,
 )
 @WebMvcTest(
     value = [VersionController::class],
@@ -99,7 +100,7 @@ class BffFilterConfigITests {
         // When
         /**
          * DELETE operations on user management paths require authentication.
-         * Without proper OIDC authentication, they return 403 Forbidden.
+         * Without proper OIDC authentication, they return 401 Forbidden.
          */
         listOf(
             "/api/v1/authorization/management/dummy@user.com",
@@ -107,7 +108,7 @@ class BffFilterConfigITests {
             mockMvc
                 .perform(delete(it))
                 // Then
-                .andExpect(status().isForbidden)
+                .andExpect(status().isUnauthorized)
         }
     }
 }

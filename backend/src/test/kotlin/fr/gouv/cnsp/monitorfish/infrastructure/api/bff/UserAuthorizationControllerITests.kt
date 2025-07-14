@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
-import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.utils.ApiTestWithJWTSecurity
@@ -32,11 +32,10 @@ class UserAuthorizationControllerITests {
         // Given
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "email",
+            AuthorizedUser(
+                email = "test@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
 
@@ -57,11 +56,10 @@ class UserAuthorizationControllerITests {
         // Given
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(false)
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "email",
+            AuthorizedUser(
+                email = "test@email.gouv.fr",
                 isSuperUser = false,
                 service = null,
-                isAdministrator = false,
             ),
         )
 
@@ -80,11 +78,10 @@ class UserAuthorizationControllerITests {
         // Given
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "d44b8b1163276cb22a02d462de5883ceb60b461e20c4e27e905b72ec8b649807",
+            AuthorizedUser(
+                email = "test@email.gouv.fr",
                 isSuperUser = false,
                 service = null,
-                isAdministrator = false,
             ),
         )
 

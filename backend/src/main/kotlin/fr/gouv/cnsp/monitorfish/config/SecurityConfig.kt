@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -32,11 +33,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 class SecurityConfig(
     val oidcProperties: OIDCProperties,
     val keycloakProxyProperties: KeycloakProxyProperties,
-    val clientRegistrationRepository: ClientRegistrationRepository,
+    val clientRegistrationRepository: ClientRegistrationRepository?,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(SecurityConfig::class.java)
 
     @Bean
+    @ConditionalOnProperty(value = ["monitorfish.oidc.enabled"], havingValue = "true")
     fun customOidcUserService(): OidcUserService {
         return object : OidcUserService() {
             override fun loadUser(userRequest: OidcUserRequest): OidcUser {
@@ -127,37 +129,46 @@ class SecurityConfig(
                         .anyRequest()
                         .authenticated()
                 }
-            }.oauth2Login { oauth2 ->
-                oauth2
-                    .userInfoEndpoint { userInfo ->
-                        userInfo.oidcUserService(customOidcUserService())
-                    }.loginPage(oidcProperties.loginUrl)
-                    .successHandler(successHandler())
-                    .failureHandler(authenticationFailureHandler())
-            }.logout { logout ->
-                logout
-                    .logoutSuccessHandler(oidcLogoutSuccessHandler())
-                    .logoutRequestMatcher(AntPathRequestMatcher("/logout", "GET"))
-                    .invalidateHttpSession(true)
-                    .clearAuthentication(true)
-                    .deleteCookies("JSESSIONID")
-            }.csrf { csrf ->
-                if (keycloakProxyProperties.enabled) {
-                    // We ignore CSRF in development as the internal keycloak proxy won't validate tokens.
-                    csrf.ignoringRequestMatchers("/oauth2/**", "/login/oauth2/**", "/realms/**")
-                }
             }
+
+        if (oidcProperties.enabled == true && clientRegistrationRepository != null) {
+            http
+                .oauth2Login { oauth2 ->
+                    oauth2
+                        .userInfoEndpoint { userInfo ->
+                            userInfo.oidcUserService(customOidcUserService())
+                        }.loginPage(oidcProperties.loginUrl)
+                        .successHandler(successHandler())
+                        .failureHandler(authenticationFailureHandler())
+                }.logout { logout ->
+                    logout
+                        .logoutSuccessHandler(oidcLogoutSuccessHandler())
+                        .logoutRequestMatcher(AntPathRequestMatcher("/logout", "GET"))
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")
+                }
+        }
+
+        http.csrf { csrf ->
+            if (keycloakProxyProperties.enabled) {
+                // We ignore CSRF in development as the internal keycloak proxy won't validate tokens.
+                csrf.ignoringRequestMatchers("/oauth2/**", "/login/oauth2/**", "/realms/**")
+            }
+        }
 
         return http.build()
     }
 
     @Bean
+    @ConditionalOnProperty(value = ["monitorfish.oidc.enabled"], havingValue = "true")
     fun successHandler(): AuthenticationSuccessHandler {
         logger.info("Redirect URL is: '${oidcProperties.successUrl}'")
         return SimpleUrlAuthenticationSuccessHandler(oidcProperties.successUrl)
     }
 
     @Bean
+    @ConditionalOnProperty(value = ["monitorfish.oidc.enabled"], havingValue = "true")
     fun authenticationFailureHandler(): AuthenticationFailureHandler =
         object : SimpleUrlAuthenticationFailureHandler(oidcProperties.errorUrl) {
             override fun onAuthenticationFailure(

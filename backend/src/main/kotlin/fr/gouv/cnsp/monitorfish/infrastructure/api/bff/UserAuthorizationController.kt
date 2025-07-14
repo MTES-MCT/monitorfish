@@ -28,15 +28,11 @@ class UserAuthorizationController(
     @GetMapping("current")
     @Operation(summary = "Get current logged user authorization")
     fun getCurrentUserAuthorization(
-        @AuthenticationPrincipal principal: Any,
+        @AuthenticationPrincipal principal: OidcUser,
     ): AuthorizedUserDataOutput? {
         logger.info("Getting current user authorization $principal")
 
-        val user =
-            principal as? OidcUser
-                ?: throw IllegalStateException("Authenticated user is not an OidcUser")
-
-        val authorizedUser = getAuthorizedUser.execute(user.email)
+        val authorizedUser = getAuthorizedUser.execute(principal.email)
 
         return AuthorizedUserDataOutput.fromUserAuthorization(authorizedUser)
     }

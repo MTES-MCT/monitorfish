@@ -95,6 +95,7 @@ dependencies {
     testImplementation("jakarta.servlet:jakarta.servlet-api:6.1.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.3.5")
+    testImplementation("org.springframework.security:spring-security-test:6.4.2")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc:3.0.3")
 }
 

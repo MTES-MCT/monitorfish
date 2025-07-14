@@ -78,11 +78,10 @@ class BffFilterConfigITests {
     }
 
     @Test
-    fun `Should return 404 for all public but protected paths`() {
+    fun `Should return 401 for all public but protected paths`() {
         // When
         /**
          * These paths are public but require authentication when OIDC is enabled.
-         * However, without the controllers mounted in this test, they return 404.
          */
         listOf(
             "/api/v1/authorization/management",
@@ -91,12 +90,12 @@ class BffFilterConfigITests {
             mockMvc
                 .perform(get(it))
                 // Then
-                .andExpect(status().isNotFound)
+                .andExpect(status().isUnauthorized)
         }
     }
 
     @Test
-    fun `Should return 403 When deleting an user`() {
+    fun `Should return 401 When deleting an user`() {
         // When
         /**
          * DELETE operations on user management paths require authentication.

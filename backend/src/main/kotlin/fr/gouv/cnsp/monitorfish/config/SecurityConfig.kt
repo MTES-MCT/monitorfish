@@ -32,7 +32,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @EnableWebSecurity
 class SecurityConfig(
     val oidcProperties: OIDCProperties,
-    val keycloakProxyProperties: KeycloakProxyProperties,
     val clientRegistrationRepository: ClientRegistrationRepository?,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(SecurityConfig::class.java)
@@ -83,6 +82,7 @@ class SecurityConfig(
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .cors { it.configurationSource(corsConfigurationSource()) }
+            .csrf { it.disable() }
             .authorizeHttpRequests { authorize ->
                 if (oidcProperties.enabled == null || oidcProperties.enabled == false) {
                     logger.warn(
@@ -148,13 +148,6 @@ class SecurityConfig(
                         .clearAuthentication(true)
                         .deleteCookies("JSESSIONID")
                 }
-        }
-
-        http.csrf { csrf ->
-            if (keycloakProxyProperties.enabled) {
-                // We ignore CSRF in development as the internal keycloak proxy won't validate tokens.
-                csrf.ignoringRequestMatchers("/oauth2/**", "/login/oauth2/**", "/realms/**")
-            }
         }
 
         return http.build()

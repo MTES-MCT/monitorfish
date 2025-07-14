@@ -26,7 +26,7 @@ services:
         condition: service_healthy
 
   app:
-    image: monitorfish:latest
+    image: monitorfish-app:$MONITORFISH_VERSION
     container_name: monitorfish_backend
     environment:
       # Database Configuration

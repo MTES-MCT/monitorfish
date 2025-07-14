@@ -14,4 +14,5 @@ class OIDCProperties {
 
     // This property is only used when running Keycloak locally in E2E tests
     var proxyUrl: String? = null
+    var issuerUri: String = ""
 }

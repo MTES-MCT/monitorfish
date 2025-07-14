@@ -31,6 +31,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @EnableWebSecurity
 class SecurityConfig(
     val oidcProperties: OIDCProperties,
+    val keycloakProxyProperties: KeycloakProxyProperties,
     val clientRegistrationRepository: ClientRegistrationRepository,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(SecurityConfig::class.java)
@@ -141,7 +142,10 @@ class SecurityConfig(
                     .clearAuthentication(true)
                     .deleteCookies("JSESSIONID")
             }.csrf { csrf ->
-                csrf.ignoringRequestMatchers("/oauth2/**", "/login/oauth2/**", "/realms/**")
+                if (keycloakProxyProperties.enabled) {
+                    // We ignore CSRF in development as the internal keycloak proxy won't validate tokens.
+                    csrf.ignoringRequestMatchers("/oauth2/**", "/login/oauth2/**", "/realms/**")
+                }
             }
 
         return http.build()
@@ -162,8 +166,6 @@ class SecurityConfig(
                 exception: AuthenticationException,
             ) {
                 logger.error("Authentication failed: ${exception.message}", exception)
-
-                // response.sendRedirect("/logout")
 
                 super.onAuthenticationFailure(request, response, exception)
             }

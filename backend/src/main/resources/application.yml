@@ -29,6 +29,7 @@ monitorfish:
         errorUrl: ${MONITORFISH_OIDC_ERROR_URL}
         authorizedSirets: ${MONITORFISH_OIDC_AUTHORIZED_SIRETS}
         proxyUrl: ${MONITORFISH_OIDC_PROXY_URL:}
+        issuerUri: ${MONITORFISH_OIDC_ISSUER_URI_EXTERNAL}
     scheduling:
         enabled: ${MONITORFISH_SCHEDULING_ENABLED}
     sentry:
@@ -41,8 +42,6 @@ monitorfish:
 logging:
     level:
         org.springframework.security.web.authentication.logout: DEBUG
-        org.springframework.security: DEBUG
-        org.springframework.security.oauth2: DEBUG
 
 spring:
     jmx:
@@ -104,6 +103,9 @@ management:
         web:
             exposure:
                 include: "*"
+
+monitorenv:
+    url: ${MONITORENV_URL}
 
 log4j2:
     script:

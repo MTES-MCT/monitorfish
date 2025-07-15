@@ -20,6 +20,7 @@ from src.flows.control_anteriority import control_anteriority_flow
 from src.flows.control_units import control_units_flow
 from src.flows.controls import controls_flow
 from src.flows.controls_open_data import controls_open_data_flow
+from src.flows.current_segments import current_segments_flow
 from src.flows.districts import districts_flow
 from src.flows.facade_areas import facade_areas_flow
 from src.flows.fao_areas import fao_areas_flow
@@ -56,6 +57,9 @@ flows_to_deploy = [
     FlowAndSchedules(flow=controls_flow),
     FlowAndSchedules(
         flow=controls_open_data_flow, schedules=[Schedule(cron="15 3 * * 5")]
+    ),
+    FlowAndSchedules(
+        flow=current_segments_flow, schedules=[Schedule(cron="2,22,42 * * * *")]
     ),
     FlowAndSchedules(flow=districts_flow),
     FlowAndSchedules(flow=species_flow),

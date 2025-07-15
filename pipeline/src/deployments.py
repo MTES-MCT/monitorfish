@@ -27,6 +27,7 @@ from src.flows.current_segments import current_segments_flow
 from src.flows.distribute_pnos import distribute_pnos_flow
 from src.flows.districts import districts_flow
 from src.flows.email_actions_to_units import email_actions_to_units_flow
+from src.flows.enrich_logbook import enrich_logbook_flow
 from src.flows.facade_areas import facade_areas_flow
 from src.flows.fao_areas import fao_areas_flow
 from src.flows.fishing_gear_codes import fishing_gear_codes_flow
@@ -91,6 +92,20 @@ flows_to_deploy = [
                     "end_days_ago": 1,
                     "test_mode": WEEKLY_CONTROL_REPORT_EMAIL_TEST_MODE,
                     "is_integration": IS_INTEGRATION,
+                },
+            )
+        ],
+    ),
+    FlowAndSchedules(
+        flow=enrich_logbook_flow,
+        schedules=[
+            Schedule(
+                cron="1,6,11,16,21,26,31,36,41,46,51,56 * * * *",
+                parameters={
+                    "start_hours_ago": 6,
+                    "end_hours_ago": 0,
+                    "minutes_per_chunk": 480,
+                    "recompute_all": False,
                 },
             )
         ],

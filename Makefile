@@ -13,11 +13,6 @@ MAKEFLAGS += --silent
 
 .DEFAULT_GOAL: help
 
-ifneq (,$(wildcard .env))
-	include .env
-	echo "GOT env"
-	export
-endif
 
 .PHONY: help ##OTHER 🛟 To display this prompts. This will list all available targets with their documentation
 help:

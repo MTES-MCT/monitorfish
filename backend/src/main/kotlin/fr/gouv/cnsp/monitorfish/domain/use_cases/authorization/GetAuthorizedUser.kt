@@ -12,7 +12,16 @@ class GetAuthorizedUser(
 ) {
     private val logger = LoggerFactory.getLogger(GetAuthorizedUser::class.java)
 
-    fun execute(email: String): AuthorizedUser {
+    fun execute(email: String?): AuthorizedUser {
+        if (email == null) {
+            logger.info("⚠ No email provided (OIDC disabled), defaulting to super-user=true")
+            return AuthorizedUser(
+                email = null,
+                isSuperUser = true,
+                service = null,
+            )
+        }
+
         val hashedEmail = hash(email)
 
         return try {

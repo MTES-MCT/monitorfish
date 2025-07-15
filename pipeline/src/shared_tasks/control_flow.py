@@ -1,3 +1,4 @@
+from itertools import chain
 from pathlib import Path
 from typing import List
 
@@ -37,3 +38,9 @@ def filter_results(task_results) -> List:
         raise ValueError from e
 
     return [r for r in task_results if not isinstance(r, (Exception, type(None)))]
+
+
+@task
+def flatten(task_results: List[list]) -> list:
+    assert isinstance(task_results, list)
+    return list(chain.from_iterable(task_results))

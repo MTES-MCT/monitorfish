@@ -177,9 +177,9 @@ class PriorNotificationController(
         operationDate: ZonedDateTime,
         @RequestBody
         logbookPriorNotificationFormDataInput: LogbookPriorNotificationFormDataInput,
-        @AuthenticationPrincipal principal: OidcUser,
+        @AuthenticationPrincipal principal: OidcUser??,
     ): LogbookPriorNotificationFormDataOutput {
-        val email = principal.email
+        val email = principal?.email ?: ""
 
         val updatedPriorNotification =
             updateLogbookPriorNotification.execute(
@@ -221,9 +221,9 @@ class PriorNotificationController(
     fun createManual(
         @RequestBody
         manualPriorNotificationFormDataInput: ManualPriorNotificationFormDataInput,
-        @AuthenticationPrincipal principal: OidcUser,
+        @AuthenticationPrincipal principal: OidcUser?,
     ): ManualPriorNotificationFormDataOutput {
-        val email = principal.email
+        val email = principal?.email ?: ""
 
         val createdPriorNotification =
             createOrUpdateManualPriorNotification.execute(
@@ -255,9 +255,9 @@ class PriorNotificationController(
         reportId: String,
         @RequestBody
         manualPriorNotificationFormDataInput: ManualPriorNotificationFormDataInput,
-        @AuthenticationPrincipal principal: OidcUser,
+        @AuthenticationPrincipal principal: OidcUser?,
     ): ManualPriorNotificationFormDataOutput {
-        val email = principal.email
+        val email = principal?.email ?: ""
 
         val updatedPriorNotification =
             createOrUpdateManualPriorNotification.execute(

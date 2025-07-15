@@ -24,14 +24,21 @@ class UserAuthorizationController(
      *   - return 200 with the UserAuthorization object if the user authorization is found
      *     (it passes the filter `UserAuthorizationCheckFilter` - the endpoint is not super-user protected)
      *   - return an 200 with `isSuperUser=false` if the user authorization is not found
+     *   - return an 200 with `isSuperUser=false` if OIDC is disabled (principal is null)
      */
     @GetMapping("current")
     @Operation(summary = "Get current logged user authorization")
     fun getCurrentUserAuthorization(
-        @AuthenticationPrincipal principal: OidcUser,
+        @AuthenticationPrincipal principal: OidcUser?,
     ): AuthorizedUserDataOutput? {
-        logger.info("Getting current user authorization $principal")
+        if (principal == null) {
+            logger.info("Getting current user authorization - OIDC disabled, returning default authorization")
+            val authorizedUser = getAuthorizedUser.execute(null)
 
+            return AuthorizedUserDataOutput.fromUserAuthorization(authorizedUser)
+        }
+
+        logger.info("Getting current user authorization for user: ${principal.email}")
         val authorizedUser = getAuthorizedUser.execute(principal.email)
 
         return AuthorizedUserDataOutput.fromUserAuthorization(authorizedUser)

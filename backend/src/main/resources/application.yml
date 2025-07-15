@@ -24,12 +24,17 @@ monitorfish:
             api-key: ${MONITORFISH_API_PROTECTED_API_KEY}
     oidc:
         enabled: ${MONITORFISH_OIDC_ENABLED}
+        clientId: ${MONITORFISH_OIDC_CLIENT_ID:}
+        clientSecret: ${MONITORFISH_OIDC_CLIENT_SECRET:}
+        redirectUri: ${MONITORFISH_OIDC_REDIRECT_URI:}
         loginUrl: ${MONITORFISH_OIDC_LOGIN_URL}
         successUrl: ${MONITORFISH_OIDC_SUCCESS_URL}
         errorUrl: ${MONITORFISH_OIDC_ERROR_URL}
         authorizedSirets: ${MONITORFISH_OIDC_AUTHORIZED_SIRETS}
+        issuerUri: ${MONITORFISH_OIDC_ISSUER_URI:}
+        issuerUriExternal: ${MONITORFISH_OIDC_ISSUER_URI_EXTERNAL}
+        userinfoEndpoint: ${MONITORFISH_OIDC_USERINFO_ENDPOINT:}
         proxyUrl: ${MONITORFISH_OIDC_PROXY_URL:}
-        issuerUri: ${MONITORFISH_OIDC_ISSUER_URI_EXTERNAL}
     scheduling:
         enabled: ${MONITORFISH_SCHEDULING_ENABLED}
     sentry:
@@ -70,25 +75,6 @@ spring:
         hikari:
             maxLifetime: 60000
             maximum-pool-size: 30
-    security:
-        oauth2:
-            client:
-                registration:
-                    proconnect:
-                        provider: proconnect
-                        client-id: ${MONITORFISH_OIDC_CLIENT_ID}
-                        client-secret: ${MONITORFISH_OIDC_CLIENT_SECRET}
-                        authorization-grant-type: authorization_code
-                        redirect-uri: ${MONITORFISH_OIDC_REDIRECT_URI}
-                        scope: openid,profile
-                provider:
-                    proconnect:
-                        issuer-uri: ${MONITORFISH_OIDC_ISSUER_URI:}
-                        # URL externe pour les redirections frontend
-                        authorization-uri: ${MONITORFISH_OIDC_ISSUER_URI_EXTERNAL:}/protocol/openid-connect/auth
-                        token-uri: ${MONITORFISH_OIDC_ISSUER_URI:}/protocol/openid-connect/token
-                        user-info-uri: ${MONITORFISH_OIDC_ISSUER_URI:}/protocol/openid-connect/userinfo
-                        jwk-set-uri: ${MONITORFISH_OIDC_ISSUER_URI:}/protocol/openid-connect/certs
     servlet:
         multipart:
             max-file-size: 5MB

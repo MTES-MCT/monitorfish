@@ -7,10 +7,15 @@ import org.springframework.context.annotation.Configuration
 @ConfigurationProperties(prefix = "monitorfish.oidc")
 class OIDCProperties {
     var enabled: Boolean? = false
+    var clientId: String = ""
+    var clientSecret: String = ""
+    var redirectUri: String = ""
     var loginUrl: String = ""
     var successUrl: String = ""
     var errorUrl: String = ""
     var authorizedSirets: List<String> = listOf()
+    var issuerUri: String = ""
+    var issuerUriExternal: String = ""
 
     /**
      * ⚠️ DEVELOPMENT ONLY - Keycloak proxy URL
@@ -23,5 +28,4 @@ class OIDCProperties {
      * Production: Should be null/unused
      */
     var proxyUrl: String? = null
-    var issuerUri: String = ""
 }

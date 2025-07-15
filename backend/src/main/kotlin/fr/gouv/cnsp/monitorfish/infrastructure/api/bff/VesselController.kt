@@ -38,9 +38,9 @@ class VesselController(
     @GetMapping("")
     @Operation(summary = "Get all active vessels")
     fun getVessels(
-        @AuthenticationPrincipal principal: OidcUser,
+        @AuthenticationPrincipal principal: OidcUser?,
     ): List<ActiveVesselBaseDataOutput> {
-        val email: String = principal.email
+        val email = principal?.email ?: ""
         val activeVessels = getActiveVessels.execute(email)
 
         return activeVessels.mapIndexed { index, vessel ->
@@ -88,10 +88,10 @@ class VesselController(
         @RequestParam(name = "beforeDateTime", required = false)
         @DateTimeFormat(pattern = zoneDateTimePattern)
         beforeDateTime: ZonedDateTime?,
-        @AuthenticationPrincipal principal: OidcUser,
+        @AuthenticationPrincipal principal: OidcUser?,
     ): ResponseEntity<SelectedVesselAndPositionsDataOutput> =
         runBlocking {
-            val email: String = principal.email
+            val email = principal?.email ?: ""
 
             val (vesselTrackHasBeenModified, vesselInformation) =
                 getVessel.execute(

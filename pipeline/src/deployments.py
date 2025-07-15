@@ -13,6 +13,7 @@ from config import (
     PNO_TEST_MODE,
     PREFECT_API_URL,
     ROOT_DIRECTORY,
+    WEEKLY_CONTROL_REPORT_EMAIL_TEST_MODE,
 )
 from src.flows.activity_visualizations import activity_visualizations_flow
 from src.flows.admin_areas import admin_areas_flow
@@ -25,6 +26,7 @@ from src.flows.controls_open_data import controls_open_data_flow
 from src.flows.current_segments import current_segments_flow
 from src.flows.distribute_pnos import distribute_pnos_flow
 from src.flows.districts import districts_flow
+from src.flows.email_actions_to_units import email_actions_to_units_flow
 from src.flows.facade_areas import facade_areas_flow
 from src.flows.fao_areas import fao_areas_flow
 from src.flows.fishing_gear_codes import fishing_gear_codes_flow
@@ -79,6 +81,20 @@ flows_to_deploy = [
         ],
     ),
     FlowAndSchedules(flow=districts_flow),
+    FlowAndSchedules(
+        flow=email_actions_to_units_flow,
+        schedules=[
+            Schedule(
+                cron="0 5 * * 1",
+                parameters={
+                    "start_days_ago": 7,
+                    "end_days_ago": 1,
+                    "test_mode": WEEKLY_CONTROL_REPORT_EMAIL_TEST_MODE,
+                    "is_integration": IS_INTEGRATION,
+                },
+            )
+        ],
+    ),
     FlowAndSchedules(flow=species_flow),
     FlowAndSchedules(flow=facade_areas_flow),
     FlowAndSchedules(flow=fao_areas_flow),

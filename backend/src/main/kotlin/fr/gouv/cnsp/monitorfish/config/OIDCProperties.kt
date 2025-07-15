@@ -15,7 +15,10 @@ class OIDCProperties {
     var errorUrl: String = ""
     var authorizedSirets: List<String> = listOf()
     var issuerUri: String = ""
-    var issuerUriExternal: String = ""
+    var authorizationUri: String = ""
+    var tokenUri: String = ""
+    var userInfoUri: String = ""
+    var jwkSetUri: String = ""
 
     /**
      * ⚠️ DEVELOPMENT ONLY - Keycloak proxy URL

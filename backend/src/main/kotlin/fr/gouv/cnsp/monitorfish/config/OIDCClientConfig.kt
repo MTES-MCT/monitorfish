@@ -26,7 +26,10 @@ class OIDCClientConfig(
         val clientSecret = validateProperty(oidcProperties.clientSecret, "Client Secret")
         val redirectUri = validateProperty(oidcProperties.redirectUri, "Redirect URI")
         val issuerUri = validateProperty(oidcProperties.issuerUri, "Issuer URI")
-        val issuerUriExternal = validateProperty(oidcProperties.issuerUriExternal, "External Issuer URI")
+        val authorizationUri = validateProperty(oidcProperties.authorizationUri, "Authorization URI")
+        val tokenUri = validateProperty(oidcProperties.tokenUri, "Token URI")
+        val userInfoUri = validateProperty(oidcProperties.userInfoUri, "User Info URI")
+        val jwkSetUri = validateProperty(oidcProperties.jwkSetUri, "JWK URI")
 
         val clientRegistration =
             ClientRegistration
@@ -37,11 +40,11 @@ class OIDCClientConfig(
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .redirectUri(redirectUri)
                 .scope("openid", "profile")
-                .authorizationUri("$issuerUriExternal/protocol/openid-connect/auth")
-                .tokenUri("$issuerUri/protocol/openid-connect/token")
-                .userInfoUri("$issuerUri/protocol/openid-connect/userinfo")
+                .authorizationUri(authorizationUri)
+                .tokenUri(tokenUri)
+                .userInfoUri(userInfoUri)
                 .userNameAttributeName("email")
-                .jwkSetUri("$issuerUri/protocol/openid-connect/certs")
+                .jwkSetUri(jwkSetUri)
                 .issuerUri(issuerUri)
                 .clientName("ProConnect")
                 .build()

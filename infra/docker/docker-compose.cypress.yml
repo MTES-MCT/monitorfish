@@ -36,11 +36,10 @@ services:
       - MONITORFISH_MIGRATION_PATH=classpath:/db/migration,classpath:/db/testdata
 
       # Server Configuration
-      - SPRING_PROFILES_ACTIVE=local
       - HOST_IP=127.0.0.1
       - MONITORFISH_SERVER_PORT=8880
       - MONITORFISH_AJP_PORT=8000
-      - STATIC_FILES_PATH=/opt/monitorfish/static
+      - STATIC_FILES_PATH=/home/monitorfish/public
       - SPRING_CLOUD_GATEWAY_MVC_FORM_FILTER_ENABLED=false
 
       # Application Settings
@@ -71,7 +70,6 @@ services:
       - MONITORFISH_OIDC_SUCCESS_URL=http://localhost:8880
       - MONITORFISH_OIDC_ERROR_URL=http://localhost:8880/register
       - MONITORFISH_OIDC_AUTHORIZED_SIRETS=1234567890,0987654321
-      - MONITORFISH_OIDC_USERINFO_ENDPOINT=/protocol/openid-connect/userinfo
       - MONITORFISH_OIDC_PROVIDER=proconnect
       - MONITORFISH_KEYCLOAK_PROXY_ENABLED=true
 

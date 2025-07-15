@@ -33,7 +33,6 @@ monitorfish:
         authorizedSirets: ${MONITORFISH_OIDC_AUTHORIZED_SIRETS}
         issuerUri: ${MONITORFISH_OIDC_ISSUER_URI:}
         issuerUriExternal: ${MONITORFISH_OIDC_ISSUER_URI_EXTERNAL}
-        userinfoEndpoint: ${MONITORFISH_OIDC_USERINFO_ENDPOINT:}
         proxyUrl: ${MONITORFISH_OIDC_PROXY_URL:}
     scheduling:
         enabled: ${MONITORFISH_SCHEDULING_ENABLED}

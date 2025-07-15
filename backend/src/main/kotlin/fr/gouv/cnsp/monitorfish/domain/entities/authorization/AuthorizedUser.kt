@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.authorization
 
 data class AuthorizedUser(
-    val email: String,
+    val email: String?,
     val isSuperUser: Boolean,
     val service: CnspService?,
 ) {

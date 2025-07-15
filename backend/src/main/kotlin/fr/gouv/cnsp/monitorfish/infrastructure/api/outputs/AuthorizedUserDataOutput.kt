@@ -9,7 +9,7 @@ data class AuthorizedUserDataOutput(
     companion object {
         fun fromUserAuthorization(authorizedUser: AuthorizedUser): AuthorizedUserDataOutput =
             AuthorizedUserDataOutput(
-                email = authorizedUser.email,
+                email = authorizedUser.email ?: "",
                 isSuperUser = authorizedUser.isSuperUser,
             )
     }

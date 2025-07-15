@@ -10,6 +10,10 @@ from config import (
     HOST_ENV_FILE_LOCATION,
     IS_INTEGRATION,
     LOGBOOK_FILES_GID,
+    MAX_FISHING_SPEED_THRESHOLD,
+    MIN_FISHING_SPEED_THRESHOLD,
+    MINIMUM_CONSECUTIVE_POSITIONS,
+    MINIMUM_MINUTES_OF_EMISSION_AT_SEA,
     PNO_TEST_MODE,
     PREFECT_API_URL,
     ROOT_DIRECTORY,
@@ -28,6 +32,7 @@ from src.flows.distribute_pnos import distribute_pnos_flow
 from src.flows.districts import districts_flow
 from src.flows.email_actions_to_units import email_actions_to_units_flow
 from src.flows.enrich_logbook import enrich_logbook_flow
+from src.flows.enrich_positions import enrich_positions_flow
 from src.flows.facade_areas import facade_areas_flow
 from src.flows.fao_areas import fao_areas_flow
 from src.flows.fishing_gear_codes import fishing_gear_codes_flow
@@ -108,6 +113,39 @@ flows_to_deploy = [
                     "recompute_all": False,
                 },
             )
+        ],
+    ),
+    FlowAndSchedules(
+        flow=enrich_positions_flow,
+        schedules=[
+            Schedule(
+                cron="1-59 * * * *",
+                parameters={
+                    "start_hours_ago": 7,
+                    "end_hours_ago": 0,
+                    "minutes_per_chunk": 420,
+                    "chunk_overlap_minutes": 0,
+                    "minimum_consecutive_positions": MINIMUM_CONSECUTIVE_POSITIONS,
+                    "minimum_minutes_of_emission_at_sea": MINIMUM_MINUTES_OF_EMISSION_AT_SEA,
+                    "min_fishing_speed_threshold": MIN_FISHING_SPEED_THRESHOLD,
+                    "max_fishing_speed_threshold": MAX_FISHING_SPEED_THRESHOLD,
+                    "recompute_all": False,
+                },
+            ),
+            Schedule(
+                cron="0 * * * *",
+                parameters={
+                    "start_hours_ago": 24,
+                    "end_hours_ago": 0,
+                    "minutes_per_chunk": 1440,
+                    "chunk_overlap_minutes": 0,
+                    "minimum_consecutive_positions": MINIMUM_CONSECUTIVE_POSITIONS,
+                    "minimum_minutes_of_emission_at_sea": MINIMUM_MINUTES_OF_EMISSION_AT_SEA,
+                    "min_fishing_speed_threshold": MIN_FISHING_SPEED_THRESHOLD,
+                    "max_fishing_speed_threshold": MAX_FISHING_SPEED_THRESHOLD,
+                    "recompute_all": True,
+                },
+            ),
         ],
     ),
     FlowAndSchedules(flow=species_flow),

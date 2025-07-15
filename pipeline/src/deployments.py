@@ -8,7 +8,9 @@ from prefect.schedules import Schedule
 from config import (
     ERS_FILES_LOCATION,
     HOST_ENV_FILE_LOCATION,
+    IS_INTEGRATION,
     LOGBOOK_FILES_GID,
+    PNO_TEST_MODE,
     PREFECT_API_URL,
     ROOT_DIRECTORY,
 )
@@ -21,6 +23,7 @@ from src.flows.control_units import control_units_flow
 from src.flows.controls import controls_flow
 from src.flows.controls_open_data import controls_open_data_flow
 from src.flows.current_segments import current_segments_flow
+from src.flows.distribute_pnos import distribute_pnos_flow
 from src.flows.districts import districts_flow
 from src.flows.facade_areas import facade_areas_flow
 from src.flows.fao_areas import fao_areas_flow
@@ -60,6 +63,20 @@ flows_to_deploy = [
     ),
     FlowAndSchedules(
         flow=current_segments_flow, schedules=[Schedule(cron="2,22,42 * * * *")]
+    ),
+    FlowAndSchedules(
+        flow=distribute_pnos_flow,
+        schedules=[
+            Schedule(
+                cron="* * * * *",
+                parameters={
+                    "test_mode": PNO_TEST_MODE,
+                    "is_integration": IS_INTEGRATION,
+                    "start_hours_ago": 120,
+                    "end_hours_ago": 0,
+                },
+            )
+        ],
     ),
     FlowAndSchedules(flow=districts_flow),
     FlowAndSchedules(flow=species_flow),

@@ -42,6 +42,7 @@ from src.flows.init_pno_types import init_pno_types_flow
 from src.flows.init_species_groups import init_species_groups_flow
 from src.flows.last_positions import last_positions_flow
 from src.flows.logbook import logbook_flow
+from src.flows.missing_dep_alerts import missing_dep_alerts_flow
 from src.flows.ports import ports_flow
 from src.flows.recompute_controls_segments import recompute_controls_segments_flow
 from src.flows.species import species_flow
@@ -172,6 +173,9 @@ flows_to_deploy = [
     FlowAndSchedules(
         flow=logbook_flow,
         schedules=[Schedule("0,5,10,15,20,25,30,35,40,45,50,55 * * * *")],
+    ),
+    FlowAndSchedules(
+        flow=missing_dep_alerts_flow, schedules=[Schedule(cron="5,25,45 * * * *")]
     ),
     FlowAndSchedules(flow=ports_flow),
     FlowAndSchedules(flow=recompute_controls_segments_flow),

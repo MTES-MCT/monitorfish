@@ -884,12 +884,12 @@ def flagged_pnos_with_active_reportings(flagged_pnos) -> pd.DataFrame:
 def test_extract_all_control_priorities(
     reset_test_data, expected_all_control_priorities
 ):
-    res = extract_all_control_priorities.run()
+    res = extract_all_control_priorities()
     pd.testing.assert_frame_equal(res, expected_all_control_priorities)
 
 
 def test_extract_pno_types(reset_test_data, expected_pno_types):
-    pno_types = extract_pno_types.run()
+    pno_types = extract_pno_types()
     pd.testing.assert_frame_equal(pno_types, expected_pno_types)
 
 
@@ -932,12 +932,12 @@ def test_extract_pno_catches(reset_test_data, expected_pno_catches):
 
 
 def test_extract_control_anteriority(reset_test_data, control_anteriority):
-    res = extract_control_anteriority.run()
+    res = extract_control_anteriority()
     pd.testing.assert_frame_equal(res, control_anteriority)
 
 
 def test_extract_vessels_with_active_reportings():
-    res = extract_vessels_with_active_reportings.run()
+    res = extract_vessels_with_active_reportings()
     assert res == {"SOME_VESSEL"}
 
 
@@ -1078,7 +1078,7 @@ def test_load_then_reset_logbook(
 
     # Reset logbook and check that the logbook_reports table is back to its original
     # state, except for the distribution attributes, which are not reset.
-    reset_pnos.run(pno_period)
+    reset_pnos(pno_period)
 
     distribution_attributes = [
         "is_in_verification_scope",

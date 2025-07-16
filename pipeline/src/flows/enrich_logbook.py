@@ -750,7 +750,7 @@ def enrich_logbook_flow(
     vessels_with_active_reportings = extract_vessels_with_active_reportings()
 
     if recompute_all:
-        reset = reset_pnos.map(periods)
+        reset_pnos.map(periods).wait()
         extract_enrich_load_logbook.map(
             periods,
             segments=unmapped(segments),
@@ -763,8 +763,7 @@ def enrich_logbook_flow(
             ),
             utcnow=unmapped(utcnow),
             vessels_with_active_reportings=unmapped(vessels_with_active_reportings),
-            wait_for=[reset],
-        )
+        ).wait()
     else:
         extract_enrich_load_logbook.map(
             periods,
@@ -778,4 +777,4 @@ def enrich_logbook_flow(
             ),
             utcnow=unmapped(utcnow),
             vessels_with_active_reportings=unmapped(vessels_with_active_reportings),
-        )
+        ).wait()

@@ -134,23 +134,26 @@ class BeaconMalfunctionToNotify:
         if not self.test_mode:
             addressees = []
 
-            if self.vessel_mobile_phone:
-                addressees.append(
-                    BeaconMalfunctionNotificationAddressee(
-                        function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                        name=None,
-                        address_or_number=self.vessel_mobile_phone,
+            if self.notification_type is not (
+                BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC
+            ):
+                if self.vessel_mobile_phone:
+                    addressees.append(
+                        BeaconMalfunctionNotificationAddressee(
+                            function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+                            name=None,
+                            address_or_number=self.vessel_mobile_phone,
+                        )
                     )
-                )
 
-            if self.operator_mobile_phone:
-                addressees.append(
-                    BeaconMalfunctionNotificationAddressee(
-                        function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
-                        name=self.operator_name,
-                        address_or_number=self.operator_mobile_phone,
+                if self.operator_mobile_phone:
+                    addressees.append(
+                        BeaconMalfunctionNotificationAddressee(
+                            function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
+                            name=self.operator_name,
+                            address_or_number=self.operator_mobile_phone,
+                        )
                     )
-                )
 
         else:
             addressees = (
@@ -170,23 +173,26 @@ class BeaconMalfunctionToNotify:
         if not self.test_mode:
             addressees = []
 
-            if self.vessel_fax:
-                addressees.append(
-                    BeaconMalfunctionNotificationAddressee(
-                        function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                        name=None,
-                        address_or_number=self.vessel_fax,
+            if self.notification_type is not (
+                BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC
+            ):
+                if self.vessel_fax:
+                    addressees.append(
+                        BeaconMalfunctionNotificationAddressee(
+                            function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+                            name=None,
+                            address_or_number=self.vessel_fax,
+                        )
                     )
-                )
 
-            if self.operator_fax:
-                addressees.append(
-                    BeaconMalfunctionNotificationAddressee(
-                        function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
-                        name=self.operator_name,
-                        address_or_number=self.operator_fax,
+                if self.operator_fax:
+                    addressees.append(
+                        BeaconMalfunctionNotificationAddressee(
+                            function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
+                            name=self.operator_name,
+                            address_or_number=self.operator_fax,
+                        )
                     )
-                )
 
         else:
             addressees = (

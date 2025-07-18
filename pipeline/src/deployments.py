@@ -173,7 +173,7 @@ flows_to_deploy = [
     ),
     FlowAndSchedules(
         flow=logbook_flow,
-        schedules=[Schedule("0,5,10,15,20,25,30,35,40,45,50,55 * * * *")],
+        schedules=[Schedule(cron="0,5,10,15,20,25,30,35,40,45,50,55 * * * *")],
     ),
     FlowAndSchedules(
         flow=missing_dep_alerts_flow, schedules=[Schedule(cron="5,25,45 * * * *")]

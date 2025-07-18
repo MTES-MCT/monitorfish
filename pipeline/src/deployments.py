@@ -57,6 +57,9 @@ from src.flows.regulations_checkup import regulations_checkup_flow
 from src.flows.risk_factors import risk_factors_flow
 from src.flows.scrape_legipeche import scrape_legipeche_flow
 from src.flows.species import species_flow
+from src.flows.suspicions_of_under_declaration_alerts import (
+    suspicions_of_under_declaration_alerts_flow,
+)
 from src.helpers.country_codes import (
     european_union_country_codes_iso_2,
     french_vessels_country_codes_iso_2,
@@ -442,6 +445,10 @@ flows_to_deploy = [
     FlowAndSchedules(
         flow=scrape_legipeche_flow,
         schedules=[Schedule(cron="15 5 * * 1,2,3,4,5")],
+    ),
+    FlowAndSchedules(
+        flow=suspicions_of_under_declaration_alerts_flow,
+        schedules=[Schedule(cron="57 6 * * *")],
     ),
 ]
 

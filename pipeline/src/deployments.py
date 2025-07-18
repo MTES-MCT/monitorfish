@@ -44,6 +44,7 @@ from src.flows.last_positions import last_positions_flow
 from src.flows.logbook import logbook_flow
 from src.flows.missing_dep_alerts import missing_dep_alerts_flow
 from src.flows.missing_far_alerts import missing_far_alerts_flow
+from src.flows.missing_trip_numbers import missing_trip_numbers_flow
 from src.flows.ports import ports_flow
 from src.flows.recompute_controls_segments import recompute_controls_segments_flow
 from src.flows.species import species_flow
@@ -208,6 +209,10 @@ flows_to_deploy = [
                 },
             ),
         ],
+    ),
+    FlowAndSchedules(
+        flow=missing_trip_numbers_flow,
+        schedules=[Schedule(cron="4,14,24,34,44,54 * * * *")],
     ),
     FlowAndSchedules(flow=ports_flow),
     FlowAndSchedules(flow=recompute_controls_segments_flow),

@@ -43,6 +43,7 @@ from src.flows.init_species_groups import init_species_groups_flow
 from src.flows.last_positions import last_positions_flow
 from src.flows.logbook import logbook_flow
 from src.flows.missing_dep_alerts import missing_dep_alerts_flow
+from src.flows.missing_far_alerts import missing_far_alerts_flow
 from src.flows.ports import ports_flow
 from src.flows.recompute_controls_segments import recompute_controls_segments_flow
 from src.flows.species import species_flow
@@ -176,6 +177,37 @@ flows_to_deploy = [
     ),
     FlowAndSchedules(
         flow=missing_dep_alerts_flow, schedules=[Schedule(cron="5,25,45 * * * *")]
+    ),
+    FlowAndSchedules(
+        flow=missing_far_alerts_flow,
+        schedules=[
+            Schedule(
+                cron="45 6 * * *",
+                parameters={
+                    "alert_type": "MISSING_FAR_ALERT",
+                    "alert_config_name": "MISSING_FAR_ALERT",
+                    "states_iso2_to_monitor_everywhere": ["FR"],
+                    "states_iso2_to_monitor_in_french_eez": ["BE", "VE"],
+                    "max_share_of_vessels_with_missing_fars": 0.5,
+                    "minimum_length": 12.0,
+                    "only_raise_if_route_shows_fishing": True,
+                    "days_without_far": 1,
+                },
+            ),
+            Schedule(
+                cron="55 6 * * *",
+                parameters={
+                    "alert_type": "MISSING_FAR_48_HOURS_ALERT",
+                    "alert_config_name": "MISSING_FAR_48_HOURS_ALERT",
+                    "states_iso2_to_monitor_everywhere": ["FR"],
+                    "states_iso2_to_monitor_in_french_eez": ["BE", "VE"],
+                    "max_share_of_vessels_with_missing_fars": 0.5,
+                    "minimum_length": 12.0,
+                    "only_raise_if_route_shows_fishing": True,
+                    "days_without_far": 2,
+                },
+            ),
+        ],
     ),
     FlowAndSchedules(flow=ports_flow),
     FlowAndSchedules(flow=recompute_controls_segments_flow),

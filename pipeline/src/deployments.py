@@ -49,8 +49,13 @@ from src.flows.missing_trip_numbers import missing_trip_numbers_flow
 from src.flows.missions import missions_flow
 from src.flows.notify_beacon_malfunctions import notify_beacon_malfunctions_flow
 from src.flows.ports import ports_flow
+from src.flows.position_alerts import position_alerts_flow
 from src.flows.recompute_controls_segments import recompute_controls_segments_flow
 from src.flows.species import species_flow
+from src.helpers.country_codes import (
+    european_union_country_codes_iso_2,
+    french_vessels_country_codes_iso_2,
+)
 
 
 ################################# List flows to deploy ################################
@@ -239,6 +244,172 @@ flows_to_deploy = [
         ],
     ),
     FlowAndSchedules(flow=ports_flow),
+    FlowAndSchedules(
+        flow=position_alerts_flow,
+        schedules=[
+            Schedule(
+                cron="1,11,21,31,41,51 * * * *",
+                parameters={
+                    "alert_type": "THREE_MILES_TRAWLING_ALERT",
+                    "alert_config_name": "THREE_MILES_TRAWLING_ALERT",
+                    "zones": ["0-3"],
+                    "hours_from_now": 8,
+                    "only_fishing_positions": True,
+                    "fishing_gear_categories": ["Chaluts"],
+                    "include_vessels_unknown_gear": True,
+                },
+            ),
+            # RTC alert for vessels flying a FR flag : applies everywhere in the world
+            Schedule(
+                cron="2,12,22,32,42,52 * * * *",
+                parameters={
+                    "alert_type": "RTC_FISHING_ALERT",
+                    "alert_config_name": "RTC_FISHING_ALERT_FR",
+                    "zones": ["Reg. RTC"],
+                    "hours_from_now": 8,
+                    "flag_states": ["FR"],
+                    "only_fishing_positions": True,
+                },
+            ),
+            # RTC alert for vessels flying a non FR flag : applies only in the FRA EEZ
+            Schedule(
+                cron="3,13,23,33,43,53 * * * *",
+                parameters={
+                    "alert_type": "RTC_FISHING_ALERT",
+                    "alert_config_name": "RTC_FISHING_ALERT_NON_FR",
+                    "zones": ["Reg. RTC"],
+                    "hours_from_now": 8,
+                    "except_flag_states": ["FR"],
+                    "eez_areas": ["FRA"],
+                    "only_fishing_positions": True,
+                },
+            ),
+            Schedule(
+                cron="4,14,24,34,44,54 * * * *",
+                parameters={
+                    "alert_type": "FRENCH_EEZ_FISHING_ALERT",
+                    "alert_config_name": "FRENCH_EEZ_FISHING_ALERT",
+                    "zones": ["FRA"],
+                    "hours_from_now": 8,
+                    "only_fishing_positions": True,
+                    "except_flag_states": list(
+                        set(
+                            european_union_country_codes_iso_2
+                            + french_vessels_country_codes_iso_2
+                            + ["VE"]
+                        )
+                    ),
+                },
+            ),
+            Schedule(
+                cron="5,15,25,35,45,55 * * * *",
+                parameters={
+                    "alert_type": "TWELVE_MILES_FISHING_ALERT",
+                    "alert_config_name": "TWELVE_MILES_FISHING_ALERT_BE_NL",
+                    "zones": ["0-12_MINUS_BE_AND_NL_FISHING_AREAS"],
+                    "hours_from_now": 8,
+                    "only_fishing_positions": True,
+                    "flag_states": ["BE", "NL"],
+                },
+            ),
+            Schedule(
+                cron="7,17,27,37,47,57 * * * *",
+                parameters={
+                    "alert_type": "TWELVE_MILES_FISHING_ALERT",
+                    "alert_config_name": "TWELVE_MILES_FISHING_ALERT_ES",
+                    "zones": ["0-12_MINUS_ES_FISHING_AREAS"],
+                    "hours_from_now": 8,
+                    "only_fishing_positions": True,
+                    "flag_states": ["ES"],
+                },
+            ),
+            Schedule(
+                cron="8,18,28,38,48,58 * * * *",
+                parameters={
+                    "alert_type": "TWELVE_MILES_FISHING_ALERT",
+                    "alert_config_name": "TWELVE_MILES_FISHING_ALERT_DE",
+                    "zones": ["0-12_MINUS_DE_FISHING_AREAS"],
+                    "hours_from_now": 8,
+                    "only_fishing_positions": True,
+                    "flag_states": ["DE"],
+                },
+            ),
+            Schedule(
+                cron="9,19,29,39,49,59 * * * *",
+                parameters={
+                    "alert_type": "TWELVE_MILES_FISHING_ALERT",
+                    "alert_config_name": "TWELVE_MILES_FISHING_ALERT_OTHERS",
+                    "zones": ["0-3", "3-6", "6-12", "0-12"],
+                    "hours_from_now": 8,
+                    "only_fishing_positions": True,
+                    "except_flag_states": ["FR", "PF", "VE", "BE", "NL", "DE", "ES"],
+                },
+            ),
+            Schedule(
+                cron="0 * * * *",
+                parameters={
+                    "alert_type": "NEAFC_FISHING_ALERT",
+                    "alert_config_name": "NEAFC_FISHING_ALERT",
+                    "hours_from_now": 8,
+                    "only_fishing_positions": True,
+                },
+            ),
+            Schedule(
+                cron="6 * * 3-5 *",
+                parameters={
+                    "alert_type": "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT",
+                    "alert_config_name": "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT",
+                    "zones": ["EOS - Lingues bleues"],
+                    "hours_from_now": 8,
+                    "only_fishing_positions": False,
+                    "species_onboard": ["BLI"],
+                    "species_onboard_min_weight": 6000.0,
+                },
+            ),
+            Schedule(
+                cron="16,46 * * * *",
+                parameters={
+                    "alert_type": "BOTTOM_GEAR_VME_FISHING_ALERT",
+                    "alert_config_name": "BOTTOM_GEAR_VME_FISHING_ALERT",
+                    "zones": [
+                        "Atlantique 400m - Ecosystèmes Marins Vulnérables (EMV) - Engins de fond"
+                    ],
+                    "hours_from_now": 8,
+                    "only_fishing_positions": True,
+                    "fishing_gears": [
+                        "TB",
+                        "GNS",
+                        "LLS",
+                        "LVS",
+                        "OTB",
+                        "OTT",
+                        "PTB",
+                        "TBB",
+                        "TBN",
+                        "TBS",
+                    ],
+                    "fishing_gear_categories": ["Dragues", "Pièges et casiers"],
+                    "include_vessels_unknown_gear": True,
+                    "min_depth": 400.0,
+                },
+            ),
+            Schedule(
+                cron="26,56 * * * *",
+                parameters={
+                    "alert_type": "BOTTOM_TRAWL_800_METERS_FISHING_ALERT",
+                    "alert_config_name": "BOTTOM_TRAWL_800_METERS_FISHING_ALERT",
+                    "zones": [
+                        "Interdiction chalutage de fond ATL - Profondeur supérieure à 800m"
+                    ],
+                    "hours_from_now": 8,
+                    "only_fishing_positions": True,
+                    "fishing_gears": ["TB", "OTB", "OTT", "PTB", "TBB", "TBN", "TBS"],
+                    "include_vessels_unknown_gear": True,
+                    "min_depth": 800.0,
+                },
+            ),
+        ],
+    ),
     FlowAndSchedules(flow=recompute_controls_segments_flow),
 ]
 

@@ -17,6 +17,7 @@ from config import (
     PNO_TEST_MODE,
     PREFECT_API_URL,
     ROOT_DIRECTORY,
+    TEST_MODE,
     WEEKLY_CONTROL_REPORT_EMAIL_TEST_MODE,
 )
 from src.flows.activity_visualizations import activity_visualizations_flow
@@ -46,6 +47,7 @@ from src.flows.missing_dep_alerts import missing_dep_alerts_flow
 from src.flows.missing_far_alerts import missing_far_alerts_flow
 from src.flows.missing_trip_numbers import missing_trip_numbers_flow
 from src.flows.missions import missions_flow
+from src.flows.notify_beacon_malfunctions import notify_beacon_malfunctions_flow
 from src.flows.ports import ports_flow
 from src.flows.recompute_controls_segments import recompute_controls_segments_flow
 from src.flows.species import species_flow
@@ -222,6 +224,18 @@ flows_to_deploy = [
                 cron="6 4 * * *",
                 parameters={"number_of_months": 200},
             )
+        ],
+    ),
+    FlowAndSchedules(
+        flow=notify_beacon_malfunctions_flow,
+        schedules=[
+            Schedule(
+                cron="* * * * *",
+                parameters={
+                    "test_mode": TEST_MODE,
+                    "is_integration": IS_INTEGRATION,
+                },
+            ),
         ],
     ),
     FlowAndSchedules(flow=ports_flow),

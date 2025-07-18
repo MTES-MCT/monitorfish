@@ -4,6 +4,6 @@ export type BannerStackItem = {
   id: number
   props: BannerStackItemProps
 }
-export type BannerStackItemProps = Omit<BannerProps, 'chilren' | 'onAutoClose' | 'onClose' | 'top'> & {
+export type BannerStackItemProps = Omit<BannerProps, 'children' | 'onAutoClose' | 'onClose' | 'top'> & {
   children: string
 }

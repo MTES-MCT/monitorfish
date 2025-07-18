@@ -1,6 +1,7 @@
 import { vesselSelectors } from '@features/Vessel/slice'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { UploadVesselFile } from '@features/VesselGroup/components/EditFixedVesselGroupDialog/UploadVesselFile'
+import { useDisplayWarningWhenEditingSharedGroup } from '@features/VesselGroup/components/hooks/useDisplayWarningWhenEditingSharedGroup'
 import { VesselGroupForm } from '@features/VesselGroup/components/VesselGroupForm'
 import { DEFAULT_FIXED_VESSEL_GROUP } from '@features/VesselGroup/constants'
 import {
@@ -24,12 +25,15 @@ type EditFixedVesselGroupDialogProps = {
   onExit: () => Promisable<void>
   selectedVesselFeatureIds?: string[]
 }
+
 export function EditFixedVesselGroupDialog({
   editedVesselGroup = undefined,
   isMainWindow = false,
   onExit,
   selectedVesselFeatureIds
 }: EditFixedVesselGroupDialogProps) {
+  useDisplayWarningWhenEditingSharedGroup(editedVesselGroup?.sharing)
+
   const formRef = useRef<FormikProps<CreateOrUpdateVesselGroup>>()
 
   const selectedVessels: Vessel.ActiveVessel[] = useMainAppSelector(state => {

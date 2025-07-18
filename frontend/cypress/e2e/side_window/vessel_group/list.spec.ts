@@ -125,8 +125,15 @@ context('Side Window > Vessel Group List', () => {
      * Modify a group
      */
     cy.get('[title="Mission Thémis – semaine 04"]').click()
-
     cy.get('[title=\'Modifier le groupe "Mission Thémis – semaine 04"\']').click({ force: true })
+
+    /**
+     * Open a vessel group should display a banner with a warning message
+     */
+    cy.get('.Component-Banner').contains(
+      'Attention, vous êtes en train de modifier un groupe partagé. Toutes vos modifications seront visibles par tous les utilisateurs ayant accès au groupe.'
+    )
+
     cy.get('.Component-Dialog').contains('Modifier un groupe de navires fixe')
     cy.get('.Component-Dialog').contains('6 navires sélectionnés.')
 

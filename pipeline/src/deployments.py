@@ -52,6 +52,7 @@ from src.flows.ports import ports_flow
 from src.flows.position_alerts import position_alerts_flow
 from src.flows.recompute_controls_segments import recompute_controls_segments_flow
 from src.flows.refresh_materialized_view import refresh_materialized_view_flow
+from src.flows.regulations_checkup import regulations_checkup_flow
 from src.flows.species import species_flow
 from src.helpers.country_codes import (
     european_union_country_codes_iso_2,
@@ -422,6 +423,10 @@ flows_to_deploy = [
                 },
             ),
         ],
+    ),
+    FlowAndSchedules(
+        flow=regulations_checkup_flow,
+        schedules=[Schedule(cron="5 6 * * 1,2,3,4,5")],
     ),
 ]
 

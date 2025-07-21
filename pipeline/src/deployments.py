@@ -62,6 +62,7 @@ from src.flows.suspicions_of_under_declaration_alerts import (
 )
 from src.flows.update_beacon_malfunctions import update_beacon_malfunctions_flow
 from src.flows.validate_pending_alerts import validate_pending_alerts_flow
+from src.flows.vessel_profiles import vessel_profiles_flow
 from src.helpers.country_codes import (
     european_union_country_codes_iso_2,
     french_vessels_country_codes_iso_2,
@@ -464,6 +465,10 @@ flows_to_deploy = [
                 parameters={"alert_type": "MISSING_FAR_ALERT"},
             )
         ],
+    ),
+    FlowAndSchedules(
+        flow=vessel_profiles_flow,
+        schedules=[Schedule(cron="51 * * * *")],
     ),
 ]
 

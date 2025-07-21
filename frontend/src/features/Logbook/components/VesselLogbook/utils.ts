@@ -1,9 +1,9 @@
 import { getOptionsFromStrings } from '../../../../utils/getOptionsFromStrings'
-import { LogbookMessageType } from '../../constants'
+import { LogbookMessageType, LogbookSoftware } from '../../constants'
 import {
   areAllMessagesNotAcknowledged,
-  getCPSNumberOfDistinctSpecies,
   getCPSMessages,
+  getCPSNumberOfDistinctSpecies,
   getDEPMessage,
   getDISMessages,
   getDISSpeciesInsightRecord,
@@ -24,6 +24,33 @@ import {
 import type { LogbookTripSummary } from './types'
 import type { Logbook } from '@features/Logbook/Logbook.types'
 import type { Option } from '@mtes-mct/monitor-ui'
+
+export function getLogbookSoftware(software: string | undefined): LogbookSoftware {
+  if (!software) {
+    return LogbookSoftware.NONE
+  }
+
+  if (software.includes('TurboCatch') || software.includes('IKTUS')) {
+    return LogbookSoftware.JPE
+  }
+
+  // Fiche de pêche papier
+  if (software.includes('FP')) {
+    return LogbookSoftware.FPP
+  }
+
+  // Journal de pêche papier
+  if (software.includes('JP')) {
+    return LogbookSoftware.JPP
+  }
+
+  // Fiche de pêche télétransmise ou journal de pêche télétransmis
+  if (software.includes('FT') || software.includes('JT')) {
+    return LogbookSoftware.VIS
+  }
+
+  return LogbookSoftware.NONE
+}
 
 export const EMPTY_LOGBOOK_TRIP_SUMMARY = {
   cps: {
@@ -120,20 +147,6 @@ export function getLogbookTripSummary(fishingActivities: Logbook.FishingActiviti
       totalWeight: totalPNOWeight
     }
   }
-}
-
-export function getUniqueGears(gearOnboard: Logbook.Gear[] | undefined): Logbook.Gear[] {
-  return (
-    gearOnboard?.reduce((acc: Logbook.Gear[], current) => {
-      const found = acc.find(item => item.gear === current.gear && item.gearName === current.gearName)
-
-      if (!found) {
-        return acc.concat([current])
-      }
-
-      return acc
-    }, []) ?? []
-  )
 }
 
 export function getLogbookMessagesTypeOptions(): Option[] {

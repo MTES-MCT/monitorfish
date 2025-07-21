@@ -1,3 +1,5 @@
+import { getLogbookSoftware } from '@features/Logbook/components/VesselLogbook/utils'
+import { LogbookSoftware } from '@features/Logbook/constants'
 import { FishingActivitiesTab } from '@features/Vessel/types/vessel'
 import { createSlice } from '@reduxjs/toolkit'
 
@@ -16,6 +18,7 @@ export type LogbookState = {
   isLastVoyage: boolean | null
   loadingFishingActivities: boolean
   nextFishingActivities: Logbook.FishingActivities | null
+  software: LogbookSoftware | undefined
   tripNumber: string | null
   vesselIdentity: Vessel.VesselIdentity | undefined
 }
@@ -28,6 +31,7 @@ const INITIAL_STATE: LogbookState = {
   isLastVoyage: null,
   loadingFishingActivities: false,
   nextFishingActivities: null,
+  software: undefined,
   tripNumber: null,
   vesselIdentity: undefined
 }
@@ -72,6 +76,7 @@ const logbookSlice = createSlice({
       state.isFirstVoyage = null
       state.isLastVoyage = null
       state.tripNumber = null
+      state.software = undefined
     },
 
     /**
@@ -86,6 +91,7 @@ const logbookSlice = createSlice({
       state.isFirstVoyage = null
       state.isLastVoyage = null
       state.tripNumber = null
+      state.software = undefined
     },
 
     resetIsLoading(state) {
@@ -136,6 +142,7 @@ const logbookSlice = createSlice({
       state.isFirstVoyage = action.payload.isFirstVoyage
       state.tripNumber = action.payload.tripNumber
       state.vesselIdentity = action.payload.vesselIdentity
+      state.software = getLogbookSoftware(action.payload.software)
       state.loadingFishingActivities = false
     }
   }

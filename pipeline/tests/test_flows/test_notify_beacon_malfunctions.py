@@ -298,7 +298,9 @@ def test_to_malfunctions_to_notify_list():
         ),
     ]
 
-    assert malfunctions_to_notify_list == expected_malfunctions_to_notify_list
+    assert [m.replace_pandas_nat() for m in malfunctions_to_notify_list] == [
+        m.replace_pandas_nat() for m in expected_malfunctions_to_notify_list
+    ]
 
 
 def test_get_templates():

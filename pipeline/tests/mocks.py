@@ -66,11 +66,6 @@ def get_utcnow_mock_factory(utcnow: datetime):
     return mock_get_utcnow
 
 
-@task
-def mock_check_flow_not_running():
-    return True
-
-
 def get_monitorfish_healthcheck_mock_factory(
     *,
     last_position_updated_by_prefect_minutes_ago: int = 0,

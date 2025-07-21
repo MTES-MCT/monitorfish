@@ -61,6 +61,7 @@ from src.flows.suspicions_of_under_declaration_alerts import (
     suspicions_of_under_declaration_alerts_flow,
 )
 from src.flows.update_beacon_malfunctions import update_beacon_malfunctions_flow
+from src.flows.validate_pending_alerts import validate_pending_alerts_flow
 from src.helpers.country_codes import (
     european_union_country_codes_iso_2,
     french_vessels_country_codes_iso_2,
@@ -454,6 +455,15 @@ flows_to_deploy = [
     FlowAndSchedules(
         flow=update_beacon_malfunctions_flow,
         schedules=[Schedule(cron="6,16,26,36,46,56 * * * *")],
+    ),
+    FlowAndSchedules(
+        flow=validate_pending_alerts_flow,
+        schedules=[
+            Schedule(
+                cron="50 6 * * *",
+                parameters={"alert_type": "MISSING_FAR_ALERT"},
+            )
+        ],
     ),
 ]
 

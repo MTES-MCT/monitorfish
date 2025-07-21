@@ -29,7 +29,7 @@ def join_values_by_column(df: pd.DataFrame, join_string: str = " ") -> list:
 
 @task
 def extract_isscaap_codes_pdf() -> io.BytesIO:
-    url = "http://www.fao.org/fishery/static/ASFIS/ISSCAAP.pdf"
+    url = "https://www.fao.org/fishery/static/ASFIS/ISSCAAP.pdf"
     r = requests.get(url, proxies=PROXIES)
     f_bytes = io.BytesIO(r.content)
     return f_bytes

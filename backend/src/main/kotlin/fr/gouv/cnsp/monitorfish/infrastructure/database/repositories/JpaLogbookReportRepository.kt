@@ -145,14 +145,19 @@ class JpaLogbookReportRepository(
                             beforeDateTime = beforeDateTime.toInstant(),
                             afterDateTime = afterDateTime.toInstant(),
                         )
-                val firstTrip = trips.first()
+                val tripsBetweenDatesWithoutLAN =
+                    trips.filter {
+                        it.startDate.atZone(UTC).isBefore(beforeDateTime) &&
+                            it.endDateWithoutLAN?.atZone(UTC)?.isAfter(afterDateTime) ?: false
+                    }
+                val firstTrip = tripsBetweenDatesWithoutLAN.first()
 
                 return VoyageDatesAndTripNumber(
                     tripNumber = firstTrip.tripNumber,
                     startDate = firstTrip.startDate.atZone(UTC),
                     endDate = firstTrip.endDate.atZone(UTC),
                     endDateWithoutLAN = firstTrip.endDateWithoutLAN?.atZone(UTC),
-                    totalTripsFoundForDates = trips.size,
+                    totalTripsFoundForDates = tripsBetweenDatesWithoutLAN.size,
                 )
             }
 

@@ -1,4 +1,5 @@
-import { SpeciesTypeToSpeciesTypeLabel } from '@features/FleetSegment/constants'
+import { FLEET_SEGMENT_ORIGIN_LABEL, SpeciesTypeToSpeciesTypeLabel } from '@features/FleetSegment/constants'
+import { ActivityOrigin } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { pluralize } from '@mtes-mct/monitor-ui'
 
 import type { FleetSegment } from '@features/FleetSegment/types'
@@ -21,9 +22,12 @@ export function getSegmentsWithProperties(
   })
 }
 
-export function getSegmentInfo(segment: FleetSegment | undefined): string {
+export function getSegmentInfo(segment: FleetSegment | undefined, activityOrigin: ActivityOrigin | undefined): string {
+  const segmentOrigin = activityOrigin ? FLEET_SEGMENT_ORIGIN_LABEL[activityOrigin] : ''
   if (!segment) {
-    return 'Segment de flotte inconnu'
+    return `${segmentOrigin}
+
+Segment de flotte inconnu`
   }
 
   const gears = segment.gears?.length ? segment.gears.join(', ') : 'aucun'
@@ -34,7 +38,9 @@ export function getSegmentInfo(segment: FleetSegment | undefined): string {
   const numberOfTargetSpecies = segment.targetSpecies?.length ?? 0
   const percent = segment.minShareOfTargetSpecies ? segment.minShareOfTargetSpecies * 100 : undefined
 
-  return `Nom : ${segment.segmentName}
+  return `${segmentOrigin}
+
+Nom : ${segment.segmentName}
 ${pluralize('Zone', numberOfFaoAreas)} : ${faoAreas}
 ${pluralize('Engin', numberOfGears)} : ${gears}
 Maillage min. : ${segment.minMesh ? `${segment.minMesh}mm` : 'aucun'}

@@ -76,7 +76,7 @@ export class VesselFeature {
     options: {
       areVesselsNotInVesselGroupsHidden: boolean
       isRiskFactorShowed: boolean
-      vesselLabel: string
+      vesselLabel: VesselLabel
       vesselLabelsShowedOnMap: boolean
       vesselsLastPositionVisibility: MonitorFishMap.LastPositionVisibility
     }
@@ -107,12 +107,14 @@ export class VesselFeature {
       labelText: string | undefined
       riskFactor: any | undefined
       underCharter: any
+      vesselLabel: VesselLabel
     } = {
       groupsDisplayed: feature.groupsDisplayed,
       isRecentSegment: feature.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE,
       labelText: undefined,
       riskFactor: undefined,
-      underCharter: feature.underCharter
+      underCharter: feature.underCharter,
+      vesselLabel: options.vesselLabel
     }
 
     if (vesselDate.getTime() < vesselIsHidden.getTime() && !feature.beaconMalfunctionId) {

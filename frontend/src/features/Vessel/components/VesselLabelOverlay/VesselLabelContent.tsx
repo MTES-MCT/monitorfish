@@ -1,3 +1,4 @@
+import { VesselLabel } from '@features/Vessel/label.types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
@@ -12,7 +13,7 @@ import {
 } from '../../../RiskFactor/utils'
 import { showVessel } from '../../useCases/showVessel'
 
-export function VesselLabel({
+export function VesselLabelContent({
   featureId,
   identity,
   label,
@@ -24,7 +25,7 @@ export function VesselLabel({
   showed,
   triggerShowRiskDetails
 }) {
-  const { groupsDisplayed, isRecentSegment, labelText, riskFactor, underCharter } = label
+  const { groupsDisplayed, isRecentSegment, labelText, riskFactor, underCharter, vesselLabel } = label
   const dispatch = useMainAppDispatch()
   const areVesselGroupsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselGroupsDisplayed)
 
@@ -51,11 +52,11 @@ export function VesselLabel({
   if (previewFilteredVesselsMode) {
     return (
       <>
-        {labelText ? (
+        {labelText && (
           <ZoneText $isLittle data-cy="vessel-label-text">
             {labelText}
           </ZoneText>
-        ) : null}
+        )}
       </>
     )
   }
@@ -66,9 +67,9 @@ export function VesselLabel({
         <Text>
           {labelText && (
             <>
-              {identity.flagState ? (
-                <Flag $rel="preload" src={`flags/${identity.flagState.toLowerCase()}.svg`} />
-              ) : null}
+              {identity.flagState && (
+                <Flag $rel="preload" alt={identity.flagState} src={`flags/${identity.flagState.toLowerCase()}.svg`} />
+              )}
               <ZoneText
                 data-cy="vessel-label-text"
                 onClick={() => {
@@ -77,7 +78,9 @@ export function VesselLabel({
                   }
                 }}
               >
-                {labelText}
+                <Label $isRecentSegment={isRecentSegment} $isSegment={vesselLabel === VesselLabel.VESSEL_FLEET_SEGMENT}>
+                  {labelText}
+                </Label>
                 {areVesselGroupsDisplayed && groupsDisplayed.length > 0 && (
                   <VesselGroups>
                     {groupsDisplayed.map(vesselGroup => (
@@ -148,6 +151,30 @@ export function VesselLabel({
     </>
   )
 }
+
+const Label = styled.span<{
+  $isRecentSegment: boolean
+  $isSegment: boolean
+}>`
+  margin-top: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
+  height: 16px;
+  display: inline-block;
+  line-height: 14px;
+
+  ${p => {
+    if (p.$isSegment && p.$isRecentSegment) {
+      return 'font-style: italic;'
+    }
+
+    if (p.$isSegment && !p.$isRecentSegment) {
+      return `background-color: ${p.theme.color.mediumSeaGreen25};`
+    }
+
+    return ''
+  }}
+`
 
 const StyledIconInfo = styled(Icon.Info)`
   margin-left: 4px;
@@ -247,8 +274,7 @@ const RiskFactorBox = styled.div`
 `
 
 const VesselLabelOverlayElement = styled.div`
-  box-shadow: 0px 2px 3px ${p => p.theme.color.charcoalShadow};
-  line-height: 18px;
+  box-shadow: 0 2px 3px ${p => p.theme.color.charcoalShadow};
   cursor: grabbing;
   height: 20px;
   display: flex;
@@ -258,28 +284,24 @@ const VesselLabelOverlayElement = styled.div`
 const Flag = styled.img<{
   $rel?: 'preload'
 }>`
-  vertical-align: bottom;
   height: 13px;
-  margin: 0 2px 5px 4px;
+  margin: 0 0 8px 4px;
   user-select: none;
-  cursor: grabbing;
-  line-height: 17px;
 `
 
 const ZoneText = styled.span<{
   $isLittle?: boolean
 }>`
-  margin-bottom: ${p => (p.$isLittle ? 0 : 3)}px;
-  margin-right: 6px;
+  margin-right: 4px;
+  margin-left: 4px;
   font-size: ${p => (p.$isLittle ? 8 : 11)}px;
   font-weight: 500;
   display: inline-block;
   user-select: none;
   color: ${p => p.theme.color.gunMetal};
-  line-height: ${p => (p.$isLittle ? 35 : 17)}px;
+  line-height: 13px;
   cursor: pointer;
-  margin-left: 2px;
-  vertical-align: middle;
+  overflow: hidden;
 `
 
 const RiskFactor = styled.span<{
@@ -289,7 +311,7 @@ const RiskFactor = styled.span<{
   height: 19px;
   padding-top: 1px;
   padding-left: 6px;
-  padding-right: 0px;
+  padding-right: 0;
   font-size: 13px;
   font-weight: 500;
   display: inline-block;

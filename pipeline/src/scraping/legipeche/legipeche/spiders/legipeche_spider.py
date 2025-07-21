@@ -4,7 +4,7 @@ import scrapy
 class LegipecheSpider(scrapy.Spider):
     name = "legipeche"
     start_urls = [
-        "http://legipeche.metier.e2.rie.gouv.fr/bibliotheque-r3.html",
+        "https://legipeche.metier.e2.rie.gouv.fr/bibliotheque-r3.html",
     ]
 
     def parse(self, response):

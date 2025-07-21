@@ -427,8 +427,8 @@ flows_to_deploy = [
         flow=refresh_materialized_view_flow,
         schedules=[
             Schedule(
-                "20 4 * * *",
-                parameter_defaults={
+                cron="20 4 * * *",
+                parameters={
                     "view_name": "analytics_controls_full_data",
                 },
             ),
@@ -444,7 +444,7 @@ flows_to_deploy = [
     ),
     FlowAndSchedules(
         flow=risk_factors_flow,
-        schdules=[Schedule(cron="3,23,43 * * * *")],
+        schedules=[Schedule(cron="3,23,43 * * * *")],
     ),
     FlowAndSchedules(
         flow=scrape_legipeche_flow,

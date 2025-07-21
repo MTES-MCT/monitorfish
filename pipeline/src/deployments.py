@@ -63,6 +63,7 @@ from src.flows.suspicions_of_under_declaration_alerts import (
 from src.flows.update_beacon_malfunctions import update_beacon_malfunctions_flow
 from src.flows.validate_pending_alerts import validate_pending_alerts_flow
 from src.flows.vessel_profiles import vessel_profiles_flow
+from src.flows.vessels import vessels_flow
 from src.helpers.country_codes import (
     european_union_country_codes_iso_2,
     french_vessels_country_codes_iso_2,
@@ -469,6 +470,10 @@ flows_to_deploy = [
     FlowAndSchedules(
         flow=vessel_profiles_flow,
         schedules=[Schedule(cron="51 * * * *")],
+    ),
+    FlowAndSchedules(
+        flow=vessels_flow,
+        schedules=[Schedule(cron="2 2,5,8,11,14,20,23 * * *")],
     ),
 ]
 

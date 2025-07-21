@@ -1,3 +1,4 @@
+import { VesselLabel } from '@features/Vessel/label.types'
 import { drawMovedLabelLineIfFoundAndReturnOffset } from '@features/Vessel/label.utils'
 import { VESSELS_LABEL_VECTOR_SOURCE } from '@features/Vessel/layers/VesselsLabelsLayer/constants'
 import { VesselFeature } from '@features/Vessel/types/vessel'
@@ -17,7 +18,7 @@ export function getLabelFromFeatures(
     selectedVessel: Vessel.SelectedVessel | undefined
     vesselIsHidden: Date
     vesselIsOpacityReduced: Date
-    vesselLabel: string
+    vesselLabel: VesselLabel
     vesselLabelsShowedOnMap: boolean
     vesselToCoordinates: Map<string, any>
     vesselsLastPositionVisibility: MonitorFishMap.LastPositionVisibility

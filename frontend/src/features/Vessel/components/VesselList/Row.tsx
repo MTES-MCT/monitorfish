@@ -2,7 +2,6 @@ import { RedCircle } from '@features/commonStyles/Circle.style'
 import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
 import { getSegmentInfo } from '@features/FleetSegment/components/FleetSegmentsWithTooltip/utils'
 import { FLEET_SEGMENT_ORIGIN_LABEL, GEAR_ORIGIN_LABEL } from '@features/FleetSegment/constants'
-import { TagInfo } from '@features/Map/components/TagInfo'
 import {
   displayOnboardFishingSpecies,
   getExpandableRowCellCustomStyle
@@ -10,7 +9,7 @@ import {
 import { ActivityOrigin, ActivityType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { pluralize, TableWithSelectableRows, THEME, type Undefine } from '@mtes-mct/monitor-ui'
+import { Icon, pluralize, TableWithSelectableRows, type Undefine } from '@mtes-mct/monitor-ui'
 import { type Column, flexRender, type Row as RowType } from '@tanstack/react-table'
 import { forwardRef } from 'react'
 import styled from 'styled-components'
@@ -48,7 +47,7 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
       return []
     }
 
-    return vessel.segments?.map(getSegmentListElement(fleetSegments)) ?? []
+    return vessel.segments?.map(getSegmentListElement(fleetSegments, vessel.activityOrigin)) ?? []
   })()
 
   const speciesOnboardWithName = (function () {
@@ -117,79 +116,33 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
             </p>
           </ExpandedRowCell>
           <ExpandedRowCell>
-            <ExpandedRowLabel>Nom des segments</ExpandedRowLabel>
-            {vessel.segments?.length ? (
-              <>
-                {vessel.activityOrigin === ActivityOrigin.FROM_LOGBOOK && (
-                  <>
-                    <ExpandedRowList>{segments}</ExpandedRowList>
-                    <StyledTagInfo
-                      backgroundColor={THEME.color.mediumSeaGreen25}
-                      color={THEME.color.charcoal}
-                      title={FLEET_SEGMENT_ORIGIN_LABEL[vessel.activityOrigin]}
-                    >
-                      {pluralize('Segment', vessel.segments?.length ?? 0)}{' '}
-                      {pluralize('actuel', vessel.segments?.length ?? 0)}
-                    </StyledTagInfo>
-                  </>
-                )}
-                {vessel.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && (
-                  <>
-                    <ExpandedRowList>{segments}</ExpandedRowList>
-                    <StyledTagInfo
-                      backgroundColor={THEME.color.goldenPoppy25}
-                      color={THEME.color.charcoal}
-                      title={FLEET_SEGMENT_ORIGIN_LABEL[vessel.activityOrigin]}
-                    >
-                      {pluralize('Segment', vessel.segments?.length ?? 0)}{' '}
-                      {pluralize('récent', vessel.segments?.length ?? 0)}
-                    </StyledTagInfo>
-                  </>
-                )}
-              </>
-            ) : (
-              <None>Aucun segment.</None>
-            )}
+            <ExpandedRowLabel>
+              {vessel.activityOrigin === ActivityOrigin.FROM_LOGBOOK &&
+                `${pluralize('Segment', vessel.segments?.length ?? 0)} ${pluralize('actuel', vessel.segments?.length ?? 0)}`}
+              {vessel.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE &&
+                `${pluralize('Segment', vessel.segments?.length ?? 0)} ${pluralize('récent', vessel.segments?.length ?? 0)}`}
+              <StyledIconInfo
+                size={16}
+                title={vessel.activityOrigin && FLEET_SEGMENT_ORIGIN_LABEL[vessel.activityOrigin]}
+              />
+            </ExpandedRowLabel>
+            {vessel.segments?.length ? <ExpandedRowList>{segments}</ExpandedRowList> : <None>Aucun segment.</None>}
           </ExpandedRowCell>
           <ExpandedRowCell>
             <ExpandedRowLabel>
-              Engins {vessel.activityOrigin === ActivityOrigin.FROM_LOGBOOK && 'à bord (FAR)'}
-              {vessel.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && '(14 derniers jours)'}
+              {vessel.activityOrigin === ActivityOrigin.FROM_LOGBOOK &&
+                `${pluralize('Engin', vessel.gearsArray?.length ?? 0)} à bord`}
+              {vessel.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE &&
+                `${pluralize('Engin', vessel.gearsArray?.length ?? 0)} ${pluralize('récent', vessel.gearsArray?.length ?? 0)}`}
+              <StyledIconInfo size={16} title={vessel.activityOrigin && GEAR_ORIGIN_LABEL[vessel.activityOrigin]} />
             </ExpandedRowLabel>
-            {vessel.gearsArray?.length ? (
-              <>
-                {vessel.activityOrigin === ActivityOrigin.FROM_LOGBOOK && (
-                  <>
-                    <ExpandedRowList>{gears}</ExpandedRowList>
-                    <StyledTagInfo
-                      backgroundColor={THEME.color.mediumSeaGreen25}
-                      color={THEME.color.charcoal}
-                      title={GEAR_ORIGIN_LABEL[vessel.activityOrigin]}
-                    >
-                      {pluralize('Engin', vessel.gearsArray?.length ?? 0)} à bord
-                    </StyledTagInfo>
-                  </>
-                )}
-                {vessel.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && (
-                  <>
-                    <ExpandedRowList>{gears}</ExpandedRowList>
-                    <StyledTagInfo
-                      backgroundColor={THEME.color.goldenPoppy25}
-                      color={THEME.color.charcoal}
-                      title={GEAR_ORIGIN_LABEL[vessel.activityOrigin]}
-                    >
-                      {pluralize('Engin', vessel.gearsArray?.length ?? 0)}{' '}
-                      {pluralize('récent', vessel.gearsArray?.length ?? 0)}
-                    </StyledTagInfo>
-                  </>
-                )}
-              </>
-            ) : (
-              <None>Aucun engin.</None>
-            )}
+            {vessel.gearsArray?.length ? <ExpandedRowList>{gears}</ExpandedRowList> : <None>Aucun engin.</None>}
           </ExpandedRowCell>
           <ExpandedRowCell>
-            <ExpandedRowLabel>Détail des espèces à bord (FAR)</ExpandedRowLabel>
+            <ExpandedRowLabel>
+              Détail des espèces à bord
+              <StyledIconInfo size={16} title="à partir des messages de captures" />
+            </ExpandedRowLabel>
             {speciesOnboardWithName.length > 0 ? (
               <ExpandedRowList>
                 {displayOnboardFishingSpecies(speciesOnboardWithName)}
@@ -226,20 +179,20 @@ function getGearListElement(gearsByCode: Record<string, Gear>) {
   }
 }
 
-function getSegmentListElement(fleetSegments: FleetSegment[]) {
+function getSegmentListElement(fleetSegments: FleetSegment[], activityOrigin: ActivityOrigin | undefined) {
   return function (code: string) {
     const foundSegment = fleetSegments.find(segment => segment.segment === code)
 
     return (
-      <li key={code} title={getSegmentInfo(foundSegment)}>
+      <li key={code} title={getSegmentInfo(foundSegment, activityOrigin)}>
         {code} – {foundSegment?.segmentName}
       </li>
     )
   }
 }
 
-const StyledTagInfo = styled(TagInfo)`
-  margin-top: 10px;
+const StyledIconInfo = styled(Icon.Info)`
+  margin-left: 4px;
 `
 
 const ExpandableRowCell = styled(TableWithSelectableRows.Td)<{
@@ -288,6 +241,10 @@ const ExpandedRowLabel = styled.span`
   display: block;
   font-weight: 400;
   width: 100%;
+
+  .Element-IconBox {
+    vertical-align: sub;
+  }
 `
 const ExpandedRowValue = styled.span<{
   $isLight?: boolean

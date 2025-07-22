@@ -57,6 +57,7 @@ context('Vessel sidebar logbook tab', () => {
     cy.log('See all messages')
     cy.get('*[data-cy^="vessel-fishing-see-all"]').click({ timeout: 10000 })
 
+    cy.get('[title="Messages issus du journal de pêche électronique"]').should('be.visible')
     cy.get('*[data-cy="vessel-fishing-message"]').should('have.length', 13)
 
     cy.get('*[data-cy="vessel-fishing-message"]').eq(0).contains("Capture d'espèces protégées")

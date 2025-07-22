@@ -5,11 +5,12 @@ enum class LogbookSoftware(
 ) {
     /**
      * Examples:
-     * - JP/05883989/VISIOCaptures V1.7.6
-     * - FP/01641449/VISIOCaptures 2.1.6
-     * - JP/07210344/VISIOCaptures 2.1.6
+     * - "Journal de pêche Télétransmis":   JT/01641449/VISIOCaptures 2.1.6
+     * - "Fiche de pêche Télétransmise":    FT/01641449/VISIOCaptures 2.1.6
+     * - "Journal de pêche papier":         JP/01641449/VISIOCaptures 2.1.6
+     * - "Fiche de pêche papier":           FP/01641449/VISIOCaptures 2.1.6
      */
-    VISIOCAPTURE("VISIOCaptures"),
+    VISIOCAPTURES("VISIOCaptures"),
 
     /**
      * Examples:
@@ -22,10 +23,10 @@ enum class LogbookSoftware(
         /**
          * True for:
          * - VisioCaptures in real time (FT and JT)
-         * - VisioCaptures in sheets (JP)
+         * - VisioCaptures in sheets (JP and FP)
          */
         fun isVisioCapture(software: String?): Boolean {
-            val isVisioCapture = software?.contains(VISIOCAPTURE.software)
+            val isVisioCapture = software?.contains(VISIOCAPTURES.software)
 
             return isVisioCapture ?: false
         }

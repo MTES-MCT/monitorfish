@@ -1,3 +1,4 @@
+import { ActivityVisualizationMap } from '@features/ActivityVisualization/components/ActivityVisualizationMap'
 import { ControlObjectiveTable } from '@features/ControlObjective/components/ControlObjectiveTable'
 import { FleetSegmentsBackoffice } from '@features/FleetSegment/components/FleetSegmentsBackoffice'
 import { MainWindow } from '@features/MainWindow'
@@ -7,6 +8,7 @@ import { ProducerOrganizationMembershipTable } from '@features/ProducerOrganizat
 import { RegulationForm } from '@features/Regulation/components/RegulationForm'
 import { RegulationTables } from '@features/Regulation/components/RegulationTables'
 import { SideWindow } from '@features/SideWindow'
+import { ActivityVisualizationPage } from '@pages/ActivityVisualizationPage'
 import { BackofficePage } from '@pages/BackofficePage'
 import { HomePage } from '@pages/HomePage'
 import { LightBackoffice } from '@pages/LightBackoffice'
@@ -62,6 +64,20 @@ export const routes = [
   {
     path: ROUTER_PATHS.register,
     element: <Register />
+  },
+  {
+    path: ROUTER_PATHS.activityVisualization,
+    element: <ActivityVisualizationPage />,
+    children: [
+      {
+        index: true,
+        element: (
+          <RequireAuth redirect>
+            <ActivityVisualizationMap />
+          </RequireAuth>
+        )
+      }
+    ]
   },
   {
     path: ROUTER_PATHS.loadLight,

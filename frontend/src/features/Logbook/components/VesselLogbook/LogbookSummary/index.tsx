@@ -5,7 +5,7 @@ import { SidebarZone } from '@features/Vessel/components/VesselSidebar/component
 import { updateVesselTrackAndLogbookFromTrip } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromTrip'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Icon, IconButton, Select } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Select, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useMemo } from 'react'
 import styled from 'styled-components'
@@ -19,7 +19,12 @@ import { LANMessageResume } from './summaries/LANMessageResume'
 import { PNOMessageResume } from './summaries/PNOMessageResume'
 import ArrowSVG from '../../../../icons/Picto_fleche-pleine-droite.svg?react'
 import { useGetLastLogbookTripsQuery } from '../../../api'
-import { LogbookMessageType as LogbookMessageTypeEnum, LogbookOperationType, NavigateTo } from '../../../constants'
+import {
+  LogbookMessageType as LogbookMessageTypeEnum,
+  LogbookOperationType,
+  LogbookSoftwareLabel,
+  NavigateTo
+} from '../../../constants'
 import { CustomDatesShowedInfo } from '../CustomDatesShowedInfo'
 import { getLogbookTripSummary } from '../utils'
 
@@ -34,6 +39,7 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const fishingActivities = useMainAppSelector(state => state.fishingActivities.fishingActivities)
+  const software = useMainAppSelector(state => state.fishingActivities.software)
   const isFirstVoyage = useMainAppSelector(state => state.fishingActivities.isFirstVoyage)
   const isLastVoyage = useMainAppSelector(state => state.fishingActivities.isLastVoyage)
   const tripNumber = useMainAppSelector(state => state.fishingActivities.tripNumber)
@@ -91,7 +97,16 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
           />
           <SidebarZone>
             <Title $hasTwoLines={false}>
-              <Text $hasTwoLines>Résumé du JPE</Text>
+              <Text $hasTwoLines>
+                Résumé
+                <StyledTag
+                  backgroundColor={THEME.color.gainsboro}
+                  color={THEME.color.gunMetal}
+                  title={software ? LogbookSoftwareLabel[software] : 'Inconnu'}
+                >
+                  {software}
+                </StyledTag>
+              </Text>
               <TextValue $hasTwoLines={false} data-cy="vessel-fishing-trip-number">
                 <PreviousTrip
                   $disabled={!!isFirstVoyage}
@@ -241,6 +256,10 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
     </>
   )
 }
+
+const StyledTag = styled(Tag)`
+  margin-left: 6px;
+`
 
 const NoFishingActivities = styled.div`
   padding: 50px 5px 0 5px;

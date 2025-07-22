@@ -1,18 +1,18 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
 type VesselListState = {
-  areMoreFiltersDisplayed: boolean
+  areFiltersDisplayed: boolean
 }
 const INITIAL_STATE: VesselListState = {
-  areMoreFiltersDisplayed: false
+  areFiltersDisplayed: true
 }
 
 const vesselListSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'vesselList',
   reducers: {
-    setAreMoreFiltersDisplayed(state, action: PayloadAction<boolean>) {
-      state.areMoreFiltersDisplayed = action.payload
+    setAreFiltersDisplayed(state, action: PayloadAction<boolean>) {
+      state.areFiltersDisplayed = action.payload
     }
   }
 })

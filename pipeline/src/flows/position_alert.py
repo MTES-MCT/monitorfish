@@ -498,7 +498,7 @@ def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
 
 
 @flow(name="Position alert")
-def position_alerts_flow(
+def position_alert_flow(
     alert_type: str,
     alert_config_name: str,
     zones: list | None = None,

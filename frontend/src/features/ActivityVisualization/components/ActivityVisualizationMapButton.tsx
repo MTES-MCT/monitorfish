@@ -2,8 +2,8 @@ import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared
 import { Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
+import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
 import { ROUTER_PATHS } from '../../../paths'
-import {useIsSuperUser} from "../../../auth/hooks/useIsSuperUser";
 
 export function ActivityVisualizationMapButton() {
   const isSuperUser = useIsSuperUser()

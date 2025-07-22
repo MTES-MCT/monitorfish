@@ -49,7 +49,7 @@ from src.flows.missing_trip_numbers import missing_trip_numbers_flow
 from src.flows.missions import missions_flow
 from src.flows.notify_beacon_malfunctions import notify_beacon_malfunctions_flow
 from src.flows.ports import ports_flow
-from src.flows.position_alerts import position_alerts_flow
+from src.flows.position_alert import position_alert_flow
 from src.flows.recompute_controls_segments import recompute_controls_segments_flow
 from src.flows.refresh_materialized_view import refresh_materialized_view_flow
 from src.flows.regulations import regulations_flow
@@ -265,7 +265,7 @@ flows_to_deploy = [
     ),
     FlowAndSchedules(flow=ports_flow),
     FlowAndSchedules(
-        flow=position_alerts_flow,
+        flow=position_alert_flow,
         schedules=[
             Schedule(
                 cron="1,11,21,31,41,51 * * * *",

@@ -49,6 +49,11 @@ context('Side Window > Vessel List > Table', () => {
     cy.get('.Table-SimpleTable tr').should('have.length', 2)
 
     cy.get('.Component-SingleTag').should('have.length', 10)
+    cy.getDataCy('vessel-list-hide-filters').click()
+    cy.get('.vessel-list-filter-bar').should('not.exist')
+    cy.get('.Component-SingleTag').should('have.length', 10)
+    cy.getDataCy('vessel-list-show-filters').click()
+    cy.get('.vessel-list-filter-bar').should('be.visible')
 
     /**
      * Open a row

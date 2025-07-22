@@ -18,7 +18,7 @@ from sqlalchemy import (
 )
 
 from src.db_config import create_engine
-from src.flows.position_alerts import (
+from src.flows.position_alert import (
     VesselsFilter,
     ZonesTable,
     alert_has_gear_parameters,
@@ -30,7 +30,7 @@ from src.flows.position_alerts import (
     get_vessels_in_alert,
     make_fishing_gears_query,
     make_positions_in_alert_query,
-    position_alerts_flow,
+    position_alert_flow,
 )
 from src.read_query import read_query
 from tests.mocks import mock_datetime_utcnow, mock_get_depth
@@ -505,7 +505,7 @@ def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test
     fishing_gear_categories = None
     include_vessels_unknown_gear = False
 
-    state = position_alerts_flow(
+    state = position_alert_flow(
         alert_type=alert_type,
         zones=zones,
         alert_config_name=alert_config_name_not_in_table,
@@ -527,7 +527,7 @@ def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test
     # The alert in the table should still be there
     assert pending_alerts.iloc[0, 0] == 1
 
-    state = position_alerts_flow(
+    state = position_alert_flow(
         alert_type=alert_type,
         zones=zones,
         alert_config_name=alert_config_name_in_table,
@@ -570,7 +570,7 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
     fishing_gear_categories = None
     include_vessels_unknown_gear = True
 
-    state = position_alerts_flow(
+    state = position_alert_flow(
         alert_type=alert_type,
         alert_config_name=alert_config_name,
         zones=zones,
@@ -719,7 +719,7 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
     fishing_gear_categories = None
     include_vessels_unknown_gear = True
 
-    state = position_alerts_flow(
+    state = position_alert_flow(
         alert_type=alert_type,
         alert_config_name=alert_config_name,
         zones=zones,
@@ -850,7 +850,7 @@ def test_flow_filters_on_gears(reset_test_data):
     fishing_gear_categories = None
     include_vessels_unknown_gear = False
 
-    state = position_alerts_flow(
+    state = position_alert_flow(
         alert_type=alert_type,
         alert_config_name=alert_config_name,
         zones=zones,
@@ -957,7 +957,7 @@ def test_flow_filters_on_time(reset_test_data):
     fishing_gear_categories = None
     include_vessels_unknown_gear = True
 
-    state = position_alerts_flow(
+    state = position_alert_flow(
         alert_type=alert_type,
         alert_config_name=alert_config_name,
         zones=zones,
@@ -1076,7 +1076,7 @@ def test_flow_filters_on_flag_states(reset_test_data):
     fishing_gear_categories = None
     include_vessels_unknown_gear = True
 
-    state = position_alerts_flow(
+    state = position_alert_flow(
         alert_type=alert_type,
         alert_config_name=alert_config_name,
         zones=zones,
@@ -1178,7 +1178,7 @@ def test_flow_filters_on_depth(reset_test_data):
     include_vessels_unknown_gear = True
     min_depth = 0.5
 
-    state = position_alerts_flow(
+    state = position_alert_flow(
         alert_type=alert_type,
         alert_config_name=alert_config_name,
         zones=zones,
@@ -1289,7 +1289,7 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
     include_vessels_unknown_gear = True
     except_flag_states = ["NL"]
 
-    state = position_alerts_flow(
+    state = position_alert_flow(
         alert_type=alert_type,
         alert_config_name=alert_config_name,
         zones=zones,
@@ -1369,7 +1369,7 @@ def test_flow_rtc_fishing_alert(reset_test_data):
     eez_areas = ["EST"]
     flag_states = ["FR"]
 
-    state = position_alerts_flow(
+    state = position_alert_flow(
         alert_type=alert_type,
         alert_config_name=alert_config_name,
         zones=zones,
@@ -1408,7 +1408,7 @@ def test_flow_neafc_fishing_alert(reset_test_data):
     hours_from_now = 8
     only_fishing_positions = True
 
-    state = position_alerts_flow(
+    state = position_alert_flow(
         alert_type=alert_type,
         alert_config_name=alert_config_name,
         zones=zones,
@@ -1447,7 +1447,7 @@ def test_flow_bli_bycatch_max_weight_exceeded_alert(reset_test_data):
     species_onboard = ["SOL", "HKE", "ANE"]
     species_onboard_min_weight = 500.0
 
-    state = position_alerts_flow(
+    state = position_alert_flow(
         alert_type=alert_type,
         alert_config_name=alert_config_name,
         zones=zones,

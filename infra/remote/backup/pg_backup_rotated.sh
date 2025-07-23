@@ -110,8 +110,8 @@ function perform_backups()
 
 		echo "Custom backup of $DATABASE"
 
-        if ! docker exec monitorfish_database sh -c "pg_dump --exclude-table-data='_timescaledb_internal._hyper*' --exclude-table=prior_notification_pdf_documents --exclude-table=logbook_raw_messages -v -Fc -h $HOSTNAME -U $USERNAME $DATABASE -f ${FINAL_BACKUP_DIR}${DATABASE}.custom.in_progress"; then
-            echo "[!!ERROR!!] Failed to produce custom backup database $DATABASE"
+		if ! docker exec monitorfish_database sh -c "pg_dump --exclude-table-data='_timescaledb_internal._hyper*' --exclude-table=prior_notification_pdf_documents --exclude-table=logbook_raw_messages -v -Fc -h $HOSTNAME -U $USERNAME $DATABASE -f ${FINAL_BACKUP_DIR}${DATABASE}.custom.in_progress"; then
+			echo "[!!ERROR!!] Failed to produce custom backup database $DATABASE"
 		else
 			mv $FINAL_BACKUP_DIR"$DATABASE".custom.in_progress $FINAL_BACKUP_DIR"$DATABASE".custom
 		fi

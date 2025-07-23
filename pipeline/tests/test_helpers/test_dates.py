@@ -4,7 +4,12 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from src.helpers.dates import Period, get_datetime_intervals, make_periods
+from src.helpers.dates import (
+    Period,
+    get_datetime_intervals,
+    is_in_validity_period,
+    make_periods,
+)
 
 
 def test_get_datetime_intervals():
@@ -88,7 +93,7 @@ def test_get_datetime_intervals():
         get_datetime_intervals(s, how="incorrect")
 
 
-def test_make_periods(self):
+def test_make_periods():
     with pytest.raises(ValueError):
         make_periods(
             start_datetime_utc=datetime(2021, 12, 1),
@@ -157,3 +162,86 @@ def test_make_periods(self):
     ]
 
     assert periods == expected_periods
+
+
+def test_is_in_validity_period():
+    d1 = datetime(2020, 5, 1, 5, 23, 50)
+    d2 = datetime(2020, 8, 12, 12, 23, 50)
+    d3 = datetime(2021, 2, 5, 12, 23, 50)
+
+    assert is_in_validity_period(
+        validity_start_date=d1,
+        validity_end_date=d2,
+        repeat_each_year=False,
+        sample_date=datetime(2020, 6, 12, 12, 23, 50),
+    )
+
+    assert not is_in_validity_period(
+        validity_start_date=d1,
+        validity_end_date=d2,
+        repeat_each_year=False,
+        sample_date=datetime(2021, 6, 12, 12, 23, 50),
+    )
+
+    assert is_in_validity_period(
+        validity_start_date=d1,
+        validity_end_date=d2,
+        repeat_each_year=True,
+        sample_date=datetime(2021, 6, 12, 12, 23, 50),
+    )
+
+    assert is_in_validity_period(
+        validity_start_date=d2,
+        validity_end_date=d3,
+        repeat_each_year=False,
+        sample_date=datetime(2021, 1, 12, 12, 23, 50),
+    )
+
+    assert is_in_validity_period(
+        validity_start_date=d2,
+        validity_end_date=d3,
+        repeat_each_year=True,
+        sample_date=datetime(2021, 1, 12, 12, 23, 50),
+    )
+
+    assert not is_in_validity_period(
+        validity_start_date=d2,
+        validity_end_date=d3,
+        repeat_each_year=False,
+        sample_date=datetime(2028, 1, 12, 12, 23, 50),
+    )
+
+    assert is_in_validity_period(
+        validity_start_date=d2,
+        validity_end_date=d3,
+        repeat_each_year=True,
+        sample_date=datetime(2028, 1, 12, 12, 23, 50),
+    )
+
+    assert is_in_validity_period(
+        validity_start_date=None,
+        validity_end_date=d3,
+        repeat_each_year=False,
+        sample_date=datetime(2015, 1, 12, 12, 23, 50),
+    )
+
+    assert not is_in_validity_period(
+        validity_start_date=None,
+        validity_end_date=d3,
+        repeat_each_year=False,
+        sample_date=datetime(2025, 1, 12, 12, 23, 50),
+    )
+
+    assert is_in_validity_period(
+        validity_start_date=d1,
+        validity_end_date=None,
+        repeat_each_year=False,
+        sample_date=datetime(2025, 1, 12, 12, 23, 50),
+    )
+
+    assert not is_in_validity_period(
+        validity_start_date=d1,
+        validity_end_date=None,
+        repeat_each_year=False,
+        sample_date=datetime(2015, 1, 12, 12, 23, 50),
+    )

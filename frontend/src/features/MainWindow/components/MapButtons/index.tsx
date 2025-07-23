@@ -1,4 +1,5 @@
 import { Account } from '@features/Account/components/Account'
+import { ActivityVisualizationMapButton } from '@features/ActivityVisualization/components/ActivityVisualizationMapButton'
 import { ControlUnitListMapButton } from '@features/ControlUnit/components/ControlUnitListMapButton'
 import { NewFeatures } from '@features/NewFeatures/components/NewFeatures'
 import { VesselListMapButton } from '@features/Vessel/components/VesselListMapButton'
@@ -23,6 +24,9 @@ export function MapButtons() {
     state => state.displayedComponent.isNewFeaturesMapButtonDisplayed
   )
   const isAccountMapButtonDisplayed = useMainAppSelector(state => state.displayedComponent.isAccountMapButtonDisplayed)
+  const isActivityVisualizationMapButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isActivityVisualizationMapButtonDisplayed
+  )
   const isPriorNotificationMapButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isPriorNotificationMapButtonDisplayed
   )
@@ -60,6 +64,7 @@ export function MapButtons() {
         {(isSuperUser || import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true') &&
           isPriorNotificationMapButtonDisplayed && <PriorNotificationListButton />}
         {isSuperUser && isBeaconMalfunctionsMapButtonDisplayed && <BeaconMalfunctionsMapButton />}
+        {isActivityVisualizationMapButtonDisplayed && <ActivityVisualizationMapButton />}
 
         {isVesselListMapButtonDisplayed && <VesselListMapButton />}
         {isVesselGroupMapButtonDisplayed && <VesselGroupMapButton />}

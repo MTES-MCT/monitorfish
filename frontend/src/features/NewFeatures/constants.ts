@@ -7,6 +7,16 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2025-07-22',
+        description: `Vous pouvez désormais afficher les données d'activité aggregées de l'année en cours dans une nouvelle carte accessible depuis le bouton "📊 Données d'activité" situé à gauche de la cartographie.
+
+Vous trouverez dans cette visualisation un lien entre les messages de captures (à partir de sa position ou du carré statistique) et le port de débarquement.
+`,
+        for: 'ALL',
+        title: `Affichage des données d'activité`,
+        type: 'NEW_FEATURE'
+      },
+      {
         date: '2025-06-25',
         description: `Vous pouvez désormais retrouver dans l'onglet "Règles des alerte" de la fenêtre des alertes l'explication
 du fonctionnement de celles-ci.`,

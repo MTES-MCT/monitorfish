@@ -1,8 +1,11 @@
+from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime
 from email.message import EmailMessage
 from enum import Enum
 from typing import List
+
+import pandas as pd
 
 from config import (
     CNSP_SIP_DEPARTMENT_EMAIL,
@@ -134,23 +137,26 @@ class BeaconMalfunctionToNotify:
         if not self.test_mode:
             addressees = []
 
-            if self.vessel_mobile_phone:
-                addressees.append(
-                    BeaconMalfunctionNotificationAddressee(
-                        function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                        name=None,
-                        address_or_number=self.vessel_mobile_phone,
+            if self.notification_type is not (
+                BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC
+            ):
+                if self.vessel_mobile_phone:
+                    addressees.append(
+                        BeaconMalfunctionNotificationAddressee(
+                            function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+                            name=None,
+                            address_or_number=self.vessel_mobile_phone,
+                        )
                     )
-                )
 
-            if self.operator_mobile_phone:
-                addressees.append(
-                    BeaconMalfunctionNotificationAddressee(
-                        function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
-                        name=self.operator_name,
-                        address_or_number=self.operator_mobile_phone,
+                if self.operator_mobile_phone:
+                    addressees.append(
+                        BeaconMalfunctionNotificationAddressee(
+                            function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
+                            name=self.operator_name,
+                            address_or_number=self.operator_mobile_phone,
+                        )
                     )
-                )
 
         else:
             addressees = (
@@ -170,23 +176,26 @@ class BeaconMalfunctionToNotify:
         if not self.test_mode:
             addressees = []
 
-            if self.vessel_fax:
-                addressees.append(
-                    BeaconMalfunctionNotificationAddressee(
-                        function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                        name=None,
-                        address_or_number=self.vessel_fax,
+            if self.notification_type is not (
+                BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC
+            ):
+                if self.vessel_fax:
+                    addressees.append(
+                        BeaconMalfunctionNotificationAddressee(
+                            function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+                            name=None,
+                            address_or_number=self.vessel_fax,
+                        )
                     )
-                )
 
-            if self.operator_fax:
-                addressees.append(
-                    BeaconMalfunctionNotificationAddressee(
-                        function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
-                        name=self.operator_name,
-                        address_or_number=self.operator_fax,
+                if self.operator_fax:
+                    addressees.append(
+                        BeaconMalfunctionNotificationAddressee(
+                            function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
+                            name=self.operator_name,
+                            address_or_number=self.operator_fax,
+                        )
                     )
-                )
 
         else:
             addressees = (
@@ -294,6 +303,14 @@ class BeaconMalfunctionToNotify:
         else:
             date_format = "%d/%m/%Y à %Hh%M UTC"
         return self.malfunction_start_date_utc.strftime(date_format)
+
+    def replace_pandas_nat(self):
+        obj = deepcopy(self)
+        if obj.malfunction_start_date_utc is pd.NaT:
+            obj = obj.__replace__(malfunction_start_date_utc=None)
+        if obj.previous_notification_datetime_utc is pd.NaT:
+            obj = obj.__replace__(previous_notification_datetime_utc=None)
+        return obj
 
 
 @dataclass

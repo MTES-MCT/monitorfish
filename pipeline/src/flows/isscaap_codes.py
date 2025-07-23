@@ -1,11 +1,9 @@
 import io
-from pathlib import Path
 
 import pandas as pd
 import requests
 import tabula
-from prefect import Flow, Parameter, task
-from prefect.executors import LocalDaskExecutor
+from prefect import flow, task
 
 from config import PROXIES
 
@@ -29,15 +27,15 @@ def join_values_by_column(df: pd.DataFrame, join_string: str = " ") -> list:
     return res
 
 
-@task(checkpoint=False)
+@task
 def extract_isscaap_codes_pdf() -> io.BytesIO:
-    url = "http://www.fao.org/fishery/static/ASFIS/ISSCAAP.pdf"
+    url = "https://www.fao.org/fishery/static/ASFIS/ISSCAAP.pdf"
     r = requests.get(url, proxies=PROXIES)
     f_bytes = io.BytesIO(r.content)
     return f_bytes
 
 
-@task(checkpoint=False)
+@task
 def parse_pdf(isscaap_codes_pdf: io.BytesIO):
     isscaap_codes = tabula.read_pdf(
         isscaap_codes_pdf,
@@ -64,7 +62,7 @@ def parse_pdf(isscaap_codes_pdf: io.BytesIO):
     return isscaap_codes
 
 
-@task(checkpoint=False)
+@task
 def transform_isscaap_codes(isscaap_codes: pd.DataFrame) -> pd.DataFrame:
     isscaap_divisions = isscaap_codes[isscaap_codes.index < 10]
     isscaap_divisions = isscaap_divisions.rename(
@@ -95,18 +93,14 @@ def transform_isscaap_codes(isscaap_codes: pd.DataFrame) -> pd.DataFrame:
     return isscaap_groups
 
 
-@task(checkpoint=False)
+@task
 def export_isscaap_codes(isscaap_codes: pd.DataFrame, csv_filepath: str) -> None:
     isscaap_codes.to_csv(csv_filepath, index=True)
 
 
-with Flow(
-    "Extract ISSCAAP codes from fao.org to csv file", executor=LocalDaskExecutor()
-) as flow:
-    csv_filepath = Parameter("csv_filepath")
+@flow(name="Extract ISSCAAP codes from fao.org to csv file")
+def isscaap_codes_flow(csv_filepath: str):
     pdf = extract_isscaap_codes_pdf()
     isscaap_codes = parse_pdf(pdf)
     isscaap_codes = transform_isscaap_codes(isscaap_codes)
     export_isscaap_codes(isscaap_codes, csv_filepath)
-
-flow.file_name = Path(__file__).name

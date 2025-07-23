@@ -9,6 +9,7 @@ data class VoyageDataOutput(
     val startDate: ZonedDateTime?,
     val endDate: ZonedDateTime?,
     val tripNumber: String,
+    val software: String?,
     val logbookMessagesAndAlerts: LogbookMessagesAndAlertsDataOutput,
     val totalTripsFoundForDates: Number?,
 ) {
@@ -20,6 +21,7 @@ data class VoyageDataOutput(
                 startDate = voyage.startDate,
                 endDate = voyage.endDate,
                 tripNumber = voyage.tripNumber,
+                software = voyage.software,
                 logbookMessagesAndAlerts =
                     LogbookMessagesAndAlertsDataOutput
                         .fromLogbookMessagesAndAlerts(voyage.logbookMessagesAndAlerts),

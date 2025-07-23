@@ -1,6 +1,7 @@
 import { BackOfficeMenuKey, BackOfficeMenuPath } from '@features/BackOffice/components/BackofficeMenu/constants'
 
 export const ROUTER_PATHS = {
+  activityVisualization: '/activity_visualization',
   backendForFrontend: '/bff',
   backoffice: '/backoffice',
   controlObjectives: BackOfficeMenuPath[BackOfficeMenuKey.CONTROL_OBJECTIVE_TABLES],

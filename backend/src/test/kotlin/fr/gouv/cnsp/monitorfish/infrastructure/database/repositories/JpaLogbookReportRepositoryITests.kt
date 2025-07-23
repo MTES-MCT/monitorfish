@@ -1199,7 +1199,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(trip.tripNumber).isEqualTo("9463715")
         assertThat(trip.startDate.toString()).isEqualTo("2019-10-11T01:06Z")
         assertThat(trip.endDate.toString()).isEqualTo("2019-10-22T11:06Z")
-        assertThat(trip.totalTripsFoundForDates).isEqualTo(4)
+        assertThat(trip.totalTripsFoundForDates).isEqualTo(3)
     }
 
     @Test

@@ -75,6 +75,7 @@ class GetVesselVoyageByDates(
                 beforeDepartureDate = trip.endDate,
                 tripNumber = trip.tripNumber,
             )
+        val software = logbookMessages.firstOrNull()?.software
 
         return Voyage(
             isLastVoyage = isLastVoyage,
@@ -83,6 +84,7 @@ class GetVesselVoyageByDates(
             endDate = trip.endDateWithoutLAN,
             tripNumber = trip.tripNumber,
             totalTripsFoundForDates = trip.totalTripsFoundForDates,
+            software = software,
             logbookMessagesAndAlerts = LogbookMessagesAndAlerts(logbookMessages, alerts),
         )
     }

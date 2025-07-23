@@ -126,3 +126,49 @@ def get_datetime_intervals(
             raise ValueError(f"unit must be None, 'h', 'min' or 's', got '{unit}'.")
 
     return intervals
+
+
+def is_in_validity_period(
+    validity_start_date: datetime | None,
+    validity_end_date: datetime | None,
+    repeat_each_year: bool,
+    sample_date: datetime,
+) -> bool:
+    """
+    Check if a sample_date falls within a validity period.
+
+    Args:
+        validity_start_date: Start of validity period (None means no start constraint)
+        validity_end_date: End of validity period (None means no end constraint)
+        repeat_each_year: If True, the validity period repeats annually
+        sample_date: Date to check against the validity period
+
+    Returns:
+        True if sample_date is within the validity period, False otherwise
+    """
+    if validity_start_date is None and validity_end_date is None:
+        return True
+
+    if validity_start_date is None:
+        return sample_date <= validity_end_date
+
+    if validity_end_date is None:
+        return sample_date >= validity_start_date
+
+    if repeat_each_year:
+        validaty_duration = validity_end_date - validity_start_date
+        one_year = timedelta(days=365)
+        if validaty_duration >= one_year:
+            return sample_date >= validity_start_date
+
+        return (
+            validity_start_date
+            <= sample_date.replace(year=min(validity_start_date.year, sample_date.year))
+            <= validity_end_date
+        ) or (
+            validity_start_date
+            <= sample_date.replace(year=min(validity_end_date.year, sample_date.year))
+            <= validity_end_date
+        )
+    else:
+        return validity_start_date <= sample_date <= validity_end_date

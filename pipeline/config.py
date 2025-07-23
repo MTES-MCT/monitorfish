@@ -105,7 +105,7 @@ ISSCAAP_GROUPS_URL = (
     "https://www.data.gouv.fr/fr/datasets/r/d3024324-ff69-429b-848b-945cb8748005"
 )
 
-FAO_SPECIES_URL = "http://www.fao.org/fishery/static/ASFIS/ASFIS_sp.zip"
+FAO_SPECIES_URL = "https://www.fao.org/fishery/static/ASFIS/ASFIS_sp.zip"
 DATA_GOUV_SPECIES_URL = (
     "https://www.data.gouv.fr/fr/datasets/r/32616122-6931-4875-8e26-a57832012419"
 )
@@ -212,6 +212,10 @@ BACKEND_API_KEY = get_key(DOTENV_PATH, "MONITORFISH_BACKEND_API_KEY")
 # Monitorenv endpoint
 MONITORENV_URL = get_key(DOTENV_PATH, "MONITORENV_URL")
 MONITORENV_API_ENDPOINT = MONITORENV_URL + "api/v2/"
+
+# External endpoints
+BATHYMETRY_API_URL = "https://rest.emodnet-bathymetry.eu"
+BATHYMETRY_DEPTH_SAMPLE_ENDPOINT = BATHYMETRY_API_URL + "/depth_sample"
 
 # Email server
 MONITORFISH_EMAIL_SERVER_URL = get_key(DOTENV_PATH, "MONITORFISH_EMAIL_SERVER_URL")

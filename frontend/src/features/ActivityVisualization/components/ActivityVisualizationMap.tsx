@@ -31,7 +31,7 @@ export function ActivityVisualizationMap() {
         map.style.width = '100%'
         map.style.height = '100%'
       }
-    }, 1000)
+    }, 3000)
   }, [html])
 
   if (!html) {

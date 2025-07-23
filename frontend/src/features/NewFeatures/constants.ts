@@ -7,6 +7,36 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2025-07-23',
+        description: `Vous pouvez retrouver l'identité du patron dans les coordonnées en bas de la fiche "Identité" de la fiche navire.
+
+Ces coordonnées sont récupérées à partir des messages du journal de pêche électronique (JPE).
+`,
+        for: 'ALL',
+        title: `Affichage de l'identité du patron dans l'onglet "Identité" de la fiche navire`,
+        type: 'NEW_FEATURE'
+      },
+      {
+        date: '2025-07-23',
+        description: `Il est désormais possible de créer des groupes de navires avec une **date de début**.
+Cela permet par exemple de constituer un groupe de navire en avance d'un suivi réglementaire limité dans le temps (ex. fermeture spatio-temporelle).`,
+        for: 'ALL',
+        title: `Ajout de la date de début de validité dans les groupes de navires`,
+        type: 'IMPROVEMENT'
+      },
+      {
+        date: '2025-07-23',
+        description: `Le type de transmission des messages JPE est maintenant affiché dans la vue "JPE" de la fiche navire, vous y trouverez :
+- **JPE: Journal de pêche électronique** (via les logiciels de bord IKTUS ou TurboCatch),
+- **JPP: Journal de pêche papier** (numérisé par FranceAgriMer via VisioCaptures avec un délai),
+- **FPP: Fiches de pêche papier** (numérisé par FranceAgriMer via VisioCaptures avec un délai),
+- **VIS: VisioCaptures** (Fiche de pêche télétransmise ou journal de pêche télétransmis via VisioCaptures).
+`,
+        for: 'ALL',
+        title: `Affichage du type de transmission des messages JPE`,
+        type: 'IMPROVEMENT'
+      },
+      {
         date: '2025-07-22',
         description: `Vous pouvez désormais afficher les données d'activité aggregées de l'année en cours dans une nouvelle carte accessible depuis le bouton "📊 Données d'activité" situé à gauche de la cartographie.
 

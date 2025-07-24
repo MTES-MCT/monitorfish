@@ -9,14 +9,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateDynamicVesselGroups
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateFixedVesselGroups
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.AddOrUpdateDynamicVesselGroup
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.AddOrUpdateFixedVesselGroup
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.DeleteFixedVesselGroupVessel
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.DeleteVesselGroup
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroups
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroupsWithVessels
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.VesselGroupWithVessels
-import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.utils.ApiTestWithJWTSecurity
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.DynamicVesselGroupDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.FixedVesselGroupDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
@@ -24,14 +18,17 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@ApiTestWithJWTSecurity(value = [(VesselGroupController::class)])
+@WebMvcTest(value = [(VesselGroupController::class)])
 class VesselGroupControllerITests {
     @Autowired
     private lateinit var api: MockMvc
@@ -59,6 +56,12 @@ class VesselGroupControllerITests {
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
+
+    private fun authenticatedRequest() =
+        oidcLogin()
+            .idToken { token ->
+                token.claim("email", "email@domain-name.com")
+            }
 
     @Test
     fun `Should save a dynamic vessel group`() {
@@ -95,7 +98,6 @@ class VesselGroupControllerITests {
                         zones = emptyList(),
                     ),
             )
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         given(
             addOrUpdateDynamicVesselGroup.execute(any(), any()),
         ).willReturn(TestUtils.getDynamicVesselGroups().first())
@@ -104,7 +106,8 @@ class VesselGroupControllerITests {
         api
             .perform(
                 post("/bff/v1/vessel_groups/dynamic")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}")
+                    .with(authenticatedRequest())
+                    .with(csrf())
                     .content(objectMapper.writeValueAsString(groupToSave))
                     .contentType(MediaType.APPLICATION_JSON),
             )
@@ -157,7 +160,6 @@ class VesselGroupControllerITests {
                         ),
                     ),
             )
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         given(
             addOrUpdateFixedVesselGroup.execute(any(), any()),
         ).willReturn(TestUtils.getFixedVesselGroups().first())
@@ -166,7 +168,8 @@ class VesselGroupControllerITests {
         api
             .perform(
                 post("/bff/v1/vessel_groups/fixed")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}")
+                    .with(authenticatedRequest())
+                    .with(csrf())
                     .content(objectMapper.writeValueAsString(groupToSave))
                     .contentType(MediaType.APPLICATION_JSON),
             )
@@ -183,14 +186,13 @@ class VesselGroupControllerITests {
     @Test
     fun `Should get all dynamic vessel groups`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         given(getAllVesselGroups.execute(any())).willReturn(TestUtils.getDynamicVesselGroups())
 
         // When
         api
             .perform(
                 get("/bff/v1/vessel_groups")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}")
+                    .with(authenticatedRequest())
                     .contentType(MediaType.APPLICATION_JSON),
             )
             // Then
@@ -206,7 +208,6 @@ class VesselGroupControllerITests {
     @Test
     fun `Should get all vessel groups with vessels`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         given(getAllVesselGroupsWithVessels.execute(any())).willReturn(
             TestUtils.getDynamicVesselGroups().map {
                 VesselGroupWithVessels(
@@ -220,7 +221,7 @@ class VesselGroupControllerITests {
         api
             .perform(
                 get("/bff/v1/vessel_groups/vessels")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}")
+                    .with(authenticatedRequest())
                     .contentType(MediaType.APPLICATION_JSON),
             )
             // Then
@@ -233,13 +234,12 @@ class VesselGroupControllerITests {
 
     @Test
     fun `Should delete a dynamic vessel groups`() {
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
-
         // When
         api
             .perform(
                 delete("/bff/v1/vessel_groups/123")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                    .with(authenticatedRequest())
+                    .with(csrf()),
             )
             // Then
             .andExpect(status().isNoContent)
@@ -249,13 +249,12 @@ class VesselGroupControllerITests {
 
     @Test
     fun `Should delete a vessel from a vessel groups`() {
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
-
         // When
         api
             .perform(
                 delete("/bff/v1/vessel_groups/123/1")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                    .with(authenticatedRequest())
+                    .with(csrf()),
             )
             // Then
             .andExpect(status().isNoContent)

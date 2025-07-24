@@ -1,12 +1,12 @@
 import { useGetLastLogbookTripsQuery } from '@features/Logbook/api'
 import { LogbookSortKey } from '@features/Logbook/components/VesselLogbook/LogbookMessages/constants'
 import { LastTrip, NextTrip, PreviousTrip } from '@features/Logbook/components/VesselLogbook/LogbookSummary'
-import { NavigateTo } from '@features/Logbook/constants'
+import { LogbookSoftwareLabel, NavigateTo } from '@features/Logbook/constants'
 import { FishingActivitiesTab } from '@features/Vessel/types/vessel'
 import { updateVesselTrackAndLogbookFromTrip } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromTrip'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Icon, IconButton, Select } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Select, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { sortBy } from 'lodash-es'
 import { useMemo, useState } from 'react'
@@ -32,6 +32,7 @@ export function LogbookMessages({ messageTypeFilter }: LogbookMessagesProps) {
   const fishingActivities = useMainAppSelector(state => state.fishingActivities.fishingActivities)
   const isFirstVoyage = useMainAppSelector(state => state.fishingActivities.isFirstVoyage)
   const isLastVoyage = useMainAppSelector(state => state.fishingActivities.isLastVoyage)
+  const software = useMainAppSelector(state => state.fishingActivities.software)
   const tripNumber = useMainAppSelector(state => state.fishingActivities.tripNumber)
   const { data: lastLogbookTrips } = useGetLastLogbookTripsQuery(
     selectedVesselIdentity?.internalReferenceNumber ?? skipToken
@@ -159,6 +160,15 @@ export function LogbookMessages({ messageTypeFilter }: LogbookMessagesProps) {
       <CustomDatesShowedInfoWithMargin>
         <CustomDatesShowedInfo width={460} />
       </CustomDatesShowedInfoWithMargin>
+      <StyledTag
+        backgroundColor={THEME.color.gainsboro}
+        color={THEME.color.gunMetal}
+        Icon={Icon.Info}
+        title={software ? LogbookSoftwareLabel[software] : 'Inconnu'}
+        withCircleIcon
+      >
+        {software && LogbookSoftwareLabel[software]}
+      </StyledTag>
       {filteredAndSortedLogbookMessages.length ? (
         filteredAndSortedLogbookMessages.map((message, index) => (
           <LogbookMessage key={message.reportId} isFirst={index === 0} logbookMessage={message} withMapControls />
@@ -169,6 +179,8 @@ export function LogbookMessages({ messageTypeFilter }: LogbookMessagesProps) {
     </Wrapper>
   )
 }
+
+const StyledTag = styled(Tag)``
 
 const StyledPreviousTrip = styled(PreviousTrip)`
   margin-right: 8px;

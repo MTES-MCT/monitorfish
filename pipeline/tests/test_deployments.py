@@ -35,12 +35,14 @@ def validate_schedule_parameters(
                     f"for flow '{flow_function.__name__}'"
                 )
 
-        for param_name in schedule_params:
+        for param_name, schedule_param in schedule_params.items():
             if param_name not in flow_params:
                 raise ValueError(
                     f"Schedule contains unknown parameter '{param_name}' "
                     f"for flow '{flow_function.__name__}'"
                 )
+            flow_param = flow_params.get(param_name)
+            assert isinstance(schedule_param, flow_param.annotation)
 
 
 def test_deployments():

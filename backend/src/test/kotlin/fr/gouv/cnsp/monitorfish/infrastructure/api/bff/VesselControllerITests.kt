@@ -598,6 +598,7 @@ class VesselControllerITests {
                 startDate = ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"),
                 endDate = null,
                 tripNumber = "1234",
+                software = "FT/",
                 logbookMessagesAndAlerts = LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()),
             )
         given(this.getVesselVoyage.execute(any(), any(), anyOrNull())).willReturn(voyage)
@@ -666,6 +667,7 @@ class VesselControllerITests {
                 startDate = ZonedDateTime.now().minusMonths(5),
                 endDate = null,
                 tripNumber = "1234",
+                software = "FT/",
                 logbookMessagesAndAlerts = LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()),
             )
         given(this.getVesselVoyage.execute(any(), any(), any())).willReturn(voyage)
@@ -1058,6 +1060,7 @@ class VesselControllerITests {
                 startDate = ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"),
                 endDate = null,
                 tripNumber = "1234",
+                software = "FT/",
                 logbookMessagesAndAlerts = LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()),
             )
         given(this.getVesselVoyageByDates.execute(any(), any(), anyOrNull(), anyOrNull())).willReturn(voyage)

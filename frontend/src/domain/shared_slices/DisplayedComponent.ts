@@ -6,6 +6,7 @@ export type DisplayedComponentState = {
   areVesselGroupsDisplayed: boolean
   areVesselsDisplayed: boolean
   isAccountMapButtonDisplayed: boolean
+  isActivityVisualizationMapButtonDisplayed: boolean
   isAlertsMapButtonDisplayed: boolean
   isBeaconMalfunctionsMapButtonDisplayed: boolean
   isControlUnitDialogDisplayed: boolean
@@ -31,6 +32,7 @@ const INITIAL_STATE: DisplayedComponentState = {
   areVesselGroupsDisplayed: true,
   areVesselsDisplayed: true,
   isAccountMapButtonDisplayed: true,
+  isActivityVisualizationMapButtonDisplayed: true,
   isAlertsMapButtonDisplayed: true,
   isBeaconMalfunctionsMapButtonDisplayed: true,
   isControlUnitDialogDisplayed: false,

@@ -8,15 +8,18 @@ import org.slf4j.LoggerFactory
 @UseCase
 class GetMissionActions(
     private val missionActionsRepository: MissionActionsRepository,
+    private val enrichMissionAction: EnrichMissionAction,
 ) {
     private val logger = LoggerFactory.getLogger(GetMissionActions::class.java)
 
     fun execute(missionId: Int): List<MissionAction> {
         logger.debug("Searching undeleted actions for mission $missionId")
-        val actions =
+        val actions: List<MissionAction> =
             missionActionsRepository
                 .findByMissionId(missionId)
-                .sortedByDescending { it.actionDatetimeUtc }
+                .map {
+                    enrichMissionAction.execute(action = it)
+                }.sortedByDescending { it.actionDatetimeUtc }
         logger.debug("Found ${actions.size} undeleted actions for mission $missionId")
 
         return actions

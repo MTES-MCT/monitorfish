@@ -356,6 +356,7 @@ export namespace Logbook {
     isFirstVoyage: boolean
     isLastVoyage: boolean
     logbookMessagesAndAlerts: FishingActivities
+    software: string | undefined
     startDate: string | undefined
     totalTripsFoundForDates: number | undefined
     tripNumber: string

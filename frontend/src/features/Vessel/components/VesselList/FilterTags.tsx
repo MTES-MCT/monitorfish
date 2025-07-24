@@ -38,7 +38,7 @@ export function FilterTags({
   onFilter,
   onReset
 }: FilterTagsProps) {
-  const areMoreFiltersDisplayed = useMainAppSelector(store => store.vesselList.areMoreFiltersDisplayed)
+  const areFiltersDisplayed = useMainAppSelector(store => store.vesselList.areFiltersDisplayed)
   const dispatch = useMainAppDispatch()
 
   const { gearsAsTreeOptions } = useGetGearsAsTreeOptions()
@@ -189,29 +189,29 @@ export function FilterTags({
           </StyledLink>
         )}
 
-        {!isReadOnly && areMoreFiltersDisplayable && areMoreFiltersDisplayed && (
+        {!isReadOnly && areMoreFiltersDisplayable && areFiltersDisplayed && (
           <StyledLink>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <Link
-              data-cy="vessel-list-show-more-filters"
+              data-cy="vessel-list-hide-filters"
               onClick={() => {
-                dispatch(vesselListActions.setAreMoreFiltersDisplayed(false))
+                dispatch(vesselListActions.setAreFiltersDisplayed(false))
               }}
             >
-              <Icon.Minus size={14} /> Voir moins de filtres
+              <Icon.Hide size={14} /> Masquer les filtres
             </Link>
           </StyledLink>
         )}
-        {!isReadOnly && areMoreFiltersDisplayable && !areMoreFiltersDisplayed && (
+        {!isReadOnly && areMoreFiltersDisplayable && !areFiltersDisplayed && (
           <StyledLink>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <Link
-              data-cy="vessel-list-show-more-filters"
+              data-cy="vessel-list-show-filters"
               onClick={() => {
-                dispatch(vesselListActions.setAreMoreFiltersDisplayed(true))
+                dispatch(vesselListActions.setAreFiltersDisplayed(true))
               }}
             >
-              <Icon.Plus size={14} /> Voir plus de filtres
+              <Icon.Display size={14} /> Afficher les filtres
             </Link>
           </StyledLink>
         )}

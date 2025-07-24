@@ -266,3 +266,19 @@ export enum NavigateTo {
   NEXT = 'NEXT',
   PREVIOUS = 'PREVIOUS'
 }
+
+export enum LogbookSoftware {
+  FPP = 'FPP',
+  JPE = 'JPE',
+  JPP = 'JPP',
+  NONE = 'NONE',
+  VIS = 'VIS'
+}
+
+export const LogbookSoftwareLabel: Record<LogbookSoftware, string> = {
+  [LogbookSoftware.JPE]: 'Messages issus du journal de pêche électronique',
+  [LogbookSoftware.JPP]: 'Messages issus du journal de pêche papier',
+  [LogbookSoftware.FPP]: 'Messages issus de fiches de pêche papier',
+  [LogbookSoftware.VIS]: 'Messages issus de VisioCaptures',
+  [LogbookSoftware.NONE]: 'Inconnu'
+}

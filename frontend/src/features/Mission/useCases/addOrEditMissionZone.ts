@@ -32,6 +32,7 @@ export const openDrawLayerModal = dispatch => {
     setDisplayedComponents({
       areVesselsDisplayed: true,
       isAccountMapButtonDisplayed: false,
+      isActivityVisualizationMapButtonDisplayed: false,
       isAlertsMapButtonDisplayed: false,
       isBeaconMalfunctionsMapButtonDisplayed: false,
       isControlUnitListMapButtonDisplayed: false,
@@ -58,6 +59,7 @@ export const closeDrawLayerModal = dispatch => {
     setDisplayedComponents({
       areVesselsDisplayed: true,
       isAccountMapButtonDisplayed: true,
+      isActivityVisualizationMapButtonDisplayed: true,
       isAlertsMapButtonDisplayed: true,
       isBeaconMalfunctionsMapButtonDisplayed: true,
       isControlUnitListMapButtonDisplayed: true,

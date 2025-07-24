@@ -36,7 +36,7 @@ import {
 export function FilterBar() {
   const dispatch = useMainAppDispatch()
   const listFilterValues = useMainAppSelector(store => store.vessel.listFilterValues)
-  const areMoreFiltersDisplayed = useMainAppSelector(store => store.vesselList.areMoreFiltersDisplayed)
+  const areFiltersDisplayed = useMainAppSelector(store => store.vesselList.areFiltersDisplayed)
 
   const { fleetSegmentsAsOptions } = useGetFleetSegmentsAsOptions()
   const { gearsAsTreeOptions } = useGetGearsAsTreeOptions()
@@ -198,231 +198,229 @@ export function FilterBar() {
   )
 
   return (
-    <Wrapper className="vessel-list-filter-bar">
-      <Row>
-        <TextInput
-          isLabelHidden
-          isSearchInput
-          isTransparent
-          label="Rechercher un navire"
-          name="searchQuery"
-          onChange={updateSearchQuery}
-          placeholder="Rechercher un navire"
-          size={Size.LARGE}
-          value={searchQuery}
-        />
-      </Row>
+    areFiltersDisplayed && (
+      <Wrapper className="vessel-list-filter-bar">
+        <Row>
+          <TextInput
+            isLabelHidden
+            isSearchInput
+            isTransparent
+            label="Rechercher un navire"
+            name="searchQuery"
+            onChange={updateSearchQuery}
+            placeholder="Rechercher un navire"
+            size={Size.LARGE}
+            value={searchQuery}
+          />
+        </Row>
 
-      <Row>
-        <CheckPicker
-          isLabelHidden
-          isTransparent
-          label="Nationalités"
-          name="countryCodes"
-          onChange={updateCountryCodes}
-          options={COUNTRIES_AS_ALPHA2_OPTIONS}
-          placeholder="Nationalité"
-          popupWidth={240}
-          renderValue={(_, items) =>
-            items.length > 0 ? <SelectValue>Nationalités ({items.length})</SelectValue> : <></>
-          }
-          searchable
-          value={listFilterValues.countryCodes}
-          virtualized
-        />
-        <CheckPicker
-          isLabelHidden
-          isTransparent
-          label="Note de risque"
-          name="riskFactors"
-          onChange={updateRiskFactors}
-          options={RISK_FACTOR_AS_OPTIONS}
-          placeholder="Note de risque"
-          popupWidth={240}
-          renderValue={(_, items) =>
-            items.length > 0 ? <SelectValue>Notes de risque ({items.length})</SelectValue> : <></>
-          }
-          searchable
-          value={listFilterValues.riskFactors}
-          virtualized
-        />
-        <CheckPicker
-          disabled={!fleetSegmentsAsOptions}
-          isLabelHidden
-          isTransparent
-          label="Segments de flotte"
-          name="fleetSegments"
-          onChange={updateFleetSegments}
-          options={fleetSegmentsAsOptions ?? []}
-          placeholder="Segments de flotte"
-          popupWidth={320}
-          renderValue={(_, items) =>
-            items.length > 0 ? <SelectValue>Segments de flotte ({items.length})</SelectValue> : <></>
-          }
-          searchable
-          value={listFilterValues.fleetSegments}
-          virtualized
-        />
-        <MultiCascader
-          disabled={!gearsAsTreeOptions}
-          isLabelHidden
-          isTransparent
-          label="Engins utilisés"
-          name="gearCodes"
-          onChange={updateGearCodes}
-          options={gearsAsTreeOptions ?? []}
-          placeholder="Engins utilisés"
-          popupWidth={500}
-          renderValue={(_, items) =>
-            items.length > 0 ? <SelectValue>Engins utilisés ({items.length})</SelectValue> : <></>
-          }
-          searchable
-          value={listFilterValues.gearCodes}
-        />
-        <CheckPicker
-          disabled={!speciesAsCodeOptions}
-          isLabelHidden
-          isTransparent
-          label="Espèces à bord"
-          name="specyCodes"
-          onChange={updateSpecyCodes}
-          options={speciesAsCodeOptions ?? []}
-          placeholder="Espèces à bord"
-          popupWidth={320}
-          renderValue={(_, items) =>
-            items.length > 0 ? <SelectValue>Espèces à bord ({items.length})</SelectValue> : <></>
-          }
-          searchable
-          value={listFilterValues.specyCodes}
-          virtualized
-        />
-        <MultiCascader
-          disabled
-          isLabelHidden
-          isTransparent
-          label="Dernier port de débarque"
-          name="lastLandingPortLocodes"
-          onChange={updateLastLandingPortLocodes}
-          options={portsAsTreeOptions ?? []}
-          placeholder="Dernier port de débarque"
-          popupWidth={500}
-          renderValue={(_, items) =>
-            items.length > 0 ? <SelectValue>Dernier port de débarque ({items.length})</SelectValue> : <></>
-          }
-          searchable
-          style={{ width: 210 }}
-          value={listFilterValues.lastLandingPortLocodes}
-        />
-        <Select
-          isLabelHidden
-          isTransparent
-          label="Dernier contrôle"
-          name="lastControlPeriod"
-          onChange={updateLastControlPeriod}
-          options={LAST_CONTROL_PERIODS_AS_OPTIONS}
-          placeholder="Dernier contrôle"
-          popupWidth={224}
-          value={listFilterValues.lastControlPeriod}
-        />
-        <CheckPicker
-          isLabelHidden
-          isTransparent
-          label="Adhésion à une OP"
-          name="producerOrganizations"
-          onChange={updateProducerOrganizations}
-          options={producerOrganizations}
-          placeholder="Adhésion à une OP"
-          popupWidth={320}
-          renderValue={(_, items) => (items.length > 0 ? <SelectValue>OP ({items.length})</SelectValue> : <></>)}
-          searchable
-          value={listFilterValues.producerOrganizations}
-        />
-        <MultiCascader
-          disabled={!filterableZoneAsTreeOptions}
-          isLabelHidden
-          isTransparent
-          label="Filtrer les navires avec une zone"
-          name="zones"
-          onChange={updateNonCustomZones}
-          options={filterableZoneAsTreeOptions?.filter(zone => zone.label !== 'Zone manuelle') ?? []}
-          placeholder="Filtrer les navires avec une zone"
-          popupWidth={500}
-          renderExtraFooter={renderMultiCascaderCustomZoneFooter}
-          renderValue={(_, items) => {
-            const itemsChildrens = items.filter(item => item.parent !== null)
+        <Row>
+          <CheckPicker
+            isLabelHidden
+            isTransparent
+            label="Nationalités"
+            name="countryCodes"
+            onChange={updateCountryCodes}
+            options={COUNTRIES_AS_ALPHA2_OPTIONS}
+            placeholder="Nationalité"
+            popupWidth={240}
+            renderValue={(_, items) =>
+              items.length > 0 ? <SelectValue>Nationalités ({items.length})</SelectValue> : <></>
+            }
+            searchable
+            value={listFilterValues.countryCodes}
+            virtualized
+          />
+          <CheckPicker
+            isLabelHidden
+            isTransparent
+            label="Note de risque"
+            name="riskFactors"
+            onChange={updateRiskFactors}
+            options={RISK_FACTOR_AS_OPTIONS}
+            placeholder="Note de risque"
+            popupWidth={240}
+            renderValue={(_, items) =>
+              items.length > 0 ? <SelectValue>Notes de risque ({items.length})</SelectValue> : <></>
+            }
+            searchable
+            value={listFilterValues.riskFactors}
+            virtualized
+          />
+          <CheckPicker
+            disabled={!fleetSegmentsAsOptions}
+            isLabelHidden
+            isTransparent
+            label="Segments de flotte"
+            name="fleetSegments"
+            onChange={updateFleetSegments}
+            options={fleetSegmentsAsOptions ?? []}
+            placeholder="Segments de flotte"
+            popupWidth={320}
+            renderValue={(_, items) =>
+              items.length > 0 ? <SelectValue>Segments de flotte ({items.length})</SelectValue> : <></>
+            }
+            searchable
+            value={listFilterValues.fleetSegments}
+            virtualized
+          />
+          <MultiCascader
+            disabled={!gearsAsTreeOptions}
+            isLabelHidden
+            isTransparent
+            label="Engins utilisés"
+            name="gearCodes"
+            onChange={updateGearCodes}
+            options={gearsAsTreeOptions ?? []}
+            placeholder="Engins utilisés"
+            popupWidth={500}
+            renderValue={(_, items) =>
+              items.length > 0 ? <SelectValue>Engins utilisés ({items.length})</SelectValue> : <></>
+            }
+            searchable
+            value={listFilterValues.gearCodes}
+          />
+          <CheckPicker
+            disabled={!speciesAsCodeOptions}
+            isLabelHidden
+            isTransparent
+            label="Espèces à bord"
+            name="specyCodes"
+            onChange={updateSpecyCodes}
+            options={speciesAsCodeOptions ?? []}
+            placeholder="Espèces à bord"
+            popupWidth={320}
+            renderValue={(_, items) =>
+              items.length > 0 ? <SelectValue>Espèces à bord ({items.length})</SelectValue> : <></>
+            }
+            searchable
+            value={listFilterValues.specyCodes}
+            virtualized
+          />
+          <MultiCascader
+            disabled
+            isLabelHidden
+            isTransparent
+            label="Dernier port de débarque"
+            name="lastLandingPortLocodes"
+            onChange={updateLastLandingPortLocodes}
+            options={portsAsTreeOptions ?? []}
+            placeholder="Dernier port de débarque"
+            popupWidth={500}
+            renderValue={(_, items) =>
+              items.length > 0 ? <SelectValue>Dernier port de débarque ({items.length})</SelectValue> : <></>
+            }
+            searchable
+            style={{ width: 210 }}
+            value={listFilterValues.lastLandingPortLocodes}
+          />
+          <Select
+            isLabelHidden
+            isTransparent
+            label="Dernier contrôle"
+            name="lastControlPeriod"
+            onChange={updateLastControlPeriod}
+            options={LAST_CONTROL_PERIODS_AS_OPTIONS}
+            placeholder="Dernier contrôle"
+            popupWidth={224}
+            value={listFilterValues.lastControlPeriod}
+          />
+          <CheckPicker
+            isLabelHidden
+            isTransparent
+            label="Adhésion à une OP"
+            name="producerOrganizations"
+            onChange={updateProducerOrganizations}
+            options={producerOrganizations}
+            placeholder="Adhésion à une OP"
+            popupWidth={320}
+            renderValue={(_, items) => (items.length > 0 ? <SelectValue>OP ({items.length})</SelectValue> : <></>)}
+            searchable
+            value={listFilterValues.producerOrganizations}
+          />
+          <MultiCascader
+            disabled={!filterableZoneAsTreeOptions}
+            isLabelHidden
+            isTransparent
+            label="Filtrer les navires avec une zone"
+            name="zones"
+            onChange={updateNonCustomZones}
+            options={filterableZoneAsTreeOptions?.filter(zone => zone.label !== 'Zone manuelle') ?? []}
+            placeholder="Filtrer les navires avec une zone"
+            popupWidth={500}
+            renderExtraFooter={renderMultiCascaderCustomZoneFooter}
+            renderValue={(_, items) => {
+              const itemsChildrens = items.filter(item => item.parent !== null)
 
-            return itemsChildrens.length > 0 ? (
-              <SelectValue>Zone de filtre ({itemsChildrens.length})</SelectValue>
-            ) : (
-              <></>
-            )
-          }}
-          searchable
-          style={{ width: 416 }}
-          uncheckableItemValues={['0', '1', '2', '3']}
-          value={listFilterValues.zones?.map(zone => zone.value)}
-        />
-        {areMoreFiltersDisplayed && (
-          <>
-            <MultiCascader
-              isLabelHidden
-              isTransparent
-              label="Quartier"
-              name="districtCodes"
-              onChange={updateDistrictCodes}
-              options={districtsAsTreeOptions ?? []}
-              placeholder="Quartier"
-              popupWidth={500}
-              renderValue={(_, items) =>
-                items.length > 0 ? <SelectValue>Quartier ({items.length})</SelectValue> : <></>
-              }
-              searchable
-              value={listFilterValues.districtCodes}
-            />
-            <Select
-              isLabelHidden
-              isTransparent
-              label="Longueur du navire"
-              name="vesselSize"
-              onChange={updateVesselSize}
-              options={VESSEL_SIZE_AS_OPTIONS}
-              placeholder="Longueur du navire"
-              value={listFilterValues.vesselSize}
-            />
-            <Select
-              isLabelHidden
-              isTransparent
-              label="Dernière position VMS"
-              name="lastPositionHoursAgo"
-              onChange={updateLastPositionHoursAgo}
-              options={LAST_POSITION_AS_OPTIONS}
-              placeholder="Dernière position VMS"
-              value={listFilterValues.lastPositionHoursAgo}
-            />
-            <Select
-              isLabelHidden
-              isTransparent
-              label="Equipé JPE"
-              name="hasLogbook"
-              onChange={updateHasLogbook}
-              options={HAS_LOGBOOK_AS_OPTIONS}
-              placeholder="Equipé JPE"
-              value={listFilterValues.hasLogbook}
-            />
-          </>
-        )}
-        <Checkbox checked={emitsPositions} label="Équipé VMS" name="emitsPositions" onChange={updateEmitsPositions} />
-        <Checkbox
-          checked={emitsNoPositions}
-          label="Non équipé VMS"
-          name="emitsNoPositions"
-          onChange={updateEmitsNoPositions}
-        />
-        <VerticalBar />
-        <Checkbox checked={isAtSea} label="En mer" name="always" onChange={updateVesselLocationAtSea} />
-        <Checkbox checked={isAtPort} label="À quai" name="always" onChange={updateVesselLocationAtPort} />
-      </Row>
-    </Wrapper>
+              return itemsChildrens.length > 0 ? (
+                <SelectValue>Zone de filtre ({itemsChildrens.length})</SelectValue>
+              ) : (
+                <></>
+              )
+            }}
+            searchable
+            style={{ width: 416 }}
+            uncheckableItemValues={['0', '1', '2', '3']}
+            value={listFilterValues.zones?.map(zone => zone.value)}
+          />
+          <MultiCascader
+            isLabelHidden
+            isTransparent
+            label="Quartier"
+            name="districtCodes"
+            onChange={updateDistrictCodes}
+            options={districtsAsTreeOptions ?? []}
+            placeholder="Quartier"
+            popupWidth={500}
+            renderValue={(_, items) =>
+              items.length > 0 ? <SelectValue>Quartier ({items.length})</SelectValue> : <></>
+            }
+            searchable
+            value={listFilterValues.districtCodes}
+          />
+          <Select
+            isLabelHidden
+            isTransparent
+            label="Longueur du navire"
+            name="vesselSize"
+            onChange={updateVesselSize}
+            options={VESSEL_SIZE_AS_OPTIONS}
+            placeholder="Longueur du navire"
+            value={listFilterValues.vesselSize}
+          />
+          <Select
+            isLabelHidden
+            isTransparent
+            label="Dernière position VMS"
+            name="lastPositionHoursAgo"
+            onChange={updateLastPositionHoursAgo}
+            options={LAST_POSITION_AS_OPTIONS}
+            placeholder="Dernière position VMS"
+            value={listFilterValues.lastPositionHoursAgo}
+          />
+          <Select
+            isLabelHidden
+            isTransparent
+            label="Equipé JPE"
+            name="hasLogbook"
+            onChange={updateHasLogbook}
+            options={HAS_LOGBOOK_AS_OPTIONS}
+            placeholder="Equipé JPE"
+            value={listFilterValues.hasLogbook}
+          />
+          <Checkbox checked={emitsPositions} label="Équipé VMS" name="emitsPositions" onChange={updateEmitsPositions} />
+          <Checkbox
+            checked={emitsNoPositions}
+            label="Non équipé VMS"
+            name="emitsNoPositions"
+            onChange={updateEmitsNoPositions}
+          />
+          <VerticalBar />
+          <Checkbox checked={isAtSea} label="En mer" name="always" onChange={updateVesselLocationAtSea} />
+          <Checkbox checked={isAtPort} label="À quai" name="always" onChange={updateVesselLocationAtPort} />
+        </Row>
+      </Wrapper>
+    )
   )
 }
 

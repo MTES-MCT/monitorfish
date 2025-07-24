@@ -18,6 +18,7 @@ import {
 import { FilterTags } from '@features/Vessel/components/VesselList/FilterTags'
 import { VesselEmitsPosition, VesselLocation } from '@features/Vessel/types/vessel'
 import { filterVesselsWithZone } from '@features/Vessel/useCases/VesselListV2/filterVesselsWithZone'
+import { useDisplayWarningWhenEditingSharedGroup } from '@features/VesselGroup/components/hooks/useDisplayWarningWhenEditingSharedGroup'
 import { VesselGroupForm } from '@features/VesselGroup/components/VesselGroupForm'
 import { DEFAULT_DYNAMIC_VESSEL_GROUP } from '@features/VesselGroup/constants'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
@@ -51,6 +52,7 @@ type ExportActivityReportsDialogProps = {
   isMainWindow?: boolean
   onExit: () => Promisable<void>
 }
+
 export function EditDynamicVesselGroupDialog({
   editedVesselGroup = undefined,
   initialListFilterValues,
@@ -58,6 +60,9 @@ export function EditDynamicVesselGroupDialog({
   onExit
 }: ExportActivityReportsDialogProps) {
   const dispatch = useMainAppDispatch()
+
+  useDisplayWarningWhenEditingSharedGroup(editedVesselGroup?.sharing)
+
   const [listFilterValues, setListFilterValues] = useState<VesselListFilter>(initialListFilterValues)
   // Used to save modification when a custom zone is drawn
   const editedVesselGroupRef = useRef<CreateOrUpdateVesselGroup | undefined>(editedVesselGroup)

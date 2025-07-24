@@ -1,11 +1,11 @@
 import { ToastContainer } from 'react-toastify'
 import styled from 'styled-components'
 
-import { Wrapper } from './Login'
+import { LoginBackground } from './Login'
 
 export function Register() {
   return (
-    <Wrapper>
+    <LoginBackground>
       <Text>
         Merci de contacter{' '}
         <a href="mailto:cnsp-france@developpement-durable.gouv.fr?subject=Création de compte MonitorFish">
@@ -14,7 +14,7 @@ export function Register() {
         pour accéder à cette page.
       </Text>
       <ToastContainer />
-    </Wrapper>
+    </LoginBackground>
   )
 }
 

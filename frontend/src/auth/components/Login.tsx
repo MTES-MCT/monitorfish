@@ -13,7 +13,7 @@ export function Login() {
   }
 
   return (
-    <Wrapper>
+    <LoginBackground>
       <>
         <Head>MonitorFish</Head>
 
@@ -44,7 +44,7 @@ export function Login() {
         <Footer>Centre National de Surveillance des Pêches (CNSP) – CROSS Etel</Footer>
       </>
       <ToastContainer />
-    </Wrapper>
+    </LoginBackground>
   )
 }
 
@@ -78,7 +78,7 @@ const Footer = styled.div`
   margin-bottom: 0;
 `
 
-export const Wrapper = styled.div`
+export const LoginBackground = styled.div`
   font-size: 13px;
   text-align: center;
   width: 100vw;

@@ -53,6 +53,7 @@ export function VesselList({ isFromUrl }: VesselListProps) {
   const vessels = useGetFilteredVesselsLastPositions()
   const listFilter = useMainAppSelector(state => state.vessel.listFilterValues)
   const isFilteringVesselList = useMainAppSelector(state => state.vessel.isFilteringVesselList)
+  const areFiltersDisplayed = useMainAppSelector(store => store.vesselList.areFiltersDisplayed)
 
   const previousListFilter = usePrevious(listFilter)
   const isBodyEmptyDataVisible = !!vessels && vessels.length === 0
@@ -121,6 +122,10 @@ export function VesselList({ isFromUrl }: VesselListProps) {
         ]
       : [0, 0]
   const filterHeight = (function () {
+    if (!areFiltersDisplayed) {
+      return 0
+    }
+
     const filterBarHeight =
       newWindowContainerRef.current?.getElementsByClassName('vessel-list-filter-bar')?.[0]?.clientHeight ?? 0
     const filterTagsHeight =

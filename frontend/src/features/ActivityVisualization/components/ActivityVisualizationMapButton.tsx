@@ -9,16 +9,18 @@ export function ActivityVisualizationMapButton() {
   const isSuperUser = useIsSuperUser()
 
   return (
-    <Wrapper>
-      <MapToolButton
-        Icon={Icon.Chart}
-        isActive={false}
-        isLeftButton
-        onClick={() => window.open(ROUTER_PATHS.activityVisualization, '_blank')}
-        style={{ top: isSuperUser ? 342 : 185 }}
-        title="Données d'activité"
-      />
-    </Wrapper>
+    import.meta.env.FRONTEND_KEPLER_ACTIVITY_VISUALIZATION_ENABLED === 'true' && (
+      <Wrapper>
+        <MapToolButton
+          Icon={Icon.Chart}
+          isActive={false}
+          isLeftButton
+          onClick={() => window.open(ROUTER_PATHS.activityVisualization, '_blank')}
+          style={{ top: isSuperUser ? 342 : 185 }}
+          title="Données d'activité"
+        />
+      </Wrapper>
+    )
   )
 }
 

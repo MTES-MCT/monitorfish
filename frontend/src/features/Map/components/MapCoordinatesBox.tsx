@@ -1,16 +1,13 @@
-import { COLORS } from '@constants/constants'
 import { useClickOutsideWhenOpened } from '@hooks/useClickOutsideWhenOpened'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { type Coordinates, MultiRadio } from '@mtes-mct/monitor-ui'
 import { useEffect, useRef, useState } from 'react'
-import { Radio, RadioGroup } from 'rsuite'
 import styled from 'styled-components'
 
 import { getCoordinates } from '../../../coordinates'
-import { CoordinatesFormat, OPENLAYERS_PROJECTION } from '../constants'
+import { COORDINATES_FORMAT_OPTIONS, CoordinatesFormat, OPENLAYERS_PROJECTION } from '../constants'
 import { setCoordinatesFormat } from '../slice'
-
-import type { Coordinates } from '@mtes-mct/monitor-ui'
 
 type MapCoordinatesBoxProps = {
   coordinates: Coordinates | undefined
@@ -19,50 +16,35 @@ export function MapCoordinatesBox({ coordinates }: MapCoordinatesBoxProps) {
   const wrapperRef = useRef(null)
 
   const dispatch = useMainAppDispatch()
-  const { coordinatesFormat } = useMainAppSelector(state => state.map)
-  const [coordinatesSelectionIsOpen, setCoordinatesSelectionIsOpen] = useState(false)
-  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, coordinatesSelectionIsOpen)
+  const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
+  const [isCoordinatesSelectionOpen, setIsCoordinatesSelectionOpen] = useState(false)
+  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, isCoordinatesSelectionOpen)
 
   useEffect(() => {
     if (clickedOutsideComponent) {
-      setCoordinatesSelectionIsOpen(false)
+      setIsCoordinatesSelectionOpen(false)
     }
   }, [clickedOutsideComponent])
 
   return (
     <div ref={wrapperRef}>
-      <CoordinatesTypeSelection $isOpen={coordinatesSelectionIsOpen}>
-        <Header data-cy="coordinates-selection" onClick={() => setCoordinatesSelectionIsOpen(false)}>
+      <CoordinatesTypeSelection $isOpen={isCoordinatesSelectionOpen}>
+        <Header data-cy="coordinates-selection" onClick={() => setIsCoordinatesSelectionOpen(false)}>
           Unités des coordonnées
         </Header>
-        <RadioWrapper
-          inline
+        <StyledMultiRadio
+          isInline
+          isLabelHidden
+          label="Format de coordonnées"
           name="coordinatesRadio"
-          onChange={value => dispatch(setCoordinatesFormat(value))}
+          onChange={nextValue => {
+            dispatch(setCoordinatesFormat(nextValue as CoordinatesFormat))
+          }}
+          options={COORDINATES_FORMAT_OPTIONS}
           value={coordinatesFormat}
-        >
-          <Radio inline title="Degrés Minutes Secondes" value={CoordinatesFormat.DEGREES_MINUTES_SECONDS}>
-            DMS
-          </Radio>
-          <Radio
-            data-cy="coordinates-selection-dmd"
-            inline
-            title="Degrés Minutes Décimales"
-            value={CoordinatesFormat.DEGREES_MINUTES_DECIMALS}
-          >
-            DMD
-          </Radio>
-          <Radio
-            data-cy="coordinates-selection-dd"
-            inline
-            title="Degrés Décimales"
-            value={CoordinatesFormat.DECIMAL_DEGREES}
-          >
-            DD
-          </Radio>
-        </RadioWrapper>
+        />
       </CoordinatesTypeSelection>
-      <CoordinatesButton onClick={() => setCoordinatesSelectionIsOpen(!coordinatesSelectionIsOpen)}>
+      <CoordinatesButton onClick={() => setIsCoordinatesSelectionOpen(!isCoordinatesSelectionOpen)}>
         {getShowedCoordinates(coordinates, coordinatesFormat)} ({coordinatesFormat})
       </CoordinatesButton>
     </div>
@@ -79,12 +61,16 @@ const getShowedCoordinates = (coordinates, coordinatesFormat) => {
   return ''
 }
 
-const RadioWrapper = styled(RadioGroup)`
-  padding: 6px 18px 12px 40px !important;
+const StyledMultiRadio = styled(MultiRadio)`
+  padding: 12px 0 6px 22px;
+
+  label {
+    vertical-align: middle;
+  }
 `
 
 const Header = styled.span`
-  background-color: ${COLORS.charcoal};
+  background-color: ${p => p.theme.color.charcoal};
   color: ${p => p.theme.color.gainsboro};
   padding: 5px 0;
   width: 100%;
@@ -103,12 +89,12 @@ const CoordinatesTypeSelection = styled.span<{
   left: 40px;
   display: inline-block;
   margin: 1px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-size: 13px;
   font-weight: 300;
   text-decoration: none;
   text-align: center;
-  background-color: ${COLORS.white};
+  background-color: ${p => p.theme.color.white};
   border: none;
   border-radius: 2px;
   width: 237px;
@@ -131,7 +117,7 @@ const CoordinatesButton = styled.span`
   text-decoration: none;
   text-align: center;
   height: 17px;
-  background-color: ${COLORS.charcoal};
+  background-color: ${p => p.theme.color.charcoal};
   border: none;
   border-radius: 2px;
   width: 235px;

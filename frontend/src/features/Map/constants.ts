@@ -1,5 +1,7 @@
 import { MonitorFishMap } from './Map.types'
 
+import type { Option } from '@mtes-mct/monitor-ui'
+
 export const WSG84_PROJECTION = 'EPSG:4326'
 export const OPENLAYERS_PROJECTION = 'EPSG:3857'
 
@@ -31,6 +33,21 @@ export enum CoordinatesFormat {
   DEGREES_MINUTES_DECIMALS = 'DMD',
   DEGREES_MINUTES_SECONDS = 'DMS'
 }
+
+export const COORDINATES_FORMAT_OPTIONS: Array<Option<CoordinatesFormat>> = [
+  {
+    label: 'DMS',
+    value: CoordinatesFormat.DEGREES_MINUTES_SECONDS
+  },
+  {
+    label: 'DMD',
+    value: CoordinatesFormat.DEGREES_MINUTES_DECIMALS
+  },
+  {
+    label: 'DD',
+    value: CoordinatesFormat.DECIMAL_DEGREES
+  }
+]
 
 export enum MapBox {
   ACCOUNT = 'ACCOUNT',

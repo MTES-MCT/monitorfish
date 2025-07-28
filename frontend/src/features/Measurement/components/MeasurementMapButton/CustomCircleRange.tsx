@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
 import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
-import { MapToolBox } from '../../../MainWindow/components/MapButtons/shared/MapToolBox'
+import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import {
   resetCircleMeasurementInDrawing,
   setCircleMeasurementInDrawing,

@@ -1,5 +1,5 @@
-import { MapToolBox } from '@features/MainWindow/components/MapButtons/shared/MapToolBox'
-import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
+import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
+import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { MapBox } from '@features/Map/constants'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'

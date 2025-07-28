@@ -5,9 +5,9 @@ import { NewFeatures } from '@features/NewFeatures/components/NewFeatures'
 import { VesselListMapButton } from '@features/Vessel/components/VesselListMapButton'
 import { VesselGroupMapButton } from '@features/VesselGroup/components/VesselGroupMapButton'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
+import { LegacyRsuiteComponentsWrapper } from '../../../../ui/LegacyRsuiteComponentsWrapper'
 
-import { VesselVisibilityMapButton } from './VesselVisibility'
+import { MapSettingsButton } from '../MapSettingsButton'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { AlertsMapButton } from '../../../Alert/components/AlertsMapButton'
 import { BeaconMalfunctionsMapButton } from '../../../BeaconMalfunction/components/BeaconMalfunctionsMapButton'
@@ -68,7 +68,7 @@ export function MapButtons() {
 
         {isVesselListMapButtonDisplayed && <VesselListMapButton />}
         {isVesselGroupMapButtonDisplayed && <VesselGroupMapButton />}
-        {isVesselVisibilityMapButtonDisplayed && <VesselVisibilityMapButton />}
+        {isVesselVisibilityMapButtonDisplayed && <MapSettingsButton />}
         {isMeasurementMapButtonDisplayed && <MeasurementMapButton />}
         {isInterestPointMapButtonDisplayed && <InterestPointMapButton />}
         {isAccountMapButtonDisplayed && <Account />}

@@ -8,8 +8,8 @@ import styled from 'styled-components'
 
 import { INTEREST_POINTS_OPTIONS } from './constants'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
-import { MapToolBox } from '../../../MainWindow/components/MapButtons/shared/MapToolBox'
-import { Header } from '../../../MainWindow/components/MapButtons/shared/styles'
+import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
+import { Header } from '@features/Map/components/MapButtons/shared/styles'
 import { interestPointActions, interestPointSelectors } from '../../slice'
 import { InterestPointType } from '../../utils'
 

@@ -1,5 +1,5 @@
 import { MapPropertyTrigger } from '@features/commonComponents/MapPropertyTrigger'
-import { MapToolBox } from '@features/MainWindow/components/MapButtons/shared/MapToolBox'
+import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { MapBox } from '@features/Map/constants'
 import { SideWindowMenuKey } from '@features/SideWindow/constants'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'

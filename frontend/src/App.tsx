@@ -9,7 +9,7 @@ import countries from 'i18n-iso-countries'
 import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
 import { RouterProvider } from 'react-router-dom'
 import { CustomProvider as RsuiteCustomProvider } from 'rsuite'
-import rsuiteFrFr from 'rsuite/locales/fr_FR'
+import frFR from 'rsuite/locales/fr_FR'
 
 import { router } from './router'
 
@@ -28,7 +28,7 @@ export function App() {
       <GlobalStyle />
       <CustomGlobalStyle />
 
-      <RsuiteCustomProvider locale={rsuiteFrFr}>
+      <RsuiteCustomProvider locale={frFR}>
         <FrontendErrorBoundary>
           <RouterProvider router={router} />
         </FrontendErrorBoundary>

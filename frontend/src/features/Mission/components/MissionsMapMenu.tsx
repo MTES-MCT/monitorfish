@@ -11,8 +11,8 @@ import styled from 'styled-components'
 
 import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
 import { setLeftMapBoxOpened } from '../../../domain/shared_slices/Global'
-import { MapToolBox } from '../../MainWindow/components/MapButtons/shared/MapToolBox'
-import { MapToolButton } from '../../MainWindow/components/MapButtons/shared/MapToolButton'
+import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
+import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 
 export function MissionsMapMenu() {
   const dispatch = useMainAppDispatch()

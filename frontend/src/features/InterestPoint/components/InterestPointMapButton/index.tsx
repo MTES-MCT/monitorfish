@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { EditInterestPoint } from './EditInterestPoint'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
-import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'
+import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { interestPointActions } from '../../slice'
 
 import type { InterestPoint } from '@features/InterestPoint/types'

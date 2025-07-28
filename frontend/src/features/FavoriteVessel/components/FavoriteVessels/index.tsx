@@ -1,6 +1,6 @@
 import { COLORS } from '@constants/constants'
-import { MapToolBox } from '@features/MainWindow/components/MapButtons/shared/MapToolBox'
-import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
+import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
+import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { MapBox } from '@features/Map/constants'
 import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'

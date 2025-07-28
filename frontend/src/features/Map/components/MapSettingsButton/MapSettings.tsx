@@ -1,4 +1,4 @@
-import { VESSEL_LABEL_OPTIONS } from '@features/MainWindow/components/MapButtons/VesselVisibility/constants'
+import { VESSEL_LABEL_OPTIONS } from '@features/Map/components/MapSettingsButton/constants'
 import { TrackDepthSelection } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/TrackDepthSelection'
 import { displayVesselsEstimatedPositions } from '@features/Vessel/useCases/displayVesselEstimatedPositions'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -7,17 +7,17 @@ import { Icon, MapMenuDialog, MultiRadio, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { LastPositionsVisibilitySlider } from './LastPositionsVisibilitySlider'
-import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
-import { MapPropertyTrigger } from '../../../../commonComponents/MapPropertyTrigger'
-import EstimatedPositionSVG from '../../../../icons/Positions_estimees.svg?react'
-import { setRiskFactorShowedOnMap, setVesselLabel, setVesselLabelsShowedOnMap } from '../../../../Map/slice'
-import { setHideNonSelectedVessels } from '../../../../Vessel/slice'
-import { updateDefaultVesselTrackDepth } from '../../../../Vessel/useCases/updateDefaultVesselTrackDepth'
-import { MapToolBox } from '../shared/MapToolBox'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
+import { MapPropertyTrigger } from '../../../commonComponents/MapPropertyTrigger'
+import EstimatedPositionSVG from '../../../icons/Positions_estimees.svg?react'
+import { setRiskFactorShowedOnMap, setVesselLabel, setVesselLabelsShowedOnMap } from '../../slice'
+import { setHideNonSelectedVessels } from '../../../Vessel/slice'
+import { updateDefaultVesselTrackDepth } from '../../../Vessel/useCases/updateDefaultVesselTrackDepth'
+import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 
 import type { VesselLabel } from '@features/Vessel/label.types'
 
-export function EditVesselVisibility({ isOpened, onClose }) {
+export function MapSettings({ isOpened, onClose }) {
   const dispatch = useMainAppDispatch()
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
   const defaultVesselTrackDepth = useMainAppSelector(state => state.map.defaultVesselTrackDepth)
@@ -175,6 +175,6 @@ const LastPositionInfo = styled.div`
 `
 
 const Wrapper = styled(MapToolBox)`
-  top: 172px;
+  top: 244px;
   width: 406px;
 `

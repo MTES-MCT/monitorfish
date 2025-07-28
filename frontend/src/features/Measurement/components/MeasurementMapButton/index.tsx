@@ -12,7 +12,7 @@ import styled from 'styled-components'
 import { CustomCircleRange } from './CustomCircleRange'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { MapComponent } from '../../../commonStyles/MapComponent'
-import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'
+import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { setMeasurementTypeToAdd } from '../../slice'
 
 export function MeasurementMapButton() {

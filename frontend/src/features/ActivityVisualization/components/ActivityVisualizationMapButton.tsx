@@ -1,4 +1,4 @@
-import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
+import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 

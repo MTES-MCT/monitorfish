@@ -156,9 +156,7 @@ const Label = styled.span<{
   $isRecentSegment: boolean
   $isSegment: boolean
 }>`
-  margin-top: 2px;
-  padding-left: 2px;
-  padding-right: 2px;
+  margin-top: 1px;
   height: 16px;
   display: inline-block;
   line-height: 14px;
@@ -276,7 +274,7 @@ const RiskFactorBox = styled.div`
 const VesselLabelOverlayElement = styled.div`
   box-shadow: 0 2px 3px ${p => p.theme.color.charcoalShadow};
   cursor: grabbing;
-  height: 20px;
+  height: 18px;
   display: flex;
   border-radius: 1px;
 `
@@ -284,7 +282,7 @@ const VesselLabelOverlayElement = styled.div`
 const Flag = styled.img<{
   $rel?: 'preload'
 }>`
-  height: 13px;
+  height: 11px;
   margin: 0 0 8px 4px;
   user-select: none;
 `
@@ -308,8 +306,8 @@ const RiskFactor = styled.span<{
   $hasText: boolean
 }>`
   width: 24px;
-  height: 19px;
-  padding-top: 1px;
+  height: 18px;
+  padding-top: 0;
   padding-left: 6px;
   padding-right: 0;
   font-size: 13px;
@@ -318,7 +316,7 @@ const RiskFactor = styled.span<{
   user-select: none;
   color: ${p => p.theme.color.white};
   background: ${p => p.color};
-  line-height: 17px;
+  line-height: 16px;
   cursor: pointer;
   border-radius: 1px;
   ${p => (p.$hasText ? 'border-bottom-left-radius: 0;' : null)}

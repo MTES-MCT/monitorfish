@@ -32,8 +32,11 @@ export function BannerStack() {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  left: 0;
+  left: 64px;
   position: absolute;
   top: 0;
-  width: 100%;
+  // 64px is the sidemenu width
+  width: calc(100% - 64px);
+  // More than the dialog z-index
+  z-index: 9999;
 `

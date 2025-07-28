@@ -254,6 +254,7 @@ const GlobalStyle = createGlobalStyle<{
                   > label {
                     .rs-checkbox-control {
                       top: -13px;
+                      left: 0;
                     }
                   }
                 }

@@ -1,4 +1,6 @@
 import { COLORS } from '@constants/constants'
+import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
+import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { MapBox } from '@features/Map/constants'
 import { addMission } from '@features/Mission/useCases/addMission'
 import { SideWindowMenuKey, SideWindowStatus } from '@features/SideWindow/constants'
@@ -11,8 +13,6 @@ import styled from 'styled-components'
 
 import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
 import { setLeftMapBoxOpened } from '../../../domain/shared_slices/Global'
-import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
-import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 
 export function MissionsMapMenu() {
   const dispatch = useMainAppDispatch()

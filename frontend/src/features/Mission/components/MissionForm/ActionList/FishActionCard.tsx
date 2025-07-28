@@ -31,16 +31,19 @@ export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishAct
     missionAction.actionType === MissionAction.MissionActionType.SEA_CONTROL
 
   const [actionLabel, ActionIcon] = useMemo(() => {
-    const vesselName = missionAction.vesselName === UNKNOWN_VESSEL.vesselName ? 'INCONNU' : missionAction.vesselName
+    const vesselName =
+      missionAction.vesselName === UNKNOWN_VESSEL.vesselName ? 'Navire inconnu' : missionAction.vesselName
+    const flagState = missionAction.flagState === UNKNOWN_VESSEL.flagState ? undefined : missionAction.flagState
 
     switch (missionAction.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL:
-        return [getActionTitle('Contrôle aérien', vesselName, 'Navire inconnu'), Icon.Plane]
+        return [getActionTitle('Contrôle aérien', flagState, vesselName, 'Navire inconnu'), Icon.Plane]
 
       case MissionAction.MissionActionType.AIR_SURVEILLANCE:
         return [
           getActionTitle(
             'Surveillance aérienne',
+            undefined,
             missionAction.numberOfVesselsFlownOver
               ? `${missionAction.numberOfVesselsFlownOver} pistes survolées`
               : undefined,
@@ -50,13 +53,13 @@ export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishAct
         ]
 
       case MissionAction.MissionActionType.LAND_CONTROL:
-        return [getActionTitle('Contrôle à la débarque', vesselName, 'Navire inconnu'), Icon.Anchor]
+        return [getActionTitle('Contrôle à la débarque', flagState, vesselName, 'Navire inconnu'), Icon.Anchor]
 
       case MissionAction.MissionActionType.OBSERVATION:
         return [<NoteContent>{missionAction.otherComments ?? 'Note libre à renseigner'}</NoteContent>, Icon.Note]
 
       case MissionAction.MissionActionType.SEA_CONTROL:
-        return [getActionTitle('Contrôle en mer', vesselName, 'Navire inconnu'), Icon.FleetSegment]
+        return [getActionTitle('Contrôle en mer', flagState, vesselName, 'Navire inconnu'), Icon.FleetSegment]
 
       default:
         throw new FrontendError('`initialValues.actionType` does not match the enum')

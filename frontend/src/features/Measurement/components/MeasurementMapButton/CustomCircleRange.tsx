@@ -1,3 +1,4 @@
+import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { CoordinatesFormat, MeasurementType, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -8,7 +9,6 @@ import styled from 'styled-components'
 
 import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
 import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
-import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import {
   resetCircleMeasurementInDrawing,
   setCircleMeasurementInDrawing,

@@ -5,10 +5,9 @@ import { NewFeatures } from '@features/NewFeatures/components/NewFeatures'
 import { VesselListMapButton } from '@features/Vessel/components/VesselListMapButton'
 import { VesselGroupMapButton } from '@features/VesselGroup/components/VesselGroupMapButton'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { LegacyRsuiteComponentsWrapper } from '../../../../ui/LegacyRsuiteComponentsWrapper'
 
-import { MapSettingsButton } from '../MapSettingsButton'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
+import { LegacyRsuiteComponentsWrapper } from '../../../../ui/LegacyRsuiteComponentsWrapper'
 import { AlertsMapButton } from '../../../Alert/components/AlertsMapButton'
 import { BeaconMalfunctionsMapButton } from '../../../BeaconMalfunction/components/BeaconMalfunctionsMapButton'
 import { FavoriteVessels } from '../../../FavoriteVessel/components/FavoriteVessels'
@@ -16,6 +15,7 @@ import { InterestPointMapButton } from '../../../InterestPoint/components/Intere
 import { MeasurementMapButton } from '../../../Measurement/components/MeasurementMapButton'
 import { MissionsMapMenu } from '../../../Mission/components/MissionsMapMenu'
 import { PriorNotificationListButton } from '../../../PriorNotification/components/PriorNotificationListButton'
+import { MapSettingsButton } from '../MapSettingsButton'
 
 export function MapButtons() {
   const isSuperUser = useIsSuperUser()

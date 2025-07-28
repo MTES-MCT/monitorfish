@@ -1,3 +1,4 @@
+import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { VESSEL_LABEL_OPTIONS } from '@features/Map/components/MapSettingsButton/constants'
 import { TrackDepthSelection } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/TrackDepthSelection'
 import { displayVesselsEstimatedPositions } from '@features/Vessel/useCases/displayVesselEstimatedPositions'
@@ -10,10 +11,9 @@ import { LastPositionsVisibilitySlider } from './LastPositionsVisibilitySlider'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { MapPropertyTrigger } from '../../../commonComponents/MapPropertyTrigger'
 import EstimatedPositionSVG from '../../../icons/Positions_estimees.svg?react'
-import { setRiskFactorShowedOnMap, setVesselLabel, setVesselLabelsShowedOnMap } from '../../slice'
 import { setHideNonSelectedVessels } from '../../../Vessel/slice'
 import { updateDefaultVesselTrackDepth } from '../../../Vessel/useCases/updateDefaultVesselTrackDepth'
-import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
+import { setRiskFactorShowedOnMap, setVesselLabel, setVesselLabelsShowedOnMap } from '../../slice'
 
 import type { VesselLabel } from '@features/Vessel/label.types'
 

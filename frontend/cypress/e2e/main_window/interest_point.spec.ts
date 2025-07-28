@@ -124,7 +124,7 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="interest-point-edit"]').click({ force: true })
     cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 })
       .should('have.value', '47° 42′ 07″ N 007° 54′ 51″ E')
-    cy.get('.Field-MultiRadio').contains('Type de point').get('[aria-checked="true"]').contains('Autre point')
+    cy.get('.Field-MultiRadio').contains('Type de point').get('.rs-radio-checked').contains('Autre point')
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
 
     cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('47° 42′', { timeout: 10000 })

@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-
 import { MapButton } from '@features/Map/components/MapButtons/MapButton'
+import styled from 'styled-components'
 
 export const VesselSidebarActionButton = styled(MapButton)<{
   $backgroundColor?: string

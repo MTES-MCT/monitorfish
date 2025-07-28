@@ -1,3 +1,4 @@
+import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { MapBox } from '@features/Map/constants'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -8,7 +9,6 @@ import styled from 'styled-components'
 import { MapSettings } from './MapSettings'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
-import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 
 export function MapSettingsButton() {
   const dispatch = useMainAppDispatch()

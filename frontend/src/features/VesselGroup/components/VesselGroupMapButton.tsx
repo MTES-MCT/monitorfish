@@ -1,3 +1,4 @@
+import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { MapBox } from '@features/Map/constants'
 import { VesselGroupMenuDialog } from '@features/VesselGroup/components/VesselGroupMenuDialog'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -6,7 +7,6 @@ import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
-import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 
 const MARGIN_TOP = 124
 

@@ -17,6 +17,7 @@ export function EnvActionCard({ missionAction }: EnvActionCardProps) {
           getActionTitle(
             EnvMissionAction.MISSION_ACTION_TYPE_LABEL[EnvMissionAction.MissionActionType.CONTROL],
             undefined,
+            undefined,
             ''
           ),
           Icon.ControlUnit
@@ -30,13 +31,14 @@ export function EnvActionCard({ missionAction }: EnvActionCardProps) {
           getActionTitle(
             EnvMissionAction.MISSION_ACTION_TYPE_LABEL[EnvMissionAction.MissionActionType.SURVEILLANCE],
             undefined,
+            undefined,
             ''
           ),
           Icon.Observation
         ]
 
       default:
-        return [getActionTitle(undefined, undefined, ''), Icon.Plane]
+        return [getActionTitle(undefined, undefined, undefined, ''), Icon.Plane]
     }
   }, [missionAction])
 

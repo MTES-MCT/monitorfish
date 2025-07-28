@@ -149,7 +149,7 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
 
   /* From App.css */
 
-  .checkbox-hidden > div > label > .rs-checkbox-wrapper {
+  .checkbox-hidden > div > label > .rs-checkbox-checker {
     opacity: 0 !important;
     margin-left: -40px;
     position: inherit;

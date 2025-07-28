@@ -5,14 +5,14 @@ import { BaseLayer } from '../../constants'
 
 type BaseLayerRowProps = {
   layer: string
-  onChange: (string) => void
+  onChange: (layer: string) => void
   selectedBaseLayer: string
 }
 export function BaseLayerRow({ layer, onChange, selectedBaseLayer }: BaseLayerRowProps) {
   return (
     <Row className="base-layers-selection" onClick={() => onChange(layer)}>
       {BaseLayer[layer].text}{' '}
-      <StyledRadio checked={layer === selectedBaseLayer} name={layer} value={layer}>
+      <StyledRadio checked={layer === selectedBaseLayer} labelPosition="left" name={layer} value={layer}>
         {' '}
       </StyledRadio>
     </Row>

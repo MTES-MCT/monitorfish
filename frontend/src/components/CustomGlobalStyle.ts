@@ -155,7 +155,7 @@ export const CustomGlobalStyle = createGlobalStyle`
     height: 25px;
   }
 
-  .checkbox-hidden > div > label > .rs-checkbox-wrapper {
+  .checkbox-hidden > div > label > .rs-checkbox-control {
     opacity: 0 !important;
     margin-left: -40px;
     position: inherit;

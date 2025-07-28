@@ -232,7 +232,7 @@ const GlobalStyle = createGlobalStyle<{
               > .rs-checkbox {
                 > .rs-checkbox-checker {
                   > label {
-                    .rs-checkbox-wrapper {
+                    .rs-checkbox-control {
                       top: -8px;
                     }
                   }
@@ -252,7 +252,7 @@ const GlobalStyle = createGlobalStyle<{
               > .rs-checkbox {
                 > .rs-checkbox-checker {
                   > label {
-                    .rs-checkbox-wrapper {
+                    .rs-checkbox-control {
                       top: -13px;
                     }
                   }

@@ -64,7 +64,8 @@ context('InterestPoint', () => {
   it('An interest Should be created from input When DD coordinates are selected', () => {
     // When
     cy.get('*[data-cy="coordinates-selection"]').click({ force: true, timeout: 10000 })
-    cy.get('*[value="DD"]').click({ timeout: 10000 })
+    cy.wait(500)
+    cy.get('*[value="DD"]').click({ force: true, timeout: 10000 })
     cy.get('#root').click(159, 1000, { timeout: 10000 })
     cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
 
@@ -84,7 +85,8 @@ context('InterestPoint', () => {
   it('An interest Should be edited When DMD coordinates are selected', () => {
     // When
     cy.get('*[data-cy="coordinates-selection"]').click({ force: true, timeout: 10000 })
-    cy.get('*[value="DMD"]').click({ timeout: 10000 })
+    cy.wait(500)
+    cy.get('*[value="DMD"]').click({ force: true, timeout: 10000 })
     cy.get('#root').click(159, 1000, { timeout: 10000 })
     cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
     cy.get('#root').click(490, 580, { timeout: 10000 })

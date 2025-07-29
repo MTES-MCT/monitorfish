@@ -20,6 +20,7 @@ export function formatDateLabel(dateLabel: string) {
 export function getActionTitle(
   subject: string | undefined,
   flagState: string | undefined,
+  isUnknown: boolean | undefined,
   details: string | undefined,
   placeholder: string | undefined
 ): ReactNode {
@@ -29,7 +30,8 @@ export function getActionTitle(
         {!!subject && <>{subject}</>}
         <Strong>
           {flagState && <StyledFlag src={`${baseUrl}/flags/${flagState.toLowerCase()}.svg`} />}
-          {details}
+          {isUnknown && <i>{details}</i>}
+          {!isUnknown && details}
         </Strong>
       </StyledSpan>
     )

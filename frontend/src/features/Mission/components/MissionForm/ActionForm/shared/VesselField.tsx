@@ -2,7 +2,7 @@ import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants
 import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { VesselSearch } from '@features/VesselSearch'
-import { Checkbox, useNewWindow } from '@mtes-mct/monitor-ui'
+import { Checkbox, FormikTextInput, useNewWindow } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
 import styled from 'styled-components'
@@ -61,7 +61,7 @@ export function VesselField() {
     }
 
     // TODO Show an error in this case?
-    if (!nextVessel.vesselId || !nextVessel.vesselName) {
+    if (!nextVessel.vesselId) {
       return
     }
 
@@ -116,6 +116,9 @@ export function VesselField() {
             onChange={handleIsVesselUnknownChange}
           />
         </Field>
+        {values.vesselId === UNKNOWN_VESSEL.vesselId && (
+          <StyledFormikTextInput isErrorMessageHidden isLight label="Nom du navire" name="vesselName" />
+        )}
         {values.vesselId && values.vesselId !== UNKNOWN_VESSEL.vesselId && (
           <VesselIdentityBar>
             {values.internalReferenceNumber && (
@@ -146,6 +149,10 @@ export function VesselField() {
     </>
   )
 }
+
+const StyledFormikTextInput = styled(FormikTextInput)`
+  margin-top: 8px;
+`
 
 const ErrorMessage = styled.p`
   color: ${p => p.theme.color.maximumRed};

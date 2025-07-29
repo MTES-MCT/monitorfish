@@ -70,6 +70,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
         <Body>
           <Title $isSelected={isSelected}>
             {mission.controlUnits.length === 1 &&
+              !!mission.controlUnits[0]?.id &&
               mission.controlUnits.map((controlUnit: LegacyControlUnit.LegacyControlUnit) => (
                 <Fragment key={controlUnit.id}>
                   <TextWithEllipsis>{controlUnit.name.toUpperCase()}</TextWithEllipsis>

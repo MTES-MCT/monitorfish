@@ -23,7 +23,7 @@ export const FormHead = styled.div<{
     line-height: 1.4;
     margin: 0;
 
-    > div {
+    > span {
       margin-right: 8px;
       vertical-align: -2px;
     }

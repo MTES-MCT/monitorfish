@@ -25,6 +25,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Form
 
     cy.fill('Navire inconnu', true)
+    cy.fill('Nom du navire', "Un navire")
     cy.fill('Ajouter un engin', 'MIS')
     // The "Lieu du contrôle" field is stubbed in FormikCoordinatesPicker
 
@@ -41,12 +42,12 @@ context('Side Window > Mission Form > Sea Control', () => {
       '@createMissionAction',
       {
         body: {
-          externalReferenceNumber: 'UNKNOWN',
+          externalReferenceNumber: '',
           flagState: 'UNDEFINED',
-          internalReferenceNumber: 'UNKNOWN',
-          ircs: 'UNKNOWN',
+          internalReferenceNumber: '',
+          ircs: '',
           vesselId: -1,
-          vesselName: 'UNKNOWN'
+          vesselName: 'Un navire'
         }
       },
       5

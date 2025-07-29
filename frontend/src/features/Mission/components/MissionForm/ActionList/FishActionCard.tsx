@@ -34,15 +34,17 @@ export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishAct
     const vesselName =
       missionAction.vesselName === UNKNOWN_VESSEL.vesselName ? 'Navire inconnu' : missionAction.vesselName
     const flagState = missionAction.flagState === UNKNOWN_VESSEL.flagState ? undefined : missionAction.flagState
+    const isUnknown = missionAction.vesselId === UNKNOWN_VESSEL.vesselId
 
     switch (missionAction.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL:
-        return [getActionTitle('Contrôle aérien', flagState, vesselName, 'Navire inconnu'), Icon.Plane]
+        return [getActionTitle('Contrôle aérien', flagState, isUnknown, vesselName, 'Navire inconnu'), Icon.Plane]
 
       case MissionAction.MissionActionType.AIR_SURVEILLANCE:
         return [
           getActionTitle(
             'Surveillance aérienne',
+            undefined,
             undefined,
             missionAction.numberOfVesselsFlownOver
               ? `${missionAction.numberOfVesselsFlownOver} pistes survolées`
@@ -53,13 +55,19 @@ export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishAct
         ]
 
       case MissionAction.MissionActionType.LAND_CONTROL:
-        return [getActionTitle('Contrôle à la débarque', flagState, vesselName, 'Navire inconnu'), Icon.Anchor]
+        return [
+          getActionTitle('Contrôle à la débarque', flagState, isUnknown, vesselName, 'Navire inconnu'),
+          Icon.Anchor
+        ]
 
       case MissionAction.MissionActionType.OBSERVATION:
         return [<NoteContent>{missionAction.otherComments ?? 'Note libre à renseigner'}</NoteContent>, Icon.Note]
 
       case MissionAction.MissionActionType.SEA_CONTROL:
-        return [getActionTitle('Contrôle en mer', flagState, vesselName, 'Navire inconnu'), Icon.FleetSegment]
+        return [
+          getActionTitle('Contrôle en mer', flagState, isUnknown, vesselName, 'Navire inconnu'),
+          Icon.FleetSegment
+        ]
 
       default:
         throw new FrontendError('`initialValues.actionType` does not match the enum')

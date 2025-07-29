@@ -246,10 +246,12 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                     "ABC000180832",
                     ZonedDateTime.now().minusYears(1),
                 ).first()
+        assertThat(reportingToArchive.id).isEqualTo(1)
         assertThat(reportingToArchive.isArchived).isEqualTo(false)
+        assertThat(reportingToArchive.archivingDate).isNull()
 
         // When
-        jpaReportingRepository.archive(reportingToArchive.id!!)
+        jpaReportingRepository.archive(1)
 
         // Then
         val archivedReporting =
@@ -258,8 +260,10 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                     VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     "ABC000180832",
                     ZonedDateTime.now().minusYears(1),
-                ).first()
+                ).first { it.id == 1 }
+        assertThat(archivedReporting.id).isEqualTo(1)
         assertThat(archivedReporting.isArchived).isEqualTo(true)
+        assertThat(archivedReporting.archivingDate).isBefore(ZonedDateTime.now())
     }
 
     @Test
@@ -378,14 +382,14 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000042310")
         assertThat((reporting.value as InfractionSuspicion).reportingActor).isEqualTo(updatedReporting.reportingActor)
-        assertThat((reporting.value as InfractionSuspicion).controlUnitId).isEqualTo(updatedReporting.controlUnitId)
-        assertThat((reporting.value as InfractionSuspicion).authorTrigram).isEqualTo(updatedReporting.authorTrigram)
-        assertThat((reporting.value as InfractionSuspicion).authorContact).isEqualTo(updatedReporting.authorContact)
-        assertThat((reporting.value as InfractionSuspicion).title).isEqualTo(updatedReporting.title)
-        assertThat((reporting.value as InfractionSuspicion).description).isEqualTo(updatedReporting.description)
-        assertThat((reporting.value as InfractionSuspicion).natinfCode).isEqualTo(updatedReporting.natinfCode)
-        assertThat((reporting.value as InfractionSuspicion).seaFront).isEqualTo(updatedReporting.seaFront)
-        assertThat((reporting.value as InfractionSuspicion).dml).isEqualTo(updatedReporting.dml)
+        assertThat((reporting.value).controlUnitId).isEqualTo(updatedReporting.controlUnitId)
+        assertThat((reporting.value).authorTrigram).isEqualTo(updatedReporting.authorTrigram)
+        assertThat((reporting.value).authorContact).isEqualTo(updatedReporting.authorContact)
+        assertThat((reporting.value).title).isEqualTo(updatedReporting.title)
+        assertThat((reporting.value).description).isEqualTo(updatedReporting.description)
+        assertThat((reporting.value).natinfCode).isEqualTo(updatedReporting.natinfCode)
+        assertThat((reporting.value).seaFront).isEqualTo(updatedReporting.seaFront)
+        assertThat((reporting.value).dml).isEqualTo(updatedReporting.dml)
     }
 
     @Test
@@ -409,11 +413,11 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000597493")
         assertThat((reporting.value as Observation).reportingActor).isEqualTo(updatedReporting.reportingActor)
-        assertThat((reporting.value as Observation).controlUnitId).isEqualTo(updatedReporting.controlUnitId)
-        assertThat((reporting.value as Observation).authorTrigram).isEqualTo(updatedReporting.authorTrigram)
-        assertThat((reporting.value as Observation).authorContact).isEqualTo(updatedReporting.authorContact)
-        assertThat((reporting.value as Observation).title).isEqualTo(updatedReporting.title)
-        assertThat((reporting.value as Observation).description).isEqualTo(updatedReporting.description)
+        assertThat((reporting.value).controlUnitId).isEqualTo(updatedReporting.controlUnitId)
+        assertThat((reporting.value).authorTrigram).isEqualTo(updatedReporting.authorTrigram)
+        assertThat((reporting.value).authorContact).isEqualTo(updatedReporting.authorContact)
+        assertThat((reporting.value).title).isEqualTo(updatedReporting.title)
+        assertThat((reporting.value).description).isEqualTo(updatedReporting.description)
     }
 
     @Test
@@ -437,11 +441,11 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000042310")
         assertThat(reporting.type).isEqualTo(ReportingType.OBSERVATION)
         assertThat((reporting.value as Observation).reportingActor).isEqualTo(updatedReporting.reportingActor)
-        assertThat((reporting.value as Observation).controlUnitId).isEqualTo(updatedReporting.controlUnitId)
-        assertThat((reporting.value as Observation).authorTrigram).isEqualTo(updatedReporting.authorTrigram)
-        assertThat((reporting.value as Observation).authorContact).isEqualTo(updatedReporting.authorContact)
-        assertThat((reporting.value as Observation).title).isEqualTo(updatedReporting.title)
-        assertThat((reporting.value as Observation).description).isEqualTo(updatedReporting.description)
+        assertThat((reporting.value).controlUnitId).isEqualTo(updatedReporting.controlUnitId)
+        assertThat((reporting.value).authorTrigram).isEqualTo(updatedReporting.authorTrigram)
+        assertThat((reporting.value).authorContact).isEqualTo(updatedReporting.authorContact)
+        assertThat((reporting.value).title).isEqualTo(updatedReporting.title)
+        assertThat((reporting.value).description).isEqualTo(updatedReporting.description)
     }
 
     @Test

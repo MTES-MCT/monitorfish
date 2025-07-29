@@ -81,8 +81,11 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
     @Modifying(clearAutomatically = true)
     @Query(
         value = """
-        UPDATE reportings
-        SET archived = TRUE
+        UPDATE
+            reportings
+        SET
+            archived = TRUE,
+            archiving_date_utc = NOW() AT TIME ZONE 'UTC'
         WHERE id = :id
     """,
         nativeQuery = true,

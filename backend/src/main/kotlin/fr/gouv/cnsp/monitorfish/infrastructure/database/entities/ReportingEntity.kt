@@ -55,6 +55,8 @@ data class ReportingEntity(
     val value: String,
     @Column(name = "archived", nullable = false)
     val isArchived: Boolean,
+    @Column(name = "archiving_date_utc", nullable = true)
+    val archivingDate: ZonedDateTime? = null,
     @Column(name = "deleted", nullable = false)
     val isDeleted: Boolean,
     @Column(name = "latitude")
@@ -76,6 +78,7 @@ data class ReportingEntity(
             creationDate = creationDate,
             validationDate = validationDate,
             expirationDate = expirationDate,
+            archivingDate = archivingDate,
             value = ReportingMapper.getReportingValueFromJSON(mapper, value, type),
             isArchived = isArchived,
             isDeleted = isDeleted,

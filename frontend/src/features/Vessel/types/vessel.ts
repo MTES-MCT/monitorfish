@@ -289,13 +289,13 @@ export enum FishingActivitiesTab {
 export const UNKNOWN_VESSEL: Vessel.VesselIdentity = {
   beaconNumber: undefined,
   districtCode: undefined,
-  externalReferenceNumber: 'UNKNOWN',
+  externalReferenceNumber: '',
   flagState: 'UNDEFINED',
-  internalReferenceNumber: 'UNKNOWN',
-  ircs: 'UNKNOWN',
+  internalReferenceNumber: '',
+  ircs: '',
   mmsi: undefined,
   vesselId: -1,
   vesselIdentifier: undefined,
   vesselLength: undefined,
-  vesselName: 'UNKNOWN'
+  vesselName: ''
 }

@@ -64,8 +64,8 @@ export function VesselSummary() {
           <>
             {selectedVessel?.mmsi ? (
               <Photo
-                $referrerpolicy="no-referrer"
                 onError={() => setPhotoFallback(true)}
+                referrerPolicy="no-referrer"
                 src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${selectedVessel?.mmsi}&size=thumb300`}
               />
             ) : (
@@ -177,7 +177,7 @@ const Body = styled.div`
 `
 
 const Photo = styled.img<{
-  $referrerpolicy: string
+  referrerPolicy: string
 }>`
   max-height: 190px;
   left: auto;

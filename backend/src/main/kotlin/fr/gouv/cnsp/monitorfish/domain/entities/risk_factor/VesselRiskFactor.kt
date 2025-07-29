@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.LastControlPeriod
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import java.time.ZonedDateTime
 
 /**
@@ -61,6 +62,7 @@ data class VesselRiskFactor(
 ) {
     fun isInGroup(
         vesselGroup: VesselGroupBase,
+        profile: VesselProfile?,
         now: ZonedDateTime,
     ): Boolean {
         if (vesselGroup !is DynamicVesselGroup) return false
@@ -90,13 +92,39 @@ data class VesselRiskFactor(
                 null -> true
             }
 
+        val hasFleetSegmentMatch =
+            filters.fleetSegments.isEmpty() || (this.segments.any { it in filters.fleetSegments })
+
+        val hasGearMatch =
+            filters.gearCodes.isEmpty() || (this.gearOnboard.any { it.gear in filters.gearCodes })
+
+        val hasSpecyMatch =
+            filters.specyCodes.isEmpty() || (this.speciesOnboard.any { it.species in filters.specyCodes })
+
         val hasRiskFactorMatch =
             filters.riskFactors.isEmpty() ||
                 filters.riskFactors.any { riskFactor ->
                     this.riskFactor in riskFactor.toDouble()..<(riskFactor + 1).toDouble()
                 }
 
-        return hasLastControlPeriodMatch && hasRiskFactorMatch
+        /**
+         * IF
+         *  a filter on segment or gear is set AND the vessel has not sent any FAR
+         * THEN
+         *  compute the matches on the profile to obtain the recent segment or gear
+         * ELSE
+         *  Match the segments, gears and species based on the current data
+         */
+        return if ((filters.fleetSegments.isNotEmpty() && this.segments.isEmpty()) ||
+            (filters.gearCodes.isNotEmpty() && this.gearOnboard.isEmpty())
+        ) {
+            (profile?.isRecentInGroup(vesselGroup) ?: false) &&
+                hasSpecyMatch &&
+                hasLastControlPeriodMatch &&
+                hasRiskFactorMatch
+        } else {
+            hasFleetSegmentMatch && hasGearMatch && hasSpecyMatch && hasLastControlPeriodMatch && hasRiskFactorMatch
+        }
     }
 
     fun isLastPositionInGroup(vesselGroup: VesselGroupBase): Boolean {

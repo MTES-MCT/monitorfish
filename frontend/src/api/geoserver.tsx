@@ -146,7 +146,7 @@ function getAdministrativeZoneURL(
 
   let subZoneFilter = ''
   if (subZone) {
-    const filter = `${subZone.replace(/'/g, "''")}`
+    const filter = `${encodeURIComponent(subZone).replace(/'/g, "''")}`
 
     subZoneFilter = `&featureID=${filter.replace(/'/g, '%27').replace(/ /g, '%20')}`
   }

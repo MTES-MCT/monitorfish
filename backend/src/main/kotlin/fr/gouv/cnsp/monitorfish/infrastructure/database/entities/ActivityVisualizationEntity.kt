@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import fr.gouv.cnsp.monitorfish.domain.entities.activity.ActivityVisualization
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import jakarta.persistence.*
 import java.time.Instant
 import java.time.ZoneOffset

@@ -416,4 +416,283 @@ class DynamicVesselGroupUTests {
         // Then
         assertThat(containsVessel).isFalse
     }
+
+    @Test
+    fun `containsActiveVessel should return false when vessel has no lastPosition and filters require position data`() {
+        // Given
+        val vessel =
+            EnrichedActiveVessel(
+                lastPosition = null,
+                vesselProfile = DUMMY_VESSEL_PROFILE,
+                vessel =
+                    Vessel(
+                        id = 123,
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        underCharter = true,
+                        hasLogbookEsacapt = false,
+                    ),
+                producerOrganization = null,
+                riskFactor = VesselRiskFactor(),
+            )
+
+        val groupWithPositionFilter =
+            DynamicVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Group with position filter",
+                description = "",
+                pointsOfAttention = "",
+                color = "",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.now(),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                startOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf(CountryCode.FR),
+                        districtCodes = listOf(),
+                        fleetSegments = emptyList(),
+                        emitsPositions = emptyList(),
+                        gearCodes = emptyList(),
+                        hasLogbook = null,
+                        lastControlPeriod = null,
+                        lastLandingPortLocodes = emptyList(),
+                        lastPositionHoursAgo = 24,
+                        producerOrganizations = emptyList(),
+                        riskFactors = emptyList(),
+                        specyCodes = emptyList(),
+                        vesselSize = null,
+                        vesselsLocation = listOf(VesselLocation.SEA),
+                        zones = listOf(),
+                    ),
+            )
+
+        // When
+        val containsVessel =
+            groupWithPositionFilter.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
+
+        // Then
+        assertThat(containsVessel).isFalse
+    }
+
+    @Test
+    fun `containsActiveVessel should return false when vessel has no lastPosition and only lastPositionHoursAgo filter is set`() {
+        // Given
+        val vessel =
+            EnrichedActiveVessel(
+                lastPosition = null,
+                vesselProfile = DUMMY_VESSEL_PROFILE,
+                vessel =
+                    Vessel(
+                        id = 123,
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        underCharter = true,
+                        hasLogbookEsacapt = false,
+                    ),
+                producerOrganization = null,
+                riskFactor = VesselRiskFactor(),
+            )
+
+        val groupWithHoursAgoFilter =
+            DynamicVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Group with hours ago filter",
+                description = "",
+                pointsOfAttention = "",
+                color = "",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.now(),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                startOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf(CountryCode.FR),
+                        districtCodes = listOf(),
+                        fleetSegments = emptyList(),
+                        emitsPositions = emptyList(),
+                        gearCodes = emptyList(),
+                        hasLogbook = null,
+                        lastControlPeriod = null,
+                        lastLandingPortLocodes = emptyList(),
+                        lastPositionHoursAgo = 24,
+                        producerOrganizations = emptyList(),
+                        riskFactors = emptyList(),
+                        specyCodes = emptyList(),
+                        vesselSize = null,
+                        vesselsLocation = emptyList(),
+                        zones = emptyList(),
+                    ),
+            )
+
+        // When
+        val containsVessel =
+            groupWithHoursAgoFilter.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
+
+        // Then
+        assertThat(containsVessel).isFalse
+    }
+
+    @Test
+    fun `containsActiveVessel should return false when vessel has no lastPosition and only vesselsLocation filter is set`() {
+        // Given
+        val vessel =
+            EnrichedActiveVessel(
+                lastPosition = null,
+                vesselProfile = DUMMY_VESSEL_PROFILE,
+                vessel =
+                    Vessel(
+                        id = 123,
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        underCharter = true,
+                        hasLogbookEsacapt = false,
+                    ),
+                producerOrganization = null,
+                riskFactor = VesselRiskFactor(),
+            )
+
+        val groupWithLocationFilter =
+            DynamicVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Group with location filter",
+                description = "",
+                pointsOfAttention = "",
+                color = "",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.now(),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                startOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf(CountryCode.FR),
+                        districtCodes = listOf(),
+                        fleetSegments = emptyList(),
+                        emitsPositions = emptyList(),
+                        gearCodes = emptyList(),
+                        hasLogbook = null,
+                        lastControlPeriod = null,
+                        lastLandingPortLocodes = emptyList(),
+                        lastPositionHoursAgo = null,
+                        producerOrganizations = emptyList(),
+                        riskFactors = emptyList(),
+                        specyCodes = emptyList(),
+                        vesselSize = null,
+                        vesselsLocation = listOf(VesselLocation.SEA),
+                        zones = emptyList(),
+                    ),
+            )
+
+        // When
+        val containsVessel =
+            groupWithLocationFilter.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
+
+        // Then
+        assertThat(containsVessel).isFalse
+    }
+
+    @Test
+    fun `containsActiveVessel should return false when vessel has no lastPosition and only zones filter is set`() {
+        // Given
+        val vessel =
+            EnrichedActiveVessel(
+                lastPosition = null,
+                vesselProfile = DUMMY_VESSEL_PROFILE,
+                vessel =
+                    Vessel(
+                        id = 123,
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        underCharter = true,
+                        hasLogbookEsacapt = false,
+                    ),
+                producerOrganization = null,
+                riskFactor = VesselRiskFactor(),
+            )
+
+        val groupWithZoneFilter =
+            DynamicVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Group with zone filter",
+                description = "",
+                pointsOfAttention = "",
+                color = "",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.now(),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                startOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf(CountryCode.FR),
+                        districtCodes = listOf(),
+                        fleetSegments = emptyList(),
+                        emitsPositions = emptyList(),
+                        gearCodes = emptyList(),
+                        hasLogbook = null,
+                        lastControlPeriod = null,
+                        lastLandingPortLocodes = emptyList(),
+                        lastPositionHoursAgo = null,
+                        producerOrganizations = emptyList(),
+                        riskFactors = emptyList(),
+                        specyCodes = emptyList(),
+                        vesselSize = null,
+                        vesselsLocation = emptyList(),
+                        zones =
+                            listOf(
+                                ZoneFilter(
+                                    feature =
+                                        org.locationtech.jts.geom.GeometryFactory().createPoint(
+                                            org.locationtech.jts.geom
+                                                .Coordinate(0.0, 0.0),
+                                        ),
+                                    label = "Test Zone",
+                                    value = "TEST_ZONE",
+                                ),
+                            ),
+                    ),
+            )
+
+        // When
+        val containsVessel =
+            groupWithZoneFilter.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
+
+        // Then
+        assertThat(containsVessel).isFalse
+    }
 }

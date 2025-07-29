@@ -1,6 +1,6 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_THIRTY_SECONDS_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { ALL_SEAFRONT_GROUP } from '@constants/seafront'
-import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
+import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { useGetPriorNotificationsToVerifyQuery } from '@features/PriorNotification/priorNotificationApi'
 import { SideWindowMenuKey, SideWindowStatus } from '@features/SideWindow/constants'
 import { sideWindowActions } from '@features/SideWindow/slice'

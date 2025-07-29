@@ -3,7 +3,7 @@ import { SelectPicker } from 'rsuite'
 import styled from 'styled-components'
 
 import type { CSSProperties, ReactNode } from 'react'
-import type { TypeAttributes } from 'rsuite/esm/@types/common'
+import type { TypeAttributes } from 'rsuite/esm/internals/types'
 
 type CustomSelectComponentProps = Readonly<{
   cleanable?: boolean

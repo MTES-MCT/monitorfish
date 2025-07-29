@@ -88,12 +88,12 @@ export const CustomCheckbox = styled(Checkbox)`
   display: flex;
   vertical-align: baseline;
   margin-left: 0px;
-  .rs-checkbox-wrapper {
+  .rs-checkbox-checker {
     top: 0px !important;
     left: 0px !important;
     border: 1px solid ${p => (p.$isRequired ? THEME.color.maximumRed : THEME.color.lightGray)};
   }
-  .rs-checkbox-wrapper .rs-checkbox-inner {
+  .rs-checkbox-checker .rs-checkbox-inner {
     &:before {
       border: none !important;
       box-sizing: border-box;

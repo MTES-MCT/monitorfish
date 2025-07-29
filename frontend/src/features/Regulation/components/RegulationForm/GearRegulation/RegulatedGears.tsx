@@ -227,6 +227,7 @@ export function RegulatedGears({
           </InfoBox>
         </CheckboxWrapper>
         <CustomMultiCascader
+          $valueIsMissing={false}
           cleanable={false}
           data={formattedAndFilteredCategoriesToGears}
           data-cy={`${dataCyTarget}-gears-selector`}
@@ -329,7 +330,9 @@ const MultiCascaderLabel = styled.span`
   color: ${p => p.theme.color.slateGray};
 `
 
-const CustomMultiCascader = styled(MultiCascader)`
+const CustomMultiCascader = styled(MultiCascader)<{
+  $valueIsMissing: boolean | undefined
+}>`
   a {
     box-sizing: border-box;
     border-color: ${p => (p.$valueIsMissing ? p.theme.color.maximumRed : p.theme.color.lightGray)}!important;

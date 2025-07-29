@@ -1,4 +1,4 @@
-import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
+import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { SideWindowMenuKey, SideWindowStatus } from '@features/SideWindow/constants'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { countVesselListFilter } from '@features/Vessel/components/VesselList/utils'
@@ -23,7 +23,7 @@ export function VesselListMapButton() {
     <MapToolButton
       badgeNumber={numberOfFilters || undefined}
       data-cy="vessel-list"
-      Icon={Icon.VesselList}
+      Icon={Icon.ListLines}
       isActive={isActive}
       onClick={toggleSideWindow}
       style={{ top: 76 }}

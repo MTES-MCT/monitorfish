@@ -111,7 +111,7 @@ const Box = styled.div`
           text-overflow: ellipsis;
           white-space: nowrap;
 
-          > .rs-checkbox-wrapper {
+          > .rs-checkbox-control {
             left: 12px;
             top: 10px !important;
           }

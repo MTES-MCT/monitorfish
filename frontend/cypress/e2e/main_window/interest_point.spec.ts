@@ -64,8 +64,9 @@ context('InterestPoint', () => {
   it('An interest Should be created from input When DD coordinates are selected', () => {
     // When
     cy.get('*[data-cy="coordinates-selection"]').click({ force: true, timeout: 10000 })
+    cy.wait(500)
+    cy.get('*[value="DD"]').click({ force: true, timeout: 10000 })
     cy.get('#root').click(159, 1000, { timeout: 10000 })
-    cy.get('*[data-cy="coordinates-selection-dd"]').click({ timeout: 10000 })
     cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
 
     // Then
@@ -84,8 +85,9 @@ context('InterestPoint', () => {
   it('An interest Should be edited When DMD coordinates are selected', () => {
     // When
     cy.get('*[data-cy="coordinates-selection"]').click({ force: true, timeout: 10000 })
+    cy.wait(500)
+    cy.get('*[value="DMD"]').click({ force: true, timeout: 10000 })
     cy.get('#root').click(159, 1000, { timeout: 10000 })
-    cy.get('*[data-cy="coordinates-selection-dmd"]').click({ timeout: 10000 })
     cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
     cy.get('#root').click(490, 580, { timeout: 10000 })
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
@@ -124,7 +126,7 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="interest-point-edit"]').click({ force: true })
     cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 })
       .should('have.value', '47° 42′ 07″ N 007° 54′ 51″ E')
-    cy.get('.Field-MultiRadio').contains('Type de point').get('[aria-checked="true"]').contains('Autre point')
+    cy.get('.Field-MultiRadio').contains('Type de point').get('.rs-radio-checked').contains('Autre point')
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
 
     cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('47° 42′', { timeout: 10000 })

@@ -138,6 +138,8 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
           note: "Un point d'attention mis à jour.",
           reportId: createdPriorNotification.reportId
         })
+
+        cy.clickButton('Diffuser')
       })
     })
   })

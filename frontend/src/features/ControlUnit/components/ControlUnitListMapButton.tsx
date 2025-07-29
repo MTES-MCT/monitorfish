@@ -1,4 +1,4 @@
-import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
+import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
@@ -39,7 +39,7 @@ export function ControlUnitListMapButton() {
       Icon={Icon.ControlUnit}
       isActive={isControlUnitListDialogDisplayed || isControlUnitDialogDisplayed}
       onClick={toggle}
-      style={{ top: 220 }}
+      style={{ top: 172 }}
       title="Liste des unités de contrôle"
     />
   )

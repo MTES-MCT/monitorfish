@@ -4,7 +4,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { PipsMode } from 'nouislider'
 import styled from 'styled-components'
 
-import Nouislider from '../../../../../ui/Nouislider'
+import Nouislider from '../../../../ui/Nouislider'
 
 // Hours
 const LABELS = [48, 24, 12, 6, 3, 2, 1]

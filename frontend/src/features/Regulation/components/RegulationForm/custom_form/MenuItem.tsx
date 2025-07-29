@@ -72,7 +72,7 @@ const CustomCheckbox = styled(Checkbox)`
     color: ${p => p.theme.color.slateGray};
   }
 
-  .rs-checkbox-wrapper .rs-checkbox-inner {
+  .rs-checkbox-checker .rs-checkbox-inner {
     &:before {
       border: 1px solid ${p => p.theme.color.lightGray} !important;
       box-sizing: border-box;

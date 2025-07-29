@@ -1,4 +1,6 @@
 import { deleteInterestPoint } from '@features/InterestPoint/useCases/deleteInterestPoint'
+import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
+import { Header } from '@features/Map/components/MapButtons/shared/styles'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
@@ -8,8 +10,6 @@ import styled from 'styled-components'
 
 import { INTEREST_POINTS_OPTIONS } from './constants'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
-import { MapToolBox } from '../../../MainWindow/components/MapButtons/shared/MapToolBox'
-import { Header } from '../../../MainWindow/components/MapButtons/shared/styles'
 import { interestPointActions, interestPointSelectors } from '../../slice'
 import { InterestPointType } from '../../utils'
 

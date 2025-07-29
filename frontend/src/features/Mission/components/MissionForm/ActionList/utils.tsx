@@ -1,3 +1,4 @@
+import { Flag } from '@features/commonComponents/Flag'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import dayjs from 'dayjs'
 import styled from 'styled-components'
@@ -6,6 +7,8 @@ import type { MissionActionFormValues } from '../types'
 import type { ReactNode } from 'react'
 
 import CompletionStatus = MissionAction.CompletionStatus
+
+const baseUrl = window.location.origin
 
 export function formatDateLabel(dateLabel: string) {
   return dateLabel.replace(
@@ -16,6 +19,7 @@ export function formatDateLabel(dateLabel: string) {
 
 export function getActionTitle(
   subject: string | undefined,
+  flagState: string | undefined,
   details: string | undefined,
   placeholder: string | undefined
 ): ReactNode {
@@ -23,7 +27,10 @@ export function getActionTitle(
     return (
       <StyledSpan title={details}>
         {!!subject && <>{subject}</>}
-        <Strong>{details}</Strong>
+        <Strong>
+          {flagState && <StyledFlag src={`${baseUrl}/flags/${flagState.toLowerCase()}.svg`} />}
+          {details}
+        </Strong>
       </StyledSpan>
     )
   }
@@ -34,6 +41,13 @@ export function getActionTitle(
 
   return subject
 }
+
+const StyledFlag = styled(Flag)`
+  height: 14px;
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 4px;
+`
 
 const Strong = styled.div`
   display: block;

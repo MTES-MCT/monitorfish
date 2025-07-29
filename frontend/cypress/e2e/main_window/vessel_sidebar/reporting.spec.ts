@@ -47,7 +47,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="ReportingTable-reporting"]').first().contains('FRAIS AVIS MODE')
 
     // Archive the newly created reporting
-    cy.get('table .rs-checkbox-wrapper').eq(1).click({ force: true })
+    cy.get('table .rs-checkbox-control').eq(1).click({ force: true })
     cy.clickButton('Archiver 1 signalement')
     cy.clickButton('Archiver')
   })

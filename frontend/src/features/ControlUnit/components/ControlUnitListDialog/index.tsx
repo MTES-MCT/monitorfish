@@ -1,4 +1,4 @@
-import { MapToolBox } from '@features/MainWindow/components/MapButtons/shared/MapToolBox'
+import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { Accent, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'

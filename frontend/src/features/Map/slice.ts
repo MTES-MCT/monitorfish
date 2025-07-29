@@ -155,11 +155,8 @@ const mapSlice = createSlice({
 
     /**
      * Set the coordinate format in the whole application (as DMS, DMD or DD)
-     * @param {Object} state
-     * @param {{
-     * payload: CoordinatesFormat}} action - The coordinate format
      */
-    setCoordinatesFormat(state, action) {
+    setCoordinatesFormat(state, action: PayloadAction<CoordinatesFormat>) {
       window.localStorage.setItem(coordinatesFormatLocalStorageKey, JSON.stringify(action.payload))
       state.coordinatesFormat = action.payload
     },

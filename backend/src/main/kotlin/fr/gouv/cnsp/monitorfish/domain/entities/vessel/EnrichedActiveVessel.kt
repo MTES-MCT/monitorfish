@@ -56,11 +56,7 @@ data class EnrichedActiveVessel(
             if (activityOrigin == ActivityOrigin.FROM_LOGBOOK) {
                 lastPosition?.speciesOnboard?.mapNotNull { it.species }?.distinct() ?: listOf()
             } else {
-                vesselProfile
-                    ?.species
-                    ?.keys
-                    ?.toList()
-                    ?.distinct() ?: listOf()
+                listOf()
             }
     }
 

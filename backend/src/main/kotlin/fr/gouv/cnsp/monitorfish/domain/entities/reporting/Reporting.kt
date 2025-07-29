@@ -18,6 +18,7 @@ data class Reporting(
     val creationDate: ZonedDateTime,
     val validationDate: ZonedDateTime? = null,
     val expirationDate: ZonedDateTime? = null,
+    val archivingDate: ZonedDateTime? = null,
     val value: ReportingValue,
     val isArchived: Boolean,
     val isDeleted: Boolean,

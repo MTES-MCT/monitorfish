@@ -3,7 +3,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.use_cases.activity.GetActivityVisualizationFile
 import fr.gouv.cnsp.monitorfish.infrastructure.api.ControllersExceptionHandler
-import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,19 +28,25 @@ class ActivityVisualizationControllerITests {
     @Test
     fun `Should get activity visualization file`() {
         // Given
-        given(getActivityVisualizationFile.execute()).willReturn("""
+        given(getActivityVisualizationFile.execute()).willReturn(
+            """
             <html>
             </html>
-        """.trimIndent())
+            """.trimIndent(),
+        )
 
         // When
         api
             .perform(get("/bff/v1/activity_visualization"))
             // Then
             .andExpect(status().isOk)
-            .andExpect(content().string("""
-            <html>
-            </html>
-        """.trimIndent()))
+            .andExpect(
+                content().string(
+                    """
+                    <html>
+                    </html>
+                    """.trimIndent(),
+                ),
+            )
     }
 }

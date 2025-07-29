@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/bff/v1/activity_visualization")
 @Tag(name = "APIs for activity visualization")
 class ActivityVisualizationController(
-    private val getActivityVisualizationFile: GetActivityVisualizationFile
+    private val getActivityVisualizationFile: GetActivityVisualizationFile,
 ) {
     @GetMapping("")
     @Operation(summary = "Get activity visualization")
-    fun getActivityVisualization(): String =
-        getActivityVisualizationFile.execute()
+    fun getActivityVisualization(): String = getActivityVisualizationFile.execute()
 }

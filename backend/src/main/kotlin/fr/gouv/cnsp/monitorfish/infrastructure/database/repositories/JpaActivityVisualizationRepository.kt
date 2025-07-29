@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository
 class JpaActivityVisualizationRepository(
     private val dbActivityVisualizationRepository: DBActivityVisualizationRepository,
 ) : ActivityVisualizationRepository {
-    override fun findCurrentActivityVisualization(): ActivityVisualization {
-        return dbActivityVisualizationRepository.findCurrentActivityVisualization().toActivityVisualization()
-    }
+    override fun findCurrentActivityVisualization(): ActivityVisualization =
+        dbActivityVisualizationRepository.findCurrentActivityVisualization().toActivityVisualization()
 }

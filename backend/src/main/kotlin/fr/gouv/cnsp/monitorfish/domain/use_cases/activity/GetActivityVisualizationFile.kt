@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 
 @UseCase
 class GetActivityVisualizationFile(
-    private val activityVisualizationRepository: ActivityVisualizationRepository
+    private val activityVisualizationRepository: ActivityVisualizationRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetActivityVisualizationFile::class.java)
 

@@ -126,10 +126,16 @@ self.addEventListener('message', async event => {
  * Entrypoint - when fetching an asset or an API
  */
 self.addEventListener('fetch', event => {
+  const url = event.request.url.toString()
+  const urlObj = new URL(url)
+
+  // Only intercept same-origin requests or whitelisted external basemap requests
+  if (urlObj.origin !== self.location.origin && !WHITELISTED_BASE_MAPS_PATHS.find(path => url.includes(path))) {
+    return // Let browser handle external requests naturally
+  }
+
   event.respondWith(
     (async () => {
-      const url = event.request.url.toString()
-
       const cacheKey = getCacheKey(url)
       const cacheKeyRequest = new Request(cacheKey)
 

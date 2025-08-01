@@ -219,14 +219,14 @@ def test_is_in_validity_period():
     )
 
     assert is_in_validity_period(
-        validity_start_date=None,
+        validity_start_date=pd.NaT,
         validity_end_date=d3,
         repeat_each_year=False,
         sample_date=datetime(2015, 1, 12, 12, 23, 50),
     )
 
     assert not is_in_validity_period(
-        validity_start_date=None,
+        validity_start_date=pd.NaT,
         validity_end_date=d3,
         repeat_each_year=False,
         sample_date=datetime(2025, 1, 12, 12, 23, 50),
@@ -234,14 +234,14 @@ def test_is_in_validity_period():
 
     assert is_in_validity_period(
         validity_start_date=d1,
-        validity_end_date=None,
+        validity_end_date=pd.NaT,
         repeat_each_year=False,
         sample_date=datetime(2025, 1, 12, 12, 23, 50),
     )
 
     assert not is_in_validity_period(
         validity_start_date=d1,
-        validity_end_date=None,
+        validity_end_date=pd.NaT,
         repeat_each_year=False,
         sample_date=datetime(2015, 1, 12, 12, 23, 50),
     )

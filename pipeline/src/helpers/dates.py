@@ -129,8 +129,8 @@ def get_datetime_intervals(
 
 
 def is_in_validity_period(
-    validity_start_date: datetime | None,
-    validity_end_date: datetime | None,
+    validity_start_date: datetime,
+    validity_end_date: datetime,
     repeat_each_year: bool,
     sample_date: datetime,
 ) -> bool:
@@ -146,13 +146,13 @@ def is_in_validity_period(
     Returns:
         True if sample_date is within the validity period, False otherwise
     """
-    if validity_start_date is None and validity_end_date is None:
+    if pd.isna(validity_start_date) and pd.isna(validity_end_date):
         return True
 
-    if validity_start_date is None:
+    if pd.isna(validity_start_date):
         return sample_date <= validity_end_date
 
-    if validity_end_date is None:
+    if pd.isna(validity_end_date):
         return sample_date >= validity_start_date
 
     if repeat_each_year:

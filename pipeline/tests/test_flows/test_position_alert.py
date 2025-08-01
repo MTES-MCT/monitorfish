@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 from unittest.mock import patch
 
 import pandas as pd
-import pytest
 import pytz
 from geoalchemy2 import Geometry
 from sqlalchemy import (
@@ -18,17 +17,12 @@ from sqlalchemy import (
 )
 
 from src.db_config import create_engine
+from src.entities.alerts import GearSpecification, SpeciesSpecification
 from src.flows.position_alert import (
-    VesselsFilter,
-    ZonesTable,
-    alert_has_gear_parameters,
-    extract_current_gears,
-    extract_vessels_with_species_onboard,
-    filter_on_gears,
-    filter_vessels,
-    get_alert_type_zones_table,
+    extract_vessels_current_gears,
     get_vessels_in_alert,
-    make_fishing_gears_query,
+    get_vessels_with_gears,
+    get_vessels_with_species_min_weight,
     make_positions_in_alert_query,
     position_alert_flow,
 )
@@ -40,65 +34,103 @@ def mock_get_depth(lon: float, lat: float):
     return lon
 
 
-def test_zones_table():
-    meta = MetaData()
-    table = Table(
-        "test_table",
-        meta,
-        Column("id", Integer),
-        Column("some_text", VARCHAR),
-        Column("geometry", Geometry),
+# def test_zones_table():
+#     meta = MetaData()
+#     table = Table(
+#         "test_table",
+#         meta,
+#         Column("id", Integer),
+#         Column("some_text", VARCHAR),
+#         Column("geometry", Geometry),
+#     )
+
+#     zones_table = ZonesTable(
+#         table=table, geometry_column="geometry", filter_column="id"
+#     )
+#     assert zones_table.table is table
+#     assert zones_table.filter_column == "id"
+#     assert zones_table.geometry_column == "geometry"
+
+#     with pytest.raises(AssertionError):
+#         ZonesTable(table=table, geometry_column="some_text", filter_column="id")
+
+#     with pytest.raises(AssertionError):
+#         ZonesTable(
+#             table=table, geometry_column="geometry", filter_column="id_not_exists"
+#         )
+
+#     with pytest.raises(AssertionError):
+#         ZonesTable(
+#             table=table, geometry_column="geometry_not_exists", filter_column="id"
+#         )
+
+
+def test_get_vessels_with_species_min_weight():
+    vessels_species = pd.DataFrame(
+        {
+            "cfr": [
+                "VESSEL_1",
+                "VESSEL_1",
+                "VESSEL_1",
+                "VESSEL_2",
+                "VESSEL_2",
+                "VESSEL_3",
+            ],
+            "species": ["SP1", "SP2", "SP3", "SP2", "SP4", "SP4"],
+            "weight": [120.0, 125.5, 560.0, 50.5, 96.2, 696.2],
+        }
     )
 
-    zones_table = ZonesTable(
-        table=table, geometry_column="geometry", filter_column="id"
+    species_spec = [
+        SpeciesSpecification(species="SP1", min_weight=500.0),
+        SpeciesSpecification(species="SP2", min_weight=100.0),
+        SpeciesSpecification(species="SP3", min_weight=500.0),
+        SpeciesSpecification(species="SP4", min_weight=500.0),
+    ]
+
+    cfrs = get_vessels_with_species_min_weight(
+        vessels_species=vessels_species, species_spec=species_spec
     )
-    assert zones_table.table is table
-    assert zones_table.filter_column == "id"
-    assert zones_table.geometry_column == "geometry"
+    assert cfrs == ["VESSEL_1", "VESSEL_3"]
 
-    with pytest.raises(AssertionError):
-        ZonesTable(table=table, geometry_column="some_text", filter_column="id")
-
-    with pytest.raises(AssertionError):
-        ZonesTable(
-            table=table, geometry_column="geometry", filter_column="id_not_exists"
-        )
-
-    with pytest.raises(AssertionError):
-        ZonesTable(
-            table=table, geometry_column="geometry_not_exists", filter_column="id"
-        )
+    species_spec = [
+        SpeciesSpecification(species="SP1", min_weight=5000.0),
+        SpeciesSpecification(species="SP2", min_weight=1000.0),
+        SpeciesSpecification(species="SP3", min_weight=5000.0),
+        SpeciesSpecification(species="SP4", min_weight=5000.0),
+    ]
+    cfrs = get_vessels_with_species_min_weight(
+        vessels_species=vessels_species, species_spec=species_spec
+    )
+    assert cfrs == []
 
 
-def test_alert_has_gear_parameters_returns_true_on_non_null_inputs():
-    assert alert_has_gear_parameters(["OTM"], ["Chaluts"])
-    assert alert_has_gear_parameters(["OTB"], ["Chaluts", "Filets"])
-    assert alert_has_gear_parameters(["OTT"], None)
-    assert alert_has_gear_parameters(None, ["Chaluts"])
-
-
-def test_alert_has_gear_parameters_returns_false_on_null_inputs():
-    assert not alert_has_gear_parameters(None, None)
-
-
-def test_alert_has_gear_parameters_raises_type_error_on_incorrect_input():
-    with pytest.raises(TypeError):
-        alert_has_gear_parameters(["OTM"], "not a list")
-    with pytest.raises(TypeError):
-        alert_has_gear_parameters(None, "not a list")
-    with pytest.raises(TypeError):
-        alert_has_gear_parameters("not_a_list", None)
-    with pytest.raises(TypeError):
-        alert_has_gear_parameters("unexpected string type", ["OTB"])
-
-
-def test_get_alert_type_zones_table(reset_test_data):
-    with pytest.raises(ValueError):
-        get_alert_type_zones_table("Some unknown alert type")
-
-    zones_tables = get_alert_type_zones_table("THREE_MILES_TRAWLING_ALERT")
-    assert isinstance(zones_tables, ZonesTable)
+def test_get_vessels_with_gears():
+    vessels_gears = pd.DataFrame(
+        {
+            "cfr": [
+                "VESSEL1",
+                "VESSEL1",
+                "VESSEL2",
+                "VESSEL3",
+                "VESSEL4",
+                "VESSEL5",
+                "VESSEL6",
+                "VESSEL7",
+                "VESSEL8",
+            ],
+            "gear": ["OTM", "OTB", "OTB", "OTB", "OTT", "OTT", "OTT", "LSS", "LHP"],
+            "mesh": [110.0, 110.0, 110.0, 80.0, 110.0, 80.0, None, None, None],
+        }
+    )
+    gears = [
+        GearSpecification(gear="OTM", min_mesh=80.0, max_mesh=120.0),
+        GearSpecification(gear="OTB", min_mesh=100.0),
+        GearSpecification(gear="OTT", max_mesh=100.0),
+        GearSpecification(gear="LSS"),
+    ]
+    res = get_vessels_with_gears(vessels_gears=vessels_gears, gears=gears)
+    assert res == ["VESSEL1", "VESSEL2", "VESSEL5", "VESSEL7"]
 
 
 @patch(
@@ -136,7 +168,7 @@ def test_make_positions_in_alert_query():
         "facades", meta, Column("facade", VARCHAR), Column("geometry", Geometry)
     )
 
-    zones_table = ZonesTable(
+    zones_table = Table(
         Table(
             "zones",
             meta,
@@ -247,66 +279,8 @@ def test_make_positions_in_alert_query():
     assert query == expected_query
 
 
-def test_make_fishing_gears_query():
-    meta = MetaData()
-    fishing_gears_table = Table(
-        "fishing_gear_codes",
-        meta,
-        Column("fishing_gear_code", VARCHAR),
-        Column("fishing_gear_category", VARCHAR),
-    )
-
-    # Test with filter on gear codes
-
-    select_statement = make_fishing_gears_query(
-        fishing_gears_table, fishing_gears=["OTB", "OTM"], fishing_gear_categories=None
-    )
-
-    query = str(select_statement.compile(compile_kwargs={"literal_binds": True}))
-
-    expected_query = (
-        "SELECT "
-        "fishing_gear_codes.fishing_gear_code "
-        "\nFROM fishing_gear_codes "
-        "\nWHERE fishing_gear_codes.fishing_gear_code IN ('OTB', 'OTM')"
-    )
-
-    assert query == expected_query
-
-    # Test with filter on gear categories
-
-    select_statement = make_fishing_gears_query(
-        fishing_gears_table, fishing_gears=None, fishing_gear_categories=["Chaluts"]
-    )
-
-    query = str(select_statement.compile(compile_kwargs={"literal_binds": True}))
-
-    expected_query = (
-        "SELECT "
-        "fishing_gear_codes.fishing_gear_code "
-        "\nFROM fishing_gear_codes "
-        "\nWHERE fishing_gear_codes.fishing_gear_category IN ('Chaluts')"
-    )
-
-    assert query == expected_query
-
-    # Get all gear codes
-
-    select_statement = make_fishing_gears_query(
-        fishing_gears_table, fishing_gears=None, fishing_gear_categories=None
-    )
-
-    query = str(select_statement.compile(compile_kwargs={"literal_binds": True}))
-
-    expected_query = (
-        "SELECT " "fishing_gear_codes.fishing_gear_code " "\nFROM fishing_gear_codes"
-    )
-
-    assert query == expected_query
-
-
 def test_extract_current_gears(reset_test_data):
-    current_gears = extract_current_gears()
+    current_gears = extract_vessels_current_gears()
     nb_last_positions_vessels = read_query(
         "SELECT COUNT(*) FROM last_positions", db="monitorfish_remote"
     ).iloc[0, 0]
@@ -339,108 +313,13 @@ def test_extract_current_gears(reset_test_data):
     )
 
 
-def test_extract_vessels_with_species_onboard(reset_test_data):
-    vessels_filter_1 = extract_vessels_with_species_onboard(
-        species_onboard=["SOL", "HKE"],
-        min_weight=2500.0,
-    )
-
-    assert vessels_filter_1 == VesselsFilter(
-        is_active=True, vessels_cfr=["ABC000542519"]
-    )
-
-    vessels_filter_2 = extract_vessels_with_species_onboard(
-        species_onboard=None,
-        min_weight=2500.0,
-    )
-
-    assert vessels_filter_2 == VesselsFilter(is_active=False, vessels_cfr=None)
-
-    vessels_filter_3 = extract_vessels_with_species_onboard(
-        species_onboard=["SOL", "HKE"],
-        min_weight=25000.0,
-    )
-
-    assert vessels_filter_3 == VesselsFilter(is_active=True, vessels_cfr=[])
-
-
-def test_filter_vessels():
-    positions_in_alert = pd.DataFrame(
-        {
-            "cfr": ["A", "B", "C", "D", None],
-            "some_data": [1.23, 5.56, 12.23, 5.236, 98.58],
-        }
-    )
-
-    filtered_positions_1 = filter_vessels(
-        positions_in_alert, VesselsFilter(is_active=True, vessels_cfr=["A", "B"])
-    )
-    filtered_positions_2 = filter_vessels(
-        positions_in_alert, VesselsFilter(is_active=False, vessels_cfr=["A", "B"])
-    )
-    filtered_positions_3 = filter_vessels(
-        positions_in_alert, VesselsFilter(is_active=True, vessels_cfr=[])
-    )
-    filtered_positions_4 = filter_vessels(
-        positions_in_alert.head(0),
-        VesselsFilter(is_active=True, vessels_cfr=["A", "B"]),
-    )
-
-    pd.testing.assert_frame_equal(filtered_positions_1, positions_in_alert.head(2))
-    pd.testing.assert_frame_equal(filtered_positions_2, positions_in_alert)
-    pd.testing.assert_frame_equal(filtered_positions_3, positions_in_alert.head(0))
-    pd.testing.assert_frame_equal(filtered_positions_4, positions_in_alert.head(0))
-
-
-def test_filter_on_gears():
-    positions_in_alert = pd.DataFrame(
-        {
-            "cfr": ["A", "B", "C", "D"],
-            "external_immatriculation": ["AA", "BB", "CC", "DD"],
-            "ircs": ["AAA", "BBB", "CCC", "DDD"],
-            "some_data": [1.23, 5.56, 12.23, 5.236],
-        }
-    )
-    current_gears = pd.DataFrame(
-        {
-            "cfr": ["A", "B", "C", "D"],
-            "external_immatriculation": ["AA", "BB", "CC", "DD"],
-            "ircs": ["AAA", "BBB", "CCC", "DDD"],
-            "current_gears": [None, {"OTB", "OTT"}, {"DRB"}, {"OTM"}],
-        }
-    )
-    gear_codes = {"OTM", "OTB"}
-
-    # Test excluding unknown gears
-    include_vessels_unknown_gear = False
-
-    filtered_positions_in_alert = filter_on_gears(
-        positions_in_alert,
-        current_gears,
-        gear_codes,
-        include_vessels_unknown_gear,
-    )
-
-    pd.testing.assert_frame_equal(
-        filtered_positions_in_alert,
-        positions_in_alert.loc[positions_in_alert.cfr == "D"],
-    )
-
-    # Test including unknown gears
-    include_vessels_unknown_gear = True
-
-    filtered_positions_in_alert = filter_on_gears(
-        positions_in_alert,
-        current_gears,
-        gear_codes,
-        include_vessels_unknown_gear,
-    )
-
-    pd.testing.assert_frame_equal(
-        filtered_positions_in_alert,
-        positions_in_alert.loc[positions_in_alert.cfr.isin(["D", "A"])],
-        check_like=True,
-    )
+# def test_extract_vessels_with_species_onboard(reset_test_data):
+#     vessels_filter_1 = extract_vessels_with_species_onboard(
+#         [
+#             SpeciesSpecification(species="SOL", min_weight=2500),
+#             SpeciesSpecification(species="HKE", min_weight=2500),
+#         ]
+#     )
 
 
 def test_get_vessels_in_alert():

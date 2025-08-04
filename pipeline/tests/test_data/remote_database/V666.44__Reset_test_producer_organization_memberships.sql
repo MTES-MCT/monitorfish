@@ -1,3 +1,5 @@
+DELETE FROM public.producer_organization_memberships;
+
 INSERT INTO public.producer_organization_memberships (
     internal_reference_number, joining_date, organization_name
 ) VALUES

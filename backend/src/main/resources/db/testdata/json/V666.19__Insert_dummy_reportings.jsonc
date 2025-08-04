@@ -23,7 +23,7 @@
                     "seaFront": "NAMO",
                     "riskFactor": 3.5647,
                     "type": "POSITION_ALERT",
-                    "alert_id": 1,
+                    "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
                     "natinfCode": 7059
                 },
@@ -48,7 +48,7 @@
                     "seaFront": "NAMO",
                     "riskFactor": 3.3647,
                     "type": "POSITION_ALERT",
-                    "alert_id": 1,
+                    "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
                     "natinfCode": 7059
                 },
@@ -99,7 +99,7 @@
                     "seaFront": "SA",
                     "riskFactor": 2.647,
                     "type": "POSITION_ALERT",
-                    "alert_id": 8,
+                    "alertId": 8,
                     "name": "Pêche dans les 12 milles sans droits historiques",
                     "natinfCode": 2610
                 },
@@ -417,7 +417,7 @@
                     "seaFront": "MED",
                     "riskFactor": 2.647,
                     "type": "POSITION_ALERT",
-                    "alert_id": 10,
+                    "alertId": 10,
                     "name": "R(UE) 1241 - Plus de 6 tonnes de lingue bleue (BLI) à bord",
                     "natinfCode": 2610
                 },

@@ -14,7 +14,6 @@ CREATE TABLE public.position_alerts (
     track_analysis_depth DOUBLE PRECISION NOT NULL DEFAULT 12.0,
     only_fishing_positions BOOLEAN NOT NULL DEFAULT true,
     gears JSONB,
-    include_vessels_with_unknown_gear BOOLEAN NOT NULL DEFAULT false,
     species JSONB,
     administrative_areas JSONB,
     regulatory_areas JSONB,

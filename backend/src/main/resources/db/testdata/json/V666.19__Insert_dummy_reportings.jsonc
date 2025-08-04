@@ -22,7 +22,9 @@
                 "value:jsonb": {
                     "seaFront": "NAMO",
                     "riskFactor": 3.5647,
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "type": "POSITION_ALERT",
+                    "alert_id": 1,
+                    "name": "Chalutage dans les 3 milles",
                     "natinfCode": 7059
                 },
                 "vessel_id": 123456,
@@ -45,7 +47,9 @@
                 "value:jsonb": {
                     "seaFront": "NAMO",
                     "riskFactor": 3.3647,
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "type": "POSITION_ALERT",
+                    "alert_id": 1,
+                    "name": "Chalutage dans les 3 milles",
                     "natinfCode": 7059
                 },
                 "vessel_id": 123456,
@@ -94,7 +98,9 @@
                 "value:jsonb": {
                     "seaFront": "SA",
                     "riskFactor": 2.647,
-                    "type": "TWELVE_MILES_FISHING_ALERT",
+                    "type": "POSITION_ALERT",
+                    "alert_id": 8,
+                    "name": "Pêche dans les 12 milles sans droits historiques",
                     "natinfCode": 2610
                 },
                 "vessel_id": null,
@@ -410,7 +416,9 @@
                 "value:jsonb": {
                     "seaFront": "MED",
                     "riskFactor": 2.647,
-                    "type": "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT",
+                    "type": "POSITION_ALERT",
+                    "alert_id": 10,
+                    "name": "R(UE) 1241 - Plus de 6 tonnes de lingue bleue (BLI) à bord",
                     "natinfCode": 2610
                 },
                 "vessel_id": 115,

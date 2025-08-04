@@ -6,13 +6,15 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
                                                                                                            '"seaFront": "NAMO",' ||
                                                                                                            '"riskFactor": 3.5647,' ||
                                                                                                            '"dml": "DML 13",' ||
-                                                                                                           '"type": "THREE_MILES_TRAWLING_ALERT"' ||
+                                                                                                           '"type": "POSITION_ALERT",' ||
+                                                                                                           '"alert_id": 1' ||
                                                                                                            '}')::jsonb, -40.4050, -9.6987),
        ('MALOTRU', 'U_W0NTFINDME', 'TALK2ME', 'QGDF','FR',  NOW(), '9463723', 'INTERNAL_REFERENCE_NUMBER', ('{' ||
                                                                                                       '"seaFront": "NAMO",' ||
                                                                                                       '"riskFactor": 1.5647,' ||
                                                                                                       '"dml": "DML 06",' ||
-                                                                                                      '"type": "THREE_MILES_TRAWLING_ALERT"' ||
+                                                                                                      '"type": "POSITION_ALERT",' ||
+                                                                                                      '"alert_id": 1' ||
                                                                                                       '}')::jsonb, -28.7514, 126.258),
        ('PAYSAGE ROMAN LIER', 'ABC000339263', 'CN775734', 'YHIZ',
         'FR', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '15 hours 45 minutes', '9463723', 'INTERNAL_REFERENCE_NUMBER',
@@ -20,7 +22,8 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
          '"seaFront": "SA",' ||
          '"riskFactor": 2.5647,' ||
          '"dml": "DML 56",' ||
-         '"type": "THREE_MILES_TRAWLING_ALERT"' ||
+         '"type": "POSITION_ALERT",' ||
+         '"alert_id": 1' ||
          '}')::jsonb, null, null),
        ('LE b@TO', 'FR263418260', '08FR65324', 'IR12A',
         'FR', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '13 hours 45 minutes', '9463723', 'INTERNAL_REFERENCE_NUMBER',
@@ -28,7 +31,8 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
          '"seaFront": "NAMO",' ||
          '"riskFactor": 2.5647,' ||
          '"dml": "DML 56",' ||
-         '"type": "THREE_MILES_TRAWLING_ALERT"' ||
+         '"type": "POSITION_ALERT",' ||
+         '"alert_id": 1' ||
          '}')::jsonb, -55.5963, -11.2245),
        ('PHENOMENE', 'ABC000259234', 'XS666810', 'VU2483',
         'GB', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '12 hours 45 minutes', '9463723', 'INTERNAL_REFERENCE_NUMBER',
@@ -36,7 +40,8 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
          '"seaFront": "NAMO",' ||
          '"riskFactor": 2.5647,' ||
          '"dml": "DML 56",' ||
-         '"type": "THREE_MILES_TRAWLING_ALERT"' ||
+         '"type": "POSITION_ALERT",' ||
+         '"alert_id": 1' ||
          '}')::jsonb, null, null),
        ('PHENOMENE', 'ABC000777801', 'DA215454', 'RZUW',
         'GB', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '10 hours 45 minutes', '9463723', 'INTERNAL_REFERENCE_NUMBER',
@@ -44,7 +49,8 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
          '"seaFront": "MED",' ||
          '"riskFactor": 2.5647,' ||
          '"dml": "DML 56",' ||
-         '"type": "THREE_MILES_TRAWLING_ALERT"' ||
+         '"type": "POSITION_ALERT",' ||
+         '"alert_id": 1' ||
          '}')::jsonb, -75.698, 51.5987),
        ('PHENOMENE', 'ABC000180818', 'GJ232455', 'VSJM',
         'GB', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '9 hours 45 minutes', '9463723', 'INTERNAL_REFERENCE_NUMBER',
@@ -53,7 +59,8 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
          '"flagState": "FR",' ||
          '"riskFactor": 2.5647,' ||
          '"dml": "DML 56",' ||
-         '"type": "THREE_MILES_TRAWLING_ALERT"' ||
+         '"type": "POSITION_ALERT",' ||
+         '"alert_id": 1' ||
          '}')::jsonb, null, null),
        ('PHENOMENE', 'ABC000011166', 'WN121110', 'KK5645',
         'GB', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '8 hours 45 minutes', '9463723', 'INTERNAL_REFERENCE_NUMBER',
@@ -61,7 +68,8 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
          '"seaFront": "MED",' ||
          '"riskFactor": 2.5647,' ||
          '"dml": "DML 56",' ||
-         '"type": "THREE_MILES_TRAWLING_ALERT"' ||
+         '"type": "POSITION_ALERT",' ||
+         '"alert_id": 1' ||
          '}')::jsonb, -8.96, 51.8514),
        ('PHENOMENE', 'ABC000543897', 'NW232931', 'MPBS',
         'GB', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '7 hours 45 minutes', '9463723', 'INTERNAL_REFERENCE_NUMBER',
@@ -69,7 +77,8 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
          '"seaFront": "NAMO",' ||
          '"riskFactor": 2.5647,' ||
          '"dml": "DML 56",' ||
-         '"type": "THREE_MILES_TRAWLING_ALERT"' ||
+         '"type": "POSITION_ALERT",' ||
+         '"alert_id": 1' ||
          '}')::jsonb, null, null),
        ('PHENOMENE', 'ABC000073956', 'GD896743', 'KAML',
         'GB', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '6 hours 45 minutes', '9463723', 'INTERNAL_REFERENCE_NUMBER',
@@ -77,7 +86,8 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
          '"seaFront": "NAMO",' ||
          '"riskFactor": 2.5647,' ||
          '"dml": "DML 56",' ||
-         '"type": "THREE_MILES_TRAWLING_ALERT"' ||
+         '"type": "POSITION_ALERT",' ||
+         '"alert_id": 1' ||
          '}')::jsonb, -5.1258, 47.6789),
        ('PHENOMENE', 'ABC000960650', 'BI807222', 'LC0403',
         'GB', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '5 hours 45 minutes', '9463723', 'INTERNAL_REFERENCE_NUMBER',
@@ -85,7 +95,8 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
          '"seaFront": "SA",' ||
          '"riskFactor": 2.5647,' ||
          '"dml": "DML 56",' ||
-         '"type": "THREE_MILES_TRAWLING_ALERT"' ||
+         '"type": "POSITION_ALERT",' ||
+         '"alert_id": 1' ||
          '}')::jsonb, -8.56, -22.0236),
        ('PHENOMENE', 'ABC000349363', 'KX186589', 'OA0800',
         'GB', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '4 hours 45 minutes', '9463723', 'INTERNAL_REFERENCE_NUMBER',
@@ -93,7 +104,8 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
          '"seaFront": "SA",' ||
          '"riskFactor": 2.5647,' ||
          '"dml": "DML 56",' ||
-         '"type": "THREE_MILES_TRAWLING_ALERT"' ||
+         '"type": "POSITION_ALERT",' ||
+         '"alert_id": 1' ||
          '}')::jsonb, null, null),
        ('PHENOMENE', 'ABC000089374', 'LP645300', 'RXQO',
         'GB', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '3 hours 45 minutes', '9463723', 'INTERNAL_REFERENCE_NUMBER',
@@ -101,7 +113,8 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
          '"seaFront": "Guyane",' ||
          '"riskFactor": 2.5647,' ||
          '"dml": "DML 56",' ||
-         '"type": "THREE_MILES_TRAWLING_ALERT"' ||
+         '"type": "POSITION_ALERT",' ||
+         '"alert_id": 1' ||
          '}')::jsonb, -4.5691, 19.6547),
        ('PHENOMENE', 'ABC000221063', 'OI435694', 'JHKB',
         'GB', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '2 hours 45 minutes', '9463723', 'INTERNAL_REFERENCE_NUMBER',
@@ -109,7 +122,8 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
          '"seaFront": "Guadeloupe",' ||
          '"riskFactor": 2.5647,' ||
          '"dml": "DML 56",' ||
-         '"type": "THREE_MILES_TRAWLING_ALERT"' ||
+         '"type": "POSITION_ALERT",' ||
+         '"alert_id": 1' ||
          '}')::jsonb, null, null),
        ('TEMPÊTE COULEUR PUIS', 'ABC000118343', 'TO598604', 'MRCP',
         'FR', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '1 hours 7 minutes', '2020005', 'INTERNAL_REFERENCE_NUMBER',
@@ -117,7 +131,8 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
          '"seaFront": "NAMO",' ||
          '"riskFactor": 2.5,' ||
          '"dml": "DML 56",' ||
-         '"type": "FRENCH_EEZ_FISHING_ALERT"' ||
+         '"type": "POSITION_ALERT",' ||
+         '"alert_id": 4' ||
          '}')::jsonb, 73.569, -52.456),
        ('ASSURER TON COMME', 'ABC000207106', 'DC896841', 'MNMN',
         'FR', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '2 hours 7 minutes', '2020009', 'INTERNAL_REFERENCE_NUMBER',
@@ -125,7 +140,8 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
          '"seaFront": "NAMO",' ||
          '"riskFactor": 2.2,' ||
          '"dml": "DML 56", '||
-         '"type": "TWELVE_MILES_FISHING_ALERT"' ||
+         '"type": "POSITION_ALERT",' ||
+         '"alert_id": 8' ||
          '}')::jsonb, 5.56, 1.2),
        ('MARQUER NOTE MANIER', 'ABC000498845', 'YH219470', 'EXG7039',
         'FR', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '4 hours 7 minutes', null, 'INTERNAL_REFERENCE_NUMBER', ('{' ||
@@ -151,3 +167,18 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
                                                                                                                  '"riskFactor": 1.5,' ||
                                                                                                                  '"type": "MISSING_DEP_ALERT"' ||
                                                                                                                  '}')::jsonb, -11.569, 47.851);
+
+UPDATE pending_alerts a
+SET value = jsonb_set(
+    jsonb_set(
+        value,
+        '{name}',
+        to_jsonb(pa.name)
+    ),
+    '{description}',
+    to_jsonb(pa.description)
+)
+FROM position_alerts pa
+WHERE
+    (a.value->>'type' = 'POSITION_ALERT') AND
+    pa.id = (a.value->>'alert_id')::INTEGER;

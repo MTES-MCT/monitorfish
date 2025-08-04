@@ -5,7 +5,9 @@ VALUES ('NATUREL NON FUIR', 'ABC000571489', 'IS726385', 'LRED', 'INTERNAL_REFERE
         'FR', NOW() + ('15 DAYS')::interval, ('{' ||
                                                                      '"seaFront": "MEMN",' ||
                                                                      '"riskFactor": 3.6947,' ||
-                                                                     '"type": "TWELVE_MILES_FISHING_ALERT",' ||
+                                                                     '"type": "POSITION_ALERT",' ||
+                                                                     '"alert_id": 8,' ||
+                                                                     '"name": "Pêche dans les 12 milles sans droits historiques",' ||
                                                                      '"natinfCode": 27689' ||
                                                                      '}')::jsonb),
        ('JARDIN TANT DESCENDRE', 'ABC000417080', 'KS181242', 'QFH9332', 'INTERNAL_REFERENCE_NUMBER',
@@ -19,13 +21,17 @@ VALUES ('NATUREL NON FUIR', 'ABC000571489', 'IS726385', 'LRED', 'INTERNAL_REFERE
         'FR', NOW() + ('5 HOURS')::interval, ('{' ||
                                               '"seaFront": "SA",' ||
                                               '"riskFactor": 3.6947,' ||
-                                              '"type": "THREE_MILES_TRAWLING_ALERT",' ||
+                                              '"type": "POSITION_ALERT",' ||
+                                              '"alert_id": 1,' ||
+                                              '"name": "Chalutage dans les 3 milles",'
                                               '"natinfCode": 27689' ||
                                               '}')::jsonb),
        ('FORTUNE ARME ABATTRE', 'ABC000677933', 'IG415546', 'UTIG', 'INTERNAL_REFERENCE_NUMBER',
         'X', NOW() + ('24 HOURS')::interval, ('{' ||
                                                '"seaFront": "NAMO",' ||
                                                '"riskFactor": 3.6947,' ||
-                                               '"type": "THREE_MILES_TRAWLING_ALERT",' ||
+                                               '"type": "POSITION_ALERT",' ||
+                                               '"alert_id": 1,' ||
+                                               '"name": "Chalutage dans les 3 milles",'
                                                '"natinfCode": 27689' ||
                                                '}')::jsonb);

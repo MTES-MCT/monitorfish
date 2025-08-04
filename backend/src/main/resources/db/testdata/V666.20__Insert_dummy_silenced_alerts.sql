@@ -6,7 +6,7 @@ VALUES ('NATUREL NON FUIR', 'ABC000571489', 'IS726385', 'LRED', 'INTERNAL_REFERE
                                                                      '"seaFront": "MEMN",' ||
                                                                      '"riskFactor": 3.6947,' ||
                                                                      '"type": "POSITION_ALERT",' ||
-                                                                     '"alert_id": 8,' ||
+                                                                     '"alertId": 8,' ||
                                                                      '"name": "Pêche dans les 12 milles sans droits historiques",' ||
                                                                      '"natinfCode": 27689' ||
                                                                      '}')::jsonb),
@@ -22,7 +22,7 @@ VALUES ('NATUREL NON FUIR', 'ABC000571489', 'IS726385', 'LRED', 'INTERNAL_REFERE
                                               '"seaFront": "SA",' ||
                                               '"riskFactor": 3.6947,' ||
                                               '"type": "POSITION_ALERT",' ||
-                                              '"alert_id": 1,' ||
+                                              '"alertId": 1,' ||
                                               '"name": "Chalutage dans les 3 milles",'
                                               '"natinfCode": 27689' ||
                                               '}')::jsonb),
@@ -31,7 +31,7 @@ VALUES ('NATUREL NON FUIR', 'ABC000571489', 'IS726385', 'LRED', 'INTERNAL_REFERE
                                                '"seaFront": "NAMO",' ||
                                                '"riskFactor": 3.6947,' ||
                                                '"type": "POSITION_ALERT",' ||
-                                               '"alert_id": 1,' ||
+                                               '"alertId": 1,' ||
                                                '"name": "Chalutage dans les 3 milles",'
                                                '"natinfCode": 27689' ||
                                                '}')::jsonb);

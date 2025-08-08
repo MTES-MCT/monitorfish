@@ -31,7 +31,7 @@ Pêche en zone CPANE (NEAFC).', false, 22070, true, false, NULL, NULL, NULL, fal
 (10, 'R(UE) 1241 - Plus de 6 tonnes de lingue bleue (BLI) à bord', '_Sur les 8 dernières heures_
 
 Pour tous les navires sur les areas REG "EOS - Lingues bleues", avec plus de 6 tonnes de BLI à bord.
-    ', false, 12900, true, false, NULL, NULL, NULL, false, 8, false, 'null', '[{"species": "BLI", "min_weight": 6000.0}]', 'null', '[{"topic": "EOS - Lingues bleues"}]', NULL, '{}', NULL, '{}', '{}'),
+    ', false, 12900, true, false, NULL, NULL, NULL, false, 8, false, 'null', '[{"species": "BLI", "minWeight": 6000.0}]', 'null', '[{"topic": "EOS - Lingues bleues"}]', NULL, '{}', NULL, '{}', '{}'),
 (11, 'Pêche en zone EMV avec un engin de fond à plus de 400m de profondeur', '_Sur les 8 dernières heures_
 
 Pour tous les navires en pêche sur la zone REG "Atlantique 400m - Ecosystèmes Marins Vulnérables (EMV) - Engins de fond",

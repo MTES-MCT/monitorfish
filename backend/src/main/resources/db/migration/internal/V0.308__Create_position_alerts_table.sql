@@ -15,6 +15,7 @@ CREATE TABLE public.position_alerts (
     only_fishing_positions BOOLEAN NOT NULL DEFAULT true,
     gears JSONB,
     species JSONB,
+    species_catch_areas VARCHAR[],
     administrative_areas JSONB,
     regulatory_areas JSONB,
     min_depth DOUBLE PRECISION,

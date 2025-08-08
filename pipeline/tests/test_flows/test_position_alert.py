@@ -1,10 +1,12 @@
 from datetime import datetime, timedelta
+from typing import List
 from unittest.mock import patch
 
 import pandas as pd
 import pytest
 import pytz
 from geoalchemy2 import Geometry
+from pytest import fixture
 from sqlalchemy import (
     BOOLEAN,
     FLOAT,
@@ -18,90 +20,492 @@ from sqlalchemy import (
 )
 
 from src.db_config import create_engine
+from src.entities.alerts import (
+    AdminAreasSpecification,
+    AdminAreasSpecWithTable,
+    AdministrativeAreaType,
+    AreasTableMetadata,
+    GearSpecification,
+    RegulatoryAreaSpecification,
+    SpeciesSpecification,
+)
 from src.flows.position_alert import (
-    VesselsFilter,
-    ZonesTable,
-    alert_has_gear_parameters,
-    extract_current_gears,
+    extract_vessels_current_gears,
     extract_vessels_with_species_onboard,
-    filter_on_gears,
-    filter_vessels,
-    get_alert_type_zones_table,
+    get_sets_of_identifiers,
     get_vessels_in_alert,
-    make_fishing_gears_query,
+    get_vessels_with_gears,
+    get_vessels_with_species_min_weight,
     make_positions_in_alert_query,
+    make_vessels_query,
+    merge_sets_of_identifiers,
     position_alert_flow,
+    to_admin_areas_spec_with_table,
+    to_admin_areas_table_metadata,
+    to_regulatory_area_filter,
 )
 from src.read_query import read_query
-from tests.mocks import mock_datetime_utcnow, mock_get_depth
+from tests.mocks import mock_get_depth
 
 
-def test_zones_table():
-    meta = MetaData()
-    table = Table(
-        "test_table",
-        meta,
+@fixture
+def admin_area_specifications() -> List[AdminAreasSpecification]:
+    return [
+        AdminAreasSpecification(
+            areaType=AdministrativeAreaType.FAO_AREA,
+            areas=["27.7", "27.8.a"],
+        ),
+        AdminAreasSpecification(
+            areaType=AdministrativeAreaType.EEZ_AREA,
+            areas=["FR", "BE"],
+        ),
+        AdminAreasSpecification(
+            areaType=AdministrativeAreaType.DISTANCE_TO_SHORE,
+            areas=["3-6", "0-3"],
+        ),
+        AdminAreasSpecification(
+            areaType=AdministrativeAreaType.NEAFC_AREA,
+            areas=[1],
+        ),
+    ]
+
+
+@fixture
+def admin_areas_table_metadata() -> List[AreasTableMetadata]:
+    return [
+        AreasTableMetadata(
+            table_name="fao_areas",
+            geometry_column="wkb_geometry",
+            filter_column="f_code",
+        ),
+        AreasTableMetadata(
+            table_name="eez_areas",
+            geometry_column="wkb_geometry",
+            filter_column="iso_sov1",
+        ),
+        AreasTableMetadata(
+            table_name="n_miles_to_shore_areas_subdivided",
+            geometry_column="geometry",
+            filter_column="miles_to_shore",
+        ),
+        AreasTableMetadata(
+            table_name="neafc_regulatory_area",
+            geometry_column="wkb_geometry",
+            filter_column="ogc_fid",
+        ),
+    ]
+
+
+@fixture
+def regulations_table() -> Table:
+    return Table(
+        "regulations",
+        MetaData(),
+        Column("law_type", VARCHAR),
+        Column("topic", VARCHAR),
+        Column("zone", VARCHAR),
+        schema="public",
+    )
+
+
+@fixture
+def admin_areas_tables() -> List[Table]:
+    return [
+        Table(
+            "fao_areas",
+            MetaData(),
+            Column("wkb_geometry", Geometry),
+            Column("f_code", VARCHAR),
+            schema="public",
+        ),
+        Table(
+            "eez_areas",
+            MetaData(),
+            Column("wkb_geometry", Geometry),
+            Column("iso_sov1", VARCHAR),
+            schema="public",
+        ),
+        Table(
+            "n_miles_to_shore_areas_subdivided",
+            MetaData(),
+            Column("miles_to_shore", VARCHAR),
+            Column("geometry", Geometry),
+            schema="public",
+        ),
+        Table(
+            "neafc_regulatory_area",
+            MetaData(),
+            Column("ogc_fid", Integer),
+            Column("wkb_geometry", Geometry),
+            schema="public",
+        ),
+    ]
+
+
+@fixture
+def vessels_table() -> Table:
+    return Table(
+        "vessels",
+        MetaData(),
         Column("id", Integer),
-        Column("some_text", VARCHAR),
-        Column("geometry", Geometry),
+        Column("cfr", VARCHAR),
+        Column("external_immatriculation", VARCHAR),
+        Column("ircs", VARCHAR),
+        Column("district_code", VARCHAR),
+        schema="public",
     )
 
-    zones_table = ZonesTable(
-        table=table, geometry_column="geometry", filter_column="id"
+
+@fixture
+def prod_org_memberships_table() -> Table:
+    return Table(
+        "producer_organization_memberships",
+        MetaData(),
+        Column("internal_reference_number", VARCHAR),
+        Column("organization_name", VARCHAR),
+        schema="public",
     )
-    assert zones_table.table is table
-    assert zones_table.filter_column == "id"
-    assert zones_table.geometry_column == "geometry"
 
-    with pytest.raises(AssertionError):
-        ZonesTable(table=table, geometry_column="some_text", filter_column="id")
 
-    with pytest.raises(AssertionError):
-        ZonesTable(
-            table=table, geometry_column="geometry", filter_column="id_not_exists"
+@fixture
+def admin_areas_specs_with_tables(
+    admin_area_specifications, admin_areas_table_metadata, admin_areas_tables
+) -> List[AdminAreasSpecWithTable]:
+    return [
+        AdminAreasSpecWithTable(
+            area_type=s.areaType, areas=s.areas, metadata=m, table=t
         )
-
-    with pytest.raises(AssertionError):
-        ZonesTable(
-            table=table, geometry_column="geometry_not_exists", filter_column="id"
+        for (s, m, t) in zip(
+            admin_area_specifications, admin_areas_table_metadata, admin_areas_tables
         )
+    ]
 
 
-def test_alert_has_gear_parameters_returns_true_on_non_null_inputs():
-    assert alert_has_gear_parameters(["OTM"], ["Chaluts"])
-    assert alert_has_gear_parameters(["OTB"], ["Chaluts", "Filets"])
-    assert alert_has_gear_parameters(["OTT"], None)
-    assert alert_has_gear_parameters(None, ["Chaluts"])
+@fixture
+def vessels_current_gears() -> pd.DataFrame:
+    return pd.DataFrame(
+        [
+            {"cfr": "ABC000145907", "gear": "PS1", "mesh": 80.0},
+            {"cfr": "ABC000306959", "gear": "OTM", "mesh": 80.0},
+            {"cfr": "ABC000542519", "gear": "OTB", "mesh": 80.0},
+            {"cfr": "CFR_OF_LOGBK", "gear": "OTM", "mesh": 80.0},
+            {"cfr": "DEF000115851", "gear": "OTB", "mesh": 80.0},
+            {"cfr": "DEF000155891", "gear": "FPO", "mesh": 80.0},
+            {"cfr": "DEF000155891", "gear": "GTR", "mesh": 80.0},
+            {"cfr": "OLD_VESSEL_1", "gear": "PTB", "mesh": 65.0},
+            {"cfr": "UNKONWN_VESS", "gear": "OTM", "mesh": 100.0},
+        ]
+    )
 
 
-def test_alert_has_gear_parameters_returns_false_on_null_inputs():
-    assert not alert_has_gear_parameters(None, None)
+@fixture
+def species_specs() -> List[SpeciesSpecification]:
+    return [
+        SpeciesSpecification(species="SOL", minWeight=2500),
+        SpeciesSpecification(species="HKE"),
+        SpeciesSpecification(species="ANE", minWeight=None),
+    ]
 
 
-def test_alert_has_gear_parameters_raises_type_error_on_incorrect_input():
-    with pytest.raises(TypeError):
-        alert_has_gear_parameters(["OTM"], "not a list")
-    with pytest.raises(TypeError):
-        alert_has_gear_parameters(None, "not a list")
-    with pytest.raises(TypeError):
-        alert_has_gear_parameters("not_a_list", None)
-    with pytest.raises(TypeError):
-        alert_has_gear_parameters("unexpected string type", ["OTB"])
+@fixture
+def vessels_with_species_onboard() -> pd.DataFrame:
+    return pd.DataFrame(
+        [
+            {"cfr": "ABC000306959", "species": "HKE", "weight": 713.0},
+            {"cfr": "ABC000542519", "species": "HKE", "weight": 2426.0},
+            {"cfr": "ABC000542519", "species": "SOL", "weight": 157.0},
+            {"cfr": "CFR_OF_LOGBK", "species": "HKE", "weight": 713.0},
+            {"cfr": "OLD_VESSEL_1", "species": "ANE", "weight": 213.0},
+        ]
+    )
 
 
-def test_get_alert_type_zones_table(reset_test_data):
-    with pytest.raises(ValueError):
-        get_alert_type_zones_table("Some unknown alert type")
-
-    zones_tables = get_alert_type_zones_table("THREE_MILES_TRAWLING_ALERT")
-    assert isinstance(zones_tables, ZonesTable)
+@fixture
+def vessels_with_species_min_weight() -> pd.DataFrame:
+    return pd.DataFrame()
 
 
-@patch(
-    "src.flows.position_alerts.datetime",
-    mock_datetime_utcnow(datetime(2021, 1, 1, 16, 10, 0)),
-)
-def test_make_positions_in_alert_query():
+def mock_get_depth(lon: float, lat: float):
+    return lon
+
+
+def test_to_admin_areas_table_metadata(
+    admin_area_specifications, admin_areas_table_metadata
+):
+    res = [to_admin_areas_table_metadata(spec) for spec in admin_area_specifications]
+    assert res == admin_areas_table_metadata
+
+
+def test_to_admin_areas_spec_with_table(
+    admin_area_specifications,
+    admin_areas_tables,
+    admin_areas_table_metadata,
+    admin_areas_specs_with_tables,
+):
+    res = [
+        to_admin_areas_spec_with_table(s, m, t)
+        for s, m, t in zip(
+            admin_area_specifications, admin_areas_table_metadata, admin_areas_tables
+        )
+    ]
+    assert res == admin_areas_specs_with_tables
+
+
+def test_to_regulatory_area_filter(regulations_table):
+    spec = RegulatoryAreaSpecification(lawType="law_type_1", topic=None, zone=None)
+    filter_condition = to_regulatory_area_filter(spec, regulations_table)
+    filter_str = str(filter_condition.compile(compile_kwargs={"literal_binds": True}))
+    assert filter_str == "public.regulations.law_type = 'law_type_1'"
+
+    spec = RegulatoryAreaSpecification(lawType=None, topic="topic_1", zone=None)
+    filter_condition = to_regulatory_area_filter(spec, regulations_table)
+    filter_str = str(filter_condition.compile(compile_kwargs={"literal_binds": True}))
+    assert filter_str == "public.regulations.topic = 'topic_1'"
+
+    spec = RegulatoryAreaSpecification(lawType=None, topic=None, zone="zone_1")
+    filter_condition = to_regulatory_area_filter(spec, regulations_table)
+    filter_str = str(filter_condition.compile(compile_kwargs={"literal_binds": True}))
+    assert filter_str == "public.regulations.zone = 'zone_1'"
+
+    spec = RegulatoryAreaSpecification(
+        lawType="law_type_1", topic="topic_1", zone="zone_1"
+    )
+    filter_condition = to_regulatory_area_filter(spec, regulations_table)
+    filter_str = str(filter_condition.compile(compile_kwargs={"literal_binds": True}))
+    assert filter_str == (
+        "public.regulations.law_type = 'law_type_1' AND "
+        "public.regulations.topic = 'topic_1' AND "
+        "public.regulations.zone = 'zone_1'"
+    )
+
+    spec = RegulatoryAreaSpecification(lawType="", topic="topic_1", zone=None)
+    filter_condition = to_regulatory_area_filter(spec, regulations_table)
+    filter_str = str(filter_condition.compile(compile_kwargs={"literal_binds": True}))
+    assert filter_str == "public.regulations.topic = 'topic_1'"
+
+    spec = RegulatoryAreaSpecification(lawType=None, topic=None, zone=None)
+    with pytest.raises(
+        ValueError, match="Cannot set regulatory area filter without any criterion"
+    ):
+        to_regulatory_area_filter(spec, regulations_table)
+
+    spec = RegulatoryAreaSpecification(lawType=None, topic=None, zone="")
+    with pytest.raises(
+        ValueError, match="Cannot set regulatory area filter without any criterion"
+    ):
+        to_regulatory_area_filter(spec, regulations_table)
+
+
+def test_make_vessels_query(vessels_table, prod_org_memberships_table):
+    # Test with all parameters
+    select_statement = make_vessels_query(
+        vessels_table=vessels_table,
+        prod_org_memberships_table=prod_org_memberships_table,
+        vessel_ids=[1, 2],
+        district_codes=["AA", "BB"],
+        producer_organizations=["Org1", "Org2"],
+    )
+    query = str(select_statement.compile(compile_kwargs={"literal_binds": True}))
+
+    expected_query = (
+        "SELECT public.vessels.id, "
+        "public.vessels.cfr, "
+        "public.vessels.external_immatriculation, "
+        "public.vessels.ircs "
+        "\nFROM public.vessels "
+        "JOIN public.producer_organization_memberships "
+        "ON public.vessels.cfr = "
+        "public.producer_organization_memberships.internal_reference_number "
+        "\nWHERE public.vessels.id IN (1, 2) AND "
+        "public.vessels.district_code IN ('AA', 'BB') AND "
+        "public.producer_organization_memberships.organization_name "
+        "IN ('Org1', 'Org2')"
+    )
+
+    assert query == expected_query
+
+    # Test with minimal parameters
+    select_statement = make_vessels_query(
+        vessels_table=vessels_table,
+        prod_org_memberships_table=None,
+        vessel_ids=None,
+        district_codes=None,
+        producer_organizations=None,
+    )
+    query = str(select_statement.compile(compile_kwargs={"literal_binds": True}))
+
+    expected_query = (
+        "SELECT public.vessels.id, "
+        "public.vessels.cfr, "
+        "public.vessels.external_immatriculation, "
+        "public.vessels.ircs "
+        "\nFROM public.vessels"
+    )
+
+    assert query == expected_query
+
+
+def test_get_sets_of_identifiers():
+    vessels = pd.DataFrame(
+        {
+            "id": [1, 2, 3, 4, 5, 6],
+            "cfr": ["CFR1", "CFR2", None, None, None, None],
+            "external_immatriculation": ["EXT1", "EXT2", "EXT3", "-", None, None],
+            "ircs": ["IRCS1", "IRCS2", "IRCS3", "IRCS4", "IRCS5", None],
+        }
+    )
+
+    cfrs, external_immats, ircss = get_sets_of_identifiers(vessels)
+
+    assert cfrs == {"CFR1", "CFR2"}
+    assert external_immats == {"EXT3"}
+    assert ircss == {"IRCS4", "IRCS5"}
+
+    cfrs, external_immats, ircss = get_sets_of_identifiers(vessels.head(0))
+
+    assert cfrs == set()
+    assert external_immats == set()
+    assert ircss == set()
+
+
+def test_merge_sets_of_identifiers():
+    vessels_cfrs = {"CFR1", "CFR2", "CFR3"}
+    vessels_external_immats = {"EXT1", "EXT2"}
+    vessels_ircss = {"IRCS1", "IRCS2"}
+    cfrs_with_species = {"CFR1", "CFR2"}
+    cfrs_with_gears = {"CFR2", "CFR3", "CFR4"}
+
+    # Test when no species or gear conditions are given
+    cfrs, external_immats, ircss = merge_sets_of_identifiers(
+        cfrs_with_species_min_weight=None,
+        cfrs_with_gears=None,
+        vessels_cfrs=vessels_cfrs,
+        vessels_external_immats=vessels_external_immats,
+        vessels_ircss=vessels_ircss,
+    )
+    assert cfrs == vessels_cfrs
+    assert external_immats == vessels_external_immats
+    assert ircss == vessels_ircss
+
+    # Test when with species condition
+    cfrs, external_immats, ircss = merge_sets_of_identifiers(
+        cfrs_with_species_min_weight=cfrs_with_species,
+        cfrs_with_gears=None,
+        vessels_cfrs=vessels_cfrs,
+        vessels_external_immats=vessels_external_immats,
+        vessels_ircss=vessels_ircss,
+    )
+    assert cfrs == {"CFR1", "CFR2"}
+    assert external_immats is None
+    assert ircss is None
+
+    # Test when with gear condition
+    cfrs, external_immats, ircss = merge_sets_of_identifiers(
+        cfrs_with_species_min_weight=None,
+        cfrs_with_gears=cfrs_with_gears,
+        vessels_cfrs=vessels_cfrs,
+        vessels_external_immats=vessels_external_immats,
+        vessels_ircss=vessels_ircss,
+    )
+    assert cfrs == {"CFR2", "CFR3"}
+    assert external_immats is None
+    assert ircss is None
+
+    # Test when with both species and gear conditions
+    cfrs, external_immats, ircss = merge_sets_of_identifiers(
+        cfrs_with_species_min_weight=cfrs_with_species,
+        cfrs_with_gears=cfrs_with_gears,
+        vessels_cfrs=vessels_cfrs,
+        vessels_external_immats=vessels_external_immats,
+        vessels_ircss=vessels_ircss,
+    )
+    assert cfrs == {"CFR2"}
+    assert external_immats is None
+    assert ircss is None
+
+    # Test when with both species and gear conditions and empty intersection
+    vessels_cfrs = {"CFR1", "CFR2"}
+    cfrs_with_species = {"CFR3", "CFR4"}
+
+    cfrs, external_immats, ircss = merge_sets_of_identifiers(
+        cfrs_with_species_min_weight=cfrs_with_species,
+        cfrs_with_gears=None,
+        vessels_cfrs=vessels_cfrs,
+        vessels_external_immats={"EXT1"},
+        vessels_ircss={"IRCS1"},
+    )
+
+    assert cfrs == set()
+    assert external_immats is None
+    assert ircss is None
+
+    # Test when all parameters are None.
+    cfrs, external_immats, ircss = merge_sets_of_identifiers(
+        cfrs_with_species_min_weight=None,
+        cfrs_with_gears=None,
+        vessels_cfrs=None,
+        vessels_external_immats=None,
+        vessels_ircss=None,
+    )
+
+    assert cfrs is None
+    assert external_immats is None
+    assert ircss is None
+
+    # Test when all parameters are empty sets
+    cfrs, external_immats, ircss = merge_sets_of_identifiers(
+        cfrs_with_species_min_weight=set(),
+        cfrs_with_gears=set(),
+        vessels_cfrs=set(),
+        vessels_external_immats=set(),
+        vessels_ircss=set(),
+    )
+
+    assert cfrs == set()
+    assert external_immats is None
+    assert ircss is None
+
+    # Test when all parameters are mixed None and empty sets
+    cfrs, external_immats, ircss = merge_sets_of_identifiers(
+        cfrs_with_species_min_weight=set(),
+        cfrs_with_gears=None,
+        vessels_cfrs=None,
+        vessels_external_immats=None,
+        vessels_ircss={"IRCS1"},
+    )
+
+    assert cfrs == set()
+    assert external_immats is None
+    assert ircss is None
+
+    # Condition on species excludes ircs and external_immat
+    cfrs, external_immats, ircss = merge_sets_of_identifiers(
+        cfrs_with_species_min_weight={"CFR1"},
+        cfrs_with_gears=None,
+        vessels_cfrs=None,
+        vessels_external_immats={"EXT1", "EXT2"},
+        vessels_ircss={"IRCS1", "IRCS2"},
+    )
+
+    assert cfrs == {"CFR1"}
+    assert external_immats is None
+    assert ircss is None
+
+    # Condition on gears excludes ircs and external_immat
+    cfrs, external_immats, ircss = merge_sets_of_identifiers(
+        cfrs_with_species_min_weight=None,
+        cfrs_with_gears={"CFR1"},
+        vessels_cfrs=None,
+        vessels_external_immats={"EXT1", "EXT2"},
+        vessels_ircss={"IRCS1", "IRCS2"},
+    )
+
+    assert cfrs == {"CFR1"}
+    assert external_immats is None
+    assert ircss is None
+
+
+def test_make_positions_in_alert_query(admin_areas_specs_with_tables):
     meta = MetaData()
     positions_table = Table(
         "positions",
@@ -119,57 +523,66 @@ def test_make_positions_in_alert_query():
         Column("geometry", Geometry),
     )
 
-    eez_areas_table = Table(
-        "eez_areas",
-        meta,
-        Column("id", Integer),
-        Column("iso_sov1", VARCHAR),
-        Column("some_other_data", VARCHAR),
-        Column("wkb_geometry", Geometry),
-    )
-
     facades_table = Table(
         "facades", meta, Column("facade", VARCHAR), Column("geometry", Geometry)
     )
 
-    zones_table = ZonesTable(
-        Table(
-            "zones",
-            meta,
-            Column("zone_name", VARCHAR),
-            Column("geometry_col", Geometry),
-        ),
-        geometry_column="geometry_col",
-        filter_column="zone_name",
+    regulations_table = Table(
+        "regulations",
+        meta,
+        Column("geometry", Geometry),
+        Column("law_type", VARCHAR),
+        Column("topic", VARCHAR),
+        Column("zone", VARCHAR),
     )
-
     # Test make_positions_in_alert_query with all arguments
 
     only_fishing_positions = True
-    zones = ["Zone A"]
-    hours_from_now = 6
-    flag_states = ["NL, DE"]
-    except_flag_states = ["VE"]
+    track_analysis_depth = 6
+    now = datetime(2024, 5, 2, 12, 30, 0)
+    flag_states_iso2 = ["NL, DE"]
+
+    regulatory_areas = [
+        RegulatoryAreaSpecification(
+            lawType="law_type_1",
+            topic="topic_1",
+            zone="zone_1",
+        ),
+        RegulatoryAreaSpecification(
+            lawType="law_type_2",
+        ),
+        RegulatoryAreaSpecification(
+            topic="topic_3",
+        ),
+        RegulatoryAreaSpecification(
+            zone="zone_4",
+        ),
+    ]
+
+    cfrs = {"cfr_1", "cfr_2"}
+    external_immats = {"external_immat_1", "external_immat_2"}
+    ircss = {"ircs_1", "ircs_2"}
 
     select_statement = make_positions_in_alert_query(
         positions_table=positions_table,
         facades_table=facades_table,
-        zones_table=zones_table,
-        eez_areas_table=eez_areas_table,
+        track_analysis_depth=track_analysis_depth,
+        now=now,
+        regulations_table=regulations_table,
         only_fishing_positions=only_fishing_positions,
-        zones=zones,
-        hours_from_now=hours_from_now,
-        flag_states=flag_states,
-        except_flag_states=except_flag_states,
-        eez_areas=["FRA", "BEL"],
+        flag_states_iso2=flag_states_iso2,
+        regulatory_areas=regulatory_areas,
+        admin_areas_specs_with_tables=admin_areas_specs_with_tables,
+        cfrs=cfrs,
+        external_immats=external_immats,
+        ircss=ircss,
     )
 
     query = str(select_statement.compile(compile_kwargs={"literal_binds": True}))
 
     expected_query = (
         "SELECT "
-        "positions.id, "
-        "positions.internal_reference_number AS cfr, "
+        "positions.id, positions.internal_reference_number AS cfr, "
         "positions.external_reference_number AS external_immatriculation, "
         "positions.ircs, "
         "positions.vessel_name, "
@@ -179,23 +592,47 @@ def test_make_positions_in_alert_query():
         "positions.longitude, "
         "facades.facade "
         "\nFROM positions "
-        "JOIN zones "
-        "ON ST_Intersects(positions.geometry, zones.geometry_col) "
         "LEFT OUTER JOIN facades "
         "ON ST_Intersects(positions.geometry, facades.geometry) "
-        "LEFT OUTER JOIN eez_areas "
-        "ON ST_Intersects(positions.geometry, eez_areas.wkb_geometry) "
-        "\nWHERE positions.date_time > '2021-01-01 10:10:00' "
-        "AND positions.date_time < '2021-01-01 16:10:00' "
-        "AND ("
-        "positions.internal_reference_number IS NOT NULL OR "
+        "JOIN regulations "
+        "ON ST_Intersects(positions.geometry, regulations.geometry) "
+        "JOIN public.fao_areas "
+        "ON ST_Intersects(positions.geometry, public.fao_areas.wkb_geometry) "
+        "JOIN public.eez_areas "
+        "ON ST_Intersects(positions.geometry, public.eez_areas.wkb_geometry) "
+        "JOIN public.n_miles_to_shore_areas_subdivided "
+        "ON ST_Intersects(positions.geometry, public.n_miles_to_shore_areas_subdivided.geometry) "
+        "JOIN public.neafc_regulatory_area "
+        "ON ST_Intersects(positions.geometry, public.neafc_regulatory_area.wkb_geometry) "
+        "\nWHERE "
+        "positions.date_time > '2024-05-02 06:30:00' AND "
+        "positions.date_time < '2024-05-02 12:30:00' AND "
+        "(positions.internal_reference_number IS NOT NULL OR "
         "positions.external_reference_number IS NOT NULL OR "
-        "positions.ircs IS NOT NULL) "
-        "AND positions.is_fishing "
-        "AND zones.zone_name IN ('Zone A') "
-        "AND positions.flag_state IN ('NL, DE') "
-        "AND (positions.flag_state NOT IN ('VE')) "
-        "AND eez_areas.iso_sov1 IN ('FRA', 'BEL')"
+        "positions.ircs IS NOT NULL"
+        ") AND "
+        "("
+        "regulations.law_type = 'law_type_1' AND "
+        "regulations.topic = 'topic_1' AND "
+        "regulations.zone = 'zone_1' OR "
+        "regulations.law_type = 'law_type_2' OR "
+        "regulations.topic = 'topic_3' OR "
+        "regulations.zone = 'zone_4'"
+        ") AND "
+        "public.fao_areas.f_code IN ('27.7', '27.8.a') AND "
+        "public.eez_areas.iso_sov1 IN ('FR', 'BE') AND "
+        "public.n_miles_to_shore_areas_subdivided.miles_to_shore IN ('3-6', '0-3') AND "
+        "public.neafc_regulatory_area.ogc_fid IN (1) AND "
+        "("
+        "positions.internal_reference_number IN ('cfr_1', 'cfr_2') OR "
+        "positions.internal_reference_number IS NULL AND "
+        "positions.external_reference_number IN "
+        "('external_immat_1', 'external_immat_2') OR "
+        "positions.internal_reference_number IS NULL AND "
+        "positions.ircs IN ('ircs_1', 'ircs_2')"
+        ") AND "
+        "positions.is_fishing AND "
+        "positions.flag_state IN ('NL, DE')"
     )
 
     assert query == expected_query
@@ -207,10 +644,8 @@ def test_make_positions_in_alert_query():
     select_statement = make_positions_in_alert_query(
         positions_table=positions_table,
         facades_table=facades_table,
-        zones_table=zones_table,
-        eez_areas_table=eez_areas_table,
-        only_fishing_positions=only_fishing_positions,
-        hours_from_now=hours_from_now,
+        track_analysis_depth=track_analysis_depth,
+        now=now,
     )
 
     query = str(select_statement.compile(compile_kwargs={"literal_binds": True}))
@@ -228,215 +663,189 @@ def test_make_positions_in_alert_query():
         "positions.longitude, "
         "facades.facade "
         "\nFROM positions "
-        "JOIN zones "
-        "ON ST_Intersects(positions.geometry, zones.geometry_col) "
         "LEFT OUTER JOIN facades "
         "ON ST_Intersects(positions.geometry, facades.geometry) "
-        "\nWHERE positions.date_time > '2021-01-01 10:10:00' "
-        "AND positions.date_time < '2021-01-01 16:10:00' "
+        "\nWHERE positions.date_time > '2024-05-02 06:30:00' "
+        "AND positions.date_time < '2024-05-02 12:30:00' "
         "AND ("
         "positions.internal_reference_number IS NOT NULL OR "
         "positions.external_reference_number IS NOT NULL OR "
-        "positions.ircs IS NOT NULL)"
+        "positions.ircs IS NOT NULL) "
+        "AND positions.is_fishing"
     )
 
     assert query == expected_query
 
 
-def test_make_fishing_gears_query():
-    meta = MetaData()
-    fishing_gears_table = Table(
-        "fishing_gear_codes",
-        meta,
-        Column("fishing_gear_code", VARCHAR),
-        Column("fishing_gear_category", VARCHAR),
+def test_extract_vessels_current_gears(reset_test_data, vessels_current_gears):
+    res = extract_vessels_current_gears().sort_values("cfr").reset_index(drop=True)
+    pd.testing.assert_frame_equal(res, vessels_current_gears)
+
+
+def test_extract_vessels_with_species_onboard(
+    reset_test_data, species_specs, vessels_with_species_onboard
+):
+    res = (
+        extract_vessels_with_species_onboard(species_specs)
+        .sort_values(["cfr", "species"])
+        .reset_index(drop=True)
     )
+    pd.testing.assert_frame_equal(res, vessels_with_species_onboard)
 
-    # Test with filter on gear codes
-
-    select_statement = make_fishing_gears_query(
-        fishing_gears_table, fishing_gears=["OTB", "OTM"], fishing_gear_categories=None
+    res = (
+        extract_vessels_with_species_onboard(
+            species_specs, species_catch_areas=["27.7", "27.8.c"]
+        )
+        .sort_values(["cfr", "species"])
+        .reset_index(drop=True)
     )
-
-    query = str(select_statement.compile(compile_kwargs={"literal_binds": True}))
-
-    expected_query = (
-        "SELECT "
-        "fishing_gear_codes.fishing_gear_code "
-        "\nFROM fishing_gear_codes "
-        "\nWHERE fishing_gear_codes.fishing_gear_code IN ('OTB', 'OTM')"
-    )
-
-    assert query == expected_query
-
-    # Test with filter on gear categories
-
-    select_statement = make_fishing_gears_query(
-        fishing_gears_table, fishing_gears=None, fishing_gear_categories=["Chaluts"]
-    )
-
-    query = str(select_statement.compile(compile_kwargs={"literal_binds": True}))
-
-    expected_query = (
-        "SELECT "
-        "fishing_gear_codes.fishing_gear_code "
-        "\nFROM fishing_gear_codes "
-        "\nWHERE fishing_gear_codes.fishing_gear_category IN ('Chaluts')"
-    )
-
-    assert query == expected_query
-
-    # Get all gear codes
-
-    select_statement = make_fishing_gears_query(
-        fishing_gears_table, fishing_gears=None, fishing_gear_categories=None
-    )
-
-    query = str(select_statement.compile(compile_kwargs={"literal_binds": True}))
-
-    expected_query = (
-        "SELECT " "fishing_gear_codes.fishing_gear_code " "\nFROM fishing_gear_codes"
-    )
-
-    assert query == expected_query
-
-
-def test_extract_current_gears(reset_test_data):
-    current_gears = extract_current_gears()
-    nb_last_positions_vessels = read_query(
-        "SELECT COUNT(*) FROM last_positions", db="monitorfish_remote"
-    ).iloc[0, 0]
-
-    # extract_current_gears should yield gears of all vessels in the
-    # `last_positions` table
-    assert len(current_gears) == nb_last_positions_vessels
-
-    # extract_current_gears should take gears in the `last_positions` table
-    # when available
-
-    assert current_gears.loc[current_gears.cfr == "ABC000542519", "current_gears"].iloc[
-        0
-    ] == {"OTM"}
-
-    # extract_current_gears should take gears in the `vessels` table when not
-    # available in the `last_positions` table
-    assert current_gears.loc[current_gears.cfr == "ABC000055481", "current_gears"].iloc[
-        0
-    ] == {"OTT", "OTB", "OTM"}
-
-    # extract_current_gears should return current_gears = `None` for vessels
-    # whose gear is not in `vessels` nor in `last_positions`
-    assert (
-        current_gears.loc[
-            current_gears.external_immatriculation == "SB125334",
-            "current_gears",
-        ].iloc[0]
-        is None
-    )
-
-
-def test_extract_vessels_with_species_onboard(reset_test_data):
-    vessels_filter_1 = extract_vessels_with_species_onboard(
-        species_onboard=["SOL", "HKE"],
-        min_weight=2500.0,
-    )
-
-    assert vessels_filter_1 == VesselsFilter(
-        is_active=True, vessels_cfr=["ABC000542519"]
-    )
-
-    vessels_filter_2 = extract_vessels_with_species_onboard(
-        species_onboard=None,
-        min_weight=2500.0,
-    )
-
-    assert vessels_filter_2 == VesselsFilter(is_active=False, vessels_cfr=None)
-
-    vessels_filter_3 = extract_vessels_with_species_onboard(
-        species_onboard=["SOL", "HKE"],
-        min_weight=25000.0,
-    )
-
-    assert vessels_filter_3 == VesselsFilter(is_active=True, vessels_cfr=[])
-
-
-def test_filter_vessels():
-    positions_in_alert = pd.DataFrame(
-        {
-            "cfr": ["A", "B", "C", "D", None],
-            "some_data": [1.23, 5.56, 12.23, 5.236, 98.58],
-        }
-    )
-
-    filtered_positions_1 = filter_vessels(
-        positions_in_alert, VesselsFilter(is_active=True, vessels_cfr=["A", "B"])
-    )
-    filtered_positions_2 = filter_vessels(
-        positions_in_alert, VesselsFilter(is_active=False, vessels_cfr=["A", "B"])
-    )
-    filtered_positions_3 = filter_vessels(
-        positions_in_alert, VesselsFilter(is_active=True, vessels_cfr=[])
-    )
-    filtered_positions_4 = filter_vessels(
-        positions_in_alert.head(0),
-        VesselsFilter(is_active=True, vessels_cfr=["A", "B"]),
-    )
-
-    pd.testing.assert_frame_equal(filtered_positions_1, positions_in_alert.head(2))
-    pd.testing.assert_frame_equal(filtered_positions_2, positions_in_alert)
-    pd.testing.assert_frame_equal(filtered_positions_3, positions_in_alert.head(0))
-    pd.testing.assert_frame_equal(filtered_positions_4, positions_in_alert.head(0))
-
-
-def test_filter_on_gears():
-    positions_in_alert = pd.DataFrame(
-        {
-            "cfr": ["A", "B", "C", "D"],
-            "external_immatriculation": ["AA", "BB", "CC", "DD"],
-            "ircs": ["AAA", "BBB", "CCC", "DDD"],
-            "some_data": [1.23, 5.56, 12.23, 5.236],
-        }
-    )
-    current_gears = pd.DataFrame(
-        {
-            "cfr": ["A", "B", "C", "D"],
-            "external_immatriculation": ["AA", "BB", "CC", "DD"],
-            "ircs": ["AAA", "BBB", "CCC", "DDD"],
-            "current_gears": [None, {"OTB", "OTT"}, {"DRB"}, {"OTM"}],
-        }
-    )
-    gear_codes = {"OTM", "OTB"}
-
-    # Test excluding unknown gears
-    include_vessels_unknown_gear = False
-
-    filtered_positions_in_alert = filter_on_gears(
-        positions_in_alert,
-        current_gears,
-        gear_codes,
-        include_vessels_unknown_gear,
-    )
-
     pd.testing.assert_frame_equal(
-        filtered_positions_in_alert,
-        positions_in_alert.loc[positions_in_alert.cfr == "D"],
+        res,
+        (
+            vessels_with_species_onboard[
+                vessels_with_species_onboard.cfr.isin(["ABC000542519", "OLD_VESSEL_1"])
+            ].reset_index(drop=True)
+        ),
     )
 
-    # Test including unknown gears
-    include_vessels_unknown_gear = True
 
-    filtered_positions_in_alert = filter_on_gears(
-        positions_in_alert,
-        current_gears,
-        gear_codes,
-        include_vessels_unknown_gear,
+def test_get_vessels_with_species_min_weight():
+    vessels_species = pd.DataFrame(
+        {
+            "cfr": [
+                "VESSEL_1",
+                "VESSEL_1",
+                "VESSEL_1",
+                "VESSEL_2",
+                "VESSEL_2",
+                "VESSEL_3",
+            ],
+            "species": ["SP1", "SP2", "SP3", "SP2", "SP4", "SP4"],
+            "weight": [120.0, 125.5, 560.0, 50.5, 96.2, 696.2],
+        }
     )
 
-    pd.testing.assert_frame_equal(
-        filtered_positions_in_alert,
-        positions_in_alert.loc[positions_in_alert.cfr.isin(["D", "A"])],
-        check_like=True,
+    species_spec = [
+        SpeciesSpecification(species="SP1", minWeight=500.0),
+        SpeciesSpecification(species="SP2", minWeight=50.0),
+        SpeciesSpecification(species="SP3", minWeight=500.0),
+        SpeciesSpecification(species="SP4", minWeight=500.0),
+    ]
+
+    cfrs = get_vessels_with_species_min_weight(
+        vessels_species=vessels_species, species_spec=species_spec
     )
+    assert cfrs == {"VESSEL_1", "VESSEL_2", "VESSEL_3"}
+
+    species_spec = [
+        SpeciesSpecification(species="SP1", minWeight=500.0),
+        SpeciesSpecification(species="SP2", minWeight=100.0),
+        SpeciesSpecification(species="SP3", minWeight=500.0),
+        SpeciesSpecification(species="SP4", minWeight=500.0),
+    ]
+
+    cfrs = get_vessels_with_species_min_weight(
+        vessels_species=vessels_species, species_spec=species_spec
+    )
+    assert cfrs == {"VESSEL_1", "VESSEL_3"}
+
+    species_spec = [
+        SpeciesSpecification(species="SP1", minWeight=1000.0),
+        SpeciesSpecification(species="SP2", minWeight=1000.0),
+        SpeciesSpecification(species="SP3", minWeight=1000.0),
+        SpeciesSpecification(species="SP4", minWeight=500.0),
+    ]
+    cfrs = get_vessels_with_species_min_weight(
+        vessels_species=vessels_species, species_spec=species_spec
+    )
+    assert cfrs == {"VESSEL_3"}
+
+    species_spec = [
+        SpeciesSpecification(species="SP1"),
+        SpeciesSpecification(species="SP2", minWeight=1000.0),
+        SpeciesSpecification(species="SP3", minWeight=1000.0),
+        SpeciesSpecification(species="SP4", minWeight=500.0),
+    ]
+    cfrs = get_vessels_with_species_min_weight(
+        vessels_species=vessels_species, species_spec=species_spec
+    )
+    assert cfrs == {"VESSEL_1", "VESSEL_3"}
+
+
+def test_get_vessels_with_gears():
+    vessels_gears = pd.DataFrame(
+        {
+            "cfr": [
+                "VESSEL1",
+                "VESSEL1",
+                "VESSEL2",
+                "VESSEL3",
+                "VESSEL4",
+                "VESSEL5",
+                "VESSEL6",
+                "VESSEL7",
+                "VESSEL8",
+            ],
+            "gear": ["OTM", "OTB", "OTB", "OTB", "OTT", "OTT", "OTT", "LSS", "LHP"],
+            "mesh": [110.0, 110.0, 110.0, 80.0, 110.0, 80.0, None, None, None],
+        }
+    )
+    gears = [
+        GearSpecification(gear="OTM", minMesh=80.0, maxMesh=120.0),
+        GearSpecification(gear="OTB", minMesh=100.0),
+        GearSpecification(gear="OTT", maxMesh=100.0),
+        GearSpecification(gear="LSS"),
+    ]
+    res = get_vessels_with_gears(vessels_gears=vessels_gears, gears=gears)
+    assert res == {"VESSEL1", "VESSEL2", "VESSEL5", "VESSEL7"}
+
+    # Test with no mesh constraint
+    gears = [
+        GearSpecification(gear="OTM"),
+        GearSpecification(gear="OTB"),
+        GearSpecification(gear="OTT"),
+        GearSpecification(gear="LSS"),
+    ]
+    res = get_vessels_with_gears(vessels_gears=vessels_gears, gears=gears)
+    assert res == {
+        "VESSEL1",
+        "VESSEL2",
+        "VESSEL3",
+        "VESSEL4",
+        "VESSEL5",
+        "VESSEL6",
+        "VESSEL7",
+    }
+
+    # Test with no mesh info
+    vessels_gears = pd.DataFrame(
+        {
+            "cfr": [
+                "VESSEL6",
+                "VESSEL7",
+                "VESSEL8",
+            ],
+            "gear": ["OTT", "LSS", "LHP"],
+            "mesh": [None, None, None],
+        }
+    )
+    gears = [
+        GearSpecification(gear="OTM", minMesh=80.0, maxMesh=120.0),
+        GearSpecification(gear="OTB", minMesh=100.0),
+        GearSpecification(gear="OTT", maxMesh=100.0),
+        GearSpecification(gear="LSS"),
+    ]
+    res = get_vessels_with_gears(vessels_gears=vessels_gears, gears=gears)
+    assert res == {"VESSEL7"}
+
+    gears = [
+        GearSpecification(gear="OTM", minMesh=80.0, maxMesh=120.0),
+        GearSpecification(gear="OTB", minMesh=100.0),
+        GearSpecification(gear="OTT", maxMesh=100.0),
+        GearSpecification(gear="DRB"),
+    ]
+    res = get_vessels_with_gears(vessels_gears=vessels_gears, gears=gears)
+    assert res == set()
 
 
 def test_get_vessels_in_alert():
@@ -492,29 +901,47 @@ def test_get_vessels_in_alert():
     )
 
 
-def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test_data):
+def test_flow_deletes_existing_pending_alerts_of_matching_type_and_alert_id(
+    reset_test_data,
+):
     # With these parameters, no alert should be raised.
-    alert_type = "THREE_MILES_TRAWLING_ALERT"
-    alert_config_name_in_table = "ALERTE_1"
-    alert_config_name_not_in_table = "ALERTE_2"
-    zones = ["0-3"]
-    hours_from_now = 8
+    position_alert_id_in_table = 1
+    position_alert_id_not_in_table = 2
+    track_analysis_depth = 8
+    natinf_code = 5826
     only_fishing_positions = True
-    flag_states = None
-    fishing_gears = ["LLS"]
-    fishing_gear_categories = None
-    include_vessels_unknown_gear = False
+    gears = [GearSpecification(gear="LLS")]
+    species = None
+    species_catch_areas = None
+    administrative_areas = [
+        AdminAreasSpecification(
+            areaType=AdministrativeAreaType.DISTANCE_TO_SHORE, areas=["0-3"]
+        )
+    ]
+    regulatory_areas = None
+    min_depth = None
+    flag_states_iso2 = None
+    vessel_ids = None
+    district_codes = None
+    producer_organizations = None
 
     state = position_alert_flow(
-        alert_type=alert_type,
-        zones=zones,
-        alert_config_name=alert_config_name_not_in_table,
-        hours_from_now=hours_from_now,
+        position_alert_id=position_alert_id_not_in_table,
+        name="Alerte alerte c'est l'alerte",
+        description="Alerte générale !!",
+        natinf_code=natinf_code,
+        track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
-        flag_states=flag_states,
-        fishing_gears=fishing_gears,
-        fishing_gear_categories=fishing_gear_categories,
-        include_vessels_unknown_gear=include_vessels_unknown_gear,
+        gears=gears,
+        species=species,
+        species_catch_areas=species_catch_areas,
+        administrative_areas=administrative_areas,
+        regulatory_areas=regulatory_areas,
+        min_depth=min_depth,
+        flag_states_iso2=flag_states_iso2,
+        vessel_ids=vessel_ids,
+        district_codes=district_codes,
+        producer_organizations=producer_organizations,
         return_state=True,
     )
 
@@ -528,15 +955,22 @@ def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test
     assert pending_alerts.iloc[0, 0] == 1
 
     state = position_alert_flow(
-        alert_type=alert_type,
-        zones=zones,
-        alert_config_name=alert_config_name_in_table,
-        hours_from_now=hours_from_now,
+        position_alert_id=position_alert_id_in_table,
+        name="Alerte alerte c'est l'alerte",
+        description="Alerte générale !!",
+        natinf_code=natinf_code,
+        track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
-        flag_states=flag_states,
-        fishing_gears=fishing_gears,
-        fishing_gear_categories=fishing_gear_categories,
-        include_vessels_unknown_gear=include_vessels_unknown_gear,
+        gears=gears,
+        species=species,
+        species_catch_areas=species_catch_areas,
+        administrative_areas=administrative_areas,
+        regulatory_areas=regulatory_areas,
+        min_depth=min_depth,
+        flag_states_iso2=flag_states_iso2,
+        vessel_ids=vessel_ids,
+        district_codes=district_codes,
+        producer_organizations=producer_organizations,
         return_state=True,
     )
 
@@ -559,27 +993,22 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
 
     now = pytz.utc.localize(datetime.utcnow())
 
-    # With these parameters, all 5 vessels should be in alert.
-    alert_type = "THREE_MILES_TRAWLING_ALERT"
-    alert_config_name = "ALERTE_1"
-    zones = ["0-3", "3-6"]
-    hours_from_now = 48
+    track_analysis_depth = 48
     only_fishing_positions = False
-    flag_states = None
-    fishing_gears = None
-    fishing_gear_categories = None
-    include_vessels_unknown_gear = True
+    name = "Chalutage dans les 3 milles"
+    description = "Description de l'alerte Chalutage dans les 3 milles"
+    natinf_code = 7059
 
     state = position_alert_flow(
-        alert_type=alert_type,
-        alert_config_name=alert_config_name,
-        zones=zones,
-        hours_from_now=hours_from_now,
+        position_alert_id=1,
+        name=name,
+        description=description,
+        natinf_code=natinf_code,
+        track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
-        flag_states=flag_states,
-        fishing_gears=fishing_gears,
-        fishing_gear_categories=fishing_gear_categories,
-        include_vessels_unknown_gear=include_vessels_unknown_gear,
+        administrative_areas=[
+            AdminAreasSpecification(areaType="DISTANCE_TO_SHORE", areas=["0-3", "3-6"]),
+        ],
         return_state=True,
     )
 
@@ -628,31 +1057,51 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
             "value": [
                 {
                     "dml": "DML 29",
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "name": name,
+                    "description": description,
+                    "natinfCode": natinf_code,
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
                     "seaFront": None,
                     "riskFactor": 1.74110112659225003,
                 },
                 {
                     "dml": "DML 29",
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "name": name,
+                    "description": description,
+                    "natinfCode": natinf_code,
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
                     "seaFront": "SA",
                     "riskFactor": None,
                 },
                 {
                     "dml": "DML 29",
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "name": name,
+                    "description": description,
+                    "natinfCode": natinf_code,
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
                     "seaFront": "NAMO",
                     "riskFactor": 1.41421356237310003,
                 },
                 {
                     "dml": None,
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "name": name,
+                    "description": description,
+                    "natinfCode": natinf_code,
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
                     "seaFront": "SA",
                     "riskFactor": None,
                 },
                 {
                     "dml": "DML 13",
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "name": name,
+                    "description": description,
+                    "natinfCode": natinf_code,
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
                     "seaFront": "NAMO",
                     "riskFactor": 1.7411011266,
                 },
@@ -664,7 +1113,7 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
                 "INTERNAL_REFERENCE_NUMBER",
                 "IRCS",
             ],
-            "alert_config_name": [alert_config_name] * 5,
+            "alert_config_name": ["POSITION_ALERT/1"] * 5,
             "vessel_id": [3, 1, 2, None, 6],
             "latitude": [53.435, 49.610, 43.324, 49.606, 43.324],
             "longitude": [5.553, -0.740, 5.359, -0.736, 5.359],
@@ -708,27 +1157,24 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
 def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data):
     now = pytz.utc.localize(datetime.utcnow())
 
-    # With these parameters, all 5 vessels should be in alert.
-    alert_type = "THREE_MILES_TRAWLING_ALERT"
-    alert_config_name = "ALERTE_1"
-    zones = ["0-3", "3-6"]
-    hours_from_now = 48
+    alert_id = 1
+    alert_config_name = f"POSITION_ALERT/{alert_id}"
+    track_analysis_depth = 48
     only_fishing_positions = False
-    flag_states = None
-    fishing_gears = None
-    fishing_gear_categories = None
-    include_vessels_unknown_gear = True
+    name = "Chalutage dans les 3 milles"
+    description = "Description de l'alerte Chalutage dans les 3 milles"
+    natinf_code = 7059
 
     state = position_alert_flow(
-        alert_type=alert_type,
-        alert_config_name=alert_config_name,
-        zones=zones,
-        hours_from_now=hours_from_now,
+        position_alert_id=1,
+        name=name,
+        description=description,
+        natinf_code=natinf_code,
+        track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
-        flag_states=flag_states,
-        fishing_gears=fishing_gears,
-        fishing_gear_categories=fishing_gear_categories,
-        include_vessels_unknown_gear=include_vessels_unknown_gear,
+        administrative_areas=[
+            AdminAreasSpecification(areaType="DISTANCE_TO_SHORE", areas=["0-3", "3-6"]),
+        ],
         return_state=True,
     )
 
@@ -772,25 +1218,41 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
             "value": [
                 {
                     "dml": "DML 29",
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "type": "POSITION_ALERT",
+                    "alertId": alert_id,
+                    "natinfCode": natinf_code,
+                    "name": name,
+                    "description": description,
                     "seaFront": None,
                     "riskFactor": 1.74110112659225003,
                 },
                 {
                     "dml": "DML 29",
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "type": "POSITION_ALERT",
+                    "alertId": alert_id,
+                    "natinfCode": natinf_code,
+                    "name": name,
+                    "description": description,
                     "seaFront": "SA",
                     "riskFactor": None,
                 },
                 {
                     "dml": "DML 29",
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "type": "POSITION_ALERT",
+                    "alertId": alert_id,
+                    "natinfCode": natinf_code,
+                    "name": name,
+                    "description": description,
                     "seaFront": "NAMO",
                     "riskFactor": 1.41421356237310003,
                 },
                 {
                     "dml": "DML 13",
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "type": "POSITION_ALERT",
+                    "alertId": alert_id,
+                    "natinfCode": natinf_code,
+                    "name": name,
+                    "description": description,
                     "seaFront": "NAMO",
                     "riskFactor": 1.7411011266,
                 },
@@ -839,27 +1301,30 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
 def test_flow_filters_on_gears(reset_test_data):
     now = pytz.utc.localize(datetime.utcnow())
 
-    # With these parameters, all 3 vessels should be in alert.
-    alert_type = "THREE_MILES_TRAWLING_ALERT"
-    alert_config_name = "ALERTE_1"
-    zones = ["0-3", "3-6"]
-    hours_from_now = 48
+    alert_id = 1
+    alert_config_name = f"POSITION_ALERT/{alert_id}"
+    track_analysis_depth = 48
     only_fishing_positions = False
-    flag_states = None
-    fishing_gears = ["OTM", "OTB", "OTT"]
-    fishing_gear_categories = None
-    include_vessels_unknown_gear = False
+    name = "Chalutage dans les 3 milles"
+    description = "Description de l'alerte Chalutage dans les 3 milles"
+    gears = [
+        GearSpecification(gear="OTM"),
+        GearSpecification(gear="OTB"),
+        GearSpecification(gear="OTT"),
+    ]
+    natinf_code = 7059
 
     state = position_alert_flow(
-        alert_type=alert_type,
-        alert_config_name=alert_config_name,
-        zones=zones,
-        hours_from_now=hours_from_now,
+        position_alert_id=1,
+        name=name,
+        description=description,
+        natinf_code=natinf_code,
+        track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
-        flag_states=flag_states,
-        fishing_gears=fishing_gears,
-        fishing_gear_categories=fishing_gear_categories,
-        include_vessels_unknown_gear=include_vessels_unknown_gear,
+        administrative_areas=[
+            AdminAreasSpecification(areaType="DISTANCE_TO_SHORE", areas=["0-3", "3-6"]),
+        ],
+        gears=gears,
         return_state=True,
     )
 
@@ -869,53 +1334,45 @@ def test_flow_filters_on_gears(reset_test_data):
 
     expected_pending_alerts = pd.DataFrame(
         {
-            "vessel_name": [
-                "PLACE SPECTACLE SUBIR",
-                "DEVINER FIGURE CONSCIENCE",
-            ],
-            "internal_reference_number": [
-                "ABC000055481",
-                "ABC000542519",
-            ],
-            "external_reference_number": [
-                "AS761555",
-                "RO237719",
-            ],
-            "ircs": [
-                "IL2468",
-                "FQ7058",
-            ],
-            "creation_date": [
-                now,
-                now,
-            ],
+            "vessel_name": ["ÉTABLIR IMPRESSION LORSQUE", "DEVINER FIGURE CONSCIENCE"],
+            "internal_reference_number": ["ABC000306959", "ABC000542519"],
+            "external_reference_number": ["RV348407", "RO237719"],
+            "ircs": ["LLUK", "FQ7058"],
+            "creation_date": [now, now],
             "trip_number": [None, None],
             "value": [
                 {
                     "dml": "DML 29",
-                    "type": "THREE_MILES_TRAWLING_ALERT",
-                    "seaFront": None,
-                    "riskFactor": 1.74110112659225003,
+                    "name": "Chalutage dans les 3 milles",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "seaFront": "SA",
+                    "natinfCode": 7059,
+                    "riskFactor": None,
+                    "description": "Description de l'alerte Chalutage dans les 3 milles",
                 },
                 {
                     "dml": "DML 29",
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "name": "Chalutage dans les 3 milles",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
                     "seaFront": "NAMO",
-                    "riskFactor": 1.41421356237310003,
+                    "natinfCode": 7059,
+                    "riskFactor": 1.4142135624,
+                    "description": "Description de l'alerte Chalutage dans les 3 milles",
                 },
             ],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
             ],
-            "alert_config_name": [alert_config_name] * 2,
-            "vessel_id": [3, 2],
-            "latitude": [53.435, 43.324],
-            "longitude": [5.553, 5.359],
-            "flag_state": ["NL", "FR"],
+            "alert_config_name": [alert_config_name, alert_config_name],
+            "vessel_id": [1, 2],
+            "latitude": [49.61, 43.324],
+            "longitude": [-0.74, 5.359],
+            "flag_state": ["FR", "FR"],
         }
     )
-
     pd.testing.assert_frame_equal(
         pending_alerts.sort_values("vessel_id")
         .reset_index(drop=True)
@@ -946,27 +1403,26 @@ def test_flow_filters_on_gears(reset_test_data):
 def test_flow_filters_on_time(reset_test_data):
     now = pytz.utc.localize(datetime.utcnow())
 
-    # With these parameters, all 3 vessels should be in alert.
-    alert_type = "THREE_MILES_TRAWLING_ALERT"
-    alert_config_name = "ALERTE_1"
-    zones = ["0-3", "3-6"]
-    hours_from_now = 8
+    alert_id = 1
+    alert_config_name = f"POSITION_ALERT/{alert_id}"
+    track_analysis_depth = 8
     only_fishing_positions = False
-    flag_states = None
-    fishing_gears = None
-    fishing_gear_categories = None
-    include_vessels_unknown_gear = True
+    name = "Chalutage dans les 3 milles"
+    description = "Description de l'alerte Chalutage dans les 3 milles"
+    gears = None
+    natinf_code = 7059
 
     state = position_alert_flow(
-        alert_type=alert_type,
-        alert_config_name=alert_config_name,
-        zones=zones,
-        hours_from_now=hours_from_now,
+        position_alert_id=1,
+        name=name,
+        description=description,
+        natinf_code=natinf_code,
+        track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
-        flag_states=flag_states,
-        fishing_gears=fishing_gears,
-        fishing_gear_categories=fishing_gear_categories,
-        include_vessels_unknown_gear=include_vessels_unknown_gear,
+        administrative_areas=[
+            AdminAreasSpecification(areaType="DISTANCE_TO_SHORE", areas=["0-3", "3-6"]),
+        ],
+        gears=gears,
         return_state=True,
     )
 
@@ -1004,20 +1460,32 @@ def test_flow_filters_on_time(reset_test_data):
             "trip_number": [None, None, None],
             "value": [
                 {
+                    "name": "Chalutage dans les 3 milles",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "natinfCode": 7059,
+                    "description": "Description de l'alerte Chalutage dans les 3 milles",
                     "dml": "DML 29",
-                    "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "SA",
                     "riskFactor": None,
                 },
                 {
+                    "name": "Chalutage dans les 3 milles",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "natinfCode": 7059,
+                    "description": "Description de l'alerte Chalutage dans les 3 milles",
                     "dml": "DML 29",
-                    "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "NAMO",
                     "riskFactor": 1.41421356237310003,
                 },
                 {
+                    "name": "Chalutage dans les 3 milles",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "natinfCode": 7059,
+                    "description": "Description de l'alerte Chalutage dans les 3 milles",
                     "dml": "DML 13",
-                    "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "NAMO",
                     "riskFactor": 1.7411011266,
                 },
@@ -1065,27 +1533,28 @@ def test_flow_filters_on_time(reset_test_data):
 def test_flow_filters_on_flag_states(reset_test_data):
     now = pytz.utc.localize(datetime.utcnow())
 
-    # With these parameters, all 3 vessels should be in alert.
-    alert_type = "THREE_MILES_TRAWLING_ALERT"
-    alert_config_name = "ALERTE_1"
-    zones = ["0-3", "3-6"]
-    hours_from_now = 48
+    alert_id = 1
+    alert_config_name = f"POSITION_ALERT/{alert_id}"
+    track_analysis_depth = 48
     only_fishing_positions = False
-    flag_states = ["NL"]
-    fishing_gears = None
-    fishing_gear_categories = None
-    include_vessels_unknown_gear = True
+    name = "Chalutage dans les 3 milles"
+    description = "Description de l'alerte Chalutage dans les 3 milles"
+    gears = None
+    natinf_code = 7059
+    flag_states_iso2 = ["NL"]
 
     state = position_alert_flow(
-        alert_type=alert_type,
-        alert_config_name=alert_config_name,
-        zones=zones,
-        hours_from_now=hours_from_now,
+        position_alert_id=1,
+        name=name,
+        description=description,
+        natinf_code=natinf_code,
+        track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
-        flag_states=flag_states,
-        fishing_gears=fishing_gears,
-        fishing_gear_categories=fishing_gear_categories,
-        include_vessels_unknown_gear=include_vessels_unknown_gear,
+        administrative_areas=[
+            AdminAreasSpecification(areaType="DISTANCE_TO_SHORE", areas=["0-3", "3-6"]),
+        ],
+        gears=gears,
+        flag_states_iso2=flag_states_iso2,
         return_state=True,
     )
 
@@ -1114,9 +1583,13 @@ def test_flow_filters_on_flag_states(reset_test_data):
             "value": [
                 {
                     "dml": "DML 29",
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "type": "POSITION_ALERT",
                     "seaFront": None,
                     "riskFactor": 1.74110112659225003,
+                    "name": "Chalutage dans les 3 milles",
+                    "alertId": 1,
+                    "natinfCode": 7059,
+                    "description": "Description de l'alerte Chalutage dans les 3 milles",
                 },
             ],
             "vessel_identifier": [
@@ -1165,29 +1638,25 @@ def test_flow_filters_on_depth(reset_test_data):
         connection.execute(text("DELETE FROM silenced_alerts;"))
 
     now = pytz.utc.localize(datetime.utcnow())
-
-    # With these parameters, all 5 vessels should be in alert.
-    alert_type = "THREE_MILES_TRAWLING_ALERT"
-    alert_config_name = "ALERTE_1"
-    zones = ["0-3", "3-6"]
-    hours_from_now = 48
+    alert_id = 1
+    alert_config_name = f"POSITION_ALERT/{alert_id}"
+    track_analysis_depth = 48
     only_fishing_positions = False
-    flag_states = None
-    fishing_gears = None
-    fishing_gear_categories = None
-    include_vessels_unknown_gear = True
+    name = "Chalutage dans les 3 milles"
+    description = "Description de l'alerte Chalutage dans les 3 milles"
+    natinf_code = 7059
     min_depth = 0.5
 
     state = position_alert_flow(
-        alert_type=alert_type,
-        alert_config_name=alert_config_name,
-        zones=zones,
-        hours_from_now=hours_from_now,
+        position_alert_id=1,
+        name=name,
+        description=description,
+        natinf_code=natinf_code,
+        track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
-        flag_states=flag_states,
-        fishing_gears=fishing_gears,
-        fishing_gear_categories=fishing_gear_categories,
-        include_vessels_unknown_gear=include_vessels_unknown_gear,
+        administrative_areas=[
+            AdminAreasSpecification(areaType="DISTANCE_TO_SHORE", areas=["0-3", "3-6"]),
+        ],
         min_depth=min_depth,
         return_state=True,
     )
@@ -1222,17 +1691,25 @@ def test_flow_filters_on_depth(reset_test_data):
             "value": [
                 {
                     "dml": "DML 29",
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "type": "POSITION_ALERT",
                     "seaFront": "SA",
                     "riskFactor": None,
                     "depth": -0.740,
+                    "name": "Chalutage dans les 3 milles",
+                    "alertId": 1,
+                    "natinfCode": 7059,
+                    "description": "Description de l'alerte Chalutage dans les 3 milles",
                 },
                 {
                     "dml": None,
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "type": "POSITION_ALERT",
                     "seaFront": "SA",
                     "riskFactor": None,
                     "depth": -0.736,
+                    "name": "Chalutage dans les 3 milles",
+                    "alertId": 1,
+                    "natinfCode": 7059,
+                    "description": "Description de l'alerte Chalutage dans les 3 milles",
                 },
             ],
             "vessel_identifier": [
@@ -1277,28 +1754,25 @@ def test_flow_filters_on_depth(reset_test_data):
     ).all()
 
 
-def test_flow_french_eez_fishing_alert(reset_test_data):
-    # With these parameters, 2 french vessels should be in alert.
-    alert_type = "FRENCH_EEZ_FISHING_ALERT"
-    alert_config_name = "ALERTE_1"
-    zones = ["FRA"]
-    hours_from_now = 8
+def test_flow_filters_on_eez_area(reset_test_data):
+    alert_id = 1
+    alert_config_name = f"POSITION_ALERT/{alert_id}"
+    track_analysis_depth = 8
     only_fishing_positions = False
-    fishing_gears = None
-    fishing_gear_categories = None
-    include_vessels_unknown_gear = True
-    except_flag_states = ["NL"]
+    name = "Pêche en ZEE française"
+    description = "Description de l'alerte Pêche en ZEE française"
+    natinf_code = 9999
 
     state = position_alert_flow(
-        alert_type=alert_type,
-        alert_config_name=alert_config_name,
-        zones=zones,
-        hours_from_now=hours_from_now,
-        fishing_gears=fishing_gears,
-        fishing_gear_categories=fishing_gear_categories,
-        include_vessels_unknown_gear=include_vessels_unknown_gear,
+        position_alert_id=1,
+        name=name,
+        description=description,
+        natinf_code=natinf_code,
+        track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
-        except_flag_states=except_flag_states,
+        administrative_areas=[
+            AdminAreasSpecification(areaType="EEZ_AREA", areas=["FRA"]),
+        ],
         return_state=True,
     )
 
@@ -1328,15 +1802,23 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
             "value": [
                 {
                     "dml": "DML 29",
-                    "type": "FRENCH_EEZ_FISHING_ALERT",
+                    "type": "POSITION_ALERT",
                     "seaFront": "NAMO",
                     "riskFactor": 1.4142135624,
+                    "name": "Pêche en ZEE française",
+                    "alertId": 1,
+                    "natinfCode": 9999,
+                    "description": "Description de l'alerte Pêche en ZEE française",
                 },
                 {
                     "dml": "DML 13",
-                    "type": "FRENCH_EEZ_FISHING_ALERT",
+                    "type": "POSITION_ALERT",
                     "seaFront": "NAMO",
                     "riskFactor": 1.7411011266,
+                    "name": "Pêche en ZEE française",
+                    "alertId": 1,
+                    "natinfCode": 9999,
+                    "description": "Description de l'alerte Pêche en ZEE française",
                 },
             ],
             "vessel_identifier": [
@@ -1359,114 +1841,125 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
     )
 
 
-def test_flow_rtc_fishing_alert(reset_test_data):
-    # With these parameters, 2 french vessels should be in alert.
-    alert_type = "RTC_FISHING_ALERT"
-    alert_config_name = "RTC_FISHING_ALERT"
-    zones = ["Reg. RTC"]
-    hours_from_now = 8
+def test_flow_filters_on_regulatory_areas(reset_test_data):
+    alert_id = 2
+    alert_config_name = f"POSITION_ALERT/{alert_id}"
+    track_analysis_depth = 8
     only_fishing_positions = True
-    eez_areas = ["EST"]
-    flag_states = ["FR"]
+    name = "Pêche en zone RTC"
+    description = "Description de l'alerte Pêche en zone RTC"
+    natinf_code = 9999
 
     state = position_alert_flow(
-        alert_type=alert_type,
-        alert_config_name=alert_config_name,
-        zones=zones,
-        hours_from_now=hours_from_now,
+        position_alert_id=alert_id,
+        name=name,
+        description=description,
+        natinf_code=natinf_code,
+        track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
-        flag_states=flag_states,
-        eez_areas=eez_areas,
+        regulatory_areas=[
+            RegulatoryAreaSpecification(lawType="Reg. RTC"),
+        ],
         return_state=True,
     )
 
     assert state.is_completed()
 
     pending_alerts = read_query(
-        """
+        f"""
             SELECT *
             FROM pending_alerts
-            WHERE alert_config_name = 'RTC_FISHING_ALERT'
+            WHERE alert_config_name = '{alert_config_name}'
         """,
         db="monitorfish_remote",
     )
     assert len(pending_alerts) == 1
     assert (
         pending_alerts.loc[
-            pending_alerts.alert_config_name == "RTC_FISHING_ALERT",
+            pending_alerts.alert_config_name == alert_config_name,
             "internal_reference_number",
         ].values[0]
         == "ABC000306959"
     )
 
 
-def test_flow_neafc_fishing_alert(reset_test_data):
-    # With these parameters, 2 french vessels should be in alert.
-    alert_type = "NEAFC_FISHING_ALERT"
-    alert_config_name = "NEAFC_FISHING_ALERT"
-    zones = None
-    hours_from_now = 8
+def test_flow_filters_on_neafc_area(reset_test_data):
+    alert_id = 2
+    alert_config_name = f"POSITION_ALERT/{alert_id}"
+    track_analysis_depth = 8
     only_fishing_positions = True
+    name = "Pêche en zone RTC"
+    description = "Description de l'alerte Pêche en zone RTC"
+    natinf_code = 9999
 
     state = position_alert_flow(
-        alert_type=alert_type,
-        alert_config_name=alert_config_name,
-        zones=zones,
-        hours_from_now=hours_from_now,
+        position_alert_id=alert_id,
+        name=name,
+        description=description,
+        natinf_code=natinf_code,
+        track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
+        administrative_areas=[
+            AdminAreasSpecification(areaType="NEAFC_AREA", areas=[1, 2])
+        ],
         return_state=True,
     )
 
     assert state.is_completed()
 
     pending_alerts = read_query(
-        """
+        f"""
             SELECT *
             FROM pending_alerts
-            WHERE alert_config_name = 'NEAFC_FISHING_ALERT'
+            WHERE alert_config_name = '{alert_config_name}'
         """,
         db="monitorfish_remote",
     )
     assert len(pending_alerts) == 1
     assert (
         pending_alerts.loc[
-            pending_alerts.alert_config_name == "NEAFC_FISHING_ALERT",
+            pending_alerts.alert_config_name == alert_config_name,
             "internal_reference_number",
         ].values[0]
         == "ABC000306959"
     )
 
 
-def test_flow_bli_bycatch_max_weight_exceeded_alert(reset_test_data):
-    # With these parameters, 2 french vessels should be in alert.
-    alert_type = "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT"
-    alert_config_name = "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT"
-    zones = ["Mediterranée - filets"]
-    hours_from_now = 8
+def test_flow_filters_on_species_and_catch_areas(reset_test_data):
+    alert_id = 3
+    alert_config_name = f"POSITION_ALERT/{alert_id}"
+    track_analysis_depth = 48
     only_fishing_positions = False
-    species_onboard = ["SOL", "HKE", "ANE"]
-    species_onboard_min_weight = 500.0
+    species = [
+        SpeciesSpecification(species="HKE", minWeight=100.0),
+    ]
+    name = "Pêche avec espèces sensibles en zone interdite"
+    description = (
+        "Description de l'alerte Pêche avec espèces sensibles en zone interdite"
+    )
+    natinf_code = 9999
 
     state = position_alert_flow(
-        alert_type=alert_type,
-        alert_config_name=alert_config_name,
-        zones=zones,
-        hours_from_now=hours_from_now,
+        position_alert_id=alert_id,
+        name=name,
+        description=description,
+        natinf_code=natinf_code,
+        track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
-        species_onboard=species_onboard,
-        species_onboard_min_weight=species_onboard_min_weight,
+        species=species,
+        species_catch_areas=["27.8.c"],
         return_state=True,
     )
 
     assert state.is_completed()
 
     pending_alerts = read_query(
-        """
+        f"""
             SELECT *
             FROM pending_alerts
-            WHERE alert_config_name = 'BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT'
+            WHERE alert_config_name = '{alert_config_name}'
         """,
         db="monitorfish_remote",
     )
     assert len(pending_alerts) == 1
-    assert pending_alerts["internal_reference_number"].values[0] == "ABC000306959"
+    assert pending_alerts["internal_reference_number"].values[0] == "ABC000542519"

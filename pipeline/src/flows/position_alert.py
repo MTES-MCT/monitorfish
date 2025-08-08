@@ -1,192 +1,200 @@
-from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import List
+from typing import List, Tuple
 
+import duckdb
 import pandas as pd
-from geoalchemy2 import Geometry
 from geoalchemy2.functions import ST_Intersects
-from prefect import flow, get_run_logger, task
+from prefect import flow, task
 from sqlalchemy import Table, and_, or_, select
 from sqlalchemy.sql import Select
 
-from src import utils
-from src.db_config import create_engine
-from src.entities.alerts import AlertType
+from src.entities.alerts import (
+    AdminAreasSpecification,
+    AdminAreasSpecWithTable,
+    AdministrativeAreaType,
+    AreasTableMetadata,
+    GearSpecification,
+    RegulatoryAreaSpecification,
+    SpeciesSpecification,
+)
 from src.generic_tasks import extract, read_query_task
-from src.processing import coalesce, join_on_multiple_keys
-from src.read_query import read_query
+from src.processing import join_on_multiple_keys
 from src.shared_tasks.alerts import (
     extract_silenced_alerts,
     filter_alerts,
     load_alerts,
     make_alerts,
 )
+from src.shared_tasks.dates import get_utcnow
 from src.shared_tasks.infrastructure import get_table
 from src.shared_tasks.positions import add_depth, add_vessel_identifier
 from src.shared_tasks.risk_factors import extract_current_risk_factors
 from src.shared_tasks.vessels import add_vessel_id, add_vessels_columns
 
 
-class ZonesTable:
-    """
-    A class to represent a table of zones which can be filtered on a given field.
-
-        Args:
-            table (Table): A SQLAchemy `Table`
-            geometry_column (str): name of the geometry column
-            filter_column (str, optionnal): name of the column on which to filter
-            (typically the id or unique name of zones). Defaults to `None`.
-
-        Raises:
-            AssertionError: if `filter_column` is given and is not a column of `table`
-            or `geometry_column` is not a column of `Table` of type
-            `geoalchemy2.Geometry`
-    """
-
-    def __init__(self, table: Table, geometry_column: str, filter_column: str = None):
-        if filter_column:
-            assert filter_column in table.columns
-        assert geometry_column in table.columns
-        assert isinstance(table.columns[geometry_column].type, Geometry)
-        self.table = table
-        self.filter_column = filter_column
-        self.geometry_column = geometry_column
-
-    def __repr__(self):
-        return (
-            f"ZonesTable(table={self.table.__repr__()}, "
-            f"filter_column='{self.filter_column}', "
-            f"geometry_column='{self.geometry_column}')"
-        )
-
-
-@dataclass
-class VesselsFilter:
-    is_active: bool
-    vessels_cfr: List[str]
-
-
 @task
-def alert_has_gear_parameters(
-    fishing_gears: list, fishing_gear_categories: list
-) -> bool:
-    """
-    Returns `True` if one of the input arguments are non empty lists, `False`
-    otherwise.
-
-    Args:
-        fishing_gears (list): list of gears or `None`
-        fishing_gear_categories (list): list of gear_categories or `None`
-
-    Returns:
-        bool: `True` if one of the input arguments are non empty lists, `False`
-        otherwise.
-
-    Raises:
-        TypeError: if the input arguments are not lists or `None`.
-    """
-
-    try:
-        assert fishing_gears is None or isinstance(fishing_gears, list)
-    except AssertionError:
-        raise TypeError("'fishing_gears' must be `None` or `list`.")
-
-    try:
-        assert fishing_gear_categories is None or isinstance(
-            fishing_gear_categories, list
-        )
-    except AssertionError:
-        raise TypeError("'fishing_gear_categories' must be `None` or `list`.")
-
-    return True if fishing_gears or fishing_gear_categories else False
-
-
-@task
-def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
-    """
-    Return a `ZonesTable` representing the table in which zones for the given
-    `alert_type` are stored.
-
-    Args:
-        alert_type (str): the type of alert.
-
-    Returns:
-        ZonesTable: table in which to look for the zones for the given alert type.
-
-    Raises:
-        ValueError: if the input `alert_type` does not correspond to one of the
-          expected types of alert.
-    """
-    alert_type = AlertType(alert_type)
-    alert_type_zones_tables = {
-        AlertType.THREE_MILES_TRAWLING_ALERT: {
-            "table": "n_miles_to_shore_areas_subdivided",
-            "filter_column": "miles_to_shore",
-            "geometry_column": "geometry",
-        },
-        AlertType.TWELVE_MILES_FISHING_ALERT: {
-            "table": "n_miles_to_shore_areas_subdivided",
-            "filter_column": "miles_to_shore",
-            "geometry_column": "geometry",
-        },
-        AlertType.FRENCH_EEZ_FISHING_ALERT: {
-            "table": "eez_areas",
-            "filter_column": "iso_sov1",
-            "geometry_column": "wkb_geometry",
-        },
-        AlertType.RTC_FISHING_ALERT: {
-            "table": "regulations",
-            "filter_column": "law_type",
-            "geometry_column": "geometry",
-        },
-        AlertType.NEAFC_FISHING_ALERT: {
-            "table": "neafc_regulatory_area",
-            "filter_column": None,
-            "geometry_column": "wkb_geometry",
-        },
-        AlertType.BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT: {
-            "table": "regulations",
-            "filter_column": "topic",
-            "geometry_column": "geometry",
-        },
-        AlertType.BOTTOM_GEAR_VME_FISHING_ALERT: {
-            "table": "regulations",
-            "filter_column": "topic",
-            "geometry_column": "geometry",
-        },
-        AlertType.BOTTOM_TRAWL_800_METERS_FISHING_ALERT: {
-            "table": "regulations",
-            "filter_column": "zone",
-            "geometry_column": "geometry",
-        },
+def to_admin_areas_table_metadata(
+    admin_area_spec: AdminAreasSpecification,
+) -> AreasTableMetadata:
+    area_tables_metadata = {
+        AdministrativeAreaType.FAO_AREA: AreasTableMetadata(
+            table_name="fao_areas",
+            geometry_column="wkb_geometry",
+            filter_column="f_code",
+        ),
+        AdministrativeAreaType.EEZ_AREA: AreasTableMetadata(
+            table_name="eez_areas",
+            geometry_column="wkb_geometry",
+            filter_column="iso_sov1",
+        ),
+        AdministrativeAreaType.NEAFC_AREA: AreasTableMetadata(
+            table_name="neafc_regulatory_area",
+            geometry_column="wkb_geometry",
+            filter_column="ogc_fid",
+        ),
+        AdministrativeAreaType.DISTANCE_TO_SHORE: AreasTableMetadata(
+            table_name="n_miles_to_shore_areas_subdivided",
+            geometry_column="geometry",
+            filter_column="miles_to_shore",
+        ),
     }
 
-    logger = get_run_logger()
+    return area_tables_metadata[admin_area_spec.areaType]
 
-    try:
-        table_info = alert_type_zones_tables[alert_type]
-    except KeyError:
-        raise ValueError(
-            (
-                f"Unknown alert type '{alert_type}'. "
-                f"Expects one of {alert_type_zones_tables.keys()}."
-            )
+
+@task
+def to_admin_areas_spec_with_table(
+    spec: AdminAreasSpecification, table_metadata: AreasTableMetadata, table: Table
+) -> AdminAreasSpecWithTable:
+    return AdminAreasSpecWithTable(
+        area_type=spec.areaType,
+        areas=spec.areas,
+        metadata=table_metadata,
+        table=table,
+    )
+
+
+def to_regulatory_area_filter(
+    spec: RegulatoryAreaSpecification, regulations_table: Table
+):
+    filters = []
+    if spec.lawType:
+        filters.append(regulations_table.c.law_type == spec.lawType)
+    if spec.topic:
+        filters.append(regulations_table.c.topic == spec.topic)
+    if spec.zone:
+        filters.append(regulations_table.c.zone == spec.zone)
+
+    if len(filters) == 0:
+        raise ValueError("Cannot set regulatory area filter without any criterion")
+
+    return and_(*filters)
+
+
+@task
+def make_vessels_query(
+    *,
+    vessels_table: Table,
+    prod_org_memberships_table: Table | None,
+    vessel_ids: list | None,
+    district_codes: list | None,
+    producer_organizations: list | None,
+) -> Select:
+    from_table = vessels_table
+
+    filter_conditions = []
+
+    if vessel_ids:
+        filter_conditions.append(vessels_table.c.id.in_(vessel_ids))
+
+    if district_codes:
+        filter_conditions.append(vessels_table.c.district_code.in_(district_codes))
+
+    if producer_organizations:
+        assert isinstance(prod_org_memberships_table, Table)
+        from_table = from_table.join(
+            prod_org_memberships_table,
+            from_table.c.cfr == prod_org_memberships_table.c.internal_reference_number,
+        )
+        filter_conditions.append(
+            prod_org_memberships_table.c.organization_name.in_(producer_organizations)
         )
 
-    zones_table = utils.get_table(
-        table_info["table"],
-        schema="public",
-        conn=create_engine("monitorfish_remote"),
-        logger=logger,
+    return (
+        select(
+            vessels_table.c.id,
+            vessels_table.c.cfr,
+            vessels_table.c.external_immatriculation,
+            vessels_table.c.ircs,
+        )
+        .select_from(from_table)
+        .where(and_(*filter_conditions))
     )
 
-    zones_table = ZonesTable(
-        table=zones_table,
-        filter_column=table_info["filter_column"],
-        geometry_column=table_info["geometry_column"],
+
+@task
+def get_sets_of_identifiers(vessels: pd.DataFrame) -> Tuple[set, set, set]:
+    cfrs = set(vessels.cfr.dropna())
+    external_immatriculations = set(
+        vessels.loc[
+            (vessels.cfr.isna())
+            & (vessels.external_immatriculation.notnull())
+            & (vessels.external_immatriculation != "-"),
+            "external_immatriculation",
+        ]
+    )
+    ircss = set(
+        vessels.loc[
+            (vessels.cfr.isna())
+            & (
+                (vessels.external_immatriculation.isna())
+                | (vessels.external_immatriculation == "-")
+            )
+            & (vessels.ircs.notnull()),
+            "ircs",
+        ]
     )
 
-    return zones_table
+    return (
+        cfrs,
+        external_immatriculations,
+        ircss,
+    )
+
+
+@task
+def merge_sets_of_identifiers(
+    cfrs_with_species_min_weight: set | None,
+    cfrs_with_gears: set | None,
+    vessels_cfrs: set | None,
+    vessels_external_immats: set | None,
+    vessels_ircss: set | None,
+) -> Tuple[set | None, set | None, set | None]:
+    external_immats = vessels_external_immats
+    ircss = vessels_ircss
+
+    # When a species or a gear condition is given, fitlering on an identifier other
+    # than CFR is excluded.
+    if cfrs_with_species_min_weight is not None or cfrs_with_gears is not None:
+        external_immats = None
+        ircss = None
+
+    cfr_sets = []
+    if vessels_cfrs is not None:
+        cfr_sets.append(vessels_cfrs)
+
+    if cfrs_with_species_min_weight is not None:
+        cfr_sets.append(cfrs_with_species_min_weight)
+
+    if cfrs_with_gears is not None:
+        cfr_sets.append(cfrs_with_gears)
+
+    if len(cfr_sets) == 0:
+        cfrs = None
+    else:
+        cfrs = set.intersection(*cfr_sets)
+
+    return cfrs, external_immats, ircss
 
 
 @task
@@ -194,59 +202,91 @@ def make_positions_in_alert_query(
     *,
     positions_table: Table,
     facades_table: Table,
-    zones_table: ZonesTable,
-    eez_areas_table: Table,
-    only_fishing_positions: bool,
-    zones: List = None,
-    hours_from_now: int = 8,
-    flag_states: List = None,
-    except_flag_states: List = None,
-    eez_areas: List = None,
+    track_analysis_depth: float,
+    now: datetime,
+    regulations_table: Table | None = None,
+    only_fishing_positions: bool = True,
+    flag_states_iso2: List[str] | None = None,
+    regulatory_areas: List[RegulatoryAreaSpecification] | None = None,
+    admin_areas_specs_with_tables: List[AdminAreasSpecWithTable] | None = None,
+    cfrs: set | None = None,
+    external_immats: set | None = None,
+    ircss: set | None = None,
 ) -> Select:
-    """
-    Creates select statement for the query to execute to compute positions in alert.
-
-    Args:
-        positions_table (Table): `SQLAlchemy.Table` of positions.
-        facades_table (Table): `SQLAlchemy.Table` of façades.
-        zones_table (ZonesTable): `ZonesTable` of zones.
-        eez_areas_table (Table): `SQLAlchemy.Table` of Exclusive Economic Zones.
-        only_fishing_positions (bool): If `True`, filters positions to keep only
-          positions tagged as `is_fishing`.
-        zones (List, optional): If provided, adds a
-          'WHERE zones.filter_column IN zones' clause to the query. Defaults to None.
-        hours_from_now (int, optional): Determines how many hours back in the past the
-          `positions` table will be scanned. Defaults to 8.
-        flag_states (List, optional): If given, filters positions to keep only those of
-          vessels that belong to these flag_states. Defaults to None.
-        except_flag_states (List, optional): If given, filters positions to keep only
-          those of vessels that do NOT belong to these flag_states. Defaults to None.
-
-    Returns:
-        Select: `SQLAlchemy.Select` statement corresponding to the given parameters.
-    """
-
-    now = datetime.utcnow()
-    start_date = now - timedelta(hours=hours_from_now)
+    start_date = now - timedelta(hours=track_analysis_depth)
 
     from_tables = positions_table.join(
-        zones_table.table,
-        ST_Intersects(
-            positions_table.c.geometry,
-            zones_table.table.c[zones_table.geometry_column],
-        ),
-    ).join(
         facades_table,
         ST_Intersects(positions_table.c.geometry, facades_table.c.geometry),
         isouter=True,
     )
 
-    if eez_areas:
+    filter_conditions = [
+        positions_table.c.date_time > start_date,
+        positions_table.c.date_time < now,
+        or_(
+            positions_table.c.internal_reference_number.isnot(None),
+            positions_table.c.external_reference_number.isnot(None),
+            positions_table.c.ircs.isnot(None),
+        ),
+    ]
+
+    if regulatory_areas:
         from_tables = from_tables.join(
-            eez_areas_table,
-            ST_Intersects(positions_table.c.geometry, eez_areas_table.c.wkb_geometry),
-            isouter=True,
+            regulations_table,
+            ST_Intersects(
+                positions_table.c.geometry,
+                regulations_table.c.geometry,
+            ),
         )
+        regulatory_area_specs = [
+            to_regulatory_area_filter(spec=a, regulations_table=regulations_table)
+            for a in regulatory_areas
+        ]
+        filter_conditions.append(or_(*regulatory_area_specs))
+
+    if admin_areas_specs_with_tables:
+        for admin_areas_spec_with_table in admin_areas_specs_with_tables:
+            admin_areas_table = admin_areas_spec_with_table.table
+            geom_column = admin_areas_spec_with_table.metadata.geometry_column
+            filter_column = admin_areas_spec_with_table.metadata.filter_column
+
+            from_tables = from_tables.join(
+                admin_areas_table,
+                ST_Intersects(
+                    positions_table.c.geometry, admin_areas_table.c.get(geom_column)
+                ),
+            )
+
+            filter_conditions.append(
+                admin_areas_table.c.get(filter_column).in_(
+                    admin_areas_spec_with_table.areas
+                )
+            )
+
+    if cfrs is not None or external_immats is not None or ircss is not None:
+        vessel_filters = []
+        if cfrs is not None:
+            vessel_filters.append(
+                positions_table.c.internal_reference_number.in_(sorted(cfrs))
+            )
+        if external_immats is not None:
+            vessel_filters.append(
+                and_(
+                    positions_table.c.internal_reference_number == None,  # noqa: E711
+                    positions_table.c.external_reference_number.in_(
+                        sorted(external_immats)
+                    ),
+                )
+            )
+        if ircss is not None:
+            vessel_filters.append(
+                and_(
+                    positions_table.c.internal_reference_number == None,  # noqa: E711
+                    positions_table.c.ircs.in_(sorted(ircss)),
+                )
+            )
+        filter_conditions.append(or_(*vessel_filters))
 
     q = (
         select(
@@ -264,196 +304,83 @@ def make_positions_in_alert_query(
             facades_table.c.facade,
         )
         .select_from(from_tables)
-        .where(
-            and_(
-                positions_table.c.date_time > start_date,
-                positions_table.c.date_time < now,
-                or_(
-                    positions_table.c.internal_reference_number.isnot(None),
-                    positions_table.c.external_reference_number.isnot(None),
-                    positions_table.c.ircs.isnot(None),
-                ),
-            )
-        )
+        .where(and_(*filter_conditions))
     )
 
     if only_fishing_positions:
         q = q.where(positions_table.c.is_fishing)
 
-    if zones:
-        q = q.where(zones_table.table.c[zones_table.filter_column].in_(zones))
-
-    if flag_states:
-        q = q.where(positions_table.c.flag_state.in_(flag_states))
-
-    if except_flag_states:
-        q = q.where(positions_table.c.flag_state.notin_(except_flag_states))
-
-    if eez_areas:
-        q = q.where(eez_areas_table.c["iso_sov1"].in_(eez_areas))
+    if flag_states_iso2:
+        q = q.where(positions_table.c.flag_state.in_(flag_states_iso2))
 
     return q
 
 
 @task
-def make_fishing_gears_query(
-    fishing_gears_table: Table,
-    fishing_gears: List[str] = None,
-    fishing_gear_categories: List[str] = None,
-) -> Select:
+def extract_vessels_current_gears() -> pd.DataFrame:
     """
-    Creates select statement for the query to execute to get the list of gear codes for
-    which to generate alerts.
+    Extracts vessels with their current gear(s) from current_segment if available,
+    from vessel profiles' recent_gears if not.
     """
 
-    q = select(fishing_gears_table.c.fishing_gear_code)
-
-    filters = []
-
-    if fishing_gears:
-        filters.append(fishing_gears_table.c.fishing_gear_code.in_(fishing_gears))
-
-    if fishing_gear_categories:
-        filters.append(
-            fishing_gears_table.c.fishing_gear_category.in_(fishing_gear_categories)
-        )
-
-    if filters:
-        q = q.where(or_(*filters))
-
-    return q
-
-
-@task
-def extract_current_gears() -> pd.DataFrame:
-    """
-    Extracts of vessels in `last_positions` with their current (known or probable)
-    gear(s).
-
-      - For vessels that have non null `gear_onboard` (for their last DEP) in
-        `last_positions`, these gears are used
-      - For other vessels, the `gears_declared` from the `vessels` table are used.
-    """
-
-    current_gears = extract(
+    return extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/current_gears.sql",
     )
 
-    current_gears["current_gears"] = coalesce(
-        current_gears[["gear_onboard", "declared_fishing_gears"]]
-    )
-
-    current_gears["current_gears"] = current_gears["current_gears"].map(
-        lambda li: set(li) if li else None
-    )
-
-    current_gears = current_gears.drop(
-        columns=["gear_onboard", "declared_fishing_gears"]
-    )
-
-    return current_gears
-
-
-@task
-def extract_gear_codes(query: Select) -> set:
-    """
-    Executes the input `sqlalchemy.Select` statement, expected to contain a
-    `fishing_gear_code` column, returns said columns results as a `set`.
-    """
-
-    fishing_gear_codes = read_query(
-        query,
-        db="monitorfish_remote",
-    )
-
-    return set(fishing_gear_codes.fishing_gear_code)
-
 
 @task
 def extract_vessels_with_species_onboard(
-    species_onboard: list = None, min_weight: float = 0.0
-) -> VesselsFilter:
-    if species_onboard is None:
-        return VesselsFilter(is_active=False, vessels_cfr=None)
-
-    assert isinstance(species_onboard, list)
-    assert isinstance(min_weight, (float, int))
-
-    vessels = extract(
-        "monitorfish_remote",
-        "monitorfish/vessels_with_species_onboard.sql",
-        params={
-            "species_onboard": tuple(species_onboard),
-            "min_weight": min_weight,
-        },
-    )
-    return VesselsFilter(is_active=True, vessels_cfr=vessels.cfr.tolist())
-
-
-@task
-def filter_vessels(
-    positions_in_alert: pd.DataFrame, vessels_filter: VesselsFilter
+    species_spec: List[SpeciesSpecification],
+    species_catch_areas: List[str] | None = None,
 ) -> pd.DataFrame:
-    if not vessels_filter.is_active:
-        return positions_in_alert
+    params = {"species_onboard": tuple([s.species for s in species_spec])}
+
+    if species_catch_areas:
+        query_filepath = "monitorfish/vessels_species_onboard_with_areas.sql"
+        params["areas_regex_array"] = [f"{a}%" for a in species_catch_areas]
     else:
-        return positions_in_alert[
-            positions_in_alert.cfr.isin(vessels_filter.vessels_cfr)
-        ].reset_index(drop=True)
+        query_filepath = "monitorfish/vessels_species_onboard.sql"
+
+    return extract("monitorfish_remote", query_filepath=query_filepath, params=params)
 
 
 @task
-def filter_on_gears(
-    positions_in_alert: pd.DataFrame,
-    current_gears: pd.DataFrame,
-    gear_codes: set,
-    include_vessels_unknown_gear: bool,
-):
-    """
-    Filters input `positions_in_alert` to keep only rows for which the vessel's
-    current gears are included in `gear_codes`.
-
-    Args:
-        positions_in_alert (pd.DataFrame): DataFrame of positions. Must have columns
-          "cfr", "external_immatriculation", "ircs"
-        current_gears (pd.DataFrame): DataFrame of vessels. Must have columns
-          "cfr", "external_immatriculation", "ircs", "current_gears"
-        gear_codes (set): set of gear_codes
-        include_vessels_unknown_gear (bool): if `True`, `positions_in_alert` for which
-          the corresponding vessel does not have any known gears (because the vessel
-          is either absent of the `current_gears` DataFrame or has `None` in
-          the `current_gears` field of that DataFrame) are kept. Otherwise, those rows
-          are discarded.
-    """
-
-    positions_in_alert = join_on_multiple_keys(
-        positions_in_alert,
-        current_gears,
-        how="left",
-        or_join_keys=["cfr", "external_immatriculation", "ircs"],
+def get_vessels_with_species_min_weight(
+    vessels_species: pd.DataFrame, species_spec: List[SpeciesSpecification]
+) -> set:
+    species_min_weight_dict = (
+        pd.DataFrame(species_spec).groupby("species")["minWeight"].min().to_dict()
     )
+    df = vessels_species.assign(
+        min_weight=vessels_species.species.map(species_min_weight_dict).fillna(0)
+    )
+    return set(df.query("weight >= min_weight").cfr)
 
-    positions_in_alert_known_gear = positions_in_alert.dropna(subset=["current_gears"])
 
-    positions_in_alert_known_gear = positions_in_alert_known_gear.loc[
-        positions_in_alert_known_gear.current_gears.map(
-            lambda s: s.issubset(gear_codes)
-        )
-    ]
+@task
+def get_vessels_with_gears(
+    vessels_gears: pd.DataFrame, gears: List[GearSpecification]
+) -> set:
+    vessels_gears = vessels_gears.copy(deep=True)
+    gears_min_mesh = pd.DataFrame(gears).set_index("gear")["minMesh"].to_dict()
+    gears_max_mesh = pd.DataFrame(gears).set_index("gear")["maxMesh"].to_dict()
+    vessels_gears["min_mesh"] = vessels_gears.gear.map(gears_min_mesh)
+    vessels_gears["max_mesh"] = vessels_gears.gear.map(gears_max_mesh)
 
-    res = positions_in_alert_known_gear
-
-    if include_vessels_unknown_gear:
-        positions_in_alert_unknown_gear = positions_in_alert.loc[
-            positions_in_alert.current_gears.isna()
-        ]
-
-        res = pd.concat([res, positions_in_alert_unknown_gear])
-
-    res = res.drop(columns=["current_gears"])
-
-    return res
+    vessels_gears = vessels_gears[vessels_gears.gear.isin(gears_max_mesh)].reset_index(
+        drop=True
+    )
+    vessels = duckdb.query(
+        """
+        SELECT DISTINCT cfr
+        FROM vessels_gears
+        WHERE
+            (mesh >= min_mesh OR min_mesh IS NULL) AND
+            (mesh <= max_mesh OR max_mesh IS NULL)
+    """
+    ).to_df()
+    return set(vessels.cfr)
 
 
 @task
@@ -499,78 +426,119 @@ def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
 
 @flow(name="Position alert")
 def position_alert_flow(
-    alert_type: str,
-    alert_config_name: str,
-    zones: list | None = None,
-    hours_from_now: int = 8,
+    position_alert_id: int,
+    name: str,
+    description: str,
+    natinf_code: int,
+    track_analysis_depth: float = 12.0,
     only_fishing_positions: bool = True,
-    flag_states: list | None = None,
-    except_flag_states: list | None = None,
-    fishing_gears: list | None = None,
-    fishing_gear_categories: list | None = None,
-    species_onboard: list | None = None,
-    species_onboard_min_weight: float = 0.0,
-    include_vessels_unknown_gear: bool = True,
-    eez_areas: list | None = None,
+    gears: List[GearSpecification] | None = None,
+    species: List[SpeciesSpecification] | None = None,
+    species_catch_areas: List[str] | None = None,
+    administrative_areas: List[AdminAreasSpecification] | None = None,
+    regulatory_areas: List[RegulatoryAreaSpecification] | None = None,
     min_depth: float | None = None,
+    flag_states_iso2: List[str] | None = None,
+    vessel_ids: List[int] | None = None,
+    district_codes: List[str] | None = None,
+    producer_organizations: List[str] | None = None,
 ):
-    must_filter_on_gears = alert_has_gear_parameters(
-        fishing_gears, fishing_gear_categories
-    )
+    now = get_utcnow()
+    if administrative_areas:
+        administrative_areas_table_metadatas = [
+            to_admin_areas_table_metadata(a) for a in administrative_areas
+        ]
+        table_names = [t.table_name for t in administrative_areas_table_metadatas]
+        administrative_areas_tables = get_table.map(table_names)
+        admin_areas_specs_with_tables = to_admin_areas_spec_with_table.map(
+            spec=administrative_areas,
+            table_metadata=administrative_areas_table_metadatas,
+            table=administrative_areas_tables,
+        )
+    else:
+        admin_areas_specs_with_tables = None
 
-    positions_table = get_table("positions")
-    vessels_table = get_table("vessels")
-    districts_table = get_table("districts")
-    eez_areas_table = get_table("eez_areas")
-    zones_table = get_alert_type_zones_table(alert_type)
-    facades_table = get_table("facade_areas_subdivided")
+    positions_table = get_table.submit("positions")
+    vessels_table = get_table.submit("vessels")
+    districts_table = get_table.submit("districts")
+    facades_table = get_table.submit("facade_areas_subdivided")
+
+    if regulatory_areas:
+        regulations_table = get_table.submit("regulations")
+    else:
+        regulations_table = None
+
+    if species:
+        vessels_species = extract_vessels_with_species_onboard.submit(
+            species, species_catch_areas
+        )
+        cfrs_with_species_min_weight = get_vessels_with_species_min_weight.submit(
+            vessels_species=vessels_species, species_spec=species
+        )
+    else:
+        cfrs_with_species_min_weight = None
+
+    if gears:
+        vessels_current_gears = extract_vessels_current_gears.submit()
+        cfrs_with_gears = get_vessels_with_gears.submit(vessels_current_gears, gears)
+    else:
+        cfrs_with_gears = None
+
+    if vessel_ids or district_codes or producer_organizations:
+        if producer_organizations:
+            prod_org_memberships_table = get_table("producer_organization_memberships")
+        else:
+            prod_org_memberships_table = None
+        vessels_query = make_vessels_query(
+            vessels_table=vessels_table,
+            prod_org_memberships_table=prod_org_memberships_table,
+            vessel_ids=vessel_ids,
+            district_codes=district_codes,
+            producer_organizations=producer_organizations,
+        )
+        vessels = read_query_task("monitorfish_remote", vessels_query)
+        (
+            vessels_cfrs,
+            vessels_external_immats,
+            vessels_ircss,
+        ) = get_sets_of_identifiers(vessels)
+
+    else:
+        vessels_cfrs = None
+        vessels_external_immats = None
+        vessels_ircss = None
+
+    cfrs, external_immats, ircss = merge_sets_of_identifiers(
+        cfrs_with_species_min_weight,
+        cfrs_with_gears,
+        vessels_cfrs,
+        vessels_external_immats,
+        vessels_ircss,
+    )
 
     positions_query = make_positions_in_alert_query(
         positions_table=positions_table,
         facades_table=facades_table,
-        zones_table=zones_table,
-        eez_areas_table=eez_areas_table,
+        track_analysis_depth=track_analysis_depth,
+        now=now,
+        regulations_table=regulations_table,
         only_fishing_positions=only_fishing_positions,
-        zones=zones,
-        hours_from_now=hours_from_now,
-        flag_states=flag_states,
-        except_flag_states=except_flag_states,
-        eez_areas=eez_areas,
+        flag_states_iso2=flag_states_iso2,
+        regulatory_areas=regulatory_areas,
+        admin_areas_specs_with_tables=admin_areas_specs_with_tables,
+        cfrs=cfrs,
+        external_immats=external_immats,
+        ircss=ircss,
     )
 
+    current_risk_factors = extract_current_risk_factors.submit()
     positions_in_alert = read_query_task.submit("monitorfish_remote", positions_query)
-    species_onboard_vessels_filter = extract_vessels_with_species_onboard.submit(
-        species_onboard=species_onboard,
-        min_weight=species_onboard_min_weight,
-    )
-
-    positions_in_alert = filter_vessels(
-        positions_in_alert, vessels_filter=species_onboard_vessels_filter
-    )
-
-    if must_filter_on_gears:
-        fishing_gears_table = get_table("fishing_gear_codes")
-        fishing_gears_query = make_fishing_gears_query(
-            fishing_gears_table=fishing_gears_table,
-            fishing_gears=fishing_gears,
-            fishing_gear_categories=fishing_gear_categories,
-        )
-        gear_codes = extract_gear_codes.submit(fishing_gears_query)
-        current_gears = extract_current_gears.submit()
-
-        positions_in_alert = filter_on_gears(
-            positions_in_alert=positions_in_alert,
-            current_gears=current_gears,
-            gear_codes=gear_codes,
-            include_vessels_unknown_gear=include_vessels_unknown_gear,
-        )
 
     if min_depth:
         positions_in_alert = add_depth(positions_in_alert)
         positions_in_alert = filter_on_depth(positions_in_alert, min_depth)
 
     positions_in_alert = add_vessel_identifier(positions_in_alert)
-    current_risk_factors = extract_current_risk_factors.submit()
     positions_in_alert = merge_risk_factor(positions_in_alert, current_risk_factors)
     vessels_in_alert = get_vessels_in_alert(positions_in_alert)
     vessels_in_alert = add_vessel_id(vessels_in_alert, vessels_table)
@@ -580,9 +548,18 @@ def position_alert_flow(
         districts_table=districts_table,
         districts_columns_to_add=["dml"],
     )
-    alerts = make_alerts(vessels_in_alert, alert_type, alert_config_name)
+    alerts = make_alerts(
+        vessels_in_alert,
+        alert_type="POSITION_ALERT",
+        alert_id=position_alert_id,
+        name=name,
+        description=description,
+        natinf_code=natinf_code,
+    )
     silenced_alerts = extract_silenced_alerts.submit(
-        alert_type, number_of_hours=hours_from_now
+        alert_type="POSITION_ALERT",
+        number_of_hours=track_analysis_depth,
+        alert_id=position_alert_id,
     )
     alert_without_silenced = filter_alerts(alerts, silenced_alerts)
-    load_alerts(alert_without_silenced, alert_config_name)
+    load_alerts(alert_without_silenced, f"POSITION_ALERT/{position_alert_id}")

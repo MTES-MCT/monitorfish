@@ -84,7 +84,7 @@ dependencies {
     api("org.hibernate:hibernate-spatial:6.6.4.Final")
     api("io.sentry:sentry:8.18.0")
     api("io.sentry:sentry-log4j2:8.18.0")
-    implementation("org.springframework.cloud:spring-cloud-gateway-mvc:4.3.0")
+    implementation("org.springframework.cloud:spring-cloud-gateway-mvc:4.2.0")
     runtimeOnly("org.postgresql:postgresql:42.7.7")
     testImplementation("io.ktor:ktor-client-mock-jvm:3.2.3")
     testImplementation("org.assertj:assertj-core:3.27.3")

@@ -33,7 +33,7 @@ class GetActivityReports(
         jdp: JointDeploymentPlan,
     ): ActivityReports {
         val fleetSegments = fleetSegmentRepository.findAllByYear(ZonedDateTime.now(clock).year)
-        val controls = missionActionsRepository.findSeaLandAndAirControlBetweenDates(beforeDateTime, afterDateTime)
+        val controls = missionActionsRepository.findSeaAndLandControlBetweenDates(beforeDateTime, afterDateTime)
         logger.info("Found ${controls.size} controls between dates [$afterDateTime, $beforeDateTime].")
 
         if (controls.isEmpty()) {
@@ -75,23 +75,6 @@ class GetActivityReports(
                             return@filter isUnderJdp
                         }
 
-                        MissionActionType.AIR_CONTROL -> {
-                            val controlMission = missions.firstOrNull { mission -> mission.id == control.missionId }
-                            val isUnderJdp = controlMission?.isUnderJdp == true
-                            if (controlMission == null) {
-                                logger.error(
-                                    "Mission id '${control.missionId}' linked to AIR control id '${control.id}' could not be found. Is this mission deleted ?",
-                                )
-                            }
-
-                            if (control.faoAreas.isNotEmpty()) {
-                                return@filter isUnderJdp && jdp.isAttributedJdp(control)
-                            }
-
-                            // The mission must be under JDP
-                            return@filter isUnderJdp
-                        }
-
                         else -> throw IllegalArgumentException("Bad control type: ${control.actionType}")
                     }
                 }.filter { control ->
@@ -111,7 +94,6 @@ class GetActivityReports(
                         when (control.actionType) {
                             MissionActionType.LAND_CONTROL -> ActivityCode.LAN
                             MissionActionType.SEA_CONTROL -> ActivityCode.FIS
-                            MissionActionType.AIR_CONTROL -> ActivityCode.UNK
                             else -> throw IllegalArgumentException("Bad control type: ${control.actionType}")
                         }
 

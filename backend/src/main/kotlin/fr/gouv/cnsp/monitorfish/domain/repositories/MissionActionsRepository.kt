@@ -13,7 +13,7 @@ interface MissionActionsRepository {
         afterDateTime: ZonedDateTime,
     ): List<MissionAction>
 
-    fun findSeaLandAndAirControlBetweenDates(
+    fun findSeaAndLandControlBetweenDates(
         beforeDateTime: ZonedDateTime,
         afterDateTime: ZonedDateTime,
     ): List<MissionAction>

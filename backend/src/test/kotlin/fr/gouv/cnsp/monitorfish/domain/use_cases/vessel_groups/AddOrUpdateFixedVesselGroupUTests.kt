@@ -148,7 +148,7 @@ class AddOrUpdateFixedVesselGroupUTests {
                         gearCodes = listOf("OTB", "OTM", "TBB", "PTB"),
                         hasLogbook = true,
                         lastControlPeriod = LastControlPeriod.BEFORE_ONE_YEAR_AGO,
-                        lastLandingPortLocodes = emptyList(),
+                        landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
                         riskFactors = listOf(2, 3),

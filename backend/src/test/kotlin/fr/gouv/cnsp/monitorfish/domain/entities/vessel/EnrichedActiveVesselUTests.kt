@@ -40,6 +40,7 @@ class EnrichedActiveVesselUTests {
                 vesselGroups = getDynamicVesselGroups(),
                 beacon = null,
                 lastPosition = null,
+                landingPort = null,
             )
 
         // Then
@@ -76,6 +77,7 @@ class EnrichedActiveVesselUTests {
                 vesselGroups = getDynamicVesselGroups(),
                 beacon = null,
                 lastPosition = getDummyLastPositions().first(),
+                landingPort = null,
             )
 
         // Then
@@ -108,6 +110,7 @@ class EnrichedActiveVesselUTests {
                 vesselGroups = getDynamicVesselGroups(),
                 beacon = null,
                 lastPosition = lastPositionWithoutGears,
+                landingPort = null,
             )
 
         // Then
@@ -139,6 +142,7 @@ class EnrichedActiveVesselUTests {
                 vesselGroups = getDynamicVesselGroups(),
                 beacon = null,
                 lastPosition = lastPositionWithNullGears,
+                landingPort = null,
             )
 
         // Then
@@ -159,6 +163,7 @@ class EnrichedActiveVesselUTests {
                 vesselGroups = listOf(),
                 beacon = null,
                 lastPosition = getDummyLastPositions().first(),
+                landingPort = null,
             )
 
         // When & Then
@@ -182,6 +187,7 @@ class EnrichedActiveVesselUTests {
                 vesselGroups = listOf(),
                 beacon = null,
                 lastPosition = null,
+                landingPort = null,
             )
 
         // When & Then
@@ -202,6 +208,7 @@ class EnrichedActiveVesselUTests {
                 vesselGroups = listOf(),
                 beacon = null,
                 lastPosition = null,
+                landingPort = null,
             )
 
         // When & Then
@@ -221,6 +228,7 @@ class EnrichedActiveVesselUTests {
                 vesselGroups = listOf(),
                 beacon = null,
                 lastPosition = null,
+                landingPort = null,
             )
 
         // When & Then
@@ -239,6 +247,7 @@ class EnrichedActiveVesselUTests {
                 vesselGroups = listOf(),
                 beacon = null,
                 lastPosition = null,
+                landingPort = null,
             )
 
         // When & Then
@@ -258,6 +267,7 @@ class EnrichedActiveVesselUTests {
                 vesselGroups = listOf(),
                 beacon = null,
                 lastPosition = getDummyLastPositions().first(),
+                landingPort = null,
             )
 
         // When & Then
@@ -277,6 +287,7 @@ class EnrichedActiveVesselUTests {
                 vesselGroups = listOf(),
                 beacon = null,
                 lastPosition = getDummyLastPositions().first(),
+                landingPort = null,
             )
 
         // When & Then
@@ -305,6 +316,7 @@ class EnrichedActiveVesselUTests {
                 vesselGroups = listOf(),
                 beacon = null,
                 lastPosition = null,
+                landingPort = null,
             )
 
         // When & Then
@@ -323,6 +335,7 @@ class EnrichedActiveVesselUTests {
                 vesselGroups = listOf(),
                 beacon = null,
                 lastPosition = null,
+                landingPort = null,
             )
 
         // When & Then
@@ -341,6 +354,7 @@ class EnrichedActiveVesselUTests {
                 vesselGroups = listOf(),
                 beacon = null,
                 lastPosition = null,
+                landingPort = null,
             )
 
         // When & Then

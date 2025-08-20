@@ -47,6 +47,7 @@ sealed class ActiveVesselBaseDataOutput(
     open val gearsArray: List<String>,
     open val hasInfractionSuspicion: Boolean,
     open val speciesArray: List<String>,
+    open val landingPortLocode: String?,
 ) {
     companion object {
         fun fromEnrichedActiveVessel(
@@ -128,6 +129,7 @@ sealed class ActiveVesselBaseDataOutput(
                         },
                     activityType = enrichedActiveVessel.activityType,
                     activityOrigin = enrichedActiveVessel.activityOrigin,
+                    landingPortLocode = enrichedActiveVessel.landingPort?.locode,
                 )
             } ?: run {
                 require(enrichedActiveVessel.vessel != null) {
@@ -179,6 +181,7 @@ sealed class ActiveVesselBaseDataOutput(
                     speciesArray = enrichedActiveVessel.speciesArray,
                     activityType = enrichedActiveVessel.activityType,
                     activityOrigin = enrichedActiveVessel.activityOrigin,
+                    landingPortLocode = enrichedActiveVessel.landingPort?.locode,
                 )
             }
     }
@@ -218,6 +221,7 @@ data class ActiveVesselEmittingPositionDataOutput(
     override val hasInfractionSuspicion: Boolean,
     override val speciesArray: List<String>,
     override val isFiltered: Int, // 0 is False, 1 is True - for WebGL
+    override val landingPortLocode: String?,
     val alerts: List<String>,
     val hasAlert: Boolean,
     val beaconMalfunctionId: Int? = null,
@@ -268,6 +272,7 @@ data class ActiveVesselEmittingPositionDataOutput(
         speciesArray = speciesArray,
         activityType = activityType,
         activityOrigin = activityOrigin,
+        landingPortLocode = landingPortLocode,
     )
 
 data class ActiveVesselEmittingLogbookDataOutput(
@@ -299,6 +304,7 @@ data class ActiveVesselEmittingLogbookDataOutput(
     override val isAtPort: Boolean,
     override val producerOrganization: String? = null,
     override val reportings: List<String> = listOf(),
+    override val landingPortLocode: String?,
     // Properties for efficient filtering in frontend
     override val isFiltered: Int, // 0 is False, 1 is True - for WebGL
     override val gearsArray: List<String>,
@@ -337,6 +343,7 @@ data class ActiveVesselEmittingLogbookDataOutput(
         isFiltered = isFiltered,
         activityType = activityType,
         activityOrigin = activityOrigin,
+        landingPortLocode = landingPortLocode,
     )
 
 data class LastPositionVesselGroupDataOutput(

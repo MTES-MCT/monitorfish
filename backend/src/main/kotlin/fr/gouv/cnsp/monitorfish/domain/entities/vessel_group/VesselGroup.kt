@@ -69,6 +69,10 @@ data class DynamicVesselGroup(
         activeVessel: EnrichedActiveVessel,
         now: ZonedDateTime,
     ): Boolean {
+        val hasLandingPort = activeVessel.landingPort != null
+        val hasLandingPortMatch =
+            if (hasLandingPort) activeVessel.landingPort.isInGroup(vesselGroup = this) else true
+
         if (activeVessel.lastPosition != null) {
             val hasLastPositionMatch =
                 activeVessel.lastPosition.isInGroup(
@@ -85,7 +89,7 @@ data class DynamicVesselGroup(
 
             val hasRiskFactorMatch = activeVessel.riskFactor.isLastPositionInGroup(this)
 
-            return hasLastPositionMatch && hasProducerOrganizationMatch && hasRiskFactorMatch
+            return hasLastPositionMatch && hasProducerOrganizationMatch && hasRiskFactorMatch && hasLandingPortMatch
         }
 
         if (filters.lastPositionHoursAgo != null ||
@@ -119,7 +123,8 @@ data class DynamicVesselGroup(
         return hasRiskFactorAndProfileMatch &&
             hasVesselReferentialMatch &&
             hasPositionsMatch &&
-            hasProducerOrganizationMatch
+            hasProducerOrganizationMatch &&
+            hasLandingPortMatch
     }
 }
 

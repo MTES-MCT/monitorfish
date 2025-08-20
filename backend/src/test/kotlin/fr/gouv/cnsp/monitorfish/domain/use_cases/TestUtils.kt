@@ -51,6 +51,7 @@ object TestUtils {
                     AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT -> throw IllegalArgumentException(
                         "Unhandled test case",
                     )
+
                     AlertTypeMapping.THREE_MILES_TRAWLING_ALERT -> ThreeMilesTrawlingAlert(seaFront = NAMO.toString())
                     AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT -> FrenchEEZFishingAlert(seaFront = NAMO.toString())
                     AlertTypeMapping.TWELVE_MILES_FISHING_ALERT -> TwelveMilesFishingAlert(seaFront = NAMO.toString())
@@ -975,7 +976,7 @@ object TestUtils {
                         gearCodes = listOf("OTB", "OTM", "TBB", "PTB"),
                         hasLogbook = true,
                         lastControlPeriod = LastControlPeriod.BEFORE_SIX_MONTHS_AGO,
-                        lastLandingPortLocodes = emptyList(),
+                        landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
                         riskFactors = listOf(2, 3),
@@ -1003,7 +1004,7 @@ object TestUtils {
                         gearCodes = listOf("OTB", "OTM", "TBB", "PTB"),
                         hasLogbook = true,
                         lastControlPeriod = LastControlPeriod.BEFORE_ONE_YEAR_AGO,
-                        lastLandingPortLocodes = emptyList(),
+                        landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
                         riskFactors = listOf(2, 3),

@@ -130,7 +130,7 @@ class GetActivityReportsUTests {
                     completion = Completion.TO_COMPLETE,
                 ),
             )
-        given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
+        given(missionActionsRepository.findSeaLandAndAirControlBetweenDates(any(), any())).willReturn(controls)
 
         val vessels =
             listOf(
@@ -283,7 +283,7 @@ class GetActivityReportsUTests {
                     userTrigram = "LTH",
                 ),
             )
-        given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
+        given(missionActionsRepository.findSeaLandAndAirControlBetweenDates(any(), any())).willReturn(controls)
 
         val vessels =
             listOf(
@@ -449,7 +449,7 @@ class GetActivityReportsUTests {
                     userTrigram = "LTH",
                 ),
             )
-        given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
+        given(missionActionsRepository.findSeaLandAndAirControlBetweenDates(any(), any())).willReturn(controls)
 
         val vessels =
             listOf(
@@ -542,7 +542,7 @@ class GetActivityReportsUTests {
                     userTrigram = "LTH",
                 ),
             )
-        given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
+        given(missionActionsRepository.findSeaLandAndAirControlBetweenDates(any(), any())).willReturn(controls)
 
         val vessels =
             listOf(
@@ -623,7 +623,7 @@ class GetActivityReportsUTests {
                     userTrigram = "LTH",
                 ),
             )
-        given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
+        given(missionActionsRepository.findSeaLandAndAirControlBetweenDates(any(), any())).willReturn(controls)
 
         val vessels =
             listOf(
@@ -645,6 +645,84 @@ class GetActivityReportsUTests {
                 Mission(
                     2,
                     missionTypes = listOf(MissionType.SEA),
+                    missionSource = MissionSource.MONITORFISH,
+                    isUnderJdp = true,
+                    isGeometryComputedFromControls = false,
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                ),
+            )
+        given(missionRepository.findByIds(listOf(2))).willReturn(missions)
+
+        // When
+        val activityReports =
+            GetActivityReports(
+                missionActionsRepository,
+                portRepository,
+                vesselRepository,
+                missionRepository,
+                fleetSegmentRepository,
+                fixedClock,
+            ).execute(
+                ZonedDateTime.now(),
+                ZonedDateTime.now().minusDays(1),
+                JointDeploymentPlan.NORTH_SEA,
+            )
+
+        // Then
+        assertThat(activityReports.activityReports).hasSize(1)
+    }
+
+    @Test
+    fun `execute Should include an AIR control done within the JDP FAO area`() {
+        // Given
+        given(fleetSegmentRepository.findAllByYear(any())).willReturn(
+            TestUtils.getDummyFleetSegments(),
+        )
+
+        val controls =
+            listOf(
+                MissionAction(
+                    id = 2,
+                    vesselId = 1,
+                    missionId = 2,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    actionType = MissionActionType.AIR_CONTROL,
+                    // The first fao area "27.7.c" is within WESTERN_WATERS
+                    // The second fao area "27.4.b" is within NORTH_SEA
+                    faoAreas = listOf("27.7.c", "27.4.b"),
+                    seizureAndDiversion = false,
+                    speciesInfractions = listOf(),
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    completion = Completion.TO_COMPLETE,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
+                ),
+            )
+        given(missionActionsRepository.findSeaLandAndAirControlBetweenDates(any(), any())).willReturn(controls)
+
+        val vessels =
+            listOf(
+                Vessel(
+                    id = 1,
+                    internalReferenceNumber = "FR00022680",
+                    vesselName = "MY AWESOME VESSEL",
+                    flagState = CountryCode.FR,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing",
+                    districtCode = "AY",
+                    hasLogbookEsacapt = false,
+                ),
+            )
+        given(vesselRepository.findVesselsByIds(eq(listOf(1)))).willReturn(vessels)
+
+        val missions =
+            listOf(
+                Mission(
+                    2,
+                    missionTypes = listOf(MissionType.AIR),
                     missionSource = MissionSource.MONITORFISH,
                     isUnderJdp = true,
                     isGeometryComputedFromControls = false,
@@ -736,7 +814,7 @@ class GetActivityReportsUTests {
                     completion = Completion.TO_COMPLETE,
                 ),
             )
-        given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
+        given(missionActionsRepository.findSeaLandAndAirControlBetweenDates(any(), any())).willReturn(controls)
 
         val vessels =
             listOf(
@@ -862,7 +940,7 @@ class GetActivityReportsUTests {
                     completion = Completion.TO_COMPLETE,
                 ),
             )
-        given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
+        given(missionActionsRepository.findSeaLandAndAirControlBetweenDates(any(), any())).willReturn(controls)
 
         val vessels =
             listOf(
@@ -954,7 +1032,7 @@ class GetActivityReportsUTests {
                     userTrigram = "CPAMOI",
                 ),
             )
-        given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
+        given(missionActionsRepository.findSeaLandAndAirControlBetweenDates(any(), any())).willReturn(controls)
 
         val vessels =
             listOf(
@@ -1057,7 +1135,7 @@ class GetActivityReportsUTests {
                     userTrigram = "CPAMOI",
                 ),
             )
-        given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
+        given(missionActionsRepository.findSeaLandAndAirControlBetweenDates(any(), any())).willReturn(controls)
 
         val vessels =
             listOf(

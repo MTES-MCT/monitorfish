@@ -100,6 +100,14 @@ lint-back:
 		-e "Exceeded max line length" \
 		-e "Package name must not contain underscore" \
 		-e "Wildcard import"
+
+.PHONY: run-cypress-docker-compose ##LOCAL Run Cypress docker compose
+run-cypress-docker-compose:
+	echo "######"
+	echo "WARNING: Replace the monitorfish-app tag with your local one in the docker-compose.cypress.yml file."
+	echo "######"
+	cd infra/docker && docker compose -f docker-compose.cypress.yml up
+
 .PHONY: build-app-docker ##LOCAL Build app docker image
 build-app-docker:
 	docker build -f infra/docker/app/Dockerfile -t monitorfish .

@@ -75,7 +75,7 @@ class KeycloakProxyController(
             val headerName = headerNames.nextElement()
             val headerValues = request.getHeaders(headerName)
 
-            while (headerValues.hasMoreElements()) {
+            while (!headerName.isNullOrEmpty() && headerValues.hasMoreElements()) {
                 proxy.header(headerName, headerValues.nextElement())
             }
         }
@@ -134,7 +134,7 @@ class KeycloakProxyController(
             val headerName = headerNames.nextElement()
             val headerValues = request.getHeaders(headerName)
 
-            while (headerValues.hasMoreElements()) {
+            while (!headerName.isNullOrEmpty() && headerValues.hasMoreElements()) {
                 proxy.header(headerName, headerValues.nextElement())
             }
         }

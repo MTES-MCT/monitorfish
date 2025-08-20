@@ -302,7 +302,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         val beforeDateTime = ZonedDateTime.now().plusWeeks(1)
 
         // When
-        val controls = jpaMissionActionsRepository.findSeaAndLandControlBetweenDates(beforeDateTime, afterDateTime)
+        val controls = jpaMissionActionsRepository.findSeaLandAndAirControlBetweenDates(beforeDateTime, afterDateTime)
 
         // Then
         assertThat(controls).hasSize(1)
@@ -319,7 +319,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         val afterDateTime = ZonedDateTime.parse("2020-01-17T00:00:00.000Z")
 
         // When
-        val controls = jpaMissionActionsRepository.findSeaAndLandControlBetweenDates(beforeDateTime, afterDateTime)
+        val controls = jpaMissionActionsRepository.findSeaLandAndAirControlBetweenDates(beforeDateTime, afterDateTime)
 
         // Then
         assertThat(controls).hasSize(1)

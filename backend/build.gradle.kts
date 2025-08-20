@@ -19,7 +19,8 @@ ktlint {
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2024.0.2")
+        // We can't upgrade to >2024.0.1 as this breaks the E2E tests (via the proxy)
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2024.0.0")
     }
 }
 

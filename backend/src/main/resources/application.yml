@@ -48,6 +48,10 @@ logging:
         org.springframework.security.web.authentication.logout: DEBUG
 
 spring:
+    cloud:
+        gateway:
+            default-filters:
+                - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
     jmx:
         enabled: false
     mvc:

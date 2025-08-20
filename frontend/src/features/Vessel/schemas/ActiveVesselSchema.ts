@@ -49,6 +49,7 @@ const ActiveVesselBaseSchema = z.strictObject({
   ircs: z.string().optional(),
   isAtPort: z.boolean(),
   isFiltered: z.number(),
+  landingPortLocode: z.string().optional(),
   // 0 is False, 1 is True - for WebGL
   lastControlDateTime: z.string().optional(),
   lastControlInfraction: z.boolean().optional(),

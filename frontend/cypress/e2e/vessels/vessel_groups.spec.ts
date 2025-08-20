@@ -10,6 +10,8 @@ context('Vessel groups', () => {
     cy.getDataCy('side-window-menu-vessel-list').click()
     cy.fill('Nationalités', ['Espagne', 'France'])
     cy.getDataCy('vessel-list-length').contains('3149 navires')
+    cy.fill('Ports de débarque', ['Brest'])
+    cy.getDataCy('vessel-list-length').contains('840 navires')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 2)
 
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
@@ -24,25 +26,30 @@ context('Vessel groups', () => {
      */
     cy.get('.Component-Dialog').contains('Actuellement, 4 navires correspondent aux filtres sélectionnés.')
     cy.get('.Component-Dialog').within(() => {
-      cy.get('.Component-SingleTag').should('have.length', 5)
+      cy.get('.Component-SingleTag').should('have.length', 6)
     })
 
     cy.fill('Engins utilisés', ['OTT'], { index: 1 })
     cy.get('.Component-Dialog').contains('Actuellement, 1 navire correspond aux filtres sélectionnés.')
     cy.get('.Component-Dialog').within(() => {
-      cy.get('.Component-SingleTag').eq(4).within(() => {
-        cy.get('button').click()
-      })
+      cy.get('.Component-SingleTag')
+        .eq(4)
+        .within(() => {
+          cy.get('button').click()
+        })
     })
     cy.wait(200)
     cy.get('.Component-Dialog').contains('Actuellement, 4 navires correspondent aux filtres sélectionnés.')
 
     cy.get('[title="#8c2c17"]').click()
-    cy.fill("Nom du groupe", "Lorem ipsum dolor sit amet")
-    cy.fill("Description du groupe", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.")
-    cy.fill("Points d'attention", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
-    cy.fill("Partage du groupe", "Groupe partagé")
-    cy.fill("Partager le groupe avec...", ['Pôle OPS métropole'])
+    cy.fill('Nom du groupe', 'Lorem ipsum dolor sit amet')
+    cy.fill(
+      'Description du groupe',
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.'
+    )
+    cy.fill("Points d'attention", 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.')
+    cy.fill('Partage du groupe', 'Groupe partagé')
+    cy.fill('Partager le groupe avec...', ['Pôle OPS métropole'])
     cy.clickButton('Créer le groupe')
     cy.contains('Le groupe de navires dynamique "Lorem ipsum dolor sit amet" a bien été créé.').should('be.visible')
 
@@ -84,12 +91,14 @@ context('Vessel groups', () => {
      * Display the created vessel group
      */
     cy.get('[title="Lorem ipsum dolor sit amet"]').click()
-    cy.get('[title="Lorem ipsum dolor sit amet"]').contains('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.')
+    cy.get('[title="Lorem ipsum dolor sit amet"]').contains(
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.'
+    )
     cy.get('[title="Lorem ipsum dolor sit amet"]').contains('Groupe dynamique')
     cy.get('[title="Lorem ipsum dolor sit amet"]').contains('Groupe partagé')
     cy.get('[title="Afficher les critères de définition du groupe"]').click()
     cy.get('[title="Lorem ipsum dolor sit amet"]').within(() => {
-      cy.get('.Component-SingleTag').should('have.length', 5)
+      cy.get('.Component-SingleTag').should('have.length', 6)
     })
     cy.get('[title="Masquer les critères de définition du groupe"]').click()
 
@@ -101,14 +110,19 @@ context('Vessel groups', () => {
     cy.get('.Component-Dialog').contains('Actuellement, 4 navires correspondent aux filtres sélectionnés.')
     // Name of the vessel group
     cy.get('[id="name"]').should('have.value', 'Lorem ipsum dolor sit amet')
-    cy.get('[id="description"]').should('have.value', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.')
+    cy.get('[id="description"]').should(
+      'have.value',
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.'
+    )
 
     cy.fill('Description du groupe', 'Modification de la description: consectetur adipiscing elit.')
     // Deletion of the last filter
     cy.get('.Component-Dialog').within(() => {
-      cy.get('.Component-SingleTag').eq(3).within(() => {
-        cy.get('button').click()
-      })
+      cy.get('.Component-SingleTag')
+        .eq(4)
+        .within(() => {
+          cy.get('button').click()
+        })
     })
 
     // Add a custom zone
@@ -119,7 +133,7 @@ context('Vessel groups', () => {
     cy.get('body').dblclick(560, 620)
     cy.clickButton('Valider la zone de groupe')
     cy.get('.Component-Dialog').within(() => {
-      cy.get('.Component-SingleTag').eq(4).contains('Zone de filtre manuelle')
+      cy.get('.Component-SingleTag').eq(5).contains('Zone de filtre manuelle')
     })
     cy.clickButton('Modifier le groupe')
     cy.contains('Le groupe de navires dynamique "Lorem ipsum dolor sit amet" a bien été modifié.').should('be.visible')
@@ -128,12 +142,13 @@ context('Vessel groups', () => {
      * Verify the modified values
      */
     cy.get('[title="Lorem ipsum dolor sit amet"]').click()
-    cy.get('[title="Lorem ipsum dolor sit amet"]')
-      .contains('Modification de la description: consectetur adipiscing elit.')
+    cy.get('[title="Lorem ipsum dolor sit amet"]').contains(
+      'Modification de la description: consectetur adipiscing elit.'
+    )
     cy.get('[title="Afficher les critères de définition du groupe"]').click()
     cy.get('[title="Lorem ipsum dolor sit amet"]').within(() => {
-      cy.get('.Component-SingleTag').should('have.length', 5)
-      cy.get('.Component-SingleTag').eq(4).contains('Zone de filtre manuelle')
+      cy.get('.Component-SingleTag').should('have.length', 6)
+      cy.get('.Component-SingleTag').eq(5).contains('Zone de filtre manuelle')
     })
     cy.get('[title="Masquer les critères de définition du groupe"]').click()
 
@@ -147,20 +162,20 @@ context('Vessel groups', () => {
       cy.get('li').eq(2).contains('Mission Thémis – semaine 03')
       cy.get('li').eq(3).contains('Mission Thémis – chaluts de fonds')
 
-      cy.get("[title=\'Epingler le groupe \"Mission Thémis – chaluts de fonds\"\']").click()
+      cy.get('[title=\'Epingler le groupe "Mission Thémis – chaluts de fonds"\']').click()
       cy.get('li').eq(0).contains('Mission Thémis – chaluts de fonds')
       cy.get('li').eq(1).contains('Lorem ipsum dolor sit amet')
       cy.get('li').eq(2).contains('Mission Thémis – semaine 04')
       cy.get('li').eq(3).contains('Mission Thémis – semaine 03')
 
-      cy.get("[title=\'Epingler le groupe \"Mission Thémis – semaine 03\"\']").click()
+      cy.get('[title=\'Epingler le groupe "Mission Thémis – semaine 03"\']').click()
       cy.get('li').eq(0).contains('Mission Thémis – semaine 03')
       cy.get('li').eq(1).contains('Mission Thémis – chaluts de fonds')
       cy.get('li').eq(2).contains('Lorem ipsum dolor sit amet')
       cy.get('li').eq(3).contains('Mission Thémis – semaine 04')
 
-      cy.get("[title=\'Dépingler le groupe \"Mission Thémis – chaluts de fonds\"\']").click()
-      cy.get("[title=\'Dépingler le groupe \"Mission Thémis – semaine 03\"\']").click()
+      cy.get('[title=\'Dépingler le groupe "Mission Thémis – chaluts de fonds"\']').click()
+      cy.get('[title=\'Dépingler le groupe "Mission Thémis – semaine 03"\']').click()
       cy.get('li').eq(0).contains('Lorem ipsum dolor sit amet')
       cy.get('li').eq(1).contains('Mission Thémis – semaine 04')
       cy.get('li').eq(2).contains('Mission Thémis – semaine 03')
@@ -170,7 +185,7 @@ context('Vessel groups', () => {
     /**
      * Delete the created group
      */
-    cy.get("[title=\'Supprimer le groupe \"Lorem ipsum dolor sit amet\"\']").click()
+    cy.get('[title=\'Supprimer le groupe "Lorem ipsum dolor sit amet"\']').click()
     cy.clickButton('Confirmer la suppression')
 
     cy.contains('Le groupe de navires a bien été supprimé.').should('be.visible')
@@ -186,15 +201,15 @@ context('Vessel groups', () => {
     cy.get('.Component-Dialog').contains('Actuellement, 4 navires correspondent aux filtres sélectionnés.')
 
     cy.get('[title="#8c2c17"]').click()
-    cy.fill("Nom du groupe", "Lorem ipsum dynamique")
-    cy.fill("Description du groupe", "Lorem ipsum dolor sit amet.")
+    cy.fill('Nom du groupe', 'Lorem ipsum dynamique')
+    cy.fill('Description du groupe', 'Lorem ipsum dolor sit amet.')
     cy.clickButton('Créer le groupe')
     cy.contains('Le groupe de navires dynamique "Lorem ipsum dynamique" a bien été créé.').should('be.visible')
 
     cy.clickButton('Groupes de navires')
     cy.get('[title="Lorem ipsum dynamique"]').click()
 
-    cy.get("[title=\'Supprimer le groupe \"Lorem ipsum dynamique\"\']").click()
+    cy.get('[title=\'Supprimer le groupe "Lorem ipsum dynamique"\']').click()
     cy.clickButton('Confirmer la suppression')
   })
 
@@ -245,8 +260,8 @@ context('Vessel groups', () => {
     cy.get('.Component-Dialog').contains('4 navires sélectionnés.')
 
     cy.get('[title="#8c2c17"]').click()
-    cy.fill("Nom du groupe", "Dolor sit amet")
-    cy.fill("Description du groupe", "Consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.")
+    cy.fill('Nom du groupe', 'Dolor sit amet')
+    cy.fill('Description du groupe', 'Consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.')
     cy.clickButton('Créer le groupe')
     cy.contains('Le groupe de navires fixe "Dolor sit amet" a bien été créé.').should('be.visible')
 
@@ -258,7 +273,9 @@ context('Vessel groups', () => {
 
     cy.clickButton('Groupes de navires')
     cy.get('[title="Dolor sit amet"]').click()
-    cy.get('[title="Dolor sit amet"]').contains('Consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.')
+    cy.get('[title="Dolor sit amet"]').contains(
+      'Consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.'
+    )
     cy.get('[title="Dolor sit amet"]').contains('Groupe fixe')
 
     /**
@@ -269,7 +286,10 @@ context('Vessel groups', () => {
     cy.get('.Component-Dialog').contains('4 navires sélectionnés.')
     // Name of the vessel group
     cy.get('[id="name"]').should('have.value', 'Dolor sit amet')
-    cy.get('[id="description"]').should('have.value', 'Consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.')
+    cy.get('[id="description"]').should(
+      'have.value',
+      'Consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.'
+    )
 
     cy.fill('Description du groupe', 'Modification de la description: consectetur adipiscing elit.')
     cy.clickButton('Modifier le groupe')
@@ -279,13 +299,12 @@ context('Vessel groups', () => {
      * Verify the modified values
      */
     cy.get('[title="Dolor sit amet"]').click()
-    cy.get('[title="Dolor sit amet"]')
-      .contains('Modification de la description: consectetur adipiscing elit.')
+    cy.get('[title="Dolor sit amet"]').contains('Modification de la description: consectetur adipiscing elit.')
 
     /**
      * Delete the created group
      */
-    cy.get("[title=\'Supprimer le groupe \"Dolor sit amet\"\']").click()
+    cy.get('[title=\'Supprimer le groupe "Dolor sit amet"\']').click()
     cy.clickButton('Confirmer la suppression')
 
     cy.contains('Le groupe de navires a bien été supprimé.').should('be.visible')
@@ -307,13 +326,13 @@ context('Vessel groups', () => {
     cy.get('.Component-Dialog').contains('1 navire sélectionné.')
 
     cy.get('[title="#8c2c17"]').click()
-    cy.fill("Nom du groupe", "Lorem ipsum")
-    cy.fill("Description du groupe", "Lorem ipsum dolor sit amet.")
+    cy.fill('Nom du groupe', 'Lorem ipsum')
+    cy.fill('Description du groupe', 'Lorem ipsum dolor sit amet.')
     cy.clickButton('Créer le groupe')
     cy.wait(250)
 
     cy.get('[title="Lorem ipsum"]').click()
-    cy.get("[title=\'Supprimer le groupe \"Lorem ipsum\"\']").click()
+    cy.get('[title=\'Supprimer le groupe "Lorem ipsum"\']').click()
     cy.clickButton('Confirmer la suppression')
   })
 })

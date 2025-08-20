@@ -75,6 +75,7 @@ class JpaLastPositionRepository(
                             organizationName = it.producerOrganizationName ?: "",
                         ),
                     riskFactor = it.riskFactor?.toVesselRiskFactor(mapper) ?: VesselRiskFactor(),
+                    landingPort = null,
                 )
             }.filter { it.hasEitherLastPositionOrVesselProfileWithVessel() }
     }

@@ -10,8 +10,7 @@ data class VesselGroupFilters(
     val emitsPositions: List<VesselEmitsPositions> = listOf(),
     val hasLogbook: Boolean?,
     val lastControlPeriod: LastControlPeriod?,
-    // TODO Implement the filter
-    val lastLandingPortLocodes: List<String> = listOf(),
+    val landingPortLocodes: List<String> = listOf(),
     val lastPositionHoursAgo: Int?,
     val producerOrganizations: List<String> = listOf(),
     val riskFactors: List<Int> = listOf(),

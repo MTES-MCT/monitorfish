@@ -286,6 +286,7 @@ export class MonitorFishWebWorker {
     const specyCodesSet = filters.specyCodes?.length ? new Set(filters.specyCodes) : undefined
     const vesselsLocation = filters.vesselsLocation?.length === 1 ? filters.vesselsLocation[0] : undefined
     const emitsPositions = filters.emitsPositions?.length === 1 ? filters.emitsPositions[0] : undefined
+    const landingPortLocodesSet = filters.landingPortLocodes?.length ? new Set(filters.landingPortLocodes) : undefined
 
     const fuse = new CustomSearch<Vessel.ActiveVessel>(
       vessels,
@@ -310,10 +311,6 @@ export class MonitorFishWebWorker {
       { isDiacriticSensitive: false, isStrict: true, threshold: 0.4 }
     )
 
-    /* TODO Implement these filters
-    lastLandingPortLocodes: string[]
-     */
-
     const searchedVessels = filters.searchQuery ? fuse.find(filters.searchQuery) : vessels
 
     return searchedVessels
@@ -329,6 +326,13 @@ export class MonitorFishWebWorker {
         if (
           producerOrganizationSet &&
           (!vessel.producerOrganization || !producerOrganizationSet.has(vessel.producerOrganization))
+        ) {
+          return false
+        }
+
+        if (
+          landingPortLocodesSet &&
+          (!vessel.landingPortLocode || !landingPortLocodesSet.has(vessel.landingPortLocode))
         ) {
           return false
         }

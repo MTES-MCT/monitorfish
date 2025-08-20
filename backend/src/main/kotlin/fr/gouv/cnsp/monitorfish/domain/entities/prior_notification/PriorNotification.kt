@@ -193,12 +193,27 @@ data class PriorNotification(
                 logbookMessageAndValue = logbookMessageAndValue,
                 sentAt = logbookMessageAndValue.logbookMessage.reportDateTime,
                 updatedAt = logbookMessageAndValue.value.updatedAt ?: logbookMessage.operationDateTime,
-                // These props need to be calculated in the use case
-                port = null,
+                port =
+                    logbookMessageAndValue.value.port?.let {
+                        Port(
+                            locode = it,
+                            null,
+                            name = logbookMessageAndValue.value.portName ?: "",
+                            facade = null,
+                            faoAreas = emptyList(),
+                            latitude = null,
+                            longitude = null,
+                            region = null,
+                        )
+                    },
                 reportingCount = null,
                 seafront = null,
                 // For practical reasons `vessel` can't be `null`, so we temporarily set it to "Navire inconnu"
-                vessel = UNKNOWN_VESSEL,
+                vessel =
+                    UNKNOWN_VESSEL.copy(
+                        // used to retrieve vessel from logbooks
+                        internalReferenceNumber = logbookMessage.internalReferenceNumber,
+                    ),
                 lastControlDateTime = null,
             )
         }

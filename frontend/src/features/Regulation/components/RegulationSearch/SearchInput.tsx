@@ -3,11 +3,14 @@ import { regulationActions } from '@features/Regulation/slice'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { trackEvent } from '@hooks/useTracking'
 import { Accent, Icon, IconButton, SingleTag, Size, TextInput, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { resetZoneSelected, setAdvancedSearchIsOpen, setRegulatoryLayersSearchResult, setZoneSelected } from './slice'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { resetInteraction, setInteractionTypeAndListener } from '../../../Draw/slice'
 import PolygonFilterSVG from '../../../icons/Filtre_zone_polygone.svg?react'
 import PolygonFilterSelectedSVG from '../../../icons/Filtre_zone_polygone_selected.svg?react'
@@ -20,12 +23,21 @@ import type { Polygon } from 'geojson'
 
 export function SearchInput() {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   const { advancedSearchIsOpen, zoneSelected } = useMainAppSelector(state => state.regulatoryLayerSearch)
 
   const { drawedGeometry, interactionType } = useListenForDrawedGeometry(InteractionListener.REGULATION)
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
   const selectedOrSelectingZoneIsSquare = zoneSelected?.name === InteractionType.SQUARE
   const selectedOrSelectingZoneIsPolygon = zoneSelected?.name === InteractionType.POLYGON
+
+  const saveEvent = useDebouncedCallback(() => {
+    trackEvent({
+      action: "Recherche d'une réglementation",
+      category: 'Réglementation',
+      name: isSuperUser ? 'CNSP' : 'EXT'
+    })
+  }, 2000)
 
   const search = useCallback(
     async (nextSearchQuery: string | undefined, nextZoneSelected: ZoneFilter | undefined) => {
@@ -40,8 +52,9 @@ export function SearchInput() {
       const foundRegulatoryLayers = await dispatch(searchRegulatoryLayers(nextSearchQuery))
 
       dispatch(setRegulatoryLayersSearchResult(foundRegulatoryLayers))
+      saveEvent()
     },
-    [dispatch]
+    [dispatch, saveEvent]
   )
 
   useEffect(() => {

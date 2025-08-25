@@ -1,5 +1,6 @@
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
+import { trackEvent } from '@hooks/useTracking'
 import { Accent, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
@@ -8,6 +9,7 @@ import { FilterBar } from './FilterBar'
 import { Item } from './Item'
 import { getFilters } from './utils'
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '../../../../api/constants'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
@@ -16,6 +18,7 @@ import { isNotArchived } from '../../../../utils/isNotArchived'
 import { useGetControlUnitsQuery } from '../../controlUnitApi'
 
 export function ControlUnitListDialog() {
+  const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
   const filtersState = useMainAppSelector(store => store.controlUnitListDialog.filtersState)
   const isStationLayerDisplayed = useMainAppSelector(store => store.displayedComponent.isStationLayerDisplayed)
@@ -47,6 +50,11 @@ export function ControlUnitListDialog() {
   }, [activeControlUnits, filtersState])
 
   const toggleStationLayer = () => {
+    trackEvent({
+      action: `Affichage/Masquage des bases`,
+      category: 'Unités de contrôles',
+      name: isSuperUser ? 'CNSP' : 'EXT'
+    })
     dispatch(
       displayedComponentActions.setDisplayedComponents({
         isStationLayerDisplayed: !isStationLayerDisplayed

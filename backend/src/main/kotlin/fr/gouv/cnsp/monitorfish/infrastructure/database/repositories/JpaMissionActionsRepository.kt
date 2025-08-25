@@ -46,7 +46,7 @@ class JpaMissionActionsRepository(
     override fun findById(id: Int): MissionAction =
         dbMissionActionsRepository.findById(id).get().toMissionAction(mapper)
 
-    override fun findSeaAndLandControlBetweenDates(
+    override fun findSeaLandAndAirControlBetweenDates(
         beforeDateTime: ZonedDateTime,
         afterDateTime: ZonedDateTime,
     ): List<MissionAction> =
@@ -57,6 +57,7 @@ class JpaMissionActionsRepository(
                 listOf(
                     MissionActionType.SEA_CONTROL,
                     MissionActionType.LAND_CONTROL,
+                    MissionActionType.AIR_CONTROL,
                 ),
             ).map { action ->
                 action.toMissionAction(

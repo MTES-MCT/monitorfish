@@ -5,8 +5,6 @@ const EMPTY_CSV_ERROR = 'Le CSV ajouté est vide.'
 /**
  * The CSV column order:
  *   CFR
- *   Nom
- *   Pavillon
  *   Call Sign
  *   Marquage externe
  * @param file
@@ -29,10 +27,10 @@ export const getVesselsFromFile = async (file: File): Promise<VesselIdentityForV
 
   return rowsAsArray.map(row => ({
     cfr: row[0],
-    externalIdentification: row[4],
-    flagState: row[2] ?? 'UNDEFINED',
-    ircs: row[3],
-    name: row[1],
+    externalIdentification: row[2],
+    flagState: 'UNDEFINED',
+    ircs: row[1],
+    name: undefined,
     vesselId: undefined,
     vesselIdentifier: undefined
   }))

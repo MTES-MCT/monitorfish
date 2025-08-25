@@ -118,10 +118,10 @@ context('Side Window > Mission List > VesselFilter Bar', () => {
     cy.intercept('GET', `*isUnderJdp=true*`).as('getMissions')
     cy.fill('Missions sous JDP', true)
     cy.wait('@getMissions')
-    cy.get('.TableBodyRow').should('have.length', 0)
+    cy.get('.TableBodyRow').should('have.length', 1)
 
     cy.fill('Missions sous JDP', false)
-    cy.get('.TableBodyRow').should('have.length.to.be.greaterThan', 0)
+    cy.get('.TableBodyRow').should('have.length.to.be.greaterThan', 1)
     cy.getDataCy('missions-reset-filters').click()
 
     /**

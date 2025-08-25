@@ -13,6 +13,7 @@ import { Accent, Button, Icon, Level, MapMenuDialog } from '@mtes-mct/monitor-ui
 import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
+import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
 import { UserAccountContext } from '../../../context/UserAccountContext'
 import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
@@ -28,6 +29,7 @@ export function Account() {
   const dispatch = useMainAppDispatch()
   const { trackEvent } = useTracking()
   const { serviceWorker } = useGetServiceWorker()
+  const isSuperUser = useIsSuperUser()
   const userAccount = useContext(UserAccountContext)
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
   const isBaseMapCachedLocally = useMainAppSelector(state => state.layer.isBaseMapCachedLocally)
@@ -70,7 +72,7 @@ export function Account() {
     trackEvent({
       action: 'Réinitialisation des cartes sauvegardées en local',
       category: 'CACHE',
-      name: userAccount.email ?? ''
+      name: isSuperUser ? 'CNSP' : 'EXT'
     })
   }
 
@@ -88,7 +90,7 @@ export function Account() {
     trackEvent({
       action: 'Activation de la sauvegarde des cartes en local',
       category: 'CACHE',
-      name: userAccount.email ?? ''
+      name: isSuperUser ? 'CNSP' : 'EXT'
     })
     registerServiceWorker()
     dispatch(layerActions.setIsBaseMapCachedLocally(true))
@@ -109,7 +111,7 @@ export function Account() {
     trackEvent({
       action: 'Dé-activation de la sauvegarde des cartes en local',
       category: 'CACHE',
-      name: userAccount.email ?? ''
+      name: isSuperUser ? 'CNSP' : 'EXT'
     })
     unregisterServiceWorker()
     dispatch(layerActions.setIsBaseMapCachedLocally(false))

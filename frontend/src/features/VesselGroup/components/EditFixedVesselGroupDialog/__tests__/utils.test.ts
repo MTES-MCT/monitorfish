@@ -15,9 +15,9 @@ describe('features/VesselGroupList/components/EditFixedVesselGroupDialog/utils',
       {
         cfr: 'FR114515646',
         externalIdentification: 'EMFS',
-        flagState: 'FR',
+        flagState: 'UNDEFINED',
         ircs: 'FW658',
-        name: 'LE BAT@',
+        name: undefined,
         vesselId: undefined,
         vesselIdentifier: undefined
       }

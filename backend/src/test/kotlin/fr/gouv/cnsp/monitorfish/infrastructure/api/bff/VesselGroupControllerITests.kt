@@ -9,12 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateDynamicVesselGroups
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateFixedVesselGroups
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.AddOrUpdateDynamicVesselGroup
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.AddOrUpdateFixedVesselGroup
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.DeleteFixedVesselGroupVessel
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.DeleteVesselGroup
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroups
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroupsWithVessels
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.VesselGroupWithVessels
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.utils.ApiTestWithJWTSecurity
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.DynamicVesselGroupDataInput
@@ -85,7 +80,7 @@ class VesselGroupControllerITests {
                         gearCodes = listOf("OTB", "OTM", "TBB", "PTB"),
                         hasLogbook = true,
                         lastControlPeriod = LastControlPeriod.BEFORE_SIX_MONTHS_AGO,
-                        lastLandingPortLocodes = emptyList(),
+                        landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
                         riskFactors = listOf(2, 3),

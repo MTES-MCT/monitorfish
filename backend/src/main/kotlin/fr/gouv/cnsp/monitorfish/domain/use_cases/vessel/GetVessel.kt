@@ -105,16 +105,19 @@ class GetVessel(
                             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                             value = internalReferenceNumber,
                         )
+
                     VesselIdentifier.IRCS ->
                         lastPositionRepository.findByVesselIdentifier(
                             vesselIdentifier = VesselIdentifier.IRCS,
                             value = ircs,
                         )
+
                     VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
                         lastPositionRepository.findByVesselIdentifier(
                             vesselIdentifier = VesselIdentifier.EXTERNAL_REFERENCE_NUMBER,
                             value = externalReferenceNumber,
                         )
+
                     null -> null
                 }
 
@@ -132,6 +135,7 @@ class GetVessel(
                         ),
                     producerOrganization = vesselProducerOrganization.await(),
                     riskFactor = vesselRiskFactor.await() ?: VesselRiskFactor(),
+                    landingPort = null,
                 )
 
             val foundVesselGroups =

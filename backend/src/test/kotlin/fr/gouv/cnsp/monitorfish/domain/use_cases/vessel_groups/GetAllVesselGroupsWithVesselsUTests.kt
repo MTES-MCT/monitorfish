@@ -50,6 +50,7 @@ class GetAllVesselGroupsWithVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
+                    landingPort = null,
                 )
             },
         )
@@ -106,6 +107,7 @@ class GetAllVesselGroupsWithVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(riskFactor = 2.3),
+                    landingPort = null,
                 )
             },
         )

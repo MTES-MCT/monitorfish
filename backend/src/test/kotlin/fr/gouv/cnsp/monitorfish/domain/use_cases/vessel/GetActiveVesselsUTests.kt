@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
+import com.nhaarman.mockitokotlin2.mock
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
@@ -10,33 +11,39 @@ import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
+import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDynamicVesselGroups
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.mockito.BDDMockito.given
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.mockito.Mock
 import java.time.ZonedDateTime
 
-@ExtendWith(SpringExtension::class)
 class GetActiveVesselsUTests {
-    @MockBean
-    private lateinit var lastPositionRepository: LastPositionRepository
+    @Mock
+    private val lastPositionRepository: LastPositionRepository = mock()
 
-    @MockBean
-    private lateinit var vesselGroupRepository: VesselGroupRepository
+    @Mock
+    private val vesselGroupRepository: VesselGroupRepository = mock()
 
-    @MockBean
-    private lateinit var getAuthorizedUser: GetAuthorizedUser
+    @Mock
+    private val getAuthorizedUser: GetAuthorizedUser = mock()
+
+    @Mock
+    private val logbookReportRepository: LogbookReportRepository = mock()
+
+    private val getActiveVessels =
+        GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser, logbookReportRepository)
 
     @Test
     fun `execute Should return last positions with groups When multiple group conditions matches`() {
@@ -67,6 +74,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(riskFactor = 2.3),
+                    landingPort = null,
                 ),
             ),
         )
@@ -75,9 +83,7 @@ class GetActiveVesselsUTests {
         )
 
         // When
-        val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
-                .execute("DUMMY_EMAIL")
+        val activeVessels = getActiveVessels.execute("DUMMY_EMAIL")
 
         // Then
         assertThat(activeVessels).hasSize(1)
@@ -112,6 +118,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
+                    landingPort = null,
                 ),
             ),
         )
@@ -137,7 +144,7 @@ class GetActiveVesselsUTests {
                             gearCodes = emptyList(),
                             hasLogbook = null,
                             lastControlPeriod = null,
-                            lastLandingPortLocodes = emptyList(),
+                            landingPortLocodes = emptyList(),
                             lastPositionHoursAgo = null,
                             producerOrganizations = emptyList(),
                             riskFactors = emptyList(),
@@ -152,7 +159,7 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
@@ -189,6 +196,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
+                    landingPort = null,
                 ),
             ),
         )
@@ -214,7 +222,7 @@ class GetActiveVesselsUTests {
                             gearCodes = emptyList(),
                             hasLogbook = null,
                             lastControlPeriod = null,
-                            lastLandingPortLocodes = emptyList(),
+                            landingPortLocodes = emptyList(),
                             lastPositionHoursAgo = null,
                             producerOrganizations = emptyList(),
                             riskFactors = emptyList(),
@@ -229,7 +237,7 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
@@ -271,6 +279,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
+                    landingPort = null,
                 ),
             ),
         )
@@ -296,7 +305,7 @@ class GetActiveVesselsUTests {
                             gearCodes = listOf("OTB"),
                             hasLogbook = null,
                             lastControlPeriod = null,
-                            lastLandingPortLocodes = emptyList(),
+                            landingPortLocodes = emptyList(),
                             lastPositionHoursAgo = null,
                             producerOrganizations = emptyList(),
                             riskFactors = emptyList(),
@@ -311,7 +320,7 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
@@ -348,6 +357,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
+                    landingPort = null,
                 ),
             ),
         )
@@ -373,7 +383,7 @@ class GetActiveVesselsUTests {
                             gearCodes = emptyList(),
                             hasLogbook = true,
                             lastControlPeriod = null,
-                            lastLandingPortLocodes = emptyList(),
+                            landingPortLocodes = emptyList(),
                             lastPositionHoursAgo = null,
                             producerOrganizations = emptyList(),
                             riskFactors = emptyList(),
@@ -388,7 +398,7 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
@@ -424,6 +434,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
+                    landingPort = null,
                 ),
             ),
         )
@@ -449,7 +460,7 @@ class GetActiveVesselsUTests {
                             gearCodes = emptyList(),
                             hasLogbook = null,
                             lastControlPeriod = null,
-                            lastLandingPortLocodes = emptyList(),
+                            landingPortLocodes = emptyList(),
                             lastPositionHoursAgo = 3,
                             producerOrganizations = emptyList(),
                             riskFactors = emptyList(),
@@ -464,7 +475,7 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
@@ -500,6 +511,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(riskFactor = 2.56),
+                    landingPort = null,
                 ),
             ),
         )
@@ -525,7 +537,7 @@ class GetActiveVesselsUTests {
                             gearCodes = emptyList(),
                             hasLogbook = null,
                             lastControlPeriod = null,
-                            lastLandingPortLocodes = emptyList(),
+                            landingPortLocodes = emptyList(),
                             lastPositionHoursAgo = null,
                             producerOrganizations = emptyList(),
                             riskFactors = listOf(2),
@@ -540,7 +552,7 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
@@ -585,6 +597,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
+                    landingPort = null,
                 ),
             ),
         )
@@ -610,7 +623,7 @@ class GetActiveVesselsUTests {
                             gearCodes = emptyList(),
                             hasLogbook = null,
                             lastControlPeriod = null,
-                            lastLandingPortLocodes = emptyList(),
+                            landingPortLocodes = emptyList(),
                             lastPositionHoursAgo = null,
                             producerOrganizations = emptyList(),
                             riskFactors = emptyList(),
@@ -625,7 +638,7 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
@@ -662,6 +675,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
+                    landingPort = null,
                 ),
             ),
         )
@@ -686,7 +700,7 @@ class GetActiveVesselsUTests {
                             gearCodes = emptyList(),
                             hasLogbook = null,
                             lastControlPeriod = null,
-                            lastLandingPortLocodes = emptyList(),
+                            landingPortLocodes = emptyList(),
                             lastPositionHoursAgo = null,
                             producerOrganizations = emptyList(),
                             riskFactors = emptyList(),
@@ -701,7 +715,7 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
@@ -738,6 +752,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
+                    landingPort = null,
                 ),
             ),
         )
@@ -762,7 +777,7 @@ class GetActiveVesselsUTests {
                             gearCodes = emptyList(),
                             hasLogbook = null,
                             lastControlPeriod = null,
-                            lastLandingPortLocodes = emptyList(),
+                            landingPortLocodes = emptyList(),
                             lastPositionHoursAgo = null,
                             producerOrganizations = emptyList(),
                             riskFactors = emptyList(),
@@ -777,7 +792,7 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
@@ -814,6 +829,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
+                    landingPort = null,
                 ),
             ),
         )
@@ -848,7 +864,7 @@ class GetActiveVesselsUTests {
                             gearCodes = emptyList(),
                             hasLogbook = null,
                             lastControlPeriod = null,
-                            lastLandingPortLocodes = emptyList(),
+                            landingPortLocodes = emptyList(),
                             lastPositionHoursAgo = null,
                             producerOrganizations = emptyList(),
                             riskFactors = emptyList(),
@@ -870,7 +886,7 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
@@ -908,6 +924,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
+                    landingPort = null,
                 ),
             ),
         )
@@ -933,7 +950,7 @@ class GetActiveVesselsUTests {
                             gearCodes = emptyList(),
                             hasLogbook = null,
                             lastControlPeriod = null,
-                            lastLandingPortLocodes = emptyList(),
+                            landingPortLocodes = emptyList(),
                             lastPositionHoursAgo = null,
                             producerOrganizations = emptyList(),
                             riskFactors = emptyList(),
@@ -948,7 +965,7 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
@@ -985,6 +1002,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
+                    landingPort = null,
                 ),
             ),
         )
@@ -1010,7 +1028,7 @@ class GetActiveVesselsUTests {
                             gearCodes = emptyList(),
                             hasLogbook = null,
                             lastControlPeriod = null,
-                            lastLandingPortLocodes = emptyList(),
+                            landingPortLocodes = emptyList(),
                             lastPositionHoursAgo = null,
                             producerOrganizations = emptyList(),
                             riskFactors = emptyList(),
@@ -1025,7 +1043,7 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
@@ -1063,6 +1081,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
+                    landingPort = null,
                 ),
             ),
         )
@@ -1088,7 +1107,7 @@ class GetActiveVesselsUTests {
                             gearCodes = emptyList(),
                             hasLogbook = null,
                             lastControlPeriod = LastControlPeriod.BEFORE_ONE_YEAR_AGO,
-                            lastLandingPortLocodes = emptyList(),
+                            landingPortLocodes = emptyList(),
                             lastPositionHoursAgo = null,
                             producerOrganizations = emptyList(),
                             riskFactors = emptyList(),
@@ -1103,7 +1122,7 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
@@ -1141,6 +1160,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
+                    landingPort = null,
                 ),
             ),
         )
@@ -1166,7 +1186,7 @@ class GetActiveVesselsUTests {
                             gearCodes = emptyList(),
                             hasLogbook = null,
                             lastControlPeriod = LastControlPeriod.AFTER_ONE_MONTH_AGO,
-                            lastLandingPortLocodes = emptyList(),
+                            landingPortLocodes = emptyList(),
                             lastPositionHoursAgo = null,
                             producerOrganizations = emptyList(),
                             riskFactors = emptyList(),
@@ -1181,7 +1201,7 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
@@ -1208,6 +1228,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
+                    landingPort = null,
                 )
             },
         )
@@ -1217,7 +1238,7 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
@@ -1246,6 +1267,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
+                    landingPort = null,
                 )
             },
         )
@@ -1290,7 +1312,7 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
@@ -1322,6 +1344,7 @@ class GetActiveVesselsUTests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(riskFactor = 2.3),
+                    landingPort = null,
                 )
             },
         )
@@ -1367,12 +1390,105 @@ class GetActiveVesselsUTests {
 
         // When
         val activeVessels =
-            GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser)
+            getActiveVessels
                 .execute("DUMMY_EMAIL")
 
         // Then
         assertThat(activeVessels).hasSize(4)
         assertThat(activeVessels[0].lastPosition?.internalReferenceNumber).isEqualTo("FR224226850")
         assertThat(activeVessels[0].vesselGroups).hasSize(2)
+    }
+
+    @Test
+    fun `execute Should return landing port When vessels are found in future prior notification`() {
+        // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+                isSuperUser = true,
+                service = null,
+                isAdministrator = false,
+            ),
+        )
+        val vesselThatShouldMatchWithPriorNotification =
+            VesselIdentity(
+                vesselId = 1,
+                cfr = "FR00022680",
+                name = "MY AWESOME VESSEL",
+                flagState = CountryCode.FR,
+                ircs = null,
+                externalIdentification = null,
+                vesselIdentifier = null,
+            )
+        val vessel =
+            Vessel(
+                id = 1,
+                internalReferenceNumber = vesselThatShouldMatchWithPriorNotification.cfr,
+                flagState = vesselThatShouldMatchWithPriorNotification.flagState,
+                hasLogbookEsacapt = false,
+            )
+        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+            TestUtils.getDummyLastPositions().map {
+                EnrichedActiveVessel(
+                    lastPosition = it,
+                    vesselProfile = null,
+                    vessel = vessel,
+                    producerOrganization = null,
+                    riskFactor = VesselRiskFactor(),
+                    landingPort = null,
+                )
+            },
+        )
+
+        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+            getDynamicVesselGroups() +
+                listOf(
+                    FixedVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        vessels =
+                            listOf(
+                                VesselIdentity(
+                                    vesselId = null,
+                                    cfr = "FR123456785",
+                                    name = "MY AWESOME VESSEL TWO",
+                                    flagState = CountryCode.FR,
+                                    ircs = null,
+                                    externalIdentification = null,
+                                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                ),
+                                vesselThatShouldMatchWithPriorNotification,
+                            ),
+                    ),
+                ),
+        )
+
+        val fakePriorNotification =
+            PriorNotificationFaker
+                .fakePriorNotification()
+                .copy(
+                    vessel = vessel,
+                )
+        given(logbookReportRepository.findAllAcknowledgedPriorNotifications(any())).willReturn(
+            listOf(
+                fakePriorNotification,
+            ),
+        )
+
+        // When
+        val activeVessels = getActiveVessels.execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(activeVessels).hasSize(4)
+        assertThat(activeVessels[0].landingPort).isEqualTo(fakePriorNotification.port)
     }
 }

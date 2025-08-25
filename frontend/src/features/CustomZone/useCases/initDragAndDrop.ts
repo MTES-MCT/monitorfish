@@ -1,6 +1,7 @@
 import { WSG84_PROJECTION } from '@features/Map/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { trackEvent } from '@hooks/useTracking'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 import { Feature } from 'ol'
 import { GPX, IGC, KML, TopoJSON } from 'ol/format'
@@ -22,17 +23,22 @@ import type { ThunkDispatch } from 'redux-thunk'
 /**
  * Show all custom showed with the `isShowed` property as true
  */
-export const initDragAndDrop = (): MainAppThunk => dispatch => {
-  const dragAndDropInteraction = new DragAndDrop({
-    formatConstructors: [GPX, GeoJSON, IGC, KML, TopoJSON] as any
-  })
+export const initDragAndDrop =
+  (isSuperUser: boolean): MainAppThunk =>
+  dispatch => {
+    const dragAndDropInteraction = new DragAndDrop({
+      formatConstructors: [GPX, GeoJSON, IGC, KML, TopoJSON] as any
+    })
 
-  dragAndDropInteraction.on('addfeatures', saveAndShowCustomZones(dispatch))
+    dragAndDropInteraction.on('addfeatures', saveAndShowCustomZones(dispatch, isSuperUser))
 
-  monitorfishMap.addInteraction(dragAndDropInteraction)
-}
+    monitorfishMap.addInteraction(dragAndDropInteraction)
+  }
 
-function saveAndShowCustomZones(dispatch: ThunkDispatch<ReturnType<typeof mainStore.getState>, undefined, AnyAction>) {
+function saveAndShowCustomZones(
+  dispatch: ThunkDispatch<ReturnType<typeof mainStore.getState>, undefined, AnyAction>,
+  isSuperUser: boolean
+) {
   return (event: DragAndDropEvent) => {
     const uuid = uuidv4()
     const fileName = event.file.name
@@ -81,5 +87,10 @@ function saveAndShowCustomZones(dispatch: ThunkDispatch<ReturnType<typeof mainSt
     layer.getSource()?.addFeatures(event.features as Feature<Geometry>[])
 
     fitViewToFeatures(event.features as Feature<Geometry>[])
+    trackEvent({
+      action: "Ajout d'une zone",
+      category: 'Zones importées',
+      name: isSuperUser ? 'CNSP' : 'EXT'
+    })
   }
 }

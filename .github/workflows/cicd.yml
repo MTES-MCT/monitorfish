@@ -84,7 +84,7 @@ jobs:
         with:
           cache: npm
           cache-dependency-path: ./frontend/package-lock.json
-          node-version: 20
+          node-version: 22
 
       - name: Install Node.js dependencies
         run: npm ci
@@ -211,7 +211,7 @@ jobs:
         with:
           cache: npm
           cache-dependency-path: ./frontend/package-lock.json
-          node-version: 20
+          node-version: 22
 
       - name: Setup Firefox
         uses: browser-actions/setup-firefox@latest
@@ -272,7 +272,7 @@ jobs:
         with:
           cache: npm
           cache-dependency-path: ./frontend/package-lock.json
-          node-version: 20
+          node-version: 22
 
       - name: Install Node.js dependencies
         run: npm ci

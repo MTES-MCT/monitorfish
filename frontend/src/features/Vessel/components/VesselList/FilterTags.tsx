@@ -30,6 +30,7 @@ type FilterTagsProps = {
   onFilter?: (nextListFilterValues: VesselListFilter) => void
   onReset?: () => void
 }
+
 export function FilterTags({
   areMoreFiltersDisplayable = false,
   className,
@@ -101,10 +102,10 @@ export function FilterTags({
             </SingleTag>
           ))}
 
-        {!!listFilterValues.lastLandingPortLocodes &&
+        {!!listFilterValues.landingPortLocodes &&
           !!portsAsTreeOptions &&
-          listFilterValues.lastLandingPortLocodes.map(port => (
-            <SingleTag key={`portLocodes-${port}`} onDelete={() => remove('lastLandingPortLocodes', port)}>
+          listFilterValues.landingPortLocodes.map(port => (
+            <SingleTag key={`portLocodes-${port}`} onDelete={() => remove('landingPortLocodes', port)}>
               {String(`Dernière débarque à ${getSelectedOptionFromOptionValueInTree(portsAsTreeOptions, port)?.label}`)}
             </SingleTag>
           ))}

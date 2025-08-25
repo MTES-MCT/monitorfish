@@ -61,7 +61,7 @@ export function EditDynamicVesselGroupDialog({
 }: ExportActivityReportsDialogProps) {
   const dispatch = useMainAppDispatch()
 
-  useDisplayWarningWhenEditingSharedGroup(editedVesselGroup?.sharing)
+  useDisplayWarningWhenEditingSharedGroup(editedVesselGroup?.sharing, isMainWindow)
 
   const [listFilterValues, setListFilterValues] = useState<VesselListFilter>(initialListFilterValues)
   // Used to save modification when a custom zone is drawn
@@ -192,11 +192,6 @@ export function EditDynamicVesselGroupDialog({
     updateListFilterValuesAndCountVessels(nextListFilterValues)
   }
 
-  const updateLastLandingPortLocodes = async (nextPortLocodes: string[] | undefined) => {
-    const nextListFilterValues = { ...listFilterValues, lastLandingPortLocodes: nextPortLocodes ?? [] }
-    updateListFilterValuesAndCountVessels(nextListFilterValues)
-  }
-
   const updateProducerOrganizations = async (nextProducerOrganizations: string[] | undefined) => {
     const nextListFilterValues = { ...listFilterValues, producerOrganizations: nextProducerOrganizations ?? [] }
     updateListFilterValuesAndCountVessels(nextListFilterValues)
@@ -258,6 +253,11 @@ export function EditDynamicVesselGroupDialog({
       : nextSpecyCodes
 
     const nextListFilterValues = { ...listFilterValues, specyCodes: normalizedNextSpecyCodes ?? [] }
+    updateListFilterValuesAndCountVessels(nextListFilterValues)
+  }
+
+  const updateLandingPortLocodes = (nextLandingPortLocodes: string[] | undefined) => {
+    const nextListFilterValues = { ...listFilterValues, landingPortLocodes: nextLandingPortLocodes ?? [] }
     updateListFilterValuesAndCountVessels(nextListFilterValues)
   }
 
@@ -371,20 +371,20 @@ export function EditDynamicVesselGroupDialog({
             virtualized
           />
           <MultiCascader
-            disabled
+            disabled={!portsAsTreeOptions}
             isLabelHidden
             isTransparent
-            label="Dernier port de débarque"
-            name="lastLandingPortLocodes"
-            onChange={updateLastLandingPortLocodes}
+            label="Ports de débarque"
+            name="portLocodes"
+            onChange={updateLandingPortLocodes}
             options={portsAsTreeOptions ?? []}
-            placeholder="Dernier port de débarque"
+            placeholder="Ports de débarque"
             popupWidth={500}
             renderValue={(_, items) =>
-              items.length > 0 ? <SelectValue>Dernier port de débarque ({items.length})</SelectValue> : <></>
+              items.length > 0 ? <SelectValue>Ports de débarque ({items.length})</SelectValue> : <></>
             }
             searchable
-            value={listFilterValues.lastLandingPortLocodes}
+            value={listFilterValues.landingPortLocodes}
           />
           <Select
             isLabelHidden

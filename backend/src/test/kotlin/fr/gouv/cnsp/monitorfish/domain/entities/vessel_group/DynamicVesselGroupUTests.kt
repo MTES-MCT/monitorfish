@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.TestUtils
+import fr.gouv.cnsp.monitorfish.fakers.PortFaker
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.TestUtils.DUMMY_VESSEL_PROFILE
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -28,6 +29,7 @@ class DynamicVesselGroupUTests {
                         vessel = null,
                         producerOrganization = null,
                         riskFactor = VesselRiskFactor(),
+                        landingPort = null,
                     )
                 }.first()
 
@@ -54,7 +56,7 @@ class DynamicVesselGroupUTests {
                         gearCodes = emptyList(),
                         hasLogbook = null,
                         lastControlPeriod = null,
-                        lastLandingPortLocodes = emptyList(),
+                        landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
                         riskFactors = emptyList(),
@@ -96,6 +98,7 @@ class DynamicVesselGroupUTests {
                     ),
                 producerOrganization = null,
                 riskFactor = VesselRiskFactor(),
+                landingPort = null,
             )
 
         val group =
@@ -121,7 +124,7 @@ class DynamicVesselGroupUTests {
                         gearCodes = emptyList(),
                         hasLogbook = null,
                         lastControlPeriod = null,
-                        lastLandingPortLocodes = emptyList(),
+                        landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
                         riskFactors = emptyList(),
@@ -156,6 +159,7 @@ class DynamicVesselGroupUTests {
                         vessel = null,
                         producerOrganization = null,
                         riskFactor = VesselRiskFactor(),
+                        landingPort = null,
                     )
                 }.first()
 
@@ -182,7 +186,7 @@ class DynamicVesselGroupUTests {
                         gearCodes = emptyList(),
                         hasLogbook = null,
                         lastControlPeriod = null,
-                        lastLandingPortLocodes = emptyList(),
+                        landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = listOf("OP_NORD"),
                         riskFactors = emptyList(),
@@ -222,6 +226,7 @@ class DynamicVesselGroupUTests {
                                 internalReferenceNumber = "CFR",
                             ),
                         riskFactor = VesselRiskFactor(),
+                        landingPort = null,
                     )
                 }.first()
 
@@ -248,7 +253,7 @@ class DynamicVesselGroupUTests {
                         gearCodes = emptyList(),
                         hasLogbook = null,
                         lastControlPeriod = null,
-                        lastLandingPortLocodes = emptyList(),
+                        landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = listOf("OP_NORD"),
                         riskFactors = emptyList(),
@@ -298,6 +303,7 @@ class DynamicVesselGroupUTests {
                                 internalReferenceNumber = "CFR",
                             ),
                         riskFactor = VesselRiskFactor(),
+                        landingPort = null,
                     )
                 }.first()
 
@@ -324,7 +330,7 @@ class DynamicVesselGroupUTests {
                         gearCodes = emptyList(),
                         hasLogbook = null,
                         lastControlPeriod = null,
-                        lastLandingPortLocodes = emptyList(),
+                        landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = listOf("OP_NORD"),
                         riskFactors = emptyList(),
@@ -369,6 +375,7 @@ class DynamicVesselGroupUTests {
                             ),
                         producerOrganization = null,
                         riskFactor = VesselRiskFactor(),
+                        landingPort = null,
                     )
                 }.first()
 
@@ -395,7 +402,7 @@ class DynamicVesselGroupUTests {
                         gearCodes = emptyList(),
                         hasLogbook = null,
                         lastControlPeriod = null,
-                        lastLandingPortLocodes = emptyList(),
+                        landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = listOf("OP_NORD"),
                         riskFactors = emptyList(),
@@ -437,6 +444,7 @@ class DynamicVesselGroupUTests {
                     ),
                 producerOrganization = null,
                 riskFactor = VesselRiskFactor(),
+                landingPort = null,
             )
 
         val groupWithPositionFilter =
@@ -462,7 +470,7 @@ class DynamicVesselGroupUTests {
                         gearCodes = emptyList(),
                         hasLogbook = null,
                         lastControlPeriod = null,
-                        lastLandingPortLocodes = emptyList(),
+                        landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = 24,
                         producerOrganizations = emptyList(),
                         riskFactors = emptyList(),
@@ -504,6 +512,7 @@ class DynamicVesselGroupUTests {
                     ),
                 producerOrganization = null,
                 riskFactor = VesselRiskFactor(),
+                landingPort = null,
             )
 
         val groupWithHoursAgoFilter =
@@ -529,7 +538,7 @@ class DynamicVesselGroupUTests {
                         gearCodes = emptyList(),
                         hasLogbook = null,
                         lastControlPeriod = null,
-                        lastLandingPortLocodes = emptyList(),
+                        landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = 24,
                         producerOrganizations = emptyList(),
                         riskFactors = emptyList(),
@@ -571,6 +580,7 @@ class DynamicVesselGroupUTests {
                     ),
                 producerOrganization = null,
                 riskFactor = VesselRiskFactor(),
+                landingPort = null,
             )
 
         val groupWithLocationFilter =
@@ -596,7 +606,7 @@ class DynamicVesselGroupUTests {
                         gearCodes = emptyList(),
                         hasLogbook = null,
                         lastControlPeriod = null,
-                        lastLandingPortLocodes = emptyList(),
+                        landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
                         riskFactors = emptyList(),
@@ -638,6 +648,7 @@ class DynamicVesselGroupUTests {
                     ),
                 producerOrganization = null,
                 riskFactor = VesselRiskFactor(),
+                landingPort = null,
             )
 
         val groupWithZoneFilter =
@@ -663,7 +674,7 @@ class DynamicVesselGroupUTests {
                         gearCodes = emptyList(),
                         hasLogbook = null,
                         lastControlPeriod = null,
-                        lastLandingPortLocodes = emptyList(),
+                        landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
                         riskFactors = emptyList(),
@@ -688,6 +699,274 @@ class DynamicVesselGroupUTests {
         // When
         val containsVessel =
             groupWithZoneFilter.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
+
+        // Then
+        assertThat(containsVessel).isFalse
+    }
+
+    @Test
+    fun `containsActiveVessel should match a vessel landing port when landing port locode filter is set and there is no last position`() {
+        // Given
+        val landingPortLocode = "FRLEH"
+        val landingPortLocodesFilter = listOf(landingPortLocode)
+        val vessel =
+            TestUtils
+                .getDummyLastPositions()
+                .map {
+                    EnrichedActiveVessel(
+                        lastPosition = it,
+                        vesselProfile = null,
+                        vessel = null,
+                        producerOrganization = null,
+                        riskFactor = VesselRiskFactor(),
+                        landingPort = PortFaker.fakePort(locode = landingPortLocode),
+                    )
+                }.first()
+
+        val group =
+            DynamicVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Dummy group",
+                description = "",
+                pointsOfAttention = "",
+                color = "",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.now(),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                startOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf(),
+                        districtCodes = listOf(),
+                        fleetSegments = emptyList(),
+                        emitsPositions = listOf(),
+                        gearCodes = emptyList(),
+                        hasLogbook = null,
+                        lastControlPeriod = null,
+                        landingPortLocodes = landingPortLocodesFilter,
+                        lastPositionHoursAgo = null,
+                        producerOrganizations = emptyList(),
+                        riskFactors = emptyList(),
+                        specyCodes = emptyList(),
+                        vesselSize = null,
+                        vesselsLocation = emptyList(),
+                        zones = emptyList(),
+                    ),
+            )
+
+        // When
+        val containsVessel =
+            group.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
+
+        // Then
+        assertThat(containsVessel).isTrue
+    }
+
+    @Test
+    fun `containsActiveVessel should return false when landing port locode filter is set but doesnt match vessel landing port`() {
+        // Given
+        val landingPortLocode = "FRLEH"
+        val landingPortLocodesFilter = listOf(landingPortLocode)
+        val vessel =
+            TestUtils
+                .getDummyLastPositions()
+                .map {
+                    EnrichedActiveVessel(
+                        lastPosition = it,
+                        vesselProfile = null,
+                        vessel = null,
+                        producerOrganization = null,
+                        riskFactor = VesselRiskFactor(),
+                        landingPort = PortFaker.fakePort(locode = "FRABC"),
+                    )
+                }.first()
+
+        val group =
+            DynamicVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Dummy group",
+                description = "",
+                pointsOfAttention = "",
+                color = "",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.now(),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                startOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf(),
+                        districtCodes = listOf(),
+                        fleetSegments = emptyList(),
+                        emitsPositions = listOf(),
+                        gearCodes = emptyList(),
+                        hasLogbook = null,
+                        lastControlPeriod = null,
+                        landingPortLocodes = landingPortLocodesFilter,
+                        lastPositionHoursAgo = null,
+                        producerOrganizations = emptyList(),
+                        riskFactors = emptyList(),
+                        specyCodes = emptyList(),
+                        vesselSize = null,
+                        vesselsLocation = emptyList(),
+                        zones = emptyList(),
+                    ),
+            )
+
+        // When
+        val containsVessel =
+            group.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
+
+        // Then
+        assertThat(containsVessel).isFalse
+    }
+
+    @Test
+    fun `containsActiveVessel should match a vessel landing port when landing port locode is set but there is no last position`() {
+        // Given
+        val landingPortLocode = "FRLEH"
+        val landingPortLocodesFilter = listOf(landingPortLocode)
+        val vessel =
+            EnrichedActiveVessel(
+                lastPosition = null,
+                vesselProfile = null,
+                vessel =
+                    Vessel(
+                        id = 123,
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        underCharter = true,
+                        hasLogbookEsacapt = false,
+                    ),
+                producerOrganization = null,
+                riskFactor = VesselRiskFactor(),
+                landingPort = PortFaker.fakePort(locode = landingPortLocode),
+            )
+
+        val group =
+            DynamicVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Dummy group",
+                description = "",
+                pointsOfAttention = "",
+                color = "",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.now(),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                startOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf(),
+                        districtCodes = listOf(),
+                        fleetSegments = emptyList(),
+                        emitsPositions = listOf(),
+                        gearCodes = emptyList(),
+                        hasLogbook = null,
+                        lastControlPeriod = null,
+                        landingPortLocodes = landingPortLocodesFilter,
+                        lastPositionHoursAgo = null,
+                        producerOrganizations = emptyList(),
+                        riskFactors = emptyList(),
+                        specyCodes = emptyList(),
+                        vesselSize = null,
+                        vesselsLocation = emptyList(),
+                        zones = emptyList(),
+                    ),
+            )
+
+        // When
+        val containsVessel =
+            group.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
+
+        // Then
+        assertThat(containsVessel).isTrue
+    }
+
+    @Test
+    fun `containsActiveVessel should return false when landing port locode filter is set but doesnt match vessel landing port but there is position`() {
+        // Given
+        val landingPortLocode = "FRLEH"
+        val landingPortLocodesFilter = listOf(landingPortLocode)
+        val vessel =
+            EnrichedActiveVessel(
+                lastPosition = null,
+                vesselProfile = DUMMY_VESSEL_PROFILE,
+                vessel =
+                    Vessel(
+                        id = 123,
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        underCharter = true,
+                        hasLogbookEsacapt = false,
+                    ),
+                producerOrganization = null,
+                riskFactor = VesselRiskFactor(),
+                landingPort = PortFaker.fakePort(locode = "FRABC"),
+            )
+
+        val group =
+            DynamicVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Dummy group",
+                description = "",
+                pointsOfAttention = "",
+                color = "",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.now(),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                startOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf(),
+                        districtCodes = listOf(),
+                        fleetSegments = emptyList(),
+                        emitsPositions = listOf(),
+                        gearCodes = emptyList(),
+                        hasLogbook = null,
+                        lastControlPeriod = null,
+                        landingPortLocodes = landingPortLocodesFilter,
+                        lastPositionHoursAgo = null,
+                        producerOrganizations = emptyList(),
+                        riskFactors = emptyList(),
+                        specyCodes = emptyList(),
+                        vesselSize = null,
+                        vesselsLocation = emptyList(),
+                        zones = emptyList(),
+                    ),
+            )
+
+        // When
+        val containsVessel =
+            group.containsActiveVessel(
                 activeVessel = vessel,
                 now = ZonedDateTime.now(),
             )

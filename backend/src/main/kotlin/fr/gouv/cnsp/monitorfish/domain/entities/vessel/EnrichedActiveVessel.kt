@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.entities.vessel
 
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
+import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
@@ -17,6 +18,7 @@ data class EnrichedActiveVessel(
     val vessel: Vessel?,
     val producerOrganization: ProducerOrganizationMembership?,
     val riskFactor: VesselRiskFactor,
+    val landingPort: Port?,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(EnrichedActiveVessel::class.java)
 

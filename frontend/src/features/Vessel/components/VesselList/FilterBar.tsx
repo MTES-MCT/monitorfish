@@ -129,8 +129,8 @@ export function FilterBar() {
     dispatch(filterVessels({ vesselSize: nextVesselSize }))
   }
 
-  const updateLastLandingPortLocodes = (nextPortLocodes: string[] | undefined) => {
-    dispatch(filterVessels({ lastLandingPortLocodes: nextPortLocodes ?? [] }))
+  const updateLandingPortLocodes = (nextPortLocodes: string[] | undefined) => {
+    dispatch(filterVessels({ landingPortLocodes: nextPortLocodes ?? [] }))
   }
 
   const updateProducerOrganizations = (nextProducerOrganizations: string[] | undefined) => {
@@ -298,21 +298,20 @@ export function FilterBar() {
             virtualized
           />
           <MultiCascader
-            disabled
             isLabelHidden
             isTransparent
-            label="Dernier port de débarque"
-            name="lastLandingPortLocodes"
-            onChange={updateLastLandingPortLocodes}
+            label="Ports de débarque"
+            name="landingPortLocodes"
+            onChange={updateLandingPortLocodes}
             options={portsAsTreeOptions ?? []}
-            placeholder="Dernier port de débarque"
+            placeholder="Ports de débarque"
             popupWidth={500}
             renderValue={(_, items) =>
               items.length > 0 ? <SelectValue>Dernier port de débarque ({items.length})</SelectValue> : <></>
             }
             searchable
             style={{ width: 210 }}
-            value={listFilterValues.lastLandingPortLocodes}
+            value={listFilterValues.landingPortLocodes}
           />
           <Select
             isLabelHidden

@@ -38,7 +38,7 @@ class ProducerOrganizationMembershipUTests {
                         gearCodes = emptyList(),
                         hasLogbook = null,
                         lastControlPeriod = null,
-                        lastLandingPortLocodes = emptyList(),
+                        landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = listOf("OP_NORD"),
                         riskFactors = emptyList(),

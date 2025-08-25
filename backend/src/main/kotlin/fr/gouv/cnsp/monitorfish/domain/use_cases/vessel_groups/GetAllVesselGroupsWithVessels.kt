@@ -112,8 +112,10 @@ class GetAllVesselGroupsWithVessels(
                             ),
                         producerOrganization = null,
                         riskFactor = VesselRiskFactor(),
+                        landingPort = null,
                     )
                 }
+
                 else -> {
                     logger.warn("Vessel ${vessel.cfr} not found in vessels table, skipping it.")
 

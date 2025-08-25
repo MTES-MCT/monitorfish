@@ -13,6 +13,7 @@ export enum LastControlPeriod {
   BEFORE_THREE_MONTHS_AGO = 'BEFORE_THREE_MONTHS_AGO',
   BEFORE_TWO_YEARS_AGO = 'BEFORE_TWO_YEARS_AGO'
 }
+
 export const LAST_CONTROL_PERIOD_LABEL: Record<LastControlPeriod, string> = {
   AFTER_ONE_MONTH_AGO: 'Contrôlé il y a moins d’1 mois',
   BEFORE_ONE_MONTH_AGO: 'Contrôlé il y a plus d’1 mois',
@@ -28,6 +29,7 @@ export enum VesselSize {
   BELOW_TEN_METERS = 'BELOW_TEN_METERS',
   BELOW_TWELVE_METERS = 'BELOW_TWELVE_METERS'
 }
+
 export const VESSEL_SIZE_LABEL: Record<VesselSize, string> = {
   ABOVE_TWELVE_METERS: 'Plus de 12m',
   BELOW_TEN_METERS: 'Moins de 10m',
@@ -98,7 +100,7 @@ export const DEFAULT_VESSEL_LIST_FILTER_VALUES: VesselListFilter = {
   gearCodes: [],
   vesselsLocation: [VesselLocation.SEA],
   lastControlPeriod: undefined,
-  lastLandingPortLocodes: [],
+  landingPortLocodes: [],
   lastPositionHoursAgo: undefined,
   producerOrganizations: [],
   hasLogbook: undefined,

@@ -10,13 +10,9 @@ Monitorfish
 .. include:: overview.rst
 
 
-----
-
-Table of contents
-=================
-
 .. toctree::
    :maxdepth: 1
+   :hidden:
 
    feature-presentation
    architecture

@@ -2,6 +2,12 @@
 Architecture
 ============
 
+
+.. image:: _static/img/architecture.png
+  :width: 800
+  :alt: Architecture diagram
+
+
 Monitorfish is built around 3 main components :
 
 .. contents::
@@ -42,7 +48,7 @@ Stack
 
 The main tools used to extract data, process it in python and load it to the PostgreSQL database of Monitorfish are :
 
-* python 3.8.7
+* python 3
 * `SQLAlchemy <https://www.sqlalchemy.org/>`__ as a python SQL toolkit to interact with SQL databases
 * Database adapters `cx_Oracle <https://oracle.github.io/python-cx_Oracle/>`__ and  `psycopg2 <https://github.com/psycopg/psycopg2/>`__ for 
   connectivity to Oracle and PostgreSQL databases respectively

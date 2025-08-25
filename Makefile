@@ -351,10 +351,12 @@ restore-db:
 # ----------------------------------------------------------
 # ???: Documentation commands
 
-push-docs-to-transifex:
+update-docs-pots:
 	cd datascience/docs && \
-	poetry run sphinx-build -b gettext -D extensions="sphinx.ext.viewcode","sphinx.ext.napoleon" source pot && \
-	poetry run tx config mapping-bulk --project monitorfish --file-extension '.pot' --source-file-dir pot --source-lang en --type PO --expression 'locale/<lang>/LC_MESSAGES/{filepath}/{filename}.po' --execute && \
+	poetry run sphinx-build -b gettext -D extensions="sphinx.ext.viewcode","sphinx.ext.napoleon" source pot
+push-docs-to-transifex: update-docs-pots
+	cd datascience/docs && \
+	./update_tx_config.sh && \
 	poetry run tx push --source
 pull-translated-docs-from-transifex:
 	cd datascience/docs && \

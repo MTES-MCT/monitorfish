@@ -10,4 +10,6 @@ Feature presentation
     fleet-segments
     risk-factor
     control-priority-steering
-    
+    prior-notifications
+    groups-of-vessels
+    activity-overview

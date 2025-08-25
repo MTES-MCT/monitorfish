@@ -9,11 +9,14 @@ Features
 
 * Visualization of fishing vessels' real time **positions** (VMS)
 * Visualization of fishing vessels' declarative **fishing activity** data (ERS)
+* Vizualization of synthetic :doc:`activity overview <activity-overview>`
 * Visualization of fishing vessels' historical **controls** and **violations**
 * Visualization of :doc:`regulated fishing areas <regulation>` of the french and european regulations
 * Computation of fishing vessels' real time belonging to :doc:`fleet segments <fleet-segments>` as defined by the `European Fishing Control Agency (EFCA) <https://www.efca.europa.eu/en>`_ in its `risk assessment methodology <https://www.efca.europa.eu/en/content/guidelines-risk-assessment-methodology-fisheries-compliance>`_
 * Real time fraud detection :doc:`alerts <alerts>`
 * Computation of fishing vessels' real time :doc:`risk factor <risk-factor>`, a metric developed in the context of the Monitorfish project that aims to help FMC agents **prioritize vessels to control** based on all the above elements 
+* Compliance checking of :doc:`prior notifications <prior-notifications>` of return to port and prioritization for land inspections
+* Creation and sharing of :doc:`groups of vessels <groups-of-vessels>`
 * Administration panel that allows admins to
 
   * Update regulation data : update authorized fishing areas / periods / gears...

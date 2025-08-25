@@ -1,7 +1,11 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 
 from prefect import Flow
+from prefect.client.schemas.objects import (
+    ConcurrencyLimitConfig,
+    ConcurrencyLimitStrategy,
+)
 from prefect.runner.storage import LocalStorage
 from prefect.schedules import Schedule
 
@@ -16,7 +20,6 @@ from config import (
     MINIMUM_MINUTES_OF_EMISSION_AT_SEA,
     PNO_TEST_MODE,
     PREFECT_API_URL,
-    ROOT_DIRECTORY,
     TEST_MODE,
     WEEKLY_CONTROL_REPORT_EMAIL_TEST_MODE,
 )
@@ -49,7 +52,7 @@ from src.flows.missing_trip_numbers import missing_trip_numbers_flow
 from src.flows.missions import missions_flow
 from src.flows.notify_beacon_malfunctions import notify_beacon_malfunctions_flow
 from src.flows.ports import ports_flow
-from src.flows.position_alerts import position_alerts_flow
+from src.flows.position_alert import position_alert_flow
 from src.flows.recompute_controls_segments import recompute_controls_segments_flow
 from src.flows.refresh_materialized_view import refresh_materialized_view_flow
 from src.flows.regulations import regulations_flow
@@ -69,12 +72,22 @@ from src.helpers.country_codes import (
     french_vessels_country_codes_iso_2,
 )
 
-
 ################################# List flows to deploy ################################
+
+
+def default_concurrency_limit() -> ConcurrencyLimitConfig:
+    return ConcurrencyLimitConfig(
+        limit=1, collision_strategy=ConcurrencyLimitStrategy.CANCEL_NEW
+    )
+
+
 @dataclass
 class FlowAndSchedules:
     flow: Flow
     schedules: List[Schedule] = None
+    concurrency_limit: ConcurrencyLimitConfig = field(
+        default_factory=default_concurrency_limit
+    )
 
 
 flows_to_deploy = [
@@ -257,7 +270,7 @@ flows_to_deploy = [
     ),
     FlowAndSchedules(flow=ports_flow),
     FlowAndSchedules(
-        flow=position_alerts_flow,
+        flow=position_alert_flow,
         schedules=[
             Schedule(
                 cron="1,11,21,31,41,51 * * * *",
@@ -480,7 +493,9 @@ flows_to_deploy = [
 
 deployments = [
     flow_to_deploy.flow.to_deployment(
-        name=flow_to_deploy.flow.name, schedules=flow_to_deploy.schedules
+        name=flow_to_deploy.flow.name,
+        schedules=flow_to_deploy.schedules,
+        concurrency_limit=flow_to_deploy.concurrency_limit,
     )
     for flow_to_deploy in flows_to_deploy
 ]
@@ -493,9 +508,8 @@ for deployment in deployments:
             f"{HOST_ENV_FILE_LOCATION}:/home/monitorfish-pipeline/pipeline/.env"
         ],
     }
-    deployment.concurrency_limit = 1
     deployment.work_pool_name = "monitorfish"
-    deployment.storage = LocalStorage(ROOT_DIRECTORY.as_posix())
+    deployment.storage = LocalStorage("/home/monitorfish-pipeline/pipeline")
 
     if deployment.name == "logbook":
         deployment.job_variables["docker"] = {

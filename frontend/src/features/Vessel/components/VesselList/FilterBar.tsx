@@ -307,7 +307,7 @@ export function FilterBar() {
             placeholder="Ports de débarque"
             popupWidth={500}
             renderValue={(_, items) =>
-              items.length > 0 ? <SelectValue>Dernier port de débarque ({items.length})</SelectValue> : <></>
+              items.length > 0 ? <SelectValue>Port de débarque ({items.length})</SelectValue> : <></>
             }
             searchable
             style={{ width: 210 }}

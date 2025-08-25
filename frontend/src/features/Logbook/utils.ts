@@ -1,6 +1,8 @@
+import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES, BLUEFIN_TUNA_SPECY_CODE } from '@features/PriorNotification/constants'
+import { undefinedize } from '@utils/undefinedize'
+
 import { LogbookMessageType } from './constants'
 import { Logbook } from './Logbook.types'
-import { undefinedize } from '../../utils/undefinedize'
 
 import type { CatchProperty, CatchWithProperties, ProtectedCatchWithProperties } from './components/VesselLogbook/types'
 import type { SpeciesInsight, SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from './types'
@@ -23,11 +25,17 @@ function getCatchPropertiesObject(logbookCatch: Logbook.Catch): CatchProperty {
 
 export function buildCatchArray(catches: Logbook.Catch[]): CatchWithProperties[] {
   const NOT_FOUND = -1
+  const hasCatchesExtendedTunaSpecies =
+    catches.find(aCatch => BLUEFIN_TUNA_EXTENDED_SPECY_CODES.includes(aCatch.species)) !== undefined
 
   return catches
     .reduce((accumulator: CatchWithProperties[], logbookCatch) => {
       const sameSpeciesIndex = accumulator.findIndex(accCatch => accCatch.species === logbookCatch.species)
       const logbookCatchProperties = getCatchPropertiesObject(logbookCatch)
+
+      if (hasCatchesExtendedTunaSpecies && logbookCatch.species === BLUEFIN_TUNA_SPECY_CODE) {
+        return accumulator
+      }
 
       if (sameSpeciesIndex === NOT_FOUND) {
         return accumulator.concat({
@@ -206,8 +214,17 @@ export const getTotalLANWeight = (logbookMessage: Logbook.LanMessage | undefined
 /**
  * The PNO message weight are LIVE, so we must NOT apply the conversion factor
  */
-export const getTotalPNOWeight = (logbookMessageValue: Logbook.PnoMessageValue | undefined): number =>
-  logbookMessageValue ? getSumOfCatches(logbookMessageValue?.catchOnboard ?? [], false) : 0
+export const getTotalPNOWeight = (logbookMessageValue: Logbook.PnoMessageValue | undefined): number => {
+  if (logbookMessageValue) {
+    const catchOnboardWithoutExtendedTunaSpecies = logbookMessageValue?.catchOnboard?.filter(
+      aCatch => !BLUEFIN_TUNA_EXTENDED_SPECY_CODES.includes(aCatch.species)
+    )
+
+    return getSumOfCatches(catchOnboardWithoutExtendedTunaSpecies ?? [], false)
+  }
+
+  return 0
+}
 
 function getSumOfCatches(arrayOfCatches: Logbook.Catch[], hasConversionFactorApplied = false): number {
   const sum = arrayOfCatches.reduce((subAccumulator, speciesCatch) => {

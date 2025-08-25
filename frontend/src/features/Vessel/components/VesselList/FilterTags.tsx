@@ -106,7 +106,7 @@ export function FilterTags({
           !!portsAsTreeOptions &&
           listFilterValues.landingPortLocodes.map(port => (
             <SingleTag key={`portLocodes-${port}`} onDelete={() => remove('landingPortLocodes', port)}>
-              {String(`Dernière débarque à ${getSelectedOptionFromOptionValueInTree(portsAsTreeOptions, port)?.label}`)}
+              {String(`Débarquement à ${getSelectedOptionFromOptionValueInTree(portsAsTreeOptions, port)?.label}`)}
             </SingleTag>
           ))}
 

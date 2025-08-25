@@ -197,6 +197,7 @@ export function VesselSearch({
 const Wrapper = styled.div`
   box-sizing: border-box;
   transition: all 0.7s;
+  position: relative;
   width: 320px;
 
   * {

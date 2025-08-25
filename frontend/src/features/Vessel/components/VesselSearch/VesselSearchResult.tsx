@@ -76,10 +76,8 @@ const Results = styled.div`
 const List = styled.ul`
   margin: 0;
   padding: 0;
-  border-radius: 2px;
   overflow-y: scroll;
   overflow-x: hidden;
   max-height: 311px;
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
+  border-radius: 2px;
 `

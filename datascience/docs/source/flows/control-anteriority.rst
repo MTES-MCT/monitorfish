@@ -2,7 +2,7 @@
 Control anteriority
 ===================
 
-The ``Control anteriority`` flow extracts controls data from the ``controls``, produces aggregated 
+The ``Control anteriority`` flow extracts controls data from the ``controls`` table, produces aggregated 
 control statistics for each vessel and loads the results into the ``control_anteriority`` table 
 of the Monitorfish database.
 

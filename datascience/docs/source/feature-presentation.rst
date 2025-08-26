@@ -15,3 +15,4 @@ Feature presentation
     groups-of-vessels
     activity-overview
     vessel-profiles
+    vms-beacon-monitoring

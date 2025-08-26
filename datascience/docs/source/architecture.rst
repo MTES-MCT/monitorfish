@@ -37,9 +37,9 @@ Front end
 * Openlayers
 * React
 
-.. _data_pipeline:
-
 ----
+
+.. _data-pipeline:
 
 Data pipeline
 *************

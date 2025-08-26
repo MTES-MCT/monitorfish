@@ -1,15 +1,14 @@
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
-import { useContext } from 'react'
 import styled from 'styled-components'
 
-import { UserAccountContext } from '../../../../../context/UserAccountContext'
+import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
 import { getRegulatoryZoneTextTypeAsText } from '../../../utils'
 import { SectionTitle, Section, List, Label } from '../RegulatoryMetadata.style'
 
 export function RegulatoryReferencesDisplayed() {
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
-  const userAccount = useContext(UserAccountContext)
+  const isSuperUser = useIsSuperUser()
 
   const { regulatoryReferences } = regulatoryZoneMetadata ?? {}
 
@@ -17,7 +16,7 @@ export function RegulatoryReferencesDisplayed() {
     trackEvent({
       action: "Ouverture d'un lien Legipêche",
       category: 'EXTERNAL_LINK',
-      name: userAccount.email ?? ''
+      name: isSuperUser ? 'CNSP' : 'EXT'
     })
   }
 

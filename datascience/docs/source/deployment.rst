@@ -2,8 +2,6 @@
 Deployment & Administration
 ===========================
 
-----
-
 Prerequisites
 ^^^^^^^^^^^^^
 
@@ -46,7 +44,6 @@ Running the database service
 ----------------------------
 
 The Monitorfish database must be running for data processing operations to be carried out. For this, run the backend service first.
-
 
 ----
 

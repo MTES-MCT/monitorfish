@@ -239,10 +239,11 @@ In order to translate documentation using Transifex, you must set it up :
 * you need to have ``transifex-client`` installed, which is part of the :ref:`python development dependencies <data-install>`. If you have not yet done so, install development dependencies
 * ask us for an invitation to join our organization on Transifex
 * in your Transifex account, create an API token in ``User Setttings`` > ``API token``
-* in ``datascience/docs``, run :
+* in ``datascience/docs``, run (with your API token instead of ``$TOKEN``) :
 
-    tx init --token $TOKEN --no-interactive
-  (with your API token instead of ``$TOKEN``)
+  .. code-block:: shell
+
+      tx init --token $TOKEN --no-interactive
 
 Pushing documentation to Transifex for translation
 """"""""""""""""""""""""""""""""""""""""""""""""""

@@ -1,5 +1,5 @@
-External data sources
-=====================
+Data sources
+============
 
 VMS positions
 ^^^^^^^^^^^^^
@@ -16,11 +16,19 @@ where logbook xml files must be deposited.
 Databases
 ^^^^^^^^^
 
-Data is imported (and constantly updated) from external databases for :doc:`flows/controls`, :doc:`flows/controllers`, :doc:`flows/fishing-gears` and :doc:`flows/vessels`.
+Data is imported - and kept in sync by periodically reimporting data - from these databases :
 
-These databases are :
-
-* OCAN
-* FMC2
+* The OCAN database for :doc:`flows/vessels`
+* The FMC2 database for :doc:`flows/beacons`
+* A data warehouse (also developped by the same team : https://github.com/MTES-MCT/fisheries-and-environment-data-warehouse) for :doc:`flows/vessel-profiles`
+* The CROSS-A database for :doc:`flows/administrative-areas`, :doc:`flows/facade-areas`, :doc:`flows/ports`, :doc:`flows/regulations`
 
 Credentials for these data sources must be configured for Monitorfish to connect to them. See :ref:`environment_variables`.
+
+Other sources
+^^^^^^^^^^^^^
+
+The following sources are also used :
+
+* The `fao.org <https://www.fao.org/>`__ website for FAO areas and species referencials
+* The legipeche intranet website is scraped and user for for :doc:`regulations data checkup <flows/regulations-checkup>`

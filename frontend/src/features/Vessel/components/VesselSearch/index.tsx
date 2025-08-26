@@ -57,6 +57,7 @@ export function VesselSearch({
   const dispatch = useMainAppDispatch()
   const baseUrl = window.location.origin
   const wrapperRef = useRef(null)
+  const inputRef = useRef(null)
 
   const [foundVessels, setFoundVessels] = useState<Vessel.VesselIdentity[]>([])
   const [inputValue, setInputValue] = useState(selectedVessel?.vesselName ?? '')
@@ -149,6 +150,7 @@ export function VesselSearch({
     <Wrapper ref={wrapperRef} className={className} style={style}>
       <InputWrapper>
         <Input
+          ref={inputRef}
           $baseUrl={baseUrl}
           $flagState={flagState}
           $hasError={hasError}

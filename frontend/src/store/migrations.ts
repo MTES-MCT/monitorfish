@@ -11,3 +11,13 @@ export const MAIN_PERSISTOR_VESSEL_GROUPS_MIGRATIONS = {
     vesselGroupsIdsDisplayed: []
   })
 }
+
+export const MAIN_PERSISTOR_VESSEL_MIGRATIONS = {
+  0: state => {
+    const nextState = { ...state }
+
+    delete nextState.listFilterValues.lastLandingPortLocodes
+
+    return nextState
+  }
+}

@@ -1,9 +1,11 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { doNotAnimate } from '@features/Map/slice'
 import { addVesselTrackShowed, resetLoadingVessel } from '@features/Vessel/slice'
 import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { vesselApi } from '@features/Vessel/vesselApi'
+import { Level } from '@mtes-mct/monitor-ui'
 import { transform } from 'ol/proj'
 
 import { displayBannerWarningFromAPIFeedback } from './displayBannerWarningFromAPIFeedback'
@@ -41,6 +43,17 @@ export const showVesselTrack =
       dispatch(displayBannerWarningFromAPIFeedback(positions, isTrackDepthModified, false))
 
       if (!positions?.length) {
+        dispatch(
+          addMainWindowBanner({
+            children: "Nous n'avons trouvé aucune position pour ce navire",
+            closingDelay: 3000,
+            isClosable: true,
+            isFixed: true,
+            level: Level.WARNING,
+            withAutomaticClosing: true
+          })
+        )
+
         return
       }
 

@@ -68,7 +68,7 @@ flowchart TB
     PrefectApache --> PrefectApp
     Runners -- JPE --> JPE
     Runners -- Scraping<br>HTTP --> Legipeche
-    Runners -- Contrôles, balises --> FMC
+    Runners -- Balises --> FMC
     Runners -- Profils de navires --> DW
     Runners -- Navires --> Ocan
     Runners -- HTTP --> Apache

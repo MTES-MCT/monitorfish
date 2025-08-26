@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { CustomZone } from './CustomZone'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { COLORS } from '../../../../constants/constants'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
@@ -18,6 +19,7 @@ export type CustomZonesProps = Readonly<{
 }>
 export function CustomZones({ hideLayersListWhenSearching = false }: CustomZonesProps) {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
 
   const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
   const [isOpened, setIsOpened] = useState(false)
@@ -27,9 +29,9 @@ export function CustomZones({ hideLayersListWhenSearching = false }: CustomZones
   const zonesLength = useMemo(() => zoneList.length, [zoneList])
 
   useEffect(() => {
-    dispatch(initDragAndDrop())
+    dispatch(initDragAndDrop(isSuperUser))
     dispatch(initLayer())
-  }, [dispatch])
+  }, [dispatch, isSuperUser])
 
   useEffect(() => {
     setIsOpened(layersSidebarOpenedLayerType === LayerType.CUSTOM)

@@ -31,7 +31,7 @@ import {
 import { notUndefined } from '@tanstack/react-virtual'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { EditDynamicVesselGroupDialog } from 'features/VesselGroup/components/EditDynamicVesselGroupDialog'
-import { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { getTableColumns, vesselListActionColumn } from './columns'
@@ -39,7 +39,7 @@ import { FilterBar } from './FilterBar'
 import { FilterTags } from './FilterTags'
 import { Row } from './Row'
 import { TableBodyEmptyData } from './TableBodyEmptyData'
-import { UserAccountContext } from '../../../../context/UserAccountContext'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { SkeletonRow } from '../../../../ui/Table/SkeletonRow'
 
 type VesselListProps = Readonly<{
@@ -47,7 +47,7 @@ type VesselListProps = Readonly<{
 }>
 export function VesselList({ isFromUrl }: VesselListProps) {
   const dispatch = useMainAppDispatch()
-  const userAccount = useContext(UserAccountContext)
+  const isSuperUser = useIsSuperUser()
   const { newWindowContainerRef } = useNewWindow()
   const tableContainerRef = useRef<HTMLDivElement>(null)
   const vessels = useGetFilteredVesselsLastPositions()
@@ -98,7 +98,7 @@ export function VesselList({ isFromUrl }: VesselListProps) {
       trackEvent({
         action: "Ouverture/fermeture d'une ligne de la liste des navires",
         category: 'VESSEL_LIST',
-        name: userAccount?.email ?? ''
+        name: isSuperUser ? 'CNSP' : 'EXT'
       })
       setExpanded(nexState)
     },

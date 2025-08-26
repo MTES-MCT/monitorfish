@@ -194,10 +194,11 @@ class CreateOrUpdateManualPriorNotification(
 
         val authorTrigram = existingMessageValue?.authorTrigram
         val createdBy = existingMessageValue?.createdBy ?: existingMessageValue?.authorTrigram ?: author
+        val isPriorNotificationZero = fishingCatches.all { it.weight == null || it.weight == 0.0 }
 
         // If the prior notification is not in verification scope,
         // we pass `isBeingSent` as `true` in order to ask the workflow to send it.
-        val isBeingSent = !isInVerificationScope && isPartOfControlUnitSubscriptions
+        val isBeingSent = !isInVerificationScope && isPartOfControlUnitSubscriptions && !isPriorNotificationZero
         val portName = allPorts.find { it.locode == portLocode }?.name
 
         return PNO().apply {

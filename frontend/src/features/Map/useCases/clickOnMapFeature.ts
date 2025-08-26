@@ -82,7 +82,7 @@ export const clickOnMapFeature =
       ).getProperties() as Vessel.VesselIdentity
 
       if (mapClick.ctrlKeyPressed) {
-        // Vessel dispatches can only be called from the main app (FronteOffice)
+        // Vessel dispatches can only be called from the main app (map)
         ;(dispatch as MainAppDispatch)(showVesselTrack(clickedVessel, true, null))
       } else {
         ;(dispatch as MainAppDispatch)(showVessel(clickedVessel, false))

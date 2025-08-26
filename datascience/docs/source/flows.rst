@@ -8,7 +8,7 @@ Flows
 What are flows?
 ===============
 
-*Flows* are batch jobs that move and transform data. Collectively, they constitute the :ref:`data-pipeline` part of 
+*Flows* are batch jobs that move and transform data. Collectively, they constitute the :ref:`data_pipeline` part of 
 the Monitorfish architecture.
 
 Each batch job is written as a `Prefect flow <https://docs.prefect.io/core/concepts/flows.html#overview>`__
@@ -92,3 +92,4 @@ List of flows
     flows/species-groups
     flows/species
     flows/vessels
+    flows/vessel-profiles

@@ -23,6 +23,6 @@ When signs of fraud are detected on a vessel, it appears on the map with a red h
 
 *Map showing a vessel's VMS track which presents signs of illegal trawling in the 3 nautical miles coastal strip*
 
-Alerts are then humanly checked and validated / invalidated. Validated alerts become *reportings* which are stored in the Monitorfish database and add the vessel's history.
+Alerts are then humanly checked and validated / invalidated. Validated alerts become *reportings* which are stored in the Monitorfish database and added to the vessel's history.
 
 Alerts make use of the fishing detection algorithm of the :doc:`enrich position flow <flows/enrich-positions>`.

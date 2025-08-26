@@ -125,7 +125,7 @@ Control level
 A fishing vessel's control level is defined in two steps :
 
 1. Time-base weighting of the number of controls
-"""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""
 
 The controls of the past 3 years are counted with a linearly decreasing 
 weight :

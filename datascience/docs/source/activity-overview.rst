@@ -2,7 +2,7 @@
 Activity overview
 =================
 
-The declared activity data is aggregated to produce synthetic visualizations of catches and landings.
+The declared activity data is aggregated to produce synthetic visualizations of catches and landings of all vessels.
 
 .. image:: _static/img/activity-overview.png
   :width: 800

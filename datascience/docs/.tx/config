@@ -6,6 +6,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/alerts.po
 source_file            = pot/alerts.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -14,6 +15,15 @@ file_filter            = locale/<lang>/LC_MESSAGES/architecture.po
 source_file            = pot/architecture.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false
+
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_authentication]
+file_filter            = locale/<lang>/LC_MESSAGES/authentication.po
+source_file            = pot/authentication.pot
+type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -22,6 +32,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/containerization.po
 source_file            = pot/containerization.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -30,6 +41,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/contributing.po
 source_file            = pot/contributing.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -38,6 +50,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/control-priority-steering.po
 source_file            = pot/control-priority-steering.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -46,6 +59,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/data-sources.po
 source_file            = pot/data-sources.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -54,6 +68,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/deployment.po
 source_file            = pot/deployment.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -62,6 +77,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/feature-presentation.po
 source_file            = pot/feature-presentation.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -70,6 +86,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/fleet-segments.po
 source_file            = pot/fleet-segments.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -78,6 +95,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows.po
 source_file            = pot/flows.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -86,6 +104,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/administrative-areas.po
 source_file            = pot/flows/administrative-areas.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -94,6 +113,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/anchorages.po
 source_file            = pot/flows/anchorages.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -102,6 +122,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/beacons.po
 source_file            = pot/flows/beacons.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -110,6 +131,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/control-anteriority.po
 source_file            = pot/flows/control-anteriority.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -118,6 +140,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/controllers.po
 source_file            = pot/flows/controllers.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -126,6 +149,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/controls.po
 source_file            = pot/flows/controls.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -134,6 +158,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/current-segments.po
 source_file            = pot/flows/current-segments.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -142,6 +167,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/districts.po
 source_file            = pot/flows/districts.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -150,6 +176,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/enrich-positions.po
 source_file            = pot/flows/enrich-positions.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -158,6 +185,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/ers.po
 source_file            = pot/flows/ers.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -166,6 +194,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/facade-areas.po
 source_file            = pot/flows/facade-areas.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -174,6 +203,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/fao-areas.po
 source_file            = pot/flows/fao-areas.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -182,6 +212,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/fishing-gears.po
 source_file            = pot/flows/fishing-gears.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -190,6 +221,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/infractions.po
 source_file            = pot/flows/infractions.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -198,6 +230,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/last-positions.po
 source_file            = pot/flows/last-positions.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -206,6 +239,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/logbook.po
 source_file            = pot/flows/logbook.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -214,6 +248,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/missing-far-alerts.po
 source_file            = pot/flows/missing-far-alerts.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -222,6 +257,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/missing-trip-numbers.po
 source_file            = pot/flows/missing-trip-numbers.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -230,6 +266,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/ports.po
 source_file            = pot/flows/ports.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -238,6 +275,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/position-alerts.po
 source_file            = pot/flows/position-alerts.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -246,6 +284,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/regulations.po
 source_file            = pot/flows/regulations.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -254,6 +293,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/regulations-checkup.po
 source_file            = pot/flows/regulations-checkup.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -262,6 +302,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/risk-factor.po
 source_file            = pot/flows/risk-factor.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -270,6 +311,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/scrape-legipeche.po
 source_file            = pot/flows/scrape-legipeche.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -278,6 +320,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/species.po
 source_file            = pot/flows/species.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -286,6 +329,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/species-groups.po
 source_file            = pot/flows/species-groups.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -294,6 +338,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/flows/vessels.po
 source_file            = pot/flows/vessels.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -302,6 +347,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/index.po
 source_file            = pot/index.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -310,14 +356,15 @@ file_filter            = locale/<lang>/LC_MESSAGES/overview.po
 source_file            = pot/overview.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
 [o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_reference]
 file_filter            = locale/<lang>/LC_MESSAGES/reference.po
 source_file            = pot/reference.pot
-source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -326,6 +373,7 @@ file_filter            = locale/<lang>/LC_MESSAGES/regulation.po
 source_file            = pot/regulation.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
@@ -334,6 +382,15 @@ file_filter            = locale/<lang>/LC_MESSAGES/risk-factor.po
 source_file            = pot/risk-factor.pot
 source_lang            = en
 type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false
+
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_vessel_identification]
+file_filter            = locale/<lang>/LC_MESSAGES/vessel_identification.po
+source_file            = pot/vessel_identification.pot
+type                   = PO
+minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 

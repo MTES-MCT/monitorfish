@@ -19,18 +19,17 @@ Communication
 
 Communication within the team is done on :
 
-* a Slack workspace
+* a Mattermost workspace
 * daily standup meetings
 
-The first thing to do when joining the project is to `get in touch <mailto:vincent.chery@m4x.org>`_ so we help you join these spaces.
+The first thing to do when joining the project is to `get in touch <mailto:monitor@beta.gouv.fr>`_ so we help you join these spaces.
 
 Project management
 ------------------
 
 We use :
 
-* a board with the `roadmap of the project <https://github.com/MTES-MCT/monitorfish/projects/3>`_
-* a more detailed `board of the tasks <https://github.com/MTES-MCT/monitorfish/projects/1>`_ (issues)
+* a `board of the tasks <https://github.com/orgs/MTES-MCT/projects/38>`_ (issues)
 * work on issues is always done on feature branches which are merged into ``master`` after review
 
 ----
@@ -160,7 +159,7 @@ Windows & Docker
 Data pipeline development and data science
 ==========================================
 
-Data processing and ETL operations are done in python using `prefect <https://docs.prefect.io/core/>`_ and `pandas <https://pandas.pydata.org/>`_.
+Data processing and ETL operations are done in python using `prefect <https://docs.prefect.io/>`_ and `pandas <https://pandas.pydata.org/>`_.
 
 Data and data sources
 ---------------------
@@ -172,8 +171,8 @@ Data is not open and can only be accessed from inside the RIE network. To work w
 Install
 -------
 
-* The project runs on **python 3.8.7**. To manage python versions, we suggest you use `pyenv <https://github.com/pyenv/pyenv>`_. See the official documentation for installation instructions.
-* After installing python 3.8.7, install development dependencies :
+* The project runs on **python 3**. To manage python versions, we suggest you use `pyenv <https://github.com/pyenv/pyenv>`_. See the official documentation for installation instructions.
+* After installing python 3 (the exact version currently used can be found in the .python-version file), install development dependencies :
 
   * If you do not have ``poetry``, install it to manage python dependencies:
 
@@ -240,10 +239,11 @@ In order to translate documentation using Transifex, you must set it up :
 * you need to have ``transifex-client`` installed, which is part of the :ref:`python development dependencies <data-install>`. If you have not yet done so, install development dependencies
 * ask us for an invitation to join our organization on Transifex
 * in your Transifex account, create an API token in ``User Setttings`` > ``API token``
-* in ``datascience/docs``, run :
+* in ``datascience/docs``, run (with your API token instead of ``$TOKEN``) :
 
-    tx init --token $TOKEN --no-interactive
-  (with your API token instead of ``$TOKEN``)
+  .. code-block:: shell
+
+      tx init --token $TOKEN --no-interactive
 
 Pushing documentation to Transifex for translation
 """"""""""""""""""""""""""""""""""""""""""""""""""

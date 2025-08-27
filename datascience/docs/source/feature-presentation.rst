@@ -7,7 +7,12 @@ Feature presentation
 
     alerts
     regulation
+    inspection-data-entry
     fleet-segments
     risk-factor
     control-priority-steering
-    
+    prior-notifications
+    groups-of-vessels
+    activity-overview
+    vessel-profiles
+    vms-beacon-monitoring

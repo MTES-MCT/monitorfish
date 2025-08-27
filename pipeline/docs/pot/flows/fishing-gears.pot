@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-27 14:22+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/fishing-gears.rst:3
+#: 7c3fc64a07dc4a008adb5282030a0fc5
+msgid "Fishing gears"
+msgstr ""
+
+#: ../source/flows/fishing-gears.rst:5
+#: 06ff40e056a14108a09ec937e88d0cef
+msgid "The ``Fishing gears`` flow extracts the fishing gears repository data from hard coded csv files stored in ``pipeline/src/pipeline/data/`` and loads it to the ``fishing_gear_codes`` and ``fishing_gear_codes_groups`` tables of the Monitorfish database."
+msgstr ""
+
+#: ../source/flows/fishing-gears.rst:9
+#: e95788ecfef7450ea166a4c0d6a2e77d
+msgid "It is run manually when needed (when the csv files are updated)."
+msgstr ""

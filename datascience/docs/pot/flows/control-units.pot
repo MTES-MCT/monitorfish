@@ -1,0 +1,27 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/control-units.rst:3
+#: 01851aeab1234cc0a797cf69876650c2
+msgid "Control units"
+msgstr ""
+
+#: ../source/flows/control-units.rst:5
+#: 3b9793ac044e46aa8c0c35636fbe6526
+msgid "The ``Control units`` flow import control units and administrations from Monitorenv and loads them into ``analytics_control_units`` and ``analytics_administrations`` respectively."
+msgstr ""

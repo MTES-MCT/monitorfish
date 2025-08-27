@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2023, Vincent Chéry & Loup Théron
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-05 15:32+0100\n"
+"POT-Creation-Date: 2025-08-27 10:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,7 +71,12 @@ msgstr ""
 msgid "exceeding the maximum authorized blue ling (BLI) quantity held onboard : logbook data showing more than 6 tons of blue ling (BLI) onboard a vessel present in area 27.6.a, which is the maximum quantity authorized by R(UE) 1241."
 msgstr ""
 
-#: ../source/alerts.rst:17
+#: ../source/alerts.rst:16
+#: 1aa235fcb77a40a8a096778709a39ade
+msgid "user-defined configurable alerts : to detect ad-hoc behaviour, focus monitoring in a certain area..."
+msgstr ""
+
+#: ../source/alerts.rst:18
 #: f495746f408b476c96fc885a0d404659
 msgid "When signs of fraud are detected on a vessel, it appears on the map with a red halo :"
 msgstr ""
@@ -81,17 +86,17 @@ msgstr ""
 msgid "Map showing a vessel's VMS track which presents signs of illegal trawling in the 3 nautical miles coastal strip"
 msgstr ""
 
-#: ../source/alerts.rst:23
+#: ../source/alerts.rst:24
 #: 15027adb885d4f9aaec559b7fe1343cc
 msgid "*Map showing a vessel's VMS track which presents signs of illegal trawling in the 3 nautical miles coastal strip*"
 msgstr ""
 
-#: ../source/alerts.rst:25
+#: ../source/alerts.rst:26
 #: 5f3dfbfba4564a2c858902e72634fe47
-msgid "Alerts are then humanly checked and validated / invalidated. Validated alerts become *reportings* which are stored in the Monitorfish database and add the vessel's history."
+msgid "Alerts are then humanly checked and validated / invalidated. Validated alerts become *reportings* which are stored in the Monitorfish database and added to the vessel's history."
 msgstr ""
 
-#: ../source/alerts.rst:27
+#: ../source/alerts.rst:28
 #: 0ec65f29d69246f59de3219b7168d288
 msgid "Alerts make use of the fishing detection algorithm of the :doc:`enrich position flow <flows/enrich-positions>`."
 msgstr ""

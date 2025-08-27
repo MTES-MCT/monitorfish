@@ -1,0 +1,77 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Vincent Chéry <vincent.chery@m4x.org>, 2025
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"PO-Revision-Date: 2025-08-27 08:34+0000\n"
+"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2025\n"
+"Language-Team: French (https://app.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: ../source/vessel-profiles.rst:3 3279b27058864167849566b5013c8e3d
+msgid "Vessel profiles"
+msgstr "Profils de navires"
+
+#: ../source/vessel-profiles.rst:5 58a756c3d851436c9e78ef7592a8b272
+msgid ""
+"Vessel profiles are computed by aggregating each vessels' declarative data "
+"(catches, landings)."
+msgstr ""
+"Les profils des navires sont calculés en agrégeant les données déclaratives "
+"de chaque navire (captures, débarquements)."
+
+#: ../source/vessel-profiles.rst-1 92b42194fc5948c3b840d29b157e0685
+msgid ""
+"Vessel profile diagram with shares (%) of catches per species, gear, area "
+"and landing port4"
+msgstr ""
+"Diagramme du profil des navires avec parts (%) des captures par espèce, "
+"engin, zone et port de débarquement"
+
+#: ../source/vessel-profiles.rst:12 70813046a8864059ba1277d9f1905bd6
+msgid ""
+"Vessel profiles are a way to see the vessel's usual activity at a glance. "
+"This is useful to identify the likely activity of vessels for which no data "
+"is available in real time :"
+msgstr ""
+"Les profils des navires permettent de visualiser d'un seul coup d'œil "
+"l'activité habituelle d'un navire. Cela est utile pour identifier l'activité"
+" probable des navires pour lesquels aucune donnée n'est disponible en temps "
+"réel :"
+
+#: ../source/vessel-profiles.rst:14 d2af9e112ada42fc9b0dfae8b7f842aa
+msgid ""
+"vessels which are not subject to real time activity declaration in "
+"electronic logbooks"
+msgstr ""
+"navires qui ne sont pas soumis à la déclaration d'activité en temps réel "
+"dans les journaux de bord électroniques"
+
+#: ../source/vessel-profiles.rst:15 031b7b2d2c86466e8c379f804e373678
+msgid ""
+"trips that started less than 24 hours ago and for which no FAR has been "
+"emitted yet"
+msgstr ""
+"marées ayant débuté il y a moins de 24 heures et pour lesquelles aucun FAR "
+"n'a encore été émis"
+
+#: ../source/vessel-profiles.rst:17 ab07fb6627bf43578a0a129e2d493118
+msgid ""
+"Vessel profiles are also use for the computation of :doc:`risks factors "
+"<flows/risk-factor>`."
+msgstr ""
+"Les profils des vaisseaux sont également utilisés pour le calcul des "
+":doc:`facteurs de risque <flows/risk-factor>`."

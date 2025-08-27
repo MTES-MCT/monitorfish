@@ -1,0 +1,38 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"PO-Revision-Date: 2025-08-27 08:34+0000\n"
+"Language-Team: French (https://app.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: ../source/flows/suspicions-of-under-declaration-alerts.rst:3
+#: 4730c06175584b34a2c34b743f76deb5
+msgid "Suspicions of under declaration alerts"
+msgstr ""
+
+#: ../source/flows/suspicions-of-under-declaration-alerts.rst:5
+#: e1f3256b65bb48d881eadc347b9c4500
+msgid ""
+"The ``Suspicions of under declaration alerts`` flow identifies instances of "
+"vessels which present an unusually high ratio of fishing effort to declared "
+"fishing products."
+msgstr ""
+
+#: ../source/flows/suspicions-of-under-declaration-alerts.rst:7
+#: 40429b1cedaa44c39afc19883af9749b
+msgid ""
+"Alerts are generated for these vessels and loaded to the ``pending_alerts`` "
+"table."
+msgstr ""

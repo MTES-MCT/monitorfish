@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2023, Vincent Chéry & Loup Théron
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-21 10:14+0100\n"
+"POT-Creation-Date: 2025-08-27 10:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,11 +22,11 @@ msgid "Ports"
 msgstr ""
 
 #: ../source/flows/ports.rst:5
-#: a619af8f5b194251bf66017a9aa710b2
-msgid "The ``ports`` flow extracts the list of ports from the open dataset on `data.gouv.fr <https://www.data.gouv.fr/fr/datasets/liste-des-ports-du-systeme-ers-avec-donnees-de-position/>`__, which is managed by the development team, and loads it to the ``ports`` table of the Monitorfish database."
+#: 2e7f119a9b59438596e00ab2294e8114
+msgid "The ``ports`` flow extracts the list of ports from the CROSS-A data, loads it to the ``ports`` table of the Monitorfish database and updates the open dataset `data.gouv.fr <https://www.data.gouv.fr/fr/datasets/liste-des-ports-du-systeme-ers-avec-donnees-de-position/>`__."
 msgstr ""
 
-#: ../source/flows/ports.rst:9
+#: ../source/flows/ports.rst:7
 #: 2e1050057b7442d99640ffc406597019
-msgid "It is run manually when needed in order to sync the Monitorfish database with the open dataset."
+msgid "It is run manually when needed (when ports have been modified in the CROSS-A database)."
 msgstr ""

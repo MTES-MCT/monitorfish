@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/recompute-controls-segments.rst:3
+#: 63ea053b052540b5993276ca087bf5f3
+msgid "Recompute controls segments"
+msgstr ""
+
+#: ../source/flows/recompute-controls-segments.rst:5
+#: c8ba9b8f11f1429b98d209051f62955d
+msgid "The ``Recompute controls segments`` flow recomputes the segments (initially allocated by the backend when filling the inspection report form) for the selected year and control types."
+msgstr ""
+
+#: ../source/flows/recompute-controls-segments.rst:8
+#: 7f0b6e3105ae4b0fa33a840a357c6b28
+msgid "This is mostly useful when segment definitions change during the year and the segments of all controls since January 1st need to be recomputed according to the updated definitions."
+msgstr ""

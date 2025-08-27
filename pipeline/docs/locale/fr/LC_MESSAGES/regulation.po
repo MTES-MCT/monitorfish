@@ -1,0 +1,56 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Vincent Chéry <vincent.chery@m4x.org>, 2025
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"PO-Revision-Date: 2021-08-23 14:48+0000\n"
+"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2025\n"
+"Language-Team: French (https://app.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: ../source/regulation.rst:3 8bf282f2b86c44e48d983530c07c27d4
+msgid "Regulation"
+msgstr "Réglementation"
+
+#: ../source/regulation.rst:5 aaf29ce05fb94e37afe50ff6b6f0fd79
+msgid ""
+"A dedicated team of the FMC watches fishing regulation evolutions and "
+"captures it as semi-structured data in the admin panel of Monitorfish."
+msgstr ""
+"Une équipe dédiée du FMC suit les évolutions de la réglementation des pêches"
+" et les saisit sous forme de données semi-structurées dans le panneau "
+"d'administration de Monitorfish."
+
+#: ../source/regulation.rst:8 a8dc3e3f43f84ba2972e62944e749786
+msgid ""
+"This data can be then displayed in Monitorfish to show regulated fishing "
+"areas."
+msgstr ""
+"Ces données peuvent ensuite être affichées dans Monitorfish pour montrer les"
+" zones de pêche réglementées."
+
+#: ../source/regulation.rst-1 5643e8d4065249a79443ec219038799d
+msgid "Map with regulated fishing areas showed in Monitorfish"
+msgstr "Carte avec les zones de pêche réglementées affichées dans Monitorfish"
+
+#: ../source/regulation.rst:14 c90e1cf7656b497e8d3f6b8f0983e814
+msgid ""
+"The regulations data set is published and updated weekly on on data.gouv.fr "
+": https://www.data.gouv.fr/datasets/reglementation-des-peches-cartographiee/"
+msgstr ""
+"L'ensemble des données réglementaires est publié et mis à jour chaque "
+"semaine sur data.gouv.fr : https://www.data.gouv.fr/datasets/reglementation-"
+"des-peches-cartographiee/"

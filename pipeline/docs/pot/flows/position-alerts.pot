@@ -1,0 +1,72 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/position-alerts.rst:3
+#: 59cb8fa2902148f9b44fe0b971193e3d
+msgid "Position alerts"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:5
+#: 1c89c74e1b9943b8947fd321fe6f8c65
+msgid "The ``Position alerts`` flow detects whether any vessel emitted VMS data that matches the specified detection parameters on :"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:7
+#: f8357151c4d347f19625e886aaa010cd
+msgid "flag state"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:8
+#: 928e779082994651a383aeab484949ab
+msgid "area of detection"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:9
+#: 0337b606d3504fc1a178d695fc9fa0f6
+msgid "whether to detect all positions or only positions with fishing activity (as detected by the :doc:`enrich positions flow <enrich-positions>`)"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:10
+#: 8d9eb919a2894626b53ad5f57b551e18
+msgid "fishing gear (from logbook data and :doc:`vessel-profiles`)"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:11
+#: 9deb74c25c4b4972933ce9738d7dbc1d
+msgid "species (from logbook data)"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:12
+#: c403c956f1ef49af96660a591d430145
+msgid "time window (specified by a number of hours preceding the present time)"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:13
+#: 21abb91782524270bc358081affa8c97
+msgid "depth (based on bathymetry data from https://emodnet.ec.europa.eu at the position of the VMS point)"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:14
+#: 18ad06abf73444499ce0316af379074b
+msgid "list of vessels (specified by their district, producer organization or individually)"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:16
+#: 3ed54288c3e94ad5a82304e9e7613732
+msgid "The detected vessels are loaded to the ``pending_alerts`` table."
+msgstr ""

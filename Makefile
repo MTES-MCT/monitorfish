@@ -352,17 +352,17 @@ restore-db:
 # ???: Documentation commands
 
 update-docs-pots:
-	cd datascience/docs && \
+	cd pipeline/docs && \
 	poetry run sphinx-build -b gettext -D extensions="sphinx.ext.viewcode","sphinx.ext.napoleon" source pot
 push-docs-to-transifex: update-docs-pots
-	cd datascience/docs && \
+	cd pipeline/docs && \
 	./update_tx_config.sh && \
 	poetry run tx push --source
 pull-translated-docs-from-transifex:
-	cd datascience/docs && \
+	cd pipeline/docs && \
 	poetry run tx pull --all
 build-docs-locally:
-	cd datascience/docs && \
+	cd pipeline/docs && \
 	poetry run sphinx-build -b html source build/html/en && \
 	poetry run sphinx-build -b html -D language=fr source build/html/fr
 

@@ -1,0 +1,27 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/update-beacon-malfunctions.rst:3
+#: acda9e65f62841e3ba270fed904a3c1c
+msgid "Update beacon malfunctions"
+msgstr ""
+
+#: ../source/flows/update-beacon-malfunctions.rst:5
+#: e9888474ff944ce2a2c93b9c10322323
+msgid "The ``Update beacon malfunctions`` flow identifies vessels with an activated beacon (supposed to emit) which have not been emitting for several hours. A beacon malfunction is generated and loaded to the ``beacon_malfunctions`` table for every occurrence of a beacon not emitting for a certain time. Data from this table is used in the app by the :doc:`../vms-beacon-monitoring` module."
+msgstr ""

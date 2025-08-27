@@ -21,7 +21,9 @@ from src.utils import delete_rows, get_table
 
 
 @task
-def extract_silenced_alerts(alert_type: str, number_of_hours: int = 0) -> pd.DataFrame:
+def extract_silenced_alerts(
+    alert_type: str, number_of_hours: int = 0, alert_id: str | None = None
+) -> pd.DataFrame:
     """
     Return DataFrame of vessels with active silenced alerts of the given type.
 
@@ -35,10 +37,21 @@ def extract_silenced_alerts(alert_type: str, number_of_hours: int = 0) -> pd.Dat
     """
 
     alert_type = AlertType(alert_type)
+
+    query_filepath = (
+        "monitorfish/silenced_alerts_with_alert_id.sql"
+        if alert_id is not None
+        else "monitorfish/silenced_alerts.sql"
+    )
+
+    params = {"alert_type": alert_type.value, "number_of_hours": number_of_hours}
+    if alert_id is not None:
+        params["alert_id"] = alert_id
+
     return extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/silenced_alerts.sql",
-        params={"alert_type": alert_type.value, "number_of_hours": number_of_hours},
+        query_filepath=query_filepath,
+        params=params,
     )
 
 
@@ -92,7 +105,7 @@ def extract_non_archived_reportings_ids_of_type(alert_type: str) -> List[int]:
 
 
 @task
-def archive_reporting(id: int) -> pd.DataFrame:
+def archive_reporting(id: int):
     logger = get_run_logger()
     url = REPORTING_ARCHIVING_ENDPOINT_TEMPLATE.format(reporting_id=id)
     logger.info(f"Archiving reporting {id}.")
@@ -101,7 +114,7 @@ def archive_reporting(id: int) -> pd.DataFrame:
 
 
 @task
-def validate_pending_alert(id: int) -> pd.DataFrame:
+def validate_pending_alert(id: int):
     logger = get_run_logger()
     url = PENDING_ALERT_VALIDATION_ENDPOINT_TEMPLATE.format(pending_alert_id=id)
     logger.info(f"Validating pending alert {id}.")
@@ -113,7 +126,11 @@ def validate_pending_alert(id: int) -> pd.DataFrame:
 def make_alerts(
     vessels_in_alert: pd.DataFrame,
     alert_type: str,
-    alert_config_name: str,
+    *,
+    alert_id: int | None = None,
+    name: str | None = None,
+    description: str | None = None,
+    natinf_code: int | None = None,
 ) -> pd.DataFrame:
     """
     Generates alerts from the input `vessels_in_alert`, which must contain the
@@ -141,7 +158,12 @@ def make_alerts(
         vessels_in_alert (pd.DataFrame): `DateFrame` of vessels for which to
           create an alert.
         alert_type (str): `type` to specify in the built alerts.
-        alert_config_name (str): `alert_config_name` to specify in the built alerts.
+        alert_id (str | None): `alert_id` to specify in the built alerts,
+          defaults to None.
+        name (str | None): name of the alert, defaults to None.
+        description (str | None): description of the alert, defaults to None.
+        natinf_code (str | None): natinf code associated with the alert, defaults to
+          None.
 
     Returns:
         pd.DataFrame: `DataFrame` of alerts.
@@ -162,11 +184,30 @@ def make_alerts(
     if "longitude" not in alerts:
         alerts["longitude"] = None
 
-    alerts["type"] = AlertType(alert_type).value
+    alert_type = AlertType(alert_type).value
+    alerts["type"] = alert_type
+    alert_type_suffix = f"/{alert_id}" if alert_id is not None else ""
+    alerts["alert_config_name"] = alert_type + alert_type_suffix
 
     value_cols = ["seaFront", "type", "riskFactor", "dml"]
     if "depth" in alerts.columns:
         value_cols += ["depth"]
+
+    if name is not None:
+        alerts["name"] = name
+        value_cols.append("name")
+
+    if description is not None:
+        alerts["description"] = description
+        value_cols.append("description")
+
+    if natinf_code is not None:
+        alerts["natinfCode"] = natinf_code
+        value_cols.append("natinfCode")
+
+    if alert_id is not None:
+        alerts["alertId"] = alert_id
+        value_cols.append("alertId")
 
     alerts["value"] = df_to_dict_series(
         alerts.rename(
@@ -176,8 +217,6 @@ def make_alerts(
             }
         )[value_cols]
     )
-
-    alerts["alert_config_name"] = alert_config_name
 
     return alerts[
         [
@@ -192,7 +231,6 @@ def make_alerts(
             "creation_date",
             "latitude",
             "longitude",
-            "type",
             "value",
             "alert_config_name",
         ]

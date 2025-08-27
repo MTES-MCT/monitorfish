@@ -1,0 +1,37 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-27 14:22+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/groups-of-vessels.rst:3
+#: 07be021d5a3a49888254e533b8b70371
+msgid "Groups of vessels"
+msgstr ""
+
+#: ../source/groups-of-vessels.rst:5
+#: 892153b2e5e74b76810b3f87f33781d7
+msgid "Groups of vessels can be created on various criteria (fleet segment, risk factor, gear, producer organization, vessel size, time since last inspection...)."
+msgstr ""
+
+#: ../source/groups-of-vessels.rst:7
+#: 2167ec11e6e94f6e9b28a084603c082b
+msgid "Map showing groups of vessels"
+msgstr ""
+
+#: ../source/groups-of-vessels.rst:12
+#: 813ffa8d2784486b887eb55df4659526
+msgid "Groups created by one user can be kept private or shared with other users. This functionality makes monitoring and targeting of fishing vessels on various criteria very flexible."
+msgstr ""

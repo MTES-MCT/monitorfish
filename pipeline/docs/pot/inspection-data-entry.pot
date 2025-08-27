@@ -1,0 +1,37 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-27 14:22+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/inspection-data-entry.rst:3
+#: 4862d023f9df4f0c94adc161fc4413ef
+msgid "Inspection data entry"
+msgstr ""
+
+#: ../source/inspection-data-entry.rst:5
+#: 448f3ad1f1444bbf9d1ccc53a25c6322
+msgid "After each inspection, the inspection report is entered into a dedicated form."
+msgstr ""
+
+#: ../source/inspection-data-entry.rst:7
+#: c02b09918304411096bba04ce5b67b9e
+msgid "Inspection report form"
+msgstr ""
+
+#: ../source/inspection-data-entry.rst:11
+#: 31ff1835f840438fb79e0ac2ea701840
+msgid "This data is then visible on the inspection history of each vessel and used to compute the vessel's :doc:`risk-factor`."
+msgstr ""

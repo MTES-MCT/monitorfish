@@ -19,8 +19,8 @@ sys.path.insert(0, os.path.abspath("."))
 # -- Project information -----------------------------------------------------
 
 project = "Monitorfish"
-copyright = "2023, Vincent Chéry & Loup Théron"
-author = "Vincent Chéry"
+copyright = "2025, Vincent Chéry & Loup Théron"
+author = "Vincent Chéry & Loup Théron"
 
 
 # -- General configuration ---------------------------------------------------

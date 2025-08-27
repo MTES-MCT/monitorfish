@@ -3,7 +3,11 @@ Risk factor
 ===========
 
 The risk factor is a metric computed for each vessel based its historical and real time data 
-aimed at helping FMC agents prioritize vessels to control.
+aimed at helping FMC agents prioritize vessels to control. It is visible on the map for all vessels and, in a more detailed way, in each vessel's detailed view :
+
+.. image:: _static/img/risk-factor-map.png
+  :width: 800
+  :alt: Map showing vessels with their risk-factor and details of one vessel's risk factor
 
 It is computed and constantly updated by the :doc:`flows/risk-factor` flow.
 
@@ -125,7 +129,7 @@ Control level
 A fishing vessel's control level is defined in two steps :
 
 1. Time-base weighting of the number of controls
-"""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""
 
 The controls of the past 3 years are counted with a linearly decreasing 
 weight :

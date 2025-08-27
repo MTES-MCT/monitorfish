@@ -66,29 +66,45 @@ List of flows
 .. toctree::
     :maxdepth: 1
 
+    flows/activity-visualizations
     flows/administrative-areas
     flows/anchorages
     flows/beacons
     flows/control-anteriority
-    flows/controllers
+    flows/control-units
     flows/controls
+    flows/controls-open-data
     flows/current-segments
+    flows/distribute-pnos
     flows/districts
+    flows/email-actions-to-units
+    flows/enrich-logbook
     flows/enrich-positions
+    flows/export-species
     flows/facade-areas
     flows/fao-areas
     flows/fishing-gears
+    flows/foreign-fmcs
     flows/infractions
     flows/last-positions
     flows/logbook
+    flows/missions
+    flows/missing-dep-alerts
     flows/missing-far-alerts
     flows/missing-trip-numbers
+    flows/notify-beacon-malfunctions
     flows/ports
     flows/position-alerts
+    flows/recompute-controls-segments
+    flows/refresh-materialized-view
     flows/regulations-checkup
     flows/regulations
     flows/risk-factor
     flows/scrape-legipeche
     flows/species-groups
     flows/species
+    flows/suspicions-of-under-declaration-alerts
+    flows/update-beacon-malfunctions
+    flows/validate-pending-alerts
     flows/vessels
+    flows/vessel-profiles

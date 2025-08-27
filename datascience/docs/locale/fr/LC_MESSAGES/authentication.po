@@ -1,0 +1,54 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-21 10:14+0100\n"
+"PO-Revision-Date: 2025-08-25 12:38+0000\n"
+"Language-Team: French (https://app.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: ../source/authentication.rst:2 1044489854724660841f4f664377057f
+msgid "Authentication & authorization"
+msgstr ""
+
+#: ../source/authentication.rst:5 64b844189c4e43c1a7f15dcb00db0ead
+msgid "Authentication"
+msgstr ""
+
+#: ../source/authentication.rst:7 c77a742013bc4f6fbad39bb1cda38d22
+msgid ""
+"We use OIDC (the French government OIDC called \"Cerbère\") to authenticate "
+"users."
+msgstr ""
+
+#: ../source/authentication.rst:9 17d4f98b84844c5f88083bc964fed624
+msgid ""
+"frontend: An Authorization Code Flow With Proof Key of Code Exchange (PKCE) "
+"is used in our frontend SPA to gather the `access_token`"
+msgstr ""
+
+#: ../source/authentication.rst:10 c233bcf2c2084220aa68cb024d90d0c8
+msgid ""
+"backend: Our backend is a seen as a Resource Server, the `access_token` is "
+"verified within an API security filter."
+msgstr ""
+
+#: ../source/authentication.rst:13 8dcade6fb5894780937dbec2bc12c318
+msgid "Authorization"
+msgstr ""
+
+#: ../source/authentication.rst:15 26768f143cca434e8c56390f16bbc74e
+msgid ""
+"We store users authorization is a custom `user_authorizations` table : the "
+"hashed email (SHA256) of the JWT email is used to authorize users."
+msgstr ""

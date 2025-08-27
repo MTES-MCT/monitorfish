@@ -1,5 +1,5 @@
-sphinx==7.2.6
-sphinx-rtd-theme==2.0.0
+Sphinx==7.4.7
+sphinx-rtd-theme==3.0.2
 sphinx-intl==2.3.1
 sphinx-autoapi==3.6.0
 sphinxcontrib-fulltoc==1.2.0

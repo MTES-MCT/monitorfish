@@ -80,7 +80,6 @@ List of flows
     flows/email-actions-to-units
     flows/enrich-logbook
     flows/enrich-positions
-    flows/export-species
     flows/facade-areas
     flows/fao-areas
     flows/fishing-gears

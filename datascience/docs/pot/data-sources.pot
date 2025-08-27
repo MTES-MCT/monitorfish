@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2023, Vincent Chéry & Loup Théron
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-21 10:14+0100\n"
+"POT-Creation-Date: 2025-08-27 10:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 
 #: ../source/data-sources.rst:2
 #: bca05d2157e140c7a9de92edc88fd787
-msgid "External data sources"
+msgid "Data sources"
 msgstr ""
 
 #: ../source/data-sources.rst:5
@@ -47,26 +47,51 @@ msgid "Databases"
 msgstr ""
 
 #: ../source/data-sources.rst:19
-#: 75d45bdc0efb41f19bcb1d0542e22ac2
-msgid "Data is imported (and constantly updated) from external databases for :doc:`flows/controls`, :doc:`flows/controllers`, :doc:`flows/fishing-gears` and :doc:`flows/vessels`."
+#: 695d9749ca1d479fbc00df6d32c405bf
+msgid "Data is imported - and kept in sync by periodically reimporting data - from these databases :"
 msgstr ""
 
 #: ../source/data-sources.rst:21
-#: 8c00b1fca43943ecb6cbf10bb3970ba7
-msgid "These databases are :"
+#: 422b1188c1e6498ba1829bc5f00d6338
+msgid "The OCAN database for :doc:`flows/vessels`"
+msgstr ""
+
+#: ../source/data-sources.rst:22
+#: 465bc0eeddd240f8ac43fd822b878f8b
+msgid "The FMC2 database for :doc:`flows/beacons`"
 msgstr ""
 
 #: ../source/data-sources.rst:23
-#: 786bf0828e424e8aa32bf5c2fbab0de3
-msgid "OCAN"
+#: 7da5cd01b01a4e92b3be8aba2289a6c7
+msgid "A data warehouse (also developped by the same team : https://github.com/MTES-MCT/fisheries-and-environment-data-warehouse) for :doc:`flows/vessel-profiles`"
 msgstr ""
 
 #: ../source/data-sources.rst:24
-#: e2f38f9e17d54986b1c687932361ada6
-msgid "FMC2"
+#: 75d45bdc0efb41f19bcb1d0542e22ac2
+msgid "The CROSS-A database for :doc:`flows/administrative-areas`, :doc:`flows/facade-areas`, :doc:`flows/ports`, :doc:`flows/regulations`"
 msgstr ""
 
 #: ../source/data-sources.rst:26
 #: 6b92a5bc2f0a4818976d4c2a8852b853
 msgid "Credentials for these data sources must be configured for Monitorfish to connect to them. See :ref:`environment_variables`."
+msgstr ""
+
+#: ../source/data-sources.rst:29
+#: bca05d2157e140c7a9de92edc88fd787
+msgid "Other sources"
+msgstr ""
+
+#: ../source/data-sources.rst:31
+#: 4d1902e5455a4fb38daa1c161271bd33
+msgid "The following sources are also used :"
+msgstr ""
+
+#: ../source/data-sources.rst:33
+#: 0bcde0c09e3e419bbe948fad1e64fbbd
+msgid "The `fao.org <https://www.fao.org/>`__ website for FAO areas and species referencials"
+msgstr ""
+
+#: ../source/data-sources.rst:34
+#: 2158fc6be3ee4aeeb7cb3dc5a432d547
+msgid "The legipeche intranet website is scraped and user for for :doc:`regulations data checkup <flows/regulations-checkup>`"
 msgstr ""

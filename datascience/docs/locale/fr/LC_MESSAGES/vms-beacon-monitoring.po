@@ -1,0 +1,44 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Vincent Chéry <vincent.chery@m4x.org>, 2025
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"PO-Revision-Date: 2025-08-27 08:34+0000\n"
+"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2025\n"
+"Language-Team: French (https://app.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: ../source/vms-beacon-monitoring.rst:3 6184c804d5b14614a746b36c87633a2a
+msgid "VMS beacon monitoring"
+msgstr "Surveillance des balises VMS"
+
+#: ../source/vms-beacon-monitoring.rst:5 52d323736e314141a01b4199b069e154
+msgid ""
+"A module of Monitorfish is dedicated to monitoring the emission of VMS "
+"beacons - which are required by law to emit constantly. When a VMS beacon "
+"censes to emit, a malfunction is generated in Monitorfish. The vessel "
+"captain and satellite operator are notified and the malfunction can be "
+"tracked in a dedicated kanban until the malfunction is resolved."
+msgstr ""
+"Un module de Monitorfish est dédié à la surveillance des émissions des "
+"balises VMS, qui doivent légalement émettre en permanence. Lorsqu'une balise"
+" VMS cesse d'émettre, une *avarie* est généré dans Monitorfish. Le capitaine"
+" du navire et l'opérateur satellite sont avertis et l'avarie peut être "
+"suivie dans un kanban dédié jusqu'à ce qu'elle soit résolue."
+
+#: ../source/vms-beacon-monitoring.rst-1 389698286064437c927bfc1d679f3c84
+msgid "Kanban of beacon malfunctions"
+msgstr "Kanban des avaries VMS"

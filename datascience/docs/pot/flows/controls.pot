@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2023, Vincent Chéry & Loup Théron
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-21 10:14+0100\n"
+"POT-Creation-Date: 2025-08-27 10:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,10 +23,10 @@ msgstr ""
 
 #: ../source/flows/controls.rst:5
 #: 66981795e5c04f478142bbd27b73ac24
-msgid "The ``controls`` flow extracts all controls data from the FMC database and inserts the data into the ``controls`` table of the Monitorfish database."
+msgid "The ``controls`` flow extracts all controls data from the FMC database and inserts the data into the ``mission_actions`` table of the Monitorfish database."
 msgstr ""
 
 #: ../source/flows/controls.rst:8
-#: dc311a49540c4482b9c5150f0cc94e7d
-msgid "It is scheduled to run 10 minutes."
+#: 230b1528d9a04a32a10d0ac15e1d4c0a
+msgid "This flow was used to import inspection data from the legacy system which existed before Monitorfish. Since the development of :doc:`../inspection-data-entry` in Monitorfish, this flow is not used any more (but could be if a new import of legacy data were to be necessary)."
 msgstr ""

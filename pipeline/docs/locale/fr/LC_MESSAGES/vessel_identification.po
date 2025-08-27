@@ -1,0 +1,72 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"PO-Revision-Date: 2025-08-25 12:38+0000\n"
+"Language-Team: French (https://app.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: ../source/vessel_identification.rst:2 3786807385364e4e801f0f7ba06eb84e
+msgid "Vessel identification"
+msgstr ""
+
+#: ../source/vessel_identification.rst:4 2d3655670e4448d294ac58e348e5767f
+msgid "For identifying vessels and related information, we use :"
+msgstr ""
+
+#: ../source/vessel_identification.rst:8 e3a0ce60bcd5487eac73a4f3409bd11f
+msgid ""
+"``vessel_id`` (`Navpro <https://sipa.agriculture.gouv.fr/nav-"
+"pro-r62.html>`__ identifier) for :"
+msgstr ""
+
+#: ../source/vessel_identification.rst:7 b0f116454a9a4bc5a2e57bc84764a936
+msgid ""
+"VMS `Beacon` and `BeaconMalfunction` (a vessel must have a ``vessel_id`` "
+"from `Navpro` to emit VMS)"
+msgstr ""
+
+#: ../source/vessel_identification.rst:8 a35458f31cc14715a025ebf472177ef6
+msgid "`Vessel` characteristics (fetched from `Navpro`)"
+msgstr ""
+
+#: ../source/vessel_identification.rst:9 be32c2130aff469f8ae6eeb547753b31
+msgid "`Control`"
+msgstr ""
+
+#: ../source/vessel_identification.rst:10 0886be5ddd2d4092a966471e88347cd1
+msgid "``internal_reference_number`` (Community Fleet Register - CFR) for :"
+msgstr ""
+
+#: ../source/vessel_identification.rst:11 8550a4c2766444a49401cfd31604aaca
+msgid ""
+"`Logbook` containing `ERS` (Electronic Reporting System) and `FLUX` "
+"(Fisheries Language for Universal Exchange) messages"
+msgstr ""
+
+#: ../source/vessel_identification.rst:13 c8a02d90684d4262b881843c6489cfc6
+msgid ""
+"``internal_reference_number`` (Community Fleet Register - CFR), ``ircs`` "
+"(International Radio Call Sign of the vessel) and "
+"``external_reference_number`` (side number, registration number, IMO number "
+"or any other external marking identifying the vessel) for :"
+msgstr ""
+
+#: ../source/vessel_identification.rst:13 5dba1357c12d4fd092e6f32186c85c04
+msgid "VMS `Position`"
+msgstr ""
+
+#: ../source/vessel_identification.rst:14 9a0410d0fa5e4a8d9322c4bb30066216
+msgid "`Alert` and `Reporting`"
+msgstr ""

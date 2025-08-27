@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"PO-Revision-Date: 2025-08-27 08:34+0000\n"
+"Language-Team: French (https://app.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: ../source/flows/activity-visualizations.rst:3
+#: d9cd7f8663e947be826f48c2bf300921
+msgid "Activity visualizations"
+msgstr ""
+
+#: ../source/flows/activity-visualizations.rst:5
+#: 845b3a89ace34fa4bf47b40ebc8989bd
+msgid ""
+"The ``Activity visualizations`` flow extract one year of aggregated "
+"declarative data from the Data Warehouse, generates a `kepler.gl "
+"<https://kepler.gl>`__ visualization with it and loads it in the "
+"``activity_visualisations`` table."
+msgstr ""

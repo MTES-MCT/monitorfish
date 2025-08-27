@@ -1,0 +1,158 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Vincent Chéry <vincent.chery@m4x.org>, 2025
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"PO-Revision-Date: 2021-08-23 14:48+0000\n"
+"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2025\n"
+"Language-Team: French (https://app.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: ../source/index.rst:8 dd4a39ea9ae4467c88e47111595db619
+msgid "Monitorfish"
+msgstr "Monitorfish"
+
+#: ../source/overview.rst:3 c70f626f262044cba31ebceb0303fa39
+msgid "Overview"
+msgstr "En bref"
+
+#: ../source/overview.rst:5 e3439acbacf04b0f92af90e6ebcdf6a2
+msgid ""
+"**Monitorfish** is a **fishing vessels monitoring software** developped by "
+"the French administration for the french **Fisheries Monitoring Center "
+"(FMC)** - the `Centre National de Surveillance des Pêches "
+"<https://www.mer.gouv.fr/la-police-des-peches>`_ - and its partners."
+msgstr ""
+"**Monitorfish** est un **logiciel de surveillance des navires de pêche** "
+"développé par l'administration française pour le **Fisheries Monitoring "
+"Center (FMC)** français - le `Centre National de Surveillance des Pêches "
+"<https://www.mer.gouv.fr/la-police-des-peches>`_ - et ses partenaires."
+
+#: ../source/overview.rst:8 45cd7b719bcc45b4a06f9346d2ff222c
+msgid "Features"
+msgstr "Fonctionnalités"
+
+#: ../source/overview.rst:10 6d1e4a9deb8944769a4114e373c5bb63
+msgid "Visualization of fishing vessels' real time **positions** (VMS)"
+msgstr ""
+"Visualisation des **positions** des navires de pêche en temps réel (VMS)"
+
+#: ../source/overview.rst:11 80b9d577d5bc453fa24216170d71805b
+msgid ""
+"Visualization of fishing vessels' declarative **fishing activity** data "
+"(ERS)"
+msgstr ""
+"Visualisation des données déclaratives de **l'activité de pêche** des "
+"navires de pêche (ERS)"
+
+#: ../source/overview.rst:12 434541e56fef473bac7dcfefddde003f
+msgid ""
+"Vizualization of synthetic :doc:`activity overview <activity-overview>`"
+msgstr ":doc:`Visualisation synthétique de l'activité <activity-overview>`"
+
+#: ../source/overview.rst:13 c0dd4ad0bc1d42299be80fb8d586185b
+msgid ":doc:`Inspection reports data entry <inspection-data-entry>`"
+msgstr ""
+":doc:`Saisie des données de rapport de contrôle<inspection-data-entry>`"
+
+#: ../source/overview.rst:14 84bb5291a2f641549169f17ee4c5a6ba
+msgid ""
+"Visualization of fishing vessels' historical **inspections** and "
+"**violations**"
+msgstr ""
+"Visualisation de l'historique des **inspections** et des **infractions** des"
+" navires de pêche"
+
+#: ../source/overview.rst:15 550f6d8c7a8c403094936317e5b240f9
+msgid ""
+"Visualization of :doc:`regulated fishing areas <regulation>` of the french "
+"and european regulations"
+msgstr ""
+"Visualisation des :doc:`zones de pêche réglementées <regulation>` de la "
+"réglementation française et européenn"
+
+#: ../source/overview.rst:16 8c0ee20ba7f241668a5f96064e14e2fe
+msgid ""
+"Computation of fishing vessels' real time belonging to :doc:`fleet segments "
+"<fleet-segments>` as defined by the `European Fishing Control Agency (EFCA) "
+"<https://www.efca.europa.eu/en>`_ in its `risk assessment methodology "
+"<https://www.efca.europa.eu/en/content/guidelines-risk-assessment-"
+"methodology-fisheries-compliance>`_"
+msgstr ""
+"Calcul en temps réel de l'appartenance des navires de pêche aux "
+":doc:`segments de flotte <fleet-segments>` tels que définis par `l'Agence "
+"européenne de contrôle des pêches (EFCA) <https://www.efca.europa.eu/en>`_ "
+"dans sa `méthodologie d'évaluation des risques "
+"<https://www.efca.europa.eu/en/content/guidelines-risk-assessment-"
+"methodology-fisheries-compliance>`_."
+
+#: ../source/overview.rst:17 41d16795351d4cbf9c0a3d04004b3356
+msgid "Real time fraud detection :doc:`alerts <alerts>`"
+msgstr ":doc:`Alertes <alerts>` de détection de fraude en temps réel"
+
+#: ../source/overview.rst:18 d983db0e889b4635992b99478bacc6e7
+msgid ""
+"Computation of fishing vessels' real time :doc:`risk factor <risk-factor>`, "
+"a metric developed in the context of the Monitorfish project that aims to "
+"help FMC agents **prioritize vessels to control** based on all the above "
+"elements"
+msgstr ""
+"Calcul du :doc:`facteur de risque <risk-factor>` des navires de pêche en "
+"temps réel, une métrique développée dans le cadre du projet Monitorfish qui "
+"vise à aider les agents du FMC à **prioriser les navires à contrôler** sur "
+"la base des éléments ci-dessus."
+
+#: ../source/overview.rst:19 94bb643d086f4ad78e139bea1e6aac99
+msgid ""
+"Compliance checking of :doc:`prior notifications <prior-notifications>` of "
+"return to port and prioritization for land inspections"
+msgstr ""
+"Vérification de la conformité des :doc:`notifications préalables <prior-"
+"notifications>` de retour au port et priorisation des contrôle à quai"
+
+#: ../source/overview.rst:20 3f9203c71611466994e9f8bc9c768dee
+msgid "Creation and sharing of :doc:`groups of vessels <groups-of-vessels>`"
+msgstr "Création et partage de :doc:`groupes de navires <groups-of-vessels>`"
+
+#: ../source/overview.rst:21 f1c10ec65fd84528987529f8744440ae
+msgid "Administration panel that allows admins to"
+msgstr "Interface d'administration qui permet aux administrateurs de"
+
+#: ../source/overview.rst:23 4fcca2a119b94786ab223f54fe0186a0
+msgid ""
+"Update regulation data : update authorized fishing areas / periods / "
+"gears..."
+msgstr ""
+"Mettre à jour les données réglementaires : mise à jour des zones / périodes "
+"/ engins de pêche autorisés..."
+
+#: ../source/overview.rst:24 52b87782f5c94dadad4bc79af6997a52
+msgid "Update the definitions of :doc:`fleet segments <fleet-segments>`"
+msgstr ""
+"Mettre à jour les définitions de :doc:`segments de flotte <fleet-segments>`"
+
+#: ../source/overview.rst:25 b998bbfdc5614c8791767c31e4841168
+msgid ""
+":doc:`Stear control priorities <control-priority-steering>` by dynamically "
+"adjuting the control priority level of each fleet segment"
+msgstr ""
+":doc:`Piloter les priorités de contrôle <control-priority-steering>` en "
+"ajustant dynamiquement le niveau de priorité de contrôle de chaque segment "
+"de flotte"
+
+#: ../source/overview.rst:30 130334b74af24f83bc3b91c43e4000d5
+msgid "Demo"
+msgstr "Démo"

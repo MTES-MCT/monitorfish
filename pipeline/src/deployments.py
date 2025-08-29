@@ -3,7 +3,7 @@ from typing import List
 
 from prefect import Flow
 from prefect.runner.storage import LocalStorage
-from prefect.schedules import Schedule
+from prefect.schedules import RRule, Schedule
 
 from config import (
     ERS_FILES_LOCATION,
@@ -102,8 +102,8 @@ flows_to_deploy = [
     FlowAndSchedules(
         flow=distribute_pnos_flow,
         schedules=[
-            Schedule(
-                cron="* * * * *",
+            RRule(
+                rrule="FREQ=MINUTELY;BYSECOND=45",
                 parameters={
                     "test_mode": PNO_TEST_MODE,
                     "is_integration": IS_INTEGRATION,
@@ -186,8 +186,8 @@ flows_to_deploy = [
     FlowAndSchedules(
         flow=last_positions_flow,
         schedules=[
-            Schedule(
-                cron="* * * * *",
+            RRule(
+                rrule="FREQ=MINUTELY;BYSECOND=15",
                 parameters={"minutes": 1440, "action": "update"},
             ),
         ],
@@ -246,8 +246,8 @@ flows_to_deploy = [
     FlowAndSchedules(
         flow=notify_beacon_malfunctions_flow,
         schedules=[
-            Schedule(
-                cron="* * * * *",
+            RRule(
+                rrule="FREQ=MINUTELY;BYSECOND=30",
                 parameters={
                     "test_mode": TEST_MODE,
                     "is_integration": IS_INTEGRATION,

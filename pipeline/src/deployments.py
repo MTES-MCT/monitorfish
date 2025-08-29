@@ -103,7 +103,7 @@ flows_to_deploy = [
         flow=distribute_pnos_flow,
         schedules=[
             RRule(
-                rrule="FREQ=MINUTELY;BYSECOND=45",
+                "FREQ=MINUTELY;BYSECOND=45",
                 parameters={
                     "test_mode": PNO_TEST_MODE,
                     "is_integration": IS_INTEGRATION,
@@ -187,7 +187,7 @@ flows_to_deploy = [
         flow=last_positions_flow,
         schedules=[
             RRule(
-                rrule="FREQ=MINUTELY;BYSECOND=15",
+                "FREQ=MINUTELY;BYSECOND=15",
                 parameters={"minutes": 1440, "action": "update"},
             ),
         ],
@@ -247,7 +247,7 @@ flows_to_deploy = [
         flow=notify_beacon_malfunctions_flow,
         schedules=[
             RRule(
-                rrule="FREQ=MINUTELY;BYSECOND=30",
+                "FREQ=MINUTELY;BYSECOND=30",
                 parameters={
                     "test_mode": TEST_MODE,
                     "is_integration": IS_INTEGRATION,

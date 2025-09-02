@@ -33,11 +33,7 @@ from src.flows.position_alerts import (
     position_alerts_flow,
 )
 from src.read_query import read_query
-from tests.mocks import mock_datetime_utcnow
-
-
-def mock_get_depth(lon: float, lat: float):
-    return lon
+from tests.mocks import mock_datetime_utcnow, mock_get_depth
 
 
 def test_zones_table():

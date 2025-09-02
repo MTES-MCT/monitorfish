@@ -2,7 +2,12 @@ from unittest.mock import patch
 
 import pandas as pd
 
-from src.shared_tasks.positions import add_vessel_identifier, tag_positions_at_port
+from src.shared_tasks.positions import (
+    add_depth,
+    add_vessel_identifier,
+    tag_positions_at_port,
+)
+from tests.mocks import mock_get_depth
 
 
 @patch("src.shared_tasks.positions.extract")
@@ -122,4 +127,31 @@ def test_add_vessel_identifier():
     pd.testing.assert_frame_equal(
         last_positions_with_vessel_identifier,
         expected_last_positions_with_vessel_identifier,
+    )
+
+
+@patch("src.shared_tasks.positions.get_depth", mock_get_depth)
+def test_add_depth():
+    df = pd.DataFrame(
+        {
+            "latitude": [48.5, 47.2, 46.8, 45.1, 43.7],
+            "longitude": [-4.5, -3.2, -1.8, 0.5, 2.1],
+            "vessel_name": [
+                "Bretagne",
+                "Normandie",
+                "Aquitaine",
+                "Provence",
+                "Corsica",
+            ],
+            "speed_knots": [12.5, 8.3, 15.7, 6.9, 11.2],
+        }
+    )
+
+    expected_df_with_depth = df.assign(depth=df.longitude)
+    df_with_depth = add_depth(df)
+    pd.testing.assert_frame_equal(df_with_depth, expected_df_with_depth)
+
+    df_with_depth_empty_input = add_depth.fn(df.head(0))
+    pd.testing.assert_frame_equal(
+        df_with_depth_empty_input, expected_df_with_depth.head(0)
     )

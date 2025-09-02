@@ -497,7 +497,7 @@ for deployment in deployments:
     deployment.work_pool_name = "monitorfish"
     deployment.storage = LocalStorage(ROOT_DIRECTORY.as_posix())
 
-    if deployment.name == "logbook":
+    if deployment.name == "Logbook":
         deployment.job_variables["docker"] = {
             "run_config": {"group_add": [LOGBOOK_FILES_GID]}
         }

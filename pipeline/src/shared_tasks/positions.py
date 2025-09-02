@@ -87,7 +87,9 @@ def add_vessel_identifier(positions: pd.DataFrame) -> pd.DataFrame:
 def add_depth(positions: pd.DataFrame) -> pd.DataFrame:
     positions = positions.copy(deep=True)
     positions["depth"] = positions.apply(
-        lambda row: get_depth(lon=row["longitude"], lat=row["latitude"]), axis=1
+        lambda row: get_depth(lon=row["longitude"], lat=row["latitude"]),
+        axis=1,
+        result_type="reduce",
     )
 
     return positions

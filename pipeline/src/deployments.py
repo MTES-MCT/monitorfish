@@ -187,7 +187,13 @@ flows_to_deploy = [
         flow=last_positions_flow,
         schedules=[
             RRule(
-                "FREQ=MINUTELY;BYSECOND=15",
+                (
+                    "FREQ=MINUTELY;"
+                    "BYMINUTE="
+                    "0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,"
+                    "32,34,36,38,40,42,44,46,48,50,52,54,56,58;"
+                    "BYSECOND=15"
+                ),
                 parameters={"minutes": 1440, "action": "update"},
             ),
         ],
@@ -247,7 +253,13 @@ flows_to_deploy = [
         flow=notify_beacon_malfunctions_flow,
         schedules=[
             RRule(
-                "FREQ=MINUTELY;BYSECOND=30",
+                (
+                    "FREQ=MINUTELY;"
+                    "BYMINUTE="
+                    "1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,"
+                    "33,35,37,39,41,43,45,47,49,51,53,55,57,59;"
+                    "BYSECOND=30"
+                ),
                 parameters={
                     "test_mode": TEST_MODE,
                     "is_integration": IS_INTEGRATION,

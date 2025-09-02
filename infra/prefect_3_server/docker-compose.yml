@@ -17,12 +17,19 @@ services:
       - "5432:5432"
     restart: always
 
-  prefect:
+  redis:
+    image: redis:7
+
+  prefect-api:
     image: prefecthq/prefect:3-python3.12
     container_name: prefect-server
     depends_on:
       postgres:
         condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_started
     environment:
       # Prefect API and UI configuration
       PREFECT_API_URL: ${PREFECT_API_URL:?error}
@@ -30,10 +37,49 @@ services:
       
       # Database configuration
       PREFECT_SERVER_DATABASE_CONNECTION_URL: postgresql+asyncpg://prefect:${POSTGRES_PASSWORD:?error}@postgres:5432/prefect
+      PREFECT_API_DATABASE_MIGRATE_ON_START: "false"
+
+      # Redis
+      PREFECT_MESSAGING_BROKER: prefect_redis.messaging
+      PREFECT_MESSAGING_CACHE: prefect_redis.messaging
+      PREFECT_SERVER_EVENTS_CAUSAL_ORDERING: prefect_redis.ordering
+      PREFECT_SERVER_CONCURRENCY_LEASE_STORAGE: prefect_redis.lease_storage
+      PREFECT_REDIS_MESSAGING_HOST: redis
+      PREFECT_REDIS_MESSAGING_PORT: "6379"
     ports:
       - "4200:4200"
     restart: always
-    command: ["prefect", "server", "start", "--host", "0.0.0.0"]
+    command: ["prefect", "server", "start", "--host", "0.0.0.0", "--no-services"]
+
+  migrate:
+    image: prefecthq/prefect:3-python3.12
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: prefect server database upgrade -y
+    environment:
+      PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://prefect:${POSTGRES_PASSWORD:?error}@postgres:5432/prefect
+
+  prefect-background:
+    image: prefecthq/prefect:3-python3.12
+    container_name: prefect-background-services
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_started
+    command: prefect server services start
+    environment:
+      PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://prefect:${POSTGRES_PASSWORD:?error}@postgres:5432/prefect
+      PREFECT_API_DATABASE_MIGRATE_ON_START: "false"
+      PREFECT_MESSAGING_BROKER: prefect_redis.messaging
+      PREFECT_MESSAGING_CACHE: prefect_redis.messaging
+      PREFECT_SERVER_EVENTS_CAUSAL_ORDERING: prefect_redis.ordering
+      PREFECT_SERVER_CONCURRENCY_LEASE_STORAGE: prefect_redis.lease_storage
+      PREFECT_REDIS_MESSAGING_HOST: redis
+      PREFECT_REDIS_MESSAGING_PORT: "6379"
 
 volumes:
   postgres_data:

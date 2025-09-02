@@ -124,3 +124,7 @@ def mock_update_resource(
             resource=resource,
             mock_update=mock_update,
         )
+
+
+def mock_get_depth(lon: float, lat: float):
+    return lon

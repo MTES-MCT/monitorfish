@@ -101,7 +101,7 @@
     "@swc/jest": "0.2.39",
     "@testing-library/react": "15.0.7",
     "@testing-library/user-event": "^14.6.1",
-    "@tsconfig/vite-react": "2.0.1",
+    "@tsconfig/vite-react": "7.0.0",
     "@types/diacritics": "1.3.3",
     "@types/jest": "29.5.14",
     "@types/lodash-es": "4.17.12",

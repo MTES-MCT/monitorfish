@@ -492,6 +492,7 @@ for deployment in deployments:
         "volumes": [
             f"{HOST_ENV_FILE_LOCATION}:/home/monitorfish-pipeline/pipeline/.env"
         ],
+        "auto_remove": True,
     }
     deployment.concurrency_limit = 1
     deployment.work_pool_name = "monitorfish"

@@ -121,8 +121,12 @@ export function FilterBar() {
     )
   }
 
-  const updateLastControlPeriod = (nextLastControlPeriod: LastControlPeriod | undefined) => {
-    dispatch(filterVessels({ lastControlPeriod: nextLastControlPeriod }))
+  const updateLastControlAtSeaPeriod = (nextLastControlPeriod: LastControlPeriod | undefined) => {
+    dispatch(filterVessels({ lastControlAtSeaPeriod: nextLastControlPeriod }))
+  }
+
+  const updateLastControlAtQuayPeriod = (nextLastControlPeriod: LastControlPeriod | undefined) => {
+    dispatch(filterVessels({ lastControlAtQuayPeriod: nextLastControlPeriod }))
   }
 
   const updateVesselSize = (nextVesselSize: VesselSize | undefined) => {
@@ -297,6 +301,28 @@ export function FilterBar() {
             value={listFilterValues.specyCodes}
             virtualized
           />
+          <Select
+            isLabelHidden
+            isTransparent
+            label="Dernier contrôle mer"
+            name="lastControlAtSeaPeriod"
+            onChange={updateLastControlAtSeaPeriod}
+            options={LAST_CONTROL_PERIODS_AS_OPTIONS}
+            placeholder="Dernier contrôle mer"
+            popupWidth={224}
+            value={listFilterValues.lastControlAtSeaPeriod}
+          />
+          <Select
+            isLabelHidden
+            isTransparent
+            label="Dernier contrôle quai"
+            name="lastControlAtQuayPeriod"
+            onChange={updateLastControlAtQuayPeriod}
+            options={LAST_CONTROL_PERIODS_AS_OPTIONS}
+            placeholder="Dernier contrôle quai"
+            popupWidth={224}
+            value={listFilterValues.lastControlAtQuayPeriod}
+          />
           <MultiCascader
             isLabelHidden
             isTransparent
@@ -310,19 +336,7 @@ export function FilterBar() {
               items.length > 0 ? <SelectValue>Port de débarque ({items.length})</SelectValue> : <></>
             }
             searchable
-            style={{ width: 210 }}
             value={listFilterValues.landingPortLocodes}
-          />
-          <Select
-            isLabelHidden
-            isTransparent
-            label="Dernier contrôle"
-            name="lastControlPeriod"
-            onChange={updateLastControlPeriod}
-            options={LAST_CONTROL_PERIODS_AS_OPTIONS}
-            placeholder="Dernier contrôle"
-            popupWidth={224}
-            value={listFilterValues.lastControlPeriod}
           />
           <CheckPicker
             isLabelHidden
@@ -341,11 +355,11 @@ export function FilterBar() {
             disabled={!filterableZoneAsTreeOptions}
             isLabelHidden
             isTransparent
-            label="Filtrer les navires avec une zone"
+            label="Filtrer avec une zone"
             name="zones"
             onChange={updateNonCustomZones}
             options={filterableZoneAsTreeOptions?.filter(zone => zone.label !== 'Zone manuelle') ?? []}
-            placeholder="Filtrer les navires avec une zone"
+            placeholder="Filtrer avec une zone"
             popupWidth={500}
             renderExtraFooter={renderMultiCascaderCustomZoneFooter}
             renderValue={(_, items) => {
@@ -358,7 +372,6 @@ export function FilterBar() {
               )
             }}
             searchable
-            style={{ width: 416 }}
             uncheckableItemValues={['0', '1', '2', '3']}
             value={listFilterValues.zones?.map(zone => zone.value)}
           />

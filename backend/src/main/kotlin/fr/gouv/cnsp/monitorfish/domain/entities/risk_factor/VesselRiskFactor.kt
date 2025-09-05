@@ -44,7 +44,9 @@ data class VesselRiskFactor(
     val segments: List<String> = listOf(),
     val segmentHighestImpact: String? = null,
     val segmentHighestPriority: String? = null,
-    val lastControlDatetime: ZonedDateTime? = null,
+    val lastControlDateTime: ZonedDateTime? = null,
+    val lastControlAtSeaDateTime: ZonedDateTime? = null,
+    val lastControlAtQuayDateTime: ZonedDateTime? = null,
     val postControlComments: String? = null,
     val numberControlsLastFiveYears: Short = 0,
     val numberControlsLastThreeYears: Short = 0,
@@ -69,25 +71,48 @@ data class VesselRiskFactor(
 
         val filters = vesselGroup.filters
 
-        val hasLastControlPeriodMatch =
-            when (filters.lastControlPeriod) {
+        val hasLastControlAtSeaDatetimePeriodMatch =
+            when (filters.lastControlAtSeaPeriod) {
                 LastControlPeriod.AFTER_ONE_MONTH_AGO ->
-                    this.lastControlDatetime?.isAfter(now.minusMonths(1))
+                    this.lastControlAtSeaDateTime?.isAfter(now.minusMonths(1))
                         ?: false
                 LastControlPeriod.BEFORE_ONE_MONTH_AGO ->
-                    this.lastControlDatetime?.isBefore(now.minusMonths(1))
+                    this.lastControlAtSeaDateTime?.isBefore(now.minusMonths(1))
                         ?: true // If no control is found, it is before the expected date
                 LastControlPeriod.BEFORE_ONE_YEAR_AGO ->
-                    this.lastControlDatetime?.isBefore(now.minusYears(1))
+                    this.lastControlAtSeaDateTime?.isBefore(now.minusYears(1))
                         ?: true // If no control is found, it is before the expected date
                 LastControlPeriod.BEFORE_SIX_MONTHS_AGO ->
-                    this.lastControlDatetime?.isBefore(now.minusMonths(6))
+                    this.lastControlAtSeaDateTime?.isBefore(now.minusMonths(6))
                         ?: true // If no control is found, it is before the expected date
                 LastControlPeriod.BEFORE_THREE_MONTHS_AGO ->
-                    this.lastControlDatetime?.isBefore(now.minusMonths(3))
+                    this.lastControlAtSeaDateTime?.isBefore(now.minusMonths(3))
                         ?: true // If no control is found, it is before the expected date
                 LastControlPeriod.BEFORE_TWO_YEARS_AGO ->
-                    this.lastControlDatetime?.isBefore(now.minusYears(2))
+                    this.lastControlAtSeaDateTime?.isBefore(now.minusYears(2))
+                        ?: true // If no control is found, it is before the expected date
+                null -> true
+            }
+
+        val hasLastControlAtQuayDatetimePeriodMatch =
+            when (filters.lastControlAtQuayPeriod) {
+                LastControlPeriod.AFTER_ONE_MONTH_AGO ->
+                    this.lastControlAtQuayDateTime?.isAfter(now.minusMonths(1))
+                        ?: false
+                LastControlPeriod.BEFORE_ONE_MONTH_AGO ->
+                    this.lastControlAtQuayDateTime?.isBefore(now.minusMonths(1))
+                        ?: true // If no control is found, it is before the expected date
+                LastControlPeriod.BEFORE_ONE_YEAR_AGO ->
+                    this.lastControlAtQuayDateTime?.isBefore(now.minusYears(1))
+                        ?: true // If no control is found, it is before the expected date
+                LastControlPeriod.BEFORE_SIX_MONTHS_AGO ->
+                    this.lastControlAtQuayDateTime?.isBefore(now.minusMonths(6))
+                        ?: true // If no control is found, it is before the expected date
+                LastControlPeriod.BEFORE_THREE_MONTHS_AGO ->
+                    this.lastControlAtQuayDateTime?.isBefore(now.minusMonths(3))
+                        ?: true // If no control is found, it is before the expected date
+                LastControlPeriod.BEFORE_TWO_YEARS_AGO ->
+                    this.lastControlAtQuayDateTime?.isBefore(now.minusYears(2))
                         ?: true // If no control is found, it is before the expected date
                 null -> true
             }
@@ -120,14 +145,20 @@ data class VesselRiskFactor(
         ) {
             (profile?.isRecentInGroup(vesselGroup) ?: false) &&
                 hasSpecyMatch &&
-                hasLastControlPeriodMatch &&
+                hasLastControlAtSeaDatetimePeriodMatch &&
+                hasLastControlAtQuayDatetimePeriodMatch &&
                 hasRiskFactorMatch
         } else {
-            hasFleetSegmentMatch && hasGearMatch && hasSpecyMatch && hasLastControlPeriodMatch && hasRiskFactorMatch
+            hasFleetSegmentMatch &&
+                hasGearMatch &&
+                hasSpecyMatch &&
+                hasLastControlAtSeaDatetimePeriodMatch &&
+                hasLastControlAtQuayDatetimePeriodMatch &&
+                hasRiskFactorMatch
         }
     }
 
-    fun isLastPositionInGroup(vesselGroup: VesselGroupBase): Boolean {
+    fun isLastPositionInGroup(vesselGroup: VesselGroupBase, now: ZonedDateTime): Boolean {
         if (vesselGroup !is DynamicVesselGroup) return false
 
         val filters = vesselGroup.filters
@@ -138,6 +169,52 @@ data class VesselRiskFactor(
                     this.riskFactor in riskFactor.toDouble()..<(riskFactor + 1).toDouble()
                 }
 
-        return hasRiskFactorMatch
+        val hasLastControlAtSeaDatetimePeriodMatch =
+            when (filters.lastControlAtSeaPeriod) {
+                LastControlPeriod.AFTER_ONE_MONTH_AGO ->
+                    this.lastControlAtSeaDateTime?.isAfter(now.minusMonths(1))
+                        ?: false
+                LastControlPeriod.BEFORE_ONE_MONTH_AGO ->
+                    this.lastControlAtSeaDateTime?.isBefore(now.minusMonths(1))
+                        ?: true // If no control is found, it is before the expected date
+                LastControlPeriod.BEFORE_ONE_YEAR_AGO ->
+                    this.lastControlAtSeaDateTime?.isBefore(now.minusYears(1))
+                        ?: true // If no control is found, it is before the expected date
+                LastControlPeriod.BEFORE_SIX_MONTHS_AGO ->
+                    this.lastControlAtSeaDateTime?.isBefore(now.minusMonths(6))
+                        ?: true // If no control is found, it is before the expected date
+                LastControlPeriod.BEFORE_THREE_MONTHS_AGO ->
+                    this.lastControlAtSeaDateTime?.isBefore(now.minusMonths(3))
+                        ?: true // If no control is found, it is before the expected date
+                LastControlPeriod.BEFORE_TWO_YEARS_AGO ->
+                    this.lastControlAtSeaDateTime?.isBefore(now.minusYears(2))
+                        ?: true // If no control is found, it is before the expected date
+                null -> true
+            }
+
+        val hasLastControlAtQuayDatetimePeriodMatch =
+            when (filters.lastControlAtQuayPeriod) {
+                LastControlPeriod.AFTER_ONE_MONTH_AGO ->
+                    this.lastControlAtQuayDateTime?.isAfter(now.minusMonths(1))
+                        ?: false
+                LastControlPeriod.BEFORE_ONE_MONTH_AGO ->
+                    this.lastControlAtQuayDateTime?.isBefore(now.minusMonths(1))
+                        ?: true // If no control is found, it is before the expected date
+                LastControlPeriod.BEFORE_ONE_YEAR_AGO ->
+                    this.lastControlAtQuayDateTime?.isBefore(now.minusYears(1))
+                        ?: true // If no control is found, it is before the expected date
+                LastControlPeriod.BEFORE_SIX_MONTHS_AGO ->
+                    this.lastControlAtQuayDateTime?.isBefore(now.minusMonths(6))
+                        ?: true // If no control is found, it is before the expected date
+                LastControlPeriod.BEFORE_THREE_MONTHS_AGO ->
+                    this.lastControlAtQuayDateTime?.isBefore(now.minusMonths(3))
+                        ?: true // If no control is found, it is before the expected date
+                LastControlPeriod.BEFORE_TWO_YEARS_AGO ->
+                    this.lastControlAtQuayDateTime?.isBefore(now.minusYears(2))
+                        ?: true // If no control is found, it is before the expected date
+                null -> true
+            }
+
+        return hasRiskFactorMatch && hasLastControlAtSeaDatetimePeriodMatch && hasLastControlAtQuayDatetimePeriodMatch
     }
 }

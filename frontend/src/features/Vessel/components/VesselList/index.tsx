@@ -68,11 +68,14 @@ export function VesselList({ isFromUrl }: VesselListProps) {
   const [columns, tableData] = useMemo(
     () => [
       isFilteringVesselList
-        ? getTableColumns(isFromUrl, vesselListActionColumn).map(column => ({ ...column, cell: SkeletonRow }))
-        : getTableColumns(isFromUrl, vesselListActionColumn),
+        ? getTableColumns(isFromUrl, vesselListActionColumn, listFilter).map(column => ({
+            ...column,
+            cell: SkeletonRow
+          }))
+        : getTableColumns(isFromUrl, vesselListActionColumn, listFilter),
       isFilteringVesselList ? Array(8).fill({}) : (vessels ?? [])
     ],
-    [isFilteringVesselList, isFromUrl, vessels]
+    [isFilteringVesselList, isFromUrl, vessels, listFilter]
   )
 
   /**

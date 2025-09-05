@@ -31,7 +31,8 @@ class VesselRiskFactorUTests {
                         },
                     ),
                 speciesOnboard = listOf(Species(species = "COD", weight = 100.0)),
-                lastControlDatetime = ZonedDateTime.now().minusMonths(4),
+                lastControlAtSeaDateTime = ZonedDateTime.now().minusMonths(4),
+                lastControlAtQuayDateTime = ZonedDateTime.now().minusMonths(4),
             )
 
         val group =
@@ -56,7 +57,8 @@ class VesselRiskFactorUTests {
                         gearCodes = listOf("OTB"),
                         emitsPositions = listOf(),
                         hasLogbook = null,
-                        lastControlPeriod = LastControlPeriod.BEFORE_THREE_MONTHS_AGO,
+                        lastControlAtSeaPeriod = LastControlPeriod.BEFORE_THREE_MONTHS_AGO,
+                        lastControlAtQuayPeriod = LastControlPeriod.BEFORE_THREE_MONTHS_AGO,
                         landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
@@ -91,7 +93,7 @@ class VesselRiskFactorUTests {
                         },
                     ),
                 speciesOnboard = listOf(Species(species = "COD", weight = 100.0)),
-                lastControlDatetime = ZonedDateTime.now().minusMonths(2),
+                lastControlDateTime = ZonedDateTime.now().minusMonths(2),
             )
 
         val group =
@@ -116,7 +118,8 @@ class VesselRiskFactorUTests {
                         gearCodes = listOf("OTB"),
                         emitsPositions = listOf(),
                         hasLogbook = null,
-                        lastControlPeriod = null,
+                        lastControlAtSeaPeriod = null,
+                        lastControlAtQuayPeriod = null,
                         landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
@@ -175,7 +178,8 @@ class VesselRiskFactorUTests {
                         gearCodes = listOf("OTB"),
                         emitsPositions = listOf(),
                         hasLogbook = null,
-                        lastControlPeriod = null,
+                        lastControlAtSeaPeriod = null,
+                        lastControlAtQuayPeriod = null,
                         landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
@@ -235,7 +239,8 @@ class VesselRiskFactorUTests {
                         gearCodes = listOf(),
                         emitsPositions = listOf(),
                         hasLogbook = null,
-                        lastControlPeriod = null,
+                        lastControlAtSeaPeriod = null,
+                        lastControlAtQuayPeriod = null,
                         landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
@@ -261,7 +266,7 @@ class VesselRiskFactorUTests {
         val vesselRiskFactor =
             VesselRiskFactor(
                 riskFactor = 2.5,
-                lastControlDatetime = now.minusWeeks(2), // 2 weeks ago
+                lastControlAtSeaDateTime = now.minusWeeks(2), // 2 weeks ago
             )
 
         val group =
@@ -286,7 +291,8 @@ class VesselRiskFactorUTests {
                         gearCodes = listOf(),
                         emitsPositions = listOf(),
                         hasLogbook = null,
-                        lastControlPeriod = LastControlPeriod.AFTER_ONE_MONTH_AGO,
+                        lastControlAtSeaPeriod = LastControlPeriod.AFTER_ONE_MONTH_AGO,
+                        lastControlAtQuayPeriod = null,
                         landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
@@ -312,7 +318,7 @@ class VesselRiskFactorUTests {
         val vesselRiskFactor =
             VesselRiskFactor(
                 riskFactor = 2.5,
-                lastControlDatetime = now.minusMonths(2), // 2 months ago
+                lastControlAtSeaDateTime = now.minusMonths(2), // 2 months ago
             )
 
         val group =
@@ -337,7 +343,8 @@ class VesselRiskFactorUTests {
                         gearCodes = listOf(),
                         emitsPositions = listOf(),
                         hasLogbook = null,
-                        lastControlPeriod = LastControlPeriod.BEFORE_ONE_MONTH_AGO,
+                        lastControlAtSeaPeriod = LastControlPeriod.BEFORE_ONE_MONTH_AGO,
+                        lastControlAtQuayPeriod = null,
                         landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
@@ -386,7 +393,8 @@ class VesselRiskFactorUTests {
                         gearCodes = listOf(),
                         emitsPositions = listOf(),
                         hasLogbook = null,
-                        lastControlPeriod = null,
+                        lastControlAtSeaPeriod = null,
+                        lastControlAtQuayPeriod = null,
                         landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
@@ -399,7 +407,7 @@ class VesselRiskFactorUTests {
             )
 
         // When
-        val result = vesselRiskFactor.isLastPositionInGroup(group)
+        val result = vesselRiskFactor.isLastPositionInGroup(group, ZonedDateTime.now())
 
         // Then
         assertThat(result).isTrue
@@ -435,7 +443,8 @@ class VesselRiskFactorUTests {
                         gearCodes = listOf(),
                         emitsPositions = listOf(),
                         hasLogbook = null,
-                        lastControlPeriod = null,
+                        lastControlAtSeaPeriod = null,
+                        lastControlAtQuayPeriod = null,
                         landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
@@ -448,7 +457,7 @@ class VesselRiskFactorUTests {
             )
 
         // When
-        val result = vesselRiskFactor.isLastPositionInGroup(group)
+        val result = vesselRiskFactor.isLastPositionInGroup(group, ZonedDateTime.now())
 
         // Then
         assertThat(result).isFalse
@@ -484,7 +493,8 @@ class VesselRiskFactorUTests {
                         gearCodes = listOf(),
                         emitsPositions = listOf(),
                         hasLogbook = null,
-                        lastControlPeriod = null,
+                        lastControlAtSeaPeriod = null,
+                        lastControlAtQuayPeriod = null,
                         landingPortLocodes = emptyList(),
                         lastPositionHoursAgo = null,
                         producerOrganizations = emptyList(),
@@ -497,7 +507,7 @@ class VesselRiskFactorUTests {
             )
 
         // When
-        val result = vesselRiskFactor.isLastPositionInGroup(group)
+        val result = vesselRiskFactor.isLastPositionInGroup(group, ZonedDateTime.now())
 
         // Then
         assertThat(result).isTrue

@@ -27,6 +27,7 @@ SELECT
     a.id,
     vessel_id,
     action_datetime_utc AS control_datetime_utc,
+    action_type,
     COALESCE(infractions_natinf_codes, '{}') AS infractions_natinf_codes,
     seizure_and_diversion,
     has_some_species_seized,

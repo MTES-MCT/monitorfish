@@ -39,7 +39,8 @@ export function buildFeature(
     ircs: vessel.ircs,
     isAtPort: vessel.isAtPort,
     isFiltered: vessel.isFiltered,
-    lastControlDateTime: vessel.lastControlDateTime,
+    lastControlAtQuayDateTime: vessel.lastControlAtQuayDateTime,
+    lastControlAtSeaDateTime: vessel.lastControlAtSeaDateTime,
     lastLogbookMessageDateTime: vessel.lastLogbookMessageDateTime,
     lastPositionSentAt: vessel.lastPositionSentAt,
     latitude: vessel.latitude,
@@ -135,3 +136,25 @@ export const getVesselCompositeIdentifier: (vessel) => Vessel.VesselCompositeIde
   `${vessel.internalReferenceNumber ?? 'UNKNOWN'}/${vessel.ircs ?? 'UNKNOWN'}/${
     vessel.externalReferenceNumber ?? 'UNKNOWN'
   }`
+
+export function getLastControlDateTime(
+  lastControlAtSeaDateTime: string | undefined,
+  lastControlAtQuayDateTime: string | undefined
+): string | undefined {
+  let lastControlDateTime: string | undefined
+
+  if (!!lastControlAtQuayDateTime && !lastControlAtSeaDateTime) {
+    lastControlDateTime = lastControlAtQuayDateTime
+  }
+
+  if (!!lastControlAtSeaDateTime && !lastControlAtQuayDateTime) {
+    lastControlDateTime = lastControlAtSeaDateTime
+  }
+
+  if (!!lastControlAtSeaDateTime && !!lastControlAtQuayDateTime) {
+    lastControlDateTime =
+      lastControlAtQuayDateTime >= lastControlAtSeaDateTime ? lastControlAtQuayDateTime : lastControlAtSeaDateTime
+  }
+
+  return lastControlDateTime
+}

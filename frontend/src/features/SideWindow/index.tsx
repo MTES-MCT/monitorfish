@@ -10,13 +10,7 @@ import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindow
 import { VesselListAndGroups } from '@features/Vessel/components/VesselListAndGroups'
 import { setVessels } from '@features/Vessel/slice'
 import { vesselApi } from '@features/Vessel/vesselApi'
-import {
-  FulfillingBouncingCircleLoader,
-  NewWindowContext,
-  type NewWindowContextValue,
-  Notifier,
-  THEME
-} from '@mtes-mct/monitor-ui'
+import { NewWindowContext, type NewWindowContextValue, Notifier, THEME } from '@mtes-mct/monitor-ui'
 import {
   type CSSProperties,
   Fragment,
@@ -39,6 +33,7 @@ import { getAllGearCodes } from '../../domain/use_cases/gearCode/getAllGearCodes
 import { getInfractions } from '../../domain/use_cases/infraction/getInfractions'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
+import { LoadingSpinnerWall } from '../../ui/LoadingSpinnerWall'
 import { SideWindowAlerts } from '../Alert/components/SideWindowAlerts'
 import { BeaconMalfunctionBoard } from '../BeaconMalfunction/components/BeaconMalfunctionBoard'
 import { getAllBeaconMalfunctions } from '../BeaconMalfunction/useCases/getAllBeaconMalfunctions'
@@ -158,12 +153,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
               <GrayOverlay onClick={closeRightSidebar} style={grayOverlayStyle} />
             )}
             <FrontendErrorBoundary>
-              {isPreloading && (
-                <Loading>
-                  <FulfillingBouncingCircleLoader className="update-vessels" color={THEME.color.lightGray} />
-                  <Text data-cy="first-loader">Chargement...</Text>
-                </Loading>
-              )}
+              {isPreloading && <LoadingSpinnerWall isVesselShowed message="Chargement..." />}
               {!isPreloading && (
                 <Content>
                   {(selectedPath.menu === SideWindowMenuKey.VESSEL_LIST ||
@@ -336,16 +326,3 @@ const Content = styled.div`
 `
 
 const GrayOverlay = styled.div``
-
-const Loading = styled.div`
-  margin-left: 550px;
-  margin-top: 350px;
-`
-
-const Text = styled.span`
-  bottom: -17px;
-  color: ${p => p.theme.color.slateGray};
-  font-size: 13px;
-  margin-top: 10px;
-  position: relative;
-`

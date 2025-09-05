@@ -272,8 +272,11 @@ export class MonitorFishWebWorker {
       ? now.set('hour', now.get('hour') - filters.lastPositionHoursAgo)
       : now
 
-    const lastControlledFilter = filters.lastControlPeriod
-      ? getLastControlledFilterFromLastControlPeriod(filters.lastControlPeriod)
+    const lastControlAtSeaFilter = filters.lastControlAtSeaPeriod
+      ? getLastControlledFilterFromLastControlPeriod(filters.lastControlAtSeaPeriod)
+      : undefined
+    const lastControlAtQuayFilter = filters.lastControlAtQuayPeriod
+      ? getLastControlledFilterFromLastControlPeriod(filters.lastControlAtQuayPeriod)
       : undefined
 
     const producerOrganizationSet = filters.producerOrganizations?.length
@@ -391,22 +394,44 @@ export class MonitorFishWebWorker {
           }
         }
 
-        if (lastControlledFilter?.lastControlledBefore && !!vessel?.lastControlDateTime) {
-          const vesselDate = customDayjs(vessel?.lastControlDateTime)
-          const lastControlledBefore = customDayjs(lastControlledFilter.lastControlledBefore)
+        if (lastControlAtSeaFilter?.lastControlledBefore && !!vessel?.lastControlAtSeaDateTime) {
+          const vesselDate = customDayjs(vessel?.lastControlAtSeaDateTime)
+          const lastControlledBefore = customDayjs(lastControlAtSeaFilter.lastControlledBefore)
 
           if (!vesselDate.isBefore(lastControlledBefore)) {
             return false
           }
         }
 
-        if (lastControlledFilter?.lastControlledAfter) {
-          if (!vessel?.lastControlDateTime) {
+        if (lastControlAtSeaFilter?.lastControlledAfter) {
+          if (!vessel?.lastControlAtSeaDateTime) {
             return false
           }
 
-          const vesselDate = customDayjs(vessel?.lastControlDateTime)
-          const lastControlledAfter = customDayjs(lastControlledFilter.lastControlledAfter)
+          const vesselDate = customDayjs(vessel?.lastControlAtSeaDateTime)
+          const lastControlledAfter = customDayjs(lastControlAtSeaFilter.lastControlledAfter)
+
+          if (!vesselDate.isAfter(lastControlledAfter)) {
+            return false
+          }
+        }
+
+        if (lastControlAtQuayFilter?.lastControlledBefore && !!vessel?.lastControlAtQuayDateTime) {
+          const vesselDate = customDayjs(vessel?.lastControlAtQuayDateTime)
+          const lastControlledBefore = customDayjs(lastControlAtQuayFilter.lastControlledBefore)
+
+          if (!vesselDate.isBefore(lastControlledBefore)) {
+            return false
+          }
+        }
+
+        if (lastControlAtQuayFilter?.lastControlledAfter) {
+          if (!vessel?.lastControlAtQuayDateTime) {
+            return false
+          }
+
+          const vesselDate = customDayjs(vessel?.lastControlAtQuayDateTime)
+          const lastControlledAfter = customDayjs(lastControlAtQuayFilter.lastControlledAfter)
 
           if (!vesselDate.isAfter(lastControlledAfter)) {
             return false

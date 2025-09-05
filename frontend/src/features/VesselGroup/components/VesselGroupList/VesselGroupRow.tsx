@@ -202,6 +202,11 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
               {vesselGroupWithVessels.group.pointsOfAttention}
             </PointsOfAttention>
             <VesselTable
+              filters={
+                vesselGroupWithVessels.group.type === GroupType.DYNAMIC
+                  ? vesselGroupWithVessels.group.filters
+                  : undefined
+              }
               isFixedGroup={vesselGroupWithVessels.group.type === GroupType.FIXED}
               isFromUrl={isFromUrl}
               isPinned={isPinned}

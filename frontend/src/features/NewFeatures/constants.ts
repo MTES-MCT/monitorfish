@@ -7,6 +7,20 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2025-09-05',
+        description: `Le filtre "Dernier contrôle" de la liste des navires a été remplacé par deux filtres :
+- Dernier contrôle à quai,
+- Dernier contrôle en mer.
+
+Cela permet d'affiner le ciblage d'un navire avec son dernier contrôle.
+
+Si vous aviez créé des groupes de navires dynamiques avec ce critère, les deux filtres "Dernier contrôle à quai" et "Dernier contrôle en mer" prennent l'ancienne valeur.
+`,
+        for: 'ALL',
+        title: `Amélioration du filtre "Dernier contrôle" de la liste des navires`,
+        type: 'IMPROVEMENT'
+      },
+      {
         date: '2025-07-23',
         description: `Vous pouvez retrouver l'identité du patron dans les coordonnées en bas de la fiche "Identité" de la fiche navire.
 

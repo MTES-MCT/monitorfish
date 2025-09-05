@@ -19,5 +19,17 @@ export const MAIN_PERSISTOR_VESSEL_MIGRATIONS = {
     delete nextState.listFilterValues.lastLandingPortLocodes
 
     return nextState
+  },
+  1: state => {
+    const nextState = {
+      ...state
+    }
+
+    nextState.listFilterValues.lastControlAtQuayPeriod = state.listFilterValues.lastControlPeriod
+    nextState.listFilterValues.lastControlAtSeaPeriod = state.listFilterValues.lastControlPeriod
+
+    delete nextState.listFilterValues.lastControlPeriod
+
+    return nextState
   }
 }

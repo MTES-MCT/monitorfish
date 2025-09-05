@@ -182,8 +182,13 @@ export function EditDynamicVesselGroupDialog({
     )
   }
 
-  const updateLastControlPeriod = async (nextLastControlPeriod: LastControlPeriod | undefined) => {
-    const nextListFilterValues = { ...listFilterValues, lastControlPeriod: nextLastControlPeriod }
+  const updateLastControlAtSeaPeriod = (nextLastControlPeriod: LastControlPeriod | undefined) => {
+    const nextListFilterValues = { ...listFilterValues, lastControlAtSeaPeriod: nextLastControlPeriod }
+    updateListFilterValuesAndCountVessels(nextListFilterValues)
+  }
+
+  const updateLastControlAtQuayPeriod = (nextLastControlPeriod: LastControlPeriod | undefined) => {
+    const nextListFilterValues = { ...listFilterValues, lastControlAtQuayPeriod: nextLastControlPeriod }
     updateListFilterValuesAndCountVessels(nextListFilterValues)
   }
 
@@ -389,13 +394,24 @@ export function EditDynamicVesselGroupDialog({
           <Select
             isLabelHidden
             isTransparent
-            label="Dernier contrôle"
-            name="lastControlPeriod"
-            onChange={updateLastControlPeriod}
+            label="Dernier contrôle mer"
+            name="lastControlAtSeaPeriod"
+            onChange={updateLastControlAtSeaPeriod}
             options={LAST_CONTROL_PERIODS_AS_OPTIONS}
-            placeholder="Dernier contrôle"
+            placeholder="Dernier contrôle mer"
             popupWidth={224}
-            value={listFilterValues.lastControlPeriod}
+            value={listFilterValues.lastControlAtSeaPeriod}
+          />
+          <Select
+            isLabelHidden
+            isTransparent
+            label="Dernier contrôle quai"
+            name="lastControlAtQuayPeriod"
+            onChange={updateLastControlAtQuayPeriod}
+            options={LAST_CONTROL_PERIODS_AS_OPTIONS}
+            placeholder="Dernier contrôle quai"
+            popupWidth={224}
+            value={listFilterValues.lastControlAtQuayPeriod}
           />
           <CheckPicker
             isLabelHidden
@@ -431,7 +447,6 @@ export function EditDynamicVesselGroupDialog({
               )
             }}
             searchable
-            style={{ width: 416 }}
             uncheckableItemValues={['0', '1', '2', '3']}
             value={listFilterValues.zones?.map(zone => zone.value)}
           />
@@ -574,7 +589,7 @@ const Row = styled.div`
     margin-top: 16px;
   }
 
-  > .Element-Field:not(:nth-child(5)):not(:nth-child(9)) {
+  > .Element-Field:not(:nth-child(5)):not(:nth-child(10)) {
     margin-right: 16px;
   }
 

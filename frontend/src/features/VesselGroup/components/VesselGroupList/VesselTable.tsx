@@ -13,14 +13,17 @@ import styled, { css } from 'styled-components'
 
 import { TableBodyEmptyData } from './TableBodyEmptyData'
 
+import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
+
 type VesselTableProps = Readonly<{
+  filters: VesselListFilter | undefined
   isFixedGroup: boolean
   isFromUrl: boolean
   isPinned: boolean
   vesselGroupId: number
   vessels: Vessel.ActiveVessel[]
 }>
-export function VesselTable({ isFixedGroup, isFromUrl, isPinned, vesselGroupId, vessels }: VesselTableProps) {
+export function VesselTable({ filters, isFixedGroup, isFromUrl, isPinned, vesselGroupId, vessels }: VesselTableProps) {
   const isBodyEmptyDataVisible = !!vessels && vessels.length === 0
 
   const searchQuery = useMainAppSelector(state => state.vesselGroupList.searchQuery)
@@ -35,7 +38,10 @@ export function VesselTable({ isFixedGroup, isFromUrl, isPinned, vesselGroupId, 
      * (see `areGroupsOpened`in HideNonSelectedVessels.tsx)
      * */
     if (!searchQuery || searchQuery.length <= SEARCH_QUERY_MIN_LENGTH - 1) {
-      return [getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId, isFixedGroup)), vessels ?? []]
+      return [
+        getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId, isFixedGroup), filters),
+        vessels ?? []
+      ]
     }
 
     const fuse = new CustomSearch<Vessel.ActiveVessel>(
@@ -45,8 +51,11 @@ export function VesselTable({ isFixedGroup, isFromUrl, isPinned, vesselGroupId, 
     )
     const filteredVessels = fuse.find(searchQuery)
 
-    return [getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId, isFixedGroup)), filteredVessels]
-  }, [isFromUrl, vesselGroupId, isFixedGroup, vessels, searchQuery])
+    return [
+      getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId, isFixedGroup), filters),
+      filteredVessels
+    ]
+  }, [isFromUrl, vesselGroupId, isFixedGroup, vessels, filters, searchQuery])
 
   const table = useReactTable({
     columns,

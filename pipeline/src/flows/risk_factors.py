@@ -133,7 +133,11 @@ def extract_control_anteriority():
     return extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/control_anteriority.sql",
-        parse_dates=["last_control_datetime_utc"],
+        parse_dates=[
+            "last_control_datetime_utc", 
+            "last_control_at_sea_datetime_utc", 
+            "last_control_at_quay_datetime_utc"
+        ],
     )
 
 

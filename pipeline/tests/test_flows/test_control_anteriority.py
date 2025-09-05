@@ -104,6 +104,31 @@ def last_years_controls():
                 pytz.utc.localize(datetime(2025, 1, 1)),
                 pytz.utc.localize(datetime(2025, 1, 2)),
             ],
+            "action_type": [
+                'SEA_CONTROL',    # ID -199999
+                'SEA_CONTROL',    # ID -144762  
+                'SEA_CONTROL',    # ID 1
+                'SEA_CONTROL',    # ID 2
+                'SEA_CONTROL',    # ID 3
+                'SEA_CONTROL',    # ID 4
+                'LAND_CONTROL',   # ID 6
+                'LAND_CONTROL',   # ID 7
+                'LAND_CONTROL',   # ID 8
+                'LAND_CONTROL',   # ID 10
+                'SEA_CONTROL',    # ID 11
+                'SEA_CONTROL',    # ID 12
+                'SEA_CONTROL',    # ID 13
+                'SEA_CONTROL',    # ID 14
+                'SEA_CONTROL',    # ID 15
+                'LAND_CONTROL',   # ID 16
+                'LAND_CONTROL',   # ID 17
+                'LAND_CONTROL',   # ID 18
+                'LAND_CONTROL',   # ID 19
+                'LAND_CONTROL',   # ID 20
+                'LAND_CONTROL',   # ID 21
+                'LAND_CONTROL',   # ID 22
+                'LAND_CONTROL'    # ID 23
+            ],
             "infractions_natinf_codes": [
                 [],
                 [],
@@ -420,6 +445,20 @@ def loaded_control_anteriority() -> pd.DataFrame:
                 now - relativedelta(weeks=1, days=2),
                 now - relativedelta(months=3),
             ],
+            "last_control_at_sea_datetime_utc": [
+                now - relativedelta(weeks=3),
+                now - relativedelta(weeks=2),
+                now - relativedelta(weeks=1),
+                now - relativedelta(weeks=1, days=2),
+                now - relativedelta(months=3),
+            ],
+            "last_control_at_quay_datetime_utc": [
+                now - relativedelta(weeks=3),
+                now - relativedelta(weeks=2),
+                now - relativedelta(weeks=1),
+                now - relativedelta(weeks=1, days=2),
+                now - relativedelta(months=3),
+            ],
             "last_control_infraction": [True, True, False, False, False],
             "post_control_comments": [
                 (
@@ -493,12 +532,14 @@ def test_extract_last_5_years_controls(reset_test_data, last_years_controls):
 
     controls = extract_last_years_controls(years=5)
 
-    pd.testing.assert_frame_equal(
-        controls.drop(columns=["control_datetime_utc"])
-        .sort_values("id")
-        .reset_index(drop=True),
-        last_years_controls.drop(columns=["control_datetime_utc"]),
-    )
+    # Get the actual data without datetime for comparison
+    controls_test = controls.drop(columns=["control_datetime_utc"]).sort_values("id").reset_index(drop=True)
+    expected_test = last_years_controls.drop(columns=["control_datetime_utc"]).sort_values("id").reset_index(drop=True)
+    
+    # Reorder columns to match expected order
+    controls_test = controls_test[expected_test.columns]
+    
+    pd.testing.assert_frame_equal(controls_test, expected_test)
 
     assert ((now - controls.control_datetime_utc) < five_years).all()
 
@@ -531,8 +572,12 @@ def test_compute_control_rate_risk_factors(
     ):
         res = compute_control_rate_risk_factors(last_years_controls)
 
+    # Test that the new columns exist
+    assert "last_control_at_sea_datetime_utc" in res.columns
+    assert "last_control_at_quay_datetime_utc" in res.columns
+    
     pd.testing.assert_frame_equal(
-        res.drop(columns=["last_control_datetime_utc"]), control_rate_risk_factors
+        res.drop(columns=["last_control_datetime_utc", "last_control_at_sea_datetime_utc", "last_control_at_quay_datetime_utc"]), control_rate_risk_factors
     )
 
 
@@ -573,6 +618,8 @@ def test_control_anteriority_flow(reset_test_data, loaded_control_anteriority):
     inexact_columns = [
         "last_control_datetime_utc",
         "number_recent_controls",
+        "last_control_at_sea_datetime_utc",
+        "last_control_at_quay_datetime_utc",
     ]
 
     # Check last_control_datetime_utc
@@ -599,7 +646,10 @@ def test_control_anteriority_flow(reset_test_data, loaded_control_anteriority):
     ).all()
 
     # Check all other columns
-    pd.testing.assert_frame_equal(
-        control_anteriority.drop(columns=inexact_columns),
-        loaded_control_anteriority.drop(columns=inexact_columns),
-    )
+    actual = control_anteriority.drop(columns=inexact_columns)
+    expected = loaded_control_anteriority.drop(columns=inexact_columns)
+    
+    # Reorder actual columns to match expected order
+    actual = actual[expected.columns]
+    
+    pd.testing.assert_frame_equal(actual, expected)

@@ -6,6 +6,20 @@ import type { MonitorFishFeature } from '@features/NewFeatures/types'
 export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
+    {
+      date: '2025-09-05',
+      description: `Le filtre "Dernier contrôle" de la liste des navires a été remplacé par deux filtres :
+- Dernier contrôle à quai,
+- Dernier contrôle en mer.
+
+Cela permet d'affiner le ciblage d'un navire avec son dernier contrôle.
+
+Si vous aviez créé des groupes de navires dynamiques avec ce critère, les deux filtres "Dernier contrôle à quai" et "Dernier contrôle en mer" prennent l'ancienne valeur.
+`,
+      for: 'ALL',
+      title: `Amélioration du filtre "Dernier contrôle" de la liste des navires`,
+      type: 'IMPROVEMENT'
+    },
       {
         date: '2025-08-27',
         description: `La création d'un groupe de navires fixe est simplifiée, le nom du navire et son pavillon ne sont plus requis.

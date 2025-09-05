@@ -35,10 +35,15 @@ export const VESSEL_LIST_CSV_MAP_BASE: DownloadAsCsvMap<Omit<Vessel.ActiveVessel
     label: 'Espèces à bord',
     transform: vessel => vessel.speciesArray.join(', ')
   },
-  lastControlDateTime: {
-    label: 'Date dernier contrôle',
+  lastControlAtSeaDateTime: {
+    label: 'Date dernier contrôle en mer',
     transform: vessel =>
-      vessel.lastControlDateTime ? customDayjs(vessel.lastControlDateTime).utc().format('YYYY-MM-DD') : ''
+      vessel.lastControlAtSeaDateTime ? customDayjs(vessel.lastControlAtSeaDateTime).utc().format('YYYY-MM-DD') : ''
+  },
+  lastControlAtQuayDateTime: {
+    label: 'Date dernier contrôle à quai',
+    transform: vessel =>
+      vessel.lastControlAtQuayDateTime ? customDayjs(vessel.lastControlAtQuayDateTime).utc().format('YYYY-MM-DD') : ''
   },
   dateTime: {
     label: 'GDH (UTC)',

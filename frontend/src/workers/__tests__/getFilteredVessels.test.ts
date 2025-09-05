@@ -106,21 +106,31 @@ describe('MonitorFishWebWorker.getFilteredVessels', () => {
   it('should filters by lastControlPeriod (BEFORE_ONE_YEAR_AGO)', () => {
     const filters = {
       ...DEFAULT_VESSEL_LIST_FILTER_VALUES,
-      lastControlPeriod: LastControlPeriod.BEFORE_ONE_YEAR_AGO,
+      lastControlAtSeaPeriod: LastControlPeriod.BEFORE_ONE_YEAR_AGO,
       vesselsLocation: []
     }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
     expect(result).toStrictEqual(['vessel1', 'vessel3'])
   })
 
-  it('should filters by lastControlPeriod (AFTER_ONE_MONTH_AGO)', () => {
+  it('should filters by lastControlAtSeaPeriod (AFTER_ONE_MONTH_AGO)', () => {
     const filters = {
       ...DEFAULT_VESSEL_LIST_FILTER_VALUES,
-      lastControlPeriod: LastControlPeriod.AFTER_ONE_MONTH_AGO,
+      lastControlAtSeaPeriod: LastControlPeriod.AFTER_ONE_MONTH_AGO,
       vesselsLocation: []
     }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
     expect(result).toStrictEqual(['vessel2'])
+  })
+
+  it('should filters by lastControlAtQuayPeriod (BEFORE_ONE_YEAR_AGO)', () => {
+    const filters = {
+      ...DEFAULT_VESSEL_LIST_FILTER_VALUES,
+      lastControlAtQuayPeriod: LastControlPeriod.BEFORE_ONE_YEAR_AGO,
+      vesselsLocation: []
+    }
+    const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
+    expect(result).toStrictEqual(['vessel2', 'vessel3'])
   })
 
   it('should filters by emitsPositions (AFTER_ONE_MONTH_AGO)', () => {

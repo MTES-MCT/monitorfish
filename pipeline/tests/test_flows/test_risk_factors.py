@@ -1,5 +1,6 @@
 import pandas as pd
 import pytest
+from datetime import datetime, timedelta
 from sqlalchemy import text
 
 from src.db_config import create_engine
@@ -168,6 +169,28 @@ def risk_factors() -> pd.DataFrame:
                 pd.NaT,
                 pd.NaT,
                 pd.Timestamp("2018-01-01 07:57:45"),
+                pd.NaT,
+            ],
+            "last_control_at_quay_datetime_utc": [
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+            ],
+            "last_control_at_sea_datetime_utc": [
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
                 pd.NaT,
             ],
             "last_control_infraction": [
@@ -638,6 +661,15 @@ def test_risk_factor_flow(reset_test_data, risk_factors):
     assert len(control_anteriority) == 4
     assert set(control_anteriority.ircs) == {"LLUK", "OLY7853", "IL2468", "SOMEID"}
 
-    pd.testing.assert_frame_equal(
-        loaded_risk_factors.drop(columns=["id"]), risk_factors
-    )
+    # Reorder columns to match expected order
+    actual = loaded_risk_factors.drop(columns=["id"])
+    expected = risk_factors
+    actual = actual[expected.columns]
+    
+    # Convert datetime columns that might have NULL/None values to proper datetime type
+    datetime_columns = ['last_control_at_quay_datetime_utc', 'last_control_at_sea_datetime_utc']
+    for col in datetime_columns:
+        if col in actual.columns:
+            actual[col] = pd.to_datetime(actual[col])
+    
+    pd.testing.assert_frame_equal(actual, expected)

@@ -120,12 +120,25 @@ export function FilterTags({
             </SingleTag>
           ))}
 
-        {!!listFilterValues.lastControlPeriod && (
+        {!!listFilterValues.lastControlAtQuayPeriod && (
           <SingleTag
-            key={`lastControlPeriod-${listFilterValues.lastControlPeriod}`}
-            onDelete={() => remove('lastControlPeriod', listFilterValues.lastControlPeriod as LastControlPeriod)}
+            key={`lastControlAtQuayPeriod-${listFilterValues.lastControlAtQuayPeriod}`}
+            onDelete={() =>
+              remove('lastControlAtQuayPeriod', listFilterValues.lastControlAtQuayPeriod as LastControlPeriod)
+            }
           >
-            {LAST_CONTROL_PERIOD_LABEL[listFilterValues.lastControlPeriod]}
+            {`${LAST_CONTROL_PERIOD_LABEL[listFilterValues.lastControlAtQuayPeriod]} (à quai)`}
+          </SingleTag>
+        )}
+
+        {!!listFilterValues.lastControlAtSeaPeriod && (
+          <SingleTag
+            key={`lastControlAtSeaPeriod-${listFilterValues.lastControlAtSeaPeriod}`}
+            onDelete={() =>
+              remove('lastControlAtSeaPeriod', listFilterValues.lastControlAtSeaPeriod as LastControlPeriod)
+            }
+          >
+            {`${LAST_CONTROL_PERIOD_LABEL[listFilterValues.lastControlAtSeaPeriod]} (en mer)`}
           </SingleTag>
         )}
 

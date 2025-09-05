@@ -59,7 +59,11 @@ data class RiskFactorEntity(
     @Column(name = "recent_segments_control_priority_level")
     val recentControlPriorityLevel: Double,
     @Column(name = "last_control_datetime_utc")
-    val lastControlDatetime: ZonedDateTime? = null,
+    val lastControlDateTime: ZonedDateTime? = null,
+    @Column(name = "last_control_at_sea_datetime_utc")
+    val lastControlAtSeaDateTime: ZonedDateTime? = null,
+    @Column(name = "last_control_at_quay_datetime_utc")
+    val lastControlAtQuayDateTime: ZonedDateTime? = null,
     @Column(name = "control_rate_risk_factor")
     val controlRateRiskFactor: Double,
     @Column(name = "total_weight_onboard")
@@ -95,7 +99,9 @@ data class RiskFactorEntity(
             segmentHighestImpact = segmentHighestImpact,
             segmentHighestPriority = segmentHighestPriority,
             totalWeightOnboard = totalWeightOnboard ?: 0.0,
-            lastControlDatetime = lastControlDatetime,
+            lastControlDateTime = lastControlDateTime,
+            lastControlAtSeaDateTime = lastControlAtSeaDateTime,
+            lastControlAtQuayDateTime = lastControlAtQuayDateTime,
             controlRateRiskFactor = controlRateRiskFactor,
             numberControlsLastFiveYears = numberControlsLastFiveYears,
             numberControlsLastThreeYears = numberControlsLastThreeYears,

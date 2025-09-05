@@ -72,29 +72,6 @@ data class LastPosition(
         val hasDistrictCodeMatch =
             filters.districtCodes.isEmpty() || this.districtCode in filters.districtCodes
 
-        val hasLastControlPeriodMatch =
-            when (filters.lastControlPeriod) {
-                LastControlPeriod.AFTER_ONE_MONTH_AGO ->
-                    this.lastControlDateTime?.isAfter(now.minusMonths(1))
-                        ?: false
-                LastControlPeriod.BEFORE_ONE_MONTH_AGO ->
-                    this.lastControlDateTime?.isBefore(now.minusMonths(1))
-                        ?: true // If no control is found, it is before the expected date
-                LastControlPeriod.BEFORE_ONE_YEAR_AGO ->
-                    this.lastControlDateTime?.isBefore(now.minusYears(1))
-                        ?: true // If no control is found, it is before the expected date
-                LastControlPeriod.BEFORE_SIX_MONTHS_AGO ->
-                    this.lastControlDateTime?.isBefore(now.minusMonths(6))
-                        ?: true // If no control is found, it is before the expected date
-                LastControlPeriod.BEFORE_THREE_MONTHS_AGO ->
-                    this.lastControlDateTime?.isBefore(now.minusMonths(3))
-                        ?: true // If no control is found, it is before the expected date
-                LastControlPeriod.BEFORE_TWO_YEARS_AGO ->
-                    this.lastControlDateTime?.isBefore(now.minusYears(2))
-                        ?: true // If no control is found, it is before the expected date
-                null -> true
-            }
-
         val hasLogbookMatch =
             filters.hasLogbook?.let {
                 this.lastLogbookMessageDateTime != null
@@ -167,7 +144,6 @@ data class LastPosition(
             } ?: true
 
         return hasCountryCodeMatch &&
-            hasLastControlPeriodMatch &&
             hasDistrictCodeMatch &&
             hasLogbookMatch &&
             hasLastPositionDateTimeMatch &&

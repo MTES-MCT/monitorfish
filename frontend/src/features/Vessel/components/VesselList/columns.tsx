@@ -1,20 +1,25 @@
 import { Ellipsised } from '@components/Ellipsised'
 import { Titled } from '@components/Titled'
 import { FLEET_SEGMENT_ORIGIN_LABEL, GEAR_ORIGIN_LABEL } from '@features/FleetSegment/constants'
+import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselList/constants'
 import { ActivityOrigin } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { getLastControlDateTime } from '@features/Vessel/utils'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { customDayjs, TableWithSelectableRows, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
+import styled from 'styled-components'
 
 import { ActionButtonsCell } from './cells/ActionButtonsCell'
 import { None, StyledCountryFlag } from './styles'
 import { VesselRiskFactor } from '../../../RiskFactor/components/VesselRiskFactor'
 
+import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
 
 export function getTableColumns(
   isFromUrl: boolean,
-  actionColumn: ColumnDef<Vessel.ActiveVessel, any>
+  actionColumn: ColumnDef<Vessel.ActiveVessel, any>,
+  listFilter: VesselListFilter | undefined
 ): Array<ColumnDef<Vessel.ActiveVessel, any>> {
   const legacyFirefoxOffset = !isFromUrl && isLegacyFirefox() ? -32 : 0
   const actionColumnWithOffset = { ...actionColumn, size: (actionColumn.size ?? 60) + legacyFirefoxOffset }
@@ -45,11 +50,16 @@ export function getTableColumns(
       cell: (info: CellContext<Vessel.ActiveVessel, number | undefined>) => {
         const vessel = info.row.original
 
+        const lastControlDateTime = getLastControlDateTime(
+          vessel.lastControlAtSeaDateTime,
+          vessel.lastControlAtQuayDateTime
+        )
+
         return (
           <VesselRiskFactor
             hasVesselRiskFactorSegments={false}
             isVesselUnderCharter={vessel.underCharter}
-            vesselLastControlDateTime={vessel.lastControlDateTime}
+            vesselLastControlDateTime={lastControlDateTime}
             vesselRiskFactor={vessel.riskFactor}
           />
         )
@@ -162,9 +172,45 @@ export function getTableColumns(
       size: 274 + legacyFirefoxOffset
     },
     {
-      accessorKey: 'lastControlDateTime',
-      cell: (info: CellContext<Vessel.ActiveVessel, string | undefined>) =>
-        info.getValue() ? customDayjs(info.getValue()).utc().format('[Le] DD/MM/YYYY') : <None>-</None>,
+      accessorKey: 'lastControlAtSeaDateTime',
+      cell: (info: CellContext<Vessel.ActiveVessel, string | undefined>) => {
+        const vessel = info.row.original
+        const hasLastControlAtSeaFilter =
+          listFilter?.lastControlAtSeaPeriod !== DEFAULT_VESSEL_LIST_FILTER_VALUES.lastControlAtSeaPeriod
+        const hasLastControlAtQuayFilter =
+          listFilter?.lastControlAtQuayPeriod !== DEFAULT_VESSEL_LIST_FILTER_VALUES.lastControlAtQuayPeriod
+        const hasNoLastControlFilter = !hasLastControlAtSeaFilter && !hasLastControlAtQuayFilter
+        const hasTwoLastControlFilters = hasLastControlAtSeaFilter && hasLastControlAtQuayFilter
+
+        let lastControlDateTime: string | undefined
+        let controlType = ''
+        if (hasLastControlAtSeaFilter || !hasLastControlAtQuayFilter) {
+          controlType = '(mer)'
+          lastControlDateTime = vessel.lastControlAtSeaDateTime
+        }
+
+        if (hasLastControlAtQuayFilter || !hasLastControlAtSeaFilter) {
+          controlType = '(quai)'
+          lastControlDateTime = vessel.lastControlAtQuayDateTime
+        }
+
+        if (hasNoLastControlFilter || hasTwoLastControlFilters) {
+          lastControlDateTime = getLastControlDateTime(
+            vessel.lastControlAtSeaDateTime,
+            vessel.lastControlAtQuayDateTime
+          )
+          controlType = lastControlDateTime === vessel.lastControlAtSeaDateTime ? '(mer)' : '(quai)'
+        }
+
+        return info.getValue() ? (
+          <>
+            {customDayjs(lastControlDateTime).utc().format('[Le] DD/MM/YYYY')}{' '}
+            <LastControlType>{controlType}</LastControlType>
+          </>
+        ) : (
+          <None>-</None>
+        )
+      },
       enableSorting: true,
       header: () => 'Dernier contrôle',
       id: 'lastControlDateTime',
@@ -197,3 +243,7 @@ export const vesselListActionColumn: ColumnDef<Vessel.ActiveVessel, any> = {
   id: 'actions',
   size: 60
 }
+
+const LastControlType = styled.span`
+  color: ${p => p.theme.color.slateGray};
+`

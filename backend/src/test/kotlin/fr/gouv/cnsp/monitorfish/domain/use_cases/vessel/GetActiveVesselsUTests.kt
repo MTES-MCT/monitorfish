@@ -4,7 +4,6 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.mock
-import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
@@ -1386,11 +1385,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return landing port When vessels are found in future prior notification`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "DUMMY_EMAIL",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         val vesselThatShouldMatchWithPriorNotification =

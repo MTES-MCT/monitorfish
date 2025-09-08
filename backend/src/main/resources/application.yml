@@ -78,17 +78,6 @@ spring:
         multipart:
             max-file-size: 5MB
 
-management:
-    endpoint:
-        health:
-            show-details: always
-        metrics:
-            enable: false
-    endpoints:
-        web:
-            exposure:
-                include: "*"
-
 monitorenv:
     url: ${MONITORENV_URL}
 

@@ -103,7 +103,7 @@ describe('MonitorFishWebWorker.getFilteredVessels', () => {
     expect(result).toStrictEqual(['vessel1', 'vessel3'])
   })
 
-  it('should filters by lastControlPeriod (BEFORE_ONE_YEAR_AGO)', () => {
+  it('should filters by lastControlAtSeaPeriod (BEFORE_ONE_YEAR_AGO)', () => {
     const filters = {
       ...DEFAULT_VESSEL_LIST_FILTER_VALUES,
       lastControlAtSeaPeriod: LastControlPeriod.BEFORE_ONE_YEAR_AGO,

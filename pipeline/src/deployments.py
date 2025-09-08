@@ -510,6 +510,6 @@ for deployment in deployments:
         deployment.job_variables["docker"] = {
             "run_config": {"group_add": [LOGBOOK_FILES_GID]}
         }
-        deployment.job_variables[
-            "volumes"
-        ] += f"{ERS_FILES_LOCATION}:{ERS_FILES_LOCATION}"
+        deployment.job_variables["volumes"].append(
+            f"{ERS_FILES_LOCATION}:{ERS_FILES_LOCATION}"
+        )

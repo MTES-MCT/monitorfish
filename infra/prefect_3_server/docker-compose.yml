@@ -8,6 +8,7 @@ services:
       POSTGRES_DB: prefect
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./postgres.conf:/etc/postgresql/postgresql.conf
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U prefect"]
       interval: 10s
@@ -15,7 +16,13 @@ services:
       retries: 5
     ports:
       - "5432:5432"
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
     restart: always
+    deploy:
+      resources:
+        reservations:
+          cpus: '0.5'
+          memory: 500M
 
   redis:
     image: redis:7
@@ -36,9 +43,8 @@ services:
       PREFECT_UI_URL: ${PREFECT_UI_URL:?error}
       
       # Database configuration
-      PREFECT_SERVER_DATABASE_CONNECTION_URL: postgresql+asyncpg://prefect:${POSTGRES_PASSWORD:?error}@postgres:5432/prefect
+      PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://prefect:${POSTGRES_PASSWORD:?error}@postgres:5432/prefect?ssl=disable
       PREFECT_API_DATABASE_MIGRATE_ON_START: "false"
-
       # Redis
       PREFECT_MESSAGING_BROKER: prefect_redis.messaging
       PREFECT_MESSAGING_CACHE: prefect_redis.messaging
@@ -72,14 +78,29 @@ services:
         condition: service_started
     command: prefect server services start
     environment:
-      PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://prefect:${POSTGRES_PASSWORD:?error}@postgres:5432/prefect
-      PREFECT_API_DATABASE_MIGRATE_ON_START: "false"
+      # Database configuration
+      PREFECT_SERVER_DATABASE_CONNECTION_URL: postgresql+asyncpg://prefect:${POSTGRES_PASSWORD:?error}@postgres:5432/prefect?ssl=disable
+      PREFECT_SERVER_DATABASE_MIGRATE_ON_START: "false"
+
+      # Redis configuration
       PREFECT_MESSAGING_BROKER: prefect_redis.messaging
       PREFECT_MESSAGING_CACHE: prefect_redis.messaging
       PREFECT_SERVER_EVENTS_CAUSAL_ORDERING: prefect_redis.ordering
       PREFECT_SERVER_CONCURRENCY_LEASE_STORAGE: prefect_redis.lease_storage
       PREFECT_REDIS_MESSAGING_HOST: redis
       PREFECT_REDIS_MESSAGING_PORT: "6379"
+
+      # Scheduler
+      PREFECT_SERVER_SERVICES_SCHEDULER_LOOP_SECONDS: 60
+      PREFECT_SERVER_SERVICES_SCHEDULER_MAX_RUNS: 10
+      PREFECT_SERVER_SERVICES_SCHEDULER_MIN_SCHEDULED_TIME: PT5M
+      PREFECT_SERVER_SERVICES_SCHEDULER_MAX_SCHEDULED_TIME: P14D
+      PREFECT_SERVER_SERVICES_SCHEDULER_RECENT_DEPLOYMENTS_LOOP_SECONDS: 30
+
+      # Telemetry
+      PREFECT_SERVER_ANALYTICS_ENABLED: "false"
+
+    restart: unless-stopped
 
 volumes:
   postgres_data:

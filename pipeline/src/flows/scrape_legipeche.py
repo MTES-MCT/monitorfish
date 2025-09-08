@@ -104,7 +104,7 @@ def load_legipeche(legipeche: pd.DataFrame):
 
 @flow(name="Scrape legipeche")
 def scrape_legipeche_flow():
-    deleted_csv = delete_csv()
-    extraction_datetime_utc = scrape_legipeche_to_csv(upstream_tasks=[deleted_csv])
+    delete_csv()
+    extraction_datetime_utc = scrape_legipeche_to_csv()
     legipeche = read_legipeche_csv(extraction_datetime_utc)
     load_legipeche(legipeche)

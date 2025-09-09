@@ -97,8 +97,6 @@ export function BeaconMalfunctionCard({
         {vesselStatus && (
           <VesselStatusSelect
             beaconMalfunction={beaconMalfunction}
-            domRef={bodyRef}
-            isAbsolute={false}
             isCleanable={false}
             updateVesselStatus={updateVesselStatus}
             vesselStatus={vesselStatus}

@@ -1,71 +1,58 @@
-import { THEME } from '@mtes-mct/monitor-ui'
-import { useEffect } from 'react'
-import { SelectPicker } from 'rsuite'
+import { Select, THEME } from '@mtes-mct/monitor-ui'
+import styled from 'styled-components'
 
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 import { VESSEL_STATUS } from '../../constants'
 
-import type { BeaconMalfunction } from '../../types'
+import type { BeaconMalfunction, BeaconMalfunctionStatusValue } from '../../types'
 
 type VesselStatusSelectProps = {
-  beaconMalfunction: BeaconMalfunction | undefined
-  domRef: any
-  isAbsolute?: boolean
+  beaconMalfunction?: BeaconMalfunction
   isCleanable?: boolean
-  marginTop?: number | undefined
   updateVesselStatus: (beaconMalfunction: BeaconMalfunction | undefined, status: string) => void
-  // TODO Type vesselStatus in constants.tsx
-  vesselStatus: { color: string; icon: JSX.Element; label: string; textColor: string; value: string } | undefined
+  vesselStatus: Omit<BeaconMalfunctionStatusValue, 'hoursOffsetToRetrieveMalfunctionCreation'> | undefined
 }
 export function VesselStatusSelect({
   beaconMalfunction,
-  domRef,
-  isAbsolute = false,
   isCleanable = false,
-  marginTop = undefined,
   updateVesselStatus,
   vesselStatus
 }: VesselStatusSelectProps) {
-  useEffect(() => {
-    if (domRef.current) {
-      // TODO Use styled-component and avoid useEffect to update these elements style.
-      const selectElement = domRef.current.querySelector('.rs-picker-select > div') as HTMLElement
-      if (selectElement?.style) {
-        selectElement.style.setProperty('background', vesselStatus?.color ?? THEME.color.white, 'important')
-      }
-
-      const toggleElement = domRef.current.querySelector(
-        '*[data-cy="side-window-beacon-malfunctions-vessel-status"]'
-      ) as HTMLElement
-      if (toggleElement?.style) {
-        toggleElement.style.setProperty('color', vesselStatus?.textColor ?? THEME.color.charcoal, 'important')
-      }
-
-      const icons = domRef.current.querySelectorAll('.rs-icon') as HTMLElement[]
-      icons.forEach(icon => {
-        if (icon?.style) {
-          // eslint-disable-next-line no-param-reassign
-          icon.style.color = vesselStatus?.textColor ?? THEME.color.charcoal
-        }
-      })
-    }
-  }, [vesselStatus, beaconMalfunction, domRef])
-
   return (
-    <SelectPicker
+    <StyledSelect
+      $color={vesselStatus?.color ?? THEME.color.white}
+      $textColor={vesselStatus?.textColor ?? THEME.color.charcoal}
       cleanable={isCleanable}
-      container={() => domRef.current}
-      data={VESSEL_STATUS}
-      menuStyle={
-        isAbsolute
-          ? { marginLeft: 40, marginTop: 120, position: 'absolute' }
-          : { marginLeft: -5, marginTop: marginTop ?? -67, position: 'relative' }
-      }
+      isLabelHidden
+      label="Status"
+      menuStyle={{ width: '180px' }}
+      name="vesselStatus"
       onChange={status => updateVesselStatus(beaconMalfunction, status as string)}
+      options={VESSEL_STATUS}
       placeholder="Statut"
-      renderValue={(_, item) => <VesselStatusSelectValue item={item} />}
+      renderValue={(_, item) => (
+        <VesselStatusSelectValue item={item} textColor={vesselStatus?.textColor ?? THEME.color.charcoal} />
+      )}
       searchable={false}
-      value={vesselStatus?.value ?? null}
+      value={vesselStatus?.value ?? undefined}
     />
   )
 }
+
+const StyledSelect = styled(Select)<{ $color: string; $textColor: string }>`
+  > div {
+    > .rs-picker {
+      > .rs-picker-toggle {
+        background-color: ${p => p.$color} !important;
+        padding-right: 28px !important;
+        > .rs-stack {
+          > .rs-picker-toggle-indicator {
+            > svg {
+              color: ${p => p.$textColor} !important;
+            }
+          }
+        }
+      }
+    }
+  }
+`

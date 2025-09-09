@@ -1,8 +1,7 @@
-import { COLORS } from '@constants/constants'
 import { VesselStatusSelectValue } from '@features/BeaconMalfunction/components/BeaconMalfunctionBoard/VesselStatusSelectValue'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { useEffect, useRef } from 'react'
-import { SelectPicker } from 'rsuite'
+import { Select, THEME } from '@mtes-mct/monitor-ui'
+import { useRef } from 'react'
 import styled from 'styled-components'
 
 import { VESSEL_STATUS } from '../../../../../../BeaconMalfunction/constants'
@@ -25,21 +24,6 @@ export function CurrentBeaconMalfunctionBody({
       beaconMalfunctionStatusValue.value === currentBeaconMalfunctionWithDetails?.beaconMalfunction?.vesselStatus
   )
 
-  useEffect(() => {
-    if (vesselStatus?.color && currentBeaconMalfunctionWithDetails?.beaconMalfunction?.id) {
-      // TODO Use styled-component and avoid useEffect to update these elements style.
-      ;(
-        (vesselStatusRef.current as HTMLDivElement).querySelector('.rs-picker-select > div') as HTMLElement
-      ).style.setProperty('background', vesselStatus.color, 'important')
-      ;(
-        (vesselStatusRef.current as HTMLDivElement).querySelector('.rs-picker-select') as HTMLElement
-      ).style.setProperty('margin', '0 16px 0 0', 'important')
-      ;(
-        (vesselStatusRef.current as HTMLDivElement).querySelector('.rs-picker-toggle-value >  div') as HTMLElement
-      ).style.setProperty('color', vesselStatus.textColor, 'important')
-    }
-  }, [vesselStatus, currentBeaconMalfunctionWithDetails?.beaconMalfunction])
-
   const updateVesselStatus = (beaconMalfunction, status) => {
     const nextBeaconMalfunction = {
       ...beaconMalfunction,
@@ -57,18 +41,22 @@ export function CurrentBeaconMalfunctionBody({
 
   return currentBeaconMalfunctionWithDetails ? (
     <Body ref={vesselStatusRef}>
-      <SelectPicker
+      <StyledSelect
+        $color={vesselStatus?.color ?? THEME.color.white}
+        $textColor={vesselStatus?.textColor ?? THEME.color.charcoal}
         cleanable={false}
-        data={VESSEL_STATUS}
+        isLabelHidden
+        label="Status"
+        name="vesselStatus"
         onChange={status => updateVesselStatus(currentBeaconMalfunctionWithDetails?.beaconMalfunction, status)}
-        renderValue={(_, item) => <VesselStatusSelectValue item={item} />}
+        options={VESSEL_STATUS}
+        renderValue={(_, item) => (
+          <VesselStatusSelectValue item={item} textColor={vesselStatus?.textColor ?? THEME.color.charcoal} />
+        )}
         searchable={false}
         value={vesselStatus?.value}
       />
-      <LastPosition
-        style={lastPositionStyle}
-        title={currentBeaconMalfunctionWithDetails?.beaconMalfunction?.malfunctionStartDateTime}
-      >
+      <LastPosition title={currentBeaconMalfunctionWithDetails?.beaconMalfunction?.malfunctionStartDateTime}>
         <TimeAgo style={timeAgoStyle} />
         {getMalfunctionStartDateText(currentBeaconMalfunctionWithDetails?.beaconMalfunction)}
       </LastPosition>
@@ -81,28 +69,22 @@ const Body = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   position: relative;
-
-  .rs-picker-toggle-wrapper {
-    width: 184px !important;
-
-    > .rs-picker-toggle {
-      height: 30px !important;
-      padding: 2px 8px !important;
-
-      .rs-picker-toggle-value {
-        span {
-          display: inline-block !important;
-          overflow: hidden !important;
-          text-overflow: ellipsis !important;
-          white-space: nowrap !important;
-          width: 130px !important;
+`
+const StyledSelect = styled(Select)<{ $color: string; $textColor: string }>`
+  > div {
+    > .rs-picker {
+      > .rs-picker-toggle {
+        background-color: ${p => p.$color} !important;
+        padding-right: 28px !important;
+        > .rs-stack {
+          > .rs-picker-toggle-indicator {
+            > svg {
+              color: ${p => p.$textColor} !important;
+            }
+          }
         }
-      }
-
-      .rs-picker-caret-icon {
-        top: 3px !important;
       }
     }
   }
@@ -115,11 +97,10 @@ const timeAgoStyle = {
   width: 15
 }
 
-const LastPosition = styled.div``
-const lastPositionStyle = {
-  background: `${COLORS.gainsboro} 0% 0% no-repeat padding-box`,
-  borderRadius: 1,
-  display: 'inline-block',
-  fontWeight: 500,
-  padding: '5px 8px'
-}
+const LastPosition = styled.div`
+  background: ${p => p.theme.color.gainsboro} 0% 0% no-repeat padding-box;
+  border-radius: 1px;
+  display: inline-block;
+  font-weight: 500;
+  padding: 5px 8px;
+`

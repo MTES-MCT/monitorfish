@@ -7,6 +7,31 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2025-08-27',
+        description: `La création d'un groupe de navires fixe est simplifiée, le nom du navire et son pavillon ne sont plus requis.
+Vous pouvez désormais créer une liste CSV seulement avec :
+- CFR (optionel)
+- Call Sign (optionel)
+- Marquage externe (optionel)
+
+⚠️  Au moins un identifiant parmis les trois est nécessaire, mais le CFR est le plus précis pour identifier un navire.`,
+        for: 'ALL',
+        title: `Simplification de la création des groupes fixes depuis une liste (CSV)`,
+        type: 'IMPROVEMENT'
+      },
+      {
+        date: '2025-08-26',
+        description: `Vous pouvez désormais filtrer les navires par **port de débarque**.
+
+Lorsqu’un navire a transmis un **préavis de débarquement** (message JPE PNO) encore actif, il apparaîtra dans les résultats si ce filtre est appliqué. Ce filtre peut également être utilisé dans les groupes de navires.
+
+Cette fonctionnalité permet de visualiser directement sur la cartographie les navires en approche d’un port, afin de mieux planifier les contrôles à la débarque.
+`,
+        for: 'ALL',
+        title: `Ajout du filtre "Port de débarque" dans la liste des navires et les groupes`,
+        type: 'NEW_FEATURE'
+      },
+      {
         date: '2025-07-23',
         description: `Vous pouvez retrouver l'identité du patron dans les coordonnées en bas de la fiche "Identité" de la fiche navire.
 

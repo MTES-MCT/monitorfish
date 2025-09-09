@@ -5,12 +5,14 @@ import { vesselGroupListActions } from '@features/VesselGroup/components/VesselG
 import { VesselGroupRow } from '@features/VesselGroup/components/VesselGroupList/VesselGroupRow'
 import { GroupType, Sharing } from '@features/VesselGroup/types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { trackEvent } from '@hooks/useTracking'
 import { Checkbox, Size, TextInput } from '@mtes-mct/monitor-ui'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
+import { UserAccountContext } from '../../../../context/UserAccountContext'
 
 type VesselListProps = Readonly<{
   isFromUrl: boolean
@@ -18,10 +20,19 @@ type VesselListProps = Readonly<{
 export function VesselGroupList({ isFromUrl }: VesselListProps) {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
+  const userAccount = useContext(UserAccountContext)
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
   const [filteredGroupTypes, setFilteredGroupTypes] = useState<GroupType[]>([GroupType.DYNAMIC, GroupType.FIXED])
   const [filteredSharing, setFilteredSharing] = useState<Sharing[]>([Sharing.SHARED, Sharing.PRIVATE])
   const [filteredExpired, setFilterExpired] = useState<boolean>(false)
+
+  useEffect(() => {
+    trackEvent({
+      action: 'Affichage des groupes de navires depuis la deuxième fenêtre',
+      category: 'VESSEL_GROUP',
+      name: userAccount?.email ?? ''
+    })
+  }, [userAccount?.email])
 
   const { pinnedVesselGroupsWithVessels, unpinnedVesselGroupsWithVessels } = useGetVesselGroupsWithVessels(
     filteredGroupTypes,

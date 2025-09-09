@@ -405,5 +405,15 @@ export const CustomGlobalStyle = createGlobalStyle`
     border-radius: 0;
     font-size: 13px;
     z-index: 9999;
+    .rs-picker-select-menu-item.rs-picker-select-menu-item-active,
+    .rs-picker-select-menu-item.rs-picker-select-menu-item-active:hover,
+    .rs-picker-select-menu-item:not(.rs-picker-select-menu-item-disabled):hover,
+    .rs-picker-select-menu-item.rs-picker-select-menu-item-focus,
+    .rs-picker-select-menu-item {
+        color: #707785 !important;
+        font-size: 13px;
+        font-weight: normal;
+        max-width: 600px;
+    }
   }
 `

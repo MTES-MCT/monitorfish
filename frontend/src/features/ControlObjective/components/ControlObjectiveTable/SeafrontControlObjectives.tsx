@@ -1,6 +1,5 @@
 import { BackOfficeTitle } from '@features/BackOffice/components/BackOfficeTitle'
 import {
-  ControlPriorityCell,
   DeleteCell,
   ImpactRiskFactorCell,
   INPUT_TYPE,
@@ -14,6 +13,7 @@ import { Table } from 'rsuite'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { ControlPriorityCell } from './ControlPriorityCell'
 import { LoadingSpinnerWall } from '../../../../ui/LoadingSpinnerWall'
 import { useGetFleetSegmentsQuery } from '../../../FleetSegment/apis'
 import {

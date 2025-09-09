@@ -12,12 +12,14 @@ import { type DynamicVesselGroup, GroupType, Sharing, type VesselGroupWithVessel
 import { addVesselToFixedVesselGroup } from '@features/VesselGroup/useCases/addVesselToFixedVesselGroup'
 import { deleteVesselGroup } from '@features/VesselGroup/useCases/deleteVesselGroup'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { trackEvent } from '@hooks/useTracking'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Icon, IconButton, Tag, THEME, useNewWindow } from '@mtes-mct/monitor-ui'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { getDate } from '../../../../utils'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
@@ -29,6 +31,7 @@ type VesselGroupRowProps = {
   vesselGroupWithVessels: VesselGroupWithVessels
 }
 export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithVessels }: VesselGroupRowProps) {
+  const isSuperUser = useIsSuperUser()
   const { newWindowContainerRef } = useNewWindow()
   const dispatch = useMainAppDispatch()
 
@@ -61,6 +64,11 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
 
   const togglePinGroup = async event => {
     event.stopPropagation()
+    trackEvent({
+      action: "Epingle d'un groupe de navire dans la deuxième fenêtre",
+      category: 'VESSEL_GROUP',
+      name: isSuperUser ? 'CNSP' : 'EXT'
+    })
 
     if (isPinned) {
       dispatch(vesselGroupActions.vesselGroupIdUnpinned(vesselGroupWithVessels.group.id))
@@ -83,6 +91,11 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
     const date = new Date()
     const fileName = `${vesselGroupWithVessels.group.name}_${getDate(date.toISOString())}`
 
+    trackEvent({
+      action: "Téléchargement d'un groupe de navire",
+      category: 'VESSEL_GROUP',
+      name: isSuperUser ? 'CNSP' : 'EXT'
+    })
     downloadAsCsv(
       fileName,
       vesselGroupWithVessels.vessels as Omit<Vessel.ActiveVesselEmittingPosition, 'id'>[],

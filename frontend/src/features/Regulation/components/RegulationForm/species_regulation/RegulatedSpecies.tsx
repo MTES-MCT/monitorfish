@@ -179,6 +179,7 @@ export function RegulatedSpecies({
             )}
             searchable
             value={DEFAULT_SPECIES_CATEGORY_VALUE}
+            virtualized
             width={280}
           />
         </ContentLine>
@@ -202,6 +203,7 @@ export function RegulatedSpecies({
               )}
               searchable
               value={DEFAULT_SPECIES_VALUE}
+              virtualized
               width={280}
             />
           ) : null}

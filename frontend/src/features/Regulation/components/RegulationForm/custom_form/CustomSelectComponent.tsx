@@ -16,6 +16,7 @@ type CustomSelectComponentProps = Readonly<{
   renderMenuItem: (label: ReactNode, item: any) => JSX.Element
   searchable: boolean
   value: any
+  virtualized?: boolean
   width?: number
 }>
 export function CustomSelectComponent({
@@ -31,6 +32,7 @@ export function CustomSelectComponent({
   renderMenuItem,
   searchable,
   value,
+  virtualized = false,
   width = undefined
 }: CustomSelectComponentProps) {
   return (
@@ -56,7 +58,7 @@ export function CustomSelectComponent({
         searchable={searchable}
         style={{ width: width ? `${width}px` : '200px' }}
         value={value}
-        virtualized
+        virtualized={virtualized}
       />
     </SelectWrapper>
   )

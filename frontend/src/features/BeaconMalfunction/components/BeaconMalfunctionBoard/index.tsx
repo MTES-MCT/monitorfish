@@ -8,12 +8,7 @@ import {
   useSensor,
   useSensors
 } from '@dnd-kit/core'
-import {
-  BeaconMalfunctionsStage,
-  BeaconMalfunctionVesselStatus,
-  STAGE_RECORD,
-  VESSEL_STATUS
-} from '@features/BeaconMalfunction/constants'
+import { BeaconMalfunctionVesselStatus, STAGE_RECORD, VESSEL_STATUS } from '@features/BeaconMalfunction/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
@@ -144,7 +139,7 @@ export function BeaconMalfunctionBoard() {
       setIsDroppedId(beaconMalfunction.id)
       dispatch(
         updateBeaconMalfunctionFromKanban(beaconMalfunction.id, nextBeaconMalfunction, {
-          stage: nextBeaconMalfunction.stage as BeaconMalfunctionsStage | undefined,
+          stage: undefined,
           vesselStatus: nextBeaconMalfunction.vesselStatus as BeaconMalfunctionVesselStatus | undefined
         })
       )
@@ -197,9 +192,9 @@ export function BeaconMalfunctionBoard() {
           nextBeaconMalfunction.vesselStatusLastModificationDateTime = new Date().toISOString()
 
           dispatch(
-            // @ts-ignore
             updateBeaconMalfunctionFromKanban(beaconId, nextBeaconMalfunction, {
-              stage: nextBeaconMalfunction.stage
+              stage: nextBeaconMalfunction.stage,
+              vesselStatus: undefined
             })
           )
         }

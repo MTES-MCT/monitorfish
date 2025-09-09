@@ -21,7 +21,7 @@ import type {
 } from '../../types'
 
 const BEACON_CREATION_AT_SEA_OFFSET = 6
-const BEACON_CREATION_AT_PORT_OFFSET = 24
+const BEACON_CREATION_AT_PORT_OFFSET = 60
 
 export const getBeaconCreationDate = (dateLastEmission, status) => {
   switch (status) {

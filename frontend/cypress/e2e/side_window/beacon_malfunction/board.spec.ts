@@ -144,6 +144,7 @@ context('Side Window > Beacon Malfunction Board', () => {
     // Then
     cy.wait('@moveBeaconMalfunctionCardVesselStatus').then(({ request, response }) => {
       expect(request.body.vesselStatus).contains('NO_NEWS')
+      expect(request.body.stage).eq(null)
       expect(response && response.statusCode).equal(200)
     })
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
@@ -274,8 +275,11 @@ context('Side Window > Beacon Malfunction Board', () => {
     // Then
     cy.wait('@moveBeaconMalfunctionCardVesselStatus').then(({ request, response }) => {
       expect(request.body.vesselStatus).contains('AT_SEA')
+      expect(request.body.stage).eq(null)
       expect(response && response.statusCode).equal(200)
     })
+    cy.getDataCy("side-window-beacon-malfunctions-detail-action-content")
+      .contains("Le statut du ticket a été modifié, de Sans nouvelles à Navire en mer.")
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
       .contains('Navire en mer')

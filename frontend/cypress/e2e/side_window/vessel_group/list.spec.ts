@@ -55,7 +55,7 @@ context('Side Window > Vessel Group List', () => {
     /**
      * Open a dynamic vessel group and display vessels
      */
-    cy.get('[title="Mission Thémis – chaluts de fonds"]').contains('86 navires')
+    cy.get('[title="Mission Thémis – chaluts de fonds"]').contains('84 navires')
     cy.get('[title="Mission Thémis – chaluts de fonds"]').click()
     cy.get('[title="Mission Thémis – chaluts de fonds"]').contains(
       'Ciblage pour la mission du Thémis (bordée A) du 08/01 au 17/01/25.'
@@ -65,7 +65,7 @@ context('Side Window > Vessel Group List', () => {
         'blanchiment bar en 7.d.'
     )
     cy.get('[title="Mission Thémis – chaluts de fonds"]').within(() => {
-      cy.get('.Table-SimpleTable tr').should('have.length', 87)
+      cy.get('.Table-SimpleTable tr').should('have.length', 85)
     })
 
     /**

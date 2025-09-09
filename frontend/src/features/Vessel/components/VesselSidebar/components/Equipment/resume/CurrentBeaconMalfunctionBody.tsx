@@ -49,7 +49,7 @@ export function CurrentBeaconMalfunctionBody({
 
     dispatch(
       updateBeaconMalfunctionFromKanban(beaconMalfunction.id, nextBeaconMalfunction, {
-        stage: nextBeaconMalfunction.stage,
+        stage: undefined,
         vesselStatus: nextBeaconMalfunction.vesselStatus
       })
     )

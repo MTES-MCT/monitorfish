@@ -1,4 +1,4 @@
-import { Checkbox, Radio } from '@mtes-mct/monitor-ui'
+import { Checkbox } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 type MenuItemProps = Readonly<{
@@ -10,14 +10,6 @@ type MenuItemProps = Readonly<{
 export function MenuItem({ checked = false, item, tag }: MenuItemProps) {
   const { label } = item
   const labelToDisplay = label
-
-  if (tag === 'Radio') {
-    return (
-      <Radio checked={checked} labelPosition="right" name={labelToDisplay} title={labelToDisplay}>
-        {labelToDisplay}
-      </Radio>
-    )
-  }
 
   if (tag === 'Checkbox') {
     return (

@@ -76,9 +76,9 @@ export function RegulatedGear({
             renderMenuItem={(_, item) => <MenuItem item={item} />}
             searchable={false}
             value={meshType ?? GearMeshSizeEqualityComparator.greaterThan}
-            width={165}
+            width={170}
           />
-          <CustomInput
+          <StyledCustomInput
             $isGray={mesh && mesh[0] !== ''}
             onChange={intervalValue => {
               const nextIntervalValue = mesh ? [...mesh] : []
@@ -129,5 +129,9 @@ export function RegulatedGear({
 const Wrapper = styled.div``
 
 const SecondCustomInput = styled(CustomInput)`
+  margin-left: 10px;
+`
+
+const StyledCustomInput = styled(CustomInput)`
   margin-left: 10px;
 `

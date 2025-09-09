@@ -68,7 +68,12 @@ export function VesselLabelContent({
           {labelText && (
             <>
               {identity.flagState && (
-                <Flag $rel="preload" draggable="false" alt={identity.flagState} src={`flags/${identity.flagState.toLowerCase()}.svg`} />
+                <Flag
+                  $rel="preload"
+                  alt={identity.flagState}
+                  draggable="false"
+                  src={`flags/${identity.flagState.toLowerCase()}.svg`}
+                />
               )}
               <ZoneText
                 data-cy="vessel-label-text"

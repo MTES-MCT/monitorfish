@@ -8,10 +8,12 @@ import { GroupType, Sharing, type VesselGroup } from '@features/VesselGroup/type
 import { deleteVesselGroup } from '@features/VesselGroup/useCases/deleteVesselGroup'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { trackEvent } from '@hooks/useTracking'
 import { Accent, customDayjs, Icon, IconButton, Link, Tag, THEME } from '@mtes-mct/monitor-ui'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from 'styled-components'
 
+import { UserAccountContext } from '../../../../context/UserAccountContext'
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 
 type VesselGroupRowProps = {
@@ -20,6 +22,7 @@ type VesselGroupRowProps = {
 }
 export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProps) {
   const dispatch = useMainAppDispatch()
+  const userAccount = useContext(UserAccountContext)
   const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
   const vesselGroupsIdsPinned = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsPinned)
   const isDisplayed = vesselGroupsIdsDisplayed.includes(vesselGroup.id)
@@ -53,12 +56,22 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
 
   const hideGroup = async event => {
     event.stopPropagation()
+    trackEvent({
+      action: "Masquage d' un groupe de navires depuis la cartographie",
+      category: 'VESSEL_GROUP',
+      name: userAccount?.email ?? ''
+    })
     await dispatch(vesselGroupActions.vesselGroupIdHidden(vesselGroup.id))
     dispatch(renderVesselFeatures())
   }
 
   const showGroup = async event => {
     event.stopPropagation()
+    trackEvent({
+      action: "Affichage d' un groupe de navires depuis la cartographie",
+      category: 'VESSEL_GROUP',
+      name: userAccount?.email ?? ''
+    })
     await dispatch(vesselGroupActions.vesselGroupIdDisplayed(vesselGroup.id))
     dispatch(renderVesselFeatures())
   }

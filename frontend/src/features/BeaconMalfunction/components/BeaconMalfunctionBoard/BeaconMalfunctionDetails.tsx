@@ -229,8 +229,8 @@ const ShowVessel = styled.div`
 const Flag = styled.img`
   cursor: pointer;
   display: inline-block;
-  height: 14;
-  margin-top: 5;
+  height: 14px;
+  margin-top: 5px;
   vertical-align: middle;
 `
 

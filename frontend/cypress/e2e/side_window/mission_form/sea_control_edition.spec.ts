@@ -120,9 +120,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.get('*[data-cy="action-list-item"]').click()
     cy.wait(500)
 
-    cy.intercept('POST', 'bff/v1/fleet_segments/compute').as(
-      'computeFleetSegments'
-    )
+    cy.intercept('POST', 'bff/v1/fleet_segments/compute').as('computeFleetSegments')
     cy.get('input[placeholder="Rechercher un navire..."]').clear().type('phe')
     cy.contains('mark', 'PHE').click()
 
@@ -404,8 +402,9 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     cy.get('input[placeholder="Rechercher un navire..."]').type('pheno').wait(250)
     cy.contains('mark', 'PHENO').click()
-    cy.get('#port').parent().click({ force: true })
-    cy.get('.rs-search-box-input').type('saintmalo{enter}', { force: true })
+    cy.get('input[name="port"]').click({ force: true })
+    cy.get('input[placeholder="Rechercher"]').type('saintmalo{enter}', { force: true })
+
     // Should select the right port
     cy.get('.Field-Select').contains('Saint-Malo (FRSML)')
     cy.fill('Saisi par', 'Marlin')
@@ -425,8 +424,8 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.fill('Etat des données', ['À compléter'])
     cy.get('.Table').find(`.TableBodyRow[data-id="43"]`).clickButton('Éditer la mission')
 
-    cy.get('[id="mission_control_unit_administration_0"]').contains('DREAL')
-    cy.get('[id="mission_control_unit_name_0"]').contains('DREAL Pays-de-La-Loire')
+    cy.get('input[name="mission_control_unit_administration_0"]').should('have.value', 'DREAL')
+    cy.get('input[name="mission_control_unit_name_0"]').should('have.value', 10019)
     cy.clickButton('Supprimer l’action')
     cy.clickButton('Supprimer')
     cy.wait(500)

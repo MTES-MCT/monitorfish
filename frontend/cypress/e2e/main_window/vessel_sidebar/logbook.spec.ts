@@ -214,23 +214,23 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
     cy.get('*[data-cy^="vessel-menu-fishing"]').click()
     cy.get('*[data-cy^="vessel-fishing"]').should('be.visible')
-    cy.get('#tripNumber-describe').contains('Marée n°SRC-TRP-TTT20200506194051795')
+    cy.get('input[name="tripNumber"]').should('have.value', 'SRC-TRP-TTT20200506194051795')
 
     // Then
     cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 10000 })
-    cy.get('#tripNumber-describe').contains('Marée n°20230087')
+    cy.get('input[name="tripNumber"]').should('have.value', '20230087')
 
     cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 10000 })
-    cy.get('#tripNumber-describe').contains('Marée n°20230086')
+    cy.get('input[name="tripNumber"]').should('have.value', '20230086')
 
     cy.get('*[data-cy^="vessel-fishing-next-trip"]').click({ timeout: 10000 })
-    cy.get('#tripNumber-describe').contains('Marée n°20230087')
+    cy.get('input[name="tripNumber"]').should('have.value', '20230087')
 
     cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 10000 })
-    cy.get('#tripNumber-describe').contains('Marée n°20230086')
+    cy.get('input[name="tripNumber"]').should('have.value', '20230086')
 
     cy.get('*[data-cy^="vessel-fishing-last-trip"]').click({ timeout: 10000 })
-    cy.get('#tripNumber-describe').contains('Marée n°SRC-TRP-TTT20200506194051795')
+    cy.get('input[name="tripNumber"]').should('have.value', 'SRC-TRP-TTT20200506194051795')
   })
 
   it('Fishing trips Should be selected from the trips list', () => {
@@ -242,11 +242,12 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
     cy.get('*[data-cy^="vessel-menu-fishing"]').click()
     cy.get('*[data-cy^="vessel-fishing"]').should('be.visible')
-    cy.get('#tripNumber-describe').contains('Marée n°SRC-TRP-TTT20200506194051795')
+    cy.get('input[name="tripNumber"]').should('have.value', 'SRC-TRP-TTT20200506194051795')
 
     cy.fill('Numéro de marée', 'Marée n°20230087')
 
-    cy.get('#tripNumber-describe').contains('Marée n°20230087')
+    cy.get('input[name="tripNumber"]').should('have.value', '20230087')
+
     cy.get('*[data-cy^="vessel-fishing-see-all"]').click()
 
     cy.log('Also in all logbook messages')

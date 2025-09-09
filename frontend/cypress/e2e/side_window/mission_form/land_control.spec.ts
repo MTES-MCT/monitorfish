@@ -45,8 +45,8 @@ context('Side Window > Mission Form > Land Control', () => {
 
     // Port de contrôle
     // Try to select a port with custom search (the "-" missing but the port should be found)
-    cy.get('#port').parent().click({ force: true })
-    cy.get('.rs-search-box-input').type('saintmalo{enter}', { force: true })
+    cy.get('input[name="port"]').click({ force: true })
+    cy.get('input[placeholder="Rechercher"]').type('saintmalo{enter}', { force: true })
     // Should select the right port
     cy.get('.Field-Select').contains('Saint-Malo (FRSML)')
 
@@ -257,9 +257,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Port de contrôle', 'Auray')
 
     // A mission zone should be automatically added
-    cy.get('.Component-Banner').contains(
-      'Une zone de mission a été modifiée à partir des contrôles de la mission'
-    )
+    cy.get('.Component-Banner').contains('Une zone de mission a été modifiée à partir des contrôles de la mission')
     cy.get('*[data-cy="mission-main-form-location"]').should(
       'contain',
       'Actuellement, la zone de mission ' +
@@ -288,9 +286,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Port de contrôle', 'Abu Musa')
 
     // The mission zone should be automatically updated
-    cy.get('.Component-Banner').contains(
-      'Une zone de mission a été modifiée à partir des contrôles de la mission'
-    )
+    cy.get('.Component-Banner').contains('Une zone de mission a été modifiée à partir des contrôles de la mission')
 
     cy.get('*[data-cy="mission-main-form-location"]').should(
       'contain',

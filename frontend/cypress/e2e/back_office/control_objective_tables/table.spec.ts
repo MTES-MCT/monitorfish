@@ -131,7 +131,7 @@ context('BackOffice > Control Objective Tables > Table', () => {
 
   it('Should add an objective', () => {
     // Given
-    cy.get('.rs-table-row').should('have.length', 86)
+    cy.get('.rs-table-row').should('have.length', 85)
     cy.intercept('POST', '/bff/v1/admin/control_objectives').as('addObjective')
     cy.wait(200)
 
@@ -159,7 +159,7 @@ context('BackOffice > Control Objective Tables > Table', () => {
     cy.visit('/backoffice/control_objectives')
     cy.wait('@controlObjectives')
     cy.wait(50)
-    cy.get('.rs-table-row').should('have.length', 87)
+    cy.get('.rs-table-row').should('have.length', 86)
   })
 
   it('Should handle new year as expected', () => {

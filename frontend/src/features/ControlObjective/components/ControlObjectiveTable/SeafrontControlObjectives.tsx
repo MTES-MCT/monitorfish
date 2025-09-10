@@ -6,7 +6,7 @@ import {
   ModifiableCell,
   SegmentCellWithTitle
 } from '@features/Regulation/components/RegulationTables/tableCells'
-import { Select } from '@mtes-mct/monitor-ui'
+import { Label, Select } from '@mtes-mct/monitor-ui'
 import { sortArrayByColumn, SortType } from '@utils/sortArrayByColumn'
 import { useCallback, useEffect, useState } from 'react'
 import { Table } from 'rsuite'
@@ -279,24 +279,28 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
         </Table.Column>
       </Table>
 
-      <Select
-        data-cy="add-control-objective"
-        isTransparent
-        label="Ajouter"
-        name="AddSegment"
-        onChange={segment => setSegmentToAddToFacade(segment ?? undefined)}
-        options={getFleetSegmentsQuery.data
-          .map(segment => ({ label: segment.segment, value: segment.segment }))
-          .filter(
-            segment =>
-              !controlObjectivesWithMaybeFleetSegment.find(facadeSegment => facadeSegment.segment === segment.value)
-          )
-          .sort((a, b) => a.label.localeCompare(b.label))}
-        placeholder="segment"
-        searchable
-        style={{ width: 120 }}
-        value={segmentToAddToFacade}
-      />
+      <AddSegment>
+        <Label>Ajouter</Label>
+        <Select
+          data-cy="add-control-objective"
+          isLabelHidden
+          isTransparent
+          label="Ajouter un objectif"
+          name="AddSegment"
+          onChange={segment => setSegmentToAddToFacade(segment ?? undefined)}
+          options={getFleetSegmentsQuery.data
+            .map(segment => ({ label: segment.segment, value: segment.segment }))
+            .filter(
+              segment =>
+                !controlObjectivesWithMaybeFleetSegment.find(facadeSegment => facadeSegment.segment === segment.value)
+            )
+            .sort((a, b) => a.label.localeCompare(b.label))}
+          placeholder="segment"
+          searchable
+          style={{ width: 120 }}
+          value={segmentToAddToFacade}
+        />
+      </AddSegment>
     </Wrapper>
   )
 }
@@ -305,4 +309,10 @@ const Wrapper = styled.div`
   margin-left: 40px;
   margin-top: 10px;
   margin-bottom: 10px;
+`
+
+const AddSegment = styled.div`
+  align-items: center;
+  display: inline-flex;
+  gap: 8px;
 `

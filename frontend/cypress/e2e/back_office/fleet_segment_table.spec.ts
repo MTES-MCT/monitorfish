@@ -184,7 +184,7 @@ context('BackOffice > Fleet Segments Table', () => {
     cy.get('[role="row"]').should('have.length', 68)
 
     // When
-    cy.fill('Année', `${yearToAdd}`)
+    cy.fill("l'année", `${yearToAdd}`)
 
     // Then
     cy.get('input[name="fleet-segments-select-year"]').should('have.value', `${yearToAdd}`)

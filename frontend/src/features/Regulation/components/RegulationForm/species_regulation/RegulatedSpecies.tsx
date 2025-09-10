@@ -11,11 +11,7 @@ import {
 } from '../../../../commonStyles/Backoffice.style'
 import { GreenCircle, RedCircle } from '../../../../commonStyles/Circle.style'
 import { CustomInput, Label } from '../../../../commonStyles/Input.style'
-import {
-  DEFAULT_AUTHORIZED_REGULATED_SPECIES,
-  DEFAULT_MENU_CLASSNAME,
-  DEFAULT_UNAUTHORIZED_REGULATED_SPECIES
-} from '../../../utils'
+import { DEFAULT_AUTHORIZED_REGULATED_SPECIES, DEFAULT_UNAUTHORIZED_REGULATED_SPECIES } from '../../../utils'
 import { CustomSelectComponent } from '../custom_form/CustomSelectComponent'
 import { MenuItem } from '../custom_form/MenuItem'
 import { Tag } from '../Tag'
@@ -171,30 +167,32 @@ export function RegulatedSpecies({
         )}
         <ContentLine>
           <CustomSelectComponent
-            data={formattedSpeciesGroups}
             disabled={!!controlledRegulatedSpecies.allSpecies}
             emptyMessage="Aucune catégorie"
-            menuClassName={DEFAULT_MENU_CLASSNAME}
-            menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
+            label="Catégorie d'espèces"
+            name="speciesGroups"
             onChange={onSpeciesGroupChange}
+            options={formattedSpeciesGroups}
             placeholder={DEFAULT_SPECIES_CATEGORY_VALUE}
             renderMenuItem={(_label, item) => (
               <MenuItem checked={speciesGroups?.includes(item.value)} item={item} tag="Checkbox" />
             )}
             searchable
             value={DEFAULT_SPECIES_CATEGORY_VALUE}
+            virtualized
+            width={280}
           />
         </ContentLine>
         <ContentLine>
           {formattedSpecies?.length ? (
             <CustomSelectComponent
-              data={formattedSpecies}
               dataCy={`${dataCyTarget}-species-selector`}
               disabled={!!controlledRegulatedSpecies.allSpecies}
               emptyMessage="Aucune espèce"
-              menuClassName={DEFAULT_MENU_CLASSNAME}
-              menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
+              label="Espèce"
+              name="species"
               onChange={onSpeciesChange}
+              options={formattedSpecies}
               placeholder={DEFAULT_SPECIES_VALUE}
               renderMenuItem={(_label, item) => (
                 <MenuItem
@@ -205,6 +203,8 @@ export function RegulatedSpecies({
               )}
               searchable
               value={DEFAULT_SPECIES_VALUE}
+              virtualized
+              width={280}
             />
           ) : null}
         </ContentLine>

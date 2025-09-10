@@ -41,6 +41,7 @@ export function RegulationTopicLine({ isDisabled }) {
         <Label>Thématique de la zone</Label>
         <StyledSelect
           key={JSON.stringify(layerTypeList)}
+          data-cy="regulation-topic-select"
           disabled={isDisabled || isAddTopicClicked}
           error={topic ? undefined : 'Thématique requise.'}
           isErrorMessageHidden

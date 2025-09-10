@@ -246,7 +246,7 @@ context('Side Window > Beacon Malfunction Board', () => {
           `&IRCS=CALLME&trackDepth=CUSTOM&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER`
       )
     ).as('showVesselPositionsOnMap')
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-show-vessel"]').click()
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-show-vessel"]').click({ force: true })
     cy.wait('@showVesselPositionsOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))
   })
 
@@ -278,8 +278,9 @@ context('Side Window > Beacon Malfunction Board', () => {
       expect(request.body.stage).eq(null)
       expect(response && response.statusCode).equal(200)
     })
-    cy.getDataCy("side-window-beacon-malfunctions-detail-action-content")
-      .contains("Le statut du ticket a été modifié, de Sans nouvelles à Navire en mer.")
+    cy.getDataCy('side-window-beacon-malfunctions-detail-action-content').contains(
+      'Le statut du ticket a été modifié, de Sans nouvelles à Navire en mer.'
+    )
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
       .contains('Navire en mer')
@@ -382,7 +383,7 @@ context('Side Window > Beacon Malfunction Board', () => {
 
     // When
     // Click on send notification select menu
-    cy.fill("Envoyer un message", "Relance pour avarie en mer")
+    cy.fill('Envoyer un message', 'Relance pour avarie en mer')
 
     // Then
     cy.get('*[data-cy="side-window-beacon-malfunctions-sending-notification"]').contains(
@@ -403,7 +404,7 @@ context('Side Window > Beacon Malfunction Board', () => {
 
     // When
     // Click on send notification select menu
-    cy.fill("Envoyer un message", "Notification à un FMC étranger")
+    cy.fill('Envoyer un message', 'Notification à un FMC étranger')
     cy.fill('Choisir la nationalité du FMC', 'ABC')
 
     // Then

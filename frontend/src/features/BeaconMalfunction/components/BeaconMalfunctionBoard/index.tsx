@@ -232,11 +232,7 @@ export function BeaconMalfunctionBoard() {
         />
         <VesselStatusSelectWrapper ref={vesselStatusSelectRef}>
           <VesselStatusSelect
-            beaconMalfunction={undefined}
-            domRef={vesselStatusSelectRef}
-            isAbsolute={false}
             isCleanable
-            marginTop={-35}
             updateVesselStatus={(_, status) =>
               setFilteredVesselStatus(VESSEL_STATUS.find(statusObject => statusObject.value === status))
             }

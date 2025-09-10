@@ -59,11 +59,11 @@ context('BackOffice > Fleet Segments Table', () => {
         faoAreas: ['21.0.A'],
         gears: ['DRM', 'FAG'],
         impactRiskFactor: 1.2,
-        minMesh: 50,
         maxMesh: 100,
+        minMesh: 50,
         segment: 'ATL0036',
         segmentName: 'All Trawls 45',
-        targetSpecies: ['COD'],
+        targetSpecies: ['COD']
       })
     })
 
@@ -107,10 +107,10 @@ context('BackOffice > Fleet Segments Table', () => {
     cy.fill('Zones FAO', ['21.1.A', '21.1.B'])
     cy.fill('Maillage min.', 50)
     cy.fill('Maillage max.', 100)
-    cy.fill('Type espèce SCIP', "DEMERSAL")
+    cy.fill('Type espèce SCIP', 'DEMERSAL')
     cy.fill('Espèces ciblées', ['COD', 'SOL'])
     cy.fill('Pourcent. min. espèces', 0.2)
-    cy.fill('Types de navires', ["Chalutier pêche arrière - congélateur"])
+    cy.fill('Types de navires', ['Chalutier pêche arrière - congélateur'])
     cy.fill('Priorité', 2)
 
     cy.clickButton('Ajouter')
@@ -164,7 +164,7 @@ context('BackOffice > Fleet Segments Table', () => {
   })
 
   it('Should show previous year fleet segments', () => {
-    cy.get('[id="fleet-segments-select-year-describe"]').contains(currentYear)
+    cy.get('input[name="fleet-segments-select-year"]').should('have.value', `${currentYear}`)
     cy.get('[role="row"]').should('have.length', 68)
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear - 1}`).as('fleetSegments')
 
@@ -172,21 +172,22 @@ context('BackOffice > Fleet Segments Table', () => {
     cy.fill('Année', `${currentYear - 1}`)
 
     // Then
-    cy.get('[id="fleet-segments-select-year-describe"]').contains(currentYear - 1)
+    cy.get('input[name="fleet-segments-select-year"]').should('have.value', `${currentYear - 1}`)
     cy.get('[role="row"]').should('have.length', 44)
   })
 
   it('Should add a new year based on current year', () => {
     // Given
     const yearToAdd = currentYear - 9
-    cy.get('[id="fleet-segments-select-year-describe"]').contains(currentYear)
+    cy.get('input[name="fleet-segments-select-year"]').should('have.value', `${currentYear}`)
+
     cy.get('[role="row"]').should('have.length', 68)
 
     // When
     cy.fill("l'année", `${yearToAdd}`)
 
     // Then
-    cy.get('[id="fleet-segments-select-year-describe"]').contains(yearToAdd)
+    cy.get('input[name="fleet-segments-select-year"]').should('have.value', `${yearToAdd}`)
     cy.get('[role="row"]').should('have.length', 68)
   })
 })

@@ -1,18 +1,19 @@
 import { BackOfficeTitle } from '@features/BackOffice/components/BackOfficeTitle'
 import {
-  ControlPriorityCell,
   DeleteCell,
   ImpactRiskFactorCell,
   INPUT_TYPE,
   ModifiableCell,
   SegmentCellWithTitle
 } from '@features/Regulation/components/RegulationTables/tableCells'
+import { Label, Select } from '@mtes-mct/monitor-ui'
 import { sortArrayByColumn, SortType } from '@utils/sortArrayByColumn'
 import { useCallback, useEffect, useState } from 'react'
-import { SelectPicker, Table } from 'rsuite'
+import { Table } from 'rsuite'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { ControlPriorityCell } from './ControlPriorityCell'
 import { LoadingSpinnerWall } from '../../../../ui/LoadingSpinnerWall'
 import { useGetFleetSegmentsQuery } from '../../../FleetSegment/apis'
 import {
@@ -277,22 +278,26 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
           <DeleteCell dataKey="id" id="id" onClick={deleteControlObjectiveRow} />
         </Table.Column>
       </Table>
+
       <AddSegment>
-        Ajouter
-        <SelectPicker
-          data={getFleetSegmentsQuery.data
+        <Label>Ajouter</Label>
+        <Select
+          data-cy="add-control-objective"
+          isLabelHidden
+          isTransparent
+          label="Ajouter un objectif"
+          name="AddSegment"
+          onChange={segment => setSegmentToAddToFacade(segment ?? undefined)}
+          options={getFleetSegmentsQuery.data
             .map(segment => ({ label: segment.segment, value: segment.segment }))
             .filter(
               segment =>
                 !controlObjectivesWithMaybeFleetSegment.find(facadeSegment => facadeSegment.segment === segment.value)
             )
-            .sort((a, b) => sortArrayByColumn(a, b, 'label', 'asc'))}
-          data-cy="add-control-objective"
-          onChange={segment => setSegmentToAddToFacade(segment ?? undefined)}
+            .sort((a, b) => a.label.localeCompare(b.label))}
           placeholder="segment"
-          placement="auto"
           searchable
-          style={{ margin: '0px 10px 10px 10px', width: 70 }}
+          style={{ width: 120 }}
           value={segmentToAddToFacade}
         />
       </AddSegment>
@@ -300,21 +305,14 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
   )
 }
 
-const AddSegment = styled.div`
-  color: ${p => p.theme.color.gunMetal};
-  line-height: 10px;
-  margin-left: 5px;
-  margin-top: -10px;
-  text-align: left;
-  width: fit-content;
-`
-
 const Wrapper = styled.div`
   margin-left: 40px;
   margin-top: 10px;
   margin-bottom: 10px;
+`
 
-  * {
-    box-sizing: revert;
-  }
+const AddSegment = styled.div`
+  align-items: center;
+  display: inline-flex;
+  gap: 8px;
 `

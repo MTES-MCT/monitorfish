@@ -18,6 +18,34 @@ type RegulatedGearProps = Readonly<{
   onCloseIconClicked: (tagValue: string) => void
   remarks: string | undefined
 }>
+
+const options = [
+  {
+    label: 'supérieur à',
+    value: GearMeshSizeEqualityComparator.greaterThan
+  },
+  {
+    label: 'supérieur ou égal à',
+    value: GearMeshSizeEqualityComparator.greaterThanOrEqualTo
+  },
+  {
+    label: 'inférieur à',
+    value: GearMeshSizeEqualityComparator.lowerThan
+  },
+  {
+    label: 'inférieur ou égal à',
+    value: GearMeshSizeEqualityComparator.lowerThanOrEqualTo
+  },
+  {
+    label: 'égal à',
+    value: GearMeshSizeEqualityComparator.equal
+  },
+  {
+    label: 'entre',
+    value: GearMeshSizeEqualityComparator.between
+  }
+]
+
 export function RegulatedGear({
   allowMesh,
   code,
@@ -41,40 +69,16 @@ export function RegulatedGear({
           <Label data-cy="mesh-label">Maillage</Label>
           <CustomSelectComponent
             cleanable={false}
-            data={[
-              {
-                label: 'supérieur à',
-                value: GearMeshSizeEqualityComparator.greaterThan
-              },
-              {
-                label: 'supérieur ou égal à',
-                value: GearMeshSizeEqualityComparator.greaterThanOrEqualTo
-              },
-              {
-                label: 'inférieur à',
-                value: GearMeshSizeEqualityComparator.lowerThan
-              },
-              {
-                label: 'inférieur ou égal à',
-                value: GearMeshSizeEqualityComparator.lowerThanOrEqualTo
-              },
-              {
-                label: 'égal à',
-                value: GearMeshSizeEqualityComparator.equal
-              },
-              {
-                label: 'entre',
-                value: GearMeshSizeEqualityComparator.between
-              }
-            ]}
+            label="Type de maillage"
+            name="meshType"
             onChange={value => onChange('meshType', value)}
+            options={options}
             renderMenuItem={(_, item) => <MenuItem item={item} />}
             searchable={false}
             value={meshType ?? GearMeshSizeEqualityComparator.greaterThan}
-            valueIsMissing={false}
-            width={165}
+            width={170}
           />
-          <CustomInput
+          <StyledCustomInput
             $isGray={mesh && mesh[0] !== ''}
             onChange={intervalValue => {
               const nextIntervalValue = mesh ? [...mesh] : []
@@ -122,12 +126,12 @@ export function RegulatedGear({
   )
 }
 
-const Wrapper = styled.div`
-  .rs-picker-toggle {
-    width: 120px;
-  }
-`
+const Wrapper = styled.div``
 
 const SecondCustomInput = styled(CustomInput)`
+  margin-left: 10px;
+`
+
+const StyledCustomInput = styled(CustomInput)`
   margin-left: 10px;
 `

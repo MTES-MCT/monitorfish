@@ -3,7 +3,7 @@
 
 import { Accent, Icon, IconButton, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, type ChangeEvent } from 'react'
-import { SelectPicker, Table } from 'rsuite'
+import { Table } from 'rsuite'
 import styled from 'styled-components'
 
 import { getRiskFactorColor } from '@features/RiskFactor/utils'
@@ -141,34 +141,6 @@ export function FleetSegmentInput({
   )
 }
 
-export function ControlPriorityCell({ dataKey, onChange, ...props }) {
-  const { rowData } = props
-  const dataCy = `row-${rowData.id}-${dataKey}`
-
-  return (
-    <Cell key={rowData.id} {...props} className="table-content-editing">
-      <SelectPicker
-        cleanable={false}
-        data={[
-          { label: 1, value: 1 },
-          { label: 2, value: 2 },
-          { label: 3, value: 3 },
-          { label: 4, value: 4 }
-        ]}
-        data-cy={dataCy}
-        onChange={value => {
-          const controlPriority = value && !isNaN(parseInt(value)) ? parseInt(value) : ''
-          onChange && onChange(rowData.id, dataKey, controlPriority)
-        }}
-        searchable={false}
-        size="xs"
-        style={{ width: 20 }}
-        value={rowData[dataKey]}
-      />
-    </Cell>
-  )
-}
-
 type SegmentCellWithTitleProps = Readonly<
   Omit<InnerCellProps<any, any>, 'rowData'> &
     React.RefAttributes<HTMLDivElement> & {
@@ -198,9 +170,7 @@ type RiskFactorCellProps = Readonly<
 export function ImpactRiskFactorCell({ expandedRowKeys, onChange, rowData, ...props }: RiskFactorCellProps) {
   return (
     <Cell {...props} style={{ marginLeft: 13 }}>
-      <RiskFactorBox color={getRiskFactorColor(rowData.impactRiskFactor)}>
-        {rowData.impactRiskFactor}
-      </RiskFactorBox>
+      <RiskFactorBox color={getRiskFactorColor(rowData.impactRiskFactor)}>{rowData.impactRiskFactor}</RiskFactorBox>
     </Cell>
   )
 }

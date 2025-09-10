@@ -137,7 +137,7 @@ context('BackOffice > Control Objective Tables > Table', () => {
 
     // When
     cy.get('*[data-cy="add-control-objective"]').eq(0).click()
-    cy.get('[data-key="FR_DRB"] > .rs-picker-select-menu-item').click()
+    cy.get('[data-key="FR_DRB"]').click({ force: true })
     cy.wait('@addObjective')
 
     // Then

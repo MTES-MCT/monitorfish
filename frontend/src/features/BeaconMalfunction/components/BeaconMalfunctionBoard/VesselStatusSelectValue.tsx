@@ -1,28 +1,26 @@
 import styled from 'styled-components'
 
-export function VesselStatusSelectValue({ item }) {
+export function VesselStatusSelectValue({ item, textColor }) {
   const { icon } = item
 
   return (
-    <Value data-cy="side-window-beacon-malfunctions-vessel-status" style={valueStyle}>
-      {icon}
-      <Text style={textStyle}>{item.label}</Text>
+    <Value data-cy="side-window-beacon-malfunctions-vessel-status" textColor={textColor}>
+      <div>{icon}</div>
+      <Text title={item.label}>{item.label}</Text>
     </Value>
   )
 }
 
-const Value = styled.div`
+const Value = styled.div<{ textColor: string }>`
   align-items: center;
+  color: ${p => p.textColor} !important;
   display: flex;
-  height: 22px;
 `
-const valueStyle = {
-  color: '#282F3E'
-}
 
 const Text = styled.span`
-  line-height: 1;
+  margin-left: 5px;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
-const textStyle = {
-  marginLeft: 5
-}

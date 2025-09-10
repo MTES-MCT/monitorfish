@@ -937,7 +937,9 @@ def test_flow(reset_test_data):
         with patch("src.helpers.emails.send_fax", mock_send_fax):
             with patch("src.helpers.emails.send_sms", mock_send_sms):
                 with patch("src.helpers.emails.send_email", mock_send_email):
-                    return send_beacon_malfunction_message(msg_to_send, is_integration)
+                    return send_beacon_malfunction_message.fn(
+                        msg_to_send, is_integration
+                    )
 
     state = notify_beacon_malfunctions_flow(
         test_mode=False,

@@ -6,6 +6,9 @@ CREATE TABLE public.position_alerts (
     natinf_code INTEGER NOT NULL,
     is_activated BOOLEAN NOT NULL DEFAULT true,
     is_in_error BOOLEAN NOT NULL DEFAULT false,
+    is_deleted BOOLEAN NOT NULL DEFAULT false,
+    created_by TEXT NOT NULL,
+    created_at_utc TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     error_reason TEXT,
     -- the alert is valid at all times if both start and end validity dates are NULL
     validity_start_datetime_utc TIMESTAMP WITHOUT TIME ZONE,
@@ -29,7 +32,7 @@ CREATE TABLE public.position_alerts (
             repeat_each_year AND (
                 validity_start_datetime_utc IS NULL OR
                 validity_end_datetime_utc IS NULL OR
-                validity_start_datetime_utc > validity_end_datetime_utc            
+                validity_start_datetime_utc > validity_end_datetime_utc
             )
         )
     )

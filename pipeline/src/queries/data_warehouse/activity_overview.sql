@@ -11,7 +11,9 @@ WITH t AS (
         landing_port_longitude,
         landing_port_latitude,
         SUM(weight) AS weight_
-    FROM monitorfish.enriched_catches
+    FROM monitorfish.enriched_catches c
+    LEFT JOIN monitorfish.vessels v
+    ON v.cfr = c.cfr
     WHERE 
         far_datetime_utc >= {from_datetime_utc:DateTime} AND
         far_datetime_utc < {to_datetime_utc:DateTime} AND
@@ -19,7 +21,8 @@ WITH t AS (
         latitude IS NOT NULL AND
         landing_port_longitude IS NOT NULL AND
         landing_port_latitude IS NOT NULL AND
-        weight IS NOT NULL
+        weight IS NOT NULL AND
+        weight < COALESCE(1300 * NULLIF(v.power, 0), 1000000)
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 )
 

@@ -5,7 +5,7 @@ from src.read_query import read_query
 from tests.mocks import get_utcnow_mock_factory
 
 
-def test_flow(reset_test_data, add_enriched_catches):
+def test_flow(reset_test_data, add_enriched_catches, add_vessels):
     get_utcnow_mock = get_utcnow_mock_factory(datetime(2050, 8, 19, 11, 14))
     state = activity_visualizations_flow(
         start_months_ago=12,

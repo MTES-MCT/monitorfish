@@ -1,8 +1,9 @@
 import pandas as pd
+from dotenv import get_key
 from pytest import fixture
 
-from config import TEST_DATA_LOCATION
-from src.db_config import create_datawarehouse_client
+from config import DOTENV_PATH, TEST_DATA_LOCATION
+from src.db_config import create_datawarehouse_client, db_env
 
 
 @fixture
@@ -13,6 +14,54 @@ def add_monitorfish_database():
     yield
     print("Dropping monitorfish database")
     client.command("DROP DATABASE monitorfish")
+
+
+@fixture
+def add_monitorfish_proxy_database(add_monitorfish_database):
+    client = create_datawarehouse_client()
+    print("Creating monitorfish_proxy database")
+
+    client.command("DROP DATABASE IF EXISTS monitorfish_proxy")
+    host = get_key(DOTENV_PATH, db_env["monitorfish_remote"]["host"])
+    port = get_key(DOTENV_PATH, db_env["monitorfish_remote"]["port"])
+    sid = get_key(DOTENV_PATH, db_env["monitorfish_remote"]["sid"])
+    usr = get_key(DOTENV_PATH, db_env["monitorfish_remote"]["usr"])
+    pwd = get_key(DOTENV_PATH, db_env["monitorfish_remote"]["pwd"])
+    schema = "public"
+
+    sql = f"""
+        CREATE DATABASE monitorfish_proxy
+        ENGINE = PostgreSQL(
+            '{host}:{port}',
+            '{sid}',
+            '{usr}',
+            '{pwd}',
+            '{schema}'
+        )
+    """
+
+    client.command(sql)
+    yield
+    print("Dropping monitorfish_proxy database")
+    client.command("DROP DATABASE monitorfish_proxy")
+
+
+@fixture
+def add_vessels(add_monitorfish_proxy_database):
+    client = create_datawarehouse_client()
+    print("Creating monitorfish.vessels table")
+    client.command(
+        """
+        CREATE TABLE monitorfish.vessels
+        ENGINE MergeTree
+        ORDER BY id
+        AS
+        SELECT * FROM monitorfish_proxy.vessels
+    """
+    )
+    yield
+    print("Dropping monitorfish.vessels table")
+    client.command("DROP TABLE monitorfish.vessels")
 
 
 @fixture

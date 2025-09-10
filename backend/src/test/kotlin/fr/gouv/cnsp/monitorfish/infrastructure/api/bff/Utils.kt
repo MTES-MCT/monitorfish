@@ -1,12 +1,76 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.AdministrativeAreaSpecification
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.AdministrativeAreaType
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.GearSpecification
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PositionAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.RegulatoryAreaSpecification
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SpeciesSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import kotlinx.coroutines.runBlocking
 import org.mockito.BDDMockito
+import java.time.ZonedDateTime
 
 fun <T> givenSuspended(block: suspend () -> T) = BDDMockito.given(runBlocking { block() })!!
 
 object TestUtils {
+    val DUMMY_POSITION_ALERT =
+        PositionAlert(
+            id = 1,
+            name = "Chalutage dans les 3 milles",
+            description =
+                """
+                _Sur les 8 dernières heures_\n\nPour tous les navires en
+                pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur
+                marée, ou n'ayant pas encore fait de FAR.
+                """.trimIndent(),
+            isUserDefined = false,
+            natinfCode = 7059,
+            isActivated = true,
+            isInError = false,
+            isDeleted = false,
+            errorReason = null,
+            validityStartDatetimeUtc = null,
+            validityEndDatetimeUtc = null,
+            repeatEachYear = false,
+            trackAnalysisDepth = 8.0,
+            onlyFishingPositions = true,
+            gears =
+                listOf(
+                    GearSpecification("OTB", null, null),
+                    GearSpecification("OTM", 80.0, 120.0),
+                    GearSpecification("PTB", null, null),
+                ),
+            species =
+                listOf(
+                    SpeciesSpecification("HKE", 500.0),
+                    SpeciesSpecification("SOL", null),
+                ),
+            speciesCatchAreas = listOf("27.7.e", "27.8.a"),
+            administrativeAreas =
+                listOf(
+                    AdministrativeAreaSpecification(
+                        areas = listOf("0-3"),
+                        areaType = AdministrativeAreaType.DISTANCE_TO_SHORE,
+                    ),
+                ),
+            regulatoryAreas =
+                listOf(
+                    RegulatoryAreaSpecification(
+                        lawType = "Reg. RTC",
+                        topic = null,
+                        zone = null,
+                    ),
+                ),
+            minDepth = null,
+            flagStatesIso2 = listOf("FR", "ES"),
+            vesselIds = listOf(1, 2, 3),
+            districtCodes = listOf("CC", "BR"),
+            producerOrganizations = listOf("SA THO AN"),
+            createdBy = "user@example.gouv.fr",
+            createdAtUtc = ZonedDateTime.now(),
+        )
+
     val DUMMY_VESSEL_PROFILE =
         VesselProfile(
             cfr = "BEL010331976",

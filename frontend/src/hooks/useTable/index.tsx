@@ -13,14 +13,7 @@ import type { CollectionItem } from '../../types'
 /** @deprecated Use `useReactTable` from @tanstack/react-table instead. */
 export function useTable<T extends CollectionItem = CollectionItem>(
   maybeRawData: T[] | undefined,
-  {
-    columns,
-    defaultSortedKey,
-    isCheckable,
-    isDefaultSortingDesc,
-    searchableKeys = [],
-    searchFuseOptions = {}
-  }: TableOptions<T>,
+  { columns, defaultSortedKey, isDefaultSortingDesc, searchableKeys = [], searchFuseOptions = {} }: TableOptions<T>,
   filterFunctions: FilterFunction<T>[],
   searchQuery?: string
 ) {
@@ -185,17 +178,9 @@ export function useTable<T extends CollectionItem = CollectionItem>(
 
   const renderTableHead = useCallback(
     () => (
-      <TableHead
-        columns={columns as any}
-        isAllChecked={isAllChecked}
-        isCheckable={isCheckable}
-        isSortingDesc={isSortingDesc}
-        onAllCheckChange={toggleCheckAll}
-        onSort={sortColumn}
-        sortingKey={sortingKey}
-      />
+      <TableHead columns={columns as any} isSortingDesc={isSortingDesc} onSort={sortColumn} sortingKey={sortingKey} />
     ),
-    [columns, toggleCheckAll, isAllChecked, isCheckable, isSortingDesc, sortColumn, sortingKey]
+    [columns, isSortingDesc, sortColumn, sortingKey]
   )
 
   const toggleTableCheckForId = useCallback(

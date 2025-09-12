@@ -38,7 +38,6 @@ export type TableColumn<T extends Record<string, any> = Record<string, any>> = {
 export type TableOptions<T extends CollectionItem> = {
   columns: TableColumn<T>[]
   defaultSortedKey?: string
-  isCheckable?: boolean
   isDefaultSortingDesc?: boolean
   searchFuseOptions?: IFuseOptions<TableItem<T>>
   searchQuery?: string

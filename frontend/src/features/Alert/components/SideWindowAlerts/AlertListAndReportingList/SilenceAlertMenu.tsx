@@ -1,4 +1,3 @@
-import { DATE_RANGE_PICKER_LOCALE } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/DateRange'
 import { useClickOutsideWhenOpenedWithinRef } from '@hooks/useClickOutsideWhenOpenedWithinRef'
 import { useForceUpdate } from '@hooks/useForceUpdate'
 import { THEME } from '@mtes-mct/monitor-ui'
@@ -12,6 +11,20 @@ import { SilencedAlertPeriod } from '../../../constants'
 import type { PendingAlert, SilencedAlertPeriodRequest } from '../../../types'
 import type { CSSProperties, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
+
+const DATE_RANGE_PICKER_LOCALE = {
+  friday: 'Ve',
+  last7Days: '7 derniers jours',
+  monday: 'Lu',
+  ok: 'OK',
+  saturday: 'Sa',
+  sunday: 'Di',
+  thursday: 'Je',
+  today: "Aujourd'hui",
+  tuesday: 'Ma',
+  wednesday: 'Me',
+  yesterday: 'Hier'
+}
 
 export type SilenceAlertMenuProps = {
   baseRef: any

@@ -11,8 +11,8 @@ import { BaseMap } from './BaseMap'
 import { ControlOverlay } from './ControlOverlay'
 import { LayerDetailsBox } from './LayerDetailsBox'
 import MapHistory from './MapHistory'
-import { MapMenu } from './MapMenu'
 import { MapVesselClickAndAnimationHandler } from './MapVesselClickAndAnimationHandler'
+import { RightClickMapMenu } from './RightClickMapMenu'
 import { SelectedControlOverlay } from './SelectedControlOverlay'
 import { TrackTypeOverlay } from './TrackTypeOverlay'
 import VesselTrackOverlay from './VesselTrackOverlay'
@@ -110,7 +110,7 @@ export function MainMap() {
         setShouldUpdateView={setShouldUpdateView}
         shouldUpdateView={shouldUpdateView}
       />
-      <MapMenu />
+      <RightClickMapMenu />
       <MeasurementLayer />
       <FilterLayer />
 

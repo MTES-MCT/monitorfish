@@ -5,14 +5,14 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Point } from 'ol/geom'
 import { useEffect, useRef, useState } from 'react'
 
-import { monitorfishMap } from '../monitorfishMap'
-import MapMenuOverlay from './MapMenuOverlay'
 import { vesselSelectors } from '../../Vessel/slice'
 import { LayerProperties } from '../constants'
+import { monitorfishMap } from '../monitorfishMap'
+import { RightClickMapMenuOverlay } from './RightClickMapMenuOverlay'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
-export function MapMenu() {
+export function RightClickMapMenu() {
   const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
   const [coordinates, setCoordinates] = useState<number[]>([])
   const vessel = useRef<Vessel.ActiveVesselEmittingPosition | undefined>()
@@ -52,7 +52,7 @@ export function MapMenu() {
 
   return (
     <>
-      <MapMenuOverlay coordinates={coordinates} vessel={vessel.current} />
+      <RightClickMapMenuOverlay coordinates={coordinates} vessel={vessel.current} />
     </>
   )
 }

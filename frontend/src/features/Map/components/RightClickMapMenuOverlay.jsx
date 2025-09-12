@@ -176,7 +176,7 @@ export function RightClickMapMenuOverlay({ coordinates, vessel }) {
                           2 semaines
                         </Menu>
                         <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_MONTH)}>
-                          1 moiss
+                          1 mois
                         </Menu>
                         <Menu
                           $withPadding

@@ -2,10 +2,9 @@ import { COLORS } from '@constants/constants'
 import { useListenForScroll } from '@hooks/useListenForScroll'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { customDayjs } from '@mtes-mct/monitor-ui'
+import { customDayjs, Toggle } from '@mtes-mct/monitor-ui'
 import { pushToObjectAtIndex } from '@utils/pushToObjectAtIndex'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Toggle } from 'rsuite'
 import styled from 'styled-components'
 
 import { BeaconMalfunctionDetailsFollowUpItem } from './BeaconMalfunctionDetailsFollowUpItem'
@@ -215,8 +214,10 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
             Équipe SIP
             <Toggle
               checked={userType === UserType.OPS}
+              isLabelHidden
+              label="Équipe OPS / SIP"
+              name="user-type-toggle"
               onChange={checked => dispatch(setUserType(checked ? UserType.OPS : UserType.SIP))}
-              size="sm"
             />
             Équipe OPS
             <SubmitComment

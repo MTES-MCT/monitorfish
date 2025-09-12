@@ -137,11 +137,11 @@ export function RiskFactorResume() {
             </SubRisk>
             <DetectabilityRiskFactorDetails isOpen={detectabilityRiskFactorIsOpen} />
           </RiskFactorZone>
-          <RiskFactorExplanationModal isOpen={riskFactorExplanationIsOpen} setIsOpen={setRiskFactorExplanationIsOpen} />
         </>
       ) : (
         <NoRiskFactor>Ce navire n&apos;a pas de note de risque</NoRiskFactor>
       )}
+      {riskFactorExplanationIsOpen && <RiskFactorExplanationModal setIsOpen={setRiskFactorExplanationIsOpen} />}
     </>
   )
 }

@@ -11,7 +11,6 @@ import styled from 'styled-components'
 
 import { PendingAlertRow } from './PendingAlertRow'
 import { SilenceAlertMenu } from './SilenceAlertMenu'
-import { getAlertNameFromType } from './utils'
 import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../constants'
 import { AdditionalSubMenu, SUB_MENU_LABEL } from '../constants'
 import { resetFocusOnPendingAlert, setSubMenu } from '../slice'
@@ -56,16 +55,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
     () =>
       new CustomSearch(
         currentSeafrontAlerts,
-        [
-          'vesselName',
-          'internalReferenceNumber',
-          'externalReferenceNumber',
-          'ircs',
-          {
-            getFn: alert => getAlertNameFromType(alert.value.type),
-            name: ['value', 'type']
-          }
-        ],
+        ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs', 'value.name'],
         { threshold: 0.4 }
       ),
     [currentSeafrontAlerts]

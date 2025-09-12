@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
@@ -177,7 +177,7 @@ class JpaReportingRepository(
         dbReportingRepository.archiveReporting(id)
     }
 
-    override fun findUnarchivedReportingsAfterNewVoyage(): List<Pair<Int, AlertType>> =
+    override fun findUnarchivedReportingsAfterNewVoyage(): List<Pair<Int, Alert>> =
         dbReportingRepository.findAllUnarchivedAfterDEPLogbookMessage().map { result ->
             Pair(
                 result[0] as Int,
@@ -185,7 +185,7 @@ class JpaReportingRepository(
                     mapper,
                     result[1] as String?,
                     ReportingType.ALERT,
-                ) as AlertType,
+                ) as Alert,
             )
         }
 

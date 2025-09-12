@@ -489,6 +489,8 @@ def risk_factors() -> pd.DataFrame:
                 None,
                 None,
             ],
+            "last_control_at_sea_datetime_utc": [None] * 9,
+            "last_control_at_quay_datetime_utc": [None] * 9,
         }
     )
 

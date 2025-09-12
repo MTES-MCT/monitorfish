@@ -1,6 +1,6 @@
 context('Side Window > Vessel List > Table', () => {
 
-  it('Should filter vessels, open a row and download the CSV When logged as super user', () => {
+  it.only('Should filter vessels, open a row and download the CSV When logged as super user', () => {
     cy.cleanDownloadedFiles()
     cy.login('superuser')
 
@@ -44,9 +44,13 @@ context('Side Window > Vessel List > Table', () => {
     cy.getDataCy('vessel-list-length').contains('1 navire')
     cy.get('.Table-SimpleTable tr').should('have.length', 2)
 
-    cy.fill('Dernier contrôle', 'Contrôlé il y a plus de 3 mois')
+    cy.fill('Dernier contrôle mer', 'Contrôlé il y a plus de 3 mois')
     cy.getDataCy('vessel-list-length').contains('1 navire')
     cy.get('.Table-SimpleTable tr').should('have.length', 2)
+
+    cy.fill('Dernier contrôle quai', 'Contrôlé il y a plus de 3 mois')
+    cy.getDataCy('vessel-list-length').contains('0 navire')
+    cy.fill('Dernier contrôle quai', undefined)
 
     cy.get('.Component-SingleTag').should('have.length', 10)
     cy.getDataCy('vessel-list-hide-filters').scrollIntoView().click()

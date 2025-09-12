@@ -159,7 +159,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(firstResultRiskFactors).hasSize(firstResult.size)
         assertThat(
             firstResultRiskFactors.all {
-                it.lastControlDatetime!!.isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
+                it.lastControlDateTime!!.isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isTrue()
 
@@ -180,7 +180,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(secondResultRiskFactors).hasSize(secondResult.size)
         assertThat(
             secondResultRiskFactors.all {
-                it.lastControlDatetime!!.isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
+                it.lastControlDateTime!!.isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isTrue()
     }

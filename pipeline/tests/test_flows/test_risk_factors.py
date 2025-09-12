@@ -6,8 +6,6 @@ from src.db_config import create_engine
 from src.entities.vessel_profiles import VesselProfileType
 from src.flows.risk_factors import (
     compute_profile_segments_impact_and_priority,
-    extract_control_anteriority,
-    extract_current_segments,
     extract_recent_segments,
     risk_factors_flow,
 )
@@ -488,6 +486,28 @@ def risk_factors() -> pd.DataFrame:
                 None,
                 None,
             ],
+            "last_control_at_sea_datetime_utc": [
+                pd.NaT,
+                pd.NaT,
+                pd.Timestamp("2020-06-08 19:21:40"),
+                pd.NaT,
+                pd.Timestamp("2017-01-08 08:57:45"),
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+            ],
+            "last_control_at_quay_datetime_utc": [
+                pd.Timestamp("2018-01-08 08:57:45"),
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.Timestamp("2016-01-08 08:57:45"),
+                pd.NaT,
+                pd.NaT,
+                pd.Timestamp("2018-01-01 07:57:45"),
+                pd.NaT,
+            ],
         }
     )
 
@@ -618,25 +638,7 @@ def test_risk_factor_flow(reset_test_data, risk_factors):
     assert state.is_completed()
 
     ######## Check that data was correctly computed and loaded to risk_factors ########
-    current_segments = extract_current_segments()
-    control_anteriority = extract_control_anteriority()
     loaded_risk_factors = read_query(query, db="monitorfish_remote")
-
-    # Risk factors should be an outer join of vessels in current_segments and
-    # control_anteriority, so if we have two vessels in current_segments, two vessels
-    # in control_anteriority, one of which is in both tables, then there me be three
-    # vessels in risk_factors.
-    assert len(current_segments) == 5
-    assert set(current_segments.cfr) == {
-        "ABC000542519",
-        "ABC000306959",
-        "UNKONWN_VESS",
-        "CFR_OF_LOGBK",
-        "OLD_VESSEL_1",
-    }
-
-    assert len(control_anteriority) == 4
-    assert set(control_anteriority.ircs) == {"LLUK", "OLY7853", "IL2468", "SOMEID"}
 
     pd.testing.assert_frame_equal(
         loaded_risk_factors.drop(columns=["id"]), risk_factors

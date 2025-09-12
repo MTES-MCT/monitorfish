@@ -87,7 +87,10 @@ data class DynamicVesselGroup(
                     false -> true
                 }
 
-            val hasRiskFactorMatch = activeVessel.riskFactor.isLastPositionInGroup(this)
+            val hasRiskFactorMatch = activeVessel.riskFactor.isLastPositionInGroup(
+                vesselGroup = this,
+                now = now,
+            )
 
             return hasLastPositionMatch && hasProducerOrganizationMatch && hasRiskFactorMatch && hasLandingPortMatch
         }
@@ -106,7 +109,7 @@ data class DynamicVesselGroup(
                 profile = activeVessel.vesselProfile,
                 now = now,
             )
-        val hasVesselReferentialMatch = activeVessel.vessel?.isInGroup(this) == true
+        val hasVesselReferentialMatch = activeVessel.vessel?.isInGroup(vesselGroup = this) == true
         val hasProducerOrganizationMatch =
             when (filters.producerOrganizations.isNotEmpty()) {
                 true -> activeVessel.producerOrganization?.isInGroup(this) == true

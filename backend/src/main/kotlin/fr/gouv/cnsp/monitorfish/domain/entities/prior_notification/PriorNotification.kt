@@ -99,13 +99,13 @@ data class PriorNotification(
         lastControlDateTime =
             if (isManuallyCreated) {
                 logbookMessage.vesselId?.let { vesselId ->
-                    allRiskFactors.find { it.vesselId == vesselId }?.lastControlDatetime
+                    allRiskFactors.find { it.vesselId == vesselId }?.lastControlDateTime
                 }
             } else {
                 logbookMessage.internalReferenceNumber?.let { vesselInternalReferenceNumber ->
                     allRiskFactors
                         .find { it.internalReferenceNumber == vesselInternalReferenceNumber }
-                        ?.lastControlDatetime
+                        ?.lastControlDateTime
                 }
             }
     }

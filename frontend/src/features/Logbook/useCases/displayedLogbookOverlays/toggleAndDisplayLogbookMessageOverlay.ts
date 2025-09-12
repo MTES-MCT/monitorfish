@@ -1,6 +1,6 @@
 import { logbookActions } from '@features/Logbook/slice'
 import {
-  getFishingActivityFeatureOnTrackLine,
+  getLogbookMessageFeatureOnTrackLine,
   getVesselTrackLines
 } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays'
 import { binarySearchLine } from '@features/Logbook/useCases/displayedLogbookOverlays/utils'
@@ -19,19 +19,17 @@ export const toggleAndDisplayLogbookMessageOverlay =
     }
 
     const {
-      fishingActivities: { displayedLogbookOverlays, fishingActivities }
+      fishingActivities: { displayedLogbookOverlays, logbookMessages }
     } = getState()
-    if (!fishingActivities || displayedLogbookOverlays.findIndex(activity => activity.id === operationNumber) !== -1) {
+    if (!logbookMessages || displayedLogbookOverlays.findIndex(message => message.id === operationNumber) !== -1) {
       return
     }
 
-    const fishingActivity = fishingActivities.logbookMessages.find(
-      activity => activity.operationNumber === operationNumber
-    )
-    if (!fishingActivity) {
+    const logbookMessage = logbookMessages.find(message => message.operationNumber === operationNumber)
+    if (!logbookMessage) {
       return
     }
-    assertNotNullish(fishingActivity.operationNumber)
+    assertNotNullish(logbookMessage.operationNumber)
 
     await dispatch(logbookActions.setAreFishingActivitiesShowedOnMap(true))
 
@@ -46,25 +44,25 @@ export const toggleAndDisplayLogbookMessageOverlay =
       }))
       .sort((a, b) => a.start.valueOf() - b.start.valueOf())
 
-    const activityDateTime = customDayjs(getActivityDateTimeFromMessage(fishingActivity))
-    const lineOfFishingActivity = binarySearchLine(activityDateTime, linesByTimestamp)
-    if (!lineOfFishingActivity) {
+    const messageDateTime = customDayjs(getActivityDateTimeFromMessage(logbookMessage))
+    const lineOfLogbookMessage = binarySearchLine(messageDateTime, linesByTimestamp)
+    if (!lineOfLogbookMessage) {
       return
     }
 
-    const featureData = getFishingActivityFeatureOnTrackLine(
-      fishingActivity.operationNumber,
-      lineOfFishingActivity,
-      activityDateTime
+    const featureData = getLogbookMessageFeatureOnTrackLine(
+      logbookMessage.operationNumber,
+      lineOfLogbookMessage,
+      messageDateTime
     )
 
     const nextDisplayedLogbookOverlay = {
-      activityDateTime,
       coordinates: featureData.coordinates,
-      id: fishingActivity.operationNumber,
-      isDeleted: fishingActivity.isDeleted,
-      isNotAcknowledged: !fishingActivity.acknowledgment?.isSuccess,
-      name: getLogbookMessageType(fishingActivity)
+      id: logbookMessage.operationNumber,
+      isDeleted: logbookMessage.isDeleted,
+      isNotAcknowledged: !logbookMessage.acknowledgment?.isSuccess,
+      messageDateTime,
+      name: getLogbookMessageType(logbookMessage)
     }
     dispatch(logbookActions.displayLogbookOverlay(nextDisplayedLogbookOverlay))
 

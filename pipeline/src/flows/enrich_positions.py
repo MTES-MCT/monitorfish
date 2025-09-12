@@ -1,7 +1,7 @@
 from logging import Logger
 
 import pandas as pd
-from prefect import flow, get_run_logger, task, unmapped
+from prefect import flow, get_run_logger, task
 from sqlalchemy import text
 
 from src.db_config import create_engine
@@ -296,11 +296,12 @@ def enrich_positions_flow(
         chunk_overlap_minutes,
     )
 
-    extract_enrich_load.map(
-        periods,
-        minimum_consecutive_positions=unmapped(minimum_consecutive_positions),
-        min_fishing_speed_threshold=unmapped(min_fishing_speed_threshold),
-        max_fishing_speed_threshold=unmapped(max_fishing_speed_threshold),
-        minimum_minutes_of_emission_at_sea=unmapped(minimum_minutes_of_emission_at_sea),
-        recompute_all=unmapped(recompute_all),
-    )
+    for period in periods:
+        extract_enrich_load(
+            period,
+            minimum_consecutive_positions=minimum_consecutive_positions,
+            min_fishing_speed_threshold=min_fishing_speed_threshold,
+            max_fishing_speed_threshold=max_fishing_speed_threshold,
+            minimum_minutes_of_emission_at_sea=minimum_minutes_of_emission_at_sea,
+            recompute_all=recompute_all,
+        )

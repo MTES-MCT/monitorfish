@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultImpactRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import org.assertj.core.api.Assertions.assertThat
@@ -81,15 +80,15 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val previousLastPositions = jpaLastPositionRepository.findAll()
         val previousLastPosition = previousLastPositions.find { it.internalReferenceNumber == "ABC000926735" }!!
         assertThat(previousLastPosition.alerts).hasSize(1)
-        assertThat(previousLastPosition.alerts).contains("THREE_MILES_TRAWLING_ALERT")
+        assertThat(previousLastPosition.alerts).contains("Chalutage dans les 3 milles")
         assertThat(previousLastPosition.reportings).hasSize(0)
         cacheManager.getCache("vessels_all_position")?.clear()
 
         // When
         jpaLastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-            AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            "ABC000926735",
+            alertName = "Chalutage dans les 3 milles",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            value = "ABC000926735",
             isValidated = true,
         )
 
@@ -108,15 +107,15 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val previousLastPositions = jpaLastPositionRepository.findAll()
         val previousLastPosition = previousLastPositions.find { it.internalReferenceNumber == "ABC000339263" }!!
         assertThat(previousLastPosition.alerts).hasSize(1)
-        assertThat(previousLastPosition.alerts).contains("THREE_MILES_TRAWLING_ALERT")
+        assertThat(previousLastPosition.alerts).contains("Chalutage dans les 3 milles")
         assertThat(previousLastPosition.reportings).hasSize(0)
         cacheManager.getCache("vessels_all_position")?.clear()
 
         // When
         jpaLastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-            AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            "ABC000339263",
+            alertName = "Chalutage dans les 3 milles",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            value = "ABC000339263",
             isValidated = false,
         )
 
@@ -134,15 +133,15 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val previousLastPositions = jpaLastPositionRepository.findAll()
         val previousLastPosition = previousLastPositions.find { it.internalReferenceNumber == "ABC000498845" }!!
         assertThat(previousLastPosition.alerts).hasSize(2)
-        assertThat(previousLastPosition.alerts).contains("MISSING_FAR_ALERT")
+        assertThat(previousLastPosition.alerts).contains("FAR manquant en 24h")
         assertThat(previousLastPosition.reportings).hasSize(0)
         cacheManager.getCache("vessels_all_position")?.clear()
 
         // When
         jpaLastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-            AlertTypeMapping.MISSING_FAR_ALERT,
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            "ABC000498845",
+            alertName = "FAR manquant en 24h",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            value = "ABC000498845",
             isValidated = false,
         )
 
@@ -150,7 +149,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val lastPositions = jpaLastPositionRepository.findAll()
         val lastPosition = lastPositions.find { it.internalReferenceNumber == "ABC000498845" }!!
         assertThat(lastPosition.alerts).hasSize(1)
-        assertThat(previousLastPosition.alerts).contains("MISSING_FAR_ALERT")
+        assertThat(lastPosition.alerts).contains("FAR manquant en 24h")
         assertThat(lastPosition.reportings).hasSize(0)
     }
 
@@ -186,7 +185,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
                 it.riskFactor.impactRiskFactor != defaultImpactRiskFactor &&
                     it.vesselProfile == null
             }
-        assertThat(vesselWithRiskFactorNotInProfile.lastPosition?.internalReferenceNumber).isEqualTo("ABC000103914")
+        assertThat(vesselWithRiskFactorNotInProfile.lastPosition?.internalReferenceNumber).isEqualTo("ABC000661639")
 
         /**
          * Only a profile without a last position

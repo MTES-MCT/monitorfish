@@ -4,8 +4,9 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilenceAlertPeriod
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
@@ -34,7 +35,7 @@ class SilencePendingAlertUTests {
     @Test
     fun `execute Should silence a pending alert for one day`() {
         // Given
-        val pendingAlert =
+        val pendingPositionAlert =
             PendingAlert(
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
@@ -44,9 +45,16 @@ class SilencePendingAlertUTests {
                 flagState = CountryCode.FR,
                 tripNumber = "123456",
                 creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert(),
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ),
             )
-        given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
+        given(pendingAlertRepository.find(any())).willReturn(pendingPositionAlert)
 
         // When
         SilencePendingAlert(
@@ -57,14 +65,15 @@ class SilencePendingAlertUTests {
 
         // Then
         Mockito.verify(pendingAlertRepository).delete(eq(666))
+        // TODO Modify removeAlertToLastPositionByVesselIdentifierEquals to include the id
         Mockito.verify(lastPositionRepository).removeAlertToLastPositionByVesselIdentifierEquals(
-            AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            "FRFGRGR",
-            false,
+            alertName = "Chalutage dans les 3 milles",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            value = "FRFGRGR",
+            isValidated = false,
         )
         argumentCaptor<ZonedDateTime>().apply {
-            verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), any())
+            verify(silencedAlertRepository, times(1)).save(eq(pendingPositionAlert), capture(), any())
 
             assertThat(allValues.first().toString().split("T")[0])
                 .isEqualTo(
@@ -80,7 +89,7 @@ class SilencePendingAlertUTests {
     @Test
     fun `execute Should silence a pending alert for a custom period`() {
         // Given
-        val pendingAlert =
+        val pendingPositionAlert =
             PendingAlert(
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
@@ -90,9 +99,16 @@ class SilencePendingAlertUTests {
                 flagState = CountryCode.FR,
                 tripNumber = "123456",
                 creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert(),
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ),
             )
-        given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
+        given(pendingAlertRepository.find(any())).willReturn(pendingPositionAlert)
 
         // When
         SilencePendingAlert(
@@ -108,7 +124,7 @@ class SilencePendingAlertUTests {
         // Then
         Mockito.verify(pendingAlertRepository).delete(eq(666))
         argumentCaptor<ZonedDateTime>().apply {
-            verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), any())
+            verify(silencedAlertRepository, times(1)).save(eq(pendingPositionAlert), capture(), any())
 
             assertThat(allValues.first().toString().split("T")[0])
                 .isEqualTo(
@@ -124,7 +140,7 @@ class SilencePendingAlertUTests {
     @Test
     fun `execute Should throw an exception When silencing a pending alert for a custom period Without after or before dates`() {
         // Given
-        val pendingAlert =
+        val pendingPositionAlert =
             PendingAlert(
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
@@ -134,9 +150,16 @@ class SilencePendingAlertUTests {
                 flagState = CountryCode.FR,
                 tripNumber = "123456",
                 creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert(),
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ),
             )
-        given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
+        given(pendingAlertRepository.find(any())).willReturn(pendingPositionAlert)
 
         // When
         val throwable =

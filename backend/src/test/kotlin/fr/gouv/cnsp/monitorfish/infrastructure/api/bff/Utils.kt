@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.AdministrativeAreaSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.AdministrativeAreaType
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.GearSpecification
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PositionAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PositionAlertSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.RegulatoryAreaSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SpeciesSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
@@ -15,7 +15,7 @@ fun <T> givenSuspended(block: suspend () -> T) = BDDMockito.given(runBlocking { 
 
 object TestUtils {
     val DUMMY_POSITION_ALERT =
-        PositionAlert(
+        PositionAlertSpecification(
             id = 1,
             name = "Chalutage dans les 3 milles",
             description =

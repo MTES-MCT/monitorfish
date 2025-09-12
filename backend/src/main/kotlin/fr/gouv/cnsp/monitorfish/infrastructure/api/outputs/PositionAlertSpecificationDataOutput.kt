@@ -3,9 +3,10 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.*
 import java.time.ZonedDateTime
 
-data class PositionAlertDataOutput(
+data class PositionAlertSpecificationDataOutput(
     val id: Int? = null,
     val name: String,
+    val type: String,
     val description: String,
     val isUserDefined: Boolean,
     val natinfCode: Int,
@@ -31,39 +32,46 @@ data class PositionAlertDataOutput(
     val createdAtUtc: ZonedDateTime,
 ) {
     companion object {
-        fun fromPositionAlert(positionAlert: PositionAlert) =
-            PositionAlertDataOutput(
-                id = positionAlert.id,
-                name = positionAlert.name,
-                description = positionAlert.description,
-                isUserDefined = positionAlert.isUserDefined,
-                natinfCode = positionAlert.natinfCode,
-                isActivated = positionAlert.isActivated,
-                isInError = positionAlert.isInError,
-                errorReason = positionAlert.errorReason,
-                validityStartDatetimeUtc = positionAlert.validityStartDatetimeUtc,
-                validityEndDatetimeUtc = positionAlert.validityEndDatetimeUtc,
-                repeatEachYear = positionAlert.repeatEachYear,
-                trackAnalysisDepth = positionAlert.trackAnalysisDepth,
-                onlyFishingPositions = positionAlert.onlyFishingPositions,
-                gears = positionAlert.gears.map { GearSpecificationDataOutput.fromGearSpecification(it) },
-                species = positionAlert.species.map { SpeciesSpecificationDataOutput.fromSpeciesSpecification(it) },
-                speciesCatchAreas = positionAlert.speciesCatchAreas,
+        fun fromPositionAlertSpecification(positionAlertSpecification: PositionAlertSpecification) =
+            PositionAlertSpecificationDataOutput(
+                id = positionAlertSpecification.id,
+                name = positionAlertSpecification.name,
+                type = positionAlertSpecification.type,
+                description = positionAlertSpecification.description,
+                isUserDefined = positionAlertSpecification.isUserDefined,
+                natinfCode = positionAlertSpecification.natinfCode,
+                isActivated = positionAlertSpecification.isActivated,
+                isInError = positionAlertSpecification.isInError,
+                errorReason = positionAlertSpecification.errorReason,
+                validityStartDatetimeUtc = positionAlertSpecification.validityStartDatetimeUtc,
+                validityEndDatetimeUtc = positionAlertSpecification.validityEndDatetimeUtc,
+                repeatEachYear = positionAlertSpecification.repeatEachYear,
+                trackAnalysisDepth = positionAlertSpecification.trackAnalysisDepth,
+                onlyFishingPositions = positionAlertSpecification.onlyFishingPositions,
+                gears = positionAlertSpecification.gears.map { GearSpecificationDataOutput.fromGearSpecification(it) },
+                species =
+                    positionAlertSpecification.species.map {
+                        SpeciesSpecificationDataOutput
+                            .fromSpeciesSpecification(
+                                it,
+                            )
+                    },
+                speciesCatchAreas = positionAlertSpecification.speciesCatchAreas,
                 administrativeAreas =
-                    positionAlert.administrativeAreas.map {
+                    positionAlertSpecification.administrativeAreas.map {
                         AdministrativeAreaSpecificationDataOutput.fromAdministrativeAreaSpecification(it)
                     },
                 regulatoryAreas =
-                    positionAlert.regulatoryAreas.map {
+                    positionAlertSpecification.regulatoryAreas.map {
                         RegulatoryAreaSpecificationDataOutput.fromRegulatoryAreaSpecification(it)
                     },
-                minDepth = positionAlert.minDepth,
-                flagStatesIso2 = positionAlert.flagStatesIso2,
-                vesselIds = positionAlert.vesselIds,
-                districtCodes = positionAlert.districtCodes,
-                producerOrganizations = positionAlert.producerOrganizations,
-                createdBy = positionAlert.createdBy,
-                createdAtUtc = positionAlert.createdAtUtc,
+                minDepth = positionAlertSpecification.minDepth,
+                flagStatesIso2 = positionAlertSpecification.flagStatesIso2,
+                vesselIds = positionAlertSpecification.vesselIds,
+                districtCodes = positionAlertSpecification.districtCodes,
+                producerOrganizations = positionAlertSpecification.producerOrganizations,
+                createdBy = positionAlertSpecification.createdBy,
+                createdAtUtc = positionAlertSpecification.createdAtUtc,
             )
     }
 }

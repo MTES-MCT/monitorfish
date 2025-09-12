@@ -2,7 +2,9 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilencedAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.SilencedAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.GetSilencedAlerts
@@ -22,43 +24,64 @@ class GetSilencedAlertsUTests {
     @Test
     fun `execute Should return silenced alerts without validated alerts`() {
         // Given
-        val silencedAlertOne =
+        val silencedPositionAlertOne =
             SilencedAlert(
                 internalReferenceNumber = "INTERNAL_REF_ONE",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
-                value = ThreeMilesTrawlingAlert(),
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ),
                 silencedBeforeDate = ZonedDateTime.now().plusHours(5),
             )
-        val silencedAlertTwo =
+        val silencedPositionAlertTwo =
             SilencedAlert(
                 internalReferenceNumber = "INTERNAL_REF_TWO",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
-                value = ThreeMilesTrawlingAlert(),
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ),
                 silencedBeforeDate = ZonedDateTime.now().plusHours(5),
                 wasValidated = true,
             )
-        val silencedAlertThree =
+        val silencedPositionAlertThree =
             SilencedAlert(
                 internalReferenceNumber = "INTERNAL_REF_THREE",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
-                value = ThreeMilesTrawlingAlert(),
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ),
                 silencedBeforeDate = ZonedDateTime.now().plusHours(5),
                 wasValidated = false,
             )
         given(silencedAlertRepository.findAllCurrentSilencedAlerts()).willReturn(
             listOf(
-                silencedAlertOne,
-                silencedAlertTwo,
-                silencedAlertThree,
+                silencedPositionAlertOne,
+                silencedPositionAlertTwo,
+                silencedPositionAlertThree,
             ),
         )
 

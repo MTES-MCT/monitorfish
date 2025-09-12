@@ -6,11 +6,12 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory
@@ -603,7 +604,7 @@ class VesselControllerITests {
                 endDate = null,
                 tripNumber = "1234",
                 software = "FT/",
-                logbookMessagesAndAlerts = LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()),
+                logbookMessages = TestUtils.getDummyLogbookMessages(),
             )
         given(this.getVesselVoyage.execute(any(), any(), anyOrNull())).willReturn(voyage)
 
@@ -621,18 +622,18 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.isFirstVoyage", equalTo(false)))
             .andExpect(jsonPath("$.startDate", equalTo("2021-01-21T10:21:26.617301+01:00")))
             .andExpect(jsonPath("$.endDate", equalTo(null)))
-            .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages.length()", equalTo(6)))
-            .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[0].messageType", equalTo("FAR")))
+            .andExpect(jsonPath("$.logbookMessages.length()", equalTo(6)))
+            .andExpect(jsonPath("$.logbookMessages[0].messageType", equalTo("FAR")))
             .andExpect(
                 jsonPath(
-                    "$.logbookMessagesAndAlerts.logbookMessages[0].message.hauls[0].dimensions",
+                    "$.logbookMessages[0].message.hauls[0].dimensions",
                     equalTo("150;120"),
                 ),
-            ).andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[1].messageType", equalTo("DEP")))
-            .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[1].tripNumber", equalTo("345")))
+            ).andExpect(jsonPath("$.logbookMessages[1].messageType", equalTo("DEP")))
+            .andExpect(jsonPath("$.logbookMessages[1].tripNumber", equalTo("345")))
             .andExpect(
                 jsonPath(
-                    "$.logbookMessagesAndAlerts.logbookMessages[1].reportDateTime",
+                    "$.logbookMessages[1].reportDateTime",
                     equalTo("2020-05-04T03:04:05.000000003Z"),
                 ),
             )
@@ -672,7 +673,7 @@ class VesselControllerITests {
                 endDate = null,
                 tripNumber = "1234",
                 software = "FT/",
-                logbookMessagesAndAlerts = LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()),
+                logbookMessages = TestUtils.getDummyLogbookMessages(),
             )
         given(this.getVesselVoyage.execute(any(), any(), any())).willReturn(voyage)
 
@@ -835,7 +836,14 @@ class VesselControllerITests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert() as ReportingValue,
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ) as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
                 infraction =
@@ -857,7 +865,14 @@ class VesselControllerITests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now().minusYears(1),
                 validationDate = ZonedDateTime.now().minusYears(1),
-                value = ThreeMilesTrawlingAlert() as ReportingValue,
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ) as ReportingValue,
                 isArchived = true,
                 isDeleted = false,
             )
@@ -941,7 +956,7 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.current[0].reporting.isArchived", equalTo(false)))
             .andExpect(jsonPath("$.current[0].reporting.isDeleted", equalTo(false)))
             .andExpect(jsonPath("$.current[0].reporting.infraction.natinfCode", equalTo(7059)))
-            .andExpect(jsonPath("$.current[0].reporting.value.type", equalTo("THREE_MILES_TRAWLING_ALERT")))
+            .andExpect(jsonPath("$.current[0].reporting.value.type", equalTo("POSITION_ALERT")))
             .andExpect(jsonPath("$.current[0].reporting.value.natinfCode", equalTo(7059)))
             .andExpect(jsonPath("$.archived.2024[0].reporting.id", equalTo(666)))
             .andExpect(jsonPath("$.archived.2024[0].reporting.internalReferenceNumber", equalTo("FR224226850")))
@@ -1065,7 +1080,7 @@ class VesselControllerITests {
                 endDate = null,
                 tripNumber = "1234",
                 software = "FT/",
-                logbookMessagesAndAlerts = LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()),
+                logbookMessages = TestUtils.getDummyLogbookMessages(),
             )
         given(this.getVesselVoyageByDates.execute(any(), any(), anyOrNull(), anyOrNull())).willReturn(voyage)
 
@@ -1083,8 +1098,8 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.isFirstVoyage", equalTo(false)))
             .andExpect(jsonPath("$.startDate", equalTo("2021-01-21T10:21:26.617301+01:00")))
             .andExpect(jsonPath("$.endDate", equalTo(null)))
-            .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages.length()", equalTo(6)))
-            .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[0].messageType", equalTo("FAR")))
+            .andExpect(jsonPath("$.logbookMessages.length()", equalTo(6)))
+            .andExpect(jsonPath("$.logbookMessages[0].messageType", equalTo("FAR")))
 
         Mockito.verify(getVesselVoyageByDates).execute("FR224226850", VesselTrackDepth.TWO_DAYS, null, null)
     }

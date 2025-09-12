@@ -5,7 +5,7 @@ import { RiskFactorSchema } from '@features/RiskFactor/types'
 import type { RiskFactor } from '@features/RiskFactor/types'
 import type { SafeParseReturnType } from 'zod'
 
-function valueOrundefinedIfNotFoundOrThrow<Type>(
+function valueOrUndefinedIfNotFoundOrThrow<Type>(
   result: SafeParseReturnType<any, any>,
   response: BackendApi.ResponseBodyError | Type
 ): Type | undefined {
@@ -28,7 +28,7 @@ export const riskFactorApi = monitorfishApi.injectEndpoints({
       transformResponse: (response: BackendApi.ResponseBodyError | RiskFactor) => {
         const result = RiskFactorSchema.safeParse(response)
 
-        return valueOrundefinedIfNotFoundOrThrow<RiskFactor>(result, response)
+        return valueOrUndefinedIfNotFoundOrThrow<RiskFactor>(result, response)
       }
     })
   })

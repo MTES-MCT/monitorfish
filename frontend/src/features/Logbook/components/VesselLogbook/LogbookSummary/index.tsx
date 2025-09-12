@@ -1,4 +1,3 @@
-import { COMMON_ALERT_TYPE_OPTION } from '@features/Alert/constants'
 import { VesselSidebarFleetSegments } from '@features/FleetSegment/components/VesselSidebarFleetSegments'
 import { getLastLogbookTripsOptions } from '@features/Logbook/components/VesselLogbook/LogbookMessages/utils'
 import { SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
@@ -38,7 +37,7 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
   const dispatch = useMainAppDispatch()
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
-  const fishingActivities = useMainAppSelector(state => state.fishingActivities.fishingActivities)
+  const logbookMessages = useMainAppSelector(state => state.fishingActivities.logbookMessages)
   const software = useMainAppSelector(state => state.fishingActivities.software)
   const isFirstVoyage = useMainAppSelector(state => state.fishingActivities.isFirstVoyage)
   const isLastVoyage = useMainAppSelector(state => state.fishingActivities.isLastVoyage)
@@ -49,18 +48,7 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
   )
 
   const lastLogbookTripsOptions = getLastLogbookTripsOptions(lastLogbookTrips, tripNumber)
-
-  const logbookTrip: LogbookTripSummary = useMemo(() => getLogbookTripSummary(fishingActivities), [fishingActivities])
-
-  const catchesOverToleranceAlert = useMemo(() => {
-    if (!fishingActivities?.alerts?.length) {
-      return undefined
-    }
-
-    return fishingActivities.alerts.find(
-      alert => alert?.value?.type === COMMON_ALERT_TYPE_OPTION.PNO_LAN_WEIGHT_TOLERANCE_ALERT.code
-    )?.value
-  }, [fishingActivities?.alerts])
+  const logbookTrip: LogbookTripSummary = useMemo(() => getLogbookTripSummary(logbookMessages), [logbookMessages])
 
   const goToPreviousTrip = () => {
     dispatch(updateVesselTrackAndLogbookFromTrip(selectedVesselIdentity, NavigateTo.PREVIOUS, true))
@@ -75,7 +63,7 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
     dispatch(updateVesselTrackAndLogbookFromTrip(selectedVesselIdentity, NavigateTo.EQUALS, true, nextTripNumber))
   }
 
-  if (!fishingActivities) {
+  if (!logbookMessages) {
     return (
       <Body>
         <StyledVesselSidebarFleetSegments
@@ -89,7 +77,7 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
 
   return (
     <>
-      {fishingActivities ? (
+      {logbookMessages ? (
         <Body>
           <StyledVesselSidebarFleetSegments
             activityOrigin={selectedVessel?.activityOrigin}
@@ -152,7 +140,7 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
               <Arrow onClick={() => showLogbookMessages()} />
             </Title>
             <CustomDatesShowedInfo />
-            {fishingActivities?.logbookMessages?.length ? (
+            {logbookMessages?.length ? (
               <LogbookMessages>
                 {logbookTrip.dep.log ? (
                   <DEPMessageResume
@@ -230,7 +218,6 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
 
                 {logbookTrip.lan.log ? (
                   <LANMessageResume
-                    catchesOverToleranceAlert={catchesOverToleranceAlert}
                     isDeleted={logbookTrip.lan.log.isDeleted}
                     isNotAcknowledged={
                       !!logbookTrip.lan.log.acknowledgment && !logbookTrip.lan.log.acknowledgment.isSuccess

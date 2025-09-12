@@ -1,6 +1,9 @@
 package fr.gouv.cnsp.monitorfish.config
 
 import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
@@ -9,7 +12,7 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.jsontype.NamedType
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.ProtectedSpeciesCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTypeMapping
@@ -20,7 +23,6 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.IHasImplementation as IAlertsHasImplementation
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripGear as GearLogbook
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.IHasImplementation as IReportingsHasImplementation
 
@@ -36,6 +38,7 @@ class MapperConfiguration {
                 addSerializer(Double::class.java, RoundedDoubleSerializer())
                 addSerializer(Double::class.javaPrimitiveType, RoundedDoubleSerializer())
                 addSerializer(BigDecimal::class.java, RoundedBigDecimalSerializer())
+                addDeserializer(AlertType::class.java, AlertTypeMappingDeserializer())
             },
         )
 
@@ -48,20 +51,9 @@ class MapperConfiguration {
         mapper.registerSubtypes(NamedType(ProtectedSpeciesCatch::class.java, "protectedSpeciesCatch"))
         mapper.registerSubtypes(NamedType(GearLogbook::class.java, "gear"))
 
-        registerAlertsSubType(mapper, AlertTypeMapping::class.java)
         registerReportingsSubType(mapper, ReportingTypeMapping::class.java)
 
         return mapper
-    }
-
-    private fun <E> registerAlertsSubType(
-        mapper: ObjectMapper,
-        enumOfTypeToAdd: Class<E>,
-    ) where E : Enum<E>?, E : IAlertsHasImplementation? {
-        Arrays
-            .stream(enumOfTypeToAdd.enumConstants)
-            .map { enumItem -> NamedType(enumItem.getImplementation(), enumItem.name) }
-            .forEach { type -> mapper.registerSubtypes(type) }
     }
 
     private fun <E> registerReportingsSubType(
@@ -98,5 +90,15 @@ class RoundedBigDecimalSerializer : JsonSerializer<BigDecimal>() {
     ) {
         val rounded = value.setScale(4, RoundingMode.HALF_UP)
         gen.writeNumber(rounded)
+    }
+}
+
+class AlertTypeMappingDeserializer : JsonDeserializer<AlertType>() {
+    override fun deserialize(
+        p: JsonParser,
+        ctxt: DeserializationContext,
+    ): AlertType {
+        val value = p.text
+        return AlertType.valueOf(value)
     }
 }

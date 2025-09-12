@@ -63,7 +63,7 @@ data class RiskFactorDataOutput(
             numberGearSeizuresLastFiveYears = vesselRiskFactor.numberGearSeizuresLastFiveYears,
             numberSpeciesSeizuresLastFiveYears = vesselRiskFactor.numberSpeciesSeizuresLastFiveYears,
             numberVesselSeizuresLastFiveYears = vesselRiskFactor.numberVesselSeizuresLastFiveYears,
-            lastControlDatetime = vesselRiskFactor.lastControlDatetime,
+            lastControlDatetime = vesselRiskFactor.lastControlDateTime,
             impactRiskFactor =
                 when (isRecentProfile) {
                     true -> vesselRiskFactor.recentSegmentsImpactRiskFactor

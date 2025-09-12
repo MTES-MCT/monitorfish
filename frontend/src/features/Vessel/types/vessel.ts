@@ -2,7 +2,7 @@ import { BaseLayer } from '@features/Map/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { VesselLabel } from '@features/Vessel/label.types'
 import { ActivityOrigin } from '@features/Vessel/schemas/ActiveVesselSchema'
-import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
+import { getLastControlDateTime, getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import countries from 'i18n-iso-countries'
 
 import type { PartialExcept } from '../../../types'
@@ -64,7 +64,8 @@ export class VesselFeature {
       | 'impactRiskFactor'
       | 'internalReferenceNumber'
       | 'isAtPort'
-      | 'lastControlDateTime'
+      | 'lastControlAtSeaDateTime'
+      | 'lastControlAtQuayDateTime'
       | 'probabilityRiskFactor'
       | 'riskFactor'
       | 'segments'
@@ -95,8 +96,12 @@ export class VesselFeature {
     const { isRiskFactorShowed, vesselLabel, vesselLabelsShowedOnMap, vesselsLastPositionVisibility } = options
     const vesselDate = new Date(feature.dateTime)
     const vesselIsHidden = new Date()
-    const hasBeenControlledLastFiveYears = feature.lastControlDateTime
-      ? new Date(feature.lastControlDateTime).getTime() > new Date(vesselIsHidden.getUTCFullYear() - 5, 0, 1).getTime()
+    const lastControlDateTime = getLastControlDateTime(
+      feature.lastControlAtSeaDateTime,
+      feature.lastControlAtQuayDateTime
+    )
+    const hasBeenControlledLastFiveYears = lastControlDateTime
+      ? new Date(lastControlDateTime).getTime() > new Date(vesselIsHidden.getUTCFullYear() - 5, 0, 1).getTime()
       : false
     vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
 

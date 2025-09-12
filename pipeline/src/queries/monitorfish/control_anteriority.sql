@@ -19,5 +19,7 @@ SELECT
     last_control_logbook_infractions,
     last_control_gear_infractions,
     last_control_species_infractions,
-    last_control_other_infractions
+    last_control_other_infractions,
+    last_control_at_sea_datetime_utc,
+    last_control_at_quay_datetime_utc
 FROM control_anteriority

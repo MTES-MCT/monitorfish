@@ -95,7 +95,8 @@ export function countVesselListFilter(listFilterValues: VesselListFilter) {
     (listFilterValues.fleetSegments?.length ?? 0) +
     (listFilterValues.gearCodes?.length ?? 0) +
     (listFilterValues.hasLogbook ? 1 : 0) +
-    (listFilterValues.lastControlPeriod ? 1 : 0) +
+    (listFilterValues.lastControlAtSeaPeriod ? 1 : 0) +
+    (listFilterValues.lastControlAtQuayPeriod ? 1 : 0) +
     (listFilterValues.landingPortLocodes?.length ?? 0) +
     (listFilterValues.lastPositionHoursAgo ? 1 : 0) +
     (listFilterValues.producerOrganizations?.length ?? 0) +

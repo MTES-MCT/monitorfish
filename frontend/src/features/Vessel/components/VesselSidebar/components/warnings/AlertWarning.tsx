@@ -1,4 +1,3 @@
-import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
 import { showAlertInSideWindow } from '@features/Vessel/useCases/showAlertInSideWindow'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import styled from 'styled-components'
@@ -23,8 +22,7 @@ export function AlertWarning({ selectedVessel }: AlertWarningProps) {
     return <></>
   }
 
-  const alertName =
-    selectedVessel.alerts.length === 1 ? getAlertNameFromType(firstAlert) : `${selectedVessel.alerts.length} alertes`
+  const alertName = selectedVessel.alerts.length === 1 ? firstAlert : `${selectedVessel.alerts.length} alertes`
 
   return (
     <>

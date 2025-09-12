@@ -1,5 +1,4 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
-import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
 import { ALERTS_ARCHIVED_AFTER_NEW_VOYAGE, PendingAlertValueType } from '@features/Alert/constants'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
@@ -154,10 +153,7 @@ export function ReportingCard({
 
         <Body $isInfractionSuspicion={isAnInfractionSuspicion}>
           <Title>
-            {reportingActor} /{' '}
-            {reporting.type === ReportingType.ALERT
-              ? getAlertNameFromType(reporting.value.type)
-              : reporting.value.title}
+            {reportingActor} / {reporting.type === ReportingType.ALERT ? reporting.value.name : reporting.value.title}
           </Title>
           <DateText>
             {otherOccurrencesOfSameAlert.length > 0 ? 'Dernière alerte le' : 'Le'} {alertDateTime}

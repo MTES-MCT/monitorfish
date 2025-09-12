@@ -1,23 +1,18 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PNOAndLANAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
-import kotlin.jvm.Throws
 
 @UseCase
 class GetVesselVoyage(
     private val logbookReportRepository: LogbookReportRepository,
-    private val PNOAndLANAlertRepository: PNOAndLANAlertRepository,
     private val getLogbookMessages: GetLogbookMessages,
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselVoyage::class.java)
@@ -89,13 +84,6 @@ class GetVesselVoyage(
         val isLastVoyage = getIsLastVoyage(tripNumber, voyageRequest, internalReferenceNumber, trip.tripNumber)
         val isFirstVoyage = getIsFirstVoyage(internalReferenceNumber, trip.tripNumber)
 
-        val alerts =
-            PNOAndLANAlertRepository.findAlertsOfTypes(
-                types = listOf(element = AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
-                internalReferenceNumber = internalReferenceNumber,
-                tripNumber = trip.tripNumber,
-            )
-
         val logbookMessages =
             getLogbookMessages.execute(
                 internalReferenceNumber = internalReferenceNumber,
@@ -112,7 +100,7 @@ class GetVesselVoyage(
             endDate = trip.endDateWithoutLAN,
             tripNumber = trip.tripNumber,
             software = software,
-            logbookMessagesAndAlerts = LogbookMessagesAndAlerts(logbookMessages, alerts),
+            logbookMessages = logbookMessages,
         )
     }
 

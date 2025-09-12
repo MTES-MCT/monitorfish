@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
@@ -43,7 +43,7 @@ class ReportingDataOutput(
                         )
 
                     is Observation -> ObservationDataOutput.fromObservation(reporting.value, controlUnit)
-                    is AlertType -> AlertDataOutput.fromAlertType(reporting.value)
+                    is Alert -> AlertDataOutput.fromAlertType(reporting.value)
                     else -> throw IllegalArgumentException("Should not happen.")
                 }
 

@@ -1,4 +1,3 @@
-import { PendingAlertValueType } from '@features/Alert/constants'
 import { ReportingType } from '@features/Reporting/types'
 import { z } from 'zod'
 
@@ -74,7 +73,7 @@ const ActiveVesselBaseSchema = z.strictObject({
 
 export const ActiveVesselEmittingPositionSchema = ActiveVesselBaseSchema.extend({
   activityType: z.literal('POSITION_BASED'),
-  alerts: z.array(z.union([z.nativeEnum(PendingAlertValueType), z.literal('PNO_LAN_WEIGHT_TOLERANCE_ALERT')])),
+  alerts: z.array(z.string()),
   beaconMalfunctionId: numberOrUndefined,
   coordinates: z.array(z.number()), // OPENLAYERS_PROJECTION
   course: numberOrUndefined,

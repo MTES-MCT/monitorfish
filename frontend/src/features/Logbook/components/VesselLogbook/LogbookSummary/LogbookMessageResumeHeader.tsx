@@ -10,7 +10,6 @@ import type { Promisable } from 'type-fest'
 
 type LogbookMessageResumeHeaderProps = {
   hasNoMessage: boolean
-  isAlert?: boolean
   isDeleted?: boolean
   isLastItem?: boolean
   isNotAcknowledged: boolean
@@ -25,7 +24,6 @@ type LogbookMessageResumeHeaderProps = {
 }
 export function LogbookMessageResumeHeader({
   hasNoMessage,
-  isAlert = false,
   isDeleted = false,
   isLastItem = false,
   isNotAcknowledged,
@@ -68,14 +66,7 @@ export function LogbookMessageResumeHeader({
               {LogbookMessageTypeEnum[messageType].name}
             </LogbookMessageName>
             <LogbookMessageResumeText data-cy="vessel-fishing-resume-title" title={onHoverText ?? ''}>
-              {hasNoMessage ? (
-                <Gray>Aucun message</Gray>
-              ) : (
-                <>
-                  {title}
-                  {isAlert ? <Red /> : null}
-                </>
-              )}
+              {hasNoMessage ? <Gray>Aucun message</Gray> : <>{title}</>}
             </LogbookMessageResumeText>
             {!hasNoMessage && (
               <ShowThisMessage onClick={() => showLogbookMessages && showLogbookMessages(messageType)} />
@@ -86,16 +77,6 @@ export function LogbookMessageResumeHeader({
     </>
   )
 }
-
-const Red = styled.span`
-  height: 8px;
-  width: 8px;
-  margin-left: 5px;
-  /* TODO Replace this color with a theme color. */
-  background-color: #e1000f;
-  border-radius: 50%;
-  display: inline-block;
-`
 
 const ShowThisMessage = styled(ArrowSVG)`
   vertical-align: sub;

@@ -18,11 +18,11 @@ export function VesselLogbook() {
   const dispatch = useMainAppDispatch()
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const {
-    fishingActivities,
     fishingActivitiesTab,
     isLastVoyage,
     loadingFishingActivities,
-    nextFishingActivities,
+    logbookMessages,
+    nextLogbookMessages,
     vesselIdentity
   } = useMainAppSelector(state => state.fishingActivities)
 
@@ -60,19 +60,19 @@ export function VesselLogbook() {
     }
   }, [
     dispatch,
-    fishingActivities,
+    logbookMessages,
     vesselIdentity,
     loadingFishingActivities,
     selectedVesselIdentity,
     showedLogbookIsOutdated
   ])
 
-  const updateFishingActivities = (_nextFishingActivities: Logbook.FishingActivities) => {
-    if (!_nextFishingActivities) {
+  const updateLogbookMessages = (_nextLogbookMessages: Logbook.Message[]) => {
+    if (!_nextLogbookMessages) {
       return
     }
 
-    dispatch(logbookActions.setFishingActivities(_nextFishingActivities))
+    dispatch(logbookActions.setLogbookMessages(_nextLogbookMessages))
     dispatch(logbookActions.resetNextUpdate())
   }
 
@@ -82,10 +82,10 @@ export function VesselLogbook() {
 
   return (
     <Wrapper className="smooth-scroll" data-cy="vessel-fishing">
-      {nextFishingActivities && (
+      {nextLogbookMessages && (
         <>
           <UpdateFishingActivities />
-          <UpdateFishingActivitiesButton onClick={() => updateFishingActivities(nextFishingActivities)}>
+          <UpdateFishingActivitiesButton onClick={() => updateLogbookMessages(nextLogbookMessages)}>
             Nouveaux messages JPE
           </UpdateFishingActivitiesButton>
         </>

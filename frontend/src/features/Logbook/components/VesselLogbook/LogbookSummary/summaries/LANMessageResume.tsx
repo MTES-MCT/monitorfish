@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { COMMON_ALERT_TYPE_OPTION } from '../../../../../Alert/constants'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
 import { getCodeWithNameOrDash, getDatetimeOrDash, getValueOrDash } from '../../LogbookMessages/messages/utils'
 import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
@@ -9,7 +8,6 @@ import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
 import type { Promisable } from 'type-fest'
 
 type LANMessageResumeProps = {
-  catchesOverToleranceAlert: any
   hasNoMessage?: boolean
   isDeleted: boolean
   isNotAcknowledged: boolean
@@ -22,7 +20,6 @@ type LANMessageResumeProps = {
   totalPNOWeight: number
 }
 export function LANMessageResume({
-  catchesOverToleranceAlert,
   hasNoMessage = false,
   isDeleted,
   isNotAcknowledged,
@@ -52,17 +49,6 @@ export function LANMessageResume({
     }
   }, [isOpen])
 
-  const getWeightOverToleranceInfo = () => {
-    if (catchesOverToleranceAlert && COMMON_ALERT_TYPE_OPTION.PNO_LAN_WEIGHT_TOLERANCE_ALERT.nameWithAlertDetails) {
-      return COMMON_ALERT_TYPE_OPTION.PNO_LAN_WEIGHT_TOLERANCE_ALERT.nameWithAlertDetails(
-        catchesOverToleranceAlert.percentOfTolerance,
-        catchesOverToleranceAlert.minimumWeightThreshold
-      )
-    }
-
-    return ''
-  }
-
   function filterSameSpecies() {
     return (acc, current) => {
       const x = acc.find(item => item.species === current.species)
@@ -78,18 +64,15 @@ export function LANMessageResume({
     <Wrapper>
       <LogbookMessageResumeHeader
         hasNoMessage={hasNoMessage}
-        isAlert={!!catchesOverToleranceAlert}
         isDeleted={isDeleted}
         isLastItem
         isNotAcknowledged={isNotAcknowledged}
         isOpen={isOpen}
         messageType={LogbookMessageTypeEnum.LAN.code.toString()}
-        onHoverText={getWeightOverToleranceInfo()}
+        onHoverText=""
         setIsOpen={setIsOpen}
         showLogbookMessages={showLogbookMessages}
-        title={
-          !hasNoMessage && catchesOverToleranceAlert && COMMON_ALERT_TYPE_OPTION.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name
-        }
+        title=""
       />
       {!hasNoMessage && (
         <LogbookMessageContent chartHeight={chartHeight} isOpen={isOpen}>
@@ -123,18 +106,7 @@ export function LANMessageResume({
                 // eslint-disable-next-line react/no-array-index-key
                 <Species key={index}>
                   <SubKey>Espèce {index + 1}</SubKey>{' '}
-                  <SubValue>
-                    {getCodeWithNameOrDash(speciesCatch.species, speciesCatch.speciesName)}
-                    {/* eslint-disable-next-line no-nested-ternary */}
-                    {catchesOverToleranceAlert?.catchesOverTolerance?.length &&
-                      catchesOverToleranceAlert.catchesOverTolerance.some(
-                        catchWithAlert => catchWithAlert.lan.species === speciesCatch.species
-                      ) && (
-                        <OverWeightTolerance title={getWeightOverToleranceInfo()}>
-                          <OverWeightToleranceText>10 %</OverWeightToleranceText>
-                        </OverWeightTolerance>
-                      )}
-                  </SubValue>
+                  <SubValue>{getCodeWithNameOrDash(speciesCatch.species, speciesCatch.speciesName)}</SubValue>
                   <br />
                   <Weights>
                     <Weight>
@@ -195,23 +167,6 @@ export function LANMessageResume({
 const WeightInfo = styled.span`
   margin: 10px 0 0 5px;
   width: 100%;
-`
-
-const OverWeightToleranceText = styled.span`
-  vertical-align: text-top;
-  line-height: 9px;
-  margin: 0 0 0 3px;
-`
-
-const OverWeightTolerance = styled.span`
-  border-radius: 11px;
-  /* TODO Replace with theme color. */
-  background: #e1000f;
-  font-size: 11px;
-  color: ${p => p.theme.color.white};
-  margin: 7px 7px 7px 5px;
-  height: 17px;
-  padding: 3px 5px 0px 2px;
 `
 
 const Weights = styled.div`

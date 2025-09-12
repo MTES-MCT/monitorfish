@@ -1,5 +1,5 @@
 import { ALERT_RULES_TABLE_COLUMNS } from '@features/Alert/components/SideWindowAlerts/AlertRules/constants'
-import { OPERATIONAL_ALERTS } from '@features/Alert/constants'
+import { EXTRA_OPERATIONAL_ALERTS } from '@features/Alert/constants'
 import { DataTable, Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
@@ -66,7 +66,7 @@ export function AlertRules() {
       <SubTitle>Règles de déclenchement et d’archivage</SubTitle>
       <SmallLine />
       <DataTableWrapper>
-        <DataTable columns={ALERT_RULES_TABLE_COLUMNS} data={OPERATIONAL_ALERTS} initialSorting={[]} />
+        <DataTable columns={ALERT_RULES_TABLE_COLUMNS} data={EXTRA_OPERATIONAL_ALERTS} initialSorting={[]} />
       </DataTableWrapper>
     </Wrapper>
   )

@@ -10,7 +10,7 @@ data class VoyageDataOutput(
     val endDate: ZonedDateTime?,
     val tripNumber: String,
     val software: String?,
-    val logbookMessagesAndAlerts: LogbookMessagesAndAlertsDataOutput,
+    val logbookMessages: List<LogbookMessageDataOutput>,
     val totalTripsFoundForDates: Number?,
 ) {
     companion object {
@@ -22,9 +22,7 @@ data class VoyageDataOutput(
                 endDate = voyage.endDate,
                 tripNumber = voyage.tripNumber,
                 software = voyage.software,
-                logbookMessagesAndAlerts =
-                    LogbookMessagesAndAlertsDataOutput
-                        .fromLogbookMessagesAndAlerts(voyage.logbookMessagesAndAlerts),
+                logbookMessages = voyage.logbookMessages.map { LogbookMessageDataOutput.fromLogbookMessage(it) },
                 totalTripsFoundForDates = voyage.totalTripsFoundForDates,
             )
     }

@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.CacheManager
 import org.springframework.transaction.annotation.Transactional
 
-class JpaPositionAlertRepositoryITests : AbstractDBTests() {
+class JpaPositionAlertSpecificationRepositoryITests : AbstractDBTests() {
     @Autowired
-    private lateinit var jpaPositionAlertRepository: JpaPositionAlertRepository
+    private lateinit var jpaPositionAlertSpecificationRepository: JpaPositionAlertSpecificationSpecificationRepository
 
     @Autowired
     lateinit var cacheManager: CacheManager
@@ -17,7 +17,7 @@ class JpaPositionAlertRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllByIsDeletedIsFalse Should find all non-deleted alerts`() {
         // When
-        val alerts = jpaPositionAlertRepository.findAllByIsDeletedIsFalse()
+        val alerts = jpaPositionAlertSpecificationRepository.findAllByIsDeletedIsFalse()
 
         // then
         assertThat(alerts).hasSize(17)

@@ -61,10 +61,12 @@ describe('ReportingCard()', () => {
       underCharter: undefined,
       validationDate: '2023-10-30T15:08:05.845121Z',
       value: {
+        alertId: 1,
         dml: null,
+        name: 'Chalutage des les 3 milles',
         natinfCode: 2610,
         seaFront: Seafront.NAMO,
-        type: PendingAlertValueType.TWELVE_MILES_FISHING_ALERT
+        type: PendingAlertValueType.POSITION_ALERT
       },
       vesselId: 1234568,
       vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,

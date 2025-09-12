@@ -8,7 +8,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PNOAndLANAlertRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -25,9 +24,6 @@ import java.time.ZonedDateTime
 class GetVesselVoyageByDatesUTests {
     @MockBean
     private lateinit var logbookReportRepository: LogbookReportRepository
-
-    @MockBean
-    private lateinit var PNOAndLANAlertRepository: PNOAndLANAlertRepository
 
     @MockBean
     private lateinit var getLogbookMessages: GetLogbookMessages
@@ -74,19 +70,15 @@ class GetVesselVoyageByDatesUTests {
         val voyage =
             GetVesselVoyageByDates(
                 logbookReportRepository = logbookReportRepository,
-                PNOAndLANAlertRepository = PNOAndLANAlertRepository,
                 getDatesFromVesselTrackDepth = getDatesFromVesselTrackDepth,
                 getLogbookMessages = getLogbookMessages,
             ).execute(expectedCfr, VesselTrackDepth.CUSTOM, expectedStartDate, expectedEndDate)
-
-        val (logbookMessages, alerts) = voyage.logbookMessagesAndAlerts
 
         // Then
         assertThat(voyage.isLastVoyage).isTrue
         assertThat(voyage.isFirstVoyage).isFalse
         assertThat(voyage.startDate).isEqualTo(expectedStartDate)
         assertThat(voyage.endDate).isEqualTo(expectedEndDateWithoutLan)
-        assertThat(logbookMessages).hasSize(1)
-        assertThat(alerts).hasSize(0)
+        assertThat(voyage.logbookMessages).hasSize(1)
     }
 }

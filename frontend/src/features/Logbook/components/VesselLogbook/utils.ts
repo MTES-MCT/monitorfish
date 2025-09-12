@@ -88,28 +88,26 @@ export const EMPTY_LOGBOOK_TRIP_SUMMARY = {
   }
 }
 
-export function getLogbookTripSummary(fishingActivities: Logbook.FishingActivities | undefined): LogbookTripSummary {
-  if (!fishingActivities?.logbookMessages?.length) {
+export function getLogbookTripSummary(logbookMessages: Logbook.Message[] | undefined): LogbookTripSummary {
+  if (!logbookMessages?.length) {
     return EMPTY_LOGBOOK_TRIP_SUMMARY
   }
 
-  const messages = fishingActivities.logbookMessages
-
-  const depMessage = getDEPMessage(messages)
+  const depMessage = getDEPMessage(logbookMessages)
   const totalDEPWeight = getTotalDEPWeight(depMessage)
 
-  const lanMessage = getLANMessage(messages)
+  const lanMessage = getLANMessage(logbookMessages)
 
-  const disMessages = getDISMessages(messages)
+  const disMessages = getDISMessages(logbookMessages)
   const totalDISWeight = getTotalDISWeight(disMessages)
 
-  const cpsMessages = getCPSMessages(messages)
+  const cpsMessages = getCPSMessages(logbookMessages)
   const numberOfSpecies = getCPSNumberOfDistinctSpecies(cpsMessages)
 
-  const farMessages = getFARMessages(messages)
+  const farMessages = getFARMessages(logbookMessages)
   const totalFARWeight = getTotalFARWeight(farMessages)
 
-  const pnoMessage = getPNOMessage(messages)
+  const pnoMessage = getPNOMessage(logbookMessages)
   const totalPNOWeight = getTotalPNOWeight(pnoMessage?.message)
 
   return {

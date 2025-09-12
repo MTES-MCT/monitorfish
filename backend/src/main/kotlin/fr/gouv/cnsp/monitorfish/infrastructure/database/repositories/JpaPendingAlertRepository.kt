@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.PendingAlertEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBPendingAlertRepository
@@ -17,7 +17,7 @@ class JpaPendingAlertRepository(
         dbPendingAlertRepository.save(PendingAlertEntity.fromPendingAlert(alert, mapper))
     }
 
-    override fun findAlertsOfTypes(types: List<AlertTypeMapping>): List<PendingAlert> {
+    override fun findAlertsOfTypes(types: List<AlertType>): List<PendingAlert> {
         val rulesAsString = types.map { it.name }
 
         return dbPendingAlertRepository

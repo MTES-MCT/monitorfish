@@ -30,7 +30,7 @@ object TestUtils {
         id: Int,
         validationDate: ZonedDateTime,
         type: ReportingType,
-        alertType: AlertTypeMapping?,
+        alertType: AlertType?,
         isArchived: Boolean? = false,
         natinfCode: Int? = null,
     ): Reporting =
@@ -48,16 +48,16 @@ object TestUtils {
                 ),
             value =
                 when (alertType) {
-                    AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT -> throw IllegalArgumentException(
-                        "Unhandled test case",
-                    )
-
-                    AlertTypeMapping.THREE_MILES_TRAWLING_ALERT -> ThreeMilesTrawlingAlert(seaFront = NAMO.toString())
-                    AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT -> FrenchEEZFishingAlert(seaFront = NAMO.toString())
-                    AlertTypeMapping.TWELVE_MILES_FISHING_ALERT -> TwelveMilesFishingAlert(seaFront = NAMO.toString())
-                    AlertTypeMapping.RTC_FISHING_ALERT -> RTCFishingAlert(seaFront = NAMO.toString())
-                    AlertTypeMapping.MISSING_FAR_ALERT -> MissingFARAlert(seaFront = NAMO.toString())
-                    AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT -> MissingFAR48HoursAlert(seaFront = NAMO.toString())
+                    AlertType.POSITION_ALERT ->
+                        Alert(
+                            type = AlertType.POSITION_ALERT,
+                            seaFront = NAMO.toString(),
+                            alertId = 1,
+                            natinfCode = 7059,
+                            name = "Chalutage dans les 3 milles",
+                        )
+                    AlertType.MISSING_FAR_ALERT -> AlertType.MISSING_FAR_ALERT.getValue()
+                    AlertType.MISSING_FAR_48_HOURS_ALERT -> AlertType.MISSING_FAR_48_HOURS_ALERT.getValue()
                     else ->
                         InfractionSuspicion(
                             ReportingActor.OPS,
@@ -85,7 +85,14 @@ object TestUtils {
                 flagState = CountryCode.FR,
                 creationDate = dateTime,
                 validationDate = dateTime,
-                value = ThreeMilesTrawlingAlert() as ReportingValue,
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ) as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
             ),
@@ -100,7 +107,14 @@ object TestUtils {
                 flagState = CountryCode.FR,
                 creationDate = dateTime,
                 validationDate = dateTime,
-                value = ThreeMilesTrawlingAlert() as ReportingValue,
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ) as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
             ),
@@ -115,7 +129,14 @@ object TestUtils {
                 flagState = CountryCode.FR,
                 creationDate = dateTime.minusYears(1),
                 validationDate = dateTime.minusYears(1),
-                value = ThreeMilesTrawlingAlert() as ReportingValue,
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ) as ReportingValue,
                 isArchived = true,
                 isDeleted = false,
             ),
@@ -683,273 +704,6 @@ object TestUtils {
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
-            ),
-        )
-    }
-
-    fun getDummyPNOAndLANLogbookMessages(
-        weightToAdd: Double = 0.0,
-        addSpeciesToLAN: Boolean = false,
-    ): List<Pair<LogbookMessage, LogbookMessage>> {
-        val catchOne = LogbookFishingCatch()
-        catchOne.species = "TTV"
-        catchOne.weight = 123.0
-        catchOne.conversionFactor = 1.0
-
-        val catchTwo = LogbookFishingCatch()
-        catchTwo.species = "SMV"
-        catchTwo.weight = 961.5
-        catchTwo.conversionFactor = 1.22
-
-        val catchThree = LogbookFishingCatch()
-        catchThree.species = "PNB"
-        catchThree.weight = 69.7
-        catchThree.conversionFactor = 1.35
-
-        val catchFour = LogbookFishingCatch()
-        catchFour.species = "CQL"
-        catchFour.weight = 98.2
-        catchFour.conversionFactor = 1.0
-
-        val catchFive = LogbookFishingCatch()
-        catchFive.species = "FGV"
-        catchFive.weight = 25.5
-
-        val catchSix = LogbookFishingCatch()
-        catchSix.species = "THB"
-        catchSix.weight = 35.0
-
-        val catchSeven = LogbookFishingCatch()
-        catchSeven.species = "VGY"
-        catchSeven.weight = 66666.0
-
-        val catchEight = LogbookFishingCatch()
-        catchEight.species = "MQP"
-        catchEight.weight = 11.1
-
-        val catchNine = LogbookFishingCatch()
-        catchNine.species = "FPS"
-        catchNine.weight = 22.0
-
-        val catchTen = LogbookFishingCatch()
-        catchTen.species = "DPD"
-        catchTen.weight = 2225.0
-
-        val firstLan = LAN()
-        // The weight is reduced because of the conversion factor
-        // catchTwo: 788.11 = 961.5 / 1.22
-        // catchTwo: 51.62 = 69.7 / 1.35
-        firstLan.catchLanded =
-            listOf(
-                catchOne,
-                catchTwo.copy(weight = 788.11),
-                catchThree.copy(weight = 51.62),
-                catchFour,
-                catchNine,
-            )
-
-        val firstPno = PNO()
-        firstPno.catchOnboard =
-            listOf(
-                catchOne.copy(weight = catchOne.weight?.plus(weightToAdd)),
-                catchTwo.copy(weight = catchTwo.weight?.plus(0.5)),
-                catchThree.copy(weight = catchThree.weight?.plus(weightToAdd)),
-                catchFour,
-            )
-
-        val secondLan = LAN()
-        if (addSpeciesToLAN) {
-            secondLan.catchLanded = listOf(catchFive, catchSix, catchSeven, catchEight, catchTen)
-        } else {
-            secondLan.catchLanded = listOf(catchFive, catchSix, catchSeven, catchEight)
-        }
-        val secondPno = PNO()
-        secondPno.catchOnboard = listOf(catchFive, catchSix, catchSeven, catchEight)
-
-        return listOf(
-            Pair(
-                LogbookMessage(
-                    id = 1,
-                    operationNumber = "456846844658",
-                    tripNumber = "125345",
-                    reportId = "456846844658",
-                    operationType = LogbookOperationType.DAT,
-                    messageType = "LAN",
-                    message = firstLan,
-                    transmissionFormat = LogbookTransmissionFormat.ERS,
-                    integrationDateTime = ZonedDateTime.now(),
-                    isEnriched = false,
-                    operationDateTime = ZonedDateTime.now(),
-                    reportDateTime = ZonedDateTime.now(),
-                ),
-                LogbookMessage(
-                    id = 2,
-                    operationNumber = "47177857577",
-                    tripNumber = "125345",
-                    reportId = "47177857577",
-                    operationType = LogbookOperationType.DAT,
-                    messageType = "PNO",
-                    message = firstPno,
-                    transmissionFormat = LogbookTransmissionFormat.ERS,
-                    integrationDateTime = ZonedDateTime.now(),
-                    isEnriched = false,
-                    operationDateTime = ZonedDateTime.now(),
-                    reportDateTime = ZonedDateTime.now(),
-                ),
-            ),
-            Pair(
-                LogbookMessage(
-                    id = 3,
-                    operationNumber = "48545254254",
-                    tripNumber = "125345",
-                    reportId = "48545254254",
-                    operationType = LogbookOperationType.DAT,
-                    messageType = "LAN",
-                    message = secondLan,
-                    transmissionFormat = LogbookTransmissionFormat.ERS,
-                    integrationDateTime = ZonedDateTime.now(),
-                    isEnriched = false,
-                    operationDateTime = ZonedDateTime.now(),
-                    reportDateTime = ZonedDateTime.now(),
-                ),
-                LogbookMessage(
-                    id = 4,
-                    operationNumber = "004045204504",
-                    tripNumber = "125345",
-                    reportId = "004045204504",
-                    operationType = LogbookOperationType.DAT,
-                    messageType = "PNO",
-                    message = secondPno,
-                    transmissionFormat = LogbookTransmissionFormat.ERS,
-                    integrationDateTime = ZonedDateTime.now(),
-                    isEnriched = false,
-                    operationDateTime = ZonedDateTime.now(),
-                    reportDateTime = ZonedDateTime.now(),
-                ),
-            ),
-        )
-    }
-
-    fun getDummyPNOAndLANLogbookMessagesWithSpeciesInDouble(
-        weightToAdd: Double = 0.0,
-        addSpeciesToLAN: Boolean = false,
-    ): List<Pair<LogbookMessage, LogbookMessage>> {
-        val catchOne = LogbookFishingCatch()
-        catchOne.species = "TTV"
-        catchOne.weight = 123.0
-        val catchTwo = LogbookFishingCatch()
-        catchTwo.species = "SMV"
-        catchTwo.weight = 961.5
-        val catchThree = LogbookFishingCatch()
-        catchThree.species = "PNB"
-        catchThree.weight = 69.7
-        val catchFour = LogbookFishingCatch()
-        catchFour.species = "CQL"
-        catchFour.weight = 98.2
-
-        val catchFive = LogbookFishingCatch()
-        catchFive.species = "FGV"
-        catchFive.weight = 25.5
-        val catchSix = LogbookFishingCatch()
-        catchSix.species = "THB"
-        catchSix.weight = 35.0
-        val catchSeven = LogbookFishingCatch()
-        catchSeven.species = "VGY"
-        catchSeven.weight = 66666.0
-        val catchEight = LogbookFishingCatch()
-        catchEight.species = "MQP"
-        catchEight.weight = 11.1
-
-        val catchNine = LogbookFishingCatch()
-        catchNine.species = "FPS"
-        catchNine.weight = 22.0
-
-        val catchTen = LogbookFishingCatch()
-        catchTen.species = "DPD"
-        catchTen.weight = 2225.0
-
-        val firstLan = LAN()
-        firstLan.catchLanded = listOf(catchOne, catchTwo, catchTwo, catchTwo, catchThree, catchFour, catchNine)
-
-        val firstPno = PNO()
-        firstPno.catchOnboard =
-            listOf(
-                catchOne.copy(weight = catchOne.weight?.plus(weightToAdd)),
-                catchTwo.copy(weight = catchTwo.weight?.plus(0.5)),
-                catchTwo,
-                catchThree.copy(weight = catchThree.weight?.plus(weightToAdd)),
-                catchFour,
-            )
-
-        val secondLan = LAN()
-        if (addSpeciesToLAN) {
-            secondLan.catchLanded = listOf(catchFive, catchSix, catchSeven, catchEight, catchTen)
-        } else {
-            secondLan.catchLanded = listOf(catchFive, catchSix, catchSeven, catchEight)
-        }
-        val secondPno = PNO()
-        secondPno.catchOnboard = listOf(catchFive, catchSix, catchSeven, catchEight)
-
-        return listOf(
-            Pair(
-                LogbookMessage(
-                    id = 1,
-                    operationNumber = "456846844658",
-                    tripNumber = "125345",
-                    reportId = "456846844658",
-                    operationType = LogbookOperationType.DAT,
-                    messageType = "LAN",
-                    message = firstLan,
-                    transmissionFormat = LogbookTransmissionFormat.ERS,
-                    integrationDateTime = ZonedDateTime.now(),
-                    isEnriched = false,
-                    operationDateTime = ZonedDateTime.now(),
-                    reportDateTime = ZonedDateTime.now(),
-                ),
-                LogbookMessage(
-                    id = 2,
-                    operationNumber = "47177857577",
-                    tripNumber = "125345",
-                    reportId = "47177857577",
-                    operationType = LogbookOperationType.DAT,
-                    messageType = "PNO",
-                    message = firstPno,
-                    transmissionFormat = LogbookTransmissionFormat.ERS,
-                    integrationDateTime = ZonedDateTime.now(),
-                    isEnriched = false,
-                    operationDateTime = ZonedDateTime.now(),
-                    reportDateTime = ZonedDateTime.now(),
-                ),
-            ),
-            Pair(
-                LogbookMessage(
-                    id = 3,
-                    operationNumber = "48545254254",
-                    tripNumber = "125345",
-                    reportId = "48545254254",
-                    operationType = LogbookOperationType.DAT,
-                    messageType = "LAN",
-                    message = secondLan,
-                    transmissionFormat = LogbookTransmissionFormat.ERS,
-                    integrationDateTime = ZonedDateTime.now(),
-                    isEnriched = false,
-                    operationDateTime = ZonedDateTime.now(),
-                    reportDateTime = ZonedDateTime.now(),
-                ),
-                LogbookMessage(
-                    id = 4,
-                    operationNumber = "004045204504",
-                    tripNumber = "125345",
-                    reportId = "004045204504",
-                    operationType = LogbookOperationType.DAT,
-                    messageType = "PNO",
-                    message = secondPno,
-                    transmissionFormat = LogbookTransmissionFormat.ERS,
-                    integrationDateTime = ZonedDateTime.now(),
-                    isEnriched = false,
-                    operationDateTime = ZonedDateTime.now(),
-                    reportDateTime = ZonedDateTime.now(),
-                ),
             ),
         )
     }

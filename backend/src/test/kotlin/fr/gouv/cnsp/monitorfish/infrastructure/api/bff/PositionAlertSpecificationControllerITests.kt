@@ -20,21 +20,21 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @Import(SentryConfig::class, MapperConfiguration::class)
 @AutoConfigureMockMvc(addFilters = false)
-@WebMvcTest(value = [(PositionAlertController::class)])
-class PositionAlertControllerITests {
+@WebMvcTest(value = [(PositionAlertSpecificationController::class)])
+class PositionAlertSpecificationControllerITests {
     @Autowired
     private lateinit var api: MockMvc
 
     @MockBean
-    private lateinit var getPositionAlerts: GetPositionAlerts
+    private lateinit var getPositionAlertSpecifications: GetPositionAlertSpecifications
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
     @Test
-    fun `Should get all pending alerts`() {
+    fun `Should get all position alerts`() {
         // Given
-        given(getPositionAlerts.execute()).willReturn(
+        given(getPositionAlertSpecifications.execute()).willReturn(
             listOf(DUMMY_POSITION_ALERT),
         )
 
@@ -45,5 +45,6 @@ class PositionAlertControllerITests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
             .andExpect(jsonPath("$[0].name", equalTo("Chalutage dans les 3 milles")))
+            .andExpect(jsonPath("$[0].type", equalTo("POSITION_ALERT")))
     }
 }

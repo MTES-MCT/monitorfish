@@ -3,8 +3,9 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -26,7 +27,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         // Given
         val creationDate = ZonedDateTime.now()
         val now = ZonedDateTime.now()
-        val alertOne =
+        val positionAlertOne =
             PendingAlert(
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
@@ -36,21 +37,28 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 flagState = CountryCode.FR,
                 tripNumber = "123456",
                 creationDate = creationDate,
-                value = ThreeMilesTrawlingAlert("NAMO"),
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ),
                 latitude = 5.5588,
                 longitude = -45.3698,
             )
 
         // When
-        jpaReportingRepository.save(alertOne, now)
+        jpaReportingRepository.save(positionAlertOne, now)
         val reporting = jpaReportingRepository.findAll()
 
         // Then
         assertThat(reporting).hasSize(16)
         assertThat(reporting.last().internalReferenceNumber).isEqualTo("FRFGRGR")
         assertThat(reporting.last().externalReferenceNumber).isEqualTo("RGD")
-        val alert = reporting.last().value as ThreeMilesTrawlingAlert
-        assertThat(alert.seaFront).isEqualTo("NAMO")
+        val positionAlert = reporting.last().value as Alert
+        assertThat(positionAlert.seaFront).isEqualTo("NAMO")
         assertThat(reporting.last().creationDate).isEqualTo(creationDate)
         assertThat(reporting.last().validationDate).isEqualTo(now)
         assertThat(reporting.last().latitude).isEqualTo(5.5588)
@@ -161,14 +169,14 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(reporting.last().internalReferenceNumber).isEqualTo("ABC000180832")
         assertThat(reporting.last().isArchived).isEqualTo(true)
         assertThat(reporting.last().isDeleted).isEqualTo(false)
-        val alertOne = reporting.last().value as ThreeMilesTrawlingAlert
-        assertThat(alertOne.seaFront).isEqualTo("NAMO")
+        val positionAlertOne = reporting.last().value as Alert
+        assertThat(positionAlertOne.seaFront).isEqualTo("NAMO")
 
         assertThat(reporting.first().internalReferenceNumber).isEqualTo("ABC000180832")
         assertThat(reporting.first().isArchived).isEqualTo(false)
         assertThat(reporting.first().isDeleted).isEqualTo(false)
-        val alertTwo = reporting.first().value as ThreeMilesTrawlingAlert
-        assertThat(alertTwo.seaFront).isEqualTo("NAMO")
+        val positionAlertTwo = reporting.first().value as Alert
+        assertThat(positionAlertTwo.seaFront).isEqualTo("NAMO")
     }
 
     @Test
@@ -187,8 +195,8 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(reporting.first().internalReferenceNumber).isEqualTo("ABC000180832")
         assertThat(reporting.first().isArchived).isEqualTo(false)
         assertThat(reporting.first().isDeleted).isEqualTo(false)
-        val alertTwo = reporting.first().value as ThreeMilesTrawlingAlert
-        assertThat(alertTwo.seaFront).isEqualTo("NAMO")
+        val positionAlertTwo = reporting.first().value as Alert
+        assertThat(positionAlertTwo.seaFront).isEqualTo("NAMO")
     }
 
     @Test
@@ -206,14 +214,14 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(reporting.last().internalReferenceNumber).isEqualTo("ABC000180832")
         assertThat(reporting.last().isArchived).isEqualTo(true)
         assertThat(reporting.last().isDeleted).isEqualTo(false)
-        val alertOne = reporting.last().value as ThreeMilesTrawlingAlert
-        assertThat(alertOne.seaFront).isEqualTo("NAMO")
+        val positionAlertOne = reporting.last().value as Alert
+        assertThat(positionAlertOne.seaFront).isEqualTo("NAMO")
 
         assertThat(reporting.first().internalReferenceNumber).isEqualTo("ABC000180832")
         assertThat(reporting.first().isArchived).isEqualTo(false)
         assertThat(reporting.first().isDeleted).isEqualTo(false)
-        val alertTwo = reporting.first().value as ThreeMilesTrawlingAlert
-        assertThat(alertTwo.seaFront).isEqualTo("NAMO")
+        val positionAlertTwo = reporting.first().value as Alert
+        assertThat(positionAlertTwo.seaFront).isEqualTo("NAMO")
     }
 
     @Test
@@ -231,8 +239,8 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(reporting.first().internalReferenceNumber).isEqualTo("ABC000180832")
         assertThat(reporting.first().isArchived).isEqualTo(false)
         assertThat(reporting.first().isDeleted).isEqualTo(false)
-        val alertTwo = reporting.first().value as ThreeMilesTrawlingAlert
-        assertThat(alertTwo.seaFront).isEqualTo("NAMO")
+        val positionAlertTwo = reporting.first().value as Alert
+        assertThat(positionAlertTwo.seaFront).isEqualTo("NAMO")
     }
 
     @Test
@@ -457,7 +465,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(reportings).hasSize(1)
         assertThat(reportings.first().first).isEqualTo(1)
-        assertThat(reportings.first().second.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
+        assertThat(reportings.first().second.type).isEqualTo(AlertType.POSITION_ALERT)
     }
 
     @Test

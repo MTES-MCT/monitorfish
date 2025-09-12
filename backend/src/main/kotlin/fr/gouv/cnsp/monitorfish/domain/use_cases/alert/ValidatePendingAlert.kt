@@ -54,9 +54,9 @@ class ValidatePendingAlert(
                     "The fields 'internalReferenceNumber' must be not null when the vessel identifier is INTERNAL_REFERENCE_NUMBER."
                 }
                 lastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-                    validatedAlert.value.type,
-                    validatedAlert.vesselIdentifier,
-                    validatedAlert.internalReferenceNumber,
+                    alertName = validatedAlert.value.name,
+                    vesselIdentifier = validatedAlert.vesselIdentifier,
+                    value = validatedAlert.internalReferenceNumber,
                     isValidated = true,
                 )
             }
@@ -65,9 +65,9 @@ class ValidatePendingAlert(
                     "The fields 'ircs' must be not null when the vessel identifier is IRCS."
                 }
                 lastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-                    validatedAlert.value.type,
-                    validatedAlert.vesselIdentifier,
-                    validatedAlert.ircs,
+                    alertName = validatedAlert.value.name,
+                    vesselIdentifier = validatedAlert.vesselIdentifier,
+                    value = validatedAlert.ircs,
                     isValidated = true,
                 )
             }
@@ -76,9 +76,9 @@ class ValidatePendingAlert(
                     "The fields 'externalReferenceNumber' must be not null when the vessel identifier is EXTERNAL_REFERENCE_NUMBER."
                 }
                 lastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-                    validatedAlert.value.type,
-                    validatedAlert.vesselIdentifier,
-                    validatedAlert.externalReferenceNumber,
+                    alertName = validatedAlert.value.name,
+                    vesselIdentifier = validatedAlert.vesselIdentifier,
+                    value = validatedAlert.externalReferenceNumber,
                     isValidated = true,
                 )
             }

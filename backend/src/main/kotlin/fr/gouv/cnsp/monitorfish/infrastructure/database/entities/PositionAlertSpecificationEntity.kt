@@ -10,7 +10,7 @@ import java.time.ZonedDateTime
 
 @Entity
 @Table(name = "position_alerts")
-data class PositionAlertEntity(
+data class PositionAlertSpecificationEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -71,8 +71,8 @@ data class PositionAlertEntity(
     @Column(name = "created_at_utc")
     val createdAtUtc: ZonedDateTime,
 ) {
-    fun toPositionAlert(mapper: ObjectMapper): PositionAlert =
-        PositionAlert(
+    fun toPositionAlertSpecification(mapper: ObjectMapper): PositionAlertSpecification =
+        PositionAlertSpecification(
             id = id,
             name = name,
             description = description,

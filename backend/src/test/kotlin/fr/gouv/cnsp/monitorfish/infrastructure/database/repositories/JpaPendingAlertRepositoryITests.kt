@@ -2,8 +2,9 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -19,7 +20,7 @@ class JpaPendingAlertRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAlertsOfTypes Should return an alert with the type entered`() {
         // Given
-        val alertOne =
+        val positionAlertOne =
             PendingAlert(
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
@@ -29,18 +30,25 @@ class JpaPendingAlertRepositoryITests : AbstractDBTests() {
                 flagState = CountryCode.FR,
                 tripNumber = "123456",
                 creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert(),
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ),
             )
-        jpaPendingAlertRepository.save(alertOne)
+        jpaPendingAlertRepository.save(positionAlertOne)
 
         // When
-        val alerts = jpaPendingAlertRepository.findAlertsOfTypes(listOf(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT))
+        val alerts = jpaPendingAlertRepository.findAlertsOfTypes(listOf(AlertType.POSITION_ALERT))
 
         // Then
-        assertThat(alerts).hasSize(15)
+        assertThat(alerts).hasSize(17)
         assertThat(alerts.first().externalReferenceNumber).isEqualTo("DONTSINK")
         assertThat(alerts.first().internalReferenceNumber).isEqualTo("FAK000999999")
-        assertThat(alerts.first().value.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
+        assertThat(alerts.first().value.type).isEqualTo(AlertType.POSITION_ALERT)
         assertThat(alerts.last().vesselId).isEqualTo(123)
     }
 
@@ -53,7 +61,7 @@ class JpaPendingAlertRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(alert.externalReferenceNumber).isEqualTo("DONTSINK")
         assertThat(alert.internalReferenceNumber).isEqualTo("FAK000999999")
-        assertThat(alert.value.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
+        assertThat(alert.value.type).isEqualTo(AlertType.POSITION_ALERT)
         assertThat(alert.value.dml).isEqualTo("DML 13")
         assertThat(alert.value.seaFront).isEqualTo("NAMO")
     }

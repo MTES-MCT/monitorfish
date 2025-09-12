@@ -21,5 +21,5 @@ SELECT
     district_codes,
     producer_organizations
 FROM position_alerts
-WHERE is_deleted IS FALSE
+WHERE NOT is_deleted AND NOT is_deactivated
 ORDER BY id

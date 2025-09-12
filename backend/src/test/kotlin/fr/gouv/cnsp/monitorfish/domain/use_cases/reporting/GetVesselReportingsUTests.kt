@@ -2,8 +2,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -149,7 +149,7 @@ class GetVesselReportingsUTests {
                 validationDate = ZonedDateTime.parse("2022-09-15T10:15:30Z"),
                 internalReferenceNumber = "FR224226850",
                 type = ReportingType.ALERT,
-                alertType = AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+                alertType = AlertType.POSITION_ALERT,
             )
 
         val secondReporting =
@@ -158,7 +158,7 @@ class GetVesselReportingsUTests {
                 validationDate = ZonedDateTime.parse("2022-11-20T08:00:00Z"),
                 internalReferenceNumber = "FR224226850",
                 type = ReportingType.ALERT,
-                alertType = AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+                alertType = AlertType.POSITION_ALERT,
             )
 
         val thirdReporting =
@@ -167,7 +167,7 @@ class GetVesselReportingsUTests {
                 validationDate = ZonedDateTime.parse("2024-12-30T15:08:05.845121Z"),
                 internalReferenceNumber = "FR224226850",
                 type = ReportingType.ALERT,
-                alertType = AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+                alertType = AlertType.POSITION_ALERT,
             )
 
         val fourthReporting =
@@ -176,7 +176,7 @@ class GetVesselReportingsUTests {
                 validationDate = ZonedDateTime.parse("2023-10-30T09:10:00Z"),
                 internalReferenceNumber = "FR224226850",
                 type = ReportingType.ALERT,
-                alertType = AlertTypeMapping.MISSING_FAR_ALERT,
+                alertType = AlertType.MISSING_FAR_ALERT,
             )
 
         given(reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(any(), any(), any())).willReturn(
@@ -203,23 +203,23 @@ class GetVesselReportingsUTests {
 
         val firstResult = result.current[0]
         assertThat(firstResult.reporting.id).isEqualTo(1234567)
-        assertThat((firstResult.reporting.value as AlertType).type).isEqualTo(
-            AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+        assertThat((firstResult.reporting.value as Alert).type).isEqualTo(
+            AlertType.POSITION_ALERT,
         )
 
         assertThat(firstResult.otherOccurrencesOfSameAlert).hasSize(2)
         assertThat(firstResult.otherOccurrencesOfSameAlert[0].id).isEqualTo(123456)
-        assertThat((firstResult.otherOccurrencesOfSameAlert[0].value as AlertType).type).isEqualTo(
-            AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+        assertThat((firstResult.otherOccurrencesOfSameAlert[0].value as Alert).type).isEqualTo(
+            AlertType.POSITION_ALERT,
         )
         assertThat(firstResult.otherOccurrencesOfSameAlert[1].id).isEqualTo(12345)
-        assertThat((firstResult.otherOccurrencesOfSameAlert[1].value as AlertType).type).isEqualTo(
-            AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+        assertThat((firstResult.otherOccurrencesOfSameAlert[1].value as Alert).type).isEqualTo(
+            AlertType.POSITION_ALERT,
         )
 
         val secondResult = result.current[1]
         assertThat(secondResult.reporting.id).isEqualTo(12345678)
-        assertThat((secondResult.reporting.value as AlertType).type).isEqualTo(AlertTypeMapping.MISSING_FAR_ALERT)
+        assertThat((secondResult.reporting.value as Alert).type).isEqualTo(AlertType.MISSING_FAR_ALERT)
         assertThat(secondResult.otherOccurrencesOfSameAlert).isEmpty()
     }
 
@@ -232,7 +232,7 @@ class GetVesselReportingsUTests {
                 validationDate = ZonedDateTime.parse("2024-01-01T12:00:00Z"),
                 internalReferenceNumber = "FR55667788",
                 type = ReportingType.ALERT,
-                alertType = AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
+                alertType = AlertType.POSITION_ALERT,
             )
 
         val alertReporting2 =
@@ -241,7 +241,7 @@ class GetVesselReportingsUTests {
                 validationDate = ZonedDateTime.parse("2024-02-01T12:00:00Z"),
                 internalReferenceNumber = "FR55667788",
                 type = ReportingType.ALERT,
-                alertType = AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
+                alertType = AlertType.POSITION_ALERT,
             )
 
         val infractionReporting =
@@ -259,7 +259,7 @@ class GetVesselReportingsUTests {
                 validationDate = ZonedDateTime.parse("2024-04-01T12:00:00Z"),
                 internalReferenceNumber = "FR55667788",
                 type = ReportingType.ALERT,
-                alertType = AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT,
+                alertType = AlertType.MISSING_FAR_48_HOURS_ALERT,
             )
 
         given(reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(any(), any(), any())).willReturn(
@@ -286,8 +286,8 @@ class GetVesselReportingsUTests {
 
         val firstResult = result.current[0]
         assertThat(firstResult.reporting.id).isEqualTo(44556)
-        assertThat((firstResult.reporting.value as AlertType).type).isEqualTo(
-            AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT,
+        assertThat((firstResult.reporting.value as Alert).type).isEqualTo(
+            AlertType.MISSING_FAR_48_HOURS_ALERT,
         )
         assertThat(firstResult.otherOccurrencesOfSameAlert).isEmpty()
 
@@ -298,13 +298,13 @@ class GetVesselReportingsUTests {
 
         val thirdResult = result.current[2]
         assertThat(thirdResult.reporting.id).isEqualTo(22334)
-        assertThat((thirdResult.reporting.value as AlertType).type).isEqualTo(
-            AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
+        assertThat((thirdResult.reporting.value as Alert).type).isEqualTo(
+            AlertType.POSITION_ALERT,
         )
         assertThat(thirdResult.otherOccurrencesOfSameAlert).hasSize(1)
         assertThat(thirdResult.otherOccurrencesOfSameAlert[0].id).isEqualTo(11223)
-        assertThat((thirdResult.otherOccurrencesOfSameAlert[0].value as AlertType).type).isEqualTo(
-            AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
+        assertThat((thirdResult.otherOccurrencesOfSameAlert[0].value as Alert).type).isEqualTo(
+            AlertType.POSITION_ALERT,
         )
     }
 
@@ -317,7 +317,7 @@ class GetVesselReportingsUTests {
                 validationDate = ZonedDateTime.now().minusMonths(11),
                 internalReferenceNumber = "FR55667788",
                 type = ReportingType.ALERT,
-                alertType = AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
+                alertType = AlertType.POSITION_ALERT,
                 isArchived = true,
             )
 
@@ -327,7 +327,7 @@ class GetVesselReportingsUTests {
                 validationDate = ZonedDateTime.now().minusMonths(11),
                 internalReferenceNumber = "FR55667788",
                 type = ReportingType.ALERT,
-                alertType = AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
+                alertType = AlertType.POSITION_ALERT,
                 isArchived = true,
             )
 
@@ -358,7 +358,7 @@ class GetVesselReportingsUTests {
                 validationDate = ZonedDateTime.now().minusMonths(7),
                 internalReferenceNumber = "FR55667788",
                 type = ReportingType.ALERT,
-                alertType = AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT,
+                alertType = AlertType.MISSING_FAR_48_HOURS_ALERT,
                 isArchived = true,
             )
 
@@ -415,7 +415,7 @@ class GetVesselReportingsUTests {
         assertThat(infractionSuspicionsSummary[0].numberOfOccurrences).isEqualTo(2)
         assertThat(
             infractionSuspicionsSummary[0].title,
-        ).isEqualTo("Pêche dans les 12 milles sans droits historiques (NATINF 2610)")
+        ).isEqualTo("Chalutage dans les 3 milles (NATINF 7059)")
         assertThat(infractionSuspicionsSummary[1].numberOfOccurrences).isEqualTo(1)
         assertThat(
             infractionSuspicionsSummary[1].title,

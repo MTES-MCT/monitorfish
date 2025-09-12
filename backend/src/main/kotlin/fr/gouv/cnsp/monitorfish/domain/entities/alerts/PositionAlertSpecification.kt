@@ -1,16 +1,18 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.alerts
 
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import java.time.ZonedDateTime
 
-data class PositionAlert(
+data class PositionAlertSpecification(
     val id: Int? = null,
     val name: String,
+    val type: String = AlertType.POSITION_ALERT.name,
     val description: String,
     val isUserDefined: Boolean,
     val natinfCode: Int,
     val isActivated: Boolean = true,
     val isInError: Boolean = false,
-    val isDeleted: Boolean,
+    val isDeleted: Boolean = false,
     val errorReason: String? = null,
     val validityStartDatetimeUtc: ZonedDateTime? = null,
     val validityEndDatetimeUtc: ZonedDateTime? = null,

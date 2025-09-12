@@ -485,7 +485,9 @@ def loaded_control_anteriority() -> pd.DataFrame:
                 [],
                 [],
             ],
-        }
+            "last_control_at_sea_datetime_utc": [None] * 5,
+            "last_control_at_quay_datetime_utc": [None] * 5,
+        },
     )
 
 

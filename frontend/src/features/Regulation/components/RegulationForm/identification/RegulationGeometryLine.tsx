@@ -36,6 +36,7 @@ export function RegulationGeometryLine({
         }}
         options={geometryIdList}
         placeholder="Choisir un tracé"
+        style={{ width: '200px' }}
       />
       {id && (
         <>

@@ -32,7 +32,6 @@ export function RegulationLayerZoneLine() {
         onChange={setZoneName}
         placeholder="Nom de la zone"
         value={zone}
-        width="200px"
       />
       <InfoBox pointer>
         <InfoTextWrapper>
@@ -45,4 +44,5 @@ export function RegulationLayerZoneLine() {
 
 const StyledTextInput = styled(TextInput)`
   margin-right: 8px;
+  width: 200px;
 `

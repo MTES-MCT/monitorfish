@@ -52,6 +52,7 @@ export function RegulationTopicLine({ isDisabled }) {
           options={layerTypeList}
           placeholder="Choisir une thématique"
           searchable
+          style={{ width: '200px' }}
         />
         {topic && !isAddTopicClicked && <StyledTag onDelete={updateTopic}>{topic as unknown as string}</StyledTag>}
         {isAddTopicClicked && (

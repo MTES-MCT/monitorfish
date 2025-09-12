@@ -50,6 +50,7 @@ export function RegulationRegionLine({ isDisabled }) {
         placeholder="Choisir une région"
         renderValue={(_, items) => (items.length > 0 ? <OptionValue>Région ({items.length}) </OptionValue> : <></>)}
         searchable={false}
+        style={{ width: '200px' }}
         value={regionList}
       />
       {regionList?.map(selectedRegion => (
@@ -63,7 +64,6 @@ export function RegulationRegionLine({ isDisabled }) {
 
 const StyledMultiSelect = styled(MultiSelect)`
   margin-right: 8px;
-  width: 150px;
 `
 
 const StyledTag = styled(SingleTag)`

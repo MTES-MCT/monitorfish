@@ -1,5 +1,4 @@
 import { THEME } from '@mtes-mct/monitor-ui'
-import { Checkbox } from 'rsuite'
 import styled, { css } from 'styled-components'
 
 export const ContentLine = styled.div<{
@@ -81,34 +80,6 @@ export const InfoText = styled.span<{
   white-space: pre-line;
 `
 
-export const CustomCheckbox = styled(Checkbox)`
-  padding-right: 15px;
-  font-size: 13px;
-  color: ${THEME.color.gunMetal};
-  display: flex;
-  vertical-align: baseline;
-  margin-left: 0px;
-  .rs-checkbox-checker {
-    top: 0px !important;
-    left: 0px !important;
-    border: 1px solid ${p => (p.$isRequired ? THEME.color.maximumRed : THEME.color.lightGray)};
-  }
-  .rs-checkbox-checker .rs-checkbox-inner {
-    &:before {
-      border: none !important;
-      box-sizing: border-box;
-    }
-    &:after {
-      margin-top: 0px !important;
-      margin-left: 4px !important;
-    }
-  }
-  .rs-checkbox-checker {
-    padding-top: 0px !important;
-    padding-left: 24px !important;
-  }
-`
-
 export const customRadioGroup = css`
   display: flex;
   flex-direction: row;
@@ -136,6 +107,7 @@ export const FormContent = styled.div<{
 }>`
   display: ${p => (!p.$display ? 'none' : 'flex')};
   flex-direction: column;
+  gap: 12px;
   align-items: flex-start;
   margin-bottom: 15px;
 `

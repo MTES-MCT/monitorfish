@@ -1,9 +1,9 @@
+import { Checkbox, type Option } from '@mtes-mct/monitor-ui'
 import { Fragment, useCallback } from 'react'
 import styled from 'styled-components'
 
 import {
   ContentLine,
-  CustomCheckbox,
   Delimiter,
   FormContent,
   FormSection,
@@ -17,7 +17,6 @@ import { MenuItem } from '../custom_form/MenuItem'
 import { Tag } from '../Tag'
 
 import type { RegulatedSpecies as RegulatedSpeciesType } from '@features/Regulation/types'
-import type { Option } from '@mtes-mct/monitor-ui'
 import type { Specy } from 'domain/types/specy'
 
 const REGULATORY_SPECIES_KEYS = {
@@ -156,13 +155,13 @@ export function RegulatedSpecies({
       <FormContent $display>
         {!authorized && (
           <ContentLine>
-            <CustomCheckbox
+            <Checkbox
               checked={!!controlledRegulatedSpecies.allSpecies}
               inline
+              label="Toutes les espèces"
+              name="allSpecies"
               onChange={_ => onAllSpeciesChange(!controlledRegulatedSpecies.allSpecies)}
-            >
-              Toutes les espèces
-            </CustomCheckbox>
+            />
           </ContentLine>
         )}
         <ContentLine>

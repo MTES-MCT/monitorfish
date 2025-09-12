@@ -36,6 +36,7 @@ export function RegulationLawTypeLine({ selectData }) {
         options={selectData}
         placeholder="Choisir un ensemble"
         searchable={false}
+        style={{ width: '200px' }}
       />
       {lawType && <StyledTag onDelete={onLawTypeChange}>{lawType as unknown as string}</StyledTag>}
     </ContentLine>

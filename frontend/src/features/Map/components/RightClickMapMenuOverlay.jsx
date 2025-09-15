@@ -1,18 +1,18 @@
 import Overlay from 'ol/Overlay'
 import { createRef, useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
 import { TrackRangeModal } from './map_menu/TrackRangeModal'
-import { COLORS } from '../../../constants/constants'
-import { getTrackRequestFromTrackDepth, VesselTrackDepth } from '../../Vessel/types/vesselTrackDepth'
-import { addVesselToFavorites } from '../../FavoriteVessel/slice'
-import { showVesselTrack } from '../../Vessel/useCases/showVesselTrack'
 import { useClickOutsideWhenOpened } from '../../../hooks/useClickOutsideWhenOpened'
+import { addVesselToFavorites } from '../../FavoriteVessel/slice'
 import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
+import { getTrackRequestFromTrackDepth, VesselTrackDepth } from '../../Vessel/types/vesselTrackDepth'
+import { showVesselTrack } from '../../Vessel/useCases/showVesselTrack'
 import { monitorfishMap } from '../monitorfishMap'
 
-function MapMenuOverlay({ coordinates, vessel }) {
+export function RightClickMapMenuOverlay({ coordinates, vessel }) {
   const dispatch = useDispatch()
 
   const ref = createRef()
@@ -42,8 +42,9 @@ function MapMenuOverlay({ coordinates, vessel }) {
   }, [])
 
   /**
-   * @param {[Date, Date]=} dateRange
+   * @param {DateRange | undefined} dateRange
    */
+
   const updateDateRange = useCallback(
     dateRange => {
       if (!dateRange) {
@@ -62,9 +63,11 @@ function MapMenuOverlay({ coordinates, vessel }) {
       dispatch(showVesselTrack(vessel, true, trackRequest))
 
       monitorfishMap.removeOverlay(getOverlay())
+
       setIsOpen(false)
       setSelectedDateRange(dateRange)
       setSelectedTrackDepth(undefined)
+      setIsTrackRangeModalOpen(false)
     },
     [vessel]
   )
@@ -112,10 +115,10 @@ function MapMenuOverlay({ coordinates, vessel }) {
   }, [coordinates])
 
   return (
-    <WrapperToBeKeptForDOMManagement ref={ref}>
-      <div ref={ref}>
-        {isOpen ? (
-          <>
+    <>
+      <WrapperToBeKeptForDOMManagement ref={ref}>
+        <div ref={ref}>
+          {isOpen ? (
             <Wrapper>
               <div>
                 {vessel ? (
@@ -145,39 +148,39 @@ function MapMenuOverlay({ coordinates, vessel }) {
                 <SecondColumnMenu>
                   {vessel ? (
                     <>
-                      <Menu onClick={() => setSelectedTrackDepth(VesselTrackDepth.LAST_DEPARTURE)} second>
+                      <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.LAST_DEPARTURE)}>
                         dernier DEP
                       </Menu>
-                      <Menu onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWELVE_HOURS)} second>
+                      <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWELVE_HOURS)}>
                         12 heures
                       </Menu>
-                      <Menu onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_DAY)} second>
+                      <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_DAY)}>
                         24 heures
                       </Menu>
-                      <Menu onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWO_DAYS)} second>
+                      <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWO_DAYS)}>
                         2 jours
                       </Menu>
                       <Menu
+                        $withPadding
                         data-cy="show-vessel-tracks-three-days"
                         onClick={() => setSelectedTrackDepth(VesselTrackDepth.THREE_DAYS)}
-                        second
                       >
                         3 jours
                       </Menu>
-                      <Menu onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_WEEK)} second>
+                      <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_WEEK)}>
                         1 semaine
                       </Menu>
-                      <Menu onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWO_WEEK)} second>
+                      <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWO_WEEK)}>
                         2 semaines
                       </Menu>
-                      <Menu onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_MONTH)} second>
-                        1 moiss
+                      <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_MONTH)}>
+                        1 mois
                       </Menu>
                       <Menu
+                        $withPadding
+                        $withTopLine
                         data-cy="show-vessel-tracks-custom-period"
                         onClick={() => setIsTrackRangeModalOpen(true)}
-                        second
-                        withTopLine
                       >
                         Choisir une période précise
                       </Menu>
@@ -186,16 +189,19 @@ function MapMenuOverlay({ coordinates, vessel }) {
                 </SecondColumnMenu>
               ) : null}
             </Wrapper>
-            <TrackRangeModal
-              isOpen={isTrackRangeModalOpen}
-              onChange={updateDateRange}
-              onClose={() => setIsTrackRangeModalOpen(false)}
-              selectedDates={selectedDateRange}
-            />
-          </>
-        ) : null}
-      </div>
-    </WrapperToBeKeptForDOMManagement>
+          ) : null}
+        </div>
+      </WrapperToBeKeptForDOMManagement>
+      {isTrackRangeModalOpen &&
+        createPortal(
+          <TrackRangeModal
+            onChange={updateDateRange}
+            onClose={() => setIsTrackRangeModalOpen(false)}
+            selectedDates={selectedDateRange}
+          />,
+          document.body
+        )}
+    </>
   )
 }
 
@@ -203,7 +209,7 @@ const Wrapper = styled.div`
   font: normal normal normal 13px/18px Marianne;
   letter-spacing: 0px;
   text-align: left;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   display: flex;
 `
 
@@ -231,19 +237,17 @@ const SecondColumnMenu = styled.div`
 `
 
 const Menu = styled.span`
-  background: ${COLORS.white};
-  padding: 5px ${props => (props.second ? 15 : 0)}px 0px 15px;
+  background: ${p => p.theme.color.white};
+  padding: 5px ${p => (p.$withPadding ? 15 : 0)}px 0px 15px;
   height: 25px;
   display: inline-block;
   display: flex;
   width: 100%;
-  border-top: ${props => (props.withTopLine ? 1 : 0)}px solid ${COLORS.lightGray};
+  border-top: ${p => (p.$withTopLine ? 1 : 0)}px solid ${p => p.theme.color.lightGray};
 
   &:hover {
-    background: ${COLORS.gainsboro};
+    background: ${p => p.theme.color.gainsboro};
   }
 `
 
 const WrapperToBeKeptForDOMManagement = styled.div``
-
-export default MapMenuOverlay

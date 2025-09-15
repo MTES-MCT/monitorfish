@@ -1,5 +1,5 @@
-import {getLocalizedDayjs} from '../utils/getLocalizedDayjs'
-import {getUtcizedDayjs} from '../utils/getUtcizedDayjs'
+import { getLocalizedDayjs } from '../utils/getLocalizedDayjs'
+import { getUtcizedDayjs } from '../utils/getUtcizedDayjs'
 
 context('Vessels Track', () => {
   beforeEach(() => {
@@ -59,13 +59,9 @@ context('Vessels Track', () => {
     cy.get('*[data-cy^="show-vessel-tracks-custom-period"]').click({ force: true })
     cy.get('.rs-picker-daterange .rs-picker-caret-icon').eq(0).click(460, 480, { force: true, timeout: 10000 })
 
-    cy.get('.rs-calendar-table-cell:not(.rs-calendar-table-cell-un-same-month) .rs-calendar-table-cell-day')
-      .contains(new RegExp(`^${getLocalizedDayjs(getUtcizedDayjs().toDate()).format('D')}$`))
-      .click({ force: true, timeout: 10000 })
-    cy.get('.rs-calendar-table-cell:not(.rs-calendar-table-cell-un-same-month) .rs-calendar-table-cell-day')
-      .contains(new RegExp(`^${getLocalizedDayjs(getUtcizedDayjs().toDate()).format('D')}$`))
-      .click({ force: true, timeout: 10000 })
-    cy.get('.rs-picker-toolbar-right > .rs-btn').click({ force: true, timeout: 10000 })
+    const asDayjsUtcDate = getLocalizedDayjs(getUtcizedDayjs().toDate())
+    const today = [asDayjsUtcDate.year(), asDayjsUtcDate.month() + 1, asDayjsUtcDate.date()]
+    cy.fill('Période précise', [today, today])
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 2)
   })
 })

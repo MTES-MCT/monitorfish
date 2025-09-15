@@ -1,10 +1,9 @@
-import { Modal } from 'rsuite'
+import { Accent, Button, Dialog } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { RiskFactorBox } from './RiskFactorBox'
 import { RiskFactorExplanationSchema } from './RiskFactorExplanationSchema'
-import { StyledModalHeader } from '../../commonComponents/StyledModalHeader'
-import { basePrimaryButton, SecondaryButton } from '../../commonStyles/Buttons.style'
+import { basePrimaryButton } from '../../commonStyles/Buttons.style'
 import RiskFactorControlSVG from '../../icons/Note_de_controle_gyrophare.svg?react'
 import RiskFactorImpactSVG from '../../icons/Note_impact_poisson.svg?react'
 import RiskFactorInfractionsSVG from '../../icons/Note_infraction_stop.svg?react'
@@ -18,18 +17,14 @@ import {
 import type { Promisable } from 'type-fest'
 
 type RiskFactorExplanationModalProps = Readonly<{
-  isOpen: boolean
   setIsOpen: (isOpen: boolean) => Promisable<void>
 }>
-export function RiskFactorExplanationModal({ isOpen, setIsOpen }: RiskFactorExplanationModalProps) {
+export function RiskFactorExplanationModal({ setIsOpen }: RiskFactorExplanationModalProps) {
   return (
-    <Modal backdrop onClose={() => setIsOpen(false)} open={isOpen} size="lg" style={{ marginTop: 50 }}>
-      <StyledModalHeader>
-        <Modal.Title>
-          <ModalTitle>Explication de la note de risque des navires</ModalTitle>
-        </Modal.Title>
-      </StyledModalHeader>
-      <ModalBodyStyled>
+    <StyledDialog>
+      <Dialog.Title>Explication de la note de risque des navires</Dialog.Title>
+
+      <StyledDialogBody>
         <Title>principe du facteur de risque</Title>
         <Line />
         <Text>
@@ -151,20 +146,29 @@ export function RiskFactorExplanationModal({ isOpen, setIsOpen }: RiskFactorExpl
           <RiskFactorBox color={getRiskFactorColor(4)}>4</RiskFactorBox>
           {getDetectabilityRiskFactorText(4)}
         </RiskFactorLegend>
-      </ModalBodyStyled>
-      <Modal.Footer>
+      </StyledDialogBody>
+      <StyledDialogAction>
         <DocumentationLink
           href="https://monitorfish.readthedocs.io/fr/latest/risk-factor.html#risk-factor"
           target="_blank"
         >
           Consulter la documentation de MonitorFish
         </DocumentationLink>
-        <CloseButton onClick={() => setIsOpen(false)}>Fermer</CloseButton>
-      </Modal.Footer>
-    </Modal>
+        <CloseButton accent={Accent.SECONDARY} onClick={() => setIsOpen(false)}>
+          Fermer
+        </CloseButton>
+      </StyledDialogAction>
+    </StyledDialog>
   )
 }
 
+const StyledDialog = styled(Dialog)`
+  > div {
+    &:not(:first-child) {
+      max-width: fit-content;
+    }
+  }
+`
 const DocumentationLink = styled.a<{
   $width?: string
 }>`
@@ -175,7 +179,7 @@ const DocumentationLink = styled.a<{
   margin: 20px 0 20px 10px;
 `
 
-const CloseButton = styled(SecondaryButton)`
+const CloseButton = styled(Button)`
   margin-right: 20px;
 `
 
@@ -211,9 +215,13 @@ const RiskFactorInfractions = styled(RiskFactorInfractionsSVG)`
   vertical-align: sub;
 `
 
-const ModalBodyStyled = styled(Modal.Body)`
+const StyledDialogBody = styled(Dialog.Body)`
   padding: 50px 60px !important;
-  max-height: 600px !important;
+  max-height: 500px !important;
+  text-align: left !important;
+  max-width: inherit !important;
+  overflow: hidden;
+  overflow-y: scroll;
 `
 
 const Text = styled.p`
@@ -235,11 +243,6 @@ const SmallLine = styled.div`
   border-bottom: 2px solid ${p => p.theme.color.lightGray};
 `
 
-const ModalTitle = styled.div`
-  font-size: 16px;
-  line-height: 30px;
-`
-
 const Title = styled.div`
   font-size: 16px;
   color: ${p => p.theme.color.slateGray};
@@ -252,4 +255,9 @@ const SubTitle = styled.div`
   color: ${p => p.theme.color.slateGray};
   font-weight: 700;
   margin-top: 20px;
+`
+
+const StyledDialogAction = styled(Dialog.Action)`
+  justify-content: end;
+  padding: 8px;
 `

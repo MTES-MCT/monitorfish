@@ -86,7 +86,7 @@ const VesselNameOrInput = styled(MapComponent)<{
   display: inline-block;
   top: 10px;
   right: ${p => (p.$isRightMenuShrinked ? 10 : 55)}px;
-  z-index: 995;
+  z-index: 1000;
   color: ${p => p.theme.color.gainsboro};
   text-decoration: none;
   border: none;

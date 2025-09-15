@@ -15,7 +15,7 @@ export function TrackRangeModal({ onChange, onClose, selectedDates }: TrackRange
           defaultValue={selectedDates}
           isHistorical
           isLabelHidden
-          label="période précise"
+          label="Période précise"
           name="customPeriod"
           onChange={onChange}
         />

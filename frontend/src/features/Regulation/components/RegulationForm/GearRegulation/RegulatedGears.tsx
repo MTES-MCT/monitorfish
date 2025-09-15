@@ -1,19 +1,12 @@
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import { Checkbox, MultiRadio, MultiCascader, Label } from '@mtes-mct/monitor-ui'
 import { isEqual } from 'lodash-es'
 import { useCallback, useEffect } from 'react'
-import { type CheckboxProps, MultiCascader, Radio, RadioGroup } from 'rsuite'
 import styled from 'styled-components'
 
 import { RegulatedGear } from './RegulatedGear'
 import { getGroupCategories, REGULATED_GEARS_KEYS } from '../../../../../domain/entities/backoffice'
-import {
-  CustomCheckbox,
-  customRadioGroup,
-  Delimiter,
-  FormContent,
-  FormSection,
-  RegulatorySectionTitle
-} from '../../../../commonStyles/Backoffice.style'
+import { Delimiter, FormContent, FormSection, RegulatorySectionTitle } from '../../../../commonStyles/Backoffice.style'
 import { GreenCircle, RedCircle } from '../../../../commonStyles/Circle.style'
 import { GEARS_CATEGORIES_WITH_MESH } from '../../../utils'
 import { INFO_TEXT } from '../../RegulationTables/constants'
@@ -194,21 +187,21 @@ export function RegulatedGears({
           <GearCheckBox
             checked={allGears}
             data-cy={`${dataCyTarget}-all-gears-option`}
-            onChange={onCheckboxChange}
+            label="Tous les engins"
+            name="allGears"
+            onChange={checked => onCheckboxChange(REGULATED_GEARS_KEYS.ALL_GEARS, checked ?? false)}
             value={REGULATED_GEARS_KEYS.ALL_GEARS}
-          >
-            Tous les engins
-          </GearCheckBox>
+          />
         )}
         <CheckboxWrapper>
           <GearCheckBox
             checked={allTowedGears}
             data-cy={`${dataCyTarget}-all-towed-gears-option`}
-            onChange={onCheckboxChange}
+            label="Engins trainants"
+            name="allTowedGears"
+            onChange={checked => onCheckboxChange(REGULATED_GEARS_KEYS.ALL_TOWED_GEARS, checked ?? false)}
             value={REGULATED_GEARS_KEYS.ALL_TOWED_GEARS}
-          >
-            Engins trainants
-          </GearCheckBox>
+          />
           <InfoBox pointer>
             <InfoText>{INFO_TEXT.TOWED_GEAR}</InfoText>
           </InfoBox>
@@ -217,11 +210,12 @@ export function RegulatedGears({
           <GearCheckBox
             checked={allPassiveGears}
             data-cy={`${dataCyTarget}-all-passive-gears-option`}
-            onChange={onCheckboxChange}
+            label="Engins dormants"
+            name="allPassiveGears"
+            onChange={checked => onCheckboxChange(REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS, checked ?? false)}
             value={REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS}
-          >
-            Engins dormants
-          </GearCheckBox>
+          />
+
           <InfoBox pointer>
             <InfoText>{INFO_TEXT.PASSIVE_GEAR}</InfoText>
           </InfoBox>
@@ -229,34 +223,37 @@ export function RegulatedGears({
         <CustomMultiCascader
           $valueIsMissing={false}
           cleanable={false}
-          data={formattedAndFilteredCategoriesToGears}
           data-cy={`${dataCyTarget}-gears-selector`}
-          menuWidth={250}
+          isLabelHidden
+          isTransparent
+          label="Engins réglementés"
+          name="specificGears"
           onChange={values => set(REGULATED_GEARS_KEYS.SELECTED_GEARS_AND_CATEGORIES, values)}
           onSelect={(item, activePaths) => {
             if (activePaths.length !== 2) {
               return
             }
 
-            if (!selectedCategoriesAndGears.find(value => value === item.value)) {
+            if (!selectedCategoriesAndGears.find(value => value === item.optionValue)) {
               set(
                 REGULATED_GEARS_KEYS.SELECTED_GEARS_AND_CATEGORIES,
-                selectedCategoriesAndGears.concat(item.value as any)
+                selectedCategoriesAndGears.concat(item.optionValue as any)
               )
             }
 
-            if (selectedCategoriesAndGears.find(value => value === item.value)) {
+            if (selectedCategoriesAndGears.find(value => value === item.optionValue)) {
               set(
                 REGULATED_GEARS_KEYS.SELECTED_GEARS_AND_CATEGORIES,
-                selectedCategoriesAndGears.filter(tag => tag !== item.value)
+                selectedCategoriesAndGears.filter(tag => tag !== item.optionValue)
               )
             }
           }}
+          options={formattedAndFilteredCategoriesToGears}
           placeholder="Choisir un ou des engins"
-          placement="autoVerticalStart"
+          popupWidth={550}
           renderValue={() => <MultiCascaderLabel>Choisir un ou des engins</MultiCascaderLabel>}
           searchable
-          style={{ width: 200 }}
+          style={{ width: 240 }}
           value={selectedCategoriesAndGears || []}
         />
         {(Object.keys(regulatedGears).length > 0 || Object.keys(regulatedGearCategories).length > 0) && (
@@ -294,16 +291,19 @@ export function RegulatedGears({
         )}
         {!authorized && (
           <DerogationRadioWrapper>
-            <DerogationRadio
-              $isYellow={derogation}
-              inline
-              onChange={value => set(REGULATED_GEARS_KEYS.DEROGATION, value)}
-              value={derogation as any}
-            >
-              <Text>Mesures dérogatoires</Text>
-              <CustomRadio value={true as any}>oui</CustomRadio>
-              <CustomRadio value={false as any}>non</CustomRadio>
-            </DerogationRadio>
+            <Label>Mesures dérogatoires</Label>
+            <MultiRadio
+              isInline
+              isLabelHidden
+              label="Mesures dérogatoires"
+              name="derogation"
+              onChange={value => set(REGULATED_GEARS_KEYS.DEROGATION, value ?? false)}
+              options={[
+                { label: 'oui', value: true },
+                { label: 'non', value: false }
+              ]}
+              value={derogation}
+            />
           </DerogationRadioWrapper>
         )}
       </FormContent>
@@ -352,47 +352,11 @@ const CustomMultiCascader = styled(MultiCascader)<{
   }
 `
 
-const GearCheckBox = styled(CustomCheckbox)<any, CheckboxProps<REGULATED_GEARS_KEYS>>`
+const GearCheckBox = styled(Checkbox)`
   padding-right: 11px;
 `
 
 const DerogationRadioWrapper = styled.div`
-  padding-top: 15px;
-`
-const DerogationRadio = styled(RadioGroup)`
-  ${customRadioGroup}
-  padding: 10px !important;
-  border: 1.5px solid ${p => (p.$isYellow ? p.theme.color.goldenPoppy : p.theme.color.lightGray)}!important;
-  &:focus {
-    border: 1.5px solid ${p => (p.$isYellow ? p.theme.color.goldenPoppy : p.theme.color.lightGray)}!important;
-  }
-`
-
-const Text = styled.p`
-  font-size: 13px;
-  color: ${p => p.theme.color.slateGray};
-`
-
-const CustomRadio = styled(Radio)`
-  .rs-radio-checker {
-    padding-top: 0px;
-    padding-bottom: 4px;
-    padding-left: 29px;
-    min-height: 0px;
-    line-height: 1;
-    position: relative;
-    &:before {
-      box-sizing: border-box;
-    }
-    &:after {
-      box-sizing: border-box;
-    }
-    margin-right: 0px;
-  }
-
-  .rs-radio-checker > label {
-    font-size: 13px;
-    vertical-align: sub;
-    color: ${p => p.theme.color.gunMetal};
-  }
+  display: flex;
+  gap: 16px;
 `

@@ -31,113 +31,111 @@ export function RiskFactorResume() {
   return (
     <>
       {selectedVessel?.riskFactor?.riskFactor ? (
-        <>
-          <RiskFactorZone>
-            <GlobalRiskFactor>Note de risque globale</GlobalRiskFactor>
-            <GlobalRisk data-cy="global-risk-factor">
-              <RiskFactorCursor
-                color={getRiskFactorColor(selectedVessel.riskFactor.riskFactor)}
-                height={24}
-                isBig
-                // eslint-disable-next-line no-unsafe-optional-chaining
-                progress={(100 * selectedVessel.riskFactor.riskFactor) / 4}
-                underCharter={selectedVessel.underCharter}
-                value={selectedVessel.riskFactor.riskFactor}
-              />
-              <GlobalText $underCharter={selectedVessel.underCharter}>
-                <SeeMore
-                  $underCharter={selectedVessel.underCharter}
-                  data-cy="show-risk-factor-explanation-modal"
-                  onClick={() => setRiskFactorExplanationIsOpen(true)}
-                >
-                  En savoir plus
-                </SeeMore>
-                {selectedVessel.underCharter ? <UnderCharterText>navire sous charte</UnderCharterText> : null}
-              </GlobalText>
-            </GlobalRisk>
-            <Line />
-            <SubRisk data-cy="impact-risk-factor" onClick={() => setImpactRiskFactorIsOpen(!impactRiskFactorIsOpen)}>
-              <SubRiskHeader>
-                <SubRiskTitle>Impact sur la ressource</SubRiskTitle>
-                <Chevron $isOpen={impactRiskFactorIsOpen} />
-              </SubRiskHeader>
-              <RiskFactorImpact />
-              <RiskFactorCursor
-                color={getRiskFactorColor(selectedVessel.riskFactor.impactRiskFactor)}
-                height={8}
-                // eslint-disable-next-line no-unsafe-optional-chaining
-                progress={(100 * selectedVessel.riskFactor.impactRiskFactor) / 4}
-                value={selectedVessel.riskFactor.impactRiskFactor}
-              />
-              <SubRiskText
-                title={getImpactRiskFactorText(
-                  selectedVessel.riskFactor.impactRiskFactor,
-                  !!selectedVessel.riskFactor.segmentHighestImpact
-                )}
+        <RiskFactorZone>
+          <GlobalRiskFactor>Note de risque globale</GlobalRiskFactor>
+          <GlobalRisk data-cy="global-risk-factor">
+            <RiskFactorCursor
+              color={getRiskFactorColor(selectedVessel.riskFactor.riskFactor)}
+              height={24}
+              isBig
+              // eslint-disable-next-line no-unsafe-optional-chaining
+              progress={(100 * selectedVessel.riskFactor.riskFactor) / 4}
+              underCharter={selectedVessel.underCharter}
+              value={selectedVessel.riskFactor.riskFactor}
+            />
+            <GlobalText $underCharter={selectedVessel.underCharter}>
+              <SeeMore
+                $underCharter={selectedVessel.underCharter}
+                data-cy="show-risk-factor-explanation-modal"
+                onClick={() => setRiskFactorExplanationIsOpen(true)}
               >
-                {getImpactRiskFactorText(
-                  selectedVessel.riskFactor.impactRiskFactor,
-                  !!selectedVessel.riskFactor.segmentHighestImpact
-                )}
-              </SubRiskText>
-            </SubRisk>
-            <ImpactRiskFactorDetails isOpen={impactRiskFactorIsOpen} />
-            <Line />
-            <SubRisk
-              data-cy="probability-risk-factor"
-              onClick={() => setProbabilityRiskFactorIsOpen(!probabilityRiskFactorIsOpen)}
+                En savoir plus
+              </SeeMore>
+              {selectedVessel.underCharter ? <UnderCharterText>navire sous charte</UnderCharterText> : null}
+            </GlobalText>
+          </GlobalRisk>
+          <Line />
+          <SubRisk data-cy="impact-risk-factor" onClick={() => setImpactRiskFactorIsOpen(!impactRiskFactorIsOpen)}>
+            <SubRiskHeader>
+              <SubRiskTitle>Impact sur la ressource</SubRiskTitle>
+              <Chevron $isOpen={impactRiskFactorIsOpen} />
+            </SubRiskHeader>
+            <RiskFactorImpact />
+            <RiskFactorCursor
+              color={getRiskFactorColor(selectedVessel.riskFactor.impactRiskFactor)}
+              height={8}
+              // eslint-disable-next-line no-unsafe-optional-chaining
+              progress={(100 * selectedVessel.riskFactor.impactRiskFactor) / 4}
+              value={selectedVessel.riskFactor.impactRiskFactor}
+            />
+            <SubRiskText
+              title={getImpactRiskFactorText(
+                selectedVessel.riskFactor.impactRiskFactor,
+                !!selectedVessel.riskFactor.segmentHighestImpact
+              )}
             >
-              <SubRiskHeader>
-                <SubRiskTitle>Probabilité d&apos;infraction</SubRiskTitle>
-                <Chevron $isOpen={probabilityRiskFactorIsOpen} />
-              </SubRiskHeader>
-              <RiskFactorInfractions />
-              <RiskFactorCursor
-                color={getRiskFactorColor(selectedVessel.riskFactor.probabilityRiskFactor)}
-                height={8}
-                // eslint-disable-next-line no-unsafe-optional-chaining
-                progress={(100 * selectedVessel.riskFactor.probabilityRiskFactor) / 4}
-                value={selectedVessel.riskFactor.probabilityRiskFactor}
-              />
-              <SubRiskText
-                title={getProbabilityRiskFactorText(
-                  selectedVessel.riskFactor.probabilityRiskFactor,
-                  !!selectedVessel.riskFactor.numberControlsLastFiveYears
-                )}
-              >
-                {getProbabilityRiskFactorText(
-                  selectedVessel.riskFactor.probabilityRiskFactor,
-                  !!selectedVessel.riskFactor.numberControlsLastFiveYears
-                )}
-              </SubRiskText>
-            </SubRisk>
-            <ProbabilityRiskFactorDetails isOpen={probabilityRiskFactorIsOpen} />
-            <Line />
-            <SubRisk
-              data-cy="detectability-risk-factor"
-              onClick={() => setDetectabilityRiskFactorIsOpen(!detectabilityRiskFactorIsOpen)}
+              {getImpactRiskFactorText(
+                selectedVessel.riskFactor.impactRiskFactor,
+                !!selectedVessel.riskFactor.segmentHighestImpact
+              )}
+            </SubRiskText>
+          </SubRisk>
+          <ImpactRiskFactorDetails isOpen={impactRiskFactorIsOpen} />
+          <Line />
+          <SubRisk
+            data-cy="probability-risk-factor"
+            onClick={() => setProbabilityRiskFactorIsOpen(!probabilityRiskFactorIsOpen)}
+          >
+            <SubRiskHeader>
+              <SubRiskTitle>Probabilité d&apos;infraction</SubRiskTitle>
+              <Chevron $isOpen={probabilityRiskFactorIsOpen} />
+            </SubRiskHeader>
+            <RiskFactorInfractions />
+            <RiskFactorCursor
+              color={getRiskFactorColor(selectedVessel.riskFactor.probabilityRiskFactor)}
+              height={8}
+              // eslint-disable-next-line no-unsafe-optional-chaining
+              progress={(100 * selectedVessel.riskFactor.probabilityRiskFactor) / 4}
+              value={selectedVessel.riskFactor.probabilityRiskFactor}
+            />
+            <SubRiskText
+              title={getProbabilityRiskFactorText(
+                selectedVessel.riskFactor.probabilityRiskFactor,
+                !!selectedVessel.riskFactor.numberControlsLastFiveYears
+              )}
             >
-              <SubRiskHeader>
-                <SubRiskTitle>Priorité de contrôle</SubRiskTitle>
-                <Chevron $isOpen={detectabilityRiskFactorIsOpen} />
-              </SubRiskHeader>
-              <RiskFactorControl />
-              <RiskFactorCursor
-                color={getRiskFactorColor(selectedVessel.riskFactor.detectabilityRiskFactor)}
-                height={8}
-                // eslint-disable-next-line no-unsafe-optional-chaining
-                progress={(100 * selectedVessel.riskFactor.detectabilityRiskFactor) / 4}
-                value={selectedVessel.riskFactor.detectabilityRiskFactor}
-              />
-              <SubRiskText
-                title={getDetectabilityRiskFactorText(selectedVessel.riskFactor.detectabilityRiskFactor, true)}
-              >
-                {getDetectabilityRiskFactorText(selectedVessel.riskFactor.detectabilityRiskFactor, true)}
-              </SubRiskText>
-            </SubRisk>
-            <DetectabilityRiskFactorDetails isOpen={detectabilityRiskFactorIsOpen} />
-          </RiskFactorZone>
-        </>
+              {getProbabilityRiskFactorText(
+                selectedVessel.riskFactor.probabilityRiskFactor,
+                !!selectedVessel.riskFactor.numberControlsLastFiveYears
+              )}
+            </SubRiskText>
+          </SubRisk>
+          <ProbabilityRiskFactorDetails isOpen={probabilityRiskFactorIsOpen} />
+          <Line />
+          <SubRisk
+            data-cy="detectability-risk-factor"
+            onClick={() => setDetectabilityRiskFactorIsOpen(!detectabilityRiskFactorIsOpen)}
+          >
+            <SubRiskHeader>
+              <SubRiskTitle>Priorité de contrôle</SubRiskTitle>
+              <Chevron $isOpen={detectabilityRiskFactorIsOpen} />
+            </SubRiskHeader>
+            <RiskFactorControl />
+            <RiskFactorCursor
+              color={getRiskFactorColor(selectedVessel.riskFactor.detectabilityRiskFactor)}
+              height={8}
+              // eslint-disable-next-line no-unsafe-optional-chaining
+              progress={(100 * selectedVessel.riskFactor.detectabilityRiskFactor) / 4}
+              value={selectedVessel.riskFactor.detectabilityRiskFactor}
+            />
+            <SubRiskText
+              title={getDetectabilityRiskFactorText(selectedVessel.riskFactor.detectabilityRiskFactor, true)}
+            >
+              {getDetectabilityRiskFactorText(selectedVessel.riskFactor.detectabilityRiskFactor, true)}
+            </SubRiskText>
+          </SubRisk>
+          <DetectabilityRiskFactorDetails isOpen={detectabilityRiskFactorIsOpen} />
+        </RiskFactorZone>
       ) : (
         <NoRiskFactor>Ce navire n&apos;a pas de note de risque</NoRiskFactor>
       )}

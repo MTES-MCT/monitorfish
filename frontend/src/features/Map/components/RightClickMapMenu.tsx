@@ -50,9 +50,5 @@ export function RightClickMapMenu() {
     }
   }, [vessels])
 
-  return (
-    <>
-      <RightClickMapMenuOverlay coordinates={coordinates} vessel={vessel.current} />
-    </>
-  )
+  return <RightClickMapMenuOverlay coordinates={coordinates} vessel={vessel.current} />
 }

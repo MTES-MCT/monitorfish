@@ -2,7 +2,6 @@ import Overlay from 'ol/Overlay'
 import { createRef, useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useDispatch } from 'react-redux'
-import { createPath } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { TrackRangeModal } from './map_menu/TrackRangeModal'
@@ -120,78 +119,76 @@ export function RightClickMapMenuOverlay({ coordinates, vessel }) {
       <WrapperToBeKeptForDOMManagement ref={ref}>
         <div ref={ref}>
           {isOpen ? (
-            <>
-              <Wrapper>
-                <div>
+            <Wrapper>
+              <div>
+                {vessel ? (
+                  <>
+                    <FirstColumnMenu>
+                      <Menu
+                        data-cy="show-vessel-tracks-menu-options"
+                        onMouseEnter={() => setShowTrackDepthSubMenu(true)}
+                      >
+                        Afficher la piste VMS depuis…
+                        <ChevronIcon />
+                      </Menu>
+                    </FirstColumnMenu>
+                    <FirstColumnMenu>
+                      <Menu
+                        data-cy="add-vessel-to-favorites"
+                        onClick={() => dispatch(addVesselToFavorites(vessel)) && setIsOpen(false)}
+                        onMouseEnter={() => setShowTrackDepthSubMenu(false)}
+                      >
+                        Ajouter le navire aux navires suivis
+                      </Menu>
+                    </FirstColumnMenu>
+                  </>
+                ) : null}
+              </div>
+              {showTrackDepthSubMenu ? (
+                <SecondColumnMenu>
                   {vessel ? (
                     <>
-                      <FirstColumnMenu>
-                        <Menu
-                          data-cy="show-vessel-tracks-menu-options"
-                          onMouseEnter={() => setShowTrackDepthSubMenu(true)}
-                        >
-                          Afficher la piste VMS depuis…
-                          <ChevronIcon />
-                        </Menu>
-                      </FirstColumnMenu>
-                      <FirstColumnMenu>
-                        <Menu
-                          data-cy="add-vessel-to-favorites"
-                          onClick={() => dispatch(addVesselToFavorites(vessel)) && setIsOpen(false)}
-                          onMouseEnter={() => setShowTrackDepthSubMenu(false)}
-                        >
-                          Ajouter le navire aux navires suivis
-                        </Menu>
-                      </FirstColumnMenu>
+                      <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.LAST_DEPARTURE)}>
+                        dernier DEP
+                      </Menu>
+                      <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWELVE_HOURS)}>
+                        12 heures
+                      </Menu>
+                      <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_DAY)}>
+                        24 heures
+                      </Menu>
+                      <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWO_DAYS)}>
+                        2 jours
+                      </Menu>
+                      <Menu
+                        $withPadding
+                        data-cy="show-vessel-tracks-three-days"
+                        onClick={() => setSelectedTrackDepth(VesselTrackDepth.THREE_DAYS)}
+                      >
+                        3 jours
+                      </Menu>
+                      <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_WEEK)}>
+                        1 semaine
+                      </Menu>
+                      <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWO_WEEK)}>
+                        2 semaines
+                      </Menu>
+                      <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_MONTH)}>
+                        1 mois
+                      </Menu>
+                      <Menu
+                        $withPadding
+                        $withTopLine
+                        data-cy="show-vessel-tracks-custom-period"
+                        onClick={() => setIsTrackRangeModalOpen(true)}
+                      >
+                        Choisir une période précise
+                      </Menu>
                     </>
                   ) : null}
-                </div>
-                {showTrackDepthSubMenu ? (
-                  <SecondColumnMenu>
-                    {vessel ? (
-                      <>
-                        <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.LAST_DEPARTURE)}>
-                          dernier DEP
-                        </Menu>
-                        <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWELVE_HOURS)}>
-                          12 heures
-                        </Menu>
-                        <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_DAY)}>
-                          24 heures
-                        </Menu>
-                        <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWO_DAYS)}>
-                          2 jours
-                        </Menu>
-                        <Menu
-                          $withPadding
-                          data-cy="show-vessel-tracks-three-days"
-                          onClick={() => setSelectedTrackDepth(VesselTrackDepth.THREE_DAYS)}
-                        >
-                          3 jours
-                        </Menu>
-                        <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_WEEK)}>
-                          1 semaine
-                        </Menu>
-                        <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWO_WEEK)}>
-                          2 semaines
-                        </Menu>
-                        <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_MONTH)}>
-                          1 mois
-                        </Menu>
-                        <Menu
-                          $withPadding
-                          $withTopLine
-                          data-cy="show-vessel-tracks-custom-period"
-                          onClick={() => setIsTrackRangeModalOpen(true)}
-                        >
-                          Choisir une période précise
-                        </Menu>
-                      </>
-                    ) : null}
-                  </SecondColumnMenu>
-                ) : null}
-              </Wrapper>
-            </>
+                </SecondColumnMenu>
+              ) : null}
+            </Wrapper>
           ) : null}
         </div>
       </WrapperToBeKeptForDOMManagement>

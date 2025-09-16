@@ -14,5 +14,6 @@ Feature presentation
     prior-notifications
     groups-of-vessels
     activity-overview
+    activity-report
     vessel-profiles
     vms-beacon-monitoring

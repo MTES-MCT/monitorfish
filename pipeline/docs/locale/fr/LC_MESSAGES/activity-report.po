@@ -1,0 +1,193 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Vincent Chéry <vincent.chery@m4x.org>, 2025
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-16 16:49+0200\n"
+"PO-Revision-Date: 2025-09-16 14:54+0000\n"
+"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2025\n"
+"Language-Team: French (https://app.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: ../source/activity-report.rst:3 c5aaa34827a944eb994f438d819effa6
+msgid "Activity Report"
+msgstr "Rapport d'activité"
+
+#: ../source/activity-report.rst:5 4798c623e8754659b1425af1d3e3cc28
+msgid ""
+"The activity report (Act-Rep) export is a CSV file sent to the European "
+"Fisheries Control Agency (EFCA) to report controls within Joint Deployment "
+"Plans (JDPs)."
+msgstr ""
+"Le rapport d’activité (Act-Rep) est un fichier CSV envoyé à l’Agence "
+"européenne de contrôle des pêches (EFCA) pour déclarer les contrôles "
+"réalisés dans le cadre des Plans de Déploiement Conjoint (JDP)."
+
+#: ../source/activity-report.rst:7 150a334bbcf84081a7d2ede4ae5fadf2
+msgid "The JDPs are :"
+msgstr "Les JDP sont :"
+
+#: ../source/activity-report.rst:9 9d0bb5e0005b4e5587fc3b2f1e649c6d
+msgid "**Eastern Atlantic and Mediterranean** (DECISION EFCA 2018/030)"
+msgstr "**Atlantique Est et Méditerranée** (DÉCISION EFCA 2018/030)"
+
+#: ../source/activity-report.rst:10 0557e819e035469996be99332fff831b
+msgid "**North Sea** (DECISION EFCA 2018/032)"
+msgstr "**Mer du Nord** (DÉCISION EFCA 2018/032)"
+
+#: ../source/activity-report.rst:11 2f0bb35c9dc946d59320b48438f028c0
+msgid "**Western Waters** (DECISION EFCA 2018/033)"
+msgstr "**Eaux occidentales** (DÉCISION EFCA 2018/033)"
+
+#: ../source/activity-report.rst:13 d6dc5ad2dfd24f9299d73c8df56cc205
+msgid "A control must be reported in an Act-Rep if :"
+msgstr "Un contrôle doit être déclaré dans un Act-Rep si :"
+
+#: ../source/activity-report.rst:15 37b94bfe02ea40cba4f55fed7198aed3
+msgid "The control is done at **Sea** within a JDP mission"
+msgstr "Le contrôle est effectué **en mer** dans le cadre d’une mission JDP"
+
+#: ../source/activity-report.rst:16 7fb777fd89e44b14ab3fd9c34d96214c
+msgid "The control is done at **Air** within a JDP mission"
+msgstr "Le contrôle est effectué **par air** dans le cadre d’une mission JDP"
+
+#: ../source/activity-report.rst:17 36efb9fe4c694a91a6a3a7c7d44dd1f9
+msgid "The control is done at **Land**, and :"
+msgstr "Le contrôle est effectué **à la débarque**, et :"
+
+#: ../source/activity-report.rst:19 8928c747d78e4f8fabbb64f0d0f1222e
+msgid ""
+"A **species** from the controls is specified in the JDP and the **FAO zone**"
+" of the trip is specified in the JDP, or"
+msgstr ""
+"Une **espèce contrôlée** est spécifiée dans le JDP et la **zone FAO** du "
+"voyage est spécifiée dans le JDP, ou"
+
+#: ../source/activity-report.rst:20 ae199254ba094419ad50ce1afc4bd37f
+msgid ""
+"A **species** from the controls is under EU Quotas (R(CE) 1224/2009 – "
+"Article 14 & 15) when the vessel is a **third country** vessel (i.e GB)"
+msgstr ""
+"Une **espèce contrôlée** est soumise à quotas de l’UE (R(CE) 1224/2009 – "
+"Articles 14 & 15) lorsque le navire est issu d’un **pays tiers** (par ex. "
+"Royaume-Uni)"
+
+#: ../source/activity-report.rst:24 68ffa1e3076f4e6cb66a5c49e02efaf6
+msgid "Special case"
+msgstr "Cas particulier"
+
+#: ../source/activity-report.rst:26 8afd515212b94cf8aeb0391fc9f584a0
+msgid ""
+"Note that we must double count inspections for controls in PEL13 segments in"
+" which BFT are observed. Given that they should be part also of the WW JDP "
+"(particularly considering there is a dedicated Specific Action to this Fleet"
+" Segment and the ALB fishery) :"
+msgstr ""
+"À noter qu’il faut compter double les inspections pour les contrôles dans "
+"les segments PEL13 où du BFT est observé. En effet, ils doivent aussi être "
+"intégrés au JDP WW (notamment en raison d’une Action Spécifique dédiée à ce "
+"segment de flotte et à la pêcherie de ALB) :"
+
+#: ../source/activity-report.rst:28 3b0502370c5d4574992b5c4edeceb457
+msgid ""
+"All events linked to PEL13 (OTM/PTM targeting ALB and fishing/landing in "
+"Atlantic areas/ports) should be reported to the WW JDP (although they might "
+"also be reported to the MED JDP)"
+msgstr ""
+"Tous les événements liés au PEL13 (OTM/PTM ciblant l’ALB et "
+"pêchant/débarquant dans les zones/ports atlantiques) doivent être rapportés "
+"au JDP WW (bien qu’ils puissent aussi être rapportés au JDP MED)"
+
+#: ../source/activity-report.rst:29 e46a9c8ec7f641dabf36bd0d109fa77f
+msgid ""
+"All events linked to PEL13 (OTM/PTM targeting ALB and fishing/landing in "
+"Atlantic areas/ports) in which BFT are observed should be reported to the WW"
+" JDP and to the WW MED as well"
+msgstr ""
+"Tous les événements liés au PEL13 (OTM/PTM ciblant l’ALB et "
+"pêchant/débarquant dans les zones/ports atlantiques) dans lesquels du BFT "
+"est observé doivent être rapportés au JDP WW et au JDP MED également"
+
+#: ../source/activity-report.rst:32 5b6d975364bd49f99c2c34360285ac6b
+msgid "JDP specifications"
+msgstr "Spécifications des JDP"
+
+#: ../source/activity-report.rst:35 ../source/activity-report.rst:44
+#: ff93b14bf58d471f9cb1fcbc7abfa0c7 15a7a0df8fde4f51950b6e9b4eed1963
+msgid "JDP"
+msgstr ""
+
+#: ../source/activity-report.rst:35 ac3fc21343cd45afa58543d0465be40a
+msgid "Operational FAO zones"
+msgstr ""
+
+#: ../source/activity-report.rst:37 ../source/activity-report.rst:46
+#: 4840dc2216bd4b52bcc04123a68b9614 4ee533b2d5494e68872f1f2f842f2a69
+msgid "Eastern Atlantic"
+msgstr ""
+
+#: ../source/activity-report.rst:37 1909f51035b7410e963947f15f1167d1
+msgid "34.1.2, 27.7, 27.8, 27.9, 27.10"
+msgstr ""
+
+#: ../source/activity-report.rst:38 ../source/activity-report.rst:47
+#: 17550782fcee4446895e07c070234900 eb8330b9bd534c308faaa8cc6cb5fd7d
+msgid "Mediterranean"
+msgstr ""
+
+#: ../source/activity-report.rst:38 cfd573fa73d346cd9f971df770a736ce
+msgid "37.1, 37.2, 37.3"
+msgstr ""
+
+#: ../source/activity-report.rst:39 ../source/activity-report.rst:48
+#: 079b25606d2741dc825363b6b81da165 e1276507e3e44da19c29506a8e514a90
+msgid "North Sea"
+msgstr ""
+
+#: ../source/activity-report.rst:39 e09f9fd6bc5c4fa8b191fb6025d6cc34
+msgid "27.4, 27.3.a"
+msgstr ""
+
+#: ../source/activity-report.rst:40 ../source/activity-report.rst:49
+#: 4891daed4df5471c987d0229e8210789 51ad1a7414f041e986ffb6f2ac5acf7f
+msgid "Western Waters"
+msgstr ""
+
+#: ../source/activity-report.rst:40 d03df3b37b21466e87d2820af62ef7c7
+msgid "27.5, 27.6, 27.7, 27.8, 27.9, 27.10, 34.1.1, 34.1.2, 34.2.0"
+msgstr ""
+
+#: ../source/activity-report.rst:44 07b58a8e859045bbac50acea4993958c
+msgid "Species"
+msgstr ""
+
+#: ../source/activity-report.rst:46 6aa7b99cd1be43b2a9a0a320aa2e292e
+msgid "BFT"
+msgstr ""
+
+#: ../source/activity-report.rst:47 c8a0d5dd99ff4c57895b5a979903f919
+msgid ""
+"ANE,HOM,JAX,HMM,JAA,SWO,ALB,MAC,MAZ,PIL,BFT,ELE,BSS,WRF,SIA,COL,DOX,DPS,ARA,SBR,SBG,ARS,LBS,VLO,LOX,NEP,SSB,GPX,HKE,SBA,PAC,RPG,VEN,PTS,CLH,MUX,MUM,MUR,MUT,SHR,CTB,SWA,SOL,ANN"
+msgstr ""
+
+#: ../source/activity-report.rst:48 727034f6e44e43168bc2e1496f5f5e71
+msgid ""
+"HOM,JAX,ALB,ARU,ARY,HER,SAN,MAC,WHB,SPR,BET,ELE,ANF,MNZ,USK,COD,LEZ,PRA,SBR,HAD,GHL,GRV,NEP,POL,POK,LEM,BLI,LIN,WHG,HKE,PLE,WIT,SRX,BSF,SCF,BLL,SOL,NOP"
+msgstr ""
+
+#: ../source/activity-report.rst:49 84ca86cc92154e12abf8f1b55260c14a
+msgid ""
+"PIL,ELE,ANE,HOM,JAX,ALB,ARU,ARY,HER,MAC,WHB,SPR,OTH,BET,ANF,MNZ,USK,COD,LEZ,SBR,HAD,GHL,GRV,NEP,POL,POK,BLI,LIN,WHG,HKE,PLE,SRX,BSF,BOR,SOL"
+msgstr ""

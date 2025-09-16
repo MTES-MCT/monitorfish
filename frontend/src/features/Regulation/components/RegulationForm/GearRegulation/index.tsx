@@ -6,6 +6,7 @@ import {
 } from '@features/Regulation/utils'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import { Textarea } from '@mtes-mct/monitor-ui'
 import { GEAR_REGULATION_KEYS, prepareCategoriesAndGearsToDisplay } from 'domain/entities/backoffice'
 import { getAllGearCodes } from 'domain/use_cases/gearCode/getAllGearCodes'
 import { useEffect, useState } from 'react'
@@ -13,7 +14,6 @@ import styled from 'styled-components'
 
 import { RegulatedGears } from './RegulatedGears'
 import { Section, OtherRemark, VerticalLine } from '../../../../commonStyles/Backoffice.style'
-import { Label, CustomInput } from '../../../../commonStyles/Input.style'
 import { SectionTitle } from '../../RegulationTables/SectionTitle'
 
 import type { BackofficeAppPromiseThunk } from '@store'
@@ -60,7 +60,7 @@ export function GearRegulation() {
     setGearRegulation(property, regulatedGears)
   }
 
-  const setOtherInfo = value => {
+  const setOtherInfo = (value: string | undefined) => {
     setGearRegulation(GEAR_REGULATION_KEYS.OTHER_INFO, value)
   }
 
@@ -87,15 +87,13 @@ export function GearRegulation() {
         />
       </RegulatedGearsForms>
       <OtherRemark $show={show}>
-        <Label>Remarques</Label>
-        <CustomInput
-          $isGray={!!processingRegulation.gearRegulation?.otherInfo}
-          as="textarea"
-          onChange={event => setOtherInfo(event.target.value)}
-          placeholder=""
+        <Textarea
+          label="Remarques"
+          name="gearRegulationOtherInfo"
+          onChange={setOtherInfo}
           rows={2}
+          style={{ width: '500px' }}
           value={processingRegulation.gearRegulation?.otherInfo ?? ''}
-          width="500px"
         />
       </OtherRemark>
     </Section>

@@ -29,6 +29,7 @@ import {
 } from '@features/Regulation/utils'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import { Textarea } from '@mtes-mct/monitor-ui'
 import { setError } from 'domain/shared_slices/Global'
 import { getAllSpecies } from 'domain/use_cases/species/getAllSpecies'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -37,7 +38,6 @@ import styled from 'styled-components'
 
 import { Footer, FooterButton, OtherRemark, Section, Title } from '../../../commonStyles/Backoffice.style'
 import { CancelButton, ValidateButton } from '../../../commonStyles/Buttons.style'
-import { CustomInput, Label } from '../../../commonStyles/Input.style'
 import ChevronIconSVG from '../../../icons/Chevron_simple_gris.svg?react'
 import { STATUS } from '../RegulationTables/constants'
 
@@ -216,7 +216,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
     }
   }, [dispatch, geometriesMap, isEdition, processingRegulation, selectedRegulatoryZoneId, isRegulatoryPreviewDisplayed])
 
-  const setOtherInfo = value => {
+  const setOtherInfo = (value: string | undefined) => {
     dispatch(
       regulationActions.updateProcessingRegulationByKey({
         key: REGULATORY_REFERENCE_KEYS.OTHER_INFO,
@@ -260,17 +260,14 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
               <GearRegulation />
               {/* @ts-ignore */}
               <OtherRemark $show>
-                <Label>Remarques générales</Label>
-                {/* @ts-ignore */}
-                <CustomInput
-                  $isGray={otherInfo && otherInfo !== ''}
-                  as="textarea"
+                <Textarea
                   data-cy="regulatory-general-other-info"
-                  onChange={event => setOtherInfo(event.target.value)}
-                  placeholder=""
+                  label="Remarques générales"
+                  name="otherInfo"
+                  onChange={setOtherInfo}
                   rows={2}
+                  style={{ width: '500px' }}
                   value={otherInfo ?? ''}
-                  width="500px"
                 />
               </OtherRemark>
             </ContentWrapper>

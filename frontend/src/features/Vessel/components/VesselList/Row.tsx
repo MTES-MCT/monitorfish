@@ -6,6 +6,8 @@ import {
   displayOnboardFishingSpecies,
   getExpandableRowCellCustomStyle
 } from '@features/Vessel/components/VesselList/cells/utils'
+import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselList/constants'
+import { getLastControlDateTimeAndControlType } from '@features/Vessel/components/VesselList/utils'
 import { ActivityOrigin, ActivityType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -30,9 +32,19 @@ type RowProps = Readonly<{
 }>
 export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackground = false, index, row }, ref) => {
   const vessel = row.original
+  const listFilter = useMainAppSelector(store => store.vessel.listFilterValues)
   const gearsByCode = useMainAppSelector(state => state.gear.gearsByCode)
   const speciesByCode = useMainAppSelector(state => state.species.speciesByCode)
   const { data: fleetSegments } = useGetFleetSegmentsQuery()
+  const hasLastControlAtSeaFilter =
+    listFilter?.lastControlAtSeaPeriod !== DEFAULT_VESSEL_LIST_FILTER_VALUES.lastControlAtSeaPeriod
+  const hasLastControlAtQuayFilter =
+    listFilter?.lastControlAtQuayPeriod !== DEFAULT_VESSEL_LIST_FILTER_VALUES.lastControlAtQuayPeriod
+  const { lastControlDateTime } = getLastControlDateTimeAndControlType(
+    hasLastControlAtSeaFilter,
+    hasLastControlAtQuayFilter,
+    vessel
+  )
 
   const gears = (function () {
     if (!gearsByCode || !row.getIsExpanded()) {
@@ -153,10 +165,14 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
             )}
           </ExpandedRowCell>
           <ExpandedRowCell>
-            <ExpandedRowLabel>
-              Résultat du contrôle {vessel.lastControlInfraction && <RedCircle $margin="2" />}
-            </ExpandedRowLabel>
-            {vessel.lastControlInfraction ? '1 infraction' : "Pas d'infraction"}
+            {lastControlDateTime && (
+              <>
+                <ExpandedRowLabel>
+                  Résultat du contrôle {vessel.lastControlInfraction && <RedCircle $margin="2" />}
+                </ExpandedRowLabel>
+                {vessel.lastControlInfraction ? '1 infraction' : "Pas d'infraction"}
+              </>
+            )}
           </ExpandedRowCell>
           <ExpandedRowCell />
           <ExpandedRowCell />

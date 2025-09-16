@@ -1,6 +1,8 @@
 import { getAdministrativeSubZonesFromAPI } from '@api/geoserver'
 import { LayerProperties } from '@features/Map/constants'
-import { customDayjs, type TreeOption } from '@mtes-mct/monitor-ui'
+import { getLastControlDateTime } from '@features/Vessel/utils'
+import { Vessel } from '@features/Vessel/Vessel.types'
+import { customDayjs, type TreeOption, type Undefine } from '@mtes-mct/monitor-ui'
 import { isEqual } from 'lodash-es'
 
 import { DEFAULT_VESSEL_LIST_FILTER_VALUES, LastControlPeriod } from './constants'
@@ -108,4 +110,37 @@ export function countVesselListFilter(listFilterValues: VesselListFilter) {
     (listFilterValues.emitsPositions?.length ?? 0) +
     (listFilterValues.zones?.length ?? 0)
   )
+}
+
+export function getLastControlDateTimeAndControlType(
+  hasLastControlAtSeaFilter: boolean,
+  hasLastControlAtQuayFilter: boolean,
+  vessel: Undefine<Vessel.ActiveVessel> | undefined
+) {
+  if (!vessel) {
+    return { controlType: undefined, lastControlDateTime: undefined }
+  }
+
+  const hasNoLastControlFilter = !hasLastControlAtSeaFilter && !hasLastControlAtQuayFilter
+  const hasTwoLastControlFilters = hasLastControlAtSeaFilter && hasLastControlAtQuayFilter
+
+  let lastControlDateTime: string | undefined
+  let controlType = ''
+
+  if (hasLastControlAtSeaFilter && !hasLastControlAtQuayFilter) {
+    controlType = '(mer)'
+    lastControlDateTime = vessel.lastControlAtSeaDateTime
+  }
+
+  if (hasLastControlAtQuayFilter && !hasLastControlAtSeaFilter) {
+    controlType = '(quai)'
+    lastControlDateTime = vessel.lastControlAtQuayDateTime
+  }
+
+  if (hasNoLastControlFilter || hasTwoLastControlFilters) {
+    lastControlDateTime = getLastControlDateTime(vessel.lastControlAtSeaDateTime, vessel.lastControlAtQuayDateTime)
+    controlType = lastControlDateTime === vessel.lastControlAtSeaDateTime ? '(mer)' : '(quai)'
+  }
+
+  return { controlType, lastControlDateTime }
 }

@@ -2,6 +2,7 @@ import { Ellipsised } from '@components/Ellipsised'
 import { Titled } from '@components/Titled'
 import { FLEET_SEGMENT_ORIGIN_LABEL, GEAR_ORIGIN_LABEL } from '@features/FleetSegment/constants'
 import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselList/constants'
+import { getLastControlDateTimeAndControlType } from '@features/Vessel/components/VesselList/utils'
 import { ActivityOrigin } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { getLastControlDateTime } from '@features/Vessel/utils'
 import { Vessel } from '@features/Vessel/Vessel.types'
@@ -179,30 +180,13 @@ export function getTableColumns(
           listFilter?.lastControlAtSeaPeriod !== DEFAULT_VESSEL_LIST_FILTER_VALUES.lastControlAtSeaPeriod
         const hasLastControlAtQuayFilter =
           listFilter?.lastControlAtQuayPeriod !== DEFAULT_VESSEL_LIST_FILTER_VALUES.lastControlAtQuayPeriod
-        const hasNoLastControlFilter = !hasLastControlAtSeaFilter && !hasLastControlAtQuayFilter
-        const hasTwoLastControlFilters = hasLastControlAtSeaFilter && hasLastControlAtQuayFilter
+        const { controlType, lastControlDateTime } = getLastControlDateTimeAndControlType(
+          hasLastControlAtSeaFilter,
+          hasLastControlAtQuayFilter,
+          vessel
+        )
 
-        let lastControlDateTime: string | undefined
-        let controlType = ''
-        if (hasLastControlAtSeaFilter || !hasLastControlAtQuayFilter) {
-          controlType = '(mer)'
-          lastControlDateTime = vessel.lastControlAtSeaDateTime
-        }
-
-        if (hasLastControlAtQuayFilter || !hasLastControlAtSeaFilter) {
-          controlType = '(quai)'
-          lastControlDateTime = vessel.lastControlAtQuayDateTime
-        }
-
-        if (hasNoLastControlFilter || hasTwoLastControlFilters) {
-          lastControlDateTime = getLastControlDateTime(
-            vessel.lastControlAtSeaDateTime,
-            vessel.lastControlAtQuayDateTime
-          )
-          controlType = lastControlDateTime === vessel.lastControlAtSeaDateTime ? '(mer)' : '(quai)'
-        }
-
-        return info.getValue() ? (
+        return lastControlDateTime ? (
           <>
             {customDayjs(lastControlDateTime).utc().format('[Le] DD/MM/YYYY')}{' '}
             <LastControlType>{controlType}</LastControlType>

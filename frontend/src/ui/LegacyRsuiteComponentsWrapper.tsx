@@ -305,34 +305,4 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
   .rs-btn-primary:hover {
     color: inherit;
   }
-
-  /*****************************************************************************
-    Fixes following mointor-ui v12 upgrade (including Rsuite breaking changes)
-  */
-
-  .rs-picker {
-    border-radius: 0;
-    font-size: 13px;
-    width: 100%;
-
-    * {
-      font-size: 13px;
-    }
-
-    [role='combobox'] {
-      width: 100%;
-    }
-
-    .rs-picker-toggle-placeholder {
-      font-size: 11px;
-    }
-  }
-
-  .rs-picker {
-    width: auto;
-  }
-
-  .rs-picker-popup {
-    z-index: 9999;
-  }
 `

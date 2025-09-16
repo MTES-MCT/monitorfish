@@ -46,7 +46,7 @@ enum class JointDeploymentPlan(
 
     /**
      * See "DÉCISION D’EXÉCUTION (UE) 2023/2376 DE LA COMMISSION":
-     *  https://extranet.legipeche.metier.developpement-durable.gouv.fr/fichier/pdf/oj_l_202302376_fr_txt_cle6b198e.pdf?arg=24774&cle=7d14626b709ff7e8c62586bcd8683e7e9fcaa348&file=pdf%2Foj_l_202302376_fr_txt_cle6b198e.pdf
+     *  https://eur-lex.europa.eu/legal-content/FR/TXT/HTML/?uri=OJ:L_202302376
      */
     fun isLandControlApplicable(control: MissionAction): Boolean {
         val speciesOnboardCodes = control.speciesOnboard.mapNotNull { it.speciesCode }

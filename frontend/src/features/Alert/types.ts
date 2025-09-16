@@ -5,6 +5,12 @@ import z from 'zod'
 import type { MissionAction } from '@features/Mission/missionAction.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Except } from 'type-fest'
+import {
+  AdministrativeAreaSpecificationSchema,
+  AlertSpecificationSchema,
+  GearSpecificationSchema, RegulatoryAreaSpecificationSchema,
+  SpeciesSpecificationSchema
+} from "@features/Alert/schemas/AlertSpecificationSchema";
 
 export type PendingAlert = {
   creationDate: string
@@ -43,4 +49,17 @@ export type SilenceAlertQueueItem = {
 
 export type AlertNameAndVesselIdentity = Vessel.VesselIdentity & {
   name: string | null | undefined
+}
+
+export type AlertSpecification = z.infer<typeof AlertSpecificationSchema>
+export type GearSpecification = z.infer<typeof GearSpecificationSchema>
+export type SpeciesSpecification = z.infer<typeof SpeciesSpecificationSchema>
+export type RegulatoryAreaSpecification = z.infer<typeof RegulatoryAreaSpecificationSchema>
+export type AdministrativeAreaSpecification = z.infer<typeof AdministrativeAreaSpecificationSchema>
+
+export enum AdministrativeAreaType {
+  DISTANCE_TO_SHORE = 'DISTANCE_TO_SHORE',
+  EEZ_AREA = 'EEZ_AREA',
+  FAO_AREA = 'FAO_AREA',
+  NEAFC_AREA = 'NEAFC_AREA'
 }

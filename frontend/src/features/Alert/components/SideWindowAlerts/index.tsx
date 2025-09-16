@@ -1,7 +1,6 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { NO_SEAFRONT_GROUP, SEAFRONT_GROUP_SEAFRONTS, SeafrontGroup } from '@constants/seafront'
 import { AlertAndReportingTab } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/constants'
-import { AlertRules } from '@features/Alert/components/SideWindowAlerts/AlertRules'
 import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -15,6 +14,7 @@ import { SubMenu } from '../../../SideWindow/SubMenu'
 
 import type { AlertSubMenu } from './constants'
 import type { MutableRefObject, RefObject } from 'react'
+import {AlertsManagement} from "@features/Alert/components/SideWindowAlerts/AlertsManagement";
 
 type SideWindowAlertsProps = Readonly<{
   baseRef: RefObject<HTMLDivElement>
@@ -90,7 +90,7 @@ export function SideWindowAlerts({ baseRef, isFromUrl }: SideWindowAlertsProps) 
         />
       )}
       {subMenu === AdditionalSubMenu.SUSPENDED_ALERTS && <SilencedAlerts />}
-      {subMenu === AdditionalSubMenu.ALERT_RULES && <AlertRules />}
+      {subMenu === AdditionalSubMenu.ALERT_RULES && <AlertsManagement />}
     </>
   )
 }

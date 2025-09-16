@@ -11,5 +11,6 @@ export enum DisplayedErrorKey {
   SIDE_WINDOW_REPORTING_LIST_ERROR = 'sideWindowReportingListError',
   SIDE_WINDOW_VESSEL_GROUP_LIST_ERROR = 'sideWindowVesselGroupListError',
   SIDE_WINDOW_VESSEL_LIST_ERROR = 'sideWindowVesselListError',
+  SIDE_WINDOW_ALERT_MANAGEMENT_ERROR = 'sideWindowAlertManagementError',
   VESSEL_SIDEBAR_ERROR = 'vesselSidebarError'
 }

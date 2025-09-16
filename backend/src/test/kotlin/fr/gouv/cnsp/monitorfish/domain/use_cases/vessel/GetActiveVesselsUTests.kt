@@ -1091,7 +1091,11 @@ class GetActiveVesselsUTests {
                     vesselProfile = null,
                     vessel = null,
                     producerOrganization = null,
-                    riskFactor = VesselRiskFactor(lastControlAtQuayDateTime = ZonedDateTime.now().minusYears(2), lastControlAtSeaDateTime = null),
+                    riskFactor =
+                        VesselRiskFactor(
+                            lastControlAtQuayDateTime = ZonedDateTime.now().minusYears(2),
+                            lastControlAtSeaDateTime = null,
+                        ),
                     landingPort = null,
                 ),
             ),

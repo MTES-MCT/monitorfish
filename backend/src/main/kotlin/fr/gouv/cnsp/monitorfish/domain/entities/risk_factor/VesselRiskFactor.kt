@@ -158,7 +158,10 @@ data class VesselRiskFactor(
         }
     }
 
-    fun isLastPositionInGroup(vesselGroup: VesselGroupBase, now: ZonedDateTime): Boolean {
+    fun isLastPositionInGroup(
+        vesselGroup: VesselGroupBase,
+        now: ZonedDateTime,
+    ): Boolean {
         if (vesselGroup !is DynamicVesselGroup) return false
 
         val filters = vesselGroup.filters

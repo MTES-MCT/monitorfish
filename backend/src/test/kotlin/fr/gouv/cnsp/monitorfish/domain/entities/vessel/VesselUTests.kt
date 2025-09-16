@@ -32,7 +32,29 @@ class VesselUTests {
     }
 
     @Test
-    fun `getNationalIdentifier should return the identifier for a FR vessel When district code is null`() {
+    fun `getNationalIdentifier should return the identifier for a BE vessel`() {
+        // Given
+        val vessel =
+            Vessel(
+                id = 1,
+                internalReferenceNumber = "BEL01022680",
+                vesselName = "MY AWESOME VESSEL",
+                flagState = CountryCode.FR,
+                declaredFishingGears = listOf("Trémails"),
+                vesselType = "Fishing",
+                districtCode = "AY",
+                hasLogbookEsacapt = false,
+            )
+
+        // When
+        val nationalIdentifier = vessel.getNationalIdentifier()
+
+        // Then
+        assertThat(nationalIdentifier).isEqualTo("AY1022680")
+    }
+
+    @Test
+    fun `getNationalIdentifier should return no identifier for a FR vessel When district code is null`() {
         // Given
         val vessel =
             Vessel(
@@ -50,7 +72,7 @@ class VesselUTests {
         val nationalIdentifier = vessel.getNationalIdentifier()
 
         // Then
-        assertThat(nationalIdentifier).isEqualTo("22680")
+        assertThat(nationalIdentifier).isEqualTo("")
     }
 
     @Test

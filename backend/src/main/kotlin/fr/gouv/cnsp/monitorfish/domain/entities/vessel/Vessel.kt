@@ -74,17 +74,18 @@ data class Vessel(
         "VESSELS:${this.internalReferenceNumber ?: "UNKNOWN"}/${this.ircs ?: "UNKNOWN"}/${this.externalReferenceNumber ?: "UNKNOWN"}"
 
     fun getNationalIdentifier(): String {
+        if (districtCode.isNullOrEmpty()) {
+            return ""
+        }
+
         val internalReferenceNumberCountryCode =
             LIKELY_CONTROLLED_COUNTRY_CODES.find { countryAlpha3 ->
                 internalReferenceNumber?.contains(
                     countryAlpha3,
                 ) == true
             }
-        val identifier = internalReferenceNumber?.replace("${internalReferenceNumberCountryCode}000", "") ?: ""
-
-        if (districtCode.isNullOrEmpty()) {
-            return identifier
-        }
+        val zeros = if (internalReferenceNumberCountryCode == CountryCode.BE.alpha3) "0" else "000" // The BEL state have a higher CFR
+        val identifier = internalReferenceNumber?.replace("${internalReferenceNumberCountryCode}$zeros", "") ?: ""
 
         return "$districtCode$identifier"
     }

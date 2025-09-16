@@ -1,8 +1,8 @@
 import { PendingAlertValueType } from '@features/Alert/constants'
-import { AdministrativeAreaType } from '@features/AlertSpecification/types'
 import { z } from 'zod'
 
 import { stringOrUndefined, numberOrUndefined } from '../../../types'
+import {AdministrativeAreaType} from "@features/Alert/types";
 
 export const GearSpecificationSchema = z.strictObject({
   gear: z.string(),

@@ -79,7 +79,7 @@ export function RegulatedGear({
             width={170}
           />
           <StyledCustomInput
-            $isGray={mesh && mesh[0] !== ''}
+            $isGray
             onChange={intervalValue => {
               const nextIntervalValue = mesh ? [...mesh] : []
               nextIntervalValue[0] = intervalValue
@@ -92,7 +92,7 @@ export function RegulatedGear({
             <>
               et
               <SecondCustomInput
-                $isGray={mesh && mesh.length === 2 && mesh[1] !== ''}
+                $isGray
                 onChange={value => {
                   if (!mesh) {
                     return
@@ -112,7 +112,7 @@ export function RegulatedGear({
       <ContentLine $alignedToTop>
         <Label>Remarques</Label>
         <CustomInput
-          $isGray={remarks}
+          $isGray
           as="textarea"
           data-cy="regulatory-gears-remarks"
           onChange={event => onChange('remarks', event.target.value)}

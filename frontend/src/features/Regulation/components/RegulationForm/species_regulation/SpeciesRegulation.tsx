@@ -1,18 +1,17 @@
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import { Textarea, type Option } from '@mtes-mct/monitor-ui'
 import { SPECIES_REGULATION_KEYS } from 'domain/entities/backoffice'
-import { useCallback, useEffect, useState, type ChangeEvent } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { RegulatedSpecies } from './RegulatedSpecies'
 import { OtherRemark, Section, VerticalLine } from '../../../../commonStyles/Backoffice.style'
-import { CustomInput, Label } from '../../../../commonStyles/Input.style'
 import { regulationActions } from '../../../slice'
 import { REGULATORY_REFERENCE_KEYS } from '../../../utils'
 import { SectionTitle } from '../../RegulationTables/SectionTitle'
 
 import type { RegulatedSpecies as RegulatedSpeciesType } from '@features/Regulation/types'
-import type { Option } from '@mtes-mct/monitor-ui'
 
 export function SpeciesRegulation() {
   const dispatch = useBackofficeAppDispatch()
@@ -72,8 +71,8 @@ export function SpeciesRegulation() {
     [setSpeciesRegulation]
   )
 
-  const setOtherInfo = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setSpeciesRegulation(SPECIES_REGULATION_KEYS.OTHER_INFO, event.target.value)
+  const setOtherInfo = (value: string | undefined) => {
+    setSpeciesRegulation(SPECIES_REGULATION_KEYS.OTHER_INFO, value)
   }
 
   return (
@@ -101,19 +100,14 @@ export function SpeciesRegulation() {
         />
       </RegulatedSpeciesForms>
       <OtherRemark $show={show}>
-        <Label>Remarques</Label>
-        <CustomInput
-          $isGray={
-            processingRegulation.speciesRegulation?.otherInfo &&
-            processingRegulation.speciesRegulation?.otherInfo !== ''
-          }
-          as="textarea"
+        <Textarea
           data-cy="regulatory-species-other-info"
+          label="Remarques"
+          name="speciesRegulationOtherInfo"
           onChange={setOtherInfo}
-          placeholder=""
           rows={2}
+          style={{ width: '500px' }}
           value={processingRegulation.speciesRegulation?.otherInfo ?? ''}
-          width="500px"
         />
       </OtherRemark>
     </Section>

@@ -98,11 +98,14 @@ export function getSpeciesOnboardWithUntargetedSpeciesGrouped(
   speciesOnboard: MissionAction.SpeciesControl[],
   jdpSpecies: string[]
 ): MissionAction.SpeciesControl[] {
-  const otherSpeciesSummedWeight = speciesOnboard
-    .filter(species => !jdpSpecies.includes(species.speciesCode))
-    .map(species => species.controlledWeight ?? species.declaredWeight)
-    .filter((species): species is number => species !== undefined)
-    .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+  const otherSpeciesSummedWeight = Number(
+    speciesOnboard
+      .filter(species => !jdpSpecies.includes(species.speciesCode))
+      .map(species => species.controlledWeight ?? species.declaredWeight)
+      .filter((species): species is number => species !== undefined)
+      .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+      .toFixed(1)
+  )
 
   const otherSpecy = {
     controlledWeight: undefined,

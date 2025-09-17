@@ -192,7 +192,7 @@ export function getTableColumns(
             <LastControlType>{controlType}</LastControlType>
           </>
         ) : (
-          <None>-</None>
+          <None>Aucun depuis 5 ans</None>
         )
       },
       enableSorting: true,

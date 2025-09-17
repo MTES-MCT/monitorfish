@@ -443,7 +443,7 @@ def generate_html(df: pd.DataFrame, config: dict) -> str:
     } else {
         console.warn("Élément avec l'ID 'kepler-gl__map' introuvable.");
     }
-    }, 1);
+    }, 100);
     };
     </script>"""
 

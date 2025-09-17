@@ -1,5 +1,6 @@
+import { Label } from '@features/commonStyles/Input.style'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
-import { Checkbox, MultiRadio, MultiCascader, Label } from '@mtes-mct/monitor-ui'
+import { Checkbox, MultiRadio, MultiCascader } from '@mtes-mct/monitor-ui'
 import { isEqual } from 'lodash-es'
 import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
@@ -358,5 +359,4 @@ const GearCheckBox = styled(Checkbox)`
 
 const DerogationRadioWrapper = styled.div`
   display: flex;
-  gap: 16px;
 `

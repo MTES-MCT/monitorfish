@@ -1,10 +1,10 @@
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import { Textarea } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 
 import { FishingPeriodForm } from './FishingPeriodForm'
 import { OtherRemark, Section } from '../../../../commonStyles/Backoffice.style'
-import { CustomInput, Label } from '../../../../commonStyles/Input.style'
 import { regulationActions } from '../../../slice'
 import { SectionTitle } from '../../RegulationTables/SectionTitle'
 
@@ -14,8 +14,8 @@ export function FishingPeriodSection() {
 
   const [show, setShow] = useState(false)
 
-  const onChange = value => {
-    dispatch(regulationActions.setFishingPeriodOtherInfo(value))
+  const onChange = (value: string | undefined) => {
+    dispatch(regulationActions.setFishingPeriodOtherInfo(value ?? ''))
   }
 
   return (
@@ -23,15 +23,13 @@ export function FishingPeriodSection() {
       <SectionTitle isOpen={show} setIsOpen={setShow} title="Périodes de pêche" />
       <FishingPeriodForm show={show} />
       <OtherRemark $show={show}>
-        <Label>Remarques</Label>
-        <CustomInput
-          $isGray={processingRegulation.fishingPeriod?.otherInfo !== ''}
-          as="textarea"
-          onChange={event => onChange(event.target.value)}
-          placeholder=""
+        <Textarea
+          label="Remarques"
+          name="fishingPeriodOtherInfo"
+          onChange={onChange}
           rows={2}
+          style={{ width: '500px' }}
           value={processingRegulation.fishingPeriod?.otherInfo ?? ''}
-          width="500px"
         />
       </OtherRemark>
     </Section>

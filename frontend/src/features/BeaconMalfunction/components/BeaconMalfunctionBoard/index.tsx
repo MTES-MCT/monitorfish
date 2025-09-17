@@ -13,7 +13,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { createSelector } from '@reduxjs/toolkit'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
@@ -34,7 +34,7 @@ import type {
   BeaconMalfunctionStatusValue
 } from '@features/BeaconMalfunction/types'
 import type { MainRootState } from '@store'
-import type { CSSProperties, MutableRefObject } from 'react'
+import type { CSSProperties } from 'react'
 
 const getMemoizedBeaconMalfunctionsByStage = createSelector(
   (state: MainRootState) => state.beaconMalfunction.beaconMalfunctions,
@@ -52,7 +52,6 @@ export function BeaconMalfunctionBoard() {
   const [searchedVessel, setSearchedVessel] = useState<string>('')
   const [activeBeaconMalfunction, setActiveBeaconMalfunction] = useState(null)
   const [filteredVesselStatus, setFilteredVesselStatus] = useState<BeaconMalfunctionStatusValue | undefined>()
-  const vesselStatusSelectRef = useRef() as MutableRefObject<HTMLDivElement>
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10
@@ -230,15 +229,13 @@ export function BeaconMalfunctionBoard() {
           type="text"
           value={searchedVessel}
         />
-        <VesselStatusSelectWrapper ref={vesselStatusSelectRef}>
-          <VesselStatusSelect
-            isCleanable
-            updateVesselStatus={(_, status) =>
-              setFilteredVesselStatus(VESSEL_STATUS.find(statusObject => statusObject.value === status))
-            }
-            vesselStatus={filteredVesselStatus}
-          />
-        </VesselStatusSelectWrapper>
+        <VesselStatusSelect
+          isCleanable
+          updateVesselStatus={(_, status) =>
+            setFilteredVesselStatus(VESSEL_STATUS.find(statusObject => statusObject.value === status))
+          }
+          vesselStatus={filteredVesselStatus}
+        />
       </Header>
       <DndContext
         autoScroll
@@ -347,22 +344,6 @@ const Wrapper = styled(LegacyRsuiteComponentsWrapper)`
     margin-right: 5px;
     margin-left: 5px;
   }
-
-  .rs-picker {
-    width: 180px !important;
-
-    > .rs-picker-toggle {
-      padding: 3px 8px 5px;
-
-      > .rs-stack {
-        > .rs-picker-toggle-indicator {
-          > svg {
-            top: 4px;
-          }
-        }
-      }
-    }
-  }
 `
 const wrapperStyle: CSSProperties = {
   height: 'calc(100vh - 20px)',
@@ -371,8 +352,6 @@ const wrapperStyle: CSSProperties = {
   padding: '20px 0 0 10px',
   width: 'calc(100vw - 90px)'
 }
-
-const VesselStatusSelectWrapper = styled.div``
 
 const Header = styled.div`
   display: flex;

@@ -179,7 +179,7 @@ export function RegulatedSpecies({
             searchable
             value={DEFAULT_SPECIES_CATEGORY_VALUE}
             virtualized
-            width={280}
+            width={300}
           />
         </ContentLine>
         <ContentLine>
@@ -203,7 +203,7 @@ export function RegulatedSpecies({
               searchable
               value={DEFAULT_SPECIES_VALUE}
               virtualized
-              width={280}
+              width={300}
             />
           ) : null}
         </ContentLine>
@@ -227,7 +227,7 @@ export function RegulatedSpecies({
                 <SpeciesDetail>
                   <Label>Remarques</Label>
                   <CustomInput
-                    $isGray={species.find(_species => _species.code === speciesValue.code)?.remarks}
+                    $isGray
                     as="textarea"
                     data-cy={`${dataCyTarget}-regulatory-species-remarks`}
                     onChange={event =>

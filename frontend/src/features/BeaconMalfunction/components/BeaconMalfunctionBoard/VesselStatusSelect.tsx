@@ -25,7 +25,6 @@ export function VesselStatusSelect({
       cleanable={isCleanable}
       isLabelHidden
       label="Status"
-      menuStyle={{ width: '180px' }}
       name="vesselStatus"
       onChange={status => updateVesselStatus(beaconMalfunction, status as string)}
       options={VESSEL_STATUS}
@@ -34,6 +33,7 @@ export function VesselStatusSelect({
         <VesselStatusSelectValue item={item} textColor={vesselStatus?.textColor ?? THEME.color.charcoal} />
       )}
       searchable={false}
+      style={{ width: '180px' }}
       value={vesselStatus?.value ?? undefined}
     />
   )

@@ -10,6 +10,7 @@ Features
 * Visualization of fishing vessels' real time **positions** (VMS)
 * Visualization of fishing vessels' declarative **fishing activity** data (ERS)
 * Vizualization of synthetic :doc:`activity overview <activity-overview>`
+* :doc:`Activity report (Act-Rep) <activity-report>`
 * :doc:`Inspection reports data entry <inspection-data-entry>`
 * Visualization of fishing vessels' historical **inspections** and **violations**
 * Visualization of :doc:`regulated fishing areas <regulation>` of the french and european regulations

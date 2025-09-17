@@ -1,0 +1,37 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-16 15:29+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/activity-overview copy.rst:3
+#: 46f40f83683c4a96a3f7ce63366994b7
+msgid "Activity overview"
+msgstr ""
+
+#: ../source/activity-overview copy.rst:5
+#: 7cf0843082e54227b08219b24e86d1c1
+msgid "The declared activity data is aggregated to produce synthetic visualizations of catches and landings of all vessels."
+msgstr ""
+
+#: ../source/activity-overview copy.rst:7
+#: 50517dbf6baa48ee8537a5fefa1b966b
+msgid "Map showing a synthetic overview of the fishing activity"
+msgstr ""
+
+#: ../source/activity-overview copy.rst:12
+#: 73ec0639a58f46ec90adc2b71bc3c059
+msgid "These visualizations are used to analyze the trends in activity - by fleet segment, by area, ... - and establish inspection plans following a risk-based methodology."
+msgstr ""

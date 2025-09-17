@@ -51,7 +51,7 @@ describe('utils', () => {
     expect(groupedSpeciesOnboard[0]?.speciesCode).toEqual('HKE')
     expect(groupedSpeciesOnboard[0]?.controlledWeight).toEqual(500)
     expect(groupedSpeciesOnboard[1]?.speciesCode).toEqual('OTH')
-    expect(groupedSpeciesOnboard[1]?.declaredWeight).toEqual(182.56)
+    expect(groupedSpeciesOnboard[1]?.declaredWeight).toEqual(182.6)
     expect(groupedSpeciesOnboard[2]?.speciesCode).toEqual('ANZ')
     expect(groupedSpeciesOnboard[2]?.declaredWeight).toEqual(12.6)
   })

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2025-09-16 16:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,65 +53,70 @@ msgstr ""
 
 #: ../source/overview.rst:13
 #: c0dd4ad0bc1d42299be80fb8d586185b
-msgid ":doc:`Inspection reports data entry <inspection-data-entry>`"
+msgid ":doc:`Activity report (Act-Rep) <activity-report>`"
 msgstr ""
 
 #: ../source/overview.rst:14
+#: c0dd4ad0bc1d42299be80fb8d586185b
+msgid ":doc:`Inspection reports data entry <inspection-data-entry>`"
+msgstr ""
+
+#: ../source/overview.rst:15
 #: 84bb5291a2f641549169f17ee4c5a6ba
 msgid "Visualization of fishing vessels' historical **inspections** and **violations**"
 msgstr ""
 
-#: ../source/overview.rst:15
+#: ../source/overview.rst:16
 #: 550f6d8c7a8c403094936317e5b240f9
 msgid "Visualization of :doc:`regulated fishing areas <regulation>` of the french and european regulations"
 msgstr ""
 
-#: ../source/overview.rst:16
+#: ../source/overview.rst:17
 #: 8c0ee20ba7f241668a5f96064e14e2fe
 msgid "Computation of fishing vessels' real time belonging to :doc:`fleet segments <fleet-segments>` as defined by the `European Fishing Control Agency (EFCA) <https://www.efca.europa.eu/en>`_ in its `risk assessment methodology <https://www.efca.europa.eu/en/content/guidelines-risk-assessment-methodology-fisheries-compliance>`_"
 msgstr ""
 
-#: ../source/overview.rst:17
+#: ../source/overview.rst:18
 #: 41d16795351d4cbf9c0a3d04004b3356
 msgid "Real time fraud detection :doc:`alerts <alerts>`"
 msgstr ""
 
-#: ../source/overview.rst:18
+#: ../source/overview.rst:19
 #: d983db0e889b4635992b99478bacc6e7
 msgid "Computation of fishing vessels' real time :doc:`risk factor <risk-factor>`, a metric developed in the context of the Monitorfish project that aims to help FMC agents **prioritize vessels to control** based on all the above elements"
 msgstr ""
 
-#: ../source/overview.rst:19
+#: ../source/overview.rst:20
 #: 94bb643d086f4ad78e139bea1e6aac99
 msgid "Compliance checking of :doc:`prior notifications <prior-notifications>` of return to port and prioritization for land inspections"
 msgstr ""
 
-#: ../source/overview.rst:20
+#: ../source/overview.rst:21
 #: 3f9203c71611466994e9f8bc9c768dee
 msgid "Creation and sharing of :doc:`groups of vessels <groups-of-vessels>`"
 msgstr ""
 
-#: ../source/overview.rst:21
+#: ../source/overview.rst:22
 #: f1c10ec65fd84528987529f8744440ae
 msgid "Administration panel that allows admins to"
 msgstr ""
 
-#: ../source/overview.rst:23
+#: ../source/overview.rst:24
 #: 4fcca2a119b94786ab223f54fe0186a0
 msgid "Update regulation data : update authorized fishing areas / periods / gears..."
 msgstr ""
 
-#: ../source/overview.rst:24
+#: ../source/overview.rst:25
 #: 52b87782f5c94dadad4bc79af6997a52
 msgid "Update the definitions of :doc:`fleet segments <fleet-segments>`"
 msgstr ""
 
-#: ../source/overview.rst:25
+#: ../source/overview.rst:26
 #: b998bbfdc5614c8791767c31e4841168
 msgid ":doc:`Stear control priorities <control-priority-steering>` by dynamically adjuting the control priority level of each fleet segment"
 msgstr ""
 
-#: ../source/overview.rst:30
+#: ../source/overview.rst:31
 #: 130334b74af24f83bc3b91c43e4000d5
 msgid "Demo"
 msgstr ""

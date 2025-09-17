@@ -331,8 +331,7 @@ export function FilterBar() {
             onChange={updateLandingPortLocodes}
             options={portsAsTreeOptions ?? []}
             placeholder="Ports de débarque"
-            placement="bottomEnd"
-            popupWidth={500}
+            popupWidth={300}
             renderValue={(_, items) =>
               items.length > 0 ? <SelectValue>Port de débarque ({items.length})</SelectValue> : <></>
             }

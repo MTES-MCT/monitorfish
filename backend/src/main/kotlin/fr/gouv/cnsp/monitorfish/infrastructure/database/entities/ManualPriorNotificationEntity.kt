@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
+import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalException
@@ -110,7 +111,11 @@ data class ManualPriorNotificationEntity(
                     vesselId = vesselId,
                 )
             // For practical reasons `vessel` can't be `null`, so we temporarily set it to "Navire inconnu"
-            val vessel = UNKNOWN_VESSEL
+            val vessel =
+                UNKNOWN_VESSEL.copy(
+                    // used to retrieve vessel from manual pno
+                    internalReferenceNumber = pnoLogbookMessage.internalReferenceNumber,
+                )
             val logbookMessageAndValue = LogbookMessageAndValue(pnoLogbookMessage, PNO::class.java)
 
             return PriorNotification(
@@ -121,8 +126,19 @@ data class ManualPriorNotificationEntity(
                 reportId = reportId,
                 sentAt = sentAt,
                 updatedAt = logbookMessageAndValue.value.updatedAt,
-                // These props need to be calculated in the use case
-                port = null,
+                port =
+                    logbookMessageAndValue.value.port?.let {
+                        Port(
+                            locode = it,
+                            null,
+                            name = logbookMessageAndValue.value.portName ?: "",
+                            facade = null,
+                            faoAreas = emptyList(),
+                            latitude = null,
+                            longitude = null,
+                            region = null,
+                        )
+                    },
                 reportingCount = null,
                 seafront = null,
                 vessel = vessel,

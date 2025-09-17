@@ -45,7 +45,7 @@ The full documentation is hosted [here](https://monitorfish.readthedocs.io/en/la
 ## Background
 The motivation of the french FMC was to streamline its operations and better enforce fishing regulations by developing an **integrated tool** that makes all information relevant to the coordination of fishing control easily accessible. Furthermore, the tool was to act as a **decision support system** to better detect and prevent violations.
 
-On the initiative of the french FMC, the project started in September 2020 as a challenge of the [Entrepreneur d'Intérêt Général (EIG)](https://entrepreneur-interet-general.etalab.gouv.fr/index.html) program which helps initiate digital projects in the french administration. More information on the [page of the EIG challenge](https://www.eig.numerique.gouv.fr/defis/monitorfish/).
+On the initiative of the french FMC, the project started in September 2020 as a challenge of the [Entrepreneur d'Intérêt Général (EIG)](https://www.eig.numerique.gouv.fr/) program which helps initiate digital projects in the french administration. More information on the [page of the EIG challenge](https://www.eig.numerique.gouv.fr/defis/monitorfish/).
 
 After 10 months of incubation in the EIG program, the software is in production and used daily by the french FMC.
 

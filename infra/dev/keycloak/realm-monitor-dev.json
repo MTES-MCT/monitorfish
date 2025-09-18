@@ -1,108 +1,24 @@
 {
   "realm": "monitor",
   "enabled": true,
+  "accessTokenLifespan": 600,
+  "accessTokenLifespanForImplicitFlow": 9000,
+  "ssoSessionMaxLifespan": 360000,
+  "accessCodeLifespan": 600,
+  "accessCodeLifespanUserAction": 3000,
+  "accessCodeLifespanLogin": 18000,
   "clients": [
     {
       "clientId": "monitorfish",
       "enabled": true,
       "protocol": "openid-connect",
       "redirectUris": [
-        "http://localhost:8880/login/oauth2/code/proconnect",
-        "http://localhost:8880",
-        "http://localhost:3000"
+        "*"
       ],
       "webOrigins": [
-        "http://localhost:3000",
-        "http://localhost:8880"
+        "*"
       ],
-      "publicClient": false,
-      "secret": "BHKLjYpcN2NzFlU2kTu63z8rDxQgUl8z",
-      "defaultClientScopes": ["openid", "profile", "email", "siret"],
-      "optionalClientScopes": []
-    }
-  ],
-  "clientScopes": [
-    {
-      "name": "openid",
-      "description": "OpenID Connect built-in scope: openid",
-      "protocol": "openid-connect",
-      "attributes": {
-        "consent.screen.text": "OpenID Connect",
-        "display.on.consent.screen": "true"
-      },
-      "protocolMappers": [
-        {
-          "name": "sub",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-sub-mapper",
-          "consentRequired": false,
-          "config": {}
-        }
-      ]
-    },
-    {
-      "name": "email",
-      "description": "OpenID Connect built-in scope: email",
-      "protocol": "openid-connect",
-      "attributes": {
-        "consent.screen.text": "Email address",
-        "display.on.consent.screen": "true"
-      },
-      "protocolMappers": [
-        {
-          "name": "email",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-property-mapper",
-          "consentRequired": false,
-          "config": {
-            "userinfo.token.claim": "true",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "email",
-            "jsonType.label": "string",
-            "user.attribute": "email"
-          }
-        },
-        {
-          "name": "email verified",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-property-mapper",
-          "consentRequired": false,
-          "config": {
-            "userinfo.token.claim": "true",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "email_verified",
-            "jsonType.label": "boolean",
-            "user.attribute": "emailVerified"
-          }
-        }
-      ]
-    },
-    {
-      "name": "siret",
-      "description": "SIRET scope for accessing SIRET information",
-      "protocol": "openid-connect",
-      "attributes": {
-        "consent.screen.text": "Access to SIRET information",
-        "display.on.consent.screen": "true"
-      },
-      "protocolMappers": [
-        {
-          "name": "siret-mapper",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-attribute-mapper",
-          "consentRequired": false,
-          "config": {
-            "userinfo.token.claim": "true",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "SIRET",
-            "jsonType.label": "json",
-            "user.attribute": "siret"
-          }
-        }
-      ]
+      "publicClient": true
     }
   ],
   "users": [
@@ -119,11 +35,7 @@
           "value": "fish",
           "temporary": false
         }
-      ],
-      "attributes":
-      {
-        "siret": ["1234567890"]
-      }
+      ]
     },
     {
       "username": "superuser",
@@ -138,30 +50,7 @@
           "value": "fish",
           "temporary": false
         }
-      ],
-      "attributes":
-      {
-        "siret": ["1234567890"]
-      }
-    },
-    {
-      "username": "lambdaUser",
-      "email": "lambda@me.fr",
-      "firstName": "lambda",
-      "lastName": "user",
-      "enabled": true,
-      "emailVerified": true,
-      "credentials": [
-        {
-          "type": "password",
-          "value": "fish",
-          "temporary": false
-        }
-      ],
-      "attributes":
-      {
-        "siret": ["1111111111"]
-      }
+      ]
     }
   ]
 }

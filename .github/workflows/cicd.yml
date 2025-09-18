@@ -153,6 +153,7 @@ jobs:
           build-args: |
             IS_RELEASE=${{ env.IS_RELEASE }}
             VERSION=${{ env.VERSION }}
+            ENV_PROFILE=${{ env.ENV_PROFILE }}
             GITHUB_SHA=${{ github.sha }}
 
         # Temp fix
@@ -187,6 +188,7 @@ jobs:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
       CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+      ENV_PROFILE: ${{ needs.version.outputs.ENV_PROFILE }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       MONITORFISH_VERSION: ${{ needs.version.outputs.VERSION }}
       PUPPETEER_SKIP_DOWNLOAD: "true"
@@ -235,7 +237,7 @@ jobs:
           install-command: npm ci
           parallel: true
           record: true
-          wait-on: "http://localhost:8880"
+          wait-on: "http://0.0.0.0:8880"
           working-directory: ./frontend
 
   e2e_multi_windows_test:
@@ -246,6 +248,7 @@ jobs:
     timeout-minutes: 30
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      ENV_PROFILE: ${{ needs.version.outputs.ENV_PROFILE }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       MONITORFISH_VERSION: ${{ needs.version.outputs.VERSION }}
       PUPPETEER_SKIP_DOWNLOAD: "true"

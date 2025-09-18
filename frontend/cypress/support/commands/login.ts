@@ -11,7 +11,7 @@ export function login(user: string) {
     cy.visit('/login')
     cy.wait(500)
 
-    cy.clickButton('S\'identifier avec ProConnect')
+    cy.clickButton('Se connecter avec Cerbère')
 
     // Login with Keycloak
     cy.get('[name="username"]').type(user)

@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
 import fr.gouv.cnsp.monitorfish.config.*
+import fr.gouv.cnsp.monitorfish.domain.repositories.OIDCRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.API_KEY_FILTER_PRECEDENCE
 import fr.gouv.cnsp.monitorfish.infrastructure.api.USER_AUTH_FILTER_PRECEDENCE
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Configuration
 class BffFilterConfig(
     private val protectedPathsAPIProperties: ProtectedPathsAPIProperties,
     private val oidcProperties: OIDCProperties,
+    private val oidcRepository: OIDCRepository,
     private val getIsAuthorizedUser: GetIsAuthorizedUser,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(BffFilterConfig::class.java)
@@ -25,9 +27,10 @@ class BffFilterConfig(
         registrationBean.order = USER_AUTH_FILTER_PRECEDENCE
         registrationBean.filter =
             UserAuthorizationCheckFilter(
-                oidcProperties = oidcProperties,
-                protectedPathsAPIProperties = protectedPathsAPIProperties,
-                getIsAuthorizedUser = getIsAuthorizedUser,
+                oidcProperties,
+                protectedPathsAPIProperties,
+                oidcRepository,
+                getIsAuthorizedUser,
             )
         registrationBean.urlPatterns = protectedPathsAPIProperties.paths
 

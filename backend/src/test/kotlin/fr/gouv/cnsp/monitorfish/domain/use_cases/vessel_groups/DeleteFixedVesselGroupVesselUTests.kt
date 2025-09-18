@@ -3,8 +3,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify
-import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.Sharing
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselIdentity
@@ -33,10 +33,11 @@ class DeleteFixedVesselGroupVesselUTests {
 
         //
         given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
+            UserAuthorization(
+                hashedEmail = "a6ad88a1dcff3355c23693eaf12898065873d38e13f41d8841f05ee2c6a19f3a",
                 isSuperUser = true,
                 service = CnspService.POLE_OPS_METROPOLE,
+                isAdministrator = false,
             ),
         )
         given(vesselGroupRepository.findById(any())).willReturn(groupToUpdate)
@@ -76,10 +77,11 @@ class DeleteFixedVesselGroupVesselUTests {
 
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
+            UserAuthorization(
+                hashedEmail = "a6ad88a1dcff3355c23693eaf12898065873d38e13f41d8841f05ee2c6a19f3a",
                 isSuperUser = true,
                 service = CnspService.POLE_OPS_METROPOLE,
+                isAdministrator = false,
             ),
         )
         given(vesselGroupRepository.findById(any())).willReturn(groupToUpdate)
@@ -116,10 +118,11 @@ class DeleteFixedVesselGroupVesselUTests {
 
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
+            UserAuthorization(
+                hashedEmail = "a6ad88a1dcff3355c23693eaf12898065873d38e13f41d8841f05ee2c6a19f3a",
                 isSuperUser = true,
                 service = CnspService.POLE_OPS_METROPOLE,
+                isAdministrator = false,
             ),
         )
         given(vesselGroupRepository.findById(any())).willReturn(groupToUpdate)
@@ -148,10 +151,11 @@ class DeleteFixedVesselGroupVesselUTests {
 
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "another@email.gouv.fr",
+            UserAuthorization(
+                hashedEmail = "a6ad88a1dcff3355c23693eaf12898065873d38e13f41d8841f05ee2c6a19f3a",
                 isSuperUser = true,
                 service = CnspService.POLE_SIP,
+                isAdministrator = false,
             ),
         )
         given(vesselGroupRepository.findById(any())).willReturn(groupToUpdate)

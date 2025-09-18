@@ -32,8 +32,12 @@ RUN gradle assemble
 FROM node:20-alpine AS build-front
 
 ARG VERSION
+ARG ENV_PROFILE
 ENV CI=true
+ENV ENV_PROFILE=$ENV_PROFILE
 ENV PUPPETEER_SKIP_DOWNLOAD=true
+
+RUN echo ${ENV_PROFILE}
 
 COPY frontend/ /tmp/frontend/
 COPY infra/ /tmp/infra/
@@ -55,6 +59,9 @@ FROM azul/zulu-openjdk-alpine:17-jre
 
 ARG VERSION
 ENV VERSION=$VERSION
+
+ARG ENV_PROFILE
+ENV ENV_PROFILE=$ENV_PROFILE
 
 ENV ENV_DB_URL=""
 
@@ -98,6 +105,11 @@ RUN mkdir /home/monitorfish/logs
 # It must point to the front (React) files
 ENV STATIC_FILES_PATH="/home/monitorfish/public"
 
+# Default profile is for local. Can be overriden at start : docker run -e "SPRING_PROFILES_ACTIVE=prod"
+ENV SPRING_PROFILES_ACTIVE=$ENV_PROFILE
+
+RUN echo ${ENV_PROFILE}
+
 USER root
 RUN chown monitorfish /home/monitorfish/import-meta-env
 RUN chmod +x /home/monitorfish/import-meta-env
@@ -114,4 +126,5 @@ ENTRYPOINT ["/home/monitorfish/env.sh"]
 CMD exec java -Dhttp.proxyHost=${MONITORFISH_HTTP_PROXY_HOST} -Dhttp.proxyPort=${MONITORFISH_HTTP_PROXY_PORT} \
               -Dhttps.proxyHost=${MONITORFISH_HTTP_PROXY_HOST} -Dhttps.proxyPort=${MONITORFISH_HTTP_PROXY_PORT} \
               -Dhttp.nonProxyHosts=${MONITORFISH_HTTP_NON_PROXY_HOSTS} -Dhttps.nonProxyHosts=${MONITORFISH_HTTP_NON_PROXY_HOSTS} \
+              -Dspring.config.additional-location="/home/monitorfish/configurations/" \
               -jar "monitorfish-${VERSION}.jar"

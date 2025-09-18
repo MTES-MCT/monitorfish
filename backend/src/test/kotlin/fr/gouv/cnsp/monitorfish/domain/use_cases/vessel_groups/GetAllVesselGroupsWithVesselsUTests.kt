@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
-import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
@@ -35,10 +35,11 @@ class GetAllVesselGroupsWithVesselsUTests {
     fun `execute get all fixed groups with vessels from last positions`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
                 isSuperUser = true,
                 service = null,
+                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -82,10 +83,11 @@ class GetAllVesselGroupsWithVesselsUTests {
     fun `execute get all dynamic groups with vessels from last positions`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
                 isSuperUser = true,
                 service = null,
+                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(

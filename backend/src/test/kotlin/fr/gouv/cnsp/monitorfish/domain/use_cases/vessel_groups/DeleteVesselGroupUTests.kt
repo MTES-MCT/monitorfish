@@ -3,8 +3,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
-import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.Sharing
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
@@ -31,10 +31,11 @@ class DeleteVesselGroupUTests {
 
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
                 isSuperUser = true,
                 service = null,
+                isAdministrator = false,
             ),
         )
         given(vesselGroupRepository.findById(any())).willReturn(groupToDelete)
@@ -59,10 +60,11 @@ class DeleteVesselGroupUTests {
 
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "another@email.gouv.fr",
+            UserAuthorization(
+                hashedEmail = "a6ad88a1dcff3355c23693eaf12898065873d38e13f41d8841f05ee2c6a19f3a",
                 isSuperUser = true,
                 service = CnspService.POLE_OPS_METROPOLE,
+                isAdministrator = false,
             ),
         )
         given(vesselGroupRepository.findById(any())).willReturn(groupToDelete)

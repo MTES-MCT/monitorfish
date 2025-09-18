@@ -4,7 +4,7 @@ const IS_CI = Boolean(process.env.CI)
 
 export default defineConfig({
   e2e: {
-    baseUrl: `http://${IS_CI ? 'localhost:8880' : 'localhost:3000'}`,
+    baseUrl: `http://${IS_CI ? '0.0.0.0:8880' : 'localhost:3000'}`,
     excludeSpecPattern: ['**/__snapshots__/*', '**/__image_snapshots__/*'],
     specPattern: 'cypress/e2e/**/*.spec.ts'
   },
@@ -14,6 +14,8 @@ export default defineConfig({
      * instead of `import.meta.env` in application code.
      */
     FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED: true,
+    FRONTEND_OIDC_AUTHORITY: `http://${IS_CI ? '0.0.0.0:8880' : 'localhost:3000'}/realms/monitor`,
+    FRONTEND_OIDC_CLIENT_ID: 'monitorfish'
   },
   projectId: '9b7q8z',
   retries: {

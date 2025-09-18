@@ -20,11 +20,12 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
@@ -32,7 +33,6 @@ import java.time.ZonedDateTime
 import kotlin.text.Charsets.UTF_8
 
 @Import(SentryConfig::class)
-@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(PriorNotificationController::class)])
 class PriorNotificationControllerUTests {
     @Autowired
@@ -86,6 +86,12 @@ class PriorNotificationControllerUTests {
     @MockBean
     private lateinit var invalidatePriorNotification: InvalidatePriorNotification
 
+    private fun authenticatedRequest() =
+        oidcLogin()
+            .idToken { token ->
+                token.claim("email", "email@domain-name.com")
+            }
+
     @Test
     fun `getAll Should get a list of prior notifications`() {
         val firstFakePriorNotification = PriorNotificationFaker.fakePriorNotification(1)
@@ -120,7 +126,7 @@ class PriorNotificationControllerUTests {
             .perform(
                 get(
                     "/bff/v1/prior_notifications?willArriveAfter=2000-01-01T00:00:00Z&willArriveBefore=2100-01-01T00:00:00Z&seafrontGroup=ALL&sortColumn=EXPECTED_ARRIVAL_DATE&sortDirection=DESC&pageNumber=0&pageSize=10",
-                ),
+                ).with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
@@ -156,7 +162,9 @@ class PriorNotificationControllerUTests {
             .perform(
                 put(
                     "/bff/v1/prior_notifications/logbook/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
-                ).contentType(MediaType.APPLICATION_JSON)
+                ).with(authenticatedRequest())
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
                     .content(requestBody)
                     .characterEncoding(UTF_8),
             )
@@ -195,6 +203,8 @@ class PriorNotificationControllerUTests {
         api
             .perform(
                 post("/bff/v1/prior_notifications/manual/compute")
+                    .with(authenticatedRequest())
+                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestBody),
             )
@@ -251,6 +261,8 @@ class PriorNotificationControllerUTests {
         api
             .perform(
                 post("/bff/v1/prior_notifications/manual")
+                    .with(authenticatedRequest())
+                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestBody),
             )
@@ -307,6 +319,8 @@ class PriorNotificationControllerUTests {
         api
             .perform(
                 put("/bff/v1/prior_notifications/manual/${fakePriorNotification.reportId!!}")
+                    .with(authenticatedRequest())
+                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestBody),
             )
@@ -327,7 +341,7 @@ class PriorNotificationControllerUTests {
             .perform(
                 get(
                     "/bff/v1/prior_notifications/to_verify",
-                ),
+                ).with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
@@ -341,7 +355,7 @@ class PriorNotificationControllerUTests {
 
         // When
         api
-            .perform(get("/bff/v1/prior_notifications/types"))
+            .perform(get("/bff/v1/prior_notifications/types").with(authenticatedRequest()))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))
@@ -366,8 +380,8 @@ class PriorNotificationControllerUTests {
         api
             .perform(
                 get(
-                    "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
-                ),
+                    "/bff/v1/prior_notifications/${fakePriorNotification.reportId}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
+                ).with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
@@ -428,7 +442,7 @@ class PriorNotificationControllerUTests {
             .perform(
                 get(
                     "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
-                ),
+                ).with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
@@ -490,7 +504,7 @@ class PriorNotificationControllerUTests {
 
         // When
         api
-            .perform(get("/bff/v1/prior_notifications/REPORT_ID/pdf"))
+            .perform(get("/bff/v1/prior_notifications/REPORT_ID/pdf").with(authenticatedRequest()))
             // Then
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_PDF))
@@ -504,7 +518,7 @@ class PriorNotificationControllerUTests {
 
         // When
         api
-            .perform(get("/bff/v1/prior_notifications/REPORT_ID/pdf/exist"))
+            .perform(get("/bff/v1/prior_notifications/REPORT_ID/pdf/exist").with(authenticatedRequest()))
             // Then
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -528,8 +542,8 @@ class PriorNotificationControllerUTests {
         api
             .perform(
                 post(
-                    "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/verify_and_send?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
-                ),
+                    "/bff/v1/prior_notifications/${fakePriorNotification.reportId}/verify_and_send?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
+                ).with(authenticatedRequest()).with(csrf()),
             )
             // Then
             .andExpect(status().isOk)
@@ -555,7 +569,7 @@ class PriorNotificationControllerUTests {
             .perform(
                 put(
                     "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/invalidate?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
-                ),
+                ).with(authenticatedRequest()).with(csrf()),
             )
             // Then
             .andExpect(status().isOk)
@@ -604,7 +618,7 @@ class PriorNotificationControllerUTests {
 
         // When
         api
-            .perform(get("/bff/v1/prior_notifications/$fakeReportId/sent_messages"))
+            .perform(get("/bff/v1/prior_notifications/$fakeReportId/sent_messages").with(authenticatedRequest()))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))

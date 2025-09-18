@@ -10,19 +10,19 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.input.LogbookPriorNotificatio
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationComputeDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationFormDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
-import fr.gouv.cnsp.monitorfish.infrastructure.api.security.UserAuthorizationCheckFilter
 import fr.gouv.cnsp.monitorfish.infrastructure.exceptions.BackendRequestErrorCode
 import fr.gouv.cnsp.monitorfish.infrastructure.exceptions.BackendRequestException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.servlet.http.HttpServletResponse
 import jakarta.websocket.server.PathParam
 import org.springframework.data.domain.Sort
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.time.ZonedDateTime
@@ -169,7 +169,6 @@ class PriorNotificationController(
     @PutMapping("/logbook/{reportId}")
     @Operation(summary = "Update a logbook prior notification by its `reportId`")
     fun updateLogbook(
-        response: HttpServletResponse,
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
@@ -178,13 +177,16 @@ class PriorNotificationController(
         operationDate: ZonedDateTime,
         @RequestBody
         logbookPriorNotificationFormDataInput: LogbookPriorNotificationFormDataInput,
+        @AuthenticationPrincipal principal: OidcUser??,
     ): LogbookPriorNotificationFormDataOutput {
+        val email = principal?.email ?: ""
+
         val updatedPriorNotification =
             updateLogbookPriorNotification.execute(
                 reportId = reportId,
                 operationDate = operationDate,
                 note = logbookPriorNotificationFormDataInput.note,
-                updatedBy = response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER),
+                updatedBy = email,
             )
 
         return LogbookPriorNotificationFormDataOutput.fromPriorNotification(updatedPriorNotification)
@@ -217,13 +219,15 @@ class PriorNotificationController(
     @PostMapping("/manual")
     @Operation(summary = "Create a new manual prior notification")
     fun createManual(
-        response: HttpServletResponse,
         @RequestBody
         manualPriorNotificationFormDataInput: ManualPriorNotificationFormDataInput,
+        @AuthenticationPrincipal principal: OidcUser?,
     ): ManualPriorNotificationFormDataOutput {
+        val email = principal?.email ?: ""
+
         val createdPriorNotification =
             createOrUpdateManualPriorNotification.execute(
-                author = response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER),
+                author = email,
                 didNotFishAfterZeroNotice = manualPriorNotificationFormDataInput.didNotFishAfterZeroNotice,
                 expectedArrivalDate = manualPriorNotificationFormDataInput.expectedArrivalDate,
                 expectedLandingDate = manualPriorNotificationFormDataInput.expectedLandingDate,
@@ -246,16 +250,18 @@ class PriorNotificationController(
     @PutMapping("/manual/{reportId}")
     @Operation(summary = "Update a manual prior notification by its `reportId`")
     fun updateManual(
-        response: HttpServletResponse,
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
         @RequestBody
         manualPriorNotificationFormDataInput: ManualPriorNotificationFormDataInput,
+        @AuthenticationPrincipal principal: OidcUser?,
     ): ManualPriorNotificationFormDataOutput {
+        val email = principal?.email ?: ""
+
         val updatedPriorNotification =
             createOrUpdateManualPriorNotification.execute(
-                author = response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER),
+                author = email,
                 didNotFishAfterZeroNotice = manualPriorNotificationFormDataInput.didNotFishAfterZeroNotice,
                 expectedArrivalDate = manualPriorNotificationFormDataInput.expectedArrivalDate,
                 expectedLandingDate = manualPriorNotificationFormDataInput.expectedLandingDate,

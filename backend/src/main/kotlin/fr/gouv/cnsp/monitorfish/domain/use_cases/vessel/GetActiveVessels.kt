@@ -52,11 +52,11 @@ class GetActiveVessels(
 
         return lastPositionsWithProfileAndVessel
             .map { activeVessel ->
+                val internalReferenceNumber =
+                    activeVessel.vessel?.internalReferenceNumber ?: activeVessel.lastPosition?.internalReferenceNumber
                 val landingPort =
-                    activeVessel.vessel?.internalReferenceNumber?.let {
-                        futurePriorNotificationsGroupByInternalReferenceNumber[it]
-                            ?.firstOrNull()
-                            ?.port
+                    internalReferenceNumber?.let {
+                        futurePriorNotificationsGroupByInternalReferenceNumber[it]?.firstOrNull()?.port
                     }
 
                 val foundVesselGroups =

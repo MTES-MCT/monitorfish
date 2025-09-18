@@ -10,9 +10,10 @@ context('Vessel groups', () => {
     cy.getDataCy('side-window-menu-vessel-list').click()
     cy.fill('Nationalités', ['Espagne', 'France'])
     cy.getDataCy('vessel-list-length').contains('3149 navires')
-    cy.fill('Ports de débarque', ['Brest'])
-    cy.getDataCy('vessel-list-length').contains('840 navires')
+    cy.fill('Ports de débarque', ['Nice', 'Brest'])
+    cy.getDataCy('vessel-list-length').contains('2 navires')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 2)
+    cy.fill('Ports de débarque', undefined)
 
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
     cy.getDataCy('vessel-list-length').contains('4 navires')
@@ -26,7 +27,7 @@ context('Vessel groups', () => {
      */
     cy.get('.Component-Dialog').contains('Actuellement, 4 navires correspondent aux filtres sélectionnés.')
     cy.get('.Component-Dialog').within(() => {
-      cy.get('.Component-SingleTag').should('have.length', 6)
+      cy.get('.Component-SingleTag').should('have.length', 5)
     })
 
     cy.fill('Engins utilisés', ['OTT'], { index: 1 })
@@ -98,7 +99,7 @@ context('Vessel groups', () => {
     cy.get('[title="Lorem ipsum dolor sit amet"]').contains('Groupe partagé')
     cy.get('[title="Afficher les critères de définition du groupe"]').click()
     cy.get('[title="Lorem ipsum dolor sit amet"]').within(() => {
-      cy.get('.Component-SingleTag').should('have.length', 6)
+      cy.get('.Component-SingleTag').should('have.length', 5)
     })
     cy.get('[title="Masquer les critères de définition du groupe"]').click()
 
@@ -119,7 +120,7 @@ context('Vessel groups', () => {
     // Deletion of the last filter
     cy.get('.Component-Dialog').within(() => {
       cy.get('.Component-SingleTag')
-        .eq(4)
+        .eq(3)
         .within(() => {
           cy.get('button').click()
         })
@@ -133,7 +134,7 @@ context('Vessel groups', () => {
     cy.get('body').dblclick(560, 620)
     cy.clickButton('Valider la zone de groupe')
     cy.get('.Component-Dialog').within(() => {
-      cy.get('.Component-SingleTag').eq(5).contains('Zone de filtre manuelle')
+      cy.get('.Component-SingleTag').eq(4).contains('Zone de filtre manuelle')
     })
     cy.clickButton('Modifier le groupe')
     cy.contains('Le groupe de navires dynamique "Lorem ipsum dolor sit amet" a bien été modifié.').should('be.visible')
@@ -147,8 +148,8 @@ context('Vessel groups', () => {
     )
     cy.get('[title="Afficher les critères de définition du groupe"]').click()
     cy.get('[title="Lorem ipsum dolor sit amet"]').within(() => {
-      cy.get('.Component-SingleTag').should('have.length', 6)
-      cy.get('.Component-SingleTag').eq(5).contains('Zone de filtre manuelle')
+      cy.get('.Component-SingleTag').should('have.length', 5)
+      cy.get('.Component-SingleTag').eq(4).contains('Zone de filtre manuelle')
     })
     cy.get('[title="Masquer les critères de définition du groupe"]').click()
 

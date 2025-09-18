@@ -1,9 +1,7 @@
 import { browserTracingIntegration, init, replayIntegration } from '@sentry/react'
 import { createRoot } from 'react-dom/client'
-import { AuthProvider } from 'react-oidc-context'
 
 import { App } from './App'
-import { getOIDCConfig } from './auth/getOIDCConfig'
 
 import 'rsuite/dist/rsuite.min.css'
 import 'nouislider/dist/nouislider.css'
@@ -29,15 +27,4 @@ if (!container) {
 }
 const root = createRoot(container)
 
-const { IS_OIDC_ENABLED, oidcConfig } = getOIDCConfig()
-
-if (IS_OIDC_ENABLED) {
-  root.render(
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    <AuthProvider {...oidcConfig}>
-      <App />
-    </AuthProvider>
-  )
-} else {
-  root.render(<App />)
-}
+root.render(<App />)

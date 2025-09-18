@@ -8,7 +8,6 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useKey } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { downloadFile } from '@utils/downloadFile'
-import { useAuthRequestHeaders } from 'auth/hooks/useAuthRequestHeaders'
 import { useCallback, useMemo } from 'react'
 import { Uploader } from 'rsuite'
 import styled from 'styled-components'
@@ -23,7 +22,6 @@ type UploadFilesProps = Readonly<{
 }>
 export function UploadFiles({ isManualPriorNotification, isReadOnly, operationDate, reportId }: UploadFilesProps) {
   const dispatch = useMainAppDispatch()
-  const headers = useAuthRequestHeaders()
 
   const action = `/bff/v1/prior_notifications/${reportId}/uploads?isManualPriorNotification=${isManualPriorNotification}&operationDate=${operationDate}`
   const { data: uploads } = useGetPriorNotificationUploadsQuery(reportId)
@@ -75,7 +73,7 @@ export function UploadFiles({ isManualPriorNotification, isReadOnly, operationDa
     [dispatch, isManualPriorNotification, operationDate, reportId]
   )
 
-  if (!headers || !uploadAsFileTypes) {
+  if (!uploadAsFileTypes) {
     return <></>
   }
 
@@ -86,11 +84,11 @@ export function UploadFiles({ isManualPriorNotification, isReadOnly, operationDa
         action={action}
         defaultFileList={uploadAsFileTypes}
         draggable
-        headers={headers}
         onPreview={download}
         onRemove={remove}
         onSuccess={refetch}
         readOnly={isReadOnly}
+        withCredentials
       >
         <File>
           {isReadOnly

@@ -1,47 +1,71 @@
 import { useTracking } from '@hooks/useTracking'
 import { setUser } from '@sentry/react'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
+import { type AuthContextProps, useAuth } from 'react-oidc-context'
 
-import { useGetCurrentUserAuthorizationQuery } from '../apis'
+import { useGetCurrentUserAuthorizationQueryOverride } from './useGetCurrentUserAuthorizationQueryOverride'
+import { getOIDCConfig } from '../getOIDCConfig'
 
 import type { UserAccountContextType } from '../../context/UserAccountContext'
 
-export function useGetUserAccount(): { isLoading: boolean; userAccount: UserAccountContextType | undefined } {
+const { IS_OIDC_ENABLED } = getOIDCConfig()
+
+export function useGetUserAccount(): UserAccountContextType | undefined {
+  // `| undefined` because it's undefined if the OIDC is disabled which is the case for Cypress tests
+  const auth = useAuth() as AuthContextProps | undefined
   const { trackUserId } = useTracking()
-  const oidcEnabled = import.meta.env.FRONTEND_OIDC_ENABLED
-  const { data: user, isLoading } = useGetCurrentUserAuthorizationQuery(undefined, {
-    skip: !oidcEnabled
-  })
+  const { data: user } = useGetCurrentUserAuthorizationQueryOverride({ skip: !auth?.isAuthenticated })
 
   useEffect(() => {
-    if (user) {
-      trackUserId(user.email)
-      setUser({ email: user.email })
+    if (auth?.user?.profile?.email) {
+      trackUserId(auth.user.profile.email)
+      setUser({ email: auth.user.profile.email })
     }
-  }, [trackUserId, user])
+  }, [trackUserId, auth?.user?.profile?.email])
+
+  const logout = useCallback(() => {
+    if (!auth) {
+      return
+    }
+
+    const idTokenHint = auth.user?.id_token
+
+    auth.removeUser()
+    auth.signoutRedirect({ id_token_hint: idTokenHint ?? '' })
+  }, [auth])
 
   const userAccount = useMemo(() => {
-    if (!oidcEnabled) {
+    if (!IS_OIDC_ENABLED) {
       return {
         email: '',
         isAuthenticated: true,
-        isSuperUser: true
+        isSuperUser: user?.isSuperUser ?? false,
+        logout
       }
     }
 
-    if (!user) {
+    if (!!auth?.isLoading || (auth?.isAuthenticated && !user)) {
       return undefined
     }
 
     return {
-      email: user.email,
-      isAuthenticated: true,
-      isSuperUser: user.isSuperUser,
-      logout: () => {
-        window.location.href = '/logout'
-      }
+      email: auth?.user?.profile?.email,
+      isAuthenticated: auth?.isAuthenticated ?? false,
+      isSuperUser: user?.isSuperUser ?? false,
+      logout
     }
-  }, [oidcEnabled, user])
+  }, [logout, user, auth?.isAuthenticated, auth?.isLoading, auth?.user?.profile?.email])
 
-  return { isLoading, userAccount }
+  useEffect(
+    () =>
+      // the `return` is important - addAccessTokenExpired() returns a cleanup function
+      auth?.events?.addAccessTokenExpired(() => {
+        // eslint-disable-next-line no-console
+        console.log('Renewing token...')
+        auth?.signinSilent()
+      }),
+    [auth]
+  )
+
+  return userAccount
 }

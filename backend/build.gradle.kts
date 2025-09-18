@@ -58,7 +58,6 @@ dependencies {
     api("org.springframework.boot:spring-boot-configuration-processor:3.3.5")
     api("org.springframework.boot:spring-boot-starter-cache:3.3.5")
     api("org.springframework.boot:spring-boot-starter-log4j2:3.3.5")
-    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.3.5")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     api("io.ktor:ktor-client-core-jvm:3.0.3")
@@ -95,7 +94,6 @@ dependencies {
     testImplementation("jakarta.servlet:jakarta.servlet-api:6.1.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.3.5")
-    testImplementation("org.springframework.security:spring-security-test:6.4.2")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc:3.0.3")
 }
 

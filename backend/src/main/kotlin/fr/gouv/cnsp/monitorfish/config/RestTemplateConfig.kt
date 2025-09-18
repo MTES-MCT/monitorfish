@@ -30,9 +30,7 @@ class RestTemplateConfig {
                     } else {
                         "Request body too large to display"
                     }
-                logger.info(
-                    "[DEV-PROXY] OUTGOING PROXIED REQUEST ${request.method} ${request.uri} ${request.headers} $bodyString",
-                )
+                logger.info("OUTGOING PROXIED REQUEST ${request.method} ${request.uri} ${request.headers} $bodyString")
 
                 // Proceed with the request
                 execution.execute(request, body)

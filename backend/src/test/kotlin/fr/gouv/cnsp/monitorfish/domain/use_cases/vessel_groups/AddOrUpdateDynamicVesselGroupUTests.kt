@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 
 import com.nhaarman.mockitokotlin2.any
-import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
@@ -32,10 +32,11 @@ class AddOrUpdateDynamicVesselGroupUTests {
 
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
                 isSuperUser = true,
                 service = null,
+                isAdministrator = false,
             ),
         )
         given(vesselGroupRepository.upsert(any<DynamicVesselGroup>())).willReturn(
@@ -57,10 +58,11 @@ class AddOrUpdateDynamicVesselGroupUTests {
 
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
                 isSuperUser = true,
                 service = null,
+                isAdministrator = false,
             ),
         )
         given(vesselGroupRepository.findById(1)).willReturn(
@@ -85,10 +87,11 @@ class AddOrUpdateDynamicVesselGroupUTests {
 
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
                 isSuperUser = true,
                 service = null,
+                isAdministrator = false,
             ),
         )
         given(vesselGroupRepository.findById(1)).willReturn(
@@ -114,10 +117,11 @@ class AddOrUpdateDynamicVesselGroupUTests {
 
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
+            UserAuthorization(
+                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
                 isSuperUser = true,
                 service = null,
+                isAdministrator = false,
             ),
         )
         given(vesselGroupRepository.findById(1)).willReturn(

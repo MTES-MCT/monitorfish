@@ -1,16 +1,17 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
 import fr.gouv.cnsp.monitorfish.config.*
+import fr.gouv.cnsp.monitorfish.domain.repositories.OIDCRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.VersionController
+import fr.gouv.cnsp.monitorfish.infrastructure.oidc.APIOIDCRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.info.BuildProperties
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -21,28 +22,22 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
     OIDCProperties::class,
     ProtectedPathsAPIProperties::class,
     BffFilterConfig::class,
-    KeycloakProxyProperties::class,
+    ApiClient::class,
     SentryConfig::class,
     CustomAuthenticationEntryPoint::class,
-    ApiKeyCheckFilter::class,
+    APIOIDCRepository::class,
 )
 @WebMvcTest(
     value = [VersionController::class],
     properties = [
         "monitorfish.oidc.enabled=true",
-        "monitorfish.oidc.login-url=http://localhost:8080/login",
-        "monitorfish.oidc.success-url=http://localhost:8080/",
-        "monitorfish.oidc.error-url=http://localhost:8080/error",
-        "monitorfish.oidc.authorized-sirets=123456789",
-        "monitorfish.oidc.issuer-uri=http://localhost:8080/auth",
-        "monitorfish.api.protected.paths=/bff/**",
-        "monitorfish.api.protected.super-user-paths=/bff/**",
-        "monitorfish.api.protected.public-paths=/api/**",
-        "monitorfish.api.protected.api-key=test-key",
-        "monitorfish.keycloak.proxy.enabled=false",
+        "spring.security.oauth2.resourceserver.jwt.public-key-location=classpath:oidc-issuer.pub",
+        "monitorfish.oidc.userinfo-endpoint=/api/user",
     ],
 )
 class BffFilterConfigITests {
+    val VALID_JWT = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJpc3N1ZXIuZ291di5mciIsInN1YiI6ImFsbWEiLCJhdWQiOiJzaGVuaXF1YSIsImlhdCI6MTY4NDI0MDAxOCwiZXhwIjo5MzU0MjQwNjE4fQ.l7x_Yp_0oFsLpu__PEOOc-F5MlzXrhfFDYDG25kj7dsq5_KkRm06kprIJMTtnA7JiYm44D7sFS6n6LzlkJLqjyxE17AnUUBEu1UXe373okUD9tMoLZt31e9tYyO8pQVy0roEGLepDGpJ-lvkC3hTvu-uwAxvXXK-OFx7f-GlMDpfkGNMhXYczfDmPmrCjStHAYGW8gfbE7elSXw51cbVuHOKsnqBm3SFJz3d_laO4c3SV5XFpcrlEdvP9ImQWnJU3pjiaViMB3Lj1UquCWxohT154WiVnodC549T50LkHXV4Q7ho04GK2Ivltl_CnR4rgS7HOkOZV3RICOIQm3sbXA"
+
     @Autowired
     private lateinit var mockMvc: MockMvc
 
@@ -50,17 +45,18 @@ class BffFilterConfigITests {
     private lateinit var getIsAuthorizedUser: GetIsAuthorizedUser
 
     @MockBean
-    private lateinit var clientRegistrationRepository: ClientRegistrationRepository
-
-    @MockBean
     private lateinit var buildProperties: BuildProperties
 
+    @Autowired
+    private lateinit var oidcRepository: OIDCRepository
+
     @Test
-    fun `Should return 302 redirect for all user authorization protected paths`() {
+    fun `Should return 401 for all user authorization protected paths`() {
         // When
         /**
-         * This test returns a 302 redirect to the login page when no valid OIDC authentication is provided.
-         * With OIDC enabled, these paths require proper authentication and redirect to login.
+         * This test return a 401 http code as the issuer uri could not be fetched (404 not found because of the dummy url).
+         * Hence, the bearer is valid but the request is invalid
+         * When this test is failing, a 404 http code will be returned (as the controllers are not mounted in this test)
          */
         listOf(
             "/bff/v1/vessels",
@@ -71,41 +67,41 @@ class BffFilterConfigITests {
             "/bff/v1/vessels/risk_factors",
         ).forEach {
             mockMvc
-                .perform(get(it))
-                // Then
-                .andExpect(status().isFound)
-        }
-    }
-
-    @Test
-    fun `Should return 401 for all public but protected paths`() {
-        // When
-        /**
-         * These paths are public but require authentication when OIDC is enabled.
-         */
-        listOf(
-            "/api/v1/authorization/management",
-            "/api/v1/beacon_malfunctions/123",
-        ).forEach {
-            mockMvc
-                .perform(get(it))
+                .perform(
+                    get(it)
+                        .header("Authorization", "Bearer $VALID_JWT"),
+                )
                 // Then
                 .andExpect(status().isUnauthorized)
         }
     }
 
     @Test
-    fun `Should return 401 When deleting an user`() {
+    fun `Should return 401 for all public but protected paths`() {
         // When
-        /**
-         * DELETE operations on user management paths require authentication.
-         * Without proper OIDC authentication, they return 401 Forbidden.
-         */
+        listOf(
+            "/api/v1/authorization/management",
+            "/api/v1/beacon_malfunctions/123",
+        ).forEach {
+            mockMvc
+                .perform(
+                    get(it),
+                )
+                // Then
+                .andExpect(status().isUnauthorized)
+        }
+    }
+
+    @Test
+    fun `Should return 401 for When deleting an user`() {
+        // When
         listOf(
             "/api/v1/authorization/management/dummy@user.com",
         ).forEach {
             mockMvc
-                .perform(delete(it))
+                .perform(
+                    delete(it),
+                )
                 // Then
                 .andExpect(status().isUnauthorized)
         }

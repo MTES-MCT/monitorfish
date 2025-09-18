@@ -7,8 +7,8 @@ import { LoadingSpinnerWall } from '../../ui/LoadingSpinnerWall'
 import { useGetUserAccount } from '../hooks/useGetUserAccount'
 
 export function RequireAuth({ children, redirect = false, requireSuperUser = false }) {
-  const { isLoading, userAccount } = useGetUserAccount()
-  if (isLoading) {
+  const userAccount = useGetUserAccount()
+  if (!userAccount) {
     return (
       <LoginBackground>
         <LoadingSpinnerWall isVesselShowed />
@@ -24,7 +24,7 @@ export function RequireAuth({ children, redirect = false, requireSuperUser = fal
     return null
   }
 
-  if (!userAccount?.isAuthenticated) {
+  if (!userAccount.isAuthenticated) {
     return handleRedirect(ROUTER_PATHS.login, redirect)
   }
 

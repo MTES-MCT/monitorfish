@@ -1,6 +1,8 @@
-import {faker} from '@faker-js/faker'
+import { faker } from '@faker-js/faker'
 
-import type {Reporting} from '@features/Reporting/types'
+import { getAuthorizationHeader } from '../../../support/commands/getAuthorizationHeader'
+
+import type { Reporting } from '@features/Reporting/types'
 
 /**
  * @returns Created reporting ID.
@@ -41,9 +43,14 @@ export const createReportingFromVesselSidebar = (vesselName: string) => {
 }
 
 export const deleteReporting = (reportId: number) => {
-  cy.request({
-    method: 'DELETE',
-    url: `/bff/v1/reportings/${reportId}`
+  getAuthorizationHeader().then(authorization => {
+    cy.request({
+      headers: {
+        authorization
+      },
+      method: 'DELETE',
+      url: `/bff/v1/reportings/${reportId}`
+    })
   })
 }
 

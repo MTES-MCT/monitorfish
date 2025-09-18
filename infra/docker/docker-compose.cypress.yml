@@ -29,27 +29,65 @@ services:
     image: monitorfish-app:$MONITORFISH_VERSION
     container_name: monitorfish_backend
     environment:
+      # Database Configuration
       - ENV_DB_URL=jdbc:postgresql://db:5432/monitorfishdb?user=postgres&password=postgres
-      - SPRING_PROFILES_ACTIVE=local
+      - ENV_DB_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - MONITORFISH_DATABASE_MISSIONS_ACTIONS_CHUNK_SIZE=100
+      - MONITORFISH_MIGRATION_PATH=classpath:/db/migration,classpath:/db/testdata
+
+      # Server Configuration
       - HOST_IP=127.0.0.1
+      - MONITORFISH_SERVER_PORT=8880
+      - MONITORFISH_AJP_PORT=8000
+      - STATIC_FILES_PATH=/home/monitorfish/public
+      - SPRING_CLOUD_GATEWAY_MVC_FORM_FILTER_ENABLED=false
+
+      # Application Settings
+      - MONITORFISH_SERVER_ROOT=http://localhost:8880
+
+      # Sentry Backend
       - SENTRY_DSN=
+      - MONITORFISH_SENTRY_ENABLED=false
+
+      # MonitorEnv Backend
       - MONITORENV_URL=http://geoserver-monitorenv-stubs:8080
+
+      # API Configuration
       - MONITORFISH_API_PROTECTED_API_KEY=APIKEY
+      - MONITORFISH_API_PROTECTED_PATHS=/bff/*
+      - MONITORFISH_API_PROTECTED_SUPER_USER_PATHS=/bff/v1/beacon_malfunctions,/bff/v1/missions,/bff/v1/operational_alerts,/bff/v1/reportings,/bff/v1/vessels/risk_factors,/bff/v1/admin/control_objectives,/bff/v1/admin/fleet_segments,/bff/v1/fleet_segments/compute
+      - MONITORFISH_API_PROTECTED_PUBLIC_PATHS=/api/v1/authorization/management/*,/api/v1/beacon_malfunctions/*,/api/v1/mission_actions/*
+
+      # OIDC Configuration
+      - MONITORFISH_OIDC_ENABLED=true
+      - MONITORFISH_OIDC_PROXY_URL=http://keycloak:8080
+      - MONITORFISH_OIDC_ISSUER_URI=http://keycloak:8080/realms/monitor
+      - MONITORFISH_OIDC_AUTHORIZATION_URI=http://localhost:8880/realms/monitor/protocol/openid-connect/auth
+      - MONITORFISH_OIDC_TOKEN_URI=http://keycloak:8080/realms/monitor/protocol/openid-connect/token
+      - MONITORFISH_OIDC_USER_INFO_URI=http://keycloak:8080/realms/monitor/protocol/openid-connect/userinfo
+      - MONITORFISH_OIDC_JWK_SET_URI=http://keycloak:8080/realms/monitor/protocol/openid-connect/certs
+      - MONITORFISH_OIDC_CLIENT_ID=monitorfish
+      - MONITORFISH_OIDC_CLIENT_SECRET=BHKLjYpcN2NzFlU2kTu63z8rDxQgUl8z
+      - MONITORFISH_OIDC_REDIRECT_URI=http://localhost:8880/login/oauth2/code/proconnect
+      - MONITORFISH_OIDC_LOGIN_URL=/oauth2/authorization/proconnect
+      - MONITORFISH_OIDC_SUCCESS_URL=http://localhost:8880
+      - MONITORFISH_OIDC_ERROR_URL=http://localhost:8880/register
+      - MONITORFISH_OIDC_AUTHORIZED_SIRETS=1234567890,0987654321
+      - MONITORFISH_OIDC_PROVIDER=proconnect
+      - MONITORFISH_KEYCLOAK_PROXY_ENABLED=true
+
+      # Scheduling
+      - MONITORFISH_SCHEDULING_ENABLED=false
+
+      # Gateway Configuration
+      - SPRING_CLOUD_GATEWAY_MVC_FORM_FILTER_ENABLED=false
+
+      # Frontend Configuration
       - FRONTEND_GEOSERVER_LOCAL_URL=http://0.0.0.0:8081
       - FRONTEND_GEOSERVER_REMOTE_URL=http://0.0.0.0:8081
       - FRONTEND_MAPBOX_KEY=pk.eyJ1IjoibW9uaXRvcmZpc2giLCJhIjoiY2tsdHJ6dHhhMGZ0eDJ2bjhtZmJlOHJmZiJ9.bdi1cO-cUcZKXdkEkqAoZQ
       - FRONTEND_MONITORENV_URL=http://0.0.0.0:8081
-      - FRONTEND_OIDC_AUTHORITY=http://0.0.0.0:8880/realms/monitor
-      - FRONTEND_OIDC_CLIENT_ID=monitorfish
-      - MONITORFISH_OIDC_ENABLED=true
-      - MONITORFISH_OIDC_PROXY_URL=http://keycloak:8080
-      - MONITORFISH_OIDC_ISSUER_URI=http://0.0.0.0:8880/realms/monitor
-      - MONITORFISH_KEYCLOAK_PROXY_ENABLED=true
       - FRONTEND_OIDC_ENABLED=true
-      - MONITORFISH_SCHEDULING_ENABLED=false
-      - FRONTEND_OIDC_REDIRECT_URI=http://0.0.0.0:8880
-      - SPRING_CLOUD_GATEWAY_MVC_FORM_FILTER_ENABLED=false
-      - FRONTEND_OIDC_LOGOUT_REDIRECT_URI=http://0.0.0.0:8880/login
       - FRONTEND_MONITORFISH_VERSION=
       - FRONTEND_SENTRY_DSN=https://a5f3272efa794bb9ada2ffea90f2fec5@sentry.incubateur.net/8
       - FRONTEND_SENTRY_TRACING_ORIGINS=
@@ -88,11 +126,13 @@ services:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_HOSTNAME_STRICT=false # See https://www.keycloak.org/server/reverseproxy for vars below
+      - KC_HOSTNAME=keycloak:8080
       - KC_HTTP_ENABLED=true
       - PROXY_ADDRESS_FORWARDING=true
       - KC_PROXY=edge
       - KC_PROXY_HEADERS=forwarded
       - KC_HEALTH_ENABLED=true
+      - KC_FRONTEND_URL=http://localhost:8880/
     ports:
       - "8085:8080"
     volumes:

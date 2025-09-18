@@ -29,7 +29,6 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.TestUtils.DUMMY_VESSEL_PROFILE
-import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.utils.ApiTestWithJWTSecurity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDynamicVesselGroups
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
@@ -39,8 +38,10 @@ import org.mockito.BDDMockito
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -52,7 +53,7 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-@ApiTestWithJWTSecurity(value = [(VesselController::class)])
+@WebMvcTest(value = [VesselController::class])
 @Import(MapperConfiguration::class)
 class VesselControllerITests {
     @Autowired
@@ -97,10 +98,15 @@ class VesselControllerITests {
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
+    private fun authenticatedRequest() =
+        oidcLogin()
+            .idToken { token ->
+                token.claim("email", "email@domain-name.com")
+            }
+
     @Test
     fun `Should get all vessels last positions`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         val gear = Gear()
         gear.gear = "OTB"
         gear.dimensions = "12;123"
@@ -148,7 +154,7 @@ class VesselControllerITests {
         api
             .perform(
                 get("/bff/v1/vessels")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                    .with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
@@ -177,7 +183,6 @@ class VesselControllerITests {
     @Test
     fun `Should get vessel with last positions and vessel data`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition =
             Position(
@@ -294,7 +299,7 @@ class VesselControllerITests {
             .perform(
                 get(
                     "/bff/v1/vessels/find?vesselId=123&internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER",
-                ).header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                ).with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
@@ -333,7 +338,6 @@ class VesselControllerITests {
     @Test
     fun `Should return an Accepted header When the DEP message was not found`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         givenSuspended {
             getVessel.execute(
                 userEmail = any(),
@@ -371,7 +375,7 @@ class VesselControllerITests {
             .perform(
                 get(
                     "/bff/v1/vessels/find?vesselId=&internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER",
-                ).header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                ).with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isAccepted)
@@ -380,7 +384,6 @@ class VesselControllerITests {
     @Test
     fun `Should get vessels's last positions and data When from and to date parameters are set`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         givenSuspended {
             getVessel.execute(
                 userEmail = any(),
@@ -419,7 +422,7 @@ class VesselControllerITests {
                 get(
                     "/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123" +
                         "&IRCS=IEF4&trackDepth=CUSTOM&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&afterDateTime=2021-03-24T22:07:00.000Z&beforeDateTime=2021-04-24T22:07:00.000Z",
-                ).header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                ).with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
@@ -442,7 +445,6 @@ class VesselControllerITests {
     @Test
     fun `Should get vessels positions`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition =
             Position(
@@ -518,7 +520,7 @@ class VesselControllerITests {
             .perform(
                 get(
                     "/bff/v1/vessels/positions?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER",
-                ).header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                ).with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
@@ -540,7 +542,6 @@ class VesselControllerITests {
     @Test
     fun `Should search for a vessel`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         given(this.searchVessels.execute(any())).willReturn(
             listOf(
                 VesselAndBeacon(
@@ -576,7 +577,7 @@ class VesselControllerITests {
         api
             .perform(
                 get("/bff/v1/vessels/search?searched=VESSEL")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                    .with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
@@ -595,7 +596,6 @@ class VesselControllerITests {
     @Test
     fun `Should find the last logbook messages of vessels`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         val voyage =
             Voyage(
                 isLastVoyage = true,
@@ -613,7 +613,7 @@ class VesselControllerITests {
             .perform(
                 get(
                     "/bff/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=LAST&beforeDateTime=",
-                ).header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                ).with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
@@ -644,7 +644,6 @@ class VesselControllerITests {
     @Test
     fun `getVesselVoyage() Should return NOT_FOUND When not found`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         given(
             this.getVesselVoyage.execute(any(), any(), any()),
         ).willThrow(BackendUsageException(BackendUsageErrorCode.NOT_FOUND_BUT_OK))
@@ -654,7 +653,7 @@ class VesselControllerITests {
             .perform(
                 get(
                     "/bff/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=PREVIOUS&tripNumber=12345",
-                ).header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                ).with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
@@ -664,7 +663,6 @@ class VesselControllerITests {
     @Test
     fun `Should find the logbook messages of vessels before a specified date`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         val voyage =
             Voyage(
                 isLastVoyage = true,
@@ -681,7 +679,7 @@ class VesselControllerITests {
         api.perform(
             get(
                 "/bff/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=PREVIOUS&tripNumber=12345",
-            ).header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+            ).with(authenticatedRequest()),
         )
 
         Mockito.verify(getVesselVoyage).execute(
@@ -694,7 +692,6 @@ class VesselControllerITests {
     @Test
     fun `Should get vessel's beacon malfunctions`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         val now = ZonedDateTime.now().minusDays(1)
         given(
             this.getVesselBeaconMalfunctions.execute(
@@ -795,7 +792,7 @@ class VesselControllerITests {
             .perform(
                 get(
                     "/bff/v1/vessels/beacon_malfunctions?vesselId=123&afterDateTime=2021-03-24T22:07:00.000Z",
-                ).header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                ).with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
@@ -823,7 +820,6 @@ class VesselControllerITests {
     @Test
     fun `Should get vessel's reportings by vessel identity with vessel ID`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         val currentReporting =
             Reporting(
                 id = 1,
@@ -940,7 +936,7 @@ class VesselControllerITests {
                 get(
                     "/bff/v1/vessels/reportings?vesselId=123456&internalReferenceNumber=FR224226850" +
                         "&externalReferenceNumber=123&ircs=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
-                ).header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                ).with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
@@ -968,7 +964,6 @@ class VesselControllerITests {
 
     @Test
     fun `Should get vessel's reporting by vessel identity without vessel ID`() {
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         given(
             this.getVesselReportings.execute(
                 eq(null),
@@ -997,7 +992,7 @@ class VesselControllerITests {
                 get(
                     "/bff/v1/vessels/reportings?vesselId=&internalReferenceNumber=FR224226850" +
                         "&externalReferenceNumber=123&ircs=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
-                ).header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                ).with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
@@ -1015,7 +1010,6 @@ class VesselControllerITests {
     @Test
     fun `Should get the risk factor of a vessel`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         given(this.getVesselRiskFactor.execute(any())).willReturn(
             VesselRiskFactor(segments = listOf("SWW10")),
         )
@@ -1024,7 +1018,7 @@ class VesselControllerITests {
         api
             .perform(
                 get("/bff/v1/vessels/risk_factor?internalReferenceNumber=FR224226850")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                    .with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
@@ -1037,14 +1031,13 @@ class VesselControllerITests {
     @Test
     fun `Should get a 404 When the risk factor is not found`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         given(this.getVesselRiskFactor.execute(any())).willThrow(IllegalArgumentException("Not found"))
 
         // When
         api
             .perform(
                 get("/bff/v1/vessels/risk_factor?internalReferenceNumber=FR224226850")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                    .with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isBadRequest)
@@ -1053,14 +1046,13 @@ class VesselControllerITests {
     @Test
     fun `Should find the last logbook trip numbers of a given vessels`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         given(this.getVesselLastTripNumbers.execute(any())).willReturn(listOf("2020000125", "2020000126", "2020000127"))
 
         // When
         api
             .perform(
                 get("/bff/v1/vessels/logbook/last?internalReferenceNumber=FR224226850")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                    .with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
@@ -1071,7 +1063,6 @@ class VesselControllerITests {
     @Test
     fun `Should find logbook messages of a vessel by dates`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
         val voyage =
             Voyage(
                 isLastVoyage = true,
@@ -1089,7 +1080,7 @@ class VesselControllerITests {
             .perform(
                 get(
                     "/bff/v1/vessels/logbook/find_by_dates?internalReferenceNumber=FR224226850&trackDepth=TWO_DAYS&beforeDateTime=&afterDateTime=",
-                ).header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                ).with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)

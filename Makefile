@@ -13,6 +13,7 @@ MAKEFLAGS += --silent
 
 .DEFAULT_GOAL: help
 
+
 .PHONY: help ##OTHER 🛟 To display this prompts. This will list all available targets with their documentation
 help:
 	echo "❓ Use \`make <target>' where <target> is one of 👇"
@@ -72,8 +73,9 @@ install-front:
 
 .PHONY: run-back ##LOCAL ▶️  Run backend API
 run-back: run-stubbed-apis
+	./frontend/node_modules/.bin/import-meta-env-prepare -u -x ./backend/.env.example -p ./backend/.env.local.defaults
 	docker compose up -d --quiet-pull --wait db keycloak
-	cd backend && ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+	@bash -c 'set -a; source .env; cd backend && ./gradlew bootRun'
 
 .PHONY: run-front ##LOCAL ▶️  Run frontend for development
 run-front:
@@ -98,6 +100,9 @@ lint-back:
 		-e "Exceeded max line length" \
 		-e "Package name must not contain underscore" \
 		-e "Wildcard import"
+.PHONY: build-app-docker ##LOCAL Build app docker image
+build-app-docker:
+	docker build -f infra/docker/app/Dockerfile -t monitorfish .
 
 run-stubbed-apis:
 	docker compose stop geoserver-monitorenv-stubs

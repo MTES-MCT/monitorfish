@@ -4,7 +4,7 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.mock
-import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
@@ -49,11 +49,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return last positions with groups When multiple group conditions matches`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         val lastPosition = TestUtils.getDummyLastPositions().first()
@@ -95,11 +94,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return last positions with groups When flag state match`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -173,11 +171,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return last positions with groups When fleet segment match`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -252,11 +249,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return last positions with groups When gear match`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -336,11 +332,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return last positions with groups When has logbook match`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -415,11 +410,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return last positions with groups When last position match`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -493,11 +487,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return last positions with groups When risk factor match`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -571,11 +564,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return last positions with groups When species match`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -658,11 +650,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return last positions with groups When vessel size match`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -736,11 +727,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return last positions with groups When vessel location match`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -814,11 +804,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return last positions with groups When zone match`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -909,11 +898,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return last positions without groups When vessel district code not match`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -988,11 +976,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return last positions with groups When vessel district code match`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -1068,11 +1055,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return last positions with groups When vessel Last Control Period match`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -1151,11 +1137,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return last positions with groups When vessel Last Control Period does not match`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -1229,11 +1214,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return vessels without groups When no matching groups for user`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -1268,11 +1252,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return fixed groups When vessels are found in the last position table`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -1345,11 +1328,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return fixed and dynamics groups When vessels are found in the last position table`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
@@ -1419,11 +1401,10 @@ class GetActiveVesselsUTests {
     fun `execute Should return landing port When vessels are found in future prior notification`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "DUMMY_EMAIL",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         val vesselThatShouldMatchWithPriorNotification =

@@ -65,6 +65,12 @@ export default defineConfig({
       '/bff': {
         target: 'http://localhost:8880'
       },
+      '/logout': {
+        target: 'http://localhost:8880'
+      },
+      '/oauth2': {
+        target: 'http://localhost:8880'
+      },
       '/proxy': {
         target: 'http://localhost:8880'
       },

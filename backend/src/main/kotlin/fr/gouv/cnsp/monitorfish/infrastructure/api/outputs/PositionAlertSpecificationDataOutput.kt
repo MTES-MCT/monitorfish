@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.*
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import java.time.ZonedDateTime
 
 data class PositionAlertSpecificationDataOutput(
@@ -12,6 +13,7 @@ data class PositionAlertSpecificationDataOutput(
     val natinfCode: Int,
     val isActivated: Boolean = true,
     val isInError: Boolean = false,
+    val hasAutomaticArchiving: Boolean = false,
     val errorReason: String? = null,
     val validityStartDatetimeUtc: ZonedDateTime? = null,
     val validityEndDatetimeUtc: ZonedDateTime? = null,
@@ -24,9 +26,10 @@ data class PositionAlertSpecificationDataOutput(
     val administrativeAreas: List<AdministrativeAreaSpecificationDataOutput> = listOf(),
     val regulatoryAreas: List<RegulatoryAreaSpecificationDataOutput> = listOf(),
     val minDepth: Double? = null,
-    val flagStatesIso2: List<String>? = listOf(),
-    val vesselIds: List<Int>? = listOf(),
-    val districtCodes: List<String>? = listOf(),
+    val flagStatesIso2: List<String> = listOf(),
+    val vesselIds: List<Int> = listOf(),
+    val vessels: List<VesselIdentityDataOutput> = listOf(),
+    val districtCodes: List<String> = listOf(),
     val producerOrganizations: List<String> = listOf(),
     val createdBy: String,
     val createdAtUtc: ZonedDateTime,
@@ -41,6 +44,7 @@ data class PositionAlertSpecificationDataOutput(
                 isUserDefined = positionAlertSpecification.isUserDefined,
                 natinfCode = positionAlertSpecification.natinfCode,
                 isActivated = positionAlertSpecification.isActivated,
+                hasAutomaticArchiving = positionAlertSpecification.hasAutomaticArchiving,
                 isInError = positionAlertSpecification.isInError,
                 errorReason = positionAlertSpecification.errorReason,
                 validityStartDatetimeUtc = positionAlertSpecification.validityStartDatetimeUtc,
@@ -68,6 +72,7 @@ data class PositionAlertSpecificationDataOutput(
                 minDepth = positionAlertSpecification.minDepth,
                 flagStatesIso2 = positionAlertSpecification.flagStatesIso2,
                 vesselIds = positionAlertSpecification.vesselIds,
+                vessels = positionAlertSpecification.vessels.map { VesselIdentityDataOutput.fromVessel(it) },
                 districtCodes = positionAlertSpecification.districtCodes,
                 producerOrganizations = positionAlertSpecification.producerOrganizations,
                 createdBy = positionAlertSpecification.createdBy,

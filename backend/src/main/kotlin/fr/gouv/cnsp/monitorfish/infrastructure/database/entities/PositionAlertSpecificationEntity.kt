@@ -28,6 +28,8 @@ data class PositionAlertSpecificationEntity(
     val isActivated: Boolean = true,
     @Column(name = "is_in_error", nullable = false)
     val isInError: Boolean = false,
+    @Column(name = "has_automatic_archiving", nullable = false)
+    val hasAutomaticArchiving: Boolean = false,
     @Column(name = "error_reason", columnDefinition = "TEXT")
     val errorReason: String? = null,
     @Column(name = "validity_start_datetime_utc")
@@ -81,6 +83,7 @@ data class PositionAlertSpecificationEntity(
             isActivated = isActivated,
             isInError = isInError,
             isDeleted = isDeleted,
+            hasAutomaticArchiving = hasAutomaticArchiving,
             errorReason = errorReason,
             validityStartDatetimeUtc = validityStartDatetimeUtc,
             validityEndDatetimeUtc = validityEndDatetimeUtc,
@@ -98,9 +101,9 @@ data class PositionAlertSpecificationEntity(
                 ),
             regulatoryAreas = deserializeJSONList(mapper, regulatoryAreas, RegulatoryAreaSpecification::class.java),
             minDepth = minDepth,
-            flagStatesIso2 = flagStatesIso2,
-            vesselIds = vesselIds,
-            districtCodes = districtCodes,
+            flagStatesIso2 = flagStatesIso2 ?: listOf(),
+            vesselIds = vesselIds ?: listOf(),
+            districtCodes = districtCodes ?: listOf(),
             producerOrganizations = producerOrganizations ?: listOf(),
             createdBy = createdBy,
             createdAtUtc = createdAtUtc,

@@ -3,6 +3,7 @@
 import { monitorfishApi } from '@api/api'
 import { BackendApi } from '@api/BackendApi.types'
 import { valueOrUndefinedIfNotFoundOrThrow } from '@api/utils'
+import { AlertSpecificationSchema } from '@features/Alert/schemas/AlertSpecificationSchema'
 import { SilencedAlertSchema } from '@features/Alert/schemas/SilencedAlertSchema'
 import {
   type AlertSpecification,
@@ -13,8 +14,7 @@ import {
   type SilencedAlertPeriodRequest
 } from '@features/Alert/types'
 import { FrontendApiError } from '@libs/FrontendApiError'
-import {parseResponseOrReturn} from "@utils/parseResponseOrReturn";
-import {AlertSpecificationSchema} from "@features/Alert/schemas/AlertSpecificationSchema";
+import { parseResponseOrReturn } from '@utils/parseResponseOrReturn'
 
 export const ALERTS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les alertes opérationelles"
 export const VALIDATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu valider l'alerte opérationelle"

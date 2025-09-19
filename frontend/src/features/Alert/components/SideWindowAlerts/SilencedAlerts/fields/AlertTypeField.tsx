@@ -1,9 +1,9 @@
-import {FieldError, Select} from '@mtes-mct/monitor-ui'
-import {useField} from 'formik'
+import { useGetAllAlertSpecificationsQuery } from '@features/Alert/apis'
+import { FieldError, Select } from '@mtes-mct/monitor-ui'
+import { useField } from 'formik'
 import styled from 'styled-components'
 
-import type {SilencedAlertFormValues} from '../types'
-import {useGetAllAlertSpecificationsQuery} from "@features/Alert/apis";
+import type { SilencedAlertFormValues } from '../types'
 
 export function AlertTypeField() {
   const [input, meta, helper] = useField<SilencedAlertFormValues['value']>('value')

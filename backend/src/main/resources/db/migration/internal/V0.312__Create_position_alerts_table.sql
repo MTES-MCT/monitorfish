@@ -7,6 +7,7 @@ CREATE TABLE public.position_alerts (
     is_activated BOOLEAN NOT NULL DEFAULT true,
     is_in_error BOOLEAN NOT NULL DEFAULT false,
     is_deleted BOOLEAN NOT NULL DEFAULT false,
+    has_automatic_archiving BOOLEAN NOT NULL DEFAULT false,
     created_by TEXT NOT NULL,
     created_at_utc TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     error_reason TEXT,

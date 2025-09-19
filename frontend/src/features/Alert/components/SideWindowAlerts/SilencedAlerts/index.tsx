@@ -31,7 +31,7 @@ export function SilencedAlerts() {
   const fuse = useMemo(
     () =>
       new CustomSearch(
-        silencedAlerts,
+        structuredClone(silencedAlerts),
         ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs', 'value.name'],
         { threshold: 0.4 }
       ),

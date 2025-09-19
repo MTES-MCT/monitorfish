@@ -1,32 +1,26 @@
-import {openPriorNotificationCard} from '@features/PriorNotification/useCases/openPriorNotificationCard'
+import { getExpandableRowCellCustomStyle } from '@features/Alert/components/SideWindowAlerts/AlertsManagement/cells/utils'
 import {
-  openPriorNotificationReportingList
-} from '@features/PriorNotification/useCases/openPriorNotificationReportingList'
-import {getPriorNotificationIdentifier} from '@features/PriorNotification/utils'
-import {useMainAppDispatch} from '@hooks/useMainAppDispatch'
-import {customDayjs, Icon, TableWithSelectableRows, Tag, THEME} from '@mtes-mct/monitor-ui'
-import {flexRender, type Row as RowType} from '@tanstack/react-table'
-import {useIsSuperUser} from 'auth/hooks/useIsSuperUser'
+  AdministrativeAreaType,
+  AdministrativeAreaTypeLabel,
+  AdministrativeAreaValueLabel,
+  type AlertSpecification
+} from '@features/Alert/types'
+import { Flag } from '@features/commonComponents/Flag'
+import { useGetGearsAsOptions } from '@hooks/useGetGearsAsOptions'
+import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
+import { TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import { flexRender, type Row as RowType } from '@tanstack/react-table'
+import countries from 'i18n-iso-countries'
 import styled from 'styled-components'
-
-import {FixedTag, None} from './styles'
-import {
-  displayOnboardFishingSpecies,
-  getColorsFromState,
-  getExpandableRowCellCustomStyle,
-  getVesselIdentityFromPriorNotification
-} from './utils'
-import {PriorNotification} from '../../PriorNotification.types'
-import {openManualPriorNotificationForm} from '../../useCases/openManualPriorNotificationForm'
-import type {AlertSpecification} from "@features/Alert/types";
 
 type RowProps = Readonly<{
   row: RowType<AlertSpecification>
 }>
 export function Row({ row }: RowProps) {
-  const isSuperUser = useIsSuperUser()
-
+  const { gearsAsOptions } = useGetGearsAsOptions()
+  const { speciesAsOptions } = useGetSpeciesAsOptions()
   const alertSpecification = row.original
+  const baseUrl = window.location.origin
 
   return (
     <>
@@ -34,7 +28,7 @@ export function Row({ row }: RowProps) {
         {row?.getVisibleCells().map(cell => (
           <ExpandableRowCell
             key={cell.id}
-            $hasRightBorder={['natinfCode'].includes(cell.column.id)}
+            $hasRightBorder={['validityPeriod'].includes(cell.column.id)}
             onClick={() => row.toggleExpanded()}
             style={getExpandableRowCellCustomStyle(cell.column)}
           >
@@ -49,126 +43,144 @@ export function Row({ row }: RowProps) {
           <ExpandedRowCell>
             <p>
               <ExpandedRowLabel>Description</ExpandedRowLabel>
-              <ExpandedRowValue>
-                {alertSpecification.description}
-              </ExpandedRowValue>
+              <ExpandedRowValue>{alertSpecification.description}</ExpandedRowValue>
             </p>
-            {!!alertSpecification.id && <p>
-              <ExpandedRowLabel>Position VMS pris en compte</ExpandedRowLabel>
-              <ExpandedRowValue>
-                {!!alertSpecification.id && alertSpecification.onlyFishingPositions && "Les positions en pêche uniquement"}
-                {!!alertSpecification.id && !alertSpecification.onlyFishingPositions && "Toutes les positions en mer"}
-              </ExpandedRowValue>
-            </p>}
-          </ExpandedRowCell>
-          <ExpandedRowCell>
-            {(alertSpecification.gears?.length > 0) && <p>
-              <ExpandedRowLabel>Engins à bord :</ExpandedRowLabel>
-              <ExpandedRowValue>
-                {alertSpecification.gears
-                  .map(gear => `${gear.gear}`)
-                  .join(', ')
-                }
-              </ExpandedRowValue>
-            </p>}
-            {(alertSpecification.administrativeAreas?.length > 0 || alertSpecification.regulatoryAreas?.length > 0) && <p>
-              <ExpandedRowLabel>Zones (VMS) :</ExpandedRowLabel>
-              <ExpandedRowValue>
-                {alertSpecification.administrativeAreas
-                  .map(area => `${area.areaType}: ${area.areas.join(', ')}`)
-                  .join(', ')
-                }
-                {alertSpecification.regulatoryAreas
-                  .map(area => `Zone REG "${area.topic} - ${area.zone}"`)
-                  .join(', ')
-                }
-              </ExpandedRowValue>
-            </p>}
-          </ExpandedRowCell>
-          <ExpandedRowCell />
-          <ExpandedRowCell />
-          <ExpandedRowCell>
-            <p>
-              {!!alertSpecification.vesselInternalReferenceNumber && (
-                <ExpandedRowValue $isLight>{alertSpecification.vesselInternalReferenceNumber} (CFR)</ExpandedRowValue>
-              )}
-              {!!alertSpecification.vesselIrcs && (
-                <ExpandedRowValue $isLight>{alertSpecification.vesselIrcs} (Call sign)</ExpandedRowValue>
-              )}
-              {!!alertSpecification.vesselExternalReferenceNumber && (
-                <ExpandedRowValue $isLight>
-                  {alertSpecification.vesselExternalReferenceNumber} (Marq. ext.)
+            {!!alertSpecification.id && (
+              <p>
+                <ExpandedRowLabel>Position VMS pris en compte</ExpandedRowLabel>
+                <ExpandedRowValue>
+                  {!!alertSpecification.id &&
+                    alertSpecification.onlyFishingPositions &&
+                    'Les positions en pêche uniquement'}
+                  {!!alertSpecification.id && !alertSpecification.onlyFishingPositions && 'Toutes les positions en mer'}
                 </ExpandedRowValue>
-              )}
-              {!!alertSpecification.vesselMmsi && (
-                <ExpandedRowValue $isLight>{alertSpecification.vesselMmsi} (MMSI)</ExpandedRowValue>
-              )}
+              </p>
+            )}
+          </ExpandedRowCell>
+          <ExpandedRowCell>
+            {alertSpecification.species.length > 0 && (
+              <p>
+                <ExpandedRowLabel>Espèces à bord :</ExpandedRowLabel>
+                <ExpandedRowValue>
+                  {alertSpecification.species
+                    .map(species => {
+                      const speciesName = speciesAsOptions?.find(
+                        speciesOption => speciesOption.value.code === species.species
+                      )
+
+                      return `${speciesName?.label ?? species.species}${species.minWeight !== undefined ? ` (min. ${species.minWeight}kg)` : ''}`
+                    })
+                    .join(', ')}
+                </ExpandedRowValue>
+              </p>
+            )}
+            {alertSpecification.speciesCatchAreas.length > 0 && (
+              <p>
+                <ExpandedRowLabel>Zones de capture (FAR) :</ExpandedRowLabel>
+                <ExpandedRowValue>{alertSpecification.speciesCatchAreas.join(', ')}</ExpandedRowValue>
+              </p>
+            )}
+            {alertSpecification.gears.length > 0 && (
+              <p>
+                <ExpandedRowLabel>Engins à bord :</ExpandedRowLabel>
+                <ExpandedRowValue>
+                  {alertSpecification.gears
+                    .map(gear => {
+                      const gearName = gearsAsOptions?.find(gearOption => gearOption.value === gear.gear)
+                      const minMesh = gear.minMesh ? `maillage min. ${gear.minMesh}mm` : null
+                      const maxMesh = gear.maxMesh ? `maillage max. ${gear.maxMesh}mm` : null
+
+                      return `${gearName?.label ?? gear.gear}${!!minMesh || !!maxMesh ? ` (${[minMesh, maxMesh].filter(mesh => !!mesh).join(', ')})` : ''}`
+                    })
+                    .join(', ')}
+                </ExpandedRowValue>
+              </p>
+            )}
+            {alertSpecification.flagStatesIso2.length > 0 && (
+              <p>
+                <ExpandedRowLabel>Nationalités :</ExpandedRowLabel>
+                <ExpandedRowValue>
+                  {alertSpecification.flagStatesIso2
+                    .map(flagState => countries.getName(flagState.toLowerCase(), 'fr'))
+                    .join(', ')}
+                </ExpandedRowValue>
+              </p>
+            )}
+            {alertSpecification.districtCodes.length > 0 && (
+              <p>
+                <ExpandedRowLabel>Quartiers :</ExpandedRowLabel>
+                <ExpandedRowValue>{alertSpecification.districtCodes.join(', ')}</ExpandedRowValue>
+              </p>
+            )}
+            {alertSpecification.producerOrganizations.length > 0 && (
+              <p>
+                <ExpandedRowLabel>OPs :</ExpandedRowLabel>
+                <ExpandedRowValue>{alertSpecification.producerOrganizations.join(', ')}</ExpandedRowValue>
+              </p>
+            )}
+            {alertSpecification.vesselIds.length > 0 && (
+              <p>
+                <ExpandedRowLabel>Navires :</ExpandedRowLabel>
+                <ExpandedRowValue>
+                  {alertSpecification.vessels?.map(vessel => (
+                    <span title={vessel.internalReferenceNumber}>
+                      <Flag
+                        rel="preload"
+                        src={`${baseUrl ? `${baseUrl}/` : ''}flags/${vessel.flagState.toLowerCase()}.svg`}
+                        style={{ marginLeft: 5, marginRight: 5, marginTop: -1, width: 13 }}
+                        title={countries.getName(vessel.flagState.toLowerCase(), 'fr')}
+                      />
+                      {vessel.vesselName},
+                    </span>
+                  ))}
+                </ExpandedRowValue>
+              </p>
+            )}
+            {(alertSpecification.administrativeAreas?.length > 0 || alertSpecification.regulatoryAreas?.length > 0) && (
+              <p>
+                <ExpandedRowLabel>Zones (VMS) :</ExpandedRowLabel>
+                <ExpandedRowValue>
+                  {alertSpecification.administrativeAreas.map(area => {
+                    const areas =
+                      area.areaType === AdministrativeAreaType.DISTANCE_TO_SHORE
+                        ? area.areas.map(areaValue => AdministrativeAreaValueLabel[areaValue] ?? areaValue)
+                        : area.areas
+
+                    return (
+                      <>
+                        {AdministrativeAreaTypeLabel[area.areaType]}: {areas.join(', ')}
+                        <br />
+                      </>
+                    )
+                  })}
+                  {alertSpecification.regulatoryAreas.map(area => (
+                    <>
+                      Zone REG &quot;{area.topic ?? 'Aucun topic'} - {area.zone ?? 'Aucun nom'}&quot;
+                      <br />
+                    </>
+                  ))}
+                </ExpandedRowValue>
+              </p>
+            )}
+          </ExpandedRowCell>
+          <ExpandedRowCell />
+          <ExpandedRowCell>
+            <p>
+              <ExpandedRowLabel>Délai de visibilité</ExpandedRowLabel>
+              <ExpandedRowValue>{alertSpecification.trackAnalysisDepth} heures</ExpandedRowValue>
             </p>
             <p>
-              <ExpandedRowLabel>Taille du navire :</ExpandedRowLabel>
-              <ExpandedRowValue>{alertSpecification.vesselLength ?? '-'}</ExpandedRowValue>
+              <ExpandedRowLabel>Fréquence d&apos;actualisation</ExpandedRowLabel>
+              <ExpandedRowValue>10 minutes</ExpandedRowValue>
             </p>
             <p>
-              <ExpandedRowLabel>Dernier contrôle :</ExpandedRowLabel>
+              <ExpandedRowLabel>Archivage auto des signalements</ExpandedRowLabel>
               <ExpandedRowValue>
-                {alertSpecification.vesselLastControlDateTime
-                  ? customDayjs(alertSpecification.vesselLastControlDateTime).utc().format('[Le] DD/MM/YYYY')
-                  : '-'}
+                {alertSpecification.hasAutomaticArchiving ? 'Oui, quand le navire fait un nouveau DEP.' : 'Non'}
               </ExpandedRowValue>
             </p>
           </ExpandedRowCell>
-          <ExpandedRowCell>
-            <ExpandedRowLabel>Nom des segments :</ExpandedRowLabel>
-            {alertSpecification.tripSegments.length > 0 ? (
-              <ExpandedRowList>
-                {alertSpecification.tripSegments.map(tripSegment => (
-                  <li key={tripSegment.code}>{`${tripSegment.code} – ${tripSegment.name}`}</li>
-                ))}
-              </ExpandedRowList>
-            ) : (
-              <None>Aucun segment.</None>
-            )}
-          </ExpandedRowCell>
-          <ExpandedRowCell>
-            <ExpandedRowLabel>Principales espèces à bord :</ExpandedRowLabel>
-            {alertSpecification.onBoardCatches.length > 0 ? (
-              <ExpandedRowList>{displayOnboardFishingSpecies(alertSpecification.onBoardCatches)}</ExpandedRowList>
-            ) : (
-              <None>Aucune capture à bord.</None>
-            )}
-          </ExpandedRowCell>
-          <ExpandedRowCell colSpan={2} style={{ paddingLeft: 0, paddingRight: 0, paddingTop: 12 }}>
-            <>
-              {alertSpecification.isInvalidated && (
-                <Tag backgroundColor={THEME.color.maximumRed} color={THEME.color.white} style={{ marginBottom: 16 }}>
-                  Invalidé
-                </Tag>
-              )}
-              {!alertSpecification.isInvalidated && !!alertSpecification.state && (
-                <FixedTag
-                  backgroundColor={getColorsFromState(alertSpecification.state).backgroundColor}
-                  borderColor={getColorsFromState(alertSpecification.state).borderColor}
-                  color={getColorsFromState(alertSpecification.state).color}
-                  style={{ marginBottom: 16 }}
-                  title={PriorNotification.STATE_LABEL[alertSpecification.state]}
-                >
-                  {PriorNotification.STATE_LABEL[alertSpecification.state]}
-                </FixedTag>
-              )}
-
-              {isSuperUser && alertSpecification.reportingCount > 0 && (
-                <FixedTag
-                  backgroundColor={THEME.color.maximumRed15}
-                  color={THEME.color.maximumRed}
-                  onClick={openReportingList}
-                  role="link"
-                  title="Ouvrir la liste des signalements pour ce navire"
-                >{`${
-                  alertSpecification.reportingCount
-                } signalement${alertSpecification.reportingCount > 1 ? 's' : ''}`}</FixedTag>
-              )}
-            </>
-          </ExpandedRowCell>
+          <ExpandedRowCell />
         </ExpandedRow>
       )}
     </>
@@ -186,7 +198,7 @@ const ExpandableRowCell = styled(TableWithSelectableRows.Td)`
 const ExpandedRow = styled(TableWithSelectableRows.BodyTr)`
   > td {
     overflow: hidden !important;
-    color: ${p => p.theme.color.charcoa};
+    color: ${p => p.theme.color.charcoal};
     background: ${p => p.theme.color.cultured};
   }
 
@@ -223,29 +235,4 @@ const ExpandedRowValue = styled.span<{
 }>`
   color: ${p => (p.$isLight ? p.theme.color.slateGray : 'inherit')};
   display: block;
-`
-const ExpandedRowList = styled.ul`
-  list-style: none;
-  padding: 0;
-`
-
-const TagGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 16px;
-`
-
-const Link = styled.button`
-  background: none;
-  border: none;
-  color: ${p => p.theme.color.slateGray};
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-  transition: color 0.2s;
-
-  &:hover {
-    color: ${p => p.theme.color.gunMetal};
-  }
 `

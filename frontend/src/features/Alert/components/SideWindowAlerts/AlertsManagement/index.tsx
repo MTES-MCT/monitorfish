@@ -1,28 +1,33 @@
-import {PageWithUnderlineTitle} from "@features/SideWindow/components/PageWithUnderlineTitle";
-import {Button, CustomSearch, Icon, Size, TableWithSelectableRows, TextInput} from "@mtes-mct/monitor-ui";
-import {HowAlertsWorksDialog} from "@features/Alert/components/HowAlertsWorksDialog";
-import {useMemo, useState} from "react";
-import {useGetAllAlertSpecificationsQuery} from "@features/Alert/apis";
-import styled, {css} from "styled-components";
-import {flexRender, getCoreRowModel, getExpandedRowModel, useReactTable} from "@tanstack/react-table";
-import {getTableColumns} from "@features/Alert/components/SideWindowAlerts/AlertsManagement/columns";
-import {ErrorWall} from "@components/ErrorWall";
-import {DisplayedErrorKey} from "@libs/DisplayedError/constants";
-import {Row} from "@features/PriorNotification/components/PriorNotificationList/Row";
+import { ErrorWall } from '@components/ErrorWall'
+import { useGetAllAlertSpecificationsQuery } from '@features/Alert/apis'
+import { HowAlertsWorksDialog } from '@features/Alert/components/HowAlertsWorksDialog'
+import { getTableColumns } from '@features/Alert/components/SideWindowAlerts/AlertsManagement/columns'
+import { PageWithUnderlineTitle } from '@features/SideWindow/components/PageWithUnderlineTitle'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+import {
+  Button,
+  CustomSearch,
+  Icon,
+  LinkButton,
+  pluralize,
+  Size,
+  TableWithSelectableRows,
+  TextInput
+} from '@mtes-mct/monitor-ui'
+import { flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from '@tanstack/react-table'
+import { useMemo, useState } from 'react'
+import styled, { css } from 'styled-components'
+
+import { Row } from './Row'
 
 export function AlertsManagement() {
   const { data: alertSpecifications, error } = useGetAllAlertSpecificationsQuery()
 
-  const [isHowAlertsWorksDialogOpen, setIsHowAlertsWorksDialogOpen] = useState(false)
+  const [isHowAlertsWorksDialogOpen, setIsHowAlertsWorksDialogOpen] = useState<boolean>(false)
   const [searchQuery, setSearchQuery] = useState<string>()
 
   const fuse = useMemo(
-    () =>
-      new CustomSearch(
-        alertSpecifications ?? [],
-        ['name'],
-        { threshold: 0.4 }
-      ),
+    () => new CustomSearch(structuredClone(alertSpecifications ?? []), ['name'], { threshold: 0.4 }),
     [alertSpecifications]
   )
 
@@ -42,21 +47,23 @@ export function AlertsManagement() {
     getCoreRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     getRowCanExpand: () => true,
-    getRowId: row => row.type + row.id,
-    rowCount: filteredAlertSpecifications?.length ?? 0,
+    getRowId: row => `${row.type}:${row.id}`,
+    rowCount: filteredAlertSpecifications?.length ?? 0
   })
 
   const { rows } = table.getRowModel()
+
+  const openHowAlertsWorksDialog = () => {
+    setIsHowAlertsWorksDialogOpen(true)
+  }
 
   return (
     <>
       <PageWithUnderlineTitle.Wrapper>
         <PageWithUnderlineTitle.Header>
-          <PageWithUnderlineTitle.HeaderTitle>
-            Gestion des alertes
-          </PageWithUnderlineTitle.HeaderTitle>
+          <PageWithUnderlineTitle.HeaderTitle>Gestion des alertes</PageWithUnderlineTitle.HeaderTitle>
           <PageWithUnderlineTitle.HeaderButtonGroup>
-            <Button Icon={Icon.Plus} onClick={() => {}}>
+            <Button disabled Icon={Icon.Plus} onClick={() => {}}>
               Créer une nouvelle alerte
             </Button>
           </PageWithUnderlineTitle.HeaderButtonGroup>
@@ -64,8 +71,8 @@ export function AlertsManagement() {
 
         <PageWithUnderlineTitle.Body>
           <StyledInput
-            Icon={Icon.Search}
             isLabelHidden
+            isSearchInput
             isTransparent
             label="Rechercher une alerte"
             name="searchQuery"
@@ -74,41 +81,50 @@ export function AlertsManagement() {
             size={Size.LARGE}
             value={searchQuery}
           />
+          <TableOuterWrapper>
+            <TableTop>
+              <TableLegend data-cy="alerts-specification-list-length">
+                {`${filteredAlertSpecifications?.length ?? 0} ${pluralize('alerte', filteredAlertSpecifications?.length ?? 0)}`}
+              </TableLegend>
+              <LinkButton onClick={openHowAlertsWorksDialog}>
+                En savoir plus sur le fonctionnement des alertes
+              </LinkButton>
+            </TableTop>
+            <TableInnerWrapper $hasError={!!error}>
+              {!!error && <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_ALERT_MANAGEMENT_ERROR} />}
+              {!error && (
+                <TableWithSelectableRows.Table $withRowCheckbox>
+                  <TableWithSelectableRows.Head>
+                    {table.getHeaderGroups().map(headerGroup => (
+                      <tr key={headerGroup.id}>
+                        {headerGroup.headers.map(header => (
+                          <TableWithSelectableRows.Th key={header.id} $width={header.column.getSize()}>
+                            <TableWithSelectableRows.SortContainer
+                              className={header.column.getCanSort() ? 'cursor-pointer' : ''}
+                              onClick={header.column.getToggleSortingHandler()}
+                            >
+                              {flexRender(header.column.columnDef.header, header.getContext())}
+                              {header.column.getCanSort() &&
+                                ({
+                                  asc: <Icon.SortSelectedDown size={14} />,
+                                  desc: <Icon.SortSelectedUp size={14} />
+                                }[header.column.getIsSorted() as string] ?? <Icon.SortingArrows size={14} />)}
+                            </TableWithSelectableRows.SortContainer>
+                          </TableWithSelectableRows.Th>
+                        ))}
+                      </tr>
+                    ))}
+                  </TableWithSelectableRows.Head>
 
-          <TableInnerWrapper $hasError={!!error}>
-            {!!error && <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_ALERT_MANAGEMENT_ERROR} />}
-            {!error && (
-              <TableWithSelectableRows.Table $withRowCheckbox>
-                <TableWithSelectableRows.Head>
-                  {table.getHeaderGroups().map(headerGroup => (
-                    <tr key={headerGroup.id}>
-                      {headerGroup.headers.map(header => (
-                        <TableWithSelectableRows.Th key={header.id} $width={header.column.getSize()}>
-                          <TableWithSelectableRows.SortContainer
-                            className={header.column.getCanSort() ? 'cursor-pointer' : ''}
-                            onClick={header.column.getToggleSortingHandler()}
-                          >
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                            {header.column.getCanSort() &&
-                              ({
-                                asc: <Icon.SortSelectedDown size={14} />,
-                                desc: <Icon.SortSelectedUp size={14} />
-                              }[header.column.getIsSorted() as string] ?? <Icon.SortingArrows size={14} />)}
-                          </TableWithSelectableRows.SortContainer>
-                        </TableWithSelectableRows.Th>
-                      ))}
-                    </tr>
-                  ))}
-                </TableWithSelectableRows.Head>
-
-                <tbody>
-                {rows.map(row => (
-                  <Row key={row.id} row={row} />
-                ))}
-                </tbody>
-              </TableWithSelectableRows.Table>
-            )}
-          </TableInnerWrapper>
+                  <tbody>
+                    {rows.map(row => (
+                      <Row key={row.id} row={row} />
+                    ))}
+                  </tbody>
+                </TableWithSelectableRows.Table>
+              )}
+            </TableInnerWrapper>
+          </TableOuterWrapper>
         </PageWithUnderlineTitle.Body>
       </PageWithUnderlineTitle.Wrapper>
       {isHowAlertsWorksDialogOpen && <HowAlertsWorksDialog onClose={() => setIsHowAlertsWorksDialogOpen(false)} />}
@@ -116,16 +132,41 @@ export function AlertsManagement() {
   )
 }
 
+const TableOuterWrapper = styled.div`
+  align-self: flex-start;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+
+  * {
+    box-sizing: border-box;
+  }
+`
+
+const TableLegend = styled.p`
+  color: ${p => p.theme.color.slateGray};
+  line-height: 1;
+  margin: 0;
+`
+
+const TableTop = styled.div`
+  align-items: flex-end;
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 8px 8px 0;
+`
+
 const StyledInput = styled(TextInput)`
   width: 416px;
+  margin-bottom: 32px;
 `
 
 const TableInnerWrapper = styled.div<{
   $hasError: boolean
 }>`
   align-items: flex-start;
-  height: 519px; /* = table height - 5px (negative margin-top) + 1px for Chrome compatibility */
-  min-width: 1407px; /* = table width + right padding + scrollbar width (8px) */
+  height: calc(100vh - 250px); /* = window height - filters height - title height */
+  min-width: 1205px; /* = table width + right padding + scrollbar width (8px) */
   padding-right: 8px;
   overflow-y: scroll;
   width: auto;
@@ -135,8 +176,8 @@ const TableInnerWrapper = styled.div<{
   }
 
   ${p =>
-  p.$hasError &&
-  css`
+    p.$hasError &&
+    css`
       align-items: center;
       border: solid 1px ${p.theme.color.lightGray};
       display: flex;

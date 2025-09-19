@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.repositories.PositionAlertSpecificationRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional
 @UseCase
 class ArchiveOutdatedReportings(
     private val reportingRepository: ReportingRepository,
+    private val alertSpecificationRepository: PositionAlertSpecificationRepository
 ) {
     private val logger = LoggerFactory.getLogger(ArchiveOutdatedReportings::class.java)
 
@@ -20,18 +22,17 @@ class ArchiveOutdatedReportings(
         val reportingCandidatesToArchive = reportingRepository.findUnarchivedReportingsAfterNewVoyage()
         val expiredReportingsToArchive = reportingRepository.findExpiredReportings()
 
+        val alertSpecificationsToArchive = alertSpecificationRepository.findAllByIsDeletedIsFalse()
+            .filter { it.hasAutomaticArchiving }
+            .mapNotNull { it.id }
+        val extraAlertsToArchive =
+            AlertType.entries
+                .filter { it.name !== AlertType.POSITION_ALERT.name && it.specification?.hasAutomaticArchiving == true }
+
         val filteredReportingIdsToArchive =
             reportingCandidatesToArchive
                 .filter {
-                    it.second.type == AlertType.MISSING_FAR_ALERT ||
-                        it.second.type == AlertType.MISSING_FAR_48_HOURS_ALERT ||
-                        it.second.alertId == 1 ||
-                        // THREE_MILES_TRAWLING_ALERT
-                        it.second.type == AlertType.MISSING_DEP_ALERT ||
-                        it.second.type == AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT ||
-                        it.second.alertId == 10 ||
-                        // BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT
-                        it.second.alertId == 9 // NEAFC_FISHING_ALERT
+                    extraAlertsToArchive.contains(it.second.type) || alertSpecificationsToArchive.contains(it.first)
                 }.map { it.first }
 
         logger.info("Found ${filteredReportingIdsToArchive.size} reportings alerts to archive.")

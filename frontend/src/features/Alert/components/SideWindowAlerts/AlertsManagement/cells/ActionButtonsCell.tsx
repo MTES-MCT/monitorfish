@@ -1,21 +1,19 @@
-import {useMainAppDispatch} from '@hooks/useMainAppDispatch'
-import {Accent, Icon, IconButton} from '@mtes-mct/monitor-ui'
+import { ConfirmationModal } from '@components/ConfirmationModal'
+import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
+import { useState } from 'react'
 import styled from 'styled-components'
-import type {AlertSpecification} from "@features/Alert/types";
-import {ConfirmationModal} from "@components/ConfirmationModal";
-import {useState} from "react";
+
+import type { AlertSpecification } from '@features/Alert/types'
 
 type ActionButtonsCellProps = Readonly<{
   alertSpecification: AlertSpecification
 }>
 export function ActionButtonsCell({ alertSpecification }: ActionButtonsCellProps) {
-  const dispatch = useMainAppDispatch()
   const [isDeleteAlertConfirmationModalOpen, setIsDeleteAlertConfirmationModalOpen] = useState(false)
 
   const edit = () => {
     if (!alertSpecification.isUserDefined) {
-
-      return
+      // TODO Implement
     }
   }
 
@@ -26,6 +24,7 @@ export function ActionButtonsCell({ alertSpecification }: ActionButtonsCellProps
       <Wrapper>
         <IconButton
           accent={Accent.TERTIARY}
+          disabled
           Icon={Icon.Edit}
           onClick={edit}
           title="Éditer l'alerte"
@@ -33,8 +32,11 @@ export function ActionButtonsCell({ alertSpecification }: ActionButtonsCellProps
         />
         <IconButton
           accent={Accent.TERTIARY}
+          disabled
           Icon={Icon.Delete}
-          onClick={() => { setIsDeleteAlertConfirmationModalOpen(true) }}
+          onClick={() => {
+            setIsDeleteAlertConfirmationModalOpen(true)
+          }}
           title="Supprimer l'alerte"
           withUnpropagatedClick
         />
@@ -48,7 +50,8 @@ export function ActionButtonsCell({ alertSpecification }: ActionButtonsCellProps
                 <b>Êtes-vous sûr de vouloir supprimer cette alerte ?</b>
               </p>
               <p>
-                Cela supprimera la définition et les critères de l'alerte, ainsi que toutes ses occurrences en cours.
+                Cela supprimera la définition et les critères de l&apos;alerte, ainsi que toutes ses occurrences en
+                cours.
               </p>
             </>
           }

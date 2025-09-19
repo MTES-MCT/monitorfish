@@ -1,3 +1,10 @@
+import {
+  AdministrativeAreaSpecificationSchema,
+  AlertSpecificationSchema,
+  GearSpecificationSchema,
+  RegulatoryAreaSpecificationSchema,
+  SpeciesSpecificationSchema
+} from '@features/Alert/schemas/AlertSpecificationSchema'
 import { PendingAlertValueSchema, SilencedAlertSchema } from '@features/Alert/schemas/SilencedAlertSchema'
 import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import z from 'zod'
@@ -5,12 +12,6 @@ import z from 'zod'
 import type { MissionAction } from '@features/Mission/missionAction.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Except } from 'type-fest'
-import {
-  AdministrativeAreaSpecificationSchema,
-  AlertSpecificationSchema,
-  GearSpecificationSchema, RegulatoryAreaSpecificationSchema,
-  SpeciesSpecificationSchema
-} from "@features/Alert/schemas/AlertSpecificationSchema";
 
 export type PendingAlert = {
   creationDate: string
@@ -62,4 +63,20 @@ export enum AdministrativeAreaType {
   EEZ_AREA = 'EEZ_AREA',
   FAO_AREA = 'FAO_AREA',
   NEAFC_AREA = 'NEAFC_AREA'
+}
+
+export const AdministrativeAreaTypeLabel: Record<AdministrativeAreaType, string> = {
+  DISTANCE_TO_SHORE: 'Distances à la côte',
+  EEZ_AREA: 'Zones ZEE',
+  FAO_AREA: 'Zones FAO',
+  NEAFC_AREA: 'Zones NEAFC'
+}
+
+export enum AdministrativeAreaValueLabel {
+  '0-12_MINUS_DE_FISHING_AREA' = '12 milles (sans la ZEE DE)',
+  '0-12_MINUS_ES_FISHING_AREA' = '12 milles (sans la ZEE ESP)',
+  '0-3' = '3 milles',
+  '12_MINUS_BE_AND_NL_FISHING_AREAS' = '12 milles (sans les ZEEs BEL et NLD)',
+  '3-6' = 'Entre 3 et 6 milles',
+  '6-12' = 'Entre 6 et 12 milles'
 }

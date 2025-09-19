@@ -1,8 +1,9 @@
 import { PendingAlertValueType } from '@features/Alert/constants'
+import { AdministrativeAreaType } from '@features/Alert/types'
+import { VesselIdentitySchema } from '@features/Vessel/schemas/VesselIdentitySchema'
 import { z } from 'zod'
 
 import { stringOrUndefined, numberOrUndefined } from '../../../types'
-import {AdministrativeAreaType} from "@features/Alert/types";
 
 export const GearSpecificationSchema = z.strictObject({
   gear: z.string(),
@@ -31,10 +32,11 @@ export const AlertSpecificationSchema = z.strictObject({
   createdAtUtc: z.string(),
   createdBy: z.string(),
   description: z.string(),
-  districtCodes: z.array(z.string()).optional(),
+  districtCodes: z.array(z.string()),
   errorReason: stringOrUndefined,
-  flagStatesIso2: z.array(z.string()).optional(),
+  flagStatesIso2: z.array(z.string()),
   gears: z.array(GearSpecificationSchema),
+  hasAutomaticArchiving: z.boolean(),
   id: numberOrUndefined,
   isActivated: z.boolean(),
   isInError: z.boolean(),
@@ -52,5 +54,6 @@ export const AlertSpecificationSchema = z.strictObject({
   type: z.nativeEnum(PendingAlertValueType),
   validityEndDatetimeUtc: z.string().optional(),
   validityStartDatetimeUtc: z.string().optional(),
-  vesselIds: z.array(z.number()).optional()
+  vesselIds: z.array(z.number()),
+  vessels: z.array(VesselIdentitySchema)
 })

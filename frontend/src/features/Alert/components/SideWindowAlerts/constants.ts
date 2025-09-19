@@ -3,7 +3,7 @@ import { getOptionsFromLabelledEnum } from '@mtes-mct/monitor-ui'
 import type { NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 
 export enum AdditionalSubMenu {
-  ALERT_RULES = 'ALERT_MANAGEMENT',
+  ALERT_MANAGEMENT = 'ALERT_MANAGEMENT',
   SUSPENDED_ALERTS = 'SUSPENDED_ALERTS'
 }
 

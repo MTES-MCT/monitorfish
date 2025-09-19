@@ -31,6 +31,7 @@ object TestUtils {
             isDeleted = false,
             errorReason = null,
             validityStartDatetimeUtc = null,
+            hasAutomaticArchiving = true,
             validityEndDatetimeUtc = null,
             repeatEachYear = false,
             trackAnalysisDepth = 8.0,

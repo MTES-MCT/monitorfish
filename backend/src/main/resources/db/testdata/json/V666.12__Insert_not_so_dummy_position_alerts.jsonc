@@ -5,7 +5,7 @@
             {
                 "id": 1,
                 "name": "Chalutage dans les 3 milles",
-                "description": "_Sur les 8 dernières heures_\\n\\nPour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
                 "is_user_defined": false,
                 "natinf_code": 7059,
                 "is_activated": true,
@@ -16,6 +16,7 @@
                 "repeat_each_year": false,
                 "track_analysis_depth": 8.0,
                 "only_fishing_positions": true,
+                "has_automatic_archiving": true,
                 "gears:jsonb": [
                     {"gear": "OT"},
                     {"gear": "OTB"},
@@ -50,7 +51,7 @@
             {
                 "id": 2,
                 "name": "Pêche en zone RTC par un navire français",
-                "description": "_Sur les 8 dernières heures_\\n\\nPour les navires français dans toutes les zones RTC du monde.",
+                "description": "Pour les navires français dans toutes les zones RTC du monde.",
                 "is_user_defined": false,
                 "natinf_code": 2596,
                 "is_activated": true,
@@ -61,6 +62,7 @@
                 "repeat_each_year": false,
                 "track_analysis_depth": 8.0,
                 "only_fishing_positions": true,
+                "has_automatic_archiving": false,
                 "gears": null,
                 "species": null,
                 "species_catch_areas": [],
@@ -79,7 +81,7 @@
             {
                 "id": 3,
                 "name": "Pêche en zone RTC par un navire étranger",
-                "description": "_Sur les 8 dernières heures_\\n\\nPour les navires étrangers dans les zones RTC de ZEE française",
+                "description": "Pour les navires étrangers dans les zones RTC de ZEE française",
                 "is_user_defined": false,
                 "natinf_code": 2596,
                 "is_activated": true,
@@ -90,6 +92,7 @@
                 "repeat_each_year": false,
                 "track_analysis_depth": 8.0,
                 "only_fishing_positions": true,
+                "has_automatic_archiving": false,
                 "gears": null,
                 "species": null,
                 "species_catch_areas": [],
@@ -110,7 +113,7 @@
             {
                 "id": 4,
                 "name": "Pêche en ZEE française par un navire tiers",
-                "description": "_Sur les 8 dernières heures_\\n\\nPour tous les navires tiers en pêche en ZEE française.",
+                "description": "Pour tous les navires tiers en pêche en ZEE française.",
                 "is_user_defined": false,
                 "natinf_code": 2608,
                 "is_activated": true,
@@ -121,6 +124,7 @@
                 "repeat_each_year": false,
                 "track_analysis_depth": 8.0,
                 "only_fishing_positions": true,
+                "has_automatic_archiving": false,
                 "gears": null,
                 "species": null,
                 "species_catch_areas": [],
@@ -139,7 +143,7 @@
             {
                 "id": 5,
                 "name": "Pêche dans les 12 milles sans droits historiques (BE, NL)",
-                "description": "_Sur les 8 dernières heures_\\n\\nPour les navires belges et néerlandais en pêche dans les 12 milles hors de leurs zones de droits historiques.",
+                "description": "Pour les navires belges et néerlandais en pêche dans les 12 milles hors de leurs zones de droits historiques.",
                 "is_user_defined": false,
                 "natinf_code": 2610,
                 "is_activated": true,
@@ -150,6 +154,7 @@
                 "repeat_each_year": false,
                 "track_analysis_depth": 8.0,
                 "only_fishing_positions": true,
+                "has_automatic_archiving":  false,
                 "gears": null,
                 "species": null,
                 "species_catch_areas": [],
@@ -168,7 +173,7 @@
             {
                 "id": 6,
                 "name": "Pêche dans les 12 milles sans droits historiques (ES)",
-                "description": "_Sur les 8 dernières heures_\\n\\nPour les navires espagnols en pêche dans les 12 milles hors de leurs zones de droits historiques.",
+                "description": "Pour les navires espagnols en pêche dans les 12 milles hors de leurs zones de droits historiques.",
                 "is_user_defined": false,
                 "natinf_code": 2610,
                 "is_activated": true,
@@ -179,6 +184,7 @@
                 "repeat_each_year": false,
                 "track_analysis_depth": 8.0,
                 "only_fishing_positions": true,
+                "has_automatic_archiving":  false,
                 "gears": null,
                 "species": null,
                 "species_catch_areas": [],
@@ -197,7 +203,7 @@
             {
                 "id": 7,
                 "name": "Pêche dans les 12 milles sans droits historiques (DE)",
-                "description": "_Sur les 8 dernières heures_\\n\\nPour les navires allemands en pêche dans les 12 milles hors de leurs zones de droits historiques.",
+                "description": "Pour les navires allemands en pêche dans les 12 milles hors de leurs zones de droits historiques.",
                 "is_user_defined": false,
                 "natinf_code": 2610,
                 "is_activated": true,
@@ -208,6 +214,7 @@
                 "repeat_each_year": false,
                 "track_analysis_depth": 8.0,
                 "only_fishing_positions": true,
+                "has_automatic_archiving":  false,
                 "gears": null,
                 "species": null,
                 "species_catch_areas": [],
@@ -226,7 +233,7 @@
             {
                 "id": 8,
                 "name": "Pêche dans les 12 milles sans droits historiques",
-                "description": "_Sur les 8 dernières heures_\\n\\nPour tous les navires UE - hors navires allemands, espagnols, néerlandais et belges - ou tiers en pêche dans les 12 milles.",
+                "description": "Pour tous les navires UE - hors navires allemands, espagnols, néerlandais et belges - ou tiers en pêche dans les 12 milles.",
                 "is_user_defined": false,
                 "natinf_code": 2610,
                 "is_activated": true,
@@ -237,6 +244,7 @@
                 "repeat_each_year": false,
                 "track_analysis_depth": 8.0,
                 "only_fishing_positions": true,
+                "has_automatic_archiving":  false,
                 "gears": null,
                 "species": null,
                 "species_catch_areas": [],
@@ -255,7 +263,7 @@
             {
                 "id": 9,
                 "name": "Pêche en zone CPANE (NEAFC)",
-                "description": "_Sur les 8 dernières heures_\\n\\nPêche en zone CPANE (NEAFC).",
+                "description": "Pêche en zone CPANE (NEAFC).",
                 "is_user_defined": false,
                 "natinf_code": 22070,
                 "is_activated": true,
@@ -266,6 +274,7 @@
                 "repeat_each_year": false,
                 "track_analysis_depth": 8.0,
                 "only_fishing_positions": true,
+                "has_automatic_archiving": true,
                 "gears": null,
                 "species": null,
                 "species_catch_areas": [],
@@ -284,7 +293,7 @@
             {
                 "id": 10,
                 "name": "R(UE) 1241 - Plus de 6 tonnes de lingue bleue (BLI) à bord",
-                "description": "_Sur les 8 dernières heures_\\n\\nPour tous les navires sur les areas REG \\\"EOS - Lingues bleues\\\", avec plus de 6 tonnes de BLI à bord.",
+                "description": "Pour tous les navires sur les areas REG \\\"EOS - Lingues bleues\\\", avec plus de 6 tonnes de BLI à bord.",
                 "is_user_defined": false,
                 "natinf_code": 12900,
                 "is_activated": true,
@@ -295,6 +304,7 @@
                 "repeat_each_year": false,
                 "track_analysis_depth": 8.0,
                 "only_fishing_positions": false,
+                "has_automatic_archiving":  true,
                 "gears": null,
                 "species:jsonb": [
                     {"species": "BLI", "minWeight": 6000.0}
@@ -315,7 +325,7 @@
             {
                 "id": 11,
                 "name": "Pêche en zone EMV avec un engin de fond à plus de 400m de profondeur",
-                "description": "_Sur les 8 dernières heures_\\n\\nPour tous les navires en pêche sur la zone REG \\\"Atlantique 400m - Ecosystèmes Marins Vulnérables (EMV) - Engins de fond\\\",\\nà une profondeur supérieure à 400m avec les engins :\\n- TB (Chaluts de fond (non spécifiés))\\n- GNS (Filets maillants calés (ancrés))\\n- LLS (Palangres calées)\\n- LVS (Palangre verticale de fond)\\n- OTB (Chaluts de fond à panneaux)\\n- OTT (Chaluts jumeaux à panneaux)\\n- PTB (Chaluts-bœufs de fond)\\n- TBB (Chaluts à perche)\\n- TBN (Chaluts à langoustines)\\n- TBS (Chaluts de fond à crevettes)\\n- Dragues\\n- Pièges et casiers",
+                "description": "Pour tous les navires en pêche sur la zone REG \\\"Atlantique 400m - Ecosystèmes Marins Vulnérables (EMV) - Engins de fond\\\",\\nà une profondeur supérieure à 400m avec les engins :\\n- TB (Chaluts de fond (non spécifiés))\\n- GNS (Filets maillants calés (ancrés))\\n- LLS (Palangres calées)\\n- LVS (Palangre verticale de fond)\\n- OTB (Chaluts de fond à panneaux)\\n- OTT (Chaluts jumeaux à panneaux)\\n- PTB (Chaluts-bœufs de fond)\\n- TBB (Chaluts à perche)\\n- TBN (Chaluts à langoustines)\\n- TBS (Chaluts de fond à crevettes)\\n- Dragues\\n- Pièges et casiers",
                 "is_user_defined": false,
                 "natinf_code": 2610,
                 "is_activated": true,
@@ -326,6 +336,7 @@
                 "repeat_each_year": false,
                 "track_analysis_depth": 8.0,
                 "only_fishing_positions": true,
+                "has_automatic_archiving":  false,
                 "gears:jsonb": [
                     {"gear": "OTB"},
                     {"gear": "OTT"},
@@ -370,7 +381,7 @@
             {
                 "id": 12,
                 "name": "Chalutage de fond à plus de 800m de profondeur",
-                "description": "_Sur les 8 dernières heures_\\n\\nPour tous les navires en pêche sur la zone REG \\\"Interdiction chalutage de fond ATL - Profondeur supérieure à 800m\\\", à une profondeur supérieure à 800m avec les engins :\\n- TB (Chaluts de fond (non spécifiés))\\n- OTB (Chaluts de fond à panneaux)\\n- OTT (Chaluts jumeaux à panneaux)\\n- PTB (Chaluts-bœufs de fond)\\n- TBB (Chaluts à perche)\\n- TBN (Chaluts à langoustines)\\n- TBS (Chaluts de fond à crevettes)",
+                "description": "Pour tous les navires en pêche sur la zone REG \\\"Interdiction chalutage de fond ATL - Profondeur supérieure à 800m\\\", à une profondeur supérieure à 800m avec les engins :\\n- TB (Chaluts de fond (non spécifiés))\\n- OTB (Chaluts de fond à panneaux)\\n- OTT (Chaluts jumeaux à panneaux)\\n- PTB (Chaluts-bœufs de fond)\\n- TBB (Chaluts à perche)\\n- TBN (Chaluts à langoustines)\\n- TBS (Chaluts de fond à crevettes)",
                 "is_user_defined": false,
                 "natinf_code": 2610,
                 "is_activated": true,
@@ -381,6 +392,7 @@
                 "repeat_each_year": false,
                 "track_analysis_depth": 8.0,
                 "only_fishing_positions": true,
+                "has_automatic_archiving":  false,
                 "gears:jsonb": [
                     {"gear": "TB"},
                     {"gear": "OTB"},
@@ -418,6 +430,7 @@
                 "repeat_each_year": true,
                 "track_analysis_depth": 12.0,
                 "only_fishing_positions": false,
+                "has_automatic_archiving":  false,
                 "gears:jsonb": [
                     {"gear": "OTM", "minMesh": 80.0, "maxMesh": 120.0},
                     {"gear": "OTB", "minMesh": 80.0, "maxMesh": null},
@@ -460,6 +473,7 @@
                 "repeat_each_year": true,
                 "track_analysis_depth": 12.0,
                 "only_fishing_positions": false,
+                "has_automatic_archiving":  false,
                 "gears:jsonb": [
                     {"gear": "OTM", "minMesh": 80.0, "maxMesh": 120.0},
                     {"gear": "OTB", "minMesh": 80.0, "maxMesh": null},
@@ -502,6 +516,7 @@
                 "repeat_each_year": true,
                 "track_analysis_depth": 12.0,
                 "only_fishing_positions": false,
+                "has_automatic_archiving":  false,
                 "gears:jsonb": [
                     {"gear": "OTM", "minMesh": 80.0, "maxMesh": 120.0},
                     {"gear": "OTB", "minMesh": 80.0, "maxMesh": null},
@@ -544,6 +559,7 @@
                 "repeat_each_year": false,
                 "track_analysis_depth": 12.0,
                 "only_fishing_positions": false,
+                "has_automatic_archiving":  false,
                 "gears:jsonb": [
                     {"gear": "OTM", "minMesh": 80.0, "maxMesh": 120.0},
                     {"gear": "OTB", "minMesh": 80.0, "maxMesh": null},
@@ -586,6 +602,7 @@
                 "repeat_each_year": true,
                 "track_analysis_depth": 12.0,
                 "only_fishing_positions": false,
+                "has_automatic_archiving":  false,
                 "gears:jsonb": [
                     {"gear": "GTR"}
                 ],

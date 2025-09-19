@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.alerts
 
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import java.time.ZonedDateTime
 
 data class PositionAlertSpecification(
@@ -13,6 +14,7 @@ data class PositionAlertSpecification(
     val isActivated: Boolean = true,
     val isInError: Boolean = false,
     val isDeleted: Boolean = false,
+    val hasAutomaticArchiving: Boolean = false,
     val errorReason: String? = null,
     val validityStartDatetimeUtc: ZonedDateTime? = null,
     val validityEndDatetimeUtc: ZonedDateTime? = null,
@@ -25,9 +27,10 @@ data class PositionAlertSpecification(
     val administrativeAreas: List<AdministrativeAreaSpecification> = listOf(),
     val regulatoryAreas: List<RegulatoryAreaSpecification> = listOf(),
     val minDepth: Double? = null,
-    val flagStatesIso2: List<String>? = listOf(),
-    val vesselIds: List<Int>? = listOf(),
-    val districtCodes: List<String>? = listOf(),
+    val flagStatesIso2: List<String> = listOf(),
+    val vesselIds: List<Int> = listOf(),
+    val vessels: List<Vessel> = listOf(),
+    val districtCodes: List<String> = listOf(),
     val producerOrganizations: List<String> = listOf(),
     val createdBy: String,
     val createdAtUtc: ZonedDateTime,

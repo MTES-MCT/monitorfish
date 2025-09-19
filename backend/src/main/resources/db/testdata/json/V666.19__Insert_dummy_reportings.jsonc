@@ -25,7 +25,7 @@
                     "type": "POSITION_ALERT",
                     "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
-                    "description": "_Sur les 8 dernières heures_\\n\\nPour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
                     "natinfCode": 7059
                 },
                 "vessel_id": 123456,
@@ -51,7 +51,7 @@
                     "type": "POSITION_ALERT",
                     "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
-                    "description": "_Sur les 8 dernières heures_\\n\\nPour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
                     "natinfCode": 7059
                 },
                 "vessel_id": 123456,
@@ -104,7 +104,7 @@
                     "type": "POSITION_ALERT",
                     "alertId": 8,
                     "name": "Pêche dans les 12 milles sans droits historiques",
-                    "description": "_Sur les 8 dernières heures_\\n\\nPour tous les navires UE - hors navires allemands, espagnols, néerlandais et belges - ou tiers en pêche dans les 12 milles.",
+                    "description": "Pour tous les navires UE - hors navires allemands, espagnols, néerlandais et belges - ou tiers en pêche dans les 12 milles.",
                     "natinfCode": 2610
                 },
                 "vessel_id": null,
@@ -425,7 +425,7 @@
                     "type": "POSITION_ALERT",
                     "alertId": 10,
                     "name": "R(UE) 1241 - Plus de 6 tonnes de lingue bleue (BLI) à bord",
-                    "description": "_Sur les 8 dernières heures_\\n\\nPour tous les navires sur les areas REG \\\"EOS - Lingues bleues\\\", avec plus de 6 tonnes de BLI à bord.",
+                    "description": "Pour tous les navires sur les areas REG \\\"EOS - Lingues bleues\\\", avec plus de 6 tonnes de BLI à bord.",
                     "natinfCode": 12900
                 },
                 "vessel_id": 115,

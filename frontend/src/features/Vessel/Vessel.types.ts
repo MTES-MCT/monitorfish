@@ -2,9 +2,9 @@ import {
   type ActiveVesselEmittingPositionSchema,
   ActiveVesselSchema,
   type DeclaredLogbookSpeciesSchema,
-  type VesselGroupOfActiveVesselSchema,
-  VesselIdentifier
+  type VesselGroupOfActiveVesselSchema
 } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { VesselIdentitySchema } from '@features/Vessel/schemas/VesselIdentitySchema'
 import { z } from 'zod'
 
 import type { VesselSchema } from '@features/Vessel/schemas/VesselSchema'
@@ -15,19 +15,7 @@ import type Point from 'ol/geom/Point'
 export namespace Vessel {
   export type SelectedVessel = z.infer<typeof VesselSchema>
 
-  export type VesselIdentity = {
-    beaconNumber: number | undefined
-    districtCode: string | undefined
-    externalReferenceNumber: string | undefined
-    flagState: string
-    internalReferenceNumber: string | undefined
-    ircs: string | undefined
-    mmsi: string | undefined
-    vesselId: VesselId | undefined
-    vesselIdentifier: VesselIdentifier | undefined
-    vesselLength: number | undefined
-    vesselName: string | undefined
-  }
+  export type VesselIdentity = z.infer<typeof VesselIdentitySchema>
 
   /**
    * The vessel id number used to identify vessels entered in NAVPRO French database

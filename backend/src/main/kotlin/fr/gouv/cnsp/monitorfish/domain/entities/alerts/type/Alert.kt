@@ -14,7 +14,7 @@ class Alert(
 ) : ReportingValue(natinfCode) {
     // TODO Test it
     init {
-        if (type == AlertType.POSITION_ALERT) {
+        if (this.type == AlertType.POSITION_ALERT) {
             requireNotNull(alertId)
         }
     }

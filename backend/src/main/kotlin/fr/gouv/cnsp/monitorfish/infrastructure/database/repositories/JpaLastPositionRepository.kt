@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
@@ -90,16 +89,17 @@ class JpaLastPositionRepository(
 
     @Transactional
     override fun removeAlertToLastPositionByVesselIdentifierEquals(
-        alertType: AlertTypeMapping,
+        alertName: String,
         vesselIdentifier: VesselIdentifier,
         value: String,
         isValidated: Boolean,
     ) {
+        // TODO Handle case of POSITION_ALERT, and add the id of the alert
         dbLastPositionRepository.removeAlertByVesselIdentifierEquals(
-            vesselIdentifier.name,
-            value,
-            alertType.name,
-            isValidated,
+            vesselIdentifier = vesselIdentifier.name,
+            value = value,
+            alertName = alertName,
+            isValidated = isValidated,
         )
     }
 

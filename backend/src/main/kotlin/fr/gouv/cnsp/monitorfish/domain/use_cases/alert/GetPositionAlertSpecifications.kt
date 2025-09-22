@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 @UseCase
 class GetPositionAlertSpecifications(
     private val positionAlertSpecificationRepository: PositionAlertSpecificationRepository,
-    private val vesselRepository: VesselRepository
+    private val vesselRepository: VesselRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetPositionAlertSpecifications::class.java)
 
@@ -19,16 +19,17 @@ class GetPositionAlertSpecifications(
         val allAlertsVesselsIds = alerts.map { it.vesselIds }.flatten().distinct()
         val allAlertVessels = vesselRepository.findVesselsByIds(allAlertsVesselsIds)
 
-        val alertsWithVessels = alerts.map { alert ->
-            if (alert.vesselIds.isEmpty()) {
-                return@map alert
+        val alertsWithVessels =
+            alerts.map { alert ->
+                if (alert.vesselIds.isEmpty()) {
+                    return@map alert
+                }
+
+                val alertVessels =
+                    alert.vesselIds.mapNotNull { vesselId -> allAlertVessels.firstOrNull { it.id == vesselId } }
+
+                return@map alert.copy(vessels = alertVessels)
             }
-
-            val alertVessels =
-                alert.vesselIds.mapNotNull { vesselId -> allAlertVessels.firstOrNull { it.id == vesselId } }
-
-            return@map alert.copy(vessels = alertVessels)
-        }
 
         val extraAlerts =
             AlertType.entries

@@ -162,7 +162,7 @@ context('Side Window > Alert List', () => {
         flagState: 'FR',
         internalReferenceNumber: 'FAK000999999',
         ircs: 'CALLME',
-        value: '{"type":"FRENCH_EEZ_FISHING_ALERT"}',
+        value: '{"alertId":4,"name":"Pêche en ZEE française par un navire tiers","type":"POSITION_ALERT"}',
         vesselId: 1,
         vesselIdentifier: 'INTERNAL_REFERENCE_NUMBER',
         vesselName: 'PHENOMENE'

@@ -2,9 +2,9 @@ import { getExpandableRowCellCustomStyle } from '@features/Alert/components/Side
 import {
   AdministrativeAreaType,
   AdministrativeAreaTypeLabel,
-  AdministrativeAreaValueLabel,
-  type AlertSpecification
-} from '@features/Alert/types'
+  AdministrativeAreaValueLabel
+} from '@features/Alert/constants'
+import { type AlertSpecification } from '@features/Alert/types'
 import { Flag } from '@features/commonComponents/Flag'
 import { useGetGearsAsOptions } from '@hooks/useGetGearsAsOptions'
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'

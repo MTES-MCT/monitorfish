@@ -12,10 +12,11 @@ class Alert(
     val name: String,
     val description: String? = null,
 ) : ReportingValue(natinfCode) {
-    // TODO Test it
     init {
         if (this.type == AlertType.POSITION_ALERT) {
-            requireNotNull(alertId)
+            requireNotNull(alertId) {
+                "Alert id must be not null when the alert is a position"
+            }
         }
     }
 }

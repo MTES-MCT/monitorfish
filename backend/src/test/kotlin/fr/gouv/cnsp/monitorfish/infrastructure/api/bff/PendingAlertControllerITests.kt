@@ -241,9 +241,10 @@ class PendingAlertControllerITests {
                                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                                 flagState = CountryCode.FR,
                                 silencedBeforeDate = ZonedDateTime.now(),
-                                value = "{\"type\": \"POSITION_ALERT\"," +
+                                value =
+                                    "{\"type\": \"POSITION_ALERT\"," +
                                         "\"name\": \"Chalutage dans les 3 milles\"," +
-                                        "\"alertId\": \"1\"}"
+                                        "\"alertId\": \"1\"}",
                             ),
                         ),
                     ).contentType(MediaType.APPLICATION_JSON),

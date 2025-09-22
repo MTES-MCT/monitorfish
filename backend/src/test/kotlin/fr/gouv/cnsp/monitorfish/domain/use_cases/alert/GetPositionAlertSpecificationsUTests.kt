@@ -28,13 +28,15 @@ class GetPositionAlertSpecificationsUTests {
         given(positionAlertSpecification.findAllByIsDeletedIsFalse())
             .willReturn(listOf(DUMMY_POSITION_ALERT, DUMMY_POSITION_ALERT.copy(vesselIds = listOf(5, 6))))
         given(vesselRepository.findVesselsByIds(eq(listOf(1, 2, 3, 5, 6))))
-            .willReturn(listOf(
-                Vessel(id = 1, flagState = CountryCode.FR, hasLogbookEsacapt = false),
-                Vessel(id = 2, flagState = CountryCode.FR, hasLogbookEsacapt = false),
-                Vessel(id = 3, flagState = CountryCode.FR, hasLogbookEsacapt = false),
-                Vessel(id = 5, flagState = CountryCode.FR, hasLogbookEsacapt = false),
-                Vessel(id = 6, flagState = CountryCode.FR, hasLogbookEsacapt = false),
-            ))
+            .willReturn(
+                listOf(
+                    Vessel(id = 1, flagState = CountryCode.FR, hasLogbookEsacapt = false),
+                    Vessel(id = 2, flagState = CountryCode.FR, hasLogbookEsacapt = false),
+                    Vessel(id = 3, flagState = CountryCode.FR, hasLogbookEsacapt = false),
+                    Vessel(id = 5, flagState = CountryCode.FR, hasLogbookEsacapt = false),
+                    Vessel(id = 6, flagState = CountryCode.FR, hasLogbookEsacapt = false),
+                ),
+            )
 
         // When
         val alerts = GetPositionAlertSpecifications(positionAlertSpecification, vesselRepository).execute()

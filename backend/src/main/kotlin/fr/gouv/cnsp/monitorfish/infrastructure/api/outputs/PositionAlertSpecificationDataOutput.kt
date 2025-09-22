@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.*
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import java.time.ZonedDateTime
 
 data class PositionAlertSpecificationDataOutput(

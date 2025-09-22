@@ -1,5 +1,4 @@
-import { PendingAlertValueType } from '@features/Alert/constants'
-import { AdministrativeAreaType } from '@features/Alert/types'
+import { AdministrativeAreaType, PendingAlertValueType } from '@features/Alert/constants'
 import { VesselIdentitySchema } from '@features/Vessel/schemas/VesselIdentitySchema'
 import { z } from 'zod'
 

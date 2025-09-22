@@ -303,7 +303,7 @@ export function RegulatedGears({
                 { label: 'oui', value: true },
                 { label: 'non', value: false }
               ]}
-              value={derogation}
+              value={derogation ?? false}
             />
           </DerogationRadioWrapper>
         )}

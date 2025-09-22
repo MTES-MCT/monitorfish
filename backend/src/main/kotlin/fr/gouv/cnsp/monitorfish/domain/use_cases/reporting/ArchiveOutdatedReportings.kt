@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional
 @UseCase
 class ArchiveOutdatedReportings(
     private val reportingRepository: ReportingRepository,
-    private val alertSpecificationRepository: PositionAlertSpecificationRepository
+    private val alertSpecificationRepository: PositionAlertSpecificationRepository,
 ) {
     private val logger = LoggerFactory.getLogger(ArchiveOutdatedReportings::class.java)
 
@@ -22,9 +22,11 @@ class ArchiveOutdatedReportings(
         val reportingCandidatesToArchive = reportingRepository.findUnarchivedReportingsAfterNewVoyage()
         val expiredReportingsToArchive = reportingRepository.findExpiredReportings()
 
-        val alertSpecificationsToArchive = alertSpecificationRepository.findAllByIsDeletedIsFalse()
-            .filter { it.hasAutomaticArchiving }
-            .mapNotNull { it.id }
+        val alertSpecificationsToArchive =
+            alertSpecificationRepository
+                .findAllByIsDeletedIsFalse()
+                .filter { it.hasAutomaticArchiving }
+                .mapNotNull { it.id }
         val extraAlertsToArchive =
             AlertType.entries
                 .filter { it.name !== AlertType.POSITION_ALERT.name && it.specification?.hasAutomaticArchiving == true }

@@ -94,7 +94,6 @@ class JpaLastPositionRepository(
         value: String,
         isValidated: Boolean,
     ) {
-        // TODO Handle case of POSITION_ALERT, and add the id of the alert
         dbLastPositionRepository.removeAlertByVesselIdentifierEquals(
             vesselIdentifier = vesselIdentifier.name,
             value = value,

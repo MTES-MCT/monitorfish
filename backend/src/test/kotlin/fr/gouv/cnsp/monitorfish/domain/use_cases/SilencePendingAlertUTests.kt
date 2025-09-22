@@ -65,7 +65,6 @@ class SilencePendingAlertUTests {
 
         // Then
         Mockito.verify(pendingAlertRepository).delete(eq(666))
-        // TODO Modify removeAlertToLastPositionByVesselIdentifierEquals to include the id
         Mockito.verify(lastPositionRepository).removeAlertToLastPositionByVesselIdentifierEquals(
             alertName = "Chalutage dans les 3 milles",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,

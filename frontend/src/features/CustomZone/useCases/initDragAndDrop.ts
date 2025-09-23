@@ -2,7 +2,7 @@ import { WSG84_PROJECTION } from '@features/Map/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { trackEvent } from '@hooks/useTracking'
-import { logSoftError } from '@mtes-mct/monitor-ui'
+import { logSoftError } from '@utils/logSoftError'
 import { Feature } from 'ol'
 import { GPX, IGC, KML, TopoJSON } from 'ol/format'
 import GeoJSON from 'ol/format/GeoJSON'
@@ -77,7 +77,6 @@ function saveAndShowCustomZones(
     const layer = getLayer(MonitorFishMap.MonitorFishLayer.CUSTOM)
     if (!layer) {
       logSoftError({
-        isSideWindowError: false,
         message: 'Layer `CUSTOM` not found in `monitorfishMap` map object.'
       })
 

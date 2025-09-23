@@ -11,10 +11,11 @@ import { VesselEmitsPosition, VesselLocation, vesselSize } from '@features/Vesse
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { SEARCH_QUERY_MIN_LENGTH } from '@features/VesselGroup/components/VesselGroupList/hooks/constants'
 import { GroupType, Sharing, type VesselGroupWithVessels } from '@features/VesselGroup/types'
-import { customDayjs, CustomSearch, logSoftError } from '@mtes-mct/monitor-ui'
+import { customDayjs, CustomSearch } from '@mtes-mct/monitor-ui'
 import { booleanPointInPolygon } from '@turf/boolean-point-in-polygon'
 import { point } from '@turf/helpers'
 import { isNotNullish } from '@utils/isNotNullish'
+import { logSoftError } from '@utils/logSoftError'
 import * as Comlink from 'comlink'
 import { asArray } from 'ol/color'
 

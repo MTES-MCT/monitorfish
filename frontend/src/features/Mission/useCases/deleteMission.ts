@@ -1,8 +1,10 @@
 import { monitorenvMissionApi } from '@features/Mission/monitorenvMissionApi'
 import { SideWindowMenuKey } from '@features/SideWindow/constants'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
-import { logSoftError } from '@mtes-mct/monitor-ui'
+import { Level } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
+import { logSoftError } from '@utils/logSoftError'
 
 import type { MainAppThunk } from '@store'
 
@@ -18,10 +20,18 @@ export const deleteMission =
       return true
     } catch (error: any) {
       logSoftError({
-        isSideWindowError: true,
+        callback: () =>
+          dispatch(
+            addSideWindowBanner({
+              children: error.userMessage,
+              closingDelay: 3000,
+              isClosable: true,
+              level: Level.ERROR,
+              withAutomaticClosing: true
+            })
+          ),
         message: '`delete()` failed.',
-        originalError: error,
-        userMessage: error.userMessage
+        originalError: error
       })
 
       return false

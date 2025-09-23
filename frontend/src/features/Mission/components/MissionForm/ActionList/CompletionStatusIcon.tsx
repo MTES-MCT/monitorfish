@@ -1,5 +1,6 @@
 import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
 import { getMissionActionMissingFields } from '@features/Mission/components/MissionForm/utils/getMissionActionMissingFields'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
@@ -9,7 +10,8 @@ type MissingFieldsText = {
   missionAction: MissionActionForTimeline
 }
 export function CompletionStatusIcon({ missionAction }: MissingFieldsText) {
-  const missingFields = getMissionActionMissingFields(missionAction)
+  const dispatch = useMainAppDispatch()
+  const missingFields = getMissionActionMissingFields(missionAction, dispatch)
   const isMissionEnded = useIsMissionEnded()
 
   if (missingFields === 0) {

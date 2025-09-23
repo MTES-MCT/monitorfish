@@ -18,22 +18,14 @@ import { deleteMissionAction } from '@features/Mission/useCases/deleteMissionAct
 import { saveMissionAndMissionActionsByDiff } from '@features/Mission/useCases/saveMissionAndMissionActionsByDiff'
 import { getMissionStatus } from '@features/Mission/utils'
 import { SideWindowMenuKey } from '@features/SideWindow/constants'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { cleanMissionForm } from '@features/SideWindow/useCases/cleanMissionForm'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import {
-  Accent,
-  Banner,
-  Button,
-  customDayjs,
-  humanizePastDate,
-  Icon,
-  Level,
-  logSoftError,
-  THEME
-} from '@mtes-mct/monitor-ui'
+import { Accent, Banner, Button, customDayjs, humanizePastDate, Icon, Level, THEME } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
+import { logSoftError } from '@utils/logSoftError'
 import { omit } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -136,11 +128,11 @@ export function MissionForm() {
   const isMissionFormValid = useMemo(() => {
     const isMainFormValid = MainFormLiveSchema.isValidSync(mainFormValues)
     const areAllActionsValid = actionsFormValues.every(actionFormValues =>
-      isMissionActionFormValid(actionFormValues, false)
+      isMissionActionFormValid(actionFormValues, false, dispatch)
     )
 
     return isMainFormValid && areAllActionsValid
-  }, [mainFormValues, actionsFormValues])
+  }, [mainFormValues, actionsFormValues, dispatch])
 
   const formattedUpdateDate = useMemo(
     () => mainFormValues.updatedAtUtc && humanizePastDate(mainFormValues.updatedAtUtc),
@@ -371,10 +363,18 @@ export function MissionForm() {
       setIsExternalActionsDialogOpen(true)
     } catch (error) {
       logSoftError({
-        isSideWindowError: true,
+        callback: () =>
+          dispatch(
+            addSideWindowBanner({
+              children: "Nous n'avons pas pu vérifier si cette mission est supprimable.",
+              closingDelay: 3000,
+              isClosable: true,
+              level: Level.ERROR,
+              withAutomaticClosing: true
+            })
+          ),
         message: '`canDeleteMission` API call failed.',
-        originalError: error,
-        userMessage: "Nous n'avons pas pu vérifier si cette mission est supprimable."
+        originalError: error
       })
     }
   }, [dispatch])

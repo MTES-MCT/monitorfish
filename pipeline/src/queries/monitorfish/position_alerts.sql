@@ -13,6 +13,7 @@ SELECT
     only_fishing_positions,
     gears,
     species,
+    species_catch_areas,
     administrative_areas,
     regulatory_areas,
     min_depth,
@@ -21,5 +22,5 @@ SELECT
     district_codes,
     producer_organizations
 FROM position_alerts
-WHERE NOT is_deleted AND NOT is_deactivated
+WHERE NOT is_deleted AND is_activated
 ORDER BY id

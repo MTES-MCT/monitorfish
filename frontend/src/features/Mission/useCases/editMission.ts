@@ -46,7 +46,7 @@ const editMissionWithoutConfirmation =
       const missionWithActions = await dispatch(
         monitorfishMissionApi.endpoints.getMission.initiate(id, RTK_FORCE_REFETCH_QUERY_OPTIONS)
       ).unwrap()
-      const nextDraft = getMissionDraftFromMissionWithActions(missionWithActions)
+      const nextDraft = getMissionDraftFromMissionWithActions(missionWithActions, dispatch)
 
       dispatch(missionFormActions.initializeDraft(nextDraft))
       dispatch(sideWindowActions.setSelectedPathIsLoading(false))

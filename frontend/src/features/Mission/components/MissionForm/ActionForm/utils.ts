@@ -1,36 +1,9 @@
 import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
-import { logSoftError } from '@mtes-mct/monitor-ui'
 import { isEqual, isEmpty } from 'lodash-es'
 
 import type { MissionActionFormValues } from '../types'
 import type { FormikErrors } from 'formik'
 import type { Promisable } from 'type-fest'
-
-export function getInitialMissionActionFormValues(
-  actions: MissionActionFormValues[] | undefined = [],
-  editedDraftActionIndex: number | undefined = undefined
-): MissionActionFormValues | undefined {
-  if (editedDraftActionIndex === undefined) {
-    return undefined
-  }
-
-  const missionActionFormValues = actions[editedDraftActionIndex]
-  if (!missionActionFormValues) {
-    logSoftError({
-      context: {
-        actions,
-        editedDraftActionIndex
-      },
-      isSideWindowError: true,
-      message: '`missionActionFormValues` is undefined.',
-      userMessage: "Une erreur est survenue pendant l'initialisation de la mission."
-    })
-
-    return undefined
-  }
-
-  return missionActionFormValues
-}
 
 export function validateBeforeOnChange(
   initialValues: MissionActionFormValues,

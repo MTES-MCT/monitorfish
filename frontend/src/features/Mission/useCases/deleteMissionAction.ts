@@ -72,7 +72,7 @@ export const deleteMissionAction =
 
     function initIsDraftDirty() {
       if (mainFormValuesFromDraft) {
-        const [areFormsValid] = validateMissionForms(mainFormValuesFromDraft, actionsFormValues, false)
+        const [areFormsValid] = validateMissionForms(mainFormValuesFromDraft, actionsFormValues, false, dispatch)
         if (areFormsValid) {
           dispatch(missionFormActions.setIsDraftDirty(false))
         }

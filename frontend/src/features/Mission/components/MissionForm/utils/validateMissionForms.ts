@@ -1,17 +1,21 @@
 import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { logSoftError } from '@mtes-mct/monitor-ui'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
+import { logSoftError } from '@utils/logSoftError'
 
 import { areMissionFormsValuesValid } from './areMissionFormsValuesValid'
 import * as ActionSchemas from '../ActionForm/schemas'
 import { MainFormLiveSchema } from '../MainForm/schemas'
 
 import type { MissionActionFormValues, MissionMainFormValues } from '../types'
+import type { MainAppDispatch } from '@store'
 
 export function validateMissionForms(
   mainFormValues: MissionMainFormValues | Mission.Mission,
   actionsFormValues: MissionActionFormValues[] | MissionAction.MissionAction[],
-  isCompletionValidation: boolean
+  isCompletionValidation: boolean,
+  dispatch: MainAppDispatch
 ): [
   boolean,
   {
@@ -69,9 +73,17 @@ export function validateMissionForms(
 
       default:
         logSoftError({
-          isSideWindowError: true,
-          message: 'Unknown `actionFormValues.actionType` value.',
-          userMessage: "Une erreur est survenue pendant l'enregistrement de la mission."
+          callback: () =>
+            dispatch(
+              addSideWindowBanner({
+                children: "Une erreur est survenue pendant l'enregistrement de la mission.",
+                closingDelay: 3000,
+                isClosable: true,
+                level: Level.ERROR,
+                withAutomaticClosing: true
+              })
+            ),
+          message: 'Unknown `actionFormValues.actionType` value.'
         })
 
         return {

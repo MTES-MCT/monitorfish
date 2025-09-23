@@ -49,6 +49,22 @@ UPDATE public.silenced_alerts
 SET value = value || '{"type": "POSITION_ALERT", "alertId": 12, "name": "Chalutage de fond à plus de 800m de profondeur"}'
 WHERE value->>'type'= 'BOTTOM_TRAWL_800_METERS_FISHING_ALERT';
 
+UPDATE public.silenced_alerts
+SET value = value || '{"name": "FAR manquant en 24h"}'
+WHERE value->>'type'= 'MISSING_FAR_ALERT';
+
+UPDATE public.silenced_alerts
+SET value = value || '{"name": "FAR manquant en 48h"}'
+WHERE value->>'type'= 'MISSING_FAR_48_HOURS_ALERT';
+
+UPDATE public.silenced_alerts
+SET value = value || '{"name": "Sortie sans émission de message \"DEP\""}'
+WHERE value->>'type'= 'MISSING_DEP_ALERT:';
+
+UPDATE public.silenced_alerts
+SET value = value || '{"name": "Suspicion de sous-déclaration"}'
+WHERE value->>'type'= 'SUSPICION_OF_UNDER_DECLARATION_ALERT';
+
 -- Update reportings
 UPDATE public.reportings
 SET value = value || '{"type": "POSITION_ALERT", "alertId": 1, "name": "Chalutage dans les 3 milles"}'
@@ -97,3 +113,19 @@ WHERE value->>'type'= 'BOTTOM_GEAR_VME_FISHING_ALERT';
 UPDATE public.reportings
 SET value = value || '{"type": "POSITION_ALERT", "alertId": 12, "name": "Chalutage de fond à plus de 800m de profondeur"}'
 WHERE value->>'type'= 'BOTTOM_TRAWL_800_METERS_FISHING_ALERT';
+
+UPDATE public.reportings
+SET value = value || '{"name": "FAR manquant en 24h"}'
+WHERE value->>'type'= 'MISSING_FAR_ALERT';
+
+UPDATE public.reportings
+SET value = value || '{"name": "FAR manquant en 48h"}'
+WHERE value->>'type'= 'MISSING_FAR_48_HOURS_ALERT';
+
+UPDATE public.reportings
+SET value = value || '{"name": "Sortie sans émission de message \"DEP\""}'
+WHERE value->>'type'= 'MISSING_DEP_ALERT:';
+
+UPDATE public.reportings
+SET value = value || '{"name": "Suspicion de sous-déclaration"}'
+WHERE value->>'type'= 'SUSPICION_OF_UNDER_DECLARATION_ALERT';

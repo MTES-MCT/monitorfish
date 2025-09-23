@@ -23,24 +23,26 @@ def test_position_alerts_flow(mock_run_deployment, reset_test_data):
             "name": "Alerte all-in",
             "description": "Alerte tous critères",
             "natinf_code": 22206,
+            "track_analysis_depth": 12.0,
             "only_fishing_positions": False,
             "gears": [
-                GearSpecification(gear="OTM", min_mesh=80.0, max_mesh=120.0),
-                GearSpecification(gear="OTB", min_mesh=80.0, max_mesh=None),
-                GearSpecification(gear="LLS", min_mesh=None, max_mesh=None),
+                GearSpecification(gear="OTM", minMesh=80.0, maxMesh=120.0),
+                GearSpecification(gear="OTB", minMesh=80.0, maxMesh=None),
+                GearSpecification(gear="LLS", minMesh=None, maxMesh=None),
             ],
             "species": [
-                SpeciesSpecification(species="HKE", min_weight=713.0),
-                SpeciesSpecification(species="LOB", min_weight=None),
-                SpeciesSpecification(species="SOL", min_weight=None),
+                SpeciesSpecification(species="HKE", minWeight=713.0),
+                SpeciesSpecification(species="LOB", minWeight=None),
+                SpeciesSpecification(species="SOL", minWeight=None),
             ],
+            "species_catch_areas": ["27.7.e", "27.7.d", "27.8.a"],
             "administrative_areas": [
                 AdminAreasSpecification(
-                    area_type=AdministrativeAreaType.FAO_AREA,
+                    areaType=AdministrativeAreaType.FAO_AREA,
                     areas=["27", "28.8"],
                 ),
                 AdminAreasSpecification(
-                    area_type=AdministrativeAreaType.EEZ_AREA,
+                    areaType=AdministrativeAreaType.EEZ_AREA,
                     areas=["FRA", "BEL"],
                 ),
             ],
@@ -70,9 +72,11 @@ def test_position_alerts_flow(mock_run_deployment, reset_test_data):
             "name": "Alerte 1",
             "description": "Alerte tremail zone A",
             "natinf_code": 12345,
+            "track_analysis_depth": 12.0,
             "only_fishing_positions": False,
-            "gears": [GearSpecification(gear="GTR", min_mesh=None, max_mesh=None)],
+            "gears": [GearSpecification(gear="GTR", minMesh=None, maxMesh=None)],
             "species": None,
+            "species_catch_areas": None,
             "administrative_areas": None,
             "regulatory_areas": [
                 RegulatoryAreaSpecification(

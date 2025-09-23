@@ -16,6 +16,27 @@ context('Side Window > Alert Management', () => {
     cy.get('.Table-SimpleTable tr').should('have.length', 22)
     cy.getDataCy('alerts-specification-list-length').contains('21 alertes')
 
+    /**
+     * Activate/deactivate an alert
+     */
+    cy.get('[name="activate-alert-POSITION_ALERT-17"]').click({ force: true })
+    cy.clickButton('Confirmer la désactivation')
+    cy.wait(500)
+    cy.get('[name="activate-alert-POSITION_ALERT-17"]').click({ force: true })
+    cy.wait(500)
+
+    /**
+     * Delete an alert
+     */
+    cy.get('[title*="Supprimer"][title*="Alerte 1"]').click()
+    cy.clickButton('Confirmer la suppression')
+
+    cy.get('.Table-SimpleTable tr').should('have.length', 21)
+    cy.getDataCy('alerts-specification-list-length').contains('20 alertes')
+
+    /**
+     * Search an alert
+     */
     cy.fill('Rechercher une alerte', '12 milles')
     cy.getDataCy('alerts-specification-list-length').contains('5 alertes')
     cy.get('.Table-SimpleTable tr').should('have.length', 6)

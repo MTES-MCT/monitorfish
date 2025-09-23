@@ -1,5 +1,7 @@
+import { addBackOfficeBanner } from '@features/BackOffice/useCases/addBackOfficeBanner'
+import { Level } from '@mtes-mct/monitor-ui'
+
 import { sendRegulationTransaction } from '../../../api/geoserver'
-import { setError } from '../../../domain/shared_slices/Global'
 import { regulationActions } from '../slice'
 import { RegulationActionType } from '../utils'
 
@@ -20,6 +22,14 @@ export const updateRegulation =
       }
     } catch (err) {
       console.error(err)
-      dispatch(setError(err))
+      dispatch(
+        addBackOfficeBanner({
+          children: (err as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
     }
   }

@@ -9,9 +9,10 @@ import {
   useSensors
 } from '@dnd-kit/core'
 import { BeaconMalfunctionVesselStatus, STAGE_RECORD, VESSEL_STATUS } from '@features/BeaconMalfunction/constants'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { THEME } from '@mtes-mct/monitor-ui'
+import { Level, THEME } from '@mtes-mct/monitor-ui'
 import { createSelector } from '@reduxjs/toolkit'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
@@ -22,7 +23,6 @@ import { Droppable } from './Droppable'
 import { StageColumn } from './StageColumn'
 import { getBeaconMalfunctionsByStage, searchInBeaconMalfunctions } from './utils'
 import { VesselStatusSelect } from './VesselStatusSelect'
-import { setError } from '../../../../domain/shared_slices/Global'
 import { LegacyRsuiteComponentsWrapper } from '../../../../ui/LegacyRsuiteComponentsWrapper'
 import SearchIconSVG from '../../../icons/Loupe_dark.svg?react'
 import { getAllBeaconMalfunctions } from '../../useCases/getAllBeaconMalfunctions'
@@ -159,14 +159,30 @@ export function BeaconMalfunctionBoard() {
       const nextStage = findStage(over?.id)
 
       if (previousStage === STAGE_RECORD.END_OF_MALFUNCTION.code && nextStage !== STAGE_RECORD.ARCHIVED.code) {
-        dispatch(setError(new Error('Une avarie archivée ne peut revenir en arrière')))
+        dispatch(
+          addSideWindowBanner({
+            children: 'Une avarie archivée ne peut revenir en arrière',
+            closingDelay: 3000,
+            isClosable: true,
+            level: Level.ERROR,
+            withAutomaticClosing: true
+          })
+        )
         setActiveBeaconMalfunction(null)
 
         return
       }
 
       if (previousStage !== STAGE_RECORD.END_OF_MALFUNCTION.code && nextStage === STAGE_RECORD.ARCHIVED.code) {
-        dispatch(setError(new Error('Seulement une avarie terminée peut être archivée')))
+        dispatch(
+          addSideWindowBanner({
+            children: 'Seulement une avarie terminée peut être archivée',
+            closingDelay: 3000,
+            isClosable: true,
+            level: Level.ERROR,
+            withAutomaticClosing: true
+          })
+        )
         setActiveBeaconMalfunction(null)
 
         return

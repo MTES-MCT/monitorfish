@@ -1,5 +1,6 @@
 import { monitorenvApi, monitorfishApi, monitorfishPublicApi } from '@api/api'
 import { alertReducer } from '@features/Alert/components/SideWindowAlerts/slice'
+import { backOfficeReducer } from '@features/BackOffice/slice'
 import { controlUnitDialogReducer } from '@features/ControlUnit/components/ControlUnitDialog/slice'
 import { controlUnitListDialogPersistedReducer } from '@features/ControlUnit/components/ControlUnitListDialog/slice'
 import { customZoneReducer, type CustomZoneState } from '@features/CustomZone/slice'
@@ -173,7 +174,7 @@ export const mainReducer = {
 
 export const backofficeReducer = {
   ...commonReducerList,
-
+  backOffice: backOfficeReducer,
   layer: backOfficeLayerReducer,
   priorNotification: backofficePriorNotificationReducer,
   producerOrganizationMembership: backofficeProducerOrganizationMembershipReducer

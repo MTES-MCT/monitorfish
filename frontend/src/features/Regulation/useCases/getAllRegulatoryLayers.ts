@@ -1,7 +1,8 @@
 import { getAllRegulatoryLayersFromAPI } from '@api/geoserver'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { layerActions } from '@features/Map/layer.slice'
+import { Level } from '@mtes-mct/monitor-ui'
 
-import { setError } from '../../../domain/shared_slices/Global'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
 import { regulationActions } from '../slice'
 
@@ -26,6 +27,14 @@ export const getAllRegulatoryLayers = (): MainAppThunk<Promise<void>> => async (
     dispatch(layerActions.setShowedLayersWithLocalStorageValues(layersWithoutGeometry))
   } catch (error) {
     console.error(error)
-    dispatch(setError(error))
+    dispatch(
+      addMainWindowBanner({
+        children: (error as Error).message,
+        closingDelay: 3000,
+        isClosable: true,
+        level: Level.ERROR,
+        withAutomaticClosing: true
+      })
+    )
   }
 }

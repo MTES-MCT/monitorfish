@@ -9,7 +9,6 @@ import { Level } from '@mtes-mct/monitor-ui'
 import { transform } from 'ol/proj'
 
 import { displayBannerWarningFromAPIFeedback } from './displayBannerWarningFromAPIFeedback'
-import { removeError, setError } from '../../../domain/shared_slices/Global'
 import { getCustomOrDefaultTrackRequest } from '../types/vesselTrackDepth'
 
 import type { TrackRequest } from '@features/Vessel/types/types'
@@ -32,7 +31,6 @@ export const showVesselTrack =
       const nextTrackRequest = getCustomOrDefaultTrackRequest(trackRequest, defaultVesselTrackDepth, true)
 
       dispatch(doNotAnimate(!isFromUserAction))
-      dispatch(removeError())
 
       const { isTrackDepthModified, positions } = await dispatch(
         vesselApi.endpoints.getVesselPositions.initiate(
@@ -88,7 +86,16 @@ export const showVesselTrack =
         })
       )
     } catch (error) {
-      dispatch(setError(error))
+      dispatch(
+        addMainWindowBanner({
+          children: (error as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          isFixed: true,
+          level: Level.WARNING,
+          withAutomaticClosing: true
+        })
+      )
       dispatch(resetLoadingVessel())
     }
   }

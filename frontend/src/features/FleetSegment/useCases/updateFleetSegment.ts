@@ -1,6 +1,6 @@
+import { addBackOfficeBanner } from '@features/BackOffice/useCases/addBackOfficeBanner'
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
-
-import { setError } from '../../../domain/shared_slices/Global'
+import { Level } from '@mtes-mct/monitor-ui'
 
 import type { FleetSegment } from '../types'
 
@@ -28,7 +28,15 @@ export const updateFleetSegment =
 
       return updateFleetSegments(previousFleetSegments, segment, updatedFleetSegment)
     } catch (error) {
-      dispatch(setError(error))
+      dispatch(
+        addBackOfficeBanner({
+          children: (error as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
 
       return undefined
     }

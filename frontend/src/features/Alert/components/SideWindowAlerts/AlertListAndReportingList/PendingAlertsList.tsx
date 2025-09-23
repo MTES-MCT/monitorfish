@@ -161,9 +161,9 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
           index={0}
           style={{
             ...listItemStyle,
-            background: COLORS.white,
-            border: `1px solid ${COLORS.lightGray}`,
-            color: COLORS.slateGray
+            background: THEME.color.white,
+            border: `1px solid ${THEME.color.lightGray}`,
+            color: THEME.color.slateGray
           }}
         >
           <FlexboxGrid>
@@ -234,15 +234,15 @@ const ScrollableContainerStyle: CSSProperties = {
 
 const NoAlerts = styled.div``
 const noAlertsStyle: CSSProperties = {
-  color: COLORS.slateGray,
+  color: `${p => p.theme.color.slateGray}`,
   marginTop: 20,
   textAlign: 'center'
 }
 
 const listItemStyle = (isFocused: boolean, toClose: boolean): CSSProperties => ({
   animation: toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset',
-  background: isFocused ? COLORS.gainsboro : COLORS.cultured,
-  border: `1px solid ${COLORS.lightGray}`,
+  background: `${p => (isFocused ? p.theme.color.gainsboro : p.theme.color.cultured)}`,
+  border: `1px solid ${p => p.theme.color.lightGray}`,
   borderRadius: 1,
   height: 42,
   marginTop: 6,

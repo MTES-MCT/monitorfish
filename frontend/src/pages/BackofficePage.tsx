@@ -1,6 +1,7 @@
 import { BackofficeMode } from '@api/BackofficeMode'
 import { Notifier } from '@components/Notifier'
 import { BackOfficeMenu } from '@features/BackOffice/components/BackofficeMenu'
+import { BannerStack } from '@features/BackOffice/components/BannerStack'
 import countries from 'i18n-iso-countries'
 import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
 import { Provider } from 'react-redux'
@@ -21,6 +22,7 @@ export function BackofficePage() {
         <BackofficeMode isBackoffice />
 
         <Wrapper>
+          <BannerStack />
           <BackOfficeMenu />
 
           <Outlet />

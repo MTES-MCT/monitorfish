@@ -50,6 +50,7 @@ def missing_dep_alerts_flow(
     alerts = make_alerts(
         vessels_with_missing_deps,
         AlertType.MISSING_DEP_ALERT.value,
+        'Sortie sans émission de message "DEP"',
     )
     filtered_alerts = filter_alerts(alerts, silenced_alerts, active_reportings)
 

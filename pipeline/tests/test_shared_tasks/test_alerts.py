@@ -189,6 +189,7 @@ def test_make_alerts():
     alerts = make_alerts(
         vessels_in_alert,
         alert_type="MISSING_FAR_ALERT",
+        name="Jean-Michel d'Aitèque Sion",
     )
 
     expected_alerts = pd.DataFrame(
@@ -210,12 +211,14 @@ def test_make_alerts():
             "value": [
                 {
                     "seaFront": "NAMO",
+                    "name": "Jean-Michel d'Aitèque Sion",
                     "type": "MISSING_FAR_ALERT",
                     "riskFactor": 1.23,
                     "dml": "dml 007",
                 },
                 {
                     "seaFront": "MEMN",
+                    "name": "Jean-Michel d'Aitèque Sion",
                     "type": "MISSING_FAR_ALERT",
                     "riskFactor": 3.56,
                     "dml": "dml 22",
@@ -235,6 +238,7 @@ def test_make_alerts():
     alerts = make_alerts(
         vessels_in_alert,
         alert_type="MISSING_FAR_ALERT",
+        name="Jean-Michel d'Aitèque Sion",
         alert_id=42,
     )
     expected_alerts["latitude"] = None

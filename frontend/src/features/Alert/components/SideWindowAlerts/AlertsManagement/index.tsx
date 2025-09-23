@@ -219,8 +219,8 @@ export function AlertsManagement() {
             <>
               <p>
                 <b>
-                  Êtes-vous sûr de vouloir désactiver l&apos;alerte &quot
-                  {deactivateConfirmationModal.alertSpecification.name}&quot ?
+                  Êtes-vous sûr de vouloir désactiver l&apos;alerte &quot;
+                  {deactivateConfirmationModal.alertSpecification.name}&quot; ?
                 </b>
               </p>
               <p>Cela stoppera toutes les occurrences futures.</p>
@@ -240,8 +240,8 @@ export function AlertsManagement() {
             <>
               <p>
                 <b>
-                  Êtes-vous sûr de vouloir supprimer l&apos;alerte &quot
-                  {deleteConfirmationModal.alertSpecification.name}&quot ?
+                  Êtes-vous sûr de vouloir supprimer l&apos;alerte &quot;
+                  {deleteConfirmationModal.alertSpecification.name}&quot; ?
                 </b>
               </p>
               <p>

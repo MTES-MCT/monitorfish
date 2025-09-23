@@ -116,6 +116,7 @@ def test_flow(reset_test_data_suspicions_of_under_declaration_alerts):
         "trip_number": None,
         "value": {
             "dml": "DML 29",
+            "name": "Suspicion de sous-déclaration",
             "type": "SUSPICION_OF_UNDER_DECLARATION_ALERT",
             "seaFront": "SA",
             "riskFactor": 2.58,

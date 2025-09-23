@@ -126,9 +126,9 @@ def validate_pending_alert(id: int):
 def make_alerts(
     vessels_in_alert: pd.DataFrame,
     alert_type: str,
+    name: str,
     *,
     alert_id: int | None = None,
-    name: str | None = None,
     description: str | None = None,
     natinf_code: int | None = None,
 ) -> pd.DataFrame:
@@ -158,9 +158,9 @@ def make_alerts(
         vessels_in_alert (pd.DataFrame): `DateFrame` of vessels for which to
           create an alert.
         alert_type (str): `type` to specify in the built alerts.
+        name (str): name of the alert.
         alert_id (str | None): `alert_id` to specify in the built alerts,
           defaults to None.
-        name (str | None): name of the alert, defaults to None.
         description (str | None): description of the alert, defaults to None.
         natinf_code (str | None): natinf code associated with the alert, defaults to
           None.
@@ -168,6 +168,7 @@ def make_alerts(
     Returns:
         pd.DataFrame: `DataFrame` of alerts.
     """
+    assert name is not None
     alerts = vessels_in_alert.copy(deep=True)
     alerts = alerts.rename(
         columns={
@@ -188,14 +189,11 @@ def make_alerts(
     alerts["type"] = alert_type
     alert_type_suffix = f"/{alert_id}" if alert_id is not None else ""
     alerts["alert_config_name"] = alert_type + alert_type_suffix
+    alerts["name"] = name
 
-    value_cols = ["seaFront", "type", "riskFactor", "dml"]
+    value_cols = ["seaFront", "type", "riskFactor", "dml", "name"]
     if "depth" in alerts.columns:
         value_cols += ["depth"]
-
-    if name is not None:
-        alerts["name"] = name
-        value_cols.append("name")
 
     if description is not None:
         alerts["description"] = description

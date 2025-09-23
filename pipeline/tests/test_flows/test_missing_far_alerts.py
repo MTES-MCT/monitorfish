@@ -427,7 +427,7 @@ def test_flow(reset_test_data):
 
     state = missing_far_alerts_flow(
         alert_type="MISSING_FAR_ALERT",
-        alert_config_name="MISSING_FAR_ALERT",
+        name="FAR manquant en 24h",
         states_iso2_to_monitor_everywhere=["FR", "NL"],
         states_iso2_to_monitor_in_french_eez=["ES", "DE"],
         max_share_of_vessels_with_missing_fars=1.0,
@@ -454,7 +454,7 @@ def test_flow_filters_silenced_alerts(reset_test_data):
 
     state = missing_far_alerts_flow(
         alert_type="MISSING_FAR_ALERT",
-        alert_config_name="MISSING_FAR_ALERT",
+        name="FAR manquant en 24h",
         states_iso2_to_monitor_everywhere=["FR", "NL"],
         states_iso2_to_monitor_in_french_eez=["ES", "DE"],
         max_share_of_vessels_with_missing_fars=1.0,
@@ -483,7 +483,7 @@ def test_flow_fails_if_share_of_vessels_with_missing_far_is_too_large(reset_test
 
     state = missing_far_alerts_flow(
         alert_type="MISSING_FAR_ALERT",
-        alert_config_name="MISSING_FAR_ALERT",
+        name="FAR manquant en 24h",
         states_iso2_to_monitor_everywhere=["FR", "NL"],
         states_iso2_to_monitor_in_french_eez=["ES", "DE"],
         max_share_of_vessels_with_missing_fars=max_share_of_vessels_with_missing_fars,

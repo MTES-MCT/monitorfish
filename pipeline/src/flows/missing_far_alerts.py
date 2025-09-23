@@ -416,7 +416,7 @@ def merge_risk_factor(
 @flow(name="Missing FAR alerts")
 def missing_far_alerts_flow(
     alert_type: str,
-    alert_config_name: str,
+    name: str,
     states_iso2_to_monitor_everywhere: list,
     states_iso2_to_monitor_in_french_eez: list,
     max_share_of_vessels_with_missing_fars: float,
@@ -507,7 +507,7 @@ def missing_far_alerts_flow(
         districts_table=districts_table,
         districts_columns_to_add=["dml"],
     )
-    alerts = make_alerts(vessels_with_missing_fars, alert_type)
+    alerts = make_alerts(vessels_with_missing_fars, alert_type, name)
     silenced_alerts = extract_silenced_alerts.submit(
         alert_type, number_of_hours=period_start_hours_from_now
     )

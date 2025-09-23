@@ -18,6 +18,9 @@ import { parseResponseOrReturn } from '@utils/parseResponseOrReturn'
 
 export const ALERTS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les alertes opérationelles"
 export const VALIDATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu valider l'alerte opérationelle"
+export const ACTIVATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu activer l'alerte"
+export const DEACTIVATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu désactiver l'alerte"
+export const DELETE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu supprimer l'alerte"
 export const SILENCE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu suspendre l'alerte opérationelle"
 export const DELETE_SILENCED_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu réactiver l'alerte opérationelle"
 export const CREATE_SILENCED_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu suspendre l'alerte opérationelle"
@@ -94,6 +97,30 @@ const POSITION_ALERT_SPECIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu récupé
 
 export const alertSpecificationsApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
+    activateAlert: builder.mutation<void, number>({
+      invalidatesTags: () => [{ type: 'AlertSpecifications' }],
+      query: id => ({
+        method: 'PUT',
+        url: `/position_alerts_specs/${id}/activate`
+      }),
+      transformErrorResponse: response => new FrontendApiError(ACTIVATE_ALERT_ERROR_MESSAGE, response)
+    }),
+    deactivateAlert: builder.mutation<void, number>({
+      invalidatesTags: () => [{ type: 'AlertSpecifications' }],
+      query: id => ({
+        method: 'PUT',
+        url: `/position_alerts_specs/${id}/deactivate`
+      }),
+      transformErrorResponse: response => new FrontendApiError(DEACTIVATE_ALERT_ERROR_MESSAGE, response)
+    }),
+    deleteAlert: builder.mutation<void, number>({
+      invalidatesTags: () => [{ type: 'AlertSpecifications' }],
+      query: id => ({
+        method: 'DELETE',
+        url: `/position_alerts_specs/${id}`
+      }),
+      transformErrorResponse: response => new FrontendApiError(DELETE_ALERT_ERROR_MESSAGE, response)
+    }),
     getAllAlertSpecifications: builder.query<AlertSpecification[], void>({
       providesTags: () => [{ type: 'AlertSpecifications' }],
       query: () => `/position_alerts_specs`,
@@ -104,4 +131,9 @@ export const alertSpecificationsApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const { useGetAllAlertSpecificationsQuery } = alertSpecificationsApi
+export const {
+  useActivateAlertMutation,
+  useDeactivateAlertMutation,
+  useDeleteAlertMutation,
+  useGetAllAlertSpecificationsQuery
+} = alertSpecificationsApi

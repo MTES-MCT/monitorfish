@@ -1,5 +1,11 @@
+import { ConfirmationModal } from '@components/ConfirmationModal'
 import { ErrorWall } from '@components/ErrorWall'
-import { useGetAllAlertSpecificationsQuery } from '@features/Alert/apis'
+import {
+  useGetAllAlertSpecificationsQuery,
+  useActivateAlertMutation,
+  useDeactivateAlertMutation,
+  useDeleteAlertMutation
+} from '@features/Alert/apis'
 import { HowAlertsWorksDialog } from '@features/Alert/components/HowAlertsWorksDialog'
 import { getTableColumns } from '@features/Alert/components/SideWindowAlerts/AlertsManagement/columns'
 import { PageWithUnderlineTitle } from '@features/SideWindow/components/PageWithUnderlineTitle'
@@ -7,24 +13,46 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import {
   Button,
   CustomSearch,
+  FulfillingBouncingCircleLoader,
   Icon,
   LinkButton,
   pluralize,
   Size,
   TableWithSelectableRows,
-  TextInput
+  TextInput,
+  THEME
 } from '@mtes-mct/monitor-ui'
-import { flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from '@tanstack/react-table'
+import {
+  flexRender,
+  getCoreRowModel,
+  getExpandedRowModel,
+  getSortedRowModel,
+  useReactTable
+} from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Row } from './Row'
 
+import type { AlertSpecification } from '@features/Alert/types'
+
 export function AlertsManagement() {
-  const { data: alertSpecifications, error } = useGetAllAlertSpecificationsQuery()
+  const { data: alertSpecifications, error, isLoading: isFetchingAlerts } = useGetAllAlertSpecificationsQuery()
+  const [activateAlert, { isLoading: isActivatingAlert }] = useActivateAlertMutation()
+  const [deactivateAlert, { isLoading: isDeactivatingAlert }] = useDeactivateAlertMutation()
+  const [deleteAlert, { isLoading: isDeletingAlert }] = useDeleteAlertMutation()
+  const isLoading = isFetchingAlerts || isActivatingAlert || isDeactivatingAlert || isDeletingAlert
 
   const [isHowAlertsWorksDialogOpen, setIsHowAlertsWorksDialogOpen] = useState<boolean>(false)
   const [searchQuery, setSearchQuery] = useState<string>()
+  const [deactivateConfirmationModal, setDeactivateConfirmationModal] = useState<{
+    alertSpecification: AlertSpecification | undefined
+    isOpen: boolean
+  }>({ alertSpecification: undefined, isOpen: false })
+  const [deleteConfirmationModal, setDeleteConfirmationModal] = useState<{
+    alertSpecification: AlertSpecification | undefined
+    isOpen: boolean
+  }>({ alertSpecification: undefined, isOpen: false })
 
   const fuse = useMemo(
     () => new CustomSearch(structuredClone(alertSpecifications ?? []), ['name'], { threshold: 0.4 }),
@@ -39,15 +67,69 @@ export function AlertsManagement() {
     return fuse.find(searchQuery)
   }, [alertSpecifications, searchQuery, fuse])
 
+  const handleToggleConfirmation = (alertSpecification: AlertSpecification, action: 'activate' | 'deactivate') => {
+    if (action === 'deactivate') {
+      setDeactivateConfirmationModal({ alertSpecification, isOpen: true })
+
+      return
+    }
+
+    // Direct activation without confirmation
+    if (alertSpecification.id) {
+      activateAlert(alertSpecification.id)
+    }
+  }
+
+  const handleConfirmToggle = async () => {
+    if (!deactivateConfirmationModal.alertSpecification?.id) {
+      return
+    }
+
+    // Only deactivation needs confirmation
+    await deactivateAlert(deactivateConfirmationModal.alertSpecification.id)
+    setDeactivateConfirmationModal({ alertSpecification: undefined, isOpen: false })
+  }
+
+  const handleCancelToggle = () => {
+    setDeactivateConfirmationModal({ alertSpecification: undefined, isOpen: false })
+  }
+
+  const handleDeleteConfirmation = (alertSpecification: AlertSpecification) => {
+    setDeleteConfirmationModal({ alertSpecification, isOpen: true })
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!deleteConfirmationModal.alertSpecification?.id) {
+      return
+    }
+
+    await deleteAlert(deleteConfirmationModal.alertSpecification.id)
+    setDeleteConfirmationModal({ alertSpecification: undefined, isOpen: false })
+  }
+
+  const handleCancelDelete = () => {
+    setDeleteConfirmationModal({ alertSpecification: undefined, isOpen: false })
+  }
+
   const table = useReactTable({
-    columns: getTableColumns(true),
+    columns: getTableColumns(true, handleToggleConfirmation, handleDeleteConfirmation),
     data: filteredAlertSpecifications ?? [],
-    enableRowSelection: true,
+    enableRowSelection: false,
+    enableSorting: true,
     enableSortingRemoval: false,
     getCoreRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     getRowCanExpand: () => true,
     getRowId: row => `${row.type}:${row.id}`,
+    getSortedRowModel: getSortedRowModel(),
+    initialState: {
+      sorting: [
+        {
+          desc: false,
+          id: 'name'
+        }
+      ]
+    },
     rowCount: filteredAlertSpecifications?.length ?? 0
   })
 
@@ -81,10 +163,11 @@ export function AlertsManagement() {
             size={Size.LARGE}
             value={searchQuery}
           />
-          <TableOuterWrapper>
+          <TableOuterWrapper $isLoading={isLoading}>
             <TableTop>
               <TableLegend data-cy="alerts-specification-list-length">
                 {`${filteredAlertSpecifications?.length ?? 0} ${pluralize('alerte', filteredAlertSpecifications?.length ?? 0)}`}
+                {isLoading && <FulfillingBouncingCircleLoader color={THEME.color.slateGray} size={16} />}
               </TableLegend>
               <LinkButton onClick={openHowAlertsWorksDialog}>
                 En savoir plus sur le fonctionnement des alertes
@@ -93,7 +176,7 @@ export function AlertsManagement() {
             <TableInnerWrapper $hasError={!!error}>
               {!!error && <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_ALERT_MANAGEMENT_ERROR} />}
               {!error && (
-                <TableWithSelectableRows.Table $withRowCheckbox>
+                <TableWithSelectableRows.Table>
                   <TableWithSelectableRows.Head>
                     {table.getHeaderGroups().map(headerGroup => (
                       <tr key={headerGroup.id}>
@@ -128,11 +211,56 @@ export function AlertsManagement() {
         </PageWithUnderlineTitle.Body>
       </PageWithUnderlineTitle.Wrapper>
       {isHowAlertsWorksDialogOpen && <HowAlertsWorksDialog onClose={() => setIsHowAlertsWorksDialogOpen(false)} />}
+      {deactivateConfirmationModal.isOpen && deactivateConfirmationModal.alertSpecification && (
+        <ConfirmationModal
+          color={THEME.color.maximumRed}
+          confirmationButtonLabel="Confirmer la désactivation"
+          message={
+            <>
+              <p>
+                <b>
+                  Êtes-vous sûr de vouloir désactiver l&apos;alerte &quot
+                  {deactivateConfirmationModal.alertSpecification.name}&quot ?
+                </b>
+              </p>
+              <p>Cela stoppera toutes les occurrences futures.</p>
+            </>
+          }
+          onCancel={handleCancelToggle}
+          onConfirm={handleConfirmToggle}
+          title="Désactiver l'alerte"
+        />
+      )}
+      {deleteConfirmationModal.isOpen && deleteConfirmationModal.alertSpecification && (
+        <ConfirmationModal
+          color={THEME.color.maximumRed}
+          confirmationButtonLabel="Confirmer la suppression"
+          iconName="Delete"
+          message={
+            <>
+              <p>
+                <b>
+                  Êtes-vous sûr de vouloir supprimer l&apos;alerte &quot
+                  {deleteConfirmationModal.alertSpecification.name}&quot ?
+                </b>
+              </p>
+              <p>
+                Cela supprimera la définition et les critères de l&apos;alerte, ainsi que toutes les occurrences
+                futures.
+              </p>
+            </>
+          }
+          onCancel={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
+          title="Supprimer l'alerte"
+        />
+      )}
     </>
   )
 }
 
-const TableOuterWrapper = styled.div`
+const TableOuterWrapper = styled.div<{ $isLoading: boolean }>`
+  cursor: ${p => (p.$isLoading ? 'progress' : 'unset')} !important;
   align-self: flex-start;
   box-sizing: border-box;
   display: flex;
@@ -147,6 +275,12 @@ const TableLegend = styled.p`
   color: ${p => p.theme.color.slateGray};
   line-height: 1;
   margin: 0;
+  display: flex;
+  height: 12px;
+
+  > div {
+    margin-left: 8px;
+  }
 `
 
 const TableTop = styled.div`

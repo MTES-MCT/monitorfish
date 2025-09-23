@@ -1,7 +1,8 @@
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { LayerProperties } from '@features/Map/constants'
+import { Level } from '@mtes-mct/monitor-ui'
 
 import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from '../../../api/geoserver'
-import { setError } from '../../../domain/shared_slices/Global'
 import { STATUS } from '../components/RegulationTables/constants'
 import { regulationActions } from '../slice'
 import { mapToRegulatoryZone, DEFAULT_REGULATORY_TEXT } from '../utils'
@@ -60,6 +61,14 @@ export const showRegulationToEdit =
       dispatch(regulationActions.setSelectedRegulatoryZoneId(id))
     } catch (err) {
       console.error(err)
-      dispatch(setError(new Error(REGULATORY_ZONE_METADATA_ERROR_MESSAGE)))
+      dispatch(
+        addMainWindowBanner({
+          children: REGULATORY_ZONE_METADATA_ERROR_MESSAGE,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
     }
   }

@@ -1,14 +1,14 @@
 import { FIVE_MINUTES, TWENTY_MINUTES } from '@api/APIWorker'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { saveActiveVesselsAndDisplayLastPositions } from '@features/Vessel/useCases/saveActiveVesselsAndDisplayLastPositions'
 import { useGetActiveVesselsQuery } from '@features/Vessel/vesselApi'
 import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { FulfillingBouncingCircleLoader } from '@mtes-mct/monitor-ui'
+import { FulfillingBouncingCircleLoader, Level } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { setError } from '../../../domain/shared_slices/Global'
 import { MapComponent } from '../../commonStyles/MapComponent'
 import VesselSVG from '../../icons/Icone_navire.svg?react'
 
@@ -33,7 +33,16 @@ export function VesselLoader() {
   useEffect(() => {
     if (isError || !vessels) {
       if (error) {
-        dispatch(setError(error))
+        dispatch(
+          addMainWindowBanner({
+            children: (error as Error).message,
+            closingDelay: 3000,
+            isClosable: true,
+            isFixed: true,
+            level: Level.ERROR,
+            withAutomaticClosing: true
+          })
+        )
       }
 
       return

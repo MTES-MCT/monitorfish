@@ -1,7 +1,7 @@
 import { bannerStackAdapter, mainWindowActions } from '../slice'
 
-import type { BannerStackItem, BannerStackItemProps } from '../types'
 import type { MainAppThunk } from '@store'
+import type { BannerStackItem, BannerStackItemProps } from 'types'
 
 /**
  * Add a banner to the main window.

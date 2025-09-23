@@ -1,5 +1,7 @@
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
+
 import { getInfractionsFromAPI } from '../../../api/infraction'
-import { setError } from '../../shared_slices/Global'
 import { setInfractions } from '../../shared_slices/Infraction'
 
 export const getInfractions = () => dispatch => {
@@ -8,6 +10,14 @@ export const getInfractions = () => dispatch => {
       dispatch(setInfractions(infractions.sort((a, b) => a.natinfCode - b.natinfCode)))
     })
     .catch(error => {
-      dispatch(setError(error))
+      dispatch(
+        addSideWindowBanner({
+          children: (error as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
     })
 }

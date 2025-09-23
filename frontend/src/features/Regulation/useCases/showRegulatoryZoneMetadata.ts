@@ -1,5 +1,7 @@
+import { addBackOfficeBanner } from '@features/BackOffice/useCases/addBackOfficeBanner'
+import { Level } from '@mtes-mct/monitor-ui'
+
 import { getRegulatoryFeatureMetadataFromAPI } from '../../../api/geoserver'
-import { setError } from '../../../domain/shared_slices/Global'
 import { regulationActions } from '../slice'
 import { mapToRegulatoryZone } from '../utils'
 
@@ -31,7 +33,15 @@ export const showRegulatoryZoneMetadata =
       }
     } catch (err) {
       dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
-      dispatch(setError(err))
+      dispatch(
+        addBackOfficeBanner({
+          children: (err as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
       dispatch(regulationActions.resetLoadingRegulatoryZoneMetadata())
       dispatch(regulationActions.resetRegulatoryGeometriesToPreview())
     }

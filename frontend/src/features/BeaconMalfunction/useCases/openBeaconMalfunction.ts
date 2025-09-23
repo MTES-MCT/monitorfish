@@ -1,8 +1,9 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { beaconMalfunctionApi } from '@features/BeaconMalfunction/apis'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
 
 import { setOpenedBeaconMalfunction } from '../../../domain/shared_slices/BeaconMalfunction'
-import { setError } from '../../../domain/shared_slices/Global'
 
 import type { BeaconMalfunctionResumeAndDetails } from '@features/BeaconMalfunction/types'
 import type { MainAppThunk } from '@store'
@@ -18,7 +19,6 @@ export const openBeaconMalfunction =
         showTab: isFromUserAction
       })
     )
-
     try {
       const beaconMalfunctionWithDetails = await dispatch(
         beaconMalfunctionApi.endpoints.getBeaconMalfunction.initiate(
@@ -34,7 +34,15 @@ export const openBeaconMalfunction =
         })
       )
     } catch (error) {
-      dispatch(setError(error))
+      dispatch(
+        addMainWindowBanner({
+          children: (error as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
       dispatch(
         setOpenedBeaconMalfunction({
           beaconMalfunction: previousBeaconMalfunction,

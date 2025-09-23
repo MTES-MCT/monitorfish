@@ -7,21 +7,21 @@ export const bannerStackAdapter = createEntityAdapter({
   sortComparer: (a, b) => a.id - b.id
 })
 
-interface MainWindowState {
+interface BackOfficeState {
   bannerStack: EntityState<BannerStackItem, number>
 }
-const INITIAL_STATE: MainWindowState = {
+const INITIAL_STATE: BackOfficeState = {
   bannerStack: bannerStackAdapter.getInitialState()
 }
 
-const mainWindowSlice = createSlice({
+const backOfficeSlice = createSlice({
   initialState: INITIAL_STATE,
-  name: 'mainWindow',
+  name: 'backOffice',
   reducers: {
     /**
      * Add a banner to the stack.
      *
-     * @internal /!\ This action is not meant to be dispatched directly. Use `addMainWindowBanner()` dispatcher instead.
+     * @internal /!\ This action is not meant to be dispatched directly. Use `addBackOfficeBanner()` dispatcher instead.
      */
     addBanner(state, action: PayloadAction<BannerStackItem>) {
       bannerStackAdapter.addOne(state.bannerStack, action.payload)
@@ -38,5 +38,5 @@ const mainWindowSlice = createSlice({
   }
 })
 
-export const mainWindowActions = mainWindowSlice.actions
-export const mainWindowReducer = mainWindowSlice.reducer
+export const backOfficeActions = backOfficeSlice.actions
+export const backOfficeReducer = backOfficeSlice.reducer

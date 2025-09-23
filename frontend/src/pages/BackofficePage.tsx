@@ -9,7 +9,6 @@ import { Outlet } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
 import styled from 'styled-components'
 
-import { ErrorToastNotification } from '../features/commonComponents/ErrorToastNotification'
 import { backofficeStore, backofficeStorePersistor } from '../store'
 
 countries.registerLocale(COUNTRIES_FR)
@@ -28,7 +27,6 @@ export function BackofficePage() {
           <Outlet />
         </Wrapper>
 
-        <ErrorToastNotification />
         <Notifier />
       </PersistGate>
     </Provider>

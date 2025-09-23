@@ -1,3 +1,4 @@
+import { WindowContext } from '@api/constants'
 import { BaseMap } from '@features/Map/components/BaseMap'
 import { backOfficeLayerActions } from '@features/Map/layer.slice.backoffice'
 import { BaseLayer } from '@features/Map/layers/BaseLayer'
@@ -46,9 +47,9 @@ export function RegulationTables() {
   const simplifiedGeometries = useBackofficeAppSelector(state => state.regulation.simplifiedGeometries)
 
   const initBackoffice = useCallback(async () => {
-    await dispatch(getAllSpecies<BackofficeAppPromiseThunk>())
+    await dispatch(getAllSpecies<BackofficeAppPromiseThunk>(WindowContext.BackOffice))
     dispatch(getAllRegulatoryLayersByRegTerritory())
-    dispatch(getAllGearCodes<BackofficeAppPromiseThunk>())
+    dispatch(getAllGearCodes<BackofficeAppPromiseThunk>(WindowContext.BackOffice))
     dispatch(regulationActions.setProcessingRegulationSaved(false))
     dispatch(regulationActions.setRegulatoryZoneMetadata(undefined))
   }, [dispatch])

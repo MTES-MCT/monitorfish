@@ -1,5 +1,6 @@
 // TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
 
+import { WindowContext } from '@api/constants'
 import { addBackOfficeBanner } from '@features/BackOffice/useCases/addBackOfficeBanner'
 import { BaseMap } from '@features/Map/components/BaseMap'
 import { LayerProperties } from '@features/Map/constants'
@@ -84,7 +85,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
       const geometryRecord = await dispatch(getGeometryWithoutRegulationReference())
       setGeometriesMap(geometryRecord)
 
-      await dispatch(getAllSpecies<BackofficeAppPromiseThunk>())
+      await dispatch(getAllSpecies<BackofficeAppPromiseThunk>(WindowContext.BackOffice))
       await dispatch(getAllRegulatoryLayersByRegTerritory())
       dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
     })()

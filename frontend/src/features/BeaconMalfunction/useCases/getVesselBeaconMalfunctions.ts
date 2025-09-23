@@ -10,7 +10,6 @@ import {
   setVesselBeaconMalfunctionsResumeAndHistory
 } from '../../../domain/shared_slices/BeaconMalfunction'
 import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
-import { removeError } from '../../../domain/shared_slices/Global'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 
 export const getVesselBeaconMalfunctions = (isFromUserAction: boolean) => async (dispatch, getState) => {
@@ -48,8 +47,6 @@ export const getVesselBeaconMalfunctions = (isFromUserAction: boolean) => async 
     if (openedBeaconMalfunction) {
       dispatch(openBeaconMalfunction(openedBeaconMalfunction, isFromUserAction))
     }
-
-    dispatch(removeError())
   } catch (error) {
     dispatch(
       displayOrLogError(

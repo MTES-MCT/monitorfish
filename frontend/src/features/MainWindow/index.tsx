@@ -11,7 +11,6 @@ import styled from 'styled-components'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { ErrorToastNotification } from '../commonComponents/ErrorToastNotification'
 import { ControlUnitDialog } from '../ControlUnit/components/ControlUnitDialog'
 import { ControlUnitListDialog } from '../ControlUnit/components/ControlUnitListDialog'
 import { DrawLayerModal } from '../Draw/components/DrawModal'
@@ -85,7 +84,6 @@ export function MainWindow() {
 
         <VesselLoader />
         <APIWorker />
-        <ErrorToastNotification />
         <Notifier />
 
         {status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}

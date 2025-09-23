@@ -544,8 +544,8 @@ export function MissionForm() {
 
 const StyledBanner = styled(Banner)`
   left: unset;
-  width: calc(100% - 122px);
-  min-width: calc(100% - 122px);
+  width: calc(100% - 64px);
+  min-width: calc(100% - 64px);
 `
 
 const MissionCreatedText = styled.div`

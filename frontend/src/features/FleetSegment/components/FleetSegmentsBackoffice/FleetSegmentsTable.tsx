@@ -1,3 +1,4 @@
+import { WindowContext } from '@api/constants'
 import { EditAndDeleteCell, TagsCell } from '@features/Regulation/components/RegulationTables/tableCells'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -31,8 +32,9 @@ export function FleetSegmentsTable({
   const { height } = useWindowResize()
 
   useEffect(() => {
-    dispatch(getAllGearCodes<MainAppAsyncThunk>())
-    dispatch(getAllSpecies<MainAppAsyncThunk>())
+    /* TODO: understand why BackofficeAppPromiseThunk type is not accepted */
+    dispatch(getAllGearCodes<MainAppAsyncThunk>(WindowContext.BackOffice))
+    dispatch(getAllSpecies<MainAppAsyncThunk>(WindowContext.BackOffice))
   }, [dispatch])
 
   return (
@@ -71,7 +73,7 @@ export function FleetSegmentsTable({
       <Column width={250}>
         <HeaderCell>FAO</HeaderCell>
         <TagsCell
-          data={faoAreas.map(faoArea => ({ label: faoArea, value: faoArea }))}
+          data={faoAreas?.map(faoArea => ({ label: faoArea, value: faoArea }))}
           dataKey="faoAreas"
           id="segment"
         />

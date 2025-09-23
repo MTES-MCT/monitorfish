@@ -5,7 +5,6 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Level } from '@mtes-mct/monitor-ui'
 
 import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
-import { removeError } from '../../../domain/shared_slices/Global'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { logbookApi } from '../api'
 import { logbookActions } from '../slice'
@@ -71,8 +70,6 @@ export const getVesselLogbookByDates =
       }
 
       dispatch(logbookActions.setVoyage({ ...voyage, vesselIdentity }))
-
-      dispatch(removeError())
     } catch (error) {
       dispatch(
         displayOrLogError(

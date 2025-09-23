@@ -1,4 +1,4 @@
-import { RtkCacheTagType } from '@api/constants'
+import { RtkCacheTagType, WindowContext } from '@api/constants'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { FrontendError } from '@libs/FrontendError'
@@ -65,7 +65,8 @@ export const duplicateLogbookPriorNotification =
             err,
             () => duplicateLogbookPriorNotification(identifier),
             true,
-            DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR
+            DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR,
+            WindowContext.SideWindow
           )
         )
 

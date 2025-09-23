@@ -56,7 +56,8 @@ export const updateReporting =
           true,
           windowContext === WindowContext.MainWindow
             ? DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
-            : DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR
+            : DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR,
+          windowContext
         )
       )
     }

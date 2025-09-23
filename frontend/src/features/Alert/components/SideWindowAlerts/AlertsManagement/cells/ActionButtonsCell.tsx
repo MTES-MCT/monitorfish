@@ -33,7 +33,7 @@ export function ActionButtonsCell({ alertSpecification, onDeleteConfirmation }: 
             onDeleteConfirmation(alertSpecification)
           }
         }}
-        title="Supprimer l'alerte"
+        title={`Supprimer l'alerte "${alertSpecification.name}"`}
         withUnpropagatedClick
       />
     </Wrapper>

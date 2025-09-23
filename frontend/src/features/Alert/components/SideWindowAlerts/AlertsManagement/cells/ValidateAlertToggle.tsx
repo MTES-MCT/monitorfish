@@ -26,8 +26,8 @@ export function ValidateAlertToggle({
           checked={alertSpecification.isActivated}
           disabled={!alertSpecification.isUserDefined}
           isLabelHidden
-          label="Activation de l'alerte"
-          name="activate-alert"
+          label={`${alertSpecification.isActivated ? 'Activer' : 'Désactiver'} l'alerte "${alertSpecification.name}"`}
+          name={`activate-alert-${alertSpecification.type}-${alertSpecification.id ?? 0}`}
           onChange={handleChange}
           size="sm"
         />

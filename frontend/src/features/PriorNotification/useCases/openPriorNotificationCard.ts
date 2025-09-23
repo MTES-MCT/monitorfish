@@ -1,4 +1,4 @@
-import { RtkCacheTagType } from '@api/constants'
+import { RtkCacheTagType, WindowContext } from '@api/constants'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
@@ -65,7 +65,8 @@ export const openPriorNotificationCard =
             err,
             () => openPriorNotificationCard(priorNotificationIdentifier, fingerprint, isManuallyCreated),
             true,
-            DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR
+            DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR,
+            WindowContext.SideWindow
           )
         )
 

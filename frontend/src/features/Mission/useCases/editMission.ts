@@ -1,4 +1,4 @@
-import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS, WindowContext } from '@api/constants'
 import { monitorfishMissionApi } from '@features/Mission/monitorfishMissionApi'
 import { SideWindowMenuKey, SideWindowStatus } from '@features/SideWindow/constants'
 import { sideWindowActions } from '@features/SideWindow/slice'
@@ -51,9 +51,16 @@ const editMissionWithoutConfirmation =
       dispatch(missionFormActions.initializeDraft(nextDraft))
       dispatch(sideWindowActions.setSelectedPathIsLoading(false))
     } catch (err) {
+      console.error(err)
       if (err instanceof FrontendApiError) {
         dispatch(
-          displayOrLogError(err, () => editMissionWithoutConfirmation(id), true, DisplayedErrorKey.MISSION_FORM_ERROR)
+          displayOrLogError(
+            err,
+            () => editMissionWithoutConfirmation(id),
+            true,
+            DisplayedErrorKey.MISSION_FORM_ERROR,
+            WindowContext.SideWindow
+          )
         )
 
         return

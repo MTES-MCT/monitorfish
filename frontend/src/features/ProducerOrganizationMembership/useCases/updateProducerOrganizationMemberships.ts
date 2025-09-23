@@ -1,3 +1,4 @@
+import { WindowContext } from '@api/constants'
 import { producerOrganizationMembershipApi } from '@features/ProducerOrganizationMembership/apis'
 import { getNextMembershipsFromFile } from '@features/ProducerOrganizationMembership/useCases/utils/utils'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -15,6 +16,14 @@ export const updateProducerOrganizationMemberships =
         producerOrganizationMembershipApi.endpoints.setProducerOrganizationMemberships.initiate(nextMemberships)
       ).unwrap()
     } catch (err) {
-      dispatch(displayOrLogError(err, undefined, true, DisplayedErrorKey.BACKOFFICE_PRODUCER_ORGANIZATION_ERROR))
+      dispatch(
+        displayOrLogError(
+          err,
+          undefined,
+          true,
+          DisplayedErrorKey.BACKOFFICE_PRODUCER_ORGANIZATION_ERROR,
+          WindowContext.BackOffice
+        )
+      )
     }
   }

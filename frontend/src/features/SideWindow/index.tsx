@@ -1,3 +1,4 @@
+import { WindowContext } from '@api/constants'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { getOperationalAlerts } from '@features/Alert/useCases/getOperationalAlerts'
 import { getSilencedAlerts } from '@features/Alert/useCases/getSilencedAlerts'
@@ -130,7 +131,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
       const vessels = await dispatch(vesselApi.endpoints.getActiveVessels.initiate()).unwrap()
       await dispatch(setVessels(vessels))
       dispatch(getInfractions())
-      dispatch(getAllGearCodes<MainAppAsyncThunk>())
+      dispatch(getAllGearCodes<MainAppAsyncThunk>(WindowContext.SideWindow))
     })()
   }, [dispatch, isFromURL, isSuperUser])
 

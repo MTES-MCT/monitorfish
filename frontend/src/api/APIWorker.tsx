@@ -11,6 +11,7 @@ import { VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { updateVesselTracks } from '@features/Vessel/useCases/updateVesselTracks'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+import { WindowContext } from './constants'
 import { useIsSuperUser } from '../auth/hooks/useIsSuperUser'
 import { setIsUpdatingVessels } from '../domain/shared_slices/Global'
 import { getAllGearCodes } from '../domain/use_cases/gearCode/getAllGearCodes'
@@ -46,7 +47,7 @@ export function APIWorker() {
 
   const load = useCallback(async () => {
     dispatch(setIsUpdatingVessels())
-    dispatch(getAllGearCodes<MainAppAsyncThunk>())
+    dispatch(getAllGearCodes<MainAppAsyncThunk>(WindowContext.MainWindow))
 
     if (isSuperUser) {
       dispatch(fleetSegmentApi.endpoints.getFleetSegments.initiate())
@@ -58,7 +59,7 @@ export function APIWorker() {
 
     dispatch(getInfractions())
     // This `await` must be kept at the end of the function to prevent blocking of other fetch
-    await dispatch(getAllSpecies<MainAppAsyncThunk>())
+    await dispatch(getAllSpecies<MainAppAsyncThunk>(WindowContext.MainWindow))
     dispatch(getAllRegulatoryLayers())
   }, [dispatch, isSuperUser])
 

@@ -1,3 +1,4 @@
+import { WindowContext } from '@api/constants'
 import { regulationActions } from '@features/Regulation/slice'
 import {
   DEFAULT_AUTHORIZED_REGULATED_GEARS,
@@ -31,7 +32,7 @@ export function GearRegulation() {
 
   useEffect(() => {
     if (!categoriesToGears || !groupsToCategories || gearsByCode) {
-      dispatch(getAllGearCodes<BackofficeAppPromiseThunk>())
+      dispatch(getAllGearCodes<BackofficeAppPromiseThunk>(WindowContext.BackOffice))
     }
   }, [categoriesToGears, dispatch, gearsByCode, groupsToCategories])
 

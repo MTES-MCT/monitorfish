@@ -1,7 +1,11 @@
+import { WindowContext } from '@api/constants'
+import { addBackOfficeBanner } from '@features/BackOffice/useCases/addBackOfficeBanner'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
+
 import { getAllGearsFromAPI } from '../../../api/gearCode'
 import { REGULATED_GEARS_KEYS } from '../../entities/backoffice'
 import { gearActions } from '../../shared_slices/Gear'
-import { setError } from '../../shared_slices/Global'
 
 import type {
   BackofficeAppDispatch,
@@ -31,8 +35,8 @@ const getGroupName = (groupId: 1 | 2): string | undefined => {
   }
 }
 
-export function getAllGearCodes<T extends MainAppAsyncThunk | BackofficeAppPromiseThunk>(): T
-export function getAllGearCodes(): MainAppAsyncThunk | BackofficeAppPromiseThunk {
+export function getAllGearCodes<T extends MainAppAsyncThunk | BackofficeAppPromiseThunk>(context: WindowContext): T
+export function getAllGearCodes(context: WindowContext): MainAppAsyncThunk | BackofficeAppPromiseThunk {
   return async (
     dispatch: BackofficeAppDispatch | MainAppDispatch,
     getState: BackofficeAppGetState | MainAppGetState
@@ -82,7 +86,19 @@ export function getAllGearCodes(): MainAppAsyncThunk | BackofficeAppPromiseThunk
       dispatch(gearActions.setGroupsToCategories(groupToCategories))
       dispatch(gearActions.setGearsByCode(gearsByCode))
     } catch (err) {
-      dispatch(setError(err))
+      const bannerProps = {
+        children: (err as Error).message,
+        closingDelay: 3000,
+        isClosable: true,
+        level: Level.ERROR,
+        withAutomaticClosing: true
+      }
+      /* TODO: understand type error if no `as any` */
+      if (context === WindowContext.BackOffice) {
+        dispatch(addBackOfficeBanner(bannerProps) as any)
+      } else {
+        dispatch(addMainWindowBanner(bannerProps) as any)
+      }
     }
   }
 }

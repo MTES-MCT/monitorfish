@@ -1,3 +1,4 @@
+import { useGetFaoAreasQuery } from '@api/faoAreas'
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { Button, customDayjs, FulfillingBouncingCircleLoader, Select, THEME } from '@mtes-mct/monitor-ui'
@@ -7,7 +8,6 @@ import styled from 'styled-components'
 
 import { CreateOrEditFleetSegmentModal } from './CreateOrEditFleetSegmentModal'
 import { FleetSegmentsTable } from './FleetSegmentsTable'
-import { getFAOAreas } from '../../../../domain/use_cases/faoAreas/getFAOAreas'
 import { theme } from '../../../../ui/theme'
 import { BackOfficeTitle } from '../../../BackOffice/components/BackOfficeTitle'
 import { addFleetSegmentYear } from '../../useCases/addFleetSegmentYear'
@@ -22,15 +22,11 @@ export function FleetSegmentsBackoffice() {
   const currentYear = customDayjs().year()
   const dispatch = useBackofficeAppDispatch()
   const [fleetSegments, setFleetSegments] = useState<FleetSegment[]>([])
-  const [faoAreas, setFAOAreas] = useState<string[]>([])
   const [year, setYear] = useState<number>(currentYear)
   const [yearEntries, setYearEntries] = useState([getLabeledYear(currentYear)])
   const [isNewFleetSegmentModalOpen, setIsNewFleetSegmentModalOpen] = useState(false)
   const [editedFleetSegment, setEditedFleetSegment] = useState<FleetSegment | undefined>()
-
-  useEffect(() => {
-    dispatch(getFAOAreas()).then(_faoAreas => setFAOAreas(_faoAreas || []))
-  }, [dispatch])
+  const { data: faoAreas } = useGetFaoAreasQuery()
 
   const yearsToAdd = useMemo(
     () =>
@@ -157,7 +153,7 @@ export function FleetSegmentsBackoffice() {
       {fleetSegments.length ? (
         <>
           <FleetSegmentsTable
-            faoAreas={faoAreas}
+            faoAreas={faoAreas ?? []}
             fleetSegments={fleetSegments}
             onDeleteFleetSegment={onDeleteFleetSegment}
             openEditFleetSegmentModal={openEditFleetSegmentModal}

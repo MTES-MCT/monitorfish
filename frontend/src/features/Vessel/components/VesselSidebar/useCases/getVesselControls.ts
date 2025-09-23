@@ -4,7 +4,6 @@ import { Vessel } from '@features/Vessel/Vessel.types'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { displayedErrorActions } from '../../../../../domain/shared_slices/DisplayedError'
-import { removeError } from '../../../../../domain/shared_slices/Global'
 import { displayOrLogError } from '../../../../../domain/use_cases/error/displayOrLogError'
 import { loadControls, resetLoadControls, setControlSummary, unsetControlSummary } from '../control.slice'
 
@@ -38,7 +37,6 @@ export const getVesselControls = (vesselIdentity: Vessel.VesselIdentity) => asyn
     ).unwrap()
 
     dispatch(setControlSummary(controlSummary))
-    dispatch(removeError())
   } catch (error) {
     dispatch(
       displayOrLogError(error, () => getVesselControls(vesselIdentity), true, DisplayedErrorKey.VESSEL_SIDEBAR_ERROR)

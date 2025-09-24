@@ -1,11 +1,13 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PositionAlertSpecification
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBPositionAlertSpecificationRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.CacheManager
 import org.springframework.transaction.annotation.Transactional
+import java.time.ZonedDateTime
 
 class JpaPositionAlertSpecificationRepositoryITests : AbstractDBTests() {
     @Autowired
@@ -168,5 +170,44 @@ class JpaPositionAlertSpecificationRepositoryITests : AbstractDBTests() {
         val dbAlertAfterSecondDelete = dbPositionAlertSpecificationRepository.findById(alertId)
         assertThat(dbAlertAfterSecondDelete).isPresent
         assertThat(dbAlertAfterSecondDelete.get().isDeleted).isTrue()
+    }
+
+    @Test
+    @Transactional
+    fun `save Should create a new alert specification`() {
+        // Given
+        val alertsBefore = jpaPositionAlertSpecificationRepository.findAllByIsDeletedIsFalse()
+        val initialCount = alertsBefore.size
+
+        val newAlertSpecification =
+            PositionAlertSpecification(
+                name = "New Test Alert",
+                description = "New test alert description",
+                isUserDefined = true,
+                natinfCode = 1234,
+                isActivated = false,
+                repeatEachYear = false,
+                trackAnalysisDepth = 8.0,
+                onlyFishingPositions = true,
+                createdBy = "test@example.com",
+                createdAtUtc = ZonedDateTime.now(),
+            )
+
+        // When
+        jpaPositionAlertSpecificationRepository.save(newAlertSpecification)
+
+        // Then
+        val alertsAfter = jpaPositionAlertSpecificationRepository.findAllByIsDeletedIsFalse()
+        assertThat(alertsAfter.size).isEqualTo(initialCount + 1)
+
+        val newAlert = alertsAfter.find { it.name == "New Test Alert" }
+        assertThat(newAlert).isNotNull
+        assertThat(newAlert!!.description).isEqualTo("New test alert description")
+        assertThat(newAlert.natinfCode).isEqualTo(1234)
+        assertThat(newAlert.isActivated).isFalse()
+        assertThat(newAlert.isUserDefined).isTrue()
+        assertThat(newAlert.isDeleted).isFalse()
+        assertThat(newAlert.createdBy).isEqualTo("test@example.com")
+        assertThat(newAlert.createdAtUtc).isNotNull()
     }
 }

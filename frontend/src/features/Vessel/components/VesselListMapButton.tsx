@@ -26,7 +26,6 @@ export function VesselListMapButton() {
       Icon={Icon.ListLines}
       isActive={isActive}
       onClick={toggleSideWindow}
-      style={{ top: 76 }}
       title="Liste des navires"
     />
   )

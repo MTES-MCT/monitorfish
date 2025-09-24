@@ -43,18 +43,6 @@ export function FavoriteVessels() {
 
   return (
     <Wrapper>
-      <MapToolButton
-        badgeBackgroundColor={isOpened ? THEME.color.charcoal : THEME.color.gainsboro}
-        badgeColor={isOpened ? THEME.color.white : THEME.color.gunMetal}
-        badgeNumber={favorites?.length || undefined}
-        data-cy="favorite-vessels"
-        Icon={Icon.Favorite}
-        isActive={isOpened}
-        isLeftButton
-        onClick={() => dispatch(setLeftMapBoxOpened(isOpened ? undefined : MapBox.FAVORITE_VESSELS))}
-        style={{ top: 73 }}
-        title="Mes navires suivis"
-      />
       {isRendered && (
         <FavoriteVesselsBox
           $isLeftBox
@@ -100,6 +88,17 @@ export function FavoriteVessels() {
           />
         </FavoriteVesselsBox>
       )}
+      <MapToolButton
+        badgeBackgroundColor={isOpened ? THEME.color.charcoal : THEME.color.gainsboro}
+        badgeColor={isOpened ? THEME.color.white : THEME.color.gunMetal}
+        badgeNumber={favorites?.length || undefined}
+        data-cy="favorite-vessels"
+        Icon={Icon.Favorite}
+        isActive={isOpened}
+        isShrinkable={false}
+        onClick={() => dispatch(setLeftMapBoxOpened(isOpened ? undefined : MapBox.FAVORITE_VESSELS))}
+        title="Mes navires suivis"
+      />
     </Wrapper>
   )
 }
@@ -141,5 +140,4 @@ const Header = styled.div<{
 
 const FavoriteVesselsBox = styled(MapToolBox)`
   width: 305px;
-  top: 73px;
 `

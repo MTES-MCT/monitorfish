@@ -20,6 +20,7 @@ type EditInterestPointProps = Readonly<{
   isOpen: boolean
   onClose: () => void
 }>
+
 export function EditInterestPoint({ isOpen, onClose }: EditInterestPointProps) {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
@@ -258,6 +259,5 @@ const Body = styled.div`
 `
 
 const Wrapper = styled(MapToolBox)`
-  top: 340px;
   width: 306px;
 `

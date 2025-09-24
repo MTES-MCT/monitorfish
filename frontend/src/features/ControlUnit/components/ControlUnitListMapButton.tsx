@@ -1,3 +1,4 @@
+import { ControlUnitListDialog } from '@features/ControlUnit/components/ControlUnitListDialog'
 import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -35,12 +36,14 @@ export function ControlUnitListMapButton() {
   }
 
   return (
-    <MapToolButton
-      Icon={Icon.ControlUnit}
-      isActive={isControlUnitListDialogDisplayed || isControlUnitDialogDisplayed}
-      onClick={toggle}
-      style={{ top: 172 }}
-      title="Liste des unités de contrôle"
-    />
+    <>
+      <ControlUnitListDialog />
+      <MapToolButton
+        Icon={Icon.ControlUnit}
+        isActive={isControlUnitListDialogDisplayed || isControlUnitDialogDisplayed}
+        onClick={toggle}
+        title="Liste des unités de contrôle"
+      />
+    </>
   )
 }

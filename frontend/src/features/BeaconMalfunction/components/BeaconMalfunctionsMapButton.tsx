@@ -39,9 +39,8 @@ export function BeaconMalfunctionsMapButton() {
       data-cy="beacon-malfunction-button"
       Icon={Icon.Vms}
       isActive={isActive}
-      isLeftButton
+      isShrinkable={false}
       onClick={toggleSideWindow}
-      style={{ top: 280 }}
       title="Avaries VMS"
     />
   )

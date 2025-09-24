@@ -47,10 +47,10 @@ export function MissionsMapMenu() {
 
   return (
     <Wrapper>
-      <MissionMenuBox $isLeftBox $isOpen={leftMapBoxOpened === MapBox.MISSIONS} data-cy="missions-menu-box">
+      <MapToolBox $isLeftBox $isOpen={leftMapBoxOpened === MapBox.MISSIONS} data-cy="missions-menu-box">
         <MissionsMenuWrapper>
           <Header>
-            <CloseButton Icon={Icon.Close} onClick={toggleMissionsMenu} />
+            <CloseButton Icon={Icon.Close} onClick={toggleMissionsMenu} title="Fermer" />
             <MapMenuDialog.Title>Missions et contrôles</MapMenuDialog.Title>
             <MapMenuDialog.VisibilityButton
               accent={Accent.SECONDARY}
@@ -73,15 +73,15 @@ export function MissionsMapMenu() {
             </Section>
           </MissionsMenuBody>
         </MissionsMenuWrapper>
-      </MissionMenuBox>
+      </MapToolBox>
       <MapToolButton
         data-cy="missions-map-button"
         Icon={Icon.MissionAction}
         iconSize={25}
         isActive={leftMapBoxOpened === MapBox.MISSIONS}
-        isLeftButton
+        isShrinkable={false}
         onClick={toggleMissionsMenu}
-        style={{ color: THEME.color.gainsboro, top: 136 }}
+        style={{ color: THEME.color.gainsboro }}
         title="Missions et contrôles"
       />
     </Wrapper>
@@ -92,10 +92,6 @@ const Wrapper = styled.div`
   transition: all 0.2s;
   z-index: 98;
   left: 10px;
-`
-
-const MissionMenuBox = styled(MapToolBox)`
-  top: 136px;
 `
 
 const MissionsMenuWrapper = styled.div`
@@ -114,6 +110,7 @@ const Header = styled(MapMenuDialog.Header)`
 const MissionsMenuBody = styled.div``
 const Section = styled.div`
   padding: 12px;
+
   &:not(:last-child) {
     border-bottom: 1px solid ${COLORS.gainsboro};
   }

@@ -1,9 +1,6 @@
 import styled from 'styled-components'
 
 export const LegacyRsuiteComponentsWrapper = styled.div`
-  height: 100%;
-  width: 100%;
-
   /*****************************************************************************
     Legacy Rsuite custom CSS
   */

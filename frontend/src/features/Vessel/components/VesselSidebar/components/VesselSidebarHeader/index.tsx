@@ -72,7 +72,6 @@ export function VesselSidebarHeader() {
         isActive={!!selectedVessel}
         onClick={() => dispatch(setIsFocusedOnVesselSearch(true))}
         onMouseEnter={() => dispatch(expandRightMenu())}
-        style={{ top: 10 }}
         title="Rechercher un navire"
       />
     </>
@@ -84,7 +83,6 @@ const VesselNameOrInput = styled(MapComponent)<{
 }>`
   position: absolute;
   display: inline-block;
-  top: 10px;
   right: ${p => (p.$isRightMenuShrinked ? 10 : 55)}px;
   z-index: 1000;
   color: ${p => p.theme.color.gainsboro};

@@ -22,7 +22,6 @@ import { useGetServiceWorker } from '../../../workers/hooks/useGetServiceWorker'
 import { registerServiceWorker } from '../../../workers/registerServiceWorker'
 import { unregisterServiceWorker } from '../../../workers/unregisterServiceWorker'
 
-const MARGIN_TOP = 412
 const BYTE_TO_MEGA_BYTE_FACTOR = 0.000001
 
 export function Account() {
@@ -163,13 +162,7 @@ export function Account() {
           </StyledContainer>
         </MapMenuDialogWrapper>
       )}
-      <MapToolButton
-        Icon={Icon.Account}
-        isActive={isOpened}
-        onClick={openOrClose}
-        style={{ top: MARGIN_TOP }}
-        title="Mon compte"
-      />
+      <MapToolButton Icon={Icon.Account} isActive={isOpened} onClick={openOrClose} title="Mon compte" />
       {isUnregisterCacheConfirmationModalOpen && (
         <ConfirmationModal
           confirmationButtonLabel="Désactiver"
@@ -234,6 +227,4 @@ const Wrapper = styled.div`
   }
 `
 
-const MapMenuDialogWrapper = styled(MapToolBox)`
-  top: ${MARGIN_TOP}px;
-`
+const MapMenuDialogWrapper = styled(MapToolBox)``

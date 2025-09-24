@@ -10,9 +10,12 @@ import { useBeforeUnload } from 'react-router-dom'
 import styled from 'styled-components'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
+import { PreviewFilteredVessels } from './components/PreviewFilteredVessels'
+import { APIWorker } from '../../api/APIWorker'
+import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
+import { Notifier } from '../../components/Notifier'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { ControlUnitDialog } from '../ControlUnit/components/ControlUnitDialog'
-import { ControlUnitListDialog } from '../ControlUnit/components/ControlUnitListDialog'
 import { DrawLayerModal } from '../Draw/components/DrawModal'
 import { HealthcheckHeadband } from '../Healthcheck/components/HealthcheckHeadband'
 import { LayersSidebar } from '../LayersSidebar/components'
@@ -22,8 +25,6 @@ import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
 import { MapButtons } from '../Map/components/MapButtons'
 import { SideWindowLauncher } from '../SideWindow/SideWindowLauncher'
 import { VesselLoader } from '../Vessel/components/VesselLoader'
-import { VesselSidebar } from '../Vessel/components/VesselSidebar/components'
-import { VesselSidebarHeader } from '../Vessel/components/VesselSidebar/components/VesselSidebarHeader'
 
 export function MainWindow() {
   const isControlUnitDialogDisplayed = useMainAppSelector(
@@ -31,8 +32,6 @@ export function MainWindow() {
   )
   const isSuperUser = useIsSuperUser()
   const isDrawLayerModalDisplayed = useMainAppSelector(state => state.displayedComponent.isDrawLayerModalDisplayed)
-  const isVesselSearchDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselSearchDisplayed)
-  const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
   const isDraftDirty = useMainAppSelector(state => state.missionForm.isDraftDirty)
   const status = useMainAppSelector(state => state.sideWindow.status)
 
@@ -71,15 +70,11 @@ export function MainWindow() {
         <MainMap />
 
         <LegacyRsuiteComponentsWrapper>
-          <LayersSidebar />
-          {isVesselSearchDisplayed && <VesselSidebarHeader />}
           <MapButtons />
           <RightMenuOnHoverArea />
         </LegacyRsuiteComponentsWrapper>
-        {isVesselSidebarOpen && <VesselSidebar />}
 
         {isControlUnitDialogDisplayed && <ControlUnitDialog />}
-        <ControlUnitListDialog />
 
         <VesselLoader />
         <APIWorker />

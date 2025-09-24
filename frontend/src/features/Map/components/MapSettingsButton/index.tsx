@@ -28,15 +28,14 @@ export function MapSettingsButton() {
 
   return (
     <Wrapper>
+      {isRendered && <MapSettings isOpened={isOpened} onClose={openOrCloseVesselVisibility} />}
       <MapToolButton
         data-cy="vessel-visibility"
         Icon={Icon.MapSettings}
         isActive={isOpened}
         onClick={openOrCloseVesselVisibility}
-        style={{ top: 244 }}
         title="Affichage des dernières positions"
       />
-      {isRendered && <MapSettings isOpened={isOpened} onClose={openOrCloseVesselVisibility} />}
     </Wrapper>
   )
 }

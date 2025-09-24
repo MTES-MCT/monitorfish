@@ -62,7 +62,7 @@ export function ControlUnitResourceList({ controlUnit }: ControlUnitResourceList
 
       setIsDeletionConfirmationModalOpen(true)
     } catch (error) {
-      FrontendApiError.handleIfAny(error)
+      FrontendApiError.handleIfAny(error, dispatch)
     }
   }, [dispatch, editedControlUnitResourceId])
 
@@ -103,7 +103,7 @@ export function ControlUnitResourceList({ controlUnit }: ControlUnitResourceList
       closeDialogsAndModals()
       closeForm()
     } catch (err) {
-      FrontendApiError.handleIfAny(err)
+      FrontendApiError.handleIfAny(err, dispatch)
     }
   }, [closeDialogsAndModals, closeForm, dispatch, editedControlUnitResourceId])
 
@@ -134,7 +134,7 @@ export function ControlUnitResourceList({ controlUnit }: ControlUnitResourceList
 
         closeForm()
       } catch (err) {
-        FrontendApiError.handleIfAny(err)
+        FrontendApiError.handleIfAny(err, dispatch)
       }
     },
     [closeForm, dispatch, isNewControlUnitResourceFormOpen]

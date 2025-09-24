@@ -19,7 +19,6 @@ import { LayersSidebar } from '../LayersSidebar/components'
 import { PreviewFilteredVessels } from './components/PreviewFilteredVessels'
 import { APIWorker } from '../../api/APIWorker'
 import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
-import { Notifier } from '../../components/Notifier'
 import { MapButtons } from '../Map/components/MapButtons'
 import { SideWindowLauncher } from '../SideWindow/SideWindowLauncher'
 import { VesselLoader } from '../Vessel/components/VesselLoader'
@@ -84,7 +83,6 @@ export function MainWindow() {
 
         <VesselLoader />
         <APIWorker />
-        <Notifier />
 
         {status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}
         {isDrawLayerModalDisplayed && <DrawLayerModal />}

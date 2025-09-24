@@ -1,9 +1,9 @@
-import { NotifierEvent } from '@components/Notifier/NotifierEvent'
+import { addBackOfficeBanner } from '@features/BackOffice/useCases/addBackOfficeBanner'
 import { backofficeProducerOrganizationMembershipActions } from '@features/ProducerOrganizationMembership/slice.backoffice'
 import { updateProducerOrganizationMemberships } from '@features/ProducerOrganizationMembership/useCases/updateProducerOrganizationMemberships'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
-import { Button, Icon, Size, TextInput } from '@mtes-mct/monitor-ui'
+import { Button, Icon, Level, Size, TextInput } from '@mtes-mct/monitor-ui'
 import { useCallback, useRef } from 'react'
 import { Uploader } from 'rsuite'
 import styled from 'styled-components'
@@ -22,7 +22,15 @@ export function FilterBar() {
     }
 
     await dispatch(updateProducerOrganizationMemberships(fileType.blobFile as File))
-    window.document.dispatchEvent(new NotifierEvent('Mise à jour des données effectuée', 'success', false, false))
+    dispatch(
+      addBackOfficeBanner({
+        children: 'Mise à jour des données effectuée',
+        closingDelay: 3000,
+        isClosable: true,
+        level: Level.SUCCESS,
+        withAutomaticClosing: true
+      })
+    )
   }
 
   const updateSearchQuery = useCallback(

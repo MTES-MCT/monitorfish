@@ -1,12 +1,13 @@
 /* eslint-disable no-console */
-
-import { NotifierEvent } from '@components/Notifier/NotifierEvent'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
 import { Scope } from '@sentry/react'
 
 import { FrontendError } from './FrontendError'
-import { UsageError } from './UsageError'
 
 import type { CustomResponseError } from '@api/types'
+import type { MainAppDispatch } from '@store'
 
 /**
  * Unexpected error handled in Frontend API code.
@@ -35,14 +36,15 @@ export class FrontendApiError extends FrontendError {
   }
 
   /**
-   * Handle `FrontendApiError` and `UsageError` RTP query/mutation error
-   * by dispatching a toast or a dialog if any.
+   * Handle `FrontendApiError` RTP query/mutation error
+   * by dispatching a banner if any.
    */
   // TODO Temporary solution until we finalize the general error handling proposal.
   static handleIfAny(
     // TODO Find a way to correctly infer custom errors in Redux RTK.
-    // This error can only be `FrontendApiError` or `UsageError` but we use `any` in the meantime.
+    // This error can only be `FrontendApiError` but we use `any` in the meantime.
     errorOrResponse: any,
+    dispatch: MainAppDispatch,
     /** Should the error be displayed in the side-windows? */
     isSideWindowError: boolean = false
   ) {
@@ -53,9 +55,30 @@ export class FrontendApiError extends FrontendError {
     const error = 'error' in errorOrResponse ? errorOrResponse.error : errorOrResponse
 
     if ('userMessage' in error) {
-      const isDialogError = error instanceof UsageError
+      console.log('FrontendApiError.handleIfAny', { error, isSideWindowError })
+      if (isSideWindowError) {
+        dispatch(
+          addSideWindowBanner({
+            children: error.userMessage,
+            closingDelay: 3000,
+            isClosable: true,
+            level: Level.ERROR,
+            withAutomaticClosing: true
+          })
+        )
 
-      window.document.dispatchEvent(new NotifierEvent(error.userMessage, 'error', isDialogError, isSideWindowError))
+        return
+      }
+
+      dispatch(
+        addMainWindowBanner({
+          children: error.userMessage,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
 
       return
     }

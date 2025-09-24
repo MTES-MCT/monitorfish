@@ -1,7 +1,7 @@
+import { BannerStack } from '@features/MainWindow/components/BannerStack'
 import { Button } from '@mtes-mct/monitor-ui'
 import { type AuthContextProps, useAuth } from 'react-oidc-context'
 import { Navigate } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify'
 import styled from 'styled-components'
 
 import { ROUTER_PATHS } from '../../paths'
@@ -47,6 +47,7 @@ export function Login() {
 
   return (
     <LoginBackground>
+      <BannerStack />
       {!!auth?.isLoading || isLoading ? (
         <LoadingSpinnerWall isVesselShowed />
       ) : (
@@ -71,7 +72,6 @@ export function Login() {
         </>
       )}
       {auth?.error && <div>Oops... {auth.error?.message}</div>}
-      <ToastContainer />
     </LoginBackground>
   )
 }

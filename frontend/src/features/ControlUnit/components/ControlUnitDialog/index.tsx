@@ -1,7 +1,7 @@
 import { Accent, Button, ControlUnit, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash-es'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { AreaNote } from './AreaNote'
@@ -31,7 +31,12 @@ export function ControlUnitDialog() {
     controlUnitId,
     RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
   )
-  FrontendApiError.handleIfAny(getControlControlUnitError)
+
+  useEffect(() => {
+    if (getControlControlUnitError) {
+      FrontendApiError.handleIfAny(getControlControlUnitError, dispatch)
+    }
+  }, [getControlControlUnitError, dispatch])
 
   const openNewMission = useCallback(() => {
     if (!controlUnit) {
@@ -67,7 +72,7 @@ export function ControlUnitDialog() {
       try {
         await dispatch(monitorenvControlUnitApi.endpoints.updateControlUnit.initiate(nextControlUnitData)).unwrap()
       } catch (err) {
-        FrontendApiError.handleIfAny(err)
+        FrontendApiError.handleIfAny(err, dispatch)
       }
     },
     [dispatch]

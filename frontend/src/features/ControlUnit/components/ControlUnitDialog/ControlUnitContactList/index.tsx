@@ -85,7 +85,7 @@ export function ControlUnitContactList({ controlUnit, onSubmit }: ControlUnitCon
       closeDialogsAndModals()
       closeForm()
     } catch (err) {
-      FrontendApiError.handleIfAny(err)
+      FrontendApiError.handleIfAny(err, dispatch)
     }
   }
 

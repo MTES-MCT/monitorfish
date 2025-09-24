@@ -1,7 +1,6 @@
 import { monitorenvApi } from '@api/api'
 import { BackendApi } from '@api/BackendApi.types'
 import { FrontendApiError } from '@libs/FrontendApiError'
-import { UsageError } from '@libs/UsageError'
 
 import type { ControlUnit } from '@mtes-mct/monitor-ui'
 
@@ -50,13 +49,7 @@ export const monitorenvControlUnitResourceApi = monitorenvApi.injectEndpoints({
         method: 'DELETE',
         url: `/v1/control_unit_resources/${controlUnitResourceId}`
       }),
-      transformErrorResponse: response => {
-        if (response.responseData?.type === BackendApi.ErrorCode.FOREIGN_KEY_CONSTRAINT) {
-          return new UsageError(IMPOSSIBLE_CONTROL_UNIT_RESOURCE_DELETION_ERROR_MESSAGE)
-        }
-
-        return new FrontendApiError(DELETE_CONTROL_UNIT_RESOURCE_ERROR_MESSAGE, response)
-      }
+      transformErrorResponse: response => new FrontendApiError(DELETE_CONTROL_UNIT_RESOURCE_ERROR_MESSAGE, response)
     }),
 
     getControlUnitResource: builder.query<ControlUnit.ControlUnitResource, number>({

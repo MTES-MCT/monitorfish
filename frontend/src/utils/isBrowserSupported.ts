@@ -1,5 +1,7 @@
+import { FrontendApiError } from '@libs/FrontendApiError'
 import { browserName, browserVersion } from 'react-device-detect'
-import { toast } from 'react-toastify'
+
+import { mainStore } from '../store'
 
 export function isBrowserSupported(): boolean {
   const browserVersionAsNumber = Number(browserVersion)
@@ -30,7 +32,10 @@ export function isBrowserSupported(): boolean {
       return browserVersionAsNumber >= 12
 
     default:
-      toast.error(`Navigateur inconnu: "${browserName} v${browserVersion}"`)
+      FrontendApiError.handleIfAny(
+        { userMessage: `Navigateur inconnu: "${browserName} v${browserVersion}"` },
+        mainStore.dispatch
+      )
 
       return false
   }

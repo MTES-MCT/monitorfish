@@ -11,7 +11,7 @@ import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindow
 import { VesselListAndGroups } from '@features/Vessel/components/VesselListAndGroups'
 import { setVessels } from '@features/Vessel/slice'
 import { vesselApi } from '@features/Vessel/vesselApi'
-import { NewWindowContext, type NewWindowContextValue, Notifier, THEME } from '@mtes-mct/monitor-ui'
+import { NewWindowContext, type NewWindowContextValue, THEME } from '@mtes-mct/monitor-ui'
 import {
   type CSSProperties,
   Fragment,
@@ -186,7 +186,6 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
                 </Content>
               )}
             </FrontendErrorBoundary>
-            <Notifier isSideWindow />
           </NewWindowContext.Provider>
         )}
       </Wrapper>

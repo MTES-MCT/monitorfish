@@ -11,7 +11,7 @@ import type { MainAppUseCase } from '@store'
 
 /**
  * Dispatch:
- * - A toast error if the use-case was triggered by the cron
+ * - A Banner error if the use-case was triggered by the cron
  * - A displayedError to be shown in the vessel sidebar if the use-case was triggered by the user
  */
 export const displayOrLogError =
@@ -28,7 +28,7 @@ export const displayOrLogError =
     const errorMessage = error instanceof Error ? error.message : JSON.stringify(error)
 
     /**
-     * If the use-case was triggered by the cron, we only log an error with a Toast
+     * If the use-case was triggered by the cron, we only log an error with a Banner
      */
     if (!isFromUserAction) {
       const bannerProps = {

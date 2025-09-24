@@ -62,15 +62,14 @@ export function InterestPointMapButton() {
 
   return (
     <Wrapper>
+      {isRendered && <EditInterestPoint isOpen={isOpened} onClose={onClose} />}
       <MapToolButton
         data-cy="interest-point"
         Icon={Icon.Report}
         isActive={isOpened}
         onClick={openOrCloseInterestPoint}
-        style={{ top: 340 }}
         title="Créer un point d'intérêt"
       />
-      {isRendered && <EditInterestPoint isOpen={isOpened} onClose={onClose} />}
     </Wrapper>
   )
 }

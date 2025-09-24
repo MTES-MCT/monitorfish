@@ -5,7 +5,6 @@ import { NewFeature } from '@features/NewFeatures/components/NewFeature'
 import { NEW_FEATURES } from '@features/NewFeatures/constants'
 import { getFeaturesByMonths, isFeatureDisplayed } from '@features/NewFeatures/utils'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
-import { useGetTopOffset } from '@hooks/useGetTopOffset'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
@@ -17,12 +16,9 @@ import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
 import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
 
-const MARGIN_TOP = 460
-
 export function NewFeatures() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
-  const marginTop = useGetTopOffset()
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
   const checkedFeatures = useMainAppSelector(state => state.newFeatures.checkedFeatures)
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.NEW_FEATURES)
@@ -73,14 +69,14 @@ export function NewFeatures() {
   return (
     <Wrapper>
       {isRendered && (
-        <MapMenuDialogWrapper $hideBoxShadow $isOpen={isOpened} $marginTop={marginTop} data-cy="map-new-features-box">
+        <MapToolBox $hideBoxShadow $isOpen={isOpened} data-cy="map-new-features-box">
           <StyledContainer>
             <MapMenuDialog.Header>
               <MapMenuDialog.Title>Nouveautés MonitorFish</MapMenuDialog.Title>
             </MapMenuDialog.Header>
             <StyledBody>{features}</StyledBody>
           </StyledContainer>
-        </MapMenuDialogWrapper>
+        </MapToolBox>
       )}
       <MapToolButton
         badgeBackgroundColor={THEME.color.blueGray}
@@ -92,7 +88,6 @@ export function NewFeatures() {
         Icon={Icon.NewFeatures}
         isActive={isOpened}
         onClick={openOrClose}
-        style={{ top: MARGIN_TOP }}
         title="Nouveautés MonitorFish"
       />
     </Wrapper>
@@ -116,10 +111,4 @@ const Wrapper = styled.div`
   * {
     box-sizing: border-box;
   }
-`
-
-const MapMenuDialogWrapper = styled(MapToolBox)<{
-  $marginTop: number
-}>`
-  bottom: calc(100vh - ${p => p.$marginTop}px - 40px - ${MARGIN_TOP}px);
 `

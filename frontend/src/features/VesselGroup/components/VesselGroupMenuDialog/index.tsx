@@ -20,8 +20,6 @@ import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
 
-const MARGIN_TOP = 124
-
 export function VesselGroupMenuDialog() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
@@ -247,7 +245,6 @@ const StyledBody = styled(MapMenuDialog.Body)`
 `
 
 const VesselGroupMenuDialogWrapper = styled(MapToolBox)`
-  top: ${MARGIN_TOP}px;
   width: 400px;
 `
 

@@ -8,8 +8,6 @@ import styled from 'styled-components'
 
 import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
 
-const MARGIN_TOP = 124
-
 export function VesselGroupMapButton() {
   const dispatch = useMainAppDispatch()
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
@@ -30,7 +28,7 @@ export function VesselGroupMapButton() {
         iconSize={25}
         isActive={rightMapBoxOpened === MapBox.VESSEL_GROUPS}
         onClick={toggleVesselGroupsMenu}
-        style={{ color: THEME.color.gainsboro, top: MARGIN_TOP }}
+        style={{ color: THEME.color.gainsboro }}
         title="Groupes de navires"
       />
     </Wrapper>

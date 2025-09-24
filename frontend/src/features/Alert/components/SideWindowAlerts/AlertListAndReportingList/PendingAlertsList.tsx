@@ -156,16 +156,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
           overflow: 'visible'
         }}
       >
-        <List.Item
-          key={0}
-          index={0}
-          style={{
-            ...listItemStyle,
-            background: THEME.color.white,
-            border: `1px solid ${THEME.color.lightGray}`,
-            color: THEME.color.slateGray
-          }}
-        >
+        <StyledListItem key={0} index={0}>
           <FlexboxGrid>
             <FlexboxGrid.Item style={timeAgoColumnStyle}>Ouverte il y a...</FlexboxGrid.Item>
             <FlexboxGrid.Item colspan={7} style={alertTypeStyle}>
@@ -174,7 +165,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
             <FlexboxGrid.Item style={alertNatinfStyle}>NATINF</FlexboxGrid.Item>
             <FlexboxGrid.Item style={vesselNameColumnStyle}>Navire</FlexboxGrid.Item>
           </FlexboxGrid>
-        </List.Item>
+        </StyledListItem>
         <ScrollableContainer ref={scrollableContainerRef} className="smooth-scroll" style={ScrollableContainerStyle}>
           {sortedAlerts.map((alert, index) => (
             <PendingAlertRow
@@ -239,16 +230,15 @@ const noAlertsStyle: CSSProperties = {
   textAlign: 'center'
 }
 
-const listItemStyle = (isFocused: boolean, toClose: boolean): CSSProperties => ({
-  animation: toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset',
-  background: `${p => (isFocused ? p.theme.color.gainsboro : p.theme.color.cultured)}`,
-  border: `1px solid ${p => p.theme.color.lightGray}`,
-  borderRadius: 1,
-  height: 42,
-  marginTop: 6,
-  overflow: 'hidden',
-  transition: 'background 3s'
-})
+const StyledListItem = styled(List.Item)`
+  background: ${p => p.theme.color.white};
+  border: 1px solid ${p => p.theme.color.lightGray};
+  border-radius: 1px;
+  color: ${p => p.theme.color.slateGray};
+  height: 42px;
+  margin-top: 6px;
+  overflow: hidden;
+`
 
 const styleCenter = {
   alignItems: 'center',

@@ -175,6 +175,5 @@ const LastPositionInfo = styled.div`
 `
 
 const Wrapper = styled(MapToolBox)`
-  top: 244px;
   width: 406px;
 `

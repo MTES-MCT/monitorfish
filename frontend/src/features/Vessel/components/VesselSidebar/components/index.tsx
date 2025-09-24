@@ -98,7 +98,7 @@ const Wrapper = styled(MapComponent)<{
   padding: 0;
   position: absolute;
   right: ${p => (p.$isRightMenuOpen && p.$isSidebarOpen ? 55 : 10)}px;
-  top: 50px;
+  top: 40px;
   transition:
     all 0.5s,
     right 0.3s,

@@ -31,14 +31,6 @@ export function LayersSidebar() {
 
   return (
     <>
-      <MapToolButton
-        Icon={Icon.MapLayers}
-        isActive={isRegulationSearchOpened || regulatoryZoneMetadataPanelIsOpen}
-        isLeftButton
-        onClick={() => dispatch(setLeftMapBoxOpened(isRegulationSearchOpened ? undefined : MapBox.REGULATIONS))}
-        style={{ top: 10 }}
-        title="Arbre des couches"
-      />
       {isRegulationSearchRendered && (
         <Sidebar
           $hideBoxShadow
@@ -68,6 +60,13 @@ export function LayersSidebar() {
           </RegulatoryZoneMetadataShifter>
         </Sidebar>
       )}
+      <MapToolButton
+        Icon={Icon.MapLayers}
+        isActive={isRegulationSearchOpened || regulatoryZoneMetadataPanelIsOpen}
+        isShrinkable={false}
+        onClick={() => dispatch(setLeftMapBoxOpened(isRegulationSearchOpened ? undefined : MapBox.REGULATIONS))}
+        title="Arbre des couches"
+      />
     </>
   )
 }
@@ -86,9 +85,7 @@ const RegulatoryZoneMetadataShifter = styled.div<{
   transition: all 0.3s;
 `
 
-const Sidebar = styled(MapToolBox)`
-  top: 10px;
-`
+const Sidebar = styled(MapToolBox)``
 
 const Layers = styled.div<{
   $hasHealthcheckTextWarning: boolean

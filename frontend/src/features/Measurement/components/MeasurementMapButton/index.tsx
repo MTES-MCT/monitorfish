@@ -1,3 +1,4 @@
+import { TransparentButton } from '@components/style'
 import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { MapBox, MeasurementType } from '@features/Map/constants'
 import { useClickOutsideWhenOpenedAndExecute } from '@hooks/useClickOutsideWhenOpenedAndExecute'
@@ -87,29 +88,29 @@ export function MeasurementMapButton() {
           </MeasurementItem>
         </MeasurementOptions>
       )}
+      {isMeasurementToolRendered && <CustomCircleRange isOpened={isMeasurementToolOpen} />}
+
       <MapToolButton
         data-cy="measurement"
         Icon={measurementIcon}
         isActive={isMeasurementMenuOpen || !!measurementTypeToAdd}
         onClick={openOrCloseMeasurementMenu}
-        style={{ top: 292 }}
         title="Mesurer une distance"
       />
-      {isMeasurementToolRendered && <CustomCircleRange isOpened={isMeasurementToolOpen} />}
     </Wrapper>
   )
 }
 
-// TODO `display: inline-block;` is ignored here because of the `float: right;`.
-const MeasurementItem = styled.div`
+const MeasurementItem = styled(TransparentButton)`
   background: ${p => p.theme.color.blueGray};
+
+  &:hover {
+    background: ${p => p.theme.color.blueGray};
+    border: 1px solid transparent;
+  }
+
   border-radius: 2px;
-  cursor: pointer;
-  display: inline-block;
-  height: 32px;
-  margin-left: 5px;
-  padding: 0;
-  padding-top: 8px;
+  padding: 8px 0 0;
   position: relative;
   right: 0;
   text-align: center;
@@ -119,7 +120,6 @@ const MeasurementItem = styled.div`
 
 const Wrapper = styled.div`
   transition: all 0.2s;
-  z-index: 1000;
 `
 
 const MeasurementOptions = styled(MapComponent)<{
@@ -127,13 +127,11 @@ const MeasurementOptions = styled(MapComponent)<{
   $isOpen: boolean
 }>`
   border-radius: 2px;
-  display: inline-block;
-  margin-right: ${p => (p.$isOpen ? '0px' : '-200px')};
+  display: flex;
+  gap: 8px;
+  margin-right: ${p => (p.$isOpen ? '50px' : '-250px')};
   opacity: ${p => (p.$isOpen ? '1' : '0')};
   position: absolute;
   right: 10px;
-  top: 292px;
   transition: all 0.3s;
-  width: 135px;
-  z-index: 9999;
 `

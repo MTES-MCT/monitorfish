@@ -4,9 +4,10 @@ import { cleanDownloadedFiles } from './commands/cleanDownloadedFiles'
 import { countRequestsByAlias, resetCountRequestsByAlias } from './commands/countRequestsByAlias'
 import { getComputedStyle } from './commands/getComputedStyle'
 import { getDownloadedFileContent } from './commands/getDownloadedFileContent'
-import { login } from './commands/login'
-import {getFeaturesFromLayer} from "./commands/getFeaturesFromLayer";
+import { getFeaturesFromLayer } from './commands/getFeaturesFromLayer'
 import { getViewCenter } from './commands/getViewCenter'
+import { injectAxe } from './commands/injectAxe'
+import { login } from './commands/login'
 
 registerMonitorUiCustomCommands()
 
@@ -24,3 +25,4 @@ Cypress.Commands.add('getComputedStyle', getComputedStyle)
 Cypress.Commands.add('getDownloadedFileContent', getDownloadedFileContent)
 Cypress.Commands.add('resetCountRequestsByAlias', resetCountRequestsByAlias)
 Cypress.Commands.add('login', login)
+Cypress.Commands.add('injectAxe', injectAxe)

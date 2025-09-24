@@ -9,6 +9,7 @@ export type DialogProps = HtmlHTMLAttributes<HTMLDivElement> & {
   onClose: () => Promisable<void>
   title: string
 }
+
 export function OverlayCard({ children, isCloseButtonHidden = false, onClose, title, ...props }: DialogProps) {
   return (
     <StyledMapMenuDialogContainer {...props}>
@@ -18,6 +19,7 @@ export function OverlayCard({ children, isCloseButtonHidden = false, onClose, ti
           Icon={Icon.Close}
           onClick={onClose}
           style={{ visibility: isCloseButtonHidden ? 'hidden' : 'visible' }}
+          title="Fermer"
         />
       </StyledMapMenuDialogHeader>
       {children}

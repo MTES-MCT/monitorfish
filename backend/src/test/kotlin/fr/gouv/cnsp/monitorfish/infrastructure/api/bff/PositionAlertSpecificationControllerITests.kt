@@ -3,29 +3,29 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.TestUtils.DUMMY_POSITION_ALERT
+import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.utils.ApiTestWithJWTSecurity
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
+import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@Import(SentryConfig::class, MapperConfiguration::class)
-@AutoConfigureMockMvc(addFilters = false)
-@WebMvcTest(value = [(PositionAlertSpecificationController::class)])
+@Import(MapperConfiguration::class)
+@ApiTestWithJWTSecurity(value = [(PositionAlertSpecificationController::class)])
 class PositionAlertSpecificationControllerITests {
     @Autowired
     private lateinit var api: MockMvc
+
+    @MockBean
+    private lateinit var getIsAuthorizedUser: GetIsAuthorizedUser
 
     @MockBean
     private lateinit var getPositionAlertSpecifications: GetPositionAlertSpecifications
@@ -36,6 +36,12 @@ class PositionAlertSpecificationControllerITests {
     @MockBean
     private lateinit var deleteAlertSpecification: DeleteAlertSpecification
 
+    @MockBean
+    private lateinit var addPositionAlertSpecification: AddPositionAlertSpecification
+
+    @MockBean
+    private lateinit var updatePositionAlertSpecification: UpdatePositionAlertSpecification
+
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
@@ -45,10 +51,14 @@ class PositionAlertSpecificationControllerITests {
         given(getPositionAlertSpecifications.execute()).willReturn(
             listOf(DUMMY_POSITION_ALERT),
         )
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
 
         // When
         api
-            .perform(get("/bff/v1/position_alerts_specs"))
+            .perform(
+                get("/bff/v1/position_alerts_specs")
+                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+            )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
@@ -58,9 +68,14 @@ class PositionAlertSpecificationControllerITests {
 
     @Test
     fun `Should activate an alert specification`() {
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
+
         // When
         api
-            .perform(put("/bff/v1/position_alerts_specs/123/activate"))
+            .perform(
+                put("/bff/v1/position_alerts_specs/123/activate")
+                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+            )
             // Then
             .andExpect(status().isOk)
 
@@ -70,9 +85,14 @@ class PositionAlertSpecificationControllerITests {
 
     @Test
     fun `Should deactivate an alert specification`() {
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
+
         // When
         api
-            .perform(put("/bff/v1/position_alerts_specs/456/deactivate"))
+            .perform(
+                put("/bff/v1/position_alerts_specs/456/deactivate")
+                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+            )
             // Then
             .andExpect(status().isOk)
 
@@ -82,13 +102,133 @@ class PositionAlertSpecificationControllerITests {
 
     @Test
     fun `Should delete an alert specification`() {
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
+
         // When
         api
-            .perform(delete("/bff/v1/position_alerts_specs/789"))
+            .perform(
+                delete("/bff/v1/position_alerts_specs/789")
+                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+            )
             // Then
             .andExpect(status().isOk)
 
         // Verify
         verify(deleteAlertSpecification).execute(789)
+    }
+
+    @Test
+    fun `Should create an alert specification`() {
+        // Given
+        val userEmail = "email@domain-name.com"
+        val alertSpecificationJson =
+            """
+            {
+                "name": "Test Alert",
+                "type": "POSITION_ALERT",
+                "description": "Test alert description",
+                "natinfCode": 7059,
+                "isActivated": true,
+                "hasAutomaticArchiving": false,
+                "repeatEachYear": false,
+                "trackAnalysisDepth": 8.0,
+                "onlyFishingPositions": true,
+                "gears": [],
+                "species": [],
+                "speciesCatchAreas": [],
+                "administrativeAreas": [],
+                "regulatoryAreas": [],
+                "flagStatesIso2": [],
+                "vesselIds": [],
+                "districtCodes": [],
+                "producerOrganizations": []
+            }
+            """.trimIndent()
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
+
+        // When
+        api
+            .perform(
+                post("/bff/v1/position_alerts_specs")
+                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(alertSpecificationJson),
+            )
+            // Then
+            .andExpect(status().isOk)
+
+        // Verify
+        verify(addPositionAlertSpecification).execute(
+            eq(userEmail),
+            argThat { alertSpec ->
+                alertSpec.name == "Test Alert" &&
+                    alertSpec.type == "POSITION_ALERT" &&
+                    alertSpec.description == "Test alert description" &&
+                    alertSpec.natinfCode == 7059 &&
+                    alertSpec.isActivated &&
+                    alertSpec.isUserDefined &&
+                    !alertSpec.hasAutomaticArchiving &&
+                    !alertSpec.repeatEachYear &&
+                    alertSpec.trackAnalysisDepth == 8.0 &&
+                    alertSpec.onlyFishingPositions
+            },
+        )
+    }
+
+    @Test
+    fun `Should update an alert specification`() {
+        // Given
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
+        val alertId = 123
+        val alertSpecificationJson =
+            """
+            {
+                "name": "Updated Alert",
+                "type": "POSITION_ALERT",
+                "description": "Updated alert description",
+                "natinfCode": 7060,
+                "isActivated": false,
+                "repeatEachYear": true,
+                "trackAnalysisDepth": 15.0,
+                "onlyFishingPositions": false,
+                "gears": [],
+                "species": [],
+                "speciesCatchAreas": [],
+                "administrativeAreas": [],
+                "regulatoryAreas": [],
+                "flagStatesIso2": [],
+                "vesselIds": [],
+                "districtCodes": [],
+                "producerOrganizations": []
+            }
+            """.trimIndent()
+
+        // When
+        api
+            .perform(
+                put("/bff/v1/position_alerts_specs/$alertId")
+                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(alertSpecificationJson),
+            )
+            // Then
+            .andExpect(status().isOk)
+
+        // Verify
+        verify(updatePositionAlertSpecification).execute(
+            eq(alertId),
+            argThat { alertSpec ->
+                alertSpec.name == "Updated Alert" &&
+                    alertSpec.type == "POSITION_ALERT" &&
+                    alertSpec.description == "Updated alert description" &&
+                    alertSpec.natinfCode == 7060 &&
+                    !alertSpec.isActivated &&
+                    alertSpec.isUserDefined &&
+                    !alertSpec.hasAutomaticArchiving &&
+                    alertSpec.repeatEachYear &&
+                    alertSpec.trackAnalysisDepth == 15.0 &&
+                    !alertSpec.onlyFishingPositions
+            },
+        )
     }
 }

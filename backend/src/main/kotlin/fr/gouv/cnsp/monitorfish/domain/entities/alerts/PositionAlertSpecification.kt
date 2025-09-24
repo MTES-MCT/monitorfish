@@ -32,8 +32,8 @@ data class PositionAlertSpecification(
     val vessels: List<Vessel> = listOf(),
     val districtCodes: List<String> = listOf(),
     val producerOrganizations: List<String> = listOf(),
-    val createdBy: String,
-    val createdAtUtc: ZonedDateTime,
+    val createdBy: String? = null,
+    val createdAtUtc: ZonedDateTime? = null,
 )
 
 data class GearSpecification(

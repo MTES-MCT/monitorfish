@@ -74,8 +74,8 @@ data class PositionAlertSpecificationDataOutput(
                 vessels = positionAlertSpecification.vessels.map { VesselIdentityDataOutput.fromVessel(it) },
                 districtCodes = positionAlertSpecification.districtCodes,
                 producerOrganizations = positionAlertSpecification.producerOrganizations,
-                createdBy = positionAlertSpecification.createdBy,
-                createdAtUtc = positionAlertSpecification.createdAtUtc,
+                createdBy = positionAlertSpecification.createdBy!!,
+                createdAtUtc = positionAlertSpecification.createdAtUtc!!,
             )
     }
 }

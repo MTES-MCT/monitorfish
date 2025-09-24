@@ -361,7 +361,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.get('[aria-label="Supprimer cette zone"]').click()
 
     cy.wait(250)
-    cy.get('.Toastify__toast--success').should('not.exist')
+    cy.get('.Component-Banner').should('not.exist')
   })
 
   /**

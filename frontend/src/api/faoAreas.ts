@@ -21,7 +21,7 @@ export const faoAreasApi = monitorfishApi.injectEndpoints({
     }),
 
     getFaoAreas: builder.query<string[], void>({
-      query: () => '/fao_areass',
+      query: () => '/fao_areas',
       transformErrorResponse: response => new FrontendApiError(FAO_AREAS_ERROR_MESSAGE, response)
     })
   })

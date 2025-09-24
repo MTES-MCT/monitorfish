@@ -69,19 +69,21 @@ export function HealthcheckHeadband() {
           {healthcheckTextWarning.length > 1 && <StyledChevronIcon $isOpen={areAllWarningsOpened} />}
         </HealthcheckWarnings>
       )}
-      {healthcheckTextWarning.length > 1 &&
-        !previewFilteredVesselsMode &&
-        healthcheckTextWarning.map((warning, index) => (
-          <MultipleWarningsHeadband
-            // eslint-disable-next-line react/no-array-index-key
-            key={`${index}-${warning}`}
-            $isLast={healthcheckTextWarning.length === index + 1}
-            $isOpen={areAllWarningsOpened}
-            $topOffset={index + 1}
-          >
-            {warning}
-          </MultipleWarningsHeadband>
-        ))}
+      {healthcheckTextWarning.length > 1 && !previewFilteredVesselsMode && (
+        <ul>
+          {healthcheckTextWarning.map((warning, index) => (
+            <MultipleWarningsHeadband
+              // eslint-disable-next-line react/no-array-index-key
+              key={`${index}-${warning}`}
+              $isLast={healthcheckTextWarning.length === index + 1}
+              $isOpen={areAllWarningsOpened}
+              $topOffset={index + 1}
+            >
+              {warning}
+            </MultipleWarningsHeadband>
+          ))}
+        </ul>
+      )}
     </>
   )
 }
@@ -117,7 +119,7 @@ const HealthcheckWarnings = styled.div<{
   cursor: ${p => (p.$hasMultipleWarnings ? 'pointer' : 'unset')};
 `
 
-const MultipleWarningsHeadband = styled.div<{
+const MultipleWarningsHeadband = styled.li<{
   $isLast: boolean
   $isOpen: boolean
   $topOffset: number

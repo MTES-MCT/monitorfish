@@ -1,14 +1,14 @@
 import { RtkCacheTagType } from '@api/constants'
 import { alertApi } from '@features/Alert/apis'
 import { setPendingAlerts } from '@features/Alert/components/SideWindowAlerts/slice'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { removeVesselAlertAndUpdateReporting } from '@features/Vessel/slice'
 import { VesselFeature } from '@features/Vessel/types/vessel'
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { vesselApi } from '@features/Vessel/vesselApi'
+import { Level } from '@mtes-mct/monitor-ui'
 import { deleteListItems } from '@utils/deleteListItems'
 import { updateListItemsProp } from '@utils/updateListItemsProp'
-
-import { setError } from '../../../domain/shared_slices/Global'
 
 import type { LEGACY_PendingAlert } from '@features/Alert/types'
 import type { MainAppThunk } from '@store'
@@ -48,7 +48,15 @@ export const validateAlert =
     } catch (error) {
       clearTimeout(timeout)
       dispatch(setPendingAlerts(previousAlerts))
-      dispatch(setError(error))
+      dispatch(
+        addSideWindowBanner({
+          children: (error as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
     }
   }
 

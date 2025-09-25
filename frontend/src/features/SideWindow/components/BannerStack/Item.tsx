@@ -1,11 +1,11 @@
 import { Banner, type BannerProps } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import type { SideWindow } from '../../SideWindow.types'
 import type { Promisable } from 'type-fest'
+import type { BannerStackItemProps } from 'types'
 
 type ItemProps = Readonly<{
-  bannerProps: SideWindow.BannerStackItemProps
+  bannerProps: BannerStackItemProps
   bannerStackId: number
   onCloseOrAutoclose: (bannerStackKey: number) => Promisable<void>
 }>

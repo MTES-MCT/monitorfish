@@ -1,6 +1,6 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { createOrUpdateControlUnitContact } from '@features/ControlUnit/useCases/createOrUpdateControlUnitContact'
-import { mainWindowActions } from '@features/MainWindow/slice'
+import { mainWindowBannerActions } from '@features/MainWindow/slice'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { FrontendApiError } from '@libs/FrontendApiError'
@@ -85,7 +85,7 @@ export function ControlUnitContactList({ controlUnit, onSubmit }: ControlUnitCon
       closeDialogsAndModals()
       closeForm()
     } catch (err) {
-      FrontendApiError.handleIfAny(err)
+      FrontendApiError.handleIfAny(err, dispatch)
     }
   }
 
@@ -129,7 +129,7 @@ export function ControlUnitContactList({ controlUnit, onSubmit }: ControlUnitCon
       return
     }
 
-    dispatch(mainWindowActions.removeBanner(noEmailSubscriptionContactWarningBannerIdRef.current))
+    dispatch(mainWindowBannerActions.removeBanner(noEmailSubscriptionContactWarningBannerIdRef.current))
 
     noEmailSubscriptionContactWarningBannerIdRef.current = undefined
   }

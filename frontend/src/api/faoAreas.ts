@@ -1,6 +1,6 @@
 import { FrontendApiError } from '@libs/FrontendApiError'
 
-import { monitorfishApi, monitorfishApiKy } from './api'
+import { monitorfishApi } from './api'
 
 export const FAO_AREAS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones FAO"
 
@@ -21,24 +21,10 @@ export const faoAreasApi = monitorfishApi.injectEndpoints({
     }),
 
     getFaoAreas: builder.query<string[], void>({
-      query: () => '/fao_areas'
+      query: () => '/fao_areas',
+      transformErrorResponse: response => new FrontendApiError(FAO_AREAS_ERROR_MESSAGE, response)
     })
   })
 })
 
 export const { useComputeVesselFaoAreasQuery, useGetFaoAreasQuery } = faoAreasApi
-
-/**
- * Get FAO areas
- *
- * @throws {FrontendApiError}
- */
-async function getFAOAreasFromAPI() {
-  try {
-    return await monitorfishApiKy.get(`/bff/v1/fao_areas`).json<Array<string>>()
-  } catch (err) {
-    throw new FrontendApiError(FAO_AREAS_ERROR_MESSAGE, (err as FrontendApiError).originalError)
-  }
-}
-
-export { getFAOAreasFromAPI }

@@ -4,14 +4,15 @@ import { createEntityAdapter, createSlice, type EntityState, type PayloadAction 
 import { getFullPathFromPath } from './utils'
 
 import type { SideWindow } from './SideWindow.types'
+import type { BannerStackItem } from 'types'
 
 export const bannerStackAdapter = createEntityAdapter({
-  selectId: (bannerStackItem: SideWindow.BannerStackItem) => bannerStackItem.id,
+  selectId: (bannerStackItem: BannerStackItem) => bannerStackItem.id,
   sortComparer: (a, b) => a.id - b.id
 })
 
 export interface SideWindowState {
-  bannerStack: EntityState<SideWindow.BannerStackItem, number>
+  bannerStack: EntityState<BannerStackItem, number>
   isDraftCancellationConfirmationDialogOpen: boolean
   nextPath: SideWindow.FullPath | undefined
   selectedPath: SideWindow.FullPath
@@ -37,7 +38,7 @@ const sideWindowSlice = createSlice({
      * @internal
      * /!\ NEVER use this action directly, use `addSideWindowBanner()` use case instead.
      */
-    addBanner(state, action: PayloadAction<SideWindow.BannerStackItem>) {
+    addBanner(state, action: PayloadAction<BannerStackItem>) {
       bannerStackAdapter.addOne(state.bannerStack, action.payload)
     },
 

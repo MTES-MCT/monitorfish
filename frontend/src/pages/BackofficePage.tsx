@@ -1,6 +1,6 @@
 import { BackofficeMode } from '@api/BackofficeMode'
-import { Notifier } from '@components/Notifier'
 import { BackOfficeMenu } from '@features/BackOffice/components/BackofficeMenu'
+import { BannerStack } from '@features/MainWindow/components/BannerStack'
 import countries from 'i18n-iso-countries'
 import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
 import { Provider } from 'react-redux'
@@ -8,7 +8,6 @@ import { Outlet } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
 import styled from 'styled-components'
 
-import { ErrorToastNotification } from '../features/commonComponents/ErrorToastNotification'
 import { backofficeStore, backofficeStorePersistor } from '../store'
 
 countries.registerLocale(COUNTRIES_FR)
@@ -21,13 +20,11 @@ export function BackofficePage() {
         <BackofficeMode isBackoffice />
 
         <Wrapper>
+          <BannerStack />
           <BackOfficeMenu />
 
           <Outlet />
         </Wrapper>
-
-        <ErrorToastNotification />
-        <Notifier />
       </PersistGate>
     </Provider>
   )

@@ -1,7 +1,9 @@
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
+
 import { getAllGearsFromAPI } from '../../../api/gearCode'
 import { REGULATED_GEARS_KEYS } from '../../entities/backoffice'
 import { gearActions } from '../../shared_slices/Gear'
-import { setError } from '../../shared_slices/Global'
 
 import type {
   BackofficeAppDispatch,
@@ -82,7 +84,16 @@ export function getAllGearCodes(): MainAppAsyncThunk | BackofficeAppPromiseThunk
       dispatch(gearActions.setGroupsToCategories(groupToCategories))
       dispatch(gearActions.setGearsByCode(gearsByCode))
     } catch (err) {
-      dispatch(setError(err))
+      /* TODO: understand type error if no `as any` */
+      dispatch(
+        addMainWindowBanner({
+          children: (err as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        }) as any
+      )
     }
   }
 }

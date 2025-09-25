@@ -13,7 +13,6 @@ const lastSearchedVesselsLocalStorageKey = 'lastSearchedVessels'
 
 // TODO Properly type this redux state.
 export type GlobalState = {
-  error: any
   // TODO Rename this prop.
   healthcheckTextWarning: string[]
   isBackoffice: boolean
@@ -29,7 +28,6 @@ export type GlobalState = {
   userType: string
 }
 const INITIAL_STATE: GlobalState = {
-  error: null,
   healthcheckTextWarning: [],
   isBackoffice: false,
   isUpdatingVessels: false,
@@ -83,17 +81,8 @@ export const globalSlice = createSlice({
       state.rightMenuIsOpen = true
     },
 
-    removeError(state) {
-      state.error = null
-    },
-
     resetIsUpdatingVessels(state) {
       state.isUpdatingVessels = false
-    },
-
-    setError(state, action: PayloadAction<any>) {
-      // eslint-disable-next-line no-null/no-null
-      state.error = action.payload !== undefined && action.payload !== null ? String(action.payload) : action.payload
     },
 
     /**
@@ -158,9 +147,7 @@ export const {
   addSearchedVessel,
   contractRightMenu,
   expandRightMenu,
-  removeError,
   resetIsUpdatingVessels,
-  setError,
   setHealthcheckTextWarning,
   setIsBackoffice,
   setIsUpdatingVessels,

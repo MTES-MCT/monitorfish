@@ -1,3 +1,4 @@
+import { WindowContext } from '@api/constants'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
@@ -51,7 +52,15 @@ export const updateLogbookPriorNotification =
       dispatch(priorNotificationActions.setOpenedPriorNotificationDetail(logbookPriorNotification))
     } catch (err) {
       if (err instanceof FrontendApiError) {
-        dispatch(displayOrLogError(err, undefined, true, DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
+        dispatch(
+          displayOrLogError(
+            err,
+            undefined,
+            true,
+            DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR,
+            WindowContext.SideWindow
+          )
+        )
 
         return
       }

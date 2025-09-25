@@ -1,5 +1,7 @@
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
+
 import { getAllRegulatoryLayersFromAPI } from '../../../api/geoserver'
-import { setError } from '../../../domain/shared_slices/Global'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
 import { regulationActions } from '../slice'
 
@@ -23,7 +25,15 @@ export const getAllRegulatoryLayersByRegTerritory =
       dispatch(regulationActions.setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
       dispatch(regulationActions.setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))
     } catch (error) {
-      dispatch(setError(error))
+      dispatch(
+        addMainWindowBanner({
+          children: (error as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
 
       throw error
     }

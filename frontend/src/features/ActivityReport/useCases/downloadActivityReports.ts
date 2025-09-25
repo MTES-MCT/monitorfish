@@ -1,6 +1,7 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
-import { customDayjs, logSoftError } from '@mtes-mct/monitor-ui'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
+import { logSoftError } from '@utils/logSoftError'
 
 import { activityReportApi } from '../apis'
 import { JDP_CSV_MAP_BASE } from '../components/ExportActivityReportsDialog/csvMap'
@@ -66,7 +67,6 @@ function getJdpLabel(jdp: JDP) {
       return 'WW-01'
     default: {
       logSoftError({
-        isSideWindowError: false,
         message: 'JDP not found.'
       })
 

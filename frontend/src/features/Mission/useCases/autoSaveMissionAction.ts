@@ -2,7 +2,9 @@ import { missionFormActions } from '@features/Mission/components/MissionForm/sli
 import { getMissionActionDataFromFormValues } from '@features/Mission/components/MissionForm/utils'
 import { isMissionActionFormValid } from '@features/Mission/components/MissionForm/utils/isMissionActionFormValid'
 import { missionActionApi } from '@features/Mission/missionActionApi'
-import { logSoftError } from '@mtes-mct/monitor-ui'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
+import { logSoftError } from '@utils/logSoftError'
 
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MainAppThunk } from '@store'
@@ -14,7 +16,7 @@ export const autoSaveMissionAction =
     isAutoSaveEnabled: boolean
   ): MainAppThunk<Promise<number | undefined>> =>
   async dispatch => {
-    if (!isMissionActionFormValid(actionFormValues, false) || !isAutoSaveEnabled) {
+    if (!isMissionActionFormValid(actionFormValues, false, dispatch) || !isAutoSaveEnabled) {
       dispatch(missionFormActions.setIsDraftDirty(true))
 
       return actionFormValues.id
@@ -56,10 +58,18 @@ export const autoSaveMissionAction =
       return missionActionData.id
     } catch (err) {
       logSoftError({
-        isSideWindowError: true,
+        callback: () =>
+          dispatch(
+            addSideWindowBanner({
+              children: "Une erreur est survenue pendant l'enregistrement de la mission.",
+              closingDelay: 3000,
+              isClosable: true,
+              level: Level.ERROR,
+              withAutomaticClosing: true
+            })
+          ),
         message: '`await autoSaveAction()` failed.',
-        originalError: err,
-        userMessage: "Une erreur est survenue pendant l'enregistrement de la mission."
+        originalError: err
       })
 
       return actionFormValues.id

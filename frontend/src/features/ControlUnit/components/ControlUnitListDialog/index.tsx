@@ -2,7 +2,7 @@ import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBo
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { trackEvent } from '@hooks/useTracking'
 import { Accent, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { FilterBar } from './FilterBar'
@@ -34,8 +34,11 @@ export function ControlUnitListDialog() {
   const close = () => {
     dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
   }
-
-  FrontendApiError.handleIfAny(getControlUnitsError)
+  useEffect(() => {
+    if (getControlUnitsError) {
+      FrontendApiError.handleIfAny(getControlUnitsError, dispatch)
+    }
+  }, [getControlUnitsError, dispatch])
 
   const activeControlUnits = useMemo(() => controlUnits?.filter(isNotArchived), [controlUnits])
 

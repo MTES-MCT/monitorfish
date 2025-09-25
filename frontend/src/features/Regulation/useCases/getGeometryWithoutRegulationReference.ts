@@ -1,5 +1,7 @@
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
+
 import { getAllGeometryWithoutProperty } from '../../../api/geoserver'
-import { setError } from '../../../domain/shared_slices/Global'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
 
 import type { Polygon } from 'geojson'
@@ -14,8 +16,15 @@ export const getGeometryWithoutRegulationReference =
 
       return await monitorFishWorker.getIdToGeometryObject(features)
     } catch (e) {
-      dispatch(setError(e))
-
+      dispatch(
+        addMainWindowBanner({
+          children: (e as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
       throw e
     }
   }

@@ -1,5 +1,3 @@
-import { ToastContainer } from 'react-toastify'
-
 import { LoginBackground } from './Login'
 
 export function Register() {
@@ -10,7 +8,6 @@ export function Register() {
         cnsp-france@developpement-durable.gouv.fr
       </a>{' '}
       pour accéder à cette page.
-      <ToastContainer />
     </LoginBackground>
   )
 }

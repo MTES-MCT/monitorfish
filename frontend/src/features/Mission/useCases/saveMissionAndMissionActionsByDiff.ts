@@ -4,8 +4,10 @@ import { getMissionActionsToCreateUpdateOrDelete } from '@features/Mission/compo
 import { missionActionApi } from '@features/Mission/missionActionApi'
 import { monitorfishMissionApi } from '@features/Mission/monitorfishMissionApi'
 import { saveMission } from '@features/Mission/useCases/saveMission'
-import { logSoftError } from '@mtes-mct/monitor-ui'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
+import { logSoftError } from '@utils/logSoftError'
 
 import type { MissionActionFormValues, MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MainAppThunk } from '@store'
@@ -59,10 +61,18 @@ export const saveMissionAndMissionActionsByDiff =
       return savedMission
     } catch (err) {
       logSoftError({
-        isSideWindowError: true,
+        callback: () =>
+          dispatch(
+            addSideWindowBanner({
+              children: "Une erreur est survenue pendant l'enregistrement de la mission.",
+              closingDelay: 3000,
+              isClosable: true,
+              level: Level.ERROR,
+              withAutomaticClosing: true
+            })
+          ),
         message: '`createOrUpdate()` failed.',
-        originalError: err,
-        userMessage: "Une erreur est survenue pendant l'enregistrement de la mission."
+        originalError: err
       })
 
       return nextMainFormValues

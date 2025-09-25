@@ -1,5 +1,6 @@
 import { MonitorFishMap } from '@features/Map/Map.types'
-import { logSoftError, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { logSoftError } from '@utils/logSoftError'
 import GeoJSON from 'ol/format/GeoJSON'
 
 import { customZoneActions } from '../slice'
@@ -23,7 +24,6 @@ export const showOrHide =
     const layer = getLayer(MonitorFishMap.MonitorFishLayer.CUSTOM)
     if (!layer) {
       logSoftError({
-        isSideWindowError: false,
         message: 'Layer `CUSTOM` not found in `monitorfishMap` map object.'
       })
 

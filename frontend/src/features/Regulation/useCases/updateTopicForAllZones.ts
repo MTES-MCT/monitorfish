@@ -1,7 +1,8 @@
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
 import { Feature } from 'ol'
 
 import { sendRegulationTransaction } from '../../../api/geoserver'
-import { setError } from '../../../domain/shared_slices/Global'
 import { regulationActions } from '../slice'
 import { getRegulatoryFeatureId, mapToRegulatoryFeatureObject, RegulationActionType } from '../utils'
 
@@ -19,7 +20,15 @@ export const updateTopicForAllZones =
       layersTopicsByRegTerritory is ${layersTopicsByRegTerritory}
       territory is ${territory}
       lawType is ${lawType}`)
-      dispatch(setError(new Error(UPDATE_TOPIC_NAME_ERROR)))
+      dispatch(
+        addMainWindowBanner({
+          children: UPDATE_TOPIC_NAME_ERROR,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
 
       return
     }
@@ -50,7 +59,15 @@ export const updateTopicForAllZones =
         dispatch(regulationActions.setRegulatoryLayerLawTypes(newLayersTopicsByRegTerritory))
       } catch (err) {
         console.error(err)
-        dispatch(setError(err))
+        dispatch(
+          addMainWindowBanner({
+            children: (err as Error).message,
+            closingDelay: 3000,
+            isClosable: true,
+            level: Level.ERROR,
+            withAutomaticClosing: true
+          })
+        )
       }
     }
   }

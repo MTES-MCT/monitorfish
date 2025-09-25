@@ -1,11 +1,12 @@
 import { beaconMalfunctionApi } from '@features/BeaconMalfunction/apis'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
 
 import {
   setOpenedBeaconMalfunction,
   setOpenedBeaconMalfunctionsInKanban,
   updateVesselBeaconMalfunctionsResumeAndHistory
 } from '../../../domain/shared_slices/BeaconMalfunction'
-import { setError } from '../../../domain/shared_slices/Global'
 
 import type { UserType } from '@features/BeaconMalfunction/constants'
 import type { MainAppThunk } from '@store'
@@ -54,6 +55,14 @@ export const saveBeaconMalfunctionCommentFromKanban =
         dispatch(updateVesselBeaconMalfunctionsResumeAndHistory(beaconMalfunctionWithDetails))
       }
     } catch (error) {
-      dispatch(setError(error))
+      dispatch(
+        addSideWindowBanner({
+          children: (error as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
     }
   }

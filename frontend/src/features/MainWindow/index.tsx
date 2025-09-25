@@ -11,7 +11,6 @@ import styled from 'styled-components'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { ErrorToastNotification } from '../commonComponents/ErrorToastNotification'
 import { ControlUnitDialog } from '../ControlUnit/components/ControlUnitDialog'
 import { ControlUnitListDialog } from '../ControlUnit/components/ControlUnitListDialog'
 import { DrawLayerModal } from '../Draw/components/DrawModal'
@@ -20,7 +19,6 @@ import { LayersSidebar } from '../LayersSidebar/components'
 import { PreviewFilteredVessels } from './components/PreviewFilteredVessels'
 import { APIWorker } from '../../api/APIWorker'
 import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
-import { Notifier } from '../../components/Notifier'
 import { MapButtons } from '../Map/components/MapButtons'
 import { SideWindowLauncher } from '../SideWindow/SideWindowLauncher'
 import { VesselLoader } from '../Vessel/components/VesselLoader'
@@ -85,8 +83,6 @@ export function MainWindow() {
 
         <VesselLoader />
         <APIWorker />
-        <ErrorToastNotification />
-        <Notifier />
 
         {status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}
         {isDrawLayerModalDisplayed && <DrawLayerModal />}

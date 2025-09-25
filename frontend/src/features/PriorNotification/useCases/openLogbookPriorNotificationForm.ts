@@ -1,4 +1,4 @@
-import { RtkCacheTagType } from '@api/constants'
+import { RtkCacheTagType, WindowContext } from '@api/constants'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
@@ -67,7 +67,8 @@ export const openLogbookPriorNotificationForm =
             err,
             () => openLogbookPriorNotificationForm(identifier, fingerprint),
             true,
-            DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR
+            DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR,
+            WindowContext.SideWindow
           )
         )
 

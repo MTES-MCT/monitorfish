@@ -1,4 +1,4 @@
-import { RtkCacheTagType } from '@api/constants'
+import { RtkCacheTagType, WindowContext } from '@api/constants'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { handleThunkError } from '@utils/handleThunkError'
@@ -31,7 +31,15 @@ export const verifyAndSendPriorNotification =
       dispatch(priorNotificationActions.setOpenedPriorNotificationDetail(priorNotificationDetail))
     } catch (err) {
       if (err instanceof FrontendApiError) {
-        dispatch(displayOrLogError(err, undefined, true, DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR))
+        dispatch(
+          displayOrLogError(
+            err,
+            undefined,
+            true,
+            DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR,
+            WindowContext.SideWindow
+          )
+        )
 
         return
       }

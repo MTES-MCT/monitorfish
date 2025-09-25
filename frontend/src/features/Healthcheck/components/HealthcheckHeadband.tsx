@@ -1,8 +1,10 @@
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { FIVE_MINUTES } from '../../../api/APIWorker'
-import { setError, setHealthcheckTextWarning } from '../../../domain/shared_slices/Global'
+import { setHealthcheckTextWarning } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
@@ -35,7 +37,15 @@ export function HealthcheckHeadband() {
 
     if (isError || !healthcheck) {
       if (error) {
-        dispatch(setError(error))
+        dispatch(
+          addMainWindowBanner({
+            children: (error as Error).message,
+            closingDelay: 3000,
+            isClosable: true,
+            level: Level.ERROR,
+            withAutomaticClosing: true
+          })
+        )
       }
 
       return

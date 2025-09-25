@@ -1,5 +1,6 @@
 import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
 import { getMissionActionMissingFields } from '@features/Mission/components/MissionForm/utils/getMissionActionMissingFields'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Icon, pluralize, THEME } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import styled from 'styled-components'
@@ -7,8 +8,9 @@ import styled from 'styled-components'
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 
 export function MissingFieldsText() {
+  const dispatch = useMainAppDispatch()
   const { values } = useFormikContext<MissionActionFormValues>()
-  const missingFields = getMissionActionMissingFields(values)
+  const missingFields = getMissionActionMissingFields(values, dispatch)
   const isMissionEnded = useIsMissionEnded()
 
   if (missingFields === 0) {

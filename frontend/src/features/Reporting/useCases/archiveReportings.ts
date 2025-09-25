@@ -30,7 +30,8 @@ export const archiveReportings =
           true,
           windowContext === WindowContext.MainWindow
             ? DisplayedErrorKey.MAIN_WINDOW_REPORTING_LIST_ERROR
-            : DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR
+            : DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR,
+          windowContext
         )
       )
     }

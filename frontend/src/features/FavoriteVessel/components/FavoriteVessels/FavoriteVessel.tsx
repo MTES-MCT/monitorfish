@@ -1,6 +1,6 @@
 import { CountryFlag } from '@components/CountryFlag'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Icon, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { hideVesselTrack } from '../../../Vessel/useCases/hideVesselTrack'
@@ -18,6 +18,7 @@ type FavoriteVesselProps = Readonly<{
   isVesselShowed: boolean
   vesselCompositeIdentifier: Vessel.VesselCompositeIdentifier
 }>
+
 export function FavoriteVessel({
   favorite,
   isLastItem,
@@ -55,43 +56,48 @@ export function FavoriteVessel({
       </VesselName>
       <Icons>
         {isVesselShowed ? (
-          <Icon.Summary
+          <IconButton
+            accent={Accent.TERTIARY}
             data-cy="favorite-vessel-close-vessel-sidebar"
+            Icon={Icon.Summary}
             /* eslint-disable-next-line react/jsx-no-bind */
             onClick={() => dispatch(unselectVessel())}
-            size={20}
             title="Fermer la fiche navire"
           />
         ) : (
-          <Icon.Summary
+          <IconButton
+            accent={Accent.TERTIARY}
             color={THEME.color.lightGray}
             data-cy="favorite-vessel-show-vessel-sidebar"
+            Icon={Icon.Summary}
             /* eslint-disable-next-line react/jsx-no-bind */
             onClick={showVesselSidebar}
-            size={20}
             title="Afficher la fiche navire"
           />
         )}
         {isTrackShowed || isVesselShowed ? (
-          <Icon.Display
+          <IconButton
+            accent={Accent.TERTIARY}
             data-cy="favorite-vessel-hide-vessel-track"
+            Icon={Icon.Display}
             /* eslint-disable-next-line react/jsx-no-bind */
             onClick={hideVesselTrackOrSidebar}
-            size={20}
           />
         ) : (
-          <Icon.Hide
+          <IconButton
+            accent={Accent.TERTIARY}
             color={THEME.color.lightGray}
             data-cy="favorite-vessel-show-vessel-track"
+            Icon={Icon.Hide}
             onClick={() => dispatch(showVesselTrack(favorite, true, null, true))}
-            size={20}
           />
         )}
-        <Icon.Close
-          color={THEME.color.slateGray}
+        <IconButton
+          accent={Accent.TERTIARY}
+          color={THEME.color.lightGray}
           data-cy="favorite-vessel-delete-vessel"
+          Icon={Icon.Close}
           onClick={() => dispatch(removeVesselFromFavorites(vesselCompositeIdentifier))}
-          size={15}
           title="Supprimer le navire de mes navires suivis"
         />
       </Icons>
@@ -106,12 +112,6 @@ const Icons = styled.div`
   display: flex;
   height: 36px;
   align-items: center;
-  cursor: pointer;
-
-  .Element-IconBox {
-    left: auto;
-    padding-left: 8px;
-  }
 `
 
 const VesselName = styled.span`

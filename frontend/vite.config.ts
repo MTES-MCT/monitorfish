@@ -34,9 +34,11 @@ export default defineConfig({
      * Used to fix https://github.com/MTES-MCT/monitorfish/issues/3211
      * @see https://github.com/bvaughn/react-window/issues/227
      */
+    // @ts-ignore
     replace({
       'pointerEvents: isScrolling ? "none" : void 0': 'pointerEvents: null'
     }),
+    // @ts-ignore
     replace({
       'pointerEvents: isScrolling ? "none" : undefined': 'pointerEvents: null'
     }),

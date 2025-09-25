@@ -44,6 +44,13 @@ export function VesselSidebarHeader() {
 
   return (
     <>
+      <MapToolButton
+        Icon={Icon.Search}
+        isActive={!!selectedVessel}
+        onClick={() => dispatch(setIsFocusedOnVesselSearch(true))}
+        onMouseEnter={() => dispatch(expandRightMenu())}
+        title="Rechercher un navire"
+      />
       <VesselNameOrInput
         $isRightMenuShrinked={isRightMenuShrinked}
         data-cy="vessel-name"
@@ -67,13 +74,6 @@ export function VesselSidebarHeader() {
           />
         )}
       </VesselNameOrInput>
-      <MapToolButton
-        Icon={Icon.Search}
-        isActive={!!selectedVessel}
-        onClick={() => dispatch(setIsFocusedOnVesselSearch(true))}
-        onMouseEnter={() => dispatch(expandRightMenu())}
-        title="Rechercher un navire"
-      />
     </>
   )
 }
@@ -84,11 +84,10 @@ const VesselNameOrInput = styled(MapComponent)<{
   position: absolute;
   display: inline-block;
   right: ${p => (p.$isRightMenuShrinked ? 10 : 55)}px;
-  z-index: 1000;
   color: ${p => p.theme.color.gainsboro};
   text-decoration: none;
   border: none;
-  background-color: none;
+  background-color: unset;
   border-radius: 2px;
   padding: 0 0 0 0;
   text-align: center;
@@ -98,6 +97,6 @@ const VesselNameOrInput = styled(MapComponent)<{
 
   &:hover,
   &:focus {
-    background-color: none;
+    background-color: unset;
   }
 `

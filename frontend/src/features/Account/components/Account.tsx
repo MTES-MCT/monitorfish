@@ -121,7 +121,8 @@ export function Account() {
   }
 
   return (
-    <Wrapper>
+    <>
+      <MapToolButton Icon={Icon.Account} isActive={isOpened} onClick={openOrClose} title="Mon compte" />
       {isRendered && (
         <MapMenuDialogWrapper $hideBoxShadow $isOpen={isOpened} data-cy="map-account-box">
           <StyledContainer>
@@ -162,7 +163,6 @@ export function Account() {
           </StyledContainer>
         </MapMenuDialogWrapper>
       )}
-      <MapToolButton Icon={Icon.Account} isActive={isOpened} onClick={openOrClose} title="Mon compte" />
       {isUnregisterCacheConfirmationModalOpen && (
         <ConfirmationModal
           confirmationButtonLabel="Désactiver"
@@ -201,7 +201,7 @@ export function Account() {
           title="Téléchargement des cartes"
         />
       )}
-    </Wrapper>
+    </>
   )
 }
 
@@ -216,15 +216,6 @@ const StyledContainer = styled(MapMenuDialog.Container)`
 const StyledFooter = styled(MapMenuDialog.Footer)`
   padding: 0;
   gap: 0;
-`
-
-const Wrapper = styled.div`
-  transition: all 0.2s;
-  left: 10px;
-
-  * {
-    box-sizing: border-box;
-  }
 `
 
 const MapMenuDialogWrapper = styled(MapToolBox)``

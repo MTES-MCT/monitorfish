@@ -67,17 +67,7 @@ export function NewFeatures() {
   }, [authorizedFeatures])
 
   return (
-    <Wrapper>
-      {isRendered && (
-        <MapToolBox $hideBoxShadow $isOpen={isOpened} data-cy="map-new-features-box">
-          <StyledContainer>
-            <MapMenuDialog.Header>
-              <MapMenuDialog.Title>Nouveautés MonitorFish</MapMenuDialog.Title>
-            </MapMenuDialog.Header>
-            <StyledBody>{features}</StyledBody>
-          </StyledContainer>
-        </MapToolBox>
-      )}
+    <>
       <MapToolButton
         badgeBackgroundColor={THEME.color.blueGray}
         badgeNumber={
@@ -90,7 +80,17 @@ export function NewFeatures() {
         onClick={openOrClose}
         title="Nouveautés MonitorFish"
       />
-    </Wrapper>
+      {isRendered && (
+        <MapToolBox $hideBoxShadow $isOpen={isOpened} data-cy="map-new-features-box">
+          <StyledContainer>
+            <MapMenuDialog.Header>
+              <MapMenuDialog.Title>Nouveautés MonitorFish</MapMenuDialog.Title>
+            </MapMenuDialog.Header>
+            <StyledBody>{features}</StyledBody>
+          </StyledContainer>
+        </MapToolBox>
+      )}
+    </>
   )
 }
 
@@ -101,14 +101,4 @@ const StyledContainer = styled(MapMenuDialog.Container)`
 
 const StyledBody = styled(MapMenuDialog.Body)`
   padding: 0;
-`
-
-const Wrapper = styled.div`
-  transition: all 0.2s;
-  z-index: 98;
-  left: 10px;
-
-  * {
-    box-sizing: border-box;
-  }
 `

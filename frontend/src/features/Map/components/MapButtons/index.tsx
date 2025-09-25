@@ -2,6 +2,7 @@ import { Account } from '@features/Account/components/Account'
 import { ActivityVisualizationMapButton } from '@features/ActivityVisualization/components/ActivityVisualizationMapButton'
 import { ControlUnitListMapButton } from '@features/ControlUnit/components/ControlUnitListMapButton'
 import { LayersSidebar } from '@features/LayersSidebar/components'
+import { RightMenuOnHoverArea } from '@features/Map/components/MapButtons/shared/RightMenuOnHoverArea'
 import { NewFeatures } from '@features/NewFeatures/components/NewFeatures'
 import { VesselListMapButton } from '@features/Vessel/components/VesselListMapButton'
 import { VesselSidebar } from '@features/Vessel/components/VesselSidebar/components'
@@ -65,6 +66,7 @@ export function MapButtons() {
 
   return (
     <>
+      <RightMenuOnHoverArea />
       <LeftMenu $top={top}>
         <MenuItem>
           <LayersSidebar />
@@ -109,8 +111,8 @@ export function MapButtons() {
       </LeftMenu>
       <RightMenu $top={top}>
         <MenuItem>
-          {isVesselSidebarOpen && <VesselSidebar />}
           {isVesselSearchDisplayed && <VesselSidebarHeader />}
+          {isVesselSidebarOpen && <VesselSidebar />}
         </MenuItem>
         <MenuItem>
           <Group>
@@ -175,9 +177,9 @@ const Menu = styled.menu<{ $top: number }>`
   display: flex;
   flex-direction: column;
   position: absolute;
-  row-gap: 24px;
+  row-gap: 32px;
   top: calc(${p => p.$top}px + 10px);
-  z-index: 10000;
+  z-index: 1;
 `
 const LeftMenu = styled(Menu)`
   left: 10px;
@@ -189,6 +191,7 @@ const RightMenu = styled(Menu)`
 
 const MenuItem = styled.li`
   position: relative;
+  display: flex;
 `
 
 const Group = styled.ul`

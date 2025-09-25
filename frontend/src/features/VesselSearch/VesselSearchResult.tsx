@@ -12,57 +12,42 @@ export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, sh
   return (
     <>
       {!!foundVessels?.length && (
-        <Results>
-          <List>
-            {foundVessels.map(featureOrIdentity => {
-              const vesselCompositeIdentifier = `${featureOrIdentity.vesselId}/${getVesselCompositeIdentifier(featureOrIdentity)}`
+        <List>
+          {foundVessels.map(featureOrIdentity => {
+            const vesselCompositeIdentifier = `${featureOrIdentity.vesselId}/${getVesselCompositeIdentifier(featureOrIdentity)}`
 
-              return (
-                <VesselSearchResultItem
-                  key={vesselCompositeIdentifier}
-                  baseUrl={baseUrl}
-                  searchQuery={searchQuery}
-                  selectVessel={selectVessel}
-                  vessel={featureOrIdentity}
-                />
-              )
-            })}
-          </List>
-        </Results>
+            return (
+              <VesselSearchResultItem
+                key={vesselCompositeIdentifier}
+                baseUrl={baseUrl}
+                searchQuery={searchQuery}
+                selectVessel={selectVessel}
+                vessel={featureOrIdentity}
+              />
+            )
+          })}
+        </List>
       )}
       {!foundVessels?.length && showLastSearchedVessels && (
-        <Results>
-          <List>
-            {lastSearchedVessels.map(vessel => {
-              const vesselCompositeIdentifier = `${vessel.vesselId}/${getVesselCompositeIdentifier(vessel)}`
+        <List>
+          {lastSearchedVessels.map(vessel => {
+            const vesselCompositeIdentifier = `${vessel.vesselId}/${getVesselCompositeIdentifier(vessel)}`
 
-              return (
-                <VesselSearchResultItem
-                  key={vesselCompositeIdentifier}
-                  baseUrl={baseUrl}
-                  searchQuery={searchQuery}
-                  selectVessel={() => selectVessel(vessel)}
-                  vessel={vessel}
-                />
-              )
-            })}
-          </List>
-        </Results>
+            return (
+              <VesselSearchResultItem
+                key={vesselCompositeIdentifier}
+                baseUrl={baseUrl}
+                searchQuery={searchQuery}
+                selectVessel={() => selectVessel(vessel)}
+                vessel={vessel}
+              />
+            )
+          })}
+        </List>
       )}
     </>
   )
 }
-
-const Results = styled.div`
-  background: white;
-  color: ${p => p.theme.color.gunMetal};
-  border-bottom: 1px solid ${p => p.theme.color.gainsboro};
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
-  position: absolute;
-  z-index: 9;
-  width: 100%;
-`
 
 const List = styled.ul`
   margin: 0;
@@ -71,6 +56,10 @@ const List = styled.ul`
   overflow-y: scroll;
   overflow-x: hidden;
   max-height: 311px;
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
+  background: white;
+  color: ${p => p.theme.color.gunMetal};
+  border-bottom: 1px solid ${p => p.theme.color.gainsboro};
+  position: absolute;
+  width: 100%;
+  z-index: 1;
 `

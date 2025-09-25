@@ -5,7 +5,9 @@ import {
 } from '@features/Mission/components/MissionForm/utils'
 import { validateMissionForms } from '@features/Mission/components/MissionForm/utils/validateMissionForms'
 import { monitorenvMissionApi } from '@features/Mission/monitorenvMissionApi'
-import { logSoftError } from '@mtes-mct/monitor-ui'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
+import { logSoftError } from '@utils/logSoftError'
 
 import type { MissionMainFormValues, MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MainAppThunk } from '@store'
@@ -52,10 +54,18 @@ export const saveMission =
       }
     } catch (err) {
       logSoftError({
-        isSideWindowError: true,
+        callback: () =>
+          dispatch(
+            addSideWindowBanner({
+              children: "Une erreur est survenue pendant l'enregistrement de la mission.",
+              closingDelay: 3000,
+              isClosable: true,
+              level: Level.ERROR,
+              withAutomaticClosing: true
+            })
+          ),
         message: '`createOrUpdate()` failed.',
-        originalError: err,
-        userMessage: "Une erreur est survenue pendant l'enregistrement de la mission."
+        originalError: err
       })
 
       return nextMainFormValues
@@ -65,7 +75,7 @@ export const saveMission =
       mainFormValues: MissionMainFormValues,
       actionsFormValues: MissionActionFormValues[]
     ) {
-      const [areFormsValid] = validateMissionForms(mainFormValues, actionsFormValues, false)
+      const [areFormsValid] = validateMissionForms(mainFormValues, actionsFormValues, false, dispatch)
       if (areFormsValid) {
         dispatch(missionFormActions.setIsDraftDirty(false))
       }

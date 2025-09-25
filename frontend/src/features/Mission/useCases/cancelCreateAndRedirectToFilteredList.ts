@@ -4,8 +4,10 @@ import { MissionDateRangeFilter, MissionFilterType } from '@features/Mission/com
 import { Mission } from '@features/Mission/mission.types'
 import { monitorenvMissionApi } from '@features/Mission/monitorenvMissionApi'
 import { SideWindowMenuKey } from '@features/SideWindow/constants'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
-import { customDayjs, logSoftError } from '@mtes-mct/monitor-ui'
+import { customDayjs, Level } from '@mtes-mct/monitor-ui'
+import { logSoftError } from '@utils/logSoftError'
 
 export const cancelCreateAndRedirectToFilteredList =
   ({ controlUnitName, missionId }: { controlUnitName: string; missionId: number | undefined }) =>
@@ -35,10 +37,18 @@ export const cancelCreateAndRedirectToFilteredList =
         }
       } catch (error) {
         logSoftError({
-          isSideWindowError: true,
+          callback: () =>
+            dispatch(
+              addSideWindowBanner({
+                children: 'Une erreur est survenue pendant la suppression de la mission.',
+                closingDelay: 3000,
+                isClosable: true,
+                level: Level.ERROR,
+                withAutomaticClosing: true
+              })
+            ),
           message: '`delete()` failed.',
-          originalError: error,
-          userMessage: 'Une erreur est survenue pendant la suppression de la mission.'
+          originalError: error
         })
       }
     }

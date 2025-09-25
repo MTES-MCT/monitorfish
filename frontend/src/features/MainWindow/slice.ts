@@ -1,6 +1,6 @@
 import { createEntityAdapter, createSlice, type EntityState, type PayloadAction } from '@reduxjs/toolkit'
 
-import type { BannerStackItem } from './types'
+import type { BannerStackItem } from 'types'
 
 export const bannerStackAdapter = createEntityAdapter({
   selectId: (bannerStackItem: BannerStackItem) => bannerStackItem.id,
@@ -14,9 +14,9 @@ const INITIAL_STATE: MainWindowState = {
   bannerStack: bannerStackAdapter.getInitialState()
 }
 
-const mainWindowSlice = createSlice({
+const mainWindowBannerSlice = createSlice({
   initialState: INITIAL_STATE,
-  name: 'mainWindow',
+  name: 'mainWindowBanner',
   reducers: {
     /**
      * Add a banner to the stack.
@@ -38,5 +38,5 @@ const mainWindowSlice = createSlice({
   }
 })
 
-export const mainWindowActions = mainWindowSlice.actions
-export const mainWindowReducer = mainWindowSlice.reducer
+export const mainWindowBannerActions = mainWindowBannerSlice.actions
+export const mainWindowBannerReducer = mainWindowBannerSlice.reducer

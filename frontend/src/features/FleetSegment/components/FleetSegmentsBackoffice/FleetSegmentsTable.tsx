@@ -31,6 +31,7 @@ export function FleetSegmentsTable({
   const { height } = useWindowResize()
 
   useEffect(() => {
+    /* TODO: understand why BackofficeAppPromiseThunk type is not accepted */
     dispatch(getAllGearCodes<MainAppAsyncThunk>())
     dispatch(getAllSpecies<MainAppAsyncThunk>())
   }, [dispatch])
@@ -71,7 +72,7 @@ export function FleetSegmentsTable({
       <Column width={250}>
         <HeaderCell>FAO</HeaderCell>
         <TagsCell
-          data={faoAreas.map(faoArea => ({ label: faoArea, value: faoArea }))}
+          data={faoAreas?.map(faoArea => ({ label: faoArea, value: faoArea }))}
           dataKey="faoAreas"
           id="segment"
         />

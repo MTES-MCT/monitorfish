@@ -1,4 +1,4 @@
-import { logSoftError } from '@mtes-mct/monitor-ui'
+import { logSoftError } from '@utils/logSoftError'
 import { without } from 'lodash-es'
 import { addMethod, number, object, ObjectSchema, string } from 'yup'
 
@@ -18,9 +18,7 @@ export function atLeastOneRequired(
 ) {
   if (!requiredFields.every(field => this.fields[field])) {
     logSoftError({
-      isSideWindowError: true,
-      message: 'All required fields should be defined before calling atLeastOneRequired',
-      userMessage: "Une erreur est survenue lors de la création de la suspention d'alerte"
+      message: 'All required fields should be defined before calling atLeastOneRequired'
     })
   }
 

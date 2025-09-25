@@ -1,4 +1,3 @@
-import { ToastContainer } from 'react-toastify'
 import styled from 'styled-components'
 
 import AlertSVG from '../features/icons/Picto_alerte.svg?react'
@@ -18,8 +17,6 @@ export function UnsupportedBrowserPage() {
           la version 69.
         </Text>
       </Alert>
-
-      <ToastContainer />
     </Wrapper>
   )
 }

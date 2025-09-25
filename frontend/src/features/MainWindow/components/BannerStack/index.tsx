@@ -4,16 +4,16 @@ import { isDefined } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { Item } from './Item'
-import { mainWindowActions } from '../../slice'
+import { mainWindowBannerActions } from '../../slice'
 
 // TODO Implement top positionning with a visible `<Healthcheck />`.
 // Use as relative `<MainWindowLayout />` wrapper for that, not a calculation.
 export function BannerStack() {
   const dispatch = useMainAppDispatch()
-  const bannerStack = useMainAppSelector(state => state.mainWindow.bannerStack)
+  const bannerStack = useMainAppSelector(state => state.mainWindowBanner.bannerStack)
 
   const remove = (bannerStackRank: number) => {
-    dispatch(mainWindowActions.removeBanner(bannerStackRank))
+    dispatch(mainWindowBannerActions.removeBanner(bannerStackRank))
   }
 
   const bannerStackItems = Object.values(bannerStack.entities).filter(isDefined)

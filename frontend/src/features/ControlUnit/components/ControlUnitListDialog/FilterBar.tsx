@@ -9,7 +9,7 @@ import {
   getOptionsFromIdAndName,
   getOptionsFromLabelledEnum
 } from '@mtes-mct/monitor-ui'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { controlUnitListDialogActions } from './slice'
@@ -28,12 +28,19 @@ export function FilterBar() {
     undefined,
     RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
   )
-  FrontendApiError.handleIfAny(getAdministrationsError)
   const { data: bases, error: getStationsError } = useGetStationsQuery(
     undefined,
     RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
   )
-  FrontendApiError.handleIfAny(getStationsError)
+
+  useEffect(() => {
+    if (getAdministrationsError) {
+      FrontendApiError.handleIfAny(getAdministrationsError, dispatch)
+    }
+    if (getStationsError) {
+      FrontendApiError.handleIfAny(getStationsError, dispatch)
+    }
+  }, [getStationsError, getAdministrationsError, dispatch])
 
   const administrationsAsOptions = useMemo(
     () => getOptionsFromIdAndName((administrations ?? []).filter(isNotArchived)),

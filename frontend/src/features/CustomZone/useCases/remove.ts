@@ -1,5 +1,5 @@
 import { MonitorFishMap } from '@features/Map/Map.types'
-import { logSoftError } from '@mtes-mct/monitor-ui'
+import { logSoftError } from '@utils/logSoftError'
 
 import { customZoneActions } from '../slice'
 import { getLayer } from '../utils/getLayer'
@@ -15,7 +15,6 @@ export const remove =
     const layer = getLayer(MonitorFishMap.MonitorFishLayer.CUSTOM)
     if (!layer) {
       logSoftError({
-        isSideWindowError: false,
         message: 'Layer `CUSTOM` not found in `monitorfishMap` map object.'
       })
 

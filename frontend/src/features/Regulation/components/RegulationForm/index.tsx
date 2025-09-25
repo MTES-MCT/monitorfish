@@ -1,5 +1,6 @@
 // TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
 
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { BaseMap } from '@features/Map/components/BaseMap'
 import { LayerProperties } from '@features/Map/constants'
 import { BaseLayer } from '@features/Map/layers/BaseLayer'
@@ -29,8 +30,7 @@ import {
 } from '@features/Regulation/utils'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
-import { Textarea } from '@mtes-mct/monitor-ui'
-import { setError } from 'domain/shared_slices/Global'
+import { Level, Textarea } from '@mtes-mct/monitor-ui'
 import { getAllSpecies } from 'domain/use_cases/species/getAllSpecies'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -212,7 +212,15 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
         regulationActions.setRegulatoryGeometriesToPreview([{ geometry: processingRegulation?.geometry }] as any)
       )
     } else {
-      dispatch(setError(new Error("Aucune géométrie n'a été trouvée pour cette identifiant.")))
+      dispatch(
+        addMainWindowBanner({
+          children: "Aucune géométrie n'a été trouvée pour cet identifiant.",
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
     }
   }, [dispatch, geometriesMap, isEdition, processingRegulation, selectedRegulatoryZoneId, isRegulatoryPreviewDisplayed])
 

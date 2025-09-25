@@ -1,7 +1,8 @@
-import type { BackofficeAppDispatch, BackofficeAppThunk, MainAppDispatch, MainAppThunk } from '@store'
+import type { ThunkAction, AnyAction } from '@reduxjs/toolkit'
+import type { BackofficeAppDispatch, BackofficeRootState, MainAppDispatch, MainRootState } from '@store'
 
 // These schemas are used for store-hybrid thunks (use cases)
-export type HybridAppDispatch = BackofficeAppDispatch | MainAppDispatch
-export type HybridAppThunk<T extends HybridAppDispatch, R = void> = T extends BackofficeAppDispatch
-  ? BackofficeAppThunk<R>
-  : MainAppThunk<R>
+export type HybridRootState = MainRootState | BackofficeRootState
+export type HybridAppDispatch = MainAppDispatch | BackofficeAppDispatch
+
+export type HybridAppThunk<R = void> = ThunkAction<R, HybridRootState, undefined, AnyAction>

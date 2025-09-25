@@ -1,5 +1,7 @@
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
+
 import { getAllSpeciesFromAPI } from '../../../api/species'
-import { setError } from '../../shared_slices/Global'
 import { speciesActions } from '../../shared_slices/Species'
 
 import type {
@@ -42,7 +44,16 @@ export function getAllSpecies(): MainAppAsyncThunk | BackofficeAppPromiseThunk {
         })
       )
     } catch (err) {
-      dispatch(setError(err))
+      /* TODO: understand type error if no `as any` */
+      dispatch(
+        addMainWindowBanner({
+          children: (err as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        }) as any
+      )
     }
   }
 }

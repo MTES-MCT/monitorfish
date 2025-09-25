@@ -1,3 +1,4 @@
+import { WindowContext } from '@api/constants'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { customDayjs } from '@mtes-mct/monitor-ui'
@@ -48,7 +49,15 @@ export const createOrUpdateManualPriorNotification =
       )
     } catch (err) {
       if (err instanceof FrontendApiError) {
-        dispatch(displayOrLogError(err, undefined, true, DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
+        dispatch(
+          displayOrLogError(
+            err,
+            undefined,
+            true,
+            DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR,
+            WindowContext.SideWindow
+          )
+        )
 
         return
       }

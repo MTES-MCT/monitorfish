@@ -1,9 +1,9 @@
 import { alertApi } from '@features/Alert/apis'
 import { setSilencedAlerts } from '@features/Alert/components/SideWindowAlerts/slice'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
 import { deleteListItems } from '@utils/deleteListItems'
 import { updateListItemsProp } from '@utils/updateListItemsProp'
-
-import { setError } from '../../../domain/shared_slices/Global'
 
 import type { SilencedAlert } from '@features/Alert/types'
 import type { MainAppThunk } from '@store'
@@ -25,7 +25,15 @@ export const reactivateSilencedAlert =
     } catch (error) {
       clearTimeout(timeout)
       dispatch(setSilencedAlerts(previousSilencedAlerts))
-      dispatch(setError(error))
+      dispatch(
+        addSideWindowBanner({
+          children: (error as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
     }
   }
 

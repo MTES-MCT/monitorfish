@@ -1,7 +1,7 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
-
-import { setError } from '../../../domain/shared_slices/Global'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
 
 export const getFleetSegmentsYearEntries = () => async dispatch => {
   try {
@@ -9,7 +9,15 @@ export const getFleetSegmentsYearEntries = () => async dispatch => {
       fleetSegmentApi.endpoints.getFleetSegmentYearEntries.initiate(undefined, RTK_FORCE_REFETCH_QUERY_OPTIONS)
     ).unwrap()
   } catch (error) {
-    dispatch(setError(error))
+    dispatch(
+      addMainWindowBanner({
+        children: (error as Error).message,
+        closingDelay: 3000,
+        isClosable: true,
+        level: Level.ERROR,
+        withAutomaticClosing: true
+      })
+    )
 
     return undefined
   }

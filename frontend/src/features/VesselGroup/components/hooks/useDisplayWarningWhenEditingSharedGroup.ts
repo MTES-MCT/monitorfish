@@ -1,4 +1,4 @@
-import { mainWindowActions } from '@features/MainWindow/slice'
+import { mainWindowBannerActions } from '@features/MainWindow/slice'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { sideWindowActions } from '@features/SideWindow/slice'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
@@ -41,7 +41,7 @@ export function useDisplayWarningWhenEditingSharedGroup(sharing?: Sharing, isMai
     return () => {
       if (id) {
         if (isMainWindow) {
-          dispatch(mainWindowActions.removeBanner(id))
+          dispatch(mainWindowBannerActions.removeBanner(id))
         } else {
           dispatch(sideWindowActions.removeBanner(id))
         }

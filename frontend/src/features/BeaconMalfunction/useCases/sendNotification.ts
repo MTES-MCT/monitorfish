@@ -1,7 +1,7 @@
 import { beaconMalfunctionApi } from '@features/BeaconMalfunction/apis'
 import { NOTIFICATION_TYPE } from '@features/BeaconMalfunction/constants'
-
-import { setError } from '../../../domain/shared_slices/Global'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
 
 import type { MainAppThunk } from '@store'
 
@@ -27,7 +27,15 @@ export const sendNotification =
 
       return notificationType
     } catch (error) {
-      dispatch(setError(error))
+      dispatch(
+        addSideWindowBanner({
+          children: (error as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
 
       return undefined
     }

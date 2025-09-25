@@ -1,6 +1,6 @@
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
-
-import { setError } from '../../../domain/shared_slices/Global'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
 
 import type { FleetSegment } from '../types'
 
@@ -19,7 +19,15 @@ export const deleteFleetSegment =
         a.segment.localeCompare(b.segment)
       )
     } catch (e) {
-      dispatch(setError(e))
+      dispatch(
+        addMainWindowBanner({
+          children: (e as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
 
       return undefined
     }

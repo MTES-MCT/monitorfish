@@ -1,8 +1,8 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { alertApi } from '@features/Alert/apis'
 import { setPendingAlerts } from '@features/Alert/components/SideWindowAlerts/slice'
-
-import { setError } from '../../../domain/shared_slices/Global'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
 
 import type { MainAppThunk } from '@store'
 
@@ -14,6 +14,14 @@ export const getOperationalAlerts = (): MainAppThunk => async dispatch => {
 
     dispatch(setPendingAlerts(alerts))
   } catch (error) {
-    dispatch(setError(error))
+    dispatch(
+      addSideWindowBanner({
+        children: (error as Error).message,
+        closingDelay: 3000,
+        isClosable: true,
+        level: Level.ERROR,
+        withAutomaticClosing: true
+      })
+    )
   }
 }

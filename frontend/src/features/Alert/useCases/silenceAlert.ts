@@ -12,8 +12,6 @@ import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/render
 import { Level } from '@mtes-mct/monitor-ui'
 import { deleteListItems } from '@utils/deleteListItems'
 
-import { setError } from '../../../domain/shared_slices/Global'
-
 import type { PendingAlert, SilencedAlertPeriodRequest } from '@features/Alert/types'
 import type { MainAppThunk } from '@store'
 
@@ -72,9 +70,16 @@ export const silenceAlert =
       dispatch(renderVesselFeatures())
     } catch (error) {
       clearTimeout(timeout)
-
       dispatch(setPendingAlerts(previousPendingAlerts))
       dispatch(setSilencedAlerts(previousSilencedAlerts))
-      dispatch(setError(error))
+      dispatch(
+        addSideWindowBanner({
+          children: (error as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
     }
   }

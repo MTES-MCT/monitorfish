@@ -1,13 +1,17 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { logSoftError } from '@mtes-mct/monitor-ui'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
+import { logSoftError } from '@utils/logSoftError'
 
 import * as ActionSchemas from '../ActionForm/schemas'
 
 import type { MissionActionFormValues } from '../types'
+import type { MainAppDispatch } from '@store'
 
 export function isMissionActionFormValid(
   actionFormValues: MissionActionFormValues | MissionAction.MissionAction,
-  isCompletionValidation: boolean
+  isCompletionValidation: boolean,
+  dispatch: MainAppDispatch
 ): boolean {
   switch (actionFormValues.actionType) {
     case MissionAction.MissionActionType.AIR_CONTROL:
@@ -36,9 +40,17 @@ export function isMissionActionFormValid(
 
     default:
       logSoftError({
-        isSideWindowError: true,
-        message: 'Unknown `actionFormValues.actionType` value.',
-        userMessage: 'Une erreur est survenue pendant la validation du formulaire.'
+        callback: () =>
+          dispatch(
+            addSideWindowBanner({
+              children: 'Une erreur est survenue pendant la validation du formulaire.',
+              closingDelay: 3000,
+              isClosable: true,
+              level: Level.ERROR,
+              withAutomaticClosing: true
+            })
+          ),
+        message: 'Unknown `actionFormValues.actionType` value.'
       })
 
       return false

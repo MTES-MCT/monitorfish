@@ -12,7 +12,7 @@ import { isNumeric } from '../../../utils/isNumeric'
 import { animateToRegulatoryLayer } from '../../Map/slice'
 
 import type { MonitorFishMap } from '@features/Map/Map.types'
-import type { HybridAppDispatch, HybridAppThunk } from '@store/types'
+import type { HybridAppThunk } from '@store/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 
@@ -31,10 +31,7 @@ const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
 const setIrretrievableFeaturesEvent = (error: any) => new CustomBaseEvent(IRRETRIEVABLE_FEATURES_EVENT, error)
 
 export const getRegulatoryVectorSource =
-  <T extends HybridAppDispatch>(
-    regulatoryZoneProperties: MonitorFishMap.ShowedLayer
-  ): HybridAppThunk<T, VectorSource<Feature<Geometry>>> =>
-  // @ts-ignore Required to avoid reducers typing conflicts. Not fancy but allows us to keep Thunk context type-checks.
+  (regulatoryZoneProperties: MonitorFishMap.ShowedLayer): HybridAppThunk<VectorSource<Feature<Geometry>>> =>
   (dispatch, getState) => {
     const zoneName = `${LayerProperties.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`
 

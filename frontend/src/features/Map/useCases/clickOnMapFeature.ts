@@ -12,7 +12,7 @@ import { MonitorFishMap } from '../Map.types'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppDispatch } from '@store'
-import type { HybridAppDispatch, HybridAppThunk } from '@store/types'
+import type { HybridAppThunk } from '@store/types'
 import type { Point, Feature as GeoJSONFeature } from 'geojson'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
@@ -20,8 +20,7 @@ import type { Geometry } from 'ol/geom'
 const geoJSONParser = new GeoJSON()
 
 export const clickOnMapFeature =
-  <T extends HybridAppDispatch>(mapClick: MonitorFishMap.MapClick): HybridAppThunk<T> =>
-  // @ts-ignore Required to avoid reducers typing conflicts. Not fancy but allows us to keep Thunk context type-checks.
+  (mapClick: MonitorFishMap.MapClick): HybridAppThunk =>
   (dispatch, getState) => {
     if (!mapClick.feature) {
       return

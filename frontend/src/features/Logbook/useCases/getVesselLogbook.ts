@@ -4,7 +4,6 @@ import { vesselsAreEquals } from '@features/Vessel/types/vessel'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
-import { removeError } from '../../../domain/shared_slices/Global'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { logbookApi } from '../api'
 import { NavigateTo } from '../constants'
@@ -59,7 +58,6 @@ export const getVesselLogbook =
       if (isSameVesselAsCurrentlyShowed && !isFromUserAction && !!lastFishingActivities && isLastVoyage) {
         if (hasNewFishingActivityUpdates(lastFishingActivities, voyage)) {
           dispatch(logbookActions.setNextUpdate(voyage.logbookMessagesAndAlerts))
-          dispatch(removeError())
         }
 
         return undefined

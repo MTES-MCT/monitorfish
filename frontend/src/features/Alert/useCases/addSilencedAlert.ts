@@ -1,7 +1,7 @@
 import { alertApi } from '@features/Alert/apis'
 import { setSilencedAlerts } from '@features/Alert/components/SideWindowAlerts/slice'
-
-import { setError } from '../../../domain/shared_slices/Global'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
+import { Level } from '@mtes-mct/monitor-ui'
 
 import type { SilencedAlertData } from '@features/Alert/types'
 import type { MainAppThunk } from '@store'
@@ -25,6 +25,14 @@ export const addSilencedAlert =
       const nextSilencedAlerts = [savedSilencedAlert, ...previousSilencedAlerts]
       dispatch(setSilencedAlerts(nextSilencedAlerts))
     } catch (error) {
-      await dispatch(setError(error))
+      dispatch(
+        addSideWindowBanner({
+          children: (error as Error).message,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
     }
   }

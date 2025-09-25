@@ -1,5 +1,4 @@
 import { WindowContext } from '@api/constants'
-import { addBackOfficeBanner } from '@features/BackOffice/useCases/addBackOfficeBanner'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { DisplayedError } from '@libs/DisplayedError'
@@ -39,9 +38,7 @@ export const displayOrLogError =
         withAutomaticClosing: true
       }
       console.error(error) // eslint-disable-line no-console
-      if (context === WindowContext.BackOffice) {
-        dispatch(addBackOfficeBanner(bannerProps))
-      } else if (context === WindowContext.SideWindow) {
+      if (context === WindowContext.SideWindow) {
         dispatch(addSideWindowBanner(bannerProps))
       } else {
         dispatch(addMainWindowBanner(bannerProps))

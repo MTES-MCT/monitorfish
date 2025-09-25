@@ -63,7 +63,7 @@ function UnmemoizedRegulatoryPreviewLayer({ regulatoryZonesToPreview, zoneSelect
 
     // Do not zoom on regulation when a specific zone was drawed to search regulations
     if (!zoneSelected) {
-      dispatch(zoomInLayer<any>({ feature: features[0] }) as unknown as UnknownAction)
+      dispatch(zoomInLayer({ feature: features[0] }) as unknown as UnknownAction)
     }
   }, [dispatch, zoneSelected, regulatoryZonesToPreview])
 

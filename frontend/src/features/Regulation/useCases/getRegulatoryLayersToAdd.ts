@@ -5,18 +5,11 @@ import { isNotNullish } from '@utils/isNotNullish'
 import { getVectorOLLayer } from './getVectorOLLayer'
 
 import type { MonitorFishMap } from '@features/Map/Map.types'
-import type { HybridAppDispatch, HybridAppThunk } from '@store/types'
-import type { Feature } from 'ol'
-import type { Geometry } from 'ol/geom'
+import type { HybridAppThunk } from '@store/types'
 import type BaseLayer from 'ol/layer/Base'
-import type VectorImageLayer from 'ol/layer/VectorImage'
 
 export const getRegulatoryLayersToAdd =
-  <T extends HybridAppDispatch>(
-    olLayers: BaseLayer[],
-    showedLayers: MonitorFishMap.ShowedLayer[]
-  ): HybridAppThunk<T, Array<VectorImageLayer<Feature<Geometry>>>> =>
-  // @ts-ignore Required to avoid reducers typing conflicts. Not fancy but allows us to keep Thunk context type-checks.
+  (olLayers: BaseLayer[], showedLayers: MonitorFishMap.ShowedLayer[]): HybridAppThunk =>
   dispatch => {
     if (!showedLayers.length) {
       return []
@@ -30,7 +23,7 @@ export const getRegulatoryLayersToAdd =
       layersToInsert
         // TODO Is it really necessary?
         .filter(isNotNullish)
-        .map(layerToInsert => dispatch(getVectorOLLayer<T>(layerToInsert)))
+        .map(layerToInsert => dispatch(getVectorOLLayer(layerToInsert)))
         // TODO Is it really necessary?
         .filter(isNotNullish)
     )

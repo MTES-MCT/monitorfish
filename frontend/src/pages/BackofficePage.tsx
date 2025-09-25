@@ -1,6 +1,6 @@
 import { BackofficeMode } from '@api/BackofficeMode'
 import { BackOfficeMenu } from '@features/BackOffice/components/BackofficeMenu'
-import { BannerStack } from '@features/BackOffice/components/BannerStack'
+import { BannerStack } from '@features/MainWindow/components/BannerStack'
 import countries from 'i18n-iso-countries'
 import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
 import { Provider } from 'react-redux'

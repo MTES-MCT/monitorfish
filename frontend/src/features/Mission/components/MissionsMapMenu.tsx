@@ -46,7 +46,7 @@ export function MissionsMapMenu() {
   }
 
   return (
-    <Wrapper>
+    <>
       <MapToolBox $isLeftBox $isOpen={leftMapBoxOpened === MapBox.MISSIONS} data-cy="missions-menu-box">
         <MissionsMenuWrapper>
           <Header>
@@ -84,15 +84,9 @@ export function MissionsMapMenu() {
         style={{ color: THEME.color.gainsboro }}
         title="Missions et contrôles"
       />
-    </Wrapper>
+    </>
   )
 }
-
-const Wrapper = styled.div`
-  transition: all 0.2s;
-  z-index: 98;
-  left: 10px;
-`
 
 const MissionsMenuWrapper = styled.div`
   width: 320px;

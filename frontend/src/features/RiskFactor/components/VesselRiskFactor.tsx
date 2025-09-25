@@ -21,6 +21,7 @@ type VesselRiskFactorProps = Readonly<
     vesselRiskFactorProbability?: number
   }>
 >
+
 // https://github.com/MTES-MCT/monitorfish/issues/3043
 export function VesselRiskFactor({
   hasVesselRiskFactorSegments = false,
@@ -133,7 +134,6 @@ const Detail = styled.div`
   top: -8px;
   position: absolute;
   transition: 0.2s all;
-  z-index: 1;
 `
 
 const DetailRow = styled.div`

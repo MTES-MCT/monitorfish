@@ -103,14 +103,15 @@ export function MeasurementMapButton() {
 
 const MeasurementItem = styled(TransparentButton)`
   background: ${p => p.theme.color.blueGray};
+  border: none;
 
   &:hover {
-    background: ${p => p.theme.color.blueGray};
-    border: 1px solid transparent;
+    background: ${p => p.theme.color.blueYonder};
+    border: none;
   }
 
   border-radius: 2px;
-  padding: 8px 0 0;
+  padding: 6px;
   position: relative;
   right: 0;
   text-align: center;
@@ -119,7 +120,7 @@ const MeasurementItem = styled(TransparentButton)`
 `
 
 const Wrapper = styled.div`
-  transition: all 0.2s;
+  display: flex;
 `
 
 const MeasurementOptions = styled(MapComponent)<{

@@ -17,6 +17,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
@@ -42,8 +43,17 @@ class GetActiveVesselsUTests {
     @Mock
     private val logbookReportRepository: LogbookReportRepository = mock()
 
+    @Mock
+    private val manualPriorNotificationRepository: ManualPriorNotificationRepository = mock()
+
     private val getActiveVessels =
-        GetActiveVessels(lastPositionRepository, vesselGroupRepository, getAuthorizedUser, logbookReportRepository)
+        GetActiveVessels(
+            lastPositionRepository,
+            vesselGroupRepository,
+            getAuthorizedUser,
+            logbookReportRepository,
+            manualPriorNotificationRepository,
+        )
 
     @Test
     fun `execute Should return last positions with groups When multiple group conditions matches`() {
@@ -1416,7 +1426,7 @@ class GetActiveVesselsUTests {
     }
 
     @Test
-    fun `execute Should return landing port When vessels are found in future prior notification`() {
+    fun `execute Should return landing port When vessels are found in future prior notification from logbook and manual prior notification`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
             UserAuthorization(
@@ -1494,9 +1504,21 @@ class GetActiveVesselsUTests {
                 .copy(
                     vessel = vessel,
                 )
+
         given(logbookReportRepository.findAllAcknowledgedPriorNotifications(any())).willReturn(
             listOf(
                 fakePriorNotification,
+            ),
+        )
+        val fakeManualPriorNotification =
+            PriorNotificationFaker
+                .fakePriorNotification()
+                .copy(
+                    vessel = vessel,
+                )
+        given(manualPriorNotificationRepository.findAll(any())).willReturn(
+            listOf(
+                fakeManualPriorNotification,
             ),
         )
 

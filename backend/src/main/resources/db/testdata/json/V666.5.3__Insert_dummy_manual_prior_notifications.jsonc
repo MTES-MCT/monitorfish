@@ -19,8 +19,17 @@
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "FRA",
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
-                "trip_gears:jsonb": [{ "gear": "LNP" }],
-                "trip_segments:jsonb": [{ "segment": "NWW09", "segmentName": "Lignes" }],
+                "trip_gears:jsonb": [
+                    {
+                        "gear": "LNP"
+                    }
+                ],
+                "trip_segments:jsonb": [
+                    {
+                        "segment": "NWW09",
+                        "segmentName": "Lignes"
+                    }
+                ],
                 "vessel_name": "POISSON PAS NET",
                 "value:jsonb": {
                     "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
@@ -64,7 +73,6 @@
                     "updatedBy": null
                 }
             },
-
             // - State: 10001
             // - Vessel: DOS FIN
             // - Species: Bluefin tuna (BFT), Swordfish (SWO)
@@ -81,10 +89,23 @@
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "BEL",
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
-                "trip_gears:jsonb": [{ "gear": "TB" }, { "gear": "TBS" }],
+                "trip_gears:jsonb": [
+                    {
+                        "gear": "TB"
+                    },
+                    {
+                        "gear": "TBS"
+                    }
+                ],
                 "trip_segments:jsonb": [
-                    { "segment": "NWW03", "segmentName": "Chalut de fond en eau profonde" },
-                    { "segment": "NWW05", "segmentName": "Chalut à perche" }
+                    {
+                        "segment": "NWW03",
+                        "segmentName": "Chalut de fond en eau profonde"
+                    },
+                    {
+                        "segment": "NWW05",
+                        "segmentName": "Chalut à perche"
+                    }
                 ],
                 "vessel_name": "DOS FIN",
                 "value:jsonb": {
@@ -183,7 +204,6 @@
                     "updatedBy": "editor@example.org"
                 }
             },
-
             // - State: 10010
             // - Vessel: QUEUE DE POISSON
             // - Landing date = Arrival date
@@ -199,10 +219,20 @@
                 "did_not_fish_after_zero_notice": true,
                 "flag_state": "FRA",
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
-                "trip_gears:jsonb": [{ "gear": "TBS" }],
+                "trip_gears:jsonb": [
+                    {
+                        "gear": "TBS"
+                    }
+                ],
                 "trip_segments:jsonb": [
-                    { "segment": "MED01", "segmentName": "All Trawls 1" },
-                    { "segment": "MED02", "segmentName": "All Trawls 2" }
+                    {
+                        "segment": "MED01",
+                        "segmentName": "All Trawls 1"
+                    },
+                    {
+                        "segment": "MED02",
+                        "segmentName": "All Trawls 2"
+                    }
                 ],
                 "vessel_name": "QUEUE DE POISSON",
                 "value:jsonb": {
@@ -247,7 +277,6 @@
                     "updatedBy": null
                 }
             },
-
             // - State: 10100
             // - Vessel: NAVIRE RENOMMÉ (ANCIEN NOM)
             // - RENAMED TO: NAVIRE RENOMMÉ (NOUVEAU NOM)
@@ -259,8 +288,17 @@
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "FRA",
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
-                "trip_gears:jsonb": [{ "gear": "OTT" }],
-                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
+                "trip_gears:jsonb": [
+                    {
+                        "gear": "OTT"
+                    }
+                ],
+                "trip_segments:jsonb": [
+                    {
+                        "segment": "MED01",
+                        "segmentName": "All Trawls 1"
+                    }
+                ],
                 "vessel_name": "NAVIRE RENOMMÉ (ANCIEN NOM)",
                 "value:jsonb": {
                     "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
@@ -305,7 +343,6 @@
                     "updatedBy": null
                 }
             },
-
             // - State: 10101
             // - Vessel: VIVA L'ITALIA
             // - Landing date = Arrival date
@@ -319,8 +356,17 @@
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "ITA",
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
-                "trip_gears:jsonb": [{ "gear": "OTT" }],
-                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
+                "trip_gears:jsonb": [
+                    {
+                        "gear": "OTT"
+                    }
+                ],
+                "trip_segments:jsonb": [
+                    {
+                        "segment": "MED01",
+                        "segmentName": "All Trawls 1"
+                    }
+                ],
                 "vessel_name": "VIVA L'ITALIA",
                 "value:jsonb": {
                     "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
@@ -364,7 +410,6 @@
                     "updatedBy": null
                 }
             },
-
             // - State: 10110
             // - Vessel: MARE ET BASS
             {
@@ -375,8 +420,17 @@
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "FRA",
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
-                "trip_gears:jsonb": [{ "gear": "OTT" }],
-                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
+                "trip_gears:jsonb": [
+                    {
+                        "gear": "OTT"
+                    }
+                ],
+                "trip_segments:jsonb": [
+                    {
+                        "segment": "MED01",
+                        "segmentName": "All Trawls 1"
+                    }
+                ],
                 "vessel_name": "MARE ET BASS",
                 "value:jsonb": {
                     "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
@@ -420,7 +474,6 @@
                     "updatedBy": null
                 }
             },
-
             // - State: 11000
             // - Vessel: FILET DOUX
             {
@@ -431,8 +484,17 @@
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "FRA",
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
-                "trip_gears:jsonb": [{ "gear": "OTT" }],
-                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
+                "trip_gears:jsonb": [
+                    {
+                        "gear": "OTT"
+                    }
+                ],
+                "trip_segments:jsonb": [
+                    {
+                        "segment": "MED01",
+                        "segmentName": "All Trawls 1"
+                    }
+                ],
                 "vessel_name": "FILET DOUX",
                 "value:jsonb": {
                     "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
@@ -476,7 +538,6 @@
                     "updatedBy": null
                 }
             },
-
             // - State: 11100
             // - Vessel: DÉVOILÉ
             {
@@ -487,8 +548,17 @@
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "FRA",
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
-                "trip_gears:jsonb": [{ "gear": "OTT" }],
-                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
+                "trip_gears:jsonb": [
+                    {
+                        "gear": "OTT"
+                    }
+                ],
+                "trip_segments:jsonb": [
+                    {
+                        "segment": "MED01",
+                        "segmentName": "All Trawls 1"
+                    }
+                ],
                 "vessel_name": "DÉVOILÉ",
                 "value:jsonb": {
                     "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
@@ -532,7 +602,6 @@
                     "updatedBy": null
                 }
             },
-
             // - State: 11101
             // - Vessel: MAT QUILLE
             {
@@ -543,8 +612,17 @@
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "FRA",
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
-                "trip_gears:jsonb": [{ "gear": "OTT" }],
-                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
+                "trip_gears:jsonb": [
+                    {
+                        "gear": "OTT"
+                    }
+                ],
+                "trip_segments:jsonb": [
+                    {
+                        "segment": "MED01",
+                        "segmentName": "All Trawls 1"
+                    }
+                ],
                 "vessel_name": "MAT QUILLE",
                 "value:jsonb": {
                     "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
@@ -588,7 +666,6 @@
                     "updatedBy": null
                 }
             },
-
             // - State: 11110
             // - Vessel: BEAU SÉANT
             {
@@ -599,8 +676,17 @@
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "FRA",
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
-                "trip_gears:jsonb": [{ "gear": "OTT" }],
-                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
+                "trip_gears:jsonb": [
+                    {
+                        "gear": "OTT"
+                    }
+                ],
+                "trip_segments:jsonb": [
+                    {
+                        "segment": "MED01",
+                        "segmentName": "All Trawls 1"
+                    }
+                ],
                 "vessel_name": "BEAU SÉANT",
                 "value:jsonb": {
                     "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
@@ -644,7 +730,6 @@
                     "updatedBy": null
                 }
             },
-
             // =========================================================================================================
             // OTHER CASES
             // =========================================================================================================
@@ -659,8 +744,17 @@
                 "did_not_fish_after_zero_notice": true,
                 "flag_state": "FRA",
                 "sent_at": "2023-01-01T08:30:00",
-                "trip_gears:jsonb": [{ "gear": "OTB" }],
-                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
+                "trip_gears:jsonb": [
+                    {
+                        "gear": "OTB"
+                    }
+                ],
+                "trip_segments:jsonb": [
+                    {
+                        "segment": "MED01",
+                        "segmentName": "All Trawls 1"
+                    }
+                ],
                 "vessel_name": "GOUJON BOUGON",
                 "value:jsonb": {
                     "updatedAt": "2023-01-01T08:45:00Z",
@@ -701,6 +795,70 @@
                     "predictedLandingDatetimeUtc": "2023-01-01T10:30:00Z",
                     "purpose": "LAN",
                     "tripStartDate": "2023-01-01T08:00:00Z",
+                    "updatedBy": null
+                }
+            },
+            // - Vessel: AIGLE BLEU
+            // - Is recent and has a landing port
+            {
+                "report_id": "00000000-0000-4000-0000-000000000012",
+                "cfr": "ABC010331976",
+                "vessel_id": 131,
+                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "did_not_fish_after_zero_notice": true,
+                "flag_state": "FRA",
+                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
+                "trip_gears:jsonb": [
+                    {
+                        "gear": "OTB"
+                    }
+                ],
+                "trip_segments:jsonb": [
+                    {
+                        "segment": "MED01",
+                        "segmentName": "All Trawls 1"
+                    }
+                ],
+                "vessel_name": "AIGLE BLEU",
+                "value:jsonb": {
+                    "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "authorTrigram": null,
+                    "createdBy": "creator@example.org",
+                    "riskFactor": 3.8,
+                    "catchOnboard": [
+                        {
+                            "faoZone": "21.1.C",
+                            "weight": 10,
+                            "nbFish": null,
+                            "species": "BIB"
+                        }
+                    ],
+                    "catchToLand": [
+                        {
+                            "faoZone": "21.1.C",
+                            "weight": 10,
+                            "nbFish": null,
+                            "species": "BIB"
+                        }
+                    ],
+                    "faoZone": null,
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
+                    "note": null,
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type F",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        }
+                    ],
+                    "port": "FRNCE",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "updatedBy": null
                 }
             }

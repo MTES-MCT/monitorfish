@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
@@ -20,6 +21,7 @@ class GetActiveVessels(
     private val vesselGroupRepository: VesselGroupRepository,
     private val getAuthorizedUser: GetAuthorizedUser,
     private val logbookReportRepository: LogbookReportRepository,
+    private val manualPriorNotificationRepository: ManualPriorNotificationRepository,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetActiveVessels::class.java)
 
@@ -40,16 +42,23 @@ class GetActiveVessels(
                 willArriveBefore = CustomZonedDateTime(ZonedDateTime.now().plusDays(2)).toString(),
             )
         val futurePriorNotificationsGroupByInternalReferenceNumber =
-            logbookReportRepository
-                .findAllAcknowledgedPriorNotifications(priorNotificationsFilter)
-                .groupBy { it.vessel?.internalReferenceNumber }
+            (
+                logbookReportRepository
+                    .findAllAcknowledgedPriorNotifications(priorNotificationsFilter) +
+                    manualPriorNotificationRepository.findAll(
+                        priorNotificationsFilter,
+                    )
+            ).groupBy { it.vessel?.internalReferenceNumber }
 
         return lastPositionsWithProfileAndVessel
             .map { activeVessel ->
+                val internalReferenceNumber =
+                    activeVessel.vessel?.internalReferenceNumber ?: activeVessel.lastPosition?.internalReferenceNumber
                 val landingPort =
-                    futurePriorNotificationsGroupByInternalReferenceNumber[activeVessel.vessel?.internalReferenceNumber]
-                        ?.firstOrNull()
-                        ?.port
+                    internalReferenceNumber?.let {
+                        futurePriorNotificationsGroupByInternalReferenceNumber[it]?.firstOrNull()?.port
+                    }
+
                 val foundVesselGroups =
                     vesselGroups.filter { vesselGroup ->
                         when (vesselGroup) {

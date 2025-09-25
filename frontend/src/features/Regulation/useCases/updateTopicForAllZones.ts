@@ -1,4 +1,4 @@
-import { addBackOfficeBanner } from '@features/BackOffice/useCases/addBackOfficeBanner'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
 import { Feature } from 'ol'
 
@@ -21,7 +21,7 @@ export const updateTopicForAllZones =
       territory is ${territory}
       lawType is ${lawType}`)
       dispatch(
-        addBackOfficeBanner({
+        addMainWindowBanner({
           children: UPDATE_TOPIC_NAME_ERROR,
           closingDelay: 3000,
           isClosable: true,
@@ -60,7 +60,7 @@ export const updateTopicForAllZones =
       } catch (err) {
         console.error(err)
         dispatch(
-          addBackOfficeBanner({
+          addMainWindowBanner({
             children: (err as Error).message,
             closingDelay: 3000,
             isClosable: true,

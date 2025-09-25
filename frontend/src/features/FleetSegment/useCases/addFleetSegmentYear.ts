@@ -1,5 +1,5 @@
-import { addBackOfficeBanner } from '@features/BackOffice/useCases/addBackOfficeBanner'
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
 
 import { getFleetSegmentsYearEntries } from './getFleetSegmentsYearEntries'
@@ -14,7 +14,7 @@ export const addFleetSegmentYear = (year: number) => async dispatch => {
     return dispatch(getFleetSegmentsYearEntries())
   } catch (error) {
     dispatch(
-      addBackOfficeBanner({
+      addMainWindowBanner({
         children: (error as Error).message,
         closingDelay: 3000,
         isClosable: true,

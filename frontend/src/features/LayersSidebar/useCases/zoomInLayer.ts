@@ -5,7 +5,7 @@ import { isNumeric } from '../../../utils/isNumeric'
 import { mapActions } from '../../Map/slice'
 
 import type { MonitorFishMap } from '@features/Map/Map.types'
-import type { HybridAppDispatch, HybridAppThunk } from '@store/types'
+import type { HybridAppThunk } from '@store/types'
 import type { Feature } from 'ol'
 import type { Coordinate } from 'ol/coordinate'
 
@@ -15,8 +15,7 @@ type Params = {
 }
 
 export const zoomInLayer =
-  <T extends HybridAppDispatch>(layer: Params): HybridAppThunk<T> =>
-  // @ts-ignore Required to avoid reducers typing conflicts. Not fancy but allows us to keep Thunk context type-checks.
+  (layer: Params): HybridAppThunk =>
   (dispatch, getState) => {
     if (layer.topicAndZone) {
       const name = `${LayerProperties.REGULATORY.code}:${layer.topicAndZone.topic}:${layer.topicAndZone.zone}`
@@ -37,8 +36,7 @@ export const zoomInLayer =
   }
 
 const animateToRegulatoryLayer =
-  <T extends HybridAppDispatch>(center: Coordinate, name: string | MonitorFishMap.ShowableLayer): HybridAppThunk<T> =>
-  // @ts-ignore Required to avoid reducers typing conflicts. Not fancy but allows us to keep Thunk context type-checks.
+  (center: Coordinate, name: string | MonitorFishMap.ShowableLayer): HybridAppThunk =>
   dispatch => {
     if (center?.length && isNumeric(center[0]) && isNumeric(center[1])) {
       dispatch(

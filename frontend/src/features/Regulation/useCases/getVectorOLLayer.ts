@@ -5,18 +5,15 @@ import { getRegulatoryVectorSource } from './getRegulatoryVectorSource'
 import { getRegulatoryLayerStyle } from '../layers/styles/regulatoryLayer.style'
 
 import type { MonitorFishMap } from '@features/Map/Map.types'
-import type { HybridAppDispatch, HybridAppThunk } from '@store/types'
+import type { HybridAppThunk } from '@store/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 
 export const getVectorOLLayer =
-  <T extends HybridAppDispatch>(
-    nextVisibleLayer: MonitorFishMap.ShowedLayer
-  ): HybridAppThunk<T, Array<VectorImageLayer<Feature<Geometry>>>> =>
-  // @ts-ignore Required to avoid reducers typing conflicts. Not fancy but allows us to keep Thunk context type-checks.
+  (nextVisibleLayer: MonitorFishMap.ShowedLayer): HybridAppThunk<VectorImageLayer<Feature<Geometry>>> =>
   dispatch => {
     const name = `${LayerProperties.REGULATORY.code}:${nextVisibleLayer.topic}:${nextVisibleLayer.zone}`
-    const source = dispatch(getRegulatoryVectorSource<T>(nextVisibleLayer))
+    const source = dispatch(getRegulatoryVectorSource(nextVisibleLayer))
 
     const newLayer = new VectorImageLayer({
       className: 'regulatory',

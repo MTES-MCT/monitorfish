@@ -1,4 +1,4 @@
-import { addBackOfficeBanner } from '@features/BackOffice/useCases/addBackOfficeBanner'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { backofficeProducerOrganizationMembershipActions } from '@features/ProducerOrganizationMembership/slice.backoffice'
 import { updateProducerOrganizationMemberships } from '@features/ProducerOrganizationMembership/useCases/updateProducerOrganizationMemberships'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
@@ -23,7 +23,7 @@ export function FilterBar() {
 
     await dispatch(updateProducerOrganizationMemberships(fileType.blobFile as File))
     dispatch(
-      addBackOfficeBanner({
+      addMainWindowBanner({
         children: 'Mise à jour des données effectuée',
         closingDelay: 3000,
         isClosable: true,

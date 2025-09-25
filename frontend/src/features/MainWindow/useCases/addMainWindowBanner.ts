@@ -1,6 +1,6 @@
-import { bannerStackAdapter, mainWindowActions } from '../slice'
+import { bannerStackAdapter, mainWindowBannerActions } from '../slice'
 
-import type { MainAppThunk } from '@store'
+import type { HybridAppThunk } from '@store/types'
 import type { BannerStackItem, BannerStackItemProps } from 'types'
 
 /**
@@ -10,13 +10,13 @@ import type { BannerStackItem, BannerStackItemProps } from 'types'
  * @returns ID of the added banner (used to remove it if needed).
  */
 export const addMainWindowBanner =
-  (props: BannerStackItemProps): MainAppThunk<number> =>
+  (props: BannerStackItemProps): HybridAppThunk<number> =>
   (dispatch, getState) => {
-    const { bannerStack } = getState().mainWindow
+    const { bannerStack } = getState().mainWindowBanner
     const nextId = bannerStackAdapter.getSelectors().selectTotal(bannerStack) + 1
     const bannerStackItem: BannerStackItem = { id: nextId, props }
 
-    dispatch(mainWindowActions.addBanner(bannerStackItem))
+    dispatch(mainWindowBannerActions.addBanner(bannerStackItem))
 
     return nextId
   }

@@ -1,4 +1,4 @@
-import { addBackOfficeBanner } from '@features/BackOffice/useCases/addBackOfficeBanner'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
 
 import { sendRegulationTransaction } from '../../../api/geoserver'
@@ -23,7 +23,7 @@ export const updateRegulation =
     } catch (err) {
       console.error(err)
       dispatch(
-        addBackOfficeBanner({
+        addMainWindowBanner({
           children: (err as Error).message,
           closingDelay: 3000,
           isClosable: true,

@@ -1,4 +1,4 @@
-import { addBackOfficeBanner } from '@features/BackOffice/useCases/addBackOfficeBanner'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
 
 import { getAllGeometryWithoutProperty } from '../../../api/geoserver'
@@ -17,7 +17,7 @@ export const getGeometryWithoutRegulationReference =
       return await monitorFishWorker.getIdToGeometryObject(features)
     } catch (e) {
       dispatch(
-        addBackOfficeBanner({
+        addMainWindowBanner({
           children: (e as Error).message,
           closingDelay: 3000,
           isClosable: true,

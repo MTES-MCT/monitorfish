@@ -52,7 +52,6 @@ export enum RtkCacheTagType {
 }
 
 export enum WindowContext {
-  BackOffice = 'BackOffice',
   MainWindow = 'MainWindow',
   SideWindow = 'SideWindow'
 }

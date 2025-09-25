@@ -1,4 +1,4 @@
-import { addBackOfficeBanner } from '@features/BackOffice/useCases/addBackOfficeBanner'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
 
 import { getAllRegulatoryLayersFromAPI } from '../../../api/geoserver'
@@ -26,7 +26,7 @@ export const getAllRegulatoryLayersByRegTerritory =
       dispatch(regulationActions.setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))
     } catch (error) {
       dispatch(
-        addBackOfficeBanner({
+        addMainWindowBanner({
           children: (error as Error).message,
           closingDelay: 3000,
           isClosable: true,

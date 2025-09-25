@@ -1,7 +1,6 @@
 // TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
 
-import { WindowContext } from '@api/constants'
-import { addBackOfficeBanner } from '@features/BackOffice/useCases/addBackOfficeBanner'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { BaseMap } from '@features/Map/components/BaseMap'
 import { LayerProperties } from '@features/Map/constants'
 import { BaseLayer } from '@features/Map/layers/BaseLayer'
@@ -85,7 +84,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
       const geometryRecord = await dispatch(getGeometryWithoutRegulationReference())
       setGeometriesMap(geometryRecord)
 
-      await dispatch(getAllSpecies<BackofficeAppPromiseThunk>(WindowContext.BackOffice))
+      await dispatch(getAllSpecies<BackofficeAppPromiseThunk>())
       await dispatch(getAllRegulatoryLayersByRegTerritory())
       dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
     })()
@@ -214,7 +213,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
       )
     } else {
       dispatch(
-        addBackOfficeBanner({
+        addMainWindowBanner({
           children: "Aucune géométrie n'a été trouvée pour cet identifiant.",
           closingDelay: 3000,
           isClosable: true,

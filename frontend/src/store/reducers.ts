@@ -1,6 +1,5 @@
 import { monitorenvApi, monitorfishApi, monitorfishPublicApi } from '@api/api'
 import { alertReducer } from '@features/Alert/components/SideWindowAlerts/slice'
-import { backOfficeReducer } from '@features/BackOffice/slice'
 import { controlUnitDialogReducer } from '@features/ControlUnit/components/ControlUnitDialog/slice'
 import { controlUnitListDialogPersistedReducer } from '@features/ControlUnit/components/ControlUnitListDialog/slice'
 import { customZoneReducer, type CustomZoneState } from '@features/CustomZone/slice'
@@ -8,7 +7,7 @@ import { drawReducer } from '@features/Draw/slice'
 import { favoriteVesselReducer } from '@features/FavoriteVessel/slice'
 import { interestPointReducer, type InterestPointState } from '@features/InterestPoint/slice'
 import { logbookReducer, type LogbookState } from '@features/Logbook/slice'
-import { mainWindowReducer } from '@features/MainWindow/slice'
+import { mainWindowBannerReducer } from '@features/MainWindow/slice'
 import { layerReducer, type LayerState } from '@features/Map/layer.slice'
 import { backOfficeLayerReducer } from '@features/Map/layer.slice.backoffice'
 import { mapReducer } from '@features/Map/slice'
@@ -70,6 +69,7 @@ const commonReducerList = {
   displayedError: displayedErrorReducer,
   gear: gearReducer,
   global: globalSliceReducer,
+  mainWindowBanner: mainWindowBannerReducer,
   map: mapReducer,
   regulation: persistReducerTyped(
     { ...getCommonPersistReducerConfig<RegulationState>('backofficePersistorRegulation', ['processingRegulation']) },
@@ -117,7 +117,6 @@ export const mainReducer = {
     { ...getCommonPersistReducerConfig<LayerState>('mainPersistorLayer', ['isBaseMapCachedLocally']) },
     layerReducer
   ),
-  mainWindow: mainWindowReducer,
   measurement: persistReducerTyped(
     { ...getCommonPersistReducerConfig<MeasurementState>('mainPersistorMeasurement', ['measurementsDrawed']) },
     measurementReducer
@@ -174,7 +173,6 @@ export const mainReducer = {
 
 export const backofficeReducer = {
   ...commonReducerList,
-  backOffice: backOfficeReducer,
   layer: backOfficeLayerReducer,
   priorNotification: backofficePriorNotificationReducer,
   producerOrganizationMembership: backofficeProducerOrganizationMembershipReducer

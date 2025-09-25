@@ -9,6 +9,7 @@ export const TransparentButton = styled.button.attrs(() => ({
 }))`
   background: transparent;
   border: 1px solid transparent;
+  text-align: start;
 
   &:hover {
     background: transparent;

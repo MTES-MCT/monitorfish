@@ -32,10 +32,11 @@ export function RightMenuOnHoverArea() {
 }
 
 const Area = styled.div`
-  height: 500px;
+  height: 100%;
   right: 0;
   width: 60px;
   opacity: 0;
   position: absolute;
   top: 0;
+  z-index: 1;
 `

@@ -37,13 +37,13 @@ export function ControlUnitListMapButton() {
 
   return (
     <>
-      <ControlUnitListDialog />
       <MapToolButton
         Icon={Icon.ControlUnit}
         isActive={isControlUnitListDialogDisplayed || isControlUnitDialogDisplayed}
         onClick={toggle}
         title="Liste des unités de contrôle"
       />
+      <ControlUnitListDialog />
     </>
   )
 }

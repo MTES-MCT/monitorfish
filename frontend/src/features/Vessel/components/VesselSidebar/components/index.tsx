@@ -64,7 +64,6 @@ const GrayOverlay = styled.div<{
   opacity: 0;
   position: absolute;
   width: 100%;
-  z-index: 11;
 
   @keyframes opacity-up {
     0% {
@@ -72,7 +71,6 @@ const GrayOverlay = styled.div<{
     }
     100% {
       opacity: 0.5;
-      z-index: 11;
     }
   }
   @keyframes opacity-down {
@@ -81,7 +79,6 @@ const GrayOverlay = styled.div<{
     }
     100% {
       opacity: 0;
-      z-index: -99999;
     }
   }
 `
@@ -104,5 +101,4 @@ const Wrapper = styled(MapComponent)<{
     right 0.3s,
     opacity 0.3s;
   width: 500px;
-  z-index: 999;
 `

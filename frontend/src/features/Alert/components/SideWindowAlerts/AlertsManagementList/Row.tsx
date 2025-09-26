@@ -1,4 +1,4 @@
-import { getExpandableRowCellCustomStyle } from '@features/Alert/components/SideWindowAlerts/AlertsManagement/cells/utils'
+import { getExpandableRowCellCustomStyle } from '@features/Alert/components/SideWindowAlerts/AlertsManagementList/cells/utils'
 import {
   AdministrativeAreaType,
   AdministrativeAreaTypeLabel,

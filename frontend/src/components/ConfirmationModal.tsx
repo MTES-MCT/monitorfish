@@ -5,6 +5,7 @@ import type { ReactNode } from 'react'
 import type { Promisable } from 'type-fest'
 
 export type ConfirmationModalProps = {
+  cancelButtonLabel?: string
   color?: string
   confirmationButtonLabel: string
   iconName?: keyof typeof Icon
@@ -14,6 +15,7 @@ export type ConfirmationModalProps = {
   title: string
 }
 export function ConfirmationModal({
+  cancelButtonLabel = 'Annuler',
   color,
   confirmationButtonLabel,
   iconName,
@@ -38,7 +40,7 @@ export function ConfirmationModal({
       <Dialog.Action>
         <Button onClick={onConfirm}>{confirmationButtonLabel}</Button>
         <Button accent={Accent.SECONDARY} onClick={onCancel}>
-          Annuler
+          {cancelButtonLabel}
         </Button>
       </Dialog.Action>
     </StyledDialog>

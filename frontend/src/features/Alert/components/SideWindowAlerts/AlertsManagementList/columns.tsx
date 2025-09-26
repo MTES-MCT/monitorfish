@@ -1,6 +1,6 @@
 import { Ellipsised } from '@components/Ellipsised'
-import { getAlertCriteriaSummary } from '@features/Alert/components/SideWindowAlerts/AlertsManagement/cells/utils'
-import { ValidateAlertToggle } from '@features/Alert/components/SideWindowAlerts/AlertsManagement/cells/ValidateAlertToggle'
+import { getAlertCriteriaSummary } from '@features/Alert/components/SideWindowAlerts/AlertsManagementList/cells/utils'
+import { ValidateAlertToggle } from '@features/Alert/components/SideWindowAlerts/AlertsManagementList/cells/ValidateAlertToggle'
 import { Icon, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import styled from 'styled-components'

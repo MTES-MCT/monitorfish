@@ -11,6 +11,7 @@ type ActionButtonsCellProps = Readonly<{
 }>
 export function ActionButtonsCell({ alertSpecification, onDeleteConfirmation }: ActionButtonsCellProps) {
   const dispatch = useMainAppDispatch()
+  const isFormHidden = import.meta.env.FRONTEND_POSITION_ALERT_FORM_ENABLED === 'false'
 
   const edit = () => {
     if (!alertSpecification.isUserDefined) {
@@ -24,7 +25,7 @@ export function ActionButtonsCell({ alertSpecification, onDeleteConfirmation }: 
     <Wrapper>
       <IconButton
         accent={Accent.TERTIARY}
-        disabled={!alertSpecification.isUserDefined}
+        disabled={!alertSpecification.isUserDefined || isFormHidden}
         Icon={Icon.Edit}
         onClick={edit}
         title="Éditer l'alerte"

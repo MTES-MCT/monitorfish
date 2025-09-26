@@ -76,7 +76,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     () =>
       getSpeciesApiQuery.data
         ? new CustomSearch(
-            structuredClone(speciesAsOptions),
+            speciesAsOptions,
             [
               {
                 name: 'value.code',

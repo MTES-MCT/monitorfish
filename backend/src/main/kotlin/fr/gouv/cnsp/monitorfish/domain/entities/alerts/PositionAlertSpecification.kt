@@ -11,7 +11,7 @@ data class PositionAlertSpecification(
     val description: String,
     val isUserDefined: Boolean,
     val natinfCode: Int,
-    val isActivated: Boolean = true,
+    val isActivated: Boolean = false,
     val isInError: Boolean = false,
     val isDeleted: Boolean = false,
     val hasAutomaticArchiving: Boolean = false,

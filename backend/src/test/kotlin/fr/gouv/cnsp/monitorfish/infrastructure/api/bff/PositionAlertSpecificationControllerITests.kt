@@ -128,7 +128,6 @@ class PositionAlertSpecificationControllerITests {
                 "type": "POSITION_ALERT",
                 "description": "Test alert description",
                 "natinfCode": 7059,
-                "isActivated": true,
                 "hasAutomaticArchiving": false,
                 "repeatEachYear": false,
                 "trackAnalysisDepth": 8.0,
@@ -165,7 +164,6 @@ class PositionAlertSpecificationControllerITests {
                     alertSpec.type == "POSITION_ALERT" &&
                     alertSpec.description == "Test alert description" &&
                     alertSpec.natinfCode == 7059 &&
-                    alertSpec.isActivated &&
                     alertSpec.isUserDefined &&
                     !alertSpec.hasAutomaticArchiving &&
                     !alertSpec.repeatEachYear &&

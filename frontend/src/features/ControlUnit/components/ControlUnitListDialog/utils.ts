@@ -72,7 +72,7 @@ export function getFilters(
   filtersState: FiltersState
 ): Filter<ControlUnit.ControlUnit>[] {
   const customSearch = new CustomSearch(
-    structuredClone(data),
+    data,
     [
       { name: 'administration.name', weight: 0.1 },
       { name: 'name', weight: 0.9 }

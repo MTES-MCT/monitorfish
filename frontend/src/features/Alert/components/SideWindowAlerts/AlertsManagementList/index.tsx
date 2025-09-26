@@ -11,6 +11,8 @@ import { getTableColumns } from '@features/Alert/components/SideWindowAlerts/Ale
 import { DEFAULT_EDITED_ALERT_SPECIFICATION } from '@features/Alert/components/SideWindowAlerts/constants'
 import { alertActions } from '@features/Alert/components/SideWindowAlerts/slice'
 import { PageWithUnderlineTitle } from '@features/SideWindow/components/PageWithUnderlineTitle'
+import { sideWindowActions } from '@features/SideWindow/slice'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import {
@@ -18,6 +20,7 @@ import {
   CustomSearch,
   FulfillingBouncingCircleLoader,
   Icon,
+  Level,
   LinkButton,
   pluralize,
   Size,
@@ -32,7 +35,7 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Row } from './Row'
@@ -57,9 +60,35 @@ export function AlertsManagementList() {
     alertSpecification: AlertSpecification | undefined
     isOpen: boolean
   }>({ alertSpecification: undefined, isOpen: false })
+  const alertsInErrorBannerIdsRef = useRef<number[]>([])
+
+  useEffect(() => {
+    alertSpecifications
+      ?.filter(alert => alert.isInError)
+      ?.forEach(async alert => {
+        const bannerId = dispatch(
+          addSideWindowBanner({
+            children: `L'alerte "${alert.name}" a été désactivée, car elle générait trop d'occurrences simultanées. Veuillez modifier ses critères ou la supprimer.`,
+            closingDelay: 20000,
+            isClosable: false,
+            isCollapsible: true,
+            isFixed: true,
+            level: Level.ERROR
+          })
+        )
+
+        alertsInErrorBannerIdsRef.current = alertsInErrorBannerIdsRef.current.concat(bannerId)
+      })
+
+    return () => {
+      alertsInErrorBannerIdsRef.current.forEach(bannerId => {
+        dispatch(sideWindowActions.removeBanner(bannerId))
+      })
+    }
+  }, [dispatch, alertSpecifications])
 
   const fuse = useMemo(
-    () => new CustomSearch(structuredClone(alertSpecifications ?? []), ['name'], { threshold: 0.4 }),
+    () => new CustomSearch(alertSpecifications ?? [], ['name'], { threshold: 0.4 }),
     [alertSpecifications]
   )
 
@@ -147,13 +176,15 @@ export function AlertsManagementList() {
     dispatch(alertActions.setEditedAlertSpecification(DEFAULT_EDITED_ALERT_SPECIFICATION))
   }
 
+  const isFormHidden = import.meta.env.FRONTEND_POSITION_ALERT_FORM_ENABLED === 'false'
+
   return (
     <>
       <PageWithUnderlineTitle.Wrapper>
         <PageWithUnderlineTitle.Header>
           <PageWithUnderlineTitle.HeaderTitle>Gestion des alertes</PageWithUnderlineTitle.HeaderTitle>
           <PageWithUnderlineTitle.HeaderButtonGroup>
-            <Button Icon={Icon.Plus} onClick={addAlert}>
+            <Button disabled={isFormHidden} Icon={Icon.Plus} onClick={addAlert}>
               Créer une nouvelle alerte
             </Button>
           </PageWithUnderlineTitle.HeaderButtonGroup>

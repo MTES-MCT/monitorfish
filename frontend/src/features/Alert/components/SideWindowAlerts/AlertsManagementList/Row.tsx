@@ -24,7 +24,7 @@ export function Row({ row }: RowProps) {
 
   return (
     <>
-      <TableWithSelectableRows.BodyTr data-id={row.id}>
+      <StyledTr $isInError={alertSpecification.isInError} data-id={row.id}>
         {row?.getVisibleCells().map(cell => (
           <ExpandableRowCell
             key={cell.id}
@@ -35,7 +35,7 @@ export function Row({ row }: RowProps) {
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </ExpandableRowCell>
         ))}
-      </TableWithSelectableRows.BodyTr>
+      </StyledTr>
 
       {row.getIsExpanded() && (
         <ExpandedRow data-id={`${row.id}-expanded`}>
@@ -186,6 +186,14 @@ export function Row({ row }: RowProps) {
     </>
   )
 }
+
+const StyledTr = styled(TableWithSelectableRows.BodyTr)<{
+  $isInError: boolean
+}>`
+  > td {
+    background-color: ${p => (p.$isInError ? p.theme.color.maximumRed15 : p.theme.color.cultured)};
+  }
+`
 
 const ExpandableRowCell = styled(TableWithSelectableRows.Td)`
   cursor: pointer;

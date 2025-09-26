@@ -22,6 +22,7 @@ class UpdatePositionAlertSpecification(
         val updatedAlertSpecification =
             alertSpecification.copy(
                 id = id,
+                isActivated = existingAlertSpecification.isActivated,
                 createdBy = existingAlertSpecification.createdBy,
                 createdAtUtc = existingAlertSpecification.createdAtUtc,
                 isInError = false,

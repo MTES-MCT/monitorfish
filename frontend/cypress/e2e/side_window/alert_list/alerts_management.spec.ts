@@ -84,12 +84,14 @@ context('Side Window > Alert Management', () => {
   })
 
   it('Should edit an existing alert', () => {
+    cy.get('.Component-Banner').contains(`L'alerte "Alerte en erreur" a été désactivée, car elle générait trop d'occurrences simultanées. Veuillez modifier ses critères ou la supprimer.`)
     cy.intercept('PUT', '/bff/v1/position_alerts_specs/*').as('updateAlert')
 
     /**
-     * Edit first editable alert
+     * Edit alert with error
      */
-    cy.get('[title="Éditer l\'alerte"]').first().click()
+    cy.fill('Rechercher une alerte', 'Alerte en erreur')
+    cy.get('[title="Éditer l\'alerte"]').click()
 
     cy.get('h1').should('contain.text', 'Modifier une alerte')
 
@@ -112,6 +114,8 @@ context('Side Window > Alert Management', () => {
     cy.contains('Gestion des alertes').should('be.visible')
     cy.fill('Rechercher une alerte', 'modifié')
     cy.getDataCy('alerts-specification-list-length').contains('1 alerte')
+    cy.get('.Component-Banner').contains("L'alerte a bien été modifiée")
+    cy.get('.Component-Banner').should('not.contain', 'a été désactivée')
   })
 
   it('Alerts specifications Should be shown in the table', () => {

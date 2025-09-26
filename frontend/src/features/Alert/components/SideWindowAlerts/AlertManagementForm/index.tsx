@@ -156,7 +156,7 @@ export function AlertManagementForm() {
             </Body>
             <Footer>
               {!!editedAlertSpecification.id && (
-                <DeleteButton accent={Accent.SECONDARY} Icon={Icon.Delete} onClick={() => {}}>
+                <DeleteButton accent={Accent.SECONDARY} disabled Icon={Icon.Delete} onClick={() => {}}>
                   Supprimer l’alerte
                 </DeleteButton>
               )}

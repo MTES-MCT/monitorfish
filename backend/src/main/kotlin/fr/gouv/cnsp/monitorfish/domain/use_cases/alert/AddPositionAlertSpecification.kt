@@ -18,6 +18,7 @@ class AddPositionAlertSpecification(
     ) {
         val enrichedAlertSpecification =
             alertSpecification.copy(
+                isActivated = true,
                 createdBy = userEmail,
                 createdAtUtc = ZonedDateTime.now(),
             )

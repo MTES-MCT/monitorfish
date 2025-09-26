@@ -1,1 +1,1 @@
-DROP TABLE pno_lan_alerts;
+DROP TABLE IF EXISTS pno_lan_alerts;

@@ -1,3 +1,5 @@
+import { alertActions } from '@features/Alert/components/SideWindowAlerts/slice'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
@@ -8,17 +10,21 @@ type ActionButtonsCellProps = Readonly<{
   onDeleteConfirmation?: ((alertSpecification: AlertSpecification) => void) | undefined
 }>
 export function ActionButtonsCell({ alertSpecification, onDeleteConfirmation }: ActionButtonsCellProps) {
+  const dispatch = useMainAppDispatch()
+
   const edit = () => {
     if (!alertSpecification.isUserDefined) {
-      // TODO Implement
+      return
     }
+
+    dispatch(alertActions.setEditedAlertSpecification(alertSpecification))
   }
 
   return (
     <Wrapper>
       <IconButton
         accent={Accent.TERTIARY}
-        disabled
+        disabled={!alertSpecification.isUserDefined}
         Icon={Icon.Edit}
         onClick={edit}
         title="Éditer l'alerte"

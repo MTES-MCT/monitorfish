@@ -4,10 +4,17 @@ import { deleteListItems } from '@utils/deleteListItems'
 import { propEq } from 'ramda'
 
 import type { AlertSubMenu } from './constants'
-import type { AlertNameAndVesselIdentity, LEGACY_PendingAlert, SilencedAlert, SilenceAlertQueueItem } from '../../types'
+import type {
+  AlertNameAndVesselIdentity,
+  AlertSpecification,
+  LEGACY_PendingAlert,
+  SilenceAlertQueueItem,
+  SilencedAlert
+} from '../../types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type AlertState = {
+  editedAlertSpecification: AlertSpecification | undefined
   focusedPendingAlertId: number | undefined
   pendingAlerts: LEGACY_PendingAlert[]
   silencedAlerts: SilencedAlert[]
@@ -15,6 +22,7 @@ export type AlertState = {
   subMenu: AlertSubMenu
 }
 const INITIAL_STATE: AlertState = {
+  editedAlertSpecification: undefined,
   focusedPendingAlertId: undefined,
   pendingAlerts: [],
   silencedAlerts: [],
@@ -81,6 +89,10 @@ const slice = createSlice({
       state.focusedPendingAlertId = undefined
     },
 
+    setEditedAlertSpecification(state, action: PayloadAction<AlertSpecification | undefined>) {
+      state.editedAlertSpecification = action.payload
+    },
+
     /**
      * Set alerts
      */
@@ -115,3 +127,4 @@ export const {
 } = slice.actions
 
 export const alertReducer = slice.reducer
+export const alertActions = slice.actions

@@ -7,8 +7,11 @@ import {
   useDeleteAlertMutation
 } from '@features/Alert/apis'
 import { HowAlertsWorksDialog } from '@features/Alert/components/HowAlertsWorksDialog'
-import { getTableColumns } from '@features/Alert/components/SideWindowAlerts/AlertsManagement/columns'
+import { getTableColumns } from '@features/Alert/components/SideWindowAlerts/AlertsManagementList/columns'
+import { DEFAULT_EDITED_ALERT_SPECIFICATION } from '@features/Alert/components/SideWindowAlerts/constants'
+import { alertActions } from '@features/Alert/components/SideWindowAlerts/slice'
 import { PageWithUnderlineTitle } from '@features/SideWindow/components/PageWithUnderlineTitle'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import {
   Button,
@@ -36,7 +39,8 @@ import { Row } from './Row'
 
 import type { AlertSpecification } from '@features/Alert/types'
 
-export function AlertsManagement() {
+export function AlertsManagementList() {
+  const dispatch = useMainAppDispatch()
   const { data: alertSpecifications, error, isLoading: isFetchingAlerts } = useGetAllAlertSpecificationsQuery()
   const [activateAlert, { isLoading: isActivatingAlert }] = useActivateAlertMutation()
   const [deactivateAlert, { isLoading: isDeactivatingAlert }] = useDeactivateAlertMutation()
@@ -139,13 +143,17 @@ export function AlertsManagement() {
     setIsHowAlertsWorksDialogOpen(true)
   }
 
+  const addAlert = () => {
+    dispatch(alertActions.setEditedAlertSpecification(DEFAULT_EDITED_ALERT_SPECIFICATION))
+  }
+
   return (
     <>
       <PageWithUnderlineTitle.Wrapper>
         <PageWithUnderlineTitle.Header>
           <PageWithUnderlineTitle.HeaderTitle>Gestion des alertes</PageWithUnderlineTitle.HeaderTitle>
           <PageWithUnderlineTitle.HeaderButtonGroup>
-            <Button disabled Icon={Icon.Plus} onClick={() => {}}>
+            <Button Icon={Icon.Plus} onClick={addAlert}>
               Créer une nouvelle alerte
             </Button>
           </PageWithUnderlineTitle.HeaderButtonGroup>
@@ -271,7 +279,7 @@ const TableOuterWrapper = styled.div<{ $isLoading: boolean }>`
   }
 `
 
-const TableLegend = styled.p`
+const TableLegend = styled.div`
   color: ${p => p.theme.color.slateGray};
   line-height: 1;
   margin: 0;

@@ -12,6 +12,108 @@ context('Side Window > Alert Management', () => {
     cy.get('*[data-cy="side-window-sub-menu-ALERT_MANAGEMENT"]').click()
   })
 
+  it('Should create a new alert with form validation', () => {
+    /**
+     * Confirmation modal
+     */
+    cy.clickButton('Créer une nouvelle alerte')
+    cy.clickButton('Fermer')
+    // Should go back to list directly without confirmation modal
+    cy.contains('Gestion des alertes').should('be.visible')
+
+    /**
+     * Open new alert form again
+     */
+    cy.clickButton('Créer une nouvelle alerte')
+    cy.getDataCy('go-back-alerts-management-list').click()
+    // Should go back to list directly without confirmation modal
+    cy.contains('Gestion des alertes').should('be.visible')
+
+    /**
+     * Open new alert form again and make changes
+     */
+    cy.clickButton('Créer une nouvelle alerte')
+    cy.fill('Nom', 'Test Alert Name')
+    cy.clickButton('Fermer')
+    cy.contains('Quitter l\'édition').should('be.visible')
+    cy.clickButton('Retourner à l’édition')
+    cy.getDataCy('go-back-alerts-management-list').click()
+    cy.contains('Quitter l\'édition').should('be.visible')
+    cy.clickButton('Quitter sans enregistrer')
+
+    // Should go back to list
+    cy.contains('Gestion des alertes').should('be.visible')
+
+    cy.intercept('POST', '/bff/v1/position_alerts_specs').as('createAlert')
+
+    /**
+     * Open new alert form
+     */
+    cy.clickButton('Créer une nouvelle alerte')
+
+    cy.get('h1').should('contain.text', 'Nouvelle alerte')
+    cy.contains('Alerte non enregistrée.')
+
+    /**
+     * Fill required fields
+     */
+    cy.fill('Nom', 'Test Alert Cypress')
+    cy.fill('Description', 'Description de test pour l\'alerte Cypress')
+    cy.fill('NATINF associé', '2608')
+    cy.fill('Période de validité', 'Sur une période donnée')
+    cy.fill('Plage de temps sur mesure', [[2024, 1, 15], [2024, 1, 30]])
+    cy.fill('Récurrence annuelle', true)
+    cy.fill('Positions VMS prises en compte par l\'alerte', 'Toutes les positions en mer')
+
+    cy.clickButton('Enregistrer')
+
+    cy.wait('@createAlert').then(interception => {
+      expect(interception.request.body.name).to.equal('Test Alert Cypress')
+      expect(interception.request.body.description).to.equal('Description de test pour l\'alerte Cypress')
+      expect(interception.request.body.natinfCode).to.equal(2608)
+      expect(interception.request.body.validityStartDatetimeUtc).to.equal('2024-01-15T00:00:00.000Z')
+      expect(interception.request.body.validityEndDatetimeUtc).to.equal('2024-01-30T23:59:59.000Z')
+      expect(interception.request.body.repeatEachYear).to.be.true
+      expect(interception.request.body.onlyFishingPositions).to.be.false
+    })
+
+    cy.contains('Gestion des alertes').should('be.visible')
+    cy.fill('Rechercher une alerte', 'Test Alert Cypress')
+    cy.get('[title*="Supprimer"][title*="Test Alert Cypress"]').click()
+    cy.clickButton('Confirmer la suppression')
+  })
+
+  it('Should edit an existing alert', () => {
+    cy.intercept('PUT', '/bff/v1/position_alerts_specs/*').as('updateAlert')
+
+    /**
+     * Edit first editable alert
+     */
+    cy.get('[title="Éditer l\'alerte"]').first().click()
+
+    cy.get('h1').should('contain.text', 'Modifier une alerte')
+
+    cy.fill('Nom', 'Nom modifié')
+    cy.fill('Description', 'Description modifiée')
+    cy.fill('Période de validité', 'En tous temps')
+    cy.get('.rs-picker-input').should('not.exist')
+    cy.fill('Positions VMS prises en compte par l\'alerte', 'Les positions en pêche uniquement')
+
+    cy.clickButton('Enregistrer')
+
+    cy.wait('@updateAlert').then(interception => {
+      expect(interception.request.body.name).to.equal('Nom modifié')
+      expect(interception.request.body.description).to.equal('Description modifiée')
+      expect(interception.request.body.onlyFishingPositions).to.be.true
+      expect(interception.request.body.validityStartDatetimeUtc).to.be.undefined
+      expect(interception.request.body.validityEndDatetimeUtc).to.be.undefined
+    })
+
+    cy.contains('Gestion des alertes').should('be.visible')
+    cy.fill('Rechercher une alerte', 'modifié')
+    cy.getDataCy('alerts-specification-list-length').contains('1 alerte')
+  })
+
   it('Alerts specifications Should be shown in the table', () => {
     cy.get('.Table-SimpleTable tr').should('have.length', 22)
     cy.getDataCy('alerts-specification-list-length').contains('21 alertes')
@@ -67,7 +169,7 @@ context('Side Window > Alert Management', () => {
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains('Zone REG "Mediterranée - filets - Zone A"')
 
     cy.clickButton('En savoir plus sur le fonctionnement des alertes')
-    cy.get('.Component-Dialog').contains('Aujourd’hui, MonitorFish compte au total 19 alertes :')
+    cy.get('.Component-Dialog').contains("Aujourd'hui, MonitorFish compte au total 19 alertes :")
     cy.clickButton('Fermer')
   })
 })

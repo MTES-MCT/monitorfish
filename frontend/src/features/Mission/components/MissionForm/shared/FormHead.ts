@@ -6,7 +6,7 @@ export const FormHead = styled.div<{
 }>`
   align-items: end;
   display: flex;
-  margin: ${p => (p.isAction ? '0px' : '32px 40px 32px 40px')};
+  margin: ${p => (p.isAction ? '0px' : `24px 40px 32px 40px`)};
   padding-bottom: 8px;
   height: 32px;
   border-bottom: 1px solid ${THEME.color.slateGray};

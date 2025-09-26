@@ -58,7 +58,7 @@ SET value = value || '{"name": "FAR manquant en 48h"}'
 WHERE value->>'type'= 'MISSING_FAR_48_HOURS_ALERT';
 
 UPDATE public.silenced_alerts
-SET value = value || '{"name": "Sortie sans émission de message \"DEP\""}'
+SET value = value || '{"name": "Sortie sans émission de message \\\"DEP\\\""}'
 WHERE value->>'type'= 'MISSING_DEP_ALERT:';
 
 UPDATE public.silenced_alerts
@@ -123,7 +123,7 @@ SET value = value || '{"name": "FAR manquant en 48h"}'
 WHERE value->>'type'= 'MISSING_FAR_48_HOURS_ALERT';
 
 UPDATE public.reportings
-SET value = value || '{"name": "Sortie sans émission de message \"DEP\""}'
+SET value = value || '{"name": "Sortie sans émission de message \\\"DEP\\\""}'
 WHERE value->>'type'= 'MISSING_DEP_ALERT:';
 
 UPDATE public.reportings

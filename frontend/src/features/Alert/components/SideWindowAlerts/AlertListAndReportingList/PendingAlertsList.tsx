@@ -149,10 +149,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
             overflow: 'visible'
           }}
         >
-          <StyledListItem
-            key={0}
-            index={0}
-          >
+          <StyledListItem key={0} index={0}>
             <FlexboxGrid>
               <FlexboxGrid.Item style={timeAgoColumnStyle}>Ouverte il y a...</FlexboxGrid.Item>
               <FlexboxGrid.Item colspan={7} style={alertTypeStyle}>

@@ -27,6 +27,10 @@ jest.mock('../../../../../hooks/useMainAppDispatch', () => ({ useMainAppDispatch
 jest.mock('../../../useCases/deleteReporting', () => ({ deleteReporting: jest.fn() }))
 // @ts-ignore
 jest.mock('../../../../Vessel/useCases/rendering/renderVesselFeatures', () => ({ renderVesselFeatures: jest.fn() }))
+// @ts-ignore
+jest.mock('../../../../Alert/apis', () => ({
+  useGetAllAlertSpecificationsQuery: () => ({ data: [] })
+}))
 
 describe('ReportingCard()', () => {
   afterAll(() => {

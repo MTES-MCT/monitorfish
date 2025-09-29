@@ -149,7 +149,7 @@ context('Side Window > Reporting List > Actions', () => {
 
       downloadReporting(
         'SA',
-        '"Alerte auto.","Pêche dans les 12 milles sans droits historiques","",2610,"FR","PROMETTRE INTÉRIEUR SAINT","ABC000232227","ZJ472279","TMG5756","NON","SA"'
+        '"Alerte auto.","Pêche dans les 12 milles sans droits historiques","Pour tous les navires UE - hors navires allemands, espagnols, néerlandais et belges - ou tiers en pêche dans les 12 milles.",2610,"FR","PROMETTRE INTÉRIEUR SAINT","ABC000232227","ZJ472279","TMG5756","NON","SA"'
       )
     })
   })

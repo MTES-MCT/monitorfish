@@ -35,6 +35,7 @@ import styled from 'styled-components'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 
 import type { AlertSpecification } from '@features/Alert/types'
+import {Criteria} from "@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants";
 
 export function AlertManagementForm() {
   const dispatch = useMainAppDispatch()
@@ -42,6 +43,7 @@ export function AlertManagementForm() {
   const [updateAlert, { isLoading: isUpdatingAlert }] = useUpdateAlertMutation()
   const editedAlertSpecification = useMainAppSelector(state => state.alert.editedAlertSpecification)
   const infractions = useMainAppSelector(state => state.infraction.infractions)
+  const [displayedCriterias, setDisplayedCriterias] = useState<Criteria[]>([])
   const [isDraftCancellationConfirmationDialogOpen, setIsDraftCancellationConfirmationDialogOpen] = useState(false)
   assertNotNullish(editedAlertSpecification)
 
@@ -158,10 +160,12 @@ export function AlertManagementForm() {
                 <StyledFormHead>
                   <h2>Critères de déclenchement</h2>
                   <Dropdown Icon={Icon.Plus} placement="bottomEnd" title="Définir les critères de déclenchement">
-                    <Dropdown.Item onClick={() => {}}>Zones</Dropdown.Item>
+                    <Dropdown.Item onClick={() => {
+                      setDisplayedCriterias(previous => previous.concat(Criteria.ZONE))
+                    }}>Zones</Dropdown.Item>
                   </Dropdown>
                 </StyledFormHead>
-                <AdministrativeZonesCriteria />
+                <AdministrativeZonesCriteria isDisplayed={displayedCriterias.includes(Criteria.ZONE)}/>
               </Panel>
             </Body>
             <Footer>

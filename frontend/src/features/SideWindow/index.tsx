@@ -3,6 +3,7 @@ import { getOperationalAlerts } from '@features/Alert/useCases/getOperationalAle
 import { getSilencedAlerts } from '@features/Alert/useCases/getSilencedAlerts'
 import { MissionForm } from '@features/Mission/components/MissionForm'
 import { useListenToAllMissionEventsUpdates } from '@features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates'
+import { getAllRegulatoryLayers } from '@features/Regulation/useCases/getAllRegulatoryLayers'
 import { reportingApi } from '@features/Reporting/reportingApi'
 import { reportingActions } from '@features/Reporting/slice'
 import { SIDE_WINDOW_EXTERNAL_USER_PATH, SideWindowMenuKey } from '@features/SideWindow/constants'
@@ -130,6 +131,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
       const vessels = await dispatch(vesselApi.endpoints.getActiveVessels.initiate()).unwrap()
       await dispatch(setVessels(vessels))
       dispatch(getInfractions())
+      dispatch(getAllRegulatoryLayers())
       dispatch(getAllGearCodes<MainAppAsyncThunk>())
     })()
   }, [dispatch, isFromURL, isSuperUser])

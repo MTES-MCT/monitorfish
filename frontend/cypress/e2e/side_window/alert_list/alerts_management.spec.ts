@@ -65,6 +65,25 @@ context('Side Window > Alert Management', () => {
     cy.fill('Récurrence annuelle', true)
     cy.fill('Positions VMS prises en compte par l\'alerte', 'Toutes les positions en mer')
 
+    /**
+     * Add administrative zones criteria
+     */
+    cy.clickButton('Définir les critères de déclenchement')
+    cy.clickButton('Zones')
+
+    /**
+     * Delete the criteria and re-add it
+     */
+    cy.get('.Component-Dropdow > ul').should('not.contain', 'Zones')
+    cy.contains('ZONES (VMS)').click()
+    cy.clickButton('Supprimer le critère')
+    cy.clickButton('Définir les critères de déclenchement')
+    cy.clickButton('Zones')
+
+    cy.contains('ZONES (VMS)').click()
+    cy.fill('Zones administratives déclenchant l\'alerte', ['27.6.a'])
+    cy.fill('Zones réglementaires déclenchant l\'alerte', ['Secteur 3'])
+
     cy.clickButton('Enregistrer')
 
     cy.wait('@createAlert').then(interception => {
@@ -75,6 +94,25 @@ context('Side Window > Alert Management', () => {
       expect(interception.request.body.validityEndDatetimeUtc).to.equal('2024-01-30T23:59:59.000Z')
       expect(interception.request.body.repeatEachYear).to.be.true
       expect(interception.request.body.onlyFishingPositions).to.be.false
+      expect(interception.request.body.administrativeAreas).to.deep.equal(
+        [
+          {
+            "areas": [
+              "27.6.a"
+            ],
+            "areaType": "FAO_AREA"
+          }
+        ]
+      )
+      expect(interception.request.body.regulatoryAreas).to.deep.equal(
+        [
+          {
+            "lawType": "Reg. NAMO",
+            "topic": "Armor CSJ Dragues",
+            "zone": "Secteur 3"
+          }
+        ]
+      )
     })
 
     cy.contains('Gestion des alertes').should('be.visible')

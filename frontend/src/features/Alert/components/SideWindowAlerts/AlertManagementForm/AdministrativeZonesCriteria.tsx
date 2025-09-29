@@ -1,26 +1,25 @@
-import {Criteria} from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/shared/Criteria'
-import {mapZonesWithMetadata} from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/utils'
-import {AdministrativeAreaType} from '@features/Alert/constants'
-import {useGetFilterableZonesAsTreeOptions} from '@hooks/useGetFilterableZonesAsTreeOptions'
-import {useMainAppSelector} from '@hooks/useMainAppSelector'
-import {MultiCascader, type TreeOption} from '@mtes-mct/monitor-ui'
-import {assertNotNullish} from '@utils/assertNotNullish'
-import {useFormikContext} from 'formik'
-import {groupBy} from 'lodash-es'
-import {useMemo, useState} from 'react'
+import { Criteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/shared/Criteria'
+import { mapZonesWithMetadata } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/utils'
+import { AdministrativeAreaType } from '@features/Alert/constants'
+import { useGetFilterableZonesAsTreeOptions } from '@hooks/useGetFilterableZonesAsTreeOptions'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { MultiCascader, type TreeOption } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
+import { useFormikContext } from 'formik'
+import { groupBy } from 'lodash-es'
+import { useMemo, useState } from 'react'
 
-import type {EditedAlertSpecification, RegulatoryAreaSpecification} from '@features/Alert/types'
+import type { EditedAlertSpecification, RegulatoryAreaSpecification } from '@features/Alert/types'
 
 const FILTERED_ZONES = ['Zone manuelle', 'Zones Cormoran (NAMO-SA)', 'Zones pour situation VMS']
 
 type AdministrativeZonesCriteriaProps = {
-  isDisplayed: boolean
+  onDelete: () => void
 }
-export function AdministrativeZonesCriteria({ isDisplayed }: AdministrativeZonesCriteriaProps) {
+export function AdministrativeZonesCriteria({ onDelete }: AdministrativeZonesCriteriaProps) {
   const { setFieldValue, values } = useFormikContext<EditedAlertSpecification>()
   const administrativeZones = values.administrativeAreas.filter(
-    zone => zone.areaType === AdministrativeAreaType.EEZ_AREA ||
-      zone.areaType === AdministrativeAreaType.FAO_AREA
+    zone => zone.areaType === AdministrativeAreaType.EEZ_AREA || zone.areaType === AdministrativeAreaType.FAO_AREA
   )
   const [isCriteriaOpened, setIsCriteriaOpened] = useState(false)
   const filterableZoneAsTreeOptions = useGetFilterableZonesAsTreeOptions()
@@ -28,19 +27,24 @@ export function AdministrativeZonesCriteria({ isDisplayed }: AdministrativeZones
 
   const regulatoryLayerLawTypes = useMainAppSelector(state => state.regulation.regulatoryLayerLawTypes)
 
-  const regulatoryOptions = useMemo(() =>
-    regulatoryLayerLawTypes ? Object.entries(regulatoryLayerLawTypes).map(([lawType, topics]) => ({
-      label: lawType,
-      value: { lawType: lawType, topic: undefined, zone: undefined },
-      children: Object.entries(topics).map(([topic, zones]) => ({
-        label: topic,
-        value: { lawType: lawType, topic: topic, zone: undefined },
-        children: zones.map(zone => ({
-          label: zone.zone,
-          value: { lawType: lawType, topic: topic, zone: zone.zone }
-        }))
-      }))
-    })) as TreeOption<RegulatoryAreaSpecification>[] : [], [regulatoryLayerLawTypes])
+  const regulatoryOptions = useMemo(
+    () =>
+      regulatoryLayerLawTypes
+        ? (Object.entries(regulatoryLayerLawTypes).map(([lawType, topics]) => ({
+            children: Object.entries(topics).map(([topic, zones]) => ({
+              children: zones.map(zone => ({
+                label: zone.zone,
+                value: { lawType, topic, zone: zone.zone }
+              })),
+              label: topic,
+              value: { lawType, topic, zone: undefined }
+            })),
+            label: lawType,
+            value: { lawType, topic: undefined, zone: undefined }
+          })) as TreeOption<RegulatoryAreaSpecification>[])
+        : [],
+    [regulatoryLayerLawTypes]
+  )
 
   const updateZones = async (nextZonesNames: string[] | undefined) => {
     assertNotNullish(filterableZoneAsTreeOptions)
@@ -67,14 +71,17 @@ export function AdministrativeZonesCriteria({ isDisplayed }: AdministrativeZones
   const updateRegulatoryAreas = (nextRegulationValues: RegulatoryAreaSpecification[] | undefined) => {
     if (nextRegulationValues === undefined) {
       setFieldValue('regulatoryAreas', [])
+
       return
     }
 
     setFieldValue('regulatoryAreas', nextRegulationValues)
   }
 
-  if (!values.regulatoryAreas.length && !values.administrativeAreas.length && !isDisplayed) {
-    return null
+  const handleDeleteCriteria = () => {
+    setFieldValue('administrativeAreas', [])
+    setFieldValue('regulatoryAreas', [])
+    onDelete()
   }
 
   return (
@@ -122,12 +129,11 @@ export function AdministrativeZonesCriteria({ isDisplayed }: AdministrativeZones
           placeholder=""
           popupWidth={600}
           searchable
-          value={values.regulatoryAreas || []}
           uncheckableItemValues={['0', '1', '2', '3']}
+          value={values.regulatoryAreas || []}
         />
-        <Criteria.Delete/>
+        <Criteria.Delete onClick={handleDeleteCriteria} />
       </Criteria.Body>
     </Criteria.Wrapper>
   )
 }
-

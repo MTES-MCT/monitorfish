@@ -4,7 +4,7 @@ import { HowAlertsWorksDialog } from '@features/Alert/components/HowAlertsWorksD
 import { silenceAlert } from '@features/Alert/useCases/silenceAlert'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { CustomSearch, Icon, LinkButton, pluralize, Size, Tag, TextInput, THEME } from '@mtes-mct/monitor-ui'
+import { CustomSearch, Icon, Link, pluralize, Size, Tag, TextInput, THEME } from '@mtes-mct/monitor-ui'
 import { sortArrayByColumn, SortType } from '@utils/sortArrayByColumn'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FlexboxGrid, List } from 'rsuite'
@@ -189,12 +189,17 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
       </Content>
       {isHowAlertsWorksDialogOpen && <HowAlertsWorksDialog onClose={() => setIsHowAlertsWorksDialogOpen(false)} />}
     </>
-)
+  )
 }
 
 const NumberOfAlerts = styled.span`
   font-weight: 500;
   margin-right: 4px;
+`
+
+const StyledLink = styled(Link)`
+  margin-left: 4px;
+  cursor: pointer;
 `
 
 const StyledTagInfo = styled(Tag)`

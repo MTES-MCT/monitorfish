@@ -1,3 +1,5 @@
+import { AdministrativeAreaTypeLabel } from '@features/Alert/constants'
+
 import { MonitorFishMap } from './Map.types'
 
 import type { Option } from '@mtes-mct/monitor-ui'
@@ -244,7 +246,7 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
   },
   [MonitorFishMap.MonitorFishLayer.EEZ]: {
     code: 'eez_areas',
-    name: 'Zones ZEE',
+    name: AdministrativeAreaTypeLabel.EEZ_AREA,
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
     zoneNamePropertyKey: 'union',
@@ -252,7 +254,7 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
   },
   [MonitorFishMap.MonitorFishLayer.FAO]: {
     code: 'fao_areas',
-    name: 'Zones FAO / CIEM',
+    name: AdministrativeAreaTypeLabel.FAO_AREA,
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
     zoneNamePropertyKey: 'f_code',

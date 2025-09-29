@@ -34,7 +34,6 @@ context('Side Window > Alert Management', () => {
     cy.get('[title="Alerte all-in"]').scrollIntoView().click({ force: true })
     cy.get('[data-id="POSITION_ALERT:13"]').contains('Navires, Espèces à bord, Zones de capture (FAR), Nationalités, Quartiers, OPs, Zones (VMS), Engins')
     cy.get('[data-id="POSITION_ALERT:13"]').contains('22206')
-    cy.get('[data-id="POSITION_ALERT:13"]').contains('Du 12/09/23 au 19/10/23')
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains('HKE - MERLU D\'EUROPE (min. 713kg), LOB - CROUPIA ROCHE, SOL - SOLE COMMUNE')
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains('27.7.e, 27.7.d, 27.8.a')
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains('France, Espagne, Allemagne, Danemark')

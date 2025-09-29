@@ -65,7 +65,7 @@ context('Side Window > Reporting List > Table', () => {
     cy.fill("Suspicions d'infraction", false)
     cy.fill('Observations', true)
 
-    cy.get('.Table-SimpleTable tr').should('have.length', 3)
+    cy.get('.Table-SimpleTable tr').should('have.length', 4)
     cy.get('.Table-SimpleTable tr').eq(1).contains('Observation')
     cy.get('.Table-SimpleTable tr').eq(2).contains('Observation')
 

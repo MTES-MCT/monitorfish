@@ -101,7 +101,7 @@ const Wrapper = styled.li`
   border-radius: 0;
   padding: 0;
   overflow: hidden;
-  color: #FF3392;
+  color: #ff3392;
 `
 
 const LogbookMessageContent = styled.div<{

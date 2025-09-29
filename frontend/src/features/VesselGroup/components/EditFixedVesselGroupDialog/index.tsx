@@ -122,7 +122,7 @@ const VesselsCount = styled.div`
 
 const Example = styled.div`
   text-align: left;
-  color: #FF3392;
+  color: #ff3392;
   font-style: italic;
 
   span {

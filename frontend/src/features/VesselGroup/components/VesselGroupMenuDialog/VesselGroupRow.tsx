@@ -267,7 +267,7 @@ const GroupTitle = styled.span`
   overflow: hidden;
 `
 const ValidityText = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   display: flex;
   font-style: italic;
   font-weight: 400;

@@ -234,7 +234,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: #FF3392;
+  color: #ff3392;
   flex: initial;
   display: inline-block;
   margin: 0;
@@ -261,7 +261,7 @@ const Value = styled.td`
 `
 
 const NoValue = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   font-weight: 300;
   line-height: normal;
 `
@@ -278,7 +278,7 @@ const Wrapper = styled.li`
   border-radius: 0;
   padding: 0;
   overflow: hidden;
-  color: #FF3392;
+  color: #ff3392;
 `
 
 const LogbookMessageContent = styled.div<{

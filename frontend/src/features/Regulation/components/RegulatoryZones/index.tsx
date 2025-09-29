@@ -87,7 +87,7 @@ const Pin = styled(Icon.Pin)`
 `
 
 const NoLayerSelected = styled.div`
-  color: #FF3392;
+  color: #ff3392;
   margin: 10px;
   font-size: 13px;
 `

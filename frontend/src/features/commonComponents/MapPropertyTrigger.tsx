@@ -89,7 +89,7 @@ const Wrapper = styled.div<{
 
 const ShowLabelText = styled.span`
   margin-left: 0;
-  color: #FF3392;
+  color: #ff3392;
   padding: 8.5px 10px;
   vertical-align: top;
   display: inline-block;

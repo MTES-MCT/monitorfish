@@ -121,6 +121,6 @@ const Wrapper = styled.div`
 
 const File = styled.div`
   font-style: italic;
-  color: #FF3392;
+  color: #ff3392;
   padding: 24px 90px;
 `

@@ -256,7 +256,7 @@ const TableTop = styled.div<{
 `
 
 const TableLegend = styled.p`
-  color: #FF3392;
+  color: #ff3392;
   line-height: 1;
   margin-left: 0;
   margin-right: auto;

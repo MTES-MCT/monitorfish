@@ -2,7 +2,7 @@ import { CompletionStatusIcon } from '@features/Mission/components/MissionForm/A
 import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
 import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { getLocalizedDayjs, THEME } from '@mtes-mct/monitor-ui'
+import { getLocalizedDayjs } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -55,14 +55,14 @@ const SourceAction = styled.span`
   margin-top: -30px;
   float: right;
   font-style: italic;
-  color: #FF3392;
+  color: #ff3392;
 `
 
 const Wrapper = styled.div<{
   $isEnvAction: boolean
 }>`
   align-items: center;
-  color: #FF3392;
+  color: #ff3392;
   display: flex;
   font-size: 13px;
   user-select: none;

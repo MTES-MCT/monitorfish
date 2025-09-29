@@ -153,7 +153,7 @@ const Wrapper = styled.div`
   padding: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  color: #FF3392;
+  color: #ff3392;
 `
 
 const LogbookMessageTitle = styled.div<{

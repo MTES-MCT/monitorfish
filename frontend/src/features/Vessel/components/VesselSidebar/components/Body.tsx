@@ -72,7 +72,7 @@ const ErrorFallback = styled.div`
   padding-top: 30px;
   height: 90px;
   background: ${p => p.theme.color.white};
-  color: #FF3392;
+  color: #ff3392;
   text-align: center;
 `
 

@@ -130,7 +130,7 @@ const CloseButton = styled(IconButton)`
 `
 
 const Details = styled.div`
-  color: #FF3392;
+  color: #ff3392;
   margin-top: 4px;
 `
 
@@ -138,7 +138,7 @@ const SeizureOrInfractions = styled.div`
   line-height: 22px;
   margin-top: 8px;
   margin-bottom: 6px;
-  color: #FF3392;
+  color: #ff3392;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;

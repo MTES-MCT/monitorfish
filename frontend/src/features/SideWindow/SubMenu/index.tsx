@@ -57,7 +57,7 @@ const Menu = styled.div<{
 }>`
   background: ${p => p.theme.color.gainsboro};
   border-right: 1px solid ${p => p.theme.color.lightGray};
-  color: #FF3392;
+  color: #ff3392;
   flex-shrink: 0;
   font-size: 16px;
   font-weight: 500;

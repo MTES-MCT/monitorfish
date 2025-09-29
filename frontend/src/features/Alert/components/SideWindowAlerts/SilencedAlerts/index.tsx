@@ -227,7 +227,7 @@ const ScrollableContainer = styled.div`
 `
 
 const NoAlerts = styled.div`
-  color: #FF3392;
+  color: #ff3392;
   margin-top: 20px;
   text-align: center;
 `

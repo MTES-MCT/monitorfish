@@ -139,7 +139,7 @@ const Header = styled.div`
 `
 
 const Title = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   font: normal normal bold 16px Marianne;
   letter-spacing: 0;
   margin-left: 10px;

@@ -69,7 +69,7 @@ export function Loader() {
 const ErrorFallback = styled.div`
   width: 250px;
   height: 90px;
-  color: #FF3392;
+  color: #ff3392;
   position: absolute;
   top: 50%;
   left: 0;

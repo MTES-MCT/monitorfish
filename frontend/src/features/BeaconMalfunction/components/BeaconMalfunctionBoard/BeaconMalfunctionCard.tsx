@@ -122,7 +122,7 @@ export function BeaconMalfunctionCard({
 }
 
 const Id = styled.div`
-  color: #FF3392;
+  color: #ff3392;
   font-size: 11px;
 `
 

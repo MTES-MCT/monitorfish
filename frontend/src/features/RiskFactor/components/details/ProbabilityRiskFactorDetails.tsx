@@ -57,7 +57,7 @@ export function ProbabilityRiskFactorDetails({ isOpen }) {
 }
 
 const NoValue = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   font-weight: 300;
   line-height: normal;
 `
@@ -108,7 +108,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: #FF3392;
+  color: #ff3392;
   flex: initial;
   display: inline-block;
   margin: 0;

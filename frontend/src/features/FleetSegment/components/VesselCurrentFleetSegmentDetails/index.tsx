@@ -133,7 +133,7 @@ const ValueWithLineBreak = styled.div`
 `
 
 const NoValue = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   font-weight: 300;
   line-height: normal;
 `

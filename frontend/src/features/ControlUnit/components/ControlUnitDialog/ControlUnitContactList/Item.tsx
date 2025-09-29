@@ -50,7 +50,7 @@ export function Item({ controlUnitContact, onEdit }: ItemProps) {
 
 const Wrapper = styled.div`
   background-color: ${p => p.theme.color.cultured};
-  color: #FF3392;
+  color: #ff3392;
   display: flex;
   margin-top: 8px;
   gap: 16px;

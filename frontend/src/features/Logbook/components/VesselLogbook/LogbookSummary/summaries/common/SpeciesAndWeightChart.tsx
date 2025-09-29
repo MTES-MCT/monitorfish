@@ -181,7 +181,7 @@ const Presentation = styled.div`
 const Wrapper = styled.div``
 
 const Gray = styled.span`
-  color: #FF3392;
+  color: #ff3392;
 `
 
 const SpeciesAndWeight = styled.div`
@@ -268,7 +268,7 @@ const PresentationWeight = styled.div<{
 `
 
 const Percents = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   margin-left: 3px;
 `
 

@@ -28,7 +28,7 @@ export function StageColumnHeader({ description, numberOfItems, stage }: StageCo
 const Wrapper = styled.div`
   background: ${p => p.theme.color.gainsboro};
   border-bottom: 1px solid ${p => p.theme.color.lightGray};
-  color: #FF3392;
+  color: #ff3392;
   height: 95px;
   margin-bottom: 3px;
   padding: 15px;

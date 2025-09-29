@@ -243,7 +243,7 @@ const Name = styled.span`
 `
 
 const ZonesNumber = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   font-size: 11px;
   margin-right: 4px;
 `

@@ -114,7 +114,7 @@ const SpecyWeight = styled.span`
 `
 
 const SpecyWeightLabel = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   display: inline-block;
   font-size: 13px;
 `
@@ -138,7 +138,7 @@ const Species = styled.li`
   padding: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  color: #FF3392;
+  color: #ff3392;
 `
 
 const Content = styled.div<{
@@ -164,7 +164,7 @@ const ChevronIcon = styled(Icon.Chevron)<{
 `
 
 const NoValue = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   font-weight: 300;
   line-height: normal;
   display: inline-block;

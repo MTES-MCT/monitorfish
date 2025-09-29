@@ -243,7 +243,7 @@ const NoMessage = styled.div`
   margin-top: 40px;
   padding-bottom: 30px;
   font-size: 13px;
-  color: #FF3392;
+  color: #ff3392;
 `
 
 const Wrapper = styled.div`
@@ -256,7 +256,7 @@ const Previous = styled.a`
   text-align: left;
   text-decoration: underline;
   font-size: 13px;
-  color: #FF3392;
+  color: #ff3392;
   cursor: pointer;
   display: inline-block;
 `

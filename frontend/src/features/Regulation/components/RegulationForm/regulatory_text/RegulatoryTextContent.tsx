@@ -3,7 +3,7 @@ import {
   checkOtherRequiredValues
 } from '@features/Regulation/components/RegulationForm/regulatory_text/utils'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
-import { Accent, Button, Checkbox, DatePicker, MultiCheckbox, SingleTag, TextInput, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Checkbox, DatePicker, MultiCheckbox, SingleTag, TextInput } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -215,6 +215,6 @@ const StyledButton = styled(Button)`
 
 const Or = styled.span`
   padding: 0 10px;
-  color: #FF3392;
+  color: #ff3392;
   font-size: 13px;
 `

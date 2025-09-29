@@ -144,5 +144,5 @@ export const StyledSubRow = styled(SubRow)`
 `
 
 const ExtendedSpecyCode = styled.span`
-  color: #FF3392;
+  color: #ff3392;
 `

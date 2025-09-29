@@ -63,7 +63,7 @@ const NoCapture = styled.span`
   margin-top: 8px;
   margin-bottom: 8px;
   font-style: italic;
-  color: #FF3392;
+  color: #ff3392;
 `
 
 const Line = styled.div`
@@ -117,7 +117,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: #FF3392;
+  color: #ff3392;
   padding: 1px 5px 5px 0;
   line-height: 0.5em;
   font-weight: normal;

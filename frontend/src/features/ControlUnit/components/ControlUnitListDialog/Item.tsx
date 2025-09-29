@@ -87,6 +87,6 @@ const AdministrationText = styled.div`
 `
 
 const ResourcesAndPortsText = styled.div`
-  color: #FF3392;
+  color: #ff3392;
   line-height: 18px;
 `

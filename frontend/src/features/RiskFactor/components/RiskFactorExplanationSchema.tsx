@@ -51,7 +51,7 @@ const RiskFactorExponent = styled.span`
   border: 1px solid ${p => p.theme.color.slateGray};
   width: fit-content;
   padding: 1px 5px;
-  color: #FF3392;
+  color: #ff3392;
   font-size: 11px;
   background: ${p => p.theme.color.white};
   margin-top: -20px;
@@ -87,14 +87,14 @@ const Box = styled.div`
   border: 1px solid ${p => p.theme.color.slateGray};
   width: fit-content;
   padding: 10px;
-  color: #FF3392;
+  color: #ff3392;
 `
 
 const GlobalBox = styled.div`
   border: 1px solid ${p => p.theme.color.charcoal};
   width: fit-content;
   padding: 11px 10px 10px 10px;
-  color: #FF3392;
+  color: #ff3392;
 `
 
 const Schema = styled.span`

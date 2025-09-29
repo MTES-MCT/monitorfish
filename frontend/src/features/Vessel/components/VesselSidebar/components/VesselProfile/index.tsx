@@ -50,7 +50,7 @@ const Wrapper = styled.div`
   margin-top: 10px;
   padding: 12px 24px 0 24px;
   background: ${p => p.theme.color.white};
-  color: #FF3392;
+  color: #ff3392;
   display: flex;
   flex-direction: column;
 `

@@ -82,7 +82,7 @@ const NoControl = styled.div`
   margin: 10px 10px;
   height: 70px;
   background: ${p => p.theme.color.white};
-  color: #FF3392;
+  color: #ff3392;
   text-align: center;
 `
 

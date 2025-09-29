@@ -81,7 +81,7 @@ const GearSection = styled.div`
 `
 
 const GearKey = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   margin-right: 10px;
   display: inline-block;
   width: 125px;
@@ -94,27 +94,27 @@ const GearValue = styled.span`
 `
 
 const MeshKey = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   margin-right: 10px;
   display: inline-block;
   width: 60px;
 `
 
 const DimensionsKey = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   margin-right: 10px;
   display: inline-block;
   width: 85px;
 `
 
 const Latitude = styled.div`
-  color: #FF3392;
+  color: #ff3392;
   display: inline-block;
   padding: 0px 5px 0px 0;
 `
 
 const Longitude = styled.div`
-  color: #FF3392;
+  color: #ff3392;
   display: inline-block;
   padding: 0px 5px 0px 10px;
 `

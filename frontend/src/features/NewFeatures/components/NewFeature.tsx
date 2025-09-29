@@ -153,7 +153,7 @@ const DateSeparator = styled.div<{
 
 const MonthAndYear = styled.div`
   background-color: ${p => p.theme.color.white};
-  color: #FF3392;
+  color: #ff3392;
   width: 96px;
   margin-top: -8px;
   line-height: 12px;

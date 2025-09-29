@@ -89,7 +89,7 @@ const CoordinatesTypeSelection = styled.span<{
   left: 40px;
   display: inline-block;
   margin: 1px;
-  color: #FF3392;
+  color: #ff3392;
   font-size: 13px;
   font-weight: 300;
   text-decoration: none;

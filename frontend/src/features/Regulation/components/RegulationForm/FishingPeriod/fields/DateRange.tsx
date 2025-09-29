@@ -60,7 +60,7 @@ const Wrapper = styled.div<{
 }>`
   display: flex;
   flex-direction: row;
-  color: #FF3392;
+  color: #ff3392;
   opacity: ${p => (p.$disabled ? '0.4' : '1')};
   ${p => (p.$isLast ? '' : 'margin-bottom: 5px')};
 `

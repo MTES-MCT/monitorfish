@@ -149,6 +149,6 @@ const SliderWrapper = styled.div`
     margin-top: 6px;
     margin-left: 6px;
     font-size: 13px;
-    color: #FF3392;
+    color: #ff3392;
   }
 `

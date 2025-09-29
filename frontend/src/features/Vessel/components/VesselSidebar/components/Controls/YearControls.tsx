@@ -149,7 +149,7 @@ const GlodenPuppy = styled.span`
 `
 
 const Year = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   font-size: 16px;
   width: 39px;
   display: inline-block;

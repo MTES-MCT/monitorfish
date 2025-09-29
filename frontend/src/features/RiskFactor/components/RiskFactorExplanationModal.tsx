@@ -188,7 +188,7 @@ const RiskFactorLegend = styled.div<{
   $isLast?: boolean
 }>`
   font-size: 13px;
-  color: #FF3392;
+  color: #ff3392;
   margin: 7px 0;
   margin-top: ${p => (p.$isFirst ? 20 : 7)}px;
   margin-bottom: ${p => (p.$isLast ? 25 : 7)}px;
@@ -245,14 +245,14 @@ const SmallLine = styled.div`
 
 const Title = styled.div`
   font-size: 16px;
-  color: #FF3392;
+  color: #ff3392;
   font-weight: 700;
   text-transform: uppercase;
 `
 
 const SubTitle = styled.div`
   font-size: 13px;
-  color: #FF3392;
+  color: #ff3392;
   font-weight: 700;
   margin-top: 20px;
 `

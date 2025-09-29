@@ -25,7 +25,7 @@ export const TableRow = styled.tr`
 `
 
 export const NoValue = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   display: inline-block;
   font-weight: 300;
   line-height: normal;
@@ -34,7 +34,7 @@ export const NoValue = styled.span`
 export const TableKey = styled.th`
   background: none;
   border: none;
-  color: #FF3392;
+  color: #ff3392;
   display: inline-block;
   font-weight: normal;
   max-width: 190px;
@@ -55,13 +55,13 @@ export const Gray = styled.span`
 `
 
 export const FirstInlineKey = styled.div`
-  color: #FF3392;
+  color: #ff3392;
   display: inline-block;
   padding: 0px 5px 0px 0;
 `
 
 export const SecondInlineKey = styled.div`
-  color: #FF3392;
+  color: #ff3392;
   display: inline-block;
   padding: 0px 5px 0px 10px;
 `

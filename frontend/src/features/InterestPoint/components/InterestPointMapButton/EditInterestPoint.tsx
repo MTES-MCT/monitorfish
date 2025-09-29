@@ -191,7 +191,7 @@ const CancelButton = styled.button`
 
   &:disabled {
     border: 1px solid ${THEME.color.lightGray};
-    color: #FF3392;
+    color: #ff3392;
   }
 `
 
@@ -210,7 +210,7 @@ const OkButton = styled.button`
 `
 
 const Body = styled.div`
-  color: #FF3392;
+  color: #ff3392;
   font-size: 13px;
   margin: 10px 15px;
   text-align: left;

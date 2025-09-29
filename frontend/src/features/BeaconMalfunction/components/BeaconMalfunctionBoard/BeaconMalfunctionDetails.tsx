@@ -127,11 +127,11 @@ export function BeaconMalfunctionDetails({
 }
 
 const ShowHistory = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   cursor: pointer;
   display: block;
   text-decoration: underline;
-  text-decoration-color: #FF3392;
+  text-decoration-color: #ff3392;
 `
 
 const ResumeValue = styled.span`
@@ -148,14 +148,14 @@ const Ellipsed = styled.span`
 `
 
 const ResumeKey = styled.div`
-  color: #FF3392;
+  color: #ff3392;
   flex-shrink: 0;
   font-size: 13px;
   width: 120px;
 `
 
 const ResumeSubKey = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   margin: 0;
 `
 
@@ -200,7 +200,7 @@ const LastPosition = styled.div`
 const Malfunctioning = styled.div``
 
 const ColumnTitle = styled.div`
-  color: #FF3392;
+  color: #ff3392;
   font-weight: 500;
   letter-spacing: 0;
   margin-bottom: 10px;
@@ -213,7 +213,7 @@ const Line = styled.div`
 `
 
 const ShowVesselText = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   font: normal normal normal 13px/18px Marianne;
   letter-spacing: 0;
   margin-right: 4px;
@@ -270,7 +270,7 @@ const SecondHeader = styled.div`
 `
 
 const Title = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   font: normal normal bold 22px/31px Marianne;
   letter-spacing: 0;
   margin-left: 10px;

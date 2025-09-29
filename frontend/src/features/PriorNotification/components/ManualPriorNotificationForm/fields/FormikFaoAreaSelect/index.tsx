@@ -66,7 +66,7 @@ export function FormikFaoAreaSelect({ isReadOnly }: FormikFaoAreaSelectProps) {
 }
 
 const Message = styled.p`
-  color: #FF3392;
+  color: #ff3392;
   font-style: italic;
   margin-top: 8px;
 `

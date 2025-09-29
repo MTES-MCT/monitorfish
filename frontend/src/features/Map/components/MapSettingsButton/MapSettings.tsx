@@ -128,7 +128,7 @@ const EstimatedPosition = styled(EstimatedPositionSVG)`
 `
 
 const LastPositionLegend = styled.div`
-  color: #FF3392;
+  color: #ff3392;
   margin: 0 12px 12px 12px;
   text-align: left;
 `

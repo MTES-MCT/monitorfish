@@ -91,7 +91,7 @@ export function CustomZones({ hideLayersListWhenSearching = false }: CustomZones
 }
 
 const HowTo = styled.li`
-  color: #FF3392;
+  color: #ff3392;
   font-style: italic;
   list-style: none;
   padding: 24px 24px;

@@ -73,7 +73,7 @@ export function ProducerOrganizationMembershipTable() {
 }
 
 const TableLegend = styled.p`
-  color: #FF3392;
+  color: #ff3392;
   line-height: 1;
   margin-bottom: 4px;
 `

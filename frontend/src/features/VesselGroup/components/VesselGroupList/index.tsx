@@ -197,7 +197,7 @@ const StyledCheckbox = styled(Checkbox)`
 `
 
 const NoGroup = styled.div`
-  color: #FF3392;
+  color: #ff3392;
   margin-top: 16px;
   margin-left: 30px;
 `
@@ -249,5 +249,5 @@ const PinnedGroupsTitle = styled.span`
   font-weight: 500;
   margin-bottom: 16px;
   display: inline-block;
-  color: #FF3392;
+  color: #ff3392;
 `

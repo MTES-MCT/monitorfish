@@ -109,7 +109,7 @@ const Title = styled.div`
 
   > div {
     &:nth-child(1) {
-      color: #FF3392;
+      color: #ff3392;
       font-weight: 700;
     }
     &:nth-child(2) {

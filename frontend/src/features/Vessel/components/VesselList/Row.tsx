@@ -253,7 +253,7 @@ const ExpandedRowCell = styled(TableWithSelectableRows.Td).attrs(props => ({
 `
 
 const ExpandedRowLabel = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   display: block;
   font-weight: 400;
   width: 100%;

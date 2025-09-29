@@ -168,7 +168,7 @@ const VesselGroupRow = styled.span``
 
 const OtherGroupsHidden = styled.span`
   font-style: italic;
-  color: #FF3392;
+  color: #ff3392;
   font-weight: normal;
 `
 
@@ -289,7 +289,7 @@ const VesselGroups = styled.div`
 `
 
 const Key = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   margin-right: 10px;
   font-weight: normal;
   width: 125px;
@@ -370,7 +370,7 @@ const LeftTriangleShadow = styled.div<{
 `
 
 const NoValue = styled.span`
-  color: #FF3392;
+  color: #ff3392;
   font-weight: 300;
   margin: 0;
   line-height: normal;
@@ -378,7 +378,7 @@ const NoValue = styled.span`
 
 const FieldName = styled.div`
   margin-top: 9px;
-  color: #FF3392;
+  color: #ff3392;
   font-size: 13px;
   font-weight: normal;
 `

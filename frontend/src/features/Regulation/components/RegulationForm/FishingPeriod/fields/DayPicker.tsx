@@ -61,6 +61,6 @@ const Circle = styled.a<{
   opacity: ${p => (p.$disabled ? '0.4' : '1')};
   &:hover {
     text-decoration: none;
-    color: #FF3392;
+    color: #ff3392;
   }
 `

@@ -149,7 +149,7 @@ const TrackRequestBody = styled(MapComponent)<{
 }>`
   background: ${p => p.theme.color.white};
   border-radius: 2px;
-  color: #FF3392;
+  color: #ff3392;
   display: flex;
   flex-direction: column;
   font-size: 13px;

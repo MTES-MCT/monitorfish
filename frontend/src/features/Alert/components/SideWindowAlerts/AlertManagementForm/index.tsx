@@ -6,6 +6,7 @@ import {
   useUpdateAlertMutation
 } from '@features/Alert/apis'
 import { AdministrativeZonesCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/AdministrativeZonesCriteria'
+import { Criteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants'
 import { FormikValidityPeriod } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/FormikValidityPeriod'
 import { FISHING_POSITION_ONLY_AS_OPTIONS } from '@features/Alert/components/SideWindowAlerts/constants'
 import { alertActions } from '@features/Alert/components/SideWindowAlerts/slice'
@@ -35,7 +36,6 @@ import styled from 'styled-components'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 
 import type { AlertSpecification } from '@features/Alert/types'
-import {Criteria} from "@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants";
 
 export function AlertManagementForm() {
   const dispatch = useMainAppDispatch()
@@ -43,7 +43,7 @@ export function AlertManagementForm() {
   const [updateAlert, { isLoading: isUpdatingAlert }] = useUpdateAlertMutation()
   const editedAlertSpecification = useMainAppSelector(state => state.alert.editedAlertSpecification)
   const infractions = useMainAppSelector(state => state.infraction.infractions)
-  const [displayedCriterias, setDisplayedCriterias] = useState<Criteria[]>([])
+  const [selectedCriterias, setSelectedCriterias] = useState<Criteria[]>([])
   const [isDraftCancellationConfirmationDialogOpen, setIsDraftCancellationConfirmationDialogOpen] = useState(false)
   assertNotNullish(editedAlertSpecification)
 
@@ -116,93 +116,112 @@ export function AlertManagementForm() {
         onSubmit={onSave}
         validationSchema={toFormikValidationSchema(EditedAlertSpecificationSchema)}
       >
-        {({ dirty }) => (
-          <Wrapper>
-            <Header>
-              <BackToListIcon
-                data-cy="go-back-alerts-management-list"
-                onClick={() => {
-                  askForDraftCancellation(dirty)
-                }}
-              />
-              <HeaderTitle>{editedAlertSpecification?.id ? 'Modifier une alerte' : 'Nouvelle alerte'}</HeaderTitle>
-            </Header>
-            <Body>
-              <Panel $isRight={false}>
-                <StyledFormHead>
-                  <h2>Informations générales</h2>
-                </StyledFormHead>
-                <HeadDescription>
-                  L’alerte concerne les navires émettant des positions VMS. Elle analyse l’activité sur 12h et
-                  s’actualise toutes les 10 min.
-                  <br />* Tous les champs marqués d’une astérisque rouge doivent être saisis.
-                </HeadDescription>
-                <FormikTextInput isRequired label="Nom" name="name" />
-                <FormikTextarea isRequired label="Description" name="description" />
-                <FormikSelect
-                  isRequired
-                  label="NATINF associé"
-                  name="natinfCode"
-                  options={infractionsAsOptions}
-                  placement="auto"
-                  searchable
-                />
-                <StyledFormikMultiRadio
-                  isInline
-                  isRequired
-                  label="Positions VMS prises en compte par l'alerte"
-                  name="onlyFishingPositions"
-                  options={FISHING_POSITION_ONLY_AS_OPTIONS}
-                />
-                <FormikValidityPeriod />
-              </Panel>
-              <Panel $isRight>
-                <StyledFormHead>
-                  <h2>Critères de déclenchement</h2>
-                  <Dropdown Icon={Icon.Plus} placement="bottomEnd" title="Définir les critères de déclenchement">
-                    <Dropdown.Item onClick={() => {
-                      setDisplayedCriterias(previous => previous.concat(Criteria.ZONE))
-                    }}>Zones</Dropdown.Item>
-                  </Dropdown>
-                </StyledFormHead>
-                <AdministrativeZonesCriteria isDisplayed={displayedCriterias.includes(Criteria.ZONE)}/>
-              </Panel>
-            </Body>
-            <Footer>
-              {!!editedAlertSpecification.id && (
-                <DeleteButton accent={Accent.SECONDARY} disabled Icon={Icon.Delete} onClick={() => {}}>
-                  Supprimer l’alerte
-                </DeleteButton>
-              )}
-              {!editedAlertSpecification.id && <Separator />}
+        {({ dirty, values }) => {
+          const hasZoneCriteria =
+            !!values.regulatoryAreas.length ||
+            !!values.administrativeAreas.length ||
+            selectedCriterias.includes(Criteria.ZONE)
 
-              <AlertInfos>
-                {editedAlertSpecification.createdAtUtc && (
-                  <>
-                    Alerte créée par {editedAlertSpecification.createdBy} le{' '}
-                    {customDayjs(editedAlertSpecification.createdAtUtc).utc().format('DD/MM/YYYY à HH[h]mm')}.{' '}
-                  </>
-                )}
-                {!editedAlertSpecification.createdAtUtc && <>Alerte non enregistrée. </>}
-              </AlertInfos>
-
-              <RightButtonsContainer>
-                <Button accent={Accent.SECONDARY} disabled={isCreatingAlert || isUpdatingAlert} type="submit">
-                  Enregistrer
-                </Button>
-                <Button
-                  accent={Accent.PRIMARY}
-                  disabled={false}
+          return (
+            <Wrapper>
+              <Header>
+                <BackToListIcon
+                  data-cy="go-back-alerts-management-list"
                   onClick={() => {
                     askForDraftCancellation(dirty)
                   }}
-                >
-                  Fermer
-                </Button>
-              </RightButtonsContainer>
-            </Footer>
-          </Wrapper>
-        )}
+                />
+                <HeaderTitle>{editedAlertSpecification?.id ? 'Modifier une alerte' : 'Nouvelle alerte'}</HeaderTitle>
+              </Header>
+              <Body>
+                <Panel $isRight={false}>
+                  <StyledFormHead>
+                    <h2>Informations générales</h2>
+                  </StyledFormHead>
+                  <HeadDescription>
+                    L’alerte concerne les navires émettant des positions VMS. Elle analyse l’activité sur 12h et
+                    s’actualise toutes les 10 min.
+                    <br />* Tous les champs marqués d’une astérisque rouge doivent être saisis.
+                  </HeadDescription>
+                  <FormikTextInput isRequired label="Nom" name="name" />
+                  <FormikTextarea isRequired label="Description" name="description" />
+                  <FormikSelect
+                    isRequired
+                    label="NATINF associé"
+                    name="natinfCode"
+                    options={infractionsAsOptions}
+                    placement="auto"
+                    searchable
+                  />
+                  <StyledFormikMultiRadio
+                    isInline
+                    isRequired
+                    label="Positions VMS prises en compte par l'alerte"
+                    name="onlyFishingPositions"
+                    options={FISHING_POSITION_ONLY_AS_OPTIONS}
+                  />
+                  <FormikValidityPeriod />
+                </Panel>
+                <Panel $isRight>
+                  <StyledFormHead>
+                    <h2>Critères de déclenchement</h2>
+                    <Dropdown Icon={Icon.Plus} placement="bottomEnd" title="Définir les critères de déclenchement">
+                      {!hasZoneCriteria && (
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedCriterias(previous => previous.concat(Criteria.ZONE))
+                          }}
+                        >
+                          Zones
+                        </Dropdown.Item>
+                      )}
+                    </Dropdown>
+                  </StyledFormHead>
+                  {hasZoneCriteria && (
+                    <AdministrativeZonesCriteria
+                      onDelete={() => {
+                        setSelectedCriterias(previous => previous.filter(criteria => criteria !== Criteria.ZONE))
+                      }}
+                    />
+                  )}
+                </Panel>
+              </Body>
+              <Footer>
+                {!!editedAlertSpecification.id && (
+                  <DeleteButton accent={Accent.SECONDARY} disabled Icon={Icon.Delete} onClick={() => {}}>
+                    Supprimer l’alerte
+                  </DeleteButton>
+                )}
+                {!editedAlertSpecification.id && <Separator />}
+
+                <AlertInfos>
+                  {editedAlertSpecification.createdAtUtc && (
+                    <>
+                      Alerte créée par {editedAlertSpecification.createdBy} le{' '}
+                      {customDayjs(editedAlertSpecification.createdAtUtc).utc().format('DD/MM/YYYY à HH[h]mm')}.{' '}
+                    </>
+                  )}
+                  {!editedAlertSpecification.createdAtUtc && <>Alerte non enregistrée. </>}
+                </AlertInfos>
+
+                <RightButtonsContainer>
+                  <Button accent={Accent.SECONDARY} disabled={isCreatingAlert || isUpdatingAlert} type="submit">
+                    Enregistrer
+                  </Button>
+                  <Button
+                    accent={Accent.PRIMARY}
+                    disabled={false}
+                    onClick={() => {
+                      askForDraftCancellation(dirty)
+                    }}
+                  >
+                    Fermer
+                  </Button>
+                </RightButtonsContainer>
+              </Footer>
+            </Wrapper>
+          )
+        }}
       </Formik>
       {isDraftCancellationConfirmationDialogOpen && (
         <ConfirmationModal

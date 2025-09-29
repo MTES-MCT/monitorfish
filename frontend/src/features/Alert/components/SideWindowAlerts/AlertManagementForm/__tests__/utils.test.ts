@@ -1,10 +1,9 @@
-import { expect } from '@jest/globals'
-
 import { AdministrativeAreaType, AdministrativeAreaTypeLabel } from '@features/Alert/constants'
+import { expect } from '@jest/globals'
 
 import { mapZonesWithMetadata } from '../utils'
 
-import type {TreeOption} from '@mtes-mct/monitor-ui'
+import type { TreeOption } from '@mtes-mct/monitor-ui'
 
 describe('mapZonesWithMetadata', () => {
   it('Should return empty array when zoneGroups is undefined or has no valid zones', () => {
@@ -27,18 +26,18 @@ describe('mapZonesWithMetadata', () => {
     // Given
     const zoneGroups: TreeOption[] = [
       {
-        label: AdministrativeAreaTypeLabel.EEZ_AREA,
         children: [
           { label: 'France', value: 'france-id' },
           { label: 'Spain', value: 'spain-id' }
-        ]
+        ],
+        label: AdministrativeAreaTypeLabel.EEZ_AREA
       },
       {
-        label: AdministrativeAreaTypeLabel.FAO_AREA,
         children: [
           { label: '27.1.0', value: 'fao-27-1-0' },
           { label: '27.4.c', value: 'fao-27-4-c' }
-        ]
+        ],
+        label: AdministrativeAreaTypeLabel.FAO_AREA
       }
     ]
 

@@ -132,6 +132,11 @@ export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishAct
     [missionAction]
   )
 
+  const confirmDeletion = () => {
+    setIsDeletionConfirmationModalOpen(false)
+    onRemove()
+  }
+
   return (
     <>
       <Head>
@@ -170,7 +175,7 @@ export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishAct
             iconName="Delete"
             message="Êtes-vous sûr de vouloir supprimer cette action ?"
             onCancel={() => setIsDeletionConfirmationModalOpen(false)}
-            onConfirm={onRemove}
+            onConfirm={confirmDeletion}
             title="Suppression de l'action"
           />,
           newWindowContainerRef.current

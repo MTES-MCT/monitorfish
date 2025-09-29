@@ -5,6 +5,7 @@ import {
   useCreateAlertMutation,
   useUpdateAlertMutation
 } from '@features/Alert/apis'
+import { AdministrativeZonesCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/AdministrativeZonesCriteria'
 import { FormikValidityPeriod } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/FormikValidityPeriod'
 import { FISHING_POSITION_ONLY_AS_OPTIONS } from '@features/Alert/components/SideWindowAlerts/constants'
 import { alertActions } from '@features/Alert/components/SideWindowAlerts/slice'
@@ -17,6 +18,7 @@ import {
   Accent,
   Button,
   customDayjs,
+  Dropdown,
   FormikMultiRadio,
   FormikSelect,
   FormikTextarea,
@@ -152,7 +154,15 @@ export function AlertManagementForm() {
                 />
                 <FormikValidityPeriod />
               </Panel>
-              <Panel $isRight />
+              <Panel $isRight>
+                <StyledFormHead>
+                  <h2>Critères de déclenchement</h2>
+                  <Dropdown Icon={Icon.Plus} placement="bottomEnd" title="Définir les critères de déclenchement">
+                    <Dropdown.Item onClick={() => {}}>Zones</Dropdown.Item>
+                  </Dropdown>
+                </StyledFormHead>
+                <AdministrativeZonesCriteria />
+              </Panel>
             </Body>
             <Footer>
               {!!editedAlertSpecification.id && (

@@ -97,7 +97,7 @@ export function Content({
 
 const Wrapper = styled.div`
   background: ${p => p.theme.color.white};
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   display: flex;
   flex-direction: column;
   padding: 16px 16px 0 16px;

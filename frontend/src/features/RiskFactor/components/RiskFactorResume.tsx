@@ -169,7 +169,7 @@ const NoRiskFactor = styled.div`
   text-align: left;
   background: ${p => p.theme.color.white};
   font-size: 15px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
 `
 
 const Chevron = styled(ChevronIcon)`
@@ -199,7 +199,7 @@ const SeeMore = styled.a<{
   $underCharter: boolean | undefined
 }>`
   font-size: 11px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   text-decoration: underline;
   cursor: pointer;
   margin-top: ${p => (p.$underCharter ? -20 : 19)}px;
@@ -256,13 +256,13 @@ const Line = styled.div`
 const GlobalRiskFactor = styled.span`
   padding-left: 24px;
   font-size: 15px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   width: 100%;
 `
 
 const SubRiskTitle = styled.div`
   font-size: 13px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   padding-left: 24px;
   margin-top: 10px;
   width: 100%;

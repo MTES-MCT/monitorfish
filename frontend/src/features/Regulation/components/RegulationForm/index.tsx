@@ -382,7 +382,7 @@ const HeaderTitle = styled.span`
   text-align: center;
   font-weight: bold;
   font-size: 16px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   text-transform: uppercase;
 `
 

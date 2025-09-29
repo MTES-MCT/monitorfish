@@ -90,7 +90,7 @@ const Key = styled.span<{
   $width?: number
 }>`
   font-size: 13px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   margin-right: 10px;
   width: ${p => (p.$width ? p.$width : '47')}px;
   display: inline-block;

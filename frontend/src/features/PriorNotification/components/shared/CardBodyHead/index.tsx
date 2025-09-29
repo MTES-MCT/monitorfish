@@ -96,7 +96,7 @@ const Intro = styled.p<{
   $withTopMargin?: boolean
 }>`
   ${p => p.$withTopMargin && 'margin-top: 2px;'}
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-style: italic;
 `
 

@@ -55,7 +55,7 @@ const CloseFormIcon = styled(IconButton)`
 
 const FormWrapper = styled.div`
   background: ${p => p.theme.color.gainsboro} 0% 0% no-repeat padding-box;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;

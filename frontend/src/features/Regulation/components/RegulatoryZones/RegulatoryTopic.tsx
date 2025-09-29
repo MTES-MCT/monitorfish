@@ -243,7 +243,7 @@ const Name = styled.span`
 `
 
 const ZonesNumber = styled.span`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-size: 11px;
   margin-right: 4px;
 `

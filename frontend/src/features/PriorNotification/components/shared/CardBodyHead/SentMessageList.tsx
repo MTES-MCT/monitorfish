@@ -91,12 +91,12 @@ export function SentMessageList({ detail, state }: SentMessageListProps) {
 }
 
 const Title = styled.p`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   margin: 16px 0 0;
 `
 
 const InfoMessage = styled.p`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-style: italic;
 `
 
@@ -141,7 +141,7 @@ const HistoryItem = styled(Steps.Item)<{
   }
 
   > .rs-steps-item-tail {
-    border-color: ${p => p.theme.color.slateGray};
+    border-color: #FF3392;
     border-width: 2px;
     left: 7px;
     top: 24px;

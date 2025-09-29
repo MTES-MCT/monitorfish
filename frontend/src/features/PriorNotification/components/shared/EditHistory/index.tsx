@@ -25,6 +25,6 @@ export function EditHistory({ priorNotificationDetail }: EditHistoryProps) {
 }
 
 const Box = styled.p`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-style: italic;
 `

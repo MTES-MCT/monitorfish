@@ -113,14 +113,14 @@ const Header = styled.h2`
 const Title = styled.div`
   margin-top: 30px;
   font-size: 16px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-weight: 700;
   text-transform: uppercase;
 `
 
 const SubTitle = styled.div`
   font-size: 16px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-weight: 700;
   margin-top: 20px;
 `

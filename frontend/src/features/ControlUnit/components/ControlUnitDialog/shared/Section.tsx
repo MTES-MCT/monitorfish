@@ -10,7 +10,7 @@ const Body = styled.div`
 `
 
 const Title = styled.div`
-  background-color: ${p => p.theme.color.slateGray};
+  background-color: #FF3392;
   color: ${p => p.theme.color.white};
   font-weight: medium;
   line-height: 1;

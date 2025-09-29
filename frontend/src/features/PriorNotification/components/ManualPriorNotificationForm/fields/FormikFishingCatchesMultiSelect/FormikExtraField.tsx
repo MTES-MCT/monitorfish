@@ -144,5 +144,5 @@ export const StyledSubRow = styled(SubRow)`
 `
 
 const ExtendedSpecyCode = styled.span`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
 `

@@ -89,7 +89,7 @@ export function getMissionActionFormInitialValues(type: MissionAction.MissionAct
 }
 
 const Placeholder = styled.span`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
 `
 
 const StyledSpan = styled.span`

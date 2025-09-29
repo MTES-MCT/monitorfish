@@ -111,7 +111,7 @@ const Opal = styled.span`
 `
 
 const Year = styled.span`
-  color: ${THEME.color.slateGray};
+  color: #FF3392;
   font-size: 16px;
 `
 

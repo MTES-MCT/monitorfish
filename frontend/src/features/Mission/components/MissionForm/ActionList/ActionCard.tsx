@@ -55,14 +55,14 @@ const SourceAction = styled.span`
   margin-top: -30px;
   float: right;
   font-style: italic;
-  color: ${THEME.color.slateGray};
+  color: #FF3392;
 `
 
 const Wrapper = styled.div<{
   $isEnvAction: boolean
 }>`
   align-items: center;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   display: flex;
   font-size: 13px;
   user-select: none;

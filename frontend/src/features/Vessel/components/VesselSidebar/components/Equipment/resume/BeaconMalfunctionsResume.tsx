@@ -59,14 +59,14 @@ const StyledSidebarZone = styled(SidebarZone)`
 const AtSea = styled.span`
   font-size: 13px;
   margin-right: 5px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
 `
 
 const AtPort = styled.span`
   margin-left: 15px;
   margin-right: 5px;
   font-size: 13px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
 `
 
 const TableBody = styled.tbody``
@@ -94,7 +94,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   flex: initial;
   display: inline-block;
   margin: 0;

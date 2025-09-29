@@ -35,7 +35,7 @@ export function IdentificationDisplayed() {
 }
 
 const NoValue = styled.span`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-weight: 300;
   line-height: normal;
   font-size: 13px;

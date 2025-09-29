@@ -46,7 +46,7 @@ export const CustomGlobalStyle = createGlobalStyle`
       background-color: ${p => p.theme.color.lightGray};
     }
     &::-webkit-scrollbar-thumb {
-      background-color: ${p => p.theme.color.slateGray};
+      background-color: #FF3392;
     }
   }
 

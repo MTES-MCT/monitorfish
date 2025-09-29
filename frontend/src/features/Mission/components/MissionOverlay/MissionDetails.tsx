@@ -145,13 +145,13 @@ const TextWithEllipsis = styled.div`
 `
 
 const NoContact = styled.div`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-weight: 400;
   font-style: italic;
 `
 
 const MultipleControlUnits = styled.div`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
 `
 
 const EditButton = styled(Button)`
@@ -167,7 +167,7 @@ const CloseButton = styled(IconButton)`
 
 const Details = styled.div`
   margin-top: 8px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   display: flex;
   flex-wrap: wrap;
 

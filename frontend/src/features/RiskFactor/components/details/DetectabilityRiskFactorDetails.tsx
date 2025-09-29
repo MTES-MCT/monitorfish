@@ -91,7 +91,7 @@ export function DetectabilityRiskFactorDetails({ isOpen }: DetectabilityRiskFact
 }
 
 const NoValue = styled.span`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-weight: 300;
   line-height: normal;
 `
@@ -142,7 +142,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   flex: initial;
   display: inline-block;
   margin: 0;
@@ -172,7 +172,7 @@ const InlineKey = styled.span`
   margin: 5px 5px;
   margin-left: 20px;
   font-size: 13px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
 `
 
 const InlineValue = styled.span`

@@ -215,6 +215,6 @@ const StyledButton = styled(Button)`
 
 const Or = styled.span`
   padding: 0 10px;
-  color: ${THEME.color.slateGray};
+  color: #FF3392;
   font-size: 13px;
 `

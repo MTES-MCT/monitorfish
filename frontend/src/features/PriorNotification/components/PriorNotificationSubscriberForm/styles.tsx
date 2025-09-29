@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const Info = styled.p`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-style: italic;
   line-height: 18px;
   margin-bottom: 16px;

@@ -125,7 +125,7 @@ const IdentityDataWrapper = styled.div`
   flex-wrap: wrap;
   font-size: 13px;
   margin-left: 5px;
-  color: ${THEME.color.slateGray};
+  color: #FF3392;
   width: 350px;
 `
 

@@ -146,7 +146,7 @@ const StyledVesselSearch = styled(VesselSearch)`
 `
 
 const VesselIdentityBar = styled.div`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-weight: 300;
   margin-top: 4px;
 

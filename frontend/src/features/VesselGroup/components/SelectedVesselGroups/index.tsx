@@ -121,7 +121,7 @@ const StyledDropdown = styled(Dropdown)`
 const EmptyGroups = styled.div`
   text-align: center;
   padding: 7px 24px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
 `
 
 const StyledAttentionIcon = styled(Tag)`
@@ -175,5 +175,5 @@ const GroupName = styled.span`
 const Header = styled.div`
   padding: 7px 24px;
   border-bottom: 1px solid ${p => p.theme.color.lightGray};
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
 `

@@ -209,7 +209,7 @@ const Wrapper = styled.div`
   font: normal normal normal 13px/18px Marianne;
   letter-spacing: 0px;
   text-align: left;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   display: flex;
 `
 

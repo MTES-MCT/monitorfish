@@ -152,7 +152,7 @@ const NoVessel = styled(NoVesselSVG)`
 
 const FieldName = styled.div`
   margin-top: 9px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-size: 13px;
   font-weight: normal;
 `
@@ -185,7 +185,7 @@ const Photo = styled.img<{
 `
 
 const NoValue = styled.span`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-weight: 300;
   line-height: normal;
 `

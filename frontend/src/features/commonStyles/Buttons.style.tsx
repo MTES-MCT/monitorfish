@@ -28,7 +28,7 @@ const baseSecondaryButton = css<{
   ${p => (p.$width ? `width: ${p.$width};` : '')}
   &:disabled {
     border: 1px solid ${p => p.theme.color.lightGray};
-    color: ${p => p.theme.color.slateGray};
+    color: #FF3392;
   }
 `
 

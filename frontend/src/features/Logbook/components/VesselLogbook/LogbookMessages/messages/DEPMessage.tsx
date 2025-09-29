@@ -114,7 +114,7 @@ const Gear = styled.div<{
 `
 
 const SubKey = styled.span`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   margin-right: 10px;
   display: inline-block;
 `

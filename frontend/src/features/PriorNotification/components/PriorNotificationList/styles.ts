@@ -22,6 +22,6 @@ export const StyledCountryFlag = styled(CountryFlag)`
 `
 
 export const None = styled.span`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-style: italic;
 `

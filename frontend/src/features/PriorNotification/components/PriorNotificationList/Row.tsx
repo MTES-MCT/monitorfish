@@ -262,7 +262,7 @@ const ExpandedRowCell = styled(TableWithSelectableRows.Td).attrs(props => ({
 `
 
 const ExpandedRowLabel = styled.span`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   display: block;
   font-weight: 400;
   width: 100%;
@@ -288,7 +288,7 @@ const TagGroup = styled.div`
 const Link = styled.button`
   background: none;
   border: none;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   cursor: pointer;
   padding: 0;
   text-decoration: underline;

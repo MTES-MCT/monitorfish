@@ -16,7 +16,7 @@ export const Title = styled.span`
   text-align: left;
   font-weight: bold;
   font-size: 16px;
-  color: ${THEME.color.slateGray};
+  color: #FF3392;
   text-transform: uppercase;
   width: 100%;
   border-bottom: 1px solid ${THEME.color.lightGray};
@@ -91,7 +91,7 @@ export const RegulatorySectionTitle = styled.div`
   padding: 0px 0px 10px 0px;
   align-items: center;
   font-size: 13px;
-  color: ${THEME.color.slateGray};
+  color: #FF3392;
 `
 
 export const FormSection = styled.div<{

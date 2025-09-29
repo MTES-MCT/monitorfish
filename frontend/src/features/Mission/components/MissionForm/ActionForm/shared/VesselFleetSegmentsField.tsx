@@ -88,6 +88,6 @@ const StyledTagGroup = styled(TagGroup)`
 `
 
 const Helper = styled.p`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-style: italic;
 `

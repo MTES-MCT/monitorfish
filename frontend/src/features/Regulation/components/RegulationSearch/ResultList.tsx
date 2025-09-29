@@ -60,6 +60,6 @@ const List = styled.ul<{
   max-height: ${p => (p.$advancedSearchIsOpen ? '52vh' : '74vh')};
   overflow-y: auto;
   overflow-x: hidden;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   transition: 0.5s all;
 `

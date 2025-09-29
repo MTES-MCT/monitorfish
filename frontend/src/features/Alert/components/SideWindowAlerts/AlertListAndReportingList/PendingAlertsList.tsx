@@ -234,7 +234,7 @@ const StyledListItem = styled(List.Item)`
   background: ${p => p.theme.color.white};
   border: 1px solid ${p => p.theme.color.lightGray};
   border-radius: 1px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   height: 42px;
   margin-top: 6px;
   overflow: hidden;

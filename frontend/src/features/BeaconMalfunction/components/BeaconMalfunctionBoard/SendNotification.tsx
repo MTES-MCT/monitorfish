@@ -135,7 +135,7 @@ const StyledForeignFmcSelect = styled(Select)`
 `
 
 const SendingNotification = styled.div`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   display: flex;
   font-size: 11px;
   margin-top: 0;

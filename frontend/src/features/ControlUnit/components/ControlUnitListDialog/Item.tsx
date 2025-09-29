@@ -87,6 +87,6 @@ const AdministrationText = styled.div`
 `
 
 const ResourcesAndPortsText = styled.div`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   line-height: 18px;
 `

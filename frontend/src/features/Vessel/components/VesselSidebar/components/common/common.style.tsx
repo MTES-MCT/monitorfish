@@ -9,7 +9,7 @@ export const SidebarZone = styled.div`
 
 export const SidebarHeader = styled.div`
   background: ${p => p.theme.color.lightGray};
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   display: flex;
   flex-grow: 2;
   flex-shrink: 0;
@@ -40,7 +40,7 @@ export const SidebarHeaderValue = styled.div<{
 `
 
 export const NoValue = styled.span`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-weight: 300;
   line-height: normal;
 `

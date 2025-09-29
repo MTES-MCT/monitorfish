@@ -164,7 +164,7 @@ const OkButton = styled.button`
 `
 
 const Body = styled.div`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-size: 13px;
   margin: 10px 15px;
   text-align: left;

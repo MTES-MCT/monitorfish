@@ -243,7 +243,7 @@ const Gray = styled.span`
 `
 
 const Key = styled.span`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   line-height: 18px;
   margin-bottom: 2px;
 `

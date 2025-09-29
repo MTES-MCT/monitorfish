@@ -223,7 +223,7 @@ const ZoneWrapper = styled.div`
 
 const Link = styled.a`
   align-items: center;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   cursor: pointer;
   display: inline-flex;
 

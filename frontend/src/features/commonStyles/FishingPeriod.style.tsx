@@ -6,7 +6,7 @@ export const Row = styled.div<{
 }>`
   display: ${p => (p.$display === false ? 'none' : 'flex')};
   margin-bottom: 8px;
-  color: ${THEME.color.slateGray};
+  color: #FF3392;
 `
 
 export const TimeRow = styled(Row)<{
@@ -20,7 +20,7 @@ export const DateRanges = styled.div`
   flex-direction: column;
   align-items: center;
   font-size: 13px;
-  color: ${THEME.color.slateGray};
+  color: #FF3392;
 `
 
 export const ContentWrapper = styled.div<{

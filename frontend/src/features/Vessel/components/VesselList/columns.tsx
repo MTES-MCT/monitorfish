@@ -229,5 +229,5 @@ export const vesselListActionColumn: ColumnDef<Vessel.ActiveVessel, any> = {
 }
 
 const LastControlType = styled.span`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
 `

@@ -72,5 +72,5 @@ const Wrapper = styled.div<{
   flex-direction: row;
   align-items: center;
   ${p => (p.$isLast ? '' : 'margin-bottom: 5px;')}
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
 `

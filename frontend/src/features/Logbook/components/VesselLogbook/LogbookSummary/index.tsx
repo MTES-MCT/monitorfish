@@ -265,7 +265,7 @@ const NoFishingActivities = styled.div`
   padding: 50px 5px 0 5px;
   height: 70px;
   background: ${p => p.theme.color.white};
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   text-align: center;
 `
 
@@ -311,7 +311,7 @@ const NoMessage = styled.div`
   margin-top: 20px;
   padding-bottom: 20px;
   font-size: 13px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   width: 100%;
 `
 
@@ -328,7 +328,7 @@ const SeeAll = styled.a`
   text-decoration: none;
   font-size: 11px;
   line-height: 10px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   margin-left: auto;
   order: 3;
   cursor: pointer;
@@ -346,7 +346,7 @@ const LogbookMessages = styled.ul`
 const Text = styled.div<{
   $hasTwoLines?: boolean
 }>`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-size: 13px;
   font-weight: 500;
   padding-top: ${p => (p.$hasTwoLines ? '5px' : '0')};
@@ -399,7 +399,7 @@ const Body = styled.div`
 const Title = styled.div<{
   $hasTwoLines?: boolean
 }>`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   background: ${p => p.theme.color.lightGray};
   padding: ${p => (p.$hasTwoLines ? '7px 10px 7px 20px;' : '8.5px 10px 8px 20px;')};
   font-size: 13px;

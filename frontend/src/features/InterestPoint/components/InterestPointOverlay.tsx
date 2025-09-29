@@ -192,7 +192,7 @@ const Footer = styled.div`
   padding: 3px;
   font-size: 12px;
   text-align: center;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
 `
 
 const Header = styled.div`

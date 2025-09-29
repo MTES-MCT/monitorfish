@@ -121,6 +121,6 @@ const Wrapper = styled.div`
 
 const File = styled.div`
   font-style: italic;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   padding: 24px 90px;
 `

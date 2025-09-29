@@ -79,7 +79,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   flex: initial;
   display: inline-block;
   padding: 1px 5px 5px 0;
@@ -103,7 +103,7 @@ const Value = styled.td`
 const NoValue = styled.td`
   padding: 1px 5px 5px 5px;
   line-height: normal;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-weight: 300;
   line-height: normal;
 `

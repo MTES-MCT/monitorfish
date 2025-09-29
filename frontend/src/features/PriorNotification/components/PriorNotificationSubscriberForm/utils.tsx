@@ -185,5 +185,5 @@ const StyledCheckbox = styled(Checkbox)`
 `
 
 const VesselIdentifierLabel = styled.span`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
 `

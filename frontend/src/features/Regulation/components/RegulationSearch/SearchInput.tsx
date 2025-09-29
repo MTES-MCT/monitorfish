@@ -179,7 +179,7 @@ const InlineTagWrapper = styled.div`
 `
 
 const SearchByGeometry = styled.div`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-size: 11px;
   font-weight: 300;
   margin: 2px 0 10px;

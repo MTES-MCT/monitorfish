@@ -24,7 +24,7 @@ export function ProfileBarChart({ profile, title }: ProfileBarChartProps) {
 }
 
 const Wrapper = styled.div`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;

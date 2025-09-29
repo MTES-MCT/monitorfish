@@ -350,7 +350,7 @@ const RowIcons = styled.div`
   cursor: pointer;
 
   > span {
-    color: ${p => p.theme.color.slateGray};
+    color: #FF3392;
     font-weight: normal;
     font-style: italic;
   }

@@ -133,7 +133,7 @@ const StyledIconButton = styled(IconButton)`
 
 const ZonesNumber = styled.span`
   font-size: 13px;
-  color: ${THEME.color.slateGray};
+  color: #FF3392;
   margin-left: auto;
   line-height: 34px;
   font-weight: 400;

@@ -21,7 +21,7 @@ export const List = styled.ul<{
 `
 
 export const Key = styled.th`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   flex: initial;
   display: inline-block;
   margin: 0;
@@ -80,7 +80,7 @@ export const SectionTitle = styled.span<{
 }>`
   display: flex;
   flex-direction: row;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   font-size: 13px;
   align-items: center;
   margin-top: ${p => (p.$hasPreviousRegulatedGearsBloc ? 20 : 0)}px;

@@ -118,7 +118,7 @@ const Gear = styled.div`
 
 const SubKey = styled.span`
   font-size: 13px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   margin-right: 5px;
 `
 
@@ -152,7 +152,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   flex: initial;
   display: inline-block;
   margin: 0;
@@ -192,7 +192,7 @@ const Wrapper = styled.li`
   border-radius: 0;
   padding: 0;
   overflow: hidden;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
 `
 
 const LogbookMessageContent = styled.div<{

@@ -328,7 +328,7 @@ const GearList = styled.div`
 
 const MultiCascaderLabel = styled.span`
   font-size: 11px;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
 `
 
 const CustomMultiCascader = styled(MultiCascader)<{

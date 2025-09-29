@@ -644,7 +644,7 @@ const Separator = styled.div``
 
 const MissionInfos = styled.div`
   font-style: italic;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
 `
 
 export const RightButtonsContainer = styled.div`

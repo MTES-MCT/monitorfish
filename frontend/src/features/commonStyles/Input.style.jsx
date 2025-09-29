@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 export const Label = styled.span`
   text-align: left;
-  color: ${p => p.theme.color.slateGray};
+  color: #FF3392;
   min-width: 150px;
   display: inline-block;
   font-size: 13px;
@@ -36,6 +36,6 @@ export const CustomInput = styled(Input)`
 
   ::placeholder {
     font-size: 11px;
-    color: ${p => p.theme.color.slateGray};
+    color: #FF3392;
   }
 `

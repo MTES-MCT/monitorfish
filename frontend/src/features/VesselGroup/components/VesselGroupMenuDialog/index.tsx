@@ -230,7 +230,7 @@ const StyledDropdownItem = styled(Dropdown.Item)`
 const VesselGroupList = styled.ul`
   color: ${p => p.theme.color.gunMetal};
   margin: 0;
-  max-height: 55vh;
+  max-height: 48vh;
   overflow-x: hidden;
   padding: 0;
   transition: 0.5s all;

@@ -1,9 +1,11 @@
 import Countries from 'i18n-iso-countries'
+import COUNTRIES_EN from 'i18n-iso-countries/langs/en.json'
 import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
 
 import type { Option } from '@mtes-mct/monitor-ui'
 
 Countries.registerLocale(COUNTRIES_FR)
+Countries.registerLocale(COUNTRIES_EN)
 
 export const BOOLEAN_AS_OPTIONS: Array<Option<boolean>> = [
   { label: 'Oui', value: true },

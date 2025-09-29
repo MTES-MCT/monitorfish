@@ -1,4 +1,4 @@
-import { Icon } from '@mtes-mct/monitor-ui'
+import {Accent, Button, Icon, THEME} from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import type { ReactNode } from 'react'
@@ -51,6 +51,19 @@ export namespace Criteria {
       </CriteriaInfo>
     )
   }
+
+  export function Delete() {
+    return <DeleteCriteria
+      accent={Accent.SECONDARY}
+      color={THEME.color.maximumRed}
+      Icon={Icon.Delete}
+      onClick={() => {}}
+      title="Supprimer l’action"
+      withUnpropagatedClick
+    >
+      Supprimer le critère
+    </DeleteCriteria>
+  }
 }
 
 const CriteriaInfo = styled.div`
@@ -61,4 +74,9 @@ const CriteriaInfo = styled.div`
   span:last-child {
     margin-left: 4px;
   }
+`
+
+const DeleteCriteria = styled(Button)`
+  color: ${p => p.theme.color.maximumRed};
+  margin-top: 24px;
 `

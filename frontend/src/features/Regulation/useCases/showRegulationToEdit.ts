@@ -64,7 +64,7 @@ export const showRegulationToEdit =
       dispatch(
         addMainWindowBanner({
           children: REGULATORY_ZONE_METADATA_ERROR_MESSAGE,
-          closingDelay: 3000,
+          closingDelay: 6000,
           isClosable: true,
           level: Level.ERROR,
           withAutomaticClosing: true

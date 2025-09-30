@@ -44,7 +44,7 @@ export function isMissionActionFormValid(
           dispatch(
             addSideWindowBanner({
               children: 'Une erreur est survenue pendant la validation du formulaire.',
-              closingDelay: 3000,
+              closingDelay: 6000,
               isClosable: true,
               level: Level.ERROR,
               withAutomaticClosing: true

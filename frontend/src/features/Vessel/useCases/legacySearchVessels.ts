@@ -18,7 +18,7 @@ export const legacySearchVessels =
       dispatch(
         addMainWindowBanner({
           children: (error as Error).message,
-          closingDelay: 3000,
+          closingDelay: 6000,
           isClosable: true,
           isFixed: true,
           level: Level.ERROR,

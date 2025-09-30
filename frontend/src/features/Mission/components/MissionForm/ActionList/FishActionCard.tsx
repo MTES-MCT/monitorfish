@@ -147,7 +147,7 @@ export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishAct
 
         <RightAlignedIconButton
           accent={Accent.TERTIARY}
-          color={THEME.color.slateGray}
+          color="#ff3392"
           Icon={Icon.Duplicate}
           iconSize={20}
           onClick={onDuplicate}

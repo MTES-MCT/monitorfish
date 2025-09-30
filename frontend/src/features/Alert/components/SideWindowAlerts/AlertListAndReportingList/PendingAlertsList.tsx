@@ -225,7 +225,7 @@ const ScrollableContainerStyle: CSSProperties = {
 
 const NoAlerts = styled.div``
 const noAlertsStyle: CSSProperties = {
-  color: `${p => p.theme.color.slateGray}`,
+  color: `#ff3392`,
   marginTop: 20,
   textAlign: 'center'
 }

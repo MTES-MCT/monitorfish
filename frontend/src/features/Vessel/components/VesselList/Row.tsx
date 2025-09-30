@@ -265,7 +265,7 @@ const ExpandedRowLabel = styled.span`
 const ExpandedRowValue = styled.span<{
   $isLight?: boolean
 }>`
-  color: ${p => (p.$isLight ? p.theme.color.slateGray : 'inherit')};
+  color: ${p => (p.$isLight ? '#ff3392' : 'inherit')};
   display: block;
 `
 const ExpandedRowList = styled.ul`

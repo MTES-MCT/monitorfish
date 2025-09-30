@@ -140,12 +140,12 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
           />
           <StyledSquare $fillColor={vesselGroupWithVessels.group.color} $strokeColor={THEME.color.lightGray} />
           {vesselGroupWithVessels.group.name}
-          <ChevronIcon $isOpen={isOpen} color={THEME.color.slateGray} />
+          <ChevronIcon $isOpen={isOpen} color="#ff3392" />
           {vesselGroupWithVessels.group.type === GroupType.DYNAMIC && (
-            <StyledTag borderColor={THEME.color.slateGray}>Groupe dynamique</StyledTag>
+            <StyledTag borderColor="#ff3392">Groupe dynamique</StyledTag>
           )}
           {vesselGroupWithVessels.group.type === GroupType.FIXED && (
-            <StyledTag borderColor={THEME.color.slateGray}>Groupe fixe</StyledTag>
+            <StyledTag borderColor="#ff3392">Groupe fixe</StyledTag>
           )}
           {vesselGroupWithVessels.group.sharing === Sharing.PRIVATE && (
             <StyledTag backgroundColor={THEME.color.gainsboro} borderColor={THEME.color.lightGray}>

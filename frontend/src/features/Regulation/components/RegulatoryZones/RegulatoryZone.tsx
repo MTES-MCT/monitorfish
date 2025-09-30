@@ -145,7 +145,7 @@ function UnmemoizedRegulatoryZone({
         )}
         {allowRemoveZone && (
           <Icon.Close
-            color={THEME.color.slateGray}
+            color="#ff3392"
             onClick={() => {
               if (onRemove && regulatoryZone.id) {
                 onRemove(regulatoryZone.id)

@@ -36,21 +36,21 @@ export function CustomZone({ isShown, name, onRemove, onToggleShowZone, uuid }: 
         </ZoneName>
         <Icons>
           <EditIcon
-            color={THEME.color.slateGray}
+            color="#ff3392"
             data-cy="custom-zone-edit-button"
             onClick={() => setIsEditDialogOpen(true)}
             size={20}
             title="Afficher la zone"
           />
           <DisplayIcon
-            color={isShown ? THEME.color.slateGray : THEME.color.lightGray}
+            color={isShown ? '#ff3392' : THEME.color.lightGray}
             data-cy="custom-zone-display-button"
             onClick={() => onToggleShowZone(uuid)}
             size={20}
             title="Afficher la zone"
           />
           <RemoveIcon
-            color={THEME.color.slateGray}
+            color="#ff3392"
             data-cy="custom-zone-remove-button"
             onClick={() => onRemove(uuid)}
             size={15}

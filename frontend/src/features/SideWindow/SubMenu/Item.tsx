@@ -81,7 +81,7 @@ const CircleWithKeyMetric = styled.span<{
   position: relative;
   background: ${p => (p.$isSelected ? p.theme.color.charcoal : p.theme.color.lightGray)};
   border-radius: 2px;
-  color: ${p => (p.$isSelected ? p.theme.color.white : p.theme.color.slateGray)};
+  color: ${p => (p.$isSelected ? p.theme.color.white : '#ff3392')};
   font-size: 13px;
   line-height: 1;
   padding: 1px 4px 4px;

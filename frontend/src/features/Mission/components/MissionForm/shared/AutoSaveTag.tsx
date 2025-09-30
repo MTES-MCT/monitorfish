@@ -8,7 +8,7 @@ export function AutoSaveTag({ isAutoSaveEnabled = false }: AutoSaveTagProps) {
   return (
     <Wrapper
       backgroundColor={isAutoSaveEnabled ? THEME.color.mediumSeaGreen25 : THEME.color.gainsboro}
-      color={isAutoSaveEnabled ? THEME.color.mediumSeaGreen : THEME.color.slateGray}
+      color={isAutoSaveEnabled ? THEME.color.mediumSeaGreen : '#ff3392'}
     >
       {isAutoSaveEnabled ? 'Enregistrement auto. actif' : 'Enregistrement auto. inactif'}
     </Wrapper>

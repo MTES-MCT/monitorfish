@@ -12,7 +12,7 @@ export const FormBody = styled.div`
   }
 
   hr {
-    background: ${p => p.theme.color.slateGray};
+    background: #ff3392
     height: 1px;
     margin: 24px 0 0;
     /* Otherwise it "mysteriously disappears" since it's in an horizontal flex context */
@@ -44,7 +44,7 @@ export const FormBodyInnerWrapper = styled.div`
   }
 
   hr {
-    background: ${p => p.theme.color.slateGray};
+    background: #ff3392
     height: 2px;
     margin: 24px 0 0;
     /* Otherwise it "mysteriously disappears" since it's in an horizontal flex context */

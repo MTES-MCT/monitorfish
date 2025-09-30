@@ -48,7 +48,7 @@ const MoreTopPadding = styled.div`
 
 const RiskFactorExponent = styled.span`
   float: right;
-  border: 1px solid ${p => p.theme.color.slateGray};
+  border: 1px solid #ff3392
   width: fit-content;
   padding: 1px 5px;
   color: #ff3392;
@@ -84,7 +84,7 @@ const SchemaText = styled.span`
 `
 
 const Box = styled.div`
-  border: 1px solid ${p => p.theme.color.slateGray};
+  border: 1px solid #ff3392
   width: fit-content;
   padding: 10px;
   color: #ff3392;

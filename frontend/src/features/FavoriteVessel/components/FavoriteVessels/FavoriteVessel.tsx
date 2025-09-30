@@ -88,7 +88,7 @@ export function FavoriteVessel({
           />
         )}
         <Icon.Close
-          color={THEME.color.slateGray}
+          color="#ff3392"
           data-cy="favorite-vessel-delete-vessel"
           onClick={() => dispatch(removeVesselFromFavorites(vesselCompositeIdentifier))}
           size={15}

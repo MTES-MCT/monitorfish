@@ -1,4 +1,3 @@
-import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 export const FormHead = styled.div<{
@@ -9,7 +8,7 @@ export const FormHead = styled.div<{
   margin: ${p => (p.isAction ? '0px' : '32px 40px 32px 40px')};
   padding-bottom: 8px;
   height: 32px;
-  border-bottom: 1px solid ${THEME.color.slateGray};
+  border-bottom: 1px solid ${'#ff3392'};
   flex-shrink: 0;
 
   > div {

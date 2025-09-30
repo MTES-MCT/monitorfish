@@ -136,7 +136,7 @@ const LogbookMessageName = styled.span<{
   $hasNoMessage: boolean
   $isNotAcknowledged: boolean
 }>`
-  color: ${p => (p.$isNotAcknowledged ? p.theme.color.maximumRed : p.theme.color.slateGray)};
+  color: ${p => (p.$isNotAcknowledged ? p.theme.color.maximumRed : '#ff3392')};
   font-weight: 500;
   margin: 5px 0 5px ${p => (p.$hasNoMessage ? '27px' : '0px')};
   padding: 2px 4px 2px 4px;

@@ -43,7 +43,7 @@ export function RegulatoryZoneMetadata() {
               {getTitle(regulatoryZoneMetadata)}
             </RegulatoryZoneName>
             <StyledCloseIcon
-              color={THEME.color.slateGray}
+              color="#ff3392"
               data-cy="regulatory-layers-metadata-close"
               onClick={onCloseIconClicked}
               size={14}

@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import { InfractionsSummary } from './InfractionsSummary'
 import { LastControl } from './LastControl'
 import { LawReminders } from './LawReminders'
-import { theme } from '../../../../../../ui/theme'
 // TODO Add the icon to https://github.com/MTES-MCT/monitor-ui
 import CautionSVG from '../../../../../icons/Attention_controles.svg?react'
 import SeaSVG from '../../../../../icons/Avarie_statut_navire_en_mer.svg?react'
@@ -39,7 +38,7 @@ export function ControlsSummary({ controlsFromDate, lastControls, summary }: Con
         </Columns>
         <Columns $isFirst={false}>
           <IconColumn>
-            <Icon.Anchor color={theme.color.slateGray} />
+            <Icon.Anchor color="#ff3392" />
           </IconColumn>
           <LastControl field={lastControls.LAND} />
         </Columns>
@@ -82,7 +81,7 @@ const Sea = styled(SeaSVG)`
   width: 20px;
 
   path {
-    fill: ${p => p.theme.color.slateGray};
+    fill: #ff3392;
   }
 `
 

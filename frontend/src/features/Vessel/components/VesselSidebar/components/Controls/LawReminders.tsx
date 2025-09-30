@@ -54,7 +54,7 @@ const Row = styled.div<{
 }>`
   margin: 0 2px 2px 0;
   width: 100%;
-  color: ${p => (p.isGrey ? p.theme.color.slateGray : 'unset')};
+  color: ${p => (p.isGrey ? '#ff3392' : 'unset')};
   font-weight: ${p => (p.isStrong ? 500 : 'unset')};
 `
 

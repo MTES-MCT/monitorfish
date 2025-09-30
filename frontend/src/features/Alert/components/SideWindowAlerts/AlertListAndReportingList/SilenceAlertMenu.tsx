@@ -211,7 +211,7 @@ const MenuLink = styled.span``
 const menuLinkStyle = (withBottomLine: boolean, hasLink: boolean, isCalendar: boolean = false): CSSProperties => ({
   background: THEME.color.white,
   borderBottom: `${withBottomLine ? 1 : 0}px solid ${THEME.color.lightGray}`,
-  color: THEME.color.slateGray,
+  color: '#ff3392',
   cursor: hasLink ? 'pointer' : 'unset',
   display: 'flex',
   height: 25,

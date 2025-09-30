@@ -101,7 +101,7 @@ export const FilterMessagesStyle = {
     ...base,
     background: THEME.color.gainsboro,
     borderRadius: 12,
-    color: THEME.color.slateGray,
+    color: '#ff3392',
     paddingBottom: 1,
     paddingTop: 2
   }),
@@ -113,7 +113,7 @@ export const FilterMessagesStyle = {
     },
     background: THEME.color.gainsboro,
     borderRadius: 12,
-    color: THEME.color.slateGray
+    color: '#ff3392'
   }),
   option: base => ({ ...base, fontSize: 13 }),
   placeholder: base => ({ ...base, fontSize: 13 }),

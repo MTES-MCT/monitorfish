@@ -42,7 +42,7 @@ const ZoneText = styled.span<{
   font-size: 11px;
   font-weight: 500;
   user-select: none;
-  color: ${p => (p.$isWhiteBackground ? p.theme.color.slateGray : p.theme.color.white)};
+  color: ${p => (p.$isWhiteBackground ? '#ff3392' : p.theme.color.white)};
   line-height: 17px;
   max-width: 250px;
   text-overflow: ellipsis;

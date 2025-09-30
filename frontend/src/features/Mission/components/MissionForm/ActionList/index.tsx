@@ -190,7 +190,7 @@ const Placeholder = styled.div`
 `
 
 const VerticalLine = styled.div<{ $height?: number | undefined }>`
-  border-left: 1px solid ${p => p.theme.color.slateGray};
+  border-left: 1px solid #ff3392
   height: ${p => p.$height ?? '0'};
   left: 21px;
   margin-top: 16px;

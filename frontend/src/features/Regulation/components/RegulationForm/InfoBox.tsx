@@ -40,7 +40,7 @@ export function InfoBox({
       {isShown || isFormOpened ? (
         <InfoTextWrapper $isFormOpened={isFormOpened} $isInfoTextShown={isShown} onMouseLeave={onMouseLeave}>
           <InfoPoint
-            backgroundColor={isShown || isFormOpened ? THEME.color.charcoal : THEME.color.slateGray}
+            backgroundColor={isShown || isFormOpened ? THEME.color.charcoal : '#ff3392'}
             margin={isShown || isFormOpened ? '3px 0 0 0' : '0px'}
           />
           {children}

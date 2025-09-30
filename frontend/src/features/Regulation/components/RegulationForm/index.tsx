@@ -371,10 +371,10 @@ const BackLink = styled.a`
   text-decoration: underline;
   font: normal normal normal 13px;
   letter-spacing: 0px;
-  color: ${p => p.theme.color.slateGray}!important;
+  color: #ff3392 !important;
   align-self: center;
   &:visited {
-    color: ${p => p.theme.color.slateGray}!important;
+    color: #ff3392 !important;
   }
 `
 

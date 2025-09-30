@@ -225,7 +225,7 @@ const ExpandableRowCell = styled(TableWithSelectableRows.Td)<{
 }>`
   cursor: pointer;
   user-select: none;
-  color: ${p => (p.$isInvalidated ? p.theme.color.slateGray : p.theme.color.charcoal)};
+  color: ${p => (p.$isInvalidated ? '#ff3392' : p.theme.color.charcoal)};
   background: ${p => (p.$isInvalidated ? p.theme.color.gainsboro : p.theme.color.cultured)};
 `
 
@@ -235,7 +235,7 @@ const ExpandedRow = styled(TableWithSelectableRows.BodyTr)<{
 }>`
   > td {
     overflow: hidden !important;
-    color: ${p => (p.$isInvalidated ? p.theme.color.slateGray : p.theme.color.charcoal)};
+    color: ${p => (p.$isInvalidated ? '#ff3392' : p.theme.color.charcoal)};
     background: ${p => (p.$isInvalidated ? p.theme.color.gainsboro : p.theme.color.cultured)};
   }
 
@@ -270,7 +270,7 @@ const ExpandedRowLabel = styled.span`
 const ExpandedRowValue = styled.span<{
   $isLight?: boolean
 }>`
-  color: ${p => (p.$isLight ? p.theme.color.slateGray : 'inherit')};
+  color: ${p => (p.$isLight ? '#ff3392' : 'inherit')};
   display: block;
 `
 const ExpandedRowList = styled.ul`

@@ -1,7 +1,7 @@
 import { VesselLabel } from '@features/Vessel/label.types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Icon, THEME } from '@mtes-mct/monitor-ui'
+import { Icon } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -123,9 +123,7 @@ export function VesselLabelContent({
             </RiskFactorBox>
             <SubRiskText>
               {getImpactRiskFactorText(riskFactor?.impactRiskFactor, riskFactor?.hasSegments)}
-              {isRecentSegment && (
-                <StyledIconInfo color={THEME.color.slateGray} size={16} title="Segment(s) ces 14 derniers jours" />
-              )}
+              {isRecentSegment && <StyledIconInfo color="#ff3392" size={16} title="Segment(s) ces 14 derniers jours" />}
             </SubRiskText>
           </RiskFactorDetail>
           <RiskFactorDetail>
@@ -185,7 +183,7 @@ const UnderCharter = styled.span<{
   width: 10px;
   height: 10px;
   background: ${p => p.theme.color.mediumSeaGreen} 0% 0% no-repeat padding-box;
-  ${p => (p.$hasBoxShadow ? `box-shadow: 0px 2px 3px ${p.theme.color.slateGray}` : null)};
+  ${p => (p.$hasBoxShadow ? `box-shadow: 0px 2px 3px ${'#ff3392'}` : null)};
   margin-left: -5px;
   margin-top: -5px;
   margin-right: 2px;

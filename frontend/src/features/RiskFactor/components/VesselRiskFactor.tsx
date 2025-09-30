@@ -179,7 +179,7 @@ const UnderCharter = styled.span`
 `
 
 const UnderCharterAsBadge = styled(UnderCharter)`
-  box-shadow: 0px 2px 3px ${p => p.theme.color.slateGray};
+  box-shadow: 0px 2px 3px #ff3392
   position: absolute;
   left: 23px;
   top: -4px;

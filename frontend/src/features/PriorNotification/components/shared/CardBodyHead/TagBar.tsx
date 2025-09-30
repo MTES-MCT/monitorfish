@@ -45,11 +45,7 @@ export function TagBar({
           </FixedTag>
         ))}
         {hasBeenComputed && !tripSegments?.length && (
-          <FixedTag
-            backgroundColor={THEME.color.white}
-            borderColor={THEME.color.lightGray}
-            color={THEME.color.slateGray}
-          >
+          <FixedTag backgroundColor={THEME.color.white} borderColor={THEME.color.lightGray} color="#ff3392">
             Aucun segment
           </FixedTag>
         )}
@@ -75,7 +71,7 @@ export function TagBar({
         )}
 
         {isPriorNotificationZero && (
-          <FixedTag key="priorNotificationZero" borderColor={THEME.color.slateGray}>
+          <FixedTag key="priorNotificationZero" borderColor="#ff3392">
             Préavis Zéro
           </FixedTag>
         )}

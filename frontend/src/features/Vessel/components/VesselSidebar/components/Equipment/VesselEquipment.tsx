@@ -116,7 +116,7 @@ const Wrapper = styled.div`
     margin: 3px 7px 0 7px;
   }
   .rs-btn-toggle::after {
-    background: ${p => p.theme.color.slateGray} 0% 0% no-repeat padding-box;
+    background: #ff3392 0% 0% no-repeat padding-box;
     top: 1px;
   }
 `

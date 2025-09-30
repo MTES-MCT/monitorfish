@@ -98,7 +98,7 @@ const MenuButton = styled(IconButton)<{
   animation: none;
   background: ${p => (p.selected ? p.theme.color.blueGray : 'none')};
   border: 0;
-  border-bottom: solid 1px ${p => p.theme.color.slateGray};
+  border-bottom: solid 1px #ff3392
   color: ${p => (p.selected ? p.theme.color.white : p.theme.color.gainsboro)};
   padding: 18px 19px;
 
@@ -106,15 +106,15 @@ const MenuButton = styled(IconButton)<{
   &:focus {
     background: ${p => (p.selected ? p.theme.color.blueGray : 'rgba(255, 255, 255, 0.125)')};
     border: 0;
-    border-bottom: solid 1px ${p => p.theme.color.slateGray};
+    border-bottom: solid 1px #ff3392
     color: ${p => p.theme.color.white};
   }
 
   &:first-child {
-    border-top: solid 1px ${p => p.theme.color.slateGray};
+    border-top: solid 1px #ff3392
 
     &:hover {
-      border-top: solid 1px ${p => p.theme.color.slateGray};
+      border-top: solid 1px #ff3392
     }
   }
 `

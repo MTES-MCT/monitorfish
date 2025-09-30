@@ -1,4 +1,3 @@
-import { THEME } from '@mtes-mct/monitor-ui'
 import MultiPoint from 'ol/geom/MultiPoint'
 import { Circle, Icon, Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
@@ -16,7 +15,7 @@ export const drawStyle = new Style({
     src: 'Pointeur_selection_zone.svg?react'
   }),
   stroke: new Stroke({
-    color: THEME.color.slateGray,
+    color: '#ff3392',
     lineDash: [4, 4],
     width: 2
   })

@@ -1,5 +1,5 @@
 import { WindowContext } from '@api/constants'
-import { Accent, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { ReportingForm } from '../ReportingForm'
@@ -21,7 +21,7 @@ export function EditReporting({ editedReporting, onClose, onIsDirty, vesselIdent
         <HeaderText>{editedReporting ? 'Editer' : 'Ouvrir'} un signalement</HeaderText>
         <CloseFormIcon
           accent={Accent.TERTIARY}
-          color={THEME.color.slateGray}
+          color="#ff3392"
           Icon={Icon.Close}
           onClick={onClose}
           size={Size.SMALL}

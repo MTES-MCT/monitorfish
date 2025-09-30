@@ -298,7 +298,7 @@ const Row = styled(List.Item)<{
   margin-top: 6px;
   overflow: hidden;
   transition: background 3s;
-  color: ${p => (p.$isHeader ? p.theme.color.slateGray : p.theme.color.gunMetal)};
+  color: ${p => (p.$isHeader ? '#ff3392' : p.theme.color.gunMetal)};
 `
 
 const VesselName = styled(FlexboxGrid.Item)`

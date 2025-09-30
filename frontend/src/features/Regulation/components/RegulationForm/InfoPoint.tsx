@@ -39,7 +39,7 @@ const Wrapper = styled.a<{
   margin-left: 4px;
   border-radius: 50%;
   ${p => (p.$margin ? `$margin: ${p.$margin};` : '')}
-  background: ${p => (p.$backgroundColor ? p.$backgroundColor : p.theme.color.slateGray)} 0% 0% no-repeat padding-box;
+  background: ${p => (p.$backgroundColor ? p.$backgroundColor : '#ff3392')} 0% 0% no-repeat padding-box;
   color: ${p => (p.$color ? p.$color : p.theme.color.white)};
   text-align: center;
   font-size: 11px;

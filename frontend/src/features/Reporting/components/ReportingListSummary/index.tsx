@@ -1,5 +1,5 @@
 import { SidebarHeader, SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
-import { Icon, THEME } from '@mtes-mct/monitor-ui'
+import { Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { InfractionSuspicionSummary } from './InfractionSuspicionSummary'
@@ -16,13 +16,13 @@ export function TwelveMonthsSummary({ reportingSummary }: ReportingListSummaryPr
       <Body>
         <Columns $isFirst>
           <IconColumn>
-            <Icon.Alert color={THEME.color.slateGray} />
+            <Icon.Alert color="#ff3392" />
           </IconColumn>
           <InfractionSuspicionSummary reportingSummary={reportingSummary} />
         </Columns>
         <Columns $isFirst={false}>
           <IconColumn>
-            <Icon.Observation color={THEME.color.slateGray} />
+            <Icon.Observation color="#ff3392" />
           </IconColumn>
           <Label>
             Observations <LabelNumber>{reportingSummary.numberOfObservations}</LabelNumber>

@@ -232,10 +232,10 @@ const Weight = styled.div<{
   width: 130px;
   background: ${p => p.theme.color.gainsboro} 0% 0% no-repeat padding-box;
   font-weight: 500;
-  border-left: 2px solid ${p => p.theme.color.slateGray};
-  border-right: 2px solid ${p => p.theme.color.slateGray};
-  border-top: 2px solid ${p => p.theme.color.slateGray};
-  ${p => (p.$isLast ? `border-bottom: 2px solid ${p.theme.color.slateGray};` : '')}
+  border-left: 2px solid #ff3392
+  border-right: 2px solid #ff3392
+  border-top: 2px solid #ff3392
+  ${p => (p.$isLast ? `border-bottom: 2px solid ${'#ff3392'};` : '')}
   height: ${p => p.$height}px;
   min-height: 20px;
   max-height: 90px;
@@ -253,10 +253,10 @@ const PresentationWeight = styled.div<{
 }>`
   width: 130px;
   font-weight: normal;
-  border-left: 2px solid ${p => p.theme.color.slateGray};
-  border-right: 2px solid ${p => p.theme.color.slateGray};
-  border-top: 2px solid ${p => p.theme.color.slateGray};
-  ${p => (p.$isLast ? `border-bottom: 2px solid ${p.theme.color.slateGray};` : '')}
+  border-left: 2px solid #ff3392
+  border-right: 2px solid #ff3392
+  border-top: 2px solid #ff3392
+  ${p => (p.$isLast ? `border-bottom: 2px solid ${'#ff3392'};` : '')}
   ${p => (p.$isLast ? 'margin-bottom: 4px;' : '')}
   height: 20px;
   font-size: 11px;

@@ -191,7 +191,7 @@ const SoftwareFailover = styled.div`
   text-align: center;
   color: ${p => p.theme.color.white};
   font-size: 13px;
-  background: ${p => p.theme.color.slateGray};
+  background: #ff3392;
 `
 
 const MessageSentByFailoverSoftwareIcon = styled.span`

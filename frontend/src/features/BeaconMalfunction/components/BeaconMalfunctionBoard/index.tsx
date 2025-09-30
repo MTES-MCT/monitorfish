@@ -353,7 +353,7 @@ const Wrapper = styled(LegacyRsuiteComponentsWrapper)`
     margin: 3px 7px 0 7px;
   }
   .rs-btn-toggle::after {
-    background: ${THEME.color.slateGray} 0% 0% no-repeat padding-box;
+    background: ${'#ff3392'} 0% 0% no-repeat padding-box;
     top: 1px;
   }
   .rs-toggle {

@@ -89,7 +89,7 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
     <>
       <Wrapper $isLastPinned={isLastPinned} $isPinned={isPinned} title={vesselGroup?.name}>
         <Row onClick={() => setIsOpen(!isOpen)}>
-          <ChevronIcon $isOpen={isOpen} color={THEME.color.slateGray} />
+          <ChevronIcon $isOpen={isOpen} color="#ff3392" />
           <Square $fillColor={vesselGroup.color} $strokeColor={THEME.color.lightGray} />
           <GroupTitle>{vesselGroup.name}</GroupTitle>
           <ValidityText>{isInFuture ? ' – À venir' : ''}</ValidityText>
@@ -126,12 +126,8 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
           <OpenedGroup>
             <GroupInformation>
               <Description title={vesselGroup.description}>{description}</Description>
-              {vesselGroup.type === GroupType.DYNAMIC && (
-                <StyledTag borderColor={THEME.color.slateGray}>Groupe dynamique</StyledTag>
-              )}
-              {vesselGroup.type === GroupType.FIXED && (
-                <StyledTag borderColor={THEME.color.slateGray}>Groupe fixe</StyledTag>
-              )}
+              {vesselGroup.type === GroupType.DYNAMIC && <StyledTag borderColor="#ff3392">Groupe dynamique</StyledTag>}
+              {vesselGroup.type === GroupType.FIXED && <StyledTag borderColor="#ff3392">Groupe fixe</StyledTag>}
               {vesselGroup.sharing === Sharing.PRIVATE && (
                 <StyledTag backgroundColor={THEME.color.gainsboro} borderColor={THEME.color.lightGray}>
                   Groupe personnel

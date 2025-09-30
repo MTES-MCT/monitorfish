@@ -173,7 +173,7 @@ function UnmemoizedRegulatoryTopic({
           )}
           {allowRemoveZone && (
             <Icon.Close
-              color={THEME.color.slateGray}
+              color="#ff3392"
               onClick={
                 onRemoveByTopic
                   ? () => onRemoveByTopic(getFirstRegulatoryZoneTopic(regulatoryZones), regulatoryZones.length)

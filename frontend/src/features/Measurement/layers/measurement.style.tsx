@@ -1,4 +1,3 @@
-import { THEME } from '@mtes-mct/monitor-ui'
 import { getCenter } from 'ol/extent'
 import Point from 'ol/geom/Point'
 import CircleStyle from 'ol/style/Circle'
@@ -23,7 +22,7 @@ export const measurementStyleWithCenter = new Style({
   },
   image: new CircleStyle({
     fill: new Fill({
-      color: THEME.color.slateGray
+      color: '#ff3392'
     }),
     radius: 2
   })
@@ -31,7 +30,7 @@ export const measurementStyleWithCenter = new Style({
 
 export const measurementStyle = new Style({
   stroke: new Stroke({
-    color: THEME.color.slateGray,
+    color: '#ff3392',
     lineDash: [4, 4],
     width: 2
   })

@@ -69,7 +69,7 @@ const rotate = keyframes`
 `
 const SpinnerBorder = styled.span`
   animation: ${rotate} 1s linear infinite;
-  border: 2px solid ${p => p.theme.color.slateGray};
+  border: 2px solid #ff3392
   border-bottom-color: transparent;
   border-radius: 50%;
   height: 100%;

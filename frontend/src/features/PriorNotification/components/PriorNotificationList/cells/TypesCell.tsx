@@ -3,7 +3,7 @@ import {
   getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches,
   isPriorNotificationZero
 } from '@features/PriorNotification/utils'
-import { Tag, THEME } from '@mtes-mct/monitor-ui'
+import { Tag } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { None } from '../styles'
@@ -26,7 +26,7 @@ export function TypesCell({ priorNotification }: TypesCellProps) {
 
   return (
     <Wrapper>
-      {hasPriorNotificationZeroTag && <Tag borderColor={THEME.color.slateGray}>Préavis 0</Tag>}
+      {hasPriorNotificationZeroTag && <Tag borderColor="#ff3392">Préavis 0</Tag>}
       {sortedTypeLabels ? (
         <Ellipsised maxWidth={hasPriorNotificationZeroTag ? 140 : 220}>{sortedTypeLabels}</Ellipsised>
       ) : (

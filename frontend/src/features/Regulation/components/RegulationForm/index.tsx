@@ -215,7 +215,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
       dispatch(
         addMainWindowBanner({
           children: "Aucune géométrie n'a été trouvée pour cet identifiant.",
-          closingDelay: 3000,
+          closingDelay: 6000,
           isClosable: true,
           level: Level.ERROR,
           withAutomaticClosing: true

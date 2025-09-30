@@ -23,7 +23,7 @@ export const updateTopicForAllZones =
       dispatch(
         addMainWindowBanner({
           children: UPDATE_TOPIC_NAME_ERROR,
-          closingDelay: 3000,
+          closingDelay: 6000,
           isClosable: true,
           level: Level.ERROR,
           withAutomaticClosing: true
@@ -62,7 +62,7 @@ export const updateTopicForAllZones =
         dispatch(
           addMainWindowBanner({
             children: (err as Error).message,
-            closingDelay: 3000,
+            closingDelay: 8000,
             isClosable: true,
             level: Level.ERROR,
             withAutomaticClosing: true

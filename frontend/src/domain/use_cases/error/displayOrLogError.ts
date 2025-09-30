@@ -32,7 +32,7 @@ export const displayOrLogError =
     if (!isFromUserAction) {
       const bannerProps = {
         children: errorMessage,
-        closingDelay: 3000,
+        closingDelay: 6000,
         isClosable: true,
         level: Level.ERROR,
         withAutomaticClosing: true

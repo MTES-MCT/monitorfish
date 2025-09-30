@@ -65,7 +65,7 @@ export const saveMissionAndMissionActionsByDiff =
           dispatch(
             addSideWindowBanner({
               children: "Une erreur est survenue pendant l'enregistrement de la mission.",
-              closingDelay: 3000,
+              closingDelay: 6000,
               isClosable: true,
               level: Level.ERROR,
               withAutomaticClosing: true

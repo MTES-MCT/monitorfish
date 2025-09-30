@@ -17,7 +17,7 @@ export const getOperationalAlerts = (): MainAppThunk => async dispatch => {
     dispatch(
       addSideWindowBanner({
         children: (error as Error).message,
-        closingDelay: 3000,
+        closingDelay: 6000,
         isClosable: true,
         level: Level.ERROR,
         withAutomaticClosing: true

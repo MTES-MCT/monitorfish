@@ -24,6 +24,7 @@ const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les info
 export const vesselApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     getActiveVessels: builder.query<Vessel.ActiveVessel[], void>({
+      providesTags: () => [{ type: RtkCacheTagType.ActiveVessels }],
       query: () => `/vessels`,
       transformResponse: (baseQueryReturnValue: Vessel.ActiveVessel[]) =>
         parseResponseOrReturn<Vessel.ActiveVessel>(baseQueryReturnValue, ActiveVesselSchema, true)

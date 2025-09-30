@@ -1,9 +1,10 @@
+import { TransparentButton } from '@components/style'
+import { ChevronIconButton } from '@features/commonStyles/icons/ChevronIconButton'
+import { Accent, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
-import ChevronIconSVG from '../../../../icons/Chevron_simple_gris.svg?react'
 import NotAcknowledgedSVG from '../../../../icons/Message_non_acquitte.svg?react'
-import ArrowSVG from '../../../../icons/Picto_fleche-pleine-droite.svg?react'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../constants'
 
 import type { Promisable } from 'type-fest'
@@ -22,6 +23,7 @@ type LogbookMessageResumeHeaderProps = {
   showLogbookMessages?: (messageType: string) => Promisable<void>
   title: JSX.Element | string | null
 }
+
 export function LogbookMessageResumeHeader({
   hasNoMessage,
   isDeleted = false,
@@ -47,14 +49,10 @@ export function LogbookMessageResumeHeader({
   return (
     <>
       {messageType && (
-        <Wrapper>
-          <LogbookMessageTitle
-            $hasNoMessage={hasNoMessage || noContent}
-            $isLastItem={isLastItem}
-            $isOpen={isOpen}
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {!(hasNoMessage || noContent) && <ChevronIcon $isOpen={isOpen} name={messageType} />}
+        <Wrapper $isLastItem={isLastItem} $isOpen={isOpen}>
+          {!(hasNoMessage || noContent) && <Chevron isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />}
+
+          <LogbookMessageTitle as={hasNoMessage || noContent ? 'div' : 'button'} onClick={() => setIsOpen(!isOpen)}>
             <LogbookMessageName
               $hasNoMessage={hasNoMessage || noContent}
               $isNotAcknowledged={isNotAcknowledged}
@@ -68,22 +66,21 @@ export function LogbookMessageResumeHeader({
             <LogbookMessageResumeText data-cy="vessel-fishing-resume-title" title={onHoverText ?? ''}>
               {hasNoMessage ? <Gray>Aucun message</Gray> : <>{title}</>}
             </LogbookMessageResumeText>
-            {!hasNoMessage && (
-              <ShowThisMessage onClick={() => showLogbookMessages && showLogbookMessages(messageType)} />
-            )}
           </LogbookMessageTitle>
+          {!hasNoMessage && (
+            <IconButton
+              accent={Accent.TERTIARY}
+              Icon={Icon.FilledArrow}
+              onClick={() => showLogbookMessages && showLogbookMessages(messageType)}
+              size={Size.SMALL}
+              title="Voir le message"
+            />
+          )}
         </Wrapper>
       )}
     </>
   )
 }
-
-const ShowThisMessage = styled(ArrowSVG)`
-  vertical-align: sub;
-  float: right;
-  padding: 11px 10px 10px 21px;
-  cursor: pointer;
-`
 
 const NotAcknowledgedOrDeleted = styled(NotAcknowledgedSVG)`
   width: 12px;
@@ -97,16 +94,17 @@ const Gray = styled.span`
   font-weight: 300;
 `
 
+const LogbookMessageTitle = styled(TransparentButton)`
+  display: flex;
+`
+
 const LogbookMessageResumeText = styled.span`
   color: ${p => p.theme.color.gunMetal};
   margin: 5px 5px 5px 5px;
   padding: 2px 4px 2px 0;
   font-size: 13px;
   font-weight: 500;
-  vertical-align: -moz-middle-with-baseline;
-  vertical-align: -webkit-baseline-middle;
   max-width: 290px;
-  display: inline-block;
   line-break: auto;
   text-overflow: ellipsis;
   overflow: hidden !important;
@@ -119,7 +117,7 @@ const LogbookMessageName = styled.span<{
 }>`
   color: ${p => (p.$isNotAcknowledged ? p.theme.color.maximumRed : p.theme.color.slateGray)};
   font-weight: 500;
-  margin: 5px 0 5px ${p => (p.$hasNoMessage ? '27px' : '0px')};
+  margin: 5px 0 5px ${p => (p.$hasNoMessage ? '35px' : '0px')};
   padding: 2px 4px 2px 4px;
   font-size: 13px;
   vertical-align: -moz-middle-with-baseline;
@@ -127,51 +125,24 @@ const LogbookMessageName = styled.span<{
   text-transform: uppercase;
 `
 
-const Wrapper = styled.div`
-  margin: 0;
-  background: ${p => p.theme.color.white};
-  border-radius: 0;
-  padding: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  color: ${p => p.theme.color.slateGray};
-`
-
-const LogbookMessageTitle = styled.div<{
-  $hasNoMessage: boolean
+const Wrapper = styled.div<{
   $isLastItem: boolean
   $isOpen: boolean
 }>`
-  height: 35px;
-  width: inherit;
-  padding: 0 0 0 20px;
-  user-select: none;
-  ${p => (!p.$hasNoMessage ? 'cursor: pointer;' : null)}
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background: ${p => p.theme.color.white};
+  border-radius: 0;
+  padding: 0;
+  color: ${p => p.theme.color.slateGray};
   ${p => (!p.$isLastItem || p.$isOpen ? `border-bottom: 1px solid ${p.theme.color.lightGray};` : null)}
 `
 
-const ChevronIcon = styled(ChevronIconSVG)<{
-  $isOpen: boolean
-  name: string
-}>`
-  transform: rotate(180deg);
-  width: 17px;
-  float: left;
-  margin-right: 10px;
-  margin-top: 12px;
-
-  animation: ${p => (p.$isOpen ? `chevron-${p.name}-resume-opening` : `chevron-${p.name}-resume-closing`)} 0.2s ease
-    forwards;
-
-  ${p => `
-      @keyframes chevron-${p.name}-resume-opening {
-        0%   { transform: rotate(180deg); }
-        100% { transform: rotate(0deg); }
-      }
-
-      @keyframes chevron-${p.name}-resume-closing {
-        0%   { transform: rotate(0deg); }
-        100% { transform: rotate(180deg);   }
-      }
-      `}
+const Chevron = styled(ChevronIconButton)`
+  svg {
+    color: ${p => p.theme.color.charcoal};
+  }
 `

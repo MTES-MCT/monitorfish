@@ -11,6 +11,7 @@ type YearsToBeaconMalfunctionListProps = {
   vesselBeaconMalfunctionsFromDate: Date
   yearsToBeaconMalfunctions: Record<number, BeaconMalfunctionResumeAndDetails[]>
 }
+
 export function YearsToBeaconMalfunctionList({
   setIsCurrentBeaconMalfunctionDetails,
   vesselBeaconMalfunctionsFromDate,
@@ -26,12 +27,13 @@ export function YearsToBeaconMalfunctionList({
       {yearsToBeaconMalfunctions && Object.keys(yearsToBeaconMalfunctions)?.length ? (
         <List data-cy="vessel-beacon-malfunctions-history">
           {sortedYears.map(year => (
-            <YearBeaconMalfunctions
-              key={year}
-              setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
-              year={year}
-              yearBeaconMalfunctions={yearsToBeaconMalfunctions[year] ?? []}
-            />
+            <li key={year}>
+              <YearBeaconMalfunctions
+                setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
+                year={year}
+                yearBeaconMalfunctions={yearsToBeaconMalfunctions[year] ?? []}
+              />
+            </li>
           ))}
         </List>
       ) : (

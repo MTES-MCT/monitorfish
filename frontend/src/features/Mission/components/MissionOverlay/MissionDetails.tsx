@@ -20,6 +20,7 @@ type MissionDetailsProps = Readonly<{
   mission: Mission.MissionPointFeatureProperties
   overlayPosition: OverlayPosition
 }>
+
 export function MissionDetails({ isSelected, mission, overlayPosition }: MissionDetailsProps) {
   const dispatch = useMainAppDispatch()
 
@@ -65,6 +66,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
             Icon={Icon.Close}
             iconSize={14}
             onClick={() => dispatch(missionFormActions.unsetSelectedMissionGeoJSON())}
+            title="Fermer"
           />
         )}
         <Body>

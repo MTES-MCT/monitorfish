@@ -30,7 +30,7 @@ export function MapSettings({ isOpened, onClose }) {
   return (
     <Wrapper $isOpen={isOpened}>
       <Header>
-        <CloseButton Icon={Icon.Close} onClick={onClose} />
+        <CloseButton Icon={Icon.Close} onClick={onClose} title="Fermer" />
         <StyledTitle>Gérer l&apos;affichage des dernières positions</StyledTitle>
       </Header>
       <MapMenuDialog.Body>

@@ -1,5 +1,6 @@
 import { Ellipsised } from '@components/Ellipsised'
 import { Titled } from '@components/Titled'
+import { HiddenText } from '@features/commonStyles/HiddenText'
 import { FLEET_SEGMENT_ORIGIN_LABEL, GEAR_ORIGIN_LABEL } from '@features/FleetSegment/constants'
 import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselList/constants'
 import { getLastControlDateTimeAndControlType } from '@features/Vessel/components/VesselList/utils'
@@ -29,12 +30,14 @@ export function getTableColumns(
   return [
     {
       accessorFn: row => row.vesselFeatureId,
-      cell: ({ row }) => (
+      cell: ({ getValue, row }) => (
         <TableWithSelectableRows.RowCheckbox
           checked={row.getIsSelected()}
           disabled={!row.getCanSelect()}
           onChange={row.getToggleSelectedHandler()}
-        />
+        >
+          <HiddenText>{`Sélectionner le navire ${getValue()}`}</HiddenText>
+        </TableWithSelectableRows.RowCheckbox>
       ),
       enableSorting: false,
       header: ({ table }) => (
@@ -42,7 +45,9 @@ export function getTableColumns(
           checked={table.getIsAllRowsSelected()}
           indeterminate={table.getIsSomeRowsSelected()}
           onChange={table.getToggleAllRowsSelectedHandler()}
-        />
+        >
+          <HiddenText>Sélectionner tous les navires</HiddenText>
+        </TableWithSelectableRows.RowCheckbox>
       ),
       id: 'select',
       size: 25 + legacyFirefoxOffset

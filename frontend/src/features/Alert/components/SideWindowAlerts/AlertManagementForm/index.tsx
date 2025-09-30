@@ -9,6 +9,7 @@ import {
 } from '@features/Alert/apis'
 import { Criteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants'
 import { NationalityCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/NationalityCriteria'
+import { VesselCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/VesselCriteria'
 import { ZoneCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/ZoneCriteria'
 import { FormikValidityPeriod } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/FormikValidityPeriod'
 import { FISHING_POSITION_ONLY_AS_OPTIONS } from '@features/Alert/components/SideWindowAlerts/constants'
@@ -163,6 +164,7 @@ export function AlertManagementForm() {
             selectedCriterias.includes(Criteria.ZONE)
           const hasNationalityCriteria =
             !!values.flagStatesIso2.length || selectedCriterias.includes(Criteria.NATIONALITY)
+          const hasVesselCriteria = !!values.vesselIds.length || selectedCriterias.includes(Criteria.VESSEL)
 
           return (
             <Wrapper>
@@ -208,6 +210,15 @@ export function AlertManagementForm() {
                   <StyledFormHead>
                     <h2>Critères de déclenchement</h2>
                     <Dropdown Icon={Icon.Plus} placement="bottomEnd" title="Définir les critères de déclenchement">
+                      {!hasVesselCriteria && (
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedCriterias(previous => previous.concat(Criteria.VESSEL))
+                          }}
+                        >
+                          Navires
+                        </Dropdown.Item>
+                      )}
                       {!hasZoneCriteria && (
                         <Dropdown.Item
                           onClick={() => {
@@ -228,6 +239,14 @@ export function AlertManagementForm() {
                       )}
                     </Dropdown>
                   </StyledFormHead>
+                  {hasVesselCriteria && (
+                    <VesselCriteria
+                      onDelete={() => {
+                        setSelectedCriterias(previous => previous.filter(criteria => criteria !== Criteria.VESSEL))
+                      }}
+                      vessels={editedAlertSpecification.vessels}
+                    />
+                  )}
                   {hasZoneCriteria && (
                     <ZoneCriteria
                       onDelete={() => {
@@ -430,6 +449,7 @@ const Panel = styled.div<{
   flex-grow: 1;
   width: 50%;
   overflow-y: auto;
+  padding-bottom: 24px;
   padding-right: 40px;
   padding-left: 40px;
 

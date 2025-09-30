@@ -11,7 +11,7 @@ type NationalityCriteriaProps = {
 }
 export function NationalityCriteria({ onDelete }: NationalityCriteriaProps) {
   const [, , helper] = useField<EditedAlertSpecification['flagStatesIso2']>('flagStatesIso2')
-  const [isCriteriaOpened, setIsCriteriaOpened] = useState(false)
+  const [isCriteriaOpened, setIsCriteriaOpened] = useState(true)
   const countries = buildCountriesAsTreeOptions()
 
   const handleDeleteCriteria = () => {

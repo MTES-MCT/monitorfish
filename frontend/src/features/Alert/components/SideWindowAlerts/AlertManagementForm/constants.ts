@@ -1,5 +1,6 @@
 export enum Criteria {
   NATIONALITY = 'NATIONALITY',
+  VESSEL = 'VESSEL',
   ZONE = 'ZONE'
 }
 

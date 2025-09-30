@@ -43,9 +43,9 @@ export namespace Criteria {
     transition: all 0.2s ease;
   `
 
-  export function Info({ children }: { children: ReactNode }) {
+  export function Info({ children, className }: { children: ReactNode; className?: string | undefined }) {
     return (
-      <CriteriaInfo>
+      <CriteriaInfo className={className}>
         <Icon.Info />
         <span>{children}</span>
       </CriteriaInfo>

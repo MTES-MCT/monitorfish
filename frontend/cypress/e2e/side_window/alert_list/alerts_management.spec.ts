@@ -75,22 +75,39 @@ context('Side Window > Alert Management', () => {
      * Delete the criteria and re-add it
      */
     cy.get('.Component-Dropdow > ul').should('not.contain', 'Zones')
-    cy.contains('ZONES (VMS)').click()
     cy.clickButton('Supprimer le critère')
+
     cy.clickButton('Définir les critères de déclenchement')
     cy.clickButton('Zones')
+    cy.wait(500)
 
-    cy.contains('ZONES (VMS)').click()
     cy.fill('Zones administratives déclenchant l\'alerte', ['27.6.a'])
     cy.fill('Zones réglementaires déclenchant l\'alerte', ['Secteur 3'])
+    cy.contains('ZONES (VMS)').click()
 
     /**
      * Add nationality zones criteria
      */
     cy.clickButton('Définir les critères de déclenchement')
     cy.clickButton('Nationalités')
-    cy.contains('NATIONALITÉS').click()
     cy.fill('Nationalités déclenchant l\'alerte', ['Royaume-Uni'])
+    cy.contains('NATIONALITÉS').click()
+
+    /**
+     * Add vessels zones criteria
+     */
+    cy.clickButton('Définir les critères de déclenchement')
+    cy.clickButton('Navires')
+    cy.getDataCy('VesselSearch-input').type('pheno')
+    cy.getDataCy('VesselSearch-item').first().click()
+    cy.contains('PHENOMENE').should('be.visible')
+    cy.contains('FAK000999999').should('be.visible')
+    cy.get('[title="Supprimer le navire"]').last().click()
+    cy.contains('PHENOMENE').should('not.exist')
+    // Re-add vessel
+    cy.getDataCy('VesselSearch-input').type('pheno')
+    cy.getDataCy('VesselSearch-item').first().click()
+    cy.contains('NAVIRES').click()
 
     cy.clickButton('Enregistrer')
 
@@ -103,6 +120,7 @@ context('Side Window > Alert Management', () => {
       expect(interception.request.body.repeatEachYear).to.be.true
       expect(interception.request.body.onlyFishingPositions).to.be.false
       expect(interception.request.body.flagStatesIso2).to.deep.equal(['GB'])
+      expect(interception.request.body.vesselIds).to.deep.equal([1])
       expect(interception.request.body.administrativeAreas).to.deep.equal(
         [
           {

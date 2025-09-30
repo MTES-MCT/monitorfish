@@ -84,6 +84,14 @@ context('Side Window > Alert Management', () => {
     cy.fill('Zones administratives déclenchant l\'alerte', ['27.6.a'])
     cy.fill('Zones réglementaires déclenchant l\'alerte', ['Secteur 3'])
 
+    /**
+     * Add nationality zones criteria
+     */
+    cy.clickButton('Définir les critères de déclenchement')
+    cy.clickButton('Nationalités')
+    cy.contains('NATIONALITÉS').click()
+    cy.fill('Nationalités déclenchant l\'alerte', ['Royaume-Uni'])
+
     cy.clickButton('Enregistrer')
 
     cy.wait('@createAlert').then(interception => {
@@ -94,6 +102,7 @@ context('Side Window > Alert Management', () => {
       expect(interception.request.body.validityEndDatetimeUtc).to.equal('2024-01-30T23:59:59.000Z')
       expect(interception.request.body.repeatEachYear).to.be.true
       expect(interception.request.body.onlyFishingPositions).to.be.false
+      expect(interception.request.body.flagStatesIso2).to.deep.equal(['GB'])
       expect(interception.request.body.administrativeAreas).to.deep.equal(
         [
           {
@@ -117,7 +126,8 @@ context('Side Window > Alert Management', () => {
 
     cy.contains('Gestion des alertes').should('be.visible')
     cy.fill('Rechercher une alerte', 'Test Alert Cypress')
-    cy.get('[title*="Supprimer"][title*="Test Alert Cypress"]').click()
+    cy.get('[title="Éditer l\'alerte"]').click()
+    cy.clickButton('Supprimer l’alerte').click()
     cy.clickButton('Confirmer la suppression')
   })
 

@@ -211,6 +211,7 @@ export function VesselSearch({
         {vesselName && (
           <IconButton
             accent={Accent.TERTIARY}
+            aria-label="Vider le champ"
             disabled={inputNativeProps.disabled}
             Icon={Icon.Close}
             iconSize={14}

@@ -84,7 +84,7 @@ export function ControlUnitDialog() {
         <StyledMapMenuDialogContainer $hasHealthcheckTextWarning={!!healthcheckTextWarning}>
           <MapMenuDialog.Header>
             <MapMenuDialog.Title>Chargement en cours...</MapMenuDialog.Title>
-            <MapMenuDialog.CloseButton Icon={Icon.Close} onClick={close} />
+            <MapMenuDialog.CloseButton Icon={Icon.Close} onClick={close} title="Fermer" />
           </MapMenuDialog.Header>
         </StyledMapMenuDialogContainer>
       </NoRsuiteOverrideWrapper>
@@ -98,7 +98,7 @@ export function ControlUnitDialog() {
           <MapMenuDialog.Title title={`${controlUnit.name} (${controlUnit.administration.name})`}>
             <b>{controlUnit.name}</b> ({controlUnit.administration.name})
           </MapMenuDialog.Title>
-          <MapMenuDialog.CloseButton Icon={Icon.Close} onClick={close} />
+          <MapMenuDialog.CloseButton Icon={Icon.Close} onClick={close} title="Fermer" />
         </MapMenuDialog.Header>
         <Formik initialValues={controlUnit} onSubmit={noop}>
           <StyledMapMenuDialogBody>

@@ -215,7 +215,7 @@ export function MissionList() {
   )
 }
 
-const Table = styled.div.attrs(() => ({
+const Table = styled.table.attrs(() => ({
   className: 'Table'
 }))`
   align-self: flex-start;
@@ -223,17 +223,13 @@ const Table = styled.div.attrs(() => ({
   font-size: 13px;
   margin-top: 10px;
 
-  > div:first-child {
-    background-color: ${p => p.theme.color.gainsboro};
-  }
-
   * {
     box-sizing: border-box;
     font-size: inherit;
   }
 `
 
-const TableBody = styled.div.attrs(() => ({
+const TableBody = styled.tbody.attrs(() => ({
   className: 'TableBody'
 }))`
   color: ${p => p.theme.color.gunMetal};
@@ -242,14 +238,13 @@ const TableBody = styled.div.attrs(() => ({
   max-height: 650px;
   overflow-y: auto;
 
-  > div {
-    > div:first-child {
-      border-left: solid 1px ${p => p.theme.color.lightGray};
-    }
+  td:first-child {
+    border-left: solid 1px ${p => p.theme.color.lightGray};
   }
+}
 `
 
-const TableBodyRow = styled.div.attrs(() => ({
+const TableBodyRow = styled.tr.attrs(() => ({
   className: 'TableBodyRow'
 }))`
   background-color: white;
@@ -260,7 +255,7 @@ const TableBodyRow = styled.div.attrs(() => ({
   }
 `
 
-const TableBodyCell = styled.div.attrs(() => ({
+const TableBodyCell = styled.td.attrs(() => ({
   className: 'TableBodyCell'
 }))<{
   $fixedWidth?: number | undefined

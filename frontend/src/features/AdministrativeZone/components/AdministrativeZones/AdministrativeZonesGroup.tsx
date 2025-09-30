@@ -1,3 +1,5 @@
+import { TransparentButton } from '@components/style'
+import { ChevronIconButton } from '@features/commonStyles/icons/ChevronIconButton'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
@@ -5,7 +7,6 @@ import styled from 'styled-components'
 import { AdministrativeZone } from './AdministrativeZone'
 import { COLORS } from '../../../../constants/constants'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
 
 import type { MonitorFishMap } from '@features/Map/Map.types'
 
@@ -14,6 +15,7 @@ type AdministrativeZonesGroupType = {
   showOrHideZone: (zone: MonitorFishMap.ShowableLayer) => (isShown: boolean) => void
   zones: MonitorFishMap.ShowableLayer[]
 }
+
 export function AdministrativeZonesGroup({ group, showOrHideZone, zones }: AdministrativeZonesGroupType) {
   const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
 
@@ -22,10 +24,10 @@ export function AdministrativeZonesGroup({ group, showOrHideZone, zones }: Admin
   return (
     <Row>
       <Zone $isOpen={isOpen}>
-        <Text onClick={() => setIsOpen(!isOpen)} title={group.name}>
-          {group.name}
-        </Text>
-        <Chevron $isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
+        <TransparentButton onClick={() => setIsOpen(!isOpen)} title={group.name}>
+          <Text>{group.name}</Text>
+        </TransparentButton>
+        <Chevron isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
       </Zone>
       <List $isOpen={isOpen} $length={zones.length} title={group.name.replace(/\s/g, '-')}>
         {zones.map((zone, index) => (
@@ -75,10 +77,9 @@ const Zone = styled.span<{
   width: -webkit-fill-available;
   width: stretch;
   display: flex;
-  user-select: none;
   padding-bottom: 2px;
-  ${p => (!p.$isOpen ? null : `border-bottom: 1px solid ${COLORS.lightGray};`)}
 
+  ${p => (!p.$isOpen ? null : `border-bottom: 1px solid ${COLORS.lightGray};`)}
   &:hover {
     background: ${THEME.color.blueGray25};
   }
@@ -93,6 +94,8 @@ const List = styled.div<{
   transition: 0.2s all;
 `
 
-const Chevron = styled(ChevronIcon)`
-  margin-top: 8px;
+const Chevron = styled(ChevronIconButton)`
+  svg {
+    color: ${p => p.theme.color.charcoal};
+  }
 `

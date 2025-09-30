@@ -70,7 +70,7 @@ export function ControlUnitListDialog() {
       <MapToolBox $isOpen={isOpened} $isTransparent>
         <MapMenuDialog.Container style={{ margin: '0' }}>
           <MissionsMenuHeader>
-            <MapMenuDialog.CloseButton Icon={Icon.Close} onClick={close} />
+            <MapMenuDialog.CloseButton Icon={Icon.Close} onClick={close} title="Fermer" />
             <MapMenuDialog.Title>Unités de contrôle</MapMenuDialog.Title>
             <MapMenuDialog.VisibilityButton
               accent={Accent.SECONDARY}

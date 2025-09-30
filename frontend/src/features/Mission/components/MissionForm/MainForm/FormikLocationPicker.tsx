@@ -168,12 +168,12 @@ export function FormikLocationPicker() {
                 </Link>
               </ZoneWrapper>
 
-              <IconButton accent={Accent.SECONDARY} Icon={Icon.Edit} onClick={editZone} />
+              <IconButton accent={Accent.SECONDARY} Icon={Icon.Edit} onClick={editZone} title="Modifier cette zone" />
               <IconButton
                 accent={Accent.SECONDARY}
-                aria-label="Supprimer cette zone"
                 Icon={Icon.Delete}
                 onClick={() => deleteZone(index)}
+                title="Supprimer cette zone"
               />
             </Row>
           ))}

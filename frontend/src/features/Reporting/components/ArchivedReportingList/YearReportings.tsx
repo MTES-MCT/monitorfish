@@ -16,6 +16,7 @@ type YearReportingsProps = Readonly<{
   reportingAndOccurences: ReportingAndOccurrences[]
   year: string
 }>
+
 export function YearReportings({ reportingAndOccurences, year }: YearReportingsProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
@@ -45,49 +46,58 @@ export function YearReportings({ reportingAndOccurences, year }: YearReportingsP
 
   const numberOfObservations = numberOfReportings - numberOfInfractionsSuspicion
 
+  const handleOpen = (): void => {
+    if (!reportingAndOccurences.length) {
+      return
+    }
+    setIsOpen(!isOpen)
+  }
+
   return (
-    <Row>
-      <YearListTitle
-        $isEmpty={reportingAndOccurences.length === 0}
-        $isOpen={isOpen}
-        data-cy="vessel-sidebar-reporting-archive-year"
-      >
-        <YearListTitleText
-          $isEmpty={reportingAndOccurences.length === 0}
-          onClick={() => reportingAndOccurences.length && setIsOpen(!isOpen)}
-          title={year.toString()}
+    <div>
+      <Row $hasBorder={!isOpen}>
+        <YearListTitle
+          as={!reportingAndOccurences.length ? 'div' : 'button'}
+          data-cy="vessel-sidebar-reporting-archive-year"
+          onClick={handleOpen}
         >
-          {!!reportingAndOccurences.length && <YearListChevronIcon $isOpen={isOpen} />}
-          <Year>{year}</Year>
-          <YearResume data-cy="vessel-reporting-year">
-            {!reportingAndOccurences.length && 'Pas de signalement'}
-            {!!numberOfInfractionsSuspicion && (
-              <>
-                {numberOfInfractionsSuspicion} suspicion{numberOfInfractionsSuspicion > 1 ? 's' : ''} d&apos;infraction
-                {numberOfInfractionsSuspicion > 1 ? 's' : ''} <Red />
-              </>
-            )}
-            {!!numberOfObservations && (
-              <>
-                {numberOfObservations} observation{numberOfObservations > 1 ? 's' : ''} <Opal />
-              </>
-            )}
-          </YearResume>
-        </YearListTitleText>
-      </YearListTitle>
+          <YearListTitleText>
+            <Year>{year}</Year>
+            <YearResume data-cy="vessel-reporting-year">
+              {!reportingAndOccurences.length && 'Pas de signalement'}
+              {!!numberOfInfractionsSuspicion && (
+                <>
+                  {numberOfInfractionsSuspicion} suspicion{numberOfInfractionsSuspicion > 1 ? 's' : ''}{' '}
+                  d&apos;infraction
+                  {numberOfInfractionsSuspicion > 1 ? 's' : ''} <Red />
+                </>
+              )}
+              {!!numberOfObservations && (
+                <>
+                  {numberOfObservations} observation{numberOfObservations > 1 ? 's' : ''} <Opal />
+                </>
+              )}
+            </YearResume>
+          </YearListTitleText>
+        </YearListTitle>
+        {!!reportingAndOccurences.length && <YearListChevronIcon isOpen={isOpen} onClick={handleOpen} />}
+      </Row>
+
       {isOpen && (
-        <YearListContentWithPadding name={year.toString()}>
-          {reportingAndOccurences.map(({ otherOccurrencesOfSameAlert, reporting }) => (
-            <ReportingCard
-              key={reporting.id}
-              isArchived
-              otherOccurrencesOfSameAlert={otherOccurrencesOfSameAlert}
-              reporting={reporting}
-            />
-          ))}
-        </YearListContentWithPadding>
+        <Row $hasBorder>
+          <YearListContentWithPadding name={year.toString()}>
+            {reportingAndOccurences.map(({ otherOccurrencesOfSameAlert, reporting }) => (
+              <ReportingCard
+                key={reporting.id}
+                isArchived
+                otherOccurrencesOfSameAlert={otherOccurrencesOfSameAlert}
+                reporting={reporting}
+              />
+            ))}
+          </YearListContentWithPadding>
+        </Row>
       )}
-    </Row>
+    </div>
   )
 }
 
@@ -122,16 +132,15 @@ const YearResume = styled.span`
   vertical-align: text-bottom;
 `
 
-const Row = styled.div`
-  background: ${p => p.theme.color.white};
-  border-bottom: 1px solid ${p => p.theme.color.lightGray};
-  color: ${p => p.theme.color.gunMetal};
-  margin: 0;
-  overflow: hidden !important;
-  text-align: left;
-  text-overflow: ellipsis;
+const Row = styled.div<{ $hasBorder: boolean }>`
+  display: flex;
+  align-items: center;
   white-space: nowrap;
-  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  background: ${p => p.theme.color.white};
+  color: ${p => p.theme.color.gunMetal};
+  ${p => (p.$hasBorder ? `border-bottom: 1px solid ${p.theme.color.lightGray};` : null)}
 `
 
 const YearListContentWithPadding = styled(YearListContent)`

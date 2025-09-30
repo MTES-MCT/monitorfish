@@ -1,3 +1,4 @@
+import { TransparentButton } from '@components/style'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
@@ -7,7 +8,7 @@ import { FIVE_MINUTES } from '../../../api/APIWorker'
 import { setHealthcheckTextWarning } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
+import { ChevronIconButton } from '../../commonStyles/icons/ChevronIconButton'
 import WarningSVG from '../../icons/Picto_alerte.svg?react'
 import { useGetHealthcheckQuery } from '../apis'
 import { useIsOnline } from '../hooks/useIsOnline'
@@ -58,15 +59,22 @@ export function HealthcheckHeadband() {
   return (
     <>
       {!!healthcheckTextWarning.length && !previewFilteredVesselsMode && (
-        <HealthcheckWarnings
-          $hasMultipleWarnings={healthcheckTextWarning.length > 1}
-          onClick={() => setAreAllWarningsOpened(!areAllWarningsOpened)}
-        >
-          <WarningIcon />
-          {healthcheckTextWarning.length === 1
-            ? healthcheckTextWarning
-            : `${healthcheckTextWarning.length} alertes concernant les données VMS et JPE.`}
-          {healthcheckTextWarning.length > 1 && <StyledChevronIcon $isOpen={areAllWarningsOpened} />}
+        <HealthcheckWarnings>
+          <StyledTransparentButton
+            as={healthcheckTextWarning.length > 1 ? 'button' : 'div'}
+            onClick={() => setAreAllWarningsOpened(!areAllWarningsOpened)}
+          >
+            <WarningIcon />
+            {healthcheckTextWarning.length === 1
+              ? healthcheckTextWarning
+              : `${healthcheckTextWarning.length} alertes concernant les données VMS et JPE.`}
+          </StyledTransparentButton>
+          {healthcheckTextWarning.length > 1 && (
+            <StyledChevronIcon
+              isOpen={areAllWarningsOpened}
+              onClick={() => setAreAllWarningsOpened(!areAllWarningsOpened)}
+            />
+          )}
         </HealthcheckWarnings>
       )}
       {healthcheckTextWarning.length > 1 && !previewFilteredVesselsMode && (
@@ -88,11 +96,16 @@ export function HealthcheckHeadband() {
   )
 }
 
-const StyledChevronIcon = styled(ChevronIcon)`
-  margin-left: 16px;
-  display: inline-block !important;
-  vertical-align: sub;
-  cursor: pointer;
+const StyledTransparentButton = styled(TransparentButton)`
+  text-align: center;
+  width: unset;
+`
+const StyledChevronIcon = styled(ChevronIconButton)`
+  background: ${p => p.theme.color.goldenPoppy};
+
+  svg {
+    color: ${p => p.theme.color.charcoal};
+  }
 `
 
 const WarningIcon = styled(WarningSVG)`
@@ -102,9 +115,7 @@ const WarningIcon = styled(WarningSVG)`
   height: 18px;
 `
 
-const HealthcheckWarnings = styled.div<{
-  $hasMultipleWarnings: boolean
-}>`
+const HealthcheckWarnings = styled.div`
   z-index: 1045;
   position: absolute;
   top: 0;
@@ -116,7 +127,10 @@ const HealthcheckWarnings = styled.div<{
   padding: 13px;
   border-bottom: 2px solid #e3be05;
   color: ${p => p.theme.color.gunMetal};
-  cursor: ${p => (p.$hasMultipleWarnings ? 'pointer' : 'unset')};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 `
 
 const MultipleWarningsHeadband = styled.li<{

@@ -11,6 +11,7 @@ type YearsToControlListProps = {
   controlsFromDate: string
   yearsToControls: Record<number, MissionAction.MissionAction[]>
 }
+
 export function YearsToControlList({ controlsFromDate, yearsToControls }: YearsToControlListProps) {
   const sortedYears = Object.keys(yearsToControls)
     .sort((a, b) => Number(b) - Number(a))
@@ -22,7 +23,9 @@ export function YearsToControlList({ controlsFromDate, yearsToControls }: YearsT
       {yearsToControls && Object.keys(yearsToControls) && Object.keys(yearsToControls).length ? (
         <List data-cy="vessel-control-years">
           {sortedYears.map(year => (
-            <YearControls key={year} year={year} yearControls={yearsToControls[year] ?? []} />
+            <li key={year}>
+              <YearControls year={year} yearControls={yearsToControls[year] ?? []} />
+            </li>
           ))}
         </List>
       ) : (

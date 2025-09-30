@@ -23,7 +23,7 @@ export function VesselCriteria({ onDelete, vessels }: VesselCriteriaProps) {
   const [isCriteriaOpened, setIsCriteriaOpened] = useState(true)
   const [updatedVessels, setUpdatedVessels] = useState<Vessel.VesselIdentity[]>(vessels)
 
-  const add = (nextVessel: Vessel.VesselIdentity | undefined) => {
+  const handleAddVessel = (nextVessel: Vessel.VesselIdentity | undefined) => {
     assertNotNullish(nextVessel?.vesselId)
 
     helper.setValue(input.value.concat(nextVessel?.vesselId))
@@ -96,7 +96,7 @@ export function VesselCriteria({ onDelete, vessels }: VesselCriteriaProps) {
           disabled={false}
           displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_ALERT_MANAGEMENT_ERROR}
           isVesselIdRequiredFromResults
-          onChange={add}
+          onChange={handleAddVessel}
           shouldCloseOnClickOutside
           shouldResetSelectedVesselOnChange
         />

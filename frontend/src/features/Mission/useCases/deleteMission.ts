@@ -24,7 +24,7 @@ export const deleteMission =
           dispatch(
             addSideWindowBanner({
               children: error.userMessage,
-              closingDelay: 3000,
+              closingDelay: 6000,
               isClosable: true,
               level: Level.ERROR,
               withAutomaticClosing: true

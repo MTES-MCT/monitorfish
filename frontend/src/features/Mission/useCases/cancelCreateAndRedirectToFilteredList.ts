@@ -41,7 +41,7 @@ export const cancelCreateAndRedirectToFilteredList =
             dispatch(
               addSideWindowBanner({
                 children: 'Une erreur est survenue pendant la suppression de la mission.',
-                closingDelay: 3000,
+                closingDelay: 6000,
                 isClosable: true,
                 level: Level.ERROR,
                 withAutomaticClosing: true

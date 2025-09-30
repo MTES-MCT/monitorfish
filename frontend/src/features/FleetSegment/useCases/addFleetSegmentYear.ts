@@ -16,7 +16,7 @@ export const addFleetSegmentYear = (year: number) => async dispatch => {
     dispatch(
       addMainWindowBanner({
         children: (error as Error).message,
-        closingDelay: 3000,
+        closingDelay: 6000,
         isClosable: true,
         level: Level.ERROR,
         withAutomaticClosing: true

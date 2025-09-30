@@ -22,7 +22,7 @@ export const deleteFleetSegment =
       dispatch(
         addMainWindowBanner({
           children: (e as Error).message,
-          closingDelay: 3000,
+          closingDelay: 6000,
           isClosable: true,
           level: Level.ERROR,
           withAutomaticClosing: true

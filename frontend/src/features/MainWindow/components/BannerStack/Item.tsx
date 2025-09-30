@@ -25,7 +25,9 @@ export function Item({ bannerProps, bannerStackRank, onCloseOrAutoclose }: ItemP
 
 const StyledBanner = styled(Banner)`
   position: static;
-  width: calc(100vw - 50px);
-  min-width: calc(100vw - 50px);
-  padding: 0 25px;
+  > div {
+    > p {
+      font-size: 16px !important;
+    }
+  }
 `

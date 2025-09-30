@@ -25,4 +25,9 @@ export function Item({ bannerProps, bannerStackId, onCloseOrAutoclose }: ItemPro
 
 const StyledBanner = styled(Banner)`
   position: static;
+  > div {
+    > p {
+      font-size: 16px !important;
+    }
+  }
 `

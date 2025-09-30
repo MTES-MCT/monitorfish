@@ -1,5 +1,6 @@
 import { Ellipsised } from '@components/Ellipsised'
 import { Titled } from '@components/Titled'
+import { HiddenText } from '@features/commonStyles/HiddenText'
 import { Logbook } from '@features/Logbook/Logbook.types'
 import { customDayjs, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
@@ -19,12 +20,14 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotifi
   return [
     {
       accessorFn: row => row.reportId,
-      cell: ({ row }) => (
+      cell: ({ getValue, row }) => (
         <TableWithSelectableRows.RowCheckbox
           checked={row.getIsSelected()}
           disabled={!row.getCanSelect()}
           onChange={row.getToggleSelectedHandler()}
-        />
+        >
+          <HiddenText>{`Sélectionner le préavis ${getValue()}`}</HiddenText>
+        </TableWithSelectableRows.RowCheckbox>
       ),
       enableSorting: false,
       header: ({ table }) => (
@@ -32,7 +35,9 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotifi
           checked={table.getIsAllRowsSelected()}
           indeterminate={table.getIsSomeRowsSelected()}
           onChange={table.getToggleAllRowsSelectedHandler()}
-        />
+        >
+          <HiddenText>Sélectionner tous les préavis</HiddenText>
+        </TableWithSelectableRows.RowCheckbox>
       ),
       id: 'select',
       size: 25 + legacyFirefoxOffset

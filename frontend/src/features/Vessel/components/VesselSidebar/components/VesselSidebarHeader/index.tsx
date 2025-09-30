@@ -94,6 +94,7 @@ const VesselNameOrInput = styled(MapComponent)<{
   margin-left: auto;
   margin-right: auto;
   transition: all 0.3s;
+  z-index: 2;
 
   &:hover,
   &:focus {

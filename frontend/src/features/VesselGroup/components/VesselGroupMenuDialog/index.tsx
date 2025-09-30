@@ -104,7 +104,7 @@ export function VesselGroupMenuDialog() {
     isRendered && (
       <VesselGroupMenuDialogWrapper $isOpen={isOpened} data-cy="vessel-groups-menu-box">
         <Header>
-          <CloseButton Icon={Icon.Close} onClick={toggleVesselGroupsMenu} />
+          <CloseButton Icon={Icon.Close} onClick={toggleVesselGroupsMenu} title="Fermer" />
           <MapMenuDialog.Title>Groupes de navires</MapMenuDialog.Title>
           <MapMenuDialog.VisibilityButton
             accent={Accent.SECONDARY}

@@ -31,6 +31,7 @@ export type VesselSearchProps = Readonly<
     withLastSearchResults?: boolean
   }
 >
+
 export function VesselSearch({
   baseRef,
   className,
@@ -177,6 +178,7 @@ export function VesselSearch({
         {vesselName && (
           <IconButton
             accent={Accent.TERTIARY}
+            aria-label="Vider le champ"
             disabled={inputNativeProps.disabled}
             Icon={Icon.Close}
             iconSize={14}
@@ -245,6 +247,7 @@ const InputWrapper = styled.div`
   position: relative;
 
   /* Clear icon button */
+
   > button {
     position: absolute;
     right: 7.5px;
@@ -252,6 +255,7 @@ const InputWrapper = styled.div`
   }
 
   /* Open vessel sidebar link */
+
   > a {
     position: absolute;
     right: 42px;

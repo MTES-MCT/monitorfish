@@ -1,6 +1,7 @@
 import { CountryFlag } from '@components/CountryFlag'
 import { Ellipsised } from '@components/Ellipsised'
 import { Titled } from '@components/Titled'
+import { HiddenText } from '@features/commonStyles/HiddenText'
 import { getReportingOrigin, getReportingTitle } from '@features/Reporting/components/ReportingTable/utils'
 import { type Reporting, ReportingType, ReportingTypeCharacteristics } from '@features/Reporting/types'
 import { TableWithSelectableRows } from '@mtes-mct/monitor-ui'
@@ -18,12 +19,14 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
   return [
     {
       accessorFn: row => row.id,
-      cell: ({ row }) => (
+      cell: ({ getValue, row }) => (
         <TableWithSelectableRows.RowCheckbox
           checked={row.getIsSelected()}
           disabled={!row.getCanSelect()}
           onChange={row.getToggleSelectedHandler()}
-        />
+        >
+          <HiddenText>{`Sélectionner le signalement ${getValue()}`}</HiddenText>
+        </TableWithSelectableRows.RowCheckbox>
       ),
       enableSorting: false,
       header: ({ table }) => (
@@ -31,7 +34,9 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
           checked={table.getIsAllRowsSelected()}
           indeterminate={table.getIsSomeRowsSelected()}
           onChange={table.getToggleAllRowsSelectedHandler()}
-        />
+        >
+          <HiddenText>Sélectionner tous les signalements</HiddenText>
+        </TableWithSelectableRows.RowCheckbox>
       ),
       id: 'select',
       size: 25 + legacyFirefoxOffset

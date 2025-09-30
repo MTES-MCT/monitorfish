@@ -45,11 +45,9 @@ export function VesselSidebar() {
       <HideNonSelectedVessels isSidebarOpen={isFirstLoad} />
       <ShowFishingActivitiesOnMap isSidebarOpen={isFirstLoad} />
       <Wrapper $isRightMenuOpen={rightMenuIsOpen} $isSidebarOpen={isFirstLoad} data-cy="vessel-sidebar">
+        <Tabs />
+        <Body />
         <GrayOverlay $isOverlayed={isFocusedOnVesselSearch && isFirstLoad} />
-        <div>
-          <Tabs />
-          <Body />
-        </div>
       </Wrapper>
     </>
   )
@@ -64,6 +62,8 @@ const GrayOverlay = styled.div<{
   opacity: 0;
   position: absolute;
   width: 100%;
+  top: 0;
+  z-index: ${p => (p.$isOverlayed ? 1 : -1)};
 
   @keyframes opacity-up {
     0% {

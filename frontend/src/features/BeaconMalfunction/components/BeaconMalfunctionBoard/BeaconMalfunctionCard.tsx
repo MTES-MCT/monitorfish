@@ -82,7 +82,10 @@ export function BeaconMalfunctionCard({
         </Row>
         <Row $hasScroll={hasScroll} $marginTop={4}>
           {beaconMalfunction?.flagState ? (
-            <Flag src={`${baseUrl}/flags/${beaconMalfunction?.flagState.toLowerCase()}.svg`} />
+            <Flag
+              alt={`Drapeau ${beaconMalfunction?.flagState}`}
+              src={`${baseUrl}/flags/${beaconMalfunction?.flagState.toLowerCase()}.svg`}
+            />
           ) : null}
           <VesselName
             className="hover-border"

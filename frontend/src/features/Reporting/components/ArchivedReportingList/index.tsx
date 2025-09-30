@@ -17,6 +17,7 @@ type ArchivedReportingListProps = Readonly<{
   onMore: (() => Promisable<void>) | undefined
   vesselReportings: VesselReportings
 }>
+
 export function ArchivedReportingList({ fromDate, onMore, vesselReportings }: ArchivedReportingListProps) {
   const reportingsByYearAsPairs = useMemo(
     () => Object.entries(vesselReportings.archived).sort(([a], [b]) => Number(b) - Number(a)),
@@ -32,7 +33,9 @@ export function ArchivedReportingList({ fromDate, onMore, vesselReportings }: Ar
       {reportingsByYearAsPairs.length > 0 && (
         <List>
           {reportingsByYearAsPairs.map(([year, reportingAndOccurences]) => (
-            <YearReportings key={year} reportingAndOccurences={reportingAndOccurences} year={year} />
+            <li key={year}>
+              <YearReportings reportingAndOccurences={reportingAndOccurences} year={year} />
+            </li>
           ))}
         </List>
       )}

@@ -18,11 +18,13 @@ export function Draggable({ children, id, stageId }) {
     cursor: 'move',
     margin: '0 10px 8px 10px'
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { role, ...attributesWithoutRole } = attributes
 
   return (
     /* eslint-disable react/jsx-props-no-spreading */
-    <button ref={setNodeRef} style={style} type="button" {...listeners} {...attributes}>
+    <div ref={setNodeRef} style={style} {...listeners} {...attributesWithoutRole}>
       {children}
-    </button>
+    </div>
   )
 }

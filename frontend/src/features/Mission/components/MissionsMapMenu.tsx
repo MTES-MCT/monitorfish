@@ -6,6 +6,7 @@ import { addMission } from '@features/Mission/useCases/addMission'
 import { SideWindowMenuKey, SideWindowStatus } from '@features/SideWindow/constants'
 import { sideWindowActions } from '@features/SideWindow/slice'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
+import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, Icon, MapMenuDialog, THEME } from '@mtes-mct/monitor-ui'
@@ -22,6 +23,8 @@ export function MissionsMapMenu() {
 
   const isActive =
     sideWindow.status !== SideWindowStatus.CLOSED && sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_LIST
+
+  const { isOpened, isRendered } = useDisplayMapBox(leftMapBoxOpened === MapBox.MISSIONS)
 
   const toggleMissionsWindow = () => {
     if (isActive) {
@@ -47,33 +50,6 @@ export function MissionsMapMenu() {
 
   return (
     <>
-      <MapToolBox $isLeftBox $isOpen={leftMapBoxOpened === MapBox.MISSIONS} data-cy="missions-menu-box">
-        <MissionsMenuWrapper>
-          <Header>
-            <CloseButton Icon={Icon.Close} onClick={toggleMissionsMenu} title="Fermer" />
-            <MapMenuDialog.Title>Missions et contrôles</MapMenuDialog.Title>
-            <MapMenuDialog.VisibilityButton
-              accent={Accent.SECONDARY}
-              data-cy="toggle-mission-layer"
-              Icon={isMissionsLayerDisplayed ? Icon.Display : Icon.Hide}
-              onClick={toggleMissionsLayer}
-              title={isMissionsLayerDisplayed ? 'Cacher les missions' : 'Afficher les missions'}
-            />
-          </Header>
-          <MissionsMenuBody>
-            <Section>
-              <BlockIconButton accent={Accent.PRIMARY} Icon={Icon.Plus} onClick={openNewMission}>
-                Ouvrir une nouvelle mission
-              </BlockIconButton>
-            </Section>
-            <Section>
-              <BlockIconButton accent={Accent.SECONDARY} Icon={Icon.Expand} onClick={toggleMissionsWindow}>
-                Voir la vue détaillée des missions
-              </BlockIconButton>
-            </Section>
-          </MissionsMenuBody>
-        </MissionsMenuWrapper>
-      </MapToolBox>
       <MapToolButton
         data-cy="missions-map-button"
         Icon={Icon.MissionAction}
@@ -84,6 +60,35 @@ export function MissionsMapMenu() {
         style={{ color: THEME.color.gainsboro }}
         title="Missions et contrôles"
       />
+      {isRendered && (
+        <MapToolBox $isLeftBox $isOpen={isOpened} data-cy="missions-menu-box">
+          <MissionsMenuWrapper>
+            <Header>
+              <CloseButton Icon={Icon.Close} onClick={toggleMissionsMenu} title="Fermer" />
+              <MapMenuDialog.Title>Missions et contrôles</MapMenuDialog.Title>
+              <MapMenuDialog.VisibilityButton
+                accent={Accent.SECONDARY}
+                data-cy="toggle-mission-layer"
+                Icon={isMissionsLayerDisplayed ? Icon.Display : Icon.Hide}
+                onClick={toggleMissionsLayer}
+                title={isMissionsLayerDisplayed ? 'Cacher les missions' : 'Afficher les missions'}
+              />
+            </Header>
+            <MissionsMenuBody>
+              <Section>
+                <BlockIconButton accent={Accent.PRIMARY} Icon={Icon.Plus} onClick={openNewMission}>
+                  Ouvrir une nouvelle mission
+                </BlockIconButton>
+              </Section>
+              <Section>
+                <BlockIconButton accent={Accent.SECONDARY} Icon={Icon.Expand} onClick={toggleMissionsWindow}>
+                  Voir la vue détaillée des missions
+                </BlockIconButton>
+              </Section>
+            </MissionsMenuBody>
+          </MissionsMenuWrapper>
+        </MapToolBox>
+      )}
     </>
   )
 }

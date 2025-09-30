@@ -367,7 +367,7 @@ export function MissionForm() {
           dispatch(
             addSideWindowBanner({
               children: "Nous n'avons pas pu vérifier si cette mission est supprimable.",
-              closingDelay: 3000,
+              closingDelay: 6000,
               isClosable: true,
               level: Level.ERROR,
               withAutomaticClosing: true

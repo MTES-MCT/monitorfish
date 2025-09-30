@@ -60,7 +60,7 @@ export class FrontendApiError extends FrontendError {
         dispatch(
           addSideWindowBanner({
             children: error.userMessage,
-            closingDelay: 3000,
+            closingDelay: 6000,
             isClosable: true,
             level: Level.ERROR,
             withAutomaticClosing: true
@@ -73,7 +73,7 @@ export class FrontendApiError extends FrontendError {
       dispatch(
         addMainWindowBanner({
           children: error.userMessage,
-          closingDelay: 3000,
+          closingDelay: 6000,
           isClosable: true,
           level: Level.ERROR,
           withAutomaticClosing: true

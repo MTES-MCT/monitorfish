@@ -162,7 +162,7 @@ export function BeaconMalfunctionBoard() {
         dispatch(
           addSideWindowBanner({
             children: 'Une avarie archivée ne peut revenir en arrière',
-            closingDelay: 3000,
+            closingDelay: 6000,
             isClosable: true,
             level: Level.ERROR,
             withAutomaticClosing: true
@@ -177,7 +177,7 @@ export function BeaconMalfunctionBoard() {
         dispatch(
           addSideWindowBanner({
             children: 'Seulement une avarie terminée peut être archivée',
-            closingDelay: 3000,
+            closingDelay: 6000,
             isClosable: true,
             level: Level.ERROR,
             withAutomaticClosing: true

@@ -25,7 +25,7 @@ export function FilterBar() {
     dispatch(
       addMainWindowBanner({
         children: 'Mise à jour des données effectuée',
-        closingDelay: 3000,
+        closingDelay: 6000,
         isClosable: true,
         level: Level.SUCCESS,
         withAutomaticClosing: true

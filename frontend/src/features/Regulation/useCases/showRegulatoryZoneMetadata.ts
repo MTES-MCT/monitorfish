@@ -32,7 +32,7 @@ export const showRegulatoryZoneMetadata =
       dispatch(
         addMainWindowBanner({
           children: (err as Error).message,
-          closingDelay: 3000,
+          closingDelay: 6000,
           isClosable: true,
           level: Level.ERROR,
           withAutomaticClosing: true

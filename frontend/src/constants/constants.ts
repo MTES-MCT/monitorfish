@@ -11,7 +11,7 @@ export const COLORS = {
   mediumSeaGreen: '#29b361',
   opal: '#a5bcc0',
   powderBlue: '#9ED7D9',
-  slateGray: '#707785',
+  slateGray: '#ff3392',
   // TODO Remove this color (it's used as hex and not constant).
   titleBottomBorder: '#E0E0E0',
   wheat: '#edd6a4',

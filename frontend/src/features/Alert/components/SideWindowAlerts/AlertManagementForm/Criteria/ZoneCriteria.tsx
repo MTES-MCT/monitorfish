@@ -3,20 +3,21 @@ import { mapZonesWithMetadata } from '@features/Alert/components/SideWindowAlert
 import { AdministrativeAreaType } from '@features/Alert/constants'
 import { useGetFilterableZonesAsTreeOptions } from '@hooks/useGetFilterableZonesAsTreeOptions'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { MultiCascader, type TreeOption } from '@mtes-mct/monitor-ui'
+import { MultiCascader, type TreeOption, type OptionValueType } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useFormikContext } from 'formik'
 import { groupBy } from 'lodash-es'
 import { useMemo, useState } from 'react'
+import styled from 'styled-components'
 
 import type { EditedAlertSpecification, RegulatoryAreaSpecification } from '@features/Alert/types'
 
 const FILTERED_ZONES = ['Zone manuelle', 'Zones Cormoran (NAMO-SA)', 'Zones pour situation VMS']
 
-type AdministrativeZonesCriteriaProps = {
+type ZoneCriteriaProps = {
   onDelete: () => void
 }
-export function AdministrativeZonesCriteria({ onDelete }: AdministrativeZonesCriteriaProps) {
+export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
   const { setFieldValue, values } = useFormikContext<EditedAlertSpecification>()
   const administrativeZones = values.administrativeAreas.filter(
     zone => zone.areaType === AdministrativeAreaType.EEZ_AREA || zone.areaType === AdministrativeAreaType.FAO_AREA
@@ -46,7 +47,7 @@ export function AdministrativeZonesCriteria({ onDelete }: AdministrativeZonesCri
     [regulatoryLayerLawTypes]
   )
 
-  const updateZones = async (nextZonesNames: string[] | undefined) => {
+  const updateZones = async (nextZonesNames: OptionValueType[] | undefined) => {
     assertNotNullish(filterableZoneAsTreeOptions)
 
     if (nextZonesNames === undefined) {
@@ -57,7 +58,7 @@ export function AdministrativeZonesCriteria({ onDelete }: AdministrativeZonesCri
 
     const allZones = mapZonesWithMetadata(filterableZoneAsTreeOptions)
 
-    const selectedZones = allZones.filter(zone => nextZonesNames.includes(zone.id))
+    const selectedZones = allZones.filter(zone => nextZonesNames.includes(zone.id as OptionValueType))
     const zonesByType = groupBy(selectedZones, 'areaType')
 
     const administrativeAreas = Object.entries(zonesByType).map(([areaType, zones]) => ({
@@ -68,14 +69,14 @@ export function AdministrativeZonesCriteria({ onDelete }: AdministrativeZonesCri
     setFieldValue('administrativeAreas', administrativeAreas)
   }
 
-  const updateRegulatoryAreas = (nextRegulationValues: RegulatoryAreaSpecification[] | undefined) => {
+  const updateRegulatoryAreas = (nextRegulationValues: OptionValueType[] | undefined) => {
     if (nextRegulationValues === undefined) {
       setFieldValue('regulatoryAreas', [])
 
       return
     }
 
-    setFieldValue('regulatoryAreas', nextRegulationValues)
+    setFieldValue('regulatoryAreas', nextRegulationValues as RegulatoryAreaSpecification[])
   }
 
   const handleDeleteCriteria = () => {
@@ -100,7 +101,7 @@ export function AdministrativeZonesCriteria({ onDelete }: AdministrativeZonesCri
           Ce critère sert à détecter les navires émettant VMS dans une zone donnée. Pour détecter des navires déclarant
           des captures dans une zone donnée, spécifier une zone du FAR dans le critère &quot;espèces à bord&quot;.
         </Criteria.Info>
-        <MultiCascader
+        <StyledMultiCascader
           disabled={!filterableZoneAsTreeOptions}
           label="Zones administratives déclenchant l'alerte"
           name="zones"
@@ -120,7 +121,7 @@ export function AdministrativeZonesCriteria({ onDelete }: AdministrativeZonesCri
             )
           })()}
         />
-        <MultiCascader
+        <StyledMultiCascader
           disabled={!regulatoryLayerLawTypes}
           label="Zones réglementaires déclenchant l'alerte"
           name="regulatoryAreas"
@@ -137,3 +138,7 @@ export function AdministrativeZonesCriteria({ onDelete }: AdministrativeZonesCri
     </Criteria.Wrapper>
   )
 }
+
+const StyledMultiCascader = styled(MultiCascader)`
+  margin-top: 16px;
+`

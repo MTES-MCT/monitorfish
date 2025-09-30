@@ -1,12 +1,15 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import {
   CREATE_ALERT_ERROR_MESSAGE,
+  DELETE_ALERT_ERROR_MESSAGE,
   UPDATE_ALERT_ERROR_MESSAGE,
   useCreateAlertMutation,
+  useDeleteAlertMutation,
   useUpdateAlertMutation
 } from '@features/Alert/apis'
-import { AdministrativeZonesCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/AdministrativeZonesCriteria'
 import { Criteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants'
+import { NationalityCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/NationalityCriteria'
+import { ZoneCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/ZoneCriteria'
 import { FormikValidityPeriod } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/FormikValidityPeriod'
 import { FISHING_POSITION_ONLY_AS_OPTIONS } from '@features/Alert/components/SideWindowAlerts/constants'
 import { alertActions } from '@features/Alert/components/SideWindowAlerts/slice'
@@ -41,10 +44,12 @@ export function AlertManagementForm() {
   const dispatch = useMainAppDispatch()
   const [createAlert, { isLoading: isCreatingAlert }] = useCreateAlertMutation()
   const [updateAlert, { isLoading: isUpdatingAlert }] = useUpdateAlertMutation()
+  const [deleteAlert, { isLoading: isDeletingAlert }] = useDeleteAlertMutation()
   const editedAlertSpecification = useMainAppSelector(state => state.alert.editedAlertSpecification)
   const infractions = useMainAppSelector(state => state.infraction.infractions)
   const [selectedCriterias, setSelectedCriterias] = useState<Criteria[]>([])
   const [isDraftCancellationConfirmationDialogOpen, setIsDraftCancellationConfirmationDialogOpen] = useState(false)
+  const [isDeleteConfirmationDialogOpen, setIsDeleteConfirmationDialogOpen] = useState(false)
   assertNotNullish(editedAlertSpecification)
 
   const infractionsAsOptions = useMemo(
@@ -109,6 +114,41 @@ export function AlertManagementForm() {
     }
   }
 
+  const handleConfirmDelete = async () => {
+    if (!editedAlertSpecification?.id) {
+      return
+    }
+
+    try {
+      await deleteAlert(editedAlertSpecification.id)
+      dispatch(alertActions.setEditedAlertSpecification(undefined))
+      setIsDeleteConfirmationDialogOpen(false)
+      dispatch(
+        addSideWindowBanner({
+          children: `L'alerte a bien été suprimée`,
+          closingDelay: 3000,
+          isClosable: true,
+          level: Level.SUCCESS,
+          withAutomaticClosing: true
+        })
+      )
+    } catch (e) {
+      dispatch(
+        addSideWindowBanner({
+          children: DELETE_ALERT_ERROR_MESSAGE,
+          closingDelay: 5000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
+    }
+  }
+
+  const handleCancelDelete = () => {
+    setIsDeleteConfirmationDialogOpen(false)
+  }
+
   return (
     <>
       <Formik
@@ -121,6 +161,8 @@ export function AlertManagementForm() {
             !!values.regulatoryAreas.length ||
             !!values.administrativeAreas.length ||
             selectedCriterias.includes(Criteria.ZONE)
+          const hasNationalityCriteria =
+            !!values.flagStatesIso2.length || selectedCriterias.includes(Criteria.NATIONALITY)
 
           return (
             <Wrapper>
@@ -175,12 +217,28 @@ export function AlertManagementForm() {
                           Zones
                         </Dropdown.Item>
                       )}
+                      {!hasNationalityCriteria && (
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedCriterias(previous => previous.concat(Criteria.NATIONALITY))
+                          }}
+                        >
+                          Nationalités
+                        </Dropdown.Item>
+                      )}
                     </Dropdown>
                   </StyledFormHead>
                   {hasZoneCriteria && (
-                    <AdministrativeZonesCriteria
+                    <ZoneCriteria
                       onDelete={() => {
                         setSelectedCriterias(previous => previous.filter(criteria => criteria !== Criteria.ZONE))
+                      }}
+                    />
+                  )}
+                  {hasNationalityCriteria && (
+                    <NationalityCriteria
+                      onDelete={() => {
+                        setSelectedCriterias(previous => previous.filter(criteria => criteria !== Criteria.NATIONALITY))
                       }}
                     />
                   )}
@@ -188,7 +246,14 @@ export function AlertManagementForm() {
               </Body>
               <Footer>
                 {!!editedAlertSpecification.id && (
-                  <DeleteButton accent={Accent.SECONDARY} disabled Icon={Icon.Delete} onClick={() => {}}>
+                  <DeleteButton
+                    accent={Accent.SECONDARY}
+                    disabled={isDeletingAlert}
+                    Icon={Icon.Delete}
+                    onClick={() => {
+                      setIsDeleteConfirmationDialogOpen(true)
+                    }}
+                  >
                     Supprimer l’alerte
                   </DeleteButton>
                 )}
@@ -237,6 +302,30 @@ export function AlertManagementForm() {
           onCancel={() => setIsDraftCancellationConfirmationDialogOpen(false)}
           onConfirm={handleConfirmCancelDraft}
           title="Quitter l'édition"
+        />
+      )}
+      {isDeleteConfirmationDialogOpen && (
+        <ConfirmationModal
+          color={THEME.color.maximumRed}
+          confirmationButtonLabel="Confirmer la suppression"
+          iconName="Delete"
+          message={
+            <>
+              <p>
+                <b>
+                  Êtes-vous sûr de vouloir supprimer l&apos;alerte &quot;
+                  {editedAlertSpecification.name}&quot; ?
+                </b>
+              </p>
+              <p>
+                Cela supprimera la définition et les critères de l&apos;alerte, ainsi que toutes les occurrences
+                futures.
+              </p>
+            </>
+          }
+          onCancel={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
+          title="Supprimer l'alerte"
         />
       )}
     </>
@@ -349,8 +438,13 @@ const Panel = styled.div<{
     font-weight: 400;
   }
 
-  .Element-Label,
-  .Element-Legend {
-    margin-top: 24px;
-  }
+  ${p =>
+    !p.$isRight
+      ? `
+      .Element-Label,
+      .Element-Legend {
+        margin-top: 24px;
+      }
+      `
+      : ''}
 `

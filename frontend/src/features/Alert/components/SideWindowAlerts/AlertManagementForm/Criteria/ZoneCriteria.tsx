@@ -22,7 +22,7 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
   const administrativeZones = values.administrativeAreas.filter(
     zone => zone.areaType === AdministrativeAreaType.EEZ_AREA || zone.areaType === AdministrativeAreaType.FAO_AREA
   )
-  const [isCriteriaOpened, setIsCriteriaOpened] = useState(false)
+  const [isCriteriaOpened, setIsCriteriaOpened] = useState(true)
   const filterableZoneAsTreeOptions = useGetFilterableZonesAsTreeOptions()
   const filteredZones = filterableZoneAsTreeOptions?.filter(zone => !FILTERED_ZONES.includes(zone.label)) ?? []
 

@@ -6,8 +6,8 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": "22",
-    "npm": "10"
+    "node": "24",
+    "npm": "11"
   },
   "scripts": {
     "build": "npm run clean && npm run bundle-sw && vite build",
@@ -37,7 +37,7 @@
   "dependencies": {
     "@dnd-kit/core": "6.3.1",
     "@dnd-kit/modifiers": "6.0.1",
-    "@mtes-mct/monitor-ui": "24.32.1",
+    "@mtes-mct/monitor-ui": "24.34.2",
     "@reduxjs/toolkit": "2.9.0",
     "@sentry/react": "8.53.0",
     "@tanstack/react-table": "8.21.3",

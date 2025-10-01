@@ -32,7 +32,7 @@ export function SilencedAlerts() {
   const fuse = useMemo(
     () =>
       new CustomSearch(
-        silencedAlerts,
+        structuredClone(silencedAlerts),
         [
           'vesselName',
           'internalReferenceNumber',

@@ -20,8 +20,3 @@ export const TransparentButton = styled.button.attrs(() => ({
   height: 100%;
   padding: 0;
 `
-
-export const StyledTransparentButton = styled(TransparentButton)`
-  display: flex;
-  padding: 6px 0 6px 16px;
-`

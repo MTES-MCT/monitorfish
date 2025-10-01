@@ -16,92 +16,32 @@ context('Axe core RGAA check that ', () => {
       cy.wait(3000)
     })
     it('should respect RGAA criteria', () => {
-      cy.injectAxe()
-      // @ts-ignore
-      cy.checkA11y(null, {
-        rules: {
-          'color-contrast': { enabled: false }
-        },
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa']
-        }
-      })
+      injectAndRunRGAACheck()
     })
     it('control unit panel should respect RGAA criteria', () => {
       cy.clickButton('Liste des unités de contrôle')
 
-      cy.injectAxe()
-      // @ts-ignore
-      cy.checkA11y(null, {
-        rules: {
-          'color-contrast': { enabled: false }
-        },
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa']
-        }
-      })
+      injectAndRunRGAACheck()
     })
     it('last position panel should respect RGAA criteria', () => {
       cy.clickButton('Affichage des dernières positions')
-      cy.injectAxe()
-      // @ts-ignore
-      cy.checkA11y(null, {
-        rules: {
-          'color-contrast': { enabled: false }
-        },
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa']
-        }
-      })
+      injectAndRunRGAACheck()
     })
 
     it('interest point panel should respect RGAA criteria', () => {
       cy.clickButton("Créer un point d'intérêt")
 
-      cy.injectAxe()
-      // @ts-ignore
-      cy.checkA11y(null, {
-        rules: {
-          'color-contrast': { enabled: false }
-        },
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa']
-        }
-      })
+      injectAndRunRGAACheck()
     })
     it('my account panel should respect RGAA criteria', () => {
       cy.clickButton('Mon compte')
 
-      cy.injectAxe()
-      // @ts-ignore
-      cy.checkA11y(null, {
-        rules: {
-          'color-contrast': { enabled: false }
-        },
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa']
-        }
-      })
+      injectAndRunRGAACheck()
     })
     it('new features panel should respect RGAA criteria', () => {
       cy.clickButton('Nouveautés MonitorFish')
 
-      cy.injectAxe()
-      // @ts-ignore
-      cy.checkA11y(null, {
-        rules: {
-          'color-contrast': { enabled: false }
-        },
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa']
-        }
-      })
+      injectAndRunRGAACheck()
     })
   })
 
@@ -112,17 +52,7 @@ context('Axe core RGAA check that ', () => {
       cy.wait(250)
       cy.getDataCy('side-window-menu-vessel-list').click()
       cy.fill('En mer', false)
-      cy.injectAxe()
-      // @ts-ignore
-      cy.checkA11y(null, {
-        rules: {
-          'color-contrast': { enabled: false }
-        },
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa']
-        }
-      })
+      injectAndRunRGAACheck()
     })
   })
 
@@ -137,49 +67,19 @@ context('Axe core RGAA check that ', () => {
     it('list should respect RGAA criteria', () => {
       cy.get('[title="Groupes de navires"]').click()
       cy.get('[title="Mission Thémis – chaluts de fonds"]').click()
-      cy.injectAxe()
-      // @ts-ignore
-      cy.checkA11y(null, {
-        rules: {
-          'color-contrast': { enabled: false }
-        },
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa']
-        }
-      })
+      injectAndRunRGAACheck()
     })
 
     it('form should respect RGAA criteria', () => {
       cy.clickButton('Créer un groupe de navires')
       cy.clickButton('Créer un groupe dynamique')
-      cy.injectAxe()
-      // @ts-ignore
-      cy.checkA11y(null, {
-        rules: {
-          'color-contrast': { enabled: false }
-        },
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa']
-        }
-      })
+      injectAndRunRGAACheck()
     })
   })
   describe('Missions ', () => {
     it('list should respect RGAA criteria', () => {
       openSideWindowMissionList()
-      cy.injectAxe()
-      // @ts-ignore
-      cy.checkA11y(null, {
-        rules: {
-          'color-contrast': { enabled: false }
-        },
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa']
-        }
-      })
+      injectAndRunRGAACheck()
     })
 
     it('form should respect RGAA criteria', () => {
@@ -187,17 +87,7 @@ context('Axe core RGAA check that ', () => {
       cy.clickButton('Ajouter')
       cy.clickButton('Ajouter un contrôle en mer')
       cy.get('*[data-cy="action-list-item"]').contains('Contrôle en mer')
-      cy.injectAxe()
-      // @ts-ignore
-      cy.checkA11y(null, {
-        rules: {
-          'color-contrast': { enabled: false }
-        },
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa']
-        }
-      })
+      injectAndRunRGAACheck()
     })
   })
 
@@ -205,17 +95,7 @@ context('Axe core RGAA check that ', () => {
     it('list should respect RGAA criteria', () => {
       openSideWindowAlertList()
       cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click()
-      cy.injectAxe()
-      // @ts-ignore
-      cy.checkA11y(null, {
-        rules: {
-          'color-contrast': { enabled: false }
-        },
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa']
-        }
-      })
+      injectAndRunRGAACheck()
     })
   })
 
@@ -226,49 +106,19 @@ context('Axe core RGAA check that ', () => {
       cy.wait(500)
       cy.getDataCy('side-window-reporting-tab').click()
       cy.getDataCy('side-window-sub-menu-NAMO').click()
-      cy.injectAxe()
-      // @ts-ignore
-      cy.checkA11y(null, {
-        rules: {
-          'color-contrast': { enabled: false }
-        },
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa']
-        }
-      })
+      injectAndRunRGAACheck()
     })
   })
 
   describe('Prior notification ', () => {
     it('list should respect RGAA criteria', () => {
       openSideWindowPriorNotificationListAsSuperUser()
-      cy.injectAxe()
-      // @ts-ignore
-      cy.checkA11y(null, {
-        rules: {
-          'color-contrast': { enabled: false }
-        },
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa']
-        }
-      })
+      injectAndRunRGAACheck()
     })
     it('form should respect RGAA criteria', () => {
       addManualSideWindowPriorNotification()
 
-      cy.injectAxe()
-      // @ts-ignore
-      cy.checkA11y(null, {
-        rules: {
-          'color-contrast': { enabled: false }
-        },
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa']
-        }
-      })
+      injectAndRunRGAACheck()
     })
   })
 
@@ -276,17 +126,21 @@ context('Axe core RGAA check that ', () => {
     it('board should respect RGAA criteria', () => {
       openSideWindowBeaconMalfunctionBoard()
 
-      cy.injectAxe()
-      // @ts-ignore
-      cy.checkA11y(null, {
-        rules: {
-          'color-contrast': { enabled: false }
-        },
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa']
-        }
-      })
+      injectAndRunRGAACheck()
     })
   })
 })
+
+const injectAndRunRGAACheck = () => {
+  cy.injectAxe()
+  // @ts-ignore
+  cy.checkA11y(null, {
+    rules: {
+      'color-contrast': { enabled: false }
+    },
+    runOnly: {
+      type: 'tag',
+      values: ['wcag2a', 'wcag2aa']
+    }
+  })
+}

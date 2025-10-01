@@ -22,7 +22,6 @@ import { useGetServiceWorker } from '../../../workers/hooks/useGetServiceWorker'
 import { registerServiceWorker } from '../../../workers/registerServiceWorker'
 import { unregisterServiceWorker } from '../../../workers/unregisterServiceWorker'
 
-const MARGIN_TOP = 412
 const BYTE_TO_MEGA_BYTE_FACTOR = 0.000001
 
 export function Account() {
@@ -122,7 +121,8 @@ export function Account() {
   }
 
   return (
-    <Wrapper>
+    <>
+      <MapToolButton Icon={Icon.Account} isActive={isOpened} onClick={openOrClose} title="Mon compte" />
       {isRendered && (
         <MapMenuDialogWrapper $hideBoxShadow $isOpen={isOpened} data-cy="map-account-box">
           <StyledContainer>
@@ -163,13 +163,6 @@ export function Account() {
           </StyledContainer>
         </MapMenuDialogWrapper>
       )}
-      <MapToolButton
-        Icon={Icon.Account}
-        isActive={isOpened}
-        onClick={openOrClose}
-        style={{ top: MARGIN_TOP }}
-        title="Mon compte"
-      />
       {isUnregisterCacheConfirmationModalOpen && (
         <ConfirmationModal
           confirmationButtonLabel="Désactiver"
@@ -208,7 +201,7 @@ export function Account() {
           title="Téléchargement des cartes"
         />
       )}
-    </Wrapper>
+    </>
   )
 }
 
@@ -225,15 +218,4 @@ const StyledFooter = styled(MapMenuDialog.Footer)`
   gap: 0;
 `
 
-const Wrapper = styled.div`
-  transition: all 0.2s;
-  left: 10px;
-
-  * {
-    box-sizing: border-box;
-  }
-`
-
-const MapMenuDialogWrapper = styled(MapToolBox)`
-  top: ${MARGIN_TOP}px;
-`
+const MapMenuDialogWrapper = styled(MapToolBox)``

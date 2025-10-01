@@ -62,7 +62,7 @@ export function FormikPortSelect() {
     () =>
       portsAsOptions.length > 0
         ? new CustomSearch(
-            portsAsOptions,
+            structuredClone(portsAsOptions),
             [
               {
                 name: 'label',

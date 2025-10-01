@@ -1,11 +1,11 @@
 import {
+  ControlUnit,
   CustomSearch,
   type Filter,
+  getControlUnitResourceCategoryFromType,
   isDefined,
   pluralize,
-  ControlUnit,
-  type Station,
-  getControlUnitResourceCategoryFromType
+  type Station
 } from '@mtes-mct/monitor-ui'
 import { isEmpty, uniq } from 'lodash-es'
 import { createEmpty, extend, type Extent } from 'ol/extent'
@@ -72,7 +72,7 @@ export function getFilters(
   filtersState: FiltersState
 ): Filter<ControlUnit.ControlUnit>[] {
   const customSearch = new CustomSearch(
-    data,
+    structuredClone(data),
     [
       { name: 'administration.name', weight: 0.1 },
       { name: 'name', weight: 0.9 }

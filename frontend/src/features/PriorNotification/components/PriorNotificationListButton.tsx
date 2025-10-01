@@ -50,9 +50,8 @@ export function PriorNotificationListButton() {
       }
       Icon={Icon.Fishery}
       isActive={isActive}
-      isLeftButton
+      isShrinkable={false}
       onClick={toggleSideWindow}
-      style={{ top: isSuperUser ? 232 : 120 }}
       title="Afficher la liste des préavis"
     />
   )

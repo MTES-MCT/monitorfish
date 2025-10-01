@@ -1,7 +1,6 @@
 import { IconButton, THEME } from '@mtes-mct/monitor-ui'
+import { type FunctionComponent, type JSX, type SVGProps, useId } from 'react'
 import styled from 'styled-components'
-
-import type { FunctionComponent, SVGProps, JSX } from 'react'
 
 /**
  * `IconSVG` props is deprecated, use `Icon` instead.
@@ -17,6 +16,7 @@ type MapPropertyTriggerProps = Readonly<{
   text: string
   updateBooleanProperty: (isChecked) => void
 }>
+
 export function MapPropertyTrigger({
   booleanProperty,
   booleanVerbs = ['Masquer', 'Afficher'],
@@ -41,10 +41,13 @@ export function MapPropertyTrigger({
     }
   }
 
+  const id = useId()
+
   return (
     <Wrapper disabled={disabled} onClick={update}>
       {!!Icon && (
         <IconButton
+          aria-labelledby={id}
           color={THEME.color.white}
           Icon={Icon}
           iconSize={24}
@@ -67,7 +70,7 @@ export function MapPropertyTrigger({
           }}
         />
       )}
-      <ShowLabelText data-cy="map-property-trigger">
+      <ShowLabelText data-cy="map-property-trigger" id={id}>
         {booleanVerb} {text}
       </ShowLabelText>
     </Wrapper>

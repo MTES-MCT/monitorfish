@@ -1,7 +1,9 @@
 // TODO Remove temporary `any`/`as any` (fresh migration to TS).
 
+import { StyledTransparentButton, Title } from '@features/LayersSidebar/components/style'
 import { LayerProperties, LayerType } from '@features/Map/constants'
 import { layerActions } from '@features/Map/layer.slice'
+import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
@@ -9,7 +11,7 @@ import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { RegulatoryTopic } from './RegulatoryTopic'
-import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
+import { ChevronIconButton } from '../../../commonStyles/icons/ChevronIconButton'
 import { hideLayer } from '../../../LayersSidebar/useCases/hideLayer'
 import { regulationActions } from '../../slice'
 import { closeRegulatoryZoneMetadata } from '../../useCases/closeRegulatoryZoneMetadata'
@@ -21,7 +23,8 @@ export function RegulatoryZones() {
   const selectedRegulatoryLayers = useMainAppSelector(state => state.regulation.selectedRegulatoryLayers)
   const advancedSearchIsOpen = useMainAppSelector(state => state.regulatoryLayerSearch.advancedSearchIsOpen)
   const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
-  const isOpen = layersSidebarOpenedLayerType === LayerType.REGULATORY
+
+  const { isOpened, isRendered } = useDisplayMapBox(layersSidebarOpenedLayerType === LayerType.REGULATORY)
 
   const removeById = useCallback(
     (id: number | string) => {
@@ -45,7 +48,7 @@ export function RegulatoryZones() {
   )
 
   const onTitleClicked = () => {
-    if (isOpen) {
+    if (isOpened) {
       dispatch(layerActions.setLayersSideBarOpenedLayerType(undefined))
     } else {
       dispatch(layerActions.setLayersSideBarOpenedLayerType(LayerType.REGULATORY))
@@ -55,10 +58,13 @@ export function RegulatoryZones() {
 
   return (
     <>
-      <RegulatoryLayersTitle $isOpen={isOpen} data-cy="regulatory-layers-my-zones" onClick={onTitleClicked}>
-        <Pin /> Mes zones réglementaires <ChevronIcon $isOpen={isOpen} />
-      </RegulatoryLayersTitle>
-      {selectedRegulatoryLayers && isOpen && (
+      <Title $isOpen={isOpened} data-cy="regulatory-layers-my-zones">
+        <StyledTransparentButton onClick={onTitleClicked}>
+          <Pin /> Mes zones réglementaires
+        </StyledTransparentButton>
+        <ChevronIconButton isOpen={isOpened} onClick={onTitleClicked} />
+      </Title>
+      {selectedRegulatoryLayers && isRendered && (
         <RegulatoryLayersList $advancedSearchIsOpen={advancedSearchIsOpen} className="smooth-scroll">
           {Object.keys(selectedRegulatoryLayers).length > 0 ? (
             Object.keys(selectedRegulatoryLayers).map((regulatoryTopic, index) => (
@@ -90,34 +96,6 @@ const NoLayerSelected = styled.div`
   color: ${p => p.theme.color.slateGray};
   margin: 10px;
   font-size: 13px;
-`
-
-const RegulatoryLayersTitle = styled.div<{
-  $isOpen: boolean
-}>`
-  background: ${p => p.theme.color.charcoal};
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  border-bottom-left-radius: ${p => (p.$isOpen ? '0' : '2px')};
-  border-bottom-right-radius: ${p => (p.$isOpen ? '0' : '2px')};
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
-  color: ${p => p.theme.color.gainsboro};
-  cursor: pointer;
-  font-size: 16px;
-  height: 30px;
-  padding-left: 20px;
-  padding-top: 5px;
-  text-align: left;
-  user-select: none;
-
-  .Element-IconBox:last-child {
-    float: right;
-    margin-top: 4px;
-  }
-
-  .Element-IconBox:first-child {
-    vertical-align: bottom;
-  }
 `
 
 const RegulatoryLayersList = styled.ul<{

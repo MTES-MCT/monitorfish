@@ -18,6 +18,7 @@ type ControlDetailsProps = Readonly<{
   isSelected: boolean
   overlayPosition: OverlayPosition
 }>
+
 export function ControlDetails({ control, isSelected, overlayPosition }: ControlDetailsProps) {
   const dispatch = useMainAppDispatch()
 
@@ -68,6 +69,7 @@ export function ControlDetails({ control, isSelected, overlayPosition }: Control
             Icon={Icon.Close}
             iconSize={14}
             onClick={() => dispatch(missionFormActions.unsetSelectedMissionActionGeoJSON())}
+            title="Fermer"
           />
         )}
         <ZoneText>

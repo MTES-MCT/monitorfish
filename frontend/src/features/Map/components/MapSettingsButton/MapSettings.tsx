@@ -30,7 +30,7 @@ export function MapSettings({ isOpened, onClose }) {
   return (
     <Wrapper $isOpen={isOpened}>
       <Header>
-        <CloseButton Icon={Icon.Close} onClick={onClose} />
+        <CloseButton Icon={Icon.Close} onClick={onClose} title="Fermer" />
         <StyledTitle>Gérer l&apos;affichage des dernières positions</StyledTitle>
       </Header>
       <MapMenuDialog.Body>
@@ -175,6 +175,5 @@ const LastPositionInfo = styled.div`
 `
 
 const Wrapper = styled(MapToolBox)`
-  top: 244px;
   width: 406px;
 `

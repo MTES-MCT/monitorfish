@@ -4,7 +4,7 @@ export const useClickOutsideWhenOpenedWithinRef = (ref, isOpened, baseRef) => {
   const [clicked, setClicked] = useState(null)
 
   useEffect(() => {
-    function handleClickOutside (event) {
+    function handleClickOutside(event) {
       if (ref.current && !ref.current.contains(event.target)) {
         setClicked({})
       } else {
@@ -12,23 +12,26 @@ export const useClickOutsideWhenOpenedWithinRef = (ref, isOpened, baseRef) => {
       }
     }
 
+    const current = baseRef?.current
+
     // Bind the event listener
     if (isOpened) {
       if (baseRef) {
-        baseRef.current?.addEventListener('mousedown', handleClickOutside)
+        current?.addEventListener('mousedown', handleClickOutside)
       } else {
         document.addEventListener('mousedown', handleClickOutside)
       }
     }
+
     return () => {
       // Unbind the event listener on clean up
       if (baseRef) {
-        baseRef.current?.removeEventListener('mousedown', handleClickOutside)
+        current?.removeEventListener('mousedown', handleClickOutside)
       } else {
         document.addEventListener('mousedown', handleClickOutside)
       }
     }
-  }, [ref, isOpened])
+  }, [ref, isOpened, baseRef])
 
   return clicked
 }

@@ -5,23 +5,22 @@ export const CustomGlobalStyle = createGlobalStyle`
   html,
   * {
     margin: 0;
-    font-family:
-      'Marianne',
-      -apple-system,
-      BlinkMacSystemFont,
-      'Segoe UI',
-      'Roboto',
-      'Oxygen',
-      'Ubuntu',
-      'Cantarell',
-      'Fira Sans',
-      'Droid Sans',
-      'Helvetica Neue',
-      sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      font-size: 13px;
-    }
+    font-family: 'Marianne',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Roboto',
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 13px;
+  }
 
   html,
   body,
@@ -42,9 +41,11 @@ export const CustomGlobalStyle = createGlobalStyle`
     &::-webkit-scrollbar {
       width: 8px;
     }
+
     &::-webkit-scrollbar-track {
       background-color: ${p => p.theme.color.lightGray};
     }
+
     &::-webkit-scrollbar-thumb {
       background-color: ${p => p.theme.color.slateGray};
     }
@@ -81,6 +82,7 @@ export const CustomGlobalStyle = createGlobalStyle`
       -webkit-box-shadow: 0 0 0 0 rgba(81, 81, 81, 0);
     }
   }
+
   @keyframes pulse {
     0% {
       -moz-box-shadow: 0 0 0 0 rgba(81, 81, 81, 0.4);
@@ -94,6 +96,12 @@ export const CustomGlobalStyle = createGlobalStyle`
       -moz-box-shadow: 0 0 0 0 rgba(81, 81, 81, 0);
       box-shadow: 0 0 0 0 rgba(81, 81, 81, 0);
     }
+  }
+
+  ul, ol, menu {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
   }
 
   /*******************************************************************************
@@ -253,18 +261,6 @@ export const CustomGlobalStyle = createGlobalStyle`
     border-top-color: #3b4559 !important;
   }
 
-  a:focus {
-    outline: none;
-  }
-
-  button:focus {
-    outline: none;
-  }
-
-  input:focus {
-    outline: none;
-  }
-
   .highlight {
     margin: 0;
     padding: 0;
@@ -340,8 +336,8 @@ export const CustomGlobalStyle = createGlobalStyle`
   }
 
   .ol-attribution ul {
-  text-shadow: none;
-}
+    text-shadow: none;
+  }
 
   .ol-control button {
     background-color: #3B4559;
@@ -396,7 +392,7 @@ export const CustomGlobalStyle = createGlobalStyle`
     height: 53px;
   }
 
-  .ol-control.zoom>button {
+  .ol-control.zoom > button {
     width: 25px;
     height: 25px;
   }
@@ -405,15 +401,16 @@ export const CustomGlobalStyle = createGlobalStyle`
     border-radius: 0;
     font-size: 13px;
     z-index: 9999;
+
     .rs-picker-select-menu-item.rs-picker-select-menu-item-active,
     .rs-picker-select-menu-item.rs-picker-select-menu-item-active:hover,
     .rs-picker-select-menu-item:not(.rs-picker-select-menu-item-disabled):hover,
     .rs-picker-select-menu-item.rs-picker-select-menu-item-focus,
     .rs-picker-select-menu-item {
-        color: #707785 !important;
-        font-size: 13px;
-        font-weight: normal;
-        max-width: 600px;
+      color: #707785 !important;
+      font-size: 13px;
+      font-weight: normal;
+      max-width: 600px;
     }
   }
 `

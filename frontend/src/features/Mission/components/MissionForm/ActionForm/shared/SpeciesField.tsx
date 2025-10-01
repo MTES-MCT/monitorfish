@@ -30,6 +30,7 @@ import type { Specy } from 'domain/types/specy'
 type SpeciesFieldProps = Readonly<{
   controlledWeightLabel: string
 }>
+
 export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const { values } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
@@ -76,7 +77,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     () =>
       getSpeciesApiQuery.data
         ? new CustomSearch(
-            speciesAsOptions,
+            structuredClone(speciesAsOptions),
             [
               {
                 name: 'value.code',

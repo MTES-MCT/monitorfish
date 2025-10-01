@@ -29,9 +29,8 @@ export function AlertsMapButton() {
       data-cy="alerts-button"
       Icon={Icon.Alert}
       isActive={isActive}
-      isLeftButton
+      isShrinkable={false}
       onClick={toggleSideWindow}
-      style={{ top: 184 }}
       title="Alertes"
     />
   )

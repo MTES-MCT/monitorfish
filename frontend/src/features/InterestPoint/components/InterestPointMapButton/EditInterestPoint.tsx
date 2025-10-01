@@ -4,7 +4,14 @@ import { Header } from '@features/Map/components/MapButtons/shared/styles'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
-import { type Coordinates, coordinatesAreDistinct, CoordinatesInput, MultiRadio, THEME } from '@mtes-mct/monitor-ui'
+import {
+  type Coordinates,
+  coordinatesAreDistinct,
+  CoordinatesInput,
+  Label,
+  MultiRadio,
+  THEME
+} from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import styled from 'styled-components'
 
@@ -20,6 +27,7 @@ type EditInterestPointProps = Readonly<{
   isOpen: boolean
   onClose: () => void
 }>
+
 export function EditInterestPoint({ isOpen, onClose }: EditInterestPointProps) {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
@@ -148,16 +156,18 @@ export function EditInterestPoint({ isOpen, onClose }: EditInterestPointProps) {
             }
           />
         </RadioWrapper>
-        <p>Libellé du point</p>
+        <Label htmlFor="label">Libellé du point</Label>
         <Name
           data-cy="interest-point-name-input"
+          id="label"
           onChange={e => updateName(e.target.value)}
           type="text"
           value={interestPointEdited?.properties.name ?? ''}
         />
-        <p>Observations</p>
+        <Label htmlFor="observations">Observations</Label>
         <textarea
           data-cy="interest-point-observations-input"
+          id="observations"
           onChange={e => updateObservations(e.target.value)}
           value={interestPointEdited?.properties.observations ?? ''}
         />
@@ -174,6 +184,7 @@ export function EditInterestPoint({ isOpen, onClose }: EditInterestPointProps) {
 
 const Name = styled.input`
   width: 100%;
+  margin-bottom: 16px;
 `
 
 const RadioWrapper = styled.div`
@@ -258,6 +269,5 @@ const Body = styled.div`
 `
 
 const Wrapper = styled(MapToolBox)`
-  top: 340px;
   width: 306px;
 `

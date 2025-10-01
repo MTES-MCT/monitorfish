@@ -1,5 +1,4 @@
-import { StyledTransparentButton } from '@components/style'
-import { Title } from '@features/LayersSidebar/components/style'
+import { StyledTransparentButton, Title } from '@features/LayersSidebar/components/style'
 import { LayerType } from '@features/Map/constants'
 import { layerActions } from '@features/Map/layer.slice'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'

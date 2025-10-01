@@ -24,9 +24,6 @@ export function ChevronIconButton({ accent = Accent.PRIMARY, className = '', isO
 export const StyledChevronButton = styled(IconButton)<{ $isOpen: boolean }>`
   width: 16px;
   height: 16px;
-  //margin-top: 3px;
-  //margin-right: 8px;
-  //margin-left: auto;
   padding: 16px;
 
   transform: ${props => (!props.$isOpen ? 'rotate(0deg)' : 'rotate(-180deg)')};
@@ -38,12 +35,4 @@ export const StyledChevronButton = styled(IconButton)<{ $isOpen: boolean }>`
     background: transparent;
     border: 1px solid transparent;
   }
-`
-
-export const StyledChevronIcon = styled(Icon.Chevron)<ChevronProps>`
-  width: 16px;
-  height: 16px;
-  transform: ${props => (!props.isOpen ? 'rotate(0deg)' : 'rotate(-180deg)')};
-  transition: all 0.5s;
-  margin-left: auto;
 `

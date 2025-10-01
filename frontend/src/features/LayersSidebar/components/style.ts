@@ -1,3 +1,4 @@
+import { TransparentButton } from '@components/style'
 import styled from 'styled-components'
 
 export const Title = styled.div<{
@@ -5,13 +6,15 @@ export const Title = styled.div<{
 }>`
   background: ${p => p.theme.color.charcoal};
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  border-bottom-left-radius: ${p => (p.$isOpen ? '0' : '2px')};
-  border-bottom-right-radius: ${p => (p.$isOpen ? '0' : '2px')};
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
+  border-radius: 2px 2px ${p => (p.$isOpen ? '0 0' : '2px 2px')};
   color: ${p => p.theme.color.gainsboro};
   font-size: 16px;
   display: flex;
   align-items: center;
   padding-right: 8px;
+`
+
+export const StyledTransparentButton = styled(TransparentButton)`
+  display: flex;
+  padding: 6px 0 6px 16px;
 `

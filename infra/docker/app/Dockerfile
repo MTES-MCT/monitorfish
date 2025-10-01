@@ -29,7 +29,7 @@ RUN gradle assemble
 ###########################
 # Build frontend with npm #
 ###########################
-FROM node:20-alpine AS build-front
+FROM node:24-alpine AS build-front
 
 ARG VERSION
 ARG ENV_PROFILE
@@ -49,7 +49,7 @@ RUN npm run build
 
 # Create an `import-meta-env` Alpine executable without node, to be copied to the final image
 RUN npx pkg ./node_modules/@import-meta-env/cli/bin/import-meta-env.js \
-  --target node16-alpine-x64 \
+  --target node24-alpine-x64 \
   --output import-meta-env
 
 ######################

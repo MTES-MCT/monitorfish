@@ -1,5 +1,4 @@
-import { StyledTransparentButton } from '@components/style'
-import { Title } from '@features/LayersSidebar/components/style'
+import { StyledTransparentButton, Title } from '@features/LayersSidebar/components/style'
 import { layerActions } from '@features/Map/layer.slice'
 import { selectBaseLayer } from '@features/Map/slice'
 import { closeRegulatoryZoneMetadata } from '@features/Regulation/useCases/closeRegulatoryZoneMetadata'

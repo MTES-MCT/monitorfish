@@ -97,7 +97,7 @@ export const CustomGlobalStyle = createGlobalStyle`
       box-shadow: 0 0 0 0 rgba(81, 81, 81, 0);
     }
   }
-  
+
   ul, ol, menu {
     list-style: none;
     padding-left: 0;
@@ -260,18 +260,6 @@ export const CustomGlobalStyle = createGlobalStyle`
     border: 1px solid transparent !important;
     border-top-color: #3b4559 !important;
   }
-
-  //a:focus {
-  //  outline: none;
-  //}
-  //
-  //button:focus {
-  //  outline: none;
-  //}
-  //
-  //input:focus {
-  //  outline: none;
-  //}
 
   .highlight {
     margin: 0;

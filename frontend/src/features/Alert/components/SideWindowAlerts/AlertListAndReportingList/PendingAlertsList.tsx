@@ -24,6 +24,7 @@ export type PendingAlertsListProps = Readonly<{
   numberOfSilencedAlerts: number
   selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup
 }>
+
 export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSeafrontGroup }: PendingAlertsListProps) {
   const dispatch = useMainAppDispatch()
   const focusedPendingAlertId = useMainAppSelector(state => state.alert.focusedPendingAlertId)
@@ -60,7 +61,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
   const fuse = useMemo(
     () =>
       new CustomSearch(
-        currentSeafrontAlerts,
+        structuredClone(currentSeafrontAlerts),
         ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs', 'value.name'],
         { threshold: 0.4 }
       ),

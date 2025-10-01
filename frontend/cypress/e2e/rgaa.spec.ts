@@ -9,12 +9,13 @@ import { openSideWindowPriorNotificationListAsSuperUser } from './side_window/pr
 
 context('Axe core RGAA check that ', () => {
   describe('Home page ', () => {
-    it('should respect RGAA criteria', () => {
+    beforeEach(() => {
       cy.login('superuser')
       cy.wait(500)
       cy.visit('/#@-824534.42,6082993.21,8.70')
-      cy.wait(500)
-
+      cy.wait(3000)
+    })
+    it('should respect RGAA criteria', () => {
       cy.injectAxe()
       // @ts-ignore
       cy.checkA11y(null, {
@@ -28,10 +29,6 @@ context('Axe core RGAA check that ', () => {
       })
     })
     it('control unit panel should respect RGAA criteria', () => {
-      cy.login('superuser')
-      cy.wait(500)
-      cy.visit('/#@-824534.42,6082993.21,8.70')
-      cy.wait(500)
       cy.clickButton('Liste des unités de contrôle')
 
       cy.injectAxe()
@@ -47,12 +44,7 @@ context('Axe core RGAA check that ', () => {
       })
     })
     it('last position panel should respect RGAA criteria', () => {
-      cy.login('superuser')
-      cy.wait(500)
-      cy.visit('/#@-824534.42,6082993.21,8.70')
-      cy.wait(500)
       cy.clickButton('Affichage des dernières positions')
-
       cy.injectAxe()
       // @ts-ignore
       cy.checkA11y(null, {
@@ -67,10 +59,6 @@ context('Axe core RGAA check that ', () => {
     })
 
     it('interest point panel should respect RGAA criteria', () => {
-      cy.login('superuser')
-      cy.wait(500)
-      cy.visit('/#@-824534.42,6082993.21,8.70')
-      cy.wait(500)
       cy.clickButton("Créer un point d'intérêt")
 
       cy.injectAxe()
@@ -86,9 +74,6 @@ context('Axe core RGAA check that ', () => {
       })
     })
     it('my account panel should respect RGAA criteria', () => {
-      cy.wait(500)
-      cy.visit('/#@-824534.42,6082993.21,8.70')
-      cy.wait(500)
       cy.clickButton('Mon compte')
 
       cy.injectAxe()
@@ -104,10 +89,6 @@ context('Axe core RGAA check that ', () => {
       })
     })
     it('new features panel should respect RGAA criteria', () => {
-      cy.login('superuser')
-      cy.wait(500)
-      cy.visit('/#@-824534.42,6082993.21,8.70')
-      cy.wait(500)
       cy.clickButton('Nouveautés MonitorFish')
 
       cy.injectAxe()
@@ -146,11 +127,14 @@ context('Axe core RGAA check that ', () => {
   })
 
   describe('Vessel Group ', () => {
-    it('list should respect RGAA criteria', () => {
+    beforeEach(() => {
       cy.login('superuser')
       cy.visit('/side_window')
       cy.wait(250)
       cy.getDataCy('side-window-menu-vessel-list').click()
+    })
+
+    it('list should respect RGAA criteria', () => {
       cy.get('[title="Groupes de navires"]').click()
       cy.get('[title="Mission Thémis – chaluts de fonds"]').click()
       cy.injectAxe()
@@ -167,10 +151,6 @@ context('Axe core RGAA check that ', () => {
     })
 
     it('form should respect RGAA criteria', () => {
-      cy.login('superuser')
-      cy.visit('/side_window')
-      cy.wait(250)
-      cy.getDataCy('side-window-menu-vessel-list').click()
       cy.clickButton('Créer un groupe de navires')
       cy.clickButton('Créer un groupe dynamique')
       cy.injectAxe()

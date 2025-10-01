@@ -222,7 +222,7 @@ export class MonitorFishWebWorker {
         ) ?? []
 
     const fuse = new CustomSearch<VesselGroupWithVessels>(
-      filteredVesselGroups,
+      structuredClone(filteredVesselGroups),
       [
         {
           getFn: vesselGroupWithVessels => vesselGroupWithVessels.vessels.map(vessel => vessel.vesselName ?? ''),
@@ -293,7 +293,7 @@ export class MonitorFishWebWorker {
     const landingPortLocodesSet = filters.landingPortLocodes?.length ? new Set(filters.landingPortLocodes) : undefined
 
     const fuse = new CustomSearch<Vessel.ActiveVessel>(
-      vessels,
+      structuredClone(vessels),
       [
         {
           getFn: vessel => vessel.vesselName ?? '',

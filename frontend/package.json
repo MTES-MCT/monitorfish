@@ -28,8 +28,8 @@
     "test:e2e:open": "cypress open --browser firefox --config-file ./config/cypress.config.ts --e2e",
     "test:multi-windows:open": "IS_HEADLESS=false jest --config=./config/multi-windows/jest.config.js",
     "test:multi-windows:run": "IS_HEADLESS=true jest --config=./config/multi-windows/jest.config.js",
-    "test:lint": "eslint --config=./.eslintrc.cjs ./src",
-    "test:lint:fix": "npm run test:lint -- --fix",
+    "test:lint": "NODE_OPTIONS='--max-old-space-size=8192' eslint --config=./.eslintrc.cjs ./src",
+    "test:lint:fix": "NODE_OPTIONS='--max-old-space-size=8192' npm run test:lint -- --fix",
     "test:type": "tsc",
     "test:unit": "jest --config=./config/jest.config.js --detectOpenHandles",
     "test:unit:watch": "npm run test:unit -- --watch"

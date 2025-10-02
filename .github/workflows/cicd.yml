@@ -75,6 +75,7 @@ jobs:
     timeout-minutes: 30
     env:
       PUPPETEER_SKIP_DOWNLOAD: "true"
+      NODE_OPTIONS: "--max_old_space_size=10240"
     steps:
       - name: Checkout
         uses: actions/checkout@v5

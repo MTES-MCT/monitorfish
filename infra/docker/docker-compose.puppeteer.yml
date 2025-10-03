@@ -185,14 +185,15 @@ services:
 
   keycloak:
     container_name: monitorfish_keycloak
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:26.0.7
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_HOSTNAME_STRICT=false
       - KC_HTTP_ENABLED=true
-      - KC_HOSTNAME=http://0.0.0.0:8880
-      - PROXY_ADDRESS_FORWARDING=true
+      - KC_PROXY_HEADERS=xforwarded
+      - KC_HEALTH_ENABLED=true
+      - KC_HTTP_MANAGEMENT_HEALTH_ENABLED=false
     ports:
       - "8085:8080"
     volumes:
@@ -200,6 +201,13 @@ services:
     command:
       - start-dev
       - --import-realm
+      - --health-enabled=true
+    healthcheck:
+      test: [ "CMD-SHELL",
+              "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep -q '200 OK'" ]
+      interval: 30s
+      timeout: 5s
+      retries: 20
 
   geoserver-stubs:
     image: rodolpheche/wiremock

@@ -309,31 +309,6 @@ export namespace Logbook {
     pnoTypeName: string
   }
 
-  export type PNOAndLANWeightToleranceAlert = {
-    externalReferenceNumber: string
-    id: string
-    internalReferenceNumber: string
-    ircs: string
-    value: PNOAndLANWeightToleranceAlertValue
-    vesselIdentifier: string
-    vesselName: string
-  }
-
-  export type PNOAndLANWeightToleranceAlertValue = {
-    catchesOverTolerance: PNOAndLANWeightToleranceAlertValueCatches[]
-    lanOperationNumber: string
-    minimumWeightThreshold: number
-    name: string
-    percentOfTolerance: number
-    pnoOperationNumber: string
-    type: 'PNO_LAN_WEIGHT_TOLERANCE_ALERT'
-  }
-
-  export type PNOAndLANWeightToleranceAlertValueCatches = {
-    lan: Object
-    pno: Object
-  }
-
   export type ProtectedSpeciesCatch = {
     careMinutes?: number
     comment?: string
@@ -355,17 +330,12 @@ export namespace Logbook {
     endDate: string | undefined
     isFirstVoyage: boolean
     isLastVoyage: boolean
-    logbookMessagesAndAlerts: FishingActivities
+    logbookMessages: Message[]
     software: string | undefined
     startDate: string | undefined
     totalTripsFoundForDates: number | undefined
     tripNumber: string
     vesselIdentity: Vessel.VesselIdentity
-  }
-
-  export type FishingActivities = {
-    alerts: PNOAndLANWeightToleranceAlert[]
-    logbookMessages: Message[]
   }
 
   // ---------------------------------------------------------------------------

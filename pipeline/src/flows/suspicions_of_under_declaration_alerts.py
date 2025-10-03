@@ -37,7 +37,7 @@ def suspicions_of_under_declaration_alerts_flow():
     alerts = make_alerts(
         vessels_with_suspicions_of_under_declaration,
         AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT.value,
-        AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT.value,
+        "Suspicion de sous-déclaration",
     )
     filtered_alerts = filter_alerts(alerts, silenced_alerts, active_reportings)
 

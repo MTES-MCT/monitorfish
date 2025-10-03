@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 
 import type { TreeOption } from '@mtes-mct/monitor-ui'
 
-export function useGetFilterableZonesAsTreeOptions() {
+export function useGetFilterableZonesAsTreeOptions(): TreeOption[] | undefined {
   const [filterableZonesAsTreeOptions, setFilterableZonesAsTreeOptions] = useState<TreeOption[] | undefined>(undefined)
 
   useEffect(() => {

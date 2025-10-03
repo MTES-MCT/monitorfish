@@ -112,12 +112,6 @@ export namespace PriorNotification {
     vesselIdentity: Vessel.VesselIdentity
   }
 
-  /** Real-time computed values displayed within a logbook prior notification form. */
-  export type LogbookComputedValues = {
-    /** Next initial state of the prior notification once it will be created or updated. */
-    nextState: State
-  }
-
   /** Real-time computed values displayed within a manual prior notification form. */
   export type ManualComputedValues = Pick<
     PriorNotification,

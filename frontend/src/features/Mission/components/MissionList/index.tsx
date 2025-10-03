@@ -1,7 +1,8 @@
-import { ALL_SEAFRONT_GROUP, SEAFRONT_GROUP_SEAFRONTS, SeafrontGroup, type AllSeafrontGroup } from '@constants/seafront'
+import { ALL_SEAFRONT_GROUP, type AllSeafrontGroup, SEAFRONT_GROUP_SEAFRONTS, SeafrontGroup } from '@constants/seafront'
 import { CompletionStatusLabel } from '@features/Mission/components/MissionList/CompletionStatusLabel'
 import { MissionStatusLabel } from '@features/Mission/components/MissionList/MissionStatusLabel'
 import { MissionAction } from '@features/Mission/missionAction.types'
+import { PageWithUnderlineTitle } from '@features/SideWindow/components/PageWithUnderlineTitle'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTable } from '@hooks/useTable'
@@ -15,7 +16,6 @@ import { FilterBar } from './FilterBar'
 import { useGetFilteredMissionsQuery } from './hooks/useGetFilteredMissionsQuery'
 import { missionListActions } from './slice'
 import { EmptyCardTable } from '../../../../ui/card-table/EmptyCardTable'
-import { NoRsuiteOverrideWrapper } from '../../../../ui/NoRsuiteOverrideWrapper'
 import { ExportActivityReportsDialog } from '../../../ActivityReport/components/ExportActivityReportsDialog'
 import { fitToExtent } from '../../../Map/slice'
 import { SubMenu } from '../../../SideWindow/SubMenu'
@@ -101,13 +101,13 @@ export function MissionList() {
         width={127}
       />
 
-      <Wrapper>
-        <Header>
-          <HeaderTitle>
+      <PageWithUnderlineTitle.Wrapper>
+        <PageWithUnderlineTitle.Header>
+          <PageWithUnderlineTitle.HeaderTitle>
             {listSeafrontGroup === ALL_SEAFRONT_GROUP && <>Toutes les missions</>}
             {listSeafrontGroup !== ALL_SEAFRONT_GROUP && <>Missions en {SUB_MENU_LABEL[listSeafrontGroup]}</>}
-          </HeaderTitle>
-          <HeaderButtonGroup>
+          </PageWithUnderlineTitle.HeaderTitle>
+          <PageWithUnderlineTitle.HeaderButtonGroup>
             <Button Icon={Icon.Plus} onClick={() => goToMissionForm()}>
               Ouvrir une nouvelle mission
             </Button>
@@ -118,10 +118,10 @@ export function MissionList() {
             >
               Exporter les ACT-REP
             </Button>
-          </HeaderButtonGroup>
-        </Header>
+          </PageWithUnderlineTitle.HeaderButtonGroup>
+        </PageWithUnderlineTitle.Header>
 
-        <Body>
+        <PageWithUnderlineTitle.Body>
           <FilterBar onQueryChange={setSearchQuery} searchQuery={searchQuery} />
 
           {isLoading && <p>Chargement en cours...</p>}
@@ -206,53 +206,14 @@ export function MissionList() {
               </Table>
             </>
           )}
-        </Body>
-      </Wrapper>
+        </PageWithUnderlineTitle.Body>
+      </PageWithUnderlineTitle.Wrapper>
       {isExportActivityReportsModalOpen && (
         <ExportActivityReportsDialog onExit={() => setIsExportActivityReportsModalOpen(false)} />
       )}
     </>
   )
 }
-
-const Wrapper = styled(NoRsuiteOverrideWrapper)`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-  width: 100%;
-  overflow-y: auto;
-`
-
-const Header = styled.div`
-  align-items: center;
-  background-color: ${p => p.theme.color.white};
-  border-bottom: solid 2px ${p => p.theme.color.gainsboro};
-  display: flex;
-  min-height: 80px;
-  justify-content: space-between;
-  padding: 0 40px 0 40px;
-`
-
-const HeaderTitle = styled.h1`
-  color: ${p => p.theme.color.charcoal};
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 1.4;
-`
-
-const HeaderButtonGroup = styled.div`
-  display: flex;
-
-  > button:not(:first-child) {
-    margin-left: 16px;
-  }
-`
-
-const Body = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 40px 40px 0 40px;
-`
 
 const Table = styled.div.attrs(() => ({
   className: 'Table'

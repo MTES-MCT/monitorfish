@@ -11,7 +11,6 @@ import { FlexboxGrid, List } from 'rsuite'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
-import { getAlertNameFromType, getAlertRuleFromType } from './utils'
 import { getSilencedAlertPeriodText } from '../../../utils'
 
 import type { LEGACY_PendingAlert, PendingAlert } from '../../../types'
@@ -77,8 +76,8 @@ export function PendingAlertRow({
           <FlexboxGrid.Item style={timeAgoColumnStyle} title={alert.creationDate}>
             {timeago.format(new Date(alert.creationDate).getTime(), 'fr')}
           </FlexboxGrid.Item>
-          <FlexboxGrid.Item style={alertTypeStyle} title={getAlertRuleFromType(alert.value.type)}>
-            {getAlertNameFromType(alert.value.type)}
+          <FlexboxGrid.Item style={alertTypeStyle} title={alert.value.description ?? alert.value.name}>
+            {alert.value.name}
           </FlexboxGrid.Item>
           <FlexboxGrid.Item style={alertNatinfStyle}>{alert.value.natinfCode}</FlexboxGrid.Item>
           <FlexboxGrid.Item style={vesselNameColumnStyle}>

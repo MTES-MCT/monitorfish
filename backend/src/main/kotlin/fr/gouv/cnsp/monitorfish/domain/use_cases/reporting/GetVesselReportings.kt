@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -116,10 +116,17 @@ class GetVesselReportings(
         val alertsSummary =
             reportings
                 .filter { it.type == ReportingType.ALERT }
-                .groupBy { (it.value as AlertType).type }
+                .groupBy { (it.value as Alert).type }
                 .map { (type, reportings) ->
-                    ReportingTitleAndNumberOfOccurrences(
-                        title = "${type.alertName} (NATINF ${reportings[0].value.natinfCode})",
+                    if (type == AlertType.POSITION_ALERT) {
+                        return@map ReportingTitleAndNumberOfOccurrences(
+                            title = "${(reportings[0].value as Alert).name} (NATINF ${reportings[0].value.natinfCode})",
+                            numberOfOccurrences = reportings.size,
+                        )
+                    }
+
+                    return@map ReportingTitleAndNumberOfOccurrences(
+                        title = "${type.specification?.name} (NATINF ${reportings[0].value.natinfCode})",
                         numberOfOccurrences = reportings.size,
                     )
                 }
@@ -203,14 +210,14 @@ class GetVesselReportings(
                     )
                 }
 
-        val alertTypeToAlertsOccurrences: Map<AlertTypeMapping, List<Reporting>> =
+        val alertToAlertsOccurrences: Map<AlertType, List<Reporting>> =
             reportings
                 .filter { it.type == ReportingType.ALERT }
-                .groupBy { (it.value as AlertType).type }
+                .groupBy { (it.value as Alert).type }
                 .withDefault { emptyList() }
 
         val alertTypeToLastAlertAndOccurrences: List<ReportingAndOccurrences> =
-            alertTypeToAlertsOccurrences
+            alertToAlertsOccurrences
                 .flatMap { (_, alerts) ->
                     if (alerts.isEmpty()) {
                         return@flatMap listOf()

@@ -1,7 +1,8 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { NO_SEAFRONT_GROUP, SEAFRONT_GROUP_SEAFRONTS, SeafrontGroup } from '@constants/seafront'
 import { AlertAndReportingTab } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/constants'
-import { AlertRules } from '@features/Alert/components/SideWindowAlerts/AlertRules'
+import { AlertManagementForm } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm'
+import { AlertsManagementList } from '@features/Alert/components/SideWindowAlerts/AlertsManagementList'
 import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -23,6 +24,7 @@ type SideWindowAlertsProps = Readonly<{
 export function SideWindowAlerts({ baseRef, isFromUrl }: SideWindowAlertsProps) {
   const dispatch = useMainAppDispatch()
   const pendingAlerts = useMainAppSelector(state => state.alert.pendingAlerts)
+  const editedAlertSpecification = useMainAppSelector(state => state.alert.editedAlertSpecification)
   const subMenu = useMainAppSelector(state => state.alert.subMenu)
   const reportingTypesDisplayed = useMainAppSelector(state => state.reportingTableFilters.reportingTypesDisplayed)
   const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
@@ -80,7 +82,7 @@ export function SideWindowAlerts({ baseRef, isFromUrl }: SideWindowAlertsProps) 
         options={ALERT_SUB_MENU_OPTIONS}
         value={subMenu}
       />
-      {subMenu !== AdditionalSubMenu.SUSPENDED_ALERTS && subMenu !== AdditionalSubMenu.ALERT_RULES && (
+      {subMenu !== AdditionalSubMenu.SUSPENDED_ALERTS && subMenu !== AdditionalSubMenu.ALERT_MANAGEMENT && (
         <AlertListAndReportingList
           baseRef={baseRef as MutableRefObject<HTMLDivElement>}
           isFromUrl={isFromUrl}
@@ -90,7 +92,8 @@ export function SideWindowAlerts({ baseRef, isFromUrl }: SideWindowAlertsProps) 
         />
       )}
       {subMenu === AdditionalSubMenu.SUSPENDED_ALERTS && <SilencedAlerts />}
-      {subMenu === AdditionalSubMenu.ALERT_RULES && <AlertRules />}
+      {subMenu === AdditionalSubMenu.ALERT_MANAGEMENT && !editedAlertSpecification && <AlertsManagementList />}
+      {subMenu === AdditionalSubMenu.ALERT_MANAGEMENT && !!editedAlertSpecification && <AlertManagementForm />}
     </>
   )
 }

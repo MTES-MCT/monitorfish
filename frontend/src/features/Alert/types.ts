@@ -1,7 +1,15 @@
+import {
+  AdministrativeAreaSpecificationSchema,
+  AlertSpecificationSchema,
+  GearSpecificationSchema,
+  RegulatoryAreaSpecificationSchema,
+  SpeciesSpecificationSchema
+} from '@features/Alert/schemas/AlertSpecificationSchema'
 import { PendingAlertValueSchema, SilencedAlertSchema } from '@features/Alert/schemas/SilencedAlertSchema'
 import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import z from 'zod'
 
+import type { EditedAlertSpecificationSchema } from '@features/Alert/schemas/EditedAlertSpecificationSchema'
 import type { MissionAction } from '@features/Mission/missionAction.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Except } from 'type-fest'
@@ -44,3 +52,11 @@ export type SilenceAlertQueueItem = {
 export type AlertNameAndVesselIdentity = Vessel.VesselIdentity & {
   name: string | null | undefined
 }
+
+export type AlertSpecification = z.infer<typeof AlertSpecificationSchema>
+export type GearSpecification = z.infer<typeof GearSpecificationSchema>
+export type SpeciesSpecification = z.infer<typeof SpeciesSpecificationSchema>
+export type RegulatoryAreaSpecification = z.infer<typeof RegulatoryAreaSpecificationSchema>
+export type AdministrativeAreaSpecification = z.infer<typeof AdministrativeAreaSpecificationSchema>
+
+export type EditedAlertSpecification = z.infer<typeof EditedAlertSpecificationSchema>

@@ -24,7 +24,7 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
 
     return speciesAsOptionsWithoutBluefinTunaSpecies?.length
       ? new CustomSearch(
-          speciesAsOptionsWithoutBluefinTunaSpecies,
+          structuredClone(speciesAsOptionsWithoutBluefinTunaSpecies),
           [
             {
               name: 'value.code',

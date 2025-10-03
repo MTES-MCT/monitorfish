@@ -1,17 +1,3 @@
-import type { Feature } from 'ol'
-import type { Coordinate } from 'ol/coordinate'
-import type Point from 'ol/geom/Point'
-
-export interface FishingActivityFeature extends Feature<Point> {
-  name?: string
-}
-
-export type FishingActivityFeatureIdAndCoordinates = {
-  coordinates: Coordinate
-  feature: FishingActivityFeature
-  id: string
-}
-
 export type SpeciesInsight = {
   presentation?: string | undefined
   species: string

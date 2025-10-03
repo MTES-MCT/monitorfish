@@ -10,7 +10,7 @@ import { z } from 'zod'
 
 export const VesselSchema = z.strictObject({
   activityOrigin: z.nativeEnum(ActivityOrigin).optional(),
-  alerts: z.array(z.union([z.nativeEnum(PendingAlertValueType), z.literal('PNO_LAN_WEIGHT_TOLERANCE_ALERT')])),
+  alerts: z.array(z.nativeEnum(PendingAlertValueType)),
   beacon: BeaconSchema.optional(),
   beaconMalfunctionId: z.number().optional(),
   bossAddress: z.string().optional(),

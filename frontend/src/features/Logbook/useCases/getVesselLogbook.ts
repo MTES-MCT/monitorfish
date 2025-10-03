@@ -29,7 +29,7 @@ export const getVesselLogbook =
     }
 
     const {
-      fishingActivities: { fishingActivities: lastFishingActivities, isLastVoyage },
+      fishingActivities: { isLastVoyage, logbookMessages: lastLogbookMessages },
       vessel: { selectedVesselIdentity: currentSelectedVesselIdentity }
     } = getState()
 
@@ -55,9 +55,9 @@ export const getVesselLogbook =
         return undefined
       }
 
-      if (isSameVesselAsCurrentlyShowed && !isFromUserAction && !!lastFishingActivities && isLastVoyage) {
-        if (hasNewFishingActivityUpdates(lastFishingActivities, voyage)) {
-          dispatch(logbookActions.setNextUpdate(voyage.logbookMessagesAndAlerts))
+      if (isSameVesselAsCurrentlyShowed && !isFromUserAction && !!lastLogbookMessages && isLastVoyage) {
+        if (hasNewFishingActivityUpdates(lastLogbookMessages, voyage)) {
+          dispatch(logbookActions.setNextUpdate(voyage.logbookMessages))
         }
 
         return undefined
@@ -104,18 +104,13 @@ function handleNoVoyageFound(isSameVesselAsCurrentlyShowed: boolean) {
   }
 }
 
-function hasNewFishingActivityUpdates(lastFishingActivities, voyage: Logbook.VesselVoyage): boolean {
+function hasNewFishingActivityUpdates(logbookMessages, voyage: Logbook.VesselVoyage): boolean {
   if (!voyage.isLastVoyage) {
     return false
   }
 
   return (
-    (lastFishingActivities.logbookMessages && !lastFishingActivities.logbookMessages.length) ||
-    (lastFishingActivities.alerts &&
-      voyage.logbookMessagesAndAlerts.alerts &&
-      voyage.logbookMessagesAndAlerts.alerts.length > lastFishingActivities.alerts.length) ||
-    (lastFishingActivities.logbookMessages &&
-      voyage.logbookMessagesAndAlerts.logbookMessages &&
-      voyage.logbookMessagesAndAlerts.logbookMessages.length > lastFishingActivities.logbookMessages.length)
+    (logbookMessages && !logbookMessages.length) ||
+    (logbookMessages && voyage.logbookMessages && voyage.logbookMessages.length > logbookMessages.length)
   )
 }

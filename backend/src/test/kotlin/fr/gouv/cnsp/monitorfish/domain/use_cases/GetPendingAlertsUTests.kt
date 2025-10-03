@@ -4,8 +4,9 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -32,7 +33,7 @@ class GetPendingAlertsUTests {
     @Test
     fun `execute Should return alerts with associated infractions`() {
         // Given
-        val pendingAlert =
+        val pendingPositionAlert =
             PendingAlert(
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
@@ -42,7 +43,14 @@ class GetPendingAlertsUTests {
                 flagState = CountryCode.FR,
                 tripNumber = "123456",
                 creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert(),
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ),
             )
         given(infractionRepository.findInfractionByNatinfCode(eq(7059))).willReturn(
             Infraction(
@@ -50,7 +58,7 @@ class GetPendingAlertsUTests {
                 infractionCategory = InfractionCategory.FISHING,
             ),
         )
-        given(pendingAlertRepository.findAlertsOfTypes(any())).willReturn(listOf(pendingAlert))
+        given(pendingAlertRepository.findAlertsOfTypes(any())).willReturn(listOf(pendingPositionAlert))
 
         // When
         val alerts = GetPendingAlerts(pendingAlertRepository, infractionRepository).execute()
@@ -62,17 +70,10 @@ class GetPendingAlertsUTests {
 
         Mockito.verify(pendingAlertRepository).findAlertsOfTypes(
             listOf(
-                AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
-                AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT,
-                AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
-                AlertTypeMapping.BOTTOM_GEAR_VME_FISHING_ALERT,
-                AlertTypeMapping.BOTTOM_TRAWL_800_METERS_FISHING_ALERT,
-                AlertTypeMapping.RTC_FISHING_ALERT,
-                AlertTypeMapping.MISSING_DEP_ALERT,
-                AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT,
-                AlertTypeMapping.SUSPICION_OF_UNDER_DECLARATION_ALERT,
-                AlertTypeMapping.BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT,
-                AlertTypeMapping.NEAFC_FISHING_ALERT,
+                AlertType.POSITION_ALERT,
+                AlertType.MISSING_DEP_ALERT,
+                AlertType.MISSING_FAR_48_HOURS_ALERT,
+                AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT,
             ),
         )
         Mockito.verify(infractionRepository, Mockito.times(1)).findInfractionByNatinfCode(eq(7059))

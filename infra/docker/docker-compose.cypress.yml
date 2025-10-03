@@ -26,7 +26,7 @@ services:
         condition: service_healthy
 
   app:
-    image: monitorfish-app:$MONITORFISH_VERSION
+    image: monitorfish:latest
     container_name: monitorfish_backend
     environment:
       # Database Configuration
@@ -128,12 +128,10 @@ services:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_HOSTNAME_STRICT=false # See https://www.keycloak.org/server/reverseproxy for vars below
-      - KC_HOSTNAME=keycloak:8080
       - KC_HTTP_ENABLED=true
       - KC_PROXY_HEADERS=xforwarded
       - KC_HEALTH_ENABLED=true
       - KC_FRONTEND_URL=http://localhost:8880/
-      - KC_HTTP_MANAGEMENT_HEALTH_ENABLED=false
     ports:
       - "8085:8080"
     volumes:
@@ -143,11 +141,11 @@ services:
       - --import-realm
       - --health-enabled=true
     healthcheck:
-      test: [ "CMD-SHELL",
-              "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep -q '200 OK'" ]
-      interval: 30s
+      test: ["CMD", "/bin/bash", "-c", "exec 3<>/dev/tcp/localhost/9000 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && timeout 2 cat <&3 | grep -q '200 OK'"]
+      interval: 10s
       timeout: 5s
-      retries: 20
+      retries: 30
+      start_period: 10s
 
   geoserver-monitorenv-stubs:
     image: rodolpheche/wiremock

@@ -176,6 +176,13 @@ expecting a callback. React native uplifter props follow this convention themsel
 
 ## Development
 
+### Run the cypress docker-compose
+
+Run:
+- `make build-app-docker`
+- Modify the tag of the docker-compose
+- `make run-cypress-docker-compose`
+
 ### Database
 
 ### Backup and restore database

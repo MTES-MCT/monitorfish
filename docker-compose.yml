@@ -49,15 +49,13 @@ services:
 
   keycloak:
     container_name: monitorfish_keycloak
-    image: quay.io/keycloak/keycloak:23.0.0
+    image: quay.io/keycloak/keycloak:26.0.7
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_HOSTNAME_STRICT=false
       - KC_HTTP_ENABLED=true
-      - PROXY_ADDRESS_FORWARDING=true
-      - KC_PROXY=edge
-      - KC_PROXY_HEADERS=forwarded
+      - KC_PROXY_HEADERS=xforwarded
       - KC_HEALTH_ENABLED=true
     ports:
       - "8085:8080"
@@ -66,12 +64,13 @@ services:
     command:
       - start-dev
       - --import-realm
+      - --health-enabled=true
     healthcheck:
-      test: [ "CMD-SHELL",
-              "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep -q '200 OK'" ]
-      interval: 30s
+      test: ["CMD", "/bin/bash", "-c", "exec 3<>/dev/tcp/localhost/9000 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && timeout 2 cat <&3 | grep -q '200 OK'"]
+      interval: 10s
       timeout: 5s
-      retries: 20
+      retries: 30
+      start_period: 10s
 
 volumes:
   geoserver-data:

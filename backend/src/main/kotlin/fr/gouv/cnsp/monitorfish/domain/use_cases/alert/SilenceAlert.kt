@@ -20,14 +20,18 @@ class SilenceAlert(
 
         // If the silenced alert is of type MISSING_FAR_ALERT or MISSING_FAR_48_HOURS_ALERT, we need to save the other silenced alert
         when (silencedAlert.value.type) {
-            AlertTypeMapping.MISSING_FAR_ALERT -> {
+            AlertType.MISSING_FAR_ALERT -> {
                 // If MISSING_FAR_ALERT was silenced, we also silence MISSING_FAR_48_HOURS_ALERT
-                val missingFAR48HoursSilencedAlert = silencedAlert.copy(value = MissingFAR48HoursAlert())
+                val missingFAR48HoursSilencedAlert =
+                    silencedAlert
+                        .copy(value = AlertType.MISSING_FAR_48_HOURS_ALERT.getValue())
                 silencedAlertRepository.save(missingFAR48HoursSilencedAlert)
             }
-            AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT -> {
+            AlertType.MISSING_FAR_48_HOURS_ALERT -> {
                 // If MISSING_FAR_48_HOURS_ALERT was silenced, we also silence MISSING_FAR_ALERT
-                val missingFARSilencedAlert = silencedAlert.copy(value = MissingFARAlert())
+                val missingFARSilencedAlert =
+                    silencedAlert
+                        .copy(value = AlertType.MISSING_FAR_ALERT.getValue())
                 silencedAlertRepository.save(missingFARSilencedAlert)
             }
             else -> {}
@@ -42,17 +46,25 @@ class SilenceAlert(
     }
 
     private fun getSilencedAlertWithNatinf(silencedAlert: SilencedAlert): SilencedAlert {
-        val nextValueWithNatinf: AlertType =
+        val nextValueWithNatinf: Alert =
             when (silencedAlert.value.type) {
-                AlertTypeMapping.THREE_MILES_TRAWLING_ALERT -> ThreeMilesTrawlingAlert()
-                AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT -> FrenchEEZFishingAlert()
-                AlertTypeMapping.TWELVE_MILES_FISHING_ALERT -> TwelveMilesFishingAlert()
-                AlertTypeMapping.BOTTOM_GEAR_VME_FISHING_ALERT -> TwelveMilesFishingAlert()
-                AlertTypeMapping.BOTTOM_TRAWL_800_METERS_FISHING_ALERT -> TwelveMilesFishingAlert()
-                AlertTypeMapping.RTC_FISHING_ALERT -> RTCFishingAlert()
-                AlertTypeMapping.MISSING_DEP_ALERT -> MissingDEPAlert()
-                AlertTypeMapping.MISSING_FAR_ALERT -> MissingFARAlert()
-                AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT -> MissingFAR48HoursAlert()
+                AlertType.POSITION_ALERT -> {
+                    requireNotNull(silencedAlert.value.alertId) {
+                        "The alert id of a POSITION_ALERT should be not null"
+                    }
+
+                    Alert(
+                        type = silencedAlert.value.type,
+                        alertId = silencedAlert.value.alertId,
+                        natinfCode = silencedAlert.value.natinfCode,
+                        seaFront = silencedAlert.value.seaFront,
+                        name = silencedAlert.value.name,
+                        description = silencedAlert.value.description,
+                    )
+                }
+                AlertType.MISSING_DEP_ALERT -> AlertType.MISSING_DEP_ALERT.getValue()
+                AlertType.MISSING_FAR_ALERT -> AlertType.MISSING_FAR_ALERT.getValue()
+                AlertType.MISSING_FAR_48_HOURS_ALERT -> AlertType.MISSING_FAR_48_HOURS_ALERT.getValue()
                 else -> {
                     throw IllegalArgumentException(
                         "The alert type '${silencedAlert.value.type}' could not be silenced.",

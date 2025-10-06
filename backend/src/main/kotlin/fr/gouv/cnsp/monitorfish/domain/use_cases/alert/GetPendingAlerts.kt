@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.alert
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NatinfCodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
@@ -19,17 +19,10 @@ class GetPendingAlerts(
         pendingAlertRepository
             .findAlertsOfTypes(
                 listOf(
-                    AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
-                    AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT,
-                    AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
-                    AlertTypeMapping.BOTTOM_GEAR_VME_FISHING_ALERT,
-                    AlertTypeMapping.BOTTOM_TRAWL_800_METERS_FISHING_ALERT,
-                    AlertTypeMapping.RTC_FISHING_ALERT,
-                    AlertTypeMapping.MISSING_DEP_ALERT,
-                    AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT,
-                    AlertTypeMapping.SUSPICION_OF_UNDER_DECLARATION_ALERT,
-                    AlertTypeMapping.BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT,
-                    AlertTypeMapping.NEAFC_FISHING_ALERT,
+                    AlertType.POSITION_ALERT,
+                    AlertType.MISSING_DEP_ALERT,
+                    AlertType.MISSING_FAR_48_HOURS_ALERT,
+                    AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT,
                 ),
             ).map { pendingAlert ->
                 pendingAlert.value.natinfCode?.let {

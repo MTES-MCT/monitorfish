@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilencedAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.CountryCodeConverter
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
@@ -57,7 +57,7 @@ data class SilencedAlertEntity(
             vesselIdentifier = vesselIdentifier,
             flagState = flagState,
             silencedBeforeDate = silencedBeforeDate,
-            value = mapper.readValue(value, AlertType::class.java),
+            value = mapper.readValue(value, Alert::class.java),
             vesselId = vesselId,
             wasValidated = wasValidated,
         )

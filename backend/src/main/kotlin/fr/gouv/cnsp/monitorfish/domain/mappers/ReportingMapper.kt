@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.mappers
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -21,7 +21,7 @@ object ReportingMapper {
         try {
             if (!message.isNullOrEmpty() && message != jsonbNullString) {
                 when (reportingType) {
-                    ReportingType.ALERT -> mapper.readValue(message, AlertType::class.java)
+                    ReportingType.ALERT -> mapper.readValue(message, Alert::class.java)
                     ReportingType.OBSERVATION -> mapper.readValue(message, Observation::class.java)
                     ReportingType.INFRACTION_SUSPICION -> mapper.readValue(message, InfractionSuspicion::class.java)
                 }

@@ -12,12 +12,12 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 export type LogbookState = {
   areFishingActivitiesShowedOnMap: boolean
   displayedLogbookOverlays: DisplayedLogbookOverlay[]
-  fishingActivities: Logbook.FishingActivities | undefined
   fishingActivitiesTab: FishingActivitiesTab
   isFirstVoyage: boolean | null
   isLastVoyage: boolean | null
   loadingFishingActivities: boolean
-  nextFishingActivities: Logbook.FishingActivities | null
+  logbookMessages: Logbook.Message[] | undefined
+  nextLogbookMessages: Logbook.Message[] | null
   software: LogbookSoftware | undefined
   tripNumber: string | null
   vesselIdentity: Vessel.VesselIdentity | undefined
@@ -25,12 +25,12 @@ export type LogbookState = {
 const INITIAL_STATE: LogbookState = {
   areFishingActivitiesShowedOnMap: true,
   displayedLogbookOverlays: [],
-  fishingActivities: undefined,
   fishingActivitiesTab: FishingActivitiesTab.SUMMARY,
   isFirstVoyage: null,
   isLastVoyage: null,
   loadingFishingActivities: false,
-  nextFishingActivities: null,
+  logbookMessages: undefined,
+  nextLogbookMessages: null,
   software: undefined,
   tripNumber: null,
   vesselIdentity: undefined
@@ -69,9 +69,9 @@ const logbookSlice = createSlice({
      */
     init(state) {
       state.displayedLogbookOverlays = []
-      state.fishingActivities = undefined
+      state.logbookMessages = undefined
       state.vesselIdentity = undefined
-      state.nextFishingActivities = null
+      state.nextLogbookMessages = null
 
       state.isFirstVoyage = null
       state.isLastVoyage = null
@@ -84,9 +84,9 @@ const logbookSlice = createSlice({
      */
     reset(state) {
       state.displayedLogbookOverlays = []
-      state.fishingActivities = undefined
+      state.logbookMessages = undefined
       state.vesselIdentity = undefined
-      state.nextFishingActivities = null
+      state.nextLogbookMessages = null
 
       state.isFirstVoyage = null
       state.isLastVoyage = null
@@ -99,20 +99,20 @@ const logbookSlice = createSlice({
     },
 
     resetNextUpdate(state) {
-      state.nextFishingActivities = null
+      state.nextLogbookMessages = null
     },
 
     setAreFishingActivitiesShowedOnMap(state, action) {
       state.areFishingActivitiesShowedOnMap = action.payload
     },
 
-    setFishingActivities(state, action: PayloadAction<Logbook.FishingActivities>) {
-      state.fishingActivities = action.payload
-      state.loadingFishingActivities = false
-    },
-
     setIsLoading(state) {
       state.loadingFishingActivities = true
+    },
+
+    setLogbookMessages(state, action: PayloadAction<Logbook.Message[]>) {
+      state.logbookMessages = action.payload
+      state.loadingFishingActivities = false
     },
 
     /**
@@ -121,7 +121,7 @@ const logbookSlice = createSlice({
      * @param {{payload: FishingActivities}} action - the fishing activities with new messages
      */
     setNextUpdate(state, action) {
-      state.nextFishingActivities = action.payload
+      state.nextLogbookMessages = action.payload
     },
 
     /**
@@ -137,7 +137,7 @@ const logbookSlice = createSlice({
      * Set selected vessel voyage
      */
     setVoyage(state, action: PayloadAction<Logbook.VesselVoyage>) {
-      state.fishingActivities = action.payload.logbookMessagesAndAlerts
+      state.logbookMessages = action.payload.logbookMessages
       state.isLastVoyage = action.payload.isLastVoyage
       state.isFirstVoyage = action.payload.isFirstVoyage
       state.tripNumber = action.payload.tripNumber

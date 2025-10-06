@@ -3,7 +3,7 @@ import { binarySearchLine } from '@features/Logbook/useCases/displayedLogbookOve
 import { getActivityDateTimeFromMessage, getLogbookMessageType } from '@features/Logbook/utils'
 import { LayerProperties } from '@features/Map/constants'
 import { VESSEL_TRACK_VECTOR_SOURCE } from '@features/Vessel/layers/VesselsTracksLayer/constants'
-import { getFishingActivityCircleStyle } from '@features/Vessel/layers/VesselsTracksLayer/vesselTrack.style'
+import { getLogbookMessageCircleStyle } from '@features/Vessel/layers/VesselsTracksLayer/vesselTrack.style'
 import { removeFishingActivitiesFeatures } from '@features/Vessel/types/track'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
@@ -17,22 +17,22 @@ import type { Geometry } from 'ol/geom'
 
 export const displayLogbookMessageOverlays = (): MainAppThunk => async (dispatch, getState) => {
   const {
-    fishingActivities: { areFishingActivitiesShowedOnMap, fishingActivities }
+    fishingActivities: { areFishingActivitiesShowedOnMap, logbookMessages }
   } = getState()
-  if (!fishingActivities || !areFishingActivitiesShowedOnMap) {
+  if (!logbookMessages || !areFishingActivitiesShowedOnMap) {
     return
   }
 
   const features = VESSEL_TRACK_VECTOR_SOURCE.getFeatures()
 
-  const displayedLogbookOverlays = fishingActivities.logbookMessages
-    .filter(fishingActivity => !fishingActivity.isCorrectedByNewerMessage)
-    .map(fishingActivity => ({
-      activityDateTime: customDayjs(getActivityDateTimeFromMessage(fishingActivity)),
-      id: fishingActivity.operationNumber ?? '',
-      isDeleted: fishingActivity.isDeleted,
-      isNotAcknowledged: !fishingActivity.acknowledgment?.isSuccess,
-      name: getLogbookMessageType(fishingActivity)
+  const displayedLogbookOverlays = logbookMessages
+    .filter(logbookMessage => !logbookMessage.isCorrectedByNewerMessage)
+    .map(logbookMessage => ({
+      activityDateTime: customDayjs(getActivityDateTimeFromMessage(logbookMessage)),
+      id: logbookMessage.operationNumber ?? '',
+      isDeleted: logbookMessage.isDeleted,
+      isNotAcknowledged: !logbookMessage.acknowledgment?.isSuccess,
+      name: getLogbookMessageType(logbookMessage)
     }))
 
   const lines = getVesselTrackLines(features)
@@ -67,15 +67,15 @@ function getFeatureAndOverlays(
   linesByTimestamp
 ): { displayedLogbookOverlays: any[]; features: Feature<Geometry>[] } {
   return displayedLogbookOverlays.reduce(
-    (acc: { displayedLogbookOverlays: any[]; features: Feature<Geometry>[] }, fishingActivity) => {
-      const { activityDateTime, id } = fishingActivity
+    (acc: { displayedLogbookOverlays: any[]; features: Feature<Geometry>[] }, logbookMessage) => {
+      const { activityDateTime, id } = logbookMessage
 
-      const lineOfFishingActivity = binarySearchLine(activityDateTime, linesByTimestamp)
+      const lineOfLogbookMessage = binarySearchLine(activityDateTime, linesByTimestamp)
 
-      if (lineOfFishingActivity) {
-        const featureAndCoordinates = getFishingActivityFeatureOnTrackLine(id, lineOfFishingActivity, activityDateTime)
+      if (lineOfLogbookMessage) {
+        const featureAndCoordinates = getLogbookMessageFeatureOnTrackLine(id, lineOfLogbookMessage, activityDateTime)
 
-        acc.displayedLogbookOverlays.push({ ...fishingActivity, coordinates: featureAndCoordinates.coordinates })
+        acc.displayedLogbookOverlays.push({ ...logbookMessage, coordinates: featureAndCoordinates.coordinates })
         acc.features.push(featureAndCoordinates.feature)
       }
 
@@ -85,10 +85,10 @@ function getFeatureAndOverlays(
   )
 }
 
-export const getFishingActivityFeatureOnTrackLine = (
+export const getLogbookMessageFeatureOnTrackLine = (
   id: string,
   vesselTrackIncludingActivity: Vessel.VesselLineFeature,
-  fishingActivityDateTime: Dayjs
+  logbookMessageDateTime: Dayjs
 ): {
   coordinates: Coordinates
   feature: Feature<Geometry>
@@ -97,14 +97,14 @@ export const getFishingActivityFeatureOnTrackLine = (
   const secondPositionDate = customDayjs(vesselTrackIncludingActivity.secondPositionDate).valueOf()
 
   const totalDistance = secondPositionDate - firstPositionDate
-  const fishingActivityDistanceFromFirstPoint = fishingActivityDateTime.valueOf() - firstPositionDate
-  const distanceFraction = fishingActivityDistanceFromFirstPoint / totalDistance
+  const logbookMessageDistanceFromFirstPoint = logbookMessageDateTime.valueOf() - firstPositionDate
+  const distanceFraction = logbookMessageDistanceFromFirstPoint / totalDistance
 
   const coordinates = vesselTrackIncludingActivity.getGeometry()!.getCoordinateAt(distanceFraction) as Coordinates
   const feature = new Feature({
     geometry: new Point(coordinates)
   })
-  feature.setStyle(getFishingActivityCircleStyle())
+  feature.setStyle(getLogbookMessageCircleStyle())
   feature.setId(`${LayerProperties.VESSEL_TRACK.code}:logbook:${id}`)
 
   return {

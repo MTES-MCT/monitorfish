@@ -1,9 +1,10 @@
 import { COLORS } from '@constants/constants'
 import { NO_SEAFRONT_GROUP, type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
+import { HowAlertsWorksDialog } from '@features/Alert/components/HowAlertsWorksDialog'
 import { silenceAlert } from '@features/Alert/useCases/silenceAlert'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { CustomSearch, Icon, Link, pluralize, Size, Tag, TextInput, THEME } from '@mtes-mct/monitor-ui'
+import { CustomSearch, Icon, LinkButton, pluralize, Size, Tag, TextInput, THEME } from '@mtes-mct/monitor-ui'
 import { sortArrayByColumn, SortType } from '@utils/sortArrayByColumn'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FlexboxGrid, List } from 'rsuite'
@@ -11,10 +12,9 @@ import styled from 'styled-components'
 
 import { PendingAlertRow } from './PendingAlertRow'
 import { SilenceAlertMenu } from './SilenceAlertMenu'
-import { getAlertNameFromType } from './utils'
 import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../constants'
-import { AdditionalSubMenu, SUB_MENU_LABEL } from '../constants'
-import { resetFocusOnPendingAlert, setSubMenu } from '../slice'
+import { SUB_MENU_LABEL } from '../constants'
+import { resetFocusOnPendingAlert } from '../slice'
 
 import type { PendingAlert, SilencedAlertPeriodRequest } from '../../../types'
 import type { CSSProperties, MutableRefObject, RefObject } from 'react'
@@ -29,6 +29,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
   const focusedPendingAlertId = useMainAppSelector(state => state.alert.focusedPendingAlertId)
   const pendingAlerts = useMainAppSelector(state => state.alert.pendingAlerts)
   const [searchQuery, setSearchQuery] = useState<string>()
+  const [isHowAlertsWorksDialogOpen, setIsHowAlertsWorksDialogOpen] = useState<boolean>(false)
   const [silenceAlertMenuDisplayedFor, setSilenceAlertMenuDisplayedFor] = useState<
     { index: number; pendingAlert: PendingAlert } | undefined
   >()
@@ -36,6 +37,10 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
 
   const sortColumn = 'creationDate'
   const sortType = SortType.DESC
+
+  const openHowAlertsWorksDialog = () => {
+    setIsHowAlertsWorksDialogOpen(true)
+  }
 
   const currentSeafrontAlerts = useMemo(() => {
     if (selectedSeafrontGroup === NO_SEAFRONT_GROUP) {
@@ -55,17 +60,8 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
   const fuse = useMemo(
     () =>
       new CustomSearch(
-        currentSeafrontAlerts,
-        [
-          'vesselName',
-          'internalReferenceNumber',
-          'externalReferenceNumber',
-          'ircs',
-          {
-            getFn: alert => getAlertNameFromType(alert.value.type),
-            name: ['value', 'type']
-          }
-        ],
+        structuredClone(currentSeafrontAlerts),
+        ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs', 'value.name'],
         { threshold: 0.4 }
       ),
     [currentSeafrontAlerts]
@@ -115,91 +111,86 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
   )
 
   return (
-    <Content>
-      <StyledTextInput
-        data-cy="side-window-alerts-search-vessel"
-        isLabelHidden
-        isSearchInput
-        isTransparent
-        label="Rechercher un navire ou une alerte"
-        name="searchQuery"
-        onChange={setSearchQuery}
-        placeholder="Rechercher un navire ou une alerte"
-        size={Size.LARGE}
-        value={searchQuery}
-      />
-      <Row>
-        <NumberOfAlerts>{filteredAlerts.length} alertes</NumberOfAlerts>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <StyledLink onClick={() => dispatch(setSubMenu(AdditionalSubMenu.ALERT_RULES))}>
-          {' '}
-          (en savoir plus sur le fonctionnement des alertes)
-        </StyledLink>
-        {numberOfSilencedAlerts > 0 && (
-          <StyledTagInfo
-            backgroundColor={THEME.color.gainsboro}
-            color={THEME.color.charcoal}
-            Icon={Icon.Info}
-            iconColor={THEME.color.goldenPoppy}
-            withCircleIcon
-          >
-            {numberOfAlertsMessage}
-          </StyledTagInfo>
-        )}
-      </Row>
-      {/** TODO Use table from monitor-ui */}
-      <List
-        data-cy="side-window-alerts-list"
-        style={{
-          ...rowStyle(sortedAlerts?.length),
-          marginTop: 8,
-          overflow: 'visible'
-        }}
-      >
-        <StyledListItem key={0} index={0}>
-          <FlexboxGrid>
-            <FlexboxGrid.Item style={timeAgoColumnStyle}>Ouverte il y a...</FlexboxGrid.Item>
-            <FlexboxGrid.Item colspan={7} style={alertTypeStyle}>
-              Titre
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item style={alertNatinfStyle}>NATINF</FlexboxGrid.Item>
-            <FlexboxGrid.Item style={vesselNameColumnStyle}>Navire</FlexboxGrid.Item>
-          </FlexboxGrid>
-        </StyledListItem>
-        <ScrollableContainer ref={scrollableContainerRef} className="smooth-scroll" style={ScrollableContainerStyle}>
-          {sortedAlerts.map((alert, index) => (
-            <PendingAlertRow
-              key={alert.id}
-              alert={alert}
-              index={index}
+    <>
+      <Content>
+        <StyledTextInput
+          data-cy="side-window-alerts-search-vessel"
+          isLabelHidden
+          isSearchInput
+          isTransparent
+          label="Rechercher un navire ou une alerte"
+          name="searchQuery"
+          onChange={setSearchQuery}
+          placeholder="Rechercher un navire ou une alerte"
+          size={Size.LARGE}
+          value={searchQuery}
+        />
+        <Row>
+          <NumberOfAlerts>{filteredAlerts.length} alertes</NumberOfAlerts>(
+          <LinkButton onClick={openHowAlertsWorksDialog}>En savoir plus sur le fonctionnement des alertes</LinkButton>)
+          {numberOfSilencedAlerts > 0 && (
+            <StyledTagInfo
+              backgroundColor={THEME.color.gainsboro}
+              color={THEME.color.charcoal}
+              Icon={Icon.Info}
+              iconColor={THEME.color.goldenPoppy}
+              withCircleIcon
+            >
+              {numberOfAlertsMessage}
+            </StyledTagInfo>
+          )}
+        </Row>
+        {/** TODO Use table from monitor-ui */}
+        <List
+          data-cy="side-window-alerts-list"
+          style={{
+            ...rowStyle(sortedAlerts?.length),
+            marginTop: 8,
+            overflow: 'visible'
+          }}
+        >
+          <StyledListItem key={0} index={0}>
+            <FlexboxGrid>
+              <FlexboxGrid.Item style={timeAgoColumnStyle}>Ouverte il y a...</FlexboxGrid.Item>
+              <FlexboxGrid.Item colspan={7} style={alertTypeStyle}>
+                Titre
+              </FlexboxGrid.Item>
+              <FlexboxGrid.Item style={alertNatinfStyle}>NATINF</FlexboxGrid.Item>
+              <FlexboxGrid.Item style={vesselNameColumnStyle}>Navire</FlexboxGrid.Item>
+            </FlexboxGrid>
+          </StyledListItem>
+          <ScrollableContainer ref={scrollableContainerRef} className="smooth-scroll" style={ScrollableContainerStyle}>
+            {sortedAlerts.map((alert, index) => (
+              <PendingAlertRow
+                key={alert.id}
+                alert={alert}
+                index={index}
+                setSilenceAlertMenuDisplayedFor={setSilenceAlertMenuDisplayedFor}
+                silencedAlertMenuDisplayedOnIndex={silenceAlertMenuDisplayedFor?.index}
+              />
+            ))}
+          </ScrollableContainer>
+          {!!silenceAlertMenuDisplayedFor && (
+            <SilenceAlertMenu
+              baseRef={baseRef}
+              pendingAlert={silenceAlertMenuDisplayedFor.pendingAlert}
+              pendingAlertIndex={silenceAlertMenuDisplayedFor.index}
+              scrollableContainer={scrollableContainerRef}
               setSilenceAlertMenuDisplayedFor={setSilenceAlertMenuDisplayedFor}
-              silencedAlertMenuDisplayedOnIndex={silenceAlertMenuDisplayedFor?.index}
+              silenceAlert={silenceAlertCallback}
             />
-          ))}
-        </ScrollableContainer>
-        {!!silenceAlertMenuDisplayedFor && (
-          <SilenceAlertMenu
-            baseRef={baseRef}
-            pendingAlert={silenceAlertMenuDisplayedFor.pendingAlert}
-            pendingAlertIndex={silenceAlertMenuDisplayedFor.index}
-            scrollableContainer={scrollableContainerRef}
-            setSilenceAlertMenuDisplayedFor={setSilenceAlertMenuDisplayedFor}
-            silenceAlert={silenceAlertCallback}
-          />
-        )}
-        {!sortedAlerts.length && <NoAlerts style={noAlertsStyle}>Aucune alerte à vérifier</NoAlerts>}
-      </List>
-    </Content>
+          )}
+          {!sortedAlerts.length && <NoAlerts style={noAlertsStyle}>Aucune alerte à vérifier</NoAlerts>}
+        </List>
+      </Content>
+      {isHowAlertsWorksDialogOpen && <HowAlertsWorksDialog onClose={() => setIsHowAlertsWorksDialogOpen(false)} />}
+    </>
   )
 }
 
 const NumberOfAlerts = styled.span`
   font-weight: 500;
-`
-
-const StyledLink = styled(Link)`
-  margin-left: 4px;
-  cursor: pointer;
+  margin-right: 4px;
 `
 
 const StyledTagInfo = styled(Tag)`
@@ -215,6 +206,11 @@ const StyledTextInput = styled(TextInput)`
 const Row = styled.div`
   margin-top: 28px;
   display: flex;
+
+  .Element-LinkButton {
+    align-items: unset;
+    padding: 0;
+  }
 `
 
 const ScrollableContainer = styled.div``

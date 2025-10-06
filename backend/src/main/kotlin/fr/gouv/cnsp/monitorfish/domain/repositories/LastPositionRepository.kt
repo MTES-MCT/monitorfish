@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.domain.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -19,7 +18,7 @@ interface LastPositionRepository {
     fun findActiveVesselWithReferentialData(): List<EnrichedActiveVessel>
 
     fun removeAlertToLastPositionByVesselIdentifierEquals(
-        alertType: AlertTypeMapping,
+        alertName: String,
         vesselIdentifier: VesselIdentifier,
         value: String,
         isValidated: Boolean,

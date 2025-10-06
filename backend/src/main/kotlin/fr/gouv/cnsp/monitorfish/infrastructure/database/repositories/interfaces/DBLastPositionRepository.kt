@@ -68,7 +68,7 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
         value = """
         UPDATE last_positions
         SET
-            alerts = f_array_remove_elem(alerts, array_position(alerts, :alertType)),
+            alerts = f_array_remove_elem(alerts, array_position(alerts, :alertName)),
             reportings = CASE
                 WHEN :isValidated IS TRUE THEN array_append(reportings, 'ALERT')
                 ELSE reportings
@@ -85,7 +85,7 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
     fun removeAlertByVesselIdentifierEquals(
         vesselIdentifier: String,
         value: String,
-        alertType: String,
+        alertName: String,
         isValidated: Boolean,
     )
 }

@@ -1,6 +1,5 @@
 /* eslint-disable no-nested-ternary */
 
-import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
 import { OverlayPosition } from '@features/Map/components/Overlay'
 import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
 import { Square } from '@features/Regulation/components/ZonePreview'
@@ -70,7 +69,7 @@ export function VesselCard({ feature, overlayPosition, yOffset }) {
         <VesselCardAlert data-cy="vessel-card-alert">
           <AlertIcon size={17} />
           {vesselProperties.alerts?.length === 1
-            ? getAlertNameFromType(vesselProperties.alerts[0]!)
+            ? vesselProperties.alerts[0]
             : `${vesselProperties.alerts?.length} alertes`}
         </VesselCardAlert>
       )}

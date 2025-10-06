@@ -1,588 +1,77 @@
-from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import List
 
 import pandas as pd
-from geoalchemy2 import Geometry
-from geoalchemy2.functions import ST_Intersects
-from prefect import flow, get_run_logger, task
-from sqlalchemy import Table, and_, or_, select
-from sqlalchemy.sql import Select
+from prefect import flow, task
+from prefect.deployments import run_deployment
 
-from src import utils
-from src.db_config import create_engine
-from src.entities.alerts import AlertType
-from src.generic_tasks import extract, read_query_task
-from src.processing import coalesce, join_on_multiple_keys
-from src.read_query import read_query
-from src.shared_tasks.alerts import (
-    extract_silenced_alerts,
-    filter_alerts,
-    load_alerts,
-    make_alerts,
-)
-from src.shared_tasks.infrastructure import get_table
-from src.shared_tasks.positions import add_depth, add_vessel_identifier
-from src.shared_tasks.risk_factors import extract_current_risk_factors
-from src.shared_tasks.vessels import add_vessel_id, add_vessels_columns
-
-
-class ZonesTable:
-    """
-    A class to represent a table of zones which can be filtered on a given field.
-
-        Args:
-            table (Table): A SQLAchemy `Table`
-            geometry_column (str): name of the geometry column
-            filter_column (str, optionnal): name of the column on which to filter
-            (typically the id or unique name of zones). Defaults to `None`.
-
-        Raises:
-            AssertionError: if `filter_column` is given and is not a column of `table`
-            or `geometry_column` is not a column of `Table` of type
-            `geoalchemy2.Geometry`
-    """
-
-    def __init__(self, table: Table, geometry_column: str, filter_column: str = None):
-        if filter_column:
-            assert filter_column in table.columns
-        assert geometry_column in table.columns
-        assert isinstance(table.columns[geometry_column].type, Geometry)
-        self.table = table
-        self.filter_column = filter_column
-        self.geometry_column = geometry_column
-
-    def __repr__(self):
-        return (
-            f"ZonesTable(table={self.table.__repr__()}, "
-            f"filter_column='{self.filter_column}', "
-            f"geometry_column='{self.geometry_column}')"
-        )
-
-
-@dataclass
-class VesselsFilter:
-    is_active: bool
-    vessels_cfr: List[str]
+from src.entities.alerts import PositionAlertSpecification
+from src.flows.position_alert import position_alert_flow
+from src.generic_tasks import extract
+from src.helpers.alerts import position_alert_specification_must_run_now
+from src.shared_tasks.dates import get_utcnow
 
 
 @task
-def alert_has_gear_parameters(
-    fishing_gears: list, fishing_gear_categories: list
-) -> bool:
-    """
-    Returns `True` if one of the input arguments are non empty lists, `False`
-    otherwise.
-
-    Args:
-        fishing_gears (list): list of gears or `None`
-        fishing_gear_categories (list): list of gear_categories or `None`
-
-    Returns:
-        bool: `True` if one of the input arguments are non empty lists, `False`
-        otherwise.
-
-    Raises:
-        TypeError: if the input arguments are not lists or `None`.
-    """
-
-    try:
-        assert fishing_gears is None or isinstance(fishing_gears, list)
-    except AssertionError:
-        raise TypeError("'fishing_gears' must be `None` or `list`.")
-
-    try:
-        assert fishing_gear_categories is None or isinstance(
-            fishing_gear_categories, list
-        )
-    except AssertionError:
-        raise TypeError("'fishing_gear_categories' must be `None` or `list`.")
-
-    return True if fishing_gears or fishing_gear_categories else False
-
-
-@task
-def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
-    """
-    Return a `ZonesTable` representing the table in which zones for the given
-    `alert_type` are stored.
-
-    Args:
-        alert_type (str): the type of alert.
-
-    Returns:
-        ZonesTable: table in which to look for the zones for the given alert type.
-
-    Raises:
-        ValueError: if the input `alert_type` does not correspond to one of the
-          expected types of alert.
-    """
-    alert_type = AlertType(alert_type)
-    alert_type_zones_tables = {
-        AlertType.THREE_MILES_TRAWLING_ALERT: {
-            "table": "n_miles_to_shore_areas_subdivided",
-            "filter_column": "miles_to_shore",
-            "geometry_column": "geometry",
-        },
-        AlertType.TWELVE_MILES_FISHING_ALERT: {
-            "table": "n_miles_to_shore_areas_subdivided",
-            "filter_column": "miles_to_shore",
-            "geometry_column": "geometry",
-        },
-        AlertType.FRENCH_EEZ_FISHING_ALERT: {
-            "table": "eez_areas",
-            "filter_column": "iso_sov1",
-            "geometry_column": "wkb_geometry",
-        },
-        AlertType.RTC_FISHING_ALERT: {
-            "table": "regulations",
-            "filter_column": "law_type",
-            "geometry_column": "geometry",
-        },
-        AlertType.NEAFC_FISHING_ALERT: {
-            "table": "neafc_regulatory_area",
-            "filter_column": None,
-            "geometry_column": "wkb_geometry",
-        },
-        AlertType.BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT: {
-            "table": "regulations",
-            "filter_column": "topic",
-            "geometry_column": "geometry",
-        },
-        AlertType.BOTTOM_GEAR_VME_FISHING_ALERT: {
-            "table": "regulations",
-            "filter_column": "topic",
-            "geometry_column": "geometry",
-        },
-        AlertType.BOTTOM_TRAWL_800_METERS_FISHING_ALERT: {
-            "table": "regulations",
-            "filter_column": "zone",
-            "geometry_column": "geometry",
-        },
-    }
-
-    logger = get_run_logger()
-
-    try:
-        table_info = alert_type_zones_tables[alert_type]
-    except KeyError:
-        raise ValueError(
-            (
-                f"Unknown alert type '{alert_type}'. "
-                f"Expects one of {alert_type_zones_tables.keys()}."
-            )
-        )
-
-    zones_table = utils.get_table(
-        table_info["table"],
-        schema="public",
-        conn=create_engine("monitorfish_remote"),
-        logger=logger,
-    )
-
-    zones_table = ZonesTable(
-        table=zones_table,
-        filter_column=table_info["filter_column"],
-        geometry_column=table_info["geometry_column"],
-    )
-
-    return zones_table
-
-
-@task
-def make_positions_in_alert_query(
-    *,
-    positions_table: Table,
-    facades_table: Table,
-    zones_table: ZonesTable,
-    eez_areas_table: Table,
-    only_fishing_positions: bool,
-    zones: List = None,
-    hours_from_now: int = 8,
-    flag_states: List = None,
-    except_flag_states: List = None,
-    eez_areas: List = None,
-) -> Select:
-    """
-    Creates select statement for the query to execute to compute positions in alert.
-
-    Args:
-        positions_table (Table): `SQLAlchemy.Table` of positions.
-        facades_table (Table): `SQLAlchemy.Table` of façades.
-        zones_table (ZonesTable): `ZonesTable` of zones.
-        eez_areas_table (Table): `SQLAlchemy.Table` of Exclusive Economic Zones.
-        only_fishing_positions (bool): If `True`, filters positions to keep only
-          positions tagged as `is_fishing`.
-        zones (List, optional): If provided, adds a
-          'WHERE zones.filter_column IN zones' clause to the query. Defaults to None.
-        hours_from_now (int, optional): Determines how many hours back in the past the
-          `positions` table will be scanned. Defaults to 8.
-        flag_states (List, optional): If given, filters positions to keep only those of
-          vessels that belong to these flag_states. Defaults to None.
-        except_flag_states (List, optional): If given, filters positions to keep only
-          those of vessels that do NOT belong to these flag_states. Defaults to None.
-
-    Returns:
-        Select: `SQLAlchemy.Select` statement corresponding to the given parameters.
-    """
-
-    now = datetime.utcnow()
-    start_date = now - timedelta(hours=hours_from_now)
-
-    from_tables = positions_table.join(
-        zones_table.table,
-        ST_Intersects(
-            positions_table.c.geometry,
-            zones_table.table.c[zones_table.geometry_column],
-        ),
-    ).join(
-        facades_table,
-        ST_Intersects(positions_table.c.geometry, facades_table.c.geometry),
-        isouter=True,
-    )
-
-    if eez_areas:
-        from_tables = from_tables.join(
-            eez_areas_table,
-            ST_Intersects(positions_table.c.geometry, eez_areas_table.c.wkb_geometry),
-            isouter=True,
-        )
-
-    q = (
-        select(
-            positions_table.c.id,
-            positions_table.c.internal_reference_number.label("cfr"),
-            positions_table.c.external_reference_number.label(
-                "external_immatriculation"
-            ),
-            positions_table.c.ircs,
-            positions_table.c.vessel_name,
-            positions_table.c.flag_state,
-            positions_table.c.date_time,
-            positions_table.c.latitude,
-            positions_table.c.longitude,
-            facades_table.c.facade,
-        )
-        .select_from(from_tables)
-        .where(
-            and_(
-                positions_table.c.date_time > start_date,
-                positions_table.c.date_time < now,
-                or_(
-                    positions_table.c.internal_reference_number.isnot(None),
-                    positions_table.c.external_reference_number.isnot(None),
-                    positions_table.c.ircs.isnot(None),
-                ),
-            )
-        )
-    )
-
-    if only_fishing_positions:
-        q = q.where(positions_table.c.is_fishing)
-
-    if zones:
-        q = q.where(zones_table.table.c[zones_table.filter_column].in_(zones))
-
-    if flag_states:
-        q = q.where(positions_table.c.flag_state.in_(flag_states))
-
-    if except_flag_states:
-        q = q.where(positions_table.c.flag_state.notin_(except_flag_states))
-
-    if eez_areas:
-        q = q.where(eez_areas_table.c["iso_sov1"].in_(eez_areas))
-
-    return q
-
-
-@task
-def make_fishing_gears_query(
-    fishing_gears_table: Table,
-    fishing_gears: List[str] = None,
-    fishing_gear_categories: List[str] = None,
-) -> Select:
-    """
-    Creates select statement for the query to execute to get the list of gear codes for
-    which to generate alerts.
-    """
-
-    q = select(fishing_gears_table.c.fishing_gear_code)
-
-    filters = []
-
-    if fishing_gears:
-        filters.append(fishing_gears_table.c.fishing_gear_code.in_(fishing_gears))
-
-    if fishing_gear_categories:
-        filters.append(
-            fishing_gears_table.c.fishing_gear_category.in_(fishing_gear_categories)
-        )
-
-    if filters:
-        q = q.where(or_(*filters))
-
-    return q
-
-
-@task
-def extract_current_gears() -> pd.DataFrame:
-    """
-    Extracts of vessels in `last_positions` with their current (known or probable)
-    gear(s).
-
-      - For vessels that have non null `gear_onboard` (for their last DEP) in
-        `last_positions`, these gears are used
-      - For other vessels, the `gears_declared` from the `vessels` table are used.
-    """
-
-    current_gears = extract(
+def extract_position_alerts() -> pd.DataFrame:
+    return extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/current_gears.sql",
+        query_filepath="monitorfish/position_alerts.sql",
     )
-
-    current_gears["current_gears"] = coalesce(
-        current_gears[["gear_onboard", "declared_fishing_gears"]]
-    )
-
-    current_gears["current_gears"] = current_gears["current_gears"].map(
-        lambda li: set(li) if li else None
-    )
-
-    current_gears = current_gears.drop(
-        columns=["gear_onboard", "declared_fishing_gears"]
-    )
-
-    return current_gears
 
 
 @task
-def extract_gear_codes(query: Select) -> set:
-    """
-    Executes the input `sqlalchemy.Select` statement, expected to contain a
-    `fishing_gear_code` column, returns said columns results as a `set`.
-    """
-
-    fishing_gear_codes = read_query(
-        query,
-        db="monitorfish_remote",
-    )
-
-    return set(fishing_gear_codes.fishing_gear_code)
-
-
-@task
-def extract_vessels_with_species_onboard(
-    species_onboard: list = None, min_weight: float = 0.0
-) -> VesselsFilter:
-    if species_onboard is None:
-        return VesselsFilter(is_active=False, vessels_cfr=None)
-
-    assert isinstance(species_onboard, list)
-    assert isinstance(min_weight, (float, int))
-
-    vessels = extract(
-        "monitorfish_remote",
-        "monitorfish/vessels_with_species_onboard.sql",
-        params={
-            "species_onboard": tuple(species_onboard),
-            "min_weight": min_weight,
-        },
-    )
-    return VesselsFilter(is_active=True, vessels_cfr=vessels.cfr.tolist())
-
-
-@task
-def filter_vessels(
-    positions_in_alert: pd.DataFrame, vessels_filter: VesselsFilter
-) -> pd.DataFrame:
-    if not vessels_filter.is_active:
-        return positions_in_alert
-    else:
-        return positions_in_alert[
-            positions_in_alert.cfr.isin(vessels_filter.vessels_cfr)
-        ].reset_index(drop=True)
-
-
-@task
-def filter_on_gears(
-    positions_in_alert: pd.DataFrame,
-    current_gears: pd.DataFrame,
-    gear_codes: set,
-    include_vessels_unknown_gear: bool,
-):
-    """
-    Filters input `positions_in_alert` to keep only rows for which the vessel's
-    current gears are included in `gear_codes`.
-
-    Args:
-        positions_in_alert (pd.DataFrame): DataFrame of positions. Must have columns
-          "cfr", "external_immatriculation", "ircs"
-        current_gears (pd.DataFrame): DataFrame of vessels. Must have columns
-          "cfr", "external_immatriculation", "ircs", "current_gears"
-        gear_codes (set): set of gear_codes
-        include_vessels_unknown_gear (bool): if `True`, `positions_in_alert` for which
-          the corresponding vessel does not have any known gears (because the vessel
-          is either absent of the `current_gears` DataFrame or has `None` in
-          the `current_gears` field of that DataFrame) are kept. Otherwise, those rows
-          are discarded.
-    """
-
-    positions_in_alert = join_on_multiple_keys(
-        positions_in_alert,
-        current_gears,
-        how="left",
-        or_join_keys=["cfr", "external_immatriculation", "ircs"],
-    )
-
-    positions_in_alert_known_gear = positions_in_alert.dropna(subset=["current_gears"])
-
-    positions_in_alert_known_gear = positions_in_alert_known_gear.loc[
-        positions_in_alert_known_gear.current_gears.map(
-            lambda s: s.issubset(gear_codes)
-        )
+def to_position_alert_specifications(
+    position_alerts: pd.DataFrame,
+) -> List[PositionAlertSpecification]:
+    return [
+        PositionAlertSpecification(**position_alert)
+        for position_alert in position_alerts.to_dict(orient="records")
     ]
 
-    res = positions_in_alert_known_gear
-
-    if include_vessels_unknown_gear:
-        positions_in_alert_unknown_gear = positions_in_alert.loc[
-            positions_in_alert.current_gears.isna()
-        ]
-
-        res = pd.concat([res, positions_in_alert_unknown_gear])
-
-    res = res.drop(columns=["current_gears"])
-
-    return res
-
 
 @task
-def filter_on_depth(positions_in_alert: pd.DataFrame, min_depth: float) -> pd.DataFrame:
-    # Positions depth is assumed to be negative below sea level.
-    # Deeper = more negative.
-    return positions_in_alert[positions_in_alert.depth <= -min_depth]
+def get_alerts_that_must_run_now(
+    alert_specifications: List[PositionAlertSpecification],
+    now: datetime,
+) -> List[PositionAlertSpecification]:
+    return [
+        a
+        for a in alert_specifications
+        if position_alert_specification_must_run_now(alert_spec=a, now=now)
+    ]
 
 
-@task
-def merge_risk_factor(
-    positions_in_alert: pd.DataFrame, current_risk_factors: pd.DataFrame
-) -> pd.DataFrame:
-    return join_on_multiple_keys(
-        positions_in_alert,
-        current_risk_factors,
-        how="left",
-        or_join_keys=["cfr", "external_immatriculation", "ircs"],
+@flow(name="Position alerts")
+def position_alerts_flow():
+    positions_alerts = extract_position_alerts()
+    now = get_utcnow()
+
+    position_alert_specifications = to_position_alert_specifications(positions_alerts)
+    position_alert_specifications_to_run = get_alerts_that_must_run_now(
+        alert_specifications=position_alert_specifications, now=now
     )
 
-
-@task
-def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
-    """
-    Returns a `DataFrame` of unique vessels in alert from the input `DataFrame` of
-    positions in alert.
-    For each vessel, the date of the most recent position is used as
-    `creation_datetime` for the alert.
-    """
-    vessels_in_alerts = (
-        positions_in_alert.sort_values("date_time", ascending=False)
-        .groupby(["cfr", "ircs", "external_immatriculation"], dropna=False)
-        .head(1)
-        .rename(
-            columns={
-                "date_time": "triggering_behaviour_datetime_utc",
-            }
+    for position_alert_specification in position_alert_specifications_to_run:
+        run_deployment(
+            name=f"{position_alert_flow.name}/{position_alert_flow.name}",
+            parameters=dict(
+                position_alert_id=position_alert_specification.id,
+                name=position_alert_specification.name,
+                description=position_alert_specification.description,
+                natinf_code=position_alert_specification.natinf_code,
+                track_analysis_depth=position_alert_specification.track_analysis_depth,
+                only_fishing_positions=position_alert_specification.only_fishing_positions,
+                gears=position_alert_specification.gears,
+                species=position_alert_specification.species,
+                species_catch_areas=position_alert_specification.species_catch_areas,
+                administrative_areas=position_alert_specification.administrative_areas,
+                regulatory_areas=position_alert_specification.regulatory_areas,
+                min_depth=position_alert_specification.min_depth,
+                flag_states_iso2=position_alert_specification.flag_states_iso2,
+                vessel_ids=position_alert_specification.vessel_ids,
+                district_codes=position_alert_specification.district_codes,
+                producer_organizations=position_alert_specification.producer_organizations,
+            ),
+            timeout=0,
         )
-        .reset_index(drop=True)
-    )
-    return vessels_in_alerts
-
-
-@flow(name="Position alert")
-def position_alerts_flow(
-    alert_type: str,
-    alert_config_name: str,
-    zones: list | None = None,
-    hours_from_now: int = 8,
-    only_fishing_positions: bool = True,
-    flag_states: list | None = None,
-    except_flag_states: list | None = None,
-    fishing_gears: list | None = None,
-    fishing_gear_categories: list | None = None,
-    species_onboard: list | None = None,
-    species_onboard_min_weight: float = 0.0,
-    include_vessels_unknown_gear: bool = True,
-    eez_areas: list | None = None,
-    min_depth: float | None = None,
-):
-    must_filter_on_gears = alert_has_gear_parameters(
-        fishing_gears, fishing_gear_categories
-    )
-
-    positions_table = get_table("positions")
-    vessels_table = get_table("vessels")
-    districts_table = get_table("districts")
-    eez_areas_table = get_table("eez_areas")
-    zones_table = get_alert_type_zones_table(alert_type)
-    facades_table = get_table("facade_areas_subdivided")
-
-    positions_query = make_positions_in_alert_query(
-        positions_table=positions_table,
-        facades_table=facades_table,
-        zones_table=zones_table,
-        eez_areas_table=eez_areas_table,
-        only_fishing_positions=only_fishing_positions,
-        zones=zones,
-        hours_from_now=hours_from_now,
-        flag_states=flag_states,
-        except_flag_states=except_flag_states,
-        eez_areas=eez_areas,
-    )
-
-    positions_in_alert = read_query_task.submit("monitorfish_remote", positions_query)
-    species_onboard_vessels_filter = extract_vessels_with_species_onboard.submit(
-        species_onboard=species_onboard,
-        min_weight=species_onboard_min_weight,
-    )
-
-    positions_in_alert = filter_vessels(
-        positions_in_alert, vessels_filter=species_onboard_vessels_filter
-    )
-
-    if must_filter_on_gears:
-        fishing_gears_table = get_table("fishing_gear_codes")
-        fishing_gears_query = make_fishing_gears_query(
-            fishing_gears_table=fishing_gears_table,
-            fishing_gears=fishing_gears,
-            fishing_gear_categories=fishing_gear_categories,
-        )
-        gear_codes = extract_gear_codes.submit(fishing_gears_query)
-        current_gears = extract_current_gears.submit()
-
-        positions_in_alert = filter_on_gears(
-            positions_in_alert=positions_in_alert,
-            current_gears=current_gears,
-            gear_codes=gear_codes,
-            include_vessels_unknown_gear=include_vessels_unknown_gear,
-        )
-
-    if min_depth:
-        positions_in_alert = add_depth(positions_in_alert)
-        positions_in_alert = filter_on_depth(positions_in_alert, min_depth)
-
-    positions_in_alert = add_vessel_identifier(positions_in_alert)
-    current_risk_factors = extract_current_risk_factors.submit()
-    positions_in_alert = merge_risk_factor(positions_in_alert, current_risk_factors)
-    vessels_in_alert = get_vessels_in_alert(positions_in_alert)
-    vessels_in_alert = add_vessel_id(vessels_in_alert, vessels_table)
-    vessels_in_alert = add_vessels_columns(
-        vessels_in_alert,
-        vessels_table,
-        districts_table=districts_table,
-        districts_columns_to_add=["dml"],
-    )
-    alerts = make_alerts(vessels_in_alert, alert_type, alert_config_name)
-    silenced_alerts = extract_silenced_alerts.submit(
-        alert_type, number_of_hours=hours_from_now
-    )
-    alert_without_silenced = filter_alerts(alerts, silenced_alerts)
-    load_alerts(alert_without_silenced, alert_config_name)

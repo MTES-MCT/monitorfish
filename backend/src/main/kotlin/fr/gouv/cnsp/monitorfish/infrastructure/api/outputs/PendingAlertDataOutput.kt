@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
@@ -17,7 +17,7 @@ data class PendingAlertDataOutput(
     val flagState: CountryCode,
     val creationDate: ZonedDateTime,
     val tripNumber: String? = null,
-    val value: AlertType,
+    val value: Alert,
     var infraction: InfractionDataOutput? = null,
 ) {
     companion object {

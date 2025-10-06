@@ -1,0 +1,433 @@
+[
+    {
+        "table": "pending_alerts",
+        "beforeAll": "TRUNCATE TABLE pending_alerts RESTART IDENTITY CASCADE;",
+        "data": [
+            {
+                "vessel_name": "PHENOMENE",
+                "internal_reference_number": "FAK000999999",
+                "external_reference_number": "DONTSINK",
+                "ircs": "CALLME",
+                "flag_state": "FR",
+                "creation_date:sql": "NOW()",
+                "trip_number": "9463715",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 3.5647,
+                    "dml": "DML 13",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "natinfCode": 7059
+                },
+                "latitude": -40.4050,
+                "longitude": -9.6987
+            },
+            {
+                "vessel_name": "MALOTRU",
+                "internal_reference_number": "U_W0NTFINDME",
+                "external_reference_number": "TALK2ME",
+                "ircs": "QGDF",
+                "flag_state": "FR",
+                "creation_date:sql": "NOW()",
+                "trip_number": "9463723",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 1.5647,
+                    "dml": "DML 06",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "natinfCode": 7059
+                },
+                "latitude": -28.7514,
+                "longitude": 126.258
+            },
+            {
+                "vessel_name": "PAYSAGE ROMAN LIER",
+                "internal_reference_number": "ABC000339263",
+                "external_reference_number": "CN775734",
+                "ircs": "YHIZ",
+                "flag_state": "FR",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '15 hours 45 minutes'",
+                "trip_number": "9463723",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "SA",
+                    "riskFactor": 2.5647,
+                    "dml": "DML 56",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "natinfCode": 7059
+                },
+                "latitude": null,
+                "longitude": null
+            },
+            {
+                "vessel_name": "LE b@TO",
+                "internal_reference_number": "FR263418260",
+                "external_reference_number": "08FR65324",
+                "ircs": "IR12A",
+                "flag_state": "FR",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '13 hours 45 minutes'",
+                "trip_number": "9463723",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 2.5647,
+                    "dml": "DML 56",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "natinfCode": 7059
+                },
+                "latitude": -55.5963,
+                "longitude": -11.2245
+            },
+            {
+                "vessel_name": "PHENOMENE",
+                "internal_reference_number": "ABC000259234",
+                "external_reference_number": "XS666810",
+                "ircs": "VU2483",
+                "flag_state": "GB",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '12 hours 45 minutes'",
+                "trip_number": "9463723",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 2.5647,
+                    "dml": "DML 56",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "natinfCode": 7059
+                },
+                "latitude": null,
+                "longitude": null
+            },
+            {
+                "vessel_name": "PHENOMENE",
+                "internal_reference_number": "ABC000777801",
+                "external_reference_number": "DA215454",
+                "ircs": "RZUW",
+                "flag_state": "GB",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '10 hours 45 minutes'",
+                "trip_number": "9463723",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "MED",
+                    "riskFactor": 2.5647,
+                    "dml": "DML 56",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "natinfCode": 7059
+                },
+                "latitude": -75.698,
+                "longitude": 51.5987
+            },
+            {
+                "vessel_name": "PHENOMENE",
+                "internal_reference_number": "ABC000180818",
+                "external_reference_number": "GJ232455",
+                "ircs": "VSJM",
+                "flag_state": "GB",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '9 hours 45 minutes'",
+                "trip_number": "9463723",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "MED",
+                    "flagState": "FR",
+                    "riskFactor": 2.5647,
+                    "dml": "DML 56",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "natinfCode": 7059
+                },
+                "latitude": null,
+                "longitude": null
+            },
+            {
+                "vessel_name": "PHENOMENE",
+                "internal_reference_number": "ABC000011166",
+                "external_reference_number": "WN121110",
+                "ircs": "KK5645",
+                "flag_state": "GB",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '8 hours 45 minutes'",
+                "trip_number": "9463723",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "MED",
+                    "riskFactor": 2.5647,
+                    "dml": "DML 56",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "natinfCode": 7059
+                },
+                "latitude": -8.96,
+                "longitude": 51.8514
+            },
+            {
+                "vessel_name": "PHENOMENE",
+                "internal_reference_number": "ABC000543897",
+                "external_reference_number": "NW232931",
+                "ircs": "MPBS",
+                "flag_state": "GB",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '7 hours 45 minutes'",
+                "trip_number": "9463723",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 2.5647,
+                    "dml": "DML 56",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "natinfCode": 7059
+                },
+                "latitude": null,
+                "longitude": null
+            },
+            {
+                "vessel_name": "PHENOMENE",
+                "internal_reference_number": "ABC000073956",
+                "external_reference_number": "GD896743",
+                "ircs": "KAML",
+                "flag_state": "GB",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '6 hours 45 minutes'",
+                "trip_number": "9463723",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 2.5647,
+                    "dml": "DML 56",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "natinfCode": 7059
+                },
+                "latitude": -5.1258,
+                "longitude": 47.6789
+            },
+            {
+                "vessel_name": "PHENOMENE",
+                "internal_reference_number": "ABC000960650",
+                "external_reference_number": "BI807222",
+                "ircs": "LC0403",
+                "flag_state": "GB",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '5 hours 45 minutes'",
+                "trip_number": "9463723",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "SA",
+                    "riskFactor": 2.5647,
+                    "dml": "DML 56",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "natinfCode": 7059
+                },
+                "latitude": -8.56,
+                "longitude": -22.0236
+            },
+            {
+                "vessel_name": "PHENOMENE",
+                "internal_reference_number": "ABC000349363",
+                "external_reference_number": "KX186589",
+                "ircs": "OA0800",
+                "flag_state": "GB",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '4 hours 45 minutes'",
+                "trip_number": "9463723",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "SA",
+                    "riskFactor": 2.5647,
+                    "dml": "DML 56",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "natinfCode": 7059
+                },
+                "latitude": null,
+                "longitude": null
+            },
+            {
+                "vessel_name": "PHENOMENE",
+                "internal_reference_number": "ABC000089374",
+                "external_reference_number": "LP645300",
+                "ircs": "RXQO",
+                "flag_state": "GB",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '3 hours 45 minutes'",
+                "trip_number": "9463723",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "Guyane",
+                    "riskFactor": 2.5647,
+                    "dml": "DML 56",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "natinfCode": 7059
+                },
+                "latitude": -4.5691,
+                "longitude": 19.6547
+            },
+            {
+                "vessel_name": "PHENOMENE",
+                "internal_reference_number": "ABC000221063",
+                "external_reference_number": "OI435694",
+                "ircs": "JHKB",
+                "flag_state": "GB",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '2 hours 45 minutes'",
+                "trip_number": "9463723",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "Guadeloupe",
+                    "riskFactor": 2.5647,
+                    "dml": "DML 56",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "natinfCode": 7059
+                },
+                "latitude": null,
+                "longitude": null
+            },
+            {
+                "vessel_name": "TEMPÊTE COULEUR PUIS",
+                "internal_reference_number": "ABC000118343",
+                "external_reference_number": "TO598604",
+                "ircs": "MRCP",
+                "flag_state": "FR",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '1 hours 7 minutes'",
+                "trip_number": "2020005",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 2.5,
+                    "dml": "DML 56",
+                    "type": "POSITION_ALERT",
+                    "alertId": 4,
+                    "name": "Pêche en ZEE française par un navire tiers",
+                    "description": "Pour tous les navires tiers en pêche en ZEE française.",
+                    "natinfCode": 2608
+                },
+                "latitude": 73.569,
+                "longitude": -52.456
+            },
+            {
+                "vessel_name": "ASSURER TON COMME",
+                "internal_reference_number": "ABC000207106",
+                "external_reference_number": "DC896841",
+                "ircs": "MNMN",
+                "flag_state": "FR",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '2 hours 7 minutes'",
+                "trip_number": "2020009",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 2.2,
+                    "dml": "DML 56",
+                    "type": "POSITION_ALERT",
+                    "alertId": 8,
+                    "name": "Pêche dans les 12 milles sans droits historiques",
+                    "description": "Pour tous les navires UE - hors navires allemands, espagnols, néerlandais et belges - ou tiers en pêche dans les 12 milles.",
+                    "natinfCode": 2610
+                },
+                "latitude": 5.56,
+                "longitude": 1.2
+            },
+            {
+                "vessel_name": "MARQUER NOTE MANIER",
+                "internal_reference_number": "ABC000498845",
+                "external_reference_number": "YH219470",
+                "ircs": "EXG7039",
+                "flag_state": "FR",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '4 hours 7 minutes'",
+                "trip_number": null,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 3.4,
+                    "type": "MISSING_FAR_ALERT",
+                    "name": "FAR manquant en 24h"
+                },
+                "latitude": -12.569,
+                "longitude": 8.851
+            },
+            {
+                "vessel_name": "MAINTENANT RÉPONSE ANNÉE",
+                "internal_reference_number": "ABC000823773",
+                "external_reference_number": "HG384751",
+                "ircs": "NK2932",
+                "flag_state": "FR",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '2 hours 17 minutes'",
+                "trip_number": null,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 1.5,
+                    "type": "MISSING_FAR_48_HOURS_ALERT",
+                    "name": "FAR manquant en 48h"
+                },
+                "latitude": -10.569,
+                "longitude": 48.851
+            },
+            {
+                "vessel_name": "MAINTENANT RÉPONSE ANNÉE",
+                "internal_reference_number": "ABC000823773",
+                "external_reference_number": "HG384751",
+                "ircs": "NK2932",
+                "flag_state": "FR",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '2 hours 13 minutes'",
+                "trip_number": null,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": null,
+                    "riskFactor": 1.5,
+                    "type": "MISSING_FAR_48_HOURS_ALERT",
+                    "name": "FAR manquant en 48h"
+                },
+                "latitude": -10.569,
+                "longitude": 48.851
+            },
+            {
+                "vessel_name": "GAGNER TAIRE REMPLIR",
+                "internal_reference_number": "ABC000443712",
+                "external_reference_number": "HK279872",
+                "ircs": "OF2978",
+                "flag_state": "FR",
+                "creation_date:sql": "(NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '1 hours 17 minutes'",
+                "trip_number": null,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 1.5,
+                    "type": "MISSING_DEP_ALERT",
+                    "name": "Sortie en mer sans émission de message \\\"DEP\\\""
+                },
+                "latitude": -11.569,
+                "longitude": 47.851
+            }
+        ]
+    }
+]

@@ -29,7 +29,7 @@ type LogbookMessagesProps = Readonly<{
 export function LogbookMessages({ messageTypeFilter }: LogbookMessagesProps) {
   const dispatch = useMainAppDispatch()
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
-  const fishingActivities = useMainAppSelector(state => state.fishingActivities.fishingActivities)
+  const logbookMessages = useMainAppSelector(state => state.fishingActivities.logbookMessages)
   const isFirstVoyage = useMainAppSelector(state => state.fishingActivities.isFirstVoyage)
   const isLastVoyage = useMainAppSelector(state => state.fishingActivities.isLastVoyage)
   const software = useMainAppSelector(state => state.fishingActivities.software)
@@ -44,11 +44,11 @@ export function LogbookMessages({ messageTypeFilter }: LogbookMessagesProps) {
   const lastLogbookTripsOptions = getLastLogbookTripsOptions(lastLogbookTrips, tripNumber)
 
   const filteredAndSortedLogbookMessages = useMemo(() => {
-    if (!fishingActivities?.logbookMessages) {
+    if (!logbookMessages) {
       return []
     }
 
-    const filteredLogbookMessages = fishingActivities.logbookMessages.filter(logbookMessage =>
+    const filteredLogbookMessages = logbookMessages.filter(logbookMessage =>
       filterBySelectedType(logbookMessage, filteredMessagesType)
     )
 
@@ -59,7 +59,7 @@ export function LogbookMessages({ messageTypeFilter }: LogbookMessagesProps) {
     }
 
     return sorted
-  }, [fishingActivities?.logbookMessages, orderBy, isAscendingSort, filteredMessagesType])
+  }, [logbookMessages, orderBy, isAscendingSort, filteredMessagesType])
 
   const goToPreviousTrip = () => {
     dispatch(updateVesselTrackAndLogbookFromTrip(selectedVesselIdentity, NavigateTo.PREVIOUS, true))

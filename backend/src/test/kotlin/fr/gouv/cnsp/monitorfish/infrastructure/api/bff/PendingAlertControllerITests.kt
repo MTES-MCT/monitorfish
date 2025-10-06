@@ -8,7 +8,9 @@ import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilenceAlertPeriod
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilencedAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SilenceOperationalAlertDataInput
@@ -71,7 +73,14 @@ class PendingAlertControllerITests {
                     flagState = CountryCode.FR,
                     tripNumber = "123456",
                     creationDate = ZonedDateTime.now(),
-                    value = ThreeMilesTrawlingAlert(),
+                    value =
+                        Alert(
+                            type = AlertType.POSITION_ALERT,
+                            seaFront = NAMO.toString(),
+                            alertId = 1,
+                            natinfCode = 7059,
+                            name = "Chalutage dans les 3 milles",
+                        ),
                 ),
             ),
         )
@@ -107,7 +116,14 @@ class PendingAlertControllerITests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 silencedBeforeDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert(),
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ),
             ),
         )
         val before = ZonedDateTime.now()
@@ -131,7 +147,7 @@ class PendingAlertControllerITests {
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", Matchers.equalTo("FRFGRGR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.flagState", Matchers.equalTo("FR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(666)))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.value.type", Matchers.equalTo("THREE_MILES_TRAWLING_ALERT")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.type", Matchers.equalTo("POSITION_ALERT")))
 
         argumentCaptor<ZonedDateTime>().apply {
             verify(silencePendingAlert).execute(eq(666), eq(SilenceAlertPeriod.CUSTOM), capture())
@@ -154,7 +170,14 @@ class PendingAlertControllerITests {
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     flagState = CountryCode.FR,
                     silencedBeforeDate = ZonedDateTime.now(),
-                    value = ThreeMilesTrawlingAlert(),
+                    value =
+                        Alert(
+                            type = AlertType.POSITION_ALERT,
+                            seaFront = NAMO.toString(),
+                            alertId = 1,
+                            natinfCode = 7059,
+                            name = "Chalutage dans les 3 milles",
+                        ),
                 ),
             ),
         )
@@ -168,7 +191,7 @@ class PendingAlertControllerITests {
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].internalReferenceNumber", Matchers.equalTo("FRFGRGR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].value.natinfCode", Matchers.equalTo(7059)))
             .andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].value.type", Matchers.equalTo("THREE_MILES_TRAWLING_ALERT")),
+                MockMvcResultMatchers.jsonPath("$[0].value.type", Matchers.equalTo("POSITION_ALERT")),
             )
     }
 
@@ -193,7 +216,14 @@ class PendingAlertControllerITests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 silencedBeforeDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert(),
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ),
             ),
         )
 
@@ -211,7 +241,10 @@ class PendingAlertControllerITests {
                                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                                 flagState = CountryCode.FR,
                                 silencedBeforeDate = ZonedDateTime.now(),
-                                value = "{\"type\": \"THREE_MILES_TRAWLING_ALERT\"}",
+                                value =
+                                    "{\"type\": \"POSITION_ALERT\"," +
+                                        "\"name\": \"Chalutage dans les 3 milles\"," +
+                                        "\"alertId\": \"1\"}",
                             ),
                         ),
                     ).contentType(MediaType.APPLICATION_JSON),
@@ -220,6 +253,48 @@ class PendingAlertControllerITests {
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", Matchers.equalTo("FRFGRGR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.flagState", Matchers.equalTo("FR")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.value.type", Matchers.equalTo("THREE_MILES_TRAWLING_ALERT")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.type", Matchers.equalTo("POSITION_ALERT")))
+    }
+
+    @Test
+    fun `Should silence an MISSING_FAR_48_HOURS_ALERT alert`() {
+        // Given
+        given(silenceAlert.execute(any())).willReturn(
+            SilencedAlert(
+                id = 666,
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                silencedBeforeDate = ZonedDateTime.now(),
+                value = AlertType.MISSING_FAR_48_HOURS_ALERT.getValue(),
+            ),
+        )
+
+        // When
+        api
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/bff/v1/operational_alerts/silenced")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            SilencedAlertDataInput(
+                                internalReferenceNumber = "FRFGRGR",
+                                externalReferenceNumber = "RGD",
+                                ircs = "6554fEE",
+                                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                flagState = CountryCode.FR,
+                                silencedBeforeDate = ZonedDateTime.now(),
+                                value = "{\"type\": \"MISSING_FAR_48_HOURS_ALERT\", \"name\": \"FAR manquant en 48h\"}",
+                            ),
+                        ),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", Matchers.equalTo("FRFGRGR")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.flagState", Matchers.equalTo("FR")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.type", Matchers.equalTo("MISSING_FAR_48_HOURS_ALERT")))
     }
 }

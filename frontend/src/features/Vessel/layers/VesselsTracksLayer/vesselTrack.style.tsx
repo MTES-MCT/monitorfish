@@ -66,8 +66,8 @@ export const getArrowStyle = (trackArrow, course) => {
   return trackLineStyleCache.get(key)
 }
 
-export const getFishingActivityCircleStyle = () => {
-  const key = 'fishingActivityCircle'
+export const getLogbookMessageCircleStyle = () => {
+  const key = 'logbookMessageCircle'
 
   if (!trackLineStyleCache.has(key)) {
     const circleStyle = new Style({

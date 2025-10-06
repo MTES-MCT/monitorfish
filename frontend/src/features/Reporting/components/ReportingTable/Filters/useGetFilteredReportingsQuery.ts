@@ -1,7 +1,6 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS, RtkCacheTagType } from '@api/constants'
 import { NO_SEAFRONT_GROUP, type NoSeafrontGroup, type SeafrontGroup } from '@constants/seafront'
-import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
-import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS, PendingAlertValueType } from '@features/Alert/constants'
+import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '@features/Alert/constants'
 import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
 import { useHandleFrontendApiError } from '@hooks/useHandleFrontendApiError'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -55,16 +54,7 @@ export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGro
             getFn: reporting => (isInfractionSuspicion(reporting) ? reporting.value.title : ''),
             name: 'value.title'
           },
-          {
-            getFn: reporting => {
-              if (Object.keys(PendingAlertValueType).includes(reporting.value.type)) {
-                return getAlertNameFromType(reporting.value.type as PendingAlertValueType)
-              }
-
-              return ''
-            },
-            name: 'value.type'
-          }
+          'value.name'
         ],
         { isCaseSensitive: false, isDiacriticSensitive: false, isStrict: true, threshold: 0.4 }
       ),

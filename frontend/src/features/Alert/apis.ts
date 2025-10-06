@@ -7,6 +7,7 @@ import { AlertSpecificationSchema } from '@features/Alert/schemas/AlertSpecifica
 import { SilencedAlertSchema } from '@features/Alert/schemas/SilencedAlertSchema'
 import {
   type AlertSpecification,
+  type EditedAlertSpecification,
   type LEGACY_PendingAlert,
   type PendingAlert,
   type SilencedAlert,
@@ -18,6 +19,11 @@ import { parseResponseOrReturn } from '@utils/parseResponseOrReturn'
 
 export const ALERTS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les alertes opérationelles"
 export const VALIDATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu valider l'alerte opérationelle"
+export const ACTIVATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu activer l'alerte"
+export const DEACTIVATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu désactiver l'alerte"
+export const CREATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu créer l'alerte. Veuillez réessayer."
+export const UPDATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu modifier l'alerte. Veuillez réessayer."
+export const DELETE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu supprimer l'alerte"
 export const SILENCE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu suspendre l'alerte opérationelle"
 export const DELETE_SILENCED_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu réactiver l'alerte opérationelle"
 export const CREATE_SILENCED_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu suspendre l'alerte opérationelle"
@@ -94,14 +100,63 @@ const POSITION_ALERT_SPECIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu récupé
 
 export const alertSpecificationsApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
+    activateAlert: builder.mutation<void, number>({
+      invalidatesTags: () => [{ type: 'AlertSpecifications' }],
+      query: id => ({
+        method: 'PUT',
+        url: `/position_alerts_specs/${id}/activate`
+      }),
+      transformErrorResponse: response => new FrontendApiError(ACTIVATE_ALERT_ERROR_MESSAGE, response)
+    }),
+    createAlert: builder.mutation<void, EditedAlertSpecification>({
+      invalidatesTags: () => [{ type: 'AlertSpecifications' }],
+      query: nextAlert => ({
+        body: nextAlert,
+        method: 'POST',
+        url: `/position_alerts_specs`
+      }),
+      transformErrorResponse: response => new FrontendApiError(CREATE_ALERT_ERROR_MESSAGE, response)
+    }),
+    deactivateAlert: builder.mutation<void, number>({
+      invalidatesTags: () => [{ type: 'AlertSpecifications' }],
+      query: id => ({
+        method: 'PUT',
+        url: `/position_alerts_specs/${id}/deactivate`
+      }),
+      transformErrorResponse: response => new FrontendApiError(DEACTIVATE_ALERT_ERROR_MESSAGE, response)
+    }),
+    deleteAlert: builder.mutation<void, number>({
+      invalidatesTags: () => [{ type: 'AlertSpecifications' }],
+      query: id => ({
+        method: 'DELETE',
+        url: `/position_alerts_specs/${id}`
+      }),
+      transformErrorResponse: response => new FrontendApiError(DELETE_ALERT_ERROR_MESSAGE, response)
+    }),
     getAllAlertSpecifications: builder.query<AlertSpecification[], void>({
       providesTags: () => [{ type: 'AlertSpecifications' }],
       query: () => `/position_alerts_specs`,
       transformErrorResponse: response => new FrontendApiError(POSITION_ALERT_SPECIFICATION_ERROR_MESSAGE, response),
       transformResponse: (baseQueryReturnValue: AlertSpecification[]) =>
         parseResponseOrReturn<AlertSpecification>(baseQueryReturnValue, AlertSpecificationSchema, true)
+    }),
+    updateAlert: builder.mutation<void, EditedAlertSpecification>({
+      invalidatesTags: () => [{ type: 'AlertSpecifications' }],
+      query: nextAlert => ({
+        body: nextAlert,
+        method: 'PUT',
+        url: `/position_alerts_specs/${nextAlert.id}`
+      }),
+      transformErrorResponse: response => new FrontendApiError(UPDATE_ALERT_ERROR_MESSAGE, response)
     })
   })
 })
 
-export const { useGetAllAlertSpecificationsQuery } = alertSpecificationsApi
+export const {
+  useActivateAlertMutation,
+  useCreateAlertMutation,
+  useDeactivateAlertMutation,
+  useDeleteAlertMutation,
+  useGetAllAlertSpecificationsQuery,
+  useUpdateAlertMutation
+} = alertSpecificationsApi

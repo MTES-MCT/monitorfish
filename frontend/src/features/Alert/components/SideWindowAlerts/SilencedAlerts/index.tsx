@@ -1,6 +1,7 @@
 import { addSilencedAlert } from '@features/Alert/useCases/addSilencedAlert'
 import { reactivateSilencedAlert } from '@features/Alert/useCases/reactivateSilencedAlert'
 import { Flag } from '@features/commonComponents/Flag'
+import { showVessel } from '@features/Vessel/useCases/showVessel'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -14,7 +15,6 @@ import * as timeago from 'timeago.js'
 
 import { AddSilencedAlertDialog } from './AddSilencedAlertDialog'
 import { getDateTime } from '../../../../../utils'
-import { showVessel } from '../../../../Vessel/useCases/showVessel'
 
 import type { SilencedAlertData } from '../../../types'
 
@@ -31,7 +31,7 @@ export function SilencedAlerts() {
   const fuse = useMemo(
     () =>
       new CustomSearch(
-        structuredClone(silencedAlerts),
+        silencedAlerts,
         ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs', 'value.name'],
         { threshold: 0.4 }
       ),

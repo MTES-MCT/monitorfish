@@ -1,6 +1,7 @@
 [
     {
         "table": "position_alerts",
+        "afterAll": "SELECT setval('position_alerts_id_seq', (SELECT MAX(id) FROM position_alerts));",
         "data": [
             {
                 "id": 1,

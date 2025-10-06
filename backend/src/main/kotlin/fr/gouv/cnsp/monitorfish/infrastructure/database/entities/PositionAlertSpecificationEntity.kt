@@ -108,4 +108,44 @@ data class PositionAlertSpecificationEntity(
             createdBy = createdBy,
             createdAtUtc = createdAtUtc,
         )
+
+    companion object {
+        fun fromPositionAlertSpecification(
+            alertSpecification: PositionAlertSpecification,
+            mapper: ObjectMapper,
+        ): PositionAlertSpecificationEntity {
+            requireNotNull(alertSpecification.createdBy)
+            requireNotNull(alertSpecification.createdAtUtc)
+
+            return PositionAlertSpecificationEntity(
+                id = alertSpecification.id,
+                name = alertSpecification.name,
+                description = alertSpecification.description,
+                isUserDefined = alertSpecification.isUserDefined,
+                natinfCode = alertSpecification.natinfCode,
+                isActivated = alertSpecification.isActivated,
+                isInError = alertSpecification.isInError,
+                isDeleted = alertSpecification.isDeleted,
+                hasAutomaticArchiving = alertSpecification.hasAutomaticArchiving,
+                errorReason = alertSpecification.errorReason,
+                validityStartDatetimeUtc = alertSpecification.validityStartDatetimeUtc,
+                validityEndDatetimeUtc = alertSpecification.validityEndDatetimeUtc,
+                repeatEachYear = alertSpecification.repeatEachYear,
+                trackAnalysisDepth = alertSpecification.trackAnalysisDepth,
+                onlyFishingPositions = alertSpecification.onlyFishingPositions,
+                gears = mapper.writeValueAsString(alertSpecification.gears),
+                species = mapper.writeValueAsString(alertSpecification.species),
+                speciesCatchAreas = alertSpecification.speciesCatchAreas,
+                administrativeAreas = mapper.writeValueAsString(alertSpecification.administrativeAreas),
+                regulatoryAreas = mapper.writeValueAsString(alertSpecification.regulatoryAreas),
+                minDepth = alertSpecification.minDepth,
+                flagStatesIso2 = alertSpecification.flagStatesIso2,
+                vesselIds = alertSpecification.vesselIds,
+                districtCodes = alertSpecification.districtCodes,
+                producerOrganizations = alertSpecification.producerOrganizations,
+                createdBy = alertSpecification.createdBy,
+                createdAtUtc = alertSpecification.createdAtUtc,
+            )
+        }
+    }
 }

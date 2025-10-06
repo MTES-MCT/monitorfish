@@ -7,9 +7,9 @@ import {
   CreateOrUpdateFixedVesselGroupSchema,
   type DynamicVesselGroupFilter,
   GroupType,
-  CreateOrUpdateDynamicVesselGroup,
-  CreateOrUpdateVesselGroup,
-  VesselIdentityForVesselGroup
+  type CreateOrUpdateDynamicVesselGroup,
+  type CreateOrUpdateVesselGroup,
+  type VesselIdentityForVesselGroup
 } from '@features/VesselGroup/types'
 import { addOrUpdateVesselGroup } from '@features/VesselGroup/useCases/addOrUpdateVesselGroup'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'

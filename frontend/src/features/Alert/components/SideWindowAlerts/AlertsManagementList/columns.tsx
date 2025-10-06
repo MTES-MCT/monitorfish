@@ -1,8 +1,8 @@
 import { Ellipsised } from '@components/Ellipsised'
-import { getAlertCriteriaSummary } from '@features/Alert/components/SideWindowAlerts/AlertsManagement/cells/utils'
+import { getAlertCriteriaSummary } from '@features/Alert/components/SideWindowAlerts/AlertsManagementList/cells/utils'
+import { ValidateAlertToggle } from '@features/Alert/components/SideWindowAlerts/AlertsManagementList/cells/ValidateAlertToggle'
 import { Icon, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
-import { Toggle } from 'rsuite'
 import styled from 'styled-components'
 
 import { ActionButtonsCell } from './cells/ActionButtonsCell'
@@ -11,16 +11,22 @@ import { getDate } from '../../../../../utils'
 import type { AlertSpecification } from '@features/Alert/types'
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
 
-export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<AlertSpecification, any>> {
+export function getTableColumns(
+  isFromUrl: boolean,
+  onToggleConfirmation?: (alertSpecification: AlertSpecification, action: 'activate' | 'deactivate') => void,
+  onDeleteConfirmation?: (alertSpecification: AlertSpecification) => void
+): Array<ColumnDef<AlertSpecification, any>> {
   const legacyFirefoxOffset = !isFromUrl && isLegacyFirefox() ? -32 : 0
 
   return [
     {
-      accessorFn: row => `${row.type}:${row.id}`,
+      accessorFn: row => `${row.isActivated}`,
       cell: ({ row }) => {
         const alertSpecification = row.original
 
-        return <Toggle checked={alertSpecification.isActivated} disabled size="sm" />
+        return (
+          <ValidateAlertToggle alertSpecification={alertSpecification} onToggleConfirmation={onToggleConfirmation} />
+        )
       },
       enableSorting: false,
       header: () => '',
@@ -85,7 +91,7 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<AlertSpecif
     {
       accessorFn: row => `${row.type}:${row.id}`,
       cell: (info: CellContext<AlertSpecification, string>) => (
-        <ActionButtonsCell alertSpecification={info.row.original} />
+        <ActionButtonsCell alertSpecification={info.row.original} onDeleteConfirmation={onDeleteConfirmation} />
       ),
       enableSorting: false,
       header: () => '',

@@ -632,6 +632,7 @@ export const Footer = styled.div`
   justify-content: space-between;
   padding: 16px;
 `
+
 const DeleteButton = styled(Button)`
   &:not([disabled]) {
     svg {

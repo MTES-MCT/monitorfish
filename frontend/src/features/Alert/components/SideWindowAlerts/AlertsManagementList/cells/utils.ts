@@ -13,7 +13,7 @@ export function getExpandableRowCellCustomStyle(column: Column<AlertSpecificatio
     case 'validityPeriod':
       return { ...defaultStyle, verticalAlign: 'middle' }
     case 'isActivated':
-      return { ...defaultStyle, paddingLeft: 16 }
+      return { ...defaultStyle, paddingLeft: 11, verticalAlign: 'middle' }
 
     default:
       return defaultStyle

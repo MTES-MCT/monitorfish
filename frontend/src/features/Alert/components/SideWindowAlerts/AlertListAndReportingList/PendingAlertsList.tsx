@@ -60,7 +60,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
   const fuse = useMemo(
     () =>
       new CustomSearch(
-        structuredClone(currentSeafrontAlerts),
+        currentSeafrontAlerts,
         ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs', 'value.name'],
         { threshold: 0.4 }
       ),

@@ -34,8 +34,8 @@ export enum ActivityOrigin {
 }
 
 const ActiveVesselBaseSchema = z.strictObject({
-  activityOrigin: z.nativeEnum(ActivityOrigin),
-  activityType: z.nativeEnum(ActivityType),
+  activityOrigin: z.enum(ActivityOrigin),
+  activityType: z.enum(ActivityType),
   detectabilityRiskFactor: z.number(),
   district: z.string().optional(),
   districtCode: z.string().optional(),
@@ -59,7 +59,7 @@ const ActiveVesselBaseSchema = z.strictObject({
   mmsi: z.string().optional(),
   probabilityRiskFactor: z.number(),
   producerOrganization: z.string().optional(),
-  reportings: z.array(z.nativeEnum(ReportingType)),
+  reportings: z.array(z.enum(ReportingType)),
   riskFactor: z.number(),
   segments: z.array(z.string()),
   speciesArray: z.array(z.string()),
@@ -67,7 +67,7 @@ const ActiveVesselBaseSchema = z.strictObject({
   underCharter: z.boolean().optional(),
   vesselFeatureId: z.string(),
   vesselId: z.number().optional(),
-  vesselIdentifier: z.nativeEnum(VesselIdentifier),
+  vesselIdentifier: z.enum(VesselIdentifier),
   vesselName: z.string().optional()
 })
 

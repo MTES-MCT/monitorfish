@@ -21,14 +21,14 @@ export const VesselListFilterSchema = z.object({
   gearCodes: z.array(z.string()),
   hasLogbook: z.boolean().optional(),
   landingPortLocodes: z.array(z.string()),
-  lastControlAtQuayPeriod: z.union([z.nativeEnum(LastControlPeriod), z.undefined()]),
-  lastControlAtSeaPeriod: z.union([z.nativeEnum(LastControlPeriod), z.undefined()]),
+  lastControlAtQuayPeriod: z.union([z.enum(LastControlPeriod), z.undefined()]),
+  lastControlAtSeaPeriod: z.union([z.enum(LastControlPeriod), z.undefined()]),
   lastPositionHoursAgo: z.number().optional(),
   producerOrganizations: z.array(z.string()),
   riskFactors: z.array(z.number()),
   searchQuery: stringOrUndefined,
   specyCodes: z.array(z.string()).optional(),
-  vesselSize: z.union([z.nativeEnum(VesselSize), z.undefined()]),
+  vesselSize: z.union([z.enum(VesselSize), z.undefined()]),
   vesselsLocation: z.array(z.custom<VesselLocation>()),
   zones: z.array(ZoneFilterSchema)
 })

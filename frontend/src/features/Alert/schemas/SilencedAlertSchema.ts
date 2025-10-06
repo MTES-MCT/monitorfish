@@ -13,9 +13,9 @@ export const PendingAlertValueSchema = z.strictObject({
   name: z.string().optional(),
   natinfCode: z.number().nullable().optional(),
   riskFactor: z.number().optional(),
-  seaFront: z.nativeEnum(Seafront).optional(),
+  seaFront: z.enum(Seafront).optional(),
   speed: z.number().optional(),
-  type: z.nativeEnum(PendingAlertValueType)
+  type: z.enum(PendingAlertValueType)
 })
 
 export const SilencedAlertSchema = z.strictObject({
@@ -28,6 +28,6 @@ export const SilencedAlertSchema = z.strictObject({
   silencedBeforeDate: z.string(),
   value: PendingAlertValueSchema,
   vesselId: numberOrUndefined,
-  vesselIdentifier: z.union([z.nativeEnum(VesselIdentifier), z.undefined()]),
+  vesselIdentifier: z.union([z.enum(VesselIdentifier), z.undefined()]),
   vesselName: z.string()
 })

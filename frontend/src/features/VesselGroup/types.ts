@@ -33,7 +33,7 @@ export enum CnspService {
 
 export const VesselGroupSchema = z.strictObject({
   color: z.string().min(1),
-  createdAtUtc: z.string().datetime(),
+  createdAtUtc: z.iso.datetime(),
   createdBy: z.string(),
   description: z.union([z.string().max(255), z.undefined()]),
   endOfValidityUtc: z.union([z.string().datetime(), z.undefined()]),
@@ -41,10 +41,10 @@ export const VesselGroupSchema = z.strictObject({
   isDeleted: z.boolean(),
   name: z.string().min(1).max(255),
   pointsOfAttention: stringOrUndefined,
-  sharedTo: z.union([z.array(z.nativeEnum(CnspService)), z.undefined()]),
-  sharing: z.nativeEnum(Sharing),
+  sharedTo: z.union([z.array(z.enum(CnspService)), z.undefined()]),
+  sharing: z.enum(Sharing),
   startOfValidityUtc: z.union([z.string().datetime(), z.undefined()]),
-  type: z.nativeEnum(GroupType),
+  type: z.enum(GroupType),
   updatedAtUtc: z.union([z.string().datetime(), z.undefined()])
 })
 
@@ -55,6 +55,7 @@ export const VesselGroupSchema = z.strictObject({
 export const VesselGroupFilterSchema = VesselListFilterSchema.omit({
   searchQuery: true
 })
+export type DynamicVesselGroupFilter = z.infer<typeof VesselGroupFilterSchema>
 
 export const DynamicVesselGroupSchema = VesselGroupSchema.extend({
   filters: VesselGroupFilterSchema,
@@ -74,7 +75,6 @@ export const CreateOrUpdateDynamicVesselGroupSchema = DynamicVesselGroupSchema.o
     path: ['endOfValidityUtc']
   })
 
-export type DynamicVesselGroup = z.infer<typeof DynamicVesselGroupSchema>
 export type CreateOrUpdateDynamicVesselGroup = z.infer<typeof CreateOrUpdateDynamicVesselGroupSchema>
 
 /**
@@ -88,7 +88,7 @@ export const VesselIdentitySchema = z.strictObject({
   ircs: stringOrUndefined,
   name: stringOrUndefined,
   vesselId: numberOrUndefined,
-  vesselIdentifier: z.union([z.nativeEnum(VesselIdentifier), z.undefined()])
+  vesselIdentifier: z.union([z.enum(VesselIdentifier), z.undefined()])
 })
 
 export const FixedVesselGroupSchema = VesselGroupSchema.extend({
@@ -110,6 +110,7 @@ export const CreateOrUpdateFixedVesselGroupSchema = FixedVesselGroupSchema.omit(
   })
 
 export type FixedVesselGroup = z.infer<typeof FixedVesselGroupSchema>
+export type DynamicVesselGroup = z.infer<typeof DynamicVesselGroupSchema>
 export type CreateOrUpdateFixedVesselGroup = z.infer<typeof CreateOrUpdateFixedVesselGroupSchema>
 export type VesselIdentityForVesselGroup = z.infer<typeof VesselIdentitySchema>
 

@@ -13,11 +13,13 @@ export const DEFAULT_DYNAMIC_VESSEL_GROUP: CreateOrUpdateDynamicVesselGroup = {
   description: undefined,
   endOfValidityUtc: undefined,
   filters: DEFAULT_VESSEL_LIST_FILTER_VALUES,
+  id: undefined,
   isDeleted: false,
   name: '',
   pointsOfAttention: undefined,
   sharedTo: undefined,
   sharing: Sharing.PRIVATE,
+  startOfValidityUtc: undefined,
   type: GroupType.DYNAMIC
 }
 
@@ -25,11 +27,13 @@ export const DEFAULT_FIXED_VESSEL_GROUP: CreateOrUpdateFixedVesselGroup = {
   color: '',
   description: undefined,
   endOfValidityUtc: undefined,
+  id: undefined,
   isDeleted: false,
   name: '',
   pointsOfAttention: undefined,
   sharedTo: undefined,
   sharing: Sharing.PRIVATE,
+  startOfValidityUtc: undefined,
   type: GroupType.FIXED,
   vessels: []
 }

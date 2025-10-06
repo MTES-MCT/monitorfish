@@ -92,9 +92,9 @@ describe('buildCountriesAsTreeOptions', () => {
     const nonEuCountries = result[1]?.children ?? []
 
     // Then
-    const franceInEU = euCountries.find(country => country.value === 'FRA')
-    const germanyInEU = euCountries.find(country => country.value === 'DEU')
-    const GBRInNonEU = nonEuCountries.find(country => country.value === 'GBR')
+    const franceInEU = euCountries.find(country => country.value === 'FR')
+    const germanyInEU = euCountries.find(country => country.value === 'DE')
+    const GBRInNonEU = nonEuCountries.find(country => country.value === 'GB')
 
     expect(franceInEU).toBeDefined()
     expect(franceInEU?.label).toBe('France')
@@ -129,7 +129,7 @@ describe('buildCountriesAsTreeOptions', () => {
       expect(country).toHaveProperty('value')
       expect(typeof country.label).toBe('string')
       expect(typeof country.value).toBe('string')
-      expect(country.value).toHaveLength(3) // ISO Alpha-3 codes are 3 characters
+      expect(country.value).toHaveLength(2) // ISO Alpha-2 codes are 2 characters
     })
   })
 })

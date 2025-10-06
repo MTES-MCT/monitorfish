@@ -36,8 +36,8 @@ export function YearBeaconMalfunctions({
   return (
     yearBeaconMalfunctions && (
       <div>
-        <Row $hasBorder={!isOpen}>
-          <YearListTitle as={isEmpty ? 'div' : 'button'}>
+        <Row $hasBorder={isOpen}>
+          <YearListTitle as={isEmpty ? 'div' : 'button'} onClick={() => !isEmpty && setIsOpen(!isOpen)}>
             <YearListTitleText>
               <Year>{year}</Year>
               <YearResume>
@@ -104,6 +104,8 @@ const YearResume = styled.span`
 `
 
 const Row = styled.div<{ $hasBorder: boolean }>`
+  display: flex;
+  align-items: center;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden !important;

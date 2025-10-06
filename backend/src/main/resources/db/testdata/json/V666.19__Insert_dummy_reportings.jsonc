@@ -22,7 +22,10 @@
                 "value:jsonb": {
                     "seaFront": "NAMO",
                     "riskFactor": 3.5647,
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
                     "natinfCode": 7059
                 },
                 "vessel_id": 123456,
@@ -45,7 +48,10 @@
                 "value:jsonb": {
                     "seaFront": "NAMO",
                     "riskFactor": 3.3647,
-                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
                     "natinfCode": 7059
                 },
                 "vessel_id": 123456,
@@ -69,6 +75,7 @@
                     "seaFront": "NAMO",
                     "riskFactor": 3.6947,
                     "type": "MISSING_FAR_ALERT",
+                    "name": "FAR manquant en 24h",
                     "natinfCode": 27689
                 },
                 "vessel_id": 123456,
@@ -94,7 +101,10 @@
                 "value:jsonb": {
                     "seaFront": "SA",
                     "riskFactor": 2.647,
-                    "type": "TWELVE_MILES_FISHING_ALERT",
+                    "type": "POSITION_ALERT",
+                    "alertId": 8,
+                    "name": "Pêche dans les 12 milles sans droits historiques",
+                    "description": "Pour tous les navires UE - hors navires allemands, espagnols, néerlandais et belges - ou tiers en pêche dans les 12 milles.",
                     "natinfCode": 2610
                 },
                 "vessel_id": null,
@@ -122,6 +132,7 @@
                     "flagState": "FR",
                     "riskFactor": 1.389,
                     "type": "MISSING_FAR_ALERT",
+                    "name": "FAR manquant en 24h",
                     "natinfCode": 27689
                 },
                 "vessel_id": null,
@@ -147,6 +158,7 @@
                     "flagState": "FR",
                     "riskFactor": 1.389,
                     "type": "MISSING_FAR_ALERT",
+                    "name": "FAR manquant en 24h",
                     "natinfCode": 27689
                 },
                 "vessel_id": null,
@@ -410,8 +422,11 @@
                 "value:jsonb": {
                     "seaFront": "MED",
                     "riskFactor": 2.647,
-                    "type": "BLI_BYCATCH_MAX_WEIGHT_EXCEEDED_ALERT",
-                    "natinfCode": 2610
+                    "type": "POSITION_ALERT",
+                    "alertId": 10,
+                    "name": "R(UE) 1241 - Plus de 6 tonnes de lingue bleue (BLI) à bord",
+                    "description": "Pour tous les navires sur les areas REG \\\"EOS - Lingues bleues\\\", avec plus de 6 tonnes de BLI à bord.",
+                    "natinfCode": 12900
                 },
                 "vessel_id": 115,
                 "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",

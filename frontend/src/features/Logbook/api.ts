@@ -80,7 +80,7 @@ export const logbookApi = monitorfishApi.injectEndpoints({
 })
 
 export function isVesselVoyage(response: any): response is Logbook.VesselVoyage {
-  return response.logbookMessagesAndAlerts !== undefined
+  return response.logbookMessages !== undefined
 }
 
 export const { useGetLastLogbookTripsQuery } = logbookApi

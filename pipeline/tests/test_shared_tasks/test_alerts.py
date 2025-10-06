@@ -22,7 +22,11 @@ from tests.mocks import mock_datetime_utcnow
 
 def test_extract_silenced_alerts(reset_test_data):
     silenced_alerts = extract_silenced_alerts(
-        AlertType.THREE_MILES_TRAWLING_ALERT.value
+        AlertType.POSITION_ALERT.value, alert_id=0
+    )
+    assert len(silenced_alerts) == 0
+    silenced_alerts = extract_silenced_alerts(
+        AlertType.POSITION_ALERT.value, alert_id=1
     )
     now = datetime.utcnow()
     d = timedelta(days=1)
@@ -94,9 +98,7 @@ def test_extract_silenced_alerts(reset_test_data):
 
 
 def test_extract_active_reportings(reset_test_data):
-    active_reportings = extract_active_reportings(
-        AlertType.THREE_MILES_TRAWLING_ALERT.value
-    )
+    active_reportings = extract_active_reportings(AlertType.POSITION_ALERT.value)
     expected_active_reportings = pd.DataFrame(
         {
             "internal_reference_number": [None, "SOME_VESSEL"],
@@ -116,18 +118,24 @@ def test_extract_active_reportings(reset_test_data):
 
 
 def test_extract_pending_alerts_ids_of_type(reset_test_data):
-    assert extract_pending_alerts_ids_of_type(
-        alert_type="THREE_MILES_TRAWLING_ALERT"
-    ) == [12]
+    assert extract_pending_alerts_ids_of_type(alert_type="POSITION_ALERT") == [12]
+
+    assert extract_pending_alerts_ids_of_type(alert_type="MISSING_FAR_ALERT") == []
 
     with pytest.raises(ValueError):
         extract_pending_alerts_ids_of_type(alert_type="NON_EXISTING_ALERT")
 
 
 def test_extract_non_archived_reportings_ids_of_type(reset_test_data):
-    assert extract_non_archived_reportings_ids_of_type(
-        alert_type="THREE_MILES_TRAWLING_ALERT"
-    ) == [56, 57]
+    assert extract_non_archived_reportings_ids_of_type(alert_type="POSITION_ALERT") == [
+        56,
+        57,
+    ]
+
+    assert (
+        extract_non_archived_reportings_ids_of_type(alert_type="MISSING_FAR_ALERT")
+        == []
+    )
 
     with pytest.raises(ValueError):
         extract_non_archived_reportings_ids_of_type(alert_type="NON_EXISTING_ALERT")
@@ -181,7 +189,7 @@ def test_make_alerts():
     alerts = make_alerts(
         vessels_in_alert,
         alert_type="MISSING_FAR_ALERT",
-        alert_config_name="MISSING_FAR_ALERT_CONFIG_1",
+        name="Jean-Michel d'Aitèque Sion",
     )
 
     expected_alerts = pd.DataFrame(
@@ -200,24 +208,25 @@ def test_make_alerts():
             "creation_date": [datetime(2020, 5, 3, 8, 0, 0)] * 2,
             "latitude": [9.8, -1.963],
             "longitude": [65.59, -81.71],
-            "type": ["MISSING_FAR_ALERT", "MISSING_FAR_ALERT"],
             "value": [
                 {
                     "seaFront": "NAMO",
+                    "name": "Jean-Michel d'Aitèque Sion",
                     "type": "MISSING_FAR_ALERT",
                     "riskFactor": 1.23,
                     "dml": "dml 007",
                 },
                 {
                     "seaFront": "MEMN",
+                    "name": "Jean-Michel d'Aitèque Sion",
                     "type": "MISSING_FAR_ALERT",
                     "riskFactor": 3.56,
                     "dml": "dml 22",
                 },
             ],
             "alert_config_name": [
-                "MISSING_FAR_ALERT_CONFIG_1",
-                "MISSING_FAR_ALERT_CONFIG_1",
+                "MISSING_FAR_ALERT",
+                "MISSING_FAR_ALERT",
             ],
         }
     ).astype({"creation_date": "datetime64[us]"})
@@ -229,7 +238,8 @@ def test_make_alerts():
     alerts = make_alerts(
         vessels_in_alert,
         alert_type="MISSING_FAR_ALERT",
-        alert_config_name="MISSING_FAR_ALERT_CONFIG_1",
+        name="Jean-Michel d'Aitèque Sion",
+        alert_id=42,
     )
     expected_alerts["latitude"] = None
     expected_alerts["longitude"] = None
@@ -238,6 +248,8 @@ def test_make_alerts():
         datetime(2020, 5, 3, 8, 0, 0),
     ]
     expected_alerts = expected_alerts.astype({"creation_date": "datetime64[us]"})
+    expected_alerts.value.map(lambda d: d.setdefault("alertId", 42))
+    expected_alerts["alert_config_name"] = ["MISSING_FAR_ALERT/42"] * 2
 
     pd.testing.assert_frame_equal(alerts, expected_alerts)
 
@@ -255,7 +267,7 @@ def one_day() -> timedelta:
 @pytest.fixture
 def alerts_to_filter(first_of_january_2000, one_day) -> pd.DataFrame:
     alert_type = "USER_DEFINED_ALERT_TYPE"
-    alert_config_name = "ALERTE_CHALUTAGE_CONFIG_1"
+    alert_config_name = "USER_DEFINED_ALERT_TYPE/42"
 
     return pd.DataFrame(
         {
@@ -389,6 +401,10 @@ def test_load_alerts(reset_test_data):
                     "type": alert_type,
                     "riskFactor": None,
                     "dml": "dml B",
+                    "alertId": 1,
+                    "name": "Alerte n°1",
+                    "description": "Alerte de non conformité numéro 1",
+                    "natinfCode": 123654,
                 },
             ],
             "alert_config_name": [alert_config_name],

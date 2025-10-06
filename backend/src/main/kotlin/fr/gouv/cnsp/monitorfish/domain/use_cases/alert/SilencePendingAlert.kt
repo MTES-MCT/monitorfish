@@ -78,9 +78,9 @@ class SilencePendingAlert(
                     "The fields 'internalReferenceNumber' must be not null when the vessel identifier is INTERNAL_REFERENCE_NUMBER."
                 }
                 lastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-                    silencedAlert.value.type,
-                    silencedAlert.vesselIdentifier,
-                    silencedAlert.internalReferenceNumber,
+                    alertName = silencedAlert.value.name,
+                    vesselIdentifier = silencedAlert.vesselIdentifier,
+                    value = silencedAlert.internalReferenceNumber,
                     isValidated = false,
                 )
             }
@@ -89,9 +89,9 @@ class SilencePendingAlert(
                     "The fields 'ircs' must be not null when the vessel identifier is IRCS."
                 }
                 lastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-                    silencedAlert.value.type,
-                    silencedAlert.vesselIdentifier,
-                    silencedAlert.ircs,
+                    alertName = silencedAlert.value.name,
+                    vesselIdentifier = silencedAlert.vesselIdentifier,
+                    value = silencedAlert.ircs,
                     isValidated = false,
                 )
             }
@@ -100,9 +100,9 @@ class SilencePendingAlert(
                     "The fields 'externalReferenceNumber' must be not null when the vessel identifier is EXTERNAL_REFERENCE_NUMBER."
                 }
                 lastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-                    silencedAlert.value.type,
-                    silencedAlert.vesselIdentifier,
-                    silencedAlert.externalReferenceNumber,
+                    alertName = silencedAlert.value.name,
+                    vesselIdentifier = silencedAlert.vesselIdentifier,
+                    value = silencedAlert.externalReferenceNumber,
                     isValidated = false,
                 )
             }

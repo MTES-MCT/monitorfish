@@ -11,6 +11,6 @@ INSERT INTO pending_alerts (
     12,
     'L''AMBRE', 'FRA000614250', 'GV614250', 'FUJW', 'INTERNAL_REFERENCE_NUMBER',
     '2021-12-23 16:03:00+00', NULL, 'FR',
-    '{"type": "THREE_MILES_TRAWLING_ALERT", "seaFront": "NAMO"}',
-    'ALERTE_1'
+    '{"type": "POSITION_ALERT", "alertId": 1, "seaFront": "NAMO"}',
+    'POSITION_ALERT/1'
 );

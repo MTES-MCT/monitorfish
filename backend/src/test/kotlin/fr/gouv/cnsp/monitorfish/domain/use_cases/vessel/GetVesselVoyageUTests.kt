@@ -5,7 +5,6 @@ import com.nhaarman.mockitokotlin2.times
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PNOAndLANAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -21,9 +20,6 @@ import java.time.ZonedDateTime
 class GetVesselVoyageUTests {
     @MockBean
     private lateinit var logbookReportRepository: LogbookReportRepository
-
-    @MockBean
-    private lateinit var PNOAndLANAlertRepository: PNOAndLANAlertRepository
 
     @MockBean
     private lateinit var getLogbookMessages: GetLogbookMessages
@@ -48,10 +44,8 @@ class GetVesselVoyageUTests {
 
         // When
         val voyage =
-            GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
+            GetVesselVoyage(logbookReportRepository, getLogbookMessages)
                 .execute("FR224226850", VoyageRequest.LAST, null)
-
-        val (_, alerts) = voyage.logbookMessagesAndAlerts
 
         // Then
         Mockito.verify(logbookReportRepository, times(0)).findTripAfterTripNumber("FR224226850", "1234")
@@ -61,7 +55,6 @@ class GetVesselVoyageUTests {
         assertThat(voyage.startDate).isEqualTo(startDate)
         assertThat(voyage.tripNumber).isEqualTo("1234")
         assertThat(voyage.endDate).isEqualTo(endDateWithoutLAN)
-        assertThat(alerts).hasSize(0)
     }
 
     @Test
@@ -69,7 +62,7 @@ class GetVesselVoyageUTests {
         // When
         val throwable =
             catchThrowable {
-                GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
+                GetVesselVoyage(logbookReportRepository, getLogbookMessages)
                     .execute("FR224226850", VoyageRequest.PREVIOUS, null)
             }
 
@@ -98,10 +91,8 @@ class GetVesselVoyageUTests {
 
         // When
         val voyage =
-            GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
+            GetVesselVoyage(logbookReportRepository, getLogbookMessages)
                 .execute("FR224226850", VoyageRequest.LAST, "12345")
-
-        val (_, alerts) = voyage.logbookMessagesAndAlerts
 
         // Then
         Mockito.verify(logbookReportRepository).findTripAfterTripNumber("FR224226850", "123456789")
@@ -111,7 +102,6 @@ class GetVesselVoyageUTests {
         assertThat(voyage.isFirstVoyage).isFalse
         assertThat(voyage.startDate).isEqualTo(startDate)
         assertThat(voyage.endDate).isEqualTo(endDateWithoutLAN)
-        assertThat(alerts).hasSize(0)
     }
 
     @Test
@@ -135,17 +125,14 @@ class GetVesselVoyageUTests {
 
         // When
         val voyage =
-            GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
+            GetVesselVoyage(logbookReportRepository, getLogbookMessages)
                 .execute("FR224226850", VoyageRequest.NEXT, "123456788")
-
-        val (_, alerts) = voyage.logbookMessagesAndAlerts
 
         // Then
         assertThat(voyage.isLastVoyage).isTrue
         assertThat(voyage.isFirstVoyage).isFalse
         assertThat(voyage.startDate).isEqualTo(expectedStartDate)
         assertThat(voyage.endDate).isEqualTo(expectedEndDateWithoutLAN)
-        assertThat(alerts).hasSize(0)
     }
 
     @Test
@@ -165,16 +152,13 @@ class GetVesselVoyageUTests {
 
         // When
         val voyage =
-            GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
+            GetVesselVoyage(logbookReportRepository, getLogbookMessages)
                 .execute("FR224226850", VoyageRequest.EQUALS, "123456788")
-
-        val (_, alerts) = voyage.logbookMessagesAndAlerts
 
         // Then
         assertThat(voyage.isLastVoyage).isFalse
         assertThat(voyage.isFirstVoyage).isFalse
         assertThat(voyage.startDate).isEqualTo(expectedStartDate)
         assertThat(voyage.endDate).isEqualTo(expectedEndDateWithoutLAN)
-        assertThat(alerts).hasSize(0)
     }
 }

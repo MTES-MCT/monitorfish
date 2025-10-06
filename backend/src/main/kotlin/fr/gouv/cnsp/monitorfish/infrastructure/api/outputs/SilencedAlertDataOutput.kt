@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilencedAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
@@ -16,7 +16,7 @@ class SilencedAlertDataOutput(
     val vesselIdentifier: VesselIdentifier,
     val flagState: CountryCode,
     val silencedBeforeDate: ZonedDateTime,
-    val value: AlertType,
+    val value: Alert,
 ) {
     companion object {
         fun fromSilencedAlert(silencedAlert: SilencedAlert) =

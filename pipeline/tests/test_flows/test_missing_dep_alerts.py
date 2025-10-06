@@ -138,6 +138,7 @@ def test_flow(reset_test_data_missing_dep_alerts):
         "trip_number": None,
         "value": {
             "dml": "DML 29",
+            "name": 'Sortie sans émission de message "DEP"',
             "type": "MISSING_DEP_ALERT",
             "seaFront": "SA",
             "riskFactor": 2.58,

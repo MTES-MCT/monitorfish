@@ -5,8 +5,9 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
@@ -39,7 +40,7 @@ class ValidatePendingAlertUTests {
     @Test
     fun `execute Should validate a pending alert`() {
         // Given
-        val pendingAlert =
+        val pendingPositionAlert =
             PendingAlert(
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
@@ -49,11 +50,18 @@ class ValidatePendingAlertUTests {
                 flagState = CountryCode.FR,
                 tripNumber = "123456",
                 creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert(),
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ),
                 latitude = 12.123,
                 longitude = -5.5698,
             )
-        given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
+        given(pendingAlertRepository.find(any())).willReturn(pendingPositionAlert)
 
         // When
         ValidatePendingAlert(
@@ -64,14 +72,14 @@ class ValidatePendingAlertUTests {
         ).execute(666)
 
         // Then
-        Mockito.verify(silencedAlertRepository).save(eq(pendingAlert), any(), any())
+        Mockito.verify(silencedAlertRepository).save(eq(pendingPositionAlert), any(), any())
         Mockito.verify(pendingAlertRepository).delete(eq(666))
-        Mockito.verify(reportingRepository).save(eq(pendingAlert), any())
+        Mockito.verify(reportingRepository).save(eq(pendingPositionAlert), any())
         Mockito.verify(lastPositionRepository).removeAlertToLastPositionByVesselIdentifierEquals(
-            AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            "FRFGRGR",
-            true,
+            alertName = "Chalutage dans les 3 milles",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            value = "FRFGRGR",
+            isValidated = true,
         )
     }
 

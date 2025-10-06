@@ -1,38 +1,48 @@
+import { useGetAllAlertSpecificationsQuery } from '@features/Alert/apis'
 import { FieldError, Select } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import styled from 'styled-components'
-
-import { OPERATIONAL_ALERTS, PendingAlertValueType } from '../../../../constants'
 
 import type { SilencedAlertFormValues } from '../types'
 
 export function AlertTypeField() {
   const [input, meta, helper] = useField<SilencedAlertFormValues['value']>('value')
+  const { data: alertSpecifications } = useGetAllAlertSpecificationsQuery()
 
-  const alertsAsOptions = OPERATIONAL_ALERTS.map(alert => ({
-    label: alert.name,
-    value: alert.code
-  }))
+  const alertsAsOptions =
+    alertSpecifications?.map(alert => ({
+      label: alert.name,
+      value: alert.name
+    })) ?? []
 
-  const add = (alert: PendingAlertValueType | undefined) => {
-    if (!alert) {
+  const add = (alertName: string | undefined) => {
+    if (!alertName || !alertSpecifications) {
       helper.setValue(undefined)
 
       return
     }
 
-    helper.setValue({ type: alert })
+    const nextValue = alertSpecifications.find(alert => alert.name === alertName)
+    if (!nextValue) {
+      return
+    }
+
+    helper.setValue({
+      alertId: nextValue.id,
+      name: nextValue.name,
+      type: nextValue.type
+    })
   }
 
   return (
     <>
       <StyledSelect
         label="Alerte suspendue"
-        name="newGear"
-        onChange={nextValue => add(nextValue as PendingAlertValueType)}
+        name="alertName"
+        onChange={nextValue => add(nextValue as string | undefined)}
         options={alertsAsOptions}
         searchable
-        value={input.value?.type}
+        value={input.value?.name}
       />
 
       {/* @ts-ignore */}

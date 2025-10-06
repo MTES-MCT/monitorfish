@@ -1,3 +1,5 @@
+import { AdditionalSubMenu } from '@features/Alert/components/SideWindowAlerts/constants'
+import { Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import type { Option } from '@mtes-mct/monitor-ui'
@@ -29,7 +31,10 @@ export function Item<T extends string = string>({
       data-cy={`side-window-sub-menu-${option.value}`}
       onClick={() => onClick(option.value)}
     >
-      {option.label}
+      <span>
+        {option.value === AdditionalSubMenu.ALERT_MANAGEMENT && <StyledSettings />}
+        {option.label}
+      </span>
       {count > 0 && (
         <CircleWithKeyMetric $isSelected={isSelected} data-cy={`side-window-sub-menu-${option.value}-number`}>
           {count}
@@ -39,6 +44,10 @@ export function Item<T extends string = string>({
     </MenuButton>
   )
 }
+
+const StyledSettings = styled(Icon.Alert)`
+  margin-right: 8px;
+`
 
 const BadgeNumber = styled.div`
   display: inline-block;
@@ -53,7 +62,7 @@ const BadgeNumber = styled.div`
   background: ${p => p.theme.color.maximumRed};
   color: ${p => p.theme.color.white};
   font-size: 12px;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   font-weight: 700;
 `
 
@@ -63,16 +72,21 @@ const MenuButton = styled.div<{
 }>`
   align-items: center;
   background: ${p => (p.$isSelected ? p.theme.color.lightGray : 'unset')};
+  color: ${p => (p.$isSelected ? p.theme.color.gunMetal : p.theme.color.slateGray)};
   border-bottom: 0.5px solid ${p => p.theme.color.lightGray};
   cursor: pointer;
   display: flex;
-  font-size: 16px;
   height: 47px;
   justify-content: space-between;
   opacity: 1;
-  padding: 0px 16px;
+  padding: 0 16px;
   transition: all 0.5s ease;
   width: ${p => p.$width - 32}px;
+
+  span:first-child {
+    font-size: 16px;
+    vertical-align: bottom;
+  }
 `
 
 const CircleWithKeyMetric = styled.span<{

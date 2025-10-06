@@ -3,10 +3,9 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilencedAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.MissingFAR48HoursAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.MissingFARAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.SilencedAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.SilenceAlert
@@ -26,7 +25,7 @@ class SilenceAlertUTests {
     fun `execute Should silence an alert`() {
         // Given
         val now = ZonedDateTime.now()
-        val alertToSilence =
+        val positionAlertToSilence =
             SilencedAlert(
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
@@ -34,20 +33,27 @@ class SilenceAlertUTests {
                 vesselId = 123,
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
-                value = ThreeMilesTrawlingAlert(),
+                value =
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        name = "Chalutage dans les 3 milles",
+                    ),
                 silencedBeforeDate = now.plusDays(25),
             )
-        given(silencedAlertRepository.save(any())).willReturn(alertToSilence)
+        given(silencedAlertRepository.save(any())).willReturn(positionAlertToSilence)
 
         // When
-        SilenceAlert(silencedAlertRepository).execute(alertToSilence)
+        SilenceAlert(silencedAlertRepository).execute(positionAlertToSilence)
 
         // Then
         argumentCaptor<SilencedAlert>().apply {
             verify(silencedAlertRepository, times(1)).save(capture())
 
             assertThat(allValues.first().internalReferenceNumber).isEqualTo("FRFGRGR")
-            assertThat(allValues.first().value.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
+            assertThat(allValues.first().value.type).isEqualTo(AlertType.POSITION_ALERT)
             assertThat(allValues.first().value.natinfCode).isEqualTo(7059)
             assertThat(allValues.first().silencedBeforeDate).isEqualTo(now.plusDays(25))
         }
@@ -65,7 +71,7 @@ class SilenceAlertUTests {
                 vesselId = 123,
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
-                value = MissingFARAlert(),
+                value = AlertType.MISSING_FAR_ALERT.getValue(),
                 silencedBeforeDate = now.plusDays(25),
             )
         given(silencedAlertRepository.save(any())).willReturn(alertToSilence)
@@ -78,12 +84,12 @@ class SilenceAlertUTests {
             verify(silencedAlertRepository, times(2)).save(capture())
 
             assertThat(allValues.first().internalReferenceNumber).isEqualTo("FRFGRGR")
-            assertThat(allValues.first().value.type).isEqualTo(AlertTypeMapping.MISSING_FAR_ALERT)
+            assertThat(allValues.first().value.type).isEqualTo(AlertType.MISSING_FAR_ALERT)
             assertThat(allValues.first().value.natinfCode).isEqualTo(27689)
             assertThat(allValues.first().silencedBeforeDate).isEqualTo(now.plusDays(25))
 
             assertThat(allValues.last().internalReferenceNumber).isEqualTo("FRFGRGR")
-            assertThat(allValues.last().value.type).isEqualTo(AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT)
+            assertThat(allValues.last().value.type).isEqualTo(AlertType.MISSING_FAR_48_HOURS_ALERT)
             assertThat(allValues.last().value.natinfCode).isEqualTo(27689)
             assertThat(allValues.last().silencedBeforeDate).isEqualTo(now.plusDays(25))
         }
@@ -101,7 +107,7 @@ class SilenceAlertUTests {
                 vesselId = 123,
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
-                value = MissingFAR48HoursAlert(),
+                value = AlertType.MISSING_FAR_48_HOURS_ALERT.getValue(),
                 silencedBeforeDate = now.plusDays(25),
             )
         given(silencedAlertRepository.save(any())).willReturn(alertToSilence)
@@ -114,12 +120,12 @@ class SilenceAlertUTests {
             verify(silencedAlertRepository, times(2)).save(capture())
 
             assertThat(allValues.first().internalReferenceNumber).isEqualTo("FRFGRGR")
-            assertThat(allValues.first().value.type).isEqualTo(AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT)
+            assertThat(allValues.first().value.type).isEqualTo(AlertType.MISSING_FAR_48_HOURS_ALERT)
             assertThat(allValues.first().value.natinfCode).isEqualTo(27689)
             assertThat(allValues.first().silencedBeforeDate).isEqualTo(now.plusDays(25))
 
             assertThat(allValues.last().internalReferenceNumber).isEqualTo("FRFGRGR")
-            assertThat(allValues.last().value.type).isEqualTo(AlertTypeMapping.MISSING_FAR_ALERT)
+            assertThat(allValues.last().value.type).isEqualTo(AlertType.MISSING_FAR_ALERT)
             assertThat(allValues.last().value.natinfCode).isEqualTo(27689)
             assertThat(allValues.last().silencedBeforeDate).isEqualTo(now.plusDays(25))
         }

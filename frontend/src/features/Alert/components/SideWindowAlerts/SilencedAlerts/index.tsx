@@ -1,4 +1,3 @@
-import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
 import { addSilencedAlert } from '@features/Alert/useCases/addSilencedAlert'
 import { reactivateSilencedAlert } from '@features/Alert/useCases/reactivateSilencedAlert'
 import { Flag } from '@features/commonComponents/Flag'
@@ -32,17 +31,8 @@ export function SilencedAlerts() {
   const fuse = useMemo(
     () =>
       new CustomSearch(
-        silencedAlerts,
-        [
-          'vesselName',
-          'internalReferenceNumber',
-          'externalReferenceNumber',
-          'ircs',
-          {
-            getFn: alert => getAlertNameFromType(alert.value.type),
-            name: ['value', 'type']
-          }
-        ],
+        structuredClone(silencedAlerts),
+        ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs', 'value.name'],
         { threshold: 0.4 }
       ),
     [silencedAlerts]
@@ -133,7 +123,7 @@ export function SilencedAlerts() {
                     />
                     {alert.vesselName}
                   </VesselName>
-                  <AlertType>{getAlertNameFromType(alert.value.type)}</AlertType>
+                  <AlertType>{alert.value.name}</AlertType>
                   <Natinf>{alert.value.natinfCode}</Natinf>
                   <DateColumn>{timeago.format(alert.silencedBeforeDate, 'fr')}</DateColumn>
                   <DateColumn>{getDateTime(alert.silencedBeforeDate, true)}</DateColumn>
@@ -204,7 +194,7 @@ const Title = styled.h2`
   color: ${p => p.theme.color.gunMetal};
   font-size: 22px;
   font-weight: 700;
-  margin: 30px 0px;
+  margin: 30px 0;
   padding-bottom: 5px;
   text-align: left;
   transition: all 0.2s;

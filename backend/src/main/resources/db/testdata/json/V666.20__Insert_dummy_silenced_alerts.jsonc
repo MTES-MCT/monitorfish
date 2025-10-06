@@ -1,0 +1,78 @@
+[
+    {
+        "table": "silenced_alerts",
+        "beforeAll": "TRUNCATE TABLE silenced_alerts RESTART IDENTITY CASCADE;",
+        "data": [
+            {
+                "vessel_name": "NATUREL NON FUIR",
+                "internal_reference_number": "ABC000571489",
+                "external_reference_number": "IS726385",
+                "ircs": "LRED",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "flag_state": "FR",
+                "silenced_before_date:sql": "NOW() + ('15 DAYS')::interval",
+                "value:jsonb": {
+                    "seaFront": "MEMN",
+                    "riskFactor": 3.6947,
+                    "type": "POSITION_ALERT",
+                    "alertId": 8,
+                    "name": "Pêche dans les 12 milles sans droits historiques",
+                    "description": "Pour tous les navires UE - hors navires allemands, espagnols, néerlandais et belges - ou tiers en pêche dans les 12 milles.",
+                    "natinfCode": 2610
+                }
+            },
+            {
+                "vessel_name": "JARDIN TANT DESCENDRE",
+                "internal_reference_number": "ABC000417080",
+                "external_reference_number": "KS181242",
+                "ircs": "QFH9332",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "flag_state": "FR",
+                "silenced_before_date:sql": "NOW() + ('50 DAYS')::interval",
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 3.6947,
+                    "type": "MISSING_FAR_ALERT",
+                    "name": "FAR manquant en 24h",
+                    "natinfCode": 27689
+                }
+            },
+            {
+                "vessel_name": "FRAPPER PREFERER RIRE",
+                "internal_reference_number": "ABC000900977",
+                "external_reference_number": "QG773364",
+                "ircs": "CA2048",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "flag_state": "FR",
+                "silenced_before_date:sql": "NOW() + ('5 HOURS')::interval",
+                "value:jsonb": {
+                    "seaFront": "SA",
+                    "riskFactor": 3.6947,
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "natinfCode": 7059
+                }
+            },
+            {
+                "vessel_name": "FORTUNE ARME ABATTRE",
+                "internal_reference_number": "ABC000677933",
+                "external_reference_number": "IG415546",
+                "ircs": "UTIG",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "flag_state": "X",
+                "silenced_before_date:sql": "NOW() + ('24 HOURS')::interval",
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 3.6947,
+                    "type": "POSITION_ALERT",
+                    "alertId": 1,
+                    "name": "Chalutage dans les 3 milles",
+                    "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
+                    "natinfCode": 7059
+                }
+            }
+        ]
+    }
+]

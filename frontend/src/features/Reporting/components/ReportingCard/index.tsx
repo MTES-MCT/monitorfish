@@ -1,11 +1,11 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
-import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
-import { ALERTS_ARCHIVED_AFTER_NEW_VOYAGE, PendingAlertValueType } from '@features/Alert/constants'
+import { useGetAllAlertSpecificationsQuery } from '@features/Alert/apis'
+import { PendingAlertValueType } from '@features/Alert/constants'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Accent, Icon, IconButton, THEME, Link, Level } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Level, Link, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -29,6 +29,11 @@ export function ReportingCard({
   reporting
 }: ReportingCardProps) {
   const dispatch = useMainAppDispatch()
+  const { data: alertSpecifications } = useGetAllAlertSpecificationsQuery()
+
+  const alertsNamesWithAutomaticArchiving = (alertSpecifications ?? [])
+    .filter(alertSpecification => alertSpecification.hasAutomaticArchiving && alertSpecification.isActivated)
+    .map(alertSpecification => alertSpecification.name)
 
   const [isDeletionConfirmationModalOpen, setIsDeletionConfirmationModalOpen] = useState(false)
   const [isArchivingConfirmationModalOpen, setIsArchivingConfirmationModalOpen] = useState(false)
@@ -38,7 +43,10 @@ export function ReportingCard({
   const reportingName = Object.values(ReportingTypeCharacteristics).find(
     reportingType => reportingType.code === reporting.type
   )?.name
-  const willExpireAfterNewVoyage = ALERTS_ARCHIVED_AFTER_NEW_VOYAGE.includes(reporting.value.type)
+  const willExpireAfterNewVoyage =
+    reporting.type === ReportingType.ALERT
+      ? !!reporting.value.name && alertsNamesWithAutomaticArchiving.includes(reporting.value.name)
+      : false
   const willExpire = willExpireAfterNewVoyage || !!reporting.expirationDate
   const canBeArchived = !(
     reporting.type === ReportingType.ALERT && reporting.value.type === PendingAlertValueType.MISSING_FAR_48_HOURS_ALERT
@@ -154,10 +162,7 @@ export function ReportingCard({
 
         <Body $isInfractionSuspicion={isAnInfractionSuspicion}>
           <Title>
-            {reportingActor} /{' '}
-            {reporting.type === ReportingType.ALERT
-              ? getAlertNameFromType(reporting.value.type)
-              : reporting.value.title}
+            {reportingActor} / {reporting.type === ReportingType.ALERT ? reporting.value.name : reporting.value.title}
           </Title>
           <DateText>
             {otherOccurrencesOfSameAlert.length > 0 ? 'Dernière alerte le' : 'Le'} {alertDateTime}

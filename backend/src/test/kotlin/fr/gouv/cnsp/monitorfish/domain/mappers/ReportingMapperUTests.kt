@@ -2,7 +2,9 @@ package fr.gouv.cnsp.monitorfish.domain.mappers
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -31,31 +33,41 @@ class ReportingMapperUTests {
     }
 
     @Test
-    fun `getReportingValueFromJSON Should deserialize an THREE_MILES_TRAWLING_ALERT When it is first serialized`() {
+    fun `getReportingValueFromJSON Should deserialize an PositionAlert When it is first serialized`() {
         // Given
-        val alert = ThreeMilesTrawlingAlert("NAMO", "DML 56", 2.356)
+        val positionAlert =
+            Alert(
+                type = AlertType.POSITION_ALERT,
+                seaFront = NAMO.toString(),
+                alertId = 1,
+                natinfCode = 7059,
+                riskFactor = 2.356,
+                name = "Chalutage dans les 3 milles",
+            )
 
         // When
-        val jsonString = mapper.writeValueAsString(alert)
+        val jsonString = mapper.writeValueAsString(positionAlert)
         val parsedReporting = ReportingMapper.getReportingValueFromJSON(mapper, jsonString, ReportingType.ALERT)
 
         // Then
-        assertThat(parsedReporting).isInstanceOf(ThreeMilesTrawlingAlert::class.java)
-        parsedReporting as ThreeMilesTrawlingAlert
+        assertThat(parsedReporting).isInstanceOf(Alert::class.java)
+        parsedReporting as Alert
         assertThat(parsedReporting.seaFront).isEqualTo("NAMO")
         assertThat(parsedReporting.riskFactor).isEqualTo(2.356)
     }
 
     @Test
-    fun `getReportingValueFromJSON Should deserialize an THREE_MILES_TRAWLING_ALERT json`() {
+    fun `getReportingValueFromJSON Should deserialize an POSITION_ALERT json`() {
         // Given
-        val alert = "{\"type\": \"THREE_MILES_TRAWLING_ALERT\", \"seaFront\": \"MEMN\", \"riskFactor\": 1.2311444133}"
+        val alert =
+            "{\"type\": \"POSITION_ALERT\", \"alertId\": 1, \"name\": \"Chalutage\", " +
+                "\"seaFront\": \"MEMN\", \"riskFactor\": 1.2311444133}"
 
         val parsedReporting = ReportingMapper.getReportingValueFromJSON(mapper, alert, ReportingType.ALERT)
 
         // Then
-        assertThat(parsedReporting).isInstanceOf(ThreeMilesTrawlingAlert::class.java)
-        parsedReporting as ThreeMilesTrawlingAlert
+        assertThat(parsedReporting).isInstanceOf(Alert::class.java)
+        parsedReporting as Alert
         assertThat(parsedReporting.seaFront).isEqualTo("MEMN")
         assertThat(parsedReporting.riskFactor).isEqualTo(1.2311444133)
     }

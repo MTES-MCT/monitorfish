@@ -1,4 +1,3 @@
-import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
 import { Logbook } from '@features/Logbook/Logbook.types'
 
 import { ReportingOriginActor, ReportingType } from '../../types'
@@ -32,7 +31,7 @@ export const getReportingOrigin = (reporting: Reporting.Reporting, isHovering: b
 
 export function getReportingTitle(reporting: Reporting.Reporting, isHovering: boolean = false): string {
   if (reporting.type === ReportingType.ALERT) {
-    return getAlertNameFromType(reporting.value.type)
+    return reporting.value.name ?? ''
   }
 
   return isHovering ? `${reporting.value.title}: ${reporting.value.description}` : reporting.value.title

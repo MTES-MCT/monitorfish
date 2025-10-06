@@ -55,7 +55,7 @@ export function YearReportings({ reportingAndOccurences, year }: YearReportingsP
 
   return (
     <div>
-      <Row $hasBorder={!isOpen}>
+      <Row $hasBorder={isOpen}>
         <YearListTitle
           as={!reportingAndOccurences.length ? 'div' : 'button'}
           data-cy="vessel-sidebar-reporting-archive-year"

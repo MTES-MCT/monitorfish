@@ -10,33 +10,45 @@ export function RightMenuOnHoverArea() {
   const dispatch = useMainAppDispatch()
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
+  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
   const isControlUnitListDialogDisplayed = useMainAppSelector(
     state => state.displayedComponent.isControlUnitListDialogDisplayed
   )
 
   const areaRef = useRef(null)
   const clickedOutsideComponent = useClickOutsideWhenOpened(areaRef, !!selectedVessel)
+  const shouldExpand = !selectedVessel || !!rightMapBoxOpened || isControlUnitListDialogDisplayed
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    if (!selectedVessel || rightMapBoxOpened || !!isControlUnitListDialogDisplayed) {
+    if (shouldExpand) {
       dispatch(expandRightMenu())
 
       return
     }
 
     dispatch(contractRightMenu())
-  }, [dispatch, clickedOutsideComponent, rightMapBoxOpened, isControlUnitListDialogDisplayed, selectedVessel])
+  }, [
+    dispatch,
+    clickedOutsideComponent,
+    rightMapBoxOpened,
+    isControlUnitListDialogDisplayed,
+    selectedVessel,
+    shouldExpand
+  ])
 
-  return selectedVessel && <Area ref={areaRef} onMouseEnter={() => dispatch(expandRightMenu())} />
+  return (
+    selectedVessel && (
+      <Area ref={areaRef} $isExpanded={rightMenuIsOpen} onMouseEnter={() => dispatch(expandRightMenu())} />
+    )
+  )
 }
 
-const Area = styled.div`
+const Area = styled.div<{ $isExpanded: boolean | undefined }>`
   height: 100%;
   right: 0;
   width: 60px;
   opacity: 0;
   position: absolute;
   top: 0;
-  z-index: 1;
+  z-index: ${p => (p.$isExpanded ? -1 : 2)};
 `

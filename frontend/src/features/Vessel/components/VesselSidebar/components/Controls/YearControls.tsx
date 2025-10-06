@@ -86,7 +86,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
   return (
     yearControls && (
       <div>
-        <Row $hasBorder={!isOpen}>
+        <Row $hasBorder={isOpen}>
           <YearListTitle as={isEmpty ? 'div' : 'button'} onClick={() => !isEmpty && setIsOpen(!isOpen)}>
             <YearListTitleText>
               <Year>{year}</Year>

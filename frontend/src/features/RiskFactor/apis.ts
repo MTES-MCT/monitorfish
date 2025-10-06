@@ -1,24 +1,9 @@
 import { monitorfishApi } from '@api/api'
 import { BackendApi } from '@api/BackendApi.types'
+import { valueOrUndefinedIfNotFoundOrThrow } from '@api/utils'
 import { RiskFactorSchema } from '@features/RiskFactor/types'
 
 import type { RiskFactor } from '@features/RiskFactor/types'
-import type { SafeParseReturnType } from 'zod'
-
-function valueOrUndefinedIfNotFoundOrThrow<Type>(
-  result: SafeParseReturnType<any, any>,
-  response: BackendApi.ResponseBodyError | Type
-): Type | undefined {
-  if (!result.success) {
-    if ((response as BackendApi.ResponseBodyError).code === BackendApi.ErrorCode.NOT_FOUND_BUT_OK) {
-      return undefined
-    }
-
-    throw result.error
-  }
-
-  return response as Type
-}
 
 export const riskFactorApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({

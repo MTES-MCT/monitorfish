@@ -9,8 +9,8 @@ import { DynamicVesselGroupSchema, FixedVesselGroupSchema } from '@features/Vess
 import { z } from 'zod'
 
 export const VesselSchema = z.strictObject({
-  activityOrigin: z.nativeEnum(ActivityOrigin).optional(),
-  alerts: z.array(z.nativeEnum(PendingAlertValueType)),
+  activityOrigin: z.enum(ActivityOrigin).optional(),
+  alerts: z.array(z.enum(PendingAlertValueType)),
   beacon: BeaconSchema.optional(),
   beaconMalfunctionId: z.number().optional(),
   bossAddress: z.string().optional(),
@@ -54,7 +54,7 @@ export const VesselSchema = z.strictObject({
   proprietorName: z.string().optional(),
   proprietorPhones: z.array(z.string()),
   registryPort: z.string().optional(),
-  reportings: z.array(z.nativeEnum(ReportingType)),
+  reportings: z.array(z.enum(ReportingType)),
   riskFactor: RiskFactorSchema,
   sailingCategory: z.string().optional(),
   sailingType: z.string().optional(),
@@ -62,7 +62,7 @@ export const VesselSchema = z.strictObject({
   underCharter: z.boolean().optional(),
   vesselEmails: z.array(z.string()),
   vesselId: z.number().optional(),
-  vesselIdentifier: z.nativeEnum(VesselIdentifier).optional(),
+  vesselIdentifier: z.enum(VesselIdentifier).optional(),
   vesselName: z.string().optional(),
   vesselPhones: z.array(z.string()),
   vesselType: z.string().optional(),

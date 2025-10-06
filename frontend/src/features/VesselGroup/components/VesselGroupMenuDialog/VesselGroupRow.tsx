@@ -16,6 +16,8 @@ import styled from 'styled-components'
 import { UserAccountContext } from '../../../../context/UserAccountContext'
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 
+import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
+
 type VesselGroupRowProps = {
   isLastPinned: boolean
   vesselGroup: VesselGroup
@@ -148,7 +150,9 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
               )}
               {vesselGroup.type === GroupType.DYNAMIC && (
                 <>
-                  {isGroupFilterCriteriaOpen && <StyledFilterTags isReadOnly listFilterValues={vesselGroup?.filters} />}
+                  {isGroupFilterCriteriaOpen && (
+                    <StyledFilterTags isReadOnly listFilterValues={vesselGroup?.filters as VesselListFilter} />
+                  )}
                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <StyledLink
                     $isOpen={isGroupFilterCriteriaOpen}

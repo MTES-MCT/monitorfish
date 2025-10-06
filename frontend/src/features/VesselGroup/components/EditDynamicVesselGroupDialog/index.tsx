@@ -25,6 +25,7 @@ import { vesselGroupActions } from '@features/VesselGroup/slice'
 import {
   type CreateOrUpdateDynamicVesselGroup,
   type CreateOrUpdateVesselGroup,
+  type DynamicVesselGroupFilter,
   GroupType
 } from '@features/VesselGroup/types'
 import { countFilteredVessels } from '@features/VesselGroup/useCases/countFilteredVessels'
@@ -48,7 +49,7 @@ import type { Promisable } from 'type-fest'
 
 type ExportActivityReportsDialogProps = {
   editedVesselGroup?: CreateOrUpdateVesselGroup
-  initialListFilterValues: VesselListFilter
+  initialListFilterValues: DynamicVesselGroupFilter
   isMainWindow?: boolean
   onExit: () => Promisable<void>
 }
@@ -63,7 +64,7 @@ export function EditDynamicVesselGroupDialog({
 
   useDisplayWarningWhenEditingSharedGroup(editedVesselGroup?.sharing, isMainWindow)
 
-  const [listFilterValues, setListFilterValues] = useState<VesselListFilter>(initialListFilterValues)
+  const [listFilterValues, setListFilterValues] = useState<DynamicVesselGroupFilter>(initialListFilterValues)
   // Used to save modification when a custom zone is drawn
   const editedVesselGroupRef = useRef<CreateOrUpdateVesselGroup | undefined>(editedVesselGroup)
   const [vesselsFound, setVesselsFound] = useState<number | undefined>(undefined)
@@ -79,7 +80,7 @@ export function EditDynamicVesselGroupDialog({
 
   const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.EDIT_DYNAMIC_VESSEL_GROUP_DIALOG)
 
-  const updateListFilterValuesAndCountVessels = async (nextListFilterValues: VesselListFilter) => {
+  const updateListFilterValuesAndCountVessels = async (nextListFilterValues: DynamicVesselGroupFilter) => {
     setListFilterValues(nextListFilterValues)
 
     const nextVesselsFound = await dispatch(countFilteredVessels(nextListFilterValues))
@@ -508,7 +509,7 @@ export function EditDynamicVesselGroupDialog({
           <Checkbox checked={isAtPort} label="À quai" name="always" onChange={updateVesselLocationAtPort} />
         </Row>
         <StyledFilterTags
-          listFilterValues={listFilterValues}
+          listFilterValues={listFilterValues as VesselListFilter}
           onFilter={nextListFilterValues => updateListFilterValuesAndCountVessels(nextListFilterValues)}
           onReset={() => updateListFilterValuesAndCountVessels(DEFAULT_VESSEL_LIST_FILTER_VALUES)}
         />

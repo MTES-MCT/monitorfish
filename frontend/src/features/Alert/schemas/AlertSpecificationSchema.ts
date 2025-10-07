@@ -23,14 +23,14 @@ export const RegulatoryAreaSpecificationSchema = z.strictObject({
 
 export const AdministrativeAreaSpecificationSchema = z.strictObject({
   areas: z.array(z.string()),
-  areaType: z.nativeEnum(AdministrativeAreaType)
+  areaType: z.enum(AdministrativeAreaType)
 })
 
 export const AlertSpecificationSchema = z.strictObject({
   administrativeAreas: z.array(AdministrativeAreaSpecificationSchema),
   createdAtUtc: z.string(),
   createdBy: z.string(),
-  description: z.string({ message: 'Champ Description requis' }),
+  description: z.string({ message: 'Champ Description requis' }).min(1, 'Champ Description requis'),
   districtCodes: z.array(z.string()),
   errorReason: stringOrUndefined,
   flagStatesIso2: z.array(z.string()),
@@ -41,8 +41,8 @@ export const AlertSpecificationSchema = z.strictObject({
   isInError: z.boolean(),
   isUserDefined: z.boolean(),
   minDepth: numberOrUndefined,
-  name: z.string({ message: 'Champ Nom requis' }),
-  natinfCode: z.number({ message: 'Champ Natinf requis' }),
+  name: z.string({ message: 'Champ Nom requis' }).min(1, 'Champ Nom requis'),
+  natinfCode: z.number({ message: 'Champ Natinf requis' }).gte(1, 'Champ Natinf requis'),
   onlyFishingPositions: z.boolean(),
   producerOrganizations: z.array(z.string()),
   regulatoryAreas: z.array(RegulatoryAreaSpecificationSchema),
@@ -50,7 +50,7 @@ export const AlertSpecificationSchema = z.strictObject({
   species: z.array(SpeciesSpecificationSchema),
   speciesCatchAreas: z.array(z.string()),
   trackAnalysisDepth: z.number(),
-  type: z.nativeEnum(PendingAlertValueType),
+  type: z.enum(PendingAlertValueType),
   validityEndDatetimeUtc: z.string().optional(),
   validityStartDatetimeUtc: z.string().optional(),
   vesselIds: z.array(z.number()),

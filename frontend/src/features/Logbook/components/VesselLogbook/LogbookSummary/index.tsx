@@ -106,7 +106,7 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
                   onClick={!isFirstVoyage ? goToPreviousTrip : undefined}
                   title="Marée précédente"
                 />
-                <Select
+                <StyledSelect
                   isCleanable={false}
                   isLabelHidden
                   label="Numéro de marée"
@@ -413,4 +413,10 @@ const Title = styled.div<{
   flex-grow: 2;
   display: flex;
   width: 400px;
+`
+
+const StyledSelect = styled(Select<string>)`
+  .rs-picker-default .rs-picker-toggle {
+    z-index: unset;
+  }
 `

@@ -1,6 +1,6 @@
 import { TransparentButton } from '@components/style'
-import { COLORS } from '@constants/constants'
 import { ChevronIconButton } from '@features/commonStyles/icons/ChevronIconButton'
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import type { HTMLProps } from 'react'
@@ -12,7 +12,9 @@ export const YearListTitle = styled(TransparentButton)`
 `
 
 export const YearListTitleText = styled.div`
-  color: ${COLORS.slateGray};
+  display: flex;
+  align-items: center;
+  color: ${THEME.color.slateGray};
   font-size: 13px;
   font-weight: 500;
   width: 95%;

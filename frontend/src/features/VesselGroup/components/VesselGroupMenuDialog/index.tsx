@@ -268,4 +268,8 @@ const Buttons = styled.div`
 const StyledDropdown = styled(Dropdown)`
   width: 100%;
   margin-bottom: 8px;
+
+  .rs-dropdown-toggle.rs-btn {
+    z-index: unset;
+  }
 `

@@ -274,7 +274,13 @@ flows_to_deploy = [
         ],
     ),
     FlowAndSchedules(flow=ports_flow),
-    FlowAndSchedules(flow=position_alert_flow),
+    FlowAndSchedules(
+        flow=position_alert_flow,
+        concurrency_limit=ConcurrencyLimitConfig(
+            limit=3,
+            collision_strategy=ConcurrencyLimitStrategy.ENQUEUE,
+        ),
+    ),
     FlowAndSchedules(
         flow=position_alerts_flow,
         schedules=[

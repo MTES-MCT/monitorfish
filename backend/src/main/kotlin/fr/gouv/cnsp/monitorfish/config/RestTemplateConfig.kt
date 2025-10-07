@@ -47,7 +47,7 @@ class RestTemplateConfig {
 
         val restTemplate =
             restTemplateBuilder
-                .requestFactory { requestFactory }
+                .requestFactoryBuilder { requestFactory }
                 .build()
 
         restTemplate.interceptors.add(

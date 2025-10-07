@@ -124,11 +124,11 @@ export function Account() {
     <>
       <MapToolButton Icon={Icon.Account} isActive={isOpened} onClick={openOrClose} title="Mon compte" />
       {isRendered && (
-        <MapMenuDialogWrapper $hideBoxShadow $isOpen={isOpened} data-cy="map-account-box">
+        <MapToolBox $hideBoxShadow $isOpen={isOpened} data-cy="map-account-box">
           <StyledContainer>
-            <MapMenuDialog.Header>
+            <StyledHeader>
               <MapMenuDialog.Title>Mon compte</MapMenuDialog.Title>
-            </MapMenuDialog.Header>
+            </StyledHeader>
             <MapMenuDialog.Body>
               {userAccount.email ?? 'Vous n’êtes pas connecté avec Cerbère'}
               <StyledButton accent={Accent.SECONDARY} Icon={Icon.Logout} isFullWidth onClick={userAccount.logout}>
@@ -161,7 +161,7 @@ export function Account() {
               </StyledFooter>
             )}
           </StyledContainer>
-        </MapMenuDialogWrapper>
+        </MapToolBox>
       )}
       {isUnregisterCacheConfirmationModalOpen && (
         <ConfirmationModal
@@ -218,4 +218,6 @@ const StyledFooter = styled(MapMenuDialog.Footer)`
   gap: 0;
 `
 
-const MapMenuDialogWrapper = styled(MapToolBox)``
+const StyledHeader = styled(MapMenuDialog.Header)`
+  height: auto;
+`

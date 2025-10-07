@@ -15,12 +15,13 @@ import { None, StyledCountryFlag } from './styles'
 import { VesselRiskFactor } from '../../../RiskFactor/components/VesselRiskFactor'
 
 import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
+import type { DynamicVesselGroupFilter } from '@features/VesselGroup/types'
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
 
 export function getTableColumns(
   isFromUrl: boolean,
   actionColumn: ColumnDef<Vessel.ActiveVessel, any>,
-  listFilter: VesselListFilter | undefined
+  listFilter: VesselListFilter | DynamicVesselGroupFilter | undefined
 ): Array<ColumnDef<Vessel.ActiveVessel, any>> {
   const legacyFirefoxOffset = !isFromUrl && isLegacyFirefox() ? -32 : 0
   const actionColumnWithOffset = { ...actionColumn, size: (actionColumn.size ?? 60) + legacyFirefoxOffset }

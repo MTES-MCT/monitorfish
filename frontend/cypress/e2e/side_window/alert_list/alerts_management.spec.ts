@@ -145,7 +145,7 @@ context('Side Window > Alert Management', () => {
     cy.contains('Gestion des alertes').should('be.visible')
     cy.fill('Rechercher une alerte', 'Test Alert Cypress')
     cy.get('[title="Éditer l\'alerte"]').click()
-    cy.clickButton('Supprimer l’alerte').click()
+    cy.clickButton('Supprimer l’alerte')
     cy.clickButton('Confirmer la suppression')
   })
 
@@ -239,7 +239,7 @@ context('Side Window > Alert Management', () => {
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains('Zone REG "Mediterranée - filets - Zone A"')
 
     cy.clickButton('En savoir plus sur le fonctionnement des alertes')
-    cy.get('.Component-Dialog').contains("Aujourd'hui, MonitorFish compte au total 19 alertes :")
+    cy.get('.Component-Dialog').contains("Aujourd’hui, MonitorFish compte au total 18 alertes :")
     cy.clickButton('Fermer')
   })
 })

@@ -2,7 +2,7 @@ import { BackendApi } from '@api/BackendApi.types'
 import { HttpStatusCode } from '@api/constants'
 import { isString } from 'lodash-es'
 
-import type { SafeParseReturnType } from 'zod'
+import type { ZodSafeParseResult } from 'zod'
 
 export function isUnauthorizedOrForbidden(httpStatus: number | string | undefined) {
   if (!httpStatus || isString(httpStatus)) {
@@ -13,7 +13,7 @@ export function isUnauthorizedOrForbidden(httpStatus: number | string | undefine
 }
 
 export function valueOrUndefinedIfNotFoundOrThrow<Type>(
-  result: SafeParseReturnType<any, any>,
+  result: ZodSafeParseResult<any>,
   response: BackendApi.ResponseBodyError | Type
 ): Type | undefined {
   if (!result.success) {

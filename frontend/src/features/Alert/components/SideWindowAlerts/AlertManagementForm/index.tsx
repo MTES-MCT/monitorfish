@@ -155,7 +155,7 @@ export function AlertManagementForm() {
       <Formik
         initialValues={editedAlertSpecification}
         onSubmit={onSave}
-        validationSchema={toFormikValidationSchema(EditedAlertSpecificationSchema)}
+        validate={toFormikValidationSchema(EditedAlertSpecificationSchema)}
       >
         {({ dirty, values }) => {
           const hasZoneCriteria =

@@ -348,7 +348,8 @@ flows_to_deploy = [
 deployments = [
     flow_to_deploy.flow.to_deployment(
         name=flow_to_deploy.flow.name,
-        # schedules=flow_to_deploy.schedules,
+        schedules=flow_to_deploy.schedules,
+        paused=True,
         concurrency_limit=flow_to_deploy.concurrency_limit,
     )
     for flow_to_deploy in flows_to_deploy

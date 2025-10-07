@@ -17,6 +17,7 @@ type DEPMessageResumeProps = Readonly<{
   rejectionCause: string | undefined
   showLogbookMessages: (messageType: string) => Promisable<void>
 }>
+
 export function DEPMessageResume({
   hasNoMessage = false,
   isDeleted,
@@ -48,7 +49,7 @@ export function DEPMessageResume({
   )
 
   return (
-    <Wrapper>
+    <>
       <LogbookMessageResumeHeader
         hasNoMessage={hasNoMessage}
         isDeleted={isDeleted}
@@ -108,7 +109,7 @@ export function DEPMessageResume({
           </Zone>
         </LogbookMessageContent>
       )}
-    </Wrapper>
+    </>
   )
 }
 
@@ -187,14 +188,6 @@ const Gray = styled.span`
   font-weight: 300;
 `
 
-const Wrapper = styled.li`
-  margin: 0;
-  border-radius: 0;
-  padding: 0;
-  overflow: hidden;
-  color: ${p => p.theme.color.slateGray};
-`
-
 const LogbookMessageContent = styled.div<{
   $gearOnboard: number
   $isOpen: boolean
@@ -204,9 +197,8 @@ const LogbookMessageContent = styled.div<{
   width: inherit;
   overflow: hidden;
   padding: 0 0 0 20px;
-  border-bottom: 1px solid ${p => p.theme.color.lightGray};
   opacity: ${p => (p.$isOpen ? 1 : 0)};
   height: ${p => (p.$isOpen ? p.speciesOnboard * 22 + p.$gearOnboard * 50 + 20 : 0)}px;
   transition: 0.2s all;
-  margin-bottom: ${p => (p.$isOpen ? 5 : -1)}px;
+  border-top: 1px solid ${p => p.theme.color.lightGray};
 `

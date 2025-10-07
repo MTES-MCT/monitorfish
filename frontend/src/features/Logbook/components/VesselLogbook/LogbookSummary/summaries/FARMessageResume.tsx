@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { SpeciesAndWeightChart } from './common/SpeciesAndWeightChart'
-import { COLORS } from '../../../../../../constants/constants'
 import { pluralize } from '../../../../../../utils/pluralize'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
 import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
@@ -87,7 +86,7 @@ export function FARMessageResume({
   }, [initialChartHeight])
 
   return (
-    <Wrapper>
+    <>
       <LogbookMessageResumeHeader
         hasNoMessage={false}
         isNotAcknowledged={allFARMessagesAreNotAcknowledged}
@@ -112,7 +111,7 @@ export function FARMessageResume({
           />
         </Zone>
       </LogbookMessageContent>
-    </Wrapper>
+    </>
   )
 }
 
@@ -128,14 +127,6 @@ const Zone = styled.div`
   flex-wrap: wrap;
 `
 
-const Wrapper = styled.li`
-  margin: 0;
-  border-radius: 0;
-  padding: 0;
-  overflow: hidden;
-  color: ${COLORS.slateGray};
-`
-
 const LogbookMessageContent = styled.div<{
   chartHeight: number
   isOpen: boolean
@@ -146,7 +137,6 @@ const LogbookMessageContent = styled.div<{
   opacity: ${props => (props.isOpen ? 1 : 0)};
   overflow: hidden;
   padding-left: 20px;
-  border-bottom: 1px solid ${p => p.theme.color.lightGray};
   transition: all 0.2s;
-  margin-bottom: ${props => (props.isOpen ? 5 : -1)}px;
+  border-top: 1px solid ${p => p.theme.color.lightGray};
 `

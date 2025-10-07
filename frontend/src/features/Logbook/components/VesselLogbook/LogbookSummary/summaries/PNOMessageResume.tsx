@@ -23,6 +23,7 @@ type PNOMessageResumeProps = Readonly<{
   totalFARAndDEPWeight: number
   totalPNOWeight: number
 }>
+
 export function PNOMessageResume({
   hasNoMessage = false,
   id,
@@ -114,7 +115,7 @@ export function PNOMessageResume({
   )
 
   return (
-    <Wrapper>
+    <>
       <LogbookMessageResumeHeader
         hasNoMessage={hasNoMessage}
         isDeleted={isDeleted}
@@ -187,7 +188,7 @@ export function PNOMessageResume({
           </Zone>
         </LogbookMessageContent>
       )}
-    </Wrapper>
+    </>
   )
 }
 
@@ -273,14 +274,6 @@ const Zone = styled.div`
   flex-wrap: wrap;
 `
 
-const Wrapper = styled.li`
-  margin: 0;
-  border-radius: 0;
-  padding: 0;
-  overflow: hidden;
-  color: ${p => p.theme.color.slateGray};
-`
-
 const LogbookMessageContent = styled.div<{
   chartHeight: number
   isOpen: boolean
@@ -290,9 +283,8 @@ const LogbookMessageContent = styled.div<{
   width: inherit;
   overflow: hidden;
   padding: 0 0 0 20px;
-  border-bottom: 1px solid ${p => p.theme.color.lightGray};
   opacity: ${p => (p.isOpen ? 1 : 0)};
   height: ${p => (p.isOpen ? p.chartHeight + 160 + (p.speciesNotLandedArray?.length ? 55 : 0) : 0)}px;
   transition: 0.2s all;
-  margin-bottom: ${p => (p.isOpen ? 5 : -1)}px;
+  border-top: 1px solid ${p => p.theme.color.lightGray};
 `

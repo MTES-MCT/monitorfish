@@ -23,9 +23,9 @@ import type { TrackRequestCustom } from '@features/Vessel/types/types'
 
 type ControlProps = Readonly<{
   control: MissionAction.MissionAction
-  isLastItem: boolean
 }>
-export function Control({ control, isLastItem }: ControlProps) {
+
+export function Control({ control }: ControlProps) {
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
@@ -81,7 +81,7 @@ export function Control({ control, isLastItem }: ControlProps) {
   const controlTitle = `CONTRÔLE ${controlType} DU ${getDate(control.actionDatetimeUtc)}`
 
   return (
-    <Wrapper isLastItem={isLastItem}>
+    <Wrapper>
       <GyroColumn>
         {numberOfInfractionsWithRecord > 0 && <StyledControlUnitFilled color={THEME.color.maximumRed} />}
         {numberOfInfractionsWithoutRecord > 0 && !numberOfInfractionsWithRecord && (
@@ -212,9 +212,7 @@ const Title = styled.div`
   padding-right: 24px;
 `
 
-const Wrapper = styled.div<{
-  isLastItem: boolean
-}>`
+const Wrapper = styled.div`
   background: ${p => p.theme.color.gainsboro};
   width: -moz-available;
   width: -webkit-fill-available;

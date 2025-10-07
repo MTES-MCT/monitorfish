@@ -26,6 +26,7 @@ services:
 
   redis:
     image: redis:7
+    restart: always
 
   prefect-api:
     image: prefecthq/prefect:3-python3.12
@@ -100,7 +101,7 @@ services:
       # Telemetry
       PREFECT_SERVER_ANALYTICS_ENABLED: "false"
 
-    restart: unless-stopped
+    restart: always
 
 volumes:
   postgres_data:

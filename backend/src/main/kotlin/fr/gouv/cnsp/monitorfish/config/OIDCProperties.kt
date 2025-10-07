@@ -15,6 +15,16 @@ class OIDCProperties {
     var errorUrl: String = ""
     var authorizedSirets: List<String> = listOf()
     var issuerUri: String = ""
+
+    /**
+     * ⚠️ DEVELOPMENT ONLY - External issuer URI for JWT validation
+     *
+     * When using the Keycloak proxy, JWT tokens will have an issuer claim
+     * matching the external URL (e.g., http://localhost:8880/realms/monitor)
+     * while the backend uses the internal URL for API calls.
+     * This property allows validating tokens with the external issuer.
+     */
+    var issuerUriExternal: String = ""
     var authorizationUri: String = ""
     var tokenUri: String = ""
     var userInfoUri: String = ""

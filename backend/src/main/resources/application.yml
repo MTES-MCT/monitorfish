@@ -49,7 +49,7 @@ logging:
 
 spring:
     jmx:
-        enabled: true
+        enabled: false
     mvc:
         static-path-pattern: "/**"
     resources:

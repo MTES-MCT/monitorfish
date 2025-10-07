@@ -12,9 +12,9 @@ import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -27,22 +27,22 @@ class ControlObjectiveAdminControllerITests {
     @Autowired
     private lateinit var api: MockMvc
 
-    @MockBean
+    @MockitoBean
     private lateinit var updateControlObjective: UpdateControlObjective
 
-    @MockBean
+    @MockitoBean
     private lateinit var getControlObjectiveOfYear: GetControlObjectivesOfYear
 
-    @MockBean
+    @MockitoBean
     private lateinit var getControlObjectiveYearEntries: GetControlObjectiveYearEntries
 
-    @MockBean
+    @MockitoBean
     private lateinit var deleteControlObjective: DeleteControlObjective
 
-    @MockBean
+    @MockitoBean
     private lateinit var addControlObjective: AddControlObjective
 
-    @MockBean
+    @MockitoBean
     private lateinit var addControlObjectiveYear: AddControlObjectiveYear
 
     @Autowired

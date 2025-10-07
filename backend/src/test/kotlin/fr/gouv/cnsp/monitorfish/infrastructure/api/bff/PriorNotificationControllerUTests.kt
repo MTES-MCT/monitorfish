@@ -21,11 +21,11 @@ import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
@@ -41,49 +41,49 @@ class PriorNotificationControllerUTests {
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
-    @MockBean
+    @MockitoBean
     private lateinit var computeManualPriorNotification: ComputeManualPriorNotification
 
-    @MockBean
+    @MockitoBean
     private lateinit var createOrUpdateManualPriorNotification: CreateOrUpdateManualPriorNotification
 
-    @MockBean
+    @MockitoBean
     private lateinit var createPriorNotificationUpload: CreatePriorNotificationUpload
 
-    @MockBean
+    @MockitoBean
     private lateinit var deletePriorNotificationUpload: DeletePriorNotificationUpload
 
-    @MockBean
+    @MockitoBean
     private lateinit var getPriorNotification: GetPriorNotification
 
-    @MockBean
+    @MockitoBean
     private lateinit var getPriorNotificationPdfDocument: GetPriorNotificationPdfDocument
 
-    @MockBean
+    @MockitoBean
     private lateinit var getPriorNotificationSentMessages: GetPriorNotificationSentMessages
 
-    @MockBean
+    @MockitoBean
     private lateinit var getPriorNotificationUpload: GetPriorNotificationUpload
 
-    @MockBean
+    @MockitoBean
     private lateinit var getPriorNotificationUploads: GetPriorNotificationUploads
 
-    @MockBean
+    @MockitoBean
     private lateinit var getPriorNotifications: GetPriorNotifications
 
-    @MockBean
+    @MockitoBean
     private lateinit var getNumberToVerify: GetNumberToVerify
 
-    @MockBean
+    @MockitoBean
     private lateinit var getPriorNotificationTypes: GetPriorNotificationTypes
 
-    @MockBean
+    @MockitoBean
     private lateinit var verifyAndSendPriorNotification: VerifyAndSendPriorNotification
 
-    @MockBean
+    @MockitoBean
     private lateinit var updateLogbookPriorNotification: UpdateLogbookPriorNotification
 
-    @MockBean
+    @MockitoBean
     private lateinit var invalidatePriorNotification: InvalidatePriorNotification
 
     private fun authenticatedRequest() =

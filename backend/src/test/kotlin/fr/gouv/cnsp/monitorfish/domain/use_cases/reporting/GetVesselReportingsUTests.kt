@@ -17,19 +17,19 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class GetVesselReportingsUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var reportingRepository: ReportingRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var infractionRepository: InfractionRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var getAllLegacyControlUnits: GetAllLegacyControlUnits
 
     @Test

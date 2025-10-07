@@ -86,7 +86,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
   return (
     yearControls && (
       <div>
-        <Row $hasBorder={isOpen}>
+        <Row>
           <YearListTitle as={isEmpty ? 'div' : 'button'} onClick={() => !isEmpty && setIsOpen(!isOpen)}>
             <YearListTitleText>
               <Year>{year}</Year>
@@ -106,14 +106,9 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
         </Row>
 
         {isOpen && (
-          <Row $hasBorder>
+          <Row>
             <YearListContent>
-              {sortedControls.map(
-                (control, index) =>
-                  control && (
-                    <Control key={control.id} control={control} isLastItem={yearControls.length === index + 1} />
-                  )
-              )}
+              {sortedControls.map(control => control && <Control key={control.id} control={control} />)}
             </YearListContent>
           </Row>
         )}
@@ -161,7 +156,7 @@ const YearResume = styled.span`
   margin-left: 15px;
 `
 
-const Row = styled.div<{ $hasBorder: boolean }>`
+const Row = styled.div`
   display: flex;
   align-items: center;
   white-space: nowrap;
@@ -169,5 +164,4 @@ const Row = styled.div<{ $hasBorder: boolean }>`
   overflow: hidden !important;
   background: ${p => p.theme.color.white};
   color: ${p => p.theme.color.gunMetal};
-  ${p => (p.$hasBorder ? `border-bottom: 1px solid ${p.theme.color.lightGray};` : null)}
 `

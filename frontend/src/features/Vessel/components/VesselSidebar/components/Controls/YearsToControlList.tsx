@@ -1,5 +1,9 @@
 import { COLORS } from '@constants/constants'
-import { SidebarHeader, SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
+import {
+  ListItem,
+  SidebarHeader,
+  SidebarZone
+} from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
@@ -23,9 +27,9 @@ export function YearsToControlList({ controlsFromDate, yearsToControls }: YearsT
       {yearsToControls && Object.keys(yearsToControls) && Object.keys(yearsToControls).length ? (
         <List data-cy="vessel-control-years">
           {sortedYears.map(year => (
-            <li key={year}>
+            <ListItem key={year}>
               <YearControls year={year} yearControls={yearsToControls[year] ?? []} />
-            </li>
+            </ListItem>
           ))}
         </List>
       ) : (

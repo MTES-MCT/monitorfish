@@ -1,4 +1,5 @@
 import {
+  ListItem,
   SidebarHeader,
   SidebarLoadMoreYears,
   SidebarZone
@@ -33,9 +34,9 @@ export function ArchivedReportingList({ fromDate, onMore, vesselReportings }: Ar
       {reportingsByYearAsPairs.length > 0 && (
         <List>
           {reportingsByYearAsPairs.map(([year, reportingAndOccurences]) => (
-            <li key={year}>
+            <ListItem key={year}>
               <YearReportings reportingAndOccurences={reportingAndOccurences} year={year} />
-            </li>
+            </ListItem>
           ))}
         </List>
       )}

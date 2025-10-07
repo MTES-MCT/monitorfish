@@ -138,7 +138,6 @@ const Wrapper = styled.div<{
   border-radius: 0;
   padding: 0;
   color: ${p => p.theme.color.slateGray};
-  ${p => (!p.$isLastItem || p.$isOpen ? `border-bottom: 1px solid ${p.theme.color.lightGray};` : null)}
 `
 
 const Chevron = styled(ChevronIconButton)`

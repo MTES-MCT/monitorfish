@@ -19,6 +19,7 @@ type LANMessageResumeProps = {
   totalLANWeight: number
   totalPNOWeight: number
 }
+
 export function LANMessageResume({
   hasNoMessage = false,
   isDeleted,
@@ -61,7 +62,7 @@ export function LANMessageResume({
   }
 
   return (
-    <Wrapper>
+    <>
       <LogbookMessageResumeHeader
         hasNoMessage={hasNoMessage}
         isDeleted={isDeleted}
@@ -160,7 +161,7 @@ export function LANMessageResume({
           </Zone>
         </LogbookMessageContent>
       )}
-    </Wrapper>
+    </>
   )
 }
 
@@ -280,14 +281,6 @@ const Zone = styled.div`
   flex-wrap: wrap;
 `
 
-const Wrapper = styled.li`
-  margin: 0;
-  border-radius: 0;
-  padding: 0;
-  overflow: hidden;
-  color: ${p => p.theme.color.slateGray};
-`
-
 const LogbookMessageContent = styled.div<{
   chartHeight: number
   isOpen: boolean
@@ -297,7 +290,7 @@ const LogbookMessageContent = styled.div<{
   opacity: ${p => (p.isOpen ? 1 : 0)};
   overflow: hidden;
   padding: 0 0 0 20px;
-  border-bottom: 1px solid ${p => p.theme.color.lightGray};
   height: ${p => (p.isOpen ? p.chartHeight + 105 + 30 : 0)}px;
   transition: 0.2s all;
+  border-top: 1px solid ${p => p.theme.color.lightGray};
 `

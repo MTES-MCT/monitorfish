@@ -55,7 +55,7 @@ export function YearReportings({ reportingAndOccurences, year }: YearReportingsP
 
   return (
     <div>
-      <Row $hasBorder={isOpen}>
+      <Row>
         <YearListTitle
           as={!reportingAndOccurences.length ? 'div' : 'button'}
           data-cy="vessel-sidebar-reporting-archive-year"
@@ -84,7 +84,7 @@ export function YearReportings({ reportingAndOccurences, year }: YearReportingsP
       </Row>
 
       {isOpen && (
-        <Row $hasBorder>
+        <Row>
           <YearListContentWithPadding name={year.toString()}>
             {reportingAndOccurences.map(({ otherOccurrencesOfSameAlert, reporting }) => (
               <ReportingCard
@@ -132,7 +132,7 @@ const YearResume = styled.span`
   vertical-align: text-bottom;
 `
 
-const Row = styled.div<{ $hasBorder: boolean }>`
+const Row = styled.div`
   display: flex;
   align-items: center;
   white-space: nowrap;
@@ -140,7 +140,6 @@ const Row = styled.div<{ $hasBorder: boolean }>`
   overflow: hidden !important;
   background: ${p => p.theme.color.white};
   color: ${p => p.theme.color.gunMetal};
-  ${p => (p.$hasBorder ? `border-bottom: 1px solid ${p.theme.color.lightGray};` : null)}
 `
 
 const YearListContentWithPadding = styled(YearListContent)`

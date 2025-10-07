@@ -20,6 +20,7 @@ export const YearListTitleText = styled.div`
 
 export const YearListContent = styled.div<HTMLProps<HTMLDivElement>>`
   overflow: hidden;
+  border-top: 1px solid ${p => p.theme.color.lightGray};
 `
 
 export const YearListChevronIcon = styled(ChevronIconButton)`

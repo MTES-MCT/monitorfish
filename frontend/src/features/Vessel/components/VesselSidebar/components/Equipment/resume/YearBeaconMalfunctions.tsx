@@ -36,7 +36,7 @@ export function YearBeaconMalfunctions({
   return (
     yearBeaconMalfunctions && (
       <div>
-        <Row $hasBorder={isOpen}>
+        <Row>
           <YearListTitle as={isEmpty ? 'div' : 'button'} onClick={() => !isEmpty && setIsOpen(!isOpen)}>
             <YearListTitleText>
               <Year>{year}</Year>
@@ -56,7 +56,7 @@ export function YearBeaconMalfunctions({
           {!isEmpty && <YearListChevronIcon isOpen={isOpen} onClick={() => !isEmpty && setIsOpen(!isOpen)} />}
         </Row>
         {isOpen && (
-          <Row $hasBorder>
+          <Row>
             {sortedMalfunctions.map((beaconMalfunctionWithDetails, index) => (
               <BeaconMalfunctionCard
                 key={beaconMalfunctionWithDetails.beaconMalfunction.id}
@@ -103,7 +103,7 @@ const YearResume = styled.span`
   vertical-align: text-bottom;
 `
 
-const Row = styled.div<{ $hasBorder: boolean }>`
+const Row = styled.div`
   display: flex;
   align-items: center;
   white-space: nowrap;
@@ -111,7 +111,6 @@ const Row = styled.div<{ $hasBorder: boolean }>`
   overflow: hidden !important;
   background: ${p => p.theme.color.white};
   color: ${p => p.theme.color.gunMetal};
-  ${p => (p.$hasBorder ? `border-bottom: 1px solid ${p.theme.color.lightGray};` : null)}
 
   line-height: 1.9em;
 `

@@ -19,10 +19,10 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -33,25 +33,25 @@ class VesselGroupControllerITests {
     @Autowired
     private lateinit var api: MockMvc
 
-    @MockBean
+    @MockitoBean
     private lateinit var getIsAuthorizedUser: GetIsAuthorizedUser
 
-    @MockBean
+    @MockitoBean
     private lateinit var addOrUpdateDynamicVesselGroup: AddOrUpdateDynamicVesselGroup
 
-    @MockBean
+    @MockitoBean
     private lateinit var addOrUpdateFixedVesselGroup: AddOrUpdateFixedVesselGroup
 
-    @MockBean
+    @MockitoBean
     private lateinit var getAllVesselGroups: GetAllVesselGroups
 
-    @MockBean
+    @MockitoBean
     private lateinit var getAllVesselGroupsWithVessels: GetAllVesselGroupsWithVessels
 
-    @MockBean
+    @MockitoBean
     private lateinit var deleteVesselGroup: DeleteVesselGroup
 
-    @MockBean
+    @MockitoBean
     private lateinit var deleteFixedVesselGroupVessel: DeleteFixedVesselGroupVessel
 
     @Autowired

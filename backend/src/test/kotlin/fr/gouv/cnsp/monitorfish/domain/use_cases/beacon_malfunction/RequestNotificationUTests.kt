@@ -7,12 +7,12 @@ import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 class RequestNotificationUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var beaconMalfunctionsRepository: BeaconMalfunctionsRepository
 
     @Test

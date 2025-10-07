@@ -21,10 +21,10 @@ import {
   FormikTextInput,
   useNewWindow
 } from '@mtes-mct/monitor-ui'
+import { toFormikValidationSchema } from '@utils/toFormikValidationSchema'
 import { Formik } from 'formik'
 import { useRef, type MutableRefObject } from 'react'
 import styled from 'styled-components'
-import { toFormikValidationSchema } from 'zod-formik-adapter'
 
 import type { FormikProps } from 'formik'
 import type { Promisable } from 'type-fest'
@@ -67,10 +67,8 @@ export function VesselGroupForm({
 
   const validationSchema =
     groupType === GroupType.FIXED
-      ? // @ts-ignore see: https://github.com/robertLichtnow/zod-formik-adapter/issues/17#issuecomment-2335148597
-        toFormikValidationSchema(CreateOrUpdateFixedVesselGroupSchema)
-      : // @ts-ignore see: https://github.com/robertLichtnow/zod-formik-adapter/issues/17#issuecomment-2335148597
-        toFormikValidationSchema(CreateOrUpdateDynamicVesselGroupSchema)
+      ? toFormikValidationSchema(CreateOrUpdateFixedVesselGroupSchema)
+      : toFormikValidationSchema(CreateOrUpdateDynamicVesselGroupSchema)
 
   const handleOnSubmit = async (values: CreateOrUpdateVesselGroup) => {
     const nextValues =

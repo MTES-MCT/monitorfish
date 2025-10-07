@@ -13,10 +13,10 @@ import styled, { css } from 'styled-components'
 
 import { TableBodyEmptyData } from './TableBodyEmptyData'
 
-import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
+import type { DynamicVesselGroupFilter } from '@features/VesselGroup/types'
 
 type VesselTableProps = Readonly<{
-  filters: VesselListFilter | undefined
+  filters: DynamicVesselGroupFilter | undefined
   isFixedGroup: boolean
   isFromUrl: boolean
   isPinned: boolean

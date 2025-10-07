@@ -33,11 +33,11 @@ import {
   THEME
 } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
+import { toFormikValidationSchema } from '@utils/toFormikValidationSchema'
 import { Form, Formik } from 'formik'
 import { sortBy } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { toFormikValidationSchema } from 'zod-formik-adapter'
 
 import type { AlertSpecification } from '@features/Alert/types'
 
@@ -155,7 +155,7 @@ export function AlertManagementForm() {
       <Formik
         initialValues={editedAlertSpecification}
         onSubmit={onSave}
-        validationSchema={toFormikValidationSchema(EditedAlertSpecificationSchema)}
+        validate={toFormikValidationSchema(EditedAlertSpecificationSchema)}
       >
         {({ dirty, values }) => {
           const hasZoneCriteria =

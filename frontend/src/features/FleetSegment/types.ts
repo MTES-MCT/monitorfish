@@ -13,7 +13,7 @@ export const FleetSegmentSchema = z.strictObject({
   faoAreas: z.array(z.string()),
   gears: z.array(z.string()),
   impactRiskFactor: z.number(),
-  mainScipSpeciesType: z.nativeEnum(ScipSpeciesType).optional(),
+  mainScipSpeciesType: z.enum(ScipSpeciesType).optional(),
   maxMesh: numberOrUndefined,
   minMesh: numberOrUndefined,
   minShareOfTargetSpecies: numberOrUndefined,

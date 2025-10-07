@@ -5,7 +5,11 @@ import { DEFAULT_DYNAMIC_VESSEL_GROUP, DEFAULT_FIXED_VESSEL_GROUP } from '@featu
 import {
   CreateOrUpdateDynamicVesselGroupSchema,
   CreateOrUpdateFixedVesselGroupSchema,
-  GroupType
+  type DynamicVesselGroupFilter,
+  GroupType,
+  type CreateOrUpdateDynamicVesselGroup,
+  type CreateOrUpdateVesselGroup,
+  type VesselIdentityForVesselGroup
 } from '@features/VesselGroup/types'
 import { addOrUpdateVesselGroup } from '@features/VesselGroup/useCases/addOrUpdateVesselGroup'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -17,17 +21,11 @@ import {
   FormikTextInput,
   useNewWindow
 } from '@mtes-mct/monitor-ui'
+import { toFormikValidationSchema } from '@utils/toFormikValidationSchema'
 import { Formik } from 'formik'
 import { useRef, type MutableRefObject } from 'react'
 import styled from 'styled-components'
-import { toFormikValidationSchema } from 'zod-formik-adapter'
 
-import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
-import type {
-  CreateOrUpdateDynamicVesselGroup,
-  CreateOrUpdateVesselGroup,
-  VesselIdentityForVesselGroup
-} from '@features/VesselGroup/types'
 import type { FormikProps } from 'formik'
 import type { Promisable } from 'type-fest'
 
@@ -36,7 +34,7 @@ type VesselGroupFormProps = {
   formRef: MutableRefObject<FormikProps<CreateOrUpdateVesselGroup>>
   groupType: GroupType
   isMainWindow?: boolean
-  listFilterValues?: VesselListFilter
+  listFilterValues?: DynamicVesselGroupFilter
   onChange?: (nextValue: CreateOrUpdateDynamicVesselGroup) => void
   onExit: () => Promisable<void>
   vesselIdentities?: VesselIdentityForVesselGroup[]
@@ -90,7 +88,7 @@ export function VesselGroupForm({
         initialValues={newOrEditedVesselGroup}
         innerRef={formRef as MutableRefObject<FormikProps<CreateOrUpdateVesselGroup>>}
         onSubmit={handleOnSubmit}
-        validationSchema={validationSchema}
+        validate={validationSchema}
       >
         {({ errors }) => (
           <>

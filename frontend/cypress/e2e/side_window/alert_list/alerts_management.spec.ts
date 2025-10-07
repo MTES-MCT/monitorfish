@@ -1,4 +1,4 @@
-import {openSideWindowAlertList} from './utils'
+import { openSideWindowAlertList } from './utils'
 
 context('Side Window > Alert Management', () => {
   beforeEach(() => {
@@ -35,10 +35,10 @@ context('Side Window > Alert Management', () => {
     cy.clickButton('Créer une nouvelle alerte')
     cy.fill('Nom', 'Test Alert Name')
     cy.clickButton('Fermer')
-    cy.contains('Quitter l\'édition').should('be.visible')
+    cy.contains("Quitter l'édition").should('be.visible')
     cy.clickButton('Retourner à l’édition')
     cy.getDataCy('go-back-alerts-management-list').click()
-    cy.contains('Quitter l\'édition').should('be.visible')
+    cy.contains("Quitter l'édition").should('be.visible')
     cy.clickButton('Quitter sans enregistrer')
 
     // Should go back to list
@@ -58,12 +58,15 @@ context('Side Window > Alert Management', () => {
      * Fill required fields
      */
     cy.fill('Nom', 'Test Alert Cypress')
-    cy.fill('Description', 'Description de test pour l\'alerte Cypress')
+    cy.fill('Description', "Description de test pour l'alerte Cypress")
     cy.fill('NATINF associé', '2608')
     cy.fill('Période de validité', 'Sur une période donnée')
-    cy.fill('Plage de temps sur mesure', [[2024, 1, 15], [2024, 1, 30]])
+    cy.fill('Plage de temps sur mesure', [
+      [2024, 1, 15],
+      [2024, 1, 30]
+    ])
     cy.fill('Récurrence annuelle', true)
-    cy.fill('Positions VMS prises en compte par l\'alerte', 'Toutes les positions en mer')
+    cy.fill("Positions VMS prises en compte par l'alerte", 'Toutes les positions en mer')
 
     /**
      * Add administrative zones criteria
@@ -81,8 +84,8 @@ context('Side Window > Alert Management', () => {
     cy.clickButton('Zones')
     cy.wait(500)
 
-    cy.fill('Zones administratives déclenchant l\'alerte', ['27.6.a'])
-    cy.fill('Zones réglementaires déclenchant l\'alerte', ['Secteur 3'])
+    cy.fill("Zones administratives déclenchant l'alerte", ['27.6.a'])
+    cy.fill("Zones réglementaires déclenchant l'alerte", ['Secteur 3'])
     cy.contains('ZONES (VMS)').click()
 
     /**
@@ -90,7 +93,7 @@ context('Side Window > Alert Management', () => {
      */
     cy.clickButton('Définir les critères de déclenchement')
     cy.clickButton('Nationalités')
-    cy.fill('Nationalités déclenchant l\'alerte', ['Royaume-Uni'])
+    cy.fill("Nationalités déclenchant l'alerte", ['Royaume-Uni'])
     cy.contains('NATIONALITÉS').click()
 
     /**
@@ -109,37 +112,40 @@ context('Side Window > Alert Management', () => {
     cy.getDataCy('VesselSearch-item').first().click()
     cy.contains('NAVIRES').click()
 
+    /**
+     * Add district criteria
+     */
+    cy.clickButton('Définir les critères de déclenchement')
+    cy.clickButton('Départements et quartiers')
+    cy.fill("Départements et/ou quartiers déclenchant l'alerte", ["Les Sables D'Olonne"])
+    cy.contains('DÉPARTEMENTS ET QUARTIERS').click()
+
     cy.clickButton('Enregistrer')
 
     cy.wait('@createAlert').then(interception => {
       expect(interception.request.body.name).to.equal('Test Alert Cypress')
-      expect(interception.request.body.description).to.equal('Description de test pour l\'alerte Cypress')
+      expect(interception.request.body.description).to.equal("Description de test pour l'alerte Cypress")
       expect(interception.request.body.natinfCode).to.equal(2608)
       expect(interception.request.body.validityStartDatetimeUtc).to.equal('2024-01-15T00:00:00.000Z')
       expect(interception.request.body.validityEndDatetimeUtc).to.equal('2024-01-30T23:59:59.000Z')
       expect(interception.request.body.repeatEachYear).to.be.true
       expect(interception.request.body.onlyFishingPositions).to.be.false
       expect(interception.request.body.flagStatesIso2).to.deep.equal(['GB'])
+      expect(interception.request.body.districtCodes).to.deep.equal(['LS'])
       expect(interception.request.body.vesselIds).to.deep.equal([1])
-      expect(interception.request.body.administrativeAreas).to.deep.equal(
-        [
-          {
-            "areas": [
-              "27.6.a"
-            ],
-            "areaType": "FAO_AREA"
-          }
-        ]
-      )
-      expect(interception.request.body.regulatoryAreas).to.deep.equal(
-        [
-          {
-            "lawType": "Reg. NAMO",
-            "topic": "Armor CSJ Dragues",
-            "zone": "Secteur 3"
-          }
-        ]
-      )
+      expect(interception.request.body.administrativeAreas).to.deep.equal([
+        {
+          areas: ['27.6.a'],
+          areaType: 'FAO_AREA'
+        }
+      ])
+      expect(interception.request.body.regulatoryAreas).to.deep.equal([
+        {
+          lawType: 'Reg. NAMO',
+          topic: 'Armor CSJ Dragues',
+          zone: 'Secteur 3'
+        }
+      ])
     })
 
     cy.contains('Gestion des alertes').should('be.visible')
@@ -150,7 +156,9 @@ context('Side Window > Alert Management', () => {
   })
 
   it('Should edit an existing alert', () => {
-    cy.get('.Component-Banner').contains(`L'alerte "Alerte en erreur" a été désactivée, car elle générait trop d'occurrences simultanées. Veuillez modifier ses critères ou la supprimer.`)
+    cy.get('.Component-Banner').contains(
+      `L'alerte "Alerte en erreur" a été désactivée, car elle générait trop d'occurrences simultanées. Veuillez modifier ses critères ou la supprimer.`
+    )
     cy.intercept('PUT', '/bff/v1/position_alerts_specs/*').as('updateAlert')
 
     /**
@@ -165,7 +173,7 @@ context('Side Window > Alert Management', () => {
     cy.fill('Description', 'Description modifiée')
     cy.fill('Période de validité', 'En tous temps')
     cy.get('.rs-picker-input').should('not.exist')
-    cy.fill('Positions VMS prises en compte par l\'alerte', 'Les positions en pêche uniquement')
+    cy.fill("Positions VMS prises en compte par l'alerte", 'Les positions en pêche uniquement')
 
     cy.clickButton('Enregistrer')
 
@@ -216,7 +224,9 @@ context('Side Window > Alert Management', () => {
     cy.get('[title="Pêche dans les 12 milles sans droits historiques (ES)"]').scrollIntoView().click({ force: true })
     cy.get('[data-id="POSITION_ALERT:6"]').contains('Nationalités, Zones (VMS)')
     cy.get('[data-id="POSITION_ALERT:6"]').contains('En tous temps')
-    cy.get('[data-id="POSITION_ALERT:6-expanded"]').contains('Pour les navires espagnols en pêche dans les 12 milles hors de leurs zones de droits historiques.')
+    cy.get('[data-id="POSITION_ALERT:6-expanded"]').contains(
+      'Pour les navires espagnols en pêche dans les 12 milles hors de leurs zones de droits historiques.'
+    )
     cy.get('[data-id="POSITION_ALERT:6-expanded"]').contains('Les positions en pêche uniquement')
     cy.get('[data-id="POSITION_ALERT:6-expanded"]').contains('Espagne')
     cy.get('[data-id="POSITION_ALERT:6-expanded"]').contains('Distances à la côte: 12 milles (sans la ZEE ESP)')
@@ -225,9 +235,13 @@ context('Side Window > Alert Management', () => {
 
     cy.fill('Rechercher une alerte', undefined)
     cy.get('[title="Alerte all-in"]').scrollIntoView().click({ force: true })
-    cy.get('[data-id="POSITION_ALERT:13"]').contains('Navires, Espèces à bord, Zones de capture (FAR), Nationalités, Quartiers, OPs, Zones (VMS), Engins')
+    cy.get('[data-id="POSITION_ALERT:13"]').contains(
+      'Navires, Espèces à bord, Zones de capture (FAR), Nationalités, Quartiers, OPs, Zones (VMS), Engins'
+    )
     cy.get('[data-id="POSITION_ALERT:13"]').contains('22206')
-    cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains('HKE - MERLU D\'EUROPE (min. 713kg), LOB - CROUPIA ROCHE, SOL - SOLE COMMUNE')
+    cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains(
+      "HKE - MERLU D'EUROPE (min. 713kg), LOB - CROUPIA ROCHE, SOL - SOLE COMMUNE"
+    )
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains('27.7.e, 27.7.d, 27.8.a')
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains('France, Espagne, Allemagne, Danemark')
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains('CC, BR, MO, NO')

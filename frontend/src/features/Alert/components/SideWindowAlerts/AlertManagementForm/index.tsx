@@ -8,6 +8,7 @@ import {
   useUpdateAlertMutation
 } from '@features/Alert/apis'
 import { Criteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants'
+import { DistrictCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/DistrictCriteria'
 import { NationalityCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/NationalityCriteria'
 import { VesselCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/VesselCriteria'
 import { ZoneCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/ZoneCriteria'
@@ -165,6 +166,7 @@ export function AlertManagementForm() {
           const hasNationalityCriteria =
             !!values.flagStatesIso2.length || selectedCriterias.includes(Criteria.NATIONALITY)
           const hasVesselCriteria = !!values.vesselIds.length || selectedCriterias.includes(Criteria.VESSEL)
+          const hasDistrictCriteria = !!values.districtCodes.length || selectedCriterias.includes(Criteria.DISTRICT)
 
           return (
             <Wrapper>
@@ -237,6 +239,15 @@ export function AlertManagementForm() {
                           Nationalités
                         </Dropdown.Item>
                       )}
+                      {!hasDistrictCriteria && (
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedCriterias(previous => previous.concat(Criteria.DISTRICT))
+                          }}
+                        >
+                          Départements et quartiers
+                        </Dropdown.Item>
+                      )}
                     </Dropdown>
                   </StyledFormHead>
                   {hasVesselCriteria && (
@@ -258,6 +269,13 @@ export function AlertManagementForm() {
                     <NationalityCriteria
                       onDelete={() => {
                         setSelectedCriterias(previous => previous.filter(criteria => criteria !== Criteria.NATIONALITY))
+                      }}
+                    />
+                  )}
+                  {hasDistrictCriteria && (
+                    <DistrictCriteria
+                      onDelete={() => {
+                        setSelectedCriterias(previous => previous.filter(criteria => criteria !== Criteria.DISTRICT))
                       }}
                     />
                   )}
@@ -454,6 +472,7 @@ const Panel = styled.div<{
   padding-left: 40px;
 
   /* TODO Handle that in @mtes-mct/monitor-ui. */
+
   legend {
     font-weight: 400;
   }

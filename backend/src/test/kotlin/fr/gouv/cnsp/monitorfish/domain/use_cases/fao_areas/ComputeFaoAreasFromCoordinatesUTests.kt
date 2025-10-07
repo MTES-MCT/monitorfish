@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.Point
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 class ComputeFaoAreasFromCoordinatesUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var faoAreaRepository: FaoAreaRepository
 
     @Test

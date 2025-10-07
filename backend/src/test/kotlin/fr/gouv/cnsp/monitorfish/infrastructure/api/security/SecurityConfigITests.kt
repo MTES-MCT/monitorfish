@@ -16,10 +16,10 @@ import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.info.BuildProperties
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
@@ -53,13 +53,13 @@ class SecurityConfigITests {
         @Autowired
         private lateinit var mockMvc: MockMvc
 
-        @MockBean
+        @MockitoBean
         private lateinit var getActivePorts: GetActivePorts
 
-        @MockBean
+        @MockitoBean
         private lateinit var buildProperties: BuildProperties
 
-        @MockBean
+        @MockitoBean
         private lateinit var clientRegistrationRepository: ClientRegistrationRepository
 
         @Test
@@ -170,13 +170,13 @@ class SecurityConfigITests {
         @Autowired
         private lateinit var mockMvc: MockMvc
 
-        @MockBean
+        @MockitoBean
         private lateinit var getActivePorts: GetActivePorts
 
-        @MockBean
+        @MockitoBean
         private lateinit var buildProperties: BuildProperties
 
-        @MockBean
+        @MockitoBean
         private lateinit var clientRegistrationRepository: ClientRegistrationRepository
 
         @Test

@@ -11,14 +11,14 @@ import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 
 @SpringBootTest(classes = [GetSpeciesFromCode::class])
 class GetSpeciesFromCodeUTests {
     @Autowired
     private lateinit var getSpeciesFromCode: GetSpeciesFromCode
 
-    @MockBean
+    @MockitoBean
     private lateinit var speciesRepository: SpeciesRepository
 
     @Test

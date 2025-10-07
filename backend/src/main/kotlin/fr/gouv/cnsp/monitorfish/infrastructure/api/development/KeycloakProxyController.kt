@@ -81,9 +81,10 @@ class KeycloakProxyController(
                 }
             }
 
-            val response = proxy
-                .uri(targetUri.toString())
-                .get()
+            val response =
+                proxy
+                    .uri(targetUri.toString())
+                    .get()
 
             // Remove duplicate CORS header added by Spring Cloud Gateway MVC
             // See: https://github.com/spring-cloud/spring-cloud-gateway/issues/3787
@@ -115,9 +116,10 @@ class KeycloakProxyController(
     ): ResponseEntity<*> {
         val targetUri = "${oidcProperties.proxyUrl}${request.requestURI}"
 
-        val response = proxy
-            .uri(targetUri)
-            .get()
+        val response =
+            proxy
+                .uri(targetUri)
+                .get()
 
         // Remove duplicate CORS header added by Spring Cloud Gateway MVC
         // See: https://github.com/spring-cloud/spring-cloud-gateway/issues/3787
@@ -174,10 +176,11 @@ class KeycloakProxyController(
             proxy
                 .header("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .header("Content-Length", formDataBytes.size.toString())
-            val response = proxy
-                .uri(targetUri.toString())
-                .body(formDataBytes)
-                .post()
+            val response =
+                proxy
+                    .uri(targetUri.toString())
+                    .body(formDataBytes)
+                    .post()
 
             // Remove duplicate CORS header added by Spring Cloud Gateway MVC
             // See: https://github.com/spring-cloud/spring-cloud-gateway/issues/3787
@@ -207,8 +210,7 @@ class KeycloakProxyController(
                 newHeaders.forEach { (key, values) ->
                     headers.addAll(key, values)
                 }
-            }
-            .body(response.body)
+            }.body(response.body)
     }
 
     private fun isHtmlResponse(response: ResponseEntity<*>): Boolean {

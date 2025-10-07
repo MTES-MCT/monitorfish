@@ -34,16 +34,21 @@ class RestTemplateConfig {
 
         // Configure request factory to NOT follow redirects
         // This is critical for OAuth/OIDC flows where redirects must be handled by the browser
-        val requestFactory = object : SimpleClientHttpRequestFactory() {
-            override fun prepareConnection(connection: HttpURLConnection, httpMethod: String) {
-                super.prepareConnection(connection, httpMethod)
-                connection.instanceFollowRedirects = false
+        val requestFactory =
+            object : SimpleClientHttpRequestFactory() {
+                override fun prepareConnection(
+                    connection: HttpURLConnection,
+                    httpMethod: String,
+                ) {
+                    super.prepareConnection(connection, httpMethod)
+                    connection.instanceFollowRedirects = false
+                }
             }
-        }
 
-        val restTemplate = restTemplateBuilder
-            .requestFactory { -> requestFactory }
-            .build()
+        val restTemplate =
+            restTemplateBuilder
+                .requestFactory { requestFactory }
+                .build()
 
         restTemplate.interceptors.add(
             ClientHttpRequestInterceptor { request, body, execution ->
@@ -75,7 +80,5 @@ class RestTemplateConfig {
         matchIfMissing = true,
     )
     @Bean
-    fun restTemplate(restTemplateBuilder: RestTemplateBuilder): RestTemplate {
-        return restTemplateBuilder.build()
-    }
+    fun restTemplate(restTemplateBuilder: RestTemplateBuilder): RestTemplate = restTemplateBuilder.build()
 }

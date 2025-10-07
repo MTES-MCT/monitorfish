@@ -23,48 +23,48 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @Import(GetVesselPositions::class, GetDatesFromVesselTrackDepth::class)
 @ExtendWith(SpringExtension::class)
 class GetVesselUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var positionRepository: PositionRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var vesselRepository: VesselRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var logbookReportRepository: LogbookReportRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var logbookRawMessageRepository: LogbookRawMessageRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var riskFactorRepository: RiskFactorRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var beaconRepository: BeaconRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var producerOrganizationMembershipRepository: ProducerOrganizationMembershipRepository
 
     @Autowired
     private lateinit var getVesselPositions: GetVesselPositions
 
-    @MockBean
+    @MockitoBean
     private lateinit var vesselGroupRepository: VesselGroupRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var vesselProfileRepository: VesselProfileRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var lastPositionRepository: LastPositionRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var getAuthorizedUser: GetAuthorizedUser
 
     @Test

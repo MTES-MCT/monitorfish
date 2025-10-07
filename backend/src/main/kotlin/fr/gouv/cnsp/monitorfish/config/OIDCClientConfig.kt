@@ -83,31 +83,38 @@ class OIDCClientConfig(
             // ⚠️ DEVELOPMENT ONLY: Custom issuer validation for Keycloak proxy
             // This code path is only taken when issuerUriExternal is configured (dev/test environments)
             if (externalIssuer.isNotBlank()) {
-                logger.warn("⚠️ DEV MODE: Custom JWT issuer validation enabled for proxy. External issuer: $externalIssuer")
-
-                val issuerValidator = OAuth2TokenValidator<Jwt> { jwt ->
-                    val tokenIssuer = jwt.issuer?.toString()
-
-                    // Accept either the internal issuer or the external (proxied) issuer
-                    if (tokenIssuer == issuerUri || tokenIssuer == externalIssuer) {
-                        logger.debug("JWT issuer validated: $tokenIssuer")
-                        org.springframework.security.oauth2.core.OAuth2TokenValidatorResult.success()
-                    } else {
-                        logger.error("JWT issuer validation failed. Expected: $issuerUri or $externalIssuer, but got: $tokenIssuer")
-                        org.springframework.security.oauth2.core.OAuth2TokenValidatorResult.failure(
-                            org.springframework.security.oauth2.core.OAuth2Error(
-                                "invalid_token",
-                                "The token issuer is invalid. Expected: $issuerUri or $externalIssuer, but got: $tokenIssuer",
-                                null
-                            )
-                        )
-                    }
-                }
-
-                val validators = DelegatingOAuth2TokenValidator(
-                    JwtValidators.createDefault(),
-                    issuerValidator
+                logger.warn(
+                    "⚠️ DEV MODE: Custom JWT issuer validation enabled for proxy. External issuer: $externalIssuer",
                 )
+
+                val issuerValidator =
+                    OAuth2TokenValidator<Jwt> { jwt ->
+                        val tokenIssuer = jwt.issuer?.toString()
+
+                        // Accept either the internal issuer or the external (proxied) issuer
+                        if (tokenIssuer == issuerUri || tokenIssuer == externalIssuer) {
+                            logger.debug("JWT issuer validated: $tokenIssuer")
+                            org.springframework.security.oauth2.core.OAuth2TokenValidatorResult
+                                .success()
+                        } else {
+                            logger.error(
+                                "JWT issuer validation failed. Expected: $issuerUri or $externalIssuer, but got: $tokenIssuer",
+                            )
+                            org.springframework.security.oauth2.core.OAuth2TokenValidatorResult.failure(
+                                org.springframework.security.oauth2.core.OAuth2Error(
+                                    "invalid_token",
+                                    "The token issuer is invalid. Expected: $issuerUri or $externalIssuer, but got: $tokenIssuer",
+                                    null,
+                                ),
+                            )
+                        }
+                    }
+
+                val validators =
+                    DelegatingOAuth2TokenValidator(
+                        JwtValidators.createDefault(),
+                        issuerValidator,
+                    )
                 jwtDecoder.setJwtValidator(validators)
             } else {
                 // Production: use standard issuer validation

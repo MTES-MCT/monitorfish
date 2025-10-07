@@ -13,8 +13,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -22,10 +22,10 @@ import java.time.ZonedDateTime
 @Import(GetDatesFromVesselTrackDepth::class)
 @ExtendWith(SpringExtension::class)
 class GetVesselVoyageByDatesUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var logbookReportRepository: LogbookReportRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var getLogbookMessages: GetLogbookMessages
 
     @Autowired

@@ -182,7 +182,7 @@ restart-remote-app-without-image-prune:
 	cd infra/remote && docker compose pull && docker compose up -d --build app --force-recreate
 
 .PHONY: restart-remote-app ##RUN ▶️  Restart app
-restart-remote-app: restart-remote-app-without-image-prune prune-old-images
+restart-remote-app: prune-old-images restart-remote-app-without-image-prune
 
 deploy-pipeline-flows-without-image-prune:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$(MONITORFISH_VERSION) && \

@@ -290,6 +290,7 @@ class GetActivityReportsUTests {
                 Vessel(
                     id = 1,
                     internalReferenceNumber = "FR00022680",
+                    externalReferenceNumber = "AY22680",
                     vesselName = "MY AWESOME VESSEL",
                     flagState = CountryCode.FR,
                     declaredFishingGears = listOf("Trémails"),
@@ -300,6 +301,7 @@ class GetActivityReportsUTests {
                 Vessel(
                     id = 2,
                     internalReferenceNumber = "FR00065455",
+                    externalReferenceNumber = "LO65455",
                     vesselName = "MY SECOND AWESOME VESSEL",
                     flagState = CountryCode.FR,
                     declaredFishingGears = listOf("Trémails"),
@@ -366,13 +368,13 @@ class GetActivityReportsUTests {
 
         activityReports.activityReports.first().let { landReport ->
             assertThat(landReport.activityCode).isEqualTo(ActivityCode.LAN)
-            assertThat(landReport.vesselNationalIdentifier).isEqualTo("AYFR00022680")
+            assertThat(landReport.vesselNationalIdentifier).isEqualTo("AY22680")
             assertThat(landReport.faoArea).isEqualTo("27.4.c")
             assertThat(landReport.segment).isEqualTo("NWW01")
         }
         activityReports.activityReports.last().let { seaReport ->
             assertThat(seaReport.activityCode).isEqualTo(ActivityCode.FIS)
-            assertThat(seaReport.vesselNationalIdentifier).isEqualTo("AYFR00022680")
+            assertThat(seaReport.vesselNationalIdentifier).isEqualTo("AY22680")
             assertThat(seaReport.faoArea).isEqualTo("27.4.c")
             assertThat(seaReport.segment).isNull()
         }

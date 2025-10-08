@@ -178,10 +178,10 @@ prune-old-images: # Not using `docker image prune` because it would delete the d
 	awk -F: '{repos[$1]++; if(repos[$1]>1) print $0}' | \
 	xargs -r docker rmi
 
-.PHONY: restart-remote-app ##RUN ▶️  Restart app
 restart-remote-app-without-image-prune:
 	cd infra/remote && docker compose pull && docker compose up -d --build app --force-recreate
 
+.PHONY: restart-remote-app ##RUN ▶️  Restart app
 restart-remote-app: restart-remote-app-without-image-prune prune-old-images
 
 deploy-pipeline-flows-without-image-prune:

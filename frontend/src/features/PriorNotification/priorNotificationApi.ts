@@ -44,7 +44,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       PriorNotification.ApiManualCreateOrUpdateResponseData,
       PriorNotification.ApiManualCreateOrUpdateRequestData
     >({
-      invalidatesTags: [{ type: RtkCacheTagType.PriorNotifications }],
+      invalidatesTags: [{ type: RtkCacheTagType.PriorNotifications }, { type: RtkCacheTagType.ActiveVessels }],
       query: data => ({
         body: data,
         method: 'POST',
@@ -174,7 +174,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
         reportId: string
       }
     >({
-      invalidatesTags: () => [{ type: RtkCacheTagType.PriorNotifications }],
+      invalidatesTags: () => [{ type: RtkCacheTagType.PriorNotifications }, { type: RtkCacheTagType.ActiveVessels }],
       query: ({ data, operationDate, reportId }) => ({
         body: data,
         method: 'PUT',

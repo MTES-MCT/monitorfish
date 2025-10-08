@@ -138,6 +138,7 @@ const Wrapper = styled.div<{
   border-radius: 0;
   padding: 0;
   color: ${p => p.theme.color.slateGray};
+  height: 34px;
 `
 
 const Chevron = styled(ChevronIconButton)`

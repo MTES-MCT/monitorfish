@@ -46,7 +46,7 @@ export function RightMenuOnHoverArea() {
 const Area = styled.div<{ $isExpanded: boolean | undefined }>`
   height: 100%;
   right: 0;
-  width: 60px;
+  width: ${p => (p.$isExpanded ? 60 : 20)}px;
   opacity: 0;
   position: absolute;
   top: 0;

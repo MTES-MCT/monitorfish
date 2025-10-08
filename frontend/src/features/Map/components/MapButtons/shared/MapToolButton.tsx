@@ -68,6 +68,7 @@ const StyledButton = styled(IconButton)<{
       return `
       ${badgeVisibility}
       button {
+        transition: all 0.3s;
         ${padding}
         ${width}
         ${borderRadius}

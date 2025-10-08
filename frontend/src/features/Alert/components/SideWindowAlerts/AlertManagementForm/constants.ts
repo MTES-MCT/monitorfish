@@ -1,4 +1,5 @@
 export enum Criteria {
+  DISTRICT = 'DISTRICT',
   NATIONALITY = 'NATIONALITY',
   VESSEL = 'VESSEL',
   ZONE = 'ZONE'

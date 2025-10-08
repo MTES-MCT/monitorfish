@@ -178,18 +178,14 @@ prune-old-images: # Not using `docker image prune` because it would delete the d
 	awk -F: '{repos[$1]++; if(repos[$1]>1) print $0}' | \
 	xargs -r docker rmi
 
-restart-remote-app-without-image-prune:
+.PHONY: restart-remote-app ##RUN ▶️  Restart app
+restart-remote-app: prune-old-images
 	cd infra/remote && docker compose pull && docker compose up -d --build app --force-recreate
 
-.PHONY: restart-remote-app ##RUN ▶️  Restart app
-restart-remote-app: prune-old-images restart-remote-app-without-image-prune
-
-deploy-pipeline-flows-without-image-prune:
+.PHONY: deploy-pipeline-flows ##RUN ▶️  Deploy pipeline flows
+deploy-pipeline-flows: prune-old-images
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$(MONITORFISH_VERSION) && \
 	infra/remote/data-pipeline-prefect3/deploy-flows.sh
-
-.PHONY: deploy-pipeline-flows ##RUN ▶️  Deploy pipeline flows
-deploy-pipeline-flows: deploy-pipeline-flows-without-image-prune prune-old-images
 
 register-pipeline-flows-prod:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \

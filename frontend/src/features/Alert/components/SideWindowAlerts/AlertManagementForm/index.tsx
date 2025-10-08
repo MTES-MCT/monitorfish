@@ -9,6 +9,7 @@ import {
 } from '@features/Alert/apis'
 import { Criteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants'
 import { NationalityCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/NationalityCriteria'
+import { ProducerOrganizationCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/ProducerOrganizationCriteria'
 import { VesselCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/VesselCriteria'
 import { ZoneCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/ZoneCriteria'
 import { FormikValidityPeriod } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/FormikValidityPeriod'
@@ -165,6 +166,8 @@ export function AlertManagementForm() {
           const hasNationalityCriteria =
             !!values.flagStatesIso2.length || selectedCriterias.includes(Criteria.NATIONALITY)
           const hasVesselCriteria = !!values.vesselIds.length || selectedCriterias.includes(Criteria.VESSEL)
+          const hasProducerOrganizationCriteria =
+            !!values.producerOrganizations.length || selectedCriterias.includes(Criteria.PRODUCER_ORGANIZATION)
 
           return (
             <Wrapper>
@@ -237,6 +240,15 @@ export function AlertManagementForm() {
                           Nationalités
                         </Dropdown.Item>
                       )}
+                      {!hasProducerOrganizationCriteria && (
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedCriterias(previous => previous.concat(Criteria.PRODUCER_ORGANIZATION))
+                          }}
+                        >
+                          Organisations de producteurs
+                        </Dropdown.Item>
+                      )}
                     </Dropdown>
                   </StyledFormHead>
                   {hasVesselCriteria && (
@@ -256,6 +268,13 @@ export function AlertManagementForm() {
                   )}
                   {hasNationalityCriteria && (
                     <NationalityCriteria
+                      onDelete={() => {
+                        setSelectedCriterias(previous => previous.filter(criteria => criteria !== Criteria.NATIONALITY))
+                      }}
+                    />
+                  )}
+                  {hasProducerOrganizationCriteria && (
+                    <ProducerOrganizationCriteria
                       onDelete={() => {
                         setSelectedCriterias(previous => previous.filter(criteria => criteria !== Criteria.NATIONALITY))
                       }}
@@ -454,6 +473,7 @@ const Panel = styled.div<{
   padding-left: 40px;
 
   /* TODO Handle that in @mtes-mct/monitor-ui. */
+
   legend {
     font-weight: 400;
   }

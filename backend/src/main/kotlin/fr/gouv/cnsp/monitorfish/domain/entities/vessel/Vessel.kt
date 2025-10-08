@@ -74,20 +74,11 @@ data class Vessel(
         "VESSELS:${this.internalReferenceNumber ?: "UNKNOWN"}/${this.ircs ?: "UNKNOWN"}/${this.externalReferenceNumber ?: "UNKNOWN"}"
 
     fun getNationalIdentifier(): String {
-        if (districtCode.isNullOrEmpty()) {
+        if (externalReferenceNumber.isNullOrEmpty()) {
             return ""
         }
 
-        val internalReferenceNumberCountryCode =
-            LIKELY_CONTROLLED_COUNTRY_CODES.find { countryAlpha3 ->
-                internalReferenceNumber?.contains(
-                    countryAlpha3,
-                ) == true
-            }
-        val zeros = if (internalReferenceNumberCountryCode == CountryCode.BE.alpha3) "0" else "000" // The BEL state have a higher CFR
-        val identifier = internalReferenceNumber?.replace("${internalReferenceNumberCountryCode}$zeros", "") ?: ""
-
-        return "$districtCode$identifier"
+        return externalReferenceNumber
     }
 
     fun isFrench(): Boolean = FRENCH_COUNTRY_CODES.contains(flagState.alpha2)
@@ -128,51 +119,5 @@ data class Vessel(
                 mmsi.isNullOrEmpty()
         )
 }
-
-val LIKELY_CONTROLLED_COUNTRY_CODES =
-    listOf(
-        CountryCode.FR.alpha3,
-        CountryCode.RU.alpha3,
-        CountryCode.KR.alpha3,
-        CountryCode.JP.alpha3,
-        CountryCode.LY.alpha3,
-        CountryCode.VE.alpha3,
-        CountryCode.SC.alpha3,
-        CountryCode.AU.alpha3,
-        CountryCode.CN.alpha3,
-        CountryCode.MG.alpha3,
-        CountryCode.BR.alpha3,
-        CountryCode.PL.alpha3,
-        CountryCode.VU.alpha3,
-        CountryCode.KM.alpha3,
-        CountryCode.MC.alpha3,
-        CountryCode.BW.alpha3,
-        CountryCode.AI.alpha3,
-        CountryCode.LK.alpha3,
-        CountryCode.TW.alpha3,
-        CountryCode.TT.alpha3,
-        CountryCode.FO.alpha3,
-        CountryCode.GY.alpha3,
-        CountryCode.PA.alpha3,
-        CountryCode.SX.alpha3,
-        CountryCode.TN.alpha3,
-        CountryCode.TR.alpha3,
-        CountryCode.AL.alpha3,
-        CountryCode.GD.alpha3,
-        CountryCode.DZ.alpha3,
-        CountryCode.SX.alpha3,
-        CountryCode.BE.alpha3,
-        CountryCode.DK.alpha3,
-        CountryCode.DE.alpha3,
-        CountryCode.EE.alpha3,
-        CountryCode.IE.alpha3,
-        CountryCode.ES.alpha3,
-        CountryCode.IT.alpha3,
-        CountryCode.NL.alpha3,
-        CountryCode.NO.alpha3,
-        CountryCode.PT.alpha3,
-        CountryCode.SE.alpha3,
-        CountryCode.GB.alpha3,
-    )
 
 val UNKNOWN_VESSEL = Vessel(id = -1, flagState = CountryCode.UNDEFINED, hasLogbookEsacapt = false)

@@ -99,6 +99,7 @@ export function HealthcheckHeadband() {
 const StyledTransparentButton = styled(TransparentButton)`
   text-align: center;
   width: unset;
+  font-size: 16px;
 `
 const StyledChevronIcon = styled(ChevronIconButton)`
   background: ${p => p.theme.color.goldenPoppy};

@@ -6,7 +6,7 @@ import { VesselGroupRow } from '@features/VesselGroup/components/VesselGroupList
 import { GroupType, Sharing } from '@features/VesselGroup/types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { trackEvent } from '@hooks/useTracking'
-import { Checkbox, Size, TextInput } from '@mtes-mct/monitor-ui'
+import { Checkbox, FulfillingBouncingCircleLoader, Size, TextInput, THEME } from '@mtes-mct/monitor-ui'
 import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
@@ -34,7 +34,7 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
     })
   }, [userAccount?.email])
 
-  const { pinnedVesselGroupsWithVessels, unpinnedVesselGroupsWithVessels } = useGetVesselGroupsWithVessels(
+  const { isLoading, pinnedVesselGroupsWithVessels, unpinnedVesselGroupsWithVessels } = useGetVesselGroupsWithVessels(
     filteredGroupTypes,
     filteredSharing,
     filteredExpired
@@ -183,13 +183,18 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
             ))}
           </UnpinnedGroups>
         )}
-        {pinnedVesselGroupsWithVessels.length + unpinnedVesselGroupsWithVessels.length === 0 && (
+        {isLoading && <StyledLoader color={THEME.color.slateGray} size={40} />}
+        {pinnedVesselGroupsWithVessels.length + unpinnedVesselGroupsWithVessels.length === 0 && !isLoading && (
           <NoGroup>Aucun groupe.</NoGroup>
         )}
       </StyledBody>
     </>
   )
 }
+
+const StyledLoader = styled(FulfillingBouncingCircleLoader)`
+  margin: auto;
+`
 
 const StyledCheckbox = styled(Checkbox)`
   margin-left: 16px;

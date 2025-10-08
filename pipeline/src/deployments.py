@@ -362,7 +362,7 @@ for deployment in deployments:
             f"{HOST_ENV_FILE_LOCATION}:/home/monitorfish-pipeline/pipeline/.env"
         ],
         "auto_remove": True,
-        "image_pull_policy": "Never",
+        "image_pull_policy": "IfNotPresent",
     }
     deployment.work_pool_name = "monitorfish"
     deployment.storage = LocalStorage("/home/monitorfish-pipeline/pipeline")

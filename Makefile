@@ -173,14 +173,23 @@ run-front-for-puppeteer:
 # ----------------------------------------------------------
 # Remote: Run commands
 
+prune-old-images: # Not using `docker image prune` because it would delete the data pipeline image if run when no flow is running
+	docker images --format "{{.Repository}}:{{.Tag}}" | \
+	awk -F: '{repos[$1]++; if(repos[$1]>1) print $0}' | \
+	xargs -r docker rmi
+
 .PHONY: restart-remote-app ##RUN ▶️  Restart app
-restart-remote-app:
+restart-remote-app-without-image-prune:
 	cd infra/remote && docker compose pull && docker compose up -d --build app --force-recreate
 
-.PHONY: register-pipeline-flows-prod ##RUN ▶️  Register pipeline flows in PROD
-deploy-pipeline-flows:
+restart-remote-app: restart-remote-app-without-image-prune prune-old-images
+
+deploy-pipeline-flows-without-image-prune:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$(MONITORFISH_VERSION) && \
 	infra/remote/data-pipeline-prefect3/deploy-flows.sh
+
+.PHONY: deploy-pipeline-flows ##RUN ▶️  Deploy pipeline flows
+deploy-pipeline-flows: deploy-pipeline-flows-without-image-prune prune-old-images
 
 register-pipeline-flows-prod:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \

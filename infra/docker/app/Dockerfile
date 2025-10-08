@@ -49,7 +49,7 @@ RUN npm run build
 
 # Create an `import-meta-env` Alpine executable without node, to be copied to the final image
 RUN npx pkg ./node_modules/@import-meta-env/cli/bin/import-meta-env.js \
-  --target node24-alpine-x64 \
+  --target node22-alpine-x64 \
   --output import-meta-env
 
 ######################

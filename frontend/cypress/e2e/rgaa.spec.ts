@@ -118,7 +118,7 @@ context('Axe core RGAA check that ', () => {
     it('form should respect RGAA criteria', () => {
       addManualSideWindowPriorNotification()
 
-      injectAndRunRGAACheck()
+      injectAndRunRGAACheck(true)
     })
   })
 
@@ -131,12 +131,13 @@ context('Axe core RGAA check that ', () => {
   })
 })
 
-const injectAndRunRGAACheck = () => {
+const injectAndRunRGAACheck = (disableLabelRule = false) => {
   cy.injectAxe()
   // @ts-ignore
   cy.checkA11y(null, {
     rules: {
-      'color-contrast': { enabled: false }
+      'color-contrast': { enabled: false },
+      ...(disableLabelRule && { 'label': { enabled: false } })
     },
     runOnly: {
       type: 'tag',

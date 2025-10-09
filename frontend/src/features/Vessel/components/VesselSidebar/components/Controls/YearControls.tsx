@@ -15,7 +15,7 @@ import {
   getNumberOfInfractionsWithRecord
 } from '../../../../../../domain/entities/controls'
 
-import type { MissionAction } from '../../../../../Mission/missionAction.types'
+import type { MissionAction } from '@features/Mission/missionAction.types'
 
 type YearControlsProps = {
   year: number

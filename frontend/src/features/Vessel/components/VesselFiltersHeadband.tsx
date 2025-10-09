@@ -47,6 +47,7 @@ const Wrapper = styled.div<{
   height: 24px;
   text-align: center;
   padding: 13px;
+  z-index: 1;
   color: ${p => p.theme.color.gainsboro};
 `
 

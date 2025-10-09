@@ -120,7 +120,6 @@
     "codecov": "3.8.3",
     "cypress": "14.5.0",
     "cypress-axe": "1.6.0",
-    "cypress-mouse-position": "1.0.0",
     "dotenv": "16.5.0",
     "eslint": "8.57.1",
     "eslint-config-airbnb": "19.0.4",

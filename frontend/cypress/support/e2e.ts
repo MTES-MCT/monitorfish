@@ -28,6 +28,8 @@ declare global {
         }>
       ): void
 
+      hoverVesselByName(vesselName: string): Cypress.Chainable
+
       getComputedStyle(dataCy: string, backUpToParentNumber?: number): Cypress.Chainable<CSSStyleDeclaration>
 
       getDownloadedFileContent(callback: (content: Cypress.Chainable<any>) => void): void

@@ -2,16 +2,10 @@ context('Vessels Overlays', () => {
   it('Last position card with vessel groups Should be seen on the map on pointer move', () => {
     cy.login('superuser')
     cy.visit('/#@-840507.18,6232030.47,8.70')
-    cy.wait(5000)
+    cy.wait(6000)
 
-    // When we move the pointer cursor (from one point to another to emit an event)
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 460, clientY: 480, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 501, clientY: 435, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 502, clientY: 425, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 500, clientY: 430, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 503, clientY: 435, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 500, clientY: 430, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 501, clientY: 435, force: true, pointerId: 1 })
+    // When we hover over the SOCRATE vessel
+    cy.hoverVesselByName('SOCRATE')
 
     // Then
     cy.wait(50)
@@ -24,13 +18,7 @@ context('Vessels Overlays', () => {
     cy.clickButton('Groupes de navires')
     cy.get('[title=\'Afficher le groupe "Mission Thémis – chaluts de fonds"\']').click()
     cy.wait(250)
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 460, clientY: 480, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 501, clientY: 435, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 502, clientY: 435, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 500, clientY: 435, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 503, clientY: 435, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 500, clientY: 435, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 501, clientY: 435, force: true, pointerId: 1 })
+    cy.hoverVesselByName('SOCRATE')
 
     // Then
     cy.wait(50)
@@ -41,13 +29,7 @@ context('Vessels Overlays', () => {
     // Hide vessel groups from map
     cy.clickButton('Cacher les groupes')
     cy.wait(250)
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 460, clientY: 480, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 501, clientY: 435, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 502, clientY: 435, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 500, clientY: 435, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 503, clientY: 435, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 500, clientY: 435, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 501, clientY: 435, force: true, pointerId: 1 })
+    cy.hoverVesselByName('SOCRATE')
 
     // Then
     cy.wait(50)
@@ -58,23 +40,13 @@ context('Vessels Overlays', () => {
   it('Last position card Should contain Alert and Beacon malfunction', () => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(5000)
+    cy.wait(6000)
 
     /**
      * Alert
      */
     // When we move the pointer cursor (from one point to another to emit an event)
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 460, clientY: 480, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 904, clientY: 255, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 905, clientY: 257, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 910, clientY: 250, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 905, clientY: 257, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 904, clientY: 255, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 904, clientY: 255, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 905, clientY: 257, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 910, clientY: 250, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 905, clientY: 257, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 904, clientY: 255, force: true, pointerId: 1 })
+    cy.hoverVesselByName('EN RÉPÉTER PÈRE')
 
     // Then
     cy.wait(50)
@@ -89,19 +61,10 @@ context('Vessels Overlays', () => {
      */
     cy.get('*[data-cy^="vessel-search-input"]').type('EH VOLER MADAME')
     cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
-    cy.wait(2000)
+    cy.wait(5000)
 
     // When we move the pointer cursor (from one point to another to emit an event)
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 460, clientY: 530, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 452, clientY: 511, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 453, clientY: 510, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 454, clientY: 509, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 453, clientY: 510, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 452, clientY: 511, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 451, clientY: 512, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 453, clientY: 511, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 454, clientY: 510, force: true, pointerId: 1 })
-    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 452, clientY: 509, force: true, pointerId: 1 })
+    cy.hoverVesselByName('EH VOLER MADAME')
 
     // Then
     cy.wait(50)
@@ -113,7 +76,7 @@ context('Vessels Overlays', () => {
   it('Position card Should be seen on the map on vessel track pointer move', () => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(5000)
+    cy.wait(6000)
 
     // When we click on the vessel
     cy.wait(200)

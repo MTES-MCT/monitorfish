@@ -51,7 +51,6 @@ export function MissionsMapMenu() {
   return (
     <>
       <MapToolButton
-        data-cy="missions-map-button"
         Icon={Icon.MissionAction}
         iconSize={25}
         isActive={leftMapBoxOpened === MapBox.MISSIONS}
@@ -68,7 +67,6 @@ export function MissionsMapMenu() {
               <MapMenuDialog.Title>Missions et contrôles</MapMenuDialog.Title>
               <MapMenuDialog.VisibilityButton
                 accent={Accent.SECONDARY}
-                data-cy="toggle-mission-layer"
                 Icon={isMissionsLayerDisplayed ? Icon.Display : Icon.Hide}
                 onClick={toggleMissionsLayer}
                 title={isMissionsLayerDisplayed ? 'Cacher les missions' : 'Afficher les missions'}

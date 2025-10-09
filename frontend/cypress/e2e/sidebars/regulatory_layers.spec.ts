@@ -7,14 +7,14 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('A regulation Should be searched, added to My Zones and showed on the map with the Zone button', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(1000)
+    cy.wait(2000)
 
     /**
      * The number of zones searched and total zones in law type should be displayed
      */
     // When
     cy.get('[title="Arbre des couches"]').click()
-    cy.get('*[name="Rechercher une zone réglementaire"]').type('interdiction')
+    cy.fill("Rechercher une zone réglementaire", 'interdiction')
 
     // Then, 2 zones are showed
     cy.get('*[data-cy="regulatory-layer-topic-count"]').contains('2/4')
@@ -90,7 +90,7 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('A regulation Should be searched, added to My Zones and showed on the map with the Topic button', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(1000)
+    cy.wait(2000)
 
     // When
     cy.get('[title="Arbre des couches"]').click()
@@ -129,7 +129,7 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('The Cotentin regulation metadata Should be opened', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(1000)
+    cy.wait(2000)
 
     // When
     cy.get('[title="Arbre des couches"]').click()
@@ -184,7 +184,7 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('The Armor regulation metadata Should be opened', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(1000)
+    cy.wait(2000)
 
     // When
     cy.get('[title="Arbre des couches"]').click()
@@ -229,7 +229,7 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('A regulation Should be searched with a rectangle', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(1000)
+    cy.wait(2000)
 
     // When
     cy.intercept(
@@ -266,7 +266,7 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('A regulation Should be searched with a polygon', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(1000)
+    cy.wait(2000)
 
     // When
     cy.get('[title="Arbre des couches"]').click()
@@ -296,7 +296,7 @@ context('Sidebars > Regulatory Layers', () => {
     }
 
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(1000)
+    cy.wait(2000)
 
     // TODO Investigate why there is white space in the Cypress iframe when hiding vessels which breaks the entire test.
     // cy.clickButton('Affichage des dernières positions')
@@ -349,7 +349,7 @@ context('Sidebars > Regulatory Layers', () => {
   it('Should unselect one of the selected topic zone layers', () => {
     // Focus the map on Corsica
     cy.visit('/#@997505.75,5180266.24,8.70')
-    cy.wait(500)
+    cy.wait(2000)
 
     // TODO Investigate why there is white space in the Cypress iframe when hiding vessels which breaks the entire test.
     // cy.clickButton('Affichage des dernières positions')
@@ -384,7 +384,7 @@ context('Sidebars > Regulatory Layers', () => {
   it('Should toggle the selected topic zone layers', () => {
     // Focus the map on Corsica
     cy.visit('/#@997505.75,5180266.24,8.70')
-    cy.wait(500)
+    cy.wait(2000)
 
     // Select all the "Corse - Chaluts" regulation zones
     cy.get('[title="Arbre des couches"]').click()

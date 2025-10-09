@@ -33,12 +33,12 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="add-vessel-to-favorites"]').click()
 
     // Then
-    cy.get('*[title="Mes navires suivis"]').parent('div').contains(1)
+    cy.get('*[title="Mes navires suivis"]').prev().contains(1)
     cy.get('*[data-cy="favorite-vessel-name"]').contains('PHENOMENE')
 
     // Delete the vessel
     cy.get('*[data-cy="favorite-vessel-delete-vessel"]').click()
-    cy.get('*[title="Mes navires suivis"]').parent('div').should('not.contain', '1')
+    cy.get('*[title="Mes navires suivis"]').prev().should('not.exist')
     cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
     cy.clickButton('Mes navires suivis', { withoutScroll: true })
 
@@ -47,7 +47,7 @@ context('Favorite Vessel', () => {
      */
     // Given
     cy.clickButton('Mes navires suivis', { withoutScroll: true })
-    cy.get('*[title="Mes navires suivis"]').parent('div').should('not.contain', '1')
+    cy.get('*[title="Mes navires suivis"]').prev().should('not.exist')
     cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
 
     // When
@@ -56,12 +56,12 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]').children().should('have.css', 'fill', 'rgb(229, 229, 235)')
 
     // Then
-    cy.get('*[title="Mes navires suivis"]').parent('div').contains(1)
+    cy.get('*[title="Mes navires suivis"]').prev().contains(1)
     cy.get('*[data-cy="favorite-vessel-name"]').contains('PHENOMENE')
 
     // Delete the vessel
     cy.get('*[data-cy="favorite-vessel-delete-vessel"]').click()
-    cy.get('*[title="Mes navires suivis"]').parent('div').should('not.contain', '1')
+    cy.get('*[title="Mes navires suivis"]').prev().should('not.exist')
     cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
     cy.clickButton('Mes navires suivis', { withoutScroll: true })
   })

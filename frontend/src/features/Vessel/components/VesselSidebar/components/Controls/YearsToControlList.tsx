@@ -1,4 +1,3 @@
-import { COLORS } from '@constants/constants'
 import {
   ListItem,
   SidebarHeader,
@@ -9,7 +8,7 @@ import styled from 'styled-components'
 
 import { YearControls } from './YearControls'
 
-import type { MissionAction } from '../../../../../Mission/missionAction.types'
+import type { MissionAction } from '@features/Mission/missionAction.types'
 
 type YearsToControlListProps = {
   controlsFromDate: string
@@ -27,7 +26,7 @@ export function YearsToControlList({ controlsFromDate, yearsToControls }: YearsT
       {yearsToControls && Object.keys(yearsToControls) && Object.keys(yearsToControls).length ? (
         <List data-cy="vessel-control-years">
           {sortedYears.map(year => (
-            <ListItem key={year}>
+            <ListItem key={year} title={`Année ${year}`}>
               <YearControls year={year} yearControls={yearsToControls[year] ?? []} />
             </ListItem>
           ))}
@@ -48,7 +47,7 @@ const List = styled.ul`
 const NoControls = styled.div`
   text-align: center;
   padding: 10px 0 10px 0;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
   width: 100%;
 `

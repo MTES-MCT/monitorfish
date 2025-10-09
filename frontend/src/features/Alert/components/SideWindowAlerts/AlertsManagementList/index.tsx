@@ -88,7 +88,7 @@ export function AlertsManagementList() {
   }, [dispatch, alertSpecifications])
 
   const fuse = useMemo(
-    () => new CustomSearch(alertSpecifications ?? [], ['name'], { threshold: 0.4 }),
+    () => new CustomSearch(alertSpecifications ?? [], ['name'], { isDiacriticSensitive: true, threshold: 0.4 }),
     [alertSpecifications]
   )
 

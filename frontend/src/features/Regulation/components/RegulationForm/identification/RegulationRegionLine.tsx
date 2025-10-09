@@ -40,7 +40,7 @@ export function RegulationRegionLine({ isDisabled }) {
       <Label>Région</Label>
       <StyledMultiSelect
         disabled={isDisabled}
-        error={regionList?.length ? undefined : 'Région requise.'}
+        error={!regionList?.length && !isDisabled ? 'Région requise.' : undefined}
         isErrorMessageHidden
         isLabelHidden
         label="Choisir une région"

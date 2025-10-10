@@ -1,5 +1,5 @@
 import { COLORS } from '@constants/constants'
-import { SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
+import { ListItem, SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import styled from 'styled-components'
 
 import { YearBeaconMalfunctions } from './YearBeaconMalfunctions'
@@ -11,6 +11,7 @@ type YearsToBeaconMalfunctionListProps = {
   vesselBeaconMalfunctionsFromDate: Date
   yearsToBeaconMalfunctions: Record<number, BeaconMalfunctionResumeAndDetails[]>
 }
+
 export function YearsToBeaconMalfunctionList({
   setIsCurrentBeaconMalfunctionDetails,
   vesselBeaconMalfunctionsFromDate,
@@ -26,12 +27,13 @@ export function YearsToBeaconMalfunctionList({
       {yearsToBeaconMalfunctions && Object.keys(yearsToBeaconMalfunctions)?.length ? (
         <List data-cy="vessel-beacon-malfunctions-history">
           {sortedYears.map(year => (
-            <YearBeaconMalfunctions
-              key={year}
-              setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
-              year={year}
-              yearBeaconMalfunctions={yearsToBeaconMalfunctions[year] ?? []}
-            />
+            <ListItem key={year}>
+              <YearBeaconMalfunctions
+                setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
+                year={year}
+                yearBeaconMalfunctions={yearsToBeaconMalfunctions[year] ?? []}
+              />
+            </ListItem>
           ))}
         </List>
       ) : (

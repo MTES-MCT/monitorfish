@@ -1,3 +1,4 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 export const SidebarZone = styled.div`
@@ -43,4 +44,8 @@ export const NoValue = styled.span`
   color: ${p => p.theme.color.slateGray};
   font-weight: 300;
   line-height: normal;
+`
+
+export const ListItem = styled.li`
+  border-bottom: 1px solid ${THEME.color.lightGray};
 `

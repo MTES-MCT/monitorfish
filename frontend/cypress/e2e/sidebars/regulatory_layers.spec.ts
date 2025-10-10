@@ -7,14 +7,14 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('A regulation Should be searched, added to My Zones and showed on the map with the Zone button', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(1000)
+    cy.wait(5000)
 
     /**
      * The number of zones searched and total zones in law type should be displayed
      */
     // When
     cy.get('[title="Arbre des couches"]').click()
-    cy.get('*[name="Rechercher une zone réglementaire"]').type('interdiction')
+    cy.fill("Rechercher une zone réglementaire", 'interdiction')
 
     // Then, 2 zones are showed
     cy.get('*[data-cy="regulatory-layer-topic-count"]').contains('2/4')
@@ -54,6 +54,7 @@ context('Sidebars > Regulatory Layers', () => {
 
     // When F5 is pressed, the zones are still showed
     cy.reload()
+    cy.wait(5000)
     cy.get('.regulatory', { timeout: 10000 }).click(490, 580, { force: true, timeout: 10000 })
     cy.wait('@getRegulation').then(({ response }) => expect(response && response.statusCode).equal(200))
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
@@ -90,7 +91,7 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('A regulation Should be searched, added to My Zones and showed on the map with the Topic button', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(1000)
+    cy.wait(5000)
 
     // When
     cy.get('[title="Arbre des couches"]').click()
@@ -129,7 +130,7 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('The Cotentin regulation metadata Should be opened', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(1000)
+    cy.wait(5000)
 
     // When
     cy.get('[title="Arbre des couches"]').click()
@@ -184,7 +185,7 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('The Armor regulation metadata Should be opened', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(1000)
+    cy.wait(5000)
 
     // When
     cy.get('[title="Arbre des couches"]').click()
@@ -229,7 +230,7 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('A regulation Should be searched with a rectangle', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(1000)
+    cy.wait(5000)
 
     // When
     cy.intercept(
@@ -266,7 +267,7 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('A regulation Should be searched with a polygon', () => {
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(1000)
+    cy.wait(5000)
 
     // When
     cy.get('[title="Arbre des couches"]').click()
@@ -296,7 +297,7 @@ context('Sidebars > Regulatory Layers', () => {
     }
 
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(1000)
+    cy.wait(5000)
 
     // TODO Investigate why there is white space in the Cypress iframe when hiding vessels which breaks the entire test.
     // cy.clickButton('Affichage des dernières positions')
@@ -311,10 +312,9 @@ context('Sidebars > Regulatory Layers', () => {
 
     // When
     cy.get('[title="Arbre des couches"]').click()
-    cy.get('*[data-cy="administrative-zones-open"]').click({ force: true, timeout: 10000 })
-    cy.get('*[data-cy="administrative-layer-toggle"]')
-      .eq(0)
-      .click({ force: true, timeout: 10000 })
+    cy.wait(500)
+    cy.clickButton('Zones administratives')
+    cy.get('[title="Zones ZEE"]').click()
       .then(() => {
         cy.getAllLocalStorage().then(localStorages => {
           const testLocalStorage = localStorages[LOCALSTORAGE_URL]
@@ -332,10 +332,10 @@ context('Sidebars > Regulatory Layers', () => {
 
     // Refresh and check the item in local storage is not deleted
     cy.reload()
-    cy.wait(2000)
+    cy.wait(5000)
     cy.get('[title="Arbre des couches"]').click()
-    cy.get('*[data-cy="administrative-zones-open"]')
-      .click({ force: true, timeout: 10000 })
+    cy.wait(500)
+    cy.clickButton('Zones administratives')
       .then(() => {
         cy.getAllLocalStorage().then(localStorages => {
           const testLocalStorage = localStorages[LOCALSTORAGE_URL]
@@ -349,7 +349,7 @@ context('Sidebars > Regulatory Layers', () => {
   it('Should unselect one of the selected topic zone layers', () => {
     // Focus the map on Corsica
     cy.visit('/#@997505.75,5180266.24,8.70')
-    cy.wait(500)
+    cy.wait(5000)
 
     // TODO Investigate why there is white space in the Cypress iframe when hiding vessels which breaks the entire test.
     // cy.clickButton('Affichage des dernières positions')
@@ -358,6 +358,7 @@ context('Sidebars > Regulatory Layers', () => {
 
     // Select all the "Corse - Chaluts" regulation zones
     cy.get('[title="Arbre des couches"]').click()
+
     cy.get('*[name="Rechercher une zone réglementaire"]').type('Corse')
     cy.get('[title=\'Sélectionner "Corse - Chaluts"\']').click()
     cy.contains('Mes zones réglementaires').click()
@@ -375,16 +376,20 @@ context('Sidebars > Regulatory Layers', () => {
     cy.get('[title=\'Sélectionner "Interdiction temporaire - Chalut à panneaux"\']').click()
 
     cy.contains('Mes zones réglementaires').click()
-    cy.contains('Mes zones réglementaires').parent().contains('Interdiction temporaire').should('be.visible')
-    cy.contains('Mes zones réglementaires').parent().contains('6 MN').should('be.visible')
-    cy.contains('Mes zones réglementaires').parent().contains('1,5 - 3 MN').should('be.visible')
-    cy.contains('Mes zones réglementaires').parent().contains('3 - 12 MN').should('be.visible')
+    cy.get('[data-cy="regulatory-layers-my-zones"]')
+      .parent()
+      .find('ul')
+      .as('myZonesList')
+    cy.get('@myZonesList').contains('Interdiction temporaire').should('be.visible')
+    cy.get('@myZonesList').contains('6 MN').should('be.visible')
+    cy.get('@myZonesList').contains('1,5 - 3 MN').should('be.visible')
+    cy.get('@myZonesList').contains('3 - 12 MN').should('be.visible')
   })
 
   it('Should toggle the selected topic zone layers', () => {
     // Focus the map on Corsica
     cy.visit('/#@997505.75,5180266.24,8.70')
-    cy.wait(500)
+    cy.wait(5000)
 
     // Select all the "Corse - Chaluts" regulation zones
     cy.get('[title="Arbre des couches"]').click()
@@ -413,7 +418,11 @@ context('Sidebars > Regulatory Layers', () => {
     // Show metadata the only "Armor CSJ Dragues" regulation zone
     cleanRegulationSearchInput()
     cy.contains('Mes zones réglementaires').click()
-    cy.contains('Mes zones réglementaires').parent().contains('Armor CSJ Dragues').click()
+    cy.get('[data-cy="regulatory-layers-my-zones"]')
+      .parent()
+      .find('ul')
+      .as('myZonesList')
+    cy.get('@myZonesList').contains('Armor CSJ Dragues').click()
     cy.get('[title=\'Afficher la réglementation "Secteur 3"\']').click()
 
     // Check a few of its metadata values

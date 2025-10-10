@@ -5,3 +5,8 @@ import 'whatwg-fetch'
 import { TextEncoder, TextDecoder } from 'util'
 
 Object.assign(global, { TextDecoder, TextEncoder })
+
+// Polyfill for structuredClone which is required by MonitorFishWebWorker
+global.structuredClone = function structuredClone(obj) {
+  return JSON.parse(JSON.stringify(obj))
+}

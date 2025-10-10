@@ -1,5 +1,7 @@
+import { StyledTransparentButton, Title } from '@features/LayersSidebar/components/style'
 import { LayerType } from '@features/Map/constants'
 import { layerActions } from '@features/Map/layer.slice'
+import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -8,7 +10,7 @@ import { AdministrativeZonesGroup } from './AdministrativeZonesGroup'
 import { COLORS } from '../../../../constants/constants'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
+import { ChevronIconButton } from '../../../commonStyles/icons/ChevronIconButton'
 import { hideLayer } from '../../../LayersSidebar/useCases/hideLayer'
 import { closeRegulatoryZoneMetadata } from '../../../Regulation/useCases/closeRegulatoryZoneMetadata'
 import { getAdministrativeZones } from '../../useCases/getAdministrativeZones'
@@ -19,12 +21,15 @@ import type { MonitorFishMap } from '@features/Map/Map.types'
 export type AdministrativeZonesProps = Readonly<{
   hideLayersListWhenSearching?: boolean
 }>
+
 export function AdministrativeZones({ hideLayersListWhenSearching = false }: AdministrativeZonesProps) {
   const dispatch = useMainAppDispatch()
   const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
   const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
 
   const [isOpened, setIsOpened] = useState(false)
+  const { isOpened: isListOpened, isRendered } = useDisplayMapBox(isOpened)
+
   const [zones, setZones] = useState<GroupedZonesAndZones>({ groupedZones: [], zones: [] })
   const zonesLength = useMemo(() => zones.zones.length + zones.groupedZones.length, [zones])
 
@@ -84,56 +89,35 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
 
   return (
     <>
-      <SectionTitle $isOpened={isOpened} data-cy="administrative-zones-open" onClick={onSectionTitleClicked}>
-        Zones administratives <ChevronIcon $isOpen={isOpened} />
-      </SectionTitle>
-      <List $isOpened={isOpened} $zonesLength={zonesLength}>
-        {zones.zones.map(zone => (
-          <Row key={zone.code}>
-            <AdministrativeZone
-              isShown={showedLayers.some(showedZone => showedZone.type === zone.code)}
-              showOrHideZone={showOrHideZone(zone)}
-              zone={zone}
-            />
-          </Row>
-        ))}
-        {zones.groupedZones.map(groupedZones => (
-          <Row key={groupedZones.group.code}>
-            <AdministrativeZonesGroup
-              group={groupedZones.group}
-              showOrHideZone={showOrHideZone}
-              zones={groupedZones.zones}
-            />
-          </Row>
-        ))}
-      </List>
+      <Title $isOpen={isListOpened}>
+        <StyledTransparentButton onClick={onSectionTitleClicked}>Zones administratives</StyledTransparentButton>
+        <ChevronIconButton isOpen={isListOpened} onClick={onSectionTitleClicked} />
+      </Title>
+      {isRendered && (
+        <List $isOpened={isListOpened} $zonesLength={zonesLength}>
+          {zones.zones.map(zone => (
+            <Row key={zone.code}>
+              <AdministrativeZone
+                isShown={showedLayers.some(showedZone => showedZone.type === zone.code)}
+                showOrHideZone={showOrHideZone(zone)}
+                zone={zone}
+              />
+            </Row>
+          ))}
+          {zones.groupedZones.map(groupedZones => (
+            <Row key={groupedZones.group.code}>
+              <AdministrativeZonesGroup
+                group={groupedZones.group}
+                showOrHideZone={showOrHideZone}
+                zones={groupedZones.zones}
+              />
+            </Row>
+          ))}
+        </List>
+      )}
     </>
   )
 }
-
-const SectionTitle = styled.div<{
-  $isOpened: boolean
-}>`
-  height: 30px;
-  padding-left: 20px;
-  padding-top: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  background: ${COLORS.charcoal};
-  color: ${COLORS.gainsboro};
-  text-align: left;
-  user-select: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
-  border-bottom-left-radius: ${p => (p.$isOpened ? '0' : '2px')};
-  border-bottom-right-radius: ${p => (p.$isOpened ? '0' : '2px')};
-
-  .Element-IconBox {
-    float: right;
-    margin-top: 4px;
-  }
-`
 
 const List = styled.ul<{
   $isOpened: boolean

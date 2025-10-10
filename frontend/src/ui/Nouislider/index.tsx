@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import nouislider, { type Options as NouisliderOptions } from 'nouislider'
-import React, { useEffect, type CSSProperties } from 'react'
+import React, { type CSSProperties, useEffect } from 'react'
 import type { Promisable } from 'type-fest'
 
 import { isEqual } from './utils'
@@ -31,6 +31,7 @@ export type NouisliderProps = NouisliderOptions & {
   onUpdate?: () => Promisable<void>
   style?: CSSProperties
 }
+
 function Nouislider({
   className,
   clickablePips = false,
@@ -194,15 +195,7 @@ function Nouislider({
     }
   }, [onUpdate, onChange, onSlide, onStart, onEnd, onSet])
 
-  const options: any = {}
-  if (id) {
-    options.id = id
-  }
-  if (className) {
-    options.className = className
-  }
-
-  return <div {...options} ref={sliderContainer} style={style} />
+  return <div ref={sliderContainer} style={style} />
 }
 
 Nouislider.defaultProps = {

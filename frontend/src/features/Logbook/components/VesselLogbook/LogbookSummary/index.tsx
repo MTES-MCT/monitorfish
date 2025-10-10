@@ -33,6 +33,7 @@ import type { Promisable } from 'type-fest'
 type LogbookSummaryProps = Readonly<{
   showLogbookMessages: (messageType?: string) => Promisable<void>
 }>
+
 export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
   const dispatch = useMainAppDispatch()
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
@@ -105,7 +106,7 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
                   onClick={!isFirstVoyage ? goToPreviousTrip : undefined}
                   title="Marée précédente"
                 />
-                <Select
+                <StyledSelect
                   isCleanable={false}
                   isLabelHidden
                   label="Numéro de marée"
@@ -142,97 +143,107 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
             <CustomDatesShowedInfo />
             {logbookMessages?.length ? (
               <LogbookMessages>
-                {logbookTrip.dep.log ? (
-                  <DEPMessageResume
-                    isDeleted={logbookTrip.dep.log.isDeleted}
-                    isNotAcknowledged={
-                      !!logbookTrip.dep.log.acknowledgment && logbookTrip.dep.log.acknowledgment?.isSuccess === false
-                    }
-                    messageValue={logbookTrip.dep.log.message}
-                    rejectionCause={logbookTrip.dep.log.acknowledgment?.rejectionCause ?? undefined}
-                    showLogbookMessages={showLogbookMessages}
-                  />
-                ) : (
-                  <EmptyResume messageType={LogbookMessageTypeEnum.DEP.code.toString()} />
-                )}
+                <li>
+                  {logbookTrip.dep.log ? (
+                    <DEPMessageResume
+                      isDeleted={logbookTrip.dep.log.isDeleted}
+                      isNotAcknowledged={
+                        !!logbookTrip.dep.log.acknowledgment && logbookTrip.dep.log.acknowledgment?.isSuccess === false
+                      }
+                      messageValue={logbookTrip.dep.log.message}
+                      rejectionCause={logbookTrip.dep.log.acknowledgment?.rejectionCause ?? undefined}
+                      showLogbookMessages={showLogbookMessages}
+                    />
+                  ) : (
+                    <EmptyResume messageType={LogbookMessageTypeEnum.DEP.code.toString()} />
+                  )}
+                </li>
+                <li>
+                  {logbookTrip.far.logs.length && logbookTrip.far.logs[0] ? (
+                    <FARMessageResume
+                      allFARMessagesAreNotAcknowledged={logbookTrip.far.areAllMessagesNotAcknowledged}
+                      id={logbookTrip.far.logs[0].reportId}
+                      numberOfMessages={
+                        logbookTrip.far.logs.filter(message => message.operationType === LogbookOperationType.DAT)
+                          .length
+                      }
+                      showLogbookMessages={showLogbookMessages}
+                      speciesAndPresentationToWeightOfFAR={logbookTrip.far.speciesAndPresentationToWeight}
+                      speciesToWeightOfFAR={logbookTrip.far.speciesToWeight}
+                      totalFARWeight={logbookTrip.far.totalWeight}
+                    />
+                  ) : (
+                    <EmptyResume messageType={LogbookMessageTypeEnum.FAR.code.toString()} />
+                  )}
+                </li>
+                <li>
+                  {logbookTrip.cps.logs.length ? (
+                    <CPSMessageResume
+                      hasNoMessageAcknowledged={logbookTrip.cps.areAllMessagesNotAcknowledged}
+                      messageValues={logbookTrip.cps.logs}
+                      numberOfSpecies={logbookTrip.cps.numberOfSpecies}
+                      showLogbookMessages={showLogbookMessages}
+                    />
+                  ) : (
+                    <EmptyResume messageType={LogbookMessageTypeEnum.CPS.code.toString()} />
+                  )}
+                </li>
+                <li>
+                  {logbookTrip.dis.logs?.length && logbookTrip.dis.logs[0] ? (
+                    <DISMessageResume
+                      allDISMessagesAreNotAcknowledged={logbookTrip.dis.areAllMessagesNotAcknowledged}
+                      id={logbookTrip.dis.logs[0].reportId}
+                      numberOfMessages={
+                        logbookTrip.dis.logs.filter(message => message.operationType === LogbookOperationType.DAT)
+                          .length
+                      }
+                      showLogbookMessages={showLogbookMessages}
+                      speciesToWeightOfDIS={logbookTrip.dis.speciesToWeight}
+                      totalDISWeight={logbookTrip.dis.totalWeight}
+                    />
+                  ) : (
+                    <EmptyResume messageType={LogbookMessageTypeEnum.DIS.code.toString()} />
+                  )}
+                </li>
+                <li>
+                  {logbookTrip.pno.log ? (
+                    <PNOMessageResume
+                      id={logbookTrip.pno.log.reportId}
+                      isDeleted={logbookTrip.pno.log.isDeleted}
+                      isNotAcknowledged={
+                        !!logbookTrip.pno.log.acknowledgment && !logbookTrip.pno.log.acknowledgment.isSuccess
+                      }
+                      pnoMessage={logbookTrip.pno.log}
+                      showLogbookMessages={showLogbookMessages}
+                      speciesToWeightOfFAR={logbookTrip.far.speciesToWeight}
+                      speciesToWeightOfPNO={logbookTrip.pno.speciesToWeight}
+                      totalFARAndDEPWeight={logbookTrip.far.totalWeight + logbookTrip.dep.totalWeight}
+                      totalPNOWeight={logbookTrip.pno.totalWeight}
+                    />
+                  ) : (
+                    <EmptyResume messageType={LogbookMessageTypeEnum.PNO.code.toString()} />
+                  )}
+                </li>
 
-                {logbookTrip.far.logs.length && logbookTrip.far.logs[0] ? (
-                  <FARMessageResume
-                    allFARMessagesAreNotAcknowledged={logbookTrip.far.areAllMessagesNotAcknowledged}
-                    id={logbookTrip.far.logs[0].reportId}
-                    numberOfMessages={
-                      logbookTrip.far.logs.filter(message => message.operationType === LogbookOperationType.DAT).length
-                    }
-                    showLogbookMessages={showLogbookMessages}
-                    speciesAndPresentationToWeightOfFAR={logbookTrip.far.speciesAndPresentationToWeight}
-                    speciesToWeightOfFAR={logbookTrip.far.speciesToWeight}
-                    totalFARWeight={logbookTrip.far.totalWeight}
-                  />
-                ) : (
-                  <EmptyResume messageType={LogbookMessageTypeEnum.FAR.code.toString()} />
-                )}
-
-                {logbookTrip.cps.logs.length ? (
-                  <CPSMessageResume
-                    hasNoMessageAcknowledged={logbookTrip.cps.areAllMessagesNotAcknowledged}
-                    messageValues={logbookTrip.cps.logs}
-                    numberOfSpecies={logbookTrip.cps.numberOfSpecies}
-                    showLogbookMessages={showLogbookMessages}
-                  />
-                ) : (
-                  <EmptyResume messageType={LogbookMessageTypeEnum.CPS.code.toString()} />
-                )}
-
-                {logbookTrip.dis.logs?.length && logbookTrip.dis.logs[0] ? (
-                  <DISMessageResume
-                    allDISMessagesAreNotAcknowledged={logbookTrip.dis.areAllMessagesNotAcknowledged}
-                    id={logbookTrip.dis.logs[0].reportId}
-                    numberOfMessages={
-                      logbookTrip.dis.logs.filter(message => message.operationType === LogbookOperationType.DAT).length
-                    }
-                    showLogbookMessages={showLogbookMessages}
-                    speciesToWeightOfDIS={logbookTrip.dis.speciesToWeight}
-                    totalDISWeight={logbookTrip.dis.totalWeight}
-                  />
-                ) : (
-                  <EmptyResume messageType={LogbookMessageTypeEnum.DIS.code.toString()} />
-                )}
-
-                {logbookTrip.pno.log ? (
-                  <PNOMessageResume
-                    id={logbookTrip.pno.log.reportId}
-                    isDeleted={logbookTrip.pno.log.isDeleted}
-                    isNotAcknowledged={
-                      !!logbookTrip.pno.log.acknowledgment && !logbookTrip.pno.log.acknowledgment.isSuccess
-                    }
-                    pnoMessage={logbookTrip.pno.log}
-                    showLogbookMessages={showLogbookMessages}
-                    speciesToWeightOfFAR={logbookTrip.far.speciesToWeight}
-                    speciesToWeightOfPNO={logbookTrip.pno.speciesToWeight}
-                    totalFARAndDEPWeight={logbookTrip.far.totalWeight + logbookTrip.dep.totalWeight}
-                    totalPNOWeight={logbookTrip.pno.totalWeight}
-                  />
-                ) : (
-                  <EmptyResume messageType={LogbookMessageTypeEnum.PNO.code.toString()} />
-                )}
-
-                {logbookTrip.lan.log ? (
-                  <LANMessageResume
-                    isDeleted={logbookTrip.lan.log.isDeleted}
-                    isNotAcknowledged={
-                      !!logbookTrip.lan.log.acknowledgment && !logbookTrip.lan.log.acknowledgment.isSuccess
-                    }
-                    lanMessage={logbookTrip.lan.log.message}
-                    showLogbookMessages={showLogbookMessages}
-                    speciesToWeightOfFAR={logbookTrip.far.speciesToWeight}
-                    speciesToWeightOfLAN={logbookTrip.lan.speciesToWeight}
-                    speciesToWeightOfPNO={logbookTrip.pno.speciesToWeight}
-                    totalLANWeight={logbookTrip.lan.totalWeight}
-                    totalPNOWeight={logbookTrip.pno.totalWeight}
-                  />
-                ) : (
-                  <EmptyResume messageType={LogbookMessageTypeEnum.LAN.code.toString()} />
-                )}
+                <li>
+                  {logbookTrip.lan.log ? (
+                    <LANMessageResume
+                      isDeleted={logbookTrip.lan.log.isDeleted}
+                      isNotAcknowledged={
+                        !!logbookTrip.lan.log.acknowledgment && !logbookTrip.lan.log.acknowledgment.isSuccess
+                      }
+                      lanMessage={logbookTrip.lan.log.message}
+                      showLogbookMessages={showLogbookMessages}
+                      speciesToWeightOfFAR={logbookTrip.far.speciesToWeight}
+                      speciesToWeightOfLAN={logbookTrip.lan.speciesToWeight}
+                      speciesToWeightOfPNO={logbookTrip.pno.speciesToWeight}
+                      totalLANWeight={logbookTrip.lan.totalWeight}
+                      totalPNOWeight={logbookTrip.pno.totalWeight}
+                    />
+                  ) : (
+                    <EmptyResume messageType={LogbookMessageTypeEnum.LAN.code.toString()} />
+                  )}
+                </li>
               </LogbookMessages>
             ) : (
               <NoMessage>Aucun message reçu</NoMessage>
@@ -328,6 +339,14 @@ const LogbookMessages = styled.ul`
   padding: 0;
   width: -moz-available;
   width: -webkit-fill-available;
+
+  > li {
+    margin: 0;
+    border-radius: 0;
+    padding: 0;
+    overflow: hidden;
+    border-bottom: 1px solid ${p => p.theme.color.lightGray};
+  }
 `
 
 const Text = styled.div<{
@@ -394,4 +413,10 @@ const Title = styled.div<{
   flex-grow: 2;
   display: flex;
   width: 400px;
+`
+
+const StyledSelect = styled(Select<string>)`
+  .rs-picker-default .rs-picker-toggle {
+    z-index: unset;
+  }
 `

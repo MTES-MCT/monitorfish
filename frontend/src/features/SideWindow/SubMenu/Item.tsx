@@ -45,7 +45,7 @@ export function Item<T extends string = string>({
   )
 }
 
-const StyledSettings = styled(Icon.Alert)`
+const StyledSettings = styled(Icon.Settings)`
   margin-right: 8px;
 `
 

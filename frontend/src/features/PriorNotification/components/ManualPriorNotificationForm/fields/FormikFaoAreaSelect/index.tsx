@@ -50,7 +50,6 @@ export function FormikFaoAreaSelect({ isReadOnly }: FormikFaoAreaSelectProps) {
 
       <FormikSelect
         disabled={!values.hasGlobalFaoArea || !faoAreasAsOptions}
-        isLabelHidden
         label="Zone globale de capture"
         name="globalFaoArea"
         options={faoAreasAsOptions ?? []}

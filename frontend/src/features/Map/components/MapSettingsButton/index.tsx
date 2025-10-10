@@ -4,7 +4,6 @@ import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
-import styled from 'styled-components'
 
 import { MapSettings } from './MapSettings'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
@@ -27,21 +26,15 @@ export function MapSettingsButton() {
   }
 
   return (
-    <Wrapper>
+    <>
       <MapToolButton
         data-cy="vessel-visibility"
         Icon={Icon.MapSettings}
         isActive={isOpened}
         onClick={openOrCloseVesselVisibility}
-        style={{ top: 244 }}
         title="Affichage des dernières positions"
       />
       {isRendered && <MapSettings isOpened={isOpened} onClose={openOrCloseVesselVisibility} />}
-    </Wrapper>
+    </>
   )
 }
-
-const Wrapper = styled.div`
-  transition: all 0.2s;
-  z-index: 1000;
-`

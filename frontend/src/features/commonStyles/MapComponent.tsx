@@ -1,4 +1,3 @@
-import { useGetTopOffset } from '@hooks/useGetTopOffset'
 import styled from 'styled-components'
 
 import type { ReactNode } from 'react'
@@ -8,13 +7,11 @@ type MapComponentStyleType = {
   className?: string
   isHidden?: boolean | undefined
 }
-export function MapComponent({ children, className, isHidden, ...props }: MapComponentStyleType) {
-  const marginTop = useGetTopOffset()
 
+export function MapComponent({ children, className, isHidden, ...props }: MapComponentStyleType) {
   return (
     <Wrapper
       $isHidden={isHidden}
-      $marginTop={marginTop}
       className={className}
       /* eslint-disable-next-line react/jsx-props-no-spreading */
       {...props}
@@ -26,8 +23,6 @@ export function MapComponent({ children, className, isHidden, ...props }: MapCom
 
 const Wrapper = styled.div<{
   $isHidden?: boolean | undefined
-  $marginTop?: number
 }>`
-  margin-top: ${p => p.$marginTop}px;
   visibility: ${p => (p.$isHidden ? 'hidden' : 'visible')};
 `

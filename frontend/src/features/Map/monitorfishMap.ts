@@ -42,7 +42,9 @@ if (isCypress()) {
       // @ts-ignore
       return layer?.values_?.source?.getFeatures() ?? []
     },
-    getViewCenter: () => monitorfishMap.getView().getCenter()
+    getPixelFromCoordinate: (coordinate: number[]) => monitorfishMap.getPixelFromCoordinate(coordinate),
+    getViewCenter: () => monitorfishMap.getView().getCenter(),
+    monitorfishMap
   }
 }
 /* eslint-enable no-underscore-dangle */

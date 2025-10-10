@@ -14,6 +14,7 @@ type VesselSearchResultProps = Readonly<{
   searchQuery: string | undefined
   withLastSearchResults: boolean
 }>
+
 export function VesselSearchResult({
   foundVessels,
   onSelect,
@@ -69,7 +70,6 @@ const Results = styled.div`
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   position: absolute;
-  z-index: 9;
   width: 100%;
 `
 

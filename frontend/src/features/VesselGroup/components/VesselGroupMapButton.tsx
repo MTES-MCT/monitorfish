@@ -4,11 +4,8 @@ import { VesselGroupMenuDialog } from '@features/VesselGroup/components/VesselGr
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
-import styled from 'styled-components'
 
 import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
-
-const MARGIN_TOP = 124
 
 export function VesselGroupMapButton() {
   const dispatch = useMainAppDispatch()
@@ -20,8 +17,7 @@ export function VesselGroupMapButton() {
   }
 
   return (
-    <Wrapper>
-      <VesselGroupMenuDialog />
+    <>
       <MapToolButton
         badgeBackgroundColor={THEME.color.gainsboro}
         badgeColor={THEME.color.gunMetal}
@@ -30,13 +26,10 @@ export function VesselGroupMapButton() {
         iconSize={25}
         isActive={rightMapBoxOpened === MapBox.VESSEL_GROUPS}
         onClick={toggleVesselGroupsMenu}
-        style={{ color: THEME.color.gainsboro, top: MARGIN_TOP }}
+        style={{ color: THEME.color.gainsboro }}
         title="Groupes de navires"
       />
-    </Wrapper>
+      <VesselGroupMenuDialog />
+    </>
   )
 }
-
-const Wrapper = styled.div`
-  transition: all 0.2s;
-`

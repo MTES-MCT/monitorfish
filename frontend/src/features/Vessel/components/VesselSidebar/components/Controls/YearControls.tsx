@@ -15,12 +15,13 @@ import {
   getNumberOfInfractionsWithRecord
 } from '../../../../../../domain/entities/controls'
 
-import type { MissionAction } from '../../../../../Mission/missionAction.types'
+import type { MissionAction } from '@features/Mission/missionAction.types'
 
 type YearControlsProps = {
   year: number
   yearControls: MissionAction.MissionAction[]
 }
+
 export function YearControls({ year, yearControls }: YearControlsProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const isEmpty = yearControls.length === 0
@@ -84,39 +85,34 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
 
   return (
     yearControls && (
-      <Row>
-        <YearListTitle
-          $isEmpty={isEmpty}
-          $isOpen={isOpen}
-          onClick={() => !isEmpty && setIsOpen(!isOpen)}
-          title={year.toString()}
-        >
-          <YearListTitleText $isEmpty={isEmpty}>
-            {!isEmpty && <YearListChevronIcon $isOpen={isOpen} />}
-            <Year>{year}</Year>
-            <YearResume data-cy="vessel-controls-year">
-              {!isEmpty ? (
-                <>
-                  {yearControls.length} {pluralize('contrôle', yearControls.length)}
-                </>
-              ) : (
-                'Aucun contrôle'
-              )}
-              {numberOfInfractionsText}
-            </YearResume>
-          </YearListTitleText>
-        </YearListTitle>
+      <div>
+        <Row>
+          <YearListTitle as={isEmpty ? 'div' : 'button'} onClick={() => !isEmpty && setIsOpen(!isOpen)}>
+            <YearListTitleText>
+              <Year>{year}</Year>
+              <YearResume data-cy="vessel-controls-year">
+                {!isEmpty ? (
+                  <>
+                    {yearControls.length} {pluralize('contrôle', yearControls.length)}
+                  </>
+                ) : (
+                  'Aucun contrôle'
+                )}
+                {numberOfInfractionsText}
+              </YearResume>
+            </YearListTitleText>
+          </YearListTitle>
+          {!isEmpty && <YearListChevronIcon isOpen={isOpen} onClick={() => !isEmpty && setIsOpen(!isOpen)} />}
+        </Row>
 
         {isOpen && (
-          // TODO Why do we need to pass a name prop here?
-          <YearListContent name={year.toString()}>
-            {sortedControls.map(
-              (control, index) =>
-                control && <Control key={control.id} control={control} isLastItem={yearControls.length === index + 1} />
-            )}
-          </YearListContent>
+          <Row>
+            <YearListContent>
+              {sortedControls.map(control => control && <Control key={control.id} control={control} />)}
+            </YearListContent>
+          </Row>
         )}
-      </Row>
+      </div>
     )
   )
 }
@@ -161,13 +157,11 @@ const YearResume = styled.span`
 `
 
 const Row = styled.div`
-  margin: 0;
-  text-align: left;
-  width: 100%;
+  display: flex;
+  align-items: center;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden !important;
   background: ${p => p.theme.color.white};
   color: ${p => p.theme.color.gunMetal};
-  border-bottom: 1px solid ${p => p.theme.color.lightGray};
 `

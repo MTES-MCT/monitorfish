@@ -1,5 +1,5 @@
-import { COLORS } from '@constants/constants'
 import { useDraggable } from '@dnd-kit/core'
+import { THEME } from '@mtes-mct/monitor-ui'
 
 import { STAGE_RECORD } from '../../constants'
 
@@ -13,16 +13,19 @@ export function Draggable({ children, id, stageId }) {
   })
 
   const style = {
-    background: COLORS.white,
-    color: COLORS.gunMetal,
+    background: THEME.color.white,
+    color: THEME.color.gunMetal,
     cursor: 'move',
-    margin: '0 10px 8px 10px'
+    margin: '0 10px 8px 10px',
+    width: 'fit-content'
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { role, ...attributesWithoutRole } = attributes
 
   return (
     /* eslint-disable react/jsx-props-no-spreading */
-    <button ref={setNodeRef} style={style} type="button" {...listeners} {...attributes}>
+    <div ref={setNodeRef} style={style} {...listeners} {...attributesWithoutRole}>
       {children}
-    </button>
+    </div>
   )
 }

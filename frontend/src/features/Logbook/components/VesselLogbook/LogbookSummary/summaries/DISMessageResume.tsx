@@ -16,6 +16,7 @@ type DISMessageResumeProps = {
   speciesToWeightOfDIS: SpeciesToSpeciesInsight | undefined
   totalDISWeight: number
 }
+
 export function DISMessageResume({
   allDISMessagesAreNotAcknowledged,
   id,
@@ -58,7 +59,7 @@ export function DISMessageResume({
         } – aucun rejet`
 
   return (
-    <Wrapper>
+    <>
       <LogbookMessageResumeHeader
         hasNoMessage={false}
         isNotAcknowledged={allDISMessagesAreNotAcknowledged}
@@ -80,7 +81,7 @@ export function DISMessageResume({
           />
         </Zone>
       </LogbookMessageContent>
-    </Wrapper>
+    </>
   )
 }
 
@@ -96,14 +97,6 @@ const Zone = styled.div`
   flex-wrap: wrap;
 `
 
-const Wrapper = styled.li`
-  margin: 0;
-  border-radius: 0;
-  padding: 0;
-  overflow: hidden;
-  color: ${p => p.theme.color.slateGray};
-`
-
 const LogbookMessageContent = styled.div<{
   chartHeight: number
   isOpen: boolean
@@ -112,9 +105,8 @@ const LogbookMessageContent = styled.div<{
   width: inherit;
   overflow: hidden;
   padding-left: 20px;
-  border-bottom: 1px solid ${p => p.theme.color.lightGray};
   opacity: ${p => (p.isOpen ? 1 : 0)};
   height: ${p => (p.isOpen && p.chartHeight ? p.chartHeight + 50 : 0)}px;
   transition: 0.2s all;
-  margin-bottom: ${p => (p.isOpen ? 5 : -1)}px;
+  border-top: 1px solid ${p => p.theme.color.lightGray};
 `

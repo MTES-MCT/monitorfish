@@ -12,13 +12,16 @@ export function useGetVesselGroupsWithVessels(
   filteredSharing: Sharing[],
   filteredExpired: boolean
 ): {
+  isLoading: boolean
   pinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
   unpinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
 } {
   const [result, setResult] = useState<{
+    isLoading: boolean
     pinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
     unpinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
   }>({
+    isLoading: true,
     pinnedVesselGroupsWithVessels: [],
     unpinnedVesselGroupsWithVessels: []
   })
@@ -45,7 +48,11 @@ export function useGetVesselGroupsWithVessels(
         debouncedFilteredExpired
       )
 
-      setResult(nextGroups)
+      setResult({
+        isLoading: false,
+        pinnedVesselGroupsWithVessels: nextGroups.pinnedVesselGroupsWithVessels,
+        unpinnedVesselGroupsWithVessels: nextGroups.unpinnedVesselGroupsWithVessels
+      })
     },
     250
   )

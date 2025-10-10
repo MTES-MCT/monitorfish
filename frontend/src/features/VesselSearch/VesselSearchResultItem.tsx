@@ -1,15 +1,15 @@
+import { TransparentButton } from '@components/style'
 import { THEME } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import Highlighter from 'react-highlight-words'
 import styled from 'styled-components'
 
 export function VesselSearchResultItem({ baseUrl, searchQuery, selectVessel, vessel }) {
-  const { flagState } = vessel
-  const { vesselName } = vessel
+  const { flagState, vesselName } = vessel
 
   return (
     <ListItem data-cy="vessel-search-item" onClick={() => selectVessel(vessel)}>
-      <div>
+      <TransparentButton>
         {!!flagState && (
           <Flag
             rel="preload"
@@ -25,8 +25,8 @@ export function VesselSearchResultItem({ baseUrl, searchQuery, selectVessel, ves
             textToHighlight={vesselName || 'SANS NOM'}
           />
         </Name>
-      </div>
-      <IdentityDataWrapper>{showVesselIdentityData(vessel, searchQuery)}</IdentityDataWrapper>
+        <IdentityDataWrapper>{showVesselIdentityData(vessel, searchQuery)}</IdentityDataWrapper>
+      </TransparentButton>
     </ListItem>
   )
 }
@@ -91,8 +91,6 @@ const ListItem = styled.li`
   padding: 0 5px 5px 7px;
   font-size: 13px;
   text-align: left;
-  list-style-type: none;
-  cursor: pointer;
   border-bottom: ${THEME.color.lightGray} 1px solid;
 
   &:hover {

@@ -1,7 +1,6 @@
 import { COLORS } from '@constants/constants'
 import {
   YearListChevronIcon,
-  YearListContent,
   YearListTitle,
   YearListTitleText
 } from '@features/Vessel/components/VesselSidebar/components/common/YearList.style'
@@ -18,6 +17,7 @@ type YearBeaconMalfunctionsProps = {
   year: number
   yearBeaconMalfunctions: BeaconMalfunctionResumeAndDetails[]
 }
+
 export function YearBeaconMalfunctions({
   setIsCurrentBeaconMalfunctionDetails,
   year,
@@ -35,27 +35,28 @@ export function YearBeaconMalfunctions({
 
   return (
     yearBeaconMalfunctions && (
-      <Row>
-        <YearListTitle $isEmpty={isEmpty} $isOpen={isOpen}>
-          <YearListTitleText $isEmpty={isEmpty} onClick={() => !isEmpty && setIsOpen(!isOpen)} title={year.toString()}>
-            {!isEmpty && <YearListChevronIcon $isOpen={isOpen} />}
-            <Year>{year}</Year>
-            <YearResume>
-              {isEmpty && 'Aucune avarie'}
-              {numberOfMalfunctions && (
-                <>
-                  {numberOfMalfunctions?.atSea} avarie
-                  {numberOfMalfunctions?.atSea > 1 ? 's' : ''} en mer <AtSeaCircle /> {numberOfMalfunctions?.atPort}{' '}
-                  avarie
-                  {numberOfMalfunctions?.atPort > 1 ? 's' : ''} à quai <AtPortCircle />
-                </>
-              )}
-            </YearResume>
-          </YearListTitleText>
-        </YearListTitle>
+      <div>
+        <Row>
+          <YearListTitle as={isEmpty ? 'div' : 'button'} onClick={() => !isEmpty && setIsOpen(!isOpen)}>
+            <YearListTitleText>
+              <Year>{year}</Year>
+              <YearResume>
+                {isEmpty && 'Aucune avarie'}
+                {numberOfMalfunctions && (
+                  <>
+                    {numberOfMalfunctions?.atSea} avarie
+                    {numberOfMalfunctions?.atSea > 1 ? 's' : ''} en mer <AtSeaCircle /> {numberOfMalfunctions?.atPort}{' '}
+                    avarie
+                    {numberOfMalfunctions?.atPort > 1 ? 's' : ''} à quai <AtPortCircle />
+                  </>
+                )}
+              </YearResume>
+            </YearListTitleText>
+          </YearListTitle>
+          {!isEmpty && <YearListChevronIcon isOpen={isOpen} onClick={() => !isEmpty && setIsOpen(!isOpen)} />}
+        </Row>
         {isOpen && (
-          // TODO Why do we need to pass a name prop here?
-          <YearListContent name={year.toString()}>
+          <Row $hasBorder>
             {sortedMalfunctions.map((beaconMalfunctionWithDetails, index) => (
               <BeaconMalfunctionCard
                 key={beaconMalfunctionWithDetails.beaconMalfunction.id}
@@ -64,9 +65,9 @@ export function YearBeaconMalfunctions({
                 setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
               />
             ))}
-          </YearListContent>
+          </Row>
         )}
-      </Row>
+      </div>
     )
   )
 }
@@ -102,17 +103,14 @@ const YearResume = styled.span`
   vertical-align: text-bottom;
 `
 
-const Row = styled.div`
-  margin: 0;
-  text-align: left;
-  list-style-type: none;
-  width: 100%;
+const Row = styled.div<{ $hasBorder?: boolean }>`
+  display: flex;
+  align-items: center;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden !important;
-  margin: 0;
   background: ${p => p.theme.color.white};
-  color: ${COLORS.gunMetal};
-  border-bottom: 1px solid ${p => p.theme.color.lightGray};
+  color: ${p => p.theme.color.gunMetal};
+  ${p => (p.$hasBorder ? `border-top: 1px solid ${p.theme.color.lightGray};` : null)}
   line-height: 1.9em;
 `

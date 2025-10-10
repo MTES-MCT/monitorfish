@@ -2,21 +2,24 @@
 // This file runs before every single spec file.
 // https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests#Support-file
 /// <reference path="../../node_modules/@mtes-mct/monitor-ui/cypress/global.d.ts" />
+import 'cypress-axe'
 
 import './commands'
 import './commands/dragTo'
 import './commands/login'
-import type {FeatureType} from "ol/format/WFS";
-import type {Coordinate} from "ol/coordinate";
+
+import type { Coordinate } from 'ol/coordinate'
+import type { FeatureType } from 'ol/format/WFS'
 
 declare global {
   namespace Cypress {
     interface Chainable {
       before(property: string): string
+
       cleanDownloadedFiles(): void
-      getFeaturesFromLayer(layerName: string): Cypress.Chainable<Array<FeatureType>>
-      getViewCenter(): Cypress.Chainable<Coordinate | undefined>
+
       countRequestsByAlias(alias: string, waitForInMs?: number): Cypress.Chainable<number>
+
       dragTo(
         selector: string,
         options?: Partial<{
@@ -24,10 +27,21 @@ declare global {
           isSmooth: boolean
         }>
       ): void
+
+      hoverVesselByName(vesselName: string): Cypress.Chainable
+
       getComputedStyle(dataCy: string, backUpToParentNumber?: number): Cypress.Chainable<CSSStyleDeclaration>
+
       getDownloadedFileContent(callback: (content: Cypress.Chainable<any>) => void): void
+
+      getFeaturesFromLayer(layerName: string): Cypress.Chainable<Array<FeatureType>>
+
+      getViewCenter(): Cypress.Chainable<Coordinate | undefined>
+
       login(user: string): void
+
       postLoginToKeycloak(user: string): void
+
       resetCountRequestsByAlias(alias: string): void
 
       /* eslint-disable typescript-sort-keys/interface */

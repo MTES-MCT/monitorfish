@@ -12,6 +12,7 @@ import { FormikMainField } from './FormikMainField'
 type FormikFishingCatchesMultiSelectProps = Readonly<{
   isReadOnly: boolean
 }>
+
 export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCatchesMultiSelectProps) {
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const { data: speciesAndGroups } = useGetSpeciesQuery()
@@ -24,7 +25,7 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
 
     return speciesAsOptionsWithoutBluefinTunaSpecies?.length
       ? new CustomSearch(
-          speciesAsOptionsWithoutBluefinTunaSpecies,
+          structuredClone(speciesAsOptionsWithoutBluefinTunaSpecies),
           [
             {
               name: 'value.code',

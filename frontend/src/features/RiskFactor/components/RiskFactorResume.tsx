@@ -1,6 +1,7 @@
 // TODO Fix the `no-unsafe-optional-chaining` statements.
 
-import { ChevronIcon } from '@features/commonStyles/icons/ChevronIcon.style'
+import { TransparentButton } from '@components/style'
+import { ChevronIconButton } from '@features/commonStyles/icons/ChevronIconButton'
 import {
   getDetectabilityRiskFactorText,
   getImpactRiskFactorText,
@@ -56,29 +57,34 @@ export function RiskFactorResume() {
           </GlobalRisk>
           <Line />
           <SubRisk data-cy="impact-risk-factor" onClick={() => setImpactRiskFactorIsOpen(!impactRiskFactorIsOpen)}>
-            <SubRiskHeader>
+            <SubRiskWrapper>
               <SubRiskTitle>Impact sur la ressource</SubRiskTitle>
-              <Chevron $isOpen={impactRiskFactorIsOpen} />
-            </SubRiskHeader>
-            <RiskFactorImpact />
-            <RiskFactorCursor
-              color={getRiskFactorColor(selectedVessel.riskFactor.impactRiskFactor)}
-              height={8}
-              // eslint-disable-next-line no-unsafe-optional-chaining
-              progress={(100 * selectedVessel.riskFactor.impactRiskFactor) / 4}
-              value={selectedVessel.riskFactor.impactRiskFactor}
+              <SubRiskContent>
+                <RiskFactorImpact />
+                <RiskFactorCursor
+                  color={getRiskFactorColor(selectedVessel.riskFactor.impactRiskFactor)}
+                  height={8}
+                  // eslint-disable-next-line no-unsafe-optional-chaining
+                  progress={(100 * selectedVessel.riskFactor.impactRiskFactor) / 4}
+                  value={selectedVessel.riskFactor.impactRiskFactor}
+                />
+                <SubRiskText
+                  title={getImpactRiskFactorText(
+                    selectedVessel.riskFactor.impactRiskFactor,
+                    !!selectedVessel.riskFactor.segmentHighestImpact
+                  )}
+                >
+                  {getImpactRiskFactorText(
+                    selectedVessel.riskFactor.impactRiskFactor,
+                    !!selectedVessel.riskFactor.segmentHighestImpact
+                  )}
+                </SubRiskText>
+              </SubRiskContent>
+            </SubRiskWrapper>
+            <Chevron
+              isOpen={impactRiskFactorIsOpen}
+              onClick={() => setImpactRiskFactorIsOpen(!impactRiskFactorIsOpen)}
             />
-            <SubRiskText
-              title={getImpactRiskFactorText(
-                selectedVessel.riskFactor.impactRiskFactor,
-                !!selectedVessel.riskFactor.segmentHighestImpact
-              )}
-            >
-              {getImpactRiskFactorText(
-                selectedVessel.riskFactor.impactRiskFactor,
-                !!selectedVessel.riskFactor.segmentHighestImpact
-              )}
-            </SubRiskText>
           </SubRisk>
           <ImpactRiskFactorDetails isOpen={impactRiskFactorIsOpen} />
           <Line />
@@ -86,29 +92,34 @@ export function RiskFactorResume() {
             data-cy="probability-risk-factor"
             onClick={() => setProbabilityRiskFactorIsOpen(!probabilityRiskFactorIsOpen)}
           >
-            <SubRiskHeader>
+            <SubRiskWrapper>
               <SubRiskTitle>Probabilité d&apos;infraction</SubRiskTitle>
-              <Chevron $isOpen={probabilityRiskFactorIsOpen} />
-            </SubRiskHeader>
-            <RiskFactorInfractions />
-            <RiskFactorCursor
-              color={getRiskFactorColor(selectedVessel.riskFactor.probabilityRiskFactor)}
-              height={8}
-              // eslint-disable-next-line no-unsafe-optional-chaining
-              progress={(100 * selectedVessel.riskFactor.probabilityRiskFactor) / 4}
-              value={selectedVessel.riskFactor.probabilityRiskFactor}
+              <SubRiskContent>
+                <RiskFactorInfractions />
+                <RiskFactorCursor
+                  color={getRiskFactorColor(selectedVessel.riskFactor.probabilityRiskFactor)}
+                  height={8}
+                  // eslint-disable-next-line no-unsafe-optional-chaining
+                  progress={(100 * selectedVessel.riskFactor.probabilityRiskFactor) / 4}
+                  value={selectedVessel.riskFactor.probabilityRiskFactor}
+                />
+                <SubRiskText
+                  title={getProbabilityRiskFactorText(
+                    selectedVessel.riskFactor.probabilityRiskFactor,
+                    !!selectedVessel.riskFactor.numberControlsLastFiveYears
+                  )}
+                >
+                  {getProbabilityRiskFactorText(
+                    selectedVessel.riskFactor.probabilityRiskFactor,
+                    !!selectedVessel.riskFactor.numberControlsLastFiveYears
+                  )}
+                </SubRiskText>
+              </SubRiskContent>
+            </SubRiskWrapper>
+            <Chevron
+              isOpen={probabilityRiskFactorIsOpen}
+              onClick={() => setProbabilityRiskFactorIsOpen(!probabilityRiskFactorIsOpen)}
             />
-            <SubRiskText
-              title={getProbabilityRiskFactorText(
-                selectedVessel.riskFactor.probabilityRiskFactor,
-                !!selectedVessel.riskFactor.numberControlsLastFiveYears
-              )}
-            >
-              {getProbabilityRiskFactorText(
-                selectedVessel.riskFactor.probabilityRiskFactor,
-                !!selectedVessel.riskFactor.numberControlsLastFiveYears
-              )}
-            </SubRiskText>
           </SubRisk>
           <ProbabilityRiskFactorDetails isOpen={probabilityRiskFactorIsOpen} />
           <Line />
@@ -116,23 +127,28 @@ export function RiskFactorResume() {
             data-cy="detectability-risk-factor"
             onClick={() => setDetectabilityRiskFactorIsOpen(!detectabilityRiskFactorIsOpen)}
           >
-            <SubRiskHeader>
+            <SubRiskWrapper>
               <SubRiskTitle>Priorité de contrôle</SubRiskTitle>
-              <Chevron $isOpen={detectabilityRiskFactorIsOpen} />
-            </SubRiskHeader>
-            <RiskFactorControl />
-            <RiskFactorCursor
-              color={getRiskFactorColor(selectedVessel.riskFactor.detectabilityRiskFactor)}
-              height={8}
-              // eslint-disable-next-line no-unsafe-optional-chaining
-              progress={(100 * selectedVessel.riskFactor.detectabilityRiskFactor) / 4}
-              value={selectedVessel.riskFactor.detectabilityRiskFactor}
+              <SubRiskContent>
+                <RiskFactorControl />
+                <RiskFactorCursor
+                  color={getRiskFactorColor(selectedVessel.riskFactor.detectabilityRiskFactor)}
+                  height={8}
+                  // eslint-disable-next-line no-unsafe-optional-chaining
+                  progress={(100 * selectedVessel.riskFactor.detectabilityRiskFactor) / 4}
+                  value={selectedVessel.riskFactor.detectabilityRiskFactor}
+                />
+                <SubRiskText
+                  title={getDetectabilityRiskFactorText(selectedVessel.riskFactor.detectabilityRiskFactor, true)}
+                >
+                  {getDetectabilityRiskFactorText(selectedVessel.riskFactor.detectabilityRiskFactor, true)}
+                </SubRiskText>
+              </SubRiskContent>
+            </SubRiskWrapper>
+            <Chevron
+              isOpen={detectabilityRiskFactorIsOpen}
+              onClick={() => setDetectabilityRiskFactorIsOpen(!detectabilityRiskFactorIsOpen)}
             />
-            <SubRiskText
-              title={getDetectabilityRiskFactorText(selectedVessel.riskFactor.detectabilityRiskFactor, true)}
-            >
-              {getDetectabilityRiskFactorText(selectedVessel.riskFactor.detectabilityRiskFactor, true)}
-            </SubRiskText>
           </SubRisk>
           <DetectabilityRiskFactorDetails isOpen={detectabilityRiskFactorIsOpen} />
         </RiskFactorZone>
@@ -172,21 +188,27 @@ const NoRiskFactor = styled.div`
   color: ${p => p.theme.color.slateGray};
 `
 
-const Chevron = styled(ChevronIcon)`
-  margin-right: 25px;
-  margin-top: 15px;
-  cursor: pointer;
-  transition: 0.2s all;
-`
-
-const SubRiskHeader = styled.div`
-  width: 100%;
-  display: flex;
+const Chevron = styled(ChevronIconButton)`
+  svg {
+    color: ${p => p.theme.color.charcoal};
+  }
 `
 
 const SubRisk = styled.div`
-  display: contents;
-  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+`
+
+const SubRiskWrapper = styled(TransparentButton)`
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+`
+
+const SubRiskContent = styled.div`
+  display: flex;
 `
 
 const GlobalRisk = styled.div`
@@ -260,11 +282,10 @@ const GlobalRiskFactor = styled.span`
   width: 100%;
 `
 
-const SubRiskTitle = styled.div`
+const SubRiskTitle = styled.h3`
   font-size: 13px;
   color: ${p => p.theme.color.slateGray};
   padding-left: 24px;
-  margin-top: 10px;
   width: 100%;
 `
 

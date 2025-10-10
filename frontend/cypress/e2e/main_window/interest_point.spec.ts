@@ -11,15 +11,15 @@ context('InterestPoint', () => {
     cy.get('#root').click(490, 580, { timeout: 10000 })
 
     // Then
-    cy.get('*[data-cy^="interest-point-name-input"]').type('Phénomène')
-    cy.get('*[data-cy^="interest-point-observations-input"]').type('Est dans la bergerie')
+    cy.get('*[data-cy="interest-point-name-input"]').type('Phénomène')
+    cy.get('*[data-cy="interest-point-observations-input"]').type('Est dans la bergerie')
 
-    cy.get('*[data-cy^="interest-point-name"]').first().contains('Phénomène', { timeout: 10000 })
-    cy.get('*[data-cy^="interest-point-observations"]').first().contains('Est dans la bergerie', { timeout: 10000 })
-    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('47° 4', { timeout: 10000 })
-    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('N', { timeout: 10000 })
-    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('007° 5', { timeout: 10000 })
-    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('W', { timeout: 10000 })
+    cy.get('*[data-cy="interest-point-name"]').contains('Phénomène', { timeout: 10000 })
+    cy.get('*[data-cy="interest-point-observations"]').contains('Est dans la bergerie', { timeout: 10000 })
+    cy.get('*[data-cy="interest-point-coordinates"]').contains('47° 4', { timeout: 10000 })
+    cy.get('*[data-cy="interest-point-coordinates"]').contains('N', { timeout: 10000 })
+    cy.get('*[data-cy="interest-point-coordinates"]').contains('007° 5', { timeout: 10000 })
+    cy.get('*[data-cy="interest-point-coordinates"]').contains('W', { timeout: 10000 })
 
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
   })
@@ -70,14 +70,14 @@ context('InterestPoint', () => {
     cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
 
     // Then
-    cy.get('*[data-cy^="coordinates-dd-input-lat"]').clear()
-    cy.get('*[data-cy^="coordinates-dd-input-lon"]').clear()
-    cy.get('*[data-cy^="coordinates-dd-input-lat"]').type('47.5525')
-    cy.get('*[data-cy^="coordinates-dd-input-lon"]').type('-7.5563')
+    cy.get('*[data-cy="coordinates-dd-input-lat"]').clear()
+    cy.get('*[data-cy="coordinates-dd-input-lon"]').clear()
+    cy.get('*[data-cy="coordinates-dd-input-lat"]').type('47.5525')
+    cy.get('*[data-cy="coordinates-dd-input-lon"]').type('-7.5563')
 
-    cy.get('*[data-cy^="interest-point-name"]').first().contains('Aucun Libellé', { timeout: 10000 })
-    cy.get('*[data-cy^="interest-point-observations"]').first().contains('Aucune observation', { timeout: 10000 })
-    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('47.5525° -007.5563°', { timeout: 10000 })
+    cy.get('*[data-cy="interest-point-name"]').first().contains('Aucun Libellé', { timeout: 10000 })
+    cy.get('*[data-cy="interest-point-observations"]').first().contains('Aucune observation', { timeout: 10000 })
+    cy.get('*[data-cy="interest-point-coordinates"]').first().contains('47.5525° -007.5563°', { timeout: 10000 })
 
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
   })
@@ -97,7 +97,7 @@ context('InterestPoint', () => {
       .type('{backspace}{backspace}{backspace}{backspace}{backspace}500W')
 
     // Then
-    cy.get('*[data-cy^="interest-point-coordinates"]')
+    cy.get('*[data-cy="interest-point-coordinates"]')
       .first()
       .contains('47° 42.111′ N 007° 54.500′ W', { timeout: 10000 })
   })
@@ -129,10 +129,10 @@ context('InterestPoint', () => {
     cy.get('.Field-MultiRadio').contains('Type de point').get('.rs-radio-checked').contains('Autre point')
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
 
-    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('47° 42′', { timeout: 10000 })
-    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('N', { timeout: 10000 })
-    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('007° 54′', { timeout: 10000 })
-    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('E', { timeout: 10000 })
+    cy.get('*[data-cy="interest-point-coordinates"]').first().contains('47° 42′', { timeout: 10000 })
+    cy.get('*[data-cy="interest-point-coordinates"]').first().contains('N', { timeout: 10000 })
+    cy.get('*[data-cy="interest-point-coordinates"]').first().contains('007° 54′', { timeout: 10000 })
+    cy.get('*[data-cy="interest-point-coordinates"]').first().contains('E', { timeout: 10000 })
   })
 
   it('An interest Should be deleted When it is in edit mode', () => {
@@ -142,7 +142,7 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
     cy.wait(300)
     cy.get('*[data-cy="interest-point-edit"]').click({ timeout: 10000 })
-    cy.get('*[data-cy^="interest-point-observations-input"]').type('Est dans la bergerie')
+    cy.get('*[data-cy="interest-point-observations-input"]').type('Est dans la bergerie')
     cy.get('*[data-cy="interest-point-delete"]').click({ timeout: 10000 })
 
     // Then

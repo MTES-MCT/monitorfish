@@ -23,6 +23,7 @@ type VesselTableProps = Readonly<{
   vesselGroupId: number
   vessels: Vessel.ActiveVessel[]
 }>
+
 export function VesselTable({ filters, isFixedGroup, isFromUrl, isPinned, vesselGroupId, vessels }: VesselTableProps) {
   const isBodyEmptyDataVisible = !!vessels && vessels.length === 0
 
@@ -45,7 +46,7 @@ export function VesselTable({ filters, isFixedGroup, isFromUrl, isPinned, vessel
     }
 
     const fuse = new CustomSearch<Vessel.ActiveVessel>(
-      vessels ?? [],
+      structuredClone(vessels ?? []),
       ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs'],
       { isStrict: true, threshold: 0.4 }
     )
@@ -162,6 +163,7 @@ const TableInnerWrapper = styled.div<{
   padding-right: 8px;
   overflow-y: scroll;
   width: auto;
+
   th {
     background: ${p => (p.$hasWhiteBackground ? p.theme.color.cultured : p.theme.color.white)};
   }

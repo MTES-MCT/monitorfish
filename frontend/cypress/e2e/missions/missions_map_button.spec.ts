@@ -8,13 +8,13 @@ context('Missions Map Button', () => {
   it('Mission layer Should be showed and hidden', () => {
     // Given
     cy.get('.MISSION_PIN_POINT').should('exist')
-    cy.get('*[data-cy^="missions-menu-box"]').should('not.be.visible')
+    cy.get('*[data-cy="missions-menu-box"]').should('not.exist')
     cy.get('*[data-cy="mission-label-text"]').should('have.length', 1)
 
     // When
-    cy.get('*[data-cy^="missions-map-button"]').forceClick()
-    cy.get('*[data-cy^="missions-menu-box"]').should('be.visible')
-    cy.get('*[data-cy^="toggle-mission-layer"]').forceClick()
+    cy.clickButton("Missions et contrôles")
+    cy.get('*[data-cy="missions-menu-box"]').should('be.visible')
+    cy.clickButton("Cacher les missions")
 
     // Then
     cy.get('*[data-cy="mission-label-text"]').should('have.length', 0)
@@ -22,13 +22,13 @@ context('Missions Map Button', () => {
 
     // On reload, the missions are still hidden
     cy.reload()
+    cy.wait(500)
     cy.get('*[data-cy="mission-label-text"]').should('have.length', 0)
     cy.get('.MISSION_PIN_POINT').should('not.exist')
 
     // Show the missions back
-    cy.get('*[data-cy^="missions-map-button"]').forceClick()
-    cy.get('*[data-cy^="missions-menu-box"]').should('be.visible')
-    cy.get('*[data-cy^="toggle-mission-layer"]').forceClick()
+    cy.clickButton("Missions et contrôles")
+    cy.clickButton("Afficher les missions")
     cy.get('.MISSION_PIN_POINT').should('exist')
     cy.get('*[data-cy="mission-label-text"]').should('have.length', 1)
   })

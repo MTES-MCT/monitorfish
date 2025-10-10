@@ -50,6 +50,7 @@ export function LastPositionsVisibilitySlider() {
       <Nouislider
         behaviour="tap"
         connect={[true, true, true]}
+        handleAttributes={[{ title: 'Valeur minimale' }, { title: 'Valeur maximale' }]}
         keyboardSupport
         onSlide={(_a, _b, nextValue) => updateValue(nextValue)}
         orientation="horizontal"

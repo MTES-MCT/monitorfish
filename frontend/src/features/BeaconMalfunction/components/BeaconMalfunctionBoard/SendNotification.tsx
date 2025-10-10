@@ -91,12 +91,12 @@ export function SendNotification({ beaconMalfunction }) {
 
   return (
     <>
-      <Select
+      <StyledSelect
         cleanable={false}
         isLabelHidden
         label="Envoyer un message"
         name="Envoyer un message"
-        onChange={status => onSelectNotification(status)}
+        onChange={status => onSelectNotification(status as string)}
         options={SELECTABLE_NOTIFICATION_TYPES.map(type => ({
           label: NOTIFICATION_TYPE[type].followUpMessage,
           value: type
@@ -128,10 +128,17 @@ export function SendNotification({ beaconMalfunction }) {
   )
 }
 
+const StyledSelect = styled(Select)`
+  width: 220px;
+`
+
 const StyledForeignFmcSelect = styled(Select)`
+  margin-top: 4px;
   .rs-picker-select {
     margin: 0 0 10px 0 !important;
   }
+
+  width: 220px;
 `
 
 const SendingNotification = styled.div`

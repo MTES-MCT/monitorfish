@@ -1,4 +1,3 @@
-import { useGetTopOffset } from '@hooks/useGetTopOffset'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, IconButton, Size } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
@@ -8,24 +7,22 @@ import type { IconButtonProps } from '@mtes-mct/monitor-ui/elements/IconButton'
 type MapToolButtonProps = {
   className?: string | undefined
   isActive: boolean
-  isLeftButton?: boolean
+  isShrinkable?: boolean
   title: string
 } & IconButtonProps
-export function MapToolButton({ className, isActive, isLeftButton = false, title, ...props }: MapToolButtonProps) {
+
+export function MapToolButton({ className, isActive, isShrinkable = true, title, ...props }: MapToolButtonProps) {
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
-  const marginTop = useGetTopOffset()
 
-  const isRightMenuShrinked = !rightMenuIsOpen && !isLeftButton
+  const isRightMenuShrinked = !rightMenuIsOpen && isShrinkable
 
   return (
     <StyledButton
       $hasBadgeNumber={!!props.badgeNumber}
       $isActive={isActive}
       $isHidden={!!previewFilteredVesselsMode}
-      $isLeftButton={isLeftButton}
       $isRightMenuShrinked={isRightMenuShrinked}
-      $marginTop={marginTop}
       accent={Accent.PRIMARY}
       aria-label={title}
       className={className}
@@ -41,20 +38,15 @@ const StyledButton = styled(IconButton)<{
   $hasBadgeNumber: boolean
   $isActive: boolean
   $isHidden: boolean | undefined
-  $isLeftButton: boolean
   $isRightMenuShrinked: boolean
-  $marginTop: number
 }>`
   height: 40px;
-  margin-top: ${p => p.$marginTop}px;
   visibility: ${p => (p.$isHidden ? 'hidden' : 'visible')};
-  position: absolute;
-  display: inline-block;
-  z-index: 99;
   width: ${p => (p.$isRightMenuShrinked ? '5px' : '40px')};
   border-radius: ${p => (p.$isRightMenuShrinked ? '1px' : '2px')};
   background: ${p => (p.$isActive ? p.theme.color.blueGray : p.theme.color.charcoal)};
   transition: all 0.3s;
+
   span {
     opacity: ${p => (p.$isRightMenuShrinked ? '0' : '1')};
   }
@@ -76,6 +68,7 @@ const StyledButton = styled(IconButton)<{
       return `
       ${badgeVisibility}
       button {
+        transition: all 0.3s;
         ${padding}
         ${width}
         ${borderRadius}
@@ -88,20 +81,6 @@ const StyledButton = styled(IconButton)<{
       ${width}
       ${borderRadius}
       ${activeProperties}
-    `
-  }}
-
-  ${p => {
-    if (p.$isLeftButton) {
-      return `
-        margin-right: 5px;
-        left: ${p.$isRightMenuShrinked ? 0 : 12}px;
-      `
-    }
-
-    return `
-      margin-left: 5px;
-      right: ${p.$isRightMenuShrinked ? 0 : 12}px;
     `
   }}
 `

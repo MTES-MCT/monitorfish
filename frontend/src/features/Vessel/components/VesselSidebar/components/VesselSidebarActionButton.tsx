@@ -16,7 +16,6 @@ export const VesselSidebarActionButton = styled(MapButton)<{
   opacity: ${p => (p.$isSidebarOpen ? 1 : 0)};
   cursor: pointer;
   border-radius: 1px;
-  z-index: 999;
   right: ${p => (p.$isRightMenuOpen && p.$isSidebarOpen ? 55 : 10)}px;
   transition:
     all 0.5s,

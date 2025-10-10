@@ -358,7 +358,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.get('input[placeholder="Rechercher un navire..."]').clear().type('phe')
     cy.contains('mark', 'PHE').click()
 
-    cy.get('[aria-label="Supprimer cette zone"]').click()
+    cy.clickButton('Supprimer cette zone')
 
     cy.wait(250)
     cy.get('.Component-Banner').should('not.exist')

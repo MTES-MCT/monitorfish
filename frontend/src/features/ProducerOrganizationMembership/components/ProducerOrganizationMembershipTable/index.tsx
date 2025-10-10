@@ -26,7 +26,7 @@ export function ProducerOrganizationMembershipTable() {
     () =>
       memberships
         ? new CustomSearch<ProducerOrganizationMembership>(
-            memberships,
+            structuredClone(memberships),
             ['internalReferenceNumber', 'organizationName'],
             { isCaseSensitive: false, isDiacriticSensitive: false, isStrict: true, threshold: 0.4 }
           )

@@ -40,7 +40,7 @@ export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGro
   const fuse = useMemo(
     () =>
       new CustomSearch<Reporting.Reporting>(
-        currentSeafrontReportings,
+        structuredClone(currentSeafrontReportings),
         [
           'vesselName',
           'internalReferenceNumber',

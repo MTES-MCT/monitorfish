@@ -29,7 +29,7 @@ RUN gradle assemble
 ###########################
 # Build frontend with npm #
 ###########################
-FROM node:20-alpine AS build-front
+FROM node:24-alpine AS build-front
 
 ARG VERSION
 ARG ENV_PROFILE

@@ -1,6 +1,5 @@
 import { BannerStack } from '@features/MainWindow/components/BannerStack'
 import { MainMap } from '@features/Map/components/MainMap'
-import { RightMenuOnHoverArea } from '@features/Map/components/MapButtons/shared/RightMenuOnHoverArea'
 import { SideWindowStatus } from '@features/SideWindow/constants'
 import { VesselFiltersHeadband } from '@features/Vessel/components/VesselFiltersHeadband'
 import { VesselGroupMainWindowEdition } from '@features/VesselGroup/components/VesselGroupMainWindowEdition'
@@ -10,20 +9,16 @@ import { useBeforeUnload } from 'react-router-dom'
 import styled from 'styled-components'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
-import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { ControlUnitDialog } from '../ControlUnit/components/ControlUnitDialog'
-import { ControlUnitListDialog } from '../ControlUnit/components/ControlUnitListDialog'
-import { DrawLayerModal } from '../Draw/components/DrawModal'
-import { HealthcheckHeadband } from '../Healthcheck/components/HealthcheckHeadband'
-import { LayersSidebar } from '../LayersSidebar/components'
 import { PreviewFilteredVessels } from './components/PreviewFilteredVessels'
 import { APIWorker } from '../../api/APIWorker'
 import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
+import { ControlUnitDialog } from '../ControlUnit/components/ControlUnitDialog'
+import { DrawLayerModal } from '../Draw/components/DrawModal'
+import { HealthcheckHeadband } from '../Healthcheck/components/HealthcheckHeadband'
 import { MapButtons } from '../Map/components/MapButtons'
 import { SideWindowLauncher } from '../SideWindow/SideWindowLauncher'
 import { VesselLoader } from '../Vessel/components/VesselLoader'
-import { VesselSidebar } from '../Vessel/components/VesselSidebar/components'
-import { VesselSidebarHeader } from '../Vessel/components/VesselSidebar/components/VesselSidebarHeader'
 
 export function MainWindow() {
   const isControlUnitDialogDisplayed = useMainAppSelector(
@@ -31,8 +26,6 @@ export function MainWindow() {
   )
   const isSuperUser = useIsSuperUser()
   const isDrawLayerModalDisplayed = useMainAppSelector(state => state.displayedComponent.isDrawLayerModalDisplayed)
-  const isVesselSearchDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselSearchDisplayed)
-  const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
   const isDraftDirty = useMainAppSelector(state => state.missionForm.isDraftDirty)
   const status = useMainAppSelector(state => state.sideWindow.status)
 
@@ -68,18 +61,14 @@ export function MainWindow() {
       <Wrapper id="mainWindowWrapper">
         <BannerStack />
         <VesselFiltersHeadband />
-        <MainMap />
 
         <LegacyRsuiteComponentsWrapper>
-          <LayersSidebar />
-          {isVesselSearchDisplayed && <VesselSidebarHeader />}
           <MapButtons />
-          <RightMenuOnHoverArea />
         </LegacyRsuiteComponentsWrapper>
-        {isVesselSidebarOpen && <VesselSidebar />}
+
+        <MainMap />
 
         {isControlUnitDialogDisplayed && <ControlUnitDialog />}
-        <ControlUnitListDialog />
 
         <VesselLoader />
         <APIWorker />

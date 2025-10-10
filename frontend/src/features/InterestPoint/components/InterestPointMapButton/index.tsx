@@ -11,7 +11,6 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
 import Feature from 'ol/Feature'
 import { Point } from 'ol/geom'
-import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EditInterestPoint } from './EditInterestPoint'
@@ -61,21 +60,15 @@ export function InterestPointMapButton() {
   }
 
   return (
-    <Wrapper>
+    <>
       <MapToolButton
         data-cy="interest-point"
         Icon={Icon.Report}
         isActive={isOpened}
         onClick={openOrCloseInterestPoint}
-        style={{ top: 340 }}
         title="Créer un point d'intérêt"
       />
       {isRendered && <EditInterestPoint isOpen={isOpened} onClose={onClose} />}
-    </Wrapper>
+    </>
   )
 }
-
-const Wrapper = styled.div`
-  transition: all 0.2s;
-  z-index: 1000;
-`

@@ -20,8 +20,6 @@ import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
 
-const MARGIN_TOP = 124
-
 export function VesselGroupMenuDialog() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
@@ -106,7 +104,7 @@ export function VesselGroupMenuDialog() {
     isRendered && (
       <VesselGroupMenuDialogWrapper $isOpen={isOpened} data-cy="vessel-groups-menu-box">
         <Header>
-          <CloseButton Icon={Icon.Close} onClick={toggleVesselGroupsMenu} />
+          <CloseButton Icon={Icon.Close} onClick={toggleVesselGroupsMenu} title="Fermer" />
           <MapMenuDialog.Title>Groupes de navires</MapMenuDialog.Title>
           <MapMenuDialog.VisibilityButton
             accent={Accent.SECONDARY}
@@ -247,7 +245,6 @@ const StyledBody = styled(MapMenuDialog.Body)`
 `
 
 const VesselGroupMenuDialogWrapper = styled(MapToolBox)`
-  top: ${MARGIN_TOP}px;
   width: 400px;
 `
 
@@ -271,4 +268,8 @@ const Buttons = styled.div`
 const StyledDropdown = styled(Dropdown)`
   width: 100%;
   margin-bottom: 8px;
+
+  .rs-dropdown-toggle.rs-btn {
+    z-index: unset;
+  }
 `

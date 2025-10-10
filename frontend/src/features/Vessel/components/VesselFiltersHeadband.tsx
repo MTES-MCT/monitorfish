@@ -38,7 +38,6 @@ export function VesselFiltersHeadband() {
 const Wrapper = styled.div<{
   $hasHealthcheckWarning: boolean
 }>`
-  z-index: 1045;
   position: absolute;
   top: ${p => (p.$hasHealthcheckWarning ? 50 : 0)}px;
   font-size: 16px;
@@ -48,6 +47,7 @@ const Wrapper = styled.div<{
   height: 24px;
   text-align: center;
   padding: 13px;
+  z-index: 1;
   color: ${p => p.theme.color.gainsboro};
 `
 

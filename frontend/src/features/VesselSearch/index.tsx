@@ -33,6 +33,7 @@ type VesselSearchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultVal
   onClickOutsideOrEscape?: () => Promisable<void>
   onInputClick?: () => Promisable<void>
 }
+
 /** @deprecated Use `@features/Vessel/components/VesselSearch` instead. */
 export function VesselSearch({
   baseRef,
@@ -210,6 +211,7 @@ export function VesselSearch({
         {vesselName && (
           <IconButton
             accent={Accent.TERTIARY}
+            aria-label="Vider le champ"
             disabled={inputNativeProps.disabled}
             Icon={Icon.Close}
             iconSize={14}
@@ -278,6 +280,7 @@ const InputWrapper = styled.div`
   position: relative;
 
   /* Clear icon button */
+
   > button {
     position: absolute;
     right: 7.5px;
@@ -285,10 +288,13 @@ const InputWrapper = styled.div`
   }
 
   /* Open vessel sidebar link */
+
   > a {
     position: absolute;
     right: 42px;
     top: 11px;
     cursor: pointer;
   }
+
+  margin-bottom: 2px;
 `

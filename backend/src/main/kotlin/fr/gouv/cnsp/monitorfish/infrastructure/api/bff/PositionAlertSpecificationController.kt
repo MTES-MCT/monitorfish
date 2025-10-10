@@ -1,17 +1,13 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.ActivateOrDeactivateAlertSpecification
-import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.AddPositionAlertSpecification
-import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.DeleteAlertSpecification
-import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.GetPositionAlertSpecifications
-import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.UpdatePositionAlertSpecification
-import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.Utils.getEmail
+import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.PositionAlertSpecificationDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PositionAlertSpecificationDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.servlet.http.HttpServletResponse
 import jakarta.websocket.server.PathParam
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -34,11 +30,11 @@ class PositionAlertSpecificationController(
     @PostMapping("")
     @Operation(summary = "Create an alert spec")
     fun add(
-        response: HttpServletResponse,
+        @AuthenticationPrincipal principal: OidcUser?,
         @RequestBody
         positionAlertSpecification: PositionAlertSpecificationDataInput,
     ) {
-        val email: String = getEmail(response)
+        val email: String = principal?.email ?: ""
 
         addPositionAlertSpecification.execute(
             userEmail = email,

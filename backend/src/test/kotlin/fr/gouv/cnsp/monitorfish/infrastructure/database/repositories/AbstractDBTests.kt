@@ -2,11 +2,10 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.TestPropertySource
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.containers.output.OutputFrame
@@ -18,15 +17,12 @@ import java.time.Duration
 import java.time.temporal.ChronoUnit
 
 @Testcontainers
-@TestPropertySource("classpath:/application.properties")
+@TestPropertySource("classpath:/application.yml")
 @SpringBootTest(
     properties = ["monitorfish.scheduling.enabled=false"],
 )
 abstract class AbstractDBTests {
-    @MockBean
-    private lateinit var jwtDecoder: JwtDecoder
-
-    @MockBean
+    @MockitoBean
     private lateinit var customAuthenticationEntryPoint: CustomAuthenticationEntryPoint
 
     companion object {

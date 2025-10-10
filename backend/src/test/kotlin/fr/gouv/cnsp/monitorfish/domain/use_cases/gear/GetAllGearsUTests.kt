@@ -12,19 +12,19 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.Clock
 
 @ExtendWith(SpringExtension::class)
 class GetAllGearsUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var gearRepository: GearRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var fleetSegmentRepository: FleetSegmentRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var gearCodeGroupRepository: GearCodeGroupRepository
 
     companion object {

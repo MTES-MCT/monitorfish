@@ -15,40 +15,40 @@ import fr.gouv.cnsp.monitorfish.fakers.VesselFaker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class CreateOrUpdateManualPriorNotificationUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var gearRepository: GearRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var manualPriorNotificationRepository: ManualPriorNotificationRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var pnoPortSubscriptionRepository: PnoPortSubscriptionRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var pnoFleetSegmentSubscriptionRepository: PnoFleetSegmentSubscriptionRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var portRepository: PortRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var priorNotificationPdfDocumentRepository: PriorNotificationPdfDocumentRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var vesselRepository: VesselRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var computeManualPriorNotification: ComputeManualPriorNotification
 
-    @MockBean
+    @MockitoBean
     private lateinit var getPriorNotification: GetPriorNotification
 
     @Test

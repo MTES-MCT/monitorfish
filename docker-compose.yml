@@ -55,9 +55,8 @@ services:
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_HOSTNAME_STRICT=false
       - KC_HTTP_ENABLED=true
-      - PROXY_ADDRESS_FORWARDING=true
-      - KC_PROXY=edge
-      - KC_PROXY_HEADERS=forwarded
+      - KC_HOSTNAME=keycloak
+      - KC_HOSTNAME_PORT=8080
       - KC_HEALTH_ENABLED=true
     ports:
       - "8085:8080"

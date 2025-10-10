@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
-import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
@@ -23,59 +23,58 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @Import(GetVesselPositions::class, GetDatesFromVesselTrackDepth::class)
 @ExtendWith(SpringExtension::class)
 class GetVesselUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var positionRepository: PositionRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var vesselRepository: VesselRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var logbookReportRepository: LogbookReportRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var logbookRawMessageRepository: LogbookRawMessageRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var riskFactorRepository: RiskFactorRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var beaconRepository: BeaconRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var producerOrganizationMembershipRepository: ProducerOrganizationMembershipRepository
 
     @Autowired
     private lateinit var getVesselPositions: GetVesselPositions
 
-    @MockBean
+    @MockitoBean
     private lateinit var vesselGroupRepository: VesselGroupRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var vesselProfileRepository: VesselProfileRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var lastPositionRepository: LastPositionRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var getAuthorizedUser: GetAuthorizedUser
 
     @Test
     fun `execute Should return the vessel and an ordered list of last positions for a given vessel`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         val now = ZonedDateTime.now().minusDays(1)
@@ -183,11 +182,10 @@ class GetVesselUTests {
     fun `execute Should not throw an exception When no Vessel found And return null`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
@@ -234,11 +232,10 @@ class GetVesselUTests {
     fun `execute Should not throw an exception When no beacon found`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
@@ -289,11 +286,10 @@ class GetVesselUTests {
     fun `execute Should not throw an exception When no vessel id given`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
@@ -340,11 +336,10 @@ class GetVesselUTests {
     fun `execute Should return a default risk factor when not found`() {
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
-            UserAuthorization(
-                hashedEmail = "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
                 isSuperUser = true,
                 service = null,
-                isAdministrator = false,
             ),
         )
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(

@@ -12,7 +12,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.anyInt
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.Clock
 import java.time.ZoneOffset
@@ -21,13 +21,13 @@ import kotlin.math.pow
 
 @ExtendWith(SpringExtension::class)
 class ComputeRiskFactorUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var riskFactorRepository: RiskFactorRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var portRepository: PortRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var controlObjectivesRepository: ControlObjectivesRepository
 
     val FIXED_CLOCK = Clock.fixed(ZonedDateTime.now().toInstant(), ZoneOffset.UTC)

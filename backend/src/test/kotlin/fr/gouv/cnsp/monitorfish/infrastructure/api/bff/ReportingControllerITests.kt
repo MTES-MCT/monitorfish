@@ -22,9 +22,9 @@ import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
@@ -38,25 +38,25 @@ class ReportingControllerITests {
     @Autowired
     private lateinit var api: MockMvc
 
-    @MockBean
+    @MockitoBean
     private lateinit var archiveReporting: ArchiveReporting
 
-    @MockBean
+    @MockitoBean
     private lateinit var deleteReporting: DeleteReporting
 
-    @MockBean
+    @MockitoBean
     private lateinit var archiveReportings: ArchiveReportings
 
-    @MockBean
+    @MockitoBean
     private lateinit var deleteReportings: DeleteReportings
 
-    @MockBean
+    @MockitoBean
     private lateinit var addReporting: AddReporting
 
-    @MockBean
+    @MockitoBean
     private lateinit var updateReporting: UpdateReporting
 
-    @MockBean
+    @MockitoBean
     private lateinit var getAllCurrentReportings: GetAllCurrentReportings
 
     @Autowired

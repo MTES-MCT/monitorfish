@@ -14,35 +14,35 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.data.domain.Sort
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class GetPriorNotificationsUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var gearRepository: GearRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var logbookReportRepository: LogbookReportRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var manualPriorNotificationRepository: ManualPriorNotificationRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var portRepository: PortRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var reportingRepository: ReportingRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var riskFactorRepository: RiskFactorRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var speciesRepository: SpeciesRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var vesselRepository: VesselRepository
 
     private val defaultFilter =

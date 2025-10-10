@@ -130,8 +130,8 @@ export function Account() {
               <MapMenuDialog.Title>Mon compte</MapMenuDialog.Title>
             </StyledHeader>
             <MapMenuDialog.Body>
-              {userAccount.email ?? 'Vous n’êtes pas connecté avec Cerbère'}
-              <StyledButton accent={Accent.SECONDARY} Icon={Icon.Logout} isFullWidth onClick={userAccount.logout}>
+              {userAccount.email ?? 'Vous n’êtes pas connecté'}
+              <StyledButton accent={Accent.SECONDARY} Icon={Icon.Logout} isFullWidth onClick={userAccount?.logout}>
                 Se déconnecter
               </StyledButton>
               {isBaseMapCachedLocally && (

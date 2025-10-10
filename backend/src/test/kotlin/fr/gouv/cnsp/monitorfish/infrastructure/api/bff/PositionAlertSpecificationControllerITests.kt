@@ -6,44 +6,52 @@ import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.TestUtils.DUMMY_POSITION_ALERT
-import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.utils.ApiTestWithJWTSecurity
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @Import(MapperConfiguration::class)
-@ApiTestWithJWTSecurity(value = [(PositionAlertSpecificationController::class)])
+@WebMvcTest(value = [PositionAlertSpecificationController::class])
 class PositionAlertSpecificationControllerITests {
     @Autowired
     private lateinit var api: MockMvc
 
-    @MockBean
+    @MockitoBean
     private lateinit var getIsAuthorizedUser: GetIsAuthorizedUser
 
-    @MockBean
+    @MockitoBean
     private lateinit var getPositionAlertSpecifications: GetPositionAlertSpecifications
 
-    @MockBean
+    @MockitoBean
     private lateinit var activateOrDeactivateAlertSpecification: ActivateOrDeactivateAlertSpecification
 
-    @MockBean
+    @MockitoBean
     private lateinit var deleteAlertSpecification: DeleteAlertSpecification
 
-    @MockBean
+    @MockitoBean
     private lateinit var addPositionAlertSpecification: AddPositionAlertSpecification
 
-    @MockBean
+    @MockitoBean
     private lateinit var updatePositionAlertSpecification: UpdatePositionAlertSpecification
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
+
+    private fun authenticatedRequest() =
+        oidcLogin()
+            .idToken { token ->
+                token.claim("email", "email@domain-name.com")
+            }
 
     @Test
     fun `Should get all position alerts`() {
@@ -57,7 +65,8 @@ class PositionAlertSpecificationControllerITests {
         api
             .perform(
                 get("/bff/v1/position_alerts_specs")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                    .with(authenticatedRequest())
+                    .with(csrf()),
             )
             // Then
             .andExpect(status().isOk)
@@ -74,7 +83,8 @@ class PositionAlertSpecificationControllerITests {
         api
             .perform(
                 put("/bff/v1/position_alerts_specs/123/activate")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                    .with(authenticatedRequest())
+                    .with(csrf()),
             )
             // Then
             .andExpect(status().isOk)
@@ -91,7 +101,8 @@ class PositionAlertSpecificationControllerITests {
         api
             .perform(
                 put("/bff/v1/position_alerts_specs/456/deactivate")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                    .with(authenticatedRequest())
+                    .with(csrf()),
             )
             // Then
             .andExpect(status().isOk)
@@ -108,7 +119,8 @@ class PositionAlertSpecificationControllerITests {
         api
             .perform(
                 delete("/bff/v1/position_alerts_specs/789")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}"),
+                    .with(authenticatedRequest())
+                    .with(csrf()),
             )
             // Then
             .andExpect(status().isOk)
@@ -149,7 +161,8 @@ class PositionAlertSpecificationControllerITests {
         api
             .perform(
                 post("/bff/v1/position_alerts_specs")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}")
+                    .with(authenticatedRequest())
+                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(alertSpecificationJson),
             )
@@ -205,7 +218,8 @@ class PositionAlertSpecificationControllerITests {
         api
             .perform(
                 put("/bff/v1/position_alerts_specs/$alertId")
-                    .header("Authorization", "Bearer ${UserAuthorizationControllerITests.VALID_JWT}")
+                    .with(authenticatedRequest())
+                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(alertSpecificationJson),
             )

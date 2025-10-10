@@ -67,14 +67,14 @@ export default defineConfig({
       '/bff': {
         target: 'http://localhost:8880'
       },
-      '/proxy': {
+      '/logout': {
         target: 'http://localhost:8880'
       },
-      '/realms': {
-        target: 'http://localhost:8085'
+      '/oauth2': {
+        target: 'http://localhost:8880'
       },
-      '/resources': {
-        target: 'http://localhost:8085'
+      '/proxy': {
+        target: 'http://localhost:8880'
       }
     }
   }

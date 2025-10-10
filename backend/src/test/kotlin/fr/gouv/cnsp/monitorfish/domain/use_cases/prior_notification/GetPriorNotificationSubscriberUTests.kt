@@ -16,30 +16,30 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 class GetPriorNotificationSubscriberUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var controlUnitRepository: ControlUnitRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var fleetSegmentRepository: FleetSegmentRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var pnoPortSubscriptionRepository: PnoPortSubscriptionRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var pnoFleetSegmentSubscriptionRepository: PnoFleetSegmentSubscriptionRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var portRepository: PortRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var vesselRepository: VesselRepository
 
     @Test

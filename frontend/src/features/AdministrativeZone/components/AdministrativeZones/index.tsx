@@ -89,7 +89,7 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
 
   return (
     <>
-      <Title $isOpen={isListOpened} data-cy="administrative-zones-open">
+      <Title $isOpen={isListOpened}>
         <StyledTransparentButton onClick={onSectionTitleClicked}>Zones administratives</StyledTransparentButton>
         <ChevronIconButton isOpen={isListOpened} onClick={onSectionTitleClicked} />
       </Title>

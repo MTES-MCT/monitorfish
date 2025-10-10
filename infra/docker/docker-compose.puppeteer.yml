@@ -123,8 +123,6 @@ services:
         condition: service_completed_successfully
       geoserver-stubs:
         condition: service_healthy
-      keycloak:
-        condition: service_started
     restart: always
     logging:
       driver: "json-file"
@@ -183,30 +181,12 @@ services:
       options:
         max-size: "1024m"
 
-  keycloak:
-    container_name: monitorfish_keycloak
-    image: quay.io/keycloak/keycloak:latest
-    environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
-      - KC_HOSTNAME_STRICT=false
-      - KC_HTTP_ENABLED=true
-      - KC_HOSTNAME=http://0.0.0.0:8880
-      - PROXY_ADDRESS_FORWARDING=true
-    ports:
-      - "8085:8080"
-    volumes:
-      - ../dev/keycloak:/opt/keycloak/data/import
-    command:
-      - start-dev
-      - --import-realm
-
   geoserver-stubs:
     image: rodolpheche/wiremock
     ports:
       - 8081:8080
     volumes:
-      - ./mappings:/home/wiremock/mappings
+      - ../../frontend/cypress/mappings:/home/wiremock/mappings
     healthcheck:
       test: [
           "CMD-SHELL",

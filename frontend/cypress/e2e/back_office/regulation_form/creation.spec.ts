@@ -52,8 +52,7 @@ context('BackOffice > Regulation Form > Creation', () => {
     // Select a French law type
     cy.fill('Choisir un ensemble', 'Reg. MED')
     cy.get('[id="Choisir une région"]').parent().click()
-    // Region list length should be equal to 18
-    cy.get('[id="Choisir une région-listbox"] > div').should('have.length', 18)
+    cy.get('[id="Choisir une région-listbox"] > div').should('have.length', 19)
 
     // Select a EU law type
     cy.fill('Choisir un ensemble', '2019')

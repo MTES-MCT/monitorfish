@@ -1,8 +1,10 @@
 import { BannerStack } from '@features/MainWindow/components/BannerStack'
+import { Button } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 export function Login() {
   const oidcEnabled = import.meta.env.FRONTEND_OIDC_ENABLED
+  const oidcProvider = import.meta.env.FRONTEND_OIDC_LOGIN_BUTTON_PROVIDER
 
   if (!oidcEnabled) {
     return <div>OIDC is disabled</div>
@@ -17,19 +19,33 @@ export function Login() {
       <>
         <Head>MonitorFish</Head>
 
-        <button className="proconnect-button" onClick={onConnect} title="S'identifier avec ProConnect" type="button">
-          <span className="proconnect-sr-only">S&apos;identifier avec ProConnect</span>
-        </button>
-        <p>
-          <a
-            href="https://www.proconnect.gouv.fr/"
-            rel="noopener noreferrer"
-            target="_blank"
-            title="Qu’est-ce que ProConnect ? - nouvelle fenêtre"
-          >
-            Qu’est-ce que ProConnect ?
-          </a>
-        </p>
+        {oidcProvider === 'proconnect' ? (
+          <>
+            <button
+              className="proconnect-button"
+              onClick={onConnect}
+              title="S'identifier avec ProConnect"
+              type="button"
+            >
+              <span className="proconnect-sr-only">S&apos;identifier avec ProConnect</span>
+            </button>
+            <p>
+              <a
+                href="https://www.proconnect.gouv.fr/"
+                rel="noopener noreferrer"
+                target="_blank"
+                title="Qu’est-ce que ProConnect ? - nouvelle fenêtre"
+              >
+                Qu’est-ce que ProConnect ?
+              </a>
+            </p>
+          </>
+        ) : (
+          <Button onClick={onConnect} title="S'identifier avec Cerbère">
+            S&apos;identifier avec Cerbère
+          </Button>
+        )}
+
         <Warning>
           <WarningHeader>Vous accédez à une application réservée aux services de l&apos;Etat.</WarningHeader>
           <br />

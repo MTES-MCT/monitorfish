@@ -287,7 +287,9 @@ export function AlertManagementForm() {
                   {hasProducerOrganizationCriteria && (
                     <ProducerOrganizationCriteria
                       onDelete={() => {
-                        setSelectedCriterias(previous => previous.filter(criteria => criteria !== Criteria.PRODUCER_ORGANIZATION))
+                        setSelectedCriterias(previous =>
+                          previous.filter(criteria => criteria !== Criteria.PRODUCER_ORGANIZATION)
+                        )
                       }}
                     />
                   )}

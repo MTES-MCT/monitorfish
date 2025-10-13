@@ -24,7 +24,7 @@ monitorfish:
             api-key: ${MONITORFISH_API_PROTECTED_API_KEY}
     oidc:
         enabled: ${MONITORFISH_OIDC_ENABLED}
-        isCerbere: ${MONITORFISH_OIDC_IS_CERBERE}
+        bypassSiretFilter: ${MONITORFISH_OIDC_BYPASS_SIRET_FILTER}
         clientId: ${MONITORFISH_OIDC_CLIENT_ID:}
         clientSecret: ${MONITORFISH_OIDC_CLIENT_SECRET:}
         redirectUri: ${MONITORFISH_OIDC_REDIRECT_URI:}

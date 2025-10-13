@@ -43,7 +43,7 @@ class SecurityConfig(
             override fun loadUser(userRequest: OidcUserRequest): OidcUser {
                 try {
                     val oidcUser = super.loadUser(userRequest)
-                    if (oidcProperties.isCerbere == "true") {
+                    if (oidcProperties.bypassSiretFilter == "true") {
                         logger.info("OIDC is with Cerbère, bypassing the SIRET checks.")
 
                         return oidcUser

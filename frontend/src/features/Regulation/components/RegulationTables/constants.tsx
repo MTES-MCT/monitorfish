@@ -11,6 +11,7 @@ export const FRENCH_REGION_LIST = [
   'Nouvelle-Aquitaine',
   'Occitanie',
   'Pays de la Loire',
+  'Polynésie Française',
   'Provence-Alpes-Côte d’Azur',
   'Guadeloupe',
   'Martinique',

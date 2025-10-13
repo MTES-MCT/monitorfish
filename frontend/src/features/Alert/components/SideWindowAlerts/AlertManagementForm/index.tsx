@@ -10,6 +10,7 @@ import {
 import { Criteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants'
 import { DistrictCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/DistrictCriteria'
 import { NationalityCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/NationalityCriteria'
+import { ProducerOrganizationCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/ProducerOrganizationCriteria'
 import { VesselCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/VesselCriteria'
 import { ZoneCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/ZoneCriteria'
 import { FormikValidityPeriod } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/FormikValidityPeriod'
@@ -166,6 +167,8 @@ export function AlertManagementForm() {
           const hasNationalityCriteria =
             !!values.flagStatesIso2.length || selectedCriterias.includes(Criteria.NATIONALITY)
           const hasVesselCriteria = !!values.vesselIds.length || selectedCriterias.includes(Criteria.VESSEL)
+          const hasProducerOrganizationCriteria =
+            !!values.producerOrganizations.length || selectedCriterias.includes(Criteria.PRODUCER_ORGANIZATION)
           const hasDistrictCriteria = !!values.districtCodes.length || selectedCriterias.includes(Criteria.DISTRICT)
 
           return (
@@ -248,6 +251,15 @@ export function AlertManagementForm() {
                           Départements et quartiers
                         </Dropdown.Item>
                       )}
+                      {!hasProducerOrganizationCriteria && (
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedCriterias(previous => previous.concat(Criteria.PRODUCER_ORGANIZATION))
+                          }}
+                        >
+                          Organisations de producteurs
+                        </Dropdown.Item>
+                      )}
                     </Dropdown>
                   </StyledFormHead>
                   {hasVesselCriteria && (
@@ -269,6 +281,15 @@ export function AlertManagementForm() {
                     <NationalityCriteria
                       onDelete={() => {
                         setSelectedCriterias(previous => previous.filter(criteria => criteria !== Criteria.NATIONALITY))
+                      }}
+                    />
+                  )}
+                  {hasProducerOrganizationCriteria && (
+                    <ProducerOrganizationCriteria
+                      onDelete={() => {
+                        setSelectedCriterias(previous =>
+                          previous.filter(criteria => criteria !== Criteria.PRODUCER_ORGANIZATION)
+                        )
                       }}
                     />
                   )}

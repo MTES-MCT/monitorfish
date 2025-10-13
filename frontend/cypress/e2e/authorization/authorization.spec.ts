@@ -29,6 +29,6 @@ context('Authorization', () => {
     cy.wait('@searchVessel')
 
     // Then
-    cy.location('pathname').should('eq', '/login')
+    cy.location('pathname').should('eq', '/log_in')
   })
 })

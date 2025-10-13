@@ -8,10 +8,10 @@ export function login(user: string) {
     })
     cy.wait(100)
 
-    cy.visit('/login')
+    cy.visit('/log_in')
     cy.wait(500)
 
-    cy.clickButton('Se connecter avec Cerbère')
+    cy.clickButton('S\'identifier avec ProConnect')
 
     // Login with Keycloak
     cy.get('[name="username"]').type(user)

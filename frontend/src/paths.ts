@@ -12,7 +12,7 @@ export const ROUTER_PATHS = {
   home: '/',
   light: '/light',
   loadLight: '/load_light',
-  login: '/login',
+  login: '/log_in',
   newRegulation: BackOfficeMenuPath.NEW_REGULATION_FORM,
   priorNotificationSubscribers: BackOfficeMenuPath[BackOfficeMenuKey.PRIOR_NOTIFICATION_SUBSCRIBER_TABLE],
   producerOrganizationMembership: BackOfficeMenuPath[BackOfficeMenuKey.PRODUCER_ORGANIZATION_TABLE],

@@ -16,7 +16,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZoneOffset
 import java.time.ZoneOffset.UTC
@@ -24,19 +24,19 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class GetLogbookMessagesUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var logbookReportRepository: LogbookReportRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var speciesRepository: SpeciesRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var portRepository: PortRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var gearRepository: GearRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var logbookRawMessageRepository: LogbookRawMessageRepository
 
     @Test

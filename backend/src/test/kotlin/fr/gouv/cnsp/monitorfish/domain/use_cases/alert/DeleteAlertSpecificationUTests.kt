@@ -4,12 +4,12 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.PositionAlertSpecificationRe
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.verify
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 class DeleteAlertSpecificationUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var positionAlertSpecificationRepository: PositionAlertSpecificationRepository
 
     @Test

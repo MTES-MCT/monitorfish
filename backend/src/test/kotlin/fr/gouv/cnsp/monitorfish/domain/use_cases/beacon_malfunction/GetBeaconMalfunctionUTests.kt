@@ -11,25 +11,25 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class GetBeaconMalfunctionUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var beaconMalfunctionsRepository: BeaconMalfunctionsRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var beaconMalfunctionCommentsRepository: BeaconMalfunctionCommentsRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var beaconMalfunctionNotificationsRepository: BeaconMalfunctionNotificationsRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var riskFactorRepository: RiskFactorRepository
 
     @Test

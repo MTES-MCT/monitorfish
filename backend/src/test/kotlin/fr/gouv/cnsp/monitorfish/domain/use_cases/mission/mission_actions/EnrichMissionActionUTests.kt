@@ -15,7 +15,7 @@ import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import java.time.ZonedDateTime
 
 @SpringBootTest(classes = [EnrichMissionAction::class])
@@ -23,7 +23,7 @@ class EnrichMissionActionUTests {
     @Autowired
     private lateinit var enrichMissionAction: EnrichMissionAction
 
-    @MockBean
+    @MockitoBean
     private lateinit var portRepository: PortRepository
 
     val mockAction =

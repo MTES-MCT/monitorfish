@@ -21,7 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.Clock
 import java.time.ZoneOffset
@@ -31,19 +31,19 @@ import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment as Fu
 
 @ExtendWith(SpringExtension::class)
 class GetActivityReportsUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var missionActionsRepository: MissionActionsRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var portRepository: PortRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var vesselRepository: VesselRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var fleetSegmentRepository: FleetSegmentRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var missionRepository: MissionRepository
 
     companion object {

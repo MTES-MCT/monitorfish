@@ -11,15 +11,15 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.TestUtils.DUMMY_POSITION_
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 class ArchiveOutdatedReportingsUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var reportingRepository: ReportingRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var positionAlertSpecification: PositionAlertSpecificationRepository
 
     @Test

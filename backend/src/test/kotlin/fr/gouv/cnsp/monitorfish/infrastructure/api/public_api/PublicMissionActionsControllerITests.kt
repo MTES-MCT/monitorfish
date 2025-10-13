@@ -18,9 +18,9 @@ import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
@@ -35,10 +35,10 @@ class PublicMissionActionsControllerITests {
     @Autowired
     private lateinit var api: MockMvc
 
-    @MockBean
+    @MockitoBean
     private lateinit var getMissionActions: GetMissionActions
 
-    @MockBean
+    @MockitoBean
     private lateinit var patchMissionAction: PatchMissionAction
 
     private fun <T> givenSuspended(block: suspend () -> T) = BDDMockito.given(runBlocking { block() })!!

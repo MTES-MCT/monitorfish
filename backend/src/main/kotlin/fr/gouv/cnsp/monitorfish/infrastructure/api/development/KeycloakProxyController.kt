@@ -67,26 +67,38 @@ class KeycloakProxyController(
         val targetUri = StringBuilder("${oidcProperties.proxyUrl}${request.requestURI}?${request.queryString}")
         logger.info("[DEV-PROXY] Forwarding ${request.requestURI} to $targetUri")
 
-        // TODO Use properties to pass all sensitive headers
-        // @see https://docs.spring.io/spring-cloud-gateway/reference/appendix.html
-        // NOTE: This is acceptable for development/testing only
-        val headerNames = request.headerNames
-        while (headerNames.hasMoreElements()) {
-            val headerName = headerNames.nextElement()
-            val headerValues = request.getHeaders(headerName)
+        return try {
+            // TODO Use properties to pass all sensitive headers
+            // @see https://docs.spring.io/spring-cloud-gateway/reference/appendix.html
+            // NOTE: This is acceptable for development/testing only
+            val headerNames = request.headerNames
+            while (headerNames.hasMoreElements()) {
+                val headerName = headerNames.nextElement()
+                val headerValues = request.getHeaders(headerName)
 
-            while (headerValues.hasMoreElements()) {
-                proxy.header(headerName, headerValues.nextElement())
+                while (headerValues.hasMoreElements()) {
+                    proxy.header(headerName, headerValues.nextElement())
+                }
             }
-        }
 
-        val response = proxy.uri(targetUri.toString()).get()
+            val response =
+                proxy
+                    .uri(targetUri.toString())
+                    .get()
 
-        // Rewrite HTML responses to fix form action URLs
-        return if (isHtmlResponse(response)) {
-            rewriteHtmlResponse(response)
-        } else {
-            response
+            // Remove duplicate CORS header added by Spring Cloud Gateway MVC
+            // See: https://github.com/spring-cloud/spring-cloud-gateway/issues/3787
+            val cleanedResponse = removeCorsHeader(response)
+
+            // Rewrite HTML responses to fix form action URLs
+            if (isHtmlResponse(cleanedResponse)) {
+                rewriteHtmlResponse(cleanedResponse)
+            } else {
+                cleanedResponse
+            }
+        } catch (e: Exception) {
+            logger.error("[DEV-PROXY] Error forwarding request to $targetUri", e)
+            throw e
         }
     }
 
@@ -104,7 +116,14 @@ class KeycloakProxyController(
     ): ResponseEntity<*> {
         val targetUri = "${oidcProperties.proxyUrl}${request.requestURI}"
 
-        return proxy.uri(targetUri).get()
+        val response =
+            proxy
+                .uri(targetUri)
+                .get()
+
+        // Remove duplicate CORS header added by Spring Cloud Gateway MVC
+        // See: https://github.com/spring-cloud/spring-cloud-gateway/issues/3787
+        return removeCorsHeader(response)
     }
 
     /**
@@ -126,44 +145,72 @@ class KeycloakProxyController(
         val targetUri = StringBuilder("${oidcProperties.proxyUrl}${request.requestURI}?${request.queryString}")
         logger.info("[DEV-PROXY] Forwarding ${request.requestURI} to $targetUri")
 
-        // TODO Use properties to pass all sensitive headers
-        // @see https://docs.spring.io/spring-cloud-gateway/reference/appendix.html
-        // NOTE: This is acceptable for development/testing only
-        val headerNames = request.headerNames
-        while (headerNames.hasMoreElements()) {
-            val headerName = headerNames.nextElement()
-            val headerValues = request.getHeaders(headerName)
+        return try {
+            // TODO Use properties to pass all sensitive headers
+            // @see https://docs.spring.io/spring-cloud-gateway/reference/appendix.html
+            // NOTE: This is acceptable for development/testing only
+            val headerNames = request.headerNames
+            while (headerNames.hasMoreElements()) {
+                val headerName = headerNames.nextElement()
+                val headerValues = request.getHeaders(headerName)
 
-            while (headerValues.hasMoreElements()) {
-                proxy.header(headerName, headerValues.nextElement())
+                while (headerValues.hasMoreElements()) {
+                    proxy.header(headerName, headerValues.nextElement())
+                }
             }
+
+            // TODO Use properties to pass form data
+            // @see spring.cloud.gateway.mvc.form-filter.enabled=false
+            // NOTE: This is acceptable for development/testing only
+            val formData = StringBuilder()
+            if (params.isNotEmpty()) {
+                params.entries
+                    .joinToString("&") { (key, values) ->
+                        "$key=${values.joinToString(",")}"
+                    }.let { formData.append(it) }
+            }
+
+            val formDataBytes = formData.toString().toByteArray(StandardCharsets.UTF_8)
+
+            // Ensure the content length matches the size of the byte array
+            proxy
+                .header("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .header("Content-Length", formDataBytes.size.toString())
+            val response =
+                proxy
+                    .uri(targetUri.toString())
+                    .body(formDataBytes)
+                    .post()
+
+            // Remove duplicate CORS header added by Spring Cloud Gateway MVC
+            // See: https://github.com/spring-cloud/spring-cloud-gateway/issues/3787
+            val cleanedResponse = removeCorsHeader(response)
+
+            // Rewrite HTML responses to fix form action URLs
+            if (isHtmlResponse(cleanedResponse)) {
+                rewriteHtmlResponse(cleanedResponse)
+            } else {
+                cleanedResponse
+            }
+        } catch (e: Exception) {
+            logger.error("[DEV-PROXY] Error forwarding POST request to $targetUri", e)
+            throw e
         }
+    }
 
-        // TODO Use properties to pass form data
-        // @see spring.cloud.gateway.mvc.form-filter.enabled=false
-        // NOTE: This is acceptable for development/testing only
-        val formData = StringBuilder()
-        if (params.isNotEmpty()) {
-            params.entries
-                .joinToString("&") { (key, values) ->
-                    "$key=${values.joinToString(",")}"
-                }.let { formData.append(it) }
-        }
+    private fun removeCorsHeader(response: ResponseEntity<*>): ResponseEntity<*> {
+        // In Spring Boot 3.4+, headers are ReadOnlyHttpHeaders and cannot be modified
+        // We need to create a new ResponseEntity with filtered headers
+        val newHeaders = response.headers.toMutableMap()
+        newHeaders.remove("Access-Control-Allow-Origin")
 
-        val formDataBytes = formData.toString().toByteArray(StandardCharsets.UTF_8)
-
-        // Ensure the content length matches the size of the byte array
-        proxy
-            .header("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-            .header("Content-Length", formDataBytes.size.toString())
-        val response = proxy.uri(targetUri.toString()).body(formDataBytes).post()
-
-        // Rewrite HTML responses to fix form action URLs
-        return if (isHtmlResponse(response)) {
-            rewriteHtmlResponse(response)
-        } else {
-            response
-        }
+        return ResponseEntity
+            .status(response.statusCode)
+            .headers { headers ->
+                newHeaders.forEach { (key, values) ->
+                    headers.addAll(key, values)
+                }
+            }.body(response.body)
     }
 
     private fun isHtmlResponse(response: ResponseEntity<*>): Boolean {

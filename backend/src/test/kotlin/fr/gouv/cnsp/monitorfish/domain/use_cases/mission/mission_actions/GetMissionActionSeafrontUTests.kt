@@ -16,16 +16,16 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class GetMissionActionSeafrontUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var facadeAreasRepository: FacadeAreasRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var portRepository: PortRepository
 
     @Test

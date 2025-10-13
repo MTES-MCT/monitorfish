@@ -86,7 +86,7 @@ context('Side Window > Alert Management', () => {
 
     cy.fill("Zones administratives déclenchant l'alerte", ['27.6.a'])
     cy.fill("Zones réglementaires déclenchant l'alerte", ['Secteur 3'])
-    cy.contains('ZONES (VMS)').click()
+    cy.clickButton('ZONES (VMS)')
 
     /**
      * Add nationality zones criteria
@@ -94,7 +94,7 @@ context('Side Window > Alert Management', () => {
     cy.clickButton('Définir les critères de déclenchement')
     cy.clickButton('Nationalités')
     cy.fill("Nationalités déclenchant l'alerte", ['Royaume-Uni'])
-    cy.contains('NATIONALITÉS').click()
+    cy.clickButton('NATIONALITÉS')
 
     /**
      * Add vessels zones criteria
@@ -110,7 +110,15 @@ context('Side Window > Alert Management', () => {
     // Re-add vessel
     cy.getDataCy('VesselSearch-input').type('pheno')
     cy.getDataCy('VesselSearch-item').first().click()
-    cy.contains('NAVIRES').click()
+    cy.clickButton('NAVIRES')
+
+    /**
+     * Add producers organization criteria
+     */
+    cy.clickButton('Définir les critères de déclenchement')
+    cy.clickButton('Organisations de producteurs')
+    cy.fill("Organisations de producteurs déclenchant l'alerte", ['COBRENORD'])
+    cy.clickButton('ORGANISATIONS DE PRODUCTEURS')
 
     /**
      * Add district criteria
@@ -133,6 +141,7 @@ context('Side Window > Alert Management', () => {
       expect(interception.request.body.flagStatesIso2).to.deep.equal(['GB'])
       expect(interception.request.body.districtCodes).to.deep.equal(['LS'])
       expect(interception.request.body.vesselIds).to.deep.equal([1])
+      expect(interception.request.body.producerOrganizations).to.deep.equal(['COBRENORD'])
       expect(interception.request.body.administrativeAreas).to.deep.equal([
         {
           areas: ['27.6.a'],

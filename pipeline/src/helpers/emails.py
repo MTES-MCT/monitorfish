@@ -415,21 +415,15 @@ def send_email_or_sms_or_fax_message(
 
 
 def resize_pdf_to_A4(pdf: bytes) -> bytes:
-    DPI = 72
-    INCHES_IN_CM = 2.54
-    A4_WIDTH_CM = 21
-    A4_HEIGHT_CM = 29.7
-    A4 = {
-        "width": DPI * A4_WIDTH_CM / INCHES_IN_CM,
-        "height": DPI * A4_HEIGHT_CM / INCHES_IN_CM,
-    }
-
+    A4_w = pypdf.PaperSize.A4.width
+    A4_h = pypdf.PaperSize.A4.height
     pdf = pypdf.PdfReader(io.BytesIO(pdf))
 
     writer = pypdf.PdfWriter()
 
     for page in pdf.pages:
-        page.scale_to(width=A4["width"], height=A4["height"])
+        page.scale_to(width=A4_w, height=A4_h)
+        page.cropbox = pypdf.generic.RectangleObject((0, 0, A4_w, A4_h))
         writer.add_page(page)
 
     for page in writer.pages:

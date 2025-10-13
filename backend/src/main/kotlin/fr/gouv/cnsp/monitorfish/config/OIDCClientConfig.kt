@@ -10,6 +10,12 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository
 import org.springframework.security.oauth2.core.AuthorizationGrantType
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator
+import org.springframework.security.oauth2.core.OAuth2TokenValidator
+import org.springframework.security.oauth2.jwt.Jwt
+import org.springframework.security.oauth2.jwt.JwtDecoderFactory
+import org.springframework.security.oauth2.jwt.JwtValidators
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
 
 @Configuration
 @ConditionalOnProperty(value = ["monitorfish.oidc.enabled"], havingValue = "true")
@@ -51,6 +57,73 @@ class OIDCClientConfig(
 
         logger.info("✅ OIDC client registration created successfully for client: $clientId")
         return InMemoryClientRegistrationRepository(clientRegistration)
+    }
+
+    /**
+     * Creates a JWT decoder factory with custom issuer validation for development/testing environments.
+     *
+     * ⚠️ DEVELOPMENT ONLY: When `issuerUriExternal` is configured (e.g., for Keycloak proxy in Cypress tests),
+     * this factory creates decoders that accept both internal and external issuers.
+     * In production (when `issuerUriExternal` is not set), standard issuer validation is used.
+     */
+    @ConditionalOnProperty(
+        value = ["monitorfish.keycloak.proxy.enabled"],
+        havingValue = "true",
+        matchIfMissing = false,
+    )
+    @Bean
+    fun jwtDecoderFactory(): JwtDecoderFactory<ClientRegistration> {
+        val issuerUri = validateProperty(oidcProperties.issuerUri, "Issuer URI")
+        val externalIssuer = oidcProperties.issuerUriExternal
+
+        return JwtDecoderFactory { clientRegistration ->
+            val jwkSetUri = clientRegistration.providerDetails.jwkSetUri
+            val jwtDecoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build()
+
+            // ⚠️ DEVELOPMENT ONLY: Custom issuer validation for Keycloak proxy
+            // This code path is only taken when issuerUriExternal is configured (dev/test environments)
+            if (externalIssuer.isNotBlank()) {
+                logger.warn(
+                    "⚠️ DEV MODE: Custom JWT issuer validation enabled for proxy. External issuer: $externalIssuer",
+                )
+
+                val issuerValidator =
+                    OAuth2TokenValidator<Jwt> { jwt ->
+                        val tokenIssuer = jwt.issuer?.toString()
+
+                        // Accept either the internal issuer or the external (proxied) issuer
+                        if (tokenIssuer == issuerUri || tokenIssuer == externalIssuer) {
+                            logger.debug("JWT issuer validated: $tokenIssuer")
+                            org.springframework.security.oauth2.core.OAuth2TokenValidatorResult
+                                .success()
+                        } else {
+                            logger.error(
+                                "JWT issuer validation failed. Expected: $issuerUri or $externalIssuer, but got: $tokenIssuer",
+                            )
+                            org.springframework.security.oauth2.core.OAuth2TokenValidatorResult.failure(
+                                org.springframework.security.oauth2.core.OAuth2Error(
+                                    "invalid_token",
+                                    "The token issuer is invalid. Expected: $issuerUri or $externalIssuer, but got: $tokenIssuer",
+                                    null,
+                                ),
+                            )
+                        }
+                    }
+
+                val validators =
+                    DelegatingOAuth2TokenValidator(
+                        JwtValidators.createDefault(),
+                        issuerValidator,
+                    )
+                jwtDecoder.setJwtValidator(validators)
+            } else {
+                // Production: use standard issuer validation
+                jwtDecoder.setJwtValidator(JwtValidators.createDefaultWithIssuer(issuerUri))
+            }
+
+            logger.debug("JWT decoder created for client: ${clientRegistration.clientId}")
+            jwtDecoder
+        }
     }
 
     private fun validateProperty(

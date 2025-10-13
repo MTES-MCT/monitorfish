@@ -30,8 +30,10 @@ def test_resize_pdf_to_A4(A3_pdf):
 
     assert A3_page.mediabox.width == 841.889764
     assert A3_page.mediabox.height == 1190.551181
-    assert resized_page.mediabox.width == 595.275591
-    assert resized_page.mediabox.height == 841.889764
+    assert resized_page.mediabox.width == 595
+    assert resized_page.mediabox.height == 842
+    assert resized_page.cropbox.width == 595
+    assert resized_page.cropbox.height == 842
 
 
 def test_create_html_email():

@@ -25,7 +25,7 @@ class SpaController : ErrorController {
                 "/ext",
                 "/light",
                 "/load_light",
-                "/login",
+                "/log_in",
                 "/register",
                 "/activity_visualization",
                 "/side_window",

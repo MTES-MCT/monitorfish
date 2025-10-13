@@ -8,7 +8,7 @@ export function login(user: string) {
     })
     cy.wait(100)
 
-    cy.visit('/login')
+    cy.visit('/log_in')
     cy.wait(500)
 
     cy.clickButton('S\'identifier avec ProConnect')

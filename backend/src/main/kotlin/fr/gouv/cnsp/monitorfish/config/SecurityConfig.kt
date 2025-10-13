@@ -43,6 +43,10 @@ class SecurityConfig(
             override fun loadUser(userRequest: OidcUserRequest): OidcUser {
                 try {
                     val oidcUser = super.loadUser(userRequest)
+                    if (oidcProperties.isCerbere == true) {
+                        return oidcUser
+                    }
+
                     val siretsClaimRaw = oidcUser.claims["SIRET"]
 
                     val tokenSirets: Set<String> =

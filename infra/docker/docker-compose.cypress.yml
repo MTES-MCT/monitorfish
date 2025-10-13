@@ -60,6 +60,7 @@ services:
 
       # OIDC Configuration
       - MONITORFISH_OIDC_ENABLED=true
+      - MONITORFISH_OIDC_IS_CERBERE=false
       - MONITORFISH_OIDC_PROXY_URL=http://keycloak:8080
       - MONITORFISH_OIDC_ISSUER_URI=http://keycloak:8080/realms/monitor
       - MONITORFISH_OIDC_AUTHORIZATION_URI=http://localhost:8880/realms/monitor/protocol/openid-connect/auth

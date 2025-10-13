@@ -22,9 +22,9 @@ import org.mockito.BDDMockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
@@ -38,22 +38,22 @@ class PendingAlertControllerITests {
     @Autowired
     private lateinit var api: MockMvc
 
-    @MockBean
+    @MockitoBean
     private lateinit var getPendingAlerts: GetPendingAlerts
 
-    @MockBean
+    @MockitoBean
     private lateinit var validatePendingAlert: ValidatePendingAlert
 
-    @MockBean
+    @MockitoBean
     private lateinit var silencePendingAlert: SilencePendingAlert
 
-    @MockBean
+    @MockitoBean
     private lateinit var getSilencedAlerts: GetSilencedAlerts
 
-    @MockBean
+    @MockitoBean
     private lateinit var deleteSilencedAlert: DeleteSilencedAlert
 
-    @MockBean
+    @MockitoBean
     private lateinit var silenceAlert: SilenceAlert
 
     @Autowired

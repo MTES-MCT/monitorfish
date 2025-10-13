@@ -33,7 +33,7 @@ class ControllersExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException::class)
     fun handleBackendRuntimeException(e: RuntimeException): BackendInternalErrorDataOutput {
-        logger.error(e.message, e.cause)
+        logger.error("Runtime exception: ${e.message}", e)
 
         return BackendInternalErrorDataOutput(code = null, message = e.message ?: BackendInternalException().message)
     }

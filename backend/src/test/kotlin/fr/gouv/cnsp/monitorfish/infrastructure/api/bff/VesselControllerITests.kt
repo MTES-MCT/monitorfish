@@ -39,9 +39,9 @@ import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -59,40 +59,40 @@ class VesselControllerITests {
     @Autowired
     private lateinit var api: MockMvc
 
-    @MockBean
+    @MockitoBean
     private lateinit var getIsAuthorizedUser: GetIsAuthorizedUser
 
-    @MockBean
+    @MockitoBean
     private lateinit var getActiveVessels: GetActiveVessels
 
-    @MockBean
+    @MockitoBean
     private lateinit var getVessel: GetVessel
 
-    @MockBean
+    @MockitoBean
     private lateinit var getVesselById: GetVesselById
 
-    @MockBean
+    @MockitoBean
     private lateinit var getVesselPositions: GetVesselPositions
 
-    @MockBean
+    @MockitoBean
     private lateinit var getVesselVoyage: GetVesselVoyage
 
-    @MockBean
+    @MockitoBean
     private lateinit var getVesselVoyageByDates: GetVesselVoyageByDates
 
-    @MockBean
+    @MockitoBean
     private lateinit var searchVessels: SearchVessels
 
-    @MockBean
+    @MockitoBean
     private lateinit var getVesselReportings: GetVesselReportings
 
-    @MockBean
+    @MockitoBean
     private lateinit var getVesselRiskFactor: GetVesselRiskFactor
 
-    @MockBean
+    @MockitoBean
     private lateinit var getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions
 
-    @MockBean
+    @MockitoBean
     private lateinit var getVesselLastTripNumbers: GetVesselLastTripNumbers
 
     @Autowired

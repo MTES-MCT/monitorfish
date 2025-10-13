@@ -12,13 +12,13 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.SilenceAlert
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class SilenceAlertUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var silencedAlertRepository: SilencedAlertRepository
 
     @Test

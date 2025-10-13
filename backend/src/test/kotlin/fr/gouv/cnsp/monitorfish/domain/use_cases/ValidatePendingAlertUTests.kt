@@ -19,22 +19,22 @@ import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class ValidatePendingAlertUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var pendingAlertRepository: PendingAlertRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var reportingRepository: ReportingRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var silencedAlertRepository: SilencedAlertRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var lastPositionRepository: LastPositionRepository
 
     @Test

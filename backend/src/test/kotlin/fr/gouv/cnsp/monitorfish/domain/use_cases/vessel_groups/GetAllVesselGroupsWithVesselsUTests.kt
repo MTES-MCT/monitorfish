@@ -17,18 +17,18 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 class GetAllVesselGroupsWithVesselsUTests {
-    @MockBean
+    @MockitoBean
     private lateinit var vesselGroupRepository: VesselGroupRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var lastPositionRepository: LastPositionRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var getAuthorizedUser: GetAuthorizedUser
 
     @Test

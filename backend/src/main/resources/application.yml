@@ -33,6 +33,10 @@ monitorfish:
         authorizedSirets: ${MONITORFISH_OIDC_AUTHORIZED_SIRETS}
         issuerUri: ${MONITORFISH_OIDC_ISSUER_URI:}
         issuerUriExternal: ${MONITORFISH_OIDC_ISSUER_URI_EXTERNAL}
+        authorizationUri: ${MONITORFISH_OIDC_AUTHORIZATION_URI:}
+        tokenUri: ${MONITORFISH_OIDC_TOKEN_URI:}
+        userInfoUri: ${MONITORFISH_OIDC_USER_INFO_URI:}
+        jwkSetUri: ${MONITORFISH_OIDC_JWK_SET_URI:}
         proxyUrl: ${MONITORFISH_OIDC_PROXY_URL:}
     scheduling:
         enabled: ${MONITORFISH_SCHEDULING_ENABLED}

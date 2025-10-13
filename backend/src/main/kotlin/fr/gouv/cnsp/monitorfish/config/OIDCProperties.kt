@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration
 @ConfigurationProperties(prefix = "monitorfish.oidc")
 class OIDCProperties {
     var enabled: Boolean? = false
+    var isCerbere: Boolean? = false
     var clientId: String = ""
     var clientSecret: String = ""
     var redirectUri: String = ""

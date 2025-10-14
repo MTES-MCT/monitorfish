@@ -50,6 +50,10 @@ const StyledVesselSearch = styled(VesselSearchWithMapVessels)`
   position: relative;
   width: 100%;
 
+  > div {
+    z-index: 10;
+  }
+
   > div:first-child {
     > input {
       background-color: ${p => p.theme.color.gainsboro};

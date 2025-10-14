@@ -87,6 +87,8 @@ COPY pipeline/ ./pipeline
 
 # Make library importable
 ENV PYTHONPATH=/home/${USER}/pipeline
+# importing main produces all .pyc files for faster imports
+RUN TEST=true python -c "import main"
 
 # Add migration files for tests
 COPY backend/src/main/resources/db/migration  ./backend/src/main/resources/db/migration

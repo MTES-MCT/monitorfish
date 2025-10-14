@@ -132,6 +132,12 @@ const Title = styled.div`
 
 const Body = styled.div`
   margin-top: 8px;
+
+  ul {
+    list-style: disc;
+    padding-left: 12px;
+    margin-bottom: 12px;
+  }
 `
 
 const VerticalBar = styled.span<{

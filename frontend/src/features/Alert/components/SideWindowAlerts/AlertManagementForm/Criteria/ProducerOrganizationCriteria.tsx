@@ -1,6 +1,6 @@
 import { Criteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/shared/Criteria'
 import { useGetProducerOrganizationsAsOptions } from '@hooks/useGetProducerOrganizationsAsOptions'
-import { FormikCheckPicker } from '@mtes-mct/monitor-ui'
+import { CheckPicker } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import { useState } from 'react'
 
@@ -11,13 +11,17 @@ type ProducerOrganizationCriteriaProps = {
 }
 
 export function ProducerOrganizationCriteria({ onDelete }: ProducerOrganizationCriteriaProps) {
-  const [, , helper] = useField<EditedAlertSpecification['producerOrganizations']>('producerOrganizations')
+  const [, meta, helper] = useField<EditedAlertSpecification['producerOrganizations']>('producerOrganizations')
   const [isCriteriaOpened, setIsCriteriaOpened] = useState(true)
   const producerOrganizations = useGetProducerOrganizationsAsOptions()
 
   const handleDeleteCriteria = () => {
     helper.setValue([])
     onDelete()
+  }
+
+  const updateProducerOrganizations = (nextValue: string[] | undefined) => {
+    helper.setValue(nextValue ?? [])
   }
 
   return (
@@ -32,11 +36,13 @@ export function ProducerOrganizationCriteria({ onDelete }: ProducerOrganizationC
         <Criteria.ChevronIcon $isOpen={isCriteriaOpened} />
       </Criteria.Head>
       <Criteria.Body $isOpen={isCriteriaOpened}>
-        <FormikCheckPicker
+        <CheckPicker
           label="Organisations de producteurs déclenchant l'alerte"
           name="producerOrganizations"
+          onChange={updateProducerOrganizations}
           options={producerOrganizations}
           searchable
+          value={meta.value}
         />
         <Criteria.Delete onClick={handleDeleteCriteria} />
       </Criteria.Body>

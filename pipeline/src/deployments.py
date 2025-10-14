@@ -368,8 +368,8 @@ for deployment in deployments:
     deployment.storage = LocalStorage("/home/monitorfish-pipeline/pipeline")
 
     if deployment.name == "Logbook":
-        deployment.job_variables["docker"] = {
-            "run_config": {"group_add": [LOGBOOK_FILES_GID]}
+        deployment.job_variables["container_create_kwargs"] = {
+            "group_add": [LOGBOOK_FILES_GID]
         }
         deployment.job_variables["volumes"].append(
             f"{ERS_FILES_LOCATION}:{ERS_FILES_LOCATION}"

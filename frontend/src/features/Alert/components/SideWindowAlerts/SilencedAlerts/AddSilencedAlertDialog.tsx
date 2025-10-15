@@ -3,7 +3,7 @@ import { Formik } from 'formik'
 import { useState } from 'react'
 import styled from 'styled-components'
 
-import { AlertTypeField } from './fields/AlertTypeField'
+import { AlertNameField } from './fields/AlertNameField'
 import { VesselField } from './fields/VesselField'
 import { SilencedAlertSchema } from './schemas'
 import { emptySilencedAlert } from './types'
@@ -36,7 +36,7 @@ export function AddSilencedAlertDialog({ onCancel, onConfirm }: DeletionConfirma
           <StyledBody>
             <>
               <VesselField />
-              <AlertTypeField />
+              <AlertNameField />
               <StyledFormikDatePicker
                 baseContainer={newWindowContainerRef.current}
                 isStringDate

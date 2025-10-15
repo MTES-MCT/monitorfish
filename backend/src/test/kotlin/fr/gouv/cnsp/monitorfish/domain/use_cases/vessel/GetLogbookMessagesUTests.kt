@@ -325,7 +325,67 @@ class GetLogbookMessagesUTests {
         // Then
         assertThat(ersMessages).hasSize(3)
 
+        assertThat(ersMessages[1].reportId).isEqualTo("9065646813")
         assertThat(ersMessages[1].isDeleted).isTrue
+    }
+
+    @Test
+    fun `execute Should not add the deleted property When the DEL message is not acknowledged`() {
+        // Given
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
+        )
+        val messagesWithoutValidRet =
+            getDummyRETLogbookMessages()
+                .filter { it.reportId != "90656468132" } +
+                LogbookMessage(
+                    id = 7,
+                    operationNumber = "",
+                    reportId = "90656468132",
+                    referencedReportId = "90656468131",
+                    operationType = LogbookOperationType.RET,
+                    messageType = "",
+                    message =
+                        Acknowledgment().apply {
+                            returnStatus = "002"
+                            rejectionCause = "Oops"
+                        },
+                    reportDateTime =
+                        ZonedDateTime
+                            .of(
+                                2020,
+                                5,
+                                5,
+                                3,
+                                4,
+                                5,
+                                3,
+                                UTC,
+                            ).minusHours(12),
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
+                    integrationDateTime = ZonedDateTime.now(),
+                    isEnriched = false,
+                    operationDateTime = ZonedDateTime.now(),
+                )
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+            messagesWithoutValidRet,
+        )
+
+        // When
+        val ersMessages =
+            GetLogbookMessages(
+                logbookReportRepository,
+                gearRepository,
+                speciesRepository,
+                portRepository,
+                logbookRawMessageRepository,
+            ).execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+
+        // Then
+        assertThat(ersMessages).hasSize(3)
+
+        assertThat(ersMessages[1].reportId).isEqualTo("9065646813")
+        assertThat(ersMessages[1].isDeleted).isFalse
     }
 
     @Test
@@ -388,6 +448,187 @@ class GetLogbookMessagesUTests {
         assertThat(ersMessages[2].isSentByFailoverSoftware).isTrue
         assertThat(ersMessages[3].isSentByFailoverSoftware).isTrue
         assertThat(ersMessages[4].isSentByFailoverSoftware).isFalse
+    }
+
+    @Test
+    fun `execute Should add the deleted property When DEL is from FLUX transmission`() {
+        // Given
+        val farMessage = FAR()
+        val haul = Haul()
+        haul.gear = "OTB"
+        farMessage.hauls = listOf(haul)
+
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
+        )
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+            listOf(
+                LogbookMessage(
+                    id = 1,
+                    operationNumber = "",
+                    tripNumber = "345",
+                    reportId = "FAR123",
+                    operationType = LogbookOperationType.DAT,
+                    messageType = "FAR",
+                    message = farMessage,
+                    reportDateTime = ZonedDateTime.now().minusHours(12),
+                    transmissionFormat = LogbookTransmissionFormat.FLUX,
+                    integrationDateTime = ZonedDateTime.now(),
+                    isEnriched = false,
+                    operationDateTime = ZonedDateTime.now(),
+                ),
+                LogbookMessage(
+                    id = 2,
+                    operationNumber = "",
+                    reportId = "DEL123",
+                    referencedReportId = "FAR123",
+                    operationType = LogbookOperationType.DEL,
+                    messageType = "",
+                    message = null,
+                    reportDateTime = ZonedDateTime.now().minusHours(6),
+                    transmissionFormat = LogbookTransmissionFormat.FLUX,
+                    integrationDateTime = ZonedDateTime.now(),
+                    isEnriched = false,
+                    operationDateTime = ZonedDateTime.now(),
+                ),
+            ),
+        )
+
+        // When
+        val ersMessages =
+            GetLogbookMessages(
+                logbookReportRepository,
+                gearRepository,
+                speciesRepository,
+                portRepository,
+                logbookRawMessageRepository,
+            ).execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+
+        // Then
+        assertThat(ersMessages).hasSize(1)
+        assertThat(ersMessages[0].reportId).isEqualTo("FAR123")
+        assertThat(ersMessages[0].isDeleted).isTrue
+    }
+
+    @Test
+    fun `execute Should add the deleted property When DEL is from VISIOCAPTURE software`() {
+        // Given
+        val farMessage = FAR()
+        val haul = Haul()
+        haul.gear = "OTB"
+        farMessage.hauls = listOf(haul)
+
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
+        )
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+            listOf(
+                LogbookMessage(
+                    id = 1,
+                    operationNumber = "",
+                    tripNumber = "345",
+                    reportId = "FAR456",
+                    operationType = LogbookOperationType.DAT,
+                    messageType = "FAR",
+                    message = farMessage,
+                    reportDateTime = ZonedDateTime.now().minusHours(12),
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
+                    integrationDateTime = ZonedDateTime.now(),
+                    isEnriched = false,
+                    operationDateTime = ZonedDateTime.now(),
+                ),
+                LogbookMessage(
+                    id = 2,
+                    operationNumber = "",
+                    reportId = "DEL456",
+                    referencedReportId = "FAR456",
+                    operationType = LogbookOperationType.DEL,
+                    messageType = "",
+                    software = "FT/VISIOCaptures V1.4.7",
+                    message = null,
+                    reportDateTime = ZonedDateTime.now().minusHours(6),
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
+                    integrationDateTime = ZonedDateTime.now(),
+                    isEnriched = false,
+                    operationDateTime = ZonedDateTime.now(),
+                ),
+            ),
+        )
+
+        // When
+        val ersMessages =
+            GetLogbookMessages(
+                logbookReportRepository,
+                gearRepository,
+                speciesRepository,
+                portRepository,
+                logbookRawMessageRepository,
+            ).execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+
+        // Then
+        assertThat(ersMessages).hasSize(1)
+        assertThat(ersMessages[0].reportId).isEqualTo("FAR456")
+        assertThat(ersMessages[0].isDeleted).isTrue
+    }
+
+    @Test
+    fun `execute Should not add the deleted property When DEL has no referencedReportId`() {
+        // Given
+        val farMessage = FAR()
+        val haul = Haul()
+        haul.gear = "OTB"
+        farMessage.hauls = listOf(haul)
+
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
+        )
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+            listOf(
+                LogbookMessage(
+                    id = 1,
+                    operationNumber = "",
+                    tripNumber = "345",
+                    reportId = "FAR789",
+                    operationType = LogbookOperationType.DAT,
+                    messageType = "FAR",
+                    message = farMessage,
+                    reportDateTime = ZonedDateTime.now().minusHours(12),
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
+                    integrationDateTime = ZonedDateTime.now(),
+                    isEnriched = false,
+                    operationDateTime = ZonedDateTime.now(),
+                ),
+                LogbookMessage(
+                    id = 2,
+                    operationNumber = "",
+                    reportId = "DEL789",
+                    referencedReportId = null,
+                    operationType = LogbookOperationType.DEL,
+                    messageType = "",
+                    message = Acknowledgment().apply { returnStatus = "000" },
+                    reportDateTime = ZonedDateTime.now().minusHours(6),
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
+                    integrationDateTime = ZonedDateTime.now(),
+                    isEnriched = false,
+                    operationDateTime = ZonedDateTime.now(),
+                ),
+            ),
+        )
+
+        // When
+        val ersMessages =
+            GetLogbookMessages(
+                logbookReportRepository,
+                gearRepository,
+                speciesRepository,
+                portRepository,
+                logbookRawMessageRepository,
+            ).execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+
+        // Then
+        assertThat(ersMessages).hasSize(1)
+        assertThat(ersMessages[0].reportId).isEqualTo("FAR789")
+        assertThat(ersMessages[0].isDeleted).isFalse
     }
 
     @Test

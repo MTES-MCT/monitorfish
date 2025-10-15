@@ -548,12 +548,16 @@ object TestUtils {
         haulTwo.mesh = 120.0
         farTwo.hauls = listOf(haulTwo)
 
-        val farAck = Acknowledgment()
-        farAck.returnStatus = "000"
+        val farAck =
+            Acknowledgment().apply {
+                returnStatus = "000"
+            }
 
-        val farBadAck = Acknowledgment()
-        farBadAck.returnStatus = "002"
-        farBadAck.rejectionCause = "Oops"
+        val farBadAck =
+            Acknowledgment().apply {
+                returnStatus = "002"
+                rejectionCause = "Oops"
+            }
 
         return listOf(
             LogbookMessage(
@@ -659,8 +663,34 @@ object TestUtils {
             LogbookMessage(
                 id = 5,
                 operationNumber = "",
+                reportId = "90656468131",
                 referencedReportId = "9065646813",
                 operationType = LogbookOperationType.DEL,
+                messageType = "",
+                message = farAck,
+                reportDateTime =
+                    ZonedDateTime
+                        .of(
+                            2020,
+                            5,
+                            5,
+                            3,
+                            4,
+                            5,
+                            3,
+                            UTC,
+                        ).minusHours(12),
+                transmissionFormat = LogbookTransmissionFormat.ERS,
+                integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
+                operationDateTime = ZonedDateTime.now(),
+            ),
+            LogbookMessage(
+                id = 7,
+                operationNumber = "",
+                reportId = "90656468132",
+                referencedReportId = "90656468131",
+                operationType = LogbookOperationType.RET,
                 messageType = "",
                 message = farAck,
                 reportDateTime =

@@ -44,6 +44,106 @@ data class LogbookMessage(
 ) {
     private val logger = LoggerFactory.getLogger(LogbookMessage::class.java)
 
+    /**
+     * Logbook messages form a linked list structure where messages reference each other via
+     * `reportId` and `referencedReportId` fields. The enrichment process traverses this chain
+     * to compute derived values and establish relationships between messages.
+     *
+     * ----
+     * Message Chain Example:
+     * FAR(id=1) ← COR(id=2, refId=1) ← DEL(id=3, refId=2) ← RET(id=4, refId=3)
+     *    ↓             ↓                     ↓                      ↓
+     *  Original    Correction           Deletion              Acknowledgment
+     * ----
+     *
+     * == Side Effects
+     *
+     * This method mutates both the current message and messages in `contextMessages`:
+     * - Sets `acknowledgment` on referenced messages
+     * - Sets `isCorrectedByNewerMessage` on corrected messages
+     * - Sets `isDeleted` on deleted messages
+     * - Sets `isSentByFailoverSoftware` on E-Sacapt messages
+     * - Sets name fields (gearName, portName, speciesName) on message content
+     *
+     * == Example: Complete Message Chain Enrichment
+     *
+     * ----
+     * Initial state:
+     * FAR(id=1, reportId=R1)
+     * COR(id=2, reportId=R2, referencedReportId=R1)
+     * DEL(id=3, reportId=R3, referencedReportId=R2)
+     * RET(id=4, reportId=R4, referencedReportId=R3, status=SUCCESS)
+     *
+     * After enrichment:
+     * FAR(id=1, isCorrectedByNewerMessage=true, acknowledgment={...})
+     *     → Marked as corrected by COR
+     *
+     * COR(id=2, isCorrectedByNewerMessage=false, isDeleted=true, acknowledgment={...})
+     *     → Latest correction, but deleted by DEL
+     *
+     * DEL(id=3, acknowledgment={isSuccess=true})
+     *     → Acknowledged by RET, deletion propagated
+     *
+     * RET(id=4)
+     *     → Processed, acknowledged DEL(id=3)
+     * ----
+     */
+    fun enrich(
+        contextMessages: List<LogbookMessage>,
+        allGears: List<Gear>,
+        allPorts: List<Port>,
+        allSpecies: List<Species>,
+    ) {
+        enrichReferenceData(allGears, allPorts, allSpecies)
+        enrichRelationalData(contextMessages)
+    }
+
+    fun enrichGearPortAndSpecyNames(
+        allGears: List<Gear>,
+        allPorts: List<Port>,
+        allSpecies: List<Species>,
+    ) {
+        enrichReferenceData(allGears, allPorts, allSpecies)
+    }
+
+    /**
+     * Phase 1: Enrich codes with human-readable names
+     * Only DAT and COR messages contain business data that needs enrichment
+     */
+    private fun enrichReferenceData(
+        allGears: List<Gear>,
+        allPorts: List<Port>,
+        allSpecies: List<Species>,
+    ) {
+        if (!shouldEnrichReferenceData()) return
+
+        message?.let { messageValue ->
+            when (messageValue) {
+                is FAR -> setNamesFromCodes(messageValue, allGears, allSpecies)
+                is CPS -> setNamesFromCodes(messageValue, allSpecies)
+                is DEP -> setNamesFromCodes(messageValue, allGears, allPorts, allSpecies)
+                is DIS -> setNamesFromCodes(messageValue, allSpecies)
+                is COE -> setNamesFromCodes(messageValue, allSpecies)
+                is COX -> setNamesFromCodes(messageValue, allSpecies)
+                is CRO -> setNamesFromCodes(messageValue, allSpecies)
+                is LAN -> setNamesFromCodes(messageValue, allPorts, allSpecies)
+                is PNO -> setNamesFromCodes(messageValue, allPorts, allSpecies)
+                is RTP -> setNamesFromCodes(messageValue, allGears, allPorts)
+                else -> {} // Other message types don't need reference data enrichment
+            }
+        }
+    }
+
+    private fun shouldEnrichReferenceData(): Boolean =
+        operationType == LogbookOperationType.DAT || operationType == LogbookOperationType.COR
+
+    /**
+     * Phase 2: Enrich relational data (acknowledgments, corrections, deletions)
+     */
+    private fun enrichRelationalData(contextMessages: List<LogbookMessage>) {
+        enrichAcknowledgeCorrectionAndDeletion(contextMessages)
+    }
+
     fun setAcknowledge(newLogbookMessageAcknowledgement: LogbookMessage) {
         val currentAcknowledgement = this.acknowledgment
         val newAcknowledgement = newLogbookMessageAcknowledgement.message as Acknowledgment
@@ -74,161 +174,101 @@ data class LogbookMessage(
         }
     }
 
-    fun enrich(
-        contextMessages: List<LogbookMessage>,
-        allGears: List<Gear>,
-        allPorts: List<Port>,
-        allSpecies: List<Species>,
-    ) {
-        if (operationType == LogbookOperationType.DAT || operationType == LogbookOperationType.COR) {
-            enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
-        }
-
-        enrichAcknowledgeCorrectionAndDeletion(contextMessages)
-    }
-
-    fun enrichGearPortAndSpecyNames(
-        allGears: List<Gear>,
-        allPorts: List<Port>,
-        allSpecies: List<Species>,
-    ) {
-        when (messageType) {
-            LogbookMessageTypeMapping.FAR.name -> {
-                setNamesFromCodes(message as FAR, allGears, allSpecies)
-            }
-
-            LogbookMessageTypeMapping.CPS.name -> {
-                setNamesFromCodes(message as CPS, allSpecies)
-            }
-
-            LogbookMessageTypeMapping.DEP.name -> {
-                setNamesFromCodes(message as DEP, allGears, allPorts, allSpecies)
-            }
-
-            LogbookMessageTypeMapping.DIS.name -> {
-                setNamesFromCodes(message as DIS, allSpecies)
-            }
-
-            LogbookMessageTypeMapping.COE.name -> {
-                setNamesFromCodes(message as COE, allSpecies)
-            }
-
-            LogbookMessageTypeMapping.COX.name -> {
-                setNamesFromCodes(message as COX, allSpecies)
-            }
-
-            LogbookMessageTypeMapping.CRO.name -> {
-                setNamesFromCodes(message as CRO, allSpecies)
-            }
-
-            LogbookMessageTypeMapping.LAN.name -> {
-                setNamesFromCodes(message as LAN, allPorts, allSpecies)
-            }
-
-            LogbookMessageTypeMapping.PNO.name -> {
-                setNamesFromCodes(message as PNO, allPorts, allSpecies)
-            }
-
-            LogbookMessageTypeMapping.RTP.name -> {
-                setNamesFromCodes(message as RTP, allGears, allPorts)
-            }
-        }
-    }
-
     private fun enrichAcknowledgeCorrectionAndDeletion(contextLogbookMessages: List<LogbookMessage>) {
-        enrichCorrectionFlags(contextLogbookMessages)
-        enrichAcknowledgement(contextLogbookMessages)
-        enrichDeletionForAutoAcknowledgedMessages(contextLogbookMessages)
-        enrichAutomaticAcknowledgment()
-        enrichFailoverSoftwareFlag()
-    }
-
-    private fun enrichCorrectionFlags(contextLogbookMessages: List<LogbookMessage>) {
-        if (operationType != LogbookOperationType.COR) return
-
-        val referencedMessages = findReferencedMessagesExcludingRet(contextLogbookMessages)
-        val referencingMessages = findReferencingMessagesExcludingRet(contextLogbookMessages)
-
-        warnIfPredecessorsNotFound(referencedMessages)
-        markPredecessorsAsCorrected(referencedMessages)
-        updateCorrectionFlagIfNewerCorrectionExists(referencingMessages)
-    }
-
-    private fun enrichAcknowledgement(contextLogbookMessages: List<LogbookMessage>) {
-        if (operationType != LogbookOperationType.RET || referencedReportId.isNullOrEmpty()) return
-
-        val referencedMessages = findReferencedMessagesExcludingRet(contextLogbookMessages)
-        referencedMessages.forEach { referencedMessage ->
-            referencedMessage.setAcknowledge(this.copy())
-            markDeletionTargetsIfAcknowledgedDelMessage(referencedMessage, contextLogbookMessages)
+        // Auto-acknowledge FLUX/VisioCapture messages first (they never receive RET)
+        if (isAutoAcknowledged()) {
+            acknowledgment = Acknowledgment(isSuccess = true)
         }
-    }
 
-    private fun enrichDeletionForAutoAcknowledgedMessages(contextLogbookMessages: List<LogbookMessage>) {
-        if (operationType != LogbookOperationType.DEL || referencedReportId.isNullOrEmpty()) return
-
-        val willBeAutoAcknowledged =
-            transmissionFormat == LogbookTransmissionFormat.FLUX ||
-                LogbookSoftware.isVisioCapture(software)
-
-        if (!willBeAutoAcknowledged) return
-
-        val referencedMessages = findReferencedMessagesExcludingRet(contextLogbookMessages)
-        markMessagesAsDeleted(referencedMessages)
-    }
-
-    private fun enrichAutomaticAcknowledgment() {
-        if (transmissionFormat == LogbookTransmissionFormat.FLUX || LogbookSoftware.isVisioCapture(software)) {
-            setAcknowledgeAsSuccessful()
-        }
-    }
-
-    private fun enrichFailoverSoftwareFlag() {
+        // Mark E-Sacapt software
         if (LogbookSoftware.isESacapt(software)) {
             isSentByFailoverSoftware = true
         }
+
+        // Handle message-type specific enrichment
+        when (operationType) {
+            LogbookOperationType.COR -> enrichCorrection(contextLogbookMessages)
+            LogbookOperationType.RET -> enrichAcknowledgement(contextLogbookMessages)
+            LogbookOperationType.DEL -> enrichDeletion(contextLogbookMessages)
+            else -> {} // Data messages (DAT) don't need special handling
+        }
     }
 
-    private fun warnIfPredecessorsNotFound(predecessors: List<LogbookMessage>) {
-        if (predecessors.isEmpty()) {
+    /**
+     * Check if this message is auto-acknowledged (FLUX or VisioCapture)
+     * These messages don't receive RET (Return Receipt) messages
+     */
+    private fun isAutoAcknowledged(): Boolean =
+        transmissionFormat == LogbookTransmissionFormat.FLUX ||
+            LogbookSoftware.isVisioCapture(software)
+
+    /**
+     * COR messages mark their referenced predecessors as corrected
+     */
+    private fun enrichCorrection(contextLogbookMessages: List<LogbookMessage>) {
+        val referencedMessages = findReferencedMessagesExcludingRet(contextLogbookMessages)
+        val referencingMessages = findReferencingMessagesExcludingRet(contextLogbookMessages)
+
+        // Warn if no predecessor found
+        if (referencedMessages.isEmpty()) {
             logger.warn(
                 "Original message $referencedReportId corrected by message COR $operationNumber is not found.",
             )
         }
-    }
 
-    private fun markPredecessorsAsCorrected(predecessors: List<LogbookMessage>) {
-        predecessors.forEach { it.isCorrectedByNewerMessage = true }
-    }
+        // Mark all predecessors as corrected
+        referencedMessages.forEach { it.isCorrectedByNewerMessage = true }
 
-    private fun updateCorrectionFlagIfNewerCorrectionExists(successors: List<LogbookMessage>) {
+        // Check if this correction is itself corrected by a newer one
         isCorrectedByNewerMessage =
-            successors.any {
-                operationType == LogbookOperationType.COR &&
+            referencingMessages.any {
+                it.operationType == LogbookOperationType.COR &&
                     it.reportDateTime != null &&
                     it.reportDateTime > reportDateTime
             }
     }
 
-    private fun markDeletionTargetsIfAcknowledgedDelMessage(
+    /**
+     * RET messages acknowledge their referenced messages
+     */
+    private fun enrichAcknowledgement(contextLogbookMessages: List<LogbookMessage>) {
+        if (referencedReportId.isNullOrEmpty()) return
+
+        val referencedMessages = findReferencedMessagesExcludingRet(contextLogbookMessages)
+        referencedMessages.forEach { referencedMessage ->
+            referencedMessage.setAcknowledge(this.copy())
+
+            propagateDeletionIfApplicable(
+                acknowledgedMessage = referencedMessage,
+                contextLogbookMessages = contextLogbookMessages,
+            )
+        }
+    }
+
+    /**
+     * When a DEL message is successfully acknowledged, mark its deletion targets as deleted
+     */
+    private fun propagateDeletionIfApplicable(
         acknowledgedMessage: LogbookMessage,
         contextLogbookMessages: List<LogbookMessage>,
     ) {
         if (acknowledgedMessage.operationType != LogbookOperationType.DEL) return
-
-        val isAcknowledged = acknowledgedMessage.acknowledgment?.isSuccess == true
-        val willBeAutoAcknowledged =
-            acknowledgedMessage.transmissionFormat == LogbookTransmissionFormat.FLUX ||
-                LogbookSoftware.isVisioCapture(acknowledgedMessage.software)
-
-        if (!isAcknowledged && !willBeAutoAcknowledged) return
+        if (acknowledgedMessage.acknowledgment?.isSuccess != true) return
 
         val deletionTargets = acknowledgedMessage.findReferencedMessagesExcludingRet(contextLogbookMessages)
-        markMessagesAsDeleted(deletionTargets)
+        deletionTargets.forEach { it.isDeleted = true }
     }
 
-    private fun markMessagesAsDeleted(messages: List<LogbookMessage>) {
-        messages.forEach { it.isDeleted = true }
+    /**
+     * Auto-acknowledged DEL messages (FLUX/VisioCapture) mark their targets as deleted immediately
+     * Other DEL messages wait for RET acknowledgment (handled in enrichReturnReceipt)
+     */
+    private fun enrichDeletion(contextLogbookMessages: List<LogbookMessage>) {
+        if (referencedReportId.isNullOrEmpty()) return
+        if (!isAutoAcknowledged()) return
+
+        val targets = findReferencedMessagesExcludingRet(contextLogbookMessages)
+        targets.forEach { it.isDeleted = true }
     }
 
     /**
@@ -262,10 +302,6 @@ data class LogbookMessage(
             it.operationType != LogbookOperationType.RET &&
                 it.reportId == targetReportId
         }
-    }
-
-    private fun setAcknowledgeAsSuccessful() {
-        this.acknowledgment = Acknowledgment(isSuccess = true)
     }
 
     private fun setNamesFromCodes(

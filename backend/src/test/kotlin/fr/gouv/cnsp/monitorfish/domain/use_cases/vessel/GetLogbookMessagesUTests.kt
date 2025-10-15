@@ -11,6 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyCorrectedLogb
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyFluxAndVisioCaptureLogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyLogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyRETLogbookMessages
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getTrip9463715LogbookMessages
 import fr.gouv.cnsp.monitorfish.fakers.PortFaker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -687,5 +688,130 @@ class GetLogbookMessagesUTests {
 
         assertThat(ersMessages[2].acknowledgment?.isSuccess).isTrue
         assertThat(ersMessages[3].acknowledgment?.isSuccess).isTrue
+    }
+
+    @Test
+    fun `execute Should handle comprehensive trip data from trip 9463715`() {
+        // Given
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+            getTrip9463715LogbookMessages(),
+        )
+        given(gearRepository.findAll()).willReturn(emptyList())
+        given(portRepository.findAll()).willReturn(emptyList())
+        given(speciesRepository.findAll()).willReturn(emptyList())
+
+        // When
+        val ersMessages =
+            GetLogbookMessages(
+                logbookReportRepository,
+                gearRepository,
+                speciesRepository,
+                portRepository,
+                logbookRawMessageRepository,
+            ).execute(
+                internalReferenceNumber = "FAK000999999",
+                afterDepartureDate = ZonedDateTime.of(2019, 10, 1, 0, 0, 0, 0, UTC),
+                beforeDepartureDate = ZonedDateTime.of(2019, 12, 31, 23, 59, 59, 0, UTC),
+                tripNumber = "9463715",
+            )
+
+        // Then
+        // Should only return DAT and COR messages (filters out RET, DEL, etc.)
+        assertThat(ersMessages).hasSize(12)
+
+        // Verify DEP message
+        assertThat(ersMessages[3].messageType).isEqualTo("DEP")
+        assertThat(ersMessages[3].reportId).isEqualTo("OOF20191011059900")
+        assertThat(ersMessages[3].message).isInstanceOf(DEP::class.java)
+        val dep = ersMessages[3].message as DEP
+        assertThat(dep.gearOnboard).hasSize(2)
+        assertThat(dep.gearOnboard[0].gear).isEqualTo("GTN")
+        assertThat(dep.gearOnboard[0].mesh).isEqualTo(100.0)
+
+        // Verify COX message
+        assertThat(ersMessages[5].messageType).isEqualTo("COX")
+        assertThat(ersMessages[5].message).isInstanceOf(COX::class.java)
+        val cox = ersMessages[5].message as COX
+        assertThat(cox.targetSpeciesOnExit).isEqualTo("DEM")
+
+        // Verify COE message
+        assertThat(ersMessages[6].messageType).isEqualTo("COE")
+        assertThat(ersMessages[6].message).isInstanceOf(COE::class.java)
+        val coe = ersMessages[6].message as COE
+        assertThat(coe.targetSpeciesOnEntry).isEqualTo("PEL")
+
+        // Verify CRO message
+        assertThat(ersMessages[7].messageType).isEqualTo("CRO")
+        assertThat(ersMessages[7].message).isInstanceOf(CRO::class.java)
+
+        // Verify FAR message (original)
+        assertThat(ersMessages[8].messageType).isEqualTo("FAR")
+        assertThat(ersMessages[8].reportId).isEqualTo("OOF20191030059902")
+        assertThat(ersMessages[8].operationType).isEqualTo(LogbookOperationType.DAT)
+        assertThat(ersMessages[8].isCorrectedByNewerMessage).isTrue
+        assertThat(ersMessages[8].acknowledgment).isNotNull
+        assertThat(ersMessages[8].acknowledgment?.isSuccess).isTrue
+        val far = ersMessages[8].message as FAR
+        assertThat(far.hauls).hasSize(1)
+        assertThat(far.hauls[0].catches).hasSize(4)
+        assertThat(far.hauls[0].dimensions).isEqualTo("150.0;120.0")
+
+        // Verify COR message (corrected FAR)
+        assertThat(ersMessages[9].messageType).isEqualTo("FAR")
+        assertThat(ersMessages[9].reportId).isEqualTo("OOF20191030059903")
+        assertThat(ersMessages[9].referencedReportId).isEqualTo("OOF20191030059902")
+        assertThat(ersMessages[9].operationType).isEqualTo(LogbookOperationType.COR)
+        assertThat(ersMessages[9].isCorrectedByNewerMessage).isFalse
+        assertThat(ersMessages[9].acknowledgment).isNotNull
+        assertThat(ersMessages[9].acknowledgment?.isSuccess).isTrue
+        val correctedFar = ersMessages[9].message as FAR
+        assertThat(correctedFar.hauls).hasSize(1)
+        // Verify dimensions field can hold numeric data as strings
+        assertThat(correctedFar.hauls[0].dimensions).isEqualTo("120.0")
+        assertThat(correctedFar.hauls[0].catches.size).isGreaterThan(far.hauls[0].catches.size)
+
+        // Verify DIS message
+        assertThat(ersMessages[10].messageType).isEqualTo("DIS")
+        assertThat(ersMessages[10].acknowledgment?.isSuccess).isTrue
+        val dis = ersMessages[10].message as DIS
+        assertThat(dis.catches).hasSize(2)
+        assertThat(dis.catches[0].species).isEqualTo("NEP")
+        assertThat(dis.catches[1].species).isEqualTo("BIB")
+
+        // Verify EOF message
+        assertThat(ersMessages[11].messageType).isEqualTo("EOF")
+        val eof = ersMessages[11].message as EOF
+        assertThat(eof.endOfFishingDateTime).isEqualTo(ZonedDateTime.of(2019, 10, 20, 12, 16, 0, 0, UTC))
+
+        // Verify PNO message
+        assertThat(ersMessages[4].messageType).isEqualTo("PNO")
+        assertThat(ersMessages[4].acknowledgment?.isSuccess).isTrue
+        val pno = ersMessages[4].message as PNO
+        assertThat(pno.catchOnboard).hasSize(4)
+
+        // Verify RTP message with error acknowledgment
+        assertThat(ersMessages[1].messageType).isEqualTo("RTP")
+        assertThat(ersMessages[1].acknowledgment).isNotNull
+        assertThat(ersMessages[1].acknowledgment?.isSuccess).isFalse
+        assertThat(ersMessages[1].acknowledgment?.returnStatus).isEqualTo("002")
+        assertThat(ersMessages[1].acknowledgment?.rejectionCause).contains("MGEN02")
+        val rtp = ersMessages[1].message as RTP
+        assertThat(rtp.port).isEqualTo("AEAJM")
+
+        // Verify LAN message is marked as deleted
+        assertThat(ersMessages[0].messageType).isEqualTo("LAN")
+        assertThat(ersMessages[0].reportId).isEqualTo("OOF20190627059908")
+        assertThat(ersMessages[0].isDeleted).isTrue
+        assertThat(ersMessages[0].acknowledgment?.isSuccess).isTrue
+        val lan = ersMessages[0].message as LAN
+        assertThat(lan.catchLanded).hasSize(6)
+        assertThat(lan.sender).isEqualTo("MAS")
+
+        // Verify CPS message
+        assertThat(ersMessages[2].messageType).isEqualTo("CPS")
+        val cps = ersMessages[2].message as CPS
+        assertThat(cps.catches).hasSize(2)
+        assertThat(cps.catches[0].species).isEqualTo("DCO")
+        assertThat(cps.catches[0].ring).isEqualTo(1234567)
     }
 }

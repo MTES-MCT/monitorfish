@@ -31,10 +31,10 @@ class GetLogbookMessages(
         val messages =
             logbookReportRepository
                 .findAllMessagesByTripNumberBetweenDates(
-                    internalReferenceNumber,
-                    afterDepartureDate,
-                    beforeDepartureDate,
-                    tripNumber,
+                    internalReferenceNumber = internalReferenceNumber,
+                    afterDate = afterDepartureDate,
+                    beforeDate = beforeDepartureDate,
+                    tripNumber = tripNumber,
                 ).sortedBy { it.reportDateTime }
                 .map { logbookMessage ->
                     logbookMessage.operationNumber?.let { operationNumber ->
@@ -49,7 +49,14 @@ class GetLogbookMessages(
                     logbookMessage
                 }
 
-        messages.forEach { it.enrich(messages, allGears, allPorts, allSpecies) }
+        messages.forEach {
+            it.enrich(
+                contextMessages = messages,
+                allGears = allGears,
+                allPorts = allPorts,
+                allSpecies = allSpecies,
+            )
+        }
 
         return messages.filter {
             listOf(

@@ -136,75 +136,136 @@ data class LogbookMessage(
     }
 
     private fun enrichAcknowledgeCorrectionAndDeletion(contextLogbookMessages: List<LogbookMessage>) {
-        val predecessorsLogbookMessages = findPredecessorsLogbookMessagesWithoutRet(contextLogbookMessages)
-        val successorsLogbookMessages = findSuccessorsLogbookMessagesWithoutRet(contextLogbookMessages)
+        enrichCorrectionFlags(contextLogbookMessages)
+        enrichAcknowledgement(contextLogbookMessages)
+        enrichDeletionForAutoAcknowledgedMessages(contextLogbookMessages)
+        enrichAutomaticAcknowledgment()
+        enrichFailoverSoftwareFlag()
+    }
 
-        if (operationType == LogbookOperationType.COR) {
-            if (predecessorsLogbookMessages.isEmpty()) {
-                logger.warn(
-                    "Original message $referencedReportId corrected by message COR $operationNumber is not found.",
-                )
-            }
+    private fun enrichCorrectionFlags(contextLogbookMessages: List<LogbookMessage>) {
+        if (operationType != LogbookOperationType.COR) return
 
-            predecessorsLogbookMessages.forEach {
-                it.isCorrectedByNewerMessage = true
-            }
-            setCorrectionAsCorrectedByNewerMessage(successorsLogbookMessages)
+        val referencedMessages = findReferencedMessagesExcludingRet(contextLogbookMessages)
+        val referencingMessages = findReferencingMessagesExcludingRet(contextLogbookMessages)
+
+        warnIfPredecessorsNotFound(referencedMessages)
+        markPredecessorsAsCorrected(referencedMessages)
+        updateCorrectionFlagIfNewerCorrectionExists(referencingMessages)
+    }
+
+    private fun enrichAcknowledgement(contextLogbookMessages: List<LogbookMessage>) {
+        if (operationType != LogbookOperationType.RET || referencedReportId.isNullOrEmpty()) return
+
+        val referencedMessages = findReferencedMessagesExcludingRet(contextLogbookMessages)
+        referencedMessages.forEach { referencedMessage ->
+            referencedMessage.setAcknowledge(this.copy())
+            markDeletionTargetsIfAcknowledgedDelMessage(referencedMessage, contextLogbookMessages)
         }
+    }
 
-        if (operationType == LogbookOperationType.RET && !referencedReportId.isNullOrEmpty()) {
-            predecessorsLogbookMessages.forEach {
-                it.setAcknowledge(this.copy())
-            }
-        }
+    private fun enrichDeletionForAutoAcknowledgedMessages(contextLogbookMessages: List<LogbookMessage>) {
+        if (operationType != LogbookOperationType.DEL || referencedReportId.isNullOrEmpty()) return
 
-        if (operationType == LogbookOperationType.DEL && !referencedReportId.isNullOrEmpty()) {
-            predecessorsLogbookMessages.forEach {
-                it.isDeleted = true
-            }
-        }
+        val willBeAutoAcknowledged =
+            transmissionFormat == LogbookTransmissionFormat.FLUX ||
+                LogbookSoftware.isVisioCapture(software)
 
+        if (!willBeAutoAcknowledged) return
+
+        val referencedMessages = findReferencedMessagesExcludingRet(contextLogbookMessages)
+        markMessagesAsDeleted(referencedMessages)
+    }
+
+    private fun enrichAutomaticAcknowledgment() {
         if (transmissionFormat == LogbookTransmissionFormat.FLUX || LogbookSoftware.isVisioCapture(software)) {
             setAcknowledgeAsSuccessful()
         }
-
-        enrichIsSentByFailoverSoftware()
     }
 
-    private fun enrichIsSentByFailoverSoftware() {
+    private fun enrichFailoverSoftwareFlag() {
         if (LogbookSoftware.isESacapt(software)) {
             isSentByFailoverSoftware = true
         }
     }
 
-    private fun findSuccessorsLogbookMessagesWithoutRet(messages: List<LogbookMessage>): List<LogbookMessage> =
-        messages.filter {
-            it.operationType != LogbookOperationType.RET &&
-                it.messageType == messageType &&
-                it.referencedReportId == reportId
+    private fun warnIfPredecessorsNotFound(predecessors: List<LogbookMessage>) {
+        if (predecessors.isEmpty()) {
+            logger.warn(
+                "Original message $referencedReportId corrected by message COR $operationNumber is not found.",
+            )
         }
-
-    private fun findPredecessorsLogbookMessagesWithoutRet(messages: List<LogbookMessage>): List<LogbookMessage> =
-        if (!referencedReportId.isNullOrEmpty()) {
-            messages.filter {
-                it.operationType != LogbookOperationType.RET &&
-                    it.reportId == referencedReportId
-            }
-        } else {
-            listOf()
-        }
-
-    private fun setAcknowledgeAsSuccessful() {
-        this.acknowledgment = Acknowledgment(isSuccess = true)
     }
 
-    private fun setCorrectionAsCorrectedByNewerMessage(successorsLogbookMessages: List<LogbookMessage>) {
+    private fun markPredecessorsAsCorrected(predecessors: List<LogbookMessage>) {
+        predecessors.forEach { it.isCorrectedByNewerMessage = true }
+    }
+
+    private fun updateCorrectionFlagIfNewerCorrectionExists(successors: List<LogbookMessage>) {
         isCorrectedByNewerMessage =
-            successorsLogbookMessages.any {
+            successors.any {
                 operationType == LogbookOperationType.COR &&
                     it.reportDateTime != null &&
                     it.reportDateTime > reportDateTime
             }
+    }
+
+    private fun markDeletionTargetsIfAcknowledgedDelMessage(
+        acknowledgedMessage: LogbookMessage,
+        contextLogbookMessages: List<LogbookMessage>,
+    ) {
+        if (acknowledgedMessage.operationType != LogbookOperationType.DEL) return
+
+        val isAcknowledged = acknowledgedMessage.acknowledgment?.isSuccess == true
+        val willBeAutoAcknowledged =
+            acknowledgedMessage.transmissionFormat == LogbookTransmissionFormat.FLUX ||
+                LogbookSoftware.isVisioCapture(acknowledgedMessage.software)
+
+        if (!isAcknowledged && !willBeAutoAcknowledged) return
+
+        val deletionTargets = acknowledgedMessage.findReferencedMessagesExcludingRet(contextLogbookMessages)
+        markMessagesAsDeleted(deletionTargets)
+    }
+
+    private fun markMessagesAsDeleted(messages: List<LogbookMessage>) {
+        messages.forEach { it.isDeleted = true }
+    }
+
+    /**
+     * Finds messages that reference this message (successors in the message chain).
+     * Excludes RET (Return Receipt) messages as they are acknowledgments, not data messages.
+     *
+     * Example: If this is a FAR message, this finds COR messages that correct it.
+     */
+    private fun findReferencingMessagesExcludingRet(messages: List<LogbookMessage>): List<LogbookMessage> {
+        val thisReportId = reportId ?: return emptyList()
+        val thisMessageType = messageType ?: return emptyList()
+
+        return messages.filter {
+            it.operationType != LogbookOperationType.RET &&
+                it.messageType == thisMessageType &&
+                it.referencedReportId == thisReportId
+        }
+    }
+
+    /**
+     * Finds the message(s) referenced by this message (predecessors in the message chain).
+     * Excludes RET (Return Receipt) messages as they are acknowledgments, not data messages.
+     *
+     * Example: If this is a COR message, this finds the original FAR it corrects.
+     */
+    internal fun findReferencedMessagesExcludingRet(messages: List<LogbookMessage>): List<LogbookMessage> {
+        val targetReportId = referencedReportId
+        if (targetReportId.isNullOrEmpty()) return emptyList()
+
+        return messages.filter {
+            it.operationType != LogbookOperationType.RET &&
+                it.reportId == targetReportId
+        }
+    }
+
+    private fun setAcknowledgeAsSuccessful() {
+        this.acknowledgment = Acknowledgment(isSuccess = true)
     }
 
     private fun setNamesFromCodes(

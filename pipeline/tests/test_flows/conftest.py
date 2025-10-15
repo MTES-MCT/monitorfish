@@ -65,6 +65,40 @@ def add_vessels(add_monitorfish_proxy_database):
 
 
 @fixture
+def add_activity_dates_table(add_monitorfish_proxy_database):
+    client = create_datawarehouse_client()
+    print("Creating monitorfish.activity_dates table")
+    client.command(
+        """
+        CREATE TABLE monitorfish.activity_dates
+        ENGINE MergeTree()
+        PARTITION BY toYYYYMM(operation_datetime_utc)
+        ORDER BY operation_datetime_utc
+        AS
+        SELECT
+            operation_datetime_utc,
+            cfr,
+            activity_datetime_utc,
+            log_type,
+            trip_number,
+            trip_number_was_computed,
+            report_id,
+            false AS is_deleted,
+            false AS is_corrected,
+            true AS is_acknowledged
+        FROM monitorfish_proxy.logbook_reports
+        WHERE
+            log_type IS NOT NULL
+            AND trip_number IS NOT NULL
+            AND operation_datetime_utc::TimeStamp < NOW() - INTERVAL 1 DAYS
+    """
+    )
+    yield
+    print("Dropping monitorfish.activity_dates table")
+    client.command("DROP TABLE monitorfish.activity_dates")
+
+
+@fixture
 def add_enriched_catches(add_monitorfish_database):
     client = create_datawarehouse_client()
     print("Creating monitorfish.enriched_catches table")

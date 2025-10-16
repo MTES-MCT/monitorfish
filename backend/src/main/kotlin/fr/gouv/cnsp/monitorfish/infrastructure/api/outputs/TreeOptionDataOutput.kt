@@ -8,14 +8,14 @@ data class TreeOptionDataOutput(
 ) {
     companion object {
         fun fromDistricts(districts: List<District>): List<TreeOptionDataOutput> {
-            val departments = districts.map { it.department }.distinct().sorted()
+            val departments = districts.map { it.departmentCode + " - " + it.department }.distinct().sorted()
 
             return departments.map { department ->
                 TreeOptionDataOutput(
                     label = department,
                     children =
                         districts
-                            .filter { it.department == department }
+                            .filter { it.departmentCode == department.split(" - ").firstOrNull() }
                             .map {
                                 Option(
                                     label = it.district,

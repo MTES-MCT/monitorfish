@@ -42,10 +42,10 @@ class DistrictControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))
-            .andExpect(jsonPath("$[0].label", equalTo("Finistère")))
+            .andExpect(jsonPath("$[0].label", equalTo("29 - Finistère")))
             .andExpect(jsonPath("$[0].children[0].label", equalTo("Brest")))
             .andExpect(jsonPath("$[0].children[0].value", equalTo("BS")))
-            .andExpect(jsonPath("$[1].label", equalTo("Morbihan")))
+            .andExpect(jsonPath("$[1].label", equalTo("56 - Morbihan")))
             .andExpect(jsonPath("$[1].children[0].label", equalTo("Lorient")))
             .andExpect(jsonPath("$[1].children[0].value", equalTo("LO")))
     }

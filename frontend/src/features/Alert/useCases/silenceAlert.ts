@@ -44,7 +44,7 @@ export const silenceAlert =
 
       dispatch(
         removeVesselAlertAndUpdateReporting({
-          alertType: pendingAlert.value.type,
+          alertName: pendingAlert.value.name,
           isValidated: false,
           vesselFeatureId: VesselFeature.getVesselFeatureId(pendingAlert)
         })

@@ -27,6 +27,7 @@ export const fortyHeightHourAlertReporting: PendingAlertReporting = {
   validationDate: '2023-10-30T15:08:05.845121Z',
   value: {
     dml: null,
+    name: 'Message FAR 48h',
     natinfCode: 2610,
     seaFront: Seafront.NAMO,
     type: PendingAlertValueType.MISSING_FAR_48_HOURS_ALERT

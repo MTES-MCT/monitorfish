@@ -76,7 +76,7 @@ const RegulatoryZoneMetadataShifter = styled.div<{
   $isOpen: boolean
 }>`
   position: absolute;
-  margin-left: ${p => (p.$isLeftMapBoxOpened ? 355 : -45)}px;
+  margin-left: ${p => (p.$isLeftMapBoxOpened ? 355 : 0)}px;
   margin-top: 45px;
   top: 0;
   opacity: ${p => (p.$isOpen ? '1' : '0')};

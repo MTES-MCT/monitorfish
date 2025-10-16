@@ -1,4 +1,3 @@
-import { PendingAlertValueType } from '@features/Alert/constants'
 import { ProducerOrganizationMembershipSchema } from '@features/ProducerOrganizationMembership/schemas/ProducerOrganizationMembershipSchema'
 import { ReportingType } from '@features/Reporting/types'
 import { RiskFactorSchema } from '@features/RiskFactor/types'
@@ -10,7 +9,7 @@ import { z } from 'zod'
 
 export const VesselSchema = z.strictObject({
   activityOrigin: z.enum(ActivityOrigin).optional(),
-  alerts: z.array(z.enum(PendingAlertValueType)),
+  alerts: z.array(z.string()),
   beacon: BeaconSchema.optional(),
   beaconMalfunctionId: z.number().optional(),
   bossAddress: z.string().optional(),

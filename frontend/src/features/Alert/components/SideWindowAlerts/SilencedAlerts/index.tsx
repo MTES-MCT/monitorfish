@@ -97,7 +97,7 @@ export function SilencedAlerts() {
         <Row key={0} $isHeader index={0}>
           <FlexboxGrid>
             <VesselName>Navire</VesselName>
-            <AlertType colspan={7}>Titre</AlertType>
+            <AlertName colspan={7}>Titre</AlertName>
             <Natinf>NATINF</Natinf>
             <DateColumn>Suspendue pour...</DateColumn>
             <DateColumn>Reprise le...</DateColumn>
@@ -123,7 +123,7 @@ export function SilencedAlerts() {
                     />
                     {alert.vesselName}
                   </VesselName>
-                  <AlertType>{alert.value.name}</AlertType>
+                  <AlertName>{alert.value.name}</AlertName>
                   <Natinf>{alert.value.natinfCode}</Natinf>
                   <DateColumn>{timeago.format(alert.silencedBeforeDate, 'fr')}</DateColumn>
                   <DateColumn>{getDateTime(alert.silencedBeforeDate, true)}</DateColumn>
@@ -298,7 +298,7 @@ const VesselName = styled(FlexboxGrid.Item)`
   width: 280px;
 `
 
-const AlertType = styled(FlexboxGrid.Item)`
+const AlertName = styled(FlexboxGrid.Item)`
   ${styleCenter}
   width: 410px;
 `

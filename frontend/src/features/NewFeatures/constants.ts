@@ -7,6 +7,34 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2025-10-14',
+        description: `Vous pouvez désormais créer des alertes paramétrables dans l'onglet "Gestion des alertes" situé dans le menu "Alertes" de la deuxième fenêtre.
+
+Les critères des alertes sont, dans un premier temps :
+- Navires,
+- Organisations de producteurs,
+- Départements et quartiers,
+- Nationalités,
+- Zones administratives et réglementaires.
+
+La liste vous permet de visualiser les critères de déclenchement des alertes fixes et paramétrables.
+
+⚠️  Toute modification ou suppression affectera tous les utilisateurs du CNSP.
+`,
+        for: 'CNSP',
+        title: `Ajout des alertes paramétrables`,
+        type: 'NEW_FEATURE'
+      },
+      {
+        date: '2025-10-14',
+        description: `Le filtre "Port de débarque" prends également en comptes les préavis de débarquement émis par les navires ne disposant pas de JPE.
+
+Cela permet de suivre le retour au port des navires soumis au préavis de débarquement.`,
+        for: 'ALL',
+        title: `Ajout des préavis manuels dans le filte "Port de débarque" de la liste des navires`,
+        type: 'IMPROVEMENT'
+      },
+      {
         date: '2025-09-05',
         description: `Le filtre "Dernier contrôle" de la liste des navires a été remplacé par deux filtres :
 - Dernier contrôle à quai,

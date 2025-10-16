@@ -1,6 +1,6 @@
 import { useGetDistrictsQuery } from '@api/district'
 import { Criteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/shared/Criteria'
-import { FormikMultiCascader } from '@mtes-mct/monitor-ui'
+import { MultiCascader } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import { useState } from 'react'
 
@@ -11,13 +11,17 @@ type DistrictCriteriaProps = {
 }
 
 export function DistrictCriteria({ onDelete }: DistrictCriteriaProps) {
-  const [, , helper] = useField<EditedAlertSpecification['districtCodes']>('districtCodes')
+  const [, meta, helper] = useField<EditedAlertSpecification['districtCodes']>('districtCodes')
   const [isCriteriaOpened, setIsCriteriaOpened] = useState(true)
   const { data: districtsAsTreeOptions } = useGetDistrictsQuery()
 
   const handleDeleteCriteria = () => {
     helper.setValue([])
     onDelete()
+  }
+
+  const updateDistrict = (nextValue: string[] | undefined) => {
+    helper.setValue(nextValue ?? [])
   }
 
   return (
@@ -32,13 +36,15 @@ export function DistrictCriteria({ onDelete }: DistrictCriteriaProps) {
         <Criteria.ChevronIcon $isOpen={isCriteriaOpened} />
       </Criteria.Head>
       <Criteria.Body $isOpen={isCriteriaOpened}>
-        <FormikMultiCascader
+        <MultiCascader
           disabled={!districtsAsTreeOptions}
           label="Départements et/ou quartiers déclenchant l'alerte"
           name="districtCodes"
+          onChange={updateDistrict}
           options={districtsAsTreeOptions ?? []}
           placeholder=""
           searchable
+          value={meta.value}
         />
         <Criteria.Delete onClick={handleDeleteCriteria} />
       </Criteria.Body>

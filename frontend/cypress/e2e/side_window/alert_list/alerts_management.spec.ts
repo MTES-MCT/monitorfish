@@ -35,10 +35,10 @@ context('Side Window > Alert Management', () => {
     cy.clickButton('Créer une nouvelle alerte')
     cy.fill('Nom', 'Test Alert Name')
     cy.clickButton('Fermer')
-    cy.contains("Quitter l'édition").should('be.visible')
+    cy.contains('Retour à la liste des alertes').should('be.visible')
     cy.clickButton('Retourner à l’édition')
     cy.getDataCy('go-back-alerts-management-list').click()
-    cy.contains("Quitter l'édition").should('be.visible')
+    cy.contains('Retour à la liste des alertes').should('be.visible')
     cy.clickButton('Quitter sans enregistrer')
 
     // Should go back to list

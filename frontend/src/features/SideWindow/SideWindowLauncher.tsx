@@ -15,7 +15,8 @@ export function SideWindowLauncher() {
     store =>
       store.missionForm.isDraftDirty ||
       store.priorNotification.isPriorNotificationFormDirty ||
-      store.priorNotification.isReportingFormDirty
+      store.priorNotification.isReportingFormDirty ||
+      store.alert.editedAlertSpecification !== undefined
   )
   const status = useMainAppSelector(store => store.sideWindow.status)
 

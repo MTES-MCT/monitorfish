@@ -97,7 +97,7 @@ export function AlertManagementForm() {
       dispatch(alertActions.setEditedAlertSpecification(undefined))
       dispatch(
         addSideWindowBanner({
-          children: `L'alerte a bien été ${isCreation ? 'créé' : 'modifiée'}`,
+          children: `L'alerte a bien été ${isCreation ? 'créée' : 'modifiée'}`,
           closingDelay: 3000,
           isClosable: true,
           level: Level.SUCCESS,
@@ -199,7 +199,6 @@ export function AlertManagementForm() {
                     label="NATINF associé"
                     name="natinfCode"
                     options={infractionsAsOptions}
-                    placement="auto"
                     searchable
                   />
                   <StyledFormikMultiRadio
@@ -214,7 +213,7 @@ export function AlertManagementForm() {
                 <Panel $isRight>
                   <StyledFormHead>
                     <h2>Critères de déclenchement</h2>
-                    <Dropdown Icon={Icon.Plus} placement="bottomEnd" title="Définir les critères de déclenchement">
+                    <StyledDropdown Icon={Icon.Plus} title="Ajouter un critère de déclenchement">
                       {!hasVesselCriteria && (
                         <Dropdown.Item
                           onClick={() => {
@@ -260,7 +259,7 @@ export function AlertManagementForm() {
                           Organisations de producteurs
                         </Dropdown.Item>
                       )}
-                    </Dropdown>
+                    </StyledDropdown>
                   </StyledFormHead>
                   {hasVesselCriteria && (
                     <VesselCriteria
@@ -328,17 +327,17 @@ export function AlertManagementForm() {
                 </AlertInfos>
 
                 <RightButtonsContainer>
-                  <Button accent={Accent.SECONDARY} disabled={isCreatingAlert || isUpdatingAlert} type="submit">
-                    Enregistrer
-                  </Button>
                   <Button
-                    accent={Accent.PRIMARY}
+                    accent={Accent.SECONDARY}
                     disabled={false}
                     onClick={() => {
                       askForDraftCancellation(dirty)
                     }}
                   >
                     Fermer
+                  </Button>
+                  <Button disabled={isCreatingAlert || isUpdatingAlert} type="submit">
+                    Enregistrer
                   </Button>
                 </RightButtonsContainer>
               </Footer>
@@ -359,7 +358,7 @@ export function AlertManagementForm() {
           }
           onCancel={() => setIsDraftCancellationConfirmationDialogOpen(false)}
           onConfirm={handleConfirmCancelDraft}
-          title="Quitter l'édition"
+          title="Retour à la liste des alertes"
         />
       )}
       {isDeleteConfirmationDialogOpen && (
@@ -414,6 +413,11 @@ export const Header = styled.div`
 
 const StyledFormHead = styled(FormHead)`
   margin: 24px 0 8px 0;
+`
+const StyledDropdown = styled(Dropdown)`
+  > ul {
+    width: 100%;
+  }
 `
 
 export const Footer = styled.div`

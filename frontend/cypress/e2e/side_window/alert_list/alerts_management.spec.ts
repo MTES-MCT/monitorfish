@@ -71,7 +71,7 @@ context('Side Window > Alert Management', () => {
     /**
      * Add administrative zones criteria
      */
-    cy.clickButton('Définir les critères de déclenchement')
+    cy.clickButton('Ajouter un critère de déclenchement')
     cy.clickButton('Zones')
 
     /**
@@ -80,7 +80,7 @@ context('Side Window > Alert Management', () => {
     cy.get('.Component-Dropdow > ul').should('not.contain', 'Zones')
     cy.clickButton('Supprimer le critère')
 
-    cy.clickButton('Définir les critères de déclenchement')
+    cy.clickButton('Ajouter un critère de déclenchement')
     cy.clickButton('Zones')
     cy.wait(500)
 
@@ -91,7 +91,7 @@ context('Side Window > Alert Management', () => {
     /**
      * Add nationality zones criteria
      */
-    cy.clickButton('Définir les critères de déclenchement')
+    cy.clickButton('Ajouter un critère de déclenchement')
     cy.clickButton('Nationalités')
     cy.fill("Nationalités déclenchant l'alerte", ['Royaume-Uni'])
     cy.clickButton('NATIONALITÉS')
@@ -99,7 +99,7 @@ context('Side Window > Alert Management', () => {
     /**
      * Add vessels zones criteria
      */
-    cy.clickButton('Définir les critères de déclenchement')
+    cy.clickButton('Ajouter un critère de déclenchement')
     cy.clickButton('Navires')
     cy.getDataCy('VesselSearch-input').type('pheno')
     cy.getDataCy('VesselSearch-item').first().click()
@@ -115,7 +115,7 @@ context('Side Window > Alert Management', () => {
     /**
      * Add producers organization criteria
      */
-    cy.clickButton('Définir les critères de déclenchement')
+    cy.clickButton('Ajouter un critère de déclenchement')
     cy.clickButton('Organisations de producteurs')
     cy.fill("Organisations de producteurs déclenchant l'alerte", ['COBRENORD'])
     cy.clickButton('ORGANISATIONS DE PRODUCTEURS')
@@ -123,7 +123,7 @@ context('Side Window > Alert Management', () => {
     /**
      * Add district criteria
      */
-    cy.clickButton('Définir les critères de déclenchement')
+    cy.clickButton('Ajouter un critère de déclenchement')
     cy.clickButton('Départements et quartiers')
     cy.fill("Départements et/ou quartiers déclenchant l'alerte", ["Les Sables D'Olonne"])
     cy.contains('DÉPARTEMENTS ET QUARTIERS').click()
@@ -262,7 +262,7 @@ context('Side Window > Alert Management', () => {
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains('Zone REG "Mediterranée - filets - Zone A"')
 
     cy.clickButton('En savoir plus sur le fonctionnement des alertes')
-    cy.get('.Component-Dialog').contains("Aujourd’hui, MonitorFish compte au total 18 alertes :")
+    cy.get('.Component-Dialog').contains('Aujourd’hui, MonitorFish compte au total 18 alertes :')
     cy.clickButton('Fermer')
   })
 })

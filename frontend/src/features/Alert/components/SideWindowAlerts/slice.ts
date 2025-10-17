@@ -45,11 +45,12 @@ const slice = createSlice({
       const { externalReferenceNumber, internalReferenceNumber, ircs, name } = action.payload
       const foundPendingAlert = state.pendingAlerts.find(
         alert =>
-          alert.value.type === name &&
+          alert.value.name === name &&
           alert.internalReferenceNumber === internalReferenceNumber &&
           alert.externalReferenceNumber === externalReferenceNumber &&
           alert.ircs === ircs
       )
+
       if (!foundPendingAlert) {
         return
       }

@@ -11,4 +11,6 @@ interface PendingAlertRepository {
     fun findAlertsOfTypes(types: List<AlertType>): List<PendingAlert>
 
     fun find(id: Int): PendingAlert
+
+    fun deleteAllByAlertId(id: Int)
 }

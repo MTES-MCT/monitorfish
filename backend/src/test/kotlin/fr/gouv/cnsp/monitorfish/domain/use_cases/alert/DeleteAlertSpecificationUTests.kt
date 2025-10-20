@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.alert
 
+import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionAlertSpecificationRepository
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -12,16 +13,20 @@ class DeleteAlertSpecificationUTests {
     @MockitoBean
     private lateinit var positionAlertSpecificationRepository: PositionAlertSpecificationRepository
 
+    @MockitoBean
+    private lateinit var pendingAlertRepository: PendingAlertRepository
+
     @Test
-    fun `execute Should call delete on repository`() {
+    fun `execute Should call delete on repository and delete pending alerts`() {
         // Given
         val alertId = 123
-        val useCase = DeleteAlertSpecification(positionAlertSpecificationRepository)
+        val useCase = DeleteAlertSpecification(positionAlertSpecificationRepository, pendingAlertRepository)
 
         // When
         useCase.execute(alertId)
 
         // Then
         verify(positionAlertSpecificationRepository).delete(alertId)
+        verify(pendingAlertRepository).deleteAllByAlertId(alertId)
     }
 }

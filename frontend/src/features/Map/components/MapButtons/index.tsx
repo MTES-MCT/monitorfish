@@ -44,6 +44,9 @@ export function MapButtons() {
   const isFavoriteVesselsMapButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isFavoriteVesselsMapButtonDisplayed
   )
+  const isMissionsMapButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isMissionsMapButtonDisplayed
+  )
   const isInterestPointMapButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isInterestPointMapButtonDisplayed
   )
@@ -76,33 +79,32 @@ export function MapButtons() {
             <FavoriteVessels />
           </MenuItem>
         )}
-        {isSuperUser && (
-          <MenuItem>
-            <Group>
-              {isFavoriteVesselsMapButtonDisplayed && (
+        <MenuItem>
+          <Group>
+            {isSuperUser && isMissionsMapButtonDisplayed && (
+              <MenuItem>
+                <MissionsMapMenu />
+              </MenuItem>
+            )}
+            {isSuperUser && isAlertsMapButtonDisplayed && (
+              <MenuItem>
+                <AlertsMapButton />
+              </MenuItem>
+            )}
+            {(isSuperUser || import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true') &&
+              isPriorNotificationMapButtonDisplayed && (
                 <MenuItem>
-                  <MissionsMapMenu />
+                  <PriorNotificationListButton />
                 </MenuItem>
               )}
-              {isAlertsMapButtonDisplayed && (
-                <MenuItem>
-                  <AlertsMapButton />
-                </MenuItem>
-              )}
-              {import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true' &&
-                isPriorNotificationMapButtonDisplayed && (
-                  <MenuItem>
-                    <PriorNotificationListButton />
-                  </MenuItem>
-                )}
-              {isBeaconMalfunctionsMapButtonDisplayed && (
-                <MenuItem>
-                  <BeaconMalfunctionsMapButton />
-                </MenuItem>
-              )}
-            </Group>
-          </MenuItem>
-        )}
+            {isSuperUser && isBeaconMalfunctionsMapButtonDisplayed && (
+              <MenuItem>
+                <BeaconMalfunctionsMapButton />
+              </MenuItem>
+            )}
+          </Group>
+        </MenuItem>
+
         {isActivityVisualizationMapButtonDisplayed && (
           <MenuItem>
             <ActivityVisualizationMapButton />

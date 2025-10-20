@@ -14,18 +14,16 @@ import AtSeaSVG from '../../../../../../icons/Icone_avarie_mer.svg?react'
 import AtPortSVG from '../../../../../../icons/Icone_avarie_quai.svg?react'
 
 import type { BeaconMalfunctionResumeAndDetails } from '../../../../../../BeaconMalfunction/types'
-import type { HTMLProps } from 'react'
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24
 
 type YearBeaconMalfunctionsProps = {
   beaconMalfunctionWithDetails: BeaconMalfunctionResumeAndDetails
-  isLastItem: boolean
   setIsCurrentBeaconMalfunctionDetails: (boolean) => void
 }
+
 export function BeaconMalfunctionCard({
   beaconMalfunctionWithDetails,
-  isLastItem,
   setIsCurrentBeaconMalfunctionDetails
 }: YearBeaconMalfunctionsProps) {
   const dispatch = useMainAppDispatch()
@@ -60,7 +58,6 @@ export function BeaconMalfunctionCard({
   return (
     <Wrapper
       data-cy="vessel-beacon-malfunction-single-history"
-      isLastItem={isLastItem}
       onClick={() => {
         setIsCurrentBeaconMalfunctionDetails(false)
         dispatch(
@@ -140,17 +137,10 @@ const Title = styled.div`
   padding: 10px 10px 0 10px;
 `
 
-const Wrapper = styled.div<
-  {
-    isLastItem: boolean
-  } & HTMLProps<HTMLDivElement>
->`
+const Wrapper = styled.div`
   background: ${p => p.theme.color.cultured};
-  margin: 10px 20px 0px 20px;
   border: 1px solid ${p => p.theme.color.lightGray};
-  width: -moz-available;
-  width: -webkit-fill-available;
-  margin-bottom: ${props => (props.isLastItem ? 10 : 0)}px;
+  width: 100%;
   cursor: pointer;
 `
 

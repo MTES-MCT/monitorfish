@@ -4,7 +4,6 @@ import {
   DELETE_ALERT_ERROR_MESSAGE,
   UPDATE_ALERT_ERROR_MESSAGE,
   useCreateAlertMutation,
-  useDeleteAlertMutation,
   useUpdateAlertMutation
 } from '@features/Alert/apis'
 import { Criteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants'
@@ -17,6 +16,7 @@ import { FormikValidityPeriod } from '@features/Alert/components/SideWindowAlert
 import { FISHING_POSITION_ONLY_AS_OPTIONS } from '@features/Alert/components/SideWindowAlerts/constants'
 import { alertActions } from '@features/Alert/components/SideWindowAlerts/slice'
 import { EditedAlertSpecificationSchema } from '@features/Alert/schemas/EditedAlertSpecificationSchema'
+import { deleteAlert } from '@features/Alert/useCases/deleteAlert'
 import { FormHead } from '@features/Mission/components/MissionForm/shared/FormHead'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -47,7 +47,6 @@ export function AlertManagementForm() {
   const dispatch = useMainAppDispatch()
   const [createAlert, { isLoading: isCreatingAlert }] = useCreateAlertMutation()
   const [updateAlert, { isLoading: isUpdatingAlert }] = useUpdateAlertMutation()
-  const [deleteAlert, { isLoading: isDeletingAlert }] = useDeleteAlertMutation()
   const editedAlertSpecification = useMainAppSelector(state => state.alert.editedAlertSpecification)
   const infractions = useMainAppSelector(state => state.infraction.infractions)
   const [selectedCriterias, setSelectedCriterias] = useState<Criteria[]>([])
@@ -97,7 +96,7 @@ export function AlertManagementForm() {
       dispatch(alertActions.setEditedAlertSpecification(undefined))
       dispatch(
         addSideWindowBanner({
-          children: `L'alerte a bien été ${isCreation ? 'créée' : 'modifiée'}`,
+          children: `L'alerte a bien été ${isCreation ? 'créée' : 'modifiée'}. Ses premières occurrences vont mettre quelques minutes à apparaître sur la carte`,
           closingDelay: 3000,
           isClosable: true,
           level: Level.SUCCESS,
@@ -123,12 +122,12 @@ export function AlertManagementForm() {
     }
 
     try {
-      await deleteAlert(editedAlertSpecification.id)
+      dispatch(deleteAlert(editedAlertSpecification.id))
       dispatch(alertActions.setEditedAlertSpecification(undefined))
       setIsDeleteConfirmationDialogOpen(false)
       dispatch(
         addSideWindowBanner({
-          children: `L'alerte a bien été suprimée`,
+          children: `L'alerte a bien été supprimée. S'il y avait des occurrences en cours, elle mettront quelques minutes à disparaître de la carte.`,
           closingDelay: 3000,
           isClosable: true,
           level: Level.SUCCESS,
@@ -305,7 +304,6 @@ export function AlertManagementForm() {
                 {!!editedAlertSpecification.id && (
                   <DeleteButton
                     accent={Accent.SECONDARY}
-                    disabled={isDeletingAlert}
                     Icon={Icon.Delete}
                     onClick={() => {
                       setIsDeleteConfirmationDialogOpen(true)
@@ -369,14 +367,14 @@ export function AlertManagementForm() {
           message={
             <>
               <p>
-                <b>
-                  Êtes-vous sûr de vouloir supprimer l&apos;alerte &quot;
-                  {editedAlertSpecification.name}&quot; ?
-                </b>
-              </p>
-              <p>
-                Cela supprimera la définition et les critères de l&apos;alerte, ainsi que toutes les occurrences
-                futures.
+                <b>Êtes-vous sûr de vouloir supprimer l&apos;alerte </b>
+                <p>
+                  <b>&quot;{editedAlertSpecification.name}&quot; ?</b>
+                </p>
+                <p>
+                  Cela supprimera la définition et les critères de l&apos;alerte, ainsi que toutes les occurrences en
+                  cours et futures.
+                </p>
               </p>
             </>
           }

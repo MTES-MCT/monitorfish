@@ -14,6 +14,7 @@ export type ConfirmationModalProps = {
   onConfirm: () => Promisable<void>
   title: string
 }
+
 export function ConfirmationModal({
   cancelButtonLabel = 'Annuler',
   color,
@@ -74,17 +75,19 @@ const StyledDialog = styled(Dialog)`
     min-width: 600px;
 
     /* Dialog.Body */
+
     > div:nth-child(2) {
       padding: 24px 40px 8px;
     }
 
     /* Dialog.Action */
+
     > div:last-child {
       padding: 24px 0 32px;
 
       > .Element-Button {
         min-width: 175px;
-        max-width: 185px;
+        max-width: 200px;
 
         &:not(:first-child) {
           margin-left: 8px;

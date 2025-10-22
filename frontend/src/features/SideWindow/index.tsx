@@ -209,12 +209,8 @@ const GlobalStyle = createGlobalStyle<{
   ${p =>
     !p.$isFromURL &&
     css`
-      .rs-checkbox {
-        > .rs-checkbox-checker {
-          > label {
-            line-height: inherit;
-          }
-        }
+      .rs-checkbox-label {
+        line-height: initial;
       }
       .Table-SimpleTable {
         > thead {

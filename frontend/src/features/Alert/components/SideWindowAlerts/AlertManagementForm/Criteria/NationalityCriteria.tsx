@@ -45,7 +45,6 @@ export function NationalityCriteria({ onDelete }: NationalityCriteriaProps) {
           placeholder=""
           popupWidth={600}
           searchable
-          uncheckableItemValues={['0', '1']}
           value={meta.value}
         />
         <Criteria.Delete onClick={handleDeleteCriteria} />

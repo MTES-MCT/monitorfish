@@ -488,11 +488,24 @@ interface DBLogbookReportRepository :
                operation_type = 'DEL'
                AND NOT is_test_message
            ORDER BY operation_datetime_utc desc
+        ),
+        del_ret AS (
+           select *
+           FROM logbook_reports
+           WHERE
+               referenced_report_id IN (select report_id FROM del) AND
+               operation_datetime_utc >= cast(:afterDateTime AS timestamp) - INTERVAL '1 day' AND
+               operation_datetime_utc < cast(:beforeDateTime AS timestamp) + INTERVAL '1 week' AND
+               operation_type = 'RET'
+               AND NOT is_test_message
+           ORDER BY operation_datetime_utc DESC
         )
         SELECT *
         FROM dat_cor
         UNION ALL SELECT * from ret
-        UNION ALL SELECT * from del""",
+        UNION ALL SELECT * from del
+        UNION ALL SELECT * from del_ret
+        """,
         nativeQuery = true,
     )
     fun findAllMessagesByTripNumberBetweenDates(

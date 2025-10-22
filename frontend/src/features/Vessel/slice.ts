@@ -160,7 +160,7 @@ const vesselSlice = createSlice({
     removeVesselAlertAndUpdateReporting(
       state,
       action: PayloadAction<{
-        alertType: string
+        alertName: string
         isValidated: boolean
         vesselFeatureId: Vessel.VesselFeatureId
       }>
@@ -168,7 +168,7 @@ const vesselSlice = createSlice({
       const vessel = vesselSelectors.selectById(state.vessels, action.payload.vesselFeatureId)
 
       if (vessel && vessel.activityType === ActivityType.POSITION_BASED) {
-        const filteredAlerts = vessel?.alerts?.filter(alert => alert !== action.payload.alertType)
+        const filteredAlerts = vessel?.alerts?.filter(alert => alert !== action.payload.alertName)
 
         if (action.payload.isValidated) {
           const addedReportings = vessel.reportings?.concat(ReportingTypeCharacteristics.ALERT.code)
@@ -196,7 +196,7 @@ const vesselSlice = createSlice({
       }
 
       if (state.selectedVessel) {
-        const filteredAlerts = state.selectedVessel.alerts?.filter(alert => alert !== action.payload.alertType) ?? []
+        const filteredAlerts = state.selectedVessel.alerts?.filter(alert => alert !== action.payload.alertName) ?? []
 
         let reportingsWithAlert: ReportingType[] = []
         if (state.selectedVessel.reportings?.length) {

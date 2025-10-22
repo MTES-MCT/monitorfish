@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import type { SilencedAlertFormValues } from '../types'
 
-export function AlertTypeField() {
+export function AlertNameField() {
   const [input, meta, helper] = useField<SilencedAlertFormValues['value']>('value')
   const { data: alertSpecifications } = useGetAllAlertSpecificationsQuery()
 

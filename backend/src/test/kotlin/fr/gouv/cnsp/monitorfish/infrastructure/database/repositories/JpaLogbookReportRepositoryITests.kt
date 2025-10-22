@@ -226,7 +226,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
                 .findAllMessagesByTripNumberBetweenDates("FAK000999999", lastDepartureDate, now, "9463715")
 
         // Then
-        assertThat(messages).hasSize(20)
+        assertThat(messages).hasSize(21)
 
         // LAN
         assertThat(messages[0].message).isInstanceOf(LAN::class.java)
@@ -386,17 +386,24 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val ackMessage5 = messages[17].message as Acknowledgment
         assertThat(ackMessage5.returnStatus).isEqualTo("000")
 
-        // DEL
+        // RET
         assertThat(messages[18].reportDateTime.toString()).isEqualTo("2019-10-30T11:32Z")
         assertThat(messages[18].operationType).isEqualTo(LogbookOperationType.RET)
         assertThat(messages[18].message).isInstanceOf(Acknowledgment::class.java)
         val ackMessage6 = messages[18].message as Acknowledgment
         assertThat(ackMessage6.returnStatus).isEqualTo("000")
 
-        // RET
+        // DEL
         assertThat(messages[19].reportDateTime.toString()).isEqualTo("2019-10-30T11:32Z")
         assertThat(messages[19].operationType).isEqualTo(LogbookOperationType.DEL)
         assertThat(messages[19].referencedReportId).isEqualTo("OOF20190627059908")
+
+        // RET
+        assertThat(messages[20].reportDateTime.toString()).isEqualTo("2019-10-30T11:32Z")
+        assertThat(messages[20].operationType).isEqualTo(LogbookOperationType.RET)
+        assertThat(messages[20].message).isInstanceOf(Acknowledgment::class.java)
+        val ackMessage7 = messages[20].message as Acknowledgment
+        assertThat(ackMessage7.returnStatus).isEqualTo("000")
     }
 
     @Test

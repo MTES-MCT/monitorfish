@@ -167,6 +167,7 @@ export function LogbookMessage({
                 <Icon.Confirm
                   color={THEME.color.mediumSeaGreen}
                   data-cy="LogbookMessage-successful-acknowledgement-icon"
+                  title={logbookMessage.acknowledgment?.rejectionCause ?? ''}
                 />
               )}
               {logbookMessage.acknowledgment?.isSuccess === false && (

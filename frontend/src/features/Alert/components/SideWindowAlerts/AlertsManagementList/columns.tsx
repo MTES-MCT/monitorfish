@@ -79,7 +79,9 @@ export function getTableColumns(
               Du {getDate(alertSpecification.validityStartDatetimeUtc).replace('/20', '/')} au{' '}
               {getDate(alertSpecification.validityEndDatetimeUtc).replace('/20', '/')}
             </Tag>
-            {alertSpecification.repeatEachYear && <Icon.Calendar />}
+            {alertSpecification.repeatEachYear && (
+              <Icon.CalendarRepetition color={THEME.color.slateGray} title="Récurrence annuelle" />
+            )}
           </ValidityPeriod>
         )
       },

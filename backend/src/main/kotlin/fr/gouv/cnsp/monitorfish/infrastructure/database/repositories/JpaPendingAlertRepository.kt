@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.PendingAlertEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBPendingAlertRepository
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -33,5 +34,10 @@ class JpaPendingAlertRepository(
 
     override fun delete(id: Int) {
         dbPendingAlertRepository.deleteById(id)
+    }
+
+    @Transactional
+    override fun deleteAllByAlertId(id: Int) {
+        dbPendingAlertRepository.deleteAllByAlertId(id)
     }
 }

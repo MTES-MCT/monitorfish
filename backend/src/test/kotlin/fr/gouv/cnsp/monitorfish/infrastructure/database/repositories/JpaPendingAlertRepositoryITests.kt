@@ -6,8 +6,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import jakarta.persistence.EntityManager
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
 import java.time.ZonedDateTime
@@ -15,6 +17,9 @@ import java.time.ZonedDateTime
 class JpaPendingAlertRepositoryITests : AbstractDBTests() {
     @Autowired
     private lateinit var jpaPendingAlertRepository: JpaPendingAlertRepository
+
+    @Autowired
+    private lateinit var entityManager: EntityManager
 
     @Test
     @Transactional
@@ -64,5 +69,25 @@ class JpaPendingAlertRepositoryITests : AbstractDBTests() {
         assertThat(alert.value.type).isEqualTo(AlertType.POSITION_ALERT)
         assertThat(alert.value.dml).isEqualTo("DML 13")
         assertThat(alert.value.seaFront).isEqualTo("NAMO")
+    }
+
+    @Test
+    @Transactional
+    fun `deleteAllByAlertId should delete all pending alerts with the given alertId `() {
+        // Given
+        val pendingPositionAlerts = jpaPendingAlertRepository.findAlertsOfTypes(listOf(AlertType.POSITION_ALERT))
+
+        val pendingAlert = pendingPositionAlerts.first()
+        val alertIdToDelete = pendingAlert.value.alertId!!
+
+        // When
+        jpaPendingAlertRepository.deleteAllByAlertId(alertIdToDelete)
+
+        // Then
+        // We need to clear the persistence context to not retrieve the deleted alert
+        entityManager.clear()
+        assertThrows<NoSuchElementException> {
+            jpaPendingAlertRepository.find(pendingAlert.id!!)
+        }
     }
 }

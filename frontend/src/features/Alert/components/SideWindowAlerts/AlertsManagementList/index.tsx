@@ -1,15 +1,12 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { ErrorWall } from '@components/ErrorWall'
-import {
-  useGetAllAlertSpecificationsQuery,
-  useActivateAlertMutation,
-  useDeactivateAlertMutation,
-  useDeleteAlertMutation
-} from '@features/Alert/apis'
+import { useActivateAlertMutation, useGetAllAlertSpecificationsQuery } from '@features/Alert/apis'
 import { HowAlertsWorksDialog } from '@features/Alert/components/HowAlertsWorksDialog'
 import { getTableColumns } from '@features/Alert/components/SideWindowAlerts/AlertsManagementList/columns'
 import { DEFAULT_EDITED_ALERT_SPECIFICATION } from '@features/Alert/components/SideWindowAlerts/constants'
 import { alertActions } from '@features/Alert/components/SideWindowAlerts/slice'
+import { deactivateAlert } from '@features/Alert/useCases/deactivateAlert'
+import { deleteAlert } from '@features/Alert/useCases/deleteAlert'
 import { PageWithUnderlineTitle } from '@features/SideWindow/components/PageWithUnderlineTitle'
 import { sideWindowActions } from '@features/SideWindow/slice'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
@@ -46,9 +43,7 @@ export function AlertsManagementList() {
   const dispatch = useMainAppDispatch()
   const { data: alertSpecifications, error, isLoading: isFetchingAlerts } = useGetAllAlertSpecificationsQuery()
   const [activateAlert, { isLoading: isActivatingAlert }] = useActivateAlertMutation()
-  const [deactivateAlert, { isLoading: isDeactivatingAlert }] = useDeactivateAlertMutation()
-  const [deleteAlert, { isLoading: isDeletingAlert }] = useDeleteAlertMutation()
-  const isLoading = isFetchingAlerts || isActivatingAlert || isDeactivatingAlert || isDeletingAlert
+  const isLoading = isFetchingAlerts || isActivatingAlert
 
   const [isHowAlertsWorksDialogOpen, setIsHowAlertsWorksDialogOpen] = useState<boolean>(false)
   const [searchQuery, setSearchQuery] = useState<string>()
@@ -119,8 +114,17 @@ export function AlertsManagementList() {
     }
 
     // Only deactivation needs confirmation
-    await deactivateAlert(deactivateConfirmationModal.alertSpecification.id)
+    dispatch(deactivateAlert(deactivateConfirmationModal.alertSpecification.id))
     setDeactivateConfirmationModal({ alertSpecification: undefined, isOpen: false })
+    dispatch(
+      addSideWindowBanner({
+        children: `L'alerte a bien été désactivée. S'il y avait des occurrences en cours, elle mettront quelques minutes à disparaître de la carte.`,
+        closingDelay: 3000,
+        isClosable: true,
+        level: Level.SUCCESS,
+        withAutomaticClosing: true
+      })
+    )
   }
 
   const handleCancelToggle = () => {
@@ -136,8 +140,17 @@ export function AlertsManagementList() {
       return
     }
 
-    await deleteAlert(deleteConfirmationModal.alertSpecification.id)
+    dispatch(deleteAlert(deleteConfirmationModal.alertSpecification.id))
     setDeleteConfirmationModal({ alertSpecification: undefined, isOpen: false })
+    dispatch(
+      addSideWindowBanner({
+        children: `L'alerte a bien été supprimée. S'il y avait des occurrences en cours, elle mettront quelques minutes à disparaître de la carte.`,
+        closingDelay: 3000,
+        isClosable: true,
+        level: Level.SUCCESS,
+        withAutomaticClosing: true
+      })
+    )
   }
 
   const handleCancelDelete = () => {
@@ -257,12 +270,15 @@ export function AlertsManagementList() {
           message={
             <>
               <p>
-                <b>
-                  Êtes-vous sûr de vouloir désactiver l&apos;alerte &quot;
-                  {deactivateConfirmationModal.alertSpecification.name}&quot; ?
-                </b>
+                <b>Êtes-vous sûr de vouloir désactiver l&apos;alerte</b>
+                <p>
+                  <b>&quot;{deactivateConfirmationModal.alertSpecification.name}&quot; ?</b>
+                </p>
+                <p>
+                  Cela supprimera toutes les occurrences en cours de l&apos;alerte et stoppera toutes ses occurences
+                  futures.
+                </p>
               </p>
-              <p>Cela stoppera toutes les occurrences futures.</p>
             </>
           }
           onCancel={handleCancelToggle}
@@ -278,14 +294,14 @@ export function AlertsManagementList() {
           message={
             <>
               <p>
-                <b>
-                  Êtes-vous sûr de vouloir supprimer l&apos;alerte &quot;
-                  {deleteConfirmationModal.alertSpecification.name}&quot; ?
-                </b>
-              </p>
-              <p>
-                Cela supprimera la définition et les critères de l&apos;alerte, ainsi que toutes les occurrences
-                futures.
+                <b>Êtes-vous sûr de vouloir supprimer l&apos;alerte </b>
+                <p>
+                  <b>&quot;{deleteConfirmationModal.alertSpecification.name}&quot; ?</b>
+                </p>
+                <p>
+                  Cela supprimera la définition et les critères de l&apos;alerte, ainsi que toutes les occurrences en
+                  cours et futures.
+                </p>
               </p>
             </>
           }

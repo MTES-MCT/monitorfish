@@ -1,4 +1,5 @@
 import { SEAFRONT_GROUP_SEAFRONTS, SeafrontGroup } from '@constants/seafront'
+import { AlertAndReportingTab } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/constants'
 import { createSlice } from '@reduxjs/toolkit'
 import { deleteListItems } from '@utils/deleteListItems'
 import { propEq } from 'ramda'
@@ -17,6 +18,7 @@ export type AlertState = {
   editedAlertSpecification: AlertSpecification | undefined
   focusedPendingAlertId: number | undefined
   pendingAlerts: LEGACY_PendingAlert[]
+  selectedTab: AlertAndReportingTab
   silencedAlerts: SilencedAlert[]
   silencedAlertsQueue: SilenceAlertQueueItem[]
   subMenu: AlertSubMenu
@@ -25,6 +27,7 @@ const INITIAL_STATE: AlertState = {
   editedAlertSpecification: undefined,
   focusedPendingAlertId: undefined,
   pendingAlerts: [],
+  selectedTab: AlertAndReportingTab.ALERT,
   silencedAlerts: [],
   silencedAlertsQueue: [],
   subMenu: SeafrontGroup.MEMN
@@ -74,6 +77,7 @@ const slice = createSlice({
       })
 
       state.subMenu = seafrontGroup ?? SeafrontGroup.MEMN
+      state.selectedTab = AlertAndReportingTab.ALERT
     },
 
     /**
@@ -102,6 +106,13 @@ const slice = createSlice({
     },
 
     /**
+     * Set alerts
+     */
+    setSelectedTab(state, action: PayloadAction<AlertAndReportingTab>) {
+      state.selectedTab = action.payload
+    },
+
+    /**
      * Set silenced alerts
      */
     setSilencedAlerts(state, action: PayloadAction<SilencedAlert[]>) {
@@ -123,6 +134,7 @@ export const {
   removeFromSilencedAlertsQueue,
   resetFocusOnPendingAlert,
   setPendingAlerts,
+  setSelectedTab,
   setSilencedAlerts,
   setSubMenu
 } = slice.actions

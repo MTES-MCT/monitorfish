@@ -14,160 +14,31 @@ interface DBLogbookReportRepository :
     JpaSpecificationExecutor<LogbookReportEntity> {
     @Query(
         """
-        WITH
-            dat_and_cor_pno_logbook_reports_with_extra_columns AS (
-                SELECT
-                    lr.*,
-                    (SELECT array_agg(pnoTypes->>'pnoTypeName') FROM jsonb_array_elements(lr.value->'pnoTypes') AS pnoTypes) AS prior_notification_type_names,
-                    (SELECT array_agg(catchOnboard->>'species') FROM jsonb_array_elements(lr.value->'catchOnboard') AS catchOnboard) AS specy_codes,
-                    (SELECT array_agg(tripGears->>'gear') FROM jsonb_array_elements(lr.trip_gears) AS tripGears) AS trip_gear_codes,
-                    (SELECT array_agg(tripSegments->>'segment') FROM jsonb_array_elements(lr.trip_segments) AS tripSegments) AS trip_segment_codes
-                FROM logbook_reports lr
-                LEFT JOIN risk_factors rf ON lr.cfr = rf.cfr
-                LEFT JOIN vessels v ON lr.cfr = v.cfr
-                WHERE
-                    -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
-                    lr.operation_datetime_utc
-                        BETWEEN CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
-                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
-
-                    AND lr.log_type = 'PNO'
-                    AND lr.operation_type IN ('DAT', 'COR')
-                    AND lr.enriched = TRUE
-
-                    -- Flag States
-                    AND (:flagStates IS NULL OR lr.flag_state IN (:flagStates))
-
-                    -- Is Less Than Twelve Meters Vessel
-                    AND (
-                        :isLessThanTwelveMetersVessel IS NULL
-                        OR (:isLessThanTwelveMetersVessel = TRUE AND v.length < 12)
-                        OR (:isLessThanTwelveMetersVessel = FALSE AND v.length >= 12)
-                    )
-
-                    -- Last Controlled After
-                    AND (:lastControlledAfter IS NULL OR rf.last_control_datetime_utc >= CAST(:lastControlledAfter AS TIMESTAMP))
-
-                    -- Last Controlled Before
-                    AND (:lastControlledBefore IS NULL OR rf.last_control_datetime_utc <= CAST(:lastControlledBefore AS TIMESTAMP))
-
-                    -- Port Locodes
-                    AND (:portLocodes IS NULL OR lr.value->>'port' IN (:portLocodes))
-
-                    -- Search Query
-                    AND (
-                        :searchQuery IS NULL OR
-                        unaccent(lower(lr.vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%') OR
-                        lower(lr.cfr) ILIKE CONCAT('%', lower(:searchQuery), '%')
-                    )
-            ),
-
-            distinct_cfrs AS (
-                SELECT DISTINCT cfr
-                FROM dat_and_cor_pno_logbook_reports_with_extra_columns
-            ),
-
-            cfr_reporting_counts AS (
-                SELECT
-                    dc.cfr,
-                    COUNT(r.id) AS reporting_count
-                FROM distinct_cfrs dc
-                LEFT JOIN reportings r ON dc.cfr = r.internal_reference_number
-                WHERE
-                    r.type = 'INFRACTION_SUSPICION'
-                    AND r.archived = FALSE
-                    AND r.deleted = FALSE
-                GROUP BY cfr
-            ),
-
-            dat_and_cor_pno_logbook_reports_with_extra_columns_and_reporting_count AS (
-                SELECT
-                    dacplrwecarc.*,
-                    COALESCE(crc.reporting_count, 0) AS reporting_count
-                FROM dat_and_cor_pno_logbook_reports_with_extra_columns dacplrwecarc
-                LEFT JOIN cfr_reporting_counts crc ON dacplrwecarc.cfr = crc.cfr
-            ),
-
-            filtered_dat_and_cor_pno_logbook_reports AS (
-                SELECT *
-                FROM dat_and_cor_pno_logbook_reports_with_extra_columns_and_reporting_count
-                WHERE
-                    -- Has One Or More Reportings
-                    (
-                        :hasOneOrMoreReportings IS NULL
-                        OR (:hasOneOrMoreReportings = TRUE AND reporting_count > 0)
-                        OR (:hasOneOrMoreReportings = FALSE AND reporting_count = 0)
-                    )
-
-                    -- Prior Notification Types
-                    AND (:priorNotificationTypesAsSqlArrayString IS NULL OR prior_notification_type_names && CAST(:priorNotificationTypesAsSqlArrayString AS TEXT[]))
-
-                    -- Specy Codes
-                    AND (:specyCodesAsSqlArrayString IS NULL OR specy_codes && CAST(:specyCodesAsSqlArrayString AS TEXT[]))
-
-                    -- Trip Gear Codes
-                    AND (:tripGearCodesAsSqlArrayString IS NULL OR trip_gear_codes && CAST(:tripGearCodesAsSqlArrayString AS TEXT[]))
-
-                    -- Trip Segment Codes
-                    AND (:tripSegmentCodesAsSqlArrayString IS NULL OR trip_segment_codes && CAST(:tripSegmentCodesAsSqlArrayString AS TEXT[]))
-            ),
-
-            acknowledged_report_ids AS (
-                SELECT DISTINCT referenced_report_id
-                FROM logbook_reports lr
-                WHERE
-                    -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
-                    lr.operation_datetime_utc
-                        BETWEEN CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
-                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
-
-                    AND lr.operation_type = 'RET'
-                    AND lr.value->>'returnStatus' = '000'
-            ),
-
-            del_pno_logbook_reports AS (
-                SELECT
-                    lr.*,
-                    CAST(NULL AS TEXT[]) AS prior_notification_type_names,
-                    CAST(NULL AS TEXT[]) AS specy_codes,
-                    CAST(NULL AS TEXT[]) AS trip_gear_codes,
-                    CAST(NULL AS TEXT[]) AS trip_segment_codes,
-                    CAST(NULL AS INTEGER) AS reporting_count
-                FROM logbook_reports lr
-                JOIN filtered_dat_and_cor_pno_logbook_reports fdacplr ON lr.referenced_report_id = fdacplr.report_id
-                WHERE
-                    -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
-                    lr.operation_datetime_utc
-                        BETWEEN CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
-                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
-
-                    AND lr.operation_type = 'DEL'
-                    AND (
-                        lr.operation_number IN (SELECT referenced_report_id FROM acknowledged_report_ids)
-                        OR fdacplr.flag_state NOT IN ('FRA', 'GUF', 'VEN') -- flag_states for which we received RET messages
-                    )
-            )
-
-        SELECT *
-        FROM filtered_dat_and_cor_pno_logbook_reports
-        WHERE
-            report_id IN (SELECT referenced_report_id FROM acknowledged_report_ids)
-            OR flag_state NOT IN ('FRA', 'GUF', 'VEN') -- flag_states for which we received RET messages
-
-        UNION ALL
-
-        SELECT *
-        FROM del_pno_logbook_reports
+        SELECT * FROM find_all_enriched_pno_references_and_related_operations(
+            :willArriveAfter,
+            :willArriveBefore,
+            :flagStates,
+            :isLessThanTwelveMetersVessel,
+            :lastControlledAfter,
+            :lastControlledBefore,
+            :portLocodes,
+            :searchQuery,
+            :hasOneOrMoreReportings,
+            :priorNotificationTypesAsSqlArrayString,
+            :specyCodesAsSqlArrayString,
+            :tripGearCodesAsSqlArrayString,
+            :tripSegmentCodesAsSqlArrayString
+        )
         """,
         nativeQuery = true,
     )
     fun findAllEnrichedPnoReferencesAndRelatedOperations(
-        flagStates: List<String>,
+        flagStates: String?,
         hasOneOrMoreReportings: Boolean?,
         isLessThanTwelveMetersVessel: Boolean?,
         lastControlledAfter: String?,
         lastControlledBefore: String?,
-        portLocodes: List<String>,
+        portLocodes: String?,
         priorNotificationTypesAsSqlArrayString: String?,
         searchQuery: String?,
         specyCodesAsSqlArrayString: String?,

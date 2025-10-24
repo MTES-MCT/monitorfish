@@ -3,7 +3,7 @@ import { mapZonesWithMetadata } from '@features/Alert/components/SideWindowAlert
 import { AdministrativeAreaType } from '@features/Alert/constants'
 import { useGetFilterableZonesAsTreeOptions } from '@hooks/useGetFilterableZonesAsTreeOptions'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { MultiCascader, type TreeOption, type OptionValueType } from '@mtes-mct/monitor-ui'
+import { MultiCascader, type OptionValueType, type TreeOption } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useFormikContext } from 'formik'
 import { groupBy } from 'lodash-es'
@@ -17,6 +17,7 @@ const FILTERED_ZONES = ['Zone manuelle', 'Zones Cormoran (NAMO-SA)', 'Zones pour
 type ZoneCriteriaProps = {
   onDelete: () => void
 }
+
 export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
   const { setFieldValue, values } = useFormikContext<EditedAlertSpecification>()
   const administrativeZones = values.administrativeAreas.filter(
@@ -25,6 +26,7 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
   const [isCriteriaOpened, setIsCriteriaOpened] = useState(true)
   const filterableZoneAsTreeOptions = useGetFilterableZonesAsTreeOptions()
   const filteredZones = filterableZoneAsTreeOptions?.filter(zone => !FILTERED_ZONES.includes(zone.label)) ?? []
+  const uncheckableZones = Object.keys(filteredZones)
 
   const regulatoryLayerLawTypes = useMainAppSelector(state => state.regulation.regulatoryLayerLawTypes)
 
@@ -44,6 +46,11 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
             value: { lawType, topic: undefined, zone: undefined }
           })) as TreeOption<RegulatoryAreaSpecification>[])
         : [],
+    [regulatoryLayerLawTypes]
+  )
+
+  const uncheckableRegulatoryOptions = useMemo(
+    () => (regulatoryLayerLawTypes ? Object.keys(Object.entries(regulatoryLayerLawTypes)) : []),
     [regulatoryLayerLawTypes]
   )
 
@@ -110,7 +117,7 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
           placeholder=""
           popupWidth={600}
           searchable
-          uncheckableItemValues={['0', '1']}
+          uncheckableItemValues={uncheckableZones}
           value={(() => {
             const allZones = mapZonesWithMetadata(filteredZones)
 
@@ -130,7 +137,7 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
           placeholder=""
           popupWidth={600}
           searchable
-          uncheckableItemValues={['0', '1', '2', '3']}
+          uncheckableItemValues={uncheckableRegulatoryOptions}
           value={values.regulatoryAreas || []}
         />
         <Criteria.Delete onClick={handleDeleteCriteria} />

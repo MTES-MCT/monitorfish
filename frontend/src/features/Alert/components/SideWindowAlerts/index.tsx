@@ -6,7 +6,7 @@ import { AlertsManagementList } from '@features/Alert/components/SideWindowAlert
 import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 
 import { AlertListAndReportingList } from './AlertListAndReportingList'
 import { AdditionalSubMenu, ALERT_SUB_MENU_OPTIONS } from './constants'
@@ -21,13 +21,14 @@ type SideWindowAlertsProps = Readonly<{
   baseRef: RefObject<HTMLDivElement>
   isFromUrl: boolean
 }>
+
 export function SideWindowAlerts({ baseRef, isFromUrl }: SideWindowAlertsProps) {
   const dispatch = useMainAppDispatch()
   const pendingAlerts = useMainAppSelector(state => state.alert.pendingAlerts)
   const editedAlertSpecification = useMainAppSelector(state => state.alert.editedAlertSpecification)
   const subMenu = useMainAppSelector(state => state.alert.subMenu)
+  const selectedTab = useMainAppSelector(state => state.alert.selectedTab)
   const reportingTypesDisplayed = useMainAppSelector(state => state.reportingTableFilters.reportingTypesDisplayed)
-  const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
 
   const { data: currentReportings } = useGetReportingsQuery(undefined, RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS)
 
@@ -87,8 +88,6 @@ export function SideWindowAlerts({ baseRef, isFromUrl }: SideWindowAlertsProps) 
           baseRef={baseRef as MutableRefObject<HTMLDivElement>}
           isFromUrl={isFromUrl}
           selectedSeafrontGroup={subMenu || SeafrontGroup.MEMN}
-          selectedTab={selectedTab}
-          setSelectedTab={setSelectedTab}
         />
       )}
       {subMenu === AdditionalSubMenu.SUSPENDED_ALERTS && <SilencedAlerts />}

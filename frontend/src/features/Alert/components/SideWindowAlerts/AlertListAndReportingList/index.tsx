@@ -1,6 +1,7 @@
 import { NO_SEAFRONT_GROUP, type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import { ReportingTable } from '@features/Reporting/components/ReportingTable'
 import { Header } from '@features/SideWindow/components/Header'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch.ts'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useMemo } from 'react'
 import styled from 'styled-components'
@@ -8,6 +9,7 @@ import styled from 'styled-components'
 import { AlertAndReportingTab } from './constants'
 import { PendingAlertsList } from './PendingAlertsList'
 import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../constants'
+import { setSelectedTab } from '../slice'
 
 import type { RefObject } from 'react'
 
@@ -15,16 +17,15 @@ type AlertListAndReportingListProps = {
   baseRef: RefObject<HTMLDivElement>
   isFromUrl: boolean
   selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup
-  selectedTab: any
-  setSelectedTab: any
 }
+
 export function AlertListAndReportingList({
   baseRef,
   isFromUrl,
-  selectedSeafrontGroup,
-  selectedTab,
-  setSelectedTab
+  selectedSeafrontGroup
 }: AlertListAndReportingListProps) {
+  const dispatch = useMainAppDispatch()
+  const selectedTab = useMainAppSelector(state => state.alert.selectedTab)
   const silencedAlerts = useMainAppSelector(state => state.alert.silencedAlerts)
 
   const filteredSilencedAlerts = useMemo(() => {
@@ -46,14 +47,14 @@ export function AlertListAndReportingList({
       <StyledHeader>
         <Title
           $isSelected={selectedTab === AlertAndReportingTab.ALERT}
-          onClick={() => setSelectedTab(AlertAndReportingTab.ALERT)}
+          onClick={() => dispatch(setSelectedTab(AlertAndReportingTab.ALERT))}
         >
           Alertes
         </Title>
         <Title
           $isSelected={selectedTab === AlertAndReportingTab.REPORTING}
           data-cy="side-window-reporting-tab"
-          onClick={() => setSelectedTab(AlertAndReportingTab.REPORTING)}
+          onClick={() => dispatch(setSelectedTab(AlertAndReportingTab.REPORTING))}
         >
           Signalements
         </Title>

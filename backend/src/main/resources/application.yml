@@ -77,8 +77,8 @@ spring:
         url: ${ENV_DB_URL}
         driver-class-name: ${ENV_DB_DRIVER_CLASS_NAME}
         hikari:
-            maxLifetime: 60000
-            maximum-pool-size: 30
+            max-lifetime: 1800000
+            maximum-pool-size: 10
     servlet:
         multipart:
             max-file-size: 5MB

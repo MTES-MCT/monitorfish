@@ -396,15 +396,7 @@ interface DBLogbookReportRepository :
 
     @Query(
         """
-            SELECT
-                operation_number
-            FROM
-                logbook_reports
-            where
-                cfr = :internalReferenceNumber AND
-                operation_datetime_utc < now()
-            ORDER BY operation_datetime_utc DESC
-            LIMIT 1
+            SELECT find_last_operation_number(:internalReferenceNumber)
         """,
         nativeQuery = true,
     )
@@ -412,15 +404,7 @@ interface DBLogbookReportRepository :
 
     @Query(
         """
-            SELECT
-                software
-            FROM
-                logbook_reports
-            where
-                cfr = :internalReferenceNumber AND
-                operation_datetime_utc < now()
-            ORDER BY operation_datetime_utc DESC
-            LIMIT 1
+            SELECT find_last_software(:internalReferenceNumber)
         """,
         nativeQuery = true,
     )

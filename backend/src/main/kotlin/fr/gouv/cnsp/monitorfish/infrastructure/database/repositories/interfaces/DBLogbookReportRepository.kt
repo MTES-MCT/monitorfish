@@ -388,15 +388,7 @@ interface DBLogbookReportRepository :
 
     @Query(
         """
-            select
-                operation_datetime_utc
-            from
-                logbook_reports
-            where
-                operation_datetime_utc > NOW() - INTERVAL '1 month' and
-                operation_datetime_utc < now()
-            order by operation_datetime_utc desc
-            limit 1
+            select find_last_operation_datetime()
         """,
         nativeQuery = true,
     )

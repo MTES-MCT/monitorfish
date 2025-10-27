@@ -12,7 +12,7 @@ RETURNS TABLE (
             operation_datetime_utc > NOW() - INTERVAL '1 month' AND
             operation_datetime_utc < now()
         ORDER BY operation_datetime_utc DESC
-        limit 1:
+        limit 1;
         RETURN;
     END;
 $$ LANGUAGE plpgsql;

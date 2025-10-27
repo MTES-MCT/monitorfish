@@ -12,7 +12,7 @@ RETURNS TABLE (
             date_time > NOW() - INTERVAL '1 month' AND
             date_time < now()
         ORDER BY date_time DESC
-        limit 1
+        limit 1;
         RETURN;
     END;
 $$ LANGUAGE plpgsql;

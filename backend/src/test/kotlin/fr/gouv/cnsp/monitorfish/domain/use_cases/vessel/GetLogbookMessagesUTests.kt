@@ -8,7 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyCorrectedLogbookMessages
-import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyFluxAndVisioCaptureLogbookMessages
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyLogbookMessagesFromFlagStatesWithoutRET
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyLogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyRETLogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getTrip9463715LogbookMessages
@@ -253,8 +253,7 @@ class GetLogbookMessagesUTests {
     @Test
     fun `execute Should only add the latest acknowledge message`() {
         // Given
-        val lastAck = Acknowledgment()
-        lastAck.returnStatus = "000"
+        val lastAck = Acknowledgment(returnStatus = "000")
 
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any()))
             .willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
@@ -338,19 +337,15 @@ class GetLogbookMessagesUTests {
         )
         val messagesWithoutValidRet =
             getDummyRETLogbookMessages()
-                .filter { it.reportId != "90656468132" } +
+                .filter { it.id != 7.toLong() } +
                 LogbookMessage(
                     id = 7,
-                    operationNumber = "",
-                    reportId = "90656468132",
+                    operationNumber = "7777777777",
+                    reportId = null,
                     referencedReportId = "90656468131",
                     operationType = LogbookOperationType.RET,
                     messageType = "",
-                    message =
-                        Acknowledgment().apply {
-                            returnStatus = "002"
-                            rejectionCause = "Oops"
-                        },
+                    message = Acknowledgment(returnStatus = "002", rejectionCause = "Oops"),
                     reportDateTime =
                         ZonedDateTime
                             .of(
@@ -390,13 +385,13 @@ class GetLogbookMessagesUTests {
     }
 
     @Test
-    fun `execute Should acknowledge FLUX and VISIOCAPTURE messages`() {
+    fun `execute Should acknowledge messages from flag stages that do not send RET`() {
         // Given
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
             VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
         )
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
-            getDummyFluxAndVisioCaptureLogbookMessages(),
+            getDummyLogbookMessagesFromFlagStatesWithoutRET(),
         )
 
         // When
@@ -452,7 +447,7 @@ class GetLogbookMessagesUTests {
     }
 
     @Test
-    fun `execute Should add the deleted property When DEL is from FLUX transmission`() {
+    fun `execute Should add the deleted property When messages are from a flag state with no RET`() {
         // Given
         val farMessage = FAR()
         val haul = Haul()
@@ -466,14 +461,15 @@ class GetLogbookMessagesUTests {
             listOf(
                 LogbookMessage(
                     id = 1,
-                    operationNumber = "",
+                    operationNumber = "FAR123",
                     tripNumber = "345",
                     reportId = "FAR123",
                     operationType = LogbookOperationType.DAT,
                     messageType = "FAR",
                     message = farMessage,
+                    flagState = "DNK",
                     reportDateTime = ZonedDateTime.now().minusHours(12),
-                    transmissionFormat = LogbookTransmissionFormat.FLUX,
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
                     integrationDateTime = ZonedDateTime.now(),
                     isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
@@ -487,7 +483,7 @@ class GetLogbookMessagesUTests {
                     messageType = "",
                     message = null,
                     reportDateTime = ZonedDateTime.now().minusHours(6),
-                    transmissionFormat = LogbookTransmissionFormat.FLUX,
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
                     integrationDateTime = ZonedDateTime.now(),
                     isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
@@ -512,67 +508,6 @@ class GetLogbookMessagesUTests {
     }
 
     @Test
-    fun `execute Should add the deleted property When DEL is from VISIOCAPTURE software`() {
-        // Given
-        val farMessage = FAR()
-        val haul = Haul()
-        haul.gear = "OTB"
-        farMessage.hauls = listOf(haul)
-
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
-        )
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
-            listOf(
-                LogbookMessage(
-                    id = 1,
-                    operationNumber = "",
-                    tripNumber = "345",
-                    reportId = "FAR456",
-                    operationType = LogbookOperationType.DAT,
-                    messageType = "FAR",
-                    message = farMessage,
-                    reportDateTime = ZonedDateTime.now().minusHours(12),
-                    transmissionFormat = LogbookTransmissionFormat.ERS,
-                    integrationDateTime = ZonedDateTime.now(),
-                    isEnriched = false,
-                    operationDateTime = ZonedDateTime.now(),
-                ),
-                LogbookMessage(
-                    id = 2,
-                    operationNumber = "",
-                    reportId = "DEL456",
-                    referencedReportId = "FAR456",
-                    operationType = LogbookOperationType.DEL,
-                    messageType = "",
-                    software = "FT/VISIOCaptures V1.4.7",
-                    message = null,
-                    reportDateTime = ZonedDateTime.now().minusHours(6),
-                    transmissionFormat = LogbookTransmissionFormat.ERS,
-                    integrationDateTime = ZonedDateTime.now(),
-                    isEnriched = false,
-                    operationDateTime = ZonedDateTime.now(),
-                ),
-            ),
-        )
-
-        // When
-        val ersMessages =
-            GetLogbookMessages(
-                logbookReportRepository,
-                gearRepository,
-                speciesRepository,
-                portRepository,
-                logbookRawMessageRepository,
-            ).execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
-
-        // Then
-        assertThat(ersMessages).hasSize(1)
-        assertThat(ersMessages[0].reportId).isEqualTo("FAR456")
-        assertThat(ersMessages[0].isDeleted).isTrue
-    }
-
-    @Test
     fun `execute Should not add the deleted property When DEL has no referencedReportId`() {
         // Given
         val farMessage = FAR()
@@ -587,7 +522,7 @@ class GetLogbookMessagesUTests {
             listOf(
                 LogbookMessage(
                     id = 1,
-                    operationNumber = "",
+                    operationNumber = "FAR789",
                     tripNumber = "345",
                     reportId = "FAR789",
                     operationType = LogbookOperationType.DAT,
@@ -601,12 +536,12 @@ class GetLogbookMessagesUTests {
                 ),
                 LogbookMessage(
                     id = 2,
-                    operationNumber = "",
-                    reportId = "DEL789",
+                    operationNumber = "DEL789",
+                    reportId = null,
                     referencedReportId = null,
                     operationType = LogbookOperationType.DEL,
                     messageType = "",
-                    message = Acknowledgment().apply { returnStatus = "000" },
+                    message = Acknowledgment(returnStatus = "000"),
                     reportDateTime = ZonedDateTime.now().minusHours(6),
                     transmissionFormat = LogbookTransmissionFormat.ERS,
                     integrationDateTime = ZonedDateTime.now(),
@@ -638,12 +573,12 @@ class GetLogbookMessagesUTests {
         val retTargetingTwoMessages =
             LogbookMessage(
                 id = 123,
-                operationNumber = "",
-                reportId = "906564681689",
-                referencedReportId = "REPORT_ID#4",
+                operationNumber = "906564681689",
+                reportId = null,
+                referencedReportId = "ON#4",
                 operationType = LogbookOperationType.RET,
                 messageType = "",
-                message = Acknowledgment().apply { returnStatus = "000" },
+                message = Acknowledgment(returnStatus = "000"),
                 reportDateTime =
                     ZonedDateTime
                         .of(

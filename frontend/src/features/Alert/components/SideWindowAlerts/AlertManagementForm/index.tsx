@@ -477,8 +477,9 @@ const HeadDescription = styled.span`
 
 export const Body = styled.div`
   background-color: ${p => p.theme.color.gainsboro};
-  display: flex;
-  flex-grow: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
   min-height: 0;
 `
 const Panel = styled.div<{
@@ -487,8 +488,6 @@ const Panel = styled.div<{
   background-color: ${p => (p.$isRight ? p.theme.color.gainsboro : p.theme.color.white)};
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  width: 50%;
   overflow-y: auto;
   padding-bottom: 24px;
   padding-right: 40px;

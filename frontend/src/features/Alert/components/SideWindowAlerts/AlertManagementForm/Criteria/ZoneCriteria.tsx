@@ -115,7 +115,6 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
           onChange={updateZones}
           options={filteredZones}
           placeholder=""
-          popupWidth={600}
           searchable
           uncheckableItemValues={uncheckableZones}
           value={(() => {
@@ -135,7 +134,6 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
           onChange={updateRegulatoryAreas}
           options={regulatoryOptions}
           placeholder=""
-          popupWidth={600}
           searchable
           uncheckableItemValues={uncheckableRegulatoryOptions}
           value={values.regulatoryAreas || []}

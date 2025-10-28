@@ -266,7 +266,7 @@ interface DBLogbookReportRepository :
            select *
            FROM logbook_reports
            WHERE
-               referenced_report_id IN (select report_id FROM dat_cor) AND
+               referenced_report_id IN (select operation_number FROM dat_cor) AND
                operation_datetime_utc >= cast(:afterDateTime AS timestamp) - INTERVAL '1 day' AND
                operation_datetime_utc < cast(:beforeDateTime AS timestamp) + INTERVAL '3 days' AND
                operation_type = 'RET'
@@ -288,7 +288,7 @@ interface DBLogbookReportRepository :
            select *
            FROM logbook_reports
            WHERE
-               referenced_report_id IN (select report_id FROM del) AND
+               referenced_report_id IN (select operation_number FROM del) AND
                operation_datetime_utc >= cast(:afterDateTime AS timestamp) - INTERVAL '1 day' AND
                operation_datetime_utc < cast(:beforeDateTime AS timestamp) + INTERVAL '1 week' AND
                operation_type = 'RET'

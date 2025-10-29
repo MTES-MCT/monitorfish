@@ -37,12 +37,12 @@ class JpaLogbookReportRepository(
         // Acknowledged "DAT", "COR" and "DEL" operations
         val logbookReportsWithDatCorAndDel =
             dbLogbookReportRepository.findAllEnrichedPnoReferencesAndRelatedOperations(
-                flagStates = filter.flagStates ?: emptyList(),
+                flagStates = toSqlArrayString(filter.flagStates),
                 hasOneOrMoreReportings = filter.hasOneOrMoreReportings,
                 isLessThanTwelveMetersVessel = filter.isLessThanTwelveMetersVessel,
                 lastControlledAfter = filter.lastControlledAfter,
                 lastControlledBefore = filter.lastControlledBefore,
-                portLocodes = filter.portLocodes ?: emptyList(),
+                portLocodes = toSqlArrayString(filter.portLocodes),
                 priorNotificationTypesAsSqlArrayString = toSqlArrayString(filter.priorNotificationTypes),
                 searchQuery = filter.searchQuery,
                 specyCodesAsSqlArrayString = toSqlArrayString(filter.specyCodes),

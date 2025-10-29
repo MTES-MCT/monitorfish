@@ -197,9 +197,10 @@ object TestUtils {
         return listOf(
             LogbookMessage(
                 id = 2,
-                operationNumber = "",
+                operationNumber = "ON#1",
                 tripNumber = "345",
                 reportId = "REPORT_ID#1",
+                flagState = "FRA",
                 operationType = LogbookOperationType.DAT,
                 messageType = "FAR",
                 software = "TurboCatch (3.7-1)",
@@ -223,9 +224,10 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 1,
-                operationNumber = "",
+                operationNumber = "ON#2",
                 tripNumber = "345",
                 reportId = "REPORT_ID#2",
+                flagState = "FRA",
                 operationType = LogbookOperationType.DAT,
                 messageType = "DEP",
                 software = "e-Sacapt Secours ERSV3 V 1.0.10",
@@ -249,9 +251,10 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 3,
-                operationNumber = "",
+                operationNumber = "ON#3",
                 tripNumber = "345",
                 reportId = "REPORT_ID#3",
+                flagState = "FRA",
                 operationType = LogbookOperationType.DAT,
                 messageType = "PNO",
                 software = "e-Sacapt Secours ERSV3 V 1.0.7",
@@ -275,9 +278,10 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 3,
-                operationNumber = "",
+                operationNumber = "ON#4",
                 tripNumber = "345",
                 reportId = "REPORT_ID#4",
+                flagState = "FRA",
                 operationType = LogbookOperationType.DAT,
                 messageType = "COE",
                 software = "e-Sacapt Secours ERSV3 V 1.0.7",
@@ -301,9 +305,10 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 4,
-                operationNumber = "",
+                operationNumber = "ON#4",
                 tripNumber = "345",
                 reportId = "REPORT_ID#4",
+                flagState = "FRA",
                 operationType = LogbookOperationType.DAT,
                 messageType = "COX",
                 software = "e-Sacapt Secours ERSV3 V 1.0.7",
@@ -319,9 +324,10 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 5,
-                operationNumber = "",
+                operationNumber = "ON#5",
                 tripNumber = "345",
                 reportId = "REPORT_ID#5",
+                flagState = "FRA",
                 operationType = LogbookOperationType.DAT,
                 messageType = "CPS",
                 software = "",
@@ -338,7 +344,7 @@ object TestUtils {
         )
     }
 
-    fun getDummyFluxAndVisioCaptureLogbookMessages(): List<LogbookMessage> {
+    fun getDummyLogbookMessagesFromFlagStatesWithoutRET(): List<LogbookMessage> {
         val gearOne = LogbookTripGear()
         gearOne.gear = "OTB"
         val gearTwo = LogbookTripGear()
@@ -370,9 +376,10 @@ object TestUtils {
         return listOf(
             LogbookMessage(
                 id = 1,
-                operationNumber = "",
+                operationNumber = "ON_1",
                 tripNumber = "345",
-                reportId = "",
+                reportId = "ON_1",
+                flagState = "BEL",
                 operationType = LogbookOperationType.DAT,
                 messageType = "DEP",
                 software = "FT/VISIOCaptures V1.4.7",
@@ -396,9 +403,10 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 2,
-                operationNumber = "",
-                tripNumber = "345",
-                reportId = "",
+                operationNumber = "ON_2",
+                tripNumber = "346",
+                reportId = "ON_2",
+                flagState = "GBR",
                 operationType = LogbookOperationType.DAT,
                 messageType = "FAR",
                 software = "FP/VISIOCaptures V1.4.7",
@@ -422,9 +430,10 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 3,
-                operationNumber = "",
+                operationNumber = "ON_3",
                 tripNumber = "345",
-                reportId = "",
+                reportId = "ON_3",
+                flagState = "BEL",
                 operationType = LogbookOperationType.DAT,
                 messageType = "PNO",
                 software = "TurboCatch (3.6-1)",
@@ -548,22 +557,21 @@ object TestUtils {
         haulTwo.mesh = 120.0
         farTwo.hauls = listOf(haulTwo)
 
-        val farAck =
-            Acknowledgment().apply {
-                returnStatus = "000"
-            }
+        val okAck =
+            Acknowledgment(returnStatus = "000")
 
-        val farBadAck =
-            Acknowledgment().apply {
-                returnStatus = "002"
+        val nokAck =
+            Acknowledgment(
+                returnStatus = "002",
                 rejectionCause = "Oops"
-            }
+            )
 
         return listOf(
             LogbookMessage(
                 id = 1,
-                operationNumber = "",
+                operationNumber = "9065646811",
                 tripNumber = "345",
+                flagState = "FRA",
                 reportId = "9065646811",
                 operationType = LogbookOperationType.DAT,
                 messageType = "FAR",
@@ -587,12 +595,12 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 2,
-                operationNumber = "",
-                reportId = "9065646816",
+                operationNumber = "2222222222",
+                reportId = null,
                 referencedReportId = "9065646811",
                 operationType = LogbookOperationType.RET,
                 messageType = "",
-                message = farBadAck,
+                message = nokAck,
                 reportDateTime =
                     ZonedDateTime
                         .of(
@@ -612,11 +620,12 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 3,
-                operationNumber = "",
+                operationNumber = "9065646813",
                 tripNumber = "345",
                 reportId = "9065646813",
                 operationType = LogbookOperationType.DAT,
                 messageType = "FAR",
+                flagState = "FRA",
                 message = farTwo,
                 reportDateTime =
                     ZonedDateTime
@@ -637,12 +646,12 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 4,
-                operationNumber = "",
-                reportId = "9065646818",
+                operationNumber = "4444444444",
+                reportId = null,
                 referencedReportId = "9065646813",
                 operationType = LogbookOperationType.RET,
                 messageType = "",
-                message = farAck,
+                message = okAck,
                 reportDateTime =
                     ZonedDateTime
                         .of(
@@ -662,12 +671,12 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 5,
-                operationNumber = "",
-                reportId = "90656468131",
+                operationNumber = "90656468131",
+                reportId = null,
                 referencedReportId = "9065646813",
                 operationType = LogbookOperationType.DEL,
                 messageType = "",
-                message = farAck,
+                message = okAck,
                 reportDateTime =
                     ZonedDateTime
                         .of(
@@ -687,12 +696,12 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 7,
-                operationNumber = "",
-                reportId = "90656468132",
+                operationNumber = "7777777777",
+                reportId = null,
                 referencedReportId = "90656468131",
                 operationType = LogbookOperationType.RET,
                 messageType = "",
-                message = farAck,
+                message = okAck,
                 reportDateTime =
                     ZonedDateTime
                         .of(
@@ -718,6 +727,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DAT,
                 messageType = "FAR",
                 message = far,
+                flagState = "BEL",
                 reportDateTime =
                     ZonedDateTime
                         .of(
@@ -977,8 +987,7 @@ object TestUtils {
         far.hauls = listOf(haul)
 
         // RET for FAR (success)
-        val farAck = Acknowledgment()
-        farAck.returnStatus = "000"
+        val farAck = Acknowledgment(returnStatus = "000")
 
         // COR message (corrected FAR with more catches)
         val corCatch1 = LogbookFishingCatch()
@@ -1064,8 +1073,7 @@ object TestUtils {
         correctedFar.hauls = listOf(correctedHaul)
 
         // RET for COR (success)
-        val corAck = Acknowledgment()
-        corAck.returnStatus = "000"
+        val corAck = Acknowledgment(returnStatus = "000")
 
         // DIS message
         val disCatch1 = LogbookFishingCatch()
@@ -1095,8 +1103,7 @@ object TestUtils {
         dis.discardDateTime = ZonedDateTime.of(2019, 10, 17, 11, 45, 0, 0, UTC)
 
         // RET for DIS (success)
-        val disAck = Acknowledgment()
-        disAck.returnStatus = "000"
+        val disAck = Acknowledgment(returnStatus = "000")
 
         // EOF message
         val eof = EOF()
@@ -1143,8 +1150,7 @@ object TestUtils {
         pno.predictedArrivalDatetimeUtc = ZonedDateTime.of(2019, 10, 21, 8, 16, 0, 0, UTC)
 
         // RET for PNO (success)
-        val pnoAck = Acknowledgment()
-        pnoAck.returnStatus = "000"
+        val pnoAck = Acknowledgment(returnStatus = "000")
 
         // RTP message
         val rtp = RTP()
@@ -1154,12 +1160,13 @@ object TestUtils {
         rtp.dateTime = ZonedDateTime.of(2019, 10, 21, 11, 12, 0, 0, UTC)
 
         // RET for RTP (error)
-        val rtpAck = Acknowledgment()
-        rtpAck.returnStatus = "002"
-        rtpAck.rejectionCause =
-            "002 MGEN02 Message incorrect : la date/heure de l'événement RTP n° OOF20201105037001 " +
-            "est postérieure à la date/heure courante. Veuillez vérifier la date/heure de " +
-            "l'événement déclaré et renvoyer votre message."
+        val rtpAck = Acknowledgment(
+            returnStatus = "002",
+            rejectionCause =
+                "002 MGEN02 Message incorrect : la date/heure de l'événement RTP n° OOF20201105037001 " +
+                "est postérieure à la date/heure courante. Veuillez vérifier la date/heure de " +
+                "l'événement déclaré et renvoyer votre message."
+        )
 
         // LAN message
         val lanCatch1 = LogbookFishingCatch()
@@ -1263,12 +1270,10 @@ object TestUtils {
         cps.longitude = -2.741
 
         // RET for LAN (success)
-        val lanAck = Acknowledgment()
-        lanAck.returnStatus = "000"
+        val lanAck = Acknowledgment(returnStatus = "000")
 
         // RET for DEL (success)
-        val delAck = Acknowledgment()
-        delAck.returnStatus = "000"
+        val delAck = Acknowledgment(returnStatus = "000")
 
         return listOf(
             // DEP
@@ -1280,6 +1285,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DAT,
                 messageType = "DEP",
                 message = dep,
+                flagState = "FRA",
                 reportDateTime = ZonedDateTime.of(2019, 10, 11, 2, 6, 0, 0, UTC),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.of(2021, 1, 18, 7, 17, 28, 888437000, UTC),
@@ -1296,6 +1302,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DAT,
                 messageType = "COX",
                 message = cox,
+                flagState = "FRA",
                 reportDateTime = ZonedDateTime.of(2019, 10, 15, 11, 23, 0, 0, UTC),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.of(2021, 1, 18, 7, 17, 18, 982560000, UTC),
@@ -1312,6 +1319,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DAT,
                 messageType = "COE",
                 message = coe,
+                flagState = "FRA",
                 reportDateTime = ZonedDateTime.of(2019, 10, 17, 1, 32, 0, 0, UTC),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.of(2021, 1, 18, 7, 17, 18, 324128000, UTC),
@@ -1328,6 +1336,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DAT,
                 messageType = "CRO",
                 message = cro,
+                flagState = "FRA",
                 reportDateTime = ZonedDateTime.of(2019, 10, 17, 1, 33, 0, 0, UTC),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.of(2021, 1, 18, 7, 17, 18, 324128000, UTC),
@@ -1344,6 +1353,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DAT,
                 messageType = "FAR",
                 message = far,
+                flagState = "FRA",
                 reportDateTime = ZonedDateTime.of(2019, 10, 17, 11, 32, 0, 0, UTC),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.of(2021, 1, 18, 7, 17, 27, 384921000, UTC),
@@ -1354,9 +1364,9 @@ object TestUtils {
             // RET for FAR
             LogbookMessage(
                 id = 6,
-                operationNumber = "",
+                operationNumber = "OOF20103048326985",
                 tripNumber = null,
-                reportId = "OOF20103048326985",
+                reportId = null,
                 referencedReportId = "OOF20191030059902",
                 operationType = LogbookOperationType.RET,
                 messageType = "",
@@ -1378,6 +1388,7 @@ object TestUtils {
                 operationType = LogbookOperationType.COR,
                 messageType = "FAR",
                 message = correctedFar,
+                flagState = "FRA",
                 reportDateTime = ZonedDateTime.of(2019, 10, 30, 11, 32, 0, 0, UTC),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.of(2021, 1, 18, 7, 19, 27, 384921000, UTC),
@@ -1388,9 +1399,9 @@ object TestUtils {
             // RET for COR
             LogbookMessage(
                 id = 8,
-                operationNumber = "",
+                operationNumber = "OOF19103048321388",
                 tripNumber = null,
-                reportId = "OOF19103048321388",
+                reportId = null,
                 referencedReportId = "OOF20191030059903",
                 operationType = LogbookOperationType.RET,
                 messageType = "",
@@ -1411,6 +1422,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DAT,
                 messageType = "DIS",
                 message = dis,
+                flagState = "FRA",
                 reportDateTime = ZonedDateTime.of(2019, 10, 30, 11, 38, 0, 0, UTC),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.of(2021, 1, 18, 7, 17, 27, 384921000, UTC),
@@ -1421,9 +1433,9 @@ object TestUtils {
             // RET for DIS
             LogbookMessage(
                 id = 10,
-                operationNumber = "",
+                operationNumber = "OOF22103048326325",
                 tripNumber = null,
-                reportId = "OOF22103048326325",
+                reportId = null,
                 referencedReportId = "OOF20191030059909",
                 operationType = LogbookOperationType.RET,
                 messageType = "",
@@ -1444,6 +1456,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DAT,
                 messageType = "EOF",
                 message = eof,
+                flagState = "FRA",
                 reportDateTime = ZonedDateTime.of(2019, 12, 3, 12, 16, 0, 0, UTC),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.of(2021, 1, 18, 7, 17, 26, 736456000, UTC),
@@ -1460,6 +1473,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DAT,
                 messageType = "PNO",
                 message = pno,
+                flagState = "FRA",
                 reportDateTime = ZonedDateTime.of(2019, 10, 11, 8, 16, 0, 0, UTC),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.of(2021, 1, 18, 7, 17, 19, 42440000, UTC),
@@ -1470,9 +1484,9 @@ object TestUtils {
             // RET for PNO
             LogbookMessage(
                 id = 13,
-                operationNumber = "",
+                operationNumber = "OOF22113048321388",
                 tripNumber = null,
-                reportId = "OOF22113048321388",
+                reportId = null,
                 referencedReportId = "OOF20191011059902",
                 operationType = LogbookOperationType.RET,
                 messageType = "",
@@ -1493,6 +1507,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DAT,
                 messageType = "RTP",
                 message = rtp,
+                flagState = "FRA",
                 reportDateTime = ZonedDateTime.of(2019, 8, 30, 11, 12, 0, 0, UTC),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.of(2021, 1, 18, 7, 17, 20, 7244000, UTC),
@@ -1503,9 +1518,9 @@ object TestUtils {
             // RET for RTP (error)
             LogbookMessage(
                 id = 15,
-                operationNumber = "",
+                operationNumber = "OOF20190830059966",
                 tripNumber = null,
-                reportId = "OOF20190830059966",
+                reportId = null,
                 referencedReportId = "OOF20190830059906",
                 operationType = LogbookOperationType.RET,
                 messageType = "",
@@ -1526,6 +1541,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DAT,
                 messageType = "LAN",
                 message = lan,
+                flagState = "FRA",
                 reportDateTime = ZonedDateTime.of(2019, 6, 27, 11, 6, 0, 0, UTC),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.of(2021, 1, 18, 9, 17, 28, 271700000, UTC),
@@ -1542,6 +1558,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DAT,
                 messageType = "CPS",
                 message = cps,
+                flagState = "FRA",
                 reportDateTime = ZonedDateTime.of(2019, 10, 11, 1, 6, 0, 0, UTC),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.of(2019, 10, 11, 1, 17, 28, 271700000, UTC),
@@ -1552,9 +1569,9 @@ object TestUtils {
             // RET for LAN
             LogbookMessage(
                 id = 18,
-                operationNumber = "",
+                operationNumber = "OOF221030483213993",
                 tripNumber = null,
-                reportId = "OOF221030483213993",
+                reportId = null,
                 referencedReportId = "OOF20190627059908",
                 operationType = LogbookOperationType.RET,
                 messageType = "",
@@ -1569,9 +1586,9 @@ object TestUtils {
             // DEL
             LogbookMessage(
                 id = 19,
-                operationNumber = "",
+                operationNumber = "OOF22103048321399",
                 tripNumber = null,
-                reportId = "OOF22103048321399",
+                reportId = null,
                 referencedReportId = "OOF20190627059908",
                 operationType = LogbookOperationType.DEL,
                 messageType = "",
@@ -1586,9 +1603,9 @@ object TestUtils {
             // RET for DEL
             LogbookMessage(
                 id = 20,
-                operationNumber = "",
+                operationNumber = "OOF221030483213994",
                 tripNumber = null,
-                reportId = "OOF221030483213994",
+                reportId = null,
                 referencedReportId = "OOF22103048321399",
                 operationType = LogbookOperationType.RET,
                 messageType = "",

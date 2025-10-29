@@ -61,8 +61,6 @@ class LogbookMessageUTests {
 
         // Then
         assertThat(logbookMessage.acknowledgment?.isSuccess).isTrue()
-        assertThat(logbookMessage.acknowledgment?.dateTime)
-            .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC))
     }
 
     @Test
@@ -86,8 +84,6 @@ class LogbookMessageUTests {
 
         // Then
         assertThat(logbookMessage.acknowledgment?.isSuccess).isFalse()
-        assertThat(logbookMessage.acknowledgment?.dateTime)
-            .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC))
     }
 
     @Test
@@ -101,14 +97,13 @@ class LogbookMessageUTests {
                 acknowledgment =
                     Acknowledgment(
                         isSuccess = false,
-                        dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
                     ),
             )
         val firstNewAcknowledgmentMessage =
             getFakeLogbookMessage(
                 LogbookOperationType.RET,
-                ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
-                firstLogbookMessage.reportId,
+                null,
+                firstLogbookMessage.operationNumber,
                 Acknowledgment(returnStatus = "000"),
             )
 
@@ -117,8 +112,6 @@ class LogbookMessageUTests {
 
         // Then
         assertThat(firstLogbookMessage.acknowledgment?.isSuccess).isTrue()
-        assertThat(firstLogbookMessage.acknowledgment?.dateTime)
-            .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
 
         // Given
         val secondLogbookMessage =
@@ -129,13 +122,12 @@ class LogbookMessageUTests {
                 acknowledgment =
                     Acknowledgment(
                         isSuccess = false,
-                        dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC),
                     ),
             )
         val secondNewAcknowledgmentMessage =
             getFakeLogbookMessage(
                 LogbookOperationType.RET,
-                ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
+                null,
                 secondLogbookMessage.reportId,
                 Acknowledgment(returnStatus = "000"),
             )
@@ -145,142 +137,6 @@ class LogbookMessageUTests {
 
         // Then
         assertThat(secondLogbookMessage.acknowledgment?.isSuccess).isTrue()
-        assertThat(secondLogbookMessage.acknowledgment?.dateTime)
-            .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
     }
 
-    @Test
-    fun `setAcknowledge should update to a new acknowledgement when it's more recent FAILED one than the current FAILED one`() {
-        // Given
-        val logbookMessage =
-            getFakeLogbookMessage(
-                LogbookOperationType.DAT,
-                ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
-            ).copy(
-                acknowledgment =
-                    Acknowledgment(
-                        isSuccess = false,
-                        dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
-                        returnStatus = "001",
-                    ),
-            )
-        val firstNewAcknowledgmentMessage =
-            getFakeLogbookMessage(
-                LogbookOperationType.RET,
-                ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC),
-                logbookMessage.reportId,
-                Acknowledgment(returnStatus = "002"),
-            )
-
-        // When
-        logbookMessage.setAcknowledge(firstNewAcknowledgmentMessage)
-
-        // Then
-        assertThat(logbookMessage.acknowledgment?.isSuccess).isFalse()
-        assertThat(logbookMessage.acknowledgment?.dateTime)
-            .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC))
-        assertThat(logbookMessage.acknowledgment?.returnStatus).isEqualTo("002")
-
-        // Given
-        val secondNewAcknowledgmentMessage =
-            getFakeLogbookMessage(
-                LogbookOperationType.RET,
-                ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
-                logbookMessage.reportId,
-                Acknowledgment(returnStatus = "001"),
-            )
-
-        // When
-        logbookMessage.setAcknowledge(secondNewAcknowledgmentMessage)
-
-        // Then
-        assertThat(logbookMessage.acknowledgment?.isSuccess).isFalse()
-        assertThat(logbookMessage.acknowledgment?.dateTime)
-            .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC))
-        assertThat(logbookMessage.acknowledgment?.returnStatus).isEqualTo("002")
-    }
-
-    @Test
-    fun `setAcknowledge should NOT update to a new acknowledgement when it's more recent SUCCESSFUL one than the current SUCCESSFUL one`() {
-        // Given
-        val logbookMessage =
-            getFakeLogbookMessage(
-                LogbookOperationType.DAT,
-                ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
-            ).copy(
-                acknowledgment =
-                    Acknowledgment(
-                        isSuccess = true,
-                        dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
-                        returnStatus = "000",
-                    ),
-            )
-        val newAcknowledgmentMessage =
-            getFakeLogbookMessage(
-                LogbookOperationType.RET,
-                ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
-                logbookMessage.reportId,
-                Acknowledgment(returnStatus = "000"),
-            )
-
-        // When
-        logbookMessage.setAcknowledge(newAcknowledgmentMessage)
-
-        // Then
-        assertThat(logbookMessage.acknowledgment?.isSuccess).isTrue()
-        assertThat(logbookMessage.acknowledgment?.dateTime)
-            .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC))
-        assertThat(logbookMessage.acknowledgment?.returnStatus).isEqualTo("000")
-    }
-
-    @Test
-    fun `enrich Should enrich a correction message And update isCorrectedByNewerMessage of the corrected message`() {
-        // Given
-        val correctionMessage = dummyFarMessages.first()
-        val correctedMessage = dummyFarMessages.last()
-
-        // When
-        correctionMessage.enrich(dummyFarMessages, listOf(), listOf(), listOf())
-
-        // Then
-        assertThat(correctionMessage.isCorrectedByNewerMessage).isEqualTo(false)
-        assertThat(correctedMessage.isCorrectedByNewerMessage).isEqualTo(true)
-        assertThat(correctionMessage.acknowledgment?.isSuccess).isEqualTo(true)
-    }
-
-    @Test
-    fun `enrich Should enrich a corrected message`() {
-        // Given
-        val correctedMessage = dummyFarMessages.last()
-
-        // When
-        correctedMessage.enrich(dummyFarMessages, listOf(), listOf(), listOf())
-
-        // Then
-        assertThat(correctedMessage.isCorrectedByNewerMessage).isEqualTo(false)
-        assertThat(correctedMessage.acknowledgment?.isSuccess).isEqualTo(true)
-    }
-
-    @Test
-    fun `enrich Should enrich corrected LAN messages`() {
-        // When
-        dummyCorrectedLanMessages.forEach { it.enrich(dummyCorrectedLanMessages, listOf(), listOf(), listOf()) }
-
-        val farAndCorMessages =
-            dummyCorrectedLanMessages.filter {
-                listOf(
-                    LogbookOperationType.DAT,
-                    LogbookOperationType.COR,
-                ).contains(it.operationType)
-            }
-
-        // Then
-        assertThat(farAndCorMessages.first().reportId).isEqualTo("OOF20190430059907")
-        assertThat(farAndCorMessages.first().isCorrectedByNewerMessage).isEqualTo(true)
-        assertThat(farAndCorMessages.first().acknowledgment?.isSuccess).isEqualTo(true)
-
-        assertThat(farAndCorMessages.last().reportId).isEqualTo("OOF69850430059918")
-        assertThat(farAndCorMessages.last().isCorrectedByNewerMessage).isEqualTo(false)
-        assertThat(farAndCorMessages.last().acknowledgment?.isSuccess).isEqualTo(true)
-    }
 }

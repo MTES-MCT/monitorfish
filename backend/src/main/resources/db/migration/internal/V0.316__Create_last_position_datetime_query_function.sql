@@ -1,18 +1,15 @@
 CREATE OR REPLACE FUNCTION find_last_datetime_in_positions_table()
-RETURNS TABLE (
-    last_datetime_utc TIMESTAMP WITHOUT TIME ZONE
-) AS $$
+RETURNS TIMESTAMP WITHOUT TIME ZONE
+AS $$
+    DECLARE last_datetime_in_positions_table TIMESTAMP WITHOUT TIME ZONE;
     BEGIN
-        RETURN QUERY
-        SELECT
-            date_time
-        FROM
-            positions
+        SELECT date_time INTO last_datetime_in_positions_table
+        FROM positions
         WHERE
-            date_time > NOW() - INTERVAL '1 month' AND
-            date_time < now()
+            date_time > NOW() AT TIME ZONE 'UTC' - INTERVAL '1 month' AND
+            date_time < NOW() AT TIME ZONE 'UTC'
         ORDER BY date_time DESC
-        limit 1;
-        RETURN;
+        LIMIT 1;
+        RETURN last_datetime_in_positions_table;
     END;
 $$ LANGUAGE plpgsql;

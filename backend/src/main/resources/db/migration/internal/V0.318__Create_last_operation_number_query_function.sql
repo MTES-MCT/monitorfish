@@ -1,20 +1,15 @@
-CREATE OR REPLACE FUNCTION find_last_operation_number(
-    searched_cfr VARCHAR
-)
-RETURNS TABLE (
-    last_operation_number VARCHAR
-) AS $$
+CREATE OR REPLACE FUNCTION find_last_operation_number(searched_cfr VARCHAR)
+RETURNS VARCHAR
+AS $$
+    DECLARE last_operation_number VARCHAR;
     BEGIN
-        RETURN QUERY
-        SELECT
-            operation_number
-        FROM
-            logbook_reports
+        SELECT operation_number INTO last_operation_number
+        FROM logbook_reports
         WHERE
             cfr = searched_cfr AND
-            operation_datetime_utc < now()
+            operation_datetime_utc < NOW() AT TIME ZONE 'UTC'
         ORDER BY operation_datetime_utc DESC
         LIMIT 1;
-        RETURN;
+        RETURN last_operation_number;
     END;
 $$ LANGUAGE plpgsql;

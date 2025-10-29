@@ -250,57 +250,14 @@ interface DBLogbookReportRepository :
     ): Instant
 
     @Query(
-        """WITH dat_cor AS (
-           SELECT *
-           FROM logbook_reports
-           WHERE
-               operation_datetime_utc >= cast(:afterDateTime AS timestamp) AND
-               operation_datetime_utc <= cast(:beforeDateTime AS timestamp) AND
-               cfr = :internalReferenceNumber AND
-               trip_number = :tripNumber AND
-               operation_type IN ('DAT', 'COR')
-               AND NOT is_test_message
-           ORDER BY operation_datetime_utc DESC
-        ),
-        ret AS (
-           select *
-           FROM logbook_reports
-           WHERE
-               referenced_report_id IN (select operation_number FROM dat_cor) AND
-               operation_datetime_utc >= cast(:afterDateTime AS timestamp) - INTERVAL '1 day' AND
-               operation_datetime_utc < cast(:beforeDateTime AS timestamp) + INTERVAL '3 days' AND
-               operation_type = 'RET'
-               AND NOT is_test_message
-           ORDER BY operation_datetime_utc DESC
-        ),
-        del AS (
-           SELECT *
-           FROM logbook_reports
-           WHERE
-               referenced_report_id IN (select report_id FROM dat_cor) AND
-               operation_datetime_utc >= cast(:afterDateTime AS timestamp) AND
-               operation_datetime_utc < cast(:beforeDateTime AS timestamp) + INTERVAL '1 week' AND
-               operation_type = 'DEL'
-               AND NOT is_test_message
-           ORDER BY operation_datetime_utc desc
-        ),
-        del_ret AS (
-           select *
-           FROM logbook_reports
-           WHERE
-               referenced_report_id IN (select operation_number FROM del) AND
-               operation_datetime_utc >= cast(:afterDateTime AS timestamp) - INTERVAL '1 day' AND
-               operation_datetime_utc < cast(:beforeDateTime AS timestamp) + INTERVAL '1 week' AND
-               operation_type = 'RET'
-               AND NOT is_test_message
-           ORDER BY operation_datetime_utc DESC
-        )
+        """
         SELECT *
-        FROM dat_cor
-        UNION ALL SELECT * from ret
-        UNION ALL SELECT * from del
-        UNION ALL SELECT * from del_ret
-        """,
+        FROM find_logbook_by_trip_number(
+            :internalReferenceNumber,
+            :afterDateTime,
+            :beforeDateTime,
+            :tripNumber
+        )""",
         nativeQuery = true,
     )
     fun findAllMessagesByTripNumberBetweenDates(

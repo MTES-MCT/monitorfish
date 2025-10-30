@@ -43,7 +43,7 @@ function getAllRegulatoryLayersFromAPI(fromBackoffice): Promise<Regulation.Regul
 
   return fetch(
     `${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-      `${LayerProperties.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
+      `${LayerProperties.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id,tags`
   )
     .then(response => {
       if (response.status === HttpStatusCode.OK) {
@@ -230,7 +230,7 @@ export function getRegulatoryZonesInExtentFromAPI(
       `${geoserverURL}/geoserver/wfs?service=WFS` +
         `&version=1.1.0&request=GetFeature&typename=monitorfish:${LayerProperties.REGULATORY.code}` +
         `&outputFormat=application/json&srsname=${WSG84_PROJECTION}` +
-        `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}${'&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region'
+        `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}${'&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,tags'
           .replace(/'/g, '%27')
           .replace(/\(/g, '%28')
           .replace(/\)/g, '%29')

@@ -1,5 +1,6 @@
 import { getVesselsFromFile } from '@features/VesselGroup/components/EditFixedVesselGroupDialog/utils'
 import { Icon } from '@mtes-mct/monitor-ui'
+import { useState } from 'react'
 import { Uploader } from 'rsuite'
 import styled from 'styled-components'
 
@@ -8,8 +9,11 @@ import type { FileType } from 'rsuite/esm/Uploader/Uploader'
 
 type UploadVesselFileProps = Readonly<{
   onChange: (vessels: VesselIdentityForVesselGroup[]) => void
+  onRemove: () => void
 }>
-export function UploadVesselFile({ onChange }: UploadVesselFileProps) {
+export function UploadVesselFile({ onChange, onRemove }: UploadVesselFileProps) {
+  const [isDisabled, setIsDisabled] = useState(false)
+
   const onUpload = async (fileList: FileType[]) => {
     const fileType = fileList[0]
     if (!fileType) {
@@ -18,16 +22,30 @@ export function UploadVesselFile({ onChange }: UploadVesselFileProps) {
 
     const vessels = await getVesselsFromFile(fileType.blobFile as File)
     onChange(vessels)
+    setIsDisabled(true)
+  }
+
+  const onRemoveFile = async () => {
+    onRemove()
+    setIsDisabled(false)
   }
 
   return (
     <Wrapper>
-      <Uploader action="" autoUpload={false} draggable fileListVisible={false} onChange={onUpload}>
+      <StyledUploader
+        action=""
+        autoUpload={false}
+        disabled={isDisabled}
+        draggable
+        multiple={false}
+        onChange={onUpload}
+        onRemove={onRemoveFile}
+      >
         <File>
           <Icon.Download size={16} />
           Ajouter une liste de navires
         </File>
-      </Uploader>
+      </StyledUploader>
     </Wrapper>
   )
 }
@@ -40,7 +58,20 @@ const Wrapper = styled.div`
     cursor: pointer;
   }
 `
-
+const StyledUploader = styled(Uploader)`
+  > .rs-uploader-file-items {
+    display: flex;
+    .rs-uploader-file-item {
+      background-color: ${p => p.theme.color.gainsboro};
+      display: flex;
+      flex: 1;
+      > button {
+        display: flex;
+        align-items: end;
+      }
+    }
+  }
+`
 const File = styled.div`
   color: ${p => p.theme.color.charcoal};
   padding: 5px 90px;

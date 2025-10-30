@@ -23,15 +23,12 @@ export function TrackDepthSelection({ className, defaultValue, label, name, onCh
   return (
     <ColumnsBox ref={ref} className={className}>
       <StyledSelect
-        // @ts-ignore we override the existing ref to appear on top of other components
-        container={() => ref.current as any}
         isCleanable={false}
         isErrorMessageHidden
         label={label}
         name={name}
         onChange={nextValue => onChange(nextValue as SelectableVesselTrackDepth | undefined)}
         options={SELECT_TRACK_DEPTH_OPTIONS}
-        placement="autoVerticalStart"
         value={normalizedDefaultValue}
       />
     </ColumnsBox>

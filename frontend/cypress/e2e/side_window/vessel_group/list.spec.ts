@@ -32,6 +32,10 @@ context('Side Window > Vessel Group List', () => {
     cy.get('[title="Groupes dynamiques"]').click()
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 
+    cy.get('[title="Groupes fixes"]').click()
+    cy.get('[title="Groupes dynamiques"]').click()
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
+
     /**
      * Filter by sharing
      */
@@ -42,6 +46,10 @@ context('Side Window > Vessel Group List', () => {
 
     cy.get('[title="Groupes partagés"]').click()
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
+    cy.get('[title="Groupes partagés"]').click()
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
+
+    cy.get('[title="Groupes personnels"]').click()
     cy.get('[title="Groupes partagés"]').click()
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 

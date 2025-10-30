@@ -17,8 +17,8 @@ export function useGetVesselGroups(filteredGroupTypes: GroupType[], filteredShar
 
     const filteredVesselGroups =
       vesselGroups
-        ?.filter(vesselGroup => filteredGroupTypes.includes(vesselGroup.type))
-        ?.filter(vesselGroup => filteredSharing.includes(vesselGroup.sharing)) ?? []
+        ?.filter(vesselGroup => filteredGroupTypes.includes(vesselGroup.type) || filteredGroupTypes.length === 0)
+        ?.filter(vesselGroup => filteredSharing.includes(vesselGroup.sharing) || filteredSharing.length === 0) ?? []
 
     const pinnedVesselGroups = filteredVesselGroups.filter(vesselGroup =>
       vesselGroupsIdsPinned.includes(vesselGroup.id)

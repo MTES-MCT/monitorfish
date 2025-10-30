@@ -15857,7 +15857,8 @@
             "next_id": null,
             "topic": "Ouest Cotentin Bivalves",
             "law_type": "Reg. MEMN",
-            "other_info": "Encore une info importante"
+            "other_info": "Encore une info importante",
+            "tags": "['ZPF']"
           },
           "bbox": [-2.6721, 48.5983, -1.3524, 49.7226]
         }

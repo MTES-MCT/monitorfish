@@ -10,6 +10,7 @@ SELECT
     species,
     regulatory_references,
     ST_CurveToLine(geometry) AS geometry,
+    tags,
     geometry_simplified,
     row_hash
 FROM prod.regulations

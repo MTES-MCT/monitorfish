@@ -15855,6 +15855,7 @@
             "zone": "Secteur 3",
             "region": "Normandie, Bretagne",
             "next_id": null,
+            "tags": ["ARP"],
             "topic": "Armor CSJ Dragues",
             "law_type": "Reg. MEMN"
           },

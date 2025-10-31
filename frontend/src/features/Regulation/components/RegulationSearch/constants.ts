@@ -15,7 +15,8 @@ export const REGULATION_SEARCH_OPTIONS: IFuseOptions<RegulatoryZone> = {
     ['speciesRegulation', 'unauthorized', 'species', 'name'],
     ['speciesRegulation', 'authorized', 'species', 'code'],
     ['speciesRegulation', 'unauthorized', 'species', 'code'],
-    ['region']
+    ['region'],
+    ['tags']
   ],
   minMatchCharLength: 2,
   threshold: 0.2

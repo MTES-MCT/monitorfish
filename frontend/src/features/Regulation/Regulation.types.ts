@@ -1,4 +1,4 @@
-import type { RegulatoryZone } from './types'
+import type { RegulatoryTags, RegulatoryZone } from './types'
 import type { Feature, FeatureCollection, Polygon } from 'geojson'
 
 export namespace Regulation {
@@ -38,7 +38,8 @@ export namespace Regulation {
    *      topic: 'Etang de Thau-Ingril Mèze',
    *      upcomingRegulatoryReferences: undefined,
    *      zone: 'Etang de Thau-Ingrill_Drague-à-main',
-   *      next_id: undefined
+   *      next_id: undefined,
+   *      tags: ["ARP"]
    *     }
    *   ]
    *   'Glénan_CSJ_Dragues': (1) […],
@@ -67,6 +68,7 @@ export namespace Regulation {
     region: string | undefined
     regulatory_references: string | undefined
     species?: string | undefined
+    tags: RegulatoryTags[] | undefined
     topic: string | undefined
     zone: string | undefined
   }
@@ -82,6 +84,7 @@ export namespace Regulation {
     region: string
     regulatory_references: string | undefined
     species: string | undefined
+    tags: RegulatoryTags[] | undefined
     topic: string
     zone: string
   }

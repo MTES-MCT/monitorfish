@@ -54,7 +54,8 @@
             "facade": "MEMN",
             "region": "Normandie, Bretagne",
             "next_id": null,
-            "law_type": "Reg. MEMN"
+            "law_type": "Reg. MEMN",
+            "tags": null
           },
           "bbox": [48.5983, -2.6721, 49.7226, -1.3524]
         },
@@ -81,7 +82,8 @@
             "zone": "Secteur 3",
             "facade": "NAMO",
             "region": "Bretagne",
-            "law_type": "Reg. MEMN"
+            "law_type": "Reg. MEMN",
+            "tags": ["ZPF"]
           },
           "bbox": [48.5536, -2.7833, 49.0387, -2.1888]
         }

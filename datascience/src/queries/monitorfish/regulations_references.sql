@@ -2,5 +2,6 @@ SELECT
     law_type,
     topic,
     zone,
-    regulatory_references
+    regulatory_references,
+    tags
 FROM regulations

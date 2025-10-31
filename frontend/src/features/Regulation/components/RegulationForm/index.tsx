@@ -40,6 +40,7 @@ import { Footer, FooterButton, OtherRemark, Section, Title } from '../../../comm
 import { CancelButton, ValidateButton } from '../../../commonStyles/Buttons.style'
 import ChevronIconSVG from '../../../icons/Chevron_simple_gris.svg?react'
 import { STATUS } from '../RegulationTables/constants'
+import { RegulationTags } from './identification/RegulationTags'
 
 import type { BackofficeAppPromiseThunk } from '@store'
 import type { Polygon } from 'geojson'
@@ -261,6 +262,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
                   isRegulatoryPreviewDisplayed={isRegulatoryPreviewDisplayed}
                   setIsRegulatoryPreviewDisplayed={setIsRegulatoryPreviewDisplayed}
                 />
+                <RegulationTags />
               </Section>
               <RegulatoryTextSection regulatoryTextList={regulatoryReferences} saveForm={saveOrUpdateRegulation} />
               <FishingPeriodSection />

@@ -20,6 +20,7 @@ export type RegulatoryZone = BaseRegulatoryZone & {
   regulatoryReferences: RegulatoryText[] | undefined
   showed?: boolean
   speciesRegulation: SpeciesRegulation
+  tags?: RegulatoryTags[]
 }
 
 export type EditedRegulatoryZone = Omit<RegulatoryZone, 'region'> & {
@@ -40,6 +41,11 @@ export type RegulatoryText = {
   textType: any
   // textType: RegulatoryTextType
   url: string
+}
+
+export enum RegulatoryTags {
+  ARP = 'ARP',
+  ZPF = 'ZPF'
 }
 
 // TODO Remove this type and declare it inline in corresponding variables.

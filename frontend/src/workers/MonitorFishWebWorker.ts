@@ -213,8 +213,10 @@ export class MonitorFishWebWorker {
   } {
     const filteredVesselGroups =
       vesselGroupsWithVessels
-        ?.filter(vesselGroup => filteredGroupTypes.includes(vesselGroup.group.type))
-        ?.filter(vesselGroup => filteredGroupSharing.includes(vesselGroup.group.sharing))
+        ?.filter(vesselGroup => filteredGroupTypes.includes(vesselGroup.group.type) || filteredGroupTypes.length === 0)
+        ?.filter(
+          vesselGroup => filteredGroupSharing.includes(vesselGroup.group.sharing) || filteredGroupSharing.length === 0
+        )
         ?.filter(vesselGroup =>
           vesselGroup.group.endOfValidityUtc && !filteredExpired
             ? customDayjs(vesselGroup.group.endOfValidityUtc).isAfter(customDayjs(), 'day')

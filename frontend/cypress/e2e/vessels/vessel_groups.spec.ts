@@ -251,14 +251,14 @@ context('Vessel groups', () => {
     /**
      * Create the vessel group
      */
-    cy.get('.Component-Dialog').contains('3 navires sélectionnés.')
+    cy.get('.Component-Dialog').contains('3 navires dans le groupe.')
 
     cy.get('input[type=file]').selectFile('cypress/fixtures/groupes_fixes.csv', {
       action: 'drag-drop',
       force: true
     })
 
-    cy.get('.Component-Dialog').contains('4 navires sélectionnés.')
+    cy.get('.Component-Dialog').contains('4 navires dans le groupe.')
 
     cy.get('[title="#8c2c17"]').click()
     cy.fill('Nom du groupe', 'Dolor sit amet')
@@ -284,7 +284,7 @@ context('Vessel groups', () => {
      */
     cy.get('[title=\'Modifier le groupe "Dolor sit amet"\']').click()
     cy.get('.Component-Dialog').contains('Modifier un groupe de navires fixe')
-    cy.get('.Component-Dialog').contains('4 navires sélectionnés.')
+    cy.get('.Component-Dialog').contains('4 navires dans le groupe.')
     // Name of the vessel group
     cy.get('[id="name"]').should('have.value', 'Dolor sit amet')
     cy.get('[id="description"]').should(
@@ -317,14 +317,14 @@ context('Vessel groups', () => {
     cy.clickButton('Créer un nouveau groupe')
     cy.clickButton('Créer un groupe fixe')
 
-    cy.get('.Component-Dialog').contains('0 navire sélectionné.')
+    cy.get('.Component-Dialog').contains('0 navire dans le groupe.')
 
     cy.get('input[type=file]').selectFile('cypress/fixtures/groupes_fixes.csv', {
       action: 'drag-drop',
       force: true
     })
 
-    cy.get('.Component-Dialog').contains('1 navire sélectionné.')
+    cy.get('.Component-Dialog').contains('1 navire dans le groupe.')
 
     cy.get('[title="#8c2c17"]').click()
     cy.fill('Nom du groupe', 'Lorem ipsum')

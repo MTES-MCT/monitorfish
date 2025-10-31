@@ -74,7 +74,7 @@ export function EditFixedVesselGroupDialog({
       <StyledDialogBody>
         <Row>
           <VesselsCount>
-            {numberOfVessels} {pluralize('navire', numberOfVessels)} {pluralize('sélectionné', numberOfVessels)}.
+            {numberOfVessels} {pluralize('navire', numberOfVessels)} dans le groupe.
           </VesselsCount>
           <Example>
             Vous pouvez ajouter des navires après avoir créé le groupe, et/ou charger une liste de navires ci-dessous{' '}
@@ -85,7 +85,10 @@ export function EditFixedVesselGroupDialog({
               title="Un champ CFR, Call Sign ou Marquage externe doit à minima être renseigné pour chaque navire."
             />
           </Example>
-          <UploadVesselFile onChange={nextVessels => setUploadedVessels(nextVessels)} />
+          <UploadVesselFile
+            onChange={nextVessels => setUploadedVessels(nextVessels)}
+            onRemove={() => setUploadedVessels([])}
+          />
         </Row>
         <VesselGroupForm
           editedVesselGroup={editedVesselGroup}

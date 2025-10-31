@@ -46,14 +46,14 @@ export function MapSettings({ isOpened, onClose }) {
       <Header $isCentered>
         <StyledTitle>Paramétrer la longueur par défaut des pistes</StyledTitle>
       </Header>
-      <MapMenuDialog.Body>
+      <StyledMapMenuDialogBody>
         <StyledTrackDepthSelection
           defaultValue={defaultVesselTrackDepth}
           label="Afficher depuis"
           name="global-track-depth"
           onChange={nextValue => dispatch(updateDefaultVesselTrackDepth(nextValue))}
         />
-      </MapMenuDialog.Body>
+      </StyledMapMenuDialogBody>
       <Header $isCentered>
         <StyledTitle>Affichage des étiquettes et notes des navires</StyledTitle>
       </Header>
@@ -114,7 +114,9 @@ const Header = styled(MapMenuDialog.Header)<{
   justify-content: ${p => (p.$isCentered ? 'center' : 'unset')};
   padding-left: ${p => (p.$isCentered ? 0 : 8)}px;
 `
-
+const StyledMapMenuDialogBody = styled(MapMenuDialog.Body)`
+  overflow-y: visible;
+`
 const StyledTitle = styled(MapMenuDialog.Title)``
 
 const CloseButton = styled(MapMenuDialog.CloseButton)`

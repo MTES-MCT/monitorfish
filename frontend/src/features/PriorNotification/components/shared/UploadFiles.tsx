@@ -109,6 +109,7 @@ const Wrapper = styled.div`
   > .rs-uploader {
     > .rs-uploader-file-items {
       > .rs-uploader-file-item {
+        background-color: ${p => p.theme.color.gainsboro};
         > .rs-uploader-file-item-panel {
           cursor: pointer;
         }

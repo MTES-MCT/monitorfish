@@ -39,7 +39,7 @@ export namespace Regulation {
    *      upcomingRegulatoryReferences: undefined,
    *      zone: 'Etang de Thau-Ingrill_Drague-à-main',
    *      next_id: undefined,
-   *      tags: ['ARP']
+   *      tags: ["ARP"]
    *     }
    *   ]
    *   'Glénan_CSJ_Dragues': (1) […],
@@ -68,6 +68,7 @@ export namespace Regulation {
     region: string | undefined
     regulatory_references: string | undefined
     species?: string | undefined
+    tags: RegulatoryTags[] | undefined
     topic: string | undefined
     zone: string | undefined
   }

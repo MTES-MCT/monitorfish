@@ -205,6 +205,7 @@ export const emptyRegulatoryFeatureObject: Regulation.RegulatoryFeatureObject = 
   next_id: undefined,
   region: undefined,
   regulatory_references: undefined,
+  tags: undefined,
   topic: undefined,
   zone: undefined
 }

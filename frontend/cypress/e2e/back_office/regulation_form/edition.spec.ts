@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import {customDayjs} from '../../utils/customDayjs'
+import { customDayjs } from '../../utils/customDayjs'
 
 context('BackOffice > Regulation Form > Edition', () => {
   beforeEach(() => {
@@ -66,8 +66,8 @@ context('BackOffice > Regulation Form > Edition', () => {
     // Given
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
     // complete missing values in form
-    cy.get('[type="checkbox"]').first().check({ force: true })
     cy.get('[type="checkbox"]').eq(2).check({ force: true })
+    cy.get('[type="checkbox"]').eq(4).check({ force: true })
 
     // When save form
     cy.get('[data-cy="regulatory-general-other-info"]').scrollIntoView().type(' et une information générale')
@@ -100,8 +100,8 @@ context('BackOffice > Regulation Form > Edition', () => {
     // Given
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
     // complete missing values in form
-    cy.get('[type="checkbox"]').first().check({ force: true })
-    cy.get('[type="checkbox"]').eq(2).check({ force: true })
+    cy.get('[type="checkbox"]').eq(3).check({ force: true })
+    cy.get('[type="checkbox"]').eq(4).check({ force: true })
     cy.get('*[data-cy^="open-regulated-species"]').click({ force: true }).scrollIntoView()
 
     cy.log('Select authorized species and groups')
@@ -162,8 +162,8 @@ context('BackOffice > Regulation Form > Edition', () => {
     // Given
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
     // complete missing values in form
-    cy.get('[type="checkbox"]').first().check({ force: true })
-    cy.get('[type="checkbox"]').eq(2).check({ force: true })
+    cy.get('[type="checkbox"]').eq(3).check({ force: true })
+    cy.get('[type="checkbox"]').eq(4).check({ force: true })
     cy.get('*[data-cy^="open-regulated-species"]').click({ force: true }).scrollIntoView()
     cy.get('*[data-cy^="regulatory-gears-section"]').click({ force: true })
     cy.get('*[data-cy="authorized-gears-selector"]').scrollIntoView()
@@ -217,8 +217,8 @@ context('BackOffice > Regulation Form > Edition', () => {
   it('Confirm modal is closed on confirm button click and post request is sent', () => {
     // Given
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
-    cy.get('[type="checkbox"]').first().check({ force: true })
-    cy.get('[type="checkbox"]').eq(2).check({ force: true })
+    cy.get('[type="checkbox"]').eq(3).check({ force: true })
+    cy.get('[type="checkbox"]').eq(4).check({ force: true })
 
     // When
     cy.get('[data-cy="go-back-link"]').eq(0).click()

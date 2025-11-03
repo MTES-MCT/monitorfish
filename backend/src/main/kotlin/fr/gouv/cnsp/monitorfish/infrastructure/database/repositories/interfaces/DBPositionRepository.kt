@@ -119,15 +119,7 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
 
     @Query(
         """
-            select
-                date_time
-            from
-                positions
-            where
-                date_time > NOW() - INTERVAL '1 month' and
-                date_time < now()
-            order by date_time desc
-            limit 1
+            select find_last_datetime_in_positions_table()
         """,
         nativeQuery = true,
     )

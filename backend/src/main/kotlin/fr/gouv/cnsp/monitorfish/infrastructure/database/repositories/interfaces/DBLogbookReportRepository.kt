@@ -14,160 +14,31 @@ interface DBLogbookReportRepository :
     JpaSpecificationExecutor<LogbookReportEntity> {
     @Query(
         """
-        WITH
-            dat_and_cor_pno_logbook_reports_with_extra_columns AS (
-                SELECT
-                    lr.*,
-                    (SELECT array_agg(pnoTypes->>'pnoTypeName') FROM jsonb_array_elements(lr.value->'pnoTypes') AS pnoTypes) AS prior_notification_type_names,
-                    (SELECT array_agg(catchOnboard->>'species') FROM jsonb_array_elements(lr.value->'catchOnboard') AS catchOnboard) AS specy_codes,
-                    (SELECT array_agg(tripGears->>'gear') FROM jsonb_array_elements(lr.trip_gears) AS tripGears) AS trip_gear_codes,
-                    (SELECT array_agg(tripSegments->>'segment') FROM jsonb_array_elements(lr.trip_segments) AS tripSegments) AS trip_segment_codes
-                FROM logbook_reports lr
-                LEFT JOIN risk_factors rf ON lr.cfr = rf.cfr
-                LEFT JOIN vessels v ON lr.cfr = v.cfr
-                WHERE
-                    -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
-                    lr.operation_datetime_utc
-                        BETWEEN CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
-                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
-
-                    AND lr.log_type = 'PNO'
-                    AND lr.operation_type IN ('DAT', 'COR')
-                    AND lr.enriched = TRUE
-
-                    -- Flag States
-                    AND (:flagStates IS NULL OR lr.flag_state IN (:flagStates))
-
-                    -- Is Less Than Twelve Meters Vessel
-                    AND (
-                        :isLessThanTwelveMetersVessel IS NULL
-                        OR (:isLessThanTwelveMetersVessel = TRUE AND v.length < 12)
-                        OR (:isLessThanTwelveMetersVessel = FALSE AND v.length >= 12)
-                    )
-
-                    -- Last Controlled After
-                    AND (:lastControlledAfter IS NULL OR rf.last_control_datetime_utc >= CAST(:lastControlledAfter AS TIMESTAMP))
-
-                    -- Last Controlled Before
-                    AND (:lastControlledBefore IS NULL OR rf.last_control_datetime_utc <= CAST(:lastControlledBefore AS TIMESTAMP))
-
-                    -- Port Locodes
-                    AND (:portLocodes IS NULL OR lr.value->>'port' IN (:portLocodes))
-
-                    -- Search Query
-                    AND (
-                        :searchQuery IS NULL OR
-                        unaccent(lower(lr.vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%') OR
-                        lower(lr.cfr) ILIKE CONCAT('%', lower(:searchQuery), '%')
-                    )
-            ),
-
-            distinct_cfrs AS (
-                SELECT DISTINCT cfr
-                FROM dat_and_cor_pno_logbook_reports_with_extra_columns
-            ),
-
-            cfr_reporting_counts AS (
-                SELECT
-                    dc.cfr,
-                    COUNT(r.id) AS reporting_count
-                FROM distinct_cfrs dc
-                LEFT JOIN reportings r ON dc.cfr = r.internal_reference_number
-                WHERE
-                    r.type = 'INFRACTION_SUSPICION'
-                    AND r.archived = FALSE
-                    AND r.deleted = FALSE
-                GROUP BY cfr
-            ),
-
-            dat_and_cor_pno_logbook_reports_with_extra_columns_and_reporting_count AS (
-                SELECT
-                    dacplrwecarc.*,
-                    COALESCE(crc.reporting_count, 0) AS reporting_count
-                FROM dat_and_cor_pno_logbook_reports_with_extra_columns dacplrwecarc
-                LEFT JOIN cfr_reporting_counts crc ON dacplrwecarc.cfr = crc.cfr
-            ),
-
-            filtered_dat_and_cor_pno_logbook_reports AS (
-                SELECT *
-                FROM dat_and_cor_pno_logbook_reports_with_extra_columns_and_reporting_count
-                WHERE
-                    -- Has One Or More Reportings
-                    (
-                        :hasOneOrMoreReportings IS NULL
-                        OR (:hasOneOrMoreReportings = TRUE AND reporting_count > 0)
-                        OR (:hasOneOrMoreReportings = FALSE AND reporting_count = 0)
-                    )
-
-                    -- Prior Notification Types
-                    AND (:priorNotificationTypesAsSqlArrayString IS NULL OR prior_notification_type_names && CAST(:priorNotificationTypesAsSqlArrayString AS TEXT[]))
-
-                    -- Specy Codes
-                    AND (:specyCodesAsSqlArrayString IS NULL OR specy_codes && CAST(:specyCodesAsSqlArrayString AS TEXT[]))
-
-                    -- Trip Gear Codes
-                    AND (:tripGearCodesAsSqlArrayString IS NULL OR trip_gear_codes && CAST(:tripGearCodesAsSqlArrayString AS TEXT[]))
-
-                    -- Trip Segment Codes
-                    AND (:tripSegmentCodesAsSqlArrayString IS NULL OR trip_segment_codes && CAST(:tripSegmentCodesAsSqlArrayString AS TEXT[]))
-            ),
-
-            acknowledged_report_ids AS (
-                SELECT DISTINCT referenced_report_id
-                FROM logbook_reports lr
-                WHERE
-                    -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
-                    lr.operation_datetime_utc
-                        BETWEEN CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
-                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
-
-                    AND lr.operation_type = 'RET'
-                    AND lr.value->>'returnStatus' = '000'
-            ),
-
-            del_pno_logbook_reports AS (
-                SELECT
-                    lr.*,
-                    CAST(NULL AS TEXT[]) AS prior_notification_type_names,
-                    CAST(NULL AS TEXT[]) AS specy_codes,
-                    CAST(NULL AS TEXT[]) AS trip_gear_codes,
-                    CAST(NULL AS TEXT[]) AS trip_segment_codes,
-                    CAST(NULL AS INTEGER) AS reporting_count
-                FROM logbook_reports lr
-                JOIN filtered_dat_and_cor_pno_logbook_reports fdacplr ON lr.referenced_report_id = fdacplr.report_id
-                WHERE
-                    -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
-                    lr.operation_datetime_utc
-                        BETWEEN CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
-                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
-
-                    AND lr.operation_type = 'DEL'
-                    AND (
-                        lr.operation_number IN (SELECT referenced_report_id FROM acknowledged_report_ids)
-                        OR fdacplr.flag_state NOT IN ('FRA', 'GUF', 'VEN') -- flag_states for which we received RET messages
-                    )
-            )
-
-        SELECT *
-        FROM filtered_dat_and_cor_pno_logbook_reports
-        WHERE
-            report_id IN (SELECT referenced_report_id FROM acknowledged_report_ids)
-            OR flag_state NOT IN ('FRA', 'GUF', 'VEN') -- flag_states for which we received RET messages
-
-        UNION ALL
-
-        SELECT *
-        FROM del_pno_logbook_reports
+        SELECT * FROM find_all_enriched_pno_references_and_related_operations(
+            :willArriveAfter,
+            :willArriveBefore,
+            :flagStates,
+            :isLessThanTwelveMetersVessel,
+            :lastControlledAfter,
+            :lastControlledBefore,
+            :portLocodes,
+            :searchQuery,
+            :hasOneOrMoreReportings,
+            :priorNotificationTypesAsSqlArrayString,
+            :specyCodesAsSqlArrayString,
+            :tripGearCodesAsSqlArrayString,
+            :tripSegmentCodesAsSqlArrayString
+        )
         """,
         nativeQuery = true,
     )
     fun findAllEnrichedPnoReferencesAndRelatedOperations(
-        flagStates: List<String>,
+        flagStates: String?,
         hasOneOrMoreReportings: Boolean?,
         isLessThanTwelveMetersVessel: Boolean?,
         lastControlledAfter: String?,
         lastControlledBefore: String?,
-        portLocodes: List<String>,
+        portLocodes: String?,
         priorNotificationTypesAsSqlArrayString: String?,
         searchQuery: String?,
         specyCodesAsSqlArrayString: String?,
@@ -183,83 +54,7 @@ interface DBLogbookReportRepository :
      * - 0 element
      */
     @Query(
-        """
-        WITH
-            searched_pno AS (
-                SELECT *
-                FROM logbook_reports
-                WHERE
-                    operation_datetime_utc
-                        BETWEEN CAST(:operationDate AS TIMESTAMP) - INTERVAL '4 hours'
-                        AND CAST(:operationDate AS TIMESTAMP) + INTERVAL '4 hours'
-                    AND report_id = :reportId
-                    AND log_type = 'PNO'
-                    AND enriched = TRUE
-            ),
-
-           dels_targeting_searched_pno AS (
-               -- A DEL message has no flag_state, which we need to acknowledge messages of non french vessels.
-               -- So we use the flag_state of the deleted message.
-               SELECT del.referenced_report_id, del.operation_number, searched_pno.flag_state
-               FROM logbook_reports del
-               JOIN searched_pno
-               ON del.referenced_report_id = searched_pno.report_id
-               WHERE
-                   del.operation_datetime_utc
-                       BETWEEN CAST(:operationDate AS TIMESTAMP) - INTERVAL '48 hours'
-                       AND CAST(:operationDate AS TIMESTAMP) + INTERVAL '48 hours'
-                   AND del.operation_type = 'DEL'
-           ),
-
-           cors_targeting_searched_pno AS (
-               SELECT *
-               FROM logbook_reports
-               WHERE
-                   operation_datetime_utc
-                       BETWEEN CAST(:operationDate AS TIMESTAMP) - INTERVAL '48 hours'
-                       AND CAST(:operationDate AS TIMESTAMP) + INTERVAL '48 hours'
-                   AND operation_type = 'COR'
-                   AND referenced_report_id = :reportId
-           ),
-
-           acknowledged_cors_and_dels AS (
-               SELECT DISTINCT referenced_report_id
-               FROM logbook_reports
-               WHERE
-                   operation_datetime_utc
-                       BETWEEN CAST(:operationDate AS TIMESTAMP) - INTERVAL '48 hours'
-                       AND CAST(:operationDate AS TIMESTAMP) + INTERVAL '48 hours'
-                   AND operation_type = 'RET'
-                   AND value->>'returnStatus' = '000'
-                   AND referenced_report_id IN (
-                       SELECT operation_number FROM dels_targeting_searched_pno
-                       UNION ALL
-                       SELECT report_id FROM cors_targeting_searched_pno
-                   )
-           ),
-
-            acknowledged_dels_targeting_searched_pno AS (
-                SELECT referenced_report_id
-                FROM dels_targeting_searched_pno
-                WHERE
-                    operation_number IN (SELECT referenced_report_id FROM acknowledged_cors_and_dels)
-                    OR flag_state NOT IN ('FRA', 'GUF', 'VEN') -- flag_states for which we received RET messages
-            ),
-
-            acknowledged_cors_targeting_searched_pno AS (
-                SELECT referenced_report_id
-                FROM cors_targeting_searched_pno
-                WHERE
-                    report_id IN (SELECT referenced_report_id FROM acknowledged_cors_and_dels)
-                    OR flag_state NOT IN ('FRA', 'GUF', 'VEN') -- flag_states for which we received RET messages
-            )
-
-        SELECT *
-        FROM searched_pno
-        WHERE
-            report_id NOT IN (SELECT referenced_report_id FROM acknowledged_dels_targeting_searched_pno) AND
-            report_id NOT IN (SELECT referenced_report_id FROM acknowledged_cors_targeting_searched_pno)
-        """,
+        "SELECT * FROM find_pno_by_report_id(:reportId, :operationDate)",
         nativeQuery = true,
     )
     fun findAcknowledgedNonDeletedPnoDatAndCorsByReportId(
@@ -455,57 +250,14 @@ interface DBLogbookReportRepository :
     ): Instant
 
     @Query(
-        """WITH dat_cor AS (
-           SELECT *
-           FROM logbook_reports
-           WHERE
-               operation_datetime_utc >= cast(:afterDateTime AS timestamp) AND
-               operation_datetime_utc <= cast(:beforeDateTime AS timestamp) AND
-               cfr = :internalReferenceNumber AND
-               trip_number = :tripNumber AND
-               operation_type IN ('DAT', 'COR')
-               AND NOT is_test_message
-           ORDER BY operation_datetime_utc DESC
-        ),
-        ret AS (
-           select *
-           FROM logbook_reports
-           WHERE
-               referenced_report_id IN (select report_id FROM dat_cor) AND
-               operation_datetime_utc >= cast(:afterDateTime AS timestamp) - INTERVAL '1 day' AND
-               operation_datetime_utc < cast(:beforeDateTime AS timestamp) + INTERVAL '3 days' AND
-               operation_type = 'RET'
-               AND NOT is_test_message
-           ORDER BY operation_datetime_utc DESC
-        ),
-        del AS (
-           SELECT *
-           FROM logbook_reports
-           WHERE
-               referenced_report_id IN (select report_id FROM dat_cor) AND
-               operation_datetime_utc >= cast(:afterDateTime AS timestamp) AND
-               operation_datetime_utc < cast(:beforeDateTime AS timestamp) + INTERVAL '1 week' AND
-               operation_type = 'DEL'
-               AND NOT is_test_message
-           ORDER BY operation_datetime_utc desc
-        ),
-        del_ret AS (
-           select *
-           FROM logbook_reports
-           WHERE
-               referenced_report_id IN (select report_id FROM del) AND
-               operation_datetime_utc >= cast(:afterDateTime AS timestamp) - INTERVAL '1 day' AND
-               operation_datetime_utc < cast(:beforeDateTime AS timestamp) + INTERVAL '1 week' AND
-               operation_type = 'RET'
-               AND NOT is_test_message
-           ORDER BY operation_datetime_utc DESC
-        )
+        """
         SELECT *
-        FROM dat_cor
-        UNION ALL SELECT * from ret
-        UNION ALL SELECT * from del
-        UNION ALL SELECT * from del_ret
-        """,
+        FROM find_logbook_by_trip_number(
+            :internalReferenceNumber,
+            :afterDateTime,
+            :beforeDateTime,
+            :tripNumber
+        )""",
         nativeQuery = true,
     )
     fun findAllMessagesByTripNumberBetweenDates(
@@ -517,15 +269,7 @@ interface DBLogbookReportRepository :
 
     @Query(
         """
-            select
-                operation_datetime_utc
-            from
-                logbook_reports
-            where
-                operation_datetime_utc > NOW() - INTERVAL '1 month' and
-                operation_datetime_utc < now()
-            order by operation_datetime_utc desc
-            limit 1
+            select find_last_operation_datetime()
         """,
         nativeQuery = true,
     )
@@ -533,15 +277,7 @@ interface DBLogbookReportRepository :
 
     @Query(
         """
-            SELECT
-                operation_number
-            FROM
-                logbook_reports
-            where
-                cfr = :internalReferenceNumber AND
-                operation_datetime_utc < now()
-            ORDER BY operation_datetime_utc DESC
-            LIMIT 1
+            SELECT find_last_operation_number(:internalReferenceNumber)
         """,
         nativeQuery = true,
     )
@@ -549,15 +285,7 @@ interface DBLogbookReportRepository :
 
     @Query(
         """
-            SELECT
-                software
-            FROM
-                logbook_reports
-            where
-                cfr = :internalReferenceNumber AND
-                operation_datetime_utc < now()
-            ORDER BY operation_datetime_utc DESC
-            LIMIT 1
+            SELECT find_last_software(:internalReferenceNumber)
         """,
         nativeQuery = true,
     )

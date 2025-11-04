@@ -254,8 +254,8 @@ interface DBLogbookReportRepository :
         SELECT *
         FROM find_logbook_by_trip_number(
             :internalReferenceNumber,
-            :afterDateTime,
-            :beforeDateTime,
+            (:afterDateTime)::TIMESTAMP WITHOUT TIME ZONE,
+            (:beforeDateTime)::TIMESTAMP WITHOUT TIME ZONE,
             :tripNumber
         )""",
         nativeQuery = true,

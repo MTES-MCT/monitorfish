@@ -32,6 +32,10 @@ context('Side Window > Vessel Group List', () => {
     cy.get('[title="Groupes dynamiques"]').click()
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 
+    cy.get('[title="Groupes fixes"]').click()
+    cy.get('[title="Groupes dynamiques"]').click()
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
+
     /**
      * Filter by sharing
      */
@@ -42,6 +46,10 @@ context('Side Window > Vessel Group List', () => {
 
     cy.get('[title="Groupes partagés"]').click()
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
+    cy.get('[title="Groupes partagés"]').click()
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
+
+    cy.get('[title="Groupes personnels"]').click()
     cy.get('[title="Groupes partagés"]').click()
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 
@@ -128,7 +136,7 @@ context('Side Window > Vessel Group List', () => {
     cy.get('[title=\'Modifier le groupe "Mission Thémis – semaine 04"\']').click({ force: true })
 
     cy.get('.Component-Dialog').contains('Modifier un groupe de navires fixe')
-    cy.get('.Component-Dialog').contains('6 navires sélectionnés.')
+    cy.get('.Component-Dialog').contains('6 navires dans le groupe.')
 
     cy.fill('Description du groupe', 'Nouvelle valeur.')
     cy.clickButton('Modifier le groupe')

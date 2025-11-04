@@ -15,8 +15,8 @@ interface DBLogbookReportRepository :
     @Query(
         """
         SELECT * FROM find_all_enriched_pno_references_and_related_operations(
-            :willArriveAfter,
-            :willArriveBefore,
+            (:willArriveAfter)::TIMESTAMP WITHOUT TIME ZONE,
+            (:willArriveBefore)::TIMESTAMP WITHOUT TIME ZONE,
             :flagStates,
             :isLessThanTwelveMetersVessel,
             :lastControlledAfter,
@@ -54,7 +54,7 @@ interface DBLogbookReportRepository :
      * - 0 element
      */
     @Query(
-        "SELECT * FROM find_pno_by_report_id(:reportId, :operationDate)",
+        "SELECT * FROM find_pno_by_report_id(:reportId, (:operationDate)::TIMESTAMP WITHOUT TIME ZONE)",
         nativeQuery = true,
     )
     fun findAcknowledgedNonDeletedPnoDatAndCorsByReportId(
@@ -254,8 +254,8 @@ interface DBLogbookReportRepository :
         SELECT *
         FROM find_logbook_by_trip_number(
             :internalReferenceNumber,
-            :afterDateTime,
-            :beforeDateTime,
+            (:afterDateTime)::TIMESTAMP WITHOUT TIME ZONE,
+            (:beforeDateTime)::TIMESTAMP WITHOUT TIME ZONE,
             :tripNumber
         )""",
         nativeQuery = true,

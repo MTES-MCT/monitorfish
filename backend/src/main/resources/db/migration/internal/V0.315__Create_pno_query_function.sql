@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION find_all_enriched_pno_references_and_related_operations(
-    willArriveAfter VARCHAR,
-    willArriveBefore VARCHAR,
+    willArriveAfter TIMESTAMP WITHOUT TIME ZONE,
+    willArriveBefore TIMESTAMP WITHOUT TIME ZONE,
     flagStates VARCHAR DEFAULT NULL,
     isLessThanTwelveMetersVessel BOOLEAN DEFAULT NULL,
     lastControlledAfter VARCHAR DEFAULT NULL,
@@ -60,27 +60,21 @@ RETURNS TABLE (
             LEFT JOIN vessels v ON lr.cfr = v.cfr
             WHERE
                 lr.operation_datetime_utc
-                    BETWEEN (willArriveAfter::TIMESTAMP) - INTERVAL '48 hours'
-                    AND (willArriveBefore::TIMESTAMP) + INTERVAL '48 hours'
+                    BETWEEN willArriveAfter - INTERVAL '48 hours'
+                    AND willArriveBefore + INTERVAL '48 hours'
 
                 AND lr.log_type = 'PNO'
                 AND lr.operation_type IN ('DAT', 'COR')
                 AND lr.enriched = TRUE
-
                 AND (flagStates IS NULL OR lr.flag_state = ANY(flagStates::VARCHAR[]))
-
                 AND (
                     isLessThanTwelveMetersVessel IS NULL
                     OR (isLessThanTwelveMetersVessel = TRUE AND v.length < 12)
                     OR (isLessThanTwelveMetersVessel = FALSE AND v.length >= 12)
                 )
-
                 AND (lastControlledAfter IS NULL OR rf.last_control_datetime_utc >= lastControlledAfter::TIMESTAMP)
-
                 AND (lastControlledBefore IS NULL OR rf.last_control_datetime_utc <= lastControlledBefore::TIMESTAMP)
-
                 AND (portLocodes IS NULL OR lr.value->>'port' = ANY(portLocodes::VARCHAR[]))
-
                 AND (
                     searchQuery IS NULL OR
                     unaccent(lower(lr.vessel_name)) ILIKE CONCAT('%', unaccent(lower(searchQuery)), '%') OR
@@ -123,13 +117,9 @@ RETURNS TABLE (
                     OR (hasOneOrMoreReportings = TRUE AND pnos_and_reporting_count.reporting_count > 0)
                     OR (hasOneOrMoreReportings = FALSE AND pnos_and_reporting_count.reporting_count = 0)
                 )
-
                 AND (priorNotificationTypesAsSqlArrayString IS NULL OR pnos_and_reporting_count.prior_notification_type_names && priorNotificationTypesAsSqlArrayString::TEXT[])
-
                 AND (specyCodesAsSqlArrayString IS NULL OR pnos_and_reporting_count.specy_codes && specyCodesAsSqlArrayString::TEXT[])
-
                 AND (tripGearCodesAsSqlArrayString IS NULL OR pnos_and_reporting_count.trip_gear_codes && tripGearCodesAsSqlArrayString::TEXT[])
-
                 AND (tripSegmentCodesAsSqlArrayString IS NULL OR pnos_and_reporting_count.trip_segment_codes && tripSegmentCodesAsSqlArrayString::TEXT[])
         ),
 
@@ -138,9 +128,8 @@ RETURNS TABLE (
             FROM logbook_reports lr
             WHERE
                 lr.operation_datetime_utc
-                    BETWEEN (willArriveAfter::TIMESTAMP) - INTERVAL '48 hours'
-                    AND (willArriveBefore::TIMESTAMP) + INTERVAL '48 hours'
-
+                    BETWEEN willArriveAfter - INTERVAL '48 hours'
+                    AND willArriveBefore + INTERVAL '48 hours'
                 AND lr.operation_type = 'RET'
                 AND lr.value->>'returnStatus' = '000'
         ),
@@ -157,9 +146,8 @@ RETURNS TABLE (
             JOIN filtered_pnos fdacplr ON lr.referenced_report_id = fdacplr.report_id
             WHERE
                 lr.operation_datetime_utc
-                    BETWEEN (willArriveAfter::TIMESTAMP) - INTERVAL '48 hours'
-                    AND (willArriveBefore::TIMESTAMP) + INTERVAL '48 hours'
-
+                    BETWEEN willArriveAfter - INTERVAL '48 hours'
+                    AND willArriveBefore + INTERVAL '48 hours'
                 AND lr.operation_type = 'DEL'
                 AND (
                     lr.operation_number IN (SELECT acknowledged_report_ids.referenced_report_id FROM acknowledged_report_ids)

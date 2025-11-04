@@ -1,3 +1,5 @@
+import { GearMeshSizeEqualityComparator } from 'domain/entities/backoffice'
+
 import { openSideWindowAlertList } from './utils'
 
 context('Side Window > Alert Management', () => {
@@ -128,9 +130,20 @@ context('Side Window > Alert Management', () => {
     cy.fill("Départements et/ou quartiers déclenchant l'alerte", ["Les Sables D'Olonne"])
     cy.contains('DÉPARTEMENTS ET QUARTIERS').click()
 
+    /**
+     * Add gears on board criteria
+     */
+    cy.clickButton('Ajouter un critère de déclenchement')
+    cy.clickButton('Engins à bord')
+    cy.fill("Engins à bord déclenchant l'alerte", ['Chaluts à langoustines (TBN)'])
+    cy.fill('Type de maillage', 'Supérieur ou égal à')
+    cy.fill('Maillage min', '70')
+    cy.contains('ENGINS À BORD').click()
+
     cy.clickButton('Enregistrer')
 
     cy.wait('@createAlert').then(interception => {
+      console.log('interception.request.body', interception.request.body) // eslint-disable-line no-console
       expect(interception.request.body.name).to.equal('Test Alert Cypress')
       expect(interception.request.body.description).to.equal("Description de test pour l'alerte Cypress")
       expect(interception.request.body.natinfCode).to.equal(2608)
@@ -153,6 +166,14 @@ context('Side Window > Alert Management', () => {
           lawType: 'Reg. NAMO',
           topic: 'Armor CSJ Dragues',
           zone: 'Secteur 3'
+        }
+      ])
+      expect(interception.request.body.gears).to.deep.equal([
+        {
+          gear: 'TBN',
+          maxMesh: undefined,
+          meshType: GearMeshSizeEqualityComparator.greaterThanOrEqualTo,
+          minMesh: 70
         }
       ])
     })

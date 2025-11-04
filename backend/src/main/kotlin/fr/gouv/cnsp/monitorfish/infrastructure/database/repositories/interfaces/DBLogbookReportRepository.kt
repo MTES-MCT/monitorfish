@@ -15,8 +15,8 @@ interface DBLogbookReportRepository :
     @Query(
         """
         SELECT * FROM find_all_enriched_pno_references_and_related_operations(
-            :willArriveAfter,
-            :willArriveBefore,
+            (:willArriveAfter)::TIMESTAMP WITHOUT TIME ZONE,
+            (:willArriveBefore)::TIMESTAMP WITHOUT TIME ZONE,
             :flagStates,
             :isLessThanTwelveMetersVessel,
             :lastControlledAfter,

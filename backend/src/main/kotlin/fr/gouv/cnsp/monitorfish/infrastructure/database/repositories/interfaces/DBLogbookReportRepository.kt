@@ -54,7 +54,7 @@ interface DBLogbookReportRepository :
      * - 0 element
      */
     @Query(
-        "SELECT * FROM find_pno_by_report_id(:reportId, :operationDate)",
+        "SELECT * FROM find_pno_by_report_id(:reportId, (:operationDate)::TIMESTAMP WITHOUT TIME ZONE)",
         nativeQuery = true,
     )
     fun findAcknowledgedNonDeletedPnoDatAndCorsByReportId(

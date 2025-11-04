@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION find_pno_by_report_id(
     searched_pno_report_id VARCHAR,
-    searched_pno_operation_datetime_utc VARCHAR
+    searched_pno_operation_datetime_utc TIMESTAMP WITHOUT TIME ZONE
 )
 RETURNS SETOF logbook_reports AS $$
     BEGIN
@@ -11,8 +11,8 @@ RETURNS SETOF logbook_reports AS $$
                 FROM logbook_reports lr
                 WHERE
                     lr.operation_datetime_utc
-                        BETWEEN CAST(searched_pno_operation_datetime_utc AS TIMESTAMP) - INTERVAL '4 hours'
-                        AND CAST(searched_pno_operation_datetime_utc AS TIMESTAMP) + INTERVAL '4 hours'
+                        BETWEEN searched_pno_operation_datetime_utc - INTERVAL '4 hours'
+                        AND searched_pno_operation_datetime_utc + INTERVAL '4 hours'
                     AND lr.report_id = searched_pno_report_id
                     AND lr.log_type = 'PNO'
                     AND lr.enriched = TRUE
@@ -25,8 +25,8 @@ RETURNS SETOF logbook_reports AS $$
                ON del.referenced_report_id = searched_pno.report_id
                WHERE
                    del.operation_datetime_utc
-                       BETWEEN CAST(searched_pno_operation_datetime_utc AS TIMESTAMP) - INTERVAL '48 hours'
-                       AND CAST(searched_pno_operation_datetime_utc AS TIMESTAMP) + INTERVAL '48 hours'
+                       BETWEEN searched_pno_operation_datetime_utc - INTERVAL '48 hours'
+                       AND searched_pno_operation_datetime_utc + INTERVAL '48 hours'
                    AND del.operation_type = 'DEL'
            ),
 
@@ -35,8 +35,8 @@ RETURNS SETOF logbook_reports AS $$
                FROM logbook_reports lr
                WHERE
                    lr.operation_datetime_utc
-                       BETWEEN CAST(searched_pno_operation_datetime_utc AS TIMESTAMP) - INTERVAL '48 hours'
-                       AND CAST(searched_pno_operation_datetime_utc AS TIMESTAMP) + INTERVAL '48 hours'
+                       BETWEEN searched_pno_operation_datetime_utc - INTERVAL '48 hours'
+                       AND searched_pno_operation_datetime_utc + INTERVAL '48 hours'
                    AND lr.operation_type = 'COR'
                    AND lr.referenced_report_id = searched_pno_report_id
            ),
@@ -46,8 +46,8 @@ RETURNS SETOF logbook_reports AS $$
                FROM logbook_reports lr
                WHERE
                    lr.operation_datetime_utc
-                       BETWEEN CAST(searched_pno_operation_datetime_utc AS TIMESTAMP) - INTERVAL '48 hours'
-                       AND CAST(searched_pno_operation_datetime_utc AS TIMESTAMP) + INTERVAL '48 hours'
+                       BETWEEN searched_pno_operation_datetime_utc - INTERVAL '48 hours'
+                       AND searched_pno_operation_datetime_utc + INTERVAL '48 hours'
                    AND lr.operation_type = 'RET'
                    AND lr.value->>'returnStatus' = '000'
                    AND lr.referenced_report_id IN (

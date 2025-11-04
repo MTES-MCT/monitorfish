@@ -16,6 +16,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLogbookReportRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageDates
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.utils.toSqlArrayString
 import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
 import jakarta.transaction.Transactional
@@ -218,7 +219,7 @@ class JpaLogbookReportRepository(
                     dbLogbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
                         internalReferenceNumber = internalReferenceNumber,
                         tripNumber = previousTripNumber,
-                    )
+                    ).first().let { VoyageDates(it[0], it[1], it[2]) }
 
                 return VoyageDatesAndTripNumber(
                     tripNumber = previousTripNumber,
@@ -249,7 +250,7 @@ class JpaLogbookReportRepository(
                     dbLogbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
                         internalReferenceNumber = internalReferenceNumber,
                         tripNumber = tripNumber,
-                    )
+                    ).first().let { VoyageDates(it[0], it[1], it[2]) }
 
                 return VoyageDatesAndTripNumber(
                     tripNumber = tripNumber,
@@ -288,7 +289,7 @@ class JpaLogbookReportRepository(
                     dbLogbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
                         internalReferenceNumber = internalReferenceNumber,
                         tripNumber = nextTripNumber,
-                    )
+                    ).first().let { VoyageDates(it[0], it[1], it[2]) }
 
                 return VoyageDatesAndTripNumber(
                     tripNumber = nextTripNumber,

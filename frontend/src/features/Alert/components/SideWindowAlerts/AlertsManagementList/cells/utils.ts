@@ -47,6 +47,9 @@ export function getAlertCriteriaSummary(alertSpecification: AlertSpecification):
   if (alertSpecification.gears.length > 0) {
     summary = summary.concat('Engins')
   }
+  if (alertSpecification.gears.length > 0) {
+    summary = summary.concat('Engins à bord')
+  }
 
   return summary.join(', ')
 }

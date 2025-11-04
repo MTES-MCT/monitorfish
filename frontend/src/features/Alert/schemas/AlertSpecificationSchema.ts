@@ -3,10 +3,12 @@ import { VesselIdentitySchema } from '@features/Vessel/schemas/VesselIdentitySch
 import { z } from 'zod'
 
 import { stringOrUndefined, numberOrUndefined } from '../../../types'
+import { GearMeshSizeEqualityComparator } from '../types'
 
 export const GearSpecificationSchema = z.strictObject({
   gear: z.string(),
   maxMesh: numberOrUndefined,
+  meshType: z.enum(GearMeshSizeEqualityComparator).optional(),
   minMesh: numberOrUndefined
 })
 

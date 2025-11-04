@@ -102,7 +102,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
             SELECT lr.cfr, lr.ircs, lr.external_identification, lr.operation_number, MAX(lr.operation_datetime_utc) as last_dep_date_time
             FROM logbook_reports lr
             WHERE
-                lr.operation_datetime_utc > NOW() - INTERVAL '12 hour' AND
+                lr.operation_datetime_utc > NOW() AT TIME ZONE 'UTC' - INTERVAL '12 hour' AND
                 lr.log_type = 'DEP'
             GROUP BY lr.cfr, lr.ircs, lr.external_identification, lr.operation_number
         ),
@@ -111,7 +111,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
             SELECT DISTINCT referenced_report_id
             FROM logbook_reports lr
             WHERE
-                lr.operation_datetime_utc > NOW() - INTERVAL '12 hour' AND
+                lr.operation_datetime_utc > NOW() AT TIME ZONE 'UTC' - INTERVAL '12 hour' AND
                 lr.operation_type = 'RET' AND
                 lr.value->>'returnStatus' = '000'
         )
@@ -122,7 +122,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         FROM
             reportings r
         INNER JOIN
-            (select * from recent_dep_messages) rdp
+            recent_dep_messages rdp
             ON CASE
                 WHEN r.vessel_identifier = 'INTERNAL_REFERENCE_NUMBER' THEN r.internal_reference_number = rdp.cfr
                 WHEN r.vessel_identifier = 'IRCS' THEN r.ircs = rdp.ircs
@@ -132,7 +132,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         WHERE
             r.archived is false AND
             r.deleted is false AND
-            rdp.last_dep_date_time >= r.validation_date AND
+            rdp.last_dep_date_time >= r.validation_date AT TIME ZONE 'UTC' AND
             rdp.operation_number IN (SELECT referenced_report_id FROM acknowledged_report_ids)
         """,
         nativeQuery = true,

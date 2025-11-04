@@ -1,10 +1,6 @@
 import { useGetGearsQuery } from '@api/gear'
-import {
-  GearMeshSizeEqualityComparator,
-  gearMeshSizeOptions,
-  type EditedAlertSpecification,
-  type GearSpecification
-} from '@features/Alert/types'
+import { GearMeshSizeEqualityComparator, gearMeshSizeOptions } from '@features/Alert/constants'
+import { type EditedAlertSpecification, type GearSpecification } from '@features/Alert/types'
 import { Tag } from '@features/Regulation/components/RegulationForm/Tag'
 import { GEARS_CATEGORIES_WITH_MESH } from '@features/Regulation/utils'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'

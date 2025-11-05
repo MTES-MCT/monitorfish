@@ -16,7 +16,6 @@ def extract_trips_snapshot() -> pd.DataFrame:
 @task
 def load_trips_snapshot(trips: pd.DataFrame):
     logger = get_run_logger()
-    breakpoint()
     load(
         df=trips,
         table_name="trips_snapshot",
@@ -28,7 +27,7 @@ def load_trips_snapshot(trips: pd.DataFrame):
 
 
 @flow(name="Trips snapshot")
-def trips_flow(nb_days: int = 1):
+def trips_flow():
     # Extract
     trips_snapshot = extract_trips_snapshot()
 

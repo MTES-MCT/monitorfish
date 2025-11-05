@@ -86,6 +86,7 @@ class JpaPositionRepository(
             .findAllByMmsi(mmsi)
             .map(PositionEntity::toPosition)
 
+    @Cacheable(value = ["last_position_date"])
     override fun findLastPositionDate(): ZonedDateTime =
         dbPositionRepository.findLastPositionDateTime().atZone(ZoneOffset.UTC)
 }

@@ -36,6 +36,7 @@ class CaffeineConfiguration {
     val infractions = "infractions"
 
     // Logbook Reports (Logbook Messages)
+    val lastLogbookOperationDate = "last_logbook_operation_datetime_utc"
     val logbook = "logbook_messages"
     val logbookRawMessage = "logbook_raw_message"
     val nextLogbook = "next_logbook"
@@ -83,6 +84,8 @@ class CaffeineConfiguration {
     val activeVessel = "active_vessel"
     val vesselCharter = "vessel_charter"
     val vesselProducerOrganization = "vessel_producer_organization"
+    val lastPositionDate = "last_position_date"
+    val latestLastPositionDate = "latest_last_position_date"
 
     // Others
     val controlAnteriority = "control_anteriority"
@@ -122,6 +125,7 @@ class CaffeineConfiguration {
         val infractionCache = buildMinutesCache(infraction, ticker, oneWeek)
 
         // Logbook Reports (Logbook Messages)
+        val lastLogbookOperationDateCache = buildMinutesCache(lastLogbookOperationDate, ticker, 1)
         val logbookCache = buildMinutesCache(logbook, ticker, 10)
         val logbookRawMessageCache = buildMinutesCache(logbookRawMessage, ticker, oneWeek)
         val nextLogbookCache = buildMinutesCache(nextLogbook, ticker, 10)
@@ -171,6 +175,8 @@ class CaffeineConfiguration {
         val activeVesselCache = buildSecondsCache(activeVessel, ticker, 60)
         val vesselCharterCache = buildMinutesCache(vesselCharter, ticker, 30)
         val vesselProducerOrganizationCache = buildMinutesCache(vesselProducerOrganization, ticker, 120)
+        val lastPositionDateCache = buildMinutesCache(lastPositionDate, ticker, 1)
+        val latestLastPositionDateCache = buildMinutesCache(latestLastPositionDate, ticker, 1)
 
         // Others
         val controlAnteriorityCache = buildMinutesCache(controlAnteriority, ticker, 1)
@@ -240,6 +246,9 @@ class CaffeineConfiguration {
                 vesselCharterCache,
                 vesselProducerOrganizationCache,
                 userInfoCache,
+                lastLogbookOperationDateCache,
+                lastPositionDateCache,
+                latestLastPositionDateCache,
             ),
         )
 

@@ -79,6 +79,7 @@ class JpaLastPositionRepository(
             }.filter { it.hasEitherLastPositionOrVesselProfileWithVessel() }
     }
 
+    @Cacheable(value = ["latest_last_position_date"])
     override fun findLastPositionDate(): ZonedDateTime =
         try {
             dbLastPositionRepository.findLastPositionDateTime().atZone(UTC)

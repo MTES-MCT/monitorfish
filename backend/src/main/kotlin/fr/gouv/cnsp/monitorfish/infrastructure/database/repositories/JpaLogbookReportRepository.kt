@@ -347,6 +347,7 @@ class JpaLogbookReportRepository(
     override fun findById(id: Long): LogbookMessage =
         dbLogbookReportRepository.findById(id).get().toLogbookMessage(objectMapper)
 
+    @Cacheable(value = ["last_logbook_operation_datetime_utc"])
     override fun findLastMessageDate(): ZonedDateTime {
         return try {
             dbLogbookReportRepository.findLastOperationDateTime().atZone(UTC)

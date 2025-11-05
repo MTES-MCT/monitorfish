@@ -9,4 +9,4 @@ def test_flow(reset_test_data, add_activity_dates_table):
         "SELECT * FROM trips_snapshot ORDER BY cfr, trip_number",
         db="monitorfish_remote",
     )
-    assert len(trips) == 1
+    assert len(trips) == 11

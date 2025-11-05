@@ -484,6 +484,16 @@ def prepare_df_for_loading(
     enum_columns: list = None,
     bytea_columns: list = None,
 ):
+    if not (
+        jsonb_columns
+        or pg_array_columns
+        or nullable_integer_columns
+        or timedelta_columns
+        or enum_columns
+        or bytea_columns
+    ):
+        return df
+
     df_ = df.copy(deep=True)
 
     # Serialize columns to be loaded into JSONB columns

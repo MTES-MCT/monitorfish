@@ -9,7 +9,7 @@ def extract_trips_snapshot() -> pd.DataFrame:
     return extract(
         db_name="data_warehouse",
         query_filepath="data_warehouse/trips_snapshot.sql",
-        dtypes={"is_last_trip": bool},
+        return_pyarrow_dtypes=True,
     )
 
 

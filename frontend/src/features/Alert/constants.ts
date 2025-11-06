@@ -142,3 +142,30 @@ export const gearMeshSizeOptions = [
     value: GearMeshSizeEqualityComparator.BETWEEN
   }
 ]
+
+export enum SpeciesWeightEqualityComparator {
+  EQUAL = 'EQUAL',
+  GREATER_THAN = 'GREATER_THAN',
+  LOWER_THAN = 'LOWER_THAN'
+}
+
+export const speciesWeightOptions = [
+  {
+    label: 'inférieure à ',
+    value: SpeciesWeightEqualityComparator.LOWER_THAN
+  },
+  {
+    label: 'supérieure à ',
+    value: SpeciesWeightEqualityComparator.GREATER_THAN
+  },
+  {
+    label: 'égale à ',
+    value: SpeciesWeightEqualityComparator.EQUAL
+  }
+]
+
+export const speciesWeightEqualityComparatorLabels: Record<SpeciesWeightEqualityComparator, string> = {
+  [SpeciesWeightEqualityComparator.EQUAL]: 'égal à',
+  [SpeciesWeightEqualityComparator.GREATER_THAN]: 'supérieure à',
+  [SpeciesWeightEqualityComparator.LOWER_THAN]: 'inférieure à'
+}

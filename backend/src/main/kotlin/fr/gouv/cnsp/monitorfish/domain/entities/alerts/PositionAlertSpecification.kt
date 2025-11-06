@@ -44,8 +44,9 @@ data class GearSpecification(
 )
 
 data class SpeciesSpecification(
-    val species: String,
-    val minWeight: Double?,
+    val code: String,
+    val weight: Double?,
+    val weightType: SpecyWeightEqualityComparator?,
 )
 
 data class RegulatoryAreaSpecification(
@@ -73,4 +74,10 @@ enum class GearMeshSizeEqualityComparator {
     LOWER_THAN,
     LOWER_THAN_OR_EQUAL_TO,
     GREATER_THAN_OR_EQUAL_TO,
+}
+
+enum class SpecyWeightEqualityComparator {
+    EQUAL,
+    GREATER_THAN,
+    LOWER_THAN,
 }

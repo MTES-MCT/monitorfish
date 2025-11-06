@@ -3,7 +3,8 @@ import {
   AdministrativeAreaType,
   AdministrativeAreaTypeLabel,
   AdministrativeAreaValueLabel,
-  gearMeshSizeEqualityComparatorLabels
+  gearMeshSizeEqualityComparatorLabels,
+  speciesWeightEqualityComparatorLabels
 } from '@features/Alert/constants'
 import { type AlertSpecification } from '@features/Alert/types'
 import { Flag } from '@features/commonComponents/Flag'
@@ -89,10 +90,14 @@ export function Row({ row }: RowProps) {
                   {alertSpecification.species
                     .map(species => {
                       const speciesName = speciesAsOptions?.find(
-                        speciesOption => speciesOption.value.code === species.species
+                        speciesOption => speciesOption.value.code === species.code
                       )
 
-                      return `${speciesName?.label ?? species.species}${species.minWeight !== undefined ? ` (min. ${species.minWeight}kg)` : ''}`
+                      const weightTypeLabel = species.weightType
+                        ? speciesWeightEqualityComparatorLabels[species.weightType]
+                        : ''
+
+                      return `${speciesName?.label ?? species.code}${species.weight !== undefined ? ` (${weightTypeLabel} ${species.weight}kg)` : ''}`
                     })
                     .join(', ')}
                 </ExpandedRowValue>
@@ -101,7 +106,9 @@ export function Row({ row }: RowProps) {
             {alertSpecification.speciesCatchAreas.length > 0 && (
               <p>
                 <ExpandedRowLabel>Zones de capture (FAR) :</ExpandedRowLabel>
-                <ExpandedRowValue>{alertSpecification.speciesCatchAreas.join(', ')}</ExpandedRowValue>
+                <ExpandedRowValue>
+                  {alertSpecification.speciesCatchAreas.join(', ').replaceAll('fao_areas.', '')}
+                </ExpandedRowValue>
               </p>
             )}
 

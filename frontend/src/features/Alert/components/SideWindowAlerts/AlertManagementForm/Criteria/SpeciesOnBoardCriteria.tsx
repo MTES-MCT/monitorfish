@@ -122,7 +122,7 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
         }}
         type="button"
       >
-        <Criteria.Title>ENGINS À BORD</Criteria.Title>
+        <Criteria.Title>ESPÈCES À BORD</Criteria.Title>
         <Criteria.ChevronIcon $isOpen={isCriteriaOpened} />
       </Criteria.Head>
       <Criteria.Body $isOpen={isCriteriaOpened}>

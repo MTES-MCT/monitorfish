@@ -1,7 +1,8 @@
 import {
   AdministrativeAreaType,
   PendingAlertValueType,
-  GearMeshSizeEqualityComparator
+  GearMeshSizeEqualityComparator,
+  SpeciesWeightEqualityComparator
 } from '@features/Alert/constants'
 import { VesselIdentitySchema } from '@features/Vessel/schemas/VesselIdentitySchema'
 import { z } from 'zod'
@@ -16,8 +17,9 @@ export const GearSpecificationSchema = z.strictObject({
 })
 
 export const SpeciesSpecificationSchema = z.strictObject({
-  minWeight: numberOrUndefined,
-  species: z.string()
+  code: z.string(),
+  weight: numberOrUndefined,
+  weightType: z.enum(SpeciesWeightEqualityComparator).optional()
 })
 
 export const RegulatoryAreaSpecificationSchema = z.strictObject({

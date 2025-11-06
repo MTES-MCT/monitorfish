@@ -308,7 +308,7 @@
                 "has_automatic_archiving":  true,
                 "gears": null,
                 "species:jsonb": [
-                    {"species": "BLI", "minWeight": 6000.0}
+                    {"code": "BLI", "weight": 6000.0, "weightType": null}
                 ],
                 "species_catch_areas": [],
                 "administrative_areas": null,
@@ -438,9 +438,9 @@
                     {"gear": "LLS"}
                 ],
                 "species:jsonb": [
-                    {"minWeight": 713.0, "species": "HKE"},
-                    {"species": "LOB"},
-                    {"species": "SOL", "minWeight": null}
+                    {"weight": 713.0, "code": "HKE"},
+                    {"code": "LOB"},
+                    {"code": "SOL", "minWeight": null}
                 ],
                 "species_catch_areas": ["27.7.e", "27.7.d", "27.8.a"],
                 "administrative_areas:jsonb": [
@@ -481,9 +481,9 @@
                     {"gear": "LLS"}
                 ],
                 "species:jsonb": [
-                    {"minWeight": 713.0, "species": "HKE"},
-                    {"species": "LOB"},
-                    {"species": "SOL", "minWeight": null}
+                    {"minWeight": 713.0, "code": "HKE", "weightType":"GREATER_THAN"},
+                    {"code": "LOB"},
+                    {"code": "SOL", "minWeight": null, "weightType":null}
                 ],
                 "species_catch_areas": null,
                 "administrative_areas:jsonb": [
@@ -524,9 +524,9 @@
                     {"gear": "LLS"}
                 ],
                 "species:jsonb": [
-                    {"minWeight": 713.0, "species": "HKE"},
-                    {"species": "LOB"},
-                    {"species": "SOL", "minWeight": null}
+                    {"weight": 713.0, "code": "HKE", "weightType":"LOWER_THAN"},
+                    {"code": "LOB"},
+                    {"code": "SOL", "weight": null, "weightType":null}
                 ],
                 "species_catch_areas": null,
                 "administrative_areas:jsonb": [
@@ -567,9 +567,9 @@
                     {"gear": "LLS"}
                 ],
                 "species:jsonb": [
-                    {"minWeight": 713.0, "species": "HKE"},
-                    {"species": "LOB"},
-                    {"species": "SOL", "minWeight": null}
+                    {"weight": 713.0, "code": "HKE", "weightTyp":"EQUAL"},
+                    {"code": "LOB"},
+                    {"code": "SOL", "minWeight": null, "weightType":null}
                 ],
                 "species_catch_areas": null,
                 "administrative_areas:jsonb": [

@@ -90,6 +90,7 @@ export function GearOnBoardCriteria({ onDelete }: GearOnBoardCriteriaProps) {
           seront utilisés.
         </Criteria.Info>
         <MultiCascader
+          data-cy="alert-criteria-gear-on-board-selector"
           disabled={!gearsAsTreeOptions}
           label="Engins déclanchant l'alerte"
           name="gearCodes"
@@ -120,10 +121,7 @@ export function GearOnBoardCriteria({ onDelete }: GearOnBoardCriteriaProps) {
                 <Wrapper key={gear.gear}>
                   <GearWrapper>
                     <Label>{`Engin ${index + 1}`}</Label>
-                    <Tag
-                      onCloseIconClicked={() => deleteGear(index)}
-                      tagValue={`${label}${gear.gear ? ` (${gear.gear})` : ''}`}
-                    />
+                    <Tag onCloseIconClicked={() => deleteGear(index)} tagValue={`${label} (${gear.gear})`} />
                   </GearWrapper>
                   {allowMesh && (
                     <div>
@@ -146,7 +144,7 @@ export function GearOnBoardCriteria({ onDelete }: GearOnBoardCriteriaProps) {
                             setFieldValue(`gears.${index}.minMesh`, nextValue === '' ? undefined : Number(nextValue))
                           }}
                           type="number"
-                          value={String(gear.minMesh) ?? ''}
+                          value={gear.minMesh ? String(gear.minMesh) : ''}
                         />
                         {values.gears[index]?.meshType === GearMeshSizeEqualityComparator.BETWEEN && (
                           <>
@@ -162,7 +160,7 @@ export function GearOnBoardCriteria({ onDelete }: GearOnBoardCriteriaProps) {
                                 )
                               }}
                               type="number"
-                              value={String(gear.maxMesh) ?? ''}
+                              value={gear.maxMesh ? String(gear.maxMesh) : ''}
                             />
                           </>
                         )}

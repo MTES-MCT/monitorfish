@@ -71,6 +71,6 @@ enum class GearMeshSizeEqualityComparator {
     BETWEEN,
     GREATER_THAN,
     LOWER_THAN,
-    LESS_THAN_OR_EQUAL_TO,
+    LOWER_THAN_OR_EQUAL_TO,
     GREATER_THAN_OR_EQUAL_TO,
 }

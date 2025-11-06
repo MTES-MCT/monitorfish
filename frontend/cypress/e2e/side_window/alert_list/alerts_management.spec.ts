@@ -135,7 +135,9 @@ context('Side Window > Alert Management', () => {
      */
     cy.clickButton('Ajouter un critère de déclenchement')
     cy.clickButton('Engins à bord')
-    cy.fill("Engins à bord déclenchant l'alerte", ['Chaluts à langoustines (TBN)'])
+    cy.getDataCy('alert-criteria-gear-on-board-selector').click()
+    cy.get('.rs-checkbox-checker').filter(':contains("Chaluts")').click({ timeout: 10000 })
+    cy.get('.rs-checkbox-checker').filter(':contains("Chaluts à langoustines - TBN")').click({ timeout: 10000 })
     cy.fill('Type de maillage', 'Supérieur ou égal à')
     cy.fill('Maillage min', '70')
     cy.contains('ENGINS À BORD').click()

@@ -69,10 +69,11 @@ export function Row({ row }: RowProps) {
                       const minMesh = gear.minMesh ? `maillage min. ${gear.minMesh}mm` : null
                       const maxMesh = gear.maxMesh ? `maillage max. ${gear.maxMesh}mm` : null
                       const meshType = gear.meshType ? gearMeshSizeEqualityComparatorLabels[gear.meshType] : null
+                      const maxMeshText = gear.maxMesh ? ` et ${gear.maxMesh} mm` : ' mm'
 
                       const meshText =
                         meshType && gear.minMesh
-                          ? `maillage ${meshType} ${gear.minMesh}${gear.maxMesh ? ` et ${gear.maxMesh} mm` : ' mm'}`
+                          ? `maillage ${meshType} ${gear.minMesh}${maxMeshText}`
                           : `${[minMesh, maxMesh].filter(mesh => !!mesh).join(', ')}`
 
                       return `${gearName?.label ?? gear.gear}${!!minMesh || !!maxMesh ? ` (${meshText})` : ''}`

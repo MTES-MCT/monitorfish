@@ -45,9 +45,6 @@ export function getAlertCriteriaSummary(alertSpecification: AlertSpecification):
     summary = summary.concat('Zones (VMS)')
   }
   if (alertSpecification.gears.length > 0) {
-    summary = summary.concat('Engins')
-  }
-  if (alertSpecification.gears.length > 0) {
     summary = summary.concat('Engins à bord')
   }
 

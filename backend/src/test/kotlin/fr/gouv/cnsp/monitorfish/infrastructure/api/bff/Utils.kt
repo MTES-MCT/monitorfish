@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.GearSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PositionAlertSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.RegulatoryAreaSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SpeciesSpecification
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SpecyWeightEqualityComparator
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import kotlinx.coroutines.runBlocking
 import org.mockito.BDDMockito
@@ -45,8 +46,8 @@ object TestUtils {
                 ),
             species =
                 listOf(
-                    SpeciesSpecification("HKE", 500.0),
-                    SpeciesSpecification("SOL", null),
+                    SpeciesSpecification("HKE", 500.0, SpecyWeightEqualityComparator.EQUAL),
+                    SpeciesSpecification("SOL", null, null),
                 ),
             speciesCatchAreas = listOf("27.7.e", "27.8.a"),
             administrativeAreas =

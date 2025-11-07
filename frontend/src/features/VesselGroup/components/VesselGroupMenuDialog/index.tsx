@@ -13,12 +13,12 @@ import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, Checkbox, Dropdown, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
-import { useState } from 'react'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
+import { vesselGroupListActions } from '../VesselGroupList/slice'
 
 export function VesselGroupMenuDialog() {
   const dispatch = useMainAppDispatch()
@@ -32,50 +32,53 @@ export function VesselGroupMenuDialog() {
 
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.VESSEL_GROUPS)
 
-  const [filteredGroupTypes, setFilteredGroupTypes] = useState<GroupType[]>([GroupType.DYNAMIC, GroupType.FIXED])
-  const [filteredSharing, setFilteredSharing] = useState<Sharing[]>([Sharing.SHARED, Sharing.PRIVATE])
+  const { filteredGroupTypes, filteredSharing } = useMainAppSelector(state => state.vesselGroupList)
 
   const { pinnedVesselGroups, unpinnedVesselGroups } = useGetVesselGroups(filteredGroupTypes, filteredSharing)
   const orderedVesselGroups = pinnedVesselGroups.concat(unpinnedVesselGroups)
 
   const updateDynamicGroupType = (nextGroupType: boolean | undefined) => {
     if (!nextGroupType) {
-      setFilteredGroupTypes(filteredGroupTypes.filter(value => value !== GroupType.DYNAMIC))
+      dispatch(
+        vesselGroupListActions.setFilteredGroupTypes(filteredGroupTypes.filter(value => value !== GroupType.DYNAMIC))
+      )
 
       return
     }
 
-    setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.DYNAMIC))
+    dispatch(vesselGroupListActions.setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.DYNAMIC)))
   }
 
   const updateFixedGroupType = (nextGroupType: boolean | undefined) => {
     if (!nextGroupType) {
-      setFilteredGroupTypes(filteredGroupTypes.filter(value => value !== GroupType.FIXED))
+      dispatch(
+        vesselGroupListActions.setFilteredGroupTypes(filteredGroupTypes.filter(value => value !== GroupType.FIXED))
+      )
 
       return
     }
 
-    setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.FIXED))
+    dispatch(vesselGroupListActions.setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.FIXED)))
   }
 
   const updatePrivateSharing = (nextSharing: boolean | undefined) => {
     if (!nextSharing) {
-      setFilteredSharing(filteredSharing.filter(value => value !== Sharing.PRIVATE))
+      dispatch(vesselGroupListActions.setFilteredSharing(filteredSharing.filter(value => value !== Sharing.PRIVATE)))
 
       return
     }
 
-    setFilteredSharing(filteredSharing.concat(Sharing.PRIVATE))
+    dispatch(vesselGroupListActions.setFilteredSharing(filteredSharing.concat(Sharing.PRIVATE)))
   }
 
   const updateSharedSharing = (nextSharing: boolean | undefined) => {
     if (!nextSharing) {
-      setFilteredSharing(filteredSharing.filter(value => value !== Sharing.SHARED))
+      dispatch(vesselGroupListActions.setFilteredSharing(filteredSharing.filter(value => value !== Sharing.SHARED)))
 
       return
     }
 
-    setFilteredSharing(filteredSharing.concat(Sharing.SHARED))
+    dispatch(vesselGroupListActions.setFilteredSharing(filteredSharing.concat(Sharing.SHARED)))
   }
 
   const createNewDynamicGroup = () => {

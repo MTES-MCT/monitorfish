@@ -8,8 +8,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyCorrectedLogbookMessages
-import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyLogbookMessagesFromFlagStatesWithoutRET
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyLogbookMessages
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyLogbookMessagesFromFlagStatesWithoutRET
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyRETLogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getTrip9463715LogbookMessages
 import fr.gouv.cnsp.monitorfish.fakers.PortFaker

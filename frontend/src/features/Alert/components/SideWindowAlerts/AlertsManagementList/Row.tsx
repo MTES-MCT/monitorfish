@@ -2,7 +2,8 @@ import { getExpandableRowCellCustomStyle } from '@features/Alert/components/Side
 import {
   AdministrativeAreaType,
   AdministrativeAreaTypeLabel,
-  AdministrativeAreaValueLabel
+  AdministrativeAreaValueLabel,
+  gearMeshSizeEqualityComparatorLabels
 } from '@features/Alert/constants'
 import { type AlertSpecification } from '@features/Alert/types'
 import { Flag } from '@features/commonComponents/Flag'
@@ -58,6 +59,29 @@ export function Row({ row }: RowProps) {
             )}
           </ExpandedRowCell>
           <ExpandedRowCell>
+            {alertSpecification.gears.length > 0 && (
+              <p>
+                <ExpandedRowLabel>Engins à bord :</ExpandedRowLabel>
+                <ExpandedRowValue>
+                  {alertSpecification.gears
+                    .map(gear => {
+                      const gearName = gearsAsOptions?.find(gearOption => gearOption.value === gear.gear)
+                      const minMesh = gear.minMesh ? `maillage min. ${gear.minMesh}mm` : null
+                      const maxMesh = gear.maxMesh ? `maillage max. ${gear.maxMesh}mm` : null
+                      const meshType = gear.meshType ? gearMeshSizeEqualityComparatorLabels[gear.meshType] : null
+                      const maxMeshText = gear.maxMesh ? ` et ${gear.maxMesh} mm` : ' mm'
+
+                      const meshText =
+                        meshType && gear.minMesh
+                          ? `maillage ${meshType} ${gear.minMesh}${maxMeshText}`
+                          : `${[minMesh, maxMesh].filter(mesh => !!mesh).join(', ')}`
+
+                      return `${gearName?.label ?? gear.gear}${!!minMesh || !!maxMesh ? ` (${meshText})` : ''}`
+                    })
+                    .join(', ')}
+                </ExpandedRowValue>
+              </p>
+            )}
             {alertSpecification.species.length > 0 && (
               <p>
                 <ExpandedRowLabel>Espèces à bord :</ExpandedRowLabel>
@@ -80,22 +104,7 @@ export function Row({ row }: RowProps) {
                 <ExpandedRowValue>{alertSpecification.speciesCatchAreas.join(', ')}</ExpandedRowValue>
               </p>
             )}
-            {alertSpecification.gears.length > 0 && (
-              <p>
-                <ExpandedRowLabel>Engins à bord :</ExpandedRowLabel>
-                <ExpandedRowValue>
-                  {alertSpecification.gears
-                    .map(gear => {
-                      const gearName = gearsAsOptions?.find(gearOption => gearOption.value === gear.gear)
-                      const minMesh = gear.minMesh ? `maillage min. ${gear.minMesh}mm` : null
-                      const maxMesh = gear.maxMesh ? `maillage max. ${gear.maxMesh}mm` : null
 
-                      return `${gearName?.label ?? gear.gear}${!!minMesh || !!maxMesh ? ` (${[minMesh, maxMesh].filter(mesh => !!mesh).join(', ')})` : ''}`
-                    })
-                    .join(', ')}
-                </ExpandedRowValue>
-              </p>
-            )}
             {alertSpecification.flagStatesIso2.length > 0 && (
               <p>
                 <ExpandedRowLabel>Nationalités :</ExpandedRowLabel>

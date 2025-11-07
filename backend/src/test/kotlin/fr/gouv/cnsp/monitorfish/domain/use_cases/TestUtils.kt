@@ -563,7 +563,7 @@ object TestUtils {
         val nokAck =
             Acknowledgment(
                 returnStatus = "002",
-                rejectionCause = "Oops"
+                rejectionCause = "Oops",
             )
 
         return listOf(
@@ -1160,13 +1160,14 @@ object TestUtils {
         rtp.dateTime = ZonedDateTime.of(2019, 10, 21, 11, 12, 0, 0, UTC)
 
         // RET for RTP (error)
-        val rtpAck = Acknowledgment(
-            returnStatus = "002",
-            rejectionCause =
-                "002 MGEN02 Message incorrect : la date/heure de l'événement RTP n° OOF20201105037001 " +
-                "est postérieure à la date/heure courante. Veuillez vérifier la date/heure de " +
-                "l'événement déclaré et renvoyer votre message."
-        )
+        val rtpAck =
+            Acknowledgment(
+                returnStatus = "002",
+                rejectionCause =
+                    "002 MGEN02 Message incorrect : la date/heure de l'événement RTP n° OOF20201105037001 " +
+                        "est postérieure à la date/heure courante. Veuillez vérifier la date/heure de " +
+                        "l'événement déclaré et renvoyer votre message.",
+            )
 
         // LAN message
         val lanCatch1 = LogbookFishingCatch()

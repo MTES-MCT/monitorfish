@@ -1,3 +1,5 @@
+// import { GearMeshSizeEqualityComparator } from 'domain/entities/backoffice'
+
 import { openSideWindowAlertList } from './utils'
 
 context('Side Window > Alert Management', () => {
@@ -128,6 +130,19 @@ context('Side Window > Alert Management', () => {
     cy.fill("Départements et/ou quartiers déclenchant l'alerte", ["Les Sables D'Olonne"])
     cy.contains('DÉPARTEMENTS ET QUARTIERS').click()
 
+    /**
+     * Add gears on board criteria
+     */
+    // TODO: to uncomment when connection is fixed
+    /*     cy.clickButton('Ajouter un critère de déclenchement')
+    cy.clickButton('Engins à bord')
+    cy.getDataCy('alert-criteria-gear-on-board-selector').click()
+    cy.get('span[title="Chaluts"]').click({ timeout: 10000 })
+    cy.get('span[title="Chaluts à langoustines – TBN"]').click({ timeout: 10000 })
+    cy.fill('Type de maillage', 'Supérieur ou égal à')
+    cy.fill('Maillage min', '70')
+    cy.contains('ENGINS À BORD').click() */
+
     cy.clickButton('Enregistrer')
 
     cy.wait('@createAlert').then(interception => {
@@ -155,6 +170,15 @@ context('Side Window > Alert Management', () => {
           zone: 'Secteur 3'
         }
       ])
+      // TODO: to uncomment when connection is fixed
+      /*  expect(interception.request.body.gears).to.deep.equal([
+        {
+          gear: 'TBN',
+          maxMesh: undefined,
+          meshType: GearMeshSizeEqualityComparator.greaterThanOrEqualTo,
+          minMesh: 70
+        }
+      ]) */
     })
 
     cy.contains('Gestion des alertes').should('be.visible')

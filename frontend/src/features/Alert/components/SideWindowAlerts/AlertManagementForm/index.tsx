@@ -8,6 +8,7 @@ import {
 } from '@features/Alert/apis'
 import { Criteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants'
 import { DistrictCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/DistrictCriteria'
+import { GearOnBoardCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/GearOnBoardCriteria'
 import { NationalityCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/NationalityCriteria'
 import { ProducerOrganizationCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/ProducerOrganizationCriteria'
 import { VesselCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/VesselCriteria'
@@ -170,6 +171,8 @@ export function AlertManagementForm() {
             !!values.producerOrganizations.length || selectedCriterias.includes(Criteria.PRODUCER_ORGANIZATION)
           const hasDistrictCriteria = !!values.districtCodes.length || selectedCriterias.includes(Criteria.DISTRICT)
 
+          const hasGearOnBoardCriteria = !!values.gears.length || selectedCriterias.includes(Criteria.GEAR_ON_BOARD)
+
           return (
             <Wrapper>
               <Header>
@@ -213,6 +216,15 @@ export function AlertManagementForm() {
                   <StyledFormHead>
                     <h2>Critères de déclenchement</h2>
                     <StyledDropdown Icon={Icon.Plus} title="Ajouter un critère de déclenchement">
+                      {!hasGearOnBoardCriteria && (
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedCriterias(previous => previous.concat(Criteria.GEAR_ON_BOARD))
+                          }}
+                        >
+                          Engins à bord
+                        </Dropdown.Item>
+                      )}
                       {!hasVesselCriteria && (
                         <Dropdown.Item
                           onClick={() => {
@@ -260,6 +272,15 @@ export function AlertManagementForm() {
                       )}
                     </StyledDropdown>
                   </StyledFormHead>
+                  {hasGearOnBoardCriteria && (
+                    <GearOnBoardCriteria
+                      onDelete={() => {
+                        setSelectedCriterias(previous =>
+                          previous.filter(criteria => criteria !== Criteria.GEAR_ON_BOARD)
+                        )
+                      }}
+                    />
+                  )}
                   {hasVesselCriteria && (
                     <VesselCriteria
                       onDelete={() => {

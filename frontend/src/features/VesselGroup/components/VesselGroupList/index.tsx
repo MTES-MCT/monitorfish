@@ -8,7 +8,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector.ts'
 import { trackEvent } from '@hooks/useTracking'
 import { Checkbox, FulfillingBouncingCircleLoader, Size, TextInput, THEME } from '@mtes-mct/monitor-ui'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
@@ -22,9 +22,7 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
   const isSuperUser = useIsSuperUser()
   const searchQuery = useMainAppSelector(state => state.vesselGroupList.searchQuery)
   const userAccount = useContext(UserAccountContext)
-  const [filteredGroupTypes, setFilteredGroupTypes] = useState<GroupType[]>([GroupType.DYNAMIC, GroupType.FIXED])
-  const [filteredSharing, setFilteredSharing] = useState<Sharing[]>([Sharing.SHARED, Sharing.PRIVATE])
-  const [filteredExpired, setFilterExpired] = useState<boolean>(false)
+  const { filteredExpired, filteredGroupTypes, filteredSharing } = useMainAppSelector(state => state.vesselGroupList)
 
   useEffect(() => {
     trackEvent({
@@ -46,46 +44,50 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
 
   const updateDynamicGroupType = (nextGroupType: boolean | undefined) => {
     if (!nextGroupType) {
-      setFilteredGroupTypes(filteredGroupTypes.filter(value => value !== GroupType.DYNAMIC))
+      dispatch(
+        vesselGroupListActions.setFilteredGroupTypes(filteredGroupTypes.filter(value => value !== GroupType.DYNAMIC))
+      )
 
       return
     }
 
-    setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.DYNAMIC))
+    dispatch(vesselGroupListActions.setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.DYNAMIC)))
   }
 
   const updateFixedGroupType = (nextGroupType: boolean | undefined) => {
     if (!nextGroupType) {
-      setFilteredGroupTypes(filteredGroupTypes.filter(value => value !== GroupType.FIXED))
+      dispatch(
+        vesselGroupListActions.setFilteredGroupTypes(filteredGroupTypes.filter(value => value !== GroupType.FIXED))
+      )
 
       return
     }
 
-    setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.FIXED))
+    dispatch(vesselGroupListActions.setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.FIXED)))
   }
 
   const updatePrivateSharing = (nextSharing: boolean | undefined) => {
     if (!nextSharing) {
-      setFilteredSharing(filteredSharing.filter(value => value !== Sharing.PRIVATE))
+      dispatch(vesselGroupListActions.setFilteredSharing(filteredSharing.filter(value => value !== Sharing.PRIVATE)))
 
       return
     }
 
-    setFilteredSharing(filteredSharing.concat(Sharing.PRIVATE))
+    dispatch(vesselGroupListActions.setFilteredSharing(filteredSharing.concat(Sharing.PRIVATE)))
   }
 
   const updateSharedSharing = (nextSharing: boolean | undefined) => {
     if (!nextSharing) {
-      setFilteredSharing(filteredSharing.filter(value => value !== Sharing.SHARED))
+      dispatch(vesselGroupListActions.setFilteredSharing(filteredSharing.filter(value => value !== Sharing.SHARED)))
 
       return
     }
 
-    setFilteredSharing(filteredSharing.concat(Sharing.SHARED))
+    dispatch(vesselGroupListActions.setFilteredSharing(filteredSharing.concat(Sharing.SHARED)))
   }
 
   const updateExpiredGroups = (nextExpired: boolean | undefined) => {
-    setFilterExpired(!!nextExpired)
+    dispatch(vesselGroupListActions.setFilteredExpired(!!nextExpired))
   }
 
   const areGroupsOpened = !!searchQuery && searchQuery.length > SEARCH_QUERY_MIN_LENGTH

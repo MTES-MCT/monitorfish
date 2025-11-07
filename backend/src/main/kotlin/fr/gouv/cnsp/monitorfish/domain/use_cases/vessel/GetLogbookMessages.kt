@@ -99,8 +99,7 @@ class GetLogbookMessages(
         datCorDelMessages.forEach { message ->
             if (message.isAutoAcknowledged()) {
                 message.acknowledgment = Acknowledgment(isSuccess = true)
-            }
-            else {
+            } else {
                 // Acknowledgements are referenced by operation number and not by report_id !
                 val rets = retMessages.filter { ret -> ret.referencedReportId == message.operationNumber }
                 rets.forEach { ret -> message.setAcknowledge(ret) }
@@ -108,13 +107,21 @@ class GetLogbookMessages(
         }
 
         // Mark dat and cor messages that are referenced by an acknowledged DEL message as deleted
-        val deletedReportIds = delMessages.filter { it.acknowledgment?.isSuccess ?: false }.map { it.referencedReportId }
+        val deletedReportIds =
+            delMessages
+                .filter {
+                    it.acknowledgment?.isSuccess ?: false
+                }.map { it.referencedReportId }
         datCorMessages.forEach { datCorMessage ->
             datCorMessage.isDeleted = deletedReportIds.contains(datCorMessage.reportId)
         }
 
         // Mark dat and cor messages that are referenced by an acknowledged non-deleted COR message as corrected
-        val correctedReportIds = corMessages.filter { !it.isDeleted && (it.acknowledgment?.isSuccess ?: false) }.map { it.referencedReportId }
+        val correctedReportIds =
+            corMessages
+                .filter {
+                    !it.isDeleted && (it.acknowledgment?.isSuccess ?: false)
+                }.map { it.referencedReportId }
         datCorMessages.forEach { datCorMessage ->
             datCorMessage.isCorrectedByNewerMessage = correctedReportIds.contains(datCorMessage.reportId)
         }

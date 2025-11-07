@@ -1,4 +1,8 @@
-import { AdministrativeAreaType, PendingAlertValueType } from '@features/Alert/constants'
+import {
+  AdministrativeAreaType,
+  PendingAlertValueType,
+  GearMeshSizeEqualityComparator
+} from '@features/Alert/constants'
 import { VesselIdentitySchema } from '@features/Vessel/schemas/VesselIdentitySchema'
 import { z } from 'zod'
 
@@ -7,6 +11,7 @@ import { stringOrUndefined, numberOrUndefined } from '../../../types'
 export const GearSpecificationSchema = z.strictObject({
   gear: z.string(),
   maxMesh: numberOrUndefined,
+  meshType: z.enum(GearMeshSizeEqualityComparator).optional(),
   minMesh: numberOrUndefined
 })
 

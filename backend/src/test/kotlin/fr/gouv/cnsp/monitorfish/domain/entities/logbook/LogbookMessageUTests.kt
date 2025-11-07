@@ -1,7 +1,5 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.TestUtils.dummyCorrectedLanMessages
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.TestUtils.dummyFarMessages
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
 import org.assertj.core.api.Assertions.assertThat
@@ -138,5 +136,4 @@ class LogbookMessageUTests {
         // Then
         assertThat(secondLogbookMessage.acknowledgment?.isSuccess).isTrue()
     }
-
 }

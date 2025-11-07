@@ -167,8 +167,7 @@ data class LogbookMessage(
      * Check if this message is auto-acknowledged (FLUX or VisioCapture)
      * These messages don't receive RET (Return Receipt) messages
      */
-    fun isAutoAcknowledged(): Boolean =
-        flagState !in listOf("FRA", "GUF", "REU", "VEN")
+    fun isAutoAcknowledged(): Boolean = flagState !in listOf("FRA", "GUF", "REU", "VEN")
 
     private fun setNamesFromCodes(
         message: COE,

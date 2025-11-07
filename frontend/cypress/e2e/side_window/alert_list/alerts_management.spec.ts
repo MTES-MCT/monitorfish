@@ -204,8 +204,9 @@ context('Side Window > Alert Management', () => {
 
     cy.fill('Nom', 'Nom modifié')
     cy.fill('Description', 'Description modifiée')
+    cy.get('.Field-DateRangePicker__RangeCalendarPicker').should('exist')
     cy.fill('Période de validité', 'En tous temps')
-    cy.get('.rs-picker-input').should('not.exist')
+    cy.get('.Field-DateRangePicker__RangeCalendarPicker').should('not.exist')
     cy.fill("Positions VMS prises en compte par l'alerte", 'Les positions en pêche uniquement')
 
     cy.clickButton('Enregistrer')

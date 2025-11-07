@@ -7,7 +7,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.allopen") version "2.1.0"
     kotlin("plugin.noarg") version "2.1.0"
     kotlin("plugin.jpa") version "2.1.0"
-    id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
+    id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
     kotlin("plugin.serialization") version "2.1.0"
     id("io.spring.dependency-management") version "1.1.7"
 }

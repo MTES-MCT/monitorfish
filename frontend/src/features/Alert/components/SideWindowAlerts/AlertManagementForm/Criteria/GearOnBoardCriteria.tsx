@@ -4,7 +4,7 @@ import { type EditedAlertSpecification, type GearSpecification } from '@features
 import { Tag } from '@features/Regulation/components/RegulationForm/Tag'
 import { GEARS_CATEGORIES_WITH_MESH } from '@features/Regulation/utils'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
-import { FormikSelect, Label, MultiCascader, TextInput } from '@mtes-mct/monitor-ui'
+import { FormikSelect, Label, MultiCascader, TextInput, THEME } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useState } from 'react'
 import styled from 'styled-components'
@@ -73,6 +73,30 @@ export function GearOnBoardCriteria({ onDelete }: GearOnBoardCriteriaProps) {
     setFieldValue('gears', newGears)
   }
 
+  const sortedGears = [...values.gears].sort((a, b) => {
+    const gearRefA = gearsReferential?.find(g => g.code === a.gear)
+    const gearRefB = gearsReferential?.find(g => g.code === b.gear)
+
+    if (!gearRefA && !gearRefB) {
+      return 0
+    }
+    if (!gearRefA) {
+      return 1
+    }
+    if (!gearRefB) {
+      return -1
+    }
+
+    const allowMeshA = GEARS_CATEGORIES_WITH_MESH.includes(gearRefA.category)
+    const allowMeshB = GEARS_CATEGORIES_WITH_MESH.includes(gearRefB.category)
+
+    if (allowMeshA === allowMeshB) {
+      return 0
+    }
+
+    return allowMeshA ? -1 : 1
+  })
+
   return (
     <Criteria.Wrapper>
       <Criteria.Head
@@ -92,15 +116,14 @@ export function GearOnBoardCriteria({ onDelete }: GearOnBoardCriteriaProps) {
         <MultiCascader
           data-cy="alert-criteria-gear-on-board-selector"
           disabled={!gearsAsTreeOptions}
-          label="Engins déclanchant l'alerte"
+          label="Ajouter un engin"
           name="gearCodes"
           onChange={updateGearCodes}
           onSelect={selectGearCodes}
           options={gearsAsTreeOptions ?? []}
-          placeholder="Engins déclanchant l'alerte"
-          popupWidth={500}
+          placeholder="Sélectionner"
           renderValue={(_, items) =>
-            items.length > 0 ? <SelectValue>Engins déclanchant l&apos;alerte ({items.length})</SelectValue> : <></>
+            items.length > 0 ? <SelectValue>Engins déclenchant l&apos;alerte ({items.length})</SelectValue> : <></>
           }
           searchable
           style={{ marginTop: '16px' }}
@@ -108,7 +131,7 @@ export function GearOnBoardCriteria({ onDelete }: GearOnBoardCriteriaProps) {
         />
         {values.gears.length > 0 && (
           <GearsWrapper>
-            {values.gears.map((gear, index) => {
+            {sortedGears.map((gear, index) => {
               const gearRefential = gearsReferential?.find(g => g.code === gear.gear)
 
               if (!gearRefential) {
@@ -119,54 +142,52 @@ export function GearOnBoardCriteria({ onDelete }: GearOnBoardCriteriaProps) {
 
               return (
                 <Wrapper key={gear.gear}>
-                  <GearWrapper>
-                    <Label>{`Engin ${index + 1}`}</Label>
-                    <Tag onCloseIconClicked={() => deleteGear(index)} tagValue={`${label} (${gear.gear})`} />
-                  </GearWrapper>
+                  <TagWrapper $withMaxWidth={allowMesh}>
+                    <Tag
+                      backGroundColor={THEME.color.lightGray}
+                      onCloseIconClicked={() => deleteGear(index)}
+                      tagValue={`${gear.gear} - ${label}`}
+                    />
+                  </TagWrapper>
                   {allowMesh && (
-                    <div>
+                    <MeshWrapper>
                       <Label data-cy="mesh-label">Maillage</Label>
-                      <MeshFieldsWrapper>
-                        <FormikSelect
-                          cleanable={false}
-                          isLabelHidden
-                          label="Type de maillage"
-                          name={`gears.${index}.meshType`}
-                          options={gearMeshSizeOptions}
-                          searchable={false}
-                          style={{ width: '170px' }}
-                        />
-                        <StyledTextInput
-                          isLabelHidden
-                          label="Maillage min"
-                          name={`gears.${index}.minMesh`}
-                          onChange={(nextValue: string | undefined) => {
-                            setFieldValue(`gears.${index}.minMesh`, nextValue === '' ? undefined : Number(nextValue))
-                          }}
-                          type="number"
-                          value={gear.minMesh ? String(gear.minMesh) : ''}
-                        />
-                        {values.gears[index]?.meshType === GearMeshSizeEqualityComparator.BETWEEN && (
-                          <>
-                            et
-                            <StyledTextInput
-                              isLabelHidden
-                              label="Maillage max"
-                              name={`gears.${index}.maxMesh`}
-                              onChange={(nextValue: string | undefined) => {
-                                setFieldValue(
-                                  `gears.${index}.maxMesh`,
-                                  nextValue === '' ? undefined : Number(nextValue)
-                                )
-                              }}
-                              type="number"
-                              value={gear.maxMesh ? String(gear.maxMesh) : ''}
-                            />
-                          </>
-                        )}
-                        <span>mm</span>
-                      </MeshFieldsWrapper>
-                    </div>
+                      <FormikSelect
+                        isLabelHidden
+                        label="Type de maillage"
+                        name={`gears.${index}.meshType`}
+                        options={gearMeshSizeOptions}
+                        searchable={false}
+                        style={{ width: '170px' }}
+                      />
+                      <StyledTextInput
+                        isLabelHidden
+                        label="Maillage min"
+                        min={0}
+                        name={`gears.${index}.minMesh`}
+                        onChange={(nextValue: string | undefined) => {
+                          setFieldValue(`gears.${index}.minMesh`, nextValue === '' ? undefined : Number(nextValue))
+                        }}
+                        type="number"
+                        value={gear.minMesh ? String(gear.minMesh) : ''}
+                      />
+                      {values.gears[index]?.meshType === GearMeshSizeEqualityComparator.BETWEEN && (
+                        <>
+                          et
+                          <StyledTextInput
+                            isLabelHidden
+                            label="Maillage max"
+                            name={`gears.${index}.maxMesh`}
+                            onChange={(nextValue: string | undefined) => {
+                              setFieldValue(`gears.${index}.maxMesh`, nextValue === '' ? undefined : Number(nextValue))
+                            }}
+                            type="number"
+                            value={gear.maxMesh ? String(gear.maxMesh) : ''}
+                          />
+                        </>
+                      )}
+                      <Unit>mm</Unit>
+                    </MeshWrapper>
                   )}
                 </Wrapper>
               )
@@ -181,10 +202,6 @@ export function GearOnBoardCriteria({ onDelete }: GearOnBoardCriteriaProps) {
 
 const SelectValue = styled.span`
   display: flex;
-  overflow: hidden;
-  pointer-events: none;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 `
 const GearsWrapper = styled.div`
   display: flex;
@@ -194,20 +211,22 @@ const GearsWrapper = styled.div`
 `
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 8px;
 `
-const GearWrapper = styled.div`
-  align-self: start;
-  display: flex;
-  flex-direction: column;
-`
-
-const MeshFieldsWrapper = styled.div`
+const MeshWrapper = styled.div`
   align-items: center;
   display: flex;
   gap: 8px;
 `
 const StyledTextInput = styled(TextInput)`
-  width: 64px;
+  width: 72px;
+`
+
+const TagWrapper = styled.div<{ $withMaxWidth: boolean }>`
+  max-width: ${props => (props.$withMaxWidth ? '40%' : 'none')};
+`
+const Unit = styled.span`
+  color: ${THEME.color.slateGray};
 `

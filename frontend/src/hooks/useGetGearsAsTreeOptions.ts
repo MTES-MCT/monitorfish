@@ -22,7 +22,7 @@ export function useGetGearsAsTreeOptions() {
         children: gears
           .filter(gear => gear.category === category)
           .map(gear => ({
-            label: `${gear.name} – ${gear.code}`,
+            label: `${gear.code} - ${gear.name}`,
             value: gear.code
           }))
           .sort((a, b) => a.label.localeCompare(b.label)),

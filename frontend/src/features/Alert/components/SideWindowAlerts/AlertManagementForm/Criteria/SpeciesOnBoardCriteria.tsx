@@ -6,7 +6,17 @@ import { FieldsetGroupSpinner } from '@features/Mission/components/MissionForm/s
 import { Tag } from '@features/Regulation/components/RegulationForm/Tag'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { CustomSearch, FormikSelect, TextInput, type Option, Select, MultiSelect, Level } from '@mtes-mct/monitor-ui'
+import {
+  CustomSearch,
+  FormikSelect,
+  TextInput,
+  type Option,
+  Select,
+  MultiSelect,
+  Level,
+  THEME,
+  Label
+} from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
@@ -149,10 +159,14 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
             return (
               <Wrapper key={specy.code}>
                 <TagWrapper>
-                  <Tag onCloseIconClicked={() => deleteSpecy(index)} tagValue={specyLabel ?? ''} />
+                  <Tag
+                    backGroundColor={THEME.color.lightGray}
+                    onCloseIconClicked={() => deleteSpecy(index)}
+                    tagValue={specyLabel ?? ''}
+                  />
                 </TagWrapper>
                 <WeightWrapper>
-                  <span>Quantité</span>
+                  <Label>Quantité</Label>
                   <FormikSelect
                     isLabelHidden
                     label={`Fourchette de quantité pour l'espèce ${specy.code}`}
@@ -166,11 +180,11 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
                     onChange={(nextValue: string | undefined) => {
                       setFieldValue(`species.${index}.weight`, nextValue ? Number(nextValue) : undefined)
                     }}
-                    style={{ width: '64px' }}
+                    style={{ width: '72px' }}
                     type="number"
                     value={specy.weight ? String(specy.weight) : ''}
                   />
-                  <span>kg</span>
+                  <Unit>kg</Unit>
                 </WeightWrapper>
               </Wrapper>
             )
@@ -194,7 +208,9 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
 
 const Wrapper = styled.div`
   display: flex;
-  gap: 84px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
 `
 const SpeciesWrapper = styled.div`
   display: flex;
@@ -202,13 +218,15 @@ const SpeciesWrapper = styled.div`
   gap: 24px;
   margin-top: 24px;
 `
-
-const TagWrapper = styled.div`
-  display: flex;
-  width: 280px;
-`
 const WeightWrapper = styled.div`
   align-items: center;
   display: flex;
   gap: 8px;
+`
+
+const TagWrapper = styled.div`
+  max-width: 50%;
+`
+const Unit = styled.span`
+  color: ${THEME.color.slateGray};
 `

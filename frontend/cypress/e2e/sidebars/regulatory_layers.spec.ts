@@ -14,7 +14,7 @@ context('Sidebars > Regulatory Layers', () => {
      */
     // When
     cy.get('[title="Arbre des couches"]').click()
-    cy.fill("Rechercher une zone réglementaire", 'interdiction')
+    cy.fill('Rechercher une zone réglementaire', 'interdiction')
 
     // Then, 2 zones are showed
     cy.get('*[data-cy="regulatory-layer-topic-count"]').contains('2/4')
@@ -235,7 +235,7 @@ context('Sidebars > Regulatory Layers', () => {
     // When
     cy.intercept(
       'GET',
-      `http://*:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&srsname=EPSG:4326&bbox=-378334.88336741074,6265784.372024373,-280465.66220758925,6284605.376093569,EPSG:3857&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region`
+      `http://*:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&srsname=EPSG:4326&bbox=-378334.88336741074,6265784.372024373,-280465.66220758925,6284605.376093569,EPSG:3857&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,tags`
     ).as('getFeature')
     cy.get('[title="Arbre des couches"]').click()
 
@@ -245,7 +245,9 @@ context('Sidebars > Regulatory Layers', () => {
     cy.get('canvas').eq(0).click(490, 560, { force: true, timeout: 10000 })
     cy.get('canvas').eq(0).click(230, 610, { force: true, timeout: 10000 })
     cy.wait('@getFeature').then(({ request, response }) => {
-      expect(request.url).contains('propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region')
+      expect(request.url).contains(
+        'propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,tags'
+      )
       expect(response && response.statusCode).equal(200)
     })
 
@@ -314,7 +316,8 @@ context('Sidebars > Regulatory Layers', () => {
     cy.get('[title="Arbre des couches"]').click()
     cy.wait(500)
     cy.clickButton('Zones administratives')
-    cy.get('[title="Zones ZEE"]').click()
+    cy.get('[title="Zones ZEE"]')
+      .click()
       .then(() => {
         cy.getAllLocalStorage().then(localStorages => {
           const testLocalStorage = localStorages[LOCALSTORAGE_URL]
@@ -326,7 +329,7 @@ context('Sidebars > Regulatory Layers', () => {
     cy.wait(500)
 
     // Then
-    cy.getFeaturesFromLayer('eez_areas').then((features) => {
+    cy.getFeaturesFromLayer('eez_areas').then(features => {
       expect(features.length).to.be.equal(7)
     })
 
@@ -335,15 +338,14 @@ context('Sidebars > Regulatory Layers', () => {
     cy.wait(5000)
     cy.get('[title="Arbre des couches"]').click()
     cy.wait(500)
-    cy.clickButton('Zones administratives')
-      .then(() => {
-        cy.getAllLocalStorage().then(localStorages => {
-          const testLocalStorage = localStorages[LOCALSTORAGE_URL]
-          const showedLayers = JSON.parse(testLocalStorage?.homepagelayersShowedOnMap as string)
-          expect(showedLayers).length(1)
-          expect(showedLayers[0].type).equal('eez_areas')
-        })
+    cy.clickButton('Zones administratives').then(() => {
+      cy.getAllLocalStorage().then(localStorages => {
+        const testLocalStorage = localStorages[LOCALSTORAGE_URL]
+        const showedLayers = JSON.parse(testLocalStorage?.homepagelayersShowedOnMap as string)
+        expect(showedLayers).length(1)
+        expect(showedLayers[0].type).equal('eez_areas')
       })
+    })
   })
 
   it('Should unselect one of the selected topic zone layers', () => {
@@ -376,10 +378,7 @@ context('Sidebars > Regulatory Layers', () => {
     cy.get('[title=\'Sélectionner "Interdiction temporaire - Chalut à panneaux"\']').click()
 
     cy.contains('Mes zones réglementaires').click()
-    cy.get('[data-cy="regulatory-layers-my-zones"]')
-      .parent()
-      .find('ul')
-      .as('myZonesList')
+    cy.get('[data-cy="regulatory-layers-my-zones"]').parent().find('ul').as('myZonesList')
     cy.get('@myZonesList').contains('Interdiction temporaire').should('be.visible')
     cy.get('@myZonesList').contains('6 MN').should('be.visible')
     cy.get('@myZonesList').contains('1,5 - 3 MN').should('be.visible')
@@ -418,10 +417,7 @@ context('Sidebars > Regulatory Layers', () => {
     // Show metadata the only "Armor CSJ Dragues" regulation zone
     cleanRegulationSearchInput()
     cy.contains('Mes zones réglementaires').click()
-    cy.get('[data-cy="regulatory-layers-my-zones"]')
-      .parent()
-      .find('ul')
-      .as('myZonesList')
+    cy.get('[data-cy="regulatory-layers-my-zones"]').parent().find('ul').as('myZonesList')
     cy.get('@myZonesList').contains('Armor CSJ Dragues').click()
     cy.get('[title=\'Afficher la réglementation "Secteur 3"\']').click()
 

@@ -19,7 +19,8 @@ BEGIN
         COALESCE(NEW.gears::text, '') ||
         COALESCE(NEW.regulatory_references::text, '') ||
         COALESCE(NEW.geometry::text, '')  ||
-        COALESCE(NEW.next_id::text, '')
+        COALESCE(NEW.next_id::text, '') ||
+        COALESCE(NEW.tags::text, '')
         );
     RETURN NEW;
 END;

@@ -2,7 +2,7 @@ import { ZonePreview } from '@features/Regulation/components/ZonePreview'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTracking } from '@hooks/useTracking'
-import { FingerprintLoader, Icon, THEME } from '@mtes-mct/monitor-ui'
+import { FingerprintLoader, Icon, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 
@@ -39,9 +39,16 @@ export function RegulatoryZoneMetadata() {
         <>
           <Header>
             <StyledZonePreview regulatoryZone={regulatoryZoneMetadata} />
-            <RegulatoryZoneName title={getTitle(regulatoryZoneMetadata)}>
-              {getTitle(regulatoryZoneMetadata)}
-            </RegulatoryZoneName>
+            <NameAndTagsContainer>
+              <RegulatoryZoneName title={getTitle(regulatoryZoneMetadata)}>
+                {getTitle(regulatoryZoneMetadata)}
+              </RegulatoryZoneName>
+              <TagsContainer>
+                {regulatoryZoneMetadata?.tags?.map(regulatoryArea => (
+                  <StyledTag backgroundColor={THEME.color.white}>{regulatoryArea}</StyledTag>
+                ))}
+              </TagsContainer>
+            </NameAndTagsContainer>
             <StyledCloseIcon
               color={THEME.color.slateGray}
               data-cy="regulatory-layers-metadata-close"
@@ -87,15 +94,29 @@ const Wrapper = styled.div<{
   padding: 0;
   transition: all 0.5s;
 `
-
-const RegulatoryZoneName = styled.span`
+const NameAndTagsContainer = styled.div`
+  display: flex;
   flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+const RegulatoryZoneName = styled.span`
   line-height: initial;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 15px;
   margin-right: 5px;
+`
+
+const TagsContainer = styled.div`
+  display: flex;
+  gap: 4px;
+  margin-right: 4px;
+`
+const StyledTag = styled(Tag)`
+  align-self: center;
 `
 
 const Header = styled.div`

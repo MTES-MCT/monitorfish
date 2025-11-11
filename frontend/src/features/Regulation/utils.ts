@@ -37,6 +37,7 @@ export const mapToRegulatoryZone = (
     region: feature.properties.region,
     regulatoryReferences: parseRegulatoryReferences(feature.properties.regulatory_references),
     speciesRegulation: parseSpeciesRegulation(feature.properties.species, speciesByCode),
+    tags: feature.properties.tags ?? [],
     topic: feature.properties.topic,
     zone: decodeURI(feature.properties.zone)
   }
@@ -168,6 +169,7 @@ export const mapToRegulatoryFeatureObject = ({
   region,
   regulatoryReferences,
   speciesRegulation,
+  tags,
   topic,
   zone
 }: {
@@ -179,6 +181,7 @@ export const mapToRegulatoryFeatureObject = ({
   region: string | undefined
   regulatoryReferences: any
   speciesRegulation: any
+  tags?: any | undefined
   topic: string | undefined
   zone: string | undefined
 }) => ({
@@ -190,6 +193,7 @@ export const mapToRegulatoryFeatureObject = ({
   region,
   regulatory_references: JSON.stringify(regulatoryReferences),
   species: JSON.stringify(speciesRegulation),
+  tags: JSON.stringify(tags),
   topic,
   zone
 })
@@ -201,6 +205,7 @@ export const emptyRegulatoryFeatureObject: Regulation.RegulatoryFeatureObject = 
   next_id: undefined,
   region: undefined,
   regulatory_references: undefined,
+  tags: undefined,
   topic: undefined,
   zone: undefined
 }
@@ -370,6 +375,7 @@ export const REGULATORY_REFERENCE_KEYS = {
   REGION: 'region',
   REGULATORY_REFERENCES: 'regulatoryReferences',
   SPECIES_REGULATION: 'speciesRegulation',
+  TAGS: 'tags',
   TOPIC: 'topic',
   ZONE: 'zone'
 }

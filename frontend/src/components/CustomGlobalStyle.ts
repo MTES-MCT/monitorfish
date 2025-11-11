@@ -169,6 +169,10 @@ export const CustomGlobalStyle = createGlobalStyle`
     position: inherit;
   }
 
+  .rs-checkbox-label {
+    line-height: normal;
+  }
+
   .collapsed {
     display: none;
   }

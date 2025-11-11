@@ -107,6 +107,7 @@ def load_new_regulations(new_regulations: pd.DataFrame):
             "species",
             "gears",
         ],
+        pg_array_columns=["tags"],
         how="upsert",
         table_id_column="id",
         df_id_column="id",

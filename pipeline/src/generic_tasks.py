@@ -25,6 +25,7 @@ def extract(
     backend: str = "pandas",
     geom_col: str = "geom",
     crs: int = None,
+    return_pyarrow_dtypes: bool = False,
 ) -> Union[pd.DataFrame, gpd.GeoDataFrame]:
     """Run SQL query against the indicated database and return the result as a
     `pandas.DataFrame`.
@@ -67,7 +68,9 @@ def extract(
             if not set, tries to determine CRS from the SRID associated with the first
             geometry in the database, and assigns that to all geometries. Ignored when
             `backend` is 'pandas'. Defaults to None.
-
+        return_pyarrow_dtypes (bool, optional): If `True`, and `db_name` is
+          `"data_warehouse"`, results are returned as a pandas DataFrame of `pyarrow`
+          dtypes. Ignored if `db_name` is not `"data_warehouse"`. Defaults to `False`.
     Returns:
         Union[pd.DataFrame, gpd.GeoDataFrame]: Query results
     """
@@ -80,6 +83,7 @@ def extract(
         backend=backend,
         geom_col=geom_col,
         crs=crs,
+        return_pyarrow_dtypes=return_pyarrow_dtypes,
     )
 
     if dtypes:

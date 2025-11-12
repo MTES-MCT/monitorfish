@@ -65,10 +65,10 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
     fun `findLastPositionDate Should return a dummy date When there is no row in the last_position table`() {
         // Given
         jpaLastPositionRepository.deleteAll()
+        cacheManager.getCache("latest_last_position_date")?.clear()
 
         // When
         val dateTime = jpaLastPositionRepository.findLastPositionDate()
-
         // Then
         assertThat(dateTime).isEqualTo(ZonedDateTime.parse("2012-04-17T00:00:00.000000001Z"))
     }

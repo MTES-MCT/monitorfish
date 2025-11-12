@@ -127,21 +127,17 @@ interface DBLogbookReportRepository :
         pageable: Pageable,
     ): List<VoyageTripNumberAndDate>
 
-    @Query(
-        """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageDates(
-            MIN(e.operationDateTime),
-            MAX(e.operationDateTime),
-            MAX(CASE WHEN messageType != 'LAN' THEN e.operationDateTime END)
-        )
-        FROM LogbookReportEntity e
-        WHERE e.internalReferenceNumber = :internalReferenceNumber
-        AND e.tripNumber = :tripNumber
-        AND NOT e.isTestMessage""",
+    @Query("""SELECT
+            start_date,
+            end_date,
+            end_date_without_lan
+        FROM find_dates_of_trip(:internalReferenceNumber, :tripNumber)""",
+        nativeQuery = true
     )
     fun findFirstAndLastOperationsDatesOfTrip(
         internalReferenceNumber: String,
         tripNumber: String,
-    ): VoyageDates
+    ): List<Array<Instant>>
 
     /**
      * The last `MAX(lr_all.operationDateTime)` date is used to display the fishing trip positions, hence LAN are excluded.

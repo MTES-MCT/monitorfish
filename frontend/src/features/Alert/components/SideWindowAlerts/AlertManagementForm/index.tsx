@@ -20,6 +20,7 @@ import { EditedAlertSpecificationSchema } from '@features/Alert/schemas/EditedAl
 import { deleteAlert } from '@features/Alert/useCases/deleteAlert'
 import { FormHead } from '@features/Mission/components/MissionForm/shared/FormHead'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
+import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import {
@@ -42,10 +43,13 @@ import { sortBy } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
+import { SpeciesOnBoardCriteria } from './Criteria/SpeciesOnBoardCriteria'
+
 import type { AlertSpecification } from '@features/Alert/types'
 
 export function AlertManagementForm() {
   const dispatch = useMainAppDispatch()
+  const { speciesAsOptions } = useGetSpeciesAsOptions()
   const [createAlert, { isLoading: isCreatingAlert }] = useCreateAlertMutation()
   const [updateAlert, { isLoading: isUpdatingAlert }] = useUpdateAlertMutation()
   const editedAlertSpecification = useMainAppSelector(state => state.alert.editedAlertSpecification)
@@ -170,8 +174,11 @@ export function AlertManagementForm() {
           const hasProducerOrganizationCriteria =
             !!values.producerOrganizations.length || selectedCriterias.includes(Criteria.PRODUCER_ORGANIZATION)
           const hasDistrictCriteria = !!values.districtCodes.length || selectedCriterias.includes(Criteria.DISTRICT)
-
           const hasGearOnBoardCriteria = !!values.gears.length || selectedCriterias.includes(Criteria.GEAR_ON_BOARD)
+          const hasSpeciesOnBoardCriteria =
+            !!values.species.length ||
+            !!values.speciesCatchAreas.length ||
+            selectedCriterias.includes(Criteria.SPECIES_ON_BOARD)
 
           return (
             <Wrapper>
@@ -223,6 +230,15 @@ export function AlertManagementForm() {
                           }}
                         >
                           Engins à bord
+                        </Dropdown.Item>
+                      )}
+                      {!hasSpeciesOnBoardCriteria && (
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedCriterias(previous => previous.concat(Criteria.SPECIES_ON_BOARD))
+                          }}
+                        >
+                          Espèces à bord
                         </Dropdown.Item>
                       )}
                       {!hasVesselCriteria && (
@@ -279,6 +295,16 @@ export function AlertManagementForm() {
                           previous.filter(criteria => criteria !== Criteria.GEAR_ON_BOARD)
                         )
                       }}
+                    />
+                  )}
+                  {hasSpeciesOnBoardCriteria && (
+                    <SpeciesOnBoardCriteria
+                      onDelete={() => {
+                        setSelectedCriterias(previous =>
+                          previous.filter(criteria => criteria !== Criteria.SPECIES_ON_BOARD)
+                        )
+                      }}
+                      speciesAsOptions={speciesAsOptions}
                     />
                   )}
                   {hasVesselCriteria && (

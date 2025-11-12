@@ -84,7 +84,7 @@ data class GearSpecificationDataOutput(
     val gear: String,
     val minMesh: Double?,
     val maxMesh: Double?,
-    val meshType: GearMeshSizeEqualityComparator?,
+    val meshType: GearMeshSizeEqualityComparatorEnum?,
 ) {
     companion object {
         fun fromGearSpecification(gearSpecification: GearSpecification) =
@@ -98,14 +98,16 @@ data class GearSpecificationDataOutput(
 }
 
 data class SpeciesSpecificationDataOutput(
-    val species: String,
-    val minWeight: Double?,
+    val code: String,
+    val weight: Double?,
+    val weightType: SpecyWeightEqualityComparatorEnum?,
 ) {
     companion object {
         fun fromSpeciesSpecification(speciesSpecification: SpeciesSpecification) =
             SpeciesSpecificationDataOutput(
-                species = speciesSpecification.species,
-                minWeight = speciesSpecification.minWeight,
+                code = speciesSpecification.code,
+                weight = speciesSpecification.weight,
+                weightType = speciesSpecification.weightType,
             )
     }
 }

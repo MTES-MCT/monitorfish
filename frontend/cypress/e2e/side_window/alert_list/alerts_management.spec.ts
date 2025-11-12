@@ -204,8 +204,9 @@ context('Side Window > Alert Management', () => {
 
     cy.fill('Nom', 'Nom modifié')
     cy.fill('Description', 'Description modifiée')
+    cy.get('.Field-DateRangePicker__RangeCalendarPicker').should('exist')
     cy.fill('Période de validité', 'En tous temps')
-    cy.get('.rs-picker-input').should('not.exist')
+    cy.get('.Field-DateRangePicker__RangeCalendarPicker').should('not.exist')
     cy.fill("Positions VMS prises en compte par l'alerte", 'Les positions en pêche uniquement')
 
     cy.clickButton('Enregistrer')
@@ -273,7 +274,7 @@ context('Side Window > Alert Management', () => {
     )
     cy.get('[data-id="POSITION_ALERT:13"]').contains('22206')
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains(
-      "HKE - MERLU D'EUROPE (min. 713kg), LOB - CROUPIA ROCHE, SOL - SOLE COMMUNE"
+      "HKE - MERLU D'EUROPE (égal à 713kg), LOB - CROUPIA ROCHE, SOL - SOLE COMMUNE"
     )
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains('27.7.e, 27.7.d, 27.8.a')
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains('France, Espagne, Allemagne, Danemark')

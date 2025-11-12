@@ -40,12 +40,13 @@ data class GearSpecification(
     val gear: String,
     val minMesh: Double?,
     val maxMesh: Double?,
-    val meshType: GearMeshSizeEqualityComparator?,
+    val meshType: GearMeshSizeEqualityComparatorEnum?,
 )
 
 data class SpeciesSpecification(
-    val species: String,
-    val minWeight: Double?,
+    val code: String,
+    val weight: Double?,
+    val weightType: SpecyWeightEqualityComparatorEnum?,
 )
 
 data class RegulatoryAreaSpecification(
@@ -66,11 +67,17 @@ enum class AdministrativeAreaType {
     DISTANCE_TO_SHORE,
 }
 
-enum class GearMeshSizeEqualityComparator {
+enum class GearMeshSizeEqualityComparatorEnum {
     EQUAL,
     BETWEEN,
     GREATER_THAN,
     LOWER_THAN,
     LOWER_THAN_OR_EQUAL_TO,
     GREATER_THAN_OR_EQUAL_TO,
+}
+
+enum class SpecyWeightEqualityComparatorEnum {
+    EQUAL,
+    GREATER_THAN,
+    LOWER_THAN,
 }

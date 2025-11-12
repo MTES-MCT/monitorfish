@@ -2,12 +2,12 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.AdministrativeAreaSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.AdministrativeAreaType
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.GearMeshSizeEqualityComparator
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.GearMeshSizeEqualityComparatorEnum
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.GearSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PositionAlertSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.RegulatoryAreaSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SpeciesSpecification
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SpecyWeightEqualityComparator
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SpecyWeightEqualityComparatorEnum
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import kotlinx.coroutines.runBlocking
 import org.mockito.BDDMockito
@@ -41,12 +41,12 @@ object TestUtils {
             gears =
                 listOf(
                     GearSpecification("OTB", null, null, meshType = null),
-                    GearSpecification("OTM", 80.0, 120.0, meshType = GearMeshSizeEqualityComparator.BETWEEN),
+                    GearSpecification("OTM", 80.0, 120.0, meshType = GearMeshSizeEqualityComparatorEnum.BETWEEN),
                     GearSpecification("PTB", null, null, meshType = null),
                 ),
             species =
                 listOf(
-                    SpeciesSpecification("HKE", 500.0, SpecyWeightEqualityComparator.EQUAL),
+                    SpeciesSpecification("HKE", 500.0, SpecyWeightEqualityComparatorEnum.EQUAL),
                     SpeciesSpecification("SOL", null, null),
                 ),
             speciesCatchAreas = listOf("27.7.e", "27.8.a"),

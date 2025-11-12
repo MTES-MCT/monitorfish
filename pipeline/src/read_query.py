@@ -21,6 +21,7 @@ def read_saved_query(
     geom_col: str = "geom",
     crs: Union[int, None] = None,
     parse_dates: Union[list, dict, None] = None,
+    return_pyarrow_dtypes: bool = False,
     **kwargs,
 ) -> Union[pd.DataFrame, gpd.GeoDataFrame]:
     """Run saved SQLquery on a database. Supported databases :
@@ -66,6 +67,9 @@ def read_saved_query(
             (D, s, ns, ms, us) in case of parsing integer timestamps.
           - Dict of ``{column_name: arg dict}``, where the arg dict corresponds
             to the keyword arguments of :func:`pandas.to_datetime`
+        return_pyarrow_dtypes (bool, optional): If `True`, and `db` is
+          `"data_warehouse"`, results are returned as a pandas DataFrame of `pyarrow`
+          dtypes. Ignored if `db` is not `"data_warehouse"`. Defaults to `False`.
         kwargs : passed to pd.read_sql or gpd.read_postgis
 
     Returns:
@@ -85,6 +89,7 @@ def read_saved_query(
         geom_col=geom_col,
         crs=crs,
         parse_dates=parse_dates,
+        return_pyarrow_dtypes=return_pyarrow_dtypes,
         **kwargs,
     )
 
@@ -100,6 +105,7 @@ def read_query(
     geom_col: str = "geom",
     crs: Union[int, None] = None,
     parse_dates: Union[list, dict, None] = None,
+    return_pyarrow_dtypes: bool = False,
     **kwargs,
 ) -> Union[pd.DataFrame, gpd.GeoDataFrame]:
     """Run SQLquery on a database. Supported databases :
@@ -146,6 +152,9 @@ def read_query(
             (D, s, ns, ms, us) in case of parsing integer timestamps.
           - Dict of ``{column_name: arg dict}``, where the arg dict corresponds
             to the keyword arguments of :func:`pandas.to_datetime`
+        return_pyarrow_dtypes (bool, optional): If `True`, and `db` is
+          `"data_warehouse"`, results are returned as a pandas DataFrame of `pyarrow`
+          dtypes. Ignored if `db` is not `"data_warehouse"`. Defaults to `False`.
         kwargs : passed to pd.read_sql or gpd.read_postgis
 
     Returns:
@@ -156,9 +165,12 @@ def read_query(
         client = create_datawarehouse_client()
         # `query_df` returns an empty DataFrame without any column when there are no
         # rows in the result set. Using query_arrow().to_pandas() returns
-        # an (empty) DataFrame with columns, thus presercing the consistency of the
+        # an (empty) DataFrame with columns, thus preserving the consistency of the
         # expected dataset.
-        return client.query_arrow(query, parameters=params).to_pandas()
+        types_mapper = pd.ArrowDtype if return_pyarrow_dtypes else None
+        return client.query_arrow(query, parameters=params).to_pandas(
+            types_mapper=types_mapper
+        )
     else:
         if isinstance(query, str):
             query = text(query)

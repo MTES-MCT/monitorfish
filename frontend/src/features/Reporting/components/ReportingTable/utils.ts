@@ -23,7 +23,7 @@ export const getReportingOrigin = (reporting: Reporting.Reporting, isHovering: b
     case ReportingOriginActor.DML:
       return `${reporting.value.dml}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
     case ReportingOriginActor.OTHER:
-      return `${reporting.value.dml}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
+      return reporting.value.authorContact ?? ''
     default:
       return ''
   }

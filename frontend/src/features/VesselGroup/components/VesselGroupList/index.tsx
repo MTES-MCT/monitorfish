@@ -39,9 +39,12 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
     filteredSharing,
     filteredExpired
   )
+  // console.log(isLoading, pinnedVesselGroupsWithVessels, unpinnedVesselGroupsWithVessels)
 
   const debouncedSetSearch = useDebouncedCallback(nextQuery => {
-    dispatch(vesselGroupListActions.setSearchQuery(nextQuery))
+    if (nextQuery?.length > 1) {
+      dispatch(vesselGroupListActions.setSearchQuery(nextQuery))
+    }
   }, 250)
 
   const toggleSetSearchQuery = (nextQuery: string | undefined) => {
@@ -154,7 +157,7 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
             />
           </>
         </Row>
-        {pinnedVesselGroupsWithVessels.length > 0 && (
+        {!isLoading && pinnedVesselGroupsWithVessels.length > 0 && (
           <PinnedGroupsWrapper>
             <PinnedGroupsTitle>Groupes épinglés</PinnedGroupsTitle>
             <PinnedGroups data-cy="pinned-vessels-groups">
@@ -170,7 +173,7 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
             </PinnedGroups>
           </PinnedGroupsWrapper>
         )}
-        {unpinnedVesselGroupsWithVessels.length > 0 && (
+        {!isLoading && unpinnedVesselGroupsWithVessels.length > 0 && (
           <UnpinnedGroups data-cy="unpinned-vessels-groups">
             {unpinnedVesselGroupsWithVessels.map(groupWithVessels => (
               <VesselGroupRow

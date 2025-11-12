@@ -63,10 +63,11 @@ export function useGetVesselGroupsWithVessels(
   )
 
   useEffect(() => {
-    // Set loading state immediately when filters change (but not during RTK query loading)
     if (!isLoading) {
+      // Set loading state immediately when filters change (but not during RTK query loading)
       setResult(prev => ({ ...prev, isLoading: true }))
     }
+    
     debouncedSearch(searchQuery, filteredGroupTypes, filteredSharing, filteredExpired, isLoading)
   }, [
     searchQuery,

@@ -39,7 +39,6 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
     filteredSharing,
     filteredExpired
   )
-  // console.log(isLoading, pinnedVesselGroupsWithVessels, unpinnedVesselGroupsWithVessels)
 
   const debouncedSetSearch = useDebouncedCallback(nextQuery => {
     if (nextQuery?.length > 1) {

@@ -92,7 +92,7 @@ class KeycloakProxyController(
 
             // Rewrite HTML responses to fix form action URLs
             if (isHtmlResponse(cleanedResponse)) {
-                rewriteHtmlResponse(cleanedResponse)
+                rewriteHtmlResponse(cleanedResponse, request)
             } else {
                 cleanedResponse
             }
@@ -188,7 +188,7 @@ class KeycloakProxyController(
 
             // Rewrite HTML responses to fix form action URLs
             if (isHtmlResponse(cleanedResponse)) {
-                rewriteHtmlResponse(cleanedResponse)
+                rewriteHtmlResponse(cleanedResponse, request)
             } else {
                 cleanedResponse
             }
@@ -218,18 +218,23 @@ class KeycloakProxyController(
         return contentType?.toString()?.contains("text/html") == true
     }
 
-    private fun rewriteHtmlResponse(response: ResponseEntity<*>): ResponseEntity<*> {
+    private fun rewriteHtmlResponse(response: ResponseEntity<*>, request: HttpServletRequest): ResponseEntity<*> {
         try {
             val body = response.body as? ByteArray ?: return response
             val html = String(body, StandardCharsets.UTF_8)
 
+            // Detect the origin of the request to rewrite URLs appropriately
+            // This allows Cypress tests to work in dev mode (localhost:3000) as well as in CI (localhost:8880 or app:8880)
+            val targetOrigin = detectTargetOrigin(request)
+            logger.info("[DEV-PROXY] Rewriting HTML responses to use origin: $targetOrigin")
+
             // Replace Keycloak internal URLs with proxy URLs for local development
             val rewrittenHtml =
                 html
-                    .replace("http://keycloak:8080", "http://localhost:8880")
-                    .replace("action=\"/realms/", "action=\"http://localhost:8880/realms/")
-                    .replace("href=\"/realms/", "href=\"http://localhost:8880/realms/")
-                    .replace("src=\"/realms/", "src=\"http://localhost:8880/realms/")
+                    .replace("http://keycloak:8080", targetOrigin)
+                    .replace("action=\"/realms/", "action=\"$targetOrigin/realms/")
+                    .replace("href=\"/realms/", "href=\"$targetOrigin/realms/")
+                    .replace("src=\"/realms/", "src=\"$targetOrigin/realms/")
 
             val rewrittenBody = rewrittenHtml.toByteArray(StandardCharsets.UTF_8)
 
@@ -248,5 +253,50 @@ class KeycloakProxyController(
             logger.error("Error rewriting HTML response", e)
             return response
         }
+    }
+
+    /**
+     * Detect the target origin for URL rewriting based on the request origin
+     *
+     * - If request comes from localhost:3000 (dev mode frontend), rewrite to localhost:3000
+     * - If request comes from localhost:8880 (dev mode or CI frontend on same port), rewrite to localhost:8880
+     * - If request comes from app:8880 (Docker CI environment), rewrite to app:8880
+     * - Default to localhost:8880
+     */
+    private fun detectTargetOrigin(request: HttpServletRequest): String {
+        // Check Referer header first (most reliable for POST requests)
+        val referer = request.getHeader("Referer")
+        if (!referer.isNullOrBlank()) {
+            logger.debug("[DEV-PROXY] Detected referer: $referer")
+            return when {
+                referer.contains("localhost:3000") -> "http://localhost:3000"
+                referer.contains("localhost:8880") -> "http://localhost:8880"
+                referer.contains("app:8880") -> "http://app:8880"
+                else -> "http://localhost:8880" // Default
+            }
+        }
+
+        // Check Origin header as fallback (for CORS preflight or certain requests)
+        val origin = request.getHeader("Origin")
+        if (!origin.isNullOrBlank()) {
+            logger.debug("[DEV-PROXY] Detected origin header: $origin")
+            return origin
+        }
+
+        // Check X-Forwarded-Host for proxy scenarios
+        val forwardedHost = request.getHeader("X-Forwarded-Host")
+        if (!forwardedHost.isNullOrBlank()) {
+            logger.debug("[DEV-PROXY] Detected forwarded host: $forwardedHost")
+            return when {
+                forwardedHost.contains("localhost:3000") -> "http://localhost:3000"
+                forwardedHost.contains("localhost:8880") -> "http://localhost:8880"
+                forwardedHost.contains("app") -> "http://app:8880"
+                else -> "http://localhost:8880"
+            }
+        }
+
+        // Default fallback
+        logger.debug("[DEV-PROXY] No origin detected, defaulting to localhost:8880")
+        return "http://localhost:8880"
     }
 }

@@ -37,7 +37,7 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
   const { setFieldValue, values } = useFormikContext<EditedAlertSpecification>()
   const { data: speciesAndGroups } = useGetSpeciesQuery()
 
-  const [administrativeZones, setAdministrativeZones] = useState<any | null>(null)
+  const [administrativeZones, setAdministrativeZones] = useState<any | undefined>(undefined)
 
   useEffect(() => {
     let isMounted = true

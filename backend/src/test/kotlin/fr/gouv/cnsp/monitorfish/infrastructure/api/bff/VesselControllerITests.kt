@@ -28,6 +28,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUs
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
+import fr.gouv.cnsp.monitorfish.fakers.VesselContactToUpdateFaker
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.TestUtils.DUMMY_VESSEL_PROFILE
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDynamicVesselGroups
 import kotlinx.coroutines.CompletableDeferred
@@ -40,10 +41,12 @@ import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
+import org.springframework.http.MediaType
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.math.BigDecimal
@@ -94,6 +97,12 @@ class VesselControllerITests {
 
     @MockitoBean
     private lateinit var getVesselTripNumbers: GetVesselTripNumbers
+
+    @MockitoBean
+    private lateinit var getVesselContactToUpdateByVesselId: GetVesselContactToUpdateByVesselId
+
+    @MockitoBean
+    private lateinit var saveVesselContactToUpdate: SaveVesselContactToUpdate
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -1061,37 +1070,63 @@ class VesselControllerITests {
     }
 
     @Test
-    fun `Should find logbook messages of a vessel by dates`() {
+    fun `Should find the vessel contact method of the given vessel id`() {
         // Given
-        val voyage =
-            Voyage(
-                isLastVoyage = true,
-                isFirstVoyage = false,
-                startDate = ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"),
-                endDate = null,
-                tripNumber = "1234",
-                software = "FT/",
-                logbookMessages = TestUtils.getDummyLogbookMessages(),
-            )
-        given(this.getVesselVoyageByDates.execute(any(), any(), anyOrNull(), anyOrNull())).willReturn(voyage)
+        val id = 1
+        val vesselContact = VesselContactToUpdateFaker.fakeVesselContactToUpdate()
+        given(getVesselContactToUpdateByVesselId.execute(id)).willReturn(vesselContact)
 
         // When
         api
             .perform(
-                get(
-                    "/bff/v1/vessels/logbook/find_by_dates?internalReferenceNumber=FR224226850&trackDepth=TWO_DAYS&beforeDateTime=&afterDateTime=",
-                ).with(authenticatedRequest()),
+                get("/bff/v1/vessels/contact_method/$id")
+                    .with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.isLastVoyage", equalTo(true)))
-            .andExpect(jsonPath("$.tripNumber", equalTo("1234")))
-            .andExpect(jsonPath("$.isFirstVoyage", equalTo(false)))
-            .andExpect(jsonPath("$.startDate", equalTo("2021-01-21T10:21:26.617301+01:00")))
-            .andExpect(jsonPath("$.endDate", equalTo(null)))
-            .andExpect(jsonPath("$.logbookMessages.length()", equalTo(6)))
-            .andExpect(jsonPath("$.logbookMessages[0].messageType", equalTo("FAR")))
+            .andExpect(jsonPath("$.id", equalTo(vesselContact.id)))
+            .andExpect(jsonPath("$.vesselId", equalTo(vesselContact.vesselId)))
+            .andExpect(jsonPath("$.contactMethod", equalTo(vesselContact.contactMethod)))
+            .andExpect(jsonPath("$.contactMethodShouldBeChecked", equalTo(vesselContact.contactMethodShouldBeChecked)))
+    }
 
-        Mockito.verify(getVesselVoyageByDates).execute("FR224226850", VesselTrackDepth.TWO_DAYS, null, null)
+    @Test
+    fun `Should create the vessel contact method`() {
+        // Given
+        val id = 1
+        val vesselContact = VesselContactToUpdateFaker.fakeVesselContactToUpdate()
+        given(getVesselContactToUpdateByVesselId.execute(id)).willReturn(vesselContact)
+
+        // When
+        api
+            .perform(
+                post("/bff/v1/vessels/contact_method")
+                    .with(authenticatedRequest())
+                    .with(csrf())
+                    .content(objectMapper.writeValueAsString(vesselContact))
+                    .contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isCreated)
+    }
+
+    @Test
+    fun `Should update the vessel contact method`() {
+        // Given
+        val id = 1
+        val vesselContact = VesselContactToUpdateFaker.fakeVesselContactToUpdate()
+        given(getVesselContactToUpdateByVesselId.execute(id)).willReturn(vesselContact)
+
+        // When
+        api
+            .perform(
+                put("/bff/v1/vessels/contact_method")
+                    .with(authenticatedRequest())
+                    .with(csrf())
+                    .content(objectMapper.writeValueAsString(vesselContact))
+                    .contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isOk)
     }
 }

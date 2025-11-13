@@ -5,11 +5,11 @@ import { vesselGroupListActions } from '@features/VesselGroup/components/VesselG
 import { VesselGroupRow } from '@features/VesselGroup/components/VesselGroupList/VesselGroupRow'
 import { GroupType, Sharing } from '@features/VesselGroup/types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector.ts'
 import { trackEvent } from '@hooks/useTracking'
 import { Checkbox, FulfillingBouncingCircleLoader, Size, TextInput, THEME } from '@mtes-mct/monitor-ui'
 import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { useDebouncedCallback } from 'use-debounce'
 
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { UserAccountContext } from '../../../../context/UserAccountContext'
@@ -20,8 +20,8 @@ type VesselListProps = Readonly<{
 export function VesselGroupList({ isFromUrl }: VesselListProps) {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
+  const searchQuery = useMainAppSelector(state => state.vesselGroupList.searchQuery)
   const userAccount = useContext(UserAccountContext)
-  const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
   const [filteredGroupTypes, setFilteredGroupTypes] = useState<GroupType[]>([GroupType.DYNAMIC, GroupType.FIXED])
   const [filteredSharing, setFilteredSharing] = useState<Sharing[]>([Sharing.SHARED, Sharing.PRIVATE])
   const [filteredExpired, setFilterExpired] = useState<boolean>(false)
@@ -40,15 +40,8 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
     filteredExpired
   )
 
-  const debouncedSetSearch = useDebouncedCallback(nextQuery => {
-    if (nextQuery?.length > 1) {
-      dispatch(vesselGroupListActions.setSearchQuery(nextQuery))
-    }
-  }, 250)
-
   const toggleSetSearchQuery = (nextQuery: string | undefined) => {
-    setSearchQuery(nextQuery)
-    debouncedSetSearch(nextQuery)
+    dispatch(vesselGroupListActions.setSearchQuery(nextQuery))
   }
 
   const updateDynamicGroupType = (nextGroupType: boolean | undefined) => {

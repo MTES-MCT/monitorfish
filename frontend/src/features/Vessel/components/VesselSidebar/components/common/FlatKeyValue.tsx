@@ -55,7 +55,7 @@ const Zone = styled.div`
 `
 
 const Fields = styled.table`
-  margin: 8px 8px 8px 16px;
+  margin: 16px 16px 16px 24px;
   display: table;
   min-width: 40%;
 `

@@ -10,6 +10,7 @@ import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useMemo, useState } from 'react'
 import styled, { css } from 'styled-components'
+import { useDebounce } from 'use-debounce'
 
 import { TableBodyEmptyData } from './TableBodyEmptyData'
 
@@ -28,17 +29,18 @@ export function VesselTable({ filters, isFixedGroup, isFromUrl, isPinned, vessel
   const isBodyEmptyDataVisible = !!vessels && vessels.length === 0
 
   const searchQuery = useMainAppSelector(state => state.vesselGroupList.searchQuery)
+  const [debouncedSearchQuery] = useDebounce(searchQuery, 250)
 
   const [rowSelection, setRowSelection] = useState({})
 
   const [columns, tableData] = useMemo(() => {
     /**
      * `SEARCH_QUERY_MIN_LENGTH - 1` because we would like to avoid an initial rendering of
-     * the table when there is a filter be pre-searching for vessels.
+     * the table when there is a filter by pre-searching for vessels.
      * This is doable because SEARCH_QUERY_MIN_LENGTH also trigger the opening of the `VesselTable`
-     * (see `areGroupsOpened`in HideNonSelectedVessels.tsx)
+     * (see `areGroupsOpened`in VesselGroupList.tsx)
      * */
-    if (!searchQuery || searchQuery.length <= SEARCH_QUERY_MIN_LENGTH - 1) {
+    if (!debouncedSearchQuery || debouncedSearchQuery.length <= SEARCH_QUERY_MIN_LENGTH - 1) {
       return [
         getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId, isFixedGroup), filters),
         vessels ?? []
@@ -50,13 +52,13 @@ export function VesselTable({ filters, isFixedGroup, isFromUrl, isPinned, vessel
       ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs'],
       { isStrict: true, threshold: 0.4 }
     )
-    const filteredVessels = fuse.find(searchQuery)
+    const filteredVessels = fuse.find(debouncedSearchQuery)
 
     return [
       getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId, isFixedGroup), filters),
       filteredVessels
     ]
-  }, [isFromUrl, vesselGroupId, isFixedGroup, vessels, filters, searchQuery])
+  }, [isFromUrl, vesselGroupId, isFixedGroup, vessels, filters, debouncedSearchQuery])
 
   const table = useReactTable({
     columns,

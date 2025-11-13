@@ -38,4 +38,54 @@ context('Vessel sidebar identity tab', () => {
     cy.get('*[data-cy="Contact navire"]').contains('0918273645, +33 6 00 00 00 00')
     cy.get('*[data-cy="Contact navire"]').contains('escogriffe@dgse.spy, henri.duflot@dgse.spy')
   })
+
+  it('Identity should modify contact method', () => {
+    // Given
+    cy.intercept('POST', `/bff/v1/vessels/contact_method`).as('createContactMethod')
+    cy.intercept('PUT', `/bff/v1/vessels/contact_method`).as('updateContactMethod')
+    openVesselBySearch('fr263418')
+    cy.clickButton('Identité')
+
+    // When creating a vessel contact
+    cy.fill("Modalité de contact avec l'unité", 'Nouvelle modalité de contact')
+    cy.fill('Contact à mettre à jour', true)
+    cy.clickButton('Valider')
+
+    // Then
+    cy.wait('@createContactMethod').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      assert.deepInclude(interception.request.body, {
+        contactMethod: 'Nouvelle modalité de contact',
+        contactMethodShouldBeChecked: true,
+        vesselId: 3
+      })
+    })
+
+    // When cancelling modifications
+    cy.fill("Modalité de contact avec l'unité", 'Autre modalité de contact')
+    cy.fill('Contact à mettre à jour', false)
+    cy.clickButton('Annuler')
+    // Then
+    cy.get('#contactMethod').should('have.value', 'Nouvelle modalité de contact')
+
+    // When updating a vessel contact method
+    cy.fill("Modalité de contact avec l'unité", 'Autre modalité de contact')
+    cy.fill('Contact à mettre à jour', false)
+    cy.clickButton('Valider')
+    // Then
+    cy.wait('@updateContactMethod').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      assert.deepInclude(interception.request.body, {
+        contactMethod: 'Autre modalité de contact',
+        contactMethodShouldBeChecked: false,
+        vesselId: 3
+      })
+    })
+  })
 })

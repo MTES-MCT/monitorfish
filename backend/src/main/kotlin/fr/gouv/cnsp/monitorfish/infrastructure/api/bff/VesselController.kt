@@ -5,7 +5,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.VesselContactToUpdateDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselContactToUpdateDataOutput.Companion.fromVesselContactToUpdate
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -34,6 +36,8 @@ class VesselController(
     private val getVesselReportings: GetVesselReportings,
     private val getVesselRiskFactor: GetVesselRiskFactor,
     private val getVesselTripNumbers: GetVesselTripNumbers,
+    private val getVesselContactToUpdateByVesselId: GetVesselContactToUpdateByVesselId,
+    private val saveVesselContactToUpdate: SaveVesselContactToUpdate,
 ) {
     @GetMapping("")
     @Operation(summary = "Get all active vessels")
@@ -311,5 +315,39 @@ class VesselController(
         val riskFactor = getVesselRiskFactor.execute(internalReferenceNumber)
 
         return RiskFactorDataOutput.fromVesselRiskFactor(riskFactor)
+    }
+
+    @GetMapping("/contact_method/{vesselId}")
+    @Operation(summary = "Get vessel contact method to update from its vessel ID")
+    fun getVesselContactToUpdateByVesselId(
+        @PathParam("Vessel ID")
+        @PathVariable(name = "vesselId")
+        vesselId: Int,
+    ): ResponseEntity<VesselContactToUpdateDataOutput> {
+        val vesselContactToUpdate = getVesselContactToUpdateByVesselId.execute(vesselId)
+        return if (vesselContactToUpdate != null) {
+            ResponseEntity.ok(fromVesselContactToUpdate(vesselContactToUpdate))
+        } else {
+            ResponseEntity.noContent().build()
+        }
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(value = ["/contact_method"], consumes = ["application/json"])
+    @Operation(summary = "create a vessel contact method")
+    fun createVesselContactToUpdate(
+        @RequestBody
+        vesselContactToUpdate: VesselContactToUpdateDataInput,
+    ) {
+        saveVesselContactToUpdate.execute(vesselContactToUpdate.toVesselContactToUpdate())
+    }
+
+    @PutMapping(value = ["/contact_method"], consumes = ["application/json"])
+    @Operation(summary = "update a vessel contact method")
+    fun updateVesselContactToUpdate(
+        @RequestBody
+        vesselContactToUpdate: VesselContactToUpdateDataInput,
+    ) {
+        saveVesselContactToUpdate.execute(vesselContactToUpdate.toVesselContactToUpdate())
     }
 }

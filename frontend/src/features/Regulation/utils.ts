@@ -37,7 +37,7 @@ export const mapToRegulatoryZone = (
     region: feature.properties.region,
     regulatoryReferences: parseRegulatoryReferences(feature.properties.regulatory_references),
     speciesRegulation: parseSpeciesRegulation(feature.properties.species, speciesByCode),
-    tags: feature.properties.tags ?? [],
+    tags: feature.properties.tags ? parseJSON(feature.properties.tags) : [],
     topic: feature.properties.topic,
     zone: decodeURI(feature.properties.zone)
   }

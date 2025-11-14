@@ -83,7 +83,7 @@
             "facade": "NAMO",
             "region": "Bretagne",
             "law_type": "Reg. MEMN",
-            "tags": ["ZPF"]
+            "tags": "[\"ZPF\"]"
           },
           "bbox": [48.5536, -2.7833, 49.0387, -2.1888]
         }

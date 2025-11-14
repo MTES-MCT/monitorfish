@@ -127,12 +127,13 @@ interface DBLogbookReportRepository :
         pageable: Pageable,
     ): List<VoyageTripNumberAndDate>
 
-    @Query("""SELECT
+    @Query(
+        """SELECT
             start_date,
             end_date,
             end_date_without_lan
         FROM find_dates_of_trip(:internalReferenceNumber, :tripNumber)""",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findFirstAndLastOperationsDatesOfTrip(
         internalReferenceNumber: String,

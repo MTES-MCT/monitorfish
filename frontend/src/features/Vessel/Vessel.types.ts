@@ -4,6 +4,7 @@ import {
   type DeclaredLogbookSpeciesSchema,
   type VesselGroupOfActiveVesselSchema
 } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { ContactMethodSchema } from '@features/Vessel/schemas/ContactMethodSchema'
 import { VesselIdentitySchema } from '@features/Vessel/schemas/VesselIdentitySchema'
 import { z } from 'zod'
 
@@ -14,6 +15,8 @@ import type Point from 'ol/geom/Point'
 
 export namespace Vessel {
   export type SelectedVessel = z.infer<typeof VesselSchema>
+
+  export type ContactMethod = z.infer<typeof ContactMethodSchema>
 
   export type VesselIdentity = z.infer<typeof VesselIdentitySchema>
 

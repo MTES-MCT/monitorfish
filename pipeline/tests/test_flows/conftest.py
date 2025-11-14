@@ -67,14 +67,23 @@ def add_vessels(add_monitorfish_proxy_database):
 @fixture
 def add_activity_dates_table(add_monitorfish_proxy_database):
     client = create_datawarehouse_client()
+
     print("Creating monitorfish.activities table")
+    with open(
+        TEST_DATA_LOCATION
+        / (
+            "external/data_warehouse/forklift/forklift/pipeline/sql_scripts/"
+            "ddl/monitorfish/create_activities_if_not_exists.sql"
+        ),
+        "r",
+    ) as f:
+        ddl = f.read()
+    client.command(ddl)
+
+    print("Populating monitorfish.activities table")
     client.command(
         """
-        CREATE TABLE monitorfish.activities
-        ENGINE MergeTree()
-        PARTITION BY toYYYYMM(operation_datetime_utc)
-        ORDER BY operation_datetime_utc
-        AS
+        INSERT INTO monitorfish.activities
         SELECT
             operation_datetime_utc,
             cfr,

@@ -90,10 +90,12 @@ export function FormikMultiControlUnitPicker({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [missionId, engagedControlUnit])
 
+  const controlUnits = values.controlUnits?.length > 0 ? values.controlUnits : [INITIAL_MISSION_CONTROL_UNIT]
+
   return (
     <Wrapper>
       <>
-        {(values.controlUnits ?? [INITIAL_MISSION_CONTROL_UNIT]).map((controlUnit, index) => (
+        {controlUnits.map((controlUnit, index) => (
           <ControlUnitSelect
             // eslint-disable-next-line react/no-array-index-key
             key={`${controlUnit.id}-${index}`}

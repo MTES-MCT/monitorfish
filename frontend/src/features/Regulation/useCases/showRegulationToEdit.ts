@@ -38,6 +38,7 @@ export const showRegulationToEdit =
         region,
         regulatoryReferences,
         speciesRegulation,
+        tags,
         topic,
         zone
       } = regulatoryZoneMetadata
@@ -54,6 +55,7 @@ export const showRegulationToEdit =
           region: region ? region.split(', ') : [],
           regulatoryReferences: regulatoryReferences?.length ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT],
           speciesRegulation,
+          tags,
           topic,
           zone
         })

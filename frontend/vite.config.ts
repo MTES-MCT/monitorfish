@@ -67,6 +67,12 @@ export default defineConfig({
       '/bff': {
         target: 'http://localhost:8880'
       },
+      '/login': {
+        target: 'http://localhost:8880'
+      },
+      '/realms': {
+        target: 'http://localhost:8880'
+      },
       '/logout': {
         target: 'http://localhost:8880'
       },

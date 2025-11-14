@@ -9,6 +9,7 @@
       "redirectUris": [
         "http://localhost:8880/login/oauth2/code/proconnect",
         "http://localhost:8880",
+        "http://localhost:3000/login/oauth2/code/proconnect",
         "http://localhost:3000"
       ],
       "webOrigins": [

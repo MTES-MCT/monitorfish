@@ -1,5 +1,6 @@
 import { useGetLegacyControlUnitsQuery } from '@api/legacyControlUnit'
 import { getControlUnitsOptionsFromControlUnits } from '@features/ControlUnit/utils'
+import { INITIAL_MISSION_CONTROL_UNIT } from '@features/Mission/components/MissionForm/constants'
 import { useForceUpdate } from '@hooks/useForceUpdate'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { ControlUnit, usePrevious } from '@mtes-mct/monitor-ui'
@@ -89,10 +90,12 @@ export function FormikMultiControlUnitPicker({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [missionId, engagedControlUnit])
 
+  const controlUnits = values.controlUnits?.length > 0 ? values.controlUnits : [INITIAL_MISSION_CONTROL_UNIT]
+
   return (
     <Wrapper>
       <>
-        {(values.controlUnits ?? []).map((controlUnit, index) => (
+        {controlUnits.map((controlUnit, index) => (
           <ControlUnitSelect
             // eslint-disable-next-line react/no-array-index-key
             key={`${controlUnit.id}-${index}`}

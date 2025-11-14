@@ -27,7 +27,7 @@ export function useGetVesselGroupsWithVessels(
   })
   const vesselGroupsIdsPinned = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsPinned)
   const searchQuery = useMainAppSelector(state => state.vesselGroupList.searchQuery)
-  const { data: vesselGroupsWithVessels } = useGetVesselGroupsWithVesselsQuery(
+  const { data: vesselGroupsWithVessels, isLoading } = useGetVesselGroupsWithVesselsQuery(
     undefined,
     RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
   )
@@ -37,8 +37,13 @@ export function useGetVesselGroupsWithVessels(
       debouncedSearchQuery: string | undefined,
       debouncedFilteredGroupTypes: GroupType[],
       debouncedFilteredSharing: Sharing[],
-      debouncedFilteredExpired: boolean
+      debouncedFilteredExpired: boolean,
+      debouncedIsLoading: boolean
     ) => {
+      if (debouncedIsLoading) {
+        return
+      }
+
       const nextGroups = await MonitorFishWorker.getFilteredVesselGroups(
         vesselGroupsWithVessels ?? [],
         vesselGroupsIdsPinned,
@@ -58,9 +63,15 @@ export function useGetVesselGroupsWithVessels(
   )
 
   useEffect(() => {
-    debouncedSearch(searchQuery, filteredGroupTypes, filteredSharing, filteredExpired)
+    if (!isLoading) {
+      // Set loading state immediately when filters change (but not during RTK query loading)
+      setResult(prev => ({ ...prev, isLoading: true }))
+    }
+
+    debouncedSearch(searchQuery, filteredGroupTypes, filteredSharing, filteredExpired, isLoading)
   }, [
     searchQuery,
+    isLoading,
     debouncedSearch,
     filteredGroupTypes,
     filteredSharing,

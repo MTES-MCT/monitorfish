@@ -35,8 +35,10 @@ context('Vessel sidebar identity tab', () => {
     cy.get('*[data-cy="Coordonnées propriétaire"]').contains('+33 6 45 25 14')
     cy.get('*[data-cy="Coordonnées armateur"]').contains('DUPOND')
     cy.get('*[data-cy="Coordonnées armateur"]').contains('+33 6 84 56 32 14')
-    cy.get('*[data-cy="Contact navire"]').contains('0918273645, +33 6 00 00 00 00')
-    cy.get('*[data-cy="Contact navire"]').contains('escogriffe@dgse.spy, henri.duflot@dgse.spy')
+    cy.get('*[data-cy="Contact navire"]').contains('0918273645')
+    cy.get('*[data-cy="Contact navire"]').contains('+33 6 00 00 00 00')
+    cy.get('*[data-cy="Contact navire"]').contains('escogriffe@dgse.spy')
+    cy.get('*[data-cy="Contact navire"]').contains('henri.duflot@dgse.spy')
   })
 
   it('Identity should modify contact method', () => {

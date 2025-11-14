@@ -218,7 +218,10 @@ class KeycloakProxyController(
         return contentType?.toString()?.contains("text/html") == true
     }
 
-    private fun rewriteHtmlResponse(response: ResponseEntity<*>, request: HttpServletRequest): ResponseEntity<*> {
+    private fun rewriteHtmlResponse(
+        response: ResponseEntity<*>,
+        request: HttpServletRequest,
+    ): ResponseEntity<*> {
         try {
             val body = response.body as? ByteArray ?: return response
             val html = String(body, StandardCharsets.UTF_8)

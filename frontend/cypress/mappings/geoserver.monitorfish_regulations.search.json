@@ -26,7 +26,7 @@
             "zone": "Praires Ouest cotentin",
             "region": "Normandie, Bretagne",
             "law_type": "Reg. MEMN",
-            "tags": ["ZPF"]
+            "tags": "[\"ZPF\"]"
           },
           "bbox": [48.5983, -2.6721, 49.7226, -1.3524]
         },
@@ -44,7 +44,7 @@
             "zone": "Secteur 3",
             "region": "Bretagne",
             "law_type": "Reg. NAMO",
-            "tags": ["ARP"]
+            "tags": "[\"ARP\"]"
           },
           "bbox": [48.5536, -2.7833, 49.0387, -2.1888]
         },
@@ -85,7 +85,7 @@
             "gears": "{\"authorized\": {\"allGears\": false, \"allTowedGears\": false, \"regulatedGears\": {}, \"allPassiveGears\": false, \"regulatedGearCategories\": {}, \"selectedCategoriesAndGears\": []}, \"unauthorized\": {\"allGears\": false, \"allTowedGears\": false, \"regulatedGears\": {\"OT\": {\"code\": \"OT\", \"name\": \"Chaluts à panneaux (non spécifiés)\", \"groupId\": 1, \"category\": \"Chaluts\"}}, \"allPassiveGears\": false, \"regulatedGearCategories\": {}, \"selectedCategoriesAndGears\": [\"OT\"]}}",
             "regulatory_references": "[{\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-2013070-0001-med-a632.html\", \"endDate\": \"infinite\", \"textType\": [\"creation\", \"regulation\"], \"reference\": \"Arrêté Préfectoral 2013070-0001 / MED\", \"startDate\": 1658827915145}]",
             "next_id": null,
-            "tags": ["ARP", "ZPF"]
+            "tags": "[\"ARP\", \"ZPF\"]"
           },
           "bbox": [42.8611, 9.4054, 43.0777, 9.5525]
         },
@@ -120,7 +120,7 @@
             "gears": "{\"otherInfo\": \"Lorsque profondeur > 50 m\", \"authorized\": {\"allGears\": false, \"allTowedGears\": false, \"regulatedGears\": {\"OTB\": {\"code\": \"OTB\", \"name\": \"Chaluts de fond à panneaux\", \"groupId\": 1, \"remarks\": \"Puissance motrice inférieure ou égale à 147 kW\", \"category\": \"Chaluts\"}}, \"allPassiveGears\": false, \"regulatedGearCategories\": {}, \"selectedCategoriesAndGears\": [\"OTB\"]}, \"unauthorized\": {\"allGears\": false, \"allTowedGears\": false, \"regulatedGears\": {}, \"allPassiveGears\": false, \"regulatedGearCategories\": {}, \"selectedCategoriesAndGears\": []}}",
             "regulatory_references": "[{\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-2013070-0001-med-a632.html\", \"endDate\": \"infinite\", \"textType\": [\"creation\", \"regulation\"], \"reference\": \"Arrêté Préfectoral 2013070-0001 / MED\", \"startDate\": 1658823005569}]",
             "next_id": null,
-            "tags": ["ZPF"]
+            "tags": "[\"ZPF\"]"
           },
           "bbox": [41.3517, 9.2976, 43.0777, 9.6275]
         },

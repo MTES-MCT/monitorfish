@@ -1,4 +1,4 @@
-import type { RegulatoryTags, RegulatoryZone } from './types'
+import type { RegulatoryZone } from './types'
 import type { Feature, FeatureCollection, Polygon } from 'geojson'
 
 export namespace Regulation {
@@ -68,7 +68,7 @@ export namespace Regulation {
     region: string | undefined
     regulatory_references: string | undefined
     species?: string | undefined
-    tags: RegulatoryTags[] | undefined
+    tags: string | undefined
     topic: string | undefined
     zone: string | undefined
   }
@@ -84,7 +84,7 @@ export namespace Regulation {
     region: string
     regulatory_references: string | undefined
     species: string | undefined
-    tags: RegulatoryTags[] | undefined
+    tags: string | undefined
     topic: string
     zone: string
   }

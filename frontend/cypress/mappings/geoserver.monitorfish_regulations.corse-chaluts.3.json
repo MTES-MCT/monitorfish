@@ -1015,7 +1015,7 @@
             "regulatory_references": "[{\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-2013070-0001-med-a632.html\", \"endDate\": \"infinite\", \"textType\": [\"creation\", \"regulation\"], \"reference\": \"Arrêté Préfectoral 2013070-0001 / MED\", \"startDate\": 1658823005569}]",
             "row_hash": "2f4f0ea1a4554a7bd457d3b5b09055d1",
             "next_id": null,
-            "tags": ["ZPF"]
+            "tags": "[\"ZPF\"]"
           },
           "bbox": [9.2976, 41.3517, 9.6275, 43.0777]
         }

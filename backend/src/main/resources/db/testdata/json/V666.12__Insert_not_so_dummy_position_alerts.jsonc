@@ -433,8 +433,8 @@
                 "only_fishing_positions": false,
                 "has_automatic_archiving":  false,
                 "gears:jsonb": [
-                    {"gear": "OTM", "minMesh": 80.0, "maxMesh": 120.0, "meshType": "BETWEEN"},
-                    {"gear": "OTB", "minMesh": 80.0, "maxMesh": null, "meshType": "LOWER_THAN"},
+                    {"gear": "OTM", "minMesh": 80.0, "maxMesh": 120.0},
+                    {"gear": "OTB", "minMesh": 80.0, "maxMesh": null},
                     {"gear": "LLS"}
                 ],
                 "species:jsonb": [
@@ -476,8 +476,8 @@
                 "only_fishing_positions": false,
                 "has_automatic_archiving":  false,
                 "gears:jsonb": [
-                    {"gear": "OTM", "minMesh": 80.0, "maxMesh": 120.0, "meshType": "BETWEEN"},
-                    {"gear": "OTB", "minMesh": 80.0, "maxMesh": null, "meshType": "LOWER_THAN"},
+                    {"gear": "OTM", "minMesh": 80.0, "maxMesh": 120.0},
+                    {"gear": "OTB", "minMesh": 80.0, "maxMesh": null},
                     {"gear": "LLS"}
                 ],
                 "species:jsonb": [
@@ -519,8 +519,8 @@
                 "only_fishing_positions": false,
                 "has_automatic_archiving":  false,
                 "gears:jsonb": [
-                    {"gear": "OTM", "minMesh": 80.0, "maxMesh": null, "meshType": "LOWER_THAN"},
-                    {"gear": "OTB", "minMesh": 80.0, "maxMesh": null, "meshType": "GREATER_THAN"},
+                    {"gear": "OTM", "minMesh": 80.0, "maxMesh": null},
+                    {"gear": "OTB", "minMesh": 80.0, "maxMesh": null},
                     {"gear": "LLS"}
                 ],
                 "species:jsonb": [
@@ -562,8 +562,8 @@
                 "only_fishing_positions": false,
                 "has_automatic_archiving":  false,
                 "gears:jsonb": [
-                    {"gear": "OTM", "minMesh": 80.0, "maxMesh": null, "meshType": "EQUAL"},
-                    {"gear": "OTB", "minMesh": 80.0, "maxMesh": null, "meshType": "GREATER_THAN"},
+                    {"gear": "OTM", "minMesh": 80.0, "maxMesh": null},
+                    {"gear": "OTB", "minMesh": 80.0, "maxMesh": null},
                     {"gear": "LLS"}
                 ],
                 "species:jsonb": [

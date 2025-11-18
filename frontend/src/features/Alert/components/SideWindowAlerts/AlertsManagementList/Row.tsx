@@ -3,7 +3,6 @@ import {
   AdministrativeAreaType,
   AdministrativeAreaTypeLabel,
   AdministrativeAreaValueLabel,
-  gearMeshSizeEqualityComparatorLabels,
   speciesWeightEqualityComparatorLabels
 } from '@features/Alert/constants'
 import { type AlertSpecification } from '@features/Alert/types'
@@ -67,17 +66,10 @@ export function Row({ row }: RowProps) {
                   {alertSpecification.gears
                     .map(gear => {
                       const gearName = gearsAsOptions?.find(gearOption => gearOption.value === gear.gear)
-                      const minMesh = gear.minMesh ? `maillage min. ${gear.minMesh}mm` : null
-                      const maxMesh = gear.maxMesh ? `maillage max. ${gear.maxMesh}mm` : null
-                      const meshType = gear.meshType ? gearMeshSizeEqualityComparatorLabels[gear.meshType] : null
-                      const maxMeshText = gear.maxMesh ? ` et ${gear.maxMesh} mm` : ' mm'
 
-                      const meshText =
-                        meshType && gear.minMesh
-                          ? `maillage ${meshType} ${gear.minMesh}${maxMeshText}`
-                          : `${[minMesh, maxMesh].filter(mesh => !!mesh).join(', ')}`
+                      const meshText = gear.minMesh ? `maillage min. ${gear.minMesh}mm` : null
 
-                      return `${gearName?.label ?? gear.gear}${!!minMesh || !!maxMesh ? ` (${meshText})` : ''}`
+                      return `${gearName?.label ?? gear.gear}${meshText ? ` (${meshText})` : ''}`
                     })
                     .join(', ')}
                 </ExpandedRowValue>

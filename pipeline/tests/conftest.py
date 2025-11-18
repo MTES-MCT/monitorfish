@@ -147,7 +147,7 @@ def start_remote_database_container(set_environment_variables, create_docker_cli
     client = create_docker_client
     print("Starting database container")
     remote_database_container = client.containers.run(
-        "timescale/timescaledb-postgis:1.7.4-pg11",
+        "ghcr.io/mtes-mct/monitorfish/monitorfish-database:pg16-ts2.14.2-postgis3.5.1",
         environment={
             "POSTGRES_PASSWORD": os.environ["MONITORFISH_REMOTE_DB_PWD"],
             "POSTGRES_USER": os.environ["MONITORFISH_REMOTE_DB_USER"],

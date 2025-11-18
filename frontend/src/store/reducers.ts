@@ -27,7 +27,10 @@ import { stationReducer } from '@features/Station/slice'
 import { vesselListReducer } from '@features/Vessel/components/VesselList/slice'
 import { controlReducer } from '@features/Vessel/components/VesselSidebar/control.slice'
 import { vesselReducer, type VesselState } from '@features/Vessel/slice'
-import { vesselGroupListReducer } from '@features/VesselGroup/components/VesselGroupList/slice'
+import {
+  vesselGroupListReducer,
+  type VesselGroupListState
+} from '@features/VesselGroup/components/VesselGroupList/slice'
 import { vesselGroupReducer } from '@features/VesselGroup/slice'
 import { beaconMalfunctionReducer } from 'domain/shared_slices/BeaconMalfunction'
 import { displayedComponentReducer, type DisplayedComponentState } from 'domain/shared_slices/DisplayedComponent'
@@ -167,7 +170,17 @@ export const mainReducer = {
     },
     vesselGroupReducer
   ),
-  vesselGroupList: vesselGroupListReducer,
+  vesselGroupList: persistReducerTyped(
+    {
+      ...getCommonPersistReducerConfig<VesselGroupListState>('mainPersistorVesselGroupList', [
+        'filteredExpired',
+        'filteredGroupTypes',
+        'filteredSharing',
+        'searchQuery'
+      ])
+    },
+    vesselGroupListReducer
+  ),
   vesselList: vesselListReducer
 }
 

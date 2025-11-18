@@ -1,7 +1,5 @@
 import { GroupType, Sharing } from '@features/VesselGroup/types'
 import { createSlice } from '@reduxjs/toolkit'
-import { persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
 
 import type { PayloadAction } from '@reduxjs/toolkit'
 
@@ -17,11 +15,6 @@ export const INITIAL_STATE: VesselGroupListState = {
   filteredGroupTypes: [GroupType.DYNAMIC, GroupType.FIXED],
   filteredSharing: [Sharing.SHARED, Sharing.PRIVATE],
   searchQuery: undefined
-}
-
-const persistConfig = {
-  key: 'vesselGroupList',
-  storage
 }
 
 const vesselGroupListSlice = createSlice({
@@ -45,4 +38,4 @@ const vesselGroupListSlice = createSlice({
 
 export const vesselGroupListActions = vesselGroupListSlice.actions
 
-export const vesselGroupListReducer = persistReducer(persistConfig, vesselGroupListSlice.reducer)
+export const vesselGroupListReducer = vesselGroupListSlice.reducer

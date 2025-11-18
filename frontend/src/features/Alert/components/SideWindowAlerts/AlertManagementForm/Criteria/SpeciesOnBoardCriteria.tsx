@@ -1,22 +1,11 @@
 import { getAdministrativeSubZonesFromAPI } from '@api/geoserver'
 import { useGetSpeciesQuery } from '@api/specy'
-import { speciesWeightOptions } from '@features/Alert/constants'
 import { LayerProperties } from '@features/Map/constants'
 import { FieldsetGroupSpinner } from '@features/Mission/components/MissionForm/shared/FieldsetGroup'
 import { Tag } from '@features/Regulation/components/RegulationForm/Tag'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import {
-  CustomSearch,
-  FormikSelect,
-  TextInput,
-  type Option,
-  Select,
-  MultiSelect,
-  Level,
-  THEME,
-  Label
-} from '@mtes-mct/monitor-ui'
+import { CustomSearch, TextInput, type Option, Select, MultiSelect, Level, THEME, Label } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
@@ -108,10 +97,7 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
       return
     }
 
-    const newSpeciesList = [
-      ...(values.species ?? []),
-      { code: nextSpecy.code, weight: undefined, weightType: undefined }
-    ]
+    const newSpeciesList = [...(values.species ?? []), { code: nextSpecy.code, minWeight: undefined }]
     setFieldValue('species', newSpeciesList)
   }
 
@@ -121,7 +107,7 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
   }
 
   if (!speciesAsOptions?.length || !customSearch || !administrativeZones) {
-    return <FieldsetGroupSpinner isLight legend="Espèce déclenchant l'alerte" />
+    return <FieldsetGroupSpinner isLight />
   }
 
   return (
@@ -166,23 +152,17 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
                   />
                 </TagWrapper>
                 <WeightWrapper>
-                  <Label>Quantité</Label>
-                  <FormikSelect
-                    isLabelHidden
-                    label={`Fourchette de quantité pour l'espèce ${specy.code}`}
-                    name={`species[${index}].weightType`}
-                    options={speciesWeightOptions}
-                  />
+                  <Label>Quantité supérieure à</Label>
                   <TextInput
                     isLabelHidden
                     label={`Quantité pour l'espèce ${specy.code}`}
-                    name={`species[${index}].weight`}
+                    name={`species[${index}].minWeight`}
                     onChange={(nextValue: string | undefined) => {
-                      setFieldValue(`species.${index}.weight`, nextValue ? Number(nextValue) : undefined)
+                      setFieldValue(`species.${index}.minWeight`, nextValue ? Number(nextValue) : undefined)
                     }}
                     style={{ width: '72px' }}
                     type="number"
-                    value={specy.weight ? String(specy.weight) : ''}
+                    value={specy.minWeight ? String(specy.minWeight) : ''}
                   />
                   <Unit>kg</Unit>
                 </WeightWrapper>

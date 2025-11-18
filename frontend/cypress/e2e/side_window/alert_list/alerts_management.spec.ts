@@ -136,10 +136,20 @@ context('Side Window > Alert Management', () => {
     cy.clickButton('Ajouter un critère de déclenchement')
     cy.clickButton('Engins à bord')
     cy.getDataCy('alert-criteria-gear-on-board-selector').click()
-    cy.get('span[title="Chaluts"]').click({ timeout: 10000 })
-    cy.get('span[title="Chaluts à langoustines – TBN"]').click({ timeout: 10000 })
+    cy.get('span[title="Chaluts"]').click()
+    cy.get('span[title="TBN - Chaluts à langoustines"]').click({ force: true })
     cy.fill('Maillage min', '70')
     cy.contains('ENGINS À BORD').click()
+
+    /**
+     * Add species on board criteria
+     */
+    cy.clickButton('Ajouter un critère de déclenchement')
+    cy.clickButton('Espèces à bord')
+    cy.fill("Espèce déclenchant l'alerte", 'MORUE COMMUNE (CABILLAUD)')
+    cy.fill('Quantité pour l\'espèce COD', '500')
+    cy.fill('Zones de capture (FAR)', ['27.5.b'])
+    cy.contains('ESPÈCES À BORD').click()
 
     cy.clickButton('Enregistrer')
 
@@ -155,6 +165,7 @@ context('Side Window > Alert Management', () => {
       expect(interception.request.body.districtCodes).to.deep.equal(['LS'])
       expect(interception.request.body.vesselIds).to.deep.equal([1])
       expect(interception.request.body.producerOrganizations).to.deep.equal(['COBRENORD'])
+      expect(interception.request.body.speciesCatchAreas).to.deep.equal(['fao_areas.27.5.b'])
       expect(interception.request.body.administrativeAreas).to.deep.equal([
         {
           areas: ['27.6.a'],
@@ -171,8 +182,14 @@ context('Side Window > Alert Management', () => {
       expect(interception.request.body.gears).to.deep.equal([
         {
           gear: 'TBN',
-          maxMesh: undefined,
+          maxMesh: null,
           minMesh: 70
+        }
+      ])
+      expect(interception.request.body.species).to.deep.equal([
+        {
+          code: 'COD',
+          minWeight: 500,
         }
       ])
     })

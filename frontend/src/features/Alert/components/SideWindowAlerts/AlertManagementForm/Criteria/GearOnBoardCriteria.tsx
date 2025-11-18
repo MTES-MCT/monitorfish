@@ -1,10 +1,9 @@
 import { useGetGearsQuery } from '@api/gear'
-import { GearMeshSizeEqualityComparator, gearMeshSizeOptions } from '@features/Alert/constants'
 import { type EditedAlertSpecification, type GearSpecification } from '@features/Alert/types'
 import { Tag } from '@features/Regulation/components/RegulationForm/Tag'
 import { GEARS_CATEGORIES_WITH_MESH } from '@features/Regulation/utils'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
-import { FormikSelect, Label, MultiCascader, TextInput, THEME } from '@mtes-mct/monitor-ui'
+import { Label, MultiCascader, TextInput, THEME } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useState } from 'react'
 import styled from 'styled-components'
@@ -37,7 +36,6 @@ export function GearOnBoardCriteria({ onDelete }: GearOnBoardCriteriaProps) {
         return {
           gear: gearCode,
           maxMesh: undefined,
-          meshType: undefined,
           minMesh: undefined
         }
       }) ?? []
@@ -62,7 +60,6 @@ export function GearOnBoardCriteria({ onDelete }: GearOnBoardCriteriaProps) {
     const newGear: GearSpecification = {
       gear: gearCode,
       maxMesh: undefined,
-      meshType: undefined,
       minMesh: undefined
     }
     setFieldValue('gears', [...values.gears, newGear])
@@ -151,15 +148,7 @@ export function GearOnBoardCriteria({ onDelete }: GearOnBoardCriteriaProps) {
                   </TagWrapper>
                   {allowMesh && (
                     <MeshWrapper>
-                      <Label data-cy="mesh-label">Maillage</Label>
-                      <FormikSelect
-                        isLabelHidden
-                        label="Type de maillage"
-                        name={`gears.${index}.meshType`}
-                        options={gearMeshSizeOptions}
-                        searchable={false}
-                        style={{ width: '170px' }}
-                      />
+                      <Label>Maillage inférieur à</Label>
                       <StyledTextInput
                         isLabelHidden
                         label="Maillage min"
@@ -171,21 +160,6 @@ export function GearOnBoardCriteria({ onDelete }: GearOnBoardCriteriaProps) {
                         type="number"
                         value={gear.minMesh ? String(gear.minMesh) : ''}
                       />
-                      {values.gears[index]?.meshType === GearMeshSizeEqualityComparator.BETWEEN && (
-                        <>
-                          et
-                          <StyledTextInput
-                            isLabelHidden
-                            label="Maillage max"
-                            name={`gears.${index}.maxMesh`}
-                            onChange={(nextValue: string | undefined) => {
-                              setFieldValue(`gears.${index}.maxMesh`, nextValue === '' ? undefined : Number(nextValue))
-                            }}
-                            type="number"
-                            value={gear.maxMesh ? String(gear.maxMesh) : ''}
-                          />
-                        </>
-                      )}
                       <Unit>mm</Unit>
                     </MeshWrapper>
                   )}

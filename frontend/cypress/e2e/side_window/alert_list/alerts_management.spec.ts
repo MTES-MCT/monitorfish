@@ -133,15 +133,13 @@ context('Side Window > Alert Management', () => {
     /**
      * Add gears on board criteria
      */
-    // TODO: to uncomment when connection is fixed
-    /*     cy.clickButton('Ajouter un critère de déclenchement')
+    cy.clickButton('Ajouter un critère de déclenchement')
     cy.clickButton('Engins à bord')
     cy.getDataCy('alert-criteria-gear-on-board-selector').click()
     cy.get('span[title="Chaluts"]').click({ timeout: 10000 })
     cy.get('span[title="Chaluts à langoustines – TBN"]').click({ timeout: 10000 })
-    cy.fill('Type de maillage', 'Supérieur ou égal à')
     cy.fill('Maillage min', '70')
-    cy.contains('ENGINS À BORD').click() */
+    cy.contains('ENGINS À BORD').click()
 
     cy.clickButton('Enregistrer')
 
@@ -170,15 +168,13 @@ context('Side Window > Alert Management', () => {
           zone: 'Secteur 3'
         }
       ])
-      // TODO: to uncomment when connection is fixed
-      /*  expect(interception.request.body.gears).to.deep.equal([
+      expect(interception.request.body.gears).to.deep.equal([
         {
           gear: 'TBN',
           maxMesh: undefined,
-          meshType: GearMeshSizeEqualityComparator.greaterThanOrEqualTo,
           minMesh: 70
         }
-      ]) */
+      ])
     })
 
     cy.contains('Gestion des alertes').should('be.visible')

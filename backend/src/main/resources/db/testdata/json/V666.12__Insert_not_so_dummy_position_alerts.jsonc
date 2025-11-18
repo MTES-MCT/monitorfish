@@ -308,7 +308,7 @@
                 "has_automatic_archiving":  true,
                 "gears": null,
                 "species:jsonb": [
-                    {"code": "BLI", "weight": 6000.0, "weightType": null}
+                    {"species": "BLI", "minWeight": 6000.0}
                 ],
                 "species_catch_areas": [],
                 "administrative_areas": null,
@@ -433,14 +433,14 @@
                 "only_fishing_positions": false,
                 "has_automatic_archiving":  false,
                 "gears:jsonb": [
-                    {"gear": "OTM", "minMesh": 80.0, "maxMesh": 120.0},
-                    {"gear": "OTB", "minMesh": 80.0, "maxMesh": null},
+                    {"gear": "OTM", "minMesh": 80.0, "maxMesh": 120.0, "meshType": "BETWEEN"},
+                    {"gear": "OTB", "minMesh": 80.0, "maxMesh": null, "meshType": "LOWER_THAN"},
                     {"gear": "LLS"}
                 ],
                 "species:jsonb": [
-                    {"weight": 713.0, "code": "HKE"},
-                    {"code": "LOB"},
-                    {"code": "SOL", "minWeight": null}
+                    {"minWeight": 713.0, "species": "HKE"},
+                    {"species": "LOB"},
+                    {"species": "SOL", "minWeight": null}
                 ],
                 "species_catch_areas": ["27.7.e", "27.7.d", "27.8.a"],
                 "administrative_areas:jsonb": [
@@ -476,14 +476,14 @@
                 "only_fishing_positions": false,
                 "has_automatic_archiving":  false,
                 "gears:jsonb": [
-                    {"gear": "OTM", "minMesh": 80.0, "maxMesh": 120.0},
-                    {"gear": "OTB", "minMesh": 80.0, "maxMesh": null},
+                    {"gear": "OTM", "minMesh": 80.0, "maxMesh": 120.0, "meshType": "BETWEEN"},
+                    {"gear": "OTB", "minMesh": 80.0, "maxMesh": null, "meshType": "LOWER_THAN"},
                     {"gear": "LLS"}
                 ],
                 "species:jsonb": [
-                    {"minWeight": 713.0, "code": "HKE", "weightType":"GREATER_THAN"},
-                    {"code": "LOB"},
-                    {"code": "SOL", "minWeight": null, "weightType":null}
+                    {"minWeight": 713.0, "species": "HKE"},
+                    {"species": "LOB"},
+                    {"species": "SOL", "minWeight": null}
                 ],
                 "species_catch_areas": null,
                 "administrative_areas:jsonb": [
@@ -519,14 +519,14 @@
                 "only_fishing_positions": false,
                 "has_automatic_archiving":  false,
                 "gears:jsonb": [
-                    {"gear": "OTM", "minMesh": 80.0, "maxMesh": null},
-                    {"gear": "OTB", "minMesh": 80.0, "maxMesh": null},
+                    {"gear": "OTM", "minMesh": 80.0, "maxMesh": null, "meshType": "LOWER_THAN"},
+                    {"gear": "OTB", "minMesh": 80.0, "maxMesh": null, "meshType": "GREATER_THAN"},
                     {"gear": "LLS"}
                 ],
                 "species:jsonb": [
-                    {"weight": 713.0, "code": "HKE", "weightType":"LOWER_THAN"},
-                    {"code": "LOB"},
-                    {"code": "SOL", "weight": null, "weightType":null}
+                    {"minWeight": 713.0, "species": "HKE"},
+                    {"species": "LOB"},
+                    {"species": "SOL", "minWeight": null}
                 ],
                 "species_catch_areas": null,
                 "administrative_areas:jsonb": [
@@ -562,14 +562,14 @@
                 "only_fishing_positions": false,
                 "has_automatic_archiving":  false,
                 "gears:jsonb": [
-                    {"gear": "OTM", "minMesh": 80.0, "maxMesh": null},
-                    {"gear": "OTB", "minMesh": 80.0, "maxMesh": null},
+                    {"gear": "OTM", "minMesh": 80.0, "maxMesh": null, "meshType": "EQUAL"},
+                    {"gear": "OTB", "minMesh": 80.0, "maxMesh": null, "meshType": "GREATER_THAN"},
                     {"gear": "LLS"}
                 ],
                 "species:jsonb": [
-                    {"weight": 713.0, "code": "HKE", "weightTyp":"EQUAL"},
-                    {"code": "LOB"},
-                    {"code": "SOL", "minWeight": null, "weightType":null}
+                    {"minWeight": 713.0, "species": "HKE"},
+                    {"species": "LOB"},
+                    {"species": "SOL", "minWeight": null}
                 ],
                 "species_catch_areas": null,
                 "administrative_areas:jsonb": [

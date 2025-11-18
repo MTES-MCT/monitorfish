@@ -2,8 +2,7 @@ import { getExpandableRowCellCustomStyle } from '@features/Alert/components/Side
 import {
   AdministrativeAreaType,
   AdministrativeAreaTypeLabel,
-  AdministrativeAreaValueLabel,
-  speciesWeightEqualityComparatorLabels
+  AdministrativeAreaValueLabel
 } from '@features/Alert/constants'
 import { type AlertSpecification } from '@features/Alert/types'
 import { Flag } from '@features/commonComponents/Flag'
@@ -85,11 +84,7 @@ export function Row({ row }: RowProps) {
                         speciesOption => speciesOption.value.code === species.code
                       )
 
-                      const weightTypeLabel = species.weightType
-                        ? speciesWeightEqualityComparatorLabels[species.weightType]
-                        : ''
-
-                      return `${speciesName?.label ?? species.code}${species.weight !== undefined ? ` (${weightTypeLabel} ${species.weight}kg)` : ''}`
+                      return `${speciesName?.label ?? species.code}${species.minWeight !== undefined ? ` (supérieure à ${species.minWeight}kg)` : ''}`
                     })
                     .join(', ')}
                 </ExpandedRowValue>

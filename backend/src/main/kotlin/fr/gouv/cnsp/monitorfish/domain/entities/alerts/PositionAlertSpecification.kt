@@ -44,8 +44,7 @@ data class GearSpecification(
 
 data class SpeciesSpecification(
     val code: String,
-    val weight: Double?,
-    val weightType: SpecyWeightEqualityComparatorEnum?,
+    val minWeight: Double?,
 )
 
 data class RegulatoryAreaSpecification(
@@ -64,10 +63,4 @@ enum class AdministrativeAreaType {
     EEZ_AREA,
     NEAFC_AREA,
     DISTANCE_TO_SHORE,
-}
-
-enum class SpecyWeightEqualityComparatorEnum {
-    EQUAL,
-    GREATER_THAN,
-    LOWER_THAN,
 }

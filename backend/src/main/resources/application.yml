@@ -24,14 +24,14 @@ monitorfish:
             api-key: ${MONITORFISH_API_PROTECTED_API_KEY}
     oidc:
         enabled: ${MONITORFISH_OIDC_ENABLED}
-        bypassSiretFilter: ${MONITORFISH_OIDC_BYPASS_SIRET_FILTER}
+        bypassEmailDomainsFilter: ${MONITORFISH_OIDC_BYPASS_EMAIL_DOMAINS_FILTER:false}
         clientId: ${MONITORFISH_OIDC_CLIENT_ID:}
         clientSecret: ${MONITORFISH_OIDC_CLIENT_SECRET:}
         redirectUri: ${MONITORFISH_OIDC_REDIRECT_URI:}
         loginUrl: ${MONITORFISH_OIDC_LOGIN_URL}
         successUrl: ${MONITORFISH_OIDC_SUCCESS_URL}
         errorUrl: ${MONITORFISH_OIDC_ERROR_URL}
-        authorizedSirets: ${MONITORFISH_OIDC_AUTHORIZED_SIRETS}
+        authorizedEmailDomains: ${MONITORFISH_OIDC_AUTHORIZED_EMAIL_DOMAINS:}
         issuerUri: ${MONITORFISH_OIDC_ISSUER_URI:}
         issuerUriExternal: ${MONITORFISH_OIDC_ISSUER_URI_EXTERNAL}
         authorizationUri: ${MONITORFISH_OIDC_AUTHORIZATION_URI:}

@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.config
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.SpaController.Companion.FRONTEND_APP_ROUTES
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -8,14 +9,21 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.core.AuthenticationException
+import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService
 import org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInitiatedLogoutSuccessHandler
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException
+import org.springframework.security.oauth2.core.OAuth2Error
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.AuthenticationFailureHandler
@@ -24,9 +32,11 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.web.client.RestTemplate
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import java.util.Base64
 
 @Configuration
 @EnableWebSecurity
@@ -40,34 +50,109 @@ class SecurityConfig(
     @ConditionalOnProperty(value = ["monitorfish.oidc.enabled"], havingValue = "true")
     fun customOidcUserService(): OidcUserService {
         return object : OidcUserService() {
-            override fun loadUser(userRequest: OidcUserRequest): OidcUser {
+            private val restTemplate = RestTemplate()
+            private val objectMapper = ObjectMapper()
+
+            override fun loadUser(userRequest: OidcUserRequest): OidcUser =
                 try {
                     val oidcUser = super.loadUser(userRequest)
-                    if (oidcProperties.bypassSiretFilter == "true") {
-                        logger.info("OIDC is with Cerbère, bypassing the SIRET checks.")
 
-                        return oidcUser
-                    }
-
-                    val siretsClaimRaw = oidcUser.claims["SIRET"]
-
-                    val tokenSirets: Set<String> =
-                        when (siretsClaimRaw) {
-                            is List<*> -> siretsClaimRaw.filterIsInstance<String>().toSet()
-                            is String -> setOf(siretsClaimRaw)
-                            else -> throw OAuth2AuthenticationException("SIRET claim missing or malformed")
-                        }
-
-                    val isAuthorized = oidcProperties.authorizedSirets.any { it in tokenSirets }
-                    if (!isAuthorized) {
-                        throw OAuth2AuthenticationException("User not authorized for the requested SIRET(s)")
-                    }
-
-                    return oidcUser
+                    validateAndProcessUser(oidcUser)
                 } catch (e: Exception) {
-                    logger.error("⛔ Exception in loadUser", e)
-                    throw e
+                    // AgentConnect returns userinfo as JWT instead of JSON
+                    if (e.message?.contains("application/jwt") == true) {
+                        logger.info("UserInfo endpoint returned JWT content type, decoding JWT response...")
+
+                        try {
+                            val oidcUser = loadUserFromJwtUserInfo(userRequest)
+
+                            validateAndProcessUser(oidcUser)
+                        } catch (jwtError: Exception) {
+                            logger.error("⛔ Failed to decode JWT userinfo response", jwtError)
+
+                            throw OAuth2AuthenticationException(
+                                OAuth2Error(
+                                    "invalid_user_info_response",
+                                    "Failed to decode JWT userinfo response: ${jwtError.message}",
+                                    null,
+                                ),
+                                jwtError as Throwable,
+                            )
+                        }
+                    } else {
+                        logger.error("⛔ Exception in loadUser", e)
+                        throw e
+                    }
                 }
+
+            private fun loadUserFromJwtUserInfo(userRequest: OidcUserRequest): OidcUser {
+                val userInfoUri = userRequest.clientRegistration.providerDetails.userInfoEndpoint.uri
+                val accessToken = userRequest.accessToken.tokenValue
+
+                logger.debug("Fetching JWT userinfo from: $userInfoUri")
+
+                val headers =
+                    HttpHeaders().apply {
+                        setBearerAuth(accessToken)
+                    }
+
+                val response =
+                    restTemplate.exchange(
+                        userInfoUri,
+                        HttpMethod.GET,
+                        HttpEntity<String>(headers),
+                        String::class.java,
+                    )
+
+                val jwtToken = response.body ?: throw IllegalArgumentException("Empty userinfo response")
+
+                val claims = decodeJwtClaims(jwtToken)
+                logger.debug("Successfully decoded JWT userinfo with claims: ${claims.keys}")
+
+                // Create OidcUserInfo and OidcUser with the decoded claims
+                val userInfo = OidcUserInfo(claims)
+                return DefaultOidcUser(
+                    emptyList<GrantedAuthority>(),
+                    userRequest.idToken,
+                    userInfo,
+                )
+            }
+
+            private fun decodeJwtClaims(jwtToken: String): Map<String, Any> {
+                val parts = jwtToken.split(".")
+                if (parts.size != 3) {
+                    throw IllegalArgumentException("Invalid JWT format: expected 3 parts, got ${parts.size}")
+                }
+
+                val payloadBase64 = parts[1]
+                val decodedBytes = Base64.getUrlDecoder().decode(payloadBase64)
+                val payloadJson = String(decodedBytes, Charsets.UTF_8)
+
+                @Suppress("UNCHECKED_CAST")
+                return objectMapper.readValue(payloadJson, LinkedHashMap::class.java) as Map<String, Any>
+            }
+
+            private fun validateAndProcessUser(oidcUser: OidcUser): OidcUser {
+                if (oidcProperties.bypassSiretFilter == "true") {
+                    logger.info("OIDC is with Cerbère, bypassing the SIRET checks.")
+                    return oidcUser
+                }
+
+                val siretsClaimRaw = oidcUser.claims["SIRET"]
+
+                val tokenSirets: Set<String> =
+                    when (siretsClaimRaw) {
+                        is List<*> -> siretsClaimRaw.filterIsInstance<String>().toSet()
+                        is String -> setOf(siretsClaimRaw)
+                        else -> throw OAuth2AuthenticationException("SIRET claim missing or malformed")
+                    }
+
+                val isAuthorized = oidcProperties.authorizedSirets.any { it in tokenSirets }
+                if (!isAuthorized) {
+                    throw OAuth2AuthenticationException("User not authorized for the requested SIRET(s)")
+                }
+
+                return oidcUser
             }
         }
     }

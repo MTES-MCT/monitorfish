@@ -1,12 +1,11 @@
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION, LayerProperties } from '@features/Map/constants'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { THEME } from '@mtes-mct/monitor-ui'
 import GeoJSON from 'ol/format/GeoJSON'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import { Stroke, Style } from 'ol/style'
 import React, { useEffect, useRef } from 'react'
-
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION, LayerProperties } from '@features/Map/constants'
-import { monitorfishMap } from '@features/Map/monitorfishMap'
 
 function VesselFilterLayer() {
   const filters = []

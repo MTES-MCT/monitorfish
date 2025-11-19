@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import java.time.Instant
+import java.time.ZonedDateTime
 
 @DynamicUpdate
 interface DBLogbookReportRepository :
@@ -48,6 +49,55 @@ interface DBLogbookReportRepository :
         willArriveBefore: String,
     ): List<LogbookReportEntity>
 
+    @Query(
+        """
+        WITH snapshot_trips AS (
+            SELECT
+                trip_number,
+                sort_order_datetime_utc,
+                first_operation_datetime_utc,
+                last_operation_datetime_utc
+            FROM trips_snapshot
+            WHERE cfr = :internalReferenceNumber
+        ),
+
+        latest_trips AS (
+            SELECT
+                trip_number,
+                COALESCE(
+                    MIN(
+                        CASE WHEN ABS(activity_datetime_utc - operation_datetime_utc) / 3600 / 24 / 365 < 5
+                        THEN activity_datetime_utc
+                    END),
+                    MIN(operation_datetime_utc)
+                ) AS sort_order_datetime_utc,
+                MIN(operation_datetime_utc) AS first_operation_datetime_utc,
+                MAX(operation_datetime_utc) AS last_operation_datetime_utc
+            FROM logbook_reports
+            WHERE
+                operation_datetime_utc >= NOW() AT TIME ZONE 'UTC' - INTERVAL '24 hours'
+                AND operation_datetime_utc < NOW() AT TIME ZONE 'UTC' + INTERVAL '24 hours'
+                AND cfr = :internalReferenceNumber
+                AND trip_number IS NOT NULL
+            GROUP BY trip_number
+        )
+
+        SELECT
+            COALESCE(st.trip_number, lt.trip_number) AS trip_number,
+            LEAST(st.sort_order_datetime_utc, lt.sort_order_datetime_utc) AS sort_order_datetime_utc,
+            LEAST(st.first_operation_datetime_utc, lt.first_operation_datetime_utc) AS first_operation_datetime_utc,
+            GREATEST(st.last_operation_datetime_utc, lt.last_operation_datetime_utc) AS last_operation_datetime_utc
+        FROM snapshot_trips st
+        FULL OUTER JOIN latest_trips lt
+        ON st.trip_number = lt.trip_number
+        ORDER BY 2
+        """,
+        nativeQuery = true,
+    )
+    fun findAllTrips(
+        internalReferenceNumber: String,
+    ): List<Array<Any>>
+
     /**
      * This query either returns:
      * - 1 element if the report id is found, not corrected and not deleted
@@ -62,205 +112,41 @@ interface DBLogbookReportRepository :
         operationDate: String,
     ): List<LogbookReportEntity>
 
-    @Query(
-        """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(
-            e.tripNumber,
-            MIN(e.operationDateTime)
-        )
-        FROM LogbookReportEntity e
-        WHERE e.internalReferenceNumber = :internalReferenceNumber
-        AND e.tripNumber IS NOT NULL
-        AND e.operationType IN ('DAT', 'COR')
-        AND NOT e.isTestMessage
-        AND e.operationDateTime < (
-        SELECT
-            MIN(er.operationDateTime)
-        FROM
-            LogbookReportEntity er
-        WHERE
-            er.internalReferenceNumber = :internalReferenceNumber AND
-            er.tripNumber = :tripNumber
-        )
-        GROUP BY e.tripNumber
-        ORDER BY 2 DESC""",
-    )
-    fun findPreviousTripNumber(
-        internalReferenceNumber: String,
-        tripNumber: String,
-        pageable: Pageable,
-    ): List<VoyageTripNumberAndDate>
 
-    /**
-     * We filter the LAN to ensure we do not miss a trip if there is a trip is ended before the LAN of the previous trip is sent.
-     * i.e, we want the "Trip 2" not to be missed:
-     *
-     *  [DEP, FAR, RTP,     ...LAN]                                  Trip 1 (current trip)
-     *            [DEP, FAR, RTP]                                    Trip 2
-     *                              [DEP, FAR, RTP,     ...LAN]      Trip 3
-     *
-     *  time ->
-     */
-    @Query(
-        """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MAX(e.operationDateTime))
-        FROM LogbookReportEntity e
-        WHERE e.internalReferenceNumber = :internalReferenceNumber
-        AND e.tripNumber IS NOT NULL
-        AND e.tripNumber != :tripNumber
-        AND e.operationType IN ('DAT', 'COR')
-        AND NOT e.isTestMessage
-        AND e.operationDateTime > (
-            SELECT
-                MAX(er.operationDateTime)
-            FROM
-                LogbookReportEntity er
-            WHERE
-                er.internalReferenceNumber = :internalReferenceNumber AND
-                er.tripNumber = :tripNumber AND
-                er.messageType != 'LAN'
-        )
-        GROUP BY e.tripNumber
-        ORDER BY 2 ASC""",
-    )
-    fun findNextTripNumber(
-        internalReferenceNumber: String,
-        tripNumber: String,
-        pageable: Pageable,
-    ): List<VoyageTripNumberAndDate>
-
-    @Query(
-        """SELECT
+    @Query("""SELECT
             start_date,
-            end_date,
-            end_date_without_lan
-        FROM find_dates_of_trip(:internalReferenceNumber, :tripNumber)""",
-        nativeQuery = true,
+            end_date
+        FROM find_dates_of_trip(
+            :internalReferenceNumber,
+            :tripNumber,
+            :firstOperationDateTime,
+            :lastOperationDateTime
+        )""",
+        nativeQuery = true
     )
-    fun findFirstAndLastOperationsDatesOfTrip(
+    fun findDatesOfTrip(
         internalReferenceNumber: String,
         tripNumber: String,
+        firstOperationDateTime: ZonedDateTime,
+        lastOperationDateTime: ZonedDateTime
     ): List<Array<Instant>>
 
-    /**
-     * The last `MAX(lr_all.operationDateTime)` date is used to display the fishing trip positions, hence LAN are excluded.
-     */
-    @Query(
-        """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDates(
-            e.tripNumber,
-            MIN(e.operationDateTime),
-            MAX(e.operationDateTime),
-            MAX(CASE WHEN messageType != 'LAN' THEN e.operationDateTime END)
-        )
-        FROM LogbookReportEntity e
-        WHERE e.internalReferenceNumber = :internalReferenceNumber
-        AND e.tripNumber IS NOT NULL
-        AND e.operationType IN ('DAT', 'COR')
-        AND e.operationDateTime <= :beforeDateTime
-        AND NOT e.isTestMessage
-        GROUP BY e.tripNumber
-        ORDER BY 2 DESC""",
-    )
-    fun findTripsBeforeDatetime(
-        internalReferenceNumber: String,
-        beforeDateTime: Instant,
-        pageable: Pageable,
-    ): List<VoyageTripNumberAndDates>
-
-    /**
-     * Subqueries are required to get MIN and MAX date_time outside the clause :
-     *  `e.operationDateTime BETWEEN :afterDateTime AND :beforeDateTime`
-     *
-     *  The last `MAX(lr_all.activityDateTime)` date is used to display the fishing trip positions, hence LAN are excluded.
-     */
-    @Query(
-        """
-        SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDates(
-            e.tripNumber,
-            (SELECT MIN(lr_all.operationDateTime)
-             FROM LogbookReportEntity lr_all
-             WHERE
-                lr_all.internalReferenceNumber = :internalReferenceNumber AND
-                lr_all.tripNumber = e.tripNumber
-             ),
-            (SELECT MAX(lr_all.operationDateTime)
-             FROM LogbookReportEntity lr_all
-             WHERE
-                lr_all.internalReferenceNumber = :internalReferenceNumber AND
-                lr_all.tripNumber = e.tripNumber
-             ),
-             (SELECT MAX(lr_all.operationDateTime)
-             FROM LogbookReportEntity lr_all
-             WHERE
-                lr_all.internalReferenceNumber = :internalReferenceNumber AND
-                lr_all.tripNumber = e.tripNumber AND
-                lr_all.messageType != 'LAN'
-             )
-    )
-    FROM LogbookReportEntity e
-    WHERE
-        e.internalReferenceNumber = :internalReferenceNumber
-        AND e.tripNumber IS NOT NULL
-        AND e.operationType IN ('DAT', 'COR')
-        AND e.operationDateTime BETWEEN :afterDateTime AND :beforeDateTime
-        AND NOT e.isTestMessage
-    GROUP BY e.tripNumber
-    ORDER BY MIN(e.operationDateTime) DESC""",
-    )
-    fun findTripsBetweenDates(
-        internalReferenceNumber: String,
-        beforeDateTime: Instant,
-        afterDateTime: Instant,
-    ): List<VoyageTripNumberAndDates>
-
-    @Query(
-        """WITH dat_cor AS (
-            SELECT *
-            FROM logbook_reports e
-            WHERE e.cfr = :internalReferenceNumber
-            AND e.trip_number = :tripNumber
-            AND operation_datetime_utc >= :startDate
-            AND operation_datetime_utc <= :endDate
-            AND NOT e.is_test_message
-        ),
-        ret AS (
-            SELECT *
-            FROM logbook_reports
-            WHERE referenced_report_id IN (select report_id FROM dat_cor)
-            AND operation_datetime_utc >= cast(:startDate AS TIMESTAMP) - INTERVAL '1 day'
-            AND operation_datetime_utc <= cast(:endDate AS TIMESTAMP) + INTERVAL '3 days'
-            AND operation_type = 'RET'
-            AND NOT is_test_message
-        )
-        SELECT MIN(dc.operation_datetime_utc)
-        FROM dat_cor dc
-        LEFT OUTER JOIN ret r
-            ON r.referenced_report_id = dc.report_id
-            WHERE
-                r.value->>'returnStatus' = '000' OR
-                dc.transmission_format = 'FLUX'""",
-        nativeQuery = true,
-    )
-    fun findFirstAcknowledgedDateOfTrip(
-        internalReferenceNumber: String,
-        tripNumber: String,
-        startDate: Instant,
-        endDate: Instant,
-    ): Instant
 
     @Query(
         """
         SELECT *
         FROM find_logbook_by_trip_number(
             :internalReferenceNumber,
-            (:afterDateTime)::TIMESTAMP WITHOUT TIME ZONE,
-            (:beforeDateTime)::TIMESTAMP WITHOUT TIME ZONE,
+            :firstOperationDateTime,
+            :lastOperationDateTime,
             :tripNumber
         )""",
         nativeQuery = true,
     )
-    fun findAllMessagesByTripNumberBetweenDates(
+    fun findAllMessagesByTripNumberBetweenOperationDates(
         internalReferenceNumber: String,
-        afterDateTime: String,
-        beforeDateTime: String,
+        firstOperationDateTime: ZonedDateTime,
+        lastOperationDateTime: ZonedDateTime,
         tripNumber: String,
     ): List<LogbookReportEntity>
 

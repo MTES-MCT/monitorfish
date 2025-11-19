@@ -39,12 +39,15 @@ class GetDatesFromVesselTrackDepth(
                     try {
                         // We subtract 4h to this date to ensure the track starts at the port
                         // (the departure message may be sent after the departure)
-                        logbookReportRepository
-                            .findFirstAcknowledgedDateOfTripBeforeDateTime(
-                                internalReferenceNumber,
-                                ZonedDateTime.now(),
-                            ).minusHours(4)
-                    } catch (e: NoLogbookFishingTripFound) {
+                        val lastTrip = logbookReportRepository.findAllTrips(internalReferenceNumber).last()
+                        val dates = logbookReportRepository.findDatesOfTrip(
+                            internalReferenceNumber,
+                            lastTrip.tripNumber,
+                            lastTrip.firstOperationDateTime,
+                            lastTrip.lastOperationDateTime
+                        )
+                        dates.startDateTime!!.minusHours(4)
+                    } catch (e: NoSuchElementException) {
                         logger.warn(e.message)
                         isTrackDepthModified = true
                         ZonedDateTime.now().minusDays(1)

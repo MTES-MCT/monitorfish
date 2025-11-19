@@ -51,7 +51,7 @@ updates:
         update-types: ["minor", "patch"]
 
   - package-ecosystem: "pip"
-    directory: "/datascience"
+    directory: "/pipeline"
     assignees:
       - "VincentAntoine"
     schedule:

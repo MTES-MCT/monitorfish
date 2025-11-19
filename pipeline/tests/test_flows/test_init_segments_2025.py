@@ -5,7 +5,7 @@ from src.read_query import read_query
 
 
 def test_flow(reset_test_data):
-    segments_query = "SELECT * FROM fleet_segments ORDER BY year, segment"
+    segments_query = "SELECT * FROM fleet_segments"
     initial_segments = read_query(segments_query, db="monitorfish_remote")
 
     state = init_2025_segments_flow(return_state=True)
@@ -39,7 +39,11 @@ def test_flow(reset_test_data):
     )
     pd.testing.assert_frame_equal(
         segments_to_insert,
-        segments_after_first_run.query("year == 2025").reset_index(drop=True),
+        (
+            segments_after_first_run.query("year == 2025")
+            .sort_values(["year", "segment"])
+            .reset_index(drop=True)
+        ),
         check_dtype=False,
     )
 

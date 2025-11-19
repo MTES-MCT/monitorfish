@@ -59,7 +59,7 @@ class SecurityConfig(
 
                     validateAndProcessUser(oidcUser)
                 } catch (e: Exception) {
-                    // AgentConnect returns userinfo as JWT instead of JSON
+                    // ProConnect returns userinfo as JWT instead of JSON
                     if (e.message?.contains("application/jwt") == true) {
                         logger.info("UserInfo endpoint returned JWT content type, decoding JWT response...")
 

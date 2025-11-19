@@ -8,7 +8,6 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import org.slf4j.LoggerFactory
-import java.time.ZonedDateTime
 
 @UseCase
 class GetVesselVoyage(
@@ -23,48 +22,36 @@ class GetVesselVoyage(
         voyageRequest: VoyageRequest,
         tripNumber: String?,
     ): Voyage {
-        val trip =
+        val vesselTrips =  logbookReportRepository.findAllTrips(internalReferenceNumber)
+        var tripIndex: Int? = null
+        var trip =
             try {
                 when (voyageRequest) {
-                    VoyageRequest.LAST ->
-                        logbookReportRepository.findLastTripBeforeDateTime(
-                            internalReferenceNumber = internalReferenceNumber,
-                            /**
-                             * This 4-hour buffer prevents incorrect message datetime to be filtered.
-                             * Sometimes, vessel inboard computers might have offset datetime.
-                             */
-                            beforeDateTime = ZonedDateTime.now().plusHours(4),
-                        )
+                    VoyageRequest.LAST -> {
+                        tripIndex = vesselTrips.size - 1
+                        vesselTrips.last()
+                    }
                     VoyageRequest.PREVIOUS -> {
                         require(tripNumber != null) {
                             "Current trip number parameter must be not null"
                         }
-
-                        logbookReportRepository.findTripBeforeTripNumber(
-                            internalReferenceNumber = internalReferenceNumber,
-                            tripNumber = tripNumber,
-                        )
+                        tripIndex = vesselTrips.indexOfFirst { it.tripNumber == tripNumber } - 1
+                        vesselTrips[tripIndex]
                     }
                     VoyageRequest.NEXT -> {
                         require(tripNumber != null) {
                             "Current trip number parameter must be not null"
                         }
-
-                        logbookReportRepository.findTripAfterTripNumber(
-                            internalReferenceNumber = internalReferenceNumber,
-                            tripNumber = tripNumber,
-                        )
+                        tripIndex = vesselTrips.indexOfFirst { it.tripNumber == tripNumber } + 1
+                        vesselTrips[tripIndex]
                     }
 
                     VoyageRequest.EQUALS -> {
                         require(tripNumber != null) {
                             "trip number parameter must be not null"
                         }
-
-                        logbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
-                            internalReferenceNumber = internalReferenceNumber,
-                            tripNumber = tripNumber,
-                        )
+                        tripIndex = vesselTrips.indexOfFirst { it.tripNumber == tripNumber }
+                        vesselTrips[tripIndex]
                     }
                 }
             } catch (e: IllegalArgumentException) {
@@ -81,67 +68,32 @@ class GetVesselVoyage(
                 )
             }
 
-        val isLastVoyage = getIsLastVoyage(tripNumber, voyageRequest, internalReferenceNumber, trip.tripNumber)
-        val isFirstVoyage = getIsFirstVoyage(internalReferenceNumber, trip.tripNumber)
+
+        // Add depDateTime and rtpDateTime
+        trip = logbookReportRepository.findDatesOfTrip(
+            internalReferenceNumber,
+            trip.tripNumber,
+            trip.firstOperationDateTime,
+            trip.lastOperationDateTime
+        )
 
         val logbookMessages =
             getLogbookMessages.execute(
                 internalReferenceNumber = internalReferenceNumber,
-                afterDepartureDate = trip.startDate,
-                beforeDepartureDate = trip.endDate,
+                firstOperationDateTime = trip.firstOperationDateTime,
+                lastOperationDateTime = trip.lastOperationDateTime,
                 tripNumber = trip.tripNumber,
             )
         val software = logbookMessages.firstOrNull()?.software
 
         return Voyage(
-            isLastVoyage = isLastVoyage,
-            isFirstVoyage = isFirstVoyage,
-            startDate = trip.startDate,
-            endDate = trip.endDateWithoutLAN,
+            isLastVoyage = tripIndex == vesselTrips.size - 1,
+            isFirstVoyage = tripIndex == 0,
+            startDate = trip.startDateTime,
+            endDate = trip.endDateTime,
             tripNumber = trip.tripNumber,
             software = software,
             logbookMessages = logbookMessages,
         )
     }
-
-    private fun getIsLastVoyage(
-        currentTripNumber: String?,
-        voyageRequest: VoyageRequest,
-        internalReferenceNumber: String,
-        tripNumber: String,
-    ): Boolean {
-        if (currentTripNumber == null) {
-            return true
-        }
-
-        if (voyageRequest == VoyageRequest.PREVIOUS) {
-            return false
-        }
-
-        return try {
-            logbookReportRepository.findTripAfterTripNumber(
-                internalReferenceNumber = internalReferenceNumber,
-                tripNumber = tripNumber,
-            )
-
-            false
-        } catch (e: NoLogbookFishingTripFound) {
-            true
-        }
-    }
-
-    private fun getIsFirstVoyage(
-        internalReferenceNumber: String,
-        tripNumber: String,
-    ): Boolean =
-        try {
-            logbookReportRepository.findTripBeforeTripNumber(
-                internalReferenceNumber = internalReferenceNumber,
-                tripNumber = tripNumber,
-            )
-
-            false
-        } catch (e: NoLogbookFishingTripFound) {
-            true
-        }
 }

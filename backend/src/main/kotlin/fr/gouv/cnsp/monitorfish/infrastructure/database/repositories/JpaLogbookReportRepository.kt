@@ -25,6 +25,7 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
+import java.sql.Timestamp
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZoneOffset.UTC
@@ -139,9 +140,9 @@ class JpaLogbookReportRepository(
         return dbLogbookReportRepository.findAllTrips(internalReferenceNumber).map {
             VoyageDatesAndTripNumber(
                 tripNumber=it[0] as String,
-                startDateTime=(it[1] as Instant).atZone(ZoneOffset.UTC),
-                firstOperationDateTime=(it[2] as Instant).atZone(ZoneOffset.UTC),
-                lastOperationDateTime=(it[3] as Instant).atZone(ZoneOffset.UTC)
+                startDateTime=(it[1] as Timestamp).toInstant().atZone(ZoneOffset.UTC),
+                firstOperationDateTime=(it[2] as Timestamp).toInstant().atZone(ZoneOffset.UTC),
+                lastOperationDateTime=(it[3] as Timestamp).toInstant().atZone(ZoneOffset.UTC)
                 )
         }
     }

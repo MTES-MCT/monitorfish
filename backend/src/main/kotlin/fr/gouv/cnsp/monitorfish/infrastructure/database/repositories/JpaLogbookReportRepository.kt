@@ -216,10 +216,12 @@ class JpaLogbookReportRepository(
                         ).first()
                         .tripNumber
                 val previousTrip =
-                    dbLogbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
-                        internalReferenceNumber = internalReferenceNumber,
-                        tripNumber = previousTripNumber,
-                    ).first().let { VoyageDates(it[0], it[1], it[2]) }
+                    dbLogbookReportRepository
+                        .findFirstAndLastOperationsDatesOfTrip(
+                            internalReferenceNumber = internalReferenceNumber,
+                            tripNumber = previousTripNumber,
+                        ).first()
+                        .let { VoyageDates(it[0], it[1], it[2]) }
 
                 return VoyageDatesAndTripNumber(
                     tripNumber = previousTripNumber,
@@ -247,10 +249,12 @@ class JpaLogbookReportRepository(
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val nextTrip =
-                    dbLogbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
-                        internalReferenceNumber = internalReferenceNumber,
-                        tripNumber = tripNumber,
-                    ).first().let { VoyageDates(it[0], it[1], it[2]) }
+                    dbLogbookReportRepository
+                        .findFirstAndLastOperationsDatesOfTrip(
+                            internalReferenceNumber = internalReferenceNumber,
+                            tripNumber = tripNumber,
+                        ).first()
+                        .let { VoyageDates(it[0], it[1], it[2]) }
 
                 return VoyageDatesAndTripNumber(
                     tripNumber = tripNumber,
@@ -286,10 +290,12 @@ class JpaLogbookReportRepository(
                         ).first()
                         .tripNumber
                 val nextTrip =
-                    dbLogbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
-                        internalReferenceNumber = internalReferenceNumber,
-                        tripNumber = nextTripNumber,
-                    ).first().let { VoyageDates(it[0], it[1], it[2]) }
+                    dbLogbookReportRepository
+                        .findFirstAndLastOperationsDatesOfTrip(
+                            internalReferenceNumber = internalReferenceNumber,
+                            tripNumber = nextTripNumber,
+                        ).first()
+                        .let { VoyageDates(it[0], it[1], it[2]) }
 
                 return VoyageDatesAndTripNumber(
                     tripNumber = nextTripNumber,

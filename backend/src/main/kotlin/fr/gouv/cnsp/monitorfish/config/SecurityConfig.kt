@@ -141,7 +141,7 @@ class SecurityConfig(
                     return oidcUser
                 }
 
-                val siretsClaimRaw = oidcUser.claims["SIRET"]
+                val siretsClaimRaw = oidcUser.claims["siret"]
                 logger.debug(
                     "Raw SIRET claim from JWT: $siretsClaimRaw (type: ${siretsClaimRaw?.javaClass?.simpleName})",
                 )

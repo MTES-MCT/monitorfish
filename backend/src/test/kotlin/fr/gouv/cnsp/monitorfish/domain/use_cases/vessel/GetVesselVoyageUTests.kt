@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.times
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
@@ -25,36 +26,58 @@ class GetVesselVoyageUTests {
     private lateinit var getLogbookMessages: GetLogbookMessages
 
     @Test
-    fun `execute Should return a voyage with isFirstVoyage as true When requesting a LAST voyage with current trip number as null`() {
+    fun `execute Should return a voyage with isLastVoyage as true When requesting a LAST voyage with current trip number as null`() {
         // Given
-        val endDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
-        val endDateWithoutLAN = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00").minusDays(1)
-        val startDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
-        given(logbookReportRepository.findTripBeforeTripNumber(any(), any())).willThrow(
-            NoLogbookFishingTripFound("Not found"),
+        val firstOperationDateTime = ZonedDateTime.parse("2021-08-21T10:24:46+00:00")
+        val lastOperationDateTime = ZonedDateTime.parse("2021-08-22T10:24:46+00:00")
+        val startDate = ZonedDateTime.parse("2021-05-21T10:24:46+00:00")
+        val endDate = ZonedDateTime.parse("2021-06-21T10:24:46+00:00")
+        val cfr = "FR224226850"
+        val tripNumber = "trip2"
+        given(logbookReportRepository.findAllTrips(any())).willReturn(
+            listOf(
+                VoyageDatesAndTripNumber(
+                    "trip1",
+                    firstOperationDateTime,
+                    lastOperationDateTime
+                ),
+                VoyageDatesAndTripNumber(
+                    tripNumber,
+                    firstOperationDateTime,
+                    lastOperationDateTime
+                )
+            )
         )
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
+        given(
+            logbookReportRepository.findDatesOfTrip(
+                eq(cfr),
+                eq(tripNumber),
+                eq(firstOperationDateTime),
+                eq(lastOperationDateTime)
+            )
+        ).willReturn(
             VoyageDatesAndTripNumber(
-                tripNumber = "1234",
-                startDate = startDate,
-                endDate = endDate,
-                endDateWithoutLAN = endDateWithoutLAN,
-            ),
+                tripNumber=tripNumber,
+                firstOperationDateTime=firstOperationDateTime,
+                lastOperationDateTime=lastOperationDateTime,
+                startDateTime=startDate,
+                endDateTime=endDate,
+
+            )
         )
 
         // When
         val voyage =
             GetVesselVoyage(logbookReportRepository, getLogbookMessages)
-                .execute("FR224226850", VoyageRequest.LAST, null)
+                .execute(cfr, VoyageRequest.LAST, null)
 
         // Then
-        Mockito.verify(logbookReportRepository, times(0)).findTripAfterTripNumber("FR224226850", "1234")
-        Mockito.verify(logbookReportRepository).findTripBeforeTripNumber("FR224226850", "1234")
 
-        assertThat(voyage.isFirstVoyage).isTrue
+        assertThat(voyage.isFirstVoyage).isFalse
+        assertThat(voyage.isLastVoyage).isTrue
         assertThat(voyage.startDate).isEqualTo(startDate)
-        assertThat(voyage.tripNumber).isEqualTo("1234")
-        assertThat(voyage.endDate).isEqualTo(endDateWithoutLAN)
+        assertThat(voyage.endDate).isEqualTo(endDate)
+        assertThat(voyage.tripNumber).isEqualTo(tripNumber)
     }
 
     @Test
@@ -74,91 +97,183 @@ class GetVesselVoyageUTests {
     }
 
     @Test
-    fun `execute Should return a voyage with isLastVoyage as false When requesting a LAST voyage`() {
+    fun `execute Should return a voyage with isLastVoyage and isFirstVoyage as true When requesting a LAST voyage on a vessel with only one trip`() {
         // Given
-        val endDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
-        val endDateWithoutLAN = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00").minusDays(1)
-        val startDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
-        val tripNumber = "123456789"
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
+        val firstOperationDateTime = ZonedDateTime.parse("2021-08-21T10:24:46+00:00")
+        val lastOperationDateTime = ZonedDateTime.parse("2021-08-22T10:24:46+00:00")
+        val startDate = ZonedDateTime.parse("2021-05-21T10:24:46+00:00")
+        val endDate = ZonedDateTime.parse("2021-06-21T10:24:46+00:00")
+        val cfr = "FR224226850"
+        val tripNumber = "trip1"
+        given(logbookReportRepository.findAllTrips(any())).willReturn(
+            listOf(
+                VoyageDatesAndTripNumber(
+                    tripNumber,
+                    firstOperationDateTime,
+                    lastOperationDateTime
+                )
+            )
+        )
+        given(
+            logbookReportRepository.findDatesOfTrip(
+                eq(cfr),
+                eq(tripNumber),
+                any(),
+                any()
+            )
+        ).willReturn(
             VoyageDatesAndTripNumber(
-                tripNumber = tripNumber,
-                startDate = startDate,
-                endDate = endDate,
-                endDateWithoutLAN = endDateWithoutLAN,
-            ),
+                tripNumber=tripNumber,
+                firstOperationDateTime=firstOperationDateTime,
+                lastOperationDateTime=lastOperationDateTime,
+                startDateTime=startDate,
+                endDateTime=endDate,
+
+                )
         )
 
         // When
         val voyage =
             GetVesselVoyage(logbookReportRepository, getLogbookMessages)
-                .execute("FR224226850", VoyageRequest.LAST, "12345")
+                .execute(cfr, VoyageRequest.LAST, null)
 
         // Then
-        Mockito.verify(logbookReportRepository).findTripAfterTripNumber("FR224226850", "123456789")
-        Mockito.verify(logbookReportRepository).findTripBeforeTripNumber("FR224226850", "123456789")
 
-        assertThat(voyage.isLastVoyage).isFalse
-        assertThat(voyage.isFirstVoyage).isFalse
+        assertThat(voyage.isFirstVoyage).isTrue
+        assertThat(voyage.isLastVoyage).isTrue
         assertThat(voyage.startDate).isEqualTo(startDate)
-        assertThat(voyage.endDate).isEqualTo(endDateWithoutLAN)
+        assertThat(voyage.endDate).isEqualTo(endDate)
+        assertThat(voyage.tripNumber).isEqualTo(tripNumber)
     }
 
     @Test
-    fun `execute Should return a voyage with isLastVoyage as true When no next voyage after the found voyage is found`() {
+    fun `execute Should return a voyage with isLastVoyage as true When requesting the next voyage starting from the penultimate voyage`() {
         // Given
-        val expectedEndDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
-        val expectedEndDateWithoutLAN = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00").minusDays(1)
-        val expectedStartDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
-        val expectedTripNumber = "123456789"
-        given(logbookReportRepository.findTripAfterTripNumber("FR224226850", "123456788")).willReturn(
-            VoyageDatesAndTripNumber(
-                tripNumber = expectedTripNumber,
-                startDate = expectedStartDate,
-                endDate = expectedEndDate,
-                endDateWithoutLAN = expectedEndDateWithoutLAN,
-            ),
+        val firstOperationDateTime = ZonedDateTime.parse("2021-08-21T10:24:46+00:00")
+        val lastOperationDateTime = ZonedDateTime.parse("2021-08-22T10:24:46+00:00")
+        val startDate = ZonedDateTime.parse("2021-05-21T10:24:46+00:00")
+        val endDate = ZonedDateTime.parse("2021-06-21T10:24:46+00:00")
+        val tripNumber = "trip3"
+        val cfr = "FR224226850"
+        given(logbookReportRepository.findAllTrips(any())).willReturn(
+            listOf(
+                VoyageDatesAndTripNumber(
+                    "trip1",
+                    firstOperationDateTime,
+                    lastOperationDateTime
+                ),
+                VoyageDatesAndTripNumber(
+                    "trip2",
+                    firstOperationDateTime,
+                    lastOperationDateTime
+                ),
+                VoyageDatesAndTripNumber(
+                    tripNumber,
+                    firstOperationDateTime,
+                    lastOperationDateTime
+                ),
+            )
         )
-        given(logbookReportRepository.findTripAfterTripNumber("FR224226850", expectedTripNumber)).willThrow(
-            NoLogbookFishingTripFound("Not found"),
+        given(
+            logbookReportRepository.findDatesOfTrip(
+                eq(cfr),
+                eq(tripNumber),
+                any(),
+                any()
+            )
+        ).willReturn(
+            VoyageDatesAndTripNumber(
+                tripNumber=tripNumber,
+                firstOperationDateTime=firstOperationDateTime,
+                lastOperationDateTime=lastOperationDateTime,
+                startDateTime=startDate,
+                endDateTime=endDate,
+
+                )
         )
 
         // When
         val voyage =
             GetVesselVoyage(logbookReportRepository, getLogbookMessages)
-                .execute("FR224226850", VoyageRequest.NEXT, "123456788")
+                .execute(cfr, VoyageRequest.NEXT, "trip2")
 
         // Then
-        assertThat(voyage.isLastVoyage).isTrue
+
         assertThat(voyage.isFirstVoyage).isFalse
-        assertThat(voyage.startDate).isEqualTo(expectedStartDate)
-        assertThat(voyage.endDate).isEqualTo(expectedEndDateWithoutLAN)
+        assertThat(voyage.isLastVoyage).isTrue
+        assertThat(voyage.startDate).isEqualTo(startDate)
+        assertThat(voyage.endDate).isEqualTo(endDate)
+        assertThat(voyage.tripNumber).isEqualTo(tripNumber)
     }
+
 
     @Test
     fun `execute Should return a voyage When a specific trip is requested`() {
         // Given
-        val expectedEndDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
-        val expectedEndDateWithoutLAN = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00").minusDays(1)
-        val expectedStartDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
-        given(logbookReportRepository.findFirstAndLastOperationsDatesOfTrip("FR224226850", "123456788")).willReturn(
+        val firstOperationDateTime = ZonedDateTime.parse("2021-08-21T10:24:46+00:00")
+        val lastOperationDateTime = ZonedDateTime.parse("2021-08-22T10:24:46+00:00")
+        val startDate = ZonedDateTime.parse("2021-05-21T10:24:46+00:00")
+        val endDate = ZonedDateTime.parse("2021-06-21T10:24:46+00:00")
+        val cfr = "FR224226850"
+        val tripNumber = "trip4"
+        given(logbookReportRepository.findAllTrips(any())).willReturn(
+            listOf(
+                VoyageDatesAndTripNumber(
+                    "trip1",
+                    firstOperationDateTime,
+                    lastOperationDateTime
+                ),
+                VoyageDatesAndTripNumber(
+                    "trip2",
+                    firstOperationDateTime,
+                    lastOperationDateTime
+                ),
+                VoyageDatesAndTripNumber(
+                    "trip3",
+                    firstOperationDateTime,
+                    lastOperationDateTime
+                ),
+                VoyageDatesAndTripNumber(
+                    tripNumber,
+                    firstOperationDateTime,
+                    lastOperationDateTime
+                ),
+                VoyageDatesAndTripNumber(
+                    "trip5",
+                    firstOperationDateTime,
+                    lastOperationDateTime
+                ),
+            )
+        )
+        given(
+            logbookReportRepository.findDatesOfTrip(
+                eq(cfr),
+                eq(tripNumber),
+                any(),
+                any()
+            )
+        ).willReturn(
             VoyageDatesAndTripNumber(
-                tripNumber = "123456788",
-                startDate = expectedStartDate,
-                endDate = expectedEndDate,
-                endDateWithoutLAN = expectedEndDateWithoutLAN,
-            ),
+                tripNumber=tripNumber,
+                firstOperationDateTime=firstOperationDateTime,
+                lastOperationDateTime=lastOperationDateTime,
+                startDateTime=startDate,
+                endDateTime=endDate,
+
+                )
         )
 
         // When
         val voyage =
             GetVesselVoyage(logbookReportRepository, getLogbookMessages)
-                .execute("FR224226850", VoyageRequest.EQUALS, "123456788")
+                .execute(cfr, VoyageRequest.EQUALS, tripNumber)
 
         // Then
-        assertThat(voyage.isLastVoyage).isFalse
+
         assertThat(voyage.isFirstVoyage).isFalse
-        assertThat(voyage.startDate).isEqualTo(expectedStartDate)
-        assertThat(voyage.endDate).isEqualTo(expectedEndDateWithoutLAN)
+        assertThat(voyage.isLastVoyage).isFalse
+        assertThat(voyage.startDate).isEqualTo(startDate)
+        assertThat(voyage.endDate).isEqualTo(endDate)
+        assertThat(voyage.tripNumber).isEqualTo(tripNumber)
     }
 }

@@ -25,6 +25,7 @@ class GetVesselVoyageByDates(
         fromDateTime: ZonedDateTime? = null,
         toDateTime: ZonedDateTime? = null,
     ): Voyage {
+        val vesselTrips = logbookReportRepository.findAllTrips(internalReferenceNumber)
         val dates =
             getDatesFromVesselTrackDepth.execute(
                 internalReferenceNumber = internalReferenceNumber,
@@ -33,72 +34,46 @@ class GetVesselVoyageByDates(
                 toDateTime = toDateTime,
             )
 
-        val trip =
-            try {
-                logbookReportRepository.findTripBetweenDates(
-                    internalReferenceNumber = internalReferenceNumber,
-                    afterDateTime = dates.from,
-                    beforeDateTime = dates.to,
-                )
-            } catch (e: IllegalArgumentException) {
-                throw BackendUsageException(
-                    BackendUsageErrorCode.NOT_FOUND_BUT_OK,
-                    message = "Could not fetch voyage for request \"${dates}\"",
-                    cause = e,
-                )
-            } catch (e: NoLogbookFishingTripFound) {
-                throw BackendUsageException(
-                    BackendUsageErrorCode.NOT_FOUND_BUT_OK,
-                    message = "Could not fetch voyage for request \"${dates}\"",
-                    cause = e,
-                )
-            }
+        val tripsBetweenDates = vesselTrips.filter {
+            it.startDateTime!!.isBefore(toDateTime) &&
+            it.startDateTime.isAfter(fromDateTime)
+        }
+        if (tripsBetweenDates.isEmpty()) {
+            throw BackendUsageException(
+                BackendUsageErrorCode.NOT_FOUND_BUT_OK,
+                message = "Could not fetch voyage for request \"${dates}\"",
+            )
+        }
 
-        val isLastVoyage = getIsLastVoyage(internalReferenceNumber, trip.tripNumber)
-        val isFirstVoyage = getIsFirstVoyage(internalReferenceNumber, trip.tripNumber)
+        var trip = tripsBetweenDates.first()
+
+        trip = logbookReportRepository.findDatesOfTrip(
+            internalReferenceNumber,
+            trip.tripNumber,
+            trip.firstOperationDateTime,
+            trip.lastOperationDateTime
+        )
+
+        val tripIndex = vesselTrips.indexOfFirst { it.tripNumber == trip.tripNumber }
 
         val logbookMessages =
             getLogbookMessages.execute(
                 internalReferenceNumber = internalReferenceNumber,
-                afterDepartureDate = trip.startDate,
-                beforeDepartureDate = trip.endDate,
+                firstOperationDateTime = trip.firstOperationDateTime,
+                lastOperationDateTime = trip.lastOperationDateTime,
                 tripNumber = trip.tripNumber,
             )
         val software = logbookMessages.firstOrNull()?.software
 
         return Voyage(
-            isLastVoyage = isLastVoyage,
-            isFirstVoyage = isFirstVoyage,
-            startDate = trip.startDate,
-            endDate = trip.endDateWithoutLAN,
+            isLastVoyage = tripIndex == vesselTrips.size - 1,
+            isFirstVoyage = tripIndex == 0,
+            startDate = trip.startDateTime,
+            endDate = trip.endDateTime,
             tripNumber = trip.tripNumber,
-            totalTripsFoundForDates = trip.totalTripsFoundForDates,
+            totalTripsFoundForDates = tripsBetweenDates.size,
             software = software,
             logbookMessages = logbookMessages,
         )
     }
-
-    private fun getIsLastVoyage(
-        internalReferenceNumber: String,
-        tripNumber: String,
-    ): Boolean =
-        try {
-            logbookReportRepository.findTripAfterTripNumber(internalReferenceNumber, tripNumber)
-
-            false
-        } catch (e: NoLogbookFishingTripFound) {
-            true
-        }
-
-    private fun getIsFirstVoyage(
-        internalReferenceNumber: String,
-        tripNumber: String,
-    ): Boolean =
-        try {
-            logbookReportRepository.findTripBeforeTripNumber(internalReferenceNumber, tripNumber)
-
-            false
-        } catch (e: NoLogbookFishingTripFound) {
-            true
-        }
 }

@@ -74,147 +74,6 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findLastTripBefore Should return the last departure date When the CFR is given`() {
-        // When
-        val lastTrip = jpaLogbookReportRepository.findLastTripBeforeDateTime("FAK000999999", ZonedDateTime.now())
-
-        // Then
-        assertThat(lastTrip.startDate.toString()).isEqualTo("2019-10-11T01:06Z")
-        assertThat(lastTrip.endDate.toString()).isEqualTo("2019-10-22T11:06Z")
-        assertThat(lastTrip.tripNumber).isEqualTo("9463715")
-    }
-
-    @Test
-    @Transactional
-    fun `findLastTripBefore Should throw an exception When no parameter is given`() {
-        // When
-        val throwable =
-            catchThrowable {
-                jpaLogbookReportRepository.findLastTripBeforeDateTime("", ZonedDateTime.now())
-            }
-
-        // Then
-        assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
-        assertThat(throwable.message).contains("No trip found for the vessel.")
-    }
-
-    @Test
-    @Transactional
-    fun `findLastTripBefore Should throw an exception When the vessel could not be found`() {
-        // When
-        val throwable =
-            catchThrowable {
-                jpaLogbookReportRepository.findLastTripBeforeDateTime(
-                    "ARGH",
-                    ZonedDateTime.now(),
-                )
-            }
-
-        // Then
-        assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
-        assertThat(throwable.message).contains("No trip found for the vessel.")
-    }
-
-    @Test
-    @Transactional
-    fun `findTripBeforeTripNumber Should return the previous trip number When there is an overlap between the current and previous trip`() {
-        // When
-        val secondTrip =
-            jpaLogbookReportRepository.findTripBeforeTripNumber(
-                "FAK000999999",
-                "9463714",
-            )
-
-        // Then
-        assertThat(secondTrip.tripNumber).isEqualTo("9463713")
-        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-01-18T11:45Z")
-        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-02-23T13:08Z")
-    }
-
-    @Test
-    @Transactional
-    fun `findTripBeforeTripNumber Should return an exception When the current trip number is invalid`() {
-        // When
-        val throwable =
-            catchThrowable {
-                jpaLogbookReportRepository.findTripBeforeTripNumber(
-                    "FAK000999999",
-                    "9463712",
-                )
-            }
-
-        // Then
-        assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
-        assertThat(throwable.message).contains("No trip found for the vessel.")
-    }
-
-    @Test
-    @Transactional
-    fun `findTripBeforeTripNumber Should return the previous trip number When there is no overlap between the current and previous trip`() {
-        // When
-        val secondTrip =
-            jpaLogbookReportRepository.findTripBeforeTripNumber(
-                "FAK000999999",
-                "9463715",
-            )
-
-        // Then
-        assertThat(secondTrip.tripNumber).isEqualTo("9463714")
-        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-02-17T01:05Z")
-        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-10-15T12:01Z")
-    }
-
-    @Test
-    @Transactional
-    fun `findTripAfterTripNumber Should return the next trip number When there is an overlap between the current and previous trip`() {
-        // When
-        val secondTrip =
-            jpaLogbookReportRepository.findTripAfterTripNumber(
-                "FAK000999999",
-                "9463713",
-            )
-
-        // Then
-        assertThat(secondTrip.tripNumber).isEqualTo("9463714")
-        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-02-17T01:05Z")
-        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-10-15T12:01Z")
-    }
-
-    @Test
-    @Transactional
-    fun `findTripAfterTripNumber Should return the next trip number When there is no overlap between the current and previous trip`() {
-        // When
-        val secondTrip =
-            jpaLogbookReportRepository.findTripAfterTripNumber(
-                "FAK000999999",
-                "9463714",
-            )
-
-        // Then
-        assertThat(secondTrip.tripNumber).isEqualTo("9463715")
-        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-10-11T01:06Z")
-        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-10-22T11:06Z")
-    }
-
-    @Test
-    @Transactional
-    fun `findTripAfterTripNumber Should throw an exception When there is no next trip found`() {
-        // When
-        val throwable =
-            catchThrowable {
-                jpaLogbookReportRepository.findTripAfterTripNumber(
-                    "FAK000999999",
-                    "9463715",
-                )
-            }
-
-        // Then
-        assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
-        assertThat(throwable.message).contains("No trip found for the vessel.")
-    }
-
-    @Test
-    @Transactional
     fun `findAllMessagesByTripNumberBetweenDates Should retrieve all messages When the CFR is given`() {
         // Given
         val lastDepartureDate = ZonedDateTime.of(2019, 10, 11, 0, 4, 0, 0, UTC)
@@ -223,7 +82,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // When
         val messages =
             jpaLogbookReportRepository
-                .findAllMessagesByTripNumberBetweenDates("FAK000999999", lastDepartureDate, now, "9463715")
+                .findAllMessagesByTripNumberBetweenOperationDates("FAK000999999", lastDepartureDate, now, "9463715")
 
         // Then
         assertThat(messages).hasSize(21)
@@ -416,7 +275,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // When
         val messages =
             jpaLogbookReportRepository
-                .findAllMessagesByTripNumberBetweenDates("FAK000999999", afterDate, beforeDate, "9463715")
+                .findAllMessagesByTripNumberBetweenOperationDates("FAK000999999", afterDate, beforeDate, "9463715")
 
         // Then
         assertThat(messages).hasSize(2)
@@ -442,51 +301,6 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Then
         // Because `CURRENT_DATE - INTERVAL '2 days'` is used in the test data
         assertThat(dateTime).isAfter(ZonedDateTime.now().minusDays(3))
-    }
-
-    @Test
-    @Transactional
-    fun `findFirstAcknowledgedDateOfTripBeforeDateTime Should return the last acknowledged message date When transmission format is ERS`() {
-        // When
-        val lastTrip =
-            jpaLogbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(
-                "FAK000999999",
-                ZonedDateTime.now(),
-            )
-
-        // Then
-        assertThat(lastTrip.toString()).isEqualTo("2019-10-17T11:32Z")
-    }
-
-    @Test
-    @Transactional
-    fun `findFirstAcknowledgedDateOfTripBeforeDateTime Should return the last acknowledged message date When transmission format is FLUX`() {
-        // When
-        val lastTrip =
-            jpaLogbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(
-                "SOCR4T3",
-                ZonedDateTime.now(),
-            )
-
-        // Then
-        assertThat(lastTrip.toString()).isEqualTo("2020-05-06T18:39:33Z")
-    }
-
-    @Test
-    @Transactional
-    fun `findFirstAcknowledgedDateOfTripBeforeDateTime Should throw a custom exception When the findFirstAcknowledgedDateOfTrip request is empty`() {
-        // When
-        val throwable =
-            catchThrowable {
-                jpaLogbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(
-                    "UNKNOWN_VESS",
-                    ZonedDateTime.parse("2018-02-17T01:06:00Z"),
-                )
-            }
-
-        // Then
-        assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
-        assertThat(throwable.message).contains("No trip found for the vessel.")
     }
 
     @Test
@@ -1189,60 +1003,5 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Then
         val updatedCorReport = jpaLogbookReportRepository.findById(2109)
         assertThat((updatedCorReport.message as PNO).isInvalidated).isEqualTo(true)
-    }
-
-    @Test
-    @Transactional
-    fun `findTripBetweenDates Should return the first trip found with the total count of trips`() {
-        // When
-        val trip =
-            jpaLogbookReportRepository.findTripBetweenDates(
-                "FAK000999999",
-                ZonedDateTime.parse("2018-02-17T01:05Z"),
-                ZonedDateTime.parse("2020-10-15T12:01Z"),
-            )
-
-        // Then
-        assertThat(trip.tripNumber).isEqualTo("9463715")
-        assertThat(trip.startDate.toString()).isEqualTo("2019-10-11T01:06Z")
-        assertThat(trip.endDate.toString()).isEqualTo("2019-10-22T11:06Z")
-        assertThat(trip.totalTripsFoundForDates).isEqualTo(3)
-    }
-
-    @Test
-    @Transactional
-    fun `findTripBetweenDates Should return the whole trip found When the dates are included within the total trip`() {
-        // When
-        val trip =
-            jpaLogbookReportRepository.findTripBetweenDates(
-                "FAK000999999",
-                ZonedDateTime.parse("2019-10-11T01:05Z"),
-                ZonedDateTime.parse("2019-10-11T12:01Z"),
-            )
-
-        // Then
-        assertThat(trip.tripNumber).isEqualTo("9463715")
-        assertThat(trip.startDate.toString()).isEqualTo("2019-10-11T01:06Z")
-        assertThat(trip.endDate.toString()).isEqualTo("2019-10-22T11:06Z")
-        assertThat(trip.totalTripsFoundForDates).isEqualTo(1)
-    }
-
-    @Test
-    @Transactional
-    fun `findTripBetweenDates Should throw an exception When no trip found`() {
-        // When
-        val throwable =
-            catchThrowable {
-                jpaLogbookReportRepository.findTripBetweenDates(
-                    "FAK000999999",
-                    ZonedDateTime.parse("2010-02-17T01:05Z"),
-                    ZonedDateTime.parse("2010-10-15T12:01Z"),
-                )
-            }
-
-        // Then
-        assertThat(
-            throwable.message,
-        ).contains("No trip found for the vessel. (internalReferenceNumber: \"FAK000999999\")")
     }
 }

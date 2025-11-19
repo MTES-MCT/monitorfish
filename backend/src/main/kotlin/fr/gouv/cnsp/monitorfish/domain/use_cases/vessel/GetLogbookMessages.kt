@@ -10,6 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import org.slf4j.LoggerFactory
+import java.time.Instant
 import java.time.ZonedDateTime
 
 @UseCase
@@ -24,8 +25,8 @@ class GetLogbookMessages(
 
     fun execute(
         internalReferenceNumber: String,
-        afterDepartureDate: ZonedDateTime,
-        beforeDepartureDate: ZonedDateTime,
+        firstOperationDateTime: ZonedDateTime,
+        lastOperationDateTime: ZonedDateTime,
         tripNumber: String,
     ): List<LogbookMessage> {
         val referenceData = loadReferenceData()
@@ -33,8 +34,8 @@ class GetLogbookMessages(
         val allMessages =
             fetchAndPrepareMessages(
                 internalReferenceNumber,
-                afterDepartureDate,
-                beforeDepartureDate,
+                firstOperationDateTime,
+                lastOperationDateTime,
                 tripNumber,
             )
 
@@ -52,15 +53,15 @@ class GetLogbookMessages(
 
     private fun fetchAndPrepareMessages(
         internalReferenceNumber: String,
-        afterDepartureDate: ZonedDateTime,
-        beforeDepartureDate: ZonedDateTime,
+        firstOperationDateTime: ZonedDateTime,
+        lastOperationDateTime: ZonedDateTime,
         tripNumber: String,
     ): List<LogbookMessage> =
         logbookReportRepository
-            .findAllMessagesByTripNumberBetweenDates(
+            .findAllMessagesByTripNumberBetweenOperationDates(
                 internalReferenceNumber = internalReferenceNumber,
-                afterDate = afterDepartureDate,
-                beforeDate = beforeDepartureDate,
+                firstOperationDateTime = firstOperationDateTime,
+                lastOperationDateTime = lastOperationDateTime,
                 tripNumber = tripNumber,
             ).sortedBy { it.reportDateTime }
             .onEach { attachRawMessage(it) }

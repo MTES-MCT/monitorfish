@@ -43,10 +43,7 @@ class GetLogbookMessagesUTests {
     @Test
     fun `execute Should return an ordered list of last ERS messages with the codes' names`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
-        )
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenOperationDates(any(), any(), any(), any())).willReturn(
             getDummyLogbookMessages(),
         )
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
@@ -161,10 +158,7 @@ class GetLogbookMessagesUTests {
     @Test
     fun `execute Should flag a corrected message as true`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
-        )
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenOperationDates(any(), any(), any(), any())).willReturn(
             getDummyCorrectedLogbookMessages(),
         )
 
@@ -199,10 +193,7 @@ class GetLogbookMessagesUTests {
     @Test
     fun `execute Should filter to return only DAT and COR messages and add the acknowledge property`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
-        )
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenOperationDates(any(), any(), any(), any())).willReturn(
             getDummyRETLogbookMessages(),
         )
 
@@ -255,9 +246,7 @@ class GetLogbookMessagesUTests {
         // Given
         val lastAck = Acknowledgment(returnStatus = "000")
 
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any()))
-            .willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any()))
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenOperationDates(any(), any(), any(), any()))
             .willReturn(
                 getDummyRETLogbookMessages() +
                     LogbookMessage(
@@ -305,10 +294,7 @@ class GetLogbookMessagesUTests {
     @Test
     fun `execute Should add the deleted property`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
-        )
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenOperationDates(any(), any(), any(), any())).willReturn(
             getDummyRETLogbookMessages(),
         )
 
@@ -332,9 +318,6 @@ class GetLogbookMessagesUTests {
     @Test
     fun `execute Should not add the deleted property When the DEL message is not acknowledged`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
-        )
         val messagesWithoutValidRet =
             getDummyRETLogbookMessages()
                 .filter { it.id != 7.toLong() } +
@@ -363,7 +346,7 @@ class GetLogbookMessagesUTests {
                     isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
                 )
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenOperationDates(any(), any(), any(), any())).willReturn(
             messagesWithoutValidRet,
         )
 
@@ -387,10 +370,7 @@ class GetLogbookMessagesUTests {
     @Test
     fun `execute Should acknowledge messages from flag stages that do not send RET`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
-        )
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenOperationDates(any(), any(), any(), any())).willReturn(
             getDummyLogbookMessagesFromFlagStatesWithoutRET(),
         )
 
@@ -419,10 +399,7 @@ class GetLogbookMessagesUTests {
     @Test
     fun `execute Should flag messages sent by the failover software e-Sacapt`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
-        )
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenOperationDates(any(), any(), any(), any())).willReturn(
             getDummyLogbookMessages(),
         )
 
@@ -454,10 +431,7 @@ class GetLogbookMessagesUTests {
         haul.gear = "OTB"
         farMessage.hauls = listOf(haul)
 
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
-        )
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenOperationDates(any(), any(), any(), any())).willReturn(
             listOf(
                 LogbookMessage(
                     id = 1,
@@ -515,10 +489,7 @@ class GetLogbookMessagesUTests {
         haul.gear = "OTB"
         farMessage.hauls = listOf(haul)
 
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
-        )
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenOperationDates(any(), any(), any(), any())).willReturn(
             listOf(
                 LogbookMessage(
                     id = 1,
@@ -596,10 +567,7 @@ class GetLogbookMessagesUTests {
                 isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             )
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
-        )
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenOperationDates(any(), any(), any(), any())).willReturn(
             getDummyLogbookMessages() + retTargetingTwoMessages,
         )
 
@@ -613,8 +581,8 @@ class GetLogbookMessagesUTests {
                 logbookRawMessageRepository,
             ).execute(
                 internalReferenceNumber = "FR224226850",
-                afterDepartureDate = ZonedDateTime.now().minusMinutes(5),
-                beforeDepartureDate = ZonedDateTime.now(),
+                firstOperationDateTime = ZonedDateTime.now().minusMinutes(5),
+                lastOperationDateTime = ZonedDateTime.now(),
                 tripNumber = "345",
             )
 
@@ -628,7 +596,7 @@ class GetLogbookMessagesUTests {
     @Test
     fun `execute Should handle comprehensive trip data from trip 9463715`() {
         // Given
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenOperationDates(any(), any(), any(), any())).willReturn(
             getTrip9463715LogbookMessages(),
         )
         given(gearRepository.findAll()).willReturn(emptyList())
@@ -645,8 +613,8 @@ class GetLogbookMessagesUTests {
                 logbookRawMessageRepository,
             ).execute(
                 internalReferenceNumber = "FAK000999999",
-                afterDepartureDate = ZonedDateTime.of(2019, 10, 1, 0, 0, 0, 0, UTC),
-                beforeDepartureDate = ZonedDateTime.of(2019, 12, 31, 23, 59, 59, 0, UTC),
+                firstOperationDateTime = ZonedDateTime.of(2019, 10, 1, 0, 0, 0, 0, UTC),
+                lastOperationDateTime = ZonedDateTime.of(2019, 12, 31, 23, 59, 59, 0, UTC),
                 tripNumber = "9463715",
             )
 

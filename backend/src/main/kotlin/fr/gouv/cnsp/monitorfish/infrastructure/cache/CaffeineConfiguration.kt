@@ -39,8 +39,6 @@ class CaffeineConfiguration {
     val lastLogbookOperationDate = "last_logbook_operation_datetime_utc"
     val logbook = "logbook_messages"
     val logbookRawMessage = "logbook_raw_message"
-    val nextLogbook = "next_logbook"
-    val previousLogbook = "previous_logbook"
     val pnoTypes = "pno_types"
     val logbookPnoTypes = "logbook_pno_types"
     val pnoToVerify = "pno_to_verify"
@@ -128,8 +126,6 @@ class CaffeineConfiguration {
         val lastLogbookOperationDateCache = buildMinutesCache(lastLogbookOperationDate, ticker, 1)
         val logbookCache = buildMinutesCache(logbook, ticker, 10)
         val logbookRawMessageCache = buildMinutesCache(logbookRawMessage, ticker, oneWeek)
-        val nextLogbookCache = buildMinutesCache(nextLogbook, ticker, 10)
-        val previousLogbookCache = buildMinutesCache(previousLogbook, ticker, 10)
 
         val pnoToVerifyCache = buildMinutesCache(pnoToVerify, ticker, 5)
         val manualPnoToVerifyCache = buildMinutesCache(manualPnoToVerify, ticker, 5)
@@ -215,7 +211,6 @@ class CaffeineConfiguration {
                 logbookCache,
                 logbookRawMessageCache,
                 missionControlUnitsCache,
-                nextLogbookCache,
                 pnoTypesCache,
                 logbookPnoTypesCache,
                 allVisioCapturesVesselsCache,
@@ -223,7 +218,6 @@ class CaffeineConfiguration {
                 manualPnoToVerifyCache,
                 portCache,
                 portsCache,
-                previousLogbookCache,
                 riskFactorByCfrCache,
                 riskFactorByVesselIdCache,
                 riskFactorsCache,

@@ -7,14 +7,14 @@ import org.springframework.context.annotation.Configuration
 @ConfigurationProperties(prefix = "monitorfish.oidc")
 class OIDCProperties {
     var enabled: Boolean? = false
-    var bypassSiretFilter: String? = "false"
+    var bypassEmailDomainsFilter: String? = "false"
     var clientId: String = ""
     var clientSecret: String = ""
     var redirectUri: String = ""
     var loginUrl: String = ""
     var successUrl: String = ""
     var errorUrl: String = ""
-    var authorizedSirets: List<String> = listOf()
+    var authorizedEmailDomains: List<String> = listOf()
     var issuerUri: String = ""
 
     /**

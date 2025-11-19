@@ -133,55 +133,40 @@ class SecurityConfig(
             }
 
             private fun validateAndProcessUser(oidcUser: OidcUser): OidcUser {
-                logger.debug("========== SIRET Validation ==========")
-                logger.debug("MONITORFISH_OIDC_BYPASS_SIRET_FILTER=${oidcProperties.bypassSiretFilter}")
+                logger.debug("========== Email Domain Validation ==========")
+                logger.debug("MONITORFISH_OIDC_BYPASS_EMAIL_DOMAINS_FILTER=${oidcProperties.bypassEmailDomainsFilter}")
 
-                if (oidcProperties.bypassSiretFilter == "true") {
-                    logger.info("✅ OIDC is bypassing SIRET checks.")
+                if (oidcProperties.bypassEmailDomainsFilter == "true") {
+                    logger.info("✅ OIDC is bypassing email domain checks.")
                     return oidcUser
                 }
 
-                val siretsClaimRaw = oidcUser.claims["siret"]
-                logger.debug(
-                    "Raw SIRET claim from JWT: $siretsClaimRaw (type: ${siretsClaimRaw?.javaClass?.simpleName})",
-                )
+                val emailClaim = oidcUser.claims["email"] as? String
+                logger.debug("User email from JWT: $emailClaim")
 
-                val tokenSirets: Set<String> =
-                    when (siretsClaimRaw) {
-                        is List<*> -> {
-                            val stringList = siretsClaimRaw.filterIsInstance<String>().toSet()
-                            logger.debug("SIRET claim is List: $stringList")
-                            stringList
-                        }
-                        is String -> {
-                            logger.debug("SIRET claim is String: $siretsClaimRaw")
-                            setOf(siretsClaimRaw)
-                        }
-                        null -> {
-                            val errorMsg = "SIRET claim is missing/null in JWT"
-                            logger.error("❌ $errorMsg")
-                            throw OAuth2AuthenticationException(errorMsg)
-                        }
-                        else -> {
-                            val errorMsg = "SIRET claim has unexpected type: ${siretsClaimRaw.javaClass.simpleName}, value: $siretsClaimRaw"
-                            logger.error("❌ $errorMsg")
-                            throw OAuth2AuthenticationException(errorMsg)
-                        }
-                    }
-
-                logger.debug("Extracted token SIRETs: $tokenSirets")
-                logger.debug("Configured authorized SIRETs: ${oidcProperties.authorizedSirets}")
-
-                val isAuthorized = oidcProperties.authorizedSirets.any { it in tokenSirets }
-                if (!isAuthorized) {
-                    val errorMsg =
-                        "User not authorized. Token SIRETs: $tokenSirets do not match any authorized SIRET: ${oidcProperties.authorizedSirets}"
+                if (emailClaim.isNullOrBlank()) {
+                    val errorMsg = "Email claim is missing or empty in JWT"
                     logger.error("❌ $errorMsg")
                     throw OAuth2AuthenticationException(errorMsg)
                 }
 
-                logger.debug("✅ User authorized with SIRET(s): $tokenSirets")
-                logger.debug("========== End SIRET Validation ==========")
+                val emailDomain = emailClaim.substringAfterLast("@")
+                logger.debug("Extracted email domain: $emailDomain")
+                logger.debug("Configured authorized email domains: ${oidcProperties.authorizedEmailDomains}")
+
+                val isAuthorized = oidcProperties.authorizedEmailDomains.any { domain ->
+                    emailDomain.equals(domain, ignoreCase = true)
+                }
+
+                if (!isAuthorized) {
+                    val errorMsg =
+                        "User not authorized. Email domain '$emailDomain' does not match any authorized domain: ${oidcProperties.authorizedEmailDomains}"
+                    logger.error("❌ $errorMsg")
+                    throw OAuth2AuthenticationException(errorMsg)
+                }
+
+                logger.info("✅ User authorized with email domain: $emailDomain")
+                logger.debug("========== End Email Domain Validation ==========")
                 return oidcUser
             }
         }

@@ -38,12 +38,10 @@ class MissionActionsController(
         @RequestParam(name = "afterDateTime")
         @DateTimeFormat(pattern = VesselController.zoneDateTimePattern)
         afterDateTime: ZonedDateTime,
-    ): ControlsSummaryDataOutput =
-        runBlocking {
-            val actionsSummary = getVesselControls.execute(vesselId, afterDateTime)
-
-            ControlsSummaryDataOutput.fromControlsSummary(actionsSummary)
-        }
+    ): ControlsSummaryDataOutput = runBlocking {
+        val actionsSummary = getVesselControls.execute(vesselId, afterDateTime)
+        ControlsSummaryDataOutput.fromControlsSummary(actionsSummary)
+    }
 
     @GetMapping("/controls/activity_reports")
     @Operation(summary = "Get vessels activity reports (ACT-REP)")
@@ -59,10 +57,9 @@ class MissionActionsController(
         @Parameter(description = "JDP")
         @RequestParam(name = "jdp")
         jdp: JointDeploymentPlan,
-    ): ActivityReportsDataOutput {
+    ): ActivityReportsDataOutput = runBlocking {
         val activityReports = getActivityReports.execute(beforeDateTime, afterDateTime, jdp)
-
-        return ActivityReportsDataOutput.fromActivityReports(activityReports)
+        ActivityReportsDataOutput.fromActivityReports(activityReports)
     }
 
     @GetMapping("")

@@ -361,7 +361,8 @@ class MissionActionsControllerITests {
     @Test
     fun `Should get all activity reports for a given date range and JDP`() {
         // Given
-        given(getActivityReports.execute(any(), any(), any())).willReturn(
+        runBlocking {
+            given(getActivityReports.execute(any(), any(), any())).willReturn(
             ActivityReports(
                 activityReports =
                     listOf(
@@ -402,6 +403,7 @@ class MissionActionsControllerITests {
                 jdpSpecies = listOf("BSS", "MAK", "LTH"),
             ),
         )
+        }
 
         // When
         api
@@ -421,10 +423,12 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$.jdpSpecies.length()", equalTo(3)))
             .andExpect(jsonPath("$.jdpSpecies[0]", equalTo("BSS")))
 
-        Mockito.verify(getActivityReports).execute(
-            ZonedDateTime.parse("2020-05-04T03:04:05Z"),
-            ZonedDateTime.parse("2020-03-04T03:04:05Z"),
-            JointDeploymentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC,
-        )
+        runBlocking {
+            Mockito.verify(getActivityReports).execute(
+                ZonedDateTime.parse("2020-05-04T03:04:05Z"),
+                ZonedDateTime.parse("2020-03-04T03:04:05Z"),
+                JointDeploymentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC,
+            )
+        }
     }
 }

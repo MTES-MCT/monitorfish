@@ -75,6 +75,8 @@ dependencies {
     api("org.jetbrains.kotlin:kotlin-reflect:2.2.21")
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.10.2")
+    api("org.reactivestreams:reactive-streams:1.0.4")
     api("com.neovisionaries:nv-i18n:1.29")
     api("com.github.ben-manes.caffeine:caffeine:3.2.3")
     api("io.hypersistence:hypersistence-utils-hibernate-63:3.11.0")

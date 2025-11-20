@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.AdministrativeAreaSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.AdministrativeAreaType
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.GearMeshSizeEqualityComparator
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.GearSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PositionAlertSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.RegulatoryAreaSpecification
@@ -39,9 +38,9 @@ object TestUtils {
             onlyFishingPositions = true,
             gears =
                 listOf(
-                    GearSpecification("OTB", null, null, meshType = null),
-                    GearSpecification("OTM", 80.0, 120.0, meshType = GearMeshSizeEqualityComparator.BETWEEN),
-                    GearSpecification("PTB", null, null, meshType = null),
+                    GearSpecification("OTB", null, null),
+                    GearSpecification("OTM", 80.0, 120.0),
+                    GearSpecification("PTB", null, null),
                 ),
             species =
                 listOf(

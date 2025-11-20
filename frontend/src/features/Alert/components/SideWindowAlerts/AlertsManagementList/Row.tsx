@@ -81,10 +81,10 @@ export function Row({ row }: RowProps) {
                   {alertSpecification.species
                     .map(species => {
                       const speciesName = speciesAsOptions?.find(
-                        speciesOption => speciesOption.value.code === species.code
+                        speciesOption => speciesOption.value.code === species.species
                       )
 
-                      return `${speciesName?.label ?? species.code}${species.minWeight !== undefined ? ` (supérieure à ${species.minWeight}kg)` : ''}`
+                      return `${speciesName?.label ?? species.species}${species.minWeight !== undefined ? ` (supérieure à ${species.minWeight}kg)` : ''}`
                     })
                     .join(', ')}
                 </ExpandedRowValue>

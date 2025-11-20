@@ -11,8 +11,8 @@ export const GearSpecificationSchema = z.strictObject({
 })
 
 export const SpeciesSpecificationSchema = z.strictObject({
-  code: z.string(),
-  minWeight: numberOrUndefined
+  minWeight: numberOrUndefined,
+  species: z.string()
 })
 
 export const RegulatoryAreaSpecificationSchema = z.strictObject({

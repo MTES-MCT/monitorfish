@@ -239,7 +239,7 @@ context('Side Window > Alert Management', () => {
     cy.get('.Component-Banner').should('not.contain', 'a été désactivée')
   })
 
-  it.only('Alerts specifications Should be shown in the table', () => {
+  it('Alerts specifications Should be shown in the table', () => {
     cy.get('.Table-SimpleTable tr').should('have.length', 22)
     cy.getDataCy('alerts-specification-list-length').contains('21 alertes')
 

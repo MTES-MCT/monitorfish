@@ -78,8 +78,9 @@ class MissionController(
         @PathParam("Id")
         @PathVariable(name = "id")
         id: Int,
-    ): MissionWithActionsDataOutput = runBlocking {
-        val missionAndActions = getMission.execute(id)
-        MissionWithActionsDataOutput.fromMissionAndActions(missionAndActions)
-    }
+    ): MissionWithActionsDataOutput =
+        runBlocking {
+            val missionAndActions = getMission.execute(id)
+            MissionWithActionsDataOutput.fromMissionAndActions(missionAndActions)
+        }
 }

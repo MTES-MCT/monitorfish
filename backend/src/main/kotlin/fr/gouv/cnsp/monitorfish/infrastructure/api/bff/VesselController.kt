@@ -89,28 +89,29 @@ class VesselController(
         @DateTimeFormat(pattern = zoneDateTimePattern)
         beforeDateTime: ZonedDateTime?,
         @AuthenticationPrincipal principal: OidcUser?,
-    ): ResponseEntity<SelectedVesselAndPositionsDataOutput> = runBlocking {
-        val email = principal?.email ?: ""
+    ): ResponseEntity<SelectedVesselAndPositionsDataOutput> =
+        runBlocking {
+            val email = principal?.email ?: ""
 
-        val (vesselTrackHasBeenModified, vesselInformation) =
-            getVessel.execute(
-                vesselId = vesselId,
-                internalReferenceNumber = internalReferenceNumber,
-                externalReferenceNumber = externalReferenceNumber,
-                ircs = IRCS,
-                trackDepth = trackDepth,
-                vesselIdentifier = vesselIdentifier,
-                fromDateTime = afterDateTime,
-                toDateTime = beforeDateTime,
-                userEmail = email,
-            )
+            val (vesselTrackHasBeenModified, vesselInformation) =
+                getVessel.execute(
+                    vesselId = vesselId,
+                    internalReferenceNumber = internalReferenceNumber,
+                    externalReferenceNumber = externalReferenceNumber,
+                    ircs = IRCS,
+                    trackDepth = trackDepth,
+                    vesselIdentifier = vesselIdentifier,
+                    fromDateTime = afterDateTime,
+                    toDateTime = beforeDateTime,
+                    userEmail = email,
+                )
 
-        val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
+            val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
 
-        ResponseEntity
-            .status(returnCode)
-            .body(SelectedVesselAndPositionsDataOutput.fromEnrichedActiveVesselWithPositions(vesselInformation))
-    }
+            ResponseEntity
+                .status(returnCode)
+                .body(SelectedVesselAndPositionsDataOutput.fromEnrichedActiveVesselWithPositions(vesselInformation))
+        }
 
     @GetMapping("/beacon_malfunctions")
     @Operation(summary = "Get vessel's beacon malfunctions history")
@@ -160,27 +161,28 @@ class VesselController(
         @RequestParam(name = "beforeDateTime", required = false)
         @DateTimeFormat(pattern = zoneDateTimePattern)
         beforeDateTime: ZonedDateTime?,
-    ): ResponseEntity<List<PositionDataOutput>> = runBlocking {
-        val (vesselTrackHasBeenModified, positions) =
-            getVesselPositions.execute(
-                internalReferenceNumber = internalReferenceNumber,
-                externalReferenceNumber = externalReferenceNumber,
-                ircs = IRCS,
-                trackDepth = trackDepth,
-                vesselIdentifier = vesselIdentifier,
-                fromDateTime = afterDateTime,
-                toDateTime = beforeDateTime,
-            )
+    ): ResponseEntity<List<PositionDataOutput>> =
+        runBlocking {
+            val (vesselTrackHasBeenModified, positions) =
+                getVesselPositions.execute(
+                    internalReferenceNumber = internalReferenceNumber,
+                    externalReferenceNumber = externalReferenceNumber,
+                    ircs = IRCS,
+                    trackDepth = trackDepth,
+                    vesselIdentifier = vesselIdentifier,
+                    fromDateTime = afterDateTime,
+                    toDateTime = beforeDateTime,
+                )
 
-        val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
+            val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
 
-        val positionsDataOutput =
-            positions.await().map {
-                PositionDataOutput.fromPosition(it)
-            }
+            val positionsDataOutput =
+                positions.await().map {
+                    PositionDataOutput.fromPosition(it)
+                }
 
-        ResponseEntity.status(returnCode).body(positionsDataOutput)
-    }
+            ResponseEntity.status(returnCode).body(positionsDataOutput)
+        }
 
     companion object {
         const val zoneDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.000X"

@@ -363,46 +363,46 @@ class MissionActionsControllerITests {
         // Given
         runBlocking {
             given(getActivityReports.execute(any(), any(), any())).willReturn(
-            ActivityReports(
-                activityReports =
-                    listOf(
-                        ActivityReport(
-                            action =
-                                MissionAction(
-                                    1,
-                                    1,
-                                    1,
-                                    actionType = MissionActionType.SEA_CONTROL,
-                                    actionDatetimeUtc = ZonedDateTime.now(),
-                                    isDeleted = false,
-                                    hasSomeGearsSeized = false,
-                                    hasSomeSpeciesSeized = false,
-                                    isFromPoseidon = true,
-                                    flagState = CountryCode.FR,
-                                    userTrigram = "LTH",
-                                    completion = Completion.TO_COMPLETE,
-                                ),
-                            activityCode = ActivityCode.FIS,
-                            vesselNationalIdentifier = "AYFR000654",
-                            controlUnits = listOf(LegacyControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
-                            faoArea = "27.7.c",
-                            segment = "NS01",
-                            vessel =
-                                Vessel(
-                                    id = 1,
-                                    internalReferenceNumber = "FR00022680",
-                                    vesselName = "MY AWESOME VESSEL",
-                                    flagState = CountryCode.FR,
-                                    declaredFishingGears = listOf("Trémails"),
-                                    vesselType = "Fishing",
-                                    districtCode = "AY",
-                                    hasLogbookEsacapt = false,
-                                ),
+                ActivityReports(
+                    activityReports =
+                        listOf(
+                            ActivityReport(
+                                action =
+                                    MissionAction(
+                                        1,
+                                        1,
+                                        1,
+                                        actionType = MissionActionType.SEA_CONTROL,
+                                        actionDatetimeUtc = ZonedDateTime.now(),
+                                        isDeleted = false,
+                                        hasSomeGearsSeized = false,
+                                        hasSomeSpeciesSeized = false,
+                                        isFromPoseidon = true,
+                                        flagState = CountryCode.FR,
+                                        userTrigram = "LTH",
+                                        completion = Completion.TO_COMPLETE,
+                                    ),
+                                activityCode = ActivityCode.FIS,
+                                vesselNationalIdentifier = "AYFR000654",
+                                controlUnits = listOf(LegacyControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
+                                faoArea = "27.7.c",
+                                segment = "NS01",
+                                vessel =
+                                    Vessel(
+                                        id = 1,
+                                        internalReferenceNumber = "FR00022680",
+                                        vesselName = "MY AWESOME VESSEL",
+                                        flagState = CountryCode.FR,
+                                        declaredFishingGears = listOf("Trémails"),
+                                        vesselType = "Fishing",
+                                        districtCode = "AY",
+                                        hasLogbookEsacapt = false,
+                                    ),
+                            ),
                         ),
-                    ),
-                jdpSpecies = listOf("BSS", "MAK", "LTH"),
-            ),
-        )
+                    jdpSpecies = listOf("BSS", "MAK", "LTH"),
+                ),
+            )
         }
 
         // When

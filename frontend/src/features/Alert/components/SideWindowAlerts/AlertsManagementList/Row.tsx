@@ -2,8 +2,7 @@ import { getExpandableRowCellCustomStyle } from '@features/Alert/components/Side
 import {
   AdministrativeAreaType,
   AdministrativeAreaTypeLabel,
-  AdministrativeAreaValueLabel,
-  gearMeshSizeEqualityComparatorLabels
+  AdministrativeAreaValueLabel
 } from '@features/Alert/constants'
 import { type AlertSpecification } from '@features/Alert/types'
 import { Flag } from '@features/commonComponents/Flag'
@@ -66,17 +65,10 @@ export function Row({ row }: RowProps) {
                   {alertSpecification.gears
                     .map(gear => {
                       const gearName = gearsAsOptions?.find(gearOption => gearOption.value === gear.gear)
-                      const minMesh = gear.minMesh ? `maillage min. ${gear.minMesh}mm` : null
-                      const maxMesh = gear.maxMesh ? `maillage max. ${gear.maxMesh}mm` : null
-                      const meshType = gear.meshType ? gearMeshSizeEqualityComparatorLabels[gear.meshType] : null
-                      const maxMeshText = gear.maxMesh ? ` et ${gear.maxMesh} mm` : ' mm'
 
-                      const meshText =
-                        meshType && gear.minMesh
-                          ? `maillage ${meshType} ${gear.minMesh}${maxMeshText}`
-                          : `${[minMesh, maxMesh].filter(mesh => !!mesh).join(', ')}`
+                      const meshText = gear.minMesh ? `maillage min. ${gear.minMesh}mm` : null
 
-                      return `${gearName?.label ?? gear.gear}${!!minMesh || !!maxMesh ? ` (${meshText})` : ''}`
+                      return `${gearName?.label ?? gear.gear}${meshText ? ` (${meshText})` : ''}`
                     })
                     .join(', ')}
                 </ExpandedRowValue>
@@ -92,7 +84,7 @@ export function Row({ row }: RowProps) {
                         speciesOption => speciesOption.value.code === species.species
                       )
 
-                      return `${speciesName?.label ?? species.species}${species.minWeight !== undefined ? ` (min. ${species.minWeight}kg)` : ''}`
+                      return `${speciesName?.label ?? species.species}${species.minWeight !== undefined ? ` (supérieure à ${species.minWeight}kg)` : ''}`
                     })
                     .join(', ')}
                 </ExpandedRowValue>
@@ -101,7 +93,9 @@ export function Row({ row }: RowProps) {
             {alertSpecification.speciesCatchAreas.length > 0 && (
               <p>
                 <ExpandedRowLabel>Zones de capture (FAR) :</ExpandedRowLabel>
-                <ExpandedRowValue>{alertSpecification.speciesCatchAreas.join(', ')}</ExpandedRowValue>
+                <ExpandedRowValue>
+                  {alertSpecification.speciesCatchAreas.join(', ').replaceAll('fao_areas.', '')}
+                </ExpandedRowValue>
               </p>
             )}
 

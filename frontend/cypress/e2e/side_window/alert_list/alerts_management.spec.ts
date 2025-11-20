@@ -133,15 +133,23 @@ context('Side Window > Alert Management', () => {
     /**
      * Add gears on board criteria
      */
-    // TODO: to uncomment when connection is fixed
-    /*     cy.clickButton('Ajouter un critère de déclenchement')
+    cy.clickButton('Ajouter un critère de déclenchement')
     cy.clickButton('Engins à bord')
     cy.getDataCy('alert-criteria-gear-on-board-selector').click()
-    cy.get('span[title="Chaluts"]').click({ timeout: 10000 })
-    cy.get('span[title="Chaluts à langoustines – TBN"]').click({ timeout: 10000 })
-    cy.fill('Type de maillage', 'Supérieur ou égal à')
+    cy.get('span[title="Chaluts"]').click()
+    cy.get('span[title="TBN - Chaluts à langoustines"]').click({ force: true })
     cy.fill('Maillage min', '70')
-    cy.contains('ENGINS À BORD').click() */
+    cy.contains('ENGINS À BORD').click()
+
+    /**
+     * Add species on board criteria
+     */
+    cy.clickButton('Ajouter un critère de déclenchement')
+    cy.clickButton('Espèces à bord')
+    cy.fill("Espèce déclenchant l'alerte", 'MORUE COMMUNE (CABILLAUD)')
+    cy.fill('Quantité pour l\'espèce COD', '500')
+    cy.fill('Zones de capture (FAR)', ['27.5.b'])
+    cy.contains('ESPÈCES À BORD').click()
 
     cy.clickButton('Enregistrer')
 
@@ -157,6 +165,7 @@ context('Side Window > Alert Management', () => {
       expect(interception.request.body.districtCodes).to.deep.equal(['LS'])
       expect(interception.request.body.vesselIds).to.deep.equal([1])
       expect(interception.request.body.producerOrganizations).to.deep.equal(['COBRENORD'])
+      expect(interception.request.body.speciesCatchAreas).to.deep.equal(['fao_areas.27.5.b'])
       expect(interception.request.body.administrativeAreas).to.deep.equal([
         {
           areas: ['27.6.a'],
@@ -170,15 +179,19 @@ context('Side Window > Alert Management', () => {
           zone: 'Secteur 3'
         }
       ])
-      // TODO: to uncomment when connection is fixed
-      /*  expect(interception.request.body.gears).to.deep.equal([
+      expect(interception.request.body.gears).to.deep.equal([
         {
           gear: 'TBN',
-          maxMesh: undefined,
-          meshType: GearMeshSizeEqualityComparator.greaterThanOrEqualTo,
+          maxMesh: null,
           minMesh: 70
         }
-      ]) */
+      ])
+      expect(interception.request.body.species).to.deep.equal([
+        {
+          species: 'COD',
+          minWeight: 500,
+        }
+      ])
     })
 
     cy.contains('Gestion des alertes').should('be.visible')
@@ -204,8 +217,9 @@ context('Side Window > Alert Management', () => {
 
     cy.fill('Nom', 'Nom modifié')
     cy.fill('Description', 'Description modifiée')
+    cy.get('.Field-DateRangePicker__RangeCalendarPicker').should('exist')
     cy.fill('Période de validité', 'En tous temps')
-    cy.get('.rs-picker-input').should('not.exist')
+    cy.get('.Field-DateRangePicker__RangeCalendarPicker').should('not.exist')
     cy.fill("Positions VMS prises en compte par l'alerte", 'Les positions en pêche uniquement')
 
     cy.clickButton('Enregistrer')
@@ -273,7 +287,7 @@ context('Side Window > Alert Management', () => {
     )
     cy.get('[data-id="POSITION_ALERT:13"]').contains('22206')
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains(
-      "HKE - MERLU D'EUROPE (min. 713kg), LOB - CROUPIA ROCHE, SOL - SOLE COMMUNE"
+      "HKE - MERLU D'EUROPE (supérieure à 713kg), LOB - CROUPIA ROCHE, SOL - SOLE COMMUNE"
     )
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains('27.7.e, 27.7.d, 27.8.a')
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains('France, Espagne, Allemagne, Danemark')

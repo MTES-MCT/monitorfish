@@ -98,7 +98,7 @@ class SecurityConfigITests {
                             oidcLogin()
                                 .idToken { token ->
                                     token.claim("email", "test@example.com")
-                                    token.claim("SIRET", "123456789")
+                                    token.claim("siret", "123456789")
                                 },
                         ),
                 )

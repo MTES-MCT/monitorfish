@@ -43,7 +43,7 @@ data class GearSpecification(
 )
 
 data class SpeciesSpecification(
-    val code: String,
+    val species: String,
     val minWeight: Double?,
 )
 

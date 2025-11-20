@@ -92,12 +92,12 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
       return
     }
 
-    const isSpecyAlreadyInCriteria = values.species?.find(specy => specy.code === nextSpecy.code)
+    const isSpecyAlreadyInCriteria = values.species?.find(specy => specy.species === nextSpecy.code)
     if (isSpecyAlreadyInCriteria) {
       return
     }
 
-    const newSpeciesList = [...(values.species ?? []), { code: nextSpecy.code, minWeight: undefined }]
+    const newSpeciesList = [...(values.species ?? []), { minWeight: undefined, species: nextSpecy.code }]
     setFieldValue('species', newSpeciesList)
   }
 
@@ -140,10 +140,12 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
         />
         <SpeciesWrapper>
           {values.species?.map((specy, index) => {
-            const specyLabel = speciesAndGroups?.species?.find(specyFromApi => specyFromApi.code === specy.code)?.name
+            const specyLabel = speciesAndGroups?.species?.find(
+              specyFromApi => specyFromApi.code === specy.species
+            )?.name
 
             return (
-              <Wrapper key={specy.code}>
+              <Wrapper key={specy.species}>
                 <TagWrapper>
                   <Tag
                     backGroundColor={THEME.color.lightGray}
@@ -155,7 +157,7 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
                   <Label>Quantité supérieure à</Label>
                   <TextInput
                     isLabelHidden
-                    label={`Quantité pour l'espèce ${specy.code}`}
+                    label={`Quantité pour l'espèce ${specy.species}`}
                     name={`species[${index}].minWeight`}
                     onChange={(nextValue: string | undefined) => {
                       setFieldValue(`species.${index}.minWeight`, nextValue ? Number(nextValue) : undefined)

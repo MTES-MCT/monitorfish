@@ -96,14 +96,14 @@ data class GearSpecificationDataOutput(
 }
 
 data class SpeciesSpecificationDataOutput(
-    val code: String,
-    val weight: Double?,
+    val species: String,
+    val minWeight: Double?,
 ) {
     companion object {
         fun fromSpeciesSpecification(speciesSpecification: SpeciesSpecification) =
             SpeciesSpecificationDataOutput(
-                code = speciesSpecification.code,
-                weight = speciesSpecification.minWeight,
+                species = speciesSpecification.species,
+                minWeight = speciesSpecification.minWeight,
             )
     }
 }

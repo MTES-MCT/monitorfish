@@ -28,6 +28,7 @@ data class MissionWithActionsDataOutput(
     val isUnderJdp: Boolean? = false,
     val controlUnits: List<LegacyControlUnit> = listOf(),
     val actions: List<MissionActionDataOutput>,
+    val hasRapportNavActions: Boolean,
 ) {
     companion object {
         fun fromMissionAndActions(missionAndActions: MissionAndActions) =
@@ -53,6 +54,7 @@ data class MissionWithActionsDataOutput(
                 isUnderJdp = missionAndActions.mission.isUnderJdp,
                 controlUnits = missionAndActions.mission.controlUnits,
                 actions = missionAndActions.actions.map { MissionActionDataOutput.fromMissionAction(it) },
+                hasRapportNavActions = missionAndActions.hasRapportNavActions,
             )
     }
 }

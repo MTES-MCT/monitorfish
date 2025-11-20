@@ -27,7 +27,7 @@ class GetActivityReports(
 ) {
     private val logger = LoggerFactory.getLogger(GetActivityReports::class.java)
 
-    fun execute(
+    suspend fun execute(
         beforeDateTime: ZonedDateTime,
         afterDateTime: ZonedDateTime,
         jdp: JointDeploymentPlan,

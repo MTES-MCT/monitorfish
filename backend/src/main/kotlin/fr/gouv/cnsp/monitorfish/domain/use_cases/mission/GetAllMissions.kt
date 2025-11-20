@@ -66,7 +66,7 @@ class GetAllMissions(
                         .filter { it.missionId == mission.id }
                         .sortedByDescending { it.actionDatetimeUtc }
 
-                return@map MissionAndActions(mission, missionActions)
+                return@map MissionAndActions(mission = mission, actions = missionActions, hasRapportNavActions = false)
             }.filter { filteredMission ->
                 filterInfractions(infractionsFilter, filteredMission)
             }

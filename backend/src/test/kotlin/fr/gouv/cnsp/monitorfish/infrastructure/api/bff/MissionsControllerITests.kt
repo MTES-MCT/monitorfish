@@ -90,6 +90,7 @@ class MissionsControllerITests {
                                 completion = Completion.TO_COMPLETE,
                             ),
                         ),
+                    hasRapportNavActions = false,
                 ),
             ),
         )
@@ -168,6 +169,7 @@ class MissionsControllerITests {
                             userTrigram = "LTH",
                         ),
                     ),
+                hasRapportNavActions = false,
             ),
         )
 

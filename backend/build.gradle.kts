@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     `maven-publish`
-    id("org.springframework.boot") version "3.5.7"
+    id("org.springframework.boot") version "3.5.8"
     id("org.jetbrains.kotlin.plugin.spring") version "2.2.21"
     kotlin("jvm") version "2.2.21"
     id("org.jetbrains.kotlin.plugin.allopen") version "2.2.21"
@@ -49,17 +49,17 @@ tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilation
 }
 
 dependencies {
-    api("org.springframework.boot:spring-boot-starter-web:3.5.7")
+    api("org.springframework.boot:spring-boot-starter-web:3.5.8")
     api("org.springframework.security:spring-security-oauth2-resource-server:6.5.6")
     api("org.springframework.security:spring-security-oauth2-jose:6.5.6")
-    api("org.springframework.boot:spring-boot-starter-json:3.5.7")
-    api("org.springframework.boot:spring-boot-starter-security:3.5.7")
-    api("org.springframework.boot:spring-boot-starter-data-jpa:3.5.7")
-    api("org.springframework.boot:spring-boot-configuration-processor:3.5.7")
-    api("org.springframework.boot:spring-boot-starter-cache:3.5.7")
-    api("org.springframework.boot:spring-boot-starter-log4j2:3.5.7")
+    api("org.springframework.boot:spring-boot-starter-json:3.5.8")
+    api("org.springframework.boot:spring-boot-starter-security:3.5.8")
+    api("org.springframework.boot:spring-boot-starter-data-jpa:3.5.8")
+    api("org.springframework.boot:spring-boot-configuration-processor:3.5.8")
+    api("org.springframework.boot:spring-boot-starter-cache:3.5.8")
+    api("org.springframework.boot:spring-boot-starter-log4j2:3.5.8")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-    runtimeOnly("org.springframework.boot:spring-boot-devtools:3.5.7")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools:3.5.8")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
     api("io.ktor:ktor-client-core-jvm:3.3.2")
     api("io.ktor:ktor-client-java-jvm:3.3.2")
@@ -94,7 +94,7 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter:1.21.3")
     testImplementation("jakarta.servlet:jakarta.servlet-api:6.1.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:5.3.2")
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.7")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.8")
     testImplementation("org.springframework.security:spring-security-test:6.5.6")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc:3.0.5")
 }

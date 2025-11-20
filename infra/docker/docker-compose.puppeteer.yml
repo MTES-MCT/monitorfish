@@ -76,7 +76,7 @@ services:
 
       # OIDC Configuration
       - MONITORFISH_OIDC_ENABLED=false
-      - MONITORFISH_OIDC_BYPASS_SIRET_FILTER=false
+      - MONITORFISH_OIDC_BYPASS_EMAIL_DOMAINS_FILTER=true
       - MONITORFISH_OIDC_PROXY_URL=http://keycloak:8080
       - MONITORFISH_OIDC_ISSUER_URI=http://keycloak:8080/realms/monitor
       - MONITORFISH_OIDC_CLIENT_ID=monitorfish
@@ -85,7 +85,7 @@ services:
       - MONITORFISH_OIDC_LOGIN_URL=/oauth2/authorization/proconnect
       - MONITORFISH_OIDC_SUCCESS_URL=http://localhost:8880
       - MONITORFISH_OIDC_ERROR_URL=http://localhost:8880/register
-      - MONITORFISH_OIDC_AUTHORIZED_SIRETS=1234567890,0987654321
+      - MONITORFISH_OIDC_AUTHORIZED_EMAIL_DOMAINS=email.gouv.fr,email.com
       - MONITORFISH_OIDC_PROVIDER=proconnect
       - MONITORFISH_KEYCLOAK_PROXY_ENABLED=false
 

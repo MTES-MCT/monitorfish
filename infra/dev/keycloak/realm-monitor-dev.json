@@ -98,7 +98,7 @@
             "userinfo.token.claim": "true",
             "id.token.claim": "true",
             "access.token.claim": "true",
-            "claim.name": "SIRET",
+            "claim.name": "siret",
             "jsonType.label": "json",
             "user.attribute": "siret"
           }

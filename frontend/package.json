@@ -113,7 +113,7 @@
     "@types/styled-components": "5.1.36",
     "@typescript-eslint/eslint-plugin": "6.2.1",
     "@typescript-eslint/parser": "6.2.1",
-    "@vitejs/plugin-react": "4.6.0",
+    "@vitejs/plugin-react": "5.1.1",
     "assert": "2.1.0",
     "codecov": "3.8.3",
     "cypress": "14.5.0",

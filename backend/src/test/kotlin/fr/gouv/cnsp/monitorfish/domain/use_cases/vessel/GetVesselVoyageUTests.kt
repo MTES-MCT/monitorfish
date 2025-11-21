@@ -4,7 +4,6 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.times
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import org.assertj.core.api.Assertions.assertThat
@@ -12,7 +11,6 @@ import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
-import org.mockito.Mockito
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
@@ -39,31 +37,30 @@ class GetVesselVoyageUTests {
                 VoyageDatesAndTripNumber(
                     "trip1",
                     firstOperationDateTime,
-                    lastOperationDateTime
+                    lastOperationDateTime,
                 ),
                 VoyageDatesAndTripNumber(
                     tripNumber,
                     firstOperationDateTime,
-                    lastOperationDateTime
-                )
-            )
+                    lastOperationDateTime,
+                ),
+            ),
         )
         given(
             logbookReportRepository.findDatesOfTrip(
                 eq(cfr),
                 eq(tripNumber),
                 eq(firstOperationDateTime),
-                eq(lastOperationDateTime)
-            )
+                eq(lastOperationDateTime),
+            ),
         ).willReturn(
             VoyageDatesAndTripNumber(
-                tripNumber=tripNumber,
-                firstOperationDateTime=firstOperationDateTime,
-                lastOperationDateTime=lastOperationDateTime,
-                startDateTime=startDate,
-                endDateTime=endDate,
-
-            )
+                tripNumber = tripNumber,
+                firstOperationDateTime = firstOperationDateTime,
+                lastOperationDateTime = lastOperationDateTime,
+                startDateTime = startDate,
+                endDateTime = endDate,
+            ),
         )
 
         // When
@@ -110,26 +107,25 @@ class GetVesselVoyageUTests {
                 VoyageDatesAndTripNumber(
                     tripNumber,
                     firstOperationDateTime,
-                    lastOperationDateTime
-                )
-            )
+                    lastOperationDateTime,
+                ),
+            ),
         )
         given(
             logbookReportRepository.findDatesOfTrip(
                 eq(cfr),
                 eq(tripNumber),
                 any(),
-                any()
-            )
+                any(),
+            ),
         ).willReturn(
             VoyageDatesAndTripNumber(
-                tripNumber=tripNumber,
-                firstOperationDateTime=firstOperationDateTime,
-                lastOperationDateTime=lastOperationDateTime,
-                startDateTime=startDate,
-                endDateTime=endDate,
-
-                )
+                tripNumber = tripNumber,
+                firstOperationDateTime = firstOperationDateTime,
+                lastOperationDateTime = lastOperationDateTime,
+                startDateTime = startDate,
+                endDateTime = endDate,
+            ),
         )
 
         // When
@@ -160,36 +156,35 @@ class GetVesselVoyageUTests {
                 VoyageDatesAndTripNumber(
                     "trip1",
                     firstOperationDateTime,
-                    lastOperationDateTime
+                    lastOperationDateTime,
                 ),
                 VoyageDatesAndTripNumber(
                     "trip2",
                     firstOperationDateTime,
-                    lastOperationDateTime
+                    lastOperationDateTime,
                 ),
                 VoyageDatesAndTripNumber(
                     tripNumber,
                     firstOperationDateTime,
-                    lastOperationDateTime
+                    lastOperationDateTime,
                 ),
-            )
+            ),
         )
         given(
             logbookReportRepository.findDatesOfTrip(
                 eq(cfr),
                 eq(tripNumber),
                 any(),
-                any()
-            )
+                any(),
+            ),
         ).willReturn(
             VoyageDatesAndTripNumber(
-                tripNumber=tripNumber,
-                firstOperationDateTime=firstOperationDateTime,
-                lastOperationDateTime=lastOperationDateTime,
-                startDateTime=startDate,
-                endDateTime=endDate,
-
-                )
+                tripNumber = tripNumber,
+                firstOperationDateTime = firstOperationDateTime,
+                lastOperationDateTime = lastOperationDateTime,
+                startDateTime = startDate,
+                endDateTime = endDate,
+            ),
         )
 
         // When
@@ -206,7 +201,6 @@ class GetVesselVoyageUTests {
         assertThat(voyage.tripNumber).isEqualTo(tripNumber)
     }
 
-
     @Test
     fun `execute Should return a voyage When a specific trip is requested`() {
         // Given
@@ -221,46 +215,45 @@ class GetVesselVoyageUTests {
                 VoyageDatesAndTripNumber(
                     "trip1",
                     firstOperationDateTime,
-                    lastOperationDateTime
+                    lastOperationDateTime,
                 ),
                 VoyageDatesAndTripNumber(
                     "trip2",
                     firstOperationDateTime,
-                    lastOperationDateTime
+                    lastOperationDateTime,
                 ),
                 VoyageDatesAndTripNumber(
                     "trip3",
                     firstOperationDateTime,
-                    lastOperationDateTime
+                    lastOperationDateTime,
                 ),
                 VoyageDatesAndTripNumber(
                     tripNumber,
                     firstOperationDateTime,
-                    lastOperationDateTime
+                    lastOperationDateTime,
                 ),
                 VoyageDatesAndTripNumber(
                     "trip5",
                     firstOperationDateTime,
-                    lastOperationDateTime
+                    lastOperationDateTime,
                 ),
-            )
+            ),
         )
         given(
             logbookReportRepository.findDatesOfTrip(
                 eq(cfr),
                 eq(tripNumber),
                 any(),
-                any()
-            )
+                any(),
+            ),
         ).willReturn(
             VoyageDatesAndTripNumber(
-                tripNumber=tripNumber,
-                firstOperationDateTime=firstOperationDateTime,
-                lastOperationDateTime=lastOperationDateTime,
-                startDateTime=startDate,
-                endDateTime=endDate,
-
-                )
+                tripNumber = tripNumber,
+                firstOperationDateTime = firstOperationDateTime,
+                lastOperationDateTime = lastOperationDateTime,
+                startDateTime = startDate,
+                endDateTime = endDate,
+            ),
         )
 
         // When

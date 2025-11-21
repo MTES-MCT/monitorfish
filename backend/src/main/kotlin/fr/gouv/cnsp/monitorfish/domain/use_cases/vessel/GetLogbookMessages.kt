@@ -10,7 +10,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import org.slf4j.LoggerFactory
-import java.time.Instant
 import java.time.ZonedDateTime
 
 @UseCase

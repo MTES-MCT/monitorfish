@@ -4,7 +4,6 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.TestUtils.getDummyPositions
@@ -41,7 +40,7 @@ class GetVesselPositionsUTests {
             getDummyPositions(now),
         )
         given(logbookReportRepository.findAllTrips(any())).willReturn(
-            listOf()
+            listOf(),
         )
 
         // When
@@ -104,7 +103,6 @@ class GetVesselPositionsUTests {
         // Then
         assertThat(throwable).isNull()
     }
-
 
     @Test
     fun `execute Should throw an exception When vessel from date is not given as a parameter and track depth is CUSTOM`() {

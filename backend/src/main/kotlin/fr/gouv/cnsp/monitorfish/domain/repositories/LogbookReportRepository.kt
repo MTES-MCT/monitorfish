@@ -6,7 +6,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
-import java.time.Instant
 import java.time.ZonedDateTime
 
 interface LogbookReportRepository {
@@ -37,7 +36,7 @@ interface LogbookReportRepository {
         internalReferenceNumber: String,
         tripNumber: String,
         firstOperationDateTime: ZonedDateTime,
-        lastOperationDateTime: ZonedDateTime
+        lastOperationDateTime: ZonedDateTime,
     ): VoyageDatesAndTripNumber
 
     fun findDistinctPriorNotificationTypes(): List<String>

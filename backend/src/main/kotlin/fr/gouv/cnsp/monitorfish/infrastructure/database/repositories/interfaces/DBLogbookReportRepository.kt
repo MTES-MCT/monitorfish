@@ -66,7 +66,7 @@ interface DBLogbookReportRepository :
                 trip_number,
                 COALESCE(
                     MIN(
-                        CASE WHEN ABS(activity_datetime_utc - operation_datetime_utc) / 3600 / 24 / 365 < 5
+                        CASE WHEN ABS(EXTRACT(epoch FROM activity_datetime_utc - operation_datetime_utc)) / 3600 / 24 / 365 < 5
                         THEN activity_datetime_utc
                     END),
                     MIN(operation_datetime_utc)

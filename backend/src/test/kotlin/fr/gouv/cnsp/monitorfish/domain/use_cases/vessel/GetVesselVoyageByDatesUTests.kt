@@ -48,57 +48,61 @@ class GetVesselVoyageByDatesUTests {
                     tripNumber = "1",
                     firstOperationDateTime = dummyOperationDateTime.minusMonths(1),
                     lastOperationDateTime = dummyOperationDateTime.minusMonths(1),
-                    startDateTime = expectedStartDate.minusMonths(1)
+                    startDateTime = expectedStartDate.minusMonths(1),
                 ),
                 VoyageDatesAndTripNumber(
                     tripNumber = "2",
                     firstOperationDateTime = dummyOperationDateTime.minusWeeks(1),
                     lastOperationDateTime = dummyOperationDateTime.minusWeeks(1),
-                    startDateTime = expectedStartDate.minusWeeks(1)
+                    startDateTime = expectedStartDate.minusWeeks(1),
                 ),
                 VoyageDatesAndTripNumber(
                     tripNumber = expectedTripNumber,
                     firstOperationDateTime = dummyOperationDateTime,
                     lastOperationDateTime = dummyOperationDateTime,
-                    startDateTime = expectedStartDate
+                    startDateTime = expectedStartDate,
                 ),
                 VoyageDatesAndTripNumber(
                     tripNumber = "4",
                     firstOperationDateTime = dummyOperationDateTime.plusWeeks(1),
                     lastOperationDateTime = dummyOperationDateTime.plusWeeks(1),
-                    startDateTime = expectedStartDate.plusWeeks(1)
-                )
-            )
+                    startDateTime = expectedStartDate.plusWeeks(1),
+                ),
+            ),
         )
 
-        given(logbookReportRepository.findDatesOfTrip(
-            eq(expectedCfr),
-            eq(expectedTripNumber),
-            eq(dummyOperationDateTime),
-            eq(dummyOperationDateTime)
-        )).willReturn(
+        given(
+            logbookReportRepository.findDatesOfTrip(
+                eq(expectedCfr),
+                eq(expectedTripNumber),
+                eq(dummyOperationDateTime),
+                eq(dummyOperationDateTime),
+            ),
+        ).willReturn(
             VoyageDatesAndTripNumber(
-                tripNumber=expectedTripNumber,
-                firstOperationDateTime=dummyOperationDateTime,
-                lastOperationDateTime=dummyOperationDateTime,
-                startDateTime=expectedStartDate,
-                endDateTime=expectedEndDate
-                )
+                tripNumber = expectedTripNumber,
+                firstOperationDateTime = dummyOperationDateTime,
+                lastOperationDateTime = dummyOperationDateTime,
+                startDateTime = expectedStartDate,
+                endDateTime = expectedEndDate,
+            ),
         )
 
-        given(logbookReportRepository.findDatesOfTrip(
-            eq(expectedCfr),
-            eq("1"),
-            eq(dummyOperationDateTime.minusMonths(1)),
-            eq(dummyOperationDateTime.minusMonths(1))
-        )).willReturn(
+        given(
+            logbookReportRepository.findDatesOfTrip(
+                eq(expectedCfr),
+                eq("1"),
+                eq(dummyOperationDateTime.minusMonths(1)),
+                eq(dummyOperationDateTime.minusMonths(1)),
+            ),
+        ).willReturn(
             VoyageDatesAndTripNumber(
-                tripNumber="1",
-                firstOperationDateTime=dummyOperationDateTime.minusMonths(1),
-                lastOperationDateTime=dummyOperationDateTime.minusMonths(1),
-                startDateTime=expectedStartDate.minusMonths(1),
-                endDateTime=expectedEndDate.minusMonths(1)
-            )
+                tripNumber = "1",
+                firstOperationDateTime = dummyOperationDateTime.minusMonths(1),
+                lastOperationDateTime = dummyOperationDateTime.minusMonths(1),
+                startDateTime = expectedStartDate.minusMonths(1),
+                endDateTime = expectedEndDate.minusMonths(1),
+            ),
         )
 
         given(getLogbookMessages.execute(eq(expectedCfr), any(), any(), any())).willReturn(
@@ -121,7 +125,7 @@ class GetVesselVoyageByDatesUTests {
                     expectedCfr,
                     VesselTrackDepth.CUSTOM,
                     expectedStartDate.plusHours(1),
-                    expectedEndDate.minusHours(1)
+                    expectedEndDate.minusHours(1),
                 )
             }
         assertThat(exception.code).isEqualTo(BackendUsageErrorCode.NOT_FOUND_BUT_OK)
@@ -135,7 +139,7 @@ class GetVesselVoyageByDatesUTests {
                 expectedCfr,
                 VesselTrackDepth.CUSTOM,
                 expectedStartDate.minusHours(1),
-                expectedEndDate.plusHours(1)
+                expectedEndDate.plusHours(1),
             )
 
         val voyage1 =
@@ -147,7 +151,7 @@ class GetVesselVoyageByDatesUTests {
                 expectedCfr,
                 VesselTrackDepth.CUSTOM,
                 expectedStartDate.minusYears(1),
-                expectedEndDate.plusHours(1)
+                expectedEndDate.plusHours(1),
             )
 
         // Then
@@ -166,6 +170,5 @@ class GetVesselVoyageByDatesUTests {
         assertThat(voyage1.endDate).isEqualTo(expectedEndDate.minusMonths(1))
         assertThat(voyage1.logbookMessages).hasSize(1)
         assertThat(voyage1.totalTripsFoundForDates).isEqualTo(3)
-
     }
 }

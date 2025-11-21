@@ -68,6 +68,10 @@ services:
       # MonitorEnv Backend
       - MONITORENV_URL=http://monitorenv-app:8880
 
+      # RapportNav
+      - RAPPORTNAV_URL=http://bad_url.com
+      - RAPPORTNAV_TIMEOUT=3000
+
       # API Configuration
       - MONITORFISH_API_PROTECTED_API_KEY=DUMMY-API-KEY
       - MONITORFISH_API_PROTECTED_PATHS=/bff/*
@@ -188,7 +192,7 @@ services:
     ports:
       - 8081:8080
     volumes:
-      - ../../frontend/cypress/mappings:/home/wiremock/mappings
+      - ../../frontend/cypress/mappings/geoserver_monitorenv:/home/wiremock/mappings
     healthcheck:
       test: [
           "CMD-SHELL",

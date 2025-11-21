@@ -39,16 +39,14 @@ class APIRapportNavMissionActionsRepository(
             } catch (e: CancellationException) {
                 logger.error("Timeout while fetching rapportNav $missionActionsUrl", e)
 
-                throw HttpTimeoutException(e.message)
+                RapportNavMissionAction(id = missionId, containsActionsAddedByUnit = false)
             } catch (e: Exception) {
                 logger.error(
                     "Could not fetch mission actions from rapportNav at $missionActionsUrl",
                     e,
                 )
 
-                throw NoSuchElementException(
-                    "Could not fetch mission actions from rapportNav at $missionActionsUrl",
-                )
+                RapportNavMissionAction(id = missionId, containsActionsAddedByUnit = false)
             }
         }
     }

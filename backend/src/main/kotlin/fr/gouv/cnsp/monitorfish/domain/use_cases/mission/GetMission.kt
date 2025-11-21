@@ -20,25 +20,16 @@ class GetMission(
         return coroutineScope {
             val missionFuture = async { missionRepository.findById(missionId) }
             val actionsFuture = async { getMissionActions.execute(missionId) }
+            val rapportNavActionsFuture =
+                async {
+                    rapportNavMissionActionsRepository.findRapportNavMissionActionsById(missionId)
+                }
 
-            try {
-                val rapportNavActionsFuture =
-                    async {
-                        rapportNavMissionActionsRepository.findRapportNavMissionActionsById(missionId)
-                    }
-
-                return@coroutineScope MissionAndActions(
-                    mission = missionFuture.await(),
-                    actions = actionsFuture.await(),
-                    hasRapportNavActions = rapportNavActionsFuture.await().containsActionsAddedByUnit,
-                )
-            } catch (e: Exception) {
-                return@coroutineScope MissionAndActions(
-                    mission = missionFuture.await(),
-                    actions = actionsFuture.await(),
-                    hasRapportNavActions = false,
-                )
-            }
+            return@coroutineScope MissionAndActions(
+                mission = missionFuture.await(),
+                actions = actionsFuture.await(),
+                hasRapportNavActions = rapportNavActionsFuture.await().containsActionsAddedByUnit,
+            )
         }
     }
 }

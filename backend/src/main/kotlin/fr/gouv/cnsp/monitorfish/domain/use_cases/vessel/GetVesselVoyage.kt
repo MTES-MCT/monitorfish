@@ -22,7 +22,7 @@ class GetVesselVoyage(
         voyageRequest: VoyageRequest,
         tripNumber: String?,
     ): Voyage {
-        val vesselTrips =  logbookReportRepository.findAllTrips(internalReferenceNumber)
+        val vesselTrips = logbookReportRepository.findAllTrips(internalReferenceNumber)
         var tripIndex: Int? = null
         var trip =
             try {
@@ -68,14 +68,14 @@ class GetVesselVoyage(
                 )
             }
 
-
         // Add depDateTime and rtpDateTime
-        trip = logbookReportRepository.findDatesOfTrip(
-            internalReferenceNumber,
-            trip.tripNumber,
-            trip.firstOperationDateTime,
-            trip.lastOperationDateTime
-        )
+        trip =
+            logbookReportRepository.findDatesOfTrip(
+                internalReferenceNumber,
+                trip.tripNumber,
+                trip.firstOperationDateTime,
+                trip.lastOperationDateTime,
+            )
 
         val logbookMessages =
             getLogbookMessages.execute(

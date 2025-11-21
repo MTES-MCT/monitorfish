@@ -45,7 +45,14 @@ services:
     ports:
       - 8081:8080
     volumes:
-      - ./frontend/cypress/mappings:/home/wiremock/mappings
+      - ./frontend/cypress/mappings/geoserver_monitorenv:/home/wiremock/mappings
+
+  rapportnav-stubs:
+    image: rodolpheche/wiremock
+    ports:
+      - 8082:8080
+    volumes:
+      - ./frontend/cypress/mappings/rapportnav:/home/wiremock/mappings
 
   keycloak:
     container_name: monitorfish_keycloak

@@ -6,12 +6,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.rapportnav.RapportNavMissionActi
 import fr.gouv.cnsp.monitorfish.domain.repositories.RapportNavMissionActionsRepository
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withTimeout
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
-import java.net.http.HttpTimeoutException
 
 @Repository
 class APIRapportNavMissionActionsRepository(
@@ -24,30 +23,32 @@ class APIRapportNavMissionActionsRepository(
         val missionActionsUrl =
             "${rapportnavProperties.url}/api/v1/missions/$missionId"
 
-        return withTimeout(rapportnavProperties.timeout) {
-            try {
-                val rapportNavMissionActions =
-                    apiClient
-                        .httpClient
-                        .get(missionActionsUrl)
-                        .body<RapportNavMissionAction>()
-                logger.debug(
-                    "Fetched is mission has actions and the result is : $rapportNavMissionActions",
-                )
+        return try {
+            withTimeout(rapportnavProperties.timeout) {
+                try {
+                    val rapportNavMissionActions =
+                        apiClient
+                            .httpClient
+                            .get(missionActionsUrl)
+                            .body<RapportNavMissionAction>()
+                    logger.debug(
+                        "Fetched is mission has actions and the result is : $rapportNavMissionActions",
+                    )
 
-                return@withTimeout rapportNavMissionActions
-            } catch (e: CancellationException) {
-                logger.error("Timeout while fetching rapportNav $missionActionsUrl", e)
+                    return@withTimeout rapportNavMissionActions
+                } catch (e: Exception) {
+                    logger.error(
+                        "Could not fetch mission actions from rapportNav at $missionActionsUrl",
+                        e,
+                    )
 
-                RapportNavMissionAction(id = missionId, containsActionsAddedByUnit = false)
-            } catch (e: Exception) {
-                logger.error(
-                    "Could not fetch mission actions from rapportNav at $missionActionsUrl",
-                    e,
-                )
-
-                RapportNavMissionAction(id = missionId, containsActionsAddedByUnit = false)
+                    RapportNavMissionAction(id = missionId, containsActionsAddedByUnit = false)
+                }
             }
+        } catch (e: TimeoutCancellationException) {
+            logger.error("Timeout while fetching rapportNav $missionActionsUrl", e)
+
+            RapportNavMissionAction(id = missionId, containsActionsAddedByUnit = false)
         }
     }
 }

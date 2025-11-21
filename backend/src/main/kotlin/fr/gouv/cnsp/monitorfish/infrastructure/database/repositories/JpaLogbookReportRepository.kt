@@ -133,7 +133,7 @@ class JpaLogbookReportRepository(
         }
     }
 
-    @Cacheable(value = ["first_and_last_trip_dates"])
+    @Cacheable(value = ["all_trips"])
     override fun findAllTrips(internalReferenceNumber: String): List<VoyageDatesAndTripNumber> =
         dbLogbookReportRepository.findAllTrips(internalReferenceNumber).map {
             VoyageDatesAndTripNumber(

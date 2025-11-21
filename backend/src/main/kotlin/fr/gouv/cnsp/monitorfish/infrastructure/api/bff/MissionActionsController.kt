@@ -41,7 +41,6 @@ class MissionActionsController(
     ): ControlsSummaryDataOutput =
         runBlocking {
             val actionsSummary = getVesselControls.execute(vesselId, afterDateTime)
-
             ControlsSummaryDataOutput.fromControlsSummary(actionsSummary)
         }
 
@@ -59,11 +58,11 @@ class MissionActionsController(
         @Parameter(description = "JDP")
         @RequestParam(name = "jdp")
         jdp: JointDeploymentPlan,
-    ): ActivityReportsDataOutput {
-        val activityReports = getActivityReports.execute(beforeDateTime, afterDateTime, jdp)
-
-        return ActivityReportsDataOutput.fromActivityReports(activityReports)
-    }
+    ): ActivityReportsDataOutput =
+        runBlocking {
+            val activityReports = getActivityReports.execute(beforeDateTime, afterDateTime, jdp)
+            ActivityReportsDataOutput.fromActivityReports(activityReports)
+        }
 
     @GetMapping("")
     @Operation(summary = "Get mission actions of specified mission")

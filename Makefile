@@ -113,8 +113,8 @@ build-app-docker:
 	docker build -f infra/docker/app/Dockerfile -t monitorfish .
 
 run-stubbed-apis:
-	docker compose stop geoserver-monitorenv-stubs
-	docker compose up -d --quiet-pull --wait geoserver-monitorenv-stubs
+	docker compose stop geoserver-monitorenv-stubs rapportnav-stubs
+	docker compose up -d --quiet-pull --wait geoserver-monitorenv-stubs rapportnav-stubs
 
 stop-stubbed-apis:
 	docker stop cypress-geoserver-1

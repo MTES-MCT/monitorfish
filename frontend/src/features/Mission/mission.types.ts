@@ -123,5 +123,6 @@ export namespace Mission {
 
   export interface MissionWithActions extends Mission {
     actions: MissionAction.MissionAction[]
+    hasRapportNavActions: boolean
   }
 }

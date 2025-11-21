@@ -138,38 +138,34 @@ class APIMissionRepository(
         }
     }
 
-    override fun findByIds(ids: List<Int>): List<Mission> {
+    override suspend fun findByIds(ids: List<Int>): List<Mission> {
         val idsParameter = ids.joinToString(",")
 
         val missionsUrl = "${monitorenvProperties.url}/api/v1/missions/find?ids=$idsParameter"
 
         logger.info("Fetching missions at URL: $missionsUrl")
-        return runBlocking {
-            try {
-                val missions = apiClient.httpClient.get(missionsUrl).body<List<MissionDataResponse>>()
-                logger.info("Fetched ${missions.size}.")
+        return try {
+            val missions = apiClient.httpClient.get(missionsUrl).body<List<MissionDataResponse>>()
+            logger.info("Fetched ${missions.size}.")
 
-                return@runBlocking missions.map { it.toMission() }
-            } catch (e: Exception) {
-                logger.error("Could not fetch missions at $missionsUrl", e)
+            missions.map { it.toMission() }
+        } catch (e: Exception) {
+            logger.error("Could not fetch missions at $missionsUrl", e)
 
-                return@runBlocking listOf()
-            }
+            listOf()
         }
     }
 
-    override fun findById(id: Int): Mission {
+    override suspend fun findById(id: Int): Mission {
         val missionUrl = "${monitorenvProperties.url}/api/v1/missions/$id"
 
         logger.info("Fetching mission at URL: $missionUrl")
-        return runBlocking {
-            try {
-                val mission = apiClient.httpClient.get(missionUrl).body<MissionDataResponse>()
+        return try {
+            val mission = apiClient.httpClient.get(missionUrl).body<MissionDataResponse>()
 
-                return@runBlocking mission.toFullMission()
-            } catch (e: Exception) {
-                throw CouldNotFindException("Could not fetch missions at $missionUrl", e)
-            }
+            mission.toFullMission()
+        } catch (e: Exception) {
+            throw CouldNotFindException("Could not fetch missions at $missionUrl", e)
         }
     }
 }

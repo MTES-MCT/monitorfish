@@ -109,9 +109,8 @@ class VesselController(
             val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
 
             ResponseEntity
-                .status(
-                    returnCode,
-                ).body(SelectedVesselAndPositionsDataOutput.fromEnrichedActiveVesselWithPositions(vesselInformation))
+                .status(returnCode)
+                .body(SelectedVesselAndPositionsDataOutput.fromEnrichedActiveVesselWithPositions(vesselInformation))
         }
 
     @GetMapping("/beacon_malfunctions")
@@ -162,8 +161,8 @@ class VesselController(
         @RequestParam(name = "beforeDateTime", required = false)
         @DateTimeFormat(pattern = zoneDateTimePattern)
         beforeDateTime: ZonedDateTime?,
-    ): ResponseEntity<List<PositionDataOutput>> {
-        return runBlocking {
+    ): ResponseEntity<List<PositionDataOutput>> =
+        runBlocking {
             val (vesselTrackHasBeenModified, positions) =
                 getVesselPositions.execute(
                     internalReferenceNumber = internalReferenceNumber,
@@ -182,9 +181,8 @@ class VesselController(
                     PositionDataOutput.fromPosition(it)
                 }
 
-            return@runBlocking ResponseEntity.status(returnCode).body(positionsDataOutput)
+            ResponseEntity.status(returnCode).body(positionsDataOutput)
         }
-    }
 
     companion object {
         const val zoneDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.000X"

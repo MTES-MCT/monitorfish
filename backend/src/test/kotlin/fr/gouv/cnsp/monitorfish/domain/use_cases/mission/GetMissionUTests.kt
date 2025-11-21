@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionSource
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.rapportnav.RapportNavMissionAction
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotFindException
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RapportNavMissionActionsRepository
@@ -56,6 +57,12 @@ class GetMissionUTests {
                 ),
             )
             given(getMissionActions.execute(any())).willReturn(getDummyMissionActions(listOf(1, 2)))
+            given(rapportNavMissionActionsRepository.findRapportNavMissionActionsById(any())).willReturn(
+                RapportNavMissionAction(
+                    id = 123,
+                    containsActionsAddedByUnit = false,
+                ),
+            )
 
             // When
             val missionsAndActions =
@@ -77,6 +84,12 @@ class GetMissionUTests {
             // Given
             given(missionRepository.findById(any())).willThrow(CouldNotFindException("API ERROR"))
             given(getMissionActions.execute(any())).willReturn(getDummyMissionActions(listOf(123, 456)))
+            given(rapportNavMissionActionsRepository.findRapportNavMissionActionsById(any())).willReturn(
+                RapportNavMissionAction(
+                    id = 123,
+                    containsActionsAddedByUnit = false,
+                ),
+            )
 
             // When
             val throwable =

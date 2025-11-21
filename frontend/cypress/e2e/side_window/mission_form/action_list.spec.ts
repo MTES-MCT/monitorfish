@@ -255,7 +255,7 @@ context('Side Window > Mission Form > Action List', () => {
     )
   })
 
-  it.only('Should show Env actions on the actions timeline and display rapportnav text', () => {
+  it('Should show Env actions on the actions timeline and display rapportnav text', () => {
     editSideWindowMissionListMissionWithId(34, SeafrontGroup.MEMN)
 
     cy.getDataCy("mission-form-action-list").contains("Des données ont été ajoutées par l'unité dans la mission.")

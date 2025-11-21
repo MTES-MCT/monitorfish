@@ -122,7 +122,9 @@
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '5 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "updatedBy": null
-                }
+                },
+                "activity_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "trip_number": "9463716"
             },
             {
                 "id": 1101,
@@ -1591,12 +1593,12 @@
                 "cfr": "ABC000180832",
                 "enriched": true,
                 "flag_state": "FRA",
-                "integration_datetime_utc:sql": "NOW() - INTERVAL '15 minutes'",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "log_type": "DEP",
-                "operation_datetime_utc:sql": "NOW() - INTERVAL '15 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "operation_number": "FAKE_OPERATION_121",
                 "operation_type": "DAT",
-                "report_datetime_utc:sql": "NOW() - INTERVAL '15 minutes'",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "software": "TurboCatch (3.7-1)",
                 "transmission_format": "ERS",
                 "trip_gears": null,
@@ -1604,10 +1606,10 @@
                 "vessel_name": "MARIAGE ÎLE HASARD",
                 "value:jsonb": {
                     "anticipatedActivity": "FSH",
-                    "departureDatetimeUtc": "NOW() - INTERVAL '15 minutes'",
+                    "departureDatetimeUtc": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                     "departurePort": "AEJAZ",
                     "gearOnboard": [{ "gear": "GTR", "mesh": 100.0 }],
-                    "tripStartDate": "NOW() - INTERVAL '15 minutes'",
+                    "tripStartDate": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                     "updatedAt": null,
                     "updatedBy": null
                 }
@@ -1616,8 +1618,8 @@
                 "id": 1120,
                 "report_id": null,
                 "referenced_report_id": "FAKE_OPERATION_121",
-                "integration_datetime_utc:sql": "NOW() - INTERVAL '14 minutes'",
-                "operation_datetime_utc:sql": "NOW() - INTERVAL '14 minutes'",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_number": "FAKE_OPERATION_121_RET",
                 "operation_type": "RET",
                 "transmission_format": "ERS",

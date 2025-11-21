@@ -25,6 +25,7 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
+import java.sql.Timestamp
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZoneOffset.UTC
@@ -136,12 +137,12 @@ class JpaLogbookReportRepository(
 
     @Cacheable(value = ["first_and_last_trip_dates"])
     override fun findAllTrips(internalReferenceNumber: String): List<VoyageDatesAndTripNumber> {
-        return dbLogbookReportRepository.findAllTrips(internalReferenceNumber).map {
+        return dbLogbookReportRepository.findqAllTrips(internalReferenceNumber).map {
             VoyageDatesAndTripNumber(
                 tripNumber=it[0] as String,
-                startDateTime=(it[1] as Instant).atZone(ZoneOffset.UTC),
-                firstOperationDateTime=(it[2] as Instant).atZone(ZoneOffset.UTC),
-                lastOperationDateTime=(it[3] as Instant).atZone(ZoneOffset.UTC)
+                startDateTime=(it[1] as Timestamp).toInstant().atZone(ZoneOffset.UTC),
+                firstOperationDateTime=(it[2] as Timestamp).toInstant().atZone(ZoneOffset.UTC),
+                lastOperationDateTime=(it[3] as Timestamp).toInstant().atZone(ZoneOffset.UTC)
                 )
         }
     }

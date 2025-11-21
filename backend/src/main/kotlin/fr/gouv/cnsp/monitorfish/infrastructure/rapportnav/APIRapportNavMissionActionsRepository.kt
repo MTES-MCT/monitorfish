@@ -22,6 +22,7 @@ class APIRapportNavMissionActionsRepository(
     override suspend fun findRapportNavMissionActionsById(missionId: Int): RapportNavMissionAction {
         val missionActionsUrl =
             "${rapportnavProperties.url}/api/v1/missions/$missionId"
+        logger.info("Fetching RapportNav actions at: $missionActionsUrl")
 
         return try {
             withTimeout(rapportnavProperties.timeout) {
@@ -32,7 +33,7 @@ class APIRapportNavMissionActionsRepository(
                             .get(missionActionsUrl)
                             .body<RapportNavMissionAction>()
                     logger.debug(
-                        "Fetched is mission has actions and the result is : $rapportNavMissionActions",
+                        "Fetched mission has actions and the result is : $rapportNavMissionActions",
                     )
 
                     return@withTimeout rapportNavMissionActions

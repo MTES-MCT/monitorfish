@@ -8,8 +8,6 @@ import io.ktor.utils.io.*
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import java.net.http.HttpTimeoutException
 
 class APIRapportNavActionsRepositoryITests {
     @Test
@@ -75,7 +73,7 @@ class APIRapportNavActionsRepositoryITests {
     }
 
     @Test
-    fun `findRapportNavMissionActionsById should throw HttpTimeoutException after X ms when rapportNav doesnt answer`() {
+    fun `findRapportNavMissionActionsById should return negative object after X ms when rapportNav doesnt answer`() {
         runBlocking {
             val mockEngine =
                 MockEngine { _ ->
@@ -100,18 +98,10 @@ class APIRapportNavActionsRepositoryITests {
             rapportnavProperties.timeout = 200
 
             // When
-            val httpTimeoutException =
-                assertThrows<HttpTimeoutException> {
-                    runBlocking {
-                        APIRapportNavMissionActionsRepository(
-                            apiClient,
-                            rapportnavProperties,
-                        ).findRapportNavMissionActionsById(
-                            1,
-                        )
-                    }
-                }
-            assertThat(httpTimeoutException.message).isEqualTo("Timed out waiting for 200 ms")
+            val missionActions =
+                APIRapportNavMissionActionsRepository(apiClient, rapportnavProperties)
+                    .findRapportNavMissionActionsById(1)
+            assertThat(missionActions.containsActionsAddedByUnit).isFalse()
         }
     }
 }

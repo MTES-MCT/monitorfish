@@ -53,7 +53,7 @@ services:
       - MONITORENV_URL=http://geoserver-monitorenv-stubs:8080
 
       # RapportNav
-      - RAPPORTNAV_URL=http://geoserver-monitorenv-stubs:8080
+      - RAPPORTNAV_URL=http://rapportnav-stubs:8080
       - RAPPORTNAV_TIMEOUT=3000
 
       # API Configuration

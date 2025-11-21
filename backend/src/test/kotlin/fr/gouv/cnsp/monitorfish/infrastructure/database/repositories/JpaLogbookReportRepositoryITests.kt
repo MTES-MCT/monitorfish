@@ -74,6 +74,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findAllTrips Should retrieve all trips When the CFR is given`() {
+        val trips = jpaLogbookReportRepository.findAllTrips("FAK000999999")
+        assertThat(trips.size).isEqualTo(5)
+    }
+
+    @Test
+    @Transactional
     fun `findAllMessagesByTripNumberBetweenDates Should retrieve all messages When the CFR is given`() {
         // Given
         val lastDepartureDate = ZonedDateTime.of(2019, 10, 11, 0, 4, 0, 0, UTC)
@@ -359,7 +366,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             )
 
         // Then
-        assertThat(trips).isEqualTo(listOf("456", "123"))
+        assertThat(trips).isEqualTo(listOf("9463716", "456", "123"))
     }
 
     @Test

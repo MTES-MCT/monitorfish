@@ -93,9 +93,7 @@ interface DBLogbookReportRepository :
         """,
         nativeQuery = true,
     )
-    fun findAllTrips(
-        internalReferenceNumber: String,
-    ): List<Array<Any>>
+    fun findAllTrips(internalReferenceNumber: String): List<Array<Any>>
 
     /**
      * This query either returns:
@@ -111,7 +109,6 @@ interface DBLogbookReportRepository :
         operationDate: String,
     ): List<LogbookReportEntity>
 
-
     @Query(
         """SELECT
             start_date,
@@ -122,15 +119,14 @@ interface DBLogbookReportRepository :
             :firstOperationDateTime,
             :lastOperationDateTime
         )""",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findDatesOfTrip(
         internalReferenceNumber: String,
         tripNumber: String,
         firstOperationDateTime: ZonedDateTime,
-        lastOperationDateTime: ZonedDateTime
+        lastOperationDateTime: ZonedDateTime,
     ): List<Array<Instant>>
-
 
     @Query(
         """

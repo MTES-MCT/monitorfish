@@ -5,7 +5,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
@@ -34,10 +33,11 @@ class GetVesselVoyageByDates(
                 toDateTime = toDateTime,
             )
 
-        val tripsBetweenDates = vesselTrips.filter {
-            it.startDateTime!!.isBefore(toDateTime) &&
-            it.startDateTime.isAfter(fromDateTime)
-        }
+        val tripsBetweenDates =
+            vesselTrips.filter {
+                it.startDateTime!!.isBefore(toDateTime) &&
+                    it.startDateTime.isAfter(fromDateTime)
+            }
         if (tripsBetweenDates.isEmpty()) {
             throw BackendUsageException(
                 BackendUsageErrorCode.NOT_FOUND_BUT_OK,
@@ -47,12 +47,13 @@ class GetVesselVoyageByDates(
 
         var trip = tripsBetweenDates.first()
 
-        trip = logbookReportRepository.findDatesOfTrip(
-            internalReferenceNumber,
-            trip.tripNumber,
-            trip.firstOperationDateTime,
-            trip.lastOperationDateTime
-        )
+        trip =
+            logbookReportRepository.findDatesOfTrip(
+                internalReferenceNumber,
+                trip.tripNumber,
+                trip.firstOperationDateTime,
+                trip.lastOperationDateTime,
+            )
 
         val tripIndex = vesselTrips.indexOfFirst { it.tripNumber == trip.tripNumber }
 

@@ -89,6 +89,7 @@ class CaffeineConfiguration {
     val controlAnteriority = "control_anteriority"
     val district = "district"
     val districts = "districts"
+    val allTrips = "all_trips"
     val firstAndLastTripDates = "first_and_last_trip_dates"
     val suddenDropOfPositionsReceived = "sudden_drop_of_positions_received"
     val userAuthorization = "user_authorization"
@@ -178,7 +179,8 @@ class CaffeineConfiguration {
         val controlAnteriorityCache = buildMinutesCache(controlAnteriority, ticker, 1)
         val districtCache = buildMinutesCache(district, ticker, 120)
         val districtsCache = buildMinutesCache(districts, ticker, 120)
-        val firstAndLastTripDates = buildMinutesCache(firstAndLastTripDates, ticker, 10)
+        val firstAndLastTripDatesCache = buildMinutesCache(firstAndLastTripDates, ticker, 10)
+        val allTripsCache = buildMinutesCache(allTrips, ticker, 10)
         val suddenDropOfPositionsReceivedCache = buildMinutesCache(suddenDropOfPositionsReceived, ticker, 2)
         val userAuthorizationCache = buildMinutesCache(userAuthorization, ticker, 120)
         val smallChatScriptCache = buildMinutesCache(smallChatScript, ticker, oneDay)
@@ -200,7 +202,8 @@ class CaffeineConfiguration {
                 faoAreasCache,
                 faoAreasSortedByUsageCache,
                 findBeaconCache,
-                firstAndLastTripDates,
+                allTripsCache,
+                firstAndLastTripDatesCache,
                 gearCache,
                 gearCodeGroupCache,
                 gearCodeGroupsCache,

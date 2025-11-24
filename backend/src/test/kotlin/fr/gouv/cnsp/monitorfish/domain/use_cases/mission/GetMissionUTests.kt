@@ -7,8 +7,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionSource
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.rapportnav.RapportNavMissionAction
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotFindException
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.RapportNavMissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.TestUtils.getDummyMissionActions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.GetMissionActions
 import kotlinx.coroutines.runBlocking
@@ -29,64 +31,83 @@ class GetMissionUTests {
     @MockitoBean
     private lateinit var missionRepository: MissionRepository
 
+    @MockitoBean
+    private lateinit var rapportNavMissionActionsRepository: RapportNavMissionActionsRepository
+
     @Test
     fun `execute Should get a mission with associated actions`() {
-        // Given
-        given(missionRepository.findById(any())).willReturn(
-            Mission(
-                id = 123,
-                controlUnits = listOf(),
-                missionTypes = listOf(MissionType.SEA),
-                startDateTimeUtc = ZonedDateTime.now(),
-                isGeometryComputedFromControls = false,
-                missionSource = MissionSource.MONITORFISH,
-                envActions =
-                    listOf(
-                        EnvMissionAction(
-                            id = UUID.randomUUID(),
-                            actionStartDateTimeUtc = ZonedDateTime.now(),
-                            actionType = EnvMissionActionType.CONTROL,
+        runBlocking {
+            // Given
+            given(missionRepository.findById(any())).willReturn(
+                Mission(
+                    id = 123,
+                    controlUnits = listOf(),
+                    missionTypes = listOf(MissionType.SEA),
+                    startDateTimeUtc = ZonedDateTime.now(),
+                    isGeometryComputedFromControls = false,
+                    missionSource = MissionSource.MONITORFISH,
+                    envActions =
+                        listOf(
+                            EnvMissionAction(
+                                id = UUID.randomUUID(),
+                                actionStartDateTimeUtc = ZonedDateTime.now(),
+                                actionType = EnvMissionActionType.CONTROL,
+                            ),
                         ),
-                    ),
-            ),
-        )
-        given(getMissionActions.execute(any())).willReturn(getDummyMissionActions(listOf(1, 2)))
+                ),
+            )
+            given(getMissionActions.execute(any())).willReturn(getDummyMissionActions(listOf(1, 2)))
+            given(rapportNavMissionActionsRepository.findRapportNavMissionActionsById(any())).willReturn(
+                RapportNavMissionAction(
+                    id = 123,
+                    containsActionsAddedByUnit = false,
+                ),
+            )
 
-        // When
-        val missionsAndActions =
-            runBlocking {
-                return@runBlocking GetMission(
+            // When
+            val missionsAndActions =
+                GetMission(
                     missionRepository,
                     getMissionActions,
+                    rapportNavMissionActionsRepository,
                 ).execute(123)
-            }
 
-        // Then
-        assertThat(missionsAndActions.mission.envActions).hasSize(1)
-        assertThat(missionsAndActions.actions).hasSize(3)
+            // Then
+            assertThat(missionsAndActions.mission.envActions).hasSize(1)
+            assertThat(missionsAndActions.actions).hasSize(3)
+        }
     }
 
     @Test
     fun `execute Should throw When a mission could not be fetched`() {
-        // Given
-        given(missionRepository.findById(any())).willThrow(CouldNotFindException("API ERROR"))
-        given(getMissionActions.execute(any())).willReturn(getDummyMissionActions(listOf(123, 456)))
+        runBlocking {
+            // Given
+            given(missionRepository.findById(any())).willThrow(CouldNotFindException("API ERROR"))
+            given(getMissionActions.execute(any())).willReturn(getDummyMissionActions(listOf(123, 456)))
+            given(rapportNavMissionActionsRepository.findRapportNavMissionActionsById(any())).willReturn(
+                RapportNavMissionAction(
+                    id = 123,
+                    containsActionsAddedByUnit = false,
+                ),
+            )
 
-        // When
-        val throwable =
-            catchThrowable {
-                runBlocking {
-                    GetMission(
-                        missionRepository,
-                        getMissionActions,
-                    ).execute(123)
+            // When
+            val throwable =
+                catchThrowable {
+                    runBlocking {
+                        GetMission(
+                            missionRepository = missionRepository,
+                            getMissionActions = getMissionActions,
+                            rapportNavMissionActionsRepository = rapportNavMissionActionsRepository,
+                        ).execute(123)
+                    }
                 }
-            }
 
-        // Then
-        assertThat(throwable).isNotNull()
-        assertThat(throwable.message).isEqualTo(
-            "API ERROR",
-        )
+            // Then
+            assertThat(throwable).isNotNull()
+            assertThat(throwable.message).isEqualTo(
+                "API ERROR",
+            )
+        }
     }
 }

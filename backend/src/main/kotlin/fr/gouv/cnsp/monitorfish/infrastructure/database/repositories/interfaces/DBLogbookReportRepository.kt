@@ -54,7 +54,7 @@ interface DBLogbookReportRepository :
         WITH snapshot_trips AS (
             SELECT
                 trip_number,
-                sort_order_datetime_utc,
+                dep_datetime_utc,
                 first_operation_datetime_utc,
                 last_operation_datetime_utc
             FROM trips_snapshot
@@ -70,7 +70,7 @@ interface DBLogbookReportRepository :
                         THEN activity_datetime_utc
                     END),
                     MIN(operation_datetime_utc)
-                ) AS sort_order_datetime_utc,
+                ) AS dep_datetime_utc,
                 MIN(operation_datetime_utc) AS first_operation_datetime_utc,
                 MAX(operation_datetime_utc) AS last_operation_datetime_utc
             FROM logbook_reports
@@ -84,7 +84,7 @@ interface DBLogbookReportRepository :
 
         SELECT
             COALESCE(st.trip_number, lt.trip_number) AS trip_number,
-            LEAST(st.sort_order_datetime_utc, lt.sort_order_datetime_utc) AS sort_order_datetime_utc,
+            LEAST(st.dep_datetime_utc, lt.dep_datetime_utc) AS dep_datetime_utc,
             LEAST(st.first_operation_datetime_utc, lt.first_operation_datetime_utc) AS first_operation_datetime_utc,
             GREATEST(st.last_operation_datetime_utc, lt.last_operation_datetime_utc) AS last_operation_datetime_utc
         FROM snapshot_trips st

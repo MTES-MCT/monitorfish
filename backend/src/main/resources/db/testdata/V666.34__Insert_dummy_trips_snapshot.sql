@@ -1,5 +1,5 @@
 INSERT INTO trips_snapshot(
-                cfr, trip_number, sort_order_datetime_utc,  first_operation_datetime_utc, last_operation_datetime_utc) VALUES
+                cfr, trip_number, dep_datetime_utc,         first_operation_datetime_utc, last_operation_datetime_utc) VALUES
     ('FAK000999999',   '9463710',   '2018-08-30 12:41:00',         '2018-08-23 12:41:00',       '2018-08-30 12:41:00'),
     ('U_W0NTFINDME',   '9463711',   '2019-01-18 11:45:00',         '2018-02-17 01:05:00',       '2019-01-18 11:45:00'),
     ('FAK000999999',   '9463714',   '2019-02-27 01:05:00',         '2019-02-17 01:05:00',       '2019-10-15 12:01:00'),

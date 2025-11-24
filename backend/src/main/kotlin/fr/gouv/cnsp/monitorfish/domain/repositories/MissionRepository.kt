@@ -24,8 +24,8 @@ interface MissionRepository {
         seaFronts: List<String>?,
     ): List<Mission>
 
-    fun findByIds(ids: List<Int>): List<Mission>
+    suspend fun findByIds(ids: List<Int>): List<Mission>
 
     @Throws(CouldNotFindException::class)
-    fun findById(id: Int): Mission
+    suspend fun findById(id: Int): Mission
 }

@@ -39,6 +39,14 @@ export function ActionList({
 }: ActionListProps) {
   const getMissionApiQuery = useGetMissionQuery(missionId ?? skipToken)
 
+  const hasRapportNavActions = useMemo(() => {
+    if (!getMissionApiQuery.data) {
+      return false
+    }
+
+    return getMissionApiQuery.data.hasRapportNavActions
+  }, [getMissionApiQuery.data])
+
   const allSortedMissionActionsForTimeline: Array<
     MissionActionForTimeline | EnvMissionAction.MissionActionForTimeline
   > = useMemo(() => {
@@ -79,7 +87,7 @@ export function ActionList({
 
   return (
     <Wrapper>
-      <FormHead>
+      <FormHead marginBottom={hasRapportNavActions ? 8 : undefined}>
         <h2>Actions réalisées en mission</h2>
 
         <Dropdown Icon={Icon.Plus} placement="bottomEnd" title="Ajouter">
@@ -114,6 +122,11 @@ export function ActionList({
 
       <FormBody data-cy="mission-form-action-list">
         <FrontendErrorBoundary>
+          {hasRapportNavActions && (
+            <RapportNavActionsText>
+              Des données ont été ajoutées par l&apos;unité dans la mission.
+            </RapportNavActionsText>
+          )}
           <Timeline ref={actionTimelineRef}>
             {!allSortedMissionActionsForTimeline.length && (
               <Placeholder>Aucune action n’est ajoutée pour le moment.</Placeholder>
@@ -187,6 +200,12 @@ const Placeholder = styled.div`
   font-size: 13px;
   font-style: italic;
   justify-content: center;
+`
+
+const RapportNavActionsText = styled.span`
+  color: ${p => p.theme.color.slateGray};
+  font-size: 13px;
+  font-style: italic;
 `
 
 const VerticalLine = styled.div<{ $height?: number | undefined }>`

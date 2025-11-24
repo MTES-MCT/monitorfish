@@ -5,4 +5,5 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionA
 data class MissionAndActions(
     val mission: Mission,
     val actions: List<MissionAction>,
+    val hasRapportNavActions: Boolean,
 )

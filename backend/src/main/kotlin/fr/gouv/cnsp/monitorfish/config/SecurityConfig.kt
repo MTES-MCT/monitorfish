@@ -154,9 +154,10 @@ class SecurityConfig(
                 logger.debug("Extracted email domain: $emailDomain")
                 logger.debug("Configured authorized email domains: ${oidcProperties.authorizedEmailDomains}")
 
-                val isAuthorized = oidcProperties.authorizedEmailDomains.any { domain ->
-                    emailDomain.equals(domain, ignoreCase = true)
-                }
+                val isAuthorized =
+                    oidcProperties.authorizedEmailDomains.any { domain ->
+                        emailDomain.equals(domain, ignoreCase = true)
+                    }
 
                 if (!isAuthorized) {
                     val errorMsg =

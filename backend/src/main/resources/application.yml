@@ -63,6 +63,10 @@ spring:
         hibernate:
             ddl-auto: validate
         properties:
+            jakarta:
+                persistence:
+                    query:
+                        timeout: ${MONITORFISH_DATABASE_TIMEOUT}
             hibernate:
                 temp:
                     use_jdbc_metadata_defaults: false
@@ -77,7 +81,6 @@ spring:
         url: ${ENV_DB_URL}
         driver-class-name: ${ENV_DB_DRIVER_CLASS_NAME}
         hikari:
-            connection-init-sql: "SET statement_timeout = '60s'"
             max-lifetime: 1800000
             maximum-pool-size: 10
     servlet:

@@ -6,46 +6,17 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import java.time.ZonedDateTime
 
 interface LogbookReportRepository {
     fun findAllAcknowledgedPriorNotifications(filter: PriorNotificationsFilter): List<PriorNotification>
 
-    @Throws(NoLogbookFishingTripFound::class)
-    fun findLastTripBeforeDateTime(
-        internalReferenceNumber: String,
-        beforeDateTime: ZonedDateTime,
-    ): VoyageDatesAndTripNumber
+    fun findAllTrips(internalReferenceNumber: String): List<VoyageDatesAndTripNumber>
 
-    @Throws(NoLogbookFishingTripFound::class)
-    fun findFirstAcknowledgedDateOfTripBeforeDateTime(
+    fun findAllMessagesByTripNumberBetweenOperationDates(
         internalReferenceNumber: String,
-        beforeDateTime: ZonedDateTime,
-    ): ZonedDateTime
-
-    @Throws(NoLogbookFishingTripFound::class)
-    fun findTripBeforeTripNumber(
-        internalReferenceNumber: String,
-        tripNumber: String,
-    ): VoyageDatesAndTripNumber
-
-    @Throws(NoLogbookFishingTripFound::class)
-    fun findTripAfterTripNumber(
-        internalReferenceNumber: String,
-        tripNumber: String,
-    ): VoyageDatesAndTripNumber
-
-    fun findTripBetweenDates(
-        internalReferenceNumber: String,
-        afterDateTime: ZonedDateTime,
-        beforeDateTime: ZonedDateTime,
-    ): VoyageDatesAndTripNumber
-
-    fun findAllMessagesByTripNumberBetweenDates(
-        internalReferenceNumber: String,
-        afterDate: ZonedDateTime,
-        beforeDate: ZonedDateTime,
+        firstOperationDateTime: ZonedDateTime,
+        lastOperationDateTime: ZonedDateTime,
         tripNumber: String,
     ): List<LogbookMessage>
 
@@ -61,9 +32,11 @@ interface LogbookReportRepository {
 
     fun findLastThreeYearsTripNumbers(internalReferenceNumber: String): List<String>
 
-    fun findFirstAndLastOperationsDatesOfTrip(
+    fun findDatesOfTrip(
         internalReferenceNumber: String,
         tripNumber: String,
+        firstOperationDateTime: ZonedDateTime,
+        lastOperationDateTime: ZonedDateTime,
     ): VoyageDatesAndTripNumber
 
     fun findDistinctPriorNotificationTypes(): List<String>

@@ -23,36 +23,6 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('*[data-cy="vessel-track-depth-selection"]').should('not.have.attr', 'disabled')
   })
 
-  it('Vessel track depth Should be changed', () => {
-    // Given
-    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('Pheno')
-    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
-    cy.wait(200)
-    cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
-
-    // When
-    cy.get('[title="Paramétrer l\'affichage de la piste VMS"]').click()
-    cy.fill('Afficher la piste VMS depuis', '3 jours')
-    cy.wait(500)
-
-    // Then
-    cy.get('[data-id="5"] > td').eq(2).contains('0 nds')
-
-    // And click on a position to zoom in
-    cy.get('[data-id="5"] > td').eq(2).trigger('pointermove', { force: true, pointerId: 1 })
-    cy.get('[data-id="5"] > td').eq(2).click({
-      force: true
-    })
-
-    // The table should be sorted in ascending datetime order
-    cy.get('.Table-SimpleTable').contains('GDH').click()
-    cy.get('[data-id="0"] > td').eq(2).contains('8.7 nds')
-    cy.get('[data-id="0"] > td').eq(1).find('[title="Position au port"]').should('exist')
-    cy.get('[data-id="0"] > td').eq(1).find('[title="Position manuelle (4h-report)"]').should('exist')
-    cy.get('[data-id="0"] > td').eq(1).find('[title="Réseau CELLULAR"]').should('exist')
-    cy.get('[data-id="0"] > td').eq(1).contains('CEL')
-  })
-
   it('Vessel track Should be downloaded', () => {
     // Given
     cy.cleanDownloadedFiles()
@@ -83,7 +53,10 @@ context('Vessel sidebar controls buttons', () => {
     })
   })
 
-  it('Vessel track dates Should be changed When walking in fishing trips', () => {
+  it('Vessel track dates', () => {
+    /**
+     * Should be changed When walking in fishing trips
+     */
     // Given
     openVesselBySearch('Pheno')
 
@@ -96,27 +69,24 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('[aria-label="Jour de début"]').should('have.value', '16')
     cy.get('[aria-label="Mois de début"]').should('have.value', '02')
     cy.get('[aria-label="Année de début"]').should('have.value', '2019')
-    cy.get('[aria-label="Jour de fin"]').should('have.value', '15')
-    cy.get('[aria-label="Mois de fin"]').should('have.value', '10')
-    cy.get('[aria-label="Année de fin"]').should('have.value', '2019')
+    cy.get('[aria-label="Jour de fin"]').should('have.value', '09')
+    cy.get('[aria-label="Mois de fin"]').should('have.value', '08')
+    cy.get('[aria-label="Année de fin"]').should('have.value', '2020')
     cy.get('[name="vessel-track-depth"]').should('have.value', '')
 
     // Then, back to another trip depth of three days
     cy.fill('Afficher la piste VMS depuis', '3 jours')
     cy.get('[name="vessel-track-depth"]').should('have.value', 'THREE_DAYS')
-  })
 
-  it('Vessel track dates Should be changed from the agenda', () => {
+    /**
+     * Should be changed from the agenda
+     */
     const startDateAsDayjs = dayjs().subtract(1, 'day').hour(1).minute(2)
     const endDateAsDayjs = dayjs().hour(3).minute(4)
-
-    // Given
-    openVesselBySearch('Pheno')
     cy.get('*[data-cy^="animate-to-track"]').click({ timeout: 10000 })
 
     // When
     cy.intercept('GET', '/bff/v1/vessels/positions*').as('getPositions')
-    cy.getDataCy('vessel-track-depth-selection').click()
 
     cy.get('input[aria-label="Jour de début"]').type(startDateAsDayjs.format('DD'))
     cy.get('input[aria-label="Mois de début"]').type(startDateAsDayjs.format('MM'))
@@ -141,6 +111,31 @@ context('Vessel sidebar controls buttons', () => {
         )}/\\d{2}/\\d{2}`
       )
     )
+
+    /**
+     * Vessel track depth Should be changed
+     */
+
+    // Given
+    cy.fill('Afficher la piste VMS depuis', '3 jours')
+    cy.wait(500)
+
+    // Then
+    cy.get('[data-id="5"] > td').eq(2).contains('0 nds')
+
+    // And click on a position to zoom in
+    cy.get('[data-id="5"] > td').eq(2).trigger('pointermove', { force: true, pointerId: 1 })
+    cy.get('[data-id="5"] > td').eq(2).click({
+      force: true
+    })
+
+    // The table should be sorted in ascending datetime order
+    cy.get('.Table-SimpleTable').contains('GDH').click()
+    cy.get('[data-id="0"] > td').eq(2).contains('8.7 nds')
+    cy.get('[data-id="0"] > td').eq(1).find('[title="Position au port"]').should('exist')
+    cy.get('[data-id="0"] > td').eq(1).find('[title="Position manuelle (4h-report)"]').should('exist')
+    cy.get('[data-id="0"] > td').eq(1).find('[title="Réseau CELLULAR"]').should('exist')
+    cy.get('[data-id="0"] > td').eq(1).contains('CEL')
   })
 
   it('Fishing activities Should be seen on the vessel track, clicked and trip should be modified from dates', () => {
@@ -168,15 +163,15 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
 
     cy.get('input[aria-label="Jour de début"]').type('11')
-    cy.get('input[aria-label="Mois de début"]').type('10')
+    cy.get('input[aria-label="Mois de début"]').type('02')
     cy.get('input[aria-label="Année de début"]').type('2019')
     cy.get('input[aria-label="Jour de fin"]').type('19')
     cy.get('input[aria-label="Mois de fin"]').type('10')
     cy.get('input[aria-label="Année de fin"]').type('2019')
     cy.get('.Component-Banner')
-      .contains("Nous avons trouvé 2 marées pour ces dates, seulement la 1ère marée est affichée dans l'onglet JPE.")
+      .contains("Nous avons trouvé 3 marées pour ces dates, seulement la 1ère marée est affichée dans l'onglet JPE.")
     cy.getDataCy('vessel-menu-fishing').click()
-    cy.getDataCy('custom-dates-showed-text').contains('Piste affichée du 11/10/19 au 19/10/19')
+    cy.getDataCy('custom-dates-showed-text').contains('Piste affichée du 11/02/19 au 19/10/19')
 
     // Hide fishing activities
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 10000 })

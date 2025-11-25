@@ -39,8 +39,6 @@ class CaffeineConfiguration {
     val lastLogbookOperationDate = "last_logbook_operation_datetime_utc"
     val logbook = "logbook_messages"
     val logbookRawMessage = "logbook_raw_message"
-    val nextLogbook = "next_logbook"
-    val previousLogbook = "previous_logbook"
     val pnoTypes = "pno_types"
     val logbookPnoTypes = "logbook_pno_types"
     val pnoToVerify = "pno_to_verify"
@@ -91,6 +89,7 @@ class CaffeineConfiguration {
     val controlAnteriority = "control_anteriority"
     val district = "district"
     val districts = "districts"
+    val allTrips = "all_trips"
     val firstAndLastTripDates = "first_and_last_trip_dates"
     val suddenDropOfPositionsReceived = "sudden_drop_of_positions_received"
     val userAuthorization = "user_authorization"
@@ -128,8 +127,6 @@ class CaffeineConfiguration {
         val lastLogbookOperationDateCache = buildMinutesCache(lastLogbookOperationDate, ticker, 1)
         val logbookCache = buildMinutesCache(logbook, ticker, 10)
         val logbookRawMessageCache = buildMinutesCache(logbookRawMessage, ticker, oneWeek)
-        val nextLogbookCache = buildMinutesCache(nextLogbook, ticker, 10)
-        val previousLogbookCache = buildMinutesCache(previousLogbook, ticker, 10)
 
         val pnoToVerifyCache = buildMinutesCache(pnoToVerify, ticker, 5)
         val manualPnoToVerifyCache = buildMinutesCache(manualPnoToVerify, ticker, 5)
@@ -182,7 +179,8 @@ class CaffeineConfiguration {
         val controlAnteriorityCache = buildMinutesCache(controlAnteriority, ticker, 1)
         val districtCache = buildMinutesCache(district, ticker, 120)
         val districtsCache = buildMinutesCache(districts, ticker, 120)
-        val firstAndLastTripDates = buildMinutesCache(firstAndLastTripDates, ticker, 10)
+        val firstAndLastTripDatesCache = buildMinutesCache(firstAndLastTripDates, ticker, 10)
+        val allTripsCache = buildMinutesCache(allTrips, ticker, 10)
         val suddenDropOfPositionsReceivedCache = buildMinutesCache(suddenDropOfPositionsReceived, ticker, 2)
         val userAuthorizationCache = buildMinutesCache(userAuthorization, ticker, 120)
         val smallChatScriptCache = buildMinutesCache(smallChatScript, ticker, oneDay)
@@ -204,7 +202,8 @@ class CaffeineConfiguration {
                 faoAreasCache,
                 faoAreasSortedByUsageCache,
                 findBeaconCache,
-                firstAndLastTripDates,
+                allTripsCache,
+                firstAndLastTripDatesCache,
                 gearCache,
                 gearCodeGroupCache,
                 gearCodeGroupsCache,
@@ -215,7 +214,6 @@ class CaffeineConfiguration {
                 logbookCache,
                 logbookRawMessageCache,
                 missionControlUnitsCache,
-                nextLogbookCache,
                 pnoTypesCache,
                 logbookPnoTypesCache,
                 allVisioCapturesVesselsCache,
@@ -223,7 +221,6 @@ class CaffeineConfiguration {
                 manualPnoToVerifyCache,
                 portCache,
                 portsCache,
-                previousLogbookCache,
                 riskFactorByCfrCache,
                 riskFactorByVesselIdCache,
                 riskFactorsCache,

@@ -23,9 +23,9 @@ import jakarta.transaction.Transactional
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
-import org.springframework.data.domain.PageRequest
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
+import java.sql.Timestamp
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
@@ -132,176 +132,42 @@ class JpaLogbookReportRepository(
         }
     }
 
-    override fun findTripBetweenDates(
-        internalReferenceNumber: String,
-        afterDateTime: ZonedDateTime,
-        beforeDateTime: ZonedDateTime,
-    ): VoyageDatesAndTripNumber {
-        try {
-            if (internalReferenceNumber.isNotEmpty()) {
-                val trips =
-                    dbLogbookReportRepository
-                        .findTripsBetweenDates(
-                            internalReferenceNumber = internalReferenceNumber,
-                            beforeDateTime = beforeDateTime.toInstant(),
-                            afterDateTime = afterDateTime.toInstant(),
-                        )
-                val tripsBetweenDatesWithoutLAN =
-                    trips.filter {
-                        it.startDate.atZone(UTC).isBefore(beforeDateTime) &&
-                            it.endDateWithoutLAN?.atZone(UTC)?.isAfter(afterDateTime) ?: false
-                    }
-                val firstTrip = tripsBetweenDatesWithoutLAN.first()
-
-                return VoyageDatesAndTripNumber(
-                    tripNumber = firstTrip.tripNumber,
-                    startDate = firstTrip.startDate.atZone(UTC),
-                    endDate = firstTrip.endDate.atZone(UTC),
-                    endDateWithoutLAN = firstTrip.endDateWithoutLAN?.atZone(UTC),
-                    totalTripsFoundForDates = tripsBetweenDatesWithoutLAN.size,
-                )
-            }
-
-            throw IllegalArgumentException("No CFR given to find the vessel.")
-        } catch (e: NoSuchElementException) {
-            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
-        } catch (e: IllegalArgumentException) {
-            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
+    @Cacheable(value = ["all_trips"])
+    override fun findAllTrips(internalReferenceNumber: String): List<VoyageDatesAndTripNumber> =
+        dbLogbookReportRepository.findAllTrips(internalReferenceNumber).map {
+            VoyageDatesAndTripNumber(
+                tripNumber = it[0] as String,
+                startDateTime = (it[1] as Timestamp).toInstant().atZone(UTC),
+                firstOperationDateTime = (it[2] as Timestamp).toInstant().atZone(UTC),
+                lastOperationDateTime = (it[3] as Timestamp).toInstant().atZone(UTC),
+            )
         }
-    }
-
-    override fun findLastTripBeforeDateTime(
-        internalReferenceNumber: String,
-        beforeDateTime: ZonedDateTime,
-    ): VoyageDatesAndTripNumber {
-        try {
-            if (internalReferenceNumber.isNotEmpty()) {
-                val lastTrip =
-                    dbLogbookReportRepository
-                        .findTripsBeforeDatetime(
-                            internalReferenceNumber = internalReferenceNumber,
-                            beforeDateTime = beforeDateTime.toInstant(),
-                            pageable = PageRequest.of(0, 1),
-                        ).first()
-
-                return VoyageDatesAndTripNumber(
-                    tripNumber = lastTrip.tripNumber,
-                    startDate = lastTrip.startDate.atZone(UTC),
-                    endDate = lastTrip.endDate.atZone(UTC),
-                    endDateWithoutLAN = lastTrip.endDateWithoutLAN?.atZone(UTC),
-                )
-            }
-
-            throw IllegalArgumentException("No CFR given to find the vessel.")
-        } catch (e: NoSuchElementException) {
-            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
-        } catch (e: IllegalArgumentException) {
-            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
-        }
-    }
-
-    @Cacheable(value = ["previous_logbook"])
-    override fun findTripBeforeTripNumber(
-        internalReferenceNumber: String,
-        tripNumber: String,
-    ): VoyageDatesAndTripNumber {
-        try {
-            if (internalReferenceNumber.isNotEmpty()) {
-                val previousTripNumber =
-                    dbLogbookReportRepository
-                        .findPreviousTripNumber(
-                            internalReferenceNumber = internalReferenceNumber,
-                            tripNumber = tripNumber,
-                            pageable = PageRequest.of(0, 1),
-                        ).first()
-                        .tripNumber
-                val previousTrip =
-                    dbLogbookReportRepository
-                        .findFirstAndLastOperationsDatesOfTrip(
-                            internalReferenceNumber = internalReferenceNumber,
-                            tripNumber = previousTripNumber,
-                        ).first()
-                        .let { VoyageDates(it[0], it[1], it[2]) }
-
-                return VoyageDatesAndTripNumber(
-                    tripNumber = previousTripNumber,
-                    startDate = previousTrip.startDate.atZone(UTC),
-                    endDate = previousTrip.endDate.atZone(UTC),
-                    endDateWithoutLAN = previousTrip.endDateWithoutLAN?.atZone(UTC),
-                )
-            }
-
-            throw IllegalArgumentException("No CFR given to find the vessel.")
-        } catch (e: NoSuchElementException) {
-            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
-        } catch (e: IllegalArgumentException) {
-            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
-        } catch (e: EmptyResultDataAccessException) {
-            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
-        }
-    }
 
     @Cacheable(value = ["first_and_last_trip_dates"])
-    override fun findFirstAndLastOperationsDatesOfTrip(
+    override fun findDatesOfTrip(
         internalReferenceNumber: String,
         tripNumber: String,
+        firstOperationDateTime: ZonedDateTime,
+        lastOperationDateTime: ZonedDateTime,
     ): VoyageDatesAndTripNumber {
         try {
             if (internalReferenceNumber.isNotEmpty()) {
-                val nextTrip =
+                val tripDates =
                     dbLogbookReportRepository
-                        .findFirstAndLastOperationsDatesOfTrip(
+                        .findDatesOfTrip(
                             internalReferenceNumber = internalReferenceNumber,
                             tripNumber = tripNumber,
+                            firstOperationDateTime = firstOperationDateTime,
+                            lastOperationDateTime = lastOperationDateTime,
                         ).first()
-                        .let { VoyageDates(it[0], it[1], it[2]) }
+                        .let { VoyageDates(it[0], it[1]) }
 
                 return VoyageDatesAndTripNumber(
                     tripNumber = tripNumber,
-                    startDate = nextTrip.startDate.atZone(UTC),
-                    endDate = nextTrip.endDate.atZone(UTC),
-                    endDateWithoutLAN = nextTrip.endDateWithoutLAN?.atZone(UTC),
-                )
-            }
-
-            throw IllegalArgumentException("No CFR given to find the vessel.")
-        } catch (e: NoSuchElementException) {
-            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
-        } catch (e: IllegalArgumentException) {
-            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
-        } catch (e: EmptyResultDataAccessException) {
-            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
-        }
-    }
-
-    @Cacheable(value = ["next_logbook"])
-    override fun findTripAfterTripNumber(
-        internalReferenceNumber: String,
-        tripNumber: String,
-    ): VoyageDatesAndTripNumber {
-        try {
-            if (internalReferenceNumber.isNotEmpty()) {
-                val nextTripNumber =
-                    dbLogbookReportRepository
-                        .findNextTripNumber(
-                            internalReferenceNumber = internalReferenceNumber,
-                            tripNumber = tripNumber,
-                            pageable = PageRequest.of(0, 1),
-                        ).first()
-                        .tripNumber
-                val nextTrip =
-                    dbLogbookReportRepository
-                        .findFirstAndLastOperationsDatesOfTrip(
-                            internalReferenceNumber = internalReferenceNumber,
-                            tripNumber = nextTripNumber,
-                        ).first()
-                        .let { VoyageDates(it[0], it[1], it[2]) }
-
-                return VoyageDatesAndTripNumber(
-                    tripNumber = nextTripNumber,
-                    startDate = nextTrip.startDate.atZone(UTC),
-                    endDate = nextTrip.endDate.atZone(UTC),
-                    endDateWithoutLAN = nextTrip.endDateWithoutLAN?.atZone(UTC),
+                    firstOperationDateTime = firstOperationDateTime,
+                    lastOperationDateTime = lastOperationDateTime,
+                    startDateTime = tripDates.startDate.atZone(UTC),
+                    endDateTime = tripDates.endDate.atZone(UTC),
                 )
             }
 
@@ -319,19 +185,19 @@ class JpaLogbookReportRepository(
         "No trip found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
 
     @Cacheable(value = ["logbook_messages"])
-    override fun findAllMessagesByTripNumberBetweenDates(
+    override fun findAllMessagesByTripNumberBetweenOperationDates(
         internalReferenceNumber: String,
-        afterDate: ZonedDateTime,
-        beforeDate: ZonedDateTime,
+        firstOperationDateTime: ZonedDateTime,
+        lastOperationDateTime: ZonedDateTime,
         tripNumber: String,
     ): List<LogbookMessage> {
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 return dbLogbookReportRepository
-                    .findAllMessagesByTripNumberBetweenDates(
+                    .findAllMessagesByTripNumberBetweenOperationDates(
                         internalReferenceNumber = internalReferenceNumber,
-                        afterDateTime = afterDate.toInstant().toString(),
-                        beforeDateTime = beforeDate.toInstant().toString(),
+                        firstOperationDateTime = firstOperationDateTime,
+                        lastOperationDateTime = lastOperationDateTime,
                         tripNumber = tripNumber,
                     ).map {
                         it.toLogbookMessage(objectMapper)
@@ -360,41 +226,6 @@ class JpaLogbookReportRepository(
         } catch (e: Exception) {
             // We return a dummy old date, as only the UAT will have old messages
             return ZonedDateTime.now().minusMonths(1)
-        }
-    }
-
-    override fun findFirstAcknowledgedDateOfTripBeforeDateTime(
-        internalReferenceNumber: String,
-        beforeDateTime: ZonedDateTime,
-    ): ZonedDateTime {
-        try {
-            if (internalReferenceNumber.isNotEmpty()) {
-                val lastTrip =
-                    dbLogbookReportRepository
-                        .findTripsBeforeDatetime(
-                            internalReferenceNumber = internalReferenceNumber,
-                            beforeDateTime = beforeDateTime.toInstant(),
-                            pageable = PageRequest.of(0, 1),
-                        ).first()
-
-                return dbLogbookReportRepository
-                    .findFirstAcknowledgedDateOfTrip(
-                        internalReferenceNumber = internalReferenceNumber,
-                        tripNumber = lastTrip.tripNumber,
-                        startDate = lastTrip.startDate,
-                        endDate = lastTrip.endDate,
-                    ).atZone(
-                        UTC,
-                    )
-            }
-
-            throw IllegalArgumentException("No CFR given to find the vessel.")
-        } catch (e: EmptyResultDataAccessException) {
-            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
-        } catch (e: NoSuchElementException) {
-            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
-        } catch (e: IllegalArgumentException) {
-            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
         }
     }
 

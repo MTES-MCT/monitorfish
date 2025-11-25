@@ -171,4 +171,92 @@ class GetVesselVoyageByDatesUTests {
         assertThat(voyage1.logbookMessages).hasSize(1)
         assertThat(voyage1.totalTripsFoundForDates).isEqualTo(3)
     }
+
+    @Test
+    fun `execute Should return a voyage when fromDateTime and toDateTime are null`() {
+        // Given
+        // Use "now" relative dates since THREE_DAYS uses ZonedDateTime.now()
+        val now = ZonedDateTime.now()
+        val recentDate = now.minusDays(1)
+        val expectedStartDate = recentDate.withHour(10).withMinute(24).withSecond(46)
+        val expectedEndDate =
+            recentDate
+                .plusDays(1)
+                .withHour(10)
+                .withMinute(24)
+                .withSecond(46)
+        val expectedCfr = "FR224226850"
+        val expectedTripNumber = "2"
+
+        // Create mock trips where trip 2 is within the last 3 days
+        given(logbookReportRepository.findAllTrips(eq(expectedCfr))).willReturn(
+            listOf(
+                VoyageDatesAndTripNumber(
+                    tripNumber = "1",
+                    firstOperationDateTime = now.minusDays(10),
+                    lastOperationDateTime = now.minusDays(10),
+                    startDateTime = now.minusDays(10),
+                ),
+                VoyageDatesAndTripNumber(
+                    tripNumber = expectedTripNumber,
+                    firstOperationDateTime = recentDate,
+                    lastOperationDateTime = recentDate,
+                    startDateTime = expectedStartDate,
+                ),
+                VoyageDatesAndTripNumber(
+                    tripNumber = "3",
+                    firstOperationDateTime = now.plusDays(1),
+                    lastOperationDateTime = now.plusDays(1),
+                    startDateTime = now.plusDays(1),
+                ),
+            ),
+        )
+
+        given(
+            logbookReportRepository.findDatesOfTrip(
+                eq(expectedCfr),
+                eq(expectedTripNumber),
+                eq(recentDate),
+                eq(recentDate),
+            ),
+        ).willReturn(
+            VoyageDatesAndTripNumber(
+                tripNumber = expectedTripNumber,
+                firstOperationDateTime = recentDate,
+                lastOperationDateTime = recentDate,
+                startDateTime = expectedStartDate,
+                endDateTime = expectedEndDate,
+            ),
+        )
+
+        given(getLogbookMessages.execute(eq(expectedCfr), any(), any(), any())).willReturn(
+            listOf(
+                getFakeLogbookMessage(
+                    LogbookOperationType.DAT,
+                    ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
+                ),
+            ),
+        )
+
+        // When
+        val voyage =
+            GetVesselVoyageByDates(
+                logbookReportRepository = logbookReportRepository,
+                getDatesFromVesselTrackDepth = getDatesFromVesselTrackDepth,
+                getLogbookMessages = getLogbookMessages,
+            ).execute(
+                expectedCfr,
+                VesselTrackDepth.THREE_DAYS,
+                fromDateTime = null,
+                toDateTime = null,
+            )
+
+        // Then
+        assertThat(voyage.tripNumber).isEqualTo(expectedTripNumber)
+        assertThat(voyage.isLastVoyage).isFalse
+        assertThat(voyage.isFirstVoyage).isFalse
+        assertThat(voyage.startDate).isEqualTo(expectedStartDate)
+        assertThat(voyage.endDate).isEqualTo(expectedEndDate)
+        assertThat(voyage.logbookMessages).hasSize(1)
+    }
 }

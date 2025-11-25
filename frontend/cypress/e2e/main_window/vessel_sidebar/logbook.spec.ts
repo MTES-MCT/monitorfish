@@ -9,14 +9,11 @@ context('Vessel sidebar logbook tab', () => {
     cy.wait(1000)
   })
 
-  it('FAR and DIS messages resume Should notify that all messages are not acknowledged', () => {
-    // Given
-    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).click()
-    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('U_W0')
-    cy.wait(50)
-    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
-    cy.wait(200)
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+  it('Fishing Should contain the vessel ERS logbook messages', () => {
+    /**
+     * FAR and DIS messages resume Should notify that all messages are not acknowledged
+     */
+    openVesselBySearch('U_W0')
 
     // When
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
@@ -33,11 +30,12 @@ context('Vessel sidebar logbook tab', () => {
       .contains('message non acquitté – aucun rejet', { timeout: 10000 })
 
     cy.get('*[data-cy="fishing-resume-not-acknowledged-icon"]').should('have.length', 2)
-  })
 
-  it('Fishing Should contain the vessel ERS logbook messages', () => {
-    cy.log('Fishing Should contain the vessel fishing resume')
+    /**
+     * Fishing Should contain the vessel fishing resume
+     */
 
+    cy.getDataCy("vessel-search-selected-vessel-title").click()
     openVesselBySearch('Pheno')
 
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
@@ -58,7 +56,7 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy^="vessel-fishing-see-all"]').click({ timeout: 10000 })
 
     cy.get('[title="Messages issus du journal de pêche électronique"]').should('be.visible')
-    cy.get('*[data-cy="vessel-fishing-message"]').should('have.length', 13)
+    cy.get('*[data-cy="vessel-fishing-message"]').should('have.length', 14)
 
     cy.get('*[data-cy="vessel-fishing-message"]').eq(0).contains("Capture d'espèces protégées")
     cy.get('*[data-cy="vessel-fishing-message-body"]').eq(0).contains('DAUPHIN COMMUN (DCO)')
@@ -100,6 +98,9 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy="vessel-fishing-message"]').eq(12).siblings().eq(1).contains('MESSAGE SUPPRIMÉ')
     cy.get('*[data-cy="vessel-fishing-message-body"]').eq(12).contains('BONITE A DOS RAYE (BON)')
 
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(13).contains('Préavis (notification de retour au port)')
+    cy.get('*[data-cy="vessel-fishing-message-body"]').eq(13).contains('MORUE COMMUNE (CABILLAUD) (COD)')
+
     // Invalidated PNO message
     cy.getDataCy('vessel-fishing-previous-trip').click()
     cy.contains('Marée n°9463714').should('be.visible')
@@ -108,10 +109,13 @@ context('Vessel sidebar logbook tab', () => {
 
     cy.getDataCy('vessel-fishing-message').eq(1).contains('Préavis (notification de retour au port)')
     cy.getDataCy('vessel-fishing-message').eq(1).siblings().eq(1).contains('MESSAGE INVALIDÉ')
-  })
 
-  it('Fishing Should contain the vessel FLUX logbook messages', () => {
+    /**
+     * Fishing Should contain the vessel FLUX logbook messages
+     */
+
     // Given
+    cy.getDataCy("vessel-search-selected-vessel-title").click()
     openVesselBySearch('SOCRATE')
 
     // When
@@ -120,7 +124,7 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy^="vessel-fishing-see-all"]').click({ timeout: 10000 })
 
     // Then
-    cy.get('*[data-cy="vessel-fishing-message"]').should('have.length', 24)
+    cy.get('*[data-cy="vessel-fishing-message"]').should('have.length', 23)
     cy.get('*[data-cy="vessel-fishing-message"]').first().contains('Départ', { timeout: 10000 })
     cy.get('*[data-cy="vessel-fishing-message"]')
       .first()
@@ -152,12 +156,12 @@ context('Vessel sidebar logbook tab', () => {
       .should(
         'have.string',
         `/bff/v1/vessels/positions?afterDateTime=${encodeURIComponent('2019-02-16T21:05:00.000Z')}` +
-          `&beforeDateTime=${encodeURIComponent('2019-10-15T13:01:00.000Z')}&externalReferenceNumber=DONTSINK&internalReferenceNumber=FAK000999999` +
+          `&beforeDateTime=${encodeURIComponent('2020-08-09T14:47:00.000Z')}&externalReferenceNumber=DONTSINK&internalReferenceNumber=FAK000999999` +
           '&IRCS=CALLME&trackDepth=CUSTOM&vesselIdentifier=INTERNAL_REFERENCE_NUMBER'
       )
 
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 4)
-    cy.get('*[data-cy="custom-dates-showed-text"]').contains('Piste affichée du 16/02/19 au 15/10/19')
+    cy.get('*[data-cy="custom-dates-showed-text"]').contains('Piste affichée du 16/02/19 au 09/08/20')
 
     // Hide fishing activities
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 10000 })
@@ -179,15 +183,13 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy="custom-dates-showed-text"]').should('not.exist')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
     cy.get('[name="vessel-track-depth"]').should('have.value', 'TWELVE_HOURS')
-  })
 
-  it('Single fishing activity Should be seen on map When clicking on the position icon', () => {
-    // Given
-    openVesselBySearch('Pheno')
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
+    /**
+     * Single fishing activity Should be seen on map When clicking on the position icon
+     */
+
     cy.fill('Afficher la piste VMS depuis', '3 jours')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
-    cy.get('[title="Cacher les messages du JPE sur la piste"]').click()
 
     // When
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })

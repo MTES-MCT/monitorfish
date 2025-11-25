@@ -35,8 +35,8 @@ class GetVesselVoyageByDates(
 
         val tripsBetweenDates =
             vesselTrips.filter {
-                it.startDateTime!!.isBefore(toDateTime) &&
-                    it.startDateTime.isAfter(fromDateTime)
+                it.startDateTime!!.isBefore(dates.to) &&
+                    it.startDateTime.isAfter(dates.from)
             }
         if (tripsBetweenDates.isEmpty()) {
             throw BackendUsageException(
@@ -56,6 +56,9 @@ class GetVesselVoyageByDates(
             )
 
         val tripIndex = vesselTrips.indexOfFirst { it.tripNumber == trip.tripNumber }
+        require(tripIndex >= 0) {
+            "Trip ${trip.tripNumber} not found"
+        }
 
         val logbookMessages =
             getLogbookMessages.execute(

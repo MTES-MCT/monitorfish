@@ -23,7 +23,7 @@ class GetVesselVoyage(
         tripNumber: String?,
     ): Voyage {
         val vesselTrips = logbookReportRepository.findAllTrips(internalReferenceNumber)
-        var tripIndex: Int? = null
+        var tripIndex: Int?
         var trip =
             try {
                 when (voyageRequest) {
@@ -36,6 +36,9 @@ class GetVesselVoyage(
                             "Current trip number parameter must be not null"
                         }
                         tripIndex = vesselTrips.indexOfFirst { it.tripNumber == tripNumber } - 1
+                        require(tripIndex >= 0) {
+                            "Trip $tripNumber not found"
+                        }
                         vesselTrips[tripIndex]
                     }
                     VoyageRequest.NEXT -> {
@@ -43,6 +46,9 @@ class GetVesselVoyage(
                             "Current trip number parameter must be not null"
                         }
                         tripIndex = vesselTrips.indexOfFirst { it.tripNumber == tripNumber } + 1
+                        require(tripIndex < vesselTrips.size) {
+                            "Trip $tripNumber not found"
+                        }
                         vesselTrips[tripIndex]
                     }
 
@@ -51,6 +57,9 @@ class GetVesselVoyage(
                             "trip number parameter must be not null"
                         }
                         tripIndex = vesselTrips.indexOfFirst { it.tripNumber == tripNumber }
+                        require(tripIndex >= 0) {
+                            "Trip $tripNumber not found"
+                        }
                         vesselTrips[tripIndex]
                     }
                 }

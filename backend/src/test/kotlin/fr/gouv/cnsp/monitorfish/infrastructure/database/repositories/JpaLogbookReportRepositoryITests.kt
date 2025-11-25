@@ -74,7 +74,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllTrips Should retrieve all trips When the CFR is given`() {
         val trips = jpaLogbookReportRepository.findAllTrips("FAK000999999")
-        assertThat(trips.size).isEqualTo(5)
+        assertThat(trips.size).isEqualTo(4)
     }
 
     @Test
@@ -90,24 +90,24 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
                 .findAllMessagesByTripNumberBetweenOperationDates("FAK000999999", lastDepartureDate, now, "9463715")
 
         // Then
-        assertThat(messages).hasSize(21)
+        assertThat(messages).hasSize(23)
 
         // LAN
-        assertThat(messages[0].message).isInstanceOf(LAN::class.java)
-        val lanMessage = messages[0].message as LAN
+        assertThat(messages[1].message).isInstanceOf(LAN::class.java)
+        val lanMessage = messages[1].message as LAN
         assertThat(lanMessage.port).isEqualTo("AEAJM")
         assertThat(lanMessage.sender).isEqualTo("MAS")
         assertThat(lanMessage.catchLanded).hasSize(6)
         assertThat(lanMessage.landingDateTime).isAfter(ZonedDateTime.now().minusDays(5))
 
         // RTP
-        assertThat(messages[1].message).isInstanceOf(RTP::class.java)
-        val rtpMessage = messages[1].message as RTP
+        assertThat(messages[2].message).isInstanceOf(RTP::class.java)
+        val rtpMessage = messages[2].message as RTP
         assertThat(rtpMessage.dateTime).isAfter(ZonedDateTime.now().minusDays(5))
 
         // PNO
-        assertThat(messages[2].message).isInstanceOf(PNO::class.java)
-        val pnoMessage = messages[2].message as PNO
+        assertThat(messages[3].message).isInstanceOf(PNO::class.java)
+        val pnoMessage = messages[3].message as PNO
         assertThat(pnoMessage.port).isEqualTo("AEJAZ")
         assertThat(pnoMessage.purpose).isEqualTo(LogbookMessagePurpose.LAN)
         assertThat(pnoMessage.catchOnboard).hasSize(4)
@@ -130,28 +130,28 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(pnoMessage.predictedArrivalDatetimeUtc).isAfter(ZonedDateTime.now().minusDays(5))
 
         // EOF
-        assertThat(messages[3].message).isInstanceOf(EOF::class.java)
-        val eofMessage = messages[3].message as EOF
+        assertThat(messages[4].message).isInstanceOf(EOF::class.java)
+        val eofMessage = messages[4].message as EOF
         assertThat(eofMessage.endOfFishingDateTime.toString()).isEqualTo("2019-10-20T12:16Z")
 
         // DIS
-        assertThat(messages[4].message).isInstanceOf(DIS::class.java)
-        val disMessage = messages[4].message as DIS
+        assertThat(messages[5].message).isInstanceOf(DIS::class.java)
+        val disMessage = messages[5].message as DIS
         assertThat(disMessage.catches).hasSize(2)
         assertThat(disMessage.catches.first().weight).isEqualTo(5.0)
         assertThat(disMessage.catches.first().nbFish).isEqualTo(1.0)
         assertThat(disMessage.catches.first().species).isEqualTo("NEP")
 
         // INS
-        assertThat(messages[5].operationType).isEqualTo(LogbookOperationType.COR)
-        assertThat(messages[5].referencedReportId).isNotNull
-        assertThat(messages[5].message).isNull()
-
-        // FAR
         assertThat(messages[6].operationType).isEqualTo(LogbookOperationType.COR)
         assertThat(messages[6].referencedReportId).isNotNull
-        assertThat(messages[6].message).isInstanceOf(FAR::class.java)
-        val farMessageOneCorrected = messages[6].message as FAR
+        assertThat(messages[6].message).isNull()
+
+        // FAR
+        assertThat(messages[7].operationType).isEqualTo(LogbookOperationType.COR)
+        assertThat(messages[7].referencedReportId).isNotNull
+        assertThat(messages[7].message).isInstanceOf(FAR::class.java)
+        val farMessageOneCorrected = messages[7].message as FAR
         assertThat(farMessageOneCorrected.hauls.size).isEqualTo(1)
         val farMessageOneCorrectedHaul = farMessageOneCorrected.hauls.first()
         assertThat(farMessageOneCorrectedHaul.gear).isEqualTo("GTN")
@@ -168,8 +168,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(farMessageOneCorrectedHaul.catches.first().statisticalRectangle).isEqualTo("23E6")
 
         // FAR
-        assertThat(messages[7].message).isInstanceOf(FAR::class.java)
-        val farMessageOne = messages[7].message as FAR
+        assertThat(messages[8].message).isInstanceOf(FAR::class.java)
+        val farMessageOne = messages[8].message as FAR
         assertThat(farMessageOne.hauls.size).isEqualTo(1)
         val farMessageOneHaul = farMessageOne.hauls.first()
         assertThat(farMessageOneHaul.gear).isEqualTo("GTN")
@@ -187,23 +187,30 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(farMessageOneHaul.catches.first().statisticalRectangle).isEqualTo("23E6")
 
         // CRO
-        assertThat(messages[8].messageType).isEqualTo("CRO")
-        assertThat(messages[8].message).isInstanceOf(CRO::class.java)
+        assertThat(messages[9].messageType).isEqualTo("CRO")
+        assertThat(messages[9].message).isInstanceOf(CRO::class.java)
 
         // COE
-        assertThat(messages[9].reportDateTime.toString()).isEqualTo("2019-10-17T01:32Z")
-        assertThat(messages[9].messageType).isEqualTo("COE")
-        assertThat(messages[9].message).isInstanceOf(COE::class.java)
+        assertThat(messages[10].reportDateTime.toString()).isEqualTo("2019-10-17T01:32Z")
+        assertThat(messages[10].messageType).isEqualTo("COE")
+        assertThat(messages[10].message).isInstanceOf(COE::class.java)
 
         // COX
-        assertThat(messages[10].reportDateTime.toString()).isEqualTo("2019-10-15T11:23Z")
-        assertThat(messages[10].messageType).isEqualTo("COX")
-        assertThat(messages[10].message).isInstanceOf(COX::class.java)
+        assertThat(messages[11].reportDateTime.toString()).isEqualTo("2019-10-15T11:23Z")
+        assertThat(messages[11].messageType).isEqualTo("COX")
+        assertThat(messages[11].message).isInstanceOf(COX::class.java)
+
+        // CPS
+        assertThat(messages[12].reportDateTime.toString()).isEqualTo("2019-10-11T01:06Z")
+        assertThat(messages[12].message).isInstanceOf(CPS::class.java)
+        val cpsMessage = messages[12].message as CPS
+        assertThat(cpsMessage.gear).isEqualTo("GTR")
+        assertThat(cpsMessage.cpsDatetime.toString()).isEqualTo("2019-10-11T03:06Z")
 
         // DEP
-        assertThat(messages[11].reportDateTime.toString()).isEqualTo("2019-10-11T02:06Z")
-        assertThat(messages[11].message).isInstanceOf(DEP::class.java)
-        val depMessage = messages[11].message as DEP
+        assertThat(messages[13].reportDateTime.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(messages[13].message).isInstanceOf(DEP::class.java)
+        val depMessage = messages[13].message as DEP
         assertThat(depMessage.gearOnboard).hasSize(2)
         assertThat(depMessage.gearOnboard.first().gear).isEqualTo("GTN")
         assertThat(depMessage.gearOnboard.first().mesh).isEqualTo(100.0)
@@ -211,56 +218,43 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(depMessage.anticipatedActivity).isEqualTo("FSH")
         assertThat(depMessage.departureDateTime.toString()).isEqualTo("2019-10-11T01:40Z")
 
-        // CPS
-        assertThat(messages[12].reportDateTime.toString()).isEqualTo("2019-10-11T01:06Z")
-        assertThat(messages[12].message).isInstanceOf(CPS::class.java)
-        val cpsMessage = messages[12].message as CPS
-        assertThat(cpsMessage.gear).isEqualTo("GTR")
-        assertThat(cpsMessage.cpsDatetime.toString()).isEqualTo("2023-02-28T17:44Z")
-
         // RET
-        assertThat(messages[13].reportDateTime.toString()).isEqualTo("2021-01-18T07:19:29.384921Z")
-        assertThat(messages[13].message).isInstanceOf(Acknowledgment::class.java)
-        assertThat(messages[13].operationType).isEqualTo(LogbookOperationType.RET)
-        val ackMessage1 = messages[13].message as Acknowledgment
+        assertThat(messages[14].message).isInstanceOf(Acknowledgment::class.java)
+        assertThat(messages[14].operationType).isEqualTo(LogbookOperationType.RET)
+        val ackMessage1 = messages[14].message as Acknowledgment
         assertThat(ackMessage1.returnStatus).isEqualTo("000")
 
         // RET
-        assertThat(messages[14].reportDateTime.toString()).isEqualTo("2019-08-30T11:12Z")
-        assertThat(messages[14].message).isInstanceOf(Acknowledgment::class.java)
-        assertThat(messages[14].operationType).isEqualTo(LogbookOperationType.RET)
-        val ackMessage2 = messages[14].message as Acknowledgment
-        assertThat(ackMessage2.returnStatus).isEqualTo("002")
-
-        // RET
+        assertThat(messages[15].reportDateTime.toString()).isEqualTo("2021-01-18T07:19:29.384921Z")
         assertThat(messages[15].message).isInstanceOf(Acknowledgment::class.java)
         assertThat(messages[15].operationType).isEqualTo(LogbookOperationType.RET)
-        val ackMessage3 = messages[15].message as Acknowledgment
-        assertThat(ackMessage3.returnStatus).isEqualTo("000")
+        val ackMessage2 = messages[15].message as Acknowledgment
+        assertThat(ackMessage2.returnStatus).isEqualTo("000")
 
         // RET
         assertThat(messages[16].message).isInstanceOf(Acknowledgment::class.java)
         assertThat(messages[16].operationType).isEqualTo(LogbookOperationType.RET)
-        val ackMessage4 = messages[16].message as Acknowledgment
-        assertThat(ackMessage4.returnStatus).isEqualTo("000")
+        val ackMessage3 = messages[16].message as Acknowledgment
+        assertThat(ackMessage3.returnStatus).isEqualTo("002")
 
         // RET
         assertThat(messages[17].message).isInstanceOf(Acknowledgment::class.java)
         assertThat(messages[17].operationType).isEqualTo(LogbookOperationType.RET)
-        val ackMessage5 = messages[17].message as Acknowledgment
+        val ackMessage4 = messages[17].message as Acknowledgment
+        assertThat(ackMessage4.returnStatus).isEqualTo("000")
+
+        // RET
+        assertThat(messages[18].message).isInstanceOf(Acknowledgment::class.java)
+        assertThat(messages[18].operationType).isEqualTo(LogbookOperationType.RET)
+        val ackMessage5 = messages[18].message as Acknowledgment
         assertThat(ackMessage5.returnStatus).isEqualTo("000")
 
         // RET
-        assertThat(messages[18].reportDateTime.toString()).isEqualTo("2019-10-30T11:32Z")
-        assertThat(messages[18].operationType).isEqualTo(LogbookOperationType.RET)
-        assertThat(messages[18].message).isInstanceOf(Acknowledgment::class.java)
-        val ackMessage6 = messages[18].message as Acknowledgment
-        assertThat(ackMessage6.returnStatus).isEqualTo("000")
-
-        // DEL
         assertThat(messages[19].reportDateTime.toString()).isEqualTo("2019-10-30T11:32Z")
-        assertThat(messages[19].operationType).isEqualTo(LogbookOperationType.DEL)
-        assertThat(messages[19].referencedReportId).isEqualTo("OOF20190627059908")
+        assertThat(messages[19].operationType).isEqualTo(LogbookOperationType.RET)
+        assertThat(messages[19].message).isInstanceOf(Acknowledgment::class.java)
+        val ackMessage6 = messages[19].message as Acknowledgment
+        assertThat(ackMessage6.returnStatus).isEqualTo("000")
 
         // RET
         assertThat(messages[20].reportDateTime.toString()).isEqualTo("2019-10-30T11:32Z")
@@ -268,6 +262,11 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(messages[20].message).isInstanceOf(Acknowledgment::class.java)
         val ackMessage7 = messages[20].message as Acknowledgment
         assertThat(ackMessage7.returnStatus).isEqualTo("000")
+
+        // DEL
+        assertThat(messages[21].reportDateTime.toString()).isEqualTo("2019-10-30T11:32Z")
+        assertThat(messages[21].operationType).isEqualTo(LogbookOperationType.DEL)
+        assertThat(messages[21].referencedReportId).isEqualTo("OOF20190627059908")
     }
 
     @Test
@@ -285,10 +284,14 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(messages).hasSize(2)
 
+        // CPS
+        assertThat(messages[0].reportDateTime.toString()).isEqualTo("2019-10-11T01:06Z")
+        assertThat(messages[0].message).isInstanceOf(CPS::class.java)
+
         // DEP
-        assertThat(messages[0].reportDateTime.toString()).isEqualTo("2019-10-11T02:06Z")
-        assertThat(messages[0].message).isInstanceOf(DEP::class.java)
-        val depMessage = messages[0].message as DEP
+        assertThat(messages[1].reportDateTime.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(messages[1].message).isInstanceOf(DEP::class.java)
+        val depMessage = messages[1].message as DEP
         assertThat(depMessage.gearOnboard).hasSize(2)
         assertThat(depMessage.gearOnboard.first().gear).isEqualTo("GTN")
         assertThat(depMessage.gearOnboard.first().mesh).isEqualTo(100.0)
@@ -364,7 +367,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             )
 
         // Then
-        assertThat(trips).isEqualTo(listOf("9463716", "456", "123"))
+        assertThat(trips).isEqualTo(listOf("9463715", "456", "123"))
     }
 
     @Test
@@ -985,11 +988,11 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Then
         val updatedCorReport = jpaLogbookReportRepository.findById(2109)
         assertThat((updatedCorReport.message as PNO).authorTrigram).isNull()
-        assertThat((updatedCorReport.message as PNO).note).isEqualTo("A wonderful note")
-        assertThat((updatedCorReport.message as PNO).updatedBy).isEqualTo("editor@example.org")
-        assertThat((updatedCorReport.message as PNO).isBeingSent).isEqualTo(false)
-        assertThat((updatedCorReport.message as PNO).isVerified).isEqualTo(false)
-        assertThat((updatedCorReport.message as PNO).isSent).isEqualTo(false)
+        assertThat((updatedCorReport.message).note).isEqualTo("A wonderful note")
+        assertThat((updatedCorReport.message).updatedBy).isEqualTo("editor@example.org")
+        assertThat((updatedCorReport.message).isBeingSent).isEqualTo(false)
+        assertThat(updatedCorReport.message.isVerified).isEqualTo(false)
+        assertThat((updatedCorReport.message).isSent).isEqualTo(false)
     }
 
     @Test

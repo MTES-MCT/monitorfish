@@ -26,7 +26,6 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
 import java.sql.Timestamp
-import java.time.ZoneOffset
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
@@ -138,9 +137,9 @@ class JpaLogbookReportRepository(
         dbLogbookReportRepository.findAllTrips(internalReferenceNumber).map {
             VoyageDatesAndTripNumber(
                 tripNumber = it[0] as String,
-                startDateTime = (it[1] as Timestamp).toInstant().atZone(ZoneOffset.UTC),
-                firstOperationDateTime = (it[2] as Timestamp).toInstant().atZone(ZoneOffset.UTC),
-                lastOperationDateTime = (it[3] as Timestamp).toInstant().atZone(ZoneOffset.UTC),
+                startDateTime = (it[1] as Timestamp).toInstant().atZone(UTC),
+                firstOperationDateTime = (it[2] as Timestamp).toInstant().atZone(UTC),
+                lastOperationDateTime = (it[3] as Timestamp).toInstant().atZone(UTC),
             )
         }
 
@@ -167,8 +166,8 @@ class JpaLogbookReportRepository(
                     tripNumber = tripNumber,
                     firstOperationDateTime = firstOperationDateTime,
                     lastOperationDateTime = lastOperationDateTime,
-                    startDateTime = tripDates.startDate.atZone(ZoneOffset.UTC),
-                    endDateTime = tripDates.endDate.atZone(ZoneOffset.UTC),
+                    startDateTime = tripDates.startDate.atZone(UTC),
+                    endDateTime = tripDates.endDate.atZone(UTC),
                 )
             }
 

@@ -125,7 +125,8 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
         <Criteria.Info>
           Les espèces à bord sont déterminées à partir de tous les FAR de la marée en cours.
           <br />
-          Toutes les quantités sont à indiquer en poids vif. En l&apos;absence de quantité, l&apos;alerte remontera dès le 1er kg.
+          Toutes les quantités sont à indiquer en poids vif. En l&apos;absence de quantité, l&apos;alerte remontera dès
+          le 1er kg.
         </Criteria.Info>
         <Select
           customSearch={customSearch}

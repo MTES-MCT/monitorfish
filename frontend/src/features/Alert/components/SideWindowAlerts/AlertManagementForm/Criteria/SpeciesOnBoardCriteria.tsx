@@ -5,7 +5,7 @@ import { FieldsetGroupSpinner } from '@features/Mission/components/MissionForm/s
 import { Tag } from '@features/Regulation/components/RegulationForm/Tag'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { CustomSearch, TextInput, type Option, Select, MultiSelect, Level, THEME, Label } from '@mtes-mct/monitor-ui'
+import { CustomSearch, Label, Level, MultiSelect, type Option, Select, TextInput, THEME } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
@@ -123,8 +123,10 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
       </Criteria.Head>
       <Criteria.Body $isOpen={isCriteriaOpened}>
         <Criteria.Info>
-          Les espèces à bord sont déterminées à partir de tous les FAR de la marée en cours.Toutes les quantités sont à
-          indiquer en poids vif.
+          Les espèces à bord sont déterminées à partir de tous les FAR de la marée en cours.
+          <br />
+          Toutes les quantités sont à indiquer en poids vif. En l&apos;absence de quantité, l&apos;alerte remontera dès
+          le 1er kg.
         </Criteria.Info>
         <Select
           customSearch={customSearch}
@@ -150,7 +152,7 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
                   <Tag
                     backGroundColor={THEME.color.lightGray}
                     onCloseIconClicked={() => deleteSpecy(index)}
-                    tagValue={specyLabel ?? ''}
+                    tagValue={specyLabel ? `${specyLabel} (${specy.species})` : ''}
                   />
                 </TagWrapper>
                 <WeightWrapper>
@@ -176,9 +178,16 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
             label="Zones de capture (FAR)"
             name="speciesCatchAreas"
             onChange={selectedOptions => {
+              if (!selectedOptions) {
+                setFieldValue('speciesCatchAreas', [])
+
+                return
+              }
+
               setFieldValue('speciesCatchAreas', selectedOptions)
             }}
             options={administrativeZones || []}
+            searchable
             value={values?.speciesCatchAreas || []}
           />
         </SpeciesWrapper>

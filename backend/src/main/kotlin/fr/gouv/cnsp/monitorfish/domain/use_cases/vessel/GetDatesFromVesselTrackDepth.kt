@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.dtos.DatesOfVesselTrackDepth
 import org.slf4j.Logger
@@ -39,12 +38,16 @@ class GetDatesFromVesselTrackDepth(
                     try {
                         // We subtract 4h to this date to ensure the track starts at the port
                         // (the departure message may be sent after the departure)
-                        logbookReportRepository
-                            .findFirstAcknowledgedDateOfTripBeforeDateTime(
+                        val lastTrip = logbookReportRepository.findAllTrips(internalReferenceNumber).last()
+                        val dates =
+                            logbookReportRepository.findDatesOfTrip(
                                 internalReferenceNumber,
-                                ZonedDateTime.now(),
-                            ).minusHours(4)
-                    } catch (e: NoLogbookFishingTripFound) {
+                                lastTrip.tripNumber,
+                                lastTrip.firstOperationDateTime,
+                                lastTrip.lastOperationDateTime,
+                            )
+                        dates.startDateTime!!.minusHours(4)
+                    } catch (e: NoSuchElementException) {
                         logger.warn(e.message)
                         isTrackDepthModified = true
                         ZonedDateTime.now().minusDays(1)

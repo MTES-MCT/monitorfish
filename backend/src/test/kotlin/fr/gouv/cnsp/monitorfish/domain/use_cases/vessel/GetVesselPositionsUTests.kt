@@ -4,7 +4,6 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.TestUtils.getDummyPositions
@@ -34,14 +33,14 @@ class GetVesselPositionsUTests {
     private lateinit var getDatesFromVesselTrackDepth: GetDatesFromVesselTrackDepth
 
     @Test
-    fun `execute Should return the last 1 day positions When the DEP message is not found`() {
+    fun `execute Should return the last 1 day positions When the vessels has no logbook trips`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             getDummyPositions(now),
         )
-        given(logbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(any(), any())).willThrow(
-            NoLogbookFishingTripFound("ERROR"),
+        given(logbookReportRepository.findAllTrips(any())).willReturn(
+            listOf(),
         )
 
         // When
@@ -94,34 +93,6 @@ class GetVesselPositionsUTests {
                             externalReferenceNumber = "",
                             ircs = "",
                             trackDepth = VesselTrackDepth.TWELVE_HOURS,
-                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                            fromDateTime = null,
-                            toDateTime = null,
-                        )
-                }
-            }
-
-        // Then
-        assertThat(throwable).isNull()
-    }
-
-    @Test
-    fun `execute Should not throw an exception When a vessel's last DEP is not found`() {
-        // Given
-        given(logbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(any(), any())).willThrow(
-            NoLogbookFishingTripFound("ERROR"),
-        )
-
-        // When
-        val throwable =
-            catchThrowable {
-                runBlocking {
-                    GetVesselPositions(positionRepository, getDatesFromVesselTrackDepth)
-                        .execute(
-                            internalReferenceNumber = "FR224226850",
-                            externalReferenceNumber = "",
-                            ircs = "",
-                            trackDepth = VesselTrackDepth.LAST_DEPARTURE,
                             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                             fromDateTime = null,
                             toDateTime = null,

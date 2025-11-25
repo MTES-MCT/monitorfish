@@ -135,6 +135,7 @@ export function LogbookMessages({ messageTypeFilter }: LogbookMessagesProps) {
         <StyledNextTrip
           $disabled={!!isLastVoyage}
           accent={Accent.SECONDARY}
+          data-cy="vessel-fishing-next-trip"
           Icon={Icon.Chevron}
           iconSize={20}
           onClick={!isLastVoyage ? goToNextTrip : undefined}

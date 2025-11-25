@@ -124,7 +124,7 @@
                     "updatedBy": null
                 },
                 "activity_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "trip_number": "9463716"
+                "trip_number": "9463715"
             },
             {
                 "id": 1101,

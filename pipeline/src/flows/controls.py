@@ -206,33 +206,6 @@ def transform_controls(controls: pd.DataFrame):
     # ---------------------------------------------------------------------------------
     # Transform the list of infraction ids from string to list
 
-    logbook_natinfs = {
-        27689,
-        27885,
-        20235,
-        20234,
-        10409,
-        20236,
-        27886,
-        10405,
-        20246,
-        20213,
-    }
-    gear_natinfs = {
-        7059,
-        27724,
-        2593,
-        7057,
-        27725,
-        7060,
-        20242,
-        12918,
-        27723,
-        20243,
-        20220,
-    }
-    species_natinfs = {12900, 7062, 7983, 7061, 7063, 27730, 7984, 12902, 28346}
-
     logger.info("Transforming infraction natinfs from string to list")
 
     controls["infraction_natinfs"] = controls.infraction_natinfs.map(
@@ -244,55 +217,14 @@ def transform_controls(controls: pd.DataFrame):
         InfractionType.from_poseidon_infraction_field
     )
 
-    logger.info("Creating infractions (consolidated from gear, species, logbook, and other)")
-    if len(controls) == 0:
-        controls["infractions"] = None
+    logger.info("Creating infractions")
+    if len(controls) > 0:
+        controls["infractions"] = controls.apply(
+            lambda row: make_infractions(row["infraction_natinfs"], row["infraction_type"]) or None,
+            axis=1
+        )
     else:
-        # Create a combined list of all infractions
-        def combine_infractions(row):
-            all_infractions = []
-
-            # Gear infractions
-            gear_inf = make_infractions(
-                row["infraction_natinfs"],
-                row["infraction_type"],
-                only_natinfs=gear_natinfs,
-            )
-            if gear_inf:
-                all_infractions.extend(gear_inf)
-
-            # Species infractions
-            species_inf = make_infractions(
-                row["infraction_natinfs"],
-                row["infraction_type"],
-                only_natinfs=species_natinfs,
-            )
-            if species_inf:
-                all_infractions.extend(species_inf)
-
-            # Logbook infractions
-            logbook_inf = make_infractions(
-                row["infraction_natinfs"],
-                row["infraction_type"],
-                only_natinfs=logbook_natinfs,
-            )
-            if logbook_inf:
-                all_infractions.extend(logbook_inf)
-
-            # Other infractions
-            other_inf = make_infractions(
-                row["infraction_natinfs"],
-                row["infraction_type"],
-                exclude_natinfs=set.union(
-                    logbook_natinfs, gear_natinfs, species_natinfs
-                ),
-            )
-            if other_inf:
-                all_infractions.extend(other_inf)
-
-            return all_infractions if all_infractions else None
-
-        controls["infractions"] = controls.apply(combine_infractions, axis=1)
+        controls["infractions"] = None
 
     controls = controls.drop(
         columns=["infraction_natinfs", "infraction", "infraction_type"]

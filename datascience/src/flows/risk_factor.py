@@ -218,8 +218,11 @@ def compute_risk_factors(
         }
     )
 
-    risk_factors["last_control_infractions"] = risk_factors["last_control_infractions"].where(
-        risk_factors["last_control_infractions"].notnull(), pd.Series([[]] * len(risk_factors))
+    risk_factors["last_control_infractions"] = risk_factors[
+        "last_control_infractions"
+    ].where(
+        risk_factors["last_control_infractions"].notnull(),
+        pd.Series([[]] * len(risk_factors)),
     )
 
     risk_factors["probability_risk_factor"] = risk_factors[

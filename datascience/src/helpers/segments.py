@@ -81,8 +81,8 @@ def allocate_segments_to_catches(
     query = f"""
         WITH catches_main_type AS (
             SELECT
-                { catch_id_column },
-                { batch_id_column },
+                {catch_id_column},
+                {batch_id_column},
                 year,
                 fao_area,
                 gear,
@@ -93,8 +93,8 @@ def allocate_segments_to_catches(
                 vessel_type,
                 CASE
                     WHEN (
-                        SUM(CASE WHEN scip_species_type = 'PELAGIC' THEN weight ELSE 0 END) OVER (PARTITION BY { batch_id_column }) >
-                        SUM(CASE WHEN scip_species_type = 'DEMERSAL' THEN weight ELSE 0 END) OVER (PARTITION BY { batch_id_column })
+                        SUM(CASE WHEN scip_species_type = 'PELAGIC' THEN weight ELSE 0 END) OVER (PARTITION BY {batch_id_column}) >
+                        SUM(CASE WHEN scip_species_type = 'DEMERSAL' THEN weight ELSE 0 END) OVER (PARTITION BY {batch_id_column})
                     ) THEN 'PELAGIC'
                     ELSE 'DEMERSAL'
                 END AS main_scip_species_type
@@ -103,7 +103,7 @@ def allocate_segments_to_catches(
 
         segmented_catches AS (
             SELECT
-                { catch_id_column },
+                {catch_id_column},
                 s.segment,
                 s.segment_name,
                 s.impact_risk_factor,
@@ -120,10 +120,10 @@ def allocate_segments_to_catches(
                                 0
                             END
                         )
-                        OVER (PARTITION BY { batch_id_column }, s.segment)
+                        OVER (PARTITION BY {batch_id_column}, s.segment)
                     ) / (
                         SUM(weight)
-                        OVER (PARTITION BY { batch_id_column }, s.segment)
+                        OVER (PARTITION BY {batch_id_column}, s.segment)
                     ),
                     0
                 ) AS share_of_target_species,
@@ -137,7 +137,7 @@ def allocate_segments_to_catches(
                             0
                         END
                     )
-                    OVER (PARTITION BY { batch_id_column }, s.segment)
+                    OVER (PARTITION BY {batch_id_column}, s.segment)
                 ) > 0 AS has_target_species
 
             FROM catches_main_type c
@@ -161,20 +161,20 @@ def allocate_segments_to_catches(
         ),
 
         catches_top_priority_segment AS (
-            SELECT DISTINCT ON ({ catch_id_column })
-                { catch_id_column },
+            SELECT DISTINCT ON ({catch_id_column})
+                {catch_id_column},
                 segment,
                 segment_name,
                 impact_risk_factor
             FROM segmented_catches c
-            ORDER BY { catch_id_column }, priority DESC
+            ORDER BY {catch_id_column}, priority DESC
         )
 
         SELECT c.*, s.segment, s.segment_name, s.impact_risk_factor
         FROM catches c
         LEFT JOIN catches_top_priority_segment s
-        ON c.{ catch_id_column } = s.{ catch_id_column }
-        ORDER BY c.{ catch_id_column }
+        ON c.{catch_id_column} = s.{catch_id_column}
+        ORDER BY c.{catch_id_column}
     """
     res = duckdb.sql(query).to_df()
     return res

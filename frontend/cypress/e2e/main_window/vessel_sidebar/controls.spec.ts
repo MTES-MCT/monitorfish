@@ -86,7 +86,7 @@ context('Vessel sidebar controls tab', () => {
       .and('contain', 'NATINF 23581')
       .and('contain', 'Maille trop petite')
 
-      .and('contain', '2Infraction 2')
+      .and('contain', 'Infraction 2')
       .and('contain', 'Engin non conforme')
       .and('contain', 'Sans PV')
       .and('contain', 'NATINF 27724')

@@ -29,9 +29,9 @@ def test_refresh_analytics_controls_full_data(reset_test_data):
 
     controls_after_refresh = read_query(query, db="monitorfish_remote")
 
-    assert len(initial_controls) == 26
-    assert len(controls_before_refresh) == 26
-    assert len(controls_after_refresh) == 22
+    assert len(initial_controls) == 27
+    assert len(controls_before_refresh) == 27
+    assert len(controls_after_refresh) == 23
 
     pd.testing.assert_frame_equal(initial_controls, controls_before_refresh)
     pd.testing.assert_frame_equal(

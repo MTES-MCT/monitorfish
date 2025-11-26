@@ -18,7 +18,7 @@ export function getFeaturesFromRegulatoryZones(geojsonFeatures: Partial<Regulato
   return geojsonFeatures
     .filter(regulatoryZone => regulatoryZone)
     .map(regulatoryZone => {
-      const properties = omit(['geometry'], regulatoryZone)
+      const properties = omit(regulatoryZone, ['geometry'])
 
       const feature = new GeoJSONOLFormat({
         featureProjection: OPENLAYERS_PROJECTION

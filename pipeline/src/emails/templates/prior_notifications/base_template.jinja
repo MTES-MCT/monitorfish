@@ -53,32 +53,10 @@
                         <td class="data-label">Résultat du contrôle</td>
                         <td>
                             {% if last_control_datetime_utc %}
-                                {% if last_control_gear_infractions %}
+                                {% if last_control_infractions %}
                                     <p class="control-result">
-                                        <span class="infraction-count">{{ last_control_gear_infractions|count }} infraction{{ last_control_gear_infractions|count|pluralize }} engins</span> - 
-                                        NATINF{{ last_control_gear_infractions|count|pluralize|capitalize }} {{ last_control_gear_infractions|map(attribute="natinf", default="-")|join(", ")  }}
-                                    </p>
-                                {% endif %}
-
-                                {% if last_control_logbook_infractions %}
-                                    <p class="control-result">
-                                        <span class="infraction-count">{{ last_control_logbook_infractions|count }} infraction{{ last_control_logbook_infractions|count|pluralize }} obl. déclaratives et déclarations</span> - 
-                                        NATINF{{ last_control_logbook_infractions|count|pluralize|capitalize }} {{ last_control_logbook_infractions|map(attribute="natinf", default="-")|join(", ")  }}
-                                    </p>
-                                {% endif %}
-
-
-                                {% if last_control_species_infractions %}
-                                    <p class="control-result">
-                                        <span class="infraction-count">{{ last_control_species_infractions|count }} infraction{{ last_control_species_infractions|count|pluralize }} espèces</span> - 
-                                        NATINF{{ last_control_species_infractions|count|pluralize|capitalize }} {{ last_control_species_infractions|map(attribute="natinf", default="-")|join(", ")  }}
-                                    </p>
-                                {% endif %}
-
-                                {% if last_control_other_infractions %}
-                                    <p class="control-result">
-                                        <span class="infraction-count">{{ last_control_other_infractions|count }} infraction{{ last_control_other_infractions|count|pluralize }} autre</span> - 
-                                        NATINF{{ last_control_other_infractions|count|pluralize|capitalize }} {{ last_control_other_infractions|map(attribute="natinf", default="-")|join(", ")  }}
+                                        <span class="infraction-count">{{ last_control_infractions|count }} infraction{{ last_control_infractions|count|pluralize }}</span> -
+                                        NATINF{{ last_control_infractions|count|pluralize|capitalize }} {{ last_control_infractions|map(attribute="natinf", default="-")|join(", ")  }}
                                     </p>
                                 {% endif %}
 

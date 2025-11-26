@@ -81,32 +81,32 @@ context('Vessel sidebar controls tab', () => {
       .first()
       .should('contain', 'Appréhension espèce')
 
-      .and('contain', '1. Infraction engin')
+      .and('contain', 'Infraction 1')
       .and('contain', 'Avec PV')
       .and('contain', 'NATINF 23581')
       .and('contain', 'Maille trop petite')
 
-      .and('contain', '2. Infraction engin')
+      .and('contain', '2Infraction 2')
       .and('contain', 'Engin non conforme')
       .and('contain', 'Sans PV')
       .and('contain', 'NATINF 27724')
 
-      .and('contain', '3. Infraction espèce')
+      .and('contain', 'Infraction 3')
       .and('contain', 'Sous taille de 8cm')
       .and('contain', 'Sans PV')
       .and('contain', 'NATINF 28346')
 
-      .and('contain', '4. Infraction JPE')
+      .and('contain', 'Infraction 4')
       .and('contain', 'Poids à bord MNZ supérieur de 50% au poids déclaré')
       .and('contain', 'Avec PV')
       .and('contain', 'NATINF 27689')
 
-      .and('contain', '5. Infraction autre')
+      .and('contain', 'Infraction 5')
       .and('contain', 'Chalutage répété dans les 3 milles sur Piste VMS - confirmé de visu')
       .and('contain', 'Sans PV')
       .and('contain', 'NATINF 23588')
 
-      .and('contain', '6. Infraction autre')
+      .and('contain', 'Infraction 6')
       .and('contain', "Absence d'équipement AIS à bord")
       .and('contain', 'Sans PV')
       .and('contain', 'NATINF 23584')

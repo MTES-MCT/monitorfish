@@ -886,7 +886,7 @@ def make_update_logbook_reports_statement(
         logger.info(
             (
                 "Creating state change SQL statement for "
-                f"{ len(logbook_pno_report_ids) } LOGBOOK PNOs."
+                f"{len(logbook_pno_report_ids)} LOGBOOK PNOs."
             )
         )
 
@@ -976,7 +976,7 @@ def make_manual_prior_notifications_statement(
         logger.info(
             (
                 "Creating state change SQL statement for "
-                f"{ len(manual_pno_report_ids) } MANUAL PNOs."
+                f"{len(manual_pno_report_ids)} MANUAL PNOs."
             )
         )
 

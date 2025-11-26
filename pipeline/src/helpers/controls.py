@@ -4,8 +4,7 @@ from src.entities.missions import InfractionType
 
 
 def make_infractions(
-    natinfs: Union[None, Set[int]],
-    infraction_type: InfractionType
+    natinfs: Union[None, Set[int]], infraction_type: InfractionType
 ) -> List[dict]:
     """
     Generates a list of infraction dicts.

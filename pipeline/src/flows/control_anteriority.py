@@ -282,13 +282,17 @@ def compute_control_rate_risk_factors(controls: pd.DataFrame) -> pd.DataFrame:
         .reset_index()
     )
 
-    control_rate_risk_factors['last_control_at_sea_datetime_utc'] = control_rate_risk_factors['vessel_id'].map(
+    control_rate_risk_factors[
+        "last_control_at_sea_datetime_utc"
+    ] = control_rate_risk_factors["vessel_id"].map(
         controls_.query("action_type == 'SEA_CONTROL'")
         .groupby("vessel_id")["control_datetime_utc"]
         .max()
     )
 
-    control_rate_risk_factors['last_control_at_quay_datetime_utc'] = control_rate_risk_factors['vessel_id'].map(
+    control_rate_risk_factors[
+        "last_control_at_quay_datetime_utc"
+    ] = control_rate_risk_factors["vessel_id"].map(
         controls_.query("action_type == 'LAND_CONTROL'")
         .groupby("vessel_id")["control_datetime_utc"]
         .max()

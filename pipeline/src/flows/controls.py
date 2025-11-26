@@ -220,8 +220,11 @@ def transform_controls(controls: pd.DataFrame):
     logger.info("Creating infractions")
     if len(controls) > 0:
         controls["infractions"] = controls.apply(
-            lambda row: make_infractions(row["infraction_natinfs"], row["infraction_type"]) or None,
-            axis=1
+            lambda row: make_infractions(
+                row["infraction_natinfs"], row["infraction_type"]
+            )
+            or None,
+            axis=1,
         )
     else:
         controls["infractions"] = None

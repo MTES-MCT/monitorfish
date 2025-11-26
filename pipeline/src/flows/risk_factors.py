@@ -134,9 +134,9 @@ def extract_control_anteriority():
         db_name="monitorfish_remote",
         query_filepath="monitorfish/control_anteriority.sql",
         parse_dates=[
-            "last_control_datetime_utc", 
-            "last_control_at_sea_datetime_utc", 
-            "last_control_at_quay_datetime_utc"
+            "last_control_datetime_utc",
+            "last_control_at_sea_datetime_utc",
+            "last_control_at_quay_datetime_utc",
         ],
     )
 
@@ -217,8 +217,11 @@ def compute_risk_factors(
         }
     )
 
-    risk_factors["last_control_infractions"] = risk_factors["last_control_infractions"].where(
-        risk_factors["last_control_infractions"].notnull(), pd.Series([[]] * len(risk_factors))
+    risk_factors["last_control_infractions"] = risk_factors[
+        "last_control_infractions"
+    ].where(
+        risk_factors["last_control_infractions"].notnull(),
+        pd.Series([[]] * len(risk_factors)),
     )
 
     risk_factors["probability_risk_factor"] = risk_factors[

@@ -1,5 +1,5 @@
+import { omit } from 'lodash-es'
 import GeoJSONOLFormat from 'ol/format/GeoJSON'
-import { omit } from 'ramda'
 
 import { OPENLAYERS_PROJECTION } from '../constants'
 

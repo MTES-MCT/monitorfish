@@ -53,7 +53,6 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
           facade: 'MEMN',
           faoAreas: ['27.8.a'],
           flagState: 'FR',
-          gearInfractions: [],
           gearOnboard: [
             {
               comments: null,
@@ -73,19 +72,17 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
           latitude: 53.35,
           licencesAndLogbookObservations: null,
           licencesMatchActivity: 'NOT_APPLICABLE',
-          logbookInfractions: [],
           logbookMatchesActivity: 'NOT_APPLICABLE',
           longitude: -10.85,
           missionId: 4,
           numberOfVesselsFlownOver: null,
           otherComments: 'Commentaires post contrôle',
-          otherInfractions: [],
           portLocode: null,
           segments: [],
           seizureAndDiversion: false,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: 'NO',
-          speciesInfractions: [],
+          infractions: [],
           speciesObservations: null,
           speciesOnboard: [
             { controlledWeight: null, declaredWeight: null, nbFish: null, speciesCode: 'SPR', underSized: false }
@@ -149,7 +146,6 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
           facade: 'MEMN',
           faoAreas: ['27.8.b', '27.8.c'],
           flagState: 'FR',
-          gearInfractions: [],
           gearOnboard: [
             {
               comments: null,
@@ -167,19 +163,17 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
           latitude: 53.35,
           licencesAndLogbookObservations: null,
           licencesMatchActivity: 'NOT_APPLICABLE',
-          logbookInfractions: [],
           logbookMatchesActivity: 'NOT_APPLICABLE',
           longitude: -10.85,
           missionId: 4,
           numberOfVesselsFlownOver: null,
           otherComments: 'Commentaires post contrôle',
-          otherInfractions: [],
           portLocode: null,
           segments: [],
           seizureAndDiversion: false,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: 'NO',
-          speciesInfractions: [],
+          infractions: [],
           speciesObservations: null,
           speciesOnboard: [
             {

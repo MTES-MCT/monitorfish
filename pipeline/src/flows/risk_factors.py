@@ -217,17 +217,9 @@ def compute_risk_factors(
         }
     )
 
-    last_control_infraction_columns = [
-        "last_control_logbook_infractions",
-        "last_control_gear_infractions",
-        "last_control_species_infractions",
-        "last_control_other_infractions",
-    ]
-
-    for c in last_control_infraction_columns:
-        risk_factors[c] = risk_factors[c].where(
-            risk_factors[c].notnull(), pd.Series([[]] * len(risk_factors))
-        )
+    risk_factors["last_control_infractions"] = risk_factors["last_control_infractions"].where(
+        risk_factors["last_control_infractions"].notnull(), pd.Series([[]] * len(risk_factors))
+    )
 
     risk_factors["probability_risk_factor"] = risk_factors[
         "infraction_rate_risk_factor"
@@ -319,10 +311,7 @@ def load_risk_factors(risk_factors: pd.DataFrame):
         jsonb_columns=[
             "gear_onboard",
             "species_onboard",
-            "last_control_logbook_infractions",
-            "last_control_gear_infractions",
-            "last_control_species_infractions",
-            "last_control_other_infractions",
+            "last_control_infractions",
             "recent_gear_onboard",
             "usual_gear_onboard",
         ],

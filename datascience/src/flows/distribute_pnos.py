@@ -296,21 +296,9 @@ def pre_render_pno(
         logger.error(f"Failed to interpret purpose code with error {error_message}.")
         purpose = pno.purpose
 
-    last_control_logbook_infractions = [
+    last_control_infractions = [
         Infraction(natinf=inf.get("natinf"), comments=inf.get("comments"))
-        for inf in pno.last_control_logbook_infractions
-    ]
-    last_control_gear_infractions = [
-        Infraction(natinf=inf.get("natinf"), comments=inf.get("comments"))
-        for inf in pno.last_control_gear_infractions
-    ]
-    last_control_species_infractions = [
-        Infraction(natinf=inf.get("natinf"), comments=inf.get("comments"))
-        for inf in pno.last_control_species_infractions
-    ]
-    last_control_other_infractions = [
-        Infraction(natinf=inf.get("natinf"), comments=inf.get("comments"))
-        for inf in pno.last_control_other_infractions
+        for inf in pno.last_control_infractions
     ]
 
     return PreRenderedPno(
@@ -340,10 +328,7 @@ def pre_render_pno(
         mmsi=pno.mmsi,
         risk_factor=pno.risk_factor or default_risk_factors["risk_factor"],
         last_control_datetime_utc=pno.last_control_datetime_utc,
-        last_control_logbook_infractions=last_control_logbook_infractions,
-        last_control_gear_infractions=last_control_gear_infractions,
-        last_control_species_infractions=last_control_species_infractions,
-        last_control_other_infractions=last_control_other_infractions,
+        last_control_infractions=last_control_infractions,
         is_verified=pno.is_verified,
         is_being_sent=pno.is_being_sent,
         source=pno.source,
@@ -493,16 +478,10 @@ def render_pno(
         last_control_datetime_utc=format_nullable_datetime(
             pno.last_control_datetime_utc
         ),
-        last_control_logbook_infractions=pno.last_control_logbook_infractions,
-        last_control_gear_infractions=pno.last_control_gear_infractions,
-        last_control_species_infractions=pno.last_control_species_infractions,
-        last_control_other_infractions=pno.last_control_other_infractions,
+        last_control_infractions=pno.last_control_infractions,
         last_control_compliant=(
             isinstance(pno.last_control_datetime_utc, datetime)
-            and (pno.last_control_logbook_infractions == [])
-            and (pno.last_control_gear_infractions == [])
-            and (pno.last_control_species_infractions == [])
-            and (pno.last_control_other_infractions == [])
+            and (pno.last_control_infractions == [])
         ),
     )
 

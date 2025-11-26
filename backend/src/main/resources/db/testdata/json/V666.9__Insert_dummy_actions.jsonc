@@ -1,0 +1,608 @@
+[
+    {
+        "table": "infractions",
+        "beforeAll": "DELETE FROM infractions;\nDELETE FROM mission_actions;\nALTER SEQUENCE mission_actions_id_seq RESTART WITH 1;\n",
+        "id": "natinf_code",
+        "data": [
+            {
+                "natinf_code": 23581,
+                "regulation": "Arreté du 12/01/3021",
+                "infraction_category": "Pêche",
+                "infraction": "Taille de maille non réglementaire"
+            },
+            {
+                "natinf_code": 23588,
+                "regulation": "Arreté du 15/01/3021",
+                "infraction_category": "Pêche",
+                "infraction": "Chalutage dans la zone des 3 milles"
+            },
+            {
+                "natinf_code": 23584,
+                "regulation": "Arreté du 18/01/3021",
+                "infraction_category": "Sécurité / Rôle",
+                "infraction": "Défaut AIS"
+            },
+            {
+                "natinf_code": 7059,
+                "regulation": "d1852",
+                "infraction_category": "Pêche",
+                "infraction": "Peche maritime avec un engin dans une zone ou son emploi est interdit"
+            },
+            {
+                "natinf_code": 27689,
+                "regulation": "ART.L.945-2 §I 3°, ART.L.921-9 C.RURAL.\tPêche",
+                "infraction_category": "Pêche",
+                "infraction": "Pêche\tNon respect des obligations d'enregistrement et de communication des donnees requises dans le cadre du systeme de declaration par voie electronique - peche maritime"
+            },
+            {
+                "natinf_code": 2608,
+                "regulation": "d1852",
+                "infraction_category": "Pêche",
+                "infraction": "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne"
+            },
+            {
+                "natinf_code": 27724,
+                "regulation": "Art. 128.5.12.d",
+                "infraction_category": "Pêche",
+                "infraction": "Utilisation d'engin de pêche maritime non conforme aux mesures techniques de conservation et de gestion des ressources"
+            },
+            {
+                "natinf_code": 28346,
+                "regulation": "ART.L.945-4 15° C.RURAL",
+                "infraction_category": "Pêche",
+                "infraction": "Détention de produits de la pêche maritime et de l'aquaculture marine de taille, calibre ou poids prohibe"
+            }
+        ]
+    },
+    {
+        "table": "mission_actions",
+        "id": "id",
+        "data": [
+            // - Mission 1: SEA_CONTROL with no infractions
+            // - Vessel: PHENOMENE (FAK000999999)
+            // - Status: TO_COMPLETE
+            {
+                "vessel_id": 1,
+                "cfr": "FAK000999999",
+                "vessel_name": "PHENOMENE",
+                "flag_state": "GB",
+                "mission_id": 1,
+                "action_type": "SEA_CONTROL",
+                "action_datetime_utc:sql": "NOW() - interval '1 year'",
+                "has_some_gears_seized": false,
+                "has_some_species_seized": false,
+                "facade": "NAMO",
+                "longitude": -8.52,
+                "latitude": 51.58,
+                "port_locode": null,
+                "vessel_targeted": "YES",
+                "seizure_and_diversion": false,
+                "seizure_and_diversion_comments": null,
+                "other_comments": "Commentaires post contrôle",
+                "completion": "TO_COMPLETE",
+                "completed_by": null,
+                "infractions:jsonb": [],
+                "species_observations": null,
+                "fao_areas": ["27.7.c"],
+                "emits_vms": null,
+                "emits_ais": null,
+                "logbook_matches_activity": null,
+                "licences_match_activity": null,
+                "species_weight_controlled": null,
+                "species_size_controlled": null,
+                "separate_stowage_of_preserved_species": null,
+                "licences_and_logbook_observations": null,
+                "number_of_vessels_flown_over": null,
+                "unit_without_omega_gauge": null,
+                "control_quality_comments": null,
+                "is_from_poseidon": false,
+                "user_trigram": "ABC",
+                "is_deleted": false
+            },
+            // - Mission 2: SEA_CONTROL with multiple infractions and seized species
+            // - Vessel: PHENOMENE (FAK000999999)
+            // - Status: COMPLETED
+            // - Infractions: WITH_RECORD (23581, 23588, 27689), PENDING (27724, 23584), WITHOUT_RECORD (28346)
+            {
+                "vessel_id": 1,
+                "cfr": "FAK000999999",
+                "vessel_name": "PHENOMENE",
+                "flag_state": "GB",
+                "mission_id": 2,
+                "action_type": "SEA_CONTROL",
+                "action_datetime_utc:sql": "NOW()",
+                "has_some_gears_seized": false,
+                "has_some_species_seized": true,
+                "facade": "NAMO",
+                "longitude": -0.52,
+                "latitude": 47.44,
+                "port_locode": null,
+                "vessel_targeted": "NO",
+                "seizure_and_diversion": true,
+                "seizure_and_diversion_comments": "Saisie de la pêche",
+                "other_comments": "Commentaires post contrôle",
+                "completion": "COMPLETED",
+                "completed_by": "XYZ",
+                "gear_onboard:jsonb": [
+                    {
+                        "gearCode": "OTB",
+                        "gearName": "Chaluts de fond à panneaux",
+                        "declaredMesh": 60.0,
+                        "controlledMesh": null,
+                        "hasUncontrolledMesh": true,
+                        "gearWasControlled": false
+                    },
+                    {
+                        "gearCode": "OTM",
+                        "gearName": "Chaluts pélagiques à panneaux",
+                        "declaredMesh": 60.0,
+                        "controlledMesh": 52.8,
+                        "hasUncontrolledMesh": false,
+                        "gearWasControlled": true
+                    }
+                ],
+                "infractions:jsonb": [
+                    {
+                        "infractionType": "WITH_RECORD",
+                        "natinf": 23581,
+                        "comments": "Maille trop petite"
+                    },
+                    {
+                        "infractionType": "PENDING",
+                        "natinf": 27724,
+                        "comments": "Engin non conforme"
+                    },
+                    {
+                        "infractionType": "WITHOUT_RECORD",
+                        "natinf": 28346,
+                        "comments": "Sous taille de 8cm"
+                    },
+                    {
+                        "infractionType": "WITH_RECORD",
+                        "natinf": 23588,
+                        "comments": "Chalutage répété dans les 3 milles sur Piste VMS - confirmé de visu"
+                    },
+                    {
+                        "infractionType": "PENDING",
+                        "natinf": 23584,
+                        "comments": "Absence d'équipement AIS à bord"
+                    },
+                    {
+                        "infractionType": "WITH_RECORD",
+                        "natinf": 27689,
+                        "comments": "Poids à bord MNZ supérieur de 50% au poids déclaré"
+                    }
+                ],
+                "species_onboard:jsonb": [
+                    {
+                        "speciesCode": "MNZ",
+                        "declaredWeight": 302.5,
+                        "controlledWeight": 450,
+                        "underSized": true
+                    },
+                    {
+                        "speciesCode": "CRF",
+                        "declaredWeight": 40,
+                        "controlledWeight": 40,
+                        "underSized": false
+                    }
+                ],
+                "species_observations": "Saisie de l'ensemble des captures à bord",
+                "fao_areas": ["27.7.d", "27.7.e"],
+                "segments:jsonb": [
+                    {
+                        "segment": "SWW04",
+                        "segmentName": "Midwater trawls",
+                        "faoAreas": ["27.8c", "27.8"]
+                    },
+                    {
+                        "segment": "PEL03",
+                        "segmentName": "Polyvalent - Bottom trawl",
+                        "faoAreas": ["27.3.a", "27.7", "27.8", "27.9"]
+                    }
+                ],
+                "emits_vms": "YES",
+                "emits_ais": "NOT_APPLICABLE",
+                "logbook_matches_activity": "NO",
+                "licences_match_activity": "NO",
+                "species_weight_controlled": true,
+                "species_size_controlled": true,
+                "separate_stowage_of_preserved_species": "YES",
+                "licences_and_logbook_observations": "C'est pas très très bien réglo toute cette poissecalle non déclarée",
+                "number_of_vessels_flown_over": null,
+                "unit_without_omega_gauge": false,
+                "control_quality_comments": "Ciblage CNSP non respecté",
+                "is_from_poseidon": false,
+                "user_trigram": "DEF",
+                "is_deleted": false
+            },
+            // - Mission 3: SEA_CONTROL with no infractions
+            // - Vessel: PHENOMENE (FAK000999999)
+            // - Status: TO_COMPLETE
+            {
+                "vessel_id": 1,
+                "cfr": "FAK000999999",
+                "vessel_name": "PHENOMENE",
+                "flag_state": "GB",
+                "mission_id": 3,
+                "action_type": "SEA_CONTROL",
+                "action_datetime_utc:sql": "NOW() - interval '1 year' - interval '1 month'",
+                "has_some_gears_seized": false,
+                "has_some_species_seized": false,
+                "facade": "NAMO",
+                "longitude": -8.52,
+                "latitude": 51.58,
+                "port_locode": null,
+                "vessel_targeted": "YES",
+                "seizure_and_diversion": false,
+                "seizure_and_diversion_comments": null,
+                "other_comments": null,
+                "completion": "TO_COMPLETE",
+                "completed_by": null,
+                "infractions:jsonb": [],
+                "species_observations": null,
+                "fao_areas": null,
+                "emits_vms": "NO",
+                "emits_ais": "YES",
+                "logbook_matches_activity": null,
+                "licences_match_activity": "YES",
+                "species_weight_controlled": false,
+                "species_size_controlled": false,
+                "separate_stowage_of_preserved_species": null,
+                "licences_and_logbook_observations": null,
+                "number_of_vessels_flown_over": null,
+                "unit_without_omega_gauge": null,
+                "control_quality_comments": null,
+                "is_from_poseidon": true,
+                "user_trigram": "GHI",
+                "is_deleted": false
+            },
+            // - Mission 4: SEA_CONTROL with no infractions
+            // - Vessel: MALOTRU (U_W0NTFINDME)
+            // - Status: TO_COMPLETE
+            {
+                "vessel_id": 2,
+                "cfr": "U_W0NTFINDME",
+                "vessel_name": "MALOTRU",
+                "flag_state": "FR",
+                "mission_id": 4,
+                "action_type": "SEA_CONTROL",
+                "action_datetime_utc:sql": "NOW() - interval '1 year'",
+                "has_some_gears_seized": false,
+                "has_some_species_seized": false,
+                "facade": "MEMN",
+                "longitude": -10.85,
+                "latitude": 53.35,
+                "port_locode": null,
+                "vessel_targeted": "YES",
+                "seizure_and_diversion": false,
+                "seizure_and_diversion_comments": null,
+                "other_comments": "Commentaires post contrôle",
+                "completion": "TO_COMPLETE",
+                "completed_by": null,
+                "infractions:jsonb": [],
+                "species_observations": null,
+                "fao_areas": ["27.8.a"],
+                "emits_vms": "NOT_APPLICABLE",
+                "emits_ais": null,
+                "logbook_matches_activity": "NOT_APPLICABLE",
+                "licences_match_activity": "NOT_APPLICABLE",
+                "species_weight_controlled": null,
+                "species_size_controlled": null,
+                "separate_stowage_of_preserved_species": "NO",
+                "licences_and_logbook_observations": null,
+                "number_of_vessels_flown_over": null,
+                "unit_without_omega_gauge": null,
+                "control_quality_comments": null,
+                "is_from_poseidon": false,
+                "user_trigram": "JKL",
+                "is_deleted": false
+            },
+            // - Mission 5: LAND_CONTROL with gears and species
+            // - Vessel: PHENOMENE (FAK000999999)
+            // - Status: TO_COMPLETE
+            {
+                "vessel_id": 1,
+                "cfr": "FAK000999999",
+                "vessel_name": "PHENOMENE",
+                "flag_state": "GB",
+                "mission_id": 5,
+                "action_type": "LAND_CONTROL",
+                "action_datetime_utc": "2020-01-18T07:19:28.384921Z",
+                "has_some_gears_seized": false,
+                "has_some_species_seized": false,
+                "facade": "MEMN",
+                "longitude": null,
+                "latitude": null,
+                "port_locode": "AEFAT",
+                "vessel_targeted": "YES",
+                "seizure_and_diversion": false,
+                "seizure_and_diversion_comments": null,
+                "other_comments": "Documents pas à jour\nVoir avec CNSP\nC.F. L.P",
+                "completion": "TO_COMPLETE",
+                "completed_by": null,
+                "gear_onboard:jsonb": [
+                    {
+                        "gearCode": "OTB",
+                        "gearName": "Chaluts de fond à panneaux",
+                        "declaredMesh": 60.0,
+                        "controlledMesh": 58.9,
+                        "hasUncontrolledMesh": false,
+                        "gearWasControlled": true
+                    }
+                ],
+                "infractions:jsonb": [],
+                "species_onboard:jsonb": [
+                    {
+                        "speciesCode": "JAX",
+                        "declaredWeight": 302.5,
+                        "controlledWeight": 450,
+                        "underSized": true
+                    },
+                    {
+                        "speciesCode": "CRF",
+                        "declaredWeight": 40,
+                        "controlledWeight": 40,
+                        "underSized": false
+                    }
+                ],
+                "species_observations": null,
+                "fao_areas": ["27.4.a"],
+                "segments:jsonb": [
+                    {
+                        "segment": "NS13",
+                        "segmentName": "NS13",
+                        "faoAreas": ["27.2.a", "27.4"]
+                    }
+                ],
+                "emits_vms": null,
+                "emits_ais": "NO",
+                "logbook_matches_activity": "NO",
+                "licences_match_activity": null,
+                "species_weight_controlled": null,
+                "species_size_controlled": null,
+                "separate_stowage_of_preserved_species": null,
+                "licences_and_logbook_observations": null,
+                "number_of_vessels_flown_over": null,
+                "unit_without_omega_gauge": false,
+                "control_quality_comments": null,
+                "is_from_poseidon": false,
+                "user_trigram": "MNO",
+                "is_deleted": false
+            },
+            // - Mission 6: AIR_SURVEILLANCE
+            // - Vessel: PHENOMENE (FAK000999999)
+            // - Status: TO_COMPLETE
+            // - Number of vessels flown over: 26
+            {
+                "vessel_id": 1,
+                "cfr": "FAK000999999",
+                "vessel_name": "PHENOMENE",
+                "flag_state": "GB",
+                "mission_id": 6,
+                "action_type": "AIR_SURVEILLANCE",
+                "action_datetime_utc": "2021-02-10T12:11:18.884456Z",
+                "has_some_gears_seized": false,
+                "has_some_species_seized": false,
+                "facade": "MED",
+                "longitude": null,
+                "latitude": null,
+                "port_locode": null,
+                "vessel_targeted": null,
+                "seizure_and_diversion": null,
+                "seizure_and_diversion_comments": null,
+                "other_comments": "1 navire / 26 en défaut AIS",
+                "completion": "TO_COMPLETE",
+                "completed_by": null,
+                "infractions:jsonb": [],
+                "species_observations": null,
+                "fao_areas": null,
+                "segments:jsonb": [
+                    {
+                        "segment": "MED01",
+                        "segmentName": "All Trawls 1",
+                        "faoAreas": ["37.1", "37.2", "37.3"]
+                    },
+                    {
+                        "segment": "MED02",
+                        "segmentName": "All Traws 2",
+                        "faoAreas": ["37.1", "37.2", "37.3"]
+                    }
+                ],
+                "emits_vms": null,
+                "emits_ais": null,
+                "logbook_matches_activity": null,
+                "licences_match_activity": null,
+                "species_weight_controlled": null,
+                "species_size_controlled": null,
+                "separate_stowage_of_preserved_species": null,
+                "licences_and_logbook_observations": null,
+                "number_of_vessels_flown_over": 26,
+                "unit_without_omega_gauge": null,
+                "control_quality_comments": "Bonne coordinnation avec le CNSP",
+                "is_from_poseidon": false,
+                "user_trigram": "PQR",
+                "is_deleted": false
+            },
+            // - Mission 6: AIR_CONTROL
+            // - Vessel: PHENOMENE (FAK000999999)
+            // - Status: TO_COMPLETE
+            // - Infraction: WITHOUT_RECORD (23584)
+            {
+                "vessel_id": 1,
+                "cfr": "FAK000999999",
+                "vessel_name": "PHENOMENE",
+                "flag_state": "GB",
+                "mission_id": 6,
+                "action_type": "AIR_CONTROL",
+                "action_datetime_utc": "2021-02-10T12:11:18.884456Z",
+                "has_some_gears_seized": false,
+                "has_some_species_seized": false,
+                "facade": "MED",
+                "longitude": 4.789730,
+                "latitude": 42.73183,
+                "port_locode": null,
+                "vessel_targeted": null,
+                "seizure_and_diversion": null,
+                "seizure_and_diversion_comments": null,
+                "other_comments": null,
+                "completion": "TO_COMPLETE",
+                "completed_by": null,
+                "infractions:jsonb": [
+                    {
+                        "infractionType": "WITHOUT_RECORD",
+                        "natinf": 23584,
+                        "comments": "Non émission AIS"
+                    }
+                ],
+                "species_observations": "{37.1.1}",
+                "fao_areas": null,
+                "emits_vms": null,
+                "emits_ais": null,
+                "logbook_matches_activity": null,
+                "licences_match_activity": null,
+                "species_weight_controlled": null,
+                "species_size_controlled": null,
+                "separate_stowage_of_preserved_species": null,
+                "licences_and_logbook_observations": null,
+                "number_of_vessels_flown_over": null,
+                "unit_without_omega_gauge": null,
+                "control_quality_comments": null,
+                "is_from_poseidon": false,
+                "user_trigram": "PQR",
+                "is_deleted": false
+            },
+            // - Mission 43: AIR_CONTROL
+            // - Vessel: Unknown (vessel_id: 123)
+            // - Status: TO_COMPLETE
+            // - Infraction: WITH_RECORD (23584)
+            {
+                "vessel_id": 123,
+                "cfr": null,
+                "vessel_name": null,
+                "flag_state": "UNDEFINED",
+                "mission_id": 43,
+                "action_type": "AIR_CONTROL",
+                "action_datetime_utc": "2021-02-10T12:11:18.884456Z",
+                "has_some_gears_seized": false,
+                "has_some_species_seized": false,
+                "facade": "MED",
+                "longitude": 4.789730,
+                "latitude": 42.73183,
+                "port_locode": null,
+                "vessel_targeted": null,
+                "seizure_and_diversion": null,
+                "seizure_and_diversion_comments": null,
+                "other_comments": null,
+                "completion": "TO_COMPLETE",
+                "completed_by": null,
+                "infractions:jsonb": [
+                    {
+                        "infractionType": "WITH_RECORD",
+                        "natinf": 23584,
+                        "comments": "Non émission AIS"
+                    }
+                ],
+                "species_observations": "{37.1.1}",
+                "fao_areas": null,
+                "emits_vms": null,
+                "emits_ais": null,
+                "logbook_matches_activity": null,
+                "licences_match_activity": null,
+                "species_weight_controlled": null,
+                "species_size_controlled": null,
+                "separate_stowage_of_preserved_species": null,
+                "licences_and_logbook_observations": null,
+                "number_of_vessels_flown_over": null,
+                "unit_without_omega_gauge": null,
+                "control_quality_comments": null,
+                "is_from_poseidon": false,
+                "user_trigram": "PQR",
+                "is_deleted": false
+            },
+            // - Mission 34: SEA_CONTROL
+            // - Vessel: Unknown (vessel_id: 1234)
+            // - Status: TO_COMPLETE
+            {
+                "vessel_id": 1234,
+                "cfr": null,
+                "vessel_name": null,
+                "flag_state": "UNDEFINED",
+                "mission_id": 34,
+                "action_type": "SEA_CONTROL",
+                "action_datetime_utc": "2019-01-18T07:19:28.384921Z",
+                "has_some_gears_seized": false,
+                "has_some_species_seized": false,
+                "facade": "Sud Océan Indien",
+                "longitude": -0.56,
+                "latitude": 49.44,
+                "port_locode": null,
+                "vessel_targeted": "YES",
+                "seizure_and_diversion": false,
+                "seizure_and_diversion_comments": null,
+                "other_comments": "Commentaires post contrôle",
+                "completion": "TO_COMPLETE",
+                "completed_by": null,
+                "infractions:jsonb": [],
+                "species_observations": null,
+                "fao_areas": ["27.8.a"],
+                "emits_vms": "NOT_APPLICABLE",
+                "emits_ais": null,
+                "logbook_matches_activity": "NOT_APPLICABLE",
+                "licences_match_activity": "NOT_APPLICABLE",
+                "species_weight_controlled": null,
+                "species_size_controlled": null,
+                "separate_stowage_of_preserved_species": "NO",
+                "licences_and_logbook_observations": null,
+                "number_of_vessels_flown_over": null,
+                "unit_without_omega_gauge": null,
+                "control_quality_comments": null,
+                "is_from_poseidon": false,
+                "user_trigram": "JKL",
+                "is_deleted": false
+            },
+            // - Mission 34: SEA_CONTROL (DELETED)
+            // - Vessel: Unknown (vessel_id: 9999)
+            // - Status: TO_COMPLETE
+            // - Marked as deleted
+            {
+                "vessel_id": 9999,
+                "cfr": null,
+                "vessel_name": null,
+                "flag_state": "UNDEFINED",
+                "mission_id": 34,
+                "action_type": "SEA_CONTROL",
+                "action_datetime_utc": "2019-01-19T07:19:28.384921Z",
+                "has_some_gears_seized": false,
+                "has_some_species_seized": false,
+                "facade": "MEMN",
+                "longitude": -0.56,
+                "latitude": 49.44,
+                "port_locode": null,
+                "vessel_targeted": "YES",
+                "seizure_and_diversion": false,
+                "seizure_and_diversion_comments": null,
+                "other_comments": "Action supprimée",
+                "completion": "TO_COMPLETE",
+                "completed_by": null,
+                "infractions:jsonb": [],
+                "species_observations": null,
+                "fao_areas": ["27.8.a"],
+                "emits_vms": "NOT_APPLICABLE",
+                "emits_ais": null,
+                "logbook_matches_activity": "NOT_APPLICABLE",
+                "licences_match_activity": "NOT_APPLICABLE",
+                "species_weight_controlled": null,
+                "species_size_controlled": null,
+                "separate_stowage_of_preserved_species": "NO",
+                "licences_and_logbook_observations": null,
+                "number_of_vessels_flown_over": null,
+                "unit_without_omega_gauge": null,
+                "control_quality_comments": null,
+                "is_from_poseidon": false,
+                "user_trigram": "JKL",
+                "is_deleted": true
+            }
+        ]
+    }
+]

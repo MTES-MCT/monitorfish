@@ -10,11 +10,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
+import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership

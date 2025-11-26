@@ -1,52 +1,23 @@
-import {
-  Accent,
-  Button,
-  FormikMultiRadio,
-  FormikSelect,
-  FormikTextarea,
-  type Option,
-  Select
-} from '@mtes-mct/monitor-ui'
+import { Accent, Button, FormikMultiRadio, FormikSelect, FormikTextarea, type Option } from '@mtes-mct/monitor-ui'
 import { Form, Formik } from 'formik'
-import { useState } from 'react'
 import styled from 'styled-components'
 
-import { infractionGroupToLabel } from './constants'
-import { InfractionCategory } from './types'
 import { InfractionFormLiveSchema } from '../../schemas'
 import { INFRACTION_TYPES_AS_OPTIONS } from '../constants'
 
 import type { MissionAction } from '@features/Mission/missionAction.types'
 
 type InfractionFormProps = Readonly<{
-  initialValues: MissionAction.Infraction & { group?: string | undefined }
-  isEdition?: boolean
+  initialValues: MissionAction.Infraction
   natinfsAsOptions: Option<number>[]
   onCancel: () => void
-  onSubmit: (nextInfractionFormValues: MissionAction.Infraction, infractionGroup: string | undefined) => void
+  onSubmit: (nextInfractionFormValues: MissionAction.Infraction) => void
 }>
-export function InfractionForm({
-  initialValues,
-  isEdition = false,
-  natinfsAsOptions,
-  onCancel,
-  onSubmit
-}: InfractionFormProps) {
-  const [infractionGroup, setInfractionGroup] = useState<string | undefined>(initialValues.group ?? undefined)
-
-  const infractionCategoryOptions = Object.keys(InfractionCategory).map(category => {
-    const categoryValue = InfractionCategory[category]
-
-    return {
-      label: infractionGroupToLabel[categoryValue],
-      value: categoryValue
-    }
-  })
-
+export function InfractionForm({ initialValues, natinfsAsOptions, onCancel, onSubmit }: InfractionFormProps) {
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={values => onSubmit(values, infractionGroup)}
+      onSubmit={values => onSubmit(values)}
       validationSchema={InfractionFormLiveSchema}
     >
       {({ isValid }) => (
@@ -57,21 +28,6 @@ export function InfractionForm({
             label="Résultat de l’infraction"
             name="infractionType"
             options={INFRACTION_TYPES_AS_OPTIONS}
-          />
-          <Select
-            cleanable={false}
-            disabled={isEdition}
-            label="Catégorie d’infraction"
-            name="infraction-group"
-            onChange={category => {
-              if (isEdition) {
-                return
-              }
-
-              setInfractionGroup(category as string)
-            }}
-            options={infractionCategoryOptions}
-            value={infractionGroup}
           />
           <HackedFormikSelect isErrorMessageHidden label="NATINF" name="natinf" options={natinfsAsOptions} searchable />
           <FormikTextarea isErrorMessageHidden label="Observations sur l’infraction" name="comments" rows={2} />

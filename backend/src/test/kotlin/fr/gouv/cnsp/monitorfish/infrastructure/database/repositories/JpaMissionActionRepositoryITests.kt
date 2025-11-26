@@ -64,38 +64,32 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.faoAreas).hasSize(2)
         assertThat(firstControl.faoAreas.first()).isEqualTo("27.7.d")
         assertThat(firstControl.faoAreas.last()).isEqualTo("27.7.e")
-        assertThat(firstControl.logbookInfractions).hasSize(1)
-        assertThat(firstControl.logbookInfractions.first().infractionType).isEqualTo(
-            InfractionType.WITH_RECORD,
-        )
-        assertThat(firstControl.logbookInfractions.first().natinf).isEqualTo(27689)
-        assertThat(firstControl.logbookInfractions.first().comments).contains(
-            "Poids à bord MNZ supérieur de 50% au poids déclaré",
-        )
         assertThat(firstControl.licencesAndLogbookObservations).isEqualTo(
             "C'est pas très très bien réglo toute cette poissecalle non déclarée",
         )
-        assertThat(firstControl.gearInfractions).hasSize(2)
-        assertThat(firstControl.gearInfractions.first().infractionType).isEqualTo(
+        assertThat(firstControl.infractions).hasSize(6)
+        assertThat(firstControl.infractions.first().infractionType).isEqualTo(
             InfractionType.WITH_RECORD,
         )
-        assertThat(firstControl.gearInfractions.first().natinf).isEqualTo(23581)
-        assertThat(firstControl.gearInfractions.first().comments).isEqualTo("Maille trop petite")
-        assertThat(firstControl.speciesInfractions).hasSize(1)
-        assertThat(firstControl.speciesInfractions.first().infractionType).isEqualTo(
-            InfractionType.WITHOUT_RECORD,
-        )
-        assertThat(firstControl.speciesInfractions.first().natinf).isEqualTo(28346)
-        assertThat(firstControl.speciesInfractions.first().comments).isEqualTo("Sous taille de 8cm")
+        assertThat(firstControl.infractions.first().natinf).isEqualTo(23581)
+        assertThat(firstControl.infractions.first().comments).isEqualTo("Maille trop petite")
+        assertThat(firstControl.infractions[2].natinf).isEqualTo(28346)
+        assertThat(firstControl.infractions[2].comments).isEqualTo("Sous taille de 8cm")
         assertThat(firstControl.speciesObservations).isEqualTo("Saisie de l'ensemble des captures à bord")
         assertThat(firstControl.seizureAndDiversion).isTrue
-        assertThat(firstControl.otherInfractions).hasSize(2)
-        assertThat(firstControl.otherInfractions.first().infractionType).isEqualTo(
+        assertThat(firstControl.infractions[3].infractionType).isEqualTo(
             InfractionType.WITH_RECORD,
         )
-        assertThat(firstControl.otherInfractions.first().natinf).isEqualTo(23588)
-        assertThat(firstControl.otherInfractions.first().comments).isEqualTo(
+        assertThat(firstControl.infractions[3].natinf).isEqualTo(23588)
+        assertThat(firstControl.infractions[3].comments).isEqualTo(
             "Chalutage répété dans les 3 milles sur Piste VMS - confirmé de visu",
+        )
+        assertThat(firstControl.infractions.last().infractionType).isEqualTo(
+            InfractionType.WITH_RECORD,
+        )
+        assertThat(firstControl.infractions.last().natinf).isEqualTo(27689)
+        assertThat(firstControl.infractions.last().comments).contains(
+            "Poids à bord MNZ supérieur de 50% au poids déclaré",
         )
         assertThat(firstControl.numberOfVesselsFlownOver).isNull()
         assertThat(firstControl.unitWithoutOmegaGauge).isFalse
@@ -220,7 +214,6 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
                 faoAreas = listOf(),
                 flagState = CountryCode.FR,
                 flightGoals = listOf(),
-                gearInfractions = listOf(),
                 gearOnboard = listOf(),
                 id = expectedId,
                 internalReferenceNumber = "FAK000999999",
@@ -228,20 +221,18 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
                 latitude = 49.44,
                 licencesAndLogbookObservations = null,
                 licencesMatchActivity = ControlCheck.NOT_APPLICABLE,
-                logbookInfractions = listOf(),
                 logbookMatchesActivity = ControlCheck.NOT_APPLICABLE,
                 longitude = -0.56,
                 missionId = 34,
                 numberOfVesselsFlownOver = null,
                 otherComments = "Commentaires post contrôle",
-                otherInfractions = listOf(),
                 portLocode = null,
                 portName = null,
                 segments = listOf(),
                 seizureAndDiversion = false,
                 seizureAndDiversionComments = null,
                 separateStowageOfPreservedSpecies = ControlCheck.NO,
-                speciesInfractions = listOf(),
+                infractions = listOf(),
                 speciesObservations = null,
                 speciesOnboard = listOf(),
                 speciesSizeControlled = null,

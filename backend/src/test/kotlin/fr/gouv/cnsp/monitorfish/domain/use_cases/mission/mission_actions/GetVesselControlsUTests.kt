@@ -6,9 +6,9 @@ import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearControl
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesInfraction
 import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
@@ -52,8 +52,8 @@ class GetVesselControlsUTests {
             gearControl.hasUncontrolledMesh = false
             val gearControls = listOf(gearControl)
 
-            val speciesInfraction = SpeciesInfraction()
-            speciesInfraction.natinf = 12345
+            val infraction = Infraction()
+            infraction.natinf = 12345
 
             val expectedControls =
                 listOf(
@@ -81,7 +81,7 @@ class GetVesselControlsUTests {
                         actionDatetimeUtc = ZonedDateTime.now(),
                         actionType = MissionActionType.SEA_CONTROL,
                         seizureAndDiversion = false,
-                        speciesInfractions = listOf(speciesInfraction),
+                        infractions = listOf(infraction),
                         isDeleted = false,
                         hasSomeGearsSeized = false,
                         hasSomeSpeciesSeized = false,
@@ -97,7 +97,7 @@ class GetVesselControlsUTests {
                         actionDatetimeUtc = ZonedDateTime.now(),
                         actionType = MissionActionType.SEA_CONTROL,
                         seizureAndDiversion = false,
-                        speciesInfractions = listOf(speciesInfraction),
+                        infractions = listOf(infraction),
                         isDeleted = false,
                         hasSomeGearsSeized = false,
                         hasSomeSpeciesSeized = false,

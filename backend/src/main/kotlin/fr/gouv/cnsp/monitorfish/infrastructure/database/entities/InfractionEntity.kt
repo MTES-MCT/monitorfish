@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory
+import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionCategory
 import jakarta.persistence.*
 
 @Entity

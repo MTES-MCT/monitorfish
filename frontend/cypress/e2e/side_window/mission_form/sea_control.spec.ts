@@ -207,7 +207,6 @@ context('Side Window > Mission Form > Sea Control', () => {
           externalReferenceNumber: 'TALK2ME',
           facade: null,
           flagState: 'UNDEFINED',
-          gearInfractions: [],
           gearOnboard: [
             {
               comments: 'Autres mesures.',
@@ -236,29 +235,25 @@ context('Side Window > Mission Form > Sea Control', () => {
           latitude: 47.084,
           licencesAndLogbookObservations: 'Une observation hors infraction sur les obligations déclaaratives.',
           licencesMatchActivity: 'NO',
-          logbookInfractions: [
-            { comments: 'Une observation sur l’infraction déclarative.', infractionType: 'WITH_RECORD', natinf: 23581 }
-          ],
-          logbookMatchesActivity: 'NOT_APPLICABLE',
-          longitude: -3.872,
-          missionId: 1,
-          numberOfVesselsFlownOver: null,
-          otherComments: 'Une autre observation.',
-          otherInfractions: [
-            { comments: 'Une observation sur l’infraction autre.', infractionType: 'WITHOUT_RECORD', natinf: 27689 }
-          ],
-          portLocode: null,
-          segments: [],
-          seizureAndDiversion: true,
-          seizureAndDiversionComments: null,
-          separateStowageOfPreservedSpecies: 'YES',
-          speciesInfractions: [
+          infractions: [
+            { comments: 'Une observation sur l’infraction déclarative.', infractionType: 'WITH_RECORD', natinf: 23581 },
+            { comments: 'Une observation sur l’infraction autre.', infractionType: 'WITHOUT_RECORD', natinf: 27689 },
             {
               comments: 'Une observation sur l’infraction espèce.',
               infractionType: 'WITHOUT_RECORD',
               natinf: 23588
             }
           ],
+          logbookMatchesActivity: 'NOT_APPLICABLE',
+          longitude: -3.872,
+          missionId: 1,
+          numberOfVesselsFlownOver: null,
+          otherComments: 'Une autre observation.',
+          portLocode: null,
+          segments: [],
+          seizureAndDiversion: true,
+          seizureAndDiversionComments: null,
+          separateStowageOfPreservedSpecies: 'YES',
           speciesObservations: 'Une observation hors infraction sur les espèces.',
           speciesOnboard: [
             { controlledWeight: null, declaredWeight: 235.6, nbFish: null, speciesCode: 'HKE', underSized: false },
@@ -342,7 +337,6 @@ context('Side Window > Mission Form > Sea Control', () => {
           facade: null,
           faoAreas: ['27.8.b', '27.8.c'],
           flagState: 'FR',
-          gearInfractions: [],
           gearOnboard: [
             {
               comments: null,
@@ -362,19 +356,17 @@ context('Side Window > Mission Form > Sea Control', () => {
           latitude: 47.084,
           licencesAndLogbookObservations: null,
           licencesMatchActivity: null,
-          logbookInfractions: [],
           logbookMatchesActivity: null,
           longitude: -3.872,
           missionId: 1,
           numberOfVesselsFlownOver: null,
           otherComments: null,
-          otherInfractions: [],
           portLocode: null,
           segments: [{ segment: 'SWW02', segmentName: 'SWW02' }],
           seizureAndDiversion: false,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: null,
-          speciesInfractions: [],
+          infractions: [],
           speciesObservations: null,
           speciesOnboard: [
             { controlledWeight: null, declaredWeight: 471.2, nbFish: null, speciesCode: 'HKE', underSized: false },

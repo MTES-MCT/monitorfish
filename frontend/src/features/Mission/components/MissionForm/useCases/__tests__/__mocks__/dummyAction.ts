@@ -18,7 +18,6 @@ export const dummyAction = {
   faoAreas: ['27.8.b', '27.8.c'],
   flagState: 'FR',
   flightGoals: [],
-  gearInfractions: [],
   gearOnboard: [
     {
       comments: undefined,
@@ -33,6 +32,7 @@ export const dummyAction = {
   hasSomeGearsSeized: false,
   hasSomeSpeciesSeized: false,
   id: 123456,
+  infractions: [],
   internalReferenceNumber: 'FAK000999999',
   ircs: 'CALLME',
   isAdministrativeControl: undefined,
@@ -44,20 +44,17 @@ export const dummyAction = {
   latitude: 47.648401281163814,
   licencesAndLogbookObservations: undefined,
   licencesMatchActivity: undefined,
-  logbookInfractions: [],
   logbookMatchesActivity: undefined,
   longitude: -4.281934312813745,
   missionId: 123,
   numberOfVesselsFlownOver: undefined,
   otherComments: undefined,
-  otherInfractions: [],
   portLocode: undefined,
   portName: undefined,
   segments: [{ segment: 'SWW01/02/03', segmentName: 'Bottom trawls' }],
   seizureAndDiversion: false,
   seizureAndDiversionComments: undefined,
   separateStowageOfPreservedSpecies: undefined,
-  speciesInfractions: [],
   speciesObservations: undefined,
   speciesOnboard: [
     {

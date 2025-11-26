@@ -161,12 +161,17 @@ class MissionActionsControllerITests {
                                 missionId = 2,
                                 vesselId = 2,
                                 actionType = MissionActionType.SEA_CONTROL,
-                                logbookInfractions =
+                                infractions =
                                     listOf(
-                                        LogbookInfraction(
+                                        Infraction(
                                             InfractionType.WITH_RECORD,
                                             27689,
                                             "Poids à bord MNZ supérieur de 50% au poids déclaré",
+                                        ),
+                                        Infraction(
+                                            InfractionType.WITH_RECORD,
+                                            27689,
+                                            "Maille trop petite",
                                         ),
                                     ),
                                 faoAreas = listOf("25.6.9", "25.7.9"),
@@ -175,14 +180,6 @@ class MissionActionsControllerITests {
                                         FleetSegment(
                                             segment = "WWSS10",
                                             segmentName = "World Wide Segment",
-                                        ),
-                                    ),
-                                gearInfractions =
-                                    listOf(
-                                        GearInfraction(
-                                            InfractionType.WITH_RECORD,
-                                            27689,
-                                            "Maille trop petite",
                                         ),
                                     ),
                                 hasSomeGearsSeized = false,
@@ -202,15 +199,16 @@ class MissionActionsControllerITests {
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.missionId", equalTo(2)))
             .andExpect(jsonPath("$.vesselId", equalTo(2)))
-            .andExpect(jsonPath("$.logbookInfractions[0].infractionType", equalTo("WITH_RECORD")))
-            .andExpect(jsonPath("$.logbookInfractions[0].natinf", equalTo(27689)))
+            .andExpect(jsonPath("$.infractions.length()", equalTo(2)))
+            .andExpect(jsonPath("$.infractions[0].infractionType", equalTo("WITH_RECORD")))
+            .andExpect(jsonPath("$.infractions[0].natinf", equalTo(27689)))
             .andExpect(jsonPath("$.isAdministrativeControl", equalTo(true)))
             .andExpect(jsonPath("$.isComplianceWithWaterRegulationsControl", equalTo(true)))
             .andExpect(jsonPath("$.isSafetyEquipmentAndStandardsComplianceControl", equalTo(true)))
             .andExpect(jsonPath("$.isSeafarersControl", equalTo(true)))
             .andExpect(
                 jsonPath(
-                    "$.logbookInfractions[0].comments",
+                    "$.infractions[0].comments",
                     equalTo("Poids à bord MNZ supérieur de 50% au poids déclaré"),
                 ),
             )
@@ -250,12 +248,17 @@ class MissionActionsControllerITests {
                                 missionId = 2,
                                 vesselId = 2,
                                 actionType = MissionActionType.SEA_CONTROL,
-                                logbookInfractions =
+                                infractions =
                                     listOf(
-                                        LogbookInfraction(
+                                        Infraction(
                                             InfractionType.WITH_RECORD,
                                             27689,
                                             "Poids à bord MNZ supérieur de 50% au poids déclaré",
+                                        ),
+                                        Infraction(
+                                            InfractionType.WITH_RECORD,
+                                            27689,
+                                            "Maille trop petite",
                                         ),
                                     ),
                                 faoAreas = listOf("25.6.9", "25.7.9"),
@@ -264,14 +267,6 @@ class MissionActionsControllerITests {
                                         FleetSegment(
                                             segment = "WWSS10",
                                             segmentName = "World Wide Segment",
-                                        ),
-                                    ),
-                                gearInfractions =
-                                    listOf(
-                                        GearInfraction(
-                                            InfractionType.WITH_RECORD,
-                                            27689,
-                                            "Maille trop petite",
                                         ),
                                     ),
                                 gearOnboard = listOf(gearControl),
@@ -296,11 +291,11 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$.faoAreas[1]", equalTo("25.7.9")))
             .andExpect(jsonPath("$.segments[0].segment", equalTo("WWSS10")))
             .andExpect(jsonPath("$.segments[0].segmentName", equalTo("World Wide Segment")))
-            .andExpect(jsonPath("$.logbookInfractions[0].infractionType", equalTo("WITH_RECORD")))
-            .andExpect(jsonPath("$.logbookInfractions[0].natinf", equalTo(27689)))
+            .andExpect(jsonPath("$.infractions[0].infractionType", equalTo("WITH_RECORD")))
+            .andExpect(jsonPath("$.infractions[0].natinf", equalTo(27689)))
             .andExpect(
                 jsonPath(
-                    "$.logbookInfractions[0].comments",
+                    "$.infractions[0].comments",
                     equalTo("Poids à bord MNZ supérieur de 50% au poids déclaré"),
                 ),
             )

@@ -451,7 +451,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.get('.Table').find(`.TableBodyRow[data-id="2"]`).clickButton('Éditer la mission')
     cy.get('*[data-cy="action-list-item"]').click()
     cy.wait(500)
-    cy.contains('Autre infraction 2').should('exist')
+    cy.contains('Infraction 2').should('exist')
     cy.clickButton("Éditer l'infraction", { index: 4 })
 
     // When editing
@@ -459,7 +459,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.clickButton('Valider l’infraction')
 
     // Then
-    cy.contains('Autre infraction 2').should('exist')
+    cy.contains('Infraction 2').should('exist')
     cy.contains('Un nouveau commentaire').should('exist')
 
     // When deleting

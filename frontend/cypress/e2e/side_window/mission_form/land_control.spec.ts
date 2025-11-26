@@ -86,21 +86,18 @@ context('Side Window > Mission Form > Land Control', () => {
     // Infractions
     cy.clickButton('Ajouter une infraction')
     cy.fill('Résultat de l’infraction', 'Avec PV')
-    cy.fill('Catégorie d’infraction', 'Infraction obligations déclaratives et autorisations de pêche')
     cy.fill('NATINF', '23581')
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction déclarative.')
     cy.clickButton('Valider l’infraction')
 
     cy.clickButton('Ajouter une infraction')
     cy.fill('Résultat de l’infraction', 'Sans PV')
-    cy.fill('Catégorie d’infraction', 'Infraction espèces')
     cy.fill('NATINF', '23588')
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction espèce.')
     cy.clickButton('Valider l’infraction')
 
     cy.clickButton('Ajouter une infraction')
     cy.fill('Résultat de l’infraction', 'Sans PV')
-    cy.fill('Catégorie d’infraction', 'Autre infraction')
     cy.fill('NATINF', '27689')
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction autre.')
     cy.clickButton('Valider l’infraction')

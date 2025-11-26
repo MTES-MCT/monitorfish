@@ -69,12 +69,9 @@ export function getMissionActionInfractionsFromMissionActionFormValues(
   missionActionFormValues: MissionAction.MissionAction | MissionActionFormValues,
   withPendingInfractions: boolean = false
 ): Array<MissionAction.Infraction> {
-  return [
-    ...(missionActionFormValues.gearInfractions ? missionActionFormValues.gearInfractions : []),
-    ...(missionActionFormValues.logbookInfractions ? missionActionFormValues.logbookInfractions : []),
-    ...(missionActionFormValues.speciesInfractions ? missionActionFormValues.speciesInfractions : []),
-    ...(missionActionFormValues.otherInfractions ? missionActionFormValues.otherInfractions : [])
-  ].filter(({ natinf }) => withPendingInfractions || Boolean(natinf))
+  return (missionActionFormValues.infractions ? missionActionFormValues.infractions : []).filter(
+    ({ natinf }) => withPendingInfractions || Boolean(natinf)
+  )
 }
 
 export function getMissionActionFormInitialValues(type: MissionAction.MissionActionType): MissionActionFormValues {

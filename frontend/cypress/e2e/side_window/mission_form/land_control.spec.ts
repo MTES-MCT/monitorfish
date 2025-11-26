@@ -140,7 +140,6 @@ context('Side Window > Mission Form > Land Control', () => {
           facade: null,
           faoAreas: ['27.8.b', '27.8.c'],
           flagState: 'FR',
-          gearInfractions: [],
           gearOnboard: [
             {
               comments: null,
@@ -169,23 +168,19 @@ context('Side Window > Mission Form > Land Control', () => {
           latitude: null,
           licencesAndLogbookObservations: 'Une observation hors infraction sur les obligations déclaaratives.',
           licencesMatchActivity: 'NO',
-          logbookInfractions: [
-            { comments: 'Une observation sur l’infraction déclarative.', infractionType: 'WITH_RECORD', natinf: 23581 }
-          ],
           logbookMatchesActivity: 'NOT_APPLICABLE',
           longitude: null,
           missionId: 1,
           numberOfVesselsFlownOver: null,
           otherComments: 'Une autre observation.',
-          otherInfractions: [
-            { comments: 'Une observation sur l’infraction autre.', infractionType: 'WITHOUT_RECORD', natinf: 27689 }
-          ],
           portLocode: 'FRZEG',
           segments: [{ segment: 'SWW02', segmentName: 'SWW02' }],
           seizureAndDiversion: true,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: 'YES',
-          speciesInfractions: [
+          infractions: [
+            { comments: 'Une observation sur l’infraction déclarative.', infractionType: 'WITH_RECORD', natinf: 23581 },
+            { comments: 'Une observation sur l’infraction autre.', infractionType: 'WITHOUT_RECORD', natinf: 27689 },
             {
               comments: 'Une observation sur l’infraction espèce.',
               infractionType: 'WITHOUT_RECORD',

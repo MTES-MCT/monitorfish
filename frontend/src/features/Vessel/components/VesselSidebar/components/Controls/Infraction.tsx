@@ -1,16 +1,13 @@
-import { COLORS } from '@constants/constants'
 import { useGetNatinfsAsOptions } from '@features/Mission/components/MissionForm/hooks/useGetNatinfsAsOptions'
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { find } from 'lodash-es'
 import styled from 'styled-components'
-
-import { MissionAction } from '../../../../../Mission/missionAction.types'
 
 type InfractionProps = {
   index: number
   infraction: MissionAction.Infraction
-  infractionDomain: MissionAction.InfractionDomain
 }
-export function Infraction({ index, infraction, infractionDomain }: InfractionProps) {
+export function Infraction({ index, infraction }: InfractionProps) {
   const natinfsAsOptions = useGetNatinfsAsOptions()
 
   const infractionWithLabel = (function () {
@@ -19,30 +16,9 @@ export function Infraction({ index, infraction, infractionDomain }: InfractionPr
     return { ...infraction, infractionLabel }
   })()
 
-  const infractionDomainText = (function () {
-    switch (infractionDomain) {
-      case MissionAction.InfractionDomain.GEAR:
-        return 'engin'
-
-      case MissionAction.InfractionDomain.SPECIES:
-        return 'espèce'
-
-      case MissionAction.InfractionDomain.LOGBOOK:
-        return 'JPE'
-
-      case MissionAction.InfractionDomain.OTHER:
-        return 'autre'
-
-      default:
-        return ''
-    }
-  })()
-
   return (
     <Wrapper isFirstInfraction={index === 1}>
-      <InfractionDomainText>
-        {index}. Infraction {infractionDomainText}
-      </InfractionDomainText>
+      <InfractionTitle>Infraction {index}</InfractionTitle>
       {infraction.comments && (
         <>
           {infraction.comments}
@@ -63,7 +39,7 @@ export function Infraction({ index, infraction, infractionDomain }: InfractionPr
   )
 }
 
-const InfractionDomainText = styled.div`
+const InfractionTitle = styled.div`
   font-weight: bold;
 `
 
@@ -78,13 +54,13 @@ const Wrapper = styled.div<{
 `
 
 const InfractionTagText = styled.span`
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   margin: 0 7px 0 7px;
   font-weight: 500;
 `
 
 const InfractionTag = styled.span`
-  margin: 5px 8px 0px 0px;
+  margin: 5px 8px 0 0;
   background: ${p => p.theme.color.white};
   border-radius: 11px;
   font-size: 13px;

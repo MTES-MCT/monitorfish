@@ -15,11 +15,11 @@ export namespace MissionAction {
     facade: string | undefined
     faoAreas: string[]
     flagState: string | undefined
-    gearInfractions: Infraction[]
     gearOnboard: GearControl[]
     hasSomeGearsSeized: boolean
     hasSomeSpeciesSeized: boolean
     id: number
+    infractions: Infraction[]
     internalReferenceNumber: string | undefined
     ircs: string | undefined
     isAdministrativeControl: boolean | undefined
@@ -30,13 +30,11 @@ export namespace MissionAction {
     latitude: number | undefined
     licencesAndLogbookObservations: string | undefined
     licencesMatchActivity: ControlCheck | undefined
-    logbookInfractions: Infraction[]
     logbookMatchesActivity: ControlCheck | undefined
     longitude: number | undefined
     missionId: number
     numberOfVesselsFlownOver: number | undefined
     otherComments: string | undefined
-    otherInfractions: Infraction[]
     portLocode: string | undefined
     // This field is added by the API
     portName: string | undefined
@@ -44,7 +42,6 @@ export namespace MissionAction {
     seizureAndDiversion: boolean | undefined
     seizureAndDiversionComments: string | undefined
     separateStowageOfPreservedSpecies: ControlCheck | undefined
-    speciesInfractions: Infraction[]
     speciesObservations: string | undefined
     speciesOnboard: SpeciesControl[]
     speciesQuantitySeized: number | undefined
@@ -77,13 +74,6 @@ export namespace MissionAction {
     VMS_AIS_CHECK: 'Vérifications VMS/AIS',
     UNAUTHORIZED_FISHING: 'Pêche sans autorisation',
     CLOSED_AREA: 'Zones fermées'
-  }
-
-  export enum InfractionDomain {
-    GEAR = 'GEAR',
-    LOGBOOK = 'LOGBOOK',
-    OTHER = 'OTHER',
-    SPECIES = 'SPECIES'
   }
 
   export enum InfractionType {

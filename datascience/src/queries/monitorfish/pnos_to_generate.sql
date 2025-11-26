@@ -52,10 +52,7 @@ acknowledged_deleted_messages AS (
     v.mmsi,
     (r.value->>'riskFactor')::DOUBLE PRECISION AS risk_factor,
     rf.last_control_datetime_utc,
-    COALESCE(rf.last_control_logbook_infractions, '[]') AS last_control_logbook_infractions,
-    COALESCE(rf.last_control_gear_infractions, '[]') AS last_control_gear_infractions,
-    COALESCE(rf.last_control_species_infractions, '[]') AS last_control_species_infractions,
-    COALESCE(rf.last_control_other_infractions, '[]') AS last_control_other_infractions,
+    COALESCE(rf.last_control_infractions, '[]'::jsonb) AS last_control_infractions,
     (value->>'isVerified')::BOOLEAN AS is_verified,
     (value->>'isBeingSent')::BOOLEAN AS is_being_sent,
     'LOGBOOK' AS source
@@ -121,10 +118,7 @@ UNION ALL
     v.mmsi,
     (r.value->>'riskFactor')::DOUBLE PRECISION AS risk_factor,
     rf.last_control_datetime_utc,
-    COALESCE(rf.last_control_logbook_infractions, '[]') AS last_control_logbook_infractions,
-    COALESCE(rf.last_control_gear_infractions, '[]') AS last_control_gear_infractions,
-    COALESCE(rf.last_control_species_infractions, '[]') AS last_control_species_infractions,
-    COALESCE(rf.last_control_other_infractions, '[]') AS last_control_other_infractions,
+    COALESCE(rf.last_control_infractions, '[]'::jsonb) AS last_control_infractions,
     (value->>'isVerified')::BOOLEAN AS is_verified,
     (value->>'isBeingSent')::BOOLEAN AS is_being_sent,
     'MANUAL' AS source

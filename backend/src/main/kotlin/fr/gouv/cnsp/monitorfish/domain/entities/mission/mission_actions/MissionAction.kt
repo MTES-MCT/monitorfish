@@ -29,13 +29,10 @@ data class MissionAction(
     val speciesWeightControlled: Boolean? = null,
     val speciesSizeControlled: Boolean? = null,
     val separateStowageOfPreservedSpecies: ControlCheck? = null,
-    val logbookInfractions: List<LogbookInfraction> = listOf(),
     val licencesAndLogbookObservations: String? = null,
-    val gearInfractions: List<GearInfraction> = listOf(),
-    val speciesInfractions: List<SpeciesInfraction> = listOf(),
+    val infractions: List<Infraction> = listOf(),
     val speciesObservations: String? = null,
     val seizureAndDiversion: Boolean? = null,
-    val otherInfractions: List<OtherInfraction> = listOf(),
     val numberOfVesselsFlownOver: Int? = null,
     val unitWithoutOmegaGauge: Boolean? = null,
     val controlQualityComments: String? = null,
@@ -97,23 +94,12 @@ data class MissionAction(
         }
     }
 
-    fun containsNoInfractions(): Boolean =
-        gearInfractions.isEmpty() &&
-            speciesInfractions.isEmpty() &&
-            logbookInfractions.isEmpty() &&
-            otherInfractions.isEmpty()
+    fun containsNoInfractions(): Boolean = infractions.isEmpty()
 
-    fun containsInfractionsWithRecord(): Boolean =
-        gearInfractions.any { it.infractionType == InfractionType.WITH_RECORD } ||
-            speciesInfractions.any { it.infractionType == InfractionType.WITH_RECORD } ||
-            logbookInfractions.any { it.infractionType == InfractionType.WITH_RECORD } ||
-            otherInfractions.any { it.infractionType == InfractionType.WITH_RECORD }
+    fun containsInfractionsWithRecord(): Boolean = infractions.any { it.infractionType == InfractionType.WITH_RECORD }
 
     fun containsInfractionsWithoutRecord(): Boolean =
-        gearInfractions.any { it.infractionType == InfractionType.WITHOUT_RECORD } ||
-            speciesInfractions.any { it.infractionType == InfractionType.WITHOUT_RECORD } ||
-            logbookInfractions.any { it.infractionType == InfractionType.WITHOUT_RECORD } ||
-            otherInfractions.any { it.infractionType == InfractionType.WITHOUT_RECORD }
+        infractions.any { it.infractionType == InfractionType.WITHOUT_RECORD }
 
     private fun checkControlPosition() {
         require(this.longitude != null) {

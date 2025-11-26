@@ -7,8 +7,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory
+import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository

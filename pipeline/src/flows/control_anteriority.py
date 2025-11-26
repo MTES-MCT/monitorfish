@@ -518,10 +518,7 @@ def load_control_anteriority(control_anteriority: pd.DataFrame):
         logger=get_run_logger(),
         how="replace",
         jsonb_columns=[
-            "last_control_logbook_infractions",
-            "last_control_gear_infractions",
-            "last_control_species_infractions",
-            "last_control_other_infractions",
+            "last_control_infractions",
         ],
     )
 

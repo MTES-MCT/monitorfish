@@ -66,7 +66,7 @@ spring:
             jakarta:
                 persistence:
                     query:
-                        timeout: ${MONITORFISH_DATABASE_TIMEOUT}
+                        timeout: ${MONITORFISH_DATABASE_QUERY_TIMEOUT}
             hibernate:
                 temp:
                     use_jdbc_metadata_defaults: false

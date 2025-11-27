@@ -292,7 +292,7 @@
                 "separate_stowage_of_preserved_species": "NO",
                 "licences_and_logbook_observations": null,
                 "number_of_vessels_flown_over": null,
-                "unit_without_omega_gauge": null,
+                "unit_without_omega_gauge": false,
                 "control_quality_comments": null,
                 "is_from_poseidon": false,
                 "user_trigram": "JKL",

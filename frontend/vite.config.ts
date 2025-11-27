@@ -73,6 +73,9 @@ export default defineConfig({
       '/realms': {
         target: 'http://localhost:8880'
       },
+      '/resources': {
+        target: 'http://localhost:8880'
+      },
       '/logout': {
         target: 'http://localhost:8880'
       },

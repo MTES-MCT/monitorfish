@@ -77,8 +77,10 @@ SELECT
     COALESCE(infraction_categories, '{Aucune infraction}'::VARCHAR[]) AS infraction_categories,
     COALESCE(infraction_natinfs, '{Aucune infraction}'::VARCHAR[]) AS infraction_natinfs,
     COALESCE(seizure_and_diversion, false) AS seizure_and_diversion,
-    COALESCE(inf.infraction_comments, '') AS infraction_comments
+    COALESCE(inf.infraction_comments, '') AS infraction_comments,
+    COALESCE(segment->>'segment', 'Hors segment') AS segment
 FROM mission_actions a
+LEFT JOIN LATERAL jsonb_array_elements(CASE WHEN jsonb_typeof(segments) = 'array' THEN segments ELSE '[]' END) AS segment on true
 LEFT JOIN controls_infraction_natinfs_array inf ON inf.id = a.id
 LEFT JOIN ports ON ports.locode = a.port_locode
 JOIN analytics_missions m ON a.mission_id = m.id

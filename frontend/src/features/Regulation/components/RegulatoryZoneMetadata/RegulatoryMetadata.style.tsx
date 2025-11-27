@@ -63,7 +63,7 @@ export const Section = styled.div`
   color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
   font-weight: 500;
-  padding: 15px 45px 15px 20px;
+  padding: 16px;
   text-align: left;
   border-bottom: 1px solid ${p => p.theme.color.lightGray};
 

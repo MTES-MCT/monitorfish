@@ -1,16 +1,13 @@
-import { useEffect, useState } from 'react'
+import { THEME } from '@mtes-mct/monitor-ui'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
-import { GearsOrGearCategories } from './GearsOrGearCategories'
-import { COLORS } from '../../../../../constants/constants'
-import { getGroupCategories, REGULATED_GEARS_KEYS } from '../../../../../domain/entities/backoffice'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { theme } from '../../../../../ui/theme'
 import { GreenCircle, RedCircle } from '../../../../commonStyles/Circle.style'
 import { InfoPoint } from '../../RegulationForm/InfoPoint'
 import { INFO_TEXT } from '../../RegulationTables/constants'
 import { Label, List, SectionTitle } from '../RegulatoryMetadata.style'
+import { CategoriesList } from './CategoriesList'
 
 import type { RegulatedGears as RegulatedGearsType } from '../../../types'
 
@@ -24,39 +21,8 @@ export function RegulatedGears({
   hasPreviousRegulatedGearsBloc = false,
   regulatedGearsObject
 }: RegulatedGearsProps) {
-  const categoriesToGears = useMainAppSelector(state => state.gear.categoriesToGears)
-  const groupsToCategories = useMainAppSelector(state => state.gear.groupsToCategories)
-
   const { allGears, allPassiveGears, allTowedGears, derogation, otherInfo, regulatedGearCategories, regulatedGears } =
     regulatedGearsObject
-
-  const [filteredRegulatedGearCategories, setFilteredRegulatedGearCategories] = useState(regulatedGearCategories)
-  const towedGearsCategories = getGroupCategories(REGULATED_GEARS_KEYS.ALL_TOWED_GEARS, groupsToCategories)
-  const passiveGearsCategories = getGroupCategories(REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS, groupsToCategories)
-
-  useEffect(() => {
-    const nextFilteredRegulatedGearCategories = { ...regulatedGearCategories }
-    if (allTowedGears) {
-      towedGearsCategories.forEach(category => {
-        delete nextFilteredRegulatedGearCategories[category]
-      })
-    }
-
-    if (allPassiveGears) {
-      passiveGearsCategories.forEach(category => {
-        delete nextFilteredRegulatedGearCategories[category]
-      })
-    }
-
-    setFilteredRegulatedGearCategories(nextFilteredRegulatedGearCategories)
-  }, [
-    allPassiveGears,
-    allTowedGears,
-    groupsToCategories,
-    passiveGearsCategories,
-    regulatedGearCategories,
-    towedGearsCategories
-  ])
 
   const dataCyTarget = authorized ? 'authorized' : 'unauthorized'
 
@@ -66,9 +32,8 @@ export function RegulatedGears({
         {authorized ? <GreenCircle $margin="0 5px 0 0" /> : <RedCircle $margin="0 5px 0 0" />}
         Engins {authorized ? 'réglementés' : 'interdits'}
       </SectionTitle>
-      {allGears ? (
-        <Label>Tous les engins</Label>
-      ) : (
+      {allGears && <Label>Tous les engins</Label>}
+      {!allGears && (
         <List>
           {allTowedGears && (
             <Label
@@ -88,17 +53,17 @@ export function RegulatedGears({
               <InfoPoint margin="3px" title={INFO_TEXT.PASSIVE_GEAR} />
             </Label>
           )}
-          <GearsOrGearCategories list={regulatedGears} />
-          <GearsOrGearCategories
-            categoriesToGears={categoriesToGears}
-            isCategory
-            list={filteredRegulatedGearCategories}
+          <CategoriesList
+            allPassiveGears={!!allPassiveGears}
+            allTowedGears={!!allTowedGears}
+            regulatedGearCategories={regulatedGearCategories}
+            regulatedGears={regulatedGears}
           />
         </List>
       )}
       {!authorized && derogation && (
         <Derogation>
-          <InfoPoint backgroundColor={theme.color.goldenPoppy} color={COLORS.charcoal} margin="3px 0 0 0" />
+          <InfoPoint backgroundColor={theme.color.goldenPoppy} color={THEME.color.charcoal} margin="3px 0 0 0" />
           <DerogationMessage>Mesures dérogatoire: consulter les références réglementaires</DerogationMessage>
         </Derogation>
       )}
@@ -116,6 +81,6 @@ const Derogation = styled.span`
 `
 
 const DerogationMessage = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   margin-left: 4px;
 `

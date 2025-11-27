@@ -1,8 +1,9 @@
 import ReactMarkdown from 'react-markdown'
+import styled from 'styled-components'
 
 import { GreenCircle, RedCircle } from '../../../../commonStyles/Circle.style'
 import { CodeAndName } from '../CodeAndName'
-import { Elem, Field, Fields, Key, Label, List, SectionTitle, Value } from '../RegulatoryMetadata.style'
+import { Elem, Label, List, SectionTitle } from '../RegulatoryMetadata.style'
 
 import type { RegulatedSpecies as RegulatedSpeciesType } from '../../../types'
 
@@ -37,18 +38,7 @@ export function RegulatedSpecies({
                 return (
                   <Elem key={code}>
                     <CodeAndName code={code} name={name} />
-                    <Fields>
-                      <tbody>
-                        {remarks && (
-                          <Field>
-                            <Key>Remarques</Key>
-                            <Value>
-                              <ReactMarkdown>{remarks}</ReactMarkdown>
-                            </Value>
-                          </Field>
-                        )}
-                      </tbody>
-                    </Fields>
+                    <Remarks>{remarks}</Remarks>
                   </Elem>
                 )
               })
@@ -65,3 +55,7 @@ export function RegulatedSpecies({
     </div>
   )
 }
+
+const Remarks = styled(ReactMarkdown)`
+  margin-left: 24px;
+`

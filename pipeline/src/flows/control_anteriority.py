@@ -228,7 +228,7 @@ def transform_vessels_most_recent_control(controls: pd.DataFrame) -> pd.DataFram
         controls.post_control_comments != "", None
     )
     controls = controls.drop(
-        columns=["infraction_comments", "last_control_infractions"]
+        columns=["infraction_comments"]
     )
     return controls
 

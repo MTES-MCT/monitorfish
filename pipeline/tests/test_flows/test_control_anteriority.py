@@ -132,11 +132,11 @@ def last_years_controls():
             "infractions_natinf_codes": [
                 [],
                 [],
-                [17, 1030, 1031, 22206],
+                [17, 1030, 1031],
                 [22182],
                 [20233],
                 [],
-                [27724, 2606, 4761, 22206],
+                [27724],
                 [17],
                 [1030],
                 [7061],
@@ -188,7 +188,7 @@ def last_years_controls():
                 False,
                 False,
                 False,
-                True,
+                False,
                 False,
                 False,
                 False,
@@ -213,7 +213,7 @@ def last_years_controls():
                 False,
                 True,
                 False,
-                False,
+                True,
                 False,
                 False,
                 False,
@@ -249,14 +249,9 @@ def vessels_most_recent_control() -> pd.DataFrame:
             ],
             "last_control_infractions": [
                 [
-                    {"natinf": 17, "comments": "Infraction espèces 1"},
+                    {"comments": "Infraction espèces 1", "natinf": 17},
                     {"natinf": 1030},
                     {"natinf": 1031},
-                    {
-                        "natinf": 22206,
-                        "comments": "Infraction 1",
-                        "infractionType": "WITH_RECORD",
-                    },
                 ],
                 [
                     {
@@ -297,11 +292,25 @@ def transformed_vessels_most_recent_control():
                 "SB125334",
                 None,
             ],
+            "last_control_infractions": [
+                [
+                    {"comments": "Infraction espèces 1", "natinf": 17},
+                    {"natinf": 1030},
+                    {"natinf": 1031},
+                ],
+                [
+                    {
+                        "natinf": 7061,
+                        "comments": "Infraction 7",
+                        "infractionType": "WITH_RECORD",
+                    }
+                ],
+                [],
+                [],
+                [],
+            ],
             "post_control_comments": [
-                (
-                    "OTB 70MM DÉCLARÉ - signaux pyrotechniques périmés - "
-                    "Infraction espèces 1, Infraction 1"
-                ),
+                "OTB 70MM DÉCLARÉ - signaux pyrotechniques périmés - Infraction espèces 1",
                 (
                     "Saisie: APPREHNTION DE 1600 KG DE SCE - "
                     "PECHE DE LA SCE EN ZONE 5 FERMEE - "
@@ -355,7 +364,7 @@ def infraction_rate_risk_factors() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "vessel_id": [1, 2, 3, 4, 483],
-            "infraction_score": [45.2, -5.5, -1.0, -1.9, -1.9],
+            "infraction_score": [33.2, -5.5, -1.0, -1.9, -1.9],
             "infraction_rate_risk_factor": [4, 1, 1, 1, 1],
         }
     )
@@ -367,10 +376,10 @@ def control_statistics() -> pd.DataFrame:
         {
             "vessel_id": [1, 2, 3, 4, 483],
             "number_controls_last_5_years": [7, 11, 1, 2, 2],
-            "number_infractions_last_5_years": [12, 1, 0, 1, 0],
+            "number_infractions_last_5_years": [8, 1, 0, 1, 0],
             "number_vessel_seizures_last_5_years": [2, 1, 0, 0, 2],
-            "number_gear_seizures_last_5_years": [1, 0, 0, 0, 0],
-            "number_species_seizures_last_5_years": [1, 0, 0, 0, 0],
+            "number_gear_seizures_last_5_years": [2, 0, 0, 0, 0],
+            "number_species_seizures_last_5_years": [0, 0, 0, 0, 0],
             "number_controls_last_3_years": [4, 11, 1, 2, 1],
         }
     )
@@ -415,10 +424,7 @@ def loaded_control_anteriority() -> pd.DataFrame:
             ],
             "last_control_infraction": [True, True, False, False, False],
             "post_control_comments": [
-                (
-                    "OTB 70MM DÉCLARÉ - signaux pyrotechniques périmés - "
-                    "Infraction espèces 1, Infraction 1"
-                ),
+                "OTB 70MM DÉCLARÉ - signaux pyrotechniques périmés - Infraction espèces 1",
                 (
                     "Saisie: APPREHNTION DE 1600 KG DE SCE - "
                     "PECHE DE LA SCE EN ZONE 5 FERMEE - APPREHENTION DE 1600 KG DE SCE "
@@ -429,20 +435,20 @@ def loaded_control_anteriority() -> pd.DataFrame:
                 "Contrôle Poséidon à mettre à jour",
             ],
             "number_recent_controls": [
-                2.45072991,
-                5.50638683,
-                0.99361314,
-                1.98266423,
-                1.83120437,
+                2.450730,
+                5.510949,
+                0.993613,
+                1.982664,
+                1.831204,
             ],
             "control_rate_risk_factor": [1.0, 1.0, 2.5, 1.75, 1.75],
-            "infraction_score": [54.9, -5.5, -1.0, -1.9, -1.9],
+            "infraction_score": [35.9, -5.5, -1.0, -1.9, -1.9],
             "infraction_rate_risk_factor": [4.0, 1.0, 1.0, 1.0, 1.0],
             "number_controls_last_5_years": [7, 11, 1, 2, 2],
             "number_controls_last_3_years": [5, 11, 1, 2, 2],
-            "number_infractions_last_5_years": [12, 1, 0, 1, 0],
-            "number_gear_seizures_last_5_years": [1, 0, 0, 0, 0],
-            "number_species_seizures_last_5_years": [1, 0, 0, 0, 0],
+            "number_infractions_last_5_years": [8, 1, 0, 1, 0],
+            "number_gear_seizures_last_5_years": [2, 0, 0, 0, 0],
+            "number_species_seizures_last_5_years": [0, 0, 0, 0, 0],
             "number_vessel_seizures_last_5_years": [2, 1, 0, 0, 2],
         }
     )

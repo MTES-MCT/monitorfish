@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.development
 
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
-import io.ktor.client.request.forms.*
 import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -113,17 +113,46 @@ class KeycloakProxyController(
     fun getResources(
         proxy: ProxyExchange<ByteArray?>,
         request: HttpServletRequest,
-    ): ResponseEntity<*> {
+        response: HttpServletResponse,
+    ): Void? {
         val targetUri = "${oidcProperties.proxyUrl}${request.requestURI}"
 
-        val response =
+        val proxiedResponse =
             proxy
                 .uri(targetUri)
+                .header("Accept-Encoding", "identity")
+                .header("Connection", "close")
                 .get()
 
-        // Remove duplicate CORS header added by Spring Cloud Gateway MVC
-        // See: https://github.com/spring-cloud/spring-cloud-gateway/issues/3787
-        return removeCorsHeader(response)
+        val cleanedResponse = removeCorsHeader(proxiedResponse)
+        val body = cleanedResponse.body as? ByteArray
+
+        response.status = cleanedResponse.statusCode.value()
+
+        // Copy headers, excluding problematic ones that cause chunked encoding issues
+        cleanedResponse.headers.forEach { (name, values) ->
+            if (name.lowercase() !in
+                setOf(
+                    "transfer-encoding",
+                    "content-encoding",
+                    "content-length",
+                    "connection",
+                )
+            ) {
+                values.forEach { value ->
+                    response.addHeader(name, value)
+                }
+            }
+        }
+
+        // Set Content-Length and write body to prevent chunked encoding
+        if (body != null) {
+            response.setHeader("Content-Length", body.size.toString())
+            response.outputStream.write(body)
+        }
+
+        response.flushBuffer()
+        return null
     }
 
     /**

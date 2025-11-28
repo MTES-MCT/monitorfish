@@ -77,12 +77,7 @@ export const getNumberOfInfractions = (
     return 0
   }
 
-  return (
-    (control.gearInfractions?.length ?? 0) +
-    (control.logbookInfractions?.length ?? 0) +
-    (control.speciesInfractions?.length ?? 0) +
-    (control.otherInfractions?.length ?? 0)
-  )
+  return control.infractions?.length ?? 0
 }
 
 /**
@@ -97,12 +92,7 @@ export const getNumberOfInfractionsWithRecord = (
 
   const infractionWithRecordFilter = infraction => infraction.infractionType === InfractionType.WITH_RECORD
 
-  return (
-    (control.gearInfractions?.filter(infractionWithRecordFilter).length ?? 0) +
-    (control.logbookInfractions?.filter(infractionWithRecordFilter).length ?? 0) +
-    (control.speciesInfractions?.filter(infractionWithRecordFilter).length ?? 0) +
-    (control.otherInfractions?.filter(infractionWithRecordFilter).length ?? 0)
-  )
+  return control.infractions?.filter(infractionWithRecordFilter).length ?? 0
 }
 
 export const isControl = actionType =>
@@ -121,12 +111,7 @@ export const getNumberOfInfractionsWithoutRecord = (control: MissionAction.Missi
     return 0
   }
 
-  return (
-    control.gearInfractions.filter(infractionWithoutRecordFilter).length +
-    control.logbookInfractions.filter(infractionWithoutRecordFilter).length +
-    control.speciesInfractions.filter(infractionWithoutRecordFilter).length +
-    control.otherInfractions.filter(infractionWithoutRecordFilter).length
-  )
+  return control.infractions.filter(infractionWithoutRecordFilter).length
 }
 
 /**
@@ -137,12 +122,5 @@ export const getNatinfForInfractionsWithoutRecord = (control: MissionAction.Miss
     return []
   }
 
-  const listOfNatinfForInfractionsWithoutRecords: number[] = [
-    ...control.gearInfractions.filter(infractionWithoutRecordFilter).map(infraction => infraction.natinf),
-    ...control.logbookInfractions.filter(infractionWithoutRecordFilter).map(infraction => infraction.natinf),
-    ...control.speciesInfractions.filter(infractionWithoutRecordFilter).map(infraction => infraction.natinf),
-    ...control.otherInfractions.filter(infractionWithoutRecordFilter).map(infraction => infraction.natinf)
-  ]
-
-  return listOfNatinfForInfractionsWithoutRecords
+  return control.infractions.filter(infractionWithoutRecordFilter).map(infraction => infraction.natinf)
 }

@@ -34,9 +34,6 @@ export function Control({ control }: ControlProps) {
   const numberOfInfractionsWithRecord = getNumberOfInfractionsWithRecord(control)
   const numberOfInfractionsWithoutRecord = getNumberOfInfractionsWithoutRecord(control)
   const numberOfInfractions = numberOfInfractionsWithRecord + numberOfInfractionsWithoutRecord
-  const gearAndSpeciesInfractionsLength = control.gearInfractions.length + control.speciesInfractions.length
-  const gearSpeciesAndLogbookInfractionsLength =
-    control.gearInfractions.length + control.speciesInfractions.length + control.logbookInfractions.length
 
   const openMission = () => {
     dispatch(editMission(control.missionId))
@@ -120,36 +117,11 @@ export function Control({ control }: ControlProps) {
             )}
           </StyledTagGroup>
         )}
-        {control.gearInfractions.map((infraction, index) => (
+        {control.infractions.map((infraction, index) => (
           <Infraction
             key={`${infraction.infractionType}${infraction.natinf}${infraction.comments}`}
             index={index + 1}
             infraction={infraction}
-            infractionDomain={MissionAction.InfractionDomain.GEAR}
-          />
-        ))}
-        {control.speciesInfractions.map((infraction, index) => (
-          <Infraction
-            key={`${infraction.infractionType}${infraction.natinf}${infraction.comments}`}
-            index={control.gearInfractions.length + index + 1}
-            infraction={infraction}
-            infractionDomain={MissionAction.InfractionDomain.SPECIES}
-          />
-        ))}
-        {control.logbookInfractions.map((infraction, index) => (
-          <Infraction
-            key={`${infraction.infractionType}${infraction.natinf}${infraction.comments}`}
-            index={gearAndSpeciesInfractionsLength + index + 1}
-            infraction={infraction}
-            infractionDomain={MissionAction.InfractionDomain.LOGBOOK}
-          />
-        ))}
-        {control.otherInfractions.map((infraction, index) => (
-          <Infraction
-            key={`${infraction.infractionType}${infraction.natinf}${infraction.comments}`}
-            index={gearSpeciesAndLogbookInfractionsLength + index + 1}
-            infraction={infraction}
-            infractionDomain={MissionAction.InfractionDomain.OTHER}
           />
         ))}
         {control.gearOnboard.map(gear => (

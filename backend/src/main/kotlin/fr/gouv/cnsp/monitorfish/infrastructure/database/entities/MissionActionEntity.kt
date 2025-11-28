@@ -69,24 +69,15 @@ class MissionActionEntity(
     @Column(name = "separate_stowage_of_preserved_species")
     @Enumerated(EnumType.STRING)
     val separateStowageOfPreservedSpecies: ControlCheck? = null,
-    @Type(JsonBinaryType::class)
-    @Column(name = "logbook_infractions", columnDefinition = "jsonb")
-    val logbookInfractions: String? = null,
     @Column(name = "licences_and_logbook_observations")
     val licencesAndLogbookObservations: String? = null,
     @Type(JsonBinaryType::class)
-    @Column(name = "gear_infractions", columnDefinition = "jsonb")
-    val gearInfractions: String? = null,
-    @Type(JsonBinaryType::class)
-    @Column(name = "species_infractions", columnDefinition = "jsonb")
-    val speciesInfractions: String? = null,
+    @Column(name = "infractions", columnDefinition = "jsonb")
+    val infractions: String? = null,
     @Column(name = "species_observations")
     val speciesObservations: String? = null,
     @Column(name = "seizure_and_diversion")
     val seizureAndDiversion: Boolean? = null,
-    @Type(JsonBinaryType::class)
-    @Column(name = "other_infractions", columnDefinition = "jsonb")
-    val otherInfractions: String? = null,
     @Column(name = "number_of_vessels_flown_over")
     val numberOfVesselsFlownOver: Int? = null,
     @Column(name = "unit_without_omega_gauge")
@@ -173,13 +164,10 @@ class MissionActionEntity(
                 speciesWeightControlled = missionAction.speciesWeightControlled,
                 speciesSizeControlled = missionAction.speciesSizeControlled,
                 separateStowageOfPreservedSpecies = missionAction.separateStowageOfPreservedSpecies,
-                logbookInfractions = mapper.writeValueAsString(missionAction.logbookInfractions),
+                infractions = mapper.writeValueAsString(missionAction.infractions),
                 licencesAndLogbookObservations = missionAction.licencesAndLogbookObservations,
-                gearInfractions = mapper.writeValueAsString(missionAction.gearInfractions),
-                speciesInfractions = mapper.writeValueAsString(missionAction.speciesInfractions),
                 speciesObservations = missionAction.speciesObservations,
                 seizureAndDiversion = missionAction.seizureAndDiversion,
-                otherInfractions = mapper.writeValueAsString(missionAction.otherInfractions),
                 numberOfVesselsFlownOver = missionAction.numberOfVesselsFlownOver,
                 unitWithoutOmegaGauge = missionAction.unitWithoutOmegaGauge,
                 controlQualityComments = missionAction.controlQualityComments,
@@ -237,23 +225,10 @@ class MissionActionEntity(
             speciesWeightControlled = speciesWeightControlled,
             speciesSizeControlled = speciesSizeControlled,
             separateStowageOfPreservedSpecies = separateStowageOfPreservedSpecies,
-            logbookInfractions =
-                deserializeJSONList(
-                    mapper,
-                    logbookInfractions,
-                    LogbookInfraction::class.java,
-                ),
             licencesAndLogbookObservations = licencesAndLogbookObservations,
-            gearInfractions =
-                deserializeJSONList(
-                    mapper,
-                    gearInfractions,
-                    GearInfraction::class.java,
-                ),
-            speciesInfractions = deserializeJSONList(mapper, speciesInfractions, SpeciesInfraction::class.java),
+            infractions = deserializeJSONList(mapper, infractions, Infraction::class.java),
             speciesObservations = speciesObservations,
             seizureAndDiversion = seizureAndDiversion,
-            otherInfractions = deserializeJSONList(mapper, otherInfractions, OtherInfraction::class.java),
             numberOfVesselsFlownOver = numberOfVesselsFlownOver,
             unitWithoutOmegaGauge = unitWithoutOmegaGauge,
             controlQualityComments = controlQualityComments,

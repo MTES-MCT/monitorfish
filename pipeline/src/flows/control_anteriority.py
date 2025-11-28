@@ -228,7 +228,7 @@ def transform_vessels_most_recent_control(controls: pd.DataFrame) -> pd.DataFram
         controls.post_control_comments != "", None
     )
     controls = controls.drop(
-        columns=["infraction_comments", "last_control_infractions"]
+        columns=["infraction_comments"]
     )
     return controls
 
@@ -282,13 +282,17 @@ def compute_control_rate_risk_factors(controls: pd.DataFrame) -> pd.DataFrame:
         .reset_index()
     )
 
-    control_rate_risk_factors['last_control_at_sea_datetime_utc'] = control_rate_risk_factors['vessel_id'].map(
+    control_rate_risk_factors[
+        "last_control_at_sea_datetime_utc"
+    ] = control_rate_risk_factors["vessel_id"].map(
         controls_.query("action_type == 'SEA_CONTROL'")
         .groupby("vessel_id")["control_datetime_utc"]
         .max()
     )
 
-    control_rate_risk_factors['last_control_at_quay_datetime_utc'] = control_rate_risk_factors['vessel_id'].map(
+    control_rate_risk_factors[
+        "last_control_at_quay_datetime_utc"
+    ] = control_rate_risk_factors["vessel_id"].map(
         controls_.query("action_type == 'LAND_CONTROL'")
         .groupby("vessel_id")["control_datetime_utc"]
         .max()
@@ -518,10 +522,7 @@ def load_control_anteriority(control_anteriority: pd.DataFrame):
         logger=get_run_logger(),
         how="replace",
         jsonb_columns=[
-            "last_control_logbook_infractions",
-            "last_control_gear_infractions",
-            "last_control_species_infractions",
-            "last_control_other_infractions",
+            "last_control_infractions",
         ],
     )
 

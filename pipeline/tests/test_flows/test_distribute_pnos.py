@@ -592,27 +592,17 @@ def extracted_pnos() -> pd.DataFrame:
                 None,
                 None,
             ],
-            "last_control_logbook_infractions": [[], [], [], [], [], [], [], [], []],
-            "last_control_gear_infractions": [
+            "last_control_infractions": [
                 [
                     {
                         "natinf": 27724,
                         "comments": "Infraction engin",
                         "infractionType": "WITHOUT_RECORD",
-                    }
+                    },
+                    {"natinf": 2606},
+                    {"natinf": 4761},
+                    {"natinf": 22206},
                 ],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-            ],
-            "last_control_species_infractions": [[], [], [], [], [], [], [], [], []],
-            "last_control_other_infractions": [
-                [{"natinf": 2606}, {"natinf": 4761}, {"natinf": 22206}],
                 [],
                 [],
                 [],
@@ -747,16 +737,12 @@ def pno_to_render_1() -> PnoToRender:
         mmsi=None,
         risk_factor=2.09885592141872,
         last_control_datetime_utc=datetime(2023, 6, 3, 9, 13, 38, 259967),
-        last_control_logbook_infractions=[],
-        last_control_gear_infractions=[
+        last_control_infractions=[
             {
                 "natinf": 27724,
                 "comments": "Infraction engin",
                 "infractionType": "WITHOUT_RECORD",
-            }
-        ],
-        last_control_species_infractions=[],
-        last_control_other_infractions=[
+            },
             {"natinf": 2606},
             {"natinf": 4761},
             {"natinf": 22206},
@@ -831,12 +817,8 @@ def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
         mmsi=None,
         risk_factor=2.09885592141872,
         last_control_datetime_utc=datetime(2023, 6, 3, 9, 13, 38, 259967),
-        last_control_logbook_infractions=[],
-        last_control_gear_infractions=[
-            Infraction(natinf=27724, comments="Infraction engin")
-        ],
-        last_control_species_infractions=[],
-        last_control_other_infractions=[
+        last_control_infractions=[
+            Infraction(natinf=27724, comments="Infraction engin"),
             Infraction(natinf=2606, comments=None),
             Infraction(natinf=4761, comments=None),
             Infraction(natinf=22206, comments=None),
@@ -875,10 +857,7 @@ def pno_to_render_2() -> PnoToRender:
         mmsi=None,
         risk_factor=np.nan,
         last_control_datetime_utc=pd.NaT,
-        last_control_logbook_infractions=[],
-        last_control_gear_infractions=[],
-        last_control_species_infractions=[],
-        last_control_other_infractions=[],
+        last_control_infractions=[],
         is_verified=True,
         is_being_sent=True,
         source=PnoSource.LOGBOOK,
@@ -914,10 +893,7 @@ def pre_rendered_pno_2() -> PreRenderedPno:
         mmsi=None,
         risk_factor=default_risk_factors["risk_factor"],
         last_control_datetime_utc=None,
-        last_control_logbook_infractions=[],
-        last_control_gear_infractions=[],
-        last_control_species_infractions=[],
-        last_control_other_infractions=[],
+        last_control_infractions=[],
         is_verified=True,
         is_being_sent=True,
         source=PnoSource.LOGBOOK,

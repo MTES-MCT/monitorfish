@@ -47,7 +47,6 @@ context('Side Window > Mission Form > Air Control', () => {
     // Infractions
     cy.clickButton('Ajouter une infraction')
     cy.fill('Résultat de l’infraction', 'Avec PV')
-    cy.fill('Catégorie d’infraction', 'Autre infraction')
     cy.fill('NATINF', '23581')
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction.')
     cy.clickButton('Valider l’infraction')
@@ -80,7 +79,6 @@ context('Side Window > Mission Form > Air Control', () => {
           externalReferenceNumber: 'DONTSINK',
           facade: null,
           flagState: 'FR',
-          gearInfractions: [],
           gearOnboard: [],
           id: 2,
           internalReferenceNumber: 'FAK000999999',
@@ -88,13 +86,12 @@ context('Side Window > Mission Form > Air Control', () => {
           latitude: 47.084,
           licencesAndLogbookObservations: null,
           licencesMatchActivity: null,
-          logbookInfractions: [],
           logbookMatchesActivity: null,
           longitude: -3.872,
           missionId: 1,
           numberOfVesselsFlownOver: null,
           otherComments: 'Une autre observation.',
-          otherInfractions: [
+          infractions: [
             { comments: 'Une observation sur l’infraction.', infractionType: 'WITH_RECORD', natinf: 23581 }
           ],
           portLocode: null,
@@ -102,7 +99,6 @@ context('Side Window > Mission Form > Air Control', () => {
           seizureAndDiversion: null,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: null,
-          speciesInfractions: [],
           speciesObservations: null,
           speciesOnboard: [],
           speciesSizeControlled: null,

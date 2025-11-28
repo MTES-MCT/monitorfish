@@ -3,13 +3,11 @@ import { FrontendError } from '@libs/FrontendError'
 import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { find } from 'lodash-es'
-import { remove as ramdaRemove, update as ramdaUpdate } from 'ramda'
 import { Fragment, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { Infraction } from './Infraction'
 import { InfractionForm } from './InfractionForm'
-import { InfractionCategory } from './types'
 import { useGetNatinfsAsOptions } from '../../../hooks/useGetNatinfsAsOptions'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../../shared/FieldsetGroupSeparator'
@@ -24,36 +22,17 @@ type FormikMultiInfractionPickerProps = Readonly<{
 export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMultiInfractionPickerProps) {
   const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
 
-  const [editedInfraction, setEditedInfraction] = useState<{ index: number; infractionGroup: string } | undefined>(
-    undefined
-  )
+  const [editedInfractionIndex, setEditedInfractionIndex] = useState<number | undefined>(undefined)
   const [isNewInfractionFormOpen, setIsNewInfractionFormOpen] = useState(false)
 
   const natinfsAsOptions = useGetNatinfsAsOptions()
 
-  const infractionsWithLabelGroupAndIndex = useMemo(() => {
-    const allInfractions = [
-      ...(values.gearInfractions?.map((infraction, index) => ({
+  const infractionsWithLabelAndIndex = useMemo(() => {
+    const allInfractions =
+      values.infractions?.map((infraction, index) => ({
         ...infraction,
-        group: InfractionCategory.GEAR_INFRACTIONS,
         index
-      })) ?? []),
-      ...(values.logbookInfractions?.map((infraction, index) => ({
-        ...infraction,
-        group: InfractionCategory.LOGBOOK_INFRACTION,
-        index
-      })) ?? []),
-      ...(values.otherInfractions?.map((infraction, index) => ({
-        ...infraction,
-        group: InfractionCategory.OTHER_INFRACTIONS,
-        index
-      })) ?? []),
-      ...(values.speciesInfractions?.map((infraction, index) => ({
-        ...infraction,
-        group: InfractionCategory.SPECIES_INFRACTIONS,
-        index
-      })) ?? [])
-    ]
+      })) ?? []
     if (!allInfractions.length) {
       return []
     }
@@ -63,16 +42,10 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
 
       return { ...infraction, label: nextInfractionLabel }
     })
-  }, [
-    values.gearInfractions,
-    values.logbookInfractions,
-    values.otherInfractions,
-    values.speciesInfractions,
-    natinfsAsOptions
-  ])
+  }, [values.infractions, natinfsAsOptions])
 
   const closeInfractionForm = useCallback(() => {
-    setEditedInfraction(undefined)
+    setEditedInfractionIndex(undefined)
   }, [])
 
   const closeNewInfractionForm = useCallback(() => {
@@ -80,55 +53,48 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
   }, [])
 
   const create = useCallback(
-    (newInfractionFormValues: MissionAction.Infraction, infractionGroup: string | undefined) => {
-      if (!infractionGroup) {
-        return
-      }
-
+    (newInfractionFormValues: MissionAction.Infraction) => {
       const newInfractionWithComments: MissionAction.Infraction = {
         ...newInfractionFormValues,
         comments: newInfractionFormValues.comments || ''
       }
 
-      const nextInfractions = [...(values[infractionGroup] || []), newInfractionWithComments]
+      const nextInfractions = [...(values.infractions ?? []), newInfractionWithComments]
 
-      setFieldValue(infractionGroup, nextInfractions)
+      setFieldValue('infractions', nextInfractions)
 
       setIsNewInfractionFormOpen(false)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [values.gearInfractions, values.logbookInfractions, values.otherInfractions, values.speciesInfractions]
+    [values.infractions]
   )
 
   const remove = useCallback(
-    (index: number, infractionGroup: string) => {
-      if (!values[infractionGroup]) {
-        throw new FrontendError('`values[infractionGroup]` is undefined')
-      }
-
-      const nextInfractions = ramdaRemove(index, 1, values[infractionGroup])
+    (index: number) => {
+      const infractions = values.infractions ?? []
+      const nextInfractions = [...infractions.slice(0, index), ...infractions.slice(index + 1)]
       const normalizedNextInfractions = nextInfractions.length > 0 ? nextInfractions : undefined
 
-      setFieldValue(infractionGroup, normalizedNextInfractions)
+      setFieldValue('infractions', normalizedNextInfractions)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [values.gearInfractions, values.logbookInfractions, values.otherInfractions, values.speciesInfractions]
+    [values.infractions]
   )
 
   const openNewInfractionForm = useCallback(() => {
     setIsNewInfractionFormOpen(true)
   }, [])
 
-  const onEdit = useCallback((index: number, infractionGroup: string) => {
-    setEditedInfraction({ index, infractionGroup })
+  const onEdit = useCallback((index: number) => {
+    setEditedInfractionIndex(index)
   }, [])
 
   const update = useCallback(
     (nextInfractionFormValues: MissionAction.Infraction) => {
-      if (editedInfraction === undefined || !values[editedInfraction.infractionGroup]) {
-        throw new FrontendError('`editedInfraction` or `values[editedInfraction.infractionGroup]` is undefined')
+      if (editedInfractionIndex === undefined) {
+        throw new FrontendError('`editedInfraction` is undefined')
       }
 
       const updatedInfractionWithComments: MissionAction.Infraction = {
@@ -136,26 +102,18 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
         comments: nextInfractionFormValues.comments || ''
       }
 
-      const nextInfractions = ramdaUpdate(
-        editedInfraction.index,
-        updatedInfractionWithComments,
-        values[editedInfraction.infractionGroup]
+      const infractions = values.infractions ?? []
+      const nextInfractions = infractions.map((infraction, index) =>
+        index === editedInfractionIndex ? updatedInfractionWithComments : infraction
       )
 
-      setFieldValue(editedInfraction.infractionGroup, nextInfractions)
+      setFieldValue('infractions', nextInfractions)
 
       closeInfractionForm()
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      closeInfractionForm,
-      editedInfraction,
-      values.gearInfractions,
-      values.logbookInfractions,
-      values.otherInfractions,
-      values.speciesInfractions
-    ]
+    [closeInfractionForm, editedInfractionIndex, values.infractions]
   )
 
   if (!natinfsAsOptions.length) {
@@ -165,20 +123,17 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
   return (
     <Wrapper isLight legend={label}>
       <FrontendErrorBoundary>
-        {infractionsWithLabelGroupAndIndex.length > 0 && (
+        {infractionsWithLabelAndIndex.length > 0 && (
           <StyledRow>
-            {infractionsWithLabelGroupAndIndex.map((infraction, index) => {
-              const isEdition =
-                infraction.index === editedInfraction?.index && infraction.group === editedInfraction?.infractionGroup
+            {infractionsWithLabelAndIndex.map((infraction, index) => {
+              const isEdition = infraction.index === editedInfractionIndex
 
               return (
-                <Fragment key={`${infraction.group}-infraction-${infraction.index}`}>
+                <Fragment key={`infraction-${infraction.index}`}>
                   {!isEdition && (
                     <>
                       <Infraction data={infraction} index={infraction.index} onDelete={remove} onEdit={onEdit} />
-                      {index + 1 < infractionsWithLabelGroupAndIndex.length && (
-                        <FieldsetGroupSeparator marginBottom={12} />
-                      )}
+                      {index + 1 < infractionsWithLabelAndIndex.length && <FieldsetGroupSeparator marginBottom={12} />}
                     </>
                   )}
 
@@ -186,14 +141,11 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
                     <>
                       <InfractionForm
                         initialValues={infraction}
-                        isEdition
                         natinfsAsOptions={natinfsAsOptions}
                         onCancel={closeInfractionForm}
                         onSubmit={update}
                       />
-                      {infractionsWithLabelGroupAndIndex.length > index + 1 && (
-                        <FieldsetGroupSeparator marginBottom={12} />
-                      )}
+                      {infractionsWithLabelAndIndex.length > index + 1 && <FieldsetGroupSeparator marginBottom={12} />}
                     </>
                   )}
                 </Fragment>
@@ -203,7 +155,7 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
         )}
         {!isNewInfractionFormOpen && (
           <>
-            {infractionsWithLabelGroupAndIndex.length > 0 && <FieldsetGroupSeparator />}
+            {infractionsWithLabelAndIndex.length > 0 && <FieldsetGroupSeparator />}
             <Button accent={Accent.SECONDARY} Icon={Icon.Plus} isFullWidth onClick={openNewInfractionForm}>
               {addButtonLabel}
             </Button>
@@ -212,7 +164,7 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
 
         {isNewInfractionFormOpen && (
           <>
-            {infractionsWithLabelGroupAndIndex.length > 0 && <FieldsetGroupSeparator marginBottom={12} />}
+            {infractionsWithLabelAndIndex.length > 0 && <FieldsetGroupSeparator marginBottom={12} />}
             <Row>
               <InfractionForm
                 initialValues={{} as MissionAction.Infraction}
@@ -242,11 +194,11 @@ const Row = styled.div`
     margin: 12px 0 8px;
 
     &:first-child {
-      margin: 0px 0 8px;
+      margin: 0 0 8px;
     }
   }
 `
 
 const StyledRow = styled(Row)`
-  padding-top: 0px;
+  padding-top: 0;
 `

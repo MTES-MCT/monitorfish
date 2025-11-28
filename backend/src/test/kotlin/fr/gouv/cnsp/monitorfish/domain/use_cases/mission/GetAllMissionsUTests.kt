@@ -2,8 +2,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.mission
 
 import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.config.DatabaseProperties
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesInfraction
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.TestUtils.getDummyMissionActions
@@ -176,9 +176,9 @@ class GetAllMissionsUTests {
             .willReturn(
                 listOf(
                     firstChunkMissionActions.first().copy(
-                        speciesInfractions =
+                        infractions =
                             listOf(
-                                SpeciesInfraction().apply {
+                                Infraction().apply {
                                     infractionType = InfractionType.WITH_RECORD
                                 },
                             ),
@@ -190,9 +190,9 @@ class GetAllMissionsUTests {
             .willReturn(
                 secondChunkMissionActions +
                     secondChunkMissionActions.last().copy(
-                        speciesInfractions =
+                        infractions =
                             listOf(
-                                SpeciesInfraction().apply {
+                                Infraction().apply {
                                     infractionType = InfractionType.WITHOUT_RECORD
                                 },
                             ),
@@ -228,7 +228,7 @@ class GetAllMissionsUTests {
         val firstMissionActions = missionsAndActions.first().actions
         assertThat(
             firstMissionActions.single { action ->
-                action.speciesInfractions.any {
+                action.infractions.any {
                     it.infractionType ==
                         InfractionType.WITH_RECORD
                 }
@@ -265,9 +265,9 @@ class GetAllMissionsUTests {
             .willReturn(
                 listOf(
                     firstChunkMissionActions.first().copy(
-                        speciesInfractions =
+                        infractions =
                             listOf(
-                                SpeciesInfraction().apply {
+                                Infraction().apply {
                                     infractionType = InfractionType.WITH_RECORD
                                 },
                             ),
@@ -279,9 +279,9 @@ class GetAllMissionsUTests {
             .willReturn(
                 secondChunkMissionActions +
                     secondChunkMissionActions.last().copy(
-                        speciesInfractions =
+                        infractions =
                             listOf(
-                                SpeciesInfraction().apply {
+                                Infraction().apply {
                                     infractionType = InfractionType.WITHOUT_RECORD
                                 },
                             ),
@@ -344,9 +344,9 @@ class GetAllMissionsUTests {
             .willReturn(
                 listOf(
                     firstChunkMissionActions.first().copy(
-                        speciesInfractions =
+                        infractions =
                             listOf(
-                                SpeciesInfraction().apply {
+                                Infraction().apply {
                                     infractionType = InfractionType.WITH_RECORD
                                 },
                             ),
@@ -358,9 +358,9 @@ class GetAllMissionsUTests {
             .willReturn(
                 secondChunkMissionActions +
                     secondChunkMissionActions.last().copy(
-                        speciesInfractions =
+                        infractions =
                             listOf(
-                                SpeciesInfraction().apply {
+                                Infraction().apply {
                                     infractionType = InfractionType.WITHOUT_RECORD
                                 },
                             ),
@@ -400,7 +400,7 @@ class GetAllMissionsUTests {
         val firstMissionActions = missionsAndActions.first().actions
         assertThat(
             firstMissionActions.single { action ->
-                action.speciesInfractions.any {
+                action.infractions.any {
                     it.infractionType ==
                         InfractionType.WITH_RECORD
                 }

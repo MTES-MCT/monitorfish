@@ -26,9 +26,9 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   emitsAis: undefined,
   emitsVms: undefined,
   facade: undefined,
-  gearInfractions: [],
   gearOnboard: [],
   id: undefined,
+  infractions: [],
   isAdministrativeControl: undefined,
   isComplianceWithWaterRegulationsControl: undefined,
   isSafetyEquipmentAndStandardsComplianceControl: undefined,
@@ -37,18 +37,15 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   latitude: undefined,
   licencesAndLogbookObservations: undefined,
   licencesMatchActivity: undefined,
-  logbookInfractions: [],
   logbookMatchesActivity: undefined,
   longitude: undefined,
   numberOfVesselsFlownOver: undefined,
   otherComments: undefined,
-  otherInfractions: [],
   portLocode: undefined,
   segments: [],
   seizureAndDiversion: undefined,
   seizureAndDiversionComments: undefined,
   separateStowageOfPreservedSpecies: undefined,
-  speciesInfractions: [],
   speciesObservations: undefined,
   speciesOnboard: [],
   speciesSizeControlled: undefined,
@@ -65,16 +62,6 @@ export const CONTROL_CHECKS_AS_OPTIONS: Option[] = [
   { label: 'Non', value: MissionAction.ControlCheck.NO },
   { label: 'Non concerné', value: MissionAction.ControlCheck.NOT_APPLICABLE }
 ]
-
-/**
- * List of PAM units identifiers:
- *  10141 PAM Gyptis
- *  10404 PAM Iris
- *  10121 PAM Jeanne Barret
- *  10345 PAM Osiris
- *  10080 PAM Themis
- */
-export const PAMControlUnitIds = [10141, 10404, 10121, 10345, 10080]
 
 /**
  * Is auto-save enabled.

@@ -206,33 +206,6 @@ def transform_controls(controls: pd.DataFrame):
     # ---------------------------------------------------------------------------------
     # Transform the list of infraction ids from string to list
 
-    logbook_natinfs = {
-        27689,
-        27885,
-        20235,
-        20234,
-        10409,
-        20236,
-        27886,
-        10405,
-        20246,
-        20213,
-    }
-    gear_natinfs = {
-        7059,
-        27724,
-        2593,
-        7057,
-        27725,
-        7060,
-        20242,
-        12918,
-        27723,
-        20243,
-        20220,
-    }
-    species_natinfs = {12900, 7062, 7983, 7061, 7063, 27730, 7984, 12902, 28346}
-
     logger.info("Transforming infraction natinfs from string to list")
 
     controls["infraction_natinfs"] = controls.infraction_natinfs.map(
@@ -244,59 +217,17 @@ def transform_controls(controls: pd.DataFrame):
         InfractionType.from_poseidon_infraction_field
     )
 
-    logger.info("Creating gear_infractions")
-    if len(controls) == 0:
-        controls["gear_infractions"] = None
-    else:
-        controls["gear_infractions"] = controls.apply(
+    logger.info("Creating infractions")
+    if len(controls) > 0:
+        controls["infractions"] = controls.apply(
             lambda row: make_infractions(
-                row["infraction_natinfs"],
-                row["infraction_type"],
-                only_natinfs=gear_natinfs,
-            ),
+                row["infraction_natinfs"], row["infraction_type"]
+            )
+            or None,
             axis=1,
         )
-
-    logger.info("Creating species_infractions")
-    if len(controls) == 0:
-        controls["species_infractions"] = None
     else:
-        controls["species_infractions"] = controls.apply(
-            lambda row: make_infractions(
-                row["infraction_natinfs"],
-                row["infraction_type"],
-                only_natinfs=species_natinfs,
-            ),
-            axis=1,
-        )
-
-    logger.info("Creating logbook_infractions")
-    if len(controls) == 0:
-        controls["logbook_infractions"] = None
-    else:
-        controls["logbook_infractions"] = controls.apply(
-            lambda row: make_infractions(
-                row["infraction_natinfs"],
-                row["infraction_type"],
-                only_natinfs=logbook_natinfs,
-            ),
-            axis=1,
-        )
-
-    logger.info("Creating other_infractions")
-    if len(controls) == 0:
-        controls["other_infractions"] = None
-    else:
-        controls["other_infractions"] = controls.apply(
-            lambda row: make_infractions(
-                row["infraction_natinfs"],
-                row["infraction_type"],
-                exclude_natinfs=set.union(
-                    logbook_natinfs, gear_natinfs, species_natinfs
-                ),
-            ),
-            axis=1,
-        )
+        controls["infractions"] = None
 
     controls = controls.drop(
         columns=["infraction_natinfs", "infraction", "infraction_type"]
@@ -575,11 +506,8 @@ def make_missions_actions_and_missions_control_units(
         "fao_areas",
         "segments",
         "gear_onboard",
-        "gear_infractions",
+        "infractions",
         "species_onboard",
-        "species_infractions",
-        "logbook_infractions",
-        "other_infractions",
         "has_some_gears_seized",
         "has_some_species_seized",
         "seizure_and_diversion",
@@ -713,10 +641,7 @@ def load_mission_actions(mission_actions: pd.DataFrame, loading_mode: str):
             "segments",
             "gear_onboard",
             "species_onboard",
-            "gear_infractions",
-            "species_infractions",
-            "logbook_infractions",
-            "other_infractions",
+            "infractions",
         ],
         how="upsert",
         table_id_column=id_column,

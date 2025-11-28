@@ -1,5 +1,4 @@
 import { FrontendApiError } from '@libs/FrontendApiError'
-import { ascend, identity } from 'ramda'
 
 import { monitorfishApi } from '../../api/api'
 
@@ -44,7 +43,7 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
     getControlObjectiveYears: builder.query<number[], void>({
       providesTags: () => [{ type: 'ControlObjectivesYears' }],
       query: () => '/admin/control_objectives/years',
-      transformResponse: (baseQueryReturnValue: number[]) => baseQueryReturnValue.sort(ascend(identity))
+      transformResponse: (baseQueryReturnValue: number[]) => baseQueryReturnValue.sort((a, b) => a - b)
     }),
     updateControlObjective: builder.mutation<void, UpdateControlObjective>({
       invalidatesTags: [{ type: 'ControlObjectives' }],

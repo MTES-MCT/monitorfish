@@ -3,10 +3,10 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.*
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
+import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier

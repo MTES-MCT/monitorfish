@@ -5,7 +5,7 @@ from src.read_query import read_query
 
 
 def test_flow(reset_test_data):
-    segments_query = "SELECT * FROM fleet_segments"
+    segments_query = "SELECT * FROM fleet_segments ORDER BY year, segment"
     initial_segments = read_query(segments_query, db="monitorfish_remote")
 
     state = init_2025_segments_flow(return_state=True)

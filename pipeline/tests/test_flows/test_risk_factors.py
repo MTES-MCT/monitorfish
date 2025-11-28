@@ -268,34 +268,6 @@ def risk_factors() -> pd.DataFrame:
             "number_gear_seizures_last_5_years": [1, 0, 1, 0, 2, 0, 0, 1, 0],
             "number_species_seizures_last_5_years": [3, 0, 1, 0, 0, 0, 0, 3, 0],
             "number_vessel_seizures_last_5_years": [0, 0, 1, 0, 0, 0, 0, 0, 0],
-            "last_control_infractions": [
-                [
-                    {
-                        "natinf": 20233,
-                        "comments": "Infraction 3",
-                        "infractionType": "WITH_RECORD",
-                    }
-                ],
-                [],
-                [],
-                [],
-                [
-                    {
-                        "natinf": 27724,
-                        "comments": "Infraction engin",
-                        "infractionType": "WITHOUT_RECORD",
-                    },
-                    {
-                        "natinf": 1030,
-                        "comments": "Infraction espèces 2",
-                        "infractionType": "WITH_RECORD",
-                    },
-                ],
-                [],
-                [],
-                [{"natinf": 2606}, {"natinf": 4761}, {"natinf": 22206}],
-                [],
-            ],
             "recent_gear_onboard": [
                 None,
                 [{"gear": "PS1", "mesh": 80.0}],
@@ -483,6 +455,34 @@ def risk_factors() -> pd.DataFrame:
                 pd.NaT,
                 pd.Timestamp("2018-01-01 07:57:45"),
                 pd.NaT,
+            ],
+            "last_control_infractions": [
+                [
+                    {
+                        "natinf": 20233,
+                        "comments": "Infraction 3",
+                        "infractionType": "WITH_RECORD",
+                    }
+                ],
+                [],
+                [],
+                [],
+                [
+                    {
+                        "natinf": 27724,
+                        "comments": "Infraction engin",
+                        "infractionType": "WITHOUT_RECORD",
+                    },
+                    {
+                        "natinf": 1030,
+                        "comments": "Infraction espèces 2",
+                        "infractionType": "WITH_RECORD",
+                    },
+                ],
+                [],
+                [],
+                [{"natinf": 2606}, {"natinf": 4761}, {"natinf": 22206}],
+                [],
             ],
         }
     )

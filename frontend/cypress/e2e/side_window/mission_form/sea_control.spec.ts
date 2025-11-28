@@ -154,21 +154,18 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Infractions
     cy.clickButton('Ajouter une infraction')
     cy.fill('Résultat de l’infraction', 'Avec PV')
-    cy.fill('Catégorie d’infraction', 'Infraction obligations déclaratives et autorisations de pêche')
     cy.fill('NATINF', '23581')
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction déclarative.')
     cy.clickButton('Valider l’infraction')
 
     cy.clickButton('Ajouter une infraction')
     cy.fill('Résultat de l’infraction', 'Sans PV')
-    cy.fill('Catégorie d’infraction', 'Infraction espèces')
     cy.fill('NATINF', '23588')
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction espèce.')
     cy.clickButton('Valider l’infraction')
 
     cy.clickButton('Ajouter une infraction')
     cy.fill('Résultat de l’infraction', 'Sans PV')
-    cy.fill('Catégorie d’infraction', 'Autre infraction')
     cy.fill('NATINF', '27689')
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction autre.')
     cy.clickButton('Valider l’infraction')
@@ -207,7 +204,6 @@ context('Side Window > Mission Form > Sea Control', () => {
           externalReferenceNumber: 'TALK2ME',
           facade: null,
           flagState: 'UNDEFINED',
-          gearInfractions: [],
           gearOnboard: [
             {
               comments: 'Autres mesures.',
@@ -236,29 +232,25 @@ context('Side Window > Mission Form > Sea Control', () => {
           latitude: 47.084,
           licencesAndLogbookObservations: 'Une observation hors infraction sur les obligations déclaaratives.',
           licencesMatchActivity: 'NO',
-          logbookInfractions: [
-            { comments: 'Une observation sur l’infraction déclarative.', infractionType: 'WITH_RECORD', natinf: 23581 }
-          ],
-          logbookMatchesActivity: 'NOT_APPLICABLE',
-          longitude: -3.872,
-          missionId: 1,
-          numberOfVesselsFlownOver: null,
-          otherComments: 'Une autre observation.',
-          otherInfractions: [
-            { comments: 'Une observation sur l’infraction autre.', infractionType: 'WITHOUT_RECORD', natinf: 27689 }
-          ],
-          portLocode: null,
-          segments: [],
-          seizureAndDiversion: true,
-          seizureAndDiversionComments: null,
-          separateStowageOfPreservedSpecies: 'YES',
-          speciesInfractions: [
+          infractions: [
+            { comments: 'Une observation sur l’infraction déclarative.', infractionType: 'WITH_RECORD', natinf: 23581 },
+            { comments: 'Une observation sur l’infraction autre.', infractionType: 'WITHOUT_RECORD', natinf: 27689 },
             {
               comments: 'Une observation sur l’infraction espèce.',
               infractionType: 'WITHOUT_RECORD',
               natinf: 23588
             }
           ],
+          logbookMatchesActivity: 'NOT_APPLICABLE',
+          longitude: -3.872,
+          missionId: 1,
+          numberOfVesselsFlownOver: null,
+          otherComments: 'Une autre observation.',
+          portLocode: null,
+          segments: [],
+          seizureAndDiversion: true,
+          seizureAndDiversionComments: null,
+          separateStowageOfPreservedSpecies: 'YES',
           speciesObservations: 'Une observation hors infraction sur les espèces.',
           speciesOnboard: [
             { controlledWeight: null, declaredWeight: 235.6, nbFish: null, speciesCode: 'HKE', underSized: false },
@@ -342,7 +334,6 @@ context('Side Window > Mission Form > Sea Control', () => {
           facade: null,
           faoAreas: ['27.8.b', '27.8.c'],
           flagState: 'FR',
-          gearInfractions: [],
           gearOnboard: [
             {
               comments: null,
@@ -362,19 +353,17 @@ context('Side Window > Mission Form > Sea Control', () => {
           latitude: 47.084,
           licencesAndLogbookObservations: null,
           licencesMatchActivity: null,
-          logbookInfractions: [],
           logbookMatchesActivity: null,
           longitude: -3.872,
           missionId: 1,
           numberOfVesselsFlownOver: null,
           otherComments: null,
-          otherInfractions: [],
           portLocode: null,
           segments: [{ segment: 'SWW02', segmentName: 'SWW02' }],
           seizureAndDiversion: false,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: null,
-          speciesInfractions: [],
+          infractions: [],
           speciesObservations: null,
           speciesOnboard: [
             { controlledWeight: null, declaredWeight: 471.2, nbFish: null, speciesCode: 'HKE', underSized: false },
@@ -414,8 +403,6 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.fill('Résultat de l’infraction', 'Avec PV')
 
-    cy.fill('Catégorie d’infraction', 'Infraction engins')
-
     cy.fill('NATINF', '23581')
 
     // -------------------------------------------------------------------------
@@ -425,7 +412,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.clickButton('Valider l’infraction')
 
-    cy.contains('Infraction engins 1').should('exist')
+    cy.contains('Infraction 1').should('exist')
     cy.contains('Avec PV').should('exist')
     cy.contains('NATINF : 23581 - Taille de maille non réglementaire').should('exist')
 
@@ -442,7 +429,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.clickButton('Valider l’infraction')
 
-    cy.contains('Infraction engins 1').should('exist')
+    cy.contains('Infraction 1').should('exist')
     cy.contains('Sans PV').should('exist')
     cy.contains('NATINF : 23588 - Chalutage dans la zone des 3 milles').should('exist')
     cy.contains("Une autre observation sur l'infraction").should('exist')
@@ -452,7 +439,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.clickButton("Supprimer l'infraction")
 
-    cy.contains('Infraction engins 1').should('not.exist')
+    cy.contains('Infraction 1').should('not.exist')
   })
 
   it('Should fill the mission zone from the last sea control added', () => {

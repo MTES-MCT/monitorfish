@@ -72,7 +72,7 @@ context('Side Window > Mission Form > Action List', () => {
           faoAreas: ['27.8.a'],
           flagState: 'FR',
           flightGoals: [],
-          gearInfractions: [],
+          infractions: [],
           gearOnboard: [],
           hasSomeGearsSeized: false,
           hasSomeSpeciesSeized: false,
@@ -87,19 +87,16 @@ context('Side Window > Mission Form > Action List', () => {
           latitude: 53.35,
           licencesAndLogbookObservations: null,
           licencesMatchActivity: 'NOT_APPLICABLE',
-          logbookInfractions: [],
           logbookMatchesActivity: 'NOT_APPLICABLE',
           longitude: -10.85,
           missionId: 4,
           numberOfVesselsFlownOver: null,
           otherComments: 'Commentaires post contrôle',
-          otherInfractions: [],
           portLocode: null,
           segments: [],
           seizureAndDiversion: false,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: 'NO',
-          speciesInfractions: [],
           speciesObservations: null,
           speciesOnboard: [],
           speciesSizeControlled: null,
@@ -166,25 +163,21 @@ context('Side Window > Mission Form > Action List', () => {
 
     cy.clickButton('Ajouter une infraction')
     cy.fill('Résultat de l’infraction', 'Avec PV')
-    cy.fill('Catégorie d’infraction', 'Infraction obligations déclaratives et autorisations de pêche')
     cy.fill('NATINF', '23581')
     cy.clickButton('Valider l’infraction')
 
     cy.clickButton('Ajouter une infraction')
     cy.fill('Résultat de l’infraction', 'Avec PV')
-    cy.fill('Catégorie d’infraction', 'Infraction obligations déclaratives et autorisations de pêche')
     cy.fill('NATINF', '23588')
     cy.clickButton('Valider l’infraction')
 
     cy.clickButton('Ajouter une infraction')
     cy.fill('Résultat de l’infraction', 'Sans PV')
-    cy.fill('Catégorie d’infraction', 'Infraction obligations déclaratives et autorisations de pêche')
     cy.fill('NATINF', '23584')
     cy.clickButton('Valider l’infraction')
 
     cy.clickButton('Ajouter une infraction')
     cy.fill('Résultat de l’infraction', 'En attente')
-    cy.fill('Catégorie d’infraction', 'Infraction obligations déclaratives et autorisations de pêche')
     cy.clickButton('Valider l’infraction')
 
     cy.get('.Element-Tag').contains('2 INF AVEC PV').should('be.visible')

@@ -225,10 +225,6 @@ def vessels_with_species_min_weight() -> pd.DataFrame:
     return pd.DataFrame()
 
 
-def mock_get_depth(lon: float, lat: float):
-    return lon
-
-
 def test_to_admin_areas_table_metadata(
     admin_area_specifications, admin_areas_table_metadata
 ):

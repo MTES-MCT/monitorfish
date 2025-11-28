@@ -126,15 +126,7 @@ export function getSpeciesOnboardWithUntargetedSpeciesGrouped(
 }
 
 function getInfractionsKeys(action: MissionAction.MissionAction, key: string): string[] {
-  return ([] as string[]).concat.apply(
-    [],
-    [
-      getInfractionsWithRecordKey(action.gearInfractions, key),
-      getInfractionsWithRecordKey(action.speciesInfractions, key),
-      getInfractionsWithRecordKey(action.logbookInfractions, key),
-      getInfractionsWithRecordKey(action.otherInfractions, key)
-    ]
-  )
+  return ([] as string[]).concat.apply([], [getInfractionsWithRecordKey(action.infractions, key)])
 }
 
 function getInfractionsWithRecordKey(infractions: MissionAction.Infraction[], key: string): string[] {

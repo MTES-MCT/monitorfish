@@ -279,38 +279,6 @@ def vessels_most_recent_control() -> pd.DataFrame:
                 "RAS",
                 "Contrôle Poséidon à mettre à jour",
             ],
-            "last_control_logbook_infractions": [[], [], [], [], []],
-            "last_control_gear_infractions": [[], [], [], [], []],
-            "last_control_species_infractions": [
-                [
-                    {"natinf": 17, "comments": "Infraction espèces 1"},
-                    {"natinf": 1030},
-                    {"natinf": 1031},
-                ],
-                [],
-                [],
-                [],
-                [],
-            ],
-            "last_control_other_infractions": [
-                [
-                    {
-                        "natinf": 22206,
-                        "comments": "Infraction 1",
-                        "infractionType": "WITH_RECORD",
-                    }
-                ],
-                [
-                    {
-                        "natinf": 7061,
-                        "comments": "Infraction 7",
-                        "infractionType": "WITH_RECORD",
-                    }
-                ],
-                [],
-                [],
-                [],
-            ],
         }
     )
 
@@ -329,6 +297,28 @@ def transformed_vessels_most_recent_control():
                 "SB125334",
                 None,
             ],
+            "last_control_infractions": [
+                [
+                    {"natinf": 17, "comments": "Infraction espèces 1"},
+                    {"natinf": 1030},
+                    {"natinf": 1031},
+                    {
+                        "natinf": 22206,
+                        "comments": "Infraction 1",
+                        "infractionType": "WITH_RECORD",
+                    },
+                ],
+                [
+                    {
+                        "natinf": 7061,
+                        "comments": "Infraction 7",
+                        "infractionType": "WITH_RECORD",
+                    },
+                ],
+                [],
+                [],
+                [],
+            ],
             "post_control_comments": [
                 (
                     "OTB 70MM DÉCLARÉ - signaux pyrotechniques périmés - "
@@ -342,38 +332,6 @@ def transformed_vessels_most_recent_control():
                 None,
                 "RAS",
                 "Contrôle Poséidon à mettre à jour",
-            ],
-            "last_control_logbook_infractions": [[], [], [], [], []],
-            "last_control_gear_infractions": [[], [], [], [], []],
-            "last_control_species_infractions": [
-                [
-                    {"natinf": 17, "comments": "Infraction espèces 1"},
-                    {"natinf": 1030},
-                    {"natinf": 1031},
-                ],
-                [],
-                [],
-                [],
-                [],
-            ],
-            "last_control_other_infractions": [
-                [
-                    {
-                        "natinf": 22206,
-                        "comments": "Infraction 1",
-                        "infractionType": "WITH_RECORD",
-                    }
-                ],
-                [
-                    {
-                        "natinf": 7061,
-                        "comments": "Infraction 7",
-                        "infractionType": "WITH_RECORD",
-                    }
-                ],
-                [],
-                [],
-                [],
             ],
             "last_control_infraction": [True, True, False, False, False],
         }
@@ -508,33 +466,23 @@ def loaded_control_anteriority() -> pd.DataFrame:
             "number_gear_seizures_last_5_years": [1, 0, 0, 0, 0],
             "number_species_seizures_last_5_years": [1, 0, 0, 0, 0],
             "number_vessel_seizures_last_5_years": [2, 1, 0, 0, 2],
-            "last_control_logbook_infractions": [[], [], [], [], []],
-            "last_control_gear_infractions": [[], [], [], [], []],
-            "last_control_species_infractions": [
+            "last_control_infractions": [
                 [
                     {"natinf": 17, "comments": "Infraction espèces 1"},
                     {"natinf": 1030},
                     {"natinf": 1031},
-                ],
-                [],
-                [],
-                [],
-                [],
-            ],
-            "last_control_other_infractions": [
-                [
                     {
                         "natinf": 22206,
                         "comments": "Infraction 1",
                         "infractionType": "WITH_RECORD",
-                    }
+                    },
                 ],
                 [
                     {
                         "natinf": 7061,
                         "comments": "Infraction 7",
                         "infractionType": "WITH_RECORD",
-                    }
+                    },
                 ],
                 [],
                 [],

@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.entities.alerts
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 

@@ -58,10 +58,7 @@ class PnoToRender:
     mmsi: str
     risk_factor: float
     last_control_datetime_utc: datetime
-    last_control_logbook_infractions: List[dict]
-    last_control_gear_infractions: List[dict]
-    last_control_species_infractions: List[dict]
-    last_control_other_infractions: List[dict]
+    last_control_infractions: List[dict]
     is_verified: bool
     is_being_sent: bool
     source: PnoSource
@@ -127,10 +124,7 @@ class PreRenderedPno:
     mmsi: str
     risk_factor: float
     last_control_datetime_utc: datetime
-    last_control_logbook_infractions: List[Infraction]
-    last_control_gear_infractions: List[Infraction]
-    last_control_species_infractions: List[Infraction]
-    last_control_other_infractions: List[Infraction]
+    last_control_infractions: List[Infraction]
     is_verified: bool
     is_being_sent: bool
     source: PnoSource

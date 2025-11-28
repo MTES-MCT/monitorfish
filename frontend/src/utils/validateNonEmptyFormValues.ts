@@ -1,5 +1,3 @@
-import { hasIn } from 'ramda'
-
 import { FormError, FormErrorCode } from '../libs/FormError'
 import { FrontendError } from '../libs/FrontendError'
 
@@ -13,7 +11,7 @@ export function validateNonEmptyFormValues<T extends Record<string, any>>(
     const sortedRequiredProps = requiredProps.sort()
 
     sortedRequiredProps.forEach(prop => {
-      if (!hasIn(String(prop), record)) {
+      if (!(String(prop) in record)) {
         throw new FormError(record, prop, FormErrorCode.MISSING)
       }
 

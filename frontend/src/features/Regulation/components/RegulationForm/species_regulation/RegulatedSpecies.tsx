@@ -160,7 +160,7 @@ export function RegulatedSpecies({
               inline
               label="Toutes les espèces"
               name="allSpecies"
-              onChange={__unused => onAllSpeciesChange(!controlledRegulatedSpecies.allSpecies)}
+              onChange={_unused => onAllSpeciesChange(!controlledRegulatedSpecies.allSpecies)}
             />
           </ContentLine>
         )}

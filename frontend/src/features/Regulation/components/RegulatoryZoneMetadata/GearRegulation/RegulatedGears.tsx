@@ -1,5 +1,4 @@
 import { THEME } from '@mtes-mct/monitor-ui'
-import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
 import { theme } from '../../../../../ui/theme'
@@ -21,7 +20,7 @@ export function RegulatedGears({
   hasPreviousRegulatedGearsBloc = false,
   regulatedGearsObject
 }: RegulatedGearsProps) {
-  const { allGears, allPassiveGears, allTowedGears, derogation, otherInfo, regulatedGearCategories, regulatedGears } =
+  const { allGears, allPassiveGears, allTowedGears, derogation, regulatedGearCategories, regulatedGears } =
     regulatedGearsObject
 
   const dataCyTarget = authorized ? 'authorized' : 'unauthorized'
@@ -67,7 +66,6 @@ export function RegulatedGears({
           <DerogationMessage>Mesures dérogatoire: consulter les références réglementaires</DerogationMessage>
         </Derogation>
       )}
-      {otherInfo && <ReactMarkdown>{otherInfo}</ReactMarkdown>}
     </Wrapper>
   )
 }

@@ -199,11 +199,12 @@ context('BackOffice > Regulation Form > Edition', () => {
     cy.wait('@postRegulation').then(({ request, response }) => {
       expect(request.body).contain(
         // Unauthorized
-        '{"unauthorized":{"allGears":false,"otherInfo":null,"allTowedGears":false,' +
+        '{"unauthorized":{"allGears":false,"allTowedGears":false,' +
           '"regulatedGears":{"OT":{"code":"OT","name":"Chaluts à panneaux (non spécifiés)","category":"Chaluts","groupId":1}},' +
           '"allPassiveGears":false,"regulatedGearCategories":{},"selectedCategoriesAndGears":["OT"]},' +
+          '"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - Dragues avec dents !",'+
           // Authorized
-          '"authorized":{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - Dragues avec dents !",' +
+          '"authorized":{"allGears":false,' +
           '"allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines",' +
           '"category":"Chaluts","groupId":1,"meshType":"lowerThanOrEqualTo","mesh":["123"],"remarks":"Attention à cette espèce!"}},' +
           '"allPassiveGears":false,"regulatedGearCategories":{"Dragues":{"name":"Dragues"}},"selectedCategoriesAndGears":["Dragues","TBN"]}}'

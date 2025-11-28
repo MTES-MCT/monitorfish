@@ -1,3 +1,6 @@
+import { RegulatoryTagsLabel } from '@features/Regulation/components/RegulatoryZoneMetadata/constants'
+import { GearRegulation } from '@features/Regulation/components/RegulatoryZoneMetadata/GearRegulation'
+import { SpeciesRegulation } from '@features/Regulation/components/RegulatoryZoneMetadata/SpeciesRegulation'
 import { ZonePreview } from '@features/Regulation/components/ZonePreview'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -6,13 +9,11 @@ import { FingerprintLoader, Icon, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 
-import { FishingPeriodDisplayed } from './fishingPeriod'
-import { GearRegulationDisplayed } from './gearRegulation/GearRegulationDisplayed'
-import { IdentificationDisplayed } from './identification/IdentificationDisplayed'
-import { OtherInfoDisplayed } from './otherInfo/OtherInfoDisplayed'
+import { FishingPeriod } from './FishingPeriod'
+import { Identification } from './Identification'
+import { OtherInfo } from './OtherInfo'
 import { OutdatedRegulatoryReferences } from './OutdatedRegulatoryReferences'
-import { RegulatoryReferencesDisplayed } from './regulatoryReferences/RegulatoryReferencesDisplayed'
-import { SpeciesRegulationDisplayed } from './speciesRegulation/SpeciesRegulationDisplayed'
+import { RegulatoryReferences } from './RegulatoryReferences'
 import { closeRegulatoryZoneMetadata } from '../../useCases/closeRegulatoryZoneMetadata'
 import { getTitle } from '../../utils'
 
@@ -44,8 +45,10 @@ export function RegulatoryZoneMetadata() {
                 {getTitle(regulatoryZoneMetadata)}
               </RegulatoryZoneName>
               <TagsContainer>
-                {regulatoryZoneMetadata?.tags?.map(regulatoryArea => (
-                  <StyledTag backgroundColor={THEME.color.white}>{regulatoryArea}</StyledTag>
+                {regulatoryZoneMetadata?.tags?.map(tag => (
+                  <StyledTag backgroundColor={THEME.color.white} title={RegulatoryTagsLabel[tag]}>
+                    {tag}
+                  </StyledTag>
                 ))}
               </TagsContainer>
             </NameAndTagsContainer>
@@ -58,12 +61,12 @@ export function RegulatoryZoneMetadata() {
           </Header>
           <OutdatedRegulatoryReferences />
           <Content>
-            <IdentificationDisplayed />
-            <FishingPeriodDisplayed />
-            <GearRegulationDisplayed />
-            <SpeciesRegulationDisplayed />
-            <OtherInfoDisplayed />
-            <RegulatoryReferencesDisplayed />
+            <Identification />
+            <FishingPeriod />
+            <GearRegulation />
+            <SpeciesRegulation />
+            <OtherInfo />
+            <RegulatoryReferences />
           </Content>
         </>
       ) : (

@@ -7,12 +7,12 @@ import { RegulatedGears } from './RegulatedGears'
 import { DEFAULT_AUTHORIZED_REGULATED_GEARS, DEFAULT_UNAUTHORIZED_REGULATED_GEARS } from '../../../utils'
 import { Section } from '../RegulatoryMetadata.style'
 
-export function GearRegulationDisplayed() {
+export function GearRegulation() {
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
 
   const { gearRegulation } = regulatoryZoneMetadata ?? {}
   if (!gearRegulation) {
-    throw new FrontendError('`gearRegulation` is undefined.')
+    throw new FrontendError('`GearRegulation` is undefined.')
   }
 
   const { authorized, otherInfo, unauthorized } = gearRegulation
@@ -60,5 +60,5 @@ export const regulatedGearsIsNotEmpty = regulatedGearsObject =>
 const MarkdownWithMargin = styled.div<{
   $hasMargin: boolean
 }>`
-  margin-top: ${p => (p.$hasMargin ? 20 : 0)}px;
+  margin-top: ${p => (p.$hasMargin ? 16 : 0)}px;
 `

@@ -1,14 +1,14 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector.ts'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
 import { RegulatedSpecies } from './RegulatedSpecies'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { DEFAULT_AUTHORIZED_REGULATED_SPECIES, DEFAULT_UNAUTHORIZED_REGULATED_SPECIES } from '../../../utils'
 import { Section } from '../RegulatoryMetadata.style'
 
 import type { RegulatedSpecies as RegulatedSpeciesType } from '../../../types'
 
-export function SpeciesRegulationDisplayed() {
+export function SpeciesRegulation() {
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
 
   const { speciesRegulation } = regulatoryZoneMetadata ?? {}
@@ -54,5 +54,5 @@ const isRegulatedSpeciesEmpty = (regulatedSpecies: RegulatedSpeciesType | undefi
 const MarkdownWithMargin = styled.div<{
   $hasMargin: boolean
 }>`
-  margin-top: ${p => (p.$hasMargin ? 20 : 0)}px;
+  margin-top: ${p => (p.$hasMargin ? 16 : 0)}px;
 `

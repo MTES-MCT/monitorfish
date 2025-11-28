@@ -1,5 +1,5 @@
 import { CodeAndName } from '@features/Regulation/components/RegulatoryZoneMetadata/CodeAndName'
-import { GearOrGearCategoryFields } from '@features/Regulation/components/RegulatoryZoneMetadata/gearRegulation/GearOrGearCategoryFields'
+import { GearOrGearCategoryFields } from '@features/Regulation/components/RegulatoryZoneMetadata/GearRegulation/GearOrGearCategoryFields'
 
 import type { Gear as GearReferentialType } from '../../../../../domain/types/Gear'
 import type { Gear } from '@features/Regulation/types'

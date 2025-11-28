@@ -1,4 +1,4 @@
-import { CategoryRow } from '@features/Regulation/components/RegulatoryZoneMetadata/gearRegulation/CategoryRow'
+import { CategoryRow } from '@features/Regulation/components/RegulatoryZoneMetadata/GearRegulation/CategoryRow'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useMemo } from 'react'
 

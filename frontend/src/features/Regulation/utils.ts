@@ -319,14 +319,12 @@ export const DEFAULT_FISHING_PERIOD_VALUES: FishingPeriod = {
 
 export const DEFAULT_AUTHORIZED_REGULATED_SPECIES: RegulatedSpecies = {
   allSpecies: undefined,
-  otherInfo: undefined,
   species: [],
   speciesGroups: []
 }
 
 export const DEFAULT_UNAUTHORIZED_REGULATED_SPECIES: RegulatedSpecies = {
   allSpecies: undefined,
-  otherInfo: undefined,
   species: [],
   speciesGroups: []
 }
@@ -342,7 +340,6 @@ export const DEFAULT_AUTHORIZED_REGULATED_GEARS: RegulatedGears = {
   allPassiveGears: undefined,
   allTowedGears: undefined,
   derogation: undefined,
-  otherInfo: undefined,
   regulatedGearCategories: {},
   regulatedGears: {},
   selectedCategoriesAndGears: []
@@ -353,7 +350,6 @@ export const DEFAULT_UNAUTHORIZED_REGULATED_GEARS: RegulatedGears = {
   allPassiveGears: undefined,
   allTowedGears: undefined,
   derogation: undefined,
-  otherInfo: undefined,
   regulatedGearCategories: {},
   regulatedGears: {},
   selectedCategoriesAndGears: []

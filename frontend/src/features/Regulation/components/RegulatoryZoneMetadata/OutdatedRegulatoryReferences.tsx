@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../constants/constants'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import AlertSVG from '../../../icons/Picto_alerte.svg?react'
 import { INFINITE } from '../RegulationTables/constants'
@@ -34,8 +33,7 @@ export function OutdatedRegulatoryReferences() {
 }
 
 const Warning = styled.div`
-  font-size: 13px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   background: ${p => p.theme.color.goldenPoppy};
   display: flex;
   text-align: left;

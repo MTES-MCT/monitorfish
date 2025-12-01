@@ -1,13 +1,11 @@
-import { InfoText, InfoTextWrapper } from '@features/commonStyles/Backoffice.style'
+import { RegulatoryTagsLabel } from '@features/Regulation/components/RegulatoryZoneMetadata/constants'
 import { regulationActions } from '@features/Regulation/slice'
 import { RegulatoryTags } from '@features/Regulation/types'
 import { REGULATORY_REFERENCE_KEYS } from '@features/Regulation/utils'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
-import { Checkbox } from '@mtes-mct/monitor-ui'
+import { Checkbox, Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
-
-import { InfoBox } from '../InfoBox'
 
 export function RegulationTags() {
   const dispatch = useBackofficeAppDispatch()
@@ -19,7 +17,7 @@ export function RegulationTags() {
   }
 
   return (
-    <TagsContainer>
+    <Wrapper>
       <CheckBoxContainer>
         <Checkbox
           checked={tags?.includes(RegulatoryTags.ARP)}
@@ -27,11 +25,7 @@ export function RegulationTags() {
           name="ARP"
           onChange={() => updateTag(RegulatoryTags.ARP)}
         />
-        <InfoBox pointer={false}>
-          <InfoTextWrapper>
-            <InfoText>Zone issue d’une Analyse de Risque Pêche au sein d’une zone Natura 2000</InfoText>
-          </InfoTextWrapper>
-        </InfoBox>
+        <Icon.Info size={16} title={RegulatoryTagsLabel[RegulatoryTags.ARP]} />
       </CheckBoxContainer>
       <CheckBoxContainer>
         <Checkbox
@@ -40,23 +34,19 @@ export function RegulationTags() {
           name="ZPF"
           onChange={() => updateTag(RegulatoryTags.ZPF)}
         />
-        <InfoBox pointer={false}>
-          <InfoTextWrapper>
-            <InfoText>Zone de protection forte au sein d’une Aire Marine Protégée (AMP)</InfoText>
-          </InfoTextWrapper>
-        </InfoBox>
+        <Icon.Info size={16} title={RegulatoryTagsLabel[RegulatoryTags.ZPF]} />
       </CheckBoxContainer>
-    </TagsContainer>
+    </Wrapper>
   )
 }
 
-const TagsContainer = styled.div`
+const Wrapper = styled.div`
   display: flex;
   gap: 24px;
 `
 
 const CheckBoxContainer = styled.div`
-  align-items: baseline;
+  align-items: center;
   display: flex;
   gap: 8px;
 `

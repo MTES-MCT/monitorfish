@@ -1,10 +1,9 @@
-import { InfoPoint } from '@features/Regulation/components/RegulationForm/InfoPoint'
 import { CategoryLabel } from '@features/Regulation/components/RegulatoryZoneMetadata/GearRegulation/constants'
 import { GearOrGearCategoryFields } from '@features/Regulation/components/RegulatoryZoneMetadata/GearRegulation/GearOrGearCategoryFields'
 import { GearRow } from '@features/Regulation/components/RegulatoryZoneMetadata/GearRegulation/GearRow'
 import { buildCategoryTooltip } from '@features/Regulation/components/RegulatoryZoneMetadata/GearRegulation/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { THEME } from '@mtes-mct/monitor-ui'
+import { Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import type { Gear, GearCategory } from '@features/Regulation/types'
@@ -25,7 +24,7 @@ export function CategoryRow({ category, foundCategory, regulatedGearsList }: Cat
         <GearTitle>{category}</GearTitle>
         <Category>
           {CategoryLabel[category]}
-          <InfoPoint backgroundColor={THEME.color.charcoal} margin="3px" title={title} />
+          <StyledInfoPoint size={16} title={title} />
         </Category>
         <GearOrGearCategoryFields gearOrCategory={foundCategory} />
       </CategoryWrapper>
@@ -38,7 +37,7 @@ export function CategoryRow({ category, foundCategory, regulatedGearsList }: Cat
       <CategoryWrapper key={category}>
         <GearTitle>{category}</GearTitle>
         {gearsOfCategory.map(gear => (
-          <GearRow key={gear.code} categoriesToGears={categoriesToGears} gear={gear} />
+          <GearRow key={gear.code} gear={gear} />
         ))}
       </CategoryWrapper>
     )
@@ -49,11 +48,17 @@ export function CategoryRow({ category, foundCategory, regulatedGearsList }: Cat
 
 const CategoryWrapper = styled.div``
 
+const StyledInfoPoint = styled(Icon.Info)`
+  margin-left: 3px;
+  cursor: help;
+`
+
 const GearTitle = styled.span`
   font-weight: bold;
   color: ${p => p.theme.color.gunMetal};
 `
 
 const Category = styled.div`
-  margin-bottom: 16px;
+  align-items: center;
+  display: flex;
 `

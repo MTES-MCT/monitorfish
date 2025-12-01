@@ -1,20 +1,19 @@
 import { useMainAppSelector } from '@hooks/useMainAppSelector.ts'
 import ReactMarkdown from 'react-markdown'
-import styled from 'styled-components'
 
 import { RegulatedSpecies } from './RegulatedSpecies'
 import { DEFAULT_AUTHORIZED_REGULATED_SPECIES, DEFAULT_UNAUTHORIZED_REGULATED_SPECIES } from '../../../utils'
-import { Section } from '../RegulatoryMetadata.style'
-
-import type { RegulatedSpecies as RegulatedSpeciesType } from '../../../types'
+import { MarkdownWithMargin, Section } from '../RegulatoryMetadata.style'
+import { regulatedSpeciesIsNotEmpty } from '../utils'
 
 export function SpeciesRegulation() {
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
 
-  const { speciesRegulation } = regulatoryZoneMetadata ?? {}
-  const { authorized, otherInfo, unauthorized } = speciesRegulation ?? {}
-  const hasAuthorizedContent = !isRegulatedSpeciesEmpty(authorized ?? undefined)
-  const hasUnauthorizedContent = !isRegulatedSpeciesEmpty(unauthorized ?? undefined)
+  const authorized = regulatoryZoneMetadata?.speciesRegulation?.authorized
+  const otherInfo = regulatoryZoneMetadata?.speciesRegulation?.otherInfo
+  const unauthorized = regulatoryZoneMetadata?.speciesRegulation?.unauthorized
+  const hasAuthorizedContent = regulatedSpeciesIsNotEmpty(authorized)
+  const hasUnauthorizedContent = regulatedSpeciesIsNotEmpty(unauthorized)
   const areSpeciesRegulationEmpty = !hasAuthorizedContent && !hasUnauthorizedContent && !otherInfo
 
   if (areSpeciesRegulationEmpty) {
@@ -30,7 +29,7 @@ export function SpeciesRegulation() {
         {hasUnauthorizedContent && (
           <RegulatedSpecies
             authorized={false}
-            hasPreviousRegulatedSpeciesBloc={hasAuthorizedContent}
+            hasMarginTop={hasAuthorizedContent}
             regulatedSpecies={unauthorized ?? DEFAULT_UNAUTHORIZED_REGULATED_SPECIES}
           />
         )}
@@ -46,13 +45,3 @@ export function SpeciesRegulation() {
     </>
   )
 }
-
-const isRegulatedSpeciesEmpty = (regulatedSpecies: RegulatedSpeciesType | undefined): boolean =>
-  !regulatedSpecies ||
-  (!regulatedSpecies.speciesGroups?.length && !regulatedSpecies.species?.length && !regulatedSpecies.allSpecies)
-
-const MarkdownWithMargin = styled.div<{
-  $hasMargin: boolean
-}>`
-  margin-top: ${p => (p.$hasMargin ? 16 : 0)}px;
-`

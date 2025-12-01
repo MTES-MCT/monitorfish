@@ -33,7 +33,7 @@ class VesselController(
     private val getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions,
     private val getVesselReportings: GetVesselReportings,
     private val getVesselRiskFactor: GetVesselRiskFactor,
-    private val getVesselLastTripNumbers: GetVesselLastTripNumbers,
+    private val getVesselTripNumbers: GetVesselTripNumbers,
 ) {
     @GetMapping("")
     @Operation(summary = "Get all active vessels")
@@ -293,13 +293,13 @@ class VesselController(
         return VoyageDataOutput.fromVoyage(voyage)
     }
 
-    @GetMapping("/logbook/last")
+    @GetMapping("/logbook/trips")
     @Operation(summary = "Get vessel's last Logbook trip numbers")
     fun getVesselLogbookVoyages(
         @Parameter(description = "Vessel internal reference number (CFR)", required = true)
         @RequestParam(name = "internalReferenceNumber")
         internalReferenceNumber: String,
-    ): List<String> = getVesselLastTripNumbers.execute(internalReferenceNumber)
+    ): List<String> = getVesselTripNumbers.execute(internalReferenceNumber)
 
     @GetMapping("/risk_factor")
     @Operation(summary = "Get vessel risk factor")

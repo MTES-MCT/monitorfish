@@ -93,7 +93,7 @@ class VesselControllerITests {
     private lateinit var getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions
 
     @MockitoBean
-    private lateinit var getVesselLastTripNumbers: GetVesselLastTripNumbers
+    private lateinit var getVesselTripNumbers: GetVesselTripNumbers
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -1044,14 +1044,14 @@ class VesselControllerITests {
     }
 
     @Test
-    fun `Should find the last logbook trip numbers of a given vessels`() {
+    fun `Should find the logbook trip numbers of a given vessels`() {
         // Given
-        given(this.getVesselLastTripNumbers.execute(any())).willReturn(listOf("2020000125", "2020000126", "2020000127"))
+        given(this.getVesselTripNumbers.execute(any())).willReturn(listOf("2020000125", "2020000126", "2020000127"))
 
         // When
         api
             .perform(
-                get("/bff/v1/vessels/logbook/last?internalReferenceNumber=FR224226850")
+                get("/bff/v1/vessels/logbook/trips?internalReferenceNumber=FR224226850")
                     .with(authenticatedRequest()),
             )
             // Then

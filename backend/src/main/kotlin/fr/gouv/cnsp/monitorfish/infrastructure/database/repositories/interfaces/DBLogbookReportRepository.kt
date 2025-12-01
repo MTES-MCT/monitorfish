@@ -166,20 +166,6 @@ interface DBLogbookReportRepository :
     fun findLastReportSoftware(internalReferenceNumber: String): String?
 
     @Query(
-        """SELECT distinct e.trip_number
-        FROM logbook_reports e
-        WHERE e.cfr = :internalReferenceNumber
-        AND e.trip_number IS NOT NULL
-        AND e.operation_type IN ('DAT', 'COR')
-        AND NOT e.is_test_message
-        AND e.operation_datetime_utc > now() - interval '3 year'
-        ORDER BY e.trip_number DESC
-    """,
-        nativeQuery = true,
-    )
-    fun findLastThreeYearsTripNumbers(internalReferenceNumber: String): List<String>
-
-    @Query(
         """
         SELECT DISTINCT jsonb_array_elements(value->'pnoTypes')->>'pnoTypeName' AS uniquePnoTypeName
         FROM logbook_reports

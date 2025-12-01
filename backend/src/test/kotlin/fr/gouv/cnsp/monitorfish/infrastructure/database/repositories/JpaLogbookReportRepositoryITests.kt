@@ -313,65 +313,6 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findLastTwoYearsTripNumbers Should return an empty list When no trip is found`() {
-        // When
-        val trips =
-            jpaLogbookReportRepository.findLastThreeYearsTripNumbers(
-                "UNKNOWN_VESS",
-            )
-
-        // Then
-        assertThat(trips).isEmpty()
-    }
-
-    @Test
-    @Transactional
-    fun `findLastTwoYearsTripNumbers Should return the last trips`() {
-        // Given
-        val rawMessages =
-            listOf(
-                LogbookRawMessage("FPXE1546546114565"),
-                LogbookRawMessage("FPXE1546545654481"),
-            )
-        jpaLogbookRawMessageRepository.save(rawMessages.first())
-        jpaLogbookRawMessageRepository.save(rawMessages.last())
-
-        val messages = TestUtils.getDummyLogbookMessages()
-        jpaLogbookReportRepository.save(
-            messages
-                .first()
-                .copy(
-                    internalReferenceNumber = "FAK000999999",
-                    operationNumber = "FPXE1546546114565",
-                    reportDateTime = ZonedDateTime.now(),
-                    operationDateTime = ZonedDateTime.now(),
-                    tripNumber = "123",
-                ),
-        )
-        jpaLogbookReportRepository.save(
-            messages
-                .last()
-                .copy(
-                    internalReferenceNumber = "FAK000999999",
-                    operationNumber = "FPXE1546545654481",
-                    reportDateTime = ZonedDateTime.now().plusMinutes(3),
-                    operationDateTime = ZonedDateTime.now().plusMinutes(3),
-                    tripNumber = "456",
-                ),
-        )
-
-        // When
-        val trips =
-            jpaLogbookReportRepository.findLastThreeYearsTripNumbers(
-                "FAK000999999",
-            )
-
-        // Then
-        assertThat(trips).isEqualTo(listOf("9463715", "456", "123"))
-    }
-
-    @Test
-    @Transactional
     fun `findAllAcknowledgedPriorNotifications Should return PNO logbook reports from ESP & FRA vessels`() {
         // Given
         val filter =

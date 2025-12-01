@@ -58,6 +58,7 @@ from src.flows.recompute_controls_segments import recompute_controls_segments_fl
 from src.flows.refresh_materialized_view import refresh_materialized_view_flow
 from src.flows.regulations import regulations_flow
 from src.flows.regulations_checkup import regulations_checkup_flow
+from src.flows.regulations_open_data import regulations_open_data_flow
 from src.flows.risk_factors import risk_factors_flow
 from src.flows.scrape_legipeche import scrape_legipeche_flow
 from src.flows.species import species_flow
@@ -305,6 +306,10 @@ flows_to_deploy = [
     FlowAndSchedules(
         flow=regulations_checkup_flow,
         schedules=[Schedule(cron="5 6 * * 1,2,3,4,5")],
+    ),
+    FlowAndSchedules(
+        flow=regulations_open_data_flow,
+        schedules=[Schedule(cron="18 1 * * 5")],
     ),
     FlowAndSchedules(
         flow=regulations_flow,

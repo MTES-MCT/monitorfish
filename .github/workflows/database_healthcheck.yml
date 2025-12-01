@@ -36,7 +36,7 @@ jobs:
       POSTGRES_PASSWORD: postgres
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Get last release version
         id: get-last-release-version

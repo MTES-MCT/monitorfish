@@ -40,7 +40,7 @@ jobs:
       VERSION: ${{ env.VERSION }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set version and environment profile
         uses: ./.github/actions/set-version-and-environment-profile
@@ -63,7 +63,7 @@ jobs:
           java-version: 17
 
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Unit test
         run: make test-back
@@ -78,7 +78,7 @@ jobs:
       NODE_OPTIONS: "--max_old_space_size=10240"
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
         uses: actions/setup-node@v5
@@ -126,7 +126,7 @@ jobs:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set up Docker Buildx
         id: buildx
@@ -194,7 +194,7 @@ jobs:
       VERSION: ${{ needs.version.outputs.VERSION }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Download image
         uses: ishworkh/container-image-artifact-download@v2.1.0
@@ -253,7 +253,7 @@ jobs:
       VERSION: ${{ needs.version.outputs.VERSION }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Download image
         uses: ishworkh/container-image-artifact-download@v2.1.0
@@ -299,7 +299,7 @@ jobs:
       SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 100
 
@@ -347,7 +347,7 @@ jobs:
       VERSION: ${{needs.version.outputs.VERSION}}
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Download image
         uses: ishworkh/container-image-artifact-download@v2.1.0

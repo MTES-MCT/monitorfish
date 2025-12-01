@@ -1,1 +1,0 @@
-REFRESH MATERIALIZED VIEW public.analytics_controls_full_data;

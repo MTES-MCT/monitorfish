@@ -1,4 +1,4 @@
-import { useGetLastLogbookTripsQuery } from '@features/Logbook/api'
+import { useGetLogbookTripsQuery } from '@features/Logbook/api'
 import { LogbookSortKey } from '@features/Logbook/components/VesselLogbook/LogbookMessages/constants'
 import { LastTrip, NextTrip, PreviousTrip } from '@features/Logbook/components/VesselLogbook/LogbookSummary'
 import { LogbookSoftwareLabel, NavigateTo } from '@features/Logbook/constants'
@@ -13,12 +13,7 @@ import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { LogbookMessage } from './messages/LogbookMessage'
-import {
-  downloadMessages,
-  filterBySelectedType,
-  getLastLogbookTripsOptions,
-  LOGBOOK_SORT_LABELS_AS_OPTIONS
-} from './utils'
+import { downloadMessages, filterBySelectedType, getLogbookTripsOptions, LOGBOOK_SORT_LABELS_AS_OPTIONS } from './utils'
 import { logbookActions } from '../../../slice'
 import { CustomDatesShowedInfo } from '../CustomDatesShowedInfo'
 import { getLogbookMessagesTypeOptions } from '../utils'
@@ -34,14 +29,12 @@ export function LogbookMessages({ messageTypeFilter }: LogbookMessagesProps) {
   const isLastVoyage = useMainAppSelector(state => state.fishingActivities.isLastVoyage)
   const software = useMainAppSelector(state => state.fishingActivities.software)
   const tripNumber = useMainAppSelector(state => state.fishingActivities.tripNumber)
-  const { data: lastLogbookTrips } = useGetLastLogbookTripsQuery(
-    selectedVesselIdentity?.internalReferenceNumber ?? skipToken
-  )
+  const { data: logbookTrips } = useGetLogbookTripsQuery(selectedVesselIdentity?.internalReferenceNumber ?? skipToken)
 
   const [isAscendingSort, setIsAscendingSort] = useState(true)
   const [filteredMessagesType, setFilteredMessagesType] = useState<string | undefined>(messageTypeFilter)
   const [orderBy, setOrderBy] = useState<LogbookSortKey>(LogbookSortKey.reportDateTime)
-  const lastLogbookTripsOptions = getLastLogbookTripsOptions(lastLogbookTrips, tripNumber)
+  const logbookTripsOptions = getLogbookTripsOptions(logbookTrips, tripNumber)
 
   const filteredAndSortedLogbookMessages = useMemo(() => {
     if (!logbookMessages) {
@@ -128,7 +121,7 @@ export function LogbookMessages({ messageTypeFilter }: LogbookMessagesProps) {
           label="Numéro de marée"
           name="tripNumber"
           onChange={getLogbookTrip}
-          options={lastLogbookTripsOptions}
+          options={logbookTripsOptions}
           searchable
           value={(tripNumber as string) ?? undefined}
         />

@@ -39,7 +39,7 @@ jobs:
       packages: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set IMAGE_TAG
         run: echo "IMAGE_TAG=ghcr.io/mtes-mct/monitorfish/monitorfish-database:${{ matrix.image_version }}" >> $GITHUB_ENV
@@ -86,7 +86,7 @@ jobs:
       packages: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set IMAGE_TAG
         run: echo "IMAGE_TAG=ghcr.io/mtes-mct/monitorfish/monitorfish-database-upgrade:${{ matrix.image_version }}" >> $GITHUB_ENV

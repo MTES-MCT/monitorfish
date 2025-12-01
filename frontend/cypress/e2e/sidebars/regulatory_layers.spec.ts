@@ -157,21 +157,24 @@ context('Sidebars > Regulatory Layers', () => {
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('inférieur à 123 mm')
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('Attention à cette espèce!')
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('Dragues')
-    cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains(
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('Toutes les dragues')
+    cy.getDataCy("authorized-regulatory-layers-metadata-gears").within(() => {
+      cy.get('.Element-IconBox').should(
+        'have.attr',
+        'title',
+        'DHB - Drague à main manœuvrée à partir du bateau\n' +
+        'DHS - Drague à main manœuvrée à partir du rivage\n' +
+        'DRB - Dragues remorquées par bateau\n' +
+        "DRH - Dragues à main utilisées à bord d'un bateau\n" +
+        'DRM - Dragues mécanisées\n' +
+        'HMD - Dragues mécanisées incluant les dragues suceuses'
+      )
+    })
+    cy.getDataCy("regulatory-layers-metadata-gears-other-info").contains(
       'li',
       'Drague sans dent et de largeur maximale 1,30 mètre'
     )
-    cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('li', 'Dragues avec dents !')
-    cy.get('*[data-cy="regulatory-layers-metadata-gears-category-with-infobox"]').should(
-      'have.attr',
-      'title',
-      'DHB - Drague à main manœuvrée à partir du bateau \n' +
-        'DHS - Drague à main manœuvrée à partir du rivage \n' +
-        'DRB - Dragues remorquées par bateau \n' +
-        "DRH - Dragues à main utilisées à bord d'un bateau \n" +
-        'DRM - Dragues mécanisées \n' +
-        'HMD - Dragues mécanisées incluant les dragues suceuses \n'
-    )
+    cy.getDataCy("regulatory-layers-metadata-gears-other-info").contains('li', 'Dragues avec dents !')
 
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('URC (OURSINS NCA)')
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('li', 'Pas plus de 500kg')
@@ -216,7 +219,7 @@ context('Sidebars > Regulatory Layers', () => {
       )
     cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears"]').contains('Chaluts')
     cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears"]').contains('Dragues')
-    cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears"]').contains('Engins non autorisés')
+    cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears"]').contains('Engins interdits')
     cy.get('*[data-cy="regulatory-layers-metadata-gears-other-info"]').contains(
       'Encore une dernière information sur les engins !'
     )

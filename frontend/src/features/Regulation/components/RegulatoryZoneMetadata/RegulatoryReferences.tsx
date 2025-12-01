@@ -2,15 +2,15 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
 import styled from 'styled-components'
 
-import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
-import { getRegulatoryZoneTextTypeAsText } from '../../../utils'
-import { SectionTitle, Section, List, Label } from '../RegulatoryMetadata.style'
+import { SectionTitle, Section, List, Label } from './RegulatoryMetadata.style'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
+import { getRegulatoryZoneTextTypeAsText } from '../../utils'
 
-export function RegulatoryReferencesDisplayed() {
+export function RegulatoryReferences() {
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
   const isSuperUser = useIsSuperUser()
 
-  const { regulatoryReferences } = regulatoryZoneMetadata ?? {}
+  const regulatoryReferences = regulatoryZoneMetadata?.regulatoryReferences
 
   const sendTrackEvent = () => {
     trackEvent({

@@ -77,7 +77,6 @@ export type FishingPeriod = {
 
 export type RegulatedSpecies = {
   allSpecies: boolean | undefined
-  otherInfo: string | undefined
   species: RegulatedSpeciesDetail[]
   /** group name */
   speciesGroups: string[]
@@ -118,7 +117,6 @@ export type RegulatedGears = {
   allPassiveGears: boolean | undefined
   allTowedGears: boolean | undefined
   derogation: boolean | undefined
-  otherInfo: string | undefined
   regulatedGearCategories: Record<string, GearCategory>
   regulatedGears: Record<string, Gear>
   /**  a list of categories name and gears code */

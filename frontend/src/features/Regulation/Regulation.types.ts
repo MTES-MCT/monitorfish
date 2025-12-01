@@ -1,4 +1,5 @@
-import type { RegulatoryZone } from './types'
+import { RegulatoryTags, type RegulatoryZone } from './types'
+
 import type { Feature, FeatureCollection, Polygon } from 'geojson'
 
 export namespace Regulation {
@@ -27,7 +28,7 @@ export namespace Regulation {
    *      prohibitions: undefined,
    *      quantity: undefined,
    *      region: 'Occitanie, Languedoc-Roussillon',
-   *      gearRegulation: Object { authorized: undefined, allGears: undefined, allTowedGears: undefined, … },
+   *      GearRegulation: Object { authorized: undefined, allGears: undefined, allTowedGears: undefined, … },
    *      regulatoryReferences: Array [ {…} ],
    *      regulatorySpecies: Object { authorized: undefined, allSpecies: undefined, otherInfo: undefined, … },
    *      rejections: undefined,
@@ -68,7 +69,7 @@ export namespace Regulation {
     region: string | undefined
     regulatory_references: string | undefined
     species?: string | undefined
-    tags: string | undefined
+    tags: RegulatoryTags | undefined
     topic: string | undefined
     zone: string | undefined
   }
@@ -84,7 +85,7 @@ export namespace Regulation {
     region: string
     regulatory_references: string | undefined
     species: string | undefined
-    tags: string | undefined
+    tags: RegulatoryTags | undefined
     topic: string
     zone: string
   }

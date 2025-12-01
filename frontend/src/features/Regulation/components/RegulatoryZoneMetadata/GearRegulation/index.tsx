@@ -1,21 +1,23 @@
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { FrontendError } from '@libs/FrontendError'
 import ReactMarkdown from 'react-markdown'
-import styled from 'styled-components'
 
 import { RegulatedGears } from './RegulatedGears'
 import { DEFAULT_AUTHORIZED_REGULATED_GEARS, DEFAULT_UNAUTHORIZED_REGULATED_GEARS } from '../../../utils'
-import { Section } from '../RegulatoryMetadata.style'
+import { MarkdownWithMargin, Section } from '../RegulatoryMetadata.style'
+import { regulatedGearsIsNotEmpty } from '../utils'
 
-export function GearRegulationDisplayed() {
+export function GearRegulation() {
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
 
-  const { gearRegulation } = regulatoryZoneMetadata ?? {}
+  const gearRegulation = regulatoryZoneMetadata?.gearRegulation
   if (!gearRegulation) {
-    throw new FrontendError('`gearRegulation` is undefined.')
+    throw new FrontendError('`GearRegulation` is undefined.')
   }
 
-  const { authorized, otherInfo, unauthorized } = gearRegulation
+  const { authorized } = gearRegulation
+  const { otherInfo } = gearRegulation
+  const { unauthorized } = gearRegulation
   const hasAuthorizedContent = regulatedGearsIsNotEmpty(authorized)
   const hasUnauthorizedContent = regulatedGearsIsNotEmpty(unauthorized)
   const gearRegulationIsNotEmpty = hasAuthorizedContent || hasUnauthorizedContent || otherInfo
@@ -25,13 +27,13 @@ export function GearRegulationDisplayed() {
       {gearRegulationIsNotEmpty && (
         <Section>
           {hasAuthorizedContent && (
-            <RegulatedGears authorized regulatedGearsObject={authorized || DEFAULT_AUTHORIZED_REGULATED_GEARS} />
+            <RegulatedGears authorized regulatedGearsObject={authorized ?? DEFAULT_AUTHORIZED_REGULATED_GEARS} />
           )}
           {hasUnauthorizedContent && (
             <RegulatedGears
               authorized={false}
-              hasPreviousRegulatedGearsBloc={hasAuthorizedContent}
-              regulatedGearsObject={unauthorized || DEFAULT_UNAUTHORIZED_REGULATED_GEARS}
+              hasMarginTop={hasAuthorizedContent}
+              regulatedGearsObject={unauthorized ?? DEFAULT_UNAUTHORIZED_REGULATED_GEARS}
             />
           )}
           {otherInfo && (
@@ -47,18 +49,3 @@ export function GearRegulationDisplayed() {
     </>
   )
 }
-
-export const regulatedGearsIsNotEmpty = regulatedGearsObject =>
-  regulatedGearsObject?.allGears ||
-  regulatedGearsObject?.allTowedGears ||
-  regulatedGearsObject?.allPassiveGears ||
-  Object.keys(regulatedGearsObject?.regulatedGears || {})?.length ||
-  Object.keys(regulatedGearsObject?.regulatedGearCategories || {})?.length ||
-  regulatedGearsObject?.selectedCategoriesAndGears?.length ||
-  regulatedGearsObject?.derogation
-
-const MarkdownWithMargin = styled.div<{
-  $hasMargin: boolean
-}>`
-  margin-top: ${p => (p.$hasMargin ? 20 : 0)}px;
-`

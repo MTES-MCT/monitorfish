@@ -2,21 +2,21 @@ import styled from 'styled-components'
 
 export const Label = styled.div`
   display: flex;
+  align-items: center;
 `
 
 export const Elem = styled.li`
   list-style-type: none;
 `
 
-export const List = styled.ul<{
-  $isLast?: boolean
-}>`
+export const List = styled.div`
   display: flex;
+  gap: 16px;
   flex-direction: column;
   font-size: 13px;
   color: ${p => p.theme.color.gunMetal};
   padding-bottom: 8px;
-  padding-left: 0px;
+  padding-left: 0;
   margin: 0;
 `
 
@@ -63,7 +63,7 @@ export const Section = styled.div`
   color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
   font-weight: 500;
-  padding: 15px 45px 15px 20px;
+  padding: 16px;
   text-align: left;
   border-bottom: 1px solid ${p => p.theme.color.lightGray};
 
@@ -100,4 +100,10 @@ export const Field = styled.tr`
   border: none;
   background: none;
   line-height: 0.5em;
+`
+
+export const MarkdownWithMargin = styled.div<{
+  $hasMargin: boolean
+}>`
+  margin-top: ${p => (p.$hasMargin ? 16 : 0)}px;
 `

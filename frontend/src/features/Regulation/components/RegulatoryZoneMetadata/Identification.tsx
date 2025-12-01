@@ -1,12 +1,15 @@
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import styled from 'styled-components'
 
-import { Key, Value, Fields, Field } from '../RegulatoryMetadata.style'
+import { Field, Fields, Key, Value } from './RegulatoryMetadata.style'
 
-export function IdentificationDisplayed() {
+export function Identification() {
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
 
-  const { lawType, region, topic, zone } = regulatoryZoneMetadata ?? {}
+  const lawType = regulatoryZoneMetadata?.lawType
+  const region = regulatoryZoneMetadata?.region
+  const topic = regulatoryZoneMetadata?.topic
+  const zone = regulatoryZoneMetadata?.zone
 
   return (
     <Zone>

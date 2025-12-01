@@ -1,12 +1,12 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import ReactMarkdown from 'react-markdown'
 
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { Section } from '../RegulatoryMetadata.style'
+import { Section } from './RegulatoryMetadata.style'
 
-export function OtherInfoDisplayed() {
+export function OtherInfo() {
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
 
-  const { otherInfo } = regulatoryZoneMetadata ?? {}
+  const otherInfo = regulatoryZoneMetadata?.otherInfo
 
   return (
     <>

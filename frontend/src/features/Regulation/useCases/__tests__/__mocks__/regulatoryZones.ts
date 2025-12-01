@@ -21,7 +21,6 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
-        otherInfo: undefined,
         regulatedGearCategories: {},
         regulatedGears: {},
         selectedCategoriesAndGears: ['Chaluts']
@@ -32,7 +31,6 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
-        otherInfo: undefined,
         regulatedGearCategories: {},
         regulatedGears: {},
         selectedCategoriesAndGears: []
@@ -81,7 +79,6 @@ export const regulatoryZones: RegulatoryZone[] = [
     speciesRegulation: {
       authorized: {
         allSpecies: false,
-        otherInfo: undefined,
         species: [
           { code: 'URC', name: 'OURSINS NCA', remarks: '500 kg' },
           { code: 'URX', name: 'OURSINS,ETC. NCA', remarks: '500 kg' }
@@ -91,7 +88,6 @@ export const regulatoryZones: RegulatoryZone[] = [
       otherInfo: undefined,
       unauthorized: {
         allSpecies: false,
-        otherInfo: undefined,
         species: [],
         speciesGroups: []
       }
@@ -119,7 +115,6 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
-        otherInfo: undefined,
         regulatedGearCategories: {},
         regulatedGears: {},
         selectedCategoriesAndGears: []
@@ -130,7 +125,6 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
-        otherInfo: undefined,
         regulatedGearCategories: {},
         regulatedGears: {},
         selectedCategoriesAndGears: []
@@ -172,7 +166,6 @@ export const regulatoryZones: RegulatoryZone[] = [
     speciesRegulation: {
       authorized: {
         allSpecies: false,
-        otherInfo: undefined,
         species: [
           { code: 'WPO', name: 'OURSH NCA', remarks: '500 kg' },
           { code: 'WPI', name: 'AIIILE ,ETC. NCA', remarks: '500 kg' }
@@ -182,7 +175,6 @@ export const regulatoryZones: RegulatoryZone[] = [
       otherInfo: undefined,
       unauthorized: {
         allSpecies: false,
-        otherInfo: undefined,
         species: [],
         speciesGroups: []
       }
@@ -210,7 +202,6 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
-        otherInfo: undefined,
         regulatedGearCategories: {},
         regulatedGears: {},
         selectedCategoriesAndGears: []
@@ -221,7 +212,6 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
-        otherInfo: undefined,
         regulatedGearCategories: {},
         regulatedGears: {},
         selectedCategoriesAndGears: []
@@ -256,14 +246,12 @@ export const regulatoryZones: RegulatoryZone[] = [
     speciesRegulation: {
       authorized: {
         allSpecies: false,
-        otherInfo: undefined,
         species: [{ code: 'WHG', name: 'MERLAN', remarks: '500 kg' }],
         speciesGroups: []
       },
       otherInfo: undefined,
       unauthorized: {
         allSpecies: false,
-        otherInfo: undefined,
         species: [],
         speciesGroups: []
       }
@@ -291,7 +279,6 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
-        otherInfo: undefined,
         regulatedGearCategories: {},
         regulatedGears: {},
         selectedCategoriesAndGears: ['OTB']
@@ -302,7 +289,6 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
-        otherInfo: undefined,
         regulatedGearCategories: {},
         regulatedGears: {},
         selectedCategoriesAndGears: []
@@ -337,14 +323,12 @@ export const regulatoryZones: RegulatoryZone[] = [
     speciesRegulation: {
       authorized: {
         allSpecies: false,
-        otherInfo: undefined,
         species: [{ code: 'HKE', name: 'Merlu européen', remarks: '500 kg' }],
         speciesGroups: []
       },
       otherInfo: undefined,
       unauthorized: {
         allSpecies: false,
-        otherInfo: undefined,
         species: [],
         speciesGroups: []
       }
@@ -372,7 +356,6 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
-        otherInfo: undefined,
         regulatedGearCategories: {},
         regulatedGears: {},
         selectedCategoriesAndGears: []
@@ -383,7 +366,6 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
-        otherInfo: undefined,
         regulatedGearCategories: {},
         regulatedGears: {},
         selectedCategoriesAndGears: ['Chalut']
@@ -418,14 +400,12 @@ export const regulatoryZones: RegulatoryZone[] = [
     speciesRegulation: {
       authorized: {
         allSpecies: false,
-        otherInfo: undefined,
         species: [{ code: 'MUR', name: 'Rouget de roche', remarks: '500 kg' }],
         speciesGroups: []
       },
       otherInfo: undefined,
       unauthorized: {
         allSpecies: false,
-        otherInfo: undefined,
         species: [],
         speciesGroups: []
       }

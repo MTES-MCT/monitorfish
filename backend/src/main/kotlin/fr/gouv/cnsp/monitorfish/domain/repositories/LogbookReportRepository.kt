@@ -32,13 +32,6 @@ interface LogbookReportRepository {
 
     fun findLastThreeYearsTripNumbers(internalReferenceNumber: String): List<String>
 
-    fun findDatesOfTrip(
-        internalReferenceNumber: String,
-        tripNumber: String,
-        firstOperationDateTime: ZonedDateTime,
-        lastOperationDateTime: ZonedDateTime,
-    ): VoyageDatesAndTripNumber
-
     fun findDistinctPriorNotificationTypes(): List<String>
 
     fun findLastReportSoftware(internalReferenceNumber: String): String?

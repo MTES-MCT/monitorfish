@@ -5,29 +5,27 @@
 frontend/node_modules
 
 # Env variables
-datascience/.env
 pipeline/.env
 pipeline/.monitorfish
 
 #Docs
-/datascience/docs
+/pipeline/docs
 
 # Notebooks
-/datascience/notebooks
-datascience/dam-si-jupyter-config.py
+/pipeline/notebooks
 **/.ipython
 **/.ipynb_checkpoints/
 .jupyter/
 
 # Local data
-/datascience/data
+/pipeline/data
 
 # Python
 *.pyc
-datascience/monitorfish.egg-info
-/datascience/.local
-/datascience/.cache
-/datascience/.pytest_cache
+pipeline/monitorfish.egg-info
+/pipeline/.local
+/pipeline/.cache
+/pipeline/.pytest_cache
 **/__pycache__
 
 # Coverage reports

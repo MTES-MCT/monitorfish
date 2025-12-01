@@ -1,9 +1,0 @@
-PNO à {{ port_name }}
-- {{ vessel_name }}{{ " ({})".format(cfr) if cfr }}
-{{ "- Segment(s) {}".format(trip_segments) if trip_segments }}
-- Note de risque {{ "{:.2f}".format(risk_factor) }}
-{{ "- Arrivée est. {}".format(predicted_arrival_datetime_utc) if predicted_arrival_datetime_utc else "" }}
-{{ "- Déb. prévue {}".format(predicted_landing_datetime_utc) if predicted_landing_datetime_utc else "" }}
-{{ "- {}".format(bft_summary) if bft_summary else "" }}{% if note %}
-
-[!] Points d'attention relevés par le CNSP, consultez le pdf.{% endif %}

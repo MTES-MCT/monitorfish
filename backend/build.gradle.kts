@@ -19,7 +19,7 @@ ktlint {
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.0.0")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.1.0")
     }
 }
 
@@ -61,16 +61,16 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.5.8")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
-    api("io.ktor:ktor-client-core-jvm:3.3.2")
-    api("io.ktor:ktor-client-java-jvm:3.3.2")
-    api("io.ktor:ktor-client-content-negotiation-jvm:3.3.2")
-    api("io.ktor:ktor-serialization-kotlinx-json-jvm:3.3.2")
+    api("io.ktor:ktor-client-core-jvm:3.3.3")
+    api("io.ktor:ktor-client-java-jvm:3.3.3")
+    api("io.ktor:ktor-client-content-negotiation-jvm:3.3.3")
+    api("io.ktor:ktor-serialization-kotlinx-json-jvm:3.3.3")
     api("org.hibernate.validator:hibernate-validator:8.0.2.Final")
     api("jakarta.validation:jakarta.validation-api:3.1.1")
     api("com.fasterxml.jackson.module:jackson-module-kotlin:2.20.1")
     api("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
-    api("org.flywaydb:flyway-core:11.17.0")
-    api("org.flywaydb:flyway-database-postgresql:11.17.0")
+    api("org.flywaydb:flyway-core:11.18.0")
+    api("org.flywaydb:flyway-database-postgresql:11.18.0")
     api("org.springdoc:springdoc-openapi-ui:1.8.0")
     api("org.jetbrains.kotlin:kotlin-reflect:2.2.21")
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21")
@@ -83,11 +83,11 @@ dependencies {
     implementation("org.locationtech.proj4j:proj4j:1.4.1")
     implementation("org.locationtech.proj4j:proj4j-epsg:1.4.1")
     api("org.hibernate:hibernate-spatial:6.6.29.Final")
-    api("io.sentry:sentry:8.26.0")
-    api("io.sentry:sentry-log4j2:8.26.0")
+    api("io.sentry:sentry:8.27.1")
+    api("io.sentry:sentry-log4j2:8.27.1")
     implementation("org.springframework.cloud:spring-cloud-gateway-mvc:4.3.2")
     runtimeOnly("org.postgresql:postgresql:42.7.8")
-    testImplementation("io.ktor:ktor-client-mock-jvm:3.3.2")
+    testImplementation("io.ktor:ktor-client-mock-jvm:3.3.3")
     testImplementation("org.assertj:assertj-core:3.27.6")
     testImplementation("org.testcontainers:postgresql:1.21.3")
     testImplementation("org.testcontainers:testcontainers:1.21.3")

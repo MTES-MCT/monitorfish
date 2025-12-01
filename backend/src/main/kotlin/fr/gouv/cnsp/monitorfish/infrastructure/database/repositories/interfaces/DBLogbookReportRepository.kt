@@ -54,6 +54,7 @@ interface DBLogbookReportRepository :
             SELECT
                 trip_number,
                 start_datetime_utc,
+                end_datetime_utc,
                 first_operation_datetime_utc,
                 last_operation_datetime_utc
             FROM trips_snapshot
@@ -70,6 +71,14 @@ interface DBLogbookReportRepository :
                     END),
                     MIN(operation_datetime_utc)
                 ) AS start_datetime_utc,
+                MAX(
+                    CASE WHEN log_type != 'LAN' AND ABS(EXTRACT(epoch FROM activity_datetime_utc - operation_datetime_utc)) / 3600 / 24 / 365 < 5
+                    THEN activity_datetime_utc
+                END) AS end_date_no_lan,
+                MAX(
+                    CASE WHEN log_type = 'LAN' AND ABS(EXTRACT(epoch FROM activity_datetime_utc - operation_datetime_utc)) / 3600 / 24 / 365 < 5
+                    THEN activity_datetime_utc
+                END) AS end_date_lan,
                 MIN(operation_datetime_utc) AS first_operation_datetime_utc,
                 MAX(operation_datetime_utc) AS last_operation_datetime_utc
             FROM logbook_reports
@@ -84,6 +93,11 @@ interface DBLogbookReportRepository :
         SELECT
             COALESCE(st.trip_number, lt.trip_number) AS trip_number,
             LEAST(st.start_datetime_utc, lt.start_datetime_utc) AS start_datetime_utc,
+            COALESCE(
+                GREATEST(st.end_datetime_utc, lt.end_date_no_lan),
+                lt.end_date_lan,
+                lt.last_operation_datetime_utc
+            ) AS end_datetime_utc,
             LEAST(st.first_operation_datetime_utc, lt.first_operation_datetime_utc) AS first_operation_datetime_utc,
             GREATEST(st.last_operation_datetime_utc, lt.last_operation_datetime_utc) AS last_operation_datetime_utc
         FROM snapshot_trips st
@@ -108,25 +122,6 @@ interface DBLogbookReportRepository :
         reportId: String,
         operationDate: String,
     ): List<LogbookReportEntity>
-
-    @Query(
-        """SELECT
-            start_date,
-            end_date
-        FROM find_dates_of_trip(
-            :internalReferenceNumber,
-            :tripNumber,
-            :firstOperationDateTime,
-            :lastOperationDateTime
-        )""",
-        nativeQuery = true,
-    )
-    fun findDatesOfTrip(
-        internalReferenceNumber: String,
-        tripNumber: String,
-        firstOperationDateTime: ZonedDateTime,
-        lastOperationDateTime: ZonedDateTime,
-    ): List<Array<Instant>>
 
     @Query(
         """

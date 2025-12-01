@@ -20,7 +20,7 @@ export function InfoPoint({ backgroundColor, color, dataCy, margin, onMouseEnter
       onMouseOut={onMouseOut}
       title={title}
     >
-      !
+      i
     </Wrapper>
   )
 }

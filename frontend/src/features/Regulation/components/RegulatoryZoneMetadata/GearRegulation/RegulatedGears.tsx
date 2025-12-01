@@ -1,4 +1,4 @@
-import { THEME } from '@mtes-mct/monitor-ui'
+import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { theme } from '../../../../../ui/theme'
@@ -12,14 +12,10 @@ import type { RegulatedGears as RegulatedGearsType } from '../../../types'
 
 export type RegulatedGearsProps = {
   authorized: boolean
-  hasPreviousRegulatedGearsBloc?: boolean
+  hasMarginTop?: boolean
   regulatedGearsObject: RegulatedGearsType
 }
-export function RegulatedGears({
-  authorized,
-  hasPreviousRegulatedGearsBloc = false,
-  regulatedGearsObject
-}: RegulatedGearsProps) {
+export function RegulatedGears({ authorized, hasMarginTop = false, regulatedGearsObject }: RegulatedGearsProps) {
   const { allGears, allPassiveGears, allTowedGears, derogation, regulatedGearCategories, regulatedGears } =
     regulatedGearsObject
 
@@ -27,7 +23,7 @@ export function RegulatedGears({
 
   return (
     <Wrapper data-cy={`${dataCyTarget}-regulatory-layers-metadata-gears`}>
-      <SectionTitle $hasPreviousRegulatedGearsBloc={hasPreviousRegulatedGearsBloc}>
+      <SectionTitle $hasPreviousRegulatedGearsBloc={hasMarginTop}>
         {authorized ? <GreenCircle $margin="0 5px 0 0" /> : <RedCircle $margin="0 5px 0 0" />}
         Engins {authorized ? 'réglementés' : 'interdits'}
       </SectionTitle>
@@ -40,7 +36,7 @@ export function RegulatedGears({
               title={INFO_TEXT.TOWED_GEAR}
             >
               Tous les engins trainants
-              <InfoPoint margin="3px" title={INFO_TEXT.TOWED_GEAR} />
+              <StyledInfoPoint size={16} title={INFO_TEXT.TOWED_GEAR} />
             </Label>
           )}
           {allPassiveGears && (
@@ -49,7 +45,7 @@ export function RegulatedGears({
               title={INFO_TEXT.PASSIVE_GEAR}
             >
               Tous les engins dormants
-              <InfoPoint margin="3px" title={INFO_TEXT.PASSIVE_GEAR} />
+              <StyledInfoPoint size={16} title={INFO_TEXT.PASSIVE_GEAR} />
             </Label>
           )}
           <CategoriesList
@@ -76,6 +72,11 @@ const Derogation = styled.span`
   display: flex;
   border: 1px solid ${theme.color.goldenPoppy};
   padding: 4px 15px 6px 8px;
+`
+
+const StyledInfoPoint = styled(Icon.Info)`
+  margin-left: 3px;
+  cursor: help;
 `
 
 const DerogationMessage = styled.span`

@@ -22,7 +22,9 @@ export function RegulatoryZoneMetadata() {
   const { trackPage } = useTracking()
 
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
-  const regulatoryZoneMetadataPanelIsOpen = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
+  const regulatoryZoneMetadataPanelIsOpen = useMainAppSelector(
+    state => state.regulation.regulatoryZoneMetadataPanelIsOpen
+  )
 
   const onCloseIconClicked = () => {
     dispatch(closeRegulatoryZoneMetadata())

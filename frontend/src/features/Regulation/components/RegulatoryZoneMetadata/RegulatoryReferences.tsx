@@ -10,7 +10,7 @@ export function RegulatoryReferences() {
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
   const isSuperUser = useIsSuperUser()
 
-  const { regulatoryReferences } = regulatoryZoneMetadata ?? {}
+  const regulatoryReferences = regulatoryZoneMetadata?.regulatoryReferences
 
   const sendTrackEvent = () => {
     trackEvent({

@@ -35,7 +35,7 @@ class GetVesselVoyageByDates(
 
         val tripsBetweenDates =
             vesselTrips.filter {
-                it.startDateTime!!.isBefore(dates.to) &&
+                it.startDateTime.isBefore(dates.to) &&
                     it.startDateTime.isAfter(dates.from)
             }
         if (tripsBetweenDates.isEmpty()) {

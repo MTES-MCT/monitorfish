@@ -25,4 +25,3 @@ export const regulatedSpeciesIsNotEmpty = (regulatedSpecies: RegulatedSpecies | 
   !!(regulatedSpecies?.allSpecies || regulatedSpecies?.speciesGroups?.length || regulatedSpecies?.species?.length)
 
 /* eslint-enable @typescript-eslint/prefer-nullish-coalescing */
-

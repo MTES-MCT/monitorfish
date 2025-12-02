@@ -124,6 +124,7 @@ export function LogbookMessages({ messageTypeFilter }: LogbookMessagesProps) {
           options={logbookTripsOptions}
           searchable
           value={(tripNumber as string) ?? undefined}
+          virtualized
         />
         <StyledNextTrip
           $disabled={!!isLastVoyage}

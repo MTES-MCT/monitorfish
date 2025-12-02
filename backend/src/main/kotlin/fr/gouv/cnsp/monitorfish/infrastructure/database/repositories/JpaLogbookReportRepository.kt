@@ -16,7 +16,6 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLogbookReportRepository
-import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageDates
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.utils.toSqlArrayString
 import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
 import jakarta.transaction.Transactional
@@ -134,19 +133,22 @@ class JpaLogbookReportRepository(
 
     @Cacheable(value = ["all_trips"])
     override fun findAllTrips(internalReferenceNumber: String): List<VoyageDatesAndTripNumber> =
-        dbLogbookReportRepository.findAllTrips(internalReferenceNumber).map {
-            VoyageDatesAndTripNumber(
-                tripNumber = it[0] as String,
-                startDateTime = (it[1] as Timestamp).toInstant().atZone(UTC),
-                endDateTime = (it[2] as Timestamp).toInstant().atZone(UTC),
-                firstOperationDateTime = (it[3] as Timestamp).toInstant().atZone(UTC),
-                lastOperationDateTime = (it[4] as Timestamp).toInstant().atZone(UTC),
+        try {
+            dbLogbookReportRepository.findAllTrips(internalReferenceNumber).map {
+                VoyageDatesAndTripNumber(
+                    tripNumber = it[0] as String,
+                    startDateTime = (it[1] as Timestamp).toInstant().atZone(UTC),
+                    endDateTime = (it[2] as Timestamp).toInstant().atZone(UTC),
+                    firstOperationDateTime = (it[3] as Timestamp).toInstant().atZone(UTC),
+                    lastOperationDateTime = (it[4] as Timestamp).toInstant().atZone(UTC),
+                )
+            }
+        } catch (e: RuntimeException) {
+            throw NoLogbookFishingTripFound(
+                "No trip found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")",
+                e,
             )
         }
-
-
-    private fun getTripNotFoundExceptionMessage(internalReferenceNumber: String) =
-        "No trip found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
 
     @Cacheable(value = ["logbook_messages"])
     override fun findAllMessagesByTripNumberBetweenOperationDates(

@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.times
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
@@ -39,14 +38,14 @@ class GetVesselVoyageUTests {
                     firstOperationDateTime,
                     lastOperationDateTime,
                     startDate,
-                    endDate
+                    endDate,
                 ),
                 VoyageDatesAndTripNumber(
                     tripNumber,
                     firstOperationDateTime,
                     lastOperationDateTime,
                     startDate,
-                    endDate
+                    endDate,
                 ),
             ),
         )
@@ -97,7 +96,7 @@ class GetVesselVoyageUTests {
                     firstOperationDateTime,
                     lastOperationDateTime,
                     startDate,
-                    endDate
+                    endDate,
                 ),
             ),
         )
@@ -132,21 +131,21 @@ class GetVesselVoyageUTests {
                     firstOperationDateTime,
                     lastOperationDateTime,
                     startDate,
-                    endDate
+                    endDate,
                 ),
                 VoyageDatesAndTripNumber(
                     "trip2",
                     firstOperationDateTime,
                     lastOperationDateTime,
                     startDate,
-                    endDate
+                    endDate,
                 ),
                 VoyageDatesAndTripNumber(
                     tripNumber,
                     firstOperationDateTime,
                     lastOperationDateTime,
                     startDate,
-                    endDate
+                    endDate,
                 ),
             ),
         )
@@ -181,35 +180,35 @@ class GetVesselVoyageUTests {
                     firstOperationDateTime,
                     lastOperationDateTime,
                     startDate,
-                    endDate
+                    endDate,
                 ),
                 VoyageDatesAndTripNumber(
                     "trip2",
                     firstOperationDateTime,
                     lastOperationDateTime,
                     startDate,
-                    endDate
+                    endDate,
                 ),
                 VoyageDatesAndTripNumber(
                     "trip3",
                     firstOperationDateTime,
                     lastOperationDateTime,
                     startDate,
-                    endDate
+                    endDate,
                 ),
                 VoyageDatesAndTripNumber(
                     tripNumber,
                     firstOperationDateTime,
                     lastOperationDateTime,
                     startDate,
-                    endDate
+                    endDate,
                 ),
                 VoyageDatesAndTripNumber(
                     "trip5",
                     firstOperationDateTime,
                     lastOperationDateTime,
                     startDate,
-                    endDate
+                    endDate,
                 ),
             ),
         )

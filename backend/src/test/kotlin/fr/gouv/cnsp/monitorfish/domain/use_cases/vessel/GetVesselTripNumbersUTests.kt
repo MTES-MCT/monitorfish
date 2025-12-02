@@ -22,26 +22,26 @@ class GetVesselTripNumbersUTests {
         given(logbookReportRepository.findAllTrips("SOME_CFR")).willReturn(
             listOf(
                 VoyageDatesAndTripNumber(
-                    tripNumber="1",
-                    firstOperationDateTime=someDate,
-                    lastOperationDateTime=someDate,
-                    startDateTime=someDate,
-                    endDateTime=someDate
+                    tripNumber = "1",
+                    firstOperationDateTime = someDate,
+                    lastOperationDateTime = someDate,
+                    startDateTime = someDate,
+                    endDateTime = someDate,
                 ),
                 VoyageDatesAndTripNumber(
-                    tripNumber="2",
-                    firstOperationDateTime=someDate,
-                    lastOperationDateTime=someDate,
-                    startDateTime=someDate,
-                    endDateTime=someDate
+                    tripNumber = "2",
+                    firstOperationDateTime = someDate,
+                    lastOperationDateTime = someDate,
+                    startDateTime = someDate,
+                    endDateTime = someDate,
                 ),
                 VoyageDatesAndTripNumber(
-                    tripNumber="3",
-                    firstOperationDateTime=someDate,
-                    lastOperationDateTime=someDate,
-                    startDateTime=someDate,
-                    endDateTime=someDate
-                )
+                    tripNumber = "3",
+                    firstOperationDateTime = someDate,
+                    lastOperationDateTime = someDate,
+                    startDateTime = someDate,
+                    endDateTime = someDate,
+                ),
             ),
         )
 

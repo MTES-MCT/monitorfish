@@ -113,6 +113,7 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
                   options={logbookTripsOptions}
                   searchable
                   value={tripNumber ?? undefined}
+                  virtualized
                 />
                 <NextTrip
                   $disabled={!!isLastVoyage}

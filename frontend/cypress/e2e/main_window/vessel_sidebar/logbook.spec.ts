@@ -103,13 +103,13 @@ context('Vessel sidebar logbook tab', () => {
 
     // Invalidated PNO message
     cy.getDataCy('vessel-fishing-previous-trip').click()
-    cy.contains('Marée n°9463714').should('be.visible')
-    cy.getDataCy('vessel-fishing-previous-trip').click()
     cy.contains('Marée n°9463713').should('be.visible')
 
     cy.getDataCy('vessel-fishing-message').eq(1).contains('Préavis (notification de retour au port)')
     cy.getDataCy('vessel-fishing-message').eq(1).siblings().eq(1).contains('MESSAGE INVALIDÉ')
 
+    cy.getDataCy('vessel-fishing-previous-trip').click()
+    cy.contains('Marée n°9463714').should('be.visible')
     /**
      * Fishing Should contain the vessel FLUX logbook messages
      */
@@ -155,18 +155,19 @@ context('Vessel sidebar logbook tab', () => {
       .its('response.url')
       .should(
         'have.string',
-        `/bff/v1/vessels/positions?afterDateTime=${encodeURIComponent('2019-02-16T21:05:00.000Z')}` +
-          `&beforeDateTime=${encodeURIComponent('2020-08-09T14:47:00.000Z')}&externalReferenceNumber=DONTSINK&internalReferenceNumber=FAK000999999` +
+        `/bff/v1/vessels/positions?afterDateTime=${encodeURIComponent('2019-02-23T09:08:00.000Z')}` +
+          `&beforeDateTime=${encodeURIComponent('2019-02-23T14:08:00.000Z')}&externalReferenceNumber=DONTSINK&internalReferenceNumber=FAK000999999` +
           '&IRCS=CALLME&trackDepth=CUSTOM&vesselIdentifier=INTERNAL_REFERENCE_NUMBER'
       )
 
+    cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 10000 })
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 4)
     cy.get('*[data-cy="custom-dates-showed-text"]').contains('Piste affichée du 16/02/19 au 09/08/20')
 
     // Hide fishing activities
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 10000 })
     cy.intercept('GET', '/bff/v1/vessels/positions*').as('nextTripPositions')
-    cy.get('*[data-cy^="vessel-fishing-next-trip"]').click({ timeout: 10000 })
+    cy.get('*[data-cy^="vessel-fishing-last-trip"]').click({ timeout: 10000 })
     /**
      * Hours are modified before request, see `getDateRangeMinusFourHoursPlusOneHour()`
      */

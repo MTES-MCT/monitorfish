@@ -201,11 +201,19 @@ const StyledLastTrip = styled(LastTrip)`
 
 const SelectTrip = styled(Select<string>)`
   width: 375px;
+
+  .rs-picker-default .rs-picker-toggle {
+    z-index: unset;
+  }
 `
 
 const StyledSelect = styled(Select<string>)`
   width: 217px;
   margin-right: 8px;
+
+  .rs-picker-default .rs-picker-toggle {
+    z-index: unset;
+  }
 `
 
 const CustomDatesShowedInfoWithMargin = styled.div`

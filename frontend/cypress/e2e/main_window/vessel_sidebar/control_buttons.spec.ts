@@ -63,6 +63,7 @@ context('Vessel sidebar controls buttons', () => {
     // When
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
     cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 10000 })
+    cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 10000 })
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
 
     // Then

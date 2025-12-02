@@ -5,11 +5,11 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import org.slf4j.LoggerFactory
 
 @UseCase
-class GetVesselLastTripNumbers(
+class GetVesselTripNumbers(
     private val logbookReportRepository: LogbookReportRepository,
 ) {
-    private val logger = LoggerFactory.getLogger(GetVesselLastTripNumbers::class.java)
+    private val logger = LoggerFactory.getLogger(GetVesselTripNumbers::class.java)
 
     fun execute(internalReferenceNumber: String): List<String> =
-        logbookReportRepository.findLastThreeYearsTripNumbers(internalReferenceNumber)
+        logbookReportRepository.findAllTrips(internalReferenceNumber).map { it.tripNumber }
 }

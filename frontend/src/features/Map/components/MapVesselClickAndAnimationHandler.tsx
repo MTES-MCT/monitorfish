@@ -27,13 +27,13 @@ export function MapVesselClickAndAnimationHandler() {
       if (animateToCoordinates && animateToCoordinates[0] && animateToCoordinates[1] && vesselSidebarIsOpen) {
         if (getMapZoom() >= 8) {
           const resolution = getMapResolution()
-          monitorfishMap.getView().animate(createAnimateObject(animateToCoordinates, resolution * 200, 1000, undefined))
+          monitorfishMap.getView().animate(createAnimateObject(animateToCoordinates, resolution * 200, 500, undefined))
         } else {
-          monitorfishMap.getView().animate(createAnimateObject(animateToCoordinates, 0, 800, 8), () => {
+          monitorfishMap.getView().animate(createAnimateObject(animateToCoordinates, 0, 250, 8), () => {
             const resolution = getMapResolution()
             monitorfishMap
               .getView()
-              .animate(createAnimateObject(animateToCoordinates, resolution * 200, 500, undefined))
+              .animate(createAnimateObject(animateToCoordinates, resolution * 200, 250, undefined))
           })
         }
         dispatch(resetAnimateToCoordinates())
@@ -68,7 +68,7 @@ export function MapVesselClickAndAnimationHandler() {
       callback: () => {
         dispatch(resetFitToExtent())
       },
-      duration: 1000,
+      duration: 200,
       maxZoom: 12,
       padding: [30, 30, 30, 30]
     })

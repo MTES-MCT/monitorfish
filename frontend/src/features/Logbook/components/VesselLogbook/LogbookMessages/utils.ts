@@ -32,19 +32,16 @@ export function isPnoMessage(logbookMessage: Logbook.Message): logbookMessage is
 
 export const LOGBOOK_SORT_LABELS_AS_OPTIONS = getOptionsFromLabelledEnum(LogbookSortKeyLabel)
 
-export function getLastLogbookTripsOptions(
-  lastLogbookTrips: string[] | undefined,
-  currentTripNumber: string | null
-): Option[] {
+export function getLogbookTripsOptions(logbookTrips: string[] | undefined, currentTripNumber: string | null): Option[] {
   if (!currentTripNumber) {
     return []
   }
 
-  const logbookTrips = lastLogbookTrips?.includes(currentTripNumber)
-    ? lastLogbookTrips
-    : [...(lastLogbookTrips ?? []), currentTripNumber]
+  const filteredLogbookTrips = logbookTrips?.includes(currentTripNumber)
+    ? logbookTrips
+    : [...(logbookTrips ?? []), currentTripNumber]
 
-  return logbookTrips.map(trip => ({
+  return filteredLogbookTrips.map(trip => ({
     label: `Marée n°${trip}`,
     value: trip
   }))

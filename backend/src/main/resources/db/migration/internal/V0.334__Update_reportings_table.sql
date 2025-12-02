@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS reportings_internal_reference_number_idx ON reportings (internal_reference_number)

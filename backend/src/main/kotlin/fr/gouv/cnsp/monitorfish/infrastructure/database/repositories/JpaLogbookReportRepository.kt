@@ -16,7 +16,6 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLogbookReportRepository
-import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageDates
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.utils.toSqlArrayString
 import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
 import jakarta.transaction.Transactional
@@ -134,55 +133,22 @@ class JpaLogbookReportRepository(
 
     @Cacheable(value = ["all_trips"])
     override fun findAllTrips(internalReferenceNumber: String): List<VoyageDatesAndTripNumber> =
-        dbLogbookReportRepository.findAllTrips(internalReferenceNumber).map {
-            VoyageDatesAndTripNumber(
-                tripNumber = it[0] as String,
-                startDateTime = (it[1] as Timestamp).toInstant().atZone(UTC),
-                firstOperationDateTime = (it[2] as Timestamp).toInstant().atZone(UTC),
-                lastOperationDateTime = (it[3] as Timestamp).toInstant().atZone(UTC),
-            )
-        }
-
-    @Cacheable(value = ["first_and_last_trip_dates"])
-    override fun findDatesOfTrip(
-        internalReferenceNumber: String,
-        tripNumber: String,
-        firstOperationDateTime: ZonedDateTime,
-        lastOperationDateTime: ZonedDateTime,
-    ): VoyageDatesAndTripNumber {
         try {
-            if (internalReferenceNumber.isNotEmpty()) {
-                val tripDates =
-                    dbLogbookReportRepository
-                        .findDatesOfTrip(
-                            internalReferenceNumber = internalReferenceNumber,
-                            tripNumber = tripNumber,
-                            firstOperationDateTime = firstOperationDateTime,
-                            lastOperationDateTime = lastOperationDateTime,
-                        ).first()
-                        .let { VoyageDates(it[0], it[1]) }
-
-                return VoyageDatesAndTripNumber(
-                    tripNumber = tripNumber,
-                    firstOperationDateTime = firstOperationDateTime,
-                    lastOperationDateTime = lastOperationDateTime,
-                    startDateTime = tripDates.startDate.atZone(UTC),
-                    endDateTime = tripDates.endDate.atZone(UTC),
+            dbLogbookReportRepository.findAllTrips(internalReferenceNumber).map {
+                VoyageDatesAndTripNumber(
+                    tripNumber = it[0] as String,
+                    startDateTime = (it[1] as Timestamp).toInstant().atZone(UTC),
+                    endDateTime = (it[2] as Timestamp).toInstant().atZone(UTC),
+                    firstOperationDateTime = (it[3] as Timestamp).toInstant().atZone(UTC),
+                    lastOperationDateTime = (it[4] as Timestamp).toInstant().atZone(UTC),
                 )
             }
-
-            throw IllegalArgumentException("No CFR given to find the vessel.")
-        } catch (e: NoSuchElementException) {
-            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
-        } catch (e: IllegalArgumentException) {
-            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
-        } catch (e: EmptyResultDataAccessException) {
-            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
+        } catch (e: RuntimeException) {
+            throw NoLogbookFishingTripFound(
+                "No trip found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")",
+                e,
+            )
         }
-    }
-
-    private fun getTripNotFoundExceptionMessage(internalReferenceNumber: String) =
-        "No trip found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
 
     @Cacheable(value = ["logbook_messages"])
     override fun findAllMessagesByTripNumberBetweenOperationDates(
@@ -228,9 +194,6 @@ class JpaLogbookReportRepository(
             return ZonedDateTime.now().minusMonths(1)
         }
     }
-
-    override fun findLastThreeYearsTripNumbers(internalReferenceNumber: String): List<String> =
-        dbLogbookReportRepository.findLastThreeYearsTripNumbers(internalReferenceNumber)
 
     override fun findLastReportSoftware(internalReferenceNumber: String): String? =
         dbLogbookReportRepository.findLastReportSoftware(internalReferenceNumber)

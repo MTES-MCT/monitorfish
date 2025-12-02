@@ -1,5 +1,5 @@
 import { VesselSidebarFleetSegments } from '@features/FleetSegment/components/VesselSidebarFleetSegments'
-import { getLastLogbookTripsOptions } from '@features/Logbook/components/VesselLogbook/LogbookMessages/utils'
+import { getLogbookTripsOptions } from '@features/Logbook/components/VesselLogbook/LogbookMessages/utils'
 import { SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { updateVesselTrackAndLogbookFromTrip } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromTrip'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -17,7 +17,7 @@ import { FARMessageResume } from './summaries/FARMessageResume'
 import { LANMessageResume } from './summaries/LANMessageResume'
 import { PNOMessageResume } from './summaries/PNOMessageResume'
 import ArrowSVG from '../../../../icons/Picto_fleche-pleine-droite.svg?react'
-import { useGetLastLogbookTripsQuery } from '../../../api'
+import { useGetLogbookTripsQuery } from '../../../api'
 import {
   LogbookMessageType as LogbookMessageTypeEnum,
   LogbookOperationType,
@@ -44,11 +44,9 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
   const isLastVoyage = useMainAppSelector(state => state.fishingActivities.isLastVoyage)
   const tripNumber = useMainAppSelector(state => state.fishingActivities.tripNumber)
 
-  const { data: lastLogbookTrips } = useGetLastLogbookTripsQuery(
-    selectedVesselIdentity?.internalReferenceNumber ?? skipToken
-  )
+  const { data: logbookTrips } = useGetLogbookTripsQuery(selectedVesselIdentity?.internalReferenceNumber ?? skipToken)
 
-  const lastLogbookTripsOptions = getLastLogbookTripsOptions(lastLogbookTrips, tripNumber)
+  const logbookTripsOptions = getLogbookTripsOptions(logbookTrips, tripNumber)
   const logbookTrip: LogbookTripSummary = useMemo(() => getLogbookTripSummary(logbookMessages), [logbookMessages])
 
   const goToPreviousTrip = () => {
@@ -112,9 +110,10 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
                   label="Numéro de marée"
                   name="tripNumber"
                   onChange={getLogbookTrip}
-                  options={lastLogbookTripsOptions}
+                  options={logbookTripsOptions}
                   searchable
                   value={tripNumber ?? undefined}
+                  virtualized
                 />
                 <NextTrip
                   $disabled={!!isLastVoyage}

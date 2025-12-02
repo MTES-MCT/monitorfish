@@ -35,7 +35,7 @@ class GetVesselVoyageByDates(
 
         val tripsBetweenDates =
             vesselTrips.filter {
-                it.startDateTime!!.isBefore(dates.to) &&
+                it.startDateTime.isBefore(dates.to) &&
                     it.startDateTime.isAfter(dates.from)
             }
         if (tripsBetweenDates.isEmpty()) {
@@ -45,16 +45,7 @@ class GetVesselVoyageByDates(
             )
         }
 
-        var trip = tripsBetweenDates.first()
-
-        trip =
-            logbookReportRepository.findDatesOfTrip(
-                internalReferenceNumber,
-                trip.tripNumber,
-                trip.firstOperationDateTime,
-                trip.lastOperationDateTime,
-            )
-
+        val trip = tripsBetweenDates.first()
         val tripIndex = vesselTrips.indexOfFirst { it.tripNumber == trip.tripNumber }
         require(tripIndex >= 0) {
             "Trip ${trip.tripNumber} not found"

@@ -9,7 +9,7 @@ import { monitorfishApi } from '../../api/api'
 import type { TrackRequest } from '@features/Vessel/types/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
-const LAST_LOGBOOK_TRIPS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les dernières marées"
+const LOGBOOK_TRIPS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les marées du navire"
 const LOGBOOK_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les messages JPE de ce navire"
 
 export type GetVesselLogbookParams = {
@@ -25,10 +25,10 @@ export type GetVesselLogbookByDatesParams = {
 
 export const logbookApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
-    getLastLogbookTrips: builder.query<string[], string>({
-      providesTags: () => [{ type: 'TripNumbers' }],
-      query: internalReferenceNumber => `/vessels/logbook/last?internalReferenceNumber=${internalReferenceNumber}`,
-      transformErrorResponse: response => new FrontendApiError(LAST_LOGBOOK_TRIPS_ERROR_MESSAGE, response)
+    getLogbookTrips: builder.query<string[], string>({
+      keepUnusedDataFor: 30,
+      query: internalReferenceNumber => `/vessels/logbook/trips?internalReferenceNumber=${internalReferenceNumber}`,
+      transformErrorResponse: response => new FrontendApiError(LOGBOOK_TRIPS_ERROR_MESSAGE, response)
     }),
     getVesselLogbook: builder.query<Logbook.VesselVoyage | undefined, GetVesselLogbookParams>({
       query: (params: GetVesselLogbookParams) => {
@@ -83,4 +83,4 @@ export function isVesselVoyage(response: any): response is Logbook.VesselVoyage 
   return response.logbookMessages !== undefined
 }
 
-export const { useGetLastLogbookTripsQuery } = logbookApi
+export const { useGetLogbookTripsQuery } = logbookApi

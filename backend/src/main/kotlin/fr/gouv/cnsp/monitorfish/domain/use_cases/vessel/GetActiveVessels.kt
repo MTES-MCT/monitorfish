@@ -38,8 +38,8 @@ class GetActiveVessels(
 
         val priorNotificationsFilter =
             PriorNotificationsFilter(
-                willArriveAfter = CustomZonedDateTime(ZonedDateTime.now()).toString(),
-                willArriveBefore = CustomZonedDateTime(ZonedDateTime.now().plusDays(2)).toString(),
+                willArriveAfter = now,
+                willArriveBefore = now.plusDays(2),
             )
         val futurePriorNotificationsGroupByInternalReferenceNumber =
             (

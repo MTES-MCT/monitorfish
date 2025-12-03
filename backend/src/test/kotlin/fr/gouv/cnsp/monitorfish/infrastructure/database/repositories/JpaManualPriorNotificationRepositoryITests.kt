@@ -27,8 +27,8 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
     val defaultPriorNotificationsFilter =
         PriorNotificationsFilter(
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2099-12-31T00:00:00Z",
+            willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+            willArriveBefore = ZonedDateTime.parse("2099-12-31T00:00:00Z"),
         )
 
     @BeforeEach
@@ -384,8 +384,8 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         // Given
         val firstFilter =
             PriorNotificationsFilter(
-                willArriveAfter = "2024-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -403,8 +403,8 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         // Given
         val secondFilter =
             PriorNotificationsFilter(
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2024-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
             )
 
         // When

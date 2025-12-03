@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ManualPriorNotificationEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
+import java.time.ZonedDateTime
 
 interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotificationEntity, String> {
     @Query(
@@ -19,11 +20,8 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
                 LEFT JOIN risk_factors rf ON mpn.vessel_id = rf.vessel_id
                 LEFT JOIN vessels v ON mpn.vessel_id = v.id
                 WHERE
-                    -- TODO /!\ INDEX created_at WITH TIMESCALE /!\
-                    -- This filter helps Timescale optimize the query since `created_at` is indexed
-                    mpn.created_at
-                        BETWEEN CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
-                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '168 hours'
+                    -- WillArriveAfter and WillArriveBefore
+                    iso_zulu_text_to_date(mpn.value ->> 'predictedArrivalDatetimeUtc') BETWEEN :willArriveAfter AND :willArriveBefore
 
                     -- Flag States
                     AND (:flagStates IS NULL OR mpn.flag_state IN (:flagStates))
@@ -50,12 +48,6 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
                         unaccent(lower(mpn.vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%') OR
                         lower(mpn.cfr) ILIKE CONCAT('%', lower(:searchQuery), '%')
                     )
-
-                    -- Will Arrive After
-                    AND mpn.value->>'predictedArrivalDatetimeUtc' >= :willArriveAfter
-
-                    -- Will Arrive Before
-                    AND mpn.value->>'predictedArrivalDatetimeUtc' <= :willArriveBefore
             ),
 
             distinct_vessel_ids AS MATERIALIZED (
@@ -125,8 +117,8 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
         specyCodesAsSqlArrayString: String?,
         tripGearCodesAsSqlArrayString: String?,
         tripSegmentCodesAsSqlArrayString: String?,
-        willArriveAfter: String,
-        willArriveBefore: String,
+        willArriveAfter: ZonedDateTime,
+        willArriveBefore: ZonedDateTime,
     ): List<ManualPriorNotificationEntity>
 
     @Query(

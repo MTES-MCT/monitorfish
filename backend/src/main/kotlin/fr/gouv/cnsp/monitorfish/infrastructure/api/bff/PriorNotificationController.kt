@@ -132,8 +132,8 @@ class PriorNotificationController(
                 specyCodes = specyCodes,
                 tripGearCodes = tripGearCodes,
                 tripSegmentCodes = tripSegmentCodes,
-                willArriveAfter = willArriveAfter,
-                willArriveBefore = willArriveBefore,
+                willArriveAfter = ZonedDateTime.parse(willArriveAfter),
+                willArriveBefore = ZonedDateTime.parse(willArriveBefore),
             )
 
         val paginatedPriorNotifications =

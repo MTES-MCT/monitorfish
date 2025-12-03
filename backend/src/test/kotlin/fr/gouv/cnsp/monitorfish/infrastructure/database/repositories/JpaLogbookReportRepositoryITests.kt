@@ -316,8 +316,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val filter =
             PriorNotificationsFilter(
                 flagStates = listOf("ESP", "FRA"),
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -344,8 +344,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val firstFilter =
             PriorNotificationsFilter(
                 hasOneOrMoreReportings = true,
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -363,8 +363,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val secondFilter =
             PriorNotificationsFilter(
                 hasOneOrMoreReportings = false,
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -386,8 +386,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val firstFilter =
             PriorNotificationsFilter(
                 isLessThanTwelveMetersVessel = true,
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -408,8 +408,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val secondFilter =
             PriorNotificationsFilter(
                 isLessThanTwelveMetersVessel = false,
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -434,8 +434,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val firstFilter =
             PriorNotificationsFilter(
                 lastControlledAfter = "2024-01-01T00:00:00Z",
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -460,8 +460,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val secondFilter =
             PriorNotificationsFilter(
                 lastControlledBefore = "2024-01-01T00:00:00Z",
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -490,8 +490,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val filter =
             PriorNotificationsFilter(
                 portLocodes = listOf("FRSML", "FRVNE"),
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -513,8 +513,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val firstFilter =
             PriorNotificationsFilter(
                 searchQuery = "pheno",
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -535,8 +535,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val secondFilter =
             PriorNotificationsFilter(
                 searchQuery = "hénO",
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -561,8 +561,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val firstFilter =
             PriorNotificationsFilter(
                 searchQuery = "FAK000999999",
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -583,8 +583,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val secondFilter =
             PriorNotificationsFilter(
                 searchQuery = "999999",
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -609,8 +609,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val filter =
             PriorNotificationsFilter(
                 specyCodes = listOf("COD", "HKE"),
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -633,8 +633,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val filter =
             PriorNotificationsFilter(
                 priorNotificationTypes = listOf("Préavis type A", "Préavis type C"),
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -657,8 +657,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val filter =
             PriorNotificationsFilter(
                 tripSegmentCodes = listOf("SWW06", "NWW03"),
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -685,8 +685,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val filter =
             PriorNotificationsFilter(
                 tripGearCodes = listOf("OTT", "TB"),
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -708,8 +708,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Given
         val firstFilter =
             PriorNotificationsFilter(
-                willArriveAfter = "2024-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -727,8 +727,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Given
         val secondFilter =
             PriorNotificationsFilter(
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2024-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
             )
 
         // When
@@ -752,8 +752,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             PriorNotificationsFilter(
                 priorNotificationTypes = listOf("Préavis type A", "Préavis type C"),
                 tripGearCodes = listOf("OTT", "TB"),
-                willArriveAfter = "2024-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2100-01-01T00:00:00Z"),
             )
 
         // When
@@ -791,8 +791,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Given
         val firstFilter =
             PriorNotificationsFilter(
-                willArriveAfter = "2024-09-01T13:00:00Z",
-                willArriveBefore = "2024-09-01T17:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2024-09-01T13:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2024-09-01T17:00:00Z"),
             )
 
         // When
@@ -806,8 +806,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Given
         val secondFilter =
             PriorNotificationsFilter(
-                willArriveAfter = "2024-09-02T19:00:00Z",
-                willArriveBefore = "2024-09-02T23:00:00Z",
+                willArriveAfter = ZonedDateTime.parse("2024-09-02T19:00:00Z"),
+                willArriveBefore = ZonedDateTime.parse("2024-09-02T23:00:00Z"),
             )
 
         // When

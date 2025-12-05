@@ -27,7 +27,7 @@ def extract_missing_deps(hours_from_now: int):
     )
 
 
-@flow(name="Missing DEP alerts")
+@flow(name="Monitorfish - Missing DEP alerts")
 def missing_dep_alerts_flow(
     hours_from_now: int = MISSING_DEP_TRACK_ANALYSIS_HOURS,
     get_monitorfish_healthcheck_fn: Callable = get_monitorfish_healthcheck,

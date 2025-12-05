@@ -102,7 +102,7 @@ def load_legipeche(legipeche: pd.DataFrame):
         )
 
 
-@flow(name="Scrape legipeche")
+@flow(name="Monitorfish - Scrape legipeche")
 def scrape_legipeche_flow():
     delete_csv()
     extraction_datetime_utc = scrape_legipeche_to_csv()

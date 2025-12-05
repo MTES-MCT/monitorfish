@@ -724,7 +724,7 @@ def extract_enrich_load_logbook(
     load_enriched_pnos(pnos, period, logger)
 
 
-@flow(name="Enrich Logbook")
+@flow(name="Monitorfish - Enrich Logbook")
 def enrich_logbook_flow(
     start_hours_ago: int,
     end_hours_ago: int,

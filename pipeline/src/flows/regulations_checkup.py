@@ -717,7 +717,7 @@ def send_message(msg: EmailMessage):
     send_email(msg)
 
 
-@flow(name="Regulations checkup")
+@flow(name="Monitorfish - Regulations checkup")
 def regulations_checkup_flow(
     proxies: dict = PROXIES,
     backoffice_regulation_url: str = BACKOFFICE_REGULATION_URL,

@@ -26,7 +26,7 @@ def load_trips_snapshot(trips: pd.DataFrame):
     )
 
 
-@flow(name="Trips snapshot")
+@flow(name="Monitorfish - Trips snapshot")
 def trips_snapshot_flow():
     # Extract
     trips_snapshot = extract_trips_snapshot()

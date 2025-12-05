@@ -78,7 +78,7 @@ def load_satellite_operators(satellite_operators):
     )
 
 
-@flow(name="Beacons")
+@flow(name="Monitorfish - Beacons")
 def beacons_flow():
     # Extract
     beacons = extract_beacons()

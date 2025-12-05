@@ -213,7 +213,7 @@ def load_unece(locations):
     )
 
 
-@flow(name="Create UNECE ports codes table")
+@flow(name="Monitorfish - Create UNECE ports codes table")
 def flow_make_unece_ports(csv_directory_path: str):
     locations = extract_unece_locations(csv_directory_path)
     locations = clean_unece(locations)
@@ -278,7 +278,7 @@ def load_circabc(locations):
     )
 
 
-@flow(name="Create CIRCABC ports codes table")
+@flow(name="Monitorfish - Create CIRCABC ports codes table")
 def flow_make_circabc_ports(csv_filepath: str):
     locations = extract_circabc_locations(csv_filepath)
     locations = clean_circabc(locations)
@@ -444,7 +444,7 @@ def load_port_codes(ports):
     )
 
 
-@flow(name="Extract combine CIRCABC and UNECE ports referencials")
+@flow(name="Monitorfish - Extract combine CIRCABC and UNECE ports referencials")
 def flow_combine_circabc_unece_ports():
     circabc_ports = extract_circabc_ports()
     unece_ports = extract_unece_ports()
@@ -640,7 +640,7 @@ def load_geocoded_ports(geocoded_ports):
     )
 
 
-@flow(name="Geocode ports")
+@flow(name="Monitorfish - Geocode ports")
 def flow_geocode_ports():
     ports = extract_port_codes()
     active_ports_locodes = extract_active_ports_locodes()
@@ -881,7 +881,7 @@ def load_ports(ports):
     )
 
 
-@flow(name="Ports")
+@flow(name="Monitorfish - Ports")
 def ports_flow(
     dataset_id: str = PORTS_DATASET_ID,
     ports_resource_id: str = PORTS_CSV_RESOURCE_ID,

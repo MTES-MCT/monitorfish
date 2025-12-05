@@ -442,7 +442,7 @@ def load_logbook_data(cleaned_data: List[dict]):
                 )
 
 
-@flow(name="Logbook")
+@flow(name="Monitorfish - Logbook")
 def logbook_flow(
     received_directory: str = RECEIVED_DIRECTORY.as_posix(),
     treated_directory: str = TREATED_DIRECTORY.as_posix(),

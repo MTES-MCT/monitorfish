@@ -402,7 +402,7 @@ def make_reset_requested_notifications_statement(
     return statement
 
 
-@flow(name="Notify malfunctions")
+@flow(name="Monitorfish - Notify malfunctions")
 def notify_beacon_malfunctions_flow(
     test_mode: bool,
     is_integration: bool,

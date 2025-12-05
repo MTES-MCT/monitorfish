@@ -54,7 +54,7 @@ def get_regulations_for_geopackage(regulations: gpd.GeoDataFrame) -> gpd.GeoData
     return regulations[columns].copy(deep=True)
 
 
-@flow(name="Regulations open data")
+@flow(name="Monitorfish - Regulations open data")
 def regulations_open_data_flow(
     dataset_id: str = REGULATIONS_DATASET_ID,
     csv_resource_id: str = REGULATIONS_CSV_RESOURCE_ID,

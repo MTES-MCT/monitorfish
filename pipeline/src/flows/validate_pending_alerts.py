@@ -8,7 +8,7 @@ from src.shared_tasks.alerts import (
 )
 
 
-@flow(name="Validate pending alerts")
+@flow(name="Monitorfish - Validate pending alerts")
 def validate_pending_alerts_flow(alert_type: str):
     pending_alert_ids = extract_pending_alerts_ids_of_type(alert_type)
     validated_alerts = validate_pending_alert.map(pending_alert_ids)

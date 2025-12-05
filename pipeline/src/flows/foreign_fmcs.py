@@ -66,7 +66,7 @@ def load_foreign_fmcs(foreign_fmcs):
     )
 
 
-@flow(name="Foreign FMCs")
+@flow(name="Monitorfish - Foreign FMCs")
 def foreign_fmcs_flow(extract_foreign_fmcs_contacts_task=extract_foreign_fmcs_contacts):
     foreign_fmcs_contacts = extract_foreign_fmcs_contacts_task()
     foreign_fmcs = transform_foreign_fmcs_contacts(foreign_fmcs_contacts)

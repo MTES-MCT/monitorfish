@@ -413,7 +413,7 @@ def merge_risk_factor(
     )
 
 
-@flow(name="Missing FAR alerts")
+@flow(name="Monitorfish - Missing FAR alerts")
 def missing_far_alerts_flow(
     alert_type: str,
     name: str,

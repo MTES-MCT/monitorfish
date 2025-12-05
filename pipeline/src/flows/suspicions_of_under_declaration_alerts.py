@@ -19,7 +19,7 @@ def extract_suspicions_of_under_declaration():
     )
 
 
-@flow(name="Suspicions of under-declaration")
+@flow(name="Monitorfish - Suspicions of under-declaration")
 def suspicions_of_under_declaration_alerts_flow():
     vessels_with_suspicions_of_under_declaration = (
         extract_suspicions_of_under_declaration.submit()

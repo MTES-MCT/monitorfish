@@ -114,7 +114,7 @@ def load_new_regulations(new_regulations: pd.DataFrame):
     )
 
 
-@flow(name="Regulations")
+@flow(name="Monitorfish - Regulations")
 def regulations_flow():
     local_hashes = extract_local_hashes()
     remote_hashes = extract_remote_hashes()

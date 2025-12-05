@@ -59,7 +59,7 @@ def transform_fleet_segments_open_data(fleet_segments) -> pd.DataFrame:
     return fleet_segments
 
 
-@flow(name="Controls open data")
+@flow(name="Monitorfish - Controls open data")
 def controls_open_data_flow(
     dataset_id: str = CONTROLS_STATISTICS_DATASET_ID,
     controls_resource_id: str = CONTROLS_STATISTICS_CSV_RESOURCE_ID,

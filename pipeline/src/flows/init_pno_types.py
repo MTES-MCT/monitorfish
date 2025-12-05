@@ -91,7 +91,7 @@ def load_pno_types_and_rules(
         )
 
 
-@flow(name="Init pno types")
+@flow(name="Monitorfish - Init pno types")
 def init_pno_types_flow():
     pno_types_table = get_table("pno_types")
     pno_type_rules_table = get_table("pno_type_rules")

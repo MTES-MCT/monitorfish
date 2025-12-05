@@ -354,18 +354,19 @@ flows_to_deploy = [
     ),
 ]
 
+deployments = []
 
-deployments = [
-    flow_to_deploy.flow.to_deployment(
+for flow_to_deploy in flows_to_deploy:
+    # Ensure flow name unicity among all projects orchestrated by Prefect 3
+    assert flow_to_deploy.flow.name[:14] == "Monitorfish - "
+
+    deployment = flow_to_deploy.flow.to_deployment(
         name=flow_to_deploy.flow.name,
         schedules=flow_to_deploy.schedules,
         concurrency_limit=flow_to_deploy.concurrency_limit,
+        tags=["monitorfish"],
     )
-    for flow_to_deploy in flows_to_deploy
-]
 
-################### Define flows' run config ####################
-for deployment in deployments:
     deployment.job_variables = {
         "env": {"PREFECT_API_URL": PREFECT_API_URL},
         "volumes": [
@@ -377,10 +378,12 @@ for deployment in deployments:
     deployment.work_pool_name = "monitorfish"
     deployment.storage = LocalStorage("/home/monitorfish-pipeline/pipeline")
 
-    if deployment.name == "Logbook":
+    if deployment.name == "Monitorfish - Logbook":
         deployment.job_variables["container_create_kwargs"] = {
             "group_add": [LOGBOOK_FILES_GID]
         }
         deployment.job_variables["volumes"].append(
             f"{ERS_FILES_LOCATION}:{ERS_FILES_LOCATION}"
         )
+
+    deployments.append(deployment)

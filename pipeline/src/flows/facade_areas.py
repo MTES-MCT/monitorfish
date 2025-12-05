@@ -31,7 +31,7 @@ def load_facade_areas(facade_areas: pd.DataFrame):
     )
 
 
-@flow(name="Facade areas")
+@flow(name="Monitorfish - Facade areas")
 def facade_areas_flow():
     facade_areas = extract_facade_areas()
     load_facade_areas(facade_areas)

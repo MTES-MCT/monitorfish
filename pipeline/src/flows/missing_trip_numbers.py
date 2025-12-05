@@ -94,7 +94,7 @@ def load_computed_trip_numbers(computed_trip_numbers: pd.DataFrame):
         )
 
 
-@flow(name="Missing trip number")
+@flow(name="Monitorfish - Missing trip number")
 def missing_trip_numbers_flow(reset_trip_numbers: bool = False):
     if reset_trip_numbers:
         reset_computed_trip_numbers()

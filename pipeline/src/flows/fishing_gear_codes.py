@@ -43,7 +43,7 @@ def load_fishing_gear_codes_groups(fishing_gear_codes_groups):
     )
 
 
-@flow(name="Fishing gears")
+@flow(name="Monitorfish - Fishing gears")
 def fishing_gear_codes_flow():
     fishing_gear_codes = extract_fishing_gear_codes()
     fishing_gear_codes_groups = extract_fishing_gear_codes_groups()

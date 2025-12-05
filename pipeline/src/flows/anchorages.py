@@ -399,7 +399,7 @@ def load_processed_anchorages(anchorages: pd.DataFrame):
     )
 
 
-@flow(name="Anchorages Compute")
+@flow(name="Monitorfish - Anchorages Compute")
 def anchorages_compute_flow(
     h3_resolution: int = ANCHORAGES_H3_CELL_RESOLUTION,
     number_signals_threshold: int = 100,
@@ -515,7 +515,7 @@ def load_anchorages_to_monitorfish(anchorages: pd.DataFrame):
     )
 
 
-@flow(name="Anchorages")
+@flow(name="Monitorfish - Anchorages")
 def anchorages_flow():
     """Main anchorages flow - extract from data.gouv.fr and load to database"""
     anchorages = extract_datagouv_anchorages(

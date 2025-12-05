@@ -354,18 +354,18 @@ flows_to_deploy = [
     ),
 ]
 
+deployments = []
 
-deployments = [
-    flow_to_deploy.flow.to_deployment(
+for flow_to_deploy in flows_to_deploy:
+    flow_to_deploy.flow.name = "Monitorfish - " + flow_to_deploy.flow.name
+
+    deployment = flow_to_deploy.flow.to_deployment(
         name=flow_to_deploy.flow.name,
         schedules=flow_to_deploy.schedules,
         concurrency_limit=flow_to_deploy.concurrency_limit,
+        tags=["monitorfish"],
     )
-    for flow_to_deploy in flows_to_deploy
-]
 
-################### Define flows' run config ####################
-for deployment in deployments:
     deployment.job_variables = {
         "env": {"PREFECT_API_URL": PREFECT_API_URL},
         "volumes": [
@@ -384,3 +384,5 @@ for deployment in deployments:
         deployment.job_variables["volumes"].append(
             f"{ERS_FILES_LOCATION}:{ERS_FILES_LOCATION}"
         )
+
+    deployments.append(deployment)

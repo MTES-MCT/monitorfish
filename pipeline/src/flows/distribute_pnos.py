@@ -1020,7 +1020,7 @@ def make_manual_prior_notifications_statement(
         return statement
 
 
-@flow(name="Distribute pnos")
+@flow(name="Monitorfish - Distribute pnos")
 def distribute_pnos_flow(
     test_mode: bool,
     is_integration: bool,

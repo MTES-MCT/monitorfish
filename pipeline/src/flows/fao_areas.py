@@ -56,7 +56,7 @@ def load_fao_areas(fao_areas: gpd.GeoDataFrame):
     )
 
 
-@flow(name="FAO areas")
+@flow(name="Monitorfish - FAO areas")
 def fao_areas_flow(
     url: str = FAO_AREAS_URL,
     proxies: dict = PROXIES,

@@ -421,7 +421,7 @@ def load_last_positions(last_positions):
     )
 
 
-@flow(name="Last positions")
+@flow(name="Monitorfish - Last positions")
 def last_positions_flow(
     current_position_estimation_max_hours: int = CURRENT_POSITION_ESTIMATION_MAX_HOURS,
     minutes: int = 5,

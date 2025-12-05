@@ -357,7 +357,8 @@ flows_to_deploy = [
 deployments = []
 
 for flow_to_deploy in flows_to_deploy:
-    flow_to_deploy.flow.name = "Monitorfish - " + flow_to_deploy.flow.name
+    # Ensure flow name unicity among all projects orchestrated by Prefect 3
+    assert flow_to_deploy.flow.name[:14] == "Monitorfish - "
 
     deployment = flow_to_deploy.flow.to_deployment(
         name=flow_to_deploy.flow.name,

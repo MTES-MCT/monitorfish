@@ -42,7 +42,7 @@ def get_alerts_that_must_run_now(
     ]
 
 
-@flow(name="Position alerts")
+@flow(name="Monitorfish - Position alerts")
 def position_alerts_flow():
     positions_alerts = extract_position_alerts()
     now = get_utcnow()

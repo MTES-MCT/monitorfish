@@ -27,7 +27,7 @@ def load_infractions(infractions):
     )
 
 
-@flow(name="Infractions")
+@flow(name="Monitorfish - Infractions")
 def infractions_flow():
     infractions = extract_infractions()
     infractions = clean_infractions(infractions)

@@ -424,7 +424,7 @@ def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
     return vessels_in_alerts
 
 
-@flow(name="Position alert")
+@flow(name="Monitorfish - Position alert")
 def position_alert_flow(
     position_alert_id: int,
     name: str,

@@ -101,7 +101,7 @@ def export_species(species: pd.DataFrame, csv_filepath: str) -> None:
     species.to_csv(csv_filepath, index=False, encoding="utf8")
 
 
-@flow(name="Export Species")
+@flow(name="Monitorfish - Export Species")
 def export_species_flow(csv_filepath: str):
     species = extract_species(url=FAO_SPECIES_URL, proxies=PROXIES)
     isscaap_groups = extract_isscaap_groups(url=ISSCAAP_GROUPS_URL, proxies=PROXIES)

@@ -26,7 +26,7 @@ def load_districts(districts):
     )
 
 
-@flow(name="Districts")
+@flow(name="Monitorfish - Districts")
 def districts_flow():
     districts = extract_districts()
     load_districts(districts)

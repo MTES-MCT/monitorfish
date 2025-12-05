@@ -220,7 +220,7 @@ def load_vessel_profiles(vessel_profiles: pd.DataFrame):
     )
 
 
-@flow(name="Vessel profiles")
+@flow(name="Monitorfish - Vessel profiles")
 def vessel_profiles_flow(get_utcnow_fn=get_utcnow):
     # Extract
     now = get_utcnow_fn()

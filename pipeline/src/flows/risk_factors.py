@@ -323,7 +323,7 @@ def load_risk_factors(risk_factors: pd.DataFrame):
     )
 
 
-@flow(name="Risk factors")
+@flow(name="Monitorfish - Risk factors")
 def risk_factors_flow():
     # Extract
     current_year = get_current_year()

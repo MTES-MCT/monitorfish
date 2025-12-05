@@ -227,9 +227,7 @@ def transform_vessels_most_recent_control(controls: pd.DataFrame) -> pd.DataFram
     controls["post_control_comments"] = controls.post_control_comments.where(
         controls.post_control_comments != "", None
     )
-    controls = controls.drop(
-        columns=["infraction_comments"]
-    )
+    controls = controls.drop(columns=["infraction_comments"])
     return controls
 
 
@@ -527,7 +525,7 @@ def load_control_anteriority(control_anteriority: pd.DataFrame):
     )
 
 
-@flow(name="Control anteriority")
+@flow(name="Monitorfish - Control anteriority")
 def control_anteriority_flow(number_years: int = 5):
     # Extract
     controls = extract_last_years_controls(number_years)

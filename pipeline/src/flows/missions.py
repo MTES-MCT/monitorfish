@@ -135,7 +135,7 @@ def load_missions_and_missions_control_units(
         )
 
 
-@flow(name="missions")
+@flow(name="Monitorfish - missions")
 def missions_flow(
     number_of_months: int,
     extract_missions_fn=extract_missions,

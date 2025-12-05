@@ -771,7 +771,7 @@ def load_land_areas(land_areas: pd.DataFrame):
     )
 
 
-@flow(name="Administrative areas")
+@flow(name="Monitorfish - Administrative areas")
 def admin_areas_flow():
     cgpm_areas = extract_cgpm_areas()
     load_cgpm_areas(cgpm_areas)

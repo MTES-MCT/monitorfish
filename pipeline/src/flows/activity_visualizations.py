@@ -480,7 +480,7 @@ def load_activity_visualization(df: pd.DataFrame, truncate_table: bool):
     )
 
 
-@flow(name="Generate kepler activity viz")
+@flow(name="Monitorfish - Generate kepler activity viz")
 def activity_visualizations_flow(
     start_months_ago: int = 12,
     end_months_ago: int = 0,

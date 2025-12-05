@@ -277,7 +277,7 @@ def extract_enrich_load(
     load_fishing_activity(positions, period, logger)
 
 
-@flow(name="Enrich positions")
+@flow(name="Monitorfish - Enrich positions")
 def enrich_positions_flow(
     start_hours_ago: int,
     end_hours_ago: int,

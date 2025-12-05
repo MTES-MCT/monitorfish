@@ -409,7 +409,7 @@ def load_vessels(all_vessels: pd.DataFrame):
     )
 
 
-@flow(name="Vessels")
+@flow(name="Monitorfish - Vessels")
 def vessels_flow():
     # Extract
     french_vessels = extract_french_vessels.submit()

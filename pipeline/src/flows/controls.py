@@ -650,7 +650,7 @@ def load_mission_actions(mission_actions: pd.DataFrame, loading_mode: str):
     )
 
 
-@flow(name="Controls")
+@flow(name="Monitorfish - Controls")
 def controls_flow(
     loading_mode: str,
     number_of_months: int,

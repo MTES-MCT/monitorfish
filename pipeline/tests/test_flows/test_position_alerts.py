@@ -17,7 +17,7 @@ def test_position_alerts_flow(mock_run_deployment, reset_test_data):
     assert mock_run_deployment.call_count == 14
 
     mock_run_deployment.assert_any_call(
-        name="Position alert/Position alert",
+        name="Monitorfish - Position alert/Monitorfish - Position alert",
         parameters={
             "position_alert_id": 1,
             "name": "Alerte all-in",
@@ -66,7 +66,7 @@ def test_position_alerts_flow(mock_run_deployment, reset_test_data):
         timeout=0,
     )
     mock_run_deployment.assert_any_call(
-        name="Position alert/Position alert",
+        name="Monitorfish - Position alert/Monitorfish - Position alert",
         parameters={
             "position_alert_id": 5,
             "name": "Alerte 1",

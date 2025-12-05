@@ -198,7 +198,7 @@ def load_current_segments(vessels_segments):  # pragma: no cover
     )
 
 
-@flow(name="Current segments")
+@flow(name="Monitorfish - Current segments")
 def current_segments_flow(number_of_days: int = 90):
     # Extract
     current_year = get_current_year()

@@ -136,7 +136,7 @@ def load_controls_segments(controls_segments: pd.DataFrame):
         )
 
 
-@flow(name="Recompute controls segments")
+@flow(name="Monitorfish - Recompute controls segments")
 def recompute_controls_segments_flow(year: int, control_types: List[str]):
     # Extract
     controls_catches = extract_controls_catches(year=year, control_types=control_types)

@@ -42,7 +42,7 @@ def load_2025_segments(segments: pd.DataFrame):
     )
 
 
-@flow(name="Init 2025 segments")
+@flow(name="Monitorfish - Init 2025 segments")
 def init_2025_segments_flow():
     segments = extract_2025_segments()
     load_2025_segments(segments)

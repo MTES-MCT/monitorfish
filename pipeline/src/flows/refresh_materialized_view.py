@@ -16,7 +16,7 @@ def refresh_view(view: Table) -> pd.DataFrame:
         connection.execute(query)
 
 
-@flow(name="Refresh materialized view")
+@flow(name="Monitorfish - Refresh materialized view")
 def refresh_materialized_view_flow(
     view_name: str,
     schema: str = "public",

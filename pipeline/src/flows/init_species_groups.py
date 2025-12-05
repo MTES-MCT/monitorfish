@@ -40,7 +40,7 @@ def load_species_groups(species_groups, species_codes_groups):
     )
 
 
-@flow(name="Species groups")
+@flow(name="Monitorfish - Species groups")
 def init_species_groups_flow():
     species_groups = extract_species_groups()
     species_codes_groups = extract_species_codes_groups()

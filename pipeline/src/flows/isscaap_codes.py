@@ -98,7 +98,7 @@ def export_isscaap_codes(isscaap_codes: pd.DataFrame, csv_filepath: str) -> None
     isscaap_codes.to_csv(csv_filepath, index=True)
 
 
-@flow(name="Extract ISSCAAP codes from fao.org to csv file")
+@flow(name="Monitorfish - Extract ISSCAAP codes from fao.org to csv file")
 def isscaap_codes_flow(csv_filepath: str):
     pdf = extract_isscaap_codes_pdf()
     isscaap_codes = parse_pdf(pdf)

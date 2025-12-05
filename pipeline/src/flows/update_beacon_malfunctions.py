@@ -452,7 +452,7 @@ def request_notification(
     r.raise_for_status()
 
 
-@flow(name="Beacons malfunctions")
+@flow(name="Monitorfish - Beacons malfunctions")
 def update_beacon_malfunctions_flow(
     max_hours_without_emission_at_sea: int = BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA,
     max_hours_without_emission_at_port: int = BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT,

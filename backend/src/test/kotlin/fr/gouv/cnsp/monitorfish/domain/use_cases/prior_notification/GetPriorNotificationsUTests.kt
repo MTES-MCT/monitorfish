@@ -47,8 +47,8 @@ class GetPriorNotificationsUTests {
 
     private val defaultFilter =
         PriorNotificationsFilter(
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2099-12-31T00:00:00Z",
+            willArriveAfter = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+            willArriveBefore = ZonedDateTime.parse("2099-12-31T00:00:00Z"),
         )
     private val defaultIsInvalidated = null
     private val defaultIsPriorNotificationZero = null

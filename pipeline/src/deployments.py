@@ -378,7 +378,7 @@ for flow_to_deploy in flows_to_deploy:
     deployment.work_pool_name = "monitorfish"
     deployment.storage = LocalStorage("/home/monitorfish-pipeline/pipeline")
 
-    if deployment.name == "Logbook":
+    if deployment.name == "Monitorfish - Logbook":
         deployment.job_variables["container_create_kwargs"] = {
             "group_add": [LOGBOOK_FILES_GID]
         }

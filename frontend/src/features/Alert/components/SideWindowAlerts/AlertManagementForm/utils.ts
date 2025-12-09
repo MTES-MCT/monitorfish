@@ -1,11 +1,12 @@
-import { EU_COUNTRY_CODES } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants'
-import { AdministrativeAreaType, AdministrativeAreaTypeLabel } from '@features/Alert/constants'
-import Countries, { getAlpha3Code, getNames } from 'i18n-iso-countries'
+import {EU_COUNTRY_CODES} from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants'
+import {AdministrativeAreaType, AdministrativeAreaTypeLabel} from '@features/Alert/constants'
+import Countries, {getAlpha3Code, getNames} from 'i18n-iso-countries'
 import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
-import { flatMap, sortBy } from 'lodash-es'
+import {flatMap, groupBy, sortBy} from 'lodash-es'
 
-import type { TreeOption } from '@mtes-mct/monitor-ui'
-import type { TreeBranchOption, TreeLeafOption } from '@mtes-mct/monitor-ui/types/definitions'
+import type {TreeOption} from '@mtes-mct/monitor-ui'
+import type {TreeBranchOption, TreeLeafOption} from '@mtes-mct/monitor-ui/types/definitions'
+import type {RegulatoryAreaSpecification} from "@features/Alert/types.ts";
 
 Countries.registerLocale(COUNTRIES_FR)
 
@@ -89,4 +90,47 @@ export const buildCountriesAsTreeOptions = (locale: string = 'fr'): TreeOption[]
       value: 'non-eu'
     } as TreeBranchOption
   ]
+}
+
+export const convertRegulatoryAreasArrayToTreeOptions = (regulatoryAreas: RegulatoryAreaSpecification[] | undefined): TreeOption[] | undefined => {
+  if (!regulatoryAreas) {
+    return undefined
+  }
+
+  const grouped = groupBy(regulatoryAreas, 'lawType')
+
+  return Object.entries(grouped).map(([lawType, lawTypeAreas]): TreeBranchOption => {
+    const topicGroups = groupBy(lawTypeAreas, 'topic')
+
+    return {
+      children: Object.entries(topicGroups).map(([topic, topicAreas]): TreeBranchOption => ({
+        children: topicAreas.map((area): TreeLeafOption => ({
+          label: area.zone!,
+          value: area.zone!
+        })),
+        label: topic,
+        value: topic
+      })),
+      label: lawType,
+      value: lawType
+    }
+  })
+}
+
+export const convertTreeOptionsToRegulatoryAreasArray = (nextRegulationValues: TreeOption[]): RegulatoryAreaSpecification[] => {
+
+  return Object.entries(nextRegulationValues).map(([_, lawType]) => {
+    return (
+      Object.entries(lawType.children).map(([_, topic]) => {
+
+        return (
+          Object.entries(topic.children).map(([_, zone]) => ({
+            lawType: lawType.value,
+            topic: topic.value,
+            zone: zone.value
+          }))
+        )
+      })
+    )
+  }).flat().flat()
 }

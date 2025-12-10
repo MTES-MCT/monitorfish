@@ -35,14 +35,14 @@ object TestUtils {
         infractions =
             listOf(
                 Infraction(
-                    InfractionType.WITH_RECORD,
-                    27689,
-                    "Poids à bord MNZ supérieur de 50% au poids déclaré",
+                    infractionType = InfractionType.WITH_RECORD,
+                    natinf = 27689,
+                    comments = "Poids à bord MNZ supérieur de 50% au poids déclaré",
                 ),
                 Infraction(
-                    InfractionType.WITH_RECORD,
-                    27689,
-                    "Maille trop petite",
+                    infractionType = InfractionType.WITH_RECORD,
+                    natinf = 27689,
+                    comments = "Maille trop petite",
                 ),
             ),
         faoAreas = listOf("25.6.9", "25.7.9"),

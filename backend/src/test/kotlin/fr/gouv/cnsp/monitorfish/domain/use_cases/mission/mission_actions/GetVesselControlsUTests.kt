@@ -52,8 +52,7 @@ class GetVesselControlsUTests {
             gearControl.hasUncontrolledMesh = false
             val gearControls = listOf(gearControl)
 
-            val infraction = Infraction()
-            infraction.natinf = 12345
+            val infraction = Infraction(natinf = 12345)
 
             val expectedControls =
                 listOf(

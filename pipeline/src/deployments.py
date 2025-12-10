@@ -42,6 +42,7 @@ from src.flows.fao_areas import fao_areas_flow
 from src.flows.fishing_gear_codes import fishing_gear_codes_flow
 from src.flows.foreign_fmcs import foreign_fmcs_flow
 from src.flows.infractions import infractions_flow
+from src.flows.init_infraction_threat_characterization import init_infraction_threat_characterization_flow
 from src.flows.init_pno_types import init_pno_types_flow
 from src.flows.init_species_groups import init_species_groups_flow
 from src.flows.last_positions import last_positions_flow
@@ -193,6 +194,7 @@ flows_to_deploy = [
     FlowAndSchedules(flow=fishing_gear_codes_flow),
     FlowAndSchedules(flow=foreign_fmcs_flow, schedules=[Schedule(cron="37 10 * * *")]),
     FlowAndSchedules(flow=infractions_flow, schedules=[Schedule(cron="1 8 * * *")]),
+    FlowAndSchedules(flow=init_infraction_threat_characterization_flow),
     FlowAndSchedules(flow=init_pno_types_flow),
     FlowAndSchedules(flow=init_species_groups_flow),
     FlowAndSchedules(

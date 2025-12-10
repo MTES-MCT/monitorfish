@@ -34,6 +34,7 @@ class CaffeineConfiguration {
     // Infractions
     val infraction = "infraction"
     val infractions = "infractions"
+    val threatCharacterization = "threat_characterization"
 
     // Logbook Reports (Logbook Messages)
     val lastLogbookOperationDate = "last_logbook_operation_datetime_utc"
@@ -121,6 +122,7 @@ class CaffeineConfiguration {
         // Infractions
         val infractionsCache = buildMinutesCache(infractions, ticker, oneWeek)
         val infractionCache = buildMinutesCache(infraction, ticker, oneWeek)
+        val threatCharacterizationCache = buildMinutesCache(threatCharacterization, ticker, oneWeek)
 
         // Logbook Reports (Logbook Messages)
         val lastLogbookOperationDateCache = buildMinutesCache(lastLogbookOperationDate, ticker, 1)
@@ -207,6 +209,7 @@ class CaffeineConfiguration {
                 gearsCache,
                 infractionCache,
                 infractionsCache,
+                threatCharacterizationCache,
                 legacyControlUnitsCache,
                 logbookCache,
                 logbookRawMessageCache,

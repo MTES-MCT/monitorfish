@@ -14,6 +14,10 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.Ac
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReports
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.GearControlDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.MissionActionInfractionDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.NatinfDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ThreatCharacterizationDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ThreatDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions
@@ -156,6 +160,7 @@ class MissionActionsControllerITests {
                 post("/bff/v1/mission_actions")
                     .content(
                         objectMapper.writeValueAsString(
+                            // value =
                             AddMissionActionDataInput(
                                 actionDatetimeUtc = dateTime,
                                 missionId = 2,
@@ -163,14 +168,48 @@ class MissionActionsControllerITests {
                                 actionType = MissionActionType.SEA_CONTROL,
                                 infractions =
                                     listOf(
-                                        Infraction(
+                                        MissionActionInfractionDataInput(
                                             InfractionType.WITH_RECORD,
-                                            27689,
+                                            ThreatDataInput(
+                                                children =
+                                                    listOf(
+                                                        ThreatCharacterizationDataInput(
+                                                            children =
+                                                                listOf(
+                                                                    NatinfDataInput(
+                                                                        name = "27689",
+                                                                        value = 27689,
+                                                                    ),
+                                                                ),
+                                                            name = "Pêche sans autorisation par navire tiers",
+                                                            value = "Pêche sans autorisation par navire tiers",
+                                                        ),
+                                                    ),
+                                                name = "Activités INN",
+                                                value = "Activités INN",
+                                            ),
                                             "Poids à bord MNZ supérieur de 50% au poids déclaré",
                                         ),
-                                        Infraction(
+                                        MissionActionInfractionDataInput(
                                             InfractionType.WITH_RECORD,
-                                            27689,
+                                            ThreatDataInput(
+                                                children =
+                                                    listOf(
+                                                        ThreatCharacterizationDataInput(
+                                                            children =
+                                                                listOf(
+                                                                    NatinfDataInput(
+                                                                        name = "27689",
+                                                                        value = 27689,
+                                                                    ),
+                                                                ),
+                                                            name = "Pêche sans autorisation par navire tiers",
+                                                            value = "Pêche sans autorisation par navire tiers",
+                                                        ),
+                                                    ),
+                                                name = "Activités INN",
+                                                value = "Activités INN",
+                                            ),
                                             "Maille trop petite",
                                         ),
                                     ),
@@ -201,7 +240,6 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$.vesselId", equalTo(2)))
             .andExpect(jsonPath("$.infractions.length()", equalTo(2)))
             .andExpect(jsonPath("$.infractions[0].infractionType", equalTo("WITH_RECORD")))
-            .andExpect(jsonPath("$.infractions[0].natinf", equalTo(27689)))
             .andExpect(jsonPath("$.isAdministrativeControl", equalTo(true)))
             .andExpect(jsonPath("$.isComplianceWithWaterRegulationsControl", equalTo(true)))
             .andExpect(jsonPath("$.isSafetyEquipmentAndStandardsComplianceControl", equalTo(true)))
@@ -250,14 +288,48 @@ class MissionActionsControllerITests {
                                 actionType = MissionActionType.SEA_CONTROL,
                                 infractions =
                                     listOf(
-                                        Infraction(
+                                        MissionActionInfractionDataInput(
                                             InfractionType.WITH_RECORD,
-                                            27689,
+                                            ThreatDataInput(
+                                                children =
+                                                    listOf(
+                                                        ThreatCharacterizationDataInput(
+                                                            children =
+                                                                listOf(
+                                                                    NatinfDataInput(
+                                                                        name = "27689",
+                                                                        value = 27689,
+                                                                    ),
+                                                                ),
+                                                            name = "Pêche sans autorisation par navire tiers",
+                                                            value = "Pêche sans autorisation par navire tiers",
+                                                        ),
+                                                    ),
+                                                name = "Activités INN",
+                                                value = "Activités INN",
+                                            ),
                                             "Poids à bord MNZ supérieur de 50% au poids déclaré",
                                         ),
-                                        Infraction(
+                                        MissionActionInfractionDataInput(
                                             InfractionType.WITH_RECORD,
-                                            27689,
+                                            ThreatDataInput(
+                                                children =
+                                                    listOf(
+                                                        ThreatCharacterizationDataInput(
+                                                            children =
+                                                                listOf(
+                                                                    NatinfDataInput(
+                                                                        name = "27689",
+                                                                        value = 27689,
+                                                                    ),
+                                                                ),
+                                                            name = "Pêche sans autorisation par navire tiers",
+                                                            value = "Pêche sans autorisation par navire tiers",
+                                                        ),
+                                                    ),
+                                                name = "Activités INN",
+                                                value = "Activités INN",
+                                            ),
                                             "Maille trop petite",
                                         ),
                                     ),
@@ -292,7 +364,9 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$.segments[0].segment", equalTo("WWSS10")))
             .andExpect(jsonPath("$.segments[0].segmentName", equalTo("World Wide Segment")))
             .andExpect(jsonPath("$.infractions[0].infractionType", equalTo("WITH_RECORD")))
-            .andExpect(jsonPath("$.infractions[0].natinf", equalTo(27689)))
+            .andExpect(jsonPath("$.infractions[0].threat.name", equalTo("Autres")))
+            .andExpect(jsonPath("$.infractions[0].threat.children[0].name", equalTo("Autres")))
+            .andExpect(jsonPath("$.infractions[0].threat.children[0].children[0].name", equalTo("27689")))
             .andExpect(
                 jsonPath(
                     "$.infractions[0].comments",

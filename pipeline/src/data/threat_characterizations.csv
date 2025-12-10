@@ -1,0 +1,77 @@
+id,name
+1,Pêche sans autorisation par navire tiers
+2,Pêche non conforme à l'autorisation par navire tiers
+3,Pêche sans autorisation par navire communautaire
+4,Pêche sans autorisation par navire français
+5,Navire sans immatriculation
+6,Vente de produits pêchés illégalement
+7,Transport de produits pêchés illégalement
+8,Entrave à l’observation
+9,Dissimulation
+10,Interférence
+11,Sécurité
+12,Transbordement
+13,AIS
+14,Autorisation
+15,Débarquement
+16,Engin
+17,Marquage engin
+18,Espèce interdite
+19,Espèce protégée
+20,Immersion espèces
+21,Marquage espèces
+22,Espèces en sous taille / sous poids
+23,REM
+24,Surquota
+25,Tracabilité
+26,VMS
+27,Période interdite
+28,Zone interdite
+29,Pêche sans autorisation
+30,Détention produits de la mer sans autorisation
+31,Détention explosifs/substances dangereuses
+32,Utilisation explosifs/substances dangereuses
+33,Transport de produits pêchés avec explosifs/substances dangereuses
+34,Vente de produits pêchés avec explosifs/substances dangereuses
+35,Non déclaration d'entrée en ZEE FR
+36,Non déclaration des captures à bord en ZEE FR
+37,Rejet
+38,Tri
+39,BMS (JPE)
+40,BMS (JT-FT)
+41,DIS/DIM (JPE)
+42,DIS/DIM (JT-FT)
+43,Certification capture
+44,COE/COX
+45,DEP
+46,Document de transport
+47,Engin/maillage (JPE)
+48,Engin/maillage (JT-FT)
+49,EOF
+50,FAR (JPE)
+51,FAR (JT-FT)
+52,JPE non fonctionnel / absent
+53,JT-FT absence de télédéclaration
+54,LAN (JPE)
+55,LAN (JT-FT)
+56,Marge de tolérance
+57,Pesée
+58,Plan d’arrimage
+59,Plan de cale
+60,PNO
+61,LSC (JPE)
+62,LSC (JT-FT)
+63,RTP
+64,Permis d’armement - absence document
+65,Permis d’armement - absence document, suspension, perte validité, LEP échue, absence PME
+66,Permis d’armement - défaut de présentation
+67,Permis de navigation - absence du titre à bord
+68,Permis de navigation -  non respect des conditions
+69,Equipage - absence fiche effectif minimal
+70,Equipage - non respect de la fiche d'effectif minimal
+71,Equipage - refus présentation liste équipage
+72,Equipage - absence liste équipage
+73,Aptitude médicale
+74,Titres de formation
+75,Langue
+76,Travail illégal

@@ -484,6 +484,17 @@ def risk_factors() -> pd.DataFrame:
                 [{"natinf": 2606}, {"natinf": 4761}, {"natinf": 22206}],
                 [],
             ],
+            "has_current_vms_fishing_activity": [
+                True,
+                False,
+                False,
+                True,
+                False,
+                False,
+                False,
+                False,
+                False,
+            ],
         }
     )
 

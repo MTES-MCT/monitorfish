@@ -35,6 +35,15 @@ def extract_usual_segments():
 
 
 @task
+def extract_vessels_with_current_vms_fishing_activity() -> set:
+    vessels_with_current_vms_fishing_activity = extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/vessels_with_current_vms_fishing_activity.sql",
+    )
+    return set(vessels_with_current_vms_fishing_activity.cfr)
+
+
+@task
 def compute_profile_segments_impact_and_priority(
     profile_segments: pd.DataFrame,
     segments: pd.DataFrame,
@@ -190,7 +199,9 @@ def merge(
 
 @task
 def compute_risk_factors(
-    merged_segments: pd.DataFrame, control_anteriority: pd.DataFrame
+    merged_segments: pd.DataFrame,
+    control_anteriority: pd.DataFrame,
+    vessels_with_current_vms_fishing_activity: set,
 ):
     risk_factors = join_on_multiple_keys(
         control_anteriority,
@@ -292,6 +303,9 @@ def compute_risk_factors(
             "number_vessel_seizures_last_5_years": int,
         }
     )
+    risk_factors["has_current_vms_fishing_activity"] = risk_factors.cfr.isin(
+        vessels_with_current_vms_fishing_activity
+    )
 
     return risk_factors
 
@@ -333,6 +347,9 @@ def risk_factors_flow():
     recent_segments = extract_recent_segments.submit()
     usual_segments = extract_usual_segments.submit()
     control_anteriority = extract_control_anteriority.submit()
+    vessels_with_current_vms_fishing_activity = (
+        extract_vessels_with_current_vms_fishing_activity.submit()
+    )
 
     # Transform
     recent_segments = compute_profile_segments_impact_and_priority(
@@ -342,7 +359,9 @@ def risk_factors_flow():
         usual_segments, segments, control_priorities, VesselProfileType.USUAL
     )
     merged_segments = merge(current_segments, recent_segments, usual_segments)
-    risk_factors = compute_risk_factors(merged_segments, control_anteriority)
+    risk_factors = compute_risk_factors(
+        merged_segments, control_anteriority, vessels_with_current_vms_fishing_activity
+    )
 
     # Load
     load_risk_factors(risk_factors)

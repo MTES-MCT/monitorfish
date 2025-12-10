@@ -3,8 +3,22 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import java.time.ZonedDateTime
+
+data class MissionActionInfractionDataOutput(
+    val infractionType: InfractionType,
+    val threat: ThreatDataOutput,
+    val comments: String? = null,
+) {
+    companion object {
+        fun fromInfraction(infraction: Infraction) =
+            MissionActionInfractionDataOutput(
+                infractionType = infraction.infractionType!!,
+                threat = InfractionThreatCharacterizationDataOutput.fromInfraction(infraction),
+                comments = infraction.comments,
+            )
+    }
+}
 
 data class MissionActionDataOutput(
     val id: Int? = null,
@@ -29,7 +43,7 @@ data class MissionActionDataOutput(
     val speciesSizeControlled: Boolean? = null,
     val separateStowageOfPreservedSpecies: ControlCheck? = null,
     val licencesAndLogbookObservations: String? = null,
-    val infractions: List<Infraction> = listOf(),
+    val infractions: List<MissionActionInfractionDataOutput> = listOf(),
     val speciesObservations: String? = null,
     val seizureAndDiversion: Boolean? = null,
     val numberOfVesselsFlownOver: Int? = null,
@@ -85,7 +99,10 @@ data class MissionActionDataOutput(
                 speciesSizeControlled = missionAction.speciesSizeControlled,
                 separateStowageOfPreservedSpecies = missionAction.separateStowageOfPreservedSpecies,
                 licencesAndLogbookObservations = missionAction.licencesAndLogbookObservations,
-                infractions = missionAction.infractions,
+                infractions =
+                    missionAction.infractions.map {
+                        MissionActionInfractionDataOutput.fromInfraction(it)
+                    },
                 speciesObservations = missionAction.speciesObservations,
                 seizureAndDiversion = missionAction.seizureAndDiversion,
                 numberOfVesselsFlownOver = missionAction.numberOfVesselsFlownOver,

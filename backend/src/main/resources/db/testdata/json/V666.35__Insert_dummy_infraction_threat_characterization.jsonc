@@ -1,0 +1,1069 @@
+[
+    {
+        "table": "threats",
+        "data": [
+            {
+                "id": 1,
+                "name": "Activités INN"
+            },
+            {
+                "id": 2,
+                "name": "Entrave au contrôle"
+            },
+            {
+                "id": 3,
+                "name": "Mesures techniques et de conservation"
+            },
+            {
+                "id": 4,
+                "name": "Terres Australes"
+            },
+            {
+                "id": 5,
+                "name": "Obligation de débarquement"
+            },
+            {
+                "id": 6,
+                "name": "Obligations déclaratives"
+            },
+            {
+                "id": 7,
+                "name": "Sécurité / gens de mer"
+            }
+        ]
+    },
+    {
+        "table": "threat_characterizations",
+        "data": [
+            {
+                "id": 1,
+                "name": "Pêche sans autorisation par navire tiers"
+            },
+            {
+                "id": 2,
+                "name": "Pêche non conforme à l'autorisation par navire tiers"
+            },
+            {
+                "id": 3,
+                "name": "Pêche sans autorisation par navire communautaire"
+            },
+            {
+                "id": 4,
+                "name": "Pêche sans autorisation par navire français"
+            },
+            {
+                "id": 5,
+                "name": "Navire sans immatriculation"
+            },
+            {
+                "id": 6,
+                "name": "Vente de produits pêchés illégalement"
+            },
+            {
+                "id": 7,
+                "name": "Transport de produits pêchés illégalement"
+            },
+            {
+                "id": 8,
+                "name": "Entrave à l'observation"
+            },
+            {
+                "id": 9,
+                "name": "Dissimulation"
+            },
+            {
+                "id": 10,
+                "name": "Interférence"
+            },
+            {
+                "id": 11,
+                "name": "Sécurité"
+            },
+            {
+                "id": 12,
+                "name": "Transbordement"
+            },
+            {
+                "id": 13,
+                "name": "AIS"
+            },
+            {
+                "id": 14,
+                "name": "Autorisation"
+            },
+            {
+                "id": 15,
+                "name": "Débarquement"
+            },
+            {
+                "id": 16,
+                "name": "Engin"
+            },
+            {
+                "id": 17,
+                "name": "Marquage engin"
+            },
+            {
+                "id": 18,
+                "name": "Espèce interdite"
+            },
+            {
+                "id": 19,
+                "name": "Espèce protégée"
+            },
+            {
+                "id": 20,
+                "name": "Immersion espèces"
+            },
+            {
+                "id": 21,
+                "name": "Marquage espèces"
+            },
+            {
+                "id": 22,
+                "name": "Espèces en sous taille / sous poids"
+            },
+            {
+                "id": 23,
+                "name": "REM"
+            },
+            {
+                "id": 24,
+                "name": "Surquota"
+            },
+            {
+                "id": 25,
+                "name": "Tracabilité"
+            },
+            {
+                "id": 26,
+                "name": "VMS"
+            },
+            {
+                "id": 27,
+                "name": "Période interdite"
+            },
+            {
+                "id": 28,
+                "name": "Zone interdite"
+            },
+            {
+                "id": 29,
+                "name": "Pêche sans autorisation"
+            },
+            {
+                "id": 30,
+                "name": "Détention produits de la mer sans autorisation"
+            },
+            {
+                "id": 31,
+                "name": "Détention explosifs/substances dangereuses"
+            },
+            {
+                "id": 32,
+                "name": "Utilisation explosifs/substances dangereuses"
+            },
+            {
+                "id": 33,
+                "name": "Transport de produits pêchés avec explosifs/substances dangereuses"
+            },
+            {
+                "id": 34,
+                "name": "Vente de produits pêchés avec explosifs/substances dangereuses"
+            },
+            {
+                "id": 35,
+                "name": "Non déclaration d'entrée en ZEE FR"
+            },
+            {
+                "id": 36,
+                "name": "Non déclaration des captures à bord en ZEE FR"
+            },
+            {
+                "id": 37,
+                "name": "Rejet"
+            },
+            {
+                "id": 38,
+                "name": "Tri"
+            },
+            {
+                "id": 39,
+                "name": "BMS (JPE)"
+            },
+            {
+                "id": 40,
+                "name": "BMS (JT-FT)"
+            },
+            {
+                "id": 41,
+                "name": "DIS/DIM (JPE)"
+            },
+            {
+                "id": 42,
+                "name": "DIS/DIM (JT-FT)"
+            },
+            {
+                "id": 43,
+                "name": "Certification capture"
+            },
+            {
+                "id": 44,
+                "name": "COE/COX"
+            },
+            {
+                "id": 45,
+                "name": "DEP"
+            },
+            {
+                "id": 46,
+                "name": "Document de transport"
+            },
+            {
+                "id": 47,
+                "name": "Engin/maillage (JPE)"
+            },
+            {
+                "id": 48,
+                "name": "Engin/maillage (JT-FT)"
+            },
+            {
+                "id": 49,
+                "name": "EOF"
+            },
+            {
+                "id": 50,
+                "name": "FAR (JPE)"
+            },
+            {
+                "id": 51,
+                "name": "FAR (JT-FT)"
+            },
+            {
+                "id": 52,
+                "name": "JPE non fonctionnel / absent"
+            },
+            {
+                "id": 53,
+                "name": "JT-FT absence de télédéclaration"
+            },
+            {
+                "id": 54,
+                "name": "LAN (JPE)"
+            },
+            {
+                "id": 55,
+                "name": "LAN (JT-FT)"
+            },
+            {
+                "id": 56,
+                "name": "Marge de tolérance"
+            },
+            {
+                "id": 57,
+                "name": "Pesée"
+            },
+            {
+                "id": 58,
+                "name": "Plan d'arrimage"
+            },
+            {
+                "id": 59,
+                "name": "Plan de cale"
+            },
+            {
+                "id": 60,
+                "name": "PNO"
+            },
+            {
+                "id": 61,
+                "name": "LSC (JPE)"
+            },
+            {
+                "id": 62,
+                "name": "LSC (JT-FT)"
+            },
+            {
+                "id": 63,
+                "name": "RTP"
+            },
+            {
+                "id": 64,
+                "name": "Permis d'armement - absence document"
+            },
+            {
+                "id": 65,
+                "name": "Permis d'armement - absence document, suspension, perte validité, LEP échue, absence PME"
+            },
+            {
+                "id": 66,
+                "name": "Permis d'armement - défaut de présentation"
+            },
+            {
+                "id": 67,
+                "name": "Permis de navigation - absence du titre à bord"
+            },
+            {
+                "id": 68,
+                "name": "Permis de navigation -  non respect des conditions"
+            },
+            {
+                "id": 69,
+                "name": "Equipage - absence fiche effectif minimal"
+            },
+            {
+                "id": 70,
+                "name": "Equipage - non respect de la fiche d'effectif minimal"
+            },
+            {
+                "id": 71,
+                "name": "Equipage - refus présentation liste équipage"
+            },
+            {
+                "id": 72,
+                "name": "Equipage - absence liste équipage"
+            },
+            {
+                "id": 73,
+                "name": "Aptitude médicale"
+            },
+            {
+                "id": 74,
+                "name": "Titres de formation"
+            },
+            {
+                "id": 75,
+                "name": "Langue"
+            },
+            {
+                "id": 76,
+                "name": "Travail illégal"
+            }
+        ]
+    },
+    {
+        "table": "infraction_threat_characterization",
+        "data": [
+            {
+                "id": 1,
+                "natinf_code": 2608,
+                "threat_id": 1,
+                "threat_characterization_id": 1
+            },
+            {
+                "id": 2,
+                "natinf_code": 2609,
+                "threat_id": 1,
+                "threat_characterization_id": 2
+            },
+            {
+                "id": 3,
+                "natinf_code": 2610,
+                "threat_id": 1,
+                "threat_characterization_id": 3
+            },
+            {
+                "id": 4,
+                "natinf_code": 22070,
+                "threat_id": 1,
+                "threat_characterization_id": 4
+            },
+            {
+                "id": 5,
+                "natinf_code": 27879,
+                "threat_id": 1,
+                "threat_characterization_id": 5
+            },
+            {
+                "id": 6,
+                "natinf_code": 27900,
+                "threat_id": 1,
+                "threat_characterization_id": 6
+            },
+            {
+                "id": 7,
+                "natinf_code": 27898,
+                "threat_id": 1,
+                "threat_characterization_id": 7
+            },
+            {
+                "id": 8,
+                "natinf_code": 27885,
+                "threat_id": 2,
+                "threat_characterization_id": 8
+            },
+            {
+                "id": 9,
+                "natinf_code": 12922,
+                "threat_id": 2,
+                "threat_characterization_id": 9
+            },
+            {
+                "id": 10,
+                "natinf_code": 27685,
+                "threat_id": 2,
+                "threat_characterization_id": 9
+            },
+            {
+                "id": 11,
+                "natinf_code": 2584,
+                "threat_id": 2,
+                "threat_characterization_id": 10
+            },
+            {
+                "id": 12,
+                "natinf_code": 2604,
+                "threat_id": 2,
+                "threat_characterization_id": 10
+            },
+            {
+                "id": 13,
+                "natinf_code": 4234,
+                "threat_id": 2,
+                "threat_characterization_id": 10
+            },
+            {
+                "id": 14,
+                "natinf_code": 22035,
+                "threat_id": 2,
+                "threat_characterization_id": 10
+            },
+            {
+                "id": 15,
+                "natinf_code": 2605,
+                "threat_id": 2,
+                "threat_characterization_id": 11
+            },
+            {
+                "id": 16,
+                "natinf_code": 2606,
+                "threat_id": 2,
+                "threat_characterization_id": 11
+            },
+            {
+                "id": 17,
+                "natinf_code": 27714,
+                "threat_id": 3,
+                "threat_characterization_id": 12
+            },
+            {
+                "id": 18,
+                "natinf_code": 27688,
+                "threat_id": 3,
+                "threat_characterization_id": 13
+            },
+            {
+                "id": 19,
+                "natinf_code": 2603,
+                "threat_id": 3,
+                "threat_characterization_id": 14
+            },
+            {
+                "id": 20,
+                "natinf_code": 12912,
+                "threat_id": 3,
+                "threat_characterization_id": 14
+            },
+            {
+                "id": 21,
+                "natinf_code": 22070,
+                "threat_id": 3,
+                "threat_characterization_id": 14
+            },
+            {
+                "id": 22,
+                "natinf_code": 30792,
+                "threat_id": 3,
+                "threat_characterization_id": 14
+            },
+            {
+                "id": 23,
+                "natinf_code": 32099,
+                "threat_id": 3,
+                "threat_characterization_id": 14
+            },
+            {
+                "id": 24,
+                "natinf_code": 10400,
+                "threat_id": 3,
+                "threat_characterization_id": 15
+            },
+            {
+                "id": 25,
+                "natinf_code": 27715,
+                "threat_id": 3,
+                "threat_characterization_id": 15
+            },
+            {
+                "id": 26,
+                "natinf_code": 27718,
+                "threat_id": 3,
+                "threat_characterization_id": 15
+            },
+            {
+                "id": 27,
+                "natinf_code": 27721,
+                "threat_id": 3,
+                "threat_characterization_id": 15
+            },
+            {
+                "id": 28,
+                "natinf_code": 2593,
+                "threat_id": 3,
+                "threat_characterization_id": 16
+            },
+            {
+                "id": 29,
+                "natinf_code": 7057,
+                "threat_id": 3,
+                "threat_characterization_id": 16
+            },
+            {
+                "id": 30,
+                "natinf_code": 7059,
+                "threat_id": 3,
+                "threat_characterization_id": 16
+            },
+            {
+                "id": 31,
+                "natinf_code": 7060,
+                "threat_id": 3,
+                "threat_characterization_id": 16
+            },
+            {
+                "id": 32,
+                "natinf_code": 12891,
+                "threat_id": 3,
+                "threat_characterization_id": 16
+            },
+            {
+                "id": 33,
+                "natinf_code": 12898,
+                "threat_id": 3,
+                "threat_characterization_id": 16
+            },
+            {
+                "id": 34,
+                "natinf_code": 12918,
+                "threat_id": 3,
+                "threat_characterization_id": 16
+            },
+            {
+                "id": 35,
+                "natinf_code": 27724,
+                "threat_id": 3,
+                "threat_characterization_id": 16
+            },
+            {
+                "id": 36,
+                "natinf_code": 27724,
+                "threat_id": 3,
+                "threat_characterization_id": 17
+            },
+            {
+                "id": 37,
+                "natinf_code": 27725,
+                "threat_id": 3,
+                "threat_characterization_id": 16
+            },
+            {
+                "id": 38,
+                "natinf_code": 27725,
+                "threat_id": 3,
+                "threat_characterization_id": 17
+            },
+            {
+                "id": 39,
+                "natinf_code": 27731,
+                "threat_id": 3,
+                "threat_characterization_id": 16
+            },
+            {
+                "id": 40,
+                "natinf_code": 7063,
+                "threat_id": 3,
+                "threat_characterization_id": 18
+            },
+            {
+                "id": 41,
+                "natinf_code": 7064,
+                "threat_id": 3,
+                "threat_characterization_id": 18
+            },
+            {
+                "id": 42,
+                "natinf_code": 28347,
+                "threat_id": 3,
+                "threat_characterization_id": 18
+            },
+            {
+                "id": 43,
+                "natinf_code": 27730,
+                "threat_id": 3,
+                "threat_characterization_id": 19
+            },
+            {
+                "id": 44,
+                "natinf_code": 2600,
+                "threat_id": 3,
+                "threat_characterization_id": 20
+            },
+            {
+                "id": 45,
+                "natinf_code": 27729,
+                "threat_id": 3,
+                "threat_characterization_id": 21
+            },
+            {
+                "id": 46,
+                "natinf_code": 7983,
+                "threat_id": 3,
+                "threat_characterization_id": 22
+            },
+            {
+                "id": 47,
+                "natinf_code": 7984,
+                "threat_id": 3,
+                "threat_characterization_id": 22
+            },
+            {
+                "id": 48,
+                "natinf_code": 28346,
+                "threat_id": 3,
+                "threat_characterization_id": 22
+            },
+            {
+                "id": 49,
+                "natinf_code": 27688,
+                "threat_id": 3,
+                "threat_characterization_id": 23
+            },
+            {
+                "id": 50,
+                "natinf_code": 12900,
+                "threat_id": 3,
+                "threat_characterization_id": 24
+            },
+            {
+                "id": 51,
+                "natinf_code": 12902,
+                "threat_id": 3,
+                "threat_characterization_id": 24
+            },
+            {
+                "id": 52,
+                "natinf_code": 28348,
+                "threat_id": 3,
+                "threat_characterization_id": 24
+            },
+            {
+                "id": 53,
+                "natinf_code": 33914,
+                "threat_id": 3,
+                "threat_characterization_id": 25
+            },
+            {
+                "id": 54,
+                "natinf_code": 7064,
+                "threat_id": 3,
+                "threat_characterization_id": 12
+            },
+            {
+                "id": 55,
+                "natinf_code": 12902,
+                "threat_id": 3,
+                "threat_characterization_id": 12
+            },
+            {
+                "id": 56,
+                "natinf_code": 27717,
+                "threat_id": 3,
+                "threat_characterization_id": 12
+            },
+            {
+                "id": 57,
+                "natinf_code": 33914,
+                "threat_id": 3,
+                "threat_characterization_id": 12
+            },
+            {
+                "id": 58,
+                "natinf_code": 27688,
+                "threat_id": 3,
+                "threat_characterization_id": 26
+            },
+            {
+                "id": 59,
+                "natinf_code": 7060,
+                "threat_id": 3,
+                "threat_characterization_id": 27
+            },
+            {
+                "id": 60,
+                "natinf_code": 7062,
+                "threat_id": 3,
+                "threat_characterization_id": 27
+            },
+            {
+                "id": 61,
+                "natinf_code": 2596,
+                "threat_id": 3,
+                "threat_characterization_id": 28
+            },
+            {
+                "id": 62,
+                "natinf_code": 7061,
+                "threat_id": 3,
+                "threat_characterization_id": 28
+            },
+            {
+                "id": 63,
+                "natinf_code": 27686,
+                "threat_id": 3,
+                "threat_characterization_id": 28
+            },
+            {
+                "id": 64,
+                "natinf_code": 27687,
+                "threat_id": 3,
+                "threat_characterization_id": 28
+            },
+            {
+                "id": 65,
+                "natinf_code": 32071,
+                "threat_id": 3,
+                "threat_characterization_id": 28
+            },
+            {
+                "id": 66,
+                "natinf_code": 22806,
+                "threat_id": 4,
+                "threat_characterization_id": 29
+            },
+            {
+                "id": 67,
+                "natinf_code": 27679,
+                "threat_id": 4,
+                "threat_characterization_id": 30
+            },
+            {
+                "id": 68,
+                "natinf_code": 27698,
+                "threat_id": 4,
+                "threat_characterization_id": 31
+            },
+            {
+                "id": 69,
+                "natinf_code": 27699,
+                "threat_id": 4,
+                "threat_characterization_id": 32
+            },
+            {
+                "id": 70,
+                "natinf_code": 27701,
+                "threat_id": 4,
+                "threat_characterization_id": 33
+            },
+            {
+                "id": 71,
+                "natinf_code": 27702,
+                "threat_id": 4,
+                "threat_characterization_id": 34
+            },
+            {
+                "id": 72,
+                "natinf_code": 22807,
+                "threat_id": 4,
+                "threat_characterization_id": 35
+            },
+            {
+                "id": 73,
+                "natinf_code": 22808,
+                "threat_id": 4,
+                "threat_characterization_id": 36
+            },
+            {
+                "id": 74,
+                "natinf_code": 27695,
+                "threat_id": 4,
+                "threat_characterization_id": 28
+            },
+            {
+                "id": 75,
+                "natinf_code": 27696,
+                "threat_id": 4,
+                "threat_characterization_id": 27
+            },
+            {
+                "id": 76,
+                "natinf_code": 27728,
+                "threat_id": 5,
+                "threat_characterization_id": 37
+            },
+            {
+                "id": 77,
+                "natinf_code": 27748,
+                "threat_id": 5,
+                "threat_characterization_id": 37
+            },
+            {
+                "id": 78,
+                "natinf_code": 34314,
+                "threat_id": 5,
+                "threat_characterization_id": 37
+            },
+            {
+                "id": 79,
+                "natinf_code": 27726,
+                "threat_id": 5,
+                "threat_characterization_id": 38
+            },
+            {
+                "id": 80,
+                "natinf_code": 27689,
+                "threat_id": 5,
+                "threat_characterization_id": 39
+            },
+            {
+                "id": 81,
+                "natinf_code": 27885,
+                "threat_id": 5,
+                "threat_characterization_id": 40
+            },
+            {
+                "id": 82,
+                "natinf_code": 27689,
+                "threat_id": 5,
+                "threat_characterization_id": 41
+            },
+            {
+                "id": 83,
+                "natinf_code": 27885,
+                "threat_id": 5,
+                "threat_characterization_id": 42
+            },
+            {
+                "id": 84,
+                "natinf_code": 27689,
+                "threat_id": 6,
+                "threat_characterization_id": 43
+            },
+            {
+                "id": 85,
+                "natinf_code": 27689,
+                "threat_id": 6,
+                "threat_characterization_id": 44
+            },
+            {
+                "id": 86,
+                "natinf_code": 27689,
+                "threat_id": 6,
+                "threat_characterization_id": 45
+            },
+            {
+                "id": 87,
+                "natinf_code": 31004,
+                "threat_id": 6,
+                "threat_characterization_id": 46
+            },
+            {
+                "id": 88,
+                "natinf_code": 27689,
+                "threat_id": 6,
+                "threat_characterization_id": 47
+            },
+            {
+                "id": 89,
+                "natinf_code": 27885,
+                "threat_id": 6,
+                "threat_characterization_id": 48
+            },
+            {
+                "id": 90,
+                "natinf_code": 27689,
+                "threat_id": 6,
+                "threat_characterization_id": 49
+            },
+            {
+                "id": 91,
+                "natinf_code": 27689,
+                "threat_id": 6,
+                "threat_characterization_id": 50
+            },
+            {
+                "id": 92,
+                "natinf_code": 27885,
+                "threat_id": 6,
+                "threat_characterization_id": 51
+            },
+            {
+                "id": 93,
+                "natinf_code": 27689,
+                "threat_id": 6,
+                "threat_characterization_id": 52
+            },
+            {
+                "id": 94,
+                "natinf_code": 27885,
+                "threat_id": 6,
+                "threat_characterization_id": 53
+            },
+            {
+                "id": 95,
+                "natinf_code": 27689,
+                "threat_id": 6,
+                "threat_characterization_id": 54
+            },
+            {
+                "id": 96,
+                "natinf_code": 27885,
+                "threat_id": 6,
+                "threat_characterization_id": 55
+            },
+            {
+                "id": 97,
+                "natinf_code": 27689,
+                "threat_id": 6,
+                "threat_characterization_id": 56
+            },
+            {
+                "id": 98,
+                "natinf_code": 27727,
+                "threat_id": 6,
+                "threat_characterization_id": 57
+            },
+            {
+                "id": 99,
+                "natinf_code": 30835,
+                "threat_id": 6,
+                "threat_characterization_id": 58
+            },
+            {
+                "id": 100,
+                "natinf_code": 27885,
+                "threat_id": 6,
+                "threat_characterization_id": 59
+            },
+            {
+                "id": 101,
+                "natinf_code": 27712,
+                "threat_id": 6,
+                "threat_characterization_id": 60
+            },
+            {
+                "id": 102,
+                "natinf_code": 27689,
+                "threat_id": 6,
+                "threat_characterization_id": 61
+            },
+            {
+                "id": 103,
+                "natinf_code": 27885,
+                "threat_id": 6,
+                "threat_characterization_id": 62
+            },
+            {
+                "id": 104,
+                "natinf_code": 27689,
+                "threat_id": 6,
+                "threat_characterization_id": 63
+            },
+            {
+                "id": 105,
+                "natinf_code": 27693,
+                "threat_id": 7,
+                "threat_characterization_id": 64
+            },
+            {
+                "id": 106,
+                "natinf_code": 32326,
+                "threat_id": 7,
+                "threat_characterization_id": 65
+            },
+            {
+                "id": 107,
+                "natinf_code": 32327,
+                "threat_id": 7,
+                "threat_characterization_id": 66
+            },
+            {
+                "id": 108,
+                "natinf_code": 22205,
+                "threat_id": 7,
+                "threat_characterization_id": 67
+            },
+            {
+                "id": 109,
+                "natinf_code": 22182,
+                "threat_id": 7,
+                "threat_characterization_id": 68
+            },
+            {
+                "id": 110,
+                "natinf_code": 30028,
+                "threat_id": 7,
+                "threat_characterization_id": 69
+            },
+            {
+                "id": 111,
+                "natinf_code": 30029,
+                "threat_id": 7,
+                "threat_characterization_id": 70
+            },
+            {
+                "id": 112,
+                "natinf_code": 31122,
+                "threat_id": 7,
+                "threat_characterization_id": 71
+            },
+            {
+                "id": 113,
+                "natinf_code": 31123,
+                "threat_id": 7,
+                "threat_characterization_id": 72
+            },
+            {
+                "id": 114,
+                "natinf_code": 30032,
+                "threat_id": 7,
+                "threat_characterization_id": 73
+            },
+            {
+                "id": 115,
+                "natinf_code": 30034,
+                "threat_id": 7,
+                "threat_characterization_id": 74
+            },
+            {
+                "id": 116,
+                "natinf_code": 4485,
+                "threat_id": 7,
+                "threat_characterization_id": 74
+            },
+            {
+                "id": 117,
+                "natinf_code": 31116,
+                "threat_id": 7,
+                "threat_characterization_id": 75
+            },
+            {
+                "id": 118,
+                "natinf_code": 1508,
+                "threat_id": 7,
+                "threat_characterization_id": 76
+            },
+            {
+                "id": 119,
+                "natinf_code": 1509,
+                "threat_id": 7,
+                "threat_characterization_id": 76
+            },
+            {
+                "id": 120,
+                "natinf_code": 4761,
+                "threat_id": 7,
+                "threat_characterization_id": 11
+            }
+        ]
+    }
+]

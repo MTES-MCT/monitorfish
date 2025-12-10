@@ -1,61 +1,7 @@
 [
     {
-        "table": "infractions",
-        "beforeAll": "DELETE FROM infractions;\nDELETE FROM mission_actions;\nALTER SEQUENCE mission_actions_id_seq RESTART WITH 1;\n",
-        "id": "natinf_code",
-        "data": [
-            {
-                "natinf_code": 23581,
-                "regulation": "Arreté du 12/01/3021",
-                "infraction_category": "Pêche",
-                "infraction": "Taille de maille non réglementaire"
-            },
-            {
-                "natinf_code": 23588,
-                "regulation": "Arreté du 15/01/3021",
-                "infraction_category": "Pêche",
-                "infraction": "Chalutage dans la zone des 3 milles"
-            },
-            {
-                "natinf_code": 23584,
-                "regulation": "Arreté du 18/01/3021",
-                "infraction_category": "Sécurité / Rôle",
-                "infraction": "Défaut AIS"
-            },
-            {
-                "natinf_code": 7059,
-                "regulation": "d1852",
-                "infraction_category": "Pêche",
-                "infraction": "Peche maritime avec un engin dans une zone ou son emploi est interdit"
-            },
-            {
-                "natinf_code": 27689,
-                "regulation": "ART.L.945-2 §I 3°, ART.L.921-9 C.RURAL.\tPêche",
-                "infraction_category": "Pêche",
-                "infraction": "Pêche\tNon respect des obligations d'enregistrement et de communication des donnees requises dans le cadre du systeme de declaration par voie electronique - peche maritime"
-            },
-            {
-                "natinf_code": 2608,
-                "regulation": "d1852",
-                "infraction_category": "Pêche",
-                "infraction": "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne"
-            },
-            {
-                "natinf_code": 27724,
-                "regulation": "Art. 128.5.12.d",
-                "infraction_category": "Pêche",
-                "infraction": "Utilisation d'engin de pêche maritime non conforme aux mesures techniques de conservation et de gestion des ressources"
-            },
-            {
-                "natinf_code": 28346,
-                "regulation": "ART.L.945-4 15° C.RURAL",
-                "infraction_category": "Pêche",
-                "infraction": "Détention de produits de la pêche maritime et de l'aquaculture marine de taille, calibre ou poids prohibe"
-            }
-        ]
-    },
-    {
         "table": "mission_actions",
+        "beforeAll": "DELETE FROM mission_actions;\nALTER SEQUENCE mission_actions_id_seq RESTART WITH 1;\n",
         "id": "id",
         "data": [
             // - Mission 1: SEA_CONTROL with no infractions

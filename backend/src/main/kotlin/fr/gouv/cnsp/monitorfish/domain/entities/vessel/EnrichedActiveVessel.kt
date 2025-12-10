@@ -69,6 +69,7 @@ data class EnrichedActiveVessel(
         return when {
             hasDeclaredCatchesOnboard -> ActivityOrigin.FROM_LOGBOOK
             hasCurrentVmsFishingActivity -> ActivityOrigin.FROM_RECENT_PROFILE
+            // TODO : Use USUAL_PROFILE data for vessels that have no VMS and no recent_profile data
             !hasLastPosition -> ActivityOrigin.FROM_RECENT_PROFILE
             else -> ActivityOrigin.FROM_LOGBOOK
         }

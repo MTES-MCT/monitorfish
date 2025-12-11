@@ -1,6 +1,7 @@
 import { monitorfishApi } from '@api/api'
 import { HttpStatusCode, RtkCacheTagType } from '@api/constants'
 import { ActiveVesselSchema } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { ContactMethodSchema } from '@features/Vessel/schemas/ContactMethodSchema'
 import { VesselSchema } from '@features/Vessel/schemas/VesselSchema'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
@@ -20,9 +21,19 @@ const GET_VESSEL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informatio
 const GET_VESSEL_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les signalements de ce navire."
 const SEARCH_VESSELS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les navires correspondants à cette recherche."
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
+const VESSEL_CONTACT_ERROR_MESSAGE = "Nous n'avons pas pu mettre à jour les modalités de contact du navire"
 
 export const vesselApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
+    createVesselContactMethod: builder.mutation<void, Vessel.ContactMethod>({
+      query: data => ({
+        body: data,
+        method: 'POST',
+        url: `/vessels/contact_method`
+      }),
+      transformErrorResponse: response => new FrontendApiError(VESSEL_CONTACT_ERROR_MESSAGE, response)
+    }),
+
     getActiveVessels: builder.query<Vessel.ActiveVessel[], void>({
       providesTags: () => [{ type: RtkCacheTagType.ActiveVessels }],
       query: () => `/vessels`,
@@ -83,6 +94,12 @@ export const vesselApi = monitorfishApi.injectEndpoints({
           vesselAndPositions: baseQueryReturnValue
         }
       }
+    }),
+
+    getVesselContactToUpdate: builder.query<Vessel.ContactMethod, number>({
+      query: id => `/vessels/contact_method/${id}`,
+      transformResponse: (baseQueryReturnValue: Vessel.ContactMethod) =>
+        parseResponseOrReturn<Vessel.ContactMethod>(baseQueryReturnValue, ContactMethodSchema, false)
     }),
 
     /**
@@ -163,8 +180,24 @@ export const vesselApi = monitorfishApi.injectEndpoints({
     searchVessels: builder.query<Vessel.VesselIdentity[], Vessel.ApiSearchFilter>({
       query: filter => getUrlOrPathWithQueryParams('/vessels/search', filter),
       transformErrorResponse: response => new FrontendApiError(SEARCH_VESSELS_ERROR_MESSAGE, response)
+    }),
+
+    updateVesselContactMethod: builder.mutation<void, Vessel.ContactMethod>({
+      query: data => ({
+        body: data,
+        method: 'PUT',
+        url: `/vessels/contact_method`
+      }),
+      transformErrorResponse: response => new FrontendApiError(VESSEL_CONTACT_ERROR_MESSAGE, response)
     })
   })
 })
 
-export const { useGetActiveVesselsQuery, useGetVesselQuery, useGetVesselReportingsByVesselIdentityQuery } = vesselApi
+export const {
+  useCreateVesselContactMethodMutation,
+  useGetActiveVesselsQuery,
+  useGetVesselContactToUpdateQuery,
+  useGetVesselQuery,
+  useGetVesselReportingsByVesselIdentityQuery,
+  useUpdateVesselContactMethodMutation
+} = vesselApi

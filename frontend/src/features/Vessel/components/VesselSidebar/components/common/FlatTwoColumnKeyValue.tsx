@@ -11,6 +11,7 @@ type KeyValueTableProps = {
   firstColumn: Array<KeyValue>
   secondColumn: Array<KeyValue>
 }
+
 export function FlatTwoColumnKeyValue({ className, firstColumn, secondColumn }: KeyValueTableProps) {
   return (
     <Zone className={className}>
@@ -51,8 +52,6 @@ const TableBody = styled.tbody``
 const Zone = styled.div`
   background: ${p => p.theme.color.white};
   display: flex;
-  flex-wrap: wrap;
-  margin: 5px 5px 10px;
   text-align: left;
 
   > table:not(:first-child) {
@@ -63,8 +62,7 @@ const Zone = styled.div`
 const Fields = styled.table<{
   $isSecondColumn?: boolean
 }>`
-  padding: 10px 5px 5px 20px;
-  margin: 10px ${p => (p.$isSecondColumn ? 20 : 0)}px 10px ${p => (p.$isSecondColumn ? 0 : 20)}px;
+  margin: 16px ${p => (p.$isSecondColumn ? 24 : 0)}px 16px ${p => (p.$isSecondColumn ? 0 : 24)}px;
   display: table;
   flex-basis: 200px;
   flex-shrink: 0;

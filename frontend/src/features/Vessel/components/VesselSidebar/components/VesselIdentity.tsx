@@ -1,5 +1,6 @@
 import { FlatKeyValue } from '@features/Vessel/components/VesselSidebar/components/common/FlatKeyValue'
 import { FlatTwoColumnKeyValue } from '@features/Vessel/components/VesselSidebar/components/common/FlatTwoColumnKeyValue'
+import { VesselContactToUpdateForm } from '@features/Vessel/components/VesselSidebar/components/VesselContactToUpdateForm'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { customDayjs, FingerprintLoader, THEME } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
@@ -127,7 +128,7 @@ export function VesselIdentity() {
           }
         ]}
       />
-      <StyledFlatKeyValue
+      <FlatKeyValue
         column={[
           {
             key: 'Type de navire',
@@ -160,7 +161,7 @@ export function VesselIdentity() {
         ]}
         keyWidth={200}
       />
-      <StyledFlatKeyValue
+      <FlatKeyValue
         column={[
           {
             key: 'Etat du permis de navigation',
@@ -211,7 +212,7 @@ export function VesselIdentity() {
         ]}
         keyWidth={200}
       />
-      <StyledFlatKeyValue
+      <FlatKeyValue
         column={[
           {
             key: 'Organisation de producteurs',
@@ -221,12 +222,14 @@ export function VesselIdentity() {
           },
           {
             key: 'Coordonnées propriétaire',
-            value: (
+            value: (!!selectedVessel?.proprietorName ||
+              !(selectedVessel?.proprietorPhones?.length === 0) ||
+              !(selectedVessel?.proprietorEmails?.length === 0)) && (
               <>
                 <ValueWithLineBreak>{selectedVessel?.proprietorName}</ValueWithLineBreak>
-                {!!selectedVessel?.proprietorPhones && (
-                  <ValueWithLineBreak>{selectedVessel?.proprietorPhones.join(', ')}</ValueWithLineBreak>
-                )}
+                {selectedVessel?.proprietorPhones?.map(proprietorPhone => (
+                  <ValueWithLineBreak>{proprietorPhone}</ValueWithLineBreak>
+                ))}
                 {!!selectedVessel?.proprietorEmails && (
                   <ValueWithLineBreak>{selectedVessel?.proprietorEmails.join(', ')}</ValueWithLineBreak>
                 )}
@@ -235,12 +238,14 @@ export function VesselIdentity() {
           },
           {
             key: 'Coordonnées armateur',
-            value: (
+            value: (!!selectedVessel?.operatorName ||
+              !(selectedVessel?.operatorPhones?.length === 0) ||
+              !!selectedVessel?.operatorEmail) && (
               <>
                 <ValueWithLineBreak>{selectedVessel?.operatorName}</ValueWithLineBreak>
-                {!!selectedVessel?.operatorPhones && (
-                  <ValueWithLineBreak>{selectedVessel?.operatorPhones.join(', ')}</ValueWithLineBreak>
-                )}
+                {selectedVessel?.operatorPhones?.map(operatorPhone => (
+                  <ValueWithLineBreak>{operatorPhone}</ValueWithLineBreak>
+                ))}
                 {!!selectedVessel?.operatorEmail && (
                   <ValueWithLineBreak>{selectedVessel?.operatorEmail}</ValueWithLineBreak>
                 )}
@@ -250,7 +255,7 @@ export function VesselIdentity() {
           {
             hasMultipleLines: true,
             key: 'Coordonnées patron',
-            value: (
+            value: (!!selectedVessel?.bossName || !!selectedVessel?.bossAddress) && (
               <>
                 {!!selectedVessel?.bossName && <ValueWithLineBreak>{selectedVessel?.bossName}</ValueWithLineBreak>}
                 {!!selectedVessel?.bossAddress && (
@@ -262,37 +267,39 @@ export function VesselIdentity() {
           {
             hasMultipleLines: true,
             key: 'Contact navire',
-            value: (
+            value: (!(selectedVessel?.vesselPhones?.length === 0) || !(selectedVessel?.vesselEmails.length === 0)) && (
               <>
-                {!!selectedVessel?.vesselPhones && (
-                  <ValueWithLineBreak>{selectedVessel?.vesselPhones.join(', ')}</ValueWithLineBreak>
-                )}
-                {!!selectedVessel?.vesselEmails && (
-                  <ValueWithLineBreak>{selectedVessel?.vesselEmails.join(', ')}</ValueWithLineBreak>
-                )}
+                {selectedVessel?.vesselPhones?.map(vesselPhone => (
+                  <ValueWithLineBreak>{vesselPhone}</ValueWithLineBreak>
+                ))}
+                {selectedVessel?.vesselEmails?.map(vesselEmail => (
+                  <ValueWithLineBreak>{vesselEmail}</ValueWithLineBreak>
+                ))}
               </>
             )
           }
         ]}
         keyWidth={200}
       />
+      <VesselContactToUpdateForm vesselId={selectedVessel?.vesselId} />
     </Body>
   ) : (
     <FingerprintLoader className="radar" color={THEME.color.charcoal} />
   )
 }
 
-const StyledFlatKeyValue = styled(FlatKeyValue)`
-  margin: 10px 5px 0;
-  width: 480px;
-`
-
 const ValueWithLineBreak = styled.div`
   font-size: 13px;
 `
 
 const Body = styled.div`
-  padding: 5px 5px 10px 5px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+
+  > *:not(:last-child):not(:first-child) {
+    margin-top: 8px;
+  }
 `
 
 const LicenceActive = styled.span`

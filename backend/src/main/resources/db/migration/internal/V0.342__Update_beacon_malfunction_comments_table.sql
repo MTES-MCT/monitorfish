@@ -1,0 +1,2 @@
+CREATE INDEX IF NOT EXISTS beacon_malfunction_comments_beacon_malfunction_id_idx
+ON beacon_malfunction_comments (beacon_malfunction_id);

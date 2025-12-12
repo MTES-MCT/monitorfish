@@ -54,8 +54,8 @@ class JpaManualPriorNotificationRepository(
                 specyCodesAsSqlArrayString = null,
                 tripGearCodesAsSqlArrayString = null,
                 tripSegmentCodesAsSqlArrayString = null,
-                willArriveAfter = CustomZonedDateTime(ZonedDateTime.now().minusHours(24)).toString(),
-                willArriveBefore = CustomZonedDateTime(ZonedDateTime.now().plusHours(24)).toString(),
+                willArriveAfter = ZonedDateTime.now().minusHours(24),
+                willArriveBefore = ZonedDateTime.now().plusHours(24),
             ).filter {
                 it.value.isInVerificationScope == true &&
                     it.value.isVerified == false &&

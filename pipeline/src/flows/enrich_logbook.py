@@ -27,14 +27,6 @@ from src.utils import psql_insert_copy
 
 
 @task
-def extract_all_control_priorities():
-    return extract(
-        db_name="monitorfish_remote",
-        query_filepath="monitorfish/all_control_priorities.sql",
-    )
-
-
-@task
 def extract_pno_types() -> pd.DataFrame:
     return extract(
         db_name="monitorfish_remote", query_filepath="monitorfish/pno_types.sql"
@@ -145,9 +137,7 @@ def extract_pno_catches(
 
 
 def compute_pno_segments(
-    pno_catches: pd.DataFrame,
-    segments: pd.DataFrame,
-    all_control_priorities: pd.DataFrame,
+    pno_catches: pd.DataFrame, segments: pd.DataFrame
 ) -> pd.DataFrame:
     """
     Computes the segments of the input PNO species and gears.
@@ -184,14 +174,6 @@ def compute_pno_segments(
           - vessel_types `List[str]` `['Fishing vessel', 'Trawler']`
           - priority `float` `1.0`
 
-        all_control_priorities (pd.DataFrame): DataFrame of control priorities.
-          Must have columns:
-
-          - year `int` 2022
-          - facade `str` "MEMN"
-          - segment `str` "SWW01"
-          - control_priority_level `float` 2.8
-
     Returns:
         pd.DataFrame: DataFrame of PNOs with attributed PNO types. 1 line = 1 PNO.
           Has columns:
@@ -209,7 +191,6 @@ def compute_pno_segments(
                     {...}
                 ]```
             - impact_risk_factor `float` `2.8`
-            - control_priority_level `float` `2.8`
     """
     unnested_gears_catches = pno_catches.explode("trip_gears")
     unnested_gears_catches["catch_id"] = range(len(unnested_gears_catches))
@@ -240,14 +221,8 @@ def compute_pno_segments(
                     }
                 ) FILTER (WHERE sc.segment IS NOT NULL)
             ) AS trip_segments,
-            MAX(sc.impact_risk_factor) AS impact_risk_factor,
-            MAX(acp.control_priority_level) AS control_priority_level
+            MAX(sc.impact_risk_factor) AS impact_risk_factor
         FROM segmented_catches sc
-        LEFT JOIN all_control_priorities acp
-        ON
-            acp.year = sc.year AND
-            acp.facade = sc.facade AND
-            acp.segment = sc.segment
         GROUP BY 1
         ORDER BY 1
     """
@@ -257,7 +232,6 @@ def compute_pno_segments(
     res = res.fillna(
         {
             "impact_risk_factor": default_risk_factors["impact_risk_factor"],
-            "control_priority_level": default_risk_factors["control_priority_level"],
         }
     )
 
@@ -438,9 +412,7 @@ def compute_pno_risk_factors(
 
     res["probability_risk_factor"] = res["infraction_rate_risk_factor"]
 
-    res["detectability_risk_factor"] = (
-        res["control_rate_risk_factor"] * res["control_priority_level"]
-    ) ** 0.5
+    res["detectability_risk_factor"] = res["control_rate_risk_factor"]
 
     res["risk_factor"] = (
         (res["impact_risk_factor"] ** risk_factor_coefficients["impact"])
@@ -458,7 +430,6 @@ def compute_pno_risk_factors(
             "probability_risk_factor",
             "detectability_risk_factor",
             "control_rate_risk_factor",
-            "control_priority_level",
         ]
     )
 
@@ -662,7 +633,6 @@ def extract_enrich_load_logbook(
     segments: pd.DataFrame,
     pno_types: pd.DataFrame,
     control_anteriority: pd.DataFrame,
-    all_control_priorities: pd.DataFrame,
     pno_units_targeting_vessels: pd.DataFrame,
     pno_units_ports_and_segments_subscriptions: pd.DataFrame,
     utcnow: datetime,
@@ -695,9 +665,7 @@ def extract_enrich_load_logbook(
 
     logger.info("Computing PNO segments...")
     pnos_with_segments = compute_pno_segments(
-        pno_catches=pnos_catches,
-        segments=segments,
-        all_control_priorities=all_control_priorities,
+        pno_catches=pnos_catches, segments=segments
     )
 
     logger.info("Computing PNO types...")
@@ -740,7 +708,6 @@ def enrich_logbook_flow(
     )
 
     segments = extract_all_segments()
-    all_control_priorities = extract_all_control_priorities()
     pno_types = extract_pno_types()
     control_anteriority = extract_control_anteriority()
     pno_units_targeting_vessels = extract_pno_units_targeting_vessels()
@@ -756,7 +723,6 @@ def enrich_logbook_flow(
             segments=unmapped(segments),
             pno_types=unmapped(pno_types),
             control_anteriority=unmapped(control_anteriority),
-            all_control_priorities=unmapped(all_control_priorities),
             pno_units_targeting_vessels=unmapped(pno_units_targeting_vessels),
             pno_units_ports_and_segments_subscriptions=unmapped(
                 pno_units_ports_and_segments_subscriptions
@@ -770,7 +736,6 @@ def enrich_logbook_flow(
             segments=unmapped(segments),
             pno_types=unmapped(pno_types),
             control_anteriority=unmapped(control_anteriority),
-            all_control_priorities=unmapped(all_control_priorities),
             pno_units_targeting_vessels=unmapped(pno_units_targeting_vessels),
             pno_units_ports_and_segments_subscriptions=unmapped(
                 pno_units_ports_and_segments_subscriptions

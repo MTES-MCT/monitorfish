@@ -13,7 +13,6 @@ from src.flows.enrich_logbook import (
     compute_pno_segments,
     compute_pno_types,
     enrich_logbook_flow,
-    extract_all_control_priorities,
     extract_control_anteriority,
     extract_pno_catches,
     extract_pno_trips_period,
@@ -46,20 +45,6 @@ def sample_control_anteriority() -> pd.DataFrame:
             "cfr": ["CFR000000001", "CFR000000006", "CFR000000004"],
             "control_rate_risk_factor": [1.75, 4, 2.5],
             "infraction_rate_risk_factor": [1.0, 3.0, 1.0],
-        }
-    )
-
-
-@pytest.fixture
-def expected_all_control_priorities() -> pd.DataFrame:
-    current_year = datetime.utcnow().year
-
-    return pd.DataFrame(
-        {
-            "year": [current_year - 1, current_year - 1, current_year, current_year],
-            "facade": ["SA", "SA", "SA", "SA"],
-            "segment": ["SWW01/02/03", "SWW04", "SWW01/02/03", "SWW04"],
-            "control_priority_level": [2.0, 2.0, 1.0, 3.0],
         }
     )
 
@@ -281,26 +266,6 @@ def sample_pno_catches() -> pd.DataFrame:
 
 
 @pytest.fixture
-def sample_all_control_priorities() -> pd.DataFrame:
-    return pd.DataFrame(
-        {
-            "year": [2023, 2023, 2023, 2023, 2023, 2022, 2022],
-            "facade": ["MED", "MED", "MEMN", "SA", "Guadeloupe", "SA", "MED"],
-            "segment": [
-                "SHKE27",
-                "SOTM",
-                "SOTM",
-                "SxTB8910",
-                "SOTM",
-                "SxTB8910",
-                "SHKE27",
-            ],
-            "control_priority_level": [2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6],
-        }
-    )
-
-
-@pytest.fixture
 def expected_pno_catches() -> pd.DataFrame:
     return pd.DataFrame(
         {
@@ -517,16 +482,6 @@ def expected_computed_pno_segments() -> pd.DataFrame:
                 2.8,
                 2.5,
                 1.9,
-            ],
-            "control_priority_level": [
-                default_risk_factors["control_priority_level"],
-                default_risk_factors["control_priority_level"],
-                default_risk_factors["control_priority_level"],
-                2.3,
-                default_risk_factors["control_priority_level"],
-                2.0,
-                2.4,
-                default_risk_factors["control_priority_level"],
             ],
         }
     )
@@ -831,34 +786,22 @@ def merged_pnos() -> pd.DataFrame:
                 2.5,
                 1.9,
             ],
-            "control_priority_level": [
-                default_risk_factors["control_priority_level"],
-                default_risk_factors["control_priority_level"],
-                default_risk_factors["control_priority_level"],
-                2.3,
-                default_risk_factors["control_priority_level"],
-                2.0,
-                2.4,
-                default_risk_factors["control_priority_level"],
-            ],
         }
     )
 
 
 @pytest.fixture
 def pnos_with_risk_factors(merged_pnos) -> pd.DataFrame:
-    return merged_pnos.drop(
-        columns=["impact_risk_factor", "control_priority_level"]
-    ).assign(
+    return merged_pnos.drop(columns=["impact_risk_factor"]).assign(
         risk_factor=[
-            1.15016332,
-            1.74110113,
-            1.74110113,
-            1.98943874,
-            2.09127911,
-            2.87303211,
-            1.71949265,
-            1.97958756,
+            1.32287565,
+            2.46228882,
+            2.46228882,
+            2.03134464,
+            2.95751527,
+            3.41663022,
+            1.58893827,
+            2.79955958,
         ]
     )
 
@@ -866,26 +809,19 @@ def pnos_with_risk_factors(merged_pnos) -> pd.DataFrame:
 @pytest.fixture
 def flagged_pnos(pnos_with_risk_factors) -> pd.DataFrame:
     return pnos_with_risk_factors.assign(
-        is_in_verification_scope=[False, False, True, False, False, True, False, False],
+        is_in_verification_scope=[False, True, True, False, True, True, False, True],
         is_verified=[False, False, False, False, False, False, False, False],
         is_sent=[False, False, False, False, False, False, False, False],
-        is_being_sent=[False, False, False, False, True, False, True, True],
+        is_being_sent=[False, False, False, False, False, False, True, False],
     )
 
 
 @pytest.fixture
 def flagged_pnos_with_active_reportings(flagged_pnos) -> pd.DataFrame:
     return flagged_pnos.assign(
-        is_in_verification_scope=[True, False, True, False, False, True, True, False],
-        is_being_sent=[False, False, False, False, True, False, False, True],
+        is_in_verification_scope=[True, True, True, False, True, True, True, True],
+        is_being_sent=[False, False, False, False, False, False, False, False],
     )
-
-
-def test_extract_all_control_priorities(
-    reset_test_data, expected_all_control_priorities
-):
-    res = extract_all_control_priorities()
-    pd.testing.assert_frame_equal(res, expected_all_control_priorities)
 
 
 def test_extract_pno_types(reset_test_data, expected_pno_types):
@@ -961,25 +897,19 @@ def test_compute_pno_types_with_empty_gears_list_only(
 def test_compute_pno_segments(
     sample_pno_catches,
     segments,
-    sample_all_control_priorities,
     expected_computed_pno_segments,
 ):
-    res = compute_pno_segments(
-        sample_pno_catches, segments, sample_all_control_priorities
-    )
+    res = compute_pno_segments(sample_pno_catches, segments)
     pd.testing.assert_frame_equal(res, expected_computed_pno_segments)
 
 
 def test_compute_pno_segments_with_empty_gears_only(
     sample_pno_catches,
     segments,
-    sample_all_control_priorities,
     expected_computed_pno_segments,
 ):
     assert sample_pno_catches.loc[2, "trip_gears"] == []
-    res = compute_pno_segments(
-        sample_pno_catches.loc[[2]], segments, sample_all_control_priorities
-    )
+    res = compute_pno_segments(sample_pno_catches.loc[[2]], segments)
     pd.testing.assert_frame_equal(
         res, expected_computed_pno_segments.loc[[2]].reset_index(drop=True)
     )

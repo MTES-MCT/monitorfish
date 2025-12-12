@@ -145,6 +145,7 @@ default_risk_factors = {
     "control_rate_risk_factor": 4,
     "infraction_rate_risk_factor": 2,
     "control_priority_level": 1,
+    "infringement_risk_level": 2,
     "impact_risk_factor": 1,
     "probability_risk_factor": 2,
     "detectability_risk_factor": 2,

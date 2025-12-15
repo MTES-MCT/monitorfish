@@ -72,6 +72,6 @@ class InfractionControllerITests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(3)))
             .andExpect(jsonPath("$[0].children.length()", equalTo(7)))
-            .andExpect(jsonPath("$[1].name", equalTo("Entrave au contrôle")))
+            .andExpect(jsonPath("$[1].label", equalTo("Entrave au contrôle")))
     }
 }

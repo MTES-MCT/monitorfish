@@ -26,7 +26,10 @@ class PublicMissionActionsController(
         missionId: Int,
     ): List<MissionActionDataOutput> =
         getMissionActions.execute(missionId).map {
-            MissionActionDataOutput.fromMissionAction(it)
+            MissionActionDataOutput.fromMissionAction(
+                it,
+                useThreatHierarchyForForm = false,
+            )
         }
 
     @PatchMapping(value = ["/{actionId}"], consumes = ["application/json"])
@@ -41,6 +44,9 @@ class PublicMissionActionsController(
     ): MissionActionDataOutput {
         val updatedMissionAction = patchMissionAction.execute(actionId, actionInput.toPatchableMissionAction())
 
-        return MissionActionDataOutput.fromMissionAction(updatedMissionAction)
+        return MissionActionDataOutput.fromMissionAction(
+            missionAction = updatedMissionAction,
+            useThreatHierarchyForForm = false,
+        )
     }
 }

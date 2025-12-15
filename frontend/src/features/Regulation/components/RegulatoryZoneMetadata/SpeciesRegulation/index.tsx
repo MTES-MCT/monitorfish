@@ -1,4 +1,4 @@
-import { useMainAppSelector } from '@hooks/useMainAppSelector.ts'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import ReactMarkdown from 'react-markdown'
 
 import { RegulatedSpecies } from './RegulatedSpecies'

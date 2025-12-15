@@ -31,30 +31,38 @@ data class MissionWithActionsDataOutput(
     val hasRapportNavActions: Boolean,
 ) {
     companion object {
-        fun fromMissionAndActions(missionAndActions: MissionAndActions) =
-            MissionWithActionsDataOutput(
-                id = missionAndActions.mission.id,
-                missionTypes = missionAndActions.mission.missionTypes,
-                openBy = missionAndActions.mission.openBy,
-                completedBy = missionAndActions.mission.completedBy,
-                observationsCacem = missionAndActions.mission.observationsCacem,
-                observationsCnsp = missionAndActions.mission.observationsCnsp,
-                facade = missionAndActions.mission.facade,
-                geom = missionAndActions.mission.geom,
-                createdAtUtc = missionAndActions.mission.createdAtUtc,
-                updatedAtUtc = missionAndActions.mission.updatedAtUtc,
-                envActions =
-                    missionAndActions.mission.envActions
-                        ?.map { EnvMissionActionDataOutput.fromEnvMissionAction(it) } ?: listOf(),
-                startDateTimeUtc = missionAndActions.mission.startDateTimeUtc,
-                endDateTimeUtc = missionAndActions.mission.endDateTimeUtc,
-                isGeometryComputedFromControls = missionAndActions.mission.isGeometryComputedFromControls,
-                missionSource = missionAndActions.mission.missionSource,
-                hasMissionOrder = missionAndActions.mission.hasMissionOrder,
-                isUnderJdp = missionAndActions.mission.isUnderJdp,
-                controlUnits = missionAndActions.mission.controlUnits,
-                actions = missionAndActions.actions.map { MissionActionDataOutput.fromMissionAction(it) },
-                hasRapportNavActions = missionAndActions.hasRapportNavActions,
-            )
+        fun fromMissionAndActions(
+            missionAndActions: MissionAndActions,
+            useThreatHierarchyForForm: Boolean = true,
+        ) = MissionWithActionsDataOutput(
+            id = missionAndActions.mission.id,
+            missionTypes = missionAndActions.mission.missionTypes,
+            openBy = missionAndActions.mission.openBy,
+            completedBy = missionAndActions.mission.completedBy,
+            observationsCacem = missionAndActions.mission.observationsCacem,
+            observationsCnsp = missionAndActions.mission.observationsCnsp,
+            facade = missionAndActions.mission.facade,
+            geom = missionAndActions.mission.geom,
+            createdAtUtc = missionAndActions.mission.createdAtUtc,
+            updatedAtUtc = missionAndActions.mission.updatedAtUtc,
+            envActions =
+                missionAndActions.mission.envActions
+                    ?.map { EnvMissionActionDataOutput.fromEnvMissionAction(it) } ?: listOf(),
+            startDateTimeUtc = missionAndActions.mission.startDateTimeUtc,
+            endDateTimeUtc = missionAndActions.mission.endDateTimeUtc,
+            isGeometryComputedFromControls = missionAndActions.mission.isGeometryComputedFromControls,
+            missionSource = missionAndActions.mission.missionSource,
+            hasMissionOrder = missionAndActions.mission.hasMissionOrder,
+            isUnderJdp = missionAndActions.mission.isUnderJdp,
+            controlUnits = missionAndActions.mission.controlUnits,
+            actions =
+                missionAndActions.actions.map {
+                    MissionActionDataOutput.fromMissionAction(
+                        it,
+                        useThreatHierarchyForForm = useThreatHierarchyForForm,
+                    )
+                },
+            hasRapportNavActions = missionAndActions.hasRapportNavActions,
+        )
     }
 }

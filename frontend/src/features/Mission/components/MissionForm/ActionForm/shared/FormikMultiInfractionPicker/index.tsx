@@ -2,14 +2,12 @@ import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { FrontendError } from '@libs/FrontendError'
 import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
-import { find } from 'lodash-es'
-import { Fragment, useCallback, useMemo, useState } from 'react'
+import { Fragment, useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 import { Infraction } from './Infraction'
 import { InfractionForm } from './InfractionForm'
-import { useGetNatinfsAsOptions } from '../../../hooks/useGetNatinfsAsOptions'
-import { FieldsetGroup, FieldsetGroupSpinner } from '../../../shared/FieldsetGroup'
+import { FieldsetGroup } from '../../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../../shared/FieldsetGroupSeparator'
 
 import type { MissionActionFormValues } from '../../../types'
@@ -25,24 +23,7 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
   const [editedInfractionIndex, setEditedInfractionIndex] = useState<number | undefined>(undefined)
   const [isNewInfractionFormOpen, setIsNewInfractionFormOpen] = useState(false)
 
-  const natinfsAsOptions = useGetNatinfsAsOptions()
-
-  const infractionsWithLabelAndIndex = useMemo(() => {
-    const allInfractions =
-      values.infractions?.map((infraction, index) => ({
-        ...infraction,
-        index
-      })) ?? []
-    if (!allInfractions.length) {
-      return []
-    }
-
-    return allInfractions.map(infraction => {
-      const nextInfractionLabel = find(natinfsAsOptions, { value: infraction.natinf })?.label
-
-      return { ...infraction, label: nextInfractionLabel }
-    })
-  }, [values.infractions, natinfsAsOptions])
+  const infractions = values.infractions ?? []
 
   const closeInfractionForm = useCallback(() => {
     setEditedInfractionIndex(undefined)
@@ -72,8 +53,8 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
 
   const remove = useCallback(
     (index: number) => {
-      const infractions = values.infractions ?? []
-      const nextInfractions = [...infractions.slice(0, index), ...infractions.slice(index + 1)]
+      const previousInfractions = values.infractions ?? []
+      const nextInfractions = [...previousInfractions.slice(0, index), ...previousInfractions.slice(index + 1)]
       const normalizedNextInfractions = nextInfractions.length > 0 ? nextInfractions : undefined
 
       setFieldValue('infractions', normalizedNextInfractions)
@@ -102,8 +83,8 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
         comments: nextInfractionFormValues.comments || ''
       }
 
-      const infractions = values.infractions ?? []
-      const nextInfractions = infractions.map((infraction, index) =>
+      const previousInfractions = values.infractions ?? []
+      const nextInfractions = previousInfractions.map((infraction, index) =>
         index === editedInfractionIndex ? updatedInfractionWithComments : infraction
       )
 
@@ -116,36 +97,36 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
     [closeInfractionForm, editedInfractionIndex, values.infractions]
   )
 
-  if (!natinfsAsOptions.length) {
-    return <FieldsetGroupSpinner isLight legend={label} />
-  }
-
   return (
     <Wrapper isLight legend={label}>
       <FrontendErrorBoundary>
-        {infractionsWithLabelAndIndex.length > 0 && (
+        {infractions.length > 0 && (
           <StyledRow>
-            {infractionsWithLabelAndIndex.map((infraction, index) => {
-              const isEdition = infraction.index === editedInfractionIndex
+            {infractions.map((infraction, index) => {
+              const isEdition = index === editedInfractionIndex
 
               return (
-                <Fragment key={`infraction-${infraction.index}`}>
+                <Fragment
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={`infraction-${index}`}
+                >
                   {!isEdition && (
                     <>
-                      <Infraction data={infraction} index={infraction.index} onDelete={remove} onEdit={onEdit} />
-                      {index + 1 < infractionsWithLabelAndIndex.length && <FieldsetGroupSeparator marginBottom={12} />}
+                      <Infraction
+                        data={infraction}
+                        hasMultipleInfraction={infractions.length > 1}
+                        index={index}
+                        onDelete={remove}
+                        onEdit={onEdit}
+                      />
+                      {index + 1 < infractions.length && <FieldsetGroupSeparator marginBottom={12} />}
                     </>
                   )}
 
                   {isEdition && (
                     <>
-                      <InfractionForm
-                        initialValues={infraction}
-                        natinfsAsOptions={natinfsAsOptions}
-                        onCancel={closeInfractionForm}
-                        onSubmit={update}
-                      />
-                      {infractionsWithLabelAndIndex.length > index + 1 && <FieldsetGroupSeparator marginBottom={12} />}
+                      <InfractionForm initialValues={infraction} onCancel={closeInfractionForm} onSubmit={update} />
+                      {infractions.length > index + 1 && <FieldsetGroupSeparator marginBottom={12} />}
                     </>
                   )}
                 </Fragment>
@@ -155,7 +136,7 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
         )}
         {!isNewInfractionFormOpen && (
           <>
-            {infractionsWithLabelAndIndex.length > 0 && <FieldsetGroupSeparator />}
+            {infractions.length > 0 && <FieldsetGroupSeparator />}
             <Button accent={Accent.SECONDARY} Icon={Icon.Plus} isFullWidth onClick={openNewInfractionForm}>
               {addButtonLabel}
             </Button>
@@ -164,11 +145,10 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
 
         {isNewInfractionFormOpen && (
           <>
-            {infractionsWithLabelAndIndex.length > 0 && <FieldsetGroupSeparator marginBottom={12} />}
+            {infractions.length > 0 && <FieldsetGroupSeparator marginBottom={12} />}
             <Row>
               <InfractionForm
                 initialValues={{} as MissionAction.Infraction}
-                natinfsAsOptions={natinfsAsOptions}
                 onCancel={closeNewInfractionForm}
                 onSubmit={create}
               />

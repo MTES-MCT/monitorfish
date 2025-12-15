@@ -120,6 +120,7 @@ export function Control({ control }: ControlProps) {
         {control.infractions.map((infraction, index) => (
           <Infraction
             key={`${infraction.infractionType}${infraction.natinf}${infraction.comments}`}
+            hasMultipleInfraction={control.infractions.length > 1}
             index={index + 1}
             infraction={infraction}
           />

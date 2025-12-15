@@ -13,7 +13,7 @@ export function Infraction({ hasMultipleInfraction, index, infraction }: Infract
   return (
     <Wrapper isFirstInfraction={index === 1}>
       <InfractionTitle>
-        Infraction {hasMultipleInfraction && `${index} : `} {infraction.threatCharacterization}
+        Infraction {hasMultipleInfraction && `${index} :`} {infraction.threatCharacterization}
       </InfractionTitle>
       {infraction.comments && (
         <>

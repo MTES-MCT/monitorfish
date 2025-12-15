@@ -83,8 +83,8 @@ class JpaLogbookReportRepository(
                 it.logbookMessageAndValue.value.predictedArrivalDatetimeUtc?.let { predictedArrivalDatetimeUtc ->
                     Utils.isZonedDateTimeBetween(
                         zonedDateTime = predictedArrivalDatetimeUtc,
-                        start = ZonedDateTime.parse(filter.willArriveAfter),
-                        end = ZonedDateTime.parse(filter.willArriveBefore),
+                        start = filter.willArriveAfter,
+                        end = filter.willArriveBefore,
                         isInclusive = true,
                     )
                 } == true
@@ -95,8 +95,8 @@ class JpaLogbookReportRepository(
     override fun findAllPriorNotificationsToVerify(): List<PriorNotification> {
         val filter =
             PriorNotificationsFilter(
-                willArriveAfter = CustomZonedDateTime(ZonedDateTime.now().minusHours(24)).toString(),
-                willArriveBefore = CustomZonedDateTime(ZonedDateTime.now().plusHours(24)).toString(),
+                willArriveAfter = ZonedDateTime.now().minusHours(24),
+                willArriveBefore = ZonedDateTime.now().plusHours(24),
             )
 
         return findAllAcknowledgedPriorNotifications(filter).filter {

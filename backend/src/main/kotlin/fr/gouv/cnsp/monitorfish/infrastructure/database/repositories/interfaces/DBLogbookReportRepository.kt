@@ -15,8 +15,8 @@ interface DBLogbookReportRepository :
     @Query(
         """
         SELECT * FROM find_all_enriched_pno_references_and_related_operations(
-            (:willArriveAfter)::TIMESTAMP WITHOUT TIME ZONE,
-            (:willArriveBefore)::TIMESTAMP WITHOUT TIME ZONE,
+            :willArriveAfter,
+            :willArriveBefore,
             :flagStates,
             :isLessThanTwelveMetersVessel,
             :lastControlledAfter,
@@ -44,8 +44,8 @@ interface DBLogbookReportRepository :
         specyCodesAsSqlArrayString: String?,
         tripGearCodesAsSqlArrayString: String?,
         tripSegmentCodesAsSqlArrayString: String?,
-        willArriveAfter: String,
-        willArriveBefore: String,
+        willArriveAfter: ZonedDateTime,
+        willArriveBefore: ZonedDateTime,
     ): List<LogbookReportEntity>
 
     @Query(

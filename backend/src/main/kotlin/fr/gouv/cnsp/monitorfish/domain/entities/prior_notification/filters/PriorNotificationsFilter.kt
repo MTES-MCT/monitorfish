@@ -1,5 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters
 
+import java.time.ZonedDateTime
+
 data class PriorNotificationsFilter(
     val flagStates: List<String>? = null,
     val hasOneOrMoreReportings: Boolean? = null,
@@ -12,6 +14,6 @@ data class PriorNotificationsFilter(
     val specyCodes: List<String>? = null,
     val tripGearCodes: List<String>? = null,
     val tripSegmentCodes: List<String>? = null,
-    val willArriveAfter: String,
-    val willArriveBefore: String,
+    val willArriveAfter: ZonedDateTime,
+    val willArriveBefore: ZonedDateTime,
 )

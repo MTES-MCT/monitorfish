@@ -101,6 +101,8 @@
                     {
                         "infractionType": "WITHOUT_RECORD",
                         "natinf": 28346,
+                        "threat": "Mesures techniques et de conservation",
+                        "threatCharacterization": "Espèces en sous taille / sous poids",
                         "comments": "Sous taille de 8cm"
                     },
                     {
@@ -116,6 +118,8 @@
                     {
                         "infractionType": "WITH_RECORD",
                         "natinf": 27689,
+                        "threat": "Obligation de débarquement",
+                        "threatCharacterization": "BMS (JPE)",
                         "comments": "Poids à bord MNZ supérieur de 50% au poids déclaré"
                     }
                 ],

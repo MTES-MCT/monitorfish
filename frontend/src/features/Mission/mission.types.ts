@@ -114,7 +114,7 @@ export namespace Mission {
     flagState: string | undefined
     hasGearSeized: boolean
     hasSpeciesSeized: boolean
-    infractionsNatinfs: string[]
+    infractions: MissionAction.Infraction[]
     missionId: number
     numberOfInfractions: number
     numberOfInfractionsWithRecords: number

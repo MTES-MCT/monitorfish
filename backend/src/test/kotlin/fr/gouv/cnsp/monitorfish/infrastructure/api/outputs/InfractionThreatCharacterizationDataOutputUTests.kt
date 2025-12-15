@@ -16,19 +16,19 @@ class InfractionThreatCharacterizationDataOutputUTests {
 
         // Then
         assertThat(threats).hasSize(3)
-        assertThat(threats.first().name).isEqualTo("Activités INN")
+        assertThat(threats.first().label).isEqualTo("Activités INN")
         assertThat(threats.first().value).isEqualTo("Activités INN")
         assertThat(threats.first().value).isEqualTo("Activités INN")
         assertThat(threats.first().children).hasSize(7)
 
         val firstThreatCharacterization = threats.first().children.first()
-        assertThat(firstThreatCharacterization.name).isEqualTo("Pêche sans autorisation par navire tiers")
-        assertThat(firstThreatCharacterization.name).isEqualTo("Pêche sans autorisation par navire tiers")
+        assertThat(firstThreatCharacterization.label).isEqualTo("Pêche sans autorisation par navire tiers")
+        assertThat(firstThreatCharacterization.label).isEqualTo("Pêche sans autorisation par navire tiers")
         assertThat(firstThreatCharacterization.children).hasSize(1)
 
         val firstNatinf = firstThreatCharacterization.children.first()
         assertThat(
-            firstNatinf.name,
+            firstNatinf.label,
         ).isEqualTo(
             "2608 - Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne",
         )

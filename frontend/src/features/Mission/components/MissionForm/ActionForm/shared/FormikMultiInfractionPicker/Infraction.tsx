@@ -1,28 +1,39 @@
+import { getFlatInfractionFromThreatsHierarchy } from '@features/Mission/components/MissionForm/ActionForm/utils'
+import { useGetNatinfsAsOptions } from '@features/Mission/components/MissionForm/hooks/useGetNatinfsAsOptions'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { Accent, Icon, IconButton, Legend, Tag, TagGroup, THEME } from '@mtes-mct/monitor-ui'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
+import { getInfractionTitle } from '../../../../../../../domain/entities/controls'
+
 import type { Promisable } from 'type-fest'
 
 type InfractionProps = Readonly<{
-  data: MissionAction.Infraction & { label: string | undefined }
+  data: MissionAction.Infraction
+  hasMultipleInfraction?: boolean
   index: number
   onDelete: (index: number) => Promisable<void>
   onEdit: (index: number) => Promisable<void>
 }>
-export function Infraction({ data, index, onDelete, onEdit }: InfractionProps) {
+export function Infraction({ data, hasMultipleInfraction, index, onDelete, onEdit }: InfractionProps) {
+  const natinfsAsOptions = useGetNatinfsAsOptions()
+  const natinfAndThreatCharacterization = getFlatInfractionFromThreatsHierarchy(natinfsAsOptions, data)
+
   return (
     <>
-      <Legend>Infraction {index + 1}</Legend>
+      <Legend>
+        Infraction {hasMultipleInfraction && index + 1} -{' '}
+        <ThreatCharacterization>{natinfAndThreatCharacterization.threatCharacterization}</ThreatCharacterization>
+      </Legend>
 
       <InnerWrapper>
         <div>
           <TagGroup>
             <Tag accent={Accent.PRIMARY}>{MissionAction.INFRACTION_TYPE_LABEL[data.infractionType]}</Tag>
             {data.infractionType !== MissionAction.InfractionType.PENDING && (
-              <StyledTag accent={Accent.PRIMARY} title={data.label ?? String(data.natinf)}>
-                NATINF : {data.label ?? data.natinf}
+              <StyledTag accent={Accent.PRIMARY} title={getInfractionTitle(natinfAndThreatCharacterization)}>
+                {natinfAndThreatCharacterization.threat} / NATINF {natinfAndThreatCharacterization.natinf}
               </StyledTag>
             )}
           </TagGroup>
@@ -61,6 +72,10 @@ const StyledTag = styled(Tag)`
   white-space: nowrap;
   max-width: 400px;
   display: inline-block;
+`
+
+const ThreatCharacterization = styled.span`
+  color: ${p => p.theme.color.gunMetal};
 `
 
 const InnerWrapper = styled.div`

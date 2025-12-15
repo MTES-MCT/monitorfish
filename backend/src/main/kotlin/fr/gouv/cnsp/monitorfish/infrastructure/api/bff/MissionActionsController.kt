@@ -21,11 +21,9 @@ import java.time.ZonedDateTime
 @Tag(name = "APIs for mission actions")
 class MissionActionsController(
     private val getVesselControls: GetVesselControls,
-    private val getMissionActions: GetMissionActions,
     private val addMissionAction: AddMissionAction,
     private val updateMissionAction: UpdateMissionAction,
     private val deleteMissionAction: DeleteMissionAction,
-    private val getMissionAction: GetMissionAction,
     private val getActivityReports: GetActivityReports,
 ) {
     @GetMapping("/controls")
@@ -64,17 +62,6 @@ class MissionActionsController(
             ActivityReportsDataOutput.fromActivityReports(activityReports)
         }
 
-    @GetMapping("")
-    @Operation(summary = "Get mission actions of specified mission")
-    fun getMissionActions(
-        @Parameter(description = "Mission id")
-        @RequestParam(name = "missionId")
-        missionId: Int,
-    ): List<MissionActionDataOutput> =
-        getMissionActions.execute(missionId).map {
-            MissionActionDataOutput.fromMissionAction(it)
-        }
-
     @PostMapping(value = [""], consumes = ["application/json"])
     @Operation(summary = "Create a mission action")
     @ResponseStatus(HttpStatus.CREATED)
@@ -96,18 +83,6 @@ class MissionActionsController(
     ): MissionActionDataOutput {
         val updatedMissionAction = updateMissionAction.execute(actionId, actionInput.toMissionAction())
         return MissionActionDataOutput.fromMissionAction(updatedMissionAction)
-    }
-
-    @GetMapping(value = ["/{actionId}"])
-    @Operation(summary = "Get a mission action")
-    fun getMissionAction(
-        @PathParam("Action id")
-        @PathVariable(name = "actionId")
-        actionId: Int,
-    ): MissionActionDataOutput {
-        val fetchedMissionAction = getMissionAction.execute(actionId)
-
-        return MissionActionDataOutput.fromMissionAction(fetchedMissionAction)
     }
 
     @DeleteMapping(value = ["/{actionId}"])

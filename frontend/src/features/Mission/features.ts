@@ -4,7 +4,7 @@ import { getMissionActionInfractionsFromMissionActionFormValues } from '@feature
 import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { getMissionColor, getMissionCompletionFrontStatus, getMissionStatus } from '@features/Mission/utils'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { OPENLAYERS_PROJECTION, type Option, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import { random } from 'lodash-es'
 import { Feature } from 'ol'
 import { GeoJSON } from 'ol/format'
@@ -118,6 +118,7 @@ export const getMissionFeatureZone = (
 }
 
 export const getMissionActionFeature = (
+  natinfsAsOptions: Option<number>[],
   action: MissionAction.MissionAction | MissionActionFormValues
 ): Feature | undefined => {
   if (!action.longitude || !action.latitude) {
@@ -127,8 +128,7 @@ export const getMissionActionFeature = (
   const coordinates = transform([action.longitude, action.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
   const numberOfInfractions = getNumberOfInfractions(action)
   const numberOfInfractionsWithRecords = getNumberOfInfractionsWithRecord(action)
-  const infractions = getMissionActionInfractionsFromMissionActionFormValues(action)
-  const infractionsNatinfs = infractions.map(({ natinf }) => natinf)
+  const infractions = getMissionActionInfractionsFromMissionActionFormValues(natinfsAsOptions, action)
 
   const actionId = action.id ?? random(1000)
   const feature = new Feature({
@@ -138,7 +138,7 @@ export const getMissionActionFeature = (
     geometry: new Point(coordinates),
     hasSomeGearsSeized: action.hasSomeGearsSeized,
     hasSomeSpeciesSeized: action.hasSomeSpeciesSeized,
-    infractionsNatinfs,
+    infractions,
     missionId: action.missionId,
     numberOfInfractions,
     numberOfInfractionsWithRecords,

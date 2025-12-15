@@ -1,10 +1,11 @@
+import { Accent, Tag } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { Green, Red } from './Controls.style'
-import { getNumberOfInfractions } from '../../../../../../domain/entities/controls'
+import { getInfractionTitle, getNumberOfInfractions } from '../../../../../../domain/entities/controls'
 import { getDate } from '../../../../../../utils'
 
-import type { MissionAction } from '../../../../../Mission/missionAction.types'
+import type { MissionAction } from '@features/Mission/missionAction.types'
 
 type LastControlProps = {
   field: MissionAction.ControlAndText
@@ -32,6 +33,12 @@ export function LastControl({ field }: LastControlProps) {
               {' '}
               {numberOfInfractions} infraction{numberOfInfractions > 1 ? 's' : ''}
               <Red />
+              <br />
+              {control.infractions.map(infraction => (
+                <StyledTag accent={Accent.PRIMARY} title={getInfractionTitle(infraction)}>
+                  {infraction.threat} / NATINF {infraction.natinf}
+                </StyledTag>
+              ))}
             </>
           ) : (
             <>
@@ -60,4 +67,9 @@ const Row = styled.div<{
   font-weight: ${p => (p.$isStrong ? 500 : 'unset')};
   margin: 0 2px 2px 0;
   width: 100%;
+`
+
+const StyledTag = styled(Tag)`
+  margin-top: 8px;
+  margin-right: 8px;
 `

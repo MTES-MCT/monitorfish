@@ -4,19 +4,19 @@ import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionThreatChara
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
 
 data class NatinfDataOutput(
-    val name: String,
+    val label: String,
     val value: Int,
 )
 
 data class ThreatCharacterizationDataOutput(
     val children: List<NatinfDataOutput>,
-    val name: String,
+    val label: String,
     val value: String,
 )
 
 data class ThreatDataOutput(
     val children: List<ThreatCharacterizationDataOutput>,
-    val name: String,
+    val label: String,
     val value: String,
 )
 
@@ -43,8 +43,8 @@ data class InfractionThreatCharacterizationDataOutput(
             val threats =
                 InfractionHierarchyBuilder.buildThreatHierarchy(
                     items = listOf(infraction),
-                    threatExtractor = { it.threat ?: "Autres" },
-                    characterizationExtractor = { it.threatCharacterization ?: "Autres" },
+                    threatExtractor = { it.threat ?: "Famille inconnue" },
+                    characterizationExtractor = { it.threatCharacterization ?: "Type inconnu" },
                     natinfCodeExtractor = { it.natinf!! },
                     infractionNameExtractor = { "" },
                 )
@@ -120,7 +120,7 @@ object InfractionHierarchyBuilder {
 
         return ThreatDataOutput(
             children = characterizations,
-            name = threatName,
+            label = threatName,
             value = threatName,
         )
     }
@@ -141,7 +141,7 @@ object InfractionHierarchyBuilder {
 
         return ThreatCharacterizationDataOutput(
             children = natinfOutputs,
-            name = characterizationName,
+            label = characterizationName,
             value = characterizationName,
         )
     }
@@ -151,7 +151,7 @@ object InfractionHierarchyBuilder {
         infractionName: String,
     ): NatinfDataOutput =
         NatinfDataOutput(
-            name = formatNatinfName(natinfCode, infractionName),
+            label = formatNatinfName(natinfCode, infractionName),
             value = natinfCode,
         )
 

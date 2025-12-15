@@ -6,28 +6,29 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completi
 import java.time.ZonedDateTime
 
 data class NatinfDataInput(
-    val name: String,
+    val label: String,
     val value: Int,
 )
 
 data class ThreatCharacterizationDataInput(
     val children: List<NatinfDataInput>,
-    val name: String,
+    val label: String,
     val value: String,
 )
 
 data class ThreatDataInput(
     val children: List<ThreatCharacterizationDataInput>,
-    val name: String,
+    val label: String,
     val value: String,
 )
 
 data class MissionActionInfractionDataInput(
     val infractionType: InfractionType,
-    val threat: ThreatDataInput,
+    val threats: List<ThreatDataInput>,
     val comments: String? = null,
 ) {
     fun toInfraction(): Infraction {
+        val threat = threats.single()
         val threatName = threat.value
         val threatCharacterization = threat.children.single().value
         val natinf =

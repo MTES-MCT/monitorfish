@@ -1,6 +1,7 @@
 import { LayerProperties } from '@features/Map/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { useGetNatinfsAsOptions } from '@features/Mission/components/MissionForm/hooks/useGetNatinfsAsOptions'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
@@ -15,6 +16,7 @@ import type { Feature } from 'ol'
 import type { MutableRefObject } from 'react'
 
 export function UnmemoizedSelectedMissionActionsLayer() {
+  const natinfsAsOptions = useGetNatinfsAsOptions()
   const { missions } = useGetFilteredMissionsQuery()
   const selectedMissionGeoJSON = useMainAppSelector(store => store.missionForm.selectedMissionGeoJSON)
   const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
@@ -28,10 +30,10 @@ export function UnmemoizedSelectedMissionActionsLayer() {
     return (
       missions
         .find(missionsAndAction => missionsAndAction.id === selectedMissionGeoJSON.properties?.missionId)
-        ?.actions?.map(action => getMissionActionFeature(action))
+        ?.actions?.map(action => getMissionActionFeature(natinfsAsOptions, action))
         .filter((feature): feature is Feature => Boolean(feature)) ?? []
     )
-  }, [selectedMissionGeoJSON, missions])
+  }, [selectedMissionGeoJSON, missions, natinfsAsOptions])
 
   /**
    * If the mission geometry is defined from actions, we create new OpenLayers Features
@@ -106,7 +108,7 @@ export function UnmemoizedSelectedMissionActionsLayer() {
     }
 
     const actionFeatures = draft.actionsFormValues
-      .map(action => getMissionActionFeature({ ...action, missionId: missionId ?? NEW_MISSION_ID }))
+      .map(action => getMissionActionFeature(natinfsAsOptions, { ...action, missionId: missionId ?? NEW_MISSION_ID }))
       .filter((action): action is Feature => !!action)
 
     /**
@@ -120,7 +122,13 @@ export function UnmemoizedSelectedMissionActionsLayer() {
       : []
 
     getVectorSource().addFeatures(actionFeatures.concat(actionZonesFeatures))
-  }, [getVectorSource, missionId, draft?.actionsFormValues, draft?.mainFormValues?.isGeometryComputedFromControls])
+  }, [
+    getVectorSource,
+    natinfsAsOptions,
+    missionId,
+    draft?.actionsFormValues,
+    draft?.mainFormValues?.isGeometryComputedFromControls
+  ])
 
   return null
 }

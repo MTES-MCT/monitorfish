@@ -5,7 +5,7 @@ import { vesselGroupListActions } from '@features/VesselGroup/components/VesselG
 import { VesselGroupRow } from '@features/VesselGroup/components/VesselGroupList/VesselGroupRow'
 import { GroupType, Sharing } from '@features/VesselGroup/types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { useMainAppSelector } from '@hooks/useMainAppSelector.ts'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
 import { Checkbox, FulfillingBouncingCircleLoader, Size, TextInput, THEME } from '@mtes-mct/monitor-ui'
 import { useContext, useEffect } from 'react'

@@ -120,10 +120,31 @@ export namespace MissionAction {
     hasUncontrolledMesh: boolean
   }
 
+  type Natinf = {
+    label: string
+    value: string
+  }
+
+  type ThreatCharacterization = {
+    children: Array<Natinf>
+    label: string
+    value: string
+  }
+
+  type Threat = {
+    children: Array<ThreatCharacterization>
+    label: string
+    value: string
+  }
+
   export type Infraction = {
     comments: string
     infractionType: InfractionType
-    natinf: number
+    natinf?: number
+    natinfDescription?: string
+    threat?: string
+    threatCharacterization?: string
+    threats?: Array<Threat>
   }
 
   export type LastControls = {

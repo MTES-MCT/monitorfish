@@ -8,7 +8,7 @@ from src.generic_tasks import extract, load
 from src.processing import join_on_multiple_keys
 from src.shared_tasks.dates import get_current_year
 from src.shared_tasks.segments import (
-    extract_control_priorities,
+    extract_control_priorities_and_infringement_risk_levels,
     extract_segments_of_year,
 )
 
@@ -341,7 +341,9 @@ def load_risk_factors(risk_factors: pd.DataFrame):
 def risk_factors_flow():
     # Extract
     current_year = get_current_year()
-    control_priorities = extract_control_priorities.submit()
+    control_priorities = (
+        extract_control_priorities_and_infringement_risk_levels.submit()
+    )
     segments = extract_segments_of_year.submit(current_year)
     current_segments = extract_current_segments.submit()
     recent_segments = extract_recent_segments.submit()

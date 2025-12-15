@@ -7,7 +7,7 @@ from src.helpers.segments import allocate_segments_to_catches
 from src.processing import df_to_dict_series
 from src.shared_tasks.dates import get_current_year
 from src.shared_tasks.segments import (
-    extract_control_priorities,
+    extract_control_priorities_and_infringement_risk_levels,
     extract_segments_of_year,
 )
 
@@ -31,7 +31,10 @@ def extract_last_positions():
 
 @task
 def compute_current_segments(
-    current_catches, segments, last_positions, control_priorities
+    current_catches,
+    segments,
+    last_positions,
+    control_priorities_and_infringement_risk_levels,
 ):
     segmented_catches = (
         allocate_segments_to_catches(
@@ -116,14 +119,16 @@ def compute_current_segments(
         how="outer",
     )
 
-    # Merge façade from last positions, then control priorities
+    # Merge façade from last positions, then control priorities and infringement risk levels
     segmented_catches_with_facade = pd.merge(
         segmented_catches, last_positions, on="cfr", how="left"
     )
 
     control_priorities = (
         pd.merge(
-            segmented_catches_with_facade, control_priorities, on=["segment", "facade"]
+            segmented_catches_with_facade,
+            control_priorities_and_infringement_risk_levels,
+            on=["segment", "facade"],
         )
         .sort_values("control_priority_level", ascending=False)
         .groupby("cfr")[["cfr", "segment", "control_priority_level"]]
@@ -132,6 +137,23 @@ def compute_current_segments(
         .rename(
             columns={
                 "segment": "segment_highest_priority",
+            }
+        )
+    )
+
+    infringement_risk_levels = (
+        pd.merge(
+            segmented_catches_with_facade,
+            control_priorities_and_infringement_risk_levels,
+            on=["segment", "facade"],
+        )
+        .sort_values("infringement_risk_level", ascending=False)
+        .groupby("cfr")[["cfr", "segment", "infringement_risk_level"]]
+        .head(1)
+        .set_index("cfr")
+        .rename(
+            columns={
+                "segment": "segment_highest_infringement_risk",
             }
         )
     )
@@ -172,6 +194,7 @@ def compute_current_segments(
         last_logbook_report.join(species_onboard)
         .join(current_segments)
         .join(control_priorities)
+        .join(infringement_risk_levels)
         .reset_index()
     )
 
@@ -205,11 +228,16 @@ def current_segments_flow(number_of_days: int = 90):
     current_catches = extract_current_catches(number_of_days=number_of_days)
     last_positions = extract_last_positions()
     segments = extract_segments_of_year(current_year)
-    control_priorities = extract_control_priorities()
+    control_priorities_and_infringement_risk_levels = (
+        extract_control_priorities_and_infringement_risk_levels()
+    )
 
     # Transform
     current_segments = compute_current_segments(
-        current_catches, segments, last_positions, control_priorities
+        current_catches,
+        segments,
+        last_positions,
+        control_priorities_and_infringement_risk_levels,
     )
 
     # Load

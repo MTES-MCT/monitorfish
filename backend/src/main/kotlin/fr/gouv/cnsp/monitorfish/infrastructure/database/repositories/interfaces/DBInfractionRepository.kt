@@ -20,11 +20,11 @@ interface DBInfractionRepository : CrudRepository<InfractionEntity, Long> {
             infractions i
             ON itc.natinf_code = i.natinf_code
         INNER JOIN
-            threats t
-            ON itc.threat_id = t.id
-        INNER JOIN
             threat_characterizations tc
             ON itc.threat_characterization_id = tc.id
+        INNER JOIN
+            threats t
+            ON tc.threat_id = t.id
     """,
         nativeQuery = true,
     )

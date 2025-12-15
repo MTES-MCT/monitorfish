@@ -15,394 +15,394 @@ INSERT INTO threats (id, name) VALUES (6, 'Obligations déclaratives');
 
 INSERT INTO threats (id, name) VALUES (7, 'Sécurité / gens de mer');
 
-INSERT INTO threat_characterizations (id, name) VALUES (1, 'Pêche sans autorisation par navire tiers');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (1, 'Pêche sans autorisation par navire tiers', 1);
 
-INSERT INTO threat_characterizations (id, name) VALUES (2, 'Pêche non conforme à l''autorisation par navire tiers');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (2, 'Pêche non conforme à l''autorisation par navire tiers', 1);
 
-INSERT INTO threat_characterizations (id, name) VALUES (3, 'Pêche sans autorisation par navire communautaire');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (3, 'Pêche sans autorisation par navire communautaire', 1);
 
-INSERT INTO threat_characterizations (id, name) VALUES (4, 'Pêche sans autorisation par navire français');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (4, 'Pêche sans autorisation par navire français', 1);
 
-INSERT INTO threat_characterizations (id, name) VALUES (5, 'Navire sans immatriculation');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (5, 'Navire sans immatriculation', 1);
 
-INSERT INTO threat_characterizations (id, name) VALUES (6, 'Vente de produits pêchés illégalement');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (6, 'Vente de produits pêchés illégalement', 1);
 
-INSERT INTO threat_characterizations (id, name) VALUES (7, 'Transport de produits pêchés illégalement');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (7, 'Transport de produits pêchés illégalement', 1);
 
-INSERT INTO threat_characterizations (id, name) VALUES (8, 'Entrave à l''observation');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (8, 'Entrave à l''observation', 2);
 
-INSERT INTO threat_characterizations (id, name) VALUES (9, 'Dissimulation');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (9, 'Dissimulation', 2);
 
-INSERT INTO threat_characterizations (id, name) VALUES (10, 'Interférence');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (10, 'Interférence', 2);
 
-INSERT INTO threat_characterizations (id, name) VALUES (11, 'Sécurité');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (11, 'Sécurité', 7);
 
-INSERT INTO threat_characterizations (id, name) VALUES (12, 'Transbordement');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (12, 'Transbordement', 3);
 
-INSERT INTO threat_characterizations (id, name) VALUES (13, 'AIS');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (13, 'AIS', 3);
 
-INSERT INTO threat_characterizations (id, name) VALUES (14, 'Autorisation');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (14, 'Autorisation', 3);
 
-INSERT INTO threat_characterizations (id, name) VALUES (15, 'Débarquement');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (15, 'Débarquement', 3);
 
-INSERT INTO threat_characterizations (id, name) VALUES (16, 'Engin');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (16, 'Engin', 3);
 
-INSERT INTO threat_characterizations (id, name) VALUES (17, 'Marquage engin');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (17, 'Marquage engin', 3);
 
-INSERT INTO threat_characterizations (id, name) VALUES (18, 'Espèce interdite');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (18, 'Espèce interdite', 3);
 
-INSERT INTO threat_characterizations (id, name) VALUES (19, 'Espèce protégée');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (19, 'Espèce protégée', 3);
 
-INSERT INTO threat_characterizations (id, name) VALUES (20, 'Immersion espèces');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (20, 'Immersion espèces', 3);
 
-INSERT INTO threat_characterizations (id, name) VALUES (21, 'Marquage espèces');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (21, 'Marquage espèces', 3);
 
-INSERT INTO threat_characterizations (id, name) VALUES (22, 'Espèces en sous taille / sous poids');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (22, 'Espèces en sous taille / sous poids', 3);
 
-INSERT INTO threat_characterizations (id, name) VALUES (23, 'REM');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (23, 'REM', 3);
 
-INSERT INTO threat_characterizations (id, name) VALUES (24, 'Surquota');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (24, 'Surquota', 3);
 
-INSERT INTO threat_characterizations (id, name) VALUES (25, 'Tracabilité');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (25, 'Tracabilité', 3);
 
-INSERT INTO threat_characterizations (id, name) VALUES (26, 'VMS');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (26, 'VMS', 3);
 
-INSERT INTO threat_characterizations (id, name) VALUES (27, 'Période interdite');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (27, 'Période interdite', 4);
 
-INSERT INTO threat_characterizations (id, name) VALUES (28, 'Zone interdite');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (28, 'Zone interdite', 4);
 
-INSERT INTO threat_characterizations (id, name) VALUES (29, 'Pêche sans autorisation');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (29, 'Pêche sans autorisation', 4);
 
-INSERT INTO threat_characterizations (id, name) VALUES (30, 'Détention produits de la mer sans autorisation');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (30, 'Détention produits de la mer sans autorisation', 4);
 
-INSERT INTO threat_characterizations (id, name) VALUES (31, 'Détention explosifs/substances dangereuses');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (31, 'Détention explosifs/substances dangereuses', 4);
 
-INSERT INTO threat_characterizations (id, name) VALUES (32, 'Utilisation explosifs/substances dangereuses');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (32, 'Utilisation explosifs/substances dangereuses', 4);
 
-INSERT INTO threat_characterizations (id, name) VALUES (33, 'Transport de produits pêchés avec explosifs/substances dangereuses');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (33, 'Transport de produits pêchés avec explosifs/substances dangereuses', 4);
 
-INSERT INTO threat_characterizations (id, name) VALUES (34, 'Vente de produits pêchés avec explosifs/substances dangereuses');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (34, 'Vente de produits pêchés avec explosifs/substances dangereuses', 4);
 
-INSERT INTO threat_characterizations (id, name) VALUES (35, 'Non déclaration d''entrée en ZEE FR');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (35, 'Non déclaration d''entrée en ZEE FR', 4);
 
-INSERT INTO threat_characterizations (id, name) VALUES (36, 'Non déclaration des captures à bord en ZEE FR');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (36, 'Non déclaration des captures à bord en ZEE FR', 4);
 
-INSERT INTO threat_characterizations (id, name) VALUES (37, 'Rejet');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (37, 'Rejet', 5);
 
-INSERT INTO threat_characterizations (id, name) VALUES (38, 'Tri');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (38, 'Tri', 5);
 
-INSERT INTO threat_characterizations (id, name) VALUES (39, 'BMS (JPE)');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (39, 'BMS (JPE)', 5);
 
-INSERT INTO threat_characterizations (id, name) VALUES (40, 'BMS (JT-FT)');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (40, 'BMS (JT-FT)', 5);
 
-INSERT INTO threat_characterizations (id, name) VALUES (41, 'DIS/DIM (JPE)');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (41, 'DIS/DIM (JPE)', 5);
 
-INSERT INTO threat_characterizations (id, name) VALUES (42, 'DIS/DIM (JT-FT)');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (42, 'DIS/DIM (JT-FT)', 5);
 
-INSERT INTO threat_characterizations (id, name) VALUES (43, 'Certification capture');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (43, 'Certification capture', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (44, 'COE/COX');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (44, 'COE/COX', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (45, 'DEP');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (45, 'DEP', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (46, 'Document de transport');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (46, 'Document de transport', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (47, 'Engin/maillage (JPE)');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (47, 'Engin/maillage (JPE)', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (48, 'Engin/maillage (JT-FT)');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (48, 'Engin/maillage (JT-FT)', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (49, 'EOF');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (49, 'EOF', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (50, 'FAR (JPE)');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (50, 'FAR (JPE)', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (51, 'FAR (JT-FT)');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (51, 'FAR (JT-FT)', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (52, 'JPE non fonctionnel / absent');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (52, 'JPE non fonctionnel / absent', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (53, 'JT-FT absence de télédéclaration');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (53, 'JT-FT absence de télédéclaration', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (54, 'LAN (JPE)');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (54, 'LAN (JPE)', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (55, 'LAN (JT-FT)');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (55, 'LAN (JT-FT)', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (56, 'Marge de tolérance');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (56, 'Marge de tolérance', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (57, 'Pesée');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (57, 'Pesée', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (58, 'Plan d''arrimage');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (58, 'Plan d''arrimage', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (59, 'Plan de cale');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (59, 'Plan de cale', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (60, 'PNO');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (60, 'PNO', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (61, 'LSC (JPE)');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (61, 'LSC (JPE)', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (62, 'LSC (JT-FT)');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (62, 'LSC (JT-FT)', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (63, 'RTP');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (63, 'RTP', 6);
 
-INSERT INTO threat_characterizations (id, name) VALUES (64, 'Permis d''armement - absence document');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (64, 'Permis d''armement - absence document', 7);
 
-INSERT INTO threat_characterizations (id, name) VALUES (65, 'Permis d''armement - absence document, suspension, perte validité, LEP échue, absence PME');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (65, 'Permis d''armement - absence document, suspension, perte validité, LEP échue, absence PME', 7);
 
-INSERT INTO threat_characterizations (id, name) VALUES (66, 'Permis d''armement - défaut de présentation');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (66, 'Permis d''armement - défaut de présentation', 7);
 
-INSERT INTO threat_characterizations (id, name) VALUES (67, 'Permis de navigation - absence du titre à bord');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (67, 'Permis de navigation - absence du titre à bord', 7);
 
-INSERT INTO threat_characterizations (id, name) VALUES (68, 'Permis de navigation -  non respect des conditions');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (68, 'Permis de navigation -  non respect des conditions', 7);
 
-INSERT INTO threat_characterizations (id, name) VALUES (69, 'Equipage - absence fiche effectif minimal');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (69, 'Equipage - absence fiche effectif minimal', 7);
 
-INSERT INTO threat_characterizations (id, name) VALUES (70, 'Equipage - non respect de la fiche d''effectif minimal');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (70, 'Equipage - non respect de la fiche d''effectif minimal', 7);
 
-INSERT INTO threat_characterizations (id, name) VALUES (71, 'Equipage - refus présentation liste équipage');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (71, 'Equipage - refus présentation liste équipage', 7);
 
-INSERT INTO threat_characterizations (id, name) VALUES (72, 'Equipage - absence liste équipage');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (72, 'Equipage - absence liste équipage', 7);
 
-INSERT INTO threat_characterizations (id, name) VALUES (73, 'Aptitude médicale');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (73, 'Aptitude médicale', 7);
 
-INSERT INTO threat_characterizations (id, name) VALUES (74, 'Titres de formation');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (74, 'Titres de formation', 7);
 
-INSERT INTO threat_characterizations (id, name) VALUES (75, 'Langue');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (75, 'Langue', 7);
 
-INSERT INTO threat_characterizations (id, name) VALUES (76, 'Travail illégal');
+INSERT INTO threat_characterizations (id, name, threat_id) VALUES (76, 'Travail illégal', 7);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (1, 2608, 1, 1);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (1, 2608, 1);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (2, 2609, 1, 2);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (2, 2609, 2);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (3, 2610, 1, 3);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (3, 2610, 3);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (4, 22070, 1, 4);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (4, 22070, 4);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (5, 27879, 1, 5);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (5, 27879, 5);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (6, 27900, 1, 6);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (6, 27900, 6);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (7, 27898, 1, 7);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (7, 27898, 7);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (8, 27885, 2, 8);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (8, 27885, 8);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (9, 12922, 2, 9);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (9, 12922, 9);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (10, 27685, 2, 9);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (10, 27685, 9);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (11, 2584, 2, 10);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (11, 2584, 10);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (12, 2604, 2, 10);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (12, 2604, 10);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (13, 4234, 2, 10);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (13, 4234, 10);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (14, 22035, 2, 10);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (14, 22035, 10);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (15, 2605, 2, 11);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (15, 2605, 11);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (16, 2606, 2, 11);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (16, 2606, 11);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (17, 27714, 3, 12);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (17, 27714, 12);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (18, 27688, 3, 13);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (18, 27688, 13);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (19, 2603, 3, 14);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (19, 2603, 14);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (20, 12912, 3, 14);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (20, 12912, 14);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (21, 22070, 3, 14);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (21, 22070, 14);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (22, 30792, 3, 14);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (22, 30792, 14);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (23, 32099, 3, 14);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (23, 32099, 14);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (24, 10400, 3, 15);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (24, 10400, 15);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (25, 27715, 3, 15);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (25, 27715, 15);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (26, 27718, 3, 15);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (26, 27718, 15);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (27, 27721, 3, 15);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (27, 27721, 15);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (28, 2593, 3, 16);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (28, 2593, 16);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (29, 7057, 3, 16);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (29, 7057, 16);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (30, 7059, 3, 16);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (30, 7059, 16);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (31, 7060, 3, 16);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (31, 7060, 16);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (32, 12891, 3, 16);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (32, 12891, 16);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (33, 12898, 3, 16);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (33, 12898, 16);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (34, 12918, 3, 16);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (34, 12918, 16);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (35, 27724, 3, 16);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (35, 27724, 16);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (36, 27724, 3, 17);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (36, 27724, 17);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (37, 27725, 3, 16);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (37, 27725, 16);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (38, 27725, 3, 17);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (38, 27725, 17);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (39, 27731, 3, 16);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (39, 27731, 16);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (40, 7063, 3, 18);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (40, 7063, 18);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (41, 7064, 3, 18);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (41, 7064, 18);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (42, 28347, 3, 18);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (42, 28347, 18);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (43, 27730, 3, 19);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (43, 27730, 19);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (44, 2600, 3, 20);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (44, 2600, 20);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (45, 27729, 3, 21);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (45, 27729, 21);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (46, 7983, 3, 22);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (46, 7983, 22);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (47, 7984, 3, 22);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (47, 7984, 22);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (48, 28346, 3, 22);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (48, 28346, 22);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (49, 27688, 3, 23);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (49, 27688, 23);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (50, 12900, 3, 24);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (50, 12900, 24);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (51, 12902, 3, 24);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (51, 12902, 24);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (52, 28348, 3, 24);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (52, 28348, 24);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (53, 33914, 3, 25);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (53, 33914, 25);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (54, 7064, 3, 12);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (54, 7064, 12);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (55, 12902, 3, 12);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (55, 12902, 12);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (56, 27717, 3, 12);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (56, 27717, 12);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (57, 33914, 3, 12);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (57, 33914, 12);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (58, 27688, 3, 26);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (58, 27688, 26);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (59, 7060, 3, 27);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (59, 7060, 27);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (60, 7062, 3, 27);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (60, 7062, 27);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (61, 2596, 3, 28);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (61, 2596, 28);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (62, 7061, 3, 28);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (62, 7061, 28);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (63, 27686, 3, 28);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (63, 27686, 28);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (64, 27687, 3, 28);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (64, 27687, 28);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (65, 32071, 3, 28);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (65, 32071, 28);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (66, 22806, 4, 29);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (66, 22806, 29);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (67, 27679, 4, 30);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (67, 27679, 30);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (68, 27698, 4, 31);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (68, 27698, 31);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (69, 27699, 4, 32);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (69, 27699, 32);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (70, 27701, 4, 33);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (70, 27701, 33);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (71, 27702, 4, 34);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (71, 27702, 34);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (72, 22807, 4, 35);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (72, 22807, 35);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (73, 22808, 4, 36);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (73, 22808, 36);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (74, 27695, 4, 28);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (74, 27695, 28);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (75, 27696, 4, 27);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (75, 27696, 27);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (76, 27728, 5, 37);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (76, 27728, 37);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (77, 27748, 5, 37);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (77, 27748, 37);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (78, 34314, 5, 37);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (78, 34314, 37);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (79, 27726, 5, 38);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (79, 27726, 38);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (80, 27689, 5, 39);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (80, 27689, 39);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (81, 27885, 5, 40);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (81, 27885, 40);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (82, 27689, 5, 41);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (82, 27689, 41);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (83, 27885, 5, 42);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (83, 27885, 42);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (84, 27689, 6, 43);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (84, 27689, 43);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (85, 27689, 6, 44);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (85, 27689, 44);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (86, 27689, 6, 45);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (86, 27689, 45);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (87, 31004, 6, 46);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (87, 31004, 46);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (88, 27689, 6, 47);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (88, 27689, 47);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (89, 27885, 6, 48);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (89, 27885, 48);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (90, 27689, 6, 49);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (90, 27689, 49);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (91, 27689, 6, 50);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (91, 27689, 50);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (92, 27885, 6, 51);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (92, 27885, 51);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (93, 27689, 6, 52);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (93, 27689, 52);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (94, 27885, 6, 53);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (94, 27885, 53);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (95, 27689, 6, 54);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (95, 27689, 54);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (96, 27885, 6, 55);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (96, 27885, 55);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (97, 27689, 6, 56);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (97, 27689, 56);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (98, 27727, 6, 57);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (98, 27727, 57);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (99, 30835, 6, 58);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (99, 30835, 58);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (100, 27885, 6, 59);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (100, 27885, 59);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (101, 27712, 6, 60);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (101, 27712, 60);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (102, 27689, 6, 61);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (102, 27689, 61);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (103, 27885, 6, 62);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (103, 27885, 62);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (104, 27689, 6, 63);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (104, 27689, 63);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (105, 27693, 7, 64);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (105, 27693, 64);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (106, 32326, 7, 65);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (106, 32326, 65);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (107, 32327, 7, 66);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (107, 32327, 66);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (108, 22205, 7, 67);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (108, 22205, 67);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (109, 22182, 7, 68);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (109, 22182, 68);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (110, 30028, 7, 69);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (110, 30028, 69);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (111, 30029, 7, 70);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (111, 30029, 70);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (112, 31122, 7, 71);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (112, 31122, 71);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (113, 31123, 7, 72);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (113, 31123, 72);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (114, 30032, 7, 73);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (114, 30032, 73);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (115, 30034, 7, 74);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (115, 30034, 74);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (116, 4485, 7, 74);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (116, 4485, 74);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (117, 31116, 7, 75);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (117, 31116, 75);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (118, 1508, 7, 76);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (118, 1508, 76);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (119, 1509, 7, 76);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (119, 1509, 76);
 
-INSERT INTO infraction_threat_characterization (id, natinf_code, threat_id, threat_characterization_id) VALUES (120, 4761, 7, 11);
+INSERT INTO infraction_threat_characterization (id, natinf_code, threat_characterization_id) VALUES (120, 4761, 11);

@@ -601,10 +601,16 @@ def test_extract_recent_segments(reset_test_data, expected_recent_segments):
 
 
 def test_compute_profile_segments_impact_and_priority(
-    recent_segments, segments_of_year, control_priorities, computed_recent_segments
+    recent_segments,
+    segments_of_year,
+    control_priorities_and_infringement_risk_levels,
+    computed_recent_segments,
 ):
     res = compute_profile_segments_impact_and_priority(
-        recent_segments, segments_of_year, control_priorities, VesselProfileType.RECENT
+        recent_segments,
+        segments_of_year,
+        control_priorities_and_infringement_risk_levels,
+        VesselProfileType.RECENT,
     )
     pd.testing.assert_frame_equal(res, computed_recent_segments)
 

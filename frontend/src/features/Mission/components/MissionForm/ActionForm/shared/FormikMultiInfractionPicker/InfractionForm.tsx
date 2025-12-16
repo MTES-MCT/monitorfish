@@ -14,7 +14,7 @@ type InfractionFormProps = Readonly<{
   onSubmit: (nextInfractionFormValues: MissionAction.Infraction) => void
 }>
 export function InfractionForm({ initialValues, onCancel, onSubmit }: InfractionFormProps) {
-  const threatCharacterizationOptions = useGetThreatCharacterizationAsTreeOptions()
+  const threatCharacterizationOptions = useGetThreatCharacterizationAsTreeOptions(initialValues.threats)
 
   return (
     <Formik

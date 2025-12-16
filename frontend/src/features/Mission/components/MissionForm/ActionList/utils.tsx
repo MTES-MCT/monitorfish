@@ -73,7 +73,7 @@ export function getMissionActionInfractionsFromMissionActionFormValues(
   withPendingInfractions: boolean = false
 ): Array<UndefineExcept<MissionAction.Infraction, 'comments' | 'infractionType'>> {
   return (missionActionFormValues.infractions ? missionActionFormValues.infractions : [])
-    .map(infraction => getFlatInfractionFromThreatsHierarchy(natinfsAsOptions, infraction))
+    .map(infraction => getFlatInfractionFromThreatsHierarchy(infraction, natinfsAsOptions))
     .filter(({ natinf }) => withPendingInfractions || Boolean(natinf))
 }
 

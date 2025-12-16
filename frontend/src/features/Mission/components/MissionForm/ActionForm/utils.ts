@@ -38,16 +38,15 @@ export function getVesselName(vesselName: string | undefined) {
 }
 
 export function getFlatInfractionFromThreatsHierarchy(
-  natinfsAsOptions: Option<number>[],
-  infraction: MissionAction.Infraction
+  infraction: MissionAction.Infraction,
+  natinfsAsOptions?: Option<number>[]
 ): UndefineExcept<MissionAction.Infraction, 'comments' | 'infractionType'> {
   const threat = infraction.threats?.[0]?.label
   const threatCharacterization = infraction.threats?.[0]?.children?.[0]?.label
   const natinf = infraction.threats?.[0]?.children?.[0]?.children?.[0]?.value
 
-  const natinfDescription: string | undefined = natinf
-    ? find(natinfsAsOptions, option => option.value === Number(natinf))?.label
-    : undefined
+  const natinfDescription: string | undefined =
+    natinf && !!natinfsAsOptions ? find(natinfsAsOptions, option => option.value === Number(natinf))?.label : undefined
 
   return {
     ...infraction,

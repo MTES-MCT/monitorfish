@@ -46,12 +46,30 @@ class JpaInfractionRepositoryITests : AbstractDBTests() {
         val infractions = jpaInfractionRepository.findAll()
 
         // Then
-        assertThat(infractions).hasSize(8)
-        assertThat(infractions.first().natinfCode).isEqualTo(23581)
-        assertThat(infractions.first().regulation).isEqualTo("Arreté du 12/01/3021")
-        assertThat(infractions.first().infraction).isEqualTo("Taille de maille non réglementaire")
+        assertThat(infractions).hasSize(102)
+        assertThat(infractions.first().natinfCode).isEqualTo(17)
+        assertThat(infractions.first().regulation).isEqualTo("Reg pêche 3")
+        assertThat(infractions.first().infraction).isEqualTo("Infraction 4")
         assertThat(infractions.first().infractionCategory).isEqualTo(
             InfractionCategory.FISHING,
         )
+    }
+
+    @Test
+    @Transactional
+    fun `findInfractionsThreatCharacterization Should return all threat characterization`() {
+        // When
+        val infractions = jpaInfractionRepository.findInfractionsThreatCharacterization()
+
+        // Then
+        assertThat(infractions).hasSize(120)
+        assertThat(infractions.first().natinfCode).isEqualTo(2608)
+        assertThat(
+            infractions.first().infraction,
+        ).isEqualTo(
+            "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne",
+        )
+        assertThat(infractions.first().threat).isEqualTo("Activités INN")
+        assertThat(infractions.first().threatCharacterization).isEqualTo("Pêche sans autorisation par navire tiers")
     }
 }

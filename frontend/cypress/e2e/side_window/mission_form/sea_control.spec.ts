@@ -154,19 +154,19 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Infractions
     cy.clickButton('Ajouter une infraction')
     cy.fill('Résultat de l’infraction', 'Avec PV')
-    cy.fill('NATINF', '23581')
+    cy.fill('Type d’infraction et NATINF', ['27717'])
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction déclarative.')
     cy.clickButton('Valider l’infraction')
 
     cy.clickButton('Ajouter une infraction')
     cy.fill('Résultat de l’infraction', 'Sans PV')
-    cy.fill('NATINF', '23588')
+    cy.fill('Type d’infraction et NATINF', ['4234'])
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction espèce.')
     cy.clickButton('Valider l’infraction')
 
     cy.clickButton('Ajouter une infraction')
     cy.fill('Résultat de l’infraction', 'Sans PV')
-    cy.fill('NATINF', '27689')
+    cy.fill('Type d’infraction et NATINF', ['2584'])
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction autre.')
     cy.clickButton('Valider l’infraction')
 
@@ -233,12 +233,20 @@ context('Side Window > Mission Form > Sea Control', () => {
           licencesAndLogbookObservations: 'Une observation hors infraction sur les obligations déclaaratives.',
           licencesMatchActivity: 'NO',
           infractions: [
-            { comments: 'Une observation sur l’infraction déclarative.', infractionType: 'WITH_RECORD', natinf: 23581 },
-            { comments: 'Une observation sur l’infraction autre.', infractionType: 'WITHOUT_RECORD', natinf: 27689 },
+            {
+              comments: 'Une observation sur l’infraction déclarative.',
+              infractionType: 'WITH_RECORD',
+              threats: [{"children":[{"children":[{"label":"27717 - TRANSBORDEMENT HORS D'UN PORT DESIGNE DE PRODUITS DE LA PECHE MARITIME OU DE L'AQUACULTURE MARINE D'ESPECES SOUMISES A UN PLAN PLURIANNUEL","value":27717}],"label":"Transbordement","value":"Transbordement"}],"label":"Mesures techniques et de conservation","value":"Mesures techniques et de conservation"}]
+            },
             {
               comments: 'Une observation sur l’infraction espèce.',
               infractionType: 'WITHOUT_RECORD',
-              natinf: 23588
+              threats: [{"children":[{"children":[{"label":"4234 - NON PRESENTATION PAR UN CAPITAINE DE SON JOURNAL DE BORD AU VISA DES AGENTS DES DOUANES","value":4234}],"label":"Interférence","value":"Interférence"}],"label":"Entrave au contrôle","value":"Entrave au contrôle"}]
+            },
+            {
+              comments: 'Une observation sur l’infraction autre.',
+              infractionType: 'WITHOUT_RECORD',
+              threats: [{"children":[{"children":[{"label":"2584 - OBSTACLE A UNE SAISIE EN MATIERE DE PECHE MARITIME","value":2584}],"label":"Interférence","value":"Interférence"}],"label":"Entrave au contrôle","value":"Entrave au contrôle"}]
             }
           ],
           logbookMatchesActivity: 'NOT_APPLICABLE',
@@ -403,7 +411,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.fill('Résultat de l’infraction', 'Avec PV')
 
-    cy.fill('NATINF', '23581')
+    cy.fill('Type d’infraction et NATINF', ['27717'])
 
     // -------------------------------------------------------------------------
     // Add
@@ -412,9 +420,9 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.clickButton('Valider l’infraction')
 
-    cy.contains('Infraction 1').should('exist')
+    cy.contains('Infraction - Transbordement').should('exist')
     cy.contains('Avec PV').should('exist')
-    cy.contains('NATINF : 23581 - Taille de maille non réglementaire').should('exist')
+    cy.contains('Mesures techniques et de conservation / NATINF 27717').should('exist')
 
     cy.contains("Une observation sur l'infraction").should('exist')
 
@@ -424,14 +432,14 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton("Éditer l'infraction")
 
     cy.fill('Résultat de l’infraction', 'Sans PV')
-    cy.fill('NATINF', '23588')
+    cy.fill('Type d’infraction et NATINF', ['2584'])
     cy.fill('Observations sur l’infraction', "Une autre observation sur l'infraction")
 
     cy.clickButton('Valider l’infraction')
 
-    cy.contains('Infraction 1').should('exist')
+    cy.contains('Infraction - Interférence').should('exist')
     cy.contains('Sans PV').should('exist')
-    cy.contains('NATINF : 23588 - Chalutage dans la zone des 3 milles').should('exist')
+    cy.contains('Entrave au contrôle / NATINF 2584').should('exist')
     cy.contains("Une autre observation sur l'infraction").should('exist')
 
     // -------------------------------------------------------------------------

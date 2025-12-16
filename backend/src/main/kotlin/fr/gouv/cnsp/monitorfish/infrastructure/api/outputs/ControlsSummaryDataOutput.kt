@@ -16,7 +16,10 @@ data class ControlsSummaryDataOutput(
                 numberOfDiversions = controlsSummary.numberOfDiversions,
                 numberOfControlsWithSomeGearsSeized = controlsSummary.numberOfControlsWithSomeGearsSeized,
                 numberOfControlsWithSomeSpeciesSeized = controlsSummary.numberOfControlsWithSomeSpeciesSeized,
-                controls = controlsSummary.controls.map { MissionActionDataOutput.fromMissionAction(it) },
+                controls =
+                    controlsSummary.controls.map {
+                        MissionActionDataOutput.fromMissionAction(it, useThreatHierarchyForForm = false)
+                    },
             )
     }
 }

@@ -11,7 +11,7 @@ import { margins } from './constants'
 import { ControlDetails } from './ControlDetails'
 import { OPENLAYERS_PROJECTION } from '../../constants'
 import { monitorfishMap } from '../../monitorfishMap'
-import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay'
+import { getOverlayPosition, getTopLeftMargin } from '../Overlay'
 
 import type { Mission } from '../../../Mission/mission.types'
 
@@ -27,7 +27,6 @@ export function ControlOverlay({ feature, isSelected = false }) {
   const overlayRef = useRef<HTMLDivElement>()
   const overlayObjectRef = useRef<Overlay | undefined>()
   const [overlayTopLeftMargin, setOverlayTopLeftMargin] = useState<[number, number]>([margins.yBottom, margins.xMiddle])
-  const [overlayPosition, setOverlayPosition] = useState(OverlayPosition.BOTTOM)
 
   const selectedControl = useMemo(() => {
     if (!selectedMissionActionGeoJSON) {
@@ -112,15 +111,12 @@ export function ControlOverlay({ feature, isSelected = false }) {
     overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
 
     const nextOverlayPosition = getNextOverlayPosition()
-    setOverlayPosition(nextOverlayPosition)
     setOverlayTopLeftMargin(getTopLeftMargin(nextOverlayPosition, margins))
   }, [feature, isSelected, selectedControl, setControlProperties, overlayRef, overlayObjectRef, getNextOverlayPosition])
 
   return (
     <Wrapper ref={overlayCallback} $overlayTopLeftMargin={overlayTopLeftMargin}>
-      {controlProperties && (
-        <ControlDetails control={controlProperties} isSelected={isSelected} overlayPosition={overlayPosition} />
-      )}
+      {controlProperties && <ControlDetails control={controlProperties} isSelected={isSelected} />}
     </Wrapper>
   )
 }

@@ -1,0 +1,77 @@
+id,name,threat_id
+1,Pêche sans autorisation par navire tiers,1
+2,Pêche non conforme à l'autorisation par navire tiers,1
+3,Pêche sans autorisation par navire communautaire,1
+4,Pêche sans autorisation par navire français,1
+5,Navire sans immatriculation,1
+6,Vente de produits pêchés illégalement,1
+7,Transport de produits pêchés illégalement,1
+8,Entrave à l'observation,2
+9,Dissimulation,2
+10,Interférence,2
+11,Sécurité,7
+12,Transbordement,3
+13,AIS,3
+14,Autorisation,3
+15,Débarquement,3
+16,Engin,3
+17,Marquage engin,3
+18,Espèce interdite,3
+19,Espèce protégée,3
+20,Immersion espèces,3
+21,Marquage espèces,3
+22,Espèces en sous taille / sous poids,3
+23,REM,3
+24,Surquota,3
+25,Tracabilité,3
+26,VMS,3
+27,Période interdite,4
+28,Zone interdite,4
+29,Pêche sans autorisation,4
+30,Détention produits de la mer sans autorisation,4
+31,Détention explosifs/substances dangereuses,4
+32,Utilisation explosifs/substances dangereuses,4
+33,Transport de produits pêchés avec explosifs/substances dangereuses,4
+34,Vente de produits pêchés avec explosifs/substances dangereuses,4
+35,Non déclaration d'entrée en ZEE FR,4
+36,Non déclaration des captures à bord en ZEE FR,4
+37,Rejet,5
+38,Tri,5
+39,BMS (JPE),5
+40,BMS (JT-FT),5
+41,DIS/DIM (JPE),5
+42,DIS/DIM (JT-FT),5
+43,Certification capture,6
+44,COE/COX,6
+45,DEP,6
+46,Document de transport,6
+47,Engin/maillage (JPE),6
+48,Engin/maillage (JT-FT),6
+49,EOF,6
+50,FAR (JPE),6
+51,FAR (JT-FT),6
+52,JPE non fonctionnel / absent,6
+53,JT-FT absence de télédéclaration,6
+54,LAN (JPE),6
+55,LAN (JT-FT),6
+56,Marge de tolérance,6
+57,Pesée,6
+58,Plan d'arrimage,6
+59,Plan de cale,6
+60,PNO,6
+61,LSC (JPE),6
+62,LSC (JT-FT),6
+63,RTP,6
+64,Permis d'armement - absence document,7
+65,"Permis d'armement - absence document, suspension, perte validité, LEP échue, absence PME",7
+66,Permis d'armement - défaut de présentation,7
+67,Permis de navigation - absence du titre à bord,7
+68,Permis de navigation -  non respect des conditions,7
+69,Equipage - absence fiche effectif minimal,7
+70,Equipage - non respect de la fiche d'effectif minimal,7
+71,Equipage - refus présentation liste équipage,7
+72,Equipage - absence liste équipage,7
+73,Aptitude médicale,7
+74,Titres de formation,7
+75,Langue,7
+76,Travail illégal,7

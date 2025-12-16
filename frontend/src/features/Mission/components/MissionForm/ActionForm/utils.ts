@@ -1,7 +1,9 @@
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
-import { isEqual, isEmpty } from 'lodash-es'
+import { isEmpty, isEqual, find } from 'lodash-es'
 
 import type { MissionActionFormValues } from '../types'
+import type { Option, UndefineExcept } from '@mtes-mct/monitor-ui'
 import type { FormikErrors } from 'formik'
 import type { Promisable } from 'type-fest'
 
@@ -33,4 +35,24 @@ export function getVesselName(vesselName: string | undefined) {
   }
 
   return vesselName
+}
+
+export function getFlatInfractionFromThreatsHierarchy(
+  infraction: MissionAction.Infraction,
+  natinfsAsOptions?: Option<number>[]
+): UndefineExcept<MissionAction.Infraction, 'comments' | 'infractionType'> {
+  const threat = infraction.threats?.[0]?.label
+  const threatCharacterization = infraction.threats?.[0]?.children?.[0]?.label
+  const natinf = infraction.threats?.[0]?.children?.[0]?.children?.[0]?.value
+
+  const natinfDescription: string | undefined =
+    natinf && !!natinfsAsOptions ? find(natinfsAsOptions, option => option.value === Number(natinf))?.label : undefined
+
+  return {
+    ...infraction,
+    natinf: natinf ? parseInt(natinf, 10) : undefined,
+    natinfDescription: natinfDescription ? natinfDescription.split(' - ')[1] : '',
+    threat,
+    threatCharacterization
+  }
 }

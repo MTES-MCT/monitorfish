@@ -47,7 +47,7 @@ context('Side Window > Mission Form > Air Control', () => {
     // Infractions
     cy.clickButton('Ajouter une infraction')
     cy.fill('Résultat de l’infraction', 'Avec PV')
-    cy.fill('NATINF', '23581')
+    cy.fill('Type d’infraction et NATINF', ['27717'])
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction.')
     cy.clickButton('Valider l’infraction')
 
@@ -92,7 +92,11 @@ context('Side Window > Mission Form > Air Control', () => {
           numberOfVesselsFlownOver: null,
           otherComments: 'Une autre observation.',
           infractions: [
-            { comments: 'Une observation sur l’infraction.', infractionType: 'WITH_RECORD', natinf: 23581 }
+            {
+              comments: 'Une observation sur l’infraction.',
+              infractionType: 'WITH_RECORD',
+              threats: [{"children":[{"children":[{"label":"27717 - TRANSBORDEMENT HORS D'UN PORT DESIGNE DE PRODUITS DE LA PECHE MARITIME OU DE L'AQUACULTURE MARINE D'ESPECES SOUMISES A UN PLAN PLURIANNUEL","value":27717}],"label":"Transbordement","value":"Transbordement"}],"label":"Mesures techniques et de conservation","value":"Mesures techniques et de conservation"}]
+  }
           ],
           portLocode: null,
           segments: [],

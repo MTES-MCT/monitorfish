@@ -1,4 +1,4 @@
-import { useGetInfractionsQuery } from '@api/infraction'
+import { useGetInfractionsQuery } from '@features/Infraction/apis'
 import { useMemo } from 'react'
 
 import type { Option } from '@mtes-mct/monitor-ui'

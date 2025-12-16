@@ -188,7 +188,7 @@ export const SeaControlFormCompletionSchema = SeaControlFormLiveSchema.concat(
 export const InfractionFormLiveSchema = object({
   comments: string(),
   infractionType: string().oneOf(Object.values(MissionAction.InfractionType)).required(HIDDEN_ERROR),
-  natinf: number().when('infractionType', {
+  threats: array().when('infractionType', {
     is: (infractionType?: MissionAction.InfractionType) => infractionType !== MissionAction.InfractionType.PENDING,
     then: schema => schema.required(HIDDEN_ERROR)
   })

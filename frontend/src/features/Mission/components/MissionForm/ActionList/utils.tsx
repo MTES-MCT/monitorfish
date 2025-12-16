@@ -1,9 +1,11 @@
 import { Flag } from '@features/commonComponents/Flag'
+import { getFlatInfractionFromThreatsHierarchy } from '@features/Mission/components/MissionForm/ActionForm/utils'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import dayjs from 'dayjs'
 import styled from 'styled-components'
 
 import type { MissionActionFormValues } from '../types'
+import type { Option, UndefineExcept } from '@mtes-mct/monitor-ui'
 import type { ReactNode } from 'react'
 
 import CompletionStatus = MissionAction.CompletionStatus
@@ -66,12 +68,13 @@ const Strong = styled.div`
  * - ⚠️ When `withPendingInfractions` is true, returned infractions will include infractions without `natinf`.
  */
 export function getMissionActionInfractionsFromMissionActionFormValues(
+  natinfsAsOptions: Option<number>[],
   missionActionFormValues: MissionAction.MissionAction | MissionActionFormValues,
   withPendingInfractions: boolean = false
-): Array<MissionAction.Infraction> {
-  return (missionActionFormValues.infractions ? missionActionFormValues.infractions : []).filter(
-    ({ natinf }) => withPendingInfractions || Boolean(natinf)
-  )
+): Array<UndefineExcept<MissionAction.Infraction, 'comments' | 'infractionType'>> {
+  return (missionActionFormValues.infractions ? missionActionFormValues.infractions : [])
+    .map(infraction => getFlatInfractionFromThreatsHierarchy(infraction, natinfsAsOptions))
+    .filter(({ natinf }) => withPendingInfractions || Boolean(natinf))
 }
 
 export function getMissionActionFormInitialValues(type: MissionAction.MissionActionType): MissionActionFormValues {

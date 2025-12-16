@@ -1,10 +1,44 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import java.time.ZonedDateTime
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class MissionActionInfractionDataOutput(
+    val infractionType: InfractionType,
+    // This field is used to control the Threat CheckTreePicker
+    val threats: List<ThreatDataOutput>? = null,
+    val natinf: Int? = null,
+    val natinfDescription: String? = null,
+    val threat: String? = null,
+    val threatCharacterization: String? = null,
+    val comments: String? = null,
+) {
+    companion object {
+        fun fromInfractionWithThreatHierarchy(infraction: Infraction) =
+            MissionActionInfractionDataOutput(
+                infractionType = infraction.infractionType!!,
+                threats =
+                    listOf(
+                        InfractionThreatCharacterizationDataOutput.fromInfraction(infraction),
+                    ),
+                comments = infraction.comments,
+            )
+
+        fun fromInfraction(infraction: Infraction) =
+            MissionActionInfractionDataOutput(
+                infractionType = infraction.infractionType!!,
+                natinf = infraction.natinf!!,
+                natinfDescription = infraction.natinfDescription,
+                threat = infraction.threat ?: "Famille inconnue",
+                threatCharacterization = infraction.threatCharacterization ?: "Type inconnu",
+                comments = infraction.comments,
+            )
+    }
+}
 
 data class MissionActionDataOutput(
     val id: Int? = null,
@@ -29,7 +63,7 @@ data class MissionActionDataOutput(
     val speciesSizeControlled: Boolean? = null,
     val separateStowageOfPreservedSpecies: ControlCheck? = null,
     val licencesAndLogbookObservations: String? = null,
-    val infractions: List<Infraction> = listOf(),
+    val infractions: List<MissionActionInfractionDataOutput> = listOf(),
     val speciesObservations: String? = null,
     val seizureAndDiversion: Boolean? = null,
     val numberOfVesselsFlownOver: Int? = null,
@@ -61,60 +95,69 @@ data class MissionActionDataOutput(
     val observationsByUnit: String? = null,
 ) {
     companion object {
-        fun fromMissionAction(missionAction: MissionAction) =
-            MissionActionDataOutput(
-                id = missionAction.id,
-                vesselId = missionAction.vesselId,
-                vesselName = missionAction.vesselName,
-                internalReferenceNumber = missionAction.internalReferenceNumber,
-                externalReferenceNumber = missionAction.externalReferenceNumber,
-                ircs = missionAction.ircs,
-                flagState = missionAction.flagState,
-                districtCode = missionAction.districtCode,
-                faoAreas = missionAction.faoAreas,
-                flightGoals = missionAction.flightGoals,
-                missionId = missionAction.missionId,
-                actionType = missionAction.actionType,
-                actionDatetimeUtc = missionAction.actionDatetimeUtc,
-                actionEndDatetimeUtc = missionAction.actionEndDatetimeUtc,
-                emitsVms = missionAction.emitsVms,
-                emitsAis = missionAction.emitsAis,
-                logbookMatchesActivity = missionAction.logbookMatchesActivity,
-                licencesMatchActivity = missionAction.licencesMatchActivity,
-                speciesWeightControlled = missionAction.speciesWeightControlled,
-                speciesSizeControlled = missionAction.speciesSizeControlled,
-                separateStowageOfPreservedSpecies = missionAction.separateStowageOfPreservedSpecies,
-                licencesAndLogbookObservations = missionAction.licencesAndLogbookObservations,
-                infractions = missionAction.infractions,
-                speciesObservations = missionAction.speciesObservations,
-                seizureAndDiversion = missionAction.seizureAndDiversion,
-                numberOfVesselsFlownOver = missionAction.numberOfVesselsFlownOver,
-                unitWithoutOmegaGauge = missionAction.unitWithoutOmegaGauge,
-                controlQualityComments = missionAction.controlQualityComments,
-                segments = missionAction.segments,
-                facade = missionAction.facade,
-                longitude = missionAction.longitude,
-                latitude = missionAction.latitude,
-                portLocode = missionAction.portLocode,
-                portName = missionAction.portName,
-                seizureAndDiversionComments = missionAction.seizureAndDiversionComments,
-                otherComments = missionAction.otherComments,
-                gearOnboard = missionAction.gearOnboard,
-                speciesOnboard = missionAction.speciesOnboard,
-                controlUnits = missionAction.controlUnits,
-                userTrigram = missionAction.userTrigram,
-                vesselTargeted = missionAction.vesselTargeted,
-                hasSomeGearsSeized = missionAction.hasSomeGearsSeized,
-                hasSomeSpeciesSeized = missionAction.hasSomeSpeciesSeized,
-                speciesQuantitySeized = missionAction.speciesQuantitySeized,
-                completedBy = missionAction.completedBy,
-                completion = missionAction.completion,
-                isFromPoseidon = missionAction.isFromPoseidon,
-                isAdministrativeControl = missionAction.isAdministrativeControl,
-                isComplianceWithWaterRegulationsControl = missionAction.isComplianceWithWaterRegulationsControl,
-                isSafetyEquipmentAndStandardsComplianceControl = missionAction.isSafetyEquipmentAndStandardsComplianceControl,
-                isSeafarersControl = missionAction.isSeafarersControl,
-                observationsByUnit = missionAction.observationsByUnit,
-            )
+        fun fromMissionAction(
+            missionAction: MissionAction,
+            useThreatHierarchyForForm: Boolean = true,
+        ) = MissionActionDataOutput(
+            id = missionAction.id,
+            vesselId = missionAction.vesselId,
+            vesselName = missionAction.vesselName,
+            internalReferenceNumber = missionAction.internalReferenceNumber,
+            externalReferenceNumber = missionAction.externalReferenceNumber,
+            ircs = missionAction.ircs,
+            flagState = missionAction.flagState,
+            districtCode = missionAction.districtCode,
+            faoAreas = missionAction.faoAreas,
+            flightGoals = missionAction.flightGoals,
+            missionId = missionAction.missionId,
+            actionType = missionAction.actionType,
+            actionDatetimeUtc = missionAction.actionDatetimeUtc,
+            actionEndDatetimeUtc = missionAction.actionEndDatetimeUtc,
+            emitsVms = missionAction.emitsVms,
+            emitsAis = missionAction.emitsAis,
+            logbookMatchesActivity = missionAction.logbookMatchesActivity,
+            licencesMatchActivity = missionAction.licencesMatchActivity,
+            speciesWeightControlled = missionAction.speciesWeightControlled,
+            speciesSizeControlled = missionAction.speciesSizeControlled,
+            separateStowageOfPreservedSpecies = missionAction.separateStowageOfPreservedSpecies,
+            licencesAndLogbookObservations = missionAction.licencesAndLogbookObservations,
+            infractions =
+                missionAction.infractions.map {
+                    if (useThreatHierarchyForForm) {
+                        MissionActionInfractionDataOutput.fromInfractionWithThreatHierarchy(it)
+                    } else {
+                        MissionActionInfractionDataOutput.fromInfraction(it)
+                    }
+                },
+            speciesObservations = missionAction.speciesObservations,
+            seizureAndDiversion = missionAction.seizureAndDiversion,
+            numberOfVesselsFlownOver = missionAction.numberOfVesselsFlownOver,
+            unitWithoutOmegaGauge = missionAction.unitWithoutOmegaGauge,
+            controlQualityComments = missionAction.controlQualityComments,
+            segments = missionAction.segments,
+            facade = missionAction.facade,
+            longitude = missionAction.longitude,
+            latitude = missionAction.latitude,
+            portLocode = missionAction.portLocode,
+            portName = missionAction.portName,
+            seizureAndDiversionComments = missionAction.seizureAndDiversionComments,
+            otherComments = missionAction.otherComments,
+            gearOnboard = missionAction.gearOnboard,
+            speciesOnboard = missionAction.speciesOnboard,
+            controlUnits = missionAction.controlUnits,
+            userTrigram = missionAction.userTrigram,
+            vesselTargeted = missionAction.vesselTargeted,
+            hasSomeGearsSeized = missionAction.hasSomeGearsSeized,
+            hasSomeSpeciesSeized = missionAction.hasSomeSpeciesSeized,
+            speciesQuantitySeized = missionAction.speciesQuantitySeized,
+            completedBy = missionAction.completedBy,
+            completion = missionAction.completion,
+            isFromPoseidon = missionAction.isFromPoseidon,
+            isAdministrativeControl = missionAction.isAdministrativeControl,
+            isComplianceWithWaterRegulationsControl = missionAction.isComplianceWithWaterRegulationsControl,
+            isSafetyEquipmentAndStandardsComplianceControl = missionAction.isSafetyEquipmentAndStandardsComplianceControl,
+            isSeafarersControl = missionAction.isSeafarersControl,
+            observationsByUnit = missionAction.observationsByUnit,
+        )
     }
 }

@@ -1,40 +1,32 @@
-import { useGetNatinfsAsOptions } from '@features/Mission/components/MissionForm/hooks/useGetNatinfsAsOptions'
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { find } from 'lodash-es'
+import { Tag, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
+import { getInfractionTitle } from '../../../../../../domain/entities/controls'
+
 type InfractionProps = {
+  hasMultipleInfraction: boolean
   index: number
   infraction: MissionAction.Infraction
 }
-export function Infraction({ index, infraction }: InfractionProps) {
-  const natinfsAsOptions = useGetNatinfsAsOptions()
-
-  const infractionWithLabel = (function () {
-    const infractionLabel = find(natinfsAsOptions, { value: infraction.natinf })?.label
-
-    return { ...infraction, infractionLabel }
-  })()
-
+export function Infraction({ hasMultipleInfraction, index, infraction }: InfractionProps) {
   return (
     <Wrapper isFirstInfraction={index === 1}>
-      <InfractionTitle>Infraction {index}</InfractionTitle>
+      <InfractionTitle>
+        Infraction {hasMultipleInfraction && `${index} :`} {infraction.threatCharacterization}
+      </InfractionTitle>
       {infraction.comments && (
         <>
           {infraction.comments}
           <br />
         </>
       )}
-      <InfractionTag>
-        <InfractionTagText>
-          {infraction.infractionType === MissionAction.InfractionType.WITH_RECORD ? 'Avec' : 'Sans'} PV
-        </InfractionTagText>
-      </InfractionTag>
-      <InfractionTag>
-        <InfractionTagText title={infractionWithLabel.infractionLabel}>
-          NATINF {infractionWithLabel.natinf}
-        </InfractionTagText>
-      </InfractionTag>
+      <StyledTag backgroundColor={THEME.color.white}>
+        {infraction.infractionType === MissionAction.InfractionType.WITH_RECORD ? 'Avec' : 'Sans'} PV
+      </StyledTag>
+      <StyledTag backgroundColor={THEME.color.white} title={getInfractionTitle(infraction)}>
+        {infraction.threat} / NATINF {infraction.natinf}
+      </StyledTag>
     </Wrapper>
   )
 }
@@ -53,18 +45,15 @@ const Wrapper = styled.div<{
   box-sizing: border-box;
 `
 
-const InfractionTagText = styled.span`
-  color: ${p => p.theme.color.gunMetal};
-  margin: 0 7px 0 7px;
+const StyledTag = styled(Tag)`
+  margin-top: 8px;
+  margin-right: 8px;
   font-weight: 500;
-`
 
-const InfractionTag = styled.span`
-  margin: 5px 8px 0 0;
-  background: ${p => p.theme.color.white};
-  border-radius: 11px;
-  font-size: 13px;
-  height: 22px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 370px;
   display: inline-block;
-  vertical-align: bottom;
+  vertical-align: middle;
 `

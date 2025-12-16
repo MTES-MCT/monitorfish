@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.*
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.utils.InfractionHierarchyBuilder
 import java.time.ZonedDateTime
 
 data class PositionAlertSpecificationDataOutput(
@@ -9,7 +10,10 @@ data class PositionAlertSpecificationDataOutput(
     val type: String,
     val description: String,
     val isUserDefined: Boolean,
-    val natinfCode: Int,
+    val threatHierarchy: ThreatHierarchyDataOutput? = null,
+    val natinf: Int,
+    val threat: String,
+    val threatCharacterization: String,
     val isActivated: Boolean = true,
     val isInError: Boolean = false,
     val hasAutomaticArchiving: Boolean = false,
@@ -34,14 +38,32 @@ data class PositionAlertSpecificationDataOutput(
     val createdAtUtc: ZonedDateTime,
 ) {
     companion object {
-        fun fromPositionAlertSpecification(positionAlertSpecification: PositionAlertSpecification) =
-            PositionAlertSpecificationDataOutput(
+        fun fromPositionAlertSpecification(
+            positionAlertSpecification: PositionAlertSpecification,
+            useThreatHierarchyForForm: Boolean = true,
+        ): PositionAlertSpecificationDataOutput {
+            val threatHierarchy = if (useThreatHierarchyForForm) {
+                InfractionHierarchyBuilder.buildThreatHierarchy(
+                    items = listOf(positionAlertSpecification),
+                    threatExtractor = { it.threat },
+                    characterizationExtractor = { it.threatCharacterization },
+                    natinfCodeExtractor = { it.natinf },
+                    infractionNameExtractor = { "" },
+                ).single()
+            } else {
+                null
+            }
+
+            return PositionAlertSpecificationDataOutput(
                 id = positionAlertSpecification.id,
                 name = positionAlertSpecification.name,
                 type = positionAlertSpecification.type,
                 description = positionAlertSpecification.description,
                 isUserDefined = positionAlertSpecification.isUserDefined,
-                natinfCode = positionAlertSpecification.natinfCode,
+                threatHierarchy = threatHierarchy,
+                natinf = positionAlertSpecification.natinf,
+                threat = positionAlertSpecification.threat,
+                threatCharacterization = positionAlertSpecification.threatCharacterization,
                 isActivated = positionAlertSpecification.isActivated,
                 hasAutomaticArchiving = positionAlertSpecification.hasAutomaticArchiving,
                 isInError = positionAlertSpecification.isInError,
@@ -77,6 +99,7 @@ data class PositionAlertSpecificationDataOutput(
                 createdBy = positionAlertSpecification.createdBy!!,
                 createdAtUtc = positionAlertSpecification.createdAtUtc!!,
             )
+        }
     }
 }
 

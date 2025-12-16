@@ -24,18 +24,22 @@ def test_extract_infractions(mock_extract):
 def infractions() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "natinf_code": [20978, 22564, 30771, 30788, 40409],
-            "regulation": [None, None, None, None, "d89-273"],
+            "natinf_code": [20978, 22206, 22564, 27724, 30771, 30788, 40409],
+            "regulation": [None, "Reg pêche 1", None, "Reg pêche 5", None, None, "d89-273"],
             "infraction_category": [
                 "Environnement",
+                "Pêche",
                 "Environnement",
+                "Pêche",
                 "Environnement",
                 "Environnement",
                 "Pêche",
             ],
             "infraction": [
                 "DETENTION D'ESPECE ANIMALE NON DOMESTIQUE - ESPECE PROTEGEE",
+                "INFRACTION 1",
                 "USAGE DE FOYER LUMINEUX POUR LA PECHE SOUS-MARINE DE LOISIR",
+                "INFRACTION 2",
                 "USAGE ILLEGAL SCOOTER SOUS-MARIN",
                 "EXERCICE DE LA PECHE SOUS-MARINE DE LOISIR INTERDITE",
                 "DECLARATION ERRONEE",
@@ -48,18 +52,22 @@ def infractions() -> pd.DataFrame:
 def cleaned_infractions() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "natinf_code": [20978, 22564, 30771, 30788, 40409],
-            "regulation": [None, None, None, None, "d89-273"],
+            "natinf_code": [20978, 22206, 22564, 27724, 30771, 30788, 40409],
+            "regulation": [None, "Reg pêche 1", None, "Reg pêche 5", None, None, "d89-273"],
             "infraction_category": [
                 "Environnement",
+                "Pêche",
                 "Environnement",
+                "Pêche",
                 "Environnement",
                 "Environnement",
                 "Pêche",
             ],
             "infraction": [
                 "Detention d'espece animale non domestique - espece protegee",
+                "Infraction 1",
                 "Usage de foyer lumineux pour la peche sous-marine de loisir",
+                "Infraction 2",
                 "Usage illegal scooter sous-marin",
                 "Exercice de la peche sous-marine de loisir interdite",
                 "Declaration erronee",

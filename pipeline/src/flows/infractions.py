@@ -1,4 +1,5 @@
 from prefect import flow, get_run_logger, task
+from sqlalchemy import DDL
 
 from src.generic_tasks import extract, load
 

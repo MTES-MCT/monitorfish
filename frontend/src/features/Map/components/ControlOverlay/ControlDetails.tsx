@@ -6,20 +6,18 @@ import countries from 'i18n-iso-countries'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { margins } from './constants'
+import { getInfractionTitle } from '../../../../domain/entities/controls'
 import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
 import { missionFormActions } from '../../../Mission/components/MissionForm/slice'
-import { OverlayPosition } from '../Overlay'
 
 import type { Mission } from '../../../Mission/mission.types'
 
 type ControlDetailsProps = Readonly<{
   control: Mission.MissionActionFeatureProperties
   isSelected: boolean
-  overlayPosition: OverlayPosition
 }>
 
-export function ControlDetails({ control, isSelected, overlayPosition }: ControlDetailsProps) {
+export function ControlDetails({ control, isSelected }: ControlDetailsProps) {
   const dispatch = useMainAppDispatch()
 
   const numberOfInfractions = useMemo(() => {
@@ -105,25 +103,25 @@ export function ControlDetails({ control, isSelected, overlayPosition }: Control
                 et 1 autre
               </>
             )}
-            {!!control.infractionsNatinfs.length && (
-              <Tag accent={Accent.PRIMARY} title={control.infractionsNatinfs.join(', ')}>
-                {`${control.infractionsNatinfs.length} NATINF: ${control.infractionsNatinfs.join(', ')}`}
-              </Tag>
-            )}
+            {control.infractions.map(infraction => (
+              <StyledTag accent={Accent.PRIMARY} title={getInfractionTitle(infraction)}>
+                {`${infraction.threat} / NATINF ${infraction.natinf}`}
+              </StyledTag>
+            ))}
           </SeizureOrInfractions>
         </ZoneText>
       </Wrapper>
-      {!isSelected && (
-        <TrianglePointer>
-          {overlayPosition === OverlayPosition.BOTTOM && <BottomTriangleShadow />}
-          {overlayPosition === OverlayPosition.TOP && <TopTriangleShadow />}
-          {overlayPosition === OverlayPosition.RIGHT && <RightTriangleShadow />}
-          {overlayPosition === OverlayPosition.LEFT && <LeftTriangleShadow />}
-        </TrianglePointer>
-      )}
     </>
   )
 }
+
+const StyledTag = styled(Tag)`
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline-block;
+  max-width: 250px;
+`
 
 const CloseButton = styled(IconButton)`
   position: absolute;
@@ -141,9 +139,6 @@ const SeizureOrInfractions = styled.div`
   margin-top: 8px;
   margin-bottom: 6px;
   color: ${p => p.theme.color.slateGray};
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
 `
 
 const Title = styled.div`
@@ -157,78 +152,16 @@ const Title = styled.div`
 
 const Wrapper = styled.div`
   padding-top: 1px;
-  box-shadow: 0px 3px 6px #70778540;
+  box-shadow: 0 3px 6px #70778540;
   line-height: 20px;
   text-align: left;
-  height: 115px;
   width: 310px;
   border-radius: 1px;
+  overflow: auto;
   background-color: ${p => p.theme.color.white};
 `
 
 const ZoneText = styled.div`
-  margin: 11px 12px 0px 12px;
+  margin: 11px 12px 0 12px;
   font-size: 13px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-`
-
-const TrianglePointer = styled.div`
-  margin-left: auto;
-  margin-right: auto;
-  height: auto;
-  width: auto;
-`
-
-const BottomTriangleShadow = styled.div`
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 11px 6px 0 6px;
-  border-color: ${p => p.theme.color.white} transparent transparent transparent;
-  margin-left: ${-margins.xMiddle - 6}px;
-  margin-top: -4px;
-  clear: top;
-`
-
-const TopTriangleShadow = styled.div`
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-top: transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 11px solid ${p => p.theme.color.white};
-  border-left: 6px solid transparent;
-  margin-left: ${-margins.xMiddle - 6}px;
-  margin-top: ${margins.yBottom + 30}px;
-  clear: top;
-`
-
-const RightTriangleShadow = styled.div`
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-right: transparent;
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
-  border-left: 11px solid ${p => p.theme.color.white};
-  margin-left: ${-margins.xRight - 30}px;
-  margin-top: ${margins.yMiddle}px;
-  clear: top;
-`
-
-const LeftTriangleShadow = styled.div`
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-top: 6px solid transparent;
-  border-right: 11px solid ${p => p.theme.color.white};
-  border-bottom: 6px solid transparent;
-  border-left: transparent;
-  margin-left: -11px;
-  margin-top: ${margins.yMiddle}px;
-  clear: top;
 `

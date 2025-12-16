@@ -1,7 +1,7 @@
 import { NO_SEAFRONT_GROUP, type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import { ReportingTable } from '@features/Reporting/components/ReportingTable'
 import { Header } from '@features/SideWindow/components/Header'
-import { useMainAppDispatch } from '@hooks/useMainAppDispatch.ts'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useMemo } from 'react'
 import styled from 'styled-components'

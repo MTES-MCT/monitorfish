@@ -3,13 +3,13 @@ import { MissionAction } from '@features/Mission/missionAction.types'
 import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { FrontendError } from '@libs/FrontendError'
 import { Accent, Icon, IconButton, Tag, TagGroup, THEME, useNewWindow } from '@mtes-mct/monitor-ui'
-import { find } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
 import { ActionLabel, Head, NoteContent } from './styles'
 import { getActionTitle, getMissionActionInfractionsFromMissionActionFormValues } from './utils'
+import { getInfractionTitle } from '../../../../../domain/entities/controls'
 import { useGetNatinfsAsOptions } from '../hooks/useGetNatinfsAsOptions'
 
 import type { MissionActionFormValues } from '../types'
@@ -75,18 +75,20 @@ export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishAct
   }, [missionAction])
 
   const infractionTags = useMemo(() => {
-    const allInfractions = getMissionActionInfractionsFromMissionActionFormValues(missionAction, true)
+    const allInfractions = getMissionActionInfractionsFromMissionActionFormValues(natinfsAsOptions, missionAction, true)
     if (!allInfractions.length) {
       return []
     }
-    const nonPendingInfractions = getMissionActionInfractionsFromMissionActionFormValues(missionAction)
+    const nonPendingInfractions = getMissionActionInfractionsFromMissionActionFormValues(
+      natinfsAsOptions,
+      missionAction
+    )
     const pendingInfractions = allInfractions.filter(
       ({ infractionType }) => infractionType === MissionAction.InfractionType.PENDING
     )
     const withRecordInfractions = nonPendingInfractions.filter(
       ({ infractionType }) => infractionType === MissionAction.InfractionType.WITH_RECORD
     )
-    const infractionsNatinfs = nonPendingInfractions.map(({ natinf }) => natinf)
 
     const infractionsRecapTags = [
       ...(withRecordInfractions.length > 0 ? [`${withRecordInfractions.length} INF AVEC PV`] : []),
@@ -97,19 +99,17 @@ export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishAct
       </Tag>
     ))
 
-    const infractionsTitle = infractionsNatinfs.map(natinf => {
-      const infractionLabel = find(natinfsAsOptions, { value: natinf })?.label
+    const infractionsTags = nonPendingInfractions.map(infraction => (
+      <StyledTag
+        key={getInfractionTitle(infraction as MissionAction.Infraction)}
+        accent={Accent.PRIMARY}
+        title={getInfractionTitle(infraction as MissionAction.Infraction)}
+      >
+        {infraction.threat} / NATINF {infraction.natinf}
+      </StyledTag>
+    ))
 
-      return infractionLabel ?? natinf.toString()
-    })
-    const infractionsLabel = `${infractionsNatinfs.length} NATINF: ${infractionsNatinfs.join(', ')}`
-    const infractionsTag = (
-      <Tag key={infractionsLabel} accent={Accent.PRIMARY} title={infractionsTitle.join(', ')}>
-        {infractionsLabel}
-      </Tag>
-    )
-
-    return [...infractionsRecapTags, infractionsTag]
+    return [...infractionsRecapTags, ...infractionsTags]
   }, [missionAction, natinfsAsOptions])
 
   const redTags = useMemo(
@@ -191,4 +191,12 @@ const RightAlignedIconButton = styled(IconButton)`
 const StyledTagGroup = styled(TagGroup)`
   margin-top: 12px;
   padding-left: 32px;
+`
+
+const StyledTag = styled(Tag)`
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline-block;
+  max-width: 150px;
 `

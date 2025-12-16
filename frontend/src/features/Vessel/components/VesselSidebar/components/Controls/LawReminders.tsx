@@ -1,13 +1,15 @@
+import { Accent, Tag } from '@mtes-mct/monitor-ui'
 import { pluralize } from '@utils/pluralize'
-import { uniq } from 'lodash-es'
+import { uniqWith } from 'lodash-es'
 import styled from 'styled-components'
 
 import {
+  getInfractionTitle,
   getNumberOfInfractionsWithoutRecord,
-  getNatinfForInfractionsWithoutRecord
+  infractionWithoutRecordFilter
 } from '../../../../../../domain/entities/controls'
 
-import type { MissionAction } from '../../../../../Mission/missionAction.types'
+import type { MissionAction } from '@features/Mission/missionAction.types'
 
 type LawRemindersProps = {
   controls: MissionAction.MissionAction[]
@@ -19,12 +21,12 @@ export function LawReminders({ controls }: LawRemindersProps) {
     0
   )
 
-  const natinfs: number[] = controls.map(control => getNatinfForInfractionsWithoutRecord(control)).flat()
+  const infractions = controls.map(control => control.infractions.filter(infractionWithoutRecordFilter)).flat()
 
-  const natinfTags = uniq(natinfs).map(natinf => (
-    <InfractionTag key={natinf}>
-      <InfractionTagText>NATINF {natinf}</InfractionTagText>
-    </InfractionTag>
+  const natinfTags = uniqWith(infractions, (a, b) => a.natinf === b.natinf && a.threat === b.threat).map(infraction => (
+    <StyledTag key={infraction.natinf} accent={Accent.PRIMARY} title={getInfractionTitle(infraction)}>
+      {infraction.threat} / NATINF {infraction.natinf}
+    </StyledTag>
   ))
 
   return (
@@ -36,6 +38,7 @@ export function LawReminders({ controls }: LawRemindersProps) {
       {infractionsWithoutRecord > 0 && (
         <Row isGrey={false} isStrong>
           {infractionsWithoutRecord} {pluralize('infraction', infractionsWithoutRecord)} sans PV <GoldenPoppy />
+          <br />
           {natinfTags}
         </Row>
       )}
@@ -67,18 +70,7 @@ const GoldenPoppy = styled.span`
   display: inline-block;
 `
 
-const InfractionTag = styled.span`
-  margin: 5px 8px 0px 0px;
-  background: ${p => p.theme.color.gainsboro};
-  border-radius: 11px;
-  font-size: 11px;
-  height: 20px;
-  display: inline-block;
-  vertical-align: bottom;
-`
-
-const InfractionTagText = styled.span`
-  color: ${p => p.theme.color.gunMetal};
-  margin: 0 8px 0 8px;
-  font-weight: 500;
+const StyledTag = styled(Tag)`
+  margin-top: 8px;
+  margin-right: 8px;
 `

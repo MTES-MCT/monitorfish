@@ -12,8 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReport
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReports
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.GearControlDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.*
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions
@@ -29,7 +28,8 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
 
 @Import(SentryConfig::class)
@@ -53,9 +53,6 @@ class MissionActionsControllerITests {
 
     @MockitoBean
     private lateinit var deleteMissionAction: DeleteMissionAction
-
-    @MockitoBean
-    private lateinit var getMissionAction: GetMissionAction
 
     @MockitoBean
     private lateinit var getActivityReports: GetActivityReports
@@ -109,41 +106,6 @@ class MissionActionsControllerITests {
     }
 
     @Test
-    fun `Should get all mission actions for a mission`() {
-        // Given
-        givenSuspended { this.getMissionActions.execute(any()) }.willReturn(
-            listOf(
-                MissionAction(
-                    123,
-                    1,
-                    1,
-                    actionType = MissionActionType.SEA_CONTROL,
-                    actionDatetimeUtc = ZonedDateTime.parse("2020-10-06T16:25Z"),
-                    isDeleted = false,
-                    hasSomeGearsSeized = false,
-                    hasSomeSpeciesSeized = false,
-                    isFromPoseidon = true,
-                    flagState = CountryCode.FR,
-                    userTrigram = "LTH",
-                    completion = Completion.TO_COMPLETE,
-                ),
-            ),
-        )
-
-        // When
-        api
-            .perform(get("/bff/v1/mission_actions?missionId=123"))
-            // Then
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.length()", equalTo(1)))
-            .andExpect(jsonPath("$[0].actionDatetimeUtc", equalTo("2020-10-06T16:25:00Z")))
-
-        runBlocking {
-            Mockito.verify(getMissionActions).execute(123)
-        }
-    }
-
-    @Test
     fun `Should create a mission action with a bad facade`() {
         // Given
         val dateTime = ZonedDateTime.parse("2023-04-27T16:05:00Z")
@@ -156,6 +118,7 @@ class MissionActionsControllerITests {
                 post("/bff/v1/mission_actions")
                     .content(
                         objectMapper.writeValueAsString(
+                            // value =
                             AddMissionActionDataInput(
                                 actionDatetimeUtc = dateTime,
                                 missionId = 2,
@@ -163,14 +126,52 @@ class MissionActionsControllerITests {
                                 actionType = MissionActionType.SEA_CONTROL,
                                 infractions =
                                     listOf(
-                                        Infraction(
+                                        MissionActionInfractionDataInput(
                                             InfractionType.WITH_RECORD,
-                                            27689,
+                                            listOf(
+                                                ThreatDataInput(
+                                                    children =
+                                                        listOf(
+                                                            ThreatCharacterizationDataInput(
+                                                                children =
+                                                                    listOf(
+                                                                        NatinfDataInput(
+                                                                            label = "27689",
+                                                                            value = 27689,
+                                                                        ),
+                                                                    ),
+                                                                label = "Pêche sans autorisation par navire tiers",
+                                                                value = "Pêche sans autorisation par navire tiers",
+                                                            ),
+                                                        ),
+                                                    label = "Activités INN",
+                                                    value = "Activités INN",
+                                                ),
+                                            ),
                                             "Poids à bord MNZ supérieur de 50% au poids déclaré",
                                         ),
-                                        Infraction(
+                                        MissionActionInfractionDataInput(
                                             InfractionType.WITH_RECORD,
-                                            27689,
+                                            listOf(
+                                                ThreatDataInput(
+                                                    children =
+                                                        listOf(
+                                                            ThreatCharacterizationDataInput(
+                                                                children =
+                                                                    listOf(
+                                                                        NatinfDataInput(
+                                                                            label = "27689",
+                                                                            value = 27689,
+                                                                        ),
+                                                                    ),
+                                                                label = "Pêche sans autorisation par navire tiers",
+                                                                value = "Pêche sans autorisation par navire tiers",
+                                                            ),
+                                                        ),
+                                                    label = "Activités INN",
+                                                    value = "Activités INN",
+                                                ),
+                                            ),
                                             "Maille trop petite",
                                         ),
                                     ),
@@ -201,7 +202,6 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$.vesselId", equalTo(2)))
             .andExpect(jsonPath("$.infractions.length()", equalTo(2)))
             .andExpect(jsonPath("$.infractions[0].infractionType", equalTo("WITH_RECORD")))
-            .andExpect(jsonPath("$.infractions[0].natinf", equalTo(27689)))
             .andExpect(jsonPath("$.isAdministrativeControl", equalTo(true)))
             .andExpect(jsonPath("$.isComplianceWithWaterRegulationsControl", equalTo(true)))
             .andExpect(jsonPath("$.isSafetyEquipmentAndStandardsComplianceControl", equalTo(true)))
@@ -250,14 +250,52 @@ class MissionActionsControllerITests {
                                 actionType = MissionActionType.SEA_CONTROL,
                                 infractions =
                                     listOf(
-                                        Infraction(
+                                        MissionActionInfractionDataInput(
                                             InfractionType.WITH_RECORD,
-                                            27689,
+                                            listOf(
+                                                ThreatDataInput(
+                                                    children =
+                                                        listOf(
+                                                            ThreatCharacterizationDataInput(
+                                                                children =
+                                                                    listOf(
+                                                                        NatinfDataInput(
+                                                                            label = "27689",
+                                                                            value = 27689,
+                                                                        ),
+                                                                    ),
+                                                                label = "Pêche sans autorisation par navire tiers",
+                                                                value = "Pêche sans autorisation par navire tiers",
+                                                            ),
+                                                        ),
+                                                    label = "Activités INN",
+                                                    value = "Activités INN",
+                                                ),
+                                            ),
                                             "Poids à bord MNZ supérieur de 50% au poids déclaré",
                                         ),
-                                        Infraction(
+                                        MissionActionInfractionDataInput(
                                             InfractionType.WITH_RECORD,
-                                            27689,
+                                            listOf(
+                                                ThreatDataInput(
+                                                    children =
+                                                        listOf(
+                                                            ThreatCharacterizationDataInput(
+                                                                children =
+                                                                    listOf(
+                                                                        NatinfDataInput(
+                                                                            label = "27689",
+                                                                            value = 27689,
+                                                                        ),
+                                                                    ),
+                                                                label = "Pêche sans autorisation par navire tiers",
+                                                                value = "Pêche sans autorisation par navire tiers",
+                                                            ),
+                                                        ),
+                                                    label = "Activités INN",
+                                                    value = "Activités INN",
+                                                ),
+                                            ),
                                             "Maille trop petite",
                                         ),
                                     ),
@@ -292,7 +330,9 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$.segments[0].segment", equalTo("WWSS10")))
             .andExpect(jsonPath("$.segments[0].segmentName", equalTo("World Wide Segment")))
             .andExpect(jsonPath("$.infractions[0].infractionType", equalTo("WITH_RECORD")))
-            .andExpect(jsonPath("$.infractions[0].natinf", equalTo(27689)))
+            .andExpect(jsonPath("$.infractions[0].threats[0].label", equalTo("Famille inconnue")))
+            .andExpect(jsonPath("$.infractions[0].threats[0].children[0].label", equalTo("Type inconnu")))
+            .andExpect(jsonPath("$.infractions[0].threats[0].children[0].children[0].label", equalTo("27689")))
             .andExpect(
                 jsonPath(
                     "$.infractions[0].comments",

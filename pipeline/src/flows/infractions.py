@@ -1,4 +1,5 @@
 from prefect import flow, get_run_logger, task
+from sqlalchemy import DDL
 
 from src.generic_tasks import extract, load
 
@@ -24,6 +25,20 @@ def load_infractions(infractions):
         logger=get_run_logger(),
         how="replace",
         replace_with_truncate=True,
+        init_ddls=[
+            DDL(
+                "ALTER TABLE public.infraction_threat_characterization "
+                "DROP CONSTRAINT infraction_threat_characterization_natinf_code_fkey;"
+            ),
+        ],
+        end_ddls=[
+            DDL(
+                "ALTER TABLE public.infraction_threat_characterization "
+                "ADD CONSTRAINT infraction_threat_characterization_natinf_code_fkey "
+                "FOREIGN KEY (natinf_code) "
+                "REFERENCES public.infractions (natinf_code);"
+            ),
+        ],
     )
 
 

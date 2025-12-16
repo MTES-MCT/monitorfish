@@ -1,5 +1,5 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { customDayjs } from '@mtes-mct/monitor-ui'
+import { customDayjs, type UndefineExcept } from '@mtes-mct/monitor-ui'
 
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 
@@ -100,7 +100,7 @@ export const isControl = actionType =>
   actionType === MissionAction.MissionActionType.LAND_CONTROL ||
   actionType === MissionAction.MissionActionType.AIR_CONTROL
 
-const infractionWithoutRecordFilter = (infraction: MissionAction.Infraction) =>
+export const infractionWithoutRecordFilter = (infraction: MissionAction.Infraction) =>
   infraction.infractionType === InfractionType.WITHOUT_RECORD || infraction.infractionType === InfractionType.PENDING
 
 /**
@@ -114,13 +114,7 @@ export const getNumberOfInfractionsWithoutRecord = (control: MissionAction.Missi
   return control.infractions.filter(infractionWithoutRecordFilter).length
 }
 
-/**
- * Get the natinf of infractions without records in a control
- */
-export const getNatinfForInfractionsWithoutRecord = (control: MissionAction.MissionAction | undefined): number[] => {
-  if (!control) {
-    return []
-  }
-
-  return control.infractions.filter(infractionWithoutRecordFilter).map(infraction => infraction.natinf)
-}
+export const getInfractionTitle = (
+  infraction: UndefineExcept<MissionAction.Infraction, 'comments' | 'infractionType'>
+): string => `${infraction.threat} - ${infraction.threatCharacterization}
+${infraction.natinf} - ${infraction.natinfDescription}`

@@ -3,7 +3,6 @@ import { FrontendApiError } from '@libs/FrontendApiError'
 
 import type { MissionAction } from '@features/Mission/missionAction.types'
 
-const GET_MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les actions de la mission"
 export const MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les contrôles de ce navire"
 
 export const missionActionApi = monitorfishApi.injectEndpoints({
@@ -21,11 +20,6 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
         method: 'DELETE',
         url: `/mission_actions/${missionActionId}`
       })
-    }),
-
-    getMissionActions: builder.query<MissionAction.MissionAction[], number>({
-      query: missionId => `/mission_actions?missionId=${missionId}`,
-      transformErrorResponse: response => new FrontendApiError(GET_MISSION_ACTIONS_ERROR_MESSAGE, response)
     }),
 
     getVesselControls: builder.query<MissionAction.MissionControlsSummary, { fromDate: string; vesselId: number }>({
@@ -50,9 +44,5 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const {
-  useCreateMissionActionMutation,
-  useDeleteMissionActionMutation,
-  useGetMissionActionsQuery,
-  useUpdateMissionActionMutation
-} = missionActionApi
+export const { useCreateMissionActionMutation, useDeleteMissionActionMutation, useUpdateMissionActionMutation } =
+  missionActionApi

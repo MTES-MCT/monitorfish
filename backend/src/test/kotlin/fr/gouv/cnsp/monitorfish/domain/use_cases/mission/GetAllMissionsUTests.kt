@@ -178,9 +178,9 @@ class GetAllMissionsUTests {
                     firstChunkMissionActions.first().copy(
                         infractions =
                             listOf(
-                                Infraction().apply {
-                                    infractionType = InfractionType.WITH_RECORD
-                                },
+                                Infraction(
+                                    infractionType = InfractionType.WITH_RECORD,
+                                ),
                             ),
                     ),
                 ) + firstChunkMissionActions.subList(2, 5),
@@ -192,9 +192,9 @@ class GetAllMissionsUTests {
                     secondChunkMissionActions.last().copy(
                         infractions =
                             listOf(
-                                Infraction().apply {
-                                    infractionType = InfractionType.WITHOUT_RECORD
-                                },
+                                Infraction(
+                                    infractionType = InfractionType.WITHOUT_RECORD,
+                                ),
                             ),
                     ),
             )
@@ -267,9 +267,9 @@ class GetAllMissionsUTests {
                     firstChunkMissionActions.first().copy(
                         infractions =
                             listOf(
-                                Infraction().apply {
-                                    infractionType = InfractionType.WITH_RECORD
-                                },
+                                Infraction(
+                                    infractionType = InfractionType.WITH_RECORD,
+                                ),
                             ),
                     ),
                 ) + firstChunkMissionActions.subList(2, 5),
@@ -281,9 +281,9 @@ class GetAllMissionsUTests {
                     secondChunkMissionActions.last().copy(
                         infractions =
                             listOf(
-                                Infraction().apply {
-                                    infractionType = InfractionType.WITHOUT_RECORD
-                                },
+                                Infraction(
+                                    infractionType = InfractionType.WITHOUT_RECORD,
+                                ),
                             ),
                     ),
             )
@@ -346,9 +346,9 @@ class GetAllMissionsUTests {
                     firstChunkMissionActions.first().copy(
                         infractions =
                             listOf(
-                                Infraction().apply {
-                                    infractionType = InfractionType.WITH_RECORD
-                                },
+                                Infraction(
+                                    infractionType = InfractionType.WITH_RECORD,
+                                ),
                             ),
                     ),
                 ) + firstChunkMissionActions.subList(2, 5),
@@ -360,9 +360,9 @@ class GetAllMissionsUTests {
                     secondChunkMissionActions.last().copy(
                         infractions =
                             listOf(
-                                Infraction().apply {
-                                    infractionType = InfractionType.WITHOUT_RECORD
-                                },
+                                Infraction(
+                                    infractionType = InfractionType.WITHOUT_RECORD,
+                                ),
                             ),
                     ),
             )

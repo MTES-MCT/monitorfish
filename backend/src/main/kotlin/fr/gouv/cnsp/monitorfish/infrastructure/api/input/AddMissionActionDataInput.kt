@@ -5,6 +5,49 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import java.time.ZonedDateTime
 
+data class NatinfDataInput(
+    val label: String,
+    val value: Int,
+)
+
+data class ThreatCharacterizationDataInput(
+    val children: List<NatinfDataInput>,
+    val label: String,
+    val value: String,
+)
+
+data class ThreatDataInput(
+    val children: List<ThreatCharacterizationDataInput>,
+    val label: String,
+    val value: String,
+)
+
+data class MissionActionInfractionDataInput(
+    val infractionType: InfractionType,
+    val threats: List<ThreatDataInput>,
+    val comments: String? = null,
+) {
+    fun toInfraction(): Infraction {
+        val threat = threats.single()
+        val threatName = threat.value
+        val threatCharacterization = threat.children.single().value
+        val natinf =
+            threat.children
+                .single()
+                .children
+                .single()
+                .value
+
+        return Infraction(
+            infractionType = this.infractionType,
+            natinf = natinf,
+            threat = threatName,
+            threatCharacterization = threatCharacterization,
+            comments = this.comments,
+        )
+    }
+}
+
 data class AddMissionActionDataInput(
     var missionId: Int,
     var vesselId: Int? = null,
@@ -26,7 +69,7 @@ data class AddMissionActionDataInput(
     var speciesSizeControlled: Boolean? = null,
     var separateStowageOfPreservedSpecies: ControlCheck? = null,
     var licencesAndLogbookObservations: String? = null,
-    var infractions: List<Infraction> = listOf(),
+    var infractions: List<MissionActionInfractionDataInput> = listOf(),
     var speciesObservations: String? = null,
     var seizureAndDiversion: Boolean? = null,
     var numberOfVesselsFlownOver: Int? = null,
@@ -76,7 +119,7 @@ data class AddMissionActionDataInput(
             speciesSizeControlled = speciesSizeControlled,
             separateStowageOfPreservedSpecies = separateStowageOfPreservedSpecies,
             licencesAndLogbookObservations = licencesAndLogbookObservations,
-            infractions = infractions,
+            infractions = infractions.map { it.toInfraction() },
             speciesObservations = speciesObservations,
             seizureAndDiversion = seizureAndDiversion,
             numberOfVesselsFlownOver = numberOfVesselsFlownOver,

@@ -7,7 +7,6 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import kotlinx.coroutines.coroutineScope
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
@@ -15,9 +14,9 @@ import java.time.ZonedDateTime
 @UseCase
 class GetVesselControls(
     private val missionActionsRepository: MissionActionsRepository,
-    private val portRepository: PortRepository,
     private val gearRepository: GearRepository,
     private val missionRepository: MissionRepository,
+    private val enrichMissionAction: EnrichMissionAction,
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselControls::class.java)
 
@@ -49,14 +48,6 @@ class GetVesselControls(
                     }.map { (control, controlUnits) ->
                         control.controlUnits = controlUnits.await()
 
-                        control.portLocode?.let { port ->
-                            try {
-                                control.portName = portRepository.findByLocode(port).name
-                            } catch (e: CodeNotFoundException) {
-                                logger.warn(e.message)
-                            }
-                        }
-
                         control.gearOnboard.forEach { gearControl ->
                             gearControl.gearCode?.let { gear ->
                                 try {
@@ -68,6 +59,8 @@ class GetVesselControls(
                         }
 
                         control
+                    }.map {
+                        enrichMissionAction.execute(action = it)
                     }
 
             val numberOfDiversions =
@@ -76,11 +69,11 @@ class GetVesselControls(
                     .size
             val numberOfControlsWithSomeGearsSeized =
                 controlsWithCodeValues
-                    .filter { it.hasSomeGearsSeized == true }
+                    .filter { it.hasSomeGearsSeized }
                     .size
             val numberOfControlsWithSomeSpeciesSeized =
                 controlsWithCodeValues
-                    .filter { it.hasSomeSpeciesSeized == true }
+                    .filter { it.hasSomeSpeciesSeized }
                     .size
 
             ControlsSummary(

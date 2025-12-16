@@ -58,7 +58,7 @@ context('Controls overlay', () => {
 
     // Then
     cy.getComputedStyle('*[data-cy="mission-action-overlay"]', 2).then(styleAfter => {
-      expect(styleAfter.transform).contains('matrix(1, 0, 0, 1, 300, 397)')
+      expect(styleAfter.transform).contains('matrix(1, 0, 0, 1, 300, 413)')
     })
   })
 })

@@ -31,6 +31,13 @@ context('Vessel sidebar controls tab', () => {
     cy.get('*[data-cy="vessel-controls-summary-last-control"]')
       .first()
       .contains(`Le ${date} (BGC Lorient - DF 36 Kan An Avel), 6 infractions`)
+    cy.getDataCy('vessel-controls-summary-last-control').contains('Famille inconnue / NATINF 23581')
+    cy.getDataCy('vessel-controls-summary-last-control').contains('Famille inconnue / NATINF 27724')
+    cy.getDataCy('vessel-controls-summary-last-control').contains('Mesures techniques et de conservation / NATINF 28346')
+    cy.getDataCy('vessel-controls-summary-last-control').contains('Famille inconnue / NATINF 23588')
+    cy.getDataCy('vessel-controls-summary-last-control').contains('Famille inconnue / NATINF 23584')
+    cy.getDataCy('vessel-controls-summary-last-control').contains('Obligation de débarquement / NATINF 27689')
+
     cy.get('*[data-cy="vessel-controls-summary-last-control"]').eq(1).contains('Dernier contrôle à quai')
     cy.get('*[data-cy="vessel-controls-summary-last-control"]')
       .eq(1)
@@ -38,6 +45,9 @@ context('Vessel sidebar controls tab', () => {
 
     cy.get('*[data-cy="vessel-controls-summary-law-reminders"]').first().contains('Rappels à la loi')
     cy.get('*[data-cy="vessel-controls-summary-law-reminders"]').first().contains('4 infractions sans PV')
+    cy.getDataCy('vessel-controls-summary-law-reminders').contains('Famille inconnue / NATINF 27724')
+    cy.getDataCy('vessel-controls-summary-law-reminders').contains('Mesures techniques et de conservation / NATINF 28346')
+    cy.getDataCy('vessel-controls-summary-law-reminders').contains('Famille inconnue / NATINF 23584')
 
     // Years
     cy.get(`[data-cy="vessel-control-years"] > li[title="Année ${currentYear}"]`).contains(
@@ -75,41 +85,44 @@ context('Vessel sidebar controls tab', () => {
     cy.get('*[data-cy="vessel-control-title"]').first().contains(`CONTRÔLE EN MER DU ${date}`)
 
     // The infractions label from natinfs should be rendered
-    cy.get('[title="23584 - Défaut AIS"]').should('exist')
+    cy.get('[title="Mesures techniques et de conservation - Espèces en sous taille / sous poids\n' +
+      '28346 - Détention de produits de la pêche maritime et de l\'aquaculture marine de taille, calibre ou poids prohibe"]').should('exist')
+    cy.get('[title="Famille inconnue - Type inconnu\n' +
+      '23584 - Défaut AIS"]').should('exist')
 
     cy.get('*[data-cy="vessel-control"]')
       .first()
       .should('contain', 'Appréhension espèce')
 
-      .and('contain', 'Infraction 1')
+      .and('contain', 'Infraction 1 : Type inconnu')
       .and('contain', 'Avec PV')
-      .and('contain', 'NATINF 23581')
+      .and('contain', 'Famille inconnue / NATINF 23581')
       .and('contain', 'Maille trop petite')
 
-      .and('contain', 'Infraction 2')
+      .and('contain', 'Infraction 2 : Type inconnu')
       .and('contain', 'Engin non conforme')
       .and('contain', 'Sans PV')
-      .and('contain', 'NATINF 27724')
+      .and('contain', 'Famille inconnue / NATINF 27724')
 
-      .and('contain', 'Infraction 3')
+      .and('contain', 'Infraction 3 : Espèces en sous taille / sous poids')
       .and('contain', 'Sous taille de 8cm')
       .and('contain', 'Sans PV')
-      .and('contain', 'NATINF 28346')
+      .and('contain', 'Mesures techniques et de conservation / NATINF 28346')
 
-      .and('contain', 'Infraction 4')
+      .and('contain', 'Infraction 4 : Type inconnu')
       .and('contain', 'Poids à bord MNZ supérieur de 50% au poids déclaré')
       .and('contain', 'Avec PV')
-      .and('contain', 'NATINF 27689')
+      .and('contain', 'Famille inconnue / NATINF 23588')
 
-      .and('contain', 'Infraction 5')
+      .and('contain', 'Infraction 5 : Type inconnu')
       .and('contain', 'Chalutage répété dans les 3 milles sur Piste VMS - confirmé de visu')
       .and('contain', 'Sans PV')
-      .and('contain', 'NATINF 23588')
+      .and('contain', 'Famille inconnue / NATINF 23584')
 
-      .and('contain', 'Infraction 6')
+      .and('contain', 'Infraction 6 : BMS (JPE)')
       .and('contain', "Absence d'équipement AIS à bord")
       .and('contain', 'Sans PV')
-      .and('contain', 'NATINF 23584')
+      .and('contain', 'Obligation de débarquement / NATINF 27689')
 
       .and('contain', 'Chaluts de fond à panneaux (OTB) – non contrôlé')
       .and('contain', 'Maillage déclaré 60 mm, non mesuré')

@@ -69,7 +69,12 @@ class MissionController(
                 infractionsFilter = infractionsFilter,
                 isUnderJdp = isUnderJdp,
             )
-        return missionsAndActions.map { MissionWithActionsDataOutput.fromMissionAndActions(it) }
+        return missionsAndActions.map {
+            MissionWithActionsDataOutput.fromMissionAndActions(
+                missionAndActions = it,
+                useThreatHierarchyForForm = false,
+            )
+        }
     }
 
     @GetMapping("/{id}")
@@ -81,6 +86,9 @@ class MissionController(
     ): MissionWithActionsDataOutput =
         runBlocking {
             val missionAndActions = getMission.execute(id)
-            MissionWithActionsDataOutput.fromMissionAndActions(missionAndActions)
+            MissionWithActionsDataOutput.fromMissionAndActions(
+                missionAndActions,
+                useThreatHierarchyForForm = true,
+            )
         }
 }

@@ -1,7 +1,7 @@
+import { getInfractionsFromAPI } from '@features/Infraction/apis'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
 
-import { getInfractionsFromAPI } from '../../../api/infraction'
 import { setInfractions } from '../../shared_slices/Infraction'
 
 export const getInfractions = () => dispatch => {

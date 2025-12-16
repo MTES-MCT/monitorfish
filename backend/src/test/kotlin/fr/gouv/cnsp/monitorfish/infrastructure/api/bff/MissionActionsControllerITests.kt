@@ -129,7 +129,7 @@ class MissionActionsControllerITests {
                                         MissionActionInfractionDataInput(
                                             InfractionType.WITH_RECORD,
                                             listOf(
-                                                ThreatDataInput(
+                                                ThreatHierarchyDataInput(
                                                     children =
                                                         listOf(
                                                             ThreatCharacterizationDataInput(
@@ -153,7 +153,7 @@ class MissionActionsControllerITests {
                                         MissionActionInfractionDataInput(
                                             InfractionType.WITH_RECORD,
                                             listOf(
-                                                ThreatDataInput(
+                                                ThreatHierarchyDataInput(
                                                     children =
                                                         listOf(
                                                             ThreatCharacterizationDataInput(
@@ -253,7 +253,7 @@ class MissionActionsControllerITests {
                                         MissionActionInfractionDataInput(
                                             InfractionType.WITH_RECORD,
                                             listOf(
-                                                ThreatDataInput(
+                                                ThreatHierarchyDataInput(
                                                     children =
                                                         listOf(
                                                             ThreatCharacterizationDataInput(
@@ -277,7 +277,7 @@ class MissionActionsControllerITests {
                                         MissionActionInfractionDataInput(
                                             InfractionType.WITH_RECORD,
                                             listOf(
-                                                ThreatDataInput(
+                                                ThreatHierarchyDataInput(
                                                     children =
                                                         listOf(
                                                             ThreatCharacterizationDataInput(

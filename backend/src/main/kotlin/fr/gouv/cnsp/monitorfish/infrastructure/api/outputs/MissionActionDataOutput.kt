@@ -10,7 +10,7 @@ import java.time.ZonedDateTime
 data class MissionActionInfractionDataOutput(
     val infractionType: InfractionType,
     // This field is used to control the Threat CheckTreePicker
-    val threats: List<ThreatDataOutput>? = null,
+    val threats: List<ThreatHierarchyDataOutput>? = null,
     val natinf: Int? = null,
     val natinfDescription: String? = null,
     val threat: String? = null,

@@ -18,7 +18,7 @@ type InfractionProps = Readonly<{
 }>
 export function Infraction({ data, hasMultipleInfraction, index, onDelete, onEdit }: InfractionProps) {
   const natinfsAsOptions = useGetNatinfsAsOptions()
-  const natinfAndThreatCharacterization = getFlatInfractionFromThreatsHierarchy(natinfsAsOptions, data)
+  const natinfAndThreatCharacterization = getFlatInfractionFromThreatsHierarchy(data, natinfsAsOptions)
 
   return (
     <>

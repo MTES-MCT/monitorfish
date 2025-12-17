@@ -168,6 +168,15 @@ default_risk_factors[
 default_risk_factors["recent_segments_risk_factor"] = default_risk_factors[
     "risk_factor"
 ]
+default_risk_factors["recent_segments_infringement_risk_level"] = default_risk_factors[
+    "infringement_risk_level"
+]
+default_risk_factors["recent_segments_probability_risk_factor"] = default_risk_factors[
+    "probability_risk_factor"
+]
+default_risk_factors["recent_segments_risk_factor"] = default_risk_factors[
+    "risk_factor"
+]
 
 default_risk_factors["usual_segments_control_priority_level"] = default_risk_factors[
     "control_priority_level"
@@ -179,6 +188,14 @@ default_risk_factors["usual_segments_detectability_risk_factor"] = default_risk_
     "detectability_risk_factor"
 ]
 default_risk_factors["usual_segments_risk_factor"] = default_risk_factors["risk_factor"]
+default_risk_factors["usual_segments_infringement_risk_level"] = default_risk_factors[
+    "infringement_risk_level"
+]
+default_risk_factors["usual_segments_probability_risk_factor"] = default_risk_factors[
+    "probability_risk_factor"
+]
+default_risk_factors["usual_segments_risk_factor"] = default_risk_factors["risk_factor"]
+
 
 # BEACONS MALFUNCTIONS CONFIGURATION
 BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA = 4

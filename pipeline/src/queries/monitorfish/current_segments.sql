@@ -13,5 +13,7 @@ SELECT
     impact_risk_factor,
     control_priority_level,
     segment_highest_impact,
-    segment_highest_priority
+    segment_highest_priority,
+    infringement_risk_level,
+    segment_highest_infringement_risk
 FROM public.current_segments

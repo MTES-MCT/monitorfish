@@ -44,10 +44,10 @@ def extract_vessels_with_current_vms_fishing_activity() -> set:
 
 
 @task
-def compute_profile_segments_impact_and_priority(
+def compute_profile_segments_risk_levels(
     profile_segments: pd.DataFrame,
     segments: pd.DataFrame,
-    control_priorities: pd.DataFrame,
+    control_priorities_and_infringement_risk_levels: pd.DataFrame,
     profile_type: VesselProfileType,
 ) -> pd.DataFrame:
     segments_column = f"{profile_type.risk_factors_prefix}segments"
@@ -60,8 +60,14 @@ def compute_profile_segments_impact_and_priority(
     segment_highest_priority_column = (
         f"{profile_type.risk_factors_prefix}segment_highest_priority"
     )
+    segment_highest_infringement_risk_column = (
+        f"{profile_type.risk_factors_prefix}segment_highest_infringement_risk"
+    )
     control_priority_level_column = (
         f"{profile_type.risk_factors_prefix}segments_control_priority_level"
+    )
+    infringement_risk_level_column = (
+        f"{profile_type.risk_factors_prefix}segments_infringement_risk_level"
     )
     gear_onboard_column = f"{profile_type.risk_factors_prefix}gear_onboard"
 
@@ -95,7 +101,9 @@ def compute_profile_segments_impact_and_priority(
 
     profile_segments_control_priorities = (
         pd.merge(
-            unnested_profile_segments, control_priorities, on=["segment", "facade"]
+            unnested_profile_segments,
+            control_priorities_and_infringement_risk_levels,
+            on=["segment", "facade"],
         )
         .sort_values("control_priority_level", ascending=False)
         .groupby("cfr")[["cfr", "segment", "control_priority_level"]]
@@ -109,11 +117,30 @@ def compute_profile_segments_impact_and_priority(
         )
     )
 
+    profile_segments_infringement_risk_level = (
+        pd.merge(
+            unnested_profile_segments,
+            control_priorities_and_infringement_risk_levels,
+            on=["segment", "facade"],
+        )
+        .sort_values("infringement_risk_level", ascending=False)
+        .groupby("cfr")[["cfr", "segment", "infringement_risk_level"]]
+        .head(1)
+        .set_index("cfr")
+        .rename(
+            columns={
+                "segment": segment_highest_infringement_risk_column,
+                "infringement_risk_level": infringement_risk_level_column,
+            }
+        )
+    )
+
     res = (
         profile_segments.rename(columns={"segments": segments_column})
         .set_index("cfr")
         .join(profile_segments_impact)
         .join(profile_segments_control_priorities)
+        .join(profile_segments_infringement_risk_level)
         .rename(columns={"gear_onboard": gear_onboard_column})
         .reset_index()
     )
@@ -130,6 +157,8 @@ def compute_profile_segments_impact_and_priority(
             impact_risk_factor_column,
             segment_highest_priority_column,
             control_priority_level_column,
+            segment_highest_infringement_risk_column,
+            infringement_risk_level_column,
         ]
     ]
     res[segments_column] = res[segments_column].map(lambda d: list(d.keys()))
@@ -174,18 +203,24 @@ def merge(
             cs.control_priority_level,
             cs.segment_highest_impact,
             cs.segment_highest_priority,
+            cs.infringement_risk_level,
+            cs.segment_highest_infringement_risk,
             rs.recent_gear_onboard,
             rs.recent_segments,
             rs.recent_segment_highest_impact,
             rs.recent_segments_impact_risk_factor,
             rs.recent_segment_highest_priority,
             rs.recent_segments_control_priority_level,
+            rs.recent_segments_infringement_risk_level,
+            rs.recent_segment_highest_infringement_risk,
             us.usual_gear_onboard,
             us.usual_segments,
             us.usual_segment_highest_impact,
             us.usual_segments_impact_risk_factor,
             us.usual_segment_highest_priority,
-            us.usual_segments_control_priority_level
+            us.usual_segments_control_priority_level,
+            us.usual_segments_infringement_risk_level,
+            us.usual_segment_highest_infringement_risk
         FROM current_segments cs
         FULL OUTER JOIN usual_segments us
         ON us.cfr = cs.cfr
@@ -235,9 +270,18 @@ def compute_risk_factors(
         pd.Series([[]] * len(risk_factors)),
     )
 
-    risk_factors["probability_risk_factor"] = risk_factors[
-        "infraction_rate_risk_factor"
-    ]
+    risk_factors["probability_risk_factor"] = (
+        risk_factors["infraction_rate_risk_factor"]
+        * risk_factors["infringement_risk_level"]
+    ) ** 0.5
+    risk_factors["recent_segments_probability_risk_factor"] = (
+        risk_factors["infraction_rate_risk_factor"]
+        * risk_factors["recent_segments_infringement_risk_level"]
+    ) ** 0.5
+    risk_factors["usual_segments_probability_risk_factor"] = (
+        risk_factors["infraction_rate_risk_factor"]
+        * risk_factors["usual_segments_infringement_risk_level"]
+    ) ** 0.5
 
     risk_factors["detectability_risk_factor"] = (
         risk_factors["control_rate_risk_factor"]
@@ -269,7 +313,7 @@ def compute_risk_factors(
             ** risk_factor_coefficients["impact"]
         )
         * (
-            risk_factors["probability_risk_factor"]
+            risk_factors["recent_segments_probability_risk_factor"]
             ** risk_factor_coefficients["probability"]
         )
         * (
@@ -283,7 +327,7 @@ def compute_risk_factors(
             ** risk_factor_coefficients["impact"]
         )
         * (
-            risk_factors["probability_risk_factor"]
+            risk_factors["usual_segments_probability_risk_factor"]
             ** risk_factor_coefficients["probability"]
         )
         * (
@@ -341,7 +385,7 @@ def load_risk_factors(risk_factors: pd.DataFrame):
 def risk_factors_flow():
     # Extract
     current_year = get_current_year()
-    control_priorities = (
+    control_priorities_and_infringement_risk_levels = (
         extract_control_priorities_and_infringement_risk_levels.submit()
     )
     segments = extract_segments_of_year.submit(current_year)
@@ -354,11 +398,17 @@ def risk_factors_flow():
     )
 
     # Transform
-    recent_segments = compute_profile_segments_impact_and_priority(
-        recent_segments, segments, control_priorities, VesselProfileType.RECENT
+    recent_segments = compute_profile_segments_risk_levels(
+        recent_segments,
+        segments,
+        control_priorities_and_infringement_risk_levels,
+        VesselProfileType.RECENT,
     )
-    usual_segments = compute_profile_segments_impact_and_priority(
-        usual_segments, segments, control_priorities, VesselProfileType.USUAL
+    usual_segments = compute_profile_segments_risk_levels(
+        usual_segments,
+        segments,
+        control_priorities_and_infringement_risk_levels,
+        VesselProfileType.USUAL,
     )
     merged_segments = merge(current_segments, recent_segments, usual_segments)
     risk_factors = compute_risk_factors(

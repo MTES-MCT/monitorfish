@@ -24,7 +24,7 @@ export function Infraction({ data, hasMultipleInfraction, index, onDelete, onEdi
     <>
       <Legend>
         Infraction {hasMultipleInfraction && index + 1} -{' '}
-        <ThreatCharacterization>{natinfAndThreatCharacterization.threatCharacterization}</ThreatCharacterization>
+        <ThreatCharacterization>{natinfAndThreatCharacterization.threat}</ThreatCharacterization>
       </Legend>
 
       <InnerWrapper>
@@ -33,7 +33,8 @@ export function Infraction({ data, hasMultipleInfraction, index, onDelete, onEdi
             <Tag accent={Accent.PRIMARY}>{MissionAction.INFRACTION_TYPE_LABEL[data.infractionType]}</Tag>
             {data.infractionType !== MissionAction.InfractionType.PENDING && (
               <StyledTag accent={Accent.PRIMARY} title={getInfractionTitle(natinfAndThreatCharacterization)}>
-                {natinfAndThreatCharacterization.threat} / NATINF {natinfAndThreatCharacterization.natinf}
+                {natinfAndThreatCharacterization.threatCharacterization} / NATINF{' '}
+                {natinfAndThreatCharacterization.natinf}
               </StyledTag>
             )}
           </TagGroup>

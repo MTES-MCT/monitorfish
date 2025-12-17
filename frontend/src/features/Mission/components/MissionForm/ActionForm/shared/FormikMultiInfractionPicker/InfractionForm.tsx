@@ -34,6 +34,7 @@ export function InfractionForm({ initialValues, onCancel, onSubmit }: Infraction
           />
           <HackedCheckTreePicker
             isErrorMessageHidden
+            isRequired
             isSelect
             label="Type d’infraction et NATINF"
             name="threats"

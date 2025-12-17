@@ -1,8 +1,8 @@
-import { z } from 'zod/index'
+import { z } from 'zod'
 
 export const NatinfCodeSchema = z.strictObject({
   label: z.string(),
-  value: z.string()
+  value: z.union([z.string(), z.number()])
 })
 
 export const ThreatCharacterizationSchema = z.strictObject({

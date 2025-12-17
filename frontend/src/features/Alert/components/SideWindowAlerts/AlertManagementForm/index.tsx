@@ -1,4 +1,4 @@
-import { ConfirmationModal } from '@components/ConfirmationModal'
+import {ConfirmationModal} from '@components/ConfirmationModal'
 import {
   CREATE_ALERT_ERROR_MESSAGE,
   DELETE_ALERT_ERROR_MESSAGE,
@@ -6,46 +6,58 @@ import {
   useCreateAlertMutation,
   useUpdateAlertMutation
 } from '@features/Alert/apis'
-import { Criteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants'
-import { DistrictCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/DistrictCriteria'
-import { GearOnBoardCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/GearOnBoardCriteria'
-import { NationalityCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/NationalityCriteria'
-import { ProducerOrganizationCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/ProducerOrganizationCriteria'
-import { VesselCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/VesselCriteria'
-import { ZoneCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/ZoneCriteria'
-import { FormikValidityPeriod } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/FormikValidityPeriod'
-import { FISHING_POSITION_ONLY_AS_OPTIONS } from '@features/Alert/components/SideWindowAlerts/constants'
-import { alertActions } from '@features/Alert/components/SideWindowAlerts/slice'
-import { EditedAlertSpecificationSchema } from '@features/Alert/schemas/EditedAlertSpecificationSchema'
-import { deleteAlert } from '@features/Alert/useCases/deleteAlert'
-import { FormHead } from '@features/Mission/components/MissionForm/shared/FormHead'
-import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
-import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
-import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import {Criteria} from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants'
+import {
+  DistrictCriteria
+} from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/DistrictCriteria'
+import {
+  GearOnBoardCriteria
+} from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/GearOnBoardCriteria'
+import {
+  NationalityCriteria
+} from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/NationalityCriteria'
+import {
+  ProducerOrganizationCriteria
+} from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/ProducerOrganizationCriteria'
+import {VesselCriteria} from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/VesselCriteria'
+import {ZoneCriteria} from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/ZoneCriteria'
+import {
+  FormikValidityPeriod
+} from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/FormikValidityPeriod'
+import {FISHING_POSITION_ONLY_AS_OPTIONS} from '@features/Alert/components/SideWindowAlerts/constants'
+import {alertActions} from '@features/Alert/components/SideWindowAlerts/slice'
+import {EditedAlertSpecificationSchema} from '@features/Alert/schemas/EditedAlertSpecificationSchema'
+import {deleteAlert} from '@features/Alert/useCases/deleteAlert'
+import {FormHead} from '@features/Mission/components/MissionForm/shared/FormHead'
+import {addSideWindowBanner} from '@features/SideWindow/useCases/addSideWindowBanner'
+import {useGetSpeciesAsOptions} from '@hooks/useGetSpeciesAsOptions'
+import {useMainAppDispatch} from '@hooks/useMainAppDispatch'
+import {useMainAppSelector} from '@hooks/useMainAppSelector'
 import {
   Accent,
   Button,
+  CheckTreePicker,
   customDayjs,
   Dropdown,
   FormikMultiRadio,
-  FormikSelect,
   FormikTextarea,
   FormikTextInput,
   Icon,
   Level,
   THEME
 } from '@mtes-mct/monitor-ui'
-import { assertNotNullish } from '@utils/assertNotNullish'
-import { toFormikValidationSchema } from '@utils/toFormikValidationSchema'
-import { Form, Formik } from 'formik'
-import { sortBy } from 'lodash-es'
-import { useMemo, useState } from 'react'
+import {assertNotNullish} from '@utils/assertNotNullish'
+import {toFormikValidationSchema} from '@utils/toFormikValidationSchema'
+import {Form, Formik} from 'formik'
+import {useState} from 'react'
 import styled from 'styled-components'
 
-import { SpeciesOnBoardCriteria } from './Criteria/SpeciesOnBoardCriteria'
+import {SpeciesOnBoardCriteria} from './Criteria/SpeciesOnBoardCriteria'
 
-import type { AlertSpecification } from '@features/Alert/types'
+import type {AlertSpecification} from '@features/Alert/types'
+import {
+  useGetThreatCharacterizationAsTreeOptions
+} from "@features/Infraction/hooks/useGetThreatCharacterizationAsTreeOptions";
 
 export function AlertManagementForm() {
   const dispatch = useMainAppDispatch()
@@ -53,22 +65,14 @@ export function AlertManagementForm() {
   const [createAlert, { isLoading: isCreatingAlert }] = useCreateAlertMutation()
   const [updateAlert, { isLoading: isUpdatingAlert }] = useUpdateAlertMutation()
   const editedAlertSpecification = useMainAppSelector(state => state.alert.editedAlertSpecification)
-  const infractions = useMainAppSelector(state => state.infraction.infractions)
   const [selectedCriterias, setSelectedCriterias] = useState<Criteria[]>([])
   const [isDraftCancellationConfirmationDialogOpen, setIsDraftCancellationConfirmationDialogOpen] = useState(false)
   const [isDeleteConfirmationDialogOpen, setIsDeleteConfirmationDialogOpen] = useState(false)
   assertNotNullish(editedAlertSpecification)
-
-  const infractionsAsOptions = useMemo(
-    () =>
-      sortBy(
-        infractions.map(infraction => ({
-          label: `${infraction.natinfCode} - ${infraction.infraction}`,
-          value: infraction.natinfCode
-        })),
-        ['label']
-      ),
-    [infractions]
+  const threatCharacterizationOptions = useGetThreatCharacterizationAsTreeOptions(
+    editedAlertSpecification?.threatHierarchy
+      ? [editedAlertSpecification?.threatHierarchy]
+      : undefined
   )
 
   const askForDraftCancellation = (isDirty: boolean) => {
@@ -163,7 +167,7 @@ export function AlertManagementForm() {
         onSubmit={onSave}
         validate={toFormikValidationSchema(EditedAlertSpecificationSchema)}
       >
-        {({ dirty, values }) => {
+        {({ dirty, values, setFieldValue, errors }) => {
           const hasZoneCriteria =
             !!values.regulatoryAreas.length ||
             !!values.administrativeAreas.length ||
@@ -203,12 +207,22 @@ export function AlertManagementForm() {
                   </HeadDescription>
                   <FormikTextInput isRequired label="Nom" name="name" />
                   <FormikTextarea isRequired label="Description" name="description" />
-                  <FormikSelect
+                  <CheckTreePicker
+                    isSelect
                     isRequired
-                    label="NATINF associé"
-                    name="natinfCode"
-                    options={infractionsAsOptions}
+                    error={errors.threatHierarchy}
+                    label="Type d’infraction et NATINF"
+                    name="threatHierarchy"
+                    onChange={nextThreats => {
+                      if (!!nextThreats && nextThreats.length > 0) {
+                        setFieldValue('threatHierarchy', nextThreats[0])
+                      } else {
+                        setFieldValue('threatHierarchy', undefined)
+                      }
+                    }}
+                    options={threatCharacterizationOptions}
                     searchable
+                    value={values.threatHierarchy ? [values.threatHierarchy] : undefined}
                   />
                   <StyledFormikMultiRadio
                     isInline
@@ -529,6 +543,7 @@ export const Body = styled.div`
   height: 100%;
   min-height: 0;
 `
+
 const Panel = styled.div<{
   $isRight: boolean
 }>`

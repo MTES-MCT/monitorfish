@@ -61,7 +61,7 @@ context('Side Window > Alert Management', () => {
      */
     cy.fill('Nom', 'Test Alert Cypress')
     cy.fill('Description', "Description de test pour l'alerte Cypress")
-    cy.fill('NATINF associé', '2608')
+    cy.fill('Type d’infraction et NATINF', ['2608'])
     cy.fill('Période de validité', 'Sur une période donnée')
     cy.fill('Plage de temps sur mesure', [
       [2024, 1, 15],
@@ -156,7 +156,7 @@ context('Side Window > Alert Management', () => {
     cy.wait('@createAlert').then(interception => {
       expect(interception.request.body.name).to.equal('Test Alert Cypress')
       expect(interception.request.body.description).to.equal("Description de test pour l'alerte Cypress")
-      expect(interception.request.body.natinfCode).to.equal(2608)
+      expect(interception.request.body.threatHierarchy).to.equal(2608)
       expect(interception.request.body.validityStartDatetimeUtc).to.equal('2024-01-15T00:00:00.000Z')
       expect(interception.request.body.validityEndDatetimeUtc).to.equal('2024-01-30T23:59:59.000Z')
       expect(interception.request.body.repeatEachYear).to.be.true

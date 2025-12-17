@@ -7,7 +7,6 @@ data class PositionAlertSpecificationDataInput(
     val name: String,
     val type: String,
     val description: String,
-    val natinfCode: Int,
     val threatHierarchy: ThreatHierarchyDataInput,
     val validityStartDatetimeUtc: ZonedDateTime? = null,
     val validityEndDatetimeUtc: ZonedDateTime? = null,

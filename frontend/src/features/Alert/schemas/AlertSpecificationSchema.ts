@@ -3,6 +3,7 @@ import { VesselIdentitySchema } from '@features/Vessel/schemas/VesselIdentitySch
 import { z } from 'zod'
 
 import { stringOrUndefined, numberOrUndefined } from '../../../types'
+import {ThreatSchema} from "@features/Infraction/schemas/Threat";
 
 export const GearSpecificationSchema = z.strictObject({
   gear: z.string(),
@@ -42,7 +43,12 @@ export const AlertSpecificationSchema = z.strictObject({
   isUserDefined: z.boolean(),
   minDepth: numberOrUndefined,
   name: z.string({ message: 'Champ Nom requis' }).min(1, 'Champ Nom requis'),
-  natinfCode: z.number({ message: 'Champ Natinf requis' }).gte(1, 'Champ Natinf requis'),
+  natinf: z.number(),
+  threat: z.string(),
+  threatCharacterization: z.string(),
+  threatHierarchy: ThreatSchema.or(z.undefined()).refine((val) => val !== undefined, {
+    message: 'Champ Natinf requis'
+  }),
   onlyFishingPositions: z.boolean(),
   producerOrganizations: z.array(z.string()),
   regulatoryAreas: z.array(RegulatoryAreaSpecificationSchema),

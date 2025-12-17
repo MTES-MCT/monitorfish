@@ -4,6 +4,7 @@ export type ControlObjective = {
   controlPriorityLevel: Float<number>
   facade: string
   id: number
+  infringementRiskLevel: Float<number>
   segment: string
   targetNumberOfControlsAtPort: number
   targetNumberOfControlsAtSea: number
@@ -12,6 +13,7 @@ export type ControlObjective = {
 
 export type UpdateControlObjectivePayload = {
   controlPriorityLevel: Float<number> | null
+  infringementRiskLevel: Float<number> | null
   targetNumberOfControlsAtPort: Integer<number> | null
   targetNumberOfControlsAtSea: Integer<number> | null
 }

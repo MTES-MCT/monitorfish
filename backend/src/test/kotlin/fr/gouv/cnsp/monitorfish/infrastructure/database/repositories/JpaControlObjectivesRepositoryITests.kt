@@ -68,6 +68,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
             targetNumberOfControlsAtPort = 153,
             targetNumberOfControlsAtSea = null,
             controlPriorityLevel = null,
+            infringementRiskLevel = null,
         )
 
         // Then
@@ -88,6 +89,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
             targetNumberOfControlsAtPort = null,
             targetNumberOfControlsAtSea = 10,
             controlPriorityLevel = null,
+            infringementRiskLevel = null,
         )
 
         // Then
@@ -108,11 +110,33 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
             targetNumberOfControlsAtPort = null,
             targetNumberOfControlsAtSea = null,
             controlPriorityLevel = 2.0,
+            infringementRiskLevel = null,
         )
 
         // Then
         val updatedControlObjective = jpaControlObjectivesRepository.findAllByYear(lastYear).find { it.id == 9 }
         assertThat(updatedControlObjective?.controlPriorityLevel).isEqualTo(2.0)
+    }
+
+    @Test
+    @Transactional
+    fun `update Should update infringementRiskLevel When not null`() {
+        // Given
+        val controlObjectives = jpaControlObjectivesRepository.findAllByYear(lastYear)
+
+        // When
+        assertThat(controlObjectives.find { it.id == 9 }?.infringementRiskLevel).isEqualTo(4.0)
+        jpaControlObjectivesRepository.update(
+            id = 9,
+            targetNumberOfControlsAtPort = null,
+            targetNumberOfControlsAtSea = null,
+            controlPriorityLevel = null,
+            infringementRiskLevel = 3.0,
+        )
+
+        // Then
+        val updatedControlObjective = jpaControlObjectivesRepository.findAllByYear(lastYear).find { it.id == 9 }
+        assertThat(updatedControlObjective?.infringementRiskLevel).isEqualTo(3.0)
     }
 
     @Test
@@ -131,13 +155,18 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
                 targetNumberOfControlsAtSea = 25,
                 targetNumberOfControlsAtPort = 64,
                 controlPriorityLevel = 2.0,
+                infringementRiskLevel = 3.0
             ),
         )
 
         // Then
         val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(lastYear)
         assertThat(updatedControlObjectives).hasSize(63)
+        assertThat(updatedControlObjectives.filter { it.segment=="SEGMENT" }).hasSize(1)
         assertThat(updatedControlObjectives.find { it.segment == "SEGMENT" }?.targetNumberOfControlsAtSea).isEqualTo(25)
+        assertThat(updatedControlObjectives.find { it.segment == "SEGMENT" }?.targetNumberOfControlsAtPort).isEqualTo(64)
+        assertThat(updatedControlObjectives.find { it.segment == "SEGMENT" }?.controlPriorityLevel).isEqualTo(2.0)
+        assertThat(updatedControlObjectives.find { it.segment == "SEGMENT" }?.infringementRiskLevel).isEqualTo(3.0)
     }
 
     @Test
@@ -154,7 +183,9 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         assertThat(jpaControlObjectivesRepository.findAllByYear(lastYear)).hasSize(62)
         val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(nextYear)
         assertThat(updatedControlObjectives).hasSize(62)
-        assertThat(updatedControlObjectives.first().id).isEqualTo(144)
+        assertThat(updatedControlObjectives.sortedBy{ it.id }.first().id).isEqualTo(144)
+        assertThat(updatedControlObjectives.find{ it.segment == "SWW01/08" }?.targetNumberOfControlsAtSea).isEqualTo(139)
+        assertThat(updatedControlObjectives.find{ it.segment == "MED05" }?.infringementRiskLevel).isEqualTo(4.0)
         assertThat(updatedControlObjectives.first().year).isEqualTo(nextYear)
     }
 }

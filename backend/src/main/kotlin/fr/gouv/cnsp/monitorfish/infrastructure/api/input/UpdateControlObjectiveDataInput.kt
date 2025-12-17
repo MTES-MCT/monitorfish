@@ -4,4 +4,5 @@ data class UpdateControlObjectiveDataInput(
     var targetNumberOfControlsAtSea: Int? = null,
     var targetNumberOfControlsAtPort: Int? = null,
     var controlPriorityLevel: Double? = null,
+    var infringementRiskLevel: Double? = null,
 )

@@ -24,7 +24,9 @@ data class ControlObjectivesEntity(
     val targetNumberOfControlsAtPort: Int,
     @Column(name = "control_priority_level")
     val controlPriorityLevel: Double,
-) {
+    @Column(name = "infringement_risk_level")
+    val infringementRiskLevel: Double,
+    ) {
     fun toControlObjective() =
         ControlObjective(
             id = id,
@@ -34,6 +36,7 @@ data class ControlObjectivesEntity(
             targetNumberOfControlsAtSea = targetNumberOfControlsAtSea,
             targetNumberOfControlsAtPort = targetNumberOfControlsAtPort,
             controlPriorityLevel = controlPriorityLevel,
+            infringementRiskLevel = infringementRiskLevel,
         )
 
     companion object {
@@ -45,6 +48,7 @@ data class ControlObjectivesEntity(
                 targetNumberOfControlsAtSea = controlObjective.targetNumberOfControlsAtSea,
                 targetNumberOfControlsAtPort = controlObjective.targetNumberOfControlsAtPort,
                 controlPriorityLevel = controlObjective.controlPriorityLevel,
+                infringementRiskLevel = controlObjective.infringementRiskLevel,
             )
     }
 }

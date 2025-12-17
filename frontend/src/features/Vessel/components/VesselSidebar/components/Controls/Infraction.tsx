@@ -13,7 +13,7 @@ export function Infraction({ hasMultipleInfraction, index, infraction }: Infract
   return (
     <Wrapper isFirstInfraction={index === 1}>
       <InfractionTitle>
-        Infraction {hasMultipleInfraction && `${index} :`} {infraction.threatCharacterization}
+        Infraction {hasMultipleInfraction && `${index} :`} {infraction.threat}
       </InfractionTitle>
       {infraction.comments && (
         <>
@@ -25,7 +25,7 @@ export function Infraction({ hasMultipleInfraction, index, infraction }: Infract
         {infraction.infractionType === MissionAction.InfractionType.WITH_RECORD ? 'Avec' : 'Sans'} PV
       </StyledTag>
       <StyledTag backgroundColor={THEME.color.white} title={getInfractionTitle(infraction)}>
-        {infraction.threat} / NATINF {infraction.natinf}
+        {infraction.threatCharacterization} / NATINF {infraction.natinf}
       </StyledTag>
     </Wrapper>
   )

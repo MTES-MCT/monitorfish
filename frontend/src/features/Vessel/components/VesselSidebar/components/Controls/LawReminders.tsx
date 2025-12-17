@@ -25,7 +25,7 @@ export function LawReminders({ controls }: LawRemindersProps) {
 
   const natinfTags = uniqWith(infractions, (a, b) => a.natinf === b.natinf && a.threat === b.threat).map(infraction => (
     <StyledTag key={infraction.natinf} accent={Accent.PRIMARY} title={getInfractionTitle(infraction)}>
-      {infraction.threat} / NATINF {infraction.natinf}
+      {infraction.threatCharacterization} / NATINF {infraction.natinf}
     </StyledTag>
   ))
 

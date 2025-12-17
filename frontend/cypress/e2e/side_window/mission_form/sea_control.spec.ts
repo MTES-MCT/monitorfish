@@ -420,9 +420,9 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.clickButton('Valider l’infraction')
 
-    cy.contains('Infraction - Transbordement').should('exist')
+    cy.contains('Infraction - Mesures techniques et de conservation').should('exist')
     cy.contains('Avec PV').should('exist')
-    cy.contains('Mesures techniques et de conservation / NATINF 27717').should('exist')
+    cy.contains('Transbordement / NATINF 27717').should('exist')
 
     cy.contains("Une observation sur l'infraction").should('exist')
 
@@ -437,9 +437,9 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.clickButton('Valider l’infraction')
 
-    cy.contains('Infraction - Interférence').should('exist')
+    cy.contains('Infraction - Entrave au contrôle').should('exist')
     cy.contains('Sans PV').should('exist')
-    cy.contains('Entrave au contrôle / NATINF 2584').should('exist')
+    cy.contains('Interférence / NATINF 2584').should('exist')
     cy.contains("Une autre observation sur l'infraction").should('exist')
 
     // -------------------------------------------------------------------------

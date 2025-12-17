@@ -101,6 +101,7 @@ class ControlObjectiveAdminControllerITests {
                     targetNumberOfControlsAtSea = 23,
                     targetNumberOfControlsAtPort = 102,
                     controlPriorityLevel = 1.0,
+                    infringementRiskLevel = 1.5,
                     year = 2021,
                 ),
                 ControlObjective(
@@ -110,6 +111,7 @@ class ControlObjectiveAdminControllerITests {
                     targetNumberOfControlsAtSea = 23,
                     targetNumberOfControlsAtPort = 102,
                     controlPriorityLevel = 1.0,
+                    infringementRiskLevel = 1.5,
                     year = 2021,
                 ),
                 ControlObjective(
@@ -119,6 +121,7 @@ class ControlObjectiveAdminControllerITests {
                     targetNumberOfControlsAtSea = 23,
                     targetNumberOfControlsAtPort = 102,
                     controlPriorityLevel = 1.0,
+                    infringementRiskLevel = 1.5,
                     year = 2021,
                 ),
             ),

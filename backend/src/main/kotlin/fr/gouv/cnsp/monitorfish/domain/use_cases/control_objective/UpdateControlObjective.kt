@@ -14,9 +14,13 @@ class UpdateControlObjective(
         targetNumberOfControlsAtSea: Int?,
         targetNumberOfControlsAtPort: Int?,
         controlPriorityLevel: Double?,
+        infringementRiskLevel: Double?,
     ) {
         require(
-            targetNumberOfControlsAtSea != null || targetNumberOfControlsAtPort != null || controlPriorityLevel != null,
+            targetNumberOfControlsAtSea != null ||
+                targetNumberOfControlsAtPort != null ||
+                controlPriorityLevel != null ||
+                infringementRiskLevel != null
         ) {
             "No value to update"
         }
@@ -26,6 +30,7 @@ class UpdateControlObjective(
             targetNumberOfControlsAtSea,
             targetNumberOfControlsAtPort,
             controlPriorityLevel,
+            infringementRiskLevel,
         )
     }
 }

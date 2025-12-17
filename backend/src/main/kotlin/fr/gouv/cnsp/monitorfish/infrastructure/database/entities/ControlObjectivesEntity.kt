@@ -38,17 +38,4 @@ data class ControlObjectivesEntity(
             controlPriorityLevel = controlPriorityLevel,
             infringementRiskLevel = infringementRiskLevel,
         )
-
-    companion object {
-        fun fromControlObjective(controlObjective: ControlObjective): ControlObjectivesEntity =
-            ControlObjectivesEntity(
-                facade = Seafront.from(controlObjective.facade).toString(),
-                segment = controlObjective.segment,
-                year = controlObjective.year,
-                targetNumberOfControlsAtSea = controlObjective.targetNumberOfControlsAtSea,
-                targetNumberOfControlsAtPort = controlObjective.targetNumberOfControlsAtPort,
-                controlPriorityLevel = controlObjective.controlPriorityLevel,
-                infringementRiskLevel = controlObjective.infringementRiskLevel,
-            )
-    }
 }

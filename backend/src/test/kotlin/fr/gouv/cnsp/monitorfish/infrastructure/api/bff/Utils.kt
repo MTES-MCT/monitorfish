@@ -25,7 +25,7 @@ object TestUtils {
                 marée, ou n'ayant pas encore fait de FAR.
                 """.trimIndent(),
             isUserDefined = false,
-            natinfCode = 7059,
+            natinf = 7059,
             isActivated = true,
             isInError = false,
             isDeleted = false,

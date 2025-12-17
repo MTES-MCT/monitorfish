@@ -176,7 +176,7 @@ class PositionAlertSpecificationControllerITests {
                 alertSpec.name == "Test Alert" &&
                     alertSpec.type == "POSITION_ALERT" &&
                     alertSpec.description == "Test alert description" &&
-                    alertSpec.natinfCode == 7059 &&
+                    alertSpec.natinf == 7059 &&
                     alertSpec.isUserDefined &&
                     !alertSpec.hasAutomaticArchiving &&
                     !alertSpec.repeatEachYear &&
@@ -233,7 +233,7 @@ class PositionAlertSpecificationControllerITests {
                 alertSpec.name == "Updated Alert" &&
                     alertSpec.type == "POSITION_ALERT" &&
                     alertSpec.description == "Updated alert description" &&
-                    alertSpec.natinfCode == 7060 &&
+                    alertSpec.natinf == 7060 &&
                     !alertSpec.isActivated &&
                     alertSpec.isUserDefined &&
                     !alertSpec.hasAutomaticArchiving &&

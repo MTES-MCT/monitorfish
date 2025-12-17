@@ -24,6 +24,10 @@ data class PositionAlertSpecificationEntity(
     val isUserDefined: Boolean = true,
     @Column(name = "natinf_code", nullable = false)
     val natinfCode: Int,
+    @Column(name = "threat", nullable = false)
+    val threat: String,
+    @Column(name = "threat_characterization", nullable = false)
+    val threatCharacterization: String,
     @Column(name = "is_activated", nullable = false)
     val isActivated: Boolean = true,
     @Column(name = "is_in_error", nullable = false)
@@ -79,7 +83,9 @@ data class PositionAlertSpecificationEntity(
             name = name,
             description = description,
             isUserDefined = isUserDefined,
-            natinfCode = natinfCode,
+            natinf = natinfCode,
+            threat = threat,
+            threatCharacterization = threatCharacterization,
             isActivated = isActivated,
             isInError = isInError,
             isDeleted = isDeleted,
@@ -122,7 +128,9 @@ data class PositionAlertSpecificationEntity(
                 name = alertSpecification.name,
                 description = alertSpecification.description,
                 isUserDefined = alertSpecification.isUserDefined,
-                natinfCode = alertSpecification.natinfCode,
+                natinfCode = alertSpecification.natinf,
+                threat = alertSpecification.threat,
+                threatCharacterization = alertSpecification.threatCharacterization,
                 isActivated = alertSpecification.isActivated,
                 isInError = alertSpecification.isInError,
                 isDeleted = alertSpecification.isDeleted,

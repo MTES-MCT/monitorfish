@@ -184,7 +184,7 @@ class JpaPositionAlertSpecificationRepositoryITests : AbstractDBTests() {
                 name = "New Test Alert",
                 description = "New test alert description",
                 isUserDefined = true,
-                natinfCode = 1234,
+                natinf = 1234,
                 isActivated = false,
                 repeatEachYear = false,
                 trackAnalysisDepth = 8.0,
@@ -203,7 +203,7 @@ class JpaPositionAlertSpecificationRepositoryITests : AbstractDBTests() {
         val newAlert = alertsAfter.find { it.name == "New Test Alert" }
         assertThat(newAlert).isNotNull
         assertThat(newAlert!!.description).isEqualTo("New test alert description")
-        assertThat(newAlert.natinfCode).isEqualTo(1234)
+        assertThat(newAlert.natinf).isEqualTo(1234)
         assertThat(newAlert.isActivated).isFalse()
         assertThat(newAlert.isUserDefined).isTrue()
         assertThat(newAlert.isDeleted).isFalse()

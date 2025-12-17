@@ -12,6 +12,7 @@ interface ControlObjectivesRepository {
         targetNumberOfControlsAtSea: Int?,
         targetNumberOfControlsAtPort: Int?,
         controlPriorityLevel: Double?,
+        infringementRiskLevel: Double?,
     )
 
     fun delete(id: Int)

@@ -25,10 +25,15 @@ class JpaControlObjectivesRepository(
         targetNumberOfControlsAtSea: Int?,
         targetNumberOfControlsAtPort: Int?,
         controlPriorityLevel: Double?,
+        infringementRiskLevel: Double?,
     ) {
         try {
             controlPriorityLevel?.let {
                 dbControlObjectivesRepository.updateControlPriorityLevel(id, it)
+            }
+
+            infringementRiskLevel?.let {
+                    dbControlObjectivesRepository.updateInfringementRiskLevel(id, it)
             }
 
             targetNumberOfControlsAtSea?.let {
@@ -61,6 +66,7 @@ class JpaControlObjectivesRepository(
             controlObjective.targetNumberOfControlsAtSea,
             controlObjective.targetNumberOfControlsAtPort,
             controlObjective.controlPriorityLevel,
+            controlObjective.infringementRiskLevel,
         )
 
         return dbControlObjectivesRepository.findByFacadeAndSegmentAndYearEquals(

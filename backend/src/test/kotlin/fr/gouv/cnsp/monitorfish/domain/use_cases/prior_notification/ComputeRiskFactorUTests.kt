@@ -198,6 +198,7 @@ class ComputeRiskFactorUTests {
                     controlPriorityLevel = 1.2,
                     targetNumberOfControlsAtSea = 1,
                     targetNumberOfControlsAtPort = 2,
+                    infringementRiskLevel = 3.0,
                 ),
                 ControlObjective(
                     facade = "MEMN",
@@ -206,6 +207,7 @@ class ComputeRiskFactorUTests {
                     controlPriorityLevel = 1.5,
                     targetNumberOfControlsAtSea = 1,
                     targetNumberOfControlsAtPort = 2,
+                    infringementRiskLevel = 1.0,
                 ),
                 ControlObjective(
                     facade = "MED",
@@ -214,6 +216,7 @@ class ComputeRiskFactorUTests {
                     controlPriorityLevel = 1.2,
                     targetNumberOfControlsAtSea = 1,
                     targetNumberOfControlsAtPort = 2,
+                    infringementRiskLevel = 4.0,
                 ),
             )
         val port = PortFaker.fakePort(locode = portLocode, name = "Port name", facade = "MED")
@@ -286,6 +289,7 @@ class ComputeRiskFactorUTests {
                     controlPriorityLevel = 1.2,
                     targetNumberOfControlsAtSea = 1,
                     targetNumberOfControlsAtPort = 2,
+                    infringementRiskLevel = 2.0,
                 ),
                 ControlObjective(
                     facade = "MEMN",
@@ -294,6 +298,7 @@ class ComputeRiskFactorUTests {
                     controlPriorityLevel = 1.5,
                     targetNumberOfControlsAtSea = 1,
                     targetNumberOfControlsAtPort = 2,
+                    infringementRiskLevel = 3.0,
                 ),
             )
         val port = PortFaker.fakePort(locode = portLocode, name = "Port name", facade = "MED")

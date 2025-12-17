@@ -105,7 +105,7 @@ export function ControlDetails({ control, isSelected }: ControlDetailsProps) {
             )}
             {control.infractions.map(infraction => (
               <StyledTag accent={Accent.PRIMARY} title={getInfractionTitle(infraction)}>
-                {`${infraction.threat} / NATINF ${infraction.natinf}`}
+                {`${infraction.threatCharacterization} / NATINF ${infraction.natinf}`}
               </StyledTag>
             ))}
           </SeizureOrInfractions>

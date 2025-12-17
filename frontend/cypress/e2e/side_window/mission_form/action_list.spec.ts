@@ -182,9 +182,9 @@ context('Side Window > Mission Form > Action List', () => {
 
     cy.get('.Element-Tag').contains('2 INF AVEC PV').should('be.visible')
     cy.get('.Element-Tag').contains('1 INF EN ATTENTE').should('be.visible')
-    cy.get('.Element-Tag').contains('Mesures techniques et de conservation / NATINF 27717').should('be.visible')
-    cy.get('.Element-Tag').contains('Entrave au contrôle / NATINF 4234').should('be.visible')
-    cy.get('.Element-Tag').contains('Entrave au contrôle / NATINF 2584').should('be.visible')
+    cy.get('.Element-Tag').contains('Transbordement / NATINF 27717').should('be.visible')
+    cy.get('.Element-Tag').contains('Interférence / NATINF 4234').should('be.visible')
+    cy.get('.Element-Tag').contains('Interférence / NATINF 2584').should('be.visible')
     // The infractions label from natinfs should be rendered
     cy.get(
       '[title="Mesures techniques et de conservation - Transbordement\n' +

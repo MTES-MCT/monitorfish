@@ -105,7 +105,7 @@ export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishAct
         accent={Accent.PRIMARY}
         title={getInfractionTitle(infraction as MissionAction.Infraction)}
       >
-        {infraction.threat} / NATINF {infraction.natinf}
+        {infraction.threatCharacterization} / NATINF {infraction.natinf}
       </StyledTag>
     ))
 

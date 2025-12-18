@@ -52,65 +52,64 @@ id,name,threat_id
 84,Note de vente - première vente,8
 85,Produits impropres à la consommation,8
 86,Traçabilité,8
-87,Tracabilité,8
-88,Traçabilité - labellisation,8
-89,Vente de produits pêchés illégalement – pêche récréative,8
-90,Vente produits pêchés illégalement – pêche pro,8
-91,Vente produits pêchés illégalement – pêche récréative,8
-92,"Vente produits taille, calibre, poids prohibe  - soumis obligation débarquement)",8
-93,"Vente produits taille, calibre, poids prohibe  - non soumis obligation débarquement)",8
-94,Espèce interdite,8
-95,"Transport produits taille, calibre, poids prohibés",8
-96,"Stockage produits taille, calibre, poids prohibe",8
-97,Défaut d'AIS,3
-98,Non respect port désigné,3
-99,Chalutage 3MN,3
-100,Fermeture spatio-temporelle / RTC,3
-101,Cétacés - pinger absent / non fonctionnel,3
-102,Engin non-conforme,3
-103,Marquage engin actif,3
-104,Marquage engin passif,3
-105,Dispositif d'écrémage illégal,3
-106,Usage illégal système détection poisson,3
-107,Usage illégal DCP,3
-108,Dispositif illégal pour le tri,3
-109,"Taille, calibre, poids prohibés",3
-110,"Taille, calibre, poids prohibés - Surquota",3
-111,VMS - absence,3
-112,VMS - fréquence/cadencement,3
-113,Période interdite,3
-114,Zone interdite,3
-115,Pêche sans autorisation,9
-116,Détention produits de la mer sans autorisation,9
-117,Détention explosifs/substances dangereuses,9
-118,Utilisation explosifs/substances dangereuses,9
-119,Transport de produits pêchés avec explosifs/substances dangereuses,9
-120,Vente de produits pêchés avec explosifs/substances dangereuses,9
-121,Non déclaration d'entrée en ZEE FR,9
-122,Non déclaration des captures à bord en ZEE FR,9
-123,Zone interdite,9
-124,Période interdite,9
-125,Absence de pesée au débarquement,6
-126,Plan d’arrimage,6
-127,Cetacés - caméra inactive / absence collecte de données,6
-128,Permis d’armement -  détention produits pêche maritime sans permis d'armement,10
-129,"Permis d’armement - absence document, suspension, perte validité, LEP échue, absence PME",10
-130,Permis d’armement - défaut de présentation,10
-131,Permis de navigation - absence du titre à bord,10
-132,Permis de navigation -  non respect des conditions,10
-133,Equipage - absence fiche effectif minimal,10
-134,Equipage - non respect de la fiche d'effectif minimal,10
-135,Equipage - refus présentation liste équipage,10
-136,Equipage - absence liste équipage,10
-137,Aptitude médicale,10
-138,Titres de formation,10
-139,Langue,10
-140,Abus d'autorité,10
-141,Travail illégal,10
-142,Marques extérieures,11
-143,Pollution,11
-144,Sécurité maritime,11
-145,Engins sauvetage,11
-146,Securité / hygiène,11
-147,Logement / hygiène,11
-148,Titres de sécurité - certificat prévention pollution,11
+87,Traçabilité - labellisation,8
+88,Vente de produits pêchés illégalement – pêche récréative,8
+89,Vente produits pêchés illégalement – pêche pro,8
+90,Vente produits pêchés illégalement – pêche récréative,8
+91,"Vente produits taille, calibre, poids prohibe  - soumis obligation débarquement)",8
+92,"Vente produits taille, calibre, poids prohibe  - non soumis obligation débarquement)",8
+93,Espèce interdite,8
+94,"Transport produits taille, calibre, poids prohibés",8
+95,"Stockage produits taille, calibre, poids prohibe",8
+96,Défaut d'AIS,3
+97,Non respect port désigné,3
+98,Chalutage 3MN,3
+99,Fermeture spatio-temporelle / RTC,3
+100,Cétacés - pinger absent / non fonctionnel,3
+101,Engin non-conforme,3
+102,Marquage engin actif,3
+103,Marquage engin passif,3
+104,Dispositif d'écrémage illégal,3
+105,Usage illégal système détection poisson,3
+106,Usage illégal DCP,3
+107,Dispositif illégal pour le tri,3
+108,"Taille, calibre, poids prohibés",3
+109,"Taille, calibre, poids prohibés - Surquota",3
+110,VMS - absence,3
+111,VMS - fréquence/cadencement,3
+112,Période interdite,3
+113,Zone interdite,3
+114,Pêche sans autorisation,9
+115,Détention produits de la mer sans autorisation,9
+116,Détention explosifs/substances dangereuses,9
+117,Utilisation explosifs/substances dangereuses,9
+118,Transport de produits pêchés avec explosifs/substances dangereuses,9
+119,Vente de produits pêchés avec explosifs/substances dangereuses,9
+120,Non déclaration d'entrée en ZEE FR,9
+121,Non déclaration des captures à bord en ZEE FR,9
+122,Zone interdite,9
+123,Période interdite,9
+124,Absence de pesée au débarquement,6
+125,Plan d’arrimage,6
+126,Cetacés - caméra inactive / absence collecte de données,6
+127,Permis d’armement -  détention produits pêche maritime sans permis d'armement,10
+128,"Permis d’armement - absence document, suspension, perte validité, LEP échue, absence PME",10
+129,Permis d’armement - défaut de présentation,10
+130,Permis de navigation - absence du titre à bord,10
+131,Permis de navigation -  non respect des conditions,10
+132,Equipage - absence fiche effectif minimal,10
+133,Equipage - non respect de la fiche d'effectif minimal,10
+134,Equipage - refus présentation liste équipage,10
+135,Equipage - absence liste équipage,10
+136,Aptitude médicale,10
+137,Titres de formation,10
+138,Langue,10
+139,Abus d'autorité,10
+140,Travail illégal,10
+141,Marques extérieures,11
+142,Pollution,11
+143,Sécurité maritime,11
+144,Engins sauvetage,11
+145,Securité / hygiène,11
+146,Logement / hygiène,11
+147,Titres de sécurité - certificat prévention pollution,11

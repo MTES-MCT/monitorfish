@@ -2,39 +2,21 @@ id,name,threat_id
 1,Pêche sans autorisation par navire tiers,1
 2,Pêche non conforme à l'autorisation par navire tiers,1
 3,Pêche sans autorisation par navire communautaire,1
-4,Pêche sans autorisation par navire français,1
 5,Navire sans immatriculation,1
 6,Vente de produits pêchés illégalement,1
 7,Transport de produits pêchés illégalement,1
-8,Entrave à l'observation,2
 9,Dissimulation,2
 10,Interférence,2
-11,Sécurité,7
 12,Transbordement,3
-13,AIS,3
 14,Autorisation,3
 15,Débarquement,3
 16,Engin,3
-17,Marquage engin,3
 18,Espèce interdite,3
 19,Espèce protégée,3
 20,Immersion espèces,3
 21,Marquage espèces,3
-22,Espèces en sous taille / sous poids,3
 23,REM,3
-24,Surquota,3
 25,Tracabilité,3
-26,VMS,3
-27,Période interdite,4
-28,Zone interdite,4
-29,Pêche sans autorisation,4
-30,Détention produits de la mer sans autorisation,4
-31,Détention explosifs/substances dangereuses,4
-32,Utilisation explosifs/substances dangereuses,4
-33,Transport de produits pêchés avec explosifs/substances dangereuses,4
-34,Vente de produits pêchés avec explosifs/substances dangereuses,4
-35,Non déclaration d'entrée en ZEE FR,4
-36,Non déclaration des captures à bord en ZEE FR,4
 37,Rejet,5
 38,Tri,5
 39,BMS (JPE),5
@@ -55,23 +37,80 @@ id,name,threat_id
 54,LAN (JPE),6
 55,LAN (JT-FT),6
 56,Marge de tolérance,6
-57,Pesée,6
-58,Plan d'arrimage,6
 59,Plan de cale,6
 60,PNO,6
 61,LSC (JPE),6
 62,LSC (JT-FT),6
 63,RTP,6
-64,Permis d'armement - absence document,7
-65,"Permis d'armement - absence document, suspension, perte validité, LEP échue, absence PME",7
-66,Permis d'armement - défaut de présentation,7
-67,Permis de navigation - absence du titre à bord,7
-68,Permis de navigation -  non respect des conditions,7
-69,Equipage - absence fiche effectif minimal,7
-70,Equipage - non respect de la fiche d'effectif minimal,7
-71,Equipage - refus présentation liste équipage,7
-72,Equipage - absence liste équipage,7
-73,Aptitude médicale,7
-74,Titres de formation,7
-75,Langue,7
-76,Travail illégal,7
+77,Pêche sans autorisation,1
+78,Elements d'identification inexistants / dissimulés,1
+79,Entrave à l’observation,2
+80,Sécurité,2
+81,Certificat de capture,8
+82,Déclaration de prise en charge,8
+83,Note de vente,8
+84,Note de vente - première vente,8
+85,Produits impropres à la consommation,8
+86,Traçabilité,8
+87,Tracabilité,8
+88,Traçabilité - labellisation,8
+89,Vente de produits pêchés illégalement – pêche récréative,8
+90,Vente produits pêchés illégalement – pêche pro,8
+91,Vente produits pêchés illégalement – pêche récréative,8
+92,"Vente produits taille, calibre, poids prohibe  - soumis obligation débarquement)",8
+93,"Vente produits taille, calibre, poids prohibe  - non soumis obligation débarquement)",8
+94,Espèce interdite,8
+95,"Transport produits taille, calibre, poids prohibés",8
+96,"Stockage produits taille, calibre, poids prohibe",8
+97,Défaut d'AIS,3
+98,Non respect port désigné,3
+99,Chalutage 3MN,3
+100,Fermeture spatio-temporelle / RTC,3
+101,Cétacés - pinger absent / non fonctionnel,3
+102,Engin non-conforme,3
+103,Marquage engin actif,3
+104,Marquage engin passif,3
+105,Dispositif d'écrémage illégal,3
+106,Usage illégal système détection poisson,3
+107,Usage illégal DCP,3
+108,Dispositif illégal pour le tri,3
+109,"Taille, calibre, poids prohibés",3
+110,"Taille, calibre, poids prohibés - Surquota",3
+111,VMS - absence,3
+112,VMS - fréquence/cadencement,3
+113,Période interdite,3
+114,Zone interdite,3
+115,Pêche sans autorisation,9
+116,Détention produits de la mer sans autorisation,9
+117,Détention explosifs/substances dangereuses,9
+118,Utilisation explosifs/substances dangereuses,9
+119,Transport de produits pêchés avec explosifs/substances dangereuses,9
+120,Vente de produits pêchés avec explosifs/substances dangereuses,9
+121,Non déclaration d'entrée en ZEE FR,9
+122,Non déclaration des captures à bord en ZEE FR,9
+123,Zone interdite,9
+124,Période interdite,9
+125,Absence de pesée au débarquement,6
+126,Plan d’arrimage,6
+127,Cetacés - caméra inactive / absence collecte de données,6
+128,Permis d’armement -  détention produits pêche maritime sans permis d'armement,10
+129,"Permis d’armement - absence document, suspension, perte validité, LEP échue, absence PME",10
+130,Permis d’armement - défaut de présentation,10
+131,Permis de navigation - absence du titre à bord,10
+132,Permis de navigation -  non respect des conditions,10
+133,Equipage - absence fiche effectif minimal,10
+134,Equipage - non respect de la fiche d'effectif minimal,10
+135,Equipage - refus présentation liste équipage,10
+136,Equipage - absence liste équipage,10
+137,Aptitude médicale,10
+138,Titres de formation,10
+139,Langue,10
+140,Abus d'autorité,10
+141,Travail illégal,10
+142,Marques extérieures,11
+143,Pollution,11
+144,Sécurité maritime,11
+145,Engins sauvetage,11
+146,Securité / hygiène,11
+147,Logement / hygiène,11
+148,Titres de sécurité - certificat prévention pollution,11

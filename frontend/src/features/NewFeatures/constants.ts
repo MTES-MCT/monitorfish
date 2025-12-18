@@ -16,7 +16,9 @@ Cette catégorisation s'articule autour de **7 familles principales** :
 - **Mesures techniques et de conservation**,
 - **Obligation de débarquement**,
 - **Obligations déclaratives**,
-- **Sécurité / gens de mer**,
+- **Filière**,
+- **Sécurité**,
+- **Gens de mer**,
 - **TAAF**.
 
 Cette nouvelle classification permet d'affiner la définition des infractions, et facilite donc leur analyse.

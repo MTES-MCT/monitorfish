@@ -7,6 +7,56 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2025-12-17',
+        description: `Les infractions (codes NATINF) sont désormais catégorisées selon leur famille et leur type dans les comptes rendus de contrôles à partir de l'année 2026.
+
+Cette catégorisation s'articule autour de **7 familles principales** :
+- **Activités INN**,
+- **Entrave au contrôle**,
+- **Mesures techniques et de conservation**,
+- **Obligation de débarquement**,
+- **Obligations déclaratives**,
+- **Sécurité / gens de mer**,
+- **TAAF**.
+
+Cette nouvelle classification permet d'affiner la définition des infractions, et facilite donc leur analyse.
+
+Exemple:
+Différentes familles et types viennent préciser le **NATINF 27689** :
+
+
+1. **Obligation de débarquement**
+- BMS (JPE)
+- DIS/DIM (JPE)
+
+2. **Obligations déclaratives**
+- Certification capture
+- COE/COX
+- DEP
+- Engin/maillage (JPE)
+- EOF
+- FAR (JPE)
+- JPE non fonctionnel/absent
+- LAN (JPE)
+- Marge de tolérance
+- LSC (JPE)
+- RTP
+
+Les catégories s'affichent dans les détails des contrôles et lors de la saisie d'infractions.`,
+        for: 'ALL',
+        title: `Ajout de la catégorisation des infractions (NATINF)`,
+        type: 'NEW_FEATURE'
+      },
+      {
+        date: '2025-12-11',
+        description: `Un nouveau champ **"Modalités de contact"** a été ajouté dans l'onglet "Identité" de la fiche navire.
+
+Cette fonctionnalité facilite la communication avec les navires, en permettant aux équipes opérationnelles de savoir immédiatement quel numéro appeler.`,
+        for: 'ALL',
+        title: `Ajout des modalités de contact dans la fiche navire`,
+        type: 'IMPROVEMENT'
+      },
+      {
         date: '2025-10-14',
         description: `Vous pouvez désormais créer des alertes paramétrables dans l'onglet "Gestion des alertes" situé dans le menu "Alertes" de la deuxième fenêtre.
 

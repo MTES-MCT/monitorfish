@@ -1,0 +1,1 @@
+ALTER TABLE public.threat_characterizations DROP CONSTRAINT IF EXISTS threat_characterizations_name_key;

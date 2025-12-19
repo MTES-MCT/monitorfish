@@ -1,9 +1,17 @@
 import { AdministrativeAreaType, AdministrativeAreaTypeLabel } from '@features/Alert/constants'
 import { expect } from '@jest/globals'
 
-import { buildCountriesAsTreeOptions, mapZonesWithMetadata } from '../utils'
+import {
+  buildCountriesAsTreeOptions,
+  convertRegulatoryAreasArrayToTreeOptions,
+  convertRegulatoryLayerLawTypesToTreeOptions,
+  convertTreeOptionsToRegulatoryAreasArray,
+  mapZonesWithMetadata
+} from '../utils'
 
-import type { TreeOption } from '@mtes-mct/monitor-ui'
+import type { RegulatoryAreaSpecification } from '@features/Alert/types'
+import type { RegulatoryLawTypes } from '@features/Regulation/types'
+import type { TreeBranchOption, TreeOption } from '@mtes-mct/monitor-ui'
 
 describe('mapZonesWithMetadata', () => {
   it('Should return empty array when zoneGroups is undefined or has no valid zones', () => {
@@ -131,5 +139,223 @@ describe('buildCountriesAsTreeOptions', () => {
       expect(typeof country.value).toBe('string')
       expect(country.value).toHaveLength(2) // ISO Alpha-2 codes are 2 characters
     })
+  })
+})
+
+describe('convertRegulatoryAreasArrayToTreeOptions', () => {
+  it('Should convert regulatory areas array to tree structure grouped by lawType and topic', () => {
+    // Given
+    const regulatoryAreas: RegulatoryAreaSpecification[] = [
+      {
+        lawType: 'Reg. (EU) 2019/1241',
+        topic: 'Bar commun',
+        zone: 'VIIIa'
+      },
+      {
+        lawType: 'Reg. (EU) 2019/1241',
+        topic: 'Bar commun',
+        zone: 'VIIIb'
+      },
+      {
+        lawType: 'Reg. (EU) 2019/1241',
+        topic: 'Cabillaud',
+        zone: 'VIId'
+      },
+      {
+        lawType: 'Reg. (EU) 2023/194',
+        topic: 'Sole',
+        zone: 'VIIe'
+      }
+    ]
+
+    // When
+    const result = convertRegulatoryAreasArrayToTreeOptions(regulatoryAreas)
+
+    // Then
+    expect(result).toHaveLength(2)
+
+    // Check first lawType group
+    expect(result?.[0]?.label).toBe('Reg. (EU) 2019/1241')
+    expect(result?.[0]?.value).toBe('Reg. (EU) 2019/1241')
+    expect(result?.[0]?.children).toHaveLength(2)
+
+    // Check topic groups within first lawType
+    const firstLawTypeChildren = result?.[0]?.children
+    const barCommunTopic = firstLawTypeChildren?.find(topic => topic.label === 'Bar commun')
+    expect(barCommunTopic?.value).toBe('Bar commun')
+    expect(barCommunTopic?.children).toHaveLength(2)
+    expect(barCommunTopic?.children?.[0]).toEqual({ label: 'VIIIa', value: 'VIIIa' })
+    expect(barCommunTopic?.children?.[1]).toEqual({ label: 'VIIIb', value: 'VIIIb' })
+
+    const cabillaudTopic = firstLawTypeChildren?.find(topic => topic.label === 'Cabillaud')
+    expect(cabillaudTopic?.value).toBe('Cabillaud')
+    expect(cabillaudTopic?.children).toHaveLength(1)
+    expect(cabillaudTopic?.children?.[0]).toEqual({ label: 'VIId', value: 'VIId' })
+
+    // Check second lawType group
+    expect(result?.[1]?.label).toBe('Reg. (EU) 2023/194')
+    expect(result?.[1]?.value).toBe('Reg. (EU) 2023/194')
+    expect(result?.[1]?.children).toHaveLength(1)
+
+    const soleTopic = result?.[1]?.children?.[0]
+    expect(soleTopic?.label).toBe('Sole')
+    expect(soleTopic?.value).toBe('Sole')
+    expect(soleTopic?.children).toHaveLength(1)
+    expect(soleTopic?.children?.[0]).toEqual({ label: 'VIIe', value: 'VIIe' })
+  })
+
+  it('Should return undefined when regulatory areas is undefined', () => {
+    // When
+    const result = convertRegulatoryAreasArrayToTreeOptions(undefined)
+
+    // Then
+    expect(result).toBeUndefined()
+  })
+})
+
+describe('convertTreeOptionsToRegulatoryAreasArray', () => {
+  it('Should convert tree structure to flat regulatory areas array', () => {
+    // Given
+    const treeOptions: TreeOption[] = [
+      {
+        children: [
+          {
+            children: [
+              { label: 'VIIIa', value: 'VIIIa' },
+              { label: 'VIIIb', value: 'VIIIb' }
+            ],
+            label: 'Bar commun',
+            value: 'Bar commun'
+          },
+          {
+            children: [{ label: 'VIId', value: 'VIId' }],
+            label: 'Cabillaud',
+            value: 'Cabillaud'
+          }
+        ],
+        label: 'Reg. (EU) 2019/1241',
+        value: 'Reg. (EU) 2019/1241'
+      } as TreeBranchOption,
+      {
+        children: [
+          {
+            children: [{ label: 'VIIe', value: 'VIIe' }],
+            label: 'Sole',
+            value: 'Sole'
+          }
+        ],
+        label: 'Reg. (EU) 2023/194',
+        value: 'Reg. (EU) 2023/194'
+      } as TreeBranchOption
+    ]
+
+    // When
+    const result = convertTreeOptionsToRegulatoryAreasArray(treeOptions)
+
+    // Then
+    expect(result).toHaveLength(4)
+    expect(result).toEqual([
+      {
+        lawType: 'Reg. (EU) 2019/1241',
+        topic: 'Bar commun',
+        zone: 'VIIIa'
+      },
+      {
+        lawType: 'Reg. (EU) 2019/1241',
+        topic: 'Bar commun',
+        zone: 'VIIIb'
+      },
+      {
+        lawType: 'Reg. (EU) 2019/1241',
+        topic: 'Cabillaud',
+        zone: 'VIId'
+      },
+      {
+        lawType: 'Reg. (EU) 2023/194',
+        topic: 'Sole',
+        zone: 'VIIe'
+      }
+    ])
+  })
+})
+
+describe('convertRegulatoryLayerLawTypesToTreeOptions', () => {
+  it('Should convert regulatory layer law types to tree options structure', () => {
+    // Given
+    const regulatoryLayerLawTypes: RegulatoryLawTypes = {
+      'Reg. (EU) 2019/1241': {
+        'Bar commun': [
+          {
+            lawType: 'Reg. (EU) 2019/1241',
+            topic: 'Bar commun',
+            zone: 'VIIIa'
+          } as any,
+          {
+            lawType: 'Reg. (EU) 2019/1241',
+            topic: 'Bar commun',
+            zone: 'VIIIb'
+          } as any
+        ],
+        Cabillaud: [
+          {
+            lawType: 'Reg. (EU) 2019/1241',
+            topic: 'Cabillaud',
+            zone: 'VIId'
+          } as any
+        ]
+      },
+      'Reg. (EU) 2023/194': {
+        Sole: [
+          {
+            lawType: 'Reg. (EU) 2023/194',
+            topic: 'Sole',
+            zone: 'VIIe'
+          } as any
+        ]
+      }
+    }
+
+    // When
+    const result = convertRegulatoryLayerLawTypesToTreeOptions(regulatoryLayerLawTypes)
+
+    // Then
+    expect(result).toHaveLength(2)
+
+    // Check first lawType
+    expect(result[0]?.label).toBe('Reg. (EU) 2019/1241')
+    expect(result[0]?.value).toBe('Reg. (EU) 2019/1241')
+    expect(result[0]?.children).toHaveLength(2)
+
+    // Check topics within first lawType
+    const firstLawTypeChildren = result[0]?.children
+    const barCommunTopic = firstLawTypeChildren?.find(topic => topic.label === 'Bar commun')
+    expect(barCommunTopic?.value).toBe('Bar commun')
+    expect(barCommunTopic?.children).toHaveLength(2)
+    expect(barCommunTopic?.children?.[0]).toEqual({ label: 'VIIIa', value: 'VIIIa' })
+    expect(barCommunTopic?.children?.[1]).toEqual({ label: 'VIIIb', value: 'VIIIb' })
+
+    const cabillaudTopic = firstLawTypeChildren?.find(topic => topic.label === 'Cabillaud')
+    expect(cabillaudTopic?.value).toBe('Cabillaud')
+    expect(cabillaudTopic?.children).toHaveLength(1)
+    expect(cabillaudTopic?.children?.[0]).toEqual({ label: 'VIId', value: 'VIId' })
+
+    // Check second lawType
+    expect(result[1]?.label).toBe('Reg. (EU) 2023/194')
+    expect(result[1]?.value).toBe('Reg. (EU) 2023/194')
+    expect(result[1]?.children).toHaveLength(1)
+
+    const soleTopic = result[1]?.children?.[0]
+    expect(soleTopic?.label).toBe('Sole')
+    expect(soleTopic?.value).toBe('Sole')
+    expect(soleTopic?.children).toHaveLength(1)
+    expect(soleTopic?.children?.[0]).toEqual({ label: 'VIIe', value: 'VIIe' })
+  })
+
+  it('Should return empty array when regulatory layer law types is undefined', () => {
+    // When
+    const result = convertRegulatoryLayerLawTypesToTreeOptions(undefined)
+
+    // Then
+    expect(result).toEqual([])
   })
 })

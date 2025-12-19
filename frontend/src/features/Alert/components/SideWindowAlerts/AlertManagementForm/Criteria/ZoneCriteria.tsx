@@ -1,9 +1,14 @@
 import { Criteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/shared/Criteria'
-import { mapZonesWithMetadata } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/utils'
+import {
+  convertRegulatoryAreasArrayToTreeOptions,
+  convertRegulatoryLayerLawTypesToTreeOptions,
+  convertTreeOptionsToRegulatoryAreasArray,
+  mapZonesWithMetadata
+} from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/utils'
 import { AdministrativeAreaType } from '@features/Alert/constants'
 import { useGetFilterableZonesAsTreeOptions } from '@hooks/useGetFilterableZonesAsTreeOptions'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { MultiCascader, type OptionValueType, type TreeOption } from '@mtes-mct/monitor-ui'
+import { CheckTreePicker, MultiCascader, type OptionValueType, type TreeOption } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useFormikContext } from 'formik'
 import { groupBy } from 'lodash-es'
@@ -29,28 +34,8 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
   const uncheckableZones = Object.keys(filteredZones)
 
   const regulatoryLayerLawTypes = useMainAppSelector(state => state.regulation.regulatoryLayerLawTypes)
-
   const regulatoryOptions = useMemo(
-    () =>
-      regulatoryLayerLawTypes
-        ? (Object.entries(regulatoryLayerLawTypes).map(([lawType, topics]) => ({
-            children: Object.entries(topics).map(([topic, zones]) => ({
-              children: zones.map(zone => ({
-                label: zone.zone,
-                value: { lawType, topic, zone: zone.zone }
-              })),
-              label: topic,
-              value: { lawType, topic, zone: undefined }
-            })),
-            label: lawType,
-            value: { lawType, topic: undefined, zone: undefined }
-          })) as TreeOption<RegulatoryAreaSpecification>[])
-        : [],
-    [regulatoryLayerLawTypes]
-  )
-
-  const uncheckableRegulatoryOptions = useMemo(
-    () => (regulatoryLayerLawTypes ? Object.keys(Object.entries(regulatoryLayerLawTypes)) : []),
+    () => convertRegulatoryLayerLawTypesToTreeOptions(regulatoryLayerLawTypes),
     [regulatoryLayerLawTypes]
   )
 
@@ -76,14 +61,16 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
     setFieldValue('administrativeAreas', administrativeAreas)
   }
 
-  const updateRegulatoryAreas = (nextRegulationValues: OptionValueType[] | undefined) => {
+  const updateRegulatoryAreas = (nextRegulationValues: TreeOption[] | undefined) => {
     if (nextRegulationValues === undefined) {
       setFieldValue('regulatoryAreas', [])
 
       return
     }
 
-    setFieldValue('regulatoryAreas', nextRegulationValues as RegulatoryAreaSpecification[])
+    const nextRegulationArray = convertTreeOptionsToRegulatoryAreasArray(nextRegulationValues)
+
+    setFieldValue('regulatoryAreas', nextRegulationArray as RegulatoryAreaSpecification[])
   }
 
   const handleDeleteCriteria = () => {
@@ -91,6 +78,8 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
     setFieldValue('regulatoryAreas', [])
     onDelete()
   }
+
+  const regulatoryCheckTreeValues = convertRegulatoryAreasArrayToTreeOptions(values.regulatoryAreas)
 
   return (
     <Criteria.Wrapper>
@@ -127,7 +116,7 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
             )
           })()}
         />
-        <StyledMultiCascader
+        <StyledCheckTreePicker
           disabled={!regulatoryLayerLawTypes}
           label="Zones réglementaires déclenchant l'alerte"
           name="regulatoryAreas"
@@ -135,8 +124,7 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
           options={regulatoryOptions}
           placeholder=""
           searchable
-          uncheckableItemValues={uncheckableRegulatoryOptions}
-          value={values.regulatoryAreas || []}
+          value={regulatoryCheckTreeValues ?? []}
         />
         <Criteria.Delete onClick={handleDeleteCriteria} />
       </Criteria.Body>
@@ -145,5 +133,9 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
 }
 
 const StyledMultiCascader = styled(MultiCascader)`
+  margin-top: 16px;
+`
+
+const StyledCheckTreePicker = styled(CheckTreePicker)`
   margin-top: 16px;
 `

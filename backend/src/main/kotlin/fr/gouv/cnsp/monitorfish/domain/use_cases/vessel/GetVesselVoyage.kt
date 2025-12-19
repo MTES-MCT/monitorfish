@@ -24,7 +24,7 @@ class GetVesselVoyage(
     ): Voyage {
         val vesselTrips = logbookReportRepository.findAllTrips(internalReferenceNumber)
         var tripIndex: Int?
-        var trip =
+        val trip =
             try {
                 when (voyageRequest) {
                     VoyageRequest.LAST -> {
@@ -63,18 +63,17 @@ class GetVesselVoyage(
                         vesselTrips[tripIndex]
                     }
                 }
-            } catch (e: IllegalArgumentException) {
-                throw BackendUsageException(
-                    BackendUsageErrorCode.NOT_FOUND_BUT_OK,
-                    message = "Could not fetch voyage for request \"${voyageRequest}\"",
-                    cause = e,
-                )
-            } catch (e: NoLogbookFishingTripFound) {
-                throw BackendUsageException(
-                    BackendUsageErrorCode.NOT_FOUND_BUT_OK,
-                    message = "Could not fetch voyage for request \"${voyageRequest}\"",
-                    cause = e,
-                )
+            } catch (e: Exception) {
+                when (e) {
+                    is IllegalArgumentException,
+                    is NoLogbookFishingTripFound,
+                    is NoSuchElementException -> throw BackendUsageException(
+                        BackendUsageErrorCode.NOT_FOUND_BUT_OK,
+                        message = "Could not fetch voyage for request \"${voyageRequest}\"",
+                        cause = e,
+                    )
+                    else -> throw e
+                }
             }
 
         val logbookMessages =

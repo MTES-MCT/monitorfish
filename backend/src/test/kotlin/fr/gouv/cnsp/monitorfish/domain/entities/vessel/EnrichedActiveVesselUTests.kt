@@ -88,9 +88,9 @@ class EnrichedActiveVesselUTests {
     }
 
     @Test
-    fun `Should compute activity origin as FROM_RECENT_PROFILE When gear onboard is empty`() {
+    fun `Should compute activity origin as FROM_LOGBOOK When species onboard is not empty`() {
         // Given
-        val lastPositionWithoutGears = getDummyLastPositions().first().copy(gearOnboard = listOf())
+        val lastPositionWithoutGears = getDummyLastPositions().first()
         val vessel =
             EnrichedActiveVessel(
                 vessel =
@@ -104,7 +104,12 @@ class EnrichedActiveVesselUTests {
                         underCharter = true,
                         hasLogbookEsacapt = false,
                     ),
-                riskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                riskFactor = VesselRiskFactor(
+                    2.3,
+                    2.0,
+                    1.9,
+                    3.2
+                ),
                 producerOrganization = null,
                 vesselProfile = DUMMY_VESSEL_PROFILE,
                 vesselGroups = getDynamicVesselGroups(),
@@ -114,15 +119,15 @@ class EnrichedActiveVesselUTests {
             )
 
         // Then
-        assertThat(vessel.activityOrigin).isEqualTo(ActivityOrigin.FROM_RECENT_PROFILE)
-        assertThat(vessel.segments).isEqualTo(listOf("NWW05"))
-        assertThat(vessel.gearsArray).isEqualTo(listOf("TBB"))
+        assertThat(vessel.activityOrigin).isEqualTo(ActivityOrigin.FROM_LOGBOOK)
+        assertThat(vessel.segments).isEqualTo(listOf("NWW03", "NWW06"))
+        assertThat(vessel.gearsArray).isEqualTo(listOf("OTB"))
     }
 
     @Test
-    fun `Should compute activity origin as FROM_RECENT_PROFILE When gear onboard is null`() {
+    fun `Should compute activity origin as FROM_RECENT_PROFILE When species onboard is empty and vessel has vms activity`() {
         // Given
-        val lastPositionWithNullGears = getDummyLastPositions().first().copy(gearOnboard = null)
+        val lastPositionWithNullGears = getDummyLastPositions().first().copy(speciesOnboard = listOf())
         val vessel =
             EnrichedActiveVessel(
                 vessel =
@@ -136,7 +141,13 @@ class EnrichedActiveVesselUTests {
                         underCharter = true,
                         hasLogbookEsacapt = false,
                     ),
-                riskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                riskFactor = VesselRiskFactor(
+                    2.3,
+                    2.0,
+                    1.9,
+                    3.2,
+                    hasCurrentVmsFishingActivity = true
+                ),
                 producerOrganization = null,
                 vesselProfile = DUMMY_VESSEL_PROFILE,
                 vesselGroups = getDynamicVesselGroups(),
@@ -150,6 +161,83 @@ class EnrichedActiveVesselUTests {
         assertThat(vessel.segments).isEqualTo(listOf("NWW05"))
         assertThat(vessel.gearsArray).isEqualTo(listOf("TBB"))
     }
+
+    @Test
+    fun `Should compute activity origin as FROM_RECENT_PROFILE When species onboard is null and vessel has vms activity`() {
+        // Given
+        val lastPositionWithNullGears = getDummyLastPositions().first().copy(speciesOnboard = null)
+        val vessel =
+            EnrichedActiveVessel(
+                vessel =
+                    Vessel(
+                        id = 123,
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        underCharter = true,
+                        hasLogbookEsacapt = false,
+                    ),
+                riskFactor = VesselRiskFactor(
+                    2.3,
+                    2.0,
+                    1.9,
+                    3.2,
+                    hasCurrentVmsFishingActivity = true
+                ),
+                producerOrganization = null,
+                vesselProfile = DUMMY_VESSEL_PROFILE,
+                vesselGroups = getDynamicVesselGroups(),
+                beacon = null,
+                lastPosition = lastPositionWithNullGears,
+                landingPort = null,
+            )
+
+        // Then
+        assertThat(vessel.activityOrigin).isEqualTo(ActivityOrigin.FROM_RECENT_PROFILE)
+        assertThat(vessel.segments).isEqualTo(listOf("NWW05"))
+        assertThat(vessel.gearsArray).isEqualTo(listOf("TBB"))
+    }
+
+    @Test
+    fun `Should compute activity origin as FROM_LOGBOOK When species onboard is empty and vessel has no vms activity`() {
+        // Given
+        val lastPositionWithNullGears = getDummyLastPositions().first().copy(speciesOnboard = null)
+        val vessel =
+            EnrichedActiveVessel(
+                vessel =
+                    Vessel(
+                        id = 123,
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        underCharter = true,
+                        hasLogbookEsacapt = false,
+                    ),
+                riskFactor = VesselRiskFactor(
+                    2.3,
+                    2.0,
+                    1.9,
+                    3.2,
+                    hasCurrentVmsFishingActivity = false
+                ),
+                producerOrganization = null,
+                vesselProfile = DUMMY_VESSEL_PROFILE,
+                vesselGroups = getDynamicVesselGroups(),
+                beacon = null,
+                lastPosition = lastPositionWithNullGears,
+                landingPort = null,
+            )
+
+        // Then
+        assertThat(vessel.activityOrigin).isEqualTo(ActivityOrigin.FROM_LOGBOOK)
+        assertThat(vessel.segments).isEqualTo(listOf("NWW03", "NWW06"))
+        assertThat(vessel.gearsArray).isEqualTo(listOf("OTB"))
+    }
+
 
     @Test
     fun `Should get segments from last position When activity origin is FROM_LOGBOOK`() {
@@ -181,7 +269,7 @@ class EnrichedActiveVesselUTests {
         val vessel =
             EnrichedActiveVessel(
                 vessel = null,
-                riskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                riskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2, hasCurrentVmsFishingActivity = true),
                 producerOrganization = null,
                 vesselProfile = vesselProfileWithNoSegment,
                 vesselGroups = listOf(),

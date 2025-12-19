@@ -30,7 +30,7 @@ data class EnrichedActiveVessel(
 
     init {
         activityType = computeActivityTypeFrom(lastPosition)
-        activityOrigin = computeActivityOriginFrom(lastPosition)
+        activityOrigin = computeActivityOriginFrom(lastPosition, riskFactor)
 
         segments =
             if (activityOrigin == ActivityOrigin.FROM_LOGBOOK) {
@@ -62,15 +62,15 @@ data class EnrichedActiveVessel(
             }
     }
 
-    /**
-     * The last_positions table is updated more frequently than vessel_profiles/risk_factors tables,
-     * so we prefer using last_positions.
-     */
-    private fun computeActivityOriginFrom(lastPosition: LastPosition?): ActivityOrigin {
-        val isEmittingLogbookCurrently = lastPosition?.gearOnboard?.isNotEmpty() ?: false
-
+    private fun computeActivityOriginFrom(lastPosition: LastPosition? ,riskFactor: VesselRiskFactor): ActivityOrigin {
+        val hasDeclaredCatchesOnboard = riskFactor.speciesOnboard.isNotEmpty()
+        val hasCurrentVmsFishingActivity = riskFactor.hasCurrentVmsFishingActivity
+        val hasLastPosition = (lastPosition != null)
         return when {
-            !isEmittingLogbookCurrently -> ActivityOrigin.FROM_RECENT_PROFILE
+            hasDeclaredCatchesOnboard -> ActivityOrigin.FROM_LOGBOOK
+            hasCurrentVmsFishingActivity -> ActivityOrigin.FROM_RECENT_PROFILE
+            // TODO : Use USUAL_PROFILE data for vessels that have no VMS and no recent_profile data
+            !hasLastPosition -> ActivityOrigin.FROM_RECENT_PROFILE
             else -> ActivityOrigin.FROM_LOGBOOK
         }
     }

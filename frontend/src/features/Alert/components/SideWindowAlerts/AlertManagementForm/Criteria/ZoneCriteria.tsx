@@ -6,7 +6,7 @@ import {
 import { AdministrativeAreaType } from '@features/Alert/constants'
 import { useGetFilterableZonesAsTreeOptions } from '@hooks/useGetFilterableZonesAsTreeOptions'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import {CheckTreePicker, type OptionValueType, type TreeOption} from '@mtes-mct/monitor-ui'
+import {CheckTreePicker, MultiCascader, type OptionValueType, type TreeOption} from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useFormikContext } from 'formik'
 import { groupBy } from 'lodash-es'
@@ -47,10 +47,11 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
             })),
             label: lawType,
             value: lawType
-          })) as TreeOption<RegulatoryAreaSpecification>[])
+          })) as TreeOption[])
         : [],
     [regulatoryLayerLawTypes]
   )
+  console.log(regulatoryOptions)
 
   const updateZones = async (nextZonesNames: OptionValueType[] | undefined) => {
     assertNotNullish(filterableZoneAsTreeOptions)
@@ -131,7 +132,7 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
             )
           })()}
         />
-        <StyledMultiCascader
+        <StyledCheckTreePicker
           disabled={!regulatoryLayerLawTypes}
           label="Zones réglementaires déclenchant l'alerte"
           name="regulatoryAreas"
@@ -147,6 +148,10 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
   )
 }
 
-const StyledMultiCascader = styled(CheckTreePicker)`
+const StyledMultiCascader = styled(MultiCascader)`
+  margin-top: 16px;
+`
+
+const StyledCheckTreePicker = styled(CheckTreePicker)`
   margin-top: 16px;
 `

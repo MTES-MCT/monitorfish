@@ -1,12 +1,14 @@
 import { Criteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/shared/Criteria'
 import {
-  convertRegulatoryAreasArrayToTreeOptions, convertTreeOptionsToRegulatoryAreasArray,
+  convertRegulatoryAreasArrayToTreeOptions,
+  convertRegulatoryLayerLawTypesToTreeOptions,
+  convertTreeOptionsToRegulatoryAreasArray,
   mapZonesWithMetadata
 } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/utils'
 import { AdministrativeAreaType } from '@features/Alert/constants'
 import { useGetFilterableZonesAsTreeOptions } from '@hooks/useGetFilterableZonesAsTreeOptions'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import {CheckTreePicker, MultiCascader, type OptionValueType, type TreeOption} from '@mtes-mct/monitor-ui'
+import { CheckTreePicker, MultiCascader, type OptionValueType, type TreeOption } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useFormikContext } from 'formik'
 import { groupBy } from 'lodash-es'
@@ -32,26 +34,10 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
   const uncheckableZones = Object.keys(filteredZones)
 
   const regulatoryLayerLawTypes = useMainAppSelector(state => state.regulation.regulatoryLayerLawTypes)
-
   const regulatoryOptions = useMemo(
-    () =>
-      regulatoryLayerLawTypes
-        ? (Object.entries(regulatoryLayerLawTypes).map(([lawType, topics]) => ({
-            children: Object.entries(topics).map(([topic, zones]) => ({
-              children: zones.map(zone => ({
-                label: zone.zone,
-                value: zone.zone
-              })),
-              label: topic,
-              value: topic
-            })),
-            label: lawType,
-            value: lawType
-          })) as TreeOption[])
-        : [],
+    () => convertRegulatoryLayerLawTypesToTreeOptions(regulatoryLayerLawTypes),
     [regulatoryLayerLawTypes]
   )
-  console.log(regulatoryOptions)
 
   const updateZones = async (nextZonesNames: OptionValueType[] | undefined) => {
     assertNotNullish(filterableZoneAsTreeOptions)
@@ -75,7 +61,6 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
     setFieldValue('administrativeAreas', administrativeAreas)
   }
 
-
   const updateRegulatoryAreas = (nextRegulationValues: TreeOption[] | undefined) => {
     if (nextRegulationValues === undefined) {
       setFieldValue('regulatoryAreas', [])
@@ -95,7 +80,6 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
   }
 
   const regulatoryCheckTreeValues = convertRegulatoryAreasArrayToTreeOptions(values.regulatoryAreas)
-  console.log(regulatoryCheckTreeValues, values.regulatoryAreas)
 
   return (
     <Criteria.Wrapper>
@@ -140,7 +124,7 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
           options={regulatoryOptions}
           placeholder=""
           searchable
-          value={regulatoryCheckTreeValues || []}
+          value={regulatoryCheckTreeValues ?? []}
         />
         <Criteria.Delete onClick={handleDeleteCriteria} />
       </Criteria.Body>

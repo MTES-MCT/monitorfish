@@ -68,7 +68,7 @@ context('Vessel sidebar resume tab', () => {
     /**
      * Vessel with a recent profile
      */
-    openVesselBySearch('CFR117')
+    openVesselBySearch('CFR109')
     cy.get('*[data-cy^="impact-risk-factor"]').click({ force: true, timeout: 10000 })
     cy.get(
       '[title="Segment(s) ces 14 derniers jours\n\n' +

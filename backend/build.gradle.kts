@@ -1,3 +1,7 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jlleitschuh.gradle.ktlint.KtlintExtension
+
 plugins {
     `java-library`
     `maven-publish`
@@ -10,6 +14,30 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
     kotlin("plugin.serialization") version "2.2.21"
     id("io.spring.dependency-management") version "1.1.7"
+}
+
+group = "fr.gouv.cnsp"
+version = "VERSION_TO_CHANGE"
+description = "MonitorFish"
+java.sourceCompatibility = JavaVersion.VERSION_21
+
+publishing {
+    publications.create<MavenPublication>("maven") {
+        from(components["java"])
+    }
+}
+
+springBoot {
+    mainClass.set("fr.gouv.cnsp.monitorfish.MonitorFishApplicationKt")
+
+    buildInfo {
+        properties {
+            additional =
+                mapOf(
+                    "commit.hash" to "COMMIT_TO_CHANGE",
+                )
+        }
+    }
 }
 
 // this is to address https://github.com/JLLeitschuh/ktlint-gradle/issues/809
@@ -29,7 +57,7 @@ repositories {
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 
 noArg {
@@ -40,11 +68,10 @@ configurations.all {
     exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
 }
 
-tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask::class.java) {
+tasks.withType<KotlinCompile> {
     compilerOptions {
-        freeCompilerArgs.add("-Xjsr305=strict")
-        // jvmTarget.set(JvmTarget.JVM_17)
-        // javaParameters.set(true)
+        jvmTarget.set(JvmTarget.JVM_21)
+        freeCompilerArgs.set(listOf("-Xjsr305=strict"))
     }
 }
 
@@ -99,30 +126,6 @@ dependencies {
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc:3.0.5")
 }
 
-group = "fr.gouv.cnsp"
-version = "VERSION_TO_CHANGE"
-description = "MonitorFish"
-java.sourceCompatibility = JavaVersion.VERSION_17
-
-publishing {
-    publications.create<MavenPublication>("maven") {
-        from(components["java"])
-    }
-}
-
-springBoot {
-    mainClass.set("fr.gouv.cnsp.monitorfish.MonitorFishApplicationKt")
-
-    buildInfo {
-        properties {
-            additional =
-                mapOf(
-                    "commit.hash" to "COMMIT_TO_CHANGE",
-                )
-        }
-    }
-}
-
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
@@ -131,7 +134,7 @@ tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
 }
 
-configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+configure<KtlintExtension> {
     verbose.set(true)
     android.set(false)
     outputToConsole.set(true)

@@ -5,13 +5,20 @@ context('Main Window > Control Unit Dialog > Contact List', () => {
     goToMainWindowAndOpenControlUnit(10484)
   })
 
-  it('Should show all contacts by default', () => {
+  /**
+   * See: update-control-unit-contact-scenario.json for stub scenario
+   */
+  it('Should add, edit and delete a contact', () => {
+    /**
+     * Test case 1: Should show all contacts by default
+     */
     cy.getDataCy('ControlUnitDialog-control-unit-contact').should('have.length', 4)
     cy.contains('Centre opérationnel').should('be.visible')
     cy.contains('Nom de contact à renseigner').should('be.visible')
-  })
 
-  it('Should validate the form', () => {
+    /**
+     * Test case 2: Should validate the form
+     */
     cy.clickButton('Ajouter un contact')
 
     cy.clickButton('Ajouter')
@@ -22,12 +29,7 @@ context('Main Window > Control Unit Dialog > Contact List', () => {
     cy.getDataCy('ControlUnitDialog').clickButton('Annuler')
 
     cy.get('p').contains('Ajouter un contact').should('not.exist')
-  })
 
-  /**
-   * See: update-control-unit-contact-scenario.json for stub scenario
-   */
-  it('Should add, edit and delete a contact', () => {
     // -------------------------------------------------------------------------
     // Create
 

@@ -86,7 +86,7 @@ data class RiskFactorEntity(
     val vesselId: Int?,
     @Column(name = "has_current_vms_fishing_activity")
     val hasCurrentVmsFishingActivity: Boolean,
-    ) : Serializable {
+) : Serializable {
     fun toVesselRiskFactor(mapper: ObjectMapper) =
         VesselRiskFactor(
             impactRiskFactor = impactRiskFactor,
@@ -118,6 +118,6 @@ data class RiskFactorEntity(
             recentSegmentHighestImpact = recentSegmentHighestImpact,
             recentSegmentHighestPriority = recentSegmentHighestPriority,
             recentControlPriorityLevel = recentControlPriorityLevel,
-            hasCurrentVmsFishingActivity = hasCurrentVmsFishingActivity
+            hasCurrentVmsFishingActivity = hasCurrentVmsFishingActivity,
         )
 }

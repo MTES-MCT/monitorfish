@@ -7,12 +7,16 @@ context('Main Window > Control Unit Dialog > Resource List', () => {
     goToMainWindowAndOpenControlUnit(10484)
   })
 
-  it('Should show all resources by default', () => {
+  it('Should add, edit and delete a resource', () => {
+    // -------------------------------------------------------------------------
+    // Should show all resources by default
+
     cy.getDataCy('ControlUnitDialog-control-unit-resource').should('have.length', 1)
     cy.contains('DF 36 Kan An Avel').should('be.visible')
-  })
 
-  it('Should validate the form', () => {
+    // -------------------------------------------------------------------------
+    // Should validate the form
+
     cy.clickButton('Ajouter un moyen')
 
     cy.clickButton('Ajouter')
@@ -23,10 +27,11 @@ context('Main Window > Control Unit Dialog > Resource List', () => {
     cy.getDataCy('ControlUnitDialog').clickButton('Annuler')
 
     cy.get('p').contains('Ajouter un moyen').should('not.exist')
-  })
 
-  it('Should show an error dialog when trying to delete a resource linked to some missions', () => {
-    cy.intercept('GET', `/api/v1/control_unit_resources/553/can_delete`, {
+    // -------------------------------------------------------------------------
+    // Should show an error dialog when trying to delete a resource linked to some missions
+
+    cy.intercept({ times: 1, url: `/api/v1/control_unit_resources/553/can_delete` }, {
       body: { value: false },
       statusCode: 200
     }).as('canDeleteControlUnitResource')
@@ -36,10 +41,7 @@ context('Main Window > Control Unit Dialog > Resource List', () => {
 
     cy.get('.Component-Dialog').should('be.visible')
     cy.contains('Suppression impossible').should('be.visible')
-  })
-
-  it('Should add, edit and delete a resource', () => {
-    goToMainWindowAndOpenControlUnit(10484)
+    cy.clickButton('Fermer')
 
     // -------------------------------------------------------------------------
     // Create

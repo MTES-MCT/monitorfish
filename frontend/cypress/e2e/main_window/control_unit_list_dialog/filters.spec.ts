@@ -32,6 +32,7 @@ context('Main Window > Control Unit List Dialog', () => {
 
     cy.getDataCy('ControlUnitListDialog-control-unit').should('have.length', 1)
     cy.contains('BGC Lorient - DF 36 Kan An Avel').should('exist')
+    cy.fill('Administration', undefined)
 
     /**
      * Should find control units matching the selected resource category
@@ -42,6 +43,7 @@ context('Main Window > Control Unit List Dialog', () => {
 
     cy.contains('PAM Jeanne Barret').should('exist')
     cy.contains('ULAM 56').should('exist')
+    cy.fill('Catégorie de moyen', undefined)
 
     /**
      * Should find control units matching the selected resource type
@@ -51,6 +53,7 @@ context('Main Window > Control Unit List Dialog', () => {
     cy.getDataCy('ControlUnitListDialog-control-unit').should('have.length', 4)
     cy.contains('BSL Lorient').should('exist')
     cy.contains('ULAM 56').should('exist')
+    cy.fill('Type de moyen', undefined)
 
     /**
      * Should find control units matching the selected base

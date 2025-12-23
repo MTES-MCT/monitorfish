@@ -53,6 +53,9 @@ logging:
         org.springframework.security.web.authentication.logout: DEBUG
 
 spring:
+    threads:
+        virtual:
+            enabled: false
     jmx:
         enabled: false
     mvc:

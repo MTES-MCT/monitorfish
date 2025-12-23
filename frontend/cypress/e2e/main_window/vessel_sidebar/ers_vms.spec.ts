@@ -9,9 +9,12 @@ context('Vessel sidebar ers/vms tab', () => {
     cy.wait(1000)
   })
 
-  it('ERS/VMS tab Should be displayed for PHENOMENE', () => {
+  it('ERS/VMS tab Should show information about vessel equipment', () => {
     // Given
-    openVesselBySearch('Pheno')
+    cy.get('input[placeholder="Rechercher un navire..."]').type('pheno')
+    cy.contains('mark', 'PHENO').click()
+    cy.wait(50)
+    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.intercept('GET', '/bff/v1/vessels/beacon_malfunctions*').as('vesselBeaconMalfunctions')
 
     // When
@@ -25,10 +28,27 @@ context('Vessel sidebar ers/vms tab', () => {
     cy.get('*[data-cy="E-Sacapt"]').contains('Non')
     cy.get('*[data-cy="VisioCaptures"]').contains('Oui')
     cy.get('*[data-cy="Logiciel JPE"]').contains('JT/VISIOCaptures V1.4.7')
+  })
 
-    /**
-     * ERS/VMS tab Should contain history of beacon malfunctions and show a malfunction detail in history
-     */
+  it('ERS/VMS tab Should not throw When a beacon is missing', () => {
+    // Given
+    cy.get('input[placeholder="Rechercher un navire..."]').type('MERLU')
+    cy.contains('mark', 'MERLU').click()
+    cy.wait(50)
+    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    cy.intercept('GET', '/bff/v1/vessels/beacon_malfunctions*').as('vesselBeaconMalfunctions')
+
+    // When
+    cy.get('*[data-cy="vessel-menu-ers-vms"]').click({ timeout: 10000 })
+
+    // Then, it does not throw
+  })
+
+  it('ERS/VMS tab Should contain history of beacon malfunctions and show a malfunction detail in history', () => {
+    // Given
+    openVesselBySearch('Pheno')
+    cy.intercept('GET', '/bff/v1/vessels/beacon_malfunctions*').as('vesselBeaconMalfunctions')
+
     // When
     cy.get('*[data-cy="vessel-menu-ers-vms"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-beacon-malfunctions"]', { timeout: 10000 }).should('be.visible')
@@ -65,20 +85,6 @@ context('Vessel sidebar ers/vms tab', () => {
     cy.get('*[data-cy="beacon-malfunction-details"]', { timeout: 10000 }).contains('Navire en mer')
     cy.get('*[data-cy="beacon-malfunction-details"]', { timeout: 10000 }).contains('14 jours')
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()
-  })
-
-  it('ERS/VMS tab Should not throw When a beacon is missing', () => {
-    // Given
-    cy.get('input[placeholder="Rechercher un navire..."]').type('MERLU')
-    cy.contains('mark', 'MERLU').click()
-    cy.wait(50)
-    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
-    cy.intercept('GET', '/bff/v1/vessels/beacon_malfunctions*').as('vesselBeaconMalfunctions')
-
-    // When
-    cy.get('*[data-cy="vessel-menu-ers-vms"]').click({ timeout: 10000 })
-
-    // Then, it does not throw
   })
 
   it('ERS/VMS tab Should contain current and history of beacon malfunctions', () => {

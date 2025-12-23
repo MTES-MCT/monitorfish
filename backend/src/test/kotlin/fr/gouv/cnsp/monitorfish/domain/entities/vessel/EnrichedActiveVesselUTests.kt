@@ -104,12 +104,13 @@ class EnrichedActiveVesselUTests {
                         underCharter = true,
                         hasLogbookEsacapt = false,
                     ),
-                riskFactor = VesselRiskFactor(
-                    2.3,
-                    2.0,
-                    1.9,
-                    3.2
-                ),
+                riskFactor =
+                    VesselRiskFactor(
+                        2.3,
+                        2.0,
+                        1.9,
+                        3.2,
+                    ),
                 producerOrganization = null,
                 vesselProfile = DUMMY_VESSEL_PROFILE,
                 vesselGroups = getDynamicVesselGroups(),
@@ -141,13 +142,14 @@ class EnrichedActiveVesselUTests {
                         underCharter = true,
                         hasLogbookEsacapt = false,
                     ),
-                riskFactor = VesselRiskFactor(
-                    2.3,
-                    2.0,
-                    1.9,
-                    3.2,
-                    hasCurrentVmsFishingActivity = true
-                ),
+                riskFactor =
+                    VesselRiskFactor(
+                        2.3,
+                        2.0,
+                        1.9,
+                        3.2,
+                        hasCurrentVmsFishingActivity = true,
+                    ),
                 producerOrganization = null,
                 vesselProfile = DUMMY_VESSEL_PROFILE,
                 vesselGroups = getDynamicVesselGroups(),
@@ -179,13 +181,14 @@ class EnrichedActiveVesselUTests {
                         underCharter = true,
                         hasLogbookEsacapt = false,
                     ),
-                riskFactor = VesselRiskFactor(
-                    2.3,
-                    2.0,
-                    1.9,
-                    3.2,
-                    hasCurrentVmsFishingActivity = true
-                ),
+                riskFactor =
+                    VesselRiskFactor(
+                        2.3,
+                        2.0,
+                        1.9,
+                        3.2,
+                        hasCurrentVmsFishingActivity = true,
+                    ),
                 producerOrganization = null,
                 vesselProfile = DUMMY_VESSEL_PROFILE,
                 vesselGroups = getDynamicVesselGroups(),
@@ -217,13 +220,14 @@ class EnrichedActiveVesselUTests {
                         underCharter = true,
                         hasLogbookEsacapt = false,
                     ),
-                riskFactor = VesselRiskFactor(
-                    2.3,
-                    2.0,
-                    1.9,
-                    3.2,
-                    hasCurrentVmsFishingActivity = false
-                ),
+                riskFactor =
+                    VesselRiskFactor(
+                        2.3,
+                        2.0,
+                        1.9,
+                        3.2,
+                        hasCurrentVmsFishingActivity = false,
+                    ),
                 producerOrganization = null,
                 vesselProfile = DUMMY_VESSEL_PROFILE,
                 vesselGroups = getDynamicVesselGroups(),
@@ -237,7 +241,6 @@ class EnrichedActiveVesselUTests {
         assertThat(vessel.segments).isEqualTo(listOf("NWW03", "NWW06"))
         assertThat(vessel.gearsArray).isEqualTo(listOf("OTB"))
     }
-
 
     @Test
     fun `Should get segments from last position When activity origin is FROM_LOGBOOK`() {

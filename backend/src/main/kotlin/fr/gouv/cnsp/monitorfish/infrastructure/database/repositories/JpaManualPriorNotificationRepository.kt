@@ -10,7 +10,6 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepos
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ManualPriorNotificationEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.utils.toSqlArrayString
-import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository

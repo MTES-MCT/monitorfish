@@ -62,7 +62,10 @@ data class EnrichedActiveVessel(
             }
     }
 
-    private fun computeActivityOriginFrom(lastPosition: LastPosition? ,riskFactor: VesselRiskFactor): ActivityOrigin {
+    private fun computeActivityOriginFrom(
+        lastPosition: LastPosition?,
+        riskFactor: VesselRiskFactor,
+    ): ActivityOrigin {
         val hasDeclaredCatchesOnboard = riskFactor.speciesOnboard.isNotEmpty()
         val hasCurrentVmsFishingActivity = riskFactor.hasCurrentVmsFishingActivity
         val hasLastPosition = (lastPosition != null)

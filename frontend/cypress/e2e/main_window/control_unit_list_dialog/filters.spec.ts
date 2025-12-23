@@ -23,6 +23,7 @@ context('Main Window > Control Unit List Dialog', () => {
     cy.getDataCy('ControlUnitListDialog-control-unit').should('have.length', 3)
     cy.contains('BSL Lorient').should('exist')
     cy.contains('BGC Lorient - DF 36 Kan An Avel').should('exist')
+    cy.fill('Rechercher une unité', undefined)
 
     /**
      * Should find control units matching the selected administration

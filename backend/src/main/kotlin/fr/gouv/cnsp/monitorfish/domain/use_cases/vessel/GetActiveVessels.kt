@@ -10,7 +10,6 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
-import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime

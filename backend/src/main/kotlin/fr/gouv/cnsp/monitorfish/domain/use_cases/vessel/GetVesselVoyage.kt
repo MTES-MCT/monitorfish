@@ -67,8 +67,7 @@ class GetVesselVoyage(
                 when (e) {
                     is IllegalArgumentException,
                     is NoLogbookFishingTripFound,
-                    is NoSuchElementException,
-                    -> throw BackendUsageException(
+                    is NoSuchElementException -> throw BackendUsageException(
                         BackendUsageErrorCode.NOT_FOUND_BUT_OK,
                         message = "Could not fetch voyage for request \"${voyageRequest}\"",
                         cause = e,

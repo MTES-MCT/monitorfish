@@ -96,15 +96,10 @@ export const vesselApi = monitorfishApi.injectEndpoints({
       }
     }),
 
-    getVesselContactToUpdate: builder.query<Vessel.ContactMethod | undefined, number>({
+    getVesselContactToUpdate: builder.query<Vessel.ContactMethod, number>({
       query: id => `/vessels/contact_method/${id}`,
-      transformResponse: (baseQueryReturnValue: Vessel.ContactMethod | undefined) => {
-        if (!baseQueryReturnValue) {
-          return undefined
-        }
-
-        return parseResponseOrReturn<Vessel.ContactMethod>(baseQueryReturnValue, ContactMethodSchema, false)
-      }
+      transformResponse: (baseQueryReturnValue: Vessel.ContactMethod) =>
+        parseResponseOrReturn<Vessel.ContactMethod>(baseQueryReturnValue, ContactMethodSchema, false)
     }),
 
     /**

@@ -1,4 +1,4 @@
-import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_THIRTY_SECONDS_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { ALL_SEAFRONT_GROUP } from '@constants/seafront'
 import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { useGetPriorNotificationsToVerifyQuery } from '@features/PriorNotification/priorNotificationApi'
@@ -19,7 +19,7 @@ export function PriorNotificationListButton() {
   const sideWindow = useMainAppSelector(state => state.sideWindow)
 
   const { data } = useGetPriorNotificationsToVerifyQuery(isSuperUser ? undefined : skipToken, {
-    ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
+    ...RTK_THIRTY_SECONDS_POLLING_QUERY_OPTIONS,
     ...RTK_FORCE_REFETCH_QUERY_OPTIONS
   })
 

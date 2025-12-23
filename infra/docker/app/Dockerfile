@@ -8,7 +8,7 @@ ARG VERSION=NO_VERSION
 ########################################
 # Build monitorfish backend with maven #
 ########################################
-FROM gradle:9.2-jdk21 as buildBack
+FROM gradle:9.2-jdk21 AS build-back
 
 ARG GITHUB_SHA
 ARG VERSION

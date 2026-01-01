@@ -77,8 +77,8 @@ tasks.withType<KotlinCompile> {
 
 dependencies {
     api("org.springframework.boot:spring-boot-starter-web:3.5.8")
-    api("org.springframework.security:spring-security-oauth2-resource-server:6.5.6")
-    api("org.springframework.security:spring-security-oauth2-jose:6.5.6")
+    api("org.springframework.security:spring-security-oauth2-resource-server:7.0.2")
+    api("org.springframework.security:spring-security-oauth2-jose:7.0.2")
     api("org.springframework.boot:spring-boot-starter-json:3.5.8")
     api("org.springframework.boot:spring-boot-starter-security:3.5.8")
     api("org.springframework.boot:spring-boot-starter-data-jpa:3.5.8")
@@ -122,7 +122,7 @@ dependencies {
     testImplementation("jakarta.servlet:jakarta.servlet-api:6.1.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:5.3.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.8")
-    testImplementation("org.springframework.security:spring-security-test:6.5.6")
+    testImplementation("org.springframework.security:spring-security-test:7.0.2")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc:3.0.5")
 }
 

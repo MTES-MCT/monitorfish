@@ -38,6 +38,9 @@ def suspicions_of_under_declaration_alerts_flow():
         vessels_with_suspicions_of_under_declaration,
         AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT.value,
         "Suspicion de sous-déclaration",
+        natinf_code=27689,
+        threat="Obligations déclaratives",
+        threat_characterization="FAR (JPE)",
     )
     filtered_alerts = filter_alerts(alerts, silenced_alerts, active_reportings)
 

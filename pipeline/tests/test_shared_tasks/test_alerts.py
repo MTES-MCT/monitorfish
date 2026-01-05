@@ -181,6 +181,7 @@ def test_make_alerts():
             "triggering_behaviour_datetime_utc": [date_1, date_2],
             "latitude": [9.8, -1.963],
             "longitude": [65.59, -81.71],
+            "depth": [350.2, 256.1],
             "vessel_id": [1, 12],
             "dml": ["dml 007", "dml 22"],
         }
@@ -190,6 +191,11 @@ def test_make_alerts():
         vessels_in_alert,
         alert_type="MISSING_FAR_ALERT",
         name="Jean-Michel d'Aitèque Sion",
+        natinf_code=27689,
+        threat="Obligations déclaratives",
+        threat_characterization="FAR (JPE)",
+        alert_id=42,
+        description="Alert description",
     )
 
     expected_alerts = pd.DataFrame(
@@ -215,6 +221,12 @@ def test_make_alerts():
                     "type": "MISSING_FAR_ALERT",
                     "riskFactor": 1.23,
                     "dml": "dml 007",
+                    "natinfCode": 27689,
+                    "threat": "Obligations déclaratives",
+                    "threatCharacterization": "FAR (JPE)",
+                    "alertId": 42,
+                    "description": "Alert description",
+                    "depth": 350.2,
                 },
                 {
                     "seaFront": "MEMN",
@@ -222,11 +234,17 @@ def test_make_alerts():
                     "type": "MISSING_FAR_ALERT",
                     "riskFactor": 3.56,
                     "dml": "dml 22",
+                    "natinfCode": 27689,
+                    "threat": "Obligations déclaratives",
+                    "threatCharacterization": "FAR (JPE)",
+                    "alertId": 42,
+                    "description": "Alert description",
+                    "depth": 256.1,
                 },
             ],
             "alert_config_name": [
-                "MISSING_FAR_ALERT",
-                "MISSING_FAR_ALERT",
+                "MISSING_FAR_ALERT/42",
+                "MISSING_FAR_ALERT/42",
             ],
         }
     ).astype({"creation_date": "datetime64[us]"})
@@ -234,22 +252,21 @@ def test_make_alerts():
     pd.testing.assert_frame_equal(alerts, expected_alerts)
 
     # Without optional in input
-    vessels_in_alert = vessels_in_alert.drop(columns=["latitude", "longitude"])
+    vessels_in_alert = vessels_in_alert.drop(columns=["latitude", "longitude", "depth"])
     alerts = make_alerts(
         vessels_in_alert,
         alert_type="MISSING_FAR_ALERT",
         name="Jean-Michel d'Aitèque Sion",
-        alert_id=42,
+        natinf_code=27689,
+        threat="Obligations déclaratives",
+        threat_characterization="FAR (JPE)",
     )
     expected_alerts["latitude"] = None
     expected_alerts["longitude"] = None
-    expected_alerts["creation_date"] = [
-        datetime(2020, 5, 3, 8, 0, 0),
-        datetime(2020, 5, 3, 8, 0, 0),
-    ]
-    expected_alerts = expected_alerts.astype({"creation_date": "datetime64[us]"})
-    expected_alerts.value.map(lambda d: d.setdefault("alertId", 42))
-    expected_alerts["alert_config_name"] = ["MISSING_FAR_ALERT/42"] * 2
+    expected_alerts.value.map(lambda d: d.pop("alertId"))
+    expected_alerts.value.map(lambda d: d.pop("description"))
+    expected_alerts.value.map(lambda d: d.pop("depth"))
+    expected_alerts["alert_config_name"] = ["MISSING_FAR_ALERT"] * 2
 
     pd.testing.assert_frame_equal(alerts, expected_alerts)
 

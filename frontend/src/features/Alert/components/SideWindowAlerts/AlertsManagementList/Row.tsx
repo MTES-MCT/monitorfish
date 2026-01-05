@@ -166,7 +166,6 @@ export function Row({ row }: RowProps) {
               </p>
             )}
           </ExpandedRowCell>
-          <ExpandedRowCell />
           <ExpandedRowCell>
             <p>
               <ExpandedRowLabel>Délai de visibilité</ExpandedRowLabel>

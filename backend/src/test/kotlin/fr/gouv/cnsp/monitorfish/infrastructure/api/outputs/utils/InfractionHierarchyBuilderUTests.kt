@@ -118,7 +118,14 @@ class InfractionHierarchyBuilderUTests {
         val technicalThreat = result.find { it.label == "Mesures techniques et de conservation" }
         assertThat(technicalThreat).isNotNull
         assertThat(technicalThreat?.children).hasSize(1)
-        assertThat(technicalThreat?.children?.first()?.children?.first()?.value).isEqualTo(27718)
+        assertThat(
+            technicalThreat
+                ?.children
+                ?.first()
+                ?.children
+                ?.first()
+                ?.value,
+        ).isEqualTo(27718)
     }
 
     @Test
@@ -151,7 +158,12 @@ class InfractionHierarchyBuilderUTests {
             )
 
         // Then
-        val natinfs = result.first().children.first().children
+        val natinfs =
+            result
+                .first()
+                .children
+                .first()
+                .children
         assertThat(natinfs).hasSize(2)
 
         val emptyNameNatinf = natinfs.find { it.value == 12345 }

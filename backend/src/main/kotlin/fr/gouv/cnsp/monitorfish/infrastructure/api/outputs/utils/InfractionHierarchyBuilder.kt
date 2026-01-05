@@ -15,15 +15,15 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ThreatHierarchyDataOu
  *       {
  *         "children": [
  *           {
- *             "name": "27718 – Débarquement de produits de la pêche maritime et de l'aquaculture marine hors d'un port désigné",
+ *             "label": "27718 – Débarquement de produits de la pêche maritime et de l'aquaculture marine hors d'un port désigné",
  *             "value": 27718
  *           }
  *         ],
- *         "name": "Autorisation Débarquement",
+ *         "label": "Autorisation Débarquement",
  *         "value": "Autorisation Débarquement"
  *       }
  *     ],
- *     "name": "Mesures techniques et de conservation",
+ *     "label": "Mesures techniques et de conservation",
  *     "value": "Mesures techniques et de conservation"
  *   }
  * ]

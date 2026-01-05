@@ -42,17 +42,19 @@ data class PositionAlertSpecificationDataOutput(
             positionAlertSpecification: PositionAlertSpecification,
             useThreatHierarchyForForm: Boolean = true,
         ): PositionAlertSpecificationDataOutput {
-            val threatHierarchy = if (useThreatHierarchyForForm) {
-                InfractionHierarchyBuilder.buildThreatHierarchy(
-                    items = listOf(positionAlertSpecification),
-                    threatExtractor = { it.threat },
-                    characterizationExtractor = { it.threatCharacterization },
-                    natinfCodeExtractor = { it.natinf },
-                    infractionNameExtractor = { "" },
-                ).single()
-            } else {
-                null
-            }
+            val threatHierarchy =
+                if (useThreatHierarchyForForm) {
+                    InfractionHierarchyBuilder
+                        .buildThreatHierarchy(
+                            items = listOf(positionAlertSpecification),
+                            threatExtractor = { it.threat },
+                            characterizationExtractor = { it.threatCharacterization },
+                            natinfCodeExtractor = { it.natinf },
+                            infractionNameExtractor = { "" },
+                        ).single()
+                } else {
+                    null
+                }
 
             return PositionAlertSpecificationDataOutput(
                 id = positionAlertSpecification.id,

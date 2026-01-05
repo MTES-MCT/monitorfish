@@ -26,6 +26,8 @@ object TestUtils {
                 """.trimIndent(),
             isUserDefined = false,
             natinf = 7059,
+            threat = "Mesures techniques et de conservation",
+            threatCharacterization = "Engin",
             isActivated = true,
             isInError = false,
             isDeleted = false,

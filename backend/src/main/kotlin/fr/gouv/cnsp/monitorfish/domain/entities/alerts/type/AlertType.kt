@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.domain.entities.alerts.type
 
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PositionAlertSpecification
 import java.time.ZonedDateTime
-import kotlin.concurrent.thread
 
 enum class AlertType(
     val specification: PositionAlertSpecification?,

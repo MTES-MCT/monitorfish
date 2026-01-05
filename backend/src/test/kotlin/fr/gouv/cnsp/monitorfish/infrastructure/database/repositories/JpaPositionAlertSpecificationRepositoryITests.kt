@@ -185,6 +185,8 @@ class JpaPositionAlertSpecificationRepositoryITests : AbstractDBTests() {
                 description = "New test alert description",
                 isUserDefined = true,
                 natinf = 1234,
+                threat = "Activités INN",
+                threatCharacterization = "Pêche sans autorisation par navire communautaire",
                 isActivated = false,
                 repeatEachYear = false,
                 trackAnalysisDepth = 8.0,

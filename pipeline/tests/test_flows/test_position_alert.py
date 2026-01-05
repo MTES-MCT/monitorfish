@@ -1019,37 +1019,32 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
                 "ÉTABLIR IMPRESSION LORSQUE",
                 "DEVINER FIGURE CONSCIENCE",
                 "MYNAMEIS",
-                "I DO 4H REPORT",
             ],
             "internal_reference_number": [
                 "ABC000055481",
                 "ABC000306959",
                 "ABC000542519",
                 "ABC000658985",
-                None,
             ],
             "external_reference_number": [
                 "AS761555",
                 "RV348407",
                 "RO237719",
                 "OHMYGOSH",
-                "ZZTOPACDC",
             ],
             "ircs": [
                 "IL2468",
                 "LLUK",
                 "FQ7058",
                 "OGMJ",
-                "ZZ000000",
             ],
             "creation_date": [
                 now,
                 now,
                 now,
                 now,
-                now,
             ],
-            "trip_number": [None, None, None, None, None],
+            "trip_number": [None, None, None, None],
             "value": [
                 {
                     "dml": "DML 29",
@@ -1091,31 +1086,19 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
                     "seaFront": "SA",
                     "riskFactor": None,
                 },
-                {
-                    "dml": "DML 13",
-                    "name": name,
-                    "description": description,
-                    "natinfCode": natinf_code,
-                    "type": "POSITION_ALERT",
-                    "alertId": 1,
-                    "seaFront": "NAMO",
-                    "riskFactor": 1.7411011266,
-                },
             ],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
-                "IRCS",
             ],
-            "alert_config_name": ["POSITION_ALERT/1"] * 5,
-            "vessel_id": [3, 1, 2, None, 6],
-            "latitude": [53.435, 49.610, 43.324, 49.606, 43.324],
-            "longitude": [5.553, -0.740, 5.359, -0.736, 5.359],
+            "alert_config_name": ["POSITION_ALERT/1"] * 4,
+            "vessel_id": [3, 1, 2, None],
+            "latitude": [53.435, 49.606, 43.324, 49.606],
+            "longitude": [5.553, -0.736, 5.359, -0.736],
             "flag_state": [
                 "NL",
-                "FR",
                 "FR",
                 "FR",
                 "FR",
@@ -1184,33 +1167,28 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
                 "PLACE SPECTACLE SUBIR",
                 "ÉTABLIR IMPRESSION LORSQUE",
                 "DEVINER FIGURE CONSCIENCE",
-                "I DO 4H REPORT",
             ],
             "internal_reference_number": [
                 "ABC000055481",
                 "ABC000306959",
                 "ABC000542519",
-                None,
             ],
             "external_reference_number": [
                 "AS761555",
                 "RV348407",
                 "RO237719",
-                "ZZTOPACDC",
             ],
             "ircs": [
                 "IL2468",
                 "LLUK",
                 "FQ7058",
-                "ZZ000000",
             ],
             "creation_date": [
                 now,
                 now,
                 now,
-                now,
             ],
-            "trip_number": [None, None, None, None],
+            "trip_number": [None, None, None],
             "value": [
                 {
                     "dml": "DML 29",
@@ -1242,28 +1220,17 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
                     "seaFront": "NAMO",
                     "riskFactor": 1.41421356237310003,
                 },
-                {
-                    "dml": "DML 13",
-                    "type": "POSITION_ALERT",
-                    "alertId": alert_id,
-                    "natinfCode": natinf_code,
-                    "name": name,
-                    "description": description,
-                    "seaFront": "NAMO",
-                    "riskFactor": 1.7411011266,
-                },
             ],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
-                "IRCS",
             ],
-            "alert_config_name": [alert_config_name] * 4,
-            "vessel_id": [3, 1, 2, 6],
-            "latitude": [53.435, 49.610, 43.324, 43.324],
-            "longitude": [5.553, -0.740, 5.359, 5.359],
-            "flag_state": ["NL", "FR", "FR", "FR"],
+            "alert_config_name": [alert_config_name] * 3,
+            "vessel_id": [3, 1, 2],
+            "latitude": [53.435, 49.606, 43.324],
+            "longitude": [5.553, -0.736, 5.359],
+            "flag_state": ["NL", "FR", "FR"],
         }
     )
 
@@ -1364,8 +1331,8 @@ def test_flow_filters_on_gears(reset_test_data):
             ],
             "alert_config_name": [alert_config_name, alert_config_name],
             "vessel_id": [1, 2],
-            "latitude": [49.61, 43.324],
-            "longitude": [-0.74, 5.359],
+            "latitude": [49.606, 43.324],
+            "longitude": [-0.736, 5.359],
             "flag_state": ["FR", "FR"],
         }
     )
@@ -1431,29 +1398,24 @@ def test_flow_filters_on_time(reset_test_data):
             "vessel_name": [
                 "ÉTABLIR IMPRESSION LORSQUE",
                 "DEVINER FIGURE CONSCIENCE",
-                "I DO 4H REPORT",
             ],
             "internal_reference_number": [
                 "ABC000306959",
                 "ABC000542519",
-                None,
             ],
             "external_reference_number": [
                 "RV348407",
                 "RO237719",
-                "ZZTOPACDC",
             ],
             "ircs": [
                 "LLUK",
                 "FQ7058",
-                "ZZ000000",
             ],
             "creation_date": [
                 now,
                 now,
-                now,
             ],
-            "trip_number": [None, None, None],
+            "trip_number": [None, None],
             "value": [
                 {
                     "name": "Chalutage dans les 3 milles",
@@ -1475,27 +1437,16 @@ def test_flow_filters_on_time(reset_test_data):
                     "seaFront": "NAMO",
                     "riskFactor": 1.41421356237310003,
                 },
-                {
-                    "name": "Chalutage dans les 3 milles",
-                    "type": "POSITION_ALERT",
-                    "alertId": 1,
-                    "natinfCode": 7059,
-                    "description": "Description de l'alerte Chalutage dans les 3 milles",
-                    "dml": "DML 13",
-                    "seaFront": "NAMO",
-                    "riskFactor": 1.7411011266,
-                },
             ],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
-                "IRCS",
             ],
-            "alert_config_name": [alert_config_name] * 3,
-            "vessel_id": [1, 2, 6],
-            "latitude": [49.610, 43.324, 43.324],
-            "longitude": [-0.740, 5.359, 5.359],
-            "flag_state": ["FR", "FR", "FR"],
+            "alert_config_name": [alert_config_name] * 2,
+            "vessel_id": [1, 2],
+            "latitude": [49.606, 43.324],
+            "longitude": [-0.736, 5.359],
+            "flag_state": ["FR", "FR"],
         }
     )
 
@@ -1690,7 +1641,7 @@ def test_flow_filters_on_depth(reset_test_data):
                     "type": "POSITION_ALERT",
                     "seaFront": "SA",
                     "riskFactor": None,
-                    "depth": -0.740,
+                    "depth": -0.736,
                     "name": "Chalutage dans les 3 milles",
                     "alertId": 1,
                     "natinfCode": 7059,
@@ -1714,8 +1665,8 @@ def test_flow_filters_on_depth(reset_test_data):
             ],
             "alert_config_name": [alert_config_name] * 2,
             "vessel_id": [1, None],
-            "latitude": [49.610, 49.606],
-            "longitude": [-0.740, -0.736],
+            "latitude": [49.606, 49.606],
+            "longitude": [-0.736, -0.736],
             "flag_state": [
                 "FR",
                 "FR",
@@ -1780,21 +1731,17 @@ def test_flow_filters_on_eez_area(reset_test_data):
         {
             "vessel_name": [
                 "DEVINER FIGURE CONSCIENCE",
-                "I DO 4H REPORT",
             ],
             "internal_reference_number": [
                 "ABC000542519",
-                None,
             ],
             "external_reference_number": [
                 "RO237719",
-                "ZZTOPACDC",
             ],
             "ircs": [
                 "FQ7058",
-                "ZZ000000",
             ],
-            "trip_number": [None, None],
+            "trip_number": [None],
             "value": [
                 {
                     "dml": "DML 29",
@@ -1806,26 +1753,15 @@ def test_flow_filters_on_eez_area(reset_test_data):
                     "natinfCode": 9999,
                     "description": "Description de l'alerte Pêche en ZEE française",
                 },
-                {
-                    "dml": "DML 13",
-                    "type": "POSITION_ALERT",
-                    "seaFront": "NAMO",
-                    "riskFactor": 1.7411011266,
-                    "name": "Pêche en ZEE française",
-                    "alertId": 1,
-                    "natinfCode": 9999,
-                    "description": "Description de l'alerte Pêche en ZEE française",
-                },
             ],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
-                "IRCS",
             ],
-            "alert_config_name": [alert_config_name] * 2,
-            "vessel_id": [2, 6],
-            "latitude": [43.324, 43.324],
-            "longitude": [5.359, 5.359],
-            "flag_state": ["FR", "FR"],
+            "alert_config_name": [alert_config_name],
+            "vessel_id": [2],
+            "latitude": [43.324],
+            "longitude": [5.359],
+            "flag_state": ["FR"],
         }
     )
 

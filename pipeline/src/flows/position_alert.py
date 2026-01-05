@@ -5,7 +5,7 @@ import duckdb
 import pandas as pd
 from geoalchemy2.functions import ST_Intersects
 from prefect import flow, task
-from sqlalchemy import Table, and_, or_, select
+from sqlalchemy import Table, and_, not_, or_, select
 from sqlalchemy.sql import Select
 
 from src.entities.alerts import (
@@ -309,6 +309,8 @@ def make_positions_in_alert_query(
 
     if only_fishing_positions:
         q = q.where(positions_table.c.is_fishing)
+    else:
+        q = q.where(not_(positions_table.c.is_at_port))
 
     if flag_states_iso2:
         q = q.where(positions_table.c.flag_state.in_(flag_states_iso2))

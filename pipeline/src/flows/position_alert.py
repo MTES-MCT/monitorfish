@@ -432,6 +432,8 @@ def position_alert_flow(
     name: str,
     description: str,
     natinf_code: int,
+    threat_characterization: str,
+    threat: str,
     track_analysis_depth: float = 12.0,
     only_fishing_positions: bool = True,
     gears: List[GearSpecification] | None = None,
@@ -557,6 +559,8 @@ def position_alert_flow(
         name=name,
         description=description,
         natinf_code=natinf_code,
+        threat_characterization=threat_characterization,
+        threat=threat,
     )
     silenced_alerts = extract_silenced_alerts.submit(
         alert_type="POSITION_ALERT",

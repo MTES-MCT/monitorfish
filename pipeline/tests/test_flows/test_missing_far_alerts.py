@@ -446,6 +446,13 @@ def test_flow(reset_test_data):
     assert len(initial_pending_alerts) == 1
     assert len(final_pending_alerts) == 3
 
+    missing_far_alert_value = final_pending_alerts.loc[
+        final_pending_alerts.alert_config_name == "MISSING_FAR_ALERT", "value"
+    ].values[0]
+    assert missing_far_alert_value["threat"] == "Obligations déclaratives"
+    assert missing_far_alert_value["natinfCode"] == 27689
+    assert missing_far_alert_value["threatCharacterization"] == "FAR (JPE)"
+
 
 def test_flow_filters_silenced_alerts(reset_test_data):
     initial_pending_alerts = read_query(

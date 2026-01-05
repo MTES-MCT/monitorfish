@@ -128,9 +128,11 @@ def make_alerts(
     alert_type: str,
     name: str,
     *,
+    natinf_code: int,
+    threat: str,
+    threat_characterization: str,
     alert_id: int | None = None,
     description: str | None = None,
-    natinf_code: int | None = None,
 ) -> pd.DataFrame:
     """
     Generates alerts from the input `vessels_in_alert`, which must contain the
@@ -159,11 +161,13 @@ def make_alerts(
           create an alert.
         alert_type (str): `type` to specify in the built alerts.
         name (str): name of the alert.
+        natinf_code): natinf code associated with the alert.
+        threat (str): threat associated with the alert.
+        threat_characterization (str): threat_characterization associated with
+          the alert.
         alert_id (str | None): `alert_id` to specify in the built alerts,
           defaults to None.
         description (str | None): description of the alert, defaults to None.
-        natinf_code (str | None): natinf code associated with the alert, defaults to
-          None.
 
     Returns:
         pd.DataFrame: `DataFrame` of alerts.
@@ -199,9 +203,14 @@ def make_alerts(
         alerts["description"] = description
         value_cols.append("description")
 
-    if natinf_code is not None:
-        alerts["natinfCode"] = natinf_code
-        value_cols.append("natinfCode")
+    alerts["natinfCode"] = natinf_code
+    value_cols.append("natinfCode")
+
+    alerts["threat"] = threat
+    value_cols.append("threat")
+
+    alerts["threatCharacterization"] = threat_characterization
+    value_cols.append("threatCharacterization")
 
     if alert_id is not None:
         alerts["alertId"] = alert_id

@@ -93,8 +93,8 @@ def allocate_segments_to_catches(
                 vessel_type,
                 CASE
                     WHEN (
-                        SUM(CASE WHEN scip_species_type = 'PELAGIC' THEN weight ELSE 0 END) OVER (PARTITION BY {batch_id_column}) >
-                        SUM(CASE WHEN scip_species_type = 'DEMERSAL' THEN weight ELSE 0 END) OVER (PARTITION BY {batch_id_column})
+                        SUM(CASE WHEN scip_species_type::VARCHAR = 'PELAGIC' THEN weight ELSE 0 END) OVER (PARTITION BY {batch_id_column}) >
+                        SUM(CASE WHEN scip_species_type::VARCHAR = 'DEMERSAL' THEN weight ELSE 0 END) OVER (PARTITION BY {batch_id_column})
                     ) THEN 'PELAGIC'
                     ELSE 'DEMERSAL'
                 END AS main_scip_species_type
@@ -112,7 +112,7 @@ def allocate_segments_to_catches(
                     (
                         SUM(
                             CASE WHEN
-                                c.species = ANY(s.target_species) OR
+                                c.species::VARCHAR = ANY(s.target_species::VARCHAR[]) OR
                                 s.target_species = []
                             THEN
                                 weight
@@ -130,7 +130,7 @@ def allocate_segments_to_catches(
                 (
                     SUM(
                         CASE WHEN
-                            c.species = ANY(s.target_species)
+                            c.species::VARCHAR = ANY(s.target_species::VARCHAR[])
                         THEN
                             1
                         ELSE
@@ -143,20 +143,20 @@ def allocate_segments_to_catches(
             FROM catches_main_type c
             JOIN segments s
             ON
-                (c.gear = ANY(s.gears) OR s.gears = '[]'::VARCHAR[])
-                AND (length(filter(s.fao_areas, a -> c.fao_area LIKE a || '%')) > 0 OR s.fao_areas = '[]'::VARCHAR[])
-                AND s.year = c.year
-                AND (c.mesh >= s.min_mesh OR s.min_mesh IS NULL)
-                AND (c.mesh < s.max_mesh OR s.max_mesh IS NULL)
-                AND (c.vessel_type = ANY(s.vessel_types) OR s.vessel_types = [])
-                AND (s.main_scip_species_type = c.main_scip_species_type OR s.main_scip_species_type IS NULL)
+                (c.gear::VARCHAR = ANY(s.gears::VARCHAR[]) OR s.gears = '[]'::VARCHAR[])
+                AND (length(filter(s.fao_areas::VARCHAR[], a -> c.fao_area::VARCHAR LIKE a || '%')) > 0 OR s.fao_areas::VARCHAR[] = '[]'::VARCHAR[])
+                AND s.year::INTEGER = c.year::INTEGER
+                AND (c.mesh::DOUBLE PRECISION >= s.min_mesh::DOUBLE PRECISION OR s.min_mesh IS NULL)
+                AND (c.mesh::DOUBLE PRECISION < s.max_mesh::DOUBLE PRECISION OR s.max_mesh IS NULL)
+                AND (c.vessel_type::VARCHAR = ANY(s.vessel_types::VARCHAR[]) OR s.vessel_types = []::VARCHAR[])
+                AND (s.main_scip_species_type::VARCHAR = c.main_scip_species_type::VARCHAR OR s.main_scip_species_type IS NULL)
             QUALIFY (
                 (
                     has_target_species AND
                     share_of_target_species >= s.min_share_of_target_species
                 ) OR
                 s.min_share_of_target_species IS NULL OR
-                s.target_species = []
+                s.target_species::VARCHAR[] = []
             )
         ),
 

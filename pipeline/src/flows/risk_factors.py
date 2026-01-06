@@ -159,10 +159,10 @@ def merge(
     merged_segments = duckdb.sql(
         """
         SELECT
-            COALESCE(cs.cfr, rs.cfr, us.cfr) AS cfr,
+            COALESCE(cs.cfr::VARCHAR, rs.cfr::VARCHAR, us.cfr::VARCHAR) AS cfr,
             COALESCE(cs.vessel_id, rs.vessel_id, us.vessel_id) AS vessel_id,
-            COALESCE(cs.ircs, rs.ircs, us.ircs) AS ircs,
-            COALESCE(cs.external_immatriculation, rs.external_immatriculation, us.external_immatriculation) AS external_immatriculation,
+            COALESCE(cs.ircs::VARCHAR, rs.ircs::VARCHAR, us.ircs::VARCHAR) AS ircs,
+            COALESCE(cs.external_immatriculation::VARCHAR, rs.external_immatriculation::VARCHAR, us.external_immatriculation::VARCHAR) AS external_immatriculation,
             cs.last_logbook_message_datetime_utc,
             cs.departure_datetime_utc,
             cs.trip_number,
@@ -190,7 +190,7 @@ def merge(
         FULL OUTER JOIN usual_segments us
         ON us.cfr = cs.cfr
         FULL OUTER JOIN recent_segments rs
-        ON rs.cfr = COALESCE(us.cfr, cs.cfr)
+        ON rs.cfr = COALESCE(us.cfr::VARCHAR, cs.cfr::VARCHAR)
     """
     ).to_df()
 

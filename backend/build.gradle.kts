@@ -6,13 +6,13 @@ plugins {
     `java-library`
     `maven-publish`
     id("org.springframework.boot") version "3.5.8"
-    id("org.jetbrains.kotlin.plugin.spring") version "2.2.21"
-    kotlin("jvm") version "2.2.21"
-    id("org.jetbrains.kotlin.plugin.allopen") version "2.2.21"
-    kotlin("plugin.noarg") version "2.2.21"
-    kotlin("plugin.jpa") version "2.2.21"
+    id("org.jetbrains.kotlin.plugin.spring") version "2.3.0"
+    kotlin("jvm") version "2.3.0"
+    id("org.jetbrains.kotlin.plugin.allopen") version "2.3.0"
+    kotlin("plugin.noarg") version "2.3.0"
+    kotlin("plugin.jpa") version "2.3.0"
     id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
-    kotlin("plugin.serialization") version "2.2.21"
+    kotlin("plugin.serialization") version "2.3.0"
     id("io.spring.dependency-management") version "1.1.7"
 }
 

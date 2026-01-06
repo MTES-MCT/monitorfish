@@ -93,8 +93,8 @@ def allocate_segments_to_catches(
                 vessel_type,
                 CASE
                     WHEN (
-                        SUM(CASE WHEN scip_species_type = 'PELAGIC' THEN weight ELSE 0 END) OVER (PARTITION BY {batch_id_column}) >
-                        SUM(CASE WHEN scip_species_type = 'DEMERSAL' THEN weight ELSE 0 END) OVER (PARTITION BY {batch_id_column})
+                        SUM(CASE WHEN scip_species_type::VARCHAR = 'PELAGIC' THEN weight ELSE 0 END) OVER (PARTITION BY {batch_id_column}) >
+                        SUM(CASE WHEN scip_species_type::VARCHAR = 'DEMERSAL' THEN weight ELSE 0 END) OVER (PARTITION BY {batch_id_column})
                     ) THEN 'PELAGIC'
                     ELSE 'DEMERSAL'
                 END AS main_scip_species_type

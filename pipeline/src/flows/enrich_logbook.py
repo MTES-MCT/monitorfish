@@ -246,8 +246,8 @@ def compute_pno_segments(
         LEFT JOIN all_control_priorities acp
         ON
             acp.year = sc.year AND
-            acp.facade = sc.facade AND
-            acp.segment = sc.segment
+            acp.facade::VARCHAR = sc.facade::VARCHAR AND
+            acp.segment::VARCHAR = sc.segment::VARCHAR
         GROUP BY 1
         ORDER BY 1
     """

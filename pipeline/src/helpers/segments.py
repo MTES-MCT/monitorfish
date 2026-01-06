@@ -148,8 +148,8 @@ def allocate_segments_to_catches(
                 AND s.year = c.year
                 AND (c.mesh >= s.min_mesh OR s.min_mesh IS NULL)
                 AND (c.mesh < s.max_mesh OR s.max_mesh IS NULL)
-                AND (c.vessel_type = ANY(s.vessel_types) OR s.vessel_types = [])
-                AND (s.main_scip_species_type = c.main_scip_species_type OR s.main_scip_species_type IS NULL)
+                AND (c.vessel_type::VARCHAR = ANY(s.vessel_types::VARCHAR[]) OR s.vessel_types = [])
+                AND (s.main_scip_species_type::VARCHAR = c.main_scip_species_type::VARCHAR OR s.main_scip_species_type IS NULL)
             QUALIFY (
                 (
                     has_target_species AND

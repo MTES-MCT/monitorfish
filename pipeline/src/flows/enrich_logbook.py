@@ -246,8 +246,8 @@ def compute_pno_segments(
         LEFT JOIN all_control_priorities acp
         ON
             acp.year = sc.year AND
-            acp.facade = sc.facade AND
-            acp.segment = sc.segment
+            acp.facade::VARCHAR = sc.facade::VARCHAR AND
+            acp.segment::VARCHAR = sc.segment::VARCHAR
         GROUP BY 1
         ORDER BY 1
     """
@@ -362,7 +362,7 @@ def compute_pno_types(
             JOIN pno_types t
             ON
                 (pc.species = ANY(t.species) OR t.species = '[]'::VARCHAR[]) AND
-                (list_has_any(tgc.trip_gear_codes, t.gears) OR t.gears = '[]'::VARCHAR[]) AND
+                (list_has_any(tgc.trip_gear_codes::VARCHAR[], t.gears) OR t.gears = '[]'::VARCHAR[]) AND
                 (length(filter(t.fao_areas, a -> pc.fao_area LIKE a || '%')) > 0 OR t.fao_areas = '[]'::VARCHAR[]) AND
                 (pc.flag_state = ANY(t.flag_states) OR t.flag_states = '[]'::VARCHAR[])
         )

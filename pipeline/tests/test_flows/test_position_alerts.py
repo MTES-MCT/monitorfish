@@ -23,6 +23,8 @@ def test_position_alerts_flow(mock_run_deployment, reset_test_data):
             "name": "Alerte all-in",
             "description": "Alerte tous critères",
             "natinf_code": 22206,
+            "threat": "Threat all-in",
+            "threat_characterization": "Threat charac. all-in",
             "track_analysis_depth": 12.0,
             "only_fishing_positions": False,
             "gears": [
@@ -72,6 +74,8 @@ def test_position_alerts_flow(mock_run_deployment, reset_test_data):
             "name": "Alerte 1",
             "description": "Alerte tremail zone A",
             "natinf_code": 12345,
+            "threat": "Threat 1",
+            "threat_characterization": "Threat charac. 1",
             "track_analysis_depth": 12.0,
             "only_fishing_positions": False,
             "gears": [GearSpecification(gear="GTR", minMesh=None, maxMesh=None)],

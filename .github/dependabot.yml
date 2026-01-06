@@ -58,7 +58,7 @@ updates:
     assignees:
       - "VincentAntoine"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
       time: "04:00"
     commit-message:
       prefix: "[Tech] "
@@ -66,9 +66,7 @@ updates:
     groups:
       non-major-dependencies:
         applies-to: version-updates
-        dependency-type: production
         update-types: ["minor", "patch"]
-      non-major-dev-dependencies:
-        applies-to: version-updates
-        dependency-type: development
+      security-updates:
+        applies-to: security-updates
         update-types: ["minor", "patch"]

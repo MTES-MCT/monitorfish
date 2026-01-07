@@ -33,7 +33,10 @@ export function ActionCell({ alert, openSilenceAlertMenu }: ActionCellProps) {
         color={THEME.color.mediumSeaGreen}
         data-cy="side-window-alerts-validate-alert"
         Icon={Icon.Confirm}
-        onClick={() => dispatch(validateAlert(alert.id))}
+        onClick={e => {
+          dispatch(validateAlert(alert.id))
+          e.stopPropagation()
+        }}
         title="Valider l'alerte"
       />
       <IconButton

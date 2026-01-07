@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Callable, List, Union
+from typing import List, Union
 
 import css_inline
 import pandas as pd
@@ -406,7 +406,6 @@ def make_reset_requested_notifications_statement(
 def notify_beacon_malfunctions_flow(
     test_mode: bool,
     is_integration: bool,
-    send_beacon_malfunction_message_fn: Callable = send_beacon_malfunction_message,
 ):
     beacon_malfunctions_table = get_table(table_name="beacon_malfunctions")
     templates = get_templates()
@@ -442,7 +441,7 @@ def notify_beacon_malfunctions_flow(
 
     messages_to_send = flatten([email, sms, fax])
 
-    notifications = send_beacon_malfunction_message_fn.map(
+    notifications = send_beacon_malfunction_message.map(
         messages_to_send, is_integration=unmapped(is_integration)
     )
     notifications = filter_results(allow_failure(notifications))

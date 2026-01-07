@@ -20,7 +20,9 @@
                     "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
                     "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
-                    "natinfCode": 7059
+                    "natinfCode": 7059,
+                    "threat": "Mesures techniques et de conservation",
+                    "threatCharacterization": "Engin"
                 },
                 "latitude": -40.4050,
                 "longitude": -9.6987
@@ -42,7 +44,9 @@
                     "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
                     "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
-                    "natinfCode": 7059
+                    "natinfCode": 7059,
+                    "threat": "Mesures techniques et de conservation",
+                    "threatCharacterization": "Engin"
                 },
                 "latitude": -28.7514,
                 "longitude": 126.258
@@ -64,7 +68,9 @@
                     "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
                     "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
-                    "natinfCode": 7059
+                    "natinfCode": 7059,
+                    "threat": "Mesures techniques et de conservation",
+                    "threatCharacterization": "Engin"
                 },
                 "latitude": null,
                 "longitude": null
@@ -86,7 +92,9 @@
                     "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
                     "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
-                    "natinfCode": 7059
+                    "natinfCode": 7059,
+                    "threat": "Mesures techniques et de conservation",
+                    "threatCharacterization": "Engin"
                 },
                 "latitude": -55.5963,
                 "longitude": -11.2245
@@ -108,7 +116,9 @@
                     "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
                     "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
-                    "natinfCode": 7059
+                    "natinfCode": 7059,
+                    "threat": "Mesures techniques et de conservation",
+                    "threatCharacterization": "Engin"
                 },
                 "latitude": null,
                 "longitude": null
@@ -130,7 +140,9 @@
                     "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
                     "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
-                    "natinfCode": 7059
+                    "natinfCode": 7059,
+                    "threat": "Mesures techniques et de conservation",
+                    "threatCharacterization": "Engin"
                 },
                 "latitude": -75.698,
                 "longitude": 51.5987
@@ -153,7 +165,9 @@
                     "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
                     "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
-                    "natinfCode": 7059
+                    "natinfCode": 7059,
+                    "threat": "Mesures techniques et de conservation",
+                    "threatCharacterization": "Engin"
                 },
                 "latitude": null,
                 "longitude": null
@@ -175,7 +189,9 @@
                     "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
                     "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
-                    "natinfCode": 7059
+                    "natinfCode": 7059,
+                    "threat": "Mesures techniques et de conservation",
+                    "threatCharacterization": "Engin"
                 },
                 "latitude": -8.96,
                 "longitude": 51.8514
@@ -197,7 +213,9 @@
                     "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
                     "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
-                    "natinfCode": 7059
+                    "natinfCode": 7059,
+                    "threat": "Mesures techniques et de conservation",
+                    "threatCharacterization": "Engin"
                 },
                 "latitude": null,
                 "longitude": null
@@ -219,7 +237,9 @@
                     "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
                     "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
-                    "natinfCode": 7059
+                    "natinfCode": 7059,
+                    "threat": "Mesures techniques et de conservation",
+                    "threatCharacterization": "Engin"
                 },
                 "latitude": -5.1258,
                 "longitude": 47.6789
@@ -241,7 +261,9 @@
                     "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
                     "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
-                    "natinfCode": 7059
+                    "natinfCode": 7059,
+                    "threat": "Mesures techniques et de conservation",
+                    "threatCharacterization": "Engin"
                 },
                 "latitude": -8.56,
                 "longitude": -22.0236
@@ -263,7 +285,9 @@
                     "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
                     "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
-                    "natinfCode": 7059
+                    "natinfCode": 7059,
+                    "threat": "Mesures techniques et de conservation",
+                    "threatCharacterization": "Engin"
                 },
                 "latitude": null,
                 "longitude": null
@@ -285,7 +309,9 @@
                     "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
                     "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
-                    "natinfCode": 7059
+                    "natinfCode": 7059,
+                    "threat": "Mesures techniques et de conservation",
+                    "threatCharacterization": "Engin"
                 },
                 "latitude": -4.5691,
                 "longitude": 19.6547
@@ -307,7 +333,9 @@
                     "alertId": 1,
                     "name": "Chalutage dans les 3 milles",
                     "description": "Pour tous les navires en pêche dans la zone des 3 milles ayant déclaré un chalut dans un FAR de leur marée, ou n'ayant pas encore fait de FAR.",
-                    "natinfCode": 7059
+                    "natinfCode": 7059,
+                    "threat": "Mesures techniques et de conservation",
+                    "threatCharacterization": "Engin"
                 },
                 "latitude": null,
                 "longitude": null
@@ -329,7 +357,9 @@
                     "alertId": 4,
                     "name": "Pêche en ZEE française par un navire tiers",
                     "description": "Pour tous les navires tiers en pêche en ZEE française.",
-                    "natinfCode": 2608
+                    "natinfCode": 2608,
+                    "threat": "Activités INN",
+                    "threatCharacterization": "Pêche sans autorisation par navire tiers"
                 },
                 "latitude": 73.569,
                 "longitude": -52.456
@@ -351,7 +381,9 @@
                     "alertId": 8,
                     "name": "Pêche dans les 12 milles sans droits historiques",
                     "description": "Pour tous les navires UE - hors navires allemands, espagnols, néerlandais et belges - ou tiers en pêche dans les 12 milles.",
-                    "natinfCode": 2610
+                    "natinfCode": 2610,
+                    "threat": "Activités INN",
+                    "threatCharacterization": "Pêche sans autorisation par navire communautaire"
                 },
                 "latitude": 5.56,
                 "longitude": 1.2

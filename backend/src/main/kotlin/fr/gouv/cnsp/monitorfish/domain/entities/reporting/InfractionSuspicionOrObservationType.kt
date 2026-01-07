@@ -14,7 +14,9 @@ abstract class InfractionSuspicionOrObservationType(
     open val seaFront: String? = null,
     open val dml: String? = null,
     override val natinfCode: Int? = null,
-) : ReportingValue(natinfCode) {
+    override val threat: String? = null,
+    override val threatCharacterization: String? = null,
+) : AlertAndReportingValue(natinfCode) {
     fun checkReportingActorAndFieldsRequirements() =
         when (reportingActor) {
             ReportingActor.UNIT ->

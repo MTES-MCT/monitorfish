@@ -48,7 +48,9 @@ data class VesselIdentity(
             }
         }
 
-        requireNotNull(activeVessel.vessel)
+        if (activeVessel.vessel == null) {
+            return false
+        }
 
         return when {
             this.vesselId != null -> this.vesselId == activeVessel.vessel.id

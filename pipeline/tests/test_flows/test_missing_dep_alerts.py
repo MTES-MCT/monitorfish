@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+from unittest.mock import patch
 
 import pandas as pd
 import pytest
@@ -115,10 +116,11 @@ def test_flow(reset_test_data_missing_dep_alerts):
 
     initial_pending_alerts = read_query(query, db="monitorfish_remote")
 
-    state = missing_dep_alerts_flow(
-        get_monitorfish_healthcheck_fn=get_monitorfish_healthcheck_mock_factory(),
-        return_state=True,
-    )
+    with patch(
+        "src.flows.missing_dep_alerts.get_monitorfish_healthcheck",
+        get_monitorfish_healthcheck_mock_factory(),
+    ):
+        state = missing_dep_alerts_flow(return_state=True)
     assert state.is_completed()
 
     final_pending_alerts = read_query(query, db="monitorfish_remote")
@@ -154,12 +156,13 @@ def test_flow(reset_test_data_missing_dep_alerts):
 
 
 def test_flow_fails_if_logbook_healthcheck_fails(reset_test_data):
-    state = missing_dep_alerts_flow(
-        get_monitorfish_healthcheck_fn=get_monitorfish_healthcheck_mock_factory(
+    with patch(
+        "src.flows.missing_dep_alerts.get_monitorfish_healthcheck",
+        get_monitorfish_healthcheck_mock_factory(
             logbook_message_received_minutes_ago=25
         ),
-        return_state=True,
-    )
+    ):
+        state = missing_dep_alerts_flow(return_state=True)
 
     assert state.is_failed()
     with pytest.raises(MonitorfishHealthError):

@@ -456,11 +456,10 @@ def request_notification(
 def update_beacon_malfunctions_flow(
     max_hours_without_emission_at_sea: int = BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA,
     max_hours_without_emission_at_port: int = BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT,
-    get_monitorfish_healthcheck_fn: Callable = get_monitorfish_healthcheck,
     extract_satellite_operators_statuses_fn: Callable = extract_satellite_operators_statuses,
 ):
     # Healthcheck
-    healthcheck = get_monitorfish_healthcheck_fn()
+    healthcheck = get_monitorfish_healthcheck()
     now = get_utcnow()
     assert_last_positions_flow_health(healthcheck=healthcheck, utcnow=now)
 

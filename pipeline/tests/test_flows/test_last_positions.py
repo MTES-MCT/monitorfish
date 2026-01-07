@@ -575,12 +575,15 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
         "SELECT * FROM last_positions;", db="monitorfish_remote"
     )
 
-    state = last_positions_flow(
-        action="replace",
-        minutes=1200,
-        get_monitorfish_healthcheck_fn=get_monitorfish_healthcheck_mock_factory(),
-        return_state=True,
-    )
+    with patch(
+        "src.flows.last_positions.get_monitorfish_healthcheck",
+        get_monitorfish_healthcheck_mock_factory(),
+    ):
+        state = last_positions_flow(
+            action="replace",
+            minutes=1200,
+            return_state=True,
+        )
     assert state.is_completed()
 
     final_last_positions = read_query(
@@ -610,12 +613,15 @@ def test_last_positions_flow_updates_last_positions_when_action_is_update(
         "SELECT * FROM last_positions;", db="monitorfish_remote"
     )
 
-    state = last_positions_flow(
-        action="update",
-        minutes=35,
-        get_monitorfish_healthcheck_fn=get_monitorfish_healthcheck_mock_factory(),
-        return_state=True,
-    )
+    with patch(
+        "src.flows.last_positions.get_monitorfish_healthcheck",
+        get_monitorfish_healthcheck_mock_factory(),
+    ):
+        state = last_positions_flow(
+            action="update",
+            minutes=35,
+            return_state=True,
+        )
     assert state.is_completed()
 
     final_last_positions = read_query(

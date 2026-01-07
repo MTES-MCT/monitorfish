@@ -941,12 +941,15 @@ def test_flow(reset_test_data):
                         msg_to_send, is_integration
                     )
 
-    state = notify_beacon_malfunctions_flow(
-        test_mode=False,
-        is_integration=False,
-        send_beacon_malfunction_message_fn=mock_send_beacon_malfunction_message,
-        return_state=True,
-    )
+    with patch(
+        "src.flows.notify_beacon_malfunctions.send_beacon_malfunction_message",
+        mock_send_beacon_malfunction_message,
+    ):
+        state = notify_beacon_malfunctions_flow(
+            test_mode=False,
+            is_integration=False,
+            return_state=True,
+        )
 
     final_notifications = read_query(
         "SELECT * FROM beacon_malfunction_notifications ORDER BY id",
@@ -957,22 +960,6 @@ def test_flow(reset_test_data):
     )
 
     assert state.is_completed()
-
-    # # Check mock_send_beacon_malfunction_message results
-    # assert (
-    #     len(
-    #         state.result[
-    #             flow.get_tasks("mock_send_beacon_malfunction_message")[0]
-    #         ].result
-    #     )
-    #     == 7
-    # )
-    # assert isinstance(
-    #     state.result[flow.get_tasks("mock_send_beacon_malfunction_message")[0]].result[
-    #         1
-    #     ],
-    #     ValueError,
-    # )
 
     # Out of the 3 malfunctions to notify, the one with beacon_malfunction_id == 2
     # raised an error during the mock_send_email_notification task and should be

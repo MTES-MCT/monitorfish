@@ -258,7 +258,7 @@
                 "flag_state": "GB",
                 "mission_id": 5,
                 "action_type": "LAND_CONTROL",
-                "action_datetime_utc": "2020-01-18T07:19:28.384921Z",
+                "action_datetime_utc:sql": "CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '4 years 1 week'",
                 "has_some_gears_seized": false,
                 "has_some_species_seized": false,
                 "facade": "MEMN",

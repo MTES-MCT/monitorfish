@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 
 import { openVesselBySearch } from '../utils'
+import {getDate} from "../../../../src/utils.ts";
 
 context('Vessel sidebar controls tab', () => {
   beforeEach(() => {
@@ -39,9 +40,10 @@ context('Vessel sidebar controls tab', () => {
     cy.getDataCy('vessel-controls-summary-last-control').contains('BMS (JPE) / NATINF 27689')
 
     cy.get('*[data-cy="vessel-controls-summary-last-control"]').eq(1).contains('Dernier contrôle à quai')
+    const lastQuayControlDate = dayjs().subtract(4, 'year').subtract(1, 'week')
     cy.get('*[data-cy="vessel-controls-summary-last-control"]')
       .eq(1)
-      .contains("Le 18/01/2020 (Unité manquante), pas d'infraction")
+      .contains(`Le ${getDate(lastQuayControlDate.toISOString())} (Unité manquante), pas d'infraction`)
 
     cy.get('*[data-cy="vessel-controls-summary-law-reminders"]').first().contains('Rappels à la loi')
     cy.get('*[data-cy="vessel-controls-summary-law-reminders"]').first().contains('4 infractions sans PV')
@@ -65,14 +67,22 @@ context('Vessel sidebar controls tab', () => {
       )
 
       // The control date is hardcoded in the test data
-      cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2021"]`).contains('1 contrôle, 1 infraction sans PV')
+      if (lastQuayControlDate.isSame('2021', 'year')) {
+        cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2021"]`).contains('2 contrôles, 1 infraction sans PV')
+      } else {
+        cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2021"]`).contains('1 contrôle, 1 infraction sans PV')
+      }
     } else {
       cy.get(`[data-cy="vessel-control-years"] > li[title="Année ${currentYear - 1}"]`).contains(
         "2 contrôles, pas d'infraction"
       )
 
       // The control date is hardcoded in the test data
-      cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2021"]`).contains('1 contrôle, 1 infraction sans PV')
+      if (lastQuayControlDate.isSame('2021', 'year')) {
+        cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2021"]`).contains('2 contrôles, 1 infraction sans PV')
+      } else {
+        cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2021"]`).contains('1 contrôle, 1 infraction sans PV')
+      }
     }
 
     // When

@@ -16,7 +16,11 @@ data class ActivityReportDataOutput(
     companion object {
         fun fromActivityReport(activityReport: ActivityReport) =
             ActivityReportDataOutput(
-                action = MissionActionDataOutput.fromMissionAction(activityReport.action),
+                action =
+                    MissionActionDataOutput.fromMissionAction(
+                        missionAction = activityReport.action,
+                        useThreatHierarchyForForm = false,
+                    ),
                 activityCode = activityReport.activityCode,
                 faoArea = activityReport.faoArea,
                 segment = activityReport.segment,

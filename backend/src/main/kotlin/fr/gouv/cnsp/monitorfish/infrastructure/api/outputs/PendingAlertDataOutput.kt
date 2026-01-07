@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PositionAlertSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
@@ -19,22 +20,27 @@ data class PendingAlertDataOutput(
     val tripNumber: String? = null,
     val value: Alert,
     var infraction: InfractionDataOutput? = null,
+    val alertSpecification: PositionAlertSpecificationDataOutput,
 ) {
     companion object {
-        fun fromPendingAlert(pendingAlert: PendingAlert) =
+        fun fromPendingAlert(pendingAlert: Pair<PendingAlert, PositionAlertSpecification>) =
             PendingAlertDataOutput(
-                id = pendingAlert.id,
-                vesselId = pendingAlert.vesselId,
-                vesselName = pendingAlert.vesselName,
-                internalReferenceNumber = pendingAlert.internalReferenceNumber,
-                externalReferenceNumber = pendingAlert.externalReferenceNumber,
-                ircs = pendingAlert.ircs,
-                vesselIdentifier = pendingAlert.vesselIdentifier,
-                flagState = pendingAlert.flagState,
-                creationDate = pendingAlert.creationDate,
-                tripNumber = pendingAlert.tripNumber,
-                value = pendingAlert.value,
-                infraction = pendingAlert.infraction?.let { InfractionDataOutput.fromInfraction(it) },
+                id = pendingAlert.first.id,
+                vesselId = pendingAlert.first.vesselId,
+                vesselName = pendingAlert.first.vesselName,
+                internalReferenceNumber = pendingAlert.first.internalReferenceNumber,
+                externalReferenceNumber = pendingAlert.first.externalReferenceNumber,
+                ircs = pendingAlert.first.ircs,
+                vesselIdentifier = pendingAlert.first.vesselIdentifier,
+                flagState = pendingAlert.first.flagState,
+                creationDate = pendingAlert.first.creationDate,
+                tripNumber = pendingAlert.first.tripNumber,
+                value = pendingAlert.first.value,
+                infraction = pendingAlert.first.infraction?.let { InfractionDataOutput.fromInfraction(it) },
+                alertSpecification =
+                    PositionAlertSpecificationDataOutput.fromPositionAlertSpecification(
+                        pendingAlert.second,
+                    ),
             )
     }
 }

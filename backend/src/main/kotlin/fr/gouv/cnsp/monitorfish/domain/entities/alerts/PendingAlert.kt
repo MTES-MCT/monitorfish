@@ -6,7 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
-class PendingAlert(
+data class PendingAlert(
     val id: Int? = null,
     val vesselId: Int? = null,
     val vesselName: String? = null,

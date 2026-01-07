@@ -163,7 +163,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
                     <VesselListAndGroups isFromUrl={isFromURL} />
                   )}
                   {selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && (
-                    <SideWindowAlerts baseRef={wrapperRef as MutableRefObject<HTMLDivElement>} isFromUrl={isFromURL} />
+                    <SideWindowAlerts isFromUrl={isFromURL} />
                   )}
                   {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
                   {selectedPath.menu === SideWindowMenuKey.PRIOR_NOTIFICATION_LIST && (

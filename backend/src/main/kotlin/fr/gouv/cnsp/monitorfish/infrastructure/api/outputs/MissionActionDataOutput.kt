@@ -31,7 +31,7 @@ data class MissionActionInfractionDataOutput(
         fun fromInfraction(infraction: Infraction) =
             MissionActionInfractionDataOutput(
                 infractionType = infraction.infractionType!!,
-                natinf = infraction.natinf!!,
+                natinf = infraction.natinf,
                 natinfDescription = infraction.natinfDescription,
                 threat = infraction.threat ?: "Famille inconnue",
                 threatCharacterization = infraction.threatCharacterization ?: "Type inconnu",

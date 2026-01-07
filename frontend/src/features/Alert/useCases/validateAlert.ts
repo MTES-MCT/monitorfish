@@ -8,31 +8,25 @@ import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/render
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { Level } from '@mtes-mct/monitor-ui'
 import { deleteListItems } from '@utils/deleteListItems'
-import { updateListItemsProp } from '@utils/updateListItemsProp'
 
-import type { LEGACY_PendingAlert } from '@features/Alert/types'
 import type { MainAppThunk } from '@store'
 
 export const validateAlert =
   (id: number): MainAppThunk =>
   async (dispatch, getState) => {
     const previousAlerts = getState().alert.pendingAlerts
-    const previousAlertsWithValidatedFlag = setAlertAsValidated(previousAlerts, id)
-    dispatch(setPendingAlerts(previousAlertsWithValidatedFlag))
-
-    const timeout = setTimeout(() => {
-      const previousAlertsWithoutValidated = deleteListItems(getState().alert.pendingAlerts, 'id', id)
-      dispatch(setPendingAlerts(previousAlertsWithoutValidated))
-    }, 3200)
 
     try {
       await dispatch(alertApi.endpoints.validateAlert.initiate(id)).unwrap()
+
+      const previousAlertsWithoutValidated = deleteListItems(getState().alert.pendingAlerts, 'id', id)
+      dispatch(setPendingAlerts(previousAlertsWithoutValidated))
 
       // We dispatch this action to update the reporting list
       // since it depends on the alerts list that we just updated
       dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
 
-      const validatedAlert = previousAlertsWithValidatedFlag.find(alert => alert.id === id)
+      const validatedAlert = previousAlerts.find(alert => alert.id === id)
       if (!validatedAlert) {
         return
       }
@@ -45,8 +39,16 @@ export const validateAlert =
         })
       )
       dispatch(renderVesselFeatures())
+      dispatch(
+        addSideWindowBanner({
+          children: 'Alerte validée et ajoutée à la fiche du navire',
+          closingDelay: 4000,
+          isClosable: true,
+          level: Level.SUCCESS,
+          withAutomaticClosing: true
+        })
+      )
     } catch (error) {
-      clearTimeout(timeout)
       dispatch(setPendingAlerts(previousAlerts))
       dispatch(
         addSideWindowBanner({
@@ -59,9 +61,3 @@ export const validateAlert =
       )
     }
   }
-
-function setAlertAsValidated(previousAlerts: LEGACY_PendingAlert[], id: number): LEGACY_PendingAlert[] {
-  return updateListItemsProp(previousAlerts, 'id', id, {
-    isValidated: true
-  })
-}

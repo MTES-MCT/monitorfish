@@ -11,19 +11,11 @@ import { PendingAlertsList } from './PendingAlertsList'
 import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../constants'
 import { setSelectedTab } from '../slice'
 
-import type { RefObject } from 'react'
-
 type AlertListAndReportingListProps = {
-  baseRef: RefObject<HTMLDivElement>
   isFromUrl: boolean
   selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup
 }
-
-export function AlertListAndReportingList({
-  baseRef,
-  isFromUrl,
-  selectedSeafrontGroup
-}: AlertListAndReportingListProps) {
+export function AlertListAndReportingList({ isFromUrl, selectedSeafrontGroup }: AlertListAndReportingListProps) {
   const dispatch = useMainAppDispatch()
   const selectedTab = useMainAppSelector(state => state.alert.selectedTab)
   const silencedAlerts = useMainAppSelector(state => state.alert.silencedAlerts)
@@ -62,7 +54,6 @@ export function AlertListAndReportingList({
 
       {selectedTab === AlertAndReportingTab.ALERT && (
         <PendingAlertsList
-          baseRef={baseRef}
           numberOfSilencedAlerts={filteredSilencedAlerts.length}
           selectedSeafrontGroup={selectedSeafrontGroup}
         />

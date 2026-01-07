@@ -13,7 +13,7 @@ enum class AlertType(
         specification =
             PositionAlertSpecification(
                 id = null,
-                name = "Sortie en mer sans émission de message DEP",
+                name = "Sortie en mer sans émission de message \"DEP\"",
                 description = """_Dans une fenêtre de +/- 6h autour de la sortie de port détectée._
 
 Pour les navires français de +12 m (à l'exclusion des exemptés de JPE) n'ayant pas fait de DEP.

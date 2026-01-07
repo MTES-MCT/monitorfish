@@ -66,6 +66,7 @@ export function VesselName({ focusOnVesselSearchInput }) {
         data-cy="vessel-search-selected-vessel-close-title"
         /* eslint-disable-next-line react/jsx-no-bind */
         onClick={close}
+        title="Fermer la fiche navire"
       />
     </Wrapper>
   )
@@ -77,7 +78,7 @@ function getVesselName(selectedVesselIdentity) {
     flagState = `${selectedVesselIdentity.flagState}`
   }
 
-  return `${selectedVesselIdentity.vesselName} (${flagState.toUpperCase()})`
+  return `${selectedVesselIdentity.vesselName ?? ''} (${flagState.toUpperCase()})`
 }
 
 const Wrapper = styled.div<{

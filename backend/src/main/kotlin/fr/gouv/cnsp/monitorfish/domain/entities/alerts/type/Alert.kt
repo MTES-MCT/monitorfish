@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.alerts.type
 
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValue
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.AlertAndReportingValue
 
 class Alert(
     val type: AlertType,
@@ -8,10 +8,12 @@ class Alert(
     val dml: String? = null,
     val riskFactor: Double? = null,
     override val natinfCode: Int? = null,
+    override val threat: String? = null,
+    override val threatCharacterization: String? = null,
     val alertId: Int? = null,
     val name: String,
     val description: String? = null,
-) : ReportingValue(natinfCode) {
+) : AlertAndReportingValue(natinfCode) {
     init {
         if (this.type == AlertType.POSITION_ALERT) {
             requireNotNull(alertId) {

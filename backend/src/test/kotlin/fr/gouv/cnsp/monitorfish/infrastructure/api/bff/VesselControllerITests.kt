@@ -848,7 +848,7 @@ class VesselControllerITests {
                         alertId = 1,
                         natinfCode = 7059,
                         name = "Chalutage dans les 3 milles",
-                    ) as ReportingValue,
+                    ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
                 infraction =
@@ -877,7 +877,7 @@ class VesselControllerITests {
                         alertId = 1,
                         natinfCode = 7059,
                         name = "Chalutage dans les 3 milles",
-                    ) as ReportingValue,
+                    ) as AlertAndReportingValue,
                 isArchived = true,
                 isDeleted = false,
             )

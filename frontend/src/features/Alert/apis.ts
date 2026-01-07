@@ -8,7 +8,6 @@ import { SilencedAlertSchema } from '@features/Alert/schemas/SilencedAlertSchema
 import {
   type AlertSpecification,
   type EditedAlertSpecification,
-  type LEGACY_PendingAlert,
   type PendingAlert,
   type SilencedAlert,
   type SilencedAlertData,
@@ -27,16 +26,6 @@ export const DELETE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu supprimer l'alert
 export const SILENCE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu suspendre l'alerte opérationelle"
 export const DELETE_SILENCED_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu réactiver l'alerte opérationelle"
 export const CREATE_SILENCED_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu suspendre l'alerte opérationelle"
-
-/**
- * Type-discriminate active alerts
- */
-function normalizePendingAlert(alert: PendingAlert): LEGACY_PendingAlert {
-  return {
-    ...alert,
-    isValidated: false
-  }
-}
 
 export const alertApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
@@ -58,10 +47,9 @@ export const alertApi = monitorfishApi.injectEndpoints({
       }),
       transformErrorResponse: response => new FrontendApiError(DELETE_SILENCED_ALERT_ERROR_MESSAGE, response)
     }),
-    getOperationalAlerts: builder.query<LEGACY_PendingAlert[], void>({
+    getOperationalAlerts: builder.query<PendingAlert[], void>({
       query: () => '/operational_alerts',
-      transformErrorResponse: response => new FrontendApiError(ALERTS_ERROR_MESSAGE, response),
-      transformResponse: (response: PendingAlert[]) => response.map(normalizePendingAlert)
+      transformErrorResponse: response => new FrontendApiError(ALERTS_ERROR_MESSAGE, response)
     }),
     getSilencedAlerts: builder.query<SilencedAlert[], void>({
       query: () => '/operational_alerts/silenced',

@@ -13,6 +13,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.GetPendingAlerts
+import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.GetPositionAlertSpecifications
+import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.TestUtils.DUMMY_POSITION_ALERT
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -29,6 +31,9 @@ class GetPendingAlertsUTests {
 
     @MockitoBean
     private lateinit var infractionRepository: InfractionRepository
+
+    @MockitoBean
+    private lateinit var getPositionAlertSpecifications: GetPositionAlertSpecifications
 
     @Test
     fun `execute Should return alerts with associated infractions`() {
@@ -59,14 +64,28 @@ class GetPendingAlertsUTests {
             ),
         )
         given(pendingAlertRepository.findAlertsOfTypes(any())).willReturn(listOf(pendingPositionAlert))
+        given(getPositionAlertSpecifications.execute()).willReturn(
+            listOf(DUMMY_POSITION_ALERT) +
+                AlertType.entries
+                    .filter { it.name !== AlertType.POSITION_ALERT.name }
+                    .mapNotNull { it.specification?.copy(type = it.name) },
+        )
 
         // When
-        val alerts = GetPendingAlerts(pendingAlertRepository, infractionRepository).execute()
+        val alerts =
+            GetPendingAlerts(
+                getPositionAlertSpecifications = getPositionAlertSpecifications,
+                pendingAlertRepository = pendingAlertRepository,
+                infractionRepository = infractionRepository,
+            ).execute()
 
         // Then
-        assertThat(alerts.first().value.natinfCode).isEqualTo(7059)
-        assertThat(alerts.first().infraction?.natinfCode).isEqualTo(7059)
-        assertThat(alerts.first().infraction?.infractionCategory).isEqualTo(InfractionCategory.FISHING)
+        val alert = alerts.first().first
+        val alertSpecification = alerts.first().second
+        assertThat(alert.value.natinfCode).isEqualTo(7059)
+        assertThat(alert.infraction?.natinfCode).isEqualTo(7059)
+        assertThat(alert.infraction?.infractionCategory).isEqualTo(InfractionCategory.FISHING)
+        assertThat(alertSpecification.name).isEqualTo("Chalutage dans les 3 milles")
 
         Mockito.verify(pendingAlertRepository).findAlertsOfTypes(
             listOf(

@@ -15,14 +15,11 @@ import { setSubMenu } from './slice'
 import { SubMenu } from '../../../SideWindow/SubMenu'
 
 import type { AlertSubMenu } from './constants'
-import type { MutableRefObject, RefObject } from 'react'
 
 type SideWindowAlertsProps = Readonly<{
-  baseRef: RefObject<HTMLDivElement>
   isFromUrl: boolean
 }>
-
-export function SideWindowAlerts({ baseRef, isFromUrl }: SideWindowAlertsProps) {
+export function SideWindowAlerts({ isFromUrl }: SideWindowAlertsProps) {
   const dispatch = useMainAppDispatch()
   const pendingAlerts = useMainAppSelector(state => state.alert.pendingAlerts)
   const editedAlertSpecification = useMainAppSelector(state => state.alert.editedAlertSpecification)
@@ -84,11 +81,7 @@ export function SideWindowAlerts({ baseRef, isFromUrl }: SideWindowAlertsProps) 
         value={subMenu}
       />
       {subMenu !== AdditionalSubMenu.SUSPENDED_ALERTS && subMenu !== AdditionalSubMenu.ALERT_MANAGEMENT && (
-        <AlertListAndReportingList
-          baseRef={baseRef as MutableRefObject<HTMLDivElement>}
-          isFromUrl={isFromUrl}
-          selectedSeafrontGroup={subMenu || SeafrontGroup.MEMN}
-        />
+        <AlertListAndReportingList isFromUrl={isFromUrl} selectedSeafrontGroup={subMenu || SeafrontGroup.MEMN} />
       )}
       {subMenu === AdditionalSubMenu.SUSPENDED_ALERTS && <SilencedAlerts />}
       {subMenu === AdditionalSubMenu.ALERT_MANAGEMENT && !editedAlertSpecification && <AlertsManagementList />}

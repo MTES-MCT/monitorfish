@@ -19,7 +19,7 @@ data class Reporting(
     val validationDate: ZonedDateTime? = null,
     val expirationDate: ZonedDateTime? = null,
     val archivingDate: ZonedDateTime? = null,
-    val value: ReportingValue,
+    val value: AlertAndReportingValue,
     val isArchived: Boolean,
     val isDeleted: Boolean,
     val latitude: Double? = null,

@@ -55,7 +55,7 @@ class GetPendingAlerts(
             return@singleOrNull it.name == pendingAlertWithInfraction.value.name
         } ?: throw BackendInternalException(
             message = "Could not find alert specification of alertId: ${pendingAlertWithInfraction.value.alertId} and alertName: ${pendingAlertWithInfraction.value.name}",
-            code = BackendInternalErrorCode.UNPROCESSABLE_RESOURCE_DATA
+            code = BackendInternalErrorCode.UNPROCESSABLE_RESOURCE_DATA,
         )
 
     private fun getInfraction(pendingAlert: PendingAlert): Infraction? {

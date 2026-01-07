@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Callable, Tuple
+from typing import Tuple
 
 import pandas as pd
 from prefect import flow, get_run_logger, task
@@ -426,9 +426,8 @@ def last_positions_flow(
     current_position_estimation_max_hours: int = CURRENT_POSITION_ESTIMATION_MAX_HOURS,
     minutes: int = 5,
     action: str = "update",
-    get_monitorfish_healthcheck_fn: Callable = get_monitorfish_healthcheck,
 ):
-    healthcheck = get_monitorfish_healthcheck_fn()
+    healthcheck = get_monitorfish_healthcheck()
     assert_positions_received_by_api_health(healthcheck=healthcheck)
 
     action = validate_action(action)

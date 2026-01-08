@@ -43,7 +43,7 @@ context('Vessel sidebar controls tab', () => {
     const lastQuayControlDate = dayjs().subtract(4, 'year').subtract(1, 'week')
     cy.get('*[data-cy="vessel-controls-summary-last-control"]')
       .eq(1)
-      .contains(`Le ${getDate(lastQuayControlDate.toISOString())} (Unité manquante), pas d'infraction`)
+      .contains(`Le ${getDate(lastQuayControlDate.toISOString())} (Cross Etel), pas d'infraction`)
 
     cy.get('*[data-cy="vessel-controls-summary-law-reminders"]').first().contains('Rappels à la loi')
     cy.get('*[data-cy="vessel-controls-summary-law-reminders"]').first().contains('4 infractions sans PV')

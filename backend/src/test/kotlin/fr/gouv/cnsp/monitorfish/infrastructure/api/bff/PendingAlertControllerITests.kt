@@ -13,9 +13,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.*
+import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.TestUtils.DUMMY_POSITION_ALERT
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SilenceOperationalAlertDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SilencedAlertDataInput
 import org.assertj.core.api.Assertions.assertThat
+import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito
@@ -62,25 +64,28 @@ class PendingAlertControllerITests {
     @Test
     fun `Should get all pending alerts`() {
         // Given
-        BDDMockito.given(getPendingAlerts.execute()).willReturn(
+        given(getPendingAlerts.execute()).willReturn(
             listOf(
-                PendingAlert(
-                    internalReferenceNumber = "FRFGRGR",
-                    externalReferenceNumber = "RGD",
-                    ircs = "6554fEE",
-                    vesselId = 123,
-                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                    flagState = CountryCode.FR,
-                    tripNumber = "123456",
-                    creationDate = ZonedDateTime.now(),
-                    value =
-                        Alert(
-                            type = AlertType.POSITION_ALERT,
-                            seaFront = NAMO.toString(),
-                            alertId = 1,
-                            natinfCode = 7059,
-                            name = "Chalutage dans les 3 milles",
-                        ),
+                Pair(
+                    PendingAlert(
+                        internalReferenceNumber = "FRFGRGR",
+                        externalReferenceNumber = "RGD",
+                        ircs = "6554fEE",
+                        vesselId = 123,
+                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        flagState = CountryCode.FR,
+                        tripNumber = "123456",
+                        creationDate = ZonedDateTime.now(),
+                        value =
+                            Alert(
+                                type = AlertType.POSITION_ALERT,
+                                seaFront = NAMO.toString(),
+                                alertId = 1,
+                                natinfCode = 7059,
+                                name = "Chalutage dans les 3 milles",
+                            ),
+                    ),
+                    DUMMY_POSITION_ALERT,
                 ),
             ),
         )
@@ -90,9 +95,12 @@ class PendingAlertControllerITests {
             .perform(MockMvcRequestBuilders.get("/bff/v1/operational_alerts"))
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.equalTo(1)))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].internalReferenceNumber", Matchers.equalTo("FRFGRGR")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].value.natinfCode", Matchers.equalTo(7059)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.length()", equalTo(1)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].internalReferenceNumber", equalTo("FRFGRGR")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].value.natinfCode", equalTo(7059)))
+            .andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].alertSpecification.name", equalTo("Chalutage dans les 3 milles")),
+            )
     }
 
     @Test

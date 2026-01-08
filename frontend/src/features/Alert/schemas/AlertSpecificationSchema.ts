@@ -1,4 +1,5 @@
 import { AdministrativeAreaType, PendingAlertValueType } from '@features/Alert/constants'
+import { ThreatSchema } from '@features/Infraction/schemas/Threat'
 import { VesselIdentitySchema } from '@features/Vessel/schemas/VesselIdentitySchema'
 import { z } from 'zod'
 
@@ -42,13 +43,18 @@ export const AlertSpecificationSchema = z.strictObject({
   isUserDefined: z.boolean(),
   minDepth: numberOrUndefined,
   name: z.string({ message: 'Champ Nom requis' }).min(1, 'Champ Nom requis'),
-  natinfCode: z.number({ message: 'Champ Natinf requis' }).gte(1, 'Champ Natinf requis'),
+  natinf: z.number(),
   onlyFishingPositions: z.boolean(),
   producerOrganizations: z.array(z.string()),
   regulatoryAreas: z.array(RegulatoryAreaSpecificationSchema),
   repeatEachYear: z.boolean(),
   species: z.array(SpeciesSpecificationSchema),
   speciesCatchAreas: z.array(z.string()),
+  threat: z.string(),
+  threatCharacterization: z.string(),
+  threatHierarchy: ThreatSchema.or(z.undefined()).refine(val => val !== undefined, {
+    message: 'Champ Natinf requis'
+  }),
   trackAnalysisDepth: z.number(),
   type: z.enum(PendingAlertValueType),
   validityEndDatetimeUtc: z.string().optional(),

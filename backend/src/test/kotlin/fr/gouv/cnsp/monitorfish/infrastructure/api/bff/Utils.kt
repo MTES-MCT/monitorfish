@@ -25,7 +25,9 @@ object TestUtils {
                 marée, ou n'ayant pas encore fait de FAR.
                 """.trimIndent(),
             isUserDefined = false,
-            natinfCode = 7059,
+            natinf = 7059,
+            threat = "Mesures techniques et de conservation",
+            threatCharacterization = "Engin",
             isActivated = true,
             isInError = false,
             isDeleted = false,

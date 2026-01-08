@@ -51,14 +51,7 @@ export function getTableColumns(
       enableSorting: true,
       header: () => 'Critères de déclenchement',
       id: 'criterias',
-      size: 500 + legacyFirefoxOffset
-    },
-    {
-      accessorFn: row => row.natinfCode,
-      enableSorting: true,
-      header: () => 'NATINF',
-      id: 'natinfCode',
-      size: 100 + legacyFirefoxOffset
+      size: 600 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row.validityEndDatetimeUtc,

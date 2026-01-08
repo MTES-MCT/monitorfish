@@ -116,7 +116,10 @@ class LoggingFormatterUTests {
                 "\"natinfCode\":123456," +
                 "\"seaFront\":null," +
                 "\"dml\":null," +
-                "\"type\":\"INFRACTION_SUSPICION\"}}",
+                "\"threat\":null," +
+                "\"threatCharacterization\":null," +
+                "\"type\":\"INFRACTION_SUSPICION\"" +
+                "}}",
         )
     }
 

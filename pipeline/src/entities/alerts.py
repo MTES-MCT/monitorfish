@@ -68,6 +68,8 @@ class PositionAlertSpecification(BaseModel):
     name: str
     description: str
     natinf_code: int
+    threat: str
+    threat_characterization: str
     is_activated: bool
     is_in_error: bool
     error_reason: str | None

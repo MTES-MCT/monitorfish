@@ -15,6 +15,7 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Except } from 'type-fest'
 
 export type PendingAlert = {
+  alertSpecification: AlertSpecification
   creationDate: string
   externalReferenceNumber: string
   flagState: string
@@ -30,11 +31,6 @@ export type PendingAlert = {
 
 export type PendingAlertValue = z.infer<typeof PendingAlertValueSchema>
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export type LEGACY_PendingAlert = PendingAlert & {
-  isValidated: boolean
-}
-
 export type SilencedAlert = z.infer<typeof SilencedAlertSchema>
 
 export type SilencedAlertData = Except<SilencedAlert, 'id' | 'isReactivated'>
@@ -42,11 +38,6 @@ export type SilencedAlertData = Except<SilencedAlert, 'id' | 'isReactivated'>
 export type SilencedAlertPeriodRequest = {
   beforeDateTime: Date | null
   silencedAlertPeriod: string | null
-}
-
-export type SilenceAlertQueueItem = {
-  pendingAlertId: number
-  silencedAlertPeriodRequest: SilencedAlertPeriodRequest
 }
 
 export type AlertNameAndVesselIdentity = Vessel.VesselIdentity & {

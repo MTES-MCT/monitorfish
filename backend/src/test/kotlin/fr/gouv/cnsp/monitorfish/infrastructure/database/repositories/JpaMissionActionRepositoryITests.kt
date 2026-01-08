@@ -306,8 +306,8 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findControlsInDates Should return controls included in old dates`() {
         // Given
-        val beforeDateTime = ZonedDateTime.parse("2021-01-12T23:59:59.000Z")
-        val afterDateTime = ZonedDateTime.parse("2020-01-17T00:00:00.000Z")
+        val beforeDateTime = ZonedDateTime.now().minusYears(4)
+        val afterDateTime = ZonedDateTime.now().minusYears(4).minusWeeks(2)
 
         // When
         val controls = jpaMissionActionsRepository.findSeaLandAndAirControlBetweenDates(beforeDateTime, afterDateTime)

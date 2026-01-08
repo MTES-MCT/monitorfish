@@ -60,6 +60,8 @@ def position_alerts_flow():
                 name=position_alert_specification.name,
                 description=position_alert_specification.description,
                 natinf_code=position_alert_specification.natinf_code,
+                threat=position_alert_specification.threat,
+                threat_characterization=position_alert_specification.threat_characterization,
                 track_analysis_depth=position_alert_specification.track_analysis_depth,
                 only_fishing_positions=position_alert_specification.only_fishing_positions,
                 gears=position_alert_specification.gears,

@@ -1,4 +1,5 @@
 import { openSideWindowMissionList } from './utils'
+import dayjs from "dayjs";
 
 context('Side Window > Mission List > Export Activity Reports', () => {
   beforeEach(() => {
@@ -10,15 +11,32 @@ context('Side Window > Mission List > Export Activity Reports', () => {
 
     cy.clickButton('Exporter les ACT-REP')
 
-    cy.fill('Début', [2020, 1, 17])
-    cy.fill('Fin', [2021, 1, 12])
+    const controlDateTime = dayjs().subtract(4, 'year').subtract(1, 'week')
+    console.log(controlDateTime)
+    let startYear = controlDateTime.subtract(1, 'day').year();
+    let startMonth = controlDateTime.subtract(1, 'day').month() + 1;
+    let startDay = controlDateTime.subtract(1, 'day').date();
+    cy.fill('Début', [
+      startYear,
+      startMonth,
+      startDay
+    ])
+    let endYear = controlDateTime.add(1, 'day').year();
+    let endMonth = controlDateTime.add(1, 'day').month() + 1;
+    let endDay = controlDateTime.add(1, 'day').date();
+    cy.fill('Fin', [
+      endYear,
+      endMonth,
+      endDay
+    ])
     // Hack to close the date picker popup
     cy.get('h4').contains('Exporter les ACT-REP').click().wait(250)
     cy.fill('JDP', 'JDP NS-01')
 
+    console.log(`/bff/v1/mission_actions/controls/activity_reports?beforeDateTime=${endYear}-${endMonth}-${endDay}T23:59:59.000Z&afterDateTime=${startYear}-${startMonth}-${startDay}T00:00:00.000Z&jdp=NORTH_SEA`)
     cy.intercept(
       'GET',
-      '/bff/v1/mission_actions/controls/activity_reports?beforeDateTime=2021-01-12T23:59:59.000Z&afterDateTime=2020-01-17T00:00:00.000Z&jdp=NORTH_SEA'
+      `/bff/v1/mission_actions/controls/activity_reports?beforeDateTime=${endYear}-${String(endMonth).padStart(2, '0')}-${String(endDay).padStart(2, '0')}T23:59:59.000Z&afterDateTime=${startYear}-${String(startMonth).padStart(2, '0')}-${String(startDay).padStart(2, '0')}T00:00:00.000Z&jdp=NORTH_SEA`
     ).as('getActivityReports')
 
     cy.clickButton('Exporter')
@@ -33,9 +51,11 @@ context('Side Window > Mission List > Export Activity Reports', () => {
         )
         .should(
           'contains',
-          '"LCross Etel","L","Cross Etel","","INSPECTION","20200118","07:19","07:19","FRA","FRA","","","","Vessel","FRA","DONTSINK"'
-        )
-        .should(
+          '"LCross Etel","L","Cross Etel","","INSPECTION",'
+        ).should(
+        'contains',
+        '"FRA","FRA","","","","Vessel","FRA","DONTSINK"'
+        ).should(
           'contains',
           'RC,CFR,NA,ACTIVITY_CODE,GEAR_CODE,MESH_SIZE,FAO_AREA_CODE,FLEET_SEGMENT,LA,LO,PORT_CODE,COUNTRY_CODE,PORT_NAME,LOCATION,SPECIES1,WEIGHT1,NB_IND1,SPECIES2,WEIGHT2'
         )

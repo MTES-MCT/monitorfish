@@ -173,7 +173,7 @@ context('BackOffice > Fleet Segments Table', () => {
 
     // Then
     cy.get('input[name="fleet-segments-select-year"]').should('have.value', `${currentYear - 1}`)
-    cy.get('[role="row"]').should('have.length', 44)
+    cy.get('[role="row"]').should('have.length', 38)
   })
 
   it('Should add a new year based on current year', () => {

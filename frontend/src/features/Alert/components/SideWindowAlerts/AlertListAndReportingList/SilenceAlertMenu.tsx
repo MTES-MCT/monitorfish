@@ -9,7 +9,7 @@ import type { Promisable } from 'type-fest'
 
 // Constants
 const MENU_WIDTH = 220
-const DATE_RANGE_HEIGHT = 280
+const DATE_RANGE_HEIGHT = 250
 const MENU_HEIGHT = 360 + DATE_RANGE_HEIGHT
 const MENU_GAP = 2
 const VIEWPORT_PADDING = 10
@@ -131,7 +131,7 @@ export function SilenceAlertMenu({ anchorElement, onClose, pendingAlert, silence
 
   const position = getPosition()
 
-  if (!anchorElement || !position.top || !position.left) {
+  if (!anchorElement || (!position.top && !position.left)) {
     return null
   }
 

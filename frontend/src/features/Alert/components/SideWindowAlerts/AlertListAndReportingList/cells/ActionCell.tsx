@@ -21,23 +21,23 @@ export function ActionCell({ alert, openSilenceAlertMenu }: ActionCellProps) {
         accent={Accent.TERTIARY}
         data-cy="side-window-alerts-show-vessel"
         Icon={Icon.ViewOnMap}
-        onClick={e => {
+        onClick={() => {
           const identity = extractVesselIdentityProps(alert)
           dispatch(showVessel(identity, false))
-          e.stopPropagation()
         }}
         title="Voir sur la carte"
+        withUnpropagatedClick
       />
       <IconButton
         accent={Accent.TERTIARY}
         color={THEME.color.mediumSeaGreen}
         data-cy="side-window-alerts-validate-alert"
         Icon={Icon.Confirm}
-        onClick={e => {
+        onClick={() => {
           dispatch(validateAlert(alert.id))
-          e.stopPropagation()
         }}
         title="Valider l'alerte"
+        withUnpropagatedClick
       />
       <IconButton
         accent={Accent.TERTIARY}
@@ -46,9 +46,9 @@ export function ActionCell({ alert, openSilenceAlertMenu }: ActionCellProps) {
         Icon={Icon.Reject}
         onClick={e => {
           openSilenceAlertMenu(alert, e.currentTarget as HTMLElement)
-          e.stopPropagation()
         }}
         title="Suspendre l'alerte"
+        withUnpropagatedClick
       />
     </Wrapper>
   )

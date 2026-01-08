@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.infraction.GetAllInfractionThre
 import fr.gouv.cnsp.monitorfish.domain.use_cases.infraction.GetAllInfractions
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.InfractionDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.InfractionThreatCharacterizationDataOutput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ThreatDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ThreatHierarchyDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
@@ -27,7 +27,7 @@ class InfractionController(
 
     @GetMapping("/threats")
     @Operation(summary = "Get all infractions threat characterization")
-    fun getAllInfractionThreatCharacterizationController(): List<ThreatDataOutput> {
+    fun getAllInfractionThreatCharacterizationController(): List<ThreatHierarchyDataOutput> {
         val threatCharacterization = getAllInfractionThreatCharacterization.execute()
 
         return InfractionThreatCharacterizationDataOutput

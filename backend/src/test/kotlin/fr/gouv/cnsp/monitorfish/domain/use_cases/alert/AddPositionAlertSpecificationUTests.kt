@@ -35,7 +35,7 @@ class AddPositionAlertSpecificationUTests {
                     alertSpec.createdAtUtc != null &&
                     alertSpec.name == inputAlertSpecification.name &&
                     alertSpec.description == inputAlertSpecification.description &&
-                    alertSpec.natinfCode == inputAlertSpecification.natinfCode &&
+                    alertSpec.natinf == inputAlertSpecification.natinf &&
                     alertSpec.isActivated == inputAlertSpecification.isActivated
             },
         )

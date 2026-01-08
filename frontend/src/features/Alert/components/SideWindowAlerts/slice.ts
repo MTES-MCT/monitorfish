@@ -1,26 +1,18 @@
 import { SEAFRONT_GROUP_SEAFRONTS, SeafrontGroup } from '@constants/seafront'
 import { AlertAndReportingTab } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/constants'
 import { createSlice } from '@reduxjs/toolkit'
-import { deleteListItems } from '@utils/deleteListItems'
 import { propEq } from 'ramda'
 
 import type { AlertSubMenu } from './constants'
-import type {
-  AlertNameAndVesselIdentity,
-  AlertSpecification,
-  LEGACY_PendingAlert,
-  SilenceAlertQueueItem,
-  SilencedAlert
-} from '../../types'
+import type { AlertNameAndVesselIdentity, AlertSpecification, PendingAlert, SilencedAlert } from '../../types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type AlertState = {
   editedAlertSpecification: AlertSpecification | undefined
   focusedPendingAlertId: number | undefined
-  pendingAlerts: LEGACY_PendingAlert[]
+  pendingAlerts: PendingAlert[]
   selectedTab: AlertAndReportingTab
   silencedAlerts: SilencedAlert[]
-  silencedAlertsQueue: SilenceAlertQueueItem[]
   subMenu: AlertSubMenu
 }
 const INITIAL_STATE: AlertState = {
@@ -29,7 +21,6 @@ const INITIAL_STATE: AlertState = {
   pendingAlerts: [],
   selectedTab: AlertAndReportingTab.ALERT,
   silencedAlerts: [],
-  silencedAlertsQueue: [],
   subMenu: SeafrontGroup.MEMN
 }
 
@@ -37,10 +28,6 @@ const slice = createSlice({
   initialState: INITIAL_STATE,
   name: 'alert',
   reducers: {
-    addToPendingAlertsBeingSilenced(state, action: PayloadAction<SilenceAlertQueueItem>) {
-      state.silencedAlertsQueue = [...state.silencedAlertsQueue, action.payload]
-    },
-
     /**
      * Focus a pending alert in the alert list
      */
@@ -81,13 +68,6 @@ const slice = createSlice({
     },
 
     /**
-     * @param action - Original `PendingAlert.id`
-     */
-    removeFromSilencedAlertsQueue(state, action: PayloadAction<number>) {
-      state.silencedAlertsQueue = deleteListItems(state.silencedAlertsQueue, 'pendingAlertId', action.payload)
-    },
-
-    /**
      * Reset focus on alert
      */
     resetFocusOnPendingAlert(state) {
@@ -101,7 +81,7 @@ const slice = createSlice({
     /**
      * Set alerts
      */
-    setPendingAlerts(state, action: PayloadAction<LEGACY_PendingAlert[]>) {
+    setPendingAlerts(state, action: PayloadAction<PendingAlert[]>) {
       state.pendingAlerts = action.payload
     },
 
@@ -129,9 +109,7 @@ const slice = createSlice({
 })
 
 export const {
-  addToPendingAlertsBeingSilenced,
   focusOnAlert,
-  removeFromSilencedAlertsQueue,
   resetFocusOnPendingAlert,
   setPendingAlerts,
   setSelectedTab,

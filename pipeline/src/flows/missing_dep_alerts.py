@@ -48,6 +48,9 @@ def missing_dep_alerts_flow(
         vessels_with_missing_deps,
         AlertType.MISSING_DEP_ALERT.value,
         "Sortie en mer sans émission de message DEP",
+        natinf_code=27689,
+        threat="Obligations déclaratives",
+        threat_characterization="DEP",
     )
     filtered_alerts = filter_alerts(alerts, silenced_alerts, active_reportings)
 

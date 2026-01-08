@@ -8,5 +8,8 @@ export const EditedAlertSpecificationSchema = AlertSpecificationSchema.omit({
   isActivated: true,
   isInError: true,
   isUserDefined: true,
+  natinf: true,
+  threat: true,
+  threatCharacterization: true,
   vessels: true
 })

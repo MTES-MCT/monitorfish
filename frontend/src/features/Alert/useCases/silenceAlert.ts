@@ -1,10 +1,6 @@
 import { alertApi } from '@features/Alert/apis'
-import {
-  addToPendingAlertsBeingSilenced,
-  removeFromSilencedAlertsQueue,
-  setPendingAlerts,
-  setSilencedAlerts
-} from '@features/Alert/components/SideWindowAlerts/slice'
+import { setPendingAlerts, setSilencedAlerts } from '@features/Alert/components/SideWindowAlerts/slice'
+import { getSilencedAlertPeriodText } from '@features/Alert/utils'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { removeVesselAlertAndUpdateReporting } from '@features/Vessel/slice'
 import { VesselFeature } from '@features/Vessel/types/vessel'
@@ -24,23 +20,13 @@ export const silenceAlert =
     const previousPendingAlerts = getState().alert.pendingAlerts
     const previousSilencedAlerts = getState().alert.silencedAlerts
 
-    dispatch(
-      addToPendingAlertsBeingSilenced({
-        pendingAlertId: pendingAlert.id,
-        silencedAlertPeriodRequest
-      })
-    )
-    const timeout = setTimeout(() => {
-      const nextPendingAlerts = deleteListItems(getState().alert.pendingAlerts, 'id', pendingAlert.id)
-      dispatch(setPendingAlerts(nextPendingAlerts))
-
-      dispatch(removeFromSilencedAlertsQueue(pendingAlert.id))
-    }, 3200)
-
     try {
       const silencedAlert = await dispatch(
         alertApi.endpoints.silenceAlert.initiate({ id: pendingAlert.id, silencedAlertPeriodRequest })
       ).unwrap()
+
+      const nextPendingAlerts = deleteListItems(getState().alert.pendingAlerts, 'id', pendingAlert.id)
+      dispatch(setPendingAlerts(nextPendingAlerts))
 
       dispatch(
         removeVesselAlertAndUpdateReporting({
@@ -68,8 +54,17 @@ export const silenceAlert =
       const nextSilencedAlerts = [silencedAlert, ...previousSilencedAlerts]
       dispatch(setSilencedAlerts(nextSilencedAlerts))
       dispatch(renderVesselFeatures())
+
+      dispatch(
+        addSideWindowBanner({
+          children: `L'alerte sera suspendue ${getSilencedAlertPeriodText(silencedAlertPeriodRequest)}`,
+          closingDelay: 4000,
+          isClosable: true,
+          level: Level.SUCCESS,
+          withAutomaticClosing: true
+        })
+      )
     } catch (error) {
-      clearTimeout(timeout)
       dispatch(setPendingAlerts(previousPendingAlerts))
       dispatch(setSilencedAlerts(previousSilencedAlerts))
       dispatch(

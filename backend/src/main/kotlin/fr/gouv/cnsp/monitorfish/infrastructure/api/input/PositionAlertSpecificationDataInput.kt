@@ -7,7 +7,7 @@ data class PositionAlertSpecificationDataInput(
     val name: String,
     val type: String,
     val description: String,
-    val natinfCode: Int,
+    val threatHierarchy: ThreatHierarchyDataInput,
     val validityStartDatetimeUtc: ZonedDateTime? = null,
     val validityEndDatetimeUtc: ZonedDateTime? = null,
     val repeatEachYear: Boolean,
@@ -24,13 +24,24 @@ data class PositionAlertSpecificationDataInput(
     val districtCodes: List<String> = listOf(),
     val producerOrganizations: List<String> = listOf(),
 ) {
-    fun toPositionAlertSpecification() =
-        PositionAlertSpecification(
+    fun toPositionAlertSpecification(): PositionAlertSpecification {
+        val threat = threatHierarchy.value
+        val threatCharacterization = threatHierarchy.children.single().value
+        val natinf =
+            threatHierarchy.children
+                .single()
+                .children
+                .single()
+                .value
+
+        return PositionAlertSpecification(
             name = this.name,
             type = this.type,
             description = this.description,
             isUserDefined = true,
-            natinfCode = this.natinfCode,
+            natinf = natinf,
+            threat = threat,
+            threatCharacterization = threatCharacterization,
             validityStartDatetimeUtc = this.validityStartDatetimeUtc,
             validityEndDatetimeUtc = this.validityEndDatetimeUtc,
             repeatEachYear = this.repeatEachYear,
@@ -47,4 +58,5 @@ data class PositionAlertSpecificationDataInput(
             districtCodes = this.districtCodes,
             producerOrganizations = this.producerOrganizations,
         )
+    }
 }

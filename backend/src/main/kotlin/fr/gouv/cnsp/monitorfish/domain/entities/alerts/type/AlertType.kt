@@ -13,13 +13,15 @@ enum class AlertType(
         specification =
             PositionAlertSpecification(
                 id = null,
-                name = "Sortie en mer sans émission de message DEP",
+                name = "Sortie en mer sans émission de message \"DEP\"",
                 description = """_Dans une fenêtre de +/- 6h autour de la sortie de port détectée._
 
 Pour les navires français de +12 m (à l'exclusion des exemptés de JPE) n'ayant pas fait de DEP.
 La sortie de port est détectée sur les dernières 48h, avec le navire en mer depuis au moins 2h.""",
                 isUserDefined = false,
-                natinfCode = 27689,
+                natinf = 27689,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 isActivated = true,
                 repeatEachYear = false,
                 trackAnalysisDepth = 48.0,
@@ -41,7 +43,9 @@ Pour tous les navires français et pour les navires étrangers dont on a le JPE 
 
 Signalement archivé automatiquement dès sa création : il sert à garder une trace pour la statistique mais n'est pas utilisé directement pour l'opérationnel.""",
                 isUserDefined = false,
-                natinfCode = 27689,
+                natinf = 27689,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "FAR (JPE)",
                 isActivated = true,
                 repeatEachYear = false,
                 trackAnalysisDepth = 24.0,
@@ -61,7 +65,9 @@ Signalement archivé automatiquement dès sa création : il sert à garder une t
 
 Mêmes règles que pour l'alerte "FAR manquant en 24h" mais sur 2 jours consécutifs.""",
                 isUserDefined = false,
-                natinfCode = 27689,
+                natinf = 27689,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "FAR (JPE)",
                 isActivated = true,
                 repeatEachYear = false,
                 trackAnalysisDepth = 24.0,
@@ -86,7 +92,9 @@ _Effort de pêche = nb d'heures de pêche x puissance motrice en kW/h.
 Les navires remontent si kg des FAR < 0,015 kg x effort de pêche (kW/h)_
     """,
                 isUserDefined = false,
-                natinfCode = 27689,
+                natinf = 27689,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "FAR (JPE)",
                 isActivated = true,
                 repeatEachYear = false,
                 trackAnalysisDepth = 24.0,
@@ -102,7 +110,7 @@ Les navires remontent si kg des FAR < 0,015 kg x effort de pêche (kW/h)_
     fun getValue(): Alert =
         Alert(
             type = this,
-            natinfCode = this.specification?.natinfCode,
+            natinfCode = this.specification?.natinf,
             name = this.specification?.name ?: "",
             description = this.specification?.description ?: "",
         )

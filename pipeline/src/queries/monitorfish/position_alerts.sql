@@ -3,6 +3,8 @@ SELECT
     name,
     description,
     natinf_code,
+    threat,
+    threat_characterization,
     is_activated,
     is_in_error,
     error_reason,

@@ -2,10 +2,10 @@ package fr.gouv.cnsp.monitorfish.domain.mappers
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.AlertAndReportingValue
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValue
 import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
 import org.springframework.stereotype.Component
 
@@ -17,7 +17,7 @@ object ReportingMapper {
         mapper: ObjectMapper,
         message: String?,
         reportingType: ReportingType,
-    ): ReportingValue =
+    ): AlertAndReportingValue =
         try {
             if (!message.isNullOrEmpty() && message != jsonbNullString) {
                 when (reportingType) {

@@ -18,6 +18,7 @@ import { FISHING_POSITION_ONLY_AS_OPTIONS } from '@features/Alert/components/Sid
 import { alertActions } from '@features/Alert/components/SideWindowAlerts/slice'
 import { EditedAlertSpecificationSchema } from '@features/Alert/schemas/EditedAlertSpecificationSchema'
 import { deleteAlert } from '@features/Alert/useCases/deleteAlert'
+import { useGetThreatCharacterizationAsTreeOptions } from '@features/Infraction/hooks/useGetThreatCharacterizationAsTreeOptions'
 import { FormHead } from '@features/Mission/components/MissionForm/shared/FormHead'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
@@ -26,10 +27,10 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import {
   Accent,
   Button,
+  CheckTreePicker,
   customDayjs,
   Dropdown,
   FormikMultiRadio,
-  FormikSelect,
   FormikTextarea,
   FormikTextInput,
   Icon,
@@ -39,8 +40,7 @@ import {
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { toFormikValidationSchema } from '@utils/toFormikValidationSchema'
 import { Form, Formik } from 'formik'
-import { sortBy } from 'lodash-es'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import { SpeciesOnBoardCriteria } from './Criteria/SpeciesOnBoardCriteria'
@@ -53,22 +53,12 @@ export function AlertManagementForm() {
   const [createAlert, { isLoading: isCreatingAlert }] = useCreateAlertMutation()
   const [updateAlert, { isLoading: isUpdatingAlert }] = useUpdateAlertMutation()
   const editedAlertSpecification = useMainAppSelector(state => state.alert.editedAlertSpecification)
-  const infractions = useMainAppSelector(state => state.infraction.infractions)
   const [selectedCriterias, setSelectedCriterias] = useState<Criteria[]>([])
   const [isDraftCancellationConfirmationDialogOpen, setIsDraftCancellationConfirmationDialogOpen] = useState(false)
   const [isDeleteConfirmationDialogOpen, setIsDeleteConfirmationDialogOpen] = useState(false)
   assertNotNullish(editedAlertSpecification)
-
-  const infractionsAsOptions = useMemo(
-    () =>
-      sortBy(
-        infractions.map(infraction => ({
-          label: `${infraction.natinfCode} - ${infraction.infraction}`,
-          value: infraction.natinfCode
-        })),
-        ['label']
-      ),
-    [infractions]
+  const threatCharacterizationOptions = useGetThreatCharacterizationAsTreeOptions(
+    editedAlertSpecification?.threatHierarchy ? [editedAlertSpecification?.threatHierarchy] : undefined
   )
 
   const askForDraftCancellation = (isDirty: boolean) => {
@@ -163,7 +153,7 @@ export function AlertManagementForm() {
         onSubmit={onSave}
         validate={toFormikValidationSchema(EditedAlertSpecificationSchema)}
       >
-        {({ dirty, values }) => {
+        {({ dirty, errors, setFieldValue, values }) => {
           const hasZoneCriteria =
             !!values.regulatoryAreas.length ||
             !!values.administrativeAreas.length ||
@@ -203,12 +193,22 @@ export function AlertManagementForm() {
                   </HeadDescription>
                   <FormikTextInput isRequired label="Nom" name="name" />
                   <FormikTextarea isRequired label="Description" name="description" />
-                  <FormikSelect
+                  <CheckTreePicker
+                    error={errors.threatHierarchy}
                     isRequired
-                    label="NATINF associé"
-                    name="natinfCode"
-                    options={infractionsAsOptions}
+                    isSelect
+                    label="Type d’infraction et NATINF"
+                    name="threatHierarchy"
+                    onChange={nextThreats => {
+                      if (!!nextThreats && nextThreats.length > 0) {
+                        setFieldValue('threatHierarchy', nextThreats[0])
+                      } else {
+                        setFieldValue('threatHierarchy', undefined)
+                      }
+                    }}
+                    options={threatCharacterizationOptions}
                     searchable
+                    value={values.threatHierarchy ? [values.threatHierarchy] : undefined}
                   />
                   <StyledFormikMultiRadio
                     isInline
@@ -529,6 +529,7 @@ export const Body = styled.div`
   height: 100%;
   min-height: 0;
 `
+
 const Panel = styled.div<{
   $isRight: boolean
 }>`

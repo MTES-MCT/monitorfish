@@ -139,7 +139,22 @@ class PositionAlertSpecificationControllerITests {
                 "name": "Test Alert",
                 "type": "POSITION_ALERT",
                 "description": "Test alert description",
-                "natinfCode": 7059,
+                "threatHierarchy": {
+                     "children": [
+                       {
+                         "children": [
+                           {
+                             "label": "27718 – Débarquement de produits de la pêche maritime et de l'aquaculture marine hors d'un port désigné",
+                             "value": 27718
+                           }
+                         ],
+                         "label": "Autorisation Débarquement",
+                         "value": "Autorisation Débarquement"
+                       }
+                     ],
+                     "label": "Mesures techniques et de conservation",
+                     "value": "Mesures techniques et de conservation"
+                   },
                 "hasAutomaticArchiving": false,
                 "repeatEachYear": false,
                 "trackAnalysisDepth": 8.0,
@@ -176,7 +191,7 @@ class PositionAlertSpecificationControllerITests {
                 alertSpec.name == "Test Alert" &&
                     alertSpec.type == "POSITION_ALERT" &&
                     alertSpec.description == "Test alert description" &&
-                    alertSpec.natinfCode == 7059 &&
+                    alertSpec.natinf == 27718 &&
                     alertSpec.isUserDefined &&
                     !alertSpec.hasAutomaticArchiving &&
                     !alertSpec.repeatEachYear &&
@@ -197,7 +212,22 @@ class PositionAlertSpecificationControllerITests {
                 "name": "Updated Alert",
                 "type": "POSITION_ALERT",
                 "description": "Updated alert description",
-                "natinfCode": 7060,
+                "threatHierarchy": {
+                     "children": [
+                       {
+                         "children": [
+                           {
+                             "label": "27718 – Débarquement de produits de la pêche maritime et de l'aquaculture marine hors d'un port désigné",
+                             "value": 27718
+                           }
+                         ],
+                         "label": "Autorisation Débarquement",
+                         "value": "Autorisation Débarquement"
+                       }
+                     ],
+                     "label": "Mesures techniques et de conservation",
+                     "value": "Mesures techniques et de conservation"
+                   },
                 "isActivated": false,
                 "repeatEachYear": true,
                 "trackAnalysisDepth": 15.0,
@@ -233,7 +263,7 @@ class PositionAlertSpecificationControllerITests {
                 alertSpec.name == "Updated Alert" &&
                     alertSpec.type == "POSITION_ALERT" &&
                     alertSpec.description == "Updated alert description" &&
-                    alertSpec.natinfCode == 7060 &&
+                    alertSpec.natinf == 27718 &&
                     !alertSpec.isActivated &&
                     alertSpec.isUserDefined &&
                     !alertSpec.hasAutomaticArchiving &&

@@ -1,5 +1,5 @@
-import { openSideWindowAlertList } from './utils'
-import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
+import {openSideWindowAlertList} from './utils'
+import {getUtcDateInMultipleFormats} from '../../utils/getUtcDateInMultipleFormats'
 
 context('Side Window > Alert List', () => {
   beforeEach(() => {
@@ -15,10 +15,10 @@ context('Side Window > Alert List', () => {
     cy.get('*[data-cy="side-window-silenced-alerts-list"]').children().eq(1).children().as('previousSilencedAlerts')
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
     // https://docs.cypress.io/guides/core-concepts/variables-and-aliases#Sharing-Context
-    cy.get('*[data-cy="side-window-alerts-list"]').children().eq(1).children().as('previousAlerts')
+    cy.get('*[data-cy="side-window-alerts-list"] tbody tr').as('previousAlerts')
   })
 
-  it('Ten alerts Should be shown When clicking on the NAMO menu', () => {
+  it('Alert list display, navigation, search, filtering and expandable rows', () => {
     /**
      * Going to beacon malfunction then back in alerts Should not throw an exception
      */
@@ -31,16 +31,16 @@ context('Side Window > Alert List', () => {
      * Sub menu "Hors f." should be found
      */
     cy.get('[data-cy="side-window-sub-menu-NONE"]').click()
-    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 1)
+    cy.get('*[data-cy="side-window-alerts-list"] tbody tr').should('have.length', 1)
 
     /**
      * Alerts Should be filtered based on the search input
      */
     cy.get('*[data-cy="side-window-sub-menu-SA"]').click()
-    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 3)
-    cy.get('*[data-cy^="side-window-alerts-search-vessel"]').type('ABC0003')
-    cy.get('*[data-cy^="side-window-alerts-list"]').children().should('have.length', 2)
-    cy.get('*[data-cy^="side-window-alerts-search-vessel"]').clear()
+    cy.get('*[data-cy="side-window-alerts-list"] tbody tr').should('have.length', 3)
+    cy.fill('Rechercher un navire ou une alerte', 'YHIZ')
+    cy.get('*[data-cy="side-window-alerts-list"] tbody tr').should('have.length', 1)
+    cy.fill('Rechercher un navire ou une alerte', undefined)
 
     /**
      * Ten alerts Should be shown When clicking on the NAMO menu
@@ -53,38 +53,70 @@ context('Side Window > Alert List', () => {
     cy.get('body').contains(
       '2 suspensions d\'alertes en NAMO'
     )
-    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 10)
+    cy.get('*[data-cy="side-window-alerts-list"] tbody tr').should('have.length', 10)
 
-    cy.get(':nth-child(10)').contains('Chalutage dans les 3 milles')
-    cy.get(':nth-child(10)').contains('LE b@TO')
-    cy.get(':nth-child(10)').contains('7059')
+    cy.get('*[data-cy="side-window-alerts-list"] tbody tr').last().should('contain', 'Chalutage dans les 3 milles')
+    cy.get('*[data-cy="side-window-alerts-list"] tbody tr').last().should('contain', 'LE b@TO')
+    cy.get('*[data-cy="side-window-alerts-list"] tbody tr').last().should('contain', '7059')
 
-    // Show vessel on map
+    /**
+     * Test row expansion and collapse
+     */
+    // Get the first alert row
+    cy.fill('Rechercher un navire ou une alerte', 'MRCP')
+    cy.get('[title="Pour tous les navires tiers en pêche en ZEE française."]').click({ force: true })
+
+    cy.get(`[data-id="15-expanded"]`).should('be.visible')
+
+    cy.get(`[data-id="15-expanded"]`).should('contain', 'ABC000118343')
+    cy.get(`[data-id="15-expanded"]`).should('contain', 'MRCP')
+    cy.get(`[data-id="15-expanded"]`).should('contain', 'TO598604')
+    cy.get(`[data-id="15-expanded"]`).should('contain', 'Pour tous les navires tiers en pêche en ZEE française.')
+    cy.get(`[data-id="15-expanded"]`).should('contain', 'Les positions en pêche uniquement')
+    cy.get(`[data-id="15-expanded"]`).should('contain', 'Activités INN')
+    cy.get(`[data-id="15-expanded"]`).should('contain', 'Pêche sans autorisation par navire tiers')
+    cy.get(`[data-id="15-expanded"]`).should('contain', '2608')
+    cy.get('[title="Pour tous les navires tiers en pêche en ZEE française."]').click({ force: true })
+
+    // Verify expanded content is hidden
+    cy.get(`[data-id="15-expanded"]`).should('not.exist')
+
+    /**
+     * Test expansion with specific alert after search
+     */
+    cy.fill('Rechercher un navire ou une alerte', 'PHENOMENE')
+
+    /**
+     * Show vessel on map
+     */
     cy.intercept(
       'GET',
       'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=DONTSINK' +
       '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS&vesselId=&vesselIdentifier=INTERNAL_REFERENCE_NUMBER'
     ).as('showVesselPositionsOnMap')
-    cy.get('*[data-cy="side-window-alerts-show-vessel"]').first().forceClick()
+    cy.get('[title="Voir sur la carte"]').first().forceClick()
     cy.wait('@showVesselPositionsOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))
   })
 
-  it('An alert Should be validated', function () {
+  it('Alert validation and silencing', function () {
+    /**
+     * Test alert validation
+     */
     // Given
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
-    const expectedAlerts = this.previousAlerts.length - 1
+    const expectedAlertsAfterValidation = this.previousAlerts.length - 1
     const previousSilencedAlerts = this.previousSilencedAlerts.length
 
     // When
     cy.intercept('PUT', '/bff/v1/operational_alerts/1/validate').as('validateAlert')
-    cy.get('*[data-cy="side-window-alerts-validate-alert"]').first().click({ force: true })
-    cy.get('*[data-cy="side-window-alerts-is-validated-transition"]').should('be.visible')
+    cy.get('[title="Valider l\'alerte"]').first().click({ force: true })
+    cy.get('.Component-Banner').contains("Alerte validée et ajoutée à la fiche du navire")
     cy.wait('@validateAlert').then(({ response }) => expect(response && response.statusCode).equal(200))
 
     // The value is saved in database when I refresh the page
     cy.visit('/side_window')
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
-    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', expectedAlerts)
+    cy.get('*[data-cy="side-window-alerts-list"] tbody tr').should('have.length', expectedAlertsAfterValidation)
     // As the alert is validated, it will be silenced for 4 hours but not shown in the silenced alerts table
     cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
     cy.get('*[data-cy^="side-window-silenced-alerts-list"]')
@@ -92,18 +124,20 @@ context('Side Window > Alert List', () => {
       .eq(1)
       .children()
       .should('have.length', previousSilencedAlerts)
-  })
 
-  it('An alert Should be silenced', function () {
+    /**
+     * Test alert silencing
+     */
     // Given
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
-    const expectedSilencedAlerts = this.previousSilencedAlerts.length + 1
+    const expectedSilencedAlerts = previousSilencedAlerts + 1
+    const expectedAlertsAfterSilencing = expectedAlertsAfterValidation - 1
 
     // When
     cy.intercept('PUT', '/bff/v1/operational_alerts/2/silence').as('silenceAlert')
-    cy.get('*[data-cy="side-window-alerts-silence-alert"]').first().click({ force: true })
+    cy.get('[title="Suspendre l\'alerte"]').first().click({ force: true })
     cy.get('*[data-cy="side-window-silence-alert-one-hour"]').first().click({ force: true })
-    cy.get('*[data-cy="side-window-alerts-is-silenced-transition"]').should('be.visible')
+    cy.get('.Component-Banner').contains("L'alerte sera suspendue pendant 1 heure")
     cy.wait('@silenceAlert').then(({ response }) => expect(response && response.statusCode).equal(200))
     cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
     cy.get('*[data-cy^="side-window-silenced-alerts-list"]')
@@ -116,11 +150,7 @@ context('Side Window > Alert List', () => {
     cy.visit('/side_window')
     cy.wait(200)
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
-    cy.get('*[data-cy^="side-window-alerts-list"]')
-      .children()
-      .eq(1)
-      .children()
-      .should('have.length', this.previousAlerts.length - 1)
+    cy.get('*[data-cy="side-window-alerts-list"] tbody tr').should('have.length', expectedAlertsAfterSilencing)
     cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
     cy.get('*[data-cy^="side-window-silenced-alerts-list"]')
       .children()
@@ -129,10 +159,9 @@ context('Side Window > Alert List', () => {
       .should('have.length', expectedSilencedAlerts)
   })
 
-  it('A silenced alert Should be created', function () {
+  it('Creating new silenced alerts', function () {
     // Given
     cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
-
 
     const now = getUtcDateInMultipleFormats('2066-06-08T13:54')
     const expectedSilencedAlerts = this.previousSilencedAlerts.length + 1

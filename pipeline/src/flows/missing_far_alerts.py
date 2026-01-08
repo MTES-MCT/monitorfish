@@ -507,7 +507,14 @@ def missing_far_alerts_flow(
         districts_table=districts_table,
         districts_columns_to_add=["dml"],
     )
-    alerts = make_alerts(vessels_with_missing_fars, alert_type, name)
+    alerts = make_alerts(
+        vessels_with_missing_fars,
+        alert_type,
+        name,
+        natinf_code=27689,
+        threat="Obligations déclaratives",
+        threat_characterization="FAR (JPE)",
+    )
     silenced_alerts = extract_silenced_alerts.submit(
         alert_type, number_of_hours=period_start_hours_from_now
     )

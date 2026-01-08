@@ -48,7 +48,7 @@ export function getPendingAlertsTableColumns(
       enableSorting: true,
       header: () => 'Navire',
       id: 'vessel',
-      size: 210
+      size: 190
     },
     {
       accessorFn: row => row.value.name,
@@ -60,7 +60,7 @@ export function getPendingAlertsTableColumns(
       enableSorting: true,
       header: () => "Nom de l'alerte",
       id: 'name',
-      size: 300
+      size: 280
     },
     {
       accessorFn: row => `${row.alertSpecification.natinf}:${row.id}`,
@@ -72,7 +72,7 @@ export function getPendingAlertsTableColumns(
       enableSorting: true,
       header: () => 'Critères de déclenchement',
       id: 'criterias',
-      size: 220
+      size: 270
     },
     {
       accessorFn: row => row.value.natinfCode,
@@ -88,7 +88,7 @@ export function getPendingAlertsTableColumns(
       enableSorting: true,
       header: () => 'Type d’infraction',
       id: 'threat',
-      size: 200
+      size: 190
     },
     {
       accessorFn: row => `${row.id}`,

@@ -264,9 +264,11 @@ const TableLegend = styled.div`
 `
 
 const TableInnerWrapper = styled.div`
-  max-height: 70vh;
-  overflow-y: auto;
+  align-items: flex-start;
+  height: calc(100vh - 250px); /* = window height - filters height - title height */
   overflow-x: visible;
+  padding-right: 8px;
+  overflow-y: scroll;
 
   > table {
     min-width: 1180px;

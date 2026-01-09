@@ -926,6 +926,8 @@ def test_flow_deletes_existing_pending_alerts_of_matching_type_and_alert_id(
         name="Alerte alerte c'est l'alerte",
         description="Alerte générale !!",
         natinf_code=natinf_code,
+        threat="some threat",
+        threat_characterization="some threat_characterization",
         track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
         gears=gears,
@@ -955,6 +957,8 @@ def test_flow_deletes_existing_pending_alerts_of_matching_type_and_alert_id(
         name="Alerte alerte c'est l'alerte",
         description="Alerte générale !!",
         natinf_code=natinf_code,
+        threat="some threat",
+        threat_characterization="some threat_characterization",
         track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
         gears=gears,
@@ -1000,6 +1004,8 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
         name=name,
         description=description,
         natinf_code=natinf_code,
+        threat="some threat",
+        threat_characterization="some threat_characterization",
         track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
         administrative_areas=[
@@ -1149,6 +1155,8 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
         name=name,
         description=description,
         natinf_code=natinf_code,
+        threat="some threat",
+        threat_characterization="some threat_characterization",
         track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
         administrative_areas=[
@@ -1282,6 +1290,8 @@ def test_flow_filters_on_gears(reset_test_data):
         name=name,
         description=description,
         natinf_code=natinf_code,
+        threat="some threat",
+        threat_characterization="some threat_characterization",
         track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
         administrative_areas=[
@@ -1380,6 +1390,8 @@ def test_flow_filters_on_time(reset_test_data):
         name=name,
         description=description,
         natinf_code=natinf_code,
+        threat="some threat",
+        threat_characterization="some threat_characterization",
         track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
         administrative_areas=[
@@ -1495,6 +1507,8 @@ def test_flow_filters_on_flag_states(reset_test_data):
         name=name,
         description=description,
         natinf_code=natinf_code,
+        threat="some threat",
+        threat_characterization="some threat_characterization",
         track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
         administrative_areas=[
@@ -1599,6 +1613,8 @@ def test_flow_filters_on_depth(reset_test_data):
         name=name,
         description=description,
         natinf_code=natinf_code,
+        threat="some threat",
+        threat_characterization="some threat_characterization",
         track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
         administrative_areas=[
@@ -1715,6 +1731,8 @@ def test_flow_filters_on_eez_area(reset_test_data):
         name=name,
         description=description,
         natinf_code=natinf_code,
+        threat="some threat",
+        threat_characterization="some threat_characterization",
         track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
         administrative_areas=[
@@ -1787,6 +1805,8 @@ def test_flow_filters_on_regulatory_areas(reset_test_data):
         name=name,
         description=description,
         natinf_code=natinf_code,
+        threat="some threat",
+        threat_characterization="some threat_characterization",
         track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
         regulatory_areas=[
@@ -1829,6 +1849,8 @@ def test_flow_filters_on_neafc_area(reset_test_data):
         name=name,
         description=description,
         natinf_code=natinf_code,
+        threat="some threat",
+        threat_characterization="some threat_characterization",
         track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
         administrative_areas=[
@@ -1876,6 +1898,8 @@ def test_flow_filters_on_species_and_catch_areas(reset_test_data):
         name=name,
         description=description,
         natinf_code=natinf_code,
+        threat="some threat",
+        threat_characterization="some threat_characterization",
         track_analysis_depth=track_analysis_depth,
         only_fishing_positions=only_fishing_positions,
         species=species,

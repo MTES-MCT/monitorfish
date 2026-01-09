@@ -1,0 +1,20 @@
+services:
+  geoserver:
+    image: kartoza/geoserver:2.18.0
+    restart: always
+    ports:
+      - 8081:8080
+      - 8082:8443
+    volumes:
+      - geoserver-data:/opt/geoserver/data_dir
+    environment:
+      - SSL=true
+    healthcheck:
+      test: curl --fail -s http://localhost:8080/geoserver/index.html || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  geoserver-data:
+    driver: local

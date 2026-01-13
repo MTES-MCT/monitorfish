@@ -12,6 +12,8 @@ data class InfractionSuspicion(
     override val natinfCode: Int,
     override val seaFront: String? = null,
     override val dml: String? = null,
+    override val threat: String? = null,
+    override val threatCharacterization: String? = null,
 ) : InfractionSuspicionOrObservationType(
         reportingActor = reportingActor,
         controlUnitId = controlUnitId,
@@ -22,6 +24,8 @@ data class InfractionSuspicion(
         natinfCode = natinfCode,
         seaFront = seaFront,
         dml = dml,
+        threat = threat,
+        threatCharacterization = threatCharacterization,
         type = ReportingTypeMapping.INFRACTION_SUSPICION,
     ) {
     companion object {
@@ -30,6 +34,12 @@ data class InfractionSuspicion(
         ): InfractionSuspicion {
             require(updatedInfractionSuspicionOrObservation.natinfCode != null) {
                 "NATINF code should not be null"
+            }
+            require(updatedInfractionSuspicionOrObservation.threat != null) {
+                "threat should not be null"
+            }
+            require(updatedInfractionSuspicionOrObservation.threatCharacterization != null) {
+                "threatCharacterization should not be null"
             }
 
             return InfractionSuspicion(
@@ -40,6 +50,8 @@ data class InfractionSuspicion(
                 title = updatedInfractionSuspicionOrObservation.title,
                 description = updatedInfractionSuspicionOrObservation.description,
                 natinfCode = updatedInfractionSuspicionOrObservation.natinfCode,
+                threat = updatedInfractionSuspicionOrObservation.threat,
+                threatCharacterization = updatedInfractionSuspicionOrObservation.threatCharacterization,
             )
         }
     }

@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.use_cases
+package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.eq
@@ -10,7 +10,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.DistrictRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetReportingWithDMLAndSeaFront
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -36,6 +35,8 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
                 natinfCode = 1235,
                 authorTrigram = "LTH",
                 title = "Chalut en boeuf illégal",
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
             )
 
         given(vesselRepository.findVesselById(eq(123))).willReturn(
@@ -72,6 +73,8 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
                             natinfCode = 1235,
                             authorTrigram = "LTH",
                             title = "Chalut en boeuf illégal",
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
                         ),
                     vesselId = null,
                 )
@@ -97,6 +100,8 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
                             natinfCode = 1235,
                             authorTrigram = "LTH",
                             title = "Chalut en boeuf illégal",
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
                         ),
                     vesselId = 123,
                 )
@@ -126,6 +131,8 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
                             natinfCode = 1235,
                             authorTrigram = "LTH",
                             title = "Chalut en boeuf illégal",
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
                         ),
                     vesselId = 123,
                 )

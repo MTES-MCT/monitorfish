@@ -33,13 +33,15 @@ class ReportingDataOutput(
         fun fromReporting(
             reporting: Reporting,
             controlUnit: LegacyControlUnit?,
+            useThreatHierarchyForForm: Boolean = false,
         ): ReportingDataOutput {
             val value =
                 when (reporting.value) {
                     is InfractionSuspicion ->
                         InfractionSuspicionDataOutput.fromInfractionSuspicion(
-                            reporting.value,
-                            controlUnit,
+                            infractionSuspicion = reporting.value,
+                            controlUnit = controlUnit,
+                            useThreatHierarchyForForm = useThreatHierarchyForForm,
                         )
 
                     is Observation -> ObservationDataOutput.fromObservation(reporting.value, controlUnit)

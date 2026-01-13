@@ -14,4 +14,6 @@ class UpdatedInfractionSuspicionOrObservation(
     val title: String,
     val description: String? = null,
     val natinfCode: Int? = null,
+    val threat: String? = null,
+    val threatCharacterization: String? = null,
 )

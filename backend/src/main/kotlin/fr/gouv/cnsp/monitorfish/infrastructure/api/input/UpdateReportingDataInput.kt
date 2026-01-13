@@ -14,10 +14,20 @@ class UpdateReportingDataInput(
     val expirationDate: ZonedDateTime? = null,
     val title: String,
     val description: String? = null,
-    val natinfCode: Int? = null,
+    val threatHierarchy: ThreatHierarchyDataInput? = null,
 ) {
-    fun toUpdatedReportingValues() =
-        UpdatedInfractionSuspicionOrObservation(
+    fun toUpdatedReportingValues(): UpdatedInfractionSuspicionOrObservation {
+        val threat = threatHierarchy?.value
+        val threatCharacterization = threatHierarchy?.children?.single()?.value
+        val natinf =
+            threatHierarchy
+                ?.children
+                ?.single()
+                ?.children
+                ?.single()
+                ?.value
+
+        return UpdatedInfractionSuspicionOrObservation(
             reportingActor = this.reportingActor,
             type = this.type,
             controlUnitId = this.controlUnitId,
@@ -26,6 +36,9 @@ class UpdateReportingDataInput(
             expirationDate = this.expirationDate,
             title = this.title,
             description = this.description,
-            natinfCode = this.natinfCode,
+            threat = threat,
+            threatCharacterization = threatCharacterization,
+            natinfCode = natinf,
         )
+    }
 }

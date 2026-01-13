@@ -8,6 +8,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.NatinfDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ThreatCharacterizationDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ThreatHierarchyDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateReportingDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.log.LoggingFormatter
 import org.assertj.core.api.Assertions.assertThat
@@ -41,7 +44,25 @@ class LoggingFormatterUTests {
                 UpdateReportingDataInput(
                     reportingActor = ReportingActor.OPS,
                     type = ReportingType.INFRACTION_SUSPICION,
-                    natinfCode = 123456,
+                    threatHierarchy =
+                        ThreatHierarchyDataInput(
+                            children =
+                                listOf(
+                                    ThreatCharacterizationDataInput(
+                                        children =
+                                            listOf(
+                                                NatinfDataInput(
+                                                    label = "27689",
+                                                    value = 27689,
+                                                ),
+                                            ),
+                                        label = "Pêche sans autorisation par navire tiers",
+                                        value = "Pêche sans autorisation par navire tiers",
+                                    ),
+                                ),
+                            label = "Activités INN",
+                            value = "Activités INN",
+                        ),
                     authorTrigram = "LTH",
                     title = "A title",
                 ),
@@ -58,7 +79,7 @@ class LoggingFormatterUTests {
                 "\"expirationDate\":null," +
                 "\"title\":\"A title\"," +
                 "\"description\":null," +
-                "\"natinfCode\":123456}",
+                "\"threatHierarchy\":{\"children\":[{\"children\":[{\"label\":\"27689\",\"value\":27689}],\"label\":\"Pêche sans autorisation par navire tiers\",\"value\":\"Pêche sans autorisation par navire tiers\"}],\"label\":\"Activités INN\",\"value\":\"Activités INN\"}}",
         )
     }
 
@@ -87,6 +108,8 @@ class LoggingFormatterUTests {
                             natinfCode = 123456,
                             authorTrigram = "LTH",
                             title = "A title",
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
                         ),
                     type = ReportingType.INFRACTION_SUSPICION,
                 ),
@@ -116,8 +139,8 @@ class LoggingFormatterUTests {
                 "\"natinfCode\":123456," +
                 "\"seaFront\":null," +
                 "\"dml\":null," +
-                "\"threat\":null," +
-                "\"threatCharacterization\":null," +
+                "\"threat\":\"Obligations déclaratives\"," +
+                "\"threatCharacterization\":\"DEP\"," +
                 "\"type\":\"INFRACTION_SUSPICION\"" +
                 "}}",
         )
@@ -133,7 +156,25 @@ class LoggingFormatterUTests {
             UpdateReportingDataInput(
                 reportingActor = ReportingActor.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
-                natinfCode = 123456,
+                threatHierarchy =
+                    ThreatHierarchyDataInput(
+                        children =
+                            listOf(
+                                ThreatCharacterizationDataInput(
+                                    children =
+                                        listOf(
+                                            NatinfDataInput(
+                                                label = "27689",
+                                                value = 27689,
+                                            ),
+                                        ),
+                                    label = "Pêche sans autorisation par navire tiers",
+                                    value = "Pêche sans autorisation par navire tiers",
+                                ),
+                            ),
+                        label = "Activités INN",
+                        value = "Activités INN",
+                    ),
                 authorTrigram = "LTH",
                 title = "A title",
             )
@@ -152,7 +193,7 @@ class LoggingFormatterUTests {
                 "\"expirationDate\":null," +
                 "\"title\":\"A title\"," +
                 "\"description\":null," +
-                "\"natinfCode\":123456}",
+                "\"threatHierarchy\":{\"children\":[{\"children\":[{\"label\":\"27689\",\"value\":27689}],\"label\":\"Pêche sans autorisation par navire tiers\",\"value\":\"Pêche sans autorisation par navire tiers\"}],\"label\":\"Activités INN\",\"value\":\"Activités INN\"}}",
         )
     }
 }

@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingAndOccurrences
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ReportingDataOutput.Companion.fromReporting
 
 data class ReportingAndOccurrencesDataOutput(
     val otherOccurrencesOfSameAlert: List<ReportingDataOutput>,
@@ -9,16 +10,21 @@ data class ReportingAndOccurrencesDataOutput(
     companion object {
         fun fromReportingAndOccurrences(
             reportingAndOccurrences: ReportingAndOccurrences,
+            useThreatHierarchyForForm: Boolean = false,
         ): ReportingAndOccurrencesDataOutput =
             ReportingAndOccurrencesDataOutput(
                 otherOccurrencesOfSameAlert =
                     reportingAndOccurrences.otherOccurrencesOfSameAlert.map { reporting ->
-                        ReportingDataOutput.fromReporting(reporting, reportingAndOccurrences.controlUnit)
+                        fromReporting(
+                            reporting = reporting,
+                            controlUnit = reportingAndOccurrences.controlUnit,
+                            useThreatHierarchyForForm = useThreatHierarchyForForm,
+                        )
                     },
                 reporting =
-                    ReportingDataOutput.fromReporting(
-                        reportingAndOccurrences.reporting,
-                        reportingAndOccurrences.controlUnit,
+                    fromReporting(
+                        reporting = reportingAndOccurrences.reporting,
+                        controlUnit = reportingAndOccurrences.controlUnit,
                     ),
             )
     }

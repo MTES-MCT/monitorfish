@@ -15,6 +15,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.NatinfDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ThreatCharacterizationDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ThreatHierarchyDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateReportingDataInput
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -131,6 +134,8 @@ class ReportingControllerITests {
                         natinfCode = 123456,
                         authorTrigram = "LTH",
                         title = "A title",
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
                     ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
@@ -157,6 +162,8 @@ class ReportingControllerITests {
                                         natinfCode = 123456,
                                         authorTrigram = "LTH",
                                         title = "A title",
+                                        threat = "Obligations déclaratives",
+                                        threatCharacterization = "DEP",
                                     ),
                                 type = ReportingType.INFRACTION_SUSPICION,
                             ),
@@ -191,6 +198,8 @@ class ReportingControllerITests {
                         controlUnitId = 1234,
                         authorTrigram = "LTH",
                         title = "A title",
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
                     ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
@@ -220,6 +229,8 @@ class ReportingControllerITests {
                                         controlUnitId = 1234,
                                         authorTrigram = "LTH",
                                         title = "A title",
+                                        threat = "Obligations déclaratives",
+                                        threatCharacterization = "DEP",
                                     ),
                                 type = ReportingType.INFRACTION_SUSPICION,
                             ),
@@ -255,6 +266,8 @@ class ReportingControllerITests {
                         natinfCode = 123456,
                         authorTrigram = "LTH",
                         title = "A title",
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
                     ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
@@ -294,6 +307,8 @@ class ReportingControllerITests {
                         natinfCode = 123456,
                         authorTrigram = "LTH",
                         title = "A title",
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
                     ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
@@ -311,7 +326,25 @@ class ReportingControllerITests {
                             UpdateReportingDataInput(
                                 reportingActor = ReportingActor.OPS,
                                 type = ReportingType.INFRACTION_SUSPICION,
-                                natinfCode = 123456,
+                                threatHierarchy =
+                                    ThreatHierarchyDataInput(
+                                        children =
+                                            listOf(
+                                                ThreatCharacterizationDataInput(
+                                                    children =
+                                                        listOf(
+                                                            NatinfDataInput(
+                                                                label = "27689",
+                                                                value = 27689,
+                                                            ),
+                                                        ),
+                                                    label = "Pêche sans autorisation par navire tiers",
+                                                    value = "Pêche sans autorisation par navire tiers",
+                                                ),
+                                            ),
+                                        label = "Activités INN",
+                                        value = "Activités INN",
+                                    ),
                                 authorTrigram = "LTH",
                                 title = "A title",
                             ),
@@ -340,6 +373,8 @@ class ReportingControllerITests {
                         natinfCode = 123456,
                         authorTrigram = "LTH",
                         title = "A title",
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
                     ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
@@ -365,6 +400,8 @@ class ReportingControllerITests {
                                         natinfCode = 123456,
                                         authorTrigram = "LTH",
                                         title = "A title",
+                                        threat = "Obligations déclaratives",
+                                        threatCharacterization = "DEP",
                                     ),
                                 type = ReportingType.INFRACTION_SUSPICION,
                             ),

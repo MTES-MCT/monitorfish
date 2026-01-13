@@ -53,7 +53,7 @@ class AddReportingUTests {
                         alertId = 1,
                         natinfCode = 7059,
                         name = "Chalutage dans les 3 milles",
-                    ) as AlertAndReportingValue,
+                    ) as AlertAndReportingContent,
                 isArchived = false,
                 isDeleted = false,
             )

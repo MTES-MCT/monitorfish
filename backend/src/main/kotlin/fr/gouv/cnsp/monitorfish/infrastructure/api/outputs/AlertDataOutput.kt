@@ -12,7 +12,7 @@ class AlertDataOutput(
     val alertId: Int? = null,
     val name: String,
     val description: String? = null,
-) : ReportingValueDataOutput() {
+) : ReportingContentDataOutput() {
     companion object {
         fun fromAlertType(alert: Alert) =
             AlertDataOutput(

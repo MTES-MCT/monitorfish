@@ -14,7 +14,7 @@ class ObservationDataOutput(
     val description: String? = null,
     val seaFront: String? = null,
     val dml: String? = null,
-) : ReportingValueDataOutput() {
+) : ReportingContentDataOutput() {
     companion object {
         fun fromObservation(
             observation: Observation,

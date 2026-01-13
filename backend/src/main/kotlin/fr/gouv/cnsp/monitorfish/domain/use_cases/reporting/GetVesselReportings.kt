@@ -192,7 +192,12 @@ class GetVesselReportings(
             return updatedReportingAndOccurrences
         }
 
-        val controlUnitId = (updatedReporting.value as? InfractionSuspicionOrObservationType)?.controlUnitId
+        val controlUnitId =
+            when (val value = updatedReporting.value) {
+                is ReportingContent.InfractionSuspicion -> value.infractionSuspicion.controlUnitId
+                is ReportingContent.Observation -> value.observation.controlUnitId
+                is ReportingContent.Alert -> null
+            }
         val foundControlUnit = controlUnits.find { it.id == controlUnitId }
 
         return updatedReportingAndOccurrences.copy(controlUnit = foundControlUnit)

@@ -181,7 +181,7 @@ class JpaReportingRepository(
         dbReportingRepository.findAllUnarchivedAfterDEPLogbookMessage().map { result ->
             Pair(
                 result[0] as Int,
-                ReportingMapper.getReportingValueFromJSON(
+                ReportingMapper.getReportingContentFromJSON(
                     mapper,
                     result[1] as String?,
                     ReportingType.ALERT,

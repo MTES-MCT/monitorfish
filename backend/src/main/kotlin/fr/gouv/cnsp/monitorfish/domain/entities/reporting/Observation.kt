@@ -3,23 +3,37 @@ package fr.gouv.cnsp.monitorfish.domain.entities.reporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSuspicionOrObservation
 
 data class Observation(
-    override val reportingActor: ReportingActor,
-    override val controlUnitId: Int? = null,
-    override val authorTrigram: String,
-    override val authorContact: String? = null,
-    override val title: String,
-    override val description: String? = null,
-    override val seaFront: String? = null,
-    override val dml: String? = null,
-) : InfractionSuspicionOrObservationType(
-        reportingActor = reportingActor,
-        natinfCode = null,
-        title = title,
-        type = ReportingTypeMapping.OBSERVATION,
-        authorTrigram = authorTrigram,
-        seaFront = seaFront,
-        dml = dml,
-    ) {
+    val reportingActor: ReportingActor,
+    val controlUnitId: Int? = null,
+    val authorTrigram: String,
+    val authorContact: String? = null,
+    val title: String,
+    val description: String? = null,
+    val seaFront: String? = null,
+    val dml: String? = null,
+) {
+    fun checkReportingActorAndFieldsRequirements() {
+        when (reportingActor) {
+            ReportingActor.UNIT ->
+                require(controlUnitId != null) {
+                    "An unit must be set"
+                }
+            ReportingActor.DML ->
+                require(!authorContact.isNullOrEmpty()) {
+                    "An author contact must be set"
+                }
+            ReportingActor.DIRM ->
+                require(!authorContact.isNullOrEmpty()) {
+                    "An author contact must be set"
+                }
+            ReportingActor.OTHER ->
+                require(!authorContact.isNullOrEmpty()) {
+                    "An author contact must be set"
+                }
+            else -> {}
+        }
+    }
+
     companion object {
         fun fromUpdatedReporting(
             updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation,
@@ -31,6 +45,8 @@ data class Observation(
                 authorContact = updatedInfractionSuspicionOrObservation.authorContact,
                 title = updatedInfractionSuspicionOrObservation.title,
                 description = updatedInfractionSuspicionOrObservation.description,
+                seaFront = null,
+                dml = null,
             )
     }
 }

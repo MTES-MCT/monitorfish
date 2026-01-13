@@ -49,23 +49,29 @@ object TestUtils {
             value =
                 when (alertType) {
                     AlertType.POSITION_ALERT ->
-                        Alert(
-                            type = AlertType.POSITION_ALERT,
-                            seaFront = NAMO.toString(),
-                            alertId = 1,
-                            natinfCode = 7059,
-                            name = "Chalutage dans les 3 milles",
+                        ReportingContent.Alert(
+                            Alert(
+                                type = AlertType.POSITION_ALERT,
+                                natinfCode = 7059,
+                                threat = "Pêche",
+                                threatCharacterization = "Réglementation zone",
+                                name = "Chalutage dans les 3 milles",
+                                seaFront = NAMO.toString(),
+                                alertId = 1,
+                            ),
                         )
-                    AlertType.MISSING_FAR_ALERT -> AlertType.MISSING_FAR_ALERT.getValue()
-                    AlertType.MISSING_FAR_48_HOURS_ALERT -> AlertType.MISSING_FAR_48_HOURS_ALERT.getValue()
+                    AlertType.MISSING_FAR_ALERT -> ReportingContent.Alert(AlertType.MISSING_FAR_ALERT.getValue())
+                    AlertType.MISSING_FAR_48_HOURS_ALERT -> ReportingContent.Alert(AlertType.MISSING_FAR_48_HOURS_ALERT.getValue())
                     else ->
-                        InfractionSuspicion(
-                            ReportingActor.OPS,
-                            natinfCode = natinfCode ?: 123456,
-                            authorTrigram = "LTH",
-                            title = "A title",
-                            threat = "Obligations déclaratives",
-                            threatCharacterization = "DEP",
+                        ReportingContent.InfractionSuspicion(
+                            InfractionSuspicion(
+                                reportingActor = ReportingActor.OPS,
+                                natinfCode = natinfCode ?: 123456,
+                                authorTrigram = "LTH",
+                                title = "A title",
+                                threat = "Obligations déclaratives",
+                                threatCharacterization = "DEP",
+                            ),
                         )
                 },
             underCharter = null,
@@ -88,13 +94,17 @@ object TestUtils {
                 creationDate = dateTime,
                 validationDate = dateTime,
                 value =
-                    Alert(
-                        type = AlertType.POSITION_ALERT,
-                        seaFront = NAMO.toString(),
-                        alertId = 1,
-                        natinfCode = 7059,
-                        name = "Chalutage dans les 3 milles",
-                    ) as AlertAndReportingValue,
+                    ReportingContent.Alert(
+                        Alert(
+                            type = AlertType.POSITION_ALERT,
+                            natinfCode = 7059,
+                            threat = "Pêche",
+                            threatCharacterization = "Réglementation zone",
+                            name = "Chalutage dans les 3 milles",
+                            seaFront = NAMO.toString(),
+                            alertId = 1,
+                        ),
+                    ),
                 isArchived = false,
                 isDeleted = false,
             ),
@@ -110,13 +120,17 @@ object TestUtils {
                 creationDate = dateTime,
                 validationDate = dateTime,
                 value =
-                    Alert(
-                        type = AlertType.POSITION_ALERT,
-                        seaFront = NAMO.toString(),
-                        alertId = 1,
-                        natinfCode = 7059,
-                        name = "Chalutage dans les 3 milles",
-                    ) as AlertAndReportingValue,
+                    ReportingContent.Alert(
+                        Alert(
+                            type = AlertType.POSITION_ALERT,
+                            natinfCode = 7059,
+                            threat = "Pêche",
+                            threatCharacterization = "Réglementation zone",
+                            name = "Chalutage dans les 3 milles",
+                            seaFront = NAMO.toString(),
+                            alertId = 1,
+                        ),
+                    ),
                 isArchived = false,
                 isDeleted = false,
             ),
@@ -132,13 +146,17 @@ object TestUtils {
                 creationDate = dateTime.minusYears(1),
                 validationDate = dateTime.minusYears(1),
                 value =
-                    Alert(
-                        type = AlertType.POSITION_ALERT,
-                        seaFront = NAMO.toString(),
-                        alertId = 1,
-                        natinfCode = 7059,
-                        name = "Chalutage dans les 3 milles",
-                    ) as AlertAndReportingValue,
+                    ReportingContent.Alert(
+                        Alert(
+                            type = AlertType.POSITION_ALERT,
+                            natinfCode = 7059,
+                            threat = "Pêche",
+                            threatCharacterization = "Réglementation zone",
+                            name = "Chalutage dans les 3 milles",
+                            seaFront = NAMO.toString(),
+                            alertId = 1,
+                        ),
+                    ),
                 isArchived = true,
                 isDeleted = false,
             ),

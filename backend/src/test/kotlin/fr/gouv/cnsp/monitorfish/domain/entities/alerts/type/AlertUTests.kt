@@ -20,6 +20,8 @@ class AlertUTests {
                     alertId = null,
                     natinfCode = 7059,
                     name = "Chalutage dans les 3 milles",
+                    threat = "Pêche",
+                    threatCharacterization = "Réglementation zone",
                 )
             }
 

@@ -20,11 +20,11 @@ class ReportingMapperUTests {
     private lateinit var mapper: ObjectMapper
 
     @Test
-    fun `getReportingValueFromJSON Should throw an exception When the message value is null`() {
+    fun `getReportingContentFromJSON Should throw an exception When the message value is null`() {
         // When
         val throwable =
             catchThrowable {
-                ReportingMapper.getReportingValueFromJSON(mapper, "null", ReportingType.ALERT)
+                ReportingMapper.getReportingContentFromJSON(mapper, "null", ReportingType.ALERT)
             }
 
         // Then
@@ -33,7 +33,7 @@ class ReportingMapperUTests {
     }
 
     @Test
-    fun `getReportingValueFromJSON Should deserialize an PositionAlert When it is first serialized`() {
+    fun `getReportingContentFromJSON Should deserialize an PositionAlert When it is first serialized`() {
         // Given
         val positionAlert =
             Alert(
@@ -43,11 +43,13 @@ class ReportingMapperUTests {
                 natinfCode = 7059,
                 riskFactor = 2.356,
                 name = "Chalutage dans les 3 milles",
+                threat = "Pêche",
+                threatCharacterization = "Réglementation zone",
             )
 
         // When
         val jsonString = mapper.writeValueAsString(positionAlert)
-        val parsedReporting = ReportingMapper.getReportingValueFromJSON(mapper, jsonString, ReportingType.ALERT)
+        val parsedReporting = ReportingMapper.getReportingContentFromJSON(mapper, jsonString, ReportingType.ALERT)
 
         // Then
         assertThat(parsedReporting).isInstanceOf(Alert::class.java)
@@ -57,13 +59,13 @@ class ReportingMapperUTests {
     }
 
     @Test
-    fun `getReportingValueFromJSON Should deserialize an POSITION_ALERT json`() {
+    fun `getReportingContentFromJSON Should deserialize an POSITION_ALERT json`() {
         // Given
         val alert =
             "{\"type\": \"POSITION_ALERT\", \"alertId\": 1, \"name\": \"Chalutage\", " +
                 "\"seaFront\": \"MEMN\", \"riskFactor\": 1.2311444133}"
 
-        val parsedReporting = ReportingMapper.getReportingValueFromJSON(mapper, alert, ReportingType.ALERT)
+        val parsedReporting = ReportingMapper.getReportingContentFromJSON(mapper, alert, ReportingType.ALERT)
 
         // Then
         assertThat(parsedReporting).isInstanceOf(Alert::class.java)
@@ -100,7 +102,7 @@ class ReportingMapperUTests {
     }
 
     @Test
-    fun `getReportingValueFromJSON Should deserialize an INFRACTION_SUSPICION When a legacy flagState property is found`() {
+    fun `getReportingContentFromJSON Should deserialize an INFRACTION_SUSPICION When a legacy flagState property is found`() {
         // Given
         val infraction =
             "{" +
@@ -117,7 +119,7 @@ class ReportingMapperUTests {
                 "}"
 
         val parsedReporting =
-            ReportingMapper.getReportingValueFromJSON(
+            ReportingMapper.getReportingContentFromJSON(
                 mapper,
                 infraction,
                 ReportingType.INFRACTION_SUSPICION,

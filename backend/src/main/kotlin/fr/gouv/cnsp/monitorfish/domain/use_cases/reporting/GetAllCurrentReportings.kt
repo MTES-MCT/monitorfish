@@ -2,9 +2,9 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingContent
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
@@ -82,7 +82,12 @@ class GetAllCurrentReportings(
                 return@map Pair(reporting, null)
             }
 
-            val controlUnitId = (reporting.value as InfractionSuspicionOrObservationType).controlUnitId
+            val controlUnitId =
+                when (val value = reporting.value) {
+                    is ReportingContent.InfractionSuspicion -> value.infractionSuspicion.controlUnitId
+                    is ReportingContent.Observation -> value.observation.controlUnitId
+                    is ReportingContent.Alert -> null
+                }
             return@map Pair(reporting, controlUnits.find { it.id == controlUnitId })
         }
     }

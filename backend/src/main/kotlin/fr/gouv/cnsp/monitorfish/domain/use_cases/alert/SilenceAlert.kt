@@ -60,6 +60,8 @@ class SilenceAlert(
                         seaFront = silencedAlert.value.seaFront,
                         name = silencedAlert.value.name,
                         description = silencedAlert.value.description,
+                        threatCharacterization = silencedAlert.value.threatCharacterization,
+                        threat = silencedAlert.value.threat,
                     )
                 }
                 AlertType.MISSING_DEP_ALERT -> AlertType.MISSING_DEP_ALERT.getValue()

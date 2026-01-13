@@ -16,7 +16,7 @@ class PendingAlertMapperUTests {
     private lateinit var mapper: ObjectMapper
 
     @Test
-    fun `getReportingValueFromJSON Should deserialize a POSITION_ALERT and append the NATINF code`() {
+    fun `getReportingContentFromJSON Should deserialize a POSITION_ALERT and append the NATINF code`() {
         // Given
         val alert =
             "{\"type\": \"POSITION_ALERT\", \"alertId\": 1, \"natinfCode\": 7059, \"name\": \"Chalutage\", " +
@@ -36,7 +36,7 @@ class PendingAlertMapperUTests {
     }
 
     @Test
-    fun `getReportingValueFromJSON Should deserialize a POSITION_ALERT When a legacy flagState property is found`() {
+    fun `getReportingContentFromJSON Should deserialize a POSITION_ALERT When a legacy flagState property is found`() {
         // Given
         val alert =
             "{\"type\": \"POSITION_ALERT\", \"alertId\": 1, \"natinfCode\": 7059, \"flagState\": \"FR\", \"name\": \"Chalutage\", " +

@@ -44,6 +44,8 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                         alertId = 1,
                         natinfCode = 7059,
                         name = "Chalutage dans les 3 milles",
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
                     ),
                 latitude = 5.5588,
                 longitude = -45.3698,

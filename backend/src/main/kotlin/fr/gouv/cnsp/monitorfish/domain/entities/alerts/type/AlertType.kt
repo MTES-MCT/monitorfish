@@ -107,11 +107,17 @@ Les navires remontent si kg des FAR < 0,015 kg x effort de pêche (kW/h)_
     ),
     ;
 
-    fun getValue(): Alert =
-        Alert(
+    fun getValue(): Alert {
+        requireNotNull(this.specification) {
+            "Cannot call getValue() on AlertType without specification (e.g., POSITION_ALERT)"
+        }
+        return Alert(
             type = this,
-            natinfCode = this.specification?.natinf,
-            name = this.specification?.name ?: "",
-            description = this.specification?.description ?: "",
+            natinfCode = this.specification.natinf,
+            threat = this.specification.threat,
+            threatCharacterization = this.specification.threatCharacterization,
+            name = this.specification.name,
+            description = this.specification.description,
         )
+    }
 }

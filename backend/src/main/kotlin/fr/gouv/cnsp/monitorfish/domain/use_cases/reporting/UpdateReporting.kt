@@ -29,26 +29,34 @@ class UpdateReporting(
             "The edited reporting must be an INFRACTION_SUSPICION or an OBSERVATION"
         }
 
-        currentReporting.value as InfractionSuspicionOrObservationType
+        // Verify current reporting is InfractionSuspicion or Observation (not Alert)
+        when (currentReporting.value) {
+            is ReportingContent.InfractionSuspicion, is ReportingContent.Observation -> {}
+            is ReportingContent.Alert -> throw IllegalArgumentException(
+                "The edited reporting must be an INFRACTION_SUSPICION or an OBSERVATION",
+            )
+        }
 
         val nextReporting =
             when (updatedInfractionSuspicionOrObservation.type) {
-                ReportingType.INFRACTION_SUSPICION ->
-                    InfractionSuspicion.fromUpdatedReporting(
+                ReportingType.INFRACTION_SUSPICION -> {
+                    val infraction = InfractionSuspicion.fromUpdatedReporting(
                         updatedInfractionSuspicionOrObservation,
                     )
-                ReportingType.OBSERVATION ->
-                    Observation.fromUpdatedReporting(
+                    infraction.checkReportingActorAndFieldsRequirements()
+                    getReportingWithDMLAndSeaFront.execute(infraction, currentReporting.vesselId)
+                }
+                ReportingType.OBSERVATION -> {
+                    val observation = Observation.fromUpdatedReporting(
                         updatedInfractionSuspicionOrObservation,
                     )
+                    observation.checkReportingActorAndFieldsRequirements()
+                    getReportingWithDMLAndSeaFront.execute(observation, currentReporting.vesselId)
+                }
                 else -> throw IllegalArgumentException(
                     "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION",
                 )
-            }.let {
-                getReportingWithDMLAndSeaFront.execute(it, currentReporting.vesselId)
             }
-
-        nextReporting.checkReportingActorAndFieldsRequirements()
 
         val updatedReporting =
             when (nextReporting) {
@@ -77,7 +85,12 @@ class UpdateReporting(
         reporting: Reporting,
         controlUnits: List<LegacyControlUnit>,
     ): LegacyControlUnit? {
-        val controlUnitId = (reporting.value as InfractionSuspicionOrObservationType).controlUnitId
+        val controlUnitId =
+            when (val value = reporting.value) {
+                is ReportingContent.InfractionSuspicion -> value.infractionSuspicion.controlUnitId
+                is ReportingContent.Observation -> value.observation.controlUnitId
+                is ReportingContent.Alert -> null
+            }
         return controlUnits.find { it.id == controlUnitId }
     }
 }

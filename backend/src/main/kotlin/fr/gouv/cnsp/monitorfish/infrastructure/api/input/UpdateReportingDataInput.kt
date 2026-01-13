@@ -16,7 +16,7 @@ class UpdateReportingDataInput(
     val description: String? = null,
     val threatHierarchy: ThreatHierarchyDataInput? = null,
 ) {
-    fun toUpdatedReportingValues(): UpdatedInfractionSuspicionOrObservation {
+    fun toUpdatedReportingContents(): UpdatedInfractionSuspicionOrObservation {
         val threat = threatHierarchy?.value
         val threatCharacterization = threatHierarchy?.children?.single()?.value
         val natinf =

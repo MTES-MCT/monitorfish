@@ -11,7 +11,7 @@ import java.time.ZonedDateTime
 @ExtendWith(SpringExtension::class)
 class UpdateReportingDataInputUTests {
     @Test
-    fun `toUpdatedReportingValues Should extract threat from threatHierarchy value`() {
+    fun `toUpdatedReportingContents Should extract threat from threatHierarchy value`() {
         // Given
         val input =
             UpdateReportingDataInput(
@@ -41,14 +41,14 @@ class UpdateReportingDataInputUTests {
             )
 
         // When
-        val result = input.toUpdatedReportingValues()
+        val result = input.toUpdatedReportingContents()
 
         // Then
         assertThat(result.threat).isEqualTo("Activités INN")
     }
 
     @Test
-    fun `toUpdatedReportingValues Should extract threatCharacterization from nested children`() {
+    fun `toUpdatedReportingContents Should extract threatCharacterization from nested children`() {
         // Given
         val input =
             UpdateReportingDataInput(
@@ -78,14 +78,14 @@ class UpdateReportingDataInputUTests {
             )
 
         // When
-        val result = input.toUpdatedReportingValues()
+        val result = input.toUpdatedReportingContents()
 
         // Then
         assertThat(result.threatCharacterization).isEqualTo("Pêche sans autorisation par navire tiers")
     }
 
     @Test
-    fun `toUpdatedReportingValues Should extract natinfCode from deeply nested children`() {
+    fun `toUpdatedReportingContents Should extract natinfCode from deeply nested children`() {
         // Given
         val input =
             UpdateReportingDataInput(
@@ -115,14 +115,14 @@ class UpdateReportingDataInputUTests {
             )
 
         // When
-        val result = input.toUpdatedReportingValues()
+        val result = input.toUpdatedReportingContents()
 
         // Then
         assertThat(result.natinfCode).isEqualTo(2608)
     }
 
     @Test
-    fun `toUpdatedReportingValues Should handle null threatHierarchy`() {
+    fun `toUpdatedReportingContents Should handle null threatHierarchy`() {
         // Given
         val input =
             UpdateReportingDataInput(
@@ -134,7 +134,7 @@ class UpdateReportingDataInputUTests {
             )
 
         // When
-        val result = input.toUpdatedReportingValues()
+        val result = input.toUpdatedReportingContents()
 
         // Then
         assertThat(result.threat).isNull()
@@ -143,7 +143,7 @@ class UpdateReportingDataInputUTests {
     }
 
     @Test
-    fun `toUpdatedReportingValues Should map all other fields correctly`() {
+    fun `toUpdatedReportingContents Should map all other fields correctly`() {
         // Given
         val expirationDate = ZonedDateTime.now().plusDays(30)
         val input =
@@ -178,7 +178,7 @@ class UpdateReportingDataInputUTests {
             )
 
         // When
-        val result = input.toUpdatedReportingValues()
+        val result = input.toUpdatedReportingContents()
 
         // Then
         assertThat(result.reportingActor).isEqualTo(ReportingActor.UNIT)

@@ -79,7 +79,7 @@ data class ReportingEntity(
             validationDate = validationDate,
             expirationDate = expirationDate,
             archivingDate = archivingDate,
-            value = ReportingMapper.getReportingValueFromJSON(mapper, value, type),
+            value = ReportingMapper.getReportingContentFromJSON(mapper, value, type),
             isArchived = isArchived,
             isDeleted = isDeleted,
             latitude = latitude,

@@ -3,31 +3,40 @@ package fr.gouv.cnsp.monitorfish.domain.entities.reporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSuspicionOrObservation
 
 data class InfractionSuspicion(
-    override val reportingActor: ReportingActor,
-    override val controlUnitId: Int? = null,
-    override val authorTrigram: String,
-    override val authorContact: String? = null,
-    override val title: String,
-    override val description: String? = null,
-    override val natinfCode: Int,
-    override val seaFront: String? = null,
-    override val dml: String? = null,
-    override val threat: String? = null,
-    override val threatCharacterization: String? = null,
-) : InfractionSuspicionOrObservationType(
-        reportingActor = reportingActor,
-        controlUnitId = controlUnitId,
-        authorTrigram = authorTrigram,
-        authorContact = authorContact,
-        title = title,
-        description = description,
-        natinfCode = natinfCode,
-        seaFront = seaFront,
-        dml = dml,
-        threat = threat,
-        threatCharacterization = threatCharacterization,
-        type = ReportingTypeMapping.INFRACTION_SUSPICION,
-    ) {
+    val natinfCode: Int,
+    val threat: String,
+    val threatCharacterization: String,
+    val reportingActor: ReportingActor,
+    val controlUnitId: Int? = null,
+    val authorTrigram: String,
+    val authorContact: String? = null,
+    val title: String,
+    val description: String? = null,
+    val seaFront: String? = null,
+    val dml: String? = null,
+) {
+    fun checkReportingActorAndFieldsRequirements() {
+        when (reportingActor) {
+            ReportingActor.UNIT ->
+                require(controlUnitId != null) {
+                    "An unit must be set"
+                }
+            ReportingActor.DML ->
+                require(!authorContact.isNullOrEmpty()) {
+                    "An author contact must be set"
+                }
+            ReportingActor.DIRM ->
+                require(!authorContact.isNullOrEmpty()) {
+                    "An author contact must be set"
+                }
+            ReportingActor.OTHER ->
+                require(!authorContact.isNullOrEmpty()) {
+                    "An author contact must be set"
+                }
+            else -> {}
+        }
+    }
+
     companion object {
         fun fromUpdatedReporting(
             updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation,
@@ -43,15 +52,17 @@ data class InfractionSuspicion(
             }
 
             return InfractionSuspicion(
+                natinfCode = updatedInfractionSuspicionOrObservation.natinfCode,
+                threat = updatedInfractionSuspicionOrObservation.threat,
+                threatCharacterization = updatedInfractionSuspicionOrObservation.threatCharacterization,
                 reportingActor = updatedInfractionSuspicionOrObservation.reportingActor,
                 controlUnitId = updatedInfractionSuspicionOrObservation.controlUnitId,
                 authorTrigram = updatedInfractionSuspicionOrObservation.authorTrigram,
                 authorContact = updatedInfractionSuspicionOrObservation.authorContact,
                 title = updatedInfractionSuspicionOrObservation.title,
                 description = updatedInfractionSuspicionOrObservation.description,
-                natinfCode = updatedInfractionSuspicionOrObservation.natinfCode,
-                threat = updatedInfractionSuspicionOrObservation.threat,
-                threatCharacterization = updatedInfractionSuspicionOrObservation.threatCharacterization,
+                seaFront = null,
+                dml = null,
             )
         }
     }

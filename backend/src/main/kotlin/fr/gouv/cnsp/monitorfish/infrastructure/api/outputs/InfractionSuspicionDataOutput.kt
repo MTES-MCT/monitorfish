@@ -22,7 +22,7 @@ data class InfractionSuspicionDataOutput(
     val threatCharacterization: String,
     // This field is used to control the Reporting form
     val threatHierarchy: ThreatHierarchyDataOutput? = null,
-) : ReportingValueDataOutput() {
+) : ReportingContentDataOutput() {
     companion object {
         fun fromInfractionSuspicion(
             infractionSuspicion: InfractionSuspicion,

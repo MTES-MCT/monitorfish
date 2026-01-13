@@ -1,12 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingContent
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
@@ -23,7 +21,7 @@ class ReportingDataOutput(
     val creationDate: ZonedDateTime,
     val validationDate: ZonedDateTime? = null,
     val expirationDate: ZonedDateTime? = null,
-    val value: ReportingValueDataOutput,
+    val value: ReportingContentDataOutput,
     val isArchived: Boolean,
     val isDeleted: Boolean,
     val infraction: InfractionDataOutput? = null,
@@ -36,17 +34,18 @@ class ReportingDataOutput(
             useThreatHierarchyForForm: Boolean = false,
         ): ReportingDataOutput {
             val value =
-                when (reporting.value) {
-                    is InfractionSuspicion ->
+                when (val reportingValue = reporting.value) {
+                    is ReportingContent.InfractionSuspicion ->
                         InfractionSuspicionDataOutput.fromInfractionSuspicion(
-                            infractionSuspicion = reporting.value,
+                            infractionSuspicion = reportingValue.infractionSuspicion,
                             controlUnit = controlUnit,
                             useThreatHierarchyForForm = useThreatHierarchyForForm,
                         )
 
-                    is Observation -> ObservationDataOutput.fromObservation(reporting.value, controlUnit)
-                    is Alert -> AlertDataOutput.fromAlertType(reporting.value)
-                    else -> throw IllegalArgumentException("Should not happen.")
+                    is ReportingContent.Observation ->
+                        ObservationDataOutput.fromObservation(reportingValue.observation, controlUnit)
+                    is ReportingContent.Alert ->
+                        AlertDataOutput.fromAlertType(reportingValue.alert)
                 }
 
             return ReportingDataOutput(

@@ -1,9 +1,13 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingContent
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
@@ -19,7 +23,12 @@ class CreateReportingDataInput(
     val creationDate: ZonedDateTime,
     val validationDate: ZonedDateTime? = null,
     val expirationDate: ZonedDateTime? = null,
-    val value: InfractionSuspicionOrObservationType,
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+    @JsonSubTypes(
+        JsonSubTypes.Type(value = InfractionSuspicion::class, name = "INFRACTION_SUSPICION"),
+        JsonSubTypes.Type(value = Observation::class, name = "OBSERVATION"),
+    )
+    val value: Any,
 ) {
     fun toReporting() =
         Reporting(
@@ -36,6 +45,11 @@ class CreateReportingDataInput(
             expirationDate = this.expirationDate,
             isDeleted = false,
             isArchived = false,
-            value = this.value,
+            value =
+                when (this.value) {
+                    is InfractionSuspicion -> ReportingContent.InfractionSuspicion(this.value)
+                    is Observation -> ReportingContent.Observation(this.value)
+                    else -> throw IllegalArgumentException("Invalid reporting value type: ${this.value::class.simpleName}")
+                },
         )
 }

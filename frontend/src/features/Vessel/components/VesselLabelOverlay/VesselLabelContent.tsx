@@ -1,6 +1,7 @@
 import { VesselLabel } from '@features/Vessel/label.types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { trackEvent } from '@hooks/useTracking.ts'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
@@ -61,6 +62,23 @@ export function VesselLabelContent({
     )
   }
 
+  const handleRiskFactorClick = () => {
+    if (overlayIsPanning.current) {
+      return
+    }
+
+    setShowRiskFactorDetails(!showRiskFactorDetails)
+    triggerShowRiskDetails(featureId)
+
+    if (!showRiskFactorDetails) {
+      trackEvent({
+        action: "Affichage de la note de risque dans l'étiquette",
+        category: 'RISK_FACTOR',
+        name: ''
+      })
+    }
+  }
+
   return (
     <>
       <VesselLabelOverlayElement>
@@ -102,12 +120,7 @@ export function VesselLabelContent({
             $hasText={labelText}
             color={getRiskFactorColor(riskFactor?.globalRisk)}
             data-cy="vessel-label-risk-factor"
-            onClick={() => {
-              if (!overlayIsPanning.current) {
-                setShowRiskFactorDetails(!showRiskFactorDetails)
-                triggerShowRiskDetails(featureId)
-              }
-            }}
+            onClick={handleRiskFactorClick}
           >
             {parseFloat(riskFactor?.globalRisk).toFixed(1)}
           </RiskFactor>

@@ -9,7 +9,8 @@ import {
   getRiskFactorColor
 } from '@features/RiskFactor/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { useState } from 'react'
+import { trackEvent } from '@hooks/useTracking.ts'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { DetectabilityRiskFactorDetails } from './details/DetectabilityRiskFactorDetails'
@@ -28,6 +29,46 @@ export function RiskFactorResume() {
   const [impactRiskFactorIsOpen, setImpactRiskFactorIsOpen] = useState(false)
   const [probabilityRiskFactorIsOpen, setProbabilityRiskFactorIsOpen] = useState(false)
   const [detectabilityRiskFactorIsOpen, setDetectabilityRiskFactorIsOpen] = useState(false)
+
+  useEffect(() => {
+    if (riskFactorExplanationIsOpen) {
+      trackEvent({
+        action: "Ouverture de la modale d'explication de la note de risque",
+        category: 'RISK_FACTOR',
+        name: ''
+      })
+    }
+  }, [riskFactorExplanationIsOpen])
+
+  useEffect(() => {
+    if (impactRiskFactorIsOpen) {
+      trackEvent({
+        action: "Ouverture de l'explication de l'impact de la note de risque",
+        category: 'RISK_FACTOR',
+        name: ''
+      })
+    }
+  }, [impactRiskFactorIsOpen])
+
+  useEffect(() => {
+    if (probabilityRiskFactorIsOpen) {
+      trackEvent({
+        action: "Ouverture de l'explication de la probabilité de la note de risque",
+        category: 'RISK_FACTOR',
+        name: ''
+      })
+    }
+  }, [probabilityRiskFactorIsOpen])
+
+  useEffect(() => {
+    if (detectabilityRiskFactorIsOpen) {
+      trackEvent({
+        action: "Ouverture de l'explication de la détectabilité de la note de risque",
+        category: 'RISK_FACTOR',
+        name: ''
+      })
+    }
+  }, [detectabilityRiskFactorIsOpen])
 
   return (
     <>

@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.use_cases
+package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.*
@@ -9,9 +9,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetReportingWithDMLAndSeaFront
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdateReporting
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSuspicionOrObservation
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -101,6 +98,8 @@ class UpdateReportingUTests {
                         authorTrigram = "LTH",
                         title = "Test",
                         natinfCode = 1234,
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
                     ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
@@ -152,6 +151,8 @@ class UpdateReportingUTests {
                         authorTrigram = "LTH",
                         title = "Test",
                         natinfCode = 1234,
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
                     ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
@@ -164,6 +165,8 @@ class UpdateReportingUTests {
                 title = "Test",
                 authorTrigram = "LTH",
                 natinfCode = 1234,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
             ),
         )
 
@@ -179,6 +182,8 @@ class UpdateReportingUTests {
                             authorTrigram = "LTH",
                             title = "A reporting",
                             natinfCode = 123456,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
                         ),
                     )
             }
@@ -215,6 +220,8 @@ class UpdateReportingUTests {
                         authorTrigram = "LTH",
                         title = "Test",
                         natinfCode = 1234,
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
                     ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
@@ -235,6 +242,8 @@ class UpdateReportingUTests {
                         type = ReportingType.INFRACTION_SUSPICION,
                         authorTrigram = "LTH",
                         title = "A reporting",
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
                     ),
                 )
             }
@@ -294,6 +303,8 @@ class UpdateReportingUTests {
                 title = "A reporting",
                 description = "Test 2",
                 natinfCode = 1234,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
             ),
         )
 
@@ -326,6 +337,8 @@ class UpdateReportingUTests {
                         authorTrigram = "LTH",
                         title = "Test",
                         natinfCode = 1234,
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
                     ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
@@ -356,6 +369,8 @@ class UpdateReportingUTests {
                 title = "A reporting",
                 description = "Test 2",
                 natinfCode = 1234,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
             ),
         )
 
@@ -389,6 +404,8 @@ class UpdateReportingUTests {
                         reportingActor = ReportingActor.UNIT,
                         title = "Test",
                         natinfCode = 1234,
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
                         authorTrigram = "LTH",
                     ) as AlertAndReportingValue,
                 isArchived = false,
@@ -402,6 +419,8 @@ class UpdateReportingUTests {
                 controlUnitId = 1,
                 title = "Test",
                 natinfCode = 1234,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 dml = "DML 56",
                 authorTrigram = "LTH",
                 seaFront = "NAMO",
@@ -422,6 +441,8 @@ class UpdateReportingUTests {
                 authorTrigram = "LTH",
                 title = "A reporting",
                 natinfCode = 1234,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
             ),
         )
 
@@ -479,6 +500,8 @@ class UpdateReportingUTests {
                     authorTrigram = "LTH",
                     title = "A reporting",
                     natinfCode = 1234,
+                    threat = "Obligations déclaratives",
+                    threatCharacterization = "DEP",
                 ),
             )
 
@@ -521,6 +544,8 @@ class UpdateReportingUTests {
                 seaFront = "NAMO",
                 dml = "DML 17",
                 natinfCode = 1235,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 authorTrigram = "LTH",
                 title = "Chalut en boeuf illégal",
             ),
@@ -540,6 +565,8 @@ class UpdateReportingUTests {
                 authorTrigram = "LTH",
                 title = "A reporting",
                 natinfCode = 1234,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
             ),
         )
 

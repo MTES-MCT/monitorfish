@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.use_cases
+package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
@@ -12,7 +12,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetAllCurrentReportings
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -49,6 +48,8 @@ class GetAllCurrentReportingsUTests {
                         natinfCode = 123456,
                         authorTrigram = "LTH",
                         title = "A title",
+                        threat = "Activités INN",
+                        threatCharacterization = "Pêche sans autorisation par navire tiers",
                     ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
@@ -94,6 +95,8 @@ class GetAllCurrentReportingsUTests {
                         natinfCode = 123456,
                         authorTrigram = "LTH",
                         title = "A title",
+                        threat = "Activités INN",
+                        threatCharacterization = "Pêche sans autorisation par navire tiers",
                     ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,

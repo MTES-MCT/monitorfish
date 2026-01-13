@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.use_cases
+package fr.gouv.cnsp.monitorfish.domain.use_cases.alert
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
@@ -12,8 +12,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.GetPendingAlerts
-import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.GetPositionAlertSpecifications
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.TestUtils.DUMMY_POSITION_ALERT
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

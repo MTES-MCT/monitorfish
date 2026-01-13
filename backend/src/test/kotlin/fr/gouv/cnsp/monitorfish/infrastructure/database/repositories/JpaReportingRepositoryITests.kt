@@ -86,6 +86,8 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                         natinfCode = 123456,
                         authorTrigram = "LTH",
                         title = "A title",
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
                     ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
@@ -129,6 +131,8 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                         natinfCode = 123456,
                         authorTrigram = "LTH",
                         title = "A title",
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
                     ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
@@ -373,15 +377,17 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         // Given
         val updatedReporting =
             InfractionSuspicion(
-                ReportingActor.UNIT,
-                1,
-                "",
-                "Jean Bon",
-                "Une observation",
-                "Une description",
-                1236,
-                "MEMN",
-                "DML 56",
+                reportingActor = ReportingActor.UNIT,
+                controlUnitId = 1,
+                authorTrigram = "",
+                authorContact = "Jean Bon",
+                title = "Une observation",
+                description = "Une description",
+                natinfCode = 1236,
+                seaFront = "MEMN",
+                dml = "DML 56",
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
             )
 
         // When

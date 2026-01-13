@@ -64,6 +64,8 @@ object TestUtils {
                             natinfCode = natinfCode ?: 123456,
                             authorTrigram = "LTH",
                             title = "A title",
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
                         )
                 },
             underCharter = null,

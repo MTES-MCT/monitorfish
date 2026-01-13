@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.use_cases
+package fr.gouv.cnsp.monitorfish.domain.use_cases.alert
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.*
@@ -11,7 +11,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.SilencedAlertRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.SilencePendingAlert
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test

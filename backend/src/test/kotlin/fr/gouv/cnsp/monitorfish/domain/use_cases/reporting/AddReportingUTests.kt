@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.use_cases
+package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.*
@@ -9,8 +9,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.AddReporting
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetReportingWithDMLAndSeaFront
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -148,6 +146,8 @@ class AddReportingUTests {
                 natinfCode = 1235,
                 authorTrigram = "LTH",
                 title = "Chalut en boeuf illégal",
+                threat = "Mesures techniques et de conservation",
+                threatCharacterization = "Engin",
             ),
         )
         val reportingToAdd =
@@ -168,6 +168,8 @@ class AddReportingUTests {
                         natinfCode = 1235,
                         authorTrigram = "LTH",
                         title = "Chalut en boeuf illégal",
+                        threat = "Mesures techniques et de conservation",
+                        threatCharacterization = "Engin",
                     ),
                 isArchived = false,
                 isDeleted = false,

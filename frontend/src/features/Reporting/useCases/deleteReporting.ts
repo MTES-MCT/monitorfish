@@ -1,4 +1,5 @@
 import { RtkCacheTagType } from '@api/constants'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { VesselFeature } from '@features/Vessel/types/vessel'
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { vesselApi } from '@features/Vessel/vesselApi'
@@ -8,7 +9,6 @@ import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogE
 import { removeVesselReporting } from '../../Vessel/slice'
 import { reportingApi } from '../reportingApi'
 
-import type { ReportingType } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const deleteReporting =

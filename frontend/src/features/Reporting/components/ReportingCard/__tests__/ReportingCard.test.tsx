@@ -1,7 +1,7 @@
 import { Seafront } from '@constants/seafront'
 import { PendingAlertValueType } from '@features/Alert/constants'
 import { ReportingCard } from '@features/Reporting/components/ReportingCard'
-import { ReportingType } from '@features/Reporting/types'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { afterAll, describe, expect, it } from '@jest/globals'
 import { THEME, ThemeProvider } from '@mtes-mct/monitor-ui'

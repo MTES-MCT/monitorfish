@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { Infraction } from '../types/infraction'
+import type { Infraction } from '@features/Infraction/types'
 
 export type InfractionState = {
   infractions: Infraction[]

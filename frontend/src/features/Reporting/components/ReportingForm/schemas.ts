@@ -1,6 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
-import { ReportingOriginActor, ReportingType } from '@features/Reporting/types'
+import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { number, object, string } from 'yup'
 

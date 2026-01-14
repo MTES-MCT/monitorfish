@@ -1,5 +1,4 @@
 import type { Undefine } from '@mtes-mct/monitor-ui'
-import type { Except } from 'type-fest'
 
 export namespace LegacyControlUnit {
   export interface LegacyControlUnit {
@@ -10,8 +9,6 @@ export namespace LegacyControlUnit {
     name: string
     resources: LegacyControlUnitResource[]
   }
-
-  export type LegacyControlUnitData = Except<LegacyControlUnit, 'id'>
 
   export type LegacyControlUnitDraft = Omit<Undefine<LegacyControlUnit>, 'resources'> &
     Pick<LegacyControlUnit, 'resources'>

@@ -1,4 +1,5 @@
-import { ReportingOriginActor, ReportingType } from '@features/Reporting/types'
+import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 
 import type { EditedReporting, InfractionSuspicion, Observation } from '@features/Reporting/types'
 
@@ -75,7 +76,8 @@ export function getReportingValue(editedReporting: EditedReporting): EditedRepor
     return {
       ...(editedReporting as InfractionSuspicion),
       expirationDate: editedReporting.expirationDate,
-      natinfCode: (editedReporting as InfractionSuspicion).natinfCode
+      natinfCode: (editedReporting as InfractionSuspicion).natinfCode,
+      type: ReportingType.INFRACTION_SUSPICION
     }
   }
 

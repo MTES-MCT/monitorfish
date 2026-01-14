@@ -1,4 +1,5 @@
-import { ReportingOriginActor, ReportingOriginActorLabel } from '@features/Reporting/types'
+import { ReportingOriginActorLabel } from '@features/Reporting/types'
+import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
 
 import type { LegacyControlUnit } from '../../../ControlUnit/legacyControlUnit'
 

@@ -1,6 +1,6 @@
 import { Logbook } from '@features/Logbook/Logbook.types'
-
-import { ReportingOriginActor, ReportingType } from '../../types'
+import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 
 import type { Reporting } from '../../types'
 import type { Column } from '@tanstack/react-table'

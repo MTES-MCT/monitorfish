@@ -1,6 +1,6 @@
 import { Seafront } from '@constants/seafront'
 import { PendingAlertValueType } from '@features/Alert/constants'
-import { ReportingType } from '@features/Reporting/types'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 
 import type { PendingAlertReporting } from '@features/Reporting/types'

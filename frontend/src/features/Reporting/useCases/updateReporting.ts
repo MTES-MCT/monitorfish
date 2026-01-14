@@ -1,5 +1,5 @@
 import { WindowContext } from '@api/constants'
-import { ReportingType } from '@features/Reporting/types'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { VesselFeature } from '@features/Vessel/types/vessel'
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { Vessel } from '@features/Vessel/Vessel.types'

@@ -5,7 +5,8 @@ import {
   RegulatoryAreaSpecificationSchema,
   SpeciesSpecificationSchema
 } from '@features/Alert/schemas/AlertSpecificationSchema'
-import { PendingAlertValueSchema, SilencedAlertSchema } from '@features/Alert/schemas/SilencedAlertSchema'
+import { PendingAlertValueSchema } from '@features/Alert/schemas/PendingAlertValueSchema'
+import { SilencedAlertSchema } from '@features/Alert/schemas/SilencedAlertSchema'
 import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import z from 'zod'
 

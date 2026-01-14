@@ -1,5 +1,5 @@
 import { ProducerOrganizationMembershipSchema } from '@features/ProducerOrganizationMembership/schemas/ProducerOrganizationMembershipSchema'
-import { ReportingType } from '@features/Reporting/types'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { RiskFactorSchema } from '@features/RiskFactor/types'
 import { ActivityOrigin, VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { BeaconSchema } from '@features/Vessel/schemas/BeaconSchema'

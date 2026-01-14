@@ -1,9 +1,9 @@
 import { FrontendError } from '@libs/FrontendError'
 import { z } from 'zod'
 
-export function parseResponseOrReturn<T>(body: unknown, schema: z.ZodType<any>, isArray: false): T
-export function parseResponseOrReturn<T>(body: unknown, schema: z.ZodType<any>, isArray: true): T[]
-export function parseResponseOrReturn<T>(body: unknown, schema: z.ZodType<any>, isArray: boolean): T | T[] {
+export function parseOrReturn<T>(body: unknown, schema: z.ZodType<any>, isArray: false): T
+export function parseOrReturn<T>(body: unknown, schema: z.ZodType<any>, isArray: true): T[]
+export function parseOrReturn<T>(body: unknown, schema: z.ZodType<any>, isArray: boolean): T | T[] {
   try {
     if (!isArray) {
       return schema.parse(body)

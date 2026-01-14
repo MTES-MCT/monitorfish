@@ -9,14 +9,14 @@ import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogE
 import { addVesselReporting, removeVesselReporting } from '../../Vessel/slice'
 import { reportingApi } from '../reportingApi'
 
-import type { EditedReporting } from '@features/Reporting/types'
+import type { FormEditedReporting } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const updateReporting =
   (
     vesselIdentity: Vessel.VesselIdentity,
     id: number,
-    nextReportingFormData: EditedReporting,
+    nextReportingFormData: FormEditedReporting,
     previousReportingType: ReportingType,
     windowContext: WindowContext
   ): MainAppThunk<Promise<void>> =>

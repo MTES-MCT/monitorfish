@@ -6,11 +6,11 @@ import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Accent, Icon, IconButton, Level, Link, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Level, Link, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { getFrenchOrdinal, getReportingActorLabel } from './utils'
+import { getFrenchOrdinal, getInfractionTitle, getReportingActorLabel } from './utils'
 import { getDate, getDateTime } from '../../../../utils'
 import { ReportingTypeCharacteristics } from '../../types'
 import { archiveReporting } from '../../useCases/archiveReporting'
@@ -20,7 +20,7 @@ import type { Reporting } from '../../types'
 export type ReportingCardProps = Readonly<{
   isArchived?: boolean
   onEdit?: (nextEditedReporting: Reporting.EditableReporting) => void
-  otherOccurrencesOfSameAlert: Array<Reporting.Reporting>
+  otherOccurrencesOfSameAlert: Reporting.Reporting[]
   reporting: Reporting.Reporting
 }>
 export function ReportingCard({
@@ -152,6 +152,8 @@ export function ReportingCard({
     onEdit(reporting)
   }
 
+  const hasWillExpire = !reporting.isArchived || (reporting.isArchived && willExpire)
+
   return (
     <>
       <Wrapper $isInfractionSuspicion={isAnInfractionSuspicion} data-cy="reporting-card">
@@ -188,34 +190,31 @@ export function ReportingCard({
               </>
             )}
           </DateText>
-          {reporting.type !== ReportingType.ALERT && <Description>{reporting.value.description}</Description>}
+          {reporting.type === ReportingType.INFRACTION_SUSPICION && <Threat>{reporting.value.threat}</Threat>}
+          {reporting.type !== ReportingType.ALERT && (
+            <Description $marginTop={reporting.type === ReportingType.OBSERVATION ? 10 : 0}>
+              {reporting.value.description}
+            </Description>
+          )}
           {reporting.type !== ReportingType.ALERT && !!reporting.value.authorContact && (
-            <Author>Émetteur: {reporting.value.authorContact}</Author>
+            <Contact>Émetteur: {reporting.value.authorContact}</Contact>
           )}
-          {reporting.type !== ReportingType.ALERT && !!reporting.value.authorTrigram && (
-            <Author>Saisi par: {reporting.value.authorTrigram}</Author>
-          )}
-          {reporting.type !== ReportingType.OBSERVATION && !Number.isNaN(reporting.value.natinfCode) && (
-            <Natinf
-              title={
-                reporting.infraction
-                  ? `${reporting.infraction?.natinfCode || null}: ${
-                      reporting.infraction?.infraction || ''
-                    } (réglementation "${reporting.infraction?.regulation || ''}")`
-                  : ''
-              }
-            >
-              NATINF {reporting.value.natinfCode}
-            </Natinf>
+          {reporting.type !== ReportingType.OBSERVATION && (
+            <StyledTag accent={Accent.PRIMARY} isLight title={getInfractionTitle(reporting)}>
+              {reporting.value.threatCharacterization} / NATINF {reporting.value.natinfCode}
+            </StyledTag>
           )}
           {reporting.type === ReportingType.ALERT && !!reporting.value.depth && (
             <Natinf>Profondeur: {reporting.value.depth}m</Natinf>
           )}
-          {(!reporting.isArchived || (reporting.isArchived && willExpire)) && (
+          {hasWillExpire && (
             <ExpirationDate>
               <Icon.Clock color={THEME.color.slateGray} />
               <ExpirationDateText $isEmpty={!willExpire}>{expirationDateText}</ExpirationDateText>
             </ExpirationDate>
+          )}
+          {reporting.type !== ReportingType.ALERT && !!reporting.value.authorTrigram && (
+            <Author $marginTop={!hasWillExpire ? 16 : 0}>Créé par {reporting.value.authorTrigram}</Author>
           )}
         </Body>
 
@@ -315,6 +314,15 @@ const StyledIconButton = styled(IconButton)`
   padding-top: 8px;
 `
 
+const StyledTag = styled(Tag)`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 330px;
+  display: inline-block;
+  margin-top: 8px;
+`
+
 const OtherOccurrenceAlertDate = styled.span`
   font-size: 11px;
   margin-top: 4px;
@@ -375,32 +383,47 @@ const NumberOfAlerts = styled.span<{
 `
 
 const Title = styled.div`
-  font: normal normal bold 13px/18px Marianne;
+  font-weight: 700;
 `
 
 const DateText = styled.span`
-  font: normal normal normal 11px/15px Marianne;
+  font-size: 11px;
 `
 
 const Natinf = styled.div`
   background: ${p => p.theme.color.white};
   color: ${p => p.theme.color.gunMetal};
-  font: normal normal medium 13px/18px Marianne;
+  font-weight: 500;
   margin-top: 12px;
   padding: 2px 8px;
   width: fit-content;
 `
 
-const Description = styled.div`
+const Threat = styled.div`
   color: ${p => p.theme.color.gunMetal};
-  font: normal normal bold 13px/18px Marianne;
+  font-weight: 700;
   margin-top: 10px;
   white-space: pre-wrap;
 `
 
-const Author = styled.div`
+const Description = styled.div<{
+  $marginTop?: number
+}>`
   color: ${p => p.theme.color.gunMetal};
-  font: normal normal normal 13px/18px Marianne;
+  margin-top: ${p => p.$marginTop ?? 0}px;
+  white-space: pre-wrap;
+`
+
+const Contact = styled.div`
+  color: ${p => p.theme.color.gunMetal};
+`
+
+const Author = styled.div<{
+  $marginTop?: number
+}>`
+  color: ${p => p.theme.color.slateGray};
+  font-style: italic;
+  margin-top: ${p => p.$marginTop ?? 0}px;
 `
 
 const ExpirationDate = styled.div`
@@ -409,7 +432,6 @@ const ExpirationDate = styled.div`
 
 const ExpirationDateText = styled.span<{ $isEmpty: boolean }>`
   color: ${p => (p.$isEmpty ? p.theme.color.slateGray : p.theme.color.gunMetal)};
-  font: normal normal normal 13px/18px Marianne;
   font-style: ${p => (p.$isEmpty ? 'italic' : 'none')};
   vertical-align: super;
   margin-left: 6px;

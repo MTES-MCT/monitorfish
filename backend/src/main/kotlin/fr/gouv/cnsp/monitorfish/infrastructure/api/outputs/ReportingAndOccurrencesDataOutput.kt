@@ -17,14 +17,14 @@ data class ReportingAndOccurrencesDataOutput(
                     reportingAndOccurrences.otherOccurrencesOfSameAlert.map { reporting ->
                         fromReporting(
                             reporting = reporting,
-                            controlUnit = reportingAndOccurrences.controlUnit,
-                            useThreatHierarchyForForm = useThreatHierarchyForForm,
+                            controlUnit = reportingAndOccurrences.controlUnit
                         )
                     },
                 reporting =
                     fromReporting(
                         reporting = reportingAndOccurrences.reporting,
                         controlUnit = reportingAndOccurrences.controlUnit,
+                        useThreatHierarchyForForm = useThreatHierarchyForForm,
                     ),
             )
     }

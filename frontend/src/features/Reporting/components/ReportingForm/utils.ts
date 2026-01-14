@@ -1,13 +1,15 @@
 import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 
-import type { EditedReporting, InfractionSuspicion, Observation } from '@features/Reporting/types'
+import type { FormEditedReporting, InfractionSuspicion, Observation } from '@features/Reporting/types'
 
 export function getFormFields(
   editedOrSavedReporting: InfractionSuspicion | Observation | undefined,
   type: ReportingType.OBSERVATION | ReportingType.INFRACTION_SUSPICION | undefined,
   expirationDate: string | undefined
-): EditedReporting {
+): FormEditedReporting {
+  const reportingType = type ?? ReportingType.INFRACTION_SUSPICION
+
   const base = {
     authorContact: editedOrSavedReporting?.authorContact ?? undefined,
     authorTrigram: editedOrSavedReporting?.authorTrigram ?? undefined,
@@ -15,18 +17,21 @@ export function getFormFields(
     description: editedOrSavedReporting?.description,
     expirationDate,
     reportingActor: editedOrSavedReporting?.reportingActor ?? ReportingOriginActor.OPS,
-    title: editedOrSavedReporting?.title ?? '',
-    type: type ?? ReportingType.INFRACTION_SUSPICION
+    title: editedOrSavedReporting?.title ?? ''
   }
 
-  if (base.type === ReportingType.INFRACTION_SUSPICION) {
+  if (reportingType === ReportingType.INFRACTION_SUSPICION) {
     return {
       ...base,
-      natinfCode: (editedOrSavedReporting as InfractionSuspicion)?.natinfCode
+      threatHierarchy: (editedOrSavedReporting as InfractionSuspicion | undefined)?.threatHierarchy,
+      type: ReportingType.INFRACTION_SUSPICION
     }
   }
 
-  return base
+  return {
+    ...base,
+    type: ReportingType.OBSERVATION
+  }
 }
 
 export function updateReportingActor(
@@ -69,17 +74,4 @@ export function updateReportingActor(
         throw Error('Should not happen')
     }
   }
-}
-
-export function getReportingValue(editedReporting: EditedReporting): EditedReporting {
-  if (editedReporting.type === ReportingType.INFRACTION_SUSPICION) {
-    return {
-      ...(editedReporting as InfractionSuspicion),
-      expirationDate: editedReporting.expirationDate,
-      natinfCode: (editedReporting as InfractionSuspicion).natinfCode,
-      type: ReportingType.INFRACTION_SUSPICION
-    }
-  }
-
-  return editedReporting
 }

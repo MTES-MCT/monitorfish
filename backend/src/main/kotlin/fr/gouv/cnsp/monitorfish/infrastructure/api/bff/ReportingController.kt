@@ -38,7 +38,11 @@ class ReportingController(
     @Operation(summary = "Get all current reportings")
     fun getAllReportings(): List<ReportingDataOutput> =
         getAllCurrentReportings.execute().map {
-            ReportingDataOutput.fromReporting(it.first, it.second)
+            ReportingDataOutput.fromReporting(
+                reporting = it.first,
+                controlUnit = it.second,
+                useThreatHierarchyForForm = true
+            )
         }
 
     @PutMapping(value = ["/{reportingId}/archive"])

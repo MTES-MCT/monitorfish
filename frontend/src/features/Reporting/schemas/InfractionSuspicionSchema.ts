@@ -1,4 +1,5 @@
 import { Seafront } from '@constants/seafront'
+import { ThreatSchema } from '@features/Infraction/schemas/ThreatSchema'
 import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
 import z from 'zod'
 
@@ -18,5 +19,6 @@ export const InfractionSuspicionSchema = z.strictObject({
   seaFront: z.union([z.enum(Seafront), z.undefined()]),
   threat: z.string(),
   threatCharacterization: z.string(),
+  threatHierarchy: ThreatSchema.or(z.undefined()),
   title: z.string()
 })

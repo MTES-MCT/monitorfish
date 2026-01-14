@@ -1,5 +1,5 @@
 import { PendingAlertValueType } from '@features/Alert/constants'
-import { ReportingType } from '@features/Reporting/types'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { VesselFeature } from '@features/Vessel/types/vessel'
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'

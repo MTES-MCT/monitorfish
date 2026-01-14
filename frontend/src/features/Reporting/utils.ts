@@ -1,6 +1,7 @@
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
-import { ReportingType, ReportingTypeCharacteristics } from './types'
+import { ReportingTypeCharacteristics } from './types'
 
 export function getDefaultReportingsStartDate(): Date {
   return customDayjs().utc().subtract(3, 'year').startOf('year').toDate()

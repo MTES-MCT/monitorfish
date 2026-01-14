@@ -1,6 +1,8 @@
 import { WindowContext } from '@api/constants'
 import { useGetControlUnitsQuery } from '@features/ControlUnit/controlUnitApi'
 import { updateReportingActor } from '@features/Reporting/components/ReportingForm/utils'
+import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import {
   Accent,
@@ -18,12 +20,7 @@ import { Form as FormikForm, useFormikContext } from 'formik'
 import { useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import {
-  ReportingOriginActor,
-  ReportingOriginActorLabel,
-  ReportingType,
-  ReportingTypeCharacteristics
-} from '../../types'
+import { ReportingOriginActorLabel, ReportingTypeCharacteristics } from '../../types'
 import { mapControlUnitsToUniqueSortedIdsAsOptions } from '../CurrentReportingList/utils'
 
 import type { EditedReporting, InfractionSuspicion } from '../../types'

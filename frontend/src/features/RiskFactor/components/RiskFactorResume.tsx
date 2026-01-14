@@ -9,7 +9,7 @@ import {
   getRiskFactorColor
 } from '@features/RiskFactor/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { trackEvent } from '@hooks/useTracking.ts'
+import { trackEvent } from '@hooks/useTracking'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 

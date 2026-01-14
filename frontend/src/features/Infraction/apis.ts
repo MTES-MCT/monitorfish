@@ -1,8 +1,7 @@
 import { monitorfishApiKy, monitorfishPublicApi } from '@api/api'
 import { FrontendApiError } from '@libs/FrontendApiError'
 
-import type { Infraction } from '../../domain/types/infraction'
-import type { Threat } from '@features/Infraction/types'
+import type { Infraction, Threat } from '@features/Infraction/types'
 
 export const infractionApi = monitorfishPublicApi.injectEndpoints({
   endpoints: builder => ({

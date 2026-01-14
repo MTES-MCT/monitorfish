@@ -1,6 +1,8 @@
 import { monitorfishApi } from '@api/api'
 import { RtkCacheTagType } from '@api/constants'
+import { ReportingSchema } from '@features/Reporting/schemas/ReportingSchema'
 import { FrontendApiError } from '@libs/FrontendApiError'
+import { parseResponseOrReturn } from '@utils/parseResponseOrReturn'
 
 import type { EditedReporting, Reporting, ReportingCreation } from './types'
 
@@ -40,7 +42,9 @@ export const reportingApi = monitorfishApi.injectEndpoints({
         method: 'POST',
         url: `/reportings`
       }),
-      transformErrorResponse: response => new FrontendApiError(CREATE_REPORTING_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(CREATE_REPORTING_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: Reporting.Reporting) =>
+        parseResponseOrReturn<Reporting.Reporting>(baseQueryReturnValue, ReportingSchema, false)
     }),
 
     deleteReporting: builder.mutation<void, number>({
@@ -62,13 +66,15 @@ export const reportingApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(DELETE_REPORTINGS_ERROR_MESSAGE, response)
     }),
 
-    getReportings: builder.query<Array<Reporting.Reporting>, void>({
+    getReportings: builder.query<Reporting.Reporting[], void>({
       providesTags: () => [{ type: RtkCacheTagType.Reportings }],
       query: () => ({
         method: 'GET',
         url: '/reportings'
       }),
-      transformErrorResponse: response => new FrontendApiError(GET_REPORTINGS_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(GET_REPORTINGS_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: Reporting.Reporting[]) =>
+        parseResponseOrReturn<Reporting.Reporting>(baseQueryReturnValue, ReportingSchema, true)
     }),
 
     updateReporting: builder.mutation<Reporting.Reporting, { id: number; nextReportingFormData: EditedReporting }>({
@@ -78,7 +84,9 @@ export const reportingApi = monitorfishApi.injectEndpoints({
         method: 'PUT',
         url: `/reportings/${id}`
       }),
-      transformErrorResponse: response => new FrontendApiError(UPDATE_REPORTING_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(UPDATE_REPORTING_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: Reporting.Reporting) =>
+        parseResponseOrReturn<Reporting.Reporting>(baseQueryReturnValue, ReportingSchema, false)
     })
   })
 })

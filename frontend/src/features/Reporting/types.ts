@@ -1,63 +1,30 @@
 // TODO Wrap into a `Reporting` namespace.
 
-import { Seafront } from '@constants/seafront'
+import { BaseReportingSchema } from '@features/Reporting/schemas/BaseReportingSchema'
+import { InfractionSuspicionSchema } from '@features/Reporting/schemas/InfractionSuspicionSchema'
+import {
+  InfractionSuspicionReportingSchema,
+  ObservationReportingSchema,
+  PendingAlertReportingSchema,
+  ReportingSchema
+} from '@features/Reporting/schemas/ReportingSchema'
+import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
+import { z } from 'zod'
 
-import type { Infraction } from '../../domain/types/infraction'
-import type { PendingAlertValue } from '../Alert/types'
-import type { LegacyControlUnit } from '../ControlUnit/legacyControlUnit'
-import type { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
+import type { ObservationSchema } from '@features/Reporting/schemas/ObservationSchema'
 
 // TODO Move other types into new `Reporting` namespace.
 export namespace Reporting {
-  export type Reporting = InfractionSuspicionReporting | ObservationReporting | PendingAlertReporting
+  export type Reporting = z.infer<typeof ReportingSchema>
   export type EditableReporting = InfractionSuspicionReporting | ObservationReporting
 }
 
-export enum ReportingType {
-  // TODO Should be renamed 'PENDING_ALERT'.
-  ALERT = 'ALERT',
-  INFRACTION_SUSPICION = 'INFRACTION_SUSPICION',
-  OBSERVATION = 'OBSERVATION'
-}
+export type BaseReporting = z.infer<typeof BaseReportingSchema>
 
-export type BaseReporting = {
-  creationDate: string
-  expirationDate: string | undefined
-  externalReferenceNumber: string | undefined
-  flagState: string
-  id: number
-  infraction: Infraction | undefined
-  internalReferenceNumber: string | undefined
-  ircs: string | undefined
-  isArchived: boolean
-  isDeleted: boolean
-  type: ReportingType.ALERT | ReportingType.OBSERVATION | ReportingType.INFRACTION_SUSPICION
-  underCharter: boolean | undefined
-  validationDate: string | undefined
-  vesselId: number | undefined
-  vesselIdentifier: VesselIdentifier | undefined
-  vesselName: string | undefined
-
-  // TODO These 2 props shouldn't be there at all and should be treated in a separated redux state.
-  // eslint-disable-next-line typescript-sort-keys/interface
-  dml?: string
-  validationDateTimestamp?: number
-}
-
-export type InfractionSuspicionReporting = BaseReporting & {
-  type: ReportingType.INFRACTION_SUSPICION
-  value: InfractionSuspicion
-}
-
-export type ObservationReporting = BaseReporting & {
-  type: ReportingType.OBSERVATION
-  value: Observation
-}
-
-export type PendingAlertReporting = BaseReporting & {
-  type: ReportingType.ALERT
-  value: PendingAlertValue
-}
+export type InfractionSuspicionReporting = z.infer<typeof InfractionSuspicionReportingSchema>
+export type ObservationReporting = z.infer<typeof ObservationReportingSchema>
+export type PendingAlertReporting = z.infer<typeof PendingAlertReportingSchema>
 
 export type BaseReportingCreation = Omit<
   BaseReporting,
@@ -97,32 +64,8 @@ export type ReportingTitleAndNumberOfOccurrences = {
   title: string
 }
 
-export type InfractionSuspicion = {
-  authorContact: string | undefined
-  authorTrigram: string | undefined
-  controlUnit: LegacyControlUnit.LegacyControlUnit | undefined
-  controlUnitId: number | undefined
-  description: string | undefined
-  dml: string | undefined
-  natinfCode: number
-  reportingActor: ReportingOriginActor
-  seaFront: Seafront | undefined
-  title: string
-  type: ReportingType.INFRACTION_SUSPICION
-}
-
-export type Observation = {
-  authorContact: string | undefined
-  authorTrigram: string | undefined
-  controlUnit: LegacyControlUnit.LegacyControlUnit | undefined
-  controlUnitId: number | undefined
-  description: string | undefined
-  dml: string | undefined
-  reportingActor: ReportingOriginActor
-  seaFront: Seafront | undefined
-  title: string
-  type: ReportingType.OBSERVATION
-}
+export type InfractionSuspicion = z.infer<typeof InfractionSuspicionSchema>
+export type Observation = z.infer<typeof ObservationSchema>
 
 type ReportingTypeCharacteristic = {
   // TODO It should be useless now that types are discriminated.
@@ -158,15 +101,6 @@ export const ReportingTypeCharacteristics: Record<ReportingType, ReportingTypeCh
  * We keep this order as it define the form option inputs order
  */
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-export enum ReportingOriginActor {
-  DIRM = 'DIRM',
-  DML = 'DML',
-  OPS = 'OPS',
-  OTHER = 'OTHER',
-  SIP = 'SIP',
-  UNIT = 'UNIT'
-}
-
 export const ReportingOriginActorLabel: Record<ReportingOriginActor, string> = {
   OPS: 'OPS',
   SIP: 'SIP',

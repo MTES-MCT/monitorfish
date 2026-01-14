@@ -1,0 +1,6 @@
+export enum ReportingType {
+  // TODO Should be renamed 'PENDING_ALERT'.
+  ALERT = 'ALERT',
+  INFRACTION_SUSPICION = 'INFRACTION_SUSPICION',
+  OBSERVATION = 'OBSERVATION'
+}

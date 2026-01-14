@@ -1,12 +1,12 @@
-import { WindowContext } from '@api/constants'
 import { useGetControlUnitsQuery } from '@features/ControlUnit/controlUnitApi'
+import { useGetThreatCharacterizationAsTreeOptions } from '@features/Infraction/hooks/useGetThreatCharacterizationAsTreeOptions'
 import { updateReportingActor } from '@features/Reporting/components/ReportingForm/utils'
 import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import {
   Accent,
   Button,
+  CheckTreePicker,
   FormikDatePicker,
   FormikMultiRadio,
   FormikSelect,
@@ -15,15 +15,14 @@ import {
   getOptionsFromLabelledEnum,
   MultiRadio
 } from '@mtes-mct/monitor-ui'
-import { sortArrayByColumn } from '@utils/sortArrayByColumn'
-import { Form as FormikForm, useFormikContext } from 'formik'
+import { Form as FormikForm, type FormikErrors, useFormikContext } from 'formik'
 import { useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { ReportingOriginActorLabel, ReportingTypeCharacteristics } from '../../types'
 import { mapControlUnitsToUniqueSortedIdsAsOptions } from '../CurrentReportingList/utils'
 
-import type { EditedReporting, InfractionSuspicion } from '../../types'
+import type { FormEditedReporting, InfractionSuspicion } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 type FormProps = Readonly<{
@@ -31,25 +30,14 @@ type FormProps = Readonly<{
   hasWhiteBackground: boolean
   onClose: () => void
   onIsDirty: ((isDirty: boolean) => void) | undefined
-  windowContext: WindowContext
 }>
-export function Form({ className, hasWhiteBackground, onClose, onIsDirty, windowContext }: FormProps) {
-  const { dirty, setFieldValue, values } = useFormikContext<EditedReporting>()
+export function Form({ className, hasWhiteBackground, onClose, onIsDirty }: FormProps) {
+  const { dirty, errors, setFieldValue, values } = useFormikContext<FormEditedReporting>()
   const formRef = useRef<HTMLFormElement | null>(null)
-
-  // TODO Replace that with a `useInfractionsAsOptions()` hook with RTK query.
-  const infractions = useMainAppSelector(state => state.infraction.infractions)
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
 
-  const infractionsAsOptions = useMemo(
-    () =>
-      infractions
-        .map(infraction => ({
-          label: `${infraction.natinfCode} - ${infraction.infraction}`,
-          value: infraction.natinfCode
-        }))
-        .sort((a, b) => sortArrayByColumn(a, b, 'label', 'asc')),
-    [infractions]
+  const threatCharacterizationOptions = useGetThreatCharacterizationAsTreeOptions(
+    values.type === ReportingType.INFRACTION_SUSPICION && values.threatHierarchy ? [values.threatHierarchy] : undefined
   )
 
   const controlUnitsAsOptions = useMemo((): Option<number>[] => {
@@ -61,9 +49,6 @@ export function Form({ className, hasWhiteBackground, onClose, onIsDirty, window
   }, [controlUnitsQuery.data])
 
   const updateActor = updateReportingActor(setFieldValue)
-  const infractionTitle = infractions?.find(
-    infraction => infraction.natinfCode === (values as Partial<InfractionSuspicion>).natinfCode
-  )?.infraction
 
   useEffect(() => {
     if (onIsDirty) {
@@ -125,6 +110,7 @@ export function Form({ className, hasWhiteBackground, onClose, onIsDirty, window
       )}
       <FormikTextInput
         isLight={!hasWhiteBackground}
+        isRequired
         label="Titre"
         name="title"
         placeholder={
@@ -143,16 +129,28 @@ export function Form({ className, hasWhiteBackground, onClose, onIsDirty, window
             : 'Ex: Infraction constatée sur la taille de la maille en cul de chalut'
         }
       />
-      {values.type === ReportingTypeCharacteristics.INFRACTION_SUSPICION.code && (
-        <FormikSelect
+      {values.type === ReportingType.INFRACTION_SUSPICION && (
+        <CheckTreePicker
+          error={(errors as FormikErrors<Partial<InfractionSuspicion>>).threatHierarchy as string | undefined}
           isLight={!hasWhiteBackground}
-          label="Natinf"
-          name="natinfCode"
-          options={infractionsAsOptions}
-          placement={windowContext === WindowContext.MainWindow ? 'topStart' : undefined}
+          isRequired
+          isSelect
+          label="Type d'infraction et NATINF"
+          name="threatHierarchy"
+          onChange={nextThreats => {
+            if (!!nextThreats && nextThreats.length > 0) {
+              setFieldValue('threatHierarchy', nextThreats[0])
+            } else {
+              setFieldValue('threatHierarchy', undefined)
+            }
+          }}
+          options={threatCharacterizationOptions}
           searchable
-          // @ts-ignore
-          title={infractionTitle}
+          value={
+            values.type === ReportingType.INFRACTION_SUSPICION && values.threatHierarchy
+              ? [values.threatHierarchy]
+              : undefined
+          }
         />
       )}
       <FormikDatePicker
@@ -175,11 +173,11 @@ export function Form({ className, hasWhiteBackground, onClose, onIsDirty, window
 }
 
 const ValidateButton = styled(Button)`
-  margin: 24px 10px 0px 0px;
+  margin: 24px 10px 0 0;
 `
 
 const CancelButton = styled(Button)`
-  margin: 24px 0px 0px 0px;
+  margin: 24px 0 0 0;
 `
 
 const StyledForm = styled(FormikForm)<{

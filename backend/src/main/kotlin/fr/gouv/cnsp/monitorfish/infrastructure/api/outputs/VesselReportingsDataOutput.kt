@@ -14,7 +14,10 @@ class VesselReportingsDataOutput(
                 summary = ReportingSummaryDataOutput.fromReportingSummary(vesselReportings.summary),
                 current =
                     vesselReportings.current.map {
-                        ReportingAndOccurrencesDataOutput.fromReportingAndOccurrences(it)
+                        ReportingAndOccurrencesDataOutput.fromReportingAndOccurrences(
+                            it,
+                            useThreatHierarchyForForm = true,
+                        )
                     },
                 archived =
                     vesselReportings.archived.mapValues { (_, reportingAndOccurrences) ->

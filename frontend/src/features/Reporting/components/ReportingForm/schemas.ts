@@ -3,14 +3,14 @@
 import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { customDayjs } from '@mtes-mct/monitor-ui'
-import { number, object, string } from 'yup'
+import { object, string } from 'yup'
 
 export const CreateOrEditReportingSchema = object({
   reportingActor: string().required('Veuillez renseigner l&apos;origine du signalement.'),
   authorTrigram: string().required('Veuillez renseigner le trigramme de saisie.'),
   title: string().required('Veuillez renseigner le titre du signalement.'),
   type: string().oneOf(Object.values(ReportingType)).required('Veuillez renseigner le type de signalement.'),
-  natinfCode: number().when('type', {
+  threatHierarchy: object().when('type', {
     is: (type?: string) => type === ReportingType.INFRACTION_SUSPICION,
     then: schema => schema.required('Veuillez renseigner le NATINF.')
   }),

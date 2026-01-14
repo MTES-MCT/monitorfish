@@ -14,7 +14,7 @@ import {
   type SilencedAlertPeriodRequest
 } from '@features/Alert/types'
 import { FrontendApiError } from '@libs/FrontendApiError'
-import { parseResponseOrReturn } from '@utils/parseResponseOrReturn'
+import { parseOrReturn } from '@utils/parseOrReturn'
 
 export const ALERTS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les alertes opérationelles"
 export const VALIDATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu valider l'alerte opérationelle"
@@ -126,7 +126,7 @@ export const alertSpecificationsApi = monitorfishApi.injectEndpoints({
       query: () => `/position_alerts_specs`,
       transformErrorResponse: response => new FrontendApiError(POSITION_ALERT_SPECIFICATION_ERROR_MESSAGE, response),
       transformResponse: (baseQueryReturnValue: AlertSpecification[]) =>
-        parseResponseOrReturn<AlertSpecification>(baseQueryReturnValue, AlertSpecificationSchema, true)
+        parseOrReturn<AlertSpecification>(baseQueryReturnValue, AlertSpecificationSchema, true)
     }),
     updateAlert: builder.mutation<void, EditedAlertSpecification>({
       invalidatesTags: () => [{ type: 'AlertSpecifications' }],

@@ -2,6 +2,7 @@
 
 import { BaseReportingSchema } from '@features/Reporting/schemas/BaseReportingSchema'
 import { InfractionSuspicionSchema } from '@features/Reporting/schemas/InfractionSuspicionSchema'
+import { ReportingCreationSchema } from '@features/Reporting/schemas/ReportingCreationSchema'
 import {
   InfractionSuspicionReportingSchema,
   ObservationReportingSchema,
@@ -26,19 +27,19 @@ export type InfractionSuspicionReporting = z.infer<typeof InfractionSuspicionRep
 export type ObservationReporting = z.infer<typeof ObservationReportingSchema>
 export type PendingAlertReporting = z.infer<typeof PendingAlertReportingSchema>
 
-export type BaseReportingCreation = Omit<
-  BaseReporting,
-  'id' | 'infraction' | 'underCharter' | 'isArchived' | 'isDeleted'
->
-export type ReportingCreation = BaseReportingCreation & {
-  type: ReportingType.INFRACTION_SUSPICION | ReportingType.OBSERVATION
-  value: EditedReporting
-}
+export type ReportingCreation = z.infer<typeof ReportingCreationSchema>
 
-export type EditedReporting = Partial<InfractionSuspicion | Observation> & {
-  expirationDate: string | undefined
-  type: ReportingType.INFRACTION_SUSPICION | ReportingType.OBSERVATION
-}
+type FormBaseEditedFields = Pick<BaseReporting, 'expirationDate' | 'type'>
+
+export type FormEditedReporting =
+  | (Partial<InfractionSuspicion> &
+      FormBaseEditedFields & {
+        type: ReportingType.INFRACTION_SUSPICION
+      })
+  | (Partial<Observation> &
+      FormBaseEditedFields & {
+        type: ReportingType.OBSERVATION
+      })
 
 type Year = number
 

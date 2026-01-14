@@ -1,9 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
@@ -19,10 +17,57 @@ class CreateReportingDataInput(
     val creationDate: ZonedDateTime,
     val validationDate: ZonedDateTime? = null,
     val expirationDate: ZonedDateTime? = null,
-    val value: InfractionSuspicionOrObservationType,
+    val reportingActor: ReportingActor,
+    val controlUnitId: Int? = null,
+    val authorTrigram: String,
+    val authorContact: String? = null,
+    val title: String,
+    val description: String? = null,
+    val threatHierarchy: ThreatHierarchyDataInput? = null,
 ) {
-    fun toReporting() =
-        Reporting(
+    fun toReporting(): Reporting {
+        val threat = threatHierarchy?.value
+        val threatCharacterization = threatHierarchy?.children?.single()?.value
+        val natinf =
+            threatHierarchy
+                ?.children
+                ?.single()
+                ?.children
+                ?.single()
+                ?.value
+
+        val value = if (type == ReportingType.INFRACTION_SUSPICION) {
+            requireNotNull(natinf) {
+                "NATINF should be not null"
+            }
+
+            InfractionSuspicion(
+                reportingActor = reportingActor,
+                controlUnitId = controlUnitId,
+                authorTrigram = authorTrigram,
+                authorContact = authorContact,
+                title = title,
+                description = description,
+                natinfCode = natinf,
+                seaFront = null,
+                dml = null,
+                threat = threat,
+                threatCharacterization = threatCharacterization
+            )
+        } else {
+            Observation(
+                reportingActor = reportingActor,
+                controlUnitId = controlUnitId,
+                authorTrigram = authorTrigram,
+                authorContact = authorContact,
+                title = title,
+                description = description,
+                seaFront = null,
+                dml = null
+            )
+        }
+
+        return Reporting(
             type = this.type,
             vesselId = this.vesselId,
             vesselName = this.vesselName,
@@ -36,6 +81,7 @@ class CreateReportingDataInput(
             expirationDate = this.expirationDate,
             isDeleted = false,
             isArchived = false,
-            value = this.value,
+            value = value,
         )
+    }
 }

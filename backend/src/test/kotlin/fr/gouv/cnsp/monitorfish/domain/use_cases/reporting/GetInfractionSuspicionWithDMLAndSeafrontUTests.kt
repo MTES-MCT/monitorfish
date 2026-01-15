@@ -4,9 +4,12 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.district.District
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.InfractionSuspicion
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.DistrictRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
@@ -16,6 +19,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class GetInfractionSuspicionWithDMLAndSeafrontUTests {
@@ -29,7 +33,21 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
     fun `execute Should add the seaFront and the DML When the vessel id is given`() {
         // Given
         val expectedInfractionSuspicion =
-            InfractionSuspicion(
+            Reporting.InfractionSuspicion(
+                id = 1,
+                type = ReportingType.INFRACTION_SUSPICION,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                vesselId = 123,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                isArchived = false,
+                isDeleted = false,
+                createdBy = "test@example.gouv.fr",
                 reportingActor = ReportingActor.OPS,
                 dml = "DML 17",
                 natinfCode = 1235,
@@ -40,7 +58,7 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
             )
 
         given(vesselRepository.findVesselById(eq(123))).willReturn(
-            Vessel(id = 1, districtCode = "LO", flagState = CountryCode.FR, hasLogbookEsacapt = false),
+            Vessel(id = 123, districtCode = "LO", flagState = CountryCode.FR, hasLogbookEsacapt = false),
         )
         given(districtRepository.find(eq("LO")))
             .willReturn(District("LO", "Lorient", "56", "Morbihan", "DML 56", "NAMO"))
@@ -51,8 +69,7 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
                 vesselRepository,
                 districtRepository,
             ).execute(
-                infractionSuspicionOrObservationType = expectedInfractionSuspicion,
-                vesselId = 123,
+                reporting = expectedInfractionSuspicion,
             )
 
         // Then
@@ -66,8 +83,21 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
         val throwable =
             catchThrowable {
                 GetReportingWithDMLAndSeaFront(vesselRepository, districtRepository).execute(
-                    infractionSuspicionOrObservationType =
-                        InfractionSuspicion(
+                    reporting =
+                        Reporting.InfractionSuspicion(
+                            id = 1,
+                            type = ReportingType.INFRACTION_SUSPICION,
+                            vesselName = "BIDUBULE",
+                            internalReferenceNumber = "FR224226850",
+                            externalReferenceNumber = "1236514",
+                            ircs = "IRCS",
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            flagState = CountryCode.FR,
+                            creationDate = ZonedDateTime.now(),
+                            validationDate = ZonedDateTime.now(),
+                            isArchived = false,
+                            isDeleted = false,
+                            createdBy = "test@example.gouv.fr",
                             reportingActor = ReportingActor.OPS,
                             dml = "",
                             natinfCode = 1235,
@@ -76,7 +106,6 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
                             threat = "Obligations déclaratives",
                             threatCharacterization = "DEP",
                         ),
-                    vesselId = null,
                 )
             }
 
@@ -93,8 +122,21 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
         val throwable =
             catchThrowable {
                 GetReportingWithDMLAndSeaFront(vesselRepository, districtRepository).execute(
-                    infractionSuspicionOrObservationType =
-                        InfractionSuspicion(
+                    reporting =
+                        Reporting.InfractionSuspicion(
+                            id = 1,
+                            type = ReportingType.INFRACTION_SUSPICION,
+                            vesselName = "BIDUBULE",
+                            internalReferenceNumber = "FR224226850",
+                            externalReferenceNumber = "1236514",
+                            ircs = "IRCS",
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            flagState = CountryCode.FR,
+                            creationDate = ZonedDateTime.now(),
+                            validationDate = ZonedDateTime.now(),
+                            isArchived = false,
+                            isDeleted = false,
+                            createdBy = "test@example.gouv.fr",
                             reportingActor = ReportingActor.OPS,
                             dml = "",
                             natinfCode = 1235,
@@ -103,7 +145,6 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
                             threat = "Obligations déclaratives",
                             threatCharacterization = "DEP",
                         ),
-                    vesselId = 123,
                 )
             }
 
@@ -124,8 +165,21 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
         val throwable =
             catchThrowable {
                 GetReportingWithDMLAndSeaFront(vesselRepository, districtRepository).execute(
-                    infractionSuspicionOrObservationType =
-                        InfractionSuspicion(
+                    reporting =
+                        Reporting.InfractionSuspicion(
+                            id = 1,
+                            type = ReportingType.INFRACTION_SUSPICION,
+                            vesselName = "BIDUBULE",
+                            internalReferenceNumber = "FR224226850",
+                            externalReferenceNumber = "1236514",
+                            ircs = "IRCS",
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            flagState = CountryCode.FR,
+                            creationDate = ZonedDateTime.now(),
+                            validationDate = ZonedDateTime.now(),
+                            isArchived = false,
+                            isDeleted = false,
+                            createdBy = "test@example.gouv.fr",
                             reportingActor = ReportingActor.OPS,
                             dml = "",
                             natinfCode = 1235,
@@ -134,7 +188,6 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
                             threat = "Obligations déclaratives",
                             threatCharacterization = "DEP",
                         ),
-                    vesselId = 123,
                 )
             }
 

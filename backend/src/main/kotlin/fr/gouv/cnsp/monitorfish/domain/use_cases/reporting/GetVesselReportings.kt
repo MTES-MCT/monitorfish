@@ -1,8 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -94,15 +92,14 @@ class GetVesselReportings(
         )
     }
 
-    private fun getThreatSummary(
-        reportings: List<Reporting>,
-    ): Map<Threat, List<ThreatSummary>> {
-            return reportings
-                .filter { it.type == ReportingType.INFRACTION_SUSPICION || it.type == ReportingType.ALERT }
-                .groupBy { it.value.threat ?: "Famille inconnue" }
-                .mapValues { (_, values) ->
-                    return@mapValues values.groupBy {
-                        Pair(it.value.natinfCode, it.value.threatCharacterization ?: "Type inconnu")
+    private fun getThreatSummary(reportings: List<Reporting>): Map<Threat, List<ThreatSummary>> {
+        return reportings
+            .filter { it.type == ReportingType.INFRACTION_SUSPICION || it.type == ReportingType.ALERT }
+            .groupBy { it.threat ?: "Famille inconnue" }
+            .mapValues { (_, values) ->
+                return@mapValues values
+                    .groupBy {
+                        Pair(it.natinfCode, it.threatCharacterization ?: "Type inconnu")
                     }.map { (key, value) ->
                         val natinfCode = key.first!!
                         val threatCharacterization = key.second
@@ -119,18 +116,19 @@ class GetVesselReportings(
                             natinfCode = natinfCode,
                             natinf = infraction?.infraction ?: "",
                             threatCharacterization = threatCharacterization,
-                            numberOfOccurrences = value.size
+                            numberOfOccurrences = value.size,
                         )
                     }
-                }
+            }
     }
 
     private fun filterByYear(
         reporting: Reporting,
         year: Int,
     ): Boolean {
-        if (reporting.validationDate != null) {
-            return reporting.validationDate.year == year
+        val validationDate = reporting.validationDate
+        if (validationDate != null) {
+            return validationDate.year == year
         }
 
         return reporting.creationDate.year == year
@@ -140,8 +138,9 @@ class GetVesselReportings(
         reportingAndOccurrences: ReportingAndOccurrences,
         controlUnits: List<LegacyControlUnit>,
     ): ReportingAndOccurrences {
+        val reporting = reportingAndOccurrences.reporting
         val updatedInfraction =
-            reportingAndOccurrences.reporting.value.natinfCode?.let { natinfCode ->
+            reporting.natinfCode?.let { natinfCode ->
                 try {
                     infractionRepository.findInfractionByNatinfCode(natinfCode)
                 } catch (e: NatinfCodeNotFoundException) {
@@ -151,9 +150,21 @@ class GetVesselReportings(
             }
 
         val updatedReporting =
-            reportingAndOccurrences.reporting.copy(
-                infraction = updatedInfraction ?: reportingAndOccurrences.reporting.infraction,
-            )
+            when (reporting) {
+                is Reporting.Alert ->
+                    reporting.copy(
+                        infraction = updatedInfraction ?: reporting.infraction,
+                    )
+                is Reporting.InfractionSuspicion ->
+                    reporting.copy(
+                        infraction = updatedInfraction ?: reporting.infraction,
+                    )
+                is Reporting.Observation ->
+                    reporting.copy(
+                        infraction = updatedInfraction ?: reporting.infraction,
+                    )
+            }
+
         val updatedReportingAndOccurrences =
             reportingAndOccurrences.copy(
                 reporting = updatedReporting,
@@ -163,7 +174,12 @@ class GetVesselReportings(
             return updatedReportingAndOccurrences
         }
 
-        val controlUnitId = (updatedReporting.value as? InfractionSuspicionOrObservationType)?.controlUnitId
+        val controlUnitId =
+            when (updatedReporting) {
+                is Reporting.InfractionSuspicion -> updatedReporting.controlUnitId
+                is Reporting.Observation -> updatedReporting.controlUnitId
+                is Reporting.Alert -> null
+            }
         val foundControlUnit = controlUnits.find { it.id == controlUnitId }
 
         return updatedReportingAndOccurrences.copy(controlUnit = foundControlUnit)
@@ -181,10 +197,11 @@ class GetVesselReportings(
                     )
                 }
 
-        val alertToAlertsOccurrences: Map<AlertType, List<Reporting>> =
+        val alertToAlertsOccurrences:
+            Map<fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType, List<Reporting>> =
             reportings
                 .filter { it.type == ReportingType.ALERT }
-                .groupBy { (it.value as Alert).type }
+                .groupBy { (it as Reporting.Alert).alertType }
                 .withDefault { emptyList() }
 
         val alertTypeToLastAlertAndOccurrences: List<ReportingAndOccurrences> =
@@ -195,12 +212,13 @@ class GetVesselReportings(
                     }
 
                     val lastAlert =
-                        alerts.maxByOrNull {
-                            checkNotNull(it.validationDate) {
-                                "An alert must have a validation date: alert ${it.id} has no validation date ($it)."
+                        alerts.maxByOrNull { alert ->
+                            val validationDate = alert.validationDate
+                            checkNotNull(validationDate) {
+                                "An alert must have a validation date: alert ${alert.id} has no validation date ($alert)."
                             }
 
-                            it.validationDate
+                            validationDate
                         }
                     checkNotNull(lastAlert) { "Last alert cannot be null" }
                     val otherOccurrencesOfSameAlert =

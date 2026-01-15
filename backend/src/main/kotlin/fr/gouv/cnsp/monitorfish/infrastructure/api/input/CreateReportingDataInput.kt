@@ -1,7 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
@@ -35,54 +37,57 @@ class CreateReportingDataInput(
                 ?.single()
                 ?.value
 
-        val value =
-            if (type == ReportingType.INFRACTION_SUSPICION) {
-                requireNotNull(natinf) {
-                    "NATINF should be not null"
-                }
-
-                InfractionSuspicion(
-                    reportingActor = reportingActor,
-                    controlUnitId = controlUnitId,
-                    authorTrigram = "",
-                    authorContact = authorContact,
-                    title = title,
-                    description = description,
-                    natinfCode = natinf,
-                    seaFront = null,
-                    dml = null,
-                    threat = threat,
-                    threatCharacterization = threatCharacterization,
-                )
-            } else {
-                Observation(
-                    reportingActor = reportingActor,
-                    controlUnitId = controlUnitId,
-                    authorTrigram = "",
-                    authorContact = authorContact,
-                    title = title,
-                    description = description,
-                    seaFront = null,
-                    dml = null,
-                )
+        return if (type == ReportingType.INFRACTION_SUSPICION) {
+            requireNotNull(natinf) {
+                "NATINF should be not null"
             }
 
-        return Reporting(
-            type = this.type,
-            vesselId = this.vesselId,
-            vesselName = this.vesselName,
-            internalReferenceNumber = this.internalReferenceNumber,
-            externalReferenceNumber = this.externalReferenceNumber,
-            ircs = this.ircs,
-            vesselIdentifier = this.vesselIdentifier,
-            flagState = this.flagState,
-            creationDate = this.creationDate,
-            validationDate = this.validationDate,
-            expirationDate = this.expirationDate,
-            isDeleted = false,
-            isArchived = false,
-            value = value,
-            createdBy = createdBy,
-        )
+            Reporting.InfractionSuspicion(
+                vesselId = this.vesselId,
+                vesselName = this.vesselName,
+                internalReferenceNumber = this.internalReferenceNumber,
+                externalReferenceNumber = this.externalReferenceNumber,
+                ircs = this.ircs,
+                vesselIdentifier = this.vesselIdentifier,
+                flagState = this.flagState,
+                creationDate = this.creationDate,
+                validationDate = this.validationDate,
+                expirationDate = this.expirationDate,
+                isDeleted = false,
+                isArchived = false,
+                createdBy = createdBy,
+                reportingActor = reportingActor,
+                controlUnitId = controlUnitId,
+                authorTrigram = "",
+                authorContact = authorContact,
+                title = title,
+                description = description,
+                natinfCode = natinf,
+                threat = threat,
+                threatCharacterization = threatCharacterization,
+            )
+        } else {
+            Reporting.Observation(
+                vesselId = this.vesselId,
+                vesselName = this.vesselName,
+                internalReferenceNumber = this.internalReferenceNumber,
+                externalReferenceNumber = this.externalReferenceNumber,
+                ircs = this.ircs,
+                vesselIdentifier = this.vesselIdentifier,
+                flagState = this.flagState,
+                creationDate = this.creationDate,
+                validationDate = this.validationDate,
+                expirationDate = this.expirationDate,
+                isDeleted = false,
+                isArchived = false,
+                createdBy = createdBy,
+                reportingActor = reportingActor,
+                controlUnitId = controlUnitId,
+                authorTrigram = "",
+                authorContact = authorContact,
+                title = title,
+                description = description,
+            )
+        }
     }
 }

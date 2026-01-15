@@ -13,9 +13,12 @@ class VesselReportingsDataOutput(
     companion object {
         fun fromCurrentAndArchivedReporting(vesselReportings: VesselReportings) =
             VesselReportingsDataOutput(
-                summary = vesselReportings.summary.mapValues { (_, value) -> value.map {
-                    ThreatSummaryDataOutput.fromThreatSummary(it)
-                } },
+                summary =
+                    vesselReportings.summary.mapValues { (_, value) ->
+                        value.map {
+                            ThreatSummaryDataOutput.fromThreatSummary(it)
+                        }
+                    },
                 current =
                     vesselReportings.current.map {
                         ReportingAndOccurrencesDataOutput.fromReportingAndOccurrences(
@@ -33,7 +36,6 @@ class VesselReportingsDataOutput(
     }
 }
 
-
 data class ThreatSummaryDataOutput(
     val natinfCode: Int,
     val natinf: String,
@@ -41,11 +43,12 @@ data class ThreatSummaryDataOutput(
     val numberOfOccurrences: Int,
 ) {
     companion object {
-        fun fromThreatSummary(threatSummary: ThreatSummary) = ThreatSummaryDataOutput(
-            natinfCode = threatSummary.natinfCode,
-            natinf = threatSummary.natinf,
-            threatCharacterization = threatSummary.threatCharacterization,
-            numberOfOccurrences = threatSummary.numberOfOccurrences
-        )
+        fun fromThreatSummary(threatSummary: ThreatSummary) =
+            ThreatSummaryDataOutput(
+                natinfCode = threatSummary.natinfCode,
+                natinf = threatSummary.natinf,
+                threatCharacterization = threatSummary.threatCharacterization,
+                numberOfOccurrences = threatSummary.numberOfOccurrences,
+            )
     }
 }

@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
@@ -34,33 +33,38 @@ class GetAllCurrentReportings(
 
         val currentReportingsWithCharterInfo =
             currentReportings.map { reporting ->
+                val vesselIdentifier = reporting.vesselIdentifier
+                val internalReferenceNumber = reporting.internalReferenceNumber
+                val ircs = reporting.ircs
+                val externalReferenceNumber = reporting.externalReferenceNumber
+
                 val underCharter =
                     try {
-                        when (reporting.vesselIdentifier) {
+                        when (vesselIdentifier) {
                             VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> {
-                                requireNotNull(reporting.internalReferenceNumber) {
+                                requireNotNull(internalReferenceNumber) {
                                     "The fields 'internalReferenceNumber' must be not null when the vessel identifier is INTERNAL_REFERENCE_NUMBER."
                                 }
                                 vesselRepository.findUnderCharterForVessel(
-                                    reporting.vesselIdentifier,
-                                    reporting.internalReferenceNumber,
+                                    vesselIdentifier,
+                                    internalReferenceNumber,
                                 )
                             }
 
                             VesselIdentifier.IRCS -> {
-                                requireNotNull(reporting.ircs) {
+                                requireNotNull(ircs) {
                                     "The fields 'ircs' must be not null when the vessel identifier is IRCS."
                                 }
-                                vesselRepository.findUnderCharterForVessel(reporting.vesselIdentifier, reporting.ircs)
+                                vesselRepository.findUnderCharterForVessel(vesselIdentifier, ircs)
                             }
 
                             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> {
-                                requireNotNull(reporting.externalReferenceNumber) {
+                                requireNotNull(externalReferenceNumber) {
                                     "The fields 'externalReferenceNumber' must be not null when the vessel identifier is EXTERNAL_REFERENCE_NUMBER."
                                 }
                                 vesselRepository.findUnderCharterForVessel(
-                                    reporting.vesselIdentifier,
-                                    reporting.externalReferenceNumber,
+                                    vesselIdentifier,
+                                    externalReferenceNumber,
                                 )
                             }
 
@@ -74,7 +78,11 @@ class GetAllCurrentReportings(
                         null
                     }
 
-                reporting.copy(underCharter = underCharter)
+                when (reporting) {
+                    is Reporting.Alert -> reporting.copy(underCharter = underCharter)
+                    is Reporting.InfractionSuspicion -> reporting.copy(underCharter = underCharter)
+                    is Reporting.Observation -> reporting.copy(underCharter = underCharter)
+                }
             }
 
         return currentReportingsWithCharterInfo.map { reporting ->
@@ -82,7 +90,12 @@ class GetAllCurrentReportings(
                 return@map Pair(reporting, null)
             }
 
-            val controlUnitId = (reporting.value as InfractionSuspicionOrObservationType).controlUnitId
+            val controlUnitId =
+                when (reporting) {
+                    is Reporting.InfractionSuspicion -> reporting.controlUnitId
+                    is Reporting.Observation -> reporting.controlUnitId
+                    is Reporting.Alert -> null
+                }
             return@map Pair(reporting, controlUnits.find { it.id == controlUnitId })
         }
     }

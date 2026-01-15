@@ -2,7 +2,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
 import org.slf4j.Logger
@@ -29,48 +30,96 @@ class UpdateReporting(
             "The edited reporting must be an INFRACTION_SUSPICION or an OBSERVATION"
         }
 
-        currentReporting.value as InfractionSuspicionOrObservationType
-
         val nextReporting =
             when (updatedInfractionSuspicionOrObservation.type) {
-                ReportingType.INFRACTION_SUSPICION ->
-                    InfractionSuspicion.fromUpdatedReporting(
-                        updatedInfractionSuspicionOrObservation,
+                ReportingType.INFRACTION_SUSPICION -> {
+                    require(updatedInfractionSuspicionOrObservation.natinfCode != null) {
+                        "NATINF code should not be null"
+                    }
+                    require(updatedInfractionSuspicionOrObservation.threat != null) {
+                        "threat should not be null"
+                    }
+                    require(updatedInfractionSuspicionOrObservation.threatCharacterization != null) {
+                        "threatCharacterization should not be null"
+                    }
+
+                    Reporting.InfractionSuspicion(
+                        id = currentReporting.id,
+                        vesselId = currentReporting.vesselId,
+                        vesselName = currentReporting.vesselName,
+                        internalReferenceNumber = currentReporting.internalReferenceNumber,
+                        externalReferenceNumber = currentReporting.externalReferenceNumber,
+                        ircs = currentReporting.ircs,
+                        vesselIdentifier = currentReporting.vesselIdentifier,
+                        flagState = currentReporting.flagState,
+                        creationDate = currentReporting.creationDate,
+                        validationDate = currentReporting.validationDate,
+                        expirationDate = expirationDate,
+                        archivingDate = currentReporting.archivingDate,
+                        isArchived = currentReporting.isArchived,
+                        isDeleted = currentReporting.isDeleted,
+                        latitude = currentReporting.latitude,
+                        longitude = currentReporting.longitude,
+                        createdBy = currentReporting.createdBy,
+                        infraction = currentReporting.infraction,
+                        underCharter = currentReporting.underCharter,
+                        reportingActor = updatedInfractionSuspicionOrObservation.reportingActor,
+                        controlUnitId = updatedInfractionSuspicionOrObservation.controlUnitId,
+                        authorTrigram = "",
+                        authorContact = updatedInfractionSuspicionOrObservation.authorContact,
+                        title = updatedInfractionSuspicionOrObservation.title,
+                        description = updatedInfractionSuspicionOrObservation.description,
+                        natinfCode = updatedInfractionSuspicionOrObservation.natinfCode,
+                        threat = updatedInfractionSuspicionOrObservation.threat,
+                        threatCharacterization = updatedInfractionSuspicionOrObservation.threatCharacterization,
                     )
+                }
                 ReportingType.OBSERVATION ->
-                    Observation.fromUpdatedReporting(
-                        updatedInfractionSuspicionOrObservation,
+                    Reporting.Observation(
+                        id = currentReporting.id,
+                        vesselId = currentReporting.vesselId,
+                        vesselName = currentReporting.vesselName,
+                        internalReferenceNumber = currentReporting.internalReferenceNumber,
+                        externalReferenceNumber = currentReporting.externalReferenceNumber,
+                        ircs = currentReporting.ircs,
+                        vesselIdentifier = currentReporting.vesselIdentifier,
+                        flagState = currentReporting.flagState,
+                        creationDate = currentReporting.creationDate,
+                        validationDate = currentReporting.validationDate,
+                        expirationDate = expirationDate,
+                        archivingDate = currentReporting.archivingDate,
+                        isArchived = currentReporting.isArchived,
+                        isDeleted = currentReporting.isDeleted,
+                        latitude = currentReporting.latitude,
+                        longitude = currentReporting.longitude,
+                        createdBy = currentReporting.createdBy,
+                        infraction = currentReporting.infraction,
+                        underCharter = currentReporting.underCharter,
+                        reportingActor = updatedInfractionSuspicionOrObservation.reportingActor,
+                        controlUnitId = updatedInfractionSuspicionOrObservation.controlUnitId,
+                        authorTrigram = "",
+                        authorContact = updatedInfractionSuspicionOrObservation.authorContact,
+                        title = updatedInfractionSuspicionOrObservation.title,
+                        description = updatedInfractionSuspicionOrObservation.description,
                     )
                 else -> throw IllegalArgumentException(
                     "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION",
                 )
-            }.let {
-                getReportingWithDMLAndSeaFront.execute(
-                    infractionSuspicionOrObservationType = it,
-                    vesselId = currentReporting.vesselId,
-                )
             }
 
-        nextReporting.checkReportingActorAndFieldsRequirements()
+        val enrichedReporting = getReportingWithDMLAndSeaFront.execute(nextReporting)
+
+        when (enrichedReporting) {
+            is Reporting.InfractionSuspicion -> enrichedReporting.checkReportingActorAndFieldsRequirements()
+            is Reporting.Observation -> enrichedReporting.checkReportingActorAndFieldsRequirements()
+            is Reporting.Alert -> {}
+        }
 
         val updatedReporting =
-            when (nextReporting) {
-                is InfractionSuspicion ->
-                    reportingRepository.update(
-                        reportingId = reportingId,
-                        expirationDate = expirationDate,
-                        updatedInfractionSuspicion = nextReporting,
-                    )
-                is Observation ->
-                    reportingRepository.update(
-                        reportingId = reportingId,
-                        expirationDate = expirationDate,
-                        updatedObservation = nextReporting,
-                    )
-                else -> throw IllegalArgumentException(
-                    "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION",
-                )
-            }
+            reportingRepository.update(
+                reportingId = reportingId,
+                updatedReporting = enrichedReporting,
+            )
         val controlUnit = getControlUnit(updatedReporting, controlUnits)
 
         return Pair(updatedReporting, controlUnit)
@@ -80,7 +129,12 @@ class UpdateReporting(
         reporting: Reporting,
         controlUnits: List<LegacyControlUnit>,
     ): LegacyControlUnit? {
-        val controlUnitId = (reporting.value as InfractionSuspicionOrObservationType).controlUnitId
+        val controlUnitId =
+            when (reporting) {
+                is Reporting.InfractionSuspicion -> reporting.controlUnitId
+                is Reporting.Observation -> reporting.controlUnitId
+                is Reporting.Alert -> null
+            }
         return controlUnits.find { it.id == controlUnitId }
     }
 }

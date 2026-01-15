@@ -15,7 +15,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.ProtectedSpeciesCatch
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTypeMapping
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingTypeMapping
 import org.n52.jackson.datatype.jts.JtsModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -24,7 +24,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripGear as GearLogbook
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.IHasImplementation as IReportingsHasImplementation
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.IHasImplementation as IReportingsHasImplementation
 
 @Configuration
 class MapperConfiguration {

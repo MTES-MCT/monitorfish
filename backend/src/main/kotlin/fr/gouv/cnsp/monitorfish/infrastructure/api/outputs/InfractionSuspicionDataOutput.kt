@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.utils.InfractionHierarchyBuilder
 
@@ -24,7 +24,7 @@ data class InfractionSuspicionDataOutput(
 ) : ReportingValueDataOutput() {
     companion object {
         fun fromInfractionSuspicion(
-            infractionSuspicion: InfractionSuspicion,
+            reporting: Reporting.InfractionSuspicion,
             controlUnit: LegacyControlUnit? = null,
             useThreatHierarchyForForm: Boolean = false,
         ): InfractionSuspicionDataOutput {
@@ -32,7 +32,7 @@ data class InfractionSuspicionDataOutput(
                 if (useThreatHierarchyForForm) {
                     InfractionHierarchyBuilder
                         .buildThreatHierarchy(
-                            items = listOf(infractionSuspicion),
+                            items = listOf(reporting),
                             threatExtractor = { it.threat ?: "Famille inconnue" },
                             characterizationExtractor = { it.threatCharacterization ?: "Type inconnu" },
                             natinfCodeExtractor = { it.natinfCode },
@@ -43,18 +43,18 @@ data class InfractionSuspicionDataOutput(
                 }
 
             return InfractionSuspicionDataOutput(
-                reportingActor = infractionSuspicion.reportingActor,
-                controlUnitId = infractionSuspicion.controlUnitId,
+                reportingActor = reporting.reportingActor,
+                controlUnitId = reporting.controlUnitId,
                 controlUnit = controlUnit,
-                authorContact = infractionSuspicion.authorContact,
-                title = infractionSuspicion.title,
-                description = infractionSuspicion.description,
-                natinfCode = infractionSuspicion.natinfCode,
-                threat = infractionSuspicion.threat ?: "Famille inconnue",
-                threatCharacterization = infractionSuspicion.threatCharacterization ?: "Type inconnu",
+                authorContact = reporting.authorContact,
+                title = reporting.title,
+                description = reporting.description,
+                natinfCode = reporting.natinfCode,
+                threat = reporting.threat ?: "Famille inconnue",
+                threatCharacterization = reporting.threatCharacterization ?: "Type inconnu",
                 threatHierarchy = threatHierarchy,
-                dml = infractionSuspicion.dml,
-                seaFront = infractionSuspicion.seaFront,
+                dml = reporting.dml,
+                seaFront = reporting.seaFront,
             )
         }
     }

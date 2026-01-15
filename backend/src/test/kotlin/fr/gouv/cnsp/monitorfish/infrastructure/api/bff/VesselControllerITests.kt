@@ -830,7 +830,7 @@ class VesselControllerITests {
     fun `Should get vessel's reportings by vessel identity with vessel ID`() {
         // Given
         val currentReporting =
-            Reporting(
+            Reporting.Alert(
                 id = 1,
                 type = ReportingType.ALERT,
                 vesselName = "BIDUBULE",
@@ -841,14 +841,11 @@ class VesselControllerITests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value =
-                    Alert(
-                        type = AlertType.POSITION_ALERT,
-                        seaFront = NAMO.toString(),
-                        alertId = 1,
-                        natinfCode = 7059,
-                        name = "Chalutage dans les 3 milles",
-                    ) as AlertAndReportingValue,
+                alertType = AlertType.POSITION_ALERT,
+                seaFront = NAMO.toString(),
+                alertId = 1,
+                natinfCode = 7059,
+                name = "Chalutage dans les 3 milles",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "",
@@ -860,7 +857,7 @@ class VesselControllerITests {
             )
 
         val archivedReporting =
-            Reporting(
+            Reporting.Alert(
                 id = 666,
                 type = ReportingType.ALERT,
                 createdBy = "",
@@ -872,14 +869,11 @@ class VesselControllerITests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now().minusYears(1),
                 validationDate = ZonedDateTime.now().minusYears(1),
-                value =
-                    Alert(
-                        type = AlertType.POSITION_ALERT,
-                        seaFront = NAMO.toString(),
-                        alertId = 1,
-                        natinfCode = 7059,
-                        name = "Chalutage dans les 3 milles",
-                    ) as AlertAndReportingValue,
+                alertType = AlertType.POSITION_ALERT,
+                seaFront = NAMO.toString(),
+                alertId = 1,
+                natinfCode = 7059,
+                name = "Chalutage dans les 3 milles",
                 isArchived = true,
                 isDeleted = false,
             )
@@ -897,20 +891,23 @@ class VesselControllerITests {
             VesselReportings(
                 summary =
                     mapOf(
-                        Pair("Obligations déclaratives", listOf(
-                            ThreatSummary(
-                                natinfCode = 1234,
-                                natinf = "Infraction",
-                                threatCharacterization = "FAR",
-                                numberOfOccurrences = 2
+                        Pair(
+                            "Obligations déclaratives",
+                            listOf(
+                                ThreatSummary(
+                                    natinfCode = 1234,
+                                    natinf = "Infraction",
+                                    threatCharacterization = "FAR",
+                                    numberOfOccurrences = 2,
+                                ),
+                                ThreatSummary(
+                                    natinfCode = 1234,
+                                    natinf = "Infraction",
+                                    threatCharacterization = "DEP",
+                                    numberOfOccurrences = 1,
+                                ),
                             ),
-                            ThreatSummary(
-                                natinfCode = 1234,
-                                natinf = "Infraction",
-                                threatCharacterization = "DEP",
-                                numberOfOccurrences = 1
-                            ),
-                        ))
+                        ),
                     ),
                 current =
                     listOf(

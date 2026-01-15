@@ -34,7 +34,7 @@ class UpdateReportingUTests {
     fun `execute Should throw an exception When the reporting is an alert`() {
         // Given
         given(reportingRepository.findById(any())).willReturn(
-            Reporting(
+            Reporting.Alert(
                 id = 1,
                 type = ReportingType.ALERT,
                 vesselName = "BIDUBULE",
@@ -45,14 +45,11 @@ class UpdateReportingUTests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value =
-                    Alert(
-                        type = AlertType.POSITION_ALERT,
-                        seaFront = NAMO.toString(),
-                        alertId = 1,
-                        natinfCode = 7059,
-                        name = "Chalutage dans les 3 milles",
-                    ) as AlertAndReportingValue,
+                alertType = AlertType.POSITION_ALERT,
+                seaFront = NAMO.toString(),
+                alertId = 1,
+                natinfCode = 7059,
+                name = "Chalutage dans les 3 milles",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
@@ -81,7 +78,7 @@ class UpdateReportingUTests {
     fun `execute Should throw an exception When the new reporting type is not allowed`() {
         // Given
         given(reportingRepository.findById(any())).willReturn(
-            Reporting(
+            Reporting.InfractionSuspicion(
                 id = 1,
                 type = ReportingType.INFRACTION_SUSPICION,
                 vesselName = "BIDUBULE",
@@ -92,15 +89,12 @@ class UpdateReportingUTests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value =
-                    InfractionSuspicion(
-                        reportingActor = ReportingActor.UNIT,
-                        authorTrigram = "LTH",
-                        title = "Test",
-                        natinfCode = 1234,
-                        threat = "Obligations déclaratives",
-                        threatCharacterization = "DEP",
-                    ) as AlertAndReportingValue,
+                reportingActor = ReportingActor.UNIT,
+                authorTrigram = "LTH",
+                title = "Test",
+                natinfCode = 1234,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
@@ -134,7 +128,7 @@ class UpdateReportingUTests {
     ) {
         // Given
         val reporting =
-            Reporting(
+            Reporting.InfractionSuspicion(
                 id = 1,
                 type = ReportingType.INFRACTION_SUSPICION,
                 vesselName = "BIDUBULE",
@@ -145,31 +139,20 @@ class UpdateReportingUTests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value =
-                    InfractionSuspicion(
-                        reportingActor = ReportingActor.UNIT,
-                        authorTrigram = "LTH",
-                        title = "Test",
-                        natinfCode = 1234,
-                        threat = "Obligations déclaratives",
-                        threatCharacterization = "DEP",
-                    ) as AlertAndReportingValue,
+                reportingActor = ReportingActor.UNIT,
+                authorTrigram = "LTH",
+                title = "Test",
+                natinfCode = 1234,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
-        given(reportingRepository.update(any(), anyOrNull(), isA<InfractionSuspicion>())).willReturn(reporting)
-        given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
-            InfractionSuspicion(
-                reportingActor = reportingActor,
-                title = "Test",
-                authorTrigram = "LTH",
-                natinfCode = 1234,
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
-            ),
-        )
+        given(reportingRepository.update(any(), isA<Reporting>())).willReturn(reporting)
+        given(getReportingWithDMLAndSeaFront.execute(any()))
+            .willReturn(reporting.copy(reportingActor = reportingActor))
 
         // When
         val throwable =
@@ -203,7 +186,7 @@ class UpdateReportingUTests {
     fun `execute Should throw an exception When NATINF code is not set`() {
         // Given
         given(reportingRepository.findById(any())).willReturn(
-            Reporting(
+            Reporting.InfractionSuspicion(
                 id = 1,
                 type = ReportingType.INFRACTION_SUSPICION,
                 vesselName = "BIDUBULE",
@@ -214,15 +197,12 @@ class UpdateReportingUTests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value =
-                    InfractionSuspicion(
-                        reportingActor = ReportingActor.UNIT,
-                        authorTrigram = "LTH",
-                        title = "Test",
-                        natinfCode = 1234,
-                        threat = "Obligations déclaratives",
-                        threatCharacterization = "DEP",
-                    ) as AlertAndReportingValue,
+                reportingActor = ReportingActor.UNIT,
+                authorTrigram = "LTH",
+                title = "Test",
+                natinfCode = 1234,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
@@ -256,16 +236,8 @@ class UpdateReportingUTests {
     fun `execute Should update the reporting`() {
         // Given
         val expectedExpirationDate = ZonedDateTime.now().plusDays(2)
-        val observation =
-            Observation(
-                reportingActor = ReportingActor.UNIT,
-                controlUnitId = 1,
-                title = "A title",
-                authorTrigram = "LTH",
-                description = "Before update",
-            )
         val reporting =
-            Reporting(
+            Reporting.Observation(
                 id = 1,
                 type = ReportingType.OBSERVATION,
                 vesselName = "BIDUBULE",
@@ -277,16 +249,20 @@ class UpdateReportingUTests {
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 expirationDate = ZonedDateTime.now(),
-                value = observation as AlertAndReportingValue,
+                reportingActor = ReportingActor.UNIT,
+                controlUnitId = 1,
+                title = "A title",
+                authorTrigram = "LTH",
+                description = "Before update",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
-        given(reportingRepository.update(any(), anyOrNull(), isA<Observation>())).willReturn(reporting)
+        given(reportingRepository.update(any(), isA<Reporting>())).willReturn(reporting)
         given(
-            getReportingWithDMLAndSeaFront.execute(any(), anyOrNull()),
-        ).willReturn(observation.copy(description = "Test 2"))
+            getReportingWithDMLAndSeaFront.execute(any()),
+        ).willReturn(reporting.copy(description = "Test 2"))
 
         // When
         UpdateReporting(
@@ -309,8 +285,8 @@ class UpdateReportingUTests {
         )
 
         // Then
-        argumentCaptor<Observation>().apply {
-            verify(reportingRepository).update(any(), eq(expectedExpirationDate), capture())
+        argumentCaptor<Reporting.Observation>().apply {
+            verify(reportingRepository).update(any(), capture())
 
             assertThat(allValues.first().description).isEqualTo("Test 2")
         }
@@ -320,7 +296,7 @@ class UpdateReportingUTests {
     fun `execute Should update the reporting type`() {
         // Given
         val reporting =
-            Reporting(
+            Reporting.InfractionSuspicion(
                 id = 1,
                 type = ReportingType.INFRACTION_SUSPICION,
                 vesselName = "BIDUBULE",
@@ -331,30 +307,23 @@ class UpdateReportingUTests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value =
-                    InfractionSuspicion(
-                        reportingActor = ReportingActor.UNIT,
-                        authorTrigram = "LTH",
-                        title = "Test",
-                        natinfCode = 1234,
-                        threat = "Obligations déclaratives",
-                        threatCharacterization = "DEP",
-                    ) as AlertAndReportingValue,
+                reportingActor = ReportingActor.UNIT,
+                controlUnitId = 1,
+                authorContact = "An actor",
+                authorTrigram = "LTH",
+                title = "Test",
+                natinfCode = 1234,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
-        given(reportingRepository.update(any(), anyOrNull(), isA<Observation>())).willReturn(reporting)
-        given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
-            Observation(
-                reportingActor = ReportingActor.UNIT,
-                controlUnitId = 1,
-                authorTrigram = "LTH",
-                title = "A reporting",
-                description = "Test 2",
-            ),
-        )
+        given(reportingRepository.update(any(), isA<Reporting>())).willReturn(reporting)
+        given(getReportingWithDMLAndSeaFront.execute(any())).willAnswer { invocation ->
+            invocation.getArgument<Reporting>(0)
+        }
         // When
         UpdateReporting(
             reportingRepository,
@@ -375,8 +344,8 @@ class UpdateReportingUTests {
         )
 
         // Then
-        argumentCaptor<Observation>().apply {
-            verify(reportingRepository).update(any(), anyOrNull(), capture())
+        argumentCaptor<Reporting.Observation>().apply {
+            verify(reportingRepository).update(any(), capture())
 
             assertThat(allValues.first().description).isEqualTo("Test 2")
             assertThat(allValues.first().natinfCode).isNull()
@@ -388,7 +357,7 @@ class UpdateReportingUTests {
     fun `execute Should add the flagState, the DML and the sea front of the reporting When the reporting is an INFRACTION_SUSPICION`() {
         // Given
         val reporting =
-            Reporting(
+            Reporting.InfractionSuspicion(
                 id = 1,
                 type = ReportingType.INFRACTION_SUSPICION,
                 vesselName = "BIDUBULE",
@@ -398,32 +367,24 @@ class UpdateReportingUTests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                controlUnitId = 1,
                 validationDate = ZonedDateTime.now(),
-                value =
-                    InfractionSuspicion(
-                        reportingActor = ReportingActor.UNIT,
-                        title = "Test",
-                        natinfCode = 1234,
-                        threat = "Obligations déclaratives",
-                        threatCharacterization = "DEP",
-                        authorTrigram = "LTH",
-                    ) as AlertAndReportingValue,
+                reportingActor = ReportingActor.UNIT,
+                authorContact = "A contact",
+                title = "Test",
+                natinfCode = 1234,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
+                authorTrigram = "LTH",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
-        given(reportingRepository.update(any(), anyOrNull(), isA<InfractionSuspicion>())).willReturn(reporting)
-        given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
-            InfractionSuspicion(
-                reportingActor = ReportingActor.UNIT,
-                controlUnitId = 1,
-                title = "Test",
-                natinfCode = 1234,
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
+        given(reportingRepository.update(any(), isA<Reporting>())).willReturn(reporting)
+        given(getReportingWithDMLAndSeaFront.execute(any())).willReturn(
+            reporting.copy(
                 dml = "DML 56",
-                authorTrigram = "LTH",
                 seaFront = "NAMO",
             ),
         )
@@ -447,8 +408,8 @@ class UpdateReportingUTests {
         )
 
         // Then
-        argumentCaptor<InfractionSuspicion>().apply {
-            verify(reportingRepository).update(any(), anyOrNull(), capture())
+        argumentCaptor<Reporting.InfractionSuspicion>().apply {
+            verify(reportingRepository).update(any(), capture())
 
             assertThat(allValues.first().dml).isEqualTo("DML 56")
             assertThat(allValues.first().seaFront).isEqualTo("NAMO")
@@ -459,7 +420,7 @@ class UpdateReportingUTests {
     fun `execute Should add the flagState of the previous reporting When the reporting is an OBSERVATION`() {
         // Given
         val reporting =
-            Reporting(
+            Reporting.Observation(
                 id = 1,
                 type = ReportingType.OBSERVATION,
                 vesselName = "BIDUBULE",
@@ -470,20 +431,17 @@ class UpdateReportingUTests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value =
-                    Observation(
-                        reportingActor = ReportingActor.UNIT,
-                        title = "Test",
-                        authorTrigram = "LTH",
-                    ) as AlertAndReportingValue,
+                reportingActor = ReportingActor.UNIT,
+                title = "Test",
+                authorTrigram = "LTH",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
-        given(reportingRepository.update(any(), anyOrNull(), isA<Observation>())).willReturn(reporting)
-        given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
-            (reporting.value as Observation).copy(controlUnitId = 1),
+        given(reportingRepository.update(any(), isA<Reporting>())).willReturn(reporting)
+        given(getReportingWithDMLAndSeaFront.execute(any())).willReturn(
+            reporting.copy(controlUnitId = 1),
         )
 
         // When
@@ -506,8 +464,8 @@ class UpdateReportingUTests {
             )
 
         // Then
-        argumentCaptor<Observation>().apply {
-            verify(reportingRepository).update(any(), anyOrNull(), capture())
+        argumentCaptor<Reporting.Observation>().apply {
+            verify(reportingRepository).update(any(), capture())
         }
         assertThat(returnedReporting.first.flagState).isEqualTo(CountryCode.FR)
     }
@@ -516,7 +474,7 @@ class UpdateReportingUTests {
     fun `execute Should migrate an OBSERVATION reporting to an INFRACTION_SUSPICION`() {
         // Given
         val reporting =
-            Reporting(
+            Reporting.Observation(
                 id = 1,
                 type = ReportingType.OBSERVATION,
                 vesselName = "BIDUBULE",
@@ -527,30 +485,22 @@ class UpdateReportingUTests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value =
-                    Observation(
-                        reportingActor = ReportingActor.UNIT,
-                        title = "Test",
-                        authorTrigram = "LTH",
-                    ) as AlertAndReportingValue,
+                reportingActor = ReportingActor.UNIT,
+                controlUnitId = 1,
+                authorContact = "An actor",
+                title = "Test",
+                authorTrigram = "LTH",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
-        given(reportingRepository.update(any(), anyOrNull(), isA<InfractionSuspicion>())).willReturn(reporting)
-        given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
-            InfractionSuspicion(
-                reportingActor = ReportingActor.OPS,
-                seaFront = "NAMO",
-                dml = "DML 17",
-                natinfCode = 1235,
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
-                authorTrigram = "LTH",
-                title = "Chalut en boeuf illégal",
-            ),
-        )
+        given(reportingRepository.update(any(), isA<Reporting>()))
+            .willReturn(reporting)
+        given(getReportingWithDMLAndSeaFront.execute(any()))
+            .willAnswer { invocation ->
+                invocation.getArgument<Reporting>(0)
+            }
 
         // When
         UpdateReporting(
@@ -558,24 +508,24 @@ class UpdateReportingUTests {
             getReportingWithDMLAndSeaFront,
             getAllLegacyControlUnits,
         ).execute(
-            1,
-            UpdatedInfractionSuspicionOrObservation(
-                reportingActor = ReportingActor.UNIT,
-                type = ReportingType.INFRACTION_SUSPICION,
-                controlUnitId = 1,
-                title = "A reporting",
-                natinfCode = 1234,
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
-            ),
+            reportingId = 1,
+            updatedInfractionSuspicionOrObservation =
+                UpdatedInfractionSuspicionOrObservation(
+                    reportingActor = ReportingActor.UNIT,
+                    type = ReportingType.INFRACTION_SUSPICION,
+                    controlUnitId = 1,
+                    title = "A reporting",
+                    natinfCode = 1234,
+                    threat = "Obligations déclaratives",
+                    threatCharacterization = "DEP",
+                ),
         )
 
         // Then
-        argumentCaptor<InfractionSuspicion>().apply {
-            verify(reportingRepository).update(any(), anyOrNull(), capture())
+        argumentCaptor<Reporting.InfractionSuspicion>().apply {
+            verify(reportingRepository).update(any(), capture())
 
             assertThat(allValues.first().type.toString()).isEqualTo(ReportingType.INFRACTION_SUSPICION.name)
-            assertThat(allValues.first().dml).isEqualTo("DML 17")
         }
     }
 }

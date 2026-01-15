@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 
 class AlertDataOutput(
     val type: AlertType,
@@ -14,16 +14,16 @@ class AlertDataOutput(
     val description: String? = null,
 ) : ReportingValueDataOutput() {
     companion object {
-        fun fromAlertType(alert: Alert) =
+        fun fromAlert(reporting: Reporting.Alert) =
             AlertDataOutput(
-                type = alert.type,
-                seaFront = alert.seaFront,
-                dml = alert.dml,
-                natinfCode = alert.natinfCode,
-                riskFactor = alert.riskFactor,
-                alertId = alert.alertId,
-                name = alert.name,
-                description = alert.description,
+                type = reporting.alertType,
+                seaFront = reporting.seaFront,
+                dml = reporting.dml,
+                natinfCode = reporting.natinfCode,
+                riskFactor = reporting.riskFactor,
+                alertId = reporting.alertId,
+                name = reporting.name,
+                description = reporting.alertDescription,
             )
     }
 }

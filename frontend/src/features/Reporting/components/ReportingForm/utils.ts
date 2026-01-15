@@ -12,7 +12,6 @@ export function getFormFields(
 
   const base = {
     authorContact: editedOrSavedReporting?.authorContact ?? undefined,
-    authorTrigram: editedOrSavedReporting?.authorTrigram ?? undefined,
     controlUnitId: editedOrSavedReporting?.controlUnitId ?? undefined,
     description: editedOrSavedReporting?.description,
     expirationDate,
@@ -52,22 +51,18 @@ export function updateReportingActor(
         break
       }
       case ReportingOriginActor.UNIT: {
-        setFieldValue('authorTrigram', undefined)
         break
       }
       case ReportingOriginActor.DML: {
         setFieldValue('controlUnitId', undefined)
-        setFieldValue('authorTrigram', undefined)
         break
       }
       case ReportingOriginActor.DIRM: {
         setFieldValue('controlUnitId', undefined)
-        setFieldValue('authorTrigram', undefined)
         break
       }
       case ReportingOriginActor.OTHER: {
         setFieldValue('controlUnitId', undefined)
-        setFieldValue('authorTrigram', undefined)
         break
       }
       default:

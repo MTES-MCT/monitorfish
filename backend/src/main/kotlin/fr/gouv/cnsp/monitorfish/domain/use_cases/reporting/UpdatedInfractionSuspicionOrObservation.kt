@@ -8,7 +8,6 @@ class UpdatedInfractionSuspicionOrObservation(
     val reportingActor: ReportingActor,
     val type: ReportingType,
     val controlUnitId: Int? = null,
-    val authorTrigram: String,
     val authorContact: String? = null,
     val expirationDate: ZonedDateTime? = null,
     val title: String,

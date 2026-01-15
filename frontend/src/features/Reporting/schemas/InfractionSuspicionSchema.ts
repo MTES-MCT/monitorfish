@@ -9,6 +9,7 @@ import type { LegacyControlUnit } from '@features/ControlUnit/legacyControlUnit'
 
 export const InfractionSuspicionSchema = z.strictObject({
   authorContact: stringOrUndefined,
+  /** @deprecated Use createdBy instead */
   authorTrigram: stringOrUndefined,
   controlUnit: z.union([z.custom<LegacyControlUnit.LegacyControlUnit>(), z.undefined()]),
   controlUnitId: numberOrUndefined,

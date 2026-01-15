@@ -92,6 +92,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
+                createdBy = "test@example.gouv.fr",
             )
 
         // When
@@ -137,6 +138,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
+                createdBy = "test@example.gouv.fr",
             )
 
         // When

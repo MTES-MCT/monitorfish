@@ -63,7 +63,6 @@ export function ReportingForm({
 
       const nextReportingWithMissingProperties: ReportingCreation = {
         authorContact: nextReporting.authorContact,
-        authorTrigram: nextReporting.authorTrigram,
         controlUnit: nextReporting.controlUnit,
         controlUnitId: nextReporting.controlUnitId,
         creationDate: new Date().toISOString(),

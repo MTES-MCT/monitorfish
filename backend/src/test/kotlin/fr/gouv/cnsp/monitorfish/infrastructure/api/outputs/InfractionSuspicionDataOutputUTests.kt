@@ -121,7 +121,6 @@ class InfractionSuspicionDataOutputUTests {
         assertThat(output.reportingActor).isEqualTo(ReportingActor.UNIT)
         assertThat(output.controlUnitId).isEqualTo(1234)
         assertThat(output.controlUnit).isEqualTo(controlUnit)
-        assertThat(output.authorTrigram).isEqualTo("ABC")
         assertThat(output.authorContact).isEqualTo("abc@example.com")
         assertThat(output.title).isEqualTo("Test title")
         assertThat(output.description).isEqualTo("Test description")

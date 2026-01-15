@@ -54,6 +54,7 @@ class GetAllCurrentReportingsUTests {
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
+                createdBy = "test@example.gouv.fr",
             )
         given(reportingRepository.findAll(any())).willReturn(listOf(currentReporting))
         given(
@@ -101,6 +102,7 @@ class GetAllCurrentReportingsUTests {
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
+                createdBy = "test@example.gouv.fr",
             )
         given(reportingRepository.findAll()).willReturn(listOf(currentReporting))
 

@@ -28,6 +28,7 @@ class ReportingDataOutput(
     val isDeleted: Boolean,
     val infraction: InfractionDataOutput? = null,
     val underCharter: Boolean? = null,
+    val createdBy: String,
 ) {
     companion object {
         fun fromReporting(
@@ -67,6 +68,7 @@ class ReportingDataOutput(
                 isDeleted = reporting.isDeleted,
                 infraction = reporting.infraction?.let { InfractionDataOutput.fromInfraction(it) },
                 underCharter = reporting.underCharter,
+                createdBy = reporting.createdBy.substringBefore('@'),
             )
         }
     }

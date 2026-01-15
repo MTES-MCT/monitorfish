@@ -63,6 +63,8 @@ data class ReportingEntity(
     val latitude: Double? = null,
     @Column(name = "longitude")
     val longitude: Double? = null,
+    @Column(name = "created_by")
+    val createdBy: String,
 ) {
     fun toReporting(mapper: ObjectMapper): Reporting =
         Reporting(
@@ -84,6 +86,8 @@ data class ReportingEntity(
             isDeleted = isDeleted,
             latitude = latitude,
             longitude = longitude,
+            // TODO Fetch userTrigam from value if createdBy is empty
+            createdBy = createdBy,
         )
 
     companion object {
@@ -107,6 +111,7 @@ data class ReportingEntity(
             isDeleted = false,
             latitude = alert.latitude,
             longitude = alert.longitude,
+            createdBy = "SYSTEM",
         )
 
         fun fromReporting(
@@ -127,6 +132,7 @@ data class ReportingEntity(
             value = mapper.writeValueAsString(reporting.value),
             isArchived = false,
             isDeleted = false,
+            createdBy = reporting.createdBy,
         )
     }
 }

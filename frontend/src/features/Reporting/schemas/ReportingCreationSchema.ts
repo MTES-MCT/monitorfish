@@ -10,9 +10,12 @@ const InfractionSuspicionOrObservationCreation = InfractionSuspicionSchema.omit(
 })
 
 export const ReportingCreationSchema = BaseReportingSchema.omit({
+  createdBy: true,
   id: true,
   infraction: true,
   isArchived: true,
   isDeleted: true,
   underCharter: true
-}).extend(InfractionSuspicionOrObservationCreation.shape)
+})
+  .extend(InfractionSuspicionOrObservationCreation.shape)
+  .omit({ authorTrigram: true })

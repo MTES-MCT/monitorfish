@@ -15,9 +15,9 @@ export const getReportingOrigin = (reporting: Reporting.Reporting, isHovering: b
     case ReportingOriginActor.UNIT:
       return `${reporting.value.controlUnit?.name ?? ''}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
     case ReportingOriginActor.OPS:
-      return `Pôle OPS (${reporting.value.authorTrigram})`
+      return `Pôle OPS (${reporting.createdBy})`
     case ReportingOriginActor.SIP:
-      return `Pôle SIP (${reporting.value.authorTrigram})`
+      return `Pôle SIP (${reporting.createdBy})`
     case ReportingOriginActor.DIRM:
       return `DIRM${isHovering ? `: ${reporting.value.authorContact}` : ''}`
     case ReportingOriginActor.DML:

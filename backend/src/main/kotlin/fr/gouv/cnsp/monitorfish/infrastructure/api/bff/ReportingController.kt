@@ -74,7 +74,7 @@ class ReportingController(
         val (updatedReporting, controlUnit) =
             updateReporting.execute(
                 reportingId = reportingId,
-                updatedInfractionSuspicionOrObservation = updateReportingInput.toUpdatedReportingValues(),
+                reportingUpdateCommand = updateReportingInput.toUpdatedReportingValues(),
             )
 
         return ReportingDataOutput.fromReporting(updatedReporting, controlUnit)

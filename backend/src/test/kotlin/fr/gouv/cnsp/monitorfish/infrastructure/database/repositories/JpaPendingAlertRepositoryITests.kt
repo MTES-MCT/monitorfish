@@ -41,6 +41,8 @@ class JpaPendingAlertRepositoryITests : AbstractDBTests() {
                         seaFront = NAMO.toString(),
                         alertId = 1,
                         natinfCode = 7059,
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
                         name = "Chalutage dans les 3 milles",
                     ),
             )

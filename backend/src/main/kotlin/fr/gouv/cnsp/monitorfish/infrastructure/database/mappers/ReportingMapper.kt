@@ -1,42 +1,14 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.mappers
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
-import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.InfractionSuspicion
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.AlertValueDto
+import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.InfractionSuspicionDto
+import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.ObservationDto
 import org.springframework.stereotype.Component
-import java.time.ZonedDateTime
-
-/**
- * Common entity fields shared between all reporting types.
- */
-data class ReportingEntityFields(
-    val id: Int?,
-    val vesselId: Int?,
-    val vesselName: String?,
-    val internalReferenceNumber: String?,
-    val externalReferenceNumber: String?,
-    val ircs: String?,
-    val vesselIdentifier: VesselIdentifier?,
-    val flagState: CountryCode,
-    val creationDate: ZonedDateTime,
-    val validationDate: ZonedDateTime?,
-    val expirationDate: ZonedDateTime?,
-    val archivingDate: ZonedDateTime?,
-    val isArchived: Boolean,
-    val isDeleted: Boolean,
-    val latitude: Double?,
-    val longitude: Double?,
-    val createdBy: String,
-    val infraction: Infraction? = null,
-    val underCharter: Boolean? = null,
-)
 
 @Component
 object ReportingMapper {
@@ -49,7 +21,7 @@ object ReportingMapper {
         mapper: ObjectMapper,
         jsonValue: String?,
         reportingType: ReportingType,
-        entityFields: ReportingEntityFields,
+        entity: ReportingEntity,
     ): Reporting =
         try {
             if (jsonValue.isNullOrEmpty() || jsonValue == jsonbNullString) {
@@ -58,35 +30,34 @@ object ReportingMapper {
 
             when (reportingType) {
                 ReportingType.ALERT -> {
-                    val alertValue = mapper.readValue(jsonValue, Alert::class.java)
+                    val alertValue = mapper.readValue(jsonValue, AlertValueDto::class.java)
+
                     Reporting.Alert(
-                        id = entityFields.id,
-                        vesselId = entityFields.vesselId,
-                        vesselName = entityFields.vesselName,
-                        internalReferenceNumber = entityFields.internalReferenceNumber,
-                        externalReferenceNumber = entityFields.externalReferenceNumber,
-                        ircs = entityFields.ircs,
-                        vesselIdentifier = entityFields.vesselIdentifier,
-                        flagState = entityFields.flagState,
-                        creationDate = entityFields.creationDate,
-                        validationDate = entityFields.validationDate,
-                        expirationDate = entityFields.expirationDate,
-                        archivingDate = entityFields.archivingDate,
-                        isArchived = entityFields.isArchived,
-                        isDeleted = entityFields.isDeleted,
-                        latitude = entityFields.latitude,
-                        longitude = entityFields.longitude,
-                        createdBy = entityFields.createdBy,
-                        infraction = entityFields.infraction,
-                        underCharter = entityFields.underCharter,
+                        id = entity.id,
+                        vesselId = entity.vesselId,
+                        vesselName = entity.vesselName,
+                        internalReferenceNumber = entity.internalReferenceNumber,
+                        externalReferenceNumber = entity.externalReferenceNumber,
+                        ircs = entity.ircs,
+                        vesselIdentifier = entity.vesselIdentifier,
+                        flagState = entity.flagState,
+                        creationDate = entity.creationDate,
+                        validationDate = entity.validationDate,
+                        expirationDate = entity.expirationDate,
+                        archivingDate = entity.archivingDate,
+                        isArchived = entity.isArchived,
+                        isDeleted = entity.isDeleted,
+                        latitude = entity.latitude,
+                        longitude = entity.longitude,
+                        createdBy = entity.createdBy,
                         // Alert-specific fields from JSON value
                         alertType = alertValue.type,
                         seaFront = alertValue.seaFront,
                         dml = alertValue.dml,
                         riskFactor = alertValue.riskFactor,
-                        natinfCode = alertValue.natinfCode,
-                        threat = alertValue.threat,
-                        threatCharacterization = alertValue.threatCharacterization,
+                        natinfCode = alertValue.natinfCode ?: 0,
+                        threat = alertValue.threat ?: "Famille inconnue",
+                        threatCharacterization = alertValue.threatCharacterization ?: "Type inconnu",
                         alertId = alertValue.alertId,
                         name = alertValue.name,
                         alertDescription = alertValue.description,
@@ -94,68 +65,62 @@ object ReportingMapper {
                 }
 
                 ReportingType.INFRACTION_SUSPICION -> {
-                    val infractionSuspicionValue = mapper.readValue(jsonValue, InfractionSuspicion::class.java)
+                    val infractionSuspicionValue = mapper.readValue(jsonValue, InfractionSuspicionDto::class.java)
                     Reporting.InfractionSuspicion(
-                        id = entityFields.id,
-                        vesselId = entityFields.vesselId,
-                        vesselName = entityFields.vesselName,
-                        internalReferenceNumber = entityFields.internalReferenceNumber,
-                        externalReferenceNumber = entityFields.externalReferenceNumber,
-                        ircs = entityFields.ircs,
-                        vesselIdentifier = entityFields.vesselIdentifier,
-                        flagState = entityFields.flagState,
-                        creationDate = entityFields.creationDate,
-                        validationDate = entityFields.validationDate,
-                        expirationDate = entityFields.expirationDate,
-                        archivingDate = entityFields.archivingDate,
-                        isArchived = entityFields.isArchived,
-                        isDeleted = entityFields.isDeleted,
-                        latitude = entityFields.latitude,
-                        longitude = entityFields.longitude,
-                        createdBy = entityFields.createdBy,
-                        infraction = entityFields.infraction,
-                        underCharter = entityFields.underCharter,
+                        id = entity.id,
+                        vesselId = entity.vesselId,
+                        vesselName = entity.vesselName,
+                        internalReferenceNumber = entity.internalReferenceNumber,
+                        externalReferenceNumber = entity.externalReferenceNumber,
+                        ircs = entity.ircs,
+                        vesselIdentifier = entity.vesselIdentifier,
+                        flagState = entity.flagState,
+                        creationDate = entity.creationDate,
+                        validationDate = entity.validationDate,
+                        expirationDate = entity.expirationDate,
+                        archivingDate = entity.archivingDate,
+                        isArchived = entity.isArchived,
+                        isDeleted = entity.isDeleted,
+                        latitude = entity.latitude,
+                        longitude = entity.longitude,
+                        createdBy = entity.createdBy.ifEmpty { infractionSuspicionValue.authorTrigram },
                         // InfractionSuspicion-specific fields from JSON value
                         reportingActor = infractionSuspicionValue.reportingActor,
                         controlUnitId = infractionSuspicionValue.controlUnitId,
-                        authorTrigram = infractionSuspicionValue.authorTrigram,
                         authorContact = infractionSuspicionValue.authorContact,
                         title = infractionSuspicionValue.title,
                         description = infractionSuspicionValue.description,
                         natinfCode = infractionSuspicionValue.natinfCode,
                         seaFront = infractionSuspicionValue.seaFront,
                         dml = infractionSuspicionValue.dml,
-                        threat = infractionSuspicionValue.threat,
-                        threatCharacterization = infractionSuspicionValue.threatCharacterization,
+                        threat = infractionSuspicionValue.threat ?: "Famille inconnue",
+                        threatCharacterization = infractionSuspicionValue.threatCharacterization ?: "Type inconnu",
                     )
                 }
 
                 ReportingType.OBSERVATION -> {
-                    val observationValue = mapper.readValue(jsonValue, Observation::class.java)
+                    val observationValue = mapper.readValue(jsonValue, ObservationDto::class.java)
                     Reporting.Observation(
-                        id = entityFields.id,
-                        vesselId = entityFields.vesselId,
-                        vesselName = entityFields.vesselName,
-                        internalReferenceNumber = entityFields.internalReferenceNumber,
-                        externalReferenceNumber = entityFields.externalReferenceNumber,
-                        ircs = entityFields.ircs,
-                        vesselIdentifier = entityFields.vesselIdentifier,
-                        flagState = entityFields.flagState,
-                        creationDate = entityFields.creationDate,
-                        validationDate = entityFields.validationDate,
-                        expirationDate = entityFields.expirationDate,
-                        archivingDate = entityFields.archivingDate,
-                        isArchived = entityFields.isArchived,
-                        isDeleted = entityFields.isDeleted,
-                        latitude = entityFields.latitude,
-                        longitude = entityFields.longitude,
-                        createdBy = entityFields.createdBy,
-                        infraction = entityFields.infraction,
-                        underCharter = entityFields.underCharter,
+                        id = entity.id,
+                        vesselId = entity.vesselId,
+                        vesselName = entity.vesselName,
+                        internalReferenceNumber = entity.internalReferenceNumber,
+                        externalReferenceNumber = entity.externalReferenceNumber,
+                        ircs = entity.ircs,
+                        vesselIdentifier = entity.vesselIdentifier,
+                        flagState = entity.flagState,
+                        creationDate = entity.creationDate,
+                        validationDate = entity.validationDate,
+                        expirationDate = entity.expirationDate,
+                        archivingDate = entity.archivingDate,
+                        isArchived = entity.isArchived,
+                        isDeleted = entity.isDeleted,
+                        latitude = entity.latitude,
+                        longitude = entity.longitude,
+                        createdBy = entity.createdBy.ifEmpty { observationValue.authorTrigram },
                         // Observation-specific fields from JSON value
                         reportingActor = observationValue.reportingActor,
                         controlUnitId = observationValue.controlUnitId,
-                        authorTrigram = observationValue.authorTrigram,
                         authorContact = observationValue.authorContact,
                         title = observationValue.title,
                         description = observationValue.description,
@@ -176,7 +141,7 @@ object ReportingMapper {
     fun getValueFromReporting(reporting: Reporting): Any =
         when (reporting) {
             is Reporting.Alert ->
-                Alert(
+                AlertValueDto(
                     type = reporting.alertType,
                     seaFront = reporting.seaFront,
                     dml = reporting.dml,
@@ -190,10 +155,9 @@ object ReportingMapper {
                 )
 
             is Reporting.InfractionSuspicion ->
-                InfractionSuspicion(
+                InfractionSuspicionDto(
                     reportingActor = reporting.reportingActor,
                     controlUnitId = reporting.controlUnitId,
-                    authorTrigram = reporting.authorTrigram,
                     authorContact = reporting.authorContact,
                     title = reporting.title,
                     description = reporting.description,
@@ -205,10 +169,9 @@ object ReportingMapper {
                 )
 
             is Reporting.Observation ->
-                Observation(
+                ObservationDto(
                     reportingActor = reporting.reportingActor,
                     controlUnitId = reporting.controlUnitId,
-                    authorTrigram = reporting.authorTrigram,
                     authorContact = reporting.authorContact,
                     title = reporting.title,
                     description = reporting.description,

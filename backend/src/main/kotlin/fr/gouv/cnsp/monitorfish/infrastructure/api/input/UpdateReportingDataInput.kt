@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSuspicionOrObservation
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.ReportingUpdateCommand
 import java.time.ZonedDateTime
 
 class UpdateReportingDataInput(
@@ -15,7 +15,7 @@ class UpdateReportingDataInput(
     val description: String? = null,
     val threatHierarchy: ThreatHierarchyDataInput? = null,
 ) {
-    fun toUpdatedReportingValues(): UpdatedInfractionSuspicionOrObservation {
+    fun toUpdatedReportingValues(): ReportingUpdateCommand {
         val threat = threatHierarchy?.value
         val threatCharacterization = threatHierarchy?.children?.single()?.value
         val natinf =
@@ -26,7 +26,7 @@ class UpdateReportingDataInput(
                 ?.single()
                 ?.value
 
-        return UpdatedInfractionSuspicionOrObservation(
+        return ReportingUpdateCommand(
             reportingActor = this.reportingActor,
             type = this.type,
             controlUnitId = this.controlUnitId,

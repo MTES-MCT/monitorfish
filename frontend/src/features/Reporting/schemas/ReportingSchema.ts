@@ -16,7 +16,7 @@ export const ObservationReportingSchema = BaseReportingSchema.extend({
   value: ObservationSchema
 })
 
-export const PendingAlertReportingSchema = BaseReportingSchema.omit({ createdBy: true }).extend({
+export const PendingAlertReportingSchema = BaseReportingSchema.extend({
   type: z.literal(ReportingType.ALERT),
   value: PendingAlertValueSchema
 })

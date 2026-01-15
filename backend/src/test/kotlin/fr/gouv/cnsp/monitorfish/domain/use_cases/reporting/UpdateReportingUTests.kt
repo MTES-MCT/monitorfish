@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.*
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
@@ -49,6 +48,8 @@ class UpdateReportingUTests {
                 seaFront = NAMO.toString(),
                 alertId = 1,
                 natinfCode = 7059,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 name = "Chalutage dans les 3 milles",
                 isArchived = false,
                 isDeleted = false,
@@ -62,7 +63,7 @@ class UpdateReportingUTests {
                 UpdateReporting(reportingRepository, getReportingWithDMLAndSeaFront, getAllLegacyControlUnits)
                     .execute(
                         1,
-                        UpdatedInfractionSuspicionOrObservation(
+                        ReportingUpdateCommand(
                             reportingActor = ReportingActor.UNIT,
                             type = ReportingType.OBSERVATION,
                             title = "A reporting",
@@ -90,7 +91,6 @@ class UpdateReportingUTests {
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 reportingActor = ReportingActor.UNIT,
-                authorTrigram = "LTH",
                 title = "Test",
                 natinfCode = 1234,
                 threat = "Obligations déclaratives",
@@ -107,7 +107,7 @@ class UpdateReportingUTests {
                 UpdateReporting(reportingRepository, getReportingWithDMLAndSeaFront, getAllLegacyControlUnits)
                     .execute(
                         1,
-                        UpdatedInfractionSuspicionOrObservation(
+                        ReportingUpdateCommand(
                             reportingActor = ReportingActor.UNIT,
                             type = ReportingType.ALERT,
                             title = "A reporting",
@@ -116,9 +116,7 @@ class UpdateReportingUTests {
             }
 
         // Then
-        assertThat(throwable.message).contains(
-            "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION",
-        )
+        assertThat(throwable.message).contains("Invalid target type")
     }
 
     @ParameterizedTest
@@ -140,7 +138,6 @@ class UpdateReportingUTests {
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 reportingActor = ReportingActor.UNIT,
-                authorTrigram = "LTH",
                 title = "Test",
                 natinfCode = 1234,
                 threat = "Obligations déclaratives",
@@ -160,7 +157,7 @@ class UpdateReportingUTests {
                 UpdateReporting(reportingRepository, getReportingWithDMLAndSeaFront, getAllLegacyControlUnits)
                     .execute(
                         1,
-                        UpdatedInfractionSuspicionOrObservation(
+                        ReportingUpdateCommand(
                             reportingActor = reportingActor,
                             type = ReportingType.INFRACTION_SUSPICION,
                             title = "A reporting",
@@ -198,7 +195,6 @@ class UpdateReportingUTests {
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 reportingActor = ReportingActor.UNIT,
-                authorTrigram = "LTH",
                 title = "Test",
                 natinfCode = 1234,
                 threat = "Obligations déclaratives",
@@ -218,7 +214,7 @@ class UpdateReportingUTests {
                     getAllLegacyControlUnits,
                 ).execute(
                     1,
-                    UpdatedInfractionSuspicionOrObservation(
+                    ReportingUpdateCommand(
                         reportingActor = ReportingActor.UNIT,
                         type = ReportingType.INFRACTION_SUSPICION,
                         title = "A reporting",
@@ -229,7 +225,7 @@ class UpdateReportingUTests {
             }
 
         // Then
-        assertThat(throwable.message).contains("NATINF code should not be null")
+        assertThat(throwable.message).contains("NATINF code is required")
     }
 
     @Test
@@ -252,7 +248,6 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.UNIT,
                 controlUnitId = 1,
                 title = "A title",
-                authorTrigram = "LTH",
                 description = "Before update",
                 isArchived = false,
                 isDeleted = false,
@@ -271,7 +266,7 @@ class UpdateReportingUTests {
             getAllLegacyControlUnits,
         ).execute(
             1,
-            UpdatedInfractionSuspicionOrObservation(
+            ReportingUpdateCommand(
                 reportingActor = ReportingActor.UNIT,
                 type = ReportingType.OBSERVATION,
                 controlUnitId = 1,
@@ -310,7 +305,6 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.UNIT,
                 controlUnitId = 1,
                 authorContact = "An actor",
-                authorTrigram = "LTH",
                 title = "Test",
                 natinfCode = 1234,
                 threat = "Obligations déclaratives",
@@ -331,7 +325,7 @@ class UpdateReportingUTests {
             getAllLegacyControlUnits,
         ).execute(
             1,
-            UpdatedInfractionSuspicionOrObservation(
+            ReportingUpdateCommand(
                 reportingActor = ReportingActor.UNIT,
                 type = ReportingType.OBSERVATION,
                 controlUnitId = 1,
@@ -348,7 +342,6 @@ class UpdateReportingUTests {
             verify(reportingRepository).update(any(), capture())
 
             assertThat(allValues.first().description).isEqualTo("Test 2")
-            assertThat(allValues.first().natinfCode).isNull()
             assertThat(allValues.first().type.toString()).isEqualTo(ReportingType.OBSERVATION.toString())
         }
     }
@@ -375,7 +368,6 @@ class UpdateReportingUTests {
                 natinfCode = 1234,
                 threat = "Obligations déclaratives",
                 threatCharacterization = "DEP",
-                authorTrigram = "LTH",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
@@ -396,7 +388,7 @@ class UpdateReportingUTests {
             getAllLegacyControlUnits,
         ).execute(
             1,
-            UpdatedInfractionSuspicionOrObservation(
+            ReportingUpdateCommand(
                 reportingActor = ReportingActor.UNIT,
                 type = ReportingType.INFRACTION_SUSPICION,
                 controlUnitId = 1,
@@ -433,7 +425,6 @@ class UpdateReportingUTests {
                 validationDate = ZonedDateTime.now(),
                 reportingActor = ReportingActor.UNIT,
                 title = "Test",
-                authorTrigram = "LTH",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
@@ -452,7 +443,7 @@ class UpdateReportingUTests {
                 getAllLegacyControlUnits,
             ).execute(
                 1,
-                UpdatedInfractionSuspicionOrObservation(
+                ReportingUpdateCommand(
                     reportingActor = ReportingActor.UNIT,
                     type = ReportingType.OBSERVATION,
                     controlUnitId = 1,
@@ -489,7 +480,6 @@ class UpdateReportingUTests {
                 controlUnitId = 1,
                 authorContact = "An actor",
                 title = "Test",
-                authorTrigram = "LTH",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
@@ -509,8 +499,8 @@ class UpdateReportingUTests {
             getAllLegacyControlUnits,
         ).execute(
             reportingId = 1,
-            updatedInfractionSuspicionOrObservation =
-                UpdatedInfractionSuspicionOrObservation(
+            reportingUpdateCommand =
+                ReportingUpdateCommand(
                     reportingActor = ReportingActor.UNIT,
                     type = ReportingType.INFRACTION_SUSPICION,
                     controlUnitId = 1,

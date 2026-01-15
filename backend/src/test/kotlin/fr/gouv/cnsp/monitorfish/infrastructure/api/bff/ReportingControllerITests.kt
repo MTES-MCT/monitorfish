@@ -8,7 +8,6 @@ import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -148,7 +147,6 @@ class ReportingControllerITests {
                 creationDate = ZonedDateTime.now(),
                 reportingActor = ReportingActor.OPS,
                 natinfCode = 123456,
-                authorTrigram = "",
                 title = "A title",
                 threat = "Obligations déclaratives",
                 threatCharacterization = "DEP",
@@ -224,7 +222,6 @@ class ReportingControllerITests {
                 reportingActor = ReportingActor.UNIT,
                 natinfCode = 123456,
                 controlUnitId = 1234,
-                authorTrigram = "LTH",
                 title = "A title",
                 threat = "Obligations déclaratives",
                 threatCharacterization = "DEP",
@@ -303,7 +300,6 @@ class ReportingControllerITests {
                 creationDate = ZonedDateTime.now(),
                 reportingActor = ReportingActor.OPS,
                 natinfCode = 123456,
-                authorTrigram = "LTH",
                 title = "A title",
                 threat = "Obligations déclaratives",
                 threatCharacterization = "DEP",
@@ -346,7 +342,6 @@ class ReportingControllerITests {
                 creationDate = ZonedDateTime.now(),
                 reportingActor = ReportingActor.OPS,
                 natinfCode = 123456,
-                authorTrigram = "LTH",
                 title = "A title",
                 threat = "Obligations déclaratives",
                 threatCharacterization = "DEP",
@@ -411,7 +406,6 @@ class ReportingControllerITests {
                 creationDate = ZonedDateTime.now(),
                 reportingActor = ReportingActor.OPS,
                 natinfCode = 123456,
-                authorTrigram = "LTH",
                 title = "A title",
                 threat = "Obligations déclaratives",
                 threatCharacterization = "DEP",

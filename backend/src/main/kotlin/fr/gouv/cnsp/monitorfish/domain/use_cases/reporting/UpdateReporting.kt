@@ -19,93 +19,17 @@ class UpdateReporting(
 
     fun execute(
         reportingId: Int,
-        updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation,
+        reportingUpdateCommand: ReportingUpdateCommand,
     ): Pair<Reporting, LegacyControlUnit?> {
         val currentReporting = reportingRepository.findById(reportingId)
         val controlUnits = getAllLegacyControlUnits.execute()
         logger.info("Updating reporting id $reportingId for vessel id ${currentReporting.vesselId}")
-        val expirationDate = updatedInfractionSuspicionOrObservation.expirationDate ?: currentReporting.expirationDate
 
         require(currentReporting.type != ReportingType.ALERT) {
             "The edited reporting must be an INFRACTION_SUSPICION or an OBSERVATION"
         }
 
-        val nextReporting =
-            when (updatedInfractionSuspicionOrObservation.type) {
-                ReportingType.INFRACTION_SUSPICION -> {
-                    require(updatedInfractionSuspicionOrObservation.natinfCode != null) {
-                        "NATINF code should not be null"
-                    }
-                    require(updatedInfractionSuspicionOrObservation.threat != null) {
-                        "threat should not be null"
-                    }
-                    require(updatedInfractionSuspicionOrObservation.threatCharacterization != null) {
-                        "threatCharacterization should not be null"
-                    }
-
-                    Reporting.InfractionSuspicion(
-                        id = currentReporting.id,
-                        vesselId = currentReporting.vesselId,
-                        vesselName = currentReporting.vesselName,
-                        internalReferenceNumber = currentReporting.internalReferenceNumber,
-                        externalReferenceNumber = currentReporting.externalReferenceNumber,
-                        ircs = currentReporting.ircs,
-                        vesselIdentifier = currentReporting.vesselIdentifier,
-                        flagState = currentReporting.flagState,
-                        creationDate = currentReporting.creationDate,
-                        validationDate = currentReporting.validationDate,
-                        expirationDate = expirationDate,
-                        archivingDate = currentReporting.archivingDate,
-                        isArchived = currentReporting.isArchived,
-                        isDeleted = currentReporting.isDeleted,
-                        latitude = currentReporting.latitude,
-                        longitude = currentReporting.longitude,
-                        createdBy = currentReporting.createdBy,
-                        infraction = currentReporting.infraction,
-                        underCharter = currentReporting.underCharter,
-                        reportingActor = updatedInfractionSuspicionOrObservation.reportingActor,
-                        controlUnitId = updatedInfractionSuspicionOrObservation.controlUnitId,
-                        authorTrigram = "",
-                        authorContact = updatedInfractionSuspicionOrObservation.authorContact,
-                        title = updatedInfractionSuspicionOrObservation.title,
-                        description = updatedInfractionSuspicionOrObservation.description,
-                        natinfCode = updatedInfractionSuspicionOrObservation.natinfCode,
-                        threat = updatedInfractionSuspicionOrObservation.threat,
-                        threatCharacterization = updatedInfractionSuspicionOrObservation.threatCharacterization,
-                    )
-                }
-                ReportingType.OBSERVATION ->
-                    Reporting.Observation(
-                        id = currentReporting.id,
-                        vesselId = currentReporting.vesselId,
-                        vesselName = currentReporting.vesselName,
-                        internalReferenceNumber = currentReporting.internalReferenceNumber,
-                        externalReferenceNumber = currentReporting.externalReferenceNumber,
-                        ircs = currentReporting.ircs,
-                        vesselIdentifier = currentReporting.vesselIdentifier,
-                        flagState = currentReporting.flagState,
-                        creationDate = currentReporting.creationDate,
-                        validationDate = currentReporting.validationDate,
-                        expirationDate = expirationDate,
-                        archivingDate = currentReporting.archivingDate,
-                        isArchived = currentReporting.isArchived,
-                        isDeleted = currentReporting.isDeleted,
-                        latitude = currentReporting.latitude,
-                        longitude = currentReporting.longitude,
-                        createdBy = currentReporting.createdBy,
-                        infraction = currentReporting.infraction,
-                        underCharter = currentReporting.underCharter,
-                        reportingActor = updatedInfractionSuspicionOrObservation.reportingActor,
-                        controlUnitId = updatedInfractionSuspicionOrObservation.controlUnitId,
-                        authorTrigram = "",
-                        authorContact = updatedInfractionSuspicionOrObservation.authorContact,
-                        title = updatedInfractionSuspicionOrObservation.title,
-                        description = updatedInfractionSuspicionOrObservation.description,
-                    )
-                else -> throw IllegalArgumentException(
-                    "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION",
-                )
-            }
+        val nextReporting = currentReporting.update(reportingUpdateCommand)
 
         val enrichedReporting = getReportingWithDMLAndSeaFront.execute(nextReporting)
 

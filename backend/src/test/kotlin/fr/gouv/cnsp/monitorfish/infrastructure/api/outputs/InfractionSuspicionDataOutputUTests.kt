@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -32,7 +31,6 @@ class InfractionSuspicionDataOutputUTests {
                 isArchived = false,
                 createdBy = "test@example.gouv.fr",
                 reportingActor = ReportingActor.OPS,
-                authorTrigram = "LTH",
                 title = "Test infraction",
                 natinfCode = 2608,
                 threat = "Activités INN",
@@ -66,7 +64,6 @@ class InfractionSuspicionDataOutputUTests {
                 isArchived = false,
                 createdBy = "test@example.gouv.fr",
                 reportingActor = ReportingActor.OPS,
-                authorTrigram = "LTH",
                 title = "Test infraction",
                 natinfCode = 2608,
                 threat = "Activités INN",
@@ -113,7 +110,6 @@ class InfractionSuspicionDataOutputUTests {
                 isArchived = false,
                 createdBy = "test@example.gouv.fr",
                 reportingActor = ReportingActor.OPS,
-                authorTrigram = "LTH",
                 title = "Test infraction",
                 natinfCode = 2608,
                 threat = "Activités INN",
@@ -150,7 +146,6 @@ class InfractionSuspicionDataOutputUTests {
                 createdBy = "test@example.gouv.fr",
                 reportingActor = ReportingActor.UNIT,
                 controlUnitId = 1234,
-                authorTrigram = "ABC",
                 authorContact = "abc@example.com",
                 title = "Test title",
                 description = "Test description",

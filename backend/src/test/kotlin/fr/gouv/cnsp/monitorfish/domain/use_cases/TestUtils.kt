@@ -79,9 +79,9 @@ object TestUtils {
                     alertType = AlertType.MISSING_FAR_ALERT,
                     seaFront = alertValue.seaFront,
                     name = alertValue.name,
-                    natinfCode = alertValue.natinfCode,
-                    threat = alertValue.threat,
-                    threatCharacterization = alertValue.threatCharacterization,
+                    natinfCode = alertValue.natinfCode ?: 0,
+                    threat = alertValue.threat ?: "Famille inconnue",
+                    threatCharacterization = alertValue.threatCharacterization ?: "Type inconnu",
                 )
             }
             AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT -> {
@@ -100,9 +100,9 @@ object TestUtils {
                     alertType = AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT,
                     seaFront = alertValue.seaFront,
                     name = alertValue.name,
-                    natinfCode = alertValue.natinfCode,
-                    threat = alertValue.threat,
-                    threatCharacterization = alertValue.threatCharacterization,
+                    natinfCode = alertValue.natinfCode ?: 0,
+                    threat = alertValue.threat ?: "Famille inconnue",
+                    threatCharacterization = alertValue.threatCharacterization ?: "Type inconnu",
                 )
             }
             AlertType.MISSING_FAR_48_HOURS_ALERT -> {
@@ -121,9 +121,9 @@ object TestUtils {
                     alertType = AlertType.MISSING_FAR_48_HOURS_ALERT,
                     seaFront = alertValue.seaFront,
                     name = alertValue.name,
-                    natinfCode = alertValue.natinfCode,
-                    threat = alertValue.threat,
-                    threatCharacterization = alertValue.threatCharacterization,
+                    natinfCode = alertValue.natinfCode ?: 0,
+                    threat = alertValue.threat ?: "Famille inconnue",
+                    threatCharacterization = alertValue.threatCharacterization ?: "Type inconnu",
                 )
             }
             else ->
@@ -140,7 +140,6 @@ object TestUtils {
                     createdBy = "test@example.gouv.fr",
                     reportingActor = ReportingActor.OPS,
                     natinfCode = natinfCode ?: 123456,
-                    authorTrigram = "LTH",
                     title = "A title",
                     threat = "Obligations déclaratives",
                     threatCharacterization = "DEP",
@@ -164,6 +163,8 @@ object TestUtils {
                 seaFront = NAMO.toString(),
                 alertId = 1,
                 natinfCode = 7059,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 name = "Chalutage dans les 3 milles",
                 isArchived = false,
                 isDeleted = false,
@@ -183,6 +184,8 @@ object TestUtils {
                 seaFront = NAMO.toString(),
                 alertId = 1,
                 natinfCode = 7059,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 name = "Chalutage dans les 3 milles",
                 isArchived = false,
                 isDeleted = false,
@@ -202,6 +205,8 @@ object TestUtils {
                 seaFront = NAMO.toString(),
                 alertId = 1,
                 natinfCode = 7059,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 name = "Chalutage dans les 3 milles",
                 isArchived = true,
                 isDeleted = false,

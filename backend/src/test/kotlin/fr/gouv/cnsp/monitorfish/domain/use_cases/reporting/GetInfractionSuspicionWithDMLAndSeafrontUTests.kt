@@ -4,7 +4,6 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.district.District
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -51,7 +50,6 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
                 reportingActor = ReportingActor.OPS,
                 dml = "DML 17",
                 natinfCode = 1235,
-                authorTrigram = "LTH",
                 title = "Chalut en boeuf illégal",
                 threat = "Obligations déclaratives",
                 threatCharacterization = "DEP",
@@ -101,7 +99,6 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
                             reportingActor = ReportingActor.OPS,
                             dml = "",
                             natinfCode = 1235,
-                            authorTrigram = "LTH",
                             title = "Chalut en boeuf illégal",
                             threat = "Obligations déclaratives",
                             threatCharacterization = "DEP",
@@ -140,7 +137,6 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
                             reportingActor = ReportingActor.OPS,
                             dml = "",
                             natinfCode = 1235,
-                            authorTrigram = "LTH",
                             title = "Chalut en boeuf illégal",
                             threat = "Obligations déclaratives",
                             threatCharacterization = "DEP",
@@ -183,7 +179,6 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
                             reportingActor = ReportingActor.OPS,
                             dml = "",
                             natinfCode = 1235,
-                            authorTrigram = "LTH",
                             title = "Chalut en boeuf illégal",
                             threat = "Obligations déclaratives",
                             threatCharacterization = "DEP",

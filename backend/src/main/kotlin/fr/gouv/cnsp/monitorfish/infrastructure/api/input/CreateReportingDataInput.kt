@@ -41,6 +41,12 @@ class CreateReportingDataInput(
             requireNotNull(natinf) {
                 "NATINF should be not null"
             }
+            requireNotNull(threat) {
+                "threat should be not null"
+            }
+            requireNotNull(threatCharacterization) {
+                "threatCharacterization should be not null"
+            }
 
             Reporting.InfractionSuspicion(
                 vesselId = this.vesselId,
@@ -58,7 +64,6 @@ class CreateReportingDataInput(
                 createdBy = createdBy,
                 reportingActor = reportingActor,
                 controlUnitId = controlUnitId,
-                authorTrigram = "",
                 authorContact = authorContact,
                 title = title,
                 description = description,
@@ -83,7 +88,6 @@ class CreateReportingDataInput(
                 createdBy = createdBy,
                 reportingActor = reportingActor,
                 controlUnitId = controlUnitId,
-                authorTrigram = "",
                 authorContact = authorContact,
                 title = title,
                 description = description,

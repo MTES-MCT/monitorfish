@@ -43,6 +43,8 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                         seaFront = NAMO.toString(),
                         alertId = 1,
                         natinfCode = 7059,
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
                         name = "Chalutage dans les 3 milles",
                     ),
                 latitude = 5.5588,
@@ -82,7 +84,6 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 creationDate = creationDate,
                 reportingActor = ReportingActor.OPS,
                 natinfCode = 123456,
-                authorTrigram = "LTH",
                 title = "A title",
                 threat = "Obligations déclaratives",
                 threatCharacterization = "DEP",
@@ -125,7 +126,6 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 flagState = CountryCode.FR,
                 reportingActor = ReportingActor.OPS,
                 natinfCode = 123456,
-                authorTrigram = "LTH",
                 title = "A title",
                 threat = "Obligations déclaratives",
                 threatCharacterization = "DEP",
@@ -385,7 +385,6 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 createdBy = "test@example.gouv.fr",
                 reportingActor = ReportingActor.UNIT,
                 controlUnitId = 1,
-                authorTrigram = "",
                 authorContact = "Jean Bon",
                 title = "Une observation",
                 description = "Une description",
@@ -405,7 +404,6 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             (reporting as Reporting.InfractionSuspicion).reportingActor,
         ).isEqualTo(updatedReporting.reportingActor)
         assertThat((reporting).controlUnitId).isEqualTo(updatedReporting.controlUnitId)
-        assertThat((reporting).authorTrigram).isEqualTo(updatedReporting.authorTrigram)
         assertThat((reporting).authorContact).isEqualTo(updatedReporting.authorContact)
         assertThat((reporting).title).isEqualTo(updatedReporting.title)
         assertThat((reporting).description).isEqualTo(updatedReporting.description)
@@ -434,7 +432,6 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 createdBy = "test@example.gouv.fr",
                 reportingActor = ReportingActor.UNIT,
                 controlUnitId = 1,
-                authorTrigram = "",
                 authorContact = "Jean Bon",
                 title = "Une observation",
                 description = "Une description",
@@ -447,7 +444,6 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000597493")
         assertThat((reporting as Reporting.Observation).reportingActor).isEqualTo(updatedReporting.reportingActor)
         assertThat((reporting).controlUnitId).isEqualTo(updatedReporting.controlUnitId)
-        assertThat((reporting).authorTrigram).isEqualTo(updatedReporting.authorTrigram)
         assertThat((reporting).authorContact).isEqualTo(updatedReporting.authorContact)
         assertThat((reporting).title).isEqualTo(updatedReporting.title)
         assertThat((reporting).description).isEqualTo(updatedReporting.description)
@@ -472,7 +468,6 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 reportingActor = ReportingActor.UNIT,
                 id = 7,
                 controlUnitId = 1,
-                authorTrigram = "",
                 authorContact = "Jean Bon",
                 title = "Une observation",
                 description = "Une description",
@@ -486,7 +481,6 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(reporting.type).isEqualTo(ReportingType.OBSERVATION)
         assertThat((reporting as Reporting.Observation).reportingActor).isEqualTo(updatedReporting.reportingActor)
         assertThat((reporting).controlUnitId).isEqualTo(updatedReporting.controlUnitId)
-        assertThat((reporting).authorTrigram).isEqualTo(updatedReporting.authorTrigram)
         assertThat((reporting).authorContact).isEqualTo(updatedReporting.authorContact)
         assertThat((reporting).title).isEqualTo(updatedReporting.title)
         assertThat((reporting).description).isEqualTo(updatedReporting.description)

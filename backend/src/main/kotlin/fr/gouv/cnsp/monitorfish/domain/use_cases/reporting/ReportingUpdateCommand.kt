@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import java.time.ZonedDateTime
 
-class UpdatedInfractionSuspicionOrObservation(
+class ReportingUpdateCommand(
     val reportingActor: ReportingActor,
     val type: ReportingType,
     val controlUnitId: Int? = null,

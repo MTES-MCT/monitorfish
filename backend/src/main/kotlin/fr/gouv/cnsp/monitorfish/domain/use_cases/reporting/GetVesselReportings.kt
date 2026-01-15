@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NatinfCodeNotFoundException
@@ -10,6 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
+import kotlin.collections.map
 import kotlin.time.measureTimedValue
 
 @UseCase
@@ -94,14 +96,28 @@ class GetVesselReportings(
 
     private fun getThreatSummary(reportings: List<Reporting>): Map<Threat, List<ThreatSummary>> {
         return reportings
-            .filter { it.type == ReportingType.INFRACTION_SUSPICION || it.type == ReportingType.ALERT }
-            .groupBy { it.threat ?: "Famille inconnue" }
-            .mapValues { (_, values) ->
+            .filter {
+                return@filter when (it) {
+                    is Reporting.Alert -> true
+                    is Reporting.InfractionSuspicion -> true
+                    is Reporting.Observation -> false
+                }
+            }.groupBy {
+                return@groupBy when (it) {
+                    is Reporting.Alert -> it.threat
+                    is Reporting.InfractionSuspicion -> it.threat
+                    is Reporting.Observation -> throw IllegalArgumentException("Should not happen")
+                }
+            }.mapValues { (_, values) ->
                 return@mapValues values
                     .groupBy {
-                        Pair(it.natinfCode, it.threatCharacterization ?: "Type inconnu")
+                        return@groupBy when (it) {
+                            is Reporting.Alert -> Pair(it.natinfCode, it.threatCharacterization)
+                            is Reporting.InfractionSuspicion -> Pair(it.natinfCode, it.threatCharacterization)
+                            is Reporting.Observation -> throw IllegalArgumentException("Should not happen")
+                        }
                     }.map { (key, value) ->
-                        val natinfCode = key.first!!
+                        val natinfCode = key.first
                         val threatCharacterization = key.second
                         val infraction =
                             try {
@@ -139,30 +155,19 @@ class GetVesselReportings(
         controlUnits: List<LegacyControlUnit>,
     ): ReportingAndOccurrences {
         val reporting = reportingAndOccurrences.reporting
-        val updatedInfraction =
-            reporting.natinfCode?.let { natinfCode ->
-                try {
-                    infractionRepository.findInfractionByNatinfCode(natinfCode)
-                } catch (e: NatinfCodeNotFoundException) {
-                    logger.warn(e.message)
-                    null
-                }
-            }
 
         val updatedReporting =
             when (reporting) {
                 is Reporting.Alert ->
                     reporting.copy(
-                        infraction = updatedInfraction ?: reporting.infraction,
+                        infraction = getInfraction(reporting),
                     )
                 is Reporting.InfractionSuspicion ->
                     reporting.copy(
-                        infraction = updatedInfraction ?: reporting.infraction,
+                        infraction = getInfraction(reporting),
                     )
                 is Reporting.Observation ->
-                    reporting.copy(
-                        infraction = updatedInfraction ?: reporting.infraction,
-                    )
+                    reporting
             }
 
         val updatedReportingAndOccurrences =
@@ -184,6 +189,28 @@ class GetVesselReportings(
 
         return updatedReportingAndOccurrences.copy(controlUnit = foundControlUnit)
     }
+
+    private fun getInfraction(reporting: Reporting.InfractionSuspicion): Infraction? =
+        reporting.natinfCode.let { natinfCode ->
+            try {
+                infractionRepository.findInfractionByNatinfCode(natinfCode)
+            } catch (e: NatinfCodeNotFoundException) {
+                logger.warn(e.message)
+
+                null
+            }
+        }
+
+    private fun getInfraction(reporting: Reporting.Alert): Infraction? =
+        reporting.natinfCode.let { natinfCode ->
+            try {
+                infractionRepository.findInfractionByNatinfCode(natinfCode)
+            } catch (e: NatinfCodeNotFoundException) {
+                logger.warn(e.message)
+
+                null
+            }
+        }
 
     private fun getReportingsAndOccurrences(reportings: List<Reporting>): List<ReportingAndOccurrences> {
         val reportingsWithoutAlerts: List<ReportingAndOccurrences> =

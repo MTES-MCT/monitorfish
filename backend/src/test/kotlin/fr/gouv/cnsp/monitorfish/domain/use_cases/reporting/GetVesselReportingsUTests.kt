@@ -397,7 +397,9 @@ class GetVesselReportingsUTests {
 
         // Then
         assertThat(result.summary.keys.size).isEqualTo(2)
-        assertThat(result.summary.keys).isEqualTo(setOf("Mesures techniques et de conservation", "Famille inconnue"))
+        assertThat(
+            result.summary.keys,
+        ).isEqualTo(setOf("Mesures techniques et de conservation", "Obligations déclaratives"))
 
         assertThat(result.summary["Mesures techniques et de conservation"]?.size).isEqualTo(1)
         val firstSummary = result.summary["Mesures techniques et de conservation"]?.first()!!
@@ -406,10 +408,10 @@ class GetVesselReportingsUTests {
         assertThat(firstSummary.natinf).isEqualTo("")
         assertThat(firstSummary.numberOfOccurrences).isEqualTo(2)
 
-        assertThat(result.summary["Famille inconnue"]?.size).isEqualTo(1)
-        val secondSummary = result.summary["Famille inconnue"]?.first()!!
+        assertThat(result.summary["Obligations déclaratives"]?.size).isEqualTo(1)
+        val secondSummary = result.summary["Obligations déclaratives"]?.first()!!
         assertThat(secondSummary.natinfCode).isEqualTo(27689)
-        assertThat(secondSummary.threatCharacterization).isEqualTo("Type inconnu")
+        assertThat(secondSummary.threatCharacterization).isEqualTo("FAR (JPE)")
         assertThat(
             secondSummary.natinf,
         ).isEqualTo(

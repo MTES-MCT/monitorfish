@@ -3,14 +3,15 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.mappers
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.InfractionSuspicion
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.AlertValueDto
+import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.InfractionSuspicionDto
+import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.ObservationDto
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,26 +25,29 @@ class ReportingMapperUTests {
     @Autowired
     private lateinit var mapper: ObjectMapper
 
-    private fun getDefaultEntityFields() =
-        ReportingEntityFields(
-            id = 1,
-            vesselId = 123,
-            vesselName = "Test Vessel",
-            internalReferenceNumber = "FR123456",
-            externalReferenceNumber = "EXT123",
-            ircs = "IRCS123",
-            vesselIdentifier = null,
-            flagState = CountryCode.FR,
-            creationDate = ZonedDateTime.now(),
-            validationDate = null,
-            expirationDate = null,
-            archivingDate = null,
-            isArchived = false,
-            isDeleted = false,
-            latitude = null,
-            longitude = null,
-            createdBy = "test@example.gouv.fr",
-        )
+    private fun getDefaultEntity(
+        type: ReportingType = ReportingType.ALERT,
+        value: String = "",
+    ) = ReportingEntity(
+        id = 1,
+        vesselId = 123,
+        vesselName = "Test Vessel",
+        internalReferenceNumber = "FR123456",
+        externalReferenceNumber = "EXT123",
+        ircs = "IRCS123",
+        vesselIdentifier = null,
+        flagState = CountryCode.FR,
+        creationDate = ZonedDateTime.now(),
+        validationDate = null,
+        expirationDate = null,
+        isArchived = false,
+        isDeleted = false,
+        latitude = null,
+        longitude = null,
+        createdBy = "test@example.gouv.fr",
+        type = type,
+        value = value,
+    )
 
     @Test
     fun `getReportingFromJSON Should throw an exception When the message value is null`() {
@@ -54,7 +58,7 @@ class ReportingMapperUTests {
                     mapper,
                     "null",
                     ReportingType.ALERT,
-                    getDefaultEntityFields(),
+                    getDefaultEntity(type = ReportingType.ALERT, value = "null"),
                 )
             }
 
@@ -67,11 +71,13 @@ class ReportingMapperUTests {
     fun `getReportingFromJSON Should deserialize an PositionAlert When it is first serialized`() {
         // Given
         val positionAlert =
-            Alert(
+            AlertValueDto(
                 type = AlertType.POSITION_ALERT,
                 seaFront = Seafront.NAMO.toString(),
                 alertId = 1,
                 natinfCode = 7059,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 riskFactor = 2.356,
                 name = "Chalutage dans les 3 milles",
             )
@@ -83,7 +89,7 @@ class ReportingMapperUTests {
                 mapper,
                 jsonString,
                 ReportingType.ALERT,
-                getDefaultEntityFields(),
+                getDefaultEntity(type = ReportingType.ALERT, value = jsonString),
             )
 
         // Then
@@ -105,7 +111,7 @@ class ReportingMapperUTests {
                 mapper,
                 alert,
                 ReportingType.ALERT,
-                getDefaultEntityFields(),
+                getDefaultEntity(type = ReportingType.ALERT, value = alert),
             )
 
         // Then
@@ -134,7 +140,7 @@ class ReportingMapperUTests {
                 mapper,
                 observation,
                 ReportingType.OBSERVATION,
-                getDefaultEntityFields(),
+                getDefaultEntity(type = ReportingType.OBSERVATION, value = observation),
             )
 
         // Then
@@ -142,7 +148,6 @@ class ReportingMapperUTests {
         parsedReporting as Reporting.Observation
         Assertions.assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
         Assertions.assertThat(parsedReporting.controlUnitId).isNull()
-        Assertions.assertThat(parsedReporting.authorTrigram).isEqualTo("LTH")
         Assertions.assertThat(parsedReporting.authorContact).isNull()
         Assertions.assertThat(parsedReporting.title).isEqualTo("A title !")
         Assertions.assertThat(parsedReporting.description).isEqualTo("A description !")
@@ -170,7 +175,7 @@ class ReportingMapperUTests {
                 mapper,
                 infraction,
                 ReportingType.INFRACTION_SUSPICION,
-                getDefaultEntityFields(),
+                getDefaultEntity(type = ReportingType.INFRACTION_SUSPICION, value = infraction),
             )
 
         // Then
@@ -178,7 +183,6 @@ class ReportingMapperUTests {
         parsedReporting as Reporting.InfractionSuspicion
         Assertions.assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
         Assertions.assertThat(parsedReporting.controlUnitId).isNull()
-        Assertions.assertThat(parsedReporting.authorTrigram).isEqualTo("LTH")
         Assertions.assertThat(parsedReporting.authorContact).isNull()
         Assertions.assertThat(parsedReporting.title).isEqualTo("A title !")
         Assertions.assertThat(parsedReporting.description).isEqualTo("A description !")
@@ -207,7 +211,7 @@ class ReportingMapperUTests {
                 mapper,
                 infraction,
                 ReportingType.INFRACTION_SUSPICION,
-                getDefaultEntityFields(),
+                getDefaultEntity(type = ReportingType.INFRACTION_SUSPICION, value = infraction),
             )
 
         // Then
@@ -215,7 +219,6 @@ class ReportingMapperUTests {
         parsedReporting as Reporting.InfractionSuspicion
         Assertions.assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
         Assertions.assertThat(parsedReporting.controlUnitId).isNull()
-        Assertions.assertThat(parsedReporting.authorTrigram).isEqualTo("LTH")
         Assertions.assertThat(parsedReporting.authorContact).isNull()
         Assertions.assertThat(parsedReporting.title).isEqualTo("A title !")
         Assertions.assertThat(parsedReporting.description).isEqualTo("A description !")
@@ -238,6 +241,8 @@ class ReportingMapperUTests {
                 seaFront = "NAMO",
                 alertId = 1,
                 natinfCode = 7059,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 name = "Chalutage dans les 3 milles",
             )
 
@@ -245,8 +250,8 @@ class ReportingMapperUTests {
         val value = ReportingMapper.getValueFromReporting(reportingAlert)
 
         // Then
-        Assertions.assertThat(value).isInstanceOf(Alert::class.java)
-        val alertValue = value as Alert
+        Assertions.assertThat(value).isInstanceOf(AlertValueDto::class.java)
+        val alertValue = value as AlertValueDto
         Assertions.assertThat(alertValue.type).isEqualTo(AlertType.POSITION_ALERT)
         Assertions.assertThat(alertValue.seaFront).isEqualTo("NAMO")
         Assertions.assertThat(alertValue.alertId).isEqualTo(1)
@@ -266,10 +271,11 @@ class ReportingMapperUTests {
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
                 reportingActor = ReportingActor.OPS,
-                authorTrigram = "LTH",
                 title = "A title !",
                 description = "A description !",
                 natinfCode = 1234,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 dml = "DML 56",
             )
 
@@ -277,10 +283,9 @@ class ReportingMapperUTests {
         val value = ReportingMapper.getValueFromReporting(reportingInfractionSuspicion)
 
         // Then
-        Assertions.assertThat(value).isInstanceOf(InfractionSuspicion::class.java)
-        val infractionSuspicionValue = value as InfractionSuspicion
+        Assertions.assertThat(value).isInstanceOf(InfractionSuspicionDto::class.java)
+        val infractionSuspicionValue = value as InfractionSuspicionDto
         Assertions.assertThat(infractionSuspicionValue.reportingActor).isEqualTo(ReportingActor.OPS)
-        Assertions.assertThat(infractionSuspicionValue.authorTrigram).isEqualTo("LTH")
         Assertions.assertThat(infractionSuspicionValue.title).isEqualTo("A title !")
         Assertions.assertThat(infractionSuspicionValue.description).isEqualTo("A description !")
         Assertions.assertThat(infractionSuspicionValue.natinfCode).isEqualTo(1234)
@@ -299,7 +304,6 @@ class ReportingMapperUTests {
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
                 reportingActor = ReportingActor.OPS,
-                authorTrigram = "LTH",
                 title = "A title !",
                 description = "A description !",
             )
@@ -308,10 +312,9 @@ class ReportingMapperUTests {
         val value = ReportingMapper.getValueFromReporting(reportingObservation)
 
         // Then
-        Assertions.assertThat(value).isInstanceOf(Observation::class.java)
-        val observationValue = value as Observation
+        Assertions.assertThat(value).isInstanceOf(ObservationDto::class.java)
+        val observationValue = value as ObservationDto
         Assertions.assertThat(observationValue.reportingActor).isEqualTo(ReportingActor.OPS)
-        Assertions.assertThat(observationValue.authorTrigram).isEqualTo("LTH")
         Assertions.assertThat(observationValue.title).isEqualTo("A title !")
         Assertions.assertThat(observationValue.description).isEqualTo("A description !")
     }

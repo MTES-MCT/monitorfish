@@ -896,20 +896,21 @@ class VesselControllerITests {
         ).willReturn(
             VesselReportings(
                 summary =
-                    ReportingTwelveMonthsSummary(
-                        infractionSuspicionsSummary =
-                            listOf(
-                                ReportingTitleAndNumberOfOccurrences(
-                                    title = "A title",
-                                    numberOfOccurrences = 2,
-                                ),
-                                ReportingTitleAndNumberOfOccurrences(
-                                    title = "A title",
-                                    numberOfOccurrences = 2,
-                                ),
+                    mapOf(
+                        Pair("Obligations déclaratives", listOf(
+                            ThreatSummary(
+                                natinfCode = 1234,
+                                natinf = "Infraction",
+                                threatCharacterization = "FAR",
+                                numberOfOccurrences = 2
                             ),
-                        numberOfInfractionSuspicions = 4,
-                        numberOfObservations = 5,
+                            ThreatSummary(
+                                natinfCode = 1234,
+                                natinf = "Infraction",
+                                threatCharacterization = "DEP",
+                                numberOfOccurrences = 1
+                            ),
+                        ))
                     ),
                 current =
                     listOf(
@@ -953,9 +954,11 @@ class VesselControllerITests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.current.length()", equalTo(2)))
             .andExpect(jsonPath("$.current[0].reporting.id", equalTo(1)))
-            .andExpect(jsonPath("$.summary.numberOfInfractionSuspicions", equalTo(4)))
-            .andExpect(jsonPath("$.summary.infractionSuspicionsSummary[0].title", equalTo("A title")))
-            .andExpect(jsonPath("$.summary.infractionSuspicionsSummary[0].numberOfOccurrences", equalTo(2)))
+            .andExpect(jsonPath("$.summary[\"Obligations déclaratives\"].length()", equalTo(2)))
+            .andExpect(jsonPath("$.summary[\"Obligations déclaratives\"][0].natinfCode", equalTo(1234)))
+            .andExpect(jsonPath("$.summary[\"Obligations déclaratives\"][0].natinf", equalTo("Infraction")))
+            .andExpect(jsonPath("$.summary[\"Obligations déclaratives\"][0].threatCharacterization", equalTo("FAR")))
+            .andExpect(jsonPath("$.summary[\"Obligations déclaratives\"][0].numberOfOccurrences", equalTo(2)))
             .andExpect(jsonPath("$.current[0].reporting.flagState", equalTo("FR")))
             .andExpect(jsonPath("$.current[0].reporting.internalReferenceNumber", equalTo("FR224226850")))
             .andExpect(jsonPath("$.current[0].reporting.externalReferenceNumber", equalTo("1236514")))
@@ -986,12 +989,7 @@ class VesselControllerITests {
             ),
         ).willReturn(
             VesselReportings(
-                summary =
-                    ReportingTwelveMonthsSummary(
-                        infractionSuspicionsSummary = listOf(),
-                        numberOfInfractionSuspicions = 0,
-                        numberOfObservations = 0,
-                    ),
+                summary = mapOf(),
                 current = listOf(),
                 archived = mapOf(),
             ),

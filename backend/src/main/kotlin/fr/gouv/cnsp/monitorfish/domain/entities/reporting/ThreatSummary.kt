@@ -1,7 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.reporting
 
-data class InfractionSummary(
-    val infractionSuspicionsSummary: List<ReportingTitleAndNumberOfOccurrences>,
+data class ThreatSummary(
+    val natinfCode: Int,
+    val natinf: String,
     val threatCharacterization: String,
     val numberOfOccurrences: Int,
 )

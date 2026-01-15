@@ -337,7 +337,7 @@ class GetVesselReportingsUTests {
                 validationDate = ZonedDateTime.now().minusMonths(10),
                 internalReferenceNumber = "FR55667788",
                 type = ReportingType.INFRACTION_SUSPICION,
-                alertType = null,
+                alertType = AlertType.MISSING_FAR_48_HOURS_ALERT,
                 isArchived = true,
                 natinfCode = 7059,
             )
@@ -348,7 +348,7 @@ class GetVesselReportingsUTests {
                 validationDate = ZonedDateTime.now().minusMonths(8),
                 internalReferenceNumber = "FR55667788",
                 type = ReportingType.INFRACTION_SUSPICION,
-                alertType = null,
+                alertType = AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT,
                 isArchived = true,
             )
 
@@ -362,16 +362,6 @@ class GetVesselReportingsUTests {
                 isArchived = true,
             )
 
-        val observation =
-            createCurrentReporting(
-                id = 44558,
-                validationDate = ZonedDateTime.now().minusMonths(4),
-                internalReferenceNumber = "FR55667788",
-                type = ReportingType.OBSERVATION,
-                alertType = null,
-                isArchived = true,
-            )
-
         given(reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(any(), any(), any())).willReturn(
             listOf(
                 alertReporting1,
@@ -379,13 +369,12 @@ class GetVesselReportingsUTests {
                 infractionReporting,
                 infractionReporting2,
                 alertReporting3,
-                observation,
             ),
         )
 
-        given(infractionRepository.findInfractionByNatinfCode(eq(7059))).willReturn(
+        given(infractionRepository.findInfractionByNatinfCode(eq(27689))).willReturn(
             Infraction(
-                natinfCode = 7059,
+                natinfCode = 27689,
                 infraction = "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne",
                 infractionCategory = InfractionCategory.FISHING,
             ),
@@ -398,35 +387,30 @@ class GetVesselReportingsUTests {
                 infractionRepository,
                 getAllLegacyControlUnits,
             ).execute(
-                null,
-                "FR55667788",
-                "1234567",
-                "IRCS",
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                ZonedDateTime.now().minusYears(1),
+                vesselId = null,
+                internalReferenceNumber = "FR55667788",
+                externalReferenceNumber = "1234567",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                fromDate = ZonedDateTime.now().minusYears(1),
             )
 
         // Then
-        assertThat(result.summary.numberOfInfractionSuspicions).isEqualTo(5)
-        assertThat(result.summary.numberOfObservations).isEqualTo(1)
+        assertThat(result.summary.keys.size).isEqualTo(2)
+        assertThat(result.summary.keys).isEqualTo(setOf("Mesures techniques et de conservation", "Famille inconnue"))
 
-        val infractionSuspicionsSummary = result.summary.infractionSuspicionsSummary
-        assertThat(result.summary.infractionSuspicionsSummary).hasSize(4)
-        assertThat(infractionSuspicionsSummary[0].numberOfOccurrences).isEqualTo(2)
-        assertThat(
-            infractionSuspicionsSummary[0].title,
-        ).isEqualTo("Chalutage dans les 3 milles (NATINF 7059)")
-        assertThat(infractionSuspicionsSummary[1].numberOfOccurrences).isEqualTo(1)
-        assertThat(
-            infractionSuspicionsSummary[1].title,
-        ).isEqualTo("FAR manquant en 48h (NATINF 27689)")
-        assertThat(infractionSuspicionsSummary[2].numberOfOccurrences).isEqualTo(1)
-        assertThat(
-            infractionSuspicionsSummary[2].title,
-        ).isEqualTo(
-            "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne (NATINF 7059)",
-        )
-        assertThat(infractionSuspicionsSummary[3].numberOfOccurrences).isEqualTo(1)
-        assertThat(infractionSuspicionsSummary[3].title).isEqualTo("NATINF 123456")
+        assertThat(result.summary["Mesures techniques et de conservation"]?.size).isEqualTo(1)
+        val firstSummary = result.summary["Mesures techniques et de conservation"]?.first()!!
+        assertThat(firstSummary.natinfCode).isEqualTo(7059)
+        assertThat(firstSummary.threatCharacterization).isEqualTo("Engin")
+        assertThat(firstSummary.natinf).isEqualTo("")
+        assertThat(firstSummary.numberOfOccurrences).isEqualTo(2)
+
+        assertThat(result.summary["Famille inconnue"]?.size).isEqualTo(1)
+        val secondSummary = result.summary["Famille inconnue"]?.first()!!
+        assertThat(secondSummary.natinfCode).isEqualTo(27689)
+        assertThat(secondSummary.threatCharacterization).isEqualTo("Type inconnu")
+        assertThat(secondSummary.natinf).isEqualTo("Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne")
+        assertThat(secondSummary.numberOfOccurrences).isEqualTo(3)
     }
 }

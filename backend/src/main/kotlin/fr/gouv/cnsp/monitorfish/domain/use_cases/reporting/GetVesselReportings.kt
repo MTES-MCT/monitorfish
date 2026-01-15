@@ -84,74 +84,45 @@ class GetVesselReportings(
                     ?: reporting.creationDate.isAfter(twelveMonthsAgo)
             }
 
-        val (infractionSuspicionsSummary, infractionSuspicionsSummaryTimeTaken) =
-            measureTimedValue {
-                getInfractionSuspicionsSummary(lastTwelveMonthsReportings.filter { it.isArchived })
-            }
-        logger.info("TIME_RECORD - 'infractionSuspicionsSummary' took $infractionSuspicionsSummaryTimeTaken")
-
-        val numberOfInfractionSuspicions = infractionSuspicionsSummary.sumOf { it.numberOfOccurrences }
-        val numberOfObservation =
-            lastTwelveMonthsReportings
-                .filter { it.isArchived && it.type == ReportingType.OBSERVATION }
-                .size
-
-        val reportingTwelveMonthsSummary =
-            ReportingTwelveMonthsSummary(
-                infractionSuspicionsSummary = infractionSuspicionsSummary,
-                numberOfInfractionSuspicions = numberOfInfractionSuspicions,
-                numberOfObservations = numberOfObservation,
-            )
+        val infractionSuspicionsSummary =
+            getThreatSummary(lastTwelveMonthsReportings.filter { it.isArchived })
 
         return VesselReportings(
             current = current,
             archived = archivedYearsToReportings,
-            summary = reportingTwelveMonthsSummary,
+            summary = infractionSuspicionsSummary,
         )
     }
 
-    private fun getInfractionSuspicionsSummary(
+    private fun getThreatSummary(
         reportings: List<Reporting>,
-    ): List<ReportingTitleAndNumberOfOccurrences> {
-        val alertsSummary =
-            reportings
-                .filter { it.type == ReportingType.ALERT }
-                .groupBy { (it.value as Alert).type }
-                .map { (type, reportings) ->
-                    if (type == AlertType.POSITION_ALERT) {
-                        return@map ReportingTitleAndNumberOfOccurrences(
-                            title = "${(reportings[0].value as Alert).name} (NATINF ${reportings[0].value.natinfCode})",
-                            numberOfOccurrences = reportings.size,
+    ): Map<Threat, List<ThreatSummary>> {
+            return reportings
+                .filter { it.type == ReportingType.INFRACTION_SUSPICION || it.type == ReportingType.ALERT }
+                .groupBy { it.value.threat ?: "Famille inconnue" }
+                .mapValues { (_, values) ->
+                    return@mapValues values.groupBy {
+                        Pair(it.value.natinfCode, it.value.threatCharacterization ?: "Type inconnu")
+                    }.map { (key, value) ->
+                        val natinfCode = key.first!!
+                        val threatCharacterization = key.second
+                        val infraction =
+                            try {
+                                infractionRepository.findInfractionByNatinfCode(natinfCode)
+                            } catch (e: NatinfCodeNotFoundException) {
+                                logger.warn(e.message)
+
+                                null
+                            }
+
+                        return@map ThreatSummary(
+                            natinfCode = natinfCode,
+                            natinf = infraction?.infraction ?: "",
+                            threatCharacterization = threatCharacterization,
+                            numberOfOccurrences = value.size
                         )
                     }
-
-                    return@map ReportingTitleAndNumberOfOccurrences(
-                        title = "${type.specification?.name} (NATINF ${reportings[0].value.natinfCode})",
-                        numberOfOccurrences = reportings.size,
-                    )
                 }
-
-        val infractionSuspicionsSummary =
-            reportings
-                .filter { it.type == ReportingType.INFRACTION_SUSPICION }
-                .groupBy { (it.value as InfractionSuspicion).natinfCode }
-                .map { (natinfCode, reportings) ->
-                    val infraction =
-                        try {
-                            infractionRepository.findInfractionByNatinfCode(natinfCode)
-                        } catch (e: NatinfCodeNotFoundException) {
-                            logger.warn(e.message)
-
-                            null
-                        }
-
-                    return@map ReportingTitleAndNumberOfOccurrences(
-                        title = infraction?.infraction?.let { "$it (NATINF $natinfCode)" } ?: "NATINF $natinfCode",
-                        numberOfOccurrences = reportings.size,
-                    )
-                }
-
-        return (alertsSummary + infractionSuspicionsSummary).sortedByDescending { it.numberOfOccurrences }
     }
 
     private fun filterByYear(

@@ -55,8 +55,11 @@ object TestUtils {
                             alertId = 1,
                             natinfCode = 7059,
                             name = "Chalutage dans les 3 milles",
+                            threat = "Mesures techniques et de conservation",
+                            threatCharacterization = "Engin",
                         )
                     AlertType.MISSING_FAR_ALERT -> AlertType.MISSING_FAR_ALERT.getValue()
+                    AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT -> AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT.getValue()
                     AlertType.MISSING_FAR_48_HOURS_ALERT -> AlertType.MISSING_FAR_48_HOURS_ALERT.getValue()
                     else ->
                         InfractionSuspicion(

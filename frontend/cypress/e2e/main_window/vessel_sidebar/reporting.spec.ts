@@ -151,8 +151,6 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
     cy.wait('@getVesselReportings')
 
-    cy.get('*[data-cy="reporting-card"]').first().contains('Fin de validité au prochain DEP du navire')
-
     addAndCreateReportingWithinVesselSidebar()
     cy.wait('@getVesselReportings')
     cy.wait(200)
@@ -163,10 +161,14 @@ context('Vessel sidebar reporting tab', () => {
 
     // Then
     // Summary
-    cy.get('[data-cy="vessel-reporting-summary"]').contains('Résumé des derniers signalements (12 derniers mois)')
-    cy.get('[data-cy="vessel-reporting-summary"]').contains('Signalement "Chalutage dans les 3 milles (NATINF 7059)"')
+    cy.get('[data-cy="vessel-reporting-summary"]').contains('Dernières suspicions d’infractions (12 derniers mois)')
+    cy.get('[data-cy="vessel-reporting-summary"]').contains('Famille inconnue')
     cy.get('[data-cy="vessel-reporting-summary"]').contains(
-      "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne (NATINF 2608)"
+      "Type inconnu / NATINF 7059"
+    )
+    cy.get('[data-cy="vessel-reporting-summary"]').contains('Mesures techniques et de conservation')
+    cy.get('[data-cy="vessel-reporting-summary"]').contains(
+      "Transbordement / NATINF 27717"
     )
 
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()

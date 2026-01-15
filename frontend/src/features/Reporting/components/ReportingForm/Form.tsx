@@ -1,6 +1,7 @@
 import { useGetControlUnitsQuery } from '@features/ControlUnit/controlUnitApi'
 import { useGetThreatCharacterizationAsTreeOptions } from '@features/Infraction/hooks/useGetThreatCharacterizationAsTreeOptions'
 import { updateReportingActor } from '@features/Reporting/components/ReportingForm/utils'
+import { mapControlUnitsToUniqueSortedIdsAsOptions } from '@features/Reporting/components/VesselReportings/CurrentReportingList/utils'
 import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import {
@@ -20,7 +21,6 @@ import { useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { ReportingOriginActorLabel, ReportingTypeCharacteristics } from '../../types'
-import { mapControlUnitsToUniqueSortedIdsAsOptions } from '../CurrentReportingList/utils'
 
 import type { FormEditedReporting, InfractionSuspicion } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'

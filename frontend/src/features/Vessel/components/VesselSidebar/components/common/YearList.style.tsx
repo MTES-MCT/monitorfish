@@ -30,3 +30,14 @@ export const YearListChevronIcon = styled(ChevronIconButton)`
     color: ${p => p.theme.color.charcoal};
   }
 `
+
+export const YearListRow = styled.div`
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  background: ${p => p.theme.color.white};
+  color: ${p => p.theme.color.gunMetal};
+  height: 36px;
+`

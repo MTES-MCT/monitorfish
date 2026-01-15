@@ -7,7 +7,7 @@ import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { EditReporting } from './EditReporting'
-import { ReportingCard } from '../ReportingCard'
+import { ReportingCard } from '../../ReportingCard'
 
 import type { Reporting, ReportingAndOccurrences, VesselReportings } from '@features/Reporting/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'

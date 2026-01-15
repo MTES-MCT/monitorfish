@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.reporting
 
-data class ReportingTwelveMonthsSummary(
+data class InfractionSummary(
     val infractionSuspicionsSummary: List<ReportingTitleAndNumberOfOccurrences>,
-    val numberOfInfractionSuspicions: Int,
-    val numberOfObservations: Int,
+    val threatCharacterization: String,
+    val numberOfOccurrences: Int,
 )

@@ -15,8 +15,7 @@ export const SidebarHeader = styled.div`
   flex-grow: 2;
   flex-shrink: 0;
   font-size: 13px;
-  font-weight: 500;
-  padding: 8px 0 10px 20px;
+  padding: 9px 0 9px 16px;
   width: 400px;
   vertical-align: middle;
   user-select: none;

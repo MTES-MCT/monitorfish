@@ -3,6 +3,7 @@ import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import {
   YearListChevronIcon,
   YearListContent,
+  YearListRow,
   YearListTitle,
   YearListTitleText
 } from '@features/Vessel/components/VesselSidebar/components/common/YearList.style'
@@ -55,7 +56,7 @@ export function YearReportings({ reportingAndOccurences, year }: YearReportingsP
 
   return (
     <div>
-      <Row>
+      <YearListRow>
         <YearListTitle
           as={!reportingAndOccurences.length ? 'div' : 'button'}
           data-cy="vessel-sidebar-reporting-archive-year"
@@ -81,7 +82,7 @@ export function YearReportings({ reportingAndOccurences, year }: YearReportingsP
           </YearListTitleText>
         </YearListTitle>
         {!!reportingAndOccurences.length && <YearListChevronIcon isOpen={isOpen} onClick={handleOpen} />}
-      </Row>
+      </YearListRow>
 
       {isOpen && (
         <Row>
@@ -100,6 +101,16 @@ export function YearReportings({ reportingAndOccurences, year }: YearReportingsP
     </div>
   )
 }
+
+export const Row = styled.div`
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  background: ${p => p.theme.color.white};
+  color: ${p => p.theme.color.gunMetal};
+`
 
 const Red = styled.span`
   background-color: ${p => p.theme.color.maximumRed};
@@ -122,7 +133,6 @@ const Opal = styled.span`
 
 const Year = styled.span`
   color: ${THEME.color.slateGray};
-  font-size: 16px;
 `
 
 const YearResume = styled.span`
@@ -132,16 +142,6 @@ const YearResume = styled.span`
   vertical-align: text-bottom;
 `
 
-const Row = styled.div`
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden !important;
-  background: ${p => p.theme.color.white};
-  color: ${p => p.theme.color.gunMetal};
-`
-
 const YearListContentWithPadding = styled(YearListContent)`
-  padding: 16px 16px 0px 16px;
+  padding: 16px 16px 0 16px;
 `

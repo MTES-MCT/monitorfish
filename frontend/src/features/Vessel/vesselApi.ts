@@ -1,5 +1,6 @@
 import { monitorfishApi } from '@api/api'
 import { HttpStatusCode, RtkCacheTagType } from '@api/constants'
+import { VesselReportingsSchema } from '@features/Reporting/schemas/VesselReportingsSchema'
 import { ActiveVesselSchema } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { ContactMethodSchema } from '@features/Vessel/schemas/ContactMethodSchema'
 import { VesselSchema } from '@features/Vessel/schemas/VesselSchema'
@@ -179,7 +180,9 @@ export const vesselApi = monitorfishApi.injectEndpoints({
           ...getVesselIdentityPropsAsEmptyStringsWhenUndefined(vesselIdentity),
           fromDate
         }),
-      transformErrorResponse: response => new FrontendApiError(GET_VESSEL_REPORTINGS_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(GET_VESSEL_REPORTINGS_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: VesselReportings) =>
+        parseOrReturn<VesselReportings>(baseQueryReturnValue, VesselReportingsSchema, false)
     }),
 
     searchVessels: builder.query<Vessel.VesselIdentity[], Vessel.ApiSearchFilter>({

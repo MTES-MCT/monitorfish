@@ -357,6 +357,8 @@ const Body = styled.div<{
   margin-bottom: 12px;
   margin-top: 12px;
   width: 365px;
+  display: flex;
+  flex-direction: column;
 `
 
 const Actions = styled.div`

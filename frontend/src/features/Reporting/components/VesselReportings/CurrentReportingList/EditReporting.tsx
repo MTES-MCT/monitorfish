@@ -2,8 +2,8 @@ import { WindowContext } from '@api/constants'
 import { Accent, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { ReportingForm } from '../ReportingForm'
-import { Loader as ReportingFormLoader } from '../ReportingForm/Loader'
+import { ReportingForm } from '../../ReportingForm'
+import { Loader as ReportingFormLoader } from '../../ReportingForm/Loader'
 
 import type { Reporting } from '@features/Reporting/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'

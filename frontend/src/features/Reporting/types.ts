@@ -9,6 +9,11 @@ import {
   PendingAlertReportingSchema,
   ReportingSchema
 } from '@features/Reporting/schemas/ReportingSchema'
+import {
+  ReportingAndOccurrencesSchema,
+  ThreatSummarySchema,
+  type VesselReportingsSchema
+} from '@features/Reporting/schemas/VesselReportingsSchema'
 import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { z } from 'zod'
@@ -41,29 +46,9 @@ export type FormEditedReporting =
         type: ReportingType.OBSERVATION
       })
 
-type Year = number
-
-export type ReportingAndOccurrences = {
-  otherOccurrencesOfSameAlert: Reporting.Reporting[]
-  reporting: Reporting.Reporting
-}
-
-export type VesselReportings = {
-  archived: Record<Year, ReportingAndOccurrences[]>
-  current: ReportingAndOccurrences[]
-  summary: ReportingSummary
-}
-
-export type ReportingSummary = {
-  infractionSuspicionsSummary: ReportingTitleAndNumberOfOccurrences[]
-  numberOfInfractionSuspicions: number
-  numberOfObservations: number
-}
-
-export type ReportingTitleAndNumberOfOccurrences = {
-  numberOfOccurrences: number
-  title: string
-}
+export type VesselReportings = z.infer<typeof VesselReportingsSchema>
+export type ThreatSummary = z.infer<typeof ThreatSummarySchema>
+export type ReportingAndOccurrences = z.infer<typeof ReportingAndOccurrencesSchema>
 
 export type InfractionSuspicion = z.infer<typeof InfractionSuspicionSchema>
 export type Observation = z.infer<typeof ObservationSchema>

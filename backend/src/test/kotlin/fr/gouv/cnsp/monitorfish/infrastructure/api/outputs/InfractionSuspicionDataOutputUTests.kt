@@ -1,12 +1,17 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.InfractionSuspicion
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class InfractionSuspicionDataOutputUTests {
@@ -14,7 +19,18 @@ class InfractionSuspicionDataOutputUTests {
     fun `fromInfractionSuspicion Should include threat and threatCharacterization in output`() {
         // Given
         val infractionSuspicion =
-            InfractionSuspicion(
+            Reporting.InfractionSuspicion(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 126,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+                createdBy = "test@example.gouv.fr",
                 reportingActor = ReportingActor.OPS,
                 authorTrigram = "LTH",
                 title = "Test infraction",
@@ -24,7 +40,9 @@ class InfractionSuspicionDataOutputUTests {
             )
 
         // When
-        val output = InfractionSuspicionDataOutput.fromInfractionSuspicion(infractionSuspicion)
+        val output =
+            InfractionSuspicionDataOutput
+                .fromInfractionSuspicion(infractionSuspicion)
 
         // Then
         assertThat(output.threat).isEqualTo("Activités INN")
@@ -35,7 +53,18 @@ class InfractionSuspicionDataOutputUTests {
     fun `fromInfractionSuspicion Should build threatHierarchy When useThreatHierarchyForForm is true`() {
         // Given
         val infractionSuspicion =
-            InfractionSuspicion(
+            Reporting.InfractionSuspicion(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 126,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+                createdBy = "test@example.gouv.fr",
                 reportingActor = ReportingActor.OPS,
                 authorTrigram = "LTH",
                 title = "Test infraction",
@@ -47,7 +76,7 @@ class InfractionSuspicionDataOutputUTests {
         // When
         val output =
             InfractionSuspicionDataOutput.fromInfractionSuspicion(
-                infractionSuspicion = infractionSuspicion,
+                reporting = infractionSuspicion,
                 useThreatHierarchyForForm = true,
             )
 
@@ -71,7 +100,18 @@ class InfractionSuspicionDataOutputUTests {
     fun `fromInfractionSuspicion Should not build threatHierarchy When useThreatHierarchyForForm is false`() {
         // Given
         val infractionSuspicion =
-            InfractionSuspicion(
+            Reporting.InfractionSuspicion(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 126,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+                createdBy = "test@example.gouv.fr",
                 reportingActor = ReportingActor.OPS,
                 authorTrigram = "LTH",
                 title = "Test infraction",
@@ -83,7 +123,7 @@ class InfractionSuspicionDataOutputUTests {
         // When
         val output =
             InfractionSuspicionDataOutput.fromInfractionSuspicion(
-                infractionSuspicion = infractionSuspicion,
+                reporting = infractionSuspicion,
                 useThreatHierarchyForForm = false,
             )
 
@@ -96,7 +136,18 @@ class InfractionSuspicionDataOutputUTests {
         // Given
         val controlUnit = LegacyControlUnit(1234, "DIRM", false, "Cross Etel", listOf())
         val infractionSuspicion =
-            InfractionSuspicion(
+            Reporting.InfractionSuspicion(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 126,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+                createdBy = "test@example.gouv.fr",
                 reportingActor = ReportingActor.UNIT,
                 controlUnitId = 1234,
                 authorTrigram = "ABC",
@@ -113,7 +164,7 @@ class InfractionSuspicionDataOutputUTests {
         // When
         val output =
             InfractionSuspicionDataOutput.fromInfractionSuspicion(
-                infractionSuspicion = infractionSuspicion,
+                reporting = infractionSuspicion,
                 controlUnit = controlUnit,
             )
 

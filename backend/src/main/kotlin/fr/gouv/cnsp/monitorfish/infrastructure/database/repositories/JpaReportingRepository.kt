@@ -3,13 +3,11 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.mappers.ReportingMapper
+import fr.gouv.cnsp.monitorfish.infrastructure.database.mappers.ReportingMapper
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBReportingRepository
@@ -41,30 +39,14 @@ class JpaReportingRepository(
     @Transactional
     override fun update(
         reportingId: Int,
-        expirationDate: ZonedDateTime?,
-        updatedInfractionSuspicion: InfractionSuspicion,
+        updatedReporting: Reporting,
     ): Reporting {
+        val valueJson = mapper.writeValueAsString(ReportingMapper.getValueFromReporting(updatedReporting))
         dbReportingRepository.update(
             id = reportingId,
-            value = mapper.writeValueAsString(updatedInfractionSuspicion),
-            type = ReportingType.INFRACTION_SUSPICION.toString(),
-            expirationDate = expirationDate?.toInstant(),
-        )
-
-        return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
-    }
-
-    @Transactional
-    override fun update(
-        reportingId: Int,
-        expirationDate: ZonedDateTime?,
-        updatedObservation: Observation,
-    ): Reporting {
-        dbReportingRepository.update(
-            id = reportingId,
-            value = mapper.writeValueAsString(updatedObservation),
-            type = ReportingType.OBSERVATION.toString(),
-            expirationDate = expirationDate?.toInstant(),
+            value = valueJson,
+            type = updatedReporting.type.toString(),
+            expirationDate = updatedReporting.expirationDate?.toInstant(),
         )
 
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
@@ -181,11 +163,7 @@ class JpaReportingRepository(
         dbReportingRepository.findAllUnarchivedAfterDEPLogbookMessage().map { result ->
             Pair(
                 result[0] as Int,
-                ReportingMapper.getReportingValueFromJSON(
-                    mapper,
-                    result[1] as String?,
-                    ReportingType.ALERT,
-                ) as Alert,
+                mapper.readValue(result[1] as String?, Alert::class.java),
             )
         }
 

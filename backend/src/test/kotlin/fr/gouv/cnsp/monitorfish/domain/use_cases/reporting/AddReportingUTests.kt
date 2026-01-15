@@ -1,11 +1,14 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import com.neovisionaries.i18n.CountryCode
-import com.nhaarman.mockitokotlin2.*
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.verify
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
@@ -15,7 +18,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
-import org.mockito.Mock
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
@@ -25,19 +27,18 @@ class AddReportingUTests {
     @MockitoBean
     private lateinit var reportingRepository: ReportingRepository
 
-    @Mock
+    @MockitoBean
     private lateinit var getReportingWithDMLAndSeaFront: GetReportingWithDMLAndSeaFront
 
-    @Mock
+    @MockitoBean
     private lateinit var getAllLegacyControlUnits: GetAllLegacyControlUnits
 
     @Test
     fun `execute Should throw an exception When the reporting is an alert`() {
         // Given
         val reportingToAdd =
-            Reporting(
+            Reporting.Alert(
                 id = 1,
-                type = ReportingType.ALERT,
                 vesselName = "BIDUBULE",
                 internalReferenceNumber = "FR224226850",
                 externalReferenceNumber = "1236514",
@@ -46,14 +47,11 @@ class AddReportingUTests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value =
-                    Alert(
-                        type = AlertType.POSITION_ALERT,
-                        seaFront = NAMO.toString(),
-                        alertId = 1,
-                        natinfCode = 7059,
-                        name = "Chalutage dans les 3 milles",
-                    ) as AlertAndReportingValue,
+                alertType = AlertType.POSITION_ALERT,
+                seaFront = NAMO.toString(),
+                alertId = 1,
+                natinfCode = 7059,
+                name = "Chalutage dans les 3 milles",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
@@ -82,9 +80,8 @@ class AddReportingUTests {
     ) {
         // Given
         val reportingToAdd =
-            Reporting(
+            Reporting.Observation(
                 id = 1,
-                type = ReportingType.OBSERVATION,
                 vesselName = "BIDUBULE",
                 internalReferenceNumber = "FR224226850",
                 externalReferenceNumber = "1236514",
@@ -93,25 +90,20 @@ class AddReportingUTests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value =
-                    Observation(
-                        reportingActor = reportingActor,
-                        authorTrigram = "LTH",
-                        title = "A title",
-                    ),
+                reportingActor = reportingActor,
+                authorTrigram = "LTH",
+                title = "A title",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
             )
-        given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
-            Observation(
-                reportingActor = reportingActor,
-                authorTrigram = "LTH",
-                title = "A title",
+
+        val enrichedReporting =
+            reportingToAdd.copy(
                 dml = "DML 56",
                 seaFront = "NAMO",
-            ),
-        )
+            )
+        given(getReportingWithDMLAndSeaFront.execute(any())).willReturn(enrichedReporting)
         given(reportingRepository.save(any())).willReturn(reportingToAdd)
 
         // When
@@ -140,22 +132,9 @@ class AddReportingUTests {
     @Test
     fun `execute Should add a new reporting When the type is an INFRACTION_SUSPICION`() {
         // Given
-        given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
-            InfractionSuspicion(
-                reportingActor = ReportingActor.OPS,
-                seaFront = "NAMO",
-                dml = "DML 17",
-                natinfCode = 1235,
-                authorTrigram = "LTH",
-                title = "Chalut en boeuf illégal",
-                threat = "Mesures techniques et de conservation",
-                threatCharacterization = "Engin",
-            ),
-        )
         val reportingToAdd =
-            Reporting(
+            Reporting.InfractionSuspicion(
                 id = 1,
-                type = ReportingType.INFRACTION_SUSPICION,
                 vesselName = "BIDUBULE",
                 internalReferenceNumber = "FR224226850",
                 externalReferenceNumber = "1236514",
@@ -164,20 +143,24 @@ class AddReportingUTests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value =
-                    InfractionSuspicion(
-                        reportingActor = ReportingActor.OPS,
-                        natinfCode = 1235,
-                        authorTrigram = "LTH",
-                        title = "Chalut en boeuf illégal",
-                        threat = "Mesures techniques et de conservation",
-                        threatCharacterization = "Engin",
-                    ),
+                reportingActor = ReportingActor.OPS,
+                natinfCode = 1235,
+                authorTrigram = "LTH",
+                title = "Chalut en boeuf illégal",
+                threat = "Mesures techniques et de conservation",
+                threatCharacterization = "Engin",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
             )
-        given(reportingRepository.save(any())).willReturn(reportingToAdd)
+
+        val enrichedReporting =
+            reportingToAdd.copy(
+                seaFront = "NAMO",
+                dml = "DML 17",
+            )
+        given(getReportingWithDMLAndSeaFront.execute(any())).willReturn(enrichedReporting)
+        given(reportingRepository.save(any())).willReturn(enrichedReporting)
 
         // When
         AddReporting(reportingRepository, getReportingWithDMLAndSeaFront, getAllLegacyControlUnits).execute(
@@ -188,9 +171,9 @@ class AddReportingUTests {
         argumentCaptor<Reporting>().apply {
             verify(reportingRepository).save(capture())
 
-            val infraction = allValues.first().value as InfractionSuspicion
-            assertThat(infraction.seaFront).isEqualTo("NAMO")
-            assertThat(infraction.dml).isEqualTo("DML 17")
+            val savedReporting = allValues.first() as Reporting.InfractionSuspicion
+            assertThat(savedReporting.seaFront).isEqualTo("NAMO")
+            assertThat(savedReporting.dml).isEqualTo("DML 17")
         }
     }
 }

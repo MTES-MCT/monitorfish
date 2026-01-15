@@ -8,7 +8,7 @@ import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -139,22 +139,19 @@ class ReportingControllerITests {
     fun `Should create a reporting`() {
         // Given
         val reporting =
-            Reporting(
+            Reporting.InfractionSuspicion(
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
-                value =
-                    InfractionSuspicion(
-                        ReportingActor.OPS,
-                        natinfCode = 123456,
-                        authorTrigram = "",
-                        title = "A title",
-                        threat = "Obligations déclaratives",
-                        threatCharacterization = "DEP",
-                    ),
+                reportingActor = ReportingActor.OPS,
+                natinfCode = 123456,
+                authorTrigram = "",
+                title = "A title",
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -217,23 +214,20 @@ class ReportingControllerITests {
     fun `Should create a reporting And return an augmented payload with the control unit object When a control unit id is given`() {
         // Given
         val reporting =
-            Reporting(
+            Reporting.InfractionSuspicion(
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
-                value =
-                    InfractionSuspicion(
-                        ReportingActor.UNIT,
-                        natinfCode = 123456,
-                        controlUnitId = 1234,
-                        authorTrigram = "LTH",
-                        title = "A title",
-                        threat = "Obligations déclaratives",
-                        threatCharacterization = "DEP",
-                    ),
+                reportingActor = ReportingActor.UNIT,
+                natinfCode = 123456,
+                controlUnitId = 1234,
+                authorTrigram = "LTH",
+                title = "A title",
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -300,22 +294,19 @@ class ReportingControllerITests {
     fun `Should get all current reportings`() {
         // Given
         val reporting =
-            Reporting(
+            Reporting.InfractionSuspicion(
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
-                value =
-                    InfractionSuspicion(
-                        ReportingActor.OPS,
-                        natinfCode = 123456,
-                        authorTrigram = "LTH",
-                        title = "A title",
-                        threat = "Obligations déclaratives",
-                        threatCharacterization = "DEP",
-                    ),
+                reportingActor = ReportingActor.OPS,
+                natinfCode = 123456,
+                authorTrigram = "LTH",
+                title = "A title",
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -346,22 +337,19 @@ class ReportingControllerITests {
     fun `Should update a reporting`() {
         // Given
         val reporting =
-            Reporting(
+            Reporting.InfractionSuspicion(
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
-                value =
-                    InfractionSuspicion(
-                        ReportingActor.OPS,
-                        natinfCode = 123456,
-                        authorTrigram = "LTH",
-                        title = "A title",
-                        threat = "Obligations déclaratives",
-                        threatCharacterization = "DEP",
-                    ),
+                reportingActor = ReportingActor.OPS,
+                natinfCode = 123456,
+                authorTrigram = "LTH",
+                title = "A title",
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -415,21 +403,18 @@ class ReportingControllerITests {
     fun `Should create a reporting When no vesselIdentifier given`() {
         // Given
         val reporting =
-            Reporting(
+            Reporting.InfractionSuspicion(
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 flagState = CountryCode.FR,
                 ircs = "6554fEE",
                 creationDate = ZonedDateTime.now(),
-                value =
-                    InfractionSuspicion(
-                        ReportingActor.OPS,
-                        natinfCode = 123456,
-                        authorTrigram = "LTH",
-                        title = "A title",
-                        threat = "Obligations déclaratives",
-                        threatCharacterization = "DEP",
-                    ),
+                reportingActor = ReportingActor.OPS,
+                natinfCode = 123456,
+                authorTrigram = "LTH",
+                title = "A title",
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,

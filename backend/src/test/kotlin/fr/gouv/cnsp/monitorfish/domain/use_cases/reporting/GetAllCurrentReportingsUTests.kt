@@ -4,10 +4,8 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
@@ -35,23 +33,19 @@ class GetAllCurrentReportingsUTests {
     fun `execute Should get all reportings with the underCharter field`() {
         // Given
         val currentReporting =
-            Reporting(
+            Reporting.InfractionSuspicion(
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
-                value =
-                    InfractionSuspicion(
-                        ReportingActor.OPS,
-                        natinfCode = 123456,
-                        authorTrigram = "LTH",
-                        title = "A title",
-                        threat = "Activités INN",
-                        threatCharacterization = "Pêche sans autorisation par navire tiers",
-                    ),
-                type = ReportingType.INFRACTION_SUSPICION,
+                reportingActor = ReportingActor.OPS,
+                natinfCode = 123456,
+                authorTrigram = "LTH",
+                title = "A title",
+                threat = "Activités INN",
+                threatCharacterization = "Pêche sans autorisation par navire tiers",
                 isDeleted = false,
                 isArchived = false,
                 createdBy = "test@example.gouv.fr",
@@ -83,23 +77,19 @@ class GetAllCurrentReportingsUTests {
     fun `execute Should not throw an exception When a last position is not found to obtain the underCharter field`() {
         // Given
         val currentReporting =
-            Reporting(
+            Reporting.InfractionSuspicion(
                 internalReferenceNumber = null,
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
-                value =
-                    InfractionSuspicion(
-                        ReportingActor.OPS,
-                        natinfCode = 123456,
-                        authorTrigram = "LTH",
-                        title = "A title",
-                        threat = "Activités INN",
-                        threatCharacterization = "Pêche sans autorisation par navire tiers",
-                    ),
-                type = ReportingType.INFRACTION_SUSPICION,
+                reportingActor = ReportingActor.OPS,
+                natinfCode = 123456,
+                authorTrigram = "LTH",
+                title = "A title",
+                threat = "Activités INN",
+                threatCharacterization = "Pêche sans autorisation par navire tiers",
                 isDeleted = false,
                 isArchived = false,
                 createdBy = "test@example.gouv.fr",

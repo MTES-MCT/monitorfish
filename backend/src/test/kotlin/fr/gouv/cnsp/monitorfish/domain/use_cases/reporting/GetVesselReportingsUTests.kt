@@ -2,10 +2,10 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionCategory
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
@@ -203,23 +203,23 @@ class GetVesselReportingsUTests {
 
         val firstResult = result.current[0]
         assertThat(firstResult.reporting.id).isEqualTo(1234567)
-        assertThat((firstResult.reporting.value as Alert).type).isEqualTo(
+        assertThat((firstResult.reporting as Reporting.Alert).alertType).isEqualTo(
             AlertType.POSITION_ALERT,
         )
 
         assertThat(firstResult.otherOccurrencesOfSameAlert).hasSize(2)
         assertThat(firstResult.otherOccurrencesOfSameAlert[0].id).isEqualTo(123456)
-        assertThat((firstResult.otherOccurrencesOfSameAlert[0].value as Alert).type).isEqualTo(
+        assertThat((firstResult.otherOccurrencesOfSameAlert[0] as Reporting.Alert).alertType).isEqualTo(
             AlertType.POSITION_ALERT,
         )
         assertThat(firstResult.otherOccurrencesOfSameAlert[1].id).isEqualTo(12345)
-        assertThat((firstResult.otherOccurrencesOfSameAlert[1].value as Alert).type).isEqualTo(
+        assertThat((firstResult.otherOccurrencesOfSameAlert[1] as Reporting.Alert).alertType).isEqualTo(
             AlertType.POSITION_ALERT,
         )
 
         val secondResult = result.current[1]
         assertThat(secondResult.reporting.id).isEqualTo(12345678)
-        assertThat((secondResult.reporting.value as Alert).type).isEqualTo(AlertType.MISSING_FAR_ALERT)
+        assertThat((secondResult.reporting as Reporting.Alert).alertType).isEqualTo(AlertType.MISSING_FAR_ALERT)
         assertThat(secondResult.otherOccurrencesOfSameAlert).isEmpty()
     }
 
@@ -286,7 +286,7 @@ class GetVesselReportingsUTests {
 
         val firstResult = result.current[0]
         assertThat(firstResult.reporting.id).isEqualTo(44556)
-        assertThat((firstResult.reporting.value as Alert).type).isEqualTo(
+        assertThat((firstResult.reporting as Reporting.Alert).alertType).isEqualTo(
             AlertType.MISSING_FAR_48_HOURS_ALERT,
         )
         assertThat(firstResult.otherOccurrencesOfSameAlert).isEmpty()
@@ -298,12 +298,12 @@ class GetVesselReportingsUTests {
 
         val thirdResult = result.current[2]
         assertThat(thirdResult.reporting.id).isEqualTo(22334)
-        assertThat((thirdResult.reporting.value as Alert).type).isEqualTo(
+        assertThat((thirdResult.reporting as Reporting.Alert).alertType).isEqualTo(
             AlertType.POSITION_ALERT,
         )
         assertThat(thirdResult.otherOccurrencesOfSameAlert).hasSize(1)
         assertThat(thirdResult.otherOccurrencesOfSameAlert[0].id).isEqualTo(11223)
-        assertThat((thirdResult.otherOccurrencesOfSameAlert[0].value as Alert).type).isEqualTo(
+        assertThat((thirdResult.otherOccurrencesOfSameAlert[0] as Reporting.Alert).alertType).isEqualTo(
             AlertType.POSITION_ALERT,
         )
     }
@@ -410,7 +410,11 @@ class GetVesselReportingsUTests {
         val secondSummary = result.summary["Famille inconnue"]?.first()!!
         assertThat(secondSummary.natinfCode).isEqualTo(27689)
         assertThat(secondSummary.threatCharacterization).isEqualTo("Type inconnu")
-        assertThat(secondSummary.natinf).isEqualTo("Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne")
+        assertThat(
+            secondSummary.natinf,
+        ).isEqualTo(
+            "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne",
+        )
         assertThat(secondSummary.numberOfOccurrences).isEqualTo(3)
     }
 }

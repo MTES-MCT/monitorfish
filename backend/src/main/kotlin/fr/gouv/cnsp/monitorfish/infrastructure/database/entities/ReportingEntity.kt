@@ -1,13 +1,16 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.mappers.ReportingMapper
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.CountryCodeConverter
+import fr.gouv.cnsp.monitorfish.infrastructure.database.mappers.ReportingEntityFields
+import fr.gouv.cnsp.monitorfish.infrastructure.database.mappers.ReportingMapper
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcType
@@ -67,27 +70,30 @@ data class ReportingEntity(
     val createdBy: String,
 ) {
     fun toReporting(mapper: ObjectMapper): Reporting =
-        Reporting(
-            id = id,
-            vesselId = vesselId,
-            type = type,
-            vesselName = vesselName,
-            internalReferenceNumber = internalReferenceNumber,
-            externalReferenceNumber = externalReferenceNumber,
-            ircs = ircs,
-            vesselIdentifier = vesselIdentifier,
-            flagState = flagState,
-            creationDate = creationDate,
-            validationDate = validationDate,
-            expirationDate = expirationDate,
-            archivingDate = archivingDate,
-            value = ReportingMapper.getReportingValueFromJSON(mapper, value, type),
-            isArchived = isArchived,
-            isDeleted = isDeleted,
-            latitude = latitude,
-            longitude = longitude,
-            // TODO Fetch userTrigam from value if createdBy is empty
-            createdBy = createdBy,
+        ReportingMapper.getReportingFromJSON(
+            mapper = mapper,
+            jsonValue = value,
+            reportingType = type,
+            entityFields =
+                ReportingEntityFields(
+                    id = id,
+                    vesselId = vesselId,
+                    vesselName = vesselName,
+                    internalReferenceNumber = internalReferenceNumber,
+                    externalReferenceNumber = externalReferenceNumber,
+                    ircs = ircs,
+                    vesselIdentifier = vesselIdentifier,
+                    flagState = flagState,
+                    creationDate = creationDate,
+                    validationDate = validationDate,
+                    expirationDate = expirationDate,
+                    archivingDate = archivingDate,
+                    isArchived = isArchived,
+                    isDeleted = isDeleted,
+                    latitude = latitude,
+                    longitude = longitude,
+                    createdBy = createdBy,
+                ),
         )
 
     companion object {
@@ -129,10 +135,64 @@ data class ReportingEntity(
             creationDate = reporting.creationDate,
             validationDate = reporting.validationDate,
             expirationDate = reporting.expirationDate,
-            value = mapper.writeValueAsString(reporting.value),
+            value = mapper.writeValueAsString(ReportingMapper.getValueFromReporting(reporting)),
             isArchived = false,
             isDeleted = false,
             createdBy = reporting.createdBy,
         )
     }
+}
+
+/**
+ * Data class for JSON serialization/deserialization of InfractionSuspicion reporting value.
+ * This is used for the JSONB `value` column in the database.
+ */
+data class InfractionSuspicion(
+    val reportingActor: ReportingActor,
+    val controlUnitId: Int? = null,
+    @Deprecated("Replaced by createdBy filled in the controller")
+    val authorTrigram: String = "",
+    val authorContact: String? = null,
+    val title: String,
+    val description: String? = null,
+    val natinfCode: Int,
+    val seaFront: String? = null,
+    val dml: String? = null,
+    val threat: String? = null,
+    val threatCharacterization: String? = null,
+    @JsonProperty("type")
+    val reportingTypeMapping: ReportingTypeMapping = ReportingTypeMapping.INFRACTION_SUSPICION,
+)
+
+/**
+ * Data class for JSON serialization/deserialization of Observation reporting value.
+ * This is used for the JSONB `value` column in the database.
+ */
+data class Observation(
+    val reportingActor: ReportingActor,
+    val controlUnitId: Int? = null,
+    @Deprecated("Replaced by createdBy filled in the controller")
+    val authorTrigram: String = "",
+    val authorContact: String? = null,
+    val title: String,
+    val description: String? = null,
+    val seaFront: String? = null,
+    val dml: String? = null,
+    @JsonProperty("type")
+    val reportingTypeMapping: ReportingTypeMapping = ReportingTypeMapping.OBSERVATION,
+)
+
+enum class ReportingTypeMapping(
+    private val clazz: Class<out Any>,
+) : IHasImplementation {
+    OBSERVATION(Observation::class.java),
+    INFRACTION_SUSPICION(InfractionSuspicion::class.java),
+
+    ;
+
+    override fun getImplementation(): Class<out Any> = clazz
+}
+
+interface IHasImplementation {
+    fun getImplementation(): Class<out Any>
 }

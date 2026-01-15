@@ -45,7 +45,10 @@ class UpdateReporting(
                     "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION",
                 )
             }.let {
-                getReportingWithDMLAndSeaFront.execute(it, currentReporting.vesselId)
+                getReportingWithDMLAndSeaFront.execute(
+                    infractionSuspicionOrObservationType = it,
+                    vesselId = currentReporting.vesselId,
+                )
             }
 
         nextReporting.checkReportingActorAndFieldsRequirements()

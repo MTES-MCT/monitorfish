@@ -851,6 +851,7 @@ class VesselControllerITests {
                     ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "",
                 infraction =
                     Infraction(
                         natinfCode = 7059,
@@ -862,6 +863,7 @@ class VesselControllerITests {
             Reporting(
                 id = 666,
                 type = ReportingType.ALERT,
+                createdBy = "",
                 vesselName = "BIDUBULE",
                 internalReferenceNumber = "FR224226850",
                 externalReferenceNumber = "1236514",

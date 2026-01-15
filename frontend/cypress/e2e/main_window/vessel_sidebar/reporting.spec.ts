@@ -36,7 +36,7 @@ context('Vessel sidebar reporting tab', () => {
       .eq(0)
       .contains("Ce navire ne devrait pas être en mer, il n'a plus de points sur son permis")
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('Émetteur: Jean Bon (0612365896)')
-    cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 2608')
+    cy.getDataCy('reporting-card').contains('Transbordement / NATINF 27717').should('be.visible')
     cy.get('*[data-cy="reporting-card"]').first().contains('Pas de fin de validité')
 
     // The reporting should be found in the reporting tab of the side window
@@ -78,7 +78,6 @@ context('Vessel sidebar reporting tab', () => {
     cy.fill('Titre', 'Observation: Sortie non autorisée')
     cy.fill('Description', 'Ce navire ne devrait pas être en mer, mais ceci est une observation.')
     cy.fill('Fin de validité', date.utcDateTuple)
-    cy.fill('Saisi par', 'NTP')
 
     cy.clickButton('Valider')
 
@@ -94,14 +93,14 @@ context('Vessel sidebar reporting tab', () => {
 
       cy.get('*[data-cy^="edit-reporting-card"]').first().scrollIntoView().click({ timeout: 10000 })
       cy.fill('Type de signalement', 'Infraction (suspicion)')
-      cy.fill('Natinf', '7059')
+      cy.fill('Type d’infraction et NATINF', ['27717'])
       const nextDate = getUtcDateInMultipleFormats('2200-06-08T13:54')
       cy.fill('Fin de validité', nextDate.utcDateTuple)
       cy.clickButton('Valider')
       cy.wait('@updateReporting')
       cy.wait(50)
 
-      cy.get('*[data-cy="reporting-card"]').first().contains('NATINF 7059')
+      cy.getDataCy('reporting-card').contains('Transbordement / NATINF 27717').should('be.visible')
       cy.get('*[data-cy="reporting-card"]').first().contains('Fin de validité le 08/06/2200')
       cy.get('*[data-cy="delete-reporting-card"]').eq(0).scrollIntoView().click()
       // Then, we confirm the reporting deletion
@@ -126,7 +125,7 @@ context('Vessel sidebar reporting tab', () => {
     addAndCreateReportingWithinVesselSidebar()
 
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('OFB SD 56 / Sortie non autorisée')
-    cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 2608')
+    cy.getDataCy('reporting-card').eq(0).contains('Transbordement / NATINF 27717').should('be.visible')
     cy.get('*[data-cy="archive-reporting-card"]').eq(0).click()
     // Then, we confirm the reporting deletion
     cy.clickButton('Archiver')

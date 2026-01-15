@@ -12,7 +12,7 @@ type ReportingListSummaryProps = Readonly<{
 export function TwelveMonthsSummary({ reportingSummary }: ReportingListSummaryProps) {
   return (
     <StyledSidebarZone data-cy="vessel-reporting-summary">
-      <SidebarHeader>Résumé des derniers signalements (12 derniers mois)</SidebarHeader>
+      <SidebarHeader>Dernières suspicions d’infractions (12 derniers mois)</SidebarHeader>
       <Body>
         <Columns $isFirst>
           <IconColumn>

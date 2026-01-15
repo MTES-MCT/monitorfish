@@ -213,8 +213,8 @@ export function ReportingCard({
               <ExpirationDateText $isEmpty={!willExpire}>{expirationDateText}</ExpirationDateText>
             </ExpirationDate>
           )}
-          {reporting.type !== ReportingType.ALERT && !!reporting.value.authorTrigram && (
-            <Author $marginTop={!hasWillExpire ? 16 : 0}>Créé par {reporting.value.authorTrigram}</Author>
+          {reporting.type !== ReportingType.ALERT && (
+            <Author $marginTop={!hasWillExpire ? 16 : 0}>Créé par {reporting.createdBy}</Author>
           )}
         </Body>
 

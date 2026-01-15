@@ -19,13 +19,12 @@ class CreateReportingDataInput(
     val expirationDate: ZonedDateTime? = null,
     val reportingActor: ReportingActor,
     val controlUnitId: Int? = null,
-    val authorTrigram: String,
     val authorContact: String? = null,
     val title: String,
     val description: String? = null,
     val threatHierarchy: ThreatHierarchyDataInput? = null,
 ) {
-    fun toReporting(): Reporting {
+    fun toReporting(createdBy: String): Reporting {
         val threat = threatHierarchy?.value
         val threatCharacterization = threatHierarchy?.children?.single()?.value
         val natinf =
@@ -36,36 +35,37 @@ class CreateReportingDataInput(
                 ?.single()
                 ?.value
 
-        val value = if (type == ReportingType.INFRACTION_SUSPICION) {
-            requireNotNull(natinf) {
-                "NATINF should be not null"
-            }
+        val value =
+            if (type == ReportingType.INFRACTION_SUSPICION) {
+                requireNotNull(natinf) {
+                    "NATINF should be not null"
+                }
 
-            InfractionSuspicion(
-                reportingActor = reportingActor,
-                controlUnitId = controlUnitId,
-                authorTrigram = authorTrigram,
-                authorContact = authorContact,
-                title = title,
-                description = description,
-                natinfCode = natinf,
-                seaFront = null,
-                dml = null,
-                threat = threat,
-                threatCharacterization = threatCharacterization
-            )
-        } else {
-            Observation(
-                reportingActor = reportingActor,
-                controlUnitId = controlUnitId,
-                authorTrigram = authorTrigram,
-                authorContact = authorContact,
-                title = title,
-                description = description,
-                seaFront = null,
-                dml = null
-            )
-        }
+                InfractionSuspicion(
+                    reportingActor = reportingActor,
+                    controlUnitId = controlUnitId,
+                    authorTrigram = "",
+                    authorContact = authorContact,
+                    title = title,
+                    description = description,
+                    natinfCode = natinf,
+                    seaFront = null,
+                    dml = null,
+                    threat = threat,
+                    threatCharacterization = threatCharacterization,
+                )
+            } else {
+                Observation(
+                    reportingActor = reportingActor,
+                    controlUnitId = controlUnitId,
+                    authorTrigram = "",
+                    authorContact = authorContact,
+                    title = title,
+                    description = description,
+                    seaFront = null,
+                    dml = null,
+                )
+            }
 
         return Reporting(
             type = this.type,
@@ -82,6 +82,7 @@ class CreateReportingDataInput(
             isDeleted = false,
             isArchived = false,
             value = value,
+            createdBy = createdBy,
         )
     }
 }

@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSusp
 data class Observation(
     override val reportingActor: ReportingActor,
     override val controlUnitId: Int? = null,
+    @Deprecated("Replaced by createdBy filled in the controller")
     override val authorTrigram: String,
     override val authorContact: String? = null,
     override val title: String,
@@ -27,7 +28,7 @@ data class Observation(
             Observation(
                 reportingActor = updatedInfractionSuspicionOrObservation.reportingActor,
                 controlUnitId = updatedInfractionSuspicionOrObservation.controlUnitId,
-                authorTrigram = updatedInfractionSuspicionOrObservation.authorTrigram,
+                authorTrigram = "",
                 authorContact = updatedInfractionSuspicionOrObservation.authorContact,
                 title = updatedInfractionSuspicionOrObservation.title,
                 description = updatedInfractionSuspicionOrObservation.description,

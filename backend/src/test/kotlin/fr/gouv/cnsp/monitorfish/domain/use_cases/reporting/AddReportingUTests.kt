@@ -56,6 +56,7 @@ class AddReportingUTests {
                     ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             )
 
         // When
@@ -100,6 +101,7 @@ class AddReportingUTests {
                     ),
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             )
         given(getReportingWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
             Observation(
@@ -173,6 +175,7 @@ class AddReportingUTests {
                     ),
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             )
         given(reportingRepository.save(any())).willReturn(reportingToAdd)
 

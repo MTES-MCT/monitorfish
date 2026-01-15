@@ -17,7 +17,6 @@ class UpdateReportingDataInputUTests {
             UpdateReportingDataInput(
                 reportingActor = ReportingActor.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
-                authorTrigram = "LTH",
                 title = "Test reporting",
                 threatHierarchy =
                     ThreatHierarchyDataInput(
@@ -54,7 +53,6 @@ class UpdateReportingDataInputUTests {
             UpdateReportingDataInput(
                 reportingActor = ReportingActor.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
-                authorTrigram = "LTH",
                 title = "Test reporting",
                 threatHierarchy =
                     ThreatHierarchyDataInput(
@@ -91,7 +89,6 @@ class UpdateReportingDataInputUTests {
             UpdateReportingDataInput(
                 reportingActor = ReportingActor.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
-                authorTrigram = "LTH",
                 title = "Test reporting",
                 threatHierarchy =
                     ThreatHierarchyDataInput(
@@ -128,7 +125,6 @@ class UpdateReportingDataInputUTests {
             UpdateReportingDataInput(
                 reportingActor = ReportingActor.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
-                authorTrigram = "LTH",
                 title = "Test reporting",
                 threatHierarchy = null,
             )
@@ -151,7 +147,6 @@ class UpdateReportingDataInputUTests {
                 reportingActor = ReportingActor.UNIT,
                 type = ReportingType.OBSERVATION,
                 controlUnitId = 1234,
-                authorTrigram = "ABC",
                 authorContact = "abc@example.com",
                 expirationDate = expirationDate,
                 title = "Test title",
@@ -184,7 +179,6 @@ class UpdateReportingDataInputUTests {
         assertThat(result.reportingActor).isEqualTo(ReportingActor.UNIT)
         assertThat(result.type).isEqualTo(ReportingType.OBSERVATION)
         assertThat(result.controlUnitId).isEqualTo(1234)
-        assertThat(result.authorTrigram).isEqualTo("ABC")
         assertThat(result.authorContact).isEqualTo("abc@example.com")
         assertThat(result.expirationDate).isEqualTo(expirationDate)
         assertThat(result.title).isEqualTo("Test title")

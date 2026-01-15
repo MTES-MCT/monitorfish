@@ -135,7 +135,7 @@ export function Form({ className, hasWhiteBackground, onClose, onIsDirty }: Form
           isLight={!hasWhiteBackground}
           isRequired
           isSelect
-          label="Type d'infraction et NATINF"
+          label="Type d’infraction et NATINF"
           name="threatHierarchy"
           onChange={nextThreats => {
             if (!!nextThreats && nextThreats.length > 0) {
@@ -161,7 +161,6 @@ export function Form({ className, hasWhiteBackground, onClose, onIsDirty }: Form
         name="expirationDate"
         withTime={false}
       />
-      <FormikTextInput isLight={!hasWhiteBackground} label="Saisi par" name="authorTrigram" placeholder="Ex: LTH" />
       <ValidateButton accent={Accent.PRIMARY} type="submit">
         Valider
       </ValidateButton>

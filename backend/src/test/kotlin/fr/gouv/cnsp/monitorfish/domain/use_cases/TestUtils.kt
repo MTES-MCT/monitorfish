@@ -72,6 +72,7 @@ object TestUtils {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             internalReferenceNumber = internalReferenceNumber,
             flagState = CountryCode.FR,
+            createdBy = "test@example.gouv.fr",
         )
 
     fun getDummyReportings(dateTime: ZonedDateTime): List<Reporting> =
@@ -97,6 +98,7 @@ object TestUtils {
                     ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             ),
             Reporting(
                 id = 2,
@@ -119,6 +121,7 @@ object TestUtils {
                     ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             ),
             Reporting(
                 id = 666,
@@ -141,6 +144,7 @@ object TestUtils {
                     ) as AlertAndReportingValue,
                 isArchived = true,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             ),
         )
 

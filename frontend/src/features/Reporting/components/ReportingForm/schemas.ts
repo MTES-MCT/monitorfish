@@ -7,7 +7,6 @@ import { object, string } from 'yup'
 
 export const CreateOrEditReportingSchema = object({
   reportingActor: string().required('Veuillez renseigner l&apos;origine du signalement.'),
-  authorTrigram: string().required('Veuillez renseigner le trigramme de saisie.'),
   title: string().required('Veuillez renseigner le titre du signalement.'),
   type: string().oneOf(Object.values(ReportingType)).required('Veuillez renseigner le type de signalement.'),
   threatHierarchy: object().when('type', {

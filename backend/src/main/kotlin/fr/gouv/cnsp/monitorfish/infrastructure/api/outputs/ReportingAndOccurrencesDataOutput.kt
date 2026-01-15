@@ -17,7 +17,7 @@ data class ReportingAndOccurrencesDataOutput(
                     reportingAndOccurrences.otherOccurrencesOfSameAlert.map { reporting ->
                         fromReporting(
                             reporting = reporting,
-                            controlUnit = reportingAndOccurrences.controlUnit
+                            controlUnit = reportingAndOccurrences.controlUnit,
                         )
                     },
                 reporting =

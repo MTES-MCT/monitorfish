@@ -31,7 +31,7 @@ class PositionAlertSpecificationController(
     @Operation(summary = "Create an alert spec")
     fun add(
         @AuthenticationPrincipal
-        principal: OidcUser??,
+        principal: OidcUser?,
         @RequestBody
         positionAlertSpecification: PositionAlertSpecificationDataInput,
     ) {

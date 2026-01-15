@@ -55,6 +55,7 @@ class UpdateReportingUTests {
                     ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             ),
         )
 
@@ -67,7 +68,6 @@ class UpdateReportingUTests {
                         UpdatedInfractionSuspicionOrObservation(
                             reportingActor = ReportingActor.UNIT,
                             type = ReportingType.OBSERVATION,
-                            authorTrigram = "LTH",
                             title = "A reporting",
                         ),
                     )
@@ -103,6 +103,7 @@ class UpdateReportingUTests {
                     ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             ),
         )
 
@@ -115,7 +116,6 @@ class UpdateReportingUTests {
                         UpdatedInfractionSuspicionOrObservation(
                             reportingActor = ReportingActor.UNIT,
                             type = ReportingType.ALERT,
-                            authorTrigram = "LTH",
                             title = "A reporting",
                         ),
                     )
@@ -156,6 +156,7 @@ class UpdateReportingUTests {
                     ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
         given(reportingRepository.update(any(), anyOrNull(), isA<InfractionSuspicion>())).willReturn(reporting)
@@ -179,7 +180,6 @@ class UpdateReportingUTests {
                         UpdatedInfractionSuspicionOrObservation(
                             reportingActor = reportingActor,
                             type = ReportingType.INFRACTION_SUSPICION,
-                            authorTrigram = "LTH",
                             title = "A reporting",
                             natinfCode = 123456,
                             threat = "Obligations déclaratives",
@@ -225,6 +225,7 @@ class UpdateReportingUTests {
                     ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             ),
         )
 
@@ -240,7 +241,6 @@ class UpdateReportingUTests {
                     UpdatedInfractionSuspicionOrObservation(
                         reportingActor = ReportingActor.UNIT,
                         type = ReportingType.INFRACTION_SUSPICION,
-                        authorTrigram = "LTH",
                         title = "A reporting",
                         threat = "Obligations déclaratives",
                         threatCharacterization = "DEP",
@@ -280,6 +280,7 @@ class UpdateReportingUTests {
                 value = observation as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
         given(reportingRepository.update(any(), anyOrNull(), isA<Observation>())).willReturn(reporting)
@@ -298,7 +299,6 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.UNIT,
                 type = ReportingType.OBSERVATION,
                 controlUnitId = 1,
-                authorTrigram = "LTH",
                 expirationDate = expectedExpirationDate,
                 title = "A reporting",
                 description = "Test 2",
@@ -342,6 +342,7 @@ class UpdateReportingUTests {
                     ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
         given(reportingRepository.update(any(), anyOrNull(), isA<Observation>())).willReturn(reporting)
@@ -365,7 +366,6 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.UNIT,
                 type = ReportingType.OBSERVATION,
                 controlUnitId = 1,
-                authorTrigram = "LTH",
                 title = "A reporting",
                 description = "Test 2",
                 natinfCode = 1234,
@@ -410,6 +410,7 @@ class UpdateReportingUTests {
                     ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
         given(reportingRepository.update(any(), anyOrNull(), isA<InfractionSuspicion>())).willReturn(reporting)
@@ -438,7 +439,6 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.UNIT,
                 type = ReportingType.INFRACTION_SUSPICION,
                 controlUnitId = 1,
-                authorTrigram = "LTH",
                 title = "A reporting",
                 natinfCode = 1234,
                 threat = "Obligations déclaratives",
@@ -478,6 +478,7 @@ class UpdateReportingUTests {
                     ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
         given(reportingRepository.update(any(), anyOrNull(), isA<Observation>())).willReturn(reporting)
@@ -497,7 +498,6 @@ class UpdateReportingUTests {
                     reportingActor = ReportingActor.UNIT,
                     type = ReportingType.OBSERVATION,
                     controlUnitId = 1,
-                    authorTrigram = "LTH",
                     title = "A reporting",
                     natinfCode = 1234,
                     threat = "Obligations déclaratives",
@@ -535,6 +535,7 @@ class UpdateReportingUTests {
                     ) as AlertAndReportingValue,
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             )
         given(reportingRepository.findById(any())).willReturn(reporting)
         given(reportingRepository.update(any(), anyOrNull(), isA<InfractionSuspicion>())).willReturn(reporting)
@@ -562,7 +563,6 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.UNIT,
                 type = ReportingType.INFRACTION_SUSPICION,
                 controlUnitId = 1,
-                authorTrigram = "LTH",
                 title = "A reporting",
                 natinfCode = 1234,
                 threat = "Obligations déclaratives",

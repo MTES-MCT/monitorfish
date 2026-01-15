@@ -5,6 +5,7 @@ import { booleanOrUndefined, numberOrUndefined, stringOrUndefined } from 'types'
 import z from 'zod'
 
 export const BaseReportingSchema = z.strictObject({
+  createdBy: z.string(),
   creationDate: z.string(),
   expirationDate: stringOrUndefined,
   externalReferenceNumber: stringOrUndefined,

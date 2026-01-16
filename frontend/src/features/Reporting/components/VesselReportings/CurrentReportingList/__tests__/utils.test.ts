@@ -12,6 +12,7 @@ describe('Reportings/Current/utils.sortByValidationOrCreationDateDesc()', () => 
   it('Should return reportings sorted by date desc', () => {
     // Given
     const firstReporting: PendingAlertReporting = {
+      createdBy: 'LTH',
       creationDate: '2023-10-30T09:10:00Z',
       expirationDate: undefined,
       externalReferenceNumber: '',
@@ -37,6 +38,8 @@ describe('Reportings/Current/utils.sortByValidationOrCreationDateDesc()', () => 
         name: 'Chalutage des les 3 milles',
         natinfCode: 2610,
         seaFront: Seafront.NAMO,
+        threat: 'Famille',
+        threatCharacterization: 'Type',
         type: PendingAlertValueType.POSITION_ALERT
       },
       vesselId: 1234568,

@@ -6,6 +6,7 @@ import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import type { PendingAlertReporting } from '@features/Reporting/types'
 
 export const fortyHeightHourAlertReporting: PendingAlertReporting = {
+  createdBy: 'LTH',
   creationDate: '2023-10-30T09:10:00Z',
   expirationDate: undefined,
   externalReferenceNumber: '',
@@ -30,6 +31,8 @@ export const fortyHeightHourAlertReporting: PendingAlertReporting = {
     name: 'Message FAR 48h',
     natinfCode: 2610,
     seaFront: Seafront.NAMO,
+    threat: 'Famille',
+    threatCharacterization: 'Type',
     type: PendingAlertValueType.MISSING_FAR_48_HOURS_ALERT
   },
   vesselId: 1234568,

@@ -8,7 +8,7 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { CustomSearch } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 
-import type {InfractionSuspicionReporting, ObservationReporting, Reporting} from '@features/Reporting/types'
+import type { InfractionSuspicionReporting, ObservationReporting, Reporting } from '@features/Reporting/types'
 
 export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup) => {
   const searchQuery = useMainAppSelector(state => state.reportingTableFilters.searchQuery)
@@ -58,6 +58,11 @@ export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGro
             getFn: reporting => (!isObservation(reporting) ? reporting.value.threatCharacterization : ''),
             name: 'value.threatCharacterization'
           },
+          {
+            getFn: reporting => (!isObservation(reporting) ? reporting.value.threat : ''),
+            name: 'value.threat'
+          },
+          'value.name'
         ],
         { isCaseSensitive: false, isDiacriticSensitive: false, isStrict: true, threshold: 0.4 }
       ),

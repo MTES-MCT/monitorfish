@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
+package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.dtos
 
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType

@@ -13,8 +13,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.CreateOrUpdateDynamicVesselGroup
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.CreateOrUpdateFixedVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.CreateOrUpdateDynamicVesselGroupCommand
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.CreateOrUpdateFixedVesselGroupCommand
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
@@ -820,9 +820,9 @@ object TestUtils {
         )
     }
 
-    fun getCreateOrUpdateDynamicVesselGroups() =
+    fun getCreateOrUpdateDynamicVesselGroupCommands() =
         listOf(
-            CreateOrUpdateDynamicVesselGroup(
+            CreateOrUpdateDynamicVesselGroupCommand(
                 id = 1,
                 isDeleted = false,
                 name = "Mission Thémis – chaluts de fonds",
@@ -853,7 +853,7 @@ object TestUtils {
                         zones = emptyList(),
                     ),
             ),
-            CreateOrUpdateDynamicVesselGroup(
+            CreateOrUpdateDynamicVesselGroupCommand(
                 id = 2,
                 isDeleted = false,
                 name = "Mission Thémis – chaluts de fonds",
@@ -884,9 +884,9 @@ object TestUtils {
             ),
         )
 
-    fun getCreateOrUpdateFixedVesselGroups() =
+    fun getCreateOrUpdateFixedVesselGroupCommands() =
         listOf(
-            CreateOrUpdateFixedVesselGroup(
+            CreateOrUpdateFixedVesselGroupCommand(
                 id = 1,
                 isDeleted = false,
                 name = "Mission Thémis – chaluts de fonds",
@@ -920,7 +920,7 @@ object TestUtils {
                         ),
                     ),
             ),
-            CreateOrUpdateFixedVesselGroup(
+            CreateOrUpdateFixedVesselGroupCommand(
                 id = 2,
                 isDeleted = false,
                 name = "Mission Thémis – chaluts de fonds",

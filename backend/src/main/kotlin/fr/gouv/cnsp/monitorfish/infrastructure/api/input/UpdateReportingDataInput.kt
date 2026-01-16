@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.ReportingUpdateCommand
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.dtos.ReportingUpdateCommand
 import java.time.ZonedDateTime
 
 class UpdateReportingDataInput(

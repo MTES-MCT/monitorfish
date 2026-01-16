@@ -1,12 +1,12 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos
 
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.Sharing
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupFilters
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselIdentity
 import java.time.ZonedDateTime
 
-data class CreateOrUpdateDynamicVesselGroup(
+data class CreateOrUpdateFixedVesselGroupCommand(
     val id: Int?,
     val name: String,
     val isDeleted: Boolean,
@@ -17,13 +17,13 @@ data class CreateOrUpdateDynamicVesselGroup(
     val sharedTo: List<CnspService>?,
     val endOfValidityUtc: ZonedDateTime? = null,
     val startOfValidityUtc: ZonedDateTime? = null,
-    val filters: VesselGroupFilters,
+    val vessels: List<VesselIdentity>,
 ) {
-    fun toDynamicVesselGroup(
+    fun toFixedVesselGroup(
         createdBy: String,
         createdAtUtc: ZonedDateTime,
         updatedAtUtc: ZonedDateTime?,
-    ) = DynamicVesselGroup(
+    ) = FixedVesselGroup(
         id = id,
         name = name,
         isDeleted = isDeleted,
@@ -37,6 +37,6 @@ data class CreateOrUpdateDynamicVesselGroup(
         updatedAtUtc = updatedAtUtc,
         endOfValidityUtc = endOfValidityUtc,
         startOfValidityUtc = startOfValidityUtc,
-        filters = filters,
+        vessels = vessels,
     )
 }

@@ -5,7 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateFixedVesselGroups
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateFixedVesselGroupCommands
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import org.assertj.core.api.Assertions.assertThat
@@ -28,7 +28,7 @@ class AddOrUpdateFixedVesselGroupUTests {
 
     @Test
     fun `execute Should create a new vessel group when id is null`() {
-        val groupToSave = getCreateOrUpdateFixedVesselGroups().first().copy(id = null)
+        val groupToSave = getCreateOrUpdateFixedVesselGroupCommands().first().copy(id = null)
 
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(
@@ -53,7 +53,7 @@ class AddOrUpdateFixedVesselGroupUTests {
 
     @Test
     fun `execute Should update new vessel group when user is the owner`() {
-        val groupToSave = getCreateOrUpdateFixedVesselGroups().first()
+        val groupToSave = getCreateOrUpdateFixedVesselGroupCommands().first()
 
         // Given
         given(vesselGroupRepository.findById(1)).willReturn(
@@ -81,7 +81,7 @@ class AddOrUpdateFixedVesselGroupUTests {
 
     @Test
     fun `execute Should throw BackendUsageException When user is not the owner and update a dynamic group`() {
-        val groupToSave = getCreateOrUpdateFixedVesselGroups().first()
+        val groupToSave = getCreateOrUpdateFixedVesselGroupCommands().first()
 
         // Given
         given(vesselGroupRepository.findById(1)).willReturn(
@@ -110,7 +110,7 @@ class AddOrUpdateFixedVesselGroupUTests {
 
     @Test
     fun `execute Should throw BackendUsageException When trying to update a dynamic group to a fixed group`() {
-        val groupToSave = getCreateOrUpdateFixedVesselGroups().first().copy()
+        val groupToSave = getCreateOrUpdateFixedVesselGroupCommands().first().copy()
 
         // Given
         given(getAuthorizedUser.execute(any())).willReturn(

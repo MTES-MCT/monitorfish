@@ -43,7 +43,7 @@ class VesselGroupController(
         val vesselGroup =
             addOrUpdateDynamicVesselGroup.execute(
                 email,
-                vesselGroupInput.toCreateOrUpdateDynamicVesselGroup(),
+                vesselGroupInput.toCreateOrUpdateDynamicVesselGroupCommand(),
             )
 
         return DynamicVesselGroupDataOutput.fromDynamicVesselGroup(
@@ -63,7 +63,7 @@ class VesselGroupController(
         val vesselGroup =
             addOrUpdateFixedVesselGroup.execute(
                 email,
-                vesselGroupInput.toCreateOrUpdateFixedVesselGroup(),
+                vesselGroupInput.toCreateOrUpdateFixedVesselGroupCommand(),
             )
 
         return FixedVesselGroupDataOutput.fromFixedVesselGroup(

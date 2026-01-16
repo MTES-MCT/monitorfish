@@ -7,7 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.CreateOrUpdateDynamicVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.CreateOrUpdateDynamicVesselGroupCommand
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.ZoneOffset
@@ -22,7 +22,7 @@ class AddOrUpdateDynamicVesselGroup(
 
     fun execute(
         userEmail: String,
-        vesselGroupCreation: CreateOrUpdateDynamicVesselGroup,
+        vesselGroupCreation: CreateOrUpdateDynamicVesselGroupCommand,
     ): DynamicVesselGroup {
         logger.info(
             "Adding or updating vessel group ${vesselGroupCreation.id ?: vesselGroupCreation.name} from user $userEmail.",

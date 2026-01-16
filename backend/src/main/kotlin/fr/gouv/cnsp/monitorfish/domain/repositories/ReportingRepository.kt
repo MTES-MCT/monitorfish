@@ -2,8 +2,6 @@ package fr.gouv.cnsp.monitorfish.domain.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -19,14 +17,7 @@ interface ReportingRepository {
 
     fun update(
         reportingId: Int,
-        expirationDate: ZonedDateTime?,
-        updatedInfractionSuspicion: InfractionSuspicion,
-    ): Reporting
-
-    fun update(
-        reportingId: Int,
-        expirationDate: ZonedDateTime?,
-        updatedObservation: Observation,
+        updatedReporting: Reporting,
     ): Reporting
 
     fun findAll(filter: ReportingFilter? = null): List<Reporting>

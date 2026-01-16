@@ -1,10 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -28,23 +25,25 @@ class ReportingDataOutput(
     val isDeleted: Boolean,
     val infraction: InfractionDataOutput? = null,
     val underCharter: Boolean? = null,
+    val createdBy: String,
 ) {
     companion object {
         fun fromReporting(
             reporting: Reporting,
             controlUnit: LegacyControlUnit?,
+            useThreatHierarchyForForm: Boolean = false,
         ): ReportingDataOutput {
             val value =
-                when (reporting.value) {
-                    is InfractionSuspicion ->
+                when (reporting) {
+                    is Reporting.InfractionSuspicion ->
                         InfractionSuspicionDataOutput.fromInfractionSuspicion(
-                            reporting.value,
-                            controlUnit,
+                            reporting = reporting,
+                            controlUnit = controlUnit,
+                            useThreatHierarchyForForm = useThreatHierarchyForForm,
                         )
 
-                    is Observation -> ObservationDataOutput.fromObservation(reporting.value, controlUnit)
-                    is Alert -> AlertDataOutput.fromAlertType(reporting.value)
-                    else -> throw IllegalArgumentException("Should not happen.")
+                    is Reporting.Observation -> ObservationDataOutput.fromObservation(reporting, controlUnit)
+                    is Reporting.Alert -> AlertDataOutput.fromReportingAlert(reporting)
                 }
 
             return ReportingDataOutput(
@@ -65,6 +64,7 @@ class ReportingDataOutput(
                 isDeleted = reporting.isDeleted,
                 infraction = reporting.infraction?.let { InfractionDataOutput.fromInfraction(it) },
                 underCharter = reporting.underCharter,
+                createdBy = reporting.createdBy.substringBefore('@'),
             )
         }
     }

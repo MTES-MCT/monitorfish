@@ -830,7 +830,7 @@ class VesselControllerITests {
     fun `Should get vessel's reportings by vessel identity with vessel ID`() {
         // Given
         val currentReporting =
-            Reporting(
+            Reporting.Alert(
                 id = 1,
                 type = ReportingType.ALERT,
                 vesselName = "BIDUBULE",
@@ -841,16 +841,16 @@ class VesselControllerITests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value =
-                    Alert(
-                        type = AlertType.POSITION_ALERT,
-                        seaFront = NAMO.toString(),
-                        alertId = 1,
-                        natinfCode = 7059,
-                        name = "Chalutage dans les 3 milles",
-                    ) as AlertAndReportingValue,
+                alertType = AlertType.POSITION_ALERT,
+                seaFront = NAMO.toString(),
+                alertId = 1,
+                natinfCode = 7059,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
+                name = "Chalutage dans les 3 milles",
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "",
                 infraction =
                     Infraction(
                         natinfCode = 7059,
@@ -859,9 +859,10 @@ class VesselControllerITests {
             )
 
         val archivedReporting =
-            Reporting(
+            Reporting.Alert(
                 id = 666,
                 type = ReportingType.ALERT,
+                createdBy = "",
                 vesselName = "BIDUBULE",
                 internalReferenceNumber = "FR224226850",
                 externalReferenceNumber = "1236514",
@@ -870,14 +871,13 @@ class VesselControllerITests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now().minusYears(1),
                 validationDate = ZonedDateTime.now().minusYears(1),
-                value =
-                    Alert(
-                        type = AlertType.POSITION_ALERT,
-                        seaFront = NAMO.toString(),
-                        alertId = 1,
-                        natinfCode = 7059,
-                        name = "Chalutage dans les 3 milles",
-                    ) as AlertAndReportingValue,
+                alertType = AlertType.POSITION_ALERT,
+                seaFront = NAMO.toString(),
+                alertId = 1,
+                natinfCode = 7059,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
+                name = "Chalutage dans les 3 milles",
                 isArchived = true,
                 isDeleted = false,
             )
@@ -894,20 +894,24 @@ class VesselControllerITests {
         ).willReturn(
             VesselReportings(
                 summary =
-                    ReportingTwelveMonthsSummary(
-                        infractionSuspicionsSummary =
+                    mapOf(
+                        Pair(
+                            "Obligations déclaratives",
                             listOf(
-                                ReportingTitleAndNumberOfOccurrences(
-                                    title = "A title",
+                                ThreatSummary(
+                                    natinfCode = 1234,
+                                    natinf = "Infraction",
+                                    threatCharacterization = "FAR",
                                     numberOfOccurrences = 2,
                                 ),
-                                ReportingTitleAndNumberOfOccurrences(
-                                    title = "A title",
-                                    numberOfOccurrences = 2,
+                                ThreatSummary(
+                                    natinfCode = 1234,
+                                    natinf = "Infraction",
+                                    threatCharacterization = "DEP",
+                                    numberOfOccurrences = 1,
                                 ),
                             ),
-                        numberOfInfractionSuspicions = 4,
-                        numberOfObservations = 5,
+                        ),
                     ),
                 current =
                     listOf(
@@ -951,9 +955,11 @@ class VesselControllerITests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.current.length()", equalTo(2)))
             .andExpect(jsonPath("$.current[0].reporting.id", equalTo(1)))
-            .andExpect(jsonPath("$.summary.numberOfInfractionSuspicions", equalTo(4)))
-            .andExpect(jsonPath("$.summary.infractionSuspicionsSummary[0].title", equalTo("A title")))
-            .andExpect(jsonPath("$.summary.infractionSuspicionsSummary[0].numberOfOccurrences", equalTo(2)))
+            .andExpect(jsonPath("$.summary[\"Obligations déclaratives\"].length()", equalTo(2)))
+            .andExpect(jsonPath("$.summary[\"Obligations déclaratives\"][0].natinfCode", equalTo(1234)))
+            .andExpect(jsonPath("$.summary[\"Obligations déclaratives\"][0].natinf", equalTo("Infraction")))
+            .andExpect(jsonPath("$.summary[\"Obligations déclaratives\"][0].threatCharacterization", equalTo("FAR")))
+            .andExpect(jsonPath("$.summary[\"Obligations déclaratives\"][0].numberOfOccurrences", equalTo(2)))
             .andExpect(jsonPath("$.current[0].reporting.flagState", equalTo("FR")))
             .andExpect(jsonPath("$.current[0].reporting.internalReferenceNumber", equalTo("FR224226850")))
             .andExpect(jsonPath("$.current[0].reporting.externalReferenceNumber", equalTo("1236514")))
@@ -984,12 +990,7 @@ class VesselControllerITests {
             ),
         ).willReturn(
             VesselReportings(
-                summary =
-                    ReportingTwelveMonthsSummary(
-                        infractionSuspicionsSummary = listOf(),
-                        numberOfInfractionSuspicions = 0,
-                        numberOfObservations = 0,
-                    ),
+                summary = mapOf(),
                 current = listOf(),
                 archived = mapOf(),
             ),

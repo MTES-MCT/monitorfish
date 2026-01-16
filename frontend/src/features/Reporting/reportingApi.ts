@@ -1,8 +1,11 @@
 import { monitorfishApi } from '@api/api'
 import { RtkCacheTagType } from '@api/constants'
+import { ReportingCreationSchema } from '@features/Reporting/schemas/ReportingCreationSchema'
+import { ReportingSchema } from '@features/Reporting/schemas/ReportingSchema'
 import { FrontendApiError } from '@libs/FrontendApiError'
+import { parseOrReturn } from '@utils/parseOrReturn'
 
-import type { EditedReporting, Reporting, ReportingCreation } from './types'
+import type { FormEditedReporting, Reporting, ReportingCreation } from './types'
 
 const ARCHIVE_REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu archiver ce signalement."
 const ARCHIVE_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu archiver ces signalements."
@@ -35,12 +38,18 @@ export const reportingApi = monitorfishApi.injectEndpoints({
 
     createReporting: builder.mutation<Reporting.Reporting, ReportingCreation>({
       invalidatesTags: [{ type: RtkCacheTagType.Reportings }],
-      query: newReportingFormData => ({
-        body: newReportingFormData,
-        method: 'POST',
-        url: `/reportings`
-      }),
-      transformErrorResponse: response => new FrontendApiError(CREATE_REPORTING_ERROR_MESSAGE, response)
+      query: newReportingFormData => {
+        const formData = parseOrReturn<ReportingCreation>(newReportingFormData, ReportingCreationSchema, false)
+
+        return {
+          body: formData,
+          method: 'POST',
+          url: `/reportings`
+        }
+      },
+      transformErrorResponse: response => new FrontendApiError(CREATE_REPORTING_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: Reporting.Reporting) =>
+        parseOrReturn<Reporting.Reporting>(baseQueryReturnValue, ReportingSchema, false)
     }),
 
     deleteReporting: builder.mutation<void, number>({
@@ -62,23 +71,27 @@ export const reportingApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(DELETE_REPORTINGS_ERROR_MESSAGE, response)
     }),
 
-    getReportings: builder.query<Array<Reporting.Reporting>, void>({
+    getReportings: builder.query<Reporting.Reporting[], void>({
       providesTags: () => [{ type: RtkCacheTagType.Reportings }],
       query: () => ({
         method: 'GET',
         url: '/reportings'
       }),
-      transformErrorResponse: response => new FrontendApiError(GET_REPORTINGS_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(GET_REPORTINGS_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: Reporting.Reporting[]) =>
+        parseOrReturn<Reporting.Reporting>(baseQueryReturnValue, ReportingSchema, true)
     }),
 
-    updateReporting: builder.mutation<Reporting.Reporting, { id: number; nextReportingFormData: EditedReporting }>({
+    updateReporting: builder.mutation<Reporting.Reporting, { id: number; nextReportingFormData: FormEditedReporting }>({
       invalidatesTags: [{ type: RtkCacheTagType.Reportings }],
       query: ({ id, nextReportingFormData }) => ({
         body: nextReportingFormData,
         method: 'PUT',
         url: `/reportings/${id}`
       }),
-      transformErrorResponse: response => new FrontendApiError(UPDATE_REPORTING_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(UPDATE_REPORTING_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: Reporting.Reporting) =>
+        parseOrReturn<Reporting.Reporting>(baseQueryReturnValue, ReportingSchema, false)
     })
   })
 })

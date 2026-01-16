@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.Sharing
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupFilters
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.CreateOrUpdateDynamicVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.CreateOrUpdateDynamicVesselGroupCommand
 import java.time.ZonedDateTime
 
 data class DynamicVesselGroupDataInput(
@@ -19,8 +19,8 @@ data class DynamicVesselGroupDataInput(
     val startOfValidityUtc: ZonedDateTime? = null,
     val filters: VesselGroupFilters,
 ) {
-    fun toCreateOrUpdateDynamicVesselGroup() =
-        CreateOrUpdateDynamicVesselGroup(
+    fun toCreateOrUpdateDynamicVesselGroupCommand() =
+        CreateOrUpdateDynamicVesselGroupCommand(
             id = id,
             name = name,
             isDeleted = isDeleted,

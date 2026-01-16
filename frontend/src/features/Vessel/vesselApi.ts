@@ -1,12 +1,13 @@
 import { monitorfishApi } from '@api/api'
 import { HttpStatusCode, RtkCacheTagType } from '@api/constants'
+import { VesselReportingsSchema } from '@features/Reporting/schemas/VesselReportingsSchema'
 import { ActiveVesselSchema } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { ContactMethodSchema } from '@features/Vessel/schemas/ContactMethodSchema'
 import { VesselSchema } from '@features/Vessel/schemas/VesselSchema'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
-import { parseResponseOrReturn } from '@utils/parseResponseOrReturn'
+import { parseOrReturn } from '@utils/parseOrReturn.ts'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
@@ -38,7 +39,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
       providesTags: () => [{ type: RtkCacheTagType.ActiveVessels }],
       query: () => `/vessels`,
       transformResponse: (baseQueryReturnValue: Vessel.ActiveVessel[]) =>
-        parseResponseOrReturn<Vessel.ActiveVessel>(baseQueryReturnValue, ActiveVesselSchema, true)
+        parseOrReturn<Vessel.ActiveVessel>(baseQueryReturnValue, ActiveVesselSchema, true)
     }),
 
     getVessel: builder.query<Vessel.SelectedVessel, number>({
@@ -46,7 +47,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
       query: id => `/vessels/${id}`,
       transformErrorResponse: response => new FrontendApiError(GET_VESSEL_ERROR_MESSAGE, response),
       transformResponse: (baseQueryReturnValue: Vessel.SelectedVessel) =>
-        parseResponseOrReturn<Vessel.SelectedVessel>(baseQueryReturnValue, VesselSchema, false)
+        parseOrReturn<Vessel.SelectedVessel>(baseQueryReturnValue, VesselSchema, false)
     }),
 
     /**
@@ -86,7 +87,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
       transformResponse: async (baseQueryReturnValue: Vessel.VesselAndPositions, meta: Meta) => {
         // TODO We nee to also check the `positions` type
         if (baseQueryReturnValue.vessel) {
-          parseResponseOrReturn<Vessel.SelectedVessel>(baseQueryReturnValue.vessel, VesselSchema, false)
+          parseOrReturn<Vessel.SelectedVessel>(baseQueryReturnValue.vessel, VesselSchema, false)
         }
 
         return {
@@ -103,7 +104,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
           return undefined
         }
 
-        return parseResponseOrReturn<Vessel.ContactMethod>(baseQueryReturnValue, ContactMethodSchema, false)
+        return parseOrReturn<Vessel.ContactMethod>(baseQueryReturnValue, ContactMethodSchema, false)
       }
     }),
 
@@ -179,7 +180,9 @@ export const vesselApi = monitorfishApi.injectEndpoints({
           ...getVesselIdentityPropsAsEmptyStringsWhenUndefined(vesselIdentity),
           fromDate
         }),
-      transformErrorResponse: response => new FrontendApiError(GET_VESSEL_REPORTINGS_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(GET_VESSEL_REPORTINGS_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: VesselReportings) =>
+        parseOrReturn<VesselReportings>(baseQueryReturnValue, VesselReportingsSchema, false)
     }),
 
     searchVessels: builder.query<Vessel.VesselIdentity[], Vessel.ApiSearchFilter>({

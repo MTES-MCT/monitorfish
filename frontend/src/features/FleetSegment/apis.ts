@@ -3,7 +3,7 @@ import { FleetSegmentSchema } from '@features/FleetSegment/types'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { customDayjs } from '@mtes-mct/monitor-ui'
-import { parseResponseOrReturn } from '@utils/parseResponseOrReturn'
+import { parseOrReturn } from '@utils/parseOrReturn.ts'
 
 import type { FleetSegment } from '@features/FleetSegment/types'
 
@@ -44,7 +44,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
         url: `/fleet_segments/compute`
       }),
       transformResponse: (baseQueryReturnValue: FleetSegment[]) =>
-        parseResponseOrReturn<FleetSegment>(baseQueryReturnValue, FleetSegmentSchema, true).sort((a, b) =>
+        parseOrReturn<FleetSegment>(baseQueryReturnValue, FleetSegmentSchema, true).sort((a, b) =>
           a.segment.localeCompare(b.segment)
         )
     }),
@@ -56,7 +56,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
       }),
       transformErrorResponse: response => new FrontendApiError(CREATE_FLEET_SEGMENT_ERROR_MESSAGE, response),
       transformResponse: (baseQueryReturnValue: FleetSegment) =>
-        parseResponseOrReturn<FleetSegment>(baseQueryReturnValue, FleetSegmentSchema, false)
+        parseOrReturn<FleetSegment>(baseQueryReturnValue, FleetSegmentSchema, false)
     }),
     deleteFleetSegment: builder.mutation<FleetSegment[], { segment: string; year: number }>({
       query: ({ segment, year }) => ({
@@ -65,7 +65,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
       }),
       transformErrorResponse: response => new FrontendApiError(DELETE_FLEET_SEGMENT_ERROR_MESSAGE, response),
       transformResponse: (baseQueryReturnValue: FleetSegment[]) =>
-        parseResponseOrReturn<FleetSegment>(baseQueryReturnValue, FleetSegmentSchema, true).sort((a, b) =>
+        parseOrReturn<FleetSegment>(baseQueryReturnValue, FleetSegmentSchema, true).sort((a, b) =>
           a.segment.localeCompare(b.segment)
         )
     }),
@@ -77,7 +77,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
         return `fleet_segments/${controlledYear}`
       },
       transformResponse: (baseQueryReturnValue: FleetSegment[]) =>
-        parseResponseOrReturn<FleetSegment>(baseQueryReturnValue, FleetSegmentSchema, true).sort((a, b) =>
+        parseOrReturn<FleetSegment>(baseQueryReturnValue, FleetSegmentSchema, true).sort((a, b) =>
           a.segment.localeCompare(b.segment)
         )
     }),
@@ -87,7 +87,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
     }),
     updateFleetSegment: builder.query<FleetSegment, UpdateFleetSegmentParams>({
       query: params => {
-        const updatedSegment = parseResponseOrReturn<FleetSegment>(params.updatedSegment, FleetSegmentSchema, false)
+        const updatedSegment = parseOrReturn<FleetSegment>(params.updatedSegment, FleetSegmentSchema, false)
 
         return {
           body: updatedSegment,
@@ -97,7 +97,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
       },
       transformErrorResponse: response => new FrontendApiError(UPDATE_FLEET_SEGMENT_ERROR_MESSAGE, response),
       transformResponse: (baseQueryReturnValue: FleetSegment) =>
-        parseResponseOrReturn<FleetSegment>(baseQueryReturnValue, FleetSegmentSchema, false)
+        parseOrReturn<FleetSegment>(baseQueryReturnValue, FleetSegmentSchema, false)
     })
   })
 })

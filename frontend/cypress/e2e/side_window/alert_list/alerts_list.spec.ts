@@ -64,7 +64,7 @@ context('Side Window > Alert List', () => {
      */
     // Get the first alert row
     cy.fill('Rechercher un navire ou une alerte', 'MRCP')
-    cy.get('[title="Pour tous les navires tiers en pêche en ZEE française."]').click({ force: true })
+    cy.get('[title="Pêche en ZEE française par un navire tiers"]').click({ force: true })
 
     cy.get(`[data-id="15-expanded"]`).should('be.visible')
 
@@ -76,7 +76,7 @@ context('Side Window > Alert List', () => {
     cy.get(`[data-id="15-expanded"]`).should('contain', 'Activités INN')
     cy.get(`[data-id="15-expanded"]`).should('contain', 'Pêche sans autorisation par navire tiers')
     cy.get(`[data-id="15-expanded"]`).should('contain', '2608')
-    cy.get('[title="Pour tous les navires tiers en pêche en ZEE française."]').click({ force: true })
+    cy.get('[title="Pêche en ZEE française par un navire tiers"]').click({ force: true })
 
     // Verify expanded content is hidden
     cy.get(`[data-id="15-expanded"]`).should('not.exist')
@@ -191,7 +191,7 @@ context('Side Window > Alert List', () => {
         flagState: 'FR',
         internalReferenceNumber: 'FAK000999999',
         ircs: 'CALLME',
-        value: '{"alertId":4,"name":"Pêche en ZEE française par un navire tiers","type":"POSITION_ALERT"}',
+        value: '{"alertId":4,"name":"Pêche en ZEE française par un navire tiers","natinfCode":2608,"threat":"Activités INN","threatCharacterization":"Pêche sans autorisation par navire tiers","type":"POSITION_ALERT"}',
         vesselId: 1,
         vesselIdentifier: 'INTERNAL_REFERENCE_NUMBER',
         vesselName: 'PHENOMENE'

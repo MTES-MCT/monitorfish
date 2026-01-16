@@ -6,8 +6,8 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateDynamicVesselGroups
-import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateFixedVesselGroups
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateDynamicVesselGroupCommands
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateFixedVesselGroupCommands
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.VesselGroupWithVessels
@@ -119,7 +119,7 @@ class VesselGroupControllerITests {
         Mockito
             .verify(
                 addOrUpdateDynamicVesselGroup,
-            ).execute("email@domain-name.com", getCreateOrUpdateDynamicVesselGroups().first().copy(id = null))
+            ).execute("email@domain-name.com", getCreateOrUpdateDynamicVesselGroupCommands().first().copy(id = null))
     }
 
     @Test
@@ -181,7 +181,7 @@ class VesselGroupControllerITests {
         Mockito
             .verify(
                 addOrUpdateFixedVesselGroup,
-            ).execute("email@domain-name.com", getCreateOrUpdateFixedVesselGroups().first().copy(id = null))
+            ).execute("email@domain-name.com", getCreateOrUpdateFixedVesselGroupCommands().first().copy(id = null))
     }
 
     @Test

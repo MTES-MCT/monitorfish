@@ -1,20 +1,30 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Threat
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ThreatSummary
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.VesselReportings
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Year
 
 class VesselReportingsDataOutput(
-    val summary: ReportingSummaryDataOutput,
+    val summary: Map<Threat, List<ThreatSummaryDataOutput>>,
     val current: List<ReportingAndOccurrencesDataOutput>,
     val archived: Map<Year, List<ReportingAndOccurrencesDataOutput>>,
 ) {
     companion object {
         fun fromCurrentAndArchivedReporting(vesselReportings: VesselReportings) =
             VesselReportingsDataOutput(
-                summary = ReportingSummaryDataOutput.fromReportingSummary(vesselReportings.summary),
+                summary =
+                    vesselReportings.summary.mapValues { (_, value) ->
+                        value.map {
+                            ThreatSummaryDataOutput.fromThreatSummary(it)
+                        }
+                    },
                 current =
                     vesselReportings.current.map {
-                        ReportingAndOccurrencesDataOutput.fromReportingAndOccurrences(it)
+                        ReportingAndOccurrencesDataOutput.fromReportingAndOccurrences(
+                            it,
+                            useThreatHierarchyForForm = true,
+                        )
                     },
                 archived =
                     vesselReportings.archived.mapValues { (_, reportingAndOccurrences) ->
@@ -22,6 +32,23 @@ class VesselReportingsDataOutput(
                             ReportingAndOccurrencesDataOutput.fromReportingAndOccurrences(it)
                         }
                     },
+            )
+    }
+}
+
+data class ThreatSummaryDataOutput(
+    val natinfCode: Int,
+    val natinf: String,
+    val threatCharacterization: String,
+    val numberOfOccurrences: Int,
+) {
+    companion object {
+        fun fromThreatSummary(threatSummary: ThreatSummary) =
+            ThreatSummaryDataOutput(
+                natinfCode = threatSummary.natinfCode,
+                natinf = threatSummary.natinf,
+                threatCharacterization = threatSummary.threatCharacterization,
+                numberOfOccurrences = threatSummary.numberOfOccurrences,
             )
     }
 }

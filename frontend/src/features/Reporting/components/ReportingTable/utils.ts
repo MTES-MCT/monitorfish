@@ -1,6 +1,6 @@
 import { Logbook } from '@features/Logbook/Logbook.types'
-
-import { ReportingOriginActor, ReportingType } from '../../types'
+import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 
 import type { Reporting } from '../../types'
 import type { Column } from '@tanstack/react-table'
@@ -15,9 +15,9 @@ export const getReportingOrigin = (reporting: Reporting.Reporting, isHovering: b
     case ReportingOriginActor.UNIT:
       return `${reporting.value.controlUnit?.name ?? ''}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
     case ReportingOriginActor.OPS:
-      return `Pôle OPS (${reporting.value.authorTrigram})`
+      return `Pôle OPS (${reporting.createdBy})`
     case ReportingOriginActor.SIP:
-      return `Pôle SIP (${reporting.value.authorTrigram})`
+      return `Pôle SIP (${reporting.createdBy})`
     case ReportingOriginActor.DIRM:
       return `DIRM${isHovering ? `: ${reporting.value.authorContact}` : ''}`
     case ReportingOriginActor.DML:

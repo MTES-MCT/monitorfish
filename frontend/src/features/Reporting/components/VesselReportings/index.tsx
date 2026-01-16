@@ -1,7 +1,7 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
-import { ArchivedReportingList } from '@features/Reporting/components/ArchivedReportingList'
-import { CurrentReportingList } from '@features/Reporting/components/CurrentReportingList'
-import { TwelveMonthsSummary } from '@features/Reporting/components/ReportingListSummary'
+import { ArchivedReportingList } from '@features/Reporting/components/VesselReportings/ArchivedReportingList'
+import { CurrentReportingList } from '@features/Reporting/components/VesselReportings/CurrentReportingList'
+import { TwelveMonthsSummary } from '@features/Reporting/components/VesselReportings/TwelveMonthsSummary'
 import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
 import { getVesselIdentityFromLegacyVesselIdentity } from '@features/Vessel/utils'
 import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
@@ -45,7 +45,7 @@ export function VesselReportings() {
   return (
     <Body data-cy="vessel-reporting">
       <StyledCurrentReportingList vesselIdentity={selectedVesselIdentity} vesselReportings={vesselReportings} />
-      <TwelveMonthsSummary reportingSummary={vesselReportings.summary} />
+      <TwelveMonthsSummary threatSummary={vesselReportings.summary} />
       <ArchivedReportingList fromDate={startDate} onMore={decreaseStartDate} vesselReportings={vesselReportings} />
     </Body>
   )

@@ -7,12 +7,14 @@ import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.CreateOrUpdateDynamicVesselGroup
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.CreateOrUpdateFixedVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.CreateOrUpdateDynamicVesselGroupCommand
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.CreateOrUpdateFixedVesselGroupCommand
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
@@ -33,50 +35,122 @@ object TestUtils {
         alertType: AlertType?,
         isArchived: Boolean? = false,
         natinfCode: Int? = null,
-    ): Reporting =
-        Reporting(
-            id = id,
-            validationDate = validationDate,
-            creationDate = ZonedDateTime.now().minusDays(1),
-            type = type,
-            isArchived = isArchived ?: false,
-            isDeleted = false,
-            infraction =
-                Infraction(
-                    natinfCode = 2610,
-                    infractionCategory = InfractionCategory.FISHING,
-                ),
-            value =
-                when (alertType) {
-                    AlertType.POSITION_ALERT ->
-                        Alert(
-                            type = AlertType.POSITION_ALERT,
-                            seaFront = NAMO.toString(),
-                            alertId = 1,
-                            natinfCode = 7059,
-                            name = "Chalutage dans les 3 milles",
-                        )
-                    AlertType.MISSING_FAR_ALERT -> AlertType.MISSING_FAR_ALERT.getValue()
-                    AlertType.MISSING_FAR_48_HOURS_ALERT -> AlertType.MISSING_FAR_48_HOURS_ALERT.getValue()
-                    else ->
-                        InfractionSuspicion(
-                            ReportingActor.OPS,
-                            natinfCode = natinfCode ?: 123456,
-                            authorTrigram = "LTH",
-                            title = "A title",
-                        )
-                },
-            underCharter = null,
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            internalReferenceNumber = internalReferenceNumber,
-            flagState = CountryCode.FR,
-        )
+    ): Reporting {
+        val creationDate = ZonedDateTime.now().minusDays(1)
+        val infraction =
+            Infraction(
+                natinfCode = 2610,
+                infractionCategory = InfractionCategory.FISHING,
+            )
+        return when (alertType) {
+            AlertType.POSITION_ALERT ->
+                Reporting.Alert(
+                    id = id,
+                    validationDate = validationDate,
+                    creationDate = creationDate,
+                    isArchived = isArchived ?: false,
+                    isDeleted = false,
+                    infraction = infraction,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    internalReferenceNumber = internalReferenceNumber,
+                    flagState = CountryCode.FR,
+                    createdBy = "test@example.gouv.fr",
+                    alertType = AlertType.POSITION_ALERT,
+                    seaFront = NAMO.toString(),
+                    alertId = 1,
+                    natinfCode = 7059,
+                    name = "Chalutage dans les 3 milles",
+                    threat = "Mesures techniques et de conservation",
+                    threatCharacterization = "Engin",
+                )
+            AlertType.MISSING_FAR_ALERT -> {
+                val alertValue = AlertType.MISSING_FAR_ALERT.getValue()
+                Reporting.Alert(
+                    id = id,
+                    validationDate = validationDate,
+                    creationDate = creationDate,
+                    isArchived = isArchived ?: false,
+                    isDeleted = false,
+                    infraction = infraction,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    internalReferenceNumber = internalReferenceNumber,
+                    flagState = CountryCode.FR,
+                    createdBy = "test@example.gouv.fr",
+                    alertType = AlertType.MISSING_FAR_ALERT,
+                    seaFront = alertValue.seaFront,
+                    name = alertValue.name,
+                    natinfCode = alertValue.natinfCode,
+                    threat = alertValue.threat,
+                    threatCharacterization = alertValue.threatCharacterization,
+                )
+            }
+            AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT -> {
+                val alertValue = AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT.getValue()
+                Reporting.Alert(
+                    id = id,
+                    validationDate = validationDate,
+                    creationDate = creationDate,
+                    isArchived = isArchived ?: false,
+                    isDeleted = false,
+                    infraction = infraction,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    internalReferenceNumber = internalReferenceNumber,
+                    flagState = CountryCode.FR,
+                    createdBy = "test@example.gouv.fr",
+                    alertType = AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT,
+                    seaFront = alertValue.seaFront,
+                    name = alertValue.name,
+                    natinfCode = alertValue.natinfCode,
+                    threat = alertValue.threat,
+                    threatCharacterization = alertValue.threatCharacterization,
+                )
+            }
+            AlertType.MISSING_FAR_48_HOURS_ALERT -> {
+                val alertValue = AlertType.MISSING_FAR_48_HOURS_ALERT.getValue()
+                Reporting.Alert(
+                    id = id,
+                    validationDate = validationDate,
+                    creationDate = creationDate,
+                    isArchived = isArchived ?: false,
+                    isDeleted = false,
+                    infraction = infraction,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    internalReferenceNumber = internalReferenceNumber,
+                    flagState = CountryCode.FR,
+                    createdBy = "test@example.gouv.fr",
+                    alertType = AlertType.MISSING_FAR_48_HOURS_ALERT,
+                    seaFront = alertValue.seaFront,
+                    name = alertValue.name,
+                    natinfCode = alertValue.natinfCode,
+                    threat = alertValue.threat,
+                    threatCharacterization = alertValue.threatCharacterization,
+                )
+            }
+            else ->
+                Reporting.InfractionSuspicion(
+                    id = id,
+                    validationDate = validationDate,
+                    creationDate = creationDate,
+                    isArchived = isArchived ?: false,
+                    isDeleted = false,
+                    infraction = infraction,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    internalReferenceNumber = internalReferenceNumber,
+                    flagState = CountryCode.FR,
+                    createdBy = "test@example.gouv.fr",
+                    reportingActor = ReportingActor.OPS,
+                    natinfCode = natinfCode ?: 123456,
+                    title = "A title",
+                    threat = "Obligations déclaratives",
+                    threatCharacterization = "DEP",
+                )
+        }
+    }
 
     fun getDummyReportings(dateTime: ZonedDateTime): List<Reporting> =
         listOf(
-            Reporting(
+            Reporting.Alert(
                 id = 1,
-                type = ReportingType.ALERT,
                 vesselName = "BIDUBULE",
                 internalReferenceNumber = "FR224226850",
                 externalReferenceNumber = "1236514",
@@ -85,20 +159,19 @@ object TestUtils {
                 flagState = CountryCode.FR,
                 creationDate = dateTime,
                 validationDate = dateTime,
-                value =
-                    Alert(
-                        type = AlertType.POSITION_ALERT,
-                        seaFront = NAMO.toString(),
-                        alertId = 1,
-                        natinfCode = 7059,
-                        name = "Chalutage dans les 3 milles",
-                    ) as AlertAndReportingValue,
+                alertType = AlertType.POSITION_ALERT,
+                seaFront = NAMO.toString(),
+                alertId = 1,
+                natinfCode = 7059,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
+                name = "Chalutage dans les 3 milles",
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             ),
-            Reporting(
+            Reporting.Alert(
                 id = 2,
-                type = ReportingType.ALERT,
                 vesselName = "BIDUBULE",
                 internalReferenceNumber = "FR224226850",
                 externalReferenceNumber = "1236514",
@@ -107,20 +180,19 @@ object TestUtils {
                 flagState = CountryCode.FR,
                 creationDate = dateTime,
                 validationDate = dateTime,
-                value =
-                    Alert(
-                        type = AlertType.POSITION_ALERT,
-                        seaFront = NAMO.toString(),
-                        alertId = 1,
-                        natinfCode = 7059,
-                        name = "Chalutage dans les 3 milles",
-                    ) as AlertAndReportingValue,
+                alertType = AlertType.POSITION_ALERT,
+                seaFront = NAMO.toString(),
+                alertId = 1,
+                natinfCode = 7059,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
+                name = "Chalutage dans les 3 milles",
                 isArchived = false,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             ),
-            Reporting(
+            Reporting.Alert(
                 id = 666,
-                type = ReportingType.ALERT,
                 vesselName = "BIDUBULE",
                 internalReferenceNumber = "FR224226850",
                 externalReferenceNumber = "1236514",
@@ -129,16 +201,16 @@ object TestUtils {
                 flagState = CountryCode.FR,
                 creationDate = dateTime.minusYears(1),
                 validationDate = dateTime.minusYears(1),
-                value =
-                    Alert(
-                        type = AlertType.POSITION_ALERT,
-                        seaFront = NAMO.toString(),
-                        alertId = 1,
-                        natinfCode = 7059,
-                        name = "Chalutage dans les 3 milles",
-                    ) as AlertAndReportingValue,
+                alertType = AlertType.POSITION_ALERT,
+                seaFront = NAMO.toString(),
+                alertId = 1,
+                natinfCode = 7059,
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
+                name = "Chalutage dans les 3 milles",
                 isArchived = true,
                 isDeleted = false,
+                createdBy = "test@example.gouv.fr",
             ),
         )
 
@@ -748,9 +820,9 @@ object TestUtils {
         )
     }
 
-    fun getCreateOrUpdateDynamicVesselGroups() =
+    fun getCreateOrUpdateDynamicVesselGroupCommands() =
         listOf(
-            CreateOrUpdateDynamicVesselGroup(
+            CreateOrUpdateDynamicVesselGroupCommand(
                 id = 1,
                 isDeleted = false,
                 name = "Mission Thémis – chaluts de fonds",
@@ -781,7 +853,7 @@ object TestUtils {
                         zones = emptyList(),
                     ),
             ),
-            CreateOrUpdateDynamicVesselGroup(
+            CreateOrUpdateDynamicVesselGroupCommand(
                 id = 2,
                 isDeleted = false,
                 name = "Mission Thémis – chaluts de fonds",
@@ -812,9 +884,9 @@ object TestUtils {
             ),
         )
 
-    fun getCreateOrUpdateFixedVesselGroups() =
+    fun getCreateOrUpdateFixedVesselGroupCommands() =
         listOf(
-            CreateOrUpdateFixedVesselGroup(
+            CreateOrUpdateFixedVesselGroupCommand(
                 id = 1,
                 isDeleted = false,
                 name = "Mission Thémis – chaluts de fonds",
@@ -848,7 +920,7 @@ object TestUtils {
                         ),
                     ),
             ),
-            CreateOrUpdateFixedVesselGroup(
+            CreateOrUpdateFixedVesselGroupCommand(
                 id = 2,
                 isDeleted = false,
                 name = "Mission Thémis – chaluts de fonds",

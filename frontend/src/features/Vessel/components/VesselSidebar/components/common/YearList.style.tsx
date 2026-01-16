@@ -23,10 +23,22 @@ export const YearListTitleText = styled.div`
 export const YearListContent = styled.div<HTMLProps<HTMLDivElement>>`
   overflow: hidden;
   border-top: 1px solid ${p => p.theme.color.lightGray};
+  width: 100%;
 `
 
 export const YearListChevronIcon = styled(ChevronIconButton)`
   svg {
     color: ${p => p.theme.color.charcoal};
   }
+`
+
+export const YearListRow = styled.div`
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  background: ${p => p.theme.color.white};
+  color: ${p => p.theme.color.gunMetal};
+  height: 36px;
 `

@@ -24,8 +24,7 @@ export const createReportingFromVesselSidebar = (vesselName: string) => {
   cy.clickButton('Ouvrir un signalement')
 
   cy.fill('Titre', faker.word.words(3))
-  cy.fill('Natinf', '23588')
-  cy.fill('Saisi par', 'BOB')
+  cy.fill('Type d’infraction et NATINF', ['27717'])
 
   cy.clickButton('Valider')
 
@@ -57,8 +56,7 @@ export function addAndCreateReportingWithinVesselSidebar() {
   cy.fill('Nom et contact (numéro, mail…) de l’émetteur', 'Jean Bon (0612365896)')
   cy.fill('Titre', 'Sortie non autorisée')
   cy.fill('Description', "Ce navire ne devrait pas être en mer, il n'a plus de points sur son permis")
-  cy.fill('Natinf', '2608')
-  cy.fill('Saisi par', 'LTH')
+  cy.fill('Type d’infraction et NATINF', ['27717'])
 
   cy.clickButton('Valider')
   cy.wait('@createReporting')

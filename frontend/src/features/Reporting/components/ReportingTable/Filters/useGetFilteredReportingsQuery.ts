@@ -8,7 +8,7 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { CustomSearch } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 
-import type { InfractionSuspicionReporting, Reporting } from '@features/Reporting/types'
+import type { InfractionSuspicionReporting, ObservationReporting, Reporting } from '@features/Reporting/types'
 
 export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup) => {
   const searchQuery = useMainAppSelector(state => state.reportingTableFilters.searchQuery)
@@ -54,6 +54,14 @@ export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGro
             getFn: reporting => (isInfractionSuspicion(reporting) ? reporting.value.title : ''),
             name: 'value.title'
           },
+          {
+            getFn: reporting => (!isObservation(reporting) ? reporting.value.threatCharacterization : ''),
+            name: 'value.threatCharacterization'
+          },
+          {
+            getFn: reporting => (!isObservation(reporting) ? reporting.value.threat : ''),
+            name: 'value.threat'
+          },
           'value.name'
         ],
         { isCaseSensitive: false, isDiacriticSensitive: false, isStrict: true, threshold: 0.4 }
@@ -78,4 +86,8 @@ export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGro
 
 function isInfractionSuspicion(reporting: Reporting.Reporting): reporting is InfractionSuspicionReporting {
   return (<InfractionSuspicionReporting>reporting).value.title !== undefined
+}
+
+function isObservation(reporting: Reporting.Reporting): reporting is ObservationReporting {
+  return (<InfractionSuspicionReporting>reporting).value.threat === undefined
 }

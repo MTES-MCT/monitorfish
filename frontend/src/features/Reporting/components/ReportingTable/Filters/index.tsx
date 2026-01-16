@@ -1,5 +1,5 @@
 import { reportingTableFiltersActions } from '@features/Reporting/components/ReportingTable/Filters/slice'
-import { ReportingType } from '@features/Reporting/types'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Checkbox, Size, TextInput } from '@mtes-mct/monitor-ui'

@@ -25,8 +25,7 @@ export const createReportingFromPriorNotificationForm = (vesselName: string, rep
   cy.wait('@getVesselReportings')
 
   cy.fill('Titre', faker.word.words(3))
-  cy.fill('Natinf', '23588')
-  cy.fill('Saisi par', 'BOB')
+  cy.fill('Type d’infraction et NATINF', ['27717'])
 
   cy.clickButton('Valider')
 

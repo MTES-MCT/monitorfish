@@ -2,9 +2,11 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.dtos.ReportingUpdateCommand
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -18,56 +20,31 @@ class UpdateReporting(
 
     fun execute(
         reportingId: Int,
-        updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation,
+        reportingUpdateCommand: ReportingUpdateCommand,
     ): Pair<Reporting, LegacyControlUnit?> {
         val currentReporting = reportingRepository.findById(reportingId)
         val controlUnits = getAllLegacyControlUnits.execute()
         logger.info("Updating reporting id $reportingId for vessel id ${currentReporting.vesselId}")
-        val expirationDate = updatedInfractionSuspicionOrObservation.expirationDate ?: currentReporting.expirationDate
 
         require(currentReporting.type != ReportingType.ALERT) {
             "The edited reporting must be an INFRACTION_SUSPICION or an OBSERVATION"
         }
 
-        currentReporting.value as InfractionSuspicionOrObservationType
+        val nextReporting = currentReporting.update(reportingUpdateCommand)
 
-        val nextReporting =
-            when (updatedInfractionSuspicionOrObservation.type) {
-                ReportingType.INFRACTION_SUSPICION ->
-                    InfractionSuspicion.fromUpdatedReporting(
-                        updatedInfractionSuspicionOrObservation,
-                    )
-                ReportingType.OBSERVATION ->
-                    Observation.fromUpdatedReporting(
-                        updatedInfractionSuspicionOrObservation,
-                    )
-                else -> throw IllegalArgumentException(
-                    "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION",
-                )
-            }.let {
-                getReportingWithDMLAndSeaFront.execute(it, currentReporting.vesselId)
-            }
+        val enrichedReporting = getReportingWithDMLAndSeaFront.execute(nextReporting)
 
-        nextReporting.checkReportingActorAndFieldsRequirements()
+        when (enrichedReporting) {
+            is Reporting.InfractionSuspicion -> enrichedReporting.checkReportingActorAndFieldsRequirements()
+            is Reporting.Observation -> enrichedReporting.checkReportingActorAndFieldsRequirements()
+            is Reporting.Alert -> {}
+        }
 
         val updatedReporting =
-            when (nextReporting) {
-                is InfractionSuspicion ->
-                    reportingRepository.update(
-                        reportingId = reportingId,
-                        expirationDate = expirationDate,
-                        updatedInfractionSuspicion = nextReporting,
-                    )
-                is Observation ->
-                    reportingRepository.update(
-                        reportingId = reportingId,
-                        expirationDate = expirationDate,
-                        updatedObservation = nextReporting,
-                    )
-                else -> throw IllegalArgumentException(
-                    "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION",
-                )
-            }
+            reportingRepository.update(
+                reportingId = reportingId,
+                updatedReporting = enrichedReporting,
+            )
         val controlUnit = getControlUnit(updatedReporting, controlUnits)
 
         return Pair(updatedReporting, controlUnit)
@@ -77,7 +54,12 @@ class UpdateReporting(
         reporting: Reporting,
         controlUnits: List<LegacyControlUnit>,
     ): LegacyControlUnit? {
-        val controlUnitId = (reporting.value as InfractionSuspicionOrObservationType).controlUnitId
+        val controlUnitId =
+            when (reporting) {
+                is Reporting.InfractionSuspicion -> reporting.controlUnitId
+                is Reporting.Observation -> reporting.controlUnitId
+                is Reporting.Alert -> null
+            }
         return controlUnits.find { it.id == controlUnitId }
     }
 }

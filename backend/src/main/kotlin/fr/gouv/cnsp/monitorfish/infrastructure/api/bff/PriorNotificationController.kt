@@ -177,7 +177,7 @@ class PriorNotificationController(
         operationDate: ZonedDateTime,
         @RequestBody
         logbookPriorNotificationFormDataInput: LogbookPriorNotificationFormDataInput,
-        @AuthenticationPrincipal principal: OidcUser??,
+        @AuthenticationPrincipal principal: OidcUser?,
     ): LogbookPriorNotificationFormDataOutput {
         val email = principal?.email ?: ""
 

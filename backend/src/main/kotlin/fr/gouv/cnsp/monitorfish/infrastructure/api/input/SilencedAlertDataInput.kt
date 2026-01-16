@@ -3,7 +3,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilencedAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
@@ -28,6 +27,6 @@ class SilencedAlertDataInput(
             vesselIdentifier = this.vesselIdentifier,
             flagState = this.flagState,
             silencedBeforeDate = this.silencedBeforeDate,
-            value = objectMapper.readValue(value, Alert::class.java),
+            value = objectMapper.readValue(value, AlertDataInput::class.java).toAlert(),
         )
 }

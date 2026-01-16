@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
@@ -29,18 +28,21 @@ class AddReporting(
 
         val controlUnits = getAllLegacyControlUnits.execute()
 
-        newReporting.value as InfractionSuspicionOrObservationType
-        newReporting.value.checkReportingActorAndFieldsRequirements()
+        when (newReporting) {
+            is Reporting.InfractionSuspicion -> newReporting.checkReportingActorAndFieldsRequirements()
+            is Reporting.Observation -> newReporting.checkReportingActorAndFieldsRequirements()
+            is Reporting.Alert -> {}
+        }
 
-        val nextValue =
-            getReportingWithDMLAndSeaFront.execute(
-                newReporting.value,
-                newReporting.vesselId,
-            )
-        val nextReporting = newReporting.copy(value = nextValue)
+        val enrichedReporting = getReportingWithDMLAndSeaFront.execute(newReporting)
 
-        val savedReporting = reportingRepository.save(nextReporting)
-        val controlUnitId = (savedReporting.value as InfractionSuspicionOrObservationType).controlUnitId
+        val savedReporting = reportingRepository.save(enrichedReporting)
+        val controlUnitId =
+            when (savedReporting) {
+                is Reporting.InfractionSuspicion -> savedReporting.controlUnitId
+                is Reporting.Observation -> savedReporting.controlUnitId
+                is Reporting.Alert -> null
+            }
         val controlUnit = controlUnits.find { it.id == controlUnitId }
 
         return Pair(savedReporting, controlUnit)

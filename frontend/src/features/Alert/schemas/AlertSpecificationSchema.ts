@@ -1,5 +1,5 @@
 import { AdministrativeAreaType, PendingAlertValueType } from '@features/Alert/constants'
-import { ThreatSchema } from '@features/Infraction/schemas/Threat'
+import { ThreatSchema } from '@features/Infraction/schemas/ThreatSchema'
 import { VesselIdentitySchema } from '@features/Vessel/schemas/VesselIdentitySchema'
 import { z } from 'zod'
 

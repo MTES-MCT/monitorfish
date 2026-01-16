@@ -1,4 +1,4 @@
-import { ReportingType } from '@features/Reporting/types'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { z } from 'zod'
 
 import { numberOrUndefined, stringOrUndefined } from '../../../types'

@@ -332,6 +332,15 @@ def expected_current_segments() -> pd.DataFrame:
             "impact_risk_factor": [2.2, 2.3, 3.3, 2.2, 2.2, 1.0],
             "segment_highest_priority": ["L", None, None, "T8-9", None, None],
             "control_priority_level": [2.8, 1.0, 1.0, 2.9, 1.0, 1.0],
+            "segment_highest_infringement_risk": [
+                "T8-9",
+                None,
+                None,
+                "T8-9",
+                None,
+                None,
+            ],
+            "infringement_risk_level": [3.4, 2.0, 2.0, 3.0, 2.0, 2.0],
         }
     )
 
@@ -409,6 +418,8 @@ def current_segments() -> pd.DataFrame:
             "vessel_id": [None, 1.0, 2.0, None, 7.0],
             "external_immatriculation": [None, "RV348407", "RO237719", None, None],
             "ircs": [None, "LLUK", "FQ7058", None, None],
+            "infringement_risk_level": [2.0, 2.0, 2.0, 2.0, 2.0],
+            "segment_highest_infringement_risk": [None, None, None, None, None],
         }
     )
 
@@ -444,11 +455,14 @@ def test_compute_current_segments(
     current_catches,
     segments_of_year,
     last_positions,
-    control_priorities,
+    control_priorities_and_infringement_risk_levels,
     expected_current_segments,
 ):
     res = compute_current_segments(
-        current_catches, segments_of_year, last_positions, control_priorities
+        current_catches,
+        segments_of_year,
+        last_positions,
+        control_priorities_and_infringement_risk_levels,
     )
     pd.testing.assert_frame_equal(res, expected_current_segments)
 

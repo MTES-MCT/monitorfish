@@ -24,9 +24,9 @@ def extract_all_segments():
 
 
 @task
-def extract_control_priorities() -> pd.DataFrame:
+def extract_control_priorities_and_infringement_risk_levels() -> pd.DataFrame:
     return extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/control_priorities.sql",
+        query_filepath="monitorfish/control_priorities_and_infringement_risk_levels.sql",
         params={"year": datetime.utcnow().year},
     )

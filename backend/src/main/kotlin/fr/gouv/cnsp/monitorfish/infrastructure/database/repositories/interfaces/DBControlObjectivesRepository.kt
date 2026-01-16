@@ -36,6 +36,16 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
         controlPriorityLevel: Double,
     )
 
+    @Modifying(clearAutomatically = true)
+    @Query(
+        value = "UPDATE control_objectives SET infringement_risk_level = :infringementRiskLevel WHERE id = :controlObjectiveId",
+        nativeQuery = true,
+    )
+    fun updateInfringementRiskLevel(
+        controlObjectiveId: Int,
+        infringementRiskLevel: Double,
+    )
+
     @Query
     fun findAllByYearEquals(year: Int): List<ControlObjectivesEntity>
 
@@ -45,10 +55,25 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
     @Modifying(clearAutomatically = true)
     @Query(
         value = """
-    INSERT INTO control_objectives (facade, segment, year, target_number_of_controls_at_sea, target_number_of_controls_at_port, control_priority_level)
-        SELECT facade, segment, :nextYear, target_number_of_controls_at_sea, target_number_of_controls_at_port, control_priority_level
-        FROM control_objectives AS old
-        WHERE old.year = :currentYear
+    INSERT INTO control_objectives (
+        facade,
+        segment,
+        year,
+        target_number_of_controls_at_sea,
+        target_number_of_controls_at_port,
+        control_priority_level,
+        infringement_risk_level
+    )
+    SELECT
+        facade,
+        segment,
+        :nextYear,
+        target_number_of_controls_at_sea,
+        target_number_of_controls_at_port,
+        control_priority_level,
+        infringement_risk_level
+    FROM control_objectives AS old
+    WHERE old.year = :currentYear
     """,
         nativeQuery = true,
     )
@@ -61,14 +86,23 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
     @Query(
         """
         INSERT INTO
-            control_objectives
+            control_objectives (
+                facade,
+                segment,
+                year,
+                target_number_of_controls_at_sea,
+                target_number_of_controls_at_port,
+                control_priority_level,
+                infringement_risk_level
+            )
         VALUES (
             cast(:facade as facade),
             :segment,
             :year,
             :targetNumberOfControlsAtSea,
             :targetNumberOfControlsAtPort,
-            :controlPriorityLevel
+            :controlPriorityLevel,
+            :infringementRiskLevel
         )
     """,
         nativeQuery = true,
@@ -80,6 +114,7 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
         targetNumberOfControlsAtSea: Int,
         targetNumberOfControlsAtPort: Int,
         controlPriorityLevel: Double,
+        infringementRiskLevel: Double,
     )
 
     @Query(

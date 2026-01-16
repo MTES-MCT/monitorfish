@@ -14,6 +14,7 @@ import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { ControlPriorityCell } from './ControlPriorityCell'
+import { InfringementRiskLevelCell } from './InfringementRiskLevelCell'
 import { LoadingSpinnerWall } from '../../../../ui/LoadingSpinnerWall'
 import { useGetFleetSegmentsQuery } from '../../../FleetSegment/apis'
 import {
@@ -77,6 +78,7 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
           controlPriorityLevel: 1,
           facade,
           id: newId,
+          infringementRiskLevel: 2,
           segment: nextSegment,
           target: 1,
           targetNumberOfControlsAtPort: 0,
@@ -126,6 +128,7 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
     ) => {
       const updatedFields = {
         controlPriorityLevel: null,
+        infringementRiskLevel: null,
         targetNumberOfControlsAtPort: null,
         targetNumberOfControlsAtSea: null,
         // eslint-disable-next-line sort-keys-fix/sort-keys-fix
@@ -220,7 +223,7 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
         rowKey="id"
         sortColumn={sortColumn}
         sortType={sortType}
-        width={795}
+        width={905}
       >
         <Table.Column sortable width={100}>
           <Table.HeaderCell>Segment</Table.HeaderCell>
@@ -267,6 +270,16 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
           <Table.HeaderCell>Priorité</Table.HeaderCell>
           <ControlPriorityCell
             dataKey="controlPriorityLevel"
+            onChange={(id, key, value) =>
+              handleChangeModifiableKey(id, key, value, controlObjectivesWithMaybeFleetSegment)
+            }
+          />
+        </Table.Column>
+
+        <Table.Column width={100}>
+          <Table.HeaderCell>N. infraction</Table.HeaderCell>
+          <InfringementRiskLevelCell
+            dataKey="infringementRiskLevel"
             onChange={(id, key, value) =>
               handleChangeModifiableKey(id, key, value, controlObjectivesWithMaybeFleetSegment)
             }

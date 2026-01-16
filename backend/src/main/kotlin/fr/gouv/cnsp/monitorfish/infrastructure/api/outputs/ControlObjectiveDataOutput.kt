@@ -10,6 +10,7 @@ data class ControlObjectiveDataOutput(
     val targetNumberOfControlsAtSea: Int,
     val targetNumberOfControlsAtPort: Int,
     val controlPriorityLevel: Double,
+    val infringementRiskLevel: Double,
 ) {
     companion object {
         fun fromControlObjective(controlObjective: ControlObjective): ControlObjectiveDataOutput {
@@ -25,6 +26,7 @@ data class ControlObjectiveDataOutput(
                 targetNumberOfControlsAtSea = controlObjective.targetNumberOfControlsAtSea,
                 targetNumberOfControlsAtPort = controlObjective.targetNumberOfControlsAtPort,
                 controlPriorityLevel = controlObjective.controlPriorityLevel,
+                infringementRiskLevel = controlObjective.infringementRiskLevel,
             )
         }
     }

@@ -43,7 +43,7 @@ class ReportingDataOutput(
                         )
 
                     is Reporting.Observation -> ObservationDataOutput.fromObservation(reporting, controlUnit)
-                    is Reporting.Alert -> AlertDataOutput.fromAlert(reporting)
+                    is Reporting.Alert -> AlertDataOutput.fromReportingAlert(reporting)
                 }
 
             return ReportingDataOutput(

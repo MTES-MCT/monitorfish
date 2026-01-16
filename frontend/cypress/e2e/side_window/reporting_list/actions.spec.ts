@@ -98,7 +98,7 @@ context('Side Window > Reporting List > Actions', () => {
 
     cy.getDataCy('ReportingTable-reporting').should('have.length.greaterThan', 1)
     cy.get('tr:contains("COURANT MAIN PROFESSEUR")').contains('DML 56')
-    cy.get('tr:contains("COURANT MAIN PROFESSEUR")').contains(23581)
+    cy.get('tr:contains("COURANT MAIN PROFESSEUR")').contains('Transbordement')
 
     /**
      * The reporting type must be modified to OBSERVATION

@@ -8,11 +8,11 @@ export const PendingAlertValueSchema = z.strictObject({
   description: z.string().optional(),
   dml: z.string().nullable().optional(),
   name: z.string(),
-  natinfCode: z.number().nullable().optional(),
+  natinfCode: z.number(),
   riskFactor: z.number().optional(),
   seaFront: z.enum(Seafront).optional(),
   speed: z.number().optional(),
-  threat: z.string().nullable().optional(),
-  threatCharacterization: z.string().nullable().optional(),
+  threat: z.string(),
+  threatCharacterization: z.string(),
   type: z.enum(PendingAlertValueType)
 })

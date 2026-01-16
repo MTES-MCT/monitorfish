@@ -13,6 +13,7 @@ import * as timeago from 'timeago.js'
 import { ActionButtonsCell } from './cells/ActionButtonsCell'
 
 import type { CellContext, ColumnDef, Row } from '@tanstack/react-table'
+import {getInfractionTitle} from "@features/Reporting/components/ReportingCard/utils";
 
 export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Reporting.Reporting, any>> {
   const legacyFirefoxOffset = !isFromUrl && isLegacyFirefox() ? -32 : 0
@@ -53,7 +54,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
         return timeago.format(validationDate, 'fr').replace('il y a ', '')
       },
       enableSorting: true,
-      header: () => 'Il y a...',
+      header: () => 'Depuis...',
       id: 'date',
       size: 100 + legacyFirefoxOffset
     },
@@ -67,51 +68,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       enableSorting: false,
       header: () => 'Origine',
       id: 'origin',
-      size: 142 + legacyFirefoxOffset
-    },
-    {
-      accessorFn: row => row.type,
-      cell: (info: CellContext<Reporting.Reporting, string>) => {
-        const reportingType = info.getValue()
-        const { isInfractionSuspicion } = ReportingTypeCharacteristics[reportingType]
-
-        if (isInfractionSuspicion) {
-          return "Susp. d'infraction"
-        }
-
-        return 'Observation'
-      },
-      enableSorting: true,
-      header: () => 'Type',
-      id: 'type',
-      size: 160 + legacyFirefoxOffset
-    },
-    {
-      accessorFn: row => row,
-      cell: (info: CellContext<Reporting.Reporting, Reporting.Reporting>) => {
-        const reporting = info.getValue()
-
-        return <Ellipsised>{getReportingTitle(reporting)}</Ellipsised>
-      },
-      enableSorting: true,
-      header: () => 'Titre',
-      id: 'title',
-      size: 340 + legacyFirefoxOffset,
-      sortingFn: (rowA: Row<any>, rowB: Row<any>) => {
-        const titleA = rowA.original.value.title ?? rowA.original.value.type
-        const titleB = rowB.original.value.title ?? rowB.original.value.type
-
-        return titleA.localeCompare(titleB)
-      }
-    },
-    {
-      accessorFn: row =>
-        row.type === ReportingType.INFRACTION_SUSPICION || row.type === ReportingType.ALERT ? row.value.natinfCode : '',
-      cell: (info: CellContext<Reporting.Reporting, string | undefined>) => info.getValue(),
-      enableSorting: true,
-      header: () => 'NATINF',
-      id: 'natinfCode',
-      size: 85 + legacyFirefoxOffset
+      size: 132 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row.vesselName ?? (row.vesselId === -1 ? 'Navire inconnu' : '-'),
@@ -129,6 +86,62 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       header: () => 'Navire',
       id: 'vesselName',
       size: 260 + legacyFirefoxOffset
+    },
+    {
+      accessorFn: row => row.type,
+      cell: (info: CellContext<Reporting.Reporting, string>) => {
+        const reportingType = info.getValue()
+        const { isInfractionSuspicion } = ReportingTypeCharacteristics[reportingType]
+
+        if (isInfractionSuspicion) {
+          return "Susp. d'infraction"
+        }
+
+        return 'Observation'
+      },
+      enableSorting: true,
+      header: () => 'Type',
+      id: 'type',
+      size: 140 + legacyFirefoxOffset
+    },
+    {
+      accessorFn: row => row,
+      cell: (info: CellContext<Reporting.Reporting, Reporting.Reporting>) => {
+        const reporting = info.getValue()
+
+        return <Ellipsised>{getReportingTitle(reporting)}</Ellipsised>
+      },
+      enableSorting: true,
+      header: () => 'Titre',
+      id: 'title',
+      size: 265 + legacyFirefoxOffset,
+      sortingFn: (rowA: Row<any>, rowB: Row<any>) => {
+        const titleA = rowA.original.value.title ?? rowA.original.value.type
+        const titleB = rowB.original.value.title ?? rowB.original.value.type
+
+        return titleA.localeCompare(titleB)
+      }
+    },
+    {
+      accessorFn: row =>
+        row.type === ReportingType.INFRACTION_SUSPICION || row.type === ReportingType.ALERT ? row.value.natinfCode : '',
+      cell: ({ row }: CellContext<Reporting.Reporting, string>) => {
+        const reporting = row.original
+
+        if (reporting.type !== ReportingType.INFRACTION_SUSPICION && reporting.type !== ReportingType.ALERT) {
+          return undefined
+        }
+
+        return (
+          <Ellipsised title={getInfractionTitle(reporting)}>
+            {reporting.value.threatCharacterization} / NATINF {reporting.value.natinfCode}
+          </Ellipsised>
+        )
+      },
+      enableSorting: true,
+      header: () => 'Type d’infraction',
+      id: 'threat',
+      size: 190
     },
     {
       accessorFn: row =>

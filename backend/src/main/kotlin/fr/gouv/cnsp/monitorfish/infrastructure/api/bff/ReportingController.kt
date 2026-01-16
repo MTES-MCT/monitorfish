@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.websocket.server.PathParam
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -28,8 +30,13 @@ class ReportingController(
     fun createReporting(
         @RequestBody
         reportingInput: CreateReportingDataInput,
+        @AuthenticationPrincipal principal: OidcUser,
     ): ReportingDataOutput {
-        val (createdReporting, controlUnit) = addReporting.execute(reportingInput.toReporting())
+        val email = principal.email
+        val (createdReporting, controlUnit) =
+            addReporting.execute(
+                newReporting = reportingInput.toReporting(createdBy = email),
+            )
 
         return ReportingDataOutput.fromReporting(createdReporting, controlUnit)
     }
@@ -38,7 +45,11 @@ class ReportingController(
     @Operation(summary = "Get all current reportings")
     fun getAllReportings(): List<ReportingDataOutput> =
         getAllCurrentReportings.execute().map {
-            ReportingDataOutput.fromReporting(it.first, it.second)
+            ReportingDataOutput.fromReporting(
+                reporting = it.first,
+                controlUnit = it.second,
+                useThreatHierarchyForForm = true,
+            )
         }
 
     @PutMapping(value = ["/{reportingId}/archive"])
@@ -62,8 +73,8 @@ class ReportingController(
     ): ReportingDataOutput {
         val (updatedReporting, controlUnit) =
             updateReporting.execute(
-                reportingId,
-                updateReportingInput.toUpdatedReportingValues(),
+                reportingId = reportingId,
+                reportingUpdateCommand = updateReportingInput.toUpdatedReportingValues(),
             )
 
         return ReportingDataOutput.fromReporting(updatedReporting, controlUnit)

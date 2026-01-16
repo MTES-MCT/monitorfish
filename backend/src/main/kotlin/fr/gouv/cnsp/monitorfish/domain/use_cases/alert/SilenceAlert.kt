@@ -57,6 +57,8 @@ class SilenceAlert(
                         type = silencedAlert.value.type,
                         alertId = silencedAlert.value.alertId,
                         natinfCode = silencedAlert.value.natinfCode,
+                        threat = silencedAlert.value.threat,
+                        threatCharacterization = silencedAlert.value.threatCharacterization,
                         seaFront = silencedAlert.value.seaFront,
                         name = silencedAlert.value.name,
                         description = silencedAlert.value.description,

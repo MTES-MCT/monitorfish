@@ -19,6 +19,8 @@ class AlertUTests {
                     seaFront = NAMO.toString(),
                     alertId = null,
                     natinfCode = 7059,
+                    threat = "Obligations déclaratives",
+                    threatCharacterization = "DEP",
                     name = "Chalutage dans les 3 milles",
                 )
             }

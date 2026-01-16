@@ -84,20 +84,21 @@ context('Side Window > Reporting List > Actions', () => {
       withinSelector: 'tr:contains("COURANT MAIN PROFESSEUR")'
     })
     cy.fill('Titre', 'Suspicion de chalutage dans les 3 km')
-    cy.fill('Natinf', 'maille')
+    cy.fill('Type d’infraction et NATINF', ['27717'])
     cy.clickButton('Valider')
 
     // Then
     cy.wait('@updateReporting').then(({ request, response }) => {
-      expect(request.body.natinfCode).equal(23581)
       expect(request.body.title).contains('Suspicion de chalutage dans les 3 km')
       expect(response && response.statusCode).equal(200)
+      expect(response?.body?.value?.natinfCode).equal(27717)
+      expect(response?.body?.value?.threatCharacterization).equal('Transbordement')
     })
     cy.wait(200)
 
     cy.getDataCy('ReportingTable-reporting').should('have.length.greaterThan', 1)
     cy.get('tr:contains("COURANT MAIN PROFESSEUR")').contains('DML 56')
-    cy.get('tr:contains("COURANT MAIN PROFESSEUR")').contains(23581)
+    cy.get('tr:contains("COURANT MAIN PROFESSEUR")').contains('Transbordement')
 
     /**
      * The reporting type must be modified to OBSERVATION
@@ -112,13 +113,11 @@ context('Side Window > Reporting List > Actions', () => {
 
       // When
       cy.fill('Type de signalement', 'Observation')
-      cy.fill('Saisi par', '{backspace}{backspace}{backspace}LTH')
       cy.clickButton('Valider')
 
       // Then
       cy.wait('@updateReporting').then(({ request, response }) => {
         expect(request.body.type).contains('OBSERVATION')
-        expect(request.body.authorTrigram).contains('LTH')
         expect(response && response.statusCode).equal(200)
 
         cy.getDataCy('ReportingTable-reporting').should('have.length', numberOfReportings)

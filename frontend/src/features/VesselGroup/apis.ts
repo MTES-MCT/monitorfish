@@ -11,7 +11,7 @@ import {
   type VesselGroupWithVessels
 } from '@features/VesselGroup/types'
 import { FrontendApiError } from '@libs/FrontendApiError'
-import { parseResponseOrReturn } from '@utils/parseResponseOrReturn'
+import { parseOrReturn } from '@utils/parseOrReturn'
 import { orderBy } from 'lodash-es'
 import z from 'zod'
 
@@ -31,7 +31,7 @@ export const vesselGroupApi = monitorfishApi.injectEndpoints({
       }),
       transformErrorResponse: response => new FrontendApiError(CREATE_VESSEL_GROUPS_ERROR_MESSAGE, response),
       transformResponse: (baseQueryReturnValue: DynamicVesselGroup) =>
-        parseResponseOrReturn<DynamicVesselGroup>(baseQueryReturnValue, DynamicVesselGroupSchema, false)
+        parseOrReturn<DynamicVesselGroup>(baseQueryReturnValue, DynamicVesselGroupSchema, false)
     }),
     createOrUpdateFixedVesselGroup: builder.mutation<FixedVesselGroup, CreateOrUpdateFixedVesselGroup>({
       invalidatesTags: () => [{ type: RtkCacheTagType.VesselGroups }],
@@ -42,7 +42,7 @@ export const vesselGroupApi = monitorfishApi.injectEndpoints({
       }),
       transformErrorResponse: response => new FrontendApiError(CREATE_VESSEL_GROUPS_ERROR_MESSAGE, response),
       transformResponse: (baseQueryReturnValue: FixedVesselGroup) =>
-        parseResponseOrReturn<FixedVesselGroup>(baseQueryReturnValue, FixedVesselGroupSchema, false)
+        parseOrReturn<FixedVesselGroup>(baseQueryReturnValue, FixedVesselGroupSchema, false)
     }),
     deleteVesselFromVesselGroup: builder.mutation<void, { groupId: number; vesselIndex: number }>({
       invalidatesTags: () => [{ type: RtkCacheTagType.VesselGroups }],
@@ -66,7 +66,7 @@ export const vesselGroupApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_VESSELS_GROUPS_ERROR_MESSAGE, response),
       transformResponse: (baseQueryReturnValue: Array<VesselGroup>) =>
         orderBy(
-          parseResponseOrReturn<VesselGroup>(
+          parseOrReturn<VesselGroup>(
             baseQueryReturnValue,
             z.union([DynamicVesselGroupSchema, FixedVesselGroupSchema]),
             true

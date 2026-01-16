@@ -20,8 +20,7 @@ context('Side Window > Logbook Prior Notification Form  > Reporting List', () =>
     cy.fill('Nom et contact (numéro, mail…) de l’émetteur', 'Jean Bon (0612365896)')
     cy.fill('Titre', 'Sortie non autorisée')
     cy.fill('Description', 'Ce navire ne devrait pas être en mer.')
-    cy.fill('Natinf', '2608')
-    cy.fill('Saisi par', 'LTH')
+    cy.fill('Type d’infraction et NATINF', ['27717'])
 
     cy.clickButton('Valider')
 
@@ -37,7 +36,7 @@ context('Side Window > Logbook Prior Notification Form  > Reporting List', () =>
       cy.getDataCy('reporting-card').eq(0).contains('OFB SD 56 / Sortie non autorisée')
       cy.getDataCy('reporting-card').eq(0).contains('Ce navire ne devrait pas être en mer.')
       cy.getDataCy('reporting-card').eq(0).contains('Émetteur: Jean Bon (0612365896)')
-      cy.getDataCy('reporting-card').eq(0).contains('NATINF 2608')
+      cy.getDataCy('reporting-card').eq(0).contains('Transbordement / NATINF 27717')
 
       // Reset
       deleteReporting(createdPriorNotification.id)
@@ -60,8 +59,7 @@ context('Side Window > Logbook Prior Notification Form  > Reporting List', () =>
         cy.fill('Nom et contact (numéro, mail…) de l’émetteur', 'Jean Bon (0612365896)')
         cy.fill('Titre', 'Sortie non autorisée')
         cy.fill('Description', 'Ce navire ne devrait pas être en mer.')
-        cy.fill('Natinf', '2608')
-        cy.fill('Saisi par', 'LTH')
+        cy.fill('Type d’infraction et NATINF', ['27717'])
 
         cy.clickButton('Valider')
 
@@ -72,7 +70,7 @@ context('Side Window > Logbook Prior Notification Form  > Reporting List', () =>
         cy.getDataCy('reporting-card').eq(0).contains('OFB SD 56 / Sortie non autorisée')
         cy.getDataCy('reporting-card').eq(0).contains('Ce navire ne devrait pas être en mer.')
         cy.getDataCy('reporting-card').eq(0).contains('Émetteur: Jean Bon (0612365896)')
-        cy.getDataCy('reporting-card').eq(0).contains('NATINF 2608')
+        cy.getDataCy('reporting-card').eq(0).contains('Transbordement / NATINF 27717')
 
         // Reset
         deleteReporting(createdReportingId)

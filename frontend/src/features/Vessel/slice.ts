@@ -1,3 +1,4 @@
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselList/constants'
 import { ActivityType } from '@features/Vessel/schemas/ActiveVesselSchema'
@@ -6,7 +7,7 @@ import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { createEntityAdapter, createSlice, type EntityState, type PayloadAction } from '@reduxjs/toolkit'
 
-import { ReportingType, ReportingTypeCharacteristics } from '../Reporting/types'
+import { ReportingTypeCharacteristics } from '../Reporting/types'
 
 import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
 import type { ShowedVesselTrack, TrackRequest } from '@features/Vessel/types/types'

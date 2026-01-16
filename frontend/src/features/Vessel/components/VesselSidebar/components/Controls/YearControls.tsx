@@ -1,6 +1,7 @@
 import {
   YearListChevronIcon,
   YearListContent,
+  YearListRow,
   YearListTitle,
   YearListTitleText
 } from '@features/Vessel/components/VesselSidebar/components/common/YearList.style'
@@ -86,7 +87,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
   return (
     yearControls && (
       <div>
-        <Row>
+        <YearListRow>
           <YearListTitle as={isEmpty ? 'div' : 'button'} onClick={() => !isEmpty && setIsOpen(!isOpen)}>
             <YearListTitleText>
               <Year>{year}</Year>
@@ -103,7 +104,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
             </YearListTitleText>
           </YearListTitle>
           {!isEmpty && <YearListChevronIcon isOpen={isOpen} onClick={() => !isEmpty && setIsOpen(!isOpen)} />}
-        </Row>
+        </YearListRow>
 
         {isOpen && (
           <Row>
@@ -116,6 +117,16 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
     )
   )
 }
+
+export const Row = styled.div`
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  background: ${p => p.theme.color.white};
+  color: ${p => p.theme.color.gunMetal};
+`
 
 const Red = styled.span`
   height: 8px;
@@ -146,7 +157,6 @@ const GlodenPuppy = styled.span`
 
 const Year = styled.span`
   color: ${p => p.theme.color.slateGray};
-  font-size: 16px;
   width: 39px;
   display: inline-block;
 `
@@ -154,14 +164,4 @@ const Year = styled.span`
 const YearResume = styled.span`
   color: ${p => p.theme.color.gunMetal};
   margin-left: 15px;
-`
-
-const Row = styled.div`
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden !important;
-  background: ${p => p.theme.color.white};
-  color: ${p => p.theme.color.gunMetal};
 `

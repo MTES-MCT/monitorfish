@@ -1,7 +1,7 @@
 import { Seafront } from '@constants/seafront'
 import { PendingAlertValueType } from '@features/Alert/constants'
 import { ReportingCard } from '@features/Reporting/components/ReportingCard'
-import { ReportingType } from '@features/Reporting/types'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { afterAll, describe, expect, it } from '@jest/globals'
 import { THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
@@ -45,6 +45,7 @@ describe('ReportingCard()', () => {
     const store = mockStore({})
 
     const reporting: PendingAlertReporting = {
+      createdBy: 'LTH',
       creationDate: '2023-10-30T09:10:00Z',
       expirationDate: undefined,
       externalReferenceNumber: '',
@@ -70,6 +71,8 @@ describe('ReportingCard()', () => {
         name: 'Chalutage des les 3 milles',
         natinfCode: 2610,
         seaFront: Seafront.NAMO,
+        threat: 'Famille',
+        threatCharacterization: 'Type',
         type: PendingAlertValueType.POSITION_ALERT
       },
       vesselId: 1234568,

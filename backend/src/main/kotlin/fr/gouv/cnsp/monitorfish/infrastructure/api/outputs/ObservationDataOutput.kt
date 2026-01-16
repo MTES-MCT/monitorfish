@@ -1,14 +1,13 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 
 class ObservationDataOutput(
     val reportingActor: ReportingActor,
     val controlUnitId: Int? = null,
     val controlUnit: LegacyControlUnit? = null,
-    val authorTrigram: String,
     val authorContact: String? = null,
     val title: String,
     val description: String? = null,
@@ -17,19 +16,18 @@ class ObservationDataOutput(
 ) : ReportingValueDataOutput() {
     companion object {
         fun fromObservation(
-            observation: Observation,
+            reporting: Reporting.Observation,
             controlUnit: LegacyControlUnit? = null,
         ): ObservationDataOutput =
             ObservationDataOutput(
-                reportingActor = observation.reportingActor,
-                controlUnitId = observation.controlUnitId,
+                reportingActor = reporting.reportingActor,
+                controlUnitId = reporting.controlUnitId,
                 controlUnit = controlUnit,
-                authorTrigram = observation.authorTrigram,
-                authorContact = observation.authorContact,
-                title = observation.title,
-                description = observation.description,
-                seaFront = observation.seaFront,
-                dml = observation.dml,
+                authorContact = reporting.authorContact,
+                title = reporting.title,
+                description = reporting.description,
+                seaFront = reporting.seaFront,
+                dml = reporting.dml,
             )
     }
 }

@@ -1,4 +1,4 @@
-import { ReportingType } from '@features/Reporting/types'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
 export type ReportingTableFiltersState = {

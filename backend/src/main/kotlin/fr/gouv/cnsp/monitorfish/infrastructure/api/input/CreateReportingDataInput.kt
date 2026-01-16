@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
@@ -19,23 +19,79 @@ class CreateReportingDataInput(
     val creationDate: ZonedDateTime,
     val validationDate: ZonedDateTime? = null,
     val expirationDate: ZonedDateTime? = null,
-    val value: InfractionSuspicionOrObservationType,
+    val reportingActor: ReportingActor,
+    val controlUnitId: Int? = null,
+    val authorContact: String? = null,
+    val title: String,
+    val description: String? = null,
+    val threatHierarchy: ThreatHierarchyDataInput? = null,
 ) {
-    fun toReporting() =
-        Reporting(
-            type = this.type,
-            vesselId = this.vesselId,
-            vesselName = this.vesselName,
-            internalReferenceNumber = this.internalReferenceNumber,
-            externalReferenceNumber = this.externalReferenceNumber,
-            ircs = this.ircs,
-            vesselIdentifier = this.vesselIdentifier,
-            flagState = this.flagState,
-            creationDate = this.creationDate,
-            validationDate = this.validationDate,
-            expirationDate = this.expirationDate,
-            isDeleted = false,
-            isArchived = false,
-            value = this.value,
-        )
+    fun toReporting(createdBy: String): Reporting {
+        val threat = threatHierarchy?.value
+        val threatCharacterization = threatHierarchy?.children?.single()?.value
+        val natinf =
+            threatHierarchy
+                ?.children
+                ?.single()
+                ?.children
+                ?.single()
+                ?.value
+
+        return if (type == ReportingType.INFRACTION_SUSPICION) {
+            requireNotNull(natinf) {
+                "NATINF should be not null"
+            }
+            requireNotNull(threat) {
+                "threat should be not null"
+            }
+            requireNotNull(threatCharacterization) {
+                "threatCharacterization should be not null"
+            }
+
+            Reporting.InfractionSuspicion(
+                vesselId = this.vesselId,
+                vesselName = this.vesselName,
+                internalReferenceNumber = this.internalReferenceNumber,
+                externalReferenceNumber = this.externalReferenceNumber,
+                ircs = this.ircs,
+                vesselIdentifier = this.vesselIdentifier,
+                flagState = this.flagState,
+                creationDate = this.creationDate,
+                validationDate = this.validationDate,
+                expirationDate = this.expirationDate,
+                isDeleted = false,
+                isArchived = false,
+                createdBy = createdBy,
+                reportingActor = reportingActor,
+                controlUnitId = controlUnitId,
+                authorContact = authorContact,
+                title = title,
+                description = description,
+                natinfCode = natinf,
+                threat = threat,
+                threatCharacterization = threatCharacterization,
+            )
+        } else {
+            Reporting.Observation(
+                vesselId = this.vesselId,
+                vesselName = this.vesselName,
+                internalReferenceNumber = this.internalReferenceNumber,
+                externalReferenceNumber = this.externalReferenceNumber,
+                ircs = this.ircs,
+                vesselIdentifier = this.vesselIdentifier,
+                flagState = this.flagState,
+                creationDate = this.creationDate,
+                validationDate = this.validationDate,
+                expirationDate = this.expirationDate,
+                isDeleted = false,
+                isArchived = false,
+                createdBy = createdBy,
+                reportingActor = reportingActor,
+                controlUnitId = controlUnitId,
+                authorContact = authorContact,
+                title = title,
+                description = description,
+            )
+        }
+    }
 }

@@ -3,11 +3,13 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.NatinfDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ThreatCharacterizationDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ThreatHierarchyDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateReportingDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.log.LoggingFormatter
 import org.assertj.core.api.Assertions.assertThat
@@ -41,8 +43,25 @@ class LoggingFormatterUTests {
                 UpdateReportingDataInput(
                     reportingActor = ReportingActor.OPS,
                     type = ReportingType.INFRACTION_SUSPICION,
-                    natinfCode = 123456,
-                    authorTrigram = "LTH",
+                    threatHierarchy =
+                        ThreatHierarchyDataInput(
+                            children =
+                                listOf(
+                                    ThreatCharacterizationDataInput(
+                                        children =
+                                            listOf(
+                                                NatinfDataInput(
+                                                    label = "27689",
+                                                    value = 27689,
+                                                ),
+                                            ),
+                                        label = "Pêche sans autorisation par navire tiers",
+                                        value = "Pêche sans autorisation par navire tiers",
+                                    ),
+                                ),
+                            label = "Activités INN",
+                            value = "Activités INN",
+                        ),
                     title = "A title",
                 ),
             )
@@ -53,12 +72,11 @@ class LoggingFormatterUTests {
                 "{\"reportingActor\":\"OPS\"," +
                 "\"type\":\"INFRACTION_SUSPICION\"," +
                 "\"controlUnitId\":null," +
-                "\"authorTrigram\":\"LTH\"," +
                 "\"authorContact\":null," +
                 "\"expirationDate\":null," +
                 "\"title\":\"A title\"," +
                 "\"description\":null," +
-                "\"natinfCode\":123456}",
+                "\"threatHierarchy\":{\"children\":[{\"children\":[{\"label\":\"27689\",\"value\":27689}],\"label\":\"Pêche sans autorisation par navire tiers\",\"value\":\"Pêche sans autorisation par navire tiers\"}],\"label\":\"Activités INN\",\"value\":\"Activités INN\"}}",
         )
     }
 
@@ -81,13 +99,27 @@ class LoggingFormatterUTests {
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     flagState = CountryCode.FR,
                     creationDate = dateTime,
-                    value =
-                        InfractionSuspicion(
-                            ReportingActor.OPS,
-                            natinfCode = 123456,
-                            authorTrigram = "LTH",
-                            title = "A title",
+                    threatHierarchy =
+                        ThreatHierarchyDataInput(
+                            children =
+                                listOf(
+                                    ThreatCharacterizationDataInput(
+                                        children =
+                                            listOf(
+                                                NatinfDataInput(
+                                                    label = "27689",
+                                                    value = 27689,
+                                                ),
+                                            ),
+                                        label = "Pêche sans autorisation par navire tiers",
+                                        value = "Pêche sans autorisation par navire tiers",
+                                    ),
+                                ),
+                            label = "Activités INN",
+                            value = "Activités INN",
                         ),
+                    reportingActor = ReportingActor.OPS,
+                    title = "A title",
                     type = ReportingType.INFRACTION_SUSPICION,
                 ),
             )
@@ -106,20 +138,12 @@ class LoggingFormatterUTests {
                 "\"creationDate\":\"2019-01-18T07:19:45.000000045Z\"," +
                 "\"validationDate\":null," +
                 "\"expirationDate\":null," +
-                "\"value\":{\"type\":\"INFRACTION_SUSPICION\"," +
                 "\"reportingActor\":\"OPS\"," +
                 "\"controlUnitId\":null," +
-                "\"authorTrigram\":\"LTH\"," +
                 "\"authorContact\":null," +
                 "\"title\":\"A title\"," +
                 "\"description\":null," +
-                "\"natinfCode\":123456," +
-                "\"seaFront\":null," +
-                "\"dml\":null," +
-                "\"threat\":null," +
-                "\"threatCharacterization\":null," +
-                "\"type\":\"INFRACTION_SUSPICION\"" +
-                "}}",
+                "\"threatHierarchy\":{\"children\":[{\"children\":[{\"label\":\"27689\",\"value\":27689}],\"label\":\"Pêche sans autorisation par navire tiers\",\"value\":\"Pêche sans autorisation par navire tiers\"}],\"label\":\"Activités INN\",\"value\":\"Activités INN\"}}",
         )
     }
 
@@ -133,8 +157,25 @@ class LoggingFormatterUTests {
             UpdateReportingDataInput(
                 reportingActor = ReportingActor.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
-                natinfCode = 123456,
-                authorTrigram = "LTH",
+                threatHierarchy =
+                    ThreatHierarchyDataInput(
+                        children =
+                            listOf(
+                                ThreatCharacterizationDataInput(
+                                    children =
+                                        listOf(
+                                            NatinfDataInput(
+                                                label = "27689",
+                                                value = 27689,
+                                            ),
+                                        ),
+                                    label = "Pêche sans autorisation par navire tiers",
+                                    value = "Pêche sans autorisation par navire tiers",
+                                ),
+                            ),
+                        label = "Activités INN",
+                        value = "Activités INN",
+                    ),
                 title = "A title",
             )
 
@@ -147,12 +188,11 @@ class LoggingFormatterUTests {
                 "{\"reportingActor\":\"OPS\"," +
                 "\"type\":\"INFRACTION_SUSPICION\"," +
                 "\"controlUnitId\":null," +
-                "\"authorTrigram\":\"LTH\"," +
                 "\"authorContact\":null," +
                 "\"expirationDate\":null," +
                 "\"title\":\"A title\"," +
                 "\"description\":null," +
-                "\"natinfCode\":123456}",
+                "\"threatHierarchy\":{\"children\":[{\"children\":[{\"label\":\"27689\",\"value\":27689}],\"label\":\"Pêche sans autorisation par navire tiers\",\"value\":\"Pêche sans autorisation par navire tiers\"}],\"label\":\"Activités INN\",\"value\":\"Activités INN\"}}",
         )
     }
 }

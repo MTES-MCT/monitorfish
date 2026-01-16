@@ -6,8 +6,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.mappers.ReportingMapper
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.CountryCodeConverter
+import fr.gouv.cnsp.monitorfish.infrastructure.database.mappers.ReportingMapper
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcType
@@ -63,27 +63,15 @@ data class ReportingEntity(
     val latitude: Double? = null,
     @Column(name = "longitude")
     val longitude: Double? = null,
+    @Column(name = "created_by")
+    val createdBy: String,
 ) {
     fun toReporting(mapper: ObjectMapper): Reporting =
-        Reporting(
-            id = id,
-            vesselId = vesselId,
-            type = type,
-            vesselName = vesselName,
-            internalReferenceNumber = internalReferenceNumber,
-            externalReferenceNumber = externalReferenceNumber,
-            ircs = ircs,
-            vesselIdentifier = vesselIdentifier,
-            flagState = flagState,
-            creationDate = creationDate,
-            validationDate = validationDate,
-            expirationDate = expirationDate,
-            archivingDate = archivingDate,
-            value = ReportingMapper.getReportingValueFromJSON(mapper, value, type),
-            isArchived = isArchived,
-            isDeleted = isDeleted,
-            latitude = latitude,
-            longitude = longitude,
+        ReportingMapper.getReportingFromJSON(
+            mapper = mapper,
+            jsonValue = value,
+            reportingType = type,
+            entity = this,
         )
 
     companion object {
@@ -107,6 +95,7 @@ data class ReportingEntity(
             isDeleted = false,
             latitude = alert.latitude,
             longitude = alert.longitude,
+            createdBy = "SYSTEM",
         )
 
         fun fromReporting(
@@ -124,9 +113,10 @@ data class ReportingEntity(
             creationDate = reporting.creationDate,
             validationDate = reporting.validationDate,
             expirationDate = reporting.expirationDate,
-            value = mapper.writeValueAsString(reporting.value),
+            value = mapper.writeValueAsString(ReportingMapper.getValueFromReporting(reporting)),
             isArchived = false,
             isDeleted = false,
+            createdBy = reporting.createdBy,
         )
     }
 }

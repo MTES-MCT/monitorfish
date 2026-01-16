@@ -3,9 +3,9 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.CountryCodeConverter
+import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.AlertValueDto
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcType
@@ -62,7 +62,7 @@ data class PendingAlertEntity(
             flagState = flagState,
             creationDate = creationDate,
             tripNumber = tripNumber,
-            value = mapper.readValue(value, Alert::class.java),
+            value = mapper.readValue(value, AlertValueDto::class.java).toAlert(),
             latitude = latitude,
             longitude = longitude,
         )

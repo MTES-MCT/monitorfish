@@ -15,7 +15,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.ProtectedSpeciesCatch
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTypeMapping
+import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.IHasImplementation
+import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.ReportingTypeMapping
 import org.n52.jackson.datatype.jts.JtsModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -24,7 +25,6 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripGear as GearLogbook
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.IHasImplementation as IReportingsHasImplementation
 
 @Configuration
 class MapperConfiguration {
@@ -59,7 +59,7 @@ class MapperConfiguration {
     private fun <E> registerReportingsSubType(
         mapper: ObjectMapper,
         enumOfTypeToAdd: Class<E>,
-    ) where E : Enum<E>?, E : IReportingsHasImplementation? {
+    ) where E : Enum<E>?, E : IHasImplementation? {
         Arrays
             .stream(enumOfTypeToAdd.enumConstants)
             .map { enumItem -> NamedType(enumItem.getImplementation(), enumItem.name) }

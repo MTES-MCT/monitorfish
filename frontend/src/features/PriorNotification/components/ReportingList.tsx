@@ -1,7 +1,7 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { SideWindowCard } from '@components/SideWindowCard'
-import { CurrentReportingList } from '@features/Reporting/components/CurrentReportingList'
+import { CurrentReportingList } from '@features/Reporting/components/VesselReportings/CurrentReportingList'
 import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
 import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'

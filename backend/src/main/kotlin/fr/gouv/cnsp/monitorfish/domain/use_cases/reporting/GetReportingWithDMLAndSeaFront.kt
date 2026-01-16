@@ -1,9 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.DistrictRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
@@ -17,10 +15,8 @@ class GetReportingWithDMLAndSeaFront(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetReportingWithDMLAndSeaFront::class.java)
 
-    fun execute(
-        infractionSuspicionOrObservationType: InfractionSuspicionOrObservationType,
-        vesselId: Int?,
-    ): InfractionSuspicionOrObservationType {
+    fun execute(reporting: Reporting): Reporting {
+        val vesselId = reporting.vesselId
         vesselId?.let { vesselIdNotNull ->
             val districtCode = vesselRepository.findVesselById(vesselIdNotNull)?.districtCode
 
@@ -28,18 +24,18 @@ class GetReportingWithDMLAndSeaFront(
                 try {
                     val district = districtRepository.find(it)
 
-                    return when (infractionSuspicionOrObservationType) {
-                        is InfractionSuspicion ->
-                            infractionSuspicionOrObservationType.copy(
+                    return when (reporting) {
+                        is Reporting.InfractionSuspicion ->
+                            reporting.copy(
                                 dml = district.dml,
                                 seaFront = district.facade,
                             )
-                        is Observation ->
-                            infractionSuspicionOrObservationType.copy(
+                        is Reporting.Observation ->
+                            reporting.copy(
                                 dml = district.dml,
                                 seaFront = district.facade,
                             )
-                        else -> infractionSuspicionOrObservationType
+                        is Reporting.Alert -> reporting
                     }
                 } catch (e: CodeNotFoundException) {
                     logger.warn("Could not add DML and sea front for vesselId: $vesselIdNotNull.", e)
@@ -47,8 +43,8 @@ class GetReportingWithDMLAndSeaFront(
             }
         }
 
-        logger.warn("No vessel id given, the infraction will be stored without DML/SeaFront.")
+        logger.warn("No vessel id given, the reporting will be stored without DML/SeaFront.")
 
-        return infractionSuspicionOrObservationType
+        return reporting
     }
 }

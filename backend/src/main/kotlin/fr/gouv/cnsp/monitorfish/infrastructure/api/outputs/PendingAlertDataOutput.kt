@@ -3,7 +3,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PositionAlertSpecification
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
@@ -18,7 +17,7 @@ data class PendingAlertDataOutput(
     val flagState: CountryCode,
     val creationDate: ZonedDateTime,
     val tripNumber: String? = null,
-    val value: Alert,
+    val value: AlertDataOutput,
     var infraction: InfractionDataOutput? = null,
     val alertSpecification: PositionAlertSpecificationDataOutput,
 ) {
@@ -35,7 +34,7 @@ data class PendingAlertDataOutput(
                 flagState = pendingAlert.first.flagState,
                 creationDate = pendingAlert.first.creationDate,
                 tripNumber = pendingAlert.first.tripNumber,
-                value = pendingAlert.first.value,
+                value = AlertDataOutput.fromAlert(pendingAlert.first.value),
                 infraction = pendingAlert.first.infraction?.let { InfractionDataOutput.fromInfraction(it) },
                 alertSpecification =
                     PositionAlertSpecificationDataOutput.fromPositionAlertSpecification(

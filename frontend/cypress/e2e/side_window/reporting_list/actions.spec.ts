@@ -84,12 +84,13 @@ context('Side Window > Reporting List > Actions', () => {
       withinSelector: 'tr:contains("COURANT MAIN PROFESSEUR")'
     })
     cy.fill('Titre', 'Suspicion de chalutage dans les 3 km')
-    cy.fill('Natinf', 'maille')
+    cy.fill('Type d’infraction et NATINF', ['27717'])
     cy.clickButton('Valider')
 
     // Then
     cy.wait('@updateReporting').then(({ request, response }) => {
-      expect(request.body.natinfCode).equal(23581)
+      expect(request.body.natinfCode).equal(27717)
+      expect(request.body.threatCharacterization).equal('Transbordement')
       expect(request.body.title).contains('Suspicion de chalutage dans les 3 km')
       expect(response && response.statusCode).equal(200)
     })

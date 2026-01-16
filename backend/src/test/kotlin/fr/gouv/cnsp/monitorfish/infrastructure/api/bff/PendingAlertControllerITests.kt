@@ -260,7 +260,9 @@ class PendingAlertControllerITests {
                                 value =
                                     "{\"type\": \"POSITION_ALERT\"," +
                                         "\"name\": \"Chalutage dans les 3 milles\"," +
-                                        "\"alertId\": \"1\"}",
+                                        "\"alertId\": \"1\"," +
+                                        "\"threat\": \"Obligations déclaratives\"," +
+                                        "\"threatCharacterization\": \"DEP\"}",
                             ),
                         ),
                     ).contentType(MediaType.APPLICATION_JSON),
@@ -302,7 +304,7 @@ class PendingAlertControllerITests {
                                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                                 flagState = CountryCode.FR,
                                 silencedBeforeDate = ZonedDateTime.now(),
-                                value = "{\"type\": \"MISSING_FAR_48_HOURS_ALERT\", \"name\": \"FAR manquant en 48h\"}",
+                                value = "{\"type\": \"MISSING_FAR_48_HOURS_ALERT\", \"name\": \"FAR manquant en 48h\", \"threat\": \"Obligations déclaratives\", \"threatCharacterization\": \"DEP\"}",
                             ),
                         ),
                     ).contentType(MediaType.APPLICATION_JSON),

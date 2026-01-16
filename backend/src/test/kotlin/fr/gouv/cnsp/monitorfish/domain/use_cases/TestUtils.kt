@@ -79,9 +79,9 @@ object TestUtils {
                     alertType = AlertType.MISSING_FAR_ALERT,
                     seaFront = alertValue.seaFront,
                     name = alertValue.name,
-                    natinfCode = alertValue.natinfCode ?: 0,
-                    threat = alertValue.threat ?: "Famille inconnue",
-                    threatCharacterization = alertValue.threatCharacterization ?: "Type inconnu",
+                    natinfCode = alertValue.natinfCode,
+                    threat = alertValue.threat,
+                    threatCharacterization = alertValue.threatCharacterization,
                 )
             }
             AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT -> {
@@ -100,9 +100,9 @@ object TestUtils {
                     alertType = AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT,
                     seaFront = alertValue.seaFront,
                     name = alertValue.name,
-                    natinfCode = alertValue.natinfCode ?: 0,
-                    threat = alertValue.threat ?: "Famille inconnue",
-                    threatCharacterization = alertValue.threatCharacterization ?: "Type inconnu",
+                    natinfCode = alertValue.natinfCode,
+                    threat = alertValue.threat,
+                    threatCharacterization = alertValue.threatCharacterization,
                 )
             }
             AlertType.MISSING_FAR_48_HOURS_ALERT -> {
@@ -121,9 +121,9 @@ object TestUtils {
                     alertType = AlertType.MISSING_FAR_48_HOURS_ALERT,
                     seaFront = alertValue.seaFront,
                     name = alertValue.name,
-                    natinfCode = alertValue.natinfCode ?: 0,
-                    threat = alertValue.threat ?: "Famille inconnue",
-                    threatCharacterization = alertValue.threatCharacterization ?: "Type inconnu",
+                    natinfCode = alertValue.natinfCode,
+                    threat = alertValue.threat,
+                    threatCharacterization = alertValue.threatCharacterization,
                 )
             }
             else ->

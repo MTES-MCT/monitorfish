@@ -11,6 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.mappers.ReportingMapper
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBReportingRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.AlertValueDto
 import jakarta.persistence.EntityManager
 import jakarta.persistence.criteria.CriteriaBuilder
 import jakarta.persistence.criteria.Predicate
@@ -163,7 +164,7 @@ class JpaReportingRepository(
         dbReportingRepository.findAllUnarchivedAfterDEPLogbookMessage().map { result ->
             Pair(
                 result[0] as Int,
-                mapper.readValue(result[1] as String?, Alert::class.java),
+                mapper.readValue(result[1] as String?, AlertValueDto::class.java).toAlert(),
             )
         }
 

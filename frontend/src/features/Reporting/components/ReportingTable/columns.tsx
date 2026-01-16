@@ -2,6 +2,7 @@ import { CountryFlag } from '@components/CountryFlag'
 import { Ellipsised } from '@components/Ellipsised'
 import { Titled } from '@components/Titled'
 import { HiddenText } from '@features/commonStyles/HiddenText'
+import { getInfractionTitle } from '@features/Reporting/components/ReportingCard/utils'
 import { getReportingOrigin, getReportingTitle } from '@features/Reporting/components/ReportingTable/utils'
 import { type Reporting, ReportingTypeCharacteristics } from '@features/Reporting/types'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
@@ -13,7 +14,6 @@ import * as timeago from 'timeago.js'
 import { ActionButtonsCell } from './cells/ActionButtonsCell'
 
 import type { CellContext, ColumnDef, Row } from '@tanstack/react-table'
-import {getInfractionTitle} from "@features/Reporting/components/ReportingCard/utils";
 
 export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Reporting.Reporting, any>> {
   const legacyFirefoxOffset = !isFromUrl && isLegacyFirefox() ? -32 : 0

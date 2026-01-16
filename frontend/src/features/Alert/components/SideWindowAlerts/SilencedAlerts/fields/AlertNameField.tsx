@@ -30,6 +30,9 @@ export function AlertNameField() {
     helper.setValue({
       alertId: nextValue.id,
       name: nextValue.name,
+      natinfCode: nextValue.natinf,
+      threat: nextValue.threat,
+      threatCharacterization: nextValue.threatCharacterization,
       type: nextValue.type
     })
   }

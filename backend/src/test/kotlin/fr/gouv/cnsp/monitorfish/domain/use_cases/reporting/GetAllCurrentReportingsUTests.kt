@@ -4,9 +4,12 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
+import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
@@ -14,6 +17,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.BDDMockito
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
@@ -27,10 +31,13 @@ class GetAllCurrentReportingsUTests {
     private lateinit var vesselRepository: VesselRepository
 
     @MockitoBean
+    private lateinit var infractionRepository: InfractionRepository
+
+    @MockitoBean
     private lateinit var getAllLegacyControlUnits: GetAllLegacyControlUnits
 
     @Test
-    fun `execute Should get all reportings with the underCharter field`() {
+    fun `execute Should get all reportings with the underCharter and infractions fields`() {
         // Given
         val currentReporting =
             Reporting.InfractionSuspicion(
@@ -41,7 +48,7 @@ class GetAllCurrentReportingsUTests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 reportingActor = ReportingActor.OPS,
-                natinfCode = 123456,
+                natinfCode = 27689,
                 title = "A title",
                 threat = "Activités INN",
                 threatCharacterization = "Pêche sans autorisation par navire tiers",
@@ -56,12 +63,20 @@ class GetAllCurrentReportingsUTests {
                 eq("FRFGRGR"),
             ),
         ).willReturn(true)
+        BDDMockito.given(infractionRepository.findInfractionByNatinfCode(eq(27689))).willReturn(
+            Infraction(
+                natinfCode = 27689,
+                infraction = "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne",
+                infractionCategory = InfractionCategory.FISHING,
+            ),
+        )
 
         // When
         val reportings =
             GetAllCurrentReportings(
                 reportingRepository,
                 vesselRepository,
+                infractionRepository,
                 getAllLegacyControlUnits,
             ).execute()
 
@@ -70,6 +85,7 @@ class GetAllCurrentReportingsUTests {
         val (reporting, _) = reportings.first()
         assertThat(reporting.internalReferenceNumber).isEqualTo("FRFGRGR")
         assertThat(reporting.underCharter).isTrue
+        assertThat(reporting.infraction).isNotNull
     }
 
     @Test
@@ -97,7 +113,12 @@ class GetAllCurrentReportingsUTests {
         // When
         val throwable =
             catchThrowable {
-                GetAllCurrentReportings(reportingRepository, vesselRepository, getAllLegacyControlUnits).execute()
+                GetAllCurrentReportings(
+                    reportingRepository,
+                    vesselRepository,
+                    infractionRepository,
+                    getAllLegacyControlUnits,
+                ).execute()
             }
 
         // Then

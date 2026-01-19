@@ -153,7 +153,6 @@ export function FleetSegmentsBackoffice() {
       {fleetSegments.length ? (
         <>
           <FleetSegmentsTable
-            faoAreas={faoAreas ?? []}
             fleetSegments={fleetSegments}
             onDeleteFleetSegment={onDeleteFleetSegment}
             openEditFleetSegmentModal={openEditFleetSegmentModal}

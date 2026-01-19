@@ -5,7 +5,7 @@ import {
   INPUT_TYPE,
   ModifiableCell,
   SegmentCellWithTitle
-} from '@features/Regulation/components/RegulationTables/tableCells'
+} from '@features/ControlObjective/components/ControlObjectiveTable/tableCells'
 import { Label, Select } from '@mtes-mct/monitor-ui'
 import { sortArrayByColumn, SortType } from '@utils/sortArrayByColumn'
 import { useCallback, useEffect, useState } from 'react'
@@ -43,7 +43,6 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
   >([])
   const [sortColumn, setSortColumn] = useState<keyof ControlObjective>('segment')
   const [sortType, setSortType] = useState(SortType.ASC)
-  const [segmentToAddToFacade, setSegmentToAddToFacade] = useState<string | undefined>(undefined)
 
   const getFleetSegmentsQuery = useGetFleetSegmentsQuery()
 
@@ -54,8 +53,8 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
   const [deleteControlObjective] = useDeleteControlObjectiveMutation()
 
   const addSegmentToFacade = useCallback(
-    async (nextSegment: string) => {
-      if (!getFleetSegmentsQuery.data) {
+    async (nextSegment: string | undefined) => {
+      if (!getFleetSegmentsQuery.data || !nextSegment) {
         return
       }
 
@@ -93,7 +92,6 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
       )
 
       setControlObjectivesWithMaybeFleetSegment(sortedNextDataWithSegmentDetails)
-      setSegmentToAddToFacade(undefined)
     },
     [
       controlObjectivesWithMaybeFleetSegment,
@@ -149,7 +147,7 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
     (
       id: number,
       key: keyof ControlObjective,
-      value,
+      value: number,
       _controlObjectivesWithMaybeFleetSegment: ControlObjectiveWithMaybeFleetSegment[]
     ) => {
       const previousControlObjectivesWithMaybeFleetSegment = [..._controlObjectivesWithMaybeFleetSegment]
@@ -194,22 +192,20 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
     setControlObjectivesWithMaybeFleetSegment(nextControlObjectivesWithMaybeFleetSegment)
   }, [data, getFleetSegmentsQuery.data, sortColumn, sortType])
 
-  useEffect(() => {
-    if (!segmentToAddToFacade) {
-      return
-    }
-
-    addSegmentToFacade(segmentToAddToFacade)
-  }, [addSegmentToFacade, segmentToAddToFacade])
-
   if (!getFleetSegmentsQuery.data) {
     return <LoadingSpinnerWall />
   }
 
+  const segmentsOptions = getFleetSegmentsQuery.data
+    .map(segment => ({ label: segment.segment, value: segment.segment }))
+    .filter(
+      segment => !controlObjectivesWithMaybeFleetSegment.find(facadeSegment => facadeSegment.segment === segment.value)
+    )
+    .sort((a, b) => a.label.localeCompare(b.label))
+
   return (
     <Wrapper>
       <BackOfficeTitle data-cy="control-objective-facade-title">{title}</BackOfficeTitle>
-      <br />
       <Table
         affixHorizontalScrollbar
         data={controlObjectivesWithMaybeFleetSegment}
@@ -230,7 +226,7 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
           <SegmentCellWithTitle dataKey="segment" />
         </Table.Column>
 
-        <Table.Column sortable width={140}>
+        <Table.Column sortable width={160}>
           <Table.HeaderCell>Nom du segment</Table.HeaderCell>
           <SegmentCellWithTitle dataKey="segmentName" />
         </Table.Column>
@@ -261,12 +257,12 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
           />
         </Table.Column>
 
-        <Table.Column width={80}>
+        <Table.Column width={100}>
           <Table.HeaderCell>N. impact</Table.HeaderCell>
           <ImpactRiskFactorCell />
         </Table.Column>
 
-        <Table.Column width={70}>
+        <Table.Column width={80}>
           <Table.HeaderCell>Priorité</Table.HeaderCell>
           <ControlPriorityCell
             dataKey="controlPriorityLevel"
@@ -300,18 +296,12 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
           isTransparent
           label="Ajouter un objectif"
           name="AddSegment"
-          onChange={segment => setSegmentToAddToFacade(segment ?? undefined)}
-          options={getFleetSegmentsQuery.data
-            .map(segment => ({ label: segment.segment, value: segment.segment }))
-            .filter(
-              segment =>
-                !controlObjectivesWithMaybeFleetSegment.find(facadeSegment => facadeSegment.segment === segment.value)
-            )
-            .sort((a, b) => a.label.localeCompare(b.label))}
+          onChange={segment => addSegmentToFacade(segment)}
+          options={segmentsOptions}
           placeholder="segment"
           searchable
           style={{ width: 120 }}
-          value={segmentToAddToFacade}
+          value={undefined}
         />
       </AddSegment>
     </Wrapper>
@@ -320,7 +310,7 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
 
 const Wrapper = styled.div`
   margin-left: 40px;
-  margin-top: 10px;
+  margin-top: 32px;
   margin-bottom: 10px;
 `
 

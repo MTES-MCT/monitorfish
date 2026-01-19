@@ -46,7 +46,6 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
       transformResponse: (baseQueryReturnValue: number[]) => baseQueryReturnValue.sort((a, b) => a - b)
     }),
     updateControlObjective: builder.mutation<void, UpdateControlObjective>({
-      invalidatesTags: [{ type: 'ControlObjectives' }],
       query: ({ id, updatedFields }) => ({
         body: updatedFields,
         method: 'PUT',

@@ -7,7 +7,6 @@ import { InputPicker } from 'rsuite'
 import styled from 'styled-components'
 
 import { SeafrontControlObjectives } from './SeafrontControlObjectives'
-import { COLORS } from '../../../../constants/constants'
 import { LoadingSpinnerWall } from '../../../../ui/LoadingSpinnerWall'
 import {
   useAddControlObjectiveYearMutation,
@@ -73,6 +72,31 @@ export function ControlObjectiveTable() {
     setSelectedYear(last(getControlObjectiveYearsQuery.data))
   }, [getControlObjectiveYearsQuery])
 
+  const namoData = useMemo(
+    () => (getControlObjectivesQuery.data ?? []).filter(co => co.facade === Seafront.NAMO),
+    [getControlObjectivesQuery.data]
+  )
+
+  const memnData = useMemo(
+    () => (getControlObjectivesQuery.data ?? []).filter(co => co.facade === Seafront.MEMN),
+    [getControlObjectivesQuery.data]
+  )
+
+  const saData = useMemo(
+    () => (getControlObjectivesQuery.data ?? []).filter(co => co.facade === Seafront.SA),
+    [getControlObjectivesQuery.data]
+  )
+
+  const medData = useMemo(
+    () => (getControlObjectivesQuery.data ?? []).filter(co => co.facade === Seafront.MED),
+    [getControlObjectivesQuery.data]
+  )
+
+  const corseData = useMemo(
+    () => (getControlObjectivesQuery.data ?? []).filter(co => co.facade === Seafront.CORSE),
+    [getControlObjectivesQuery.data]
+  )
+
   if (!getControlObjectivesQuery.data || !getControlObjectiveYearsQuery.data || !selectedYear) {
     return <LoadingSpinnerWall />
   }
@@ -102,42 +126,32 @@ export function ControlObjectiveTable() {
       </Header>
       <ControlObjectivesContainer>
         <SeafrontControlObjectives
-          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === Seafront.NAMO)}
+          data={namoData}
           facade={Seafront.NAMO}
           title="NORD ATLANTIQUE - MANCHE OUEST (NAMO)"
           year={selectedYear}
         />
         <SeafrontControlObjectives
-          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === Seafront.MEMN)}
+          data={memnData}
           facade={Seafront.MEMN}
           title="MANCHE EST – MER DU NORD (MEMN)"
           year={selectedYear}
         />
+        <SeafrontControlObjectives data={saData} facade={Seafront.SA} title="SUD-ATLANTIQUE (SA)" year={selectedYear} />
         <SeafrontControlObjectives
-          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === Seafront.SA)}
-          facade={Seafront.SA}
-          title="SUD-ATLANTIQUE (SA)"
-          year={selectedYear}
-        />
-        <SeafrontControlObjectives
-          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === Seafront.MED)}
+          data={medData}
           facade={Seafront.MED}
           title="Méditerranée (MED)"
           year={selectedYear}
         />
-        <SeafrontControlObjectives
-          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === Seafront.CORSE)}
-          facade={Seafront.CORSE}
-          title="Corse (CORSE)"
-          year={selectedYear}
-        />
+        <SeafrontControlObjectives data={corseData} facade={Seafront.CORSE} title="Corse (CORSE)" year={selectedYear} />
       </ControlObjectivesContainer>
     </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
-  background-color: ${COLORS.white};
+  background-color: ${p => p.theme.color.white};
   flex-grow: 1;
 `
 
@@ -146,9 +160,8 @@ const Header = styled.div`
 `
 
 const ControlObjectivesContainer = styled.div`
-  width: 100%;
   height: calc(100vh - 90px);
-  padding: 0px 20px 20px 20px;
+  padding: 0 20px 20px 20px;
   display: flex;
   flex-wrap: wrap;
   overflow: auto;
@@ -164,7 +177,7 @@ const AddYear = styled.a<{
   margin-right: 30px;
   margin-left: auto;
   text-decoration: underline;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   cursor: pointer;
 `
 
@@ -187,7 +200,7 @@ const Year = styled.div`
   .rs-picker-has-value .rs-btn .rs-picker-toggle-value,
   .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
     font-size: 18px;
-    color: ${COLORS.gunMetal};
+    color: ${p => p.theme.color.gunMetal};
     font-weight: 700;
     text-transform: uppercase;
     width: fit-content;
@@ -212,7 +225,7 @@ const Year = styled.div`
   }
 
   .rs-input:focus {
-    background: ${COLORS.charcoal};
+    background: ${p => p.theme.color.charcoal};
     color: ${p => p.theme.color.white};
   }
 

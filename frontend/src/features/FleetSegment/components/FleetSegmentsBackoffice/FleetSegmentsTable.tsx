@@ -1,6 +1,5 @@
-import { EditAndDeleteCell, TagsCell } from '@features/Regulation/components/RegulationTables/tableCells'
+import { EditAndDeleteCell, TagsCell } from '@features/FleetSegment/components/FleetSegmentsBackoffice/tableCells'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useWindowResize } from '@hooks/useWindowResize'
 import { useEffect } from 'react'
 import { Table } from 'rsuite'
@@ -14,20 +13,16 @@ import type { MainAppAsyncThunk } from '@store'
 const { Cell, Column, HeaderCell } = Table
 
 type FleetSegmentsTableProps = Readonly<{
-  faoAreas: string[]
   fleetSegments: FleetSegment[]
   onDeleteFleetSegment: (segment: string, year: number) => void
   openEditFleetSegmentModal: (fleetSegment: FleetSegment) => void
 }>
 export function FleetSegmentsTable({
-  faoAreas,
   fleetSegments,
   onDeleteFleetSegment,
   openEditFleetSegmentModal
 }: FleetSegmentsTableProps) {
   const dispatch = useMainAppDispatch()
-  const gears = useMainAppSelector(state => state.gear.gears)
-  const species = useMainAppSelector(state => state.species.species)
   const { height } = useWindowResize()
 
   useEffect(() => {
@@ -66,16 +61,12 @@ export function FleetSegmentsTable({
 
       <Column width={280}>
         <HeaderCell>Engins</HeaderCell>
-        <TagsCell data={gears.map(gear => ({ label: gear.code, value: gear.code }))} dataKey="gears" id="segment" />
+        <TagsCell dataKey="gears" id="segment" />
       </Column>
 
       <Column width={250}>
         <HeaderCell>FAO</HeaderCell>
-        <TagsCell
-          data={faoAreas?.map(faoArea => ({ label: faoArea, value: faoArea }))}
-          dataKey="faoAreas"
-          id="segment"
-        />
+        <TagsCell dataKey="faoAreas" id="segment" />
       </Column>
 
       <Column width={90}>
@@ -95,11 +86,7 @@ export function FleetSegmentsTable({
 
       <Column width={250}>
         <HeaderCell>Espèces ciblées</HeaderCell>
-        <TagsCell
-          data={species.map(gear => ({ label: gear.code, value: gear.code }))}
-          dataKey="targetSpecies"
-          id="segment"
-        />
+        <TagsCell dataKey="targetSpecies" id="segment" />
       </Column>
 
       <Column width={120}>
@@ -119,12 +106,7 @@ export function FleetSegmentsTable({
 
       <Column fixed="right" width={60}>
         <HeaderCell> </HeaderCell>
-        <EditAndDeleteCell
-          dataKey="year"
-          id="segment"
-          onDelete={onDeleteFleetSegment}
-          onEdit={openEditFleetSegmentModal}
-        />
+        <EditAndDeleteCell id="segment" onDelete={onDeleteFleetSegment} onEdit={openEditFleetSegmentModal} />
       </Column>
     </Table>
   )

@@ -9,7 +9,7 @@ context('Vessel sidebar resume tab', () => {
     cy.wait(1000)
   })
 
-  it.only('Resume Should be opened When clicking on a vessel', () => {
+  it('Resume Should be opened When clicking on a vessel', () => {
     // When
     openVesselBySearch('Pheno')
 

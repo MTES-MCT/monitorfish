@@ -83,9 +83,7 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotifi
 
         return (
           <VesselRiskFactor
-            hasVesselRiskFactorSegments={false}
             isVesselUnderCharter={priorNotification.isVesselUnderCharter}
-            vesselLastControlDateTime={priorNotification.vesselLastControlDateTime}
             vesselRiskFactor={priorNotification.riskFactor}
           />
         )

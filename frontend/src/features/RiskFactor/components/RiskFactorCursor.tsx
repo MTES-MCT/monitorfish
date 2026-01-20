@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { RiskFactorBox } from './RiskFactorBox'
 
 type RiskFactorCursorProps = {
+  className?: string | undefined
   color: string | undefined
   height: number
   isBig?: boolean
@@ -13,6 +14,7 @@ type RiskFactorCursorProps = {
   withoutBox?: boolean
 }
 export function RiskFactorCursor({
+  className,
   color,
   height,
   isBig = false,
@@ -32,19 +34,22 @@ export function RiskFactorCursor({
   }, [progress])
 
   return (
-    <Wrapper $isBig={isBig} $withoutBox={withoutBox}>
-      <RiskFactorBox color={color} hide={withoutBox} isBig={isBig}>
-        {value?.toFixed(1)}
-      </RiskFactorBox>
-      {underCharter ? <UnderCharter /> : null}
+    <Wrapper $height={height} $isBig={isBig} $withoutBox={withoutBox} className={className}>
+      {!withoutBox && (
+        <RiskFactorBox color={color} isBig>
+          {value?.toFixed(1)}
+        </RiskFactorBox>
+      )}
+      {underCharter && <UnderCharter />}
       <Bar $height={height} $isBig={isBig}>
-        <VerticalBar $height={height} $isBig={isBig} />
-        <VerticalBar $height={height} $isBig={isBig} />
-        <VerticalBar $height={height} $isBig={isBig} />
-        <Progress $color={color} $height={height} $isBig={isBig} $progress={progressWithDelay}>
-          {progressWithDelay >= 25 ? <VerticalBar $height={height} $isBig={isBig} /> : null}
-          {progressWithDelay >= 50 ? <VerticalBar $height={height} $isBig={isBig} /> : null}
-          {progressWithDelay === 100 ? <VerticalBar $height={height} $isBig={isBig} /> : null}
+        <VerticalBar $left={52} />
+        <VerticalBar $left={104} />
+        <VerticalBar $left={156} />
+        <Progress $color={color} $progress={progressWithDelay}>
+          {progressWithDelay >= 25 && <ProgressVerticalBar $left={52} />}
+          {progressWithDelay >= 50 && <ProgressVerticalBar $left={104} />}
+          {progressWithDelay >= 75 && <ProgressVerticalBar $left={156} />}
+          {progressWithDelay === 100 && <ProgressVerticalBar $left={206} />}
         </Progress>
       </Bar>
     </Wrapper>
@@ -63,20 +68,29 @@ const UnderCharter = styled.span`
 `
 
 const Wrapper = styled.div<{
+  $height?: number
   $isBig?: boolean
   $withoutBox?: boolean
 }>`
-  margin: ${p => (p.$withoutBox ? 0 : 9)}px 0;
   padding-bottom: 1px;
   display: flex;
-  margin-left: ${p => (p.$isBig ? 24 : 0)}px;
+  align-items: end;
+
+  ${p => {
+    if (p.$withoutBox) {
+      return `height: ${p.$height}px`
+    }
+
+    return ''
+  }}
 `
 
 const Bar = styled.div<{
   $height: number
   $isBig: boolean
 }>`
-  height: ${p => (p.$height ? p.$height : 8)}px;
+  position: relative;
+  height: ${p => p.$height || 8}px;
   width: 208px;
   background: ${p => p.theme.color.lightGray};
   margin-top: ${p => (p.$isBig ? 0 : 5)}px;
@@ -84,33 +98,31 @@ const Bar = styled.div<{
 
 const Progress = styled.div<{
   $color: string | undefined
-  $height: number
-  $isBig: boolean
   $progress: number
 }>`
-  height: ${p => (p.$height ? p.$height : 8)}px;
-  width: ${p => (p.$progress ? p.$progress : 0)}%;
-  background: ${p => (p.$color ? p.$color : 'white')};
-  margin-top: calc(
-    -${p => (p.$height ? p.$height : 8)}px -
-      ${p =>
-        // eslint-disable-next-line no-nested-ternary
-        p.$isBig ? 5 : p.$height === 8 ? 11 : 14}px
-  );
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: ${p => p.$progress || 0}%;
+  background: ${p => p.$color ?? 'white'};
   transition: 1.2s all;
 `
 
-const VerticalBar = styled.div<{
-  $height: number
-  $isBig: boolean
-}>`
+const VerticalBar = styled.div<{ $left: number }>`
+  position: absolute;
+  left: ${p => p.$left}px;
+  top: 0;
   height: 100%;
   width: 2px;
   background: ${p => p.theme.color.white};
-  margin-left: 50.5px;
-  margin-top: ${p => (p.$isBig ? 1 : 0)}px;
-  padding-top: ${p =>
-    // eslint-disable-next-line no-nested-ternary
-    p.$isBig ? 0 : p.$height === 8 ? 7 : 10}px;
-  display: inline-block;
+`
+
+const ProgressVerticalBar = styled.div<{ $left: number }>`
+  position: absolute;
+  left: ${p => p.$left}px;
+  top: 0;
+  height: 100%;
+  width: 2px;
+  background: ${p => p.theme.color.white};
 `

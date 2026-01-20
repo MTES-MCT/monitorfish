@@ -15,6 +15,8 @@ export const RiskFactorSchema = z.strictObject({
   detectabilityRiskFactor: z.number(),
   gearOnboard: z.array(DeclaredLogbookGearSchema),
   impactRiskFactor: z.number(),
+  infractionRateRiskFactor: z.number(),
+  infringementRiskLevel: z.number(),
   lastControlDatetime: stringOrUndefined,
   numberControlsLastFiveYears: z.number(),
   numberControlsLastThreeYears: z.number(),

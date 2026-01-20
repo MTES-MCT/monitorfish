@@ -31,13 +31,7 @@ export function TagBar({
   return (
     <Wrapper className="Wrapper" data-cy="PriorNotificationCard-TagBar">
       <Row>
-        {!!riskFactor && (
-          <VesselRiskFactor
-            hasVesselRiskFactorSegments={tripSegments ? tripSegments.length > 0 : undefined}
-            isVesselUnderCharter={isVesselUnderCharter}
-            vesselRiskFactor={riskFactor}
-          />
-        )}
+        {!!riskFactor && <VesselRiskFactor isVesselUnderCharter={isVesselUnderCharter} vesselRiskFactor={riskFactor} />}
 
         {tripSegments?.map(tripSegment => (
           <FixedTag key={`tripSegment-${tripSegment.code}`} $isFullWidth backgroundColor={THEME.color.blueGray25}>

@@ -1,5 +1,7 @@
 import { FleetSegmentsWithTooltip } from '@features/FleetSegment/components/FleetSegmentsWithTooltip'
 import { VesselCurrentFleetSegmentDetails } from '@features/FleetSegment/components/VesselCurrentFleetSegmentDetails'
+import { OpenedDetails } from '@features/RiskFactor/components/RiskFactorResume/common'
+import { FlatKeyValue } from '@features/Vessel/components/VesselSidebar/components/common/FlatKeyValue'
 import { ActivityOrigin } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { assertNotNullish } from '@utils/assertNotNullish'
@@ -15,47 +17,61 @@ export function ImpactRiskFactorDetails({ isOpen }) {
 
   return (
     <SubRiskDetails
-      $elementHeight={currentFleetSegmentDetailsElementRef?.current?.clientHeight}
+      $currentSegmentsDetailsElementHeight={currentFleetSegmentDetailsElementRef?.current?.clientHeight}
       $hasSegment={!!riskFactor.segmentHighestImpact}
       $isOpen={isOpen}
       $isRecentProfile={selectedVessel?.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE}
     >
       <Line />
-      <Zone>
+      <OpenedDetails>
         {riskFactor.segmentHighestImpact ? (
           <>
-            <Fields>
-              <TableBody>
-                <Field>
-                  <Key>Segment de flotte</Key>
-                  <Value>
+            <StyledFlatKeyValue
+              column={[
+                {
+                  key: 'Segment de flotte',
+                  value: (
                     <FleetSegmentsWithTooltip
                       activityOrigin={selectedVessel?.activityOrigin}
                       segments={[riskFactor.segmentHighestImpact]}
                     />
-                  </Value>
-                </Field>
-              </TableBody>
-            </Fields>
+                  )
+                }
+              ]}
+              keyWidth={170}
+            />
             {selectedVessel?.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && (
               <NoCapture>Le navire n&apos;a pas fait de FAR</NoCapture>
             )}
-            <VesselCurrentFleetSegmentDetails ref={currentFleetSegmentDetailsElementRef} />
-            <Text>
+            <StyledVesselCurrentFleetSegmentDetails ref={currentFleetSegmentDetailsElementRef} />
+            <Text $marginTop={12}>
               Si le navire appartient à plusieurs segments, c&apos;est celui dont la note d&apos;impact est la plus
               élevée qui est retenu.
             </Text>
           </>
         ) : (
-          <Text>
+          <Text $marginTop={0}>
             Ce navire n&apos;appartient à aucun segment de flotte, soit parce qu&apos;il n&apos;a pas encore envoyé les
             données de sa marée, soit parce qu&apos;aucun segment ne correspond à son activité.
           </Text>
         )}
-      </Zone>
+      </OpenedDetails>
     </SubRiskDetails>
   )
 }
+
+const StyledVesselCurrentFleetSegmentDetails = styled(VesselCurrentFleetSegmentDetails)`
+  table {
+    margin: 0;
+  }
+`
+
+const StyledFlatKeyValue = styled(FlatKeyValue)`
+  table {
+    margin: 0;
+  }
+  margin-bottom: 12px;
+`
 
 const NoCapture = styled.span`
   width: 100%;
@@ -72,7 +88,7 @@ const Line = styled.div`
 `
 
 const SubRiskDetails = styled.div<{
-  $elementHeight: number | undefined
+  $currentSegmentsDetailsElementHeight: number | undefined
   $hasSegment: boolean
   $isOpen: boolean
   $isRecentProfile: boolean
@@ -83,8 +99,10 @@ const SubRiskDetails = styled.div<{
     p.$isOpen
       ? p.$hasSegment
         ? // eslint-disable-next-line no-nested-ternary
-          95 + (p.$elementHeight ? p.$elementHeight : 36) + (p.$isRecentProfile ? 34 : 0)
-        : 80
+          120 +
+          (p.$currentSegmentsDetailsElementHeight ? p.$currentSegmentsDetailsElementHeight : 36) +
+          (p.$isRecentProfile ? 45 : 0)
+        : 90
       : 0}px;
   opacity: ${p => (p.$isOpen ? '1' : '0')};
   visibility: ${p => (p.$isOpen ? 'visible' : 'hidden')};
@@ -92,54 +110,12 @@ const SubRiskDetails = styled.div<{
   transition: 0.2s all;
 `
 
-const TableBody = styled.tbody``
-
-const Zone = styled.div`
-  margin: 5px 5px 10px 16px;
-  text-align: left;
-  display: flex;
-  flex-wrap: wrap;
-  background: ${p => p.theme.color.white};
-`
-
-const Fields = styled.table`
-  display: table;
-  margin: 10px 5px 0 16px;
-  min-width: 40%;
-  width: inherit;
-`
-
-const Field = styled.tr`
-  margin: 5px 5px 5px 0;
-  border: none;
-  background: none;
-  line-height: 0.5em;
-`
-
-const Key = styled.th`
-  color: ${p => p.theme.color.slateGray};
-  padding: 1px 5px 5px 0;
-  line-height: 0.5em;
-  font-weight: normal;
-  width: 170px;
-  text-align: left;
-`
-
-const Value = styled.td`
-  font-size: 13px;
-  color: ${p => p.theme.color.gunMetal};
-  text-align: left;
-  padding: 1px 5px 5px 5px;
-  background: none;
-  border: none;
-  line-height: normal;
-  font-weight: 500;
-`
-
-const Text = styled.div`
+const Text = styled.div<{
+  $marginTop: number
+}>`
   font-size: 13px;
   color: ${p => p.theme.color.gunMetal};
   text-align: left;
   font-weight: 500;
-  margin: 4px 0 0 16px;
+  margin-top: ${p => p.$marginTop}px;
 `

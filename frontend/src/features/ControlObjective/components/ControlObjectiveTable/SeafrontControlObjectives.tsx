@@ -7,29 +7,15 @@ import {
   SegmentCellWithTitle
 } from '@features/ControlObjective/components/ControlObjectiveTable/tableCells'
 import { Label, Select } from '@mtes-mct/monitor-ui'
-import { sortArrayByColumn, SortType } from '@utils/sortArrayByColumn'
-import { useCallback, useEffect, useState } from 'react'
 import { Table } from 'rsuite'
 import styled from 'styled-components'
-import { useDebouncedCallback } from 'use-debounce'
 
 import { ControlPriorityCell } from './ControlPriorityCell'
+import { useSeafrontControlObjectives } from './hooks/useSeafrontControlObjectives'
 import { InfringementRiskLevelCell } from './InfringementRiskLevelCell'
 import { LoadingSpinnerWall } from '../../../../ui/LoadingSpinnerWall'
-import { useGetFleetSegmentsQuery } from '../../../FleetSegment/apis'
-import {
-  useAddControlObjectiveMutation,
-  useDeleteControlObjectiveMutation,
-  useUpdateControlObjectiveMutation
-} from '../../apis'
 
-import type { FleetSegment } from '../../../FleetSegment/types'
 import type { ControlObjective } from '../../types'
-
-type ControlObjectiveWithMaybeFleetSegment = ControlObjective &
-  Partial<FleetSegment> & {
-    controlPriorityLevel?: number
-  }
 
 export type SeafrontControlObjectivesProps = Readonly<{
   data: ControlObjective[]
@@ -37,184 +23,36 @@ export type SeafrontControlObjectivesProps = Readonly<{
   title: string
   year: number
 }>
+
 export function SeafrontControlObjectives({ data, facade, title, year }: SeafrontControlObjectivesProps) {
-  const [controlObjectivesWithMaybeFleetSegment, setControlObjectivesWithMaybeFleetSegment] = useState<
-    ControlObjectiveWithMaybeFleetSegment[]
-  >([])
-  const [sortColumn, setSortColumn] = useState<keyof ControlObjective>('segment')
-  const [sortType, setSortType] = useState(SortType.ASC)
+  const {
+    addSegment,
+    controlObjectives,
+    deleteRow,
+    handleSort,
+    isLoading,
+    segmentsOptions,
+    sortColumn,
+    sortType,
+    updateField
+  } = useSeafrontControlObjectives(data, facade, year)
 
-  const getFleetSegmentsQuery = useGetFleetSegmentsQuery()
-
-  const [updateControlObjective] = useUpdateControlObjectiveMutation()
-
-  const [addControlObjective] = useAddControlObjectiveMutation()
-
-  const [deleteControlObjective] = useDeleteControlObjectiveMutation()
-
-  const addSegmentToFacade = useCallback(
-    async (nextSegment: string | undefined) => {
-      if (!getFleetSegmentsQuery.data || !nextSegment) {
-        return
-      }
-
-      const newId = await addControlObjective({
-        facade,
-        segment: nextSegment,
-        year
-      })
-      if (!newId) {
-        return
-      }
-
-      const foundFleetSegment = (getFleetSegmentsQuery.data || []).find(
-        fleetSegment => fleetSegment.segment === nextSegment
-      )
-
-      const nextControlObjectiveWithFleetSegment = [
-        ...controlObjectivesWithMaybeFleetSegment,
-        {
-          controlPriorityLevel: 1,
-          facade,
-          id: newId,
-          infringementRiskLevel: 2,
-          segment: nextSegment,
-          target: 1,
-          targetNumberOfControlsAtPort: 0,
-          targetNumberOfControlsAtSea: 0,
-          year,
-          ...(foundFleetSegment ?? {})
-        } as unknown as ControlObjectiveWithMaybeFleetSegment
-      ]
-
-      const sortedNextDataWithSegmentDetails = nextControlObjectiveWithFleetSegment.sort((a, b) =>
-        sortArrayByColumn(a, b, sortColumn, sortType)
-      )
-
-      setControlObjectivesWithMaybeFleetSegment(sortedNextDataWithSegmentDetails)
-    },
-    [
-      controlObjectivesWithMaybeFleetSegment,
-      addControlObjective,
-      facade,
-      getFleetSegmentsQuery,
-      sortColumn,
-      sortType,
-      year
-    ]
-  )
-
-  const deleteControlObjectiveRow = useCallback(
-    async (id: number) => {
-      await deleteControlObjective(id)
-
-      const nextControlObjectivesWithMaybeFleetSegment = controlObjectivesWithMaybeFleetSegment.filter(
-        controlObjectiveWithMaybeFleetSegment => controlObjectiveWithMaybeFleetSegment.id !== id
-      )
-
-      setControlObjectivesWithMaybeFleetSegment(nextControlObjectivesWithMaybeFleetSegment)
-    },
-    [controlObjectivesWithMaybeFleetSegment, deleteControlObjective]
-  )
-
-  const updateControlObjectiveDebounced = useDebouncedCallback(
-    (
-      id: number,
-      key: keyof ControlObjective,
-      value,
-      previousControlObjectivesWithMaybeFleetSegment: ControlObjectiveWithMaybeFleetSegment[]
-    ) => {
-      const updatedFields = {
-        controlPriorityLevel: null,
-        infringementRiskLevel: null,
-        targetNumberOfControlsAtPort: null,
-        targetNumberOfControlsAtSea: null,
-        // eslint-disable-next-line sort-keys-fix/sort-keys-fix
-        [key]: value
-      }
-
-      updateControlObjective({
-        id: id.toString(),
-        updatedFields
-      }).catch(() => {
-        setControlObjectivesWithMaybeFleetSegment(previousControlObjectivesWithMaybeFleetSegment)
-      })
-    },
-    500
-  )
-
-  const handleChangeModifiableKey = useCallback(
-    (
-      id: number,
-      key: keyof ControlObjective,
-      value: number,
-      _controlObjectivesWithMaybeFleetSegment: ControlObjectiveWithMaybeFleetSegment[]
-    ) => {
-      const previousControlObjectivesWithMaybeFleetSegment = [..._controlObjectivesWithMaybeFleetSegment]
-      const nextControlObjectivesWithMaybeFleetSegment = _controlObjectivesWithMaybeFleetSegment.map(
-        controlObjectiveWithMaybeFleetSegment =>
-          controlObjectiveWithMaybeFleetSegment.id === id
-            ? {
-                ...controlObjectiveWithMaybeFleetSegment,
-                [key]: value
-              }
-            : controlObjectiveWithMaybeFleetSegment
-      )
-
-      setControlObjectivesWithMaybeFleetSegment(nextControlObjectivesWithMaybeFleetSegment)
-
-      updateControlObjectiveDebounced(id, key, value, previousControlObjectivesWithMaybeFleetSegment)
-    },
-    [updateControlObjectiveDebounced]
-  )
-
-  const handleSortColumn = useCallback((nextSortColumn: keyof ControlObjective, nextSortType: SortType) => {
-    setSortColumn(nextSortColumn)
-    setSortType(nextSortType)
-  }, [])
-
-  useEffect(() => {
-    if (!data.length || !getFleetSegmentsQuery.data) {
-      return
-    }
-
-    const nextControlObjectivesWithMaybeFleetSegment = data
-      .map(controlledObjective => {
-        const foundFleetSegment = (getFleetSegmentsQuery.data ?? []).find(
-          fleetSegment => fleetSegment.segment === controlledObjective.segment
-        )
-
-        return { ...controlledObjective, ...(foundFleetSegment ?? {}) } as ControlObjectiveWithMaybeFleetSegment
-      })
-      .slice()
-      .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
-
-    setControlObjectivesWithMaybeFleetSegment(nextControlObjectivesWithMaybeFleetSegment)
-  }, [data, getFleetSegmentsQuery.data, sortColumn, sortType])
-
-  if (!getFleetSegmentsQuery.data) {
+  if (isLoading) {
     return <LoadingSpinnerWall />
   }
-
-  const segmentsOptions = getFleetSegmentsQuery.data
-    .map(segment => ({ label: segment.segment, value: segment.segment }))
-    .filter(
-      segment => !controlObjectivesWithMaybeFleetSegment.find(facadeSegment => facadeSegment.segment === segment.value)
-    )
-    .sort((a, b) => a.label.localeCompare(b.label))
 
   return (
     <Wrapper>
       <BackOfficeTitle data-cy="control-objective-facade-title">{title}</BackOfficeTitle>
       <Table
         affixHorizontalScrollbar
-        data={controlObjectivesWithMaybeFleetSegment}
-        height={(controlObjectivesWithMaybeFleetSegment?.length || 0) * 40 + 60}
+        data={controlObjectives}
+        height={(controlObjectives?.length || 0) * 40 + 60}
         locale={{
           emptyMessage: 'Aucun résultat',
           loading: 'Chargement...'
         }}
-        onSortColumn={handleSortColumn as any}
+        onSortColumn={handleSort as any}
         rowHeight={40}
         rowKey="id"
         sortColumn={sortColumn}
@@ -238,9 +76,7 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
             id="id"
             inputType={INPUT_TYPE.INT}
             maxLength={3}
-            onChange={(id, key, value) =>
-              handleChangeModifiableKey(id, key, value, controlObjectivesWithMaybeFleetSegment)
-            }
+            onChange={updateField}
           />
         </Table.Column>
 
@@ -251,9 +87,7 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
             id="id"
             inputType={INPUT_TYPE.INT}
             maxLength={3}
-            onChange={(id, key, value) =>
-              handleChangeModifiableKey(id, key, value, controlObjectivesWithMaybeFleetSegment)
-            }
+            onChange={updateField}
           />
         </Table.Column>
 
@@ -264,27 +98,17 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
 
         <Table.Column width={80}>
           <Table.HeaderCell>Priorité</Table.HeaderCell>
-          <ControlPriorityCell
-            dataKey="controlPriorityLevel"
-            onChange={(id, key, value) =>
-              handleChangeModifiableKey(id, key, value, controlObjectivesWithMaybeFleetSegment)
-            }
-          />
+          <ControlPriorityCell dataKey="controlPriorityLevel" onChange={updateField} />
         </Table.Column>
 
         <Table.Column width={100}>
           <Table.HeaderCell>N. infraction</Table.HeaderCell>
-          <InfringementRiskLevelCell
-            dataKey="infringementRiskLevel"
-            onChange={(id, key, value) =>
-              handleChangeModifiableKey(id, key, value, controlObjectivesWithMaybeFleetSegment)
-            }
-          />
+          <InfringementRiskLevelCell dataKey="infringementRiskLevel" onChange={updateField} />
         </Table.Column>
 
         <Table.Column width={34}>
           <Table.HeaderCell> </Table.HeaderCell>
-          <DeleteCell dataKey="id" id="id" onClick={deleteControlObjectiveRow} />
+          <DeleteCell dataKey="id" id="id" onClick={deleteRow} />
         </Table.Column>
       </Table>
 
@@ -296,7 +120,7 @@ export function SeafrontControlObjectives({ data, facade, title, year }: Seafron
           isTransparent
           label="Ajouter un objectif"
           name="AddSegment"
-          onChange={segment => addSegmentToFacade(segment)}
+          onChange={addSegment}
           options={segmentsOptions}
           placeholder="segment"
           searchable

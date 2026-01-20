@@ -64,12 +64,7 @@ export function ModifiableCell({
         }
       }
 
-      onChange && onChange(id, dataKey, value)
-      if (dataKey === 'segment') {
-        afterChange && afterChange(dataCy.replaceAll(id, rowData[dataKey]))
-      } else {
-        afterChange && afterChange(dataCy)
-      }
+      onChange && onChange(rowData[id], dataKey, value)
     },
     [onChange, dataKey, id, afterChange, dataCy]
   )

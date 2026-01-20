@@ -1,18 +1,18 @@
 import { Accent, Button, Dialog } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { RiskFactorBox } from './RiskFactorBox'
+import { RiskFactorBox } from '../RiskFactorBox'
 import { RiskFactorExplanationSchema } from './RiskFactorExplanationSchema'
-import { basePrimaryButton } from '../../commonStyles/Buttons.style'
-import RiskFactorControlSVG from '../../icons/Note_de_controle_gyrophare.svg?react'
-import RiskFactorImpactSVG from '../../icons/Note_impact_poisson.svg?react'
-import RiskFactorInfractionsSVG from '../../icons/Note_infraction_stop.svg?react'
+import { basePrimaryButton } from '../../../commonStyles/Buttons.style'
+import RiskFactorControlSVG from '../../../icons/Note_de_controle_gyrophare.svg?react'
+import RiskFactorImpactSVG from '../../../icons/Note_impact_poisson.svg?react'
+import RiskFactorInfractionsSVG from '../../../icons/Note_infraction_stop.svg?react'
 import {
   getDetectabilityRiskFactorText,
   getImpactRiskFactorText,
-  getProbabilityRiskFactorText,
+  getInfractionRateRiskFactorText,
   getRiskFactorColor
-} from '../utils'
+} from '../../utils'
 
 import type { Promisable } from 'type-fest'
 
@@ -99,19 +99,19 @@ export function RiskFactorExplanationModal({ setIsOpen }: RiskFactorExplanationM
         </Text>
         <RiskFactorLegend $isFirst>
           <RiskFactorBox color={getRiskFactorColor(1)}>1</RiskFactorBox>
-          {getProbabilityRiskFactorText(1)}
+          {getInfractionRateRiskFactorText(1)}
         </RiskFactorLegend>
         <RiskFactorLegend>
           <RiskFactorBox color={getRiskFactorColor(2)}>2</RiskFactorBox>
-          {getProbabilityRiskFactorText(2)}
+          {getInfractionRateRiskFactorText(2)}
         </RiskFactorLegend>
         <RiskFactorLegend>
           <RiskFactorBox color={getRiskFactorColor(3)}>3</RiskFactorBox>
-          {getProbabilityRiskFactorText(3)}
+          {getInfractionRateRiskFactorText(3)}
         </RiskFactorLegend>
         <RiskFactorLegend $isLast>
           <RiskFactorBox color={getRiskFactorColor(4)}>4</RiskFactorBox>
-          {getProbabilityRiskFactorText(4)} – ou absence d&apos;antériorité de contrôle
+          {getInfractionRateRiskFactorText(4)} – ou absence d&apos;antériorité de contrôle
         </RiskFactorLegend>
         <SubTitle>
           <RiskFactorControl />

@@ -28,6 +28,8 @@ data class RiskFactorEntity(
     val recentSegmentsImpactRiskFactor: Double,
     @Column(name = "probability_risk_factor")
     val probabilityRiskFactor: Double,
+    @Column(name = "recent_segments_probability_risk_factor")
+    val recentSegmentsProbabilityRiskFactor: Double,
     @Column(name = "detectability_risk_factor")
     val detectabilityRiskFactor: Double,
     @Column(name = "recent_segments_detectability_risk_factor")
@@ -70,6 +72,12 @@ data class RiskFactorEntity(
     val totalWeightOnboard: Double?,
     @Column(name = "infraction_score")
     val infractionScore: Double? = null,
+    @Column(name = "infraction_rate_risk_factor")
+    val infractionRateRiskFactor: Double,
+    @Column(name = "infringement_risk_level")
+    val infringementRiskLevel: Double,
+    @Column(name = "recent_segments_infringement_risk_level")
+    val recentSegmentsInfringementRiskLevel: Double,
     @Column(name = "number_controls_last_5_years")
     val numberControlsLastFiveYears: Short,
     @Column(name = "number_controls_last_3_years")

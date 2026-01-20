@@ -19,6 +19,8 @@ data class RiskFactorDataOutput(
     val controlRateRiskFactor: Double,
     val lastControlDatetime: ZonedDateTime? = null,
     val impactRiskFactor: Double,
+    val infringementRiskLevel: Double,
+    val infractionRateRiskFactor: Double,
     val probabilityRiskFactor: Double,
     val detectabilityRiskFactor: Double,
     val riskFactor: Double,
@@ -56,6 +58,11 @@ data class RiskFactorDataOutput(
                     true -> vesselRiskFactor.recentControlPriorityLevel
                     false -> vesselRiskFactor.controlPriorityLevel
                 },
+            infractionRateRiskFactor = vesselRiskFactor.infractionRateRiskFactor,
+            infringementRiskLevel = when (isRecentProfile) {
+                true -> vesselRiskFactor.recentSegmentsInfringementRiskLevel
+                false -> vesselRiskFactor.infringementRiskLevel
+            },
             controlRateRiskFactor = vesselRiskFactor.controlRateRiskFactor,
             numberControlsLastFiveYears = vesselRiskFactor.numberControlsLastFiveYears,
             numberControlsLastThreeYears = vesselRiskFactor.numberControlsLastThreeYears,
@@ -69,7 +76,10 @@ data class RiskFactorDataOutput(
                     true -> vesselRiskFactor.recentSegmentsImpactRiskFactor
                     false -> vesselRiskFactor.impactRiskFactor
                 },
-            probabilityRiskFactor = vesselRiskFactor.probabilityRiskFactor,
+            probabilityRiskFactor = when (isRecentProfile) {
+                true -> vesselRiskFactor.recentSegmentsProbabilityRiskFactor
+                false -> vesselRiskFactor.probabilityRiskFactor
+            },
             detectabilityRiskFactor =
                 when (isRecentProfile) {
                     true -> vesselRiskFactor.recentSegmentsDetectabilityRiskFactor

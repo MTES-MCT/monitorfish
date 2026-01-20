@@ -24,8 +24,8 @@ context('BackOffice > Control Objective Tables > Table', () => {
     cy.get('[data-cy="control-objective-facade-title"]').eq(3).contains('Méditerranée (MED)')
     cy.get('[data-cy="control-objective-facade-title"]').eq(4).contains('Corse (CORSE)')
 
-    cy.get('.rs-table-cell-content').eq(7).contains('NS06')
-    cy.get('.rs-table-cell-content').eq(12).children().children().children().contains('1')
+    cy.get('.rs-table-cell-content').eq(8).contains('NS06')
+    cy.get('.rs-table-cell-content').eq(13).children().children().children().contains('1')
 
     const currentYear = new Date().getFullYear()
     cy.get('*[data-cy^="control-objectives-year"]').contains(currentYear)
@@ -40,11 +40,13 @@ context('BackOffice > Control Objective Tables > Table', () => {
     cy.get('[data-cy="row-15-targetNumberOfControlsAtPort"]').should('exist')
     cy.get('[data-cy="row-15-targetNumberOfControlsAtSea"]').should('exist')
     // The next segment is not found in the table but still displayed in the control objective table
-    cy.get('.rs-table-cell-content').eq(7).contains('ATL01')
+    cy.get('.rs-table-cell-content').eq(8).contains('ATL01')
   })
 
-  it('Should update the targetNumberOfControlsAtPort field on an objective', () => {
-    // When
+  it('Should update the fields of an objective', () => {
+    /**
+     * targetNumberOfControlsAtPort
+     */
     cy.intercept('PUT', '/bff/v1/admin/control_objectives/88').as('updateObjective')
     cy.wait(50)
     cy.get('*[data-cy="row-88-targetNumberOfControlsAtPort"]')
@@ -57,18 +59,9 @@ context('BackOffice > Control Objective Tables > Table', () => {
     cy.wait(50)
     cy.get('*[data-cy="row-88-targetNumberOfControlsAtPort"]').should('have.value', '23')
 
-    // The value is saved in database when I refresh the page
-    cy.intercept('GET', '/bff/v1/admin/control_objectives').as('controlObjectives')
-    cy.visit('/backoffice/control_objectives')
-    cy.wait('@controlObjectives')
-    cy.wait(50)
-    cy.get('*[data-cy="row-88-targetNumberOfControlsAtPort"]').should('have.value', '23')
-  })
-
-  it('Should update the targetNumberOfControlsAtSea field on an objective', () => {
-    // When
-    cy.intercept('PUT', '/bff/v1/admin/control_objectives/88').as('updateObjective')
-    cy.wait(50)
+    /**
+     * targetNumberOfControlsAtSea
+     */
     cy.get('*[data-cy="row-88-targetNumberOfControlsAtSea"]')
       .type('{backspace}{backspace}{backspace}{backspace}{backspace}')
       .type('2')
@@ -79,17 +72,9 @@ context('BackOffice > Control Objective Tables > Table', () => {
     cy.wait(50)
     cy.get('*[data-cy="row-88-targetNumberOfControlsAtSea"]').should('have.value', '23')
 
-    // The value is saved in database when I refresh the page
-    cy.intercept('GET', '/bff/v1/admin/control_objectives').as('controlObjectives')
-    cy.visit('/backoffice/control_objectives')
-    cy.wait('@controlObjectives')
-    cy.wait(50)
-    cy.get('*[data-cy="row-88-targetNumberOfControlsAtSea"]').should('have.value', '23')
-  })
-
-  it('Should update the controlPriorityLevel field on an objective', () => {
-    // When
-    cy.intercept('PUT', '/bff/v1/admin/control_objectives/88').as('updateObjective')
+    /**
+     * controlPriorityLevel
+     */
     cy.wait(50)
     cy.get('[data-cy="row-88-controlPriorityLevel"]').parent().click()
     cy.get('.rs-picker-select-menu-item').eq(2).click()
@@ -99,11 +84,25 @@ context('BackOffice > Control Objective Tables > Table', () => {
     cy.wait(50)
     cy.get('[data-cy="row-88-controlPriorityLevel"]').should('exist')
 
+    /**
+     * infringementRiskLevel
+     */
+    cy.wait(50)
+    cy.get('[data-cy="row-88-infringementRiskLevel"]').parent().click()
+    cy.get('.rs-picker-select-menu-item').eq(2).click()
+    cy.wait('@updateObjective')
+
+    // Then
+    cy.wait(50)
+    cy.get('[data-cy="row-88-infringementRiskLevel"]').should('exist')
+
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/admin/control_objectives').as('controlObjectives')
     cy.visit('/backoffice/control_objectives')
     cy.wait('@controlObjectives')
     cy.wait(50)
+    cy.get('*[data-cy="row-88-targetNumberOfControlsAtPort"]').should('have.value', '23')
+    cy.get('*[data-cy="row-88-targetNumberOfControlsAtSea"]').should('have.value', '23')
     cy.get('[data-cy="row-88-controlPriorityLevel"]').should('exist')
   })
 

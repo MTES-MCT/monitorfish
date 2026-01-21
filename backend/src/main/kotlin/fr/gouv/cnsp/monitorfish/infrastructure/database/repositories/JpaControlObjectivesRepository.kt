@@ -33,7 +33,7 @@ class JpaControlObjectivesRepository(
             }
 
             infringementRiskLevel?.let {
-                    dbControlObjectivesRepository.updateInfringementRiskLevel(id, it)
+                dbControlObjectivesRepository.updateInfringementRiskLevel(id, it)
             }
 
             targetNumberOfControlsAtSea?.let {

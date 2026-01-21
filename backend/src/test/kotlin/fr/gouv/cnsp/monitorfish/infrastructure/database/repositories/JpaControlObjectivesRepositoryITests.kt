@@ -155,16 +155,18 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
                 targetNumberOfControlsAtSea = 25,
                 targetNumberOfControlsAtPort = 64,
                 controlPriorityLevel = 2.0,
-                infringementRiskLevel = 3.0
+                infringementRiskLevel = 3.0,
             ),
         )
 
         // Then
         val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(lastYear)
         assertThat(updatedControlObjectives).hasSize(63)
-        assertThat(updatedControlObjectives.filter { it.segment=="SEGMENT" }).hasSize(1)
+        assertThat(updatedControlObjectives.filter { it.segment == "SEGMENT" }).hasSize(1)
         assertThat(updatedControlObjectives.find { it.segment == "SEGMENT" }?.targetNumberOfControlsAtSea).isEqualTo(25)
-        assertThat(updatedControlObjectives.find { it.segment == "SEGMENT" }?.targetNumberOfControlsAtPort).isEqualTo(64)
+        assertThat(
+            updatedControlObjectives.find { it.segment == "SEGMENT" }?.targetNumberOfControlsAtPort,
+        ).isEqualTo(64)
         assertThat(updatedControlObjectives.find { it.segment == "SEGMENT" }?.controlPriorityLevel).isEqualTo(2.0)
         assertThat(updatedControlObjectives.find { it.segment == "SEGMENT" }?.infringementRiskLevel).isEqualTo(3.0)
     }
@@ -183,9 +185,11 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         assertThat(jpaControlObjectivesRepository.findAllByYear(lastYear)).hasSize(62)
         val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(nextYear)
         assertThat(updatedControlObjectives).hasSize(62)
-        assertThat(updatedControlObjectives.sortedBy{ it.id }.first().id).isEqualTo(144)
-        assertThat(updatedControlObjectives.find{ it.segment == "SWW01/08" }?.targetNumberOfControlsAtSea).isEqualTo(139)
-        assertThat(updatedControlObjectives.find{ it.segment == "MED05" }?.infringementRiskLevel).isEqualTo(4.0)
+        assertThat(updatedControlObjectives.sortedBy { it.id }.first().id).isEqualTo(144)
+        assertThat(
+            updatedControlObjectives.find { it.segment == "SWW01/08" }?.targetNumberOfControlsAtSea,
+        ).isEqualTo(139)
+        assertThat(updatedControlObjectives.find { it.segment == "MED05" }?.infringementRiskLevel).isEqualTo(4.0)
         assertThat(updatedControlObjectives.first().year).isEqualTo(nextYear)
     }
 }

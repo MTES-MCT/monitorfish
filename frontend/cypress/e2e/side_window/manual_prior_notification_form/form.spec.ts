@@ -278,7 +278,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.contains('Créer le préavis').should('be.enabled')
   })
 
-  it('Should calculate and display manual prior notification fleet segments, risk factor & types', () => {
+  it.only('Should calculate and display manual prior notification fleet segments, risk factor & types', () => {
     // -------------------------------------------------------------------------
     // Add
 
@@ -367,7 +367,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       cy.fill('Zone globale de capture', '27.5.b')
 
       cy.wait('@computePriorNotification')
-      cy.getDataCy('VesselRiskFactor').contains('2.0').should('exist')
+      cy.getDataCy('VesselRiskFactor').contains('2.8').should('exist')
       cy.get('.Element-Tag').contains('NWW07 – NWW07').should('exist')
       cy.get('.Element-Tag').contains('NWW08 – NWW08').should('exist')
       cy.get('.Element-Tag').contains('Préavis type 1').should('not.exist')

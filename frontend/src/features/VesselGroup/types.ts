@@ -35,7 +35,7 @@ export const VesselGroupSchema = z.strictObject({
   color: z.string().min(1),
   createdAtUtc: z.iso.datetime(),
   createdBy: z.string(),
-  description: z.union([z.string().max(255), z.undefined()]),
+  description: z.union([z.string().max(2500), z.undefined()]),
   endOfValidityUtc: z.union([z.string().datetime(), z.undefined()]),
   id: z.number(),
   isDeleted: z.boolean(),

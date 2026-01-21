@@ -54,9 +54,8 @@ class ComputeRiskFactorUTests {
         // Then
         assertThat(result).isEqualTo(
             defaultImpactRiskFactor.pow(0.2) *
-                defaultProbabilityRiskFactor.pow(0.3) *
-                defaultControlRateRiskFactor.pow(0.25) *
-                defaultControlPriorityLevel.pow(0.25),
+                (defaultInfractionRateRiskFactor * defaultInfringementRiskLevel).pow(0.3) *
+                defaultControlRateRiskFactor.pow(0.25),
         )
     }
 
@@ -114,9 +113,8 @@ class ComputeRiskFactorUTests {
         // Then
         assertThat(result).isEqualTo(
             1.5.pow(0.2) *
-                defaultProbabilityRiskFactor.pow(0.3) *
-                defaultControlRateRiskFactor.pow(0.25) *
-                defaultControlPriorityLevel.pow(0.25),
+                (defaultInfractionRateRiskFactor * defaultInfringementRiskLevel).pow(0.3) *
+                defaultControlRateRiskFactor.pow(0.25),
         )
     }
 
@@ -144,7 +142,12 @@ class ComputeRiskFactorUTests {
             )
         val vesselCfr = "CFR"
         val port = PortFaker.fakePort(locode = portLocode, name = "Port name", facade = "")
-        val storedRiskFactor = VesselRiskFactor(probabilityRiskFactor = 0.6, controlRateRiskFactor = 0.7)
+        val storedRiskFactor =
+            VesselRiskFactor(
+                probabilityRiskFactor = 0.6,
+                controlRateRiskFactor = 0.7,
+                infractionRateRiskFactor = 2.3,
+            )
         given(portRepository.findByLocode(portLocode)).willReturn(port)
         given(riskFactorRepository.findByInternalReferenceNumber(vesselCfr)).willReturn(storedRiskFactor)
         given(controlObjectivesRepository.findAllByYear(anyInt())).willReturn(listOf())
@@ -160,14 +163,13 @@ class ComputeRiskFactorUTests {
         // Then
         assertThat(result).isEqualTo(
             0.5.pow(0.2) *
-                0.6.pow(0.3) *
-                0.7.pow(0.25) *
-                defaultControlPriorityLevel.pow(0.25),
+                (2.3 * defaultInfringementRiskLevel).pow(0.3) *
+                0.7.pow(0.25),
         )
     }
 
     @Test
-    fun `execute Should use highest control priority level When control objectives are available`() {
+    fun `execute Should use highest control priority level When control objectives are available but no risk factor`() {
         // Given
         val portLocode = "LOCODE"
         val fleetSegments =
@@ -235,9 +237,8 @@ class ComputeRiskFactorUTests {
         // Then
         assertThat(result).isEqualTo(
             0.5.pow(0.2) *
-                defaultProbabilityRiskFactor.pow(0.3) *
-                defaultControlRateRiskFactor.pow(0.25) *
-                1.2.pow(0.25),
+                (2.0 * 4.0).pow(0.3) *
+                defaultControlRateRiskFactor.pow(0.25),
         )
     }
 
@@ -279,7 +280,12 @@ class ComputeRiskFactorUTests {
                 ),
             )
         val vesselCfr = "CFR"
-        val storedRiskFactor = VesselRiskFactor(probabilityRiskFactor = 0.6, controlRateRiskFactor = 0.7)
+        val storedRiskFactor =
+            VesselRiskFactor(
+                probabilityRiskFactor = 0.6,
+                infractionRateRiskFactor = 1.7,
+                controlRateRiskFactor = 0.7,
+            )
         val controlObjectives =
             listOf(
                 ControlObjective(
@@ -317,9 +323,8 @@ class ComputeRiskFactorUTests {
         // Then
         assertThat(result).isEqualTo(
             2.5.pow(0.2) *
-                0.6.pow(0.3) *
-                0.7.pow(0.25) *
-                1.2.pow(0.25),
+                (1.7 * 2.0).pow(0.3) *
+                0.7.pow(0.25),
         )
     }
 }

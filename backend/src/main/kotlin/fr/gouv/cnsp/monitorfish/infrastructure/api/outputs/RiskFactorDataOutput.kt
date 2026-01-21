@@ -59,10 +59,11 @@ data class RiskFactorDataOutput(
                     false -> vesselRiskFactor.controlPriorityLevel
                 },
             infractionRateRiskFactor = vesselRiskFactor.infractionRateRiskFactor,
-            infringementRiskLevel = when (isRecentProfile) {
-                true -> vesselRiskFactor.recentSegmentsInfringementRiskLevel
-                false -> vesselRiskFactor.infringementRiskLevel
-            },
+            infringementRiskLevel =
+                when (isRecentProfile) {
+                    true -> vesselRiskFactor.recentSegmentsInfringementRiskLevel
+                    false -> vesselRiskFactor.infringementRiskLevel
+                },
             controlRateRiskFactor = vesselRiskFactor.controlRateRiskFactor,
             numberControlsLastFiveYears = vesselRiskFactor.numberControlsLastFiveYears,
             numberControlsLastThreeYears = vesselRiskFactor.numberControlsLastThreeYears,
@@ -76,10 +77,11 @@ data class RiskFactorDataOutput(
                     true -> vesselRiskFactor.recentSegmentsImpactRiskFactor
                     false -> vesselRiskFactor.impactRiskFactor
                 },
-            probabilityRiskFactor = when (isRecentProfile) {
-                true -> vesselRiskFactor.recentSegmentsProbabilityRiskFactor
-                false -> vesselRiskFactor.probabilityRiskFactor
-            },
+            probabilityRiskFactor =
+                when (isRecentProfile) {
+                    true -> vesselRiskFactor.recentSegmentsProbabilityRiskFactor
+                    false -> vesselRiskFactor.probabilityRiskFactor
+                },
             detectabilityRiskFactor =
                 when (isRecentProfile) {
                     true -> vesselRiskFactor.recentSegmentsDetectabilityRiskFactor

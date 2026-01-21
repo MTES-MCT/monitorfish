@@ -26,7 +26,7 @@ data class ControlObjectivesEntity(
     val controlPriorityLevel: Double,
     @Column(name = "infringement_risk_level")
     val infringementRiskLevel: Double,
-    ) {
+) {
     fun toControlObjective() =
         ControlObjective(
             id = id,

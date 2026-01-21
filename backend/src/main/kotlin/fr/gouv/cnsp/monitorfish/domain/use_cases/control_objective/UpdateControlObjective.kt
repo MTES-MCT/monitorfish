@@ -20,7 +20,7 @@ class UpdateControlObjective(
             targetNumberOfControlsAtSea != null ||
                 targetNumberOfControlsAtPort != null ||
                 controlPriorityLevel != null ||
-                infringementRiskLevel != null
+                infringementRiskLevel != null,
         ) {
             "No value to update"
         }

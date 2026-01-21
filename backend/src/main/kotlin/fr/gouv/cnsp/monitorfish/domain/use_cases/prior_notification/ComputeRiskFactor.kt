@@ -35,23 +35,23 @@ class ComputeRiskFactor(
 
         val highestImpactRiskFactor =
             fleetSegments.maxByOrNull { it.impactRiskFactor }?.impactRiskFactor ?: defaultImpactRiskFactor
-        val probabilityRiskFactor = storedRiskFactor?.probabilityRiskFactor ?: defaultProbabilityRiskFactor
-        val controlRateRiskFactor = storedRiskFactor?.controlRateRiskFactor ?: defaultControlRateRiskFactor
-        val highestControlPriorityLevel =
+        val infractionRateRiskFactor = storedRiskFactor?.infractionRateRiskFactor ?: defaultInfractionRateRiskFactor
+        val highestInfringementRiskLevel =
             controlObjectivesRepository
                 .findAllByYear(currentYear)
                 .filter { controlObjective ->
                     !facade.isNullOrEmpty() &&
                         controlObjective.facade == facade &&
                         fleetSegments.map { it.segment }.contains(controlObjective.segment)
-                }.maxByOrNull { it.controlPriorityLevel }
-                ?.controlPriorityLevel ?: defaultControlPriorityLevel
+                }.maxByOrNull { it.infringementRiskLevel }
+                ?.infringementRiskLevel ?: defaultInfringementRiskLevel
+        val probabilityRiskFactor = infractionRateRiskFactor * highestInfringementRiskLevel
+        val controlRateRiskFactor = storedRiskFactor?.controlRateRiskFactor ?: defaultControlRateRiskFactor
 
         val computedRiskFactor =
             highestImpactRiskFactor.pow(impactRiskFactorCoefficient) *
                 probabilityRiskFactor.pow(probabilityRiskFactorCoefficient) *
-                controlRateRiskFactor.pow(controlRateRiskFactorCoefficient) *
-                highestControlPriorityLevel.pow(controlPriorityLevelCoefficient)
+                controlRateRiskFactor.pow(controlRateRiskFactorCoefficient)
 
         return computedRiskFactor
     }

@@ -8,4 +8,5 @@ data class ControlObjective(
     val targetNumberOfControlsAtSea: Int,
     val targetNumberOfControlsAtPort: Int,
     val controlPriorityLevel: Double,
+    val infringementRiskLevel: Double,
 )

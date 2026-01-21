@@ -5,22 +5,21 @@ import { ChevronIconButton } from '@features/commonStyles/icons/ChevronIconButto
 import {
   getDetectabilityRiskFactorText,
   getImpactRiskFactorText,
-  getProbabilityRiskFactorText,
+  getInfractionRateRiskFactorText,
   getRiskFactorColor
 } from '@features/RiskFactor/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
+import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { DetectabilityRiskFactorDetails } from './details/DetectabilityRiskFactorDetails'
-import { ImpactRiskFactorDetails } from './details/ImpactRiskFactorDetails'
-import { ProbabilityRiskFactorDetails } from './details/ProbabilityRiskFactorDetails'
-import { RiskFactorCursor } from './RiskFactorCursor'
+import { DetectabilityRiskFactorDetails } from './DetectabilityRiskFactorDetails'
+import { ImpactRiskFactorDetails } from './ImpactRiskFactorDetails'
+import { ProbabilityRiskFactorDetails } from './ProbabilityRiskFactorDetails'
+import { RiskFactorCursor } from '../RiskFactorCursor'
 import { RiskFactorExplanationModal } from './RiskFactorExplanationModal'
-import RiskFactorControlSVG from '../../icons/Note_de_controle_gyrophare.svg?react'
-import RiskFactorImpactSVG from '../../icons/Note_impact_poisson.svg?react'
-import RiskFactorInfractionsSVG from '../../icons/Note_infraction_stop.svg?react'
+import RiskFactorInfractionsSVG from '../../../icons/Note_infraction_stop.svg?react'
 
 export function RiskFactorResume() {
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
@@ -76,7 +75,8 @@ export function RiskFactorResume() {
         <RiskFactorZone>
           <GlobalRiskFactor>Note de risque globale</GlobalRiskFactor>
           <GlobalRisk data-cy="global-risk-factor">
-            <RiskFactorCursor
+            <StyledRiskFactorCursor
+              $height={30}
               color={getRiskFactorColor(selectedVessel.riskFactor.riskFactor)}
               height={24}
               isBig
@@ -101,8 +101,8 @@ export function RiskFactorResume() {
             <SubRiskWrapper>
               <SubRiskTitle>Impact sur la ressource</SubRiskTitle>
               <SubRiskContent>
-                <RiskFactorImpact />
-                <RiskFactorCursor
+                <FishIcon color={THEME.color.slateGray} />
+                <StyledRiskFactorCursor
                   color={getRiskFactorColor(selectedVessel.riskFactor.impactRiskFactor)}
                   height={8}
                   // eslint-disable-next-line no-unsafe-optional-chaining
@@ -137,7 +137,7 @@ export function RiskFactorResume() {
               <SubRiskTitle>Probabilité d&apos;infraction</SubRiskTitle>
               <SubRiskContent>
                 <RiskFactorInfractions />
-                <RiskFactorCursor
+                <StyledRiskFactorCursor
                   color={getRiskFactorColor(selectedVessel.riskFactor.probabilityRiskFactor)}
                   height={8}
                   // eslint-disable-next-line no-unsafe-optional-chaining
@@ -145,12 +145,12 @@ export function RiskFactorResume() {
                   value={selectedVessel.riskFactor.probabilityRiskFactor}
                 />
                 <SubRiskText
-                  title={getProbabilityRiskFactorText(
+                  title={getInfractionRateRiskFactorText(
                     selectedVessel.riskFactor.probabilityRiskFactor,
                     !!selectedVessel.riskFactor.numberControlsLastFiveYears
                   )}
                 >
-                  {getProbabilityRiskFactorText(
+                  {getInfractionRateRiskFactorText(
                     selectedVessel.riskFactor.probabilityRiskFactor,
                     !!selectedVessel.riskFactor.numberControlsLastFiveYears
                   )}
@@ -171,8 +171,8 @@ export function RiskFactorResume() {
             <SubRiskWrapper>
               <SubRiskTitle>Priorité de contrôle</SubRiskTitle>
               <SubRiskContent>
-                <RiskFactorControl />
-                <RiskFactorCursor
+                <ControlUnitIcon color={THEME.color.slateGray} />
+                <StyledRiskFactorCursor
                   color={getRiskFactorColor(selectedVessel.riskFactor.detectabilityRiskFactor)}
                   height={8}
                   // eslint-disable-next-line no-unsafe-optional-chaining
@@ -221,6 +221,12 @@ const UnderCharterText = styled.span`
   line-height: 39px;
 `
 
+const StyledRiskFactorCursor = styled(RiskFactorCursor)<{
+  $height?: number
+}>`
+  height: ${p => (p.$height ? `${p.$height}px` : 'unset')};
+`
+
 const NoRiskFactor = styled.div`
   padding: 10px 10px 10px 25px;
   text-align: left;
@@ -229,7 +235,17 @@ const NoRiskFactor = styled.div`
   color: ${p => p.theme.color.slateGray};
 `
 
-const Chevron = styled(ChevronIconButton)`
+const Chevron = styled(ChevronIconButton)<{
+  isOpen: boolean
+}>`
+  ${p => {
+    if (p.isOpen) {
+      return 'padding-left: 24px;'
+    }
+
+    return 'padding-right: 24px;'
+  }}
+
   svg {
     color: ${p => p.theme.color.charcoal};
   }
@@ -245,63 +261,59 @@ const SubRisk = styled.div`
 const SubRiskWrapper = styled(TransparentButton)`
   display: flex;
   flex-direction: column;
-  width: 90%;
+  min-width: 0;
 `
 
 const SubRiskContent = styled.div`
   display: flex;
+  padding-bottom: 16px;
+  align-items: end;
 `
 
 const GlobalRisk = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+  padding-left: 24px;
+  height: 46px;
 `
 
 const SeeMore = styled.a<{
   $underCharter: boolean | undefined
 }>`
-  font-size: 11px;
+  font-size: 13px;
   color: ${p => p.theme.color.slateGray};
   text-decoration: underline;
   cursor: pointer;
   margin-top: ${p => (p.$underCharter ? -20 : 19)}px;
-  margin-right: ${p => (p.$underCharter ? 25 : 12)}px;
+  margin-right: ${p => (p.$underCharter ? 25 : 16)}px;
   ${p =>
     p.$underCharter
       ? `
-  margin-top: -20px;
-  margin-right: 25px;
   position: relative;
   right: -100px;
   float: left;
   `
-      : `
-  margin-right: 12px;
-  line-height: 43px;
-  `}
+      : `line-height: 43px;`}
 `
 
 const RiskFactorZone = styled.div`
-  padding-top: 10px;
   text-align: left;
   display: flex;
   flex-wrap: wrap;
   background: ${p => p.theme.color.white};
 `
 
-const RiskFactorImpact = styled(RiskFactorImpactSVG)`
-  width: 22px;
+const FishIcon = styled(Icon.Fishery)`
   margin-left: 24px;
-  margin-top: 9px;
-  margin-right: 7px;
+  margin-top: 6px;
+  margin-right: 8px;
 `
 
-const RiskFactorControl = styled(RiskFactorControlSVG)`
-  width: 22px;
+const ControlUnitIcon = styled(Icon.ControlUnit)`
   margin-left: 24px;
-  margin-top: 7px;
-  margin-right: 7px;
+  margin-top: 6px;
+  margin-right: 8px;
 `
 
 const RiskFactorInfractions = styled(RiskFactorInfractionsSVG)`
@@ -317,22 +329,24 @@ const Line = styled.div`
 `
 
 const GlobalRiskFactor = styled.span`
+  padding-top: 14px;
   padding-left: 24px;
-  font-size: 15px;
   color: ${p => p.theme.color.slateGray};
   width: 100%;
 `
 
 const SubRiskTitle = styled.h3`
   font-size: 13px;
+  font-weight: 400;
   color: ${p => p.theme.color.slateGray};
   padding-left: 24px;
   width: 100%;
+  line-height: 48px;
+  height: 36px;
 `
 
 const SubRiskText = styled.span`
-  margin: 8px;
-  margin-bottom: 12px;
+  margin-left: 8px;
   max-width: 130px;
   white-space: nowrap;
   text-overflow: ellipsis;

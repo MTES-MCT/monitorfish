@@ -18,6 +18,8 @@ const val defaultDetectabilityRiskFactor = 2.0
 const val defaultRiskFactor = 1.74
 const val defaultControlPriorityLevel = 1.0
 const val defaultControlRateRiskFactor = 4.0
+const val defaultInfringementRiskLevel = 2.0
+const val defaultInfractionRateRiskFactor = 2.0
 
 /**
  * The risk factors coefficients must be equal to values in the base Python implementation:
@@ -35,6 +37,8 @@ data class VesselRiskFactor(
     val riskFactor: Double = defaultRiskFactor,
     val controlPriorityLevel: Double = defaultControlPriorityLevel,
     val controlRateRiskFactor: Double = defaultControlRateRiskFactor,
+    val infringementRiskLevel: Double = defaultInfringementRiskLevel,
+    val infractionRateRiskFactor: Double = defaultInfractionRateRiskFactor,
     /** CFR (Community Fleet Register Number). */
     val internalReferenceNumber: String? = null,
     val vesselId: Int? = null,
@@ -61,6 +65,8 @@ data class VesselRiskFactor(
     val recentSegmentHighestImpact: String? = null,
     val recentSegmentHighestPriority: String? = null,
     val recentControlPriorityLevel: Double = controlPriorityLevelCoefficient,
+    val recentSegmentsProbabilityRiskFactor: Double = defaultProbabilityRiskFactor,
+    val recentSegmentsInfringementRiskLevel: Double = defaultInfringementRiskLevel,
     val hasCurrentVmsFishingActivity: Boolean = false,
 ) {
     fun isInGroup(

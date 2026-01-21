@@ -159,11 +159,12 @@ def add_landings(add_monitorfish_database):
 
 
 @fixture
-def control_priorities() -> pd.DataFrame:
+def control_priorities_and_infringement_risk_levels() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "facade": ["Facade 1", "Facade 1", "Facade 2", "Facade 2"],
             "segment": ["T8-9", "L", "T8-9", "L"],
             "control_priority_level": [2.5, 2.8, 2.9, 2.4],
+            "infringement_risk_level": [3.4, 2.1, 3.0, 3.4],
         }
     )

@@ -14,11 +14,11 @@ context('Vessel sidebar resume tab', () => {
     openVesselBySearch('Pheno')
 
     // Then
-    cy.get('*[data-cy^="vessel-name"]').contains('PHENOMENE (FR)')
-    cy.get('*[data-cy^="global-risk-factor"]').contains('2.5')
+    cy.getDataCy('vessel-name').contains('PHENOMENE (FR)')
+    cy.getDataCy('global-risk-factor').contains('2.5')
 
-    cy.get('*[data-cy^="impact-risk-factor"]').contains('2.1')
-    cy.get('*[data-cy^="impact-risk-factor"]').click({ force: true, timeout: 10000 })
+    cy.getDataCy('impact-risk-factor').contains('2.1')
+    cy.getDataCy('impact-risk-factor').click({ force: true, timeout: 10000 })
     cy.get(
       '[title="Segment(s) actuel(s) à partir des messages de captures\n\n' +
         'Nom : NWW10\n' +
@@ -34,18 +34,26 @@ context('Vessel sidebar resume tab', () => {
     cy.get('*[data-cy="Majorité d\'espèces à bord"]').contains('Pélagique')
     cy.get('*[data-cy="Espèces cibles à bord"]').contains('NEP (≥ 20% du total des captures)')
 
-    cy.get('*[data-cy^="probability-risk-factor"]').contains('2.0')
-    cy.get('*[data-cy^="probability-risk-factor"]').click({ force: true, timeout: 10000 })
+    cy.getDataCy('probability-risk-factor').contains('2.0')
+    cy.getDataCy('probability-risk-factor').click({ force: true, timeout: 10000 })
+    cy.getDataCy('probability-risk-factor').next().contains('Probabilité d’infraction du segment')
+    cy.getDataCy('risk-factor-infringementRiskLevel').contains('2.0 – moyenne')
+    cy.getDataCy('probability-risk-factor').next().contains('Fréquence d’infraction du navire')
+    cy.getDataCy('risk-factor-infractionRateRiskFactor').contains('2.0 – Infractions occasionnelles')
+    cy.getDataCy('probability-risk-factor').next().contains('8 contrôles sur 5 ans ')
+    cy.getDataCy('probability-risk-factor').next().contains('5 infractions pêche / 8 contrôles')
 
-    cy.get('*[data-cy^="detectability-risk-factor"]').contains('3.0')
-    cy.get('*[data-cy^="detectability-risk-factor"]').click({ force: true, timeout: 10000 })
+    cy.getDataCy('detectability-risk-factor').contains('3.0')
+    cy.getDataCy('detectability-risk-factor').click({ force: true, timeout: 10000 })
+    cy.getDataCy('detectability-risk-factor').next().contains('Priorité du segment')
+    cy.getDataCy('risk-factor-priority-level').contains('2.6 – élevée')
+    cy.getDataCy('detectability-risk-factor').next().contains('Priorité du navire')
+    cy.getDataCy('detectability-risk-factor').next().contains('3.8 – Contrôles rares')
 
     cy.wait(200)
-    cy.get('*[data-cy^="vessel-sidebar-beacon-malfunction"]').contains('NON-ÉMISSION VMS')
+    cy.getDataCy('vessel-sidebar-beacon-malfunction').contains('NON-ÉMISSION VMS')
 
-    cy.get('*[data-cy^="risk-factor-priority-level"]').contains('2.6 – élevée')
-
-    cy.get('*[data-cy^="show-risk-factor-explanation-modal"]').click({ force: true, timeout: 10000 })
+    cy.getDataCy('show-risk-factor-explanation-modal').click({ force: true, timeout: 10000 })
 
     cy.clickButton('Fermer')
     cy.get('*[data-cy="vessel-search-selected-vessel-close-title"]').click()
@@ -54,13 +62,13 @@ context('Vessel sidebar resume tab', () => {
      * An alert should be shown on the vessel sidebar
      */
     // When
-    cy.get('*[data-cy^="vessel-search-input"]').type('tempete couleur')
-    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
+    cy.getDataCy('vessel-search-input').type('tempete couleur')
+    cy.getDataCy('vessel-search-item').eq(0).click()
     cy.wait(200)
-    cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
+    cy.getDataCy('vessel-sidebar').should('be.visible')
 
     // Then
-    cy.get('*[data-cy^="vessel-sidebar-alert"]').contains('Pêche en ZEE française par un navire tiers', {
+    cy.getDataCy('vessel-sidebar-alert').contains('Pêche en ZEE française par un navire tiers', {
       timeout: 10000
     })
     cy.get('*[data-cy="vessel-search-selected-vessel-close-title"]').click()
@@ -69,7 +77,7 @@ context('Vessel sidebar resume tab', () => {
      * Vessel with a recent profile
      */
     openVesselBySearch('CFR109')
-    cy.get('*[data-cy^="impact-risk-factor"]').click({ force: true, timeout: 10000 })
+    cy.getDataCy('impact-risk-factor').click({ force: true, timeout: 10000 })
     cy.get(
       '[title="Segment(s) ces 14 derniers jours\n\n' +
         'Nom : NWW10\n' +
@@ -84,8 +92,8 @@ context('Vessel sidebar resume tab', () => {
     /**
      * Fleet segments should be displayed also in the logbook tab
      */
-    cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
-    cy.get('*[data-cy^="vessel-menu-fishing"]', { timeout: 10000 }).should('be.visible')
+    cy.getDataCy('vessel-menu-fishing').click({ timeout: 10000 })
+    cy.getDataCy('vessel-menu-fishing').should('be.visible')
     cy.get(
       '[title="Segment(s) ces 14 derniers jours\n\n' +
         'Nom : NWW10\n' +

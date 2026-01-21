@@ -21,6 +21,7 @@ class AddControlObjective(
                 targetNumberOfControlsAtPort = 0,
                 targetNumberOfControlsAtSea = 0,
                 controlPriorityLevel = 1.0,
+                infringementRiskLevel = 2.0,
             ),
         )
 }

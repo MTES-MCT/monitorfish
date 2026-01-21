@@ -8,7 +8,7 @@ import {
 import { FlatKeyValue } from '@features/Vessel/components/VesselSidebar/components/common/FlatKeyValue'
 import { InfractionsSummary } from '@features/Vessel/components/VesselSidebar/components/Controls/InfractionsSummary'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { customDayjs, isDefined } from '@mtes-mct/monitor-ui'
+import { customDayjs, Icon, isDefined } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import styled from 'styled-components'
 
@@ -26,17 +26,20 @@ export function ProbabilityRiskFactorDetails({ isOpen }) {
       <Line />
       <OpenedDetails>
         <InlineKey>Probabilité d’infraction du segment</InlineKey>
-        {/* infringement_risk_level */}
-        <InlineValue data-cy="risk-factor-infringementRiskLevel">
-          {riskFactor.infringementRiskLevel ? (
-            `${riskFactor.infringementRiskLevel?.toFixed(1)} – ${getControlPriorityLevel(
-              riskFactor.infringementRiskLevel,
-              riskFactor.segmentHighestPriority
-            )}`
-          ) : (
-            <NoValue>-</NoValue>
-          )}
-        </InlineValue>
+        {riskFactor.infringementRiskLevel ? (
+          <InlineValue data-cy="risk-factor-infringementRiskLevel">
+            <InlineValueText>
+              {riskFactor.infringementRiskLevel?.toFixed(1)} –{' '}
+              {getControlPriorityLevel(riskFactor.infringementRiskLevel, riskFactor.segmentHighestPriority)}
+            </InlineValueText>
+            <Icon.Info
+              size={16}
+              title="Cette note est déterminée par les DIRM, en analysant les données d’infraction de tous les navires appartenant au segment."
+            />
+          </InlineValue>
+        ) : (
+          <NoValue>-</NoValue>
+        )}
         <StyledRiskFactorCursor
           color={getRiskFactorColor(riskFactor.infringementRiskLevel)}
           height={5}
@@ -46,16 +49,20 @@ export function ProbabilityRiskFactorDetails({ isOpen }) {
           withoutBox
         />
         <InlineKey>Fréquence d’infraction du navire</InlineKey>
-        <InlineValue data-cy="risk-factor-infractionRateRiskFactor">
-          {riskFactor.infractionRateRiskFactor ? (
-            `${riskFactor.infractionRateRiskFactor?.toFixed(1)} – ${getInfractionRateRiskFactorText(
-              riskFactor.infractionRateRiskFactor,
-              hasBeenControlledWithinPastFiveYears
-            )}`
-          ) : (
-            <NoValue>-</NoValue>
-          )}
-        </InlineValue>
+        {riskFactor.infractionRateRiskFactor ? (
+          <InlineValue data-cy="risk-factor-infractionRateRiskFactor">
+            <InlineValueText>
+              {riskFactor.infractionRateRiskFactor?.toFixed(1)} –{' '}
+              {getInfractionRateRiskFactorText(
+                riskFactor.infractionRateRiskFactor,
+                hasBeenControlledWithinPastFiveYears
+              )}
+            </InlineValueText>
+            <Icon.Info size={16} title="Cette note s’appuie sur l’historique d’infraction du navire." />
+          </InlineValue>
+        ) : (
+          <NoValue>-</NoValue>
+        )}
         <StyledRiskFactorCursor
           color={getRiskFactorColor(riskFactor.infractionRateRiskFactor)}
           height={5}
@@ -112,12 +119,17 @@ const InlineKey = styled.span`
 `
 
 const InlineValue = styled.span`
+  display: flex;
+  gap: 8px;
+`
+
+const InlineValueText = styled.span`
   color: ${p => p.theme.color.gunMetal};
   font-weight: 500;
   text-overflow: ellipsis;
   overflow: hidden;
-  white-space: inherit;
-  max-width: 200px;
+  white-space: nowrap;
+  max-width: 170px;
 `
 
 const StyledFlatKeyValue = styled(FlatKeyValue)`

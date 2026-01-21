@@ -2,11 +2,13 @@ import { NoValue } from '@features/Vessel/components/VesselSidebar/components/co
 import styled from 'styled-components'
 
 type InfractionsSummaryProps = {
+  className?: string | undefined
   numberOfControlsWithSomeGearsSeized: number | undefined
   numberOfControlsWithSomeSpeciesSeized: number | undefined
   numberOfDiversions: number | undefined
 }
 export function InfractionsSummary({
+  className,
   numberOfControlsWithSomeGearsSeized,
   numberOfControlsWithSomeSpeciesSeized,
   numberOfDiversions
@@ -14,18 +16,18 @@ export function InfractionsSummary({
   const getText = value => (!Number.isNaN(value) ? value : <NoValue>-</NoValue>)
 
   return (
-    <Wrapper>
+    <Wrapper className={className}>
       <Tag>
         <InfractionNumber $isRed={!!numberOfControlsWithSomeGearsSeized}>
           {getText(numberOfControlsWithSomeGearsSeized)}
         </InfractionNumber>
-        <Text>Appréhens. engin</Text>
+        <Text>Appr. engin</Text>
       </Tag>
       <Tag>
         <InfractionNumber $isRed={!!numberOfControlsWithSomeSpeciesSeized}>
           {getText(numberOfControlsWithSomeSpeciesSeized)}
         </InfractionNumber>
-        <Text>Appréhens. espèce</Text>
+        <Text>Appr. espèce</Text>
       </Tag>
       <Tag>
         <InfractionNumber $isRed={!!numberOfDiversions}>{getText(numberOfDiversions)}</InfractionNumber>

@@ -1,6 +1,7 @@
 SELECT
+    year,
     facade,
     segment,
-    control_priority_level
+    infringement_risk_level
 FROM control_objectives
-WHERE year = :year
+ORDER BY 1, 2, 3

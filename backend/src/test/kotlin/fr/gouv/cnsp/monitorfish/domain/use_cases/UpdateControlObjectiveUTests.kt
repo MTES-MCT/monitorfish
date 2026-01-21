@@ -19,7 +19,7 @@ class UpdateControlObjectiveUTests {
         // When
         val throwable =
             catchThrowable {
-                UpdateControlObjective(controlObjectivesRepository).execute(1, null, null, null)
+                UpdateControlObjective(controlObjectivesRepository).execute(1, null, null, null, null)
             }
 
         // Then
@@ -32,7 +32,7 @@ class UpdateControlObjectiveUTests {
         // When
         val throwable =
             catchThrowable {
-                UpdateControlObjective(controlObjectivesRepository).execute(1, 123, null, null)
+                UpdateControlObjective(controlObjectivesRepository).execute(1, 123, null, null, null)
             }
 
         // Then

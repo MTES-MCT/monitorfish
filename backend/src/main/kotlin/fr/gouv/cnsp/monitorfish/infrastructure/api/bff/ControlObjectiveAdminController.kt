@@ -55,6 +55,7 @@ class ControlObjectiveAdminController(
             targetNumberOfControlsAtSea = updateControlObjectiveData.targetNumberOfControlsAtSea,
             targetNumberOfControlsAtPort = updateControlObjectiveData.targetNumberOfControlsAtPort,
             controlPriorityLevel = updateControlObjectiveData.controlPriorityLevel,
+            infringementRiskLevel = updateControlObjectiveData.infringementRiskLevel,
         )
     }
 

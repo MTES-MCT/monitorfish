@@ -9,7 +9,7 @@ import styled from 'styled-components'
 import {
   getDetectabilityRiskFactorText,
   getImpactRiskFactorText,
-  getProbabilityRiskFactorText,
+  getInfractionRateRiskFactorText,
   getRiskFactorColor
 } from '../../../RiskFactor/utils'
 import { showVessel } from '../../useCases/showVessel'
@@ -151,7 +151,7 @@ export function VesselLabelContent({
               {parseFloat(riskFactor?.probabilityRiskFactor).toFixed(1)}
             </RiskFactorBox>
             <SubRiskText>
-              {getProbabilityRiskFactorText(
+              {getInfractionRateRiskFactorText(
                 riskFactor?.probabilityRiskFactor,
                 riskFactor?.hasBeenControlledLastFiveYears
               )}

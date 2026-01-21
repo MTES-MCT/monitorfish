@@ -16,6 +16,7 @@ class GetAllVesselGroups(
 
     fun execute(userEmail: String): List<VesselGroupBase> {
         val userService = getAuthorizedUser.execute(userEmail).service
+        logger.info("SERVICE $userService")
 
         return vesselGroupRepository.findAllByUserAndSharing(
             user = userEmail,

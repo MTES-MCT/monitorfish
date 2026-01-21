@@ -91,6 +91,7 @@ class VesselGroupController(
         @AuthenticationPrincipal principal: OidcUser?,
     ): List<Any> {
         val email: String = principal?.email ?: ""
+        logger.info("EMAIL $email")
 
         return getAllVesselGroups.execute(email).map {
             when (it) {

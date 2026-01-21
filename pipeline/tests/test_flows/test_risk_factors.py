@@ -910,6 +910,10 @@ def risk_factors() -> pd.DataFrame:
                 False,
                 False,
                 False,
+                False,
+                False,
+                False,
+                False,
             ],
         }
     )

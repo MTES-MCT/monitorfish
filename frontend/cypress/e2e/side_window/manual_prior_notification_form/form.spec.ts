@@ -305,7 +305,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.fill('Engins utilisés', ['GN'], { index: 1 })
 
     cy.wait('@computePriorNotification')
-    cy.getDataCy('VesselRiskFactor').contains('2.0').should('exist')
+    cy.getDataCy('VesselRiskFactor').contains('2.8').should('exist')
     cy.get('.Element-Tag').contains('NWW07 – NWW07').should('exist')
     cy.get('.Element-Tag').contains('Préavis type 1').should('exist')
     cy.get('.Element-Tag').contains('Préavis type 2').should('exist')

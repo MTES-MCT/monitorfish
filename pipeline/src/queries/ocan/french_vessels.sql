@@ -122,6 +122,8 @@ WHERE
     (
         -- Exception to add a supply vessel
         nf.modele = 'ASSISTANCE THONIER'
+        -- Exception to add a tuna boat assistance vessel
+        OR f.num_cfr = 'FRA000924863'
         OR f.idc_situation IN (2, 4, 5, 7, 9, 10)
     ) AND
     -- Exclusion du statut flotteur 'Hors service'

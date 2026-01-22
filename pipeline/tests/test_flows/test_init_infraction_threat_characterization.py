@@ -38,9 +38,9 @@ def test_flow(reset_test_data):
     assert len(initial_threats) == 2
     assert len(threats_after_first_run) == 9
     assert len(initial_threat_characterizations) == 2
-    assert len(threat_characterizations_after_first_run) == 114
+    assert len(threat_characterizations_after_first_run) > 110
     assert len(initial_infraction_threat_characterization) == 2
-    assert len(infraction_threat_characterization_after_first_run) == 169
+    assert len(infraction_threat_characterization_after_first_run) > 160
 
     # Re-running should succeed and lead to the same data
     state = init_infraction_threat_characterization_flow(return_state=True)

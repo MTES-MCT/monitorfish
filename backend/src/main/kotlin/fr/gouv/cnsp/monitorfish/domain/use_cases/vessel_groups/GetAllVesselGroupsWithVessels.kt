@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselIdentity
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
@@ -57,15 +58,17 @@ class GetAllVesselGroupsWithVessels(
         }
 
         return vesselGroups.map { group ->
-            val activeVesselsFromGroups =
+            val indexedVessels =
                 when (group) {
-                    is DynamicVesselGroup -> dynamicGroupsToActiveVessels[group] ?: emptyList()
+                    is DynamicVesselGroup ->
+                        (dynamicGroupsToActiveVessels[group] ?: emptyList())
+                            .mapIndexed { index, vessel -> Pair(index, vessel) }
                     is FixedVesselGroup -> getVesselsFromReferential(group, byVesselId, byCfr, byIrcs, byExternalId)
                 }
 
             VesselGroupWithVessels(
                 group = group,
-                vessels = activeVesselsFromGroups,
+                vessels = indexedVessels,
             )
         }
     }
@@ -76,53 +79,61 @@ class GetAllVesselGroupsWithVessels(
         byCfr: MutableMap<String, EnrichedActiveVessel>,
         byIrcs: MutableMap<String, EnrichedActiveVessel>,
         byExternalId: MutableMap<String, EnrichedActiveVessel>,
-    ): List<EnrichedActiveVessel> =
-        group.vessels.mapNotNull { vessel ->
-            when {
-                vessel.vesselId != null -> byVesselId[vessel.vesselId]
-                vessel.vesselIdentifier != null ->
-                    when (vessel.vesselIdentifier) {
-                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> byCfr[vessel.cfr]
-                        VesselIdentifier.IRCS -> byIrcs[vessel.ircs]
-                        VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> byExternalId[vessel.externalIdentification]
+    ): List<Pair<Int, EnrichedActiveVessel>> =
+        group.vessels.mapIndexedNotNull { index, vessel ->
+            val foundVessel =
+                when {
+                    vessel.vesselId != null -> byVesselId[vessel.vesselId]
+                    vessel.vesselIdentifier != null ->
+                        when (vessel.vesselIdentifier) {
+                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> byCfr[vessel.cfr]
+                            VesselIdentifier.IRCS -> byIrcs[vessel.ircs]
+                            VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
+                                byExternalId[vessel.externalIdentification]
+                        }
+
+                    !vessel.cfr.isNullOrEmpty() -> byCfr[vessel.cfr]
+                    !vessel.ircs.isNullOrEmpty() -> byIrcs[vessel.ircs]
+                    !vessel.externalIdentification.isNullOrEmpty() -> byExternalId[vessel.externalIdentification]
+
+                    else -> {
+                        logger.warn("Vessel in group has no identifier.")
+
+                        null
                     }
-
-                !vessel.cfr.isNullOrEmpty() -> byCfr[vessel.cfr]
-                !vessel.ircs.isNullOrEmpty() -> byIrcs[vessel.ircs]
-                !vessel.externalIdentification.isNullOrEmpty() -> byExternalId[vessel.externalIdentification]
-                else -> {
-                    logger.warn("Vessel in group has no identifier.")
-
-                    null
-                }
-            } ?: when {
-                vessel.vesselId != null -> {
-                    EnrichedActiveVessel(
-                        lastPosition = null,
-                        vesselProfile = null,
-                        vessel =
-                            Vessel(
-                                id = vessel.vesselId,
-                                internalReferenceNumber = vessel.cfr,
-                                externalReferenceNumber = vessel.externalIdentification,
-                                ircs = vessel.ircs,
-                                vesselName = vessel.name,
-                                flagState = vessel.flagState,
-                                hasLogbookEsacapt = false,
-                            ),
-                        producerOrganization = null,
-                        riskFactor = VesselRiskFactor(),
-                        landingPort = null,
-                    )
                 }
 
-                else -> {
-                    logger.warn("Vessel ${vessel.cfr} not found in vessels table, skipping it.")
+            val resolvedVessel = foundVessel ?: createFallbackVessel(vessel)
 
-                    null
-                }
-            }
+            return@mapIndexedNotNull resolvedVessel?.let { Pair(index, it) }
         }
+
+    private fun createFallbackVessel(vessel: VesselIdentity): EnrichedActiveVessel? {
+        val vesselId = vessel.vesselId
+        if (vesselId == null) {
+            logger.warn("Vessel ${vessel.cfr} not found in active vessels, skipping it.")
+
+            return null
+        }
+
+        return EnrichedActiveVessel(
+            lastPosition = null,
+            vesselProfile = null,
+            vessel =
+                Vessel(
+                    id = vesselId,
+                    internalReferenceNumber = vessel.cfr,
+                    externalReferenceNumber = vessel.externalIdentification,
+                    ircs = vessel.ircs,
+                    vesselName = vessel.name,
+                    flagState = vessel.flagState,
+                    hasLogbookEsacapt = false,
+                ),
+            producerOrganization = null,
+            riskFactor = VesselRiskFactor(),
+            landingPort = null,
+        )
+    }
 
     private fun buildMapOfIdentifiers(
         activeVessel: EnrichedActiveVessel,

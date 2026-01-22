@@ -46,7 +46,7 @@ class JpaInfractionRepositoryITests : AbstractDBTests() {
         val infractions = jpaInfractionRepository.findAll()
 
         // Then
-        assertThat(infractions).hasSize(102)
+        assertThat(infractions).hasSize(103)
         assertThat(infractions.first().natinfCode).isEqualTo(17)
         assertThat(infractions.first().regulation).isEqualTo("Reg pêche 3")
         assertThat(infractions.first().infraction).isEqualTo("Infraction 4")

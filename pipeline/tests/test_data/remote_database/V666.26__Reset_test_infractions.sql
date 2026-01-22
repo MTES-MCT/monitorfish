@@ -99,6 +99,7 @@ INSERT INTO infractions (
     (     27715, 'Reg test',   'Cat test', 'Infraction test'),
     (     27717, 'Reg test',   'Cat test', 'Infraction test'),
     (     27718, 'Reg test',   'Cat test', 'Infraction test'),
+    (     27719, 'Reg test',   'Cat test', 'Infraction test'),
     (     27721, 'Reg test',   'Cat test', 'Infraction test'),
     (     27724, 'Reg pêche 5',             'Pêche', 'Infraction 2'),
     (     27725, 'Reg test',   'Cat test', 'Infraction test'),

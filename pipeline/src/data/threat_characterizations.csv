@@ -38,10 +38,13 @@ id,name,threat_id
 55,LAN (JT-FT),6
 56,Marge de tolérance,6
 59,Plan de cale,6
-60,PNO,6
-61,LSC (JPE),6
-62,LSC (JT-FT),6
-63,RTP,6
+60,PNO - non respect conditions (JPE),6
+61,PNO - non respect conditions (JT-FT),6
+62,PNO - absence de notification,6
+63,LSC (JPE),6
+64,LSC (JT-FT),6
+65,Cetacés - caméra inactive / absence collecte de données,6
+66,RTP,6
 77,Pêche sans autorisation,1
 78,Elements d'identification inexistants / dissimulés,1
 79,Entrave à l’observation,2

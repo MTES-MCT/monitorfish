@@ -7,11 +7,22 @@ import { numberOrUndefined, stringOrUndefined } from '../../types'
 
 const validateDates = data => {
   const { endOfValidityUtc, startOfValidityUtc } = data
+
   if (!startOfValidityUtc || !endOfValidityUtc) {
     return true
   }
 
   return customDayjs(endOfValidityUtc).isAfter(customDayjs(startOfValidityUtc))
+}
+
+const validateSharedTo = data => {
+  const { sharedTo, sharing } = data
+
+  if (sharing === Sharing.SHARED && (sharedTo === undefined || !sharedTo?.length)) {
+    return false
+  }
+
+  return true
 }
 
 export enum Sharing {
@@ -57,7 +68,7 @@ export const VesselGroupFilterSchema = VesselListFilterSchema.omit({
 })
 export type DynamicVesselGroupFilter = z.infer<typeof VesselGroupFilterSchema>
 
-export const DynamicVesselGroupSchema = VesselGroupSchema.extend({
+export const DynamicVesselGroupSchema = VesselGroupSchema.safeExtend({
   filters: VesselGroupFilterSchema,
   type: z.literal(GroupType.DYNAMIC)
 })
@@ -67,12 +78,17 @@ export const CreateOrUpdateDynamicVesselGroupSchema = DynamicVesselGroupSchema.o
   createdBy: true,
   updatedAtUtc: true
 })
+  .loose()
   .extend({
     id: z.union([z.number(), z.undefined()])
   })
   .refine(data => validateDates(data), {
     message: 'La date de fin doit être postérieure à la date de début',
     path: ['endOfValidityUtc']
+  })
+  .refine(data => validateSharedTo(data), {
+    message: 'Un pôle doit être sélectionné',
+    path: ['sharedTo']
   })
 
 export type CreateOrUpdateDynamicVesselGroup = z.infer<typeof CreateOrUpdateDynamicVesselGroupSchema>
@@ -91,7 +107,7 @@ export const VesselIdentitySchema = z.strictObject({
   vesselIdentifier: z.union([z.enum(VesselIdentifier), z.undefined()])
 })
 
-export const FixedVesselGroupSchema = VesselGroupSchema.extend({
+export const FixedVesselGroupSchema = VesselGroupSchema.safeExtend({
   type: z.literal(GroupType.FIXED),
   vessels: z.array(VesselIdentitySchema)
 })
@@ -101,12 +117,17 @@ export const CreateOrUpdateFixedVesselGroupSchema = FixedVesselGroupSchema.omit(
   createdBy: true,
   updatedAtUtc: true
 })
+  .loose()
   .extend({
     id: z.union([z.number(), z.undefined()])
   })
   .refine(data => validateDates(data), {
     message: 'La date de fin doit être postérieure à la date de début',
     path: ['endOfValidityUtc']
+  })
+  .refine(data => validateSharedTo(data), {
+    message: 'Un pôle doit être sélectionné',
+    path: ['sharedTo']
   })
 
 export type FixedVesselGroup = z.infer<typeof FixedVesselGroupSchema>

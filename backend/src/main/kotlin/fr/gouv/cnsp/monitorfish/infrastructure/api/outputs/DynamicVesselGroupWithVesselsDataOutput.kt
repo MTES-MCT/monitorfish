@@ -10,14 +10,14 @@ data class DynamicVesselGroupWithVesselsDataOutput(
     companion object {
         fun fromDynamicVesselGroup(
             group: DynamicVesselGroup,
-            vessels: List<EnrichedActiveVessel>,
+            vessels: List<Pair<Int, EnrichedActiveVessel>>,
         ) = DynamicVesselGroupWithVesselsDataOutput(
             group = DynamicVesselGroupDataOutput.fromDynamicVesselGroup(group),
             vessels =
-                vessels.mapIndexed { index, it ->
+                vessels.map {
                     ActiveVesselBaseDataOutput.fromEnrichedActiveVessel(
-                        enrichedActiveVessel = it,
-                        index = index,
+                        enrichedActiveVessel = it.second,
+                        index = it.first,
                     )
                 },
         )

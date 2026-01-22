@@ -18,7 +18,7 @@ export const VESSEL_LIST_CSV_MAP_BASE: DownloadAsCsvMap<Omit<Vessel.ActiveVessel
   internalReferenceNumber: 'CFR',
   ircs: 'C/S',
   mmsi: 'MMSI',
-  externalReferenceNumber: 'Marquage extérieur',
+  externalReferenceNumber: 'Marquage externe',
   length: {
     label: 'Longueur',
     transform: vessel => `${vessel.length} m`

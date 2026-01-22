@@ -431,11 +431,11 @@ export function EditDynamicVesselGroupDialog({
             disabled={!filterableZoneAsTreeOptions}
             isLabelHidden
             isTransparent
-            label="Filtrer les navires avec une zone"
+            label="Zones"
             name="zones"
             onChange={updateZones}
             options={filterableZoneAsTreeOptions?.filter(zone => zone.label !== 'Zone manuelle') ?? []}
-            placeholder="Filtrer les navires avec une zone"
+            placeholder="Zones"
             popupWidth={500}
             renderExtraFooter={renderMultiCascaderCustomZoneFooter}
             renderValue={(_, items) => {

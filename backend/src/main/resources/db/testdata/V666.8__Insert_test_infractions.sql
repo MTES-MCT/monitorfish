@@ -206,3 +206,5 @@ INSERT INTO infractions (natinf_code, regulation, infraction_category, infractio
 INSERT INTO infractions (natinf_code, regulation, infraction_category, infraction) VALUES (33914, 'ART.L.945-4 §I 15°, ART.R.932-4, ART.R.932-7 C.RURAL. ART.58 REGLT.CE DU 20/11/2009. ART.67, ART.68 REGLT.EX.UE DU 08/04/2011.', 'Pêche', 'TRANSBORDEMENT, DEBARQUEMENT OU TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L''AQUACULTURE MARINE SANS MARQUAGE CONFORME DE TRACABILITE');
 
 INSERT INTO infractions (natinf_code, regulation, infraction_category, infraction) VALUES (34314, 'ART.L.945-4 §I 15° C.RURAL. ART.15 §12 REGLT.UE DU 11/12/2013.', 'Pêche', 'NON RESPECT DE L''OBLIGATION DE REJET DE PRODUITS DE LA PECHE MARITIME NON CONFORMES');
+
+INSERT INTO infractions (natinf_code, regulation, infraction_category, infraction) VALUES (27719, 'L.945-4 du Code rural et de la pêche maritime , L.921-1 du Code rural et de la pêche maritime ', 'Pêche', 'PECHE MARITIME AVEC UN NAVIRE OU ENGIN FLOTTANT DONT LES CARACTERISTIQUES NE SONT PAS CONFORMES A CELLES INDIQUEES SUR LA LICENCE OU L''AUTORISATION DE PECHE');

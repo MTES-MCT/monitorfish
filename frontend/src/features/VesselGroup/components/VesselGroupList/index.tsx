@@ -7,12 +7,22 @@ import { GroupType, Sharing } from '@features/VesselGroup/types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
-import { Checkbox, FulfillingBouncingCircleLoader, Size, TextInput, THEME } from '@mtes-mct/monitor-ui'
+import { Checkbox, FulfillingBouncingCircleLoader, Select, Size, TextInput, THEME } from '@mtes-mct/monitor-ui'
 import { useContext, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { UserAccountContext } from '../../../../context/UserAccountContext'
+
+const GROUP_TYPE_OPTIONS = [
+  { label: 'Groupes dynamiques', value: GroupType.DYNAMIC },
+  { label: 'Groupes fixes', value: GroupType.FIXED }
+]
+
+const SHARING_OPTIONS = [
+  { label: 'Groupes partagés', value: Sharing.SHARED },
+  { label: 'Groupes personnels', value: Sharing.PRIVATE }
+]
 
 type VesselListProps = Readonly<{
   isFromUrl: boolean
@@ -22,7 +32,7 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
   const isSuperUser = useIsSuperUser()
   const searchQuery = useMainAppSelector(state => state.vesselGroupList.searchQuery)
   const userAccount = useContext(UserAccountContext)
-  const { filteredExpired, filteredGroupTypes, filteredSharing } = useMainAppSelector(state => state.vesselGroupList)
+  const { filteredExpired, filteredGroupType, filteredSharing } = useMainAppSelector(state => state.vesselGroupList)
 
   useEffect(() => {
     trackEvent({
@@ -33,7 +43,7 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
   }, [userAccount?.email])
 
   const { isLoading, pinnedVesselGroupsWithVessels, unpinnedVesselGroupsWithVessels } = useGetVesselGroupsWithVessels(
-    filteredGroupTypes,
+    filteredGroupType,
     filteredSharing,
     filteredExpired
   )
@@ -42,48 +52,12 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
     dispatch(vesselGroupListActions.setSearchQuery(nextQuery))
   }
 
-  const updateDynamicGroupType = (nextGroupType: boolean | undefined) => {
-    if (!nextGroupType) {
-      dispatch(
-        vesselGroupListActions.setFilteredGroupTypes(filteredGroupTypes.filter(value => value !== GroupType.DYNAMIC))
-      )
-
-      return
-    }
-
-    dispatch(vesselGroupListActions.setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.DYNAMIC)))
+  const updateGroupType = (nextGroupType: GroupType | undefined) => {
+    dispatch(vesselGroupListActions.setFilteredGroupType(nextGroupType))
   }
 
-  const updateFixedGroupType = (nextGroupType: boolean | undefined) => {
-    if (!nextGroupType) {
-      dispatch(
-        vesselGroupListActions.setFilteredGroupTypes(filteredGroupTypes.filter(value => value !== GroupType.FIXED))
-      )
-
-      return
-    }
-
-    dispatch(vesselGroupListActions.setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.FIXED)))
-  }
-
-  const updatePrivateSharing = (nextSharing: boolean | undefined) => {
-    if (!nextSharing) {
-      dispatch(vesselGroupListActions.setFilteredSharing(filteredSharing.filter(value => value !== Sharing.PRIVATE)))
-
-      return
-    }
-
-    dispatch(vesselGroupListActions.setFilteredSharing(filteredSharing.concat(Sharing.PRIVATE)))
-  }
-
-  const updateSharedSharing = (nextSharing: boolean | undefined) => {
-    if (!nextSharing) {
-      dispatch(vesselGroupListActions.setFilteredSharing(filteredSharing.filter(value => value !== Sharing.SHARED)))
-
-      return
-    }
-
-    dispatch(vesselGroupListActions.setFilteredSharing(filteredSharing.concat(Sharing.SHARED)))
+  const updateSharing = (nextSharing: Sharing | undefined) => {
+    dispatch(vesselGroupListActions.setFilteredSharing(nextSharing))
   }
 
   const updateExpiredGroups = (nextExpired: boolean | undefined) => {
@@ -107,36 +81,26 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
             size={Size.LARGE}
             value={searchQuery}
           />
-          <StyledCheckbox
-            checked={filteredGroupTypes.includes(GroupType.FIXED)}
-            label="Groupes fixes"
-            name="fixed"
-            onChange={updateFixedGroupType}
-            title="Groupes fixes"
-          />
-          <StyledCheckbox
-            checked={filteredGroupTypes.includes(GroupType.DYNAMIC)}
-            label="Groupes dynamiques"
-            name="dynamics"
-            onChange={updateDynamicGroupType}
-            title="Groupes dynamiques"
+          <StyledSelect
+            isLabelHidden
+            label="Type de groupe"
+            name="groupType"
+            onChange={value => updateGroupType(value as GroupType | undefined)}
+            options={GROUP_TYPE_OPTIONS}
+            placeholder="Groupes dynamiques et fixes"
+            value={filteredGroupType}
           />
           {isSuperUser && (
             <>
               <VerticalBar />
-              <StyledCheckbox
-                checked={filteredSharing.includes(Sharing.PRIVATE)}
-                label="Groupes personnels"
-                name="private"
-                onChange={updatePrivateSharing}
-                title="Groupes personnels"
-              />
-              <StyledCheckbox
-                checked={filteredSharing.includes(Sharing.SHARED)}
-                label="Groupes partagés"
-                name="shared"
-                onChange={updateSharedSharing}
-                title="Groupes partagés"
+              <StyledSelect
+                isLabelHidden
+                label="Partage"
+                name="sharing"
+                onChange={value => updateSharing(value as Sharing | undefined)}
+                options={SHARING_OPTIONS}
+                placeholder="Groupes partagés et personnels"
+                value={filteredSharing}
               />
             </>
           )}
@@ -196,6 +160,12 @@ const StyledLoader = styled(FulfillingBouncingCircleLoader)`
 const StyledCheckbox = styled(Checkbox)`
   margin-left: 16px;
   height: 35px;
+`
+
+const StyledSelect = styled(Select)`
+  margin-left: 16px;
+  margin-bottom: 16px;
+  width: 250px;
 `
 
 const NoGroup = styled.div`

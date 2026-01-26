@@ -5,15 +5,15 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type VesselGroupListState = {
   filteredExpired: boolean
-  filteredGroupTypes: GroupType[]
-  filteredSharing: Sharing[]
+  filteredGroupType: GroupType | undefined
+  filteredSharing: Sharing | undefined
   searchQuery: string | undefined
 }
 
 export const INITIAL_STATE: VesselGroupListState = {
   filteredExpired: false,
-  filteredGroupTypes: [GroupType.DYNAMIC, GroupType.FIXED],
-  filteredSharing: [Sharing.SHARED, Sharing.PRIVATE],
+  filteredGroupType: undefined,
+  filteredSharing: undefined,
   searchQuery: undefined
 }
 
@@ -24,10 +24,10 @@ const vesselGroupListSlice = createSlice({
     setFilteredExpired(state, action: PayloadAction<boolean>) {
       state.filteredExpired = action.payload
     },
-    setFilteredGroupTypes(state, action: PayloadAction<GroupType[]>) {
-      state.filteredGroupTypes = action.payload
+    setFilteredGroupType(state, action: PayloadAction<GroupType | undefined>) {
+      state.filteredGroupType = action.payload
     },
-    setFilteredSharing(state, action: PayloadAction<Sharing[]>) {
+    setFilteredSharing(state, action: PayloadAction<Sharing | undefined>) {
       state.filteredSharing = action.payload
     },
     setSearchQuery(state, action: PayloadAction<string | undefined>) {

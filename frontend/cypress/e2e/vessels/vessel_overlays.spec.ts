@@ -27,7 +27,7 @@ context('Vessels Overlays', () => {
     cy.get('*[data-cy^="vessel-card-groups"]').contains('1 autre groupe non affiché sur la carte')
 
     // Hide vessel groups from map
-    cy.clickButton('Cacher les groupes')
+    cy.clickButton('Cacher le groupe "Mission Thémis – semaine 04"')
     cy.wait(250)
     cy.hoverVesselByName('SOCRATE')
 

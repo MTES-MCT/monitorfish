@@ -22,35 +22,27 @@ context('Side Window > Vessel Group List', () => {
     /**
      * Filter by group type
      */
-    cy.get('[title="Groupes fixes"]').click()
+    cy.fill('Type de groupe', 'Groupes fixes')
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
-    cy.get('[title="Groupes fixes"]').click()
+    cy.fill('Type de groupe', undefined)
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 
-    cy.get('[title="Groupes dynamiques"]').click()
+    cy.fill('Type de groupe', 'Groupes dynamiques')
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 1)
-    cy.get('[title="Groupes dynamiques"]').click()
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
-
-    cy.get('[title="Groupes fixes"]').click()
-    cy.get('[title="Groupes dynamiques"]').click()
+    cy.fill('Type de groupe', undefined)
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 
     /**
      * Filter by sharing
      */
-    cy.get('[title="Groupes personnels"]').click()
+    cy.fill('Partage', 'Groupes personnels')
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 1)
-    cy.get('[title="Groupes personnels"]').click()
+    cy.fill('Partage', undefined)
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 
-    cy.get('[title="Groupes partagés"]').click()
+    cy.fill('Partage', 'Groupes partagés')
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
-    cy.get('[title="Groupes partagés"]').click()
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
-
-    cy.get('[title="Groupes personnels"]').click()
-    cy.get('[title="Groupes partagés"]').click()
+    cy.fill('Partage', undefined)
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 
     /**

@@ -12,13 +12,23 @@ import { hideVesselsNotInVesselGroups } from '@features/VesselGroup/useCases/hid
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, Checkbox, Dropdown, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Dropdown, Icon, MapMenuDialog, Select } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
 import { vesselGroupListActions } from '../VesselGroupList/slice'
+
+const GROUP_TYPE_OPTIONS = [
+  { label: 'Groupes dynamiques', value: GroupType.DYNAMIC },
+  { label: 'Groupes fixes', value: GroupType.FIXED }
+]
+
+const SHARING_OPTIONS = [
+  { label: 'Groupes partagés', value: Sharing.SHARED },
+  { label: 'Groupes personnels', value: Sharing.PRIVATE }
+]
 
 export function VesselGroupMenuDialog() {
   const dispatch = useMainAppDispatch()
@@ -31,53 +41,17 @@ export function VesselGroupMenuDialog() {
 
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.VESSEL_GROUPS)
 
-  const { filteredGroupTypes, filteredSharing } = useMainAppSelector(state => state.vesselGroupList)
+  const { filteredGroupType, filteredSharing } = useMainAppSelector(state => state.vesselGroupList)
 
-  const { pinnedVesselGroups, unpinnedVesselGroups } = useGetVesselGroups(filteredGroupTypes, filteredSharing)
+  const { pinnedVesselGroups, unpinnedVesselGroups } = useGetVesselGroups(filteredGroupType, filteredSharing)
   const orderedVesselGroups = pinnedVesselGroups.concat(unpinnedVesselGroups)
 
-  const updateDynamicGroupType = (nextGroupType: boolean | undefined) => {
-    if (!nextGroupType) {
-      dispatch(
-        vesselGroupListActions.setFilteredGroupTypes(filteredGroupTypes.filter(value => value !== GroupType.DYNAMIC))
-      )
-
-      return
-    }
-
-    dispatch(vesselGroupListActions.setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.DYNAMIC)))
+  const updateGroupType = (nextGroupType: GroupType | undefined) => {
+    dispatch(vesselGroupListActions.setFilteredGroupType(nextGroupType))
   }
 
-  const updateFixedGroupType = (nextGroupType: boolean | undefined) => {
-    if (!nextGroupType) {
-      dispatch(
-        vesselGroupListActions.setFilteredGroupTypes(filteredGroupTypes.filter(value => value !== GroupType.FIXED))
-      )
-
-      return
-    }
-
-    dispatch(vesselGroupListActions.setFilteredGroupTypes(filteredGroupTypes.concat(GroupType.FIXED)))
-  }
-
-  const updatePrivateSharing = (nextSharing: boolean | undefined) => {
-    if (!nextSharing) {
-      dispatch(vesselGroupListActions.setFilteredSharing(filteredSharing.filter(value => value !== Sharing.PRIVATE)))
-
-      return
-    }
-
-    dispatch(vesselGroupListActions.setFilteredSharing(filteredSharing.concat(Sharing.PRIVATE)))
-  }
-
-  const updateSharedSharing = (nextSharing: boolean | undefined) => {
-    if (!nextSharing) {
-      dispatch(vesselGroupListActions.setFilteredSharing(filteredSharing.filter(value => value !== Sharing.SHARED)))
-
-      return
-    }
-
-    dispatch(vesselGroupListActions.setFilteredSharing(filteredSharing.concat(Sharing.SHARED)))
+  const updateSharing = (nextSharing: Sharing | undefined) => {
+    dispatch(vesselGroupListActions.setFilteredSharing(nextSharing))
   }
 
   const createNewDynamicGroup = () => {
@@ -106,39 +80,31 @@ export function VesselGroupMenuDialog() {
           <Title>Groupes de navires</Title>
         </Header>
         <StyledBody>
-          <Columns>
-            <FirstColumnCheckbox
-              checked={filteredGroupTypes.includes(GroupType.FIXED)}
-              label="Groupes fixes"
-              name="fixed"
-              onChange={updateFixedGroupType}
-              title="Groupes fixes"
+          <FilterRow>
+            <Select
+              isLabelHidden
+              isLight
+              label="Type de groupe"
+              name="groupType"
+              onChange={value => updateGroupType(value as GroupType | undefined)}
+              options={GROUP_TYPE_OPTIONS}
+              placeholder="Groupes dynamiques et fixes"
+              value={filteredGroupType}
             />
-            <SecondColumnCheckbox
-              checked={filteredGroupTypes.includes(GroupType.DYNAMIC)}
-              label="Groupes dynamiques"
-              name="dynamics"
-              onChange={updateDynamicGroupType}
-              title="Groupes dynamiques"
-            />
-          </Columns>
+          </FilterRow>
           {isSuperUser && (
-            <Columns>
-              <FirstColumnCheckbox
-                checked={filteredSharing.includes(Sharing.PRIVATE)}
-                label="Groupes personnels"
-                name="private"
-                onChange={updatePrivateSharing}
-                title="Groupes personnels"
+            <FilterRow>
+              <Select
+                isLabelHidden
+                isLight
+                label="Partage"
+                name="sharing"
+                onChange={value => updateSharing(value as Sharing | undefined)}
+                options={SHARING_OPTIONS}
+                placeholder="Groupes partagés et personnels"
+                value={filteredSharing}
               />
-              <SecondColumnCheckbox
-                checked={filteredSharing.includes(Sharing.SHARED)}
-                label="Groupes partagés"
-                name="shared"
-                onChange={updateSharedSharing}
-                title="Groupes partagés"
-              />
-            </Columns>
+            </FilterRow>
           )}
           <VesselGroupList data-cy="vessel-groups-list">
             {orderedVesselGroups.map((vesselGroup: VesselGroup, index: number) => (
@@ -189,28 +155,11 @@ const Title = styled(MapMenuDialog.Title)`
   margin-right: 37px;
 `
 
-const Columns = styled.div`
-  display: flex;
-`
+const FilterRow = styled.div`
+  padding: 0 16px 8px;
 
-const FirstColumnCheckbox = styled(Checkbox)`
-  margin-left: 16px;
-  height: 34px;
-  width: 160px;
-  flex-shrink: 0;
-
-  label {
-    vertical-align: middle;
-  }
-`
-
-const SecondColumnCheckbox = styled(Checkbox)`
-  margin-left: 16px;
-  height: 34px;
-  flex-shrink: 0;
-
-  label {
-    vertical-align: middle;
+  .rs-picker-select {
+    border: 1px solid ${p => p.theme.color.lightGray};
   }
 `
 
@@ -224,7 +173,7 @@ const StyledDropdownItem = styled(Dropdown.Item)`
 
 const VesselGroupList = styled.ul`
   color: ${p => p.theme.color.gunMetal};
-  margin: 0;
+  margin-top: 8px;
   max-height: 48vh;
   overflow-x: hidden;
   padding: 0;

@@ -204,8 +204,8 @@ export class MonitorFishWebWorker {
     vesselGroupsWithVessels: VesselGroupWithVessels[],
     vesselGroupsIdsPinned: number[],
     searchQuery: string | undefined,
-    filteredGroupTypes: GroupType[],
-    filteredGroupSharing: Sharing[],
+    filteredGroupType: GroupType | undefined,
+    filteredGroupSharing: Sharing | undefined,
     filteredExpired: boolean
   ): {
     pinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
@@ -213,10 +213,8 @@ export class MonitorFishWebWorker {
   } {
     const filteredVesselGroups =
       vesselGroupsWithVessels
-        ?.filter(vesselGroup => filteredGroupTypes.includes(vesselGroup.group.type) || filteredGroupTypes.length === 0)
-        ?.filter(
-          vesselGroup => filteredGroupSharing.includes(vesselGroup.group.sharing) || filteredGroupSharing.length === 0
-        )
+        ?.filter(vesselGroup => !filteredGroupType || vesselGroup.group.type === filteredGroupType)
+        ?.filter(vesselGroup => !filteredGroupSharing || vesselGroup.group.sharing === filteredGroupSharing)
         ?.filter(vesselGroup =>
           vesselGroup.group.endOfValidityUtc && !filteredExpired
             ? customDayjs(vesselGroup.group.endOfValidityUtc).isAfter(customDayjs(), 'day')

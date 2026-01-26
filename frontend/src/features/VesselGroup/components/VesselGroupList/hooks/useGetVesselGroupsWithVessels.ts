@@ -8,8 +8,8 @@ import { useDebouncedCallback } from 'use-debounce'
 import { MonitorFishWorker } from '../../../../../workers/MonitorFishWorker'
 
 export function useGetVesselGroupsWithVessels(
-  filteredGroupTypes: GroupType[],
-  filteredSharing: Sharing[],
+  filteredGroupType: GroupType | undefined,
+  filteredSharing: Sharing | undefined,
   filteredExpired: boolean
 ): {
   isLoading: boolean
@@ -35,8 +35,8 @@ export function useGetVesselGroupsWithVessels(
   const debouncedSearch = useDebouncedCallback(
     async (
       debouncedSearchQuery: string | undefined,
-      debouncedFilteredGroupTypes: GroupType[],
-      debouncedFilteredSharing: Sharing[],
+      debouncedFilteredGroupType: GroupType | undefined,
+      debouncedFilteredSharing: Sharing | undefined,
       debouncedFilteredExpired: boolean,
       debouncedIsLoading: boolean
     ) => {
@@ -48,7 +48,7 @@ export function useGetVesselGroupsWithVessels(
         vesselGroupsWithVessels ?? [],
         vesselGroupsIdsPinned,
         debouncedSearchQuery,
-        debouncedFilteredGroupTypes,
+        debouncedFilteredGroupType,
         debouncedFilteredSharing,
         debouncedFilteredExpired
       )
@@ -68,12 +68,12 @@ export function useGetVesselGroupsWithVessels(
       setResult(prev => ({ ...prev, isLoading: true }))
     }
 
-    debouncedSearch(searchQuery, filteredGroupTypes, filteredSharing, filteredExpired, isLoading)
+    debouncedSearch(searchQuery, filteredGroupType, filteredSharing, filteredExpired, isLoading)
   }, [
     searchQuery,
     isLoading,
     debouncedSearch,
-    filteredGroupTypes,
+    filteredGroupType,
     filteredSharing,
     filteredExpired,
     vesselGroupsIdsPinned,

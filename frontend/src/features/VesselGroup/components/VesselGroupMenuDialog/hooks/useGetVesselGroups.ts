@@ -2,7 +2,7 @@ import { useGetAllVesselGroupsQuery } from '@features/VesselGroup/apis'
 import { GroupType, Sharing } from '@features/VesselGroup/types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 
-export function useGetVesselGroups(filteredGroupTypes: GroupType[], filteredSharing: Sharing[]) {
+export function useGetVesselGroups(filteredGroupType: GroupType | undefined, filteredSharing: Sharing | undefined) {
   const vesselGroupsIdsPinned = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsPinned)
 
   const { data: vesselGroups } = useGetAllVesselGroupsQuery()
@@ -17,8 +17,8 @@ export function useGetVesselGroups(filteredGroupTypes: GroupType[], filteredShar
 
     const filteredVesselGroups =
       vesselGroups
-        ?.filter(vesselGroup => filteredGroupTypes.includes(vesselGroup.type) || filteredGroupTypes.length === 0)
-        ?.filter(vesselGroup => filteredSharing.includes(vesselGroup.sharing) || filteredSharing.length === 0) ?? []
+        ?.filter(vesselGroup => !filteredGroupType || vesselGroup.type === filteredGroupType)
+        ?.filter(vesselGroup => !filteredSharing || vesselGroup.sharing === filteredSharing) ?? []
 
     const pinnedVesselGroups = filteredVesselGroups.filter(vesselGroup =>
       vesselGroupsIdsPinned.includes(vesselGroup.id)

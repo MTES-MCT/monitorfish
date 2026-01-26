@@ -24,7 +24,6 @@ export function VesselGroupMenuDialog() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
-  const areVesselGroupsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselGroupsDisplayed)
   const areVesselsNotInVesselGroupsHidden = useMainAppSelector(
     state => state.vesselGroup.areVesselsNotInVesselGroupsHidden
   )
@@ -95,10 +94,6 @@ export function VesselGroupMenuDialog() {
     dispatch(setRightMapBoxDisplayed(rightMapBoxOpened === MapBox.VESSEL_GROUPS ? undefined : MapBox.VESSEL_GROUPS))
   }
 
-  const toggleVesselGroupsDisplay = () => {
-    dispatch(setDisplayedComponents({ areVesselGroupsDisplayed: !areVesselGroupsDisplayed }))
-  }
-
   const toggleVesselGroupList = () => {
     dispatch(openSideWindowPath({ menu: SideWindowMenuKey.VESSEL_GROUP }))
   }
@@ -108,14 +103,7 @@ export function VesselGroupMenuDialog() {
       <VesselGroupMenuDialogWrapper $isOpen={isOpened} data-cy="vessel-groups-menu-box">
         <Header>
           <CloseButton Icon={Icon.Close} onClick={toggleVesselGroupsMenu} title="Fermer" />
-          <MapMenuDialog.Title>Groupes de navires</MapMenuDialog.Title>
-          <MapMenuDialog.VisibilityButton
-            accent={Accent.SECONDARY}
-            data-cy="toggle-vessel-groups-layer"
-            Icon={areVesselGroupsDisplayed ? Icon.Display : Icon.Hide}
-            onClick={toggleVesselGroupsDisplay}
-            title={areVesselGroupsDisplayed ? 'Cacher les groupes' : 'Afficher les groupes'}
-          />
+          <Title>Groupes de navires</Title>
         </Header>
         <StyledBody>
           <Columns>
@@ -194,6 +182,12 @@ export function VesselGroupMenuDialog() {
     )
   )
 }
+
+const Title = styled(MapMenuDialog.Title)`
+  text-align: center;
+  width: 100%;
+  margin-right: 37px;
+`
 
 const Columns = styled.div`
   display: flex;

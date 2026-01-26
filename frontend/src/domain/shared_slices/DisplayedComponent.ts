@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type DisplayedComponentState = {
-  areVesselGroupsDisplayed: boolean
   areVesselsDisplayed: boolean
   isAccountMapButtonDisplayed: boolean
   isActivityVisualizationMapButtonDisplayed: boolean
@@ -29,7 +28,6 @@ export type DisplayedComponentState = {
   isVesselVisibilityMapButtonDisplayed: boolean
 }
 const INITIAL_STATE: DisplayedComponentState = {
-  areVesselGroupsDisplayed: true,
   areVesselsDisplayed: true,
   isAccountMapButtonDisplayed: true,
   isActivityVisualizationMapButtonDisplayed: true,

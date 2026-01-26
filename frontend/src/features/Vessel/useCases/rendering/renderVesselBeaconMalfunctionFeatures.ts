@@ -27,7 +27,6 @@ export const renderVesselBeaconMalfunctionFeatures = (): MainAppThunk => async (
   }
 
   const { selectedVesselIdentity, vesselsTracksShowed } = getState().vessel
-  const { areVesselGroupsDisplayed } = getState().displayedComponent
 
   const numberOfVessels = vesselSelectors.selectTotal(getState().vessel.vessels)
   if (!numberOfVessels) {
@@ -51,7 +50,7 @@ export const renderVesselBeaconMalfunctionFeatures = (): MainAppThunk => async (
         feature.get('isFiltered') &&
         feature.get('hasBeaconMalfunction') &&
         !feature.get('hasAlert') &&
-        (areVesselsNotInVesselGroupsHidden && areVesselGroupsDisplayed ? isVesselGroupColorDefined(feature) : true) &&
+        (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true) &&
         VesselFeature.getVesselOpacityWithTimestamp(
           feature.get('dateTime'),
           vesselIsHiddenTimeThreshold,

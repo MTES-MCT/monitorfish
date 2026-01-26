@@ -355,11 +355,11 @@ export function FilterBar() {
             disabled={!filterableZoneAsTreeOptions}
             isLabelHidden
             isTransparent
-            label="Filtrer avec une zone"
+            label="Zones"
             name="zones"
             onChange={updateNonCustomZones}
             options={filterableZoneAsTreeOptions?.filter(zone => zone.label !== 'Zone manuelle') ?? []}
-            placeholder="Filtrer avec une zone"
+            placeholder="Zones"
             popupWidth={500}
             renderExtraFooter={renderMultiCascaderCustomZoneFooter}
             renderValue={(_, items) => {

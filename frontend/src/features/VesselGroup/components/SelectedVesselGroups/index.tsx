@@ -116,6 +116,10 @@ const DropdownWrapper = styled.div`
 
 const StyledDropdown = styled(Dropdown)`
   width: 100%;
+
+  button {
+    z-index: unset;
+  }
 `
 
 const EmptyGroups = styled.div`

@@ -309,55 +309,6 @@ function getRegulatoryFeatureMetadataFromAPI(
 /**
  * @description This API isn't authenticated
  */
-function getAdministrativeSubZonesFromAPI(type: string, fromBackoffice: boolean): Promise<FeatureCollection> {
-  const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
-
-  let query
-  if (type === LayerProperties.FAO.code) {
-    const filter = "f_level='DIVISION'"
-
-    query =
-      `${geoserverURL}/geoserver/wfs?service=WFS&` +
-      `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
-      `outputFormat=application/json&srsname=${WSG84_PROJECTION}&CQL_FILTER=${filter
-        .replace(/'/g, '%27')
-        .replace(/ /g, '%20')}`
-  } else {
-    query =
-      `${geoserverURL}/geoserver/wfs?service=WFS&` +
-      `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
-      `outputFormat=application/json&srsname=${WSG84_PROJECTION}`
-  }
-
-  return fetch(query)
-    .then(response => {
-      if (response.status === HttpStatusCode.OK) {
-        return response
-          .json()
-          .then(body => body)
-          .catch(e => {
-            throwIrretrievableAdministrativeZoneError(e, type)
-          })
-      }
-
-      return response.text().then(bodyAsText => {
-        throwIrretrievableAdministrativeZoneError(bodyAsText, type)
-      })
-    })
-    .catch(e => {
-      if (import.meta.env.DEV) {
-        return {
-          features: []
-        }
-      }
-
-      return throwIrretrievableAdministrativeZoneError(e, type)
-    })
-}
-
-/**
- * @description This API isn't authenticated
- */
 function sendRegulationTransaction(feature, actionType) {
   const formatWFS = new WFS()
   const formatGML = new GML({
@@ -400,7 +351,6 @@ function sendRegulationTransaction(feature, actionType) {
 
 export {
   sendRegulationTransaction,
-  getAdministrativeSubZonesFromAPI,
   getRegulatoryFeatureMetadataFromAPI,
   getRegulatoryZoneURL,
   getAdministrativeZoneURL,

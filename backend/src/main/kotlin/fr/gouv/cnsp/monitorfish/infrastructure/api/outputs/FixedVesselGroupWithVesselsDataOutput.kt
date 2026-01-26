@@ -10,14 +10,14 @@ data class FixedVesselGroupWithVesselsDataOutput(
     companion object {
         fun fromFixedVesselGroup(
             group: FixedVesselGroup,
-            vessels: List<EnrichedActiveVessel>,
+            vessels: List<Pair<Int, EnrichedActiveVessel>>,
         ) = FixedVesselGroupWithVesselsDataOutput(
             group = FixedVesselGroupDataOutput.fromFixedVesselGroup(group),
             vessels =
-                vessels.mapIndexed { index, it ->
+                vessels.map {
                     ActiveVesselBaseDataOutput.fromEnrichedActiveVessel(
-                        enrichedActiveVessel = it,
-                        index = index,
+                        enrichedActiveVessel = it.second,
+                        index = it.first,
                     )
                 },
         )

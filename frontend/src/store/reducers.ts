@@ -1,4 +1,5 @@
 import { monitorenvApi, monitorfishApi, monitorfishPublicApi } from '@api/api'
+import { geoserverApi } from '@api/geoserverApi'
 import { alertReducer } from '@features/Alert/components/SideWindowAlerts/slice'
 import { controlUnitDialogReducer } from '@features/ControlUnit/components/ControlUnitDialog/slice'
 import { controlUnitListDialogPersistedReducer } from '@features/ControlUnit/components/ControlUnitListDialog/slice'
@@ -65,6 +66,7 @@ const getCommonPersistReducerConfig = <S>(key: string, whitelist?: Array<keyof S
 })
 
 const commonReducerList = {
+  [geoserverApi.reducerPath]: geoserverApi.reducer,
   [monitorenvApi.reducerPath]: monitorenvApi.reducer,
   [monitorfishApi.reducerPath]: monitorfishApi.reducer,
   [monitorfishPublicApi.reducerPath]: monitorfishPublicApi.reducer,

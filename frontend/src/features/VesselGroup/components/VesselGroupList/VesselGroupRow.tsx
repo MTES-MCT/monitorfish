@@ -17,6 +17,7 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Icon, IconButton, Tag, THEME, useNewWindow } from '@mtes-mct/monitor-ui'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
 import { useEffect, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
@@ -208,9 +209,9 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
               !!vesselGroupWithVessels.group.description || !!vesselGroupWithVessels.group.pointsOfAttention
             }
           >
-            <Description title={vesselGroupWithVessels.group.description}>
-              {vesselGroupWithVessels.group.description}
-            </Description>
+            {vesselGroupWithVessels.group.description && (
+              <ReactMarkdown>{vesselGroupWithVessels.group.description}</ReactMarkdown>
+            )}
             <PointsOfAttention title={vesselGroupWithVessels.group.pointsOfAttention}>
               {vesselGroupWithVessels.group.pointsOfAttention}
             </PointsOfAttention>
@@ -304,8 +305,6 @@ const StyledTag = styled(Tag)`
   margin-right: 8px;
   font-weight: normal;
 `
-
-const Description = styled.p``
 
 const PointsOfAttention = styled.p`
   color: ${THEME.color.maximumRed};

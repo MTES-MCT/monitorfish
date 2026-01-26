@@ -15,6 +15,7 @@ import storage from 'redux-persist/es/storage' // LocalStorage
 
 import { backofficeReducer, mainReducer } from './reducers'
 import { monitorenvApi, monitorfishApi, monitorfishPublicApi } from '../api/api'
+import { geoserverApi } from '../api/geoserverApi'
 import { mapToProcessingRegulation } from '../features/Regulation/utils'
 
 import type { RegulationState } from '../features/Regulation/slice'
@@ -42,7 +43,12 @@ export const mainStore = configureStore({
       immutableCheck: false,
       // TODO Replace all Redux state Dates by strings & Error by a strict-typed POJO.
       serializableCheck: false
-    }).concat(monitorenvApi.middleware, monitorfishApi.middleware, monitorfishPublicApi.middleware),
+    }).concat(
+      geoserverApi.middleware,
+      monitorenvApi.middleware,
+      monitorfishApi.middleware,
+      monitorfishPublicApi.middleware
+    ),
   reducer: persistedMainReducer
 })
 setupListeners(mainStore.dispatch)
@@ -95,7 +101,7 @@ export const backofficeStore = configureStore({
         // TODO Replace all Redux state Dates by strings & Error by a strict-typed POJO.
         serializableCheck: false
       }
-    }).concat(monitorenvApi.middleware, monitorfishApi.middleware),
+    }).concat(geoserverApi.middleware, monitorenvApi.middleware, monitorfishApi.middleware),
   reducer: persistedBackofficeReducer
 })
 

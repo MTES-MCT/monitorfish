@@ -1,5 +1,6 @@
-import { getAdministrativeSubZonesFromAPI } from '@api/geoserver'
+import { geoserverApi } from '@api/geoserverApi'
 import { LayerProperties } from '@features/Map/constants'
+import { MonitorFishMap } from '@features/Map/Map.types'
 import { getLastControlDateTime } from '@features/Vessel/utils'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { customDayjs, type TreeOption, type Undefine } from '@mtes-mct/monitor-ui'
@@ -7,8 +8,8 @@ import { isEqual } from 'lodash-es'
 
 import { DEFAULT_VESSEL_LIST_FILTER_VALUES, LastControlPeriod } from './constants'
 
-import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
+import type { MainAppDispatch } from '@store'
 
 export function getLastControlledFilterFromLastControlPeriod(period: LastControlPeriod | undefined): Partial<{
   lastControlledAfter: string | undefined
@@ -50,7 +51,7 @@ export function getLastControlledFilterFromLastControlPeriod(period: LastControl
   }
 }
 
-export async function getFilterableZonesAsTreeOptions(): Promise<TreeOption[]> {
+export async function getFilterableZonesAsTreeOptions(dispatch: MainAppDispatch): Promise<TreeOption[]> {
   const filterableLayers = Object.keys(LayerProperties)
     .map<MonitorFishMap.ShowableLayer>(layerKey => LayerProperties[layerKey])
     .filter(layer => !!layer.isIntersectable)
@@ -69,7 +70,13 @@ export async function getFilterableZonesAsTreeOptions(): Promise<TreeOption[]> {
         }
       }
 
-      const result = await getAdministrativeSubZonesFromAPI(zone.code, false)
+      const result = await dispatch(
+        geoserverApi.endpoints.getAdministrativeSubZones.initiate({
+          fromBackoffice: false,
+          sortBy: zone.code === MonitorFishMap.MonitorFishLayer.FAO ? 'f_code' : undefined,
+          type: zone.code
+        })
+      ).unwrap()
       const features = result.features.map((subZone: any) => ({
         label:
           zone.zoneNamePropertyKey && subZone.properties[zone.zoneNamePropertyKey]

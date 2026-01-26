@@ -5,5 +5,5 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
 
 data class VesselGroupWithVessels(
     val group: VesselGroupBase,
-    val vessels: List<EnrichedActiveVessel>,
+    val vessels: List<Pair<Int, EnrichedActiveVessel>>,
 )

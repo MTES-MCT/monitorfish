@@ -1,4 +1,4 @@
-import { getAdministrativeSubZonesFromAPI } from '@api/geoserver'
+import { useGetAdministrativeSubZonesQuery } from '@api/geoserverApi'
 import { useGetSpeciesQuery } from '@api/specy'
 import { LayerProperties } from '@features/Map/constants'
 import { FieldsetGroupSpinner } from '@features/Mission/components/MissionForm/shared/FieldsetGroup'
@@ -26,42 +26,44 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
   const { setFieldValue, values } = useFormikContext<EditedAlertSpecification>()
   const { data: speciesAndGroups } = useGetSpeciesQuery()
 
-  const [administrativeZones, setAdministrativeZones] = useState<any | undefined>(undefined)
+  const {
+    data: administrativeZonesData,
+    error: administrativeZonesError,
+    isLoading: isLoadingAdministrativeZones
+  } = useGetAdministrativeSubZonesQuery(
+    { fromBackoffice: false, type: LayerProperties.FAO.code },
+    { skip: !isCriteriaOpened }
+  )
+
+  const administrativeZones = useMemo(() => {
+    if (!administrativeZonesData) {
+      return undefined
+    }
+
+    const zoneNameKey = LayerProperties.FAO.zoneNamePropertyKey
+    if (!zoneNameKey) {
+      return undefined
+    }
+
+    return administrativeZonesData.features.map((zone: any) => ({
+      label: zone.properties[zoneNameKey],
+      value: zone.id
+    }))
+  }, [administrativeZonesData])
 
   useEffect(() => {
-    let isMounted = true
-
-    async function fetchZones() {
-      try {
-        const zones = await getAdministrativeSubZonesFromAPI(LayerProperties.FAO.code, false)
-        const zoneNameKey = LayerProperties.FAO.zoneNamePropertyKey
-
-        if (isMounted && zoneNameKey) {
-          const zonesAsOptions = zones.features.map((zone: any) => ({
-            label: zone.properties[zoneNameKey],
-            value: zone.id
-          }))
-          setAdministrativeZones(zonesAsOptions)
-        }
-      } catch (error) {
-        dispatch(
-          addSideWindowBanner({
-            children: 'Une erreur est survenue lors de la récupération des zones FAO',
-            closingDelay: 5000,
-            isClosable: true,
-            level: Level.ERROR,
-            withAutomaticClosing: true
-          })
-        )
-      }
+    if (administrativeZonesError) {
+      dispatch(
+        addSideWindowBanner({
+          children: 'Une erreur est survenue lors de la récupération des zones FAO',
+          closingDelay: 5000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
     }
-
-    fetchZones()
-
-    return () => {
-      isMounted = false
-    }
-  }, [dispatch])
+  }, [administrativeZonesError, dispatch])
 
   const deleteCriteria = () => {
     setFieldValue('species', [])
@@ -106,7 +108,7 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
     setFieldValue('species', newSpeciesList)
   }
 
-  if (!speciesAsOptions?.length || !customSearch || !administrativeZones) {
+  if (!speciesAsOptions?.length || !customSearch || isLoadingAdministrativeZones || !administrativeZones) {
     return <FieldsetGroupSpinner isLight />
   }
 

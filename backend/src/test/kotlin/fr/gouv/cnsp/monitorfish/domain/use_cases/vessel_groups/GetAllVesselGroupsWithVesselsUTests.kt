@@ -1,11 +1,14 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselIdentity
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
@@ -71,11 +74,71 @@ class GetAllVesselGroupsWithVesselsUTests {
         assertThat(vesselGroups.first().vessels).hasSize(2)
 
         val firstVessel = vesselGroups.first().vessels.first()
-        assertThat(firstVessel.lastPosition?.internalReferenceNumber).isEqualTo("FR123456785")
+        assertThat(firstVessel.first).isEqualTo(0)
+        assertThat(firstVessel.second.lastPosition?.internalReferenceNumber).isEqualTo("FR123456785")
 
         val lastVessel = vesselGroups.first().vessels.last()
         // VesselId is matched from the getDummyLastPositions() stub: FR00022680 -> FR224226850
-        assertThat(lastVessel.lastPosition?.internalReferenceNumber).isEqualTo("FR224226850")
+        assertThat(lastVessel.second.lastPosition?.internalReferenceNumber).isEqualTo("FR224226850")
+    }
+
+    @Test
+    fun `execute get all vessels ids when a vessel is not found`() {
+        // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
+                isSuperUser = true,
+                service = null,
+            ),
+        )
+        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+            TestUtils.getDummyLastPositions().map {
+                EnrichedActiveVessel(
+                    lastPosition = it,
+                    vesselProfile = null,
+                    vessel = null,
+                    producerOrganization = null,
+                    riskFactor = VesselRiskFactor(),
+                    landingPort = null,
+                )
+            },
+        )
+        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull()))
+            .willReturn(
+                listOf(
+                    getFixedVesselGroups().first().copy(
+                        vessels =
+                            // Add unknown vessel
+                            listOf(
+                                VesselIdentity(
+                                    vesselId = null,
+                                    cfr = "NOT_FOUND",
+                                    name = null,
+                                    flagState = CountryCode.FR,
+                                    ircs = null,
+                                    externalIdentification = null,
+                                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                ),
+                            ) + getFixedVesselGroups().first().vessels,
+                    ),
+                ),
+            )
+
+        // When
+        val vesselGroups =
+            GetAllVesselGroupsWithVessels(vesselGroupRepository, lastPositionRepository, getAuthorizedUser).execute(
+                userEmail = "dummy@email.gouv.fr",
+            )
+
+        // Then
+        assertThat(vesselGroups).hasSize(1)
+        assertThat(vesselGroups.first().vessels).hasSize(2)
+
+        val firstVessel = vesselGroups.first().vessels.first()
+        // Id is not 0 but 1 because first vessel is unknown
+        assertThat(firstVessel.first).isEqualTo(1)
+        assertThat(firstVessel.second.lastPosition?.internalReferenceNumber).isEqualTo("FR123456785")
     }
 
     @Test
@@ -122,11 +185,11 @@ class GetAllVesselGroupsWithVesselsUTests {
         assertThat(vesselGroups.first().vessels).hasSize(1)
 
         val firstVessel = vesselGroups.first().vessels.first()
-        assertThat(firstVessel.lastPosition?.vesselId).isEqualTo(1)
-        assertThat(firstVessel.lastPosition?.internalReferenceNumber).isEqualTo("FR224226850")
+        assertThat(firstVessel.second.lastPosition?.vesselId).isEqualTo(1)
+        assertThat(firstVessel.second.lastPosition?.internalReferenceNumber).isEqualTo("FR224226850")
         // OTB is matching with the filter
         assertThat(
-            firstVessel.lastPosition
+            firstVessel.second.lastPosition
                 ?.gearOnboard
                 ?.first()
                 ?.gear,

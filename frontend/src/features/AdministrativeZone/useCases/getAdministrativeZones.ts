@@ -2,9 +2,7 @@ import { LayerProperties as LayersEnum, LayerType } from '@features/Map/constant
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { administrativeLayers } from '@features/Map/utils'
 
-import { getAdministrativeSubZonesFromAPI } from '../../../api/geoserver'
-
-import type { FeatureCollection } from 'geojson'
+import { geoserverApi } from '../../../api/geoserverApi'
 
 export type GroupAndZones = {
   group: MonitorFishMap.CodeAndName
@@ -18,7 +16,7 @@ export type GroupedZonesAndZones = {
 
 export const getAdministrativeZones =
   () =>
-  async (_, getState): Promise<GroupedZonesAndZones> => {
+  async (dispatch, getState): Promise<GroupedZonesAndZones> => {
     const nonGroupedZones = administrativeLayers.filter(zone => !zone.group)
 
     const groups = administrativeLayers
@@ -36,25 +34,27 @@ export const getAdministrativeZones =
       .filter((zone): zone is MonitorFishMap.ShowableLayer => zone !== undefined)
       .filter(zone => zone.type === LayerType.ADMINISTRATIVE)
       .filter(zone => zone.hasFetchableZones)
-      .map(zone =>
-        getAdministrativeSubZonesFromAPI(zone.code, getState().global.isBackoffice).then(
-          (fetchedZones: FeatureCollection) => {
-            const nextZones: MonitorFishMap.ShowableLayer[] = fetchedZones.features.map(feature => ({
-              code: feature.id!.toString(),
-              group: zone.group,
-              hasFetchableZones: zone.hasFetchableZones!,
-              name:
-                (zone.zoneNamePropertyKey && feature.properties?.[zone.zoneNamePropertyKey]?.toString()) ?? 'Aucun nom',
-              type: LayerType.ADMINISTRATIVE
-            }))
+      .map(async zone => {
+        const fetchedZones = await dispatch(
+          geoserverApi.endpoints.getAdministrativeSubZones.initiate({
+            fromBackoffice: getState().global.isBackoffice,
+            type: zone.code
+          })
+        ).unwrap()
 
-            return {
-              group: zone.group!,
-              zones: nextZones
-            }
-          }
-        )
-      )
+        const nextZones: MonitorFishMap.ShowableLayer[] = fetchedZones.features.map(feature => ({
+          code: feature.id!.toString(),
+          group: zone.group,
+          hasFetchableZones: zone.hasFetchableZones!,
+          name: (zone.zoneNamePropertyKey && feature.properties?.[zone.zoneNamePropertyKey]?.toString()) ?? 'Aucun nom',
+          type: LayerType.ADMINISTRATIVE
+        }))
+
+        return {
+          group: zone.group!,
+          zones: nextZones
+        }
+      })
 
     return Promise.all(groupedZonesToFetch).then(fetchedGroupedZones => ({
       groupedZones: [...groupedZones, ...fetchedGroupedZones],

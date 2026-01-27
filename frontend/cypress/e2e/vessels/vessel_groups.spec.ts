@@ -66,12 +66,12 @@ context('Vessel groups', () => {
      * Filter by group type
      */
     cy.fill('Type de groupe', 'Groupes fixes')
-    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 3)
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 1)
     cy.fill('Type de groupe', undefined)
     cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 4)
 
     cy.fill('Type de groupe', 'Groupes dynamiques')
-    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 1)
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 3)
     cy.fill('Type de groupe', undefined)
     cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 4)
 

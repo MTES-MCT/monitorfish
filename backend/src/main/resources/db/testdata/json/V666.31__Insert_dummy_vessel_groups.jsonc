@@ -87,7 +87,7 @@
                 "created_by": "dummy@email.gouv.fr",
                 "created_at_utc:sql": "NOW() - INTERVAL '15 day'",
                 "updated_at_utc:sql": "NOW() - INTERVAL '5 day'",
-                "end_of_validity_utc:sql": "NOW() - INTERVAL '7 day'",
+                "end_of_validity_utc:sql": "NOW() + INTERVAL '7 day'",
                 "start_of_validity_utc:sql": null
             },
             {
@@ -161,6 +161,44 @@
                 "created_at_utc:sql": "NOW() - INTERVAL '25 day'",
                 "updated_at_utc:sql": "NOW() - INTERVAL '6 day'",
                 "end_of_validity_utc:sql": "NOW() + INTERVAL '7 day'",
+                "start_of_validity_utc:sql": null
+            },
+            {
+                "id": 4,
+                "is_deleted": false,
+                "name": "Mission Thémis – semaine 05",
+                "description": "Ciblage pour la mission du Thémis (bordée W)",
+                "points_of_attention": null,
+                "color": "#303eff",
+                "filters:jsonb": {
+                    "countryCodes": [],
+                    "districtCodes": [],
+                    "fleetSegments": [
+                        "PEL13"
+                    ],
+                    "gearCodes": [],
+                    "hasLogbook": true,
+                    "lastControlAtSeaPeriod": "BEFORE_ONE_YEAR_AGO",
+                    "lastControlAtQuayPeriod": "BEFORE_ONE_YEAR_AGO",
+                    "lastLandingPortLocodes": [],
+                    "lastPositionHoursAgo": null,
+                    "producerOrganizations": [],
+                    "riskFactors": [],
+                    "specyCodes": [],
+                    "vesselSize": null,
+                    "vesselsLocation": [
+                        "SEA"
+                    ],
+                    "zones": []
+                },
+                "vessels": null,
+                "sharing": "SHARED",
+                "shared_to": ["Pôle OPS métropole"],
+                "type": "DYNAMIC",
+                "created_by": "dummy@email.gouv.fr",
+                "created_at_utc:sql": "NOW() - INTERVAL '25 day'",
+                "updated_at_utc:sql": "NOW() - INTERVAL '12 day'",
+                "end_of_validity_utc:sql": "NOW() - INTERVAL '11 day'",
                 "start_of_validity_utc:sql": null
             }
         ]

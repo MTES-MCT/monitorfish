@@ -83,16 +83,21 @@ Grant permissions (run in psql):
 -- Grant connect and schema usage
 GRANT CONNECT ON DATABASE cnsp TO geomatique;
 GRANT USAGE ON SCHEMA prod TO geomatique;
+GRANT USAGE ON SCHEMA travail TO geomatique;
 
 -- Grant read-write on all existing tables
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA prod TO geomatique;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA travail TO geomatique;
 
 -- Grant sequence usage (needed for inserts with serial/auto-increment columns)
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA prod TO geomatique;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA travail TO geomatique;
 
 -- Apply to future tables automatically
 ALTER DEFAULT PRIVILEGES IN SCHEMA prod GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO geomatique;
 ALTER DEFAULT PRIVILEGES IN SCHEMA prod GRANT USAGE, SELECT ON SEQUENCES TO geomatique;
+ALTER DEFAULT PRIVILEGES IN SCHEMA travail GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO geomatique;
+ALTER DEFAULT PRIVILEGES IN SCHEMA travail GRANT USAGE, SELECT ON SEQUENCES TO geomatique;
 ```
 
 Add the user to pg_hba.conf for remote connections:

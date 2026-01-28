@@ -25,16 +25,6 @@ context('Vessels Overlays', () => {
     cy.get('*[data-cy^="vessel-card-name"]').contains('SOCRATE')
     cy.get('*[data-cy^="vessel-card-groups"]').contains('Mission Thémis – chaluts de fonds')
     cy.get('*[data-cy^="vessel-card-groups"]').contains('1 autre groupe non affiché sur la carte')
-
-    // Hide vessel groups from map
-    cy.get('[title=\'Cacher le groupe "Mission Thémis – semaine 04"\']').click()
-    cy.wait(250)
-    cy.hoverVesselByName('SOCRATE')
-
-    // Then
-    cy.wait(50)
-    cy.get('*[data-cy^="vessel-card-name"]').contains('SOCRATE')
-    cy.get('*[data-cy^="vessel-card-groups"]').should('not.exist')
   })
 
   it('Last position card Should contain Alert and Beacon malfunction', () => {

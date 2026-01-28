@@ -5,14 +5,17 @@ import { Vessel } from '@features/Vessel/Vessel.types'
 import { getVesselGroupActionColumn } from '@features/VesselGroup/components/VesselGroupList/columns'
 import { SEARCH_QUERY_MIN_LENGTH } from '@features/VesselGroup/components/VesselGroupList/hooks/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { useTableVirtualizer } from '@hooks/useTableVirtualizer'
 import { CustomSearch, Icon, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
+import { notUndefined } from '@tanstack/react-virtual'
 import { assertNotNullish } from '@utils/assertNotNullish'
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { useDebounce } from 'use-debounce'
 
 import { TableBodyEmptyData } from './TableBodyEmptyData'
+import { SkeletonRow } from '../../../../ui/Table/SkeletonRow'
 
 import type { DynamicVesselGroupFilter } from '@features/VesselGroup/types'
 
@@ -26,14 +29,32 @@ type VesselTableProps = Readonly<{
 }>
 
 export function VesselTable({ filters, isFixedGroup, isFromUrl, isPinned, vesselGroupId, vessels }: VesselTableProps) {
-  const isBodyEmptyDataVisible = !!vessels && vessels.length === 0
-
+  const tableContainerRef = useRef<HTMLDivElement>(null)
   const searchQuery = useMainAppSelector(state => state.vesselGroupList.searchQuery)
   const [debouncedSearchQuery] = useDebounce(searchQuery, 250)
 
   const [rowSelection, setRowSelection] = useState({})
+  const [isInitialRender, setIsInitialRender] = useState(true)
 
-  const [columns, tableData] = useMemo(() => {
+  const isBodyEmptyDataVisible = !isInitialRender && !!vessels && vessels.length === 0
+
+  useEffect(() => {
+    setIsInitialRender(false)
+  }, [])
+
+  // Create CustomSearch only when vessels change (expensive structuredClone)
+  const fuse = useMemo(
+    () =>
+      new CustomSearch<Vessel.ActiveVessel>(
+        structuredClone(vessels ?? []),
+        ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs'],
+        { isStrict: true, threshold: 0.4 }
+      ),
+    [vessels]
+  )
+
+  // Filter vessels when search query changes (reuses existing fuse instance)
+  const tableData = useMemo(() => {
     /**
      * `SEARCH_QUERY_MIN_LENGTH - 1` because we would like to avoid an initial rendering of
      * the table when there is a filter by pre-searching for vessels.
@@ -41,47 +62,68 @@ export function VesselTable({ filters, isFixedGroup, isFromUrl, isPinned, vessel
      * (see `areGroupsOpened`in VesselGroupList.tsx)
      * */
     if (!debouncedSearchQuery || debouncedSearchQuery.length <= SEARCH_QUERY_MIN_LENGTH - 1) {
-      return [
-        getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId, isFixedGroup), filters),
-        vessels ?? []
-      ]
+      return vessels ?? []
     }
 
-    const fuse = new CustomSearch<Vessel.ActiveVessel>(
-      structuredClone(vessels ?? []),
-      ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs'],
-      { isStrict: true, threshold: 0.4 }
-    )
-    const filteredVessels = fuse.find(debouncedSearchQuery)
+    return fuse.find(debouncedSearchQuery)
+  }, [vessels, debouncedSearchQuery, fuse])
 
-    return [
-      getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId, isFixedGroup), filters),
-      filteredVessels
-    ]
-  }, [isFromUrl, vesselGroupId, isFixedGroup, vessels, filters, debouncedSearchQuery])
+  // Compute columns separately (only when necessary dependencies change)
+  const columns = useMemo(() => {
+    const baseColumns = getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId, isFixedGroup), filters)
+
+    if (isInitialRender) {
+      return baseColumns.map(column => ({
+        ...column,
+        cell: SkeletonRow
+      }))
+    }
+
+    return baseColumns
+  }, [isFromUrl, vesselGroupId, isFixedGroup, filters, isInitialRender])
+
+  const displayedData = isInitialRender ? Array(8).fill({}) : tableData
 
   const table = useReactTable({
     columns,
-    data: tableData,
+    data: displayedData,
     enableRowSelection: true,
     enableSortingRemoval: true,
     getCoreRowModel: getCoreRowModel(),
     getRowId: row => row.vesselFeatureId,
     getSortedRowModel: getSortedRowModel(),
     onRowSelectionChange: setRowSelection,
-    rowCount: tableData?.length ?? 0,
+    rowCount: displayedData?.length ?? 0,
     state: {
       rowSelection
     }
   })
 
   const { rows } = table.getRowModel()
+  const rowVirtualizer = useTableVirtualizer({ estimateSize: 42, overscan: 50, ref: tableContainerRef, rows })
+  const measureElement = useCallback(
+    (node: HTMLTableRowElement | null) => rowVirtualizer?.measureElement(node),
+    [rowVirtualizer]
+  )
+  const virtualRows = rowVirtualizer.getVirtualItems()
+  const [paddingBeforeRows, paddingAfterRows] =
+    virtualRows.length > 0
+      ? [
+          notUndefined(virtualRows[0]).start - rowVirtualizer.options.scrollMargin,
+          rowVirtualizer.getTotalSize() - notUndefined(virtualRows[virtualRows.length - 1]).end
+        ]
+      : [0, 0]
 
   return (
     <>
       <StyledBody>
         <TableOuterWrapper>
-          <TableInnerWrapper $hasError={false} $hasWhiteBackground={isPinned} $numberOfItems={rows.length}>
+          <TableInnerWrapper
+            ref={tableContainerRef}
+            $hasError={false}
+            $hasWhiteBackground={isPinned}
+            $numberOfItems={rows.length}
+          >
             <TableWithSelectableRows.Table $withRowCheckbox>
               <TableWithSelectableRows.Head>
                 {table.getHeaderGroups().map(headerGroup => (
@@ -109,14 +151,33 @@ export function VesselTable({ filters, isFixedGroup, isFromUrl, isPinned, vessel
               </TableWithSelectableRows.Head>
 
               {isBodyEmptyDataVisible && <TableBodyEmptyData />}
+              {paddingBeforeRows > 0 && (
+                <tr>
+                  <td aria-label="padding before" colSpan={columns.length} style={{ height: paddingBeforeRows }} />
+                </tr>
+              )}
               {!isBodyEmptyDataVisible && (
                 <tbody>
-                  {rows.map(row => {
+                  {virtualRows.map(virtualRow => {
+                    const row = rows[virtualRow?.index]
                     assertNotNullish(row)
 
-                    return <Row key={row.id} hasWhiteBackground={isPinned} index={row?.index} row={row} />
+                    return (
+                      <Row
+                        key={virtualRow.key}
+                        ref={measureElement}
+                        hasWhiteBackground={isPinned}
+                        index={virtualRow?.index}
+                        row={row}
+                      />
+                    )
                   })}
                 </tbody>
+              )}
+              {paddingAfterRows > 0 && (
+                <tr>
+                  <td aria-label="padding after" colSpan={columns.length} style={{ height: paddingAfterRows }} />
+                </tr>
               )}
             </TableWithSelectableRows.Table>
           </TableInnerWrapper>

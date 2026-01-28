@@ -25,7 +25,7 @@ class JpaVesselGroupRepositoryITests : AbstractDBTests() {
                 .findAllByUserAndSharing("dummy@email.gouv.fr", CnspService.POLE_OPS_METROPOLE)
 
         // Then
-        assertThat(vesselGroups).hasSize(3)
+        assertThat(vesselGroups).hasSize(4)
 
         val dynamicGroup = vesselGroups.first() as DynamicVesselGroup
         assertThat(dynamicGroup.name).isEqualTo("Mission Thémis – chaluts de fonds")
@@ -36,7 +36,7 @@ class JpaVesselGroupRepositoryITests : AbstractDBTests() {
         assertThat(dynamicGroup.startOfValidityUtc).isNotNull()
         assertThat(dynamicGroup.endOfValidityUtc).isNotNull()
 
-        val fixedGroup = vesselGroups.last() as FixedVesselGroup
+        val fixedGroup = vesselGroups[2] as FixedVesselGroup
         assertThat(fixedGroup.name).isEqualTo("Mission Thémis – semaine 04")
         assertThat(fixedGroup.vessels).hasOnlyElementsOfTypes(VesselIdentity::class.java)
         assertThat(fixedGroup.vessels).hasSize(6)
@@ -55,7 +55,7 @@ class JpaVesselGroupRepositoryITests : AbstractDBTests() {
                 .findAllByUserAndSharing("not_the_owner@email.gouv.fr", CnspService.POLE_OPS_METROPOLE)
 
         // Then
-        assertThat(vesselGroups).hasSize(1)
+        assertThat(vesselGroups).hasSize(2)
 
         val dynamicGroup = vesselGroups.first() as DynamicVesselGroup
         assertThat(dynamicGroup.name).isEqualTo("Mission Thémis – semaine 03")
@@ -66,7 +66,7 @@ class JpaVesselGroupRepositoryITests : AbstractDBTests() {
     fun `upsert Should save a dynamic group When sharedTo is given`() {
         // Given
         val previousGroups = jpaVesselGroupRepository.findAllByUserAndSharing("dummy@email.gouv.fr", null)
-        assertThat(previousGroups).hasSize(3)
+        assertThat(previousGroups).hasSize(4)
         val expectedGroup =
             getDynamicVesselGroups().first().copy(
                 id = null,
@@ -78,8 +78,8 @@ class JpaVesselGroupRepositoryITests : AbstractDBTests() {
         val updatedGroups = jpaVesselGroupRepository.findAllByUserAndSharing("dummy@email.gouv.fr", null)
 
         // Then
-        assertThat(savedGroup).isEqualTo(expectedGroup.copy(id = 4))
-        assertThat(updatedGroups).hasSize(4)
+        assertThat(savedGroup).isEqualTo(expectedGroup.copy(id = 5))
+        assertThat(updatedGroups).hasSize(5)
     }
 
     @Test
@@ -87,7 +87,7 @@ class JpaVesselGroupRepositoryITests : AbstractDBTests() {
     fun `upsert Should update a dynamic group`() {
         // Given
         val previousGroups = jpaVesselGroupRepository.findAllByUserAndSharing("dummy@email.gouv.fr", null)
-        assertThat(previousGroups).hasSize(3)
+        assertThat(previousGroups).hasSize(4)
         val expectedGroup = getDynamicVesselGroups().first()
 
         // When
@@ -97,7 +97,7 @@ class JpaVesselGroupRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(savedGroup.id).isEqualTo(expectedGroup.id)
         assertThat(savedGroup.name).isEqualTo(expectedGroup.name)
-        assertThat(updatedGroups).hasSize(3)
+        assertThat(updatedGroups).hasSize(4)
     }
 
     @Test
@@ -105,13 +105,13 @@ class JpaVesselGroupRepositoryITests : AbstractDBTests() {
     fun `delete Should delete a dynamic group`() {
         // Given
         val previousGroups = jpaVesselGroupRepository.findAllByUserAndSharing("dummy@email.gouv.fr", null)
-        assertThat(previousGroups).hasSize(3)
+        assertThat(previousGroups).hasSize(4)
 
         // When
         jpaVesselGroupRepository.delete(1)
         val updatedGroups = jpaVesselGroupRepository.findAllByUserAndSharing("dummy@email.gouv.fr", null)
 
         // Then
-        assertThat(updatedGroups).hasSize(2)
+        assertThat(updatedGroups).hasSize(3)
     }
 }

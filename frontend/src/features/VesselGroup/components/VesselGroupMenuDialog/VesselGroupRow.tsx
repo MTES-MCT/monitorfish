@@ -1,7 +1,9 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { Square } from '@features/Regulation/components/ZonePreview'
+import { VESSEL_LIST_CSV_MAP_BASE } from '@features/Vessel/components/ExportVesselListDialog/csvMap'
 import { FilterTags } from '@features/Vessel/components/VesselList/FilterTags'
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
+import { vesselGroupApi } from '@features/VesselGroup/apis'
 import { CNSP_SERVICE_LABEL } from '@features/VesselGroup/constants'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
 import { GroupType, Sharing, type VesselGroup } from '@features/VesselGroup/types'
@@ -10,13 +12,19 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
 import { Accent, customDayjs, Icon, IconButton, Link, Tag, THEME } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
+import { downloadAsCsv } from '@utils/downloadAsCsv'
 import { useContext, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { UserAccountContext } from '../../../../context/UserAccountContext'
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
+import { getDate } from '../../../../utils'
 
 import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type VesselGroupRowProps = {
   isLastPinned: boolean
@@ -24,6 +32,7 @@ type VesselGroupRowProps = {
 }
 export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProps) {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   const userAccount = useContext(UserAccountContext)
   const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
   const vesselGroupsIdsPinned = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsPinned)
@@ -78,9 +87,34 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
     dispatch(renderVesselFeatures())
   }
 
+  const downloadVesselGroup = async () => {
+    const vesselGroupsWithVessels = await dispatch(
+      vesselGroupApi.endpoints.getVesselGroupsWithVessels.initiate()
+    ).unwrap()
+
+    const vesselGroupWithVessels = vesselGroupsWithVessels.find(
+      groupAndVessels => groupAndVessels.group.id === vesselGroup.id
+    )
+    assertNotNullish(vesselGroupWithVessels)
+
+    const date = new Date()
+    const fileName = `${vesselGroupWithVessels.group.name}_${getDate(date.toISOString())}`
+
+    trackEvent({
+      action: "Téléchargement d'un groupe de navire",
+      category: 'VESSEL_GROUP',
+      name: isSuperUser ? 'CNSP' : 'EXT'
+    })
+    downloadAsCsv(
+      fileName,
+      vesselGroupWithVessels.vessels as Omit<Vessel.ActiveVesselEmittingPosition, 'id'>[],
+      VESSEL_LIST_CSV_MAP_BASE
+    )
+  }
+
   const description =
-    (vesselGroup.description ?? '').length > 140
-      ? `${vesselGroup.description?.substring(0, 140)}...`
+    (vesselGroup.description ?? '').length > 230
+      ? `${vesselGroup.description?.substring(0, 230)}...`
       : vesselGroup.description
 
   const isInFuture = vesselGroup.startOfValidityUtc
@@ -127,7 +161,7 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
         {isOpen && (
           <OpenedGroup>
             <GroupInformation>
-              <Description title={vesselGroup.description}>{description}</Description>
+              {description && <Description>{description}</Description>}
               {vesselGroup.type === GroupType.DYNAMIC && (
                 <StyledTag borderColor={THEME.color.slateGray}>Groupe dynamique</StyledTag>
               )}
@@ -178,6 +212,13 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
                 iconSize={20}
                 onClick={() => setIsDeleteConfirmationModalOpen(true)}
                 title={`Supprimer le groupe "${vesselGroup.name}"`}
+              />
+              <IconButton
+                accent={Accent.TERTIARY}
+                Icon={Icon.Download}
+                iconSize={20}
+                onClick={downloadVesselGroup}
+                title={`Télécharger le groupe "${vesselGroup.name}"`}
               />
             </OpenedGroupIcons>
           </OpenedGroup>
@@ -230,13 +271,18 @@ const StyledTag = styled(Tag)`
   margin-right: 8px;
 `
 
-const Description = styled.p`
+const Description = styled(ReactMarkdown)`
   margin-bottom: 8px;
 `
 
 const GroupInformation = styled.div`
   margin-right: 4px;
+
+  ul {
+    list-style: circle;
+  }
 `
+
 const OpenedGroupIcons = styled.div`
   width: 23px;
   margin-left: auto;

@@ -335,6 +335,7 @@ context('Vessel groups', () => {
     /**
      * Download a group
      */
+    cy.get('[title="Lorem ipsum"]').click()
     cy.get('[title=\'Télécharger le groupe "Lorem ipsum"\']').click({ force: true })
 
     cy.wait(400)
@@ -349,7 +350,6 @@ context('Vessel groups', () => {
         )
     })
 
-    cy.get('[title="Lorem ipsum"]').click()
     cy.get('[title=\'Supprimer le groupe "Lorem ipsum"\']').click()
     cy.clickButton('Confirmer la suppression')
   })

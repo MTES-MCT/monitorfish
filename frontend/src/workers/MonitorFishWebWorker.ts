@@ -163,17 +163,22 @@ export class MonitorFishWebWorker {
   static getActiveVesselsWithPositionAndDisplayedVesselsGroups(
     vessels: Vessel.ActiveVessel[],
     vesselGroupsIdsDisplayed: number[],
-    vesselGroupsIdsPinned: number[]
+    vesselGroupsIdsPinned: number[],
+    vesselGroupsIdsFiltered: number[]
   ): Array<[Vessel.ActiveVesselEmittingPosition, VesselGroupDisplayInformation]> {
     return vessels
       .filter(vessel => vessel.activityType === ActivityType.POSITION_BASED)
-      .map(vessel => [vessel, this.getDisplayedVesselGroups(vessel, vesselGroupsIdsDisplayed, vesselGroupsIdsPinned)])
+      .map(vessel => [
+        vessel,
+        this.getDisplayedVesselGroups(vessel, vesselGroupsIdsDisplayed, vesselGroupsIdsPinned, vesselGroupsIdsFiltered)
+      ])
   }
 
   static getDisplayedVesselGroups(
     vessel: Vessel.ActiveVesselEmittingPosition,
     vesselGroupsIdsDisplayed: number[],
-    vesselGroupsIdsPinned: number[]
+    vesselGroupsIdsPinned: number[],
+    vesselGroupsIdsFiltered: number[]
   ): VesselGroupDisplayInformation {
     const pinnedAndDisplayedVesselGroups = vesselGroupsIdsDisplayed.filter(groupId =>
       vesselGroupsIdsPinned.includes(groupId)
@@ -183,7 +188,11 @@ export class MonitorFishWebWorker {
     )
     const orderedDisplayedVesselGroups = pinnedAndDisplayedVesselGroups.concat(unpinnedAndDisplayedVesselGroups)
 
-    const groupsDisplayed = orderedDisplayedVesselGroups
+    const filteredVesselGroups = orderedDisplayedVesselGroups.filter(groupId =>
+      vesselGroupsIdsFiltered.includes(groupId)
+    )
+
+    const groupsDisplayed = filteredVesselGroups
       .map(id => vessel.vesselGroups.find(group => group.id === id))
       .filter((group): group is Vessel.VesselGroupOfActiveVessel => !!group)
 

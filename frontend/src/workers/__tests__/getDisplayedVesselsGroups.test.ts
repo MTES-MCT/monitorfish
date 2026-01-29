@@ -20,7 +20,7 @@ const secondMockVessels = {
 
 describe('MonitorFishWebWorker.getDisplayedVesselsGroups', () => {
   it('should return the correct group information when all groups are displayed and no group pinned (1)', () => {
-    const result = MonitorFishWebWorker.getDisplayedVesselGroups(firstMockVessels, [3, 2, 1], [])
+    const result = MonitorFishWebWorker.getDisplayedVesselGroups(firstMockVessels, [3, 2, 1], [], [3, 2, 1])
     expect(result).toEqual({
       groupColor: [175, 44, 75, 1],
       groupsDisplayed: [
@@ -33,7 +33,7 @@ describe('MonitorFishWebWorker.getDisplayedVesselsGroups', () => {
   })
 
   it('should return the correct group information when all groups are displayed and no group pinned (2)', () => {
-    const result = MonitorFishWebWorker.getDisplayedVesselGroups(secondMockVessels, [3, 2, 1], [])
+    const result = MonitorFishWebWorker.getDisplayedVesselGroups(secondMockVessels, [3, 2, 1], [], [3, 2, 1])
     expect(result).toEqual({
       groupColor: [18, 173, 43, 1],
       groupsDisplayed: [{ color: '#12ad2b', id: 2, name: 'Vessel Group 2' }],
@@ -42,7 +42,7 @@ describe('MonitorFishWebWorker.getDisplayedVesselsGroups', () => {
   })
 
   it('should return the correct group information when all groups are displayed and two groups pinned (1)', () => {
-    const result = MonitorFishWebWorker.getDisplayedVesselGroups(firstMockVessels, [3, 2, 1], [3, 1])
+    const result = MonitorFishWebWorker.getDisplayedVesselGroups(firstMockVessels, [3, 2, 1], [3, 1], [3, 2, 1])
 
     expect(result).toEqual({
       groupColor: [175, 44, 75, 1],
@@ -56,7 +56,7 @@ describe('MonitorFishWebWorker.getDisplayedVesselsGroups', () => {
   })
 
   it('should return the correct group information when all groups are displayed and two groups pinned (2)', () => {
-    const result = MonitorFishWebWorker.getDisplayedVesselGroups(secondMockVessels, [3, 2, 1], [3, 1])
+    const result = MonitorFishWebWorker.getDisplayedVesselGroups(secondMockVessels, [3, 2, 1], [3, 1], [3, 2, 1])
 
     expect(result).toEqual({
       groupColor: [18, 173, 43, 1],
@@ -66,7 +66,7 @@ describe('MonitorFishWebWorker.getDisplayedVesselsGroups', () => {
   })
 
   it('should return correct numberOfGroupsHidden when no groups are displayed', () => {
-    const result = MonitorFishWebWorker.getDisplayedVesselGroups(firstMockVessels, [], [])
+    const result = MonitorFishWebWorker.getDisplayedVesselGroups(firstMockVessels, [], [], [3, 2, 1])
 
     expect(result).toEqual({
       groupColor: [0, 0, 0],

@@ -9,6 +9,11 @@ export const MAIN_PERSISTOR_VESSEL_GROUPS_MIGRATIONS = {
   0: state => ({
     ...state,
     vesselGroupsIdsDisplayed: []
+  }),
+  1: state => ({
+    ...state,
+    filteredGroupType: undefined,
+    filteredSharing: undefined
   })
 }
 
@@ -20,7 +25,13 @@ export const MAIN_PERSISTOR_VESSEL_GROUP_LIST_MIGRATIONS = {
     // If array has 1 element, use that value as the filter
     filteredGroupType: state.filteredGroupTypes?.length === 1 ? state.filteredGroupTypes[0] : undefined,
     filteredSharing: state.filteredSharing?.length === 1 ? state.filteredSharing[0] : undefined
-  })
+  }),
+  1: state => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { filteredGroupType, filteredSharing, ...rest } = state
+
+    return rest
+  }
 }
 
 export const MAIN_PERSISTOR_VESSEL_MIGRATIONS = {

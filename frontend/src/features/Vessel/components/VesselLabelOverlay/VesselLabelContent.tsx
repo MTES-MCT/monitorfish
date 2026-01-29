@@ -1,6 +1,5 @@
 import { VesselLabel } from '@features/Vessel/label.types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking.ts'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
@@ -28,7 +27,6 @@ export function VesselLabelContent({
 }) {
   const { groupsDisplayed, isRecentSegment, labelText, riskFactor, underCharter, vesselLabel } = label
   const dispatch = useMainAppDispatch()
-  const areVesselGroupsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselGroupsDisplayed)
 
   const [showRiskFactorDetails, setShowRiskFactorDetails] = useState(riskFactorDetailsShowed)
 
@@ -104,7 +102,7 @@ export function VesselLabelContent({
                 <Label $isRecentSegment={isRecentSegment} $isSegment={vesselLabel === VesselLabel.VESSEL_FLEET_SEGMENT}>
                   {labelText}
                 </Label>
-                {areVesselGroupsDisplayed && groupsDisplayed.length > 0 && (
+                {groupsDisplayed.length > 0 && (
                   <VesselGroups>
                     {groupsDisplayed.map(vesselGroup => (
                       <VesselGroup key={vesselGroup.id} $color={vesselGroup.color} title={vesselGroup.name} />

@@ -103,7 +103,7 @@ export function LANMessageResume({
         title=""
       />
       {!hasNoMessage && (
-        <LogbookMessageContent chartHeight={chartHeight} isOpen={isOpen}>
+        <LogbookMessageContent chartHeight={chartHeight} data-cy="lan-message-resume" isOpen={isOpen}>
           <Zone>
             <Fields withoutMarginBottom>
               <TableBody>

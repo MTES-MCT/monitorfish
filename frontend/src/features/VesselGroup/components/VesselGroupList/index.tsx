@@ -1,8 +1,10 @@
 import { Body } from '@features/SideWindow/components/Body'
+import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { SEARCH_QUERY_MIN_LENGTH } from '@features/VesselGroup/components/VesselGroupList/hooks/constants'
 import { useGetVesselGroupsWithVessels } from '@features/VesselGroup/components/VesselGroupList/hooks/useGetVesselGroupsWithVessels'
 import { vesselGroupListActions } from '@features/VesselGroup/components/VesselGroupList/slice'
 import { VesselGroupRow } from '@features/VesselGroup/components/VesselGroupList/VesselGroupRow'
+import { vesselGroupActions } from '@features/VesselGroup/slice'
 import { GroupType, Sharing } from '@features/VesselGroup/types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -32,7 +34,8 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
   const isSuperUser = useIsSuperUser()
   const searchQuery = useMainAppSelector(state => state.vesselGroupList.searchQuery)
   const userAccount = useContext(UserAccountContext)
-  const { filteredExpired, filteredGroupType, filteredSharing } = useMainAppSelector(state => state.vesselGroupList)
+  const { filteredExpired } = useMainAppSelector(state => state.vesselGroupList)
+  const { filteredGroupType, filteredSharing } = useMainAppSelector(state => state.vesselGroup)
 
   useEffect(() => {
     trackEvent({
@@ -53,11 +56,13 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
   }
 
   const updateGroupType = (nextGroupType: GroupType | undefined) => {
-    dispatch(vesselGroupListActions.setFilteredGroupType(nextGroupType))
+    dispatch(vesselGroupActions.setFilteredGroupType(nextGroupType))
+    dispatch(renderVesselFeatures())
   }
 
   const updateSharing = (nextSharing: Sharing | undefined) => {
-    dispatch(vesselGroupListActions.setFilteredSharing(nextSharing))
+    dispatch(vesselGroupActions.setFilteredSharing(nextSharing))
+    dispatch(renderVesselFeatures())
   }
 
   const updateExpiredGroups = (nextExpired: boolean | undefined) => {

@@ -81,18 +81,22 @@ export function NewFeatures() {
         title="Nouveautés MonitorFish"
       />
       {isRendered && (
-        <MapToolBox $hideBoxShadow $isOpen={isOpened} data-cy="map-new-features-box">
+        <StyledMapToolBox $hideBoxShadow $isOpen={isOpened} data-cy="map-new-features-box">
           <StyledContainer>
             <MapMenuDialog.Header>
               <MapMenuDialog.Title>Nouveautés MonitorFish</MapMenuDialog.Title>
             </MapMenuDialog.Header>
             <StyledBody>{features}</StyledBody>
           </StyledContainer>
-        </MapToolBox>
+        </StyledMapToolBox>
       )}
     </>
   )
 }
+
+const StyledMapToolBox = styled(MapToolBox)`
+  margin-top: -48px;
+`
 
 const StyledContainer = styled(MapMenuDialog.Container)`
   margin-right: unset;

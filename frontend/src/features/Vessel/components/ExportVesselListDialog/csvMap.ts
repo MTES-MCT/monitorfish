@@ -2,6 +2,7 @@ import { CoordinatesFormat, OPENLAYERS_PROJECTION } from '@features/Map/constant
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
+import { sortBy } from 'lodash-es'
 
 import { getCoordinates } from '../../../../coordinates'
 
@@ -33,7 +34,11 @@ export const VESSEL_LIST_CSV_MAP_BASE: DownloadAsCsvMap<Omit<Vessel.ActiveVessel
   },
   speciesArray: {
     label: 'Espèces à bord',
-    transform: vessel => vessel.speciesArray.join(', ')
+    transform: vessel =>
+      sortBy(vessel.speciesOnboard, ['weight'])
+        .map(specy => specy.species)
+        .reverse()
+        .join(', ')
   },
   lastControlAtSeaDateTime: {
     label: 'Date dernier contrôle en mer',

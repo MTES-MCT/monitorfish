@@ -151,7 +151,7 @@ context('Side Window > Vessel Group List', () => {
         .readFile(`cypress/downloads/${downloadedCSVFilename}`)
         .should(
           'contains',
-          '"Royaume-Uni","PHENOMENE","FAK000999999","CALLME","","DONTSINK","14.3 m","W10, PEL03","OTB","BLI, HKE"'
+          '"Royaume-Uni","PHENOMENE","FAK000999999","CALLME","","DONTSINK","14.3 m","W10, PEL03","OTB","HKE, BLI"'
         )
     })
     /**

@@ -76,7 +76,7 @@ export function VesselGroupForm({
         ? { ...values, vessels: vesselIdentities }
         : { ...values, filters: listFilterValues ?? DEFAULT_VESSEL_LIST_FILTER_VALUES }
 
-    const isSuccess = await dispatch(addOrUpdateVesselGroup(nextValues))
+    const isSuccess = await dispatch(addOrUpdateVesselGroup(nextValues, isMainWindow))
     if (isSuccess) {
       onExit()
     }

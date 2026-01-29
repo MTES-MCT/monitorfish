@@ -131,8 +131,8 @@ export function VesselSummary() {
           segments={selectedVessel?.riskFactor?.segments}
         />
       )}
-      <VesselProfile />
       <SelectedVesselGroups />
+      <VesselProfile />
     </Body>
   ) : (
     <FingerprintLoader className="radar" color={THEME.color.charcoal} />

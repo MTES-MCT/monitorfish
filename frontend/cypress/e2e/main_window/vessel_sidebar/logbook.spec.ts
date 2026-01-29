@@ -49,8 +49,11 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy="vessel-fishing-resume-title"]').eq(2).click({ timeout: 10000 })
     cy.get('*[data-cy="cps-message-resume"]').contains('DAUPHIN COMMUN (DCO)')
     cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains('1 message non acquitté')
-
     cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains('1 message - 2256 kg pêchés au total')
+
+    cy.get('*[data-cy="lan-message-resume"]').contains('BONITE A DOS RAYE (BON)')
+    // Contains species not in the LAN but in the PNO
+    cy.get('*[data-cy="lan-message-resume"]').contains('SOLE COMMUNE (SOL)')
 
     cy.log('See all messages')
     cy.get('*[data-cy^="vessel-fishing-see-all"]').click({ timeout: 10000 })

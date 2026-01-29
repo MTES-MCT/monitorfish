@@ -12,7 +12,7 @@ import type { CreateOrUpdateVesselGroup } from '@features/VesselGroup/types'
 import type { MainAppThunk } from '@store'
 
 export const addOrUpdateVesselGroup =
-  (vesselGroup: CreateOrUpdateVesselGroup): MainAppThunk<Promise<boolean>> =>
+  (vesselGroup: CreateOrUpdateVesselGroup, isMainWindow: boolean): MainAppThunk<Promise<boolean>> =>
   async (dispatch): Promise<boolean> => {
     const isUpdate = !!vesselGroup.id
 
@@ -44,36 +44,52 @@ export const addOrUpdateVesselGroup =
 
       const bannerText = `Le groupe de navires ${vesselGroup.type === GroupType.DYNAMIC ? 'dynamique' : 'fixe'}
       "${vesselGroup.name}" a bien été ${isUpdate ? 'modifié' : 'créé'}.`
-      dispatch(
-        addSideWindowBanner({
-          children: bannerText,
-          closingDelay: 2000,
-          isClosable: true,
-          level: Level.SUCCESS,
-          withAutomaticClosing: true
-        })
-      )
-      dispatch(
-        addMainWindowBanner({
-          children: bannerText,
-          closingDelay: 2000,
-          isClosable: true,
-          level: Level.SUCCESS,
-          withAutomaticClosing: true
-        })
-      )
+
+      if (isMainWindow) {
+        dispatch(
+          addMainWindowBanner({
+            children: bannerText,
+            closingDelay: 2000,
+            isClosable: true,
+            level: Level.SUCCESS,
+            withAutomaticClosing: true
+          })
+        )
+      } else {
+        dispatch(
+          addSideWindowBanner({
+            children: bannerText,
+            closingDelay: 2000,
+            isClosable: true,
+            level: Level.SUCCESS,
+            withAutomaticClosing: true
+          })
+        )
+      }
 
       return true
     } catch (error) {
-      dispatch(
-        addSideWindowBanner({
-          children: (error as Error).message,
-          closingDelay: 5000,
-          isClosable: true,
-          level: Level.ERROR,
-          withAutomaticClosing: true
-        })
-      )
+      if (isMainWindow) {
+        dispatch(
+          addMainWindowBanner({
+            children: (error as Error).message,
+            closingDelay: 5000,
+            isClosable: true,
+            level: Level.ERROR,
+            withAutomaticClosing: true
+          })
+        )
+      } else {
+        dispatch(
+          addSideWindowBanner({
+            children: (error as Error).message,
+            closingDelay: 5000,
+            isClosable: true,
+            level: Level.ERROR,
+            withAutomaticClosing: true
+          })
+        )
+      }
 
       return false
     }

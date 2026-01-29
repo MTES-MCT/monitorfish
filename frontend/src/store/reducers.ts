@@ -165,10 +165,12 @@ export const mainReducer = {
     {
       ...getCommonPersistReducerConfig<VesselGroupState>('mainPersistorVesselGroup', [
         'vesselGroupsIdsDisplayed',
-        'areVesselsNotInVesselGroupsHidden'
+        'areVesselsNotInVesselGroupsHidden',
+        'filteredGroupType',
+        'filteredSharing'
       ]),
       migrate: createMigrate(MAIN_PERSISTOR_VESSEL_GROUPS_MIGRATIONS),
-      version: 0
+      version: 1
     },
     vesselGroupReducer
   ),
@@ -176,12 +178,10 @@ export const mainReducer = {
     {
       ...getCommonPersistReducerConfig<VesselGroupListState>('mainPersistorVesselGroupList', [
         'filteredExpired',
-        'filteredGroupType',
-        'filteredSharing',
         'searchQuery'
       ]),
       migrate: createMigrate(MAIN_PERSISTOR_VESSEL_GROUP_LIST_MIGRATIONS),
-      version: 0
+      version: 1
     },
     vesselGroupListReducer
   ),

@@ -3,6 +3,7 @@ import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBo
 import { MapBox } from '@features/Map/constants'
 import { SideWindowMenuKey } from '@features/SideWindow/constants'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
+import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { useGetVesselGroups } from '@features/VesselGroup/components/VesselGroupMenuDialog/hooks/useGetVesselGroups'
 import { VesselGroupRow } from '@features/VesselGroup/components/VesselGroupMenuDialog/VesselGroupRow'
 import { DEFAULT_DYNAMIC_VESSEL_GROUP, DEFAULT_FIXED_VESSEL_GROUP } from '@features/VesselGroup/constants'
@@ -18,7 +19,6 @@ import styled from 'styled-components'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
-import { vesselGroupListActions } from '../VesselGroupList/slice'
 
 const GROUP_TYPE_OPTIONS = [
   { label: 'Groupes dynamiques', value: GroupType.DYNAMIC },
@@ -41,17 +41,19 @@ export function VesselGroupMenuDialog() {
 
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.VESSEL_GROUPS)
 
-  const { filteredGroupType, filteredSharing } = useMainAppSelector(state => state.vesselGroupList)
+  const { filteredGroupType, filteredSharing } = useMainAppSelector(state => state.vesselGroup)
 
   const { pinnedVesselGroups, unpinnedVesselGroups } = useGetVesselGroups(filteredGroupType, filteredSharing)
   const orderedVesselGroups = pinnedVesselGroups.concat(unpinnedVesselGroups)
 
   const updateGroupType = (nextGroupType: GroupType | undefined) => {
-    dispatch(vesselGroupListActions.setFilteredGroupType(nextGroupType))
+    dispatch(vesselGroupActions.setFilteredGroupType(nextGroupType))
+    dispatch(renderVesselFeatures())
   }
 
   const updateSharing = (nextSharing: Sharing | undefined) => {
-    dispatch(vesselGroupListActions.setFilteredSharing(nextSharing))
+    dispatch(vesselGroupActions.setFilteredSharing(nextSharing))
+    dispatch(renderVesselFeatures())
   }
 
   const createNewDynamicGroup = () => {

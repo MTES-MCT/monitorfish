@@ -97,6 +97,8 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy="vessel-fishing-message"]').eq(12).contains('Débarquement')
     cy.get('*[data-cy="vessel-fishing-message"]').eq(12).siblings().eq(1).contains('MESSAGE SUPPRIMÉ')
     cy.get('*[data-cy="vessel-fishing-message-body"]').eq(12).contains('BONITE A DOS RAYE (BON)')
+    // Contains species not in the LAN but in the PNO
+    cy.get('*[data-cy="vessel-fishing-message-body"]').eq(12).contains('SOLE COMMUNE (SOL)')
 
     cy.get('*[data-cy="vessel-fishing-message"]').eq(13).contains('Préavis (notification de retour au port)')
     cy.get('*[data-cy="vessel-fishing-message-body"]').eq(13).contains('MORUE COMMUNE (CABILLAUD) (COD)')

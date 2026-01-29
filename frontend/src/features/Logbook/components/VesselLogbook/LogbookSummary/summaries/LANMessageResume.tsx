@@ -1,3 +1,5 @@
+import { assertNotNullish } from '@utils/assertNotNullish'
+import { sortBy } from 'lodash-es'
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -5,6 +7,7 @@ import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../consta
 import { getCodeWithNameOrDash, getDatetimeOrDash, getValueOrDash } from '../../LogbookMessages/messages/utils'
 import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
 
+import type { SpeciesToSpeciesInsight } from '@features/Logbook/types'
 import type { Promisable } from 'type-fest'
 
 type LANMessageResumeProps = {
@@ -13,9 +16,9 @@ type LANMessageResumeProps = {
   isNotAcknowledged: boolean
   lanMessage: any
   showLogbookMessages: (messageType: string) => Promisable<void>
-  speciesToWeightOfFAR: any
-  speciesToWeightOfLAN: any
-  speciesToWeightOfPNO: any
+  speciesToWeightOfFAR: SpeciesToSpeciesInsight | undefined
+  speciesToWeightOfLAN: SpeciesToSpeciesInsight | undefined
+  speciesToWeightOfPNO: SpeciesToSpeciesInsight | undefined
   totalLANWeight: number
   totalPNOWeight: number
 }
@@ -37,20 +40,12 @@ export function LANMessageResume({
   const [chartHeight, setChartHeight] = useState(0)
 
   useEffect(() => {
-    if (lanMessage) {
-      const count = lanMessage.catchLanded.reduce(filterSameSpecies(), [])
-      const height = count.length > 0 ? count.length * 49 : 0
-      setChartHeight(height)
-    }
-  }, [lanMessage])
-
-  useEffect(() => {
     if (isOpen) {
       firstUpdate.current = false
     }
   }, [isOpen])
 
-  function filterSameSpecies() {
+  function filterDuplicateSpecies() {
     return (acc, current) => {
       const x = acc.find(item => item.species === current.species)
       if (!x) {
@@ -60,6 +55,38 @@ export function LANMessageResume({
       return acc
     }
   }
+
+  const catchLandedWithMissingCatchesFromPno = (() => {
+    const speciesFromPno = (speciesToWeightOfPNO ? Object.keys(speciesToWeightOfPNO) : []).map(specy => {
+      assertNotNullish(speciesToWeightOfPNO)
+
+      return {
+        conversionFactor: undefined,
+        economicZone: undefined,
+        effortZone: undefined,
+        faoZone: undefined,
+        freshness: undefined,
+        nbFish: undefined,
+        packaging: undefined,
+        presentation: undefined,
+        preservationState: undefined,
+        species: specy,
+        speciesName: speciesToWeightOfPNO[specy]?.speciesName,
+        statisticalRectangle: undefined,
+        weight: 0 // The species is not declared in the LAN
+      }
+    })
+
+    return lanMessage.catchLanded.concat(speciesFromPno)
+  })()
+
+  useEffect(() => {
+    if (catchLandedWithMissingCatchesFromPno) {
+      const count = catchLandedWithMissingCatchesFromPno.reduce(filterDuplicateSpecies(), [])
+      const height = count.length > 0 ? count.length * 49 : 0
+      setChartHeight(height)
+    }
+  }, [catchLandedWithMissingCatchesFromPno])
 
   return (
     <>
@@ -102,59 +129,62 @@ export function LANMessageResume({
               </TableBody>
             </Fields>
             <WeightInfo>Tous les poids sont vifs.</WeightInfo>
-            {lanMessage.catchLanded?.length ? (
-              lanMessage.catchLanded.reduce(filterSameSpecies(), []).map((speciesCatch, index) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Species key={index}>
-                  <SubKey>Espèce {index + 1}</SubKey>{' '}
-                  <SubValue>{getCodeWithNameOrDash(speciesCatch.species, speciesCatch.speciesName)}</SubValue>
-                  <br />
-                  <Weights>
-                    <Weight>
-                      <SubKey>Poids FAR</SubKey>
-                      <SubValueWeight
-                        $withPNOWeight={speciesToWeightOfPNO && speciesToWeightOfPNO[speciesCatch.species]}
-                      >
-                        {speciesToWeightOfFAR && speciesToWeightOfFAR[speciesCatch.species] ? (
-                          <span title={`${speciesToWeightOfFAR[speciesCatch.species].weight} kg`}>
-                            {speciesToWeightOfFAR[speciesCatch.species].weight} kg
-                          </span>
-                        ) : (
-                          <NoValue>0 kg</NoValue>
-                        )}
-                      </SubValueWeight>
-                    </Weight>
-                    <Weight>
-                      <SubKey>Poids PNO</SubKey>
-                      <SubValueWeight
-                        $withPNOWeight={speciesToWeightOfPNO && speciesToWeightOfPNO[speciesCatch.species]}
-                      >
-                        {speciesToWeightOfPNO && speciesToWeightOfPNO[speciesCatch.species] ? (
-                          <span title={`${speciesToWeightOfPNO[speciesCatch.species].weight} kg`}>
-                            {speciesToWeightOfPNO[speciesCatch.species].weight} kg
-                          </span>
-                        ) : (
-                          <NoValue>0 kg</NoValue>
-                        )}
-                      </SubValueWeight>
-                    </Weight>
-                    <Weight>
-                      <SubKey>Poids LAN</SubKey>
-                      <SubValueWeight
-                        $withPNOWeight={speciesToWeightOfPNO && speciesToWeightOfPNO[speciesCatch.species]}
-                      >
-                        {speciesToWeightOfLAN && speciesToWeightOfLAN[speciesCatch.species] ? (
-                          <span title={`${speciesToWeightOfLAN[speciesCatch.species].weight} kg`}>
-                            {speciesToWeightOfLAN[speciesCatch.species].weight} kg
-                          </span>
-                        ) : (
-                          <NoValue>0 kg</NoValue>
-                        )}
-                      </SubValueWeight>
-                    </Weight>
-                  </Weights>
-                </Species>
-              ))
+            {catchLandedWithMissingCatchesFromPno.length ? (
+              sortBy(catchLandedWithMissingCatchesFromPno, 'weight')
+                .reverse()
+                .reduce(filterDuplicateSpecies(), [])
+                .map((speciesCatch, index) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <Species key={index}>
+                    <SubKey>Espèce {index + 1}</SubKey>{' '}
+                    <SubValue>{getCodeWithNameOrDash(speciesCatch.species, speciesCatch.speciesName)}</SubValue>
+                    <br />
+                    <Weights>
+                      <Weight>
+                        <SubKey>Poids FAR</SubKey>
+                        <SubValueWeight
+                          $withPNOWeight={speciesToWeightOfPNO && !!speciesToWeightOfPNO[speciesCatch.species]}
+                        >
+                          {speciesToWeightOfFAR && speciesToWeightOfFAR[speciesCatch.species] ? (
+                            <span title={`${speciesToWeightOfFAR[speciesCatch.species]?.weight} kg`}>
+                              {speciesToWeightOfFAR[speciesCatch.species]?.weight} kg
+                            </span>
+                          ) : (
+                            <NoValue>0 kg</NoValue>
+                          )}
+                        </SubValueWeight>
+                      </Weight>
+                      <Weight>
+                        <SubKey>Poids PNO</SubKey>
+                        <SubValueWeight
+                          $withPNOWeight={speciesToWeightOfPNO && !!speciesToWeightOfPNO[speciesCatch.species]}
+                        >
+                          {speciesToWeightOfPNO && speciesToWeightOfPNO[speciesCatch.species] ? (
+                            <span title={`${speciesToWeightOfPNO[speciesCatch.species]?.weight} kg`}>
+                              {speciesToWeightOfPNO[speciesCatch.species]?.weight} kg
+                            </span>
+                          ) : (
+                            <NoValue>0 kg</NoValue>
+                          )}
+                        </SubValueWeight>
+                      </Weight>
+                      <Weight>
+                        <SubKey>Poids LAN</SubKey>
+                        <SubValueWeight
+                          $withPNOWeight={speciesToWeightOfPNO && !!speciesToWeightOfPNO[speciesCatch.species]}
+                        >
+                          {speciesToWeightOfLAN && speciesToWeightOfLAN[speciesCatch.species] ? (
+                            <span title={`${speciesToWeightOfLAN[speciesCatch.species]?.weight} kg`}>
+                              {speciesToWeightOfLAN[speciesCatch.species]?.weight} kg
+                            </span>
+                          ) : (
+                            <NoValue>0 kg</NoValue>
+                          )}
+                        </SubValueWeight>
+                      </Weight>
+                    </Weights>
+                  </Species>
+                ))
             ) : (
               <Gray>Aucune capture à bord</Gray>
             )}
@@ -208,7 +238,7 @@ const SubValue = styled.span`
 `
 
 const SubValueWeight = styled.span<{
-  $withPNOWeight?: boolean
+  $withPNOWeight?: boolean | undefined
 }>`
   font-size: 13px;
   color: ${p => p.theme.color.gunMetal};

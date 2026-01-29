@@ -65,7 +65,11 @@ export function SelectedVesselGroups() {
           disabled={!vesselsGroupsAsOptions?.length}
           Icon={Icon.Plus}
           placement="topStart"
-          title="Ajouter le navire à un groupe fixe"
+          title={
+            vesselsGroupsAsOptions?.length
+              ? 'Ajouter le navire à un groupe fixe'
+              : "Vous n'avez pas encore de groupe fixe auquel ajouter le navire"
+          }
         >
           {vesselsGroupsAsOptions?.map(group => (
             <Dropdown.Item key={group.value.id} onClick={() => dispatch(addVesselToGroupFromDropdown(group.value))}>

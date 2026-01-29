@@ -47,6 +47,7 @@ import storage from 'redux-persist/es/storage' // LocalStorage
 
 import {
   MAIN_PERSISTOR_MISSION_MIGRATIONS,
+  MAIN_PERSISTOR_VESSEL_GROUP_LIST_MIGRATIONS,
   MAIN_PERSISTOR_VESSEL_GROUPS_MIGRATIONS,
   MAIN_PERSISTOR_VESSEL_MIGRATIONS
 } from './migrations'
@@ -101,8 +102,7 @@ export const mainReducer = {
   displayedComponent: persistReducerTyped(
     {
       ...getCommonPersistReducerConfig<DisplayedComponentState>('mainPersistorDisplayedComponent', [
-        'isMissionsLayerDisplayed',
-        'areVesselGroupsDisplayed'
+        'isMissionsLayerDisplayed'
       ])
     },
     displayedComponentReducer
@@ -176,10 +176,12 @@ export const mainReducer = {
     {
       ...getCommonPersistReducerConfig<VesselGroupListState>('mainPersistorVesselGroupList', [
         'filteredExpired',
-        'filteredGroupTypes',
+        'filteredGroupType',
         'filteredSharing',
         'searchQuery'
-      ])
+      ]),
+      migrate: createMigrate(MAIN_PERSISTOR_VESSEL_GROUP_LIST_MIGRATIONS),
+      version: 0
     },
     vesselGroupListReducer
   ),

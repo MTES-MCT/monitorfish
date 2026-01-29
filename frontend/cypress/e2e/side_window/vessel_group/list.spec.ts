@@ -9,56 +9,48 @@ context('Side Window > Vessel Group List', () => {
     cy.get('[title="Groupes de navires"]').click()
 
     cy.getDataCy('pinned-vessels-groups').should('not.exist')
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 
     /**
      * Filter by expired
      */
 
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
-    cy.get('[title="Groupes expirés"]').click()
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
+    cy.get('[title="Groupes expirés"]').click()
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 4)
 
     /**
      * Filter by group type
      */
-    cy.get('[title="Groupes fixes"]').click()
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
-    cy.get('[title="Groupes fixes"]').click()
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
-
-    cy.get('[title="Groupes dynamiques"]').click()
+    cy.fill('Type de groupe', 'Groupes fixes')
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 1)
-    cy.get('[title="Groupes dynamiques"]').click()
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
+    cy.fill('Type de groupe', undefined)
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 4)
 
-    cy.get('[title="Groupes fixes"]').click()
-    cy.get('[title="Groupes dynamiques"]').click()
+    cy.fill('Type de groupe', 'Groupes dynamiques')
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
+    cy.fill('Type de groupe', undefined)
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 4)
 
     /**
      * Filter by sharing
      */
-    cy.get('[title="Groupes personnels"]').click()
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 1)
-    cy.get('[title="Groupes personnels"]').click()
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
-
-    cy.get('[title="Groupes partagés"]').click()
+    cy.fill('Partage', 'Groupes personnels')
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
-    cy.get('[title="Groupes partagés"]').click()
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
+    cy.fill('Partage', undefined)
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 4)
 
-    cy.get('[title="Groupes personnels"]').click()
-    cy.get('[title="Groupes partagés"]').click()
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
+    cy.fill('Partage', 'Groupes partagés')
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
+    cy.fill('Partage', undefined)
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 4)
 
     /**
      * Pin a vessel group
      */
     cy.get('[title=\'Epingler le groupe "Mission Thémis – chaluts de fonds"\']').click()
     cy.getDataCy('pinned-vessels-groups').children().should('have.length', 1)
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 
     /**
      * Open a dynamic vessel group and display vessels
@@ -73,7 +65,7 @@ context('Side Window > Vessel Group List', () => {
         'blanchiment bar en 7.d.'
     )
     cy.get('[title="Mission Thémis – chaluts de fonds"]').within(() => {
-      cy.get('.Table-SimpleTable tr').should('have.length', 153)
+      cy.get('.Table-SimpleTable tr').should('have.length', 61)
     })
 
     /**
@@ -82,7 +74,7 @@ context('Side Window > Vessel Group List', () => {
     cy.get('[title=\'Supprimer le groupe "Mission Thémis – chaluts de fonds"\']').click({ force: true })
     cy.clickButton('Annuler')
     cy.getDataCy('pinned-vessels-groups').children().should('have.length', 1)
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 
     /**
      * Display vessels from fixed vessel groups and delete a vessel
@@ -129,7 +121,7 @@ context('Side Window > Vessel Group List', () => {
 
     cy.fill('Rechercher un navire', '')
     cy.getDataCy('pinned-vessels-groups').children().should('have.length', 1)
-    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 2)
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 
     /**
      * Modify a group

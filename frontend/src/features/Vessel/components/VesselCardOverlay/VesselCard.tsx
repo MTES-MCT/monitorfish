@@ -22,7 +22,6 @@ timeago.register('fr', timeagoFrenchLocale)
 export function VesselCard({ feature, overlayPosition, yOffset }) {
   const isSuperUser = useIsSuperUser()
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
-  const areVesselGroupsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselGroupsDisplayed)
 
   const vesselProperties = extractVesselPropertiesFromFeature(feature, [
     'alerts',
@@ -135,24 +134,23 @@ export function VesselCard({ feature, overlayPosition, yOffset }) {
           {vesselProperties.segments.length > 0 ? vesselProperties.segments.join(', ') : <NoValue>-</NoValue>}
         </Value>
       </FleetSegments>
-      {areVesselGroupsDisplayed &&
-        (vesselProperties.groupsDisplayed.length > 0 || vesselProperties.numberOfGroupsHidden > 0) && (
-          <VesselGroups data-cy="vessel-card-groups">
-            {vesselProperties.groupsDisplayed.map(vesselGroup => (
-              <VesselGroupRow key={vesselGroup.id}>
-                <Square $fillColor={vesselGroup.color} $strokeColor={THEME.color.lightGray} />
-                {vesselGroup.name}
-              </VesselGroupRow>
-            ))}
-            {vesselProperties.numberOfGroupsHidden > 0 && (
-              <OtherGroupsHidden>
-                {vesselProperties.numberOfGroupsHidden} {pluralize('autre', vesselProperties.numberOfGroupsHidden)}{' '}
-                {pluralize('groupe', vesselProperties.numberOfGroupsHidden)} non{' '}
-                {pluralize('affiché', vesselProperties.numberOfGroupsHidden)} sur la carte
-              </OtherGroupsHidden>
-            )}
-          </VesselGroups>
-        )}
+      {(vesselProperties.groupsDisplayed.length > 0 || vesselProperties.numberOfGroupsHidden > 0) && (
+        <VesselGroups data-cy="vessel-card-groups">
+          {vesselProperties.groupsDisplayed.map(vesselGroup => (
+            <VesselGroupRow key={vesselGroup.id}>
+              <Square $fillColor={vesselGroup.color} $strokeColor={THEME.color.lightGray} />
+              {vesselGroup.name}
+            </VesselGroupRow>
+          ))}
+          {vesselProperties.numberOfGroupsHidden > 0 && (
+            <OtherGroupsHidden>
+              {vesselProperties.numberOfGroupsHidden} {pluralize('autre', vesselProperties.numberOfGroupsHidden)}{' '}
+              {pluralize('groupe', vesselProperties.numberOfGroupsHidden)} non{' '}
+              {pluralize('affiché', vesselProperties.numberOfGroupsHidden)} sur la carte
+            </OtherGroupsHidden>
+          )}
+        </VesselGroups>
+      )}
       <TrianglePointer>
         {overlayPosition === OverlayPosition.BOTTOM && <BottomTriangleShadow />}
         {overlayPosition === OverlayPosition.TOP && <TopTriangleShadow $yOffset={yOffset} />}

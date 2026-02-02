@@ -109,7 +109,7 @@ dependencies {
     implementation("org.n52.jackson:jackson-datatype-jts:2.0.0")
     implementation("org.locationtech.proj4j:proj4j:1.4.1")
     implementation("org.locationtech.proj4j:proj4j-epsg:1.4.1")
-    api("org.hibernate:hibernate-spatial:6.6.29.Final")
+    api("org.hibernate:hibernate-spatial:7.2.3.Final")
     api("io.sentry:sentry:8.27.1")
     api("io.sentry:sentry-log4j2:8.27.1")
     implementation("org.springframework.cloud:spring-cloud-gateway-mvc:4.3.2")

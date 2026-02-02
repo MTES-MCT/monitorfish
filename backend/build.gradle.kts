@@ -6,13 +6,13 @@ plugins {
     `java-library`
     `maven-publish`
     id("org.springframework.boot") version "3.5.8"
-    id("org.jetbrains.kotlin.plugin.spring") version "2.2.21"
-    kotlin("jvm") version "2.2.21"
-    id("org.jetbrains.kotlin.plugin.allopen") version "2.2.21"
-    kotlin("plugin.noarg") version "2.2.21"
-    kotlin("plugin.jpa") version "2.2.21"
+    id("org.jetbrains.kotlin.plugin.spring") version "2.3.0"
+    kotlin("jvm") version "2.3.0"
+    id("org.jetbrains.kotlin.plugin.allopen") version "2.3.0"
+    kotlin("plugin.noarg") version "2.3.0"
+    kotlin("plugin.jpa") version "2.3.0"
     id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
-    kotlin("plugin.serialization") version "2.2.21"
+    kotlin("plugin.serialization") version "2.3.0"
     id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -47,7 +47,7 @@ ktlint {
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.1.0")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.1.1")
     }
 }
 
@@ -87,38 +87,38 @@ dependencies {
     api("org.springframework.boot:spring-boot-starter-log4j2:3.5.8")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.5.8")
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
-    api("io.ktor:ktor-client-core-jvm:3.3.3")
-    api("io.ktor:ktor-client-java-jvm:3.3.3")
-    api("io.ktor:ktor-client-content-negotiation-jvm:3.3.3")
-    api("io.ktor:ktor-serialization-kotlinx-json-jvm:3.3.3")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
+    api("io.ktor:ktor-client-core-jvm:3.4.0")
+    api("io.ktor:ktor-client-java-jvm:3.4.0")
+    api("io.ktor:ktor-client-content-negotiation-jvm:3.4.0")
+    api("io.ktor:ktor-serialization-kotlinx-json-jvm:3.4.0")
     api("org.hibernate.validator:hibernate-validator:8.0.2.Final")
     api("jakarta.validation:jakarta.validation-api:3.1.1")
-    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.20.1")
+    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.21.0")
     api("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     api("org.flywaydb:flyway-core:11.18.0")
     api("org.flywaydb:flyway-database-postgresql:11.18.0")
     api("org.springdoc:springdoc-openapi-ui:1.8.0")
-    api("org.jetbrains.kotlin:kotlin-reflect:2.2.21")
-    api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21")
+    api("org.jetbrains.kotlin:kotlin-reflect:2.3.0")
+    api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.3.0")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     api("com.neovisionaries:nv-i18n:1.29")
     api("com.github.ben-manes.caffeine:caffeine:3.2.3")
-    api("io.hypersistence:hypersistence-utils-hibernate-63:3.12.0")
+    api("io.hypersistence:hypersistence-utils-hibernate-63:3.15.1")
     api("org.locationtech.jts:jts-core:1.20.0")
     implementation("org.n52.jackson:jackson-datatype-jts:2.0.0")
     implementation("org.locationtech.proj4j:proj4j:1.4.1")
     implementation("org.locationtech.proj4j:proj4j-epsg:1.4.1")
     api("org.hibernate:hibernate-spatial:7.2.3.Final")
-    api("io.sentry:sentry:8.27.1")
-    api("io.sentry:sentry-log4j2:8.27.1")
-    implementation("org.springframework.cloud:spring-cloud-gateway-mvc:4.3.2")
-    runtimeOnly("org.postgresql:postgresql:42.7.8")
-    testImplementation("io.ktor:ktor-client-mock-jvm:3.3.3")
-    testImplementation("org.assertj:assertj-core:3.27.6")
-    testImplementation("org.testcontainers:postgresql:1.21.3")
-    testImplementation("org.testcontainers:testcontainers:1.21.3")
-    testImplementation("org.testcontainers:junit-jupiter:1.21.3")
+    api("io.sentry:sentry:8.31.0")
+    api("io.sentry:sentry-log4j2:8.31.0")
+    implementation("org.springframework.cloud:spring-cloud-gateway-mvc:4.3.3")
+    runtimeOnly("org.postgresql:postgresql:42.7.9")
+    testImplementation("io.ktor:ktor-client-mock-jvm:3.4.0")
+    testImplementation("org.assertj:assertj-core:3.27.7")
+    testImplementation("org.testcontainers:postgresql:1.21.4")
+    testImplementation("org.testcontainers:testcontainers:1.21.4")
+    testImplementation("org.testcontainers:junit-jupiter:1.21.4")
     testImplementation("jakarta.servlet:jakarta.servlet-api:6.1.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:5.3.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.8")

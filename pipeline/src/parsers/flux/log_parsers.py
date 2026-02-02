@@ -35,7 +35,7 @@ def parse_dep(dep):
     if not hasSpecifiedFishingGear:
         usedGear = get_element(dep, ".//ram:SpecifiedFACatch/ram:UsedFishingGear")
         if usedGear is not None:
-            value["gearOnboard"] = parse_gea(usedGear)
+            value["gearOnboard"] = [parse_gea(usedGear)]
 
     zone_data = {}
     if "RelatedFLUXLocation" in children:
@@ -281,6 +281,6 @@ def parse_rtp(rtp):
     if not hasSpecifiedFishingGear:
         usedGear = get_element(rtp, ".//ram:SpecifiedFACatch/ram:UsedFishingGear")
         if usedGear is not None:
-            value["gearOnboard"] = parse_gea(usedGear)
+            value["gearOnboard"] = [parse_gea(usedGear)]
 
     return value

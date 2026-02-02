@@ -70,10 +70,11 @@ export async function getFilterableZonesAsTreeOptions(dispatch: MainAppDispatch)
         }
       }
 
+      const fao = LayerProperties[MonitorFishMap.MonitorFishLayer.FAO]
       const result = await dispatch(
         geoserverApi.endpoints.getAdministrativeSubZones.initiate({
           fromBackoffice: false,
-          sortBy: zone.code === MonitorFishMap.MonitorFishLayer.FAO ? 'f_code' : undefined,
+          sortBy: zone.code === fao.code ? fao.zoneNamePropertyKey : undefined,
           type: zone.code
         })
       ).unwrap()

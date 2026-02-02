@@ -122,7 +122,7 @@ const StyledDropdown = styled(Dropdown)`
   width: 100%;
 
   button {
-    z-index: unset;
+    z-index: unset !important;
   }
 `
 

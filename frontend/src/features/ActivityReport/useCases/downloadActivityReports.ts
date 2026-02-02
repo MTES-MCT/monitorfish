@@ -4,7 +4,7 @@ import { downloadAsCsv } from '@utils/downloadAsCsv'
 import { logSoftError } from '@utils/logSoftError'
 
 import { activityReportApi } from '../apis'
-import { JDP_CSV_MAP_BASE } from '../components/ExportActivityReportsDialog/csvMap'
+import { JDP_CSV_MAP_BASE, MED_JDP_CSV_MAP } from '../components/ExportActivityReportsDialog/csvMap'
 import { JDP } from '../constants'
 import { getJDPCsvMap, getSpeciesOnboardWithUntargetedSpeciesGrouped } from '../utils'
 
@@ -42,7 +42,8 @@ export const downloadActivityReports =
     }))
     const fileName = getCsvFileName(jdp)
 
-    const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, jdp)
+    const baseCsvMap = jdp === JDP.MEDITERRANEAN_AND_EASTERN_ATLANTIC ? MED_JDP_CSV_MAP : JDP_CSV_MAP_BASE
+    const csvMap = getJDPCsvMap(baseCsvMap, jdp)
     downloadAsCsv(fileName, activityReportsWithId, csvMap)
 
     return fileName

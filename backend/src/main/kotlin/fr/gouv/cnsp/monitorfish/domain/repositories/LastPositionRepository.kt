@@ -15,7 +15,7 @@ interface LastPositionRepository {
         value: String,
     ): LastPosition?
 
-    fun findActiveVesselWithReferentialData(): List<EnrichedActiveVessel>
+    fun findActiveVesselWithReferentialData(dateTime: ZonedDateTime): List<EnrichedActiveVessel>
 
     fun removeAlertToLastPositionByVesselIdentifierEquals(
         alertName: String,

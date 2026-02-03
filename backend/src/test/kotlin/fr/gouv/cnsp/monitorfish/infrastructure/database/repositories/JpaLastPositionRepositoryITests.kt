@@ -159,13 +159,16 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         // Given
 
         // When
-        val lastPositionsWithProfiles = jpaLastPositionRepository.findActiveVesselWithReferentialData()
+        val lastPositionsWithProfiles =
+            jpaLastPositionRepository.findActiveVesselWithReferentialData(
+                ZonedDateTime.now().minusMonths(1),
+            )
 
         // Then
         /**
          * Only a last position without a profile
          */
-        assertThat(lastPositionsWithProfiles).hasSize(3313)
+        assertThat(lastPositionsWithProfiles).hasSize(3312)
         assertThat(lastPositionsWithProfiles.first().lastPosition).isNotNull()
         assertThat(lastPositionsWithProfiles.first().vesselProfile).isNull()
         assertThat(lastPositionsWithProfiles.first().vessel).isNull()

@@ -27,6 +27,7 @@ class GetAllVesselGroupsWithVessels(
     private val logger: Logger = LoggerFactory.getLogger(GetAllVesselGroupsWithVessels::class.java)
 
     fun execute(userEmail: String): List<VesselGroupWithVessels> {
+        val now = ZonedDateTime.now()
         val userService = getAuthorizedUser.execute(userEmail).service
         val vesselGroups =
             vesselGroupRepository.findAllByUserAndSharing(
@@ -34,8 +35,7 @@ class GetAllVesselGroupsWithVessels(
                 service = userService,
             )
         val activeVessels =
-            lastPositionRepository.findActiveVesselWithReferentialData()
-        val now = ZonedDateTime.now()
+            lastPositionRepository.findActiveVesselWithReferentialData(now.minusMonths(1))
 
         val byVesselId = mutableMapOf<Int, EnrichedActiveVessel>()
         val byCfr = mutableMapOf<String, EnrichedActiveVessel>()

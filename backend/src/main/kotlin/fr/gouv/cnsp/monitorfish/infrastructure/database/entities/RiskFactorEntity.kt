@@ -127,5 +127,9 @@ data class RiskFactorEntity(
             recentSegmentHighestPriority = recentSegmentHighestPriority,
             recentControlPriorityLevel = recentControlPriorityLevel,
             hasCurrentVmsFishingActivity = hasCurrentVmsFishingActivity,
+            infringementRiskLevel = infringementRiskLevel,
+            infractionRateRiskFactor = infractionRateRiskFactor,
+            recentSegmentsProbabilityRiskFactor = recentSegmentsProbabilityRiskFactor,
+            recentSegmentsInfringementRiskLevel = recentSegmentsInfringementRiskLevel,
         )
 }

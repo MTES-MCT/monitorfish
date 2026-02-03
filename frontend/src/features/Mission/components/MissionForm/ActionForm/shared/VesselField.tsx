@@ -1,7 +1,10 @@
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
+import { VesselSearch } from '@features/Vessel/components/VesselSearch'
 import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
+import { showVessel } from '@features/Vessel/useCases/showVessel'
 import { useGetVesselQuery } from '@features/Vessel/vesselApi'
-import { VesselSearch } from '@features/VesselSearch'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Checkbox, FormikTextInput, useNewWindow } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
@@ -15,6 +18,7 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
 export function VesselField() {
   const { errors, setValues, values } = useFormikContext<MissionActionFormValues>()
   const { updateFieldsControlledByVessel } = useGetMissionActionFormikUsecases()
+  const dispatch = useMainAppDispatch()
 
   const { newWindowContainerRef } = useNewWindow()
 
@@ -94,20 +98,25 @@ export function VesselField() {
     handleVesselSearchChange(undefined)
   }
 
+  const handleVesselLinkClick = (displayedVessel: Vessel.VesselIdentity) => {
+    dispatch(showVessel(displayedVessel, false))
+  }
+
   return (
     <>
       <Wrapper>
         <Field>
           <StyledVesselSearch
             baseRef={newWindowContainerRef}
-            defaultValue={defaultValue}
             disabled={values.vesselId === UNKNOWN_VESSEL.vesselId}
-            extendedWidth={400}
+            displayedErrorKey={DisplayedErrorKey.MISSION_FORM_ERROR}
             hasError={!!errors.vesselId}
-            isExtended
-            isLinkToVesselSidebarDisplayed
             isVesselIdRequiredFromResults
             onChange={handleVesselSearchChange}
+            onVesselLinkClick={handleVesselLinkClick}
+            shouldCloseOnClickOutside
+            value={defaultValue}
+            withLastSearchResults
           />
           <Checkbox
             checked={values.vesselId === UNKNOWN_VESSEL.vesselId}
@@ -183,7 +192,11 @@ const Field = styled.div`
 `
 
 const StyledVesselSearch = styled(VesselSearch)`
-  width: auto;
+  width: 400px;
+
+  > div {
+    z-index: 10;
+  }
 `
 
 const VesselIdentityBar = styled.div`

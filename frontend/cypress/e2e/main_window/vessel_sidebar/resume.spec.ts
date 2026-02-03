@@ -37,9 +37,9 @@ context('Vessel sidebar resume tab', () => {
     cy.getDataCy('probability-risk-factor').contains('2.0')
     cy.getDataCy('probability-risk-factor').click({ force: true, timeout: 10000 })
     cy.getDataCy('probability-risk-factor').next().contains('Probabilité d’infraction du segment')
-    cy.getDataCy('risk-factor-infringementRiskLevel').contains('2.0 – moyenne')
+    cy.getDataCy('risk-factor-infringementRiskLevel').contains('2.9 – élevée')
     cy.getDataCy('probability-risk-factor').next().contains('Fréquence d’infraction du navire')
-    cy.getDataCy('risk-factor-infractionRateRiskFactor').contains('2.0 – Infractions occasionnelles')
+    cy.getDataCy('risk-factor-infractionRateRiskFactor').contains('2.6 – Infractions répétées')
     cy.getDataCy('probability-risk-factor').next().contains('8 contrôles sur 5 ans ')
     cy.getDataCy('probability-risk-factor').next().contains('5 infractions pêche / 8 contrôles')
 

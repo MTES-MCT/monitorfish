@@ -31,7 +31,7 @@ last_controls AS (
         vessel_id,
         cfr,
         last_control_datetime_utc,
-        jsonb_agg(inf) FILTER (WHERE inf IS NOT NULL AND inf->>'infractionType' != 'PENDING') AS last_control_infractions
+        jsonb_agg(inf) FILTER (WHERE inf IS NOT NULL AND COALESCE(inf->>'infractionType', 'UNSPECIFIED_INFRACTION_TYPE') != 'PENDING') AS last_control_infractions
     FROM risk_factors
     LEFT JOIN LATERAL jsonb_array_elements(last_control_infractions) AS inf
     ON true

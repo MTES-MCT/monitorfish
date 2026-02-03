@@ -66,7 +66,7 @@ class GetActiveVesselsUTests {
             ),
         )
         val lastPosition = TestUtils.getDummyLastPositions().first()
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
                     lastPosition = lastPosition,
@@ -110,7 +110,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
                     lastPosition =
@@ -187,7 +187,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
                     lastPosition =
@@ -265,7 +265,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
                     lastPosition =
@@ -348,7 +348,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
                     lastPosition =
@@ -426,7 +426,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
                     lastPosition =
@@ -503,7 +503,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
                     lastPosition =
@@ -580,7 +580,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
                     lastPosition =
@@ -666,7 +666,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
                     lastPosition =
@@ -743,7 +743,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
                     lastPosition =
@@ -820,7 +820,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
                     lastPosition =
@@ -914,7 +914,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
                     lastPosition =
@@ -992,7 +992,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
                     lastPosition =
@@ -1071,7 +1071,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
                     lastPosition =
@@ -1153,7 +1153,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
                     lastPosition =
@@ -1230,7 +1230,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
                     lastPosition = it,
@@ -1268,7 +1268,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
                     lastPosition = it,
@@ -1344,7 +1344,7 @@ class GetActiveVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
                     lastPosition = it,
@@ -1434,7 +1434,7 @@ class GetActiveVesselsUTests {
                 flagState = vesselThatShouldMatchWithPriorNotification.flagState,
                 hasLogbookEsacapt = false,
             )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
                     lastPosition = it,

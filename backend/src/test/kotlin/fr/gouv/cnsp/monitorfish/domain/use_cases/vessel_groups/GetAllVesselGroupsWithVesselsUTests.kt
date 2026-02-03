@@ -44,7 +44,7 @@ class GetAllVesselGroupsWithVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
                     lastPosition = it,
@@ -92,7 +92,7 @@ class GetAllVesselGroupsWithVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
                     lastPosition = it,
@@ -151,7 +151,7 @@ class GetAllVesselGroupsWithVesselsUTests {
                 service = null,
             ),
         )
-        given(lastPositionRepository.findActiveVesselWithReferentialData()).willReturn(
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
                     lastPosition = it,

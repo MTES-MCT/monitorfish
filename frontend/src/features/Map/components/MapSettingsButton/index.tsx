@@ -6,7 +6,6 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
 
 import { MapSettings } from './MapSettings'
-import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
 
 export function MapSettingsButton() {
@@ -22,7 +21,6 @@ export function MapSettingsButton() {
     }
 
     dispatch(setRightMapBoxDisplayed(MapBox.VESSEL_VISIBILITY))
-    dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
   }
 
   return (

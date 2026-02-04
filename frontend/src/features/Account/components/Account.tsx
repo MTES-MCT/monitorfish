@@ -15,7 +15,6 @@ import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
 import { UserAccountContext } from '../../../context/UserAccountContext'
-import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
 import { DELETE_CACHE } from '../../../workers/constants'
 import { useGetServiceWorker } from '../../../workers/hooks/useGetServiceWorker'
@@ -39,9 +38,6 @@ export function Account() {
   const [isRegisterCacheConfirmationModalOpen, setIsRegisterCacheConfirmationModalOpen] = useState(false)
 
   const openOrClose = () => {
-    if (!rightMapBoxOpened) {
-      dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
-    }
     dispatch(setRightMapBoxDisplayed(rightMapBoxOpened === MapBox.ACCOUNT ? undefined : MapBox.ACCOUNT))
   }
 

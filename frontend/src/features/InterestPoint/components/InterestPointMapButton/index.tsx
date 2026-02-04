@@ -14,7 +14,6 @@ import { Point } from 'ol/geom'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EditInterestPoint } from './EditInterestPoint'
-import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
 import { interestPointActions } from '../../slice'
 
@@ -51,7 +50,6 @@ export function InterestPointMapButton() {
       dispatch(interestPointActions.interestPointCreation(getGeoJSONFromFeature(feature) as InterestPoint))
 
       dispatch(setRightMapBoxDisplayed(MapBox.INTEREST_POINT))
-      dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
 
       return
     }

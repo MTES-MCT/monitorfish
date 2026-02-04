@@ -163,6 +163,9 @@ const FilterRow = styled.div`
   .rs-picker-select {
     border: 1px solid ${p => p.theme.color.lightGray};
   }
+  .rs-picker-toggle {
+    z-index: unset !important;
+  }
 `
 
 const StyledDropdownItem = styled(Dropdown.Item)`

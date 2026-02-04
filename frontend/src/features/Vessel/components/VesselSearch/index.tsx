@@ -250,8 +250,8 @@ const InputWrapper = styled.div`
 
   > button {
     position: absolute;
-    right: 7.5px;
-    top: 7.5px;
+    right: 12px;
+    top: 13px;
   }
 
   /* Open vessel sidebar link */

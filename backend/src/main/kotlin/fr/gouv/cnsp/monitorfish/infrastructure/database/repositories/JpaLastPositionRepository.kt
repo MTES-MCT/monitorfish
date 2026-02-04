@@ -46,21 +46,12 @@ class JpaLastPositionRepository(
         }
 
     @Cacheable(value = ["active_vessels"])
-    override fun findActiveVesselWithReferentialData(): List<EnrichedActiveVessel> {
-        val nowMinusOneMonth = ZonedDateTime.now().minusMonths(1)
-        return dbLastPositionRepository
-            .findActiveVesselWithReferentialData(nowMinusOneMonth)
+    override fun findActiveVesselWithReferentialData(dateTime: ZonedDateTime): List<EnrichedActiveVessel> =
+        dbLastPositionRepository
+            .findActiveVesselWithReferentialData(dateTime)
             .map {
                 EnrichedActiveVessel(
-                    lastPosition =
-                        it.lastPosition?.let { lastPosition ->
-                            // There is no way to do a subquery in the JPQL query's FULL JOIN
-                            if (lastPosition.dateTime > nowMinusOneMonth || lastPosition.beaconMalfunctionId != null) {
-                                return@let lastPosition.toLastPosition(mapper)
-                            }
-
-                            return@let null
-                        },
+                    lastPosition = it.lastPosition?.toLastPosition(mapper),
                     vesselProfile = it.vesselProfile?.toVesselProfile(),
                     vessel = it.vessel?.toVessel(),
                     /**
@@ -77,7 +68,6 @@ class JpaLastPositionRepository(
                     landingPort = null,
                 )
             }.filter { it.hasEitherLastPositionOrVesselProfileWithVessel() }
-    }
 
     @Cacheable(value = ["latest_last_position_date"])
     override fun findLastPositionDate(): ZonedDateTime =

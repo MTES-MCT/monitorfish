@@ -65,6 +65,7 @@ export function VesselSearchResult({
 
 const Results = styled.div`
   background: white;
+  box-shadow: 0 1px 1px ${p => p.theme.color.slateGray};
   color: ${p => p.theme.color.gunMetal};
   border-bottom: 1px solid ${p => p.theme.color.gainsboro};
   border-bottom-left-radius: 2px;

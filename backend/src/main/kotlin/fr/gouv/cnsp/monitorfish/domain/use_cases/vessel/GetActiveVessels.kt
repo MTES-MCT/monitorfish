@@ -28,7 +28,10 @@ class GetActiveVessels(
         val now = ZonedDateTime.now()
         val userService = getAuthorizedUser.execute(userEmail).service
 
-        val lastPositionsWithProfileAndVessel = lastPositionRepository.findActiveVesselWithReferentialData()
+        val lastPositionsWithProfileAndVessel =
+            lastPositionRepository.findActiveVesselWithReferentialData(
+                now.minusMonths(1),
+            )
         val vesselGroups =
             vesselGroupRepository.findAllByUserAndSharing(
                 user = userEmail,

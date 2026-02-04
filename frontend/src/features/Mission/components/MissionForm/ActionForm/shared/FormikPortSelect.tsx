@@ -85,7 +85,7 @@ export function FormikPortSelect() {
 
   return (
     <>
-      <Select
+      <StyledSelect
         customSearch={customSearch}
         error={errors.portLocode}
         isErrorMessageHidden
@@ -105,6 +105,12 @@ export function FormikPortSelect() {
     </>
   )
 }
+
+const StyledSelect = styled(Select<string>)`
+  .rs-picker-toggle {
+    z-index: unset;
+  }
+`
 
 const StyledFieldError = styled(FieldError)`
   /*

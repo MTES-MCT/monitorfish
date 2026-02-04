@@ -10,7 +10,6 @@ import { useEffect, useRef, useState } from 'react'
 
 import { POIStyle } from './interestPoint.style'
 import { InterestPointLine } from './interestPointLine'
-import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
 import { MapBox, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../Map/constants'
 import { monitorfishMap } from '../../Map/monitorfishMap'
@@ -160,7 +159,6 @@ export function InterestPointLayer({ mapMovingAndZoomEvent }) {
 
     dispatch(interestPointActions.interestPointEdited(id))
     dispatch(setRightMapBoxDisplayed(MapBox.INTEREST_POINT))
-    dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
   }
 
   const onDelete = (id: string) => {

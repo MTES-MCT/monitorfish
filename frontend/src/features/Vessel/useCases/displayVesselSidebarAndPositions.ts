@@ -7,6 +7,7 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { displayBannerWarningFromAPIFeedback } from './displayBannerWarningFromAPIFeedback'
 import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
 import { addSearchedVessel } from '../../../domain/shared_slices/Global'
+import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
 import { getCustomOrDefaultTrackRequest } from '../types/vesselTrackDepth'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
@@ -23,6 +24,7 @@ export const displayVesselSidebarAndPositions =
       vessel: { selectedVesselTrackRequest }
     } = getState()
 
+    dispatch(setRightMapBoxDisplayed(undefined))
     dispatch(doNotAnimate(false))
     dispatch(loadingVessel(vesselIdentity))
     const nextTrackRequest = getCustomOrDefaultTrackRequest(selectedVesselTrackRequest, defaultVesselTrackDepth, false)

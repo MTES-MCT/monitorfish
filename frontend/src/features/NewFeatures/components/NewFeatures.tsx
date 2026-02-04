@@ -13,7 +13,6 @@ import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
-import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
 
 export function NewFeatures() {
@@ -34,10 +33,6 @@ export function NewFeatures() {
   }, [isRendered, isSuperUser])
 
   const openOrClose = () => {
-    if (!rightMapBoxOpened) {
-      dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
-    }
-
     dispatch(setRightMapBoxDisplayed(rightMapBoxOpened === MapBox.NEW_FEATURES ? undefined : MapBox.NEW_FEATURES))
   }
 

@@ -8,7 +8,7 @@ import { addOrEditControlCoordinates } from '@features/Mission/useCases/addOrEdi
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { MultiZoneEditor, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { MultiLocationEditor, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import { isCypress } from '@utils/isCypress'
 import { useField, useFormikContext } from 'formik'
 import Feature from 'ol/Feature'
@@ -145,25 +145,27 @@ export function FormikCoordinatesPicker() {
 
   return (
     <>
-      <MultiZoneEditor
-        addButtonLabel="Ajouter un point de contrôle"
+      <MultiLocationEditor
         defaultValue={coordinates}
         error={error}
-        initialZone={{
-          name: 'Nouvelle coordonnée'
-        }}
-        isAddButtonDisabled={!!coordinates.length || listener === InteractionListener.CONTROL_POINT}
         isErrorMessageHidden={error === HIDDEN_ERROR}
         isLight
         isRequired
         label="Lieu du contrôle"
         labelPropName="name"
-        onAdd={addOrEditCoordinates}
         onCenter={centeredCoordinates =>
           handleCenterOnMap([centeredCoordinates.longitude, centeredCoordinates.latitude])
         }
         onDelete={deleteCoordinates}
         onEdit={addOrEditCoordinates}
+        pointOptions={{
+          buttonLabel: 'Ajouter un point de contrôle',
+          initialValue: {
+            name: 'Nouvelle coordonnée'
+          },
+          isButtonDisabled: !!coordinates.length || listener === InteractionListener.CONTROL_POINT,
+          onAdd: addOrEditCoordinates
+        }}
       />
     </>
   )

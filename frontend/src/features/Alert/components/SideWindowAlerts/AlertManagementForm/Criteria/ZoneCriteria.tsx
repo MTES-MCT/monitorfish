@@ -118,6 +118,7 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
         />
         <StyledCheckTreePicker
           disabled={!regulatoryLayerLawTypes}
+          isLazyLoading
           label="Zones réglementaires déclenchant l'alerte"
           name="regulatoryAreas"
           onChange={updateRegulatoryAreas}

@@ -29,7 +29,10 @@ function populateInfractionsColumnsForMed(
     const count = index + 1
 
     // eslint-disable-next-line no-param-reassign
-    baseCsvMap[`infractionClass${count}`] = `INFR${count}_CLASS1`
+    baseCsvMap[`infractionClass${count}`] = {
+      label: `INFR${count}_CLASS1`,
+      transform: () => 'ISR'
+    }
 
     // eslint-disable-next-line no-param-reassign
     baseCsvMap[`infractionCode${count}`] = {

@@ -185,18 +185,21 @@ export const MED_JDP_CSV_MAP: DownloadAsCsvMap<ActivityReportWithId> = {
     label: 'GEAR_CODE',
     transform: activity => activity.action.gearOnboard[0]?.gearCode ?? ''
   },
+  meshSize: {
+    label: 'MESH_SIZE',
+    transform: activity =>
+      activity.action.gearOnboard[0]?.controlledMesh ?? activity.action.gearOnboard[0]?.declaredMesh ?? ''
+  },
+  fleetSegment: {
+    label: 'FLEET_SEGMENT',
+    transform: activity => activity.segment ?? ''
+  },
   eventArea: {
     label: 'EVENT_AREA',
     transform: activity => activity.faoArea ?? ''
   },
-  areaSystem: {
-    label: 'AREA_SYSTEM',
-    transform: activity => activity.faoArea ?? ''
-  },
-  faoArea: {
-    label: 'AREA_CODE',
-    transform: activity => activity.faoArea ?? ''
-  },
+  areaSystem: 'AREA_SYSTEM',
+  areaCode: 'AREA_CODE',
   latitude: {
     label: 'LA',
     transform: activity => {

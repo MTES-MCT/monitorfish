@@ -18,7 +18,7 @@ type FormikMultiInfractionPickerProps = Readonly<{
   label: string
 }>
 export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMultiInfractionPickerProps) {
-  const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
+  const { errors, setFieldValue, values } = useFormikContext<MissionActionFormValues>()
 
   const [editedInfractionIndex, setEditedInfractionIndex] = useState<number | undefined>(undefined)
   const [isNewInfractionFormOpen, setIsNewInfractionFormOpen] = useState(false)
@@ -97,6 +97,18 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
     [closeInfractionForm, editedInfractionIndex, values.infractions]
   )
 
+  const infractionsErrorsIds =
+    (errors.infractions as unknown as Array<Record<number, any> | undefined> | undefined)?.reduce(
+      (acc: number[], value, index) => {
+        if (value !== undefined) {
+          acc.push(index)
+        }
+
+        return acc
+      },
+      []
+    ) ?? []
+
   return (
     <Wrapper isLight legend={label}>
       <FrontendErrorBoundary>
@@ -114,19 +126,20 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
                     <>
                       <Infraction
                         data={infraction}
+                        hasError={infractionsErrorsIds.includes(index)}
                         hasMultipleInfraction={infractions.length > 1}
                         index={index}
                         onDelete={remove}
                         onEdit={onEdit}
                       />
-                      {index + 1 < infractions.length && <FieldsetGroupSeparator marginBottom={12} />}
+                      {index + 1 < infractions.length && <StyledFieldsetGroupSeparator marginBottom={0} />}
                     </>
                   )}
 
                   {isEdition && (
                     <>
                       <InfractionForm initialValues={infraction} onCancel={closeInfractionForm} onSubmit={update} />
-                      {infractions.length > index + 1 && <FieldsetGroupSeparator marginBottom={12} />}
+                      {infractions.length > index + 1 && <StyledFieldsetGroupSeparator marginBottom={0} />}
                     </>
                   )}
                 </Fragment>
@@ -136,7 +149,7 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
         )}
         {!isNewInfractionFormOpen && (
           <>
-            {infractions.length > 0 && <FieldsetGroupSeparator />}
+            {infractions.length > 0 && <StyledFieldsetGroupSeparator />}
             <Button accent={Accent.SECONDARY} Icon={Icon.Plus} isFullWidth onClick={openNewInfractionForm}>
               {addButtonLabel}
             </Button>
@@ -145,7 +158,7 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
 
         {isNewInfractionFormOpen && (
           <>
-            {infractions.length > 0 && <FieldsetGroupSeparator marginBottom={12} />}
+            {infractions.length > 0 && <StyledFieldsetGroupSeparator marginBottom={0} />}
             <Row>
               <InfractionForm
                 initialValues={{} as MissionAction.Infraction}
@@ -162,6 +175,8 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
 
 const Wrapper = styled(FieldsetGroup)`
   > div {
+    padding: 0;
+
     > .Element-Field:not(:first-child),
     > .Element-Fieldset:not(:first-child) {
       margin-top: 16px;
@@ -169,15 +184,11 @@ const Wrapper = styled(FieldsetGroup)`
   }
 `
 
-const Row = styled.div`
-  > legend {
-    margin: 12px 0 8px;
-
-    &:first-child {
-      margin: 0 0 8px;
-    }
-  }
+const StyledFieldsetGroupSeparator = styled(FieldsetGroupSeparator)`
+  margin-top: 0;
 `
+
+const Row = styled.div``
 
 const StyledRow = styled(Row)`
   padding-top: 0;

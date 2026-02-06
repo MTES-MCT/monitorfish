@@ -24,6 +24,18 @@ acknowledged_deleted_messages AS (
     FROM deleted_messages
     WHERE
         operation_number IN (SELECT referenced_report_id FROM acknowledged_messages)
+),
+
+last_controls AS (
+    SELECT
+        vessel_id,
+        cfr,
+        last_control_datetime_utc,
+        jsonb_agg(inf) FILTER (WHERE inf IS NOT NULL AND COALESCE(inf->>'infractionType', 'UNSPECIFIED_INFRACTION_TYPE') != 'PENDING') AS last_control_infractions
+    FROM risk_factors
+    LEFT JOIN LATERAL jsonb_array_elements(last_control_infractions) AS inf
+    ON true
+    GROUP BY 1, 2, 3
 )
 
 (SELECT DISTINCT ON (r.report_id) -- In rare cases the same PNO with the same data and the same report_id is sent multiple times in messages with different operation numbers
@@ -51,16 +63,16 @@ acknowledged_deleted_messages AS (
     v.length AS vessel_length,
     v.mmsi,
     (r.value->>'riskFactor')::DOUBLE PRECISION AS risk_factor,
-    rf.last_control_datetime_utc,
-    COALESCE(rf.last_control_infractions, '[]'::jsonb) AS last_control_infractions,
+    lc.last_control_datetime_utc,
+    COALESCE(lc.last_control_infractions, '[]'::jsonb) AS last_control_infractions,
     (value->>'isVerified')::BOOLEAN AS is_verified,
     (value->>'isBeingSent')::BOOLEAN AS is_being_sent,
     'LOGBOOK' AS source
 FROM logbook_reports r
 LEFT JOIN vessels v
 ON v.cfr = r.cfr
-LEFT JOIN risk_factors rf
-ON rf.cfr = r.cfr
+LEFT JOIN last_controls lc
+ON lc.cfr = r.cfr
 LEFT JOIN ports p
 ON p.locode = r.value->>'port'
 WHERE
@@ -117,16 +129,16 @@ UNION ALL
     v.length AS vessel_length,
     v.mmsi,
     (r.value->>'riskFactor')::DOUBLE PRECISION AS risk_factor,
-    rf.last_control_datetime_utc,
-    COALESCE(rf.last_control_infractions, '[]'::jsonb) AS last_control_infractions,
+    lc.last_control_datetime_utc,
+    COALESCE(lc.last_control_infractions, '[]'::jsonb) AS last_control_infractions,
     (value->>'isVerified')::BOOLEAN AS is_verified,
     (value->>'isBeingSent')::BOOLEAN AS is_being_sent,
     'MANUAL' AS source
 FROM manual_prior_notifications r
 LEFT JOIN vessels v
 ON v.id = r.vessel_id
-LEFT JOIN risk_factors rf
-ON rf.vessel_id = r.vessel_id
+LEFT JOIN last_controls lc
+ON lc.vessel_id = r.vessel_id
 LEFT JOIN ports p
 ON p.locode = r.value->>'port'
 WHERE

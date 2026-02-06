@@ -5,7 +5,18 @@ export default {
   maxWorkers: '50%',
   moduleNameMapper: {
     '\\.svg\\?react$': '<rootDir>/config/jest.svgImportTransformer.js',
-    '\\?worker$': '<rootDir>/config/jest.noopImportTransformer.js'
+    '\\?worker$': '<rootDir>/config/jest.noopImportTransformer.js',
+    '^@store$': '<rootDir>/src/store/index.ts',
+    '^@store/(.*)$': '<rootDir>/src/store/$1',
+    '^@features/(.*)$': '<rootDir>/src/features/$1',
+    '^@api/(.*)$': '<rootDir>/src/api/$1',
+    '^@components/(.*)$': '<rootDir>/src/components/$1',
+    '^@constants/(.*)$': '<rootDir>/src/constants/$1',
+    '^@hooks/(.*)$': '<rootDir>/src/hooks/$1',
+    '^@libs/(.*)$': '<rootDir>/src/libs/$1',
+    '^@pages/(.*)$': '<rootDir>/src/pages/$1',
+    '^@utils/(.*)$': '<rootDir>/src/utils/$1',
+    '^store/(.*)$': '<rootDir>/src/store/$1'
   },
   rootDir: '..',
   setupFiles: ['dotenv/config', '<rootDir>/config/jest.setup.js'],
@@ -25,7 +36,7 @@ export default {
             '@hooks/*': ['hooks/*'],
             '@libs/*': ['libs/*'],
             '@pages/*': ['pages/*'],
-            '@store': ['store/utils.ts'],
+            '@store': ['store/index.ts'],
             '@store/*': ['store/*'],
             '@utils/*': ['utils/*']
           },

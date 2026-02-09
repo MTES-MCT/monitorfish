@@ -4,7 +4,7 @@ ENV VIRTUAL_ENV="/opt/venv" \
     # paths
     # this is where our requirements + virtual environment will live
     PYSETUP_PATH="/opt/pysetup" \
-    VENV_PATH="/opt/pysetup/.venv" \
+    VENV_PATH="/opt/pysetup/.venv"
 
 ENV PATH="$VENV_PATH/bin:$PATH"
 

@@ -198,5 +198,4 @@ const StyledTag = styled(Tag)`
   text-overflow: ellipsis;
   overflow: hidden;
   display: inline-block;
-  max-width: 150px;
 `

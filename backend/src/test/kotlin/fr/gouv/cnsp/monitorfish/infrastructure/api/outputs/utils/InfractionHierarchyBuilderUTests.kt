@@ -63,6 +63,12 @@ class InfractionHierarchyBuilderUTests {
         val infractions =
             listOf(
                 TestInfraction(
+                    threat = "Z-threat (last sorted)",
+                    characterization = "Autorisation Débarquement",
+                    natinfCode = 27728,
+                    infractionName = "Débarquement hors port désigné",
+                ),
+                TestInfraction(
                     threat = "Activités INN",
                     characterization = "Pêche sans autorisation",
                     natinfCode = 2608,
@@ -99,7 +105,9 @@ class InfractionHierarchyBuilderUTests {
             )
 
         // Then
-        assertThat(result).hasSize(2)
+        assertThat(result).hasSize(3)
+        assertThat(result.first().label).isEqualTo("Activités INN")
+        assertThat(result.last().label).isEqualTo("Z-threat (last sorted)")
 
         val innThreat = result.find { it.label == "Activités INN" }
         assertThat(innThreat).isNotNull

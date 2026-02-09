@@ -98,4 +98,11 @@ const HackedCheckTreePicker = styled(CheckTreePicker)`
     /* TODO Investigate both these props which are a hack to fix long NATINFs breaking the layout. */
     max-width: 600px !important;
   }
+
+  @media only screen and (min-width: 1900px) {
+    .rs-picker-toggle {
+      /* TODO Investigate both these props which are a hack to fix long NATINFs breaking the layout. */
+      max-width: 812px !important;
+    }
+  }
 `

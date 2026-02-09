@@ -57,5 +57,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 0;
+  width: 545px;
   overflow-y: auto;
 `

@@ -33,7 +33,6 @@ pypdf = "^6.6.2"
 fiona = "^1.10.1"
 clickhouse-connect = "^0.10.0"
 pyarrow = "^22.0.0"
-keplergl = "^0.3.7"
 prefect = {extras = ["docker"], version = "^3.6.16"}
 duckdb = "^1.4.4"
 

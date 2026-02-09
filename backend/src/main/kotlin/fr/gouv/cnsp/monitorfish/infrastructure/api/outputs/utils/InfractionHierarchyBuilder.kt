@@ -38,7 +38,7 @@ object InfractionHierarchyBuilder {
     ): List<ThreatHierarchyDataOutput> {
         val groupedByThreat = items.groupBy { threatExtractor(it) }
 
-        return groupedByThreat.map { (threatName, itemsInThreat) ->
+        return groupedByThreat.toSortedMap().map { (threatName, itemsInThreat) ->
             buildThreatOutput(
                 threatName = threatName,
                 items = itemsInThreat,
@@ -59,7 +59,7 @@ object InfractionHierarchyBuilder {
         val groupedByCharacterization = items.groupBy { characterizationExtractor(it) }
 
         val characterizations =
-            groupedByCharacterization.map { (characterizationName, itemsInCharacterization) ->
+            groupedByCharacterization.toSortedMap().map { (characterizationName, itemsInCharacterization) ->
                 buildThreatCharacterizationOutput(
                     characterizationName = characterizationName,
                     items = itemsInCharacterization,

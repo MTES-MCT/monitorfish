@@ -1,9 +1,10 @@
+import json
 from datetime import datetime
 
 import pandas as pd
-from keplergl import KeplerGl
 from prefect import flow, get_run_logger, task
 
+from config import STATIC_LOCATION
 from src.generic_tasks import extract, load
 from src.shared_tasks.dates import date_trunc, get_utcnow, make_relativedelta
 
@@ -414,17 +415,88 @@ def make_config(time_range: list) -> dict:
     return config
 
 
+def _df_to_dict(df):
+    """Create an input dict for Kepler.gl using a DataFrame object
+
+    Inputs:
+    - df: a DataFrame object
+
+    Returns:
+    - dictionary: a dictionary variable that can be used in Kepler.gl
+
+    """
+    df_copy = df.copy()
+    # Convert all columns that aren't JSON serializable to strings
+    for col in df_copy.columns:
+        try:
+            # just check the first item in the colum
+            json.dumps(df_copy[col].iloc[0] if len(df_copy) > 0 else None)
+        except (TypeError, OverflowError):
+            df_copy[col] = df_copy[col].astype(str)
+
+    return df_copy.to_dict("split")
+
+
+def _normalize_data(data):
+    if isinstance(data, pd.DataFrame):
+        return _df_to_dict(data)
+    return data
+
+
+def data_to_json(data):
+    """Serialize a Python data object.
+    Attributes of this dictionary are to be passed to the JavaScript side.
+    """
+    if data is None:
+        return None
+    else:
+        if not isinstance(data, dict):
+            print(data)
+            raise ValueError(
+                "Data type incorrect, expecting a dictionary mapping "
+                f"from data id to value, but got {type(data)}"
+            )
+        else:
+            dataset = {}
+            # use g_use_arrow to determine if we should use arrow
+            for key, value in data.items():
+                normalized = _normalize_data(value)
+                dataset.update({key: normalized})
+
+            return dataset
+
+
+def _repr_html_(data=None, config=None, read_only=False, center_map=False):
+    with open(STATIC_LOCATION / "keplergl.html", "r") as f:
+        keplergl_html = f.read()
+    k = keplergl_html.find("<body>")
+
+    data_to_add = data_to_json(data)
+    keplergl_data = json.dumps(
+        {
+            "config": config,
+            "data": data_to_add,
+            "options": {"readOnly": read_only, "centerMap": center_map},
+        }
+    )
+
+    cmd = f"window.__keplerglDataConfig = {keplergl_data};"
+    frame_txt = (
+        keplergl_html[:k]
+        + "<body><script>"
+        + cmd
+        + "</script>"
+        + keplergl_html[k + 6 :]
+    )
+
+    return frame_txt
+
+
 @task
 def generate_html(df: pd.DataFrame, config: dict) -> str:
     df = df.copy(deep=True)
     df["far_week"] = df.far_week.map(lambda ts: ts.isoformat(sep=" "))
-    map_1 = KeplerGl()
-    map_1.add_data(df, name="activity_dataset")
-    map_1.config = config
-
-    htmlb = map_1._repr_html_()
-
-    html = htmlb.decode("utf-8")
+    html = _repr_html_(data={"activity_dataset": df}, config=config)
 
     html_list = html.split("</body></html>")
 

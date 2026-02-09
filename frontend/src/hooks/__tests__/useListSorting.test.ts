@@ -91,6 +91,6 @@ describe('hooks/useListSorting()', () => {
         result.current.setReactTableSortingState([])
       })
 
-    expect(call).toThrowError('The value is undefined.')
+    expect(call).toThrow('The value is undefined.')
   })
 })

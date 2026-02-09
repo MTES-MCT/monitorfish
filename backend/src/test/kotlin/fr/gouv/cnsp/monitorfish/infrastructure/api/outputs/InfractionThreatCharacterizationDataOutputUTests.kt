@@ -22,16 +22,16 @@ class InfractionThreatCharacterizationDataOutputUTests {
         assertThat(threats.first().children).hasSize(7)
 
         val firstThreatCharacterization = threats.first().children.first()
-        assertThat(firstThreatCharacterization.label).isEqualTo("Pêche sans autorisation par navire tiers")
-        assertThat(firstThreatCharacterization.label).isEqualTo("Pêche sans autorisation par navire tiers")
+        assertThat(firstThreatCharacterization.label).isEqualTo("Navire sans immatriculation")
+        assertThat(firstThreatCharacterization.label).isEqualTo("Navire sans immatriculation")
         assertThat(firstThreatCharacterization.children).hasSize(1)
 
         val firstNatinf = firstThreatCharacterization.children.first()
         assertThat(
             firstNatinf.label,
         ).isEqualTo(
-            "2608 - Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne",
+            "27879 - EXPLOITATION, GESTION OU POSSESSION D'UN NAVIRE DE PECHE MARITIME NON IMMATRICULE",
         )
-        assertThat(firstNatinf.value).isEqualTo(2608)
+        assertThat(firstNatinf.value).isEqualTo(27879)
     }
 }

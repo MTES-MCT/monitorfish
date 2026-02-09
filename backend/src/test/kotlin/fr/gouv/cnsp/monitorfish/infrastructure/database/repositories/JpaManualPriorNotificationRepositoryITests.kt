@@ -552,8 +552,8 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
             .usingRecursiveComparison()
             .ignoringFields("logbookMessageTyped")
             .isEqualTo(createdPriorNotification)
-        assertThat(lastPriorNotification.logbookMessageAndValue.logbookMessage)
-            .isEqualTo(createdPriorNotification.logbookMessageAndValue.logbookMessage)
+        assertThat((lastPriorNotification.logbookMessageAndValue.logbookMessage.message as PNO).createdBy)
+            .isEqualTo("ABC")
         assertThat(createdPriorNotification.logbookMessageAndValue.value.riskFactor)
             .isEqualTo(2.1)
         assertThat(createdPriorNotification.logbookMessageAndValue.logbookMessage.ircs).isEqualTo(

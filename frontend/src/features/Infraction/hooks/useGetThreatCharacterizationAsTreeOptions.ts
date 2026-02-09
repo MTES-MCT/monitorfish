@@ -1,5 +1,4 @@
 import { useGetThreatCharacterizationsQuery } from '@features/Infraction/apis'
-import { DEFAULT_THREAT, DEFAULT_THREAT_CHARACTERIZATION } from '@features/Infraction/constants'
 import { useMemo } from 'react'
 
 import type { Threat } from '@features/Infraction/types'
@@ -18,12 +17,17 @@ export function useGetThreatCharacterizationAsTreeOptions(threats?: Array<Threat
       threats?.[0]?.children?.length === 1 &&
       threats?.[0]?.children?.[0]?.children?.length === 1
 
-    if (
-      hasSingleValue &&
-      threat === DEFAULT_THREAT &&
-      threatCharacterization === DEFAULT_THREAT_CHARACTERIZATION &&
-      !!natinf
-    ) {
+    if (!hasSingleValue || !natinf || !threat || !threatCharacterization) {
+      return []
+    }
+
+    const foundThreat = getThreatCharacterizationApiQuery.data?.find(threatItem => threatItem.label === threat)
+    const foundThreatCharacterization = foundThreat?.children?.find(
+      threatCharacterizationItem => threatCharacterizationItem.label === threatCharacterization
+    )
+    const foundNatinf = foundThreatCharacterization?.children?.find(natinfItem => natinfItem.label === natinf)
+
+    if (!foundThreat || !foundThreatCharacterization || !foundNatinf) {
       return [
         {
           children: [
@@ -34,12 +38,12 @@ export function useGetThreatCharacterizationAsTreeOptions(threats?: Array<Threat
                   value: natinf
                 }
               ],
-              label: DEFAULT_THREAT_CHARACTERIZATION,
-              value: DEFAULT_THREAT_CHARACTERIZATION
+              label: threatCharacterization,
+              value: threatCharacterization
             }
           ],
-          label: DEFAULT_THREAT,
-          value: DEFAULT_THREAT
+          label: threat,
+          value: threat
         } as Threat
       ]
     }

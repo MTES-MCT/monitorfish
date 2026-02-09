@@ -5,7 +5,6 @@ ENV VIRTUAL_ENV="/opt/venv" \
     # this is where our requirements + virtual environment will live
     PYSETUP_PATH="/opt/pysetup" \
     VENV_PATH="/opt/pysetup/.venv" \
-    ORACLE_INSTANT_CLIENT_LOCATION="/opt/oracle_instant_client"
 
 ENV PATH="$VENV_PATH/bin:$PATH"
 
@@ -25,7 +24,7 @@ ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_IN_PROJECT=true \
     POETRY_VIRTUALENVS_CREATE=1 \
     POETRY_CACHE_DIR="/tmp/poetry_cache" \
-    POETRY_VERSION="1.6.1" \
+    POETRY_VERSION="2.3.2" \
     # make poetry install to this location
     POETRY_HOME="/opt/poetry"
 
@@ -35,20 +34,8 @@ ENV PATH="$POETRY_HOME/bin:$PATH"
 RUN apt-get update && apt-get install -y \
     # Compilation of psycopg2 requires a C compiler
     build-essential \
-    # To convert the Oracle Instant Client .rpm file into a .deb file
-    alien \
-    wget \
     curl \
     && rm -rf /var/lib/apt/lists/*
-
-WORKDIR $ORACLE_INSTANT_CLIENT_LOCATION
-
-# Download Oracle Instant Client .rpm and convert it to .deb file
-RUN wget \
-https://download.oracle.com/otn_software/linux/instantclient/\
-19800/oracle-instantclient19.8-basic-19.8.0.0.0-1.x86_64.rpm \
-&& alien --scripts oracle-instantclient19.8-basic-19.8.0.0.0-1.x86_64.rpm \
-&& rm oracle-instantclient19.8-basic-19.8.0.0.0-1.x86_64.rpm
 
 WORKDIR $PYSETUP_PATH
 
@@ -66,10 +53,6 @@ FROM base AS runtime
 
 ENV TINI_VERSION="v0.19.0" \
     USER="monitorfish-pipeline"
-
-WORKDIR $ORACLE_INSTANT_CLIENT_LOCATION
-COPY --from=builder $ORACLE_INSTANT_CLIENT_LOCATION $ORACLE_INSTANT_CLIENT_LOCATION
-RUN dpkg -i oracle-instantclient19.8-basic_19.8.0.0.0-2_amd64.deb
 
 RUN apt-get update && apt-get install -y \
     # pango is required by weasyprint

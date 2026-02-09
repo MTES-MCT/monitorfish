@@ -14,7 +14,6 @@ coverage = "^7.13.3"
 pre-commit = "^4.5.1"
 flake8 = "^7.2.0"
 python-dotenv = "^1.2.1"
-cx-oracle = "^8.3.0"
 scrapy = "^2.14.1"
 simplejson = "^3.20.2"
 geoalchemy2 = "^0.18.1"
@@ -35,6 +34,7 @@ clickhouse-connect = "^0.10.0"
 pyarrow = "^22.0.0"
 prefect = {extras = ["docker"], version = "^3.6.16"}
 duckdb = "^1.4.4"
+oracledb = "^3.4.2"
 
 
 [tool.poetry.group.dev.dependencies]

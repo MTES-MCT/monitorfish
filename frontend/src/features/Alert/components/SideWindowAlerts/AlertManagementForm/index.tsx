@@ -194,7 +194,7 @@ export function AlertManagementForm() {
                   <FormikTextInput isRequired label="Nom" name="name" />
                   <FormikTextarea isRequired label="Description" name="description" />
                   <CheckTreePicker
-                    error={errors.threatHierarchy}
+                    error={errors.threatHierarchy as string | undefined}
                     isRequired
                     isSelect
                     label="Type d’infraction et NATINF"

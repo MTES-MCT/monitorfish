@@ -52,8 +52,13 @@ export const AlertSpecificationSchema = z.strictObject({
   speciesCatchAreas: z.array(z.string()),
   threat: z.string(),
   threatCharacterization: z.string(),
-  threatHierarchy: ThreatSchema.or(z.undefined()).refine(val => val !== undefined, {
-    message: 'Champ Natinf requis'
+  threatHierarchy: ThreatSchema.or(z.undefined()).superRefine((val, ctx) => {
+    if (val === undefined) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Champ Natinf requis'
+      })
+    }
   }),
   trackAnalysisDepth: z.number(),
   type: z.enum(PendingAlertValueType),

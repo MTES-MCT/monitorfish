@@ -14,5 +14,5 @@ export function ActionFormHeader({ children }) {
 }
 
 const Wrapper = styled.div`
-  margin: 32px 40px 26px 40px;
+  margin: 24px 40px 26px 40px;
 `

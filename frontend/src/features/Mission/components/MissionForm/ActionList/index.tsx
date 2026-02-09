@@ -188,8 +188,8 @@ const Wrapper = styled.div`
   background-color: ${p => p.theme.color.cultured};
   display: flex;
   flex-direction: column;
+  flex: 0 0 28%;
   max-width: 465px;
-  width: 34.34%;
   overflow-y: auto;
 `
 

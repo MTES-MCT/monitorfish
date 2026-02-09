@@ -149,9 +149,8 @@ const Wrapper = styled.div`
   background-color: ${p => p.theme.color.white};
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  flex: 0 0 30%;
   max-width: 465px;
-  width: 36.34%;
   overflow-y: auto;
 
   /* TODO Handle that in @mtes-mct/monitor-ui. */

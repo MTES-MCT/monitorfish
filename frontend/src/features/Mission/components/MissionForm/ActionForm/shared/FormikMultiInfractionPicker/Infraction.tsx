@@ -3,7 +3,7 @@ import { useGetNatinfsAsOptions } from '@features/Mission/components/MissionForm
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { Accent, Icon, IconButton, Legend, Tag, TagGroup, THEME } from '@mtes-mct/monitor-ui'
 import ReactMarkdown from 'react-markdown'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { getInfractionTitle } from '../../../../../../../domain/entities/controls'
 
@@ -11,17 +11,18 @@ import type { Promisable } from 'type-fest'
 
 type InfractionProps = Readonly<{
   data: MissionAction.Infraction
+  hasError: boolean
   hasMultipleInfraction?: boolean
   index: number
   onDelete: (index: number) => Promisable<void>
   onEdit: (index: number) => Promisable<void>
 }>
-export function Infraction({ data, hasMultipleInfraction, index, onDelete, onEdit }: InfractionProps) {
+export function Infraction({ data, hasError, hasMultipleInfraction, index, onDelete, onEdit }: InfractionProps) {
   const natinfsAsOptions = useGetNatinfsAsOptions()
   const natinfAndThreatCharacterization = getFlatInfractionFromThreatsHierarchy(data, natinfsAsOptions)
 
   return (
-    <>
+    <Wrapper $hasError={hasError}>
       <Legend>
         Infraction {hasMultipleInfraction && index + 1} -{' '}
         <ThreatCharacterization>{natinfAndThreatCharacterization.threat}</ThreatCharacterization>
@@ -63,9 +64,29 @@ export function Infraction({ data, hasMultipleInfraction, index, onDelete, onEdi
           </article>
         )}
       </InnerWrapper>
-    </>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div<{
+  $hasError: boolean
+}>`
+  padding: 16px;
+
+  > legend {
+    padding: 12px 0 8px;
+
+    &:first-child {
+      padding: 0 0 8px;
+    }
+  }
+
+  ${p =>
+    p.$hasError &&
+    css`
+      border: 2px solid ${p.theme.color.maximumRed};
+    `}
+`
 
 const StyledTag = styled(Tag)`
   overflow: hidden;

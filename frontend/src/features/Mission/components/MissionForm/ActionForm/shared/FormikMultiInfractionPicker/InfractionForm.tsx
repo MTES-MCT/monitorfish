@@ -1,9 +1,10 @@
 import { useGetThreatCharacterizationAsTreeOptions } from '@features/Infraction/hooks/useGetThreatCharacterizationAsTreeOptions'
+import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
 import { Accent, Button, CheckTreePicker, FormikMultiRadio, FormikTextarea } from '@mtes-mct/monitor-ui'
 import { Form, Formik } from 'formik'
 import styled from 'styled-components'
 
-import { InfractionFormLiveSchema } from '../../schemas'
+import { InfractionFormCompletionSchema, InfractionFormLiveSchema } from '../../schemas'
 import { INFRACTION_TYPES_AS_OPTIONS } from '../constants'
 
 import type { MissionAction } from '@features/Mission/missionAction.types'
@@ -14,13 +15,16 @@ type InfractionFormProps = Readonly<{
   onSubmit: (nextInfractionFormValues: MissionAction.Infraction) => void
 }>
 export function InfractionForm({ initialValues, onCancel, onSubmit }: InfractionFormProps) {
+  const isMissionEnded = useIsMissionEnded()
   const threatCharacterizationOptions = useGetThreatCharacterizationAsTreeOptions(initialValues.threats)
+  const validationSchema = isMissionEnded ? InfractionFormCompletionSchema : InfractionFormLiveSchema
 
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={values => onSubmit(values)}
-      validationSchema={InfractionFormLiveSchema}
+      validateOnMount
+      validationSchema={validationSchema}
     >
       {({ isValid, setFieldValue, values }) => (
         <StyledForm>
@@ -62,9 +66,10 @@ export function InfractionForm({ initialValues, onCancel, onSubmit }: Infraction
 }
 
 const StyledForm = styled(Form)`
-  background-color: transparent;
+  background-color: white;
   border: 0;
   padding: 0;
+  margin: 16px;
 
   > .Element-Field,
   > .Element-Fieldset {

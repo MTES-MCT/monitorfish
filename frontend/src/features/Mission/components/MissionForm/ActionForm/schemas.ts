@@ -130,6 +130,11 @@ export const LandControlFormCompletionSchema = LandControlFormLiveSchema.concat(
       then: schema => schema.required(HIDDEN_ERROR)
     }),
 
+    infractions: array().of(
+      object({
+        infractionType: string().required().notOneOf([MissionAction.InfractionType.PENDING], HIDDEN_ERROR)
+      })
+    ),
     // Engins à bord
     gearOnboard: array().of(GearOnboardSchema).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
 
@@ -174,6 +179,12 @@ export const SeaControlFormCompletionSchema = SeaControlFormLiveSchema.concat(
       then: schema => schema.required(HIDDEN_ERROR)
     }),
 
+    infractions: array().of(
+      object({
+        infractionType: string().required().notOneOf([MissionAction.InfractionType.PENDING], HIDDEN_ERROR)
+      })
+    ),
+
     // Qualité du contrôle
     vesselTargeted: string().required(HIDDEN_ERROR),
 
@@ -193,3 +204,9 @@ export const InfractionFormLiveSchema = object({
     then: schema => schema.required(HIDDEN_ERROR)
   })
 })
+
+export const InfractionFormCompletionSchema = InfractionFormLiveSchema.concat(
+  object({
+    infractionType: string().required().notOneOf([MissionAction.InfractionType.PENDING], HIDDEN_ERROR)
+  })
+)

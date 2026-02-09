@@ -72,6 +72,15 @@ export function Infraction({ data, hasError, hasMultipleInfraction, index, onDel
 const Wrapper = styled.div<{
   $hasError: boolean
 }>`
+  padding: 16px;
+
+  > legend {
+    padding: 12px 0 8px;
+
+    &:first-child {
+      padding: 0 0 8px;
+    }
+  }
   display: flex;
   ${p =>
     p.$hasError &&

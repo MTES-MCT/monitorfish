@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
@@ -19,6 +20,7 @@ import java.time.ZonedDateTime
 @Repository
 class JpaManualPriorNotificationRepository(
     private val dbManualPriorNotificationRepository: DBManualPriorNotificationRepository,
+    private val mapper: ObjectMapper,
 ) : ManualPriorNotificationRepository {
     override fun findAll(filter: PriorNotificationsFilter): List<PriorNotification> =
         dbManualPriorNotificationRepository
@@ -36,7 +38,7 @@ class JpaManualPriorNotificationRepository(
                 tripSegmentCodesAsSqlArrayString = toSqlArrayString(filter.tripSegmentCodes),
                 willArriveAfter = filter.willArriveAfter,
                 willArriveBefore = filter.willArriveBefore,
-            ).map { it.toPriorNotification() }
+            ).map { it.toPriorNotification(mapper) }
 
     @Cacheable(value = ["manual_pno_to_verify"])
     override fun findAllToVerify(): List<PriorNotification> =
@@ -55,16 +57,16 @@ class JpaManualPriorNotificationRepository(
                 tripSegmentCodesAsSqlArrayString = null,
                 willArriveAfter = ZonedDateTime.now().minusHours(24),
                 willArriveBefore = ZonedDateTime.now().plusHours(24),
-            ).filter {
-                it.value.isInVerificationScope == true &&
-                    it.value.isVerified == false &&
-                    it.value.isInvalidated != true
-            }.map {
-                it.toPriorNotification()
+            ).map {
+                it.toPriorNotification(mapper)
+            }.filter {
+                (it.logbookMessageAndValue.logbookMessage.message as PNO).isInVerificationScope == true &&
+                    (it.logbookMessageAndValue.logbookMessage.message as PNO).isVerified == false &&
+                    (it.logbookMessageAndValue.logbookMessage.message as PNO).isInvalidated != true
             }
 
     override fun findByReportId(reportId: String): PriorNotification? =
-        dbManualPriorNotificationRepository.findByReportId(reportId)?.toPriorNotification()
+        dbManualPriorNotificationRepository.findByReportId(reportId)?.toPriorNotification(mapper)
 
     @Transactional
     @CacheEvict(value = ["manual_pno_to_verify"], allEntries = true)
@@ -72,9 +74,12 @@ class JpaManualPriorNotificationRepository(
         try {
             val manualPriorNotificationEntity =
                 dbManualPriorNotificationRepository
-                    .save(ManualPriorNotificationEntity.fromPriorNotification(newOrNextPriorNotification))
+                    .save(ManualPriorNotificationEntity.fromPriorNotification(
+                        mapper = mapper,
+                        priorNotification = newOrNextPriorNotification
+                    ))
 
-            return manualPriorNotificationEntity.toPriorNotification()
+            return manualPriorNotificationEntity.toPriorNotification(mapper)
         } catch (e: IllegalArgumentException) {
             throw BackendInternalException(
                 "Error while saving the prior notification (likely because a non-nullable variable is null).",
@@ -96,12 +101,13 @@ class JpaManualPriorNotificationRepository(
                 BackendUsageErrorCode.NOT_FOUND,
             )
 
-        val nextPnoValue: PNO = manualPriorNotification.value
+        val nextPnoValue: PNO = mapper.readValue(manualPriorNotification.value, PNO::class.java)
         nextPnoValue.isBeingSent = isBeingSent
         nextPnoValue.isSent = isSent
         nextPnoValue.isVerified = isVerified
 
-        val updatedManualPriorNotification = manualPriorNotification.copy(value = nextPnoValue)
+        val updatedManualPriorNotification = manualPriorNotification
+            .copy(value = mapper.writeValueAsString(nextPnoValue))
 
         dbManualPriorNotificationRepository.save(updatedManualPriorNotification)
     }
@@ -114,10 +120,11 @@ class JpaManualPriorNotificationRepository(
                 BackendUsageErrorCode.NOT_FOUND,
             )
 
-        val nextPnoValue: PNO = manualPriorNotification.value
+        val nextPnoValue: PNO = mapper.readValue(manualPriorNotification.value, PNO::class.java)
         nextPnoValue.isInvalidated = true
 
-        val updatedManualPriorNotification = manualPriorNotification.copy(value = nextPnoValue)
+        val updatedManualPriorNotification = manualPriorNotification
+            .copy(value = mapper.writeValueAsString(nextPnoValue))
 
         dbManualPriorNotificationRepository.save(updatedManualPriorNotification)
     }

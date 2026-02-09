@@ -1,11 +1,13 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalException
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.deserializeJSONList
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
 import org.hibernate.annotations.Type
@@ -37,18 +39,18 @@ data class ManualPriorNotificationEntity(
     val sentAt: ZonedDateTime,
     @Column(name = "trip_gears", nullable = true, columnDefinition = "jsonb")
     @Type(JsonBinaryType::class)
-    val tripGears: List<LogbookTripGear>?,
+    val tripGears: String?,
     @Column(name = "trip_segments", nullable = true, columnDefinition = "jsonb")
     @Type(JsonBinaryType::class)
-    val tripSegments: List<LogbookTripSegment>?,
+    val tripSegments: String?,
     @Column(name = "value", nullable = true, columnDefinition = "jsonb")
     @Type(JsonBinaryType::class)
-    val value: PNO,
+    val value: String,
     @Column(name = "vessel_name")
     val vesselName: String?,
 ) {
     companion object {
-        fun fromPriorNotification(priorNotification: PriorNotification): ManualPriorNotificationEntity {
+        fun fromPriorNotification(mapper: ObjectMapper, priorNotification: PriorNotification): ManualPriorNotificationEntity {
             try {
                 val pnoLogbookMessage = priorNotification.logbookMessageAndValue.logbookMessage
                 val pnoLogbookMessageValue = priorNotification.logbookMessageAndValue.value
@@ -66,9 +68,9 @@ data class ManualPriorNotificationEntity(
                     didNotFishAfterZeroNotice = priorNotification.didNotFishAfterZeroNotice,
                     flagState = pnoLogbookMessage.flagState,
                     sentAt = sentAt,
-                    tripGears = pnoLogbookMessage.tripGears,
-                    tripSegments = pnoLogbookMessage.tripSegments,
-                    value = pnoLogbookMessageValue,
+                    tripGears = mapper.writeValueAsString(pnoLogbookMessage.tripGears),
+                    tripSegments = mapper.writeValueAsString(pnoLogbookMessage.tripSegments),
+                    value = mapper.writeValueAsString(pnoLogbookMessageValue),
                     vesselName = pnoLogbookMessage.vesselName,
                     vesselId = vesselId,
                 )
@@ -81,11 +83,12 @@ data class ManualPriorNotificationEntity(
         }
     }
 
-    fun toPriorNotification(): PriorNotification {
+    fun toPriorNotification(mapper: ObjectMapper): PriorNotification {
         try {
             val reportId = requireNotNull(reportId) { "`reportId` is null." }
+            val parsedValue = mapper.readValue(value, PNO::class.java)
             val predictedArrivalDatetimeUtc =
-                requireNotNull(value.predictedArrivalDatetimeUtc) { "`predictedArrivalDatetimeUtc` is null." }
+                requireNotNull(parsedValue.predictedArrivalDatetimeUtc) { "`predictedArrivalDatetimeUtc` is null." }
 
             val pnoLogbookMessage =
                 LogbookMessage(
@@ -97,7 +100,7 @@ data class ManualPriorNotificationEntity(
                     internalReferenceNumber = cfr,
                     ircs = ircs,
                     externalReferenceNumber = externalReferenceNumber,
-                    message = value,
+                    message = parsedValue,
                     messageType = LogbookMessageTypeMapping.PNO.name,
                     operationDateTime = createdAt,
                     activityDateTime = predictedArrivalDatetimeUtc,
@@ -105,8 +108,8 @@ data class ManualPriorNotificationEntity(
                     operationType = LogbookOperationType.DAT,
                     reportDateTime = sentAt,
                     transmissionFormat = LogbookTransmissionFormat.MANUAL,
-                    tripGears = tripGears,
-                    tripSegments = tripSegments,
+                    tripGears = deserializeJSONList(mapper, tripGears, LogbookTripGear::class.java),
+                    tripSegments = deserializeJSONList(mapper, tripSegments, LogbookTripSegment::class.java),
                     vesselName = vesselName,
                     vesselId = vesselId,
                 )

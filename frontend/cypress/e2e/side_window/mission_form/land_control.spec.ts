@@ -13,7 +13,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.clickButton('Ajouter un contrôle à la débarque')
   })
 
-  it.only('Should fill the form and send the expected data to the API', () => {
+  it('Should fill the form and send the expected data to the API', () => {
     cy.getDataCy('action-completion-status').contains('13 champs nécessaires aux statistiques à compléter')
     cy.getDataCy('action-contains-missing-fields').should('exist')
 

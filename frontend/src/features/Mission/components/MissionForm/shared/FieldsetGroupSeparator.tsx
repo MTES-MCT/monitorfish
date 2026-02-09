@@ -3,11 +3,12 @@
 import styled from 'styled-components'
 
 type FieldsetGroupSeparatorType = Readonly<{
+  className?: string | undefined
   marginBottom?: number | undefined
 }>
-export function FieldsetGroupSeparator({ marginBottom }: FieldsetGroupSeparatorType) {
+export function FieldsetGroupSeparator({ className, marginBottom }: FieldsetGroupSeparatorType) {
   return (
-    <Wrapper marginBottom={marginBottom}>
+    <Wrapper className={className} marginBottom={marginBottom}>
       <HorizontalRule />
     </Wrapper>
   )

@@ -134,8 +134,7 @@ const ExpandedRow = styled(TableWithSelectableRows.BodyTr)`
   }
 `
 
-const ExpandedRowCell = styled(TableWithSelectableRows.Td).attrs(props => ({
-  ...props,
+const ExpandedRowCell = styled(TableWithSelectableRows.Td).attrs(() => ({
   $hasRightBorder: false
 }))`
   padding: 16px;

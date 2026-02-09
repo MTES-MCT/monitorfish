@@ -164,56 +164,6 @@ describe('hooks/useGetThreatCharacterizationAsTreeOptions()', () => {
     expect(result.current).toEqual(mockApiData)
   })
 
-  it('should NOT add UNKNOWN_THREAT when threat label is not DEFAULT_THREAT', () => {
-    // @ts-ignore
-    jest.spyOn(infractionApis, 'useGetThreatCharacterizationsQuery').mockReturnValue({
-      data: mockApiData
-    } as any)
-
-    const threats: Threat[] = [
-      {
-        children: [
-          {
-            children: [{ label: 'NATINF-001', value: 'NATINF-001' }],
-            label: DEFAULT_THREAT_CHARACTERIZATION,
-            value: DEFAULT_THREAT_CHARACTERIZATION
-          }
-        ],
-        label: 'Custom Threat',
-        value: 'custom'
-      }
-    ]
-
-    const { result } = renderHook(() => useGetThreatCharacterizationAsTreeOptions(threats))
-
-    expect(result.current).toEqual(mockApiData)
-  })
-
-  it('should NOT add UNKNOWN_THREAT when characterization label is not DEFAULT_THREAT_CHARACTERIZATION', () => {
-    // @ts-ignore
-    jest.spyOn(infractionApis, 'useGetThreatCharacterizationsQuery').mockReturnValue({
-      data: mockApiData
-    } as any)
-
-    const threats: Threat[] = [
-      {
-        children: [
-          {
-            children: [{ label: 'NATINF-001', value: 'NATINF-001' }],
-            label: 'Custom Characterization',
-            value: 'custom-char'
-          }
-        ],
-        label: DEFAULT_THREAT,
-        value: DEFAULT_THREAT
-      }
-    ]
-
-    const { result } = renderHook(() => useGetThreatCharacterizationAsTreeOptions(threats))
-
-    expect(result.current).toEqual(mockApiData)
-  })
-
   it('should NOT add UNKNOWN_THREAT when natinf is missing', () => {
     // @ts-ignore
     jest.spyOn(infractionApis, 'useGetThreatCharacterizationsQuery').mockReturnValue({

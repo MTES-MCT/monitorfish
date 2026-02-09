@@ -133,8 +133,7 @@ export function AlertCriteriaCell({ alertSpecification }: AlertCriteriaCellProps
   )
 }
 
-const ExpandedRowCell = styled(TableWithSelectableRows.Td).attrs(props => ({
-  ...props,
+const ExpandedRowCell = styled(TableWithSelectableRows.Td).attrs(() => ({
   $hasRightBorder: false
 }))`
   padding: 8px 16px 16px;

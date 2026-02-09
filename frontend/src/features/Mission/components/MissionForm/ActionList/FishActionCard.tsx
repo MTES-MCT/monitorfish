@@ -190,7 +190,7 @@ const RightAlignedIconButton = styled(IconButton)`
 
 const StyledTagGroup = styled(TagGroup)`
   margin-top: 12px;
-  padding-left: 32px;
+  padding-left: 28px;
 `
 
 const StyledTag = styled(Tag)`
@@ -198,5 +198,4 @@ const StyledTag = styled(Tag)`
   text-overflow: ellipsis;
   overflow: hidden;
   display: inline-block;
-  max-width: 150px;
 `

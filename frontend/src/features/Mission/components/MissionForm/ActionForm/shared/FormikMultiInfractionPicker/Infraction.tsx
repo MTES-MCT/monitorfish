@@ -23,47 +23,48 @@ export function Infraction({ data, hasError, hasMultipleInfraction, index, onDel
 
   return (
     <Wrapper $hasError={hasError}>
-      <Legend>
-        Infraction {hasMultipleInfraction && index + 1} -{' '}
-        <ThreatCharacterization>{natinfAndThreatCharacterization.threat}</ThreatCharacterization>
-      </Legend>
+      <FirstColumn>
+        <Legend>
+          Infraction {hasMultipleInfraction && index + 1} -{' '}
+          <ThreatCharacterization>{natinfAndThreatCharacterization.threat}</ThreatCharacterization>
+        </Legend>
 
-      <InnerWrapper>
-        <div>
-          <TagGroup>
-            <Tag accent={Accent.PRIMARY}>{MissionAction.INFRACTION_TYPE_LABEL[data.infractionType]}</Tag>
-            {data.infractionType !== MissionAction.InfractionType.PENDING && (
-              <StyledTag accent={Accent.PRIMARY} title={getInfractionTitle(natinfAndThreatCharacterization)}>
-                {natinfAndThreatCharacterization.threatCharacterization} / NATINF{' '}
-                {natinfAndThreatCharacterization.natinf}
-              </StyledTag>
-            )}
-          </TagGroup>
-
+        <InnerWrapper>
           <div>
-            <IconButton
-              accent={Accent.SECONDARY}
-              Icon={Icon.Edit}
-              onClick={() => onEdit(index)}
-              style={{ marginRight: '8px' }}
-              title="Éditer l'infraction"
-            />
-            <IconButton
-              accent={Accent.SECONDARY}
-              color={THEME.color.chineseRed}
-              Icon={Icon.Delete}
-              onClick={() => onDelete(index)}
-              title="Supprimer l'infraction"
-            />
+            <TagGroup>
+              <Tag accent={Accent.PRIMARY}>{MissionAction.INFRACTION_TYPE_LABEL[data.infractionType]}</Tag>
+              {data.infractionType !== MissionAction.InfractionType.PENDING && (
+                <StyledTag accent={Accent.PRIMARY} title={getInfractionTitle(natinfAndThreatCharacterization)}>
+                  {natinfAndThreatCharacterization.threatCharacterization} / NATINF{' '}
+                  {natinfAndThreatCharacterization.natinf}
+                </StyledTag>
+              )}
+            </TagGroup>
           </div>
-        </div>
 
-        {data.comments?.trim().length > 0 && (
-          <article>
-            <ReactMarkdown>{data.comments}</ReactMarkdown>
-          </article>
-        )}
-      </InnerWrapper>
+          {data.comments?.trim().length > 0 && (
+            <article>
+              <ReactMarkdown>{data.comments}</ReactMarkdown>
+            </article>
+          )}
+        </InnerWrapper>
+      </FirstColumn>
+      <SecondColumn>
+        <IconButton
+          accent={Accent.SECONDARY}
+          Icon={Icon.Edit}
+          onClick={() => onEdit(index)}
+          style={{ marginRight: '8px' }}
+          title="Éditer l'infraction"
+        />
+        <IconButton
+          accent={Accent.SECONDARY}
+          color={THEME.color.maximumRed}
+          Icon={Icon.Delete}
+          onClick={() => onDelete(index)}
+          title="Supprimer l'infraction"
+        />
+      </SecondColumn>
     </Wrapper>
   )
 }
@@ -80,12 +81,20 @@ const Wrapper = styled.div<{
       padding: 0 0 8px;
     }
   }
-
+  display: flex;
   ${p =>
     p.$hasError &&
     css`
       border: 2px solid ${p.theme.color.maximumRed};
     `}
+`
+
+const FirstColumn = styled.div``
+
+const SecondColumn = styled.div`
+  margin-left: auto;
+  align-items: flex-start;
+  display: flex;
 `
 
 const StyledTag = styled(Tag)`
@@ -101,14 +110,10 @@ const ThreatCharacterization = styled.span`
 `
 
 const InnerWrapper = styled.div`
+  margin-top: 6px;
   > div {
     display: flex;
     justify-content: space-between;
-
-    > div:last-child {
-      align-items: flex-start;
-      display: flex;
-    }
   }
 
   > article {

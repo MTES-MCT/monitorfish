@@ -175,6 +175,7 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
 
 const Wrapper = styled(FieldsetGroup)`
   > div {
+    width: 100%;
     padding: 0;
 
     > .Element-Field:not(:first-child),

@@ -1,4 +1,5 @@
 import { Ellipsised } from '@components/Ellipsised'
+import { hasCriterias } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/utils'
 import { getAlertCriteriaSummary } from '@features/Alert/components/SideWindowAlerts/AlertsManagementList/cells/utils'
 import { ValidateAlertToggle } from '@features/Alert/components/SideWindowAlerts/AlertsManagementList/cells/ValidateAlertToggle'
 import { Icon, Tag, THEME } from '@mtes-mct/monitor-ui'
@@ -45,6 +46,11 @@ export function getTableColumns(
       accessorFn: row => `${row.type}:${row.id}`,
       cell: ({ row }) => {
         const alertSpecification = row.original
+
+        const { hasNoCriteria } = hasCriterias(alertSpecification)
+        if (hasNoCriteria) {
+          return <NoCriteria>Aucun critère</NoCriteria>
+        }
 
         return <Ellipsised>{getAlertCriteriaSummary(alertSpecification)}</Ellipsised>
       },
@@ -109,4 +115,9 @@ const ValidityPeriod = styled.span`
   .Element-IconBox {
     margin-left: 4px;
   }
+`
+
+const NoCriteria = styled.span`
+  color: ${p => p.theme.color.slateGray};
+  font-style: italic;
 `

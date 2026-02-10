@@ -95,7 +95,7 @@
     "@import-meta-env/cli": "0.7.4",
     "@import-meta-env/prepare": "0.2.3",
     "@import-meta-env/unplugin": "0.6.3",
-    "@jest/globals": "29.7.0",
+    "@jest/globals": "30.2.0",
     "@rollup/plugin-replace": "6.0.3",
     "@swc/core": "1.15.11",
     "@swc/jest": "0.2.39",

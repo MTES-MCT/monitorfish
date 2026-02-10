@@ -24,5 +24,17 @@ SELECT
     district_codes,
     producer_organizations
 FROM position_alerts
-WHERE NOT is_deleted AND is_activated
+WHERE
+    NOT is_deleted AND
+    is_activated AND (
+        gears != '[]'
+        OR species != '[]'
+        OR species_catch_areas != '{}'
+        OR administrative_areas != '[]'
+        OR regulatory_areas != '[]'
+        OR flag_states_iso2 != '{}'
+        OR vessel_ids != '{}'
+        OR district_codes != '{}'
+        OR producer_organizations != '{}'
+    )
 ORDER BY id

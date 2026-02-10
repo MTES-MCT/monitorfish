@@ -7,6 +7,7 @@ import {
   YearListTitle,
   YearListTitleText
 } from '@features/Vessel/components/VesselSidebar/components/common/YearList.style'
+import { trackEvent } from '@hooks/useTracking'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
@@ -51,6 +52,15 @@ export function YearReportings({ reportingAndOccurences, year }: YearReportingsP
     if (!reportingAndOccurences.length) {
       return
     }
+
+    if (!isOpen) {
+      trackEvent({
+        action: `Affichage de l'année ${year}`,
+        category: 'REPORTING',
+        name: 'CNSP'
+      })
+    }
+
     setIsOpen(!isOpen)
   }
 

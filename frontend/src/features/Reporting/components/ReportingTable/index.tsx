@@ -13,6 +13,7 @@ import { Body } from '@features/SideWindow/components/Body'
 import { Page } from '@features/SideWindow/components/Page'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useTableVirtualizer } from '@hooks/useTableVirtualizer'
+import { trackEvent } from '@hooks/useTracking'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Icon, IconButton, TableWithSelectableRows, THEME } from '@mtes-mct/monitor-ui'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
@@ -58,6 +59,12 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
     const fileName = `${checkedCurrentSeafrontReportings.length}-signalements-${dayjs().format('DD-MM-YYYY')}`
 
     downloadAsCsv(fileName, checkedCurrentSeafrontReportings, REPORTING_CSV_MAP)
+
+    trackEvent({
+      action: `Export de signalements au format CSV`,
+      category: 'REPORTING',
+      name: 'CNSP'
+    })
   }
 
   const confirmDelete = useCallback(() => {

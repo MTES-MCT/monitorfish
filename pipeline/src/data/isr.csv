@@ -1,0 +1,69 @@
+code,name,description
+AUT-010,Vessel registration,Vessel not (or incorrectly) registered in a flag state or missing registration documentation
+AUT-020,Licence and authorisation,Fishing without a valid licence/authorisation or permit issued by the flag State or the relevant coastal State
+AUT-030,Activities with known IUU vessel(s),Fishery related activity involving a vessel identified as engaged in IUU
+AUT-040,Fish room and seawater tanks certificates,"Not available, not valid or falsified fish room and seawater tanks certificates"
+AUT-070,Forced labour,Conducting fishing activities with the use of forced labour
+AUT-080,Crew requirements,Conducting fishing activities without master on board or crew list not updated or not on board.
+AUT-999,Other Authorisations and certification requirements,If the suspected infringement is related to authorisations and certification requirements but does not match any other category of this group
+CER-010,Quota and catch limits,Fishing without a quota or after attainment of catch limit
+CER-999,Other Catch and Effort restrictions,If the suspected infringement is related to Catch and Effort restrictions but does not match any other category of this group
+CLS-010,Prohibited species or stock,Fishing prohibited species or stock: directed fishing of species or stock subject to moratorium or for which fishing is prohibited or requires a specific authorisation
+CLS-021,Prohibited depth range,Fishing at a prohibited depth range
+CLS-022,Closed area,Fishing in a closed or restricted area
+CLS-023,Closed period,Fishing in a closed period or season
+CLS-999,"Other Fishing seasons, closed areas and prohibition of fishing","If the suspected infringement is related to Fishing seasons, closed areas and prohibition of fishing but does not match any other category of this group"
+DUT-010,Failure to ensure safety of officials,"Failure to stop and manoeuvre, no or defective boarding ladder, failure to facilitate safe access of officials"
+DUT-020,Interference with officials or observers,"Obstruction of the work of officials or observers in the exercise of their duties, intimidation or interfering with officials, failure to comply with official instructions"
+DUT-030,Absence of observer on board,Fishing without observer on board when mandatory
+DUT-040,Tampering with evidence,"Destroying evidence, interfering with evidence, concealing evidence"
+GEA-010,Fishing gear,"Non compliant  gear (e.g. illegal mesh size, illegal attachments, absence or non conformity of selectivity device)"
+GEA-020,Prohibited or unauthorised fishing method,Use of prohibited or unauthorised fishing method (including use of prohibited or unauthorised fishing gear)
+GEA-030,Marking and identification fishing gear or fishing device,"Absence or non-conformity of identification of fishing gear or fishing device (marking, buys, etc..)"
+GEA-040,Deterrence devices,Absence or non-compliant use of deterrence devices  (e.g. ADDs)
+GEA-999,Other Fishing gear or fishing method,If the suspected infringement is related to fishing gear or fishing method but does not match any other category of this group
+PHO-010,Discard,"Illegal discard of species subject to landing obligation (e.g., species under catch limits or with minimum size)"
+PHO-020,Catch retained,"Retain on board, land, store or transport fish that should have been discarded at sea"
+PHO-021,Catch retained - species below MCRS,"Retain on board, land, store or transport fish below MCRS not subject to landing obligation"
+PHO-030,Marketing,Marketing illegal fishery product
+PHO-031,Marketing - Undersize fish subject to landing obligation,Marketing for direct human consumption of undersize fish subject to landing obligation
+PHO-032,Marketing - Undersize fish not subject to landing obligation,Marketing of undersize fish not subject to landing obligation
+PHO-033,Post harvesting operations involving prohibited species or stock,"Retain on board, tranship, land, store, sale, display or offer for sale prohibited species"
+PHO-034,Marketing - Food safety,Marketing of fishery product not proper for human consumption or not compliant with the rules for food safety
+PHO-040,Stowage,Stowage of catch not done according to the regulation (e.g separation of size classes)
+PHO-060,Transhipment,Illegal or unauthorised transhipment operation
+PHO-070,Weighing at landing,Absence or incorrect weighing of catches at landing (including sampling obligation)
+PHO-080,Landing authorisation,Entrance and/or landing without prior authorisation
+PHO-090,Designated port,"Entrance, Landing or making use of other services in a non-designated port or in unauthorised place"
+PHO-100,Sales notes and take-over declaration,Absence or incorrect sales note or take-over declaration
+PHO-110,Transport documents,Absence or incorrect transport documentation
+PHO-120,Catch certificate for import-export,Absence or incorrect catch certificate
+PHO-130,Traceability,Absence or incorrect information prohibiting to track the origin of the fishery product
+PHO-131,Traceability - Labelling,Product labelling non-compliant with regulation
+PHO-140,First sale,Marketing without mandatory first sale
+PHO-150,Product presentation,"Retain on board, land, store or commercialize a fish product in a not permitted presentation"
+PHO-999,"Other Post harvesting operations at sea, land based operations",If the suspected infringement is related to Post harvesting operations at sea or land based operations but does not match any other category of this group
+REP-010,Electronic fishing logbook,Not equipped or not operational or failing to fulfil obligations of recording and reporting data related to fishing activities
+REP-020,Paper Fishing logbook,Not onboard or not kept updated or failing to fulfil obligations of recording and reporting data related to fishing activities
+REP-030,Departure declaration,"Not recorded, misrecorded, not reported or not reported in due time"
+REP-040,Entry or exit in/from zone,"Not notified, not notified on time, incorrect notification"
+REP-060,Fishing operation declaration,"Not recorded, misrecorded, not reported or not reported in due time"
+REP-071,Catch declaration - fish above minimum legal size/weight,"Not recorded, misrecorded or not reported catch of fish above minimum legal size/weight"
+REP-072,Catch declaration - fish below minimum legal size/weight,"Not recorded, misrecorded or not reported catch of fish below minimum legal size/weight"
+REP-073,Catch declaration - margin of tolerance,Difference between catch reported and landing exceeding the legal margin of tolerance
+REP-080,Catch certificate,"Not recorded, misrecorded, not reported"
+REP-090,Discards declaration,"Not recorded, misrecorded, not reported (include species not subject to landing obligation, as well as exemptions for species object of landing obligation (e.g., survivability and De Minimis)"
+REP-130,End of Fishing declaration,"Not recorded, misrecorded, not reported or not reported in due time"
+REP-140,Prior notification of arrival,"Not submitted, not submitted on time or submitted incorrectly"
+REP-150,Landing declaration,"Not recorded, misrecorded, not reported or not reported in due time"
+REP-160,Stowage plan,Absence or incorrect stowage plan
+REP-180,Declaration of arrival,"Not recorded, misrecorded or not reported"
+REP-999,Other fishing vessel recording and  reporting obligations,If the suspected infringement is related to fishing vessel recording and reporting obligations but does not match any other category of this group
+VAM-010,Vessel Monitoring System (VMS),"Not equipped, not operational, tampering with equipment"
+VAM-020,Automatic Identification System (AIS),"Not equipped, not operational, tampering with equipment"
+VAM-030,Remote Electronic Monitoring (REM),"Not equipped, not operational, tampering with equipment"
+VES-010,Vessel marking,"Falsified or concealed  vessel's markings, identity or registration, failure to correctly mark a vessel"
+VES-030,Grading device,Illegal grading device on board
+VES-040,Fish detection system,Illegal use of fish detection system (e.g. spotter aircraft)
+VES-050,Fish aggregation device,Illegal use of fish aggregation device
+VES-060,Vessel catch handling equipment,"Non compliant equipment for water separation, grading, or processing"

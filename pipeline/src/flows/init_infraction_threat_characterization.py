@@ -36,13 +36,23 @@ def extract_infraction_threat_characterization():
 
 
 @task
+def extract_isr():
+    return pd.read_csv(
+        LIBRARY_LOCATION / "data/isr.csv",
+        encoding="utf8",
+    )
+
+
+@task
 def load_threat_characterization_and_join_table(
     threats: pd.DataFrame,
     threat_characterizations: pd.DataFrame,
     infraction_threat_characterization: pd.DataFrame,
+    isr: pd.DataFrame,
     threats_table: Table,
     threat_characterizations_table: Table,
     infraction_threat_characterization_table: Table,
+    isr_table: Table,
 ):
     logger = get_run_logger()
 
@@ -50,7 +60,7 @@ def load_threat_characterization_and_join_table(
 
     with e.begin() as con:
         delete(
-            tables=[infraction_threat_characterization_table, threat_characterizations_table, threats_table],
+            tables=[infraction_threat_characterization_table, threat_characterizations_table, threats_table, isr_table],
             connection=con,
             logger=logger,
         )
@@ -88,6 +98,15 @@ def load_threat_characterization_and_join_table(
         )
 
         load(
+            isr,
+            table_name="isr",
+            schema="public",
+            connection=con,
+            logger=logger,
+            how="append",
+        )
+
+        load(
             infraction_threat_characterization,
             table_name="infraction_threat_characterization",
             schema="public",
@@ -109,9 +128,12 @@ def init_infraction_threat_characterization_flow():
     threats_table = get_table("threats")
     threat_characterizations_table = get_table("threat_characterizations")
     infraction_threat_characterization_table = get_table("infraction_threat_characterization")
+    isr_table = get_table("isr")
     threats = extract_threat()
     threat_characterizations = extract_threat_characterization()
     infraction_threat_characterization = extract_infraction_threat_characterization()
+    isr = extract_isr()
     load_threat_characterization_and_join_table(
-        threats, threat_characterizations, infraction_threat_characterization, threats_table, threat_characterizations_table, infraction_threat_characterization_table
+        threats, threat_characterizations, infraction_threat_characterization, isr,
+        threats_table, threat_characterizations_table, infraction_threat_characterization_table, isr_table
     )

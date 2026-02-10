@@ -1,6 +1,7 @@
 DELETE FROM public.infraction_threat_characterization;
 DELETE FROM public.threat_characterizations;
 DELETE FROM public.threats;
+DELETE FROM public.isr;
 DELETE FROM infractions;
 
 INSERT INTO infractions (

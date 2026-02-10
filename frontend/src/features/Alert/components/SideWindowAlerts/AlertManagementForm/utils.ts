@@ -1,10 +1,10 @@
-import { EU_COUNTRY_CODES } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants'
+import { Criteria, EU_COUNTRY_CODES } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants'
 import { AdministrativeAreaType, AdministrativeAreaTypeLabel } from '@features/Alert/constants'
 import Countries, { getAlpha3Code, getNames } from 'i18n-iso-countries'
 import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
 import { flatMap, groupBy, sortBy } from 'lodash-es'
 
-import type { RegulatoryAreaSpecification } from '@features/Alert/types'
+import type { AlertSpecification, RegulatoryAreaSpecification } from '@features/Alert/types'
 import type { RegulatoryLawTypes } from '@features/Regulation/types'
 import type { TreeOption } from '@mtes-mct/monitor-ui'
 import type { TreeBranchOption, TreeLeafOption } from '@mtes-mct/monitor-ui/types/definitions'
@@ -168,4 +168,38 @@ export const convertRegulatoryLayerLawTypesToTreeOptions = (
         value: lawType
       }) as TreeBranchOption
   )
+}
+
+export function hasCriterias(values: AlertSpecification, selectedCriterias: Criteria[] = []) {
+  const hasZoneCriteria =
+    !!values.regulatoryAreas.length || !!values.administrativeAreas.length || selectedCriterias.includes(Criteria.ZONE)
+  const hasNationalityCriteria = !!values.flagStatesIso2.length || selectedCriterias.includes(Criteria.NATIONALITY)
+  const hasVesselCriteria = !!values.vesselIds.length || selectedCriterias.includes(Criteria.VESSEL)
+  const hasProducerOrganizationCriteria =
+    !!values.producerOrganizations.length || selectedCriterias.includes(Criteria.PRODUCER_ORGANIZATION)
+  const hasDistrictCriteria = !!values.districtCodes.length || selectedCriterias.includes(Criteria.DISTRICT)
+  const hasGearOnBoardCriteria = !!values.gears.length || selectedCriterias.includes(Criteria.GEAR_ON_BOARD)
+  const hasSpeciesOnBoardCriteria =
+    !!values.species.length ||
+    !!values.speciesCatchAreas.length ||
+    selectedCriterias.includes(Criteria.SPECIES_ON_BOARD)
+  const hasNoCriteria =
+    !hasGearOnBoardCriteria &&
+    !hasSpeciesOnBoardCriteria &&
+    !hasVesselCriteria &&
+    !hasZoneCriteria &&
+    !hasNationalityCriteria &&
+    !hasProducerOrganizationCriteria &&
+    !hasDistrictCriteria
+
+  return {
+    hasDistrictCriteria,
+    hasGearOnBoardCriteria,
+    hasNationalityCriteria,
+    hasNoCriteria,
+    hasProducerOrganizationCriteria,
+    hasSpeciesOnBoardCriteria,
+    hasVesselCriteria,
+    hasZoneCriteria
+  }
 }

@@ -6,6 +6,7 @@ import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
 import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { trackEvent } from '@hooks/useTracking'
 import { FingerprintLoader, Icon, LinkButton, THEME } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { assertNotNullish } from '@utils/assertNotNullish'
@@ -58,6 +59,12 @@ export function ReportingList() {
 
   const handleIsDirty = useCallback(
     (isDirty: boolean) => {
+      trackEvent({
+        action: `Ecriture d'un signalement depuis un préavis`,
+        category: 'REPORTING',
+        name: 'CNSP'
+      })
+
       dispatch(priorNotificationActions.setIsReportingFormDirty(isDirty))
     },
     [dispatch]

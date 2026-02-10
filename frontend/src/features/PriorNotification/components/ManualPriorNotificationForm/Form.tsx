@@ -6,6 +6,7 @@ import { useFormikDirtyOnceEffect } from '@hooks/useFormikDirtyOnceEffect'
 import { useGetGearsAsOptions } from '@hooks/useGetGearsAsOptions'
 import { useGetPortsAsOptions } from '@hooks/useGetPortsAsOptions'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { trackEvent } from '@hooks/useTracking'
 import {
   FormikCheckbox,
   FormikDatePicker,
@@ -55,6 +56,12 @@ export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
     if (!values.vesselIdentity) {
       return
     }
+
+    trackEvent({
+      action: `Affichage des signalements depuis un préavis`,
+      category: 'REPORTING',
+      name: 'CNSP'
+    })
 
     dispatch(priorNotificationActions.setOpenedReportingListVesselIdentity(values.vesselIdentity))
   }

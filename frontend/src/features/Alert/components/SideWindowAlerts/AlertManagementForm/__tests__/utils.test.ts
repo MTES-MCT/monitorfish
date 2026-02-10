@@ -1,15 +1,17 @@
-import { AdministrativeAreaType, AdministrativeAreaTypeLabel } from '@features/Alert/constants'
+import { AdministrativeAreaType, AdministrativeAreaTypeLabel, PendingAlertValueType } from '@features/Alert/constants'
 import { expect } from '@jest/globals'
 
+import { Criteria } from '../constants'
 import {
   buildCountriesAsTreeOptions,
   convertRegulatoryAreasArrayToTreeOptions,
   convertRegulatoryLayerLawTypesToTreeOptions,
   convertTreeOptionsToRegulatoryAreasArray,
+  hasCriterias,
   mapZonesWithMetadata
 } from '../utils'
 
-import type { RegulatoryAreaSpecification } from '@features/Alert/types'
+import type { AlertSpecification, RegulatoryAreaSpecification } from '@features/Alert/types'
 import type { RegulatoryLawTypes } from '@features/Regulation/types'
 import type { TreeBranchOption, TreeOption } from '@mtes-mct/monitor-ui'
 
@@ -357,5 +359,87 @@ describe('convertRegulatoryLayerLawTypesToTreeOptions', () => {
 
     // Then
     expect(result).toEqual([])
+  })
+})
+
+describe('hasCriterias', () => {
+  it('Should return the correct criteria flags based on values and selected criterias', () => {
+    // Given
+    const emptyValues: AlertSpecification = {
+      administrativeAreas: [],
+      createdAtUtc: '',
+      createdBy: '',
+      description: '',
+      districtCodes: [],
+      errorReason: undefined,
+      flagStatesIso2: [],
+      gears: [],
+      hasAutomaticArchiving: false,
+      id: undefined,
+      isActivated: false,
+      isInError: false,
+      isUserDefined: false,
+      minDepth: undefined,
+      name: '',
+
+      natinf: 0,
+      onlyFishingPositions: false,
+      producerOrganizations: [],
+      regulatoryAreas: [],
+      repeatEachYear: false,
+      species: [],
+      speciesCatchAreas: [],
+      threat: '',
+      threatCharacterization: '',
+      threatHierarchy: undefined,
+      trackAnalysisDepth: 0,
+      type: PendingAlertValueType.MISSING_DEP_ALERT,
+      vesselIds: [],
+      vessels: []
+    }
+
+    // When no values and no selected criterias
+    const resultEmpty = hasCriterias(emptyValues)
+
+    // Then
+    expect(resultEmpty.hasNoCriteria).toBe(true)
+    expect(resultEmpty.hasZoneCriteria).toBe(false)
+    expect(resultEmpty.hasNationalityCriteria).toBe(false)
+    expect(resultEmpty.hasVesselCriteria).toBe(false)
+    expect(resultEmpty.hasGearOnBoardCriteria).toBe(false)
+    expect(resultEmpty.hasSpeciesOnBoardCriteria).toBe(false)
+    expect(resultEmpty.hasProducerOrganizationCriteria).toBe(false)
+    expect(resultEmpty.hasDistrictCriteria).toBe(false)
+
+    // When values have data
+    const valuesWithData: AlertSpecification = {
+      ...emptyValues,
+      flagStatesIso2: ['FR'],
+      gears: [
+        {
+          gear: '',
+          maxMesh: undefined,
+          minMesh: undefined
+        }
+      ],
+      vesselIds: [1]
+    }
+    const resultWithData = hasCriterias(valuesWithData)
+
+    // Then
+    expect(resultWithData.hasNoCriteria).toBe(false)
+    expect(resultWithData.hasNationalityCriteria).toBe(true)
+    expect(resultWithData.hasVesselCriteria).toBe(true)
+    expect(resultWithData.hasGearOnBoardCriteria).toBe(true)
+    expect(resultWithData.hasZoneCriteria).toBe(false)
+
+    // When selected criterias are provided (even with empty values)
+    const resultWithSelectedCriterias = hasCriterias(emptyValues, [Criteria.ZONE, Criteria.SPECIES_ON_BOARD])
+
+    // Then
+    expect(resultWithSelectedCriterias.hasNoCriteria).toBe(false)
+    expect(resultWithSelectedCriterias.hasZoneCriteria).toBe(true)
+    expect(resultWithSelectedCriterias.hasSpeciesOnBoardCriteria).toBe(true)
+    expect(resultWithSelectedCriterias.hasNationalityCriteria).toBe(false)
   })
 })

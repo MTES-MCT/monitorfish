@@ -14,6 +14,7 @@ import { ProducerOrganizationCriteria } from '@features/Alert/components/SideWin
 import { VesselCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/VesselCriteria'
 import { ZoneCriteria } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/ZoneCriteria'
 import { FormikValidityPeriod } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/FormikValidityPeriod'
+import { hasCriterias } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/utils'
 import { FISHING_POSITION_ONLY_AS_OPTIONS } from '@features/Alert/components/SideWindowAlerts/constants'
 import { alertActions } from '@features/Alert/components/SideWindowAlerts/slice'
 import { EditedAlertSpecificationSchema } from '@features/Alert/schemas/EditedAlertSpecificationSchema'
@@ -89,9 +90,17 @@ export function AlertManagementForm() {
       }
 
       dispatch(alertActions.setEditedAlertSpecification(undefined))
+      const { hasNoCriteria } = hasCriterias(nextEditedAlertSpecification)
+
       dispatch(
         addSideWindowBanner({
-          children: `L'alerte a bien été ${isCreation ? 'créée' : 'modifiée'}. Ses premières occurrences vont mettre quelques minutes à apparaître sur la carte`,
+          children: `
+          L'alerte a bien été ${isCreation ? 'créée' : 'modifiée'}.
+          ${
+            hasNoCriteria
+              ? 'N’ayant pas de critères défini, elle ne remontera pas d’occurrence.'
+              : 'Ses premières occurrences vont mettre quelques minutes à apparaître sur la carte.'
+          }`,
           closingDelay: 3000,
           isClosable: true,
           level: Level.SUCCESS,
@@ -154,21 +163,16 @@ export function AlertManagementForm() {
         validate={toFormikValidationSchema(EditedAlertSpecificationSchema)}
       >
         {({ dirty, errors, setFieldValue, values }) => {
-          const hasZoneCriteria =
-            !!values.regulatoryAreas.length ||
-            !!values.administrativeAreas.length ||
-            selectedCriterias.includes(Criteria.ZONE)
-          const hasNationalityCriteria =
-            !!values.flagStatesIso2.length || selectedCriterias.includes(Criteria.NATIONALITY)
-          const hasVesselCriteria = !!values.vesselIds.length || selectedCriterias.includes(Criteria.VESSEL)
-          const hasProducerOrganizationCriteria =
-            !!values.producerOrganizations.length || selectedCriterias.includes(Criteria.PRODUCER_ORGANIZATION)
-          const hasDistrictCriteria = !!values.districtCodes.length || selectedCriterias.includes(Criteria.DISTRICT)
-          const hasGearOnBoardCriteria = !!values.gears.length || selectedCriterias.includes(Criteria.GEAR_ON_BOARD)
-          const hasSpeciesOnBoardCriteria =
-            !!values.species.length ||
-            !!values.speciesCatchAreas.length ||
-            selectedCriterias.includes(Criteria.SPECIES_ON_BOARD)
+          const {
+            hasDistrictCriteria,
+            hasGearOnBoardCriteria,
+            hasNationalityCriteria,
+            hasNoCriteria,
+            hasProducerOrganizationCriteria,
+            hasSpeciesOnBoardCriteria,
+            hasVesselCriteria,
+            hasZoneCriteria
+          } = hasCriterias(values, selectedCriterias)
 
           return (
             <Wrapper>
@@ -288,6 +292,12 @@ export function AlertManagementForm() {
                       )}
                     </StyledDropdown>
                   </StyledFormHead>
+                  {hasNoCriteria && (
+                    <NoCriteria>
+                      Tant qu’aucun critère n’est ajouté, vous pouvez enregistrer l’alerte, mais elle ne remontera
+                      aucune occurrence.
+                    </NoCriteria>
+                  )}
                   {hasGearOnBoardCriteria && (
                     <GearOnBoardCriteria
                       onDelete={() => {
@@ -439,6 +449,11 @@ export const Wrapper = styled(Form)`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+`
+
+const NoCriteria = styled.span`
+  color: ${p => p.theme.color.slateGray};
+  font-style: italic;
 `
 
 export const Header = styled.div`

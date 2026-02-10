@@ -503,23 +503,29 @@ def get_dead_links(
             logger.info(f"Testing {unknown_link}")
             r = requests.get(unknown_link, timeout=10)
             r.raise_for_status()
-        except requests.Timeout:
+        except (requests.Timeout, requests.ConnectionError) as e:
             try:
-                logger.info(f"{unknown_link} timed out. Retrying with proxies...")
+                logger.info(
+                    (
+                        f"{unknown_link} fails with error {repr(e)}. "
+                        "Retrying with proxies..."
+                    )
+                )
                 r = requests.get(unknown_link, timeout=10, proxies=proxies)
                 r.raise_for_status()
-            except requests.HTTPError:
-                logger.info(f"{unknown_link} is a dead link.")
+            except Exception as e:
+                logger.info(
+                    (
+                        f"{unknown_link} with proxies fails with error {repr(e)}. "
+                        "Adding to dead links"
+                    )
+                )
                 dead_links_urls.append(unknown_link)
 
-        except (
-            requests.HTTPError,
-            requests.ConnectionError,
-            requests.exceptions.MissingSchema,
-            requests.exceptions.InvalidSchema,
-            requests.exceptions.InvalidURL,
-        ) as e:
-            logger.info(f"{unknown_link} is a dead link (error {type(e)}: {e}).")
+        except Exception as e:
+            logger.info(
+                (f"{unknown_link} fails with error {repr(e)}. " "Adding to dead links")
+            )
             dead_links_urls.append(unknown_link)
 
     # null references are missing_references, not dead_links

@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FaoArea
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
@@ -11,6 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.hasFaoCodeIncludedIn
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReport
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReportInfraction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReports
 import org.slf4j.LoggerFactory
 import java.time.Clock
@@ -23,6 +25,7 @@ class GetActivityReports(
     private val vesselRepository: VesselRepository,
     private val missionRepository: MissionRepository,
     private val fleetSegmentRepository: FleetSegmentRepository,
+    private val infractionRepository: InfractionRepository,
     private val clock: Clock,
 ) {
     private val logger = LoggerFactory.getLogger(GetActivityReports::class.java)
@@ -33,6 +36,12 @@ class GetActivityReports(
         jdp: JointDeploymentPlan,
     ): ActivityReports {
         val fleetSegments = fleetSegmentRepository.findAllByYear(ZonedDateTime.now(clock).year)
+        val infractionThreatCharacterizations = infractionRepository.findInfractionsThreatCharacterization()
+        val isrByNatinfAndThreat =
+            infractionThreatCharacterizations.associateBy(
+                { Triple(it.natinfCode, it.threat, it.threatCharacterization) },
+                { Pair(it.isrCode, it.isrName) },
+            )
         val controls = missionActionsRepository.findSeaLandAndAirControlBetweenDates(beforeDateTime, afterDateTime)
         logger.info("Found ${controls.size} controls between dates [$afterDateTime, $beforeDateTime].")
 
@@ -146,6 +155,20 @@ class GetActivityReports(
 
                     val segment = getFleetSegment(control, jdp, fleetSegments)
 
+                    val enrichedInfractions =
+                        control.infractions.filter { it.infractionType == InfractionType.WITH_RECORD }.map { infraction ->
+                            val key =
+                                infraction.natinf?.let { natinf ->
+                                    Triple(natinf, infraction.threat, infraction.threatCharacterization)
+                                }
+                            val (isrCode, isrName) = key?.let { isrByNatinfAndThreat[it] } ?: Pair(null, null)
+                            ActivityReportInfraction(
+                                infraction = infraction,
+                                isrCode = isrCode,
+                                isrName = isrName,
+                            )
+                        }
+
                     ActivityReport(
                         action = control,
                         activityCode = activityCode,
@@ -154,6 +177,7 @@ class GetActivityReports(
                         segment = segment,
                         vesselNationalIdentifier = controlledVessel.getNationalIdentifier(),
                         vessel = controlledVessel,
+                        infractions = enrichedInfractions,
                     )
                 }.filterNotNull()
 

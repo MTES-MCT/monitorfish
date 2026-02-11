@@ -63,13 +63,15 @@ class JpaInfractionRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(infractions).hasSize(120)
-        assertThat(infractions.first().natinfCode).isEqualTo(2608)
+        assertThat(infractions.first().natinfCode).isEqualTo(27879)
         assertThat(
             infractions.first().infraction,
         ).isEqualTo(
-            "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne",
+            "EXPLOITATION, GESTION OU POSSESSION D'UN NAVIRE DE PECHE MARITIME NON IMMATRICULE",
         )
         assertThat(infractions.first().threat).isEqualTo("Activités INN")
-        assertThat(infractions.first().threatCharacterization).isEqualTo("Pêche sans autorisation par navire tiers")
+        assertThat(infractions.first().threatCharacterization).isEqualTo("Navire sans immatriculation")
+        assertThat(infractions.first().isrCode).isEqualTo("AUT-010")
+        assertThat(infractions.first().isrName).isEqualTo("Vessel registration")
     }
 }

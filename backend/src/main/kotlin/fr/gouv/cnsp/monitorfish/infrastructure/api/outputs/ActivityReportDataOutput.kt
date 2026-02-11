@@ -1,8 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReport
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReportInfraction
 
 data class ActivityReportDataOutput(
     val action: MissionActionDataOutput,
@@ -12,6 +14,7 @@ data class ActivityReportDataOutput(
     val vesselNationalIdentifier: String,
     val controlUnits: List<LegacyControlUnit>,
     val vessel: SelectedVesselDataOutput,
+    val infractions: List<ActivityReportInfractionDataOutput>,
 ) {
     companion object {
         fun fromActivityReport(activityReport: ActivityReport) =
@@ -27,6 +30,29 @@ data class ActivityReportDataOutput(
                 vesselNationalIdentifier = activityReport.vesselNationalIdentifier,
                 controlUnits = activityReport.controlUnits,
                 vessel = SelectedVesselDataOutput.fromVessel(activityReport.vessel),
+                infractions =
+                    activityReport.infractions.map {
+                        ActivityReportInfractionDataOutput.fromActivityReportInfraction(it)
+                    },
             )
+    }
+}
+
+data class ActivityReportInfractionDataOutput(
+    val infractionType: InfractionType?,
+    val isrCode: String?,
+    val isrName: String?,
+) {
+    companion object {
+        fun fromActivityReportInfraction(
+            activityReportInfraction: ActivityReportInfraction,
+        ): ActivityReportInfractionDataOutput {
+            val infraction = activityReportInfraction.infraction
+            return ActivityReportInfractionDataOutput(
+                infractionType = infraction.infractionType,
+                isrCode = activityReportInfraction.isrCode,
+                isrName = activityReportInfraction.isrName,
+            )
+        }
     }
 }

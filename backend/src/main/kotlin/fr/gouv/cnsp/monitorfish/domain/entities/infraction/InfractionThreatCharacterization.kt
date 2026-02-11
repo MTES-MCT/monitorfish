@@ -5,4 +5,6 @@ data class InfractionThreatCharacterization(
     val infraction: String,
     val threat: String,
     val threatCharacterization: String,
+    val isrCode: String? = null,
+    val isrName: String? = null,
 )

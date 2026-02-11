@@ -50,7 +50,10 @@ data class ManualPriorNotificationEntity(
     val vesselName: String?,
 ) {
     companion object {
-        fun fromPriorNotification(mapper: ObjectMapper, priorNotification: PriorNotification): ManualPriorNotificationEntity {
+        fun fromPriorNotification(
+            mapper: ObjectMapper,
+            priorNotification: PriorNotification,
+        ): ManualPriorNotificationEntity {
             try {
                 val pnoLogbookMessage = priorNotification.logbookMessageAndValue.logbookMessage
                 val pnoLogbookMessageValue = priorNotification.logbookMessageAndValue.value

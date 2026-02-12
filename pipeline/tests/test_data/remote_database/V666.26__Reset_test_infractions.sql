@@ -139,6 +139,10 @@ INSERT INTO infractions (
     (     33915, 'Reg test',   'Cat test', 'Infraction test'),
     (     34308, 'Reg test',   'Cat test', 'Infraction test'),
     (     34309, 'Reg test',   'Cat test', 'Infraction test'),
+    (     27252, 'Reg test',   'Cat test', 'Infraction test'),
+    (     28710, 'Reg test',   'Cat test', 'Infraction test'),
+    (     28713, 'Reg test',   'Cat test', 'Infraction test'),
+    (     4473, 'Reg test',   'Cat test', 'Infraction test'),
     (     34314, 'Reg test',   'Cat test', 'Infraction test');
 
 
